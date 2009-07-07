@@ -1,3 +1,9 @@
+2009-07-07 Roman
+- !!:/Special/FLibSYS: Interface translation to German is added by Irina Popkova.
+- /DAQ/JavaLikeCalc: Some code clear.
+- FIX:/UI/VCAEngine: Processing flag inherit is fixed for atributes "vCur" and "aCur" of primitive "Document".
+
+
 2009-07-05 Roman
 - !!:/Value: Service request for values order processing is changed to last values by first and
     archives by last. Values container for last value and archive's is separated.

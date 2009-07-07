@@ -1647,6 +1647,12 @@ void Func::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* Reg                                           *
 //*************************************************
+Reg::~Reg( )
+{
+    setType(Free);
+    if(m_nm) delete m_nm;
+}
+
 Reg &Reg::operator=( Reg &irg )
 {
     setType(irg.type());
@@ -1674,6 +1680,18 @@ void Reg::setName( const char *nm )
 {
     if( !m_nm ) m_nm = new string;
     *m_nm = nm;
+}
+
+void Reg::setType( Type tp )
+{
+    if( m_tp == tp )    return;
+    //Free old type
+    if( m_tp == String )		delete el.s_el;
+    else if( m_tp == Reg::PrmAttr )	delete el.p_attr;
+    //Set new type
+    if( tp == String )			el.s_el = new string;
+    else if( tp == Reg::PrmAttr )	el.p_attr = new AutoHD<TVal>;
+    m_tp = tp;
 }
 
 Reg::Type Reg::vType( Func *fnc )

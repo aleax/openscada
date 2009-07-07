@@ -162,11 +162,7 @@ class Reg
 	//Methods
 	Reg( ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(-1) {  }
 	Reg( int ipos ) : m_tp(Free), m_lock(false), m_nm(NULL), m_pos(ipos) {  }
-	~Reg( )
-	{
-	    setType(Free);
-	    if(m_nm) delete m_nm;
-	}
+	~Reg( );
 
 	Reg &operator=( Reg &irg );
 	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
@@ -181,17 +177,7 @@ class Reg
 	bool lock( )				{ return m_lock; }
 
 	void setName( const char *nm );
-	void setType( Type tp )
-	{
-	    if( m_tp == tp )    return;
-	    //Free old type
-	    if( m_tp == String )		delete el.s_el;
-	    else if( m_tp == Reg::PrmAttr )     delete el.p_attr;
-	    //Set new type
-	    if( tp == String )			el.s_el = new string;
-	    else if( tp == Reg::PrmAttr )	el.p_attr = new AutoHD<TVal>;
-	    m_tp = tp;
-	}
+	void setType( Type tp );
 	void setLock( bool vl )			{ m_lock = vl; }
 	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
 	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }

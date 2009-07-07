@@ -1289,7 +1289,7 @@ void SessWdg::calc( bool first, bool last )
 			else switch( attr.at().type() )
 			{
 			    case TFld::Boolean:	attr.at().setB(vl.at().getB());	break;
-			    case TFld::Integer: attr.at().setI(vl.at().getI());	break;
+			    case TFld::Integer:	attr.at().setI(vl.at().getI());	break;
 			    case TFld::Real:	attr.at().setR(vl.at().getR());	break;
 			    case TFld::String:	attr.at().setS(vl.at().getS());	break;
 			}
@@ -1332,7 +1332,7 @@ void SessWdg::calc( bool first, bool last )
 		    {
 			case IO::String:	setS(i_io,attr.at().getS());	break;
 			case IO::Integer:	setI(i_io,attr.at().getI());	break;
-			case IO::Real:	setR(i_io,attr.at().getR());	break;
+			case IO::Real:		setR(i_io,attr.at().getR());	break;
 			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
 		    }
 		}

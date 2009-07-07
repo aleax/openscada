@@ -875,9 +875,15 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	else
 	{
 	    if( !cfg.owner()->attrPresent("vCur") )
+	    {
 		cfg.owner()->attrAdd( new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99") );
+		cfg.owner()->inheritAttr("vCur");
+	    }
 	    if( !cfg.owner()->attrPresent("aCur") )
+	    {
 		cfg.owner()->attrAdd( new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99") );
+		cfg.owner()->inheritAttr("aCur");
+	    }
 	}
 
 	string fidp;
@@ -885,7 +891,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	for( int i_p = 0; true; i_p++ )
 	{
 	    fidp = "doc"+TSYS::int2str(i_p);
-	    if( !cfg.owner()->attrPresent(fidp) )      break;
+	    if( !cfg.owner()->attrPresent(fidp) )	break;
 	    else if( i_p >= cfg.getI() )	cfg.owner()->attrDel(fidp);
 	}
 
@@ -893,7 +899,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	{
 	    fidp = "doc"+TSYS::int2str(i_p);
-	    if( cfg.owner()->attrPresent(fidp) ) continue;
+	    if( cfg.owner()->attrPresent(fidp) )	continue;
 	    cfg.owner()->attrAdd( new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active) );
 	}
     }
@@ -948,7 +954,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
 	    //>> Save cursor to document to project's DB
-	    if( prev.getI() < n && prev.getI() >=0 )
+	    if( prev.getI() < n && prev.getI() >= 0 )
 	    {
 		string db  = sw->ownerSess()->parent().at().DB();
 		string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
