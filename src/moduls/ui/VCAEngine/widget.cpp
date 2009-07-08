@@ -27,6 +27,7 @@
 
 using namespace VCA;
 
+
 //************************************************
 //* Widget                                       *
 //************************************************
@@ -1334,29 +1335,32 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0)
 {
     setFld( ifld, inher );
-    switch( fld().type() )
-    {
-	case TFld::String:
-	    m_val.s_val = NULL;
-	    if( fld().flg()&Attr::DirRead ) break;
-	    m_val.s_val    = new ResString();
-	    m_val.s_val->setVal(fld().def());
-	    break;
-	case TFld::Integer:	m_val.i_val = atoi(mFld->def().c_str());	break;
-	case TFld::Real:	m_val.r_val = atof(mFld->def().c_str());	break;
-	case TFld::Boolean:	m_val.b_val = atoi(mFld->def().c_str());	break;
-    }
 }
 
 Attr::~Attr(  )
 {
-    if( fld().type() == TFld::String && m_val.s_val )	delete m_val.s_val;
-    setFld(NULL,false);
+    setFld( NULL, false );
 }
 
 void Attr::setFld( TFld *fld, bool inher )
 {
-    if( mFld && !(self_flg&Attr::IsInher) ) delete mFld;
+    if( mFld && (!fld || fld->type() != TFld::String) && mFld->type() == TFld::String && m_val.s_val ) delete m_val.s_val;
+
+    if( fld && (!mFld || fld->type() != mFld->type()) )
+	switch( fld->type() )
+	{
+	    case TFld::String:
+		m_val.s_val = NULL;
+		if( fld->flg()&Attr::DirRead ) break;
+		m_val.s_val    = new ResString();
+		m_val.s_val->setVal(fld->def());
+		break;
+	    case TFld::Integer:	m_val.i_val = atoi(fld->def().c_str());	break;
+	    case TFld::Real:	m_val.r_val = atof(fld->def().c_str());	break;
+	    case TFld::Boolean:	m_val.b_val = atoi(fld->def().c_str());	break;
+	}
+
+    if( mFld && !(self_flg&Attr::IsInher) ) { delete mFld; mFld = NULL; }
     mFld = fld;
     self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
 }
