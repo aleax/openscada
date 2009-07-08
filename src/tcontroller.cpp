@@ -28,7 +28,7 @@
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false),
+    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(true),
     mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
 {
     mId = id_c;
@@ -160,7 +160,7 @@ void TController::start( )
     mess_info(nodePath().c_str(),_("Start controller!"));
 
     //> First archives synchronization
-    if( owner().redntAllow() && redntMode( ) != TController::Off ) redntDataUpdate( );
+    if( owner().redntAllow() ) redntDataUpdate( );
 
     //> Start for children
     start_();
@@ -335,7 +335,6 @@ void TController::redntDataUpdate( )
     //> Write data to parameters
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
-	long long ctm;
 	prm = at(pls[i_p]);
 	for( int i_a = 0; i_a < req.childGet(i_p)->childSize(); i_a++ )
 	{
@@ -344,16 +343,14 @@ void TController::redntDataUpdate( )
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
 	    if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
-	    else if( aNd->name() == "ael" && aNd->childSize() )
+	    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 	    {
 		long long btm = atoll(aNd->attr("tm").c_str());
 		long long per = atoll(aNd->attr("per").c_str());
-		if( !vl.at().arch().freeStat() )
-		{
-		    TValBuf buf(vl.at().arch().at().valType(),0,per,true,true);
-		    for( int i_v = 0; i_v < aNd->childSize(); i_v++ ) buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-		    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
-		}
+		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
+		for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+		vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 	    }
 	}
     }

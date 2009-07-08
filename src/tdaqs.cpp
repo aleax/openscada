@@ -224,7 +224,6 @@ void TDAQS::save_( )
     string stLs;
     for( map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++ )
 	stLs += sit->first+";";
-    printf("TEST 10: '%s'\n",stLs.c_str());
     TBDS::genDBSet(nodePath()+"RdStList",stLs);
     res.release();
 }

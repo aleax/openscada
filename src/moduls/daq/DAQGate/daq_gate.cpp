@@ -399,16 +399,14 @@ void *TMdContr::Task( void *icntr )
 				AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
 				if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
-				else if( aNd->name() == "ael" && aNd->childSize() )
+				else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 				{
 				    long long btm = atoll(aNd->attr("tm").c_str());
 				    long long per = atoll(aNd->attr("per").c_str());
-				    if( !vl.at().arch().freeStat() )
-				    {
-					TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-					for( int i_v = 0; i_v < aNd->childSize(); i_v++ ) buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-					vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
-				    }
+				    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
+				    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+					buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+				    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 				}
 			    }
 			}

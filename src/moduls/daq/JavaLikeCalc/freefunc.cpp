@@ -533,10 +533,10 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
     rez_n->setType(op->vType(this));
     switch(rez_n->vType(this))
     {
-        case Reg::Bool:		prg += (ui8)Reg::MovB;	break;
-        case Reg::Int:		prg += (ui8)Reg::MovI;	break;
-        case Reg::Real:		prg += (ui8)Reg::MovR;	break;
-        case Reg::String:	prg += (ui8)Reg::MovS;	break;
+	case Reg::Bool:		prg += (ui8)Reg::MovB;	break;
+	case Reg::Int:		prg += (ui8)Reg::MovI;	break;
+	case Reg::Real:		prg += (ui8)Reg::MovR;	break;
+	case Reg::String:	prg += (ui8)Reg::MovS;	break;
     }
     addr = rez_n->pos(); prg.append((char*)&addr,sizeof(ui16));
     addr = op->pos();    prg.append((char*)&addr,sizeof(ui16));
