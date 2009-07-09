@@ -318,96 +318,95 @@ void *TMdContr::Task( void *icntr )
     {
 	for( unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++ )
 	{
+	    if( cntr.redntUse( ) ) { usleep( STD_WAIT_DELAY*1000 ); continue; }
+
 	    long long t_cnt = TSYS::curTime();
 
 	    ResAlloc res(cntr.enRes,false);
 
-	    if( !cntr.redntUse( ) )
+	    //> Allow stations presenting
+	    bool isAccess = false;
+	    for( int i_st = 0; i_st < cntr.mStatWork.size(); i_st++ )
+		if( cntr.mStatWork[i_st].second > 0 ) cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-cntr.period());
+		else isAccess = true;
+
+	    if( isAccess )
 	    {
-		//> Allow stations presenting
-		bool isAccess = false;
-		for( int i_st = 0; i_st < cntr.mStatWork.size(); i_st++ )
-		    if( cntr.mStatWork[i_st].second > 0 ) cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-cntr.period());
-		    else isAccess = true;
+		unsigned int div = (unsigned int)(cntr.mSync/cntr.period());
+		vector<string> pLS;
+		cntr.list(pLS);
+		AutoHD<TMdPrm> prm;
+		string scntr;
 
-		if( isAccess )
+		//> Parameters list update
+		if( (it_cnt > div && it_cnt%div == 0) || !pLS.size() )
+		    try { res.release( ); cntr.enable_( ); res.request(false); }
+		    catch(TError err) { }
+
+		//> Mark no process
+		for( int i_p=0; i_p < pLS.size(); i_p++)
 		{
-		    unsigned int div = (unsigned int)(cntr.mSync/cntr.period());
-		    vector<string> pLS;
-		    cntr.list(pLS);
-		    AutoHD<TMdPrm> prm;
-		    string scntr;
+		    if( it_cnt > div && (it_cnt+i_p)%div == 0 ) cntr.at(pLS[i_p]).at().load_();
+		    cntr.at(pLS[i_p]).at().isPrcOK = false;
+		}
 
-		    //> Parameters list update
-		    if( (it_cnt > div && it_cnt%div == 0) || !pLS.size() )
-			try { res.release( ); cntr.enable_( ); res.request(false); }
-			catch(TError err) { }
-
-		    //> Mark no process
+		//> Station's cycle
+		for( int i_st = 0; i_st < cntr.mStatWork.size(); i_st++ )
+		{
+		    if( cntr.mStatWork[i_st].second > 0 ) continue;
+		    XMLNode req("CntrReqs"); req.setAttr("path","/"+cntr.mStatWork[i_st].first+"/DAQ/");
+		    //> Put attributes reuests
 		    for( int i_p=0; i_p < pLS.size(); i_p++)
 		    {
-			if( it_cnt > div && (it_cnt+i_p)%div == 0 ) cntr.at(pLS[i_p]).at().load_();
-			cntr.at(pLS[i_p]).at().isPrcOK = false;
-		    }
-
-		    //> Station's cycle
-		    for( int i_st = 0; i_st < cntr.mStatWork.size(); i_st++ )
-		    {
-			if( cntr.mStatWork[i_st].second > 0 ) continue;
-			XMLNode req("CntrReqs"); req.setAttr("path","/"+cntr.mStatWork[i_st].first+"/DAQ/");
-			//> Put attributes reuests
-			for( int i_p=0; i_p < pLS.size(); i_p++)
+			prm = cntr.at(pLS[i_p]);
+			if( prm.at().isPrcOK ) continue;
+			for( int c_off = 0; (scntr=TSYS::strSepParse(prm.at().cntrAdr(),0,';',&c_off)).size(); )
 			{
-			    prm = cntr.at(pLS[i_p]);
-			    if( prm.at().isPrcOK ) continue;
-			    for( int c_off = 0; (scntr=TSYS::strSepParse(prm.at().cntrAdr(),0,';',&c_off)).size(); )
+			    if( TSYS::pathLev(scntr,0) != cntr.mStatWork[i_st].first ) continue;
+
+			    XMLNode *prmNd = req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr");
+
+			    //>> Put archive request
+			    vector<string> listV;
+			    prm.at().vlList(listV);
+			    for( int iV = 0; iV < listV.size(); iV++ )
 			    {
-				if( TSYS::pathLev(scntr,0) != cntr.mStatWork[i_st].first ) continue;
-
-				XMLNode *prmNd = req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr");
-
-				//>> Put archive request
-				vector<string> listV;
-				prm.at().vlList(listV);
-				for( int iV = 0; iV < listV.size(); iV++ )
-				{
-				    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-				    if( vl.at().arch().freeStat() ) continue;
-				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
-				}
+				AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
+				if( vl.at().arch().freeStat() ) continue;
+				prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
 			    }
 			}
-			if( !req.childSize() ) continue;
+		    }
+		    if( !req.childSize() ) continue;
 
-			//> Same request
-			if( cntr.cntrIfCmd(req) ) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
+		    //> Same request
+		    if( cntr.cntrIfCmd(req) ) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
 
-			//> Result process
-			for( int i_r = 0; i_r < req.childSize(); i_r++ )
+		    //> Result process
+		    for( int i_r = 0; i_r < req.childSize(); i_r++ )
+		    {
+			XMLNode *prmNd = req.childGet(i_r);
+			if( atoi(prmNd->attr("err").c_str()) ) continue;
+
+			prm = cntr.at(TSYS::pathLev(prmNd->attr("path"),2));
+			if( prm.at().isPrcOK ) continue;
+			prm.at().isPrcOK = true;
+
+			for( int i_a = 0; i_a < prmNd->childSize(); i_a++ )
 			{
-			    XMLNode *prmNd = req.childGet(i_r);
-			    if( atoi(prmNd->attr("err").c_str()) ) continue;
+			    XMLNode *aNd = prmNd->childGet(i_a);
+			    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
+			    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-			    prm = cntr.at(TSYS::pathLev(prmNd->attr("path"),2));
-			    if( prm.at().isPrcOK ) continue;
-			    prm.at().isPrcOK = true;
-
-			    for( int i_a = 0; i_a < prmNd->childSize(); i_a++ )
+			    if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
+			    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 			    {
-				XMLNode *aNd = prmNd->childGet(i_a);
-				if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
-				AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
-
-				if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
-				else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
-				{
-				    long long btm = atoll(aNd->attr("tm").c_str());
-				    long long per = atoll(aNd->attr("per").c_str());
-				    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-				    for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
-					buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-				    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
-				}
+				long long btm = atoll(aNd->attr("tm").c_str());
+				long long per = atoll(aNd->attr("per").c_str());
+				TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
+				for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+				    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+				vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 			    }
 			}
 		    }
@@ -419,7 +418,7 @@ void *TMdContr::Task( void *icntr )
 
 	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
 
-	    TSYS::taskSleep((long long)cntr.period()*1000000000);
+	    TSYS::taskSleep((long long)(1e9*cntr.period()));
 	}
     }catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
@@ -440,7 +439,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		if( mStatWork[i_st].second > 0 ) break;
 		try
 		{
-		    int rez = SYS->transport().at().cntrIfCmd(node,"DAQGate");
+		    int rez = SYS->transport().at().cntrIfCmd(node,MOD_ID+id());
 		    mStatWork[i_st].second -= 1;
 		    return rez;
 		}
@@ -612,7 +611,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((long long)(owner().period()*1000000));
+    val.arch().at().setPeriod((long long)(1e6*owner().period()));
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

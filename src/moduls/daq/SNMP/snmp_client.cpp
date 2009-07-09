@@ -355,7 +355,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.en_res.resRelease( );
 	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
-	TSYS::taskSleep((long long)cntr.period()*1000000000);
+	TSYS::taskSleep((long long)(1e9*cntr.period()));
     }
 
     snmp_sess_close(ss);

@@ -1,3 +1,11 @@
+2009-07-09 Roman
+- !!:/Transport/Serial: Interface translation to German is added by Irina Popkova.
+- FIX:/SYS: Crash on zero period is fixed into function TSYS::taskSleep().
+- /DAQ/DAQGate: Early connection restoring after redundant using disable is added.
+- !:/DAQ/DAQGate: Independent requests support is added for diferent controllers and one station.
+- !:/Protocol/SelfSystem: Access resource is deleted.
+
+
 2009-07-08 Roman
 - FIX:/DAQ: Redundance data restoring is made preemptive.
 - FIX:/UI/VCAEngine: Attributes init and free is rewrited and some fixed.

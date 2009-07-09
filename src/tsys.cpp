@@ -68,7 +68,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) :
     //signal(SIGCHLD,sighandler);
     signal(SIGALRM,sighandler);
     signal(SIGPIPE,sighandler);
-    signal(SIGFPE,sighandler);
+    //signal(SIGFPE,sighandler);
     //signal(SIGSEGV,sighandler);
     signal(SIGABRT,sighandler);
 }
@@ -914,6 +914,7 @@ long TSYS::HZ()
 void TSYS::taskSleep( long long per )
 {
     struct timespec sp_tm;
+    if( !per ) per = 1000000000;
 
     clock_gettime(CLOCK_REALTIME,&sp_tm);
     long long pnt_tm = ( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;

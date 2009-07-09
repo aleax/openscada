@@ -1,7 +1,7 @@
-# OpenSCADA core translate to Russian.
-# Copyright (C) 2003-2009 Roman Savochenko
+# OpenSCADA core translate to German.
+# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA package.
-# Roman Savochenko <rom_as@fromru.com>, 2003-2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 #
 #: tarchives.cpp:45 tarchives.cpp:56 tarchives.cpp:156 tarchives.cpp:164
 #: tarchives.cpp:186 tarchives.cpp:194 tarchives.cpp:216 tarchives.cpp:223
