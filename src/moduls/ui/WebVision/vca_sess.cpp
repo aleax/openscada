@@ -2350,7 +2350,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
         }
         else
         {
-            for( int j = 0; j < inundationItems[i].number_point.size(); j++ )
+            for( int j = 0; j < inundationItems[i].number_point.size()-1; j++ )
                 for( int k = 0; k < shapeItems.size(); k++ )
                     if( ((inundationItems[i].number_point[j] == shapeItems[k].n1) && (inundationItems[i].number_point[j+1] == shapeItems[k].n2)) ||
                         ((inundationItems[i].number_point[j] == shapeItems[k].n2) && (inundationItems[i].number_point[j+1] == shapeItems[k].n1)) )
