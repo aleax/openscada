@@ -190,7 +190,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string req, resp;
     int rez, resp_len;
 
-    //ResAlloc res( ores, true );
+    ResAlloc res( ores, true );
 
     bool   isDir = atoi(io.attr("rqDir").c_str()); io.attrDel("rqDir");
     string user = io.attr("rqUser"); io.attrDel("rqUser");
