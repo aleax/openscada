@@ -574,12 +574,12 @@ void TTrOut::stop()
     run_st = false;
 }
 
-int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
+int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     int blen = 0, off = 0;
     fd_set fdset;
 
-    ResAlloc res( nodeRes(), true );
+    if( !noRes ) ResAlloc res( nodeRes(), true );
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 

@@ -134,7 +134,7 @@ class TSocketOut: public TTransportOut
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
-	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
+	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
 
     private:
 	//Methods
@@ -144,13 +144,13 @@ class TSocketOut: public TTransportOut
 	string		&mCertKey,		// SSL certificate
 			&mKeyPass;		// SSL private key password
 
-	Res		wres;
 	SSL_CTX		*ctx;
 	BIO		*conn;
 	SSL		*ssl;
 
 	//- Status atributes -
 	float		trIn, trOut;		// Traffic in and out counter
+	Res		wres;
 };
 
 //************************************************

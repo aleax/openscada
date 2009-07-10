@@ -1,0 +1,1197 @@
+# OpenSCADA.Special.SystemTests translate to German.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+#
+#: test_kernel.cpp:55 test_kernel.cpp:929 test_kernel.cpp:935
+#: test_kernel.cpp:938 test_kernel.cpp:942 test_kernel.cpp:945
+#: test_kernel.cpp:961 test_kernel.cpp:966 test_kernel.cpp:981
+#: test_kernel.cpp:989 test_kernel.cpp:995 test_kernel.cpp:1021
+#: test_kernel.cpp:1026 test_kernel.cpp:1041 test_kernel.cpp:1049
+#: test_kernel.cpp:1055 test_kernel.cpp:1081 test_kernel.cpp:1086
+#: test_kernel.cpp:1102 test_kernel.cpp:1111 test_kernel.cpp:1117
+#: test_kernel.cpp:1143 test_kernel.cpp:1148 test_kernel.cpp:1164
+#: test_kernel.cpp:1173 test_kernel.cpp:1179 test_kernel.cpp:1205
+#: test_kernel.cpp:1210 test_kernel.cpp:1226 test_kernel.cpp:1235
+#: test_kernel.cpp:1241 test_kernel.cpp:1267 test_kernel.cpp:1272
+#: test_kernel.cpp:1288 test_kernel.cpp:1297 test_kernel.cpp:1303
+#: test_kernel.cpp:1330 test_kernel.cpp:1334 test_kernel.cpp:1349
+#: test_kernel.cpp:1357 test_kernel.cpp:1363 test_kernel.cpp:1390
+#: test_kernel.cpp:1394 test_kernel.cpp:1409 test_kernel.cpp:1415
+#: test_kernel.cpp:1421 test_kernel.cpp:1448 test_kernel.cpp:1452
+#: test_kernel.cpp:1467 test_kernel.cpp:1473 test_kernel.cpp:1479
+#: test_kernel.cpp:1506 test_kernel.cpp:1510 test_kernel.cpp:1525
+#: test_kernel.cpp:1531 test_kernel.cpp:1537 test_kernel.cpp:1572
+#: test_kernel.cpp:1579 test_kernel.cpp:1586 test_kernel.cpp:1593
+#: test_kernel.cpp:1600 test_kernel.cpp:1607 test_kernel.cpp:1614
+#: test_kernel.cpp:1621 test_kernel.cpp:1628 test_kernel.cpp:1636
+#: test_kernel.cpp:1643 test_kernel.cpp:1651 test_kernel.cpp:1658
+#: test_kernel.cpp:1665 test_kernel.cpp:1705
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.Special.SystemTests 1.3.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-07 14:57+0200\n"
+"PO-Revision-Date: 2007-10-24 19:01+0300\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: test_kernel.cpp:37
+msgid "SystemTests"
+msgstr ""
+
+#: test_kernel.cpp:38
+msgid "OpenSCADA system's tests"
+msgstr "OpenSCADA-Systemteste"
+
+#: test_kernel.cpp:39
+msgid "Special"
+msgstr "Sonderes"
+
+#: test_kernel.cpp:41
+msgid "TEST"
+msgstr ""
+
+#: test_kernel.cpp:42
+msgid "1.3.6"
+msgstr ""
+
+#: test_kernel.cpp:43
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: test_kernel.cpp:44
+msgid "Allow the group tests for OpenSCADA system."
+msgstr "Enthaelt eine Gruppe von Testen fuer das OpenSCADA-System."
+
+#: test_kernel.cpp:45
+msgid "GPL"
+msgstr ""
+
+#: test_kernel.cpp:50
+msgid "C"
+msgstr ""
+
+#: test_kernel.cpp:92 test_kernel.cpp:99
+msgid "SubType"
+msgstr "Subtyp"
+
+#: test_kernel.cpp:107
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"All tests main options:\n"
+"  id           test's id;\n"
+"  on           on test's flag;\n"
+"  per          repeat period (sek).\n"
+"       *** Test's options ***\n"
+"PARAM        Parameter test:\n"
+"  name         paremeter full name (OperationSystem.AutoDA.CPULoad).\n"
+"XML          XML parsing test:\n"
+"  file         file for XML parsing.\n"
+"MESS         Messages archive test:\n"
+"  arhtor       archivator name (StatErrors.BaseArh);\n"
+"  categ        messages category pattern.\n"
+"SOAttDet     Attach/Detach module test:\n"
+"  name         name modul (path to module);\n"
+"  full         full attach(to start).\n"
+"Val          Parameter atributes value test:\n"
+"  name         parameter attribute (OperationSystem.AutoDA.CPULoad.load);\n"
+"  arch_len     archive value getting depth;\n"
+"  arch_per     archive value getting period.\n"
+"BD           Full database test:\n"
+"  type         type BD;\n"
+"  bd           name BD;\n"
+"  table        table;\n"
+"  size         fields number.\n"
+"TrOut        Output transport test:\n"
+"  addr         input transport address;\n"
+"  type         transport type;\n"
+"  req          request to a input transport.\n"
+"Func\t      Function API test;\n"
+"SysContrLang System control language test:\n"
+"  path         path to language element (/Archive/BaseArh/mess_StatErrors/%%"
+"2fprm%%2fst).\n"
+"ValBuf       Value buffer tests;\n"
+"Archive      Value archive allocation tests:\n"
+"  arch         value archive;\n"
+"  period       values period (us).\n"
+"Base64Code   Mime Base64 algorithm tests.\n"
+"\n"
+msgstr ""
+"========================== Optionen des Moduls <%s:%s> ==========================\n"
+"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei --------\n"
+"Allgemeine Optionen aller Teste:\n"
+"  id           Testbezeichner;\n"
+"  on           Flagge der Aktivierung des Testes;\n"
+"  per          Zeit der Wiederholung (sek).\n"
+"       *** Optionen der Teste ***\n"
+"PARAM        Test des Parameters:\n"
+"  name         Ganzer Name des Parameters (OperationSystem.AutoDA.CPULoad).\n"
+"XML          Test des XML Parsings:\n"
+"  file         Datei fuer XML Parsing.\n"
+"MESS         Test des Berichtearchivs:\n"
+"  arhtor       Archivatorsname (StatErrors.BaseArh);\n"
+"  categ        Schablone der Kategorie der Berichte.\n"
+"SOAttDet     Anschlusstest/Abschalten des Moduls:\n"
+"  name         Name des Moduls;\n"
+"  full         ganz anschliessen(starten).\n"
+"Val          Test der Bedeutung der Parameterattribute :\n"
+"  name         Attribut des Parameters (OperationSystem.AutoDA.CPULoad.load);\n"
+"  arch_len     Tiefe der empfangenen Bedeutungen des Archivs;\n"
+"  arch_per     Zeit der empfangenen Bedeutungen des Archivs.\n"
+"BD           Ganzer DB-Test:\n"
+"  type         DB Typ;\n"
+"  bd           DB Name;\n"
+"  table        Tabelle;\n"
+"  size         Quantitaet der Aufzeichnungen.\n"
+"TrOut        Test des Ausgangstransport:\n"
+"  addr         Adresse des Eingangstransports;\n"
+"  type         Typ des Transports;\n"
+"  req          Anfrage an Eingangstransport.\n"
+"Func\t       Test des Subsystems der Funktionen;\n"
+"SysContrLang Sprachentest der Systemsteuerung:\n"
+"  path         Route zum Sprachenelement (/Archive/BaseArh/mess_StatErrors/%%"
+"2fprm%%2fst).\n"
+"ValBuf       Teste des Bedeutungenpuffers;\n"
+"Archive      Teste der Unterbringung der Bedeutungen ins Archiv:\n"
+"  arch         Bedeutungenarchiv;\n"
+"  period       Periodizitaet der Bedeutungen (mksek).\n"
+"Base64Code   Teste des Algorythmus Mime Base64.\n"
+"\n"
+
+#: test_kernel.cpp:155
+msgid "h"
+msgstr ""
+
+#: test_kernel.cpp:158
+msgid "help"
+msgstr ""
+
+#: test_kernel.cpp:185
+msgid ": Is starting...."
+msgstr ": Start...."
+
+#: test_kernel.cpp:186
+msgid "Not started!"
+msgstr "Nicht gestartet!"
+
+#: test_kernel.cpp:194
+msgid ": Is stopping...."
+msgstr ": Stoppen...."
+
+#: test_kernel.cpp:195
+msgid "Not stopped!"
+msgstr "Nicht gestoppt"
+
+#: test_kernel.cpp:208
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: test_kernel.cpp:226
+msgid "prm"
+msgstr ""
+
+#: test_kernel.cpp:228
+msgid "on"
+msgstr ""
+
+#: test_kernel.cpp:228 test_kernel.cpp:425
+msgid "1"
+msgstr ""
+
+#: test_kernel.cpp:228 test_kernel.cpp:229 test_kernel.cpp:343
+msgid "per"
+msgstr ""
+
+#: test_kernel.cpp:231 test_kernel.cpp:424 test_kernel.cpp:435
+#: test_kernel.cpp:449 test_kernel.cpp:466 test_kernel.cpp:475
+#: test_kernel.cpp:477 test_kernel.cpp:493 test_kernel.cpp:498
+#: test_kernel.cpp:510 test_kernel.cpp:515
+msgid "id"
+msgstr ""
+
+#: test_kernel.cpp:234
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: test_kernel.cpp:250
+msgid "PARAM"
+msgstr ""
+
+#: test_kernel.cpp:252 test_kernel.cpp:256 test_kernel.cpp:311
+#: test_kernel.cpp:360 test_kernel.cpp:371 test_kernel.cpp:421
+#: test_kernel.cpp:432 test_kernel.cpp:446 test_kernel.cpp:460
+#: test_kernel.cpp:465 test_kernel.cpp:468 test_kernel.cpp:470
+#: test_kernel.cpp:488 test_kernel.cpp:490 test_kernel.cpp:492
+#: test_kernel.cpp:497 test_kernel.cpp:505 test_kernel.cpp:507
+#: test_kernel.cpp:509 test_kernel.cpp:514 test_kernel.cpp:529
+msgid "name"
+msgstr ""
+
+#: test_kernel.cpp:256
+#, c-format
+msgid "-------- Begin parameter <%s> test ----------"
+msgstr "-------- Beginn des Testparameters <%s> ----------"
+
+#: test_kernel.cpp:261
+#, c-format
+msgid "Value attrbutes present: %d"
+msgstr "Bedeutung des Attributs ist vorhanden: %d"
+
+#: test_kernel.cpp:266 test_kernel.cpp:289
+#, c-format
+msgid "%s(SELECT): %s"
+msgstr ""
+
+#: test_kernel.cpp:270 test_kernel.cpp:293
+#, c-format
+msgid "%s(STRING): %s"
+msgstr ""
+
+#: test_kernel.cpp:273 test_kernel.cpp:296
+#, c-format
+msgid "%s(INTEGER): %d"
+msgstr ""
+
+#: test_kernel.cpp:276 test_kernel.cpp:299
+#, c-format
+msgid "%s(REAL): %f"
+msgstr ""
+
+#: test_kernel.cpp:279 test_kernel.cpp:302
+#, c-format
+msgid "%s(BOOLEAN): %d"
+msgstr ""
+
+#: test_kernel.cpp:285
+#, c-format
+msgid "Configs throw control: %d"
+msgstr ""
+
+#: test_kernel.cpp:311
+#, c-format
+msgid "-------- End parameter <%s> test ----------"
+msgstr ""
+
+#: test_kernel.cpp:315
+msgid "XML"
+msgstr ""
+
+#: test_kernel.cpp:317
+msgid "file"
+msgstr ""
+
+#: test_kernel.cpp:320
+msgid "-------- Begin XML parsing test ----------"
+msgstr ""
+
+#: test_kernel.cpp:331
+msgid "-------- End XML parsing test ----------"
+msgstr ""
+
+#: test_kernel.cpp:336
+msgid "MESS"
+msgstr ""
+
+#: test_kernel.cpp:340
+msgid "arhtor"
+msgstr ""
+
+#: test_kernel.cpp:341
+#, c-format
+msgid "-------- Begin message archive test for archivator %s ----------"
+msgstr ""
+
+#: test_kernel.cpp:343
+msgid "categ"
+msgstr ""
+
+#: test_kernel.cpp:344
+#, c-format
+msgid "New messages present %d."
+msgstr ""
+
+#: test_kernel.cpp:350
+#, c-format
+msgid "<%s> : <%s> : <%s>"
+msgstr ""
+
+#: test_kernel.cpp:352
+#, c-format
+msgid "-------- End message archive test for archivator %s ----------"
+msgstr ""
+
+#: test_kernel.cpp:356
+msgid "SOAttDet"
+msgstr ""
+
+#: test_kernel.cpp:362
+#, c-format
+msgid "-------- Begin SO <%s> test ----------"
+msgstr ""
+
+#: test_kernel.cpp:364
+msgid "full"
+msgstr ""
+
+#: test_kernel.cpp:365
+#, c-format
+msgid "-------- End SO <%s> test ----------"
+msgstr ""
+
+#: test_kernel.cpp:369
+msgid "Val"
+msgstr ""
+
+#: test_kernel.cpp:372
+msgid "arch_len"
+msgstr ""
+
+#: test_kernel.cpp:373
+msgid "arch_per"
+msgstr ""
+
+#: test_kernel.cpp:375
+#, c-format
+msgid "Value of: %s."
+msgstr ""
+
+#: test_kernel.cpp:382
+#, c-format
+msgid "Last value = %s"
+msgstr ""
+
+#: test_kernel.cpp:389
+#, c-format
+msgid "Value %d = %s."
+msgstr ""
+
+#: test_kernel.cpp:395
+msgid "BD"
+msgstr "DB"
+
+#: test_kernel.cpp:398 test_kernel.cpp:552
+msgid "type"
+msgstr ""
+
+#: test_kernel.cpp:399
+msgid "test_bd"
+msgstr ""
+
+#: test_kernel.cpp:400
+msgid "bd"
+msgstr ""
+
+#: test_kernel.cpp:401
+msgid "table"
+msgstr ""
+
+#: test_kernel.cpp:402
+msgid "size"
+msgstr ""
+
+#: test_kernel.cpp:406
+msgid "***** Begin DB tests block *****"
+msgstr ""
+
+#: test_kernel.cpp:408
+#, c-format
+msgid "Open DB: <%s>"
+msgstr ""
+
+#: test_kernel.cpp:414
+#, c-format
+msgid "Open Table: <%s>"
+msgstr ""
+
+#: test_kernel.cpp:416
+#, c-format
+msgid "Connect to table: <%s>"
+msgstr ""
+
+#: test_kernel.cpp:419
+msgid "Create DB config"
+msgstr ""
+
+#: test_kernel.cpp:421
+msgid "Name fields"
+msgstr ""
+
+#: test_kernel.cpp:421 test_kernel.cpp:487
+msgid "20"
+msgstr ""
+
+#: test_kernel.cpp:422 test_kernel.cpp:433 test_kernel.cpp:447
+#: test_kernel.cpp:465 test_kernel.cpp:471 test_kernel.cpp:473
+#: test_kernel.cpp:492 test_kernel.cpp:497 test_kernel.cpp:509
+#: test_kernel.cpp:514
+msgid "descr"
+msgstr ""
+
+#: test_kernel.cpp:422
+msgid "Description fields"
+msgstr ""
+
+#: test_kernel.cpp:422
+msgid "50"
+msgstr ""
+
+#: test_kernel.cpp:423 test_kernel.cpp:434 test_kernel.cpp:448
+#: test_kernel.cpp:466 test_kernel.cpp:498 test_kernel.cpp:515
+msgid "val"
+msgstr ""
+
+#: test_kernel.cpp:423
+msgid "Field value"
+msgstr ""
+
+#: test_kernel.cpp:423
+msgid "10.2"
+msgstr ""
+
+#: test_kernel.cpp:423
+msgid "5"
+msgstr ""
+
+#: test_kernel.cpp:424
+msgid "Field id"
+msgstr ""
+
+#: test_kernel.cpp:424
+msgid "7"
+msgstr ""
+
+#: test_kernel.cpp:424
+msgid "34"
+msgstr ""
+
+#: test_kernel.cpp:425 test_kernel.cpp:436 test_kernel.cpp:450
+#: test_kernel.cpp:466 test_kernel.cpp:478 test_kernel.cpp:480
+#: test_kernel.cpp:493 test_kernel.cpp:498 test_kernel.cpp:510
+#: test_kernel.cpp:515
+msgid "stat"
+msgstr ""
+
+#: test_kernel.cpp:425
+msgid "Field stat"
+msgstr ""
+
+#: test_kernel.cpp:428
+msgid "Create fields!"
+msgstr ""
+
+#: test_kernel.cpp:432 test_kernel.cpp:446 test_kernel.cpp:460
+#: test_kernel.cpp:468 test_kernel.cpp:470 test_kernel.cpp:529
+msgid "Sh"
+msgstr ""
+
+#: test_kernel.cpp:433
+msgid "Shifr "
+msgstr ""
+
+#: test_kernel.cpp:439
+#, c-format
+msgid "Create %d fields time <%f>sek!"
+msgstr ""
+
+#: test_kernel.cpp:442
+msgid "Update fields!"
+msgstr ""
+
+#: test_kernel.cpp:447 test_kernel.cpp:471 test_kernel.cpp:473
+msgid "New shifr "
+msgstr ""
+
+#: test_kernel.cpp:453
+#, c-format
+msgid "Update %d fields time <%f>sek!"
+msgstr ""
+
+#: test_kernel.cpp:456
+msgid "Check fields!"
+msgstr ""
+
+#: test_kernel.cpp:464
+#, c-format
+msgid "Field #155=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!"
+msgstr ""
+
+#: test_kernel.cpp:469
+#, c-format
+msgid "Field <Sh> <%s>!=<%s> error!"
+msgstr ""
+
+#: test_kernel.cpp:472
+#, c-format
+msgid "Field <descr> <%s>!=<%s> error!"
+msgstr ""
+
+#: test_kernel.cpp:476
+#, c-format
+msgid "Field <id> <%d>!=<%d> error!"
+msgstr ""
+
+#: test_kernel.cpp:479
+#, c-format
+msgid "Field <stat> <%d>!=<%d> error!"
+msgstr ""
+
+#: test_kernel.cpp:482
+#, c-format
+msgid "Get %d fields time <%f>sek!"
+msgstr ""
+
+#: test_kernel.cpp:485
+msgid "Change DB structure!"
+msgstr ""
+
+#: test_kernel.cpp:487 test_kernel.cpp:504
+msgid "fix"
+msgstr ""
+
+#: test_kernel.cpp:487
+msgid "BD fix test"
+msgstr ""
+
+#: test_kernel.cpp:488 test_kernel.cpp:505
+msgid "Sh1"
+msgstr ""
+
+#: test_kernel.cpp:490 test_kernel.cpp:492 test_kernel.cpp:507
+#: test_kernel.cpp:509
+msgid "Sh2"
+msgstr ""
+
+#: test_kernel.cpp:492 test_kernel.cpp:509
+msgid "New shifr 2"
+msgstr ""
+
+#: test_kernel.cpp:495
+msgid "Add column error!"
+msgstr ""
+
+#: test_kernel.cpp:496 test_kernel.cpp:513
+#, c-format
+msgid "Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!"
+msgstr ""
+
+#: test_kernel.cpp:501
+msgid "Add column ok!"
+msgstr ""
+
+#: test_kernel.cpp:512
+msgid "Del column error!"
+msgstr ""
+
+#: test_kernel.cpp:518
+msgid "Del column ok!"
+msgstr ""
+
+#: test_kernel.cpp:532
+#, c-format
+msgid "Del %d fields time <%f>sek!"
+msgstr ""
+
+#: test_kernel.cpp:536
+#, c-format
+msgid "Close and delete table: <%s>"
+msgstr ""
+
+#: test_kernel.cpp:539
+#, c-format
+msgid "Close and delete DB: <%s>"
+msgstr ""
+
+#: test_kernel.cpp:544
+msgid "***** End BD tests block *****"
+msgstr ""
+
+#: test_kernel.cpp:548
+msgid "TrOut"
+msgstr ""
+
+#: test_kernel.cpp:551
+msgid "addr"
+msgstr ""
+
+#: test_kernel.cpp:553
+msgid "req"
+msgstr ""
+
+#: test_kernel.cpp:567
+#, c-format
+msgid "%s: Put <%s>. Get: <%s>"
+msgstr ""
+
+#: test_kernel.cpp:570
+msgid "Func"
+msgstr ""
+
+#: test_kernel.cpp:907
+msgid "SysContrLang"
+msgstr ""
+
+#: test_kernel.cpp:909 test_kernel.cpp:913
+msgid "path"
+msgstr ""
+
+#: test_kernel.cpp:910
+#, c-format
+msgid "SysContr tests for path <%s>."
+msgstr ""
+
+#: test_kernel.cpp:912
+msgid "info"
+msgstr ""
+
+#: test_kernel.cpp:913
+msgid "user"
+msgstr ""
+
+#: test_kernel.cpp:913
+msgid "root"
+msgstr ""
+
+#: test_kernel.cpp:918
+msgid "ValBuf"
+msgstr ""
+
+#: test_kernel.cpp:923
+msgid "*** Begin value buffer tests. ***"
+msgstr ""
+
+#: test_kernel.cpp:925
+msgid ""
+"Test1. Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, "
+"HighRes = no."
+msgstr ""
+
+#: test_kernel.cpp:928 test_kernel.cpp:1581 test_kernel.cpp:1707
+msgid "Test1 passed."
+msgstr ""
+
+#: test_kernel.cpp:929
+msgid "Test1 failed! Create buffer error!"
+msgstr ""
+
+#: test_kernel.cpp:932
+msgid "Test2. Change buffer mode."
+msgstr ""
+
+#: test_kernel.cpp:934
+msgid "  Disable hard griding ok."
+msgstr ""
+
+#: test_kernel.cpp:935
+msgid "Test2 failed! Disable hard griding failed!"
+msgstr ""
+
+#: test_kernel.cpp:937
+msgid "  Set high resolution time ok."
+msgstr ""
+
+#: test_kernel.cpp:938
+msgid "Test2 failed! Set high resolution time failed!"
+msgstr ""
+
+#: test_kernel.cpp:941
+msgid "  Change buffer size ok."
+msgstr ""
+
+#: test_kernel.cpp:942
+msgid "Test2 failed! Change buffer size failed!"
+msgstr ""
+
+#: test_kernel.cpp:944
+msgid "  Change period ok."
+msgstr ""
+
+#: test_kernel.cpp:945
+msgid "Test2 failed! Change period failed!"
+msgstr ""
+
+#: test_kernel.cpp:946 test_kernel.cpp:1595
+msgid "Test2 passed."
+msgstr ""
+
+#: test_kernel.cpp:949
+msgid "Test3. Destroy buffer."
+msgstr ""
+
+#: test_kernel.cpp:951 test_kernel.cpp:1609
+msgid "Test3 passed."
+msgstr ""
+
+#: test_kernel.cpp:954
+msgid "Test4. Fill and check hard time griding string buffer."
+msgstr ""
+
+#: test_kernel.cpp:959 test_kernel.cpp:965 test_kernel.cpp:976
+#: test_kernel.cpp:977 test_kernel.cpp:978 test_kernel.cpp:988
+#: test_kernel.cpp:1002 test_kernel.cpp:1079 test_kernel.cpp:1085
+#: test_kernel.cpp:1096 test_kernel.cpp:1097 test_kernel.cpp:1098
+#: test_kernel.cpp:1099 test_kernel.cpp:1110 test_kernel.cpp:1124
+#: test_kernel.cpp:1203 test_kernel.cpp:1209 test_kernel.cpp:1220
+#: test_kernel.cpp:1221 test_kernel.cpp:1222 test_kernel.cpp:1223
+#: test_kernel.cpp:1234 test_kernel.cpp:1248 test_kernel.cpp:1328
+#: test_kernel.cpp:1333 test_kernel.cpp:1343 test_kernel.cpp:1344
+#: test_kernel.cpp:1345 test_kernel.cpp:1346 test_kernel.cpp:1356
+#: test_kernel.cpp:1370 test_kernel.cpp:1446 test_kernel.cpp:1451
+#: test_kernel.cpp:1461 test_kernel.cpp:1462 test_kernel.cpp:1463
+#: test_kernel.cpp:1464 test_kernel.cpp:1472 test_kernel.cpp:1486
+msgid "Test: "
+msgstr ""
+
+#: test_kernel.cpp:961
+msgid "Test4 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:966
+msgid "Test4 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:968 test_kernel.cpp:1028 test_kernel.cpp:1088
+#: test_kernel.cpp:1150 test_kernel.cpp:1212 test_kernel.cpp:1274
+#: test_kernel.cpp:1335 test_kernel.cpp:1395 test_kernel.cpp:1453
+#: test_kernel.cpp:1511
+msgid "  Write a half buffer ok."
+msgstr ""
+
+#: test_kernel.cpp:981
+msgid "Test4 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:986 test_kernel.cpp:1107 test_kernel.cpp:1231
+msgid "Test: 11"
+msgstr ""
+
+#: test_kernel.cpp:989
+msgid "Test4 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:991 test_kernel.cpp:1051 test_kernel.cpp:1113
+#: test_kernel.cpp:1175 test_kernel.cpp:1237 test_kernel.cpp:1299
+#: test_kernel.cpp:1359 test_kernel.cpp:1417 test_kernel.cpp:1475
+#: test_kernel.cpp:1533
+msgid "  Write a roll buffer ok."
+msgstr ""
+
+#: test_kernel.cpp:993 test_kernel.cpp:994 test_kernel.cpp:1115
+#: test_kernel.cpp:1116 test_kernel.cpp:1239 test_kernel.cpp:1240
+#: test_kernel.cpp:1361 test_kernel.cpp:1362 test_kernel.cpp:1477
+#: test_kernel.cpp:1478
+msgid "Test up."
+msgstr ""
+
+#: test_kernel.cpp:995
+msgid "Test4 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:996 test_kernel.cpp:1056 test_kernel.cpp:1118
+#: test_kernel.cpp:1180 test_kernel.cpp:1242 test_kernel.cpp:1304
+#: test_kernel.cpp:1364 test_kernel.cpp:1422 test_kernel.cpp:1480
+#: test_kernel.cpp:1538
+msgid "  Update buffer end ok."
+msgstr ""
+
+#: test_kernel.cpp:1003 test_kernel.cpp:1063 test_kernel.cpp:1125
+#: test_kernel.cpp:1187 test_kernel.cpp:1249 test_kernel.cpp:1311
+#: test_kernel.cpp:1371 test_kernel.cpp:1429 test_kernel.cpp:1487
+#: test_kernel.cpp:1545
+#, c-format
+msgid "  Write 1000 values time %f ms!"
+msgstr ""
+
+#: test_kernel.cpp:1008 test_kernel.cpp:1068 test_kernel.cpp:1130
+#: test_kernel.cpp:1192 test_kernel.cpp:1254 test_kernel.cpp:1316
+#: test_kernel.cpp:1376 test_kernel.cpp:1434 test_kernel.cpp:1492
+#: test_kernel.cpp:1550
+#, c-format
+msgid "  Read 1000 values time %f ms!"
+msgstr ""
+
+#: test_kernel.cpp:1010 test_kernel.cpp:1623
+msgid "Test4 passed."
+msgstr ""
+
+#: test_kernel.cpp:1014
+msgid "Test5. Fill and check hard time griding integer buffer."
+msgstr ""
+
+#: test_kernel.cpp:1021
+msgid "Test5 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1026
+msgid "Test5 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1041
+msgid "Test5 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1049
+msgid "Test5 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1055
+msgid "Test5 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1070 test_kernel.cpp:1638
+msgid "Test5 passed."
+msgstr ""
+
+#: test_kernel.cpp:1074
+msgid "Test6. Fill and check soft time griding string buffer (high time)."
+msgstr ""
+
+#: test_kernel.cpp:1081
+msgid "Test6 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1086
+msgid "Test6 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1102
+msgid "Test6 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1109 test_kernel.cpp:1233
+msgid "Test: 12"
+msgstr ""
+
+#: test_kernel.cpp:1111 test_kernel.cpp:1235
+msgid "Test6 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1117
+msgid "Test6 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1132 test_kernel.cpp:1653
+msgid "Test6 passed."
+msgstr ""
+
+#: test_kernel.cpp:1136
+msgid "Test7. Fill and check soft time griding integer buffer (high time)."
+msgstr ""
+
+#: test_kernel.cpp:1143
+msgid "Test7 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1148
+msgid "Test7 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1164
+msgid "Test7 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1173
+msgid "Test7 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1179
+msgid "Test7 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1194 test_kernel.cpp:1667
+msgid "Test7 passed."
+msgstr ""
+
+#: test_kernel.cpp:1198
+msgid "Test8. Fill and check soft time griding string buffer (low time)."
+msgstr ""
+
+#: test_kernel.cpp:1205
+msgid "Test8 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1210
+msgid "Test8 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1226
+msgid "Test8 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1241
+msgid "Test8 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1256
+msgid "Test8 passed."
+msgstr ""
+
+#: test_kernel.cpp:1260
+msgid "Test9. Fill and check soft time griding integer buffer (low time)."
+msgstr ""
+
+#: test_kernel.cpp:1267
+msgid "Test9 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1272
+msgid "Test9 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1288
+msgid "Test9 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1297
+msgid "Test9 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1303
+msgid "Test9 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1318
+msgid "Test9 passed."
+msgstr ""
+
+#: test_kernel.cpp:1322
+msgid "Test10. Fill and check free time string buffer (high time)."
+msgstr ""
+
+#: test_kernel.cpp:1330
+msgid "Test10 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1334
+msgid "Test10 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1349
+msgid "Test10 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1357
+msgid "Test10 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1363
+msgid "Test10 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1378
+msgid "Test10 passed."
+msgstr ""
+
+#: test_kernel.cpp:1382
+msgid "Test11. Fill and check free time integer buffer (high time)."
+msgstr ""
+
+#: test_kernel.cpp:1390
+msgid "Test11 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1394
+msgid "Test11 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1409
+msgid "Test11 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1415
+msgid "Test11 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1421
+msgid "Test11 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1436
+msgid "Test11 passed."
+msgstr ""
+
+#: test_kernel.cpp:1440
+msgid "Test12. Fill and check free time string buffer (low time)."
+msgstr ""
+
+#: test_kernel.cpp:1448
+msgid "Test12 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1452
+msgid "Test12 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1467
+msgid "Test12 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1473
+msgid "Test12 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1479
+msgid "Test12 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1494
+msgid "Test12 passed."
+msgstr ""
+
+#: test_kernel.cpp:1498
+msgid "Test13. Fill and check free time integer buffer (low time)."
+msgstr ""
+
+#: test_kernel.cpp:1506
+msgid "Test13 failed! Buffer begin or/and end error, at filling half buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1510
+msgid "Test13 failed! Write a half buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1525
+msgid "Test13 failed! Buffer begin or/and end error, at roll filling buffer!"
+msgstr ""
+
+#: test_kernel.cpp:1531
+msgid "Test13 failed! Write a roll buffer values error!"
+msgstr ""
+
+#: test_kernel.cpp:1537
+msgid "Test13 failed! Update buffer end error!"
+msgstr ""
+
+#: test_kernel.cpp:1552
+msgid "Test13 passed."
+msgstr ""
+
+#: test_kernel.cpp:1555
+msgid "Archive"
+msgstr ""
+
+#: test_kernel.cpp:1557
+msgid "arch"
+msgstr ""
+
+#: test_kernel.cpp:1558
+msgid "period"
+msgstr ""
+
+#: test_kernel.cpp:1560
+#, c-format
+msgid "*** Begin archive <%s> tests. ***"
+msgstr ""
+
+#: test_kernel.cpp:1569
+msgid "Test1. Simple fill and check archive."
+msgstr ""
+
+#: test_kernel.cpp:1579
+msgid "Test1 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1583
+msgid "Test2. Internal insert double value (down)."
+msgstr ""
+
+#: test_kernel.cpp:1593
+msgid "Test2 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1597
+msgid "Test3. Internal insert double value (up)."
+msgstr ""
+
+#: test_kernel.cpp:1607
+msgid "Test3 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1611
+msgid "Test4. Internal insert double value (down)."
+msgstr ""
+
+#: test_kernel.cpp:1621
+msgid "Test4 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1625
+msgid "Test5. Internal insert no double value."
+msgstr ""
+
+#: test_kernel.cpp:1636
+msgid "Test5 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1640
+msgid "Test6. Internal insert double (up) value."
+msgstr ""
+
+#: test_kernel.cpp:1651
+msgid "Test6 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1655
+msgid "Test7. Internal insert value instaead double value."
+msgstr ""
+
+#: test_kernel.cpp:1665
+msgid "Test7 failed!"
+msgstr ""
+
+#: test_kernel.cpp:1683
+#, c-format
+msgid "*** End archive <%s> tests. ***"
+msgstr ""
+
+#: test_kernel.cpp:1685
+msgid "Base64Code"
+msgstr ""
+
+#: test_kernel.cpp:1687
+msgid "*** Begin Base64 coding and encoding test. ***"
+msgstr ""
+
+#: test_kernel.cpp:1689
+msgid "Test1. Coding test."
+msgstr ""
+
+#: test_kernel.cpp:1695
+#, c-format
+msgid "  Code %d size text time %f ms!"
+msgstr ""
+
+#: test_kernel.cpp:1696
+msgid "  Coded text: "
+msgstr ""
+
+#: test_kernel.cpp:1700
+#, c-format
+msgid "  Encode %d size text time %f ms!"
+msgstr ""
+
+#: test_kernel.cpp:1705
+msgid "Test1 failed! Coding error!"
+msgstr ""
+
+#: test_kernel.cpp:1718
+#, c-format
+msgid "%s{%d <%s>, text <%s>, childs - %d!"
+msgstr ""
+
+#: test_kernel.cpp:1722
+#, c-format
+msgid "        Attr <%s> = <%s>!"
+msgstr ""
+
+#: test_kernel.cpp:1725
+#, c-format
+msgid "%s}%d <%s>"
+msgstr ""

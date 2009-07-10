@@ -748,10 +748,11 @@ void TSocketOut::stop()
     run_st = false;
 }
 
-int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
+int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     int kz = 0, reqTry = 0;
 
+    if( !noRes ) ResAlloc resN( nodeRes(), true );
     ResAlloc res( wres, true );
     int prevTmOut = timeout( );
     if( time ) setTimeout(time);

@@ -766,12 +766,13 @@ void TSocketOut::stop()
     run_st = false;
 }
 
-int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
+int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     int		ret = 0;
     char	err[255];
 
     if( !time ) time = 5000;
+    if( !noRes ) ResAlloc resN( nodeRes(), true );
     ResAlloc res( wres, true );
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));

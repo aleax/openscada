@@ -99,7 +99,6 @@ class TProt: public TProtocol
 
 	//Attributes
 	Res		ses_res;
-	Res		ores;
 	vector<SAuth>	auth_lst;
 	int		m_t_auth, mComprLev, mComprBrd;
 };

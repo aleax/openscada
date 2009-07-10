@@ -290,6 +290,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string mbap, err, rez;
     char buf[1000];
 
+    ResAlloc resN( tro.nodeRes(), true );
+
     string prt   = io.name();
     string sid   = io.attr("id");
     int    reqTm = atoi(io.attr("reqTm").c_str());
@@ -313,7 +315,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += pdu;
 
 	    //> Send request
-	    int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
+	    int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
 	    rez.assign(buf,resp_len);
 	    if( rez.size() < 7 )	err = _("13:Error server respond");
 	    else
@@ -323,7 +325,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		//> Wait tail
 		while( rez.size() < (resp_sz+6) )
 		{
-		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), reqTm );
+		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), reqTm, true );
 		    rez.append( buf, resp_len );
 		}
 		pdu = rez.substr(7);
@@ -340,7 +342,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //> Send request
 	    for( int i_tr = 0; i_tr < reqTry; i_tr++ )
 	    {
-		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
+		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
 		rez.assign(buf,resp_len);
 
 		if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
@@ -361,7 +363,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //> Send request
 	    for( int i_tr = 0; i_tr < reqTry; i_tr++ )
 	    {
-		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm );
+		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
 		rez.assign(buf,resp_len);
 
 		if( rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\r\n" )

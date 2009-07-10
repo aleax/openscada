@@ -903,7 +903,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	{
 	    long long stm = TSYS::curTime( );
 	    char buf[STR_BUF_LEN];
-	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),5000);
+	    ResAlloc resN( nodeRes(), true );
+	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),5000,true);
 	    answ.assign(buf,resp_len);
 
 	    while( resp_len == sizeof(buf) )

@@ -95,7 +95,7 @@ class TTrOut: public TTransportOut
 	void stop( );
 
 	//!!! The inherited (virtual) sending and receiving data interface function
-	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );
+	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
 
     private:
 	//Methods

@@ -138,12 +138,14 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void start( )			{ };
 	virtual void stop( )			{ };
 
-	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 )
+	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false )
 	{ return 0; }
 
 	void messProtIO( XMLNode &io, const string &prot );
 
 	TTipTransport &owner( );
+
+	Res &nodeRes( )					{ return nRes; }
 
     protected:
 	//Methods
@@ -170,8 +172,9 @@ class TTransportOut : public TCntrNode, public TConfig
 	bool	&m_start;
 	string	m_db;
 
-	//- Reserve parameters -
+	//> Reserve parameters
 	int	m_prm1, m_prm2;
+	Res	nRes;
 };
 
 //************************************************

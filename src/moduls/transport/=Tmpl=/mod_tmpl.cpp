@@ -348,7 +348,7 @@ void TTrOut::stop()
 }
 
 //!!! The inherited (virtual) sending data and receiving interface function implementation. Append into for your need.
-int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
+int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
