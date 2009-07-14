@@ -173,29 +173,30 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    if( !prc_st )
-    {
-	//> Establish connection
-	SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.')).at().start();
+    if( prc_st ) return;
 
-	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
+    //> Establish connection
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    try { tr.at().start(); }
+    catch( TError err ){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-	//> Start the gathering data task
-	pthread_attr_t pthr_attr;
-	pthread_attr_init( &pthr_attr );
-	struct sched_param prior;
-	if( mPrior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
-	else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
-	prior.__sched_priority = mPrior;
-	pthread_attr_setschedparam( &pthr_attr, &prior );
+    //> Clear statistic
+    numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
 
-	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
-	pthread_attr_destroy( &pthr_attr );
-	if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task is not started!") );
-    }
+    //> Start the gathering data task
+    pthread_attr_t pthr_attr;
+    pthread_attr_init( &pthr_attr );
+    struct sched_param prior;
+    if( mPrior && SYS->user() == "root" )
+	pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
+    else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
+    prior.__sched_priority = mPrior;
+    pthread_attr_setschedparam( &pthr_attr, &prior );
+
+    pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
+    pthread_attr_destroy( &pthr_attr );
+    if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
+	throw TError( nodePath().c_str(), _("Gathering task is not started!") );
 }
 
 void TMdContr::stop_( )
