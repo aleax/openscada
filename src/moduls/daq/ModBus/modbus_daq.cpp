@@ -149,7 +149,7 @@ string TMdContr::getStatus( )
 
     if( startStat( ) && !redntUse( ) )
     {
-	if( tmDelay ) val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
+	if( tmDelay > 0 ) val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
 	else val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
 				    tmGath,numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
     }
@@ -423,117 +423,114 @@ void *TMdContr::Task( void *icntr )
 	{
 	    long long t_cnt = TSYS::curTime();
 
-	    if( cntr.tmDelay > 0 )	cntr.tmDelay-=cntr.period();
-	    else
-	    {
+	    if( cntr.tmDelay > 0 )	{ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 #if OSC_DEBUG >= 3
-		mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
+	    mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
 #endif
-		ResAlloc res( cntr.req_res, false );
+	    ResAlloc res( cntr.req_res, false );
 
-		//> Get coils
-		for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
+	    //> Get coils
+	    for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
+	    {
+		if( cntr.endrun_req ) break;
+		if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err = _("4:Server failure."); continue; }
+		//>> Encode request PDU (Protocol Data Units)
+		pdu = (char)0x1;					//Function, read multiple coils
+		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);	//Address MSB
+		pdu += (char)cntr.acqBlksCoil[i_b].off;		//Address LSB
+		pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
+		pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of coils LSB
+		//>> Request to remote server
+		cntr.acqBlksCoil[i_b].err = cntr.modBusReq( pdu );
+		if( cntr.acqBlksCoil[i_b].err.empty() )
 		{
-		    if( cntr.endrun_req ) break;
-		    if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err = _("4:Server failure."); continue; }
-		    //>> Encode request PDU (Protocol Data Units)
-		    pdu = (char)0x1;					//Function, read multiple coils
-		    pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);	//Address MSB
-		    pdu += (char)cntr.acqBlksCoil[i_b].off;		//Address LSB
-		    pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
-		    pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of coils LSB
-		    //>> Request to remote server
-		    cntr.acqBlksCoil[i_b].err = cntr.modBusReq( pdu );
-		    if( cntr.acqBlksCoil[i_b].err.empty() )
-		    {
-			for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
-			    cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
-			cntr.numRCoil += cntr.acqBlksCoil[i_b].val.size();
-		    }
-		    else if( atoi(cntr.acqBlksCoil[i_b].err.c_str()) == 14 )
-		    {
-			cntr.setCntrDelay(cntr.acqBlksCoil[i_b].err);
-			break;
-		    }
+		    for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
+			cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+		    cntr.numRCoil += cntr.acqBlksCoil[i_b].val.size();
 		}
-		if( cntr.tmDelay > 0 )	continue;
-		//> Get input's coils
-		for( int i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++ )
+		else if( atoi(cntr.acqBlksCoil[i_b].err.c_str()) == 14 )
 		{
-		    if( cntr.endrun_req ) break;
-		    if( cntr.redntUse( ) ) { cntr.acqBlksCoilIn[i_b].err = _("4:Server failure."); continue; }
-		    //>> Encode request PDU (Protocol Data Units)
-		    pdu = (char)0x2;					//Function, read multiple input's coils
-		    pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
-		    pdu += (char)cntr.acqBlksCoilIn[i_b].off;		//Address LSB
-		    pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
-		    pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
-		    //>> Request to remote server
-		    cntr.acqBlksCoilIn[i_b].err = cntr.modBusReq( pdu );
-		    if( cntr.acqBlksCoilIn[i_b].err.empty() )
-		    {
-			for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
-			    cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
-			cntr.numRCoilIn += cntr.acqBlksCoilIn[i_b].val.size();
-		    }
-		    else if( atoi(cntr.acqBlksCoilIn[i_b].err.c_str()) == 14 )
-		    {
-			cntr.setCntrDelay(cntr.acqBlksCoilIn[i_b].err);
-			break;
-		    }
+		    cntr.setCntrDelay(cntr.acqBlksCoil[i_b].err);
+		    break;
 		}
-		if( cntr.tmDelay > 0 )	continue;
-		//> Get registers
-		for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
-		{
-		    if( cntr.endrun_req ) break;
-		    if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err = _("4:Server failure."); continue; }
-		    //>> Encode request PDU (Protocol Data Units)
-		    pdu = (char)0x3;				//Function, read multiple registers
-		    pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
-		    pdu += (char)(cntr.acqBlks[i_b].off/2);		//Address LSB
-		    pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
-		    pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
-		    //>> Request to remote server
-		    cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
-		    if( cntr.acqBlks[i_b].err.empty() )
-		    {
-			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
-			cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
-		    }
-		    else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
-		    {
-			cntr.setCntrDelay(cntr.acqBlks[i_b].err);
-			break;
-		    }
-		}
-		if( cntr.tmDelay > 0 )	continue;
-		//> Get input registers
-		for( int i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++ )
-		{
-		    if( cntr.endrun_req ) break;
-		    if( cntr.redntUse( ) ) { cntr.acqBlksIn[i_b].err = _("4:Server failure."); continue; }
-		    //>> Encode request PDU (Protocol Data Units)
-		    pdu = (char)0x4;				//Function, read multiple input registers
-		    pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
-		    pdu += (char)(cntr.acqBlksIn[i_b].off/2);		//Address LSB
-		    pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
-		    pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB
-		    //>> Request to remote server
-		    cntr.acqBlksIn[i_b].err = cntr.modBusReq( pdu );
-		    if( cntr.acqBlksIn[i_b].err.empty() )
-		    {
-			cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlksIn[i_b].val.size());
-			cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
-		    }
-		    else if( atoi(cntr.acqBlksIn[i_b].err.c_str()) == 14 )
-		    {
-			cntr.setCntrDelay(cntr.acqBlksIn[i_b].err);
-			break;
-		    }
-		}
-		res.release();
 	    }
+	    if( cntr.tmDelay > 0 )	continue;
+	    //> Get input's coils
+	    for( int i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++ )
+	    {
+		if( cntr.endrun_req ) break;
+		if( cntr.redntUse( ) ) { cntr.acqBlksCoilIn[i_b].err = _("4:Server failure."); continue; }
+		//>> Encode request PDU (Protocol Data Units)
+		pdu = (char)0x2;					//Function, read multiple input's coils
+		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
+		pdu += (char)cntr.acqBlksCoilIn[i_b].off;		//Address LSB
+		pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
+		pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
+		//>> Request to remote server
+		cntr.acqBlksCoilIn[i_b].err = cntr.modBusReq( pdu );
+		if( cntr.acqBlksCoilIn[i_b].err.empty() )
+		{
+		    for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
+			cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+		    cntr.numRCoilIn += cntr.acqBlksCoilIn[i_b].val.size();
+		}
+		else if( atoi(cntr.acqBlksCoilIn[i_b].err.c_str()) == 14 )
+		{
+		    cntr.setCntrDelay(cntr.acqBlksCoilIn[i_b].err);
+		    break;
+		}
+	    }
+	    if( cntr.tmDelay > 0 )	continue;
+	    //> Get registers
+	    for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
+	    {
+		if( cntr.endrun_req ) break;
+		if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err = _("4:Server failure."); continue; }
+		//>> Encode request PDU (Protocol Data Units)
+		pdu = (char)0x3;				//Function, read multiple registers
+		pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
+		pdu += (char)(cntr.acqBlks[i_b].off/2);		//Address LSB
+		pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
+		pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
+		//>> Request to remote server
+		cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
+		if( cntr.acqBlks[i_b].err.empty() )
+		{
+		    cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
+		    cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
+		}
+		else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
+		{
+		    cntr.setCntrDelay(cntr.acqBlks[i_b].err);
+		    break;
+		}
+	    }
+	    if( cntr.tmDelay > 0 )	continue;
+	    //> Get input registers
+	    for( int i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++ )
+	    {
+		if( cntr.endrun_req ) break;
+		if( cntr.redntUse( ) ) { cntr.acqBlksIn[i_b].err = _("4:Server failure."); continue; }
+		//>> Encode request PDU (Protocol Data Units)
+		pdu = (char)0x4;				//Function, read multiple input registers
+		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
+		pdu += (char)(cntr.acqBlksIn[i_b].off/2);		//Address LSB
+		pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
+		pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB
+		//>> Request to remote server
+		cntr.acqBlksIn[i_b].err = cntr.modBusReq( pdu );
+		if( cntr.acqBlksIn[i_b].err.empty() )
+		{
+		    cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlksIn[i_b].val.size());
+		    cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
+		}
+		else if( atoi(cntr.acqBlksIn[i_b].err.c_str()) == 14 )
+		{
+		    cntr.setCntrDelay(cntr.acqBlksIn[i_b].err);
+		    break;
+		}
+	    }
+	    res.release();
 
 	    //> Calc acquisition process time
 	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
