@@ -550,7 +550,9 @@ void TMdContr::setCntrDelay( const string &err )
     tmDelay = restTm;
     ResAlloc res( req_res, false );
     for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err = err;
+    for( int i_b = 0; i_b < acqBlksCoilIn.size(); i_b++ )	acqBlksCoilIn[i_b].err = err;
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err = err;
+    for( int i_b = 0; i_b < acqBlksIn.size(); i_b++ )	acqBlksIn[i_b].err = err;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
