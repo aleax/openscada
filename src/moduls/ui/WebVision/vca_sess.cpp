@@ -5533,7 +5533,8 @@ void VCADiagram::setCursor( long long itm, const string& user )
 	for( int i_p = 0; i_p < trnds.size(); i_p++ )
 	{
 	    int vpos = trnds[i_p].val(curTime);
-	    if( vpos >= trnds[i_p].val().size() ) continue;
+	    if( !trnds[i_p].val().size() || (!tTimeCurent && vpos >= trnds[i_p].val().size()) ) continue;
+	    vpos = vmax(0,vmin(trnds[i_p].val().size()-1,vpos));
 	    if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
 	    double val = trnds[i_p].val()[vpos].val;
 	    if( val != trnds[i_p].curVal() )

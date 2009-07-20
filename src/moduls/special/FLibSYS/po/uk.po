@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 # Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
-#: statfunc.cpp:49 sysfnc.h:852 timefnc.h:41 timefnc.h:56 timefnc.h:137
+#: statfunc.cpp:49 sysfnc.h:933 timefnc.h:41 timefnc.h:56 timefnc.h:137
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-06 17:29+0300\n"
+"POT-Creation-Date: 2009-07-20 19:15+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -54,73 +54,73 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:79 statfunc.cpp:265
+#: statfunc.cpp:79 statfunc.cpp:268
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:261
+#: statfunc.cpp:264
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:264
+#: statfunc.cpp:267
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:264 statfunc.cpp:270
+#: statfunc.cpp:267 statfunc.cpp:273
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:264
+#: statfunc.cpp:267
 msgid "Function"
 msgstr "Функція"
 
-#: statfunc.cpp:264 statfunc.cpp:265
+#: statfunc.cpp:267 statfunc.cpp:268
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:264 statfunc.cpp:265
+#: statfunc.cpp:267 statfunc.cpp:268
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:264 statfunc.cpp:265 sysfnc.h:100
+#: statfunc.cpp:267 statfunc.cpp:268 sysfnc.h:140
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:265
+#: statfunc.cpp:268
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:265 statfunc.cpp:270
+#: statfunc.cpp:268 statfunc.cpp:273
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:265
+#: statfunc.cpp:268
 msgid "Functions"
 msgstr "Функції"
 
-#: statfunc.cpp:265 sysfnc.h:100 sysfnc.h:817
+#: statfunc.cpp:268 sysfnc.h:140 sysfnc.h:898
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:265
+#: statfunc.cpp:268
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:265
+#: statfunc.cpp:268
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:269 sysfnc.h:747
+#: statfunc.cpp:272 sysfnc.h:828
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:275
+#: statfunc.cpp:278
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:275 sysfnc.h:78 sysfnc.h:99 sysfnc.h:124 sysfnc.h:144
-#: sysfnc.h:184 sysfnc.h:287 sysfnc.h:332 sysfnc.h:377 sysfnc.h:422
-#: sysfnc.h:466 sysfnc.h:497 sysfnc.h:528 sysfnc.h:559
+#: statfunc.cpp:278 sysfnc.h:118 sysfnc.h:139 sysfnc.h:164 sysfnc.h:184
+#: sysfnc.h:224 sysfnc.h:327 sysfnc.h:372 sysfnc.h:417 sysfnc.h:462
+#: sysfnc.h:506 sysfnc.h:537 sysfnc.h:568 sysfnc.h:599
 msgid "id"
 msgstr ""
 
@@ -128,15 +128,15 @@ msgstr ""
 msgid "sysCall"
 msgstr ""
 
-#: sysfnc.h:45 sysfnc.h:615 sysfnc.h:636 sysfnc.h:719 sysfnc.h:746
-#: sysfnc.h:771 sysfnc.h:793 sysfnc.h:814 sysfnc.h:837 sysfnc.h:865
-#: sysfnc.h:883 sysfnc.h:925
+#: sysfnc.h:45 sysfnc.h:78 sysfnc.h:633 sysfnc.h:696 sysfnc.h:717 sysfnc.h:800
+#: sysfnc.h:827 sysfnc.h:852 sysfnc.h:874 sysfnc.h:895 sysfnc.h:918
+#: sysfnc.h:946 sysfnc.h:964 sysfnc.h:1006
 msgid "rez"
 msgstr ""
 
-#: sysfnc.h:45 sysfnc.h:615 sysfnc.h:636 sysfnc.h:719 sysfnc.h:746
-#: sysfnc.h:771 sysfnc.h:793 sysfnc.h:814 sysfnc.h:837 sysfnc.h:865
-#: sysfnc.h:883 sysfnc.h:925
+#: sysfnc.h:45 sysfnc.h:78 sysfnc.h:633 sysfnc.h:696 sysfnc.h:717 sysfnc.h:800
+#: sysfnc.h:827 sysfnc.h:852 sysfnc.h:874 sysfnc.h:895 sysfnc.h:918
+#: sysfnc.h:946 sysfnc.h:964 sysfnc.h:1006
 msgid "Rezult"
 msgstr "Результат"
 
@@ -161,692 +161,764 @@ msgid "r"
 msgstr ""
 
 #: sysfnc.h:76
+msgid "dbReqSQL"
+msgstr ""
+
+#: sysfnc.h:79 sysfnc.h:188 sysfnc.h:228 sysfnc.h:332 sysfnc.h:377
+#: sysfnc.h:422 sysfnc.h:467
+msgid "addr"
+msgstr ""
+
+#: sysfnc.h:79
+msgid "DB address"
+msgstr "Адреса БД"
+
+#: sysfnc.h:80
+msgid "req"
+msgstr ""
+
+#: sysfnc.h:80
+msgid "SQL request"
+msgstr "SQL запит"
+
+#: sysfnc.h:83
+msgid "DB: SQL request"
+msgstr "DB: SQL запит"
+
+#: sysfnc.h:84
+msgid "Send SQL request to DB."
+msgstr "Відсилання SQL запиту до БД."
+
+#: sysfnc.h:116
 msgid "varhOpen"
 msgstr ""
 
-#: sysfnc.h:78 sysfnc.h:99 sysfnc.h:124 sysfnc.h:144 sysfnc.h:184
+#: sysfnc.h:118 sysfnc.h:139 sysfnc.h:164 sysfnc.h:184 sysfnc.h:224
 msgid "Archive id"
 msgstr "ID Архіва"
 
-#: sysfnc.h:79
+#: sysfnc.h:119
 msgid "name"
 msgstr ""
 
-#: sysfnc.h:79
+#: sysfnc.h:119
 msgid "Name"
 msgstr "Ім'я"
 
-#: sysfnc.h:82
+#: sysfnc.h:122
 msgid "Varch: Open"
 msgstr "Varch: Відкрити"
 
-#: sysfnc.h:83
+#: sysfnc.h:123
 msgid "Open value archive."
 msgstr "Відкрити архіватор значень."
 
-#: sysfnc.h:97
+#: sysfnc.h:137
 msgid "varhBufOpen"
 msgstr ""
 
-#: sysfnc.h:100 sysfnc.h:817
+#: sysfnc.h:140 sysfnc.h:898
 msgid "Type"
 msgstr "Тип"
 
-#: sysfnc.h:101
+#: sysfnc.h:141
 msgid "sz"
 msgstr ""
 
-#: sysfnc.h:101
+#: sysfnc.h:141
 msgid "Size"
 msgstr "Розмір"
 
-#: sysfnc.h:101
+#: sysfnc.h:141
 msgid "100"
 msgstr ""
 
-#: sysfnc.h:102
+#: sysfnc.h:142
 msgid "per"
 msgstr ""
 
-#: sysfnc.h:102
+#: sysfnc.h:142
 msgid "Period (us)"
 msgstr "Період (мкс)"
 
-#: sysfnc.h:102
+#: sysfnc.h:142
 msgid "1000000"
 msgstr ""
 
-#: sysfnc.h:103
+#: sysfnc.h:143
 msgid "hgrd"
 msgstr ""
 
-#: sysfnc.h:103
+#: sysfnc.h:143
 msgid "Hard grid"
 msgstr "Жорстка сітка"
 
-#: sysfnc.h:103 sysfnc.h:104 sysfnc.h:290 sysfnc.h:335 sysfnc.h:380
-#: sysfnc.h:425 sysfnc.h:638 sysfnc.h:666 sysfnc.h:691 timefnc.h:42
+#: sysfnc.h:143 sysfnc.h:144 sysfnc.h:330 sysfnc.h:375 sysfnc.h:420
+#: sysfnc.h:465 sysfnc.h:719 sysfnc.h:747 sysfnc.h:772 timefnc.h:42
 #: timefnc.h:68 timefnc.h:69 timefnc.h:70 timefnc.h:71 timefnc.h:72
 #: timefnc.h:73 timefnc.h:74 timefnc.h:75 timefnc.h:76 timefnc.h:77
 #: timefnc.h:109 timefnc.h:136
 msgid "0"
 msgstr ""
 
-#: sysfnc.h:104
+#: sysfnc.h:144
 msgid "hres"
 msgstr ""
 
-#: sysfnc.h:104
+#: sysfnc.h:144
 msgid "High resolution"
 msgstr "Висока роздільна здатність"
 
-#: sysfnc.h:107
+#: sysfnc.h:147
 msgid "Varch: Buffer open"
 msgstr "Varch: Відкриття буферу"
 
-#: sysfnc.h:108
+#: sysfnc.h:148
 msgid "Open value buffer for temporary values storing."
 msgstr "Відкриття буферу для тимчасового збереження значень."
 
-#: sysfnc.h:122
+#: sysfnc.h:162
 msgid "varhClose"
 msgstr ""
 
-#: sysfnc.h:127
+#: sysfnc.h:167
 msgid "Varch: Close"
 msgstr "Varch: Закрити"
 
-#: sysfnc.h:128
+#: sysfnc.h:168
 msgid "Close opened value archive or buffer."
 msgstr "Закрити відкритий архватор значень або буфер."
 
-#: sysfnc.h:142
+#: sysfnc.h:182
 msgid "varhBeg"
 msgstr ""
 
-#: sysfnc.h:145 sysfnc.h:185
+#: sysfnc.h:185 sysfnc.h:225
 msgid "sek"
 msgstr ""
 
-#: sysfnc.h:145 sysfnc.h:185 sysfnc.h:288 sysfnc.h:333 sysfnc.h:378
-#: sysfnc.h:423 sysfnc.h:468 sysfnc.h:499 sysfnc.h:530 sysfnc.h:561
+#: sysfnc.h:185 sysfnc.h:225 sysfnc.h:328 sysfnc.h:373 sysfnc.h:418
+#: sysfnc.h:463 sysfnc.h:508 sysfnc.h:539 sysfnc.h:570 sysfnc.h:601
 #: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
 msgid "Seconds"
 msgstr "Секунди"
 
-#: sysfnc.h:146 sysfnc.h:186
+#: sysfnc.h:186 sysfnc.h:226
 msgid "usek"
 msgstr ""
 
-#: sysfnc.h:146 sysfnc.h:186 sysfnc.h:289 sysfnc.h:334 sysfnc.h:379
-#: sysfnc.h:424 sysfnc.h:469 sysfnc.h:500 sysfnc.h:531 sysfnc.h:562
+#: sysfnc.h:186 sysfnc.h:226 sysfnc.h:329 sysfnc.h:374 sysfnc.h:419
+#: sysfnc.h:464 sysfnc.h:509 sysfnc.h:540 sysfnc.h:571 sysfnc.h:602
 #: timefnc.h:110
 msgid "Microseconds"
 msgstr "Мікросекунди"
 
-#: sysfnc.h:147 sysfnc.h:187 sysfnc.h:230 sysfnc.h:291 sysfnc.h:336
-#: sysfnc.h:381 sysfnc.h:426
+#: sysfnc.h:187 sysfnc.h:227 sysfnc.h:270 sysfnc.h:331 sysfnc.h:376
+#: sysfnc.h:421 sysfnc.h:466
 msgid "archtor"
 msgstr ""
 
-#: sysfnc.h:147 sysfnc.h:187 sysfnc.h:230 sysfnc.h:291 sysfnc.h:336
-#: sysfnc.h:381 sysfnc.h:426
+#: sysfnc.h:187 sysfnc.h:227 sysfnc.h:270 sysfnc.h:331 sysfnc.h:376
+#: sysfnc.h:421 sysfnc.h:466 sysfnc.h:638
 msgid "Archivator"
 msgstr "Архіватор"
 
-#: sysfnc.h:148 sysfnc.h:188 sysfnc.h:292 sysfnc.h:337 sysfnc.h:382
-#: sysfnc.h:427
-msgid "addr"
-msgstr ""
-
-#: sysfnc.h:148 sysfnc.h:188 sysfnc.h:292 sysfnc.h:337 sysfnc.h:382
-#: sysfnc.h:427
+#: sysfnc.h:188 sysfnc.h:228 sysfnc.h:332 sysfnc.h:377 sysfnc.h:422
+#: sysfnc.h:467
 msgid "Address of archive or atribute of parameter"
 msgstr "Адреса архіву або атрибуту параметра"
 
-#: sysfnc.h:151
+#: sysfnc.h:191
 msgid "Varch: Begin"
 msgstr "Varch: Початок"
 
-#: sysfnc.h:152
+#: sysfnc.h:192
 msgid "Begin of opened value archive or buffer."
 msgstr "Початок відкритого архіва значень або буфера."
 
-#: sysfnc.h:182
+#: sysfnc.h:222
 msgid "varhEnd"
 msgstr ""
 
-#: sysfnc.h:191
+#: sysfnc.h:231
 msgid "Varch: End"
 msgstr "Varch: Кінець"
 
-#: sysfnc.h:192
+#: sysfnc.h:232
 msgid "End of opened value archive or buffer."
 msgstr "Кінець відкритого архіва значень або буфера."
 
-#: sysfnc.h:222
+#: sysfnc.h:262
 msgid "varhCopyBuf"
 msgstr ""
 
-#: sysfnc.h:224
+#: sysfnc.h:264
 msgid "sid"
 msgstr ""
 
-#: sysfnc.h:224
+#: sysfnc.h:264
 msgid "Source buffer id"
 msgstr "ID вихідного буфера"
 
-#: sysfnc.h:225
+#: sysfnc.h:265
 msgid "did"
 msgstr ""
 
-#: sysfnc.h:225
+#: sysfnc.h:265
 msgid "Destination buffer id"
 msgstr "ID буфера призначення"
 
-#: sysfnc.h:226
+#: sysfnc.h:266
 msgid "begSek"
 msgstr ""
 
-#: sysfnc.h:226
+#: sysfnc.h:266
 msgid "Begin seconds"
 msgstr "Секунди початку"
 
-#: sysfnc.h:227
+#: sysfnc.h:267
 msgid "begUsek"
 msgstr ""
 
-#: sysfnc.h:227
+#: sysfnc.h:267
 msgid "Begin microseconds"
 msgstr "Мікросекунди початку"
 
-#: sysfnc.h:228
+#: sysfnc.h:268
 msgid "endSek"
 msgstr ""
 
-#: sysfnc.h:228
+#: sysfnc.h:268
 msgid "End seconds"
 msgstr "Секунди кінцю"
 
-#: sysfnc.h:229
+#: sysfnc.h:269
 msgid "endUsek"
 msgstr ""
 
-#: sysfnc.h:229
+#: sysfnc.h:269
 msgid "End microseconds"
 msgstr "Мікросекунди кінцю"
 
-#: sysfnc.h:233
+#: sysfnc.h:273
 msgid "Varch: Copy values"
 msgstr "Varch: Копіювання значень"
 
-#: sysfnc.h:234
+#: sysfnc.h:274
 msgid "Copy values among value archives and buffers."
 msgstr "Копіювання значень між архівами значень та буферами."
 
-#: sysfnc.h:284
+#: sysfnc.h:324
 msgid "varhGetI"
 msgstr ""
 
-#: sysfnc.h:286 sysfnc.h:331 sysfnc.h:376 sysfnc.h:421 sysfnc.h:467
-#: sysfnc.h:498 sysfnc.h:529 sysfnc.h:560 sysfnc.h:815 sysfnc.h:838
-#: sysfnc.h:866 sysfnc.h:884 sysfnc.h:901 timefnc.h:41
+#: sysfnc.h:326 sysfnc.h:371 sysfnc.h:416 sysfnc.h:461 sysfnc.h:507
+#: sysfnc.h:538 sysfnc.h:569 sysfnc.h:600 sysfnc.h:896 sysfnc.h:919
+#: sysfnc.h:947 sysfnc.h:965 sysfnc.h:982 timefnc.h:41
 msgid "val"
 msgstr ""
 
-#: sysfnc.h:286 sysfnc.h:331 sysfnc.h:376 sysfnc.h:421
+#: sysfnc.h:326 sysfnc.h:371 sysfnc.h:416 sysfnc.h:461
 msgid "Return value"
 msgstr "Повернення значення"
 
-#: sysfnc.h:287 sysfnc.h:332 sysfnc.h:377 sysfnc.h:422 sysfnc.h:466
-#: sysfnc.h:497 sysfnc.h:528 sysfnc.h:559
+#: sysfnc.h:327 sysfnc.h:372 sysfnc.h:417 sysfnc.h:462 sysfnc.h:506
+#: sysfnc.h:537 sysfnc.h:568 sysfnc.h:599
 msgid "Buffer id"
 msgstr "ID буферу"
 
-#: sysfnc.h:287 sysfnc.h:332 sysfnc.h:377 sysfnc.h:422 sysfnc.h:639
-#: sysfnc.h:692 timefnc.h:110
+#: sysfnc.h:327 sysfnc.h:372 sysfnc.h:417 sysfnc.h:462 sysfnc.h:720
+#: sysfnc.h:773 timefnc.h:110
 msgid "-1"
 msgstr ""
 
-#: sysfnc.h:288 sysfnc.h:333 sysfnc.h:378 sysfnc.h:423 sysfnc.h:468
-#: sysfnc.h:499 sysfnc.h:530 sysfnc.h:561 timefnc.h:42 timefnc.h:69
+#: sysfnc.h:328 sysfnc.h:373 sysfnc.h:418 sysfnc.h:463 sysfnc.h:508
+#: sysfnc.h:539 sysfnc.h:570 sysfnc.h:601 timefnc.h:42 timefnc.h:69
 #: timefnc.h:109 timefnc.h:136
 msgid "sec"
 msgstr ""
 
-#: sysfnc.h:289 sysfnc.h:334 sysfnc.h:379 sysfnc.h:424 sysfnc.h:469
-#: sysfnc.h:500 sysfnc.h:531 sysfnc.h:562 timefnc.h:110
+#: sysfnc.h:329 sysfnc.h:374 sysfnc.h:419 sysfnc.h:464 sysfnc.h:509
+#: sysfnc.h:540 sysfnc.h:571 sysfnc.h:602 timefnc.h:110
 msgid "usec"
 msgstr ""
 
-#: sysfnc.h:290 sysfnc.h:335 sysfnc.h:380 sysfnc.h:425
+#: sysfnc.h:330 sysfnc.h:375 sysfnc.h:420 sysfnc.h:465
 msgid "up_ord"
 msgstr ""
 
-#: sysfnc.h:290 sysfnc.h:335 sysfnc.h:380 sysfnc.h:425
+#: sysfnc.h:330 sysfnc.h:375 sysfnc.h:420 sysfnc.h:465
 msgid "Up order"
 msgstr "Упорядковувати до гори"
 
-#: sysfnc.h:295
+#: sysfnc.h:335
 msgid "Varch: Get integer"
 msgstr "Varch: Отримати ціле"
 
-#: sysfnc.h:296
+#: sysfnc.h:336
 msgid "Get integer from archive or buffer."
 msgstr "Отримати ціле з архіву або буферу."
 
-#: sysfnc.h:329
+#: sysfnc.h:369
 msgid "varhGetR"
 msgstr ""
 
-#: sysfnc.h:340
+#: sysfnc.h:380
 msgid "Varch: Get real"
 msgstr "Varch: Отримати реальне"
 
-#: sysfnc.h:341
+#: sysfnc.h:381
 msgid "Get real from archive or buffer."
 msgstr "Отримати реальне з архіву або буферу."
 
-#: sysfnc.h:374
+#: sysfnc.h:414
 msgid "varhGetB"
 msgstr ""
 
-#: sysfnc.h:385
+#: sysfnc.h:425
 msgid "Varch: Get boolean"
 msgstr "Varch: Отримати логічне"
 
-#: sysfnc.h:386
+#: sysfnc.h:426
 msgid "Get boolean from archive or buffer."
 msgstr "Отримати логічне з архіву або буферу."
 
-#: sysfnc.h:419
+#: sysfnc.h:459
 msgid "varhGetS"
 msgstr ""
 
-#: sysfnc.h:430
+#: sysfnc.h:470
 msgid "Varch: Get string"
 msgstr "Varch: Отримати строку"
 
-#: sysfnc.h:431
+#: sysfnc.h:471
 msgid "Get string from archive or buffer."
 msgstr "Отримати строку з архіву або буферу."
 
-#: sysfnc.h:464
+#: sysfnc.h:504
 msgid "varhSetI"
 msgstr ""
 
-#: sysfnc.h:467 sysfnc.h:498 sysfnc.h:529 sysfnc.h:560 sysfnc.h:815
-#: sysfnc.h:838 sysfnc.h:866 sysfnc.h:884 sysfnc.h:901
+#: sysfnc.h:507 sysfnc.h:538 sysfnc.h:569 sysfnc.h:600 sysfnc.h:896
+#: sysfnc.h:919 sysfnc.h:947 sysfnc.h:965 sysfnc.h:982
 msgid "Value"
 msgstr "Значення"
 
-#: sysfnc.h:472
+#: sysfnc.h:512
 msgid "Varch: Set integer"
 msgstr "Varch: Встановити ціле"
 
-#: sysfnc.h:473
+#: sysfnc.h:513
 msgid "Set integer to archive or buffer."
 msgstr "Встановити ціле до архіву або буферу."
 
-#: sysfnc.h:495
+#: sysfnc.h:535
 msgid "varhSetR"
 msgstr ""
 
-#: sysfnc.h:503
+#: sysfnc.h:543
 msgid "Varch: Set real"
 msgstr "Varch: Встановити реальне"
 
-#: sysfnc.h:504
+#: sysfnc.h:544
 msgid "Set real to archive or buffer."
 msgstr "Встановити реальне до архіву або буферу."
 
-#: sysfnc.h:526
+#: sysfnc.h:566
 msgid "varhSetB"
 msgstr ""
 
-#: sysfnc.h:534
+#: sysfnc.h:574
 msgid "Varch: Set boolean"
 msgstr "Varch: Встановити логічне"
 
-#: sysfnc.h:535
+#: sysfnc.h:575
 msgid "Set boolean to archive or buffer."
 msgstr "Встановити логічне до архіву або буферу."
 
-#: sysfnc.h:557
+#: sysfnc.h:597
 msgid "varhSetS"
 msgstr ""
 
-#: sysfnc.h:565
+#: sysfnc.h:605
 msgid "Varch: Set string"
 msgstr "Varch: Встановити строку"
 
-#: sysfnc.h:566
+#: sysfnc.h:606
 msgid "Set string to archive or buffer."
 msgstr "Встановити строку до архіву або буферу."
 
-#: sysfnc.h:588
-msgid "messPut"
+#: sysfnc.h:631
+msgid "messGet"
 msgstr ""
 
-#: sysfnc.h:590
+#: sysfnc.h:634
+msgid "btm"
+msgstr ""
+
+#: sysfnc.h:634
+msgid "Begin time"
+msgstr "Час початку"
+
+#: sysfnc.h:635
+msgid "etm"
+msgstr ""
+
+#: sysfnc.h:635
+msgid "End time"
+msgstr "Час кінця"
+
+#: sysfnc.h:636 sysfnc.h:671
 msgid "cat"
 msgstr ""
 
-#: sysfnc.h:590
+#: sysfnc.h:636 sysfnc.h:671
 msgid "Category"
 msgstr "Категорія"
 
-#: sysfnc.h:591 sysfnc.h:721 sysfnc.h:748
+#: sysfnc.h:637 sysfnc.h:672 sysfnc.h:802 sysfnc.h:829
 msgid "lev"
 msgstr ""
 
-#: sysfnc.h:591 sysfnc.h:721 sysfnc.h:748
+#: sysfnc.h:637 sysfnc.h:672 sysfnc.h:802 sysfnc.h:829
 msgid "Level"
 msgstr "Рівень"
 
-#: sysfnc.h:592
+#: sysfnc.h:638
+msgid "arch"
+msgstr ""
+
+#: sysfnc.h:641
+msgid "Mess: Get"
+msgstr "Mess: Отримання"
+
+#: sysfnc.h:642
+msgid "Get messages from system."
+msgstr "Отримання повідомлення системи."
+
+#: sysfnc.h:652
+msgid "tm"
+msgstr ""
+
+#: sysfnc.h:653
+msgid "utm"
+msgstr ""
+
+#: sysfnc.h:654
+msgid "categ"
+msgstr ""
+
+#: sysfnc.h:655
+msgid "level"
+msgstr ""
+
+#: sysfnc.h:656 sysfnc.h:673
 msgid "mess"
 msgstr ""
 
-#: sysfnc.h:592
+#: sysfnc.h:669
+msgid "messPut"
+msgstr ""
+
+#: sysfnc.h:673
 msgid "Message"
 msgstr "Повідомлення"
 
-#: sysfnc.h:595
+#: sysfnc.h:676
 msgid "Mess: Put"
 msgstr "Mess: Розмістити"
 
-#: sysfnc.h:596
+#: sysfnc.h:677
 msgid "Put message to system."
 msgstr "Розмістити повідомлення у систему"
 
-#: sysfnc.h:600
+#: sysfnc.h:681
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: sysfnc.h:613
+#: sysfnc.h:694
 msgid "strSize"
 msgstr ""
 
-#: sysfnc.h:616 sysfnc.h:637 sysfnc.h:665 sysfnc.h:690 sysfnc.h:720
+#: sysfnc.h:697 sysfnc.h:718 sysfnc.h:746 sysfnc.h:771 sysfnc.h:801
 #: timefnc.h:137
 msgid "str"
 msgstr ""
 
-#: sysfnc.h:616 sysfnc.h:637 sysfnc.h:665 sysfnc.h:690 sysfnc.h:720
+#: sysfnc.h:697 sysfnc.h:718 sysfnc.h:746 sysfnc.h:771 sysfnc.h:801
 msgid "String"
 msgstr "Строка"
 
-#: sysfnc.h:619
+#: sysfnc.h:700
 msgid "String: Get size"
 msgstr "Строка: Отримати розмір"
 
-#: sysfnc.h:620
+#: sysfnc.h:701
 msgid "Use for string size getting."
 msgstr "Використовується для отримання розміру."
 
-#: sysfnc.h:634
+#: sysfnc.h:715
 msgid "strSubstr"
 msgstr ""
 
-#: sysfnc.h:638 sysfnc.h:666 sysfnc.h:691
+#: sysfnc.h:719 sysfnc.h:747 sysfnc.h:772
 msgid "pos"
 msgstr ""
 
-#: sysfnc.h:638 sysfnc.h:666 sysfnc.h:691
+#: sysfnc.h:719 sysfnc.h:747 sysfnc.h:772
 msgid "Position"
 msgstr "Позиція"
 
-#: sysfnc.h:639 sysfnc.h:692
+#: sysfnc.h:720 sysfnc.h:773
 msgid "n"
 msgstr ""
 
-#: sysfnc.h:639 sysfnc.h:692
+#: sysfnc.h:720 sysfnc.h:773
 msgid "Number"
 msgstr "Кількість"
 
-#: sysfnc.h:642
+#: sysfnc.h:723
 msgid "String: Get substring"
 msgstr "Строка: Отримати частину строки"
 
-#: sysfnc.h:643
+#: sysfnc.h:724
 msgid "Use for substring getting."
 msgstr "Використовується для отримання частини строки."
 
-#: sysfnc.h:663
+#: sysfnc.h:744
 msgid "strInsert"
 msgstr ""
 
-#: sysfnc.h:667
+#: sysfnc.h:748
 msgid "ins"
 msgstr ""
 
-#: sysfnc.h:667
+#: sysfnc.h:748
 msgid "Insert string"
 msgstr "Вставити строку"
 
-#: sysfnc.h:670
+#: sysfnc.h:751
 msgid "String: Insert string to other string"
 msgstr "Строка: Вставка строки у іншу"
 
-#: sysfnc.h:671
+#: sysfnc.h:752
 msgid "Use for insertion string to other string."
 msgstr "Використовується для вставки строки у іншу."
 
-#: sysfnc.h:688
+#: sysfnc.h:769
 msgid "strReplace"
 msgstr ""
 
-#: sysfnc.h:693
+#: sysfnc.h:774
 msgid "repl"
 msgstr ""
 
-#: sysfnc.h:693
+#: sysfnc.h:774
 msgid "Replace string"
 msgstr "Заміняюча строка"
 
-#: sysfnc.h:696
+#: sysfnc.h:777
 msgid "String: Replace part string on other string"
 msgstr "Строка: Заміна частини строки іншою"
 
-#: sysfnc.h:697
+#: sysfnc.h:778
 msgid "Use for replacing part string on other string."
 msgstr "Використовується для заміни строки іншою."
 
-#: sysfnc.h:717
+#: sysfnc.h:798
 msgid "strParse"
 msgstr ""
 
-#: sysfnc.h:722 sysfnc.h:773
+#: sysfnc.h:803 sysfnc.h:854
 msgid "sep"
 msgstr ""
 
-#: sysfnc.h:722 sysfnc.h:773
+#: sysfnc.h:803 sysfnc.h:854
 msgid "Separator"
 msgstr "Розділювач"
 
-#: sysfnc.h:722 sysfnc.h:773
+#: sysfnc.h:803 sysfnc.h:854
 msgid "."
 msgstr ""
 
-#: sysfnc.h:723 sysfnc.h:749
+#: sysfnc.h:804 sysfnc.h:830
 msgid "off"
 msgstr ""
 
-#: sysfnc.h:723 sysfnc.h:749
+#: sysfnc.h:804 sysfnc.h:830
 msgid "Offset"
 msgstr "Зміщення"
 
-#: sysfnc.h:726
+#: sysfnc.h:807
 msgid "String: Parse on separator"
 msgstr "Строка: Розбір за розділювачем"
 
-#: sysfnc.h:727
+#: sysfnc.h:808
 msgid "Use for parse string on separator."
 msgstr "Використовується для розбору за розділювачем."
 
-#: sysfnc.h:744
+#: sysfnc.h:825
 msgid "strParsePath"
 msgstr ""
 
-#: sysfnc.h:747
+#: sysfnc.h:828
 msgid "Path"
 msgstr "Шлях"
 
-#: sysfnc.h:752
+#: sysfnc.h:833
 msgid "String: Path parse"
 msgstr "Строка: Розбір шляху"
 
-#: sysfnc.h:753
+#: sysfnc.h:834
 msgid "Use for parse path on elements."
 msgstr "Використовується для розбору шляху на елементи."
 
-#: sysfnc.h:769
+#: sysfnc.h:850
 msgid "strPath2Sep"
 msgstr ""
 
-#: sysfnc.h:772 sysfnc.h:794
+#: sysfnc.h:853 sysfnc.h:875
 msgid "src"
 msgstr ""
 
-#: sysfnc.h:772 sysfnc.h:794
+#: sysfnc.h:853 sysfnc.h:875
 msgid "Source"
 msgstr "Джерело"
 
-#: sysfnc.h:776
+#: sysfnc.h:857
 msgid "String: Path to separated string"
 msgstr "Строка: Шлях у сроку з розділювачем"
 
-#: sysfnc.h:777
+#: sysfnc.h:858
 msgid "Use for convert path to separated string."
 msgstr "Використовується для перетворення шляху у сроку з розділювачем."
 
-#: sysfnc.h:791
+#: sysfnc.h:872
 msgid "strEnc2HTML"
 msgstr ""
 
-#: sysfnc.h:797
+#: sysfnc.h:878
 msgid "String: Encode string to HTML"
 msgstr "Строка: Кодування строки у HTML"
 
-#: sysfnc.h:798
+#: sysfnc.h:879
 msgid "Use for encode string for use into HTML source."
 msgstr "Використовується для кодування сроки для використання у вихідних HTML."
 
-#: sysfnc.h:812
+#: sysfnc.h:893
 msgid "real2str"
 msgstr ""
 
-#: sysfnc.h:816
+#: sysfnc.h:897
 msgid "prc"
 msgstr ""
 
-#: sysfnc.h:816
+#: sysfnc.h:897
 msgid "Precision"
 msgstr "Точність"
 
-#: sysfnc.h:816
+#: sysfnc.h:897
 msgid "4"
 msgstr ""
 
-#: sysfnc.h:817
+#: sysfnc.h:898
 msgid "f"
 msgstr ""
 
-#: sysfnc.h:820
+#: sysfnc.h:901
 msgid "String: Real to string"
 msgstr "Строка: Реальне у строку"
 
-#: sysfnc.h:821
+#: sysfnc.h:902
 msgid "Convert real to string."
 msgstr "Перетворення реального у строку."
 
-#: sysfnc.h:835
+#: sysfnc.h:916
 msgid "int2str"
 msgstr ""
 
-#: sysfnc.h:839
+#: sysfnc.h:920
 msgid "base"
 msgstr ""
 
-#: sysfnc.h:839
+#: sysfnc.h:920
 msgid "Base"
 msgstr ""
 
-#: sysfnc.h:839
+#: sysfnc.h:920
 msgid "10"
 msgstr ""
 
-#: sysfnc.h:842
+#: sysfnc.h:923
 msgid "String: Integer to string"
 msgstr "Строка: Ціле у строку"
 
-#: sysfnc.h:843
+#: sysfnc.h:924
 msgid "Convert integer to string."
 msgstr "Перетворення цілого у строку."
 
-#: sysfnc.h:863
+#: sysfnc.h:944
 msgid "str2real"
 msgstr ""
 
-#: sysfnc.h:869
+#: sysfnc.h:950
 msgid "String: String to real"
 msgstr "Строка: Строку у реальне"
 
-#: sysfnc.h:870
+#: sysfnc.h:951
 msgid "Convert string to real."
 msgstr "Перетворення строки у реальне."
 
-#: sysfnc.h:881
+#: sysfnc.h:962
 msgid "str2int"
 msgstr ""
 
-#: sysfnc.h:887
+#: sysfnc.h:968
 msgid "String: String to integer"
 msgstr "Строка: Строка у ціле"
 
-#: sysfnc.h:888
+#: sysfnc.h:969
 msgid "Convert string to integer."
 msgstr "Перетворення строки у ціле."
 
-#: sysfnc.h:899
+#: sysfnc.h:980
 msgid "floatSplitWord"
 msgstr ""
 
-#: sysfnc.h:902 sysfnc.h:926
+#: sysfnc.h:983 sysfnc.h:1007
 msgid "w1"
 msgstr ""
 
-#: sysfnc.h:902 sysfnc.h:926
+#: sysfnc.h:983 sysfnc.h:1007
 msgid "Word 1"
 msgstr "Слово 1"
 
-#: sysfnc.h:903 sysfnc.h:927
+#: sysfnc.h:984 sysfnc.h:1008
 msgid "w2"
 msgstr ""
 
-#: sysfnc.h:903 sysfnc.h:927
+#: sysfnc.h:984 sysfnc.h:1008
 msgid "Word 2"
 msgstr "Слово 2"
 
-#: sysfnc.h:906
+#: sysfnc.h:987
 msgid "Float: Split to words"
 msgstr "Float: Розділення на слова"
 
-#: sysfnc.h:907
+#: sysfnc.h:988
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Розділення float (4 байтів) на слова (2 байти)."
 
-#: sysfnc.h:923
+#: sysfnc.h:1004
 msgid "floatMergeWord"
 msgstr ""
 
-#: sysfnc.h:930
+#: sysfnc.h:1011
 msgid "Float: Merge from words"
 msgstr "Float: Об'єднання зі слів"
 
-#: sysfnc.h:931
+#: sysfnc.h:1012
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Об'єднання float (4 байтів) зі слів (2 байти)."
 

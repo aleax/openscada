@@ -647,7 +647,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    case 0: case 1:
 		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","27") );
 		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","28") );
-		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3000000","","29") );
+		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","1;3000000","","29") );
 		if( cfg.owner()->attrAt("active").at().getB() )
 		{
 		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","30") );

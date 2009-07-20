@@ -48,10 +48,10 @@ void sfErr( const string &mess, YYLTYPE *ps);
     int	prg_cd;	//Programm code
 }
 
-%token	ERR IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN
+%token	ERR O_PRP_F IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW ARRAY OBJECT
 %token	<id>	FUNC B_FUNC B_FUNC1 B_FUNC2
 %token	<reg>	VAR CONST
-%type	<reg>	expr
+%type	<reg>	var expr
 %type	<prg_cd>	if if_expr end cycl
 %type	<fp_cnt>	prmlst
 
@@ -89,11 +89,11 @@ solve:  assign ';'
 		for( int i_io = 0; i_io < p_fnc->ioSize(); i_io++ )
 		    if( p_fnc->io(i_io)->flg()&IO::Return )
 		    {
-			Reg *rez = p_fnc->regAt(p_fnc->regGet(p_fnc->io(i_io)->id().c_str()));
+			Reg *rez = p_fnc->regAt(p_fnc->regGet(p_fnc->io(i_io)->id()));
 			if( !rez )
 			{
 			    rez = p_fnc->regAt(p_fnc->regNew(true));
-			    rez->setName(p_fnc->io(i_io)->id().c_str());
+			    rez->setName(p_fnc->io(i_io)->id());
 			    rez->setVar(i_io); rez->setLock(true);
 			}
 			p_fnc->cdAssign(rez,$2);
@@ -104,7 +104,12 @@ solve:  assign ';'
 	| FUNC '(' prmlst ')' ';'
 	    { try{ p_fnc->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '{' solver '}'
-assign: VAR '=' expr
+var:	VAR			{ $$ = $1; }
+	| var O_PRP_F		{ $$ = p_fnc->cdProp($1); }
+	| var '[' expr ']'	{ $$ = p_fnc->cdProp($1,$3); }
+	| var O_PRP_F '(' prmlst ')'
+	    { try{ $$ = p_fnc->cdObjFnc(p_fnc->cdProp($1),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+assign: var '=' expr
 	    {
 		try
 		{
@@ -112,15 +117,15 @@ assign: VAR '=' expr
 		    p_fnc->cdAssign($1,$3);
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR ADDEQ expr
+	| var ADDEQ expr
 	    {
 		try
 		{
 		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
-		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddR,$1,$3));
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Add,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR SUBEQ expr
+	| var SUBEQ expr
 	    {
 		try
 		{
@@ -128,7 +133,7 @@ assign: VAR '=' expr
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Sub,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR MULEQ expr
+	| var MULEQ expr
 	    {
 		try
 		{
@@ -136,7 +141,7 @@ assign: VAR '=' expr
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Mul,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR DIVEQ expr
+	| var DIVEQ expr
 	    {
 		try
 		{
@@ -144,16 +149,16 @@ assign: VAR '=' expr
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Div,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR INCREM
+	| var INCREM
 	    {
 		try
 		{
 		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddR,$1,reg));
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Add,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR DECREM
+	| var DECREM
 	    {
 		try
 		{
@@ -164,7 +169,7 @@ assign: VAR '=' expr
 	    }
 	| /*empty*/
 expr:	CONST	{ $$ = $1; }
-	| VAR
+	| var
 	    {
 		try
 		{
@@ -172,7 +177,8 @@ expr:	CONST	{ $$ = $1; }
 		    $$ = $1;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR '=' expr
+
+	| var '=' expr
 	    {
 		try
 		{
@@ -181,17 +187,17 @@ expr:	CONST	{ $$ = $1; }
 		    $$ = $1;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR INCREM
+	| var INCREM
 	    {
 		try
 		{
 		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL,$1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::AddR,$1,reg));
+		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Add,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| VAR DECREM
+	| var DECREM
 	    {
 		try
 		{
@@ -201,17 +207,17 @@ expr:	CONST	{ $$ = $1; }
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| INCREM VAR
+	| INCREM var
 	    {
 		try
 		{
 		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($2,p_fnc->cdBinaryOp(Reg::AddR,$2,reg));
+		    p_fnc->cdAssign($2,p_fnc->cdBinaryOp(Reg::Add,$2,reg));
 		    $$ = $2;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| DECREM VAR
+	| DECREM var
 	    {
 		try
 		{
@@ -224,8 +230,10 @@ expr:	CONST	{ $$ = $1; }
 	| B_FUNC '(' ')'		{ try{ $$ = p_fnc->cdBldFnc($1); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| B_FUNC1 '(' expr ')'		{ try{ $$ = p_fnc->cdBldFnc($1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| B_FUNC2 '(' expr ',' expr ')'	{ try{ $$ = p_fnc->cdBldFnc($1,$3,$5); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| FUNC '(' prmlst ')' 		{ try{ $$ = p_fnc->cdExtFnc($1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '+' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::AddR,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| FUNC '(' prmlst ')'		{ try{ $$ = p_fnc->cdExtFnc($1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| NEW ARRAY '(' prmlst ')'	{ try{ $$ = p_fnc->cdMviArray($4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| NEW OBJECT '(' ')'		{ try{ $$ = p_fnc->cdMviObject(); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '+' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::Add,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr '-' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::Sub,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr '*' expr	{ try{ $$ = p_fnc->cdBinaryOp(Reg::Mul,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr '/' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::Div,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
@@ -240,15 +248,19 @@ expr:	CONST	{ $$ = $1; }
 	| expr BITSHRIGHT expr		{ try{ $$ = p_fnc->cdBinaryOp(Reg::BitShRight,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr '<' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::LT,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr '>' expr { try{ $$ = p_fnc->cdBinaryOp(Reg::GT,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr GE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::GER,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr LE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::LER,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr EQ expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::EQR,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr NE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::NER,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr GE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::GEQ,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr LE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::LEQ,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr EQ expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::EQU,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr NE expr 	{ try{ $$ = p_fnc->cdBinaryOp(Reg::NEQ,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '!' expr	{ try{ $$ = p_fnc->cdUnaryOp(Reg::Not,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '~' expr	{ try{ $$ = p_fnc->cdUnaryOp(Reg::BitNot,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '-' expr %prec UN_MINUS { try{ $$ = p_fnc->cdUnaryOp(Reg::Neg,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr if_expr expr end ':' expr end
 	    { try{ $$ = p_fnc->cdCond($1,$2,$4,$7,$3,$6); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr O_PRP_F		{ $$ = p_fnc->cdProp($1); }
+	| expr '[' expr ']'	{ $$ = p_fnc->cdProp($1,$3); }
+	| expr O_PRP_F '(' prmlst ')'
+	    { try{ $$ = p_fnc->cdObjFnc(p_fnc->cdProp($1),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 prmlst: /*empty*/		{ $$ = 0; }
 	| expr			{ $$ = 1; p_fnc->f_prmst.push_front($1); }
 	| prmlst ',' prmlst	{ $$ = $1 + $3; }
@@ -430,13 +442,16 @@ retry:
 	}
 	string smb_nm = prog.substr(st_pos,pos-st_pos);
 	//Keywords
-	if( smb_nm == "if" )	return IF;
-	if( smb_nm == "else" )	return ELSE;
-	if( smb_nm == "while" )	return WHILE;
-	if( smb_nm == "for" )	return FOR;
-	if( smb_nm == "break" )	return BREAK;
+	if( smb_nm == "if" )		return IF;
+	if( smb_nm == "else" )		return ELSE;
+	if( smb_nm == "while" )		return WHILE;
+	if( smb_nm == "for" )		return FOR;
+	if( smb_nm == "break" )		return BREAK;
 	if( smb_nm == "continue" )	return CONTINUE;
 	if( smb_nm == "return" )	return RETURN;
+	if( smb_nm == "new" )		return NEW;
+	if( smb_nm == "Array" )		return ARRAY;
+	if( smb_nm == "Object" )	return OBJECT;
 	if( smb_nm == "using" )
 	{
 	    char buf[255]; buf[0] = 0;
@@ -492,36 +507,64 @@ retry:
 	    }
 	}
 
-	//Find external functions
-	if( c == '(' && p_fnc->funcGet(smb_nm) >= 0 )
+	//> Find external or object's functions
+	if( c == '(' )
 	{
-	    yylval.id = p_fnc->funcGet(smb_nm);
-	    return FUNC;
+	    //>> External functions
+	    if( p_fnc->funcGet(smb_nm) >= 0 )
+	    {
+		yylval.id = p_fnc->funcGet(smb_nm);
+		return FUNC;
+	    }
+
+	    //>> Check for object's functions
+	    int off = 0;
+	    yylval.reg = p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)));
+	    if( yylval.reg >= 0 )
+	    {
+		pos -= (smb_nm.size()-off+1);
+		yylloc.last_column -= (smb_nm.size()-off-1);
+		return VAR;
+	    }
+
+	    yyerror(_("Function error, "));
+	    return ERR;
 	}
 
-	//Check allow registers
-	if( p_fnc->regGet(smb_nm.c_str()) >= 0 )
+	//> Check allow registers
+	if( p_fnc->regGet(smb_nm) >= 0 )
 	{
-	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm.c_str()));
+	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm));
 	    return VAR;
 	}
 
-	//Only function and global atributes can have dots.
+	//> Global atributes and object's parameters.
 	if( is_dot )
 	{
-	    //Check to parameter atribute (TValue)
+	    //>> Check to parameter atribute (TValue)
 	    try
 	    {
-		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-		yylval.reg->setName(smb_nm.c_str());
-		yylval.reg->setPAttr(SYS->daq().at().at(TSYS::strSepParse(smb_nm,0,'.')).at().
+		AutoHD<TVal> vl = SYS->daq().at().at(TSYS::strSepParse(smb_nm,0,'.')).at().
 						     at(TSYS::strSepParse(smb_nm,1,'.')).at().
 						     at(TSYS::strSepParse(smb_nm,2,'.')).at().
-						     vlAt(TSYS::strSepParse(smb_nm,3,'.')));
+						     vlAt(TSYS::strSepParse(smb_nm,3,'.'));
+		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
+		yylval.reg->setName(smb_nm);
+		yylval.reg->setPAttr(vl);
 		yylval.reg->setLock(true);
 		return VAR;
 	    }catch(...){ }
-	
+
+	    //>> Check for object's parameters
+	    int off = 0;
+	    yylval.reg = p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)));
+	    if( yylval.reg >= 0 )
+	    {
+		pos -= (smb_nm.size()-off+1);
+		yylloc.last_column -= (smb_nm.size()-off-1);
+		return VAR;
+	    }
+
 	    yyerror(_("Symbol error, "));
 	    return ERR;
 	}
@@ -531,7 +574,7 @@ retry:
 	    if( p_fnc->io(i_io)->id() == smb_nm )
 	    {
 		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-		yylval.reg->setName(smb_nm.c_str());
+		yylval.reg->setName(smb_nm);
 		yylval.reg->setVar(i_io);
 		yylval.reg->setLock(true);
 	        return VAR;
@@ -540,10 +583,19 @@ retry:
 	if( i_io >= p_fnc->ioSize() )
 	{
 	    yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-	    yylval.reg->setName(smb_nm.c_str());
+	    yylval.reg->setName(smb_nm);
 	    yylval.reg->setLock(true);
 	    return VAR;
 	}
+    }
+    //Object's properties or functions
+    else if( c == '.' && (pos+1) < prog.size() )
+    {
+	st_pos = ++pos;
+	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
+	{ pos++; yylloc.last_column++; }
+	p_fnc->o_prpf = prog.substr(st_pos,pos-st_pos);
+	return O_PRP_F;
     }
     //Multi symbol operations
     else if( prog.substr(pos,2) == "++" ) { pos+=2; yylloc.last_column+=2; return INCREM; }

@@ -41,7 +41,7 @@ class IO
     friend class TFunction;
     public:
 	//Data
-	enum Type { String, Integer, Real, Boolean };
+	enum Type { String, Integer, Real, Boolean, Object };
 	enum IOFlgs
 	{
 	    Default = 0x00,	//Default mode (Input IO)
@@ -167,46 +167,48 @@ class TValFunc
 	int  ioSize( );
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
 	    return mFunc->io(id)->type();
 	}
 	unsigned ioFlg( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
 	    return mFunc->io(id)->flg();
 	}
 	bool ioHide( unsigned id )
 	{
-	    if( id >= m_val.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
 	    return mFunc->io(id)->hide();
 	}
 
-	//- get IO value -
+	//> get IO value
 	string	getS( unsigned id );
 	int	getI( unsigned id );
 	double	getR( unsigned id );
 	char	getB( unsigned id );
+	TVarObj	*getO( unsigned id );
 
-	//- set IO value -
+	//> set IO value
 	void setS( unsigned id, const string &val );
 	void setI( unsigned id, int val );
 	void setR( unsigned id, double val );
 	void setB( unsigned id, char val );
+	void setO( unsigned id, TVarObj *val );
 
-	//- Blocked values screen -
+	//> Blocked values screen
 	bool	blk( )			{ return mBlk; }
 
-	//- Dimension controll -
+	//> Dimension controll
 	bool	dimens( )		{ return mDimens; }
 	void	setDimens( bool set )	{ mDimens = set; }
 
-	//- Calc function -
+	//> Calc function
 	virtual void calc( const string &user = "" );
-	//- Calc time function -
+	//> Calc time function
 	double  calcTm( )		{ return tm_calc; }
 	void setCalcTm( double ivl )	{ tm_calc = ivl; }
 
-	//- Attached function -
+	//> Attached function
 	TFunction *func( )		{ return mFunc; }
 	void setFunc( TFunction *func, bool att_det = true );
 
@@ -224,11 +226,12 @@ class TValFunc
 		double r;
 		int    i;
 		char   b;
+		TVarObj	*o;
 	    }val;
 	};
 
 	//Attributes
-	vector<SVl>	m_val;	//pointer to: string, int, double, bool
+	vector<SVl>	mVal;	//pointer to: string, int, double, bool
 
     private:
 	//Methods

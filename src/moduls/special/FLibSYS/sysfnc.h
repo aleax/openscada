@@ -65,6 +65,46 @@ class sysCall : public TFunction
 };
 
 //*************************************************
+//* DB access functions                           *
+
+//*************************************************
+//* SQL request to DB                             *
+//*************************************************
+class dbReqSQL : public TFunction
+{
+    public:
+	dbReqSQL( ) : TFunction("dbReqSQL")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::Object,IO::Return) );
+	    ioAdd( new IO("addr",_("DB address"),IO::String,IO::Default) );
+	    ioAdd( new IO("req",_("SQL request"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("DB: SQL request"); }
+	string descr( )	{ return _("Send SQL request to DB."); }
+
+	void calc( TValFunc *val )
+	{
+	    string sdb = TBDS::realDBName(val->getS(1));
+	    TAreaObj *rez = new TAreaObj();
+	    try
+	    {
+		vector< vector<string> > rtbl;
+		AutoHD<TBD> db = SYS->db().at().nodeAt(sdb,0,'.');
+		db.at().sqlReq( val->getS(2), &rtbl );
+		for( int i_r = 0; i_r < rtbl.size(); i_r++ )
+		{
+		    TAreaObj *row = new TAreaObj();
+		    for( int i_c = 0; i_c < rtbl[i_r].size(); i_c++ )
+			row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
+		    rez->propSet(TSYS::int2str(i_r),row);
+		}
+	    }catch(...){ }
+	    val->setO(0,rez);
+	}
+};
+
+//*************************************************
 //* Archive subsystem's functions                 *
 
 //*************************************************
@@ -576,6 +616,47 @@ class varhSetS : public TFunction
 		if( !vb )	return;
 		vb->setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    }
+	}
+};
+
+//*************************************************
+//* Messages function.                            *
+
+//*************************************************
+//* Get message                                   *
+//*************************************************
+class messGet : public TFunction
+{
+    public:
+	messGet( ) : TFunction("messGet")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::Object,IO::Return) );
+	    ioAdd( new IO("btm",_("Begin time"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("etm",_("End time"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("cat",_("Category"),IO::String,IO::Default) );
+	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
+	    ioAdd( new IO("arch",_("Archivator"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("Mess: Get"); }
+	string descr( )	{ return _("Get messages from system."); }
+
+	void calc( TValFunc *val )
+	{
+	    vector<TMess::SRec> recs;
+	    SYS->archive().at().messGet( val->getI(1), val->getI(2), recs, val->getS(3), val->getI(4), val->getS(5) );
+	    TAreaObj *rez = new TAreaObj();
+	    for( int i_m = 0; i_m < recs.size(); i_m++ )
+	    {
+		TVarObj *am = new TVarObj();
+		am->propSet("tm",(int)recs[i_m].time);
+		am->propSet("utm",recs[i_m].utime);
+		am->propSet("categ",recs[i_m].categ);
+		am->propSet("level",recs[i_m].level);
+		am->propSet("mess",recs[i_m].mess);
+		rez->propSet(TSYS::int2str(i_m),am);
+	    }
+	    val->setO(0,rez);
 	}
 };
 

@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <limits.h>
 #include <math.h>
 
 #include <tsys.h>
@@ -300,6 +301,7 @@ void Func::progCompile( )
 
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
+    o_prpf = "";
     la_pos = 0;		//LA position
     prg    = "";	//Clear programm
     regClear();		//Clear registers list
@@ -363,7 +365,7 @@ int Func::regNew( bool var )
     return i_rg;
 }
 
-int Func::regGet( const char *nm )
+int Func::regGet( const string &nm )
 {
     //> Check allow registers
     for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )
@@ -391,6 +393,7 @@ Reg *Func::regTmpNew( )
 
 void Func::regTmpClean( )
 {
+    o_prpf = "";
     for( int i_rg = 0; i_rg < mTmpRegs.size(); i_rg++ )
 	delete mTmpRegs[i_rg];
     mTmpRegs.clear();
@@ -432,6 +435,49 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg+= *rez->val().s_el;
 	    break;
     }
+    return rez;
+}
+
+Reg *Func::cdMviObject( )
+{
+    //> Make result
+    Reg *rez = regAt(regNew());
+    rez->setType(Reg::Obj);
+
+    //> Make code
+    ui16 addr;
+    prg += (ui8)Reg::MviObject;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+
+    return rez;
+}
+
+Reg *Func::cdMviArray( int p_cnt )
+{
+    deque<int> p_pos;
+
+    //> Mvi all parameters
+    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    //> Get parameters.
+    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+    {
+	p_pos.push_front( f_prmst.front()->pos() );
+	f_prmst.front()->free();
+	f_prmst.pop_front();
+    }
+    //> Make result
+    Reg *rez = regAt(regNew());
+    rez->setType(Reg::Obj);
+
+    //> Make code
+    ui16 addr;
+    prg += (ui8)Reg::MviArray;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    prg += (ui8)p_cnt;
+    for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
+    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(ui16)); }
+
     return rez;
 }
 
@@ -510,39 +556,27 @@ void Func::cdAssign( Reg *rez, Reg *op )
 {
     ui16 addr;
     op = cdTypeConv(op,rez->vType(this));
-    switch(rez->vType(this))
-    {
-	case Reg::Bool:		prg += (ui8)Reg::AssB;	break;
-	case Reg::Int:		prg += (ui8)Reg::AssI;	break;
-	case Reg::Real:		prg += (ui8)Reg::AssR;	break;
-	case Reg::String:	prg += (ui8)Reg::AssS;	break;
-    }
+    prg += (ui8)Reg::Ass;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
     addr = op->pos();  prg.append((char*)&addr,sizeof(ui16));
-    //> Free temp operands
-    op->free();
+    op->free();		//> Free temp operands
 }
 
-Reg *Func::cdMove( Reg *rez, Reg *op )
+Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 {
+    if( !force && !op->lock() ) return op;
+
     ui16 addr;
     Reg *rez_n=rez;
     op = cdMvi( op );
     if( rez_n == NULL ) rez_n = regAt(regNew());
     rez_n = cdMvi( rez_n, true );
     rez_n->setType(op->vType(this));
-    switch(rez_n->vType(this))
-    {
-	case Reg::Bool:		prg += (ui8)Reg::MovB;	break;
-	case Reg::Int:		prg += (ui8)Reg::MovI;	break;
-	case Reg::Real:		prg += (ui8)Reg::MovR;	break;
-	case Reg::String:	prg += (ui8)Reg::MovS;	break;
-    }
+    prg += (ui8)Reg::Mov;
     addr = rez_n->pos(); prg.append((char*)&addr,sizeof(ui16));
     addr = op->pos();    prg.append((char*)&addr,sizeof(ui16));
 
-    //> Free temp operands
-    op->free();
+    op->free();	//> Free temp operands
 
     return rez_n;
 }
@@ -550,47 +584,37 @@ Reg *Func::cdMove( Reg *rez, Reg *op )
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
     //> Check allowing type operations
-    switch(op1->vType(this))
-    {
-	case Reg::Bool:
-	    switch(cod)
-	    {
-		case Reg::BitShLeft:
-		case Reg::BitShRight:
-		    throw TError(nodePath().c_str(),_("Operation %d don't support bool type"),cod);
-	    }
-	    break;
-	case Reg::String:
-	    switch(cod)
-	    {
-		case Reg::Sub:
-		case Reg::Mul:
-		case Reg::Div:
-		case Reg::RstI:
-		case Reg::BitOr:
-		case Reg::BitAnd:
-		case Reg::BitXor:
-		case Reg::BitShLeft:
-		case Reg::BitShRight:
-		case Reg::LOr:
-		case Reg::LAnd:
-		case Reg::LT:
-		case Reg::GT:
-		case Reg::LER:
-		case Reg::GER:
-		    throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
-	    }
-	    break;
-    }
+    if( !op1->objEl() )
+	switch(op1->vType(this))
+	{
+	    case Reg::Bool:
+		switch(cod)
+		{
+		    case Reg::BitShLeft: case Reg::BitShRight:
+			throw TError(nodePath().c_str(),_("Operation %d don't support bool type"),cod);
+		}
+		break;
+	    case Reg::String:
+		switch(cod)
+		{
+		    case Reg::Sub: case Reg::Mul: case Reg::Div: case Reg::RstI: case Reg::BitOr: case Reg::BitAnd:
+		    case Reg::BitXor: case Reg::BitShLeft: case Reg::BitShRight: case Reg::LOr: case Reg::LAnd:
+		    case Reg::LT: case Reg::GT: case Reg::LEQ: case Reg::GEQ:
+			throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
+		}
+		break;
+	    case Reg::Obj:
+		throw TError(nodePath().c_str(),_("Operation %d don't support for object type"),cod);
+	}
 
     //> Check allow the buildin calc and calc
     if( op1->pos() < 0 && op2->pos() < 0 )
     {
 	switch( cod )
 	{
-	    case Reg::AddR: case Reg::Sub: case Reg::Mul:
+	    case Reg::Add: case Reg::Sub: case Reg::Mul:
 	    case Reg::Div: case Reg::LT: case Reg::GT:
-	    case Reg::LER: case Reg::GER: case Reg::EQR: case Reg::NER:
+	    case Reg::LEQ: case Reg::GEQ: case Reg::EQU: case Reg::NEQ:
 		if( op1->vType(this) != Reg::String )
 		    op1 = cdTypeConv( op1, Reg::Real, true );
 		break;
@@ -615,7 +639,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    case Reg::Real:
 		switch(cod)
 		{
-		    case Reg::AddR:	*op1 = op1->val().r_el + op2->val().r_el;	break;
+		    case Reg::Add:	*op1 = op1->val().r_el + op2->val().r_el;	break;
 		    case Reg::Sub:	*op1 = op1->val().r_el - op2->val().r_el;	break;
 		    case Reg::Mul:	*op1 = op1->val().r_el * op2->val().r_el;	break;
 		    case Reg::Div:	*op1 = op1->val().r_el / op2->val().r_el;	break;
@@ -628,10 +652,10 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::LAnd:	*op1 = op1->val().r_el && op2->val().r_el;	break;
 		    case Reg::LT:	*op1 = op1->val().r_el < op2->val().r_el;	break;
 		    case Reg::GT:	*op1 = op1->val().r_el > op2->val().r_el;	break;
-		    case Reg::LER:	*op1 = op1->val().r_el <= op2->val().r_el;	break;
-		    case Reg::GER:	*op1 = op1->val().r_el >= op2->val().r_el;	break;
-		    case Reg::EQR:	*op1 = op1->val().r_el == op2->val().r_el;	break;
-		    case Reg::NER:	*op1 = op1->val().r_el != op2->val().r_el;	break;
+		    case Reg::LEQ:	*op1 = op1->val().r_el <= op2->val().r_el;	break;
+		    case Reg::GEQ:	*op1 = op1->val().r_el >= op2->val().r_el;	break;
+		    case Reg::EQU:	*op1 = op1->val().r_el == op2->val().r_el;	break;
+		    case Reg::NEQ:	*op1 = op1->val().r_el != op2->val().r_el;	break;
 		}
 		break;
 	    case Reg::Bool:
@@ -647,9 +671,9 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    case Reg::String:
 		switch(cod)
 		{
-		    case Reg::AddR:	*op1->val().s_el += *op2->val().s_el;		break;
-		    case Reg::EQR:	*op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;
-		    case Reg::NER:	*op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
+		    case Reg::Add:	*op1->val().s_el += *op2->val().s_el;		break;
+		    case Reg::EQU:	*op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;
+		    case Reg::NEQ:	*op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
 		}
 		break;
 	}
@@ -670,63 +694,29 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     Reg *rez = regAt(regNew());
     rez->setType(op1_tp);
     //>> Add code
-    switch(op1_tp)
+    switch(cod)
     {
-	case Reg::Bool:
-	case Reg::Int:
-	    switch(cod)
-	    {
-		case Reg::AddR:		prg += (ui8)Reg::AddR;		break;
-		case Reg::Sub:		prg += (ui8)Reg::Sub;		break;
-		case Reg::Mul:		prg += (ui8)Reg::Mul;		break;
-		case Reg::Div:		prg += (ui8)Reg::Div;		break;
-		case Reg::RstI:		prg += (ui8)Reg::RstI;		break;
-		case Reg::BitOr:	prg += (ui8)Reg::BitOr;		break;
-		case Reg::BitAnd:	prg += (ui8)Reg::BitAnd;	break;
-		case Reg::BitXor:	prg += (ui8)Reg::BitXor;	break;
-		case Reg::BitShLeft:	prg += (ui8)Reg::BitShLeft;	break;
-		case Reg::BitShRight:	prg += (ui8)Reg::BitShRight;	break;
-		case Reg::LOr:		prg += (ui8)Reg::LOr;	rez->setType(Reg::Bool);	break;
-		case Reg::LAnd:		prg += (ui8)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-		case Reg::LT:		prg += (ui8)Reg::LT;	rez->setType(Reg::Bool);	break;
-		case Reg::GT:		prg += (ui8)Reg::GT;	rez->setType(Reg::Bool);	break;
-		case Reg::LER:		prg += (ui8)Reg::LER;	rez->setType(Reg::Bool);	break;
-		case Reg::GER:		prg += (ui8)Reg::GER;	rez->setType(Reg::Bool);	break;
-		case Reg::EQR:		prg += (ui8)Reg::EQR;	rez->setType(Reg::Bool);	break;
-		case Reg::NER:		prg += (ui8)Reg::NER;	rez->setType(Reg::Bool);	break;
-	    }
-	    break;
-	case Reg::Real:
-	    switch(cod)
-	    {
-		case Reg::AddR:		prg += (ui8)Reg::AddR;	break;
-		case Reg::Sub:		prg += (ui8)Reg::Sub;	break;
-		case Reg::Mul:		prg += (ui8)Reg::Mul;	break;
-		case Reg::Div:		prg += (ui8)Reg::Div;	break;
-		case Reg::BitOr:	prg += (ui8)Reg::BitOr;	break;
-		case Reg::BitAnd:	prg += (ui8)Reg::BitAnd;	break;
-		case Reg::BitXor:	prg += (ui8)Reg::BitXor;	break;
-		case Reg::BitShLeft:	prg += (ui8)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
-		case Reg::BitShRight:	prg += (ui8)Reg::BitShRight;	rez->setType(Reg::Int);	break;
-		case Reg::LOr:		prg += (ui8)Reg::LOr;	rez->setType(Reg::Bool);	break;
-		case Reg::LAnd:		prg += (ui8)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-		case Reg::LT:		prg += (ui8)Reg::LT;	rez->setType(Reg::Bool);	break;
-		case Reg::GT:		prg += (ui8)Reg::GT;	rez->setType(Reg::Bool);	break;
-		case Reg::LER:		prg += (ui8)Reg::LER;	rez->setType(Reg::Bool);	break;
-		case Reg::GER:		prg += (ui8)Reg::GER;	rez->setType(Reg::Bool);	break;
-		case Reg::EQR:		prg += (ui8)Reg::EQR;	rez->setType(Reg::Bool);	break;
-		case Reg::NER:		prg += (ui8)Reg::NER;	rez->setType(Reg::Bool);	break;
-	    }
-	    break;
-	case Reg::String:
-	    switch(cod)
-	    {
-		case Reg::AddR:		prg += (ui8)Reg::AddS;	break;
-		case Reg::EQR:		prg += (ui8)Reg::EQS;	rez->setType(Reg::Bool);	break;
-		case Reg::NER:		prg += (ui8)Reg::NES;	rez->setType(Reg::Bool);	break;
-	    }
-            break;
+	case Reg::Add:		prg += (ui8)Reg::Add;	break;
+	case Reg::Sub:		prg += (ui8)Reg::Sub;	break;
+	case Reg::Mul:		prg += (ui8)Reg::Mul;	break;
+	case Reg::Div:		prg += (ui8)Reg::Div;	break;
+	case Reg::RstI:		prg += (ui8)Reg::RstI;	break;
+	case Reg::BitOr:	prg += (ui8)Reg::BitOr;	break;
+	case Reg::BitAnd:	prg += (ui8)Reg::BitAnd;	break;
+	case Reg::BitXor:	prg += (ui8)Reg::BitXor;	break;
+	case Reg::BitShLeft:	prg += (ui8)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
+	case Reg::BitShRight:	prg += (ui8)Reg::BitShRight;	rez->setType(Reg::Int);	break;
+	case Reg::LOr:		prg += (ui8)Reg::LOr;	rez->setType(Reg::Bool);	break;
+	case Reg::LAnd:		prg += (ui8)Reg::LAnd;	rez->setType(Reg::Bool);	break;
+	case Reg::LT:		prg += (ui8)Reg::LT;	rez->setType(Reg::Bool);	break;
+	case Reg::GT:		prg += (ui8)Reg::GT;	rez->setType(Reg::Bool);	break;
+	case Reg::LEQ:		prg += (ui8)Reg::LEQ;	rez->setType(Reg::Bool);	break;
+	case Reg::GEQ:		prg += (ui8)Reg::GEQ;	rez->setType(Reg::Bool);	break;
+	case Reg::EQU:		prg += (ui8)Reg::EQU;	rez->setType(Reg::Bool);	break;
+	case Reg::NEQ:		prg += (ui8)Reg::NEQ;	rez->setType(Reg::Bool);	break;
+	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
     }
+
     ui16 addr;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
     addr = op1_pos;    prg.append((char*)&addr,sizeof(ui16));
@@ -738,17 +728,19 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
     //> Check allowing type operations
-    switch(op->type())
-    {
-	case Reg::String:
-	    switch(cod)
-	    {
-		case Reg::Not:
-		case Reg::BitNot:
-		case Reg::Neg:
-		    throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
-	    }
-    }
+    if( !op->objEl() )
+	switch( op->type() )
+	{
+	    case Reg::String:
+		switch(cod)
+		{
+		    case Reg::Not: case Reg::BitNot: case Reg::Neg:
+			throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
+		}
+		break;
+	    case Reg::Obj:
+		throw TError(nodePath().c_str(),_("Operation %d don't support for object type"),cod);
+	}
 
     //> Check allow the buildin calc and calc
     if( op->pos() < 0 )
@@ -763,6 +755,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		    case Reg::Neg:	*op = -op->val().i_el;	break;
 		}
 		break;
+	    case Reg::Obj:
 	    case Reg::Real:
 		switch(cod)
 		{
@@ -792,25 +785,12 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
     Reg *rez = regAt(regNew());
     rez->setType(op->vType(this));
     //>> Add code
-    switch(op_tp)
+    switch(cod)
     {
-	case Reg::Bool:
-	case Reg::Int:
-	    switch(cod)
-	    {
-		case Reg::Not:		prg += (ui8)Reg::Not;	break;
-		case Reg::BitNot:	prg += (ui8)Reg::BitNot;	break;
-		case Reg::Neg:		prg += (ui8)Reg::Neg;	break;
-	    }
-	    break;
-	case Reg::Real:
-	    switch(cod)
-	    {
-		case Reg::Not:		prg += (ui8)Reg::Not;	break;
-		case Reg::BitNot:	prg += (ui8)Reg::BitNot;	break;
-		case Reg::Neg:		prg += (ui8)Reg::Neg;	break;
-	    }
-	    break;
+	case Reg::Not:		prg += (ui8)Reg::Not;	break;
+	case Reg::BitNot:	prg += (ui8)Reg::BitNot;	break;
+	case Reg::Neg:		prg += (ui8)Reg::Neg;	break;
+	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
     }
     ui16 addr;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
@@ -937,7 +917,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     //> Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
         throw TError(nodePath().c_str(),_("More than %d parameters are specified for function <%s>"),
-	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());	
+	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());
     //> Check the present return for fuction
     if( !proc && !ret_ok )
 	throw TError(nodePath().c_str(),_("Function is requested <%s>, but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
@@ -961,6 +941,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	    case IO::Integer:	rez->setType(Reg::Int);		break;
 	    case IO::Real:	rez->setType(Reg::Real);	break;
 	    case IO::Boolean:	rez->setType(Reg::Bool);	break;
+	    case IO::Object:	rez->setType(Reg::Obj);		break;
 	}
     }
 
@@ -976,61 +957,273 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     return rez;
 }
 
+Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
+{
+    if( !obj->objEl( ) )
+	throw TError(nodePath().c_str(),_("No object variable for function"));
+
+    Reg *rez = NULL;
+    deque<int> p_pos;
+
+    //> Mvi all parameters
+    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    //> Get parameters
+    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+    {
+	p_pos.push_front( f_prmst.front()->pos() );
+	f_prmst.front()->free();
+	f_prmst.pop_front();
+    }
+    obj->free();
+    rez = regAt(regNew());
+    rez->setType(Reg::String);
+
+    //> Make code
+    ui16 addr;
+    prg += (ui8)Reg::CFuncObj;
+    addr = obj->pos(); prg.append((char*)&addr,sizeof(ui16));
+    prg += (ui8)p_cnt;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+
+    for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
+    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(ui16)); }
+
+    return rez;
+}
+
+Reg *Func::cdProp( Reg *obj, Reg *prp )
+{
+    ui16 addr;
+    Reg *ro = obj;
+    if( !ro->objEl() ) { ro = cdMove( NULL, ro, false ); ro->setObjEl(); }
+
+    if( !prp )
+    {
+	prg += (ui8)Reg::OPrpSt;
+	addr = ro->pos(); prg.append((char*)&addr,sizeof(ui16));
+	prg += (ui8)o_prpf.size();
+	prg += o_prpf;
+    }
+    else
+    {
+	prp = cdMvi( prp );
+
+	prg += (ui8)Reg::OPrpDin;
+	addr = ro->pos(); prg.append((char*)&addr,sizeof(ui16));
+	addr = prp->pos(); prg.append((char*)&addr,sizeof(ui16));
+
+	prp->free();
+    }
+    return ro;
+}
+
+TVariant Func::oPropGet( TVariant vl, const string &prop )
+{
+    switch( vl.type() )
+    {
+	case TVariant::Object:	return vl.getO()->propGet(prop);
+	case TVariant::Boolean:
+	    throw TError(nodePath().c_str(),_("Boolean type have not one properties."));
+	case TVariant::Integer: 
+	    if( prop == "MAX_VALUE" )	return INT_MAX;
+	    if( prop == "MIN_VALUE" )	return INT_MIN;
+	    if( prop == "NaN" )		return EVAL_INT;
+	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+	case TVariant::Real:
+	    if( prop == "MAX_VALUE" )	return 3.4e300;
+	    if( prop == "MIN_VALUE" )	return -3.4e300;
+	    if( prop == "NaN" )		return EVAL_REAL;
+	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+	case TVariant::String:
+	    if( prop == "length" )	return (int)vl.getS().size();
+	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+    }    
+}
+
+TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prms )
+{
+    switch( vl.type() )
+    {
+	case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
+	case TVariant::Boolean:
+	    if( prop == "toString" )	return string(vl.getB() ? "true" : "false");
+	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s'."),prop.c_str());
+	case TVariant::Integer: 
+	case TVariant::Real:
+	    if( prop == "toFixed" && parms.size() )	return TSYS::realRound(vl.getR(),vmax(0,vmin(100,prms[0].getI())));
+//	    if( prop == "toString" && parms.size() )	?;
+	    throw TError(nodePath().c_str(),_("Integer type have not function '%s'."),prop.c_str());
+	case TVariant::String:
+	    if( prop == "charAt" && prms.size() )	return vl.getS().substr(prms[0].getI(),1);
+	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+    }    
+    return TVariant();
+}
+
+TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
+{
+    TVariant vl(string(EVAL_STR));
+
+    //> Get base value
+    switch( rg.type() )
+    {
+	case Reg::Bool:		vl = rg.val().b_el;	break;
+	case Reg::Int:		vl = rg.val().i_el;	break;
+	case Reg::Real:		vl = rg.val().r_el;	break;
+	case Reg::String:	vl = *rg.val().s_el;	break;
+	case Reg::Var:
+	    switch(io->ioType(rg.val().io))
+	    {
+		case IO::Boolean:	vl = io->getB(rg.val().io);	break;
+		case IO::Integer:	vl = io->getI(rg.val().io);	break;
+		case IO::Real:		vl = io->getR(rg.val().io);	break;
+		case IO::String:	vl = io->getS(rg.val().io);	break;
+	    }
+	    break;
+	case Reg::PrmAttr:
+	    switch(rg.val().p_attr->at().fld().type())
+	    {
+		case TFld::Boolean:	vl = rg.val().p_attr->at().getB();	break;
+		case TFld::Integer:	vl = rg.val().p_attr->at().getI();	break;
+		case TFld::Real:	vl = rg.val().p_attr->at().getR();	break;
+		case TFld::String:	vl = rg.val().p_attr->at().getS();	break;
+	    }
+	    break;
+	case Reg::Obj:	vl = rg.val().o_el;	break;
+    }
+
+    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+    {
+	if( fObj && i_p == (rg.propSize( )-1) ) break;
+	vl = oPropGet(vl,rg.propGet(i_p));
+    }
+
+    return vl;
+}
+
 string Func::getValS( TValFunc *io, RegW &rg )
 {
-    switch(rg.type())
-    {
-	case Reg::Bool:		return (rg.val().b_el!=EVAL_BOOL) ? TSYS::int2str((bool)rg.val().b_el) : EVAL_STR;
-	case Reg::Int:		return (rg.val().i_el!=EVAL_INT) ? TSYS::int2str(rg.val().i_el) : EVAL_STR;
-	case Reg::Real:		return (rg.val().r_el!=EVAL_REAL) ? TSYS::real2str(rg.val().r_el) : EVAL_STR;
-	case Reg::String:	return *rg.val().s_el;
-	case Reg::Var:		return io->getS(rg.val().io);
-	case Reg::PrmAttr:	return rg.val().p_attr->at().getS();
-    }
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
+	{
+	    case Reg::Bool:	return (rg.val().b_el!=EVAL_BOOL) ? TSYS::int2str((bool)rg.val().b_el) : EVAL_STR;
+	    case Reg::Int:	return (rg.val().i_el!=EVAL_INT) ? TSYS::int2str(rg.val().i_el) : EVAL_STR;
+	    case Reg::Real:	return (rg.val().r_el!=EVAL_REAL) ? TSYS::real2str(rg.val().r_el) : EVAL_STR;
+	    case Reg::String:	return *rg.val().s_el;
+	    case Reg::Var:	return io->getS(rg.val().io);
+	    case Reg::PrmAttr:	return rg.val().p_attr->at().getS();
+//	    case Reg::Obj:	return vl.getO();
+	}
+    else return getVal(io,rg).getS();
+
+    return EVAL_STR;
 }
 
 int Func::getValI( TValFunc *io, RegW &rg )
 {
-    switch(rg.type())
-    {
-	case Reg::Bool:		return (rg.val().b_el!=EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_INT;
-	case Reg::Int:		return rg.val().i_el;
-	case Reg::Real:		return (rg.val().r_el!=EVAL_REAL) ? (int)rg.val().r_el : EVAL_INT;
-	case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? atoi(rg.val().s_el->c_str()) : EVAL_INT;
-	case Reg::Var:		return io->getI(rg.val().io);
-	case Reg::PrmAttr:	return rg.val().p_attr->at().getI();
-    }
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
+	{
+	    case Reg::Bool:	return (rg.val().b_el!=EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_INT;
+	    case Reg::Int:	return rg.val().i_el;
+	    case Reg::Real:	return (rg.val().r_el!=EVAL_REAL) ? (int)rg.val().r_el : EVAL_INT;
+	    case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? atoi(rg.val().s_el->c_str()) : EVAL_INT;
+	    case Reg::Var:	return io->getI(rg.val().io);
+	    case Reg::PrmAttr:	return rg.val().p_attr->at().getI();
+//	    case Reg::Obj:	return vl.getO();
+	}
+    else return getVal(io,rg).getI();
+
+    return EVAL_INT;
 }
 
 double Func::getValR( TValFunc *io, RegW &rg )
 {
-    switch(rg.type())
-    {
-	case Reg::Bool:		return (rg.val().b_el!=EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_REAL;
-	case Reg::Int:		return (rg.val().i_el!=EVAL_INT) ? rg.val().i_el : EVAL_REAL;
-	case Reg::Real:		return rg.val().r_el;
-	case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? atof(rg.val().s_el->c_str()) : EVAL_REAL;
-	case Reg::Var:		return io->getR(rg.val().io);
-	case Reg::PrmAttr:	return rg.val().p_attr->at().getR();
-    }
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
+	{
+	    case Reg::Bool:	return (rg.val().b_el!=EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_REAL;
+	    case Reg::Int:	return (rg.val().i_el!=EVAL_INT) ? rg.val().i_el : EVAL_REAL;
+	    case Reg::Real:	return rg.val().r_el;
+	    case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? atof(rg.val().s_el->c_str()) : EVAL_REAL;
+	    case Reg::Var:	return io->getR(rg.val().io);
+	    case Reg::PrmAttr:	return rg.val().p_attr->at().getR();
+//	    case Reg::Obj:	return vl.getO();
+	}
+    else return getVal(io,rg).getR();
+
+    return EVAL_REAL;
 }
 
 char Func::getValB( TValFunc *io, RegW &rg )
 {
-    switch(rg.type())
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
+	{
+	    case Reg::Bool:	return rg.val().b_el;
+	    case Reg::Int:	return (rg.val().i_el!=EVAL_INT) ? (bool)rg.val().i_el : EVAL_BOOL;
+	    case Reg::Real:	return (rg.val().r_el!=EVAL_REAL) ? (bool)rg.val().r_el : EVAL_BOOL;
+	    case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? (bool)atoi(rg.val().s_el->c_str()) : EVAL_BOOL;
+	    case Reg::Var:	return io->getB(rg.val().io);
+	    case Reg::PrmAttr:	return rg.val().p_attr->at().getB();
+//	    case Reg::Obj:	return vl.getO();
+	}
+    else return getVal(io,rg).getB();
+
+    return EVAL_BOOL;
+}
+
+TVarObj *Func::getValO( TValFunc *io, RegW &rg )
+{
+    if( rg.type() != Reg::Obj ) throw TError(nodePath().c_str(),_("Get object from no object's register"));
+    TVariant vl(rg.val().o_el);
+    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+	vl = vl.getO()->propGet(rg.propGet(i_p));
+    return vl.getO();
+}
+
+void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
+{
+    switch( rg.type() )
     {
-	case Reg::Bool:		return rg.val().b_el;
-	case Reg::Int:		return (rg.val().i_el!=EVAL_INT) ? (bool)rg.val().i_el : EVAL_BOOL;
-	case Reg::Real:		return (rg.val().r_el!=EVAL_REAL) ? (bool)rg.val().r_el : EVAL_BOOL;
-	case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? (bool)atoi(rg.val().s_el->c_str()) : EVAL_BOOL;
-	case Reg::Var:		return io->getB(rg.val().io);
-	case Reg::PrmAttr:	return rg.val().p_attr->at().getB();
+	case Reg::Bool:		rg.val().b_el = val.getB();	break;
+	case Reg::Int:		rg.val().i_el = val.getI();	break;
+	case Reg::Real:		rg.val().r_el = val.getR();	break;
+	case Reg::String:	*rg.val().s_el = val.getS();	break;
+	case Reg::Var:
+	    switch( val.type() )
+	    {
+		case TVariant::Boolean:	io->setB(rg.val().io,val.getB());	break;
+		case TVariant::Integer:	io->setI(rg.val().io,val.getI());	break;
+		case TVariant::Real:	io->setR(rg.val().io,val.getR());	break;
+		case TVariant::String:	io->setS(rg.val().io,val.getS());	break;
+		//case TVariant::Object:	io->setO(rg.val().io,val.getO());	break;
+	    }
+	    break;
+	case Reg::PrmAttr:
+	    switch( val.type() )
+	    {
+		case TVariant::Boolean:	rg.val().p_attr->at().setB(val.getB());	break;
+		case TVariant::Integer:	rg.val().p_attr->at().setI(val.getI());	break;
+		case TVariant::Real:	rg.val().p_attr->at().setR(val.getR());	break;
+		case TVariant::String:	rg.val().p_attr->at().setS(val.getS());	break;
+	    }
+	    break;
+	case Reg::Obj:
+	{
+	    TVariant vl(rg.val().o_el);
+	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
+		else vl.getO()->propSet(rg.propGet(i_p),val);
+	    break;
+	}
     }
 }
 
 void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 {
-    switch(rg.type())
+    switch( rg.type() )
     {
 	case Reg::Bool:		rg.val().b_el = (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL;	break;
 	case Reg::Int:		rg.val().i_el = (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT;		break;
@@ -1038,12 +1231,20 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 	case Reg::String:	*rg.val().s_el = val;			break;
 	case Reg::Var:		io->setS(rg.val().io,val);		break;
 	case Reg::PrmAttr:	rg.val().p_attr->at().setS(val);	break;
+	case Reg::Obj:
+	{
+	    TVariant vl(rg.val().o_el);
+	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
+		else vl.getO()->propSet(rg.propGet(i_p),val);
+	    break;
+	}
     }
 }
 
 void Func::setValI( TValFunc *io, RegW &rg, int val )
 {
-    switch(rg.type())
+    switch( rg.type() )
     {
 	case Reg::Bool:		rg.val().b_el = (val!=EVAL_INT) ? (bool)val : EVAL_BOOL;		break;
 	case Reg::Int:		rg.val().i_el = val;			break;
@@ -1051,12 +1252,20 @@ void Func::setValI( TValFunc *io, RegW &rg, int val )
 	case Reg::String:	*rg.val().s_el = (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR;	break;
 	case Reg::Var:		io->setI(rg.val().io,val);		break;
 	case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
+	case Reg::Obj:
+	{
+	    TVariant vl(rg.val().o_el);
+	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
+		else vl.getO()->propSet(rg.propGet(i_p),val);
+	    break;
+	}
     }
 }
 
 void Func::setValR( TValFunc *io, RegW &rg, double val )
 {
-    switch(rg.type())
+    switch( rg.type() )
     {
 	case Reg::Bool:		rg.val().b_el = (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL;	break;
 	case Reg::Int:		rg.val().i_el = (val!=EVAL_REAL) ? (int)val : EVAL_INT;		break;
@@ -1064,12 +1273,20 @@ void Func::setValR( TValFunc *io, RegW &rg, double val )
 	case Reg::String:	*rg.val().s_el = (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR;	break;
 	case Reg::Var:		io->setR(rg.val().io,val);		break;
 	case Reg::PrmAttr:	rg.val().p_attr->at().setR(val);	break;
+	case Reg::Obj:
+	{
+	    TVariant vl(rg.val().o_el);
+	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
+		else vl.getO()->propSet(rg.propGet(i_p),val);
+	    break;
+	}
     }
 }
 
 void Func::setValB( TValFunc *io, RegW &rg, char val )
 {
-    switch(rg.type())
+    switch( rg.type() )
     {
 	case Reg::Bool:		rg.val().b_el = val;			break;
 	case Reg::Int:		rg.val().i_el = (val!=EVAL_BOOL) ? (bool)val : EVAL_INT;	break;
@@ -1077,7 +1294,20 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
 	case Reg::String:	*rg.val().s_el = (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR;	break;
 	case Reg::Var:		io->setB(rg.val().io,val);		break;
 	case Reg::PrmAttr:	rg.val().p_attr->at().setB(val);	break;
+	case Reg::Obj:
+	{
+	    TVariant vl(rg.val().o_el);
+	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
+		else vl.getO()->propSet(rg.propGet(i_p),val);
+	    break;
+	}
     }
+}
+
+void Func::setValO( TValFunc *io, RegW &rg, TVarObj *val )
+{
+    if( rg.type() == Reg::Obj )	rg = val;
 }
 
 void Func::calc( TValFunc *val )
@@ -1130,87 +1360,129 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 		printf("CODE: Load bool %d to reg %d.\n",*(ui8*)(cprg+3),*(ui16*)(cprg+1));
 #endif
 		reg[*(ui16*)(cprg+1)] = *(char*)(cprg+3);
-		cprg+=4; break;
+		cprg += 4; break;
 	    case Reg::MviI:
 #if OSC_DEBUG >= 5
 		printf("CODE: Load integer %d to reg %d.\n",*(int*)(cprg+3),*(ui16*)(cprg+1));
 #endif
 		reg[*(ui16*)(cprg+1)] = *(int*)(cprg+3);
-		cprg+=3+sizeof(int); break;
+		cprg += 3+sizeof(int); break;
 	    case Reg::MviR:
 #if OSC_DEBUG >= 5
 		printf("CODE: Load real %f to reg %d.\n",*(double *)(cprg+3),*(ui16*)(cprg+1));
 #endif
 		reg[*(ui16*)(cprg+1)] = *(double *)(cprg+3);
-		cprg+=3+sizeof(double); break;
+		cprg += 3+sizeof(double); break;
 	    case Reg::MviS:
 #if OSC_DEBUG >= 5
 		printf("CODE: Load string %s(%d) to reg %d.\n",string((char*)cprg+4,*(ui8*)(cprg+3)).c_str(),*(ui8*)(cprg+3),*(ui16*)(cprg+1));
 #endif
 		reg[*(ui16*)(cprg+1)] = string((char*)cprg+4,*(ui8*)(cprg+3));
-		cprg+=4+ *(ui8*)(cprg+3); break;
+		cprg += 4+ *(ui8*)(cprg+3); break;
+	    case Reg::MviObject:
+#if OSC_DEBUG >= 5
+		printf("CODE: Load object to reg %d.\n",*(ui16*)(cprg+1));
+#endif
+		reg[*(ui16*)(cprg+1)] = new TVarObj();
+		cprg += 3; break;
+	    case Reg::MviArray:
+	    {
+#if OSC_DEBUG >= 5
+		printf("CODE: Load array elements %d to reg %d.\n",*(ui8*)(cprg+3),*(ui16*)(cprg+1));
+#endif
+		TAreaObj *ar = new TAreaObj();
+		int pcnt = *(ui8*)(cprg+3);
+		//>>> Fill array by empty elements number
+		if( pcnt == 1 )
+		    for( int i_p = 0; i_p < getValI(val,reg[*(ui16*)(cprg+4)]); i_p++ )
+			ar->propSet(TSYS::int2str(i_p),EVAL_REAL);
+		//>>> Fill array by parameters
+		else
+		    for( int i_p = 0; i_p < *(ui8*)(cprg+3); i_p++ )
+			switch( reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))].vType(this) )
+			{
+			    case Reg::Bool: ar->propSet(TSYS::int2str(i_p),getValB(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));	break;
+			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));		break;
+			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));	break;
+			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));	break;
+			    case Reg::Obj: ar->propSet( TSYS::int2str(i_p), reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))].val().o_el );	break;
+			}
+		reg[*(ui16*)(cprg+1)] = ar;
+		cprg += 4 + *(ui8*)(cprg+3)*sizeof(ui16); break;
+	    }
 	    //>> Assign codes
-	    case Reg::AssB:
+	    case Reg::Ass:
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign boolean from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
-#endif		
-		setValB(val,reg[*(ui16*)(cprg+1)],getValB(val,reg[*(ui16*)(cprg+3)]));
-		cprg+=5; break;
-	    case Reg::AssI:
-#if OSC_DEBUG >= 5
-		printf("CODE: Assign integer from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Assign from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		setValI(val,reg[*(ui16*)(cprg+1)],getValI(val,reg[*(ui16*)(cprg+3)]));
-		cprg+=5; break;
-	    case Reg::AssR:
-#if OSC_DEBUG >= 5
-		printf("CODE: Assign real from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
-#endif
-		setValR(val,reg[*(ui16*)(cprg+1)],getValR(val,reg[*(ui16*)(cprg+3)]));
-		cprg+=5; break;
-	    case Reg::AssS:
-#if OSC_DEBUG >= 5
-		printf("CODE: Assign string from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
-#endif
-		setValS(val,reg[*(ui16*)(cprg+1)],getValS(val,reg[*(ui16*)(cprg+3)]));
+		if( !reg[*(ui16*)(cprg+1)].propSize( ) )
+		    switch( reg[*(ui16*)(cprg+1)].vType(this) )
+		    {
+			case Reg::Bool:		setValB(val,reg[*(ui16*)(cprg+1)],getValB(val,reg[*(ui16*)(cprg+3)]));	break;
+			case Reg::Int:		setValI(val,reg[*(ui16*)(cprg+1)],getValI(val,reg[*(ui16*)(cprg+3)]));	break;
+			case Reg::Real:		setValR(val,reg[*(ui16*)(cprg+1)],getValR(val,reg[*(ui16*)(cprg+3)]));	break;
+			case Reg::String:	setValS(val,reg[*(ui16*)(cprg+1)],getValS(val,reg[*(ui16*)(cprg+3)]));	break;
+			case Reg::Obj:		setValO(val,reg[*(ui16*)(cprg+1)],getValO(val,reg[*(ui16*)(cprg+3)]));	break;
+		    }
+		else setVal(val,reg[*(ui16*)(cprg+1)],getVal(val,reg[*(ui16*)(cprg+3)]));
 		cprg+=5; break;
 	    //>> Mov codes
-	    case Reg::MovB:
+	    case Reg::Mov:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move boolean from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Move from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]);
+		switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		{
+		    case Reg::Bool:	reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]);	break;
+		    case Reg::Int:	reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]);	break;
+		    case Reg::Real:	reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]);	break;
+		    case Reg::String:	reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]);	break;
+		    case Reg::Obj:	reg[*(ui16*)(cprg+1)] = getValO(val,reg[*(ui16*)(cprg+3)]);	break;
+		}
 		cprg+=5; break;
-	    case Reg::MovI:
+	    //>> Load properties for object
+	    case Reg::OPrpSt:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move integer from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Set object's %d properties to string len %d\n",*(ui16*)(cprg+1),*(ui8*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]);
-		cprg+=5; break;
-	    case Reg::MovR:
+		reg[*(ui16*)(cprg+1)].propAdd(string((char*)cprg+4,*(ui8*)(cprg+3)));
+		cprg += 4 + *(ui8*)(cprg+3); break;
+	    case Reg::OPrpDin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move real from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Set object's %d properties to register's %d value\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]);
-		cprg+=5; break;
-	    case Reg::MovS:
-#if OSC_DEBUG >= 5
-		printf("CODE: Move string from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
-#endif
-		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]);
-		cprg+=5; break;
+		reg[*(ui16*)(cprg+1)].propAdd(getValS(val,reg[*(ui16*)(cprg+3)]));
+		cprg += 5;  break;
 	    //>> Binary operations
-	    case Reg::AddR:
+	    case Reg::Add:
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d + %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) + getValR(val,reg[*(ui16*)(cprg+5)]);
-		cprg+=7; break;
-	    case Reg::AddS:
-#if OSC_DEBUG >= 5
-		printf("CODE: String %d = %d + %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
-#endif
-		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) + getValS(val,reg[*(ui16*)(cprg+5)]);
+		if( !reg[*(ui16*)(cprg+3)].propSize( ) )
+		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		    {
+			case Reg::Bool: case Reg::Int: case Reg::Real:
+			    reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) + getValR(val,reg[*(ui16*)(cprg+5)]);
+			    break;
+			case Reg::String:
+			    reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) + getValS(val,reg[*(ui16*)(cprg+5)]);
+			    break;
+			default:
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+		    }
+		else
+		{
+		    TVariant op1 = getVal(val,reg[*(ui16*)(cprg+3)]);
+		    switch( op1.type() )
+		    {
+			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
+			    reg[*(ui16*)(cprg+1)] = op1.getR() + getValR(val,reg[*(ui16*)(cprg+5)]); break;
+			case TVariant::String:
+			    reg[*(ui16*)(cprg+1)] = op1.getS() + getValS(val,reg[*(ui16*)(cprg+5)]); break;
+			default:
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+		    }
+		}
 		cprg+=7; break;
 	    case Reg::Sub:
 #if OSC_DEBUG >= 5
@@ -1290,41 +1562,77 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 #endif
 		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) > getValR(val,reg[*(ui16*)(cprg+5)]);
 		cprg+=7; break;
-	    case Reg::LER:
+	    case Reg::LEQ:
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d <= %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
 		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) <= getValR(val,reg[*(ui16*)(cprg+5)]);
 		cprg+=7; break;
-	    case Reg::GER:
+	    case Reg::GEQ:
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d >= %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
 		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) >= getValR(val,reg[*(ui16*)(cprg+5)]);
 		cprg+=7; break;
-	    case Reg::EQR:
+	    case Reg::EQU:
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d == %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) == getValR(val,reg[*(ui16*)(cprg+5)]);
+		if( !reg[*(ui16*)(cprg+3)].propSize( ) )
+		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		    {
+			case Reg::Bool: case Reg::Int: case Reg::Real:
+			    reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) == getValR(val,reg[*(ui16*)(cprg+5)]);
+			    break;
+			case Reg::String:
+			    reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) == getValS(val,reg[*(ui16*)(cprg+5)]);
+			    break;
+			default:
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+		    }
+		else
+		{
+		    TVariant op1 = getVal(val,reg[*(ui16*)(cprg+3)]);
+		    switch( op1.type() )
+		    {
+			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
+			    reg[*(ui16*)(cprg+1)] = op1.getR() == getValR(val,reg[*(ui16*)(cprg+5)]); break;
+			case TVariant::String:
+			    reg[*(ui16*)(cprg+1)] = op1.getS() == getValS(val,reg[*(ui16*)(cprg+5)]); break;
+			default:
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+		    }
+		}
 		cprg+=7; break;
-	    case Reg::EQS:
-#if OSC_DEBUG >= 5
-		printf("CODE: String %d = %d == %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
-#endif
-		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) == getValS(val,reg[*(ui16*)(cprg+5)]);
-		cprg+=7; break;
-	    case Reg::NER:
+	    case Reg::NEQ:
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d != %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) != getValR(val,reg[*(ui16*)(cprg+5)]);
-		cprg+=7; break;
-	    case Reg::NES:
-#if OSC_DEBUG >= 5
-		printf("CODE: String %d = %d != %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
-#endif
-		reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) != getValS(val,reg[*(ui16*)(cprg+5)]);
+		if( !reg[*(ui16*)(cprg+3)].propSize( ) )
+		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		    {
+			case Reg::Bool: case Reg::Int: case Reg::Real:
+			    reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) != getValR(val,reg[*(ui16*)(cprg+5)]);
+			    break;
+			case Reg::String:
+			    reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) != getValS(val,reg[*(ui16*)(cprg+5)]);
+			    break;
+			default:
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+		    }
+		else
+		{
+		    TVariant op1 = getVal(val,reg[*(ui16*)(cprg+3)]);
+		    switch( op1.type() )
+		    {
+			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
+			    reg[*(ui16*)(cprg+1)] = op1.getR() != getValR(val,reg[*(ui16*)(cprg+5)]); break;
+			case TVariant::String:
+			    reg[*(ui16*)(cprg+1)] = op1.getS() != getValS(val,reg[*(ui16*)(cprg+5)]); break;
+			default:
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+		    }
+		}
 		cprg+=7; break;
 	    //>> Unary operations
 	    case Reg::Not:
@@ -1522,6 +1830,7 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 			case IO::Integer:	vfnc.setI(p_p,getValI(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
 			case IO::Real:		vfnc.setR(p_p,getValR(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
 			case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
+			case IO::Object:	vfnc.setO(p_p,getValO(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
 		    }
 		}
 		//>>> Make calc
@@ -1537,19 +1846,45 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 			    case IO::Integer:	setValI(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getI(p_p)); break;
 			    case IO::Real:	setValR(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getR(p_p)); break;
 			    case IO::Boolean:	setValB(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getB(p_p)); break;
+			    case IO::Object:	setValO(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getO(p_p)); break;
 			}
 		}
 		//>>> Set return
 		if( *cprg == Reg::CFunc )
 		    switch(vfnc.ioType(r_pos))
 		    {
-			case IO::String:  reg[*(ui16*)(cprg+3)] = vfnc.getS(r_pos); break;
-			case IO::Integer: reg[*(ui16*)(cprg+3)] = vfnc.getI(r_pos); break;
-			case IO::Real:    reg[*(ui16*)(cprg+3)] = vfnc.getR(r_pos); break;
-			case IO::Boolean: reg[*(ui16*)(cprg+3)] = vfnc.getB(r_pos); break;
+			case IO::String:	reg[*(ui16*)(cprg+3)] = vfnc.getS(r_pos); break;
+			case IO::Integer:	reg[*(ui16*)(cprg+3)] = vfnc.getI(r_pos); break;
+			case IO::Real:		reg[*(ui16*)(cprg+3)] = vfnc.getR(r_pos); break;
+			case IO::Boolean:	reg[*(ui16*)(cprg+3)] = vfnc.getB(r_pos); break;
+			case IO::Object:	reg[*(ui16*)(cprg+3)] = vfnc.getO(r_pos); break;
 		    }
 
 		cprg += 5 + (*(ui8*)(cprg+2))*sizeof(ui16); break;
+	    }
+	    case Reg::CFuncObj:
+	    {
+#if OSC_DEBUG >= 5
+		printf("CODE: Call object's function %d = %d(%d).\n",*(ui16*)(cprg+4),*(ui16*)(cprg+1),*(ui8*)(cprg+3));
+#endif
+		TVariant obj = getVal(val,reg[*(ui16*)(cprg+1)],true);
+		if( reg[*(ui16*)(cprg+1)].propEmpty() )
+		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
+		
+		vector<TVariant> prms;
+		for( int i_p = 0; i_p < *(ui8*)(cprg+3); i_p++ )
+		    prms.push_back(getVal(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))]));
+		TVariant rez = oFuncCall( obj, reg[*(ui16*)(cprg+1)].propGet(reg[*(ui16*)(cprg+1)].propSize()-1), prms );
+		switch( rez.type() )
+		{
+		    case TVariant::Boolean:	reg[*(ui16*)(cprg+4)] = rez.getB();	break;
+		    case TVariant::Integer:	reg[*(ui16*)(cprg+4)] = rez.getI();	break;
+		    case TVariant::Real:	reg[*(ui16*)(cprg+4)] = rez.getR();	break;
+		    case TVariant::String:	reg[*(ui16*)(cprg+4)] = rez.getS();	break;
+		    case TVariant::Object:	reg[*(ui16*)(cprg+4)] = rez.getO();	break;
+		}
+
+		cprg += 6 + (*(ui8*)(cprg+3))*sizeof(ui16); break;
 	    }
 	    default:
 		setStart(false);
@@ -1650,48 +1985,56 @@ void Func::cntrCmdProc( XMLNode *opt )
 Reg::~Reg( )
 {
     setType(Free);
-    if(m_nm) delete m_nm;
 }
 
 Reg &Reg::operator=( Reg &irg )
 {
     setType(irg.type());
-    switch(type())
+    switch( type() )
     {
 	case Bool:	el.b_el = irg.el.b_el;	 break;
 	case Int:	el.i_el = irg.el.i_el;	break;
 	case Real:	el.r_el = irg.el.r_el;	break;
 	case String:	*el.s_el = *irg.el.s_el;break;
+	case Obj:
+	    el.o_el = irg.el.o_el;
+	    if( el.o_el ) el.o_el->connect();
+	    break;
 	case Var:	el.io = irg.el.io;	break;
 	case PrmAttr:	*el.p_attr = *irg.el.p_attr;	break;
     }
-    setName(irg.name().c_str());	//name
-    m_lock = irg.m_lock;	//locked
-    //m_pos = irg.m_pos;	//pos
+    setName(irg.name());	//name
+    mLock = irg.mLock;		//locked
     return *this;
 }
 
-string Reg::name() const
+void Reg::operator=( TVarObj *ivar )
 {
-    return m_nm ? *m_nm : "";
-}
-
-void Reg::setName( const char *nm )
-{
-    if( !m_nm ) m_nm = new string;
-    *m_nm = nm;
+    setType(Obj);
+    el.o_el = ivar;
+    el.o_el->connect();
 }
 
 void Reg::setType( Type tp )
 {
-    if( m_tp == tp )    return;
+    if( mTp == tp && mTp != Reg::Obj )	return;
     //Free old type
-    if( m_tp == String )		delete el.s_el;
-    else if( m_tp == Reg::PrmAttr )	delete el.p_attr;
+    switch( mTp )
+    {
+	case Reg::String:	delete el.s_el;		break;
+	case Reg::Obj:
+	    if( el.o_el && !el.o_el->disconnect() ) delete el.o_el;
+	    break;
+	case Reg::PrmAttr:	delete el.p_attr;	break;
+    }
     //Set new type
-    if( tp == String )			el.s_el = new string;
-    else if( tp == Reg::PrmAttr )	el.p_attr = new AutoHD<TVal>;
-    m_tp = tp;
+    switch( tp )
+    {
+	case Reg::String:	el.s_el = new string;	break;
+	case Reg::Obj:		el.o_el = NULL;	break;
+	case Reg::PrmAttr:	el.p_attr = new AutoHD<TVal>;	break;
+    }
+    mTp = tp;
 }
 
 Reg::Type Reg::vType( Func *fnc )
@@ -1715,20 +2058,85 @@ Reg::Type Reg::vType( Func *fnc )
 		case TFld::Real:	return Real;
 		case TFld::String:	return String;
 	    }
-	default: return type();
     }
+    return type();
 }
 
 void Reg::free()
 {
-    if( !lock() )
+    if( lock() ) return;
+
+    setType(Free);
+    mObjEl = mLock = false;
+}
+
+//*************************************************
+//* RegW : Work register                          *
+//*************************************************
+void RegW::operator=( TVarObj *ivar )
+{
+    setType(Reg::Obj);
+    el.o_el = ivar;
+    el.o_el->connect();
+}
+
+void RegW::setType( Reg::Type tp )
+{
+    mPrps.clear();
+    if( mTp == tp && mTp != Reg::Obj )    return;
+    //Free old type
+    switch(mTp)
     {
-	setType(Free);
-	m_lock = false;
-	if( m_nm )
-	{
-	    delete m_nm;
-	    m_nm = NULL;
-	}
+	case Reg::String:	delete el.s_el;		break;
+	case Reg::Obj:
+	    if( el.o_el && !el.o_el->disconnect() ) delete el.o_el;
+	    break;
+	case Reg::PrmAttr:	delete el.p_attr;	break;
     }
+    //Set new type
+    switch(tp)
+    {
+	case Reg::String:	el.s_el = new string;	break;
+	case Reg::Obj:		el.o_el = NULL;	break;
+	case Reg::PrmAttr:	el.p_attr = new AutoHD<TVal>;	break;
+    }
+    mTp = tp;
+}
+
+Reg::Type RegW::vType( Func *fnc )
+{
+    switch( type() )
+    {
+	case Reg::Free: return Reg::Int;
+	case Reg::Var:
+	    switch(fnc->io(val().io)->type())
+	    {
+		case IO::String:	return Reg::String;
+		case IO::Boolean:	return Reg::Bool;
+		case IO::Integer:	return Reg::Int;
+		case IO::Real:		return Reg::Real;
+	    }
+	    break;
+	case Reg::PrmAttr:
+	    switch(val().p_attr->at().fld().type())
+	    {
+		case TFld::Boolean:	return Reg::Bool;
+		case TFld::Integer:	return Reg::Int;
+		case TFld::Real:	return Reg::Real;
+		case TFld::String:	return Reg::String;
+	    }
+	    break;
+    }
+    return type();
+}
+
+string RegW::propGet( int id )
+{
+    if( id < 0 || id >= mPrps.size() ) return "";
+    return mPrps[id];
+}
+
+void RegW::propAdd( const string &vl )
+{
+    mPrps.push_back(vl);
 }

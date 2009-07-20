@@ -133,7 +133,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 	bd_tbl = TSYS::strSepParse(bd,2,'.');
     }
 
-    for( int i_ln = 0; i_ln < m_val.size(); i_ln++ )
+    for( int i_ln = 0; i_ln < ioSize(); i_ln++ )
     {
 	if( i_ln >= m_lnk.size() )
 	{

@@ -57,27 +57,29 @@ class TVariant
 	TVariant( int ivl );
 	TVariant( double ivl );
 	TVariant( const string &ivl );
-	TVariant( const TVarObj &ivl );
+	TVariant( TVarObj *ivl );
+	TVariant( const TVariant &var );
 
-	~TVariant( )	{ }
+	~TVariant( );
 
 	bool operator==( TVariant &vr );
-	TVariant &operator=( TVariant &vr );
+	TVariant &operator=( const TVariant &vr );
 
 	bool isNull( ) const	{ return (vl[0]==TVariant::Null); }
 	Type type( ) const	{ return (Type)vl[0]; }
+	void setType( Type tp );
 
-	char	getB( char def = EVAL_BOOL ) const;
-	int	getI( int def = EVAL_INT ) const;
-	double	getR( double def = EVAL_REAL ) const;
-	string	getS( const string &def = EVAL_STR ) const;
-	TVarObj	&getO( ) const;
+	char	getB( ) const;
+	int	getI( ) const;
+	double	getR( ) const;
+	string	getS( ) const;
+	TVarObj	*getO( ) const;
 
 	void setB( char val );
 	void setI( int val );
 	void setR( double val );
 	void setS( const string &val );
-	void setO( const TVarObj &val );
+	void setO( TVarObj *val );
 
     private:
 	//Attributes
@@ -93,19 +95,44 @@ class TVarObj
     public:
 	//Methods
 	TVarObj( );
-	~TVarObj( );
+	virtual ~TVarObj( );
 
-	TVarObj *dup( ) const;
-	TVarObj &operator=( const TVarObj &obj );
+	int connect( );
+	int disconnect( );
 
-	virtual TVariant propGet( const string &id, bool onlyCntr = true );
+	virtual TVariant propGet( const string &id );
+	virtual void propSet( const string &id, TVariant val );
+
+	virtual string getStrXML( const string &oid = "" );
+
+	virtual TVariant funcCall( const string &id, vector<TVariant> &prms );
+
+    protected:
+	//Attributes
+	map<string,TVariant> mProps;
+	unsigned int mUseCnt;
+};
+
+//***********************************************************
+//* TAreaObj                                                *
+//*   Area object included indexed properties               *
+//***********************************************************
+class TAreaObj : public TVarObj
+{
+    public:
+	//Methods
+	TAreaObj( )	{ };
+
+	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
 
-	virtual TVariant funcCall( const string &id, vector<TVariant> prms );
+	string getStrXML( const string &oid = "" );
+
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
     private:
 	//Attributes
-	map<string,TVariant> mProps;
+	vector<TVariant> mEls;
 };
 
 #endif // TVARIANT_H

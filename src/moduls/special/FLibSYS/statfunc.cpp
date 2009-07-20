@@ -98,6 +98,9 @@ void Lib::postEnable( int flag )
     reg( new tmFStr() );
     reg( new tmStr2Tm() );
 
+    reg( new dbReqSQL() );
+
+    reg( new messGet() );
     reg( new messPut() );
 
     reg( new strSize() );

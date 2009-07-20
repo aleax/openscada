@@ -237,7 +237,7 @@ function expand( el, val, upTree )
 	var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((i_g!=(el.grps.length-1))?'Down':'');
 	var liCont = isUsable?"<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'>":"";
 	liCont += "<img src='"+treeIco+"'/></a>";
-	liCont += "<span style='font-style: italic;'>"+el.grps[i_g].getAttribute('dscr')+":</span>";
+	liCont += "<span style='font-style: italic;'>"+strEncode(el.grps[i_g].getAttribute('dscr'))+":</span>";
 	//>> Next node for update
 	if( upTree && liN.isExpand )
 	{
@@ -297,7 +297,7 @@ function expand( el, val, upTree )
 	  if( parseInt(hostN.childNodes[i_e].getAttribute('icoSize')) )
 	    liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>";
 	  liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
-	    "onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+nodeText(hostN.childNodes[i_e])+"</a></span>";
+	    "onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+strEncode(nodeText(hostN.childNodes[i_e]))+"</a></span>";
 	  //>> Next node for update
 	  if( upTree && liN.isExpand )
 	  {

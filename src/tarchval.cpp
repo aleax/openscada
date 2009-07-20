@@ -2438,7 +2438,6 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 			setAttr("mode","1");
 
 		    lstStat = SYS->daq().at().rdStRequest(sPrm.at().owner().workId(),req,lstStat,false);
-//		    printf("TEST 00: '%s': Find hole (%lld - %lld) '%s'\n",archive().id().c_str(),firstEval/1000000,curEval/1000000,lstStat.c_str());
 		    bool evalOk = false, noEvalOk = false;
 		    if( !lstStat.empty() && !atoi(req.attr("rez").c_str()) && atoll(req.attr("tm_grnd").c_str()) && atoll(req.attr("tm").c_str()) )
 		    {
@@ -2449,8 +2448,6 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 			int val_tp = atoi(req.attr("vtp").c_str());
 			int prevPos = 0, curPos;
 			string prevVal = EVAL_STR, curVal;
-
-//			printf("TEST 01: %s Process hole (%lld-%lld)\n",archivator().workId().c_str(),bbeg/1000000,bend/1000000);
 
 			for( int v_off = 0; true; )
 			{

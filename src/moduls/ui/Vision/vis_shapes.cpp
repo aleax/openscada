@@ -2154,7 +2154,7 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 	{
 	    int vpos = shD->prms[i_p].val(curTime);
 	    if( !shD->prms[i_p].val().size() || (!shD->holdCur && vpos >= shD->prms[i_p].val().size()) ) continue;
-	    vpos = vmax(0,vmin(shD->prms[i_p].val().size()-1,vpos));;
+	    vpos = vmax(0,vmin(shD->prms[i_p].val().size()-1,vpos));
 	    if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
 	    double val = shD->prms[i_p].val()[vpos].val;
 	    if( val != shD->prms[i_p].curVal() )
