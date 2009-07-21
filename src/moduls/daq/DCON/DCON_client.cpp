@@ -414,12 +414,15 @@ void *TMdContr::Task( void *icntr )
 //				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 				//Check errors
-				cntr.p_hd[i_p].at().module_err=false;
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") cntr.p_hd[i_p].at().module_err=true;
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) cntr.p_hd[i_p].at().module_err=true;
+				cntr.p_hd[i_p].at().module_err = false;
+				if( !cntr.p_hd[i_p].at().module_err && pdu.substr(0,1) != ">" ) cntr.p_hd[i_p].at().module_err = true;
+				if( !cntr.p_hd[i_p].at().module_err &&
+					(pdu.size() < 57 || (cntr.p_hd[i_p].at().crc_ctrl &&
+					(pdu.size() < 59 || pdu.substr(57,2) != cntr.DCONCRC(pdu.substr(0,57))))) )
+				    cntr.p_hd[i_p].at().module_err = true;
 
 				//Set DAQ atributes
-				if (!cntr.p_hd[i_p].at().module_err)
+				if( !cntr.p_hd[i_p].at().module_err )
 				{
 				    cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());
 				    cntr.p_hd[i_p].at().AI[1]=atof(pdu.substr(8,7).c_str());
