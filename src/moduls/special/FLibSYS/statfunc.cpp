@@ -92,13 +92,12 @@ void Lib::postEnable( int flag )
 
     //> Reg functions
     reg( new sysCall() );
+    reg( new dbReqSQL() );
 
     reg( new tmDate() );
     reg( new tmTime() );
     reg( new tmFStr() );
     reg( new tmStr2Tm() );
-
-    reg( new dbReqSQL() );
 
     reg( new messGet() );
     reg( new messPut() );

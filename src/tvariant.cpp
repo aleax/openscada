@@ -283,6 +283,11 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	    mEls.push_back(prms[0].getO()->propGet(TSYS::int2str(i_p)));
 	return this;
     }
+    if( id == "push" && prms.size() )
+    {
+	for( int i_p = 0; i_p < prms.size(); i_p++ ) mEls.push_back(prms[i_p]);
+	return (int)mEls.size();
+    }
     if( id == "pop" )
     {
 	if( mEls.empty() ) throw TError("AreaObj",_("Array is empty."));
@@ -290,7 +295,6 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	mEls.pop_back();
 	return val;
     }
-    if( id == "push" && prms.size() )	{ mEls.push_back(prms[0]); return (int)mEls.size(); }
     if( id == "reverse" )		{ reverse(mEls.begin(),mEls.end()); return this; }
     if( id == "shift" )
     {
@@ -301,13 +305,13 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "unshift" && prms.size() )
     {
-	for( int i_p = 0; i_p < prms.size(); i_p++ )
-	    mEls.insert(mEls.begin(),prms[i_p]);
+	for( int i_p = 0; i_p < prms.size(); i_p++ ) mEls.insert(mEls.begin()+i_p,prms[i_p]);
 	return (int)mEls.size();
     }
     if( id == "slice" && prms.size() )
     {
-	int beg = vmax(0,prms[0].getI());
+	int beg = prms[0].getI();
+	if( beg < 0 ) beg = prms.size()-1+beg;
 	int end = prms.size()-1;
 	if( prms.size()>=2 ) end = prms[1].getI();
 	if( end < 0 ) end = prms.size()-1+end;
@@ -316,11 +320,6 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	for( int i_p = beg; i_p <= end; i_p++ )
 	    rez->propSet( TSYS::int2str(i_p-beg), prms[i_p] );
 	return rez;
-    }
-    if( id == "sort" )
-    {
-	//????
-	return this;
     }
     if( id == "splice" && prms.size() >= 2 )
     {
@@ -334,6 +333,11 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	    else { mEls.erase(mEls.begin()+beg); beg--; }
 	}
 	return rez;
+    }
+    if( id == "sort" )
+    {
+	//????
+	return this;
     }
 
     throw TError("AreaObj",_("Function '%s' error or not enough parameters."),id.c_str());

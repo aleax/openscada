@@ -65,9 +65,6 @@ class sysCall : public TFunction
 };
 
 //*************************************************
-//* DB access functions                           *
-
-//*************************************************
 //* SQL request to DB                             *
 //*************************************************
 class dbReqSQL : public TFunction
