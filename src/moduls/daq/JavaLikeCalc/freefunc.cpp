@@ -1051,7 +1051,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s'."),prop.c_str());
 	case TVariant::Integer: 
 	case TVariant::Real:
-	    if( prop == "toFixed" && parms.size() )	return TSYS::realRound(vl.getR(),vmax(0,vmin(100,prms[0].getI())));
+	    if( prop == "toFixed" && prms.size() )	return TSYS::realRound(vl.getR(),vmax(0,vmin(100,prms[0].getI())));
 //	    if( prop == "toString" && parms.size() )	?;
 	    throw TError(nodePath().c_str(),_("Integer type have not function '%s'."),prop.c_str());
 	case TVariant::String:
