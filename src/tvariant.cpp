@@ -228,6 +228,8 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
     throw TError("VarObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
 
+
+
 //***********************************************************
 //* TAreaObj                                                *
 //*   Area object included indexed properties               *
@@ -311,34 +313,42 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "slice" && prms.size() )
     {
 	int beg = prms[0].getI();
-	if( beg < 0 ) beg = prms.size()-1+beg;
+	if( beg < 0 ) beg = mEls.size()-1+beg;
 	int end = prms.size()-1;
 	if( prms.size()>=2 ) end = prms[1].getI();
-	if( end < 0 ) end = prms.size()-1+end;
-	end = vmin(end,prms.size()-1);
+	if( end < 0 ) end = mEls.size()-1+end;
+	end = vmin(end,mEls.size()-1);
 	TAreaObj *rez = new TAreaObj();
 	for( int i_p = beg; i_p <= end; i_p++ )
 	    rez->propSet( TSYS::int2str(i_p-beg), prms[i_p] );
 	return rez;
     }
-    if( id == "splice" && prms.size() >= 2 )
+    if( id == "splice" && prms.size() >= 1 )
     {
 	int beg = vmax(0,prms[0].getI());
-	int cnt = prms[1].getI();
+	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
+	//> Delete elements
 	TAreaObj *rez = new TAreaObj();
-	for( int i_c = 0; i_c < cnt && beg < mEls.size(); i_c++, beg++ )
+	for( int i_c = 0; i_c < cnt && beg < mEls.size(); i_c++ )
 	{
 	    rez->propSet( TSYS::int2str(i_c), mEls[beg] );
-	    if( prms.size() > 2+i_c ) mEls[beg] = prms[2+i_c];
-	    else { mEls.erase(mEls.begin()+beg); beg--; }
+	    mEls.erase(mEls.begin()+beg);
 	}
+	//> Insert elements
+	for( int i_c = 2; i_c < prms.size(); i_c++ )
+	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
 	return rez;
     }
     if( id == "sort" )
     {
-	//????
+	sort(mEls.begin(),mEls.end(),compareLess);
 	return this;
     }
 
     throw TError("AreaObj",_("Function '%s' error or not enough parameters."),id.c_str());
+}
+
+bool TAreaObj::compareLess( const TVariant &v1, const TVariant &v2 )
+{
+    return v1.getS() < v2.getS();
 }

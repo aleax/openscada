@@ -1,0 +1,726 @@
+# OpenSCADA.UI.QTStarter translate to German.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+#
+#: tuimod.cpp:61 tuimod.cpp:277 tuimod.cpp:320 tuimod.cpp:515
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.UI.QTStarter 1.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-06 21:03+0300\n"
+"PO-Revision-Date: 2007-10-29 22:03+0200\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: tuimod.cpp:44 tuimod.cpp:413 tuimod.cpp:418
+msgid "QTStarter"
+msgstr ""
+
+#: tuimod.cpp:45
+msgid "QT GUI starter"
+msgstr "QT GUI Starter"
+
+#: tuimod.cpp:46
+msgid "UI"
+msgstr "Nutzersinterface"
+
+#: tuimod.cpp:48
+msgid "1.5.3"
+msgstr ""
+
+#: tuimod.cpp:49
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: tuimod.cpp:50
+msgid "Allow QT GUI starter. It is single for all QT GUI modules!"
+msgstr ""
+"Gewaehrt den QT GUI-Starter. Der ist das einzige fuer alle QT GUI "
+"Module!"
+
+#: tuimod.cpp:51
+msgid "GPL"
+msgstr ""
+
+#: tuimod.cpp:56
+msgid "C"
+msgstr ""
+
+#: tuimod.cpp:94
+msgid "&Yes"
+msgstr "&Ya"
+
+#: tuimod.cpp:94
+msgid "&No"
+msgstr "&Nein"
+
+#: tuimod.cpp:94 tuimod.cpp:95
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: tuimod.cpp:94
+msgid "&OK"
+msgstr ""
+
+#: tuimod.cpp:94
+msgid "Apply"
+msgstr "Anwenden"
+
+#: tuimod.cpp:94
+msgid "Close"
+msgstr "Schliessen"
+
+#: tuimod.cpp:94
+msgid "Back"
+msgstr "Zurueck"
+
+#: tuimod.cpp:94
+msgid "Forward"
+msgstr "Vorwaerts"
+
+#: tuimod.cpp:94
+msgid "Parent Directory"
+msgstr "Elterndirectory"
+
+#: tuimod.cpp:95
+msgid "Look in:"
+msgstr "Durchsehen:"
+
+#: tuimod.cpp:95
+msgid "Computer"
+msgstr "Computer"
+
+#: tuimod.cpp:95
+msgid "File"
+msgstr "File"
+
+#: tuimod.cpp:95
+msgid "Folder"
+msgstr "Mappe"
+
+#: tuimod.cpp:95
+msgid "File &name:"
+msgstr "File&Name:"
+
+#: tuimod.cpp:95
+msgid "Open"
+msgstr "Oeffnen"
+
+#: tuimod.cpp:95
+msgid "&Open"
+msgstr "&Oeffnen"
+
+#: tuimod.cpp:95
+msgid "Save"
+msgstr "Speichern"
+
+#: tuimod.cpp:95
+msgid "&Save"
+msgstr "Speichern"
+
+#: tuimod.cpp:95
+msgid "Date Modified"
+msgstr "Modifizierungsdatum"
+
+#: tuimod.cpp:95
+msgid "All Files (*)"
+msgstr "Alee Files (*)"
+
+#: tuimod.cpp:96
+msgid "Create New Folder"
+msgstr "Neue Mappe schaffen"
+
+#: tuimod.cpp:96
+msgid "List View"
+msgstr "Ansichtsliste"
+
+#: tuimod.cpp:96
+msgid "Detail View"
+msgstr "Detaillierte Ansicht"
+
+#: tuimod.cpp:96
+msgid "Files of type:"
+msgstr "Typenfiles:"
+
+#: tuimod.cpp:96
+msgid "New Folder"
+msgstr "Neue Mappe"
+
+#: tuimod.cpp:96
+msgid "&New Folder"
+msgstr "&Neue Mappe"
+
+#: tuimod.cpp:96
+msgid "Show &hidden files"
+msgstr "Zeigen &Geheimfiles"
+
+#: tuimod.cpp:96
+msgid "&Delete"
+msgstr "&Loeschen"
+
+#: tuimod.cpp:96
+msgid "&Rename"
+msgstr "Um&nennen"
+
+#: tuimod.cpp:96
+msgid "Remove"
+msgstr "Umsetzen"
+
+#: tuimod.cpp:97
+msgid "&Undo"
+msgstr "&Undo"
+
+#: tuimod.cpp:97
+msgid "&Redo"
+msgstr "&Redo"
+
+#: tuimod.cpp:97
+msgid "Cu&t"
+msgstr "Aus&schneiden"
+
+#: tuimod.cpp:97
+msgid "&Copy"
+msgstr "&Kopieren"
+
+#: tuimod.cpp:97
+msgid "&Paste"
+msgstr "Ein&setzen"
+
+#: tuimod.cpp:97
+msgid "Delete"
+msgstr "Loeschen"
+
+#: tuimod.cpp:97
+msgid "Select All"
+msgstr "Alles waehlen"
+
+#: tuimod.cpp:97
+msgid "Insert Unicode control character"
+msgstr "Einsetzen Unicode-Kontrollsymbol"
+
+#: tuimod.cpp:98
+msgid "%1 bytes"
+msgstr "%1 Bytes"
+
+#: tuimod.cpp:98
+msgid "%1 KB"
+msgstr "%1 KB"
+
+#: tuimod.cpp:99
+msgid "Are sure you want to delete '%1'?"
+msgstr "Wollen Sie wirklich '%1' loeschen?"
+
+#: tuimod.cpp:100
+msgid ""
+"<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open Source "
+"Edition is intended for the development of Open Source applications. You "
+"need a commercial Qt license for development of proprietary (closed source) "
+"applications.</p><p>Please see <a href=\"http://www.trolltech.com/company/"
+"model/\">www.trolltech.com/company/model/</a> for an overview of Qt "
+"licensing.</p>"
+msgstr ""
+"<p>Dieses Programm verwertet die Qt-Ausgabe mit dem offenen Ausgangstext der Version %1."
+"</p><p>Qt-Ausgabe mit dem offenen Ausgangstext ist fuer Entwicklung von "
+"Beilagen mit dem offenen Ausgangstext ist fuer Entwicklung. Sie werden brauchen die Qt "
+"Handelslizenz fuer Entwicklung von proprietaeren (geschlossenen Ausgangstexten) Beilagen."
+"</p><p>Bitte sehen Sie hier <a href=\"http://www.trolltech.com/company/"
+"model/\">www.trolltech.com/company/model/</a> fuer Ubersicht der Qt-Lizenzen.</p>"
+
+#: tuimod.cpp:101
+msgid ""
+"<h3>About Qt</h3>%1<p>Qt is a C++ toolkit for cross-platform application "
+"development.</p><p>Qt provides single-source portability across MS&nbsp;"
+"Windows, Mac&nbsp;OS&nbsp;X, Linux, and all major commercial Unix variants. "
+"Qt is also available for embedded devices as Qt for Embedded Linux and Qt "
+"for Windows CE.</p><p>Qt is a Nokia product. See <a href=\"http://www."
+"trolltech.com/qt/\">www.trolltech.com/qt/</a> for more information.</p>"
+msgstr ""
+"<h3>Ueber Qt</h3>%1<p>Qt das ist das C++ Instrumentarium fuer die Krossplatform- "
+"Entwicklung von Beilagen. </p><p>Qt gewaehrleistet die Uebertragbarkeit, ohne Veraenderungen "
+"der Ausgangstexte, auf MS&nbsp;Windows, Mac&nbsp;OS&nbsp;X, Linux, und alle "
+"Hauptvarianten der Handels-Unix-Versionen. Qt ist auch fuer installierte "
+"Devices wie Qt fuer den installierten Linux und Qt fuer Windows CE zugaenglich.</p><p>Qt ist "
+"das Produkt von Nokia. Sehen Sie <a href=\"http://www.trolltech.com/qt/\">www."
+"trolltech.com/qt/</a> fuer detaillierte Information.</p>"
+
+#: tuimod.cpp:102
+msgid "Hu&e:"
+msgstr "Farbton:"
+
+#: tuimod.cpp:102
+msgid "&Sat:"
+msgstr "Saettigung:"
+
+#: tuimod.cpp:102
+msgid "&Val:"
+msgstr "Helligkeit:"
+
+#: tuimod.cpp:102
+msgid "&Red:"
+msgstr "Rot:"
+
+#: tuimod.cpp:102
+msgid "&Green:"
+msgstr "Gruen:"
+
+#: tuimod.cpp:102
+msgid "Bl&ue:"
+msgstr "Blau:"
+
+#: tuimod.cpp:102
+msgid "A&lpha channel:"
+msgstr "Alfa Kanale:"
+
+#: tuimod.cpp:102
+msgid "&Basic colors"
+msgstr "Grundfarben"
+
+#: tuimod.cpp:102
+msgid "&Custom colors"
+msgstr "Kundenfarben"
+
+#: tuimod.cpp:102
+msgid "&Add to Custom Colors"
+msgstr "Kundenfarbe addieren"
+
+#: tuimod.cpp:102
+msgid "Select color"
+msgstr "Farbe waehlen"
+
+#: tuimod.cpp:103
+msgid "Form"
+msgstr "Form"
+
+#: tuimod.cpp:103
+msgid "Printer"
+msgstr "Drucker"
+
+#: tuimod.cpp:103
+msgid "&Name:"
+msgstr "Name:"
+
+#: tuimod.cpp:103
+msgid "P&roperties"
+msgstr "Beschaffenheiten"
+
+#: tuimod.cpp:103
+msgid "Location:"
+msgstr "Lage:"
+
+#: tuimod.cpp:103
+msgid "Preview"
+msgstr "Pre-Durchsicht"
+
+#: tuimod.cpp:103
+msgid "Type:"
+msgstr "Typ:"
+
+#: tuimod.cpp:103
+msgid "Output &file:"
+msgstr "Ausgangsdatei:"
+
+#: tuimod.cpp:103
+msgid "Print range"
+msgstr "Druckbereich"
+
+#: tuimod.cpp:103
+msgid "Print all"
+msgstr "Alles drucken"
+
+#: tuimod.cpp:104
+msgid "Pages from"
+msgstr "Seiten von"
+
+#: tuimod.cpp:104
+msgid "to"
+msgstr "bis"
+
+#: tuimod.cpp:104
+msgid "Selection"
+msgstr "Auswahl"
+
+#: tuimod.cpp:104
+msgid "Output Settings"
+msgstr "Ausgangseinstellungen"
+
+#: tuimod.cpp:104
+msgid "Copies:"
+msgstr "Kopien:"
+
+#: tuimod.cpp:104
+msgid "Collate"
+msgstr "Pruefen"
+
+#: tuimod.cpp:104
+msgid "Reverse"
+msgstr "Revers"
+
+#: tuimod.cpp:104
+msgid "Copies"
+msgstr "Kopien"
+
+#: tuimod.cpp:104
+msgid "Color Mode"
+msgstr "Farbenmodus"
+
+#: tuimod.cpp:104
+msgid "Color"
+msgstr "Farblich"
+
+#: tuimod.cpp:104
+msgid "Grayscale"
+msgstr "Grau"
+
+#: tuimod.cpp:105
+msgid "Duplex Printing"
+msgstr "Dopelseitiger Druck"
+
+#: tuimod.cpp:105
+msgid "None"
+msgstr "Keine"
+
+#: tuimod.cpp:105
+msgid "Long side"
+msgstr "Lange Seite"
+
+#: tuimod.cpp:105
+msgid "Short side"
+msgstr "Kurze Seite"
+
+#: tuimod.cpp:105
+msgid "Options"
+msgstr "Optionen"
+
+#: tuimod.cpp:105
+msgid "&Options >>"
+msgstr "Optionen >>"
+
+#: tuimod.cpp:105
+msgid "&Options <<"
+msgstr "Optionen <<"
+
+#: tuimod.cpp:105
+msgid "&Print"
+msgstr "Druck"
+
+#: tuimod.cpp:105
+msgid "Print to File (PDF)"
+msgstr "Drucken in die Datei (PDF)"
+
+#: tuimod.cpp:105
+msgid "Print to File (Postscript)"
+msgstr "Drucken in die Datei (Postscript)"
+
+#: tuimod.cpp:106
+msgid "Local file"
+msgstr "Locale Datei"
+
+#: tuimod.cpp:106
+msgid "Write %1 file"
+msgstr "Datei %1 aufschreiben"
+
+#: tuimod.cpp:106
+msgid "Paper"
+msgstr "Papier"
+
+#: tuimod.cpp:106
+msgid "Page size:"
+msgstr "Seitengroesse:"
+
+#: tuimod.cpp:106
+msgid "Width:"
+msgstr "Weite:"
+
+#: tuimod.cpp:106
+msgid "Height:"
+msgstr "Hoehe:"
+
+#: tuimod.cpp:106
+msgid "Paper source:"
+msgstr "Papierquelle:"
+
+#: tuimod.cpp:106
+msgid "Orientation"
+msgstr "Orientation"
+
+#: tuimod.cpp:106
+msgid "Portrait"
+msgstr "Portraet"
+
+#: tuimod.cpp:106
+msgid "Landscape"
+msgstr "Landschaft"
+
+#: tuimod.cpp:106
+msgid "Reverse landscape"
+msgstr "Reverslandschaft"
+
+#: tuimod.cpp:107
+msgid "Reverse portrait"
+msgstr "Reversportraet"
+
+#: tuimod.cpp:107
+msgid "Margins"
+msgstr "Absatz"
+
+#: tuimod.cpp:107
+msgid "top margin"
+msgstr "Absatz von oben"
+
+#: tuimod.cpp:107
+msgid "left margin"
+msgstr "Absatz von links"
+
+#: tuimod.cpp:107
+msgid "right margin"
+msgstr "Absatz von rechts"
+
+#: tuimod.cpp:107
+msgid "bottom margin"
+msgstr "Absatz von unten"
+
+#: tuimod.cpp:107
+msgid "Points (pt)"
+msgstr "Punkte (pt)"
+
+#: tuimod.cpp:107
+msgid "Inches (in)"
+msgstr "Zolle (in)"
+
+#: tuimod.cpp:108
+msgid "Millimeters (mm)"
+msgstr "Millimeter (mm)"
+
+#: tuimod.cpp:108
+msgid "Centimeters (cm)"
+msgstr "Zentimeter (cm)"
+
+#: tuimod.cpp:108
+msgid "Page"
+msgstr "Seite"
+
+#: tuimod.cpp:108
+msgid "Advanced"
+msgstr "Ergaenzend"
+
+#: tuimod.cpp:130 tuimod.cpp:185
+msgid "h"
+msgstr ""
+
+#: tuimod.cpp:133 tuimod.cpp:188
+msgid "help"
+msgstr ""
+
+#: tuimod.cpp:134 tuimod.cpp:189
+msgid "demon"
+msgstr ""
+
+#: tuimod.cpp:160
+msgid "start"
+msgstr ""
+
+#: tuimod.cpp:161
+msgid "QT main thread is not started!"
+msgstr "QT-Hauptstrom ist nicht gestartet!"
+
+#: tuimod.cpp:171
+msgid "stop"
+msgstr ""
+
+#: tuimod.cpp:172
+msgid "QT main thread is not stopped!"
+msgstr "QT-Hauptstrom ist nicht gestoppt!"
+
+#: tuimod.cpp:180
+msgid "Load module."
+msgstr "Modul laden."
+
+#: tuimod.cpp:206 tuimod.cpp:215
+msgid "StartMod"
+msgstr ""
+
+#: tuimod.cpp:212
+msgid "Save module."
+msgstr "Modul speichern."
+
+#: tuimod.cpp:221
+msgid "Start module."
+msgstr "Modul starten."
+
+#: tuimod.cpp:230
+msgid "Stop module."
+msgstr "Modul stoppen."
+
+#: tuimod.cpp:241
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"StartMod  <moduls>    Start modules list (sep - ';').\n"
+"\n"
+msgstr ""
+"======================== Optionen des Moduls <%s:%s> ============================\n"
+"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei ---------\n"
+"StartMod  <модули>    Liste von Startmodulen (Trenner - ';');\n"
+"\n"
+
+#: tuimod.cpp:258
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: tuimod.cpp:271
+msgid "splash"
+msgstr ""
+
+#: tuimod.cpp:271 tuimod.cpp:314
+msgid ":/images/splash.png"
+msgstr ""
+
+#: tuimod.cpp:280 tuimod.cpp:323
+msgid ""
+"\n"
+"%1: %2"
+msgstr ""
+
+#: tuimod.cpp:293 tuimod.cpp:422 tuimod.cpp:466
+msgid "SubType"
+msgstr "Subtyp"
+
+#: tuimod.cpp:293 tuimod.cpp:422 tuimod.cpp:466
+msgid "QT"
+msgstr ""
+
+#: tuimod.cpp:294 tuimod.cpp:404 tuimod.cpp:423 tuimod.cpp:467
+msgid "QMainWindow *openWindow();"
+msgstr ""
+
+#: tuimod.cpp:314
+msgid "splash_exit"
+msgstr ""
+
+#: tuimod.cpp:342
+msgid "info"
+msgstr ""
+
+#: tuimod.cpp:345
+msgid "area"
+msgstr ""
+
+#: tuimod.cpp:345
+msgid "/prm/cfg"
+msgstr ""
+
+#: tuimod.cpp:345
+msgid "Module options"
+msgstr "Optionen des Moduls"
+
+#: tuimod.cpp:346 tuimod.cpp:347
+msgid "fld"
+msgstr ""
+
+#: tuimod.cpp:346 tuimod.cpp:353
+msgid "/prm/cfg/st_mod"
+msgstr ""
+
+#: tuimod.cpp:346
+msgid "Start QT modules (sep - ';')"
+msgstr "QT-Startmodule (tren. - ';')"
+
+#: tuimod.cpp:346 tuimod.cpp:347 tuimod.cpp:355 tuimod.cpp:356
+msgid "root"
+msgstr ""
+
+#: tuimod.cpp:346 tuimod.cpp:347
+msgid "tp"
+msgstr ""
+
+#: tuimod.cpp:346 tuimod.cpp:347
+msgid "str"
+msgstr ""
+
+#: tuimod.cpp:347 tuimod.cpp:358
+msgid "/help/g_help"
+msgstr ""
+
+#: tuimod.cpp:347
+msgid "Options help"
+msgstr "Optionenhilfe"
+
+#: tuimod.cpp:347
+msgid "cols"
+msgstr ""
+
+#: tuimod.cpp:347
+msgid "90"
+msgstr ""
+
+#: tuimod.cpp:347
+msgid "rows"
+msgstr ""
+
+#: tuimod.cpp:347
+msgid "5"
+msgstr ""
+
+#: tuimod.cpp:352
+msgid "path"
+msgstr ""
+
+#: tuimod.cpp:355 tuimod.cpp:358
+msgid "get"
+msgstr ""
+
+#: tuimod.cpp:356
+msgid "set"
+msgstr ""
+
+#: tuimod.cpp:383 tuimod.cpp:493
+msgid "*exit*"
+msgstr ""
+
+#: tuimod.cpp:411
+#, fuzzy
+msgid "QTStarterToolDis"
+msgstr "QTStarter Toolplatte"
+
+#: tuimod.cpp:414
+msgid "QTStarterTool"
+msgstr ""
+
+#: tuimod.cpp:417
+msgid "QTStarterMenuDis"
+msgstr ""
+
+#: tuimod.cpp:428 tuimod.cpp:431 tuimod.cpp:470 tuimod.cpp:473
+msgid "QIcon icon();"
+msgstr ""
+
+#: tuimod.cpp:434 tuimod.cpp:457 tuimod.cpp:476
+msgid ":/images/oscada_qt.png"
+msgstr ""
+
+#: tuimod.cpp:439
+msgid "Descript"
+msgstr "Beschreibung"
+
+#: tuimod.cpp:456
+msgid "OpenSCADA system QT-starter"
+msgstr "QT-Starter des Systems OpenSCADA"
+
+#: tuimod.cpp:492
+msgid ":/images/exit.png"
+msgstr ""
+
+#: tuimod.cpp:492
+msgid "Exit from system"
+msgstr "System verlassen"
+
+#: tuimod.cpp:519
+#, c-format
+msgid "No translated QT message: '%s'"
+msgstr ""

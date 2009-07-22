@@ -327,7 +327,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	    case 0:	//Line edit
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21") );
 		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,
-		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Data;Data and time"),"22") );
+		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Date;Date and time"),"22") );
 		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23") );
 		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
 		break;
@@ -373,7 +373,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	{
 	    case 2: case 4:	ntp = TFld::Integer;	break;
 	    case 3:		ntp = TFld::Real;	break;
-	    case 5: case 6:	ntp = TFld::Integer; flg|=Attr::DataTime;	break;
+	    case 5: case 6:	ntp = TFld::Integer; flg|=Attr::DateTime;	break;
 	}
 	int apos = cfg.owner()->attrPos("value");
 	cfg.owner()->attrDel("value");
@@ -613,7 +613,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	}
 	else
 	{
-	    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","30") );
+	    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","","30") );
 	    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","31") );
 	    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","32") );
 	}
@@ -645,12 +645,12 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	switch( cfg.getI() )
 	{
 	    case 0: case 1:
-		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","27") );
+		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","","27") );
 		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","28") );
 		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","1;3000000","","29") );
 		if( cfg.owner()->attrAt("active").at().getB() )
 		{
-		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DataTime|Attr::Mutable,"","","","","30") );
+		    cfg.owner()->attrAdd( new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","","30") );
 		    cfg.owner()->attrAdd( new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","","31") );
 		    cfg.owner()->attrAdd( new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","32") );
 		}
@@ -735,7 +735,7 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
 	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
 	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","22") );
-	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DataTime,"","","","","24") );
+	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","","24") );
 	attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","","25") );
 	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
 	attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","","27") );
@@ -825,8 +825,8 @@ void OrigDocument::postEnable( int flag )
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21") );
 	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","22") );
 	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","26") );
-	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DataTime,"","0","","","24") );
-	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DataTime|Attr::Active,"","0","","","23") );
+	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","","24") );
+	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","","23") );
 	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","25") );
     }
 }

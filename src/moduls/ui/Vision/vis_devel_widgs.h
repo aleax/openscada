@@ -71,7 +71,7 @@ class ModInspAttr: public QAbstractTableModel
 		    Image	= 0x0200,
 		    Color	= 0x0400,
 		    Font	= 0x0800,
-		    DataTime	= 0x0200
+		    DateTime	= 0x0200
 		};
 
 		//Public attributes

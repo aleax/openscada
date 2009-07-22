@@ -1313,7 +1313,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Font<<4)))->setText(_("Font"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(Attr::DataTime<<4)))->setText(_("DataTime"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(Attr::DateTime<<4)))->setText(_("DateTime"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Address<<4)))->setText(_("Address"));
     }
     else if( a_path == "/proc/lnk_ls" && ctrChkNode(opt) )

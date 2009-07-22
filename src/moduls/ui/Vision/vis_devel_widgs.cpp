@@ -364,7 +364,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 	    {
 		case Qt::DisplayRole:
 		    val = it->data();
-		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DataTime )
+		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime )
 			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
 		case Qt::EditRole:		val = it->dataEdit();	break;
@@ -672,7 +672,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	w_del = new LineEditProp(parent,LineEditProp::Font);
     else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Color )
 	w_del = new LineEditProp(parent,LineEditProp::Color);
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime )
+    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime )
     {
 	w_del = new QDateTimeEdit(parent);
 	((QDateTimeEdit*)w_del)->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
@@ -715,7 +715,7 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
 	((QTextEdit*)editor)->setPlainText(value.toString());
     else if( value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor) )
 	((LineEditProp*)editor)->setValue(value.toString());
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime && dynamic_cast<QDateTimeEdit*>(editor) )
+    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor) )
 	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
     else QItemDelegate::setEditorData(editor, index);
 }
@@ -731,7 +731,7 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
 	model->setData(index,((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
     else if( value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor) )
 	model->setData(index,((LineEditProp*)editor)->value());
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DataTime && dynamic_cast<QDateTimeEdit*>(editor) )
+    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor) )
     {
 	int tm = ((QDateTimeEdit*)editor)->dateTime().toTime_t();
 	model->setData(index,(tm>(time(NULL)+3600))?0:tm,Qt::EditRole);

@@ -1048,15 +1048,94 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
 	case TVariant::Boolean:
 	    if( prop == "toString" )	return string(vl.getB() ? "true" : "false");
-	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s'."),prop.c_str());
+	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
 	case TVariant::Integer: 
 	case TVariant::Real:
-	    if( prop == "toFixed" && prms.size() )	return TSYS::realRound(vl.getR(),vmax(0,vmin(100,prms[0].getI())));
-//	    if( prop == "toString" && parms.size() )	?;
-	    throw TError(nodePath().c_str(),_("Integer type have not function '%s'."),prop.c_str());
+	    if( prop == "toExponential" )
+	    {
+		int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : -1;
+		if( n < 0 )	return TSYS::strMess("%e",vl.getR());
+		return TSYS::strMess("%.*e",n,vl.getR());
+	    }
+	    if( prop == "toFixed" )
+	    {
+		int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : 0;
+		return TSYS::strMess("%.*f",n,vl.getR());
+	    }
+	    if( prop == "toPrecision" )
+	    {
+		int n = prms.size() ? vmax(1,vmin(21,prms[0].getI())) : -1;
+		if( n < 0 )	return TSYS::strMess("%g",vl.getR());
+		return TSYS::strMess("%.*g",n,vl.getR());
+	    }
+	    if( prop == "toString" )
+	    {
+		int n = 10;
+		if( prms.size() ) n = prms[0].getI();
+		return TSYS::strMess( (n==16)?"%x":((n==8)?"%o":"%d"),vl.getI() );
+	    }
+	    throw TError(nodePath().c_str(),_("Integer type have not function '%s' or not enough parameters for it."),prop.c_str());
 	case TVariant::String:
-	    if( prop == "charAt" && prms.size() )	return vl.getS().substr(prms[0].getI(),1);
-	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+	    if( prop == "charAt" && prms.size() )
+	    {
+		int n = prms[0].getI();
+		if( n < 0 || n >= vl.getS().size() )	return string("");
+		return vl.getS().substr(n,1);
+	    }
+	    if( prop == "charCodeAt" && prms.size() )
+	    {
+		int n = prms[0].getI();
+		if( n < 0 || n >= vl.getS().size() )	return EVAL_INT;
+		return (int)vl.getS()[n];
+	    }
+	    if( prop == "concat" && prms.size() )
+	    {
+		string rez = vl.getS();
+		for( int i_p = 0; i_p < prms.size(); i_p++ )
+		    rez += prms[i_p].getS();
+		return rez;
+	    }
+	    if( prop == "indexOf" && prms.size() )
+	    {
+		int sp = 0;
+		if( prms.size() > 1 ) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
+		sp = vl.getS().find(prms[0].getS(),sp);
+		return (sp==string::npos)?-1:sp;
+	    }
+	    if( prop == "lastIndexOf" && prms.size() )
+	    {
+		int sp = vl.getS().size()-1;
+		if( prms.size() > 1 ) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
+		sp = vl.getS().rfind(prms[0].getS(),sp);
+		return (sp==string::npos)?-1:sp;
+	    }
+	    if( (prop == "slice" || prop == "substring") && prms.size() )
+	    {
+		int beg = prms[0].getI();
+		if( beg < 0 ) beg = vl.getS().size()+beg;
+		int end = vl.getS().size();
+		if( prms.size()>=2 ) end = prms[1].getI();
+		if( end < 0 ) end = vl.getS().size()+end;
+		end = vmin(end,vl.getS().size());
+		if( beg >= end ) return string("");
+		return vl.getS().substr(beg,end-beg);
+	    }
+	    if( prop == "split" && prms.size() )
+	    {
+		TAreaObj *rez = new TAreaObj();
+		for( int posB = 0, i_p = 0; true; i_p++ )
+		{
+		    if( prms.size() > 1 && rez->size() >= prms[0].getI() ) break;
+		    int posC = vl.getS().find(prms[0].getS(),posB);
+		    if( posC != posB )
+			rez->propSet( TSYS::int2str(i_p), vl.getS().substr(posB,posC-posB) );
+		    if( posC == string::npos ) break;
+		    posB = posC+prms[0].getS().size();
+		}
+		return rez;
+	    }
+
+	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s' or not enough parameters for it."),prop.c_str());
     }    
     return TVariant();
 }

@@ -123,6 +123,8 @@ class TAreaObj : public TVarObj
 	//Methods
 	TAreaObj( )	{ };
 
+	int size( )	{ return mEls.size(); }
+
 	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
 
@@ -133,6 +135,9 @@ class TAreaObj : public TVarObj
     private:
 	//Attributes
 	vector<TVariant> mEls;
+
+	//Methods
+	static bool compareLess( const TVariant &v1, const TVariant &v2 );
 };
 
 #endif // TVARIANT_H

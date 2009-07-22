@@ -73,6 +73,7 @@ root:	solver end
 solver:	/*empty*/
 	| solver solve
 solve:  assign ';'
+	| var ';'	{ $1->free(); }
 	| IF '(' expr ')' if solve end
 	    { try{ p_fnc->cdCond($3,$5,$7,$7); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| IF '(' expr ')' if solve end ELSE solve end
