@@ -1255,138 +1255,115 @@ char Func::getValB( TValFunc *io, RegW &rg )
 
 TVarObj *Func::getValO( TValFunc *io, RegW &rg )
 {
-    if( rg.type() != Reg::Obj ) throw TError(nodePath().c_str(),_("Get object from no object's register"));
-    TVariant vl(rg.val().o_el);
-    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
-	vl = vl.getO()->propGet(rg.propGet(i_p));
-    return vl.getO();
+    if( rg.propEmpty( ) )
+    {
+	if( rg.type() != Reg::Obj ) throw TError(nodePath().c_str(),_("Get object from no object's register"));
+	return rg.val().o_el;
+    }
+    else return getVal(io,rg).getO();
 }
 
 void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 {
-    switch( rg.type() )
-    {
-	case Reg::Bool:		rg.val().b_el = val.getB();	break;
-	case Reg::Int:		rg.val().i_el = val.getI();	break;
-	case Reg::Real:		rg.val().r_el = val.getR();	break;
-	case Reg::String:	*rg.val().s_el = val.getS();	break;
-	case Reg::Var:
-	    switch( val.type() )
-	    {
-		case TVariant::Boolean:	io->setB(rg.val().io,val.getB());	break;
-		case TVariant::Integer:	io->setI(rg.val().io,val.getI());	break;
-		case TVariant::Real:	io->setR(rg.val().io,val.getR());	break;
-		case TVariant::String:	io->setS(rg.val().io,val.getS());	break;
-		//case TVariant::Object:	io->setO(rg.val().io,val.getO());	break;
-	    }
-	    break;
-	case Reg::PrmAttr:
-	    switch( val.type() )
-	    {
-		case TVariant::Boolean:	rg.val().p_attr->at().setB(val.getB());	break;
-		case TVariant::Integer:	rg.val().p_attr->at().setI(val.getI());	break;
-		case TVariant::Real:	rg.val().p_attr->at().setR(val.getR());	break;
-		case TVariant::String:	rg.val().p_attr->at().setS(val.getS());	break;
-	    }
-	    break;
-	case Reg::Obj:
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
 	{
-	    TVariant vl(rg.val().o_el);
-	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
-		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
-		else vl.getO()->propSet(rg.propGet(i_p),val);
-	    break;
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:
+		switch( val.type() )
+		{
+		    case TVariant::Boolean:	rg = val.getB();	break;
+		    case TVariant::Integer:	rg = val.getI();	break;
+		    case TVariant::Real:	rg = val.getR();	break;
+		    case TVariant::String:	rg = val.getS();	break;
+		    case TVariant::Object:	rg = val.getO();	break;
+		}
+		break;
+	    case Reg::Var:
+		switch( val.type() )
+		{
+		    case TVariant::Boolean:	io->setB(rg.val().io,val.getB());	break;
+		    case TVariant::Integer:	io->setI(rg.val().io,val.getI());	break;
+		    case TVariant::Real:	io->setR(rg.val().io,val.getR());	break;
+		    case TVariant::String:	io->setS(rg.val().io,val.getS());	break;
+		    //case TVariant::Object:	io->setO(rg.val().io,val.getO());	break;
+		}
+		break;
+	    case Reg::PrmAttr:
+		switch( val.type() )
+		{
+		    case TVariant::Boolean:	rg.val().p_attr->at().setB(val.getB());	break;
+		    case TVariant::Integer:	rg.val().p_attr->at().setI(val.getI());	break;
+		    case TVariant::Real:	rg.val().p_attr->at().setR(val.getR());	break;
+		    case TVariant::String:	rg.val().p_attr->at().setS(val.getS());	break;
+		}
+		break;
 	}
+    else if( rg.type() == Reg::Obj )
+    {
+	TVariant vl(rg.val().o_el);
+	for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
+	    if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
+	    else vl.getO()->propSet(rg.propGet(i_p),val);    
     }
 }
 
 void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 {
-    switch( rg.type() )
-    {
-	case Reg::Bool:		rg.val().b_el = (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL;	break;
-	case Reg::Int:		rg.val().i_el = (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT;		break;
-	case Reg::Real:		rg.val().r_el = (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL;	break;
-	case Reg::String:	*rg.val().s_el = val;			break;
-	case Reg::Var:		io->setS(rg.val().io,val);		break;
-	case Reg::PrmAttr:	rg.val().p_attr->at().setS(val);	break;
-	case Reg::Obj:
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
 	{
-	    TVariant vl(rg.val().o_el);
-	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
-		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
-		else vl.getO()->propSet(rg.propGet(i_p),val);
-	    break;
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
+	    case Reg::Var:	io->setS(rg.val().io,val);		break;
+	    case Reg::PrmAttr:	rg.val().p_attr->at().setS(val);	break;
 	}
-    }
+    else setVal(io,rg,val);
 }
 
 void Func::setValI( TValFunc *io, RegW &rg, int val )
 {
-    switch( rg.type() )
-    {
-	case Reg::Bool:		rg.val().b_el = (val!=EVAL_INT) ? (bool)val : EVAL_BOOL;		break;
-	case Reg::Int:		rg.val().i_el = val;			break;
-	case Reg::Real:		rg.val().r_el = (val!=EVAL_INT) ? val : EVAL_REAL;			break;
-	case Reg::String:	*rg.val().s_el = (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR;	break;
-	case Reg::Var:		io->setI(rg.val().io,val);		break;
-	case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
-	case Reg::Obj:
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
 	{
-	    TVariant vl(rg.val().o_el);
-	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
-		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
-		else vl.getO()->propSet(rg.propGet(i_p),val);
-	    break;
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
+	    case Reg::Var:	io->setI(rg.val().io,val);		break;
+	    case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
 	}
-    }
+    else setVal(io,rg,val);
 }
 
 void Func::setValR( TValFunc *io, RegW &rg, double val )
 {
-    switch( rg.type() )
-    {
-	case Reg::Bool:		rg.val().b_el = (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL;	break;
-	case Reg::Int:		rg.val().i_el = (val!=EVAL_REAL) ? (int)val : EVAL_INT;		break;
-	case Reg::Real:		rg.val().r_el = val;			break;
-	case Reg::String:	*rg.val().s_el = (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR;	break;
-	case Reg::Var:		io->setR(rg.val().io,val);		break;
-	case Reg::PrmAttr:	rg.val().p_attr->at().setR(val);	break;
-	case Reg::Obj:
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
 	{
-	    TVariant vl(rg.val().o_el);
-	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
-		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
-		else vl.getO()->propSet(rg.propGet(i_p),val);
-	    break;
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
+	    case Reg::Var:	io->setR(rg.val().io,val);		break;
+	    case Reg::PrmAttr:	rg.val().p_attr->at().setR(val);	break;
 	}
-    }
+    else setVal(io,rg,val);
 }
 
 void Func::setValB( TValFunc *io, RegW &rg, char val )
 {
-    switch( rg.type() )
-    {
-	case Reg::Bool:		rg.val().b_el = val;			break;
-	case Reg::Int:		rg.val().i_el = (val!=EVAL_BOOL) ? (bool)val : EVAL_INT;	break;
-	case Reg::Real:		rg.val().r_el = (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL;	break;
-	case Reg::String:	*rg.val().s_el = (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR;	break;
-	case Reg::Var:		io->setB(rg.val().io,val);		break;
-	case Reg::PrmAttr:	rg.val().p_attr->at().setB(val);	break;
-	case Reg::Obj:
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
 	{
-	    TVariant vl(rg.val().o_el);
-	    for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
-		if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
-		else vl.getO()->propSet(rg.propGet(i_p),val);
-	    break;
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
+	    case Reg::Var:	io->setB(rg.val().io,val);		break;
+	    case Reg::PrmAttr:	rg.val().p_attr->at().setB(val);	break;
 	}
-    }
+    else setVal(io,rg,val);
 }
 
 void Func::setValO( TValFunc *io, RegW &rg, TVarObj *val )
 {
-    if( rg.type() == Reg::Obj )	rg = val;
+    if( rg.propEmpty( ) )
+	switch( rg.type() )
+	{
+	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:
+		rg = val; break;
+	}
+    else setVal(io,rg,val);
 }
 
 void Func::calc( TValFunc *val )
@@ -1491,25 +1468,28 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 	    }
 	    //>> Assign codes
 	    case Reg::Ass:
+	    {
 #if OSC_DEBUG >= 5
 		printf("CODE: Assign from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
 		if( !reg[*(ui16*)(cprg+1)].propSize( ) )
-		    switch( reg[*(ui16*)(cprg+1)].vType(this) )
+		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
 		    {
 			case Reg::Bool:		setValB(val,reg[*(ui16*)(cprg+1)],getValB(val,reg[*(ui16*)(cprg+3)]));	break;
 			case Reg::Int:		setValI(val,reg[*(ui16*)(cprg+1)],getValI(val,reg[*(ui16*)(cprg+3)]));	break;
 			case Reg::Real:		setValR(val,reg[*(ui16*)(cprg+1)],getValR(val,reg[*(ui16*)(cprg+3)]));	break;
 			case Reg::String:	setValS(val,reg[*(ui16*)(cprg+1)],getValS(val,reg[*(ui16*)(cprg+3)]));	break;
-			case Reg::Obj:		setValO(val,reg[*(ui16*)(cprg+1)],getValO(val,reg[*(ui16*)(cprg+3)]));	break;
+			case Reg::Obj:		setVal(val,reg[*(ui16*)(cprg+1)],getVal(val,reg[*(ui16*)(cprg+3)]));	break;
 		    }
 		else setVal(val,reg[*(ui16*)(cprg+1)],getVal(val,reg[*(ui16*)(cprg+3)]));
 		cprg+=5; break;
+	    }
 	    //>> Mov codes
 	    case Reg::Mov:
 #if OSC_DEBUG >= 5
 		printf("CODE: Move from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
 #endif
+
 		switch( reg[*(ui16*)(cprg+3)].vType(this) )
 		{
 		    case Reg::Bool:	reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]);	break;
@@ -1949,11 +1929,25 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 		TVariant obj = getVal(val,reg[*(ui16*)(cprg+1)],true);
 		if( reg[*(ui16*)(cprg+1)].propEmpty() )
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
-		
+
+		//> Prepare inputs
 		vector<TVariant> prms;
 		for( int i_p = 0; i_p < *(ui8*)(cprg+3); i_p++ )
 		    prms.push_back(getVal(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))]));
+		//> Call
 		TVariant rez = oFuncCall( obj, reg[*(ui16*)(cprg+1)].propGet(reg[*(ui16*)(cprg+1)].propSize()-1), prms );
+		//> Process oytputs
+		for( int i_p = 0; i_p < prms.size(); i_p++ )
+		    if( prms[i_p].isModify() )
+			switch( prms[i_p].type() )
+			{
+			    case TVariant::Boolean:	setValB(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getB());	break;
+			    case TVariant::Integer:	setValI(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getI());	break;
+			    case TVariant::Real:	setValR(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getR());	break;
+			    case TVariant::String:	setValS(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getS());	break;
+			    case TVariant::Object:	setValO(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getO());	break;
+			}
+		//> Process return
 		switch( rez.type() )
 		{
 		    case TVariant::Boolean:	reg[*(ui16*)(cprg+4)] = rez.getB();	break;

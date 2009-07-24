@@ -28,6 +28,7 @@
 
 #include "resalloc.h"
 #include "tvariant.h"
+#include "tsys.h"
 
 using std::string;
 using std::vector;

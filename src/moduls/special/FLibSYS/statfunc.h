@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <tspecials.h>
+#include <tarchval.h>
 
 #undef _
 #define _(mess) mod->I18N(mess)

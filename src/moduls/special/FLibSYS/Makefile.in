@@ -53,7 +53,7 @@ am__installdirs = "$(DESTDIR)$(oscd_moduldir)"
 oscd_modulLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(oscd_modul_LTLIBRARIES)
 spec_FLibSYS_la_LIBADD =
-am_spec_FLibSYS_la_OBJECTS = statfunc.lo
+am_spec_FLibSYS_la_OBJECTS = statfunc.lo xmlfnc.lo varchfnc.lo
 spec_FLibSYS_la_OBJECTS = $(am_spec_FLibSYS_la_OBJECTS)
 spec_FLibSYS_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -226,7 +226,7 @@ EXTRA_DIST = *.h po/* doc/*
 INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = spec_FLibSYS.la
 spec_FLibSYS_la_LDFLAGS = -module -avoid-version -no-undefined
-spec_FLibSYS_la_SOURCES = statfunc.cpp
+spec_FLibSYS_la_SOURCES = statfunc.cpp xmlfnc.cpp varchfnc.cpp
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Special.FLibSYS
@@ -244,9 +244,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/special/FLibSYS/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/special/FLibSYS/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/special/FLibSYS/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/special/FLibSYS/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -301,6 +301,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statfunc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/varchfnc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmlfnc.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

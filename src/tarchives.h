@@ -123,6 +123,7 @@ class TMArchivator : public TCntrNode, public TConfig
 //* TTipArchivator                               *
 //************************************************
 class TArchiveS;
+class TVArchivator;
 
 class TTipArchivator: public TModule
 {
@@ -164,6 +165,8 @@ class TTipArchivator: public TModule
 //************************************************
 //* TArchiveS                                    *
 //************************************************
+class TVArchive;
+
 class TArchiveS : public TSubSYS
 {
     public:

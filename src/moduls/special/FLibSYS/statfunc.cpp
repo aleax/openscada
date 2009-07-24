@@ -24,6 +24,8 @@
 
 #include "sysfnc.h"
 #include "timefnc.h"
+#include "xmlfnc.h"
+#include "varchfnc.h"
 #include "statfunc.h"
 
 //*************************************************
@@ -93,6 +95,10 @@ void Lib::postEnable( int flag )
     //> Reg functions
     reg( new sysCall() );
     reg( new dbReqSQL() );
+    reg( new xmlNode() );
+    reg( new xmlCntrReq() );
+    reg( new vArh() );
+    reg( new vArhBuf() );
 
     reg( new tmDate() );
     reg( new tmTime() );

@@ -47,7 +47,7 @@ void TVariant::setType( Type tp )
 {
     if( tp == type() )	return;
 
-    if( type() == TVariant::Object && !getO()->disconnect() ) delete getO( );
+    if( type() == TVariant::Object && getO() && !getO()->disconnect() ) delete getO( );
 
     switch(tp)
     {
@@ -70,6 +70,11 @@ void TVariant::setType( Type tp )
 	    vl.assign(1,(char)TVariant::Object);
 	    break;
     }
+}
+
+void TVariant::setModify( bool iv )
+{
+    vl[0] = iv ? vl[0]|0x80 : vl[0]&(~0x80);
 }
 
 bool TVariant::operator==( TVariant &vr )	{ return vr.vl == vl; }
@@ -134,7 +139,9 @@ string TVariant::getS( ) const
 TVarObj	*TVariant::getO( ) const
 {
     if( type() != TVariant::Object ) throw TError("TVariant",_("Variable not object!"));
-    return (TVarObj*)TSYS::str2addr(vl.substr(1));
+    TVarObj *rez = (TVarObj*)TSYS::str2addr(vl.substr(1));
+    if( !rez ) throw TError("TVariant",_("Zero object using try!"));
+    return rez;
 }
 
 void TVariant::setB( char ivl )
@@ -163,10 +170,10 @@ void TVariant::setS( const string &ivl )
 
 void TVariant::setO( TVarObj *val )
 {
-    if( type() == TVariant::Object && !getO()->disconnect() ) delete getO( );
+    if( type() == TVariant::Object && getO() && !getO()->disconnect() ) delete getO( );
     if( type() != TVariant::Object )	setType(TVariant::Object);
     vl.replace(1,string::npos,TSYS::addr2str(val));
-    val->connect();
+    if( val ) val->connect();
 }
 
 //***********************************************************

@@ -574,7 +574,7 @@ class varhSetB : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(0);
-	    if(mod->isArch(id))	
+	    if(mod->isArch(id))
 		mod->varch(id).at().setB(val->getB(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    else
 	    {
@@ -605,7 +605,7 @@ class varhSetS : public TFunction
 	void calc( TValFunc *val )
 	{
 	    int id = val->getI(0);
-	    if(mod->isArch(id))	
+	    if(mod->isArch(id))
 		mod->varch(id).at().setS(val->getS(1),(long long)val->getI(2)*1000000+val->getI(3));
 	    else
 	    {

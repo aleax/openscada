@@ -53,7 +53,7 @@ XMLNode &XMLNode::operator=(XMLNode &prm)
     return *this;
 }
 
-void XMLNode::childAdd( XMLNode * n )
+void XMLNode::childAdd( XMLNode *n )
 {
     if( !n )	return;
     mChildren.push_back(n);
@@ -322,11 +322,7 @@ void XMLNode::start_element( void *data, const char *el, const char **attr )
     XMLNode *p = (XMLNode*)data;
     XMLNode *n = p;
 
-    if( p->mParent )
-    {
-	n = new XMLNode();
-	p->mParent->childAdd( n );
-    }
+    if( p->mParent )	n = p->mParent->childAdd();
 
     n->setName(el);
     while( *attr )

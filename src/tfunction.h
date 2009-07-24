@@ -27,6 +27,7 @@
 
 #include "tmess.h"
 #include "tcntrnode.h"
+#include <tvariant.h>
 
 using std::string;
 using std::vector;

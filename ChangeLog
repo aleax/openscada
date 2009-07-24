@@ -1,3 +1,13 @@
+2009-07-24 Roman
+- !!!!:/Special/FLibSYS: The "XMLNodeObj" object and function xmlNode() for it create and function xmlCntrReq() for send request 
+    to control interface of OpenSCADA is added.
+- !!!!:/Special/FLibSYS: The "VArchObj" object and functions vArh(), vArhBuf() for it create is added. Used for full access to value archives.
+- !!:/SYS/TVariant, /DAQ/JavaLikeCalc: Output parameters support is added into object's functions.
+- /SYS/XML: Some unification.
+- !!!!:/DAQ/DCON: Included path by Almaz Karimov for more fixes and improvements.
+- FIX:/DAQ/JavaLikeCalc: Some fixes and unification for types conversion on run.
+
+
 2009-07-22 Roman
 - !!:/UI/VCAEngine, /UI/QTStarter: Interface translation to German is added by Irina Popkova.
 - !:/SYS/TVariant: Functions "splice" and "sort" of Array is finished. Other functions some fixed.
@@ -15,7 +25,7 @@
 - !!!!:/SYS, /SYS/TVariant, /SYS/TFunction: User's objects support is final added. Supported base object TVarObj and area object TAreaObj.
 - !!!!:/DAQ/JavaLikeCalc: Full object and area types support is added. Realised access through ".prop" and "[prop]" methods.
     Realised object's functions support and call. The language unified for different types work by one virtual machine's commands.
-- !!!!:/Special: Added function dbReqSQL() and messGet(), which used object-type return.
+- !!!!:/Special/FLibSYS: Added function dbReqSQL() and messGet(), which used object-type return.
 - FIX:/UI/VCAEngine: Trend's size of primitive "Diagram" is limited 1 second on lower.
 - FIX:/UI/WebCfgD: The tree elements HTML encoding is added.
 - FIX:/UI/WebVision: No updating current values of a trand's parameters of the primitive "Diagram" on tracing mode for current time is fixed.
