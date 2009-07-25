@@ -100,27 +100,39 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if( id == "begin" )
     {
-	long long vbg;
-	if( isArch() )	vbg = arch().at().begin( (prms.size()>=2) ? prms[1].getS() : "" );
+	long long vtm;
+	if( isArch() )	vtm = arch().at().begin( (prms.size()>=2) ? prms[1].getS() : "" );
 	else
 	{
 	    if( !buf() ) return EVAL_INT;
-	    vbg = buf()->begin();
+	    vtm = buf()->begin();
 	}
-	if( prms.size() >= 1 ) { prms[0].setI(vbg%1000000); prms[0].setModify(); }
-	return (int)(vbg/1000000);
+	if( prms.size() >= 1 ) { prms[0].setI(vtm%1000000); prms[0].setModify(); }
+	return (int)(vtm/1000000);
     }
     if( id == "end" )
     {
-	long long vbg;
-	if( isArch() )	vbg = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
+	long long vtm;
+	if( isArch() )	vtm = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
 	else
 	{
 	    if( !buf() ) return EVAL_INT;
-	    vbg = buf()->end();
+	    vtm = buf()->end();
 	}
-	if( prms.size() >= 1 ) { prms[0].setI(vbg%1000000); prms[0].setModify(); }
-	return (int)(vbg/1000000);
+	if( prms.size() >= 1 ) { prms[0].setI(vtm%1000000); prms[0].setModify(); }
+	return (int)(vtm/1000000);
+    }
+    if( id == "period" )
+    {
+	long long vper;
+	if( isArch() )	vper = arch().at().period( (prms.size()>=2) ? prms[1].getS() : "" );
+	else
+	{
+	    if( !buf() ) return EVAL_INT;
+	    vper = buf()->period();
+	}
+	if( prms.size() >= 1 ) { prms[0].setI(vper%1000000); prms[0].setModify(); }
+	return (int)(vper/1000000);
     }
     if( id == "get" && prms.size() >= 2 )
     {
@@ -155,7 +167,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	else
 	{
 	    if( !buf() ) return false;
-	    switch(buf()->valType())
+	    switch( buf()->valType() )
 	    {
 		case TFld::Boolean:	buf()->setB(prms[0].getB(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
 		case TFld::Integer:	buf()->setI(prms[0].getI(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
@@ -169,7 +181,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     {
 	VArchObj *src = dynamic_cast<VArchObj*>(prms[0].getO());
 	if( !src ) return false;
-        
+
 	AutoHD<TVArchive> tarch;
 	if( src->isArch() )
 	{
