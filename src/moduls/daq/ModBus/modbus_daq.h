@@ -85,7 +85,7 @@ class TMdPrm : public TParamContr
         //Attributes
 	string	&m_attrLs;
 	TElem	p_el;		//Work atribute elements
-	string	acq_err;
+	ResString	acq_err;
 };
 
 //******************************************************
@@ -106,10 +106,10 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
-	int  getValR( int addr, string &err, bool in = false );		//Get register value
-	char getValC( int addr, string &err, bool in = false );		//Get coins value
-	void setValR( int val, int addr, string &err );			//Set register value
-	void setValC( char val, int addr, string &err );		//Set coins value
+	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
+	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
+	void setValR( int val, int addr, ResString &err );			//Set register value
+	void setValC( char val, int addr, ResString &err );		//Set coins value
 	string modBusReq( string &pdu );
 
     protected:

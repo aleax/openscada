@@ -308,37 +308,37 @@ void TMdContr::regVal( int reg, const string &dt )
     }
 }
 
-int TMdContr::getValR( int addr, string &err, bool in )
+int TMdContr::getValR( int addr, ResString &err, bool in )
 {
     int rez = EVAL_INT;
     vector< SDataRec >	&workCnt = in ? acqBlksIn : acqBlks;
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( (addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	{
-	    err = workCnt[i_b].err;
-	    if( err.empty() )
+	    err.setVal( workCnt[i_b].err );
+	    if( err.getVal().empty() )
 		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
 	    break;
 	}
     return rez;
 }
 
-char TMdContr::getValC( int addr, string &err, bool in )
+char TMdContr::getValC( int addr, ResString &err, bool in )
 {
     char rez = EVAL_BOOL;
     vector< SDataRec >	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	{
-	    err = workCnt[i_b].err;
-	    if( err.empty() )
+	    err.setVal( workCnt[i_b].err );
+	    if( err.getVal().empty() )
 		rez = workCnt[i_b].val[addr-workCnt[i_b].off];
 	    break;
 	}
     return rez;
 }
 
-void TMdContr::setValR( int val, int addr, string &err )
+void TMdContr::setValR( int val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
     string pdu;
@@ -348,8 +348,8 @@ void TMdContr::setValR( int val, int addr, string &err )
     pdu += (char)(val>>8);	//Data MSB
     pdu += (char)val;		//Data LSB
     //> Request to remote server
-    err = modBusReq( pdu );
-    if( err.empty() ) numWReg++;
+    err.setVal( modBusReq(pdu) );
+    if( err.getVal().empty() ) numWReg++;
     //> Set to acquisition block
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
@@ -360,7 +360,7 @@ void TMdContr::setValR( int val, int addr, string &err )
 	}
 }
 
-void TMdContr::setValC( char val, int addr, string &err )
+void TMdContr::setValC( char val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
     string pdu;
@@ -370,8 +370,8 @@ void TMdContr::setValC( char val, int addr, string &err )
     pdu += (char)val?0xFF:0x00;	//Data MSB
     pdu += (char)0x00;		//Data LSB
     //> Request to remote server
-    err = modBusReq( pdu );
-    if( err.empty() ) numWCoil++;
+    err.setVal( modBusReq(pdu) );
+    if( err.getVal().empty() ) numWCoil++;
     //> Set to acquisition block
     for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )
 	if( addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) )
@@ -690,8 +690,8 @@ void TMdPrm::vlGet( TVal &val )
 	}
     else if( val.name() == "err" )
     {
-	if( acq_err.empty() )	val.setS("0",0,true);
-	else			val.setS(acq_err,0,true);
+	if( acq_err.getVal().empty() )	val.setS("0",0,true);
+	else				val.setS(acq_err.getVal(),0,true);
     }
 }
 
