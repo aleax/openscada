@@ -131,7 +131,7 @@ class TSYS : public TCntrNode
 	void setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
 	void setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
 
-	//- Config file functions -
+	//> Config file functions
 	string cfgFile( )	{ return mConfFile; }
 	XMLNode &cfgRoot( )	{ return rootN; }
 
@@ -149,7 +149,7 @@ class TSYS : public TCntrNode
 
 	static void sighandler( int signal );
 
-        //- Short time dimensions -
+        //> Short time dimensions
 	unsigned long long sysClk( )		{ return mSysclc; }
 	void clkCalc( )
 	{
@@ -166,15 +166,17 @@ class TSYS : public TCntrNode
 	static long HZ( );
 
 	//Public system static methods
-	//- Current system time (usec) -
+	//> Current system time (usec)
 	static long long curTime( );
 
-	static void taskSleep( long long per );
+	//> Sleep task for period grid <per> on ns or to cron time.
+	static void taskSleep( long long per, time_t cron = 0 );
+	static time_t cron( const string &vl, time_t base = 0 );
 
-	//- Wait event with timeout support -
+	//> Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 
-	//- Convert value to string -
+	//> Convert value to string
 	static string int2str( int val, IntView view = Dec );
 	static string uint2str( unsigned val, IntView view = Dec );
 	static string ll2str( long long val, IntView view = Dec );
@@ -186,7 +188,7 @@ class TSYS : public TCntrNode
 	    return rez;
 	}
 
-	//Adress convertors
+	//> Adress convertors
 	static string addr2str( void *addr );
 	static void *str2addr( const string &str );
 

@@ -1,3 +1,10 @@
+2009-07-27 Roman
+- /SYS/DAQ: The permitions for fields of control interface is changed to "root":"DAQ".
+- !!!!:/SYS: The function TSYS::cron() is added for tasks planing by standard Cron.
+- !!:/DAQ/JavaLikeCalc: Add support to set calc time into Cron standard.
+- !!:/Special/FLibSYS: Added time plane function tmCron in standard Cron.
+
+
 2009-07-24 Roman
 - !!!!:/Special/FLibSYS: The "XMLNodeObj" object and function xmlNode() for it create and function xmlCntrReq() for send request 
     to control interface of OpenSCADA is added.

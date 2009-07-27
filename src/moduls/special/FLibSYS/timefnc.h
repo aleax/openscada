@@ -150,6 +150,25 @@ class tmStr2Tm : public TFunction
 	}
 };
 
+//*************************************************
+//* tmCron                                        *
+//*************************************************
+class tmCron : public TFunction
+{
+    public:
+	tmCron( ) : TFunction("tmCron")
+	{
+	    ioAdd( new IO("res",_("Result, seconds"),IO::Integer,IO::Return,"0") );
+	    ioAdd( new IO("str",_("Cron"),IO::String,IO::Default,"* * * * *") );
+	    ioAdd( new IO("base",_("Base time, seconds"),IO::Integer,IO::Default,"0") );
+	}
+
+	string name( )	{ return _("Time: Cron plane time"); }
+	string descr( )	{ return _("Plane time by cron standard."); }
+
+	void calc( TValFunc *val )	{ val->setI(0,SYS->cron(val->getS(1),val->getI(2))); }
+};
+
 }
 
 #endif //TIMEFNC_H

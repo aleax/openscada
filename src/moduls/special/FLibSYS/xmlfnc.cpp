@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include "xmlfnc.h"
-#include "statfunc.h"
 
 using namespace FLibSYS;
 

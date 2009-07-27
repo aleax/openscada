@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
-#: statfunc.cpp:51 varchfnc.cpp:104 varchfnc.cpp:116 varchfnc.cpp:129
-#: varchfnc.cpp:185 varchfnc.cpp:198 xmlfnc.cpp:67 sysfnc.h:930 timefnc.h:41
-#: timefnc.h:56 timefnc.h:137 xmlfnc.h:37 xmlfnc.h:52
+#: statfunc.cpp:51 varchfnc.cpp:104 varchfnc.cpp:116 varchfnc.cpp:128
+#: varchfnc.cpp:141 varchfnc.cpp:197 varchfnc.cpp:210 xmlfnc.cpp:67
+#: sysfnc.h:930 timefnc.h:41 timefnc.h:56 timefnc.h:137 xmlfnc.h:37
+#: xmlfnc.h:52
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 18:44+0300\n"
+"POT-Creation-Date: 2009-07-27 12:41+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -56,77 +57,77 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:81 statfunc.cpp:273
+#: statfunc.cpp:81 statfunc.cpp:274
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:269
+#: statfunc.cpp:270
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:272
+#: statfunc.cpp:273
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:272 statfunc.cpp:278
+#: statfunc.cpp:273 statfunc.cpp:279
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:272
+#: statfunc.cpp:273
 msgid "Function"
 msgstr "Funktion"
 
-#: statfunc.cpp:272 statfunc.cpp:273
+#: statfunc.cpp:273 statfunc.cpp:274
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:272 statfunc.cpp:273
+#: statfunc.cpp:273 statfunc.cpp:274
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:272 statfunc.cpp:273 sysfnc.h:137 varchfnc.h:96
+#: statfunc.cpp:273 statfunc.cpp:274 sysfnc.h:137 varchfnc.h:96
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:273
+#: statfunc.cpp:274
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:273 statfunc.cpp:278
+#: statfunc.cpp:274 statfunc.cpp:279
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:273
+#: statfunc.cpp:274
 msgid "Functions"
 msgstr "Funktionen"
 
-#: statfunc.cpp:273 sysfnc.h:137 sysfnc.h:895 varchfnc.h:96
+#: statfunc.cpp:274 sysfnc.h:137 sysfnc.h:895 varchfnc.h:96
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:273
+#: statfunc.cpp:274
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:273
+#: statfunc.cpp:274
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:277 xmlfnc.cpp:142 xmlfnc.cpp:150 xmlfnc.cpp:152 sysfnc.h:825
+#: statfunc.cpp:278 xmlfnc.cpp:142 xmlfnc.cpp:150 xmlfnc.cpp:152 sysfnc.h:825
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:283
+#: statfunc.cpp:284
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:283 sysfnc.h:115 sysfnc.h:136 sysfnc.h:161 sysfnc.h:181
+#: statfunc.cpp:284 sysfnc.h:115 sysfnc.h:136 sysfnc.h:161 sysfnc.h:181
 #: sysfnc.h:221 sysfnc.h:324 sysfnc.h:369 sysfnc.h:414 sysfnc.h:459
 #: sysfnc.h:503 sysfnc.h:534 sysfnc.h:565 sysfnc.h:596
 msgid "id"
 msgstr ""
 
-#: varchfnc.cpp:91 varchfnc.cpp:96 varchfnc.cpp:209
+#: varchfnc.cpp:91 varchfnc.cpp:96 varchfnc.cpp:221
 msgid "VArchObj"
 msgstr ""
 
@@ -144,19 +145,23 @@ msgid "end"
 msgstr "Sekunden"
 
 #: varchfnc.cpp:125
+msgid "period"
+msgstr ""
+
+#: varchfnc.cpp:137
 msgid "get"
 msgstr ""
 
-#: varchfnc.cpp:145
+#: varchfnc.cpp:157
 #, fuzzy
 msgid "set"
 msgstr "Offset"
 
-#: varchfnc.cpp:168
+#: varchfnc.cpp:180
 msgid "copy"
 msgstr ""
 
-#: varchfnc.cpp:209 xmlfnc.cpp:99
+#: varchfnc.cpp:221 xmlfnc.cpp:99
 #, c-format
 msgid "Function '%s' error or not enough parameters."
 msgstr ""
@@ -242,7 +247,8 @@ msgstr ""
 #: sysfnc.h:417 sysfnc.h:462 sysfnc.h:716 sysfnc.h:744 sysfnc.h:769
 #: timefnc.h:42 timefnc.h:68 timefnc.h:69 timefnc.h:70 timefnc.h:71
 #: timefnc.h:72 timefnc.h:73 timefnc.h:74 timefnc.h:75 timefnc.h:76
-#: timefnc.h:77 timefnc.h:109 timefnc.h:136 varchfnc.h:99 varchfnc.h:100
+#: timefnc.h:77 timefnc.h:109 timefnc.h:136 timefnc.h:161 timefnc.h:163
+#: varchfnc.h:99 varchfnc.h:100
 msgid "0"
 msgstr ""
 
@@ -762,7 +768,7 @@ msgid "strSize"
 msgstr ""
 
 #: sysfnc.h:694 sysfnc.h:715 sysfnc.h:743 sysfnc.h:768 sysfnc.h:798
-#: timefnc.h:137
+#: timefnc.h:137 timefnc.h:162
 msgid "str"
 msgstr ""
 
@@ -960,7 +966,7 @@ msgstr "Transformation des Realen in die Zeile."
 msgid "int2str"
 msgstr ""
 
-#: sysfnc.h:917
+#: sysfnc.h:917 timefnc.h:163
 msgid "base"
 msgstr ""
 
@@ -1180,12 +1186,43 @@ msgstr "Time: Zeile in die Zeit"
 msgid "Convert a string representation of time to a time."
 msgstr "Transformation der Zeilennotation der Zeit in die absolute Zeit."
 
-#: varchfnc.h:70
-msgid "vArh"
+#: timefnc.h:159
+msgid "tmCron"
 msgstr ""
 
-#: varchfnc.h:72 varchfnc.h:95
+#: timefnc.h:161 varchfnc.h:72 varchfnc.h:95
 msgid "res"
+msgstr ""
+
+#: timefnc.h:161
+#, fuzzy
+msgid "Result, seconds"
+msgstr "Volle Sekunden"
+
+#: timefnc.h:162
+msgid "Cron"
+msgstr ""
+
+#: timefnc.h:162
+msgid "* * * * *"
+msgstr ""
+
+#: timefnc.h:163
+#, fuzzy
+msgid "Base time, seconds"
+msgstr "Sekunden des Beginns"
+
+#: timefnc.h:166
+#, fuzzy
+msgid "Time: Cron plane time"
+msgstr "Time: Zeitenzeile"
+
+#: timefnc.h:167
+msgid "Plane time by cron standard."
+msgstr ""
+
+#: varchfnc.h:70
+msgid "vArh"
 msgstr ""
 
 #: varchfnc.h:72 varchfnc.h:95

@@ -104,6 +104,7 @@ void Lib::postEnable( int flag )
     reg( new tmTime() );
     reg( new tmFStr() );
     reg( new tmStr2Tm() );
+    reg( new tmCron() );
 
     reg( new messGet() );
     reg( new messPut() );

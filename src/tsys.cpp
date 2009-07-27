@@ -911,19 +911,157 @@ long TSYS::HZ()
     return sysconf(_SC_CLK_TCK);
 }
 
-void TSYS::taskSleep( long long per )
+void TSYS::taskSleep( long long per, time_t cron )
 {
     struct timespec sp_tm;
-    if( !per ) per = 1000000000;
 
-    clock_gettime(CLOCK_REALTIME,&sp_tm);
-    long long pnt_tm = ( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
-    do
+    if( !cron )
     {
-	sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
-	if( clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL) )	return;
+	if( !per ) per = 1000000000;
 	clock_gettime(CLOCK_REALTIME,&sp_tm);
-    }while( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm );
+	long long pnt_tm = ( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
+	do
+	{
+	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
+	    if( clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL) )	return;
+	    clock_gettime(CLOCK_REALTIME,&sp_tm);
+	}while( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm );
+    }
+    else
+    {
+	sp_tm.tv_sec = cron; sp_tm.tv_nsec = 0;
+	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
+    }
+}
+
+time_t TSYS::cron( const string &vl, time_t base )
+{
+    bool isReset = false;
+    string cronEl, tEl;
+    int vbeg, vend, vstep, vm;
+
+    time_t ctm = base?base:time(NULL);
+    struct tm ttm;
+    localtime_r(&ctm,&ttm);
+    ttm.tm_sec = 0;
+
+reload:
+    bool isReload = false;
+    //> Minutes check
+    cronEl = TSYS::strSepParse(vl,0,' ');
+    vm = 200;
+    for( int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
+    {
+	vbeg = vend = -1; vstep = 0;
+	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
+	if( vbeg < 0 ) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=59; }
+	if( vend < 0 ) vm = vmin(vm,vbeg+((ttm.tm_min>=vbeg)?60:0));
+	else if( (vbeg=vmax(0,vbeg)) < (vend=vmin(59,vend)) )
+	{
+	    if( ttm.tm_min < vbeg ) vm = vmin(vm,vbeg);
+	    else if( (vstep>1 && ttm.tm_min >= (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_min >= vend) )
+		vm = vmin(vm,vbeg+60);
+	    else if( vstep>1 ) vm = vmin( vm, vbeg + vstep*( ((ttm.tm_min+1)-vbeg)/vstep + ((((ttm.tm_min+1)-vbeg)%vstep)?1:0) ) );
+	    else vm = vmin( vm, ttm.tm_min+1 );
+	}
+	if( vm == ttm.tm_min+1 ) break;
+    }
+    ttm.tm_min = vm;
+    mktime(&ttm);
+
+    //> Hours check
+    cronEl = TSYS::strSepParse(vl,1,' ');
+    vm = 200;
+    for( int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
+    {
+	vbeg = vend = -1; vstep = 0;
+	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
+	if( vbeg < 0 ) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=23; }
+	if( vend < 0 ) vm = vmin(vm,vbeg+((ttm.tm_hour>vbeg)?24:0));
+	else if( (vbeg=vmax(0,vbeg)) < (vend=vmin(23,vend)) )
+	{
+	    if( ttm.tm_hour < vbeg ) vm = vmin(vm,vbeg);
+	    else if( (vstep>1 && ttm.tm_hour > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_hour > vend) )
+		vm = vmin(vm,vbeg+24);
+	    else if( vstep>1 ) vm = vmin( vm, vbeg + vstep*( (ttm.tm_hour-vbeg)/vstep + (((ttm.tm_hour-vbeg)%vstep)?1:0) ) );
+	    else vm = vmin( vm, ttm.tm_hour );
+	}
+	if( vm == ttm.tm_hour ) break;
+    }
+    isReload = (ttm.tm_hour!=vm);
+    ttm.tm_hour = vm;
+    mktime(&ttm);
+    if( isReload )	{ ttm.tm_min = -1; goto reload; }
+
+    //> Day check
+    cronEl = TSYS::strSepParse(vl,2,' ');
+    string cronElw = TSYS::strSepParse(vl,4,' ');
+    vm = 200;
+    if( cronEl != "*" )
+	for( int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
+	{
+	    vbeg = vend = -1; vstep = 0;
+	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
+	    if( vbeg < 0 ) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=31; }
+	    if( vend < 0 ) vm = vmin(vm,vbeg+((ttm.tm_mday>vbeg)?31:0));
+	    else if( (vbeg=vmax(1,vbeg)) < (vend=vmin(31,vend)) )
+	    {
+		if( ttm.tm_mday < vbeg ) vm = vmin(vm,vbeg);
+		else if( (vstep>1 && ttm.tm_mday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_mday > vend) )
+		    vm = vmin(vm,vbeg+31);
+		else if( vstep>1 ) vm = vmin( vm, vbeg + vstep*( (ttm.tm_mday-vbeg)/vstep + (((ttm.tm_mday-vbeg)%vstep)?1:0) ) );
+		else vm = vmin( vm, ttm.tm_mday );
+	    }
+	    if( vm == ttm.tm_mday ) break;
+        }
+    if( cronEl == "*" || (cronElw != "*" && !cronElw.empty()) )
+	for( int eoff = 0; (tEl=TSYS::strSepParse(cronElw,0,',',&eoff)).size(); )
+	{
+	    vbeg = vend = -1; vstep = 0;
+	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
+	    if( vbeg < 0 ) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=6; }
+	    if( vend < 0 ) vm = vmin( vm, ttm.tm_mday - ttm.tm_wday + vbeg+((ttm.tm_wday>vbeg)?7:0) );
+	    else if( (vbeg=vmax(1,vbeg)) < (vend=vmin(7,vend)) )
+	    {
+		if( ttm.tm_wday < vbeg ) vm = vmin( vm, ttm.tm_mday - ttm.tm_wday + vbeg );
+		else if( (vstep>1 && ttm.tm_wday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_wday > vend) )
+		    vm = vmin( vm, ttm.tm_mday - ttm.tm_wday + vbeg+7 );
+		else if( vstep>1 ) vm = vmin( vm, ttm.tm_mday - ttm.tm_wday + vbeg + vstep*( (ttm.tm_wday-vbeg)/vstep + (((ttm.tm_wday-vbeg)%vstep)?1:0) ) );
+		else vm = vmin( vm, ttm.tm_mday );
+	    }
+	    if( vm == ttm.tm_mday ) break;
+	}
+    isReload = (ttm.tm_mday!=vm);
+    if( vm <= 31 ) ttm.tm_mday = vm;
+    { ttm.tm_mday = vm-31; ttm.tm_mon++; }
+    mktime(&ttm);
+    if( isReload )	{ ttm.tm_min = -1; ttm.tm_hour = 0; goto reload; }
+
+    //> Month check
+    cronEl = TSYS::strSepParse(vl,3,' ');
+    vm = 200;
+    for( int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
+    {
+	vbeg = vend = -1; vstep = 0;
+	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
+	if( vbeg < 0 ) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=12; }
+	if( vend < 0 ) vm = vmin(vm,vbeg+(((ttm.tm_mon+1)>vbeg)?12:0));
+	else if( (vbeg=vmax(1,vbeg)) < (vend=vmin(12,vend)) )
+	{
+	    if( (ttm.tm_mon+1) < vbeg ) vm = vmin(vm,vbeg);
+	    else if( (vstep>1 && (ttm.tm_mon+1) > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && (ttm.tm_mon+1) > vend) )
+		vm = vmin(vm,vbeg+12);
+	    else if( vstep>1 ) vm = vmin( vm, vbeg + vstep*( ((ttm.tm_mon+1)-vbeg)/vstep + ((((ttm.tm_mon+1)-vbeg)%vstep)?1:0) ) );
+	    else vm = vmin( vm, ttm.tm_mon+1 );
+	}
+	if( vm == (ttm.tm_mon+1) ) break;
+    }
+    isReload = (ttm.tm_mon!=(vm-1));
+    ttm.tm_mon = vm-1;
+    mktime(&ttm);
+    if( isReload )	{ ttm.tm_min = -1; ttm.tm_hour = 0; ttm.tm_mday = 1; goto reload; }
+
+    return mktime(&ttm);
 }
 
 void TSYS::cntrCmdProc( XMLNode *opt )

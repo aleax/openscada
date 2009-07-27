@@ -113,8 +113,9 @@ class Contr: public TController, public TValFunc
 
 	string getStatus( );
 
-	int period( )	{ return vmax(mPer,1); }
-	int iterate( )	{ return mIter; }
+	long long period( )	{ return mPer; }
+	string cron( )		{ return mSched; }
+	int iterate( )		{ return mIter; }
 
 	void redntDataUpdate( );
 
@@ -140,11 +141,12 @@ class Contr: public TController, public TValFunc
 	//Attributes
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
-	int	&mPer,		// Calc period (ms)
-		&mPrior,	// Calc task priority
+	int	&mPrior,	// Calc task priority
 		&mIter;		// iteration number
-	string	&mFnc;		// Work function
+	string	&mSched,	// Calc schedule
+		&mFnc;		// Work function
 
+	long long mPer;
 	pthread_t procPthr;	// Process task thread
 };
 

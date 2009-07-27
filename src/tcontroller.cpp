@@ -362,21 +362,21 @@ void TController::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),0664,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),0664,"root","DAQ");
 	ctrMkNode("branches",opt,-1,"/br","",0444);
 	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),0444,"root","DAQ",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),0664,"root","DAQ",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),0664,"root","DAQ",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),0664,"root","DAQ",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if( ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")) )
 	    {
-		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","root",0664);
+		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","DAQ",0664);
 		//>> Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/REDNT_RUN",true);
 		if( xt ) xt->setAttr("dest","select")->setAttr("select","/cntr/redRunLst");
@@ -384,13 +384,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
 	if( owner().tpPrmSize() )
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660,"root","root",2,"idm","1","idSz","20");
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660,"root","DAQ",2,"idm","1","idSz","20");
 	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if( owner().tpPrmSize() > 1 )
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),0660,"root","root",3,"tp","str","dest","select","select","/prm/t_lst");
-		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),0660,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),0660,"root","DAQ",3,"tp","str","dest","select","select","/prm/t_lst");
+		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),0444,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),0660,"root","DAQ",5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
 	    }
 	}
 	return;
@@ -410,26 +410,26 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/t_prm" && owner().tpPrmSize() )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0660,"root","DAQ",SEQ_RD) )
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0660,"root","DAQ",SEQ_WR) )
 	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
     else if( (a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize() )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0660,"root","DAQ",SEQ_RD) )
 	{
 	    list(c_list);
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0660,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0660,"root","DAQ",SEQ_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
 	    add(vid,owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
 	    at(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0660,"root","root",SEQ_WR) )	del(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",0660,"root","DAQ",SEQ_WR) )	del(opt->attr("id"),true);
     }
     else if( a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",0444) )
     {
@@ -438,23 +438,23 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/cntr/st/db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setDB(opt->text());
     }
     else if( a_path == "/cntr/st/en_st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(en_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?enable():disable();
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText(en_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	atoi(opt->text().c_str())?enable():disable();
     }
     else if( a_path == "/cntr/st/run_st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
     }
     else if( a_path.substr(0,9) == "/cntr/cfg" )
     {
-	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","DAQ",0664);
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )
 	    for( int i_t = 0; i_t < owner().tpPrmSize( ); i_t++ )
 		if( owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2) )
 		     modifG( );

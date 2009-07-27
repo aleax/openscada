@@ -95,9 +95,9 @@ void TipContr::postEnable( int flag )
     //> Controller db structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system") );
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40") );
-    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"7","1000","0;1000000") );
+    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
-    fldAdd( new TFld("ITER",_("Iteration number in the calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    fldAdd( new TFld("ITER",_("Iteration number in single calc"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
     //> Controller value db structure
     val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
@@ -343,9 +343,8 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //* Contr: Controller object                      *
 //*************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false),
-    endrun_req(false),
-    mPer(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
+    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), endrun_req(false),
+    mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()),
     mIter(cfg("ITER").getId()), mFnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
@@ -378,7 +377,12 @@ string Contr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Calc time %.6g mks. "),calcTm());
+    if( startStat( ) && !redntUse( ) )
+    {
+	if( period() ) val += TSYS::strMess(_("Call by period %g s. "),(1e-9*period()));
+	else val += TSYS::strMess(_("Call by cron '%s'. "),cron().c_str());
+	val += TSYS::strMess(_("Calc time %.6g mks. "),calcTm());
+    }
 
     return val;
 }
@@ -474,7 +478,10 @@ void Contr::start_( )
 {
     ((Func *)func())->setStart( true );
 
-    //- Start the request data task -
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+
+    //> Start the request data task
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -525,7 +532,7 @@ void *Contr::Task( void *icntr )
 	if( !cntr.redntUse( ) )
 	{
 	    //> Setting special IO
-	    int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,(float)cntr.iterate()*1000/(float)cntr.period());
+	    int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,cntr.period()?(float)cntr.iterate()*1000/(float)cntr.period():0);
 	    ioI = cntr.ioId("f_start");		if( ioI >= 0 ) cntr.setB(ioI,is_start);
 	    ioI = cntr.ioId("f_stop");		if( ioI >= 0 ) cntr.setB(ioI,is_stop);
 
@@ -539,7 +546,7 @@ void *Contr::Task( void *icntr )
 	}
 
 	if( is_stop ) break;
-	TSYS::taskSleep((long long)cntr.period()*1000000);
+	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	if( cntr.endrun_req ) is_stop = true;
 	is_start = false;
 	cntr.modif();
@@ -600,22 +607,32 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cntr/flst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","sel_ed","select","/cntr/flst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
+	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
+	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
+		     "Seconds form is one real number (1.5, 1e-3).\n"
+		     "Cron it is standard form '* * * * *'. Where:\n"
+		     "  - minutes (0-59);\n"
+		     "  - hours (0-23);\n"
+		     "  - days (1-31);\n"
+		     "  - month (1-12);\n"
+		     "  - week day (0[sunday]-6)."));
 	if( enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calcing")) )
 	{
-	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),0664,"root","root",2,"s_com","add,del,ins,move","rows","15"))
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),0664,"root","DAQ",2,"s_com","add,del,ins,move","rows","15"))
 	    {
-		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),0664,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),0664,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),0664,"root","DAQ",5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
 		    "sel_list",_("Real;Integer;Boolean;String"));
-		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),0664,"root","DAQ",5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)+";"+TSYS::int2str(IO::Return)).c_str(),
 		    "sel_list",_("Input;Output;Return"));
-		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),0664,"root","DAQ",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),0664,"root","root",3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),0664,"root","DAQ",3,"tp","str","cols","90","rows","10");
 	}
 	return;
     }
@@ -646,7 +663,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/fnc/io" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )
 	{
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/fnc/io/0","",0664);
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/fnc/io/1","",0664);
@@ -663,11 +680,11 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","DAQ",SEQ_WR) )
 	{ ((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) ); modif(); }
-	if( ctrChkNode(opt,"ins",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"ins",0664,"root","DAQ",SEQ_WR) )
 	{ ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) ); modif(); }
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"del",0664,"root","DAQ",SEQ_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    if( func()->io(row)->flg()&Func::SysAttr )
@@ -675,9 +692,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    ((Func *)func())->ioDel( row ); 
 	    modif();
 	}
-	if( ctrChkNode(opt,"move",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"move",0664,"root","DAQ",SEQ_WR) )
 	{ ((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
@@ -699,8 +716,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/fnc/prog" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(((Func *)func())->prog());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText(((Func *)func())->prog());
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )
 	{
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
@@ -858,7 +875,7 @@ void Prm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod(((long long)owner().period())*1000);
+    val.arch().at().setPeriod( owner().period() ? owner().period()/1000 : 1000000 );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

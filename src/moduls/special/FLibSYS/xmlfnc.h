@@ -24,6 +24,8 @@
 
 #include <tfunction.h>
 
+#include "statfunc.h"
+
 namespace FLibSYS
 {
 
