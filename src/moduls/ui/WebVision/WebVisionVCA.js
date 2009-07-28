@@ -1298,7 +1298,7 @@ function makeEl( pgBr, inclPg )
     this.wFont = '';
     var allFnt = this.attrs['font'].split(' ');
     if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
-    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
+    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'pt; ';
     if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
     if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
 
