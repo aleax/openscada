@@ -428,6 +428,11 @@ if test ${ModFLibSYS} = true; then
     AC_MSG_RESULT(Build module: Special/FLibSYS)
     AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibSYS "
+    #>> Modules checkings
+    AC_CHECK_HEADERS([fftw3.h],[],
+	[AC_MSG_ERROR(UI/WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
+    AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
 fi
 AC_MSG_RESULT(===========================================)
 

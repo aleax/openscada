@@ -40,12 +40,12 @@ class XMLNode
 	//Data
 	enum SaveView
 	{
-	    BrOpenPrev		= 0x01,		//Break preview open tag
-	    BrOpenPast		= 0x02,		//Break past open tag
-	    BrClosePast		= 0x04,		//Break past close tag
-	    BrTextPast		= 0x08,		//Break past text
-	    BrPrcInstrPast	= 0x10,		//Break past process instruction
-	    BrAllPast		= 0x1E,		//Break past all
+	    BrOpenPrev		= 0x01,		//Break before open tag
+	    BrOpenPast		= 0x02,		//Break after open tag
+	    BrClosePast		= 0x04,		//Break after close tag
+	    BrTextPast		= 0x08,		//Break after text
+	    BrPrcInstrPast	= 0x10,		//Break after process instruction
+	    BrAllPast		= 0x1E,		//Break after all
 	    XMLHeader		= 0x20,		//Include XML header
 	    InclNode		= 0x80		//Included node, not root
 	};

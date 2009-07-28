@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <fftw3.h>
+
 #include "varchfnc.h"
 
 using namespace FLibSYS;
@@ -218,5 +220,49 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	}
 	return true;
     }
+    if( id == "FFT" && prms.size() >= 2 )
+    {
+	long long etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI());
+	long long btm = etm - (long long)(1e6*prms[1].getR());
+	int fftN = 0, iN = 0;
+	double *fftIn;
+
+	TAreaObj *ao = new TAreaObj();
+	if( isArch() )
+	{
+	    string archivator = (prms.size()>=3) ? prms[2].getS() : "";
+	    TValBuf tb( TFld::Real, 0, arch().at().period(archivator), true, true );
+	    arch().at().getVals(tb,btm,etm,archivator,600000);
+	    fftN = tb.realSize();
+	    if( fftN > 10 )
+	    {
+		fftIn = (double*)malloc(sizeof(double)*fftN);
+		for( btm = tb.begin(); btm <= tb.end() && iN < fftN; btm++, iN++ )
+		    fftIn[iN] = tb.getR(&btm,true);
+	    }
+	}
+	else if( buf() && buf()->realSize() > 10 )
+	{
+	    fftN = buf()->realSize();
+	    fftIn = (double*)malloc(sizeof(double)*fftN);
+	    for( btm = buf()->begin(); btm <= buf()->end() && iN < fftN; btm++, iN++ )
+		fftIn[iN] = buf()->getR(&btm,true);
+	}
+
+	if( fftN )
+	{
+	    fftw_complex *fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
+	    fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
+	    fftw_execute(p);
+	    fftw_destroy_plan(p);
+	    for( int i_v = 0; i_v < (fftN/2+1); i_v++ )
+		if( !i_v ) ao->propSet(TSYS::int2str(i_v),fftOut[i_v][0]/fftN);
+		else ao->propSet(TSYS::int2str(i_v),pow(pow(fftOut[i_v][0],2)+pow(fftOut[i_v][1],2),0.5)/(fftN/2));
+	    delete fftIn;
+	    delete fftOut;
+	}
+
+	return ao;
+    }    
     throw TError("VArchObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }

@@ -19,6 +19,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
+
 #include "xmlfnc.h"
 
 using namespace FLibSYS;
@@ -94,6 +100,46 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "childDel" && prms.size() )	{ childDel(prms[0].getI()); return this; }
     if( id == "childGet" && prms.size() )	{ return childGet(prms[0].getI()); }
+    if( id == "load" && prms.size() )
+    {
+	XMLNode nd;
+	//> Load from file
+	if( prms.size() >= 2 && prms[1].getB() )
+	{
+	    int hd = open(prms[0].getS().c_str(),O_RDONLY);
+	    if( hd < 0 ) return TSYS::strMess(_("2:Open file <%s> error: %s"),prms[0].getS().c_str(),strerror(errno));
+	    int cf_sz = lseek(hd,0,SEEK_END);
+	    lseek(hd,0,SEEK_SET);
+	    char *buf = (char *)malloc(cf_sz+1);
+	    read(hd,buf,cf_sz);
+	    buf[cf_sz] = 0;
+	    close(hd);
+	    string s_buf = buf;
+	    free(buf);
+	    try{ nd.load(s_buf); } 
+	    catch( TError err ) { return "1:"+err.mess; }
+	}
+	//> Load from string
+	else
+	    try{ nd.load(prms[0].getS()); } 
+	    catch( TError err ) { return "1:"+err.mess; }
+	fromXMLNode(nd);
+	return string("0");
+    }
+    if( id == "save" )
+    {
+	XMLNode nd;
+	toXMLNode(nd);
+	string s_buf = nd.save( (prms.size()>=1)?prms[0].getI():0 );
+	//> Save to file
+	if( prms.size() >= 2 )
+	{
+	    int hd = open( prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664 );
+	    if( hd < 0 ) return string("");
+	    write(hd,s_buf.data(),s_buf.size());
+	}
+	return s_buf;
+    }
 
     throw TError("XMLNodeObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
