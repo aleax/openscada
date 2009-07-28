@@ -1,6 +1,7 @@
 2009-07-28 Roman
 - !!:/Special/FLibSYS: The function for FFT processing archive's data is added to object "VArchObj".
     The functions for loading and saving XML-tree to string or file is added to object "XMLNodeObj".
+- FIX:/UI/Vision: Documents print is fixed by set default font size into points.
 
 
 2009-07-27 Roman

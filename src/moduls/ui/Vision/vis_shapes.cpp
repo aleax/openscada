@@ -2926,7 +2926,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
 	    QFont fnt;
 	    fnt.setFamily(QString(family).replace(QRegExp("_")," "));
-	    fnt.setPixelSize( (int)((float)size*vmin(w->xScale(true),w->yScale(true))) );
+	    fnt.setPointSize( (int)((float)size*vmin(w->xScale(true),w->yScale(true))) );
 	    fnt.setBold(bold);
 	    fnt.setItalic(italic);
 	    fnt.setUnderline(underline);
