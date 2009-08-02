@@ -1435,7 +1435,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     QPainter pnt( &shD->pictObj );
 
     //> Get generic parameters
-    long long tSize = (long long)(shD->tSize*1000000.);			//Time size (us)
+    long long tSize = (long long)(1e6*shD->tSize);			//Time size (us)
     long long tEnd  = shD->tTime;					//Time end point (us)
     long long tBeg  = tEnd - tSize;					//Time begin point (us)
     if( shD->prms.empty() || tSize <= 0 ) return;
@@ -1678,7 +1678,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     QPainter pnt( &shD->pictObj );
 
     //> Get generic parameters
-    long long tSize = (long long)(shD->tSize*1000000.);			//Trends size (us)
+    long long tSize = (long long)(1e6*shD->tSize);			//Trends size (us)
     long long tEnd  = shD->tTime;					//Trends end point (us)
     long long tPict = tEnd;
     long long tBeg  = tEnd - tSize;					//Trends begin point (us)
@@ -2029,7 +2029,7 @@ void ShapeDiagram::tracing( )
     makePicture(w);
 
     //> Trace cursors value
-    if( shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(long long)(shD->tSize*1000000.))) )
+    if( shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(long long)(1e6*shD->tSize))) )
 	setCursor( w, shD->tTime );
     w->update();
 }
@@ -2069,7 +2069,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    int curPos = -1;
 	    if( shD->type == 0 && shD->active )
 	    {
-		long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+		long long tTimeGrnd = shD->tPict - (long long)(1e6*shD->tSize);
 		long long curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 		if( curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
 		    curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
@@ -2099,7 +2099,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		    if( !shD->active ) break;
 		    if( shD->type == 0 )
 		    {
-			long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+			long long tTimeGrnd = shD->tPict - (long long)(1e6*shD->tSize);
 			long long curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 			setCursor( w, curTime+((key->key()==Qt::Key_Left)?-1:1)*(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
 		    }
@@ -2121,7 +2121,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width()) ) break;
 	    if( shD->type == 0 )
 	    {
-		long long tTimeGrnd = shD->tPict - (long long)(shD->tSize*1000000.);
+		long long tTimeGrnd = shD->tPict - (long long)(1e6*shD->tSize);
 		setCursor( w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width() );
 	    }
 	    else if( shD->type == 1 )
@@ -2140,7 +2140,7 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 
     if( shD->type == 0 )
     {
-	long long tTimeGrnd = shD->tTime - (long long)(shD->tSize*1000000.);
+	long long tTimeGrnd = shD->tTime - (long long)(1e6*shD->tSize);
 	long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
 
 	shD->holdCur = (curTime==shD->tTime);
@@ -2241,7 +2241,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 {
     ShpDt *shD = (ShpDt*)view->shpData;
 
-    long long tSize     = (long long)(shD->tSize*1000000.);
+    long long tSize     = (long long)(1e6*shD->tSize);
     long long tTime     = shD->tTime;
     long long tTimeGrnd = tTime - tSize;
     long long wantPer = tSize/view->size().width();
@@ -2384,7 +2384,7 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
 
     if( fftOut ) { delete fftOut; fftN = 0; }
 
-    long long tSize	= (long long)(shD->tSize*1000000.);
+    long long tSize	= (long long)(1e6*shD->tSize);
     long long tTime	= shD->tTime;
     long long tTimeGrnd	= tTime - tSize;
     long long workPer	= tSize/view->size().width();

@@ -4720,6 +4720,16 @@ void VCADiagram::getReq( SSess &ses )
     }
 }
 
+void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
+{
+    int img_sz;
+    char *img_ptr = (char*)gdImagePngPtr( im, &img_sz );
+    ses.page.assign( img_ptr, img_sz );
+    ses.page = mod->httpHead( "200 OK", ses.page.size(), "image/png" ) + ses.page;
+    gdFree(img_ptr);
+    gdImageDestroy(im);
+}
+
 void VCADiagram::makeTrendsPicture( SSess &ses )
 {
     ResAlloc res(mRes,true);
@@ -4736,7 +4746,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	//> Trace cursors value
 	if( active )
 	{
-	    long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
+	    long long tTimeGrnd = tTime - (long long)(1e6*tSize);
 	    if( curTime >= (tTime-2*(long long)trcPer*1000000) || curTime <= tTimeGrnd )
 		setCursor(tTime,ses.user);
 	}
@@ -4748,15 +4758,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Get generic parameters
     int parNum     = trnds.size();					//Parameter's number
-    long long tSz  = (long long)(tSize*1000000.);			//Trends size (us)
+    long long tSz  = (long long)(1e6*tSize);				//Trends size (us)
     long long tEnd = tTime;						//Trends end point (us)
     tPict = tEnd;
     long long tBeg = tEnd - tSz;					//Trends begin point (us)
-    if( !parNum || tSz <= 0 )
-    {
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-	return;
-    }
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
@@ -4770,6 +4775,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     gdImagePtr im = gdImageCreate(imW,imH);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
+
+    if( !parNum || tSz <= 0 )	{ makeImgPng(ses,im); return; }
 
     //> Make decoration and prepare trends area
     tArX = 1, tArY = 1,						//Curves of trends area rect
@@ -4787,7 +4794,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
 	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    mrkHeight = brect[3]-brect[7];
-	    if( mrkHeight <= 0 ) return;
+	    if( mrkHeight <= 0 )	{ makeImgPng(ses,im); return; }
 	    if( sclHor&0x2 )
 	    {
 	        if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
@@ -4932,12 +4939,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    aVbeg = vmax(tBeg,trnds[0].valBeg());
 	    aVend = vmin(tEnd,trnds[0].valEnd());
 
-	    if( aVbeg >= aVend )
-	    {
-		gdImageDestroy(im);
-		ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-		return;
-	    }
+	    if( aVbeg >= aVend )	{ makeImgPng(ses,im); return; }
 	    //>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
@@ -5096,12 +5098,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //> Get image and transfer it
-    int img_sz;
-    char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
-    ses.page.assign(img_ptr,img_sz);
-    ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-    gdFree(img_ptr);
-    gdImageDestroy(im);
+    makeImgPng(ses,im);
 }
 
 void VCADiagram::makeSpectrumPicture( SSess &ses )
@@ -5121,14 +5118,9 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     int clr_grid, clr_mrk;						//Colors
 
     //> Get generic parameters
-    long long tSz  = (long long)(tSize*1000000.);			//Time size (us)
+    long long tSz  = (long long)(1e6*tSize);				//Time size (us)
     long long tEnd = tTime;						//Time end point (us)
     long long tBeg = tEnd - tSz;					//Time begin point (us)
-    if( !trnds.size() || tSz <= 0 )
-    {
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-	return;
-    }
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
@@ -5142,6 +5134,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     gdImagePtr im = gdImageCreate(imW,imH);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
+
+    if( !trnds.size() || tSz <= 0 )	{ makeImgPng(ses,im); return; }
 
     //> Make decoration and prepare trends area
     tArX = 1, tArY = 1,						//Curves of trends area rect
@@ -5160,7 +5154,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
 	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    mrkHeight = brect[3]-brect[7];
-	    if( mrkHeight <= 0 ) return;
+	    if( mrkHeight <= 0 ) { makeImgPng(ses,im); return; }
 	    if( sclHor&0x2 )
 	    {
 		if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
@@ -5231,7 +5225,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     bool   vsPerc = true;			//Vertical scale percent mode
     if( trnds.size() == 1 )
     {
-	if( !trnds[0].fftN ) return;
+	if( !trnds[0].fftN ) { makeImgPng(ses,im); return; }
 
 	vsPerc = false;
 	if( trnds[0].bordU() > trnds[0].bordL() )
@@ -5363,12 +5357,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     }
 
     //> Get image and transfer it
-    int img_sz;
-    char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
-    ses.page.assign(img_ptr,img_sz);
-    ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-    gdFree(img_ptr);
-    gdImageDestroy(im);
+    makeImgPng(ses,im);
 }
 
 void VCADiagram::postReq( SSess &ses )
@@ -5387,7 +5376,7 @@ void VCADiagram::postReq( SSess &ses )
 	{
 	    if( type == 0 )
 	    {
-		long long tTimeGrnd = tPict - (long long)(tSize*1000000.);
+		long long tTimeGrnd = tPict - (long long)(1e6*tSize);
 		setCursor( tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user );
 	    }
 	    else if( type == 1 )
@@ -5521,7 +5510,7 @@ void VCADiagram::setCursor( long long itm, const string& user )
 {
     if( type == 0 )
     {
-	long long tTimeGrnd = tTime - (long long)(tSize*1000000.);
+	long long tTimeGrnd = tTime - (long long)(1e6*tSize);
 	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
 
 	XMLNode req("set");
@@ -5623,7 +5612,7 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 
 void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 {
-    long long tSize     = (long long)(owner().tSize*1000000.);
+    long long tSize     = (long long)(1e6*owner().tSize);
     long long tTime     = owner().tTime;
     long long tTimeGrnd = tTime - tSize;
     long long wantPer   = tSize/(int)(owner().width+0.5);
@@ -5762,7 +5751,7 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
 
     if( fftOut ) { delete fftOut; fftN = 0; }
 
-    long long tSize	= (long long)(owner().tSize*1000000.);
+    long long tSize	= (long long)(1e6*owner().tSize);
     long long tTime	= owner().tTime;
     long long tTimeGrnd	= tTime - tSize;
     long long workPer	= tSize/(int)(owner().width+0.5);

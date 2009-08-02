@@ -211,14 +211,18 @@ void Widget::setEnable( bool val )
 	{
 	    try
 	    {
-		if( TSYS::strNoSpace(parentNm()).empty() ) throw TError(nodePath().c_str(),"%s",_("Empty parent!"));
+		if( TSYS::strNoSpace(parentNm()).empty() || parentNm() == path() )
+		    throw TError(nodePath().c_str(),"%s",_("Empty parent or parent identical self!"));
 		if( parentNm() == ".." ) mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
+
 		//> Check for enable parent widget and enable if not
 		if( !parent().at().enable() )	parent().at().setEnable(true);
+
 		//> Inherit
 		inheritAttr( );
 		inheritIncl( );
+
 		//> Register of heritater
 		parent().at().heritReg(this);
 	    }catch(TError err)
@@ -229,7 +233,8 @@ void Widget::setEnable( bool val )
 	    }
 	}
 	mEnable = true;
-	//- Load self values from DB -
+
+	//> Load self values from DB
 	loadIO( );
     }
     if(!val)

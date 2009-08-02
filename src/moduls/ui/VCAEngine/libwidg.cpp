@@ -158,7 +158,7 @@ void WidgetLib::save_( )
 
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
-    //- Check for need copy mime data to other DB and same copy -
+    //> Check for need copy mime data to other DB and same copy
     if( !mOldDB.empty() && mOldDB != TBDS::realDBName(DB()) )
     {
 	vector<string> pls;

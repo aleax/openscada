@@ -203,6 +203,7 @@ class VCADiagram : public VCAObj
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 	void setAttrs( XMLNode &node, const string &user );
+	void makeImgPng( SSess &ses, gdImagePtr im );
 
 	void makeTrendsPicture( SSess &ses );
 	void makeSpectrumPicture( SSess &ses );
@@ -316,6 +317,8 @@ class VCASess : public TCntrNode
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
+
+
 
 	//> Objects
 	void objList( vector<string> &list )		{ chldList(id_objs,list); }
