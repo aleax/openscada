@@ -996,6 +996,7 @@ Reg *Func::cdProp( Reg *obj, Reg *prp )
 {
     ui16 addr;
     Reg *ro = obj;
+    if( !obj ) printf("TEST 00: '%s', %d\n",prg_src.c_str(),la_pos);
     if( !ro->objEl() ) { ro = cdMove( NULL, ro, false ); ro->setObjEl(); }
 
     if( !prp )

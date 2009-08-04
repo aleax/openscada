@@ -1,3 +1,7 @@
+2009-08-04 Maxim,Roman
+- FIX:/DAQ/JavaLikeCalc: Object source detect is fixed.
+
+
 2009-08-02 Roman
 - FIX:/UI/Vision, /UI/WebVision: Trend size less one second is fixed and memory leak at trend error is fixed for UI.WebVision.
 - FIX:/UI/WebVision: Parent seting for widgets to self crash is fixed.

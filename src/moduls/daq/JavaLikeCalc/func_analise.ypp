@@ -503,7 +503,7 @@ retry:
 		case 1: return B_FUNC1;
 		case 2: return B_FUNC2;
 		default:
-		    yyerror(_("Build in function have to mach parameters, "));
+		    yyerror(_("Build in function has too much parameters, "));
 		    return ERR;
 	    }
 	}
@@ -521,7 +521,7 @@ retry:
 	    //>> Check for object's functions
 	    int off = 0;
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)));
-	    if( yylval.reg >= 0 )
+	    if( yylval.reg )
 	    {
 		pos -= (smb_nm.size()-off+1);
 		yylloc.last_column -= (smb_nm.size()-off-1);
@@ -559,7 +559,7 @@ retry:
 	    //>> Check for object's parameters
 	    int off = 0;
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)));
-	    if( yylval.reg >= 0 )
+	    if( yylval.reg )
 	    {
 		pos -= (smb_nm.size()-off+1);
 		yylloc.last_column -= (smb_nm.size()-off-1);
