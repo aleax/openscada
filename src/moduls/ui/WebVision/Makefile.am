@@ -12,7 +12,7 @@ ui_WebVision_la_LIBADD = -lfftw3
 VCAjs.cpp: WebVisionVCA.js
 	@lc=`cat $< | wc -l` ; \
 	il=1 ; \
-	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	echo "const char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
 	while [ $$il -le $$lc ] ; do \
 	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
 	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \

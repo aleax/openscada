@@ -1237,7 +1237,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	h_w_start, h_w_size,	//Trend window horizontal start and size
 	v_w_start, v_w_size;	//Trend window vertical start and size
     string sclMarkFont = "Times";
-    int mrkFontSize = 8;
+    int mrkFontSize = 8, begMarkBrd = -1, endMarkBrd;
 
     //> Check and get data
     if( ibeg >= iend || valType( ) == TFld::String )	return rez;
@@ -1250,10 +1250,12 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     v_w_start = hv_border;
     v_w_size  = vsz-v_w_start-hv_border;
 
+    int mrkHeight = 0;
     int brect[8];
-    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
-    int mrkHeight = brect[3]-brect[7];
-    if( mrkHeight <= 0 ) return rez;
+    char *gdR = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
+    if( gdR ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),gdR);
+    else mrkHeight = brect[3]-brect[7];
+    //if( mrkHeight <= 0 ) return rez;
 
     v_w_size -= 2*mrkHeight;
 
@@ -1271,7 +1273,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     long long h_div = 1;
     long long h_min = ibeg;
     long long h_max = iend;
-    int hmax_ln = vsz/mrkHeight;
+    int hmax_ln = vsz/(mrkHeight?mrkHeight:10);
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
@@ -1303,22 +1305,24 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	if(!buf.end() || !buf.begin())	{ gdImageDestroy(im); return rez; }
 
 	//>> Draw full trend's data and time to the trend end position
-	tm_t = iend/1000000;
-	localtime_r(&tm_t,&ttm);
-	lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-	if( ttm.tm_sec == 0 && iend%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-	else if( iend%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
-	else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(iend%1000000)/1e6);
+	if( mrkHeight )
+	{
+	    tm_t = iend/1000000;
+	    localtime_r(&tm_t,&ttm);
+	    lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
+	    if( ttm.tm_sec == 0 && iend%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+	    else if( iend%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+	    else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(iend%1000000)/1e6);
 
-	gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
-	int markBrd = h_w_start+h_w_size-(brect[2]-brect[6]);
-	int begMarkBrd = -1;
-	int endMarkBrd = markBrd;
-	gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,v_w_start+v_w_size+3+2*mrkHeight,(char*)lab_dt.c_str());
-	gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
-	markBrd = h_w_start+h_w_size-(brect[2]-brect[6]);
-	vmin(endMarkBrd,markBrd);
-	gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,v_w_start+v_w_size+3+mrkHeight,(char*)lab_tm.c_str());
+	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
+	    int markBrd = h_w_start+h_w_size-(brect[2]-brect[6]);
+	    endMarkBrd = markBrd;
+	    gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,v_w_start+v_w_size+3+2*mrkHeight,(char*)lab_dt.c_str());
+	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
+	    markBrd = h_w_start+h_w_size-(brect[2]-brect[6]);
+	    vmin(endMarkBrd,markBrd);
+	    gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,v_w_start+v_w_size+3+mrkHeight,(char*)lab_tm.c_str());
+	}
 
 	//>> Draw grid and/or markers
 	bool first_m = true;
@@ -1328,7 +1332,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	    int h_pos = h_w_start+h_w_size*(i_h-h_min)/(h_max-h_min);
 	    gdImageLine(im,h_pos,v_w_start,h_pos,v_w_start+v_w_size,clr_grid);
 
-	    if( !(i_h%h_div) && i_h != iend )
+	    if( mrkHeight && !(i_h%h_div) && i_h != iend )
 	    {
 		tm_t = i_h/1000000;
 		localtime_r(&tm_t,&ttm);
@@ -1421,8 +1425,9 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	int v_pos = v_w_start+v_w_size-(int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
 	gdImageLine(im,h_w_start,v_pos,h_w_start+h_w_size,v_pos,clr_grid);
 	bool isMax = (fabs((v_max-i_v)/v_div) < 0.1);
-	gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,hv_border+2,v_pos+(isMax?mrkHeight:0),
-	    (char*)TSYS::strMess("%g",i_v).c_str());
+	if( mrkHeight )
+	    gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,hv_border+2,v_pos+(isMax?mrkHeight:0),
+		(char*)TSYS::strMess("%g",i_v).c_str());
     }
 
     //> Draw trend

@@ -370,7 +370,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
 	//- Prepare plain text file -
 	char s_buf[STR_BUF_LEN];
 	snprintf(s_buf,sizeof(s_buf),"%s %s %8s %8x %8x\n",
-	    mod->modId().c_str(),mod->modInfo("Version").c_str(),m_chars.c_str(),m_beg,m_end);
+	    mod->modId().c_str(),mod->modInfo("Version").c_str(),m_chars.c_str(),(unsigned int)m_beg,(unsigned int)m_end);
 	if( write(hd,s_buf,strlen(s_buf)) < 0 )
 	    throw TError(owner().nodePath().c_str(),_("Write to file error: %s"),strerror(errno));
     }
@@ -592,11 +592,11 @@ void MFileArch::put( TMess::SRec mess )
 	    {
 		m_end = mess.time;
 		snprintf(buf,sizeof(buf),"%s %s %8s %8x %8x\n",
-		    mod->modId().c_str(),mod->modInfo("Version").c_str(),m_chars.c_str(),m_beg,m_end);
+		    mod->modId().c_str(),mod->modInfo("Version").c_str(),m_chars.c_str(),(unsigned int)m_beg,(unsigned int)m_end);
 		fwrite(buf,strlen(buf),1,f);
 	    }
 	    //> Prepare and put mess to end file
-	    snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",mess.time,mess.utime,mess.level,
+	    snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
 		Mess->codeConvOut(m_chars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
 		Mess->codeConvOut(m_chars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
 	    fseek(f,0,SEEK_END);
@@ -615,12 +615,14 @@ void MFileArch::put( TMess::SRec mess )
 	    time_t last_tm = 0;
 	    while(fgets(buf,sizeof(buf),f) != NULL)
 	    {
-		sscanf(buf,"%x %*d",&m_tm);
+		unsigned int tTm;
+		sscanf(buf,"%x %*d",&tTm);
+		m_tm = tTm;
 		if( m_tm > mess.time )
 		{
 		    int prev_m_len = strlen(buf);
 		    //>>> Prepare message
-		    snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",mess.time,mess.utime,mess.level,
+		    snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
 			Mess->codeConvOut(m_chars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
 			Mess->codeConvOut(m_chars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
 		    string s_buf = buf;
@@ -718,8 +720,9 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	time_t last_tm = 0;
 	while( fgets(buf,sizeof(buf),f) != NULL && mess.size() < TArchiveS::max_req_mess )
 	{
-	    char stm[51]; int off = 0;
-	    sscanf(buf,"%50s %d",stm,&b_rec.level);
+	    char stm[51]; int off = 0, bLev;
+	    sscanf(buf,"%50s %d",stm,&bLev);
+	    b_rec.level = (TMess::Type)bLev;
 	    b_rec.time = strtol(TSYS::strSepParse(stm,0,':',&off).c_str(),NULL,16);
 	    b_rec.utime = atoi(TSYS::strSepParse(stm,0,':',&off).c_str());
 	    if( b_rec.time >= e_tm ) break;

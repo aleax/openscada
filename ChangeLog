@@ -1,3 +1,8 @@
+2009-08-05 Roman
+- !!:/UI/Vision: Interface translation to German is added by Irina Popkova.
+- FIX:/Archive, /UI/WebVision: LibGD2 function gdImageStringFT error open font print is added. Drawing images without text is released.
+
+
 2009-08-04 Maxim,Roman
 - FIX:/DAQ/JavaLikeCalc: Object source detect is fixed.
 

@@ -244,9 +244,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/moduls/ui/WebCfgD/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/moduls/ui/WebCfgD/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/moduls/ui/WebCfgD/Makefile
+	  $(AUTOMAKE) --gnu  src/moduls/ui/WebCfgD/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -516,7 +516,7 @@ uninstall-am: uninstall-local uninstall-oscd_modulLTLIBRARIES
 VCAjs.cpp: WebCfgDVCA.js
 	@lc=`cat $< | wc -l` ; \
 	il=1 ; \
-	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	echo "const char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
 	while [ $$il -le $$lc ] ; do \
 	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
 	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \
@@ -527,7 +527,7 @@ VCAjs.cpp: WebCfgDVCA.js
 VCAhtml.cpp: WebCfgDVCA.html
 	@lc=`cat $< | wc -l` ; \
 	il=1 ; \
-	echo "char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
+	echo "const char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
 	while [ $$il -le $$lc ] ; do \
 	  l="   \"`cat $< | sed -n $${il}p | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\\\"/g'`\\n\""; \
 	  if [ $$il -eq $$lc ]; then l="$$l;"; fi; \

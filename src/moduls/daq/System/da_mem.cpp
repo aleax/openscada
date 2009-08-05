@@ -61,7 +61,7 @@ void Mem::deInit( TMdPrm *prm )
 
 void Mem::getVal( TMdPrm *prm )
 {
-    long m_total, m_free, m_buff, m_cach, sw_total, sw_free;
+    int m_total, m_free, m_buff, m_cach, sw_total, sw_free;
     char buf[256];
 
     FILE *f = fopen("/proc/meminfo","r");

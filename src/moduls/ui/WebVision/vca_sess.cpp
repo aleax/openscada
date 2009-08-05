@@ -4792,9 +4792,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
-	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
-	    mrkHeight = brect[3]-brect[7];
-	    if( mrkHeight <= 0 )	{ makeImgPng(ses,im); return; }
+	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
+	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
+	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
 	        if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
@@ -4805,7 +4805,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
     //> Calc horizontal scale
     long long hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&0x2)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
+    int hmax_ln = tArW / (int)((sclHor&0x2 && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
@@ -4834,7 +4834,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -1;
 	    int endMarkBrd = tArX+tArW;
-	    if( sclHor&0x2 )
+	    if( sclHor&0x2 && mrkHeight )
 	    {
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
@@ -4861,7 +4861,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
 		else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
 		//>>>> Draw markers
-		if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
+		if( sclHor&0x2 && mrkHeight && !(i_h%hDiv) && i_h != tPict )
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t,&ttm);
@@ -4968,7 +4968,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	else { vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
     }
 
-    float vmax_ln = tArH / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
+    float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1;
@@ -4990,7 +4990,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
 		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
 		//>>> Draw markers
-		if( sclVer&0x2 )
+		if( sclVer&0x2 && mrkHeight )
 		{
 		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
 		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
@@ -5147,14 +5147,14 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	//>> Set grid color
 	clr_grid = gdImageColorAllocate(im,(ui8)(sclColor>>16),(ui8)(sclColor>>8),(ui8)sclColor);
-	if( sclHor&0x2 || sclVer&0x2 )
+	if( (sclHor&0x2 || sclVer&0x2) && mrkHeight )
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));
 	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
-	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
-	    mrkHeight = brect[3]-brect[7];
-	    if( mrkHeight <= 0 ) { makeImgPng(ses,im); return; }
+	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
+	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
+	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
 		if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
@@ -5169,7 +5169,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     fftBeg = 1e6/(double)tSz;			//Minimum frequency or maximum period time (s)
     fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;				//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&0x2)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
+    int hmax_ln = tArW / (int)((sclHor&0x2 && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
     if( hmax_ln >= 2 )
     {
 	double hLen = fftEnd-fftBeg;
@@ -5190,7 +5190,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -1;
 	    int endMarkBrd = tArX+tArW;
-	    if( sclHor&0x2 )
+	    if( sclHor&0x2 && mrkHeight )
 	    {
 		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
 		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
@@ -5206,7 +5206,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
 		else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
 
-		if( sclHor&0x2 )
+		if( sclHor&0x2 && mrkHeight )
 		{
 		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
 		    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
@@ -5251,7 +5251,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	}
     }
 
-    double vmax_ln = tArH / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
+    double vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1.;
@@ -5271,7 +5271,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
 		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
 		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
-		if( sclVer&0x2 )
+		if( sclVer&0x2 && mrkHeight )
 		{
 		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
 		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),

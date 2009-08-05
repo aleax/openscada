@@ -70,7 +70,7 @@ void NetStat::init( TMdPrm *prm )
 
 void NetStat::dList( vector<string> &list, bool part )
 {
-    unsigned int rcv, trns;
+    long unsigned int rcv, trns;
     char name[11] = "",
 	 buf[256] = "";
 
