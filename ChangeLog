@@ -1,3 +1,10 @@
+2009-08-06 Roman
+- !!:/UI/WebCfg: Interface translation to German is added by Irina Popkova.
+- !!:/SYS: Removed files which creation by "autoreconf -iv" from repository.
+- FIX:/Archive/FSArch: Resource get is fixed for aprchive's files pack for messages.
+- /System/FLibSYS: The algorithm of realisation function floatMergeWord() is some changed.
+
+
 2009-08-05 Roman
 - !!:/UI/Vision: Interface translation to German is added by Irina Popkova.
 - FIX:/Archive, /UI/WebVision: LibGD2 function gdImageStringFT error open font print is added. Drawing images without text is released.

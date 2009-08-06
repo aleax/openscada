@@ -1010,10 +1010,8 @@ class floatMergeWord : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    float vl = 0;
-	    *((ui16*)&vl) = val->getI(1);
-	    *(((ui16*)&vl)+1) = val->getI(2);
-	    val->setR(0,vl);
+	    ui32 vl = ((val->getI(2)&0xffff)<<16) | val->getI(1)&0xffff;
+	    val->setR(0,*(float*)&vl);
 	}
 };
 

@@ -334,7 +334,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* FSArch::MFileArch - Messages archivator file  *
 //*************************************************
-MFileArch::MFileArch( ModMArch *owner ) : 
+MFileArch::MFileArch( ModMArch *owner ) :
     m_xml(true), m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false), m_pack(false),
     m_size(0), m_chars("UTF-8"), m_beg(0), m_end(0), m_node(NULL)
 {
@@ -542,10 +542,13 @@ void MFileArch::attach( const string &iname, bool full )
 void MFileArch::put( TMess::SRec mess )
 {
     if( m_err ) throw TError(owner().nodePath().c_str(),_("Inserting message to an error Archive file!"));
+
+    ResAlloc res(m_res,true);
+
     if( m_pack ) { m_name = mod->unPackArch(name()); m_pack = false; }
     if( !m_load )
     {
-	attach( m_name );
+	res.release(); attach( m_name ); res.request(true);
 	if( m_err || !m_load )
 	{
 	    m_err = true;
@@ -553,7 +556,6 @@ void MFileArch::put( TMess::SRec mess )
 	}
     }
 
-    ResAlloc res(m_res,true);
     m_acces = time(NULL);
 
     if( xmlM() )
@@ -669,14 +671,16 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
     TMess::SRec b_rec;
 
     if( m_err ) throw TError(owner().nodePath().c_str(),_("Getting messages from an error Archive file!"));
+
+    ResAlloc res(m_res,false);
+
     if( m_pack ){ m_name = mod->unPackArch(name()); m_pack = false; }
     if( !m_load )
     {
-	attach( m_name );
+	res.release(); attach( m_name ); res.request(false);
 	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attached!"));
     }
 
-    ResAlloc res(m_res,false);
     m_acces = time(NULL);
 
     if( xmlM() )
@@ -780,7 +784,7 @@ void MFileArch::check( bool free )
 	}
     }
     //> Check for pack archive file
-    if( !m_err && !m_pack && owner().packTm() && (time(NULL) > m_acces + owner().packTm()*60) && ((xmlM() && !m_load) || !xmlM()) )
+    if( !m_err && !m_pack && owner().packTm() && time(NULL) > (m_acces+owner().packTm()*60) && ((xmlM() && !m_load) || !xmlM()) )
     {
 	m_name = mod->packArch(name());
 	m_pack = true;
