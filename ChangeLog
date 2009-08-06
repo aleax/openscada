@@ -3,6 +3,7 @@
 - !!:/SYS: Removed files which creation by "autoreconf -iv" from repository.
 - FIX:/Archive/FSArch: Resource get is fixed for aprchive's files pack for messages.
 - /System/FLibSYS: The algorithm of realisation function floatMergeWord() is some changed.
+- FIX:/UI/Vision, /UI/QTCfg: Events going to underlie button on time increase and decrease buttons is fixed for LineEdit element on last QT 4.5.
 
 
 2009-08-05 Roman

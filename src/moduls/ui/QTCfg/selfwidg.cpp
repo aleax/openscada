@@ -115,6 +115,7 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
 	//bt_fld->setMaximumWidth( 15 );
 	bt_fld->setEnabled( false );
 	bt_fld->setVisible( false );
+	bt_fld->blockSignals( true );
 	connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
 	box->addWidget( bt_fld );
     }
@@ -176,11 +177,12 @@ void LineEdit::setType( LType tp )
 
 void LineEdit::changed( )
 {
-    //- Enable apply
+    //> Enable apply
     if( bt_fld && !bt_fld->isEnabled() )
     {
-	bt_fld->setEnabled(true);
-	bt_fld->setVisible(true);
+	bt_fld->setEnabled( true );
+	bt_fld->setVisible( true );
+	bt_fld->blockSignals( false );
 	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );
     }
 
@@ -219,8 +221,9 @@ void LineEdit::setValue(const QString &txt)
 
     if( bt_fld && bt_fld->isEnabled() )
     {
-        bt_fld->setEnabled(false);
-        bt_fld->setVisible(false);
+        bt_fld->setEnabled( false );
+        bt_fld->setVisible( false );
+        bt_fld->blockSignals( true );
     }
 }
 
@@ -283,8 +286,9 @@ void LineEdit::setCfg(const QString &cfg)
     }
     if( bt_fld && bt_fld->isEnabled() )
     {
-	bt_fld->setEnabled(false);
-	bt_fld->setVisible(false);
+	bt_fld->setEnabled( false );
+	bt_fld->setVisible( false );
+	bt_fld->blockSignals( true );
     }
 }
 
@@ -307,8 +311,9 @@ void LineEdit::applySlot( )
 {
     emit valChanged(value());
 
-    bt_fld->setEnabled(false);
-    bt_fld->setVisible(false);
+    bt_fld->setEnabled( false );
+    bt_fld->setVisible( false );
+    bt_fld->blockSignals( true );
 
     m_val = value();
 

@@ -408,6 +408,7 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
 	//bt_fld->setFlat( true );
 	bt_fld->setEnabled( false );
 	bt_fld->setVisible( false );
+	bt_fld->blockSignals( true );
 	connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
 	box->addWidget(bt_fld);
     }
@@ -468,11 +469,12 @@ void LineEdit::setType( LType tp )
 
 void LineEdit::changed( )
 {
-    //- Enable apply
+    //> Enable apply
     if( bt_fld && !bt_fld->isEnabled() )
     {
-	bt_fld->setEnabled(true);
-	bt_fld->setVisible(true);
+	bt_fld->setEnabled( true );
+	bt_fld->setVisible( true );
+	bt_fld->blockSignals( false );
 	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );
     }
 
@@ -511,8 +513,9 @@ void LineEdit::setValue( const QString &txt )
 
     if( bt_fld && bt_fld->isEnabled() )
     {
-        bt_fld->setEnabled(false);
-        bt_fld->setVisible(false);
+        bt_fld->setEnabled( false );
+        bt_fld->setVisible( false );
+        bt_fld->blockSignals( true );
     }
 }
 
@@ -578,8 +581,9 @@ void LineEdit::setCfg(const QString &cfg)
     }
     if( bt_fld && bt_fld->isEnabled() )
     {
-	bt_fld->setEnabled(false);
-	bt_fld->setVisible(false);
+	bt_fld->setEnabled( false );
+	bt_fld->setVisible( false );
+	bt_fld->blockSignals( true );
     }
 }
 
@@ -600,8 +604,9 @@ QString LineEdit::value()
 
 void LineEdit::applySlot( )
 {
-    bt_fld->setEnabled(false);
-    bt_fld->setVisible(false);
+    bt_fld->setEnabled( false );
+    bt_fld->setVisible( false );
+    bt_fld->blockSignals( true );
 
     m_val = value();
 
@@ -610,10 +615,10 @@ void LineEdit::applySlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled())
+    if( e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled() )
     {
         QKeyEvent *keyEvent = (QKeyEvent *)e;
-        if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+        if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )
         {
 	    bt_fld->animateClick( );
 	    return true;
