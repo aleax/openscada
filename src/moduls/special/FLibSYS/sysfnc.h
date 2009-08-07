@@ -23,6 +23,7 @@
 #define SYSFNC_H
 
 #include <time.h>
+#include <stdint.h>
 
 #include <tfunction.h>
 
