@@ -183,7 +183,7 @@ TProtocolIn *TProt::in_open( const string &name )
     return new TProtIn(name);
 }
 
-ui8 TProt::CRCHi[] =
+uint8_t TProt::CRCHi[] =
 {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
     0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
@@ -203,7 +203,7 @@ ui8 TProt::CRCHi[] =
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40
 };
 
-ui8 TProt::CRCLo[] =
+uint8_t TProt::CRCLo[] =
 {
     0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5, 0xC4, 0x04,
     0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09, 0x08, 0xC8,
@@ -223,32 +223,32 @@ ui8 TProt::CRCLo[] =
     0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80, 0x40
 };
 
-ui16 TProt::CRC16( const string &mbap )
+uint16_t TProt::CRC16( const string &mbap )
 {
-    ui8 hi = 0xFF;
-    ui8 lo = 0xFF;
-    ui16 index;
+    uint8_t hi = 0xFF;
+    uint8_t lo = 0xFF;
+    uint16_t index;
     for( int i_b = 0; i_b < mbap.size(); i_b++ )
     {
-	index = lo^(ui8)mbap[i_b];
+	index = lo^(uint8_t)mbap[i_b];
 	lo = hi^CRCHi[index];
 	hi = CRCLo[index];
     }
     return hi|(lo<<8);
 }
 
-ui8 TProt::LRC( const string &mbap )
+uint8_t TProt::LRC( const string &mbap )
 {
-    ui8 ch = 0;
+    uint8_t ch = 0;
     for( int i_b = 0; i_b < mbap.size(); i_b++ )
-	ch += (ui8)mbap[i_b];
+	ch += (uint8_t)mbap[i_b];
 
     return ch;
 }
 
 string TProt::DataToASCII( const string &in )
 {
-    ui8 ch;
+    uint8_t ch;
     string rez;
 
     for( int i = 0; i < in.size(); i++ )
@@ -264,7 +264,7 @@ string TProt::DataToASCII( const string &in )
 
 string TProt::ASCIIToData( const string &in )
 {
-    ui8 ch1, ch2;
+    uint8_t ch1, ch2;
     string rez;
 
     for( int i=0; i < (in.size()&(~0x01)); i+=2 )
@@ -333,9 +333,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	}
 	else if( prt == "RTU" )		// Modbus/RTU protocol process
 	{
-	    mbap = (ui8)node;			//Unit identifier
+	    mbap = (uint8_t)node;			//Unit identifier
 	    mbap += pdu;
-	    ui16 crc = CRC16( mbap );
+	    uint16_t crc = CRC16( mbap );
 	    mbap += crc >> 8;
 	    mbap += crc;
 
@@ -346,7 +346,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		rez.assign(buf,resp_len);
 
 		if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
-		if( CRC16(rez.substr(0,rez.size()-2)) != (ui16)((rez[rez.size()-2]<<8)+(ui8)rez[rez.size()-1]) )
+		if( CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
 		{ err = _("13:Error respond: CRC check error."); continue; }
 		pdu = rez.substr( 1, rez.size()-3 );
 		err = "";
@@ -355,7 +355,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	}
 	else if( prt == "ASCII" )	// Modbus/ASCII protocol process
 	{
-	    mbap = (ui8)node;			//Unit identifier
+	    mbap = (uint8_t)node;			//Unit identifier
 	    mbap += pdu;
 	    mbap += LRC(mbap);
 	    mbap = ":"+DataToASCII(mbap)+"\r\n";
@@ -522,7 +522,7 @@ retry:
     }
     //>> RTU check
     else if( reqst.size() > 3 && reqst.size() <= 256 &&
-	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (ui16)((reqst[reqst.size()-2]<<8)+(ui8)reqst[reqst.size()-1]) )
+	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (uint16_t)((reqst[reqst.size()-2]<<8)+(uint8_t)reqst[reqst.size()-1]) )
     {
 	prt = "RTU";
 	node = reqst[0];
@@ -571,15 +571,15 @@ retry:
     }
     else if( prt == "RTU" )
     {
-	answer = (ui8)node;			//Unit identifier
+	answer = (uint8_t)node;			//Unit identifier
 	answer += pdu;
-	ui16 crc = modPrt->CRC16( answer );
+	uint16_t crc = modPrt->CRC16( answer );
 	answer += crc>>8;
 	answer += crc;
     }
     else if( prt == "ASCII" )
     {
-	answer = (ui8)node;			//Unit identifier
+	answer = (uint8_t)node;			//Unit identifier
 	answer += pdu;
 	answer += modPrt->LRC(answer);
 	answer = ":"+modPrt->DataToASCII(answer)+"\r\n";

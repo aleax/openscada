@@ -442,7 +442,7 @@ Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double ySc
 //- Painting existing inundationItems -
 void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
 {
-    int fill_clr = gdImageColorResolveAlpha( im, (ui8)(in_item.P_color>>16), (ui8)(in_item.P_color>>8), (ui8)in_item.P_color, 127 - (ui8)(in_item.P_color>>24) ); 
+    int fill_clr = gdImageColorResolveAlpha( im, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24) ); 
     in_item.index_color = fill_clr;
     gdImageFill( im, (int) TSYS::realRound(pnt.x), 
                      (int) TSYS::realRound(pnt.y),  fill_clr );
@@ -999,7 +999,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 t_start = item.ctrlPos4.x;
                 t_end = item.ctrlPos4.y;
                 if( flag_allocate )
-                    clr_el = gdImageColorResolveAlpha( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor, 127 - (ui8)(item.lineColor>>24) );
+                    clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
                 else clr_el = item.lineColor;
                 if( item.style != 0 && flag_style )//---- Drawing the dashed or dotted arc with borders' width == 0 ----
                 {
@@ -1045,9 +1045,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 gdImageSetThickness( im, item.border_width );
                 if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
                 else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-                clr_el_line = gdImageColorResolveAlpha( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor, 127 - (ui8)(item.lineColor>>24) );
+                clr_el_line = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
                 if( flag_allocate )
-                    clr_el = gdImageColorResolveAlpha( im, (ui8)(item.borderColor>>16), (ui8)(item.borderColor>>8), (ui8)item.borderColor, 127 - (ui8)(item.borderColor>>24) );
+                    clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
                 else
                 {
                     clr_el = item.borderColor;
@@ -1498,7 +1498,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
         if( item.border_width == 0 )//--- Drawing the bezier curve with borders' width == 0 ---
         {
             if( flag_allocate )
-                clr_el = gdImageColorResolveAlpha( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor, 127 - (ui8)(item.lineColor>>24) );
+                clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
             else clr_el = item.lineColor;
             t_start = 0;
             t_end = 1;
@@ -1560,8 +1560,8 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
             else
                 el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
-            clr_el_line = gdImageColorResolveAlpha( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor, 127 - (ui8)(item.lineColor>>24) );
-            if( flag_allocate ) clr_el = gdImageColorResolveAlpha( im, (ui8)(item.borderColor>>16), (ui8)(item.borderColor>>8), (ui8)item.borderColor, 127 - (ui8)(item.borderColor>>24) );
+            clr_el_line = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+            if( flag_allocate ) clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
             else 
             {
                 clr_el = item.borderColor;
@@ -1953,7 +1953,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             if( item.border_width == 0 )//--- Drawing the line with borders' width == 0 ---
             {
                 if( flag_allocate )
-                    clr_el = gdImageColorResolveAlpha( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor, 127 - (ui8)(item.lineColor>>24) );
+                    clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
                 else clr_el =item.lineColor;
                 gdImageSetThickness( im, item.width );
                 //---- Drawing the dashed line with borders' width == 0 ----
@@ -1973,9 +1973,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             }
             else//--- Drawing the line with borders' width > 0 ---
             {
-                clr_el_line = gdImageColorResolveAlpha( im, (ui8)(item.lineColor>>16), (ui8)(item.lineColor>>8), (ui8)item.lineColor, 127 - (ui8)(item.lineColor>>24) );
+                clr_el_line = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
                 if( flag_allocate )
-                    clr_el = gdImageColorResolveAlpha( im, (ui8)(item.borderColor>>16), (ui8)(item.borderColor>>8), (ui8)item.borderColor, 127 - (ui8)(item.borderColor>>24) );
+                    clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
                 else 
                 {
                     clr_el = item.borderColor;
@@ -2463,8 +2463,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
         else
         {
             int tmp_clr;
-            tmp_clr = gdImageColorResolveAlpha( im1, (ui8)(inundationItems[i].P_color>>16), (ui8)(inundationItems[i].P_color>>8), 
-                                                     (ui8)inundationItems[i].P_color, 127 - (ui8)(inundationItems[i].P_color>>24) );
+            tmp_clr = gdImageColorResolveAlpha( im1, (uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8), 
+                                                     (uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24) );
 
             for( int j = 0; j < shape_temp.size(); j++ )
                 if( shapeItems[shape_temp[j]].type == 2 )
@@ -3824,7 +3824,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                 xMax_rot = (int)TSYS::realRound( xMax_rot, 2, true );
                                 yMax_rot = (int)TSYS::realRound( yMax_rot, 2, true );
 
-                                double alpha_col = (double)(ui8)(inundationItems[i].P_color>>24)/127;
+                                double alpha_col = (double)(uint8_t)(inundationItems[i].P_color>>24)/127;
                                 double color_r, color_g, color_b;
                                 int rgb;
                                 gdImageAlphaBlending(im1,0);
@@ -3853,16 +3853,16 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                             drw_pnt1.y = scaleRotate( drw_pnt, xSc, ySc, false, true ).y;
 
                                             if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
-                                            color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (ui8)( inundationItems[i].P_color>>16 ) );
-                                            color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (ui8)( inundationItems[i].P_color>>8 ) );
-                                            color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (ui8)inundationItems[i].P_color );
+                                            color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>16 ) );
+                                            color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>8 ) );
+                                            color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)inundationItems[i].P_color );
                                             /*int color = gdImageColorResolve( im1, (int)TSYS::realRound( color_r, 2, true ),
                                                                                 (int)TSYS::realRound( color_g, 2, true ),
                                                                                 (int)TSYS::realRound( color_b, 2, true ) );*/
                                             int color = gdImageColorResolveAlpha( im1, (int)TSYS::realRound( color_r, 2, true ),
                                                                                        (int)TSYS::realRound( color_g, 2, true ),
                                                                                        (int)TSYS::realRound( color_b, 2, true ),
-                                                                                       127 - (ui8)(inundationItems[i].P_color>>24) );
+                                                                                       127 - (uint8_t)(inundationItems[i].P_color>>24) );
                                             gdImageSetPixel( im1, (int)TSYS::realRound( drw_pnt1.x, 2, true ) , (int)TSYS::realRound( drw_pnt1.y, 2, true ), color );
                                         }
                                         im_x += 1;
@@ -4786,12 +4786,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if( sclHor&0x3 || sclVer&0x3 )
     {
 	//>> Set grid color
-	clr_grid = gdImageColorAllocate(im,(ui8)(sclColor>>16),(ui8)(sclColor>>8),(ui8)sclColor);
+	clr_grid = gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
-	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
+	    clr_mrk = gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
@@ -5004,7 +5004,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     for( int i_t = 0; i_t < parNum; i_t++ )
     {
 	//>> Set trend's pen
-	int clr_t = gdImageColorAllocate(im,(ui8)(trnds[i_t].color()>>16),(ui8)(trnds[i_t].color()>>8),(ui8)trnds[i_t].color());
+	int clr_t = gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 
 	//>> Prepare generic parameters
 	aVbeg = vmax(tBeg,trnds[i_t].valBeg());
@@ -5092,7 +5092,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if( active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict) )
     {
 	//>> Set trend's pen
-	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);
+	int clr_cur = gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
 	int curPos = tArX+tArW*(curTime-tBeg)/(tPict-tBeg);
 	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
@@ -5146,12 +5146,12 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     if( sclHor&0x3 || sclVer&0x3 )
     {
 	//>> Set grid color
-	clr_grid = gdImageColorAllocate(im,(ui8)(sclColor>>16),(ui8)(sclColor>>8),(ui8)sclColor);
+	clr_grid = gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
 	if( (sclHor&0x2 || sclVer&0x2) && mrkHeight )
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));
-	    clr_mrk = gdImageColorAllocate(im,(ui8)(sclMarkColor>>16),(ui8)(sclMarkColor>>8),(ui8)sclMarkColor);
+	    clr_mrk = gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
@@ -5286,7 +5286,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	if( !trnds[i_t].fftN ) continue;
 
-	int clr_t = gdImageColorAllocate(im,(ui8)(trnds[i_t].color()>>16),(ui8)(trnds[i_t].color()>>8),(ui8)trnds[i_t].color());
+	int clr_t = gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;
 	double fftDt = (1e6/(double)tSz)*(double)width/trnds[i_t].fftN;
 
@@ -5352,7 +5352,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	float curFrq = vmax(vmin(1e6/(float)curTime,fftEnd),fftBeg);
 	int curPos = tArX+(int)(tArW*(curFrq-fftBeg)/(fftEnd-fftBeg));
-	int clr_cur = gdImageColorAllocate(im,(ui8)(curColor>>16),(ui8)(curColor>>8),(ui8)curColor);
+	int clr_cur = gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
 	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
 

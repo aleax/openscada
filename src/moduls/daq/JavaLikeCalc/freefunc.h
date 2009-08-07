@@ -360,7 +360,7 @@ class Func : public TConfig, public TFunction
 	void saveIO( );
 	void delIO( );
 
-	void exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt );
+	void exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt );
 
     private:
 	//Attributes

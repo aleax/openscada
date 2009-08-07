@@ -310,7 +310,7 @@ void Session::alarmSet( const string &wpath, const string &alrm )
 
 int Session::alarmStat( )
 {
-    ui8 alev = 0, atp = 0, aqtp = 0;
+    uint8_t alev = 0, atp = 0, aqtp = 0;
     vector<string> ls;
     list( ls );
     for( int i_p = 0; i_p < ls.size(); i_p++ )
@@ -324,7 +324,7 @@ int Session::alarmStat( )
     return (aqtp<<16)|(atp<<8)|alev;
 }
 
-void Session::alarmQuittance( const string &wpath, ui8 quit_tmpl )
+void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl )
 {
     if( !wpath.empty() ) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance( quit_tmpl, true );
     else
@@ -829,7 +829,7 @@ void SessPage::alarmSet( bool isSet )
     if( isSet )	ownerSess( )->alarmSet( path(), aCur );
 }
 
-void SessPage::alarmQuittance( ui8 quit_tmpl, bool isSet )
+void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
     if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
@@ -1187,7 +1187,7 @@ void SessWdg::alarmSet( bool isSet )
     if( isSet )	ownerSess( )->alarmSet( path(), aCur );
 }
 
-void SessWdg::alarmQuittance( ui8 quit_tmpl, bool isSet )
+void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
     if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;

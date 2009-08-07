@@ -86,7 +86,7 @@ class Session : public TCntrNode
 	//- Alarms process -
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
-	void alarmQuittance( const string &wpath, ui8 quit_tmpl );	//Alarm quittance send
+	void alarmQuittance( const string &wpath, uint8_t quit_tmpl );	//Alarm quittance send
 
 	//Attributes
 	AutoHD<TSecurity> sec;
@@ -105,13 +105,13 @@ class Session : public TCntrNode
 	{
 	    public:
 		//Methods
-		Alarm( const string &ipath, ui8 ilev, ui8 itp, const string &icat, const string &imess, const string &itpArg = "", unsigned iclc = 0 ) :
+		Alarm( const string &ipath, uint8_t ilev, uint8_t itp, const string &icat, const string &imess, const string &itpArg = "", unsigned iclc = 0 ) :
 		    path(ipath), lev(ilev), tp(itp), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
 		Alarm( const string &path, const string &alrm, unsigned clc );
 		Alarm( ) : lev(0), tp(0), qtp(0)	{ }
 
 		//Attributes
-		ui8	    lev,	//Level
+		uint8_t	    lev,	//Level
 			    tp,		//Type
 			    qtp;	//Quitance type
 		string	    path,	//Widget path
@@ -186,7 +186,7 @@ class SessWdg : public Widget, public TValFunc
 
 	//> Alarms process
 	virtual void alarmSet( bool isSet = false );
-	virtual void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
+	virtual void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 
 	//> Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
@@ -254,7 +254,7 @@ class SessPage : public SessWdg
 
 	//- Alarms process -
 	void alarmSet( bool isSet = false );
-	void alarmQuittance( ui8 quit_tmpl, bool isSet = false );
+	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 
     protected:
 	//Methods

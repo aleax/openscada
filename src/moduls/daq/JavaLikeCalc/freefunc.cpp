@@ -407,31 +407,31 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     *rez = *op;
     op->free();
     if( no_code ) return rez;
-    ui16 addr = rez->pos();
+    uint16_t addr = rez->pos();
 
     switch(rez->type())
     {
 	case Reg::Free:
 	    throw TError(nodePath().c_str(),_("Variable <%s> is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
-	    prg+=(ui8)Reg::MviB;
-	    prg.append((char *)&addr,sizeof(ui16));
-	    prg+=(ui8)rez->val().b_el;
+	    prg+=(uint8_t)Reg::MviB;
+	    prg.append((char *)&addr,sizeof(uint16_t));
+	    prg+=(uint8_t)rez->val().b_el;
 	    break;
 	case Reg::Int:
-	    prg+=(ui8)Reg::MviI;
-	    prg.append((char *)&addr,sizeof(ui16));
+	    prg+=(uint8_t)Reg::MviI;
+	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg.append((char *)&rez->val().i_el,sizeof(int));
 	    break;
 	case Reg::Real:
-	    prg+=(ui8)Reg::MviR;
-	    prg.append((char *)&addr,sizeof(ui16));
+	    prg+=(uint8_t)Reg::MviR;
+	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg.append((char *)&rez->val().r_el,sizeof(double));
 	    break;
 	case Reg::String:
-	    prg+=(ui8)Reg::MviS;
-	    prg.append((char *)&addr,sizeof(ui16));
-	    prg+=(ui8)rez->val().s_el->size();
+	    prg+=(uint8_t)Reg::MviS;
+	    prg.append((char *)&addr,sizeof(uint16_t));
+	    prg+=(uint8_t)rez->val().s_el->size();
 	    prg+= *rez->val().s_el;
 	    break;
     }
@@ -445,9 +445,9 @@ Reg *Func::cdMviObject( )
     rez->setType(Reg::Obj);
 
     //> Make code
-    ui16 addr;
-    prg += (ui8)Reg::MviObject;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    uint16_t addr;
+    prg += (uint8_t)Reg::MviObject;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
 
     return rez;
 }
@@ -471,12 +471,12 @@ Reg *Func::cdMviArray( int p_cnt )
     rez->setType(Reg::Obj);
 
     //> Make code
-    ui16 addr;
-    prg += (ui8)Reg::MviArray;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
-    prg += (ui8)p_cnt;
+    uint16_t addr;
+    prg += (uint8_t)Reg::MviArray;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    prg += (uint8_t)p_cnt;
     for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(ui16)); }
+    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -554,11 +554,11 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 
 void Func::cdAssign( Reg *rez, Reg *op )
 {
-    ui16 addr;
+    uint16_t addr;
     op = cdTypeConv(op,rez->vType(this));
-    prg += (ui8)Reg::Ass;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
-    addr = op->pos();  prg.append((char*)&addr,sizeof(ui16));
+    prg += (uint8_t)Reg::Ass;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = op->pos();  prg.append((char*)&addr,sizeof(uint16_t));
     op->free();		//> Free temp operands
 }
 
@@ -566,15 +566,15 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 {
     if( !force && !op->lock() ) return op;
 
-    ui16 addr;
+    uint16_t addr;
     Reg *rez_n=rez;
     op = cdMvi( op );
     if( rez_n == NULL ) rez_n = regAt(regNew());
     rez_n = cdMvi( rez_n, true );
     rez_n->setType(op->vType(this));
-    prg += (ui8)Reg::Mov;
-    addr = rez_n->pos(); prg.append((char*)&addr,sizeof(ui16));
-    addr = op->pos();    prg.append((char*)&addr,sizeof(ui16));
+    prg += (uint8_t)Reg::Mov;
+    addr = rez_n->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = op->pos();    prg.append((char*)&addr,sizeof(uint16_t));
 
     op->free();	//> Free temp operands
 
@@ -696,31 +696,31 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     //>> Add code
     switch(cod)
     {
-	case Reg::Add:		prg += (ui8)Reg::Add;	break;
-	case Reg::Sub:		prg += (ui8)Reg::Sub;	break;
-	case Reg::Mul:		prg += (ui8)Reg::Mul;	break;
-	case Reg::Div:		prg += (ui8)Reg::Div;	break;
-	case Reg::RstI:		prg += (ui8)Reg::RstI;	break;
-	case Reg::BitOr:	prg += (ui8)Reg::BitOr;	break;
-	case Reg::BitAnd:	prg += (ui8)Reg::BitAnd;	break;
-	case Reg::BitXor:	prg += (ui8)Reg::BitXor;	break;
-	case Reg::BitShLeft:	prg += (ui8)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
-	case Reg::BitShRight:	prg += (ui8)Reg::BitShRight;	rez->setType(Reg::Int);	break;
-	case Reg::LOr:		prg += (ui8)Reg::LOr;	rez->setType(Reg::Bool);	break;
-	case Reg::LAnd:		prg += (ui8)Reg::LAnd;	rez->setType(Reg::Bool);	break;
-	case Reg::LT:		prg += (ui8)Reg::LT;	rez->setType(Reg::Bool);	break;
-	case Reg::GT:		prg += (ui8)Reg::GT;	rez->setType(Reg::Bool);	break;
-	case Reg::LEQ:		prg += (ui8)Reg::LEQ;	rez->setType(Reg::Bool);	break;
-	case Reg::GEQ:		prg += (ui8)Reg::GEQ;	rez->setType(Reg::Bool);	break;
-	case Reg::EQU:		prg += (ui8)Reg::EQU;	rez->setType(Reg::Bool);	break;
-	case Reg::NEQ:		prg += (ui8)Reg::NEQ;	rez->setType(Reg::Bool);	break;
+	case Reg::Add:		prg += (uint8_t)Reg::Add;	break;
+	case Reg::Sub:		prg += (uint8_t)Reg::Sub;	break;
+	case Reg::Mul:		prg += (uint8_t)Reg::Mul;	break;
+	case Reg::Div:		prg += (uint8_t)Reg::Div;	break;
+	case Reg::RstI:		prg += (uint8_t)Reg::RstI;	break;
+	case Reg::BitOr:	prg += (uint8_t)Reg::BitOr;	break;
+	case Reg::BitAnd:	prg += (uint8_t)Reg::BitAnd;	break;
+	case Reg::BitXor:	prg += (uint8_t)Reg::BitXor;	break;
+	case Reg::BitShLeft:	prg += (uint8_t)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
+	case Reg::BitShRight:	prg += (uint8_t)Reg::BitShRight;	rez->setType(Reg::Int);	break;
+	case Reg::LOr:		prg += (uint8_t)Reg::LOr;	rez->setType(Reg::Bool);	break;
+	case Reg::LAnd:		prg += (uint8_t)Reg::LAnd;	rez->setType(Reg::Bool);	break;
+	case Reg::LT:		prg += (uint8_t)Reg::LT;	rez->setType(Reg::Bool);	break;
+	case Reg::GT:		prg += (uint8_t)Reg::GT;	rez->setType(Reg::Bool);	break;
+	case Reg::LEQ:		prg += (uint8_t)Reg::LEQ;	rez->setType(Reg::Bool);	break;
+	case Reg::GEQ:		prg += (uint8_t)Reg::GEQ;	rez->setType(Reg::Bool);	break;
+	case Reg::EQU:		prg += (uint8_t)Reg::EQU;	rez->setType(Reg::Bool);	break;
+	case Reg::NEQ:		prg += (uint8_t)Reg::NEQ;	rez->setType(Reg::Bool);	break;
 	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
     }
 
-    ui16 addr;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
-    addr = op1_pos;    prg.append((char*)&addr,sizeof(ui16));
-    addr = op2_pos;    prg.append((char*)&addr,sizeof(ui16));
+    uint16_t addr;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = op1_pos;    prg.append((char*)&addr,sizeof(uint16_t));
+    addr = op2_pos;    prg.append((char*)&addr,sizeof(uint16_t));
 
     return rez;
 }
@@ -787,14 +787,14 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
     //>> Add code
     switch(cod)
     {
-	case Reg::Not:		prg += (ui8)Reg::Not;	break;
-	case Reg::BitNot:	prg += (ui8)Reg::BitNot;	break;
-	case Reg::Neg:		prg += (ui8)Reg::Neg;	break;
+	case Reg::Not:		prg += (uint8_t)Reg::Not;	break;
+	case Reg::BitNot:	prg += (uint8_t)Reg::BitNot;	break;
+	case Reg::Neg:		prg += (uint8_t)Reg::Neg;	break;
 	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
     }
-    ui16 addr;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
-    addr = op_pos;     prg.append((char*)&addr,sizeof(ui16));
+    uint16_t addr;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = op_pos;     prg.append((char*)&addr,sizeof(uint16_t));
 
     return rez;
 }
@@ -802,7 +802,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *els )
 {
     Reg *rez = NULL;
-    int a_sz = sizeof(ui16);
+    int a_sz = sizeof(uint16_t);
     string cd_tmp;
 
     //> Mvi cond register (insert to programm)
@@ -813,7 +813,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     p_end += prg.size()-p_cmd;
     p_cmd = prg.size();
     prg += cd_tmp;
-    ui16 p_cond = cond->pos(); cond->free();
+    uint16_t p_cond = cond->pos(); cond->free();
 
     if( thn != NULL && els != NULL )
     {
@@ -839,7 +839,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     p_end  -= p_cmd;
 
     //> [CRR00nn]
-    prg.replace(p_cmd+1,sizeof(ui16),(char*)&p_cond,sizeof(ui16));
+    prg.replace(p_cmd+1,sizeof(uint16_t),(char*)&p_cond,sizeof(uint16_t));
     prg.replace(p_cmd+3,a_sz,((char *)&p_else),a_sz);
     prg.replace(p_cmd+3+a_sz,a_sz,((char *)&p_end),a_sz);
 
@@ -848,7 +848,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 
 void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter )
 {
-    int a_sz = sizeof(ui16);
+    int a_sz = sizeof(uint16_t);
     string cd_tmp;
     int p_body = (p_postiter?p_postiter:p_solve)-1;	//Include Reg::End command
 
@@ -860,7 +860,7 @@ void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter
     p_end+=prg.size()-p_body;
     if( p_postiter ) p_postiter+=prg.size()-p_body;
     prg+=cd_tmp;
-    ui16 p_cond = cond->pos();
+    uint16_t p_cond = cond->pos();
     cond->free();
 
     //> Make apropos adress
@@ -869,7 +869,7 @@ void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter
     if( p_postiter ) p_postiter -= p_cmd;
 
     //> [CRRbbaann]
-    prg.replace(p_cmd+1,sizeof(ui16),(char*)&p_cond,sizeof(ui16));
+    prg.replace(p_cmd+1,sizeof(uint16_t),(char*)&p_cond,sizeof(uint16_t));
     prg.replace(p_cmd+3,a_sz,((char *)&p_solve),a_sz);
     prg.replace(p_cmd+3+a_sz,a_sz,((char *)&p_postiter),a_sz);
     prg.replace(p_cmd+3+2*a_sz,a_sz,((char *)&p_end),a_sz);
@@ -878,7 +878,7 @@ void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter
 Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 {
     Reg *rez;
-    ui16 addr;
+    uint16_t addr;
     int p1_pos = -1, p2_pos = -1;
 
     if( (prm1 && prm1->vType(this) == Reg::String) ||
@@ -893,12 +893,12 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     rez = regAt(regNew());
     rez->setType(Reg::Real);
     //> Make code
-    prg += (ui8)f_cod;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    prg += (uint8_t)f_cod;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     if( p1_pos >= 0 )
-    { addr = p1_pos; prg.append((char*)&addr,sizeof(ui16)); }
+    { addr = p1_pos; prg.append((char*)&addr,sizeof(uint16_t)); }
     if( p2_pos >= 0 )
-    { addr = p2_pos; prg.append((char*)&addr,sizeof(ui16)); }
+    { addr = p2_pos; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -946,13 +946,13 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     }
 
     //> Make code
-    ui16 addr;
-    prg += proc ? (ui8)Reg::CProc : (ui8)Reg::CFunc;
-    prg += (ui8)f_id;
-    prg += (ui8)p_cnt;
-    addr = proc ? 0 : rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    uint16_t addr;
+    prg += proc ? (uint8_t)Reg::CProc : (uint8_t)Reg::CFunc;
+    prg += (uint8_t)f_id;
+    prg += (uint8_t)p_cnt;
+    addr = proc ? 0 : rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(ui16)); }
+    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -980,38 +980,38 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     rez->setType(Reg::String);
 
     //> Make code
-    ui16 addr;
-    prg += (ui8)Reg::CFuncObj;
-    addr = obj->pos(); prg.append((char*)&addr,sizeof(ui16));
-    prg += (ui8)p_cnt;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(ui16));
+    uint16_t addr;
+    prg += (uint8_t)Reg::CFuncObj;
+    addr = obj->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    prg += (uint8_t)p_cnt;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
 
     for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(ui16)); }
+    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
 
 Reg *Func::cdProp( Reg *obj, Reg *prp )
 {
-    ui16 addr;
+    uint16_t addr;
     Reg *ro = obj;
     if( !ro->objEl() ) { ro = cdMove( NULL, ro, false ); ro->setObjEl(); }
 
     if( !prp )
     {
-	prg += (ui8)Reg::OPrpSt;
-	addr = ro->pos(); prg.append((char*)&addr,sizeof(ui16));
-	prg += (ui8)o_prpf.size();
+	prg += (uint8_t)Reg::OPrpSt;
+	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+	prg += (uint8_t)o_prpf.size();
 	prg += o_prpf;
     }
     else
     {
 	prp = cdMvi( prp );
 
-	prg += (ui8)Reg::OPrpDin;
-	addr = ro->pos(); prg.append((char*)&addr,sizeof(ui16));
-	addr = prp->pos(); prg.append((char*)&addr,sizeof(ui16));
+	prg += (uint8_t)Reg::OPrpDin;
+	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+	addr = prp->pos(); prg.append((char*)&addr,sizeof(uint16_t));
 
 	prp->free();
     }
@@ -1384,13 +1384,13 @@ void Func::calc( TValFunc *val )
 
     //> Exec calc
     ExecData dt = { 1, 0, 0 };
-    try{ exec(val,reg,(const ui8*)prg.c_str(),dt); }
+    try{ exec(val,reg,(const uint8_t*)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     res.release();
     if( dt.flg&0x07 == 0x01 )	setStart(false);
 }
 
-void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
+void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 {
     while( !(dt.flg&0x01) )
     {
@@ -1413,131 +1413,131 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 	    //>> MVI codes
 	    case Reg::MviB:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load bool %d to reg %d.\n",*(ui8*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Load bool %d to reg %d.\n",*(uint8_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		reg[*(ui16*)(cprg+1)] = *(char*)(cprg+3);
+		reg[*(uint16_t*)(cprg+1)] = *(char*)(cprg+3);
 		cprg += 4; break;
 	    case Reg::MviI:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load integer %d to reg %d.\n",*(int*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Load integer %d to reg %d.\n",*(int*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		reg[*(ui16*)(cprg+1)] = *(int*)(cprg+3);
+		reg[*(uint16_t*)(cprg+1)] = *(int*)(cprg+3);
 		cprg += 3+sizeof(int); break;
 	    case Reg::MviR:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load real %f to reg %d.\n",*(double *)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Load real %f to reg %d.\n",*(double *)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		reg[*(ui16*)(cprg+1)] = *(double *)(cprg+3);
+		reg[*(uint16_t*)(cprg+1)] = *(double *)(cprg+3);
 		cprg += 3+sizeof(double); break;
 	    case Reg::MviS:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load string %s(%d) to reg %d.\n",string((char*)cprg+4,*(ui8*)(cprg+3)).c_str(),*(ui8*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Load string %s(%d) to reg %d.\n",string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str(),*(uint8_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		reg[*(ui16*)(cprg+1)] = string((char*)cprg+4,*(ui8*)(cprg+3));
-		cprg += 4+ *(ui8*)(cprg+3); break;
+		reg[*(uint16_t*)(cprg+1)] = string((char*)cprg+4,*(uint8_t*)(cprg+3));
+		cprg += 4+ *(uint8_t*)(cprg+3); break;
 	    case Reg::MviObject:
 #if OSC_DEBUG >= 5
-		printf("CODE: Load object to reg %d.\n",*(ui16*)(cprg+1));
+		printf("CODE: Load object to reg %d.\n",*(uint16_t*)(cprg+1));
 #endif
-		reg[*(ui16*)(cprg+1)] = new TVarObj();
+		reg[*(uint16_t*)(cprg+1)] = new TVarObj();
 		cprg += 3; break;
 	    case Reg::MviArray:
 	    {
 #if OSC_DEBUG >= 5
-		printf("CODE: Load array elements %d to reg %d.\n",*(ui8*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Load array elements %d to reg %d.\n",*(uint8_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
 		TAreaObj *ar = new TAreaObj();
-		int pcnt = *(ui8*)(cprg+3);
+		int pcnt = *(uint8_t*)(cprg+3);
 		//>>> Fill array by empty elements number
 		if( pcnt == 1 )
-		    for( int i_p = 0; i_p < getValI(val,reg[*(ui16*)(cprg+4)]); i_p++ )
+		    for( int i_p = 0; i_p < getValI(val,reg[*(uint16_t*)(cprg+4)]); i_p++ )
 			ar->propSet(TSYS::int2str(i_p),EVAL_REAL);
 		//>>> Fill array by parameters
 		else
-		    for( int i_p = 0; i_p < *(ui8*)(cprg+3); i_p++ )
-			switch( reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))].vType(this) )
+		    for( int i_p = 0; i_p < *(uint8_t*)(cprg+3); i_p++ )
+			switch( reg[*(uint16_t*)(cprg+4+i_p*sizeof(uint16_t))].vType(this) )
 			{
-			    case Reg::Bool: ar->propSet(TSYS::int2str(i_p),getValB(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));	break;
-			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));		break;
-			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));	break;
-			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))]));	break;
-			    case Reg::Obj: ar->propSet( TSYS::int2str(i_p), reg[*(ui16*)(cprg+4+i_p*sizeof(ui16))].val().o_el );	break;
+			    case Reg::Bool: ar->propSet(TSYS::int2str(i_p),getValB(val,reg[*(uint16_t*)(cprg+4+i_p*sizeof(uint16_t))]));	break;
+			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[*(uint16_t*)(cprg+4+i_p*sizeof(uint16_t))]));		break;
+			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[*(uint16_t*)(cprg+4+i_p*sizeof(uint16_t))]));	break;
+			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[*(uint16_t*)(cprg+4+i_p*sizeof(uint16_t))]));	break;
+			    case Reg::Obj: ar->propSet( TSYS::int2str(i_p), reg[*(uint16_t*)(cprg+4+i_p*sizeof(uint16_t))].val().o_el );	break;
 			}
-		reg[*(ui16*)(cprg+1)] = ar;
-		cprg += 4 + *(ui8*)(cprg+3)*sizeof(ui16); break;
+		reg[*(uint16_t*)(cprg+1)] = ar;
+		cprg += 4 + *(uint8_t*)(cprg+3)*sizeof(uint16_t); break;
 	    }
 	    //>> Assign codes
 	    case Reg::Ass:
 	    {
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Assign from %d to %d.\n",*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		if( !reg[*(ui16*)(cprg+1)].propSize( ) )
-		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		if( !reg[*(uint16_t*)(cprg+1)].propSize( ) )
+		    switch( reg[*(uint16_t*)(cprg+3)].vType(this) )
 		    {
-			case Reg::Bool:		setValB(val,reg[*(ui16*)(cprg+1)],getValB(val,reg[*(ui16*)(cprg+3)]));	break;
-			case Reg::Int:		setValI(val,reg[*(ui16*)(cprg+1)],getValI(val,reg[*(ui16*)(cprg+3)]));	break;
-			case Reg::Real:		setValR(val,reg[*(ui16*)(cprg+1)],getValR(val,reg[*(ui16*)(cprg+3)]));	break;
-			case Reg::String:	setValS(val,reg[*(ui16*)(cprg+1)],getValS(val,reg[*(ui16*)(cprg+3)]));	break;
-			case Reg::Obj:		setVal(val,reg[*(ui16*)(cprg+1)],getVal(val,reg[*(ui16*)(cprg+3)]));	break;
+			case Reg::Bool:		setValB(val,reg[*(uint16_t*)(cprg+1)],getValB(val,reg[*(uint16_t*)(cprg+3)]));	break;
+			case Reg::Int:		setValI(val,reg[*(uint16_t*)(cprg+1)],getValI(val,reg[*(uint16_t*)(cprg+3)]));	break;
+			case Reg::Real:		setValR(val,reg[*(uint16_t*)(cprg+1)],getValR(val,reg[*(uint16_t*)(cprg+3)]));	break;
+			case Reg::String:	setValS(val,reg[*(uint16_t*)(cprg+1)],getValS(val,reg[*(uint16_t*)(cprg+3)]));	break;
+			case Reg::Obj:		setVal(val,reg[*(uint16_t*)(cprg+1)],getVal(val,reg[*(uint16_t*)(cprg+3)]));	break;
 		    }
-		else setVal(val,reg[*(ui16*)(cprg+1)],getVal(val,reg[*(ui16*)(cprg+3)]));
+		else setVal(val,reg[*(uint16_t*)(cprg+1)],getVal(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    }
 	    //>> Mov codes
 	    case Reg::Mov:
 #if OSC_DEBUG >= 5
-		printf("CODE: Move from %d to %d.\n",*(ui16*)(cprg+3),*(ui16*)(cprg+1));
+		printf("CODE: Move from %d to %d.\n",*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
 
-		switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		switch( reg[*(uint16_t*)(cprg+3)].vType(this) )
 		{
-		    case Reg::Bool:	reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]);	break;
-		    case Reg::Int:	reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]);	break;
-		    case Reg::Real:	reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]);	break;
-		    case Reg::String:	reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]);	break;
-		    case Reg::Obj:	reg[*(ui16*)(cprg+1)] = getValO(val,reg[*(ui16*)(cprg+3)]);	break;
+		    case Reg::Bool:	reg[*(uint16_t*)(cprg+1)] = getValB(val,reg[*(uint16_t*)(cprg+3)]);	break;
+		    case Reg::Int:	reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]);	break;
+		    case Reg::Real:	reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]);	break;
+		    case Reg::String:	reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]);	break;
+		    case Reg::Obj:	reg[*(uint16_t*)(cprg+1)] = getValO(val,reg[*(uint16_t*)(cprg+3)]);	break;
 		}
 		cprg+=5; break;
 	    //>> Load properties for object
 	    case Reg::OPrpSt:
 #if OSC_DEBUG >= 5
-		printf("CODE: Set object's %d properties to string len %d\n",*(ui16*)(cprg+1),*(ui8*)(cprg+3));
+		printf("CODE: Set object's %d properties to string len %d\n",*(uint16_t*)(cprg+1),*(uint8_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)].propAdd(string((char*)cprg+4,*(ui8*)(cprg+3)));
-		cprg += 4 + *(ui8*)(cprg+3); break;
+		reg[*(uint16_t*)(cprg+1)].propAdd(string((char*)cprg+4,*(uint8_t*)(cprg+3)));
+		cprg += 4 + *(uint8_t*)(cprg+3); break;
 	    case Reg::OPrpDin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Set object's %d properties to register's %d value\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Set object's %d properties to register's %d value\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)].propAdd(getValS(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)].propAdd(getValS(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg += 5;  break;
 	    //>> Binary operations
 	    case Reg::Add:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d + %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d + %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		if( !reg[*(ui16*)(cprg+3)].propSize( ) )
-		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		if( !reg[*(uint16_t*)(cprg+3)].propSize( ) )
+		    switch( reg[*(uint16_t*)(cprg+3)].vType(this) )
 		    {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) + getValR(val,reg[*(ui16*)(cprg+5)]);
+			    reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) + getValR(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			case Reg::String:
-			    reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) + getValS(val,reg[*(ui16*)(cprg+5)]);
+			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) + getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
 		    }
 		else
 		{
-		    TVariant op1 = getVal(val,reg[*(ui16*)(cprg+3)]);
+		    TVariant op1 = getVal(val,reg[*(uint16_t*)(cprg+3)]);
 		    switch( op1.type() )
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[*(ui16*)(cprg+1)] = op1.getR() + getValR(val,reg[*(ui16*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getR() + getValR(val,reg[*(uint16_t*)(cprg+5)]); break;
 			case TVariant::String:
-			    reg[*(ui16*)(cprg+1)] = op1.getS() + getValS(val,reg[*(ui16*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getS() + getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
 		    }
@@ -1545,119 +1545,119 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 		cprg+=7; break;
 	    case Reg::Sub:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d - %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d - %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) - getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) - getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::Mul:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d * %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d * %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) * getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) * getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::Div:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d / %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d / %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) / getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) / getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::RstI:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d % %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d % %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) % getValI(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]) % getValI(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::BitOr:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d | %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d | %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) | getValI(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]) | getValI(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::BitAnd:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d & %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d & %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) & getValI(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]) & getValI(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::BitXor:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d ^ %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d ^ %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) ^ getValI(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]) ^ getValI(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::BitShLeft:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d << %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d << %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) << getValI(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]) << getValI(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::BitShRight:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d >> %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d >> %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValI(val,reg[*(ui16*)(cprg+3)]) >> getValI(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValI(val,reg[*(uint16_t*)(cprg+3)]) >> getValI(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::LOr:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d || %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d || %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]) || getValB(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValB(val,reg[*(uint16_t*)(cprg+3)]) || getValB(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::LAnd:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d && %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d && %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValB(val,reg[*(ui16*)(cprg+3)]) && getValB(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValB(val,reg[*(uint16_t*)(cprg+3)]) && getValB(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::LT:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d < %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d < %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) < getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) < getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::GT:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d > %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d > %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) > getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) > getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::LEQ:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d <= %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d <= %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) <= getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) <= getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::GEQ:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d >= %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d >= %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) >= getValR(val,reg[*(ui16*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) >= getValR(val,reg[*(uint16_t*)(cprg+5)]);
 		cprg+=7; break;
 	    case Reg::EQU:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d == %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d == %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		if( !reg[*(ui16*)(cprg+3)].propSize( ) )
-		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		if( !reg[*(uint16_t*)(cprg+3)].propSize( ) )
+		    switch( reg[*(uint16_t*)(cprg+3)].vType(this) )
 		    {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) == getValR(val,reg[*(ui16*)(cprg+5)]);
+			    reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) == getValR(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			case Reg::String:
-			    reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) == getValS(val,reg[*(ui16*)(cprg+5)]);
+			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) == getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
 		    }
 		else
 		{
-		    TVariant op1 = getVal(val,reg[*(ui16*)(cprg+3)]);
+		    TVariant op1 = getVal(val,reg[*(uint16_t*)(cprg+3)]);
 		    switch( op1.type() )
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[*(ui16*)(cprg+1)] = op1.getR() == getValR(val,reg[*(ui16*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getR() == getValR(val,reg[*(uint16_t*)(cprg+5)]); break;
 			case TVariant::String:
-			    reg[*(ui16*)(cprg+1)] = op1.getS() == getValS(val,reg[*(ui16*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getS() == getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
 		    }
@@ -1665,29 +1665,29 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 		cprg+=7; break;
 	    case Reg::NEQ:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d != %d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: %d = %d != %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		if( !reg[*(ui16*)(cprg+3)].propSize( ) )
-		    switch( reg[*(ui16*)(cprg+3)].vType(this) )
+		if( !reg[*(uint16_t*)(cprg+3)].propSize( ) )
+		    switch( reg[*(uint16_t*)(cprg+3)].vType(this) )
 		    {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)]) != getValR(val,reg[*(ui16*)(cprg+5)]);
+			    reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)]) != getValR(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			case Reg::String:
-			    reg[*(ui16*)(cprg+1)] = getValS(val,reg[*(ui16*)(cprg+3)]) != getValS(val,reg[*(ui16*)(cprg+5)]);
+			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) != getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
 		    }
 		else
 		{
-		    TVariant op1 = getVal(val,reg[*(ui16*)(cprg+3)]);
+		    TVariant op1 = getVal(val,reg[*(uint16_t*)(cprg+3)]);
 		    switch( op1.type() )
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[*(ui16*)(cprg+1)] = op1.getR() != getValR(val,reg[*(ui16*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getR() != getValR(val,reg[*(uint16_t*)(cprg+5)]); break;
 			case TVariant::String:
-			    reg[*(ui16*)(cprg+1)] = op1.getS() != getValS(val,reg[*(ui16*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getS() != getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
 		    }
@@ -1696,268 +1696,268 @@ void Func::exec( TValFunc *val, RegW *reg, const ui8 *cprg, ExecData &dt )
 	    //>> Unary operations
 	    case Reg::Not:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = !%d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: %d = !%d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = !getValB(val,reg[*(ui16*)(cprg+3)]);
+		reg[*(uint16_t*)(cprg+1)] = !getValB(val,reg[*(uint16_t*)(cprg+3)]);
 		cprg+=5; break;
 	    case Reg::BitNot:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = ~%d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: %d = ~%d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = ~getValI(val,reg[*(ui16*)(cprg+3)]);
+		reg[*(uint16_t*)(cprg+1)] = ~getValI(val,reg[*(uint16_t*)(cprg+3)]);
 		cprg+=5; break;
 	    case Reg::Neg:
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = -%d.\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: %d = -%d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = -getValR(val,reg[*(ui16*)(cprg+3)]);
+		reg[*(uint16_t*)(cprg+1)] = -getValR(val,reg[*(uint16_t*)(cprg+3)]);
 		cprg+=5; break;
 	    //>> Condition
 	    case Reg::If:
 #if OSC_DEBUG >= 5
-		printf("CODE: Condition %d: %d|%d|%d.\n",*(ui16*)(cprg+1),7,*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: Condition %d: %d|%d|%d.\n",*(uint16_t*)(cprg+1),7,*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		if( getValB(val,reg[*(ui16*)(cprg+1)]) )	exec(val,reg,cprg+7,dt);
-		else if( *(ui16*)(cprg+3) != *(ui16*)(cprg+5) )	exec(val,reg,cprg + *(ui16*)(cprg+3),dt);
-		cprg = cprg + *(ui16*)(cprg+5);
+		if( getValB(val,reg[*(uint16_t*)(cprg+1)]) )	exec(val,reg,cprg+7,dt);
+		else if( *(uint16_t*)(cprg+3) != *(uint16_t*)(cprg+5) )	exec(val,reg,cprg + *(uint16_t*)(cprg+3),dt);
+		cprg = cprg + *(uint16_t*)(cprg+5);
 		continue;
 	    case Reg::Cycle:
 #if OSC_DEBUG >= 5
-		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",*(ui16*)(cprg+1),9,*(ui16*)(cprg+3),*(ui16*)(cprg+5),*(ui16*)(cprg+7));
+		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",*(uint16_t*)(cprg+1),9,*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5),*(uint16_t*)(cprg+7));
 #endif
 		while( !(dt.flg&0x01) )
 		{
 		    exec(val,reg,cprg+9,dt);
-		    if( !getValB(val,reg[*(ui16*)(cprg+1)]) )	break;
+		    if( !getValB(val,reg[*(uint16_t*)(cprg+1)]) )	break;
 		    dt.flg &= ~0x06;
-		    exec( val, reg, cprg + *(ui16*)(cprg+3), dt );
+		    exec( val, reg, cprg + *(uint16_t*)(cprg+3), dt );
 		    //Check break and continue operators
 		    if( dt.flg&0x02 )	{ dt.flg=0; break; }
 		    else if( dt.flg&0x04 ) dt.flg=0;
 
-		    if( *(ui16*)(cprg+5) ) exec( val, reg, cprg + *(ui16*)(cprg+5),dt);
+		    if( *(uint16_t*)(cprg+5) ) exec( val, reg, cprg + *(uint16_t*)(cprg+5),dt);
 		}
-		cprg = cprg + *(ui16*)(cprg+7);
+		cprg = cprg + *(uint16_t*)(cprg+7);
 		continue;
 	    case Reg::Break:	dt.flg|=0x03;	break;
 	    case Reg::Continue:	dt.flg|=0x05;	break;
 	    //>> Buildin functions
 	    case Reg::FSin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sin(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=sin(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = sin(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = sin(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FCos:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=cos(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=cos(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = cos(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = cos(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FTan:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=tan(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=tan(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = tan(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = tan(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FSinh:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sinh(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=sinh(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = sinh(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = sinh(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FCosh:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=cosh(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=cosh(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = cosh(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = cosh(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FTanh:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=tanh(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=tanh(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = tanh(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = tanh(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FAsin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=asin(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=asin(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = asin(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = asin(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FAcos:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=acos(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=acos(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = acos(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = acos(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FAtan:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=atan(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=atan(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = atan(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = atan(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FRand:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=rand(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=rand(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = getValR(val,reg[*(ui16*)(cprg+3)])*(double)rand()/(double)RAND_MAX;
+		reg[*(uint16_t*)(cprg+1)] = getValR(val,reg[*(uint16_t*)(cprg+3)])*(double)rand()/(double)RAND_MAX;
 		cprg+=5; break;
 	    case Reg::FLg:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=lg(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=lg(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = log10(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = log10(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FLn:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=ln(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=ln(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = log(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = log(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FExp:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=exp(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=exp(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = exp(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = exp(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FPow:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=pow(%d,%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: Function %d=pow(%d,%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = pow(getValR(val,reg[*(ui16*)(cprg+3)]),getValR(val,reg[*(ui16*)(cprg+5)]));
+		reg[*(uint16_t*)(cprg+1)] = pow(getValR(val,reg[*(uint16_t*)(cprg+3)]),getValR(val,reg[*(uint16_t*)(cprg+5)]));
 		cprg+=7; break;
 	    case Reg::FMin:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=min(%d,%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: Function %d=min(%d,%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = vmin(getValR(val,reg[*(ui16*)(cprg+3)]),getValR(val,reg[*(ui16*)(cprg+5)]));
+		reg[*(uint16_t*)(cprg+1)] = vmin(getValR(val,reg[*(uint16_t*)(cprg+3)]),getValR(val,reg[*(uint16_t*)(cprg+5)]));
 		cprg+=7; break;
 	    case Reg::FMax:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=max(%d,%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3),*(ui16*)(cprg+5));
+		printf("CODE: Function %d=max(%d,%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(ui16*)(cprg+1)] = vmax(getValR(val,reg[*(ui16*)(cprg+3)]),getValR(val,reg[*(ui16*)(cprg+5)]));
+		reg[*(uint16_t*)(cprg+1)] = vmax(getValR(val,reg[*(uint16_t*)(cprg+3)]),getValR(val,reg[*(uint16_t*)(cprg+5)]));
 		cprg+=7; break;
 	    case Reg::FSqrt:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sqrt(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=sqrt(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = sqrt(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = sqrt(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FAbs:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=abs(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=abs(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = fabs(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = fabs(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FSign:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sign(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=sign(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = (getValR(val,reg[*(ui16*)(cprg+3)])>=0)?1:-1;
+		reg[*(uint16_t*)(cprg+1)] = (getValR(val,reg[*(uint16_t*)(cprg+3)])>=0)?1:-1;
 		cprg+=5; break;
 	    case Reg::FCeil:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=ceil(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=ceil(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = ceil(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = ceil(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::FFloor:
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=floor(%d).\n",*(ui16*)(cprg+1),*(ui16*)(cprg+3));
+		printf("CODE: Function %d=floor(%d).\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3));
 #endif
-		reg[*(ui16*)(cprg+1)] = floor(getValR(val,reg[*(ui16*)(cprg+3)]));
+		reg[*(uint16_t*)(cprg+1)] = floor(getValR(val,reg[*(uint16_t*)(cprg+3)]));
 		cprg+=5; break;
 	    case Reg::CProc:
 	    case Reg::CFunc:
 	    {
-		TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(ui8*)(cprg+1))->func().at());
+		TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(uint8_t*)(cprg+1))->func().at());
 #if OSC_DEBUG >= 5
-		printf("CODE: Call function/procedure %d = %s(%d).\n",*(ui16*)(cprg+3),vfnc.func()->id().c_str(),*(ui8*)(cprg+2));
+		printf("CODE: Call function/procedure %d = %s(%d).\n",*(uint16_t*)(cprg+3),vfnc.func()->id().c_str(),*(uint8_t*)(cprg+2));
 #endif
 		//>>> Get return position
 		int r_pos, i_p, p_p;
 		for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
 		    if( vfnc.ioFlg(r_pos)&IO::Return ) break;
 		//>>> Process parameters
-		for( i_p = 0; i_p < *(ui8*)(cprg+2); i_p++ )
+		for( i_p = 0; i_p < *(uint8_t*)(cprg+2); i_p++ )
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
 		    switch(vfnc.ioType(p_p))
 		    {
-			case IO::String:	vfnc.setS(p_p,getValS(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
-			case IO::Integer:	vfnc.setI(p_p,getValI(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
-			case IO::Real:		vfnc.setR(p_p,getValR(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
-			case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
-			case IO::Object:	vfnc.setO(p_p,getValO(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))])); break;
+			case IO::String:	vfnc.setS(p_p,getValS(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Integer:	vfnc.setI(p_p,getValI(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Real:		vfnc.setR(p_p,getValR(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Object:	vfnc.setO(p_p,getValO(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
 		    }
 		}
 		//>>> Make calc
 		vfnc.calc(vfnc.user());
 		//>>> Process outputs
-		for( i_p = 0; i_p < *(ui8*)(cprg+2); i_p++ )
+		for( i_p = 0; i_p < *(uint8_t*)(cprg+2); i_p++ )
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
 		    if( vfnc.ioFlg(p_p)&IO::Output )
 			switch(vfnc.ioType(p_p))
 			{
-			    case IO::String:	setValS(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getS(p_p)); break;
-			    case IO::Integer:	setValI(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getI(p_p)); break;
-			    case IO::Real:	setValR(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getR(p_p)); break;
-			    case IO::Boolean:	setValB(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getB(p_p)); break;
-			    case IO::Object:	setValO(val,reg[*(ui16*)(cprg+5+i_p*sizeof(ui16))],vfnc.getO(p_p)); break;
+			    case IO::String:	setValS(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getS(p_p)); break;
+			    case IO::Integer:	setValI(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getI(p_p)); break;
+			    case IO::Real:	setValR(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getR(p_p)); break;
+			    case IO::Boolean:	setValB(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getB(p_p)); break;
+			    case IO::Object:	setValO(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getO(p_p)); break;
 			}
 		}
 		//>>> Set return
 		if( *cprg == Reg::CFunc )
 		    switch(vfnc.ioType(r_pos))
 		    {
-			case IO::String:	reg[*(ui16*)(cprg+3)] = vfnc.getS(r_pos); break;
-			case IO::Integer:	reg[*(ui16*)(cprg+3)] = vfnc.getI(r_pos); break;
-			case IO::Real:		reg[*(ui16*)(cprg+3)] = vfnc.getR(r_pos); break;
-			case IO::Boolean:	reg[*(ui16*)(cprg+3)] = vfnc.getB(r_pos); break;
-			case IO::Object:	reg[*(ui16*)(cprg+3)] = vfnc.getO(r_pos); break;
+			case IO::String:	reg[*(uint16_t*)(cprg+3)] = vfnc.getS(r_pos); break;
+			case IO::Integer:	reg[*(uint16_t*)(cprg+3)] = vfnc.getI(r_pos); break;
+			case IO::Real:		reg[*(uint16_t*)(cprg+3)] = vfnc.getR(r_pos); break;
+			case IO::Boolean:	reg[*(uint16_t*)(cprg+3)] = vfnc.getB(r_pos); break;
+			case IO::Object:	reg[*(uint16_t*)(cprg+3)] = vfnc.getO(r_pos); break;
 		    }
 
-		cprg += 5 + (*(ui8*)(cprg+2))*sizeof(ui16); break;
+		cprg += 5 + (*(uint8_t*)(cprg+2))*sizeof(uint16_t); break;
 	    }
 	    case Reg::CFuncObj:
 	    {
 #if OSC_DEBUG >= 5
-		printf("CODE: Call object's function %d = %d(%d).\n",*(ui16*)(cprg+4),*(ui16*)(cprg+1),*(ui8*)(cprg+3));
+		printf("CODE: Call object's function %d = %d(%d).\n",*(uint16_t*)(cprg+4),*(uint16_t*)(cprg+1),*(uint8_t*)(cprg+3));
 #endif
-		TVariant obj = getVal(val,reg[*(ui16*)(cprg+1)],true);
-		if( reg[*(ui16*)(cprg+1)].propEmpty() )
+		TVariant obj = getVal(val,reg[*(uint16_t*)(cprg+1)],true);
+		if( reg[*(uint16_t*)(cprg+1)].propEmpty() )
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
 
 		//> Prepare inputs
 		vector<TVariant> prms;
-		for( int i_p = 0; i_p < *(ui8*)(cprg+3); i_p++ )
-		    prms.push_back(getVal(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))]));
+		for( int i_p = 0; i_p < *(uint8_t*)(cprg+3); i_p++ )
+		    prms.push_back(getVal(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))]));
 		//> Call
-		TVariant rez = oFuncCall( obj, reg[*(ui16*)(cprg+1)].propGet(reg[*(ui16*)(cprg+1)].propSize()-1), prms );
+		TVariant rez = oFuncCall( obj, reg[*(uint16_t*)(cprg+1)].propGet(reg[*(uint16_t*)(cprg+1)].propSize()-1), prms );
 		//> Process oytputs
 		for( int i_p = 0; i_p < prms.size(); i_p++ )
 		    if( prms[i_p].isModify() )
 			switch( prms[i_p].type() )
 			{
-			    case TVariant::Boolean:	setValB(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getB());	break;
-			    case TVariant::Integer:	setValI(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getI());	break;
-			    case TVariant::Real:	setValR(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getR());	break;
-			    case TVariant::String:	setValS(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getS());	break;
-			    case TVariant::Object:	setValO(val,reg[*(ui16*)(cprg+6+i_p*sizeof(ui16))],prms[i_p].getO());	break;
+			    case TVariant::Boolean:	setValB(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getB());	break;
+			    case TVariant::Integer:	setValI(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getI());	break;
+			    case TVariant::Real:	setValR(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getR());	break;
+			    case TVariant::String:	setValS(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getS());	break;
+			    case TVariant::Object:	setValO(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
 			}
 		//> Process return
 		switch( rez.type() )
 		{
-		    case TVariant::Boolean:	reg[*(ui16*)(cprg+4)] = rez.getB();	break;
-		    case TVariant::Integer:	reg[*(ui16*)(cprg+4)] = rez.getI();	break;
-		    case TVariant::Real:	reg[*(ui16*)(cprg+4)] = rez.getR();	break;
-		    case TVariant::String:	reg[*(ui16*)(cprg+4)] = rez.getS();	break;
-		    case TVariant::Object:	reg[*(ui16*)(cprg+4)] = rez.getO();	break;
+		    case TVariant::Boolean:	reg[*(uint16_t*)(cprg+4)] = rez.getB();	break;
+		    case TVariant::Integer:	reg[*(uint16_t*)(cprg+4)] = rez.getI();	break;
+		    case TVariant::Real:	reg[*(uint16_t*)(cprg+4)] = rez.getR();	break;
+		    case TVariant::String:	reg[*(uint16_t*)(cprg+4)] = rez.getS();	break;
+		    case TVariant::Object:	reg[*(uint16_t*)(cprg+4)] = rez.getO();	break;
 		}
 
-		cprg += 6 + (*(ui8*)(cprg+3))*sizeof(ui16); break;
+		cprg += 6 + (*(uint8_t*)(cprg+3))*sizeof(uint16_t); break;
 	    }
 	    default:
 		setStart(false);

@@ -189,8 +189,8 @@ void TMdContr::start_( )
     switch(mSmplType)
     {
 	case paFloat32:	smplSize = sizeof(float);	break;
-	case paInt32:	smplSize = sizeof(si32);	break;
-	case paInt16:	smplSize = sizeof(si16);	break;
+	case paInt32:	smplSize = sizeof(int32_t);	break;
+	case paInt16:	smplSize = sizeof(int16_t);	break;
 	default:	smplSize = 0;
     }
 
@@ -282,14 +282,14 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 	    case paInt32:
 		if( archAllow )
 		    for( int i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize )
-			val.at().arch().at().setR(*(si32*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
-		val.at().setI(*(si32*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
+			val.at().arch().at().setR(*(int32_t*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
+		val.at().setI(*(int32_t*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
 		break;
 	    case paInt16:
 		if( archAllow )
 		    for( int i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize )
-			val.at().arch().at().setR(*(si16*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
-		val.at().setI(*(si16*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
+			val.at().arch().at().setR(*(int16_t*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
+		val.at().setI(*(int16_t*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
 		break;
 	}
     }

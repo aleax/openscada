@@ -1087,8 +1087,8 @@ int TMdContr::getValI( SValData ival, string &err )
 		switch(iv_sz)
 		{
 		    case 1:	return acqBlks[i_b].val[ival.off-acqBlks[i_b].off];
-		    case 2:	return *(si16*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-		    case 4:	return *(si32*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		    case 2:	return *(int16_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		    case 4:	return *(int32_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
 	    else err = acqBlks[i_b].err;
 	    break;

@@ -2,6 +2,7 @@
 - /System/FLibSYS: The algorithm of realisation function floatMergeWord() is changed for fix strict-aliasing rules.
 - FIX:/UI/QTCfg, /UI/Vision: Events going to underlie button on time increase and decrease buttons is fixed for LineEdit element on last QT 4.5 and x86_64.
     The problem fixed not partialy by cause QT bug.
+- /SYS: Self bit-sized types define is replaced by C99 standard.
 
 
 2009-08-06 Roman

@@ -184,8 +184,8 @@ class TProt: public TProtocol
 	void outMess( XMLNode &io, TTransportOut &tro );
 
 	//> Special modbus protocol's functions
-	ui16	CRC16( const string &mbap );
-	ui8	LRC( const string &mbap );
+	uint16_t	CRC16( const string &mbap );
+	uint8_t	LRC( const string &mbap );
 	string	DataToASCII( const string &in );
 	string	ASCIIToData( const string &in );
 
@@ -211,8 +211,8 @@ class TProt: public TProtocol
 	deque<string>	mPrt;
 
 	//> Special modbus protocol's attributes
-	static ui8 CRCHi[];
-	static ui8 CRCLo[];
+	static uint8_t CRCHi[];
+	static uint8_t CRCLo[];
 
 	//Methods
 	string optDescr( );

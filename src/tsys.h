@@ -22,23 +22,13 @@
 #ifndef TSYS_H
 #define TSYS_H
 
-//- Programm constants -
+//> Programm constants
 #define PACKAGE_LICENSE	"GPL v2"
 #define PACKAGE_DESCR	"Open Supervisory Control And Data Acquisition"
 #define PACKAGE_AUTHOR	"Roman Savochenko"
 #define PACKAGE_SITE	"http://oscada.org.ua"
 
-//- Hardware independent types -
-typedef char si8;
-typedef short si16;
-typedef int si32;
-typedef long long si64;
-typedef unsigned char ui8;
-typedef unsigned short ui16;
-typedef unsigned int ui32;
-typedef unsigned long long ui64;
-
-//- Other system's constants -
+//> Other system's constants
 #define TO_FREE		NULL	// Object free
 #define STR_BUF_LEN	3000	// Len of string buffers (no string class)
 #define STD_WAIT_DELAY	100	// Standart wait dalay (ms)
@@ -80,7 +70,7 @@ class TSYS : public TCntrNode
 	enum IntView	{ Dec, Oct, Hex };
 	enum Errors
 	{
-	    //- DB errors code -
+	    //> DB errors code
 	    DBInit = 1,		//init DB error
 	    DBConn,		//connect to DB is error
 	    DBInernal,		//internal error

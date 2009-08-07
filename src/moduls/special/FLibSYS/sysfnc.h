@@ -986,7 +986,7 @@ class floatSplitWord : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    union { ui32 i; float f; } wl;
+	    union { uint32_t i; float f; } wl;
 	    wl.f = val->getR(0);
 	    val->setI(1,wl.i&0xFFFF);
 	    val->setI(2,(wl.i>>16)&0xFFFF);
@@ -1011,7 +1011,7 @@ class floatMergeWord : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    union { ui32 i; float f; } wl;
+	    union { uint32_t i; float f; } wl;
 	    wl.i = ((val->getI(2)&0xffff)<<16) | val->getI(1)&0xffff;
 	    val->setR(0,wl.f);
 	}
