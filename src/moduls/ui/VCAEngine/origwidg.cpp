@@ -741,10 +741,17 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","","27") );
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","","28") );
 	attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","","","29") );
-//	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
-//	    "0;1;2",_("On time;On level;On level and trigered"),"30") );
+	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
+	    "0;1;2;3;4;5;6;7",_("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),"30") );
 	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","","31") );
-//	attrAdd( new TFld("itProp",_("Items properties"),TFld::Integer,Attr::Active,"","0","0;10","","32") );
+	attrAdd( new TFld("clr0",_("Level color:0 (debug)"),TFld::String,Attr::Color,"","","","","40") );
+	attrAdd( new TFld("clr1",_("Level color:1 (information)"),TFld::String,Attr::Color,"","","","","41") );
+	attrAdd( new TFld("clr2",_("Level color:2 (note)"),TFld::String,Attr::Color,"","","","","42") );
+	attrAdd( new TFld("clr3",_("Level color:3 (warning)"),TFld::String,Attr::Color,"","","","","43") );
+	attrAdd( new TFld("clr4",_("Level color:4 (error)"),TFld::String,Attr::Color,"","","","","44") );
+	attrAdd( new TFld("clr5",_("Level color:5 (critical)"),TFld::String,Attr::Color,"","","","","45") );
+	attrAdd( new TFld("clr6",_("Level color:6 (alarm)"),TFld::String,Attr::Color,"","","","","46") );
+	attrAdd( new TFld("clr7",_("Level color:7 (emergency)"),TFld::String,Attr::Color,"","","","","47") );
     }
 }
 

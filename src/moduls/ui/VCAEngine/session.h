@@ -22,6 +22,8 @@
 #ifndef SESSION_H
 #define SESSION_H
 
+#include <stdint.h>
+
 #include <tcntrnode.h>
 #include <tconfig.h>
 
