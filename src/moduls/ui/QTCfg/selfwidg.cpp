@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVBoxLayout>
@@ -100,33 +101,33 @@ void ImgView::paintEvent( QPaintEvent * )
 //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
 //*********************************************************************************************
 LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
-    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), ed_fld(NULL)
+    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), ed_fld(NULL), mPrev(!prev_dis)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin( 0 );
     box->setSpacing( 0 );
 
-    if( !prev_dis )
+    setType( tp );
+}
+
+void LineEdit::viewApplyBt( bool view )
+{
+    if( view == (bool)bt_fld ) return;
+
+    if( view && !bt_fld )
     {
 	bt_fld = new QPushButton(this);
 	bt_fld->setIcon( QIcon(":/images/ok.png") );
 	bt_fld->setIconSize( QSize(12,12) );
 	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
 	//bt_fld->setMaximumWidth( 15 );
-	bt_fld->setEnabled( false );
-	bt_fld->setVisible( false );
-	bt_fld->blockSignals( true );
-	connect( bt_fld, SIGNAL( pressed() ), this, SLOT( applySlot() ) );
-	box->addWidget( bt_fld );
+	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
+	layout()->addWidget( bt_fld );
     }
-    setType( tp );
+    if( !view && bt_fld ) { bt_fld->deleteLater(); bt_fld = NULL; }
 }
 
-bool LineEdit::isEdited( )
-{
-    if( bt_fld && bt_fld->isVisible() )	return true;
-    return false;
-}
+bool LineEdit::isEdited( )	{ return bt_fld; }
 
 void LineEdit::setType( LType tp )
 {
@@ -178,13 +179,7 @@ void LineEdit::setType( LType tp )
 void LineEdit::changed( )
 {
     //> Enable apply
-    if( bt_fld && !bt_fld->isEnabled() )
-    {
-	bt_fld->setEnabled( true );
-	bt_fld->setVisible( true );
-	bt_fld->blockSignals( false );
-	//QWidget::setTabOrder( mod->getFocusedWdg(ed_fld), mod->getFocusedWdg(bt_fld) );
-    }
+    if( mPrev && !bt_fld )	viewApplyBt(true);
 
     emit valChanged(value());
 }
@@ -219,12 +214,7 @@ void LineEdit::setValue(const QString &txt)
 
     m_val = txt;
 
-    if( bt_fld && bt_fld->isEnabled() )
-    {
-        bt_fld->setEnabled( false );
-        bt_fld->setVisible( false );
-        bt_fld->blockSignals( true );
-    }
+    if( bt_fld ) viewApplyBt(false);
 }
 
 void LineEdit::setCfg(const QString &cfg)
@@ -284,12 +274,7 @@ void LineEdit::setCfg(const QString &cfg)
 	    break;
 	}
     }
-    if( bt_fld && bt_fld->isEnabled() )
-    {
-	bt_fld->setEnabled( false );
-	bt_fld->setVisible( false );
-	bt_fld->blockSignals( true );
-    }
+    if( bt_fld ) viewApplyBt(false);
 }
 
 QString LineEdit::value()
@@ -311,9 +296,7 @@ void LineEdit::applySlot( )
 {
     emit valChanged(value());
 
-    bt_fld->setEnabled( false );
-    bt_fld->setVisible( false );
-    bt_fld->blockSignals( true );
+    viewApplyBt(false);
 
     m_val = value();
 
@@ -322,7 +305,7 @@ void LineEdit::applySlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if( e->type() == QEvent::KeyRelease && bt_fld && bt_fld->isEnabled() )
+    if( e->type() == QEvent::KeyRelease && bt_fld )
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
 	if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )

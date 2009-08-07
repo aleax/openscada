@@ -181,6 +181,7 @@ namespace VISION
 	    void setCfg( const QString& );
 
 	    QWidget *workWdg( )	{ return ed_fld; }
+	    void viewApplyBt( bool view );
 
 	signals:
 	    void apply( );
@@ -197,6 +198,7 @@ namespace VISION
 	private:
 	    LType	m_tp;
 	    QString	m_val;
+	    bool	mPrev;
 	    QWidget	*ed_fld;
 	    QPushButton	*bt_fld;
     };

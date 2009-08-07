@@ -416,7 +416,7 @@ void ConfApp::quitSt()
 
 bool ConfApp::exitModifChk( )
 {
-    //- Check for no saved local station -
+    //> Check for no saved local station
     XMLNode req("modify");
     req.setAttr("path","/"+SYS->id()+"/%2fobj");
     if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
