@@ -22,6 +22,8 @@
 #ifndef FREEFUNC_H
 #define FREEFUNC_H
 
+#include <stdint.h>
+
 #include <string>
 #include <vector>
 #include <deque>
