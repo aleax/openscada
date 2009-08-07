@@ -22,6 +22,8 @@
 #ifndef MODBUS_PRT_H
 #define MODBUS_PRT_H
 
+#include <stdint.h>
+
 #include <string>
 #include <map>
 
