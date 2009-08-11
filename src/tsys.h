@@ -149,9 +149,13 @@ class TSYS : public TCntrNode
 	}
 	unsigned long long shrtCnt( )
 	{
+#if defined (__i386__) || defined (__x86_64__)
 	    unsigned int cntl, cnth;
 	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
 	    return ((unsigned long long)cnth<<32)+cntl;
+#else
+	    return 0;
+#endif
 	}
 	static long HZ( );
 
