@@ -385,7 +385,8 @@ void Widget::inheritIncl( const string &iwdg )
     else parw.at().wdgList(ls);
     for( int i_w = 0; i_w < ls.size(); i_w++ )
 	if( !wdgPresent(ls[i_w]) )
-	    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path());
+	    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path()); }
+	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 }
 
 void Widget::wClear( )
@@ -424,7 +425,8 @@ void Widget::wClear( )
 	    parw.at().wdgList(ls);
 	    for( int i_w = 0; i_w < ls.size(); i_w++ )
 		if( !wdgPresent(ls[i_w]) )
-		    wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true);
+		    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true); }
+		    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 		else wdgAt(ls[i_w]).at().wClear();
 	}
     }
@@ -763,7 +765,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		}
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::ID).c_str(),opt->text(),"");
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
+	    wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::ID).c_str(),opt->text(),"");
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	wdgDel(opt->attr("id").c_str(),true);
     }
     else return false;

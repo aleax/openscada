@@ -1,3 +1,8 @@
+2009-08-12 Maxim,Roman
+- FIX:/UI/VCAEngine: Loading broken child widgets and creation child widgets with name equalent for removed early inherited widget
+    from base container is fixed.
+
+
 2009-08-07 Roman
 - /System/FLibSYS: The algorithm of realisation function floatMergeWord() is changed for fix strict-aliasing rules.
 - FIX:/UI/QTCfg, /UI/Vision: Events going to underlie button on time increase and decrease buttons is fixed for LineEdit element on last QT 4.5 and x86_64.

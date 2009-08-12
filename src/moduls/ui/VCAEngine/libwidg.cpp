@@ -629,7 +629,9 @@ void LWidget::loadIO( )
 	    if( wdgPresent(sid) )	wdgDel(sid);
 	    continue;
 	}
-	if( !wdgPresent(sid) ) wdgAdd(sid,"","");
+	if( !wdgPresent(sid) ) 
+	    try{ wdgAdd(sid,"",""); }
+	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load();
     }
@@ -683,7 +685,7 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
 	{
 	    if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
-	    return;
+	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
     }
 
