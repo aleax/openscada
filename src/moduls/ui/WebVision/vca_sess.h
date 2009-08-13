@@ -2,8 +2,8 @@
 //OpenSCADA system module UI.WebVision file: vca_sess.h
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Roman Savochenko (rom_as@fromru.com)       *
- *                           by Lysenko Maxim (mlisenko@ukr.net)           *
- *                           by Yashina Kseniya (sobacurka@ukr.net)        *
+ *                           by Lysenko Maxim (mlisenko@oscada.org.ua)     *
+ *                           by Yashina Kseniya (ksu@oscada.org.ua)        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

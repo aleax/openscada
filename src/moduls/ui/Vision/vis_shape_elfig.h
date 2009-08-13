@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@ukr.net)
- *   			     by Yashina Kseniya (sobacurka@ukr.net)
+ *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@oscada.org.ua)
+ *   			     by Yashina Kseniya (ksu@oscada.org.ua)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -120,13 +120,13 @@ class ElFigDt : public QObject
         short   geomMargin  :8;
         double  orient;
         string  elLst;
-        QVector<ShapeItem> shapeItems;
-        QVector<inundationItem> inundationItems;
-        PntMap  shapePnts;
-        WidthMap shapeWidths;
-        ColorMap shapeColors;
-        ImageMap shapeImages;
-        StyleMap shapeStyles;
+        QVector<ShapeItem> shapeItems, shapeItems_temp;
+        QVector<inundationItem> inundationItems, inundationItems_temp;
+        PntMap  shapePnts, shapePnts_temp;
+        WidthMap shapeWidths, shapeWidths_temp;
+        ColorMap shapeColors, shapeColors_temp; 
+        ImageMap shapeImages, shapeImages_temp;
+        StyleMap shapeStyles, shapeStyles_temp;
         WdgView *w;
         QImage  pictObj;
     private slots:
@@ -255,11 +255,7 @@ class ShapeElFigure : public WdgShape
         bool flag_angle_temp;
         int rect_dyn;
         QImage rect_img;
-        PntMap  shapePnts_temp;
-        WidthMap shapeWidths_temp, shapeWidths_unScale;
-        ColorMap shapeColors_temp;
-        ImageMap shapeImages_temp;
-        StyleMap shapeStyles_temp;
+        WidthMap shapeWidths_unScale;
 
     };
 }

@@ -1,3 +1,7 @@
+2009-08-13 Maxim
+- FIX:/UI/Vision: Processing of fills for the repaint in runtime and devel modes is modified and optimized.
+
+
 2009-08-13 Roman
 - FIX:/Archive/FSArch: Processing errors is fixed for aprchive's files pack for messages.
 - !!!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: To primitive "Protocol" is added sort order support and item's decoration properties.

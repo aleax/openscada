@@ -1,7 +1,7 @@
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@ukr.net)
- *   			     by Yashina Kseniya (sobacurka@ukr.net)
+ *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@oscada.org.ua)
+ *   			     by Yashina Kseniya (ksu@oscada.org.ua)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -71,7 +71,15 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     status		= false;
     bool paint          = false;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
+    QVector<ShapeItem> &shapeItems_temp = elFD->shapeItems_temp;
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
+    QVector<inundationItem> &inundationItems_temp = elFD->inundationItems_temp;
+    PntMap &shapePnts_temp = elFD->shapePnts_temp;
+    WidthMap &shapeWidths_temp = elFD->shapeWidths_temp;
+    ColorMap &shapeColors_temp = elFD->shapeColors_temp;
+    ImageMap &shapeImages_temp = elFD->shapeImages_temp;
+    StyleMap &shapeStyles_temp = elFD->shapeStyles_temp;
+    
     PntMap *pnts = &elFD->shapePnts;
     WidthMap *widths = &elFD->shapeWidths;
     ColorMap *colors = &elFD->shapeColors;
@@ -82,8 +90,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     double t_start, t_end, a, b;
     float MotionWidth;
-    QVector<inundationItem> inundationItems_temp;
-    QVector<ShapeItem> shapeItems_temp;
     string backimg;
     QImage img;
     rect_num = -1;
@@ -91,15 +97,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
 	case -1:	//load
 	    rel_list = true;
-	    break;
-	case 1:		//root
-	    // This have no matter for the Primitive ID, its done only for outer needs
-	    if( runW ) break;
-	    shapePnts_temp = elFD->shapePnts;
-	    shapeWidths_temp = elFD->shapeWidths;
-	    shapeColors_temp = elFD->shapeColors;
-	    shapeImages_temp = elFD->shapeImages;
-	    shapeStyles_temp = elFD->shapeStyles;
 	    break;
 	case 5:		//en
 	    if( !runW )	break;
@@ -1001,49 +998,49 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         QVector<inundationItem> in_build;
         QVector<int> fill_number;
         //- Detecting if there is a necessity to rebuild inundationItem -
-        if( shapeItems.size() != shapeItems_temp.size() ) fill_build = true;
+        if( shapeItems.size() != shapeItems_temp.size() ){ fill_build = true;}
         else
             for( int i = 0; i < shapeItems.size(); i++ )
             {
                 //-- Detecting if the shapeItems have changed --
                 if( shapeItems[i].path != shapeItems_temp[i].path )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (int)TSYS::realRound(shapeItems[i].ctrlPos4.x(), 3, true) != 
                     (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.x(), 3, true) ||
                     (int)TSYS::realRound(shapeItems[i].ctrlPos4.y(), 3, true) != 
                     (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), 3, true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n1].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n1].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].y(),2,true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n2].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n2].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].y(),2,true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n3].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n3].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].y(),2,true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n4].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n4].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].y(),2,true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( TSYS::realRound((*pnts)[shapeItems[i].n5].x(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].x(),2,true) ||
                     TSYS::realRound((*pnts)[shapeItems[i].n5].y(),2,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].y(),2,true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (*colors)[shapeItems[i].lineColor].rgba() != shapeColors_temp[shapeItems_temp[i].lineColor].rgba() )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (*colors)[shapeItems[i].borderColor].rgba() != shapeColors_temp[shapeItems_temp[i].borderColor].rgba() )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (*styles)[shapeItems[i].style] != shapeStyles_temp[shapeItems_temp[i].style] )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (*widths)[shapeItems[i].width] != shapeWidths_temp[shapeItems_temp[i].width] )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (*widths)[shapeItems[i].border_width] != shapeWidths_temp[shapeItems_temp[i].border_width] )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( shapeItems[i].type != shapeItems_temp[i].type )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
                 if( (int)TSYS::realRound(shapeItems[i].angle_temp, 2, true) != (int)TSYS::realRound(shapeItems_temp[i].angle_temp, 2, true) )
-                    { fill_build = true; break;}
+                    {fill_build = true; break;}
             }
         paint = fill_build;
         //-- Detecting the difference beetwen inundationItems --
@@ -1160,34 +1157,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         if( rectItems.size() )	rectItems.clear();
         flag_ctrl    = false;
     }
-    if( up && !w->allAttrLoad( ) && uiPrmPos == -1 && 
+    if( up && !w->allAttrLoad( ) && 
         (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
-        {
-            paintImage( w );
-            if( runW )
-            {
-                shapePnts_temp = elFD->shapePnts;
-                shapeWidths_temp = elFD->shapeWidths;
-                shapeColors_temp = elFD->shapeColors;
-                shapeImages_temp = elFD->shapeImages;
-                shapeStyles_temp = elFD->shapeStyles;
-            }
-        }
-
-    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 &&
-        (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
-        {
-            paintImage( w );
-            w->update();
-            if( runW )
-            {
-                shapePnts_temp = elFD->shapePnts;
-                shapeWidths_temp = elFD->shapeWidths;
-                shapeColors_temp = elFD->shapeColors;
-                shapeImages_temp = elFD->shapeImages;
-                shapeStyles_temp = elFD->shapeStyles;
-            }
-        }
+    {
+        if( uiPrmPos == -1 ) paintImage( w );
+        else { paintImage( w ); w->update(); }
+        shapePnts_temp = elFD->shapePnts;
+        shapeWidths_temp = elFD->shapeWidths;
+        shapeColors_temp = elFD->shapeColors;
+        shapeImages_temp = elFD->shapeImages;
+        shapeStyles_temp = elFD->shapeStyles;
+    }
     if( rel_list && !w->allAttrLoad( ) && runW )
         elFD->shapeWidths = shapeWidths_unScale;
     return up;
