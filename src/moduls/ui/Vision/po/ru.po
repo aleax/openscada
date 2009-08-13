@@ -2885,8 +2885,8 @@ msgid "cw"
 msgstr ""
 
 #: vis_devel_widgs.cpp:1490
-msgid "Container widget"
-msgstr "Виджет-контейнер"
+msgid "Container's widget"
+msgstr "Виджет контейнера"
 
 #: vis_devel_widgs.cpp:1497 vis_devel_widgs.cpp:1520 vis_devel_widgs.cpp:1777
 msgid "rootLib"

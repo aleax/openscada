@@ -40,7 +40,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid,idb,cf_el), tm_calc(0.0), m_lst_check(0),
     m_use_xml(cfg("FSArchXML").getBd()), m_max_size(cfg("FSArchMSize").getId()),
     m_numb_files(cfg("FSArchNFiles").getId()), m_time_size(cfg("FSArchTmSize").getId()),
-    m_chk_tm(cfg("FSArchTm").getId()), m_pack_tm(cfg("FSArchPackTm").getId())
+    m_chk_tm(cfg("FSArchTm").getId()), mPackTm(cfg("FSArchPackTm").getId())
 {
 
 }
@@ -94,7 +94,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 
     ResAlloc res(m_res,false);
 
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
 	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;
@@ -335,14 +335,15 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 //* FSArch::MFileArch - Messages archivator file  *
 //*************************************************
 MFileArch::MFileArch( ModMArch *owner ) :
-    m_xml(true), m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false), m_pack(false),
+    m_xml(true), m_owner(owner), scan(false), m_err(false), m_write(false), m_load(false), mPack(false),
     m_size(0), m_chars("UTF-8"), m_beg(0), m_end(0), m_node(NULL)
 {
     cach_pr.tm = cach_pr.off = 0;
+    mAcces = time(NULL);
 }
 
 MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const string &icharset, bool ixml ) :
-    m_xml(ixml), m_owner(iowner), scan(false), m_err(false), m_write(false), m_load(false), m_pack(false),
+    m_xml(ixml), m_owner(iowner), scan(false), m_err(false), m_write(false), m_load(false), mPack(false),
     m_size(0), m_name(iname), m_chars(icharset), m_beg(ibeg), m_end(ibeg), m_node(NULL)
 {
     cach_pr.tm = cach_pr.off = 0;
@@ -376,6 +377,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     }
     close(hd);
     m_load = true;
+    mAcces = time(NULL);
 }
 
 MFileArch::~MFileArch()
@@ -387,45 +389,46 @@ MFileArch::~MFileArch()
 
 void MFileArch::attach( const string &iname, bool full )
 {
+    FILE *f = NULL;
     char buf[STR_BUF_LEN];
     ResAlloc res(m_res,true);
 
     m_err = false;
     m_load = false;
     m_name = iname;
-    m_pack = mod->filePack(name());
-    m_acces = time(NULL);
-
-    //> Check archive and unpack if want
-    if( m_pack )
-    {
-	//>> Get file info from DB
-	TConfig c_el(&mod->packFE());
-	c_el.cfg("FILE").setS(name());
-	if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el))
-	{
-	    m_beg = strtol(c_el.cfg("BEGIN").getS().c_str(),NULL,16);
-	    m_end = strtol(c_el.cfg("END").getS().c_str(),NULL,16);
-	    m_chars = c_el.cfg("PRM1").getS();
-	    m_xml = atoi(c_el.cfg("PRM2").getS().c_str());
-
-	    if( !m_xml || (m_xml && !full) )
-	    {
-	        //>>> Get file size
-	        int hd = open(name().c_str(),O_RDONLY);
-		if( hd > 0 )	{ m_size = lseek(hd,0,SEEK_END); close(hd); }
-		return;
-	    }
-	}
-	m_name = mod->unPackArch(name());
-	m_pack = false;
-    }
-
-    FILE *f = fopen(name().c_str(),"r");
-    if( f == NULL ) { m_err = true; return; }
+    mPack = mod->filePack(name());
+    mAcces = time(NULL);
 
     try
     {
+	//> Check archive and unpack if want
+	if( mPack )
+	{
+	    //>> Get file info from DB
+	    TConfig c_el(&mod->packFE());
+	    c_el.cfg("FILE").setS(name());
+	    if( SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el) )
+	    {
+		m_beg = strtol(c_el.cfg("BEGIN").getS().c_str(),NULL,16);
+		m_end = strtol(c_el.cfg("END").getS().c_str(),NULL,16);
+		m_chars = c_el.cfg("PRM1").getS();
+		m_xml = atoi(c_el.cfg("PRM2").getS().c_str());
+
+		if( !m_xml || (m_xml && !full) )
+		{
+		    //>>> Get file size
+		    int hd = open(name().c_str(),O_RDONLY);
+		    if( hd > 0 )	{ m_size = lseek(hd,0,SEEK_END); close(hd); }
+		    return;
+		}
+	    }
+	    m_name = mod->unPackArch(name());
+	    mPack = false;
+	}
+
+	f = fopen(name().c_str(),"r");
+	if( f == NULL ) { m_err = true; return; }
+
 	char s_char[9];
 	//> Check to plain text archive
 	if( fgets(buf,sizeof(buf),f) == NULL )
@@ -545,7 +548,12 @@ void MFileArch::put( TMess::SRec mess )
 
     ResAlloc res(m_res,true);
 
-    if( m_pack ) { m_name = mod->unPackArch(name()); m_pack = false; }
+    if( mPack )
+    {
+	try{ m_name = mod->unPackArch(name()); } 
+	catch(TError err) { m_err = true; throw; }
+	mPack = false;
+    }
     if( !m_load )
     {
 	res.release(); attach( m_name ); res.request(true);
@@ -556,7 +564,7 @@ void MFileArch::put( TMess::SRec mess )
 	}
     }
 
-    m_acces = time(NULL);
+    mAcces = time(NULL);
 
     if( xmlM() )
     {
@@ -674,14 +682,19 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 
     ResAlloc res(m_res,false);
 
-    if( m_pack ){ m_name = mod->unPackArch(name()); m_pack = false; }
+    if( mPack )
+    {
+	try{ m_name = mod->unPackArch(name()); }
+	catch(TError err) { m_err = true; throw; }
+	mPack = false;
+    }
     if( !m_load )
     {
 	res.release(); attach( m_name ); res.request(false);
 	if( m_err || !m_load )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attached!"));
     }
 
-    m_acces = time(NULL);
+    mAcces = time(NULL);
 
     if( xmlM() )
     {
@@ -777,17 +790,17 @@ void MFileArch::check( bool free )
 	    }
 	}
 	//> Free memory of XML-archive after 10 minets
-	if( time(NULL) > m_acces + owner().packTm()*30 || free )
+	if( time(NULL) > mAcces + owner().packTm()*30 || free )
 	{
 	    m_node->clear();
 	    m_load = false;
 	}
     }
     //> Check for pack archive file
-    if( !m_err && !m_pack && owner().packTm() && time(NULL) > (m_acces+owner().packTm()*60) && ((xmlM() && !m_load) || !xmlM()) )
+    if( !m_err && !mPack && owner().packTm() && time(NULL) > (mAcces+owner().packTm()*60) && ((xmlM() && !m_load) || !xmlM()) )
     {
 	m_name = mod->packArch(name());
-	m_pack = true;
+	mPack = true;
 	//>> Get file size
 	int hd = open(name().c_str(),O_RDONLY);
 	if( hd > 0 )

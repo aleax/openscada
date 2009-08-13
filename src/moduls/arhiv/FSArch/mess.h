@@ -80,8 +80,8 @@ class MFileArch
 	bool	m_err;		// Archive err
 	bool	m_write;	// Archive had changed but no writed to file
 	bool	m_load;		// Archive load to m_node
-	bool	m_pack;		// Archive packed
-	time_t	m_acces;	// last of time acces to Archive file
+	bool	mPack;		// Archive packed
+	time_t	mAcces;		// last of time acces to Archive file
 	time_t	m_beg;		// begin Archive file;
 	time_t	m_end;		// end Archive file;
 	//- XML-mode parametrs -
@@ -123,14 +123,14 @@ class ModMArch: public TMArchivator
 	int  numbFiles( )	{ return m_numb_files; }
 	int  timeSize( )	{ return m_time_size; }
 	int  checkTm( )		{ return m_chk_tm; }
-	int  packTm( )		{ return m_pack_tm; }
+	int  packTm( )		{ return mPackTm; }
 
 	void setUseXML( bool vl )	{ m_use_xml = vl; modif(); }
 	void setMaxSize( int vl )	{ m_max_size = vl; modif(); }
 	void setNumbFiles( int vl )	{ m_numb_files = vl; modif(); }
 	void setTimeSize( int vl )	{ m_time_size = vl; modif(); }
 	void setCheckTm( int vl )	{ m_chk_tm = vl; modif(); }
-	void setPackTm( int vl )	{ m_pack_tm = vl; modif(); }
+	void setPackTm( int vl )	{ mPackTm = vl; modif(); }
 
 	void checkArchivator( bool now = false );
 
@@ -144,7 +144,7 @@ class ModMArch: public TMArchivator
 	int	&m_numb_files;	// number of Archive files
 	int	&m_time_size;	// number days to one file
 	int	&m_chk_tm;	// period of check archive files directory;
-	int	&m_pack_tm;	// pack the archive files timeout
+	int	&mPackTm;	// pack the archive files timeout
 
 	Res	m_res;		// resource to access;
 	double	tm_calc;	// Archiving time

@@ -1,3 +1,8 @@
+2009-08-13 Roman
+- FIX:/Archive/FSArch: Processing errors is fixed for aprchive's files pack for messages.
+- !!!:/UI/VCAEngine, /UI/Vision, /UI/WebVision: To primitive "Protocol" is added sort order support and item's decoration properties.
+ 
+
 2009-08-12 Maxim,Roman
 - FIX:/UI/VCAEngine: Loading broken child widgets and creation child widgets with name equalent for removed early inherited widget
     from base container is fixed.

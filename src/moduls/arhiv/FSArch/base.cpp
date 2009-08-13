@@ -166,7 +166,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     if( sysres )
     {
 	remove(rez_nm.c_str());
-	throw TError(nodePath().c_str(),_("Decompress error!"));
+	throw TError(nodePath().c_str(),_("Decompress error: '%s'!"),anm.c_str());
     }
     if( replace ) remove(anm.c_str());
 

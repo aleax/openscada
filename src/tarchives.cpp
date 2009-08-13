@@ -510,9 +510,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
 	for( map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end(); p++ )
 	    if( p->second.time >= b_tm && p->second.time <= e_tm &&
 		    p->second.level >= abs(level) && Mess->chkPattern(p->second.categ,category) )
-	    mb.push_back(pair<long long,TMess::SRec* >(FTM(p->second),&p->second));
-	make_heap(mb.begin(),mb.end());
-	sort_heap(mb.begin(),mb.end());
+		mb.push_back(pair<long long,TMess::SRec* >(FTM(p->second),&p->second));
+	sort(mb.begin(),mb.end());
 	for( int i_b = 0; i_b < mb.size(); i_b++ ) recs.push_back(*mb[i_b].second);
     }
 }

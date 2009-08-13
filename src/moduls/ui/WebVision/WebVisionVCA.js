@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -138,9 +138,9 @@ function realRound( val, dig, toInt )
  ***************************************************/
 function evMouseGet( e )
 {
-    if(e.which == 1) return 'Left';
-    else if(e.which == 2) return 'Midle';
-    else if(e.which == 3) return 'Right';
+  if(e.which == 1) return 'Left';
+  else if(e.which == 2) return 'Midle';
+  else if(e.which == 3) return 'Right';
 }
 /***************************************************
  * evKeyGet - Get key code from event              *
@@ -242,19 +242,6 @@ function servSet( adr, prm, body, waitRez )
   return null;
 }
 /***************************************************
- * getWAttrs - request page/widget attributes      *
- ***************************************************/
-/*function getWAttrs( wId, tm )
-{
-  var rNode = servGet(wId,'com=attrs'+(tm?('&tm='+tm):''))
-  if( !rNode ) return;
-  var atrLs = new Object();
-  for( var i = 0; i < rNode.childNodes.length; i++ )
-    if( rNode.childNodes[i].nodeType == 1 )
-      atrLs[rNode.childNodes[i].getAttribute('id')] = nodeText(rNode.childNodes[i]);
-  return atrLs;
-}*/
-/***************************************************
  * getWAttr - request page/widget attribute        *
  ***************************************************/
 function getWAttr( wId, attr )
@@ -273,6 +260,55 @@ function setWAttrs( wId, attrs, val )
   else for( var i in attrs ) body+='<el id=\''+i+'\'>'+attrs[i]+'</el>';
   body+='</set>';
   servSet(wId,'com=attrs',body);
+}
+/***************************************************
+ * getFont - Parse font                            *
+ ***************************************************/
+function getFont( fStr, fSc, inPt )
+{
+  var rez = '';
+  if( fStr )
+  {
+    var allFnt = fStr.split(' ');
+    if( allFnt.length >= 1 ) rez += 'font-family: ' + allFnt[0].replace(/_/g,' ') + '; ';
+    if( allFnt.length >= 2 ) rez += 'font-size: ' + (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (inPt?'pt; ':'px; ');
+    if( allFnt.length >= 3 ) rez += 'font-weight: ' + (parseInt(allFnt[2])?'bold':'normal') + '; ';
+    if( allFnt.length >= 4 ) rez += 'font-style: ' + (parseInt(allFnt[3])?'italic':'normal') + '; ';
+  }
+  return rez;
+}
+/*****************************************************
+ * chkPattern - Check for allow expression to pattern *
+ *****************************************************/
+function chkPattern( val, patt )
+{
+  var mult_s = false;
+  var v_cnt = 0, p_cnt = 0;
+  var v_bck = -1, p_bck = -1;
+
+  while(true)
+  {
+    if( p_cnt >= patt.length )	return true;
+    if( patt.charAt(p_cnt) == '?' )	{ v_cnt++; p_cnt++; mult_s = false; continue; }
+    if( patt.charAt(p_cnt) == '*' )	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
+    if( patt.charAt(p_cnt) == '\\' )	p_cnt++;
+    if( v_cnt >= val.length )	break;
+    if( patt.charAt(p_cnt) == val.charAt(v_cnt) )
+    {
+      if( mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
+      v_cnt++; p_cnt++;
+    }
+    else
+    {
+      if( mult_s )
+      {
+	if( v_bck >= 0 ) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
+	else v_cnt++;
+      }
+      else break;
+    }
+  }
+  return false;
 }
 /***************************************************
  * setFocus - Command for set focus                *
@@ -550,12 +586,8 @@ function makeEl( pgBr, inclPg )
       case 1: spanStyle+='vertical-align: bottom; '; break;
       case 2: spanStyle+='vertical-align: middle; '; break;
     }
-    var allFnt = this.attrs['font'].split(' ');
-    if( allFnt.length >= 1 ) spanStyle+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
-    if( allFnt.length >= 2 ) spanStyle+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
-    if( allFnt.length >= 3 ) spanStyle+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
-    if( allFnt.length >= 4 ) spanStyle+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
-    spanStyle+='color: '+(this.attrs['color']?this.attrs['color']:'black')+'; ';
+    spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
+    spanStyle += 'color: ' + (this.attrs['color']?this.attrs['color']:'black') + '; ';
     var txtVal = this.attrs['text'];
     for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
     {
@@ -1099,12 +1131,7 @@ function makeEl( pgBr, inclPg )
     elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; ';
     geomW -= 4; geomH -= 4;
 
-    this.wFont = '';
-    var allFnt = this.attrs['font'].split(' ');
-    if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
-    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px; ';
-    if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
-    if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
+    this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc));
 
     if( !this.place.firstChild )
     {
@@ -1113,17 +1140,23 @@ function makeEl( pgBr, inclPg )
       this.place.firstChild.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
       this.place.firstChild.onclick = function(e)
       {
-        if( this.isActive ) setFocus(this.wdgLnk.addr);
-        return false;
+	if( this.isActive ) setFocus(this.wdgLnk.addr);
+	return false;
       }
       this.place.firstChild.className='prot';
       this.loadData = function( )
       {
-        var tblB = this.place.firstChild;
+	var tblB = this.place.firstChild;
 
-	//> Check for columns present and order
-	if( !this.curCols || this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || this.curLev != this.attrs['lev'] )
+	//> Get archive parameters
+	var tTime = parseInt(this.attrs['time']);
+	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
+
+	if( this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || this.curLev != this.attrs['lev'] )
 	{
+	  this.arhBeg = this.arhEnd = 0;
+	  this.messList = new Array();
+
 	  this['col_pos'] = this['col_tm'] = this['col_utm'] = this['col_lev'] = this['col_cat'] = this['col_mess'] = -1;
 	  this.curCols = this.attrs['col'];
 	  this.curArch = this.attrs['arch'];
@@ -1134,8 +1167,7 @@ function makeEl( pgBr, inclPg )
 	  var colCfg = '';
 	  var clm = this.curCols.split(';');
 	  for( var c_off = 0; c_off < clm.length; c_off++ )
-	    if( clm[c_off] == 'pos' || clm[c_off] == 'tm' || clm[c_off] == 'utm' || clm[c_off] == 'lev' || clm[c_off] == 'cat' || clm[c_off] == 'mess' )
-	    {
+	  {
 	      colCfg += "<th ind='"+clm[c_off]+"' "+
 			  "style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
 						    (clm[c_off]=='tm') ? '###Time###' :
@@ -1146,12 +1178,7 @@ function makeEl( pgBr, inclPg )
 	      this['col_'+clm[c_off]] = c_off;
 	    }
 	  rowEl.innerHTML = colCfg;
-	  this.arhBeg = this.arhEnd = 0;
 	}
-
-	//> Get archive parameters
-	var tTime = parseInt(this.attrs['time']);
-	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
 	if( !this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd )
 	{
@@ -1164,29 +1191,26 @@ function makeEl( pgBr, inclPg )
 	    if( !tTime ) { tTime = this.arhEnd; tTimeGrnd += tTime; }
 	  }
 	}
-	if( tblB.firstChild.childNodes.length <= 1 || !this.arhBeg || !this.arhEnd ) return;
+	if( !this.arhBeg || !this.arhEnd ) return;
 
 	//> Correct request to archive border
 	tTime = Math.min(tTime,this.arhEnd); tTimeGrnd = Math.max(tTimeGrnd,this.arhBeg);
+
 	//> Clear data at time error
 	var valEnd = 0; var valBeg = 0;
-	if( tblB.childNodes.length>1 && tblB.firstChild.childNodes.length )
-	{
-	  while( tblB.childNodes.length>1 && (valEnd=parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time'))) > tTime )
-	    tblB.removeChild(tblB.childNodes[1]);
-	  while( tblB.childNodes.length>1 && (valBeg=parseInt(tblB.lastChild.childNodes[0].getAttribute('time'))) < tTimeGrnd )
-	    tblB.removeChild(tblB.lastChild);
-	}
+	while( this.messList.length && (valEnd=this.messList[0].time) > tTime) this.messList.shift();
+	while( this.messList.length && (valBeg=this.messList[this.messList.length-1].time) < tTimeGrnd ) this.messList.pop();
 
-	if( tTime <= tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
+	if( tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
 	{
+	  this.messList = new Array();
 	  while( tblB.childNodes.length > 1 ) tblB.removeChild(tblB.lastChild);
 	  valEnd = valBeg = 0;
 	  return;
 	}
 
 	//> Correct request to present data
-	var toUp = false;
+	var toUp = false, isDtChang = false;
 	if( valEnd && tTime >= valEnd ) { tTimeGrnd = valEnd; toUp = true; }
 	else if( valBeg && tTimeGrnd < valBeg ) tTime = valBeg-1;
 
@@ -1194,97 +1218,117 @@ function makeEl( pgBr, inclPg )
 	    "<get arch='"+this.curArch+"' tm='"+tTime+"' tm_grnd='"+tTimeGrnd+"' cat='"+this.curTmpl+"' lev='"+this.curLev+"' />",true);
 	if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) return;
 
-	//> Process records
 	if( toUp )
 	  for( var i_req = 0; i_req < rez.childNodes.length; i_req++ )
 	  {
 	    var rcd = rez.childNodes[i_req];
-	    var rtm = parseInt(rcd.getAttribute('time'));
-	    var rutm = rcd.getAttribute('utime');
-	    var rlev = rcd.getAttribute('lev');
-	    var rcat = rcd.getAttribute('cat');
-	    var rmess = nodeText(rcd);
+	    var mess = new Array(parseInt(rcd.getAttribute('time')),parseInt(rcd.getAttribute('utime')),parseInt(rcd.getAttribute('lev')),rcd.getAttribute('cat'),nodeText(rcd));
 
 	    //>> Check for dublicates
 	    var i_p;
-	    for( i_p = 1; i_p < tblB.childNodes.length; i_p++ )
+	    for( i_p = 0; i_p < this.messList.length; i_p++ )
 	    {
-	      if( rtm > parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time')) && i_p>1 ) continue;
-	      if( (this.col_utm<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_utm]) == rutm) &&
-		    (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
-		    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_cat]) == rcat) &&
-		    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_mess]) == rmess ) )
+	      if( mess[0] > this.messList[0][0] && i_p ) continue;
+	      if( this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] && this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4] )
 		break;
 	    }
-	    if( i_p < tblB.childNodes.length ) continue;
+	    if( i_p < this.messList.length ) continue;
 
-	    var rowEl = document.createElement('tr');
-	    for( var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++ )
-	    {
-	      var celEl = document.createElement('td'); celEl.style.cssText = this.wFont;
-	      if( i_cel == 0 ) celEl.setAttribute('time',rtm);
-	      if( this.col_pos == i_cel ) { setNodeText(celEl,0); celEl.style.cssText+=' text-align: center; '; }
-	      else if( this.col_tm == i_cel )
-	      {
-		var dt = new Date(rtm*1000);
-		setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
-				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
-	      }
-	      else if( this.col_utm == i_cel ) setNodeText(celEl,rutm);
-	      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);
-	      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);
-	      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);
-	      rowEl.appendChild(celEl);
-	    }
-	    tblB.insertBefore(rowEl,tblB.childNodes[1]);
+	    //>> Insert new row
+	    this.messList.unshift(mess);
+	    isDtChang = true;
 	  }
 	else
 	  for( var i_req = rez.childNodes.length-1; i_req >= 0; i_req-- )
 	  {
 	    var rcd = rez.childNodes[i_req];
-	    var rtm = parseInt(rcd.getAttribute('time'));
-	    var rutm = rcd.getAttribute('utime');
-	    var rlev = rcd.getAttribute('lev');
-	    var rcat = rcd.getAttribute('cat');
-	    var rmess = nodeText(rcd);
+	    var mess = new Array(parseInt(rcd.getAttribute('time')),parseInt(rcd.getAttribute('utime')),parseInt(rcd.getAttribute('lev')),rcd.getAttribute('cat'),nodeText(rcd));    
 
 	    //>> Check for dublicates
 	    var i_p;
-	    for( i_p = tblB.childNodes.length-1; i_p >= 1; i_p-- )
+	    for( i_p = this.messList.length-1; i_p >= 0; i_p-- )
 	    {
-	      if( rtm < parseInt(tblB.childNodes[1].childNodes[0].getAttribute('time')) && (i_p<(tblB.childNodes.length-1)) ) continue;
-	      if( (this.col_utm<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_utm]) == rutm) &&
-		    (this.col_lev<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_lev]) == rlev) &&
-		    (this.col_cat<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_cat]) == rcat) &&
-		    (this.col_mess<0 || nodeText(tblB.childNodes[i_p].childNodes[this.col_mess]) == rmess) )
+	      if( mess[0] < this.messList[this.messList.length-1][0] && i_p < (this.messList.length-1) ) continue;
+	      if( this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] && this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4] )
 		break;
 	    }
-	    if( i_p >= 1 ) continue;
+	    if( i_p >= 0 ) continue;
 
-	    var rowEl = document.createElement('tr');
+	    //>> Insert new row
+	    this.messList.push(mess);
+	    isDtChang = true;
+	  }
+
+	if( (tblB.childNodes.length-1) == this.messList.length && !isDtChang ) return;
+
+	//> Sort data
+	var sortIts = new Array();
+	switch( parseInt(this.attrs['viewOrd'])&0x3 )
+	{
+	    case 0:
+		for( var i_m = 0; i_m < this.messList.length; i_m++ )
+		    sortIts.push( this.messList[i_m][0]+' '+this.messList[i_m][1]+':'+i_m );
+		break;
+	    case 1:
+		for( var i_m = 0; i_m < this.messList.length; i_m++ )
+		    sortIts.push( this.messList[i_m][2]+':'+i_m );
+		break;
+	    case 2:
+		for( var i_m = 0; i_m < this.messList.length; i_m++ )
+		    sortIts.push( this.messList[i_m][3]+':'+i_m );
+		break;
+	    case 3:
+		for( var i_m = 0; i_m < this.messList.length; i_m++ )
+		    sortIts.push_back( this.messList[i_m][4]+':'+i_m );
+		break;
+	}
+
+	sortIts.sort();
+	if( parseInt(this.attrs['viewOrd'])&0x4 ) sortIts.reverse();
+
+	//> Write to table
+	for( var i_m = 0; i_m < sortIts.length; i_m++ )
+	{
+	    var rowEl = (i_m>=(tblB.childNodes.length-1)) ? document.createElement('tr') : tblB.childNodes[i_m+1];
+	    var elPos = parseInt(sortIts[i_m].slice(sortIts[i_m].lastIndexOf(':')+1));
+
+	    var rowFnt = this.wFont;
+	    var rowColor = '';
+
+	    //>> Check properties
+	    for( var i_it = 0, lst_lev = -1; i_it < parseInt(this.attrs['itProp']); i_it++ )
+	    {
+		var prpLev = parseInt(this.attrs['it'+i_it+'lev']);
+		if( this.messList[elPos][2] >= prpLev && prpLev > lst_lev && chkPattern(this.messList[elPos][3],this.attrs['it'+i_it+'tmpl']) )
+		{
+		    rowFnt = getFont(this.attrs['it'+i_it+'fnt'],Math.min(xSc,ySc));
+		    rowColor = 'background-color: '+this.attrs['it'+i_it+'color']+'; ';
+		    if( this.messList[elPos][2] == parseInt(this.attrs['it'+i_it+'lev']) ) break;
+		    lst_lev = prpLev;
+		}
+	    }
+	    //if( rowColor.length ) fclr = ((0.3*clr.red()+0.59*clr.green()+0.11*clr.blue()) > 128) ? Qt::black : Qt::white;
+	    rowEl.style.cssText = rowFnt+rowColor;
+
 	    for( var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++ )
 	    {
-	      var celEl = document.createElement('td'); celEl.style.cssText = this.wFont;
-	      if( i_cel == 0 ) celEl.setAttribute('time',rtm);
-	      if( this.col_pos == i_cel ) { setNodeText(celEl,0); celEl.style.cssText+=' text-align: center; '; }
+	      var celEl = (i_cel>=rowEl.childNodes.length) ? document.createElement('td') : rowEl.childNodes[i_cel];
+	      if( this.col_pos == i_cel ) { setNodeText(celEl,i_m); celEl.style.cssText += ' text-align: center; '; }
 	      else if( this.col_tm == i_cel )
 	      {
-		var dt = new Date(rtm*1000);
+		var dt = new Date(this.messList[elPos][0]*1000);
 		setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
 				  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
 	      }
-	      else if( this.col_utm == i_cel ) setNodeText(celEl,rutm);
-	      else if( this.col_lev == i_cel ) setNodeText(celEl,rlev);
-	      else if( this.col_cat == i_cel ) setNodeText(celEl,rcat);
-	      else if( this.col_mess == i_cel ) setNodeText(celEl,rmess);
-	      rowEl.appendChild(celEl);
+	      else if( this.col_utm == i_cel ) setNodeText(celEl,this.messList[elPos][1]);
+	      else if( this.col_lev == i_cel ) setNodeText(celEl,this.messList[elPos][2]);
+	      else if( this.col_cat == i_cel ) setNodeText(celEl,this.messList[elPos][3]);
+	      else if( this.col_mess == i_cel ) setNodeText(celEl,this.messList[elPos][4]);
+	      if( i_cel >= rowEl.childNodes.length ) rowEl.appendChild(celEl);
 	    }
-	    tblB.appendChild(rowEl);
-	  }
-	//> Update position collumn
-	if( this.col_pos >= 0 )
-	  for( var i_rw = 1; i_rw < tblB.childNodes.length; i_rw++ )
-	    setNodeText(tblB.childNodes[i_rw].childNodes[this.col_pos],i_rw);
+	    if( i_m >= (tblB.childNodes.length-1) ) tblB.appendChild(rowEl);
+	}
+	while( (tblB.childNodes.length-1) > sortIts.length ) tblB.removeChild(tblB.lastChild);
       }
     }
 
@@ -1295,12 +1339,7 @@ function makeEl( pgBr, inclPg )
   {
     elStyle+='background-color: white; ';
 
-    this.wFont = '';
-    var allFnt = this.attrs['font'].split(' ');
-    if( allFnt.length >= 1 ) this.wFont+='font-family: '+allFnt[0].replace(/_/g,' ')+'; ';
-    if( allFnt.length >= 2 ) this.wFont+='font-size: '+(parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'pt; ';
-    if( allFnt.length >= 3 ) this.wFont+='font-weight: '+(parseInt(allFnt[2])?'bold':'normal')+'; ';
-    if( allFnt.length >= 4 ) this.wFont+='font-style: '+(parseInt(allFnt[3])?'italic':'normal')+'; ';
+    this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),true);
 
     var ifrmObj = this.place.childNodes[0];
     if( !ifrmObj )
@@ -1474,8 +1513,8 @@ function makeUI()
     {
       var opPg; var i_ch;
       for( i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++ )
-        if( pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p] )
-          break;
+	if( pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p] )
+	  break;
       if( i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p])) ) continue;
       if( opPg.window ) { opPg.window.close(); delete opPg.parent.pages[pgList[i_p]]; }
       else if( opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p] )
@@ -1486,14 +1525,14 @@ function makeUI()
     for( var i = 0; i < pgNode.childNodes.length; i++ )
       if( pgNode.childNodes[i].nodeName == 'pg' )
       {
-        var prPath = nodeText(pgNode.childNodes[i]);
-        //>>> Check for closed window
-        var opPg = masterPage.findOpenPage(prPath);
-        if( opPg && opPg.window && opPg.window.closed )
-        { servSet(prPath,'com=pgClose',''); delete opPg.parent.pages[prPath]; continue; }
-        //>>> Call page
-        pgList.push(prPath);
-        masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
+	var prPath = nodeText(pgNode.childNodes[i]);
+	//>>> Check for closed window
+	var opPg = masterPage.findOpenPage(prPath);
+	if( opPg && opPg.window && opPg.window.closed )
+	{ servSet(prPath,'com=pgClose',''); delete opPg.parent.pages[prPath]; continue; }
+	//>>> Call page
+	pgList.push(prPath);
+	masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
       }
     tmCnt = parseInt(pgNode.getAttribute('tm'));
   }

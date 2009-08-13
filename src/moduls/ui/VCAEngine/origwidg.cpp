@@ -662,7 +662,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
 		cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","37") );
 		cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","38") );
-		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"1","1","0;10","","39") );
+		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;10","","39") );
 		break;
 	}
     }
@@ -740,18 +740,11 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
 	attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","","27") );
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","","28") );
-	attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","","","29") );
+	attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","","29") );
 	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
 	    "0;1;2;3;4;5;6;7",_("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),"30") );
 	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","","31") );
-	attrAdd( new TFld("clr0",_("Level color:0 (debug)"),TFld::String,Attr::Color,"","","","","40") );
-	attrAdd( new TFld("clr1",_("Level color:1 (information)"),TFld::String,Attr::Color,"","","","","41") );
-	attrAdd( new TFld("clr2",_("Level color:2 (note)"),TFld::String,Attr::Color,"","","","","42") );
-	attrAdd( new TFld("clr3",_("Level color:3 (warning)"),TFld::String,Attr::Color,"","","","","43") );
-	attrAdd( new TFld("clr4",_("Level color:4 (error)"),TFld::String,Attr::Color,"","","","","44") );
-	attrAdd( new TFld("clr5",_("Level color:5 (critical)"),TFld::String,Attr::Color,"","","","","45") );
-	attrAdd( new TFld("clr6",_("Level color:6 (alarm)"),TFld::String,Attr::Color,"","","","","46") );
-	attrAdd( new TFld("clr7",_("Level color:7 (emergency)"),TFld::String,Attr::Color,"","","","","47") );
+	attrAdd( new TFld("itProp",_("Item's properties"),TFld::Integer,Attr::Active,"","","","","32") );
     }
 }
 
@@ -762,7 +755,7 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 	if( cfg.id() == "itProp" )
 	{
 	    string fid("it"), fnm(_("Item ")), fidp, fnmp;
-	    //- Delete specific unnecessary items -
+	    //> Delete specific unnecessary items
 	    for( int i_p = 0; true; i_p++ )
 	    {
 		fidp = fid+TSYS::int2str(i_p);
@@ -772,27 +765,23 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel(fidp+"lev");
 		    cfg.owner()->attrDel(fidp+"tmpl");
 		    cfg.owner()->attrDel(fidp+"fnt");
-		    cfg.owner()->attrDel(fidp+"img");
 		    cfg.owner()->attrDel(fidp+"color");
-		    cfg.owner()->attrDel(fidp+"blink");
 		}
 	    }
-	    //- Create ullage items -
+	    //> Create ullage items
 	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	    {
 		fidp = fid+TSYS::int2str(i_p);
 		fnmp = fnm+TSYS::int2str(i_p);
 		if( cfg.owner()->attrPresent( fidp+"lev" ) ) continue;
-		cfg.owner()->attrAdd( new TFld((fidp+"lev").c_str(),(fnmp+_(":levels")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()) );
+		cfg.owner()->attrAdd( new TFld((fidp+"lev").c_str(),(fnmp+_(":level")).c_str(),
+					       TFld::Integer,Attr::Mutable,"","0","0;7","",TSYS::int2str(40+5*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"tmpl").c_str(),(fnmp+_(":template")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(51+10*i_p).c_str()) );
+					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(41+5*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"fnt").c_str(),(fnmp+_(":font")).c_str(),
-					       TFld::String,Attr::Font|Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
+					       TFld::String,Attr::Font|Attr::Mutable,"","","","",TSYS::int2str(42+5*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
-					       TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"blink").c_str(),(fnmp+_(":blink")).c_str(),
-					       TFld::Boolean,Attr::Mutable,"","0","","",TSYS::int2str(54+10*i_p).c_str()) );
+					       TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(43+5*i_p).c_str()) );
 	    }
 	}
     }

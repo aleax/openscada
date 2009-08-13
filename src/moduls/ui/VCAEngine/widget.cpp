@@ -237,7 +237,7 @@ void Widget::setEnable( bool val )
 	//> Load self values from DB
 	loadIO( );
     }
-    if(!val)
+    if( !val )
     {
 	//> Free no base attributes and restore base
 	vector<string>  ls;

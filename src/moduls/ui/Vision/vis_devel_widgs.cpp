@@ -1487,7 +1487,7 @@ void WdgTree::updateTree( const string &vca_it )
 		img.loadFromData((const uchar*)simg.c_str(),simg.size());
 		if( !img.isNull() ) nit_cw->setIcon(0,QPixmap::fromImage(img));
 		nit_cw->setText(0,cwdgN->text().c_str());
-		nit_cw->setText(1,_("Container widget"));
+		nit_cw->setText(1,_("Container's widget"));
 		nit_cw->setText(2,cwdgId.c_str());
 	    }
 	}

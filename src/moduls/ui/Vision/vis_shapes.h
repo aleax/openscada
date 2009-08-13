@@ -40,6 +40,7 @@
 #include <QScrollArea>
 #include <QTextBrowser>
 
+#include <tmess.h>
 #include <xml.h>
 
 using std::string;
@@ -81,6 +82,9 @@ class WdgShape : public QObject
 
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
+
+	//Static methods
+	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true );
 
     protected:
 	//Methods
@@ -414,10 +418,21 @@ class ShapeProtocol : public WdgShape
 
     private:
 	//Data
-	//- Shape node date -
+	//> Shape node date
 	class ShpDt
 	{
 	    public:
+		//Data
+		class ItProp
+		{
+		    public:
+			ItProp( ) : lev(0)	{ }
+
+			int lev;
+			string tmpl;
+			QColor clr;
+			QFont font;
+		};
 		//Methods
 		ShpDt( ) : active(true), time(0), tSize(60), timeCurent(false), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
@@ -425,14 +440,14 @@ class ShapeProtocol : public WdgShape
 		short	timeCurent	:1;
 		short	trcPer		:10;
 		short	lev		:4;
-		short	viewOrd		:3;
-		short	itProp		:3;
+		short	viewOrd		:4;
 		QTimer 		*trcTimer;
 		QTableWidget	*addrWdg;
-		QMap<QString,int> indMap;
 		unsigned int	time, tSize;
 		unsigned int	arhBeg, arhEnd;
 		string		arch, tmpl, col;
+		vector<ItProp>	itProps;
+		deque<TMess::SRec>	messList;
 	};
 	//Private methods
 	void loadData( WdgView *view, bool full = false );
