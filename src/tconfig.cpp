@@ -24,7 +24,7 @@
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : m_elem(NULL)
+TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mNoTransl(false)
 {
     setElem(Elements,true);
 }

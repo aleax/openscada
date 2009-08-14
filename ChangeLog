@@ -2,6 +2,7 @@
 - !!!!:/DemoDB: DB and config file is rebuilded for made English language by default.
 - /SYS: Manual seting the default DB language for multilanguage enabling support is added.
 - !!:/DB/SQLite,/DB/MySQL: Writing value to default language is added in case new record creation and no default language using.
+- !!!!:/SYS, /DB/MySQL, /DB/SQLite: Enable using translation from DB it allow into no translation configuration.
 
 
 2009-08-13 Maxim

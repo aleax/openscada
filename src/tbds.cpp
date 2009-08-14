@@ -201,7 +201,15 @@ bool TBDS::dataSeek( const string &bdn, const string &path, int lev, TConfig &cf
 		    if( i_el == cf_el.size() && lev <= c_lev++ )
 		    {
 			for( int i_el = 0; i_el < cf_el.size(); i_el++ )
-			    cfg.cfg(cf_el[i_el]).setS(el->attr(cf_el[i_el]));
+			{
+			    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+			    u_cfg.setS(el->attr(cf_el[i_el]));
+			    if( !cfg.noTransl() && u_cfg.fld().flg()&TCfg::TransltText && (Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) )
+			    {
+				string vl = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
+				if( !vl.empty() ) u_cfg.setS(vl);
+			    }
+			}
 			return true;
 		    }
 		}
@@ -267,10 +275,9 @@ bool TBDS::dataGet( const string &bdn, const string &path, TConfig &cfg )
 		{
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 		    u_cfg.setS(el->attr(cf_el[i_el]));
-		    if( u_cfg.fld().flg()&TCfg::TransltText && !Mess->lang2CodeBase().empty() &&
-			((!cfg.lang2Code().empty() && cfg.lang2Code() != Mess->lang2CodeBase()) || (cfg.lang2Code().empty() && Mess->lang2Code() != Mess->lang2CodeBase())) )
+		    if( !cfg.noTransl() && u_cfg.fld().flg()&TCfg::TransltText && (Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) )
 		    {
-			string vl = el->attr(cf_el[i_el]+"_"+(cfg.lang2Code().empty()?Mess->lang2Code():cfg.lang2Code()));
+			string vl = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
 			if( !vl.empty() ) u_cfg.setS(vl);
 		    }
 		}
@@ -344,7 +351,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
 	if( !tbl.freeStat() )
 	{
 	    TConfig db_el(&dbs.at());
-	    if( !(rFlg&TBDS::UseTranslate) ) db_el.setLang2Code(Mess->lang2CodeBase());
+	    db_el.setNoTransl( !(rFlg&TBDS::UseTranslate) );
 	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(path);
 	    db_el.cfg("val").setS(val);
@@ -387,7 +394,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	if( !tbl.freeStat() )
 	{
 	    TConfig db_el(&dbs.at());
-	    if( !(rFlg&TBDS::UseTranslate) ) db_el.setLang2Code(Mess->lang2CodeBase());
+	    db_el.setNoTransl( !(rFlg&TBDS::UseTranslate) );
 	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(path);
 	    try
@@ -400,7 +407,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	}
     }
 
-    if(!bd_ok)
+    if( !bd_ok )
     {
 	//> Get from cache
 	if( SYS->present("BD") )
@@ -417,7 +424,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *tgtN = TCntrNode::ctrId(&SYS->cfgRoot(),path,true);
 	if( tgtN ) rez = tgtN->text();
-	if( rFlg&TBDS::UseTranslate && !Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase() )
+	if( rFlg&TBDS::UseTranslate )
 	{
 	    tgtN = TCntrNode::ctrId(&SYS->cfgRoot(),path+"_"+Mess->lang2Code(),true);
 	    if( tgtN ) rez = tgtN->text();
