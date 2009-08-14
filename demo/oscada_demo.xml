@@ -8,8 +8,8 @@
 	Discribe internal parameter for station.
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="StName">Демо станция</prm>
-	<prm id="StName_en">Demo station</prm>
+	<prm id="StName">Demo station</prm>
+	<prm id="StName_ru">Демо станция</prm>
 	<prm id="StName_uk">Демо станція</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="Workdir">/var/spool/openscada</prm>
@@ -17,13 +17,13 @@
 	<prm id="ModDir">/usr/lib/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="Lang2CodeBase">ru</prm>
+	<prm id="Lang2CodeBase">en</prm>
 	<prm id="SaveAtExit">0</prm>
 	<prm id="SavePeriod">0</prm>
 
 	<node id="sub_BD">
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Основная БД" NAME_en="Generic DB" NAME_uk="Основна БД" ADDR="./DEMO/DemoSt.db" CODEPAGE="KOI8-U"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_ru="Основная БД" NAME_uk="Основна БД" ADDR="./DEMO/DemoSt.db" CODEPAGE="KOI8-U"/>
 	    </tbl>
 	</node>
 
@@ -32,22 +32,22 @@
 	    <tbl id="Security_user">
 		<fld
 		    NAME="root"
-		    DESCR="Супер пользователь"
-		    DESCR_en="Super user"
+		    DESCR="Super user"
+		    DESCR_ru="Супер пользователь"
 		    DESCR_uk="Супер користувач"
 		    PASS="openscada"/>
 		<fld
 		    NAME="user"
-		    DESCR="Системный пользователь"
-		    DESCR_en="System user"
+		    DESCR="System user"
+		    DESCR_ru="Системный пользователь"
 		    DESCR_uk="Системний користувач"
 		    PASS=""/>
 	    </tbl>
 	    <tbl id="Security_grp">
 		<fld
 		    NAME="root"
-		    DESCR="Группа суперпользователей"
-		    DESCR_en="Super users groups"
+		    DESCR="Super users groups"
+		    DESCR_ru="Группа суперпользователей"
 		    DESCR_uk="Група суперкористувачів"
 		    USERS="root;user"/>
 	    </tbl>-->
@@ -65,11 +65,11 @@
 		<fld
 		    ID="WEB_1"
 		    MODULE="Sockets"
-		    NAME="Основной WEB интерфейс"
-		    NAME_en="Generic WEB interface"
+		    NAME="Generic WEB interface"
+		    NAME_ru="Основной WEB интерфейс"
 		    NAME_uk="Основний WEB інтерфейс"
-		    DESCRIPT="Основной транспорт для WEB интерфейса."
-		    DESCRIPT_en="Generic transport for WEB interface."
+		    DESCRIPT="Generic transport for WEB interface."
+		    DESCRIPT_ru="Основной транспорт для WEB интерфейса."
 		    DESCRIPT_uk="Основний транспорт для WEB інтерфейсу."
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
@@ -80,11 +80,11 @@
 		<fld
 		    ID="WEB_2"
 		    MODULE="Sockets"
-		    NAME="Резервный WEB интерфейс"
-		    NAME_en="Reserve WEB interface"
+		    NAME="Reserve WEB interface"
+		    NAME_ru="Резервный WEB интерфейс"
 		    NAME_uk="Резервний WEB інтерфейс"
-		    DESCRIPT="Резервный транспорт для WEB интерфейса."
-		    DESCRIPT_en="Reserve transport for WEB interface."
+		    DESCRIPT="Reserve transport for WEB interface."
+		    DESCRIPT_ru="Резервный транспорт для WEB интерфейса."
 		    DESCRIPT_uk="Резервний транспорт для WEB інтерфейсу."
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
@@ -97,11 +97,11 @@
 	        <fld
 		    ID="testModBus"
 		    MODULE="Sockets"
-		    NAME="Тест ModBus"
-		    NAME_en="Test ModBus"
+		    NAME="Test ModBus"
+		    NAME_ru="Тест ModBus"
 		    NAME_uk="Тест ModBus"
-		    DESCRIPT="Тест обмена по протоколу ModBus."
-		    DESCRIPT_en="Data exchange by protocol ModBus test."
+		    DESCRIPT="Data exchange by protocol ModBus test."
+		    DESCRIPT_ru="Тест обмена по протоколу ModBus."
 		    DESCRIPT_uk="Тест обміну за протоколом ModBus."
 		    ADDR="TCP:localhost:10502"
 		    START="1"/>
@@ -111,15 +111,15 @@
 	<node id="sub_DAQ">
 	    <!--
 	    <tbl id="tmplib">
-		<fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" DB="tmplib_test2"/>
+		<fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" DB="tmplib_test2"/>
 	    </tbl>
 	    <tbl id="tmplib_test2">
-		<fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" DB="test2"
+		<fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" DB="test2"
 		    PROGRAM="JavaLikeCalc.JavaScript&#010;cnt=5*i"/>
 	    </tbl>
 	    <tbl id="tmplib_test2_io">
-		<fld TMPL_ID="test2" ID="i" NAME="I" NAME_en="I" NAME_uk="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
-		<fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_en="Cnt" NAME_uk="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
+		<fld TMPL_ID="test2" ID="i" NAME="I" NAME_ru="I" NAME_uk="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
+		<fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_ru="Cnt" NAME_uk="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/>
 	    </tbl>-->
 
 	    <node id="mod_LogicLev">
@@ -127,11 +127,11 @@
 		<tbl id="DAQ">
 		    <fld
 			ID="test2"
-			NAME="Тест 2"
-			NAME_en="Test 2"
+			NAME="Test 2"
+			NAME_ru="Тест 2"
 			NAME_uk="Тест 2"
 			DESCR=""
-			DESCR_en=""
+			DESCR_ru=""
 			DESCR_uk=""
 			ENABLE="1"
 			START="1"
@@ -140,7 +140,7 @@
 			PRIOR="0"/>
 		</tbl>
 		<tbl id="test2prm">
-		    <fld SHIFR="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" EN="1" MODE="2" PRM="test2.test2"/>
+		    <fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" MODE="2" PRM="test2.test2"/>
 		</tbl>-->
 	    </node>
 
@@ -149,11 +149,11 @@
 		<tbl id="DAQ">
 		    <fld
 			ID="DataOS"
-			NAME="Даные ОС"
-			NAME_en="Data OS"
+			NAME="Data OS"
+			NAME_ru="Даные ОС"
 			NAME_uk="Дані ОС"
-			DESCR="Данные сервисов и подсистем ОС."
-			DESCR_en="Data of services and subsystems OS."
+			DESCR="Data of services and subsystems OS."
+			DESCR_ru="Данные сервисов и подсистем ОС."
 			DESCR_uk="Дані сервісів та підсистем ОС."
 			ENABLE="1"
 			START="1"
@@ -163,8 +163,8 @@
 			PRIOR="0"/>
 		</tbl>
 		<tbl id="DataOSprm">
-		    <fld SHIFR="CPU" NAME="Нагрузка CPU" NAME_en="CPU load" NAME_uk="Навантаження CPU" DESCR="" DESCR_en="" DESCR_uk="" EN="1" TYPE="CPU" SUBT="gen"/>
-		    <fld SHIFR="MEM" NAME="Память" NAME_en="Memory" NAME_uk="Пам'ять" DESCR="" DESCR_en="" DESCR_uk="" EN="1" TYPE="MEM"/>
+		    <fld SHIFR="CPU" NAME="CPU load" NAME_ru="Нагрузка CPU" NAME_uk="Навантаження CPU" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" TYPE="CPU" SUBT="gen"/>
+		    <fld SHIFR="MEM" NAME="Memory" NAME_ru="Память" NAME_uk="Пам'ять" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" TYPE="MEM"/>
 		</tbl>
 		-->
 	    </node>
@@ -172,15 +172,15 @@
 	    <node id="mod_DiamondBoards">
 	        <!--
 		<tbl id="DAQ">
-		    <fld ID="Athena" NAME="Плата Athena" NAME_en="Athena board" NAME_uk="Плата Athena" DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="0"
+		    <fld ID="Athena" NAME="Athena board" NAME_ru="Плата Athena" NAME_uk="Плата Athena" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="0"
 			BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"
 			DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/>
 		</tbl>
 		<tbl id="AthenaAnPrm">
-		    <fld SHIFR="ai0" NAME="AI 0" NAME_en="AI 0" NAME_uk="AI 0" DESCR="" DESCR_en="" DESCR_uk="" EN="0" TYPE="0" CNL="0" GAIN="0"/>
+		    <fld SHIFR="ai0" NAME="AI 0" NAME_ru="AI 0" NAME_uk="AI 0" DESCR="" DESCR_ru="" DESCR_uk="" EN="0" TYPE="0" CNL="0" GAIN="0"/>
 		</tbl>
 		<tbl id="AthenaDigPrm">
-		    <fld SHIFR="di0" NAME="DI 0" NAME_en="DI 0" NAME_uk="DI 0" DESCR="" DESCR_en="" DESCR_uk="" EN="0" TYPE="0" PORT="0" CNL="0"/>
+		    <fld SHIFR="di0" NAME="DI 0" NAME_ru="DI 0" NAME_uk="DI 0" DESCR="" DESCR_ru="" DESCR_uk="" EN="0" TYPE="0" PORT="0" CNL="0"/>
 		</tbl>
 		-->
 	    </node>
@@ -188,18 +188,18 @@
 	    <node id="mod_BlockCalc">
 		<!--
 		<tbl id="DAQ">
-		    <fld ID="Model" NAME="Модель" NAME_en="Model" NAME_uk="Модель" DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks"
+		    <fld ID="Model" NAME="Model" NAME_ru="Модель" NAME_uk="Модель" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks"
 			PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/>
 		</tbl>
 		<tbl id="Model_blcks">
-		    <fld ID="Klap" NAME="Клапан" NAME_en="Klapan" NAME_uk="Клапан" DESCR="" DESCR_en="" DESCR_uk="" FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/>
+		    <fld ID="Klap" NAME="Klapan" NAME_ru="Клапан" NAME_uk="Клапан" DESCR="" DESCR_ru="" DESCR_uk="" FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/>
 		</tbl>
 		<tbl id="Model_blcks_io">
 		    <fld BLK_ID="Klap" ID="l_kl1" TLNK="0" LNK="" VAL="50"/>
 		    <fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/>
 		</tbl>
 		<tbl id="Model_prm">
-		    <fld SHIFR="l_kl" NAME="Полож. клапана" NAME_en="Klap lev" NAME_uk="Полож. клапана" DESCR="" DESCR_en="" DESCR_uk="" EN="1" BLK="Klap" IO="l_kl1"/>
+		    <fld SHIFR="l_kl" NAME="Klap lev" NAME_ru="Полож. клапана" NAME_uk="Полож. клапана" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" BLK="Klap" IO="l_kl1"/>
 		</tbl>
 		-->
 	    </node>
@@ -207,7 +207,7 @@
 	    <node id="mod_JavaLikeCalc">
 		<!--
 		<tbl id="DAQ">
-		    <fld ID="CalcTest" NAME="Тест вычисл." NAME_en="Calc Test" NAME_uk="Тест обчисл." DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="CalcTest_prm"
+		    <fld ID="CalcTest" NAME="Calc Test" NAME_ru="Тест вычисл." NAME_uk="Тест обчисл." DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="CalcTest_prm"
 			FUNC="TemplFunc.d_alarm" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/>
 		</tbl>
 		<tbl id="CalcTest_val">
@@ -217,59 +217,59 @@
 		    <fld ID="alrm_mess" VAL="Error present."/>
 		</tbl>
 		<tbl id="CalcTest_prm">
-		    <fld SHIFR="alrm" NAME="Авария" NAME_en="Alarm" NAME_uk="Аварія" DESCR="" DESCR_en="" DESCR_uk="" EN="1" FLD="alrm"/>
+		    <fld SHIFR="alrm" NAME="Alarm" NAME_ru="Авария" NAME_uk="Аварія" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" FLD="alrm"/>
 		</tbl>
 		<tbl id="lib">
-		    <fld ID="TemplFunc" NAME="" NAME_en="" NAME_uk="" DESCR="" ESCR_en="" DESCR_uk="" DB="lib_TemplFunc"/>
+		    <fld ID="TemplFunc" NAME="" NAME_ru="" NAME_uk="" DESCR="" ESCR_ru="" DESCR_uk="" DB="lib_TemplFunc"/>
 		</tbl>
 		<tbl id="lib_TemplFunc">
-		    <fld ID="d_alarm" NAME="Авария по дискр." NAME_en="Digit alarm" NAME_uk="Аварія за дискр" DESCR="" FORMULA="alrm=(in==alrm_md)?&quot;1:&quot;+alrm_mess:&quot;0&quot;;"/>
+		    <fld ID="d_alarm" NAME="Digit alarm" NAME_ru="Авария по дискр." NAME_uk="Аварія за дискр" DESCR="" FORMULA="alrm=(in==alrm_md)?&quot;1:&quot;+alrm_mess:&quot;0&quot;;"/>
 		</tbl>
 		<tbl id="lib_TemplFunc_io">
-		    <fld F_ID="d_alarm" ID="in" NAME="Вход" NAME_en="Input" NAME_uk="Вхід" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/>
-		    <fld F_ID="d_alarm" ID="alrm" NAME="Авария" NAME_en="Alarm" NAME_uk="Аварія" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/>
-		    <fld F_ID="d_alarm" ID="alrm_md" NAME="Режим аварии" NAME_en="Alarm mode" NAME_uk="Режим аварії" TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/>
-		    <fld F_ID="d_alarm" ID="alrm_mess" NAME="Сообщ. аварии" NAME_en="Alarm message" NAME_uk="Повід. аварії" TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/>
+		    <fld F_ID="d_alarm" ID="in" NAME="Input" NAME_ru="Вход" NAME_uk="Вхід" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/>
+		    <fld F_ID="d_alarm" ID="alrm" NAME="Alarm" NAME_ru="Авария" NAME_uk="Аварія" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/>
+		    <fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" NAME_ru="Режим аварии" NAME_uk="Режим аварії" TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/>
+		    <fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" NAME_ru="Сообщ. аварии" NAME_uk="Повід. аварії" TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/>
 		</tbl>-->
 	    </node>
 
 	    <node id="mod_CIF">
 		<!--
 		<tbl id="DAQ">
-		    <fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/>
 		</tbl>
 		<tbl id="test2prm">
-		    <fld SHIFR="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" EN="1" TMPL="S7.ai_man"/>
+		    <fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" TMPL="S7.ai_man"/>
 		</tbl>-->
 	    </node>
 
 	    <node id="mod_SNMP">
 		<!--
 		<tbl id="DAQ">
-		    <fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/>
 		</tbl>
 		<tbl id="test2prm">
-		    <fld SHIFR="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" EN="1" OID_LS="system"/>
+		    <fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" OID_LS="system"/>
 		</tbl>-->
 	    </node>
 
 	    <node id="mod_ModBus">
 		<!--
 		<tbl id="DAQ">
-		    <fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" TRANSP="Sockets" ADDR="exlar.diya.org" NODE="1"/>
 		</tbl>
 		<tbl id="test2prm">
-		    <fld SHIFR="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" EN="1" ATTR_LS="321:0:tst:Test"/>
+		    <fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" ATTR_LS="321:0:tst:Test"/>
 		</tbl>-->
 	    </node>
 
 	    <node id="mod_Transporter">
 		<!--
 		<tbl id="DAQ">
-		    <fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/>
 		</tbl>-->
 	    </node>
@@ -286,11 +286,11 @@
 		<fld
 		    ID="StatErrors"
 		    MODUL="FSArch"
-		    NAME="Ошибки"
-		    NAME_en="Errors"
+		    NAME="Errors"
+		    NAME_ru="Ошибки"
 		    NAME_uk="Помилки"
-		    DESCR="Архив локальных ощибок"
-		    DESCR_en="Local errors' archive"
+		    DESCR="Local errors' archive"
+		    DESCR_ru="Архив локальных ощибок"
 		    DESCR_uk="Архів локальних помилок"
 		    START="1"
 		    CATEG="/DemoStation*"
@@ -305,11 +305,11 @@
 		<fld
 		    ID="NetRequsts"
 		    MODUL="FSArch"
-		    NAME="Сетевые запросы"
-		    NAME_en="Net requests"
+		    NAME="Net requests"
+		    NAME_ru="Сетевые запросы"
 		    NAME_uk="Мережеві запити"
-		    DESCR="Запросы к серверу через транспорт Sockets."
-		    DESCR_en="Requests to server through transport Sockets."
+		    DESCR="Requests to server through transport Sockets."
+		    DESCR_ru="Запросы к серверу через транспорт Sockets."
 		    DESCR_uk="Запити до сервера через транспорт Sockets."
 		    START="1"
 		    CATEG="/DemoStation/Transport/Sockets*"
@@ -326,11 +326,11 @@
 		<fld
 		    ID="1h"
 		    MODUL="FSArch"
-		    NAME="1час"
-		    NAME_en="1hour"
+		    NAME="1hour"
+		    NAME_ru="1час"
 		    NAME_uk="1год"
-		    DESCR="Усреднение за час"
-		    DESCR_en="Averaging for hour"
+		    DESCR="Averaging for hour"
+		    DESCR_ru="Усреднение за час"
 		    DESCR_uk="Усереднення за годину"
 		    START="1"
 		    ADDR="ARCHIVES/VAL/1h/"
@@ -345,11 +345,11 @@
 	    <tbl id="Archive_val">
 	        <fld
 		    ID="test1"
-		    NAME="Тест 1"
-		    NAME_en="Test 1"
+		    NAME="Test 1"
+		    NAME_ru="Тест 1"
 		    NAME_uk="Тест 1"
-		    DESCR="Тест 1"
-		    DESCR_en="Test 1"
+		    DESCR="Test 1"
+		    DESCR_ru="Тест 1"
 		    DESCR_uk="Тест 1"
 		    START="1"
 		    VTYPE="1"
@@ -376,21 +376,21 @@
 	    <node id="mod_VCAEngine">
 		<!--
 		<tbl id="LIB">
-		    <fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/>
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/>
 		</tbl>
 		<tbl id="wlib_test2">
-		    <fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_en="" PROC_uk="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436"/>
+		    <fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_ru="" PROC_uk="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436"/>
 		</tbl>
 		<tbl id="wlib_test2_io">
-		    <fld IDW="test2" ID="name" IO_VAL="Тест 2" IO_VAL_en="Test 2" IO_VAL_uk="Тест 2" SELF_FLG="" CFG_TMPL="" CFG_TMPL_en="" CFG_TMPL_uk="" CFG_VAL=""/>
-		    <fld IDW="test2" ID="dscr" IO_VAL="Тест модуля 2" IO_VAL_en="Test module 2" IO_VAL_uk="Тест модуля 2" SELF_FLG="" CFG_TMPL="" CFG_TMPL_en="" CFG_TMPL_uk="" CFG_VAL=""/>
+		    <fld IDW="test2" ID="name" IO_VAL="Test 2" IO_VAL_ru="Тест 2" IO_VAL_uk="Тест 2" SELF_FLG="" CFG_TMPL="" CFG_TMPL_ru="" CFG_TMPL_uk="" CFG_VAL=""/>
+		    <fld IDW="test2" ID="dscr" IO_VAL="Test module 2" IO_VAL_ru="Тест модуля 2" IO_VAL_uk="Тест модуля 2" SELF_FLG="" CFG_TMPL="" CFG_TMPL_ru="" CFG_TMPL_uk="" CFG_VAL=""/>
 		</tbl>
 		<tbl id="PRJ">
-		    <fld ID="test2" NAME="Тест 2" NAME_en="Test 2" NAME_uk="Тест 2" DESCR="" DESCR_en="" DESCR_uk="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/>
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/>
 		</tbl>
 		<tbl id="prj_test2">
-		    <fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_en="" PROC_uk="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/>
-		    <fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_en="" PROC_uk="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/>
+		    <fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_ru="" PROC_uk="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/>
+		    <fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_ru="" PROC_uk="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/>
 		</tbl>
 		<tbl id="prj_test2_incl">
 		    <fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/>

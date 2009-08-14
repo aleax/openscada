@@ -532,10 +532,11 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( !(u_cfg.fld().flg()&TCfg::Key) && !u_cfg.view() ) continue;
 
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && isVarTextTransl && !u_cfg.noTransl());
-	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
-	    ins_name = ins_name + (next?",`":"`") + TSYS::strEncode(sid,TSYS::SQL) + "` ";
-	    sval = getVal(u_cfg); //if( isTransl && sval.empty() ) sval = " ";
-	    ins_value = ins_value + (next?",'":"'") + TSYS::strEncode(sval,TSYS::SQL) + "' ";
+	    ins_name = ins_name + (next?",`":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "` " +
+		( isTransl ? (",`" + TSYS::strEncode(lang2Code+"#"+cf_el[i_el],TSYS::SQL) + "` ") : "" );
+	    sval = getVal(u_cfg);
+	    ins_value = ins_value + (next?",'":"'") + TSYS::strEncode(sval,TSYS::SQL) + "' " +
+		( isTransl ? (",'" + TSYS::strEncode(sval,TSYS::SQL) + "' ") : "" );
 	    next = true;
 	}
 	req = req + "("+ins_name+") VALUES ("+ins_value+")";
@@ -552,7 +553,7 @@ void MTable::fieldSet( TConfig &cfg )
 
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && isVarTextTransl && !u_cfg.noTransl());
 	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
-	    sval = getVal(u_cfg); //if( isTransl && sval.empty() ) sval = " ";
+	    sval = getVal(u_cfg);
 	    req = req + (next?",`":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='" + TSYS::strEncode(sval,TSYS::SQL) + "' ";
 	    next = true;
 	}
