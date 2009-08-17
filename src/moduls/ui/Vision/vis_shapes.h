@@ -302,7 +302,7 @@ class ShapeDiagram : public WdgShape
 		string	addr( )		{ return m_addr; }
 		double	bordL( )	{ return m_bord_low; }
 		double	bordU( )	{ return m_bord_up; }
-		string	color( )	{ return m_color; }
+		QColor	color( )	{ return m_color; }
 		double	curVal( )	{ return m_curvl; }
 		int	valTp( )	{ return val_tp; }
 		long long valBeg( );
@@ -313,7 +313,7 @@ class ShapeDiagram : public WdgShape
 		void setAddr( const string &vl );
 		void setBordL( double vl )	{ m_bord_low = vl; }
 		void setBordU( double vl )	{ m_bord_up  = vl; }
-		void setColor( const string &vl ){ m_color = vl; }
+		void setColor( const QColor &vl ){ m_color = vl; }
 		void setCurVal( double vl )	{ m_curvl = vl; }
 
 		void loadData( bool full = false );
@@ -330,7 +330,7 @@ class ShapeDiagram : public WdgShape
 		string		m_addr;		//A parameter or an archive item address
 		double m_bord_low, m_bord_up;	//Borders
 		double		m_curvl;	//Curent value
-		string		m_color;	//Values line color
+		QColor		m_color;	//Values line color
 		//> Archive
 		int		arh_per;	//Archive period
 		long long	arh_beg;	//Archive begin time

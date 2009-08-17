@@ -125,6 +125,10 @@ class Project : public TCntrNode, public TConfig
 		&mPer,		//Calc period
 		&mFlgs;		//Project's flags
 	bool	mEnable;	//Enable state
+
+	//> Styles
+	int	mCurStyle;	//Current style index
+	map< string, vector<string> >	mStProp;	//Styles' properties
 };
 
 //************************************************

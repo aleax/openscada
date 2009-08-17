@@ -4759,7 +4759,6 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     int clr_grid, clr_mrk;						//Colors
 
     //> Get generic parameters
-    int parNum     = trnds.size();					//Parameter's number
     long long tSz  = (long long)(1e6*tSize);				//Trends size (us)
     long long tEnd = tTime;						//Trends end point (us)
     tPict = tEnd;
@@ -4778,7 +4777,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
 
-    if( !parNum || tSz <= 0 )	{ makeImgPng(ses,im); return; }
+    if( !trnds.size() || tSz <= 0 )	{ makeImgPng(ses,im); return; }
 
     //> Make decoration and prepare trends area
     tArX = 1, tArY = 1,						//Curves of trends area rect
@@ -4927,34 +4926,44 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	}
     }
 
+    int prmRealSz = -1;
+    //>> Calc real parameters size
+    for( int i_p = 0; i_p < trnds.size(); i_p++ )
+	if( trnds[i_p].val().size() && !((trnds[i_p].color()>>31)&0x01) )
+	{
+	    if( prmRealSz == -1 ) prmRealSz = i_p;
+	    else if( prmRealSz >= 0 ) prmRealSz = -2;
+	    else prmRealSz -= 1;
+	}
+
     //> Calc vertical scale
     long long aVend;					//Corrected for allow data the trend end point
     long long aVbeg;					//Corrected for allow data the trend begin point
     double vsMax = 100, vsMin = 0;      //Trend's vertical scale border
     bool   vsPerc = true;               //Vertical scale percent mode
-    if( parNum == 1 )
+    if( prmRealSz >= 0 )
     {
 	vsPerc = false;
-	if( trnds[0].bordU() <= trnds[0].bordL() )
+	if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() )
 	{
 	    //>> Check trend for valid data
-	    aVbeg = vmax(tBeg,trnds[0].valBeg());
-	    aVend = vmin(tEnd,trnds[0].valEnd());
+	    aVbeg = vmax(tBeg,trnds[prmRealSz].valBeg());
+	    aVend = vmin(tEnd,trnds[prmRealSz].valEnd());
 
 	    if( aVbeg >= aVend )	{ makeImgPng(ses,im); return; }
 	    //>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
-	    int ipos = trnds[0].val(aVbeg);
-	    if( ipos && trnds[0].val()[ipos].tm > aVbeg ) ipos--;
+	    int ipos = trnds[prmRealSz].val(aVbeg);
+	    if( ipos && trnds[prmRealSz].val()[ipos].tm > aVbeg ) ipos--;
 	    while( true )
 	    {
-		if( ipos >= trnds[0].val().size() || end_vl )	break;
-		if( trnds[0].val()[ipos].tm >= aVend )	end_vl = true;
-		if( trnds[0].val()[ipos].val != EVAL_REAL )
+		if( ipos >= trnds[prmRealSz].val().size() || end_vl )	break;
+		if( trnds[prmRealSz].val()[ipos].tm >= aVend )	end_vl = true;
+		if( trnds[prmRealSz].val()[ipos].val != EVAL_REAL )
 		{
-		    vsMin  = vmin(vsMin,trnds[0].val()[ipos].val);
-		    vsMax  = vmax(vsMax,trnds[0].val()[ipos].val);
+		    vsMin  = vmin(vsMin,trnds[prmRealSz].val()[ipos].val);
+		    vsMax  = vmax(vsMax,trnds[prmRealSz].val()[ipos].val);
 		}
 		ipos++;
 	    }
@@ -4967,7 +4976,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		vsMax += wnt_dp/2;
 	    }
 	}
-	else { vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
+	else { vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
     }
 
     float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
@@ -5003,7 +5012,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //> Draw trends
-    for( int i_t = 0; i_t < parNum; i_t++ )
+    for( int i_t = 0; i_t < trnds.size(); i_t++ )
     {
 	//>> Set trend's pen
 	int clr_t = gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
@@ -5011,7 +5020,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	//>> Prepare generic parameters
 	aVbeg = vmax(tBeg,trnds[i_t].valBeg());
 	aVend = vmin(tEnd,trnds[i_t].valEnd());
-	if( aVbeg >= aVend ) continue;
+	if( aVbeg >= aVend || (trnds[i_t].color()>>31)&0x01 ) continue;
 	int aPosBeg = trnds[i_t].val(aVbeg);;
 	if( aPosBeg && trnds[i_t].val()[aPosBeg].tm > aVbeg ) aPosBeg--;
 
@@ -5222,24 +5231,34 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	}
     }
 
+    int prmRealSz = -1;
+    //>> Calc real parameters size
+    for( int i_p = 0; i_p < trnds.size(); i_p++ )
+	if( trnds[i_p].fftN && !((trnds[i_p].color()>>31)&0x01) )
+	{
+	    if( prmRealSz == -1 ) prmRealSz = i_p;
+	    else if( prmRealSz >= 0 ) prmRealSz = -2;
+	    else prmRealSz -= 1;
+	}
+
     //>> Calc vertical scale
     double vsMax = 100, vsMin = 0, curVl;	//Trend's vertical scale border
     bool   vsPerc = true;			//Vertical scale percent mode
-    if( trnds.size() == 1 )
+    if( prmRealSz >= 0 )
     {
-	if( !trnds[0].fftN ) { makeImgPng(ses,im); return; }
+	if( !trnds[prmRealSz].fftN ) { makeImgPng(ses,im); return; }
 
 	vsPerc = false;
-	if( trnds[0].bordU() > trnds[0].bordL() )
-	{ vsMax = trnds[0].bordU(); vsMin = trnds[0].bordL(); }
+	if( trnds[prmRealSz].bordU() > trnds[prmRealSz].bordL() )
+	{ vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
 	else
 	{
 	    //>>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
-	    double vlOff = trnds[0].fftOut[0][0]/trnds[0].fftN;
-	    for( int i_v = 1; i_v < (trnds[0].fftN/2+1); i_v++ )
+	    double vlOff = trnds[prmRealSz].fftOut[0][0]/trnds[prmRealSz].fftN;
+	    for( int i_v = 1; i_v < (trnds[prmRealSz].fftN/2+1); i_v++ )
 	    {
-		curVl = vlOff+pow(pow(trnds[0].fftOut[i_v][0],2)+pow(trnds[0].fftOut[i_v][1],2),0.5)/(trnds[0].fftN/2+1);
+		curVl = vlOff+pow(pow(trnds[prmRealSz].fftOut[i_v][0],2)+pow(trnds[prmRealSz].fftOut[i_v][1],2),0.5)/(trnds[prmRealSz].fftN/2+1);
 		vsMin = vmin(vsMin,curVl);
 		vsMax = vmax(vsMax,curVl);
 	    }
@@ -5286,7 +5305,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     //>> Draw trends trnds[i_t];
     for( int i_t = 0; i_t < trnds.size(); i_t++ )
     {
-	if( !trnds[i_t].fftN ) continue;
+	if( !trnds[i_t].fftN || (trnds[i_t].color()>>31)&0x01 ) continue;
 
 	int clr_t = gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;

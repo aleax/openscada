@@ -1183,7 +1183,7 @@ void VisDevelop::visualItEdit( )
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
 
 	scrl->setWidget( vw );
-	scrl->resize(vmax(300,vmin(650,vw->size().width()+10)),vmax(200,vmin(550,vw->size().height()+10)));
+	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addWindow(scrl);
 	scrl->show();
     }

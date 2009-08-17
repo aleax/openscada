@@ -1373,7 +1373,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    case 0: shD->prms[trndN].setAddr(val);			break;		//addr
 		    case 1: shD->prms[trndN].setBordL(atof(val.c_str()));	break;		//bordL
 		    case 2: shD->prms[trndN].setBordU(atof(val.c_str()));	break;		//bordU
-		    case 3: shD->prms[trndN].setColor(val);			break;		//color
+		    case 3: shD->prms[trndN].setColor(QColor(val.c_str()));			break;		//color
 		    case 4: shD->prms[trndN].setCurVal(atof(val.c_str())); make_pct = false;	break;		//value
 		}
 	    }
@@ -1513,24 +1513,34 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	}
     }
 
+    int prmRealSz = -1;
+    //>> Calc real parameters size
+    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	if( shD->prms[i_p].fftN && shD->prms[i_p].color().isValid() )
+	{
+	    if( prmRealSz == -1 ) prmRealSz = i_p;
+	    else if( prmRealSz >= 0 ) prmRealSz = -2;
+	    else prmRealSz -= 1;
+	}
+
     //>> Calc vertical scale
     double vsMax = 100, vsMin = 0, curVl;	//Trend's vertical scale border
     bool   vsPerc = true;			//Vertical scale percent mode
-    if( shD->prms.size() == 1 )
+    if( prmRealSz >= 0 )
     {
-	if( !shD->prms[0].fftN ) return;
+	if( !shD->prms[prmRealSz].fftN ) return;
 
 	vsPerc = false;
-	if( shD->prms[0].bordU() > shD->prms[0].bordL() )
-	{ vsMax = shD->prms[0].bordU(); vsMin = shD->prms[0].bordL(); }
+	if( shD->prms[prmRealSz].bordU() > shD->prms[prmRealSz].bordL() )
+	{ vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
 	else
 	{
 	    //>>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
-	    double vlOff = shD->prms[0].fftOut[0][0]/shD->prms[0].fftN;
-	    for( int i_v = 1; i_v < (shD->prms[0].fftN/2+1); i_v++ )
+	    double vlOff = shD->prms[prmRealSz].fftOut[0][0]/shD->prms[prmRealSz].fftN;
+	    for( int i_v = 1; i_v < (shD->prms[prmRealSz].fftN/2+1); i_v++ )
 	    {
-		curVl = vlOff+pow(pow(shD->prms[0].fftOut[i_v][0],2)+pow(shD->prms[0].fftOut[i_v][1],2),0.5)/(shD->prms[0].fftN/2+1);
+		curVl = vlOff+pow(pow(shD->prms[prmRealSz].fftOut[i_v][0],2)+pow(shD->prms[prmRealSz].fftOut[i_v][1],2),0.5)/(shD->prms[prmRealSz].fftN/2+1);
 		vsMin = vmin(vsMin,curVl);
 		vsMax = vmax(vsMax,curVl);
 	    }
@@ -1581,10 +1591,10 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     for( int i_t = 0; i_t < shD->prms.size(); i_t++ )
     {
 	TrendObj *sTr = &shD->prms[i_t];
-	if( !sTr->fftN ) continue;
+	if( !sTr->fftN || !sTr->color().isValid() ) continue;
 
 	//>>> Set trend's pen
-	QPen trpen(QColor(sTr->color().c_str()));
+	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(1);
 	pnt.setPen(trpen);
@@ -1823,34 +1833,44 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
     }
 
+    int prmRealSz = -1;
+    //>> Calc real parameters size
+    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	if( shD->prms[i_p].val().size() && shD->prms[i_p].color().isValid() )
+	{
+	    if( prmRealSz == -1 ) prmRealSz = i_p;
+	    else if( prmRealSz >= 0 ) prmRealSz = -2;
+	    else prmRealSz -= 1;
+	}
+
     //>> Calc vertical scale
     long long aVend;			//Corrected for allow data the trend end point
     long long aVbeg;			//Corrected for allow data the trend begin point
     double vsMax = 100, vsMin = 0;	//Trend's vertical scale border
     bool   vsPerc = true;		//Vertical scale percent mode
-    if( shD->prms.size() == 1 )
+    if( prmRealSz >= 0 )
     {
 	vsPerc = false;
-	if( shD->prms[0].bordU() <= shD->prms[0].bordL() )
+	if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() )
 	{
 	    //>>> Check trend for valid data
-	    aVbeg = vmax(tBeg,shD->prms[0].valBeg());
-	    aVend = vmin(tEnd,shD->prms[0].valEnd());
+	    aVbeg = vmax(tBeg,shD->prms[prmRealSz].valBeg());
+	    aVend = vmin(tEnd,shD->prms[prmRealSz].valEnd());
 
 	    if( aVbeg >= aVend ) return;
 	    //>>> Calc value borders
 	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
-	    int ipos = shD->prms[0].val(aVbeg);
-	    if( ipos && shD->prms[0].val()[ipos].tm > aVbeg ) ipos--;
+	    int ipos = shD->prms[prmRealSz].val(aVbeg);
+	    if( ipos && shD->prms[prmRealSz].val()[ipos].tm > aVbeg ) ipos--;
 	    while( true )
 	    {
-		if( ipos >= shD->prms[0].val().size() || end_vl )	break;
-		if( shD->prms[0].val()[ipos].tm >= aVend )	end_vl = true;
-		if( shD->prms[0].val()[ipos].val != EVAL_REAL )
+		if( ipos >= shD->prms[prmRealSz].val().size() || end_vl )	break;
+		if( shD->prms[prmRealSz].val()[ipos].tm >= aVend )	end_vl = true;
+		if( shD->prms[prmRealSz].val()[ipos].val != EVAL_REAL )
 		{
-		    vsMin  = vmin(vsMin,shD->prms[0].val()[ipos].val);
-		    vsMax  = vmax(vsMax,shD->prms[0].val()[ipos].val);
+		    vsMin  = vmin(vsMin,shD->prms[prmRealSz].val()[ipos].val);
+		    vsMax  = vmax(vsMax,shD->prms[prmRealSz].val()[ipos].val);
 		}
 		ipos++;
 	    }
@@ -1863,7 +1883,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		vsMax += wnt_dp/2;
 	    }
 	}
-	else { vsMax = shD->prms[0].bordU(); vsMin = shD->prms[0].bordL(); }
+	else { vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
     }
 
     float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
@@ -1905,7 +1925,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	TrendObj *sTr = &shD->prms[i_t];
 
 	//>>> Set trend's pen
-	QPen trpen(QColor(sTr->color().c_str()));
+	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(1);
 	pnt.setPen(trpen);
@@ -1914,7 +1934,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	aVbeg = vmax(tBeg,sTr->valBeg());
 	aVend = vmin(tEnd,sTr->valEnd());
 
-	if( aVbeg >= aVend ) continue;
+	if( aVbeg >= aVend || !sTr->color().isValid() ) continue;
 	int aPosBeg = sTr->val(aVbeg);
 	if( aPosBeg && sTr->val()[aPosBeg].tm > aVbeg ) aPosBeg--;
 
@@ -2602,7 +2622,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->addrWdg->setHorizontalHeaderItem(ncl,new QTableWidgetItem());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setText(clmNm.c_str());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::UserRole,clm.c_str());
-    }    
+    }
 
     //> Clear loaded data
     if( full )

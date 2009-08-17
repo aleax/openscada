@@ -1337,7 +1337,7 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Document' )
   {
-    elStyle+='background-color: white; ';
+    elStyle += 'background-color: white; ';
 
     this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),true);
 
@@ -1400,11 +1400,11 @@ function makeEl( pgBr, inclPg )
       if( this.wdgs[chEl] ) this.wdgs[chEl].makeEl(pgBr.childNodes[j]);
       else
       {
-        var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
-        wdgO.place = this.place.ownerDocument.createElement('div');
-        wdgO.makeEl(pgBr.childNodes[j]);
-        this.place.appendChild(wdgO.place);
-        this.wdgs[chEl] = wdgO;
+	var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
+	wdgO.place = this.place.ownerDocument.createElement('div');
+	wdgO.makeEl(pgBr.childNodes[j]);
+	this.place.appendChild(wdgO.place);
+	this.wdgs[chEl] = wdgO;
       }
     }
 }
@@ -1446,9 +1446,9 @@ function perUpdt( )
 		this.attrs['style']+"</style>"+
 		"</head>"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+"</html>");
     frDoc.close();
-    frDoc.wdgLnk = this;
-    frDoc.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
-    frDoc.onclick = function(e)
+    frDoc.body.wdgLnk = this;
+    frDoc.body.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+    frDoc.body.onclick = function(e)
     {
       if( this.isActive ) setFocus(this.wdgLnk.addr);
       return false;

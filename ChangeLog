@@ -1,3 +1,8 @@
+2009-08-17 Roman
+- !!:/UI/Vision, /UI/WebVision: Disabled trends checking, include correct collor check, is added to primitive "Diagram".
+- FIX:/UI/WebVision: The focus get is fixed for primitive "Document".
+
+
 2009-08-14 Roman
 - !!!!:/DemoDB: DB and config file is rebuilded for made English language by default.
 - /SYS: Manual seting the default DB language for multilanguage enabling support is added.
