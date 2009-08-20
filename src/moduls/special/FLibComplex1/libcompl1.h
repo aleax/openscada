@@ -476,7 +476,7 @@ class Increm : public TFunction
 	string descr( )
 	{
 	    return _("Incrementator per formula:\n"
-		"out = if( in1 > in2 )then in2 + in3*(in1-in2); else in2 - in4*(in2-in1);");
+		"out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);");
 	}
 
 	void calc( TValFunc *v )
