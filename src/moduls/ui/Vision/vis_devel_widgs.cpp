@@ -1898,17 +1898,17 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
     }
     //> Select only created widgets by user
     else if( wLevel() == 1 && ((WdgView*)parentWidget())->isReload )
-    { setSelect(true); z_coord = 100000; }
+    { setSelect(true,PrcChilds); z_coord = 100000; }
 }
 
 DevelWdgView::~DevelWdgView( )
 {
     if( select() && !mod->endRun( ) )
     {
-	setSelect(false,false);
+	setSelect(false);
 	for( int i_c = 0; i_c < children().size(); i_c++ )
 	    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-		((DevelWdgView*)children().at(i_c))->setSelect(false);
+		((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
     }
 }
 
@@ -1953,21 +1953,21 @@ void DevelWdgView::saveGeom( const string& item )
 	    if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
 		((DevelWdgView*)children().at(i_c))->saveGeom(item);
 
-    //- For top items (like inspector) data update -
-    if( wLevel() == 0  )  setSelect(true);
+    //> For top items (like inspector) data update
+    if( wLevel() == 0  )  setSelect(true,PrcChilds);
 }
 
-void DevelWdgView::setSelect( bool vl, bool childs, bool onlyFlag )
+void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag, bool noUpdate )
 {
     int chld_cnt = 0;
 
     fWdgSelect = vl;
-    if( !vl && edit() && !onlyFlag ) setEdit(false);
+    if( !vl && edit() && !(flgs&OnlyFlag) ) setEdit(false);
 
-    //- Level 0 process -
+    //> Level 0 process
     if( wLevel() != 0 && !edit() ) return;
 
-    if( vl && !onlyFlag )
+    if( vl && !(flgs&OnlyFlag) )
     {
 	string sel_chlds = selectChilds(&chld_cnt);
 	if( sel_chlds.size() )	emit selected(sel_chlds);
@@ -1975,16 +1975,16 @@ void DevelWdgView::setSelect( bool vl, bool childs, bool onlyFlag )
     }
     if( !vl )
     {
-	if( childs )
+	if( flgs&PrcChilds )
 	    for( int i_c = 0; i_c < children().size(); i_c++ )
 		if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false,true,onlyFlag);
-	if( !onlyFlag )	emit selected("");
+		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false,flgs|OnlyFlag);
+	if( !(flgs&OnlyFlag) )	emit selected("");
     }
 
-    //- Update actions access -
-    //-- Enable view toolbar --
-    if( !onlyFlag )
+    //> Update actions access
+    //>> Enable view toolbar
+    if( !(flgs&OnlyFlag) )
     {
 	if( !edit() )
 	{
@@ -1992,12 +1992,12 @@ void DevelWdgView::setSelect( bool vl, bool childs, bool onlyFlag )
 	    disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
 	    if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
 
-	    //-- Update widget view tools --
+	    //>> Update widget view tools
 	    for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
 		mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
 	}
 
-	update();
+	if( !(flgs&NoUpdate) ) update();
     }
 }
 
@@ -2366,7 +2366,7 @@ void DevelWdgView::editExit( )
 {
     for( int i_c = 0; i_c < children().size(); i_c++ )
 	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-	    ((DevelWdgView*)children().at(i_c))->setSelect(false);
+	    ((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
     setEdit(false);
     update();
 }
@@ -2566,14 +2566,14 @@ bool DevelWdgView::event( QEvent *event )
 	QPainter pnt( this );
 	pnt.setWindow( rect() );
 
-	//- Draw background for root widget -
+	//> Draw background for root widget
 	if( wLevel() == 0 )
 	{
 	    pnt.setPen("black");
 	    pnt.setBrush(QBrush(QColor("white")));
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	}
-	//- Draw widget border geometry -
+	//> Draw widget border geometry
 	else if( levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove )
 	{
 	    if( !fHideChilds )
@@ -2598,14 +2598,14 @@ bool DevelWdgView::event( QEvent *event )
 		if( qobject_cast<QWidget*>(children().at(i_c)) )
 		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
 	}
-	//- Check widget -
+	//> Check widget
 	if( !shape )
 	{
 	    pnt.drawImage(rect(),QImage(":/images/attention.png"));
 	    setToolTip(QString(_("Widget is not enabled or shape is not supported!")));
 	}
 
-	//- Update select widget data -
+	//> Update select widget data
 	if( wLevel() == 0 && !fHoldSelRect )
 	{
 	    QRectF rsel;
@@ -2663,7 +2663,7 @@ bool DevelWdgView::event( QEvent *event )
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
-		//- New widget inserting -
+		//> New widget inserting
 		QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
 		if( act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
 		{
@@ -2673,14 +2673,14 @@ bool DevelWdgView::event( QEvent *event )
 		    return true;
 		}
 
-		//- Select widget -
+		//> Select widget
 		if( (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
 		{
 		    dragStartPos = ((QMouseEvent*)event)->pos();
 		    bool sh_hold = QApplication::keyboardModifiers()&Qt::ShiftModifier;
 		    if( cursor().shape() == Qt::ArrowCursor || sh_hold )
 		    {
-			//-- Scan childs --
+			//>> Scan childs
 			bool sel_modif = false;
 			bool chld_sel = false;
 			DevelWdgView *cwdg = NULL;
@@ -2690,21 +2690,21 @@ bool DevelWdgView::event( QEvent *event )
 			    if( !cwdg ) continue;
 			    if( cwdg->geometryF().contains(curp) )
 			    {
-				if( !cwdg->select() )	{ cwdg->setSelect(true,true,true);  sel_modif = true; }
-				else if( sh_hold )	{ cwdg->setSelect(false,true,true); sel_modif = true; }
+				if( !cwdg->select() )	{ cwdg->setSelect(true,PrcChilds|OnlyFlag);  sel_modif = true; }
+				else if( sh_hold )	{ cwdg->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
 				if( cwdg->select() )	chld_sel = true;
 				break;
 			    }
 			}
-			//-- Select clean for childs --
+			//>> Select clean for childs
 			if( !sh_hold )
 			    for( int i_c = 0; i_c < children().size(); i_c++ )
 			    {
 				DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
 				if( !curw || (chld_sel && (curw == cwdg)) )	continue;
-				if( curw->select() )	{ curw->setSelect(false,true,true); sel_modif = true; }
+				if( curw->select() )	{ curw->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
 			    }
-			if( sel_modif || !select() )	{ setSelect(true,true,true); fSelChange = true; }
+			if( sel_modif || !select() )	{ setSelect(true,PrcChilds|OnlyFlag); fSelChange = true; }
 			event->accept();
 
 			upMouseCursors(mapFromGlobal(cursor().pos()));
@@ -2725,6 +2725,7 @@ bool DevelWdgView::event( QEvent *event )
 			fMoveHold = true;
 			holdPnt = curp;
 		    }
+		    update();	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
 		    return true;
 		}
 		break;
@@ -2739,13 +2740,17 @@ bool DevelWdgView::event( QEvent *event )
 		    {
 			DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
 			if( !cwdg || !QRect(holdPnt,curp).contains(cwdg->geometryF().toRect()) ) continue;
-			cwdg->setSelect(true,true,true);
+			cwdg->setSelect(true,PrcChilds|OnlyFlag);
 		    }
-		    setSelect(true);
+		    setSelect(true,PrcChilds);
 		    fHoldSelRect = false;
 		    //pntView->setSelArea(QRectF());
 		}
-		if( fSelChange )	{ setSelect(true); fSelChange = false; }
+		if( fSelChange )
+		{
+		    setSelect(true,PrcChilds|NoUpdate);	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
+		    fSelChange = false;
+		}
 
 		if( fMoveHold )
 		{
@@ -2788,9 +2793,9 @@ bool DevelWdgView::event( QEvent *event )
 		        if( !cwdg->shape || !cwdg->shape->isEditable( ) )	continue;
 		        edwdg = cwdg;
 		    }
-		    else if( cwdg->select() ) cwdg->setSelect(false);
+		    else if( cwdg->select() ) cwdg->setSelect(false,PrcChilds);
 		}
-		if( edwdg && !edwdg->select() )	edwdg->setSelect(true);
+		if( edwdg && !edwdg->select() )	edwdg->setSelect(true,PrcChilds);
 		editEnter( );
 		return true;
 	    }
@@ -2802,20 +2807,20 @@ bool DevelWdgView::event( QEvent *event )
 		if( edit() )    break;
 		//-- Unselect and store child widgets --
 		//if(select())
-		setSelect(true);
+		setSelect(true,PrcChilds);
 		mainWin()->setWdgScale(false);
 		return true;
 	    case QEvent::FocusOut:
 		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
 		if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() )
 		{
-		    if( editWdg )	editWdg->setSelect(false);
+		    if( editWdg )	editWdg->setSelect(false,PrcChilds);
 		    //emit selected("");
-		    setSelect(false,false);
+		    setSelect(false);
 		    //-- Unselect and store child widgets --
 		    /*for( int i_c = 0; i_c < children().size(); i_c++ )
 			if( qobject_cast<DevelWdgView*>(children().at(i_c)) && ((DevelWdgView*)children().at(i_c))->select() )
-			    ((DevelWdgView*)children().at(i_c))->setSelect(false);*/
+			    ((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);*/
 		}
 		return true;
 	    case QEvent::MouseMove:
@@ -2871,8 +2876,8 @@ bool DevelWdgView::event( QEvent *event )
 			    if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) )	break;
 			    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
 				if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
-				    ((DevelWdgView*)children().at(i_c))->setSelect(true);
-			    setSelect(true);
+				    ((DevelWdgView*)children().at(i_c))->setSelect(true,PrcChilds);
+			    setSelect(true,PrcChilds);
 			    break;
 			case Qt::Key_Left: case Qt::Key_Right: case Qt::Key_Up: case Qt::Key_Down:
 			{
@@ -2933,6 +2938,7 @@ SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(SizeDots)
 void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 {
     if( view == iview && mWPos == geom.topLeft() && mWSize == geom.size() ) return;
+
     view   = iview;
     mWPos  = geom.topLeft();
     mWSize = geom.size();
@@ -3017,9 +3023,9 @@ bool SizePntWdg::event( QEvent *ev )
 		return true;
 	    }
 	    break;
-	case QEvent::MouseButtonPress:
-	case QEvent::MouseButtonRelease:
-	    return QApplication::sendEvent(parent(),ev);
+	//case QEvent::MouseButtonPress:
+	//case QEvent::MouseButtonRelease:
+	//    return QApplication::sendEvent(parent(),ev);
     }
 
     return QWidget::event(ev);

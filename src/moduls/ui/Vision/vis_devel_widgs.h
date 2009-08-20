@@ -65,8 +65,8 @@ class ModInspAttr: public QAbstractTableModel
 		enum Type { WdgGrp, Wdg, AttrGrp, Attr };
 		enum Flag
 		{
-		    Select	= 0x01,
-		    FullText	= 0x08,
+		    Select	= 0x0001,
+		    FullText	= 0x0008,
 		    Active	= 0x0100,
 		    Image	= 0x0200,
 		    Color	= 0x0400,
@@ -461,6 +461,9 @@ class DevelWdgView: public WdgView
     Q_OBJECT
 
     public:
+	//Data
+	enum SelFlgs { PrcChilds = 0x01, OnlyFlag = 0x02, NoUpdate = 0x04 };
+
 	//Public methods
 	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
 	~DevelWdgView( );
@@ -475,7 +478,7 @@ class DevelWdgView: public WdgView
 	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
 	bool edit( )		{ return fWdgEdit; }		//Edit mode state
 
-	void setSelect( bool vl, bool childs = true, bool onlyFlag = false );
+	void setSelect( bool vl, char flgs = 0 );// bool childs = true, bool onlyFlag = false, bool noUpdate = false );
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 	void setVisScale( float val );

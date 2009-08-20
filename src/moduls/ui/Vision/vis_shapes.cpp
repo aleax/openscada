@@ -3007,7 +3007,7 @@ void ShapeDocument::nodeProcess( XMLNode *xcur, ShapeDocument::ShpDt *shD )
     }
 }
 
-bool ShapeDocument::event( WdgView *view, QEvent *event )
+bool ShapeDocument::event( WdgView *w, QEvent *event )
 {
     return false;
 }
@@ -3265,19 +3265,19 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    if( shD->inclWidget ) return false;
 	    QPainter pnt( w );
 
-	    //- Apply margin -
+	    //> Apply margin
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
-	    //- Draw background -
+	    //> Draw background
 	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
 	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
-	    //- Draw border -
+	    //> Draw border
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
-	    //- Draw focused border -
+	    //> Draw focused border
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
 
 	    return true;

@@ -702,9 +702,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {
-	if( valo.getS() == pvl.getS() ) return;
+	if( valo.getS(NULL,true) == pvl.getS() ) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -714,11 +714,17 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     switch(valo.fld().type())
     {
 	case TFld::Boolean:
-	    owner().setValC(valo.getB(NULL,true),aid,acq_err);
+	{
+	    char cvl = valo.getB(NULL,true);    
+	    if( cvl != pvl.getB() && cvl != EVAL_BOOL )	owner().setValC(cvl,aid,acq_err);
 	    break;
+	}
 	case TFld::Integer:
-	    owner().setValR(valo.getI(NULL,true),aid,acq_err);
+	{
+	    int cvl = valo.getI(NULL,true);
+	    if( cvl != pvl.getI() && cvl != EVAL_INT )	owner().setValR(cvl,aid,acq_err);
 	    break;
+	}
     }
 }
 
