@@ -118,11 +118,9 @@ void HddSmart::getVal( TMdPrm *prm )
     FILE *fp = popen(cmd.c_str(),"r");
     if( fp )
     {
-	printf("TEST 00\n");
 	while( fgets(buf,sizeof(buf),fp) != NULL )
 	{
 	    if( sscanf(buf,"%30s : %50s",name,info) != 2 ) continue;
-	    printf("TEST 01: <%s>\n",name);
 	    if(!prm->vlPresent(name))
                 fldAdd( new TFld(name,name,TFld::String,Fld::NoWrite) );
 	    prm->vlAt(name).at().setS(info,NULL,true);

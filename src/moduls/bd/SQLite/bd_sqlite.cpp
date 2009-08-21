@@ -341,8 +341,6 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     mLstUse = time(NULL);
 
     string sid;
-    string lang2Code = cfg.noTransl( ) ? "" : Mess->lang2Code();
-    //bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
     //> Make WHERE
     string req = "SELECT ";
     string req_where = "WHERE ";
@@ -352,10 +350,10 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     {
 	sid = tblStrct[i_fld][1];
 	TCfg *u_cfg = cfg.at(sid,true);
-	if( !u_cfg && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") )
+	if( !cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") )
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText && !u_cfg->noTransl()) ) continue;
+	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
 	    trPresent = true;
 	}
 	if( !u_cfg ) continue;
@@ -383,7 +381,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid,true);
 	if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
-	else if( trPresent && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") && tbl[1][i_fld].size() )
+	else if( trPresent && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") && tbl[1][i_fld].size() )
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
 	    if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
@@ -401,8 +399,6 @@ void MTable::fieldGet( TConfig &cfg )
     mLstUse = time(NULL);
 
     string sid;
-    string lang2Code = cfg.noTransl( ) ? "" : Mess->lang2Code();
-    //bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
     //> Prepare request
     string req = "SELECT ";
     string req_where;
@@ -412,10 +408,10 @@ void MTable::fieldGet( TConfig &cfg )
     {
 	sid = tblStrct[i_fld][1];
 	TCfg *u_cfg = cfg.at(sid,true);
-	if( !u_cfg && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") )
+	if( !cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") )
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText && !u_cfg->noTransl()) ) continue;
+	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
 	    trPresent = true;
 	}
 	if( !u_cfg ) continue;
@@ -443,7 +439,7 @@ void MTable::fieldGet( TConfig &cfg )
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid,true);
 	if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
-	else if( trPresent && sid.size() > 3 && sid.substr(0,3) == (lang2Code+"#") && tbl[1][i_fld].size() )
+	else if( trPresent && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") && tbl[1][i_fld].size() )
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
 	    if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
@@ -459,8 +455,7 @@ void MTable::fieldSet( TConfig &cfg )
     mLstUse = time(NULL);
 
     string sid, sval;
-    string lang2Code = cfg.noTransl( ) ? "" : Mess->lang2Code();
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
+    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -469,11 +464,11 @@ void MTable::fieldSet( TConfig &cfg )
     bool trPresent = isVarTextTransl, trDblDef = false;
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
-	if( trPresent && (!isVarTextTransl || trDblDef) ) break;
+	if( (trPresent || cfg.noTransl()) && (!isVarTextTransl || trDblDef) ) break;
 	sid = tblStrct[i_fld][1];
 	if( sid.size() > 3 )
 	{
-	    if( !trPresent && sid.substr(0,3) == (lang2Code+"#") ) trPresent = true;
+	    if( !trPresent && sid.substr(0,3) == (Mess->lang2Code()+"#") ) trPresent = true;
 	    if( isVarTextTransl && !trDblDef && sid.substr(0,3) == (Mess->lang2CodeBase()+"#") ) trDblDef = true;
 	}
     }
@@ -512,7 +507,7 @@ void MTable::fieldSet( TConfig &cfg )
 
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    ins_name = ins_name + (next?",\"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\" " +
-		(isTransl ? (",\"" + mod->sqlReqCode(lang2Code+"#"+cf_el[i_el],'"') + "\" ") : "");
+		(isTransl ? (",\"" + mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[i_el],'"') + "\" ") : "");
 	    sval = getVal(u_cfg);
 	    ins_value = ins_value + (next?",'":"'") + mod->sqlReqCode(sval) + "' " + 
 		(isTransl ? (",'" + mod->sqlReqCode(sval) + "' ") : "");
@@ -531,7 +526,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if( u_cfg.fld().flg()&TCfg::Key || !u_cfg.view() ) continue;
 
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
-	    sid = isTransl ? (lang2Code+"#"+cf_el[i_el]) : cf_el[i_el];
+	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
 	    req = req + (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(sval) + "' ";
 	    next = true;
@@ -541,14 +536,12 @@ void MTable::fieldSet( TConfig &cfg )
     req += ";";
 
     //> Query
-    //printf("TEST 02: query: <%s>\n",req.c_str());
     try{ owner().sqlReq( req ); }
     catch(TError err)
     {
 	if( (err.cod-100) == SQLITE_READONLY )	return;
 	fieldFix(cfg); owner().sqlReq( req );
     }
-    //printf("TEST 01b: End from set\n");
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -590,8 +583,7 @@ void MTable::fieldFix( TConfig &cfg )
 
     string req;
 
-    string lang2Code = cfg.noTransl( ) ? "" : Mess->lang2Code();
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && lang2Code != Mess->lang2CodeBase());
+    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -627,7 +619,7 @@ void MTable::fieldFix( TConfig &cfg )
 			    if( tblStrct[i_c][1].size() > 3 && tblStrct[i_c][1].substr(2) == ("#"+cf_el[i_cf]) && tblStrct[i_c][1].substr(0,2) != Mess->lang2Code() )
 			    {
 				all_flds = all_flds + ",\"" + mod->sqlReqCode(tblStrct[i_c][1],'"') + "\"";
-				if( tblStrct[i_c][1].substr(0,2) == lang2Code ) col_cur = true;
+				if( tblStrct[i_c][1].substr(0,2) == Mess->lang2Code() ) col_cur = true;
 			    }
 			if( !col_cur && isVarTextTransl ) fix = true;
 		    }
@@ -684,10 +676,10 @@ void MTable::fieldFix( TConfig &cfg )
 		if( tblStrct[i_c][1].size() > 3 && tblStrct[i_c][1].substr(2) == ("#"+cf_el[i_cf]) && tblStrct[i_c][1].substr(0,2) != Mess->lang2Code() )
 		{
 		    req = req + ",\"" + mod->sqlReqCode(tblStrct[i_c][1],'"') + "\" "+tpCfg;
-		    if( tblStrct[i_c][1].substr(0,2) == lang2Code ) col_cur = true;
+		    if( tblStrct[i_c][1].substr(0,2) == Mess->lang2Code() ) col_cur = true;
 		}
 	    if( !col_cur && isVarTextTransl )
-		req = req + ",\"" + mod->sqlReqCode(lang2Code+"#"+cf_el[i_cf],'"') + "\" "+tpCfg;
+		req = req + ",\"" + mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[i_cf],'"') + "\" "+tpCfg;
 	}
 	//>> Primary key
 	else if( cf.fld().flg()&TCfg::Key )
@@ -697,16 +689,13 @@ void MTable::fieldFix( TConfig &cfg )
 	}
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";
-    //printf("TEST 03: query: <%s>\n",req.c_str());
     owner().sqlReq( req );
 
-    //printf("TEST 01: %d\n",fix);
     //- Copy data from temporary DB -
     if( fix )
     {
 	req = "INSERT INTO '"+mod->sqlReqCode(name())+"'("+all_flds+") SELECT "+all_flds+" FROM 'temp_"+mod->sqlReqCode(name())+"';"
 	    "DROP TABLE 'temp_"+mod->sqlReqCode(name())+"';";
-	//printf("TEST 02: %s\n",req.c_str());
 	owner().sqlReq( req );
     }
 

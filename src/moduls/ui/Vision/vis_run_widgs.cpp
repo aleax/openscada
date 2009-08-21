@@ -292,7 +292,6 @@ bool RunWdgView::event( QEvent *event )
 	case QEvent::KeyPress:
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
-	    //printf("TEST 00: %s: %d\n",id().c_str(),event->type());
 	    if( ((QKeyEvent*)event)->key() == Qt::Key_Tab ) { mod_ev = ""; break; }
 	    if( mod_ev.empty() ) mod_ev = "key_rels";
 	    if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mod_ev+="Ctrl";

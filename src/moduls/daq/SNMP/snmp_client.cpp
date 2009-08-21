@@ -324,7 +324,6 @@ void *TMdContr::Task( void *icntr )
 					    cprm.vlAt(soid).at().setR(*(unsigned long*)vars->val.integer,0,true);
 					    break;
 					default:
-					    //printf("TEST 02: %xh\n",vars->type);
 					    //print_objid(vars->name,vars->name_length);
 					    //print_value(vars->name,vars->name_length,vars);
 					    break;
