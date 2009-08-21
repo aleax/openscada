@@ -618,9 +618,9 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {
-	if( val.getS() == pvl.getS() ) return;
+	if( val.getS(0,true) == pvl.getS() ) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS());
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
