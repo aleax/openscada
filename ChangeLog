@@ -1,3 +1,7 @@
+2009-08-21 Roman
+- FIX:/DAQ/*: Redundant processing into attrSet() is fixed.
+
+
 2009-08-20 Roman
 - !!:/DAQ/ModBus: Write to PLC is set only if value not equal previous and not EVAL.
 - FIX:/UI/Vision: Some hack for QT bug of widget update into scroll area is set.
