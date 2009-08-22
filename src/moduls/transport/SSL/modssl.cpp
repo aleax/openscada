@@ -19,8 +19,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//#include <sys/socket.h>
-
 #include <getopt.h>
 #include <signal.h>
 #include <sys/types.h>
@@ -83,7 +81,7 @@ TTransSock::TTransSock( string name )
 
     mod		= this;
 
-    //- CRYPTO reentrant init -
+    //> CRYPTO reentrant init
     mutex_buf = (pthread_mutex_t *)malloc( CRYPTO_num_locks( ) * sizeof(pthread_mutex_t) );
     for( int i = 0; i < CRYPTO_num_locks( ); i++ )
 	pthread_mutex_init(&mutex_buf[i],NULL);
@@ -93,7 +91,7 @@ TTransSock::TTransSock( string name )
     CRYPTO_set_dynlock_lock_callback(dyn_lock_function);
     CRYPTO_set_dynlock_destroy_callback(dyn_destroy_function);
 
-    //- SSL init -
+    //> SSL init
     SSL_library_init();
     SSL_load_error_strings();
     RAND_load_file("/dev/urandom",1024);
@@ -314,10 +312,10 @@ void *TSocketIn::Task( void *sock_in )
     string ssl_method = TSYS::strSepParse(s.addr(),2,':');
 
     //-- Set SSL method --
-    SSL_METHOD *meth = SSLv23_server_method();
-    if( ssl_method == "SSLv2" )		meth = SSLv2_server_method();
-    else if( ssl_method == "SSLv3" )	meth = SSLv3_server_method();
-    else if( ssl_method == "TLSv1" )	meth = TLSv1_server_method();
+    SSL_METHOD *meth = (SSL_METHOD*)SSLv23_server_method();
+    if( ssl_method == "SSLv2" )		meth = (SSL_METHOD*)SSLv2_server_method();
+    else if( ssl_method == "SSLv3" )	meth = (SSL_METHOD*)SSLv3_server_method();
+    else if( ssl_method == "TLSv1" )	meth = (SSL_METHOD*)TLSv1_server_method();
 
     try
     {
@@ -670,10 +668,10 @@ void TSocketOut::start()
     string ssl_method = TSYS::strSepParse(addr(),2,':');
 
     //> Set SSL method
-    SSL_METHOD *meth = SSLv23_client_method();
-    if( ssl_method == "SSLv2" )		meth = SSLv2_client_method();
-    else if( ssl_method == "SSLv3" )	meth = SSLv3_client_method();
-    else if( ssl_method == "TLSv1" )	meth = TLSv1_client_method();
+    SSL_METHOD *meth = (SSL_METHOD*)SSLv23_client_method();
+    if( ssl_method == "SSLv2" )		meth = (SSL_METHOD*)SSLv2_client_method();
+    else if( ssl_method == "SSLv3" )	meth = (SSL_METHOD*)SSLv3_client_method();
+    else if( ssl_method == "TLSv1" )	meth = (SSL_METHOD*)TLSv1_client_method();
 
     try
     {
