@@ -1,24 +1,25 @@
 # OpenSCADA.Archive.DBArch translate to German.
-# Copyright (C) 2008-2009 Aleksey Popkov
+# Copyright (C) 2008-2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Archive.DBArch module.
-# aleksey <aleksey@psniip.ru>, 2008-2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:163 mess.cpp:181 val.cpp:115
 #: val.cpp:146 val.cpp:176 val.cpp:192 val.cpp:205 val.cpp:230 val.cpp:299
 #: mess.h:51
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:02+0300\n"
-"PO-Revision-Date: 2008-12-11 13:33+0300\n"
-"Last-Translator: aleksey <aleksey@psniip.ru>\n"
-"Language-Team:  <ru@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:42+0300\n"
+"PO-Revision-Date: 2009-08-17 10:37+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: arch.cpp:35
 msgid "DBArch"
@@ -26,7 +27,7 @@ msgstr ""
 
 #: arch.cpp:36
 msgid "To DB archivator"
-msgstr "Zum DB Archivator"
+msgstr "Archivar für die Datenbank"
 
 #: arch.cpp:37 mess.cpp:211 mess.cpp:212 mess.cpp:214 mess.cpp:223
 #: mess.cpp:224 val.cpp:90 val.cpp:92 val.cpp:100 val.cpp:101
@@ -45,8 +46,8 @@ msgstr "Roman Savotschenko"
 msgid ""
 "The Archive module. Allow functions for messages and values arhiving to DB."
 msgstr ""
-"Modul des Archivs. Gewaehrt Archivierungsfunktionen der Mitteilungen und "
-"Bedeutungen  fuer DB."
+"Archivmodul. Funktionen zum Archivieren von Nachrichten und Werten in die "
+"Datenbank."
 
 #: arch.cpp:42
 msgid "GPL"
@@ -62,7 +63,7 @@ msgstr ""
 
 #: arch.cpp:89 arch.cpp:92
 msgid "Archive size (hours)"
-msgstr "Umfang vom Archiv (Stunden)"
+msgstr "Grösse des Archivs (Stunden)"
 
 #: arch.cpp:89 arch.cpp:92
 msgid "20.5"
@@ -79,7 +80,7 @@ msgstr ""
 
 #: arch.cpp:95
 msgid "Table"
-msgstr " Tabelle"
+msgstr "Tabelle"
 
 #: arch.cpp:95
 msgid "50"
@@ -152,7 +153,7 @@ msgstr ""
 
 #: arch.cpp:104 arch.cpp:111 arch.cpp:116 arch.cpp:121
 msgid "Time (us)"
-msgstr "Zeit (mks)"
+msgstr "Zeit (usek)"
 
 #: arch.cpp:104
 msgid "6"
@@ -180,7 +181,7 @@ msgstr ""
 
 #: arch.cpp:106
 msgid "Message"
-msgstr "Mitteilung"
+msgstr "Nachricht"
 
 #: arch.cpp:106 arch.cpp:122
 msgid "1000"
@@ -192,7 +193,7 @@ msgstr ""
 
 #: arch.cpp:107
 msgid "Level"
-msgstr "Niveau"
+msgstr "Stufe"
 
 #: arch.cpp:107
 msgid "1"
@@ -206,7 +207,7 @@ msgstr ""
 
 #: arch.cpp:112 arch.cpp:117 arch.cpp:122
 msgid "Value"
-msgstr "Bedeutung"
+msgstr "Wert"
 
 #: arch.cpp:117
 msgid "30.15"
@@ -221,8 +222,7 @@ msgid ""
 msgstr ""
 "========================== Оptionen des Moduls  <%s:%s> "
 "==========================\n"
-"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
-"--------\n"
+"-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei --------\n"
 "\n"
 
 #: arch.cpp:147
@@ -231,6 +231,11 @@ msgstr ""
 
 #: arch.cpp:150 mess.cpp:213 val.cpp:91
 msgid "help"
+msgstr ""
+
+#: arch.cpp:160 mess.cpp:66
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: arch.cpp:190 mess.cpp:208 val.cpp:87
@@ -247,7 +252,7 @@ msgstr ""
 
 #: arch.cpp:193
 msgid "Options help"
-msgstr " Optionenhilfe"
+msgstr "Optionen Hilfe"
 
 #: arch.cpp:193 mess.cpp:211 mess.cpp:212 mess.cpp:214 mess.cpp:223
 #: mess.cpp:224 val.cpp:90 val.cpp:92 val.cpp:100 val.cpp:101
@@ -297,14 +302,9 @@ msgstr ""
 msgid "."
 msgstr ""
 
-#: mess.cpp:66
-#, c-format
-msgid "%s"
-msgstr ""
-
 #: mess.cpp:120 mess.cpp:170
 msgid "Archive is not started!"
-msgstr "Archiv nicht gestartet"
+msgstr "Archiv ist nicht gestartet!"
 
 #: mess.cpp:211 mess.cpp:220
 msgid "/prm/st/tarch"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: mess.cpp:211
 msgid "Archiving time (msek)"
-msgstr "Archivierungszeit (mks)"
+msgstr "Archivierungszeit (msek)"
 
 #: mess.cpp:211 mess.cpp:214 val.cpp:92
 msgid "real"
@@ -343,6 +343,8 @@ msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
 msgstr ""
+"Datenbank Parameter im Format [<DB module>.<DB name>].\n"
+"Für die Hauptdatenbank '*.*' verwenden."
 
 #: mess.cpp:214 mess.cpp:221 val.cpp:92 val.cpp:98
 msgid "/prm/cfg/sz"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-06 17:14+0300\n"
+"POT-Creation-Date: 2009-08-27 15:26+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -29,7 +29,7 @@ msgid "Protocol"
 msgstr "Протокол"
 
 #: self.cpp:37
-msgid "0.8.1"
+msgid "0.9.0"
 msgstr ""
 
 #: self.cpp:38
@@ -65,6 +65,11 @@ msgstr ""
 
 #: self.cpp:154 self.cpp:265 self.cpp:270
 msgid "help"
+msgstr ""
+
+#: self.cpp:164
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: self.cpp:170 self.cpp:177

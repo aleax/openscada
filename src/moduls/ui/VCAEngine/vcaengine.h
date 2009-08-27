@@ -106,6 +106,7 @@ class Engine : public TUI
 	TElem &elProject( )	{ return prj_el; }
 	TElem &elPage( )	{ return page_el; }
 	TElem &elPrjSes( )	{ return prj_ses_el; }
+	TElem &elPrjStl( )	{ return prjStl_el; }
 
     protected:
 	//Methods
@@ -129,7 +130,8 @@ class Engine : public TUI
 		inclwdg_el,	//The table structure of container including widgets
 		prj_el,		//The generic table structure of project
 		page_el,	//The table structure of project's pages
-		prj_ses_el;	//The table structure of session's IO of project
+		prj_ses_el,	//The table structure of session's IO of project
+		prjStl_el;	//The table structure of styles of project
 	string	mSynthCom, mSynthCode;	//Synth parameters
 
 	Res	mSynthRes;	//Synth resource

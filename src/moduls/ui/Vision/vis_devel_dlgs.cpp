@@ -58,15 +58,15 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     setWindowTitle(_("Widget's library properties"));
     setWindowIcon(owner()->actVisItProp->icon());
 
-    //- Create tabulator -
+    //> Create tabulator
     QVBoxLayout *tab_lay = new QVBoxLayout(this);
     tab_lay->setMargin(5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
-    //- Add tab 'Widget' -
-    //--------------------
+    //> Add tab 'Widget'
+    //------------------
     wdg_tabs->addTab(new QWidget,_("Widgets library"));
     QWidget *tab_w = wdg_tabs->widget(0);
 
@@ -74,7 +74,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
 
-    //- State parameters -
+    //> State parameters
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
@@ -108,7 +108,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
 
-    //- Config parameters -
+    //> Config parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
@@ -160,7 +160,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(obj_accother, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_accother,5,3);
 
-    //--- Specific parameter: project calc time ---
+    //>>> Specific parameter: project calc time
     lab = new QLabel(_("Calc period (ms):"),tab_w);
     glay->addWidget(lab,6,0);
     prj_ctm = new LineEdit(tab_w,LineEdit::Integer);
@@ -180,9 +180,8 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
 
-
-    //- Add tab 'Mime data' -
-    //------------------------
+    //> Add tab 'Mime data'
+    //---------------------
     wdg_tabs->addTab(new QWidget,_("Mime data"));
     tab_w = wdg_tabs->widget(1);
 
@@ -211,17 +210,58 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(buttDataUnload, SIGNAL(clicked()), this, SLOT(unloadMimeData()));
     dlg_lay->addWidget(buttDataUnload,1,3);
 
-    //- Add button box -
+    //> Add tab 'Styles'
     //------------------
+    wdg_tabs->addTab( new QWidget,_("Styles") );
+    tab_w = wdg_tabs->widget(2);
+
+    dlg_lay = new QGridLayout(tab_w);
+    dlg_lay->setMargin(9);
+    dlg_lay->setSpacing(6);
+
+    lab = new QLabel(_("Style:"),tab_w);
+    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
+    dlg_lay->addWidget( lab, 0, 0 );
+    stl_select = new QComboBox(tab_w);
+    stl_select->setObjectName("/style/style");
+    connect(stl_select, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
+    dlg_lay->addWidget( stl_select, 0, 1, 1, 2 );
+
+    buttStlDel = new QPushButton(_("Erase style"),tab_w);
+    buttStlDel->setObjectName("/style/erase");
+    connect( buttStlDel, SIGNAL(clicked()), this, SLOT(isModify()) );
+    dlg_lay->addWidget(buttStlDel,0,3);
+
+    dlg_lay->addWidget( new QLabel(_("Name:"),tab_w), 1, 0 );
+    stl_name = new LineEdit(tab_w);
+    stl_name->setObjectName("/style/name");
+    connect( stl_name, SIGNAL(apply()), this, SLOT(isModify()) );
+    dlg_lay->addWidget( stl_name, 1, 1, 1, 2 );
+
+    stl_table = new QTableWidget(0,2,tab_w);
+    stl_table->setObjectName("/style/props");
+    stl_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    connect( stl_table, SIGNAL(cellChanged(int,int)), this, SLOT(stlTableChange(int,int)) );
+    headLabels.clear();
+    headLabels << _("Id") << _("Value");
+    stl_table->setHorizontalHeaderLabels(headLabels);
+    dlg_lay->addWidget(stl_table,4,0,1,4);
+
+    buttStlTableDel = new QPushButton(_("Delete record"),tab_w);
+    connect( buttStlTableDel, SIGNAL(clicked()), this, SLOT(delStlItem()) );
+    dlg_lay->addWidget(buttStlTableDel,5,3);
+
+    //> Add button box
+    //----------------
     butbox = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal, this );
-    //-- Init close button --
+    //>> Init close button
     butbox->button(QDialogButtonBox::Close)->setText(_("Close"));
     connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
 
     tab_lay->addWidget(butbox);
 
-    //- End resize -
-    //--------------
+    //> End resize
+    //------------
     resize(500,400);
 }
 
@@ -244,8 +284,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
     show_init = true;
 
-    //- Update elements present, visible and values -
-    //-----------------------------------------------
+    //> Update elements present, visible and values
+    //---------------------------------------------
     XMLNode req("get");
 
     XMLNode info_req("info");
@@ -262,13 +302,13 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
     setWindowTitle( root->attr("dscr").c_str() );
 
-    //- Generic dialog's page -
+    //> Generic dialog's page
     gnd=TCntrNode::ctrId(root,"/obj",true);
     wdg_tabs->setTabEnabled(0,gnd);
     if( gnd )
     {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
-	//-- Enable stat --
+	//>> Enable stat
 	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
 	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
@@ -276,7 +316,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_enable->setChecked(atoi(req.text().c_str()));
 	}
-	//-- DB value --
+	//>> DB value
 	gnd=TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
 	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
@@ -292,7 +332,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		obj_db->setCfg(els.c_str());
 	    }
 	}
-	//-- User --
+	//>> User
 	gnd=TCntrNode::ctrId(root,obj_user->objectName().toAscii().data(),true);
 	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
@@ -309,7 +349,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		    if( sval == req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
 		}
 	}
-	//-- Group --
+	//>> Group
 	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);
 	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
@@ -326,7 +366,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		    if( sval == req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
 		}
 	}
-	//-- Icon --
+	//>> Icon
 	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
 	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;
 	if( gnd )
@@ -337,7 +377,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	}
-	//-- Permition --
+	//>> Permition
 	string wstr;
 	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);
 	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
@@ -369,14 +409,14 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accother->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_accother->setCurrentIndex( obj_accother->findData(atoi(req.text().c_str())) );
 	}
-	//-- Id --
+	//>> Id
 	gnd=TCntrNode::ctrId(root,obj_id->objectName().toAscii().data(),true);
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_id->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_id->setText(req.text().c_str());
 	}
-	//-- Name --
+	//>> Name
 	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);
 	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
@@ -384,7 +424,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_name->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_name->setValue(req.text().c_str());
 	}
- 	//-- Description --
+ 	//>> Description
 	gnd=TCntrNode::ctrId(root,obj_descr->objectName().toAscii().data(),true);
 	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
 	if( gnd )
@@ -393,8 +433,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) ) obj_descr->setText(req.text().c_str());
 	}
 
-	//-- Special fields --
-	//--- Page type ---
+	//>> Special fields
+	//>>> Page type
 	gnd=TCntrNode::ctrId(root,prj_ctm->objectName().toAscii().data(),true);
 	prj_ctm->setVisible(gnd); ((QLabel *)TSYS::str2addr(prj_ctm->windowIconText().toAscii().data()))->setVisible(gnd);
 	if( gnd )
@@ -403,7 +443,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(prj_ctm->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) prj_ctm->setValue(req.text().c_str());
 	}
-	//--- Run window mode ---
+	//>>> Run window mode
 	gnd=TCntrNode::ctrId(root,prj_runw->objectName().toAscii().data(),true);
 	prj_runw->setVisible(gnd); ((QLabel *)TSYS::str2addr(prj_runw->windowIconText().toAscii().data()))->setVisible(gnd);
 	if( gnd )
@@ -416,14 +456,73 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
     }
 
-    //- Mime data page -
+    //> Mime data page
     gnd=TCntrNode::ctrId(root,"/mime",true);
     wdg_tabs->setTabEnabled(1,gnd);
     if( gnd )	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
 
+    //> Style
+    gnd = TCntrNode::ctrId(root,"/style",true);
+    wdg_tabs->setTabEnabled(2,gnd);
+    if( gnd )
+    {
+	wdg_tabs->setTabText(2,gnd->attr("dscr").c_str());
+
+	//>> Style
+	gnd = TCntrNode::ctrId(root,stl_select->objectName().toAscii().data(),true);
+	stl_select->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	if( gnd )
+	{
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(stl_select->objectName().toAscii().data(),TSYS::PathEl));
+	    if( !owner()->cntrIfCmd(req) ) sval = req.text();
+
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+	    stl_select->clear();
+	    if( !owner()->cntrIfCmd(req) )
+		for( int i_l = 0; i_l < req.childSize(); i_l++ )
+		{
+		    stl_select->addItem(req.childGet(i_l)->text().c_str(),req.childGet(i_l)->attr("id").c_str());
+		    if( sval == req.childGet(i_l)->attr("id") )	stl_select->setCurrentIndex(i_l);
+		}
+	}
+
+	//>> Style delete button
+	gnd = TCntrNode::ctrId(root,buttStlDel->objectName().toAscii().data(),true);
+	buttStlDel->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+
+	//>> Name
+	gnd = TCntrNode::ctrId(root,stl_name->objectName().toAscii().data(),true);
+	stl_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	if( gnd )
+	{
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(stl_name->objectName().toAscii().data(),TSYS::PathEl));
+	    if( !owner()->cntrIfCmd(req) ) stl_name->setValue(req.text().c_str());
+	}
+
+	//>> Load table data
+	gnd = TCntrNode::ctrId(root,stl_table->objectName().toAscii().data(),true);
+	stl_table->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	buttStlTableDel->setEnabled( stl_table->isEnabled() );
+	if( gnd )
+	{
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(stl_table->objectName().toAscii().data(),TSYS::PathEl));
+	    owner()->cntrIfCmd(req);
+	    for( int i_c = 0; i_c < req.childSize() && i_c < 2; i_c++ )
+	    {
+		stl_table->setRowCount(req.childGet(i_c)->childSize());
+		for( int i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++ )
+		{
+		    stl_table->setItem( i_r, i_c, new QTableWidgetItem(req.childGet(i_c)->childGet(i_r)->text().c_str()) );
+		    stl_table->item( i_r, i_c )->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((i_c==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
+		}
+	    }
+	    stl_table->resizeColumnsToContents();
+	}
+    }
+
     is_modif = false;
 
-    //- Show dialog -
+    //> Show dialog
     show();
     raise();
     activateWindow();
@@ -524,9 +623,13 @@ void LibProjProp::isModify( )
     }
     else if( oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName() )
 	req.setText(((LineEdit*)sender())->value().toAscii().data());
-    else if( oname == obj_user->objectName() || oname == obj_grp->objectName() )
+    else if( oname == stl_name->objectName() )
+    { req.setText(((LineEdit*)sender())->value().toAscii().data()); update = true; }
+    else if( oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName() )
     {
-	req.setText(((QComboBox*)sender())->currentText().toAscii().data());
+	int cPos = ((QComboBox*)sender())->currentIndex();
+	req.setText( ((QComboBox*)sender())->itemData(cPos).isNull() ? ((QComboBox*)sender())->itemText(cPos).toAscii().data() : 
+								       ((QComboBox*)sender())->itemData(cPos).toString().toAscii().data() );
 	update = true;
     }
     else if( oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() ||
@@ -535,8 +638,8 @@ void LibProjProp::isModify( )
 	req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
 	update = true;
     }
-    else if( oname == obj_descr->objectName() )
-	req.setText(obj_descr->text().toAscii().data());
+    else if( oname == obj_descr->objectName() ) req.setText(obj_descr->text().toAscii().data());
+    else if( oname == buttStlDel->objectName() ) update = true;
     else return;
 
     if( owner()->cntrIfCmd(req) )
@@ -569,11 +672,7 @@ void LibProjProp::addMimeData( )
 void LibProjProp::delMimeData( )
 {
     int row = mimeDataTable->currentRow( );
-    if( row < 0 )
-    {
-	mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this );
-	return;
-    }
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this ); return; }
 
     XMLNode req("del");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
@@ -587,11 +686,7 @@ void LibProjProp::delMimeData( )
 void LibProjProp::loadMimeData( )
 {
     int row = mimeDataTable->currentRow( );
-    if( row < 0 )
-    {
-	mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this );
-	return;
-    }
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
 
     QString fileName = QFileDialog::getOpenFileName(this,_("Load data"),"",_("All files (*.*)"));
     if( fileName.isEmpty() )	return;
@@ -615,11 +710,7 @@ void LibProjProp::loadMimeData( )
 void LibProjProp::unloadMimeData( )
 {
     int row = mimeDataTable->currentRow( );
-    if( row < 0 )
-    {
-	mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this );
-	return;
-    }
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
 
     QString fileName = QFileDialog::getSaveFileName(this,_("Save data"),
 			    mimeDataTable->item(row,0)->text(),_("All files (*.*)"));
@@ -660,6 +751,34 @@ void LibProjProp::mimeDataChange( int row, int column )
     tabChanged(1);
 }
 
+void LibProjProp::delStlItem( )
+{
+    int row = stl_table->currentRow( );
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
+
+    XMLNode req("del");
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode(stl_table->objectName().toAscii().data(),TSYS::PathEl))->
+	setAttr("key_id",stl_table->item(row,0)->text().toAscii().data());
+    if( owner()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+
+    showDlg(ed_it,true);
+}
+
+void LibProjProp::stlTableChange( int row, int column )
+{
+    if( show_init ) return;
+
+    XMLNode req("set");
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode(stl_table->objectName().toAscii().data(),TSYS::PathEl))->
+	setAttr("col","vl")->
+	setAttr("key_id",stl_table->item(row,0)->text().toAscii().data())->
+	setText(stl_table->item(row,column)->text().toAscii().data());
+    if( owner()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+
+    showDlg(ed_it,true);
+}
 
 //****************************************
 //* Widget properties dialog             *

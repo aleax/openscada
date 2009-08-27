@@ -40,6 +40,7 @@ namespace VISION
 {
 
 class UserStBar;
+class StylesStBar;
 class RunPageView;
 class RunWdgView;
 class SndPlay;
@@ -64,10 +65,12 @@ class VisRun : public QMainWindow
 	float  xScale( )	{ return x_scale; }
 	float  yScale( )	{ return y_scale; }
 	unsigned reqTm( )	{ return reqtm; }
+	int style( );
 
 	void setXScale( float vl )	{ x_scale = vl; }
 	void setYScale( float vl )	{ y_scale = vl; }
 	void setReqTm( unsigned rt )	{ reqtm = rt; }
+	void setStyle( int istl );
 
 	void initSess( const string &prj_it, bool crSessForce = false );	//Init session for project's item path
 	void callPage( const string &ses_it, bool updWdg = false );		//Call session page
@@ -117,6 +120,7 @@ class VisRun : public QMainWindow
 	void fullScreen( bool vl );			//Full screen toggle
 
 	void userChanged( const QString &oldUser, const QString &oldPass );	//User changed
+	void styleChanged( );
 
 	void about( );					//About at programm
 	void aboutQt( );				//About at QT library
@@ -157,7 +161,8 @@ class VisRun : public QMainWindow
 	//> Main components
 	QTimer		*endRunTimer, *updateTimer;
 	bool		winClose;		//Close window flag
-	UserStBar	*mWUser;			//User status widget
+	UserStBar	*mWUser;		//User status widget
+	StylesStBar	*mStlBar;		//Style status widget
 	QLabel		*mWStat;		//VCA engine station
 	QLabel		*mWTime;		//Runtime time display for fullscreen
 	string 		work_sess, src_prj;	//Work session and source project

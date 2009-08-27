@@ -1,25 +1,28 @@
 # OpenSCADA.DAQ.ModBus translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
-#: modbus_daq.cpp:79 modbus_daq.cpp:83 modbus_daq.cpp:92 modbus_daq.cpp:404
-#: modbus_daq.cpp:627 modbus_prt.cpp:139 modbus_prt.cpp:147 modbus_prt.cpp:350
-#: modbus_prt.cpp:373 modbus_prt.cpp:399 modbus_prt.cpp:546 modbus_prt.cpp:549
-#: modbus_prt.cpp:739 modbus_prt.cpp:745 modbus_prt.cpp:1208
-#: modbus_prt.cpp:1209 modbus_prt.cpp:1210 modbus_prt.cpp:1211
-#: modbus_prt.cpp:1212 modbus_prt.cpp:1276 modbus_prt.cpp:1300 moduls.cpp:31
-#, fuzzy
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+#: modbus_daq.cpp:79 modbus_daq.cpp:83 modbus_daq.cpp:92 modbus_daq.cpp:405
+#: modbus_daq.cpp:627 modbus_prt.cpp:139 modbus_prt.cpp:147 modbus_prt.cpp:352
+#: modbus_prt.cpp:375 modbus_prt.cpp:401 modbus_prt.cpp:548 modbus_prt.cpp:551
+#: modbus_prt.cpp:741 modbus_prt.cpp:747 modbus_prt.cpp:1210
+#: modbus_prt.cpp:1211 modbus_prt.cpp:1212 modbus_prt.cpp:1213
+#: modbus_prt.cpp:1214 modbus_prt.cpp:1278 modbus_prt.cpp:1302 moduls.cpp:31
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:18+0300\n"
-"PO-Revision-Date: 2007-10-29 10:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:39+0300\n"
+"PO-Revision-Date: 2009-08-17 13:28+0200\n"
+"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: modbus_daq.cpp:67 modbus_prt.cpp:99
 #, c-format
@@ -28,8 +31,9 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================== Optionen des Moduls <%s:%s> ==========================\n"
-"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei --------\n"
+"========================== Optionen des Moduls <%s:%s> "
+"==========================\n"
+"-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei --------\n"
 "\n"
 
 #: modbus_daq.cpp:79 modbus_daq.cpp:91 modbus_daq.cpp:138
@@ -50,7 +54,7 @@ msgstr ""
 
 #: modbus_daq.cpp:80
 msgid "Gather data period (s)"
-msgstr "Datenerfassungszeit (s)"
+msgstr "Datenerfassungsperiode (sek)"
 
 #: modbus_daq.cpp:80
 msgid "6.2"
@@ -58,8 +62,8 @@ msgstr ""
 
 #: modbus_daq.cpp:80 modbus_daq.cpp:84 modbus_daq.cpp:85 modbus_daq.cpp:88
 #: modbus_prt.cpp:61 modbus_prt.cpp:62 modbus_prt.cpp:65 modbus_prt.cpp:67
-#: modbus_prt.cpp:72 modbus_prt.cpp:78 modbus_prt.cpp:440 modbus_prt.cpp:442
-#: modbus_prt.cpp:1159 modbus_prt.cpp:1180 modbus_prt.cpp:1219
+#: modbus_prt.cpp:72 modbus_prt.cpp:78 modbus_prt.cpp:442 modbus_prt.cpp:444
+#: modbus_prt.cpp:1161 modbus_prt.cpp:1182 modbus_prt.cpp:1221
 msgid "1"
 msgstr ""
 
@@ -73,15 +77,15 @@ msgstr ""
 
 #: modbus_daq.cpp:81
 msgid "Gather task priority"
-msgstr "Prioritaetsniveau der Datenerfassungsaufgabe"
+msgstr "Priorität der Datenerfassung"
 
 #: modbus_daq.cpp:81
 msgid "2"
 msgstr ""
 
 #: modbus_daq.cpp:81 modbus_daq.cpp:85 modbus_daq.cpp:86 modbus_daq.cpp:693
-#: modbus_prt.cpp:61 modbus_prt.cpp:65 modbus_prt.cpp:445 modbus_prt.cpp:641
-#: modbus_prt.cpp:642 modbus_prt.cpp:1180 modbus_prt.cpp:1219
+#: modbus_prt.cpp:61 modbus_prt.cpp:65 modbus_prt.cpp:447 modbus_prt.cpp:643
+#: modbus_prt.cpp:644 modbus_prt.cpp:1182 modbus_prt.cpp:1221
 msgid "0"
 msgstr ""
 
@@ -89,7 +93,7 @@ msgstr ""
 msgid "0;100"
 msgstr ""
 
-#: modbus_daq.cpp:82 modbus_daq.cpp:134 modbus_daq.cpp:221
+#: modbus_daq.cpp:82 modbus_daq.cpp:134 modbus_daq.cpp:222
 msgid "PROT"
 msgstr ""
 
@@ -98,12 +102,12 @@ msgid "Modbus protocol"
 msgstr "Modbus-Protokoll"
 
 #: modbus_daq.cpp:82 modbus_daq.cpp:86 modbus_prt.cpp:64 modbus_prt.cpp:71
-#: modbus_prt.cpp:450
+#: modbus_prt.cpp:452
 msgid "5"
 msgstr ""
 
-#: modbus_daq.cpp:82 modbus_daq.cpp:223 modbus_prt.cpp:303 modbus_prt.cpp:533
-#: modbus_prt.cpp:558
+#: modbus_daq.cpp:82 modbus_daq.cpp:224 modbus_prt.cpp:305 modbus_prt.cpp:535
+#: modbus_prt.cpp:560
 msgid "TCP"
 msgstr ""
 
@@ -116,13 +120,13 @@ msgid "TCP/IP;RTU;ASCII"
 msgstr ""
 
 #: modbus_daq.cpp:83 modbus_daq.cpp:135 modbus_daq.cpp:564 modbus_prt.cpp:62
-#: modbus_prt.cpp:667 modbus_prt.cpp:706 modbus_prt.cpp:712 modbus_prt.cpp:713
+#: modbus_prt.cpp:669 modbus_prt.cpp:708 modbus_prt.cpp:714 modbus_prt.cpp:715
 msgid "ADDR"
 msgstr ""
 
 #: modbus_daq.cpp:83
 msgid "Transport address"
-msgstr "Adresse der Transporte"
+msgstr "Adresse der Übertragung"
 
 #: modbus_daq.cpp:84 modbus_daq.cpp:135
 msgid "NODE"
@@ -130,11 +134,11 @@ msgstr ""
 
 #: modbus_daq.cpp:84
 msgid "Destination node"
-msgstr "Zwecksknoten"
+msgstr "Zielknoten"
 
 #: modbus_daq.cpp:84 modbus_prt.cpp:58 modbus_prt.cpp:63 modbus_prt.cpp:70
-#: modbus_prt.cpp:75 modbus_prt.cpp:76 modbus_prt.cpp:440 modbus_prt.cpp:442
-#: modbus_prt.cpp:448
+#: modbus_prt.cpp:75 modbus_prt.cpp:76 modbus_prt.cpp:442 modbus_prt.cpp:444
+#: modbus_prt.cpp:450
 msgid "20"
 msgstr ""
 
@@ -142,13 +146,13 @@ msgstr ""
 msgid "0;255"
 msgstr ""
 
-#: modbus_daq.cpp:85 modbus_daq.cpp:135 modbus_daq.cpp:227
+#: modbus_daq.cpp:85 modbus_daq.cpp:135 modbus_daq.cpp:228
 msgid "FRAG_MERGE"
 msgstr ""
 
 #: modbus_daq.cpp:85
 msgid "Data fragments merge"
-msgstr "Datenfragmente verbinden"
+msgstr "Datenfragmente zusammenfügen"
 
 #: modbus_daq.cpp:86 modbus_daq.cpp:136
 msgid "TM_REQ"
@@ -156,7 +160,7 @@ msgstr ""
 
 #: modbus_daq.cpp:86
 msgid "Connection timeout (ms)"
-msgstr "Verbindungswartenzeit (мс)"
+msgstr "Zeitüberschreitung beim Verbinden (msek)"
 
 #: modbus_daq.cpp:87 modbus_daq.cpp:136
 msgid "TM_REST"
@@ -164,14 +168,14 @@ msgstr ""
 
 #: modbus_daq.cpp:87
 msgid "Restore timeout (s)"
-msgstr "Zeit der Restaurierung (s)"
+msgstr "Zeit der Wiederherstellung (sek)"
 
 #: modbus_daq.cpp:87 modbus_daq.cpp:88 modbus_prt.cpp:62 modbus_prt.cpp:72
-#: modbus_prt.cpp:1018
+#: modbus_prt.cpp:1020
 msgid "3"
 msgstr ""
 
-#: modbus_daq.cpp:88 modbus_daq.cpp:136 modbus_daq.cpp:223 modbus_daq.cpp:224
+#: modbus_daq.cpp:88 modbus_daq.cpp:136 modbus_daq.cpp:224 modbus_daq.cpp:225
 msgid "REQ_TRY"
 msgstr ""
 
@@ -187,13 +191,13 @@ msgstr ""
 msgid "Standard"
 msgstr "Standard"
 
-#: modbus_daq.cpp:92 modbus_daq.cpp:583 modbus_daq.cpp:740
+#: modbus_daq.cpp:92 modbus_daq.cpp:583 modbus_daq.cpp:746
 msgid "ATTR_LS"
 msgstr ""
 
 #: modbus_daq.cpp:92
 msgid "Attributes list"
-msgstr "Liste von Attributen"
+msgstr "Liste der Attribute"
 
 #: modbus_daq.cpp:92 modbus_prt.cpp:80
 msgid "100"
@@ -203,9 +207,15 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: modbus_daq.cpp:102 modbus_daq.cpp:741 modbus_prt.cpp:113 modbus_prt.cpp:446
-#: modbus_prt.cpp:1139
+#: modbus_daq.cpp:102 modbus_daq.cpp:747 modbus_prt.cpp:113 modbus_prt.cpp:448
+#: modbus_prt.cpp:1141
 msgid "help"
+msgstr ""
+
+#: modbus_daq.cpp:112 modbus_daq.cpp:181 modbus_prt.cpp:123 modbus_prt.cpp:154
+#: modbus_prt.cpp:660 modbus_prt.cpp:1106
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: modbus_daq.cpp:138
@@ -215,7 +225,7 @@ msgstr ""
 #: modbus_daq.cpp:152
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
-msgstr "Fehler der Verbindung. Restaurierung in %.6g с."
+msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
 
 #: modbus_daq.cpp:153
 #, c-format
@@ -223,109 +233,110 @@ msgid ""
 "Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g "
 "registers, %g coils. Errors of connection %g, of respond %g."
 msgstr ""
-"Datenerfassungszeit %.6g ms. Durchgelesen %g(%g) Register, %g(%g) Bits. "
-"Eingeschrieben %g Register, %g Bits. Fehler der Verbindung %g, Anfrage %g."
+"Datenerfassungszeit %.6g msek. Gelesen %g(%g) Register, %g(%g) Bits. "
+"Geschrieben %g Register, %g Bits. Fehler in der Verbindung %g, in der "
+"Antwort %g."
 
-#: modbus_daq.cpp:188 modbus_daq.cpp:564 modbus_daq.cpp:740 modbus_prt.cpp:440
-#: modbus_prt.cpp:442 modbus_prt.cpp:445 modbus_prt.cpp:448 modbus_prt.cpp:450
-#: modbus_prt.cpp:458 modbus_prt.cpp:465 modbus_prt.cpp:470 modbus_prt.cpp:474
-#: modbus_prt.cpp:475 modbus_prt.cpp:1131 modbus_prt.cpp:1136
-#: modbus_prt.cpp:1137 modbus_prt.cpp:1138 modbus_prt.cpp:1143
-#: modbus_prt.cpp:1155 modbus_prt.cpp:1157 modbus_prt.cpp:1158
-#: modbus_prt.cpp:1159 modbus_prt.cpp:1162 modbus_prt.cpp:1163
-#: modbus_prt.cpp:1165 modbus_prt.cpp:1166 modbus_prt.cpp:1171
-#: modbus_prt.cpp:1180 modbus_prt.cpp:1181 modbus_prt.cpp:1185
-#: modbus_prt.cpp:1186 modbus_prt.cpp:1203 modbus_prt.cpp:1206
-#: modbus_prt.cpp:1223 modbus_prt.cpp:1228 modbus_prt.cpp:1233
-#: modbus_prt.cpp:1242 modbus_prt.cpp:1247 modbus_prt.cpp:1264
-#: modbus_prt.cpp:1265 modbus_prt.cpp:1269 modbus_prt.cpp:1270
-#: modbus_prt.cpp:1334 modbus_prt.cpp:1336
+#: modbus_daq.cpp:190 modbus_daq.cpp:564 modbus_daq.cpp:746 modbus_prt.cpp:442
+#: modbus_prt.cpp:444 modbus_prt.cpp:447 modbus_prt.cpp:450 modbus_prt.cpp:452
+#: modbus_prt.cpp:460 modbus_prt.cpp:467 modbus_prt.cpp:472 modbus_prt.cpp:476
+#: modbus_prt.cpp:477 modbus_prt.cpp:1133 modbus_prt.cpp:1138
+#: modbus_prt.cpp:1139 modbus_prt.cpp:1140 modbus_prt.cpp:1145
+#: modbus_prt.cpp:1157 modbus_prt.cpp:1159 modbus_prt.cpp:1160
+#: modbus_prt.cpp:1161 modbus_prt.cpp:1164 modbus_prt.cpp:1165
+#: modbus_prt.cpp:1167 modbus_prt.cpp:1168 modbus_prt.cpp:1173
+#: modbus_prt.cpp:1182 modbus_prt.cpp:1183 modbus_prt.cpp:1187
+#: modbus_prt.cpp:1188 modbus_prt.cpp:1205 modbus_prt.cpp:1208
+#: modbus_prt.cpp:1225 modbus_prt.cpp:1230 modbus_prt.cpp:1235
+#: modbus_prt.cpp:1244 modbus_prt.cpp:1249 modbus_prt.cpp:1266
+#: modbus_prt.cpp:1267 modbus_prt.cpp:1271 modbus_prt.cpp:1272
+#: modbus_prt.cpp:1336 modbus_prt.cpp:1338
 msgid "root"
 msgstr ""
 
-#: modbus_daq.cpp:196 modbus_prt.cpp:862
+#: modbus_daq.cpp:198 modbus_prt.cpp:864
 msgid "start"
 msgstr ""
 
-#: modbus_daq.cpp:197
+#: modbus_daq.cpp:199
 msgid "Gathering task is not started!"
-msgstr "Datenerfassungaufgabe ist nicht aktiviert!"
+msgstr "Datenerfassung ist nicht gestartet!"
 
-#: modbus_daq.cpp:208 modbus_prt.cpp:873
+#: modbus_daq.cpp:209 modbus_prt.cpp:875
 msgid "stop"
 msgstr ""
 
-#: modbus_daq.cpp:209
+#: modbus_daq.cpp:210
 msgid "Gathering task is not stopped!"
-msgstr "Datenerfassungaufgabe ist nicht gestoppt!"
+msgstr "Datenerfassung ist nicht angehalten!"
 
-#: modbus_daq.cpp:239 modbus_daq.cpp:614 modbus_daq.h:108
+#: modbus_daq.cpp:240 modbus_daq.cpp:614 modbus_daq.h:108
 msgid "R"
 msgstr ""
 
-#: modbus_daq.cpp:239 modbus_daq.cpp:241 modbus_daq.cpp:689
+#: modbus_daq.cpp:240 modbus_daq.cpp:242 modbus_daq.cpp:689
 msgid "RI"
 msgstr ""
 
-#: modbus_daq.cpp:274 moduls.cpp:25
+#: modbus_daq.cpp:275 moduls.cpp:25
 msgid "C"
 msgstr ""
 
-#: modbus_daq.cpp:274 modbus_daq.cpp:276 modbus_daq.cpp:688
+#: modbus_daq.cpp:275 modbus_daq.cpp:277 modbus_daq.cpp:688
 msgid "CI"
 msgstr ""
 
-#: modbus_daq.cpp:389 modbus_daq.cpp:707 modbus_prt.cpp:294 modbus_prt.cpp:463
-#: modbus_prt.cpp:467 modbus_prt.cpp:470 modbus_prt.cpp:1018
-#: modbus_prt.cpp:1253 modbus_prt.cpp:1254
+#: modbus_daq.cpp:390 modbus_daq.cpp:707 modbus_prt.cpp:296 modbus_prt.cpp:465
+#: modbus_prt.cpp:469 modbus_prt.cpp:472 modbus_prt.cpp:1020
+#: modbus_prt.cpp:1255 modbus_prt.cpp:1256
 msgid "id"
 msgstr ""
 
-#: modbus_daq.cpp:390 modbus_prt.cpp:295
+#: modbus_daq.cpp:391 modbus_prt.cpp:297
 msgid "reqTm"
 msgstr ""
 
-#: modbus_daq.cpp:391 modbus_prt.cpp:296 modbus_prt.cpp:1018
+#: modbus_daq.cpp:392 modbus_prt.cpp:298 modbus_prt.cpp:1020
 msgid "node"
 msgstr ""
 
-#: modbus_daq.cpp:392 modbus_prt.cpp:297 modbus_prt.cpp:1018
+#: modbus_daq.cpp:393 modbus_prt.cpp:299 modbus_prt.cpp:1020
 msgid "reqTry"
 msgstr ""
 
-#: modbus_daq.cpp:395 modbus_prt.cpp:1019 modbus_daq.h:44 modbus_daq.h:45
-#: modbus_prt.h:35 modbus_prt.h:36
+#: modbus_daq.cpp:396 modbus_prt.cpp:1021 modbus_daq.h:44 modbus_daq.h:45
+#: modbus_prt.h:37 modbus_prt.h:38
 msgid "ModBus"
 msgstr ""
 
-#: modbus_daq.cpp:397 modbus_daq.cpp:399 modbus_daq.cpp:401 modbus_daq.cpp:671
-#: modbus_daq.cpp:691 modbus_prt.cpp:400 modbus_prt.cpp:1021
+#: modbus_daq.cpp:398 modbus_daq.cpp:400 modbus_daq.cpp:402 modbus_daq.cpp:671
+#: modbus_daq.cpp:691 modbus_prt.cpp:402 modbus_prt.cpp:1023
 msgid "err"
 msgstr ""
 
-#: modbus_daq.cpp:413 modbus_prt.cpp:1036
+#: modbus_daq.cpp:414 modbus_prt.cpp:1038
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: modbus_daq.cpp:429
+#: modbus_daq.cpp:428
 msgid "Fetch coils' and registers' blocks."
 msgstr "Ermittlung von Bitblocks und Register."
 
-#: modbus_daq.cpp:437 modbus_daq.cpp:463 modbus_daq.cpp:489 modbus_daq.cpp:514
-#: modbus_prt.cpp:389
+#: modbus_daq.cpp:436 modbus_daq.cpp:462 modbus_daq.cpp:488 modbus_daq.cpp:513
+#: modbus_prt.cpp:391
 msgid "4:Server failure."
 msgstr "4:Serverfehler."
 
-#: modbus_daq.cpp:561 modbus_daq.cpp:737 modbus_prt.cpp:437
-#: modbus_prt.cpp:1128
+#: modbus_daq.cpp:561 modbus_daq.cpp:743 modbus_prt.cpp:439
+#: modbus_prt.cpp:1130
 msgid "info"
 msgstr ""
 
-#: modbus_daq.cpp:564 modbus_daq.cpp:740 modbus_prt.cpp:445 modbus_prt.cpp:448
-#: modbus_prt.cpp:450 modbus_prt.cpp:1136 modbus_prt.cpp:1137
-#: modbus_prt.cpp:1138 modbus_prt.cpp:1165 modbus_prt.cpp:1166
-#: modbus_prt.cpp:1171
+#: modbus_daq.cpp:564 modbus_daq.cpp:746 modbus_prt.cpp:447 modbus_prt.cpp:450
+#: modbus_prt.cpp:452 modbus_prt.cpp:1138 modbus_prt.cpp:1139
+#: modbus_prt.cpp:1140 modbus_prt.cpp:1167 modbus_prt.cpp:1168
+#: modbus_prt.cpp:1173
 msgid "fld"
 msgstr ""
 
@@ -333,31 +344,31 @@ msgstr ""
 msgid "/cntr/cfg/ADDR"
 msgstr ""
 
-#: modbus_daq.cpp:564 modbus_prt.cpp:442 modbus_prt.cpp:445 modbus_prt.cpp:448
-#: modbus_prt.cpp:450 modbus_prt.cpp:1136 modbus_prt.cpp:1137
-#: modbus_prt.cpp:1138 modbus_prt.cpp:1157 modbus_prt.cpp:1158
-#: modbus_prt.cpp:1159 modbus_prt.cpp:1162 modbus_prt.cpp:1163
-#: modbus_prt.cpp:1165 modbus_prt.cpp:1166 modbus_prt.cpp:1172
-#: modbus_prt.cpp:1256
+#: modbus_daq.cpp:564 modbus_prt.cpp:444 modbus_prt.cpp:447 modbus_prt.cpp:450
+#: modbus_prt.cpp:452 modbus_prt.cpp:1138 modbus_prt.cpp:1139
+#: modbus_prt.cpp:1140 modbus_prt.cpp:1159 modbus_prt.cpp:1160
+#: modbus_prt.cpp:1161 modbus_prt.cpp:1164 modbus_prt.cpp:1165
+#: modbus_prt.cpp:1167 modbus_prt.cpp:1168 modbus_prt.cpp:1174
+#: modbus_prt.cpp:1258
 msgid "tp"
 msgstr ""
 
-#: modbus_daq.cpp:564 modbus_prt.cpp:448 modbus_prt.cpp:450
-#: modbus_prt.cpp:1136 modbus_prt.cpp:1138 modbus_prt.cpp:1157
-#: modbus_prt.cpp:1158 modbus_prt.cpp:1163 modbus_prt.cpp:1165
-#: modbus_prt.cpp:1166 modbus_prt.cpp:1172
+#: modbus_daq.cpp:564 modbus_prt.cpp:450 modbus_prt.cpp:452
+#: modbus_prt.cpp:1138 modbus_prt.cpp:1140 modbus_prt.cpp:1159
+#: modbus_prt.cpp:1160 modbus_prt.cpp:1165 modbus_prt.cpp:1167
+#: modbus_prt.cpp:1168 modbus_prt.cpp:1174
 msgid "str"
 msgstr ""
 
-#: modbus_daq.cpp:564 modbus_prt.cpp:1138 modbus_prt.cpp:1146
-#: modbus_prt.cpp:1148 modbus_prt.cpp:1159 modbus_prt.cpp:1165
-#: modbus_prt.cpp:1172
+#: modbus_daq.cpp:564 modbus_prt.cpp:1140 modbus_prt.cpp:1148
+#: modbus_prt.cpp:1150 modbus_prt.cpp:1161 modbus_prt.cpp:1167
+#: modbus_prt.cpp:1174
 msgid "dest"
 msgstr ""
 
-#: modbus_daq.cpp:564 modbus_prt.cpp:1138 modbus_prt.cpp:1146
-#: modbus_prt.cpp:1148 modbus_prt.cpp:1159 modbus_prt.cpp:1165
-#: modbus_prt.cpp:1172
+#: modbus_daq.cpp:564 modbus_prt.cpp:1140 modbus_prt.cpp:1148
+#: modbus_prt.cpp:1150 modbus_prt.cpp:1161 modbus_prt.cpp:1167
+#: modbus_prt.cpp:1174
 msgid "select"
 msgstr ""
 
@@ -365,17 +376,17 @@ msgstr ""
 msgid "/cntr/cfg/trLst"
 msgstr ""
 
-#: modbus_daq.cpp:568 modbus_daq.cpp:707 modbus_prt.cpp:455
-#: modbus_prt.cpp:1176
+#: modbus_daq.cpp:568 modbus_daq.cpp:707 modbus_prt.cpp:457
+#: modbus_prt.cpp:1178
 msgid "path"
 msgstr ""
 
-#: modbus_daq.cpp:574 modbus_daq.cpp:707 modbus_prt.cpp:463
-#: modbus_prt.cpp:1190 modbus_prt.cpp:1194 modbus_prt.cpp:1201
-#: modbus_prt.cpp:1216 modbus_prt.cpp:1217 modbus_prt.cpp:1218
-#: modbus_prt.cpp:1219 modbus_prt.cpp:1220 modbus_prt.cpp:1277
-#: modbus_prt.cpp:1281 modbus_prt.cpp:1294 modbus_prt.cpp:1301
-#: modbus_prt.cpp:1305 modbus_prt.cpp:1330
+#: modbus_daq.cpp:574 modbus_daq.cpp:707 modbus_prt.cpp:465
+#: modbus_prt.cpp:1192 modbus_prt.cpp:1196 modbus_prt.cpp:1203
+#: modbus_prt.cpp:1218 modbus_prt.cpp:1219 modbus_prt.cpp:1220
+#: modbus_prt.cpp:1221 modbus_prt.cpp:1222 modbus_prt.cpp:1279
+#: modbus_prt.cpp:1283 modbus_prt.cpp:1296 modbus_prt.cpp:1303
+#: modbus_prt.cpp:1307 modbus_prt.cpp:1332
 msgid "el"
 msgstr ""
 
@@ -391,21 +402,21 @@ msgstr ""
 msgid "w"
 msgstr ""
 
-#: modbus_daq.cpp:635 modbus_prt.cpp:359 modbus_prt.cpp:583
+#: modbus_daq.cpp:635 modbus_prt.cpp:361 modbus_prt.cpp:585
 msgid ":"
 msgstr ""
 
 #: modbus_daq.cpp:673
 msgid "1:Parameter is disabled."
-msgstr "1:Parameter ist disaktiviert."
+msgstr "1:Parameter ist abgeschaltet."
 
 #: modbus_daq.cpp:674
 msgid "2:Acquisition is stoped."
-msgstr "2:Befragung ist gestoppt."
+msgstr "2:Anfrage ist angehalten."
 
-#: modbus_daq.cpp:706 modbus_prt.cpp:475 modbus_prt.cpp:1181
-#: modbus_prt.cpp:1186 modbus_prt.cpp:1247 modbus_prt.cpp:1265
-#: modbus_prt.cpp:1270 modbus_prt.cpp:1336
+#: modbus_daq.cpp:706 modbus_prt.cpp:477 modbus_prt.cpp:1183
+#: modbus_prt.cpp:1188 modbus_prt.cpp:1249 modbus_prt.cpp:1267
+#: modbus_prt.cpp:1272 modbus_prt.cpp:1338
 msgid "set"
 msgstr ""
 
@@ -414,11 +425,11 @@ msgstr ""
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: modbus_daq.cpp:740
+#: modbus_daq.cpp:746
 msgid "/prm/cfg/ATTR_LS"
 msgstr ""
 
-#: modbus_daq.cpp:741
+#: modbus_daq.cpp:747
 msgid ""
 "Attributes configuration list. List must be written by lines in format: [dt:"
 "numb:rw:id:name]\n"
@@ -433,34 +444,34 @@ msgid ""
 "  'R:0x300:rw:var:Variable' - register access;\n"
 "  'C:100:r:var1:Variable 1' - coin access."
 msgstr ""
-"Liste der Attributenkonfiguration. Die Liste wird formiert mit Zeilen im Format: [dt:"
-"numb:rw:id:name]\n"
+"Liste der Attributenkonfiguration. Die Liste wird zeilenweise angegeben im "
+"Format: [dt:numb:rw:id:name]\n"
 "Wo:\n"
-"  dt - ModBus Datentyp (R-Register, C-Bit, RI-Eingangsregister, CI-Bit "
-"des Einganges);\n"
-"  numb - Adresse des ModBus-Apparats  (dezimal,hex, oder oktal.);\n"
-"  rw - Lesen-Aufschreiben-Regime (r-Lesen; w-Aufschreiben, rw-Aufschreiben und Lesen);\n"
-"  id - Bezeichner des geschaffenen Attributs;\n"
-"  name - Name des geschaffenen Attributs.\n"
+"  dt - ModBus Datentyp (R-Register, C-Bit, RI-Eingangsregister, CI-"
+"Eingangsbit);\n"
+"  numb - Adresse des ModBus-Bausteins  (dezimal,hex, oder oktal.);\n"
+"  rw - Lese-/Schreibmodus (r-Lesen; w-Schreiben, rw-Schreiben und Lesen);\n"
+"  id - Bezeichner des erstellten Attributs;\n"
+"  name - Name des erstellten Attributs.\n"
 "Beispiel:\n"
 "  'R:0x300:rw:var:Variable' - Zugang zum Register;\n"
 "  'C:100:r:var1:Variable 1' - Zugang zum Bit."
 
-#: modbus_prt.cpp:55 modbus_prt.cpp:442
+#: modbus_prt.cpp:55 modbus_prt.cpp:444
 msgid "n_"
 msgstr ""
 
 #: modbus_prt.cpp:58 modbus_prt.cpp:76 modbus_prt.cpp:141 modbus_prt.cpp:149
-#: modbus_prt.cpp:603 modbus_prt.cpp:735 modbus_prt.cpp:775 modbus_prt.cpp:789
+#: modbus_prt.cpp:605 modbus_prt.cpp:737 modbus_prt.cpp:777 modbus_prt.cpp:791
 msgid "ID"
 msgstr ""
 
-#: modbus_prt.cpp:59 modbus_prt.cpp:77 modbus_prt.cpp:603 modbus_prt.cpp:745
-#: modbus_prt.cpp:748 modbus_prt.cpp:776
+#: modbus_prt.cpp:59 modbus_prt.cpp:77 modbus_prt.cpp:605 modbus_prt.cpp:747
+#: modbus_prt.cpp:750 modbus_prt.cpp:778
 msgid "NAME"
 msgstr ""
 
-#: modbus_prt.cpp:59 modbus_prt.cpp:77 modbus_prt.cpp:1158
+#: modbus_prt.cpp:59 modbus_prt.cpp:77 modbus_prt.cpp:1160
 msgid "Name"
 msgstr "Name"
 
@@ -468,7 +479,7 @@ msgstr "Name"
 msgid "50"
 msgstr ""
 
-#: modbus_prt.cpp:60 modbus_prt.cpp:603
+#: modbus_prt.cpp:60 modbus_prt.cpp:605
 msgid "DESCR"
 msgstr ""
 
@@ -480,13 +491,13 @@ msgstr "Beschreibung"
 msgid "300"
 msgstr ""
 
-#: modbus_prt.cpp:61 modbus_prt.cpp:603
+#: modbus_prt.cpp:61 modbus_prt.cpp:605
 msgid "EN"
 msgstr ""
 
 #: modbus_prt.cpp:61
 msgid "To enable"
-msgstr "Aktivieren"
+msgstr "Einschalten"
 
 #: modbus_prt.cpp:62
 msgid "Address"
@@ -496,24 +507,24 @@ msgstr "Adresse"
 msgid "1;247"
 msgstr ""
 
-#: modbus_prt.cpp:63 modbus_prt.cpp:669
+#: modbus_prt.cpp:63 modbus_prt.cpp:671
 msgid "InTR"
 msgstr ""
 
 #: modbus_prt.cpp:63
 msgid "Input transport"
-msgstr "Eintrittstransport"
+msgstr "Eingangsübertragung"
 
-#: modbus_prt.cpp:63 modbus_prt.cpp:64 modbus_prt.cpp:912 modbus_prt.cpp:914
-#: modbus_prt.cpp:1190
+#: modbus_prt.cpp:63 modbus_prt.cpp:64 modbus_prt.cpp:914 modbus_prt.cpp:916
+#: modbus_prt.cpp:1192
 msgid "*"
 msgstr ""
 
-#: modbus_prt.cpp:64 modbus_prt.cpp:671
+#: modbus_prt.cpp:64 modbus_prt.cpp:673
 msgid "PRT"
 msgstr ""
 
-#: modbus_prt.cpp:64 modbus_prt.h:37
+#: modbus_prt.cpp:64 modbus_prt.h:39
 msgid "Protocol"
 msgstr "Protokoll"
 
@@ -523,16 +534,16 @@ msgstr ""
 
 #: modbus_prt.cpp:64
 msgid "RTU;ASCII;TCP/IP;All"
-msgstr "RTU;ASCII;TCP/IP;Все"
+msgstr "RTU;ASCII;TCP/IP;All"
 
-#: modbus_prt.cpp:65 modbus_prt.cpp:608 modbus_prt.cpp:673 modbus_prt.cpp:702
-#: modbus_prt.cpp:727
+#: modbus_prt.cpp:65 modbus_prt.cpp:610 modbus_prt.cpp:675 modbus_prt.cpp:704
+#: modbus_prt.cpp:729
 msgid "MODE"
 msgstr ""
 
 #: modbus_prt.cpp:65
 msgid "Mode"
-msgstr "Regime"
+msgstr "Modus"
 
 #: modbus_prt.cpp:65
 msgid "0;1;2"
@@ -540,15 +551,15 @@ msgstr ""
 
 #: modbus_prt.cpp:65
 msgid "Data;Gateway node;Gateway net"
-msgstr "Daten;Knotenschleuse;Netzschleuse"
+msgstr "Daten;Knotenschnittstelle;Netzschnittstelle"
 
-#: modbus_prt.cpp:67 modbus_prt.cpp:604 modbus_prt.cpp:706 modbus_prt.cpp:712
+#: modbus_prt.cpp:67 modbus_prt.cpp:606 modbus_prt.cpp:708 modbus_prt.cpp:714
 msgid "DT_PER"
 msgstr ""
 
 #: modbus_prt.cpp:67
 msgid "Calc data period (s)"
-msgstr "Datenberechnungszeit (s)"
+msgstr "Daten Rechenzeit (sek)"
 
 #: modbus_prt.cpp:67
 msgid "5.3"
@@ -558,30 +569,30 @@ msgstr ""
 msgid "0.001;99"
 msgstr ""
 
-#: modbus_prt.cpp:68 modbus_prt.cpp:677 modbus_prt.cpp:683 modbus_prt.cpp:690
-#: modbus_prt.cpp:696 modbus_prt.cpp:706 modbus_prt.cpp:712
+#: modbus_prt.cpp:68 modbus_prt.cpp:679 modbus_prt.cpp:685 modbus_prt.cpp:692
+#: modbus_prt.cpp:698 modbus_prt.cpp:708 modbus_prt.cpp:714
 msgid "DT_PROG"
 msgstr ""
 
-#: modbus_prt.cpp:68 modbus_prt.cpp:1166
+#: modbus_prt.cpp:68 modbus_prt.cpp:1168
 msgid "Programm"
-msgstr "Program"
+msgstr "Programm"
 
-#: modbus_prt.cpp:68 modbus_prt.cpp:445
+#: modbus_prt.cpp:68 modbus_prt.cpp:447
 msgid "10000"
 msgstr ""
 
-#: modbus_prt.cpp:70 modbus_prt.cpp:707 modbus_prt.cpp:713 modbus_prt.cpp:714
-#: modbus_prt.cpp:1013 modbus_prt.cpp:1014
+#: modbus_prt.cpp:70 modbus_prt.cpp:709 modbus_prt.cpp:715 modbus_prt.cpp:716
+#: modbus_prt.cpp:1015 modbus_prt.cpp:1016
 msgid "TO_TR"
 msgstr ""
 
 #: modbus_prt.cpp:70
 msgid "To transport"
-msgstr "Ins Transport"
+msgstr "Zur Übertragung"
 
-#: modbus_prt.cpp:71 modbus_prt.cpp:707 modbus_prt.cpp:713 modbus_prt.cpp:714
-#: modbus_prt.cpp:1017
+#: modbus_prt.cpp:71 modbus_prt.cpp:709 modbus_prt.cpp:715 modbus_prt.cpp:716
+#: modbus_prt.cpp:1019
 msgid "TO_PRT"
 msgstr ""
 
@@ -589,7 +600,7 @@ msgstr ""
 msgid "To protocol"
 msgstr "Ins Protokoll"
 
-#: modbus_prt.cpp:71 modbus_prt.cpp:332 modbus_prt.cpp:525 modbus_prt.cpp:570
+#: modbus_prt.cpp:71 modbus_prt.cpp:334 modbus_prt.cpp:527 modbus_prt.cpp:572
 msgid "RTU"
 msgstr ""
 
@@ -601,7 +612,7 @@ msgstr ""
 msgid "RTU;ASCII;TCP/IP"
 msgstr ""
 
-#: modbus_prt.cpp:72 modbus_prt.cpp:707 modbus_prt.cpp:713 modbus_prt.cpp:1018
+#: modbus_prt.cpp:72 modbus_prt.cpp:709 modbus_prt.cpp:715 modbus_prt.cpp:1020
 msgid "TO_ADDR"
 msgstr ""
 
@@ -609,7 +620,7 @@ msgstr ""
 msgid "To address"
 msgstr "An die Adresse"
 
-#: modbus_prt.cpp:75 modbus_prt.cpp:654 modbus_prt.cpp:732 modbus_prt.cpp:771
+#: modbus_prt.cpp:75 modbus_prt.cpp:656 modbus_prt.cpp:734 modbus_prt.cpp:773
 msgid "NODE_ID"
 msgstr ""
 
@@ -617,36 +628,36 @@ msgstr ""
 msgid "Node ID"
 msgstr "Knoten-ID"
 
-#: modbus_prt.cpp:78 modbus_prt.cpp:745 modbus_prt.cpp:749 modbus_prt.cpp:777
+#: modbus_prt.cpp:78 modbus_prt.cpp:747 modbus_prt.cpp:751 modbus_prt.cpp:779
 msgid "TYPE"
 msgstr ""
 
 #: modbus_prt.cpp:78
 msgid "Value type"
-msgstr "Bedeutungentyps"
+msgstr "Typ des Wertes"
 
-#: modbus_prt.cpp:79 modbus_prt.cpp:745 modbus_prt.cpp:750 modbus_prt.cpp:778
+#: modbus_prt.cpp:79 modbus_prt.cpp:747 modbus_prt.cpp:752 modbus_prt.cpp:780
 msgid "FLAGS"
 msgstr ""
 
 #: modbus_prt.cpp:79
 msgid "Flags"
-msgstr "Flaggen"
+msgstr "Schalter"
 
 #: modbus_prt.cpp:79 modbus_prt.cpp:81
 msgid "4"
 msgstr ""
 
-#: modbus_prt.cpp:80 modbus_prt.cpp:752 modbus_prt.cpp:753 modbus_prt.cpp:780
-#: modbus_prt.cpp:781 modbus_prt.cpp:782
+#: modbus_prt.cpp:80 modbus_prt.cpp:754 modbus_prt.cpp:755 modbus_prt.cpp:782
+#: modbus_prt.cpp:783 modbus_prt.cpp:784
 msgid "VALUE"
 msgstr ""
 
-#: modbus_prt.cpp:80 modbus_prt.cpp:1163
+#: modbus_prt.cpp:80 modbus_prt.cpp:1165
 msgid "Value"
-msgstr "Bedeutung"
+msgstr "Wert"
 
-#: modbus_prt.cpp:81 modbus_prt.cpp:738 modbus_prt.cpp:779
+#: modbus_prt.cpp:81 modbus_prt.cpp:740 modbus_prt.cpp:781
 msgid "POS"
 msgstr ""
 
@@ -654,16 +665,16 @@ msgstr ""
 msgid "Real position"
 msgstr "Reale Position"
 
-#: modbus_prt.cpp:139 modbus_prt.cpp:1280 modbus_prt.cpp:1283
-#: modbus_prt.cpp:1304 modbus_prt.cpp:1307
+#: modbus_prt.cpp:139 modbus_prt.cpp:1282 modbus_prt.cpp:1285
+#: modbus_prt.cpp:1306 modbus_prt.cpp:1309
 msgid "."
 msgstr ""
 
-#: modbus_prt.cpp:139 modbus_prt.cpp:147 modbus_prt.cpp:665
+#: modbus_prt.cpp:139 modbus_prt.cpp:147 modbus_prt.cpp:667
 msgid "_node"
 msgstr ""
 
-#: modbus_prt.cpp:142 modbus_prt.cpp:150 modbus_prt.h:180
+#: modbus_prt.cpp:142 modbus_prt.cpp:150 modbus_prt.h:182
 msgid "*.*"
 msgstr ""
 
@@ -671,612 +682,610 @@ msgstr ""
 msgid "<cfg>"
 msgstr ""
 
-#: modbus_prt.cpp:154 modbus_prt.cpp:658 modbus_prt.cpp:1104
-#, c-format
-msgid "%s"
-msgstr ""
-
 #: modbus_prt.cpp:155
 msgid "Search and create new node error."
-msgstr "Fehler der Suche und des Schaffens des neuen Knotens."
+msgstr "Fehler bem Suchen und Erstellen des neuen Knotens."
 
-#: modbus_prt.cpp:318
+#: modbus_prt.cpp:320
 msgid "13:Error server respond"
 msgstr "13:Fehler in der Antwort des Server"
 
-#: modbus_prt.cpp:346
-msgid "13:Error respond: Too short."
-msgstr "13:Fehler der Anwort: Zu kurz."
-
 #: modbus_prt.cpp:348
-msgid "13:Error respond: CRC check error."
-msgstr "13:Fehler der Antwort: Fehler der CRC-Pruefung."
+msgid "13:Error respond: Too short."
+msgstr "13:Fehlerin der Anwort: Zu kurz."
 
-#: modbus_prt.cpp:354 modbus_prt.cpp:407 modbus_prt.cpp:409 modbus_prt.cpp:515
-#: modbus_prt.cpp:578 modbus_prt.cpp:590 modbus_prt.cpp:591
+#: modbus_prt.cpp:350
+msgid "13:Error respond: CRC check error."
+msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
+
+#: modbus_prt.cpp:356 modbus_prt.cpp:409 modbus_prt.cpp:411 modbus_prt.cpp:517
+#: modbus_prt.cpp:580 modbus_prt.cpp:592 modbus_prt.cpp:593
 msgid "ASCII"
 msgstr ""
 
-#: modbus_prt.cpp:359 modbus_prt.cpp:367 modbus_prt.cpp:513 modbus_prt.cpp:583
+#: modbus_prt.cpp:361 modbus_prt.cpp:369 modbus_prt.cpp:515 modbus_prt.cpp:585
 msgid "\r\n"
 msgstr ""
 
-#: modbus_prt.cpp:368
+#: modbus_prt.cpp:370
 msgid "13:Error respond: Error format."
-msgstr "13:Fehler der Antwort: Formatfehler."
+msgstr "13:Fehler in der Antwort: Formatfehler."
 
-#: modbus_prt.cpp:371
+#: modbus_prt.cpp:373
 msgid "13:Error respond: LRC check error."
-msgstr "13:Fehler der Antwort: Fehler der LRC-Pruefung."
+msgstr "13:Fehler in der Antwort: Fehler der LRC-Prüfung."
 
-#: modbus_prt.cpp:377
+#: modbus_prt.cpp:379
 #, c-format
 msgid "Protocol '%s' error."
 msgstr "Fehler des Protokolls '%s'."
 
-#: modbus_prt.cpp:382
+#: modbus_prt.cpp:384
 msgid "13:Error respond"
-msgstr "13:Fehler der Antwort"
-
-#: modbus_prt.cpp:386
-#, c-format
-msgid "1:Function %xh is not supported."
-msgstr "1:Funktion %xh wird nicht unterstuetzt."
-
-#: modbus_prt.cpp:387
-msgid "2:Requested address not allow or request area too long."
-msgstr "2:Angefragte Adresse ist unerreichbar oder Anfragebereich ist zu weit."
+msgstr "13:Fehler in der Antwort"
 
 #: modbus_prt.cpp:388
-msgid "3:Illegal data value into request."
-msgstr "3:Illegale Bedeutung der Daten in der Anfrage."
+#, c-format
+msgid "1:Function %xh is not supported."
+msgstr "1:Funktion %xh wird nicht unterstützt."
+
+#: modbus_prt.cpp:389
+msgid "2:Requested address not allow or request area too long."
+msgstr ""
+"2:Angefragte Adresse ist nicht zulässig oder Anfragebereich ist zu gross."
 
 #: modbus_prt.cpp:390
-msgid "5:Request requires too long time for execute."
-msgstr "5:Anfrage fordert zu viel Zeit fuer Ausfuehrung."
-
-#: modbus_prt.cpp:391
-msgid "6:Server is busy."
-msgstr "6:Server ist beschaeftigt."
+msgid "3:Illegal data value into request."
+msgstr "3:Illegale Datenwert in der Anfrage."
 
 #: modbus_prt.cpp:392
-msgid "7:Programm function is error. By request functions 13 or 14."
-msgstr ""
+msgid "5:Request requires too long time for execute."
+msgstr "5:Anfrage benötigt zu viel Zeit für die Ausführung."
 
 #: modbus_prt.cpp:393
-msgid "10:Gateway problem."
-msgstr "10:Schleuseproblem."
+msgid "6:Server is busy."
+msgstr "6:Server ist beschäftigt."
 
 #: modbus_prt.cpp:394
+msgid "7:Programm function is error. By request functions 13 or 14."
+msgstr "7:Fehler in Programmfunktion. In Anfragefunctions 13 or 14."
+
+#: modbus_prt.cpp:395
+msgid "10:Gateway problem."
+msgstr "10:Schnittstellenproblem."
+
+#: modbus_prt.cpp:396
 #, c-format
 msgid "12:Unknown error: %xh."
 msgstr "12:Unbekannter Fehler: %xh."
 
-#: modbus_prt.cpp:397
+#: modbus_prt.cpp:399
 msgid "14:Device error: "
-msgstr "14:Fehler der Anlage: "
+msgstr "14:Fehler im Baustein: "
 
-#: modbus_prt.cpp:406 modbus_prt.cpp:589
+#: modbus_prt.cpp:408 modbus_prt.cpp:591
 msgid " "
 msgstr ""
 
-#: modbus_prt.cpp:406
+#: modbus_prt.cpp:408
 msgid ": '"
 msgstr ""
 
-#: modbus_prt.cpp:406
+#: modbus_prt.cpp:408
 msgid "' --> "
 msgstr ""
 
-#: modbus_prt.cpp:406 modbus_prt.cpp:589
+#: modbus_prt.cpp:408 modbus_prt.cpp:591
 msgid "("
 msgstr ""
 
-#: modbus_prt.cpp:406
+#: modbus_prt.cpp:408
 msgid ")\n"
 msgstr ""
 
-#: modbus_prt.cpp:407 modbus_prt.cpp:590
+#: modbus_prt.cpp:409 modbus_prt.cpp:592
 msgid "REQ -> "
 msgstr "Anfrage -> "
 
-#: modbus_prt.cpp:407 modbus_prt.cpp:410 modbus_prt.cpp:481 modbus_prt.cpp:589
-#: modbus_prt.cpp:590 modbus_prt.cpp:592 modbus_prt.cpp:678 modbus_prt.cpp:684
-#: modbus_prt.cpp:690 modbus_prt.cpp:696
+#: modbus_prt.cpp:409 modbus_prt.cpp:412 modbus_prt.cpp:483 modbus_prt.cpp:591
+#: modbus_prt.cpp:592 modbus_prt.cpp:594 modbus_prt.cpp:680 modbus_prt.cpp:686
+#: modbus_prt.cpp:692 modbus_prt.cpp:698
 msgid "\n"
 msgstr ""
 
-#: modbus_prt.cpp:408
+#: modbus_prt.cpp:410
 msgid "ERR -> "
 msgstr "Fehler -> "
 
-#: modbus_prt.cpp:409 modbus_prt.cpp:591
+#: modbus_prt.cpp:411 modbus_prt.cpp:593
 msgid "RESP -> "
 msgstr "Antwort -> "
 
-#: modbus_prt.cpp:440
+#: modbus_prt.cpp:442
 msgid "grp"
 msgstr ""
 
-#: modbus_prt.cpp:440 modbus_prt.cpp:456
+#: modbus_prt.cpp:442 modbus_prt.cpp:458
 msgid "/br/n_"
 msgstr ""
 
-#: modbus_prt.cpp:440 modbus_prt.cpp:1132
+#: modbus_prt.cpp:442 modbus_prt.cpp:1134
 msgid "Node"
 msgstr "Knoten"
 
-#: modbus_prt.cpp:440 modbus_prt.cpp:442 modbus_prt.cpp:1159
+#: modbus_prt.cpp:442 modbus_prt.cpp:444 modbus_prt.cpp:1161
 msgid "idm"
 msgstr ""
 
-#: modbus_prt.cpp:440 modbus_prt.cpp:442
+#: modbus_prt.cpp:442 modbus_prt.cpp:444
 msgid "idSz"
 msgstr ""
 
-#: modbus_prt.cpp:441 modbus_prt.cpp:443 modbus_prt.cpp:1132
-#: modbus_prt.cpp:1134 modbus_prt.cpp:1141 modbus_prt.cpp:1153
-#: modbus_prt.cpp:1168
+#: modbus_prt.cpp:443 modbus_prt.cpp:445 modbus_prt.cpp:1134
+#: modbus_prt.cpp:1136 modbus_prt.cpp:1143 modbus_prt.cpp:1155
+#: modbus_prt.cpp:1170
 msgid "area"
 msgstr ""
 
-#: modbus_prt.cpp:441
+#: modbus_prt.cpp:443
 msgid "/node"
 msgstr ""
 
-#: modbus_prt.cpp:441 modbus_prt.cpp:442
+#: modbus_prt.cpp:443 modbus_prt.cpp:444
 msgid "Nodes"
 msgstr "Knoten"
 
-#: modbus_prt.cpp:442 modbus_prt.cpp:1157 modbus_prt.cpp:1158
-#: modbus_prt.cpp:1159 modbus_prt.cpp:1162 modbus_prt.cpp:1163
-#: modbus_prt.cpp:1208 modbus_prt.cpp:1209 modbus_prt.cpp:1210
-#: modbus_prt.cpp:1211 modbus_prt.cpp:1212
+#: modbus_prt.cpp:444 modbus_prt.cpp:1159 modbus_prt.cpp:1160
+#: modbus_prt.cpp:1161 modbus_prt.cpp:1164 modbus_prt.cpp:1165
+#: modbus_prt.cpp:1210 modbus_prt.cpp:1211 modbus_prt.cpp:1212
+#: modbus_prt.cpp:1213 modbus_prt.cpp:1214
 msgid "list"
 msgstr ""
 
-#: modbus_prt.cpp:442 modbus_prt.cpp:456
+#: modbus_prt.cpp:444 modbus_prt.cpp:458
 msgid "/node/node"
 msgstr ""
 
-#: modbus_prt.cpp:442
+#: modbus_prt.cpp:444
 msgid "br"
 msgstr ""
 
-#: modbus_prt.cpp:442 modbus_prt.cpp:1155
+#: modbus_prt.cpp:444 modbus_prt.cpp:1157
 msgid "s_com"
 msgstr ""
 
-#: modbus_prt.cpp:442
+#: modbus_prt.cpp:444
 msgid "add,del"
 msgstr ""
 
-#: modbus_prt.cpp:442
+#: modbus_prt.cpp:444
 msgid "br_pref"
 msgstr ""
 
-#: modbus_prt.cpp:443
+#: modbus_prt.cpp:445
 msgid "/rep"
 msgstr ""
 
-#: modbus_prt.cpp:443 modbus_prt.cpp:448
+#: modbus_prt.cpp:445 modbus_prt.cpp:450
 msgid "Report"
 msgstr "Bericht"
 
-#: modbus_prt.cpp:445 modbus_prt.cpp:472
+#: modbus_prt.cpp:447 modbus_prt.cpp:474
 msgid "/rep/repLen"
 msgstr ""
 
-#: modbus_prt.cpp:445
+#: modbus_prt.cpp:447
 msgid "Report length"
-msgstr "Berichtsgroesse"
+msgstr "Berichtsgrösse"
 
-#: modbus_prt.cpp:445 modbus_prt.cpp:448 modbus_prt.cpp:474 modbus_prt.cpp:475
+#: modbus_prt.cpp:447 modbus_prt.cpp:450 modbus_prt.cpp:476 modbus_prt.cpp:477
 #: modbus_daq.h:46
 msgid "DAQ"
 msgstr ""
 
-#: modbus_prt.cpp:445 modbus_prt.cpp:1159
+#: modbus_prt.cpp:447 modbus_prt.cpp:1161
 msgid "dec"
 msgstr ""
 
-#: modbus_prt.cpp:445
+#: modbus_prt.cpp:447
 msgid "min"
 msgstr ""
 
-#: modbus_prt.cpp:445
+#: modbus_prt.cpp:447
 msgid "max"
 msgstr ""
 
-#: modbus_prt.cpp:446
+#: modbus_prt.cpp:448
 msgid "Zero use for report disabling"
-msgstr "Zero wird fuers Abschalten des Berichts benutzt."
+msgstr "Null wird für das Abschalten des Berichtes verwendet."
 
-#: modbus_prt.cpp:448 modbus_prt.cpp:477
+#: modbus_prt.cpp:450 modbus_prt.cpp:479
 msgid "/rep/rep"
 msgstr ""
 
-#: modbus_prt.cpp:448 modbus_prt.cpp:450
+#: modbus_prt.cpp:450 modbus_prt.cpp:452
 msgid "cols"
 msgstr ""
 
-#: modbus_prt.cpp:448 modbus_prt.cpp:450
+#: modbus_prt.cpp:450 modbus_prt.cpp:452
 msgid "90"
 msgstr ""
 
-#: modbus_prt.cpp:448 modbus_prt.cpp:450 modbus_prt.cpp:1155
-#: modbus_prt.cpp:1166
+#: modbus_prt.cpp:450 modbus_prt.cpp:452 modbus_prt.cpp:1157
+#: modbus_prt.cpp:1168
 msgid "rows"
 msgstr ""
 
-#: modbus_prt.cpp:450 modbus_prt.cpp:483
+#: modbus_prt.cpp:452 modbus_prt.cpp:485
 msgid "/help/g_help"
 msgstr ""
 
-#: modbus_prt.cpp:450
+#: modbus_prt.cpp:452
 msgid "Options help"
-msgstr "Optionenhilfe"
+msgstr "Optionen Hilfe"
 
-#: modbus_prt.cpp:458 modbus_prt.cpp:474 modbus_prt.cpp:483
-#: modbus_prt.cpp:1180 modbus_prt.cpp:1185 modbus_prt.cpp:1206
-#: modbus_prt.cpp:1264 modbus_prt.cpp:1269 modbus_prt.cpp:1334
+#: modbus_prt.cpp:460 modbus_prt.cpp:476 modbus_prt.cpp:485
+#: modbus_prt.cpp:1182 modbus_prt.cpp:1187 modbus_prt.cpp:1208
+#: modbus_prt.cpp:1266 modbus_prt.cpp:1271 modbus_prt.cpp:1336
 msgid "get"
 msgstr ""
 
-#: modbus_prt.cpp:465 modbus_prt.cpp:1223
+#: modbus_prt.cpp:467 modbus_prt.cpp:1225
 msgid "add"
 msgstr ""
 
-#: modbus_prt.cpp:470 modbus_prt.cpp:1233
+#: modbus_prt.cpp:472 modbus_prt.cpp:1235
 msgid "del"
 msgstr ""
 
-#: modbus_prt.cpp:589
+#: modbus_prt.cpp:591
 msgid ": "
 msgstr ""
 
-#: modbus_prt.cpp:589
+#: modbus_prt.cpp:591
 msgid ") --> "
 msgstr ""
 
-#: modbus_prt.cpp:602
+#: modbus_prt.cpp:604
 msgid "ModBusNode_"
 msgstr ""
 
-#: modbus_prt.cpp:640 modbus_prt.cpp:1045
+#: modbus_prt.cpp:642 modbus_prt.cpp:1047
 msgid "f_frq"
 msgstr ""
 
-#: modbus_prt.cpp:640
+#: modbus_prt.cpp:642
 msgid "Function calculate frequency (Hz)"
 msgstr "Funktionberechnungsfrequenz (Hz)"
 
-#: modbus_prt.cpp:640
+#: modbus_prt.cpp:642
 msgid "1000"
 msgstr ""
 
-#: modbus_prt.cpp:641 modbus_prt.cpp:1046
+#: modbus_prt.cpp:643 modbus_prt.cpp:1048
 msgid "f_start"
 msgstr ""
 
-#: modbus_prt.cpp:641
+#: modbus_prt.cpp:643
 msgid "Function start flag"
-msgstr "Flagge des Startens der Funktion"
+msgstr "Schalter für das Anhalten der Funktion"
 
-#: modbus_prt.cpp:642 modbus_prt.cpp:1047
+#: modbus_prt.cpp:644 modbus_prt.cpp:1049
 msgid "f_stop"
 msgstr ""
 
-#: modbus_prt.cpp:642
+#: modbus_prt.cpp:644
 msgid "Function stop flag"
-msgstr "Flagge des Stoppens der Funktion"
+msgstr "Schalter für das Starten der Funktion"
 
-#: modbus_prt.cpp:655 modbus_prt.cpp:733 modbus_prt.cpp:783 modbus_prt.cpp:787
-#: modbus_prt.cpp:792
+#: modbus_prt.cpp:657 modbus_prt.cpp:735 modbus_prt.cpp:785 modbus_prt.cpp:789
+#: modbus_prt.cpp:794
 msgid "_io"
 msgstr ""
 
-#: modbus_prt.cpp:822
+#: modbus_prt.cpp:824
 #, c-format
 msgid "Compile function by language '%s' error: %s"
-msgstr "Fehler der Funktionskompilation fuer die Sprache '%s': %s"
+msgstr "Fehler für die Sprache '%s' bei der Funktionskompilation : %s"
 
-#: modbus_prt.cpp:863
+#: modbus_prt.cpp:865
 msgid "Not started!"
-msgstr "Nicht gestartet"
+msgstr "Nicht gestartet!"
 
-#: modbus_prt.cpp:874
+#: modbus_prt.cpp:876
 msgid "Data process task is not stopped!"
-msgstr "Datenbearbeitungaufgabe ist nicht gestoppt!"
+msgstr "Datenbearbeitungaufgabe ist nicht angehalten!"
 
-#: modbus_prt.cpp:887
+#: modbus_prt.cpp:889
 msgid "Disabled. "
-msgstr "Disaktiviert. "
+msgstr "Abgeschaltet. "
 
-#: modbus_prt.cpp:890
+#: modbus_prt.cpp:892
 msgid "Enabled. "
-msgstr "Aktiviert. "
+msgstr "Eingeschaltet. "
 
-#: modbus_prt.cpp:894
+#: modbus_prt.cpp:896
 #, c-format
 msgid ""
 "Process time %.2f ms. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
 "registers %.4g, coils %.4g."
 msgstr ""
-"Bearbeitungszeit %.2f мс. Anfragen %.4g. Gelesen %.4g Register, %.4g "
-"Bits. Aufgeschrieben %.4g Register, %.4g Bits."
+"Bearbeitungszeit %.2f msek. Anfragen %.4g. Gelesen %.4g Register, %.4g Bits. "
+"Geschrieben %.4g Register, %.4g Bits."
 
-#: modbus_prt.cpp:898
+#: modbus_prt.cpp:900
 #, c-format
 msgid "Requests %.4g."
 msgstr "Anfragen %.4g."
 
-#: modbus_prt.cpp:1105
+#: modbus_prt.cpp:1107
 msgid "Calc node's function error."
-msgstr "Fehler der Berechnung der Funktion des Knotens."
+msgstr "Fehler bei der Berechnung der Funktion des Knotens."
 
-#: modbus_prt.cpp:1131
+#: modbus_prt.cpp:1133
 msgid "oscada_cntr"
 msgstr ""
 
-#: modbus_prt.cpp:1131
+#: modbus_prt.cpp:1133
 msgid "/"
 msgstr ""
 
-#: modbus_prt.cpp:1131
+#: modbus_prt.cpp:1133
 msgid "Node: "
 msgstr "Knoten: "
 
-#: modbus_prt.cpp:1132
+#: modbus_prt.cpp:1134
 msgid "/nd"
 msgstr ""
 
-#: modbus_prt.cpp:1134
+#: modbus_prt.cpp:1136
 msgid "/nd/st"
 msgstr ""
 
-#: modbus_prt.cpp:1134
+#: modbus_prt.cpp:1136
 msgid "State"
 msgstr "Zustand"
 
-#: modbus_prt.cpp:1136 modbus_prt.cpp:1177
+#: modbus_prt.cpp:1138 modbus_prt.cpp:1179
 msgid "/nd/st/status"
 msgstr ""
 
-#: modbus_prt.cpp:1136
+#: modbus_prt.cpp:1138
 msgid "Status"
 msgstr "Status"
 
-#: modbus_prt.cpp:1137 modbus_prt.cpp:1178
+#: modbus_prt.cpp:1139 modbus_prt.cpp:1180
 msgid "/nd/st/en_st"
 msgstr ""
 
-#: modbus_prt.cpp:1137
+#: modbus_prt.cpp:1139
 msgid "Enable"
-msgstr "Aktiv"
+msgstr "Einschalten"
 
-#: modbus_prt.cpp:1137 modbus_prt.cpp:1162
+#: modbus_prt.cpp:1139 modbus_prt.cpp:1164
 msgid "bool"
 msgstr ""
 
-#: modbus_prt.cpp:1138 modbus_prt.cpp:1183
+#: modbus_prt.cpp:1140 modbus_prt.cpp:1185
 msgid "/nd/st/db"
 msgstr ""
 
-#: modbus_prt.cpp:1138
+#: modbus_prt.cpp:1140
 msgid "DB"
 msgstr "DB"
 
-#: modbus_prt.cpp:1138
+#: modbus_prt.cpp:1140
 msgid "/db/list"
 msgstr ""
 
-#: modbus_prt.cpp:1139
+#: modbus_prt.cpp:1141
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
 msgstr ""
+"Datenbank Parameter im Format [<DB-Modul>.<DB-Name>].\n"
+"Für die Hauptdatenbank '*.*' verwenden."
 
-#: modbus_prt.cpp:1141 modbus_prt.cpp:1143 modbus_prt.cpp:1203
+#: modbus_prt.cpp:1143 modbus_prt.cpp:1145 modbus_prt.cpp:1205
 msgid "/nd/cfg"
 msgstr ""
 
-#: modbus_prt.cpp:1141
+#: modbus_prt.cpp:1143
 msgid "Config"
 msgstr "Konfiguration"
 
-#: modbus_prt.cpp:1145
+#: modbus_prt.cpp:1147
 msgid "/nd/cfg/InTR"
 msgstr ""
 
-#: modbus_prt.cpp:1146 modbus_prt.cpp:1148 modbus_prt.cpp:1165
-#: modbus_prt.cpp:1172
+#: modbus_prt.cpp:1148 modbus_prt.cpp:1150 modbus_prt.cpp:1167
+#: modbus_prt.cpp:1174
 msgid "sel_ed"
 msgstr ""
 
-#: modbus_prt.cpp:1146 modbus_prt.cpp:1188
+#: modbus_prt.cpp:1148 modbus_prt.cpp:1190
 msgid "/nd/cfg/ls_itr"
 msgstr ""
 
-#: modbus_prt.cpp:1147
+#: modbus_prt.cpp:1149
 msgid "/nd/cfg/TO_TR"
 msgstr ""
 
-#: modbus_prt.cpp:1148 modbus_prt.cpp:1196
+#: modbus_prt.cpp:1150 modbus_prt.cpp:1198
 msgid "/nd/cfg/ls_otr"
 msgstr ""
 
-#: modbus_prt.cpp:1149
+#: modbus_prt.cpp:1151
 msgid "/nd/cfg/DT_PROG"
 msgstr ""
 
-#: modbus_prt.cpp:1153
+#: modbus_prt.cpp:1155
 msgid "/dt"
 msgstr ""
 
-#: modbus_prt.cpp:1153
+#: modbus_prt.cpp:1155
 msgid "Data"
 msgstr "Daten"
 
-#: modbus_prt.cpp:1155
+#: modbus_prt.cpp:1157
 msgid "table"
 msgstr ""
 
-#: modbus_prt.cpp:1155 modbus_prt.cpp:1204
+#: modbus_prt.cpp:1157 modbus_prt.cpp:1206
 msgid "/dt/io"
 msgstr ""
 
-#: modbus_prt.cpp:1155
+#: modbus_prt.cpp:1157
 msgid "IO"
 msgstr ""
 
-#: modbus_prt.cpp:1155
+#: modbus_prt.cpp:1157
 msgid "add,del,ins,move"
 msgstr ""
 
-#: modbus_prt.cpp:1155
+#: modbus_prt.cpp:1157
 msgid "15"
 msgstr ""
 
-#: modbus_prt.cpp:1157 modbus_prt.cpp:1208
+#: modbus_prt.cpp:1159 modbus_prt.cpp:1210
 msgid "/dt/io/id"
 msgstr ""
 
-#: modbus_prt.cpp:1157
+#: modbus_prt.cpp:1159
 msgid "Id"
 msgstr ""
 
-#: modbus_prt.cpp:1158 modbus_prt.cpp:1209
+#: modbus_prt.cpp:1160 modbus_prt.cpp:1211
 msgid "/dt/io/nm"
 msgstr ""
 
-#: modbus_prt.cpp:1159 modbus_prt.cpp:1210
+#: modbus_prt.cpp:1161 modbus_prt.cpp:1212
 msgid "/dt/io/tp"
 msgstr ""
 
-#: modbus_prt.cpp:1159
+#: modbus_prt.cpp:1161
 msgid "Type"
 msgstr "Typ"
 
-#: modbus_prt.cpp:1160
+#: modbus_prt.cpp:1162
 msgid "sel_id"
 msgstr ""
 
-#: modbus_prt.cpp:1160
+#: modbus_prt.cpp:1162
 msgid ";"
 msgstr ""
 
-#: modbus_prt.cpp:1161
+#: modbus_prt.cpp:1163
 msgid "sel_list"
 msgstr ""
 
-#: modbus_prt.cpp:1161
+#: modbus_prt.cpp:1163
 msgid "Real;Integer;Boolean;String"
-msgstr "Real;Integer;Logisch;Zeile"
+msgstr "Reele Zahl;Ganzzahl;Logisch;Text"
 
-#: modbus_prt.cpp:1162 modbus_prt.cpp:1211
+#: modbus_prt.cpp:1164 modbus_prt.cpp:1213
 msgid "/dt/io/lnk"
 msgstr ""
 
-#: modbus_prt.cpp:1162
+#: modbus_prt.cpp:1164
 msgid "Link"
 msgstr "Verbindung"
 
-#: modbus_prt.cpp:1163 modbus_prt.cpp:1212
+#: modbus_prt.cpp:1165 modbus_prt.cpp:1214
 msgid "/dt/io/vl"
 msgstr ""
 
-#: modbus_prt.cpp:1165 modbus_prt.cpp:1262
+#: modbus_prt.cpp:1167 modbus_prt.cpp:1264
 msgid "/dt/progLang"
 msgstr ""
 
-#: modbus_prt.cpp:1165
+#: modbus_prt.cpp:1167
 msgid "Programm language"
 msgstr "Programmsprache."
 
-#: modbus_prt.cpp:1165 modbus_prt.cpp:1272
+#: modbus_prt.cpp:1167 modbus_prt.cpp:1274
 msgid "/dt/plang_ls"
 msgstr ""
 
-#: modbus_prt.cpp:1166 modbus_prt.cpp:1267
+#: modbus_prt.cpp:1168 modbus_prt.cpp:1269
 msgid "/dt/prog"
 msgstr ""
 
-#: modbus_prt.cpp:1166
+#: modbus_prt.cpp:1168
 msgid "10"
 msgstr ""
 
-#: modbus_prt.cpp:1168
+#: modbus_prt.cpp:1170
 msgid "/lnk"
 msgstr ""
 
-#: modbus_prt.cpp:1168
+#: modbus_prt.cpp:1170
 msgid "Links"
 msgstr "Verbindungen"
 
-#: modbus_prt.cpp:1171 modbus_prt.cpp:1332
+#: modbus_prt.cpp:1173 modbus_prt.cpp:1334
 msgid "/lnk/el_"
 msgstr ""
 
-#: modbus_prt.cpp:1172 modbus_prt.cpp:1296
+#: modbus_prt.cpp:1174 modbus_prt.cpp:1298
 msgid "/lnk/ls_"
 msgstr ""
 
-#: modbus_prt.cpp:1225 modbus_prt.cpp:1230 modbus_prt.cpp:1235
-#: modbus_prt.cpp:1244 modbus_prt.cpp:1251
+#: modbus_prt.cpp:1227 modbus_prt.cpp:1232 modbus_prt.cpp:1237
+#: modbus_prt.cpp:1246 modbus_prt.cpp:1253
 msgid "Disable node for this operation"
-msgstr "Disaktivieren den Knoten fuer diese Operation"
+msgstr "Knoten abschalten für diese Operation"
 
-#: modbus_prt.cpp:1226 modbus_prt.cpp:1231
+#: modbus_prt.cpp:1228 modbus_prt.cpp:1233
 msgid "new"
 msgstr ""
 
-#: modbus_prt.cpp:1226 modbus_prt.cpp:1231
+#: modbus_prt.cpp:1228 modbus_prt.cpp:1233
 msgid "New IO"
 msgstr "Neu IO"
 
-#: modbus_prt.cpp:1228
+#: modbus_prt.cpp:1230
 msgid "ins"
 msgstr ""
 
-#: modbus_prt.cpp:1231 modbus_prt.cpp:1236 modbus_prt.cpp:1245
-#: modbus_prt.cpp:1249
+#: modbus_prt.cpp:1233 modbus_prt.cpp:1238 modbus_prt.cpp:1247
+#: modbus_prt.cpp:1251
 msgid "row"
 msgstr ""
 
-#: modbus_prt.cpp:1238
+#: modbus_prt.cpp:1240
 msgid "Deleting lock atribute in not allow."
-msgstr "Beseitigung des blockierten Attributs ist unzulaessig."
+msgstr "Löschen Verriegelungsattribut ist nicht erlaubt."
 
-#: modbus_prt.cpp:1242
+#: modbus_prt.cpp:1244
 msgid "move"
 msgstr ""
 
-#: modbus_prt.cpp:1245
+#: modbus_prt.cpp:1247
 msgid "to"
 msgstr ""
 
-#: modbus_prt.cpp:1250
+#: modbus_prt.cpp:1252
 msgid "col"
 msgstr ""
 
-#: modbus_prt.cpp:1251 modbus_prt.cpp:1258
+#: modbus_prt.cpp:1253 modbus_prt.cpp:1260
 msgid "vl"
 msgstr ""
 
-#: modbus_prt.cpp:1252
+#: modbus_prt.cpp:1254
 msgid "Changing locked atribute is not allowed."
-msgstr "Veraenderung des blockierten Attributs ist unzulaessig."
+msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
 
-#: modbus_prt.cpp:1253 modbus_prt.cpp:1255
+#: modbus_prt.cpp:1255 modbus_prt.cpp:1257
 msgid "nm"
 msgstr ""
 
-#: modbus_prt.cpp:1253
+#: modbus_prt.cpp:1255
 msgid "Empty value is not valid."
-msgstr "Leere Bedeutung ist unzulaessig."
+msgstr "Leerer Wert ist nicht zulässig."
 
-#: modbus_prt.cpp:1257
+#: modbus_prt.cpp:1259
 msgid "lnk"
 msgstr ""
 
@@ -1284,7 +1293,7 @@ msgstr ""
 msgid "1.0.0"
 msgstr ""
 
-#: modbus_daq.h:49 modbus_prt.h:40
+#: modbus_daq.h:49 modbus_prt.h:42
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
@@ -1293,25 +1302,25 @@ msgid ""
 "Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
 "and Modbus/ASCII protocols."
 msgstr ""
-"Ermoeglicht die Realisation des Klientservices des ModBus-Protokolls. "
-"Protokolle Modbus/TCP, Modbus/RTU и Modbus/ASCII werden unterstuetzt."
+"Ermöglicht die Realisierung des Klientservices des ModBus-Protokolls. "
+"Unterstützt werden Modbus/TCP, Modbus/RTU und Modbus/ASCII Protokolle."
 
-#: modbus_daq.h:51 modbus_prt.h:42
+#: modbus_daq.h:51 modbus_prt.h:44
 msgid "GPL"
 msgstr ""
 
 #: modbus_daq.h:129
 msgid "11:Value not gathered."
-msgstr "11:Bedeutungen sind nicht befragt."
+msgstr "11:Werte sind nicht erfasst."
 
-#: modbus_prt.h:39
+#: modbus_prt.h:41
 msgid "0.5.0"
 msgstr ""
 
-#: modbus_prt.h:41
+#: modbus_prt.h:43
 msgid ""
 "Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
 "Modbus/ASCII protocols."
 msgstr ""
-"Ermoeglicht die Realisation der ModBus-Protokolle. Unterstuetzt werden Modbus/TCP, "
-"Modbus/RTU и Modbus/ASCII Protokolle."
+"Ermöglicht die Realisierung der ModBus-Protokolle. Unterstützt werden Modbus/"
+"TCP, Modbus/RTU und Modbus/ASCII Protokolle."

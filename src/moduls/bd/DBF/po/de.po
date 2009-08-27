@@ -1,22 +1,23 @@
 # OpenSCADA.DB.DBF translate to German.
-# Copyright (C) 2008-2009 Aleksey Popkov
+# Copyright (C) 2008-2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DB.DBF module.
-# aleksey <aleksey@psniip.ru>, 2008-2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: dbf_mod.cpp:56 dbf_mod.cpp:542
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:03+0300\n"
-"PO-Revision-Date: 2008-12-22 11:55+0300\n"
-"Last-Translator: aleksey <aleksey@psniip.ru>\n"
-"Language-Team:  <ru@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:30+0300\n"
+"PO-Revision-Date: 2009-08-17 11:32+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: dbf.cpp:122
 msgid "\r"
@@ -48,7 +49,7 @@ msgstr "Roman Savotschenko "
 
 #: dbf_mod.cpp:45
 msgid "BD modul. Allow support of the *.dbf files, version 3.0."
-msgstr "Der BD-Modul. Ermoeglicht die *.dbf Dateiunterstutzung, Versionen 3.0."
+msgstr "Modul unterstützt die *.dbf Datenbank Version 3.0."
 
 #: dbf_mod.cpp:46
 msgid "GPL"
@@ -67,7 +68,7 @@ msgid ""
 msgstr ""
 "========================== Optionen des Moduls <%s:%s> "
 "==========================\n"
-"-------- Die Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
+"-------- Die Parameter des Abschnitts <%s> in der Konfigurationsdatei "
 "--------\n"
 "\n"
 
@@ -79,20 +80,23 @@ msgstr ""
 msgid "help"
 msgstr ""
 
+#: dbf_mod.cpp:125 dbf_mod.cpp:252
+#, c-format
+msgid "%s"
+msgstr ""
+
 #: dbf_mod.cpp:153
 msgid "Delete DB error!"
-msgstr "Fehler im Loeschen der DB!"
+msgstr "Fehler beim Löschen der Datenbank!"
 
 #: dbf_mod.cpp:162
 #, c-format
 msgid "Error create DB directory <%s>!"
-msgstr "Fehler in der Erschaffung  des DB-Verzeichnisses <%s>!"
+msgstr "Fehler beim Erstellen des Datenbank-Verzeichnisses <%s>!"
 
 #: dbf_mod.cpp:163
 msgid "Restore previous directory as current error."
-msgstr ""
-" Wiederherstellung des Vorverzeichnisses in der Rolle des laufenden ist "
-"falsch."
+msgstr "Wiederherstellung des vorherigen Verzeichnisses ist nicht erlaubt."
 
 #: dbf_mod.cpp:180
 msgid ".."
@@ -114,7 +118,7 @@ msgstr ""
 #: dbf_mod.cpp:192
 #, c-format
 msgid "Error open table <%s>. DB is disabled."
-msgstr "Fehler der Offnung der Tabelle<%s>. Die DB ist ausgeschaltet."
+msgstr "Fehler beim Öffnen der Tabelle <%s>, die Datenbank ist abgeschaltet."
 
 #: dbf_mod.cpp:199
 msgid "info"
@@ -149,22 +153,17 @@ msgid ""
 "For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
 msgstr ""
-"Fuer DBF die BD-Adresse ist das Verzeichnis, das enthaelt die "
-"Tabellendateien (*.dbf).\n"
+"Für DBF ist die Adresse das Verzeichnis welches die Tabellendateien (*.dbf) "
+"beinhaltet.\n"
 "Zum Beispiel: /opt/dbf ."
 
 #: dbf_mod.cpp:231
 msgid "Open table error!"
-msgstr "Fehlrer der Offnung der Tabelle!"
-
-#: dbf_mod.cpp:252
-#, c-format
-msgid "%s"
-msgstr ""
+msgstr "Fehler beim Öffnen der Tabelle!"
 
 #: dbf_mod.cpp:285 dbf_mod.cpp:323 dbf_mod.cpp:412 dbf_mod.cpp:469
 msgid "Cell error!"
-msgstr "Fehler der Zelle!"
+msgstr "Fehler in der Zelle!"
 
 #: dbf_mod.cpp:303 dbf_mod.cpp:434
 msgid "Field is not present!"
@@ -172,20 +171,20 @@ msgstr "Das Feld ist nicht vorhanden!"
 
 #: dbf_mod.cpp:356 dbf_mod.cpp:382
 msgid "Column error!"
-msgstr "Fehler in der Kolumne!"
+msgstr "Fehler in der Spalte!"
 
 #: dbf_mod.cpp:394
 msgid "Delete field error!"
-msgstr "Fehler des Loschens des Feldes!"
+msgstr "Fehler beim Löschen des Feldes!"
 
 #: dbf_mod.cpp:429
 msgid "Line error!"
-msgstr "Fehler der Linie!"
+msgstr "Fehler in der Zeile!"
 
 #: dbf_mod.cpp:465
 #, c-format
 msgid "Key column <%s> is not present!"
-msgstr "Die Schluesselkolumne<%s> ist nicht vorhanden!"
+msgstr "Die Schlüsselzeile <%s> ist nicht vorhanden!"
 
 #: dbf_mod.cpp:537
 #, c-format

@@ -1,3 +1,9 @@
+2009-08-27 Roman
+- !!!!:/SYS: German translation updating path by Klaus Fetscher is merged to source tree.
+- FIX:/Transport/SSL: The fixed path of the new SSL version's changing API is merged to source tree.
+- !!!!:/UI/VCAEngine:/UI/Vision: Styles support is added.
+
+
 2009-08-21 Roman
 - FIX:/DAQ/*: Redundant processing into attrSet() is fixed.
 - FIX:/DB,/DB/SQLite,/DB/MySQL: Multilingual access to DB is fixed.

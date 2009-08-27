@@ -60,7 +60,7 @@ using namespace VISION;
 
 //****************************************
 //* Inspector of attributes model        *
-//**************************************** 
+//****************************************
 ModInspAttr::ModInspAttr( const string &iwdg, VisDevelop *mainWind ) : main_win(mainWind)
 {
     rootItem = new Item("wgrp",Item::WdgGrp);
@@ -459,11 +459,10 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     try
     {
+	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();
 	XMLNode req("set");
-	req.setAttr("path",nwdg+"/%2fattr%2f"+nattr)->
-	    setText((value.type()==QVariant::Bool) ?
-			(value.toBool()?"1":"0") : value.toString().toAscii().data());
-	if( !mainWin()->cntrIfCmd(req) )
+	req.setAttr("path",nwdg+"/%2fattr%2f"+nattr)->setText(val);
+	if( !mainWin()->cntrIfCmd(req) && req.text() == val )
 	{
 	    it->setData( (it->data().type()==QVariant::Bool) ? value.toBool() : value );
 	    it->setModify(true);

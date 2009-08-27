@@ -1,21 +1,24 @@
 # OpenSCADA.Protocol.HTTP translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: http.cpp:51 http.cpp:173 http.cpp:241 http.h:54 http.h:57 http.h:58
 #: http.h:99
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-06 17:06+0300\n"
-"PO-Revision-Date: 2007-10-23 18:02+0300\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:25+0300\n"
+"PO-Revision-Date: 2009-08-19 09:03+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: http.cpp:34
 msgid "HTTP"
@@ -39,8 +42,7 @@ msgstr "Roman Savotschenko"
 
 #: http.cpp:40
 msgid "Allow support HTTP for WWW based UIs."
-msgstr ""
-"Ermoeglicht die HTTP-Unterstuetzung fuer WWW-begruendeten Nutzersinterfaces."
+msgstr "HTTP-Unterstützung für eine WWW basierte Benutzerschnittstelle."
 
 #: http.cpp:41
 msgid "GPL"
@@ -58,9 +60,11 @@ msgid ""
 "AuthTime <min>      Life time of the authentication, minutes (default 10).\n"
 "\n"
 msgstr ""
-"======================= Optionen des Moduls <%s:%s> =============================\n"
-"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei---------\n"
-"AuthTime <мин>     Authentifikationslebenszeit, Minuten (default 10).\n"
+"======================= Optionen des Moduls <%s:%s> "
+"=============================\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei---------\n"
+"AuthTime <min>     Lebensdauer der Authentifizierung, Minuten (standard "
+"10).\n"
 "\n"
 
 #: http.cpp:102
@@ -69,6 +73,11 @@ msgstr ""
 
 #: http.cpp:105
 msgid "help"
+msgstr ""
+
+#: http.cpp:115
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: http.cpp:121 http.cpp:126
@@ -97,7 +106,7 @@ msgstr ""
 
 #: http.cpp:183
 msgid "Life time of the authentication (min)"
-msgstr "Authentifikationslebenszeit (Min.)"
+msgstr "Lebensdauer der Authentifizierung (Min.)"
 
 #: http.cpp:183 http.cpp:184 http.cpp:192 http.cpp:193
 msgid "root"
@@ -117,7 +126,7 @@ msgstr ""
 
 #: http.cpp:184
 msgid "Options help"
-msgstr "Optionenhilfe"
+msgstr "Optionen Hilfe"
 
 #: http.cpp:184
 msgid "str"
@@ -240,7 +249,7 @@ msgstr ""
 
 #: http.cpp:298
 msgid "400 Bad Request"
-msgstr "400 Schlechte Anfrage"
+msgstr "400 Fehlerhafte Anfrage"
 
 #: http.cpp:305 http.cpp:338 http.h:54
 msgid "/"
@@ -281,7 +290,7 @@ msgstr ""
 #: http.cpp:325 http.cpp:338 http.cpp:351
 #, c-format
 msgid "Going to page: <b>%s</b>"
-msgstr "Uebergehen zur Seite: <b>%s</b>"
+msgstr "Gehen zur Seite: <b>%s</b>"
 
 #: http.cpp:325 http.cpp:338 http.cpp:351
 msgid "</h2>\n"
@@ -302,7 +311,8 @@ msgstr ""
 #: http.cpp:331
 msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
 msgstr ""
-"<p style='color: #CF8122;'>Authentifikationsfehler! Versuchen Sie noch einmal.</p>"
+"<p style='color: #CF8122;'>Fehler in der Authentifizierung! Versuchen Sie "
+"noch einmal.</p>"
 
 #: http.cpp:335
 msgid "logout"
@@ -383,7 +393,7 @@ msgstr ""
 
 #: http.cpp:388
 msgid "501 Method Not Implemented"
-msgstr "501 Methode nicht realisiert"
+msgstr "501 Methode nicht verfügbar"
 
 #: http.cpp:400
 msgid ""
@@ -457,7 +467,7 @@ msgstr ""
 
 #: http.cpp:437
 msgid "Welcome to Web-interfaces of OpenSCADA system."
-msgstr "Willkommen in die Web-Interfaces des Systems OpenSCADA."
+msgstr "Willkommen in die Web-Schnittstellen des Systems OpenSCADA."
 
 #: http.cpp:437 http.cpp:441 http.cpp:445
 msgid "</p>"
@@ -481,9 +491,9 @@ msgid ""
 "Select need Web-module from list below or press <a href='/logout'>here</a> "
 "for logout or <a href='/login'>here</a> for login as other user."
 msgstr ""
-"Waehlen Sie den noetigen Web-Modul aus der Liste unten und druecken Sie <a href='/logout'>hier</"
-"a> fuers Ausloggen <a href='/login'>hier</a> fuers Einloggen im Namen eines anderen "
-"Nutzers."
+"Wählen Sie den Web-Modul aus der Liste unten oder betätigen Sie <a href='/"
+"logout'>hier</a> zum Ausloggen oder <a href='/login'>hier</a> zum einloggen "
+"als anderer Benutzer."
 
 #: http.cpp:444
 msgid "<p style='color: #CF8122;'>"
@@ -498,8 +508,8 @@ msgid ""
 "For use some modules you must be login. For login now click <a href='/"
 "login'>here</a>."
 msgstr ""
-"Fuer Anwendung einiger Module muessen Sie einloggen. Fuers Einloggen "
-"jetzt druecken Sie<a href='/login'>hier</a>."
+"Zum Bedienen einiger Module müssen Sie sich einloggen. Zum Einloggen drücken "
+"Sie<a href='/login'>hier</a>."
 
 #: http.cpp:446
 msgid "</td></tr>"
@@ -511,7 +521,7 @@ msgstr ""
 
 #: http.cpp:449
 msgid "Present web modules"
-msgstr "Befahrbare web-Module"
+msgstr "Verfügbare Web Module"
 
 #: http.cpp:449
 msgid ""
@@ -563,7 +573,7 @@ msgstr ""
 
 #: http.cpp:471
 msgid "User name"
-msgstr "Name des Nutzers"
+msgstr "Benutzername"
 
 #: http.cpp:471
 msgid ""
@@ -592,7 +602,7 @@ msgstr ""
 
 #: http.cpp:474
 msgid "Clean"
-msgstr "Reinigen"
+msgstr "Bereinigen"
 
 #: http.cpp:474
 msgid ""

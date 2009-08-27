@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-08 21:22+0200\n"
+"POT-Creation-Date: 2009-08-27 15:41+0300\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -29,7 +29,7 @@ msgid "DAQ"
 msgstr ""
 
 #: sound.cpp:36
-msgid "0.5.0"
+msgid "0.6.0"
 msgstr ""
 
 #: sound.cpp:37
@@ -70,7 +70,7 @@ msgstr "Таблиця параметрів"
 msgid "30"
 msgstr ""
 
-#: sound.cpp:94 sound.cpp:114 sound.cpp:302
+#: sound.cpp:94 sound.cpp:114 sound.cpp:313
 msgid "CARD"
 msgstr ""
 
@@ -82,11 +82,11 @@ msgstr "Пристрій карти"
 msgid "20"
 msgstr ""
 
-#: sound.cpp:94 sound.cpp:139 sound.cpp:199
+#: sound.cpp:94 sound.cpp:141 sound.cpp:201
 msgid "<default>"
 msgstr ""
 
-#: sound.cpp:95 sound.cpp:114 sound.cpp:303
+#: sound.cpp:95 sound.cpp:114 sound.cpp:314
 msgid "SMPL_RATE"
 msgstr ""
 
@@ -126,7 +126,7 @@ msgstr ""
 msgid "Standard"
 msgstr ""
 
-#: sound.cpp:101 sound.cpp:324 sound.cpp:381
+#: sound.cpp:101 sound.cpp:335 sound.cpp:394
 msgid "CHANNEL"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgstr ""
 msgid "SoundCard_"
 msgstr ""
 
-#: sound.cpp:118 sound.cpp:260
+#: sound.cpp:118 sound.cpp:272
 msgid "val"
 msgstr ""
 
@@ -162,116 +162,120 @@ msgstr ""
 msgid "Value"
 msgstr "Значення"
 
-#: sound.cpp:130
+#: sound.cpp:132
 #, c-format
 msgid "Allowed %d input channels"
 msgstr "Наявно %d вхідних каналів"
 
-#: sound.cpp:131
+#: sound.cpp:133
 #, c-format
 msgid "Gathering from %d channels. Recieved %.2f MB."
 msgstr "Збір з %d каналів. Отримано %.2f МБ."
 
-#: sound.cpp:204
+#: sound.cpp:206
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
 msgstr "Помилка вибраного пристрою '%s' або пристрій по замовченню не наявний."
 
-#: sound.cpp:205
+#: sound.cpp:207
 msgid "No one channel is configured for acquisition."
 msgstr "Жодного каналу не налаштовано для збору."
 
-#: sound.cpp:206
+#: sound.cpp:208
 msgid "Sample type set is error."
 msgstr "Помилка встановлення типу вибірки."
 
-#: sound.cpp:214
+#: sound.cpp:216
 #, c-format
 msgid "Pa_OpenStream: %s"
 msgstr ""
 
-#: sound.cpp:217
+#: sound.cpp:219
 #, c-format
 msgid "Pa_StartStream: %s"
 msgstr ""
 
-#: sound.cpp:226
+#: sound.cpp:228
 msgid "stream_stop"
 msgstr ""
 
-#: sound.cpp:227
+#: sound.cpp:229
 msgid "Sound input stream is not stopped!"
 msgstr "Звуковий потік не зупинено!"
 
-#: sound.cpp:229
+#: sound.cpp:231
 #, c-format
 msgid "Pa_CloseStream: %s"
 msgstr ""
 
-#: sound.cpp:299 sound.cpp:378
+#: sound.cpp:263
+msgid "Sound card's counter run from system time is corrected."
+msgstr ""
+
+#: sound.cpp:310 sound.cpp:391
 msgid "info"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:303 sound.cpp:381
+#: sound.cpp:313 sound.cpp:314 sound.cpp:394
 msgid "fld"
 msgstr ""
 
-#: sound.cpp:302
+#: sound.cpp:313
 msgid "/cntr/cfg/CARD"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:303 sound.cpp:381
+#: sound.cpp:313 sound.cpp:314 sound.cpp:394
 msgid "root"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:304 sound.cpp:381
+#: sound.cpp:313 sound.cpp:315 sound.cpp:394
 msgid "tp"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:304 sound.cpp:381
+#: sound.cpp:313 sound.cpp:315 sound.cpp:394
 msgid "str"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:304 sound.cpp:381
+#: sound.cpp:313 sound.cpp:315 sound.cpp:394
 msgid "dest"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:381
+#: sound.cpp:313 sound.cpp:394
 msgid "select"
 msgstr ""
 
-#: sound.cpp:302 sound.cpp:310
+#: sound.cpp:313 sound.cpp:321
 msgid "/cntr/cfg/lst_SMPL_RATE"
 msgstr ""
 
-#: sound.cpp:303
+#: sound.cpp:314
 msgid "/cntr/cfg/SMPL_RATE"
 msgstr ""
 
-#: sound.cpp:304
+#: sound.cpp:315
 msgid "sel_ed"
 msgstr ""
 
-#: sound.cpp:304
+#: sound.cpp:315
 msgid "sel_list"
 msgstr ""
 
-#: sound.cpp:304
+#: sound.cpp:315
 msgid "8000;16000;22050;44100;48000;96000"
 msgstr ""
 
-#: sound.cpp:309 sound.cpp:386
+#: sound.cpp:320 sound.cpp:399
 msgid "path"
 msgstr ""
 
-#: sound.cpp:314 sound.cpp:390
+#: sound.cpp:325 sound.cpp:403
 msgid "el"
 msgstr ""
 
-#: sound.cpp:381
+#: sound.cpp:394
 msgid "/prm/cfg/CHANNEL"
 msgstr ""
 
-#: sound.cpp:381 sound.cpp:387
+#: sound.cpp:394 sound.cpp:400
 msgid "/prm/cfg/lst_CHANNEL"
 msgstr ""

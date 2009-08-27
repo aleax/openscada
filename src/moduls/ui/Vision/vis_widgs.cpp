@@ -49,9 +49,8 @@ using namespace VISION;
 //*************************************************
 //* Id and name input dialog                      *
 //*************************************************
-InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-	const QString &ndlg, bool with_id, bool with_nm ) :
-		QDialog(parent), m_id(NULL), m_name(NULL)
+InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm ) :
+	QDialog(parent), m_id(NULL), m_name(NULL)
 {
     setWindowTitle(ndlg);
     setMinimumSize( QSize( 120, 150 ) );
@@ -348,7 +347,8 @@ void FontDlg::cfgChange()
 //*********************************************
 //* Status bar user widget                    *
 //*********************************************
-UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : QLabel(parent)
+UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : 
+    QLabel(parent)
 {
     setUser(iuser);
     setPass(ipass);

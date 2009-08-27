@@ -807,7 +807,7 @@ class SumDiv : public TFunction
 	{
 	    return _("Sum and divide per formule:\n"
 		"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
-		"      in4_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);");
+		"      in3_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);");
 	}
 
 	void calc( TValFunc *v )

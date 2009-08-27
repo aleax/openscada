@@ -1253,7 +1253,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     int mrkHeight = 0;
     int brect[8];
     char *gdR = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
-    if( gdR ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),gdR);
+    if( gdR ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s."),sclMarkFont.c_str(),gdR);
     else mrkHeight = brect[3]-brect[7];
     //if( mrkHeight <= 0 ) return rez;
 

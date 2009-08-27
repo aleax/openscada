@@ -1,20 +1,23 @@
 # OpenSCADA.Special.FLibMath translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Special.FLibMath package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: statfunc.cpp:45
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 19:54+0300\n"
-"PO-Revision-Date: 2007-10-24 18:10+0300\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:23+0300\n"
+"PO-Revision-Date: 2009-08-19 10:10+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: statfunc.cpp:30
 msgid "FLibMath"
@@ -22,11 +25,11 @@ msgstr ""
 
 #: statfunc.cpp:31
 msgid "Math function's lib"
-msgstr "Bibliothek der mathematischen Funktionen"
+msgstr "Mathematische Bibliothek"
 
 #: statfunc.cpp:32
 msgid "Special"
-msgstr "Sondere"
+msgstr "Zusatz"
 
 #: statfunc.cpp:34
 msgid "LIB"
@@ -46,7 +49,7 @@ msgstr "Roman Savotschenko"
 
 #: statfunc.cpp:69
 msgid "Allow mathematic static function library."
-msgstr "Gewaehrt die Bibliothek von standartisierten mathematischen Funktionen."
+msgstr "Bibliothek mit mathematischen Funktionen."
 
 #: statfunc.cpp:70
 msgid "GPL"
@@ -161,11 +164,11 @@ msgstr ""
 
 #: stdmath.h:56
 msgid "ArcCos"
-msgstr "Arkkosinus"
+msgstr "Arcus Cosinus"
 
 #: stdmath.h:57
 msgid "Arc cosine math function."
-msgstr "Mathematische Funktion Arkkosinus."
+msgstr "Mathematische Funktion Arcus Cosinus."
 
 #: stdmath.h:72
 msgid "asin"
@@ -173,11 +176,11 @@ msgstr ""
 
 #: stdmath.h:78
 msgid "ArcSin"
-msgstr "Arksinus"
+msgstr "Arcus Sinus"
 
 #: stdmath.h:79
 msgid "Arc sine math function."
-msgstr "Mathematische Funktion Arksinus."
+msgstr "Mathematische Funktion Arcus Sinus."
 
 #: stdmath.h:94
 msgid "atan"
@@ -185,11 +188,11 @@ msgstr ""
 
 #: stdmath.h:100
 msgid "ArcTan"
-msgstr "Arktangens"
+msgstr "Arcus Tangens"
 
 #: stdmath.h:101
 msgid "Arc tangent math function."
-msgstr "Mathematische Funktion Arktangens."
+msgstr "Mathematische Funktion Arcus Tangens."
 
 #: stdmath.h:116
 msgid "cos"
@@ -208,11 +211,11 @@ msgstr "X(Rad.)"
 
 #: stdmath.h:122
 msgid "Cosine"
-msgstr "Kosinus"
+msgstr "Cosinus"
 
 #: stdmath.h:123
 msgid "Cosine math function."
-msgstr "Mathematische Funktion Kosinus."
+msgstr "Mathematische Funktion Cosinus."
 
 #: stdmath.h:138
 msgid "cosh"
@@ -220,11 +223,11 @@ msgstr ""
 
 #: stdmath.h:144
 msgid "Cosine hyperbolical"
-msgstr "Hyperbolischer Kosinus"
+msgstr "Hyperbolischer Cosinus"
 
 #: stdmath.h:145
 msgid "Cosine hyperbolical math function."
-msgstr "Mathematische Funktion Kosinus hyperbolisch."
+msgstr "Mathematische Funktion Cosinus hyperbolisch."
 
 #: stdmath.h:160
 msgid "exp"
@@ -232,11 +235,11 @@ msgstr ""
 
 #: stdmath.h:166
 msgid "Exponent"
-msgstr "Exponentialkurve"
+msgstr "Exponent"
 
 #: stdmath.h:167
 msgid "Exponent math function."
-msgstr "Mathemtische Funktion der Exponentialkurve."
+msgstr "Mathematische Funktion des Exponents."
 
 #: stdmath.h:182
 msgid "ln"
@@ -244,11 +247,11 @@ msgstr ""
 
 #: stdmath.h:188
 msgid "Natural logarithm"
-msgstr "Natuerlicher Logarithmus"
+msgstr "Natürlicher Logarithmus"
 
 #: stdmath.h:189
 msgid "Natural logarithm math function."
-msgstr "Mathematische Funktion natuerlicher Logarithmus."
+msgstr "Mathematische Funktion natürlicher Logarithmus."
 
 #: stdmath.h:204
 msgid "lg"
@@ -276,7 +279,7 @@ msgstr "Potenz"
 
 #: stdmath.h:234
 msgid "Power math function."
-msgstr "Mathemtische Funktion Erhebung zur Potenz."
+msgstr "Mathematische Funktion zur Berechnung der Potenz."
 
 #: stdmath.h:249
 msgid "sin"
@@ -300,7 +303,7 @@ msgstr "Hyperbolischer Sinus"
 
 #: stdmath.h:278
 msgid "Sine hyperbolical math function."
-msgstr "Mathematische Funktion hyperbolischer Sinus."
+msgstr "Mathematische Funktion Sinus hyperbolisch."
 
 #: stdmath.h:293
 msgid "sqrt"
@@ -312,7 +315,7 @@ msgstr "Quadratwurzel"
 
 #: stdmath.h:300
 msgid "Square root math function."
-msgstr "Math. Funktion Quadratwurzel."
+msgstr "Mathematische Funktion Quadratwurzel."
 
 #: stdmath.h:315
 msgid "tan"
@@ -344,11 +347,11 @@ msgstr ""
 
 #: stdmath.h:365
 msgid "Ceil"
-msgstr "Abrundung bis zum Groessten"
+msgstr "Aufrundung"
 
 #: stdmath.h:366
 msgid "Ceil math function."
-msgstr "Math. Funktion der Abrundung bis zur groessten ganzen Zahl."
+msgstr "Mathematische Funktion Aufrundung zur nächst grösseren Zahl."
 
 #: stdmath.h:381
 msgid "abs"
@@ -356,11 +359,11 @@ msgstr ""
 
 #: stdmath.h:387
 msgid "Absolute"
-msgstr "Modul"
+msgstr "Absolut"
 
 #: stdmath.h:388
 msgid "Absolute math function."
-msgstr "Math. Funktion Modul von der Zahl."
+msgstr "Mathematische Funktion Absolutwert der Zahl."
 
 #: stdmath.h:403
 msgid "floor"
@@ -368,11 +371,11 @@ msgstr ""
 
 #: stdmath.h:409
 msgid "Floor"
-msgstr "Abrundung bis zum Geringsten"
+msgstr "Abrundung"
 
 #: stdmath.h:410
 msgid "Floor math function."
-msgstr "Math. Funktion der Abrundung bis zum Geringsten"
+msgstr "Mathematische Funktion Abrundung zur nächst kleineren Zahl."
 
 #: stdmath.h:425
 msgid "rand"
@@ -380,11 +383,11 @@ msgstr ""
 
 #: stdmath.h:430
 msgid "Rand"
-msgstr "Nichtbevorzugte Zahl"
+msgstr "Zufallszahl"
 
 #: stdmath.h:431
 msgid "Rand math function."
-msgstr "Math. Funktion des Generators der nichtbevorzugten Zahlen."
+msgstr "Mathematische Funktion für Zufallszahlen."
 
 #: stdmath.h:446
 msgid "if"

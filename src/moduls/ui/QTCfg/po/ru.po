@@ -5,14 +5,14 @@
 #
 #: qtcfg.cpp:677 qtcfg.cpp:748 qtcfg.cpp:1093 qtcfg.cpp:1105 qtcfg.cpp:1293
 #: qtcfg.cpp:1302 qtcfg.cpp:1903 qtcfg.cpp:1904 qtcfg.cpp:2408 qtcfg.cpp:2651
-#: selfwidg.cpp:303 selfwidg.cpp:497 selfwidg.cpp:503 selfwidg.cpp:542
+#: selfwidg.cpp:292 selfwidg.cpp:485 selfwidg.cpp:491 selfwidg.cpp:530
 #: tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:82
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-06 21:09+0300\n"
+"POT-Creation-Date: 2009-08-27 15:46+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,8 +30,8 @@ msgstr ""
 
 #: qtcfg.cpp:85
 #, c-format
-msgid "QT Configurator of OpenSCADA: %s"
-msgstr "QT OpenSCADA конфигуратор: %s"
+msgid "OpenSCADA QTCfg: %s"
+msgstr ""
 
 #: qtcfg.cpp:107 qtcfg.cpp:786 qtcfg.cpp:794
 msgid "Name"
@@ -637,7 +637,7 @@ msgstr ""
 #: qtcfg.cpp:550 qtcfg.cpp:551 qtcfg.cpp:558 qtcfg.cpp:570 qtcfg.cpp:571
 #: qtcfg.cpp:582 qtcfg.cpp:622 qtcfg.cpp:627 qtcfg.cpp:666 qtcfg.cpp:671
 #: qtcfg.cpp:696 qtcfg.cpp:697 qtcfg.cpp:731 qtcfg.cpp:852 qtcfg.cpp:928
-#: qtcfg.cpp:940 qtcfg.cpp:969 qtcfg.cpp:974 qtcfg.cpp:1025 qtcfg.cpp:1067
+#: qtcfg.cpp:940 qtcfg.cpp:969 qtcfg.cpp:974 qtcfg.cpp:1025 qtcfg.cpp:1070
 #: qtcfg.cpp:1138 qtcfg.cpp:1140 qtcfg.cpp:1186 qtcfg.cpp:1237 qtcfg.cpp:1281
 #: qtcfg.cpp:1293 qtcfg.cpp:1393 qtcfg.cpp:1394 qtcfg.cpp:1820 qtcfg.cpp:1822
 #: qtcfg.cpp:1858 qtcfg.cpp:1873 qtcfg.cpp:2038 qtcfg.cpp:2063 qtcfg.cpp:2080
@@ -665,7 +665,7 @@ msgstr ""
 
 #: qtcfg.cpp:557 qtcfg.cpp:558 qtcfg.cpp:596 qtcfg.cpp:672 qtcfg.cpp:1755
 #: qtcfg.cpp:1764 qtcfg.cpp:2063 qtcfg.cpp:2164 qtcfg.cpp:2410
-#: selfwidg.cpp:278
+#: selfwidg.cpp:271
 msgid "\n"
 msgstr ""
 
@@ -1049,7 +1049,7 @@ msgstr ""
 msgid "rez"
 msgstr ""
 
-#: qtcfg.cpp:1802 qtcfg.cpp:1810 qtcfg.cpp:2791 tuimod.cpp:283
+#: qtcfg.cpp:1802 qtcfg.cpp:1810 qtcfg.cpp:2791 tuimod.cpp:141 tuimod.cpp:283
 #, c-format
 msgid "%s"
 msgstr ""
@@ -1388,85 +1388,85 @@ msgstr "Выборочнный элемент <%s> отсутствует!"
 msgid "%s| Change <%s> to: <%s>!"
 msgstr "%s| Изменено <%s> в: <%s>!"
 
-#: selfwidg.cpp:87
+#: selfwidg.cpp:88
 msgid "Picture is not set!"
 msgstr "Картинка не установлена!"
 
-#: selfwidg.cpp:112 selfwidg.cpp:712
+#: selfwidg.cpp:120 selfwidg.cpp:700
 msgid ":/images/ok.png"
 msgstr ""
 
-#: selfwidg.cpp:358
+#: selfwidg.cpp:346
 msgid "Apply"
 msgstr "Принять"
 
-#: selfwidg.cpp:359 selfwidg.cpp:482 selfwidg.cpp:605
+#: selfwidg.cpp:347 selfwidg.cpp:470 selfwidg.cpp:593
 msgid "button_ok"
 msgstr ""
 
-#: selfwidg.cpp:359 selfwidg.cpp:482 selfwidg.cpp:605
+#: selfwidg.cpp:347 selfwidg.cpp:470 selfwidg.cpp:593
 msgid ":/images/button_ok.png"
 msgstr ""
 
-#: selfwidg.cpp:362 selfwidg.cpp:485 selfwidg.cpp:608
+#: selfwidg.cpp:350 selfwidg.cpp:473 selfwidg.cpp:596
 msgid "Cancel"
 msgstr "Отмена"
 
-#: selfwidg.cpp:363 selfwidg.cpp:486 selfwidg.cpp:609
+#: selfwidg.cpp:351 selfwidg.cpp:474 selfwidg.cpp:597
 msgid "button_cancel"
 msgstr ""
 
-#: selfwidg.cpp:363 selfwidg.cpp:486 selfwidg.cpp:609
+#: selfwidg.cpp:351 selfwidg.cpp:474 selfwidg.cpp:597
 msgid ":/images/button_cancel.png"
 msgstr ""
 
-#: selfwidg.cpp:453
+#: selfwidg.cpp:441
 msgid "ID:"
 msgstr ""
 
-#: selfwidg.cpp:461
+#: selfwidg.cpp:449
 msgid "Name:"
 msgstr "Имя:"
 
-#: selfwidg.cpp:481 selfwidg.cpp:604
+#: selfwidg.cpp:469 selfwidg.cpp:592
 msgid "Ok"
 msgstr ""
 
-#: selfwidg.cpp:532
+#: selfwidg.cpp:520
 msgid "Item type:"
 msgstr "Тип элемента:"
 
-#: selfwidg.cpp:577
+#: selfwidg.cpp:565
 msgid "Select user"
 msgstr "Выбор пользователя"
 
-#: selfwidg.cpp:585
+#: selfwidg.cpp:573
 msgid "User:"
 msgstr "Пользователь:"
 
-#: selfwidg.cpp:588
+#: selfwidg.cpp:576
 msgid "Password:"
 msgstr "Пароль:"
 
-#: selfwidg.cpp:667
+#: selfwidg.cpp:655
 msgid "<font color='%1'>%2</font>"
 msgstr ""
 
-#: selfwidg.cpp:667 tuimod.cpp:241 tuimod.cpp:242 tuimod.cpp:243
+#: selfwidg.cpp:655 tuimod.cpp:241 tuimod.cpp:242 tuimod.cpp:243
 #: tuimod.cpp:245 tuimod.cpp:253 tuimod.cpp:254 tuimod.cpp:258 tuimod.cpp:259
 #: tuimod.cpp:261
 msgid "root"
 msgstr ""
 
-#: selfwidg.cpp:667
+#: selfwidg.cpp:655
 msgid "red"
 msgstr ""
 
-#: selfwidg.cpp:667
+#: selfwidg.cpp:655
 msgid "green"
 msgstr ""
 
-#: selfwidg.cpp:688 tuimod.cpp:185
+#: selfwidg.cpp:676 tuimod.cpp:185
 msgid "Auth is wrong!!!"
 msgstr "Ошибка аутентификации!!!"
 
@@ -1633,10 +1633,13 @@ msgstr ""
 msgid "/Transport"
 msgstr ""
 
-#: selfwidg.h:165
+#: selfwidg.h:167
 msgid "QTCfg dialog"
 msgstr "QTCfg диалог"
 
-#: selfwidg.h:193
+#: selfwidg.h:195
 msgid "Node id and/or name select"
 msgstr "Выбор идентификатора и/или имени"
+
+#~ msgid "QT Configurator of OpenSCADA: %s"
+#~ msgstr "QT OpenSCADA конфигуратор: %s"

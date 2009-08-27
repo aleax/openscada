@@ -1,21 +1,24 @@
 # OpenSCADA.DAQ.SNMP translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.SNMP package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: snmp_client.cpp:59 snmp_client.cpp:137 snmp_client.cpp:146
 #: snmp_client.cpp:304 snmp_client.cpp:307 snmp_client.cpp:310
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:13+0300\n"
-"PO-Revision-Date: 2007-10-29 11:14+0200\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:40+0300\n"
+"PO-Revision-Date: 2009-08-18 09:32+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: snmp_client.cpp:42
 msgid "SNMP"
@@ -23,7 +26,7 @@ msgstr ""
 
 #: snmp_client.cpp:43
 msgid "SNMP client"
-msgstr "SNMP Kunde"
+msgstr "SNMP Client"
 
 #: snmp_client.cpp:44
 msgid "DAQ"
@@ -39,7 +42,7 @@ msgstr "Roman Savotschenko"
 
 #: snmp_client.cpp:48
 msgid "Allow realising of SNMP client service."
-msgstr "Ermoeglicht die Realisierung des Kundenservices des SNMP-Protokolls."
+msgstr "Anbindung eines Clients für das SNMP-Protokoll."
 
 #: snmp_client.cpp:49
 msgid "GPL"
@@ -51,7 +54,7 @@ msgstr ""
 
 #: snmp_client.cpp:89
 msgid "OpenSCADA SNMP client"
-msgstr "OpenSCADA SNMP Kunde"
+msgstr "OpenSCADA SNMP Client"
 
 #: snmp_client.cpp:102
 #, c-format
@@ -60,8 +63,9 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================== Optionen des Moduls <%s:%s> ==========================\n"
-"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei --------\n"
+"========================== Optionen des Moduls <%s:%s> "
+"==========================\n"
+"-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei --------\n"
 "\n"
 
 #: snmp_client.cpp:113
@@ -70,6 +74,11 @@ msgstr ""
 
 #: snmp_client.cpp:116
 msgid "help"
+msgstr ""
+
+#: snmp_client.cpp:126 snmp_client.cpp:251 snmp_client.cpp:353
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: snmp_client.cpp:137 snmp_client.cpp:145 snmp_client.cpp:162
@@ -90,7 +99,7 @@ msgstr ""
 
 #: snmp_client.cpp:138
 msgid "Gather data period (s)"
-msgstr "Datenerfassungszeit (s)"
+msgstr "Datenerfassungsperiode (sek)"
 
 #: snmp_client.cpp:138 snmp_client.cpp:142
 msgid "3"
@@ -110,7 +119,7 @@ msgstr ""
 
 #: snmp_client.cpp:139
 msgid "Gather task priority"
-msgstr "Prioritaetsniveau der Datenerfassungsaufgabe"
+msgstr "Priorität der Datenerfassung"
 
 #: snmp_client.cpp:139
 msgid "2"
@@ -154,7 +163,7 @@ msgstr ""
 
 #: snmp_client.cpp:142
 msgid "Param's attributes limit"
-msgstr "Beschraenkung fuer Attributenquantitaet"
+msgstr "Grenze Parameter Attribute"
 
 #: snmp_client.cpp:142 snmp_client.cpp:146
 msgid "100"
@@ -168,13 +177,13 @@ msgstr ""
 msgid "Standard"
 msgstr "Standard"
 
-#: snmp_client.cpp:146 snmp_client.cpp:380 snmp_client.cpp:457
+#: snmp_client.cpp:146 snmp_client.cpp:379 snmp_client.cpp:456
 msgid "OID_LS"
 msgstr ""
 
 #: snmp_client.cpp:146
 msgid "OID list (next line separated)"
-msgstr "OID-Liste (Teilung mit naechster Zeile)"
+msgstr "OID-Liste (Trennung in neuer Zeile)"
 
 #: snmp_client.cpp:162
 msgid "SNMPPrm_"
@@ -183,9 +192,9 @@ msgstr ""
 #: snmp_client.cpp:173
 #, c-format
 msgid "Gather data time %.6g ms. "
-msgstr "Datenerfassungszeit %.6g ms. "
+msgstr "Datenerfassungszeit %.6g msek. "
 
-#: snmp_client.cpp:190 snmp_client.cpp:462
+#: snmp_client.cpp:190 snmp_client.cpp:461
 msgid "root"
 msgstr ""
 
@@ -195,7 +204,7 @@ msgstr ""
 
 #: snmp_client.cpp:199
 msgid "Gathering task is not started!"
-msgstr "Datenerfassungsaufgabe ist nicht gestartet!"
+msgstr "Datenerfassung ist nicht gestartet!"
 
 #: snmp_client.cpp:210
 msgid "stop"
@@ -203,59 +212,54 @@ msgstr ""
 
 #: snmp_client.cpp:211
 msgid "Gathering task is not stopped!"
-msgstr "Datenerfassungsaufgabe ist nicht gestoppt!"
+msgstr "Datenerfassung ist nicht angehalten!"
 
 #: snmp_client.cpp:233
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: snmp_client.cpp:251 snmp_client.cpp:354
-#, c-format
-msgid "%s"
-msgstr ""
-
 #: snmp_client.cpp:251
 msgid "Error SNMP session open."
-msgstr "Fehler der Oeffnung der SNMP-Session."
+msgstr "Fehler beim Öffnen der SNMP-Sitzung."
 
-#: snmp_client.cpp:345
+#: snmp_client.cpp:344
 #, c-format
 msgid "Timeout: No Response from %s."
-msgstr "Wartezeit der Antwort von %s ist ueberschritten."
+msgstr "Zeitüberschreitung: keine Antwort von %s."
 
-#: snmp_client.cpp:372
+#: snmp_client.cpp:371
 msgid "_"
 msgstr ""
 
-#: snmp_client.cpp:380
+#: snmp_client.cpp:379
 msgid "w_attr"
 msgstr ""
 
-#: snmp_client.cpp:450
+#: snmp_client.cpp:449
 msgid "path"
 msgstr ""
 
-#: snmp_client.cpp:451
+#: snmp_client.cpp:450
 msgid "/serv/"
 msgstr ""
 
-#: snmp_client.cpp:454
+#: snmp_client.cpp:453
 msgid "info"
 msgstr ""
 
-#: snmp_client.cpp:457
+#: snmp_client.cpp:456
 msgid "fld"
 msgstr ""
 
-#: snmp_client.cpp:457 snmp_client.cpp:462
+#: snmp_client.cpp:456 snmp_client.cpp:461
 msgid "/prm/cfg/OID_LS"
 msgstr ""
 
-#: snmp_client.cpp:462
+#: snmp_client.cpp:461
 msgid "set"
 msgstr ""
 
-#: snmp_client.cpp:464
+#: snmp_client.cpp:463
 msgid "Parameter is enabled."
-msgstr "Parameter ist aktiv."
+msgstr "Parameter ist eingeschaltet."

@@ -24,6 +24,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QPainter>
+#include <QComboBox>
 
 #include <tsys.h>
 
@@ -563,10 +564,7 @@ SndPlay::SndPlay( QObject *parent ) : QThread(parent)
 
 }
 
-VisRun *SndPlay::mainWin( )
-{
-    return (VisRun *)parent();
-}
+VisRun *SndPlay::mainWin( )	{ return (VisRun *)parent(); }
 
 void SndPlay::run( )
 {
@@ -576,13 +574,13 @@ void SndPlay::run( )
     string com = mod->playCom( );
     string srcFile = "/var/tmp/oscadaPlayTmp_"+mainWin()->workSess( );
 
-    //- Put source file name to command -
+    //> Put source file name to command
     bool srcToPipe = false;
     if( (comPos=com.find("%f")) != string::npos )
 	com.replace( comPos, 2, srcFile.c_str() );
     else srcToPipe = true;
 
-    //- Write play data to file -
+    //> Write play data to file
     if( !srcToPipe )
     {
 	FILE *fp = fopen( srcFile.c_str(), "w" );
@@ -591,13 +589,75 @@ void SndPlay::run( )
 	fclose(fp);
     }
 
-    //- Call play command -
+    //> Call play command
     FILE *fp = popen( com.c_str(), "w" );
     if( !fp )		{ mPlayData.clear(); return; }
-    //- Write data to pipe -
+    //> Write data to pipe
     if( srcToPipe )	fwrite( mPlayData.data(), mPlayData.size(), 1, fp );
     pclose(fp);
     if( !srcToPipe )	remove( srcFile.c_str() );
 
     mPlayData.clear();
 };
+
+//*********************************************
+//* Status bar styles                         *
+//*********************************************
+StylesStBar::StylesStBar( int styleId, QWidget *parent ) : QLabel(parent), mStyle(-1)
+{
+    setStyle(styleId);
+}
+
+VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
+
+void StylesStBar::setStyle( int istl, const string &nm )
+{
+    mStyle = istl;
+    if( mStyle < 0 ) setText( _("No style") );
+    else if( !nm.empty() ) setText( nm.c_str() );
+    else
+    {
+	XMLNode req("get");
+	req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
+	mainWin()->cntrIfCmd(req);
+	for( int i_s = 0; i_s < req.childSize(); i_s++ )
+	    if( atoi(req.childGet(i_s)->attr("id").c_str()) == istl )
+		setText(req.childGet(i_s)->text().c_str());
+    }
+}
+
+bool StylesStBar::styleSel( )
+{
+    //> Get syles list
+    XMLNode req("get");
+    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
+    mainWin()->cntrIfCmd(req);
+
+    InputDlg dlg( this, mainWin()->windowIcon(),_("Select your style from list."),_("Style select"),false,false);
+    QLabel *lab = new QLabel(_("Style:"),&dlg);
+    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
+    dlg.edLay()->addWidget( lab, 0, 0 );
+    QComboBox *stls = new QComboBox(&dlg);
+    dlg.edLay()->addWidget( stls, 0, 1 );
+    for( int i_s = 0; i_s < req.childSize(); i_s++ )
+    {
+	stls->addItem(req.childGet(i_s)->text().c_str(),atoi(req.childGet(i_s)->attr("id").c_str()));
+	if( atoi(req.childGet(i_s)->attr("id").c_str()) == style() )
+	    stls->setCurrentIndex(i_s);
+    }
+    dlg.resize(300,120);
+    if( dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0 )
+    {
+	setStyle( stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toAscii().data() );
+	emit styleChanged( );
+	return true;
+    }
+
+    return false;
+}
+
+bool StylesStBar::event( QEvent *event )
+{
+    if( event->type() == QEvent::MouseButtonDblClick )	styleSel();
+    return QLabel::event( event );
+}

@@ -1,21 +1,24 @@
 # OpenSCADA.UI.WebCfg translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfg package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: web_cfg.cpp:54 web_cfg.cpp:210 web_cfg.cpp:245 web_cfg.cpp:463
 #: web_cfg.cpp:932 web_cfg.cpp:1313 web_cfg.cpp:1317 web_cfg.h:83 web_cfg.h:84
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 15:55+0200\n"
-"PO-Revision-Date: 2007-10-29 22:29+0200\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:50+0300\n"
+"PO-Revision-Date: 2009-08-26 08:08+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: web_cfg.cpp:36
 msgid "WebCfg"
@@ -27,7 +30,7 @@ msgstr "Systemkonfigurator (WEB)"
 
 #: web_cfg.cpp:38
 msgid "UI"
-msgstr "Nutzersinterface"
+msgstr "Benutzerschnittstelle"
 
 #: web_cfg.cpp:40
 msgid "WWW"
@@ -43,7 +46,7 @@ msgstr "Roman Savotschenko"
 
 #: web_cfg.cpp:43
 msgid "Allow the WEB based OpenSCADA system configurator."
-msgstr "Gewaehrt den WEB-begruendeten Konfigurator des Systems OpenSCADA."
+msgstr "Ermöglicht die WEB-basierten Systemeinstellungen OpenSCADA."
 
 #: web_cfg.cpp:44
 msgid "GPL"
@@ -118,8 +121,9 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"======================== Optionen des Moduls <%s:%s> ============================\n"
-"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei ---------\n"
+"======================== Optionen des Moduls <%s:%s> "
+"============================\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei ---------\n"
 "\n"
 
 #: web_cfg.cpp:141
@@ -128,6 +132,12 @@ msgstr ""
 
 #: web_cfg.cpp:144
 msgid "help"
+msgstr ""
+
+#: web_cfg.cpp:154 web_cfg.cpp:230 web_cfg.cpp:237 web_cfg.cpp:806
+#: web_cfg.cpp:830 web_cfg.cpp:1227
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: web_cfg.cpp:174
@@ -266,12 +276,6 @@ msgstr ""
 
 #: web_cfg.cpp:230 web_cfg.cpp:237 web_cfg.cpp:806 web_cfg.cpp:830
 msgid "mcat"
-msgstr ""
-
-#: web_cfg.cpp:230 web_cfg.cpp:237 web_cfg.cpp:806 web_cfg.cpp:830
-#: web_cfg.cpp:1227
-#, c-format
-msgid "%s"
 msgstr ""
 
 #: web_cfg.cpp:233 web_cfg.cpp:388 web_cfg.cpp:787
@@ -477,7 +481,7 @@ msgstr ""
 
 #: web_cfg.cpp:311
 msgid "Curent page"
-msgstr "Laufende Seite"
+msgstr "Aktuelle Seite"
 
 #: web_cfg.cpp:311
 msgid "/img_reload' alt='"
@@ -485,7 +489,7 @@ msgstr ""
 
 #: web_cfg.cpp:312
 msgid "Previous page"
-msgstr "Vorige Seite"
+msgstr "Vorhergehende Seite"
 
 #: web_cfg.cpp:312
 msgid "/img_up' alt='"
@@ -493,7 +497,7 @@ msgstr ""
 
 #: web_cfg.cpp:312
 msgid "Previos page"
-msgstr "Vorige Seite"
+msgstr "Vorhergehende Seite"
 
 #: web_cfg.cpp:314
 msgid "/about' title='"
@@ -501,7 +505,7 @@ msgstr ""
 
 #: web_cfg.cpp:314
 msgid "About"
-msgstr "Ueber..."
+msgstr "Über"
 
 #: web_cfg.cpp:314
 msgid "/img_help' alt='"
@@ -573,7 +577,7 @@ msgstr ""
 
 #: web_cfg.cpp:323
 msgid "user:"
-msgstr "Nutzer:"
+msgstr "Benutzer:"
 
 #: web_cfg.cpp:323
 msgid " <b>"
@@ -595,7 +599,7 @@ msgstr ""
 
 #: web_cfg.cpp:324
 msgid "Change"
-msgstr "tauschen"
+msgstr "Ändern"
 
 #: web_cfg.cpp:324
 msgid "</a>, <a href='/logout'>"
@@ -676,7 +680,7 @@ msgstr ""
 
 #: web_cfg.cpp:379 web_cfg.cpp:771
 msgid "Apply"
-msgstr "Annehmen"
+msgstr "Übernehmen"
 
 #: web_cfg.cpp:379 web_cfg.cpp:431 web_cfg.cpp:615 web_cfg.cpp:620
 #: web_cfg.cpp:625 web_cfg.cpp:640 web_cfg.cpp:643 web_cfg.cpp:1016
@@ -990,7 +994,7 @@ msgstr ""
 
 #: web_cfg.cpp:608
 msgid "Go"
-msgstr "Uebergehen"
+msgstr "Gehen zu"
 
 #: web_cfg.cpp:608 web_cfg.cpp:789
 msgid "'/><br/>\n"
@@ -1013,7 +1017,7 @@ msgstr ""
 
 #: web_cfg.cpp:615
 msgid "Add"
-msgstr "Addieren"
+msgstr "Hinzufügen"
 
 #: web_cfg.cpp:618 web_cfg.cpp:774 web_cfg.cpp:986 web_cfg.cpp:1032
 #: web_cfg.cpp:1034 web_cfg.cpp:1165 web_cfg.cpp:1170
@@ -1026,7 +1030,7 @@ msgstr ""
 
 #: web_cfg.cpp:620
 msgid "Insert"
-msgstr "Einsetzen"
+msgstr "Einfügen"
 
 #: web_cfg.cpp:623 web_cfg.cpp:986 web_cfg.cpp:1052 web_cfg.cpp:1054
 msgid "edit"
@@ -1038,7 +1042,7 @@ msgstr ""
 
 #: web_cfg.cpp:625
 msgid "Edit"
-msgstr "Redigieren"
+msgstr "Bearbeiten"
 
 #: web_cfg.cpp:631
 msgid "<input type='text' name='ener_id' value=''/>\n"
@@ -1089,7 +1093,7 @@ msgstr ""
 
 #: web_cfg.cpp:643
 msgid "Del"
-msgstr "Loeschen"
+msgstr "Löschen"
 
 #: web_cfg.cpp:657
 msgid "<table border='1'>\n"
@@ -1170,7 +1174,7 @@ msgstr ""
 
 #: web_cfg.cpp:773
 msgid "Add row"
-msgstr "Zeile addieren"
+msgstr "Zeile hinzufügen"
 
 #: web_cfg.cpp:773 web_cfg.cpp:775 web_cfg.cpp:777 web_cfg.cpp:780
 #: web_cfg.cpp:781
@@ -1179,19 +1183,19 @@ msgstr ""
 
 #: web_cfg.cpp:775
 msgid "Insert row"
-msgstr "Zeile einsetzen"
+msgstr "Zeile einfügen"
 
 #: web_cfg.cpp:777
 msgid "Delete row"
-msgstr "Zeile loeschen"
+msgstr "Zeile löschen"
 
 #: web_cfg.cpp:780
 msgid "Move up row"
-msgstr "Zeile nzch oben versetzen"
+msgstr "Zeile nach oben verschieben"
 
 #: web_cfg.cpp:781
 msgid "Move down row"
-msgstr "Zeile nach unten versetzen"
+msgstr "Zeile nach unten verschieben"
 
 #: web_cfg.cpp:789
 msgid "<img src='/"
@@ -1207,7 +1211,7 @@ msgstr ""
 
 #: web_cfg.cpp:825
 msgid "Post request broken!"
-msgstr "Post-Anfrage ist gebrochen!"
+msgstr "Post-Anfrage ist beschädigt!"
 
 #: web_cfg.cpp:842 web_cfg.h:83
 msgid "text/html"
@@ -1216,7 +1220,7 @@ msgstr ""
 #: web_cfg.cpp:890
 #, c-format
 msgid "%s| Change <%s:%s> to %s"
-msgstr "%s| Aenderung <%s:%s> в %s"
+msgstr "%s| Änderung <%s:%s> in %s"
 
 #: web_cfg.cpp:896 web_cfg.cpp:940 web_cfg.cpp:1127
 msgid "set"
@@ -1229,7 +1233,7 @@ msgstr ""
 #: web_cfg.cpp:921
 #, c-format
 msgid "%s| Go to link <%s>"
-msgstr "%s| Uebergang nach dem Link <%s>"
+msgstr "%s| Gehen zum Link <%s>"
 
 #: web_cfg.cpp:923 web_cfg.cpp:1016
 msgid "<meta http-equiv='Refresh' content='0; url="
@@ -1246,7 +1250,7 @@ msgstr ""
 #: web_cfg.cpp:935
 #, c-format
 msgid "%s| Put command <%s:%s>"
-msgstr "%s| Kommando uebergeben <%s:%s>"
+msgstr "%s| Kommando einsetzen <%s:%s>"
 
 #: web_cfg.cpp:980
 msgid "ener_id"
@@ -1284,7 +1288,7 @@ msgstr ""
 #: web_cfg.cpp:1029
 #, c-format
 msgid "%s| Delete <%s> element <%s:%s>."
-msgstr "%s| Loeschen <%s> des Elements <%s:%s>."
+msgstr "%s| Löschen <%s> des Elements <%s:%s>."
 
 #: web_cfg.cpp:1036 web_cfg.cpp:1056
 msgid "p_id"
@@ -1293,17 +1297,17 @@ msgstr ""
 #: web_cfg.cpp:1040
 #, c-format
 msgid "%s| Insert <%s> element <%s:%s> to %s."
-msgstr "%s| Einsetzen <%s> des Elements <%s:%s> в %s."
+msgstr "%s| Einfügen <%s> des Elements <%s:%s> in %s."
 
 #: web_cfg.cpp:1049
 #, c-format
 msgid "%s| Add <%s> element <%s:%s>."
-msgstr "%s| Addieren <%s> des Elements <%s:%s>."
+msgstr "%s| Hinzufügen <%s> des Elements <%s:%s>."
 
 #: web_cfg.cpp:1060
 #, c-format
 msgid "%s| Set <%s> element %s to <%s:%s>."
-msgstr "%s| Installierung <%s> des Elements %s in <%s:%s>."
+msgstr "%s| Speichern <%s> des Elements %s in <%s:%s>."
 
 #: web_cfg.cpp:1070 web_cfg.cpp:1211
 msgid "to"
@@ -1312,7 +1316,7 @@ msgstr ""
 #: web_cfg.cpp:1072
 #, c-format
 msgid "%s| Move <%s> from %s to %s."
-msgstr "%s| Versetzen <%s> aus %s in %s."
+msgstr "%s| Verschieben <%s> von %s nach %s."
 
 #: web_cfg.cpp:1124 web_cfg.cpp:1125 web_cfg.cpp:1168 web_cfg.cpp:1182
 #: web_cfg.cpp:1206 web_cfg.cpp:1339
@@ -1350,12 +1354,12 @@ msgstr ""
 #: web_cfg.cpp:1150
 #, c-format
 msgid "%s| Set <%s> cell (<%s>:%s) to: %s."
-msgstr "%s| Installierung <%s> der Zelle (<%s>:%s) in: %s."
+msgstr "%s| Speichern <%s> der Zelle (<%s>:%s) in: %s."
 
 #: web_cfg.cpp:1161
 #, c-format
 msgid "%s| Add <%s> record."
-msgstr "%s| Addieren <%s> der Aufzeichnung."
+msgstr "%s| Hinzufügen <%s> des Datensatzes."
 
 #: web_cfg.cpp:1168 web_cfg.cpp:1182 web_cfg.cpp:1206
 msgid "row:"
@@ -1364,17 +1368,17 @@ msgstr ""
 #: web_cfg.cpp:1172
 #, c-format
 msgid "%s| Insert <%s> record %d."
-msgstr "%s| Installierung <%s> der Aufzeichnung %d."
+msgstr "%s| Einfügen <%s> des Datensatzes %d."
 
 #: web_cfg.cpp:1196
 #, c-format
 msgid "%s| Delete <%s> record %d."
-msgstr "%s| Loeschen <%s> der Aufzeichnung %d."
+msgstr "%s| Löschen <%s> des Datensatzes %d."
 
 #: web_cfg.cpp:1212
 #, c-format
 msgid "%s| Move <%s> record from %d to %d."
-msgstr "%s| Versetzen <%s> der Aufzeichnung aus %d in %d."
+msgstr "%s| Verschieben <%s> des Datensatzes von %d nach %d."
 
 #: web_cfg.cpp:1230
 #, c-format

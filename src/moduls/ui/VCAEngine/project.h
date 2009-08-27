@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,28 +52,28 @@ class Project : public TCntrNode, public TConfig
 
 	const string &id( )	{ return mId; }			//Identifier
 	string	name( );					//Name
-	string	descr( )	{ return m_descr; }		//Description
-	string	ico( )		{ return m_ico; }		//Icon
+	string	descr( )	{ return mDescr; }		//Description
+	string	ico( )		{ return mIco; }		//Icon
 	string	owner( );					//Library owner
 	string	grp( );						//Library group
 	short	permit( )	{ return mPermit; }		//Permition for access to library
 	int	period( )	{ return mPer; }		//Project's session calc period
 	int	prjFlags( )	{ return mFlgs; }		//Project's flags
 
-	string DB( )		{ return work_prj_db; }		//Current library DB
-	string tbl( )		{ return m_dbt; }		//Table of storing library data
+	string DB( )		{ return workPrjDB; }		//Current library DB
+	string tbl( )		{ return mDBt; }		//Table of storing library data
 	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
-	void setName( const string &it )	{ m_name = it; modif(); }
-	void setDescr( const string &it )	{ m_descr = it; modif(); }
-	void setIco( const string &it )		{ m_ico = it; modif(); }
+	void setName( const string &it )	{ mName = it; modif(); }
+	void setDescr( const string &it )	{ mDescr = it; modif(); }
+	void setIco( const string &it )		{ mIco = it; modif(); }
 	void setOwner( const string &it );
-	void setGrp( const string &it )		{ m_grp = it; modif(); }
+	void setGrp( const string &it )		{ mGrp = it; modif(); }
 	void setPermit( short it )		{ mPermit = it; modif(); }
 	void setPeriod( int it )		{ mPer = it; modif(); }
 	void setPrjFlags( int val )		{ mFlgs = val; modif(); }
 
-	void setTbl( const string &it )		{ m_dbt = it; }
+	void setTbl( const string &it )		{ mDBt = it; }
 	void setFullDB( const string &it );
 
 	//> Enable stat
@@ -95,6 +95,17 @@ class Project : public TCntrNode, public TConfig
 	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
 	void mimeDataDel( const string &id, const string &idb = "" );
 
+	//> Styles
+	void stlList( vector<string> &ls );
+	int stlSize( );
+	int stlCurent( )	{ return mStyleIdW; }
+	void stlCurentSet( int sid );
+	string stlGet( int sid );
+	void stlSet( int sid, const string &stl );
+	void stlPropList( vector<string> &ls );
+	string stlPropGet( const string &pid, const string &def = "", int sid = -1 );
+	bool stlPropSet( const string &pid, const string &vl, int sid = -1 );
+
     protected:
 	//Methods
 	string nodeName( )	{ return mId; }
@@ -113,21 +124,22 @@ class Project : public TCntrNode, public TConfig
     private:
 	//Attributes
 	string  &mId,		//Identifier
-		&m_name,	//Name
-		&m_descr,	//Description
-		&m_dbt,		//DB table
-		&m_owner,	//Access owner
-		&m_grp,		//Access group
-		&m_ico,		//Individual icon
-		work_prj_db,	//Work DB
+		&mName,		//Name
+		&mDescr,	//Description
+		&mDBt,		//DB table
+		&mOwner,	//Access owner
+		&mGrp,		//Access group
+		&mIco,		//Individual icon
+		workPrjDB,	//Work DB
 		mOldDB;
 	int	&mPermit,	//Access permition
 		&mPer,		//Calc period
-		&mFlgs;		//Project's flags
+		&mFlgs,		//Project's flags
+		&mStyleIdW;	//Work style
 	bool	mEnable;	//Enable state
 
 	//> Styles
-	int	mCurStyle;	//Current style index
+	Res	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 };
 
@@ -164,12 +176,12 @@ class Page : public Widget, public TConfig
 	string calcProg( );
 	int    calcPer( );
 	string ownerFullId( bool contr = false );
-	int    prjFlags( )	{ return m_flgs; }
+	int    prjFlags( )	{ return mFlgs; }
 	string parentNm( )	{ return mParent; }
 
-	void setIco( const string &iico )	{ m_ico = iico; modif(); }
+	void setIco( const string &iico )	{ mIco = iico; modif(); }
 	void setOwner( const string &iown );
-	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
+	void setGrp( const string &igrp )	{ mGrp = igrp; modif(); }
 	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
@@ -215,6 +227,7 @@ class Page : public Widget, public TConfig
 	void wClear( );
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -222,15 +235,15 @@ class Page : public Widget, public TConfig
     private:
 	//Attributes
 	int	mPage;		//Page container identifier
-	string	&m_ico,		//Widget icon
-		&m_owner,	//Widget owner
-		&m_grp,		//Widget group
-		&m_proc,	//Widget procedure
+	string	&mIco,		//Widget icon
+		&mOwner,	//Widget owner
+		&mGrp,		//Widget group
+		&mProc,		//Widget procedure
 		&mParent,	//Widget parent
-		&m_attrs;	//Changed attributes list
+		&mAttrs;	//Changed attributes list
 	int	&mPermit,	//Widget permission
-		&m_flgs,	//Project's flags
-		&m_proc_per;	//Process period
+		&mFlgs,		//Project's flags
+		&mProcPer;	//Process period
 };
 
 //************************************************
@@ -260,7 +273,7 @@ class PageWdg : public Widget, public TConfig
 
 	void setEnable( bool val );
 	void setOwner( const string &iown );
-	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
+	void setGrp( const string &igrp )	{ mGrp = igrp; modif(); }
 	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
 
@@ -291,7 +304,7 @@ class PageWdg : public Widget, public TConfig
 
 	//Attributes
 	bool	delMark;
-	string	&mParent, &m_attrs, &m_owner, &m_grp;
+	string	&mParent, &mAttrs, &mOwner, &mGrp;
 	int	&mPermit;
 };
 

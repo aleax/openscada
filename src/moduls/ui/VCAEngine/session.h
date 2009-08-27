@@ -60,6 +60,7 @@ class Session : public TCntrNode
 	int    connects( )	{ return mConnects; }		//Connections counter
 	unsigned calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( );
+	int stlCurent( )	{ return mStyleIdW; }
 
 	void setProjNm( const string &it )	{ mPrjnm = it; }
 	void setUser( const string &it );
@@ -69,8 +70,9 @@ class Session : public TCntrNode
 	void setBackgrnd( bool val )		{ mBackgrnd = val; }
 	void connect( )				{ mConnects++; }
 	void disconnect( )			{ if(mConnects>0) mConnects--; }
+	void stlCurentSet( int sid );
 
-	//- Pages -
+	//> Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
 	bool present( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> at( const string &id );
@@ -85,10 +87,14 @@ class Session : public TCntrNode
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
-	//- Alarms process -
+	//> Alarms process
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
 	void alarmQuittance( const string &wpath, uint8_t quit_tmpl );	//Alarm quittance send
+
+	//> Style
+	string stlPropGet( const string &pid, const string &def = "" );
+	bool stlPropSet( const string &pid, const string &vl );
 
 	//Attributes
 	AutoHD<TSecurity> sec;
@@ -146,6 +152,11 @@ class Session : public TCntrNode
 
 	Res		mAlrmRes;		//Alarms resource
 	vector<Alarm>	mAlrm;			//Alarms queue
+
+	//> Styles
+	Res		mStRes;
+	int		mStyleIdW;
+	map<string,string>	mStProp;	//Styles' properties
 };
 
 //************************************************
@@ -247,14 +258,14 @@ class SessPage : public SessWdg
 
 	AutoHD<Page> parent( );
 
-	//- Pages -
+	//> Pages
 	void pageList( vector<string> &ls )			{ chldList(mPage,ls); }
 	bool pagePresent( const string &id )			{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> pageAt( const string &id );
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
-	//- Alarms process -
+	//> Alarms process
 	void alarmSet( bool isSet = false );
 	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 
@@ -263,6 +274,7 @@ class SessPage : public SessWdg
 	bool cntrCmdGeneric( XMLNode *opt );
 
 	bool attrChange( Attr &cfg, TVariant prev );
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     private:
 	//Attributes

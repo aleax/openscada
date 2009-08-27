@@ -144,6 +144,34 @@ namespace VISION
 	    string	mWdg;		//Play widget
 	    string	mPlayData;	//Play data
     };
+
+    //*********************************************
+    //* Status bar styles                         *
+    //*********************************************
+    class StylesStBar : public QLabel
+    {
+	Q_OBJECT
+
+	public:
+	    StylesStBar( int styleId, QWidget *parent = 0 );
+
+	    int style( )		{ return mStyle; }
+
+	    void setStyle( int istl, const string &nm = "" );
+
+	    bool styleSel( );
+
+	    VisRun *mainWin( );
+
+	signals:
+	    void styleChanged( );
+
+	protected:
+	    bool event( QEvent *event );
+
+	private:
+	    int	mStyle;
+    };
 }
 
 #endif //VIS_RUN_WIDGS

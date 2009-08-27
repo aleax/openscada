@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:13+0300\n"
+"POT-Creation-Date: 2009-08-27 15:40+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -70,6 +70,11 @@ msgstr ""
 
 #: snmp_client.cpp:116
 msgid "help"
+msgstr ""
+
+#: snmp_client.cpp:126 snmp_client.cpp:251 snmp_client.cpp:353
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: snmp_client.cpp:137 snmp_client.cpp:145 snmp_client.cpp:162
@@ -168,7 +173,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: snmp_client.cpp:146 snmp_client.cpp:380 snmp_client.cpp:457
+#: snmp_client.cpp:146 snmp_client.cpp:379 snmp_client.cpp:456
 msgid "OID_LS"
 msgstr ""
 
@@ -185,7 +190,7 @@ msgstr ""
 msgid "Gather data time %.6g ms. "
 msgstr "Час збору даних %.6g мс. "
 
-#: snmp_client.cpp:190 snmp_client.cpp:462
+#: snmp_client.cpp:190 snmp_client.cpp:461
 msgid "root"
 msgstr ""
 
@@ -210,52 +215,47 @@ msgstr "Задачу збору даних не зупинено!"
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: snmp_client.cpp:251 snmp_client.cpp:354
-#, c-format
-msgid "%s"
-msgstr ""
-
 #: snmp_client.cpp:251
 msgid "Error SNMP session open."
 msgstr "Помилка відкриття SNMP сесії."
 
-#: snmp_client.cpp:345
+#: snmp_client.cpp:344
 #, c-format
 msgid "Timeout: No Response from %s."
 msgstr "Перевищенно час очікування відповіді від %s."
 
-#: snmp_client.cpp:372
+#: snmp_client.cpp:371
 msgid "_"
 msgstr ""
 
-#: snmp_client.cpp:380
+#: snmp_client.cpp:379
 msgid "w_attr"
 msgstr ""
 
-#: snmp_client.cpp:450
+#: snmp_client.cpp:449
 msgid "path"
 msgstr ""
 
-#: snmp_client.cpp:451
+#: snmp_client.cpp:450
 msgid "/serv/"
 msgstr ""
 
-#: snmp_client.cpp:454
+#: snmp_client.cpp:453
 msgid "info"
 msgstr ""
 
-#: snmp_client.cpp:457
+#: snmp_client.cpp:456
 msgid "fld"
 msgstr ""
 
-#: snmp_client.cpp:457 snmp_client.cpp:462
+#: snmp_client.cpp:456 snmp_client.cpp:461
 msgid "/prm/cfg/OID_LS"
 msgstr ""
 
-#: snmp_client.cpp:462
+#: snmp_client.cpp:461
 msgid "set"
 msgstr ""
 
-#: snmp_client.cpp:464
+#: snmp_client.cpp:463
 msgid "Parameter is enabled."
 msgstr "Параметр увімкнений."

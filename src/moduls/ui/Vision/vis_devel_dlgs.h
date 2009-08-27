@@ -81,7 +81,10 @@ class LibProjProp: public QDialog
 	void delMimeData( );
 	void loadMimeData( );
 	void unloadMimeData( );
-	void mimeDataChange(int,int);
+	void mimeDataChange( int, int );
+
+	void delStlItem( );
+	void stlTableChange( int, int );
 
 	void tabChanged( int itb );
 
@@ -107,6 +110,12 @@ class LibProjProp: public QDialog
 			*buttDataDel,
 			*buttDataLoad,
 			*buttDataUnload;
+
+	QComboBox	*stl_select;	//Style select
+	LineEdit	*stl_name;	//Name
+	QTableWidget	*stl_table;	//Style's iems
+	QPushButton	*buttStlTableDel,
+			*buttStlDel;
 
 	QDialogButtonBox *butbox;	//Buttons
 

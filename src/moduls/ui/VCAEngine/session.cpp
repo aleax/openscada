@@ -33,7 +33,7 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
-    mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0),
+    mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0), mStyleIdW(-1),
     mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
     mOwner("root"), mGrp("UI"), mPermit(RWRWR_),
     mBackgrnd(false), mConnects(0)
@@ -83,6 +83,14 @@ void Session::setEnable( bool val )
 	    mPermit	= parent().at().permit( );
 	    setPeriod( parent().at().period( ) );
 
+	    //> Load previous style
+	    TConfig c_el(&mod->elPrjSes());
+	    c_el.cfg("IDW").setS("<Style>");
+	    c_el.cfg("ID").setS(user());
+	    if( SYS->db().at().dataGet(parent().at().DB()+"."+parent().at().tbl()+"_ses",mod->nodePath()+parent().at().tbl()+"_ses",c_el) )
+		stlCurentSet(c_el.cfg("IO_VAL").getI());
+	    else stlCurentSet( parent().at().stlCurent( ) );
+
 	    //> Create root pages
 	    parent().at().list(pg_ls);
 	    for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
@@ -94,7 +102,7 @@ void Session::setEnable( bool val )
 	    for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
 		catch( TError err )	{ mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
-	
+
 	    modifGClr();
 	}
 	catch(...){ mParent.free(); }
@@ -127,6 +135,15 @@ void Session::setStart( bool val )
     {
 	//> Enable session if it disabled
 	if( !enable() )	setEnable(true);
+
+	//> Load Styles from project
+	mStProp.clear();
+	if( stlCurent() >= 0 )
+	{
+	    parent().at().stlPropList(pg_ls);
+	    for( int i_sp = 0; i_sp < pg_ls.size(); i_sp++ )
+		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet( pg_ls[i_sp], "", stlCurent() );
+	}
 
 	//> Process all pages is on
 	list(pg_ls);
@@ -167,6 +184,8 @@ void Session::setStart( bool val )
 	    at(pg_ls[i_ls]).at().setProcess(false);
     }
 }
+
+
 
 string Session::ico( )
 {
@@ -285,7 +304,7 @@ void Session::alarmSet( const string &wpath, const string &alrm )
 {
     if( wpath.empty() ) return;
 
-    //- Alarms queue process -
+    //> Alarms queue process
     ResAlloc res( mAlrmRes, true );
 
     Alarm aobj( wpath, alrm, calcClk( ) );
@@ -386,6 +405,62 @@ void *Session::Task( void *icontr )
     ses.mStart = false;
 
     return NULL;
+}
+
+void Session::stlCurentSet( int sid )
+{
+    if( mStyleIdW == sid ) return;
+
+    mStyleIdW = sid;
+
+    if( start() )
+    {
+	ResAlloc res( mStRes, true );
+	//> Load Styles from project
+	mStProp.clear();
+
+	if( sid >= 0 && sid < parent().at().stlSize() )
+	{
+	    vector<string> pg_ls;
+	    parent().at().stlPropList(pg_ls);
+	    for( int i_sp = 0; i_sp < pg_ls.size(); i_sp++ )
+		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet( pg_ls[i_sp], "", sid );
+	}
+	else mStyleIdW = -1;
+    }
+
+    //> Write to DB
+    if( enable() )
+    {
+	TConfig c_el(&mod->elPrjSes());
+	c_el.cfg("IDW").setS("<Style>");
+	c_el.cfg("ID").setS(user());
+	c_el.cfg("IO_VAL").setI(mStyleIdW);
+	SYS->db().at().dataSet(parent().at().DB()+"."+parent().at().tbl()+"_ses",mod->nodePath()+parent().at().tbl()+"_ses",c_el);
+    }
+}
+
+string Session::stlPropGet( const string &pid, const string &def )
+{
+    ResAlloc res( mStRes, false );
+
+    if( stlCurent() < 0 || pid.empty() || pid == "<Styles>" ) return def;
+
+    map<string,string>::iterator iStPrp = mStProp.find(pid);
+    if( iStPrp != mStProp.end() ) return iStPrp->second;
+
+    return def;
+}
+
+bool Session::stlPropSet( const string &pid, const string &vl )
+{
+    ResAlloc res( mStRes, true );
+    if( stlCurent() < 0 || pid.empty() || pid == "<Styles>" ) return false;
+    map<string,string>::iterator iStPrp = mStProp.find(pid);
+    if( iStPrp == mStProp.end() ) return false;
+    iStPrp->second = vl;
+    
+    return true;
 }
 
 void Session::cntrCmdProc( XMLNode *opt )
@@ -493,6 +568,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Period (ms)"),permit(),owner().c_str(),grp().c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/style",_("Style"),permit(),owner().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/obj/cfg/stLst");
 		ctrMkNode("list",opt,-1,"/obj/cfg/openPg",_("Opened pages"),R_R_R_,"root","UI",1,"tp","str");
 	    }
 	}
@@ -551,6 +627,19 @@ void Session::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(period()));
 	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	setPeriod(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/obj/cfg/style" )
+    {
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText( TSYS::int2str(stlCurent()) );
+	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	stlCurentSet( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/obj/cfg/stLst" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
+	if( enable() )
+	    for( int iSt = 0; iSt < parent().at().stlSize(); iSt++ )
+		opt->childAdd("el")->setAttr("id",TSYS::int2str(iSt))->setText(TSYS::strSepParse(parent().at().stlGet(iSt),0,';'));
+
     }
     else if( a_path == "/obj/cfg/openPg" && ctrChkNode(opt) )
     {
@@ -848,6 +937,16 @@ void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
 	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
 
     if( isSet && ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
+}
+
+TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
+{
+    if( stlLock() ) return vl;
+    string pid = TSYS::strNoSpace(a.cfgTempl());
+    if( pid.empty() ) pid = a.id();
+    if( !wr ) return ownerSess()->stlPropGet( pid, vl.getS() );
+    if( ownerSess()->stlPropSet(pid,vl.getS()) ) return TVariant();
+    return vl;
 }
 
 bool SessPage::cntrCmdGeneric( XMLNode *opt )

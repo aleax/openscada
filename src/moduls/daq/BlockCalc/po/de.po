@@ -1,23 +1,24 @@
 # OpenSCADA.DAQ.BlockCalc translate to German.
-# Copyright (C) 2008-2009 Aleksey Popkov
+# Copyright (C) 2008-2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.BlockCalc module.
-# aleksey <aleksey@psniip.ru>, 2008-2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: block.cpp:167 block.cpp:522 block.cpp:572 block.cpp:611 virtual.cpp:60
 #: virtual.cpp:597 block.h:86 block.h:98 virtual.h:161
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:08+0300\n"
-"PO-Revision-Date: 2008-12-25 00:01+0300\n"
-"Last-Translator: aleksey <aleksey@psniip.ru>\n"
-"Language-Team:  <ru@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:34+0300\n"
+"PO-Revision-Date: 2009-08-17 11:46+0200\n"
+"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: block.cpp:36
 msgid "_block"
@@ -70,8 +71,9 @@ msgstr ""
 msgid "BLK_ID"
 msgstr ""
 
-#: block.cpp:91 block.cpp:174 virtual.cpp:260 virtual.cpp:300 virtual.cpp:315
-#: virtual.cpp:330 virtual.cpp:399 virtual.cpp:562 virtual.cpp:615
+#: block.cpp:91 block.cpp:174 virtual.cpp:123 virtual.cpp:260 virtual.cpp:300
+#: virtual.cpp:315 virtual.cpp:330 virtual.cpp:399 virtual.cpp:562
+#: virtual.cpp:615
 #, c-format
 msgid "%s"
 msgstr ""
@@ -91,12 +93,12 @@ msgstr ""
 #: block.cpp:175
 #, c-format
 msgid "Block link <%s> save error."
-msgstr "Fehler der Rettung der Blockverbindung <%s>."
+msgstr "Fehler beim Speichern der Blockverbindung <%s>."
 
 #: block.cpp:187
 #, c-format
 msgid "Node '%s' is not function."
-msgstr "Knoten '%s' ist nicht Funktion."
+msgstr "Knoten '%s' ist keine Funktion."
 
 #: block.cpp:190
 msgid "f_frq"
@@ -113,17 +115,17 @@ msgstr ""
 #: block.cpp:240 block.cpp:248 block.cpp:264
 #, c-format
 msgid "Link %d error!"
-msgstr "Fehler in der Knuepfung %d!"
+msgstr "Fehler in der Verbindung %d!"
 
 #: block.cpp:378
 #, c-format
 msgid "Error reading block's <%s> links."
-msgstr "Fehler des Lesens der Blocklinks <%s>."
+msgstr "Fehler beim Lesen der Blockverbindung <%s>."
 
 #: block.cpp:422
 #, c-format
 msgid "Error writing block's <%s> links."
-msgstr "Fehler des Eintragens der Blocklinks <%s>."
+msgstr "Fehler beim Schreiben der Blockverbindung <%s>."
 
 #: block.cpp:431 virtual.cpp:189 virtual.cpp:433 virtual.cpp:437
 #: virtual.cpp:445 virtual.cpp:493 virtual.cpp:637
@@ -139,9 +141,8 @@ msgid "/serv/attr"
 msgstr ""
 
 #: block.cpp:436
-#, fuzzy
 msgid "Block disabled or error."
-msgstr "Fehler <%s> der Berechnung des Blocks."
+msgstr "Block abgeschaltet oder Fehler."
 
 #: block.cpp:437 block.cpp:532 block.cpp:537 block.cpp:543 block.cpp:548
 #: block.cpp:553 block.cpp:558 block.cpp:563 block.cpp:566 block.cpp:586
@@ -158,7 +159,7 @@ msgstr ""
 #: block.cpp:564 block.cpp:566 block.cpp:586 block.cpp:587 block.cpp:592
 #: block.cpp:594 block.cpp:599 block.cpp:656 virtual.cpp:185 virtual.cpp:340
 #: virtual.cpp:484 virtual.cpp:487 virtual.cpp:488 virtual.cpp:496
-#: virtual.cpp:503 virtual.cpp:508 virtual.cpp:709
+#: virtual.cpp:503 virtual.cpp:508 virtual.cpp:707
 msgid "root"
 msgstr ""
 
@@ -182,7 +183,7 @@ msgstr ""
 msgid "set"
 msgstr ""
 
-#: block.cpp:453 virtual.cpp:182 virtual.cpp:481 virtual.cpp:706
+#: block.cpp:453 virtual.cpp:182 virtual.cpp:481 virtual.cpp:704
 msgid "info"
 msgstr ""
 
@@ -222,7 +223,7 @@ msgstr "Zustand"
 #: block.cpp:461 block.cpp:463 block.cpp:467 block.cpp:468 block.cpp:469
 #: block.cpp:470 block.cpp:471 block.cpp:472 block.cpp:481 block.cpp:498
 #: block.cpp:506 block.cpp:519 block.cpp:522 virtual.cpp:185 virtual.cpp:487
-#: virtual.cpp:709
+#: virtual.cpp:707
 msgid "fld"
 msgstr ""
 
@@ -232,7 +233,7 @@ msgstr ""
 
 #: block.cpp:461
 msgid "Enable"
-msgstr "Aktiv"
+msgstr "Einschalten"
 
 #: block.cpp:461 block.cpp:463 block.cpp:467 block.cpp:468 block.cpp:469
 #: block.cpp:470 block.cpp:471 block.cpp:472 block.cpp:473 block.cpp:481
@@ -321,7 +322,7 @@ msgstr ""
 
 #: block.cpp:470 virtual.cpp:151
 msgid "To enable"
-msgstr "Aktivieren"
+msgstr "Einschalten"
 
 #: block.cpp:471 block.cpp:556
 msgid "/blck/cfg/toprc"
@@ -376,7 +377,7 @@ msgid "/lio"
 msgstr ""
 
 #: block.cpp:478 block.cpp:482 block.cpp:507 virtual.cpp:144 virtual.cpp:556
-#: virtual.cpp:571 virtual.cpp:709
+#: virtual.cpp:571 virtual.cpp:707
 msgid "IO"
 msgstr ""
 
@@ -394,7 +395,7 @@ msgstr ""
 
 #: block.cpp:481 block.cpp:506
 msgid "Hidden"
-msgstr "Geheim"
+msgstr "Unsichtbar"
 
 #: block.cpp:482 block.cpp:589
 msgid "/lio/io"
@@ -406,7 +407,7 @@ msgstr ""
 
 #: block.cpp:489 block.cpp:516 block.cpp:532 block.cpp:537 block.cpp:553
 #: block.cpp:558 block.cpp:586 virtual.cpp:139 virtual.cpp:151 virtual.cpp:152
-#: virtual.cpp:667
+#: virtual.cpp:665
 msgid "0"
 msgstr ""
 
@@ -432,7 +433,7 @@ msgstr ""
 
 #: block.cpp:503
 msgid "Links"
-msgstr "Links"
+msgstr "Verbindungen"
 
 #: block.cpp:505
 msgid "/lnk/show"
@@ -512,7 +513,7 @@ msgstr "Roman Savotschenko"
 
 #: virtual.cpp:49
 msgid "Allow block based calculator."
-msgstr "Gewaehrt den Blockrechner."
+msgstr "Erlaubt Berechnungen mit dem Blockrechner."
 
 #: virtual.cpp:50
 msgid "GPL"
@@ -530,15 +531,14 @@ msgid ""
 msgstr ""
 "======================= Optionen des Moduls <%s:%s> "
 "=============================\n"
-"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
-"---------\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei ---------\n"
 "\n"
 
 #: virtual.cpp:110
 msgid "h"
 msgstr ""
 
-#: virtual.cpp:113 virtual.cpp:710
+#: virtual.cpp:113 virtual.cpp:708
 msgid "help"
 msgstr ""
 
@@ -560,7 +560,7 @@ msgstr ""
 
 #: virtual.cpp:137
 msgid "Block's table"
-msgstr "Tabelle der Blocks"
+msgstr "Tabelle des Blocks"
 
 #: virtual.cpp:137
 msgid "block"
@@ -572,7 +572,7 @@ msgstr ""
 
 #: virtual.cpp:138
 msgid "Calc period (ms)"
-msgstr "Periodizitaet der Berechnung (ms)"
+msgstr "Rechenzeit (ms)"
 
 #: virtual.cpp:138 virtual.cpp:185
 msgid "5"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: virtual.cpp:139
 msgid "Calc task priority"
-msgstr "Prioritaet der Rechenaufgabe"
+msgstr "Priorität der Berechnung"
 
 #: virtual.cpp:139 virtual.cpp:140 virtual.cpp:157
 msgid "2"
@@ -608,7 +608,7 @@ msgstr ""
 
 #: virtual.cpp:140
 msgid "Iteration number into calc period"
-msgstr "Zahl der Iterationen in einer Berechnungsperiode"
+msgstr "Anzahl der Iterationen in der Rechenzeit"
 
 #: virtual.cpp:140
 msgid "0;99"
@@ -624,7 +624,7 @@ msgstr "Standard"
 
 #: virtual.cpp:144
 msgid "Blocks' IOs"
-msgstr "Parameter des Blocks"
+msgstr "IO-Parameter des Blocks"
 
 #: virtual.cpp:144
 msgid "200"
@@ -653,15 +653,15 @@ msgstr ""
 
 #: virtual.cpp:157
 msgid "Link's type"
-msgstr "Typ des Links"
+msgstr "Verbindungstyp"
 
 #: virtual.cpp:158
 msgid "Link"
-msgstr "Link"
+msgstr "Verbindung"
 
 #: virtual.cpp:159
 msgid "Link's value"
-msgstr "Bedeutung des Links"
+msgstr "Verbindungswert"
 
 #: virtual.cpp:185 virtual.cpp:190
 msgid "/help/g_help"
@@ -669,7 +669,7 @@ msgstr ""
 
 #: virtual.cpp:185
 msgid "Options help"
-msgstr "Optionenhilfe"
+msgstr "Optionen Hilfe"
 
 #: virtual.cpp:201
 msgid "BlckCalcPrm_"
@@ -686,17 +686,17 @@ msgstr ""
 #: virtual.cpp:239
 #, fuzzy, c-format
 msgid "Calc time %g us. "
-msgstr "Berechnungszeit (mks)"
+msgstr "Rechenzeit (usek)"
 
 #: virtual.cpp:301 virtual.cpp:316
 #, c-format
 msgid "Enable block <%s> error."
-msgstr "Fehler der Aktivierung des Blocks <%s>."
+msgstr "Fehler beim Einschalten des Blocks <%s>."
 
 #: virtual.cpp:331
 #, c-format
 msgid "Process block <%s> error."
-msgstr "Fehler der Bearbeitung des Blocks <%s>."
+msgstr "Fehler bei der Bearbeitung des Blocks <%s>."
 
 #: virtual.cpp:348
 msgid "start"
@@ -704,7 +704,7 @@ msgstr ""
 
 #: virtual.cpp:349
 msgid "Acquisition task is not started!"
-msgstr "Sammlungstask ist nicht gestartet!"
+msgstr "Datenerfassung ist nicht gestartet!"
 
 #: virtual.cpp:360
 msgid "stop"
@@ -712,7 +712,7 @@ msgstr ""
 
 #: virtual.cpp:361
 msgid "Acquisition task is not stopped!"
-msgstr "Sammlungstask ist nicht gestoppt!"
+msgstr "Datenerfassung ist nicht angehalten!"
 
 #: virtual.cpp:378
 #, c-format
@@ -722,12 +722,12 @@ msgstr ""
 #: virtual.cpp:401
 #, c-format
 msgid "Block <%s> calc error."
-msgstr "Fehler <%s> der Berechnung des Blocks."
+msgstr "Berechnungsfehler im Blocks <%s>."
 
 #: virtual.cpp:404
 #, c-format
 msgid "Block <%s> is stoped."
-msgstr "Block <%s> ist gestoppt."
+msgstr "Block <%s> ist angehalten."
 
 #: virtual.cpp:433
 msgid "CntrReqs"
@@ -768,7 +768,7 @@ msgstr ""
 
 #: virtual.cpp:485
 msgid "Blocks scheme"
-msgstr "Blocksschema"
+msgstr "Blockschema"
 
 #: virtual.cpp:487 virtual.cpp:510
 msgid "/scheme/nmb"
@@ -788,7 +788,7 @@ msgstr ""
 
 #: virtual.cpp:488
 msgid "Blocks"
-msgstr "Blocks"
+msgstr "Blöcke"
 
 #: virtual.cpp:488
 msgid "br"
@@ -817,25 +817,25 @@ msgstr ""
 #: virtual.cpp:520
 #, c-format
 msgid "All: %d; Enabled: %d; Process: %d"
-msgstr "Insgesamt: %d; Aktiv: %d; in Bearbeitung: %d"
+msgstr "Alle: %d; Eingeschaltet: %d; Bearbeitung: %d"
 
 #: virtual.cpp:578
 msgid "_"
 msgstr ""
 
+#: virtual.cpp:663
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter ist abgeschaltet."
+
 #: virtual.cpp:664
-msgid "2:Controller is stoped"
-msgstr "2:Controller ist gestoppt"
+msgid "2:Controller is stoped."
+msgstr "2:Kontroller ist angehalten."
 
-#: virtual.cpp:666
-msgid "1:Parameter is disabled"
-msgstr "1:Parameter ist nicht aktiv"
-
-#: virtual.cpp:709
+#: virtual.cpp:707
 msgid "/prm/cfg/IO"
 msgstr ""
 
-#: virtual.cpp:710
+#: virtual.cpp:708
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<blk>.<blk_io>:<aid>:<anm>]\n"
@@ -847,15 +847,12 @@ msgid ""
 "If 'aid' or 'anm' are not set they will be generated from selected block's "
 "parameter."
 msgstr ""
-"Liste der Konfiguration der Attribute. Die Liste wird mit Zeilen im "
-"naechsten Format geformt: [<blk>.<blk_io>:<aid>:<anm>]\n"
+"Liste der Konfiguration der Attribute. Die Liste wird zeilenweise im Format "
+"[<blk>.<blk_io>:<aid>:<anm>] angegeben\n"
 "Wo:\n"
-"  blk - Bezeichner des Blocks, der Blocksschema;\n"
-"  blk_io - Parameter des Blocks, der Blocksschema;\n"
-"  aid - Bezeichner des bildenden Attributs;\n"
-"  anm - Name des bildenden Attributs.\n"
-"Falls 'aid' или 'anm' nicht festgesetzt sind, wird ihre Generation aus dem "
-"gewaehlten Parameter des Blocks erfuellt."
-
-#~ msgid "Error calc block <%s>."
-#~ msgstr "Fehler der Berechnung des Blocks <%s>."
+"  blk - Bezeichner des Blocks, des Blocksschema;\n"
+"  blk_io - Parameter des Blocks, des Blocksschema;\n"
+"  aid - Bezeichner des erstellten Attributs;\n"
+"  anm - Name des erstellten Attributs.\n"
+"Falls 'aid' oder 'anm' nicht agegebene sind, werden diese Attribute aus  dem "
+"Parameter des Blocks erstellt."

@@ -62,6 +62,7 @@ class Attr : public TCntrNode
 	    CfgLnkIn	= 0x02,		//Input link
 	    CfgLnkOut	= 0x04,		//Output link
 	    ProcAttr	= 0x08,		//Process attribute
+	    FromStyle	= 0x40,		//Get value from style
 
 	    SessAttrInh	= 0x10,		//Inherit attribute into running session
 	    IsInher	= 0x20		//Inherit attribute
@@ -87,11 +88,11 @@ class Attr : public TCntrNode
 	void setCfgVal( const string &vl );
 
 	//> Get value
-	string getSEL( );
-	string getS( );
-	double getR( );
-	int    getI( );
-	char   getB( );
+	string getSEL( bool sys = false );
+	string getS( bool sys = false );
+	double getR( bool sys = false );
+	int    getI( bool sys = false );
+	char   getB( bool sys = false );
 
 	//> Set value
 	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
@@ -156,6 +157,7 @@ class Widget : public TCntrNode
 	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
 	virtual bool   isContainer( );				//Is container (Is define of the terminator)
 	virtual bool   isLink( )	{ return m_lnk; }	//Widget as link
+	bool stlLock( )			{ return mStlLock; }	//Style lock
 
 	virtual void setName( const string &inm );
 	virtual void setDescr( const string &idscr );
@@ -166,6 +168,7 @@ class Widget : public TCntrNode
 	virtual void setCalcLang( const string &ilng )	{ };
 	virtual void setCalcProg( const string &iprg )	{ };
 	virtual void setCalcPer( int vl )		{ };
+	void setStlLock( bool vl )	{ mStlLock = vl; }
 
 	//> Storing
 	virtual void loadIO( )		{ }			//Load widget's IO
@@ -221,9 +224,10 @@ class Widget : public TCntrNode
 
 	virtual bool attrChange( Attr &cfg, TVariant prev );   //Process attribute change local and into terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
-	virtual void calc( Widget *base );
+	virtual TVariant vlGet( Attr &a );
+	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
-	TVariant vlGet( Attr &a );
+	virtual void calc( Widget *base );
 
 	//Attributes
 	//> Generic data
@@ -233,6 +237,7 @@ class Widget : public TCntrNode
 	char	m_lnk	:1;		//Widget as link
 	char	attrId	:3;		//The widget's container id
 	char	inclWdg	:3;
+	char	mStlLock:1;		//Style lock
 	string	mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators

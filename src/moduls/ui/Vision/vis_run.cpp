@@ -254,6 +254,12 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     mWStat->setWhatsThis(_("This label displays used VCA engine station."));
     mWStat->setToolTip(_("Field for display of the used VCA engine station."));
     statusBar()->insertPermanentWidget(0,mWStat);
+    mStlBar = new StylesStBar( -1, this );
+    mStlBar->setWhatsThis(_("This label displays used interface style."));
+    mStlBar->setToolTip(_("Field for display the used interface style."));
+    mStlBar->setStatusTip(_("Double click for style change."));
+    connect( mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()) );
+    statusBar()->insertPermanentWidget(0,mStlBar);
     statusBar()->insertPermanentWidget(0,toolBarStatus);
 
     //> Init scroller
@@ -309,20 +315,15 @@ VisRun::~VisRun()
     pgCacheClear();
 }
 
-string VisRun::user()
-{
-    return mWUser->user().toAscii().data();
-}
+string VisRun::user( )		{ return mWUser->user().toAscii().data(); }
 
-string VisRun::password( )
-{
-    return mWUser->pass().toAscii().data();
-}
+string VisRun::password( )	{ return mWUser->pass().toAscii().data(); }
 
-string VisRun::VCAStation( )
-{
-    return mWUser->VCAStation().toAscii().data();
-}
+string VisRun::VCAStation( )	{ return mWUser->VCAStation().toAscii().data(); }
+
+int VisRun::style( )		{ return mStlBar->style(); }
+
+void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 {
@@ -744,6 +745,19 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     }
 }
 
+void VisRun::styleChanged( )
+{
+    //> Get current style
+    XMLNode req("set");
+    req.setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle")->setText(TSYS::int2str(style()));
+    if( cntrIfCmd(req) )
+    {
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	return;
+    }
+    fullUpdatePgs();
+}
+
 void VisRun::aboutQt()
 {
     QMessageBox::aboutQt( this, mod->modInfo("Name").c_str() );
@@ -891,6 +905,10 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //> Get update period
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
     if( !cntrIfCmd(req) ) mPeriod = atoi(req.text().c_str());
+
+    //> Get current style
+    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
+    if( !cntrIfCmd(req) ) setStyle( atoi(req.text().c_str()) );
 
     //> Get project's flags
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");

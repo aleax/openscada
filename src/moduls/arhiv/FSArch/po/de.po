@@ -1,22 +1,23 @@
 # OpenSCADA.Archive.FSArch translate to German.
-# Copyright (C) 2008-2009 Aleksey Popkov
+# Copyright (C) 2008-2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Archive.FSArch module.
-# aleksey <aleksey@psniip.ru>, 2008-2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: base.cpp:53 val.cpp:390 val.cpp:391 val.cpp:392 val.cpp:393 mess.h:115
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-13 10:52+0300\n"
-"PO-Revision-Date: 2008-12-14 23:02+0300\n"
-"Last-Translator: aleksey <aleksey@psniip.ru>\n"
-"Language-Team:  <ru@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:43+0300\n"
+"PO-Revision-Date: 2009-08-17 10:44+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: base.cpp:36
 msgid "FSArch"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: base.cpp:37
 msgid "File system archivator"
-msgstr "Dateisystemarchivator (-komprimierung)"
+msgstr "Archivar für das Dateisystem"
 
 #: base.cpp:38 mess.cpp:279 mess.cpp:280 mess.cpp:281 mess.cpp:283
 #: mess.cpp:285 mess.cpp:286 mess.cpp:287 mess.cpp:288 mess.cpp:289
@@ -51,8 +52,8 @@ msgid ""
 "The Archive module. Allow functions for messages and values arhiving to file "
 "system."
 msgstr ""
-"Modul des Archivs. Gewaert Archivierungsfunktionen fuer Mitteilungen und "
-"Bedeutungen fuer Dateisystem"
+"Archivmodul. Funktionen zum Archivieren von Nachrichten und Werten in "
+"dasDateisystem"
 
 #: base.cpp:43
 msgid "GPL"
@@ -84,7 +85,7 @@ msgstr ""
 
 #: base.cpp:100
 msgid "Maximum archive file size (kB)"
-msgstr "Maximaler Dateiumfang des Archivs (кB)"
+msgstr "Maximale Dateigrösse des Archivs (kB)"
 
 #: base.cpp:100
 msgid "4"
@@ -100,7 +101,7 @@ msgstr ""
 
 #: base.cpp:101 base.cpp:108
 msgid "Maximum files number"
-msgstr "Maximale Dateizahl"
+msgstr "Maximale Dateianzahl"
 
 #: base.cpp:101 base.cpp:102 base.cpp:108
 msgid "3"
@@ -116,7 +117,7 @@ msgstr ""
 
 #: base.cpp:102
 msgid "File's time size (days)"
-msgstr " Dateiumfang (Tagen)"
+msgstr "Dateiumfang (Tage)"
 
 #: base.cpp:102
 msgid "30"
@@ -128,7 +129,7 @@ msgstr ""
 
 #: base.cpp:103 base.cpp:110
 msgid "Pack files timeout (min)"
-msgstr "Timeout von der Packung der Dateien (min)"
+msgstr "Zeitüberschreitung beim Packen der Dateien (min)"
 
 #: base.cpp:103 base.cpp:104 base.cpp:110 base.cpp:111
 msgid "2"
@@ -140,7 +141,7 @@ msgstr ""
 
 #: base.cpp:104 base.cpp:111
 msgid "Check archives period (min)"
-msgstr "Periode der Pruefung der Dateien (min)"
+msgstr "Zyklus Prüfung der Archive (min)"
 
 #: base.cpp:104 base.cpp:111
 msgid "60"
@@ -148,7 +149,7 @@ msgstr ""
 
 #: base.cpp:107
 msgid "File's time size (hours)"
-msgstr "Umfang der Datei (Stunden)"
+msgstr "Dateiumfang (Stunden)"
 
 #: base.cpp:107
 msgid "8.4"
@@ -164,7 +165,7 @@ msgstr ""
 
 #: base.cpp:109
 msgid "Numberic values rounding (%)"
-msgstr "Abrundung der Zahlenbedeutungen (%)"
+msgstr "Rundung der numerischen Werte (%)"
 
 #: base.cpp:109
 msgid "2.2"
@@ -262,16 +263,16 @@ msgstr ""
 
 #: base.cpp:152
 msgid "Compress error!"
-msgstr "Fehler der Kompression"
+msgstr "Fehler bei der Komprimierung"
 
 #: base.cpp:164
 msgid "gzip -cd \""
 msgstr ""
 
 #: base.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Decompress error: '%s'!"
-msgstr "Fehler des Entpackens"
+msgstr "Fehler '%s' beim Entpacken!"
 
 #: base.cpp:181
 #, c-format
@@ -282,8 +283,7 @@ msgid ""
 msgstr ""
 "========================== Optionen des Moduls <%s:%s> "
 "==========================\n"
-"-------- Parameter der modularen Sektion <%s> in der "
-"Konfigurationsdatei--------\n"
+"-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei--------\n"
 "\n"
 
 #: base.cpp:192
@@ -305,22 +305,22 @@ msgstr ""
 
 #: base.cpp:228
 msgid "Check archives thread is not stopped!"
-msgstr "Der Archivepruefungsfluss ist nicht gestoppt"
+msgstr "Der Thread für die Archivprüfung ist nicht angehalten"
 
 #: base.cpp:238
 #, c-format
 msgid "Timer's thread <%u> call. TID: %ld"
-msgstr ""
+msgstr "Timer Thread <%u> Aufruf. TID: %ld"
 
 #: base.cpp:250
 #, c-format
 msgid "Check message archivator <%s> error."
-msgstr "Fehler in der Pruefung der Komprimierung <%s> von Mitteilungen"
+msgstr "Fehler beim Prüfen des Nachrichtnarchivars <%s> "
 
 #: base.cpp:261
 #, c-format
 msgid "Check value archivator <%s> error."
-msgstr "Fehler in der Pruefung der Komprimierung <%s> von Bedeutungen"
+msgstr "Fehler beim Prüfen des Wertearchivars <%s> "
 
 #: base.cpp:268 base.cpp:271 mess.cpp:410 mess.cpp:818 val.cpp:85 val.cpp:125
 #: val.cpp:917
@@ -344,7 +344,7 @@ msgstr ""
 
 #: base.cpp:295
 msgid "Options help"
-msgstr " Optionenhilfe"
+msgstr "Optionen Hilfe"
 
 #: base.cpp:295 mess.cpp:279 mess.cpp:280 mess.cpp:281 mess.cpp:283
 #: mess.cpp:285 mess.cpp:286 mess.cpp:287 mess.cpp:288 mess.cpp:289
@@ -398,7 +398,7 @@ msgstr ""
 
 #: mess.cpp:97 mess.cpp:145
 msgid "Archive is not started!"
-msgstr "Archiv nicht gestartet"
+msgstr "Archiv ist nicht gestartet!"
 
 #: mess.cpp:126
 msgid "/%F %T.msg"
@@ -407,12 +407,12 @@ msgstr ""
 #: mess.cpp:130
 #, c-format
 msgid "Error create new archive file <%s>!"
-msgstr "Fehler ! Neue Archivdatei schaffen! <%s>"
+msgstr "Fehler beim Erstellen der Archivdatei <%s>!"
 
 #: mess.cpp:168 val.cpp:148
 #, c-format
 msgid "Can not create dir <%s>."
-msgstr "Kann nicht das Verzeichnis schaffen <%s>."
+msgstr "Kann das Verzeichnis <%s> nicht erstellen !"
 
 #: mess.cpp:179 val.cpp:155 val.cpp:484
 msgid ".."
@@ -428,7 +428,7 @@ msgstr ""
 
 #: mess.cpp:279
 msgid "Archivator files size (kB)"
-msgstr "Umfang der Archivdatei (кB)"
+msgstr "Grösse der Archivardateien (kB)"
 
 #: mess.cpp:279 mess.cpp:280 val.cpp:341 val.cpp:343 val.cpp:348
 msgid "real"
@@ -440,7 +440,7 @@ msgstr ""
 
 #: mess.cpp:280
 msgid "Archiving time (msek)"
-msgstr "Archivierungszeit (мs)"
+msgstr "Archivierungszeit (msek)"
 
 #: mess.cpp:281 val.cpp:337
 msgid "/prm/cfg/addr"
@@ -452,7 +452,7 @@ msgstr ""
 
 #: mess.cpp:282
 msgid "Path to directory for archivator's of messages files."
-msgstr "die Route zum Verzeichnis fuer Dateien des Mitteilungenarchivators "
+msgstr "Verzeichnispfad zu den Dateien des Nachrichtarchivars"
 
 #: mess.cpp:283 val.cpp:339
 msgid "area"
@@ -464,7 +464,7 @@ msgstr ""
 
 #: mess.cpp:283 val.cpp:339
 msgid "Additional options"
-msgstr "Zusaetzliche Optionen"
+msgstr "Zusätzliche Optionen"
 
 #: mess.cpp:285 mess.cpp:300
 msgid "/prm/add/xml"
@@ -509,7 +509,7 @@ msgstr ""
 
 #: mess.cpp:291 val.cpp:346
 msgid "Check archivator directory now"
-msgstr "Archivatorsverzeichnis jetzt pruefen"
+msgstr "Archivarverzeichnis prüfen"
 
 #: mess.cpp:302
 msgid "0"
@@ -528,7 +528,7 @@ msgstr ""
 #: mess.cpp:352 val.cpp:698
 #, c-format
 msgid "Can not create file: <%s>!"
-msgstr "Kann nicht Datei schaffen: <%s>!"
+msgstr "Kann die Datei: <%s> nicht erstellen!"
 
 #: mess.cpp:362 mess.cpp:374 mess.cpp:605
 msgid "Version"
@@ -541,7 +541,7 @@ msgstr ""
 #: mess.cpp:367 mess.cpp:376
 #, c-format
 msgid "Write to file error: %s"
-msgstr "Fehler der Aufzeichnung in die Datei: %s"
+msgstr "Fehler: %s beim Schreiben in die Datei"
 
 #: mess.cpp:373 mess.cpp:604
 #, c-format
@@ -555,7 +555,7 @@ msgstr ""
 #: mess.cpp:435
 #, c-format
 msgid "File %s header error!"
-msgstr "Dateititelfehler <%s>!"
+msgstr "Datei <%s> Dateikopf Fehler!"
 
 #: mess.cpp:436
 #, c-format
@@ -570,16 +570,16 @@ msgstr "Nicht meine Archivdatei <%s>."
 #: mess.cpp:496 mess.cpp:505
 #, c-format
 msgid "Archive <%s> file error."
-msgstr "Archivdateifehler <%s>."
+msgstr "Archiv <%s> Dateifehler."
 
 #: mess.cpp:547
 msgid "Inserting message to an error Archive file!"
-msgstr "Einschalten der Mitteilung in die Archivdatei enthaelt einen Fehler"
+msgstr "Hinzufügen einer Nachricht in das Fehler-Archivdatei"
 
 #: mess.cpp:563
 #, c-format
 msgid "Archive file '%s' isn't attached!"
-msgstr "Archivdatei '%s' ist nicht angeschlossen (zugeschaltet)"
+msgstr "Archivdatei '%s' ist nicht verbunden!"
 
 #: mess.cpp:573 mess.cpp:577 mess.cpp:704
 msgid "tm"
@@ -627,11 +627,11 @@ msgstr ""
 
 #: mess.cpp:681
 msgid "Getting messages from an error Archive file!"
-msgstr "Erhaelt Mitteilungen aus der Archivdatei mit dem Fehler!"
+msgstr "Empfange Nachrichten aus der Fehler-Archivdatei!"
 
 #: mess.cpp:694
 msgid "Archive file isn't attached!"
-msgstr "Archivdatei ist nicht zugeschaltet!"
+msgstr "Archivdatei ist nicht verbunden!"
 
 #: mess.cpp:741
 #, c-format
@@ -670,8 +670,7 @@ msgstr ""
 
 #: val.cpp:338
 msgid "Path to directory for archivator's of values files."
-msgstr ""
-"Route zum Verzeichnis der Dateien vom Komprimierungsprogramm der Bedetungen "
+msgstr "Verzeichnispfad zu den Dateien des Wertearchivars"
 
 #: val.cpp:342 val.cpp:366
 msgid "/prm/add/fn"
@@ -695,7 +694,7 @@ msgstr ""
 
 #: val.cpp:348
 msgid "Files size (Mb)"
-msgstr "Dateiumfang (Мb)"
+msgstr "Dateiumfang (МB)"
 
 #: val.cpp:349 val.cpp:416
 msgid "/arch/exp"
@@ -809,12 +808,12 @@ msgstr ""
 #: val.cpp:866
 #, c-format
 msgid "Archive file <%s> no openned!"
-msgstr "Archivdatei <%s> ist nicht geoeffnet!"
+msgstr "Archivdatei <%s> ist nicht geöffnet!"
 
 #: val.cpp:894
 #, c-format
 msgid "Attach file <%s> error."
-msgstr "Fehler im Zuschalten der Datei <%s>."
+msgstr "Fehler beim Verbinden der Datei <%s>."
 
 #: val.cpp:934 val.cpp:969 val.cpp:1094 val.cpp:1146
 msgid "Archive file error!"
@@ -824,5 +823,4 @@ msgstr "Fehler in der Archivdatei!"
 #, c-format
 msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""
-"Fehler in der Dateistruktur: <%s>.Differenz = %d .byte. Versuch es zu "
-"korrigieren!"
+"Fehler in der Dateistruktur: <%s>. Differenz = %d byte. Reparaturversuch!"

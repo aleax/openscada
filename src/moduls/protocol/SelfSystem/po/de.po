@@ -1,20 +1,23 @@
 # OpenSCADA.Protocol.SelfSystem translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: self.cpp:50 self.cpp:132 self.cpp:314 self.cpp:341
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-06 17:14+0300\n"
-"PO-Revision-Date: 2007-10-23 18:19+0300\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:26+0300\n"
+"PO-Revision-Date: 2009-08-19 09:06+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: self.cpp:33
 msgid "SelfSystem"
@@ -22,14 +25,14 @@ msgstr ""
 
 #: self.cpp:34
 msgid "Self system OpenSCADA protocol"
-msgstr "Das eigene Protokoll des Systems OpenSCADA"
+msgstr "Systemprotokoll OpenSCADA"
 
 #: self.cpp:35
 msgid "Protocol"
 msgstr "Protokoll"
 
 #: self.cpp:37
-msgid "0.8.1"
+msgid "0.9.0"
 msgstr ""
 
 #: self.cpp:38
@@ -38,7 +41,7 @@ msgstr "Roman Savotschenko"
 
 #: self.cpp:39
 msgid "Self OpenSCADA protocol, support generic functions."
-msgstr "Das eigene Protokoll OpenSCADA, unterstuetzt Hauptfunktionen."
+msgstr "Allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA."
 
 #: self.cpp:40
 msgid "GPL"
@@ -55,8 +58,9 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"======================= Optionen des Moduls <%s:%s> =============================\n"
-"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei ---------\n"
+"======================= Optionen des Moduls <%s:%s> "
+"=============================\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei ---------\n"
 "\n"
 
 #: self.cpp:151
@@ -65,6 +69,11 @@ msgstr ""
 
 #: self.cpp:154 self.cpp:265 self.cpp:270
 msgid "help"
+msgstr ""
+
+#: self.cpp:164
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: self.cpp:170 self.cpp:177
@@ -113,7 +122,7 @@ msgstr ""
 #: self.cpp:213
 #, c-format
 msgid "Station <%s> auth error: %s!"
-msgstr "Station <%s> Authentifikationsfehler: %s!"
+msgstr "Station <%s> Fehler in der Authentifizierung: %s!"
 
 #: self.cpp:214
 #, c-format
@@ -131,17 +140,17 @@ msgstr ""
 #: self.cpp:231
 #, c-format
 msgid "Station respond <%s> error!"
-msgstr "Fehler der Antwort der Station <%s>!"
+msgstr "Station antwortet mit <%s> Fehler!"
 
 #: self.cpp:233
 #, c-format
 msgid "Station <%s> error: %d:%s!"
-msgstr "Fehler der Station <%s>: %d:%s!"
+msgstr "Station <%s> Fehler: %d:%s!"
 
 #: self.cpp:236
 #, c-format
 msgid "Station <%s> error: Respond is broken!"
-msgstr "Fehler der Station <%s>: die Antwort ist nicht korrekt!"
+msgstr "Station <%s> Fehler: Antwort ist falsch!"
 
 #: self.cpp:257
 msgid "info"
@@ -157,7 +166,7 @@ msgstr ""
 
 #: self.cpp:260
 msgid "Parameters"
-msgstr "Параметры"
+msgstr "Parameter"
 
 #: self.cpp:261
 msgid "/prm/cfg"
@@ -177,7 +186,7 @@ msgstr ""
 
 #: self.cpp:263
 msgid "Life time of auth sesion(min)"
-msgstr "Sessionlebenszeit (min)"
+msgstr "Lebensdauer der Sitzung (min)"
 
 #: self.cpp:263 self.cpp:264 self.cpp:269 self.cpp:272 self.cpp:280
 #: self.cpp:281 self.cpp:285 self.cpp:286 self.cpp:290 self.cpp:291
@@ -198,7 +207,7 @@ msgstr ""
 
 #: self.cpp:264
 msgid "Compression level"
-msgstr "Kompressionslevel"
+msgstr "Kompressionsstufe"
 
 #: self.cpp:264 self.cpp:269
 msgid "min"
@@ -223,10 +232,10 @@ msgid ""
 "  0   - disable;\n"
 "  1-9 - direct level."
 msgstr ""
-"Kompressionslevel ZLib:\n"
-"  -1  - optimale Geschwindigkeit-Groesse;\n"
-"  0   - disaktiviert;\n"
-"  1-9 - direkter Level."
+"Kompressionsstufe ZLib:\n"
+"  -1  - optimale Geschwindigkeit-Grösse;\n"
+"  0   - abgeschaltet;\n"
+"  1-9 - direkte Stufe."
 
 #: self.cpp:269 self.cpp:288
 msgid "/prm/cfg/comprBrd"
@@ -246,7 +255,7 @@ msgstr ""
 
 #: self.cpp:270
 msgid "Value in bytes."
-msgstr "Bedeutung in Bytes."
+msgstr "Wert in Bytes."
 
 #: self.cpp:272 self.cpp:293
 msgid "/help/g_help"
@@ -254,7 +263,7 @@ msgstr ""
 
 #: self.cpp:272
 msgid "Options help"
-msgstr "Optionenhilfe"
+msgstr "Optionen Hilfe"
 
 #: self.cpp:272
 msgid "str"
@@ -299,7 +308,7 @@ msgstr ""
 
 #: self.cpp:330
 msgid "REZ 1 Auth error. User or password error.\n"
-msgstr "REZ 1 Authentifikationsfehler. Fehler des Nutzers oder des Kennwortes.\n"
+msgstr "REZ 1 Authentifizierungssfehler. Fehler im Benutzer oder Kennwort.\n"
 
 #: self.cpp:331 self.cpp:372
 msgid "REZ 0 "
@@ -334,11 +343,11 @@ msgstr ""
 
 #: self.cpp:348 self.cpp:379
 msgid "REZ 3 Command format error.\n"
-msgstr "REZ 3 Fehler des Kommandoformats.\n"
+msgstr "REZ 3 Fehler im Kommandoformat.\n"
 
 #: self.cpp:350
 msgid "REZ 1 Auth error. Session no valid.\n"
-msgstr "REZ 1 Authentifikationsfehler. Session ist nicht korrekt.\n"
+msgstr "REZ 1 Authentifizierungsfehler, Sitzung ist nicht gültig.\n"
 
 #: self.cpp:364
 msgid "user"

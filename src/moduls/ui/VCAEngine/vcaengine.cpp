@@ -185,6 +185,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
     prj_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     prj_el.fldAdd( new TFld("PER",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
+    prj_el.fldAdd( new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1") );
     prj_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
 
     //> Make pages DB structure
@@ -205,6 +206,19 @@ void Engine::postEnable( int flag )
     prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );
     prj_ses_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     prj_ses_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
+
+    //> Make styles' IO DB structure
+    prjStl_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
+    prjStl_el.fldAdd( new TFld("V_0",_("Value 0"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_1",_("Value 1"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_2",_("Value 2"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_3",_("Value 3"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_4",_("Value 4"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_5",_("Value 5"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_6",_("Value 6"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_7",_("Value 7"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_8",_("Value 8"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd( new TFld("V_9",_("Value 9"),TFld::String,TFld::NoFlag,"100") );
 
     //> Init original widgets library
     wlbAdd("originals",_("Original widget's library"));

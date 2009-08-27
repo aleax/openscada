@@ -9,7 +9,7 @@
 #: da_mem.cpp:42 da_mem.cpp:43 da_mem.cpp:44 da_netstat.cpp:40
 #: da_netstat.cpp:41 da_netstat.cpp:74 da_netstat.cpp:75 da_netstat.cpp:93
 #: da_netstat.cpp:94 da_sensors.cpp:108 da_sensors.cpp:124 da_sensors.cpp:146
-#: da_smart.cpp:87 da_smart.cpp:134 da_smart.cpp:143 da_uptime.cpp:39
+#: da_smart.cpp:87 da_smart.cpp:132 da_smart.cpp:141 da_uptime.cpp:39
 #: da_uptime.cpp:40 da_uptime.cpp:41 da_uptime.cpp:42 da_uptime.cpp:43
 #: da_uptime.cpp:55 os_contr.cpp:65 os_contr.cpp:170
 #, fuzzy
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:07+0300\n"
+"POT-Creation-Date: 2009-08-27 15:41+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -61,7 +61,7 @@ msgstr "Простой (%)"
 #: da_hddstat.cpp:96 da_hddstat.cpp:149 da_hddtemp.cpp:48 da_hddtemp.cpp:84
 #: da_hddtemp.cpp:150 da_mem.cpp:54 da_mem.cpp:59 da_netstat.cpp:51
 #: da_netstat.cpp:96 da_netstat.cpp:131 da_sensors.cpp:61 da_sensors.cpp:67
-#: da_smart.cpp:52 da_smart.cpp:114 da_smart.cpp:165 da_uptime.cpp:54
+#: da_smart.cpp:52 da_smart.cpp:114 da_smart.cpp:163 da_uptime.cpp:54
 #: da_uptime.cpp:67 da_uptime.cpp:96 da_uptime.cpp:108 os_contr.cpp:170
 msgid "SUBT"
 msgstr ""
@@ -73,7 +73,7 @@ msgstr ""
 #: da_cpu.cpp:58 da_cpu.cpp:120 da_cpu.cpp:156 da_hddstat.cpp:78
 #: da_hddstat.cpp:97 da_hddstat.cpp:120 da_mem.cpp:67 da_mem.cpp:97
 #: da_netstat.cpp:77 da_netstat.cpp:97 da_sensors.cpp:44 da_sensors.cpp:139
-#: da_sensors.cpp:205 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:135
+#: da_sensors.cpp:205 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:133
 #: da_uptime.cpp:71 da_uptime.cpp:89
 msgid "r"
 msgstr ""
@@ -125,14 +125,14 @@ msgid "Full CPU Load"
 msgstr "Общая нагрузка процессора"
 
 #: da_cpu.cpp:172 da_cpu.cpp:185 da_hddstat.cpp:148 da_hddtemp.cpp:149
-#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:220 da_smart.cpp:164
+#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:220 da_smart.cpp:162
 #: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:169 os_contr.cpp:341
 #: os_contr.cpp:354 os_contr.cpp:451
 msgid "TYPE"
 msgstr ""
 
 #: da_cpu.cpp:174 da_cpu.cpp:187 da_hddstat.cpp:150 da_hddtemp.cpp:151
-#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:221 da_smart.cpp:166
+#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:221 da_smart.cpp:164
 #: da_uptime.cpp:97 da_uptime.cpp:109
 msgid "EN"
 msgstr ""
@@ -244,8 +244,8 @@ msgstr ""
 msgid "Disk"
 msgstr "Диск"
 
-#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:315
-#: os_contr.cpp:445
+#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:131
+#: os_contr.cpp:315 os_contr.cpp:445
 #, c-format
 msgid "%s"
 msgstr ""
@@ -447,7 +447,7 @@ msgstr "Данные сенсоров"
 msgid "smartctl -A -v N,raw48 /dev/"
 msgstr ""
 
-#: da_smart.cpp:87 da_smart.cpp:134
+#: da_smart.cpp:87 da_smart.cpp:132
 msgid " -d ata"
 msgstr ""
 
@@ -456,16 +456,16 @@ msgstr ""
 msgid "%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n"
 msgstr ""
 
-#: da_smart.cpp:140
+#: da_smart.cpp:138
 #, c-format
 msgid "%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n"
 msgstr ""
 
-#: da_smart.cpp:152
+#: da_smart.cpp:150
 msgid "Smart_"
 msgstr ""
 
-#: da_smart.cpp:162
+#: da_smart.cpp:160
 msgid "HD smart: "
 msgstr ""
 

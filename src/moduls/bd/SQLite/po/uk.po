@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the OpenSCADA.DB.SQLite module.
 # Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
-#: bd_sqlite.cpp:51 bd_sqlite.cpp:184 bd_sqlite.cpp:247 bd_sqlite.cpp:254
-#: bd_sqlite.cpp:280 bd_sqlite.cpp:378 bd_sqlite.cpp:712
+#: bd_sqlite.cpp:51 bd_sqlite.cpp:184 bd_sqlite.cpp:246 bd_sqlite.cpp:253
+#: bd_sqlite.cpp:279 bd_sqlite.cpp:375 bd_sqlite.cpp:510 bd_sqlite.cpp:513
+#: bd_sqlite.cpp:716
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:04+0300\n"
+"POT-Creation-Date: 2009-08-27 15:33+0300\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -25,7 +26,7 @@ msgstr ""
 msgid "DB SQLite"
 msgstr "БД SQLite"
 
-#: bd_sqlite.cpp:36 bd_sqlite.cpp:267
+#: bd_sqlite.cpp:36 bd_sqlite.cpp:266
 msgid "BD"
 msgstr "БД"
 
@@ -64,8 +65,13 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: bd_sqlite.cpp:111 bd_sqlite.cpp:268
+#: bd_sqlite.cpp:111 bd_sqlite.cpp:267
 msgid "help"
+msgstr ""
+
+#: bd_sqlite.cpp:121 bd_sqlite.cpp:310
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: bd_sqlite.cpp:158
@@ -89,11 +95,11 @@ msgstr ""
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
 
-#: bd_sqlite.cpp:227
+#: bd_sqlite.cpp:226
 msgid "BEGIN;"
 msgstr ""
 
-#: bd_sqlite.cpp:230
+#: bd_sqlite.cpp:229
 msgid "COMMIT;"
 msgstr ""
 
@@ -102,35 +108,35 @@ msgstr ""
 msgid "Getting table error: %s"
 msgstr "Помилка запиту таблиці: %s"
 
-#: bd_sqlite.cpp:264
+#: bd_sqlite.cpp:263
 msgid "info"
 msgstr ""
 
-#: bd_sqlite.cpp:267
+#: bd_sqlite.cpp:266
 msgid "fld"
 msgstr ""
 
-#: bd_sqlite.cpp:267
+#: bd_sqlite.cpp:266
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: bd_sqlite.cpp:267
+#: bd_sqlite.cpp:266
 msgid "ADDR"
 msgstr ""
 
-#: bd_sqlite.cpp:267 bd_sqlite.cpp:279
+#: bd_sqlite.cpp:266 bd_sqlite.cpp:278
 msgid "root"
 msgstr ""
 
-#: bd_sqlite.cpp:268
+#: bd_sqlite.cpp:267
 msgid "tp"
 msgstr ""
 
-#: bd_sqlite.cpp:268
+#: bd_sqlite.cpp:267
 msgid "str"
 msgstr ""
 
-#: bd_sqlite.cpp:269
+#: bd_sqlite.cpp:268
 msgid ""
 "SQLite DB address must be written as: [<FileDBPath>;<nTransReq>].\n"
 "Where:\n"
@@ -142,248 +148,244 @@ msgstr ""
 "  FileDBPath - повний шлях до файлу БД (./oscada/Main.db);\n"
 "  nTransReq - кількість запитів у одній транзакції (по замовченню 1)."
 
-#: bd_sqlite.cpp:274
+#: bd_sqlite.cpp:273
 msgid "comm"
 msgstr ""
 
-#: bd_sqlite.cpp:274 bd_sqlite.cpp:279
+#: bd_sqlite.cpp:273 bd_sqlite.cpp:278
 msgid "/prm/st/end_tr"
 msgstr ""
 
-#: bd_sqlite.cpp:274
+#: bd_sqlite.cpp:273
 msgid "Close openned transaction"
 msgstr "Закрити відкриту транзакцію"
 
-#: bd_sqlite.cpp:278
+#: bd_sqlite.cpp:277
 msgid "path"
 msgstr ""
 
-#: bd_sqlite.cpp:279
+#: bd_sqlite.cpp:278
 msgid "set"
 msgstr ""
 
-#: bd_sqlite.cpp:293
+#: bd_sqlite.cpp:292
 msgid "SELECT * FROM '"
 msgstr ""
 
-#: bd_sqlite.cpp:293
+#: bd_sqlite.cpp:292
 msgid "' LIMIT 0;"
 msgstr ""
 
-#: bd_sqlite.cpp:295 bd_sqlite.cpp:699
+#: bd_sqlite.cpp:294 bd_sqlite.cpp:703
 msgid "PRAGMA table_info('"
 msgstr ""
 
-#: bd_sqlite.cpp:295 bd_sqlite.cpp:699
+#: bd_sqlite.cpp:294 bd_sqlite.cpp:703
 msgid "');"
 msgstr ""
 
-#: bd_sqlite.cpp:310
+#: bd_sqlite.cpp:309
 msgid "DROP TABLE '"
 msgstr ""
 
-#: bd_sqlite.cpp:310 bd_sqlite.cpp:640 bd_sqlite.cpp:693
+#: bd_sqlite.cpp:309 bd_sqlite.cpp:647 bd_sqlite.cpp:698
 msgid "';"
 msgstr ""
 
-#: bd_sqlite.cpp:311
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: bd_sqlite.cpp:319 bd_sqlite.cpp:341 bd_sqlite.cpp:401 bd_sqlite.cpp:542
+#: bd_sqlite.cpp:318 bd_sqlite.cpp:340 bd_sqlite.cpp:398 bd_sqlite.cpp:549
 msgid "Table is empty."
 msgstr "Таблиця порожня."
 
-#: bd_sqlite.cpp:327
+#: bd_sqlite.cpp:326
 msgid "1"
 msgstr ""
 
-#: bd_sqlite.cpp:328 bd_sqlite.cpp:602
+#: bd_sqlite.cpp:327 bd_sqlite.cpp:608
 msgid "TEXT"
 msgstr ""
 
-#: bd_sqlite.cpp:329
+#: bd_sqlite.cpp:328
 msgid "16777215"
 msgstr ""
 
-#: bd_sqlite.cpp:330 bd_sqlite.cpp:604
+#: bd_sqlite.cpp:329 bd_sqlite.cpp:610
 msgid "INTEGER"
 msgstr ""
 
-#: bd_sqlite.cpp:332 bd_sqlite.cpp:605
+#: bd_sqlite.cpp:331 bd_sqlite.cpp:611
 msgid "DOUBLE"
 msgstr ""
 
-#: bd_sqlite.cpp:348 bd_sqlite.cpp:408
+#: bd_sqlite.cpp:345 bd_sqlite.cpp:403
 msgid "SELECT "
 msgstr ""
 
-#: bd_sqlite.cpp:349 bd_sqlite.cpp:470
+#: bd_sqlite.cpp:346 bd_sqlite.cpp:478
 msgid "WHERE "
 msgstr ""
 
-#: bd_sqlite.cpp:357 bd_sqlite.cpp:387 bd_sqlite.cpp:417 bd_sqlite.cpp:447
-#: bd_sqlite.cpp:501 bd_sqlite.cpp:520 bd_sqlite.cpp:613 bd_sqlite.cpp:630
-#: bd_sqlite.cpp:669 bd_sqlite.cpp:675
+#: bd_sqlite.cpp:353 bd_sqlite.cpp:384 bd_sqlite.cpp:411 bd_sqlite.cpp:442
+#: bd_sqlite.cpp:471 bd_sqlite.cpp:472 bd_sqlite.cpp:510 bd_sqlite.cpp:529
+#: bd_sqlite.cpp:619 bd_sqlite.cpp:637 bd_sqlite.cpp:676 bd_sqlite.cpp:682
 msgid "#"
 msgstr ""
 
-#: bd_sqlite.cpp:366 bd_sqlite.cpp:426 bd_sqlite.cpp:477 bd_sqlite.cpp:558
+#: bd_sqlite.cpp:363 bd_sqlite.cpp:421 bd_sqlite.cpp:485 bd_sqlite.cpp:565
 msgid "AND \""
 msgstr ""
 
-#: bd_sqlite.cpp:366 bd_sqlite.cpp:371 bd_sqlite.cpp:426 bd_sqlite.cpp:431
-#: bd_sqlite.cpp:477 bd_sqlite.cpp:502 bd_sqlite.cpp:522 bd_sqlite.cpp:558
-#: bd_sqlite.cpp:597 bd_sqlite.cpp:615 bd_sqlite.cpp:652 bd_sqlite.cpp:680
+#: bd_sqlite.cpp:363 bd_sqlite.cpp:368 bd_sqlite.cpp:421 bd_sqlite.cpp:426
+#: bd_sqlite.cpp:485 bd_sqlite.cpp:509 bd_sqlite.cpp:531 bd_sqlite.cpp:565
+#: bd_sqlite.cpp:603 bd_sqlite.cpp:621 bd_sqlite.cpp:659 bd_sqlite.cpp:687
 msgid "\""
 msgstr ""
 
-#: bd_sqlite.cpp:366 bd_sqlite.cpp:426 bd_sqlite.cpp:477 bd_sqlite.cpp:522
-#: bd_sqlite.cpp:558
+#: bd_sqlite.cpp:363 bd_sqlite.cpp:421 bd_sqlite.cpp:485 bd_sqlite.cpp:531
+#: bd_sqlite.cpp:565
 msgid "\"='"
 msgstr ""
 
-#: bd_sqlite.cpp:366 bd_sqlite.cpp:378 bd_sqlite.cpp:477 bd_sqlite.cpp:482
-#: bd_sqlite.cpp:492 bd_sqlite.cpp:504 bd_sqlite.cpp:522 bd_sqlite.cpp:558
-#: bd_sqlite.cpp:657 bd_sqlite.cpp:659 bd_sqlite.cpp:660
+#: bd_sqlite.cpp:363 bd_sqlite.cpp:375 bd_sqlite.cpp:485 bd_sqlite.cpp:490
+#: bd_sqlite.cpp:500 bd_sqlite.cpp:512 bd_sqlite.cpp:513 bd_sqlite.cpp:531
+#: bd_sqlite.cpp:565 bd_sqlite.cpp:664 bd_sqlite.cpp:666 bd_sqlite.cpp:667
 msgid "' "
 msgstr ""
 
-#: bd_sqlite.cpp:371 bd_sqlite.cpp:431 bd_sqlite.cpp:502 bd_sqlite.cpp:522
-#: bd_sqlite.cpp:597 bd_sqlite.cpp:615 bd_sqlite.cpp:652 bd_sqlite.cpp:671
-#: bd_sqlite.cpp:675 bd_sqlite.cpp:680
+#: bd_sqlite.cpp:368 bd_sqlite.cpp:426 bd_sqlite.cpp:509 bd_sqlite.cpp:510
+#: bd_sqlite.cpp:531 bd_sqlite.cpp:603 bd_sqlite.cpp:621 bd_sqlite.cpp:659
+#: bd_sqlite.cpp:678 bd_sqlite.cpp:682 bd_sqlite.cpp:687
 msgid ",\""
 msgstr ""
 
-#: bd_sqlite.cpp:378 bd_sqlite.cpp:435 bd_sqlite.cpp:639
+#: bd_sqlite.cpp:375 bd_sqlite.cpp:430 bd_sqlite.cpp:646
 msgid " FROM '"
 msgstr ""
 
-#: bd_sqlite.cpp:378
+#: bd_sqlite.cpp:375
 msgid " LIMIT "
 msgstr ""
 
-#: bd_sqlite.cpp:378
+#: bd_sqlite.cpp:375
 msgid ",1;"
 msgstr ""
 
-#: bd_sqlite.cpp:426 bd_sqlite.cpp:504
+#: bd_sqlite.cpp:421 bd_sqlite.cpp:512
 msgid "'"
 msgstr ""
 
-#: bd_sqlite.cpp:435 bd_sqlite.cpp:550
+#: bd_sqlite.cpp:430 bd_sqlite.cpp:557
 msgid "' WHERE "
 msgstr ""
 
-#: bd_sqlite.cpp:435 bd_sqlite.cpp:482 bd_sqlite.cpp:527 bd_sqlite.cpp:562
+#: bd_sqlite.cpp:430 bd_sqlite.cpp:490 bd_sqlite.cpp:536 bd_sqlite.cpp:569
 msgid ";"
 msgstr ""
 
-#: bd_sqlite.cpp:439
+#: bd_sqlite.cpp:434
 msgid "Row is not present."
 msgstr "Запис відсутній."
 
-#: bd_sqlite.cpp:482
+#: bd_sqlite.cpp:490
 msgid "SELECT 1 FROM '"
 msgstr ""
 
-#: bd_sqlite.cpp:492 bd_sqlite.cpp:692
+#: bd_sqlite.cpp:500 bd_sqlite.cpp:697
 msgid "INSERT INTO '"
 msgstr ""
 
-#: bd_sqlite.cpp:502 bd_sqlite.cpp:652 bd_sqlite.cpp:671 bd_sqlite.cpp:675
+#: bd_sqlite.cpp:509 bd_sqlite.cpp:510 bd_sqlite.cpp:659 bd_sqlite.cpp:678
+#: bd_sqlite.cpp:682
 msgid "\" "
 msgstr ""
 
-#: bd_sqlite.cpp:504
+#: bd_sqlite.cpp:512 bd_sqlite.cpp:513
 msgid ",'"
 msgstr ""
 
-#: bd_sqlite.cpp:507
+#: bd_sqlite.cpp:516
 msgid "("
 msgstr ""
 
-#: bd_sqlite.cpp:507
+#: bd_sqlite.cpp:516
 msgid ") VALUES ("
 msgstr ""
 
-#: bd_sqlite.cpp:507
+#: bd_sqlite.cpp:516
 msgid ")"
 msgstr ""
 
-#: bd_sqlite.cpp:512
+#: bd_sqlite.cpp:521
 msgid "UPDATE '"
 msgstr ""
 
-#: bd_sqlite.cpp:512
+#: bd_sqlite.cpp:521
 msgid "' SET "
 msgstr ""
 
-#: bd_sqlite.cpp:550
+#: bd_sqlite.cpp:557
 msgid "DELETE FROM '"
 msgstr ""
 
-#: bd_sqlite.cpp:567
+#: bd_sqlite.cpp:574
 msgid "Deletion is not permited. Data base is read only.\n"
 msgstr ""
 
-#: bd_sqlite.cpp:638
+#: bd_sqlite.cpp:645
 msgid "CREATE TEMPORARY TABLE 'temp_"
 msgstr ""
 
-#: bd_sqlite.cpp:638 bd_sqlite.cpp:692
+#: bd_sqlite.cpp:645 bd_sqlite.cpp:697
 msgid "'("
 msgstr ""
 
-#: bd_sqlite.cpp:638
+#: bd_sqlite.cpp:645
 msgid ");INSERT INTO 'temp_"
 msgstr ""
 
-#: bd_sqlite.cpp:639
+#: bd_sqlite.cpp:646
 msgid "' SELECT "
 msgstr ""
 
-#: bd_sqlite.cpp:639
+#: bd_sqlite.cpp:646
 msgid "';DROP TABLE '"
 msgstr ""
 
-#: bd_sqlite.cpp:645
+#: bd_sqlite.cpp:652
 msgid "CREATE TABLE '"
 msgstr ""
 
-#: bd_sqlite.cpp:645
+#: bd_sqlite.cpp:652
 msgid "' ("
 msgstr ""
 
-#: bd_sqlite.cpp:657
+#: bd_sqlite.cpp:664
 msgid "TEXT DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:659
+#: bd_sqlite.cpp:666
 msgid "INTEGER DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:660
+#: bd_sqlite.cpp:667
 msgid "DOUBLE DEFAULT '"
 msgstr ""
 
-#: bd_sqlite.cpp:684
+#: bd_sqlite.cpp:691
 msgid ", PRIMARY KEY ("
 msgstr ""
 
-#: bd_sqlite.cpp:684
+#: bd_sqlite.cpp:691
 msgid "));"
 msgstr ""
 
-#: bd_sqlite.cpp:692
+#: bd_sqlite.cpp:697
 msgid ") SELECT "
 msgstr ""
 
-#: bd_sqlite.cpp:692
+#: bd_sqlite.cpp:697
 msgid " FROM 'temp_"
 msgstr ""
 
-#: bd_sqlite.cpp:692
+#: bd_sqlite.cpp:697
 msgid "';DROP TABLE 'temp_"
 msgstr ""

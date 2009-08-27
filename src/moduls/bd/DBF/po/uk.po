@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 15:03+0300\n"
+"POT-Creation-Date: 2009-08-27 15:30+0300\n"
 "PO-Revision-Date: 2007-10-23 12:09+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -73,6 +73,11 @@ msgstr ""
 
 #: dbf_mod.cpp:115 dbf_mod.cpp:203
 msgid "help"
+msgstr ""
+
+#: dbf_mod.cpp:125 dbf_mod.cpp:252
+#, c-format
+msgid "%s"
 msgstr ""
 
 #: dbf_mod.cpp:153
@@ -149,11 +154,6 @@ msgstr ""
 #: dbf_mod.cpp:231
 msgid "Open table error!"
 msgstr "Помилка відкриття таблиці!"
-
-#: dbf_mod.cpp:252
-#, c-format
-msgid "%s"
-msgstr ""
 
 #: dbf_mod.cpp:285 dbf_mod.cpp:323 dbf_mod.cpp:412 dbf_mod.cpp:469
 msgid "Cell error!"

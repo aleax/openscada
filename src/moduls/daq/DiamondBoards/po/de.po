@@ -1,21 +1,24 @@
 # OpenSCADA.DAQ.DiamondBoards translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.DiamondBoards package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: diamond.cpp:55 diamond.cpp:135 diamond.cpp:136 diamond.cpp:137
 #: diamond.cpp:139 diamond.cpp:140 diamond.cpp:142 diamond.cpp:144
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-18 15:06+0300\n"
-"PO-Revision-Date: 2007-10-28 09:43+0200\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
-"Language-Team: LANGUAGE <de@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:37+0300\n"
+"PO-Revision-Date: 2009-08-17 14:02+0200\n"
+"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: diamond.cpp:38
 msgid "DiamondBoards"
@@ -23,7 +26,7 @@ msgstr ""
 
 #: diamond.cpp:39
 msgid "Diamond DA boards"
-msgstr "Diamond der Datenerfassungsplatte"
+msgstr "Datenerfassungkarte Diamond"
 
 #: diamond.cpp:40
 msgid "DAQ"
@@ -41,8 +44,8 @@ msgstr "Roman Savotschenko"
 msgid ""
 "Allow access to Diamond systems DA boards. Include support of Athena board."
 msgstr ""
-"Ermoeglicht den Zugang zur Datenerfassungsplatten von Diamond systems. Enthaelt "
-"Unterstuetzung der Systemplatte Athena."
+"Zugriff auf Datenerfassungskarten von Diamond Systems (und Systemplatform "
+"Athena)."
 
 #: diamond.cpp:45
 msgid "GPL"
@@ -78,7 +81,7 @@ msgstr ""
 
 #: diamond.cpp:102
 msgid "Diamond system board"
-msgstr "Diamond Platte"
+msgstr "Diamond Karte"
 
 #: diamond.cpp:102 diamond.cpp:109 diamond.cpp:110 diamond.cpp:124
 #: diamond.cpp:130 diamond.cpp:136 diamond.cpp:140
@@ -120,7 +123,7 @@ msgstr ""
 
 #: diamond.cpp:106
 msgid "Digital parameters' table"
-msgstr "Tabelle der diskreten Parameter"
+msgstr "Tabelle der Digitalparameter"
 
 #: diamond.cpp:106
 msgid "diamond_prm_d"
@@ -153,7 +156,7 @@ msgstr ""
 
 #: diamond.cpp:108
 msgid "Base board address"
-msgstr "Grundlegende Adresse der Platte"
+msgstr "Basisadresse Karte"
 
 #: diamond.cpp:108 diamond.cpp:137
 msgid "3"
@@ -170,7 +173,7 @@ msgstr ""
 
 #: diamond.cpp:109
 msgid "Interrupt vector"
-msgstr "Vektor des Unterbrechens"
+msgstr "Interrupt Nummer"
 
 #: diamond.cpp:109
 msgid "5"
@@ -183,7 +186,7 @@ msgstr ""
 
 #: diamond.cpp:110
 msgid "Digit IO config byte"
-msgstr "Konfigurationbyte diskreter IO"
+msgstr "Konfigurationbyte Diskret IO"
 
 #: diamond.cpp:111 diamond.cpp:157 diamond.cpp:187 diamond.cpp:261
 msgid "ADMODE"
@@ -191,7 +194,7 @@ msgstr ""
 
 #: diamond.cpp:111
 msgid "A/D interrupt mode"
-msgstr "AI-Sammlung nach Unterbrechen"
+msgstr "A/D Interrupt Betriebsart"
 
 #: diamond.cpp:112 diamond.cpp:222
 msgid "ADRANGE"
@@ -199,11 +202,11 @@ msgstr ""
 
 #: diamond.cpp:112
 msgid "A/D voltage range"
-msgstr "Spannungumfang AI"
+msgstr "A/D Spannungsbereich"
 
 #: diamond.cpp:113
 msgid "5v;10v"
-msgstr "5В;10В"
+msgstr "5V;10V"
 
 #: diamond.cpp:114 diamond.cpp:223
 msgid "ADPOLAR"
@@ -211,11 +214,11 @@ msgstr ""
 
 #: diamond.cpp:114
 msgid "A/D polarity"
-msgstr "AI-Polaritaet"
+msgstr "A/D Polarität"
 
 #: diamond.cpp:115
 msgid "Bipolar;Unipolar"
-msgstr "Bipolar;Monopolar"
+msgstr "Bipolar;Unipolar"
 
 #: diamond.cpp:116 diamond.cpp:166 diamond.cpp:224 diamond.cpp:267
 #: diamond.cpp:273
@@ -224,7 +227,7 @@ msgstr ""
 
 #: diamond.cpp:116
 msgid "A/D gain"
-msgstr "Verstaerkung nach AI"
+msgstr "A/D Verstärkung"
 
 #: diamond.cpp:117 diamond.cpp:126
 msgid "x1;x2;x4;x8"
@@ -237,7 +240,7 @@ msgstr ""
 
 #: diamond.cpp:118
 msgid "A/D convertion rate (Hz)"
-msgstr "Erfassungsrate nach einem Kanal AI (Гц)"
+msgstr "A/D Abtastrate (Hz)"
 
 #: diamond.cpp:118
 msgid "6"
@@ -291,7 +294,7 @@ msgstr ""
 
 #: diamond.cpp:125
 msgid "A/D converter gain"
-msgstr "Verstaerkung A/D des Konverters"
+msgstr "Verstärkung A/D Konverter"
 
 #: diamond.cpp:128 diamond.cpp:539
 msgid "d_prm"
@@ -299,11 +302,11 @@ msgstr ""
 
 #: diamond.cpp:128
 msgid "Digital parameter"
-msgstr "Diskretparameter"
+msgstr "Digitaler Parameter"
 
 #: diamond.cpp:129
 msgid "Digital parameter type"
-msgstr "Typ des Diskretparameters"
+msgstr "Typ des Digitalen Parameters"
 
 #: diamond.cpp:130 diamond.cpp:576 diamond.cpp:606 diamond.cpp:607
 msgid "PORT"
@@ -311,7 +314,7 @@ msgstr ""
 
 #: diamond.cpp:130
 msgid "Port"
-msgstr "Порт"
+msgstr "Port"
 
 #: diamond.cpp:130
 msgid "0;1;2"
@@ -328,7 +331,7 @@ msgstr ""
 
 #: diamond.cpp:135 diamond.cpp:139
 msgid "Value %"
-msgstr "Bedeutung %"
+msgstr "Wert %"
 
 #: diamond.cpp:135 diamond.cpp:139
 msgid "0;100"
@@ -356,7 +359,7 @@ msgstr "A/D Kode"
 
 #: diamond.cpp:142 diamond.cpp:144
 msgid "Value"
-msgstr "Bedeutung"
+msgstr "Wert"
 
 #: diamond.cpp:159
 msgid "DiamPrmA_"
@@ -368,7 +371,7 @@ msgstr ""
 
 #: diamond.cpp:194
 msgid "DSC driver is not initialized!"
-msgstr "DSC-Driver ist nicht inizialisiert!"
+msgstr "DSC-Treiber ist nicht initialisiert!"
 
 #: diamond.cpp:211
 #, c-format
@@ -386,7 +389,7 @@ msgstr ""
 
 #: diamond.cpp:238
 msgid "AD DSC driver task is not started!"
-msgstr "Aufgabe der Befragung der Analogparameter des DSC-Drivers ist nicht aktiviert!"
+msgstr "AD DSC Treiber ist nicht gestartet!"
 
 #: diamond.cpp:249
 msgid "addsc_task_stop"
@@ -394,12 +397,12 @@ msgstr ""
 
 #: diamond.cpp:250
 msgid "AD DSC task is not stopped!"
-msgstr "Aufgabe der Befragung der Analogparameter DSC ist nicht gestoppt!"
+msgstr "AD DSC Aufgabe ist nicht angehalten!"
 
 #: diamond.cpp:298
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
-msgstr ""
+msgstr "Thread <%u> ist gestartet. TID: %ld"
 
 #: diamond.cpp:338 diamond.cpp:703
 #, c-format
@@ -413,7 +416,7 @@ msgstr "Fehler dscADScanInt: %s %s"
 
 #: diamond.cpp:380
 msgid "DSC card's counter run from system time is corrected."
-msgstr ""
+msgstr "DSC Zähler ist mit der Systemzeit korrigiert"
 
 #: diamond.cpp:460
 #, c-format
@@ -422,7 +425,7 @@ msgstr ""
 
 #: diamond.cpp:461
 msgid "AD DSC task error."
-msgstr "Fehler in der Aufgabe DSC."
+msgstr "AD DSC Aufgabe Fehler."
 
 #: diamond.cpp:478
 msgid "info"
@@ -438,7 +441,7 @@ msgstr ""
 
 #: diamond.cpp:481
 msgid "Board config"
-msgstr "Konfiguration der Platte"
+msgstr "Konfiguration der Karte"
 
 #: diamond.cpp:482
 msgid "/board/dio"
@@ -446,7 +449,7 @@ msgstr ""
 
 #: diamond.cpp:482
 msgid "Digital IO ports. Select input!"
-msgstr "Diskrete IO-Porte. Eingaenge sind gewaehlt!"
+msgstr "Diskrete IO-Ports. Eingang auswählen!"
 
 #: diamond.cpp:484 diamond.cpp:485 diamond.cpp:486 diamond.cpp:487
 msgid "fld"
@@ -554,11 +557,11 @@ msgstr "Fehler dscDIOOutputBit: %s %s"
 
 #: diamond.cpp:674
 msgid "2:Controller is stoped"
-msgstr "2:Controller ist gestoppt"
+msgstr "2:Kontroller ist angehalten"
 
 #: diamond.cpp:676
 msgid "1:Parameter is disabled"
-msgstr "1:Parameter ist disaktiviert"
+msgstr "1:Parameter ist abgeschaltet"
 
 #: diamond.cpp:710
 #, c-format

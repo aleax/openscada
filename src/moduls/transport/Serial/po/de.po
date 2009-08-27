@@ -1,20 +1,23 @@
 # OpenSCADA.Transport.Serial translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
-#: mod_serial.cpp:58 mod_serial.cpp:381 mod_serial.cpp:395 mod_serial.cpp:397
-#, fuzzy
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+#: mod_serial.cpp:58 mod_serial.cpp:382 mod_serial.cpp:396 mod_serial.cpp:398
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-15 12:21+0300\n"
-"PO-Revision-Date: 2009-03-31 18:28+0300\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
-"Language-Team: <deu@li.org>\n"
+"POT-Creation-Date: 2009-08-27 15:45+0300\n"
+"PO-Revision-Date: 2009-08-20 10:16+0200\n"
+"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: mod_serial.cpp:41
 msgid "Serial"
@@ -22,11 +25,11 @@ msgstr ""
 
 #: mod_serial.cpp:42
 msgid "Serial interfaces"
-msgstr "Serielles Interface"
+msgstr "Serielle Schnittstellen"
 
 #: mod_serial.cpp:43
 msgid "Transport"
-msgstr "Transport"
+msgstr "Übertragung"
 
 #: mod_serial.cpp:45
 msgid "0.5.0"
@@ -41,8 +44,8 @@ msgid ""
 "Allow serial based interfaces. Used for data exchanging through serial "
 "interfaces like RS232, RS485, GSM and other."
 msgstr ""
-"Gewaehrt das serielle Nutzersinterface. Wird Fuers Umtauschen von Daten benutzt "
-"durch Nutzersinterfaces wie RS232, RS485, GSM und andere."
+"Ermöglicht die Verwendung der Seriellen Schnittstellen für den "
+"Datenaustausch mit RS232, RS485, GSM und anderen."
 
 #: mod_serial.cpp:48
 msgid "GPL"
@@ -58,7 +61,7 @@ msgstr ""
 
 #: mod_serial.cpp:100
 msgid "Input buffer length (kB)"
-msgstr "Die Laenge des Eingangspuffers (kB)"
+msgstr "Grösse des Eingangsspeichers (kB)"
 
 #: mod_serial.cpp:100
 msgid "4"
@@ -68,24 +71,16 @@ msgstr ""
 msgid "5"
 msgstr ""
 
-#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:173 mod_serial.cpp:446
+#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:173 mod_serial.cpp:447
 msgid "TMS"
 msgstr ""
 
-#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:425 mod_serial.cpp:661
+#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:426 mod_serial.cpp:663
 msgid "Timings"
-msgstr "zeitweilige Intervalle"
+msgstr "Intervall"
 
 #: mod_serial.cpp:101 mod_serial.cpp:104
-msgid "100"
-msgstr ""
-
-#: mod_serial.cpp:101
-msgid "0.57:320"
-msgstr ""
-
-#: mod_serial.cpp:104
-msgid "640:0.57:320"
+msgid "30"
 msgstr ""
 
 #: mod_serial.cpp:113
@@ -95,25 +90,31 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================= Optionen des Moduls <%s:%s> ===========================\n"
-"------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei ---------\n"
+"========================= Optionen des Moduls <%s:%s> "
+"===========================\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei ---------\n"
 "\n"
 
 #: mod_serial.cpp:124
 msgid "h"
 msgstr ""
 
-#: mod_serial.cpp:127 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
-#: mod_serial.cpp:661
+#: mod_serial.cpp:127 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
+#: mod_serial.cpp:663
 msgid "help"
 msgstr ""
 
-#: mod_serial.cpp:156 mod_serial.cpp:416 mod_serial.cpp:652
+#: mod_serial.cpp:137 mod_serial.cpp:385
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: mod_serial.cpp:156 mod_serial.cpp:417 mod_serial.cpp:654
 msgid "info"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
-#: mod_serial.cpp:661
+#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
+#: mod_serial.cpp:663
 msgid "fld"
 msgstr ""
 
@@ -123,21 +124,21 @@ msgstr ""
 
 #: mod_serial.cpp:159
 msgid "Options help"
-msgstr "Optionenhilfe"
+msgstr "Optionen Hilfe"
 
-#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:436
-#: mod_serial.cpp:437 mod_serial.cpp:655 mod_serial.cpp:661 mod_serial.cpp:673
-#: mod_serial.cpp:674
+#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:437
+#: mod_serial.cpp:438 mod_serial.cpp:657 mod_serial.cpp:663 mod_serial.cpp:675
+#: mod_serial.cpp:676
 msgid "root"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
-#: mod_serial.cpp:661
+#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
+#: mod_serial.cpp:663
 msgid "tp"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:419 mod_serial.cpp:425 mod_serial.cpp:655
-#: mod_serial.cpp:661
+#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
+#: mod_serial.cpp:663
 msgid "str"
 msgstr ""
 
@@ -153,107 +154,107 @@ msgstr ""
 msgid "rows"
 msgstr ""
 
-#: mod_serial.cpp:164 mod_serial.cpp:433 mod_serial.cpp:670
+#: mod_serial.cpp:164 mod_serial.cpp:434 mod_serial.cpp:672
 msgid "path"
 msgstr ""
 
-#: mod_serial.cpp:165 mod_serial.cpp:436 mod_serial.cpp:673
+#: mod_serial.cpp:165 mod_serial.cpp:437 mod_serial.cpp:675
 msgid "get"
 msgstr ""
 
-#: mod_serial.cpp:175 mod_serial.cpp:448
+#: mod_serial.cpp:175 mod_serial.cpp:449
 msgid "/dev/ttyS0:19200:8E2"
 msgstr ""
 
-#: mod_serial.cpp:188 mod_serial.cpp:461
+#: mod_serial.cpp:176
+msgid "0.57:320"
+msgstr ""
+
+#: mod_serial.cpp:189 mod_serial.cpp:463
 #, c-format
 msgid "Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."
 msgstr ""
-"Eingangstraffik %.4g kb, ausgehende %.4g kb. Maximale Wartezeit des Symbols %.4g ms."
+"Datenverkehr eingehend %.4g kb, ausgehend %.4g kb. Maximale Wartezeit für "
+"ein Zeichen %.4g msek."
 
-#: mod_serial.cpp:199 mod_serial.cpp:472
+#: mod_serial.cpp:200 mod_serial.cpp:474
 msgid ":"
 msgstr ""
 
-#: mod_serial.cpp:215 mod_serial.cpp:488
+#: mod_serial.cpp:216 mod_serial.cpp:490
 #, c-format
 msgid "Serial port '%s' open error."
-msgstr "Fehler der Eroeffnung des seriellen Anschlusses '%s'."
+msgstr "Fehler beim Öffnen der Seriellen Schnittstelle '%s'."
 
-#: mod_serial.cpp:245 mod_serial.cpp:518
+#: mod_serial.cpp:246 mod_serial.cpp:520
 #, c-format
 msgid "Speed '%d' error."
-msgstr "Fehler der Geschwindigkeit '%d'."
+msgstr "Fehler in der Geschwindigkeit '%d'."
 
-#: mod_serial.cpp:251 mod_serial.cpp:524
+#: mod_serial.cpp:252 mod_serial.cpp:526
 #, c-format
 msgid "Asynchronous data format '%s' error."
 msgstr "Formatfehler der asynchronen Daten '%s'."
 
-#: mod_serial.cpp:254 mod_serial.cpp:527
+#: mod_serial.cpp:255 mod_serial.cpp:529
 #, c-format
 msgid "Char length '%d' error."
-msgstr "Fehler in der Laenge des Symbols '%d'."
+msgstr "Fehler in der Länge des Zeichen '%d'."
 
-#: mod_serial.cpp:270 mod_serial.cpp:543
+#: mod_serial.cpp:271 mod_serial.cpp:545
 #, c-format
 msgid "Parity checking mode '%c' error."
-msgstr "Fehler im Regime '%c' der Paritaetkontrolle."
+msgstr "Fehler '%c' in der Parität."
 
-#: mod_serial.cpp:276 mod_serial.cpp:549
+#: mod_serial.cpp:277 mod_serial.cpp:551
 #, c-format
 msgid "Stop bits '%d' error."
-msgstr "Fehler in der Quantitaet der Stopbits '%d'."
+msgstr "Fehler in der Anzahl der Stopbits '%d'."
 
-#: mod_serial.cpp:287
+#: mod_serial.cpp:288
 msgid "open"
 msgstr ""
 
-#: mod_serial.cpp:288
+#: mod_serial.cpp:289
 msgid "Not opened!"
-msgstr "Nicht geoeffnet!"
+msgstr "Nicht geöffnet!"
 
-#: mod_serial.cpp:305
+#: mod_serial.cpp:306
 msgid "close"
 msgstr ""
 
-#: mod_serial.cpp:306
+#: mod_serial.cpp:307
 msgid "Not closed!"
 msgstr "Nicht geschlossen!"
 
-#: mod_serial.cpp:317
+#: mod_serial.cpp:318
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: mod_serial.cpp:368
+#: mod_serial.cpp:369
 #, c-format
 msgid "Serial received message <%d>."
-msgstr "Serial hat den Bericht bekommen <%d>."
+msgstr "Die Serielle Schnittstelle hat eine Nachricht empfangen <%d>."
 
-#: mod_serial.cpp:384
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: mod_serial.cpp:385
+#: mod_serial.cpp:386
 msgid "Error request to protocol."
-msgstr "Fehler der Anfrage ans Protokoll."
+msgstr "Fehler in der Protokollanfrage."
 
-#: mod_serial.cpp:392
+#: mod_serial.cpp:393
 #, c-format
 msgid "Serial replied message <%d>."
-msgstr "Serial hat mit dem Bericht geantwortet <%d>."
+msgstr "Die Serielle Schnittstelle hat die Nachricht bestätigt <%d>."
 
-#: mod_serial.cpp:419 mod_serial.cpp:655
+#: mod_serial.cpp:420 mod_serial.cpp:657
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: mod_serial.cpp:419 mod_serial.cpp:655
+#: mod_serial.cpp:420 mod_serial.cpp:657
 msgid "ADDR"
 msgstr ""
 
-#: mod_serial.cpp:420
+#: mod_serial.cpp:421
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
@@ -262,48 +263,52 @@ msgid ""
 "                          230400, 460800, 500000, 576000 or 921600);\n"
 "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."
 msgstr ""
-"Serieller Transport hat die Adresse im Format: \"[dev]:[speed]:[format]"
+"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:[format]"
 "\". Wo:\n"
-"    dev - Adresse des seriellen Apparats (/dev/ttyS0);\n"
-"    speed - Geschwindigkeit des Apparats (300, 600, 1200, 2400, 4800, 9600, 19200, "
-"38400, 57600, 115200,\n"
+"    dev - Schnittstelle des Seriellen Anschlusses (/dev/ttyS0);\n"
+"    speed - Geschwindigkeit der Seriellen Schnittstelle (300, 600, 1200, "
+"2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 "                                 230400, 460800, 500000, 576000 oder "
 "921600);\n"
-"    format - Format der asynchronen Daten '<Groesse><Paritaet><Stop>' (8N1, 7E1, "
-"5O2)."
+"    format - Format der asynchronen Daten '<Grösse><Parität><Stop>' (8N1, "
+"7E1, 5O2)."
 
-#: mod_serial.cpp:425 mod_serial.cpp:434 mod_serial.cpp:661 mod_serial.cpp:671
+#: mod_serial.cpp:426 mod_serial.cpp:435 mod_serial.cpp:663 mod_serial.cpp:673
 msgid "/prm/cfg/TMS"
 msgstr ""
 
-#: mod_serial.cpp:426
+#: mod_serial.cpp:427
 msgid ""
 "Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 "    frm - maximum frame length, in ms."
 msgstr ""
-"Zeitweilige Intervalle der Verbindung im Format: \"[symbol]:[frm]\". Wo:\n"
-"    symbol - maximale Zeit eines Symbols, wird fuer Detektion benutzt "
-"Frameende, in ms;\n"
-"    frm - maximale Framelaenge, in ms."
+"Wartezeit der Verbindung im Format: \"[symbol]:[frm]\". Wo:\n"
+"    symbol - maximale Wartezeit für ein Zeichens, wird für die Erkennung des "
+"Rahmenendes verwendet, in msek;\n"
+"    frm - maximale Rahmenlänge, in msek."
 
-#: mod_serial.cpp:437 mod_serial.cpp:674
+#: mod_serial.cpp:438 mod_serial.cpp:676
 msgid "set"
 msgstr ""
 
-#: mod_serial.cpp:582
+#: mod_serial.cpp:450
+msgid "640:0.57:320"
+msgstr ""
+
+#: mod_serial.cpp:584
 msgid "Transport is not started!"
-msgstr "Transport ist nicht gestartet!"
+msgstr "Übertragung ist nicht gestartet!"
 
-#: mod_serial.cpp:598
+#: mod_serial.cpp:600
 msgid "Writing request error."
-msgstr "Fehler der Sendung der Anfrage."
+msgstr "Fehler beim Senden der Anfrage."
 
-#: mod_serial.cpp:615
+#: mod_serial.cpp:617
 msgid "Respond from remote device is timeouted."
-msgstr "Wartezeit der Antwort vom Apparat ist aus."
+msgstr "Zeitüberschreitung für die Anwort des entfernten Systems."
 
-#: mod_serial.cpp:656
+#: mod_serial.cpp:658
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
@@ -312,25 +317,25 @@ msgid ""
 "                          230400, 460800, 500000, 576000 or 921600 );\n"
 "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."
 msgstr ""
-"Serieller Transport hat die Adresse im Format: \"[dev]:[speed]:[format]"
+"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:[format]"
 "\". Wo:\n"
-"    dev - Adresse des seriellen Apparats (/dev/ttyS0);\n"
-"    speed - Geschwindigkeit des Apparats (300, 600, 1200, 2400, 4800, 9600, 19200, "
-"38400, 57600, 115200,\n"
+"    dev - Schnittstelle des Seriellen Anschlusses (/dev/ttyS0);\n"
+"    speed - Geschwindigkeit der Seriellen Schnittstelle (300, 600, 1200, "
+"2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 "                                 230400, 460800, 500000, 576000 oder "
 "921600 );\n"
-"    format - Format der asynchronen Daten '<Groesse><Paritaet><Stop>' (8N1, 7E1, "
-"5O2)."
+"    format - Format der asynchronen Daten '<Grösse><Parität><Stop>' (8N1, "
+"7E1, 5O2)."
 
-#: mod_serial.cpp:662
+#: mod_serial.cpp:664
 msgid ""
 "Connection timings in format: \"[conn]:[symbol]:[frm]\". Where:\n"
 "    conn - maximum time for connection respond wait, in ms;\n"
 "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 "    frm - maximum frame length, in ms."
 msgstr ""
-"Zeitweilige Intervalle der Verbindung im Format: \"[conn]:[symbol]:[frm]\". Wo:\n"
-"    conn - maximale Wartezeit der Antwort der Verbindung, in ms;\n"
-"    symbol - maximale Zeit eines Symbols, wird fuer Detektion benutzt "
-"Frameende, in ms;\n"
-"    frm - maximae Framelaenge, in ms."
+"Wartezeit der Verbindung im Format: \"[conn]:[symbol]:[frm]\". Wo:\n"
+"    conn - maximale Wartezeit für die Antwort der Verbindung, in msek;\n"
+"    symbol - maximale Wartezeit für ein Zeichen, wird für die Erkennung des "
+"Rahmenendes verwendet, in msek;\n"
+"    frm - maximale Rahmenlänge, in msek."
