@@ -4352,7 +4352,7 @@ msgstr "Повний зв'язок"
 
 #: widget.cpp:1349
 msgid "From style"
-msgstr ""
+msgstr "Зі стиля"
 
 #: widget.cpp:1404 widget.cpp:1470
 msgid "Cfg"
