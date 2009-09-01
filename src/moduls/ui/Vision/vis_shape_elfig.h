@@ -163,7 +163,7 @@ class ShapeElFigure : public WdgShape
 	//Public attributes
 	QVector<RectItem> rectItems;		//RectItem's container
 	QPainterPath 	newPath,		//Null path
-			rectPath,		//Path fo RectItem creation
+			rectPath,		//Path for RectItem creation
         		ellipse_startPath, ellipse_endPath,
         		ellipse_draw_startPath, ellipse_draw_endPath,
                         inundationPath,
@@ -172,7 +172,6 @@ class ShapeElFigure : public WdgShape
     
 	bool status; 				//Check fo any primitive paint key pressed
 	int shapeType; 				//Selected figure type
-        int kr;    
     
     private slots:
         void toolAct( QAction* );
@@ -183,19 +182,19 @@ class ShapeElFigure : public WdgShape
         int itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems, WdgView *w );			//Check for figure type under cursor
         void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );	//Move figure procedure
     
-	QPointF rotate( const QPointF &pnt, double alpha );
-	QPointF unRotate( const QPointF &pnt, double alpha, double a, double b );
-	QPointF arc( double t, double a, double b);	
-	double angle( const QLineF &l, const QLineF &l1 );
-	double length( const QPointF &pt1, const QPointF &pt2 );				
-        bool holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts );
-        void moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
-        int  realRectNum( int rect_num_old, const QVector<ShapeItem> &shapeItems );
+	QPointF rotate( const QPointF &pnt, double alpha );                                                     //Rotate the point around the centre of the widget
+        QPointF unRotate( const QPointF &pnt, double alpha, double a, double b );                               //Unrotate the point around the centre of the widget
+	QPointF arc( double t, double a, double b);	                                                        //Compute the point of the arc due to the given parameter "t"
+        double angle( const QLineF &l, const QLineF &l1 );                                                      //Compute the angle between two lines
+        double length( const QPointF &pt1, const QPointF &pt2 );				                //Compute the lenght between two points
+        bool holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts );                                       //Compute the number of connected figures with the given one
+        void moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w ); //Moving the figure(s) with the help of keyboard 
+        int  realRectNum( int rect_num_old, const QVector<ShapeItem> &shapeItems );                             //Compute the real rect number of the figure when several figures are selected
         void rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts, WdgView *w );
         void rectNum3_4( const QVector<ShapeItem> &shapeItems);
         void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
         void checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems );
-        void paintImage( WdgView *view );
+        void paintImage( WdgView *view );                                                                       //Building the image to be drawn in the Paint event
         QPainterPath painterPath( float el_width, float el_border_width, int el_type, double el_ang,
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
@@ -252,11 +251,10 @@ class ShapeElFigure : public WdgShape
         QPointF Prev_pos_1, Prev_pos_2;
         QVector<int> num_vector;
         double angle_temp;
-        bool flag_angle_temp;
+        bool flag_angle_temp, flag_geom;
         int rect_dyn;
         QImage rect_img;
         WidthMap shapeWidths_unScale;
-
     };
 }
 

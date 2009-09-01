@@ -42,7 +42,7 @@ using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),
-             status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_release(false), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false),
+             status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_release(false), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false), flag_geom (false),
                 flag_arc_rect_3_4(false), flag_first_move(false), flag_inund_break(false), flag_copy(false), flag_move(false), flag_check_pnt_inund(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
                 count_Shapes(0), geomW(0), geomH(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1), index_del(-1), rect_dyn(-1)
 {
@@ -109,17 +109,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    w->setFocusPolicy( (atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) ? Qt::TabFocus : Qt::NoFocus );
 	    break;
         case 9: 	//geomW
-            if( geomW != atoi(val.c_str()) && fabs( elFD->orient - 0 ) >= 0.01 )
+            if( geomW != atoi(val.c_str()) )
             {
                 geomW = atoi(val.c_str());
-                rel_list = true;
+                rel_list = flag_geom = true;
             }
 	    break;
         case 10:	//geomH
-            if( geomH != atoi(val.c_str()) && fabs( elFD->orient - 0 ) >= 0.01 )
+            if( geomH != atoi(val.c_str()) )
             {
                 geomH = atoi(val.c_str());
-                rel_list = true;
+                rel_list = flag_geom = true;
             }
 	    break;
 	case 12:	//geomMargin
@@ -998,7 +998,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         QVector<inundationItem> in_build;
         QVector<int> fill_number;
         //- Detecting if there is a necessity to rebuild inundationItem -
-        if( shapeItems.size() != shapeItems_temp.size() ){ fill_build = true;}
+        if( (shapeItems.size() != shapeItems_temp.size()) || (flag_geom && fabs( elFD->orient - 0 ) >= 0.01) ){ fill_build = true;}
         else
             for( int i = 0; i < shapeItems.size(); i++ )
             {
@@ -1157,11 +1157,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         if( rectItems.size() )	rectItems.clear();
         flag_ctrl    = false;
     }
-    if( up && !w->allAttrLoad( ) && 
-        (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) )
+    if( up && !w->allAttrLoad( ) && ( (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0)) 
+        || (flag_geom && !paint) ) )
     {
-        if( uiPrmPos == -1 ) paintImage( w );
+        if( uiPrmPos == -1 ){ paintImage( w ); }
         else { paintImage( w ); w->update(); }
+        flag_geom = false;
         shapePnts_temp = elFD->shapePnts;
         shapeWidths_temp = elFD->shapeWidths;
         shapeColors_temp = elFD->shapeColors;
@@ -5843,11 +5844,13 @@ void ShapeElFigure::paintImage( WdgView *view )
             pnt.setPen( Qt::NoPen );
             pnt.drawPath( inundationItems[i].path );
         }
+        //-- Sorting the figures in each fill(inundation) --
         QVector<int> number_shape;
         number_shape = inundationItems[i].number_shape;
         std::sort(number_shape.begin(), number_shape.end());
         for( int j = 0; j < number_shape.size(); j++ )
         {
+            //--- Making the resulting arrary of all figures which take part in all fills(inundations) ---
             shape_inund_all.push_back(number_shape[j]);
             if( (*widths)[shapeItems[number_shape[j]].border_width] > 0.01 )
             {
@@ -5876,6 +5879,7 @@ void ShapeElFigure::paintImage( WdgView *view )
     }
     bool flag_draw;
     //- Drawing all el_figures -
+    //-- Checking if the figure is inside the array of figures which take part in all fills --
     for( int k=0; k < shapeItems.size(); k++ )
     {
         flag_draw = true;
@@ -5885,7 +5889,7 @@ void ShapeElFigure::paintImage( WdgView *view )
                 flag_draw = false;
                 break;
             }
-        if( flag_draw )
+        if( flag_draw )//-- If the figure is out of this array, then draw it(it is the figures which take part in none fill ) --
         {
             if( (*widths)[shapeItems[k].border_width] > 0.01 )
             {
