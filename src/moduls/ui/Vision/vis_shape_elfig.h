@@ -254,7 +254,7 @@ class ShapeElFigure : public WdgShape
         bool flag_angle_temp, flag_geom;
         int rect_dyn;
         QImage rect_img;
-        WidthMap shapeWidths_unScale;
+        WidthMap shapeWidths_UnEdit;
     };
 }
 

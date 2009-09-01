@@ -1,4 +1,8 @@
 2009-08-12 Maxim
+- FIX:/UI/Vision: Scaling and unscaling of the width in devel mode is fixed for primitive ElFigure.
+
+
+2009-08-12 Maxim
 - FIX:/UI/Vision: Repainting the picture when geometry of widget is changed is fixed for primitive ElFigure.
 
 

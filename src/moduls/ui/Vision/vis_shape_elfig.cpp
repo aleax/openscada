@@ -42,7 +42,7 @@ using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),
-             status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_release(false), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false), flag_geom (false),
+             status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_release(false), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false), flag_geom (false)/*, flag_edit(false)*/,
                 flag_arc_rect_3_4(false), flag_first_move(false), flag_inund_break(false), flag_copy(false), flag_move(false), flag_check_pnt_inund(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
                 count_Shapes(0), geomW(0), geomH(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1), index_del(-1), rect_dyn(-1)
 {
@@ -75,6 +75,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
     QVector<inundationItem> &inundationItems_temp = elFD->inundationItems_temp;
     PntMap &shapePnts_temp = elFD->shapePnts_temp;
+    WidthMap shapeWidths_unScale;// = elFD->shapeWidths_unScale;
     WidthMap &shapeWidths_temp = elFD->shapeWidths_temp;
     ColorMap &shapeColors_temp = elFD->shapeColors_temp;
     ImageMap &shapeImages_temp = elFD->shapeImages_temp;
@@ -278,6 +279,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); )
             if(pi->first <= -10 ) (*pnts).erase ( pi++ );
             else ++pi;
+        //- Scaling the widths which index is more than 0 -
         for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
         {
             if(pi->first <= -10 ) (*widths).erase ( pi++ );
@@ -395,7 +397,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         else (*widths)[w_index] = 0;
                         w_index -= 1;
                 }
-                else width = -5;
+                else
+                    width = -5;
                 //-- Line color --
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
@@ -1169,7 +1172,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         shapeImages_temp = elFD->shapeImages;
         shapeStyles_temp = elFD->shapeStyles;
     }
-    if( rel_list && !w->allAttrLoad( ) && runW )
+    //- UnScaling the widths -
+    if( rel_list && !w->allAttrLoad( ) && ( runW || (devW && !devW->edit()) ) )
         elFD->shapeWidths = shapeWidths_unScale;
     return up;
 }
@@ -1530,6 +1534,21 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 
 void ShapeElFigure::editEnter( WdgView *view )
 {
+    //- Scaling the widths if the scale is more than 1 -
+    ElFigDt *elFD = (ElFigDt*)view->shpData;
+    double scale;
+    if( view->xScale(true) < view->yScale(true) ) scale = view->xScale(true);
+    else scale = view->yScale(true);
+    shapeWidths_UnEdit = elFD->shapeWidths;
+    WidthMap *widths = &elFD->shapeWidths;
+    for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
+        if( fabs( pi->second - 0 ) >= 0.01 )
+        {
+            pi->second = vmin(1000,vmax(1,pi->second * scale));
+            ++pi;
+        }
+        else ++pi;
+
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
 
     //- Self-shape tools -
@@ -1596,6 +1615,9 @@ void ShapeElFigure::editExit( WdgView *view )
         rectItems.clear();
         paintImage(view);
     }
+    //- UnScaling the widths -
+    ElFigDt *elFD = (ElFigDt*)view->shpData;
+    elFD->shapeWidths = shapeWidths_UnEdit;
 }
 
 void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
