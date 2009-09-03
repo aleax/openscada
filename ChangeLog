@@ -1,8 +1,12 @@
-2009-08-12 Maxim
+2009-09-03 Maxim
+- FIX:/UI/Vision: Translation of the "Connections" button into Russian and Ukrainian is changed.
+
+
+2009-09-02 Maxim
 - FIX:/UI/Vision: Scaling and unscaling of the width in devel mode is fixed for primitive ElFigure.
 
 
-2009-08-12 Maxim
+2009-09-01 Maxim
 - FIX:/UI/Vision: Repainting the picture when geometry of widget is changed is fixed for primitive ElFigure.
 
 
