@@ -9,9 +9,9 @@
 #: bd_sqlite.cpp:716
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.0\n"
+"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:33+0300\n"
+"POT-Creation-Date: 2009-09-06 18:05+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -34,7 +34,7 @@ msgid "BD"
 msgstr "Datenbank"
 
 #: bd_sqlite.cpp:38
-msgid "1.6.0"
+msgid "1.6.1"
 msgstr ""
 
 #: bd_sqlite.cpp:39

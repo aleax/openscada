@@ -1,7 +1,8 @@
 2009-09-06 Roman
-- !!!!:/SYS: The source tree version is changed to 0.6.4. RPM-build speck file is changed for build version 0.6.4 packages.
+- !!!!:/SYS: The source tree version is changed to 0.6.4. OpenSCADA library version changed to 0:11:0.
+    RPM-build speck file is changed for build version 0.6.4 packages.
 - !!!!:/DAQ/ICP_DAS: New module for hardware of the ICP DAS support is added.
-- !!:/DemoDB: Some fixes. Translation updating. SO main page is feature expanded. Contour frame's fonts is rised and buttons for value changing is added.
+- !!:/DemoDB: Some fixes. Translations updating. SO main page is feature expanded. Contour frame's fonts is rised and buttons for value changing is added.
 - /SYS: Encode variant "ID" is renamed to "oscdID".
 - FIX:/DAQ/BlockCalc: A controller configurtion field "IO" is expanded to size 1000 from 200.
 - /DAQ/DAQGate: Global checking for write equal values is added.
@@ -12,6 +13,12 @@
 - !!:/Special/FLibSYS: The functions for direct access to archives is removed.
 - !:/UI/VCAEngine: The function wdgList() of user's API output changet to Array object.
 - FIX:/UI/Vision: The primitive "FormEl" fields edit closing is added on widget hide.
+- !:/Archive/DBArch: Document is updated.
+- !!:/Archive/FSArch: Document is updated and released version 1.3.1.
+- !:/DB/DBF: Document is updated.
+- !:/DB/FireBird: Document is updated.
+- !!:/DB/MySQL: Document is updated and released version 1.6.1.
+- !!:/DB/SQLite: Document is updated and released version 1.6.1.
 
 
 2009-09-03 Maxim
