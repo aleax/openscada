@@ -261,7 +261,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(TSYS::strEncode(opt->text(),TSYS::ID));
+	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	usrDel(opt->text(),true);
     }
     else if( a_path == "/br/grp_" || a_path == "/usgr/grps" )
@@ -273,7 +273,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(TSYS::strEncode(opt->text(),TSYS::ID));
+	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
 	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	grpDel(opt->text(),true);
     }
     else TSubSYS::cntrCmdProc(opt);

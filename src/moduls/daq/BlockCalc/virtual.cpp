@@ -141,7 +141,7 @@ void TipContr::postEnable( int flag )
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::TransltText|TCfg::NoVal,"200") );
+    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::TransltText|TCfg::NoVal,"1000") );
 
     //Blok's db structure
     blk_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
@@ -502,7 +502,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);

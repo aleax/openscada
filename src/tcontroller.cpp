@@ -425,7 +425,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0660,"root","DAQ",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
 	    at(vid).at().setName(opt->text());
 	}

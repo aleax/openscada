@@ -211,7 +211,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(TSYS::strEncode(opt->attr("id"),TSYS::ID).c_str(),opt->text().c_str());
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mFnc,opt->attr("id"),-1,1);
     }
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )

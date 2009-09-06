@@ -171,7 +171,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid); at(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);

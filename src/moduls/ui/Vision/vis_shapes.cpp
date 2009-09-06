@@ -512,8 +512,22 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     return true;
 }
 
-bool ShapeFormEl::event( WdgView *view, QEvent *event )
+bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
+    if( event->type() == QEvent::Hide && qobject_cast<RunWdgView*>(w) )
+    {
+	ShpDt *shD = (ShpDt*)w->shpData;
+	switch( shD->elType )
+	{
+	    case 0:	//Line edit
+		((LineEdit*)shD->addrWdg)->setValue(((LineEdit*)shD->addrWdg)->value());
+		break;
+	    case 1:	//Text edit
+		((TextEdit*)shD->addrWdg)->setText(((TextEdit*)shD->addrWdg)->text());
+		break;
+	}
+    }
+    
     return false;
 }
 

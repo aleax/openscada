@@ -743,7 +743,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
 		if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
 	    break;
-	case TSYS::ID:
+	case TSYS::oscdID:
 	    sout.reserve(in.size());
 	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
 		switch( in[i_sz] )

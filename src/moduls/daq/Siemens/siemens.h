@@ -137,7 +137,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
 	vector<SLnk>	plnk;			//Parameter's links
 
-	string	acq_err;
+	ResString	acq_err;
 	time_t	acq_err_tm;
 };
 
@@ -188,15 +188,15 @@ class TMdContr: public TController
 	void prmEn( const string &id, bool val );		//Enable parameter to process list
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
 	//- Values process -
-	char getValB( SValData ival, string &err );
-	int  getValI( SValData ival, string &err );
-	double getValR( SValData ival, string &err );
-	string getValS( SValData ival, string &err );
+	char getValB( SValData ival, ResString &err );
+	int  getValI( SValData ival, ResString &err );
+	double getValR( SValData ival, ResString &err );
+	string getValS( SValData ival, ResString &err );
 
-	void setValB( bool ivl, SValData ival, string &err );
-	void setValI( int ivl, SValData ival, string &err );
-	void setValR( double ivl, SValData ival, string &err );
-	void setValS( const string &ivl, SValData ival, string &err );
+	void setValB( bool ivl, SValData ival, ResString &err );
+	void setValI( int ivl, SValData ival, ResString &err );
+	void setValR( double ivl, SValData ival, ResString &err );
+	void setValS( const string &ivl, SValData ival, ResString &err );
 
 	//> Service
 	void postDisable( int flag );				//Delete all DB if flag 1

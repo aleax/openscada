@@ -66,7 +66,7 @@ using namespace FLibSYS;
 //*************************************************
 Lib::Lib( string src )
 {
-    //- Set modul info! -
+    //> Set modul info!
     mId		= MOD_ID;
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
@@ -124,21 +124,6 @@ void Lib::postEnable( int flag )
 
     reg( new floatSplitWord() );
     reg( new floatMergeWord() );
-
-    reg( new varhOpen() );
-    reg( new varhBufOpen() );
-    reg( new varhClose() );
-    reg( new varhBeg() );
-    reg( new varhEnd() );
-    reg( new varhCopyBuf() );
-    reg( new varhGetI() );
-    reg( new varhGetR() );
-    reg( new varhGetB() );
-    reg( new varhGetS() );
-    reg( new varhSetI() );
-    reg( new varhSetR() );
-    reg( new varhSetB() );
-    reg( new varhSetS() );
 }
 
 void Lib::modStart( )
@@ -157,116 +142,12 @@ void Lib::modStop( )
     for( int i_l = 0; i_l < lst.size(); i_l++ )
 	at(lst[i_l]).at().setStart(false);
 
-    varchFree( );	//Used value archives and buffers free
-
     run_st = false;
-}
-
-int Lib::varchOpen( const string &inm )
-{
-    int i_id;
-
-    AutoHD<TVArchive> arch;
-    ResAlloc res(varch_res,true);
-    try
-    {
-	if( dynamic_cast<TVal *>(&SYS->nodeAt(inm,0,'.').at()) )
-	    arch = dynamic_cast<TVal&>(SYS->nodeAt(inm,0,'.').at()).arch();
-	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(inm,0,'.').at()) )
-	    arch = SYS->nodeAt(inm,0,'.');
-	if( arch.freeStat() ) return -1;
-	for( i_id = 0; i_id < varch_lst.size(); i_id++ )
-	    if( !varch_lst[i_id].arch )
-	    {
-		varch_lst[i_id].arch = new AutoHD<TVArchive>(arch);
-		varch_lst[i_id].isArch = true;
-		break;
-	    }
-	if( i_id >= varch_lst.size() )
-	{
-	    SVarch varch_el;
-	    varch_el.arch = new AutoHD<TVArchive>(arch);
-	    varch_el.isArch = true;
-	    varch_lst.push_back(varch_el);
-	}
-    }catch(TError err){ return -1; }
-
-    return	i_id;
-}
-
-void Lib::varchClose( int id )
-{
-    ResAlloc res(varch_res,true);
-    if( id >= 0 && id < varch_lst.size() && varch_lst[id].arch )
-    {
-	if(varch_lst[id].isArch)	delete varch_lst[id].arch;
-	else delete varch_lst[id].buf;
-	varch_lst[id].arch = NULL;
-    }
-}
-
-bool Lib::isArch(int id)
-{
-    ResAlloc res(varch_res,false);
-    if( id >= 0 && id < varch_lst.size() && varch_lst[id].arch )	return varch_lst[id].isArch;
-    return false;
-}
-
-AutoHD<TVArchive> Lib::varch( int id )
-{
-    AutoHD<TVArchive> rez;
-    ResAlloc res(varch_res,false);
-    if( id >= 0 && id < varch_lst.size() && varch_lst[id].isArch && varch_lst[id].arch )
-	rez = *varch_lst[id].arch;
-    return rez;
-}
-
-void Lib::varchFree( )
-{
-    ResAlloc res(varch_res,true);
-    for( int i_id = 0; i_id < varch_lst.size(); i_id++ )
-	if( varch_lst[i_id].isArch )	delete varch_lst[i_id].arch;
-	else delete varch_lst[i_id].buf;
-    varch_lst.clear();
-}
-
-int Lib::varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres )
-{
-    ResAlloc res(varch_res,true);
-
-    TValBuf *vb = new TValBuf(vtp,isz,ipr,ihgrd,ihres);
-    if( !vb )	return -1;
-
-    int i_id;
-    for( i_id = 0; i_id < varch_lst.size(); i_id++ )
-	if( !varch_lst[i_id].buf )
-	{
-	    varch_lst[i_id].buf = vb;
-	    varch_lst[i_id].isArch = false;
-	    break;
-	}
-    if( i_id >= varch_lst.size() )
-    {
-	SVarch varch_el;
-	varch_el.buf = vb;
-	varch_el.isArch = false;
-	varch_lst.push_back(varch_el);
-    }
-
-    return i_id;
-}
-
-TValBuf *Lib::vbuf( int id )
-{
-    ResAlloc res(varch_res,false);
-    if( id >= 0 && id < varch_lst.size() && !varch_lst[id].isArch )
-	return varch_lst[id].buf;
-    return NULL;
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TSpecial::cntrCmdProc(opt);
@@ -274,7 +155,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( (a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt) )
     {

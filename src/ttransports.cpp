@@ -559,7 +559,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    inAdd(vid); inAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	inDel(opt->attr("id"),true);
@@ -574,7 +574,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    outAdd(vid); outAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	outDel(opt->attr("id"),true);

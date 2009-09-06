@@ -65,7 +65,7 @@ class wdgList : public TFunction
     public:
 	wdgList( ) : TFunction("WdgList")
 	{
-	    ioAdd( new IO("list",_("List"),IO::String,IO::Return|IO::FullText) );
+	    ioAdd( new IO("list",_("List"),IO::Object,IO::Return) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
 	    ioAdd( new IO("pg",_("Pages"),IO::Boolean,IO::Default,"0") );
 	    setStart(true);
@@ -76,7 +76,7 @@ class wdgList : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    string sls;
+	    TAreaObj *rez = new TAreaObj();
 	    vector<string> ls;
 
 	    try
@@ -90,8 +90,8 @@ class wdgList : public TFunction
 		else if( dynamic_cast<Widget*>(&nd.at()) && !val->getB(2) )	((Widget*)&nd.at())->wdgList(ls);
 	    }
 	    catch(TError err) { }
-	    for( int i_l = 0; i_l < ls.size(); i_l++ ) sls += ls[i_l]+"\n";
-	    val->setS(0,sls);
+	    for( int i_l = 0; i_l < ls.size(); i_l++ ) rez->propSet(TSYS::int2str(i_l),ls[i_l]);
+	    val->setO(0,rez);
 	}
 };
 

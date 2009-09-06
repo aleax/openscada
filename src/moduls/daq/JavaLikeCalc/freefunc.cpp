@@ -301,7 +301,7 @@ void Func::progCompile( )
 
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
-    o_prpf = "";
+    o_prpf.clear();
     la_pos = 0;		//LA position
     prg    = "";	//Clear programm
     regClear();		//Clear registers list
@@ -393,7 +393,7 @@ Reg *Func::regTmpNew( )
 
 void Func::regTmpClean( )
 {
-    o_prpf = "";
+    o_prpf.clear();
     for( int i_rg = 0; i_rg < mTmpRegs.size(); i_rg++ )
 	delete mTmpRegs[i_rg];
     mTmpRegs.clear();
@@ -585,7 +585,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
     //> Check allowing type operations
     if( !op1->objEl() )
-	switch(op1->vType(this))
+	switch( op1->vType(this) )
 	{
 	    case Reg::Bool:
 		switch(cod)
@@ -881,8 +881,8 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     uint16_t addr;
     int p1_pos = -1, p2_pos = -1;
 
-    if( (prm1 && prm1->vType(this) == Reg::String) ||
-	(prm2 && prm2->vType(this) == Reg::String) )
+    if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
+	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
 	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
     //> Free parameter's registers
     if( prm1 )	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
@@ -977,7 +977,7 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     }
     obj->free();
     rez = regAt(regNew());
-    rez->setType(Reg::String);
+    rez->setType(Reg::Real);
 
     //> Make code
     uint16_t addr;
@@ -1002,8 +1002,9 @@ Reg *Func::cdProp( Reg *obj, Reg *prp )
     {
 	prg += (uint8_t)Reg::OPrpSt;
 	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-	prg += (uint8_t)o_prpf.size();
-	prg += o_prpf;
+	prg += (uint8_t)o_prpf.back().size();
+	prg += o_prpf.back();
+	o_prpf.pop_back();
     }
     else
     {
@@ -1489,7 +1490,6 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Move from %d to %d.\n",*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-
 		switch( reg[*(uint16_t*)(cprg+3)].vType(this) )
 		{
 		    case Reg::Bool:	reg[*(uint16_t*)(cprg+1)] = getValB(val,reg[*(uint16_t*)(cprg+3)]);	break;
@@ -1502,7 +1502,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    //>> Load properties for object
 	    case Reg::OPrpSt:
 #if OSC_DEBUG >= 5
-		printf("CODE: Set object's %d properties to string len %d\n",*(uint16_t*)(cprg+1),*(uint8_t*)(cprg+3));
+		printf("CODE: Set object's %d properties to string len %d(%s)\n",*(uint16_t*)(cprg+1),*(uint8_t*)(cprg+3),string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str());
 #endif
 		reg[*(uint16_t*)(cprg+1)].propAdd(string((char*)cprg+4,*(uint8_t*)(cprg+3)));
 		cprg += 4 + *(uint8_t*)(cprg+3); break;
@@ -1936,7 +1936,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    prms.push_back(getVal(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))]));
 		//> Call
 		TVariant rez = oFuncCall( obj, reg[*(uint16_t*)(cprg+1)].propGet(reg[*(uint16_t*)(cprg+1)].propSize()-1), prms );
-		//> Process oytputs
+		//> Process outputs
 		for( int i_p = 0; i_p < prms.size(); i_p++ )
 		    if( prms[i_p].isModify() )
 			switch( prms[i_p].type() )

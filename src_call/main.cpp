@@ -51,7 +51,6 @@ int main(int argc, char *argv[], char *envp[] )
 	    break;
 	}
 
-    //while(*envp) printf("%s\n",*envp++);
     try
     {
 	SYS = new TSYS(argc,argv,envp);

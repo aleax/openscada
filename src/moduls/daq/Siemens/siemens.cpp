@@ -1060,23 +1060,23 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
     }
 }
 
-char TMdContr::getValB( SValData ival, string &err )
+char TMdContr::getValB( SValData ival, ResString &err )
 {
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
 	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
 	    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
-	    if(!acqBlks[i_b].err.size())
+	    if( !acqBlks[i_b].err.size() )
 	        return (bool)(acqBlks[i_b].val[ival.off-acqBlks[i_b].off]&(0x01<<ival.sz));
-	    else err = acqBlks[i_b].err;
+	    else err.setVal(acqBlks[i_b].err);
 	    break;
 	}
-    err = err.size()?err:_("11:Value is not gathered.");
+    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_BOOL;
 }
 
-int TMdContr::getValI( SValData ival, string &err )
+int TMdContr::getValI( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::Integer, ival.sz );
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
@@ -1090,15 +1090,15 @@ int TMdContr::getValI( SValData ival, string &err )
 		    case 2:	return *(int16_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		    case 4:	return *(int32_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
-	    else err = acqBlks[i_b].err;
+	    else err.setVal( acqBlks[i_b].err );
 	    break;
 	}
-    err = err.size()?err:_("11:Value is not gathered.");
+    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_INT;
 }
 
-double TMdContr::getValR( SValData ival, string &err )
+double TMdContr::getValR( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::Real, ival.sz );
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
@@ -1111,15 +1111,15 @@ double TMdContr::getValR( SValData ival, string &err )
 		    case 4:	return *(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		    case 8:	return *(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
-	    else err = acqBlks[i_b].err;
+	    else err.setVal( acqBlks[i_b].err );
 	    break;
 	}
-    err = err.size()?err:_("11:Value is not gathered.");
+    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_REAL;
 }
 
-string TMdContr::getValS( SValData ival, string &err )
+string TMdContr::getValS( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::String, ival.sz );
     char buf[iv_sz];
@@ -1128,15 +1128,15 @@ string TMdContr::getValS( SValData ival, string &err )
 	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
 	    if( !acqBlks[i_b].err.size() )	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
-	    else err = acqBlks[i_b].err;
+	    else err.setVal( acqBlks[i_b].err );
 	    break;
 	}
-    err = err.size()?err:_("11:Value is not gathered.");
+    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_STR;
 }
 
-void TMdContr::setValB( bool ivl, SValData ival, string &err )
+void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
 {
     int val = getValI(SValData(ival.db,ival.off,1),err);
     if(val==EVAL_INT || (bool)(val&(0x01<<ival.sz)) == ivl) return;
@@ -1160,13 +1160,13 @@ void TMdContr::setValB( bool ivl, SValData ival, string &err )
 		    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	    { acqBlks[i_b].val[ival.off-acqBlks[i_b].off] = val; break; }
     }
-    catch(TError cerr){ err = err.size()?err:cerr.mess; }
+    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
 }
 
-void TMdContr::setValI( int ivl, SValData ival, string &err )
+void TMdContr::setValI( int ivl, SValData ival, ResString &err )
 {
     int val = getValI(ival,err);
-    if(val==EVAL_INT || val == ivl) return;
+    if( val==EVAL_INT || val == ivl ) return;
     //> Write data to controller or write data block
     val = ivl;
     int iv_sz = valSize( IO::Integer, ival.sz );
@@ -1188,10 +1188,10 @@ void TMdContr::setValI( int ivl, SValData ival, string &err )
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz))); break; }
     }
-    catch(TError cerr){ err = err.size()?err:cerr.mess; }
+    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
 }
 
-void TMdContr::setValR( double ivl, SValData ival, string &err )
+void TMdContr::setValR( double ivl, SValData ival, ResString &err )
 {
     double val = getValR(ival,err);
     float  val_4 = val;
@@ -1220,10 +1220,10 @@ void TMdContr::setValR( double ivl, SValData ival, string &err )
 		break;
 	    }
     }
-    catch(TError cerr){ err = err.size()?err:cerr.mess; }
+    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
 }
 
-void TMdContr::setValS( const string &ivl, SValData ival, string &err )
+void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
 {
     string val = getValS(ival,err);
     int iv_sz = valSize( IO::String, ival.sz );
@@ -1249,7 +1249,7 @@ void TMdContr::setValS( const string &ivl, SValData ival, string &err )
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali.c_str()); break; }
     }
-    catch(TError cerr){ err = err.size()?err:cerr.mess; }
+    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
 }
 
 int TMdContr::valSize( IO::Type itp, int iv_sz )
@@ -1570,7 +1570,7 @@ void TMdPrm::vlGet( TVal &val )
     {
 	if( val.name() == "err" )
 	{
-	    if(acq_err.size())	val.setS(acq_err,0,true);
+	    if( acq_err.getVal().size()) val.setS(acq_err.getVal(),0,true);
 	    else if(id_err>=0)	val.setS(getS(id_err),0,true);
 	    else val.setS("0",0,true);
 	}
@@ -1593,26 +1593,41 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     try
     {
 	int id_lnk = lnkId(val.name());
-	if( id_lnk >= 0 && lnk(id_lnk).val.db < 0 )
-	    id_lnk=-1;
-	switch(val.fld().type())
+	if( id_lnk >= 0 && lnk(id_lnk).val.db < 0 ) id_lnk = -1;
+	switch( val.fld().type() )
 	{
 	    case TFld::String:
-		if( id_lnk < 0 ) setS(ioId(val.name()),val.getS(0,true));
-		else owner().setValS(val.getS(0,true),lnk(id_lnk).val,acq_err);
+	    {
+		string vl = val.getS(0,true);
+		if( vl == EVAL_STR || vl == pvl.getS() ) break;
+		if( id_lnk < 0 ) setS( ioId(val.name()), vl );
+		else owner().setValS( vl, lnk(id_lnk).val, acq_err );
 		break;
+	    }
 	    case TFld::Integer:
-		if( id_lnk < 0 ) setI(ioId(val.name()),val.getI(0,true));
-		else owner().setValI(val.getI(0,true),lnk(id_lnk).val,acq_err);
+	    {
+		int vl = val.getI(0,true);
+		if( vl == EVAL_INT || vl == pvl.getI() ) break;
+		if( id_lnk < 0 ) setI( ioId(val.name()), vl );
+		else owner().setValI( vl, lnk(id_lnk).val, acq_err );
 		break;
+	    }
 	    case TFld::Real:
-		if( id_lnk < 0 ) setR(ioId(val.name()),val.getR(0,true));
-		else owner().setValR(val.getR(0,true),lnk(id_lnk).val,acq_err);
+	    {
+		double vl = val.getR(0,true);
+		if( vl == EVAL_REAL || vl == pvl.getR() ) break;
+		if( id_lnk < 0 ) setR( ioId(val.name()), vl );
+		else owner().setValR( vl, lnk(id_lnk).val, acq_err );
 		break;
+	    }
 	    case TFld::Boolean:
-		if( id_lnk < 0 ) setB(ioId(val.name()),val.getB(0,true));
-		else owner().setValB(val.getB(0,true),lnk(id_lnk).val,acq_err);
+	    {
+		char vl = val.getB(0,true);
+		if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
+		if( id_lnk < 0 ) setB( ioId(val.name()), vl );
+		else owner().setValB( vl, lnk(id_lnk).val, acq_err );
 		break;
+	    }
 	}
     }catch(TError err) {  }
 }
@@ -1681,20 +1696,20 @@ void TMdPrm::calc( bool first, bool last )
 {
     try
     {
-	//- Proccess error hold -
-	if( acq_err.size() )
+	//> Proccess error hold
+	if( !acq_err.getVal().empty() )
 	{
 	    time_t tm = time(NULL);
 	    if( !acq_err_tm )	acq_err_tm = tm+5;
-	    if( tm>acq_err_tm )	{ acq_err = ""; acq_err_tm=0; }
+	    if( tm>acq_err_tm )	{ acq_err.setVal(""); acq_err_tm=0; }
 	}
 
-	//- Set fixed system attributes -
+	//> Set fixed system attributes
 	if( id_freq>=0 )	setR(id_freq,1000./owner().period());
 	if( id_start>=0 )	setB(id_start,first);
 	if( id_stop>=0 )	setB(id_stop,last);
 
-	//- Get input links -
+	//> Get input links
 	for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	    if( lnk(i_l).val.db >= 0 )
 		switch(ioType(lnk(i_l).io_id))

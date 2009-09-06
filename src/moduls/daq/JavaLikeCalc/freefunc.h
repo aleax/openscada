@@ -377,12 +377,13 @@ class Func : public TConfig, public TFunction
 	//- Parser's data -
 	string		prg;		//Build prog
 	int		la_pos;		//LA position
-	string		p_err, o_prpf;	//Parse error
+	string		p_err;		//Parse error
 	string		mUsings;	//Functions usings namespaces
 	vector<UFunc*>	mFncs;		//Work functions list
 	vector<Reg*>	mRegs;		//Work registers list
 	vector<Reg*>	mTmpRegs;	//Constant temporary list
 	deque<Reg*>	f_prmst;	//Function's parameters stack
+	vector<string>	o_prpf;
 	Res		&parse_res;
 };
 

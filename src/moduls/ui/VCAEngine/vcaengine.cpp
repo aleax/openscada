@@ -846,7 +846,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    prjAdd(vid,opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   prjDel(opt->attr("id"),true);
@@ -860,7 +860,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(wlbAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )	wlbAdd(TSYS::strEncode(opt->attr("id"),TSYS::ID),opt->text());
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )	wlbAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID),opt->text());
 	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )	wlbDel(opt->attr("id"),true);
     }
     else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
@@ -885,7 +885,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->text(),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->text(),TSYS::oscdID);
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
 	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   sesDel(opt->text(),true);

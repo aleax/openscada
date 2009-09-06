@@ -68,7 +68,7 @@ class TFld
 
 	TFld &operator=( TFld &fld );
 
-	//- Base -
+	//> Base
 	const string &name( )	{ return m_name; }	//Name
 	const string &descr( )	{ return m_descr; }	//Description
 	int len( )		{ return m_len; }	//Length
@@ -89,12 +89,12 @@ class TFld
 	void setSelNames( const string &slnms );
 	void setReserve( const string &ires )	{ m_res = ires; }
 
-	//- Selected -
+	//> Selected
 	const vector<string>	&selValS();
 	const vector<int>	&selValI();
 	const vector<double>	&selValR();
 	const vector<bool>	&selValB();
-	//- selectable element's name -
+	//> selectable element's name
 	const vector<string> &selNm();
 
 	string selVl2Nm( const string &val );

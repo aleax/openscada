@@ -781,7 +781,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	}
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
-	    wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::ID).c_str(),opt->text(),"");
+	    wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text(),"");
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	wdgDel(opt->attr("id").c_str(),true);
     }
     else return false;

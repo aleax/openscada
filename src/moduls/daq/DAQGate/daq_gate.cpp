@@ -585,13 +585,13 @@ void TMdPrm::vlGet( TVal &val )
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() || !owner().startStat() )	valo.setI(EVAL_INT,0,true);
+    if( valo.getS() == EVAL_STR || valo.getS() == pvl.getS() ) return;
 
     XMLNode req("set");
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {
-	if( valo.getS() == pvl.getS() ) return;
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;

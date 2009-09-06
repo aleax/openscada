@@ -595,7 +595,7 @@ retry:
 	st_pos = ++pos;
 	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
 	{ pos++; yylloc.last_column++; }
-	p_fnc->o_prpf = prog.substr(st_pos,pos-st_pos);
+	p_fnc->o_prpf.push_back(prog.substr(st_pos,pos-st_pos));
 	return O_PRP_F;
     }
     //Multi symbol operations

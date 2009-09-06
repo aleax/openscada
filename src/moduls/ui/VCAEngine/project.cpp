@@ -578,7 +578,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
 	{
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::ID);
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
 	}
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	del(opt->attr("id"),true);

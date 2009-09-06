@@ -82,6 +82,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/obj/cfg/ico");
+    obj_ico->setToolTip(_("Item's icon. Click for download other."));
     obj_ico->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
     obj_ico->setIconSize(QSize(60,60));
     obj_ico->setAutoDefault(false);
@@ -816,6 +817,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setSpacing(6);
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/wdg/cfg/ico");
+    obj_ico->setToolTip(_("Item's icon. Click for download other."));
     obj_ico->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
     obj_ico->setIconSize(QSize(60,60));
     obj_ico->setAutoDefault(false);

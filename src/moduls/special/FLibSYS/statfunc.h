@@ -56,15 +56,6 @@ class Lib : public TSpecial
 	void reg( TFunction *fnc )		{ chldAdd(m_fnc,fnc); }
 	void unreg( const char *id )		{ chldDel(m_fnc,id); }
 
-	//- Value archives and buffers access methods -
-	int varchOpen( const string &inm );
-	int varchBufOpen( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
-	void varchClose( int id );
-	bool isArch( int id );
-	AutoHD<TVArchive> varch( int id );
-	TValBuf *vbuf( int id );
-	void varchFree( );
-
     private:
 	//Methods
 	void postEnable( int flag );
@@ -72,20 +63,6 @@ class Lib : public TSpecial
 
 	//Attributes
 	int	m_fnc;
-
-	//- Value archive resources -
-	Res	varch_res;
-	struct SVarch
-	{
-	    bool isArch;
-	    union
-	    {
-		AutoHD<TVArchive> *arch;
-		TValBuf	*buf;
-	    };
-	};
-
-	vector<SVarch>	varch_lst;
 };
 
 extern Lib *mod;

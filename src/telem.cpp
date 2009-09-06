@@ -34,8 +34,8 @@ TElem::TElem( const string &name ) : m_name(name)
 
 TElem::~TElem( )
 {
-    while(cont.size())	cont[0]->detElem(this);
-    while(elem.size())	fldDel(0);
+    while( cont.size() )	cont[0]->detElem(this);
+    while( elem.size() )	fldDel(0);
 }
 
 int TElem::fldAdd( TFld *fld, int id )

@@ -317,11 +317,11 @@ void *TMdContr::Task( void *icntr )
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ atributes
-				if (!cntr.p_hd[i_p].at().module_err)
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>4))
 				{
 				    unsigned int DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);
 //				    cout << DI << "\n";
@@ -363,8 +363,8 @@ void *TMdContr::Task( void *icntr )
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 				break;
 			    }
 			    //> Read-Write DAQ parameter's for I-7063 module
@@ -382,11 +382,11 @@ void *TMdContr::Task( void *icntr )
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ atributes
-				if (!cntr.p_hd[i_p].at().module_err)
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>4))
 				{
 				    unsigned int DI = strtoul(pdu.substr(3,2).c_str(),NULL,16);
 //				    cout << DI << "\n";
@@ -412,8 +412,8 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 				break;
 			    }
 			    //> Read DAQ parameter's for I-7017 module
@@ -431,11 +431,11 @@ void *TMdContr::Task( void *icntr )
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ atributes
-				if (!cntr.p_hd[i_p].at().module_err)
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>56))
 				{
 				    cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());
 				    cntr.p_hd[i_p].at().AI[1]=atof(pdu.substr(8,7).c_str());
@@ -469,8 +469,8 @@ void *TMdContr::Task( void *icntr )
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//> Request with I-7024 module
 				str=fcvt(cntr.p_hd[i_p].at().AO[1],ndig,&dec,&sign);
@@ -486,8 +486,8 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//> Request with I-7024 module
 				str=fcvt(cntr.p_hd[i_p].at().AO[2],ndig,&dec,&sign);
@@ -503,8 +503,8 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//- Request with I-7024 module
 				str=fcvt(cntr.p_hd[i_p].at().AO[3],ndig,&dec,&sign);
@@ -520,8 +520,8 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				break;
 			    }
@@ -540,11 +540,11 @@ void *TMdContr::Task( void *icntr )
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ atributes
-				if (!cntr.p_hd[i_p].at().module_err)
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>56))
 				{
 				    cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());
 				    cntr.p_hd[i_p].at().AI[1]=atof(pdu.substr(8,7).c_str());
@@ -567,8 +567,8 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
 				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if (!cntr.p_hd[i_p].at().module_err) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 				break;
 			    }
 			    //> Send HostOK for all modules
@@ -831,9 +831,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {
-	if( valo.getS(0,true) == pvl.getS() ) return;
+	if( valo.getS() == pvl.getS() ) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }

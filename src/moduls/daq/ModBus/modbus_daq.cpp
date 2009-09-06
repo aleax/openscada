@@ -223,7 +223,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
     {
 	if( icfg.getS() == "TCP" )	cfg("REQ_TRY").setView(false);
 	else				cfg("REQ_TRY").setView(true);
-	if(startStat())	stop();
+	if( startStat() ) stop();
     }
     else if( icfg.fld().name() == "FRAG_MERGE" && enableStat( ) ) disable( );
 
