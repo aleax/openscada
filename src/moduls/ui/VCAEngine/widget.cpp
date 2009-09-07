@@ -747,20 +747,23 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path);
 	}
 	vector<string>  ls;
-	switch(c_lv)
+	try
 	{
-	    case 0: mod->nodeList(ls);   break;
-	    case 1:
-		if( TSYS::pathLev(lnk,0) != ".." )
-		    mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeList(ls);
-		break;
-	    case 2:
-		if( TSYS::pathLev(lnk,0) != ".." )
-		    mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeAt(TSYS::pathLev(lnk,1)).at().nodeList(ls,"wdg_");
-		break;
-	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
+	    switch(c_lv)
+	    {
+		case 0: mod->nodeList(ls);   break;
+		case 1:
+		    if( TSYS::pathLev(lnk,0) != ".." )
+			mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeList(ls);
+		    break;
+		case 2:
+		    if( TSYS::pathLev(lnk,0) != ".." )
+			mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeAt(TSYS::pathLev(lnk,1)).at().nodeList(ls,"wdg_");
+		    break;
+	    }
+	    for(int i_l = 0; i_l < ls.size(); i_l++)
+		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
+	}catch(TError err) { }
     }
     else if( a_path == "/br/wdg_" || a_path == "/inclwdg/wdg" )
     {

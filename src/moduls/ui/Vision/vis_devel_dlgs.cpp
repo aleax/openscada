@@ -644,7 +644,10 @@ void LibProjProp::isModify( )
     else return;
 
     if( owner()->cntrIfCmd(req) )
+    {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	showDlg(ed_it,true);
+    }
     else if( update )	showDlg(ed_it,true);
 
     is_modif = true;
@@ -1398,11 +1401,11 @@ void VisItProp::selectParent( )
     {
 	QString cur_val = req.text().c_str();
 
-	//- Get values list -
+	//> Get values list
 	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/w_lst",TSYS::PathEl));
 	owner()->cntrIfCmd(req);
 
-	//- Load combobox -
+	//> Load combobox
 	obj_parent->clear();
 	for( int i_l = 0; i_l < req.childSize(); i_l++ )
 	    obj_parent->addItem(req.childGet(i_l)->text().c_str());
@@ -1484,7 +1487,10 @@ void VisItProp::isModify( )
 
     //- Send command -
     if( owner()->cntrIfCmd(req) )
+    {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	showDlg(ed_it,true);
+    }
     else
     {
 	//- Post command updating -

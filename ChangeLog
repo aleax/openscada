@@ -1,3 +1,8 @@
+2009-09-07 Maxim,Roman
+- FIX:UI.Vision: The UI.Vision item's dialog update is fixed on a widget error enabling.
+- FIX:UI.VCAEngine: Parents list get is fixed for widgets which have error parent set.
+
+
 2009-09-06 Roman
 - !!!!:/SYS: The source tree version is changed to 0.6.4. OpenSCADA library version changed to 0:11:0.
     RPM-build speck file is changed for build version 0.6.4 packages.
