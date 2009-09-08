@@ -143,12 +143,13 @@ void Func::loadIO( )
 
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(),true);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt++,cfg); )
+    for( int fld_cnt=0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++ )
     {
 	string sid = cfg.cfg("ID").getS();
 
 	//> Position storing
 	int pos = cfg.cfg("POS").getI();
+
 	while( u_pos.size() <= pos )    u_pos.push_back("");
 	u_pos[pos] = sid;
 
@@ -916,8 +917,8 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	{ ret_ok=true; break; }
     //> Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
-        throw TError(nodePath().c_str(),_("More than %d parameters are specified for function <%s>"),
-	    funcAt(f_id)->func().at().ioSize(),funcAt(f_id)->func().at().id().c_str());
+        throw TError(nodePath().c_str(),_("More than %d(%d) parameters are specified for function <%s>"),
+	    (funcAt(f_id)->func().at().ioSize()-ret_ok),p_cnt,funcAt(f_id)->func().at().id().c_str());
     //> Check the present return for fuction
     if( !proc && !ret_ok )
 	throw TError(nodePath().c_str(),_("Function is requested <%s>, but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());

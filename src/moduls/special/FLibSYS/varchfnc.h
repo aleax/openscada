@@ -43,7 +43,7 @@ class VArchObj : public TVarObj
 	bool open( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
 	void close( );
 
-	bool isArch( )		{ return mIsArch||mArch; }
+	bool isArch( )		{ return mIsArch && mArch; }
 	AutoHD<TVArchive> arch( );
 	TValBuf *buf( );
 

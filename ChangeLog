@@ -1,3 +1,11 @@
+2009-09-08 Roman
+- DAQ.LogicLev: A parameter copy function is expanded for template mode.
+- Special.FLibComplex1: Into PID function is added separated input for manual values input and store.
+- FIX:Special.FLibSYS: IsArch() function of object VArchObj is fixed.
+- Special.FLibSYS: To object VArchObj is added function isNull();
+- FIX:UI.Vision, UI.WebVision: Including a page into container is fixed for a page source.
+
+
 2009-09-07 Maxim,Roman
 - FIX:UI.Vision: The UI.Vision item's dialog update is fixed on a widget error enabling.
 - FIX:UI.VCAEngine: Parents list get is fixed for widgets which have error parent set.

@@ -100,6 +100,7 @@ void VArchObj::propSet( const string &id, TVariant val )
 
 TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
+    if( id == "isNull" ) return (char)(!isArch() && !buf());
     if( id == "begin" )
     {
 	long long vtm;

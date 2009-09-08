@@ -54,6 +54,8 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	TCntrNode &operator=( TCntrNode &node );
+
 	Mode mode( )	{ return m_wmode; }
 	void mode( Mode md, const string &prm = "" );
 

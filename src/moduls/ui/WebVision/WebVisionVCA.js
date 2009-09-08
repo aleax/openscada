@@ -365,7 +365,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
   for( var i in this.pages )
     if( this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc) ) return true;
   //> Check for open child page or for unknown and empty source pages open as master page child windows
-  if( pgOpenSrc == this.addr || this == masterPage )
+  if( (!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage )
   {
     var iPg = new pwDescr(pgId,true,this);
     iPg.window = window.open('',pgId,'width=600,height=400,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');

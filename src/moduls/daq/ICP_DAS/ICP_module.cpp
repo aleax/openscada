@@ -367,8 +367,6 @@ void TMdPrm::enable()
 	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-
-
     //> Make DAQ parameter's attributes
     switch( mod_tp )
     {

@@ -570,6 +570,7 @@ class PID : public TFunction
 	    ioAdd( new IO("sp",_("Setpoint"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("max",_("Max scale"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("min",_("Min scale"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("manIn",_("Manual input (%)"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("out",_("Output (%)"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("auto",_("Auto mode"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("casc",_("Cascade mode"),IO::Boolean,IO::Default,"0") );
@@ -607,27 +608,28 @@ class PID : public TFunction
 			sp	= v->getR(1),
 			max	= v->getR(2),
 			min	= v->getR(3),
-			out	= v->getR(4),
-			kp	= v->getR(7),
-			h_up	= v->getR(11),
-			h_dwn	= v->getR(12),
-			zi	= v->getR(13),
-			k1	= v->getR(14),
-			in1	= v->getR(15),
-			k2	= v->getR(16),
-			in2	= v->getR(17),
-			k3	= v->getR(18),
-			in3	= v->getR(19),
-			k4	= v->getR(20),
-			in4	= v->getR(21),
-			cycle	= v->getI(22),
-			integ	= v->getR(23),
-			difer	= v->getR(24),
-			lag	= v->getR(25);
+			manIn	= v->getR(4),
+			out	= v->getR(5),
+			kp	= v->getR(8),
+			h_up	= v->getR(12),
+			h_dwn	= v->getR(13),
+			zi	= v->getR(14),
+			k1	= v->getR(15),
+			in1	= v->getR(16),
+			k2	= v->getR(17),
+			in2	= v->getR(18),
+			k3	= v->getR(19),
+			in3	= v->getR(20),
+			k4	= v->getR(21),
+			in4	= v->getR(22),
+			cycle	= v->getI(23),
+			integ	= v->getR(24),
+			difer	= v->getR(25),
+			lag	= v->getR(26);
 
-	    double	Kf	= (v->getI(10)>cycle)?cycle/v->getI(10):1.;
-	    double	Kint	= (v->getI(8)>cycle)?cycle/v->getI(8):1.;
-	    double	Kdif	= (v->getI(9)>cycle)?cycle/v->getI(9):1.;
+	    double	Kf	= (v->getI(11)>cycle)?cycle/v->getI(11):1.;
+	    double	Kint	= (v->getI(9)>cycle)?cycle/v->getI(9):1.;
+	    double	Kdif	= (v->getI(10)>cycle)?cycle/v->getI(10):1.;
 
 	    //> Scale error
 	    if( max <= min )	return;
@@ -636,7 +638,7 @@ class PID : public TFunction
 	    sp = 100.*(sp+min)/(max-min);
 	    val = 100.*(val+min)/(max-min);
 	    val += k1*in1 + k2*in2;
-	    val=vmin(100.,vmax(-100.,val));
+	    val = vmin(100.,vmax(-100.,val));
 
 	    //> Error
 	    double err = sp - val;
@@ -645,17 +647,17 @@ class PID : public TFunction
 	    err = (fabs(err)<zi)?0:((err>0)?err-zi:err+zi);
 
 	    //> Gain
-	    err*=kp;
-	    err=vmin(100.,vmax(-100.,err));
+	    err *= kp;
+	    err = vmin(100.,vmax(-100.,err));
 
 	    //> Input filter lag
-	    lag+=Kf*(err-lag);
-	    integ+=Kint*lag;		//Integral
-	    difer-=Kdif*(difer-lag);	//Differecial lag
+	    lag += Kf*(err-lag);
+	    integ += Kint*lag;		//Integral
+	    difer -= Kdif*(difer-lag);	//Differecial lag
 
 	    //> Automatic mode enabled
-	    if( v->getB(5) ) out = (2.*lag + integ - difer) + k3*in3 + k4*in4;
-	    else { v->setB(6,false); v->setR(1,v->getR(0)); }
+	    if( v->getB(6) ) out = manIn = (2.*lag + integ - difer) + k3*in3 + k4*in4;
+	    else { v->setB(7,false); v->setR(1,v->getR(0)); out = manIn; }
 
 	    //> Check output limits
 	    out=vmin(h_up,vmax(h_dwn,out));
@@ -664,10 +666,11 @@ class PID : public TFunction
 	    integ = out - 2.*lag + difer - k3*in3 + k4*in4;
 
 	    //> Write outputs
-	    v->setR(4,out);
-	    v->setR(23,integ);
-	    v->setR(24,difer);
-	    v->setR(25,lag);
+	    v->setR(4,manIn);
+	    v->setR(5,out);
+	    v->setR(24,integ);
+	    v->setR(25,difer);
+	    v->setR(26,lag);
 	}
 };
 

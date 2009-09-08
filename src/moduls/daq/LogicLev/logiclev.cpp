@@ -332,6 +332,24 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();
 }
 
+TCntrNode &TMdPrm::operator=( TCntrNode &node )
+{
+    TParamContr::operator=( node );
+
+    TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
+    if( !src_n || !src_n->enableStat() || !enableStat() || src_n->mode()!=TMdPrm::Template || mode()!=TMdPrm::Template )
+	return *this;
+
+    //> IO values copy
+    for( int i_io = 0; i_io < src_n->tmpl->val.func()->ioSize(); i_io++ )
+	if( src_n->tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    lnk(lnkId(i_io)).prm_attr = src_n->lnk(src_n->lnkId(i_io)).prm_attr;
+	else tmpl->val.setS(i_io,src_n->tmpl->val.getS(i_io));
+
+    return *this;
+}
+
+
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable( flag );
