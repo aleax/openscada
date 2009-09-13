@@ -113,6 +113,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("Module type"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","552985") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_SLOT",_("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11") );
+    tpPrmAt(t_prm).fldAdd( new TFld("MOD_PRMS",_("Module addon parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000") );
 }
 
 void TTpContr::load_( )
@@ -153,7 +154,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0),
+	TController( name_c, daq_db, cfgelem ), prcSt(false), endRunReq(false), tm_gath(0),
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()),
 	mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId())
 {
@@ -188,12 +189,12 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    if( !prc_st )
+    if( !prcSt )
     {
-	if( mBus == 1 && Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
+	if( mBus == 0 && Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
 
-	if( Open_Com( mBus, mBaud, Data8Bit, NonParity, OneStopBit ) > 0 )
-	    throw TError( nodePath().c_str(), _("Open COM%d port error."), mBus );
+	if( Open_Com( (mBus?mBus:1), mBaud, Data8Bit, NonParity, OneStopBit ) > 0 )
+	    throw TError( nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1) );
 
 	//> Start the gathering data task
 	pthread_attr_t pthr_attr;
@@ -207,23 +208,25 @@ void TMdContr::start_( )
 
 	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
 	pthread_attr_destroy( &pthr_attr );
-	if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
+	if( TSYS::eventWait( prcSt, true, nodePath()+"start", 5 ) )
 	    throw TError( nodePath().c_str(), _("Gathering task is not started!") );
     }
 }
 
 void TMdContr::stop_( )
 {
-    if( prc_st )
+    if( prcSt )
     {
 	//> Stop the request and calc data task
-	endrun_req = true;
+	endRunReq = true;
 	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait( prc_st, false, nodePath()+"stop", 5 ) )
+	if( TSYS::eventWait( prcSt, false, nodePath()+"stop", 5 ) )
 	    throw TError( nodePath().c_str(), _("Gathering task is not stopped!") );
 	pthread_join( procPthr, NULL );
 
-	Close_Com(mBus);
+	Close_Com( (mBus?mBus:1) );
+
+	if( mBus == 0 )	Close_SlotAll();
     }
 }
 
@@ -233,7 +236,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
     if( icfg.name() == "BUS" )
     {
-	cfg("BAUD").setView( icfg.getI() != 1 );
+	cfg("BAUD").setView( icfg.getI() != 0 );
 	if( startStat() ) stop();
     }
     else if( icfg.name() == "BAUD" && startStat( ) ) stop( );
@@ -255,19 +258,18 @@ void TMdContr::prmEn( const string &id, bool val )
 
 void *TMdContr::Task( void *icntr )
 {
-    long long work_tm, last_tm = 0;
     TMdContr &cntr = *(TMdContr*)icntr;
 
 #if OSC_DEBUG >= 2
     mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endRunReq = false;
+    cntr.prcSt = true;
 
     try
     {
-	while( !cntr.endrun_req )
+	while( !cntr.endRunReq )
 	{
 	    if( !cntr.redntUse( ) )
 	    {
@@ -288,7 +290,7 @@ void *TMdContr::Task( void *icntr )
     }
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }
@@ -307,8 +309,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/cntr/cfg/busLst" && ctrChkNode(opt) )
-	for( int i_s = 1; i_s < 11; i_s++ )
-            opt->childAdd("el")->setAttr("id",TSYS::int2str(i_s))->setText("COM "+TSYS::int2str(i_s)+(i_s==1?_(" (Master)"):""));
+	for( int i_s = 0; i_s < 11; i_s++ )
+	    opt->childAdd("el")->setAttr("id",TSYS::int2str(i_s))->setText("COM "+TSYS::int2str(i_s?i_s:1)+(i_s==0?_(" (Master LP-8781)"):""));
     else if( a_path == "/cntr/cfg/boudLst" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setText("300");
@@ -334,14 +336,15 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr( name, tp_prm ), p_el("w_attr"), I8017_init(false),
-    mod_tp(cfg("MOD_TP").getId()), mod_addr(cfg("MOD_ADDR").getId()), mod_slot(cfg("MOD_SLOT").getId())
+    TParamContr( name, tp_prm ), p_el("w_attr"), extPrms(NULL), endRunReq(false), prcSt(false), clcCnt(0),
+    modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()), modPrms(cfg("MOD_PRMS").getSd())
 {
 
 }
 
 TMdPrm::~TMdPrm( )
 {
+    disable( );
     nodeDelAll( );
 }
 
@@ -360,32 +363,31 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
+    loadExtPrms( );
+
     //> Delete DAQ parameter's attributes
-    while(p_el.fldSize()>0)
+    while( p_el.fldSize() > 0 )
     {
 	try{ p_el.fldDel(0); }
 	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     //> Make DAQ parameter's attributes
-    switch( mod_tp )
+    switch( modTp )
     {
-	//> Make DAQ parameter's for I-7051 module
 	case 0x8017:
-	    //if( wRetVal > 0 ) throw TError(nodePath().c_str(),_("Open slot %d error."),mod_slot);
-	    //wRetVal = I8017_Init(mod_slot);
 	    for( int i_i = 0; i_i < 8; i_i++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 	    break;
 	case 0x8042:
 	    for( int i_i = 0; i_i < 16; i_i++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
 	    for( int i_o = 0; i_o < 16; i_o++ )
 		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
 	    break;
 	case 0x87019:
 	    for( int i_i = 0; i_i < 8; i_i++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 	    break;
 	case 0x87024:
 	    for( int i_o = 0; i_o < 4; i_o++ )
@@ -411,44 +413,134 @@ void TMdPrm::disable()
     for(int i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS( EVAL_STR, 0, true );
 
-    switch( mod_tp )
+    //> Stop fast task
+    if( prcSt )
     {
-	//> Make DAQ parameter's for I-7051 module
-	case 50: case 51:	//I-8017, I-8042
-	    Close_Slot(mod_slot);
+	endRunReq = true;
+	pthread_kill( fastPthr, SIGALRM );
+	if( TSYS::eventWait( prcSt, false, nodePath()+"stop", 5 ) )
+	    throw TError( nodePath().c_str(), _("Gathering fast task is not stopped!") );
+	pthread_join( fastPthr, NULL );
+    }
+
+    //> Free module object
+    switch( modTp )
+    {
+	case 0x8017:	delete ((PrmsI8017*)extPrms); extPrms = NULL; break;
+    }
+}
+
+void TMdPrm::loadExtPrms( )
+{
+    if( !enableStat() )	return;
+
+    XMLNode prmNd, *wNd;
+    string  vl;
+
+    switch( modTp )
+    {
+	case 0x8017:
+	    if( !extPrms ) extPrms = new PrmsI8017();
+	    try{ prmNd.load(modPrms); } catch(...){ }
+	    vl = prmNd.attr("cnls"); if( !vl.empty() ) ((PrmsI8017*)extPrms)->prmNum = vmin(8,vmax(0,atoi(vl.c_str())));
+	    vl = prmNd.attr("fastPer"); if( !vl.empty() ) ((PrmsI8017*)extPrms)->fastPer = atof(vl.c_str());
+	    for( int i_n = 0; i_n < prmNd.childSize(); i_n++ )
+		if( prmNd.childGet(i_n)->name() == "cnl" )
+		    ((PrmsI8017*)extPrms)->cnlMode[atoi(prmNd.childGet(i_n)->attr("id").c_str())] = atoi(prmNd.childGet(i_n)->text().c_str());
 	    break;
     }
+}
+
+void TMdPrm::saveExtPrms( )
+{
+    if( !enableStat() || !extPrms )	return;
+
+    XMLNode prmNd("prms");
+
+    switch( modTp )
+    {
+	case 0x8017:
+	    prmNd.setAttr("cnls",TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
+	    prmNd.setAttr("fastPer",TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
+	    for( int i_c = 0; i_c < 8; i_c++ )
+		prmNd.childAdd("cnl")->setAttr("id",TSYS::int2str(i_c))->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[i_c]));
+	    break;
+    }
+
+    modPrms = prmNd.save(XMLNode::BrAllPast);
+    modif();
 }
 
 void TMdPrm::getVals( )
 {
     int RetValue;
+    WORD wT;
 
-    switch( mod_tp )
+    switch( modTp )
     {    
 	case 0x8017:
 	{
-	    printf("TEST 00\n");
-	    if( !I8017_init ) { I8017_Init(mod_slot); I8017_init = true; }
-	    for( int i_v = 0; i_v < 8; i_v++ )
+	    //> Check for I8017 init
+	    if( !((PrmsI8017*)extPrms)->init ) { I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
+	    //> Check for I8017 fast task start
+	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt )
 	    {
-		I8017_SetChannelGainMode(mod_slot,i_v,0,0);
-		vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(mod_slot), 0, true );
+		//> Start task
+		pthread_attr_t pthr_attr;
+		pthread_attr_init( &pthr_attr );
+		struct sched_param prior;
+		pthread_attr_setschedpolicy( &pthr_attr, (SYS->user()=="root")?SCHED_RR:SCHED_OTHER );
+		prior.__sched_priority = 10;
+		pthread_attr_setschedparam( &pthr_attr, &prior );
+
+		pthread_create( &fastPthr, &pthr_attr, TMdPrm::fastTask, this );
+		pthread_attr_destroy( &pthr_attr );
+		if( TSYS::eventWait( prcSt, true, nodePath()+"start", 5 ) )
+		    mess_err( nodePath().c_str(), _("Fast gathering task is not started!") ); 
 	    }
+	    //> Get values direct
+	    for( int i_v = 0; i_v < 8; i_v++ )
+		if( i_v >= ((PrmsI8017*)extPrms)->prmNum ) vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);
+		else if( !((PrmsI8017*)extPrms)->fastPer )
+		{
+		    I8017_SetChannelGainMode(modSlot,i_v,((PrmsI8017*)extPrms)->cnlMode[i_v],0);
+		    vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(modSlot), 0, true );
+		}
+	    break;
+	}
+	case 0x8042:
+	{
+	    ResAlloc res( owner().reqRes, true );
+	    int c_vl = DI_16(modSlot);
+	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( (c_vl>>i_v)&0x01, 0, true );
+	    c_vl = DO_16_RB(modSlot);
+	    for( int o_v = 0; o_v < 16; o_v++ ) vlAt(TSYS::strMess("o%d",o_v)).at().setB( (c_vl>>o_v)&0x01, 0, true );
 	    break;
 	}
 	case 0x87019:
 	{
 	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 1 )	ChangeToSlot(mod_slot);
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 
-	    WORD wT;
 	    char szReceive[255];
 
-	    RetValue = Send_Receive_Cmd( owner().mBus, (char*)TSYS::strMess("#%02x",(owner().mBus==1)?0:mod_addr).c_str(), szReceive, 1, 0, &wT );
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("#%02X",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
 	    for( int i_v = 0; i_v < 8; i_v++ )
 		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1+7*i_v), 0, true );
 	    break;
+	}
+	case 0x87024:
+	{
+	    ResAlloc res( owner().reqRes, true );
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	    char szReceive[20];
+
+	    for( int i_v = 0; i_v < 4; i_v++ )
+	    {
+		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v).c_str(), szReceive, 1, 0, &wT );
+		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (RetValue||szReceive[0]!='!' ? EVAL_REAL : atof(szReceive+3)), 0, true );
+	    }
 	}
     }
 }
@@ -477,17 +569,7 @@ void TMdPrm::vlGet( TVal &val )
 
     if( owner().redntUse( ) ) return;
 
-    if( val.name() != "err" )
-	switch( mod_tp )
-	{
-/*	    case 0x8017:
-		I8017_SetChannelGainMode(mod_slot,atoi(val.name().c_str()+1),0,0);
-		val.setR( I8017_GetCurAdChannel_Float_Cal(mod_slot), 0, true );
-		break;*/
-	    case 0x8042:
-		val.setB( (DI_16(mod_slot) >> atoi(val.name().c_str()+1))&0x01, 0, true );
-		break;
-	}
+    if( val.name() == "err" ) val.setS(_("0"),0,true);
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
@@ -505,14 +587,16 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     }
 
     //> Direct write
-    switch( mod_tp )
+    switch( modTp )
     {
 	case 0x8042:
 	{
+	    ResAlloc res( owner().reqRes, true );
+
 	    bool vl = valo.getB(0,true);
 	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
-	    DO_16( mod_slot, vl ? (DI_16(mod_slot) | 0x01<<atoi(valo.name().c_str()+1)) :
-				  (DI_16(mod_slot) & ~(0x01<<atoi(valo.name().c_str()+1))) );
+	    DO_16( modSlot, vl ? (DO_16_RB(modSlot) | 0x01<<atoi(valo.name().c_str()+1)) :
+				 (DO_16_RB(modSlot) & ~(0x01<<atoi(valo.name().c_str()+1))) );
 	    break;
 	}
 	case 0x87024:
@@ -521,34 +605,14 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    if( vl == EVAL_REAL || vl == pvl.getR() ) break;
 
 	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 1 )	ChangeToSlot(mod_slot);
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 
 	    WORD wT;
-	    string cmd = TSYS::strMess("#%02x%d%+07.2f",(owner().mBus==1)?0:mod_addr,atoi(valo.name().c_str()+1),vl);
+	    string cmd = TSYS::strMess("#%02X%d%+07.3f",(owner().mBus==0)?0:modAddr,atoi(valo.name().c_str()+1),vl);
 	    char szReceive[10];
 
-	    int RetValue = Send_Receive_Cmd( owner().mBus, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
-	    printf("TEST 00: '%s' -> '%s'\n",cmd.c_str(),szReceive);
+	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
 	    valo.setR( (RetValue||szReceive[0]!='>' ? EVAL_REAL : vl), 0, true );
-
-	    /*double vl = valo.getR(0,true);
-	    if( vl == EVAL_REAL || vl == pvl.getR() ) break;
-	    DWORD dwBuf[12];
-	    float fBuf[12];
-	    char  szSend[20], szReceive[20];
-
-	    dwBuf[0] = owner().mBus;
-	    dwBuf[1] = mod_addr;
-	    dwBuf[2] = mod_tp;
-	    dwBuf[3] = 0;
-	    dwBuf[4] = 100;
-	    dwBuf[5] = atoi(valo.name().c_str()+1);
-	    dwBuf[6] = 0;
-	    dwBuf[7] = mod_slot;
-	    fBuf[0]  = valo.getR();
-	    int RetValue = AnalogOut_87K(dwBuf,fBuf,szSend,szReceive);
-	    valo.setR( (RetValue ? EVAL_REAL : fBuf[0]), 0, true );
-	    break;*/
 	}
     }
 }
@@ -562,21 +626,82 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm( true );
 }
 
+void *TMdPrm::fastTask( void *iprm )
+{
+    TMdPrm &prm = *(TMdPrm*)iprm;
+
+#if OSC_DEBUG >= 2
+    mess_debug(prm.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
+#endif
+
+    prm.endRunReq = false;
+    prm.prcSt = true;
+
+    struct timespec sp_tm;
+    long long wTm = TSYS::curTime();
+    int c_mode;
+
+    vector< AutoHD<TVal> > cnls;
+    for( int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++ )
+	cnls.push_back( prm.vlAt(TSYS::strMess("i%d",i_c)) );
+
+    while( !prm.endRunReq && prm.owner().startStat() )
+    {
+	for( int i_c = 0; i_c < cnls.size(); i_c++ )
+	{
+	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
+	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
+	    cnls[i_c].at().setR( (10.0/(c_mode?2*c_mode:1))*(float)I8017HW_GetCurAdChannel_Hex(prm.modSlot)/8000, wTm, true );
+	}
+
+	//> Calc next work time and sleep
+	wTm += (long long)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);
+	sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
+	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
+
+	//TSYS::taskSleep((long long)(1e9*100e-6));
+    }
+
+    prm.prcSt = false;
+
+    return NULL;
+}
+
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
+    char szReceive[20];
+    WORD wT;
+    int RetValue;
+
     //> Get page info
     if( opt->name() == "info" )
     {
-	cfg("MOD_ADDR").setView( (mod_tp>>12) != 8 && owner().mBus != 1 );
+	cfg("MOD_ADDR").setView( (modTp>>12) != 8 && owner().mBus != 0 );
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),0664,"root","root",3,"tp","dec","dest","select","select","/prm/cfg/modLst");
+	if( enableStat() && (modTp == 0x8017 || modTp == 0x87019) && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
+	    switch( modTp )
+	    {
+		case 0x8017:
+		    ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root","DAQ",1,"tp","dec");
+		    ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
+		    if( ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")) )
+			for( int i_v = 0; i_v < 8; i_v++ )
+			    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		    break;
+		case 0x87019:
+		    if( !owner().startStat() ) break;
+		    for( int i_v = 0; i_v < 8; i_v++ )
+			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),TSYS::strMess(_("Input %d type"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		    break;
+	    }
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/modLst" && ctrChkNode(opt) )
     {
-	if( owner().mBus == 1 )
+	if( owner().mBus == 0 )
 	{
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8017))->setText("I-8017");
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8042))->setText("I-8042");
@@ -584,5 +709,82 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87019))->setText("I-87019");
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87024))->setText("I-87024");
     }
+    else if( a_path == "/cfg/prms" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{ ((PrmsI8017*)extPrms)->prmNum = atoi(opt->text().c_str()); saveExtPrms(); }
+    }
+    else if( a_path == "/cfg/fastPer" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{ ((PrmsI8017*)extPrms)->fastPer = atof(opt->text().c_str()); saveExtPrms(); }
+    }
+    else if( a_path.substr(0,12) == "/cfg/mode/in" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{ ((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()); saveExtPrms(); }
+    }
+    else if( owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	{
+	    ResAlloc res( owner().reqRes, true );
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X8C%d",
+		(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())).c_str(), szReceive, 1, 0, &wT );
+	    opt->setText( (RetValue||szReceive[0]!='!') ? "-1" : TSYS::int2str(strtol(szReceive+6,NULL,16)) );
+	}
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{
+	    ResAlloc res( owner().reqRes, true );
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X7C%dR%02X",
+		(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())).c_str(), szReceive, 1, 0, &wT );
+	}
+    }
+    else if( a_path == "/cfg/tpLst" && ctrChkNode(opt) )
+	switch( modTp )
+	{
+	    case 0x8017:
+		opt->childAdd("el")->setAttr("id","0")->setText(_("-10V to +10V"));
+		opt->childAdd("el")->setAttr("id","1")->setText(_("-5V to +5V"));
+		opt->childAdd("el")->setAttr("id","2")->setText(_("-2.5V to +2.5V"));
+		opt->childAdd("el")->setAttr("id","3")->setText(_("-1.25V to +1.25V"));
+		opt->childAdd("el")->setAttr("id","4")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+		break;
+	    case 0x87019:
+		opt->childAdd("el")->setAttr("id","-1")->setText(_("Error"));
+		opt->childAdd("el")->setAttr("id","0")->setText(_("-15mV to +15mV"));
+		opt->childAdd("el")->setAttr("id","1")->setText(_("-50mV to +50mV"));
+		opt->childAdd("el")->setAttr("id","2")->setText(_("-100mV to +100mV"));
+		opt->childAdd("el")->setAttr("id","3")->setText(_("-500mV to +500mV"));
+		opt->childAdd("el")->setAttr("id","4")->setText(_("-1V to +1V"));
+		opt->childAdd("el")->setAttr("id","5")->setText(_("-2.5V to +2.5V"));
+		opt->childAdd("el")->setAttr("id","6")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+		opt->childAdd("el")->setAttr("id","8")->setText(_("-10V to +10V"));
+		opt->childAdd("el")->setAttr("id","9")->setText(_("-5V to +5V"));
+		opt->childAdd("el")->setAttr("id","10")->setText(_("-1V to +1V"));
+		opt->childAdd("el")->setAttr("id","11")->setText(_("-500mV to +500mV"));
+		opt->childAdd("el")->setAttr("id","12")->setText(_("-150mV to +150mV"));
+		opt->childAdd("el")->setAttr("id","13")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+		opt->childAdd("el")->setAttr("id","14")->setText(_("J Type"));
+		opt->childAdd("el")->setAttr("id","15")->setText(_("K Type"));
+		opt->childAdd("el")->setAttr("id","16")->setText(_("T Type"));
+		opt->childAdd("el")->setAttr("id","17")->setText(_("E Type"));
+		opt->childAdd("el")->setAttr("id","18")->setText(_("R Type"));
+		opt->childAdd("el")->setAttr("id","19")->setText(_("S Type"));
+		opt->childAdd("el")->setAttr("id","20")->setText(_("B Type"));
+		opt->childAdd("el")->setAttr("id","21")->setText(_("N Type"));
+		opt->childAdd("el")->setAttr("id","22")->setText(_("C Type"));
+		opt->childAdd("el")->setAttr("id","23")->setText(_("L Type"));
+		opt->childAdd("el")->setAttr("id","24")->setText(_("M Type"));
+		opt->childAdd("el")->setAttr("id","25")->setText(_("L Type (DIN43710C Type)"));
+		break;
+	}
     else TParamContr::cntrCmdProc(opt);
 }

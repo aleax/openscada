@@ -56,29 +56,52 @@ class TMdPrm : public TParamContr
 
 	void getVals( );
 
+	void loadExtPrms( );
+	void saveExtPrms( );
+
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( );
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements
-	int	&mod_tp;	//I-7000,I-8000 module type
-	int	&mod_addr;	//I-7000,I-8000 module address
-	int	&mod_slot;	//I-8000 module slot
+	int	&modTp;		//I-7000,I-8000 module type
+	int	&modAddr;	//I-7000,I-8000 module address
+	int	&modSlot;	//I-8000 module slot
+	string	&modPrms;	//Individual module extended parameters
 
     protected:
 	//Methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &cfg );
 
     private:
+	//Data
+	class PrmsI8017
+	{
+	    public:
+		PrmsI8017( ) : init(false), prmNum(8), fastPer(0)
+		{ for( int ip = 0; ip < 8; ip++ ) cnlMode[ip] = 0; }
+
+		bool	init;
+		char	prmNum;
+		float	fastPer;
+		char	cnlMode[8];
+	};
+
 	//Methods
 	void postEnable( int flag );
 	void vlGet( TVal &val );
 	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
+	static void *fastTask( void *iprm );
+
 	//Attributes
-	unsigned short	I8017_init : 1;
+	bool endRunReq, prcSt;
+	pthread_t fastPthr;
+	int clcCnt;
+
+	void *extPrms;
 };
 
 //******************************************************
@@ -121,8 +144,8 @@ class TMdContr: public TController
 		&mBus,				//Serial port address (1-COM1,2-COM2, ...)
 		&mBaud;				//Baudrate
 
-	bool	prc_st,				//Process task active
-		endrun_req;			//Request to stop of the Process task
+	bool	prcSt,				//Process task active
+		endRunReq;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
 
 	pthread_t procPthr;			//Process task thread

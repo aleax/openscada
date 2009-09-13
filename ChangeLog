@@ -1,3 +1,8 @@
+2009-09-13 Roman
+- !!!!:DAQ.ICP_DAS: Here is realised modules I-87019RW, I-8017HW, I-87024W, I-8042W full support.
+- FIX:UI.WebCfgD: To TextEdit field save function is added HTML-encoding. HTML encoding function is fixed.
+
+
 2009-09-08 Roman
 - DAQ.LogicLev: A parameter copy function is expanded for template mode.
 - Special.FLibComplex1: Into PID function is added separated input for manual values input and store.

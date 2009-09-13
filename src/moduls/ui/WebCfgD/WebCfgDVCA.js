@@ -45,7 +45,7 @@ var isKonq = navigator.appName.indexOf('Konqueror') != -1;
  ***************************************************/
 function strEncode( vl, tp )
 {
-  if( !tp || tp == "html" ) return vl.replace('&','&amp;').replace('>','&gt;').replace('<','&lt;').replace('"','&quot;');
+  if( !tp || tp == "html" ) return vl.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
   return vl;
 }
 /***************************************************
@@ -1395,8 +1395,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    btApply.onclick = function()
 	    {
 	      var wEl = this.parentNode.parentNode;
-	      wEl.childNodes[2].value;
-	      var rez = servSet(wEl.childNodes[2].itPath,'com=com','<set>'+wEl.childNodes[2].value+'</set>',true);
+	      var rez = servSet(wEl.childNodes[2].itPath,'com=com','<set>'+strEncode(wEl.childNodes[2].value,'html')+'</set>',true);
 	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 	      setTimeout('pageRefresh()',500);
 	      wEl.removeChild(this.parentNode);
