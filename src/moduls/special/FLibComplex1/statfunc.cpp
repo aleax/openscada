@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibComplex1 file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,7 +32,7 @@
 #define MOD_TYPE	"Special"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.0.3"
+#define VERSION		"1.0.4"
 //*************************************************
 
 FLibComplex1::Lib *FLibComplex1::mod;

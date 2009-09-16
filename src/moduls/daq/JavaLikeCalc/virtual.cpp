@@ -532,7 +532,7 @@ void *Contr::Task( void *icntr )
 	if( !cntr.redntUse( ) )
 	{
 	    //> Setting special IO
-	    int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,cntr.period()?(float)cntr.iterate()*1000/(float)cntr.period():0);
+	    int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,cntr.period()?(float)cntr.iterate()*1e9/(float)cntr.period():0);
 	    ioI = cntr.ioId("f_start");		if( ioI >= 0 ) cntr.setB(ioI,is_start);
 	    ioI = cntr.ioId("f_stop");		if( ioI >= 0 ) cntr.setB(ioI,is_stop);
 
@@ -875,7 +875,7 @@ void Prm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod( owner().period() ? owner().period()/1000 : 1000000 );
+    val.arch().at().setPeriod( owner().period() ? owner().period()/1e3 : 1000000 );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

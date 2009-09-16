@@ -3,37 +3,37 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 # Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
-#: modssl.cpp:57 modssl.cpp:262 modssl.cpp:280 modssl.cpp:354 modssl.cpp:495
-#: modssl.cpp:536 modssl.cpp:716
+#: modssl.cpp:55 modssl.cpp:260 modssl.cpp:278 modssl.cpp:357 modssl.cpp:498
+#: modssl.cpp:539 modssl.cpp:724
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.SSL 0.8.1\n"
+"Project-Id-Version: OpenSCADA.Transport.SSL 0.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-06 11:44+0300\n"
+"POT-Creation-Date: 2009-09-13 21:39+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: modssl.cpp:40 modssl.cpp:41
+#: modssl.cpp:38 modssl.cpp:39
 msgid "SSL"
 msgstr ""
 
-#: modssl.cpp:42
+#: modssl.cpp:40
 msgid "Transport"
 msgstr "Транспорт"
 
-#: modssl.cpp:44
-msgid "0.8.1"
+#: modssl.cpp:42
+msgid "0.8.2"
 msgstr ""
 
-#: modssl.cpp:45
+#: modssl.cpp:43
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: modssl.cpp:46
+#: modssl.cpp:44
 msgid ""
 "Allow security socket layer based transport. Used OpenSSL and supported "
 "SSLv2, SSLv3 and TLSv1."
@@ -41,75 +41,75 @@ msgstr ""
 "Предоставляет транспорт основанный на слое безопасных сокетов. Используется "
 "OpenSSL и поддерживаютя SSLv2, SSLv3 and TLSv1."
 
-#: modssl.cpp:47
+#: modssl.cpp:45
 msgid "GPL"
 msgstr ""
 
-#: modssl.cpp:52
+#: modssl.cpp:50
 msgid "C"
 msgstr ""
 
-#: modssl.cpp:99
+#: modssl.cpp:97
 msgid "/dev/urandom"
 msgstr ""
 
-#: modssl.cpp:121 modssl.cpp:229
+#: modssl.cpp:119 modssl.cpp:227
 msgid "BufLen"
 msgstr ""
 
-#: modssl.cpp:121
+#: modssl.cpp:119
 msgid "Input socket buffer length (kB)"
 msgstr "Длина входного буфера (кбайт)"
 
-#: modssl.cpp:121
+#: modssl.cpp:119
 msgid "4"
 msgstr ""
 
-#: modssl.cpp:121 modssl.cpp:214
+#: modssl.cpp:119 modssl.cpp:212
 msgid "5"
 msgstr ""
 
-#: modssl.cpp:122 modssl.cpp:229
+#: modssl.cpp:120 modssl.cpp:227
 msgid "MaxClients"
 msgstr ""
 
-#: modssl.cpp:122
+#: modssl.cpp:120
 msgid "Maximum clients process"
 msgstr "Максимальное количество обслуживаемых клиентов"
 
-#: modssl.cpp:122
+#: modssl.cpp:120
 msgid "3"
 msgstr ""
 
-#: modssl.cpp:122
+#: modssl.cpp:120
 msgid "10"
 msgstr ""
 
-#: modssl.cpp:123 modssl.cpp:127 modssl.cpp:230 modssl.cpp:637
+#: modssl.cpp:121 modssl.cpp:125 modssl.cpp:228 modssl.cpp:640
 msgid "SSLCertKey"
 msgstr ""
 
-#: modssl.cpp:123 modssl.cpp:127
+#: modssl.cpp:121 modssl.cpp:125
 msgid "SSL PEM certificat and private key"
 msgstr "SSL PEM сертификат и приватный ключ"
 
-#: modssl.cpp:123 modssl.cpp:127
+#: modssl.cpp:121 modssl.cpp:125
 msgid "10000"
 msgstr ""
 
-#: modssl.cpp:124 modssl.cpp:128 modssl.cpp:230 modssl.cpp:637
+#: modssl.cpp:122 modssl.cpp:126 modssl.cpp:228 modssl.cpp:640
 msgid "SSLKeyPass"
 msgstr ""
 
-#: modssl.cpp:124 modssl.cpp:128
+#: modssl.cpp:122 modssl.cpp:126
 msgid "SSL key password"
 msgstr "Пароль SSL ключа"
 
-#: modssl.cpp:124 modssl.cpp:128
+#: modssl.cpp:122 modssl.cpp:126
 msgid "20"
 msgstr ""
 
-#: modssl.cpp:168
+#: modssl.cpp:166
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -120,79 +120,84 @@ msgstr ""
 "------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
 "\n"
 
-#: modssl.cpp:179
+#: modssl.cpp:177
 msgid "h"
 msgstr ""
 
-#: modssl.cpp:182 modssl.cpp:596 modssl.cpp:602 modssl.cpp:847 modssl.cpp:853
+#: modssl.cpp:180 modssl.cpp:599 modssl.cpp:605 modssl.cpp:856 modssl.cpp:862
 msgid "help"
 msgstr ""
 
-#: modssl.cpp:211 modssl.cpp:593 modssl.cpp:844
+#: modssl.cpp:190 modssl.cpp:416 modssl.cpp:547
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: modssl.cpp:209 modssl.cpp:596 modssl.cpp:853
 msgid "info"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:604
-#: modssl.cpp:605 modssl.cpp:847 modssl.cpp:853 modssl.cpp:854
+#: modssl.cpp:212 modssl.cpp:599 modssl.cpp:605 modssl.cpp:606 modssl.cpp:607
+#: modssl.cpp:608 modssl.cpp:856 modssl.cpp:862 modssl.cpp:863
 msgid "fld"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:220
+#: modssl.cpp:212 modssl.cpp:218
 msgid "/help/g_help"
 msgstr ""
 
-#: modssl.cpp:214
+#: modssl.cpp:212
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:604
-#: modssl.cpp:605 modssl.cpp:612 modssl.cpp:613 modssl.cpp:617 modssl.cpp:618
-#: modssl.cpp:622 modssl.cpp:623 modssl.cpp:627 modssl.cpp:628 modssl.cpp:847
-#: modssl.cpp:853 modssl.cpp:854 modssl.cpp:861 modssl.cpp:862 modssl.cpp:866
-#: modssl.cpp:867
+#: modssl.cpp:212 modssl.cpp:599 modssl.cpp:605 modssl.cpp:606 modssl.cpp:607
+#: modssl.cpp:608 modssl.cpp:615 modssl.cpp:616 modssl.cpp:620 modssl.cpp:621
+#: modssl.cpp:625 modssl.cpp:626 modssl.cpp:630 modssl.cpp:631 modssl.cpp:856
+#: modssl.cpp:862 modssl.cpp:863 modssl.cpp:870 modssl.cpp:871 modssl.cpp:875
+#: modssl.cpp:876
 msgid "root"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:604
-#: modssl.cpp:605 modssl.cpp:847 modssl.cpp:853 modssl.cpp:854
+#: modssl.cpp:212 modssl.cpp:599 modssl.cpp:605 modssl.cpp:606 modssl.cpp:607
+#: modssl.cpp:608 modssl.cpp:856 modssl.cpp:862 modssl.cpp:863
 msgid "tp"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:847
-#: modssl.cpp:853 modssl.cpp:854
+#: modssl.cpp:212 modssl.cpp:599 modssl.cpp:605 modssl.cpp:606 modssl.cpp:856
+#: modssl.cpp:862 modssl.cpp:863
 msgid "str"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:602 modssl.cpp:853
+#: modssl.cpp:212 modssl.cpp:605 modssl.cpp:862
 msgid "cols"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:602 modssl.cpp:853
+#: modssl.cpp:212 modssl.cpp:605 modssl.cpp:862
 msgid "90"
 msgstr ""
 
-#: modssl.cpp:214 modssl.cpp:602 modssl.cpp:853
+#: modssl.cpp:212 modssl.cpp:605 modssl.cpp:862
 msgid "rows"
 msgstr ""
 
-#: modssl.cpp:219 modssl.cpp:609 modssl.cpp:858
+#: modssl.cpp:217 modssl.cpp:612 modssl.cpp:867
 msgid "path"
 msgstr ""
 
-#: modssl.cpp:220 modssl.cpp:612 modssl.cpp:617 modssl.cpp:622 modssl.cpp:627
-#: modssl.cpp:861 modssl.cpp:866
+#: modssl.cpp:218 modssl.cpp:615 modssl.cpp:620 modssl.cpp:625 modssl.cpp:630
+#: modssl.cpp:870 modssl.cpp:875
 msgid "get"
 msgstr ""
 
-#: modssl.cpp:232 modssl.cpp:639
+#: modssl.cpp:230 modssl.cpp:642
 msgid "localhost:10042"
 msgstr ""
 
-#: modssl.cpp:245
+#: modssl.cpp:243
 msgid "Start error: "
 msgstr "Ошибка запуска: "
 
-#: modssl.cpp:248
+#: modssl.cpp:246
 #, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed "
@@ -201,132 +206,127 @@ msgstr ""
 "Подключений %d, открыто %d. Трафик входящий %.4g кб, исходящий %.4g кб. "
 "Закрыто соединений из-за лимита %d."
 
-#: modssl.cpp:271
+#: modssl.cpp:269
 msgid "open"
 msgstr "открытие"
 
-#: modssl.cpp:272
+#: modssl.cpp:270
 msgid "Not opened!"
 msgstr "Не открылся!"
 
-#: modssl.cpp:286
+#: modssl.cpp:284
 msgid "close"
 msgstr "закрытие"
 
-#: modssl.cpp:287
+#: modssl.cpp:285
 msgid "Not closed!"
 msgstr "Не открылся!"
 
-#: modssl.cpp:301 modssl.cpp:444
+#: modssl.cpp:299 modssl.cpp:447
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: modssl.cpp:318 modssl.cpp:674
+#: modssl.cpp:321 modssl.cpp:682
 msgid "SSLv2"
 msgstr ""
 
-#: modssl.cpp:319 modssl.cpp:675
+#: modssl.cpp:322 modssl.cpp:683
 msgid "SSLv3"
 msgstr ""
 
-#: modssl.cpp:320 modssl.cpp:676
+#: modssl.cpp:323 modssl.cpp:684
 msgid "TLSv1"
 msgstr ""
 
-#: modssl.cpp:328 modssl.cpp:687
+#: modssl.cpp:331 modssl.cpp:695
 #, c-format
 msgid "SSL_CTX_new: %s"
 msgstr ""
 
-#: modssl.cpp:334 modssl.cpp:696
+#: modssl.cpp:337 modssl.cpp:704
 #, c-format
 msgid "Open temporaty file '%s' error: '%s'"
 msgstr "Ошибка открытия временного файла '%s': '%s'"
 
-#: modssl.cpp:344 modssl.cpp:706
+#: modssl.cpp:347 modssl.cpp:714
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"
 msgstr ""
 
-#: modssl.cpp:350 modssl.cpp:712
+#: modssl.cpp:353 modssl.cpp:720
 #, c-format
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
-#: modssl.cpp:360
+#: modssl.cpp:363
 #, c-format
 msgid "BIO_new_ssl: %s"
 msgstr ""
 
-#: modssl.cpp:365 modssl.cpp:728
+#: modssl.cpp:368 modssl.cpp:736
 msgid ":"
 msgstr ""
 
-#: modssl.cpp:376 modssl.cpp:397
+#: modssl.cpp:379 modssl.cpp:400
 #, c-format
 msgid "BIO_do_accept: %s"
 msgstr ""
 
-#: modssl.cpp:407
+#: modssl.cpp:410
 msgid "Error creation of the thread!"
 msgstr "Ошибка создания потока!"
 
-#: modssl.cpp:413 modssl.cpp:544
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: modssl.cpp:417
+#: modssl.cpp:420
 msgid ": "
 msgstr ""
 
-#: modssl.cpp:417
+#: modssl.cpp:420
 msgid " client tasks is stopping...."
 msgstr " клиентская задача остановлена...."
 
-#: modssl.cpp:447
+#: modssl.cpp:450
 #, c-format
 msgid "Connecting to the socket (%d)."
 msgstr "Подключение к сокету (%d)."
 
-#: modssl.cpp:459
+#: modssl.cpp:462
 #, c-format
 msgid "BIO_should_retry: %s"
 msgstr ""
 
-#: modssl.cpp:483 modssl.cpp:835
+#: modssl.cpp:486 modssl.cpp:844
 #, c-format
 msgid "The message is received with the size <%d>."
 msgstr "Получено сообщение размером <%d>."
 
-#: modssl.cpp:492
+#: modssl.cpp:495
 #, c-format
 msgid "The message is replied with the size <%d>."
 msgstr "Отвечено сообщением размером <%d>."
 
-#: modssl.cpp:516
+#: modssl.cpp:519
 #, c-format
 msgid "Socket has been disconnected (%d)."
 msgstr "Отключение от сокета (%d)."
 
-#: modssl.cpp:527
+#: modssl.cpp:530
 msgid "_"
 msgstr ""
 
-#: modssl.cpp:545
+#: modssl.cpp:548
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
-#: modssl.cpp:596 modssl.cpp:847
+#: modssl.cpp:599 modssl.cpp:856
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: modssl.cpp:596 modssl.cpp:847
+#: modssl.cpp:599 modssl.cpp:856
 msgid "ADDR"
 msgstr ""
 
-#: modssl.cpp:597
+#: modssl.cpp:600
 msgid ""
 "SSL input transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
@@ -341,103 +341,103 @@ msgstr ""
 "    port - сетевой порт (/etc/services);\n"
 "    mode - SSL режим и версия (SSLv2, SSLv3, SSLv23 and TLSv1)."
 
-#: modssl.cpp:602 modssl.cpp:610 modssl.cpp:853 modssl.cpp:859
+#: modssl.cpp:605 modssl.cpp:613 modssl.cpp:862 modssl.cpp:868
 msgid "/prm/cfg/certKey"
 msgstr ""
 
-#: modssl.cpp:602 modssl.cpp:853
+#: modssl.cpp:605 modssl.cpp:862
 msgid "Certificates and private key"
 msgstr "Сертификаты и приватный ключ"
 
-#: modssl.cpp:602 modssl.cpp:853
+#: modssl.cpp:605 modssl.cpp:862
 msgid "7"
 msgstr ""
 
-#: modssl.cpp:602 modssl.cpp:853
+#: modssl.cpp:605 modssl.cpp:862
 msgid "SSL PAM certificates chain and private key."
 msgstr "Цепь SSL PAM сертификатов и приватный ключ."
 
-#: modssl.cpp:603 modssl.cpp:615 modssl.cpp:854 modssl.cpp:864
+#: modssl.cpp:606 modssl.cpp:618 modssl.cpp:863 modssl.cpp:873
 msgid "/prm/cfg/pkey_pass"
 msgstr ""
 
-#: modssl.cpp:603 modssl.cpp:854
+#: modssl.cpp:606 modssl.cpp:863
 msgid "Private key password"
 msgstr "Пароль приватного ключа"
 
-#: modssl.cpp:604 modssl.cpp:620
+#: modssl.cpp:607 modssl.cpp:623
 msgid "/prm/cfg/cl_n"
 msgstr ""
 
-#: modssl.cpp:604
+#: modssl.cpp:607
 msgid "Clients maximum"
 msgstr "Максимум клиентов"
 
-#: modssl.cpp:604 modssl.cpp:605
+#: modssl.cpp:607 modssl.cpp:608
 msgid "dec"
 msgstr ""
 
-#: modssl.cpp:605 modssl.cpp:625
+#: modssl.cpp:608 modssl.cpp:628
 msgid "/prm/cfg/bf_ln"
 msgstr ""
 
-#: modssl.cpp:605
+#: modssl.cpp:608
 msgid "Input buffer (kbyte)"
 msgstr "Входной буфер (кбайт)"
 
-#: modssl.cpp:613 modssl.cpp:618 modssl.cpp:623 modssl.cpp:628 modssl.cpp:862
-#: modssl.cpp:867
+#: modssl.cpp:616 modssl.cpp:621 modssl.cpp:626 modssl.cpp:631 modssl.cpp:871
+#: modssl.cpp:876
 msgid "set"
 msgstr ""
 
-#: modssl.cpp:651
+#: modssl.cpp:654
 #, c-format
 msgid "Traffic in %.4g kb, out %.4g kb."
 msgstr "Трафик входящий %.4g кб, исходящий %.4g кб."
 
-#: modssl.cpp:723
+#: modssl.cpp:731
 #, c-format
 msgid "BIO_new_ssl_connect: %s"
 msgstr ""
 
-#: modssl.cpp:733
+#: modssl.cpp:741
 #, c-format
 msgid "BIO_do_connect: %s"
 msgstr ""
 
-#: modssl.cpp:777
+#: modssl.cpp:786
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-#: modssl.cpp:788
+#: modssl.cpp:797
 #, c-format
 msgid "BIO_write: %s"
 msgstr ""
 
-#: modssl.cpp:794
+#: modssl.cpp:803
 #, c-format
 msgid "The message is sent with the size <%d>."
 msgstr "Отправлено сообщение размером <%d>."
 
-#: modssl.cpp:806
+#: modssl.cpp:815
 #, c-format
 msgid "BIO_read: %s"
 msgstr ""
 
-#: modssl.cpp:823
+#: modssl.cpp:832
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
-#: modssl.cpp:824
+#: modssl.cpp:833
 msgid "Socket error!"
 msgstr "Ошибка сокета!"
 
-#: modssl.cpp:828
+#: modssl.cpp:837
 #, c-format
 msgid "Read reply error: %s"
 msgstr "Ошибка чтения ответа: %s"
 
-#: modssl.cpp:848
+#: modssl.cpp:857
 msgid ""
 "SSL output transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"

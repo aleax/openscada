@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,7 +38,7 @@
 #define MOD_LICENSE	"GPL"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
-#define VERSION		"0.8.1"
+#define VERSION		"0.9.0"
 //*************************************************
 
 FLibSYS::Lib *FLibSYS::mod;

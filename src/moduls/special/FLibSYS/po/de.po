@@ -4,15 +4,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-#: statfunc.cpp:51 varchfnc.cpp:106 varchfnc.cpp:118 varchfnc.cpp:130
-#: varchfnc.cpp:143 varchfnc.cpp:199 varchfnc.cpp:212 varchfnc.cpp:233
-#: xmlfnc.cpp:72 xmlfnc.cpp:138 sysfnc.h:931 timefnc.h:41 timefnc.h:56
+#: statfunc.cpp:51 varchfnc.cpp:107 varchfnc.cpp:119 varchfnc.cpp:131
+#: varchfnc.cpp:144 varchfnc.cpp:200 varchfnc.cpp:213 varchfnc.cpp:234
+#: xmlfnc.cpp:72 xmlfnc.cpp:138 sysfnc.h:416 timefnc.h:41 timefnc.h:56
 #: timefnc.h:137 xmlfnc.h:39 xmlfnc.h:54
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.8.1\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:19+0300\n"
+"POT-Creation-Date: 2009-09-16 17:56+0300\n"
 "PO-Revision-Date: 2009-08-19 11:24+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -51,84 +51,82 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:41
-msgid "0.8.1"
+msgid "0.9.0"
 msgstr ""
 
 #: statfunc.cpp:46
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:81 statfunc.cpp:274
+#: statfunc.cpp:81 statfunc.cpp:155
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:270
+#: statfunc.cpp:151
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:273
+#: statfunc.cpp:154
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:273 statfunc.cpp:279
+#: statfunc.cpp:154 statfunc.cpp:160
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:273
+#: statfunc.cpp:154
 msgid "Function"
 msgstr "Funktion"
 
-#: statfunc.cpp:273 statfunc.cpp:274
+#: statfunc.cpp:154 statfunc.cpp:155
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:273 statfunc.cpp:274
+#: statfunc.cpp:154 statfunc.cpp:155
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:273 statfunc.cpp:274 sysfnc.h:138 varchfnc.h:96
+#: statfunc.cpp:154 statfunc.cpp:155 varchfnc.h:96
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:274
+#: statfunc.cpp:155
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:274 statfunc.cpp:279
+#: statfunc.cpp:155 statfunc.cpp:160
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:274
+#: statfunc.cpp:155
 msgid "Functions"
 msgstr "Funktionen"
 
-#: statfunc.cpp:274 sysfnc.h:138 sysfnc.h:896 varchfnc.h:96
+#: statfunc.cpp:155 sysfnc.h:381 varchfnc.h:96
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:274
+#: statfunc.cpp:155
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:274
+#: statfunc.cpp:155
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:278 xmlfnc.cpp:187 xmlfnc.cpp:195 xmlfnc.cpp:197 sysfnc.h:826
+#: statfunc.cpp:159 xmlfnc.cpp:187 xmlfnc.cpp:195 xmlfnc.cpp:197 sysfnc.h:311
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:284
+#: statfunc.cpp:165
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:284 sysfnc.h:116 sysfnc.h:137 sysfnc.h:162 sysfnc.h:182
-#: sysfnc.h:222 sysfnc.h:325 sysfnc.h:370 sysfnc.h:415 sysfnc.h:460
-#: sysfnc.h:504 sysfnc.h:535 sysfnc.h:566 sysfnc.h:597
+#: statfunc.cpp:165
 msgid "id"
 msgstr ""
 
-#: varchfnc.cpp:93 varchfnc.cpp:98 varchfnc.cpp:267
+#: varchfnc.cpp:93 varchfnc.cpp:98 varchfnc.cpp:268
 msgid "VArchObj"
 msgstr ""
 
@@ -137,34 +135,38 @@ msgid "Properties no supported by object."
 msgstr "Eigenschaften werden vom Objekt nicht unterstützt."
 
 #: varchfnc.cpp:103
+msgid "isNull"
+msgstr ""
+
+#: varchfnc.cpp:104
 msgid "begin"
 msgstr ""
 
-#: varchfnc.cpp:115
+#: varchfnc.cpp:116
 msgid "end"
 msgstr ""
 
-#: varchfnc.cpp:127
+#: varchfnc.cpp:128
 msgid "period"
 msgstr ""
 
-#: varchfnc.cpp:139
+#: varchfnc.cpp:140
 msgid "get"
 msgstr ""
 
-#: varchfnc.cpp:159
+#: varchfnc.cpp:160
 msgid "set"
 msgstr ""
 
-#: varchfnc.cpp:182
+#: varchfnc.cpp:183
 msgid "copy"
 msgstr ""
 
-#: varchfnc.cpp:223
+#: varchfnc.cpp:224
 msgid "FFT"
 msgstr ""
 
-#: varchfnc.cpp:267 xmlfnc.cpp:144
+#: varchfnc.cpp:268 xmlfnc.cpp:144
 #, c-format
 msgid "Function '%s' error or not enough parameters."
 msgstr "Funktion '%s' Fehler oder zuwenig Parameter."
@@ -183,7 +185,7 @@ msgstr "Fehler beim Löschen von Kind '%d'."
 msgid "Child '%d' is not allow."
 msgstr "Kind '%d' ist nicht zulässig."
 
-#: xmlfnc.cpp:76 sysfnc.h:117 varchfnc.h:73 xmlfnc.h:76
+#: xmlfnc.cpp:76 varchfnc.h:73 xmlfnc.h:76
 msgid "name"
 msgstr ""
 
@@ -240,12 +242,11 @@ msgstr "1:Anfrage Fehler: %s"
 msgid "1:"
 msgstr ""
 
-#: xmlfnc.cpp:127 xmlfnc.cpp:200 sysfnc.h:141 sysfnc.h:142 sysfnc.h:328
-#: sysfnc.h:373 sysfnc.h:418 sysfnc.h:463 sysfnc.h:717 sysfnc.h:745
-#: sysfnc.h:770 timefnc.h:42 timefnc.h:68 timefnc.h:69 timefnc.h:70
-#: timefnc.h:71 timefnc.h:72 timefnc.h:73 timefnc.h:74 timefnc.h:75
-#: timefnc.h:76 timefnc.h:77 timefnc.h:109 timefnc.h:136 timefnc.h:161
-#: timefnc.h:163 varchfnc.h:99 varchfnc.h:100
+#: xmlfnc.cpp:127 xmlfnc.cpp:200 sysfnc.h:202 sysfnc.h:230 sysfnc.h:255
+#: timefnc.h:42 timefnc.h:68 timefnc.h:69 timefnc.h:70 timefnc.h:71
+#: timefnc.h:72 timefnc.h:73 timefnc.h:74 timefnc.h:75 timefnc.h:76
+#: timefnc.h:77 timefnc.h:109 timefnc.h:136 timefnc.h:161 timefnc.h:163
+#: varchfnc.h:99 varchfnc.h:100
 msgid "0"
 msgstr ""
 
@@ -278,15 +279,15 @@ msgstr "1:Anfrage Fehler: %s"
 msgid "sysCall"
 msgstr ""
 
-#: sysfnc.h:46 sysfnc.h:76 sysfnc.h:631 sysfnc.h:694 sysfnc.h:715 sysfnc.h:798
-#: sysfnc.h:825 sysfnc.h:850 sysfnc.h:872 sysfnc.h:893 sysfnc.h:916
-#: sysfnc.h:944 sysfnc.h:962 sysfnc.h:1005 xmlfnc.h:75 xmlfnc.h:93
+#: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
+#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:401
+#: sysfnc.h:429 sysfnc.h:447 sysfnc.h:490 xmlfnc.h:75 xmlfnc.h:93
 msgid "rez"
 msgstr ""
 
-#: sysfnc.h:46 sysfnc.h:76 sysfnc.h:631 sysfnc.h:694 sysfnc.h:715 sysfnc.h:798
-#: sysfnc.h:825 sysfnc.h:850 sysfnc.h:872 sysfnc.h:893 sysfnc.h:916
-#: sysfnc.h:944 sysfnc.h:962 sysfnc.h:1005 xmlfnc.h:75 xmlfnc.h:93
+#: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
+#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:401
+#: sysfnc.h:429 sysfnc.h:447 sysfnc.h:490 xmlfnc.h:75 xmlfnc.h:93
 msgid "Rezult"
 msgstr "Ergebnis"
 
@@ -314,8 +315,7 @@ msgstr ""
 msgid "dbReqSQL"
 msgstr ""
 
-#: sysfnc.h:77 sysfnc.h:186 sysfnc.h:226 sysfnc.h:330 sysfnc.h:375
-#: sysfnc.h:420 sysfnc.h:465
+#: sysfnc.h:77
 msgid "addr"
 msgstr ""
 
@@ -340,724 +340,398 @@ msgid "Send SQL request to DB."
 msgstr "Sende SQL Anfrage an Datenbank"
 
 #: sysfnc.h:114
-msgid "varhOpen"
-msgstr ""
-
-#: sysfnc.h:116 sysfnc.h:137 sysfnc.h:162 sysfnc.h:182 sysfnc.h:222
-msgid "Archive id"
-msgstr "ID des Archivs"
-
-#: sysfnc.h:117 varchfnc.h:73 xmlfnc.h:76
-msgid "Name"
-msgstr "Name"
-
-#: sysfnc.h:120
-msgid "Varch: Open"
-msgstr "Datei: Öffnen"
-
-#: sysfnc.h:121
-msgid "Open value archive."
-msgstr "Öffnen des Wertearchivs."
-
-#: sysfnc.h:135
-msgid "varhBufOpen"
-msgstr ""
-
-#: sysfnc.h:138 sysfnc.h:896 varchfnc.h:96
-msgid "Type"
-msgstr "Typ"
-
-#: sysfnc.h:139 varchfnc.h:97
-msgid "sz"
-msgstr ""
-
-#: sysfnc.h:139 varchfnc.h:97
-msgid "Size"
-msgstr "Grösse"
-
-#: sysfnc.h:139 varchfnc.h:97
-msgid "100"
-msgstr ""
-
-#: sysfnc.h:140 varchfnc.h:98
-msgid "per"
-msgstr ""
-
-#: sysfnc.h:140 varchfnc.h:98
-msgid "Period (us)"
-msgstr "Periode (usek)"
-
-#: sysfnc.h:140 varchfnc.h:98
-msgid "1000000"
-msgstr ""
-
-#: sysfnc.h:141 varchfnc.h:99
-msgid "hgrd"
-msgstr ""
-
-#: sysfnc.h:141 varchfnc.h:99
-msgid "Hard grid"
-msgstr "Gitter"
-
-#: sysfnc.h:142 varchfnc.h:100
-msgid "hres"
-msgstr ""
-
-#: sysfnc.h:142 varchfnc.h:100
-msgid "High resolution"
-msgstr "Hohe Auflösung"
-
-#: sysfnc.h:145
-msgid "Varch: Buffer open"
-msgstr "Datei: Öffnen des Puffers"
-
-#: sysfnc.h:146
-msgid "Open value buffer for temporary values storing."
-msgstr "Öffnen des Wertepuffers für die Zwischenspeicherung der Werte."
-
-#: sysfnc.h:160
-msgid "varhClose"
-msgstr ""
-
-#: sysfnc.h:165
-msgid "Varch: Close"
-msgstr "Datei: Schliessen"
-
-#: sysfnc.h:166
-msgid "Close opened value archive or buffer."
-msgstr "Schliessen des geöffneten Wertearchivs oder des Puffers."
-
-#: sysfnc.h:180
-msgid "varhBeg"
-msgstr ""
-
-#: sysfnc.h:183 sysfnc.h:223
-msgid "sek"
-msgstr ""
-
-#: sysfnc.h:183 sysfnc.h:223 sysfnc.h:326 sysfnc.h:371 sysfnc.h:416
-#: sysfnc.h:461 sysfnc.h:506 sysfnc.h:537 sysfnc.h:568 sysfnc.h:599
-#: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
-msgid "Seconds"
-msgstr "Sekunden"
-
-#: sysfnc.h:184 sysfnc.h:224
-msgid "usek"
-msgstr ""
-
-#: sysfnc.h:184 sysfnc.h:224 sysfnc.h:327 sysfnc.h:372 sysfnc.h:417
-#: sysfnc.h:462 sysfnc.h:507 sysfnc.h:538 sysfnc.h:569 sysfnc.h:600
-#: timefnc.h:110
-msgid "Microseconds"
-msgstr "Mikrosekunden"
-
-#: sysfnc.h:185 sysfnc.h:225 sysfnc.h:268 sysfnc.h:329 sysfnc.h:374
-#: sysfnc.h:419 sysfnc.h:464
-msgid "archtor"
-msgstr ""
-
-#: sysfnc.h:185 sysfnc.h:225 sysfnc.h:268 sysfnc.h:329 sysfnc.h:374
-#: sysfnc.h:419 sysfnc.h:464 sysfnc.h:636
-msgid "Archivator"
-msgstr "Archivar"
-
-#: sysfnc.h:186 sysfnc.h:226 sysfnc.h:330 sysfnc.h:375 sysfnc.h:420
-#: sysfnc.h:465
-msgid "Address of archive or atribute of parameter"
-msgstr "Archivadresse oder Parameterattribut"
-
-#: sysfnc.h:189
-msgid "Varch: Begin"
-msgstr "Datei: Anfang"
-
-#: sysfnc.h:190
-msgid "Begin of opened value archive or buffer."
-msgstr "Anfang (Zeit) des offenen Wertearchivs oder des Puffers."
-
-#: sysfnc.h:220
-msgid "varhEnd"
-msgstr ""
-
-#: sysfnc.h:229
-msgid "Varch: End"
-msgstr "Datei: Ende"
-
-#: sysfnc.h:230
-msgid "End of opened value archive or buffer."
-msgstr "Ende (Zeit) des offenen Wertearchiv oder des Puffers."
-
-#: sysfnc.h:260
-msgid "varhCopyBuf"
-msgstr ""
-
-#: sysfnc.h:262
-msgid "sid"
-msgstr ""
-
-#: sysfnc.h:262
-msgid "Source buffer id"
-msgstr "ID des Ausgangspuffers"
-
-#: sysfnc.h:263
-msgid "did"
-msgstr ""
-
-#: sysfnc.h:263
-msgid "Destination buffer id"
-msgstr "ID des Zielpuffers"
-
-#: sysfnc.h:264
-msgid "begSek"
-msgstr ""
-
-#: sysfnc.h:264
-msgid "Begin seconds"
-msgstr "Anfang Sekunden"
-
-#: sysfnc.h:265
-msgid "begUsek"
-msgstr ""
-
-#: sysfnc.h:265
-msgid "Begin microseconds"
-msgstr "Anfang Mikrosekunden"
-
-#: sysfnc.h:266
-msgid "endSek"
-msgstr ""
-
-#: sysfnc.h:266
-msgid "End seconds"
-msgstr "Ende Sekunden"
-
-#: sysfnc.h:267
-msgid "endUsek"
-msgstr ""
-
-#: sysfnc.h:267
-msgid "End microseconds"
-msgstr "Ende Mikrosekunden"
-
-#: sysfnc.h:271
-msgid "Varch: Copy values"
-msgstr "Datei: Kopieren der Werte"
-
-#: sysfnc.h:272
-msgid "Copy values among value archives and buffers."
-msgstr "Kopieren der Werte zwischen den Wertearchiven und den Puffern."
-
-#: sysfnc.h:322
-msgid "varhGetI"
-msgstr ""
-
-#: sysfnc.h:324 sysfnc.h:369 sysfnc.h:414 sysfnc.h:459 sysfnc.h:505
-#: sysfnc.h:536 sysfnc.h:567 sysfnc.h:598 sysfnc.h:894 sysfnc.h:917
-#: sysfnc.h:945 sysfnc.h:963 sysfnc.h:980 timefnc.h:41
-msgid "val"
-msgstr ""
-
-#: sysfnc.h:324 sysfnc.h:369 sysfnc.h:414 sysfnc.h:459
-msgid "Return value"
-msgstr "Rückgabewert"
-
-#: sysfnc.h:325 sysfnc.h:370 sysfnc.h:415 sysfnc.h:460 sysfnc.h:504
-#: sysfnc.h:535 sysfnc.h:566 sysfnc.h:597
-msgid "Buffer id"
-msgstr "ID des Puffers"
-
-#: sysfnc.h:325 sysfnc.h:370 sysfnc.h:415 sysfnc.h:460 sysfnc.h:718
-#: sysfnc.h:771 timefnc.h:110
-msgid "-1"
-msgstr ""
-
-#: sysfnc.h:326 sysfnc.h:371 sysfnc.h:416 sysfnc.h:461 sysfnc.h:506
-#: sysfnc.h:537 sysfnc.h:568 sysfnc.h:599 timefnc.h:42 timefnc.h:69
-#: timefnc.h:109 timefnc.h:136
-msgid "sec"
-msgstr ""
-
-#: sysfnc.h:327 sysfnc.h:372 sysfnc.h:417 sysfnc.h:462 sysfnc.h:507
-#: sysfnc.h:538 sysfnc.h:569 sysfnc.h:600 timefnc.h:110
-msgid "usec"
-msgstr ""
-
-#: sysfnc.h:328 sysfnc.h:373 sysfnc.h:418 sysfnc.h:463
-msgid "up_ord"
-msgstr ""
-
-#: sysfnc.h:328 sysfnc.h:373 sysfnc.h:418 sysfnc.h:463
-msgid "Up order"
-msgstr "Verschieben nach oben"
-
-#: sysfnc.h:333
-msgid "Varch: Get integer"
-msgstr "Datei: Ganzzahl laden"
-
-#: sysfnc.h:334
-msgid "Get integer from archive or buffer."
-msgstr "Ganzzahl aus dem Puffer oder dem Archiv laden."
-
-#: sysfnc.h:367
-msgid "varhGetR"
-msgstr ""
-
-#: sysfnc.h:378
-msgid "Varch: Get real"
-msgstr "Datei: Reele Zahl laden"
-
-#: sysfnc.h:379
-msgid "Get real from archive or buffer."
-msgstr "Reele Zahl aus dem Puffer oder dem Archiv laden."
-
-#: sysfnc.h:412
-msgid "varhGetB"
-msgstr ""
-
-#: sysfnc.h:423
-msgid "Varch: Get boolean"
-msgstr "Datei: Logische Zahl laden"
-
-#: sysfnc.h:424
-msgid "Get boolean from archive or buffer."
-msgstr "Logische Zahl aus dem Puffer oder dem Archiv laden."
-
-#: sysfnc.h:457
-msgid "varhGetS"
-msgstr ""
-
-#: sysfnc.h:468
-msgid "Varch: Get string"
-msgstr "Datei: Text laden"
-
-#: sysfnc.h:469
-msgid "Get string from archive or buffer."
-msgstr "Text aus dem Puffer oder dem Archiv laden."
-
-#: sysfnc.h:502
-msgid "varhSetI"
-msgstr ""
-
-#: sysfnc.h:505 sysfnc.h:536 sysfnc.h:567 sysfnc.h:598 sysfnc.h:894
-#: sysfnc.h:917 sysfnc.h:945 sysfnc.h:963 sysfnc.h:980
-msgid "Value"
-msgstr "Wert"
-
-#: sysfnc.h:510
-msgid "Varch: Set integer"
-msgstr "Datei: Ganzzahl speichern"
-
-#: sysfnc.h:511
-msgid "Set integer to archive or buffer."
-msgstr "Ganzzahl in den Puffer oder das Archiv speichern."
-
-#: sysfnc.h:533
-msgid "varhSetR"
-msgstr ""
-
-#: sysfnc.h:541
-msgid "Varch: Set real"
-msgstr "Datei: Reele Zahl speichern"
-
-#: sysfnc.h:542
-msgid "Set real to archive or buffer."
-msgstr "Reele Zahl in den Puffer oder das Archiv speichern."
-
-#: sysfnc.h:564
-msgid "varhSetB"
-msgstr ""
-
-#: sysfnc.h:572
-msgid "Varch: Set boolean"
-msgstr "Datei: Logische Zahl speichern"
-
-#: sysfnc.h:573
-msgid "Set boolean to archive or buffer."
-msgstr "Logische Zahl in den Puffer oder das Archiv speichern."
-
-#: sysfnc.h:595
-msgid "varhSetS"
-msgstr ""
-
-#: sysfnc.h:603
-msgid "Varch: Set string"
-msgstr "Datei: Text speichern"
-
-#: sysfnc.h:604
-msgid "Set string to archive or buffer."
-msgstr "Text in den Puffer oder das Archiv speichern."
-
-#: sysfnc.h:629
 msgid "messGet"
 msgstr ""
 
-#: sysfnc.h:632
+#: sysfnc.h:117
 msgid "btm"
 msgstr ""
 
-#: sysfnc.h:632
+#: sysfnc.h:117
 msgid "Begin time"
 msgstr "Anfangszeit"
 
-#: sysfnc.h:633
+#: sysfnc.h:118
 msgid "etm"
 msgstr ""
 
-#: sysfnc.h:633
+#: sysfnc.h:118
 msgid "End time"
 msgstr "Endezeit"
 
-#: sysfnc.h:634 sysfnc.h:669
+#: sysfnc.h:119 sysfnc.h:154
 msgid "cat"
 msgstr ""
 
-#: sysfnc.h:634 sysfnc.h:669
+#: sysfnc.h:119 sysfnc.h:154
 msgid "Category"
 msgstr "Kategorie"
 
-#: sysfnc.h:635 sysfnc.h:670 sysfnc.h:800 sysfnc.h:827
+#: sysfnc.h:120 sysfnc.h:155 sysfnc.h:285 sysfnc.h:312
 msgid "lev"
 msgstr ""
 
-#: sysfnc.h:635 sysfnc.h:670 sysfnc.h:800 sysfnc.h:827
+#: sysfnc.h:120 sysfnc.h:155 sysfnc.h:285 sysfnc.h:312
 msgid "Level"
 msgstr "Stufe"
 
-#: sysfnc.h:636
+#: sysfnc.h:121
 msgid "arch"
 msgstr ""
 
-#: sysfnc.h:639
+#: sysfnc.h:121
+msgid "Archivator"
+msgstr "Archivar"
+
+#: sysfnc.h:124
 msgid "Mess: Get"
 msgstr "Nachricht: Laden"
 
-#: sysfnc.h:640
+#: sysfnc.h:125
 msgid "Get messages from system."
 msgstr "Nachricht aus dem System laden."
 
-#: sysfnc.h:650
+#: sysfnc.h:135
 msgid "tm"
 msgstr ""
 
-#: sysfnc.h:651
+#: sysfnc.h:136
 msgid "utm"
 msgstr ""
 
-#: sysfnc.h:652
+#: sysfnc.h:137
 msgid "categ"
 msgstr ""
 
-#: sysfnc.h:653
+#: sysfnc.h:138
 msgid "level"
 msgstr ""
 
-#: sysfnc.h:654 sysfnc.h:671
+#: sysfnc.h:139 sysfnc.h:156
 msgid "mess"
 msgstr ""
 
-#: sysfnc.h:667
+#: sysfnc.h:152
 msgid "messPut"
 msgstr ""
 
-#: sysfnc.h:671
+#: sysfnc.h:156
 msgid "Message"
 msgstr "Nachricht"
 
-#: sysfnc.h:674
+#: sysfnc.h:159
 msgid "Mess: Put"
 msgstr "Nachricht: Speichern"
 
-#: sysfnc.h:675
+#: sysfnc.h:160
 msgid "Put message to system."
 msgstr "Die Nachricht ins System speichern."
 
-#: sysfnc.h:679
+#: sysfnc.h:164
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: sysfnc.h:692
+#: sysfnc.h:177
 msgid "strSize"
 msgstr ""
 
-#: sysfnc.h:695 sysfnc.h:716 sysfnc.h:744 sysfnc.h:769 sysfnc.h:799
+#: sysfnc.h:180 sysfnc.h:201 sysfnc.h:229 sysfnc.h:254 sysfnc.h:284
 #: timefnc.h:137 timefnc.h:162
 msgid "str"
 msgstr ""
 
-#: sysfnc.h:695 sysfnc.h:716 sysfnc.h:744 sysfnc.h:769 sysfnc.h:799
+#: sysfnc.h:180 sysfnc.h:201 sysfnc.h:229 sysfnc.h:254 sysfnc.h:284
 msgid "String"
 msgstr "Text"
 
-#: sysfnc.h:698
+#: sysfnc.h:183
 msgid "String: Get size"
 msgstr "Text: Grösse laden"
 
-#: sysfnc.h:699
+#: sysfnc.h:184
 msgid "Use for string size getting."
 msgstr "Wird verwendet um die Grösse des Texts zu laden."
 
-#: sysfnc.h:713
+#: sysfnc.h:198
 msgid "strSubstr"
 msgstr ""
 
-#: sysfnc.h:717 sysfnc.h:745 sysfnc.h:770
+#: sysfnc.h:202 sysfnc.h:230 sysfnc.h:255
 msgid "pos"
 msgstr ""
 
-#: sysfnc.h:717 sysfnc.h:745 sysfnc.h:770
+#: sysfnc.h:202 sysfnc.h:230 sysfnc.h:255
 msgid "Position"
 msgstr "Position"
 
-#: sysfnc.h:718 sysfnc.h:771
+#: sysfnc.h:203 sysfnc.h:256
 msgid "n"
 msgstr ""
 
-#: sysfnc.h:718 sysfnc.h:771
+#: sysfnc.h:203 sysfnc.h:256
 msgid "Number"
 msgstr "Anzahl"
 
-#: sysfnc.h:721
+#: sysfnc.h:203 sysfnc.h:256 timefnc.h:110
+msgid "-1"
+msgstr ""
+
+#: sysfnc.h:206
 msgid "String: Get substring"
 msgstr "Text: Textteil laden"
 
-#: sysfnc.h:722
+#: sysfnc.h:207
 msgid "Use for substring getting."
 msgstr "Wird verwendet um einen Textteil zu laden."
 
-#: sysfnc.h:742
+#: sysfnc.h:227
 msgid "strInsert"
 msgstr ""
 
-#: sysfnc.h:746
+#: sysfnc.h:231
 msgid "ins"
 msgstr ""
 
-#: sysfnc.h:746
+#: sysfnc.h:231
 msgid "Insert string"
 msgstr "Text einfügen"
 
-#: sysfnc.h:749
+#: sysfnc.h:234
 msgid "String: Insert string to other string"
 msgstr "Text: Text einfügen"
 
-#: sysfnc.h:750
+#: sysfnc.h:235
 msgid "Use for insertion string to other string."
 msgstr "Wird verwendet um einen Text in den anderen Text einzufügen. "
 
-#: sysfnc.h:767
+#: sysfnc.h:252
 msgid "strReplace"
 msgstr ""
 
-#: sysfnc.h:772
+#: sysfnc.h:257
 msgid "repl"
 msgstr ""
 
-#: sysfnc.h:772
+#: sysfnc.h:257
 msgid "Replace string"
 msgstr "Text ersetzen"
 
-#: sysfnc.h:775
+#: sysfnc.h:260
 msgid "String: Replace part string on other string"
 msgstr "Text: Textteil ersetzen"
 
-#: sysfnc.h:776
+#: sysfnc.h:261
 msgid "Use for replacing part string on other string."
 msgstr "Wird verwendet um einen Textteil durch einen anderen zu ersetzen. "
 
-#: sysfnc.h:796
+#: sysfnc.h:281
 msgid "strParse"
 msgstr ""
 
-#: sysfnc.h:801 sysfnc.h:852
+#: sysfnc.h:286 sysfnc.h:337
 msgid "sep"
 msgstr ""
 
-#: sysfnc.h:801 sysfnc.h:852
+#: sysfnc.h:286 sysfnc.h:337
 msgid "Separator"
 msgstr "Trennzeichen"
 
-#: sysfnc.h:801 sysfnc.h:852
+#: sysfnc.h:286 sysfnc.h:337
 msgid "."
 msgstr ""
 
-#: sysfnc.h:802 sysfnc.h:828
+#: sysfnc.h:287 sysfnc.h:313
 msgid "off"
 msgstr ""
 
-#: sysfnc.h:802 sysfnc.h:828
+#: sysfnc.h:287 sysfnc.h:313
 msgid "Offset"
 msgstr "Offset"
 
-#: sysfnc.h:805
+#: sysfnc.h:290
 msgid "String: Parse on separator"
 msgstr "Text: Auswerten des Textes"
 
-#: sysfnc.h:806
+#: sysfnc.h:291
 msgid "Use for parse string on separator."
 msgstr "Wird verwendet um den Text bis zum Trennzeichen auszuwerten."
 
-#: sysfnc.h:823
+#: sysfnc.h:308
 msgid "strParsePath"
 msgstr ""
 
-#: sysfnc.h:826
+#: sysfnc.h:311
 msgid "Path"
 msgstr "Pfad"
 
-#: sysfnc.h:831
+#: sysfnc.h:316
 msgid "String: Path parse"
 msgstr "Text: Auswertung des Pfades"
 
-#: sysfnc.h:832
+#: sysfnc.h:317
 msgid "Use for parse path on elements."
 msgstr "Wird verwendet um den Pfad der Elemente auszuwerten."
 
-#: sysfnc.h:848
+#: sysfnc.h:333
 msgid "strPath2Sep"
 msgstr ""
 
-#: sysfnc.h:851 sysfnc.h:873
+#: sysfnc.h:336 sysfnc.h:358
 msgid "src"
 msgstr ""
 
-#: sysfnc.h:851 sysfnc.h:873
+#: sysfnc.h:336 sysfnc.h:358
 msgid "Source"
 msgstr "Quelle"
 
-#: sysfnc.h:855
+#: sysfnc.h:340
 msgid "String: Path to separated string"
 msgstr "Text: Pfad in Text"
 
-#: sysfnc.h:856
+#: sysfnc.h:341
 msgid "Use for convert path to separated string."
 msgstr ""
 "Wird verwendet um den Pfad in einen Text mit Trennzeichen zu konvertieren."
 
-#: sysfnc.h:870
+#: sysfnc.h:355
 msgid "strEnc2HTML"
 msgstr ""
 
-#: sysfnc.h:876
+#: sysfnc.h:361
 msgid "String: Encode string to HTML"
 msgstr "Text: Kodierung des Texts in HTML"
 
-#: sysfnc.h:877
+#: sysfnc.h:362
 msgid "Use for encode string for use into HTML source."
 msgstr "Wird verwendet um den Text in HTML-Format zu konvertieren."
 
-#: sysfnc.h:891
+#: sysfnc.h:376
 msgid "real2str"
 msgstr ""
 
-#: sysfnc.h:895
+#: sysfnc.h:379 sysfnc.h:402 sysfnc.h:430 sysfnc.h:448 sysfnc.h:465
+#: timefnc.h:41
+msgid "val"
+msgstr ""
+
+#: sysfnc.h:379 sysfnc.h:402 sysfnc.h:430 sysfnc.h:448 sysfnc.h:465
+msgid "Value"
+msgstr "Wert"
+
+#: sysfnc.h:380
 msgid "prc"
 msgstr ""
 
-#: sysfnc.h:895
+#: sysfnc.h:380
 msgid "Precision"
 msgstr "Genauigkeit"
 
-#: sysfnc.h:895
+#: sysfnc.h:380
 msgid "4"
 msgstr ""
 
-#: sysfnc.h:896
+#: sysfnc.h:381 varchfnc.h:96
+msgid "Type"
+msgstr "Typ"
+
+#: sysfnc.h:381
 msgid "f"
 msgstr ""
 
-#: sysfnc.h:899
+#: sysfnc.h:384
 msgid "String: Real to string"
 msgstr "Text: Reele Zahl in Text"
 
-#: sysfnc.h:900
+#: sysfnc.h:385
 msgid "Convert real to string."
 msgstr "Konvertierung einer reelen Zahl in einen Text."
 
-#: sysfnc.h:914
+#: sysfnc.h:399
 msgid "int2str"
 msgstr ""
 
-#: sysfnc.h:918 timefnc.h:163
+#: sysfnc.h:403 timefnc.h:163
 msgid "base"
 msgstr ""
 
-#: sysfnc.h:918
+#: sysfnc.h:403
 msgid "Base"
 msgstr ""
 
-#: sysfnc.h:918
+#: sysfnc.h:403
 msgid "10"
 msgstr ""
 
-#: sysfnc.h:921
+#: sysfnc.h:406
 msgid "String: Integer to string"
 msgstr "Text: Ganzzahl in Text"
 
-#: sysfnc.h:922
+#: sysfnc.h:407
 msgid "Convert integer to string."
 msgstr "Konvertierung einer Ganzzahl in einen Text."
 
-#: sysfnc.h:942
+#: sysfnc.h:427
 msgid "str2real"
 msgstr ""
 
-#: sysfnc.h:948
+#: sysfnc.h:433
 msgid "String: String to real"
 msgstr "Text: Text in reele Zahl"
 
-#: sysfnc.h:949
+#: sysfnc.h:434
 msgid "Convert string to real."
 msgstr "Konvertierung eines Texts in eine reele Zahl."
 
-#: sysfnc.h:960
+#: sysfnc.h:445
 msgid "str2int"
 msgstr ""
 
-#: sysfnc.h:966
+#: sysfnc.h:451
 msgid "String: String to integer"
 msgstr "Text: Text in Ganzzahl"
 
-#: sysfnc.h:967
+#: sysfnc.h:452
 msgid "Convert string to integer."
 msgstr "Konvertierung eines Texts in eine Ganzzahl."
 
-#: sysfnc.h:978
+#: sysfnc.h:463
 msgid "floatSplitWord"
 msgstr ""
 
-#: sysfnc.h:981 sysfnc.h:1006
+#: sysfnc.h:466 sysfnc.h:491
 msgid "w1"
 msgstr ""
 
-#: sysfnc.h:981 sysfnc.h:1006
+#: sysfnc.h:466 sysfnc.h:491
 msgid "Word 1"
 msgstr "Wort 1"
 
-#: sysfnc.h:982 sysfnc.h:1007
+#: sysfnc.h:467 sysfnc.h:492
 msgid "w2"
 msgstr ""
 
-#: sysfnc.h:982 sysfnc.h:1007
+#: sysfnc.h:467 sysfnc.h:492
 msgid "Word 2"
 msgstr "Wort 2"
 
-#: sysfnc.h:985
+#: sysfnc.h:470
 msgid "Float: Split to words"
 msgstr "Fliesskomma: Aufteilen"
 
-#: sysfnc.h:986
+#: sysfnc.h:471
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Aufteilen Fliesskomma (4 Bytes) in Wörter (2 Bytes)."
 
-#: sysfnc.h:1003
+#: sysfnc.h:488
 msgid "floatMergeWord"
 msgstr ""
 
-#: sysfnc.h:1010
+#: sysfnc.h:495
 msgid "Float: Merge from words"
 msgstr "Fliesskomma: Zusammenfügen"
 
-#: sysfnc.h:1011
+#: sysfnc.h:496
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Zusammenfügen Fliesskomma (4 Bytes)  aus Wörtern (2 Bytes)."
 
@@ -1068,6 +742,14 @@ msgstr ""
 #: timefnc.h:41 timefnc.h:137
 msgid "Date and time string"
 msgstr "Text für Datum und Zeit"
+
+#: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
+msgid "sec"
+msgstr ""
+
+#: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
+msgid "Seconds"
+msgstr "Sekunden"
 
 #: timefnc.h:43 timefnc.h:138
 msgid "form"
@@ -1177,6 +859,14 @@ msgstr "Konvertierung einer absoluten Zeit in Datum und Uhrzeit."
 msgid "tmTime"
 msgstr ""
 
+#: timefnc.h:110
+msgid "usec"
+msgstr ""
+
+#: timefnc.h:110
+msgid "Microseconds"
+msgstr "Mikrosekunden"
+
 #: timefnc.h:113
 msgid "Time: Time"
 msgstr "Zeit: Uhrzeit"
@@ -1237,6 +927,10 @@ msgstr ""
 msgid "Result"
 msgstr "Ergebnis"
 
+#: varchfnc.h:73 xmlfnc.h:76
+msgid "Name"
+msgstr "Name"
+
 #: varchfnc.h:76
 msgid "Val: Archive"
 msgstr "Wert: Archiv speichern."
@@ -1248,6 +942,46 @@ msgstr "Objekt aus dem Wertearchiv laden."
 #: varchfnc.h:93
 msgid "vArhBuf"
 msgstr ""
+
+#: varchfnc.h:97
+msgid "sz"
+msgstr ""
+
+#: varchfnc.h:97
+msgid "Size"
+msgstr "Grösse"
+
+#: varchfnc.h:97
+msgid "100"
+msgstr ""
+
+#: varchfnc.h:98
+msgid "per"
+msgstr ""
+
+#: varchfnc.h:98
+msgid "Period (us)"
+msgstr "Periode (usek)"
+
+#: varchfnc.h:98
+msgid "1000000"
+msgstr ""
+
+#: varchfnc.h:99
+msgid "hgrd"
+msgstr ""
+
+#: varchfnc.h:99
+msgid "Hard grid"
+msgstr "Gitter"
+
+#: varchfnc.h:100
+msgid "hres"
+msgstr ""
+
+#: varchfnc.h:100
+msgid "High resolution"
+msgstr "Hohe Auflösung"
 
 #: varchfnc.h:103
 msgid "Val: Archive buffer"

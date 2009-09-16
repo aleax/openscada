@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.3\n"
+"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-07 18:45+0300\n"
+"POT-Creation-Date: 2009-09-16 17:22+0300\n"
 "PO-Revision-Date: 2007-10-24 16:47+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -33,7 +33,7 @@ msgid "LIB"
 msgstr ""
 
 #: statfunc.cpp:35
-msgid "1.0.3"
+msgid "1.0.4"
 msgstr ""
 
 #: statfunc.cpp:40
@@ -92,9 +92,9 @@ msgstr ""
 #: libcompl1.h:429 libcompl1.h:431 libcompl1.h:469 libcompl1.h:470
 #: libcompl1.h:503 libcompl1.h:505 libcompl1.h:506 libcompl1.h:508
 #: libcompl1.h:510 libcompl1.h:511 libcompl1.h:577 libcompl1.h:583
-#: libcompl1.h:722 libcompl1.h:723 libcompl1.h:725 libcompl1.h:756
-#: libcompl1.h:758 libcompl1.h:760 libcompl1.h:762 libcompl1.h:799
-#: libcompl1.h:801 libcompl1.h:803 libcompl1.h:805
+#: libcompl1.h:594 libcompl1.h:722 libcompl1.h:723 libcompl1.h:725
+#: libcompl1.h:756 libcompl1.h:758 libcompl1.h:760 libcompl1.h:762
+#: libcompl1.h:799 libcompl1.h:801 libcompl1.h:803 libcompl1.h:805
 msgid "1"
 msgstr ""
 
@@ -213,7 +213,7 @@ msgstr ""
 msgid "Calc period (ms)"
 msgstr "Період обрахування (мс)"
 
-#: libcompl1.h:58 libcompl1.h:578 libcompl1.h:594
+#: libcompl1.h:58 libcompl1.h:578
 msgid "1000"
 msgstr ""
 
@@ -784,12 +784,12 @@ msgid "Input 4"
 msgstr "Вхід 4"
 
 #: libcompl1.h:594
-msgid "cycle"
+msgid "f_frq"
 msgstr ""
 
 #: libcompl1.h:594
-msgid "Calc cycle (ms)"
-msgstr "Цикл обрахування (мс)"
+msgid "Calc frequency (Hz)"
+msgstr "Частота обчислення (Гц)"
 
 #: libcompl1.h:597
 msgid "int"

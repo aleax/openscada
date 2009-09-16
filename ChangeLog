@@ -1,3 +1,14 @@
+2009-09-16 Roman
+- FIX:DAQ.JavaLikeCalc: Frequency value into attribute "f_frq" is fixed.
+- Protocol.SelfSystem: Documents is updated.
+- !:Special.FLibComplex1: The "cycle" attribute of function "PID" is changed to "f_frq".
+- !!:Special.FLibComplex1: Documents is updated and released version 1.0.4.
+- !:Special.FLibMath: Documents is updated and English document is added.
+- !!:Special.FLibSYS: Documents is updated and released version 0.9.0.
+- !!:Special.SystemTests: Documents is updated and released version 1.3.7.
+- !!:Transport.SSL: Documents is updated and released version 0.8.2.
+
+
 2009-09-13 Roman
 - !!!!:DAQ.ICP_DAS: Here is realised modules I-87019RW, I-8017HW, I-87024W, I-8042W full support.
 - FIX:UI.WebCfgD: To TextEdit field save function is added HTML-encoding. HTML encoding function is fixed.
@@ -6,7 +17,7 @@
 2009-09-08 Roman
 - DAQ.LogicLev: A parameter copy function is expanded for template mode.
 - Special.FLibComplex1: Into PID function is added separated input for manual values input and store.
-- FIX:Special.FLibSYS: IsArch() function of object VArchObj is fixed.
+- FIX:Special.FLibSYS: The IsArch() function of object VArchObj is fixed.
 - Special.FLibSYS: To object VArchObj is added function isNull();
 - FIX:UI.Vision, UI.WebVision: Including a page into container is fixed for a page source.
 

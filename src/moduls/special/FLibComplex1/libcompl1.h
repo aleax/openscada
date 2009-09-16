@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibComplex1 file: libcompl1.h
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -591,7 +591,7 @@ class PID : public TFunction
 	    ioAdd( new IO("K4",_("K input 4"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("in4",_("Input 4"),IO::Real,IO::Default,"0") );
 
-	    ioAdd( new IO("cycle",_("Calc cycle (ms)"),IO::Integer,IO::Default,"1000") );
+	    ioAdd( new IO("f_frq",_("Calc frequency (Hz)"),IO::Real,IO::Default,"1") );
 
 	    //Internal data:
 	    ioAdd( new IO("int",_("Integral value"),IO::Real,IO::Output,"0",true) );
@@ -622,14 +622,14 @@ class PID : public TFunction
 			in3	= v->getR(20),
 			k4	= v->getR(21),
 			in4	= v->getR(22),
-			cycle	= v->getI(23),
+			frq	= v->getR(23),
 			integ	= v->getR(24),
 			difer	= v->getR(25),
 			lag	= v->getR(26);
 
-	    double	Kf	= (v->getI(11)>cycle)?cycle/v->getI(11):1.;
-	    double	Kint	= (v->getI(9)>cycle)?cycle/v->getI(9):1.;
-	    double	Kdif	= (v->getI(10)>cycle)?cycle/v->getI(10):1.;
+	    double	Kf	= vmin(1e3/(frq*v->getI(11)),1);
+	    double	Kint	= vmin(1e3/(frq*v->getI(9)),1);
+	    double	Kdif	= vmin(1e3/(frq*v->getI(10)),1);
 
 	    //> Scale error
 	    if( max <= min )	return;
