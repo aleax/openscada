@@ -100,7 +100,8 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return vmax(mPer,0.01); }
+	long long period( )	{ return mPer; }
+	string cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -141,15 +142,16 @@ class TMdContr: public TController
 
 	//Attributes
 	Res     req_res;
-	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
 		&mNode;				//Node
-	string	&mPrt,				//Protocol
+	string	&mSched,			// Calc schedule
+		&mPrt,				//Protocol
 		&mAddr;				//Transport device address
 	bool	&mMerge;			//Fragments of register merge
 	int	&reqTm,				//Request timeout in ms
 		&restTm,			//Restore timeout in s
 		&connTry;			//Connections try
+	long long mPer;
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task

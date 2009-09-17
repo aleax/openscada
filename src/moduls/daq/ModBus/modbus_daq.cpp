@@ -77,7 +77,7 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
+    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::String,TFld::Selected,"5","TCP","TCP;RTU;ASCII",_("TCP/IP;RTU;ASCII")) );
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
@@ -131,7 +131,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tmGath(0), tmDelay(0),
 	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0),
-	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mPrt(cfg("PROT").getSd()),
+	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mPrt(cfg("PROT").getSd()),
 	mAddr(cfg("ADDR").getSd()), mNode(cfg("NODE").getId()), mMerge(cfg("FRAG_MERGE").getBd()),
 	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId())
 {
@@ -150,8 +150,13 @@ string TMdContr::getStatus( )
     if( startStat( ) && !redntUse( ) )
     {
 	if( tmDelay > 0 ) val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
-	else val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
+	else
+	{
+	    if( period() ) val += TSYS::strMess(_("Call by period %g s. "),(1e-9*period()));
+	    else val += TSYS::strMess(_("Call by cron '%s'. "),cron().c_str());
+	    val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
 				    tmGath,numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+	}
     }
 
     return val;
@@ -179,6 +184,9 @@ void TMdContr::start_( )
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
     try { tr.at().start(); }
     catch( TError err ){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
 
     //> Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
@@ -535,7 +543,7 @@ void *TMdContr::Task( void *icntr )
 	    //> Calc acquisition process time
 	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
 
-	    TSYS::taskSleep((long long)(1e9*cntr.period()));
+	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	}
     }
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
@@ -557,14 +565,24 @@ void TMdContr::setCntrDelay( const string &err )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
+	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
+	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
+		     "Seconds form is one real number (1.5, 1e-3).\n"
+		     "Cron it is standard form '* * * * *'. Where:\n"
+		     "  - minutes (0-59);\n"
+		     "  - hours (0-23);\n"
+		     "  - days (1-31);\n"
+		     "  - month (1-12);\n"
+		     "  - week day (0[sunday]-6)."));
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/cntr/cfg/trLst" && ctrChkNode(opt) )
     {
@@ -732,7 +750,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode( TVArchive::ActiveAttr, val.arch().at().srcData() );
-    val.arch().at().setPeriod( (long long)(owner().period()*1000000) );
+    val.arch().at().setPeriod( owner().period() ? owner().period()/1e3 : 1000000 );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }
