@@ -1,3 +1,7 @@
+2009-09-17 Maxim
+- FIX:/UI/Vision: Line's styles saving and unscaling the widths when exiting the edit mode are fixed.
+
+
 2009-09-16 Roman
 - FIX:DAQ.JavaLikeCalc: Frequency value into attribute "f_frq" is fixed.
 - Protocol.SelfSystem: Documents is updated.

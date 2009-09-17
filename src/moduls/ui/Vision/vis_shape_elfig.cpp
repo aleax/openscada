@@ -1252,7 +1252,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
                 else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
                 if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
                     elList = elList + (((*styles)[shapeItems[i_s].style] == (*styles)[-5]) ? "" : 
-                             TSYS::int2str((*styles)[shapeItems[i_s].style]))+"\n";
+                             TSYS::int2str((*styles)[shapeItems[i_s].style]-1))+"\n";
                 else if( shapeItems[i_s].style > 0  ) elList = elList + "s" +  TSYS::int2str(shapeItems[i_s].style)+"\n";
 		break;
 	    case 2:
@@ -1321,7 +1321,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 
                 if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
                     elList = elList + (((*styles)[shapeItems[i_s].style] == (*styles)[-5]) ? "" : 
-                             TSYS::int2str((*styles)[shapeItems[i_s].style]))+"\n";
+                             TSYS::int2str((*styles)[shapeItems[i_s].style]-1))+"\n";
                 else if( shapeItems[i_s].style > 0  ) elList = elList + "s" +  TSYS::int2str(shapeItems[i_s].style)+"\n";
 		break;
 	    case 3:
@@ -1385,7 +1385,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
 
                 if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
                     elList = elList + (((*styles)[shapeItems[i_s].style] == (*styles)[-5]) ? "" : 
-                             TSYS::int2str((*styles)[shapeItems[i_s].style]))+"\n";
+                             TSYS::int2str((*styles)[shapeItems[i_s].style]-1))+"\n";
                 else if( shapeItems[i_s].style > 0  ) elList = elList + "s" +  TSYS::int2str(shapeItems[i_s].style)+"\n";
 		break;
 	}
@@ -1539,7 +1539,6 @@ void ShapeElFigure::editEnter( WdgView *view )
     double scale;
     if( view->xScale(true) < view->yScale(true) ) scale = view->xScale(true);
     else scale = view->yScale(true);
-    shapeWidths_UnEdit = elFD->shapeWidths;
     WidthMap *widths = &elFD->shapeWidths;
     for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
         if( fabs( pi->second - 0 ) >= 0.01 )
@@ -1548,7 +1547,6 @@ void ShapeElFigure::editEnter( WdgView *view )
             ++pi;
         }
         else ++pi;
-
     ((VisDevelop *)view->mainWin())->elFigTool->setVisible(true);
 
     //- Self-shape tools -
@@ -1617,7 +1615,17 @@ void ShapeElFigure::editExit( WdgView *view )
     }
     //- UnScaling the widths -
     ElFigDt *elFD = (ElFigDt*)view->shpData;
-    elFD->shapeWidths = shapeWidths_UnEdit;
+    double scale;
+    if( view->xScale(true) < view->yScale(true) ) scale = view->xScale(true);
+    else scale = view->yScale(true);
+    WidthMap *widths = &elFD->shapeWidths;
+    for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
+        if( fabs( pi->second - 0 ) >= 0.01 )
+    {
+        pi->second = vmin(1000,vmax(1,pi->second/scale));
+        ++pi;
+    }
+    else ++pi;
 }
 
 void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
