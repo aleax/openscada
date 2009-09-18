@@ -1,3 +1,11 @@
+2009-09-18 Roman
+- !!:DAQ.BlockCalc: Documents is updated and released version 1.2.1.
+- !!:DAQ.JavaLikeCalc: Documents is updated and released version 1.5.0.
+- !!:DAQ.LogicLev: Documents is updated and released version 1.0.1.
+- !!:DAQ.ModBus: Documents is updated and released version 1.0.1.
+- !!:DAQ.Siemens: Documents is updated and released version 1.2.1.
+
+
 2009-09-17 Roman
 - !:DAQ.ModBus: Calc acquisition task by cron schedule is added.
 
@@ -41,7 +49,7 @@
 - !!!!:/DAQ/ICP_DAS: New module for hardware of the ICP DAS support is added.
 - !!:/DemoDB: Some fixes. Translations updating. SO main page is feature expanded. Contour frame's fonts is rised and buttons for value changing is added.
 - /SYS: Encode variant "ID" is renamed to "oscdID".
-- FIX:/DAQ/BlockCalc: A controller configurtion field "IO" is expanded to size 1000 from 200.
+- FIX:/DAQ/BlockCalc: A controller configuration field "IO" is expanded to size 1000 from 200.
 - /DAQ/DAQGate: Global checking for write equal values is added.
 - FIX:/DAQ/DCON: The patch of Almaz Karimov is included for fix some bugs.
 - FIX:/DAQ/JavaLikeCalc: Hierarchical object's functions call is fixed. Errors on string result of object's function is fixed.
@@ -562,8 +570,8 @@
 - !:/DAQ/ModBus: Gateway mode is splited to Gataeway node and Gataeway network.
 - FIX:/DAQ/ModBus: ASCIIToData() function's encoding algorithm is fixed.
 - !!:FIX:/DAQ/ModBus: ModBus/ASCII protocol variant is final fixed and tested for everywhere.
-- FIX:/DAQ/ModBus: ~ModBus error's messages is some fixed.
-- /DAQ/ModBus: Input request's to protocol is added to ~ModBus report.
+- FIX:/DAQ/ModBus: ModBus error's messages is some fixed.
+- /DAQ/ModBus: Input request's to protocol is added to ModBus report.
 - /DAQ/ModBus: Error respond for no one present data request is added.
 - /DAQ/ModBus, Transport/Serial: The module documentation and translation is updated.
 - /Transport/Serial: The maximum char timeout a realtime control is added. Can be used for correct char timeout setting.

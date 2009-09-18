@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-17 18:58+0300\n"
+"POT-Creation-Date: 2009-09-18 19:45+0300\n"
 "PO-Revision-Date: 2009-08-17 13:28+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -1312,7 +1312,7 @@ msgid "lnk"
 msgstr ""
 
 #: modbus_daq.h:48
-msgid "1.0.0"
+msgid "1.0.1"
 msgstr ""
 
 #: modbus_daq.h:49 modbus_prt.h:42

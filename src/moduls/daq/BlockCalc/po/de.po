@@ -8,9 +8,9 @@
 #: virtual.cpp:597 block.h:86 block.h:98 virtual.h:161
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.2.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:34+0300\n"
+"POT-Creation-Date: 2009-09-18 11:08+0300\n"
 "PO-Revision-Date: 2009-08-17 11:46+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -504,7 +504,7 @@ msgid "Block based calculator"
 msgstr "Blockrechner"
 
 #: virtual.cpp:47
-msgid "1.2.0"
+msgid "1.2.1"
 msgstr ""
 
 #: virtual.cpp:48
@@ -578,7 +578,7 @@ msgstr "Rechenzeit (ms)"
 msgid "5"
 msgstr ""
 
-#: virtual.cpp:138
+#: virtual.cpp:138 virtual.cpp:144
 msgid "1000"
 msgstr ""
 
@@ -625,10 +625,6 @@ msgstr "Standard"
 #: virtual.cpp:144
 msgid "Blocks' IOs"
 msgstr "IO-Parameter des Blocks"
-
-#: virtual.cpp:144
-msgid "200"
-msgstr ""
 
 #: virtual.cpp:147 virtual.cpp:155 virtual.cpp:156 virtual.cpp:159
 #: virtual.cpp:484 virtual.cpp:488

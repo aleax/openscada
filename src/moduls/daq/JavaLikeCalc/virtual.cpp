@@ -38,7 +38,7 @@
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.4.0"
+#define VERSION		"1.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
 #define LICENSE		"GPL"
