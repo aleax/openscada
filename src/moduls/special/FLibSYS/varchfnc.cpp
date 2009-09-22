@@ -223,7 +223,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "FFT" && prms.size() >= 2 )
     {
-	long long etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI());
+	long long etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
 	long long btm = etm - (long long)(1e6*prms[1].getR());
 	int fftN = 0, iN = 0;
 	double *fftIn;

@@ -25,6 +25,7 @@
 #include "freefunc.h"
 #include "freelib.h"
 #include "virtual.h"
+#include <string.h>
 
 #define YYERROR_VERBOSE true
 
@@ -42,15 +43,17 @@ void sfErr( const string &mess, YYLTYPE *ps);
 /************************* GRAMMAR ****************************/
 %union
 {
-    int	id;	//Function id
-    Reg	*reg;	//Variable and Constant registers list index and function list index
-    int	fp_cnt;	//Function parameters counter
-    int	prg_cd;	//Programm code
+    int	id;		//Function id
+    Reg	*reg;		//Variable and Constant registers list index and function list index
+    int	fp_cnt;		//Function parameters counter
+    int	prg_cd;		//Programm code
+    char op[21];	//Object's properties.
 }
 
-%token	ERR O_PRP_F IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW ARRAY OBJECT
+%token	ERR IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW ARRAY OBJECT
 %token	<id>	FUNC B_FUNC B_FUNC1 B_FUNC2
 %token	<reg>	VAR CONST
+%token	<op>	O_PRP_F
 %type	<reg>	var expr
 %type	<prg_cd>	if if_expr end cycl
 %type	<fp_cnt>	prmlst
@@ -106,10 +109,10 @@ solve:  assign ';'
 	    { try{ p_fnc->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '{' solver '}'
 var:	VAR			{ $$ = $1; }
-	| var O_PRP_F		{ $$ = p_fnc->cdProp($1); }
-	| var '[' expr ']'	{ $$ = p_fnc->cdProp($1,$3); }
+	| var O_PRP_F		{ $$ = p_fnc->cdProp($1,$2); }
+	| var '[' expr ']'	{ $$ = p_fnc->cdProp($1,"",$3); }
 	| var O_PRP_F '(' prmlst ')'
-	    { try{ $$ = p_fnc->cdObjFnc(p_fnc->cdProp($1),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = p_fnc->cdObjFnc(p_fnc->cdProp($1,$2),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 assign: var '=' expr
 	    {
 		try
@@ -258,10 +261,10 @@ expr:	CONST	{ $$ = $1; }
 	| '-' expr %prec UN_MINUS { try{ $$ = p_fnc->cdUnaryOp(Reg::Neg,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr if_expr expr end ':' expr end
 	    { try{ $$ = p_fnc->cdCond($1,$2,$4,$7,$3,$6); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr O_PRP_F		{ $$ = p_fnc->cdProp($1); }
-	| expr '[' expr ']'	{ $$ = p_fnc->cdProp($1,$3); }
+	| expr O_PRP_F		{ $$ = p_fnc->cdProp($1,$2); }
+	| expr '[' expr ']'	{ $$ = p_fnc->cdProp($1,"",$3); }
 	| expr O_PRP_F '(' prmlst ')'
-	    { try{ $$ = p_fnc->cdObjFnc(p_fnc->cdProp($1),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = p_fnc->cdObjFnc(p_fnc->cdProp($1,$2),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 prmlst: /*empty*/		{ $$ = 0; }
 	| expr			{ $$ = 1; p_fnc->f_prmst.push_front($1); }
 	| prmlst ',' prmlst	{ $$ = $1 + $3; }
@@ -518,10 +521,10 @@ retry:
 		return FUNC;
 	    }
 
-	    //>> Check for object's functions
+	    //>> Check for object's functions and system object's function
 	    int off = 0;
-	    yylval.reg = p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)));
-	    if( yylval.reg )
+	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)))) || 
+		(yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(smb_nm.substr(0,off-1)))) )
 	    {
 		pos -= (smb_nm.size()-off+1);
 		yylloc.last_column -= (smb_nm.size()-off-1);
@@ -558,8 +561,8 @@ retry:
 
 	    //>> Check for object's parameters
 	    int off = 0;
-	    yylval.reg = p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)));
-	    if( yylval.reg )
+	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)))) ||
+		(yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(smb_nm.substr(0,off-1)))) )
 	    {
 		pos -= (smb_nm.size()-off+1);
 		yylloc.last_column -= (smb_nm.size()-off-1);
@@ -595,7 +598,9 @@ retry:
 	st_pos = ++pos;
 	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
 	{ pos++; yylloc.last_column++; }
-	p_fnc->o_prpf.push_back(prog.substr(st_pos,pos-st_pos));
+	if( (pos-st_pos) > 20 ) { yyerror(_("Object's properties too long, ")); return ERR; }
+	strncpy(yylval.op,prog.substr(st_pos,pos-st_pos).data(),20);
+	// p_fnc->o_prpf.push_back(prog.substr(st_pos,pos-st_pos));
 	return O_PRP_F;
     }
     //Multi symbol operations

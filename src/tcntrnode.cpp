@@ -31,6 +31,7 @@
 #include "xml.h"
 #include "tsys.h"
 #include "tmess.h"
+#include "tvariant.h"
 #include "tcntrnode.h"
 
 //*************************************************
@@ -240,7 +241,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 			TSYS::pathLev(path,lev,true,&off);
     if( s_br.empty() )
     {
-	if( nodeMode() == Disable ) throw TError(nodePath().c_str(),"Node is disabled!");
+	if( nodeMode() == Disable ) throw TError(nodePath().c_str(),_("Node is disabled!"));
 	return this;
     }
     ResAlloc res(hd_res,false);
@@ -249,6 +250,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 	    return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off);
     //> Go to default group
     if( chGrp )	return chldAt(0,s_br).at().nodeAt(path,0,sep,off);
+    throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
 }
 
 void TCntrNode::nodeDel( const string &path, char sep, int flag, bool shDel )
@@ -617,6 +619,15 @@ void TCntrNode::AHDDisConnect()
     pthread_mutex_lock(&connM);
     mUse--;
     pthread_mutex_unlock(&connM);
+}
+
+TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
+
+void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
+
+TVariant TCntrNode::objFuncCall( const string &id, vector<TVariant> &prms )
+{
+    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),id.c_str());
 }
 
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,

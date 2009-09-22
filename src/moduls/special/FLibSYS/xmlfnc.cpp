@@ -182,7 +182,7 @@ void xmlCntrReq::calc( TValFunc *val )
     try
     {
 	XMLNode req;
-	if( !dynamic_cast<XMLNodeObj*>(val->getO(1)) ) { val->setS(0,"1:Request is not object!"); return; }
+	if( !dynamic_cast<XMLNodeObj*>(val->getO(1)) ) { val->setS(0,_("1:Request is not object!")); return; }
 	((XMLNodeObj*)val->getO(1))->toXMLNode(req);
 	string path = req.attr("path");
 	if( val->getS(2).empty() )
@@ -198,6 +198,6 @@ void xmlCntrReq::calc( TValFunc *val )
 	}
 	((XMLNodeObj*)val->getO(1))->fromXMLNode(req);
 	val->setS(0,"0");
-    }catch(TError err){ val->setS(0,TSYS::strMess("1:Request error: %s",err.mess.c_str())); }
+    }catch(TError err){ val->setS(0,TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
 }
 

@@ -154,6 +154,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms );
+
 	void load_( );
 	void save_( );
 

@@ -93,6 +93,7 @@ class Reg
 	    MviS,	//[CRRn_____]: Load string len <n> to register <R>.
 	    MviObject,	//[CRR]: Load object.
 	    MviArray,	//[CRRnrr....]: Load array from registers list.
+	    MviSysObject,//[CRRn_____]: Load system object
 	    Ass,	//[CRRrr]: Assign from register to register.
 	    Mov,	//[CRRrr]: Move from register to register.
 	    OPrpSt,	//[CRRn_____]: Load string of object's properties len <n>  to register <R>.
@@ -287,6 +288,7 @@ class Func : public TConfig, public TFunction
 	int regGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void regClear( );
+	int sysObjGet( const string &nd );
 
 	//> Temporary registers` list functions
 	Reg *regTmpNew( );
@@ -309,7 +311,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL );
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 	Reg *cdObjFnc( Reg *obj, int p_cnt );
-	Reg *cdProp( Reg *obj, Reg *prp = NULL );
+	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
 
 	//> Properties and functions for base object's process
 	TVariant oPropGet( TVariant vl, const string &prop );
@@ -383,7 +385,6 @@ class Func : public TConfig, public TFunction
 	vector<Reg*>	mRegs;		//Work registers list
 	vector<Reg*>	mTmpRegs;	//Constant temporary list
 	deque<Reg*>	f_prmst;	//Function's parameters stack
-	vector<string>	o_prpf;
 	Res		&parse_res;
 };
 

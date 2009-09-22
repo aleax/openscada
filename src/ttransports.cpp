@@ -804,6 +804,36 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
     SYS->protocol().at().at(prot).at().outMess( io, *this );
 }
 
+TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms )
+{
+    if( iid == "messIO" && prms.size() >= 1 )
+    {
+	string rez;
+	char buf[STR_BUF_LEN];
+	ResAlloc resN( nodeRes(), true );
+	int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? 1e3*prms[1].getR() : 1000, true );
+	rez.assign(buf,resp_len);
+
+	while( resp_len == sizeof(buf) )
+	{
+	    resp_len = messIO( NULL, 0, buf, sizeof(buf), 1000, true );
+	    rez.append(buf,resp_len);
+	}
+
+	return rez;
+    }
+    /*if( iid == "messProtIO" && prms.size() >= 2 )
+    {
+	XMLNode req;
+	if( !dynamic_cast<XMLNodeObj*>(prms[0].getO()) ) return _("1:Request is not object!");
+	((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
+	messProtIO(req,prms[1].getS());
+	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
+	return "0";
+    }*/
+    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
+}
+
 void TTransportOut::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -909,7 +939,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	    while( resp_len == sizeof(buf) )
 	    {
-		resp_len = messIO(NULL,0,buf,sizeof(buf),1000);
+		resp_len = messIO(NULL,0,buf,sizeof(buf),1000,true);
 		answ.append(buf,resp_len);
 	    }
 	    TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::real2str(1e-3*(TSYS::curTime()-stm)),opt->attr("user"));

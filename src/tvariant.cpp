@@ -235,8 +235,6 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
     throw TError("VarObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
 
-
-
 //***********************************************************
 //* TAreaObj                                                *
 //*   Area object included indexed properties               *
@@ -358,4 +356,37 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 bool TAreaObj::compareLess( const TVariant &v1, const TVariant &v2 )
 {
     return v1.getS() < v2.getS();
+}
+
+//***********************************************************
+//* TCntrNodeObj                                            *
+//*   TCntrNode object for access to system's objects       *
+//***********************************************************
+TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind )
+{
+    cnd = ind;
+}
+
+TVariant TCntrNodeObj::propGet( const string &id )
+{
+    if( cnd.freeStat() ) return TVariant();
+    try
+    {
+	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
+	return new TCntrNodeObj(nnd);
+    }catch(...){ }
+
+    return cnd.at().objPropGet( id );
+}
+
+void TCntrNodeObj::propSet( const string &id, TVariant val )
+{
+    if( cnd.freeStat() ) return;
+    cnd.at().objPropSet(id,val);
+}
+
+TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
+{
+    if( cnd.freeStat() ) return TVariant();
+    return cnd.at().objFuncCall( id, prms );
 }

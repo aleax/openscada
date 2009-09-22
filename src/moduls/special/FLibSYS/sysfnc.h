@@ -368,6 +368,48 @@ class strEnc2HTML : public TFunction
 };
 
 //*************************************************
+//* String encode to Bin                          *
+//*************************************************
+class strEnc2Bin : public TFunction
+{
+    public:
+	strEnc2Bin( ) : TFunction("strEnc2Bin")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("String: Encode text to bin"); }
+	string descr( )	{ return _("Use for encode text to bin, from format <00 A0 FA DE>."); }
+
+	void calc( TValFunc *val )
+	{
+	    val->setS(0,TSYS::strEncode(val->getS(1),TSYS::Bin));
+	}
+};
+
+//*************************************************
+//* String decode from Bin                        *
+//*************************************************
+class strDec4Bin : public TFunction
+{
+    public:
+	strDec4Bin( ) : TFunction("strDec4Bin")
+	{
+	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
+	}
+
+	string name( )	{ return _("String: Decode text from bin"); }
+	string descr( )	{ return _("Use for decode text from bin to format <00 A0 FA DE>."); }
+
+	void calc( TValFunc *val )
+	{
+	    val->setS(0,TSYS::strDecode(val->getS(1),TSYS::Bin));
+	}
+};
+
+//*************************************************
 //* Convert real to string                        *
 //*************************************************
 class real2str : public TFunction

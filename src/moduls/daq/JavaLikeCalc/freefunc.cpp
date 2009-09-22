@@ -302,7 +302,6 @@ void Func::progCompile( )
 
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
-    o_prpf.clear();
     la_pos = 0;		//LA position
     prg    = "";	//Clear programm
     regClear();		//Clear registers list
@@ -324,12 +323,14 @@ void Func::progCompile( )
 int Func::funcGet( const string &path )
 {
     string ns, f_path;
+
     //> Check to correct function's path
     try
     {
 	if( dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()) )
 	    f_path = SYS->nodeAt(path,0,'.').at().nodePath();
     }catch(...){ }
+
     if( f_path.empty() )
     {
 	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
@@ -338,6 +339,7 @@ int Func::funcGet( const string &path )
 	if( ns.empty() ) return -1;
 	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
     }
+
     //> Search for already registered function
     for( int i_fnc = 0; i_fnc < mFncs.size(); i_fnc++ )
 	if( f_path == mFncs[i_fnc]->func().at().nodePath() )
@@ -351,6 +353,32 @@ void Func::funcClear( )
     for( int i_fnc = 0; i_fnc < mFncs.size(); i_fnc++ )
 	delete mFncs[i_fnc];
     mFncs.clear();
+}
+
+int Func::sysObjGet( const string &nd )
+{
+    string ns, on_path;
+    //> Check to correct function's path
+    try { SYS->nodeAt(nd); on_path = nd; } catch(...) { }
+    if( on_path.empty() )
+	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
+	    try { SYS->nodeAt(ns+"."+nd,0,'.'); on_path = ns+"."+nd; break; }
+	    catch(...){ continue; }
+
+    if( on_path.empty() ) return -1;
+
+    //> Make result
+    Reg *rez = regAt(regNew());
+    rez->setType(Reg::Obj);
+
+    //> Make code
+    uint16_t addr;
+    prg += (uint8_t)Reg::MviSysObject;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    prg += (uint8_t)on_path.size();
+    prg += on_path;
+
+    return rez->pos();
 }
 
 int Func::regNew( bool var )
@@ -394,7 +422,6 @@ Reg *Func::regTmpNew( )
 
 void Func::regTmpClean( )
 {
-    o_prpf.clear();
     for( int i_rg = 0; i_rg < mTmpRegs.size(); i_rg++ )
 	delete mTmpRegs[i_rg];
     mTmpRegs.clear();
@@ -993,29 +1020,28 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     return rez;
 }
 
-Reg *Func::cdProp( Reg *obj, Reg *prp )
+Reg *Func::cdProp( Reg *obj, const string &sprp, Reg *dprp )
 {
     uint16_t addr;
     Reg *ro = obj;
     if( !ro->objEl() ) { ro = cdMove( NULL, ro, false ); ro->setObjEl(); }
 
-    if( !prp )
+    if( !dprp )
     {
 	prg += (uint8_t)Reg::OPrpSt;
 	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-	prg += (uint8_t)o_prpf.back().size();
-	prg += o_prpf.back();
-	o_prpf.pop_back();
+	prg += (uint8_t)sprp.size();
+	prg += sprp;
     }
     else
     {
-	prp = cdMvi( prp );
+	dprp = cdMvi( dprp );
 
 	prg += (uint8_t)Reg::OPrpDin;
 	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-	addr = prp->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+	addr = dprp->pos(); prg.append((char*)&addr,sizeof(uint16_t));
 
-	prp->free();
+	dprp->free();
     }
     return ro;
 }
@@ -1040,7 +1066,8 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	case TVariant::String:
 	    if( prop == "length" )	return (int)vl.getS().size();
 	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
-    }    
+    }
+    throw TError(nodePath().c_str(),_("Get properties '%s' from value type '%d' error."),prop.c_str(),vl.type());
 }
 
 TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prms )
@@ -1467,6 +1494,14 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			}
 		reg[*(uint16_t*)(cprg+1)] = ar;
 		cprg += 4 + *(uint8_t*)(cprg+3)*sizeof(uint16_t); break;
+	    }
+	    case Reg::MviSysObject:
+	    {
+#if OSC_DEBUG >= 5
+		printf("CODE: Load system object %s(%d) to reg %d.\n",string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str(),*(uint8_t*)(cprg+3),*(uint16_t*)(cprg+1));
+#endif
+		reg[*(uint16_t*)(cprg+1)] = new TCntrNodeObj(SYS->nodeAt(string((char*)cprg+4,*(uint8_t*)(cprg+3)),0,'.'));
+		cprg += 4+ *(uint8_t*)(cprg+3); break;
 	    }
 	    //>> Assign codes
 	    case Reg::Ass:
@@ -1927,14 +1962,17 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Call object's function %d = %d(%d).\n",*(uint16_t*)(cprg+4),*(uint16_t*)(cprg+1),*(uint8_t*)(cprg+3));
 #endif
-		TVariant obj = getVal(val,reg[*(uint16_t*)(cprg+1)],true);
+
 		if( reg[*(uint16_t*)(cprg+1)].propEmpty() )
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
+
+		TVariant obj = getVal(val,reg[*(uint16_t*)(cprg+1)],true);
 
 		//> Prepare inputs
 		vector<TVariant> prms;
 		for( int i_p = 0; i_p < *(uint8_t*)(cprg+3); i_p++ )
 		    prms.push_back(getVal(val,reg[*(uint16_t*)(cprg+6+i_p*sizeof(uint16_t))]));
+
 		//> Call
 		TVariant rez = oFuncCall( obj, reg[*(uint16_t*)(cprg+1)].propGet(reg[*(uint16_t*)(cprg+1)].propSize()-1), prms );
 		//> Process outputs

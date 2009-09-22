@@ -5,14 +5,14 @@
 #
 #: statfunc.cpp:51 varchfnc.cpp:107 varchfnc.cpp:119 varchfnc.cpp:131
 #: varchfnc.cpp:144 varchfnc.cpp:200 varchfnc.cpp:213 varchfnc.cpp:234
-#: xmlfnc.cpp:72 xmlfnc.cpp:138 sysfnc.h:416 timefnc.h:41 timefnc.h:56
+#: xmlfnc.cpp:72 xmlfnc.cpp:138 sysfnc.h:458 timefnc.h:41 timefnc.h:56
 #: timefnc.h:137 xmlfnc.h:39 xmlfnc.h:54
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-16 17:56+0300\n"
+"POT-Creation-Date: 2009-09-22 18:23+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -57,71 +57,71 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:81 statfunc.cpp:155
+#: statfunc.cpp:81 statfunc.cpp:157
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:151
+#: statfunc.cpp:153
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:154
+#: statfunc.cpp:156
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:154 statfunc.cpp:160
+#: statfunc.cpp:156 statfunc.cpp:162
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:154
+#: statfunc.cpp:156
 msgid "Function"
 msgstr "Функция"
 
-#: statfunc.cpp:154 statfunc.cpp:155
+#: statfunc.cpp:156 statfunc.cpp:157
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:154 statfunc.cpp:155
+#: statfunc.cpp:156 statfunc.cpp:157
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:154 statfunc.cpp:155 varchfnc.h:96
+#: statfunc.cpp:156 statfunc.cpp:157 varchfnc.h:96
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:155 statfunc.cpp:160
+#: statfunc.cpp:157 statfunc.cpp:162
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "Functions"
 msgstr "Функции"
 
-#: statfunc.cpp:155 sysfnc.h:381 varchfnc.h:96
+#: statfunc.cpp:157 sysfnc.h:423 varchfnc.h:96
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:159 xmlfnc.cpp:187 xmlfnc.cpp:195 xmlfnc.cpp:197 sysfnc.h:311
+#: statfunc.cpp:161 xmlfnc.cpp:187 xmlfnc.cpp:195 xmlfnc.cpp:197 sysfnc.h:311
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:165
+#: statfunc.cpp:167
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:165
+#: statfunc.cpp:167
 msgid "id"
 msgstr ""
 
@@ -279,14 +279,16 @@ msgid "sysCall"
 msgstr ""
 
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
-#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:401
-#: sysfnc.h:429 sysfnc.h:447 sysfnc.h:490 xmlfnc.h:75 xmlfnc.h:93
+#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:399
+#: sysfnc.h:420 sysfnc.h:443 sysfnc.h:471 sysfnc.h:489 sysfnc.h:532
+#: xmlfnc.h:75 xmlfnc.h:93
 msgid "rez"
 msgstr ""
 
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
-#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:401
-#: sysfnc.h:429 sysfnc.h:447 sysfnc.h:490 xmlfnc.h:75 xmlfnc.h:93
+#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:399
+#: sysfnc.h:420 sysfnc.h:443 sysfnc.h:471 sysfnc.h:489 sysfnc.h:532
+#: xmlfnc.h:75 xmlfnc.h:93
 msgid "Rezult"
 msgstr "Результат"
 
@@ -576,11 +578,11 @@ msgstr "Используется для разбора пути на элеме�
 msgid "strPath2Sep"
 msgstr ""
 
-#: sysfnc.h:336 sysfnc.h:358
+#: sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
 msgid "src"
 msgstr ""
 
-#: sysfnc.h:336 sysfnc.h:358
+#: sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
 msgid "Source"
 msgstr "Источник"
 
@@ -606,131 +608,155 @@ msgstr ""
 "Используется для кодирования строки для использования в исходнике HTML."
 
 #: sysfnc.h:376
+msgid "strEnc2Bin"
+msgstr "Строка"
+
+#: sysfnc.h:382
+msgid "String: Encode text to bin"
+msgstr "Строка: Кодирование текста в бинарный вид"
+
+#: sysfnc.h:383
+msgid "Use for encode text to bin, from format <00 A0 FA DE>."
+msgstr "Используется для кодирования текста в бинарный вид, из формата <00 A0 FA DE>."
+
+#: sysfnc.h:397
+msgid "strDec4Bin"
+msgstr ""
+
+#: sysfnc.h:403
+msgid "String: Decode text from bin"
+msgstr "Строка: Декодирование текста из бинарного вида"
+
+#: sysfnc.h:404
+msgid "Use for decode text from bin to format <00 A0 FA DE>."
+msgstr "Используется для декодирования текста из бинарного вида в формат <00 A0 FA DE>."
+
+#: sysfnc.h:418
 msgid "real2str"
 msgstr ""
 
-#: sysfnc.h:379 sysfnc.h:402 sysfnc.h:430 sysfnc.h:448 sysfnc.h:465
+#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:507
 #: timefnc.h:41
 msgid "val"
 msgstr ""
 
-#: sysfnc.h:379 sysfnc.h:402 sysfnc.h:430 sysfnc.h:448 sysfnc.h:465
+#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:507
 msgid "Value"
 msgstr "Значение"
 
-#: sysfnc.h:380
+#: sysfnc.h:422
 msgid "prc"
 msgstr ""
 
-#: sysfnc.h:380
+#: sysfnc.h:422
 msgid "Precision"
 msgstr "Точность"
 
-#: sysfnc.h:380
+#: sysfnc.h:422
 msgid "4"
 msgstr ""
 
-#: sysfnc.h:381 varchfnc.h:96
+#: sysfnc.h:423 varchfnc.h:96
 msgid "Type"
 msgstr "Тип"
 
-#: sysfnc.h:381
+#: sysfnc.h:423
 msgid "f"
 msgstr ""
 
-#: sysfnc.h:384
+#: sysfnc.h:426
 msgid "String: Real to string"
 msgstr "Строка: Вещественное в строку"
 
-#: sysfnc.h:385
+#: sysfnc.h:427
 msgid "Convert real to string."
 msgstr "Преобразование вещественного в строку."
 
-#: sysfnc.h:399
+#: sysfnc.h:441
 msgid "int2str"
 msgstr ""
 
-#: sysfnc.h:403 timefnc.h:163
+#: sysfnc.h:445 timefnc.h:163
 msgid "base"
 msgstr ""
 
-#: sysfnc.h:403
+#: sysfnc.h:445
 msgid "Base"
 msgstr ""
 
-#: sysfnc.h:403
+#: sysfnc.h:445
 msgid "10"
 msgstr ""
 
-#: sysfnc.h:406
+#: sysfnc.h:448
 msgid "String: Integer to string"
 msgstr "Строка: Целое в строку"
 
-#: sysfnc.h:407
+#: sysfnc.h:449
 msgid "Convert integer to string."
 msgstr "Преобразование целого в строку."
 
-#: sysfnc.h:427
+#: sysfnc.h:469
 msgid "str2real"
 msgstr ""
 
-#: sysfnc.h:433
+#: sysfnc.h:475
 msgid "String: String to real"
 msgstr "Строка: Строка в вещественное"
 
-#: sysfnc.h:434
+#: sysfnc.h:476
 msgid "Convert string to real."
 msgstr "Преобразование строки в вещественное."
 
-#: sysfnc.h:445
+#: sysfnc.h:487
 msgid "str2int"
 msgstr "Строка"
 
-#: sysfnc.h:451
+#: sysfnc.h:493
 msgid "String: String to integer"
 msgstr "Строка: Строку во целое"
 
-#: sysfnc.h:452
+#: sysfnc.h:494
 msgid "Convert string to integer."
 msgstr "Преобразование строки в целое."
 
-#: sysfnc.h:463
+#: sysfnc.h:505
 msgid "floatSplitWord"
 msgstr ""
 
-#: sysfnc.h:466 sysfnc.h:491
+#: sysfnc.h:508 sysfnc.h:533
 msgid "w1"
 msgstr ""
 
-#: sysfnc.h:466 sysfnc.h:491
+#: sysfnc.h:508 sysfnc.h:533
 msgid "Word 1"
 msgstr "Слово 1"
 
-#: sysfnc.h:467 sysfnc.h:492
+#: sysfnc.h:509 sysfnc.h:534
 msgid "w2"
 msgstr ""
 
-#: sysfnc.h:467 sysfnc.h:492
+#: sysfnc.h:509 sysfnc.h:534
 msgid "Word 2"
 msgstr "Слово 2"
 
-#: sysfnc.h:470
+#: sysfnc.h:512
 msgid "Float: Split to words"
 msgstr "Float: Резделение на слова"
 
-#: sysfnc.h:471
+#: sysfnc.h:513
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Разделение float (4 байтов) на слова (2 байта)."
 
-#: sysfnc.h:488
+#: sysfnc.h:530
 msgid "floatMergeWord"
 msgstr ""
 
-#: sysfnc.h:495
+#: sysfnc.h:537
 msgid "Float: Merge from words"
 msgstr "Float: Объединение из слов"
 
-#: sysfnc.h:496
+#: sysfnc.h:538
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Объединение float (4 байтов) из слов (2 байта)."
 

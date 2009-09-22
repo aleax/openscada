@@ -142,4 +142,24 @@ class TAreaObj : public TVarObj
 	static bool compareLess( const TVariant &v1, const TVariant &v2 );
 };
 
+//***********************************************************
+//* TCntrNodeObj                                            *
+//*   TCntrNode object for access to system's objects       *
+//***********************************************************
+class TCntrNodeObj: public TVarObj
+{
+    public:
+	//Methods
+	TCntrNodeObj( AutoHD<TCntrNode> nd );
+
+	TVariant propGet( const string &id );
+	void propSet( const string &id, TVariant val );
+
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
+
+    private:
+	//Attributes
+	AutoHD<TCntrNode> cnd;
+};
+
 #endif // TVARIANT_H

@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:36+0300\n"
+"POT-Creation-Date: 2009-09-19 12:03+0300\n"
 "PO-Revision-Date: 2009-08-17 12:04+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -57,7 +57,7 @@ msgid "DAQ"
 msgstr ""
 
 #: DCON_client.cpp:42
-msgid "0.2.0"
+msgid "0.3.0"
 msgstr ""
 
 #: DCON_client.cpp:43

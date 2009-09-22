@@ -83,6 +83,8 @@ typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 //***************************************************************
 //* TCntrNode - Controll node					*
 //***************************************************************
+class TVariant;
+
 class TCntrNode
 {
     //* Controll scenaries language section *
@@ -154,8 +156,14 @@ class TCntrNode
 	void load( );						//Load node, if modified
 	void save( );						//Save node, if modified
 
+	//> Connections counter
 	virtual void AHDConnect( );
 	virtual void AHDDisConnect( );
+
+	//> User object access
+	virtual TVariant objPropGet( const string &id );
+	virtual void objPropSet( const string &id, TVariant val );
+	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms );
 
     protected:
 	//Data

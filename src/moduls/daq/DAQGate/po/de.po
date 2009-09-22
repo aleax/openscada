@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:35+0300\n"
+"POT-Creation-Date: 2009-09-19 12:20+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -33,7 +33,7 @@ msgid "DAQ"
 msgstr ""
 
 #: daq_gate.cpp:36
-msgid "0.7.0"
+msgid "0.8.0"
 msgstr ""
 
 #: daq_gate.cpp:37
@@ -430,7 +430,7 @@ msgstr ""
 msgid "names"
 msgstr ""
 
-#: daq_gate.cpp:589 daq_gate.cpp:670
+#: daq_gate.cpp:590 daq_gate.cpp:670
 msgid "set"
 msgstr ""
 

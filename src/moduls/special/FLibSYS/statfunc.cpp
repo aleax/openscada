@@ -117,6 +117,8 @@ void Lib::postEnable( int flag )
     reg( new strParsePath() );
     reg( new strPath2Sep() );
     reg( new strEnc2HTML() );
+    reg( new strEnc2Bin() );
+    reg( new strDec4Bin() );
     reg( new real2str() );
     reg( new int2str() );
     reg( new str2real() );

@@ -1,3 +1,16 @@
+2009-09-22 Roman
+- !!!!:SYS, DAQ.JavaLikeCalc: DOM mechanism to OpenSCADA objects is released, based on user object "TCntrNodeObj".
+- !!!!:Transport: DOM function messIO() is added to output transports for direct requests allow for users allow.
+- FIX:Transport: Manualy request sending resource alloc is fixed.
+- !!:DAQ.DAQGate: Documents is updated and released version 0.8.0.
+- !!:DAQ.DCON: Documents is updated and released version 0.3.0.
+- DAQ.ICP_DAS: Front led control is realised for modules I-87019 and I-8017HW.
+- !!:DAQ.ICP_DAS: Documents is created and released version 0.5.0.
+- FIX:DAQ.JavaLikeCalc: The object's properties loading sequence is fixed. Some any fixes is made.
+- !!:Special.FLibSYS: New user's functions strEnc2Bin() and strDec4Bin() is added. Microseconds time's part is added to function FFT().
+- Special.FLibSYS, Special.FLibComplex1: Translation the document to English is added.
+
+
 2009-09-18 Roman
 - !!:DAQ.BlockCalc: Documents is updated and released version 1.2.1.
 - !!:DAQ.JavaLikeCalc: Documents is updated and released version 1.5.0.

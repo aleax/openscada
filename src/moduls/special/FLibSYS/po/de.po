@@ -6,13 +6,13 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: statfunc.cpp:51 varchfnc.cpp:107 varchfnc.cpp:119 varchfnc.cpp:131
 #: varchfnc.cpp:144 varchfnc.cpp:200 varchfnc.cpp:213 varchfnc.cpp:234
-#: xmlfnc.cpp:72 xmlfnc.cpp:138 sysfnc.h:416 timefnc.h:41 timefnc.h:56
+#: xmlfnc.cpp:72 xmlfnc.cpp:138 sysfnc.h:458 timefnc.h:41 timefnc.h:56
 #: timefnc.h:137 xmlfnc.h:39 xmlfnc.h:54
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-16 17:56+0300\n"
+"POT-Creation-Date: 2009-09-22 18:23+0300\n"
 "PO-Revision-Date: 2009-08-19 11:24+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -58,71 +58,71 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: statfunc.cpp:81 statfunc.cpp:155
+#: statfunc.cpp:81 statfunc.cpp:157
 msgid "fnc_"
 msgstr ""
 
-#: statfunc.cpp:151
+#: statfunc.cpp:153
 msgid "info"
 msgstr ""
 
-#: statfunc.cpp:154
+#: statfunc.cpp:156
 msgid "grp"
 msgstr ""
 
-#: statfunc.cpp:154 statfunc.cpp:160
+#: statfunc.cpp:156 statfunc.cpp:162
 msgid "/br/fnc_"
 msgstr ""
 
-#: statfunc.cpp:154
+#: statfunc.cpp:156
 msgid "Function"
 msgstr "Funktion"
 
-#: statfunc.cpp:154 statfunc.cpp:155
+#: statfunc.cpp:156 statfunc.cpp:157
 msgid "root"
 msgstr ""
 
-#: statfunc.cpp:154 statfunc.cpp:155
+#: statfunc.cpp:156 statfunc.cpp:157
 msgid "idm"
 msgstr ""
 
-#: statfunc.cpp:154 statfunc.cpp:155 varchfnc.h:96
+#: statfunc.cpp:156 statfunc.cpp:157 varchfnc.h:96
 msgid "1"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "list"
 msgstr ""
 
-#: statfunc.cpp:155 statfunc.cpp:160
+#: statfunc.cpp:157 statfunc.cpp:162
 msgid "/prm/func"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "Functions"
 msgstr "Funktionen"
 
-#: statfunc.cpp:155 sysfnc.h:381 varchfnc.h:96
+#: statfunc.cpp:157 sysfnc.h:423 varchfnc.h:96
 msgid "tp"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "br"
 msgstr ""
 
-#: statfunc.cpp:155
+#: statfunc.cpp:157
 msgid "br_pref"
 msgstr ""
 
-#: statfunc.cpp:159 xmlfnc.cpp:187 xmlfnc.cpp:195 xmlfnc.cpp:197 sysfnc.h:311
+#: statfunc.cpp:161 xmlfnc.cpp:187 xmlfnc.cpp:195 xmlfnc.cpp:197 sysfnc.h:311
 msgid "path"
 msgstr ""
 
-#: statfunc.cpp:165
+#: statfunc.cpp:167
 msgid "el"
 msgstr ""
 
-#: statfunc.cpp:165
+#: statfunc.cpp:167
 msgid "id"
 msgstr ""
 
@@ -280,14 +280,16 @@ msgid "sysCall"
 msgstr ""
 
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
-#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:401
-#: sysfnc.h:429 sysfnc.h:447 sysfnc.h:490 xmlfnc.h:75 xmlfnc.h:93
+#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:399
+#: sysfnc.h:420 sysfnc.h:443 sysfnc.h:471 sysfnc.h:489 sysfnc.h:532
+#: xmlfnc.h:75 xmlfnc.h:93
 msgid "rez"
 msgstr ""
 
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
-#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:401
-#: sysfnc.h:429 sysfnc.h:447 sysfnc.h:490 xmlfnc.h:75 xmlfnc.h:93
+#: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:399
+#: sysfnc.h:420 sysfnc.h:443 sysfnc.h:471 sysfnc.h:489 sysfnc.h:532
+#: xmlfnc.h:75 xmlfnc.h:93
 msgid "Rezult"
 msgstr "Ergebnis"
 
@@ -577,11 +579,11 @@ msgstr "Wird verwendet um den Pfad der Elemente auszuwerten."
 msgid "strPath2Sep"
 msgstr ""
 
-#: sysfnc.h:336 sysfnc.h:358
+#: sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
 msgid "src"
 msgstr ""
 
-#: sysfnc.h:336 sysfnc.h:358
+#: sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
 msgid "Source"
 msgstr "Quelle"
 
@@ -607,131 +609,157 @@ msgid "Use for encode string for use into HTML source."
 msgstr "Wird verwendet um den Text in HTML-Format zu konvertieren."
 
 #: sysfnc.h:376
+msgid "strEnc2Bin"
+msgstr ""
+
+#: sysfnc.h:382
+#, fuzzy
+msgid "String: Encode text to bin"
+msgstr "Text: Kodierung des Texts in HTML"
+
+#: sysfnc.h:383
+msgid "Use for encode text to bin, from format <00 A0 FA DE>."
+msgstr ""
+
+#: sysfnc.h:397
+msgid "strDec4Bin"
+msgstr ""
+
+#: sysfnc.h:403
+#, fuzzy
+msgid "String: Decode text from bin"
+msgstr "Text: Ganzzahl in Text"
+
+#: sysfnc.h:404
+msgid "Use for decode text from bin to format <00 A0 FA DE>."
+msgstr ""
+
+#: sysfnc.h:418
 msgid "real2str"
 msgstr ""
 
-#: sysfnc.h:379 sysfnc.h:402 sysfnc.h:430 sysfnc.h:448 sysfnc.h:465
+#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:507
 #: timefnc.h:41
 msgid "val"
 msgstr ""
 
-#: sysfnc.h:379 sysfnc.h:402 sysfnc.h:430 sysfnc.h:448 sysfnc.h:465
+#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:507
 msgid "Value"
 msgstr "Wert"
 
-#: sysfnc.h:380
+#: sysfnc.h:422
 msgid "prc"
 msgstr ""
 
-#: sysfnc.h:380
+#: sysfnc.h:422
 msgid "Precision"
 msgstr "Genauigkeit"
 
-#: sysfnc.h:380
+#: sysfnc.h:422
 msgid "4"
 msgstr ""
 
-#: sysfnc.h:381 varchfnc.h:96
+#: sysfnc.h:423 varchfnc.h:96
 msgid "Type"
 msgstr "Typ"
 
-#: sysfnc.h:381
+#: sysfnc.h:423
 msgid "f"
 msgstr ""
 
-#: sysfnc.h:384
+#: sysfnc.h:426
 msgid "String: Real to string"
 msgstr "Text: Reele Zahl in Text"
 
-#: sysfnc.h:385
+#: sysfnc.h:427
 msgid "Convert real to string."
 msgstr "Konvertierung einer reelen Zahl in einen Text."
 
-#: sysfnc.h:399
+#: sysfnc.h:441
 msgid "int2str"
 msgstr ""
 
-#: sysfnc.h:403 timefnc.h:163
+#: sysfnc.h:445 timefnc.h:163
 msgid "base"
 msgstr ""
 
-#: sysfnc.h:403
+#: sysfnc.h:445
 msgid "Base"
 msgstr ""
 
-#: sysfnc.h:403
+#: sysfnc.h:445
 msgid "10"
 msgstr ""
 
-#: sysfnc.h:406
+#: sysfnc.h:448
 msgid "String: Integer to string"
 msgstr "Text: Ganzzahl in Text"
 
-#: sysfnc.h:407
+#: sysfnc.h:449
 msgid "Convert integer to string."
 msgstr "Konvertierung einer Ganzzahl in einen Text."
 
-#: sysfnc.h:427
+#: sysfnc.h:469
 msgid "str2real"
 msgstr ""
 
-#: sysfnc.h:433
+#: sysfnc.h:475
 msgid "String: String to real"
 msgstr "Text: Text in reele Zahl"
 
-#: sysfnc.h:434
+#: sysfnc.h:476
 msgid "Convert string to real."
 msgstr "Konvertierung eines Texts in eine reele Zahl."
 
-#: sysfnc.h:445
+#: sysfnc.h:487
 msgid "str2int"
 msgstr ""
 
-#: sysfnc.h:451
+#: sysfnc.h:493
 msgid "String: String to integer"
 msgstr "Text: Text in Ganzzahl"
 
-#: sysfnc.h:452
+#: sysfnc.h:494
 msgid "Convert string to integer."
 msgstr "Konvertierung eines Texts in eine Ganzzahl."
 
-#: sysfnc.h:463
+#: sysfnc.h:505
 msgid "floatSplitWord"
 msgstr ""
 
-#: sysfnc.h:466 sysfnc.h:491
+#: sysfnc.h:508 sysfnc.h:533
 msgid "w1"
 msgstr ""
 
-#: sysfnc.h:466 sysfnc.h:491
+#: sysfnc.h:508 sysfnc.h:533
 msgid "Word 1"
 msgstr "Wort 1"
 
-#: sysfnc.h:467 sysfnc.h:492
+#: sysfnc.h:509 sysfnc.h:534
 msgid "w2"
 msgstr ""
 
-#: sysfnc.h:467 sysfnc.h:492
+#: sysfnc.h:509 sysfnc.h:534
 msgid "Word 2"
 msgstr "Wort 2"
 
-#: sysfnc.h:470
+#: sysfnc.h:512
 msgid "Float: Split to words"
 msgstr "Fliesskomma: Aufteilen"
 
-#: sysfnc.h:471
+#: sysfnc.h:513
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Aufteilen Fliesskomma (4 Bytes) in Wörter (2 Bytes)."
 
-#: sysfnc.h:488
+#: sysfnc.h:530
 msgid "floatMergeWord"
 msgstr ""
 
-#: sysfnc.h:495
+#: sysfnc.h:537
 msgid "Float: Merge from words"
 msgstr "Fliesskomma: Zusammenfügen"
 
-#: sysfnc.h:496
+#: sysfnc.h:538
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Zusammenfügen Fliesskomma (4 Bytes)  aus Wörtern (2 Bytes)."
 

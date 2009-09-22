@@ -37,7 +37,7 @@ extern "C"
 #define MOD_NAME	"ICP DAS hardware"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.1.0"
+#define VERSION		"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules."
 #define LICENSE		"GPL"
@@ -310,7 +310,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/cntr/cfg/busLst" && ctrChkNode(opt) )
 	for( int i_s = 0; i_s < 11; i_s++ )
-	    opt->childAdd("el")->setAttr("id",TSYS::int2str(i_s))->setText("COM "+TSYS::int2str(i_s?i_s:1)+(i_s==0?_(" (Master LP-8781)"):""));
+	    opt->childAdd("el")->setAttr("id",TSYS::int2str(i_s))->setText("COM "+TSYS::int2str(i_s?i_s:1)+(i_s==0?_(" (Master LP-8x81)"):""));
     else if( a_path == "/cntr/cfg/boudLst" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setText("300");
@@ -377,7 +377,11 @@ void TMdPrm::enable()
     {
 	case 0x8017:
 	    for( int i_i = 0; i_i < 8; i_i++ )
+	    {
 		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+	    }
 	    break;
 	case 0x8042:
 	    for( int i_i = 0; i_i < 16; i_i++ )
@@ -386,8 +390,13 @@ void TMdPrm::enable()
 		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
 	    break;
 	case 0x87019:
+	    p_el.fldAdd( new TFld("cvct",_("Cold-Junction Compensation(CJC) temperature"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 	    for( int i_i = 0; i_i < 8; i_i++ )
+	    {
 		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+	    }
 	    break;
 	case 0x87024:
 	    for( int i_o = 0; i_o < 4; i_o++ )
@@ -477,7 +486,7 @@ void TMdPrm::getVals( )
     WORD wT;
 
     switch( modTp )
-    {    
+    {
 	case 0x8017:
 	{
 	    //> Check for I8017 init
@@ -524,9 +533,14 @@ void TMdPrm::getVals( )
 
 	    char szReceive[255];
 
+	    //> Read inputs
 	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("#%02X",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
 	    for( int i_v = 0; i_v < 8; i_v++ )
 		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1+7*i_v), 0, true );
+
+	    //> Read Cold-Junction Compensation(CJC) temperature
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    vlAt("cvct").at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1), 0, true );
 	    break;
 	}
 	case 0x87024:
@@ -575,6 +589,8 @@ void TMdPrm::vlGet( TVal &val )
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() || !owner().startStat() )	valo.setI( EVAL_INT, 0, true );
+    char szReceive[10];
+    WORD wT;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
@@ -585,10 +601,49 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
-
     //> Direct write
     switch( modTp )
     {
+	case 0x8017:
+	{
+	    bool ha = (valo.name().substr(0,2) == "ha");
+	    bool la = (valo.name().substr(0,2) == "la");
+	    if( !(ha||la) || !((PrmsI8017*)extPrms)->init )	break;
+
+	    //> Create previous value
+	    int hvl = 0, lvl = 0;
+	    for( int i_v = 7; i_v >= 0; i_v-- )
+	    {
+		hvl = hvl << 1;
+		lvl = lvl << 1;
+		if( vlAt(TSYS::strMess("ha%d",i_v)).at().getB() == true )	hvl |= 1;
+		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
+	    }
+	    I8017_SetLed(modSlot,(lvl<<8)|hvl);
+	    break;
+	}
+	case 0x87019:
+	{
+	    bool ha = (valo.name().substr(0,2) == "ha");
+	    bool la = (valo.name().substr(0,2) == "la");
+	    if( !(ha||la) )	break;
+
+	    ResAlloc res( owner().reqRes, true );
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	    //> Create previous value
+	    int hvl = 0, lvl = 0;
+	    for( int i_v = 7; i_v >= 0; i_v-- )
+	    {
+		hvl = hvl << 1;
+		lvl = lvl << 1;
+		if( vlAt(TSYS::strMess("ha%d",i_v)).at().getB() == true )	hvl |= 1;
+		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
+	    }
+
+	    Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("@%02XL%02X%02X",(owner().mBus==0)?0:modAddr,lvl,hvl).c_str(), szReceive, 1, 0, &wT );
+	    break;
+	}
 	case 0x8042:
 	{
 	    ResAlloc res( owner().reqRes, true );
@@ -607,9 +662,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    ResAlloc res( owner().reqRes, true );
 	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 
-	    WORD wT;
 	    string cmd = TSYS::strMess("#%02X%d%+07.3f",(owner().mBus==0)?0:modAddr,atoi(valo.name().c_str()+1),vl);
-	    char szReceive[10];
 
 	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
 	    valo.setR( (RetValue||szReceive[0]!='>' ? EVAL_REAL : vl), 0, true );
