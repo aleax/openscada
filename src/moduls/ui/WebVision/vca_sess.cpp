@@ -448,13 +448,6 @@ void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
     in_item.index_color = fill_clr;
     gdImageFill( im, (int) TSYS::realRound(pnt.x), 
                      (int) TSYS::realRound(pnt.y),  fill_clr );
-    int red = gdImageColorAllocate(im,255,255,255);
-    gdImageSetPixel(im, pnt.x, pnt.y, red);
-    gdImageSetPixel(im, pnt.x+1, pnt.y, red);
-    gdImageSetPixel(im, pnt.x, pnt.y+1, red);
-    gdImageSetPixel(im, pnt.x-1, pnt.y, red);
-    gdImageSetPixel(im, pnt.x, pnt.y-1, red);
-
 }
 
 //- Detecting if any point of the figure is out of the borders of the image -
