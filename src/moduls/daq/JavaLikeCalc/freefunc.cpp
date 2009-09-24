@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2009 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -150,7 +150,7 @@ void Func::loadIO( )
 	//> Position storing
 	int pos = cfg.cfg("POS").getI();
 
-	while( u_pos.size() <= pos )    u_pos.push_back("");
+	while( pos >= u_pos.size() )    u_pos.push_back("");
 	u_pos[pos] = sid;
 
 	if( ioId(sid) < 0 )
@@ -164,13 +164,14 @@ void Func::loadIO( )
 	io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
+    //> Remove holes
+    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+	if( u_pos[i_p].empty() ) { u_pos.erase(u_pos.begin()+i_p); i_p--; }
     //> Position fixing
     for( int i_p = 0; i_p < u_pos.size(); i_p++ )
     {
-	if( u_pos[i_p].empty() ) continue;
 	int iid = ioId(u_pos[i_p]);
-	if( iid != i_p )
-	    try{ ioMove(iid,i_p); } catch(...){ }
+	if( iid != i_p ) try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
 
@@ -253,15 +254,15 @@ void Func::postIOCfgChange()
 
 void Func::setStart( bool val )
 {
+    //> Start calc
     if( val )
     {
-	//> Start calc
 	progCompile( );
 	run_st = true;
     }
+    //> Stop calc
     else
     {
-	//> Stop calc
 	ResAlloc res(calc_res,true);
 	prg = "";
 	regClear();

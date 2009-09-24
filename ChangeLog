@@ -1,3 +1,9 @@
+2009-09-24 Roman
+- FIX:Archive: Get vals from values archive is fixed for don't use limits for limited buffers.
+- !!:FIX:Archive.FSArch: Export data by moltiply buffer using is fixed.
+- FIX: DAQ.Templates, DAQ.JavaLikeCalc, DAQ.ModBus: Remove holes is added into function of ordering items loading. 
+
+
 2009-09-24 Maxim
 - FIX:/UI/Vision: Rounding of the elements' widths is added for the primitive ElFigure to synchronize it with the WebVision.
 

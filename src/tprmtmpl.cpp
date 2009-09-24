@@ -166,13 +166,16 @@ void TPrmTempl::load_( )
 	    io(iid)->setDef(cfg.cfg("VALUE").getS());
 	}
     }
-    //- Position fixing -
+
+    //> Remove holes
+    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+	if( u_pos[i_p].empty() ) { u_pos.erase(u_pos.begin()+i_p); i_p--; }
+
+    //> Position fixing
     for( int i_p = 0; i_p < u_pos.size(); i_p++ )
     {
-	if( u_pos[i_p].empty() ) continue;
 	int iid = ioId(u_pos[i_p]);
-	if( iid != i_p )
-	    try{ ioMove(iid,i_p); } catch(...){ }
+	if( iid != i_p ) try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
 

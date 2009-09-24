@@ -79,7 +79,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     string a_fnm = anm;
     if( mod->filePack(anm) )
     {
-	//- Get file info from DB -
+	//> Get file info from DB
 	TConfig c_el(&mod->packFE());
 	c_el.cfg("FILE").setS(anm);
 	if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el))
@@ -94,16 +94,16 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	a_fnm = mod->unPackArch(anm,false);
 	unpck = true;
     }
-    //- Get params from file -
+    //> Get params from file
     int hd = open(a_fnm.c_str(),O_RDONLY);
     if( hd <= 0 )   return false;
-    //-- Read Header --
+    //>> Read Header
     VFileArch::FHead head;
     read(hd,&head,sizeof(VFileArch::FHead));
     close(hd);
     if( VFileArch::afl_id != head.f_tp || head.term != 0x55 )
 	return false;
-    //-- Check to archive present --
+    //>> Check to archive present
     if( archive )	{ strncpy(buf,head.archive,20); *archive = buf; }
     if( abeg )		*abeg = head.beg;
     if( aend )		*aend = head.end;
@@ -208,7 +208,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 
     if(file_tp == "wav")
     {
-	//- Export to wav -
+	//> Export to wav
 	struct
 	{
 	    char riff[4];
@@ -252,7 +252,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	off_t sz_pos = lseek(hd,0,SEEK_CUR);
 	write(hd,&chnk,sizeof(chnk));
 
-	//- Calc overage and scale of value -
+	//> Calc overage and scale of value
 	float c_val, v_over=0, v_max=-1e30, v_min=1e30;
 
 	c_tm = (long long)beg*1000000;
@@ -262,7 +262,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	    end_tm = vmin(end_tm,(long long)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 
-	    //-- Check scale --
+	    //>> Check scale
 	    for( ; c_tm <= buf.end(); c_tm+=buf_per )
 	    {
 		c_val = buf.getR(&c_tm,true);
@@ -274,25 +274,26 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	}
 	buf.clear();
 
-	//- Transver value -
+	//> Transver value
 	int val_cnt = 0;
 	c_tm = (long long)beg*1000000;
-	while( c_tm < (long long)end*1000000 )
+	while( c_tm && c_tm < (long long)end*1000000 )
 	{
-	    long long end_tm = c_tm+buf_sz*buf_per;
+	    long long end_tm = c_tm+buf_sz*buf_per-buf_per;
 	    end_tm = vmin(end_tm,(long long)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
-	
+
 	    for( ; c_tm <= buf.end(); c_tm+=buf_per, val_cnt++ )
 	    {
 		c_val = buf.getR(&c_tm,true);
+		if( !c_tm ) break;
 		if(c_val == EVAL_REAL)	c_val = v_over;
 		c_val = 2.*(c_val-v_over)/(v_max-v_min);
 		write(hd,&c_val,sizeof(float));
-	    }
+	    }    
 	}
 
-	//- Write value count -
+	//> Write value count
 	lseek(hd,sz_pos,SEEK_SET);
 	chnk.chunksize = val_cnt*sizeof(float);
 	write(hd,&chnk,sizeof(chnk));
@@ -306,14 +307,16 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	if( hd == -1 ) return;
 
 	c_tm = (long long)beg*1000000;
-	while( c_tm < (long long)end*1000000 )
+	while( c_tm && c_tm < (long long)end*1000000 )
 	{
-	    long long end_tm = c_tm+buf_sz*buf_per;
+	    long long end_tm = c_tm+buf_sz*buf_per-buf_per;
 	    end_tm = vmin(end_tm,(long long)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
+
 	    for(; c_tm <= buf.end(); c_tm+=buf_per )
 	    {
 		sprintf(c_val,"%g\n",buf.getR(&c_tm,true));
+		if( !c_tm ) break;
 		write(hd,c_val,strlen(c_val));
 	    }
 	}
@@ -576,15 +579,19 @@ long long ModVArchEl::begin()
 void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 {
     ResAlloc res(m_res,false);
+    printf("TEST 10: %lld:%lld\n",ibeg,iend);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( ibeg > iend ) break;
 	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
 	{
 	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1000000.) )
 		buf.setI(EVAL_INT,ibeg);
+	    printf("TEST 11: %lld:%lld\n",ibeg,iend);
 	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
+	    printf("TEST 12: %lld:%lld\n",ibeg,iend);
 	    ibeg = arh_f[i_a]->end()+1;
 	}
+    printf("TEST 13: %lld:%lld\n",ibeg,iend);
     for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1000000.) )
 	buf.setI(EVAL_INT,ibeg);
 }
@@ -968,7 +975,7 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
     ResAlloc res(m_res,false);
     if( m_err ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
-    //- Get values block characteristic -
+    //> Get values block characteristic
     beg = (beg/period()+(bool)(beg%period()))*period();
     vpos_beg = vmax(0,(beg-begin())/period());
     if( vpos_beg > mpos )	return;
@@ -986,26 +993,26 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 	res.request(false);
     }
 
-    //- Open archive file -
+    //> Open archive file
     int hd = open(name().c_str(),O_RDONLY);
     if( hd <= 0 ) { m_err = true; return; }
 
     voff_beg = calcVlOff(hd,vpos_beg,&vlen_beg);
 
-    //- Get the pack index block and the value block -
+    //> Get the pack index block and the value block
     if( fixVl )
     {
-	//-- Get index block --
+	//>> Get index block
 	int i_beg = sizeof(FHead)+vpos_beg/8;
 	int i_end = sizeof(FHead)+vpos_end/8+1;
 	lseek(hd,i_beg,SEEK_SET);
 	pid_b = (char*)malloc(i_end-i_beg);
 	read(hd,pid_b,i_end-i_beg);
-	//-- Calc end offset --
+	//>> Calc end offset
 	voff_end=voff_beg;
 	for( int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++ )
 	    voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);
-	//-- Get value block --
+	//>> Get value block
 	i_beg=voff_beg;
 	i_end=voff_end+vSize;
 	lseek(hd,i_beg,SEEK_SET);
@@ -1014,13 +1021,13 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
     }
     else
     {
-	//-- Get index block --
+	//>> Get index block
 	int i_beg = sizeof(FHead)+vpos_beg*vSize;
 	int i_end = sizeof(FHead)+vpos_end*vSize+vSize;
 	lseek(hd,i_beg,SEEK_SET);
 	pid_b = (char*)malloc(i_end-i_beg);
 	read(hd,pid_b,i_end-i_beg);
-	//-- Calc end offset --
+	//>> Calc end offset
 	voff_end=voff_beg;
 	vlen_end=vlen_beg;
 	for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++ )
@@ -1034,7 +1041,7 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 		vlen_end = pk_vl;
 	    }
 	}
-	//-- Get value block --
+	//>> Get value block
 	i_beg=voff_beg;
 	i_end=voff_end+vlen_end;
 	lseek(hd,i_beg,SEEK_SET);
@@ -1042,12 +1049,12 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 	read(hd,val_b,i_end-i_beg);
     }
 
-    //- Free file resource and close file -
+    //> Free file resource and close file
     close(hd);
     m_acces = time(NULL);
     res.release();
 
-    //- Process value block -
+    //> Process value block
     int pid_off = vpos_beg;
     voff_end -= voff_beg;
     voff_beg = 0;

@@ -1111,7 +1111,8 @@ void TVArchive::getVals( TValBuf &buf, long long ibeg, long long iend, const str
 		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend )
 	{
 	    //> Local request to data
-	    ibeg = vmax(ibeg,iend-(long long)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
+	    if( !buf.size() )
+		ibeg = vmax(ibeg,iend-(long long)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
 	    arch_el[i_a]->getVals(buf,ibeg,iend,onlyLocal);
 	    iend = buf.begin()-1;
 	}

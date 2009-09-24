@@ -742,7 +742,7 @@ void Node::load_( )
 	u_pos[pos] = sid;
 
 	int iid = ioId(sid);
-	
+
 	if( iid < 0 )
 	    iid = ioIns( new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),"",false),pos );
 	else
@@ -754,13 +754,16 @@ void Node::load_( )
 	if( io(iid)->flg()&Node::IsLink ) io(iid)->setRez(cfg.cfg("VALUE").getS());
 	else io(iid)->setDef(cfg.cfg("VALUE").getS());
     }
+
+    //> Remove holes
+    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+	if( u_pos[i_p].empty() ) { u_pos.erase(u_pos.begin()+i_p); i_p--; }
+
     //> Position fixing
     for( int i_p = 0; i_p < u_pos.size(); i_p++ )
     {
-	if( u_pos[i_p].empty() ) continue;
 	int iid = ioId(u_pos[i_p]);
-	if( iid != i_p )
-	    try{ ioMove(iid,i_p); } catch(...){ }
+	if( iid != i_p ) try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
 
