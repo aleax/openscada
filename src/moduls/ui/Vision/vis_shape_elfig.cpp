@@ -5886,7 +5886,7 @@ void ShapeElFigure::paintImage( WdgView *view )
             {
                 pnt.setBrush( QBrush( (*colors)[shapeItems[number_shape[j]].lineColor], Qt::SolidPattern ) );
                 pnt.setPen( QPen( (*colors)[shapeItems[number_shape[j]].borderColor], 
-                                  (*widths)[shapeItems[number_shape[j]].border_width], 
+                                  (int)TSYS::realRound((*widths)[shapeItems[number_shape[j]].border_width]), 
                                   (*styles)[shapeItems[number_shape[j]].style], Qt::FlatCap, Qt::MiterJoin ) );
                 pnt.drawPath( shapeItems[number_shape[j]].path );
             }
@@ -5895,12 +5895,14 @@ void ShapeElFigure::paintImage( WdgView *view )
             {
                 pnt.setBrush(Qt::NoBrush);
                 if( (*widths)[shapeItems[number_shape[j]].width] < 3 )
+                {
                     pnt.setPen( QPen( (*colors)[shapeItems[number_shape[j]].lineColor], 
-                                      (*widths)[shapeItems[number_shape[j]].width], 
+                                      (int)TSYS::realRound((*widths)[shapeItems[number_shape[j]].width]), 
                                       (*styles)[shapeItems[number_shape[j]].style], Qt::SquareCap, Qt::RoundJoin ) );
+                }
                 else
                     pnt.setPen( QPen( (*colors)[shapeItems[number_shape[j]].lineColor], 
-                                      (*widths)[shapeItems[number_shape[j]].width], 
+                                      (int)TSYS::realRound((*widths)[shapeItems[number_shape[j]].width]), 
                                       (*styles)[shapeItems[number_shape[j]].style], Qt::FlatCap, Qt::RoundJoin ) );
                 pnt.drawPath( shapeItems[number_shape[j]].pathSimple );
             }
@@ -5924,16 +5926,16 @@ void ShapeElFigure::paintImage( WdgView *view )
             if( (*widths)[shapeItems[k].border_width] > 0.01 )
             {
                 pnt.setBrush( QBrush( (*colors)[shapeItems[k].lineColor], Qt::SolidPattern ) );
-                pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (*widths)[shapeItems[k].border_width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
+                pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (int)TSYS::realRound((*widths)[shapeItems[k].border_width]), (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
                 pnt.drawPath( shapeItems[k].path );
             }
             else if( ( (*widths)[shapeItems[k].border_width] >= 0) && (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
             {
                 pnt.setBrush(Qt::NoBrush);
                 if( (*widths)[shapeItems[k].width] < 3 )
-                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
+                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (int)TSYS::realRound((*widths)[shapeItems[k].width]), (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
                 else
-                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (*widths)[shapeItems[k].width], (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
+                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (int)TSYS::realRound((*widths)[shapeItems[k].width]), (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
                 pnt.drawPath( shapeItems[k].pathSimple );
             }
         }

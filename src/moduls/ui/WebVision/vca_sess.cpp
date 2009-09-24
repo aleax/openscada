@@ -448,6 +448,13 @@ void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
     in_item.index_color = fill_clr;
     gdImageFill( im, (int) TSYS::realRound(pnt.x), 
                      (int) TSYS::realRound(pnt.y),  fill_clr );
+    int red = gdImageColorAllocate(im,255,255,255);
+    gdImageSetPixel(im, pnt.x, pnt.y, red);
+    gdImageSetPixel(im, pnt.x+1, pnt.y, red);
+    gdImageSetPixel(im, pnt.x, pnt.y+1, red);
+    gdImageSetPixel(im, pnt.x-1, pnt.y, red);
+    gdImageSetPixel(im, pnt.x, pnt.y-1, red);
+
 }
 
 //- Detecting if any point of the figure is out of the borders of the image -
@@ -2283,6 +2290,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     if( xSc < ySc ) scale = xSc;
     else scale = ySc;
     if( scale != 1.0 )
+    {
         for( int i=0; i<shapeItems.size(); i++ )
         {
             if( !shapeItems[i].flag_brd && shapeItems[i].border_width > 0 )
@@ -2311,6 +2319,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                 shapeItems[i].flag_brd = false;
             }
         }
+    }
     for(int i = 0; i < inundationItems.size(); i++ )
     {
         //- Detecting which figures correspond the points of each fill -
@@ -2760,7 +2769,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                             Point( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).x+10, scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y ) );
                             arc_a = length( el_p5, el_p3 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
                             arc_b = length( el_p3, el_p4 ) + shapeItems[fig[0]].width/2 + shapeItems[fig[0]].border_width;
-                            //--- if there is ane width(of figure itself or of its borders) ---
+                            //--- if there is any width(of figure itself or of its borders) ---
                             if( (shapeItems[fig[0]].width > 1 || shapeItems[fig[0]].border_width > 0 ) || ( shapeItems[fig[1]].width > 1 || shapeItems[fig[1]].border_width > 0 ) )
                             {
                                 arc_a_small = arc_a - shapeItems[fig[0]].width - 2*shapeItems[fig[0]].border_width;

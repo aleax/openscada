@@ -1,3 +1,7 @@
+2009-09-24 Maxim
+- FIX:/UI/Vision: Rounding of the elements' widths is added for the primitive ElFigure to synchronize it with the WebVision.
+
+
 2009-09-22 Roman
 - !!!!:SYS, DAQ.JavaLikeCalc: DOM mechanism to OpenSCADA objects is released, based on user object "TCntrNodeObj".
 - !!!!:Transport: DOM function messIO() is added to output transports for direct requests allow for users allow.
