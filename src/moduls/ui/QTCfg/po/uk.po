@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.0\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:46+0300\n"
+"POT-Creation-Date: 2009-09-25 11:56+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1483,7 +1483,7 @@ msgid "QT"
 msgstr ""
 
 #: tuimod.cpp:42
-msgid "1.8.0"
+msgid "1.8.1"
 msgstr ""
 
 #: tuimod.cpp:43
@@ -1636,6 +1636,3 @@ msgstr "QTCfg діалог"
 #: selfwidg.h:195
 msgid "Node id and/or name select"
 msgstr "Вибір ідентифікатора та/або ім'я вузлу"
-
-#~ msgid "QT Configurator of OpenSCADA: %s"
-#~ msgstr "QT OpenSCADA конфігуратор: %s"

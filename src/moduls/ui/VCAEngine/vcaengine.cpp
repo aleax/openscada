@@ -37,7 +37,7 @@
 #define MOD_TYPE	"UI"
 #define MOD_SUBTYPE	"VCAEngine"
 #define VER_TYPE	VER_UI
-#define VERSION		"0.8.10"
+#define VERSION		"0.9.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Generic visual control area engine."
 #define LICENSE		"GPL"

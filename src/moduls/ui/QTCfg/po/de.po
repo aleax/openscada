@@ -10,9 +10,9 @@
 #: tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:82
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.0\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:46+0300\n"
+"POT-Creation-Date: 2009-09-25 11:56+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -1489,7 +1489,7 @@ msgid "QT"
 msgstr ""
 
 #: tuimod.cpp:42
-msgid "1.8.0"
+msgid "1.8.1"
 msgstr ""
 
 #: tuimod.cpp:43
@@ -1643,6 +1643,3 @@ msgstr "QTCfg Dialog"
 #: selfwidg.h:195
 msgid "Node id and/or name select"
 msgstr "Auswahl des Bezeichners und/oder des Namens"
-
-#~ msgid "QT Configurator of OpenSCADA: %s"
-#~ msgstr "QT OpenSCADA Einstellung: %s"

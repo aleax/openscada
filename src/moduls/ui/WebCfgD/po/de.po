@@ -1,7 +1,7 @@
-# OpenSCADA.UI.WebCfgD translate to Ukrainian.
-# Copyright (C) 2008-2009 Roman Savochenko
+# OpenSCADA.UI.WebCfgD translate to German.
+# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
-# Roman Savochenko <rom_as@fromru.com>, 2008-2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
 #: web_cfg.cpp:55 web_cfg.cpp:228 web_cfg.cpp:280 web_cfg.cpp:310
 #: web_cfg.cpp:435 web_cfg.cpp:439 web_cfg.cpp:451 web_cfg.cpp:498
@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-25 12:18+0300\n"
-"PO-Revision-Date: 2007-10-29 15:28+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: <uk@li.org>\n"
+"PO-Revision-Date: 2008-12-15 15:28+0200\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: <de @li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -24,11 +24,11 @@ msgstr ""
 
 #: web_cfg.cpp:38
 msgid "Dynamic WEB configurator"
-msgstr "Динамічний WEB конфігуратор"
+msgstr "Dynamischer WEB Configurator"
 
 #: web_cfg.cpp:39
 msgid "UI"
-msgstr "Інтерфейс користувача"
+msgstr "Nutzersinterface"
 
 #: web_cfg.cpp:41
 msgid "WWW"
@@ -40,15 +40,15 @@ msgstr ""
 
 #: web_cfg.cpp:43
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "Roman Savotschenko"
 
 #: web_cfg.cpp:44
 msgid ""
 "Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS "
 "and JavaScript technologies."
 msgstr ""
-"Надає динамічний WEB базований конфігуратор. Використано XHTML, CSS та "
-"JavaScript технології."
+"Gewährt den dynamischen WEB begründeten Configurator. Benutzt XHTML, CSS und "
+"JavaScript Technologien."
 
 #: web_cfg.cpp:45
 msgid "GPL"
@@ -66,7 +66,7 @@ msgstr ""
 
 #: web_cfg.cpp:89
 msgid "Process Get comand from http protocol's!"
-msgstr "Обробка команди Get з http протоколу!"
+msgstr ""
 
 #: web_cfg.cpp:90
 msgid ""
@@ -76,199 +76,199 @@ msgstr ""
 
 #: web_cfg.cpp:91
 msgid "Process Set comand from http protocol's!"
-msgstr "Обробка команди Set з http протоколу!"
+msgstr ""
 
 #: web_cfg.cpp:97
 msgid "OpenSCADA. Dynamic WEB configurator"
-msgstr "OpenSCADA. Динамічний WEB конфігуратор"
+msgstr "OpenSCADA. Dynamischer WEB Configurator"
 
 #: web_cfg.cpp:97
 msgid "About"
-msgstr "Про..."
+msgstr "Über..."
 
 #: web_cfg.cpp:98
 msgid "Load"
-msgstr "Завантажити"
+msgstr "Laden"
 
 #: web_cfg.cpp:98
 msgid "Save"
-msgstr "Зберегти"
+msgstr "Speichern"
 
 #: web_cfg.cpp:98
 msgid "Up"
-msgstr "На рівень вище"
+msgstr "Eine Stufe höher"
 
 #: web_cfg.cpp:98
 msgid "Previous"
-msgstr "Попередній"
+msgstr "Vorig"
 
 #: web_cfg.cpp:98
 msgid "Next"
-msgstr "Наступний"
+msgstr "Nächst"
 
 #: web_cfg.cpp:98
 msgid "Add item"
-msgstr "Додати елемент"
+msgstr "Das Element addieren"
 
 #: web_cfg.cpp:98
 msgid "Delete item"
-msgstr "Видалити елемент"
+msgstr "Das Element löschen"
 
 #: web_cfg.cpp:99
 msgid "Copy item"
-msgstr "Копіювати елемент"
+msgstr "Das Element kopieren"
 
 #: web_cfg.cpp:99
 msgid "Cut item"
-msgstr "Вирізати елемент"
+msgstr "Das Element ausschneiden"
 
 #: web_cfg.cpp:99
 msgid "Paste item"
-msgstr "Вставити елемент"
+msgstr "Das Element einsetzen"
 
 #: web_cfg.cpp:100
 msgid "Reload item and tree"
-msgstr "Перевантажити елемент та дерево"
+msgstr "Das Element und den Baum umladen"
 
 #: web_cfg.cpp:100
 msgid "Start periodic update"
-msgstr "Запуск періодичного оновлення"
+msgstr "Periodisches Update starten"
 
 #: web_cfg.cpp:100
 msgid "Stop periodic update"
-msgstr "Зупинка періодичного оновлення"
+msgstr "Periodisches Update stoppen"
 
 #: web_cfg.cpp:101
 msgid "Ready"
-msgstr "Готовий"
+msgstr "Fertig"
 
 #: web_cfg.cpp:102
 msgid "Go"
-msgstr "Перейти"
+msgstr "Übergehen"
 
 #: web_cfg.cpp:102
 msgid "Add"
-msgstr "Додати"
+msgstr "Addieren"
 
 #: web_cfg.cpp:102
 msgid "Insert"
-msgstr "Вставити"
+msgstr "Einsetzen"
 
 #: web_cfg.cpp:102
 msgid "Edit"
-msgstr "Редагувати"
+msgstr "Redigieren"
 
 #: web_cfg.cpp:102
 msgid "Delete"
-msgstr "Видалити"
+msgstr "Löschen"
 
 #: web_cfg.cpp:102
 msgid "Item up"
-msgstr "Підняти"
+msgstr "Item nach oben"
 
 #: web_cfg.cpp:102
 msgid "Item down"
-msgstr "Опустити"
+msgstr "Item nach unten"
 
 #: web_cfg.cpp:103
 msgid "Add new element."
-msgstr "Додання нового елементу."
+msgstr "Das neue Element addieren."
 
 #: web_cfg.cpp:103
 msgid "Insert new element."
-msgstr "Вставлення нового елементу."
+msgstr "Das neue Element einsetzen."
 
 #: web_cfg.cpp:103
 msgid "Rename element."
-msgstr "Перейменування елементу."
+msgstr "Das neue Element umnennen."
 
 #: web_cfg.cpp:104
 msgid "Select image file for download to picture field."
-msgstr "Вибір файлу зображення для завантаження у поле зображення."
+msgstr "Die Imagedatei für das Laden ins Imagefeld wählen."
 
 #: web_cfg.cpp:105
 msgid "Add row"
-msgstr "Додати строку"
+msgstr "Die Zeile addieren"
 
 #: web_cfg.cpp:105
 msgid "Insert row"
-msgstr "Вставити строку"
+msgstr "Die Zeile einsetzen"
 
 #: web_cfg.cpp:105
 msgid "Delete row"
-msgstr "Видалити строку"
+msgstr "Die Zeile löschen"
 
 #: web_cfg.cpp:105
 msgid "Up row"
-msgstr "Підняти строку"
+msgstr "Zeile nach oben"
 
 #: web_cfg.cpp:105
 msgid "Down row"
-msgstr "Опустити строку"
+msgstr "Zeile nach unten"
 
 #: web_cfg.cpp:106
 msgid "No one editable container present."
-msgstr "Немає жодного контейнера для редагування."
+msgstr "Es gibt keinen redigierenden Container."
 
 #: web_cfg.cpp:106
 msgid "Add item to node '%1'."
-msgstr "Додання елементу '%1' до вузла."
+msgstr "Das Element wird in den Knoten '%1' addiert."
 
 #: web_cfg.cpp:106
 msgid "Item '%1' already present."
-msgstr "Елемент '%1' вже присутній."
+msgstr "Das Element '%1' ist schon vorhanden."
 
 #: web_cfg.cpp:107
 msgid "You sure for delete node '%1'?"
-msgstr "Ви дійсно бажаєте видалити вузол '%1'?"
+msgstr "Wollen Sie wirklich den Knoten '%1' löschen?"
 
 #: web_cfg.cpp:108
 msgid "Copy is imposible."
-msgstr "Копіювання неможливе."
+msgstr "Kopierung ist unmöglich."
 
 #: web_cfg.cpp:108
 msgid "Selected"
-msgstr "Вибраний"
+msgstr "Gewählt"
 
 #: web_cfg.cpp:108
 msgid "Move node '%1' to '%2'."
-msgstr "Переміщення вузлу '%1' до '%2'."
+msgstr "Den Knoten '%1' in '%2' umsetzen."
 
 #: web_cfg.cpp:108
 msgid "Copy node '%1' to '%2'."
-msgstr "Копіювання вузлу '%1' до '%2'."
+msgstr "Kopierung des Knotens '%1' в '%2'."
 
 #: web_cfg.cpp:108
 msgid "Node '%1' already present. Continue?"
-msgstr "Вузол '%1' вже присутній. Продовжити?"
+msgstr "Der Knoten '%1' ist schon vorhanden. Weiter?"
 
 #: web_cfg.cpp:109
 msgid "Element type:"
-msgstr "Тип елементу:"
+msgstr "Typ des Elements:"
 
 #: web_cfg.cpp:109
 msgid "ID:"
-msgstr "Ідентифікатор:"
+msgstr "ID:"
 
 #: web_cfg.cpp:109
 msgid "Name:"
-msgstr "Ім'я:"
+msgstr "Name:"
 
 #: web_cfg.cpp:109
 msgid "Ok"
-msgstr "Прийняти"
+msgstr "Annehmen"
 
 #: web_cfg.cpp:109
 msgid "Close"
-msgstr "Закрити"
+msgstr "Schliessen"
 
 #: web_cfg.cpp:110
 msgid "Page loaded."
-msgstr "Сторінку завантажено."
+msgstr "Die Seite ist geladet."
 
 #: web_cfg.cpp:122 web_cfg.cpp:130
 msgid "SubType"
-msgstr "Підтип"
+msgstr "SubTyp"
 
 #: web_cfg.cpp:123 web_cfg.cpp:131
 msgid "Auth"
@@ -285,8 +285,9 @@ msgid ""
 "---------- Parameters of the module section <%s> in config file ----------\n"
 "\n"
 msgstr ""
-"========================= Опції модуля <%s:%s> ===========================\n"
-"-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
+"======================== Optionen des Moduls <%s:%s> "
+"============================\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei ---------\n"
 "\n"
 
 #: web_cfg.cpp:149
@@ -550,7 +551,7 @@ msgstr ""
 #: web_cfg.cpp:387
 #, c-format
 msgid "Unknown command: %s."
-msgstr "Невідома команда: %s."
+msgstr "Unbekanntes Kommando: %s."
 
 #: web_cfg.cpp:388
 msgid "<center>Call page/widget '"
@@ -599,7 +600,7 @@ msgstr ""
 
 #: web_cfg.cpp:409 web_cfg.cpp:419
 msgid "Name: "
-msgstr "Ім'я: "
+msgstr "Name: "
 
 #: web_cfg.cpp:409 web_cfg.cpp:410 web_cfg.cpp:411 web_cfg.cpp:412
 #: web_cfg.cpp:419 web_cfg.cpp:420 web_cfg.cpp:421 web_cfg.cpp:422
@@ -615,15 +616,15 @@ msgstr ""
 
 #: web_cfg.cpp:410
 msgid "Desription: "
-msgstr "Опис: "
+msgstr "Beschreibung: "
 
 #: web_cfg.cpp:411 web_cfg.cpp:420
 msgid "License: "
-msgstr "Ліцензія: "
+msgstr "Lizenz: "
 
 #: web_cfg.cpp:412 web_cfg.cpp:421
 msgid "Author: "
-msgstr "Автор: "
+msgstr "Autor: "
 
 #: web_cfg.cpp:412
 msgid ""
@@ -645,7 +646,7 @@ msgstr ""
 
 #: web_cfg.cpp:422
 msgid "Web site: "
-msgstr "Web сайт: "
+msgstr "Web Seite: "
 
 #: web_cfg.cpp:422
 msgid ""
@@ -713,7 +714,7 @@ msgstr ""
 
 #: web_cfg.cpp:518
 msgid "Module options"
-msgstr "Опції модуля"
+msgstr "Optionen des Moduls"
 
 #: web_cfg.cpp:519
 msgid "comm"
@@ -725,7 +726,7 @@ msgstr ""
 
 #: web_cfg.cpp:519
 msgid "Go to remote stations list configuration"
-msgstr "Перейти до конфігурації переліку віддалених станцій"
+msgstr "Zur Konfiguration der Liste von entfernten Stationen übergehen"
 
 #: web_cfg.cpp:519 web_cfg.cpp:520 web_cfg.cpp:526
 msgid "root"
@@ -749,7 +750,7 @@ msgstr ""
 
 #: web_cfg.cpp:520
 msgid "Options help"
-msgstr "Допомога по опціям"
+msgstr "Optionen Hilfe"
 
 #: web_cfg.cpp:520
 msgid "str"

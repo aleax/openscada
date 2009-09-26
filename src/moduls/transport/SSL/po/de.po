@@ -1,0 +1,452 @@
+# OpenSCADA.Transport.SSL translate to Russian.
+# Copyright (C) 2009 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+#
+#: modssl.cpp:57 modssl.cpp:262 modssl.cpp:280 modssl.cpp:354 modssl.cpp:495
+#: modssl.cpp:536 modssl.cpp:716
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.Transport.SSL 0.8.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-06 11:44+0300\n"
+"PO-Revision-Date: 2008-10-13 18:53+0300\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: modssl.cpp:40 modssl.cpp:41
+msgid "SSL"
+msgstr ""
+
+#: modssl.cpp:42
+msgid "Transport"
+msgstr "Transport"
+
+#: modssl.cpp:44
+msgid "0.8.1"
+msgstr ""
+
+#: modssl.cpp:45
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: modssl.cpp:46
+msgid ""
+"Allow security socket layer based transport. Used OpenSSL and supported "
+"SSLv2, SSLv3 and TLSv1."
+msgstr ""
+"Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. Es werden benutzt "
+"OpenSSL und unterstützt SSLv2, SSLv3 und TLSv1."
+
+#: modssl.cpp:47
+msgid "GPL"
+msgstr ""
+
+#: modssl.cpp:52
+msgid "C"
+msgstr ""
+
+#: modssl.cpp:99
+msgid "/dev/urandom"
+msgstr ""
+
+#: modssl.cpp:121 modssl.cpp:229
+msgid "BufLen"
+msgstr ""
+
+#: modssl.cpp:121
+msgid "Input socket buffer length (kB)"
+msgstr "Die Länge des Eingangsbuffers (kB)"
+
+#: modssl.cpp:121
+msgid "4"
+msgstr ""
+
+#: modssl.cpp:121 modssl.cpp:214
+msgid "5"
+msgstr ""
+
+#: modssl.cpp:122 modssl.cpp:229
+msgid "MaxClients"
+msgstr ""
+
+#: modssl.cpp:122
+msgid "Maximum clients process"
+msgstr "Maximum der bedienten Kunden"
+
+#: modssl.cpp:122
+msgid "3"
+msgstr ""
+
+#: modssl.cpp:122
+msgid "10"
+msgstr ""
+
+#: modssl.cpp:123 modssl.cpp:127 modssl.cpp:230 modssl.cpp:637
+msgid "SSLCertKey"
+msgstr ""
+
+#: modssl.cpp:123 modssl.cpp:127
+msgid "SSL PEM certificat and private key"
+msgstr "Das SSL PEM Zertifikat und Privatschlüssel"
+
+#: modssl.cpp:123 modssl.cpp:127
+msgid "10000"
+msgstr ""
+
+#: modssl.cpp:124 modssl.cpp:128 modssl.cpp:230 modssl.cpp:637
+msgid "SSLKeyPass"
+msgstr ""
+
+#: modssl.cpp:124 modssl.cpp:128
+msgid "SSL key password"
+msgstr "Das Kennwort des SSL Schlüssels"
+
+#: modssl.cpp:124 modssl.cpp:128
+msgid "20"
+msgstr ""
+
+#: modssl.cpp:168
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section <%s> in config file ----------\n"
+"\n"
+msgstr ""
+"========================= Optionen des Moduls <%s:%s> ===========================\n"
+"------- Parameter des Abschnitts <%s> in der Konfigurationsdatei ---------\n"
+"\n"
+
+#: modssl.cpp:179
+msgid "h"
+msgstr ""
+
+#: modssl.cpp:182 modssl.cpp:596 modssl.cpp:602 modssl.cpp:847 modssl.cpp:853
+msgid "help"
+msgstr ""
+
+#: modssl.cpp:211 modssl.cpp:593 modssl.cpp:844
+msgid "info"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:604
+#: modssl.cpp:605 modssl.cpp:847 modssl.cpp:853 modssl.cpp:854
+msgid "fld"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:220
+msgid "/help/g_help"
+msgstr ""
+
+#: modssl.cpp:214
+msgid "Options help"
+msgstr "Помощь по опциям"
+
+#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:604
+#: modssl.cpp:605 modssl.cpp:612 modssl.cpp:613 modssl.cpp:617 modssl.cpp:618
+#: modssl.cpp:622 modssl.cpp:623 modssl.cpp:627 modssl.cpp:628 modssl.cpp:847
+#: modssl.cpp:853 modssl.cpp:854 modssl.cpp:861 modssl.cpp:862 modssl.cpp:866
+#: modssl.cpp:867
+msgid "root"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:604
+#: modssl.cpp:605 modssl.cpp:847 modssl.cpp:853 modssl.cpp:854
+msgid "tp"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:596 modssl.cpp:602 modssl.cpp:603 modssl.cpp:847
+#: modssl.cpp:853 modssl.cpp:854
+msgid "str"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:602 modssl.cpp:853
+msgid "cols"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:602 modssl.cpp:853
+msgid "90"
+msgstr ""
+
+#: modssl.cpp:214 modssl.cpp:602 modssl.cpp:853
+msgid "rows"
+msgstr ""
+
+#: modssl.cpp:219 modssl.cpp:609 modssl.cpp:858
+msgid "path"
+msgstr ""
+
+#: modssl.cpp:220 modssl.cpp:612 modssl.cpp:617 modssl.cpp:622 modssl.cpp:627
+#: modssl.cpp:861 modssl.cpp:866
+msgid "get"
+msgstr ""
+
+#: modssl.cpp:232 modssl.cpp:639
+msgid "localhost:10042"
+msgstr ""
+
+#: modssl.cpp:245
+msgid "Start error: "
+msgstr "Fehler des Startes: "
+
+#: modssl.cpp:248
+#, c-format
+msgid ""
+"Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed "
+"connections by limit %d."
+msgstr ""
+"Verbindungen %d, eröffnet %d. Eingangstreffik %.4g kB, Ausgangs- %.4g kB. "
+"Закрыто соединений из-за лимита %d."
+
+#: modssl.cpp:271
+msgid "open"
+msgstr "Eröffnen"
+
+#: modssl.cpp:272
+msgid "Not opened!"
+msgstr "Nicht eröffnet!"
+
+#: modssl.cpp:286
+msgid "close"
+msgstr "Schliessen"
+
+#: modssl.cpp:287
+msgid "Not closed!"
+msgstr "Nicht geschlossen!"
+
+#: modssl.cpp:301 modssl.cpp:444
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: modssl.cpp:318 modssl.cpp:674
+msgid "SSLv2"
+msgstr ""
+
+#: modssl.cpp:319 modssl.cpp:675
+msgid "SSLv3"
+msgstr ""
+
+#: modssl.cpp:320 modssl.cpp:676
+msgid "TLSv1"
+msgstr ""
+
+#: modssl.cpp:328 modssl.cpp:687
+#, c-format
+msgid "SSL_CTX_new: %s"
+msgstr ""
+
+#: modssl.cpp:334 modssl.cpp:696
+#, c-format
+msgid "Open temporaty file '%s' error: '%s'"
+msgstr "Fehler der Eröffnung der zeitweiligen Datei '%s': '%s'"
+
+#: modssl.cpp:344 modssl.cpp:706
+#, c-format
+msgid "SSL_CTX_use_certificate_chain_file: %s"
+msgstr ""
+
+#: modssl.cpp:350 modssl.cpp:712
+#, c-format
+msgid "SSL_CTX_use_PrivateKey_file: %s"
+msgstr ""
+
+#: modssl.cpp:360
+#, c-format
+msgid "BIO_new_ssl: %s"
+msgstr ""
+
+#: modssl.cpp:365 modssl.cpp:728
+msgid ":"
+msgstr ""
+
+#: modssl.cpp:376 modssl.cpp:397
+#, c-format
+msgid "BIO_do_accept: %s"
+msgstr ""
+
+#: modssl.cpp:407
+msgid "Error creation of the thread!"
+msgstr "Fehler der Schaffung des Stroms!"
+
+#: modssl.cpp:413 modssl.cpp:544
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: modssl.cpp:417
+msgid ": "
+msgstr ""
+
+#: modssl.cpp:417
+msgid " client tasks is stopping...."
+msgstr " Kundenaufgabe ist gestoppt...."
+
+#: modssl.cpp:447
+#, c-format
+msgid "Connecting to the socket (%d)."
+msgstr "Verbinung mit dem Socket (%d)."
+
+#: modssl.cpp:459
+#, c-format
+msgid "BIO_should_retry: %s"
+msgstr ""
+
+#: modssl.cpp:483 modssl.cpp:835
+#, c-format
+msgid "The message is received with the size <%d>."
+msgstr "Die Nachricht ist bekommen von der Größe <%d>."
+
+#: modssl.cpp:492
+#, c-format
+msgid "The message is replied with the size <%d>."
+msgstr "Es wurde beantwortet mit der Nachricht von der Größe  <%d>."
+
+#: modssl.cpp:516
+#, c-format
+msgid "Socket has been disconnected (%d)."
+msgstr "Abfall vom Socket (%d)."
+
+#: modssl.cpp:527
+msgid "_"
+msgstr ""
+
+#: modssl.cpp:545
+msgid "Error request to protocol."
+msgstr "Fehler der Anfrage ans Protokoll."
+
+#: modssl.cpp:596 modssl.cpp:847
+msgid "/prm/cfg/addr"
+msgstr ""
+
+#: modssl.cpp:596 modssl.cpp:847
+msgid "ADDR"
+msgstr ""
+
+#: modssl.cpp:597
+msgid ""
+"SSL input transport has address format:\n"
+"  [addr]:[port]:[mode] - where:\n"
+"    addr - address for SSL to be opened, '*' address opens for all "
+"interfaces;\n"
+"    port - network port (/etc/services);\n"
+"    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."
+msgstr ""
+"Das Format der Adresse des SSL Eingangstransports:\n"
+"  [addr]:[port]:[mode] - wo:\n"
+"    addr - die Adresse der Eröffnung SSL, '*' Adresse eröffnet für alle Interfaces;\n"
+"    port - der Network Port (/etc/services);\n"
+"    mode - SSL Regime und Version (SSLv2, SSLv3, SSLv23 and TLSv1)."
+
+#: modssl.cpp:602 modssl.cpp:610 modssl.cpp:853 modssl.cpp:859
+msgid "/prm/cfg/certKey"
+msgstr ""
+
+#: modssl.cpp:602 modssl.cpp:853
+msgid "Certificates and private key"
+msgstr "Zertifikate und Privatschlüssel"
+
+#: modssl.cpp:602 modssl.cpp:853
+msgid "7"
+msgstr ""
+
+#: modssl.cpp:602 modssl.cpp:853
+msgid "SSL PAM certificates chain and private key."
+msgstr "Die Kette von SSL PAM Zertifikaten und Privatschlüssel."
+
+#: modssl.cpp:603 modssl.cpp:615 modssl.cpp:854 modssl.cpp:864
+msgid "/prm/cfg/pkey_pass"
+msgstr ""
+
+#: modssl.cpp:603 modssl.cpp:854
+msgid "Private key password"
+msgstr "Das Kennwort des Privatschlüssels"
+
+#: modssl.cpp:604 modssl.cpp:620
+msgid "/prm/cfg/cl_n"
+msgstr ""
+
+#: modssl.cpp:604
+msgid "Clients maximum"
+msgstr "Kunden Maximum"
+
+#: modssl.cpp:604 modssl.cpp:605
+msgid "dec"
+msgstr ""
+
+#: modssl.cpp:605 modssl.cpp:625
+msgid "/prm/cfg/bf_ln"
+msgstr ""
+
+#: modssl.cpp:605
+msgid "Input buffer (kbyte)"
+msgstr "Eingangsbuffer (kbyte)"
+
+#: modssl.cpp:613 modssl.cpp:618 modssl.cpp:623 modssl.cpp:628 modssl.cpp:862
+#: modssl.cpp:867
+msgid "set"
+msgstr ""
+
+#: modssl.cpp:651
+#, c-format
+msgid "Traffic in %.4g kb, out %.4g kb."
+msgstr "Eingangstraffik %.4g kb, Ausgangs- %.4g kb."
+
+#: modssl.cpp:723
+#, c-format
+msgid "BIO_new_ssl_connect: %s"
+msgstr ""
+
+#: modssl.cpp:733
+#, c-format
+msgid "BIO_do_connect: %s"
+msgstr ""
+
+#: modssl.cpp:777
+msgid "Transport is not started!"
+msgstr "Der Transport  ist nicht gestartet!"
+
+#: modssl.cpp:788
+#, c-format
+msgid "BIO_write: %s"
+msgstr ""
+
+#: modssl.cpp:794
+#, c-format
+msgid "The message is sent with the size <%d>."
+msgstr "Die Nachricht von der Größe <%d> ist gesendet."
+
+#: modssl.cpp:806
+#, c-format
+msgid "BIO_read: %s"
+msgstr ""
+
+#: modssl.cpp:823
+msgid "Timeouted!"
+msgstr "Die Wartezeit ist aus!"
+
+#: modssl.cpp:824
+msgid "Socket error!"
+msgstr "Fehler des Sockets!"
+
+#: modssl.cpp:828
+#, c-format
+msgid "Read reply error: %s"
+msgstr "Fehler des Lesens der Antwort: %s"
+
+#: modssl.cpp:848
+msgid ""
+"SSL output transport has address format:\n"
+"  [addr]:[port]:[mode] - where:\n"
+"    addr - remote SSL host address;\n"
+"    port - network port (/etc/services);\n"
+"    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."
+msgstr ""
+"Das Format der Adresse des SSL-Ausgangstransport:\n"
+"  [addr]:[port]:[mode] - wo:\n"
+"    addr - Die Adresse des entfernten SSL Hostes;\n"
+"    port - Der Network Port (/etc/services);\n"
+"    mode - Das SSL-Regime und Version (SSLv2, SSLv3, SSLv23 and TLSv1)."

@@ -36,7 +36,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.6.10"
+#define MOD_VERSION	"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Web operation user interface for visual control area (VCA) projects playing."

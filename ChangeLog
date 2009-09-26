@@ -1,11 +1,21 @@
+2009-09-26 Roman
+- !!:UI.QTCfg: Documents and translations is updated and released version 1.8.1.
+- !!:UI.VCAEngine: Documents and translations is updated, the document translated to English is added and released version 0.9.0.
+- !!:UI.Vision: Documents and translations is updated, the document translated to English is added and released version 0.9.0.
+- !:UI.WebCfg: The document translated to English is added.
+- !!:UI.WebCfgD: Documents and translations is updated, the German translation is added and released version 0.6.2.
+- !!:UI.WebVision: Documents and translations is updated, the document translated to English is added and released version 0.7.0.
+- !:Transport.SSL, Transport.Sockets: The German translation is added.
+
+
 2009-09-24 Roman
 - FIX:Archive: Get vals from values archive is fixed for don't use limits for limited buffers.
-- !!:FIX:Archive.FSArch: Export data by moltiply buffer using is fixed.
-- FIX: DAQ.Templates, DAQ.JavaLikeCalc, DAQ.ModBus: Remove holes is added into function of ordering items loading. 
+- !!:FIX:Archive.FSArch: Export data by multiply buffer using is fixed.
+- FIX:DAQ.Templates, DAQ.JavaLikeCalc, DAQ.ModBus: Remove holes is added into function of ordering items loading. 
 
 
 2009-09-24 Maxim
-- FIX:/UI/Vision: Rounding of the elements' widths is added for the primitive ElFigure to synchronize it with the WebVision.
+- FIX:UI.Vision: Rounding of the elements' widths is added for the primitive ElFigure to synchronize it with the WebVision.
 
 
 2009-09-22 Roman
@@ -118,7 +128,7 @@
 
 
 2009-08-17 Roman
-- !!:/UI/Vision, /UI/WebVision: Disabled trends checking, include correct collor check, is added to primitive "Diagram".
+- !!:/UI/Vision, /UI/WebVision: Disabled trends checking, include correct color check, is added to primitive "Diagram".
 - FIX:/UI/WebVision: The focus get is fixed for primitive "Document".
 
 
