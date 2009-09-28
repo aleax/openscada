@@ -579,19 +579,15 @@ long long ModVArchEl::begin()
 void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 {
     ResAlloc res(m_res,false);
-    printf("TEST 10: %lld:%lld\n",ibeg,iend);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( ibeg > iend ) break;
 	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
 	{
 	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1000000.) )
 		buf.setI(EVAL_INT,ibeg);
-	    printf("TEST 11: %lld:%lld\n",ibeg,iend);
 	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
-	    printf("TEST 12: %lld:%lld\n",ibeg,iend);
 	    ibeg = arh_f[i_a]->end()+1;
 	}
-    printf("TEST 13: %lld:%lld\n",ibeg,iend);
     for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1000000.) )
 	buf.setI(EVAL_INT,ibeg);
 }

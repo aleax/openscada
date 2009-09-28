@@ -1,3 +1,9 @@
+2009-09-28 Roman
+- SYS.Template: The collumn "Access" is renamed to "Configure".
+- !!:DAQ.BlockCalc: Direct links to parameters using is added. 
+- DAQ.JavaLikeCalc: The operation "AND" and "OR" is made EVAL insensitivity.
+
+
 2009-09-26 Roman
 - !!:UI.QTCfg: Documents and translations is updated and released version 1.8.1.
 - !!:UI.VCAEngine: Documents and translations is updated, the document translated to English is added and released version 0.9.0.

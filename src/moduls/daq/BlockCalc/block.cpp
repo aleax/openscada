@@ -51,12 +51,12 @@ TCntrNode &Block::operator=( TCntrNode &node )
     Block *src_n = dynamic_cast<Block*>(&node);
     if( !src_n ) return *this;
 
-    //- Copy parameters -
+    //> Copy parameters
     string prev_id = m_id;
     *(TConfig *)this = *(TConfig*)src_n;
     m_id = prev_id;
 
-    //- Copy IO and links -
+    //> Copy IO and links
     if( src_n->enable() )
     {
 	setEnable(true);
@@ -102,7 +102,7 @@ void Block::load_( )
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
 
-    //- Load IO config -
+    //> Load IO config
     loadIO();
 }
 
@@ -111,7 +111,7 @@ void Block::save_( )
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataSet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
 
-    //- Save IO config -
+    //> Save IO config
     saveIO();
 }
 
@@ -146,7 +146,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 	//> Value
 	setS(i_ln,cfg.cfg("VAL").getS());
 	//> Config of link
-	setLink(i_ln,SET,(LnkT)cfg.cfg("TLNK").getI(),cfg.cfg("LNK").getS());
+	setLink( i_ln, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS() );
     }
 }
 
@@ -178,7 +178,7 @@ void Block::saveIO( )
 
 void Block::setEnable( bool val )
 {
-    //- Enable -
+    //> Enable
     if( val && !m_enable )
     {
 	if( !func() )
@@ -186,27 +186,27 @@ void Block::setEnable( bool val )
 	    if( !dynamic_cast<TFunction *>(&SYS->nodeAt(wFunc(),0,'.').at()) )
 		throw TError(nodePath().c_str(),_("Node '%s' is not function."),wFunc().c_str());
 	    setFunc( (TFunction *)&SYS->nodeAt(wFunc(),0,'.').at() );
-	    //-- Init system attributes identifiers --
+	    //>> Init system attributes identifiers
 	    id_freq  = func()->ioId("f_frq");
 	    id_start = func()->ioId("f_start");
 	    id_stop  = func()->ioId("f_stop");
 	}
-	//-- Init links --
+	//>> Init links
 	loadIO( );
     }
-    //- Disable -
+    //> Disable
     else if( !val && m_enable )
     {
 	if( process() ) setProcess(false);
-	//-- Save IO config --
+	//>> Save IO config
 	//saveIO();
 
-	//-- Clean IO --
+	//>> Clean IO
 	for( unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    setLink(i_ln,SET,FREE);
+	    setLink( i_ln, SET, FREE );
 	m_lnk.clear();
 
-	//-- Free func --
+	//>> Free func
 	setFunc(NULL);
 	id_freq=id_start=id_stop=-1;
     }
@@ -217,14 +217,14 @@ void Block::setProcess( bool val )
 {
     if( val && !enable() ) setEnable(true);
 
-    //- Connect links -
+    //> Connect links
     if( val && !process() )
     {
 	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
 	    setLink( i_ln, INIT );
 	owner().blkProc( id(), val );
     }
-    //- Disconnect links -
+    //> Disconnect links
     if( !val && process() )
     {
 	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
@@ -260,16 +260,15 @@ bool Block::linkActive( unsigned iid )
 void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 {
     ResAlloc res(lnk_res,true);
-    if( iid >= m_lnk.size() )
-	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
+    if( iid >= m_lnk.size() )	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
 
-    //- Change type link -
+    //> Change type link
     if( cmd == SET )
     {
 	if( lnk != m_lnk[iid].tp )
 	{
-	    //-- Free old structures --
-	    switch(m_lnk[iid].tp)
+	    //>> Free old structures
+	    switch( m_lnk[iid].tp )
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
 		    delete m_lnk[iid].iblk;	break;
@@ -277,8 +276,8 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		    delete m_lnk[iid].aprm;	break;
 	    }
 
-	    //-- Make new structures --
-	    switch(lnk)
+	    //>> Make new structures
+	    switch( lnk )
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
 		    m_lnk[iid].iblk = new SLIBlk;	break;
@@ -289,7 +288,7 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	}
 	m_lnk[iid].lnk = vlnk;
     }
-    //- Connect new link and init -
+    //> Connect new link and init
     if( cmd == INIT || (cmd == SET && process()) )
     {
 	string lo1 = TSYS::strSepParse(m_lnk[iid].lnk,0,'.');
@@ -319,12 +318,16 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		break;
 	    case I_PRM: case O_PRM:
 		m_lnk[iid].aprm->free();
-		if( dynamic_cast<TVal *>(&SYS->nodeAt(m_lnk[iid].lnk,0,'.').at()) )
-		    *m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.');
+		try { *m_lnk[iid].aprm = SYS->daq().at().at(lo1).at().at(lo2).at().at(lo3).at().vlAt(lo4); }
+		catch( TError err)
+		{
+		    if( dynamic_cast<TVal *>(&SYS->nodeAt(m_lnk[iid].lnk,0,'.').at()) )
+			*m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.');
+		}
 		break;
 	}
     }
-    //- Disconnect -
+    //> Disconnect
     if( cmd == DEINIT )
 	switch(m_lnk[iid].tp)
 	{
@@ -337,16 +340,16 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 
 void Block::calc( bool first, bool last )
 {
-    //- Set fixed system attributes -
+    //> Set fixed system attributes
     if( id_freq>=0 )	setR(id_freq,(1000.*(double)owner().iterate())/(double)owner().period());
     if( id_start>=0 )	setB(id_start,first);
     if( id_stop>=0 )	setB(id_stop,last);
 
-    //- Get values from input links -
+    //> Get values from input links
     lnk_res.resRequestR( );
     try
     {
-	//-- Get input links --
+	//>> Get input links
 	for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
 	    switch( m_lnk[i_ln].tp )
 	    {
@@ -379,7 +382,7 @@ void Block::calc( bool first, bool last )
     }
     lnk_res.resRelease( );
 
-    //- Calc function -
+    //> Calc function
     try
     {
 	TValFunc::calc( );
@@ -387,7 +390,7 @@ void Block::calc( bool first, bool last )
     }
     catch(TError err) { err_cnt++; throw; }
 
-    //- Put values to output links -
+    //> Put values to output links
     lnk_res.resRequestR( );
     try
     {
@@ -508,14 +511,14 @@ void Block::cntrCmdProc( XMLNode *opt )
 		{
 		    vector<string> list;
 		    ioList(list);
-		    //-- Put IO links --
+		    //>> Put IO links
 		    for( int i_io = 0; i_io < list.size(); i_io++ )
 		    {
 			int id = ioId(list[i_io]);
 
 			if( ioHide(id) && !atoi(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")).c_str()) ) continue;
 
-			//-- Add link's type --
+			//>> Add link's type
 			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
 			    func()->io(id)->name().c_str(),0664,"root","root",3,"tp","dec","dest","select","select",(ioFlg(id)&(IO::Output|IO::Return))?"/lnk/otp":"/lnk/itp");
 			if( m_lnk[id].tp != FREE )
@@ -617,36 +620,56 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    opt->childAdd("el")->setText(c_path);
 		}
 		if(c_lv) c_path+=".";
-		switch(m_lnk[id].tp)
+
+		string prm0 = TSYS::strSepParse( lnk, 0, '.' );
+		string prm1 = TSYS::strSepParse( lnk, 1, '.' );
+		string prm2 = TSYS::strSepParse( lnk, 2, '.' );
+
+		switch( m_lnk[id].tp )
 		{
 		    case I_LOC: case O_LOC:
-			switch(c_lv)
+			switch( c_lv )
 			{
 			    case 0: owner().blkList(list); break;
 			    case 1:
-				if( owner().blkPresent(TSYS::strSepParse(lnk,0,'.'))
-					&& owner().blkAt(TSYS::strSepParse(lnk,0,'.')).at().func() )
-				    owner().blkAt(TSYS::strSepParse(lnk,0,'.')).at().ioList(list);
+				if( owner().blkPresent(prm0) && owner().blkAt(prm0).at().func() )
+				    owner().blkAt(prm0).at().ioList(list);
 				break;
 			}
 			break;
 		    case I_GLB: case O_GLB:
-			switch(c_lv)
+			switch( c_lv )
 			{
 			    case 0: owner().owner().list(list); break;
 			    case 1:
-				if( owner().owner().present(TSYS::strSepParse(lnk,0,'.')) )
-				    ((Contr &)owner().owner().at(TSYS::strSepParse(lnk,0,'.')).at()).blkList(list);
+				if( owner().owner().present(prm0) )
+				    ((Contr &)owner().owner().at(prm0).at()).blkList(list);
 				break;
 			    case 2:
-				if( owner().owner().present(TSYS::strSepParse(lnk,0,'.')) &&
-					((Contr &)owner().owner().at(TSYS::strSepParse(lnk,0,'.')).at()).blkPresent(TSYS::strSepParse(lnk,1,'.')) )
-				    ((Contr &)owner().owner().at(TSYS::strSepParse(lnk,0,'.')).at()).blkAt(TSYS::strSepParse(lnk,1,'.')).at().ioList(list);
+				if( owner().owner().present(prm0) && ((Contr &)owner().owner().at(prm0).at()).blkPresent(prm1) )
+				    ((Contr&)owner().owner().at(prm0).at()).blkAt(prm1).at().ioList(list);
 				break;
 			}
 			break;
 		    case I_PRM: case O_PRM:
-		        SYS->nodeAt(lnk,0,'.').at().nodeList(list);
+			//SYS->nodeAt(lnk,0,'.').at().nodeList(list);
+			switch( c_lv )
+			{
+			    case 0:	SYS->daq().at().modList(list);	break;
+			    case 1:
+				if( SYS->daq().at().modPresent(prm0) )
+				    SYS->daq().at().at(prm0).at().list(list);
+				break;
+			    case 2:
+				 if( SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1) )
+				    SYS->daq().at().at(prm0).at().at(prm1).at().list(list);
+				break;
+			    case 3:
+				if( SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1) &&
+					SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2) )
+				    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(list);
+				break;
+			}
 			break;
 		}
 		for( unsigned i_a=0; i_a < list.size(); i_a++ )
@@ -657,8 +680,8 @@ void Block::cntrCmdProc( XMLNode *opt )
 	{
 	    char lev = TSYS::pathLev(a_path,2)[0];
 	    int id = ioId(TSYS::pathLev(a_path,2).substr(2));
-	    if( lev == '1' )		setLink(id,SET,(Block::LnkT)atoi(opt->text().c_str()));
-	    else if( lev == '2' )	setLink(id,SET,m_lnk[id].tp,opt->text());
+	    if( lev == '1' )		setLink( id, SET, (Block::LnkT)atoi(opt->text().c_str()) );
+	    else if( lev == '2' )	setLink( id, SET, m_lnk[id].tp,opt->text() );
 	    modif();
 	}
     }

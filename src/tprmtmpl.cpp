@@ -254,7 +254,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(TPrmTempl::AttrRead)+";"+TSYS::int2str(TPrmTempl::AttrFull)).c_str(),
 		    "sel_list",_("No attribute;Read only;Full access"));
-		ctrMkNode("list",opt,-1,"/io/io/5",_("Access"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/io/io/5",_("Configure"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(TPrmTempl::CfgPublConst)+";"+TSYS::int2str(TPrmTempl::CfgLink)).c_str(),
 		    "sel_list",_("Constant;Public constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),0664,"root","root",1,"tp","str");

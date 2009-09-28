@@ -1638,13 +1638,13 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d || %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(uint16_t*)(cprg+1)] = getValB(val,reg[*(uint16_t*)(cprg+3)]) || getValB(val,reg[*(uint16_t*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = (getValB(val,reg[*(uint16_t*)(cprg+3)])==1) || (getValB(val,reg[*(uint16_t*)(cprg+5)])==1);
 		cprg+=7; break;
 	    case Reg::LAnd:
 #if OSC_DEBUG >= 5
 		printf("CODE: %d = %d && %d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5));
 #endif
-		reg[*(uint16_t*)(cprg+1)] = getValB(val,reg[*(uint16_t*)(cprg+3)]) && getValB(val,reg[*(uint16_t*)(cprg+5)]);
+		reg[*(uint16_t*)(cprg+1)] = (getValB(val,reg[*(uint16_t*)(cprg+3)])==1) && (getValB(val,reg[*(uint16_t*)(cprg+5)])==1);
 		cprg+=7; break;
 	    case Reg::LT:
 #if OSC_DEBUG >= 5
