@@ -183,11 +183,12 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     if( !lbAt("sys_compile").at().present(fnc_cfg.id()) ) lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
 
     AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
-    ((TFunction&)func.at()).operator=(fnc_cfg);
+    try{ ((TFunction&)func.at()).operator=(fnc_cfg); }
+    catch(...) { func.at().setStart(true); throw; }
     func.at().setProg(prog_text.c_str());
     try
     {
-	if(func.at().startStat()) func.at().setStart(false);
+	if( func.at().startStat() ) func.at().setStart(false);
 	func.at().setUsings(usings);
 	func.at().setStart(true);
     }

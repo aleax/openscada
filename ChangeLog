@@ -1,3 +1,11 @@
+2009-02-30 Roman
+- FIX:Function,UI.VCAEngine: Creation independent function for different from parent widgets is made.
+- FIX:DAQ.LogicLev: Exclude EVAL writing by link.
+- UI.VCAEngine: Dynamic link is made deep check for find parameters into present link.
+- UI.Vision: Stacked widgets selection is made by second click to up-selected widget.
+- UI.Vision: The color for temporary a page loading messages into container is set to BorderColor for primitive "Box".
+
+
 2009-09-28 Roman
 - SYS.Template: The collumn "Access" is renamed to "Configure".
 - !!:DAQ.BlockCalc: Direct links to parameters using is added. 

@@ -106,9 +106,10 @@ class TFunction : public TCntrNode
 	bool startStat( )		{ return run_st; }
 	int use( )			{ return used.size(); }
 
+	void setId( const string &vl );
 	virtual void setStart( bool val )  { run_st = val; }
 
-	//- IO -
+	//> IO
 	void ioList( vector<string> &list );
 	int ioId( const string &id );
 	int ioSize( );

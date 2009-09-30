@@ -247,7 +247,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	string cur_pt_el;
 	int i_el = 0;
 	AutoHD<SessPage> cpg;
-	while((cur_pt_el=TSYS::pathLev(prm,i_el++)).size())
+	while( (cur_pt_el=TSYS::pathLev(prm,i_el++)).size() )
 	{
 	    string op_pg;
 	    if( cur_pt_el.substr(0,3) == "pg_" ) op_pg = cur_pt_el.substr(3);
@@ -856,6 +856,21 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			    emptyPresnt = true;
 			}
 		    }
+		    //> Find links into source if no link find
+		    if( prm_lnk.empty() )
+		    {
+			vector<string> sAtrLs;
+			src.at().attrList(sAtrLs);
+			for( int i_al = 0; i_al < sAtrLs.size(); i_al++ )
+			{
+			    AutoHD<Attr> attr = src.at().attrAt(sAtrLs[i_al]);
+			    if( attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:" )
+			    {
+				prm_lnk = attr.at().cfgVal().substr(4);
+				break;
+			    }
+			}
+		    }    
 		    //> Fill parameter's links for other attributes
 		    if( emptyPresnt && !prm_lnk.empty() )
 		    {
@@ -1126,15 +1141,30 @@ void SessWdg::setProcess( bool val )
 	fio.ioAdd( new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm") );
 
 	//>> Compile function
-	try
+	mWorkProg = "";
+	try 
 	{
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
-	    //>> Connect to compiled function
+	}
+	catch( TError err )
+	{
+	    //>> Second compile try
+	    try
+	    {
+		fio.setId(TSYS::path2sepstr(path(),'_'));
+		mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
+		    compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
+	    }
+	    catch( TError err )
+	    { mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
+	}
+	//>> Connect to compiled function
+	if( mWorkProg.size() )
+	{
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
 	    TValFunc::setUser(ownerSess()->user());
-	}catch( TError err )
-	{ mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
+	}
     }
     if( !val )
     {

@@ -2559,7 +2559,7 @@ void DevelWdgView::incDecVisScale( )
 
 bool DevelWdgView::event( QEvent *event )
 {
-    //- Paint event process -
+    //> Paint event process
     if( event->type() == QEvent::Paint )
     {
 	QPainter pnt( this );
@@ -2620,7 +2620,7 @@ bool DevelWdgView::event( QEvent *event )
 	return QWidget::event(event);
     }
 
-    //- Other events process -
+    //> Other events process
     if( wLevel() == 0 )
 	switch( event->type() )
 	{
@@ -2637,11 +2637,11 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::Drop:
 	    {
-	        QDropEvent *ev = static_cast<QDropEvent*>(event);
-	        if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
-	        {
-	            QByteArray itemData = ev->mimeData()->data("application/OpenSCADA-libwdg");
-	            QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+		QDropEvent *ev = static_cast<QDropEvent*>(event);
+		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
+		{
+		    QByteArray itemData = ev->mimeData()->data("application/OpenSCADA-libwdg");
+		    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
 		    QString lwdg;
 		    dataStream >> lwdg;
@@ -2708,11 +2708,11 @@ bool DevelWdgView::event( QEvent *event )
 
 			upMouseCursors(mapFromGlobal(cursor().pos()));
 
-			//-- Update status bar --
+			//>> Update status bar
 			mainWin()->statusBar()->showMessage(QString(_("Select elements: '%1'")).
 							arg(selectChilds().c_str()), 10000 );
 
-			//-- Hold select rect paint --
+			//>> Hold select rect paint
 			if( !chld_sel )
 			{
 			    fHoldSelRect = true;
@@ -2730,11 +2730,13 @@ bool DevelWdgView::event( QEvent *event )
 		break;
 	    }
 	    case QEvent::MouseButtonRelease:
+	    {
 		if( edit() ) break;
+
+		QPoint curp = mapFromGlobal(cursor().pos());
 
 		if( fHoldSelRect )
 		{
-		    QPoint curp = mapFromGlobal(cursor().pos());
 		    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
 		    {
 			DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
@@ -2745,6 +2747,25 @@ bool DevelWdgView::event( QEvent *event )
 		    fHoldSelRect = false;
 		    //pntView->setSelArea(QRectF());
 		}
+
+		//> Check for select next underly widget
+		if( fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove )
+		{
+		    DevelWdgView *fsel = NULL, *nsel = NULL;
+		    int i_c;
+		    for( i_c = children().size()-1; i_c >= 0; i_c-- )
+		    {
+			DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+			if( !curw ) continue;
+			if( !fsel && curw->select() ) fsel = curw;
+			else if( fsel && curw->geometryF().contains(curp) ) { nsel = curw; break; }
+		    }
+		    if( fsel ) fsel->setSelect(false,PrcChilds|OnlyFlag);
+		    if( nsel ) nsel->setSelect(true,PrcChilds|OnlyFlag);
+		    else setCursor(Qt::ArrowCursor);
+		    setSelect(true,PrcChilds);
+		}
+
 		if( fSelChange )
 		{
 		    setSelect(true,PrcChilds|NoUpdate);	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
@@ -2775,7 +2796,9 @@ bool DevelWdgView::event( QEvent *event )
 		    fMoveHold = fMoveHoldMove = false;
 		    return true;
 		}
+
 		break;
+	    }
 	    case QEvent::MouseButtonDblClick:
 	    {
 		if( edit() )	break;

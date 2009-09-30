@@ -3190,7 +3190,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	{
 	    if( !qobject_cast<RunWdgView*>(w) || qobject_cast<RunPageView*>(w) )	{ up = false; break; }
 
-	    //-- Put previous include widget to page cache --
+	    //>> Put previous include widget to page cache
 	    if( (shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()) )
 	    {
 		if( shD->inclWidget )
@@ -3206,7 +3206,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->inclWidget = NULL;
 		    w->setProperty("inclPg","");
 		}
-		//-- Create new include widget --
+		//>> Create new include widget
 		if( val.size() )
 		{
 		    if( !shD->inclScrl )
@@ -3224,6 +3224,11 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    lab->setAlignment(Qt::AlignCenter);
 		    lab->setWordWrap(true);
 		    lab->resize(w->size());
+		    QPalette plt = lab->palette();
+		    plt.setColor(QPalette::WindowText,shD->border.color());
+		    lab->setPalette(plt);
+		    lab->setLineWidth(shD->border.width());
+		    lab->setFrameShape(QFrame::Box);
 		    shD->inclScrl->setWidget(lab);
 		    qApp->processEvents();
 

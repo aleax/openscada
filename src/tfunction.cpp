@@ -41,7 +41,6 @@ TFunction::~TFunction( )
 
 TFunction &TFunction::operator=( TFunction &func )
 {
-    if( mId.empty() )	mId = func.id();
     //> Copy IO
     //>> Clear no present IO
     for( int i_io = 0; i_io < ioSize(); )
@@ -58,6 +57,8 @@ TFunction &TFunction::operator=( TFunction &func )
 	if( dst_io != i_io && !use() ) ioMove(dst_io,i_io);
     }
 
+    if( mId.empty() )	mId = func.id();
+
     return *this;
 }
 
@@ -71,6 +72,11 @@ void TFunction::preDisable( int flag )
 	    mess+=used[i]->vfName()+", ";
 	throw TError(nodePath().c_str(),_("Function is used by: %s"),mess.c_str());
     }
+}
+
+void TFunction::setId( const string &vl )
+{
+    if( !nodePrev(true) ) mId = vl;
 }
 
 int TFunction::ioSize( )
@@ -147,7 +153,7 @@ void TFunction::preIOCfgChange()
     if( blk_lst.size() )
 	throw TError(nodePath().c_str(),_("Change is not permited while function is used: %s"),blk_lst.c_str());
 
-    for(unsigned i=0; i < used.size(); i++)
+    for( unsigned i=0; i < used.size(); i++ )
 	used[i]->preIOCfgChange();
 }
 

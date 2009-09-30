@@ -563,7 +563,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 		    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead )	flg|=TFld::NoWrite;
 		    p_el.fldAdd( new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg) );
 		}
-		if( to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) )	tmpl->val.setS(i_io,"0");
+		if( to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) )	tmpl->val.setS(i_io,EVAL_STR);
 	    }
 	    //>> Init links
 	    initTmplLnks();
@@ -582,7 +582,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 void TMdPrm::initTmplLnks()
 {
     if( mode() != TMdPrm::Template )    return;
-    //- Init links -
+    //> Init links
     chk_lnk_need = false;
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
     {
@@ -776,15 +776,15 @@ void TMdPrm::calc( bool first, bool last )
 	ResAlloc res(moderes,false);
 	if(chk_lnk_need) initTmplLnks();
 
-	//- Set fixed system attributes -
+	//> Set fixed system attributes
 	if(id_freq>=0) 	tmpl->val.setR(id_freq,1000./owner().period());
 	if(id_start>=0)	tmpl->val.setB(id_start,first);
 	if(id_stop>=0)	tmpl->val.setB(id_stop,last);
 
-	//- Get input links -
+	//> Get input links
 	for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	    if( lnk(i_l).aprm.freeStat() )	tmpl->val.setS(lnk(i_l).io_id,EVAL_STR);
-	    else switch(tmpl->val.ioType(lnk(i_l).io_id))
+	    else switch( tmpl->val.ioType(lnk(i_l).io_id) )
 	    {
 		case IO::String:
 		    tmpl->val.setS(lnk(i_l).io_id,lnk(i_l).aprm.at().getS());
@@ -800,29 +800,41 @@ void TMdPrm::calc( bool first, bool last )
 		    break;
 	    }
 
-	//- Calc template -
+	//> Calc template
 	tmpl->val.calc();
 	modif();
 
-	//- Put output links -
+	//> Put output links
 	for( int i_l = 0; i_l < lnkSize(); i_l++ )
 	    if( !lnk(i_l).aprm.freeStat() &&
 		    tmpl->val.ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) &&
 		    !(lnk(i_l).aprm.at().fld().flg()&TFld::NoWrite) )
-		switch(tmpl->val.ioType(lnk(i_l).io_id))
+		switch( tmpl->val.ioType(lnk(i_l).io_id) )
 		{
 		    case IO::String:
-			lnk(i_l).aprm.at().setS(tmpl->val.getS(lnk(i_l).io_id));
+		    {
+			string vl = tmpl->val.getS(lnk(i_l).io_id);
+			if( vl != EVAL_STR )	lnk(i_l).aprm.at().setS(vl);
 			break;
+		    }
 		    case IO::Integer:
-			lnk(i_l).aprm.at().setI(tmpl->val.getI(lnk(i_l).io_id));
+		    {
+			int vl = tmpl->val.getI(lnk(i_l).io_id);
+			if( vl != EVAL_INT )	lnk(i_l).aprm.at().setI(vl);
 			break;
+		    }
 		    case IO::Real:
-			lnk(i_l).aprm.at().setR(tmpl->val.getR(lnk(i_l).io_id));
+		    {
+			double vl = tmpl->val.getR(lnk(i_l).io_id);
+			if( vl != EVAL_REAL )	lnk(i_l).aprm.at().setR(vl);
 			break;
+		    }
 		    case IO::Boolean:
-			lnk(i_l).aprm.at().setB(tmpl->val.getB(lnk(i_l).io_id));
+		    {
+			char vl = tmpl->val.getB(lnk(i_l).io_id);
+			if( vl != EVAL_BOOL )	lnk(i_l).aprm.at().setB(vl);
 			break;
+		    }
 		}
     }catch(TError err)
     {
