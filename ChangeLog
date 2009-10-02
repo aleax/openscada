@@ -5,6 +5,8 @@
 - DAQ.ICP_DAS: Connection's error display into attribute "err" is added.
 - DAQ.LogicLev: A parameter main attributes (SHIFR,NAME and DESCR) bridging to template support is added.
 - UI.Vision: The childs window of main window into runtime is made not resizible and not minimizable.
+- FIX:Archive.Val: Zero time return for up ordered request to value buffer is fixed. Can hang system on time first buffers values drop to archive.
+- FIX:UI.VCAEngine: Copy items is fixed for check inherit flag previous attribute.
 
 
 2009-02-30 Roman
