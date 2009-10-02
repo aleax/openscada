@@ -123,7 +123,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000") );
-    fldAdd( new TFld("TM_REST_DT",_("Restore data depth time (hour)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;12") );
+    fldAdd( new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12") );
     fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000") );
     fldAdd( new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100") );
     fldAdd( new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200") );
@@ -355,6 +355,7 @@ void *TMdContr::Task( void *icntr )
 		{
 		    if( cntr.mStatWork[i_st].second > 0 ) continue;
 		    XMLNode req("CntrReqs"); req.setAttr("path","/"+cntr.mStatWork[i_st].first+"/DAQ/");
+
 		    //> Put attributes reuests
 		    for( int i_p=0; i_p < pLS.size(); i_p++)
 		    {
@@ -367,6 +368,7 @@ void *TMdContr::Task( void *icntr )
 			    XMLNode *prmNd = req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr");
 
 			    //>> Put archive request
+			    if( !cntr.restDtTm() ) continue;
 			    vector<string> listV;
 			    prm.at().vlList(listV);
 			    for( int iV = 0; iV < listV.size(); iV++ )
@@ -398,7 +400,7 @@ void *TMdContr::Task( void *icntr )
 			    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 			    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-			    if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
+			    if( aNd->name() == "el" ) vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true);
 			    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 			    {
 				long long btm = atoll(aNd->attr("tm").c_str());
@@ -701,7 +703,7 @@ void TMdVl::cntrCmdProc( XMLNode *opt )
 
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/val" )	//Values access
+    if( a_path == "/serv/val" && owner().owner().restDtTm() )	//Values access
     {
 	//>> Request to remote station
 	string scntr;

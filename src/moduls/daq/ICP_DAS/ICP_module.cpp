@@ -541,6 +541,7 @@ void TMdPrm::getVals( )
 	    //> Read Cold-Junction Compensation(CJC) temperature
 	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
 	    vlAt("cvct").at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1), 0, true );
+	    acq_err.setVal(RetValue?_("10:Request to module error."):((szReceive[0]!='>')?_("11:Respond from module error."):""));
 	    break;
 	}
 	case 0x87024:
@@ -555,6 +556,7 @@ void TMdPrm::getVals( )
 		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v).c_str(), szReceive, 1, 0, &wT );
 		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (RetValue||szReceive[0]!='!' ? EVAL_REAL : atof(szReceive+3)), 0, true );
 	    }
+	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
 	}
     }
 }
@@ -583,7 +585,11 @@ void TMdPrm::vlGet( TVal &val )
 
     if( owner().redntUse( ) ) return;
 
-    if( val.name() == "err" ) val.setS(_("0"),0,true);
+    if( val.name() == "err" )
+    {
+	if( acq_err.getVal().empty() )	val.setS("0",0,true);
+	else				val.setS(acq_err.getVal(),0,true);
+    }
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
@@ -591,6 +597,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     if( !enableStat() || !owner().startStat() )	valo.setI( EVAL_INT, 0, true );
     char szReceive[10];
     WORD wT;
+    int RetValue;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
@@ -641,7 +648,8 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
 	    }
 
-	    Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("@%02XL%02X%02X",(owner().mBus==0)?0:modAddr,lvl,hvl).c_str(), szReceive, 1, 0, &wT );
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("@%02XL%02X%02X",(owner().mBus==0)?0:modAddr,lvl,hvl).c_str(), szReceive, 1, 0, &wT );
+	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
 	    break;
 	}
 	case 0x8042:
@@ -666,6 +674,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 
 	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
 	    valo.setR( (RetValue||szReceive[0]!='>' ? EVAL_REAL : vl), 0, true );
+	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
 	}
     }
 }

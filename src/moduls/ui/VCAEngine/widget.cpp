@@ -1217,7 +1217,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	{
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    if( !wdg.at().attrPresent(opt->attr("key_id")) )
-                throw TError(nodePath().c_str(),_("Deleting the enclosed widget's elements error."));
+		throw TError(nodePath().c_str(),_("Deleting the enclosed widget's elements error."));
 	    if( !(wdg.at().attrAt(opt->attr("key_id")).at().flgSelf()&Attr::IsInher) &&
 		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
 		wdg.at().attrDel(opt->attr("key_id"));

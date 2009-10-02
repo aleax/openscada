@@ -102,7 +102,7 @@ string TTpContr::optDescr( )
 
 void TTpContr::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -127,17 +127,17 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable( flag );
 
-    //- Controler's bd structure -
+    //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
 
-    //- Parameter type bd structure -
+    //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TCfg::NoVal,"1","0") );
     tpPrmAt(t_prm).fldAdd( new TFld("PRM","",TFld::String,TCfg::NoVal,"100","") );
 
-    //- Logical level parameter IO BD structure -
+    //> Logical level parameter IO BD structure
     el_prm_io.fldAdd( new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"200") );
@@ -170,7 +170,7 @@ void TMdContr::postDisable(int flag)
     {
 	if( flag )
 	{
-	    //- Delete parameter's io table -
+	    //> Delete parameter's io table
 	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl,true);
@@ -263,7 +263,7 @@ void *TMdContr::Task( void *icntr )
     bool is_start = true;
     bool is_stop  = false;
 
-    while(true)
+    while( true )
     {
 	//> Update controller's data
 	if( !cntr.redntUse( ) )
@@ -279,8 +279,9 @@ void *TMdContr::Task( void *icntr )
 	}
 
 	if( is_stop ) break;
-	TSYS::taskSleep((long long)cntr.period()*1000000);
+	TSYS::taskSleep( (long long)cntr.period()*1000000 );
 	if( cntr.endrun_req ) is_stop = true;
+
 	is_start = false;
     }
 
@@ -322,7 +323,7 @@ void TMdContr::redntDataUpdate( )
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
     TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false),
-    id_freq(-1), id_start(-1), id_stop(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
+    id_freq(-1), id_start(-1), id_stop(-1), id_sh(-1), id_nm(-1), id_dscr(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
 {
 
 }
@@ -385,15 +386,18 @@ void TMdPrm::enable()
     {
 	mode((TMdPrm::Mode)m_mode,m_prm);
 	loadIO();
-	if(mode() == TMdPrm::Template)
+	//> Init system attributes identifiers
+	if( mode() == TMdPrm::Template )
 	{
-	    //> Init system attributes identifiers
 	    id_freq	= tmpl->val.func()->ioId("f_frq");
 	    id_start	= tmpl->val.func()->ioId("f_start");
 	    id_stop	= tmpl->val.func()->ioId("f_stop");
 	    id_err	= tmpl->val.func()->ioId("f_err");
+	    id_sh	= tmpl->val.func()->ioId("SHIFR");
+	    id_nm	= tmpl->val.func()->ioId("NAME");
+	    id_dscr	= tmpl->val.func()->ioId("DESCR");
 	}
-	if(owner().startStat())	owner().prmEn(id(),true);
+	if( owner().startStat() ) owner().prmEn(id(),true);
     }
     catch(...){ disable(); throw; }
 }
@@ -777,9 +781,12 @@ void TMdPrm::calc( bool first, bool last )
 	if(chk_lnk_need) initTmplLnks();
 
 	//> Set fixed system attributes
-	if(id_freq>=0) 	tmpl->val.setR(id_freq,1000./owner().period());
-	if(id_start>=0)	tmpl->val.setB(id_start,first);
-	if(id_stop>=0)	tmpl->val.setB(id_stop,last);
+	if( id_freq >= 0 )	tmpl->val.setR(id_freq,1000./owner().period());
+	if( id_start >= 0 )	tmpl->val.setB(id_start,first);
+	if( id_stop >= 0 )	tmpl->val.setB(id_stop,last);
+	if( id_sh >= 0 )	tmpl->val.setS(id_sh,id());
+	if( id_nm >= 0 )	tmpl->val.setS(id_nm,name());
+	if( id_dscr >= 0 )	tmpl->val.setS(id_dscr,descr());
 
 	//> Get input links
 	for( int i_l = 0; i_l < lnkSize(); i_l++ )

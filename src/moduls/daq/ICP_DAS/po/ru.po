@@ -3,15 +3,17 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 # Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
-#: ICP_module.cpp:53 ICP_module.cpp:105 ICP_module.cpp:313 ICP_module.cpp:380
-#: ICP_module.cpp:384 ICP_module.cpp:386 ICP_module.cpp:389 ICP_module.cpp:392
-#: ICP_module.cpp:393 ICP_module.cpp:394 ICP_module.cpp:399
+#: ICP_module.cpp:53 ICP_module.cpp:105 ICP_module.cpp:313 ICP_module.cpp:381
+#: ICP_module.cpp:382 ICP_module.cpp:383 ICP_module.cpp:388 ICP_module.cpp:390
+#: ICP_module.cpp:393 ICP_module.cpp:396 ICP_module.cpp:397 ICP_module.cpp:398
+#: ICP_module.cpp:403 ICP_module.cpp:544 ICP_module.cpp:559 ICP_module.cpp:652
+#: ICP_module.cpp:677
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-19 14:21+0300\n"
+"POT-Creation-Date: 2009-10-01 10:48+0300\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,10 +32,10 @@ msgstr ""
 msgid "ICP DAS hardware"
 msgstr "Оборудование ICP DAS"
 
-#: ICP_module.cpp:38 ICP_module.cpp:717 ICP_module.cpp:718 ICP_module.cpp:721
-#: ICP_module.cpp:726 ICP_module.cpp:745 ICP_module.cpp:746 ICP_module.cpp:751
-#: ICP_module.cpp:752 ICP_module.cpp:757 ICP_module.cpp:758 ICP_module.cpp:763
-#: ICP_module.cpp:772
+#: ICP_module.cpp:38 ICP_module.cpp:748 ICP_module.cpp:749 ICP_module.cpp:752
+#: ICP_module.cpp:757 ICP_module.cpp:776 ICP_module.cpp:777 ICP_module.cpp:782
+#: ICP_module.cpp:783 ICP_module.cpp:788 ICP_module.cpp:789 ICP_module.cpp:794
+#: ICP_module.cpp:803
 msgid "DAQ"
 msgstr ""
 
@@ -92,8 +94,8 @@ msgstr "Период сбора данных (с)"
 msgid "6.2"
 msgstr ""
 
-#: ICP_module.cpp:106 ICP_module.cpp:108 ICP_module.cpp:115 ICP_module.cpp:786
-#: ICP_module.cpp:794
+#: ICP_module.cpp:106 ICP_module.cpp:108 ICP_module.cpp:115 ICP_module.cpp:817
+#: ICP_module.cpp:825
 msgid "1"
 msgstr ""
 
@@ -109,13 +111,13 @@ msgstr ""
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: ICP_module.cpp:107 ICP_module.cpp:108 ICP_module.cpp:115 ICP_module.cpp:787
-#: ICP_module.cpp:795
+#: ICP_module.cpp:107 ICP_module.cpp:108 ICP_module.cpp:115 ICP_module.cpp:818
+#: ICP_module.cpp:826
 msgid "2"
 msgstr ""
 
-#: ICP_module.cpp:107 ICP_module.cpp:114 ICP_module.cpp:582 ICP_module.cpp:785
-#: ICP_module.cpp:793
+#: ICP_module.cpp:107 ICP_module.cpp:114 ICP_module.cpp:590 ICP_module.cpp:816
+#: ICP_module.cpp:824
 msgid "0"
 msgstr ""
 
@@ -141,7 +143,7 @@ msgstr ""
 msgid "Baudrate"
 msgstr "Скорость"
 
-#: ICP_module.cpp:109 ICP_module.cpp:799
+#: ICP_module.cpp:109 ICP_module.cpp:830
 msgid "6"
 msgstr ""
 
@@ -157,7 +159,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: ICP_module.cpp:113 ICP_module.cpp:340 ICP_module.cpp:562 ICP_module.cpp:712
+#: ICP_module.cpp:113 ICP_module.cpp:340 ICP_module.cpp:568 ICP_module.cpp:743
 msgid "MOD_TP"
 msgstr ""
 
@@ -165,7 +167,7 @@ msgstr ""
 msgid "Module type"
 msgstr "Тип модуля"
 
-#: ICP_module.cpp:113 ICP_module.cpp:802
+#: ICP_module.cpp:113 ICP_module.cpp:833
 msgid "10"
 msgstr ""
 
@@ -173,7 +175,7 @@ msgstr ""
 msgid "552985"
 msgstr ""
 
-#: ICP_module.cpp:114 ICP_module.cpp:340 ICP_module.cpp:562 ICP_module.cpp:710
+#: ICP_module.cpp:114 ICP_module.cpp:340 ICP_module.cpp:568 ICP_module.cpp:741
 msgid "MOD_ADDR"
 msgstr ""
 
@@ -181,7 +183,7 @@ msgstr ""
 msgid "Module address"
 msgstr "Адрес модуля"
 
-#: ICP_module.cpp:114 ICP_module.cpp:788 ICP_module.cpp:796
+#: ICP_module.cpp:114 ICP_module.cpp:819 ICP_module.cpp:827
 msgid "3"
 msgstr ""
 
@@ -189,7 +191,7 @@ msgstr ""
 msgid "0;255"
 msgstr ""
 
-#: ICP_module.cpp:115 ICP_module.cpp:340 ICP_module.cpp:562
+#: ICP_module.cpp:115 ICP_module.cpp:340 ICP_module.cpp:568
 msgid "MOD_SLOT"
 msgstr ""
 
@@ -244,15 +246,15 @@ msgstr "Ошибка открытия всех LP-слотов."
 msgid "Open COM%d port error."
 msgstr "Ошибка открытия COM%d порта."
 
-#: ICP_module.cpp:203 ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:497
-#: ICP_module.cpp:712 ICP_module.cpp:717 ICP_module.cpp:718 ICP_module.cpp:721
-#: ICP_module.cpp:726 ICP_module.cpp:745 ICP_module.cpp:746 ICP_module.cpp:751
-#: ICP_module.cpp:752 ICP_module.cpp:757 ICP_module.cpp:758 ICP_module.cpp:763
-#: ICP_module.cpp:772
+#: ICP_module.cpp:203 ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:501
+#: ICP_module.cpp:743 ICP_module.cpp:748 ICP_module.cpp:749 ICP_module.cpp:752
+#: ICP_module.cpp:757 ICP_module.cpp:776 ICP_module.cpp:777 ICP_module.cpp:782
+#: ICP_module.cpp:783 ICP_module.cpp:788 ICP_module.cpp:789 ICP_module.cpp:794
+#: ICP_module.cpp:803
 msgid "root"
 msgstr ""
 
-#: ICP_module.cpp:211 ICP_module.cpp:503
+#: ICP_module.cpp:211 ICP_module.cpp:507
 msgid "start"
 msgstr ""
 
@@ -260,7 +262,7 @@ msgstr ""
 msgid "Gathering task is not started!"
 msgstr "Задача сбора данных не запущена!"
 
-#: ICP_module.cpp:223 ICP_module.cpp:426
+#: ICP_module.cpp:223 ICP_module.cpp:430
 msgid "stop"
 msgstr ""
 
@@ -268,17 +270,17 @@ msgstr ""
 msgid "Gathering task is not stopped!"
 msgstr "Задача сбора данных не остановлена!"
 
-#: ICP_module.cpp:264 ICP_module.cpp:665
+#: ICP_module.cpp:264 ICP_module.cpp:696
 #, c-format
 msgid "Thread <%u> started. TID: %ld"
 msgstr ""
 
-#: ICP_module.cpp:301 ICP_module.cpp:708
+#: ICP_module.cpp:301 ICP_module.cpp:739
 msgid "info"
 msgstr ""
 
-#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:712 ICP_module.cpp:717
-#: ICP_module.cpp:718 ICP_module.cpp:721 ICP_module.cpp:726
+#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:743 ICP_module.cpp:748
+#: ICP_module.cpp:749 ICP_module.cpp:752 ICP_module.cpp:757
 msgid "fld"
 msgstr ""
 
@@ -286,23 +288,23 @@ msgstr ""
 msgid "/cntr/cfg/BUS"
 msgstr ""
 
-#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:712 ICP_module.cpp:717
-#: ICP_module.cpp:718 ICP_module.cpp:721 ICP_module.cpp:726
+#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:743 ICP_module.cpp:748
+#: ICP_module.cpp:749 ICP_module.cpp:752 ICP_module.cpp:757
 msgid "tp"
 msgstr ""
 
-#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:712 ICP_module.cpp:717
-#: ICP_module.cpp:721 ICP_module.cpp:726
+#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:743 ICP_module.cpp:748
+#: ICP_module.cpp:752 ICP_module.cpp:757
 msgid "dec"
 msgstr ""
 
-#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:712 ICP_module.cpp:721
-#: ICP_module.cpp:726
+#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:743 ICP_module.cpp:752
+#: ICP_module.cpp:757
 msgid "dest"
 msgstr ""
 
-#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:712 ICP_module.cpp:721
-#: ICP_module.cpp:726
+#: ICP_module.cpp:304 ICP_module.cpp:306 ICP_module.cpp:743 ICP_module.cpp:752
+#: ICP_module.cpp:757
 msgid "select"
 msgstr ""
 
@@ -322,7 +324,7 @@ msgstr ""
 msgid "/cntr/cfg/boudLst"
 msgstr ""
 
-#: ICP_module.cpp:310 ICP_module.cpp:596 ICP_module.cpp:732
+#: ICP_module.cpp:310 ICP_module.cpp:607 ICP_module.cpp:763
 msgid "path"
 msgstr ""
 
@@ -330,28 +332,28 @@ msgstr ""
 #: ICP_module.cpp:319 ICP_module.cpp:320 ICP_module.cpp:321 ICP_module.cpp:322
 #: ICP_module.cpp:323 ICP_module.cpp:324 ICP_module.cpp:325 ICP_module.cpp:326
 #: ICP_module.cpp:327 ICP_module.cpp:328 ICP_module.cpp:329 ICP_module.cpp:330
-#: ICP_module.cpp:596 ICP_module.cpp:737 ICP_module.cpp:738 ICP_module.cpp:740
-#: ICP_module.cpp:741 ICP_module.cpp:785 ICP_module.cpp:786 ICP_module.cpp:787
-#: ICP_module.cpp:788 ICP_module.cpp:789 ICP_module.cpp:792 ICP_module.cpp:793
-#: ICP_module.cpp:794 ICP_module.cpp:795 ICP_module.cpp:796 ICP_module.cpp:797
-#: ICP_module.cpp:798 ICP_module.cpp:799 ICP_module.cpp:800 ICP_module.cpp:801
-#: ICP_module.cpp:802 ICP_module.cpp:803 ICP_module.cpp:804 ICP_module.cpp:805
-#: ICP_module.cpp:806 ICP_module.cpp:807 ICP_module.cpp:808 ICP_module.cpp:809
-#: ICP_module.cpp:810 ICP_module.cpp:811 ICP_module.cpp:812 ICP_module.cpp:813
-#: ICP_module.cpp:814 ICP_module.cpp:815 ICP_module.cpp:816 ICP_module.cpp:817
+#: ICP_module.cpp:607 ICP_module.cpp:768 ICP_module.cpp:769 ICP_module.cpp:771
+#: ICP_module.cpp:772 ICP_module.cpp:816 ICP_module.cpp:817 ICP_module.cpp:818
+#: ICP_module.cpp:819 ICP_module.cpp:820 ICP_module.cpp:823 ICP_module.cpp:824
+#: ICP_module.cpp:825 ICP_module.cpp:826 ICP_module.cpp:827 ICP_module.cpp:828
+#: ICP_module.cpp:829 ICP_module.cpp:830 ICP_module.cpp:831 ICP_module.cpp:832
+#: ICP_module.cpp:833 ICP_module.cpp:834 ICP_module.cpp:835 ICP_module.cpp:836
+#: ICP_module.cpp:837 ICP_module.cpp:838 ICP_module.cpp:839 ICP_module.cpp:840
+#: ICP_module.cpp:841 ICP_module.cpp:842 ICP_module.cpp:843 ICP_module.cpp:844
+#: ICP_module.cpp:845 ICP_module.cpp:846 ICP_module.cpp:847 ICP_module.cpp:848
 msgid "el"
 msgstr ""
 
-#: ICP_module.cpp:313 ICP_module.cpp:454 ICP_module.cpp:471 ICP_module.cpp:596
-#: ICP_module.cpp:737 ICP_module.cpp:738 ICP_module.cpp:740 ICP_module.cpp:741
-#: ICP_module.cpp:785 ICP_module.cpp:786 ICP_module.cpp:787 ICP_module.cpp:788
-#: ICP_module.cpp:789 ICP_module.cpp:792 ICP_module.cpp:793 ICP_module.cpp:794
-#: ICP_module.cpp:795 ICP_module.cpp:796 ICP_module.cpp:797 ICP_module.cpp:798
-#: ICP_module.cpp:799 ICP_module.cpp:800 ICP_module.cpp:801 ICP_module.cpp:802
-#: ICP_module.cpp:803 ICP_module.cpp:804 ICP_module.cpp:805 ICP_module.cpp:806
-#: ICP_module.cpp:807 ICP_module.cpp:808 ICP_module.cpp:809 ICP_module.cpp:810
-#: ICP_module.cpp:811 ICP_module.cpp:812 ICP_module.cpp:813 ICP_module.cpp:814
-#: ICP_module.cpp:815 ICP_module.cpp:816 ICP_module.cpp:817
+#: ICP_module.cpp:313 ICP_module.cpp:458 ICP_module.cpp:475 ICP_module.cpp:607
+#: ICP_module.cpp:768 ICP_module.cpp:769 ICP_module.cpp:771 ICP_module.cpp:772
+#: ICP_module.cpp:816 ICP_module.cpp:817 ICP_module.cpp:818 ICP_module.cpp:819
+#: ICP_module.cpp:820 ICP_module.cpp:823 ICP_module.cpp:824 ICP_module.cpp:825
+#: ICP_module.cpp:826 ICP_module.cpp:827 ICP_module.cpp:828 ICP_module.cpp:829
+#: ICP_module.cpp:830 ICP_module.cpp:831 ICP_module.cpp:832 ICP_module.cpp:833
+#: ICP_module.cpp:834 ICP_module.cpp:835 ICP_module.cpp:836 ICP_module.cpp:837
+#: ICP_module.cpp:838 ICP_module.cpp:839 ICP_module.cpp:840 ICP_module.cpp:841
+#: ICP_module.cpp:842 ICP_module.cpp:843 ICP_module.cpp:844 ICP_module.cpp:845
+#: ICP_module.cpp:846 ICP_module.cpp:847 ICP_module.cpp:848
 msgid "id"
 msgstr ""
 
@@ -423,411 +425,419 @@ msgstr ""
 msgid "w_attr"
 msgstr ""
 
-#: ICP_module.cpp:380 ICP_module.cpp:384 ICP_module.cpp:392 ICP_module.cpp:508
-#: ICP_module.cpp:512 ICP_module.cpp:520 ICP_module.cpp:535 ICP_module.cpp:677
+#: ICP_module.cpp:381 ICP_module.cpp:388 ICP_module.cpp:396 ICP_module.cpp:512
+#: ICP_module.cpp:516 ICP_module.cpp:524 ICP_module.cpp:539 ICP_module.cpp:708
 #, c-format
 msgid "i%d"
 msgstr ""
 
-#: ICP_module.cpp:380 ICP_module.cpp:384 ICP_module.cpp:392 ICP_module.cpp:721
+#: ICP_module.cpp:381 ICP_module.cpp:388 ICP_module.cpp:396 ICP_module.cpp:752
 #, c-format
 msgid "Input %d"
 msgstr "Вход %d"
 
-#: ICP_module.cpp:386 ICP_module.cpp:399 ICP_module.cpp:522 ICP_module.cpp:552
-#, c-format
-msgid "o%d"
-msgstr ""
-
-#: ICP_module.cpp:386 ICP_module.cpp:399
-#, c-format
-msgid "Out %d"
-msgstr "Выход %d"
-
-#: ICP_module.cpp:389 ICP_module.cpp:539
-msgid "cvct"
-msgstr ""
-
-#: ICP_module.cpp:389
-msgid "Cold-Junction Compensation(CJC) temperature"
-msgstr "Температура компенсации холодных спаев"
-
-#: ICP_module.cpp:393 ICP_module.cpp:618
+#: ICP_module.cpp:382 ICP_module.cpp:397 ICP_module.cpp:626 ICP_module.cpp:647
 #, c-format
 msgid "ha%d"
 msgstr ""
 
-#: ICP_module.cpp:393
+#: ICP_module.cpp:382 ICP_module.cpp:397
 #, c-format
 msgid "H/A %d"
 msgstr ""
 
-#: ICP_module.cpp:394 ICP_module.cpp:619
+#: ICP_module.cpp:383 ICP_module.cpp:398 ICP_module.cpp:627 ICP_module.cpp:648
 #, c-format
 msgid "la%d"
 msgstr ""
 
-#: ICP_module.cpp:394
+#: ICP_module.cpp:383 ICP_module.cpp:398
 #, c-format
 msgid "L/A %d"
 msgstr ""
 
-#: ICP_module.cpp:427
+#: ICP_module.cpp:390 ICP_module.cpp:403 ICP_module.cpp:526 ICP_module.cpp:557
+#, c-format
+msgid "o%d"
+msgstr ""
+
+#: ICP_module.cpp:390 ICP_module.cpp:403
+#, c-format
+msgid "Out %d"
+msgstr "Выход %d"
+
+#: ICP_module.cpp:393 ICP_module.cpp:543
+msgid "cvct"
+msgstr ""
+
+#: ICP_module.cpp:393
+msgid "Cold-Junction Compensation(CJC) temperature"
+msgstr "Температура компенсации холодных спаев"
+
+#: ICP_module.cpp:431
 msgid "Gathering fast task is not stopped!"
 msgstr "Задача быстрого сбора данных не остановлена!"
 
-#: ICP_module.cpp:450 ICP_module.cpp:468
+#: ICP_module.cpp:454 ICP_module.cpp:472
 msgid "cnls"
 msgstr ""
 
-#: ICP_module.cpp:451 ICP_module.cpp:469
+#: ICP_module.cpp:455 ICP_module.cpp:473
 msgid "fastPer"
 msgstr ""
 
-#: ICP_module.cpp:453 ICP_module.cpp:471
+#: ICP_module.cpp:457 ICP_module.cpp:475
 msgid "cnl"
 msgstr ""
 
-#: ICP_module.cpp:463
+#: ICP_module.cpp:467
 msgid "prms"
 msgstr ""
 
-#: ICP_module.cpp:504
+#: ICP_module.cpp:508
 msgid "Fast gathering task is not started!"
 msgstr "Задача быстрого сбора данных не запущена!"
 
-#: ICP_module.cpp:533
+#: ICP_module.cpp:537
 #, c-format
 msgid "#%02X"
 msgstr ""
 
-#: ICP_module.cpp:538
+#: ICP_module.cpp:542
 #, c-format
 msgid "$%02X3"
 msgstr ""
 
-#: ICP_module.cpp:551
+#: ICP_module.cpp:544 ICP_module.cpp:559 ICP_module.cpp:652 ICP_module.cpp:677
+msgid "10:Request to module error."
+msgstr "10:Ошибка запроса к модулю."
+
+#: ICP_module.cpp:544
+msgid "11:Respond from module error."
+msgstr "11:Ошибка в ответе модуля."
+
+#: ICP_module.cpp:556
 #, c-format
 msgid "$%02X8%d"
 msgstr ""
 
-#: ICP_module.cpp:571 ICP_module.cpp:582
+#: ICP_module.cpp:577 ICP_module.cpp:588
 msgid "err"
 msgstr ""
 
-#: ICP_module.cpp:573
+#: ICP_module.cpp:579
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-#: ICP_module.cpp:574
+#: ICP_module.cpp:580
 msgid "2:Acquisition is stoped."
 msgstr "2:Опрос остановлен."
 
-#: ICP_module.cpp:595 ICP_module.cpp:746 ICP_module.cpp:752 ICP_module.cpp:758
-#: ICP_module.cpp:772
+#: ICP_module.cpp:606 ICP_module.cpp:777 ICP_module.cpp:783 ICP_module.cpp:789
+#: ICP_module.cpp:803
 msgid "set"
 msgstr ""
 
-#: ICP_module.cpp:596
+#: ICP_module.cpp:607
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: ICP_module.cpp:605
+#: ICP_module.cpp:616 ICP_module.cpp:634
 msgid "ha"
 msgstr ""
 
-#: ICP_module.cpp:606
+#: ICP_module.cpp:617 ICP_module.cpp:635
 msgid "la"
 msgstr ""
 
-#: ICP_module.cpp:622
+#: ICP_module.cpp:651
 #, c-format
 msgid "@%02XL%02X%02X"
 msgstr ""
 
-#: ICP_module.cpp:643
+#: ICP_module.cpp:673
 #, c-format
 msgid "#%02X%d%+07.3f"
 msgstr ""
 
-#: ICP_module.cpp:712
+#: ICP_module.cpp:743
 msgid "/prm/cfg/MOD_TP"
 msgstr ""
 
-#: ICP_module.cpp:712 ICP_module.cpp:733
+#: ICP_module.cpp:743 ICP_module.cpp:764
 msgid "/prm/cfg/modLst"
 msgstr ""
 
-#: ICP_module.cpp:713 ICP_module.cpp:719
+#: ICP_module.cpp:744 ICP_module.cpp:750
 msgid "area"
 msgstr ""
 
-#: ICP_module.cpp:713
+#: ICP_module.cpp:744
 msgid "/cfg"
 msgstr ""
 
-#: ICP_module.cpp:713
+#: ICP_module.cpp:744
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: ICP_module.cpp:717 ICP_module.cpp:743
+#: ICP_module.cpp:748 ICP_module.cpp:774
 msgid "/cfg/prms"
 msgstr ""
 
-#: ICP_module.cpp:717
+#: ICP_module.cpp:748
 msgid "Process parameters"
 msgstr "Обработка параметров"
 
-#: ICP_module.cpp:718 ICP_module.cpp:749
+#: ICP_module.cpp:749 ICP_module.cpp:780
 msgid "/cfg/fastPer"
 msgstr ""
 
-#: ICP_module.cpp:718
+#: ICP_module.cpp:749
 msgid "Fast data get period (s)"
 msgstr "Период быстрого сбора данных (с)"
 
-#: ICP_module.cpp:718
+#: ICP_module.cpp:749
 msgid "real"
 msgstr ""
 
-#: ICP_module.cpp:719
+#: ICP_module.cpp:750
 msgid "/cfg/mode"
 msgstr ""
 
-#: ICP_module.cpp:719
+#: ICP_module.cpp:750
 msgid "Mode"
 msgstr "Режим"
 
-#: ICP_module.cpp:721
+#: ICP_module.cpp:752
 #, c-format
 msgid "/cfg/mode/in%d"
 msgstr ""
 
-#: ICP_module.cpp:721 ICP_module.cpp:726 ICP_module.cpp:781
+#: ICP_module.cpp:752 ICP_module.cpp:757 ICP_module.cpp:812
 msgid "/cfg/tpLst"
 msgstr ""
 
-#: ICP_module.cpp:726
+#: ICP_module.cpp:757
 #, c-format
 msgid "/cfg/inTp%d"
 msgstr ""
 
-#: ICP_module.cpp:726
+#: ICP_module.cpp:757
 #, c-format
 msgid "Input %d type"
 msgstr "Тип входа %d"
 
-#: ICP_module.cpp:737
+#: ICP_module.cpp:768
 msgid "I-8017"
 msgstr ""
 
-#: ICP_module.cpp:738
+#: ICP_module.cpp:769
 msgid "I-8042"
 msgstr ""
 
-#: ICP_module.cpp:740
+#: ICP_module.cpp:771
 msgid "I-87019"
 msgstr ""
 
-#: ICP_module.cpp:741
+#: ICP_module.cpp:772
 msgid "I-87024"
 msgstr ""
 
-#: ICP_module.cpp:745 ICP_module.cpp:751 ICP_module.cpp:757 ICP_module.cpp:763
+#: ICP_module.cpp:776 ICP_module.cpp:782 ICP_module.cpp:788 ICP_module.cpp:794
 msgid "get"
 msgstr ""
 
-#: ICP_module.cpp:755
+#: ICP_module.cpp:786
 msgid "/cfg/mode/in"
 msgstr ""
 
-#: ICP_module.cpp:761
+#: ICP_module.cpp:792
 msgid "/cfg/inTp"
 msgstr ""
 
-#: ICP_module.cpp:768
+#: ICP_module.cpp:799
 #, c-format
 msgid "$%02X8C%d"
 msgstr ""
 
-#: ICP_module.cpp:770 ICP_module.cpp:792
+#: ICP_module.cpp:801 ICP_module.cpp:823
 msgid "-1"
 msgstr ""
 
-#: ICP_module.cpp:777
+#: ICP_module.cpp:808
 #, c-format
 msgid "$%02X7C%dR%02X"
 msgstr ""
 
-#: ICP_module.cpp:785 ICP_module.cpp:800
+#: ICP_module.cpp:816 ICP_module.cpp:831
 msgid "-10V to +10V"
 msgstr "-10В до +10В"
 
-#: ICP_module.cpp:786 ICP_module.cpp:801
+#: ICP_module.cpp:817 ICP_module.cpp:832
 msgid "-5V to +5V"
 msgstr "-5В до +5В"
 
-#: ICP_module.cpp:787 ICP_module.cpp:798
+#: ICP_module.cpp:818 ICP_module.cpp:829
 msgid "-2.5V to +2.5V"
 msgstr "-2.5В до +2.5В"
 
-#: ICP_module.cpp:788
+#: ICP_module.cpp:819
 msgid "-1.25V to +1.25V"
 msgstr "-1.25В до +1.25В"
 
-#: ICP_module.cpp:789 ICP_module.cpp:797
+#: ICP_module.cpp:820 ICP_module.cpp:828
 msgid "4"
 msgstr ""
 
-#: ICP_module.cpp:789 ICP_module.cpp:799 ICP_module.cpp:805
+#: ICP_module.cpp:820 ICP_module.cpp:830 ICP_module.cpp:836
 msgid "-20mA to +20mA (with 125 ohms resistor)"
 msgstr "-20мА до +20мА (с резистором 125 Ом)"
 
-#: ICP_module.cpp:792
+#: ICP_module.cpp:823
 msgid "Error"
 msgstr "Ошибка"
 
-#: ICP_module.cpp:793
+#: ICP_module.cpp:824
 msgid "-15mV to +15mV"
 msgstr "-15мВ до +15мВ"
 
-#: ICP_module.cpp:794
+#: ICP_module.cpp:825
 msgid "-50mV to +50mV"
 msgstr "-50мВ до +50мВ"
 
-#: ICP_module.cpp:795
+#: ICP_module.cpp:826
 msgid "-100mV to +100mV"
 msgstr "-100мВ до +100мВ"
 
-#: ICP_module.cpp:796 ICP_module.cpp:803
+#: ICP_module.cpp:827 ICP_module.cpp:834
 msgid "-500mV to +500mV"
 msgstr "-500мВ до +500мВ"
 
-#: ICP_module.cpp:797 ICP_module.cpp:802
+#: ICP_module.cpp:828 ICP_module.cpp:833
 msgid "-1V to +1V"
 msgstr "-1В до +1В"
 
-#: ICP_module.cpp:798
+#: ICP_module.cpp:829
 msgid "5"
 msgstr ""
 
-#: ICP_module.cpp:800
+#: ICP_module.cpp:831
 msgid "8"
 msgstr ""
 
-#: ICP_module.cpp:801
+#: ICP_module.cpp:832
 msgid "9"
 msgstr ""
 
-#: ICP_module.cpp:803
+#: ICP_module.cpp:834
 msgid "11"
 msgstr ""
 
-#: ICP_module.cpp:804
+#: ICP_module.cpp:835
 msgid "12"
 msgstr ""
 
-#: ICP_module.cpp:804
+#: ICP_module.cpp:835
 msgid "-150mV to +150mV"
 msgstr "-150мВ до +150мВ"
 
-#: ICP_module.cpp:805
+#: ICP_module.cpp:836
 msgid "13"
 msgstr ""
 
-#: ICP_module.cpp:806
+#: ICP_module.cpp:837
 msgid "14"
 msgstr ""
 
-#: ICP_module.cpp:806
+#: ICP_module.cpp:837
 msgid "J Type"
 msgstr "J Тип"
 
-#: ICP_module.cpp:807
+#: ICP_module.cpp:838
 msgid "15"
 msgstr ""
 
-#: ICP_module.cpp:807
+#: ICP_module.cpp:838
 msgid "K Type"
 msgstr "K Тип"
 
-#: ICP_module.cpp:808
+#: ICP_module.cpp:839
 msgid "16"
 msgstr ""
 
-#: ICP_module.cpp:808
+#: ICP_module.cpp:839
 msgid "T Type"
 msgstr "T Тип"
 
-#: ICP_module.cpp:809
+#: ICP_module.cpp:840
 msgid "17"
 msgstr ""
 
-#: ICP_module.cpp:809
+#: ICP_module.cpp:840
 msgid "E Type"
 msgstr "E Тип"
 
-#: ICP_module.cpp:810
+#: ICP_module.cpp:841
 msgid "18"
 msgstr ""
 
-#: ICP_module.cpp:810
+#: ICP_module.cpp:841
 msgid "R Type"
 msgstr "R Тип"
 
-#: ICP_module.cpp:811
+#: ICP_module.cpp:842
 msgid "19"
 msgstr ""
 
-#: ICP_module.cpp:811
+#: ICP_module.cpp:842
 msgid "S Type"
 msgstr "S Тип"
 
-#: ICP_module.cpp:812
+#: ICP_module.cpp:843
 msgid "20"
 msgstr ""
 
-#: ICP_module.cpp:812
+#: ICP_module.cpp:843
 msgid "B Type"
 msgstr "B Тип"
 
-#: ICP_module.cpp:813
+#: ICP_module.cpp:844
 msgid "21"
 msgstr ""
 
-#: ICP_module.cpp:813
+#: ICP_module.cpp:844
 msgid "N Type"
 msgstr "N Тип"
 
-#: ICP_module.cpp:814
+#: ICP_module.cpp:845
 msgid "22"
 msgstr ""
 
-#: ICP_module.cpp:814
+#: ICP_module.cpp:845
 msgid "C Type"
 msgstr "C Тип"
 
-#: ICP_module.cpp:815
+#: ICP_module.cpp:846
 msgid "23"
 msgstr ""
 
-#: ICP_module.cpp:815
+#: ICP_module.cpp:846
 msgid "L Type"
 msgstr "L Тип"
 
-#: ICP_module.cpp:816
+#: ICP_module.cpp:847
 msgid "24"
 msgstr ""
 
-#: ICP_module.cpp:816
+#: ICP_module.cpp:847
 msgid "M Type"
 msgstr "H Тип"
 
-#: ICP_module.cpp:817
+#: ICP_module.cpp:848
 msgid "25"
 msgstr ""
 
-#: ICP_module.cpp:817
+#: ICP_module.cpp:848
 msgid "L Type (DIN43710C Type)"
 msgstr "L Тип (DIN43710C Тип)"

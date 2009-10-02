@@ -1,3 +1,12 @@
+2009-03-02 Roman
+- FIX:DAQ: For error in time first enabling controller is made repeate.
+- Archive.Val: An archive buffer display data's begin a and time is added.
+- DAQ.DAQGate: Archive processing disable support is added. Into this mode for current archives is set current time.
+- DAQ.ICP_DAS: Connection's error display into attribute "err" is added.
+- DAQ.LogicLev: A parameter main attributes (SHIFR,NAME and DESCR) bridging to template support is added.
+- UI.Vision: The childs window of main window into runtime is made not resizible and not minimizable.
+
+
 2009-02-30 Roman
 - FIX:Function,UI.VCAEngine: Creation independent function for different from parent widgets is made.
 - FIX:DAQ.LogicLev: Exclude EVAL writing by link.

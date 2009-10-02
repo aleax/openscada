@@ -1710,6 +1710,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","Archive",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/bEnd",_("Buffer end"),0444,"root","Archive",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/bBeg",_("Buffer begin"),0444,"root","Archive",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archive DB"),0664,"root","Archive",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
@@ -1768,11 +1770,23 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //-- Process command to page --
+    //>> Process command to page
     if( a_path == "/prm/st/st" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) )	opt->setText( startStat() ? "1" : "0" );
 	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) )	atoi(opt->text().c_str()) ? start() : stop();
+    }
+    if( a_path == "/prm/st/bEnd" && ctrChkNode(opt) )
+    {
+	struct tm ttm;
+	time_t tm_t = end(BUF_ARCH_NM)/1000000; localtime_r(&tm_t,&ttm);
+	opt->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,end(BUF_ARCH_NM)%1000000));
+    }
+    if( a_path == "/prm/st/bBeg" && ctrChkNode(opt) )
+    {
+	struct tm ttm;
+	time_t tm_t = begin(BUF_ARCH_NM)/1000000; localtime_r(&tm_t,&ttm);
+	opt->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,begin(BUF_ARCH_NM)%1000000));
     }
     else if( a_path == "/prm/st/db" )
     {

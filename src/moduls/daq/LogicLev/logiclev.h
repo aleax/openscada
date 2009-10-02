@@ -123,7 +123,7 @@ class TMdPrm : public TParamContr
 
 	bool	chk_lnk_need;			//Check lnk need flag
 	Res	moderes;			//Resource
-	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
+	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
 };
 
 //*************************************************

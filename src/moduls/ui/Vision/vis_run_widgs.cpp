@@ -287,6 +287,7 @@ bool RunWdgView::event( QEvent *event )
 
     //> Key events process for send to model
     string mod_ev;
+    if( property("active").toBool() && permCntr() )
     switch( event->type() )
     {
 	case QEvent::Paint:	return true;
@@ -528,11 +529,14 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     {
 	RunPageView *pg = new RunPageView(pg_it,mainWin(),this);
 	pg->setAttribute(Qt::WA_DeleteOnClose);
-	pg->setWindowFlags(Qt::Sheet);
+	pg->setWindowState( pg->windowState() & ~Qt::WindowMaximized );
+	pg->setWindowFlags(Qt::Tool);
 	pg->setWindowTitle(mainWin()->windowTitle());
 	pg->load("");
 	pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
 			  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
+	pg->setMinimumSize(pg->frameGeometry().size());
+	pg->setMaximumSize(pg->frameGeometry().size());
 	return true;
     }
 

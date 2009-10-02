@@ -97,11 +97,12 @@ class TMdPrm : public TParamContr
 	static void *fastTask( void *iprm );
 
 	//Attributes
-	bool endRunReq, prcSt;
-	pthread_t fastPthr;
-	int clcCnt;
+	bool		endRunReq, prcSt;
+	pthread_t	fastPthr;
+	int		clcCnt;
+	ResString	acq_err;
 
-	void *extPrms;
+	void		*extPrms;
 };
 
 //******************************************************

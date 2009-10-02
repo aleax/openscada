@@ -53,7 +53,7 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     WidgetLib *src_n = dynamic_cast<WidgetLib*>(&node);
     if( !src_n ) return *this;
 
-    //- Copy generic configuration -
+    //> Copy generic configuration
     string tid = mId;
     *(TConfig*)this = *(TConfig*)src_n;
     mId  = tid;
@@ -64,7 +64,7 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     if( !enable() ) setEnable(true);
 
     vector<string> pls;
-    //- Mime data copy -
+    //> Mime data copy
     src_n->mimeDataList(pls);
     string mimeType, mimeData;
     for( int i_m = 0; i_m < pls.size(); i_m++ )
@@ -73,7 +73,7 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
 	mimeDataSet( pls[i_m], mimeType, mimeData );
     }
 
-    //- Copy include pages -
+    // Copy include pages
     src_n->list(pls);
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
@@ -209,7 +209,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 
     if( !is_file )
     {
-	//- Get resource file from DB -
+	//> Get resource file from DB
 	string dbid = is_res ? iid.substr(4) : iid;
 	string wtbl = tbl()+"_mime";
 	string wdb  = idb.empty() ? DB() : idb;
@@ -225,7 +225,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
     }
     if( !is_res )
     {
-	//- Get resource file from file system -
+	//> Get resource file from file system
 	string filepath = is_file ? iid.substr(5) : iid;
 	int len;
 	char buf[STR_BUF_LEN];
@@ -285,7 +285,7 @@ AutoHD<LWidget> WidgetLib::at( const string &id )
 
 void WidgetLib::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -321,7 +321,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/obj/st/en" )
     {
@@ -367,7 +367,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/mime/mime" )
     {
-	//-- Request data --
+	//>> Request data
 	string idmime = opt->attr("key_id");
 	string idcol  = opt->attr("col");
 
@@ -400,11 +400,11 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	mimeDataDel(opt->attr("key_id"));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
 	{
-	    //-- Request data --
+	    //>> Request data
 	    if( idcol == "id" )
 	    {
 		string mimeType, mimeData;
-		//--- Copy mime data to new record ---
+		//>>> Copy mime data to new record
 		if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) )
 		{
 		    mimeDataSet( opt->text(), mimeType, mimeData );
@@ -414,7 +414,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    else if( idcol == "tp" )
 	    {
 		string mimeType;
-		//--- Copy mime data to new record ---
+		//>>> Copy mime data to new record
 		if( mimeDataGet( "res:"+idmime, mimeType ) )
 		    mimeDataSet( idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
