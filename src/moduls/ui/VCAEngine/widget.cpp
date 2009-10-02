@@ -75,6 +75,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     AutoHD<Attr> attr, pattr;
     for( int i_a = 0; i_a < els.size(); i_a++ )
     {
+	pattr = src_n->attrAt(els[i_a]);
 	if( !attrPresent(els[i_a]) )
 	{
 	    bool isInher = pattr.at().flgSelf()&Attr::IsInher;
@@ -83,7 +84,6 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	}
 	attr  = attrAt(els[i_a]);
 	if( attr.at().flgGlob( )&Attr::DirRead ) continue;
-	pattr = src_n->attrAt(els[i_a]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
 	switch( attr.at().type() )
 	{

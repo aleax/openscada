@@ -402,8 +402,9 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	throw TError("ValBuf",_("Value is not present."));
     if( hrd_grd )
     {
-	//- Process hard grid buffer -
+	//> Process hard grid buffer
 	int npos = up_ord?(end-tm)/per:(long long)buf.grid->size()-1-(tm-beg)/per;
+	npos = up_ord ? vmax(npos,0) : vmin(npos,buf.grid->size());
 	if( npos < 0 || npos >= buf.grid->size() ) { if(itm) *itm = 0; return eval; }
 	if(itm)	*itm = end-npos*per;
 	return (*buf.grid)[((cur-npos-1)>=0)?(cur-npos-1):(buf.grid->size()+(cur-npos-1))];
