@@ -314,14 +314,15 @@ void *TMdContr::Task( void *icntr )
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
-    try
+
+    for( unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++ )
     {
-	for( unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++ )
+	if( cntr.redntUse( ) ) { usleep( STD_WAIT_DELAY*1000 ); continue; }
+
+	long long t_cnt = TSYS::curTime();
+
+	try
 	{
-	    if( cntr.redntUse( ) ) { usleep( STD_WAIT_DELAY*1000 ); continue; }
-
-	    long long t_cnt = TSYS::curTime();
-
 	    ResAlloc res(cntr.enRes,false);
 
 	    //> Allow stations presenting
@@ -414,15 +415,15 @@ void *TMdContr::Task( void *icntr )
 		    }
 		}
 	    }
+	    //res.release( );
+	}catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
-	    //> Calc acquisition process time
-	    res.release( );
+	//> Calc acquisition process time
+	cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
 
-	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
+	TSYS::taskSleep((long long)(1e9*cntr.period()));
+    }
 
-	    TSYS::taskSleep((long long)(1e9*cntr.period()));
-	}
-    }catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
     cntr.prcSt = false;
 

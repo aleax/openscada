@@ -1498,7 +1498,7 @@ msgstr "Roman Savotschenko"
 
 #: tuimod.cpp:44
 msgid "Allow the QT based OpenSCADA system configurator."
-msgstr "Ermöglicht die QT-basierte Systemeinstellung von OpenSCADA"
+msgstr "Ermöglicht die QT-basierte Systemeinstellung von OpenSCADA."
 
 #: tuimod.cpp:45
 msgid "GPL"

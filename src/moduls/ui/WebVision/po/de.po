@@ -595,7 +595,7 @@ msgstr ""
 msgid ""
 "Web operation user interface for visual control area (VCA) projects playing."
 msgstr ""
-"Web Benutzerschnittstelle für die Steuerung der sichtbaren Bereiche (VCA)"
+"Web Benutzerschnittstelle für die Steuerung der sichtbaren Bereiche (VCA)."
 
 #: web_vision.cpp:43
 msgid "GPL"

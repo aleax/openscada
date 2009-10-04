@@ -593,7 +593,7 @@ msgid ""
 "Web operation user interface for visual control area (VCA) projects playing."
 msgstr ""
 "Web рабочий пользовательский интерфейс для исполнения визуальных сред "
-"управления (СВУ)"
+"управления (СВУ)."
 
 #: web_vision.cpp:43
 msgid "GPL"

@@ -42,7 +42,7 @@
 #define VER_TYPE	VER_CNTR
 #define VERSION		"1.0.1"
 #define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow logic level paramers."
+#define DESCRIPTION	"Allow logic level parameters."
 #define LICENSE		"GPL"
 //*************************************************
 
@@ -843,6 +843,11 @@ void TMdPrm::calc( bool first, bool last )
 			break;
 		    }
 		}
+
+	//> Put fixed system attributes
+	if( id_nm >= 0 )	setName(tmpl->val.getS(id_nm));
+	if( id_dscr >= 0 )	setDescr(tmpl->val.getS(id_dscr));
+
     }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());

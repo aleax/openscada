@@ -42,7 +42,7 @@ msgstr "Роман Савоченко"
 #: arch.cpp:41
 msgid ""
 "The Archive module. Allow functions for messages and values arhiving to DB."
-msgstr "Модуль архіву. Надає функції архівації повідомлень та значень на БД"
+msgstr "Модуль архіву. Надає функції архівації повідомлень та значень на БД."
 
 #: arch.cpp:42
 msgid "GPL"
