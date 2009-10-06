@@ -735,6 +735,7 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
 	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
 	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","22") );
+	attrAdd( new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","","23") );
 	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","","24") );
 	attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","","25") );
 	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );

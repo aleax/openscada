@@ -1152,7 +1152,8 @@ function makeEl( pgBr, inclPg )
 	var tTime = parseInt(this.attrs['time']);
 	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
-	if( this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || this.curLev != this.attrs['lev'] )
+	if( this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || 
+	    this.curLev != this.attrs['lev'] || this.headVis != this.attrs['headVis'] )
 	{
 	  this.arhBeg = this.arhEnd = 0;
 	  this.messList = new Array();
@@ -1162,21 +1163,23 @@ function makeEl( pgBr, inclPg )
 	  this.curArch = this.attrs['arch'];
 	  this.curTmpl = this.attrs['tmpl'];
 	  this.curLev = this.attrs['lev'];
+	  this.headVis = this.attrs['headVis'];
 	  var rowEl = document.createElement('tr');
 	  tblB.appendChild(rowEl);
 	  var colCfg = '';
 	  var clm = this.curCols.split(';');
 	  for( var c_off = 0; c_off < clm.length; c_off++ )
 	  {
-	      colCfg += "<th ind='"+clm[c_off]+"' "+
-			  "style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
+	    if( !parseInt(this.attrs['headVis']) ) colCfg += "<th/>";
+	    else colCfg += "<th ind='"+clm[c_off]+"' "+
+			   "style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
 						    (clm[c_off]=='tm') ? '###Time###' :
 						    (clm[c_off]=='utm') ? '###mcsec###' :
 						    (clm[c_off]=='lev') ? '###Level###' :
 						    (clm[c_off]=='cat') ? '###Category###' :
 						    (clm[c_off]=='mess') ? '###Message###' : '')+"</th>";
-	      this['col_'+clm[c_off]] = c_off;
-	    }
+	    this['col_'+clm[c_off]] = c_off;
+	  }
 	  rowEl.innerHTML = colCfg;
 	}
 

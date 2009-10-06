@@ -42,6 +42,7 @@
 #include <QDateTime>
 #include <QToolTip>
 #include <QScrollBar>
+#include <QHeaderView>
 
 #include <QApplication>
 
@@ -2528,6 +2529,10 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	case 22:	//font
 	    shD->addrWdg->setFont(getFont(val,vmin(w->xScale(true),w->yScale(true)))); break;
+	case 23:	//headVis
+	    shD->addrWdg->horizontalHeader()->setVisible(atoi(val.c_str()));
+	    shD->addrWdg->verticalHeader()->setVisible(atoi(val.c_str()));
+	    break;
 	case 24:	//time
 	{
 	    unsigned int tm = strtoul(val.c_str(),0,10);
@@ -2616,6 +2621,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     //> Get collumns indexes
     int c_tm = -1, c_tmu = -1, c_lev = -1, c_cat = -1, c_mess = -1;
 
+    shD->addrWdg->verticalHeader()->setVisible(false);
+
     string clm;
     for( int c_off = 0; (clm=TSYS::strSepParse(shD->col,0,';',&c_off)).size(); )
     {
@@ -2624,7 +2631,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for( ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++ )
 	    if( shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString() == clm.c_str() )
 		break;
-	if( clm == "tm" )	{ clmNm = _("Time"); c_tm = ncl; }
+	if( clm == "pos" )	shD->addrWdg->verticalHeader()->setVisible(true);
+	else if( clm == "tm" )	{ clmNm = _("Time"); c_tm = ncl; }
 	else if( clm == "utm" )	{ clmNm = _("mcsec"); c_tmu = ncl; }
 	else if( clm == "lev" )	{ clmNm = _("Level"); c_lev = ncl; }
 	else if( clm == "cat" )	{ clmNm = _("Category"); c_cat = ncl; }

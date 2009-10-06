@@ -1,10 +1,16 @@
-2009-03-04 Roman
+2009-10-05 Roman
+- Archive.Alarm: All allarms list processing is added by set begin and end request time equal.
+- UI.VCAEngine, UI.Vision, UI.WebVision: The property "headVis" is added to primitive "Protocol".
+- SYS: Virtual packages build openscada-plc, openscada-server and openscada-visStation is added to RPM-spec file.
+
+
+2009-10-04 Roman
 - SYS: New RPM build spec file is added to repository for build seperated packages for modules.
 - FIX:DAQ.DAQGate: Stop acquisition task is fixed on put too old data to archive's buffer.
 - DAQ.LogicLev: Back write the value of attribute NAME and DESCR from template.
 
 
-2009-03-02 Roman
+2009-10-02 Roman
 - FIX:DAQ: For error in time first enabling controller is made repeate.
 - Archive.Val: An archive buffer display data's begin a and time is added.
 - DAQ.DAQGate: Archive processing disable support is added. Into this mode for current archives is set current time.
@@ -15,7 +21,7 @@
 - FIX:UI.VCAEngine: Copy items is fixed for check inherit flag previous attribute.
 
 
-2009-02-30 Roman
+2009-09-30 Roman
 - FIX:Function,UI.VCAEngine: Creation independent function for different from parent widgets is made.
 - FIX:DAQ.LogicLev: Exclude EVAL writing by link.
 - UI.VCAEngine: Dynamic link is made deep check for find parameters into present link.

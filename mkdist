@@ -3,7 +3,7 @@
 pkg_nm="openscada"
 pkg_ver="$1"
 
-echo "Distribitive ${pkg_nm}-${pkg_ver} create"
+echo "Distributive ${pkg_nm}-${pkg_ver} create"
 
 rm -rf ${pkg_nm}-${pkg_ver}
 mkdir ${pkg_nm}-${pkg_ver}
