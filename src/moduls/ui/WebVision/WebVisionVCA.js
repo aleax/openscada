@@ -510,22 +510,23 @@ function makeEl( pgBr, inclPg )
   {
     if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
     if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-    if( parseInt(this.attrs['focus']) ) elStyle+='border-style: ridge; border-width: 2px; border-color: white; ';
-    else {
+    //if( parseInt(this.attrs['focus']) ) elStyle+='border-style: ridge; border-width: 2px; border-color: white; ';
+    //else 
+    //{
       elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
       if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
-    }
-    switch( parseInt(this.attrs['bordStyle']) )
-    {
-      case 1: elStyle+='border-style: dotted; '; break;
-      case 2: elStyle+='border-style: dashed; '; break;
-      case 3: elStyle+='border-style: solid; ';  break;
-      case 4: elStyle+='border-style: double; '; break;
-      case 5: elStyle+='border-style: groove; '; break;
-      case 6: elStyle+='border-style: ridge; ';  break;
-      case 7: elStyle+='border-style: inset; ';  break;
-      case 8: elStyle+='border-style: outset; '; break;
-    }
+      switch( parseInt(this.attrs['bordStyle']) )
+      {
+	case 1: elStyle+='border-style: dotted; '; break;
+	case 2: elStyle+='border-style: dashed; '; break;
+	case 3: elStyle+='border-style: solid; ';  break;
+	case 4: elStyle+='border-style: double; '; break;
+	case 5: elStyle+='border-style: groove; '; break;
+	case 6: elStyle+='border-style: ridge; ';  break;
+	case 7: elStyle+='border-style: inset; ';  break;
+	case 8: elStyle+='border-style: outset; '; break;
+      }
+    //}
     if( !this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)) )
     {
       if( this.inclOpen )
@@ -1150,6 +1151,7 @@ function makeEl( pgBr, inclPg )
 
 	//> Get archive parameters
 	var tTime = parseInt(this.attrs['time']);
+	if( !tTime ) tTime = (new Date()).getTime()/1000;
 	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
 	if( this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || 
@@ -1183,21 +1185,25 @@ function makeEl( pgBr, inclPg )
 	  rowEl.innerHTML = colCfg;
 	}
 
-	if( !this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd )
+	if( parseInt(this.curLev) < 0 ) this.messList = new Array();
+	else
 	{
-	  var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>",true);
-	  if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { this.arhBeg = this.arhEnd = 0; }
-	  else
+	  if( !this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd )
 	  {
-	    this.arhBeg = parseInt(rez.getAttribute('beg'));
-	    this.arhEnd = parseInt(rez.getAttribute('end'));
-	    if( !tTime ) { tTime = this.arhEnd; tTimeGrnd += tTime; }
+	    var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>",true);
+	    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { this.arhBeg = this.arhEnd = 0; }
+	    else
+	    {
+	      this.arhBeg = parseInt(rez.getAttribute('beg'));
+	      this.arhEnd = parseInt(rez.getAttribute('end'));
+	      if( !tTime ) { tTime = this.arhEnd; tTimeGrnd += tTime; }
+	    }
 	  }
-	}
-	if( !this.arhBeg || !this.arhEnd ) return;
+	  if( !this.arhBeg || !this.arhEnd ) return;
 
-	//> Correct request to archive border
-	tTime = Math.min(tTime,this.arhEnd); tTimeGrnd = Math.max(tTimeGrnd,this.arhBeg);
+	  //> Correct request to archive border
+	  tTime = Math.min(tTime,this.arhEnd); tTimeGrnd = Math.max(tTimeGrnd,this.arhBeg);
+	}
 
 	//> Clear data at time error
 	var valEnd = 0; var valBeg = 0;

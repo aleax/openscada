@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 # Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
-#: socket.cpp:62 socket.cpp:390 socket.cpp:480
+#: socket.cpp:62 socket.cpp:426 socket.cpp:518
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-05 16:10+0300\n"
+"POT-Creation-Date: 2009-10-10 19:46+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -48,63 +48,31 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: socket.cpp:104 socket.cpp:178
-msgid "BufLen"
+#: socket.cpp:103 socket.cpp:176
+msgid "A_PRMS"
 msgstr ""
 
-#: socket.cpp:104
-msgid "Input buffer length (kB)"
-msgstr "Довжина вхідного буферу (кБ)"
+#: socket.cpp:103
+msgid "Addon parameters"
+msgstr "Додаткові параметри"
 
-#: socket.cpp:104
-msgid "4"
+#: socket.cpp:103
+msgid "1000"
 msgstr ""
 
-#: socket.cpp:104 socket.cpp:163
-msgid "5"
-msgstr ""
-
-#: socket.cpp:105 socket.cpp:178
-msgid "MaxClients"
-msgstr ""
-
-#: socket.cpp:105
-msgid "Maximum clients process"
-msgstr "Максимальна кількість обслуговуваних клієнтів"
-
-#: socket.cpp:105
-msgid "3"
-msgstr ""
-
-#: socket.cpp:105 socket.cpp:106
-msgid "10"
-msgstr ""
-
-#: socket.cpp:106 socket.cpp:177
-msgid "SocketsMaxQueue"
-msgstr ""
-
-#: socket.cpp:106
-msgid "Maximum queue of input socket"
-msgstr "Максимальний розмір черги вхідного сокету"
-
-#: socket.cpp:106
-msgid "2"
-msgstr ""
-
-#: socket.cpp:109 socket.cpp:621 socket.cpp:623
+#: socket.cpp:106 socket.cpp:682 socket.cpp:684
 msgid "TMS"
 msgstr ""
 
-#: socket.cpp:109 socket.cpp:818
+#: socket.cpp:106 socket.cpp:880
 msgid "Timeout (ms)"
 msgstr "Час очікування (мс)"
 
-#: socket.cpp:109
+#: socket.cpp:106
 msgid "30"
 msgstr ""
 
-#: socket.cpp:117
+#: socket.cpp:114
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -115,71 +83,84 @@ msgstr ""
 "------- Параметри модульної секції <%s> у конфігураційному файлі ---------\n"
 "\n"
 
-#: socket.cpp:128
+#: socket.cpp:125
 msgid "h"
 msgstr ""
 
-#: socket.cpp:131 socket.cpp:561 socket.cpp:573 socket.cpp:574 socket.cpp:808
+#: socket.cpp:128 socket.cpp:604 socket.cpp:616 socket.cpp:617 socket.cpp:870
 msgid "help"
 msgstr ""
 
-#: socket.cpp:160 socket.cpp:558 socket.cpp:805
+#: socket.cpp:138 socket.cpp:568
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: socket.cpp:157 socket.cpp:601 socket.cpp:867
 msgid "info"
 msgstr ""
 
-#: socket.cpp:163 socket.cpp:561 socket.cpp:573 socket.cpp:574 socket.cpp:575
-#: socket.cpp:808 socket.cpp:818
+#: socket.cpp:160 socket.cpp:604 socket.cpp:616 socket.cpp:617 socket.cpp:618
+#: socket.cpp:619 socket.cpp:620 socket.cpp:621 socket.cpp:870 socket.cpp:880
 msgid "fld"
 msgstr ""
 
-#: socket.cpp:163 socket.cpp:169
+#: socket.cpp:160 socket.cpp:166
 msgid "/help/g_help"
 msgstr ""
 
-#: socket.cpp:163
+#: socket.cpp:160
 msgid "Options help"
 msgstr "Допомога по опціям"
 
-#: socket.cpp:163 socket.cpp:561 socket.cpp:573 socket.cpp:574 socket.cpp:575
-#: socket.cpp:582 socket.cpp:583 socket.cpp:587 socket.cpp:588 socket.cpp:592
-#: socket.cpp:593 socket.cpp:808 socket.cpp:818 socket.cpp:826 socket.cpp:827
+#: socket.cpp:160 socket.cpp:334 socket.cpp:377 socket.cpp:604 socket.cpp:616
+#: socket.cpp:617 socket.cpp:618 socket.cpp:619 socket.cpp:620 socket.cpp:621
+#: socket.cpp:628 socket.cpp:629 socket.cpp:633 socket.cpp:634 socket.cpp:638
+#: socket.cpp:639 socket.cpp:643 socket.cpp:644 socket.cpp:648 socket.cpp:649
+#: socket.cpp:653 socket.cpp:654 socket.cpp:870 socket.cpp:880 socket.cpp:888
+#: socket.cpp:889
 msgid "root"
 msgstr ""
 
-#: socket.cpp:163 socket.cpp:561 socket.cpp:573 socket.cpp:574 socket.cpp:575
-#: socket.cpp:808 socket.cpp:818
+#: socket.cpp:160 socket.cpp:604 socket.cpp:616 socket.cpp:617 socket.cpp:618
+#: socket.cpp:619 socket.cpp:620 socket.cpp:621 socket.cpp:870 socket.cpp:880
 msgid "tp"
 msgstr ""
 
-#: socket.cpp:163 socket.cpp:561 socket.cpp:808
+#: socket.cpp:160 socket.cpp:604 socket.cpp:870
 msgid "str"
 msgstr ""
 
-#: socket.cpp:163
+#: socket.cpp:160
 msgid "cols"
 msgstr ""
 
-#: socket.cpp:163
+#: socket.cpp:160
 msgid "90"
 msgstr ""
 
-#: socket.cpp:163
+#: socket.cpp:160
 msgid "rows"
 msgstr ""
 
-#: socket.cpp:168 socket.cpp:579 socket.cpp:823
+#: socket.cpp:160
+msgid "5"
+msgstr ""
+
+#: socket.cpp:165 socket.cpp:625 socket.cpp:885
 msgid "path"
 msgstr ""
 
-#: socket.cpp:169 socket.cpp:582 socket.cpp:587 socket.cpp:592 socket.cpp:826
+#: socket.cpp:166 socket.cpp:628 socket.cpp:633 socket.cpp:638 socket.cpp:643
+#: socket.cpp:648 socket.cpp:653 socket.cpp:888
 msgid "get"
 msgstr ""
 
-#: socket.cpp:180
+#: socket.cpp:178
 msgid "TCP:localhost:10002:0"
 msgstr ""
 
-#: socket.cpp:193
+#: socket.cpp:191
 #, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed "
@@ -188,129 +169,152 @@ msgstr ""
 "Підключень %d, відкрито %d. Трафік вхідний %.4g кб, вихідний %.4g кб. "
 "Закрито підключень за лімітом %d."
 
-#: socket.cpp:215 socket.cpp:223 socket.cpp:229
+#: socket.cpp:206 socket.cpp:218
+msgid "MaxQueue"
+msgstr ""
+
+#: socket.cpp:207 socket.cpp:219
+msgid "MaxClients"
+msgstr ""
+
+#: socket.cpp:208 socket.cpp:220
+msgid "BufLen"
+msgstr ""
+
+#: socket.cpp:209 socket.cpp:221
+msgid "KeepAliveCnt"
+msgstr ""
+
+#: socket.cpp:210 socket.cpp:222
+msgid "KeepAliveTm"
+msgstr ""
+
+#: socket.cpp:211 socket.cpp:223
+msgid "TaskPrior"
+msgstr ""
+
+#: socket.cpp:217
+msgid "prms"
+msgstr ""
+
+#: socket.cpp:245 socket.cpp:253 socket.cpp:259
 #, c-format
 msgid "Error create %s socket!"
 msgstr "Помилка створення %s сокету!"
 
-#: socket.cpp:232
+#: socket.cpp:262
 #, c-format
 msgid "Socket type <%s> error!"
 msgstr "Помилка у типу <%s> сокету!"
 
-#: socket.cpp:247 socket.cpp:653
+#: socket.cpp:277 socket.cpp:714
 #, c-format
 msgid "Socket name <%s> error!"
 msgstr "Помилка у імені <%s> сокету!"
 
-#: socket.cpp:255 socket.cpp:658
+#: socket.cpp:285 socket.cpp:719
 msgid "tcp"
 msgstr ""
 
-#: socket.cpp:264
+#: socket.cpp:294
 #, c-format
 msgid "TCP socket doesn't bind to <%s>!"
 msgstr "TCP сокет не під'єднався до <%s>!"
 
-#: socket.cpp:271 socket.cpp:658
+#: socket.cpp:301 socket.cpp:719
 msgid "udp"
 msgstr ""
 
-#: socket.cpp:280
+#: socket.cpp:310
 #, c-format
 msgid "UDP socket doesn't bind to <%s>!"
 msgstr "UDP сокет не під'єднався до <%s>!"
 
-#: socket.cpp:288 socket.cpp:715
+#: socket.cpp:318 socket.cpp:776
 msgid "/tmp/oscada"
 msgstr ""
 
-#: socket.cpp:297
+#: socket.cpp:327
 #, c-format
 msgid "UNIX socket doesn't bind to <%s>!"
 msgstr "UNIX сокет не під'єднався до <%s>!"
 
-#: socket.cpp:306
+#: socket.cpp:339
 msgid "open"
 msgstr ""
 
-#: socket.cpp:307
+#: socket.cpp:340
 msgid "Not opened!"
 msgstr "Не відкрився!"
 
-#: socket.cpp:319
+#: socket.cpp:352
 msgid "close"
 msgstr ""
 
-#: socket.cpp:320
+#: socket.cpp:353
 msgid "Not closed!"
 msgstr "Не закрився!"
 
-#: socket.cpp:337 socket.cpp:440
+#: socket.cpp:370 socket.cpp:478
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: socket.cpp:375 socket.cpp:391
+#: socket.cpp:411 socket.cpp:427
 msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
-#: socket.cpp:405
+#: socket.cpp:441
 #, c-format
 msgid "Socket received datagram <%d> from <%s>!"
 msgstr "Сокет отримав датаграму <%d> з <%s>!"
 
-#: socket.cpp:412
+#: socket.cpp:448
 #, c-format
 msgid "Socket replied datagram <%d> to <%s>!"
 msgstr "Сокет відповів датаграмою <%d> до <%s>!"
 
-#: socket.cpp:428
+#: socket.cpp:464
 msgid ": "
 msgstr ""
 
-#: socket.cpp:428
+#: socket.cpp:464
 msgid " client task is stopping...."
 msgstr " клієнтську задачу зупинено...."
 
-#: socket.cpp:443
+#: socket.cpp:481
 #, c-format
 msgid "Socket has been connected by <%s>!"
 msgstr "До сокета приєднався <%s>!"
 
-#: socket.cpp:469
+#: socket.cpp:507
 #, c-format
 msgid "Socket received message <%d> from <%s>."
 msgstr "Сокет отримав повідомлення <%d> від <%s>."
 
-#: socket.cpp:477
+#: socket.cpp:515
 #, c-format
 msgid "Socket replied message <%d> to <%s>."
 msgstr "Сокет відповів повідомленням <%d> до <%s>."
 
-#: socket.cpp:497
+#: socket.cpp:540
 #, c-format
 msgid "Socket has been disconnected by <%s>!"
 msgstr "Від сокету відєднався <%s>!"
 
-#: socket.cpp:525
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: socket.cpp:526
+#: socket.cpp:569
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
-#: socket.cpp:561 socket.cpp:808
+#: socket.cpp:604 socket.cpp:870
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: socket.cpp:561 socket.cpp:808
+#: socket.cpp:604 socket.cpp:870
 msgid "ADDR"
 msgstr ""
 
-#: socket.cpp:562
+#: socket.cpp:605
 msgid ""
 "Socket's input transport has address format:\n"
 "  TCP:[addr]:[port]:[mode] - TCP socket:\n"
@@ -340,99 +344,125 @@ msgstr ""
 "    name - Ім'я файлу UNIX-сокета;\n"
 "    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання)."
 
-#: socket.cpp:573 socket.cpp:580
-msgid "/prm/cfg/q_ln"
-msgstr ""
-
-#: socket.cpp:573
-msgid "Queue length"
-msgstr "Довжина черги"
-
-#: socket.cpp:573 socket.cpp:574 socket.cpp:575 socket.cpp:818
-msgid "dec"
-msgstr ""
-
-#: socket.cpp:573 socket.cpp:574
-msgid "Used for TCP and UNIX sockets."
-msgstr "Використовується для TCP та UNIX сокетів."
-
-#: socket.cpp:574 socket.cpp:585
-msgid "/prm/cfg/cl_n"
-msgstr ""
-
-#: socket.cpp:574
-msgid "Clients maximum"
-msgstr "Максимум клієнтів"
-
-#: socket.cpp:575 socket.cpp:590
-msgid "/prm/cfg/bf_ln"
-msgstr ""
-
-#: socket.cpp:575
-msgid "Input buffer (kbyte)"
-msgstr "Вхідний буфер (кбайт)"
-
-#: socket.cpp:583 socket.cpp:588 socket.cpp:593 socket.cpp:827
-msgid "set"
-msgstr ""
-
-#: socket.cpp:603
-msgid "TCP:localhost:10002"
+#: socket.cpp:616 socket.cpp:626
+msgid "/prm/cfg/qLn"
 msgstr ""
 
 #: socket.cpp:616
+msgid "Queue length"
+msgstr "Довжина черги"
+
+#: socket.cpp:616 socket.cpp:617 socket.cpp:618 socket.cpp:619 socket.cpp:620
+#: socket.cpp:621 socket.cpp:880
+msgid "dec"
+msgstr ""
+
+#: socket.cpp:616 socket.cpp:617
+msgid "Used for TCP and UNIX sockets."
+msgstr "Використовується для TCP та UNIX сокетів."
+
+#: socket.cpp:617 socket.cpp:631
+msgid "/prm/cfg/clMax"
+msgstr ""
+
+#: socket.cpp:617
+msgid "Clients maximum"
+msgstr "Максимум клієнтів"
+
+#: socket.cpp:618 socket.cpp:636
+msgid "/prm/cfg/bfLn"
+msgstr ""
+
+#: socket.cpp:618
+msgid "Input buffer (kbyte)"
+msgstr "Вхідний буфер (кбайт)"
+
+#: socket.cpp:619 socket.cpp:641
+msgid "/prm/cfg/keepAliveCon"
+msgstr ""
+
+#: socket.cpp:619
+msgid "Keep alive connections"
+msgstr "Keep alive з'єднань"
+
+#: socket.cpp:620 socket.cpp:646
+msgid "/prm/cfg/keepAliveTm"
+msgstr ""
+
+#: socket.cpp:620
+msgid "Keep alive timeout (s)"
+msgstr "Keep alive час очікування (с)"
+
+#: socket.cpp:621 socket.cpp:651
+msgid "/prm/cfg/taskPrior"
+msgstr ""
+
+#: socket.cpp:621
+msgid "Priority"
+msgstr "Пріорітет"
+
+#: socket.cpp:629 socket.cpp:634 socket.cpp:639 socket.cpp:644 socket.cpp:649
+#: socket.cpp:654 socket.cpp:889
+msgid "set"
+msgstr ""
+
+#: socket.cpp:664
+msgid "TCP:localhost:10002"
+msgstr ""
+
+#: socket.cpp:677
 #, c-format
 msgid "Traffic in %.4g kb, out %.4g kb."
 msgstr "Трафік вхідний %.4g кб, вихідний %.4g кб."
 
-#: socket.cpp:640
+#: socket.cpp:701
 #, c-format
 msgid "Type socket <%s> error!"
 msgstr "Помилка у типу <%s> сокету!"
 
-#: socket.cpp:667
+#: socket.cpp:728
 #, c-format
 msgid "Error creation TCP socket: %s!"
 msgstr "Помилка створення TCP сокету: %s!"
 
-#: socket.cpp:674
+#: socket.cpp:735
 #, c-format
 msgid "Error creation UDP socket: %s!"
 msgstr "Помилка створення UDP сокету: %s!"
 
-#: socket.cpp:694
+#: socket.cpp:755
 #, c-format
 msgid "Connect to Internet socket error: %s!"
 msgstr "Помилка підключення до Internet сокету: %s!"
 
-#: socket.cpp:722
+#: socket.cpp:783
 #, c-format
 msgid "Error creation UNIX socket: %s!"
 msgstr "Помилка створення UNIX сокету: %s!"
 
-#: socket.cpp:727
+#: socket.cpp:788
 #, c-format
 msgid "Connect to UNIX error: %s!"
 msgstr "Помилка підключення до UNIX сокету: %s!"
 
-#: socket.cpp:759
+#: socket.cpp:821
 msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
-#: socket.cpp:762
+#: socket.cpp:824
 #, c-format
 msgid "Read reply error: %s"
 msgstr "Помилка читання відповіді: %s"
 
-#: socket.cpp:787
+#: socket.cpp:849
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
-#: socket.cpp:788
+#: socket.cpp:850
 msgid "Socket error!"
 msgstr "Помилка сокету!"
 
-#: socket.cpp:809
+#: socket.cpp:871
 msgid ""
 "Socket's output transport has address format:\n"
 "  TCP:[addr]:[port] - TCP socket:\n"
@@ -454,7 +484,7 @@ msgstr ""
 "  UNIX:[name] - UNIX сокет:\n"
 "    name - Ім'я файлу UNIX-сокету."
 
-#: socket.cpp:818 socket.cpp:824
+#: socket.cpp:880 socket.cpp:886
 msgid "/prm/cfg/tmOut"
 msgstr ""
 

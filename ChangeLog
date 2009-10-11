@@ -1,3 +1,18 @@
+2009-10-11 Roman
+- FIX:SYS: RPMs build spec-file for multiple modules is fixed.
+- !!:DAQ.BlockCalc: Ordering into blocks calc is added.
+- FIX:DAQ.ICP_DAS: Module's I-8042W inputs inversion is added.
+- !!:DAQ.JavaLikeCalc: Fields setting for controller's parametrs is expanded.
+- FIX:Special.FLibComplex1, Special.FLibMath, Special.FLibSYS: Functions is enabled in time module enabling.
+- !!!:Transport.Sockets: Keep-alive limits is added. Priority set is added for transport's tasks.
+- FIX:UI.VCAEngine: The attribute "docAMess" of primitive "Document" processing is fixed.
+- !!:UI.Vision, UI.WebVision: Full support the alarms is finished for primitive "Protocol".
+- UI.Vision: Vertical scroll position saving is added for primitive "Document".
+- FIX:UI.Vision: Collumns and rows resizing is fixed for primitive "Protocol".
+- FIX:UI.Vision, UI.WebVision: Direct light border making is disable for primitive "Box". Use for this script.
+- !!!!:/DOC: OpenSCADA manual documents and API document is updated and release 0.6.4 preview is added. Old version's previews is deleted.
+
+
 2009-10-05 Roman
 - Archive.Alarm: All allarms list processing is added by set begin and end request time equal.
 - UI.VCAEngine, UI.Vision, UI.WebVision: The property "headVis" is added to primitive "Protocol".

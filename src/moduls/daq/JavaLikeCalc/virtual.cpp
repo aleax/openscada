@@ -105,7 +105,7 @@ void TipContr::postEnable( int flag )
 
     //> Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("FLD",_("Data fields(Sep - ';')"),TFld::String,TCfg::NoVal,"50") );
+    tpPrmAt(t_prm).fldAdd( new TFld("FLD",_("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300") );
 
     //> Lib's db structure
     lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
@@ -752,8 +752,69 @@ void Prm::enable()
 {
     if( enableStat() )  return;
 
+    //> Check and delete no used fields
+    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
+    {
+	string fel;
+	for( int io_off = 0; (fel=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
+	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
+	if( fel.empty() )
+	{
+	    try{ v_el.fldDel(i_fld); i_fld--; }
+	    catch(TError err)
+	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	}
+    }
+
+    //> Init elements
+    vector<string> pls;
+    int io;
+    string mio, ionm, aid, anm, def;
+    for( int io_off = 0; (mio=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
+    {
+	ionm   = TSYS::strSepParse(mio,0,':');
+	aid    = TSYS::strSepParse(mio,1,':');
+	anm    = TSYS::strSepParse(mio,2,':');
+	if( aid.empty() ) aid = ionm;
+
+	int	io_id = ((Contr &)owner()).ioId(ionm);
+	if( io_id < 0 )	continue;
+
+	unsigned	flg = TVal::DirWrite|TVal::DirRead;
+	TFld::Type	tp  = TFld::String;
+	switch( ((Contr &)owner()).ioType(io_id) )
+	{
+	    case IO::String:	tp = TFld::String; def = EVAL_STR;			break;
+	    case IO::Integer:	tp = TFld::Integer; def = TSYS::int2str(EVAL_INT);	break;
+	    case IO::Real:	tp = TFld::Real; def = TSYS::real2str(EVAL_REAL);	break;
+	    case IO::Boolean:	tp = TFld::Boolean; def = TSYS::int2str(EVAL_BOOL);	break;
+	}
+	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
+	{
+	    if( v_el.fldPresent(aid) ) v_el.fldDel(v_el.fldId(aid));
+	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg,"",def.c_str()) );
+	}
+
+	int el_id = v_el.fldId(aid);
+	v_el.fldAt(el_id).setDescr( anm.empty() ? ((Contr &)owner()).func()->io(io_id)->name() : anm );
+	v_el.fldAt(el_id).setReserve( ionm );
+    
+	pls.push_back(aid);
+    }
+
+    //> Check and delete no used attrs
+    for( int i_fld = 0; i_fld < v_el.fldSize(); i_fld++ )
+    {
+	int i_p;
+	for( i_p = 0; i_p < pls.size(); i_p++ )
+	    if( pls[i_p] == v_el.fldAt(i_fld).name() )  break;
+	if( i_p < pls.size() )  continue;
+	try{ v_el.fldDel(i_fld); i_fld--; }
+	catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }
+
     //- Init elements -
-    string dfld;
+    /*string dfld;
     for( int fld_off = 0; (dfld=TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
     {
 	unsigned	flg = TVal::DirWrite|TVal::DirRead;
@@ -787,7 +848,7 @@ void Prm::enable()
 	for( int fld_off = 0; (fel = TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
 	    if( fel == v_el.fldAt(i_fld).name() ) break;
 	if( fel.empty() )	{ v_el.fldDel(i_fld); i_fld--; }
-    }
+    }*/
 
     TParamContr::enable();
 }
@@ -818,7 +879,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
     //> Direct write
     try
     {
-	int io_id = ((Contr &)owner()).ioId(val.name());
+	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
 	if( io_id < 0 ) disable();
 	else
 	{
@@ -853,7 +914,7 @@ void Prm::vlGet( TVal &val )
     if( owner().redntUse( ) ) return;
     try
     {
-	int io_id = ((Contr &)owner()).ioId(val.name());
+	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
 	if( io_id < 0 ) disable();
 	else
 	{
@@ -879,4 +940,23 @@ void Prm::vlArchMake( TVal &val )
     val.arch().at().setPeriod( owner().period() ? owner().period()/1e3 : 1000000 );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
+}
+
+void Prm::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if( opt->name() == "info" )
+    {
+	TParamContr::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),0664,"root","root",1,
+	    "help",_("Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
+	    "Where:\n"
+	    "  io - calc function's IO;\n"
+	    "  aid - created attribute identifier;\n"
+	    "  anm - created attribute name.\n"
+	    "If 'aid' or 'anm' are not set they will be generated from selected function's IO."));
+	return;
+    }
+    //Process command to page
+    TParamContr::cntrCmdProc(opt);
 }

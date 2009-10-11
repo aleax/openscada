@@ -126,6 +126,12 @@ void Lib::postEnable( int flag )
 
     reg( new floatSplitWord() );
     reg( new floatMergeWord() );
+
+    //> Enable functions
+    vector<string> lst;
+    list(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+	at(lst[i_l]).at().setStart(true);
 }
 
 void Lib::modStart( )

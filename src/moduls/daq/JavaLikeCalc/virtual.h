@@ -89,6 +89,10 @@ class Prm : public TParamContr
 
 	Contr &owner( );
 
+    protected:
+	//Protected methods
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Methods
 	void postEnable( int flag );

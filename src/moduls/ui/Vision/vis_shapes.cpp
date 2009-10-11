@@ -2615,14 +2615,22 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		arhBeg		= shD->arhBeg,
 		arhEnd		= shD->arhEnd;
     bool	toUp = false,
-		isDtChang = false;
+		isDtChang = false,
+		newFill = false;
 
     //> Check table structure
+    //> Clear collumns
+    for( int ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++ )
+	if( shD->col.find(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString().toAscii().data()) == string::npos )
+	{
+	    shD->addrWdg->removeColumn(ncl);
+	    ncl--;
+	    newFill = true;
+	}
+
     //> Get collumns indexes
     int c_tm = -1, c_tmu = -1, c_lev = -1, c_cat = -1, c_mess = -1;
-
     shD->addrWdg->verticalHeader()->setVisible(false);
-
     string clm;
     for( int c_off = 0; (clm=TSYS::strSepParse(shD->col,0,';',&c_off)).size(); )
     {
@@ -2644,32 +2652,39 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->addrWdg->setHorizontalHeaderItem(ncl,new QTableWidgetItem());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setText(clmNm.c_str());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::UserRole,clm.c_str());
+	newFill = true;
     }
 
-    //> Clear loaded data
-    if( full )
-    {
-	shD->messList.clear();
-	arhBeg = arhEnd = 0;
-    }
+    newFill = newFill || !shD->messList.size();
 
-    //> Get archive parameters
-    if( !arhBeg || !arhEnd || tTime > arhEnd )
+    if( shD->lev < 0 ) shD->messList.clear();
+    else
     {
-	XMLNode req("info");
-	req.setAttr("arch",shD->arch)->setAttr("path","/Archive/%2fserv%2fmess");
-	if( w->cntrIfCmd(req,true) )	arhBeg = arhEnd = 0;
-	else
+	//> Clear loaded data
+	if( full )
 	{
-	    arhBeg = strtoul(req.attr("beg").c_str(),0,10);
-	    arhEnd = strtoul(req.attr("end").c_str(),0,10);
+	    shD->messList.clear();
+	    arhBeg = arhEnd = 0;
 	}
-    }
-    if( !arhBeg || !arhEnd )	return;
 
-    //> Correct request to archive border
-    tTime     = vmin(tTime,arhEnd);
-    tTimeGrnd = vmax(tTimeGrnd,arhBeg);
+	//> Get archive parameters
+	if( !arhBeg || !arhEnd || tTime > arhEnd )
+	{
+	    XMLNode req("info");
+	    req.setAttr("arch",shD->arch)->setAttr("path","/Archive/%2fserv%2fmess");
+	    if( w->cntrIfCmd(req,true) )	arhBeg = arhEnd = 0;
+	    else
+	    {
+		arhBeg = strtoul(req.attr("beg").c_str(),0,10);
+		arhEnd = strtoul(req.attr("end").c_str(),0,10);
+	    }
+	}
+	if( !arhBeg || !arhEnd )	return;
+
+	//> Correct request to archive border
+	tTime     = vmin(tTime,arhEnd);
+	tTimeGrnd = vmax(tTimeGrnd,arhBeg);
+    }
 
     //> Clear data at time error
     unsigned int valEnd = 0, valBeg = 0;
@@ -2697,9 +2712,9 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	setAttr("tm",TSYS::ll2str(tTime))->
 	setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	setAttr("cat",shD->tmpl)->
-	setAttr("lev",TSYS::uint2str(shD->lev));
+	setAttr("lev",TSYS::int2str(shD->lev));
     if( w->cntrIfCmd(req,true) )	return;
-    bool newFill = !shD->messList.size();
+
 
     if( toUp )
 	for( int i_req = 0; i_req < req.childSize(); i_req++ )
@@ -2821,7 +2836,9 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	int max_col_sz = vmax(w->size().width()/2,40);
 	for( int i_c = 0; i_c < shD->addrWdg->columnCount(); i_c++ )
 	    shD->addrWdg->setColumnWidth(i_c,vmin(max_col_sz,shD->addrWdg->columnWidth(i_c)));
+	shD->addrWdg->horizontalHeader()->setStretchLastSection(true);
     }
+    shD->addrWdg->resizeRowsToContents();
 }
 
 void ShapeProtocol::tracing( )
@@ -2997,6 +3014,8 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 	nodeProcess( &xproc, shD );
 
+	int scrollPos = shD->web->verticalScrollBar()->value();
+
 	shD->web->setHtml(
 	    ("<?xml version='1.0' ?>\n"
 	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -3008,6 +3027,8 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    "</head>\n"+
 	    xproc.save()+
 	    "</html>").c_str());
+
+	shD->web->verticalScrollBar()->setValue(scrollPos);
     }
 
     return true;
@@ -3305,7 +3326,7 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
 	    //> Draw focused border
-	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
+	    //if( w->hasFocus() )	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
 
 	    return true;
 	}

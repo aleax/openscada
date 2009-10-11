@@ -1172,9 +1172,12 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    XMLNode *reptN = xcur->childGet(i_c);
 	    bool docRevers = atoi(xcur->childGet(i_c)->attr("docRevers").c_str());
 
+	    int off = 0;
+	    int dACat = atoi(TSYS::strSepParse(dAMess,0,':',&off).c_str());
+	    string dATmpl = dAMess.substr(off);
+
 	    vector<TMess::SRec> mess;
-	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess,
-		TSYS::strSepParse(dAMess,1,':'), (TMess::Type)atoi(TSYS::strSepParse(dAMess,0,':').c_str()) );
+	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess, dATmpl, (TMess::Type)dACat );
 
 	    for( int i_r = 0; i_r < mess.size(); i_r++ )
 	    {

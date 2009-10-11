@@ -86,7 +86,7 @@ void Lib::postEnable( int flag )
 
     if( flag&TCntrNode::NodeRestore )	return;
 
-    //- Reg functions -
+    //> Reg functions
     reg( new DigitBlock() );
     reg( new Sum() );
     reg( new Mult() );
@@ -105,6 +105,12 @@ void Lib::postEnable( int flag )
     reg( new SumMult() );
     reg( new SumDiv() );
     reg( new Lag() );
+
+    //> Enable functions
+    vector<string> lst;
+    list(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+	at(lst[i_l]).at().setStart(true);
 }
 
 void Lib::modStart( )

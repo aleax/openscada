@@ -36,7 +36,7 @@ Block::Block( const string &iid, Contr *iown ) :
     TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(iid+"_block",NULL),
     m_enable(false), m_process(false), id_freq(-1), id_start(-1), id_stop(-1),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
-    m_func(cfg("FUNC").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd())
+    m_func(cfg("FUNC").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()), m_prior(cfg("PRIOR").getSd())
 {
     m_id = iid;
 }
@@ -321,8 +321,8 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		try { *m_lnk[iid].aprm = SYS->daq().at().at(lo1).at().at(lo2).at().at(lo3).at().vlAt(lo4); }
 		catch( TError err)
 		{
-		    if( dynamic_cast<TVal *>(&SYS->nodeAt(m_lnk[iid].lnk,0,'.').at()) )
-			*m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.');
+		    try{ *m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.'); }
+		    catch( TError err) { }
 		}
 		break;
 	}
@@ -472,6 +472,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/blck/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","90","rows","4");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/prior",_("Prior block"),0664,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/blks");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/func",_("Function"),(!func())?0664:0444,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
 		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",_("Go to function"),wFunc().empty()?0:0660,"root","root",1,"tp","lnk");
 	    }
@@ -560,6 +561,19 @@ void Block::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( toProcess() ? "1" : "0" );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setToProcess( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/blck/cfg/prior" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( prior() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setPrior( opt->text() );
+    }
+    else if( a_path == "/blck/cfg/blks" && ctrChkNode(opt) )
+    {
+	vector<string> list;
+	owner().blkList(list);
+	opt->childAdd("el")->setText("");
+	for( int i_b = 0; i_b < list.size(); i_b++ )
+	    if( list[i_b] != id() ) opt->childAdd("el")->setText(list[i_b]);
     }
     else if( a_path == "/blck/cfg/func" )
     {

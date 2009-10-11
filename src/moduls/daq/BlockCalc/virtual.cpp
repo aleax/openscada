@@ -150,6 +150,7 @@ void TipContr::postEnable( int flag )
     blk_el.fldAdd( new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75") );
     blk_el.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
     blk_el.fldAdd( new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"20") );    
 
     //IO blok's db structure
     blkio_el.fldAdd( new TFld("BLK_ID",_("Blok's ID"),TFld::String,TCfg::Key,"20") );
@@ -463,15 +464,23 @@ void Contr::blkAdd( const string &iid )
     chldAdd(m_bl,new Block( iid, this ));
 }
 
-void Contr::blkProc( const string & id, bool val )
+void Contr::blkProc( const string &id, bool val )
 {
     unsigned i_blk;
+    int ins_p = -1;
 
     ResAlloc res(hd_res,true);
-    for( i_blk = 0; i_blk < clc_blks.size(); i_blk++)
+    for( i_blk = 0; i_blk < clc_blks.size(); i_blk++ )
+    {
+	if( val && ins_p < 0 && id == clc_blks[i_blk].at().prior() ) ins_p = i_blk;
 	if( clc_blks[i_blk].at().id() == id ) break;
+    }
 
-    if( val && i_blk >= clc_blks.size() ) clc_blks.push_back(blkAt(id));
+    if( val && i_blk >= clc_blks.size() )
+    {
+	if( ins_p < 0 ) clc_blks.push_back(blkAt(id));
+	else clc_blks.insert(clc_blks.begin()+ins_p,blkAt(id));
+    }
     if( !val && i_blk < clc_blks.size() ) clc_blks.erase(clc_blks.begin()+i_blk);
 }
 

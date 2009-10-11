@@ -521,7 +521,7 @@ void TMdPrm::getVals( )
 	{
 	    ResAlloc res( owner().reqRes, true );
 	    int c_vl = DI_16(modSlot);
-	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( (c_vl>>i_v)&0x01, 0, true );
+	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( !((c_vl>>i_v)&0x01), 0, true );
 	    c_vl = DO_16_RB(modSlot);
 	    for( int o_v = 0; o_v < 16; o_v++ ) vlAt(TSYS::strMess("o%d",o_v)).at().setB( (c_vl>>o_v)&0x01, 0, true );
 	    break;

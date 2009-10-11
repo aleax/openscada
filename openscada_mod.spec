@@ -2,7 +2,7 @@
 Summary: Open SCADA system project
 Name: openscada
 Version: 0.6.4
-Release: alt0.20
+Release: 1
 Source: openscada-%version.tar.gz
 License: GPLv2
 Group: Applications/Engineering
@@ -805,6 +805,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_iconsdir/openscada_demo.png
 /var/spool/openscada/DEMO/*.db
 
+%files plc
+
+%files server
+
+%files visStation
+
 #===== DB subsystem modules ======
 %if_enabled DBF
 %files DB.DBF
@@ -963,7 +969,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 %if_enabled QTStarter
 %files UI.QTStarter
-%_libdir/oepenscada/ui_QTStarter.so
+%_libdir/openscada/ui_QTStarter.so
 %_datadir/locale/*/LC_MESSAGES/oscd_QTStarter.mo
 %endif
 

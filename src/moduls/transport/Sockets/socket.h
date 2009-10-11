@@ -83,16 +83,27 @@ class TSocketIn: public TTransportIn
 
 	string getStatus( );
 
-	int maxQueue( )		{ return max_queue; }
+	int maxQueue( )		{ return mMaxQueue; }
 	int maxFork( )		{ return mMaxFork; }
 	int bufLen( )		{ return mBufLen; }
+	int keepAliveCon( )	{ return mKeepAliveCon; }
+	int keepAliveTm( )	{ return mKeepAliveTm; }
+	int taskPrior( )	{ return mTaskPrior; }
 
-	void setMaxQueue( int vl )	{ max_queue = vl; modif(); }
+	void setMaxQueue( int vl )	{ mMaxQueue = vl; modif(); }
 	void setMaxFork( int vl )	{ mMaxFork = vl; modif(); }
 	void setBufLen( int vl )	{ mBufLen = vl; modif(); }
+	void setKeepAliveCon( int vl )	{ mKeepAliveCon = vl; modif(); }
+	void setKeepAliveTm( int vl )	{ mKeepAliveTm = vl; modif(); }
+	void setTaskPrior( int vl )	{ mTaskPrior = vmax(0,vmin(100,vl)); modif(); }
 
 	void start( );
 	void stop( );
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
 
     private:
 	//Methods
@@ -114,15 +125,20 @@ class TSocketIn: public TTransportIn
 	bool		endrun;			// Command for stop task
 	bool		endrun_cl;		// Command for stop client tasks
 
-	int		&max_queue;		// max queue for TCP, UNIX sockets
-	int		&mMaxFork;		// maximum forking (opened sockets)
-	int		&mBufLen;		// input buffer length
+	string		&mAPrms;		// Addon parameters
 
 	int		type;			// socket's types
 	string		path;			// path to file socket for UNIX socket
 	string		host;			// host for TCP/UDP sockets
 	string		port;			// port for TCP/UDP sockets
 	int		mode;			// mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
+
+	int		mMaxQueue,		// max queue for TCP, UNIX sockets
+			mMaxFork,		// maximum forking (opened sockets)
+			mBufLen,		// input buffer length
+			mKeepAliveCon,		// KeepAlive connections
+			mKeepAliveTm,		// KeepAlive timeout
+			mTaskPrior;		// Requests processing task prioritet
 
 	bool		cl_free;		// Clients stoped
 	vector<SSockCl>	cl_id;			// Client's pids

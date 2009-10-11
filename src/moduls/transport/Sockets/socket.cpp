@@ -100,10 +100,7 @@ void TTransSock::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//> Add self DB-fields to input transport
-	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
-	owner().inEl().fldAdd( new TFld("MaxClients",_("Maximum clients process"),TFld::Integer,0,"3","10") );
-	owner().inEl().fldAdd( new TFld("SocketsMaxQueue",_("Maximum queue of input socket"),TFld::Integer,0,"2","10") );
+	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"1000") );
 
 	//> Add self DB-fields to output transport
 	owner().outEl().fldAdd( new TFld("TMS",_("Timeout (ms)"),TFld::String,0,"30") );
@@ -174,8 +171,9 @@ void TTransSock::cntrCmdProc( XMLNode *opt )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), cl_free(true), max_queue(cfg("SocketsMaxQueue").getId()),
-    mMaxFork(cfg("MaxClients").getId()), mBufLen(cfg("BufLen").getId())
+    TTransportIn(name,idb,el), cl_free(true),
+    mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0),
+    mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("TCP:localhost:10002:0");
 }
@@ -196,17 +194,49 @@ string TSocketIn::getStatus( )
     return rez;
 }
 
+void TSocketIn::load_( )
+{
+    TTransportIn::load_();
+
+    try
+    {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(mAPrms);
+	vl = prmNd.attr("MaxQueue");	if( !vl.empty() ) mMaxQueue = atoi(vl.c_str());
+	vl = prmNd.attr("MaxClients");	if( !vl.empty() ) mMaxFork = atoi(vl.c_str());
+	vl = prmNd.attr("BufLen");	if( !vl.empty() ) mBufLen = atoi(vl.c_str());
+	vl = prmNd.attr("KeepAliveCnt");if( !vl.empty() ) mKeepAliveCon = atoi(vl.c_str());
+	vl = prmNd.attr("KeepAliveTm");	if( !vl.empty() ) mKeepAliveTm = atoi(vl.c_str());
+	vl = prmNd.attr("TaskPrior");	if( !vl.empty() ) mTaskPrior = atoi(vl.c_str());
+    } catch(...){ }
+}
+
+void TSocketIn::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("MaxQueue",TSYS::int2str(mMaxQueue));
+    prmNd.setAttr("MaxClients",TSYS::int2str(mMaxFork));
+    prmNd.setAttr("BufLen",TSYS::int2str(mBufLen));
+    prmNd.setAttr("KeepAliveCnt",TSYS::int2str(mKeepAliveCon));
+    prmNd.setAttr("KeepAliveTm",TSYS::int2str(mKeepAliveTm));
+    prmNd.setAttr("TaskPrior",TSYS::int2str(mTaskPrior));
+    mAPrms = prmNd.save(XMLNode::BrAllPast);
+
+    TTransportIn::save_();
+}
+
 void TSocketIn::start()
 {
     pthread_attr_t pthr_attr;
 
     if( run_st ) return;
 
-    //- Status clear -
+    //> Status clear
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
-    //- Socket init -
+    //> Socket init
     string s_type = TSYS::strSepParse(addr(),0,':');
 
     if( s_type == S_NM_TCP )
@@ -263,7 +293,7 @@ void TSocketIn::start()
 		close( sock_fd );
 		throw TError(nodePath().c_str(),_("TCP socket doesn't bind to <%s>!"),addr().c_str());
 	    }
-	    listen(sock_fd,max_queue);
+	    listen(sock_fd,mMaxQueue);
 	}
 	else if(type == SOCK_UDP )
 	{
@@ -277,7 +307,7 @@ void TSocketIn::start()
 	    {
 		shutdown( sock_fd,SHUT_RDWR );
 		close( sock_fd );
-                throw TError(nodePath().c_str(),_("UDP socket doesn't bind to <%s>!"),addr().c_str());
+		throw TError(nodePath().c_str(),_("UDP socket doesn't bind to <%s>!"),addr().c_str());
 	    }
 	}
     }
@@ -296,11 +326,14 @@ void TSocketIn::start()
 	    close( sock_fd );
             throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to <%s>!"),addr().c_str());
 	}
-	listen(sock_fd,max_queue);
+	listen(sock_fd,mMaxQueue);
     }
 
     pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    struct sched_param prior;
+    pthread_attr_setschedpolicy(&pthr_attr,(taskPrior()&&SYS->user()=="root")?SCHED_RR:SCHED_OTHER);
+    prior.__sched_priority=taskPrior();
+    pthread_attr_setschedparam(&pthr_attr,&prior);
     pthread_create(&pthr_tsk,&pthr_attr,Task,this);
     pthread_attr_destroy(&pthr_attr);
     if( TSYS::eventWait( run_st, true,nodePath()+"open",5) )
@@ -311,7 +344,7 @@ void TSocketIn::stop()
 {
     if( !run_st ) return;
 
-    //- Status clear -
+    //> Status clear
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
@@ -340,7 +373,10 @@ void *TSocketIn::Task(void *sock_in)
     pthread_t      th;
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
+    struct sched_param prior;
+    pthread_attr_setschedpolicy(&pthr_attr,(sock->taskPrior()&&SYS->user()=="root")?SCHED_RR:SCHED_OTHER);
+    prior.__sched_priority = sock->taskPrior();
+    pthread_attr_setschedparam(&pthr_attr,&prior);
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
 
     sock->run_st    = true;
@@ -435,6 +471,8 @@ void *TSocketIn::Task(void *sock_in)
 void *TSocketIn::ClTask( void *s_inf )
 {
     SSockIn &s = *(SSockIn*)s_inf;
+    int cnt = 0;		//> Requests counter
+    int tm = time(NULL);	//> Last connection time
 
 #if OSC_DEBUG >= 2
     mess_debug(s.s->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
@@ -478,9 +516,14 @@ void *TSocketIn::ClTask( void *s_inf )
 #endif
 	    r_len = write(s.cSock,answ.c_str(),answ.size()); s.s->trOut += (float)r_len/1024;
 	    answ = "";
+	    cnt++;
+	    tm = time(NULL);
 	}
 	sessOk = true;
-    }while( !s.s->endrun_cl && (!sessOk || s.s->mode || !prot_in.freeStat()) );
+    }while( !s.s->endrun_cl && (!sessOk || 
+	    ((s.s->mode || !prot_in.freeStat()) && 
+	     (!s.s->keepAliveCon() || cnt < s.s->keepAliveCon()) && 
+	     (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm())) ) );
 
     //> Close protocol on broken connection
     if( !prot_in.freeStat() )
@@ -570,27 +613,45 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:[name]:[mode] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/q_ln",_("Queue length"),0664,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0664,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),0664,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),0664,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),0664,"root","root",1,"tp","dec");
 	return;
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/q_ln" )
+    if( a_path == "/prm/cfg/qLn" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/prm/cfg/cl_n" )
+    else if( a_path == "/prm/cfg/clMax" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/prm/cfg/bf_ln" )
+    else if( a_path == "/prm/cfg/bfLn" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/prm/cfg/keepAliveCon" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(keepAliveCon()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setKeepAliveCon( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/prm/cfg/keepAliveTm" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(keepAliveTm()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setKeepAliveTm( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/prm/cfg/taskPrior" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(taskPrior()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTaskPrior( atoi(opt->text().c_str()) );
     }
     else TTransportIn::cntrCmdProc(opt);
 }

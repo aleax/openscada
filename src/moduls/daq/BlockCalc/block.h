@@ -42,7 +42,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 {
     public:
 	//Data
-	//- Link types: -
+	//> Link types:
 	// DIS   - Disable IO
 	// FREE  - Free link or constant
 	// I_LOC - Input interblocks local link
@@ -52,7 +52,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// O_GLB - Input interblocks global link
 	// O_PRM - output parameter link
 	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, O_LOC, O_GLB };
-	//- Link comands -
+	//> Link comands
 	enum LnkCmd { INIT, DEINIT, SET };
 
 	//Methods
@@ -70,6 +70,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool   process( )	{ return m_process; }
 	bool   toEnable( )	{ return m_to_en; }
 	bool   toProcess( )	{ return m_to_prc; }
+	string prior( )		{ return m_prior; }
 	string wFunc( )		{ return m_func; }
 
 	void setName( const string &name )	{ m_name = name; modif(); }
@@ -78,6 +79,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void setProcess( bool val );
 	void setToEnable( bool val )		{ m_to_en = val; modif(); }
 	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
+	void setPrior( const string &vl )	{ m_prior = vl; modif(); }
 	void setWFunc( const string &vl )	{ m_func = vl; modif(); }
 
 	//> Link IO
@@ -106,14 +108,14 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
     private:
 	//Data
-	//- Define input interblock link structure -
+	//> Define input interblock link structure
 	struct SLIBlk
 	{
 	    AutoHD<Block>	w_bl;	//Block AutoHD
 	    unsigned		w_id;	//IO index
 	};
 
-	//- Define link structures -
+	//> Define link structures
 	struct SLnk
 	{
 	    LnkT tp;			//Link type
@@ -133,7 +135,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	string 		&m_id,		//Block id
 			&m_name,	//Block name
 			&m_descr,	//Block description
-			&m_func;	//Associated function
+			&m_func,	//Associated function
+			&m_prior;	//Prior calc block
 	bool		&m_to_en, &m_to_prc;
 
 	Res		lnk_res;		//Link resource

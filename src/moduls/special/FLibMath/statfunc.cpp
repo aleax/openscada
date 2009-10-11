@@ -86,7 +86,7 @@ void Lib::postEnable( int flag )
 
     if( flag&TCntrNode::NodeRestore )	return;
 
-    //- Reg functions -
+    //> Reg functions
     reg( new MathAcos() );
     reg( new MathAsin() );
     reg( new MathAtan() );
@@ -106,6 +106,12 @@ void Lib::postEnable( int flag )
     reg( new MathFloor() );
     reg( new MathRand() );
     reg( new MathIf() );
+
+    //> Enable functions
+    vector<string> lst;
+    list(lst);
+    for( int i_l = 0; i_l < lst.size(); i_l++ )
+	at(lst[i_l]).at().setStart(true);
 }
 
 void Lib::modStart( )
