@@ -1,3 +1,10 @@
+2009-10-12 Roman 0.6.4
+- /DemoDB: Updated for new stufs.
+- /SYS: Splash image is updated.
+- /SYS: RPM build spec file is adapted for 0.6.4 building.
+- !!:/DOC: TODO and README documents is updated.
+
+
 2009-10-11 Roman
 - FIX:SYS: RPMs build spec-file for multiple modules is fixed.
 - !!:DAQ.BlockCalc: Ordering into blocks calc is added.

@@ -17,13 +17,7 @@ To do tasks of the project OpenSCADA
   * Make DB module for DBMS Oracle support.
 
 5. Subsystem “Data acquisition” (DAQ)
-  * Add functions of API of the user programming for management of controllers;
-  * Data acquisition module realisation for data transfer through DB tables of free structure.
-  * Data acquisition module realisation for data transfer through file of free structure.
   * Make data acquisition module for gathering data from OPC-servers by OPC UA.
-
-5.3. JavaLikeCalc
-  * Add massif support.
 
 6. Subsystem “Transports”
   * Make realisation of SNMP protocol's agent.
@@ -36,7 +30,6 @@ To do tasks of the project OpenSCADA
 8.1. VCAEngine
   * Develope and making the “Function” primitive.
   * Develope and making the “Link” primitive.
-  * Styles and the themes manager realisation.
 
 8.2. Vision
   * Develope and making the “Function” primitive.
@@ -54,9 +47,8 @@ To do tasks of the project OpenSCADA
 
 12. Documentation
   * Make manual for quick starting.
-  * Translate the documentations to English and Ukrainian languages:
-    * API of system;
-    * Modules documentation.
+  * Translate the documentations to English language:
+    * API of system.
 
 13. Project site
   * Add changes tracker and continued works at project tracker.
