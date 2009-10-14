@@ -617,7 +617,7 @@ VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
 void StylesStBar::setStyle( int istl, const string &nm )
 {
     mStyle = istl;
-    if( mStyle < 0 ) setText( _("No style") );
+    if( mStyle < 0 ) setText( _(" ") );
     else if( !nm.empty() ) setText( nm.c_str() );
     else
     {
@@ -636,6 +636,8 @@ bool StylesStBar::styleSel( )
     XMLNode req("get");
     req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
     mainWin()->cntrIfCmd(req);
+
+    if( req.childSize() <= 1 ) return false;
 
     InputDlg dlg( this, mainWin()->windowIcon(),_("Select your style from list."),_("Style select"),false,false);
     QLabel *lab = new QLabel(_("Style:"),&dlg);

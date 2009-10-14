@@ -217,8 +217,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 5:		//en
 	    if(!runW)	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    runW->setVisible(atoi(val.c_str()));
-	    if( shD->elType >= 0 ) shD->addrWdg->setVisible(atoi(val.c_str()));
+	    runW->setVisible( atoi(val.c_str()) && runW->permView() );
+	    if( shD->elType >= 0 ) shD->addrWdg->setVisible( atoi(val.c_str()) && runW->permView() );
 	    break;
 	case 6:		//active
 	    if(!runW)	break;
@@ -706,7 +706,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible(atoi(val.c_str()));
+	    w->setVisible( atoi(val.c_str()) && ((RunWdgView*)w)->permView() );
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
@@ -962,7 +962,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible(shD->en);
+	    w->setVisible( shD->en && ((RunWdgView*)w)->permView() );
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
@@ -1266,7 +1266,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible(shD->en);
+	    w->setVisible( shD->en && ((RunWdgView*)w)->permView() );
 	    up = true;
 	    break;
 	case 6:		//active
@@ -1376,6 +1376,16 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    make_pct = true;
 	    break;
 	}
+	case 40:	//sclVerScl
+	    if( shD->sclVerScl == atof(val.c_str()) )	break;
+	    shD->sclVerScl = atof(val.c_str());
+	    make_pct = true;
+	    break;
+	case 41:	//sclVerSclOff
+	    if( shD->sclVerSclOff == atof(val.c_str()) ) break;
+	    shD->sclVerSclOff = atof(val.c_str());
+	    make_pct = true;
+	    break;
 	default:
 	    //> Individual trend's attributes process
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
@@ -1569,6 +1579,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	}
     }
 
+    //>> Vertical scale and offset apply
+    float vsDif = vsMax - vsMin;
+    vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
+    vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+
     double vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
     {
@@ -1647,11 +1662,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    }
 	    curPos = tAr.x()+(int)((double)tAr.width()*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
 
-	    int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(curVl-vsMin)/(vsMax-vsMin));
+	    int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(curVl-vsMin)/(vsMax-vsMin))));
 	    if( prevVl == EVAL_REAL ) pnt.drawPoint(curPos,c_vpos);
 	    else
 	    {
-		int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*(prevVl-vsMin)/(vsMax-vsMin));
+		int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
 		pnt.drawLine(prevPos,c_vpos_prv,curPos,c_vpos);
 	    }
 	    prevPos = curPos;
@@ -1901,6 +1916,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else { vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
     }
 
+    //>> Vertical scale and offset apply
+    float vsDif = vsMax - vsMin;
+    vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
+    vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+
     float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
     {
@@ -2013,11 +2033,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    //Write point and line
 	    if( averVl != EVAL_REAL )
 	    {
-		int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(averVl-vsMin)/(vsMax-vsMin));
+		int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
 		if( prevVl == EVAL_REAL ) pnt.drawPoint(averPos,c_vpos);
 		else
 		{
-		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*(prevVl-vsMin)/(vsMax-vsMin));
+		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
 		    pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
 		}
 	    }
@@ -2493,7 +2513,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 5:		//en
 	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    w->setVisible((bool)atoi(val.c_str()));
+	    w->setVisible( (bool)atoi(val.c_str()) && ((RunWdgView*)w)->permView() );
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
@@ -2974,7 +2994,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 5:		//en
 	    if(!runW)	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    shD->web->setVisible(shD->en);
+	    shD->web->setVisible( shD->en && runW->permView() );
 	    break;
 	case 6:		//active
 	    if(!runW)	break;
@@ -3169,7 +3189,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
         case 5:         //en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible(shD->en);
+	    w->setVisible( shD->en && (((RunWdgView*)w)->permView() || dynamic_cast<RunPageView*>(w)) );
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) { up = false; break; }

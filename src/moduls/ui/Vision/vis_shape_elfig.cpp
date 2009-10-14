@@ -102,7 +102,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 5:		//en
 	    if( !runW )	break;
 	    elFD->en = (bool)atoi(val.c_str());
-	    w->setVisible(atoi(val.c_str()));
+	    w->setVisible( atoi(val.c_str()) && ((RunWdgView*)w)->permView() );
 	    break;
 	case 6:		//active
 	    if( !runW )	break;

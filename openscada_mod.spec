@@ -21,7 +21,6 @@ URL: http://oscada.org.ua
 %def_enable System
 %def_enable BlockCalc
 %def_enable JavaLikeCalc
-%def_enable DiamondBoards
 %def_enable LogicLev
 %def_enable SNMP
 %def_enable Siemens
@@ -29,10 +28,12 @@ URL: http://oscada.org.ua
 %def_enable DCON
 %def_enable DAQGate
 %def_enable SoundCard
-%def_enable ICP_DAS
-%ifarch x86_64
+%ifnarch %ix86
 %force_disable DiamondBoards
 %force_disable ICP_DAS
+%else
+%def_enable ICP_DAS
+%def_enable DiamondBoards
 %endif
 
 #=====  Archive modules =====
@@ -138,7 +139,7 @@ Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 %package plc
 Summary: OpenSCADA PLC.
 Group: Graphics
-Requires: %name = %version-%release %name-Archive.FSArch %name-DAQ.BlockCalc %name-DAQ.ICP_DAS %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
+Requires: %name = %version-%release %name-Archive.FSArch %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
 Requires: %name-DAQ.ModBus %name-DAQ.System %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Special.FLibComplex1
 Requires: %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.SSL %name-Transport.Serial %name-Transport.Sockets %name-UI.VCAEngine
 Requires: %name-UI.WebCfgD %name-UI.WebVision
@@ -153,9 +154,9 @@ The %name-plc package is virtual package for PLC.
 Summary: OpenSCADA server.
 Group: Graphics
 Requires: %name = %version-%release %name-DB.SQLite %name-DB.MySQL %name-DB.FireBird %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc
-Requires: %name-DAQ.DiamondBoards %name-DAQ.LogicLev %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard
-Requires: %name-DAQ.ICP_DAS %name-Archive.FSArch %name-Archive.DBArch %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.HTTP
-Requires: %name-Protocol.SelfSystem %name-UI.VCAEngine %name-UI.WebCfg %name-WebCfgD %name-UI.WebVision %name-Special.FLibComplex1 %name Special.FLibMath
+Requires: %name-DAQ.LogicLev %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard
+Requires: %name-Archive.FSArch %name-Archive.DBArch %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.HTTP
+Requires: %name-Protocol.SelfSystem %name-UI.VCAEngine %name-UI.WebCfg %name-UI.WebCfgD %name-UI.WebVision %name-Special.FLibComplex1 %name-Special.FLibMath
 Requires: %name-Special.FLibSYS
 %description server
 The %name-server package is virtual package for SCADA-server.

@@ -346,8 +346,8 @@ class ShapeDiagram : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), geomMargin(0), tTime(0), tPict(0), curTime(0),
-		    tTimeCurent(false), trcPer(0), holdCur(true)	{ }
+		ShpDt( ) : en(true), active(true), geomMargin(0), tTime(0), tPict(0), curTime(0), 
+		    sclVerScl(100), sclVerSclOff(0), tTimeCurent(false), trcPer(0), holdCur(true)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
@@ -370,6 +370,7 @@ class ShapeDiagram : public WdgShape
 		long long	tTime, tPict, curTime;
 		float		tSize;
 		float		fftBeg, fftEnd;
+		float		sclVerScl, sclVerSclOff;
 		string		valArch;
 	};
 

@@ -424,7 +424,7 @@ function makeEl( pgBr, inclPg )
   var elBorder = 0;
   if( this.attrs['bordWidth'] ) elBorder=parseInt(this.attrs['bordWidth']);
   var elStyle = '';
-  if( !parseInt(this.attrs['en']) ) elStyle+='visibility : hidden; ';
+  if( !(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEQ_RD)) ) elStyle+='visibility : hidden; ';
   var geomX = parseFloat(this.attrs['geomX']);
   var geomY = parseFloat(this.attrs['geomY']);
   if( this.pg ) geomX = geomY = 0;
@@ -510,13 +510,10 @@ function makeEl( pgBr, inclPg )
   {
     if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
     if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-    //if( parseInt(this.attrs['focus']) ) elStyle+='border-style: ridge; border-width: 2px; border-color: white; ';
-    //else 
-    //{
-      elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-      if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
-      switch( parseInt(this.attrs['bordStyle']) )
-      {
+     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+     if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
+     switch( parseInt(this.attrs['bordStyle']) )
+     {
 	case 1: elStyle+='border-style: dotted; '; break;
 	case 2: elStyle+='border-style: dashed; '; break;
 	case 3: elStyle+='border-style: solid; ';  break;
@@ -525,8 +522,7 @@ function makeEl( pgBr, inclPg )
 	case 6: elStyle+='border-style: ridge; ';  break;
 	case 7: elStyle+='border-style: inset; ';  break;
 	case 8: elStyle+='border-style: outset; '; break;
-      }
-    //}
+    }
     if( !this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)) )
     {
       if( this.inclOpen )

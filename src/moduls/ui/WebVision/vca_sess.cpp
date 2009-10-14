@@ -4710,7 +4710,8 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 //*************************************************
 //* VCADiagram                                    *
 //*************************************************
-VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), tTimeCurent(false), tTime(0), lstTrc(false), type(0)
+VCADiagram::VCADiagram( const string &iid ) : 
+    VCAObj(iid), tTimeCurent(false), tTime(0), lstTrc(false), type(0), sclVerScl(100), sclVerSclOff(0)
 {
 
 }
@@ -4981,6 +4982,11 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	else { vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
     }
 
+    //>> Vertical scale and offset apply
+    float vsDif = vsMax - vsMin;
+    vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
+    vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+
     float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
     {
@@ -5084,11 +5090,11 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //Write point and line
 	    if( averVl != EVAL_REAL )
 	    {
-		int c_vpos = tArY+tArH-(int)((double)tArH*(averVl-vsMin)/(vsMax-vsMin));
+		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
 		gdImageSetPixel(im,averPos,c_vpos,clr_t);
 		if( prevVl != EVAL_REAL )
 		{
-		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*(prevVl-vsMin)/(vsMax-vsMin));
+		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
 		    gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
 		}
 	    }
@@ -5274,6 +5280,11 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	}
     }
 
+    //>> Vertical scale and offset apply
+    float vsDif = vsMax - vsMin;
+    vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
+    vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+
     double vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
     {
@@ -5343,11 +5354,11 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    }
 	    curPos = tArX+(int)((double)tArW*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
 
-	    int c_vpos = tArY+tArH-(int)((double)tArH*(curVl-vsMin)/(vsMax-vsMin));
+	    int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(curVl-vsMin)/(vsMax-vsMin))));
 	    if( prevVl == EVAL_REAL ) gdImageSetPixel(im,curPos,c_vpos,clr_t);
 	    else
 	    {
-		int c_vpos_prv = tArY+tArH-(int)((double)tArH*(prevVl-vsMin)/(vsMax-vsMin));
+		int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
 		gdImageLine(im,prevPos,c_vpos_prv,curPos,c_vpos,clr_t);
 	    }
 	    prevPos = curPos;
@@ -5495,7 +5506,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		break;
 	    }
 	    case 38:	//valArch
-		valArch == req_el->text();
+		valArch = req_el->text();
 		reld_tr_dt = 2;
 		break;
 	    case 39:	//parNum
@@ -5506,6 +5517,14 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		while( parNum > trnds.size() )	trnds.push_back( TrendObj(this) );
 		break;
 	    }
+	    case 40:        //sclVerScl
+		if( sclVerScl == atof(req_el->text().c_str()) )		break;
+		sclVerScl = atof(req_el->text().c_str());
+		break;
+	    case 41:        //sclVerSclOff
+		if( sclVerSclOff == atof(req_el->text().c_str()) )	break;
+		sclVerSclOff = atof(req_el->text().c_str());
+		break;
 	    default:
 		//- Individual trend's attributes process -
 		if( uiPrmPos >= 50 && uiPrmPos < 150 )

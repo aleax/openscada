@@ -133,7 +133,9 @@ class Contr: public TController, public TValFunc
 	void disable_( );
 	void start_( );
 	void stop_( );
-	void loadFunc( );
+	void loadFunc( bool onlyVl = false );
+
+	void postIOCfgChange( );
 
 	TParamContr *ParamAttach( const string &name, int type );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

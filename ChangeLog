@@ -1,7 +1,18 @@
+2009-10-14 Roman
+- SYS: RPM-build spec-files is fixed and adapted for build version 0.6.4.
+- FIX:DAQ.BlockCalc: Ordering blocks calc mechanism is fixed and expanded.
+- FIX:DAQ.JavaLikeCalc: Type casting for second argument is fixed if first argument is Object's function result.
+    The controller function's IO values restoring is fixed after IO configuration changing.
+- UI.QTCfg: Eval display is added for digital values.
+- !!:UI.VCAEngine, UI.Vision, UI.WebVision: Full diagramm scaling support is added.
+- FIX:UI.Vision, UI.WebVision: Hide widgets on view permission absence is fixed.
+- UI.Vision: Hide "No style" messages in RunTime.
+
+
 2009-10-12 Roman 0.6.4
-- /DemoDB: Updated for new stufs.
-- /SYS: Splash image is updated.
-- /SYS: RPM build spec file is adapted for 0.6.4 building.
+- DemoDB: Updated for new stufs.
+- SYS: Splash image is updated.
+- SYS: RPM build spec file is adapted for 0.6.4 building.
 - !!:/DOC: TODO and README documents is updated.
 
 

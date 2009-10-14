@@ -1473,13 +1473,15 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    {
 		val_w->setToolTip(t_s.attr("help").c_str());
 		val_w->blockSignals(true);
-		val_w->setChecked(atoi(data_req.text().c_str()));
+		if( data_req.text() == "<EVAL>" ) val_w->setCheckState(Qt::PartiallyChecked);
+		else if( atoi(data_req.text().c_str()) ) val_w->setCheckState(Qt::Checked);
+		else val_w->setCheckState(Qt::Unchecked);
 		val_w->blockSignals(false);
 	    }
 	    if( val_r )
 	    {
 		val_r->setToolTip(t_s.attr("help").c_str());
-		val_r->setText((string("<b>")+(atoi(data_req.text().c_str())?_("On"):_("Off"))+string("</b>")).c_str());
+		val_r->setText((string("<b>")+((data_req.text() == "<EVAL>")?_("<EVAL>"):(atoi(data_req.text().c_str())?_("On"):_("Off")))+string("</b>")).c_str());
 	    }
 	}
 	//> View edit fields

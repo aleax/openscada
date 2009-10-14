@@ -222,6 +222,7 @@ class VCADiagram : public VCAObj
 	long long	tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
 	float		tSize;			//Trend size (s)
 	float		fftBeg, fftEnd;
+	float		sclVerScl, sclVerSclOff;
 	int		curColor, 		//Cursor line color
 			sclColor,		//Scale grid color
 			sclMarkColor,		//Scale markers color

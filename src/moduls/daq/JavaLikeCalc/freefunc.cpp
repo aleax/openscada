@@ -715,7 +715,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     op1 = cdMvi( op1 );
     Reg::Type op1_tp = op1->vType(this);
     int op1_pos = op1->pos();
-    op2 = cdTypeConv(op2,op1_tp);
+    if( !op1->lockType() ) op2 = cdTypeConv(op2,op1_tp);
+    else if( op2->pos() < 0 ) op2 = cdMvi( op2 );    
     int op2_pos = op2->pos();
     op1->free();
     op2->free();
@@ -1017,6 +1018,8 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
 
     for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
     { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+
+    rez->setLockType(true);
 
     return rez;
 }
@@ -1684,7 +1687,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) == getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'\n"));
 		    }
 		else
 		{
@@ -1696,7 +1699,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[*(uint16_t*)(cprg+1)] = op1.getS() == getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'\n"));
 		    }
 		}
 		cprg+=7; break;
@@ -2180,7 +2183,7 @@ void Reg::free()
     if( lock() ) return;
 
     setType(Free);
-    mObjEl = mLock = false;
+    mObjEl = mLock = mLockType = false;
 }
 
 //*************************************************

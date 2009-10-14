@@ -150,7 +150,7 @@ void TipContr::postEnable( int flag )
     blk_el.fldAdd( new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75") );
     blk_el.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
     blk_el.fldAdd( new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"20") );    
+    blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200") );    
 
     //IO blok's db structure
     blkio_el.fldAdd( new TFld("BLK_ID",_("Blok's ID"),TFld::String,TCfg::Key,"20") );
@@ -353,7 +353,7 @@ void Contr::start_( )
 
 void Contr::stop_( )
 {
-    //- Stop the request and calc data task -
+    //> Stop the request and calc data task
     if( prc_st )
     {
 	endrun_req = true;
@@ -363,7 +363,7 @@ void Contr::stop_( )
 	pthread_join( calcPthr, NULL );
     }
 
-    //- Make deprocess all blocks -
+    //> Make deprocess all blocks
     vector<string> lst;
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
@@ -472,15 +472,19 @@ void Contr::blkProc( const string &id, bool val )
     ResAlloc res(hd_res,true);
     for( i_blk = 0; i_blk < clc_blks.size(); i_blk++ )
     {
-	if( val && ins_p < 0 && id == clc_blks[i_blk].at().prior() ) ins_p = i_blk;
+	//> Check for previous set
+	if( val && ins_p < 0 && !clc_blks[i_blk].at().prior().empty() )
+	{
+	    string pvl;
+	    for( int off = 0; (pvl=TSYS::strSepParse(clc_blks[i_blk].at().prior(),0,';',&off)).size(); )
+		if( id == pvl ) { ins_p = i_blk; break; }
+	}
+
 	if( clc_blks[i_blk].at().id() == id ) break;
     }
 
     if( val && i_blk >= clc_blks.size() )
-    {
-	if( ins_p < 0 ) clc_blks.push_back(blkAt(id));
-	else clc_blks.insert(clc_blks.begin()+ins_p,blkAt(id));
-    }
+	clc_blks.insert(clc_blks.begin()+((ins_p<0)?0:ins_p),blkAt(id));
     if( !val && i_blk < clc_blks.size() ) clc_blks.erase(clc_blks.begin()+i_blk);
 }
 
@@ -655,6 +659,9 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
 	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
 	if( io_id < 0 ) disable();
 	else
+	{
+	    ResAlloc sres(owner().res(),false);
+	    if( !blk.at().prior().empty() ) sres.request(true);
 	    switch(val.fld().type())
 	    {
 		case TFld::String:	blk.at().setS(io_id,val.getS(0,true));	break;
@@ -662,6 +669,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
 		case TFld::Real:	blk.at().setR(io_id,val.getR(0,true));	break;
 		case TFld::Boolean:	blk.at().setB(io_id,val.getB(0,true));	break;
 	    }
+	}
     }catch(TError err) { disable(); }
 }
 
