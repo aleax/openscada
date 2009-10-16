@@ -404,6 +404,24 @@ int Func::regGet( const string &nm )
     return -1;
 }
 
+int Func::ioGet( const string &nm )
+{
+    int rez = -1;
+
+    //> Check IO
+    for( int i_io = 0; i_io < ioSize(); i_io++ )
+	if( io(i_io)->id() == nm )
+	{
+	    rez = regNew(true);
+	    Reg *rg = regAt(rez);
+	    rg->setName(nm);
+	    rg->setVar(i_io);
+	    rg->setLock(true);
+	    break;
+	}
+    return rez;
+}
+
 void Func::regClear( )
 {
     for( int i_rg = 0; i_rg < mRegs.size(); i_rg++ )

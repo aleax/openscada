@@ -1,6 +1,7 @@
 2009-10-16 Roman
 - FIX:UI.Vision: Rule mouse events to underlie widgets is made.
 - UI.Vision, UI.WebVision: Automatic cancel, after five second, is added for edited line of primitive "FormEl".
+- !!:FIX:DAQ.JavaLikeCalc: Using functions for parameters from function's IO is fixed for first using time.
 
 
 2009-10-14 Roman

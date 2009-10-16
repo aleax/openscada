@@ -522,12 +522,11 @@ retry:
 	    }
 
 	    //>> Check for object's functions and system object's function
-	    int off = 0;
-	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)))) || 
-		(yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(smb_nm.substr(0,off-1)))) )
+	    string sel = TSYS::strSepParse(smb_nm,0,'.');
+	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(sel))) )
 	    {
-		pos -= (smb_nm.size()-off+1);
-		yylloc.last_column -= (smb_nm.size()-off-1);
+		pos -= (smb_nm.size()-sel.size());
+		yylloc.last_column -= (smb_nm.size()-sel.size());
 		return VAR;
 	    }
 
@@ -560,12 +559,11 @@ retry:
 	    }catch(...){ }
 
 	    //>> Check for object's parameters
-	    int off = 0;
-	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(TSYS::strSepParse(smb_nm,0,'.',&off)))) ||
-		(yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(smb_nm.substr(0,off-1)))) )
+	    string sel = TSYS::strSepParse(smb_nm,0,'.');
+	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(sel))) )
 	    {
-		pos -= (smb_nm.size()-off+1);
-		yylloc.last_column -= (smb_nm.size()-off-1);
+		pos -= (smb_nm.size()-sel.size());
+		yylloc.last_column -= (smb_nm.size()-sel.size());
 		return VAR;
 	    }
 
@@ -573,24 +571,12 @@ retry:
 	    return ERR;
 	}
 	//Check IO
-	int i_io;
-	for( i_io = 0; i_io < p_fnc->ioSize(); i_io++ )
-	    if( p_fnc->io(i_io)->id() == smb_nm )
-	    {
-		yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-		yylval.reg->setName(smb_nm);
-		yylval.reg->setVar(i_io);
-		yylval.reg->setLock(true);
-	        return VAR;
-	    }
+	if( yylval.reg=p_fnc->regAt(p_fnc->ioGet(smb_nm)) )	return VAR;
 	//Get new register
-	if( i_io >= p_fnc->ioSize() )
-	{
-	    yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
-	    yylval.reg->setName(smb_nm);
-	    yylval.reg->setLock(true);
-	    return VAR;
-	}
+	yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
+	yylval.reg->setName(smb_nm);
+	yylval.reg->setLock(true);
+	return VAR;
     }
     //Object's properties or functions
     else if( c == '.' && (pos+1) < prog.size() )
