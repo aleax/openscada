@@ -194,6 +194,7 @@ namespace VISION
 	private slots:
 	    void changed( );
 	    void applySlot( );
+	    void cancelSlot( );
 
 	private:
 	    LType	m_tp;
@@ -201,6 +202,7 @@ namespace VISION
 	    bool	mPrev;
 	    QWidget	*ed_fld;
 	    QPushButton	*bt_fld;
+	    QTimer	*bt_tm;
     };
 
     //*********************************************

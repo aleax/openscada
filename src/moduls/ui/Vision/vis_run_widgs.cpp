@@ -428,6 +428,22 @@ bool RunWdgView::event( QEvent *event )
 	case QEvent::FocusIn:	attrSet("focus","1");	attrSet("event","ws_FocusIn");	return true;
 	case QEvent::FocusOut:	attrSet("focus","0");	attrSet("event","ws_FocusOut");	return true;
     }
+
+    //> Try put mouse event to next level widget into same container
+    if( !qobject_cast<RunPageView*>(this) && 
+	(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick) )
+    {
+	bool isOk = false;
+	QPoint curp = parentWidget()->mapFromGlobal(cursor().pos());
+	for( int i_c = parentWidget()->children().size()-1; i_c >= 0; i_c-- )
+	{
+	    RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget()->children().at(i_c));
+	    if( !wdg ) continue;
+	    if( wdg == this ) isOk = true;
+	    else if( isOk && wdg->geometry().contains(curp) )	return QApplication::sendEvent(wdg,event);
+	}
+    }
+
     return QWidget::event(event);
 }
 

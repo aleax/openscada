@@ -36,6 +36,7 @@
 #include <QFontComboBox>
 #include <QGroupBox>
 #include <QCheckBox>
+#include <QTimer>
 
 #include <tsys.h>
 
@@ -391,7 +392,7 @@ bool UserStBar::userSel()
 //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
 //*********************************************************************************************
 LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
-    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), ed_fld(NULL), mPrev(!prev_dis)
+    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), bt_tm(NULL), ed_fld(NULL), mPrev(!prev_dis)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin(0);
@@ -413,8 +414,15 @@ void LineEdit::viewApplyBt( bool view )
 	bt_fld->setMaximumWidth( 15 );
 	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
 	layout()->addWidget( bt_fld );
+
+	bt_tm = new QTimer(this);
+	connect( bt_tm, SIGNAL( timeout() ), this, SLOT( cancelSlot() ) );
     }
-    if( !view && bt_fld ) { bt_fld->deleteLater(); bt_fld = NULL; }
+    if( !view && bt_fld )
+    {
+	bt_tm->stop(); bt_tm->deleteLater(); bt_tm = NULL;
+	bt_fld->deleteLater(); bt_fld = NULL;
+    }
 }
 
 bool LineEdit::isEdited( )	{ return bt_fld; }
@@ -469,6 +477,7 @@ void LineEdit::changed( )
 {
     //> Enable apply
     if( mPrev && !bt_fld )	viewApplyBt(true);
+    if( bt_tm ) bt_tm->start(5000);
 
     emit valChanged(value());
 }
@@ -593,6 +602,12 @@ void LineEdit::applySlot( )
     emit apply();
 }
 
+void LineEdit::cancelSlot( )
+{
+    setValue(m_val);
+    emit cancel();
+}
+
 bool LineEdit::event( QEvent * e )
 {
     if( e->type() == QEvent::KeyRelease && bt_fld )
@@ -603,12 +618,7 @@ bool LineEdit::event( QEvent * e )
 	    bt_fld->animateClick( );
 	    return true;
 	}
-	else if(keyEvent->key() == Qt::Key_Escape )
-	{
-	    emit cancel();
-	    setValue(m_val);
-	    return true;
-	}
+	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
     return QWidget::event(e);
 }

@@ -2603,9 +2603,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( runW && elFD->active && runW->permCntr() )
             {
+		
 		string sev;
 		for( int i=0; i < inundationItems.size(); i++ )
-		    if( inundationItems[i].path.contains(ev->pos()) )
+		    if( inundationItems[i].path.contains(view->mapFromGlobal(view->cursor().pos())) )
 			sev="ws_Fig"+TSYS::int2str(i);
 		if( !sev.empty() )
 		{

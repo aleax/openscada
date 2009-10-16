@@ -543,6 +543,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseMove:
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease:
+	    case QEvent::MouseButtonDblClick:
 	    case QEvent::ContextMenu:
 		QApplication::sendEvent(w,event);
 		return true;

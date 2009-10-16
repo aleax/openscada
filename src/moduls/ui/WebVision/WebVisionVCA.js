@@ -760,11 +760,24 @@ function makeEl( pgBr, inclPg )
 	 { return (this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1].style.visibility == 'visible'); }
 	 formObj.setModify = function( on )
 	 {
+	  if( on && this.clearTm ) this.clearTm = 5;
 	  if( this.modify() == on ) return;
 	  var posOkImg = (this.parentNode.view>=1&&this.parentNode.view<=3)?2:1;
 	  var okImg = this.parentNode.childNodes[posOkImg];
-	  if( on ) { this.style.width = (parseInt(this.style.width)-16)+'px'; if(posOkImg==2) this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)-16)+'px'; okImg.style.visibility = 'visible'; }
-	  else     { this.style.width = (parseInt(this.style.width)+16)+'px'; if(posOkImg==2) this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)+16)+'px'; okImg.style.visibility = 'hidden'; }
+	  if( on )
+	  {
+	    this.style.width = (parseInt(this.style.width)-16)+'px';
+	    if(posOkImg==2) this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)-16)+'px';
+	    okImg.style.visibility = 'visible';
+	    this.wdgLnk.perUpdtEn( true ); this.clearTm = 5;
+	  }
+	  else
+	  {
+	    this.style.width = (parseInt(this.style.width)+16)+'px';
+	    if(posOkImg==2) this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)+16)+'px';
+	    okImg.style.visibility = 'hidden';
+	    this.wdgLnk.perUpdtEn( false ); this.clearTm = 0;
+	  }
 	  this.parentNode.isModify = on;
 	 }
 	}
@@ -1420,12 +1433,15 @@ function perUpdtEn( en )
      if( en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']) ) perUpdtWdgs[this.addr] = this;
      if( !en && perUpdtWdgs[this.addr] ) delete perUpdtWdgs[this.addr];
   }
-  else if( this.attrs['root'] == 'Document' ) { if(en) perUpdtWdgs[this.addr] = this; else delete perUpdtWdgs[this.addr]; }
+  else if( this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl' )
+  { if(en) perUpdtWdgs[this.addr] = this; else delete perUpdtWdgs[this.addr]; }
   for( var i in this.wdgs ) this.wdgs[i].perUpdtEn(en);
 }
 function perUpdt( )
 {
-  if( this.attrs['root'] == 'Diagram' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 )
+  if( this.attrs['root'] == 'FormEl' && this.place.childNodes[0].clearTm && (--this.place.childNodes[0].clearTm) <= 0 )
+    this.place.childNodes[0].chEscape();
+  else if( this.attrs['root'] == 'Diagram' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 )
   {
     var dgrObj = this.place.childNodes[0].childNodes[0];
     if( dgrObj ) dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
