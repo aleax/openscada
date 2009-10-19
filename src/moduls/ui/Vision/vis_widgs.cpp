@@ -429,6 +429,7 @@ bool LineEdit::isEdited( )	{ return bt_fld; }
 
 void LineEdit::setType( LType tp )
 {
+    applyReserve = false;
     if( tp == m_tp ) return;
 
     //> Delete previous
@@ -444,22 +445,27 @@ void LineEdit::setType( LType tp )
 	case Integer:
 	    ed_fld = new QSpinBox(this);
 	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
+	    if( mPrev ) applyReserve = true;
 	    break;
 	case Real:
 	    ed_fld = new QDoubleSpinBox(this);
 	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
+	    if( mPrev ) applyReserve = true;
 	    break;
 	case Time:
 	    ed_fld = new QTimeEdit(this);
 	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
+	    if( mPrev ) applyReserve = true;
 	    break;
 	case Date:
 	    ed_fld = new QDateEdit(this);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
+	    if( mPrev ) applyReserve = true;
 	    break;
 	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
+	    if( mPrev ) applyReserve = true;
 	    break;
 	case Combo:
 	    ed_fld = new QComboBox(this);
@@ -468,6 +474,11 @@ void LineEdit::setType( LType tp )
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
+    if( applyReserve )
+    {
+	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
+	((QBoxLayout*)layout())->setAlignment(ed_fld,Qt::AlignLeft);
+    }
     setFocusProxy( ed_fld );
 
     m_tp = tp;
@@ -619,6 +630,11 @@ bool LineEdit::event( QEvent * e )
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
+    }
+    else if( e->type() == QEvent::Resize && applyReserve )
+    {
+	ed_fld->setMaximumWidth(width()-12);
+	ed_fld->setMinimumWidth(width()-12);
     }
     return QWidget::event(e);
 }

@@ -596,7 +596,7 @@ class PID : public TFunction
 	    //Internal data:
 	    ioAdd( new IO("int",_("Integral value"),IO::Real,IO::Output,"0",true) );
 	    ioAdd( new IO("dif",_("Differencial value"),IO::Real,IO::Output,"0",true) );
-	    ioAdd( new IO("lag",_("Lag value"),IO::Real,IO::Output,"0",true) );
+	    ioAdd( new IO("lag",_("Differencial lag"),IO::Real,IO::Output,"0",true) );
 	}
 
 	string name( )	{ return _("PID regulator"); }
@@ -625,9 +625,9 @@ class PID : public TFunction
 			frq	= v->getR(23),
 			integ	= v->getR(24),
 			difer	= v->getR(25),
-			lag	= v->getR(26);
+			dlag	= v->getR(26);
 
-	    double	Kf	= vmin(1e3/(frq*v->getI(11)),1);
+	    double	Tzd	= vmin(1e3/(frq*v->getI(11)),1);
 	    double	Kint	= vmin(1e3/(frq*v->getI(9)),1);
 	    double	Kdif	= vmin(1e3/(frq*v->getI(10)),1);
 
@@ -650,27 +650,26 @@ class PID : public TFunction
 	    err *= kp;
 	    err = vmin(100.,vmax(-100.,err));
 
-	    //> Input filter lag
-	    lag += Kf*(err-lag);
-	    integ += Kint*lag;		//Integral
-	    difer -= Kdif*(difer-lag);	//Differecial lag
+	    integ += Kint*err;		//Integral
+	    difer -= Kdif*(difer-err);	//Differecial wait
+	    dlag  += Tzd*((err-difer)-dlag);	//Differecial lag
 
 	    //> Automatic mode enabled
-	    if( v->getB(6) ) out = manIn = (2.*lag + integ - difer) + k3*in3 + k4*in4;
+	    if( v->getB(6) ) out = manIn = err + integ + dlag + k3*in3 + k4*in4;
 	    else { v->setB(7,false); v->setR(1,v->getR(0)); out = manIn; }
 
 	    //> Check output limits
 	    out=vmin(h_up,vmax(h_dwn,out));
 
 	    //> Fix integral for manual and limits
-	    integ = out - 2.*lag + difer - k3*in3 + k4*in4;
+	    integ = out - err - dlag - k3*in3 - k4*in4;
 
 	    //> Write outputs
 	    v->setR(4,manIn);
 	    v->setR(5,out);
 	    v->setR(24,integ);
 	    v->setR(25,difer);
-	    v->setR(26,lag);
+	    v->setR(26,dlag);
 	}
 };
 

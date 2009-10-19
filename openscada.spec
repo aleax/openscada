@@ -38,7 +38,7 @@ Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwor
 /sbin/chkconfig --del oscadad
 
 %package doc
-Summary: Open SCADA documents.
+Summary: Open SCADA documents
 Group: Documentation
 %description doc
 The %name-doc package include documents files.
@@ -51,7 +51,7 @@ Das Paket %name-doc enthaelt Dokumentationsdateien.
 
 
 %package devel
-Summary: Open SCADA development.
+Summary: Open SCADA development
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
@@ -63,7 +63,7 @@ The %name-devel package includes library archives and include files.
 
 
 %package demo
-Summary: Open SCADA demo data bases and config.
+Summary: Open SCADA demo data bases and config
 Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch

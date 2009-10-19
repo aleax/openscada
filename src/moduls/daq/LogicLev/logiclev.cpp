@@ -704,6 +704,7 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	{
 	    int id_lnk = lnkId(val.name());
 	    if( id_lnk >= 0 && lnk(id_lnk).aprm.freeStat() ) id_lnk=-1;
+	    res.request(true);
 	    switch(val.fld().type())
 	    {
 		case TFld::String:

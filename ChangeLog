@@ -1,3 +1,10 @@
+2009-10-19 Roman
+- DAQ.LogicLev: Writing to template's context by resourced is added.
+- FIX:Special.FLibComplex1: Tf is move only for differential part lag.
+- UI.Vision: Into spin form's widgets is reserved place for apply button.
+- UI.WebVision: The scale support is added to primitive "Diagram".
+
+
 2009-10-16 Roman
 - FIX:UI.Vision: Rule mouse events to underlie widgets is made.
 - UI.Vision, UI.WebVision: Automatic cancel, after five second, is added for edited line of primitive "FormEl".

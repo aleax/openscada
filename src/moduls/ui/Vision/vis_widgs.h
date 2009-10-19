@@ -199,7 +199,7 @@ namespace VISION
 	private:
 	    LType	m_tp;
 	    QString	m_val;
-	    bool	mPrev;
+	    bool	mPrev, applyReserve;
 	    QWidget	*ed_fld;
 	    QPushButton	*bt_fld;
 	    QTimer	*bt_tm;

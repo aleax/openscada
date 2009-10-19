@@ -629,9 +629,16 @@ function makeEl( pgBr, inclPg )
     if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
     while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
     var medObj = this.place.ownerDocument.createElement('img');
+    medObj.wdgLnk = this;
     medObj.src = this.attrs['src'].length ? ('/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src']) : '';
     medObj.border = 0;
     if( this.attrs['fit'] == 1 ) { medObj.width = geomW; medObj.height = geomH; }
+    else medObj.onload = function()
+    {
+	var cWdth = this.width; var cHeight = this.height;
+	this.width = cWdth * this.wdgLnk.xScale(true);
+	this.height = cHeight * this.wdgLnk.yScale(true);
+    }
     if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
     {
       if( parseInt(this.attrs['areas']) )
