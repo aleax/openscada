@@ -1,3 +1,15 @@
+2009-10-23 Roman
+- FIX:DAQ.BlockCalc: Block's ordering is fixed.
+- DAQ.BlockCalc, DAQ.LogicLev: Independent resource is added for lock writing parameters on time calc.
+- DAQ.ICP_DAS: The module I-87057W support is added.
+- DAQ.JavaLikeCalc: The dynamic type is added for prevent type casting on compile time.
+    Set no write permition to attributes of parameter for Input function's attributes.
+- !!:Special.FLibSYS: The function PID is expanded by new parameters: Kd, Tzd and followSp. And parameter Tf is removed.
+- UI.Vision, UI.WebVision: The alpha support is added to colors for all primitives.
+- UI.Vision, UI.WebVision: Fill view is added to primitive "Diagrama" for boolean values.
+- UI.Vision: Send events from Quitance buttons is added. Active mode support of primitive "Protocol" is expanded.
+
+
 2009-10-19 Roman
 - DAQ.LogicLev: Writing to template's context by resourced is added.
 - FIX:Special.FLibComplex1: Tf is move only for differential part lag.

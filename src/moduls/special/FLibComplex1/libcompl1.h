@@ -576,11 +576,13 @@ class PID : public TFunction
 	    ioAdd( new IO("casc",_("Cascade mode"),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("Kp",_("Kp"),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("Ti",_("Ti (ms)"),IO::Integer,IO::Default,"1000") );
+	    ioAdd( new IO("Kd",_("Kd"),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("Td",_("Td (ms)"),IO::Integer,IO::Default,"0") );
-	    ioAdd( new IO("Tf",_("Tf-lag (ms)"),IO::Integer,IO::Default,"0") );
+	    ioAdd( new IO("Tzd",_("Td lag (ms)"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("Hup",_("Out up limit (%)"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("Hdwn",_("Out down limit (%)"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("Zi",_("Insensibility (%)"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("followSp",_("Follow sp from var on manual"),IO::Boolean,IO::Default,"1") );
 
 	    ioAdd( new IO("K1",_("K input 1"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("in1",_("Input 1"),IO::Real,IO::Default,"0") );
@@ -611,25 +613,27 @@ class PID : public TFunction
 			manIn	= v->getR(4),
 			out	= v->getR(5),
 			kp	= v->getR(8),
-			h_up	= v->getR(12),
-			h_dwn	= v->getR(13),
-			zi	= v->getR(14),
-			k1	= v->getR(15),
-			in1	= v->getR(16),
-			k2	= v->getR(17),
-			in2	= v->getR(18),
-			k3	= v->getR(19),
-			in3	= v->getR(20),
-			k4	= v->getR(21),
-			in4	= v->getR(22),
-			frq	= v->getR(23),
-			integ	= v->getR(24),
-			difer	= v->getR(25),
-			dlag	= v->getR(26);
+			kpd	= v->getR(10),
+			h_up	= v->getR(13),
+			h_dwn	= v->getR(14),
+			zi	= v->getR(15),
+			followSp = v->getB(16),
+			k1	= v->getR(17),
+			in1	= v->getR(18),
+			k2	= v->getR(19),
+			in2	= v->getR(20),
+			k3	= v->getR(21),
+			in3	= v->getR(22),
+			k4	= v->getR(23),
+			in4	= v->getR(24),
+			frq	= v->getR(25),
+			integ	= v->getR(26),
+			difer	= v->getR(27),
+			dlag	= v->getR(28);
 
-	    double	Tzd	= vmin(1e3/(frq*v->getI(11)),1);
+	    double	Tzd	= vmin(1e3/(frq*v->getI(12)),1);
 	    double	Kint	= vmin(1e3/(frq*v->getI(9)),1);
-	    double	Kdif	= vmin(1e3/(frq*v->getI(10)),1);
+	    double	Kdif	= vmin(1e3/(frq*v->getI(11)),1);
 
 	    //> Scale error
 	    if( max <= min )	return;
@@ -651,25 +655,30 @@ class PID : public TFunction
 	    err = vmin(100.,vmax(-100.,err));
 
 	    integ += Kint*err;		//Integral
-	    difer -= Kdif*(difer-err);	//Differecial wait
-	    dlag  += Tzd*((err-difer)-dlag);	//Differecial lag
+	    difer -= Kdif*(difer-val);	//Differecial wait
+	    dlag  += Tzd*((difer-val)-dlag);	//Differecial lag
 
 	    //> Automatic mode enabled
-	    if( v->getB(6) ) out = manIn = err + integ + dlag + k3*in3 + k4*in4;
-	    else { v->setB(7,false); v->setR(1,v->getR(0)); out = manIn; }
+	    if( v->getB(6) ) out = err + integ + kpd*dlag + k3*in3 + k4*in4;
+	    else
+	    {
+		v->setB(7,false);
+		if( followSp ) v->setR(1,v->getR(0));
+		out = manIn;
+	    }
 
 	    //> Check output limits
-	    out=vmin(h_up,vmax(h_dwn,out));
+	    out = manIn = vmin(h_up,vmax(h_dwn,out));
 
 	    //> Fix integral for manual and limits
-	    integ = out - err - dlag - k3*in3 - k4*in4;
+	    integ = out - err - kpd*dlag - k3*in3 - k4*in4;
 
 	    //> Write outputs
 	    v->setR(4,manIn);
 	    v->setR(5,out);
-	    v->setR(24,integ);
-	    v->setR(25,difer);
-	    v->setR(26,dlag);
+	    v->setR(26,integ);
+	    v->setR(27,difer);
+	    v->setR(28,dlag);
 	}
 };
 

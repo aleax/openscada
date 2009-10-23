@@ -85,6 +85,7 @@ class WdgShape : public QObject
 
 	//Static methods
 	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true );
+	static QColor getColor( const string &vl );
 
     protected:
 	//Methods

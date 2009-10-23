@@ -582,6 +582,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Category"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/mess",_("Messages"),R_R_R_,"root","UI",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tp",_("Type"),R_R_R_,"root","UI",1,"tp","hex");
+		ctrMkNode("list",opt,-1,"/alarm/alarm/qtp",_("Quitance"),R_R_R_,"root","UI",1,"tp","hex");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tpArg",_("Type argument"),R_R_R_,"root","UI",1,"tp","str");
 	    }
 	return;
@@ -662,6 +663,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_cat	= ctrMkNode("list",opt,-1,"/alarm/alarm/cat","",0444);
 	XMLNode *n_mess	= ctrMkNode("list",opt,-1,"/alarm/alarm/mess","",0444);
 	XMLNode *n_tp	= ctrMkNode("list",opt,-1,"/alarm/alarm/tp","",0444);
+	XMLNode *n_qtp	= ctrMkNode("list",opt,-1,"/alarm/alarm/qtp","",0444);
 	XMLNode *n_tpArg= ctrMkNode("list",opt,-1,"/alarm/alarm/tpArg","",0444);
 
 	ResAlloc res( mAlrmRes, false );
@@ -672,6 +674,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    if( n_cat )	n_cat->childAdd("el")->setText( mAlrm[i_q].cat );
 	    if( n_mess )n_mess->childAdd("el")->setText( mAlrm[i_q].mess );
 	    if( n_tp )	n_tp->childAdd("el")->setText( TSYS::int2str(mAlrm[i_q].tp) );
+	    if( n_qtp )	n_qtp->childAdd("el")->setText( TSYS::int2str(mAlrm[i_q].qtp) );
 	    if( n_tpArg ) n_tpArg->childAdd("el")->setText( mAlrm[i_q].tpArg );
 	}
     }

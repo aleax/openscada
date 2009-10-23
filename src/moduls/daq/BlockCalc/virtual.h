@@ -81,6 +81,7 @@ class TipContr;
 class Contr: public TController
 {
     friend class Block;
+    friend class Prm;
 
     public:
 	//Public methods
@@ -140,7 +141,7 @@ class Contr: public TController
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
 	double	tm_calc;			// Scheme's calc time
 
-	Res	hd_res;		// Resource for process block
+	Res	hd_res, calcRes;		// Resource for process block
 };
 
 //************************************************

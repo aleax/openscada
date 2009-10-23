@@ -4776,7 +4776,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     int imH = (int)TSYS::realRound((float)height*ySc,2,true);
 
     //> Prepare picture
-    gdImagePtr im = gdImageCreate(imW,imH);
+    gdImagePtr im = gdImageCreateTrueColor(imW,imH);
+    //gdImageCreate(imW,imH);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
 
@@ -4790,12 +4791,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if( sclHor&0x3 || sclVer&0x3 )
     {
 	//>> Set grid color
-	clr_grid = gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
+	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
+	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
-	    clr_mrk = gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
+	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
+	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
@@ -5023,7 +5026,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     for( int i_t = 0; i_t < trnds.size(); i_t++ )
     {
 	//>> Set trend's pen
-	int clr_t = gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
+	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
+	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 
 	//>> Prepare generic parameters
 	aVbeg = vmax(tBeg,trnds[i_t].valBeg());
@@ -5059,7 +5063,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	//>> Draw trend
 	bool	end_vl = false;
 	double	curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
-	int	curPos, averPos = 0, prevPos = 0;
+	int	curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos;
 	long long curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
@@ -5090,12 +5094,18 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //Write point and line
 	    if( averVl != EVAL_REAL )
 	    {
+		if( trnds[i_t].valTp() == 0 )
+                    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((100.*(0-bordL)/(bordU-bordL))-vsMin)/(vsMax-vsMin))));
 		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
-		gdImageSetPixel(im,averPos,c_vpos,clr_t);
+		if( trnds[i_t].valTp() != 0 ) gdImageSetPixel(im,averPos,c_vpos,clr_t);
+		else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
 		if( prevVl != EVAL_REAL )
 		{
 		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
-		    gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
+		    if( trnds[i_t].valTp() != 0 ) gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
+		    else
+			for( int sps = prevPos+1; sps <= averPos; sps++ )
+			    gdImageLine(im,sps,z_vpos,sps,c_vpos,clr_t);
 		}
 	    }
 	    prevVl  = averVl;
@@ -5111,7 +5121,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if( active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict) )
     {
 	//>> Set trend's pen
-	int clr_cur = gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
+	int clr_cur = gdImageColorResolveAlpha(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor,127-(uint8_t)(curColor>>24));
+	//gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
 	int curPos = tArX+tArW*(curTime-tBeg)/(tPict-tBeg);
 	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
@@ -5150,7 +5161,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     int imH = (int)TSYS::realRound((double)height*ySc,2,true);
 
     //> Prepare picture
-    gdImagePtr im = gdImageCreate(imW,imH);
+    gdImagePtr im = gdImageCreateTrueColor(imW,imH);
+    //gdImageCreate(imW,imH);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
 
@@ -5165,12 +5177,14 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     if( sclHor&0x3 || sclVer&0x3 )
     {
 	//>> Set grid color
-	clr_grid = gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
+	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
+	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
 	if( (sclHor&0x2 || sclVer&0x2) && mrkHeight )
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));
-	    clr_mrk = gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
+	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
+	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
 	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
@@ -5320,7 +5334,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	if( !trnds[i_t].fftN || (trnds[i_t].color()>>31)&0x01 ) continue;
 
-	int clr_t = gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
+	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
+	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;
 	double fftDt = (1e6/(double)tSz)*(double)width/trnds[i_t].fftN;
 
@@ -5386,7 +5401,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	float curFrq = vmax(vmin(1e6/(float)curTime,fftEnd),fftBeg);
 	int curPos = tArX+(int)(tArW*(curFrq-fftBeg)/(fftEnd-fftBeg));
-	int clr_cur = gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
+	int clr_cur = gdImageColorResolveAlpha(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor,127-(uint8_t)(curColor>>24));
+	//gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
 	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
     }
 

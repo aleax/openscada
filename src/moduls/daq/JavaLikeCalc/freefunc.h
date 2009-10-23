@@ -78,6 +78,7 @@ class Reg
 	    Int,	//Integer
 	    Real,	//Real
 	    String,	//String
+	    Dynamic,	//Dynamic type
 	    Obj,	//Object
 	    Var,	//IO variable
 	    PrmAttr	//Parameter attribute
@@ -161,8 +162,8 @@ class Reg
 	};
 
 	//Methods
-	Reg( ) : mTp(Free), mLock(false), mLockType(false), mObjEl(false), mPos(-1) {  }
-	Reg( int ipos ) : mTp(Free), mLock(false), mLockType(false), mObjEl(false), mPos(ipos) {  }
+	Reg( ) : mTp(Free), mLock(false), mObjEl(false), mPos(-1) {  }
+	Reg( int ipos ) : mTp(Free), mLock(false), mObjEl(false), mPos(ipos) {  }
 	~Reg( );
 
 	Reg &operator=( Reg &irg );
@@ -177,13 +178,11 @@ class Reg
 	Type vType( Func *fnc );
 	int pos( )				{ return mPos; }
 	bool lock( )				{ return mLock; }
-	bool lockType( )			{ return mLockType; }
 	bool objEl( )				{ return mObjEl; }
 
 	void setName( const string &nm )	{ mNm = nm; }
 	void setType( Type tp );
 	void setLock( bool vl )			{ mLock = vl; }
-	void setLockType( bool vl )		{ mLockType = vl; }
 	void setObjEl( )			{ mObjEl = true; }
 	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
 	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }
@@ -198,7 +197,6 @@ class Reg
 	string	mNm;
 	bool	mObjEl;		//Object's element
 	bool	mLock;		//Locked register
-	bool	mLockType;	//Locked type
 	Type	mTp;
 	El	el;
 };

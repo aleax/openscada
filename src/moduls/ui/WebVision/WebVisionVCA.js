@@ -277,6 +277,15 @@ function getFont( fStr, fSc, inPt )
   }
   return rez;
 }
+/***************************************************
+ * getColor - Parse color                          *
+ ***************************************************/
+function getColor( cStr )
+{
+  var fPos = cStr.indexOf('-');
+  if( fPos >= 0 ) return cStr.slice(0,fPos);
+  return cStr;
+}
 /*****************************************************
  * chkPattern - Check for allow expression to pattern *
  *****************************************************/
@@ -455,7 +464,7 @@ function makeEl( pgBr, inclPg )
   if( this.pg && this.window )
   {
     var pgWin = this.window;
-    pgWin.document.body.style.backgroundColor = this.attrs['backColor'];
+    pgWin.document.body.style.backgroundColor = getColor(this.attrs['backColor']);
     pgWin.resizeTo(geomW+20,geomH+40);
   }
 
@@ -471,7 +480,7 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'ElFigure' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
+    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
     if( this.attrs['backImg'] )
       elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     var figObj = this.place.childNodes[0];
@@ -508,10 +517,10 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Box' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
+    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
     if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
      elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-     if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
+     if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
      switch( parseInt(this.attrs['bordStyle']) )
      {
 	case 1: elStyle+='border-style: dotted; '; break;
@@ -564,10 +573,10 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Text' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
+    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
     if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
+    if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
     var txtAlign = parseInt(this.attrs['alignment']);
     var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; ';
     switch(txtAlign&0x3)
@@ -584,7 +593,7 @@ function makeEl( pgBr, inclPg )
       case 2: spanStyle+='vertical-align: middle; '; break;
     }
     spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
-    spanStyle += 'color: ' + (this.attrs['color']?this.attrs['color']:'black') + '; ';
+    spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
     var txtVal = this.attrs['text'];
     for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
     {
@@ -622,11 +631,11 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Media' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
+    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
     if( this.attrs['backImg'] )
       elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
+    if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
     while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
     var medObj = this.place.ownerDocument.createElement('img');
     medObj.wdgLnk = this;
@@ -1022,8 +1031,8 @@ function makeEl( pgBr, inclPg )
 	  formObj.className = 'vertalign';
 	  formObj.style.font = fontCfg;
 	  elStyle+='border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset':'outset')+'; cursor: pointer; border-width: 2px; ';
-	  if( this.attrs['colorText'] ) elStyle+='color: '+this.attrs['colorText']+'; ';
-	  if( this.attrs['color'] ) elStyle+='background-color: '+this.attrs['color']+'; ';
+	  if( this.attrs['colorText'] ) elStyle+='color: '+getColor(this.attrs['colorText'])+'; ';
+	  if( this.attrs['color'] ) elStyle+='background-color: '+getColor(this.attrs['color'])+'; ';
 	  else elStyle+='background-color: snow; ';
 	  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
 	  {
@@ -1064,8 +1073,8 @@ function makeEl( pgBr, inclPg )
 	  formObj.value=this.attrs['name'];
 	  formObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); return false; }
 	  formObj.wdgLnk = this;
-	  if( this.attrs['color'] ) formObj.style.backgroundColor=this.attrs['color'];
-	  if( this.attrs['colorText'] ) formObj.style.color=this.attrs['colorText'];
+	  if( this.attrs['color'] ) formObj.style.backgroundColor=getColor(this.attrs['color']);
+	  if( this.attrs['colorText'] ) formObj.style.color=getColor(this.attrs['colorText']);
 	}
 	formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 	this.place.appendChild(formObj);
@@ -1107,10 +1116,10 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Diagram' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+this.attrs['backColor']+'; ';
+    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
     if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-    if( this.attrs['bordColor'] ) elStyle+='border-color: '+this.attrs['bordColor']+'; ';
+    if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
     var anchObj = this.place.childNodes[0];
     if( !anchObj )
     {
@@ -1142,7 +1151,7 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Protocol' )
   {
-    if( this.attrs['backColor'] ) elStyle += 'background-color: '+this.attrs['backColor']+'; ';
+    if( this.attrs['backColor'] ) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
     else elStyle+='background-color: white; ';
     if( this.attrs['backImg'] )   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; ';
@@ -1327,7 +1336,7 @@ function makeEl( pgBr, inclPg )
 		if( this.messList[elPos][2] >= prpLev && prpLev > lst_lev && chkPattern(this.messList[elPos][3],this.attrs['it'+i_it+'tmpl']) )
 		{
 		    rowFnt = getFont(this.attrs['it'+i_it+'fnt'],Math.min(xSc,ySc));
-		    rowColor = 'background-color: '+this.attrs['it'+i_it+'color']+'; ';
+		    rowColor = 'background-color: '+getColor(this.attrs['it'+i_it+'color'])+'; ';
 		    if( this.messList[elPos][2] == parseInt(this.attrs['it'+i_it+'lev']) ) break;
 		    lst_lev = prpLev;
 		}

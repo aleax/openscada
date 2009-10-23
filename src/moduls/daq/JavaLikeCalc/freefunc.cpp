@@ -458,7 +458,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 
     switch(rez->type())
     {
-	case Reg::Free:
+	case Reg::Free: case Reg::Dynamic:
 	    throw TError(nodePath().c_str(),_("Variable <%s> is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
 	    prg+=(uint8_t)Reg::MviB;
@@ -602,7 +602,7 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 void Func::cdAssign( Reg *rez, Reg *op )
 {
     uint16_t addr;
-    op = cdTypeConv(op,rez->vType(this));
+    if( op->pos() < 0 ) op = cdMvi( op );
     prg += (uint8_t)Reg::Ass;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     addr = op->pos();  prg.append((char*)&addr,sizeof(uint16_t));
@@ -733,8 +733,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     op1 = cdMvi( op1 );
     Reg::Type op1_tp = op1->vType(this);
     int op1_pos = op1->pos();
-    if( !op1->lockType() ) op2 = cdTypeConv(op2,op1_tp);
-    else if( op2->pos() < 0 ) op2 = cdMvi( op2 );    
+    if( op1_tp != Reg::Dynamic ) op2 = cdTypeConv(op2,op1_tp);
+    else if( op2->pos() < 0 ) op2 = cdMvi( op2 );
     int op2_pos = op2->pos();
     op1->free();
     op2->free();
@@ -1025,7 +1025,7 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     }
     obj->free();
     rez = regAt(regNew());
-    rez->setType(Reg::Real);
+    rez->setType(Reg::Dynamic);
 
     //> Make code
     uint16_t addr;
@@ -1036,8 +1036,6 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
 
     for( int i_prm = 0; i_prm < p_pos.size(); i_prm++ )
     { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
-
-    rez->setLockType(true);
 
     return rez;
 }
@@ -1187,7 +1185,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	    }
 
 	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s' or not enough parameters for it."),prop.c_str());
-    }    
+    }
     return TVariant();
 }
 
@@ -1319,16 +1317,6 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:
-		switch( val.type() )
-		{
-		    case TVariant::Boolean:	rg = val.getB();	break;
-		    case TVariant::Integer:	rg = val.getI();	break;
-		    case TVariant::Real:	rg = val.getR();	break;
-		    case TVariant::String:	rg = val.getS();	break;
-		    case TVariant::Object:	rg = val.getO();	break;
-		}
-		break;
 	    case Reg::Var:
 		switch( val.type() )
 		{
@@ -1348,6 +1336,16 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 		    case TVariant::String:	rg.val().p_attr->at().setS(val.getS());	break;
 		}
 		break;
+	    default:
+		switch( val.type() )
+		{
+		    case TVariant::Boolean:	rg = val.getB();	break;
+		    case TVariant::Integer:	rg = val.getI();	break;
+		    case TVariant::Real:	rg = val.getR();	break;
+		    case TVariant::String:	rg = val.getS();	break;
+		    case TVariant::Object:	rg = val.getO();	break;
+		}
+		break;
 	}
     else if( rg.type() == Reg::Obj )
     {
@@ -1363,9 +1361,9 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
 	    case Reg::Var:	io->setS(rg.val().io,val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setS(val);	break;
+	    default: rg = val; break;
 	}
     else setVal(io,rg,val);
 }
@@ -1375,9 +1373,9 @@ void Func::setValI( TValFunc *io, RegW &rg, int val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
 	    case Reg::Var:	io->setI(rg.val().io,val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
+	    default: rg = val; break;
 	}
     else setVal(io,rg,val);
 }
@@ -1387,9 +1385,9 @@ void Func::setValR( TValFunc *io, RegW &rg, double val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
 	    case Reg::Var:	io->setR(rg.val().io,val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setR(val);	break;
+	    default: rg = val; break;
 	}
     else setVal(io,rg,val);
 }
@@ -1399,9 +1397,9 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:	rg = val; break;
 	    case Reg::Var:	io->setB(rg.val().io,val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setB(val);	break;
+	    default: rg = val; break;
 	}
     else setVal(io,rg,val);
 }
@@ -1411,8 +1409,8 @@ void Func::setValO( TValFunc *io, RegW &rg, TVarObj *val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String: case Reg::Obj:
-		rg = val; break;
+	    case Reg::Var: case Reg::PrmAttr:	break;
+	    default: rg = val; break;
 	}
     else setVal(io,rg,val);
 }
@@ -2201,7 +2199,7 @@ void Reg::free()
     if( lock() ) return;
 
     setType(Free);
-    mObjEl = mLock = mLockType = false;
+    mObjEl = mLock = false;
 }
 
 //*************************************************

@@ -132,20 +132,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             rel_list = true;
             break;
         case 21:	//lineClr
-        {
-            QColor res_color;
-            size_t found;
-            found = val.find("-");
-            if (found!=string::npos)
-            {
-                res_color = QColor( val.substr(0,found).c_str() );
-                res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
-                (*colors)[-5] = res_color;
-            }
-            else (*colors)[-5] = QColor(val.c_str());
+            (*colors)[-5] = getColor(val);
             rel_list = true;
             break;
-        }
         case 22:	//lineStyle
             switch(atoi(val.c_str()))
             {
@@ -166,35 +155,13 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             rel_list = true;
             break;
         case 24:	//bordClr
-        {
-            QColor res_color;
-            size_t found;
-            found = val.find("-");
-            if (found!=string::npos)
-            {
-                res_color = QColor( val.substr(0,found).c_str() );
-                res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
-                (*colors)[-6] = res_color;
-            }
-            else (*colors)[-6] = QColor(val.c_str());
+            (*colors)[-6] = getColor(val);
             rel_list = true;
             break;
-        }
         case 25:	//fillClr
-        {
-            QColor res_color;
-            size_t found;
-            found = val.find("-");
-            if (found!=string::npos)
-            {
-                res_color = QColor( val.substr(0,found).c_str() );
-                res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
-                (*colors)[-7] = res_color;
-            }
-            else (*colors)[-7] = QColor(val.c_str());
+            (*colors)[-7] = getColor(val);
 	    rel_list = true;
             break;
-        }
         case 26:	//fillImg
         {
             backimg = w->resGet(val);
@@ -231,19 +198,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         (*widths)[pnt] = atof(val.c_str());
                         break;
                     case 3 :
-                    {
-                        QColor res_color;
-                        size_t found;
-                        found = val.find("-");
-                        if (found!=string::npos)
-                        {
-                            res_color = QColor( val.substr(0,found).c_str() );
-                            res_color.setAlpha( atoi(val.substr(found+1).c_str()) );
-                            (*colors)[pnt] = res_color;
-                        }
-                        else (*colors)[pnt] = QColor(val.c_str());
+                        (*colors)[pnt] = getColor(val);
                         break;
-                    }
                     case 4 :
                         backimg = w->resGet(val);
                         if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
@@ -405,16 +361,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( el_s.size() )
                 {
                     color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = el_s.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( el_s.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(el_s.c_str());
+                    (*colors)[c_index] = getColor(el_s);
                     c_index -= 1;
                 }
                 else color = -5;
@@ -439,16 +386,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( el_s.size() )
                 {
                     bord_color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = el_s.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( el_s.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(el_s.c_str());
+                    (*colors)[c_index] = getColor(el_s);
                     c_index -= 1;
                 }
                 else bord_color = -6;
@@ -565,16 +503,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( el_s.size() )
                 {
                     color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = el_s.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( el_s.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(el_s.c_str());
+                    (*colors)[c_index] = getColor(el_s);
                     c_index -= 1;
                 }
                 else color = -5;
@@ -600,16 +529,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( el_s.size() )
                 {
                     bord_color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = el_s.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( el_s.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(el_s.c_str());
+                    (*colors)[c_index] = getColor(el_s);
                     c_index -= 1;
                 }
                 else bord_color = -6;
@@ -756,16 +676,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( el_s.size() )
                 {
                     color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = el_s.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( el_s.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(el_s.c_str());
+                    (*colors)[c_index] = getColor(el_s);
                     c_index -= 1;
                 }
                 else color = -5;
@@ -790,16 +701,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( el_s.size() )
                 {
                     bord_color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = el_s.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( el_s.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(el_s.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(el_s.c_str());
+                    (*colors)[c_index] = getColor(el_s);
                     c_index -= 1;
                 }
                 else bord_color = -6;
@@ -865,16 +767,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                 else if( fl_color.size() )
                 {
                     color = c_index;
-                    QColor res_color;
-                    size_t found;
-                    found = fl_color.find("-");
-                    if (found!=string::npos)
-                    {
-                        res_color = QColor( fl_color.substr(0,found).c_str() );
-                        res_color.setAlpha( atoi(fl_color.substr(found+1).c_str()) );
-                        (*colors)[c_index] = res_color;
-                    }
-                    else (*colors)[c_index] = QColor(fl_color.c_str());
+                    (*colors)[c_index] = getColor(fl_color);
                     c_index -= 1;
                 }
                 else color = -7;

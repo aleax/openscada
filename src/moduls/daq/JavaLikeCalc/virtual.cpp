@@ -788,6 +788,7 @@ void Prm::enable()
 	if( io_id < 0 )	continue;
 
 	unsigned	flg = TVal::DirWrite|TVal::DirRead;
+	if( !(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)) ) flg |= TFld::NoWrite;
 	TFld::Type	tp  = TFld::String;
 	switch( ((Contr &)owner()).ioType(io_id) )
 	{
@@ -805,7 +806,7 @@ void Prm::enable()
 	int el_id = v_el.fldId(aid);
 	v_el.fldAt(el_id).setDescr( anm.empty() ? ((Contr &)owner()).func()->io(io_id)->name() : anm );
 	v_el.fldAt(el_id).setReserve( ionm );
-    
+
 	pls.push_back(aid);
     }
 
@@ -819,43 +820,6 @@ void Prm::enable()
 	try{ v_el.fldDel(i_fld); i_fld--; }
 	catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
-
-    //- Init elements -
-    /*string dfld;
-    for( int fld_off = 0; (dfld=TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
-    {
-	unsigned	flg = TVal::DirWrite|TVal::DirRead;
-	TFld::Type	tp  = TFld::String;
-	int		io_id = ((Contr &)owner()).ioId(dfld);
-	if(io_id >= 0)
-	{
-	    //if( ((Contr &)owner()).ioMode(io_id) != IO::Input )
-	    //	flg |= Fld::NoWrite;
-	    switch( ((Contr &)owner()).ioType(io_id) )
-	    {
-		case IO::String:	tp = TFld::String;	break;
-		case IO::Integer:	tp = TFld::Integer;	break;
-		case IO::Real:		tp = TFld::Real;	break;
-		case IO::Boolean:	tp = TFld::Boolean;	break;
-	    }
-	    if( !v_el.fldPresent(dfld) ||
-		v_el.fldAt(v_el.fldId(dfld)).type() != tp ||
-		v_el.fldAt(v_el.fldId(dfld)).flg() != flg )
-	    {
-		if(v_el.fldPresent(dfld)) v_el.fldDel(v_el.fldId(dfld));
-		v_el.fldAdd( new TFld(dfld.c_str(),((Contr &)owner()).func()->io(io_id)->name().c_str(),tp,flg) );
-	    }
-	}
-    }
-
-    //- Check and delete no used fields -
-    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
-    {
-	string fel;
-	for( int fld_off = 0; (fel = TSYS::strSepParse(cfg("FLD").getS(),0,';',&fld_off)).size(); )
-	    if( fel == v_el.fldAt(i_fld).name() ) break;
-	if( fel.empty() )	{ v_el.fldDel(i_fld); i_fld--; }
-    }*/
 
     TParamContr::enable();
 }

@@ -122,7 +122,7 @@ class TMdPrm : public TParamContr
 	TElem	p_el;				//Work atribute elements
 
 	bool	chk_lnk_need;			//Check lnk need flag
-	Res	moderes;			//Resource
+	Res	moderes, calcRes;		//Resource
 	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
 };
 

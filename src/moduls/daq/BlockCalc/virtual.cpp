@@ -320,7 +320,7 @@ void Contr::disable_( )
 
 void Contr::start_( )
 {
-    //- Make process all bloks -
+    //> Make process all bloks
     vector<string> lst;
     blkList(lst);
     for( int i_l = 0; i_l < lst.size(); i_l++ )
@@ -332,7 +332,29 @@ void Contr::start_( )
 	    mess_warning(nodePath().c_str(),_("Process block <%s> error."),lst[i_l].c_str());
 	}
 
-    //- Start the request and calc data task -
+    //> Sort blocks
+    ResAlloc res(hd_res,true);
+    string pvl;
+    for( int i_be = 0, permCnt = 0, i_blk = 0; i_be < clc_blks.size() && permCnt < clc_blks.size()/2; i_be++ )
+    {
+	AutoHD<Block> cBlk = clc_blks[i_be];
+	for( int off = 0; (pvl=TSYS::strSepParse(cBlk.at().prior(),0,';',&off)).size(); )
+	{
+	    for( i_blk = i_be; i_blk < clc_blks.size(); i_blk++ )
+		if( pvl == clc_blks[i_blk].at().id() )
+		{
+		    clc_blks[i_be] = clc_blks[i_blk];
+		    clc_blks[i_blk] = cBlk;
+		    permCnt++;
+		    break;
+		}
+	    if( i_blk < clc_blks.size() ) break;
+	}
+	if( !pvl.empty() ) i_be = -1;
+    }
+    res.release();
+
+    //> Start the request and calc data task
     if( !prc_st )
     {
 	pthread_attr_t pthr_attr;
@@ -391,6 +413,7 @@ void *Contr::Task( void *icontr )
 	long long t_cnt = TSYS::curTime();
 
 	cntr.hd_res.resRequestR( );
+	ResAlloc sres(cntr.calcRes,true);
 	for( unsigned i_it = 0; i_it < cntr.m_iter && !cntr.redntUse(); i_it++ )
 	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
 	    {
@@ -407,6 +430,7 @@ void *Contr::Task( void *icontr )
 		    cntr.hd_res.resRequestR( );
 		}
 	    }
+	sres.release();
 	cntr.hd_res.resRelease( );
 
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
@@ -467,24 +491,12 @@ void Contr::blkAdd( const string &iid )
 void Contr::blkProc( const string &id, bool val )
 {
     unsigned i_blk;
-    int ins_p = -1;
 
     ResAlloc res(hd_res,true);
     for( i_blk = 0; i_blk < clc_blks.size(); i_blk++ )
-    {
-	//> Check for previous set
-	if( val && ins_p < 0 && !clc_blks[i_blk].at().prior().empty() )
-	{
-	    string pvl;
-	    for( int off = 0; (pvl=TSYS::strSepParse(clc_blks[i_blk].at().prior(),0,';',&off)).size(); )
-		if( id == pvl ) { ins_p = i_blk; break; }
-	}
-
 	if( clc_blks[i_blk].at().id() == id ) break;
-    }
 
-    if( val && i_blk >= clc_blks.size() )
-	clc_blks.insert(clc_blks.begin()+((ins_p<0)?0:ins_p),blkAt(id));
+    if( val && i_blk >= clc_blks.size() ) clc_blks.push_back(blkAt(id));
     if( !val && i_blk < clc_blks.size() ) clc_blks.erase(clc_blks.begin()+i_blk);
 }
 
@@ -504,7 +516,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/blk_" || a_path == "/scheme/sch" )
+    if( a_path == "/br/blk_" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
 	{
@@ -512,6 +524,31 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    blkList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
+	}
+	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	{
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
+	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
+	}
+	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+    }
+    else if( a_path == "/scheme/sch" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	{
+	    if( !startStat() )
+	    {
+		vector<string> lst;
+		blkList(lst);
+		for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
+	    }
+	    else
+	    {
+		ResAlloc sres(hd_res,false);
+		for( unsigned i_b=0; i_b < clc_blks.size(); i_b++ )
+		    opt->childAdd("el")->setAttr("id",clc_blks[i_b].at().id())->setText(clc_blks[i_b].at().name());
+	    }
 	}
 	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
 	{
@@ -660,8 +697,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
 	if( io_id < 0 ) disable();
 	else
 	{
-	    ResAlloc sres(owner().res(),false);
-	    if( !blk.at().prior().empty() ) sres.request(true);
+	    ResAlloc sres(owner().calcRes,true);
 	    switch(val.fld().type())
 	    {
 		case TFld::String:	blk.at().setS(io_id,val.getS(0,true));	break;

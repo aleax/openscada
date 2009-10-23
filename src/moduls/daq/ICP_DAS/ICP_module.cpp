@@ -402,6 +402,10 @@ void TMdPrm::enable()
 	    for( int i_o = 0; i_o < 4; i_o++ )
 		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
 	    break;
+	case 0x87057:
+	    for( int i_o = 0; i_o < 16; i_o++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+	    break;
 	default: break;
     }
 
@@ -557,6 +561,27 @@ void TMdPrm::getVals( )
 		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (RetValue||szReceive[0]!='!' ? EVAL_REAL : atof(szReceive+3)), 0, true );
 	    }
 	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
+	    break;
+	}
+	case 0x87057:
+	{
+	    ResAlloc res( owner().reqRes, true );
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	    char szReceive[20];
+
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X6",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    int vl = -1;
+	    if( !(RetValue||szReceive[0]!='!') )
+	    {
+		vl = strtoul(string(szReceive+1,4).c_str(),NULL,16);
+		acq_err.setVal("");
+	    }
+	    else acq_err.setVal(RetValue?_("10:Request to module error."):_("11:Respond from module error."));
+
+	    for( int i_v = 0; i_v < 16; i_v++ )
+		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (vl<0) ? EVAL_BOOL : (vl>>i_v)&0x01, 0, true );
+	    break;
 	}
     }
 }
@@ -675,6 +700,23 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
 	    valo.setR( (RetValue||szReceive[0]!='>' ? EVAL_REAL : vl), 0, true );
 	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
+	    break;
+	}
+	case 0x87057:
+	{
+	    char vl = valo.getB(0,true);
+	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
+
+	    ResAlloc res( owner().reqRes, true );
+	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	    int daddr = atoi(valo.name().c_str()+1);
+	    string cmd = TSYS::strMess("#%02X%s%d%02X",(owner().mBus==0)?0:modAddr,(daddr/8)?"B":"A",daddr%8,vl);
+
+	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
+	    valo.setB( (RetValue||szReceive[0]!='>' ? EVAL_BOOL : vl), 0, true );
+	    acq_err.setVal(RetValue?_("10:Request to module error."):((szReceive[0]!='>')?_("11:Respond from module error."):""));
+	    break;
 	}
     }
 }
@@ -741,22 +783,36 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	cfg("MOD_ADDR").setView( (modTp>>12) != 8 && owner().mBus != 0 );
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),0664,"root","root",3,"tp","dec","dest","select","select","/prm/cfg/modLst");
-	if( enableStat() && (modTp == 0x8017 || modTp == 0x87019) && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
-	    switch( modTp )
-	    {
-		case 0x8017:
+	switch( modTp )
+	{
+	    case 0x8017:
+		if( enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
+		{
 		    ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root","DAQ",1,"tp","dec");
 		    ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
 		    if( ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")) )
 			for( int i_v = 0; i_v < 8; i_v++ )
 			    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
-		    break;
-		case 0x87019:
-		    if( !owner().startStat() ) break;
+		}
+		break;
+	    case 0x87019:
+		if( enableStat() && owner().startStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
 		    for( int i_v = 0; i_v < 8; i_v++ )
 			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),TSYS::strMess(_("Input %d type"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
-		    break;
-	    }
+		break;
+	    case 0x87057:
+		if( enableStat() && owner().startStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
+		{
+		    ctrMkNode("fld",opt,-1,"/cfg/wSt",_("Host watchdog status is set"),RWRWR_,"root","DAQ",1,"tp","bool");
+		    ctrMkNode("fld",opt,-1,"/cfg/wEn",_("Host watchdog enable"),RWRWR_,"root","DAQ",1,"tp","bool");
+		    ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog time (s)"),RWRWR_,"root","DAQ",1,"tp","real");
+		    ctrMkNode("fld",opt,-1,"/cfg/vPon",_("Power on values"),R_R_R_,"root","DAQ",1,"tp","str");
+		    ctrMkNode("comm",opt,-1,"/cfg/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
+		    ctrMkNode("fld",opt,-1,"/cfg/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
+		    ctrMkNode("comm",opt,-1,"/cfg/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
+		}
+		break;
+	}
 	return;
     }
     //> Process command to page
@@ -770,83 +826,158 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87019))->setText("I-87019");
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87024))->setText("I-87024");
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87057))->setText("I-87057");
     }
-    else if( a_path == "/cfg/prms" )
+    else if( modTp == 0x8017 && a_path == "/cfg/prms" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
 	{ ((PrmsI8017*)extPrms)->prmNum = atoi(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( a_path == "/cfg/fastPer" )
+    else if( modTp == 0x8017 && a_path == "/cfg/fastPer" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
 	{ ((PrmsI8017*)extPrms)->fastPer = atof(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( a_path.substr(0,12) == "/cfg/mode/in" )
+    else if( modTp == 0x8017 && a_path.substr(0,12) == "/cfg/mode/in" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
 	{ ((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
+    else if( modTp == 0x8017 && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
     {
+	opt->childAdd("el")->setAttr("id","0")->setText(_("-10V to +10V"));
+	opt->childAdd("el")->setAttr("id","1")->setText(_("-5V to +5V"));
+	opt->childAdd("el")->setAttr("id","2")->setText(_("-2.5V to +2.5V"));
+	opt->childAdd("el")->setAttr("id","3")->setText(_("-1.25V to +1.25V"));
+	opt->childAdd("el")->setAttr("id","4")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+    }
+    else if( modTp == 0x87019 && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
 	{
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
 	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X8C%d",
 		(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())).c_str(), szReceive, 1, 0, &wT );
 	    opt->setText( (RetValue||szReceive[0]!='!') ? "-1" : TSYS::int2str(strtol(szReceive+6,NULL,16)) );
 	}
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
-	{
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
 	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X7C%dR%02X",
 		(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())).c_str(), szReceive, 1, 0, &wT );
+    }
+    else if( modTp == 0x87019 && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setAttr("id","-1")->setText(_("Error"));
+	opt->childAdd("el")->setAttr("id","0")->setText(_("-15mV to +15mV"));
+	opt->childAdd("el")->setAttr("id","1")->setText(_("-50mV to +50mV"));
+	opt->childAdd("el")->setAttr("id","2")->setText(_("-100mV to +100mV"));
+	opt->childAdd("el")->setAttr("id","3")->setText(_("-500mV to +500mV"));
+	opt->childAdd("el")->setAttr("id","4")->setText(_("-1V to +1V"));
+	opt->childAdd("el")->setAttr("id","5")->setText(_("-2.5V to +2.5V"));
+	opt->childAdd("el")->setAttr("id","6")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+	opt->childAdd("el")->setAttr("id","8")->setText(_("-10V to +10V"));
+	opt->childAdd("el")->setAttr("id","9")->setText(_("-5V to +5V"));
+	opt->childAdd("el")->setAttr("id","10")->setText(_("-1V to +1V"));
+	opt->childAdd("el")->setAttr("id","11")->setText(_("-500mV to +500mV"));
+	opt->childAdd("el")->setAttr("id","12")->setText(_("-150mV to +150mV"));
+	opt->childAdd("el")->setAttr("id","13")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+	opt->childAdd("el")->setAttr("id","14")->setText(_("J Type"));
+	opt->childAdd("el")->setAttr("id","15")->setText(_("K Type"));
+	opt->childAdd("el")->setAttr("id","16")->setText(_("T Type"));
+	opt->childAdd("el")->setAttr("id","17")->setText(_("E Type"));
+	opt->childAdd("el")->setAttr("id","18")->setText(_("R Type"));
+	opt->childAdd("el")->setAttr("id","19")->setText(_("S Type"));
+	opt->childAdd("el")->setAttr("id","20")->setText(_("B Type"));
+	opt->childAdd("el")->setAttr("id","21")->setText(_("N Type"));
+	opt->childAdd("el")->setAttr("id","22")->setText(_("C Type"));
+	opt->childAdd("el")->setAttr("id","23")->setText(_("L Type"));
+	opt->childAdd("el")->setAttr("id","24")->setText(_("M Type"));
+	opt->childAdd("el")->setAttr("id","25")->setText(_("L Type (DIN43710C Type)"));
+    }
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/wSt" )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	{
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    opt->setText( (RetValue||szReceive[0]!='!') ? EVAL_STR : TSYS::int2str((bool)strtol(szReceive+3,NULL,16)) );
+	}
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) && !atoi(opt->text().c_str()) )
+	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+    }
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/wEn" )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	    opt->setText( (RetValue||szReceive[0]!='!') ? EVAL_STR : TSYS::int2str((bool)strtol(string(szReceive+3,1).c_str(),NULL,16)) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X3%d%02X",(owner().mBus==0)?0:modAddr,atoi(opt->text().c_str()),strtol(szReceive+4,NULL,16)).c_str(), szReceive, 1, 0, &wT );
+    }
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/wTm" )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	    opt->setText( (RetValue||szReceive[0]!='!') ? EVAL_STR : TSYS::real2str(0.1*strtol(szReceive+4,NULL,16)) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X3%d%02X",(owner().mBus==0)?0:modAddr,(bool)strtol(string(szReceive+3,1).c_str(),NULL,16),(int)(10*atof(opt->text().c_str()))).c_str(), szReceive, 1, 0, &wT );
+	    mess_info("TEST 00","%d: '%s'\n",RetValue,(char*)TSYS::strMess("~%02X3%d%02X",(owner().mBus==0)?0:modAddr,(bool)strtol(string(szReceive+3,1).c_str(),NULL,16),(int)(10*atof(opt->text().c_str()))).c_str());
 	}
     }
-    else if( a_path == "/cfg/tpLst" && ctrChkNode(opt) )
-	switch( modTp )
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vPon" && ctrChkNode(opt) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X4P",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	if( RetValue || szReceive[0]!='!' ) opt->setText(_("Error"));
+	else
 	{
-	    case 0x8017:
-		opt->childAdd("el")->setAttr("id","0")->setText(_("-10V to +10V"));
-		opt->childAdd("el")->setAttr("id","1")->setText(_("-5V to +5V"));
-		opt->childAdd("el")->setAttr("id","2")->setText(_("-2.5V to +2.5V"));
-		opt->childAdd("el")->setAttr("id","3")->setText(_("-1.25V to +1.25V"));
-		opt->childAdd("el")->setAttr("id","4")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
-		break;
-	    case 0x87019:
-		opt->childAdd("el")->setAttr("id","-1")->setText(_("Error"));
-		opt->childAdd("el")->setAttr("id","0")->setText(_("-15mV to +15mV"));
-		opt->childAdd("el")->setAttr("id","1")->setText(_("-50mV to +50mV"));
-		opt->childAdd("el")->setAttr("id","2")->setText(_("-100mV to +100mV"));
-		opt->childAdd("el")->setAttr("id","3")->setText(_("-500mV to +500mV"));
-		opt->childAdd("el")->setAttr("id","4")->setText(_("-1V to +1V"));
-		opt->childAdd("el")->setAttr("id","5")->setText(_("-2.5V to +2.5V"));
-		opt->childAdd("el")->setAttr("id","6")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
-		opt->childAdd("el")->setAttr("id","8")->setText(_("-10V to +10V"));
-		opt->childAdd("el")->setAttr("id","9")->setText(_("-5V to +5V"));
-		opt->childAdd("el")->setAttr("id","10")->setText(_("-1V to +1V"));
-		opt->childAdd("el")->setAttr("id","11")->setText(_("-500mV to +500mV"));
-		opt->childAdd("el")->setAttr("id","12")->setText(_("-150mV to +150mV"));
-		opt->childAdd("el")->setAttr("id","13")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
-		opt->childAdd("el")->setAttr("id","14")->setText(_("J Type"));
-		opt->childAdd("el")->setAttr("id","15")->setText(_("K Type"));
-		opt->childAdd("el")->setAttr("id","16")->setText(_("T Type"));
-		opt->childAdd("el")->setAttr("id","17")->setText(_("E Type"));
-		opt->childAdd("el")->setAttr("id","18")->setText(_("R Type"));
-		opt->childAdd("el")->setAttr("id","19")->setText(_("S Type"));
-		opt->childAdd("el")->setAttr("id","20")->setText(_("B Type"));
-		opt->childAdd("el")->setAttr("id","21")->setText(_("N Type"));
-		opt->childAdd("el")->setAttr("id","22")->setText(_("C Type"));
-		opt->childAdd("el")->setAttr("id","23")->setText(_("L Type"));
-		opt->childAdd("el")->setAttr("id","24")->setText(_("M Type"));
-		opt->childAdd("el")->setAttr("id","25")->setText(_("L Type (DIN43710C Type)"));
-		break;
+	    string rez;
+	    int vl = strtol(szReceive+3,NULL,16);
+	    for( int i_o = 0; i_o < 16; i_o++ )	rez += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    opt->setText(rez);
 	}
+    }
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+	Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+    }
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vSf" && ctrChkNode(opt) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X4S",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	if( RetValue || szReceive[0]!='!' ) opt->setText(_("Error"));
+	else
+	{
+	    string rez;
+	    int vl = strtol(szReceive+3,NULL,16);
+	    for( int i_o = 0; i_o < 16; i_o++ )	rez += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    opt->setText(rez);
+	}
+    }
+    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+	Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5S",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+    }
     else TParamContr::cntrCmdProc(opt);
 }

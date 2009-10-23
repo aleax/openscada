@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-01 10:45+0300\n"
+"POT-Creation-Date: 2009-10-22 21:16+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1999,12 +1999,12 @@ msgstr ""
 msgid "/mess/mess/3"
 msgstr ""
 
-#: tarchval.cpp:402 tarchval.cpp:540 tarchval.cpp:576 tarchval.cpp:753
+#: tarchval.cpp:401 tarchval.cpp:540 tarchval.cpp:576 tarchval.cpp:753
 #: tarchval.cpp:793
 msgid "ValBuf"
 msgstr ""
 
-#: tarchval.cpp:402
+#: tarchval.cpp:401
 msgid "Value is not present."
 msgstr "Значення відсутне."
 

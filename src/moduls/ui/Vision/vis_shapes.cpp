@@ -179,6 +179,19 @@ QFont WdgShape::getFont( const string &val, float fsc, bool pixSize )
     return rez;
 }
 
+QColor WdgShape::getColor( const string &val )
+{
+    QColor res_color;
+    size_t fPs = val.find("-");
+    if( fPs == string::npos )	res_color = QColor(val.c_str());
+    else
+    {
+	res_color = QColor( val.substr(0,fPs).c_str() );
+	res_color.setAlpha( atoi(val.substr(fPs+1).c_str()) );
+    }
+    return res_color;
+}
+
 //============ Support widget's shapes ============
 
 //*************************************************
@@ -409,9 +422,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		} else ((QPushButton*)shD->addrWdg)->setIcon(QPixmap());
 		//- Color -
 		QPalette plt;
-		QColor clr(shD->color.c_str());
+		QColor clr = getColor(shD->color);
 		if( clr.isValid() )	plt.setColor(QPalette::Button,clr);
-		clr = QColor(shD->colorText.c_str());
+		clr = getColor(shD->colorText);
 		if( clr.isValid() )	plt.setColor(QPalette::ButtonText,clr);
 		((QPushButton*)shD->addrWdg)->setPalette(plt);
 		//- Checkable -
@@ -719,7 +732,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 20:	//backColor
 	{
-	    shD->backGrnd.setColor(QColor(val.c_str()));
+	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
@@ -753,13 +766,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 22:	//bordWidth
 	    shD->border.setWidth(atoi(val.c_str()));	up = true;	break;
 	case 23:	//bordColor
-	    shD->border.setColor(QColor(val.c_str()));	up = true;	break;
+	    shD->border.setColor(getColor(val));	up = true;	break;
 	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str()); up = true; break;
 	case 25:	//font
 	    shD->font = getFont(val); up = true; break;
 	case 26:	//color
-	    shD->color = QColor(val.c_str()); break;
+	    shD->color = getColor(val); break;
 	case 27:	//orient
 	    shD->orient = atoi(val.c_str()); break;
 	case 28:	//wordWrap
@@ -976,7 +989,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 20:	//backColor
 	{
-	    shD->backGrnd.setColor(QColor(val.c_str()));
+	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
@@ -1006,7 +1019,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 22:	//bordWidth
 	    shD->border.setWidth(atoi(val.c_str()));	break;
 	case 23:	//bordColor
-	    shD->border.setColor(QColor(val.c_str()));	break;
+	    shD->border.setColor(getColor(val));	break;
 	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str());		break;
 	case 25:	//src
@@ -1281,7 +1294,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->geomMargin = atoi(val.c_str()); make_pct = true; break;
 	case 20:	//backColor
 	{
-	    shD->backGrnd.setColor( QColor(val.c_str()) );
+	    shD->backGrnd.setColor( getColor(val) );
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
@@ -1313,7 +1326,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 22:	//bordWidth
 	    shD->border.setWidth(atoi(val.c_str())); make_pct = true; break;
 	case 23:	//bordColor
-	    shD->border.setColor(QColor(val.c_str())); up = true; break;
+	    shD->border.setColor(getColor(val)); up = true; break;
 	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str()); up = true; break;
 	case 25:	//trcPer
@@ -1353,17 +1366,17 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = true;
 	    break;
 	case 32:	//curColor
-	    shD->curColor = QColor(val.c_str());	up = true;		break;
+	    shD->curColor = getColor(val);	up = true;		break;
 	case 33:	//sclColor
-	    shD->sclColor = QColor(val.c_str());	make_pct = true;	break;
+	    shD->sclColor = getColor(val);	make_pct = true;	break;
 	case 34:	//sclHor
-	    shD->sclHor = atoi(val.c_str());		make_pct = true;	break;
+	    shD->sclHor = atoi(val.c_str());	make_pct = true;	break;
 	case 35:	//sclVer
-	    shD->sclVer = atoi(val.c_str());		make_pct = true;	break;
+	    shD->sclVer = atoi(val.c_str());	make_pct = true;	break;
 	case 36:	//sclMarkColor
-	    shD->sclMarkColor = QColor(val.c_str());	make_pct = true;	break;
+	    shD->sclMarkColor = getColor(val);	make_pct = true;	break;
 	case 37:	//sclMarkFont
-	    shD->sclMarkFont = getFont(val);		make_pct = true;	break;
+	    shD->sclMarkFont = getFont(val);	make_pct = true;	break;
 	case 38:	//valArch
 	    if( shD->valArch == val )	break;
 	    shD->valArch = val;
@@ -1399,7 +1412,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    case 0: shD->prms[trndN].setAddr(val);			break;		//addr
 		    case 1: shD->prms[trndN].setBordL(atof(val.c_str()));	break;		//bordL
 		    case 2: shD->prms[trndN].setBordU(atof(val.c_str()));	break;		//bordU
-		    case 3: shD->prms[trndN].setColor(QColor(val.c_str()));			break;		//color
+		    case 3: shD->prms[trndN].setColor(getColor(val));		break;		//color
 		    case 4: shD->prms[trndN].setCurVal(atof(val.c_str())); make_pct = false;	break;		//value
 		}
 	    }
@@ -2001,7 +2014,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>>> Draw trend
 	bool end_vl = false;
 	double curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
-	int    curPos, averPos = 0, prevPos = 0;
+	int    curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos;
 	long long curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
@@ -2034,12 +2047,21 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    //Write point and line
 	    if( averVl != EVAL_REAL )
 	    {
-		int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
-		if( prevVl == EVAL_REAL ) pnt.drawPoint(averPos,c_vpos);
+		if( sTr->valTp() == 0 )
+		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((100.*(0-bordL)/(bordU-bordL))-vsMin)/(vsMax-vsMin))));
+		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
+		if( prevVl == EVAL_REAL )
+		{
+		    if( sTr->valTp() != 0 ) pnt.drawPoint(averPos,c_vpos);
+		    else pnt.drawLine(averPos,z_vpos,averPos,c_vpos);    
+		}
 		else
 		{
 		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
-		    pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
+		    if( sTr->valTp() != 0 ) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
+		    else
+			for( int sps = prevPos+1; sps <= averPos; sps++ )
+			    pnt.drawLine(sps,z_vpos,sps,c_vpos);
 		}
 	    }
 	    prevVl  = averVl;
@@ -2518,8 +2540,9 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) break;
-	    shD->active = (bool)atoi(val.c_str());
-	    setFocus( w, shD->addrWdg, shD->active && ((RunWdgView*)w)->permCntr() );
+	    shD->active = (bool)atoi(val.c_str()) && ((RunWdgView*)w)->permCntr();
+	    setFocus( w, shD->addrWdg, shD->active );
+	    shD->addrWdg->setSelectionMode( shD->active ? QAbstractItemView::SingleSelection : QAbstractItemView::NoSelection );
 //	    shD->addrWdg->setEnabled( shD->active && ((RunWdgView*)w)->permCntr() );
 	    break;
 	case 12:	//geomMargin
@@ -2528,7 +2551,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	{
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
-	    brsh.setColor(QColor(val.c_str()));
+	    brsh.setColor(getColor(val));
 	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Base).color());
 	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
 	    plt.setBrush(QPalette::Base,brsh);
@@ -2616,7 +2639,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    case 0: shD->itProps[itNum].lev = atoi(val.c_str());	break;	//lev
 		    case 1: shD->itProps[itNum].tmpl = val;			break;	//tmpl
 		    case 2: shD->itProps[itNum].font = getFont(val,vmin(w->xScale(true),w->yScale(true)));	break;	//fnt
-		    case 3: shD->itProps[itNum].clr = QColor(val.c_str());	break;	//color
+		    case 3: shD->itProps[itNum].clr = getColor(val);		break;	//color
 		}
 	    }
     }
@@ -2843,7 +2866,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    else if( i_cl == c_mess )
 		shD->addrWdg->setItem( i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()) );
 	    else continue;
-	    tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
+	    //tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    tit->setData(Qt::FontRole,fnt);
 	    tit->setData(Qt::BackgroundRole,clr.isValid() ? clr : QVariant());
 	    tit->setData(Qt::ForegroundRole,fclr.isValid() ? fclr : QVariant());
@@ -3203,7 +3226,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case 20: 	//backColor
 	{
-	    shD->backGrnd.setColor(QColor(val.c_str()));
+	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
@@ -3233,7 +3256,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 22:	//bordWidth
 	    shD->border.setWidth(atoi(val.c_str()));	break;
 	case 23:	//bordColor
-	    shD->border.setColor(QColor(val.c_str()));	break;
+	    shD->border.setColor(getColor(val));	break;
 	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str());	break;
 	case 3:		//pgOpenSrc

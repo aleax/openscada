@@ -183,11 +183,11 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     actAlrmLev->setStatusTip(_("Press for all alarms quitance."));
     //>>> Alarm by Light
     if(!ico_t.load(TUIS::icoPath("alarmLight").c_str())) ico_t.load(":/images/alarmLight.png");
-    actAlrmLight = new QAction( QPixmap::fromImage(ico_t), _("Light alarm"), this );
+    actAlrmLight = new QAction( QPixmap::fromImage(ico_t), _("Blink alarm"), this );
     actAlrmLight->setObjectName("alarmLight");
-    actAlrmLight->setToolTip(_("Light alarm"));
-    actAlrmLight->setWhatsThis(_("The button for all light alarms quitance"));
-    actAlrmLight->setStatusTip(_("Press for all light alarms quitance."));
+    actAlrmLight->setToolTip(_("Blink alarm"));
+    actAlrmLight->setWhatsThis(_("The button for all blink alarms quitance"));
+    actAlrmLight->setStatusTip(_("Press for all blink alarms quitance."));
     actAlrmLight->setVisible(false);
     //>>> Alarm by mono sound (PC speaker)
     if(!ico_t.load(TUIS::icoPath("alarmAlarm").c_str())) ico_t.load(":/images/alarmAlarm.png");
@@ -795,6 +795,9 @@ void VisRun::alarmAct( QAction *alrm )
 	setAttr("tmpl",TSYS::uint2str(quitance))->
 	setAttr("wdg",qwdg);
     cntrIfCmd(req);
+
+    //> Send event to master page
+    if( master_pg ) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
 }
 
 void VisRun::initSess( const string &prj_it, bool crSessForce )
