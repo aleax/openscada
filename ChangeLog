@@ -1,3 +1,10 @@
+2009-10-26 Roman
+- DAQ.DAQGate: Setup parameter's values to EVAL is added on time connection error.
+- DAQ.ICP_DAS: Watchdogs support is added.
+- FIX:UI.QTCfg: QLabel values display is fixed for HTML values.
+- UI.WebCfgD: EVAL display is added for boolean readonly values.
+
+
 2009-10-23 Roman
 - FIX:DAQ.BlockCalc: Block's ordering is fixed.
 - DAQ.BlockCalc, DAQ.LogicLev: Independent resource is added for lock writing parameters on time calc.

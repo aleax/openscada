@@ -1377,7 +1377,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    {
 			sel_ok = true;
 			if( val_w )	val_w->setCurrentIndex( c_el );
-			if( val_r )	val_r->setText((string("<b>")+s_nm+"</b>").c_str());
+			if( val_r )	val_r->setText((string("<b>")+TSYS::strEncode(s_nm,TSYS::Html)+"</b>").c_str());
 		    }
 		}
 	    }
@@ -1396,7 +1396,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			{
 			    sel_ok = true;
 			    if( val_w )	val_w->setCurrentIndex( c_el-1 );
-			    if( val_r )	val_r->setText((string("<b>")+x_lst.childGet(i_el)->text()+"</b>").c_str());
+			    if( val_r )	val_r->setText((string("<b>")+TSYS::strEncode(x_lst.childGet(i_el)->text(),TSYS::Html)+"</b>").c_str());
 			}
 		    }
 	    }
@@ -1408,7 +1408,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_w->insertItem(c_el,data_req.text().c_str());
 		    val_w->setCurrentIndex(c_el);
 		}
-		if(val_r)	val_r->setText((string("<b>")+data_req.text()+"</b>").c_str());
+		if(val_r)	val_r->setText((string("<b>")+TSYS::strEncode(data_req.text(),TSYS::Html)+"</b>").c_str());
 	    }
 	}
     }
@@ -1481,7 +1481,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if( val_r )
 	    {
 		val_r->setToolTip(t_s.attr("help").c_str());
-		val_r->setText((string("<b>")+((data_req.text() == "<EVAL>")?_("<EVAL>"):(atoi(data_req.text().c_str())?_("On"):_("Off")))+string("</b>")).c_str());
+		val_r->setText((string("<b>")+TSYS::strEncode((data_req.text() == "<EVAL>")?_("<EVAL>"):(atoi(data_req.text().c_str())?_("On"):_("Off")),TSYS::Html)+"</b>").c_str());
 	    }
 	}
 	//> View edit fields

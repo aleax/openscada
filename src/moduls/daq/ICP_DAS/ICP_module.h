@@ -102,7 +102,8 @@ class TMdPrm : public TParamContr
 	int		clcCnt;
 	ResString	acq_err;
 
-	void		*extPrms;
+	void	*extPrms;
+	float	wTm;
 };
 
 //******************************************************
@@ -120,10 +121,12 @@ class TMdContr: public TController
 
 	double period( )	{ return vmax(mPer,0.01); }
 	int    prior( )		{ return mPrior; }
+	string prmLP( const string &prm );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void prmEn( const string &id, bool val );
+	void setPrmLP( const string &prm, const string &vl );
 
     protected:
 	//Methods
@@ -142,8 +145,9 @@ class TMdContr: public TController
 	Res	en_res, reqRes;			//Resource for enable params and request values
 	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
-		&mBus,				//Serial port address (1-COM1,2-COM2, ...)
+		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
 		&mBaud;				//Baudrate
+	string	&mLPprms;			//LinPAC parameters
 
 	bool	prcSt,				//Process task active
 		endRunReq;			//Request to stop of the Process task

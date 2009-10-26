@@ -1366,7 +1366,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       if( val_r )
       {
 	val_r.title = t_s.getAttribute('help');
-	setNodeText(val_r,parseInt(nodeText(dataReq))?'On':'Off');
+	setNodeText(val_r,nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On':'Off'));
       }
     }
     //> View edit fields

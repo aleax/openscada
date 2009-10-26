@@ -107,6 +107,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("BUS",_("Bus"),TFld::Integer,TFld::NoFlag,"2","1") );
     fldAdd( new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::NoFlag,"6","115200") );
+    fldAdd( new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -155,8 +156,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prcSt(false), endRunReq(false), tm_gath(0),
-	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()),
-	mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId())
+	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId()), mLPprms(cfg("LP_PRMS").getSd())
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -175,7 +175,6 @@ string TMdContr::getStatus( )
 
     return val;
 }
-
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
@@ -244,6 +243,23 @@ bool TMdContr::cfgChange( TCfg &icfg )
     return true;
 }
 
+string TMdContr::prmLP( const string &prm )
+{
+    XMLNode prmNd;
+    try { prmNd.load(mLPprms); return prmNd.attr(prm); } catch(...){ }
+
+    return "";
+}
+
+void TMdContr::setPrmLP( const string &prm, const string &vl )
+{
+    XMLNode prmNd;
+    try { prmNd.load(mLPprms); } catch(...){ }
+    prmNd.setAttr(prm,vl);
+    mLPprms = prmNd.save(XMLNode::BrAllPast);
+    modif();
+}
+
 void TMdContr::prmEn( const string &id, bool val )
 {
     int i_prm;
@@ -267,6 +283,10 @@ void *TMdContr::Task( void *icntr )
     cntr.endRunReq = false;
     cntr.prcSt = true;
 
+    float wTm = 0;
+    //> Init watchdog and get previous state
+    if( cntr.mBus == 0 ) wTm = atof(cntr.prmLP("wTm").c_str());
+
     try
     {
 	while( !cntr.endRunReq )
@@ -284,11 +304,17 @@ void *TMdContr::Task( void *icntr )
 		cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 	    }
 
+	    //> Watchdog timer process
+	    if( cntr.mBus == 0 && wTm > 0 ) { ResAlloc res( cntr.reqRes, true ); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
+
 	    //> Calc next work time and sleep
 	    TSYS::taskSleep((long long)(1e9*cntr.period()));
 	}
     }
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
+
+    //> Watchdog timer disable
+    if( cntr.mBus == 0 && wTm > 0 ) { ResAlloc res( cntr.reqRes, true ); DisableWDT(); res.release(); }
 
     cntr.prcSt = false;
 
@@ -304,6 +330,17 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",cfg("BUS").fld().descr(),0664,"root","root",3,"tp","dec","dest","select","select","/cntr/cfg/busLst");
 	if( cfg("BAUD").view() )
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/BAUD",cfg("BAUD").fld().descr(),0664,"root","root",3,"tp","dec","dest","sel_ed","select","/cntr/cfg/boudLst");
+	if( mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC") )
+	{
+	    if( startStat() )
+	    {
+		ctrMkNode("fld",opt,-1,"/LPcfg/sn",_("Serial number"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/LPcfg/SDKv",_("SDK version"),R_R_R_,"root","DAQ",1,"tp","str");
+		//ctrMkNode("fld",opt,-1,"/LPcfg/RSW",_("Rotary switch ID"),R_R_R_,"root","DAQ",1,"tp","dec");
+		//ctrMkNode("fld",opt,-1,"/LPcfg/dipSW",_("DIP switch"),R_R_R_,"root","DAQ",1,"tp","hex");
+	    }
+	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root","DAQ",1,"tp","real");
+	}
 	return;
     }
     //> Process command to page
@@ -329,14 +366,41 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("576000");
 	opt->childAdd("el")->setText("921600");
     }
+    else if( mBus == 0 && startStat() && a_path == "/LPcfg/sn" && ctrChkNode(opt) )
+    {
+	ResAlloc res( reqRes, true );
+	unsigned char sN[8];
+	Read_SN(sN);
+	opt->setText( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]) );
+    }
+    else if( mBus == 0 && startStat() && a_path == "/LPcfg/SDKv" && ctrChkNode(opt) )
+    {
+	ResAlloc res( reqRes, true );
+	opt->setText( TSYS::strMess("%4.2f",GetSDKversion()) );
+    }
+    /*else if( mBus == 0 && startStat() && a_path == "/LPcfg/RSW" && ctrChkNode(opt) )
+    {
+	ResAlloc res( reqRes, true );
+	opt->setText( TSYS::int2str(GetRotaryID(0)) );
+    }
+    else if( mBus == 0 && startStat() && a_path == "/LPcfg/dipSW" && ctrChkNode(opt) )
+    {
+	ResAlloc res( reqRes, true );
+	opt->setText( TSYS::int2str(GetDIPswitch()) );
+    }*/
+    else if( mBus == 0 && a_path == "/LPcfg/wTm" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( prmLP("wTm") );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	setPrmLP("wTm",opt->text());
+    }
     else TController::cntrCmdProc(opt);
 }
 
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr( name, tp_prm ), p_el("w_attr"), extPrms(NULL), endRunReq(false), prcSt(false), clcCnt(0),
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+    TParamContr( name, tp_prm ), p_el("w_attr"), extPrms(NULL), endRunReq(false), prcSt(false), clcCnt(0), wTm(0),
     modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()), modPrms(cfg("MOD_PRMS").getSd())
 {
 
@@ -447,19 +511,22 @@ void TMdPrm::loadExtPrms( )
 {
     if( !enableStat() )	return;
 
-    XMLNode prmNd, *wNd;
+    XMLNode prmNd;
+    try{ prmNd.load(modPrms); } catch(...){ }
     string  vl;
 
     switch( modTp )
     {
 	case 0x8017:
 	    if( !extPrms ) extPrms = new PrmsI8017();
-	    try{ prmNd.load(modPrms); } catch(...){ }
 	    vl = prmNd.attr("cnls"); if( !vl.empty() ) ((PrmsI8017*)extPrms)->prmNum = vmin(8,vmax(0,atoi(vl.c_str())));
 	    vl = prmNd.attr("fastPer"); if( !vl.empty() ) ((PrmsI8017*)extPrms)->fastPer = atof(vl.c_str());
 	    for( int i_n = 0; i_n < prmNd.childSize(); i_n++ )
 		if( prmNd.childGet(i_n)->name() == "cnl" )
 		    ((PrmsI8017*)extPrms)->cnlMode[atoi(prmNd.childGet(i_n)->attr("id").c_str())] = atoi(prmNd.childGet(i_n)->text().c_str());
+	    break;
+	case 0x87024: case 0x87057:
+	    vl = prmNd.attr("wTm"); if( !vl.empty() ) wTm = vmin(25.5,vmax(0,atof(vl.c_str())));
 	    break;
     }
 }
@@ -477,6 +544,9 @@ void TMdPrm::saveExtPrms( )
 	    prmNd.setAttr("fastPer",TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
 	    for( int i_c = 0; i_c < 8; i_c++ )
 		prmNd.childAdd("cnl")->setAttr("id",TSYS::int2str(i_c))->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[i_c]));
+	    break;
+	case 0x87024: case 0x87057:
+	    prmNd.setAttr("wTm",TSYS::real2str(wTm));
 	    break;
     }
 
@@ -555,6 +625,14 @@ void TMdPrm::getVals( )
 
 	    char szReceive[20];
 
+	    //> Host watchdog processing
+	    if( wTm >= 0.1 )
+	    {
+		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)).c_str(), szReceive, 1, 0, &wT );
+		if( RetValue ) { acq_err.setVal(_("10:Request to module error.")); break; }
+	    }
+
+	    //> Get data
 	    for( int i_v = 0; i_v < 4; i_v++ )
 	    {
 		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v).c_str(), szReceive, 1, 0, &wT );
@@ -570,6 +648,14 @@ void TMdPrm::getVals( )
 
 	    char szReceive[20];
 
+	    //> Host watchdog processing
+	    if( wTm >= 0.1 )
+	    {
+		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)).c_str(), szReceive, 1, 0, &wT );
+		if( RetValue ) { acq_err.setVal(_("10:Request to module error.")); break; }
+	    }
+
+	    //> Get data
 	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X6",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
 	    int vl = -1;
 	    if( !(RetValue||szReceive[0]!='!') )
@@ -697,7 +783,14 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 
 	    string cmd = TSYS::strMess("#%02X%d%+07.3f",(owner().mBus==0)?0:modAddr,atoi(valo.name().c_str()+1),vl);
 
+	    rep24:
 	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
+	    //> Set watchdog flag is process
+	    if( !RetValue && szReceive[0] == '!' )
+	    {
+		Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+		goto rep24;
+	    }
 	    valo.setR( (RetValue||szReceive[0]!='>' ? EVAL_REAL : vl), 0, true );
 	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
 	    break;
@@ -713,7 +806,15 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    int daddr = atoi(valo.name().c_str()+1);
 	    string cmd = TSYS::strMess("#%02X%s%d%02X",(owner().mBus==0)?0:modAddr,(daddr/8)?"B":"A",daddr%8,vl);
 
+	    rep57:
 	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
+	    //> Set watchdog flag is process
+	    if( !RetValue && szReceive[0] == '!' )
+	    {
+		Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+		goto rep57;
+	    }
+
 	    valo.setB( (RetValue||szReceive[0]!='>' ? EVAL_BOOL : vl), 0, true );
 	    acq_err.setVal(RetValue?_("10:Request to module error."):((szReceive[0]!='>')?_("11:Respond from module error."):""));
 	    break;
@@ -786,31 +887,38 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	switch( modTp )
 	{
 	    case 0x8017:
-		if( enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
-		{
-		    ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root","DAQ",1,"tp","dec");
-		    ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
-		    if( ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")) )
-			for( int i_v = 0; i_v < 8; i_v++ )
-			    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
-		}
+		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
+		ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root","DAQ",1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
+		if( ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")) )
+		    for( int i_v = 0; i_v < 8; i_v++ )
+			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
 		break;
 	    case 0x87019:
-		if( enableStat() && owner().startStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
-		    for( int i_v = 0; i_v < 8; i_v++ )
-			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),TSYS::strMess(_("Input %d type"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		if( !enableStat() || !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
+		for( int i_v = 0; i_v < 8; i_v++ )
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),TSYS::strMess(_("Input %d type"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		break;
+	    case 0x87024:
+		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
+		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root","DAQ",3,"tp","real","min","0","max","25.5");
+		if( !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module")) ) break;
+		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
 		break;
 	    case 0x87057:
-		if( enableStat() && owner().startStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) )
-		{
-		    ctrMkNode("fld",opt,-1,"/cfg/wSt",_("Host watchdog status is set"),RWRWR_,"root","DAQ",1,"tp","bool");
-		    ctrMkNode("fld",opt,-1,"/cfg/wEn",_("Host watchdog enable"),RWRWR_,"root","DAQ",1,"tp","bool");
-		    ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog time (s)"),RWRWR_,"root","DAQ",1,"tp","real");
-		    ctrMkNode("fld",opt,-1,"/cfg/vPon",_("Power on values"),R_R_R_,"root","DAQ",1,"tp","str");
-		    ctrMkNode("comm",opt,-1,"/cfg/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
-		    ctrMkNode("fld",opt,-1,"/cfg/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
-		    ctrMkNode("comm",opt,-1,"/cfg/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
-		}
+		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
+		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root","DAQ",3,"tp","real","min","0","max","25.5");
+		if( !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module")) ) break;
+		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
+		break;
 		break;
 	}
 	return;
@@ -828,25 +936,25 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87024))->setText("I-87024");
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87057))->setText("I-87057");
     }
-    else if( modTp == 0x8017 && a_path == "/cfg/prms" )
+    else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/prms" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
 	{ ((PrmsI8017*)extPrms)->prmNum = atoi(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( modTp == 0x8017 && a_path == "/cfg/fastPer" )
+    else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/fastPer" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
 	{ ((PrmsI8017*)extPrms)->fastPer = atof(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( modTp == 0x8017 && a_path.substr(0,12) == "/cfg/mode/in" )
+    else if( modTp == 0x8017 && enableStat() && a_path.substr(0,12) == "/cfg/mode/in" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
 	{ ((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( modTp == 0x8017 && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
+    else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("-10V to +10V"));
 	opt->childAdd("el")->setAttr("id","1")->setText(_("-5V to +5V"));
@@ -854,7 +962,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","3")->setText(_("-1.25V to +1.25V"));
 	opt->childAdd("el")->setAttr("id","4")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
     }
-    else if( modTp == 0x87019 && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
+    else if( modTp == 0x87019 && enableStat() && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
     {
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
@@ -898,46 +1006,73 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","24")->setText(_("M Type"));
 	opt->childAdd("el")->setAttr("id","25")->setText(_("L Type (DIN43710C Type)"));
     }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/wSt" )
+    else if( enableStat() && a_path == "/cfg/wTm" )
     {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::real2str(wTm) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	{ wTm = atof(opt->text().c_str()); saveExtPrms(); }
+    }
+    else if( enableStat() && owner().startStat() && a_path == "/cfg/mod/wSt" && ctrChkNode(opt) )
+    {
+	string wSt;
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	if( !RetValue && szReceive[0]=='!' )
 	{
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-	    opt->setText( (RetValue||szReceive[0]!='!') ? EVAL_STR : TSYS::int2str((bool)strtol(szReceive+3,NULL,16)) );
+	    wSt += (bool)strtol(szReceive+3,NULL,16) ? _("Set. ") : _("Clear. ");
+
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    if( !RetValue && szReceive[0]=='!' )
+	    {
+		wSt += (bool)strtol(string(szReceive+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
+		wSt += TSYS::real2str(0.1*strtol(szReceive+4,NULL,16))+_(" s.");
+	    }
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) && !atoi(opt->text().c_str()) )
-	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	opt->setText(wSt);
     }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/wEn" )
+    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt) )
     {
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 
-	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
-	    opt->setText( (RetValue||szReceive[0]!='!') ? EVAL_STR : TSYS::int2str((bool)strtol(string(szReceive+3,1).c_str(),NULL,16)) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
-	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X3%d%02X",(owner().mBus==0)?0:modAddr,atoi(opt->text().c_str()),strtol(szReceive+4,NULL,16)).c_str(), szReceive, 1, 0, &wT );
-    }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/wTm" )
-    {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
-	    opt->setText( (RetValue||szReceive[0]!='!') ? EVAL_STR : TSYS::real2str(0.1*strtol(szReceive+4,NULL,16)) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	string rez;
+	for( int i_c = 0; i_c < 4; i_c++ )
 	{
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X3%d%02X",(owner().mBus==0)?0:modAddr,(bool)strtol(string(szReceive+3,1).c_str(),NULL,16),(int)(10*atof(opt->text().c_str()))).c_str(), szReceive, 1, 0, &wT );
-	    mess_info("TEST 00","%d: '%s'\n",RetValue,(char*)TSYS::strMess("~%02X3%d%02X",(owner().mBus==0)?0:modAddr,(bool)strtol(string(szReceive+3,1).c_str(),NULL,16),(int)(10*atof(opt->text().c_str()))).c_str());
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X7%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
+	    if( RetValue || szReceive[0]!='!' ) { rez = _("Error"); break; }
+	    rez = rez + (szReceive+3) + " ";
 	}
+	opt->setText(rez);
     }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vPon" && ctrChkNode(opt) )
+    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+	for( int i_c = 0; i_c < 4; i_c++ )
+	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X4%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
+    }
+    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+
+	string rez;
+	for( int i_c = 0; i_c < 4; i_c++ )
+	{
+	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X4%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
+	    if( RetValue || szReceive[0]!='!' ) { rez = _("Error"); break; }
+	    rez = rez + (szReceive+3) + " ";
+	}
+	opt->setText(rez);
+    }
+    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    {
+	ResAlloc res( owner().reqRes, true );
+	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
+	for( int i_c = 0; i_c < 4; i_c++ )
+	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
+    }
+    else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt) )
     {
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
@@ -952,13 +1087,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->setText(rez);
 	}
     }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
     {
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 	Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
     }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vSf" && ctrChkNode(opt) )
+    else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
     {
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
@@ -973,7 +1108,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->setText(rez);
 	}
     }
-    else if( modTp == 0x87057 && owner().startStat() && a_path == "/cfg/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
     {
 	ResAlloc res( owner().reqRes, true );
 	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
