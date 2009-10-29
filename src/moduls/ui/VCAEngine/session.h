@@ -58,7 +58,7 @@ class Session : public TCntrNode
 	bool   start( )		{ return mStart; }		//Start stat
 	bool   backgrnd( )	{ return mBackgrnd; }		//Background session execution
 	int    connects( )	{ return mConnects; }		//Connections counter
-	unsigned calcClk( )	{ return mCalcClk; }		//Calc clock
+	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( );
 	int stlCurent( )	{ return mStyleIdW; }
 
@@ -71,6 +71,8 @@ class Session : public TCntrNode
 	void connect( )				{ mConnects++; }
 	void disconnect( )			{ if(mConnects>0) mConnects--; }
 	void stlCurentSet( int sid );
+
+	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
 	//> Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
@@ -221,15 +223,16 @@ class SessWdg : public Widget, public TValFunc
 	bool attrChange( Attr &cfg, TVariant prev );
 
 	unsigned int modifVal( Attr &cfg );
-	bool modifChk( unsigned int tm );
+	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
     private:
 	//Attributes
 	char		mProc	: 1;
 	char		inLnkGet: 1;
-	
+
 	string		mWorkProg;
 	unsigned int	mMdfClc;
+	unsigned int	&mCalcClk;
 	Res		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list

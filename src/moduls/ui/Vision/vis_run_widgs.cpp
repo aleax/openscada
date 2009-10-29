@@ -203,7 +203,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     {
 	case -2:	//focus
 	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
-	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
+	    if( (bool)atoi(val.c_str()) )	setFocus(Qt::OtherFocusReason);
 	    return true;
 	case -3:	//perm
 	    setPermCntr( atoi(val.c_str())&SEQ_WR );
@@ -544,10 +544,10 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     if( (pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg )
     {
 	RunPageView *pg = new RunPageView(pg_it,mainWin(),this);
-	pg->setAttribute(Qt::WA_DeleteOnClose);
-	pg->setWindowState( pg->windowState() & ~Qt::WindowMaximized );
-	pg->setWindowFlags(Qt::Tool);
-	pg->setWindowTitle(mainWin()->windowTitle());
+	pg->setAttribute( Qt::WA_DeleteOnClose );
+	pg->setWindowFlags( Qt::Dialog/*Qt::Tool*/ );
+	pg->setWindowState( pg->windowState() & (~Qt::WindowMaximized) );
+	pg->setWindowTitle( mainWin()->windowTitle() );
 	pg->load("");
 	pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
 			  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));

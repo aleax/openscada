@@ -638,7 +638,7 @@ void VisRun::exportDiag( const string &idg )
 
     QPixmap img = QPixmap::grabWidget(rwdg);
 
-    //> Call save file dialog -
+    //> Call save file dialog
     QString fileName = QFileDialog::getSaveFileName(this,_("Save diagram's image"),
 	(TSYS::path2sepstr(rwdg->name())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
     if( !fileName.isEmpty() && !img.save(fileName) )

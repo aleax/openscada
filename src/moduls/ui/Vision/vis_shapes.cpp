@@ -1895,7 +1895,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     if( prmRealSz >= 0 )
     {
 	vsPerc = false;
-	if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() )
+	if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() && shD->prms[prmRealSz].valTp() != 0 )
 	{
 	    //>>> Check trend for valid data
 	    aVbeg = vmax(tBeg,shD->prms[prmRealSz].valBeg());
@@ -1927,6 +1927,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		vsMax += wnt_dp/2;
 	    }
 	}
+	else if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() && shD->prms[prmRealSz].valTp() == 0 )	{ vsMax = 1.5; vsMin = -0.5; }
 	else { vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
     }
 
@@ -2048,7 +2049,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    if( averVl != EVAL_REAL )
 	    {
 		if( sTr->valTp() == 0 )
-		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((100.*(0-bordL)/(bordU-bordL))-vsMin)/(vsMax-vsMin))));
+		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin));
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
 		if( prevVl == EVAL_REAL )
 		{
@@ -2851,6 +2852,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 
 	for( int i_cl = 0; i_cl < shD->addrWdg->columnCount(); i_cl++ )
 	{
+	    tit = NULL;
 	    if( i_cl == c_tm )
 	    {
 		QDateTime	dtm;
@@ -2866,7 +2868,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    else if( i_cl == c_mess )
 		shD->addrWdg->setItem( i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()) );
 	    else continue;
-	    //tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
+	    tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    tit->setData(Qt::FontRole,fnt);
 	    tit->setData(Qt::BackgroundRole,clr.isValid() ? clr : QVariant());
 	    tit->setData(Qt::ForegroundRole,fclr.isValid() ? fclr : QVariant());
@@ -2912,6 +2914,7 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseMove:
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease:
+	    case QEvent::MouseButtonDblClick:
 		QApplication::sendEvent(w,event);
 	    return true;
 	}

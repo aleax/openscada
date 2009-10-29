@@ -185,7 +185,10 @@ void Session::setStart( bool val )
     }
 }
 
-
+bool Session::modifChk( unsigned int tm, unsigned int iMdfClc )
+{
+    return (mCalcClk>=tm) ? (iMdfClc >= tm && iMdfClc <= mCalcClk) : (iMdfClc >= tm || iMdfClc <= mCalcClk);
+}
 
 string Session::ico( )
 {
@@ -459,7 +462,7 @@ bool Session::stlPropSet( const string &pid, const string &vl )
     map<string,string>::iterator iStPrp = mStProp.find(pid);
     if( iStPrp == mStProp.end() ) return false;
     iStPrp->second = vl;
-    
+
     return true;
 }
 
@@ -518,7 +521,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		for( i_q = mAlrm.size()-1; i_q >= 0; i_q-- )
 		{
 		    if( !(mAlrm[i_q].qtp & Engine::Sound) ) continue;
-		    if( wdg.empty() || mAlrm[i_q].clc >= a_tm || i_next > 0 )	break;	//First, new and next alarms break
+		    if( wdg.empty() || modifChk(a_tm,mAlrm[i_q].clc) || i_next > 0 )	break;	//First, new and next alarms break
 		    if( i_first < 0 ) i_first = i_q;
 		    if( wdg == mAlrm[i_q].path ) i_next = i_q;
 		}
@@ -1013,7 +1016,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), mProc(false), TValFunc(iid+"_wdg",NULL), mMdfClc(0),
-    mSess(isess), inLnkGet(true)
+    mSess(isess), inLnkGet(true), mCalcClk(isess->calcClk())
 {
 
 }
@@ -1359,7 +1362,7 @@ void SessWdg::prcElListUpdate( )
 void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
 {
     string wpath = path+"/"+id();
-    if( modifChk(tm) ) els.push_back(wpath);
+    if( modifChk(tm,mMdfClc) ) els.push_back(wpath);
     for( int i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++ )
 	if( wdgPresent(mWdgChldAct[i_ch]) )
 	    wdgAt(mWdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
@@ -1367,15 +1370,13 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
 
 unsigned int SessWdg::modifVal( Attr &cfg )
 {
-    int m_clc = ownerSess()->calcClk( );
-    if( atoi(cfg.fld().reserve().c_str()) ) mMdfClc = m_clc;
-    return m_clc;
+    if( atoi(cfg.fld().reserve().c_str()) ) mMdfClc = mCalcClk;
+    return mCalcClk;
 }
 
-bool SessWdg::modifChk( unsigned int tm )
+bool SessWdg::modifChk( unsigned int tm, unsigned int iMdfClc )
 {
-    int m_clc = ownerSess()->calcClk( );
-    return (m_clc>tm) ? (mMdfClc >= tm && mMdfClc <= m_clc) : (mMdfClc >= tm || mMdfClc <= m_clc);
+    return (mCalcClk>=tm) ? (iMdfClc >= tm && iMdfClc <= mCalcClk) : (iMdfClc >= tm || iMdfClc <= mCalcClk);
 }
 
 void SessWdg::calc( bool first, bool last )
@@ -1607,7 +1608,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    if( !tm )
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
 		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
-	    if( !tm || modifChk(tm) )
+	    if( !tm || modifChk(tm,mMdfClc) )
 	    {
 		AutoHD<Attr> attr;
 		vector<string> als;
@@ -1615,7 +1616,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		for( int i_l = 0; i_l < als.size(); i_l++ )
 		{
 		    attr = attrAt(als[i_l]);
-		    if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
+		    if( !(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()) )
 			opt->childAdd("el")->setAttr("id",als[i_l].c_str())->
 					     setAttr("p",attr.at().fld().reserve())->
 					     setText(attr.at().getS());
@@ -1639,7 +1640,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEQ_RD:SEQ_RD|SEQ_WR),owner(),grp(),permit());
 
 	//>> Self attributes put
-	if( !tm || modifChk(tm) )
+	if( !tm || modifChk(tm,mMdfClc) )
 	{
 	    if( !tm )
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(TSYS::int2str(perm));
@@ -1649,7 +1650,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    for( int i_l = 0; i_l < als.size(); i_l++ )
 	    {
 		attr = attrAt(als[i_l]);
-		if( !(attr.at().flgGlob()&Attr::IsUser) && attr.at().modif() >= tm && atoi(attr.at().fld().reserve().c_str()) )
+		if( !(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()) )
 		    opt->childAdd("el")->setAttr("id",als[i_l].c_str())->
 				     setAttr("p",attr.at().fld().reserve())->
 				     setText(attr.at().getS());

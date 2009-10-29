@@ -319,8 +319,6 @@ class VCASess : public TCntrNode
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 
-
-
 	//> Objects
 	void objList( vector<string> &list )		{ chldList(id_objs,list); }
 	bool objPresent( const string &name )		{ return chldPresent(id_objs,name); }

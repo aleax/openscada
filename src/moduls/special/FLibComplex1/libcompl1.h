@@ -536,29 +536,32 @@ class Divider : public TFunction
 //*   1:sp    - Setpoint                                              *
 //*   2:max   - Maximum scale                                         *
 //*   3:min   - Minimum scale                                         *
-//*   4:out   - Output                                                *
-//*   5:auto  - Automatic mode                                        *
-//*   6:casc  - Cascade mode                                          *
-//*   7:Kp    - Gain                                                  *
-//*   8:Ti    - Integral time (ms)                                    *
-//*   9:Td    - Differencial time (ms)                                *
-//*   10:Tf   - Filter (lag) time (ms)                                *
-//*   11:Hup  - Up output limit (%)                                   *
-//*   12:Hdwn - Down output limit (%)                                 *
-//*   13:Zi   - Insensibility zone (%)                                *
-//*   14:K1   - Scale input 1                                         *
-//*   15:in1  - Add input 1                                           *
-//*   16:K2   - Scale input 2                                         *
-//*   17:in2  - Add input 2                                           *
-//*   18:K3   - Scale input 3                                         *
-//*   19:in3  - Add input 3                                           *
-//*   20:K4   - Scale input 4                                         *
-//*   21:in4  - Add input 4                                           *
-//*   22:cycle- Calc cycle (ms)                                       *
+//*   4:manIn - Manual input                                          *
+//*   5:out   - Output                                                *
+//*   6:auto  - Automatic mode                                        *
+//*   7:casc  - Cascade mode                                          *
+//*   8:Kp    - Gain                                                  *
+//*   9:Ti    - Integral time (ms)                                    *
+//*   10:Kd   - Kd                                                    *
+//*   11:Td   - Differencial time (ms)                                *
+//*   12:Tzd  - Filter (lag) time (ms)                                *
+//*   13:Hup  - Up output limit (%)                                   *
+//*   14:Hdwn - Down output limit (%)                                 *
+//*   15:Zi   - Insensibility zone (%)                                *
+//*   16:followSp - Follow to sp from variable for manual             *
+//*   17:K1   - Scale input 1                                         *
+//*   18:in1  - Add input 1                                           *
+//*   19:K2   - Scale input 2                                         *
+//*   20:in2  - Add input 2                                           *
+//*   21:K3   - Scale input 3                                         *
+//*   22:in3  - Add input 3                                           *
+//*   23:K4   - Scale input 4                                         *
+//*   24:in4  - Add input 4                                           *
+//*   25:cycle- Calc cycle (ms)                                       *
 //* Internal data:                                                    *
-//*   23:#int - Curent integral value                                 *
-//*   24:#dif - Curent differencial value                             *
-//*   25:#lag - Curent lag value                                      *
+//*   26:#int - Curent integral value                                 *
+//*   27:#dif - Curent differencial value                             *
+//*   28:#lag - Curent lag value                                      *
 //*********************************************************************
 class PID : public TFunction
 {
@@ -567,7 +570,7 @@ class PID : public TFunction
 	{
 	    //Inputs
 	    ioAdd( new IO("var",_("Variable"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("sp",_("Setpoint"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("sp",_("Setpoint"),IO::Real,IO::Output,"0") );
 	    ioAdd( new IO("max",_("Max scale"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("min",_("Min scale"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("manIn",_("Manual input (%)"),IO::Real,IO::Default,"0") );

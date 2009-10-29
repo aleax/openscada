@@ -1,3 +1,11 @@
+2009-10-29 Roman
+- Special.FLibSYS: The function's PID setpoint is made output.
+- FIX:UI.VCAEngine: The modify for items check is unified, expanded and some fixed.
+- FIX:UI.Vision, UI.WebVison: The logical values trand's display is fixed for no borders set.
+- FIX:UI.Vision: Editable mode for primitive protocol at noactive status is fixed.
+- FIX:UI.WebVison: Save alpha channel for images of primitive "Diagram" is fixed.
+
+
 2009-10-26 Roman
 - DAQ.DAQGate: Setup parameter's values to EVAL is added on time connection error.
 - DAQ.ICP_DAS: Watchdogs support is added.

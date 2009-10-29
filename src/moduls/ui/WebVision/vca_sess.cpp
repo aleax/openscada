@@ -4727,6 +4727,7 @@ void VCADiagram::getReq( SSess &ses )
 
 void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 {
+    gdImageSaveAlpha(im,1);
     int img_sz;
     char *img_ptr = (char*)gdImagePngPtr( im, &img_sz );
     ses.page.assign( img_ptr, img_sz );
@@ -4777,7 +4778,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
-    //gdImageCreate(imW,imH);
+    gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
 
@@ -4950,7 +4951,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if( prmRealSz >= 0 )
     {
 	vsPerc = false;
-	if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() )
+	if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() && trnds[prmRealSz].valTp() != 0 )
 	{
 	    //>> Check trend for valid data
 	    aVbeg = vmax(tBeg,trnds[prmRealSz].valBeg());
@@ -4982,6 +4983,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		vsMax += wnt_dp/2;
 	    }
 	}
+	else if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() && trnds[prmRealSz].valTp() == 0 ) { vsMax = 1.5; vsMin = -0.5; }
 	else { vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
     }
 
@@ -5095,7 +5097,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    if( averVl != EVAL_REAL )
 	    {
 		if( trnds[i_t].valTp() == 0 )
-                    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((100.*(0-bordL)/(bordU-bordL))-vsMin)/(vsMax-vsMin))));
+		    z_vpos = tArY+tArH-(int)((double)tArH*( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin));
 		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
 		if( trnds[i_t].valTp() != 0 ) gdImageSetPixel(im,averPos,c_vpos,clr_t);
 		else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
@@ -5162,7 +5164,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //> Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
-    //gdImageCreate(imW,imH);
+    gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
 
