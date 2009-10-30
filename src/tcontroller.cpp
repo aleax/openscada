@@ -115,11 +115,11 @@ string TController::getStatus( )
     string rez;
     if( startStat() )
     {
-	rez = _("Started. ");
+	rez = string("0:")+_("Started. ");
 	if( owner().redntAllow( ) && redntUse( ) ) rez += _("Geting data from remote station. ");
     }
-    else if( enableStat() ) rez = _("Enabled. ");
-    else rez = _("Disabled. ");
+    else if( enableStat() ) rez = string("1:")+_("Enabled. ");
+    else rez = string("2:")+_("Disabled. ");
 
     return rez;
 }

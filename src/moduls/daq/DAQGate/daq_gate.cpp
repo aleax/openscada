@@ -164,9 +164,11 @@ string TMdContr::getStatus( )
     if( startStat( ) && !redntUse( ) )
     {
 	val += TSYS::strMess(_("Gather data time %.6g ms. "),tmGath);
+	bool isWork = false;
 	for( int i_st = 0; i_st < mStatWork.size(); i_st++ )
 	    if( mStatWork[i_st].second > 0 ) val += TSYS::strMess(_("Station '%s' error, restoring in %.6g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second);
-	    else val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[i_st].first.c_str(),-mStatWork[i_st].second);
+	    else { val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[i_st].first.c_str(),-mStatWork[i_st].second); isWork = true; }
+	if( !isWork ) val.replace(0,1,"10");
     }
 
     return val;

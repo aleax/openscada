@@ -1,5 +1,6 @@
 2009-10-30 Roman
 - FIX:UI.VCAEngine: Close page from script is fixed. Cross linking pages call is fixed.
+- !!:DAQ: Error code is added to conroller status.
 
 
 2009-10-29 Roman
