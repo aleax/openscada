@@ -1,3 +1,7 @@
+2009-10-30 Roman
+- FIX:UI.VCAEngine: Close page from script is fixed. Cross linking pages call is fixed.
+
+
 2009-10-29 Roman
 - Special.FLibSYS: The function's PID setpoint is made output.
 - FIX:UI.VCAEngine: The modify for items check is unified, expanded and some fixed.

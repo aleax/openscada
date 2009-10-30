@@ -294,6 +294,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	    //>> Go to next page
 	    cpg = cpg.freeStat() ? at(op_pg) : cpg.at().pageAt(op_pg);
 	}
+
 	//> Open found page
 	if( !cpg.freeStat() )
 	{
@@ -385,7 +386,7 @@ void *Session::Task( void *icontr )
 
 	//> Calc session pages and all other items at recursion
 	for( int i_l = 0; i_l < pls.size(); i_l++ )
-	    try{ ses.at(pls[i_l]).at().calc(false,false); }
+	    try { ses.at(pls[i_l]).at().calc(false,false); }
 	    catch( TError err )
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -806,7 +807,7 @@ void SessPage::calc( bool first, bool last )
     vector<string> ls;
     pageList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
-        pageAt(ls[i_l]).at().calc(first,last);
+	pageAt(ls[i_l]).at().calc(first,last);
 }
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
@@ -876,7 +877,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 				break;
 			    }
 			}
-		    }    
+		    }
 		    //> Fill parameter's links for other attributes
 		    if( emptyPresnt && !prm_lnk.empty() )
 		    {
@@ -1396,6 +1397,8 @@ void SessWdg::calc( bool first, bool last )
 
     try
     {
+	int pgOpenPrc = -1;
+
 	//> Load events to process
 	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last )
 	{
@@ -1469,8 +1472,10 @@ void SessWdg::calc( bool first, bool last )
 			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
 		    }
 		}
+
 		//>> Calc
 		TValFunc::calc();
+
 		//>> Load data from calc area
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )
 		{
@@ -1478,6 +1483,7 @@ void SessWdg::calc( bool first, bool last )
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
+		    if( s_attr == "pgOpen" && attr.at().getB() != getB(i_io) ) { pgOpenPrc = i_io; continue; }
 		    switch(ioType(i_io))
 		    {
 			case IO::String:	attr.at().setS(getS(i_io));	break;
@@ -1489,6 +1495,11 @@ void SessWdg::calc( bool first, bool last )
 		//>> Save events from calc procedure
 		if( evId >= 0 ) wevent = getS(evId);
 	    }
+
+	    res.release();
+
+	    //> Close page process by pgOpen changing
+	    if( pgOpenPrc >= 0 ) attrAt("pgOpen").at().setB(getB(pgOpenPrc));
 
 	    //>> Process widget's events
 	    if( !wevent.empty() )

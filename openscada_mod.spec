@@ -87,7 +87,7 @@ Open SCADA system. For access use account "root" and password "openscada".
 Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package doc
-Summary: Open SCADA documents
+Summary: Open SCADA documents.
 Group: Documentation
 %description doc
 The %name-doc package include documents files.
@@ -99,7 +99,7 @@ The %name-doc package include documents files.
 Das Paket %name-doc enthaelt Dokumentationsdateien.
 
 %package devel
-Summary: Open SCADA development
+Summary: Open SCADA development.
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
@@ -110,7 +110,7 @@ The %name-devel package includes library archives and include files.
 Пакет %name-devel включає архів бібліотек та включаємі файли.
 
 %package demo
-Summary: Open SCADA demo data bases and config
+Summary: Open SCADA demo data bases and config.
 Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch
@@ -137,8 +137,11 @@ Fuers Starten wird Kommando <openscada_demo_en> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package plc
-Summary: OpenSCADA PLC
+Summary: OpenSCADA PLC.
 Group: Graphics
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
 Requires: %name = %version-%release %name-Archive.FSArch %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
 Requires: %name-DAQ.ModBus %name-DAQ.System %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Special.FLibComplex1
 Requires: %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.SSL %name-Transport.Serial %name-Transport.Sockets %name-UI.VCAEngine
@@ -151,8 +154,11 @@ The %name-plc package is virtual package for PLC.
 Пакет %name-plc це віртуальний пакет для ПЛК.
 
 %package server
-Summary: OpenSCADA server
+Summary: OpenSCADA server.
 Group: Graphics
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
 Requires: %name = %version-%release %name-DB.SQLite %name-DB.MySQL %name-DB.FireBird %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc
 Requires: %name-DAQ.LogicLev %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard
 Requires: %name-Archive.FSArch %name-Archive.DBArch %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.HTTP
@@ -166,8 +172,11 @@ The %name-server package is virtual package for SCADA-server.
 Пакет %name-server це віртуальний пакет для сервера SCADA.
 
 %package visStation
-Summary: OpenSCADA visual station
+Summary: OpenSCADA visual station.
 Group: Graphics
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
 Requires: %name = %version-%release %name-DB.SQLite %name-DB.MySQL %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
 Requires: %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard %name-Archive.FSArch %name-Archive.DBArch
 Requires: %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.SelfSystem %name-UI.VCAEngine %name-UI.Vision %name-UI.QTStarter
@@ -182,7 +191,7 @@ The %name-visStation package is virtual package for visual station (SCADA).
 #===== DB subsystem modules ======
 %if_enabled DBF
 %package DB.DBF
-Summary: DB DBF support
+Summary: DB DBF support.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.DBF
@@ -197,7 +206,7 @@ Das Paket %{name}-DB.DBF unterstützt die *.dbf Datenbank Version 3.0.
 
 %if_enabled SQLite
 %package DB.SQLite
-Summary: DB SQLite support
+Summary: DB SQLite support.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.SQLite
@@ -212,7 +221,7 @@ Das Paket %{name}-DB.SQLite unterstützt die SQLite Datenbank.
 
 %if_enabled MySQL
 %package DB.MySQL
-Summary: DB MySQL support
+Summary: DB MySQL support.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.MySQL
@@ -227,7 +236,7 @@ Das Paket %{name}-DB.MySQL unterstützt die MySQL Datenbank.
 
 %if_enabled FireBird
 %package DB.FireBird
-Summary: DB FireBird support
+Summary: DB FireBird support.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.FireBird
@@ -243,7 +252,7 @@ Das Paket %{name}-DB.FireBird unterstützt die FireBird Datenbank.
 #===== DAQ modules =====
 %if_enabled System
 %package DAQ.System
-Summary: System DA
+Summary: System DA.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.System
@@ -262,7 +271,7 @@ Unterstützt werden die ОС Linux Datenquellen: HDDTemp, Sensors, Uptime, Memor
 
 %if_enabled BlockCalc
 %package DAQ.BlockCalc
-Summary: Block based calculator
+Summary: Block based calculator.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.BlockCalc
@@ -277,7 +286,7 @@ Das Paket %{name}-DAQ.BlockCalc erlaubt Berechnungen mit dem Blockrechner.
 
 %if_enabled JavaLikeCalc
 %package DAQ.JavaLikeCalc
-Summary: Java-like based calculator
+Summary: Java-like based calculator.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.JavaLikeCalc
@@ -296,7 +305,7 @@ Der Benutzer kann Funktionen und Bibliotheken erstellen und modifizieren.
 
 %if_enabled DiamondBoards
 %package DAQ.DiamondBoards
-Summary: Diamond DA boards
+Summary: Diamond DA boards.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.DiamondBoards
@@ -314,7 +323,7 @@ Das Paket %{name}-DAQ.DiamondBoards Zugriff auf Datenerfassungskarten von Diamon
 
 %if_enabled LogicLev
 %package DAQ.LogicLev
-Summary: Logic level
+Summary: Logic level.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.LogicLev
@@ -329,7 +338,7 @@ Das Paket %{name}-DAQ.LogicLev ermöglicht Parameter der logischen Stufe.
 
 %if_enabled SNMP
 %package DAQ.SNMP
-Summary: SNMP client
+Summary: SNMP client.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.SNMP
@@ -344,7 +353,7 @@ Das Paket %{name}-DAQ.SNMP anbindung eines Clients für das SNMP-Protokoll.
 
 %if_enabled Siemens
 %package DAQ.Siemens
-Summary: Siemens DAQ
+Summary: Siemens DAQ.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.Siemens
@@ -363,7 +372,7 @@ Für Andere werden MPI-Protokoll und Bibliothek Libnodave verwendet.
 
 %if_enabled ModBus
 %package DAQ.ModBus
-Summary: ModBus
+Summary: ModBus.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.ModBus
@@ -378,7 +387,7 @@ Das Paket %{name}-DAQ.ModBus ermöglicht die Realisierung des Klientservices des
 
 %if_enabled DCON
 %package DAQ.DCON
-Summary: DCON client
+Summary: DCON client.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.DCON
@@ -393,7 +402,7 @@ Das Paket %{name}-DAQ.DCON Realisierung des I-7000 DCON Client-Protokolls.
 
 %if_enabled DAQGate
 %package DAQ.DAQGate
-Summary: Data sources gate
+Summary: Data sources gate.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.DAQGate
@@ -408,7 +417,7 @@ Das Paket %{name}-DAQ.DAQGate verbindung mit Datenquellen von entfernten OpenSCA
 
 %if_enabled SoundCard
 %package DAQ.SoundCard
-Summary: Sound card
+Summary: Sound card.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.SoundCard
@@ -423,7 +432,7 @@ Das Paket %{name}-DAQ.SoundCard zugriff auf Soundkartendata.
 
 %if_enabled ICP_DAS
 %package DAQ.ICP_DAS
-Summary: ICP DAS hardware
+Summary: ICP DAS hardware.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.ICP_DAS
@@ -437,7 +446,7 @@ The %{name}-DAQ.ICP_DAS package allow realisation of ICP DAS hardware support. I
 #=====  Archive modules =====
 %if_enabled FSArch
 %package Archive.FSArch
-Summary: File system archivator
+Summary: File system archivator.
 Group: Graphics
 Requires: %name = %version-%release
 %description Archive.FSArch
@@ -452,7 +461,7 @@ Das Paket %{name}-Archive.FSArch funktionen zum Archivieren von Nachrichten und 
 
 %if_enabled DBArch
 %package Archive.DBArch
-Summary: To DB archivator
+Summary: To DB archivator.
 Group: Graphics
 Requires: %name = %version-%release
 %description Archive.DBArch
@@ -468,7 +477,7 @@ Das Paket %{name}-Archive.DBArch funktionen zum Archivieren von Nachrichten und 
 #===== Transport modules =====
 %if_enabled Sockets
 %package Transport.Sockets
-Summary: Transport sockets
+Summary: Transport sockets.
 Group: Graphics
 Requires: %name = %version-%release
 %description Transport.Sockets
@@ -483,7 +492,7 @@ Das Paket %{name}-Transport.Sockets gewährt den auf Sockets gebauten Transport.
 
 %if_enabled SSL
 %package Transport.SSL
-Summary: Transport SSL
+Summary: Transport SSL.
 Group: Graphics
 Requires: %name = %version-%release
 %description Transport.SSL
@@ -498,7 +507,7 @@ Das Paket %{name}-Transport.SSL gewährt den auf der Schicht von sicheren Socket
 
 %if_enabled Serial
 %package Transport.Serial
-Summary: Transport serial interfaces
+Summary: Transport serial interfaces.
 Group: Graphics
 Requires: %name = %version-%release
 %description Transport.Serial
@@ -514,7 +523,7 @@ Das Paket %{name}-Transport.Serial ermöglicht die Verwendung der Seriellen Schn
 #===== Transport protocol modules =====
 %if_enabled HTTP
 %package Protocol.HTTP
-Summary: Protocol HTTP-realisation
+Summary: Protocol HTTP-realisation.
 Group: Graphics
 Requires: %name = %version-%release
 %description Protocol.HTTP
@@ -529,7 +538,7 @@ Das Paket %{name}-Protocol.HTTP HTTP-Unterstützung für eine WWW basierte Benut
 
 %if_enabled SelfSystem
 %package Protocol.SelfSystem
-Summary: Self system OpenSCADA protocol
+Summary: Self system OpenSCADA protocol.
 Group: Graphics
 Requires: %name = %version-%release
 %description Protocol.SelfSystem
@@ -545,7 +554,7 @@ Das Paket %{name}-Protocol.SelfSystem - allgemeine Hauptfunktionen für das Syst
 #===== UI modules =====
 %if_enabled VCAEngine
 %package UI.VCAEngine
-Summary: Visual control area engine
+Summary: Visual control area engine.
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.VCAEngine
@@ -560,7 +569,7 @@ Das Paket %{name}-UI.VCAEngine - allgemeine Visualisierungssteuerung.
 
 %if_enabled Vision
 %package UI.Vision
-Summary: Operation user interface (QT)
+Summary: Operation user interface (QT).
 Group: Graphics
 Requires: %name = %version-%release %name-UI.QTStarter
 %description UI.Vision
@@ -575,7 +584,7 @@ Das Paket %{name}-UI.Vision - benutzerschnittstelle.
 
 %if_enabled QTStarter
 %package UI.QTStarter
-Summary: QT GUI starter
+Summary: QT GUI starter.
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.QTStarter
@@ -590,7 +599,7 @@ Das Paket %{name}-UI.QTStarter - QT GUI-Starter für die QT GUI Module!
 
 %if_enabled QTCfg
 %package UI.QTCfg
-Summary: System configurator (QT)
+Summary: System configurator (QT).
 Group: Graphics
 Requires: %name = %version-%release %name-UI.QTStarter
 %description UI.QTCfg
@@ -605,7 +614,7 @@ Das Paket %{name}-UI.QTCfg ermöglicht die QT-basierte Systemeinstellung von Ope
 
 %if_enabled WebCfg
 %package UI.WebCfg
-Summary: System configurator (WEB)
+Summary: System configurator (WEB).
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.WebCfg
@@ -620,7 +629,7 @@ Das Paket %{name}-UI.WebCfg ermöglicht die WEB-basierten Systemeinstellungen Op
 
 %if_enabled WebCfgD
 %package UI.WebCfgD
-Summary: Dynamic WEB configurator
+Summary: Dynamic WEB configurator.
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.WebCfgD
@@ -635,7 +644,7 @@ Das Paket %{name}-UI.WebCfgD gewährt den dynamischen WEB begründeten Configura
 
 %if_enabled WebVision
 %package UI.WebVision
-Summary: Operation user interface (WEB)
+Summary: Operation user interface (WEB).
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.WebVision
@@ -651,7 +660,7 @@ Das Paket %{name}-UI.WebVision - web Benutzerschnittstelle für die Steuerung de
 #===== Special modules =====
 %if_enabled SystemTests
 %package Special.SystemTests
-Summary: OpenSCADA system's tests
+Summary: OpenSCADA system's tests.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.SystemTests
@@ -666,7 +675,7 @@ Das Paket %{name}-Special.SystemTests ermöglicht Gruppentests für das OpenSCAD
 
 %if_enabled FLibComplex1
 %package Special.FLibComplex1
-Summary: Complex1 function's lib
+Summary: Complex1 function's lib.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.FLibComplex1
@@ -681,7 +690,7 @@ Das Paket %{name}-Special.FLibComplex1 zugriff auf die statische Bibliothek Comp
 
 %if_enabled FLibMath
 %package Special.FLibMath
-Summary: Math function's lib
+Summary: Math function's lib.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.FLibMath
@@ -696,7 +705,7 @@ Das Paket %{name}-Special.FLibMath - bibliothek mit mathematischen Funktionen.
 
 %if_enabled FLibSYS
 %package Special.FLibSYS
-Summary: System API functions
+Summary: System API functions.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.FLibSYS

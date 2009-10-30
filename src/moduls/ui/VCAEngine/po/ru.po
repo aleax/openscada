@@ -2830,7 +2830,7 @@ msgstr ""
 
 #: session.cpp:177
 msgid "Sesion processing task is not stopped!"
-msgstr "Задача обслуживания сеанса остановлена!"
+msgstr "Задача обслуживания сеанса не остановлена!"
 
 #: session.cpp:254 session.cpp:1510 vcaengine.cpp:145 vcaengine.cpp:155
 #: vcaengine.cpp:202

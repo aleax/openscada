@@ -2054,7 +2054,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if( prevVl == EVAL_REAL )
 		{
 		    if( sTr->valTp() != 0 ) pnt.drawPoint(averPos,c_vpos);
-		    else pnt.drawLine(averPos,z_vpos,averPos,c_vpos);    
+		    else pnt.drawLine(averPos,z_vpos,averPos,c_vpos);
 		}
 		else
 		{
