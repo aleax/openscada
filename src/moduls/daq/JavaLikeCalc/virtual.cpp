@@ -183,8 +183,13 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     if( !lbAt("sys_compile").at().present(fnc_cfg.id()) ) lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
 
     AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
-    try{ ((TFunction&)func.at()).operator=(fnc_cfg); }
-    catch(...) { func.at().setStart(true); throw; }
+    bool isStart = func.at().startStat();
+    try 
+    {
+	func.at().setStart(false);
+	((TFunction&)func.at()).operator=(fnc_cfg);
+    }
+    catch(TError err) { if( isStart ) func.at().setStart(true); throw; }
     func.at().setProg(prog_text.c_str());
     try
     {
@@ -387,7 +392,6 @@ string Contr::getStatus( )
 
     return val;
 }
-
 
 void Contr::enable_( )
 {
