@@ -498,7 +498,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	}
 	else if( ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )		//Open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true);
-	else if( ctrChkNode(opt,"close",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	//Close open pages
+	else if( ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEQ_WR) )		//Close open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
 	return;
     }

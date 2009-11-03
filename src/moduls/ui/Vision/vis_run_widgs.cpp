@@ -545,14 +545,20 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     {
 	RunPageView *pg = new RunPageView(pg_it,mainWin(),this);
 	pg->setAttribute( Qt::WA_DeleteOnClose );
-	pg->setWindowFlags( Qt::Dialog/*Qt::Tool*/ );
-	pg->setWindowState( pg->windowState() & (~Qt::WindowMaximized) );
-	pg->setWindowTitle( mainWin()->windowTitle() );
+	pg->setWindowFlags( Qt::Tool );
 	pg->load("");
 	pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
 			  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
 	pg->setMinimumSize(pg->frameGeometry().size());
 	pg->setMaximumSize(pg->frameGeometry().size());
+	pg->setWindowState( pg->windowState() | Qt::WindowActive );
+
+	//>> Get page name
+	XMLNode req("get");
+	req.setAttr("path",pg->id()+"/%2fwdg%2fcfg%2fname");
+	if( !mainWin()->cntrIfCmd(req) ) pg->setWindowTitle(req.text().c_str());
+	else pg->setWindowTitle(mainWin()->windowTitle());
+
 	return true;
     }
 

@@ -5715,7 +5715,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	long long lst_tm = atoll(req.attr("tm").c_str());
 	if( lst_tm > valEnd() )
 	{
-	    double curVal = atof(req.text().c_str());
+	    double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
 	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
 	    if( valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
 	    else if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));

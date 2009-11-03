@@ -436,7 +436,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 
 ModVArchEl::~ModVArchEl( )
 {
-    //- Clear a files list -
+    //> Clear a files list
     ResAlloc res(m_res,true);
     while(arh_f.size())
     {
@@ -448,7 +448,7 @@ ModVArchEl::~ModVArchEl( )
 
 void ModVArchEl::fullErase()
 {
-    //- Remove archive's files -
+    //> Remove archive's files
     ResAlloc res(m_res,true);
     while(arh_f.size())
     {
@@ -623,10 +623,10 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && beg <= end )
 	{
-	    //-- Check begin to creating want --
+	    //>> Check begin to creating want
 	    if( beg < arh_f[i_a]->begin() )
 	    {
-		//--- Create new file(s) for old data ---
+		//>>> Create new file(s) for old data
 		char c_buf[30];
 		time_t tm = beg/1000000;
 		struct tm tm_tm;
@@ -643,7 +643,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		arh_f.insert(arh_f.begin()+i_a,new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
 		res.request(false);
 	    }
-	    //-- Insert values to archive --
+	    //>> Insert values to archive
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
 	    {
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
@@ -651,11 +651,11 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		beg = n_end+(long long)(archivator().valPeriod()*1000000.);
 	    }
 	}
-    //-- Check end to creating want --
+    //>> Check end to creating want
     while( end >= beg )
     {
 	res.request(true);
-	//-- Create new file(s) for new data --
+	//>> Create new file(s) for new data
 	char c_buf[30];
 	time_t tm = beg/1000000;
 	struct tm tm_tm;

@@ -1,7 +1,15 @@
+2009-11-03 Roman
+- UI.QTCfg: The word wrap is added to page title.
+- FIX:UI.VCAEngine: The permition to close pages is set for all.
+- FIX:UI.Vision: Run time's child window is fixed.
+- UI.Vision: Run time's child window title is set from page's name.
+- FIX:UI.Vision, UI.WebVision: EVAL value interpretation is fixed for current values of primitive "Diagram".
+
+
 2009-10-30 Roman
 - FIX:UI.VCAEngine: Close page from script is fixed. Cross linking pages call is fixed.
 - !!:DAQ: Error code is added to conroller status.
-- FIX:Get error for compile new template functions is fixed.
+- FIX:DAQ.LogicLev: Get error for compile new template functions is fixed.
 
 
 2009-10-29 Roman

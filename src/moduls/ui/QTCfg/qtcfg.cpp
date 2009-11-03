@@ -148,9 +148,10 @@ ConfApp::ConfApp( string open_user ) :
     QFont titleLab_font( titleLab->font() );
     titleLab_font.setPointSize( 14 );
     titleLab->setFont( titleLab_font );
+    titleLab->setWordWrap(true);
     gFrameLayout->addWidget( titleLab, 0, 1 );
 
-    //- Create the tabulator -
+    //> Create the tabulator
     tabs = new QTabWidget( gFrame );
     tabs->setWhatsThis(_("Tabulated configuration pages."));
     connect( tabs, SIGNAL( currentChanged(QWidget*) ), this, SLOT( tabSelect(QWidget*) ) );
@@ -164,8 +165,8 @@ ConfApp::ConfApp( string open_user ) :
 
     resize( 800, 600 );
 
-    //- Create actions -
-    //-- Close --
+    //> Create actions
+    //>> Close
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
     QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
@@ -173,7 +174,7 @@ ConfApp::ConfApp( string open_user ) :
     actClose->setWhatsThis(_("The button for closing OpenSCADA configurator window"));
     actClose->setStatusTip(_("Press to close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(activated()), this, SLOT(close()));
-    //-- Quit --
+    //>> Quit
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
