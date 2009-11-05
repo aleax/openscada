@@ -662,6 +662,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     else if( value.type() == QVariant::String && flag&ModInspAttr::Item::FullText )
     {
 	w_del = new QTextEdit(parent);
+	((QTextEdit*)w_del)->setTabStopWidth(40);
 	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

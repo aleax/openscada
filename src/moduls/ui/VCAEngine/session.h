@@ -154,6 +154,7 @@ class Session : public TCntrNode
 
 	Res		mAlrmRes;		//Alarms resource
 	vector<Alarm>	mAlrm;			//Alarms queue
+	int		mAlrmSndPlay;		//Now played sound alarm
 
 	//> Styles
 	Res		mStRes;

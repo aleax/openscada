@@ -616,7 +616,7 @@ Das Paket %{name}-UI.QTCfg ermöglicht die QT-basierte Systemeinstellung von Ope
 %package UI.WebCfg
 Summary: System configurator (WEB).
 Group: Graphics
-Requires: %name = %version-%release
+Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebCfg
 The %{name}-UI.WebCfg package allow the WEB based OpenSCADA system configurator.
 %description UI.WebCfg -l ru_RU.UTF8
@@ -631,7 +631,7 @@ Das Paket %{name}-UI.WebCfg ermöglicht die WEB-basierten Systemeinstellungen Op
 %package UI.WebCfgD
 Summary: Dynamic WEB configurator.
 Group: Graphics
-Requires: %name = %version-%release
+Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebCfgD
 The %{name}-UI.WebCfgD package allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies.
 %description UI.WebCfgD -l ru_RU.UTF8
@@ -646,7 +646,7 @@ Das Paket %{name}-UI.WebCfgD gewährt den dynamischen WEB begründeten Configura
 %package UI.WebVision
 Summary: Operation user interface (WEB).
 Group: Graphics
-Requires: %name = %version-%release
+Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebVision
 The %{name}-UI.WebVision package - web operation user interface for visual control area (VCA) projects playing.
 %description UI.WebVision -l ru_RU.UTF8

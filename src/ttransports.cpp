@@ -185,7 +185,7 @@ void TTransportS::load_( )
 	mess_err(nodePath().c_str(),_("Search and create new input transports error."));
     }
 
-    //-- Load external hosts --
+    //>> Load external hosts
     try
     {
 	TConfig c_el(&el_ext);
@@ -806,7 +806,7 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms )
 {
-    if( iid == "messIO" && prms.size() >= 1 )
+    if( iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object )
     {
 	string rez;
 	char buf[STR_BUF_LEN];
@@ -822,15 +822,14 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms )
 
 	return rez;
     }
-    /*if( iid == "messProtIO" && prms.size() >= 2 )
+    else if( iid == "messIO" && prms.size() >= 2 && dynamic_cast<XMLNodeObj*>(prms[0].getO()) )
     {
 	XMLNode req;
-	if( !dynamic_cast<XMLNodeObj*>(prms[0].getO()) ) return _("1:Request is not object!");
 	((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
 	messProtIO(req,prms[1].getS());
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
-	return "0";
-    }*/
+	return 0;
+    }
     throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }
 

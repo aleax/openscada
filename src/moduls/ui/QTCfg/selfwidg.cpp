@@ -335,6 +335,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
+    ed_fld->setTabStopWidth(40);
     connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
     box->addWidget(ed_fld);
 

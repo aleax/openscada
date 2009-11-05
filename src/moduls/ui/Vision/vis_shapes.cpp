@@ -1358,11 +1358,13 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 30:	//curSek
 	    if( (shD->curTime/1000000) == atoi(val.c_str()) ) break;
 	    shD->curTime = atoll(val.c_str())*1000000 + shD->curTime%1000000;
+	    shD->holdCur = (shD->curTime>=shD->tTime);
 	    up = true;
 	    break;
 	case 31:	//curUSek
 	    if( (shD->curTime%1000000) == atoi(val.c_str()) ) break;
 	    shD->curTime = 1000000ll*(shD->curTime/1000000)+atoll(val.c_str());
+	    shD->holdCur = (shD->curTime>=shD->tTime);
 	    up = true;
 	    break;
 	case 32:	//curColor
@@ -1413,7 +1415,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    case 1: shD->prms[trndN].setBordL(atof(val.c_str()));	break;		//bordL
 		    case 2: shD->prms[trndN].setBordU(atof(val.c_str()));	break;		//bordU
 		    case 3: shD->prms[trndN].setColor(getColor(val));		break;		//color
-		    case 4: shD->prms[trndN].setCurVal(atof(val.c_str())); make_pct = false;	break;		//value
+		    case 4:									//value
+			shD->prms[trndN].setCurVal( (val==EVAL_STR) ? EVAL_REAL : atof(val.c_str()) );
+			make_pct = false;
+			break;
 		}
 	    }
     }
@@ -1594,9 +1599,13 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     }
 
     //>> Vertical scale and offset apply
-    float vsDif = vsMax - vsMin;
-    vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
-    vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+    bool isScale = (abs(shD->sclVerSclOff) > 1 || abs(shD->sclVerScl-100) > 1);
+    if( isScale )
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
+	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+    }
 
     double vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
@@ -1605,8 +1614,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	double v_len = vsMax - vsMin;
 	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
 	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	vsMin = floor(vsMin/vDiv)*vDiv;
-	vsMax = ceil(vsMax/vDiv)*vDiv;
+	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
 	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
 	//>>> Draw vertical grid and markers
@@ -1614,7 +1622,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	{
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y(),tAr.x(),tAr.height());
-	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
+	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
 	    {
 		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMin)/(vsMax-vsMin));
 		pnt.setPen(grdPen);
@@ -1623,9 +1631,10 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
 		if( sclVer&0x2 )
 		{
-		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
 		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
 		}
 	    }
 	}
@@ -1932,9 +1941,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
 
     //>> Vertical scale and offset apply
-    float vsDif = vsMax - vsMin;
-    vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
-    vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+    bool isScale = (abs(shD->sclVerSclOff) > 1 || abs(shD->sclVerScl-100) > 1);
+    if( isScale )
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
+	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+    }
 
     float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
@@ -1943,8 +1956,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	double v_len = vsMax - vsMin;
 	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
 	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	vsMin = floor(vsMin/vDiv)*vDiv;
-	vsMax = ceil(vsMax/vDiv)*vDiv;
+	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
 	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
 	//>>> Draw vertical grid and markers
@@ -1952,18 +1964,19 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	{
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y(),tAr.x(),tAr.height());
-	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
+	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
 	    {
 		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMin)/(vsMax-vsMin));
 		pnt.setPen(grdPen);
 		if( sclVer&0x1 ) pnt.drawLine(tAr.x(),v_pos,tAr.x()+tAr.width(),v_pos);
 		else pnt.drawLine(tAr.x()-3,v_pos,tAr.x()+3,v_pos);
-		
+
 		if( sclVer&0x2 )
 		{
-		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
 		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
 		}
 	    }
 	}
@@ -2049,7 +2062,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    if( averVl != EVAL_REAL )
 	    {
 		if( sTr->valTp() == 0 )
-		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin));
+		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin)/(vsMax-vsMin))));
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
 		if( prevVl == EVAL_REAL )
 		{
@@ -2216,10 +2229,13 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 	for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
 	{
 	    int vpos = shD->prms[i_p].val(curTime);
-	    if( !shD->prms[i_p].val().size() || (!shD->holdCur && vpos >= shD->prms[i_p].val().size()) ) continue;
-	    vpos = vmax(0,vmin(shD->prms[i_p].val().size()-1,vpos));
-	    if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
-	    double val = shD->prms[i_p].val()[vpos].val;
+	    double val = EVAL_REAL;
+	    if( !(!shD->prms[i_p].val().size() || curTime < shD->prms[i_p].valBeg( ) || (!shD->holdCur && vpos >= shD->prms[i_p].val().size())) )
+	    {
+		vpos = vmax(0,vmin(shD->prms[i_p].val().size()-1,vpos));
+		if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
+		val = shD->prms[i_p].val()[vpos].val;
+	    }
 	    if( val != shD->prms[i_p].curVal() )
 		w->attrSet(TSYS::strMess("prm%dval",i_p),TSYS::real2str(val,6),54+10*i_p);
 	}

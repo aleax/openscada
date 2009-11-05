@@ -36,7 +36,7 @@ Session::Session( const string &iid, const string &iproj ) :
     mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0), mStyleIdW(-1),
     mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
     mOwner("root"), mGrp("UI"), mPermit(RWRWR_),
-    mBackgrnd(false), mConnects(0)
+    mBackgrnd(false), mConnects(0), mAlrmSndPlay(-1)
 {
     mId = iid;
     mPage = grpAdd("pg_");
@@ -323,10 +323,19 @@ void Session::alarmSet( const string &wpath, const string &alrm )
     if( i_q < mAlrm.size() && aobj.lev == mAlrm[i_q].lev )	mAlrm[i_q] = aobj;
     else
     {
-	if( i_q < mAlrm.size() )	mAlrm.erase( mAlrm.begin()+i_q );
+	if( i_q < mAlrm.size() )
+	{
+	    mAlrm.erase( mAlrm.begin()+i_q );
+	    if( i_q == mAlrmSndPlay ) mAlrmSndPlay = -1;
+	    if( i_q < mAlrmSndPlay && mAlrmSndPlay >= 0 ) mAlrmSndPlay--;
+	}
 	int i_q1 = 0;
 	while( i_q1 < mAlrm.size() && aobj.lev >= mAlrm[i_q].lev ) i_q1++;
-	if( i_q1 < mAlrm.size() )	mAlrm.insert(mAlrm.begin()+i_q1,aobj);
+	if( i_q1 < mAlrm.size() )
+	{
+	    mAlrm.insert(mAlrm.begin()+i_q1,aobj);
+	    if( i_q <= mAlrmSndPlay && mAlrmSndPlay >= 0 ) mAlrmSndPlay++;
+	}
 	else mAlrm.push_back(aobj);
     }
 }
@@ -533,7 +542,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    if( !mAlrm[i_q].tpArg.empty() )
 			opt->setText( ((AutoHD<SessWdg>)mod->nodeAt(mAlrm[i_q].path)).at().resourceGet(mAlrm[i_q].tpArg) );
 		    else opt->setText( mod->callSynth(mAlrm[i_q].mess) );
-		}
+		    mAlrmSndPlay = i_q;
+		}else mAlrmSndPlay = -1;
 	    }
 	}
 	else if( ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )

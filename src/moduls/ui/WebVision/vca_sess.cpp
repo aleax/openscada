@@ -4988,9 +4988,13 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //>> Vertical scale and offset apply
-    float vsDif = vsMax - vsMin;
-    vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
-    vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    bool isScale = (abs(sclVerSclOff) > 1 || abs(sclVerScl-100) > 1);
+    if( isScale )
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
+	vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    }
 
     float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
@@ -4999,15 +5003,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	double v_len = vsMax - vsMin;
 	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
 	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	vsMin = floor(vsMin/vDiv)*vDiv;
-	vsMax = ceil(vsMax/vDiv)*vDiv;
+	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
 	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
 	//>> Draw vertical grid and markers
 	if( sclVer&0x3 )
 	{
 	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
-	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
+	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
 	    {
 		//>>> Draw grid
 		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
@@ -5016,9 +5019,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		//>>> Draw markers
 		if( sclVer&0x2 && mrkHeight )
 		{
-		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-mrkHeight) < tArY;
 		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-			(char*)(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+			(char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
 		}
 	    }
 	}
@@ -5097,7 +5101,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    if( averVl != EVAL_REAL )
 	    {
 		if( trnds[i_t].valTp() == 0 )
-		    z_vpos = tArY+tArH-(int)((double)tArH*( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin));
+		    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin))));
 		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
 		if( trnds[i_t].valTp() != 0 ) gdImageSetPixel(im,averPos,c_vpos,clr_t);
 		else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
@@ -5297,9 +5301,13 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     }
 
     //>> Vertical scale and offset apply
-    float vsDif = vsMax - vsMin;
-    vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
-    vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    bool isScale = (abs(sclVerSclOff) > 1 || abs(sclVerScl-100) > 1);
+    if( isScale )
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
+	vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    }
 
     double vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
@@ -5308,24 +5316,24 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	double v_len = vsMax - vsMin;
 	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
 	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	vsMin = floor(vsMin/vDiv)*vDiv;
-	vsMax = ceil(vsMax/vDiv)*vDiv;
+	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
 	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
 	//>>> Draw vertical grid and markers
 	if( sclVer&0x3 )
 	{
 	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
-	    for( double i_v = vsMin; (vsMax-i_v)/vDiv > -0.1; i_v += vDiv )
+	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v += vDiv )
 	    {
 		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
 		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
 		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
 		if( sclVer&0x2 && mrkHeight )
 		{
-		    bool isMax = (fabs((vsMax-i_v)/vDiv) < 0.1);
+		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-mrkHeight) < tArY;
 		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-			(char*)(TSYS::strMess("%0.4g",i_v)+((vsPerc&&isMax)?" %":"")).c_str());
+			(char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
 		}
 	    }
 	}
@@ -5555,7 +5563,9 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 			case 1: trnds[trndN].setBordL(atof(req_el->text().c_str()));	break;	//bordL
 			case 2: trnds[trndN].setBordU(atof(req_el->text().c_str()));	break;	//bordU
 			case 3: trnds[trndN].setColor(mod->colorParse(req_el->text()));	break;	//color
-			case 4: trnds[trndN].setCurVal(atof(req_el->text().c_str()));	break;	//value
+			case 4:									//value
+			    trnds[trndN].setCurVal( (req_el->text()==EVAL_STR) ? EVAL_REAL : atof(req_el->text().c_str()) );
+			    break;
 		    }
 		}
 	}
@@ -5582,10 +5592,13 @@ void VCADiagram::setCursor( long long itm, const string& user )
 	for( int i_p = 0; i_p < trnds.size(); i_p++ )
 	{
 	    int vpos = trnds[i_p].val(curTime);
-	    if( !trnds[i_p].val().size() || (!tTimeCurent && vpos >= trnds[i_p].val().size()) ) continue;
-	    vpos = vmax(0,vmin(trnds[i_p].val().size()-1,vpos));
-	    if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
-	    double val = trnds[i_p].val()[vpos].val;
+	    double val = EVAL_REAL;
+	    if( !(!trnds[i_p].val().size() || curTime < trnds[i_p].valBeg() || (!tTimeCurent && vpos >= trnds[i_p].val().size())) )
+	    {
+		vpos = vmax(0,vmin(trnds[i_p].val().size()-1,vpos));
+		if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
+		val = trnds[i_p].val()[vpos].val;
+	    }
 	    if( val != trnds[i_p].curVal() )
 		req.childAdd("el")->setAttr("id","prm"+TSYS::int2str(i_p)+"val")->setText(TSYS::real2str(val,6));
 	}

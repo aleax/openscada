@@ -142,6 +142,41 @@ class TAreaObj : public TVarObj
 	static bool compareLess( const TVariant &v1, const TVariant &v2 );
 };
 
+//*************************************************
+//* XMLNodeObj - XML node object                  *
+//*************************************************
+class XMLNodeObj : public TVarObj
+{
+    public:
+	//Methods
+	XMLNodeObj( const string &name = "" );
+	~XMLNodeObj( );
+
+	string name( )		{ return mName; }
+	string text( )		{ return mText; }
+
+	void setName( const string &vl )	{ mName = vl; }
+	void setText( const string &vl )	{ mText = vl; }
+
+	int childSize( )	{ return mChilds.size(); }
+	XMLNodeObj *childGet( unsigned id );
+	void childAdd( XMLNodeObj *nd );
+	void childIns( unsigned id, XMLNodeObj *nd );
+	void childDel( unsigned id );
+
+	string getStrXML( const string &oid = "" );
+
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
+
+	void toXMLNode( XMLNode &nd );
+	void fromXMLNode( XMLNode &nd );
+
+    private:
+	//Attributes
+	string			mName, mText;
+	vector<XMLNodeObj*>	mChilds;
+};
+
 //***********************************************************
 //* TCntrNodeObj                                            *
 //*   TCntrNode object for access to system's objects       *

@@ -385,7 +385,7 @@ void *TMdContr::Task( void *icntr )
 		    if( !req.childSize() ) continue;
 
 		    //> Same request
-		    if( cntr.cntrIfCmd(req) ) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
+		    if( cntr.cntrIfCmd(req,true) ) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
 
 		    //> Result process
 		    for( int i_r = 0; i_r < req.childSize(); i_r++ )
@@ -426,11 +426,12 @@ void *TMdContr::Task( void *icntr )
 		    prm.at().elem().fldList(vLs);
 		    for( int i_v = 0; i_v < vLs.size(); i_v++ )
 		    {
-			if( vLs[i_v] == "ID" || vLs[i_v] == "NAME" || vLs[i_v] == "DESCR" ) continue;
+			if( vLs[i_v] == "SHIFR" || vLs[i_v] == "NAME" || vLs[i_v] == "DESCR" ) continue;
 			AutoHD<TVal> vl = prm.at().vlAt(vLs[i_v]);
 			if( vl.at().getS() == EVAL_STR ) continue;
 			vl.at().setS( EVAL_STR, vl.at().arch().freeStat() ? 0 : vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm())), true );
 		    }
+		    prm.at().vlAt("err").at().setS(_("10:Data not allow."),0,true);
 		}
 	    }
 	    //res.release( );
@@ -448,7 +449,7 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-int TMdContr::cntrIfCmd( XMLNode &node )
+int TMdContr::cntrIfCmd( XMLNode &node, bool lockErr )
 {
     string reqStat = TSYS::pathLev(node.attr("path"),0);
 
@@ -464,7 +465,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		    mStatWork[i_st].second -= 1;
 		    return rez;
 		}
-		catch(...){ mStatWork[i_st].second = mRestTm; throw; }
+		catch(...){ if( lockErr ) mStatWork[i_st].second = mRestTm; throw; }
 	    }
     }catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("err","10")->setText(err.mess); }
 
