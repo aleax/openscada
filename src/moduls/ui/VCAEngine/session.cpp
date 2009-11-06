@@ -320,7 +320,7 @@ void Session::alarmSet( const string &wpath, const string &alrm )
 	if( i_q < mAlrm.size() ) mAlrm.erase( mAlrm.begin()+i_q );
 	return;
     }
-    if( i_q < mAlrm.size() && aobj.lev == mAlrm[i_q].lev )	mAlrm[i_q] = aobj;
+    if( i_q < mAlrm.size() && aobj.lev == mAlrm[i_q].lev ) mAlrm[i_q] = aobj;
     else
     {
 	if( i_q < mAlrm.size() )
@@ -412,6 +412,8 @@ void *Session::Task( void *icontr )
 	    ses.rez_calc=0;
 	}*/
 
+
+
 	TSYS::taskSleep((long long)ses.period()*1000000);
     }
 
@@ -476,6 +478,20 @@ bool Session::stlPropSet( const string &pid, const string &vl )
     return true;
 }
 
+TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms )
+{
+    if( iid == "user" )	return user();
+    else if( iid == "alrmSndPlay" )
+    {
+	ResAlloc res( mAlrmRes, false );
+	if( mAlrmSndPlay < 0 || mAlrmSndPlay >= mAlrm.size() ) return string("");
+	return mAlrm[mAlrmSndPlay].path;
+    }
+    else if( iid == "alrmQuittance" && prms.size() >= 1 )
+	alarmQuittance( (prms.size()>=2) ? prms[1].getS() : "", prms[0].getI() );
+    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
+}
+
 void Session::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
@@ -516,7 +532,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )
 	{
 	    //> Get alarm status
-	    opt->setAttr("alarmSt",TSYS::int2str(alarmStat()));
+	    int aSt = alarmStat();
+	    opt->setAttr("alarmSt",TSYS::int2str(aSt));
 
 	    //> Get alarm from sound queue
 	    if( opt->attr("mode") == "sound" )
@@ -544,7 +561,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    else opt->setText( mod->callSynth(mAlrm[i_q].mess) );
 		    mAlrmSndPlay = i_q;
 		}else mAlrmSndPlay = -1;
-	    }
+	    } else if( !((aSt>>16) & Engine::Sound) ) mAlrmSndPlay = -1;
 	}
 	else if( ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )
 	    alarmQuittance(opt->attr("wdg"),~atoi(opt->attr("tmpl").c_str()));

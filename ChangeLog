@@ -1,3 +1,10 @@
+2009-11-06 Roman
+- FIX:DAQ.DAQGate: True status show is fixed on time connection try.
+- DAQ.ICP_DAS: Fast task priority is rised to 32.
+- Protocol.SelfSystem: Strong timeout set is removed for output transport's request.
+- UI.VCAEngine: Object's functions of user's API is added: user(), alrmSndPlay() and alrmQuittance().
+
+
 2009-11-05 Roman
 - !!:SYS, Special.FLibSYS: User's API object XMLNodeObj is moved to OpenSCADA core (tvariant.h, tvariant.cpp).
 - !!:Transport: User's API function "messIO()" is added to object of output transport for make requests through protocol.

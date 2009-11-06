@@ -206,7 +206,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if( !isDir && tro.prm1() < 0 )
 	    {
 		req = "SES_OPEN "+user+" "+pass+"\n";
-		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,10000,true);
+		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,0,true);
 		buf[resp_len] = 0;
 		buf1[0] = 0;
 		sscanf(buf,"REZ %d %255s\n",&rez,buf1);
@@ -222,7 +222,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(isDir)	req = "REQDIR "+user+" "+pass+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
 	    else	req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
 	    buf[0] = 0;
-	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),10000,true);
+	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
 	    resp.assign(buf,resp_len);
 
 	    //>> Get head
@@ -239,7 +239,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //>> Wait tail
 	    while( resp.size() < abs(resp_size)+head_end+sizeof('\n') )
 	    {
-		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),10000,true);
+		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 		resp.append(buf,resp_len);
 	    }
 

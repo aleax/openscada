@@ -573,7 +573,7 @@ void TMdPrm::getVals( )
 		pthread_attr_init( &pthr_attr );
 		struct sched_param prior;
 		pthread_attr_setschedpolicy( &pthr_attr, (SYS->user()=="root")?SCHED_RR:SCHED_OTHER );
-		prior.__sched_priority = 10;
+		prior.__sched_priority = 32;
 		pthread_attr_setschedparam( &pthr_attr, &prior );
 
 		pthread_create( &fastPthr, &pthr_attr, TMdPrm::fastTask, this );
