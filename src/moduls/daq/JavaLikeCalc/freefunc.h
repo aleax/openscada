@@ -290,7 +290,6 @@ class Func : public TConfig, public TFunction
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void regClear( );
-	int sysObjGet( const string &nd );
 
 	//> Temporary registers` list functions
 	Reg *regTmpNew( );

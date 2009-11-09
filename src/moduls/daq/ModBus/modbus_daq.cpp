@@ -149,7 +149,11 @@ string TMdContr::getStatus( )
 
     if( startStat( ) && !redntUse( ) )
     {
-	if( tmDelay > 0 ) val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
+	if( tmDelay > -1 )
+	{
+	    val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
+	    val.replace(0,1,"10");
+	}
 	else
 	{
 	    if( period() ) val += TSYS::strMess(_("Call by period %g s. "),(1e-9*period()));
@@ -539,6 +543,8 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    res.release();
+
+	    if( cntr.tmDelay <= 0 ) cntr.tmDelay--;
 
 	    //> Calc acquisition process time
 	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);

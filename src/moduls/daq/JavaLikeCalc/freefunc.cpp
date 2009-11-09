@@ -356,32 +356,6 @@ void Func::funcClear( )
     mFncs.clear();
 }
 
-int Func::sysObjGet( const string &nd )
-{
-    string ns, on_path;
-    //> Check to correct function's path
-    try { SYS->nodeAt(nd); on_path = nd; } catch(...) { }
-    if( on_path.empty() )
-	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
-	    try { SYS->nodeAt(ns+"."+nd,0,'.'); on_path = ns+"."+nd; break; }
-	    catch(...){ continue; }
-
-    if( on_path.empty() ) return -1;
-
-    //> Make result
-    Reg *rez = regAt(regNew());
-    rez->setType(Reg::Obj);
-
-    //> Make code
-    uint16_t addr;
-    prg += (uint8_t)Reg::MviSysObject;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    prg += (uint8_t)on_path.size();
-    prg += on_path;
-
-    return rez->pos();
-}
-
 int Func::regNew( bool var )
 {
     //> Get new register
@@ -408,17 +382,30 @@ int Func::ioGet( const string &nm )
 {
     int rez = -1;
 
+    if( nm == "SYS" )
+    {
+	rez = regNew();
+	Reg *rg = regAt(rez);
+	rg->setType(Reg::Obj);
+
+	//> Make code
+	uint16_t addr;
+	prg += (uint8_t)Reg::MviSysObject;
+	addr = rg->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+	prg += (char)0;
+    }
     //> Check IO
-    for( int i_io = 0; i_io < ioSize(); i_io++ )
-	if( io(i_io)->id() == nm )
-	{
-	    rez = regNew(true);
-	    Reg *rg = regAt(rez);
-	    rg->setName(nm);
-	    rg->setVar(i_io);
-	    rg->setLock(true);
-	    break;
-	}
+    else
+	for( int i_io = 0; i_io < ioSize(); i_io++ )
+	    if( io(i_io)->id() == nm )
+	    {
+		rez = regNew(true);
+		Reg *rg = regAt(rez);
+		rg->setName(nm);
+		rg->setVar(i_io);
+		rg->setLock(true);
+		break;
+	    }
     return rez;
 }
 

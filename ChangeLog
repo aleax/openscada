@@ -1,3 +1,8 @@
+2009-11-09 Roman
+- DAQ.JavaLikeCalc: Start point for system's objects is changed to symbol "SYS".
+- DAQ.ModBus: Error code into status is added for connection lost detect.
+
+
 2009-11-06 Roman
 - FIX:DAQ.DAQGate: True status show is fixed on time connection try.
 - DAQ.ICP_DAS: Fast task priority is rised to 32.

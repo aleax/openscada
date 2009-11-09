@@ -523,7 +523,7 @@ retry:
 
 	    //>> Check for object's functions and system object's function
 	    string sel = TSYS::strSepParse(smb_nm,0,'.');
-	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(sel))) )
+	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) )
 	    {
 		pos -= (smb_nm.size()-sel.size());
 		yylloc.last_column -= (smb_nm.size()-sel.size());
@@ -560,7 +560,7 @@ retry:
 
 	    //>> Check for object's parameters
 	    string sel = TSYS::strSepParse(smb_nm,0,'.');
-	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->sysObjGet(sel))) )
+	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) )
 	    {
 		pos -= (smb_nm.size()-sel.size());
 		yylloc.last_column -= (smb_nm.size()-sel.size());
