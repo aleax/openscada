@@ -1204,6 +1204,7 @@ void SessWdg::setProcess( bool val )
     {
 	//>> Free function link
 	mProc = false;
+	ResAlloc res(mCalcRes,true);
 	TValFunc::setFunc(NULL);
     }
 
