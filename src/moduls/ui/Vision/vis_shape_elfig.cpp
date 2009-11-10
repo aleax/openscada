@@ -2504,10 +2504,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		if( !sev.empty() )
 		{
 		    if( !runW->hasFocus() )	runW->setFocus( Qt::MouseFocusReason );
-		    if( ev->buttons() & Qt::LeftButton )	sev += "Left";
-		    if( ev->buttons() & Qt::RightButton ) 	sev += "Right";
-		    if( ev->buttons() & Qt::MidButton )      	sev += "Midle";
-		    view->attrSet( "event", sev );
+                    if( ev->buttons() & Qt::LeftButton )	{ sev += "Left"; view->attrSet( "event", "ws_FigLeft" ); };
+                    if( ev->buttons() & Qt::RightButton ) 	{ sev += "Right"; view->attrSet( "event", "ws_FigRight" ); }
+                    if( ev->buttons() & Qt::MidButton )      	{ sev += "Midle"; view->attrSet( "event", "ws_FigMiddle" ); }
+                    view->attrSet( "event", sev );
 		    return true;
 		}
             }

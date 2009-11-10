@@ -446,7 +446,7 @@ void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
 {
     int fill_clr = gdImageColorResolveAlpha( im, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24) ); 
     in_item.index_color = fill_clr;
-    gdImageFill( im, (int) TSYS::realRound(pnt.x), 
+    gdImageFill( im, (int) TSYS::realRound(pnt.x),
                      (int) TSYS::realRound(pnt.y),  fill_clr );
 }
 
@@ -4054,6 +4054,7 @@ void VCAElFigure::postReq( SSess &ses )
 	{
 	    XMLNode req("set");
 	    req.setAttr("path",ses.url+"/%2fserv%2fattr");
+            req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+key);
             req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+clickFillNum+key);
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
 	    req.childAdd("el")->setAttr("id","focus")->setText("1");

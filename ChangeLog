@@ -1,3 +1,7 @@
+2009-11-10 Maxim
+- UI.Vision, UI.WebVision: Additional event by the mouse click to the any "fill" is added for the primitive ElFigure.
+
+
 2009-11-09 Roman
 - DAQ.JavaLikeCalc: Start point for system's objects is changed to symbol "SYS".
 - DAQ.ModBus: Error code into status is added for connection lost detect.
