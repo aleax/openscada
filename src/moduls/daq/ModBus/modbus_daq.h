@@ -127,11 +127,11 @@ class TMdContr: public TController
 	{
 	    public:
 		SDataRec( int ioff, int v_rez ) : off(ioff)
-		{ val.assign(v_rez,0); err="11:Value not gathered."; }
+		{ val.assign(v_rez,0); err.setVal("11:Value not gathered."); }
 
 		int	off;			//Data block start offset
 		string	val;			//Data block values kadr
-		string	err;			//Acquisition error text
+		ResString	err;			//Acquisition error text
 	};
 
 	//Methods

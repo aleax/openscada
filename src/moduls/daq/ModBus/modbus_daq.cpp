@@ -89,7 +89,7 @@ void TTpContr::postEnable( int flag )
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"1000","") );
 }
 
 void TTpContr::load_( )
@@ -327,7 +327,7 @@ int TMdContr::getValR( int addr, ResString &err, bool in )
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( (addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	{
-	    err.setVal( workCnt[i_b].err );
+	    err.setVal( workCnt[i_b].err.getVal() );
 	    if( err.getVal().empty() )
 		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
 	    break;
@@ -342,7 +342,7 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
 	{
-	    err.setVal( workCnt[i_b].err );
+	    err.setVal( workCnt[i_b].err.getVal() );
 	    if( err.getVal().empty() )
 		rez = workCnt[i_b].val[addr-workCnt[i_b].off];
 	    break;
@@ -445,7 +445,7 @@ void *TMdContr::Task( void *icntr )
 	    for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
 	    {
 		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err = _("4:Server failure."); continue; }
+		if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x1;					//Function, read multiple coils
 		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);	//Address MSB
@@ -454,15 +454,15 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of coils LSB
 		//>> Request to remote server
 		cntr.acqBlksCoil[i_b].err = cntr.modBusReq( pdu );
-		if( cntr.acqBlksCoil[i_b].err.empty() )
+		if( cntr.acqBlksCoil[i_b].err.getVal().empty() )
 		{
 		    for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
 			cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
 		    cntr.numRCoil += cntr.acqBlksCoil[i_b].val.size();
 		}
-		else if( atoi(cntr.acqBlksCoil[i_b].err.c_str()) == 14 )
+		else if( atoi(cntr.acqBlksCoil[i_b].err.getVal().c_str()) == 14 )
 		{
-		    cntr.setCntrDelay(cntr.acqBlksCoil[i_b].err);
+		    cntr.setCntrDelay(cntr.acqBlksCoil[i_b].err.getVal());
 		    break;
 		}
 	    }
@@ -471,7 +471,7 @@ void *TMdContr::Task( void *icntr )
 	    for( int i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++ )
 	    {
 		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlksCoilIn[i_b].err = _("4:Server failure."); continue; }
+		if( cntr.redntUse( ) ) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x2;					//Function, read multiple input's coils
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
@@ -480,15 +480,15 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
 		//>> Request to remote server
 		cntr.acqBlksCoilIn[i_b].err = cntr.modBusReq( pdu );
-		if( cntr.acqBlksCoilIn[i_b].err.empty() )
+		if( cntr.acqBlksCoilIn[i_b].err.getVal().empty() )
 		{
 		    for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
 			cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
 		    cntr.numRCoilIn += cntr.acqBlksCoilIn[i_b].val.size();
 		}
-		else if( atoi(cntr.acqBlksCoilIn[i_b].err.c_str()) == 14 )
+		else if( atoi(cntr.acqBlksCoilIn[i_b].err.getVal().c_str()) == 14 )
 		{
-		    cntr.setCntrDelay(cntr.acqBlksCoilIn[i_b].err);
+		    cntr.setCntrDelay(cntr.acqBlksCoilIn[i_b].err.getVal());
 		    break;
 		}
 	    }
@@ -497,7 +497,7 @@ void *TMdContr::Task( void *icntr )
 	    for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
 	    {
 		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err = _("4:Server failure."); continue; }
+		if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x3;				//Function, read multiple registers
 		pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
@@ -506,14 +506,14 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		//>> Request to remote server
 		cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
-		if( cntr.acqBlks[i_b].err.empty() )
+		if( cntr.acqBlks[i_b].err.getVal().empty() )
 		{
 		    cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
 		    cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
 		}
-		else if( atoi(cntr.acqBlks[i_b].err.c_str()) == 14 )
+		else if( atoi(cntr.acqBlks[i_b].err.getVal().c_str()) == 14 )
 		{
-		    cntr.setCntrDelay(cntr.acqBlks[i_b].err);
+		    cntr.setCntrDelay(cntr.acqBlks[i_b].err.getVal());
 		    break;
 		}
 	    }
@@ -522,7 +522,7 @@ void *TMdContr::Task( void *icntr )
 	    for( int i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++ )
 	    {
 		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlksIn[i_b].err = _("4:Server failure."); continue; }
+		if( cntr.redntUse( ) ) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x4;				//Function, read multiple input registers
 		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
@@ -531,14 +531,14 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB
 		//>> Request to remote server
 		cntr.acqBlksIn[i_b].err = cntr.modBusReq( pdu );
-		if( cntr.acqBlksIn[i_b].err.empty() )
+		if( cntr.acqBlksIn[i_b].err.getVal().empty() )
 		{
 		    cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlksIn[i_b].val.size());
 		    cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
 		}
-		else if( atoi(cntr.acqBlksIn[i_b].err.c_str()) == 14 )
+		else if( atoi(cntr.acqBlksIn[i_b].err.getVal().c_str()) == 14 )
 		{
-		    cntr.setCntrDelay(cntr.acqBlksIn[i_b].err);
+		    cntr.setCntrDelay(cntr.acqBlksIn[i_b].err.getVal());
 		    break;
 		}
 	    }
