@@ -58,7 +58,7 @@ class sysCall : public TFunction
 	    char buf[STR_BUF_LEN];
 	    string rez;
 	    for( int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)); )
-	    rez.append(buf,r_cnt);
+		rez.append(buf,r_cnt);
 
 	    pclose(fp);
 	    val->setS(0,rez);

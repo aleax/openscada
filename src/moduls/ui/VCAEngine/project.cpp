@@ -1364,7 +1364,7 @@ void PageWdg::setEnable( bool val )
 
     Widget::setEnable(val);
 
-    //- Disable heritors widgets -
+    //> Disable heritors widgets
     if( val )
 	for( int i_h = 0; i_h < ownerPage().herit().size(); i_h++ )
 	    if( ownerPage().herit()[i_h].at().wdgPresent(id()) && !ownerPage().herit()[i_h].at().wdgAt(id()).at().enable( ) )

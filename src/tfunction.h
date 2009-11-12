@@ -160,9 +160,14 @@ class TValFunc
 
 	string user( )				{ return mUser; }
 	const string &vfName( )			{ return mName; }
+	bool blk( )				{ return mBlk; }
+	bool dimens( )				{ return mDimens; }
+	bool mdfChk( )				{ return mMdfChk; }
 
 	void setUser( const string &iuser )	{ mUser = iuser; }
 	void setVfName( const string &inm )	{ mName = inm; }
+	void setDimens( bool set )		{ mDimens = set; }
+	void setMdfChk( bool set );
 
 	void ioList( vector<string> &list );
 	int  ioId( const string &id );
@@ -182,6 +187,11 @@ class TValFunc
 	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
 	    return mFunc->io(id)->hide();
 	}
+	bool ioMdf( unsigned id )
+	{
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    return mVal[id].mdf;
+	}
 
 	//> get IO value
 	string	getS( unsigned id );
@@ -196,13 +206,6 @@ class TValFunc
 	void setR( unsigned id, double val );
 	void setB( unsigned id, char val );
 	void setO( unsigned id, TVarObj *val );
-
-	//> Blocked values screen
-	bool	blk( )			{ return mBlk; }
-
-	//> Dimension controll
-	bool	dimens( )		{ return mDimens; }
-	void	setDimens( bool set )	{ mDimens = set; }
 
 	//> Calc function
 	virtual void calc( const string &user = "" );
@@ -221,7 +224,8 @@ class TValFunc
 	//Data
 	struct SVl
 	{
-	    IO::Type	tp;
+	    unsigned short	tp	: 4;
+	    unsigned short	mdf	: 1;
 	    union
 	    {
 		ResString *s;
@@ -240,10 +244,11 @@ class TValFunc
 	void funcDisConnect( bool det = true );
 
 	//Attributes
-	string	mName,		//Value name
-		mUser;		//Link to user
-	bool	mBlk,		//Blocked values screen
-		mDimens;	//Make dimension of the calc time
+	string	mName,			//Value name
+		mUser;			//Link to user
+	unsigned short	mBlk	:1;	//Blocked values screen
+	unsigned short	mDimens	:1;	//Make dimension of the calc time
+	unsigned short	mMdfChk	:1;	//Modify attributes check
 
 	double tm_calc;		//Calc time in mikroseconds
 

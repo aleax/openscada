@@ -1,2 +1,8 @@
 #!/bin/sh
+
+if [ -f /tmp/.openscada_demo ]; then echo "OpenSCADA already started!"; exit 1; fi
+touch /tmp/.openscada_demo
+
 openscada --Config=/etc/oscada_demo.xml $@
+
+rm -f /tmp/.openscada_demo

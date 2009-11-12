@@ -709,10 +709,34 @@ void *TArchiveS::ArhValTask( void *param )
     return NULL;
 }
 
+TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms )
+{
+    if( iid == "messGet" && prms.size() >= 2 )
+    {
+	vector<TMess::SRec> recs;
+	messGet( prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : ""), 
+	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : 0) );
+	TAreaObj *rez = new TAreaObj();
+	for( int i_m = 0; i_m < recs.size(); i_m++ )
+	{
+	    TVarObj *am = new TVarObj();
+	    am->propSet("tm",(int)recs[i_m].time);
+	    am->propSet("utm",recs[i_m].utime);
+	    am->propSet("categ",recs[i_m].categ);
+	    am->propSet("level",recs[i_m].level);
+	    am->propSet("mess",recs[i_m].mess);
+	    rez->propSet(TSYS::int2str(i_m),am);
+	}
+	return rez;
+    }
+
+    return TCntrNode::objFuncCall(iid,prms);
+}
+
 void TArchiveS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //- Service commands process -
+    //> Service commands process
     if( a_path == "/serv/mess" )           //Messages access
     {
 	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEQ_RD) )        //Messages information

@@ -445,6 +445,7 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	{
 	    SVl val;
 	    val.tp = mFunc->io(i_vl)->type();
+	    val.mdf = false;
 	    switch( val.tp )
 	    {
 		case IO::String:	val.val.s = new ResString(mFunc->io(i_vl)->def());	break;
@@ -561,6 +562,7 @@ TVarObj *TValFunc::getO( unsigned id )
 void TValFunc::setS( unsigned id, const string &val )
 {
     if( id >= mVal.size() )	throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( mdfChk() && val != getS(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
 	case IO::Integer:	mVal[id].val.i = (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT;	break;
@@ -573,6 +575,7 @@ void TValFunc::setS( unsigned id, const string &val )
 void TValFunc::setI( unsigned id, int val )
 {
     if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( mdfChk() && val != getI(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
 	case IO::String:	mVal[id].val.s->setVal( (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR );	break;
@@ -586,6 +589,7 @@ void TValFunc::setR( unsigned id, double val )
 {
     if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
     if( isnan(val) ) val = 0.;	//Check for 'Not a Number'
+    if( mdfChk() && val != getR(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
 	case IO::String:	mVal[id].val.s->setVal( (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR );	break;
@@ -598,6 +602,7 @@ void TValFunc::setR( unsigned id, double val )
 void TValFunc::setB( unsigned id, char val )
 {
     if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( mdfChk() && val != getB(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
 	case IO::String:	mVal[id].val.s->setVal( (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR );	break;
@@ -614,6 +619,14 @@ void TValFunc::setO( unsigned id, TVarObj *val )
     if( mVal[id].val.o && !mVal[id].val.o->disconnect() ) delete mVal[id].val.o;
     mVal[id].val.o = val;
     mVal[id].val.o->connect();
+}
+
+void TValFunc::setMdfChk( bool set )
+{
+    mMdfChk = set;
+    if( set )
+	for( int i_v = 0; i_v < mVal.size(); i_v++ )
+	    mVal[i_v].mdf = false;
 }
 
 void TValFunc::calc( const string &user )

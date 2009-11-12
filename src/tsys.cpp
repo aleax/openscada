@@ -1064,6 +1064,52 @@ reload:
     return mktime(&ttm);
 }
 
+TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms )
+{
+    if( iid == "message" && prms.size() >= 3 )
+    {
+	message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() );
+	return 0;
+    }
+    else if( iid == "system" && prms.size() >= 1 )
+    {
+	FILE *fp = popen(prms[0].getS().c_str(),"r");
+	if( !fp ) return string("");
+
+	char buf[STR_BUF_LEN];
+	string rez;
+	for( int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)); )
+	    rez.append(buf,r_cnt);
+
+	pclose(fp);
+	return rez;
+    }
+    else if( iid == "XMLNode" )
+	return new XMLNodeObj( (prms.size()>=1) ? prms[0].getS() : "" );
+    else if( iid == "cntrReq" && prms.size() >= 1 )
+    {
+	XMLNode req;
+	if( !dynamic_cast<XMLNodeObj*>(prms[0].getO()) ) return string(_("1:Request is not object!"));
+	((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
+	string path = req.attr("path");
+	if( prms.size() < 2 || prms[1].getS().empty() )
+	{
+	    req.setAttr("user","root");
+	    cntrCmd(&req);
+	}
+	else
+	{
+	    req.setAttr("path",prms[1].getS()+"/"+path);
+	    transport().at().cntrIfCmd(req,"xmlCntrReq","root");
+	    req.setAttr("path",path);
+	}
+	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
+	return string("0");
+    }
+
+    return TCntrNode::objFuncCall(iid,prms);
+}
+
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[STR_BUF_LEN];

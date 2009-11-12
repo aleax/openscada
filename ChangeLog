@@ -1,3 +1,14 @@
+2009-11-11 Roman
+- FIX:DAQ.ModBus: ModBUS block's resource missing cause crash is fixed.
+- !:SYS: Multiply start preventing is added to demo-start and user-start scripts.
+- !!:SYS: User's API functions is added to OpenSCADA core object: system(), message(), XMLNode() and cntrReq().
+- !!!!:SYS.Function, DAQ.BlockCalc, DAQ.LogicLev, UI.VCAEngine: To check the parameters modify controll is added.
+- !!:DB: User's API functions SQLReq() is added to DB object.
+- !!:Archives: User's API function messGet() is added to Archive subsystem object.
+- FIX:UI.VCAEngine: Attributes type change is fixed for Mutable attributes of primitives "Text" and "FormEl".
+- FIX:UI.VCAEngine: Error message is added on time creation atribute with already present name.
+
+
 2009-11-10 Maxim
 - UI.Vision, UI.WebVision: Additional event by the mouse click to the any "fill" is added for the primitive ElFigure.
 

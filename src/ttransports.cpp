@@ -830,7 +830,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms )
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
 	return 0;
     }
-    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
+    return TCntrNode::objFuncCall(iid,prms);
 }
 
 void TTransportOut::cntrCmdProc( XMLNode *opt )

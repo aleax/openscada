@@ -7,5 +7,10 @@ fi
 
 if [ ! -e ~/.openscada/oscada.xml ]; then install -m 644 /etc/oscada_start.xml ~/.openscada/oscada.xml; fi
 
+if [ -f /tmp/.openscada_`whoami` ]; then echo "OpenSCADA already started!"; exit 1; fi
+touch /tmp/.openscada_`whoami`
+
 cd ~/.openscada
 openscada --Config=./oscada.xml $@
+
+rm -f /tmp/.openscada_`whoami`

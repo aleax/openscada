@@ -385,6 +385,7 @@ void Block::calc( bool first, bool last )
     //> Calc function
     try
     {
+	TValFunc::setMdfChk( true );
 	TValFunc::calc( );
 	modif();
     }
@@ -395,6 +396,8 @@ void Block::calc( bool first, bool last )
     try
     {
 	for( unsigned i_ln=0; i_ln < m_lnk.size(); i_ln++ )
+	{
+	    if( !ioMdf(i_ln) ) continue;
 	    switch( m_lnk[i_ln].tp )
 	    {
 		case O_LOC: case O_GLB:
@@ -418,6 +421,7 @@ void Block::calc( bool first, bool last )
 			}
 		    break;
 	    }
+	}
     }catch(TError err)
     {
 	err_cnt++;

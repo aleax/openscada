@@ -281,7 +281,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elType" )
     {
-	//- Delete specific attributes -
+	//> Delete specific attributes
 	if( cfg.getI() != prev.getI() )
 	    switch( prev.getI() )
 	    {
@@ -321,16 +321,27 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    break;
 	    }
 
-	//- Create specific attributes -
-	switch(cfg.getI())
+	//> Create specific attributes
+	switch( cfg.getI() )
 	{
 	    case 0:	//Line edit
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21") );
+	    {
+		TFld::Type vtp = TFld::String;
+		int vflg = Attr::Mutable;
+		if( cfg.owner()->attrPresent("view") )
+		    switch( cfg.owner()->attrAt("view").at().getI() )
+		    {
+			case 2: case 4:	vtp = TFld::Integer;	break;
+			case 3:		vtp = TFld::Real;	break;
+			case 5: case 6:	vtp = TFld::Integer; vflg|=Attr::DateTime;	break;
+		    }
+		cfg.owner()->attrAdd( new TFld("value",_("Value"),vtp,vflg,"200","","","","21") );
 		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,
 		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Date;Date and time"),"22") );
 		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23") );
 		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
 		break;
+	    }
 	    case 1:	//Text edit
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","21") );
 		cfg.owner()->attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","","22") );
@@ -361,27 +372,10 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		break;
 	}
     }
-    else if( cfg.flgGlob()&Attr::Active && cfg.id() == "view" )
+    else if( cfg.flgGlob()&Attr::Active && cfg.id() == "view" && cfg.getI() != prev.getI() )
     {
-	TFld::Type	ntp = TFld::String;
-	int		flg = Attr::Mutable;
-	VCA::Attr::SelfAttrFlgs	sflg = cfg.owner()->attrAt("value").at().flgSelf();
-	string		val = cfg.owner()->attrAt("value").at().getS();
-	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl( );
-	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal( );
-	switch(cfg.getI())
-	{
-	    case 2: case 4:	ntp = TFld::Integer;	break;
-	    case 3:		ntp = TFld::Real;	break;
-	    case 5: case 6:	ntp = TFld::Integer; flg|=Attr::DateTime;	break;
-	}
-	int apos = cfg.owner()->attrPos("value");
-	cfg.owner()->attrDel("value");
-	cfg.owner()->attrAdd( new TFld("value",_("Value"),ntp,flg,"200","","","","21"), apos );
-	cfg.owner()->attrAt("value").at().setFlgSelf(sflg);
-	cfg.owner()->attrAt("value").at().setS(val);
-	cfg.owner()->attrAt("value").at().setCfgTempl(cfgTmpl);
-	cfg.owner()->attrAt("value").at().setCfgVal(cfgVal);
+	cfg.owner()->attrDel("value",true);
+	cfg.owner()->attrAt("elType").at().setI(cfg.owner()->attrAt("elType").at().getI(),true);
     }
 
     return Widget::attrChange(cfg,prev);
@@ -438,7 +432,7 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 	if( cfg.id() == "numbArg" )
 	{
 	    string fid("arg"), fnm(_("Argument ")), fidp, fnmp;
-	    //- Delete specific unnecessary attributes of parameters -
+	    //> Delete specific unnecessary attributes of parameters
 	    for( int i_p = 0; true; i_p++ )
 	    {
 		fidp = fid+TSYS::int2str(i_p);
@@ -450,32 +444,25 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel(fidp+"cfg");
 		}
 	    }
-	    //- Create ullage attributes of parameters -
+	    //> Create ullage attributes of parameters
 	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	    {
 		fidp = fid+TSYS::int2str(i_p);
 		fnmp = fnm+TSYS::int2str(i_p);
-		if( cfg.owner()->attrPresent( fidp+"val" ) ) continue;
+		int vtp = 0;
+		if( cfg.owner()->attrPresent( fidp+"tp" ) ) vtp = cfg.owner()->attrAt(fidp+"tp").at().getI();
 		cfg.owner()->attrAdd( new TFld((fidp+"tp").c_str(),(fnmp+_(":type")).c_str(),
-		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0","0;1;2",_("Integer;Real;String"),TSYS::int2str(51+10*i_p).c_str()) );
+		    TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,"","0","0;1;2",_("Integer;Real;String"),TSYS::int2str(51+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
-		    TFld::Integer,Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()) );
+		    (vtp==1) ? TFld::Real : ((vtp==2) ? TFld::String : TFld::Integer),Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"cfg").c_str(),(fnmp+_(":config")).c_str(),
 		    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
 	    }
 	}
 	else if( aid >= 50 && (aid%10) == 1 && prev.getI() != cfg.getI() )
 	{
-	    int narg = (aid/10)-5;
-	    string fid = "arg"+TSYS::int2str(narg)+"val";
-	    string fnm = _("Argument ")+TSYS::int2str(narg)+_(":value");
-	    int apos = cfg.owner()->attrPos(fid);
-	    VCA::Attr::SelfAttrFlgs sflg =  cfg.owner()->attrAt(fid).at().flgSelf();
-	    cfg.owner()->attrDel(fid);
-	    cfg.owner()->attrAdd( new TFld(fid.c_str(),fnm.c_str(),
-			(cfg.getI()==1) ? TFld::Real : ((cfg.getI()==2) ? TFld::String : TFld::Integer),
-			Attr::Mutable,"","","","",TSYS::int2str(50+10*narg).c_str()), apos );
-	    cfg.owner()->attrAt(fid).at().setFlgSelf(sflg);
+	    cfg.owner()->attrDel("arg"+TSYS::int2str((aid/10)-5)+"val",true);
+	    cfg.owner()->attrAt("numbArg").at().setI(cfg.owner()->attrAt("numbArg").at().getI(),true);
 	}
     }
     return Widget::attrChange(cfg,prev);

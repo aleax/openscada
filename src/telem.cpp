@@ -228,10 +228,10 @@ string TFld::selNames()
 
 void TFld::setValues( const string &vls )
 {
-    //- Set value list -
+    //> Set value list
     if( flg()&TFld::Selected )
     {
-	//- Count alements amount -
+	//> Count alements amount
 	int i_lvl = 0, i_off = 0;
 	while( TSYS::strSepParse(vls,0,';',&i_off).size() ) i_lvl++;
 
@@ -254,7 +254,7 @@ void TFld::setValues( const string &vls )
 		m_val.v_b->resize(i_lvl,false);
 		break;
 	}
-	//- Get elements -
+	//> Get elements
 	for( int i = 0, i_off=0; i < i_lvl; i++ )
 	{
 	    string s_el = TSYS::strSepParse(vls,0,';',&i_off);

@@ -534,7 +534,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
     else if( md == TMdPrm::Template )
     {
 	bool to_make = false;
-	if( !tmpl )	tmpl = new STmpl;
+	if( !tmpl ) tmpl = new STmpl;
 	try
 	{
 	    if( !tmpl->val.func() )
@@ -782,6 +782,8 @@ void TMdPrm::calc( bool first, bool last )
 	ResAlloc cres(calcRes,true);
 	if(chk_lnk_need) initTmplLnks();
 
+	tmpl->val.setMdfChk(true);
+
 	//> Set fixed system attributes
 	if( id_freq >= 0 )	tmpl->val.setR(id_freq,1000./owner().period());
 	if( id_start >= 0 )	tmpl->val.setB(id_start,first);
@@ -815,7 +817,7 @@ void TMdPrm::calc( bool first, bool last )
 
 	//> Put output links
 	for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	    if( !lnk(i_l).aprm.freeStat() &&
+	    if( !lnk(i_l).aprm.freeStat() && tmpl->val.ioMdf(lnk(i_l).io_id) &&
 		    tmpl->val.ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) &&
 		    !(lnk(i_l).aprm.at().fld().flg()&TFld::NoWrite) )
 		switch( tmpl->val.ioType(lnk(i_l).io_id) )

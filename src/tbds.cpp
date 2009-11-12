@@ -691,6 +691,28 @@ void TBD::save_( )
     SYS->db().at().dataSet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
 }
 
+TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms )
+{
+    if( iid == "SQLReq" && prms.size() >= 1 )
+    {
+	TAreaObj *rez = new TAreaObj();
+	try
+	{
+	    vector< vector<string> > rtbl;
+	    sqlReq( prms[0].getS(), &rtbl );
+	    for( int i_r = 0; i_r < rtbl.size(); i_r++ )
+	    {
+		TAreaObj *row = new TAreaObj();
+		for( int i_c = 0; i_c < rtbl[i_r].size(); i_c++ )
+		    row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
+		rez->propSet(TSYS::int2str(i_r),row);
+	    }
+	}catch(...){ }
+	return rez;
+    }
+    return TCntrNode::objFuncCall(iid,prms);
+}
+
 void TBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info

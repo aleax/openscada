@@ -188,8 +188,6 @@ string Widget::path( )
     return mId;
 }
 
-
-
 string Widget::calcId( )
 {
     Widget *ownW = dynamic_cast<Widget*>(nodePrev());
@@ -298,7 +296,7 @@ AutoHD<Widget> Widget::parentNoLink( )
 
 void Widget::heritReg( Widget *wdg )
 {
-    //- Search already herited widget -
+    //> Search already herited widget
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( &m_herit[i_h].at() == wdg )	return;
     m_herit.push_back(AutoHD<Widget>(wdg));
@@ -306,7 +304,7 @@ void Widget::heritReg( Widget *wdg )
 
 void Widget::heritUnreg( Widget *wdg )
 {
-    //- Search herited widget -
+    //> Search herited widget
     for( int i_h = 0; i_h < m_herit.size(); i_h++ )
 	if( &m_herit[i_h].at() == wdg )	
 	{
@@ -1248,7 +1246,11 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		string tmpl	= wdg.at().attrAt(idattr).at().cfgTempl();
 		string cfgval	= wdg.at().attrAt(idattr).at().cfgVal();
 
-		if( idcol == "id" )		tid = opt->text();
+		if( idcol == "id" )
+		{
+		    tid = opt->text();
+		    if( wdg.at().attrPresent(tid) ) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present."),tid.c_str());
+		}
 		else if( idcol == "name" )	tnm = opt->text();
 		else if( idcol == "type" )
 		{

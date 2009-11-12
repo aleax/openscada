@@ -323,6 +323,7 @@ void TMdContr::regVal( int reg, const string &dt )
 int TMdContr::getValR( int addr, ResString &err, bool in )
 {
     int rez = EVAL_INT;
+    ResAlloc res( req_res, false );
     vector< SDataRec >	&workCnt = in ? acqBlksIn : acqBlks;
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( (addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
@@ -338,6 +339,7 @@ int TMdContr::getValR( int addr, ResString &err, bool in )
 char TMdContr::getValC( int addr, ResString &err, bool in )
 {
     char rez = EVAL_BOOL;
+    ResAlloc res( req_res, false );
     vector< SDataRec >	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
     for( int i_b = 0; i_b < workCnt.size(); i_b++ )
 	if( addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
@@ -363,6 +365,7 @@ void TMdContr::setValR( int val, int addr, ResString &err )
     err.setVal( modBusReq(pdu) );
     if( err.getVal().empty() ) numWReg++;
     //> Set to acquisition block
+    ResAlloc res( req_res, false );
     for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
 	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
 	{
@@ -385,6 +388,7 @@ void TMdContr::setValC( char val, int addr, ResString &err )
     err.setVal( modBusReq(pdu) );
     if( err.getVal().empty() ) numWCoil++;
     //> Set to acquisition block
+    ResAlloc res( req_res, false );
     for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )
 	if( addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) )
 	{

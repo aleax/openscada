@@ -221,6 +221,8 @@ class TSYS : public TCntrNode
 	void cfgFileScan( bool first = false );
 	void cntrCmdProc( XMLNode *opt );	// Control interface command process
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms );
+
 	static unsigned char getBase64Code( unsigned char asymb );
 
 	//Private attributes

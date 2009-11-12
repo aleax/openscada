@@ -488,7 +488,10 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms )
 	return mAlrm[mAlrmSndPlay].path;
     }
     else if( iid == "alrmQuittance" && prms.size() >= 1 )
-	alarmQuittance( (prms.size()>=2) ? prms[1].getS() : "", prms[0].getI() );
+    {
+	alarmQuittance( (prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI() );
+	return 0;
+    }
     throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }
 
@@ -1502,12 +1505,13 @@ void SessWdg::calc( bool first, bool last )
 		}
 
 		//>> Calc
+		setMdfChk( true );
 		TValFunc::calc();
 
 		//>> Load data from calc area
 		for( int i_io = 3; i_io < ioSize( ); i_io++ )
 		{
-		    if( func()->io(i_io)->rez().empty() ) continue;
+		    if( func()->io(i_io)->rez().empty() || !ioMdf(i_io) ) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
