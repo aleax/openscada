@@ -1,3 +1,8 @@
+2009-11-12 Roman
+- DAQ.ICP_DAS: The module I-8017 hang on fast acquisition detect is added.
+- FIX:UI.VCAEngine: Attributes type changing fix is return to back by wrong fix cause.
+
+
 2009-11-11 Roman
 - FIX:DAQ.ModBus: ModBUS block's resource missing cause crash is fixed.
 - !:SYS: Multiply start preventing is added to demo-start and user-start scripts.

@@ -589,6 +589,11 @@ void TMdPrm::getVals( )
 		    I8017_SetChannelGainMode(modSlot,i_v,((PrmsI8017*)extPrms)->cnlMode[i_v],0);
 		    vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(modSlot), 0, true );
 		}
+	    if( ((PrmsI8017*)extPrms)->fastPer )
+	    {
+		acq_err.setVal( (((PrmsI8017*)extPrms)->prevCnt==((PrmsI8017*)extPrms)->curCnt) ? _("10:Fast acquisition task is stoped or locked.") : "" );
+		((PrmsI8017*)extPrms)->prevCnt = ((PrmsI8017*)extPrms)->curCnt;
+	    }
 	    break;
 	}
 	case 0x8042:
@@ -850,7 +855,7 @@ void *TMdPrm::fastTask( void *iprm )
     for( int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++ )
 	cnls.push_back( prm.vlAt(TSYS::strMess("i%d",i_c)) );
 
-    while( !prm.endRunReq && prm.owner().startStat() )
+    for( ;!prm.endRunReq && prm.owner().startStat(); ((PrmsI8017*)prm.extPrms)->curCnt++ )
     {
 	for( int i_c = 0; i_c < cnls.size(); i_c++ )
 	{

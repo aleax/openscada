@@ -1420,6 +1420,7 @@ string Attr::getS( bool sys )
 {
     if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getS();
     if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getS(true),false).getS();
+
     switch( fld().type() )
     {
 	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
