@@ -298,7 +298,8 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	//> Open found page
 	if( !cpg.freeStat() )
 	{
-	    if( !oppg.empty() )	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
+	    if( !oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path() )
+		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
 	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path());
 	}
     }catch(...){ }
@@ -411,8 +412,6 @@ void *Session::Task( void *icontr )
 	    printf("Session calc time: %d = %f\n",ses.calcClk(),ses.rez_calc);
 	    ses.rez_calc=0;
 	}*/
-
-
 
 	TSYS::taskSleep((long long)ses.period()*1000000);
     }
@@ -730,7 +729,8 @@ Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) 
 //************************************************
 //* SessPage: Page of Project's session          *
 //************************************************
-SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) : SessWdg(iid,ipage,sess)
+SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) : 
+    SessWdg(iid,ipage,sess), mClosePgCom(false)
 {
     mPage = grpAdd("pg_");
 }
@@ -833,6 +833,8 @@ void SessPage::calc( bool first, bool last )
     //> Process self data
     if( process() ) SessWdg::calc(first,last);
 
+    if( mClosePgCom ) { mClosePgCom = false; setProcess(false); return; }
+
     //> Put calculate to include pages
     vector<string> ls;
     pageList(ls);
@@ -855,7 +857,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	    else
 	    {
 		ownerSess()->openUnreg(path());
-		if( process() && !attrAt("pgNoOpenProc").at().getB() )	setProcess(false);
+		if( process() && !attrAt("pgNoOpenProc").at().getB() )	mClosePgCom = true;
 		if( !attrAt("pgOpenSrc").at().getS().empty() ) attrAt("pgOpenSrc").at().setS("");
 	    }
 	}
@@ -954,6 +956,7 @@ void SessPage::alarmSet( bool isSet )
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
     }
+
     //> Included widgets process
     wdgList( lst );
     for( int i_w = 0; i_w < lst.size(); i_w++ )
@@ -1040,7 +1043,6 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 
     return true;
 }
-
 
 //************************************************
 //* SessWdg: Session page's widget               *
@@ -1149,6 +1151,7 @@ void SessWdg::setProcess( bool val )
 		fio.ioAdd( new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()) );
 	    }
 	}
+
 	//>>> Include attributes check
 	wdgList(iwls);
 	for( int i_w = 0; i_w < iwls.size(); i_w++ )
@@ -1196,6 +1199,7 @@ void SessWdg::setProcess( bool val )
 	    catch( TError err )
 	    { mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
 	}
+
 	//>> Connect to compiled function
 	if( mWorkProg.size() )
 	{
@@ -1414,6 +1418,8 @@ bool SessWdg::modifChk( unsigned int tm, unsigned int iMdfClc )
 void SessWdg::calc( bool first, bool last )
 {
     if( !process() )	return;
+
+
 
     ResAlloc res(mCalcRes,true);
 

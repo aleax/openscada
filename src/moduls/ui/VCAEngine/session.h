@@ -230,8 +230,8 @@ class SessWdg : public Widget, public TValFunc
 
     private:
 	//Attributes
-	char		mProc	: 1;
-	char		inLnkGet: 1;
+	char		mProc		: 1;
+	char		inLnkGet	: 1;
 
 	string		mWorkProg;
 	unsigned int	mMdfClc;
@@ -284,7 +284,8 @@ class SessPage : public SessWdg
 
     private:
 	//Attributes
-	int	mPage;		//Pages container identifier
+	unsigned mPage		: 4;		//Pages container identifier
+	unsigned mClosePgCom	: 1;
 };
 
 }
