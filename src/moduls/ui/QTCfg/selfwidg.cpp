@@ -157,10 +157,12 @@ void LineEdit::setType( LType tp )
 	    break;
 	case Date:
 	    ed_fld = new QDateEdit(this);
+	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
 	    break;
 	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
+	    ((QDateTimeEdit*)ed_fld)->setCalendarPopup(true);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
 	    break;
 	case Combo:

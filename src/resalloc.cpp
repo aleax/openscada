@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "errno.h"
+
 #include "tsys.h"
 #include "resalloc.h"
 
@@ -37,30 +39,34 @@ Res::~Res( )
     pthread_rwlock_destroy(&rwc);
 }
 
-void Res::resRequestW( long tm )
+void Res::resRequestW( unsigned short tm )
 {
-    if( !tm ) pthread_rwlock_wrlock(&rwc);
+    int rez = 0;
+    if( !tm ) rez = pthread_rwlock_wrlock(&rwc);
     else
     {
 	timespec wtm;
 	clock_gettime(CLOCK_REALTIME,&wtm);
 	wtm.tv_sec += tm;
-	if( pthread_rwlock_timedwrlock(CLOCK_REALTIME,&wtm) )
-	    throw TError("ResAlloc",_("Timeouted!"));
+	rez = pthread_rwlock_timedwrlock(&rwc,&wtm);
     }
+    if( rez == EDEADLK ) throw TError("ResAlloc",_("Resource is try deadlock a thread!"));
+    else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
-void Res::resRequestR( long tm )
+void Res::resRequestR( unsigned short tm )
 {
-    if( !tm ) pthread_rwlock_rdlock(&rwc);
+    int rez = 0;
+    if( !tm ) rez = pthread_rwlock_rdlock(&rwc);
     else
     {
 	timespec wtm;
 	clock_gettime(CLOCK_REALTIME,&wtm);
 	wtm.tv_sec += tm;
-	if( pthread_rwlock_timedrdlock(CLOCK_REALTIME,&wtm) )
-	    throw TError("ResAlloc",_("Timeouted!"));
+	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
+    if( rez == EDEADLK ) throw TError("ResAlloc",_("Resource is try deadlock a thread!"));
+    else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
 void Res::resRelease( )
@@ -76,7 +82,7 @@ ResAlloc::ResAlloc( Res &rid ) : mId(rid), mAlloc(false)
 
 }
 
-ResAlloc::ResAlloc( Res &rid, bool write, long tm ) : mId(rid), mAlloc(false)
+ResAlloc::ResAlloc( Res &rid, bool write, unsigned short tm ) : mId(rid), mAlloc(false)
 {
     request( write, tm );
 }
@@ -86,7 +92,7 @@ ResAlloc::~ResAlloc( )
     if( mAlloc ) release();
 }
 
-void ResAlloc::request( bool write, long tm )
+void ResAlloc::request( bool write, unsigned short tm )
 {
     if( mAlloc ) release();
     mAlloc = false;

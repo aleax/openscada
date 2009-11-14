@@ -1,3 +1,8 @@
+2009-11-14 Roman
+- !!:FIX:SYS.Res: Timeouted resource lock and deadlock control is fixed.
+- UI.QTCfg, UI.Vision: The popup calendar is enabled for Date and DateTime enter fields.
+
+
 2009-11-13 Roman
 - FIX:DAQ.JavaLikeCalc: Prevent to recompile equal functions is set.
 - FIX:UI.VCAEngine: Lock run session is fixed on time self page close.

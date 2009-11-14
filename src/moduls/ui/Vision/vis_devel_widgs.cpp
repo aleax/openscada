@@ -675,6 +675,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime )
     {
 	w_del = new QDateTimeEdit(parent);
+	((QDateTimeEdit*)w_del)->setCalendarPopup(true);
 	((QDateTimeEdit*)w_del)->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     }
     else if( value.type() == QVariant::Int )

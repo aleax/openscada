@@ -26,7 +26,7 @@
 #define PACKAGE_LICENSE	"GPL v2"
 #define PACKAGE_DESCR	"Open Supervisory Control And Data Acquisition"
 #define PACKAGE_AUTHOR	"Roman Savochenko"
-#define PACKAGE_SITE	"http://oscada.org.ua"
+#define PACKAGE_SITE	"http://oscada.org"
 
 //> Other system's constants
 #define TO_FREE		NULL	// Object free

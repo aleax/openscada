@@ -459,13 +459,15 @@ void LineEdit::setType( LType tp )
 	    break;
 	case Date:
 	    ed_fld = new QDateEdit(this);
+	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
-	    if( mPrev ) applyReserve = true;
+	    //if( mPrev ) applyReserve = true;
 	    break;
 	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
+	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
-	    if( mPrev ) applyReserve = true;
+	    //if( mPrev ) applyReserve = true;
 	    break;
 	case Combo:
 	    ed_fld = new QComboBox(this);

@@ -37,9 +37,9 @@ class Res
 	Res( );
 	~Res( );
 
-	void resRequestW( long tm = 0 );	// Write request
-	void resRequestR( long tm = 0 );	// Read request
-	void resRelease( );			// Release
+	void resRequestW( unsigned short tm = 0 );	// Write request, tm in seconds
+	void resRequestR( unsigned short tm = 0 );	// Read request, tm in seconds
+	void resRelease( );				// Release
 
     private:
 	pthread_rwlock_t rwc;
@@ -53,10 +53,10 @@ class ResAlloc
     public:
 	//Methods
 	ResAlloc( Res &rid );
-	ResAlloc( Res &rid, bool write, long tm = 0 );
+	ResAlloc( Res &rid, bool write, unsigned short tm = 0 );
 	~ResAlloc( );
 
-	void request( bool write = false, long tm = 0 );
+	void request( bool write = false, unsigned short tm = 0 );
 	void release( );
 
     private:
