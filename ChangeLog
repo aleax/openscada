@@ -1,7 +1,8 @@
 2009-11-14 Roman
 - !!:FIX:SYS.Res: Timeouted resource lock and deadlock control is fixed.
 - UI.QTCfg, UI.Vision: The popup calendar is enabled for Date and DateTime enter fields.
-
+- DAQ.BlockCalc: Disable to modify check for output links.
+- FIX:SYS: The configure.in is fixed for build on autoconf 2.64.
 
 2009-11-13 Roman
 - FIX:DAQ.JavaLikeCalc: Prevent to recompile equal functions is set.

@@ -36,7 +36,8 @@ AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
 AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
 AC_CHECK_PROG(MSGFMT, msgfmt, msgfmt, false)
 if test ${XGETTEXT} = false || test ${MSGMERGE} = false || test ${MSGFMT} = false; then 
-    AC_MSG_ERROR([Some gettext I18N utilite no present! Install gettext utilites package.]); fi
+    AC_MSG_ERROR([Some gettext I18N utilite no present! Install gettext utilites package.]);
+fi
 
 AM_SANITY_CHECK
 
@@ -250,7 +251,9 @@ if test ${ModJavaLikeCalc} = true; then
     #>> Modules checkings
     AC_PROG_YACC
     AC_CHECK_PROG(YACC_OK, bison, true, false)
-    if test ${YACC_OK} = false; then AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.]) fi
+    if test ${YACC_OK} = false; then
+	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
+    fi
 fi
 if test ${ModDiamondBoards} = true && test $target_cpu != "x86_64"; then
     AC_MSG_RESULT(Build module: DAQ/DiamondBoards)
