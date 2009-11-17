@@ -1,3 +1,9 @@
+2009-11-17 Roman
+- FIX:UI.QTCfg, UI.Vision: The popup calendar of enter fields is improved for lock write new values,
+    enable grid and set Monday as week start.
+- FIX:QT locale is force set for calendar localisation fix.
+
+
 2009-11-14 Roman
 - !!:FIX:SYS.Res: Timeouted resource lock and deadlock control is fixed.
 - UI.QTCfg, UI.Vision: The popup calendar is enabled for Date and DateTime enter fields.

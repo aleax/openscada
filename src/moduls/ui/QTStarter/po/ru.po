@@ -3,218 +3,218 @@
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 # Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
-#: tuimod.cpp:61 tuimod.cpp:277 tuimod.cpp:320 tuimod.cpp:515
+#: tuimod.cpp:62 tuimod.cpp:282 tuimod.cpp:325 tuimod.cpp:520
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:46+0300\n"
+"POT-Creation-Date: 2009-11-17 21:08+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: tuimod.cpp:44 tuimod.cpp:413 tuimod.cpp:418
+#: tuimod.cpp:45 tuimod.cpp:418 tuimod.cpp:423
 msgid "QTStarter"
 msgstr ""
 
-#: tuimod.cpp:45
+#: tuimod.cpp:46
 msgid "QT GUI starter"
 msgstr "QT GUI пускатель"
 
-#: tuimod.cpp:46
+#: tuimod.cpp:47
 msgid "UI"
 msgstr "Интерфейс пользователя"
 
-#: tuimod.cpp:48
+#: tuimod.cpp:49
 msgid "1.5.3"
 msgstr ""
 
-#: tuimod.cpp:49
+#: tuimod.cpp:50
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: tuimod.cpp:50
+#: tuimod.cpp:51
 msgid "Allow QT GUI starter. It is single for all QT GUI modules!"
 msgstr ""
 "Предоставляет QT GUI пускатель. Он является единственным для всех QT GUI "
 "модулей!"
 
-#: tuimod.cpp:51
+#: tuimod.cpp:52
 msgid "GPL"
 msgstr ""
 
-#: tuimod.cpp:56
+#: tuimod.cpp:57
 msgid "C"
 msgstr ""
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "&Yes"
 msgstr "&Да"
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "&No"
 msgstr "&Нет"
 
-#: tuimod.cpp:94 tuimod.cpp:95
+#: tuimod.cpp:95 tuimod.cpp:96
 msgid "Cancel"
 msgstr "Отмена"
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "&OK"
 msgstr ""
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "Apply"
 msgstr "Применить"
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "Close"
 msgstr "Закрыть"
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "Back"
 msgstr "Назад"
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "Forward"
 msgstr "Вперёд"
 
-#: tuimod.cpp:94
+#: tuimod.cpp:95
 msgid "Parent Directory"
 msgstr "Родительская директория"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "Look in:"
 msgstr "Просмотр:"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "Computer"
 msgstr "Компьютер"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "File"
 msgstr "Файл"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "Folder"
 msgstr "Папка"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "File &name:"
 msgstr "&Имя файла:"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "Open"
 msgstr "Открыть"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "&Open"
 msgstr "&Открыть"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "Save"
 msgstr "Сохранить"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "&Save"
 msgstr "Сохранить"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "Date Modified"
 msgstr "Дата модификации"
 
-#: tuimod.cpp:95
+#: tuimod.cpp:96
 msgid "All Files (*)"
 msgstr "Все файлы (*)"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "Create New Folder"
 msgstr "Создать новую папку"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "List View"
 msgstr "Вид списком"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "Detail View"
 msgstr "Детальный вид"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "Files of type:"
 msgstr "Файлы типов:"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "New Folder"
 msgstr "Новая папка"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "&New Folder"
 msgstr "&Новая папка"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "Show &hidden files"
 msgstr "Показать &скрытые файлы"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "&Delete"
 msgstr "У&далить"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "&Rename"
 msgstr "Пере&именовать"
 
-#: tuimod.cpp:96
+#: tuimod.cpp:97
 msgid "Remove"
 msgstr "Переместить"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "&Undo"
 msgstr "&Откат"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "&Redo"
 msgstr "&Накат"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "Cu&t"
 msgstr "Вы&резать"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "&Copy"
 msgstr "&Копировать"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "&Paste"
 msgstr "В&ставить"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "Delete"
 msgstr "Удалить"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "Select All"
 msgstr "Выбрать всё"
 
-#: tuimod.cpp:97
+#: tuimod.cpp:98
 msgid "Insert Unicode control character"
 msgstr "Вставить Unicode управляющий символ"
 
-#: tuimod.cpp:98
+#: tuimod.cpp:99
 msgid "%1 bytes"
 msgstr "%1 байт"
 
-#: tuimod.cpp:98
+#: tuimod.cpp:99
 msgid "%1 KB"
 msgstr "%1 КБ"
 
-#: tuimod.cpp:99
+#: tuimod.cpp:100
 msgid "Are sure you want to delete '%1'?"
 msgstr "Вы действительно желаете удалить '%1'?"
 
-#: tuimod.cpp:100
+#: tuimod.cpp:101
 msgid ""
 "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open Source "
 "Edition is intended for the development of Open Source applications. You "
@@ -230,7 +230,7 @@ msgstr ""
 "</p><p>Пожалуйста смотрите здесь <a href=\"http://www.trolltech.com/company/"
 "model/\">www.trolltech.com/company/model/</a> для обзора Qt лицензий.</p>"
 
-#: tuimod.cpp:101
+#: tuimod.cpp:102
 msgid ""
 "<h3>About Qt</h3>%1<p>Qt is a C++ toolkit for cross-platform application "
 "development.</p><p>Qt provides single-source portability across MS&nbsp;"
@@ -247,320 +247,324 @@ msgstr ""
 "продукт Nokia. Смотрите <a href=\"http://www.trolltech.com/qt/\">www."
 "trolltech.com/qt/</a> для детальной информации.</p>"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "Hu&e:"
 msgstr "Оттенок:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Sat:"
 msgstr "Насыщ.:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Val:"
 msgstr "Яркость:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Red:"
 msgstr "Красный:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Green:"
 msgstr "Зелёный:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "Bl&ue:"
 msgstr "Синий:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "A&lpha channel:"
 msgstr "Алфа канал:"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Basic colors"
 msgstr "Базовые цвета"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Custom colors"
 msgstr "Пользовательские цвета"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "&Add to Custom Colors"
 msgstr "Добавить пользовательский цвет"
 
-#: tuimod.cpp:102
+#: tuimod.cpp:103
 msgid "Select color"
 msgstr "Выбор цвета"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Form"
 msgstr "Форма"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Printer"
 msgstr "Принтер"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "&Name:"
 msgstr "Имя:"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "P&roperties"
 msgstr "Свойства"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Location:"
 msgstr "Расположение:"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Type:"
 msgstr "Тип:"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Output &file:"
 msgstr "Выходной файл:"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Print range"
 msgstr "Диапазон печати"
 
-#: tuimod.cpp:103
+#: tuimod.cpp:104
 msgid "Print all"
 msgstr "Печать всё"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Pages from"
 msgstr "Страницы от"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "to"
 msgstr "до"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Selection"
 msgstr "Выбор"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Output Settings"
 msgstr "Установки вывода"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Copies:"
 msgstr "Копий:"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Collate"
 msgstr "Проверять"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Reverse"
 msgstr "Реверс"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Copies"
 msgstr "Копии"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Color Mode"
 msgstr "Режим цвета"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Color"
 msgstr "Цветной"
 
-#: tuimod.cpp:104
+#: tuimod.cpp:105
 msgid "Grayscale"
 msgstr "Серый"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "Duplex Printing"
 msgstr "Двухсторонняя печать"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "None"
 msgstr "Нет"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "Long side"
 msgstr "По длинной стороне"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "Short side"
 msgstr "По короткой стороне"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "Options"
 msgstr "Опции"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "&Options >>"
 msgstr "Опции >>"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "&Options <<"
 msgstr "Опции <<"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "&Print"
 msgstr "Печать"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "Print to File (PDF)"
 msgstr "Печать в файл (PDF)"
 
-#: tuimod.cpp:105
+#: tuimod.cpp:106
 msgid "Print to File (Postscript)"
 msgstr "Печать в файл (Postscript)"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Local file"
 msgstr "Локальный файл"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Write %1 file"
 msgstr "Запись %1 файла"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Paper"
 msgstr "Бумага"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Page size:"
 msgstr "Размер страницы:"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Width:"
 msgstr "Ширина:"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Height:"
 msgstr "Высота:"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Paper source:"
 msgstr "Источник бумаги:"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Orientation"
 msgstr "Ориентация"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Portrait"
 msgstr "Портретная"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Landscape"
 msgstr "Ландшафт"
 
-#: tuimod.cpp:106
+#: tuimod.cpp:107
 msgid "Reverse landscape"
 msgstr "Реверсный ландшафт"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "Reverse portrait"
 msgstr "Реверсный портрет"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "Margins"
 msgstr "Отступы"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "top margin"
 msgstr "верхний отступ"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "left margin"
 msgstr "левый отступ"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "right margin"
 msgstr "правый отступ"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "bottom margin"
 msgstr "нижний отступ"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "Points (pt)"
 msgstr "Точек (pt)"
 
-#: tuimod.cpp:107
+#: tuimod.cpp:108
 msgid "Inches (in)"
 msgstr "Дюймов (in)"
 
-#: tuimod.cpp:108
+#: tuimod.cpp:109
 msgid "Millimeters (mm)"
 msgstr "Миллиметров (mm)"
 
-#: tuimod.cpp:108
+#: tuimod.cpp:109
 msgid "Centimeters (cm)"
 msgstr "Сантиметров (cm)"
 
-#: tuimod.cpp:108
+#: tuimod.cpp:109
 msgid "Page"
 msgstr "Страница"
 
-#: tuimod.cpp:108
+#: tuimod.cpp:109
 msgid "Advanced"
 msgstr "Дополнительно"
 
-#: tuimod.cpp:130 tuimod.cpp:185
+#: tuimod.cpp:110
+msgid "Mon"
+msgstr "Пон"
+
+#: tuimod.cpp:132 tuimod.cpp:187
 msgid "h"
 msgstr ""
 
-#: tuimod.cpp:133 tuimod.cpp:188
+#: tuimod.cpp:135 tuimod.cpp:190
 msgid "help"
 msgstr ""
 
-#: tuimod.cpp:134 tuimod.cpp:189
+#: tuimod.cpp:136 tuimod.cpp:191
 msgid "demon"
 msgstr ""
 
-#: tuimod.cpp:160
+#: tuimod.cpp:162
 msgid "start"
 msgstr ""
 
-#: tuimod.cpp:161
+#: tuimod.cpp:163
 msgid "QT main thread is not started!"
 msgstr "Основной поток QT не запущен!"
 
-#: tuimod.cpp:171
+#: tuimod.cpp:173
 msgid "stop"
 msgstr ""
 
-#: tuimod.cpp:172
+#: tuimod.cpp:174
 msgid "QT main thread is not stopped!"
 msgstr "Основной поток QT не остановлен!"
 
-#: tuimod.cpp:180
+#: tuimod.cpp:182
 msgid "Load module."
 msgstr "Загрузка модуля."
 
-#: tuimod.cpp:199
+#: tuimod.cpp:201
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: tuimod.cpp:206 tuimod.cpp:215
+#: tuimod.cpp:208 tuimod.cpp:217
 msgid "StartMod"
 msgstr ""
 
-#: tuimod.cpp:212
+#: tuimod.cpp:214
 msgid "Save module."
 msgstr "Сохранение модуля."
 
-#: tuimod.cpp:221
+#: tuimod.cpp:223
 msgid "Start module."
 msgstr "Старт модуля."
 
-#: tuimod.cpp:230
+#: tuimod.cpp:232
 msgid "Stop module."
 msgstr "Останов модуля."
 
-#: tuimod.cpp:241
+#: tuimod.cpp:243
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -573,159 +577,158 @@ msgstr ""
 "StartMod  <модули>    Список запускаемых модулей (разделитель - ';');\n"
 "\n"
 
-#: tuimod.cpp:258
+#: tuimod.cpp:260
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: tuimod.cpp:271
+#: tuimod.cpp:276
 msgid "splash"
 msgstr ""
 
-#: tuimod.cpp:271 tuimod.cpp:314
+#: tuimod.cpp:276 tuimod.cpp:319
 msgid ":/images/splash.png"
 msgstr ""
 
-#: tuimod.cpp:280 tuimod.cpp:323
+#: tuimod.cpp:285 tuimod.cpp:328
 msgid ""
 "\n"
 "%1: %2"
 msgstr ""
 
-#: tuimod.cpp:293 tuimod.cpp:422 tuimod.cpp:466
+#: tuimod.cpp:298 tuimod.cpp:427 tuimod.cpp:471
 msgid "SubType"
 msgstr "Подтип"
 
-#: tuimod.cpp:293 tuimod.cpp:422 tuimod.cpp:466
+#: tuimod.cpp:298 tuimod.cpp:427 tuimod.cpp:471
 msgid "QT"
 msgstr ""
 
-#: tuimod.cpp:294 tuimod.cpp:404 tuimod.cpp:423 tuimod.cpp:467
+#: tuimod.cpp:299 tuimod.cpp:409 tuimod.cpp:428 tuimod.cpp:472
 msgid "QMainWindow *openWindow();"
 msgstr ""
 
-#: tuimod.cpp:314
+#: tuimod.cpp:319
 msgid "splash_exit"
 msgstr ""
 
-#: tuimod.cpp:342
+#: tuimod.cpp:347
 msgid "info"
 msgstr ""
 
-#: tuimod.cpp:345
+#: tuimod.cpp:350
 msgid "area"
 msgstr ""
 
-#: tuimod.cpp:345
+#: tuimod.cpp:350
 msgid "/prm/cfg"
 msgstr ""
 
-#: tuimod.cpp:345
+#: tuimod.cpp:350
 msgid "Module options"
 msgstr "Опции модуля"
 
-#: tuimod.cpp:346 tuimod.cpp:347
+#: tuimod.cpp:351 tuimod.cpp:352
 msgid "fld"
 msgstr ""
 
-#: tuimod.cpp:346 tuimod.cpp:353
+#: tuimod.cpp:351 tuimod.cpp:358
 msgid "/prm/cfg/st_mod"
 msgstr ""
 
-#: tuimod.cpp:346
+#: tuimod.cpp:351
 msgid "Start QT modules (sep - ';')"
 msgstr "Запускаемые QT-модули (разд. - ';')"
 
-#: tuimod.cpp:346 tuimod.cpp:347 tuimod.cpp:355 tuimod.cpp:356
+#: tuimod.cpp:351 tuimod.cpp:352 tuimod.cpp:360 tuimod.cpp:361
 msgid "root"
 msgstr ""
 
-#: tuimod.cpp:346 tuimod.cpp:347
+#: tuimod.cpp:351 tuimod.cpp:352
 msgid "tp"
 msgstr ""
 
-#: tuimod.cpp:346 tuimod.cpp:347
+#: tuimod.cpp:351 tuimod.cpp:352
 msgid "str"
 msgstr ""
 
-#: tuimod.cpp:347 tuimod.cpp:358
+#: tuimod.cpp:352 tuimod.cpp:363
 msgid "/help/g_help"
 msgstr ""
 
-#: tuimod.cpp:347
+#: tuimod.cpp:352
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: tuimod.cpp:347
+#: tuimod.cpp:352
 msgid "cols"
 msgstr ""
 
-#: tuimod.cpp:347
+#: tuimod.cpp:352
 msgid "90"
 msgstr ""
 
-#: tuimod.cpp:347
+#: tuimod.cpp:352
 msgid "rows"
 msgstr ""
 
-#: tuimod.cpp:347
+#: tuimod.cpp:352
 msgid "5"
 msgstr ""
 
-#: tuimod.cpp:352
+#: tuimod.cpp:357
 msgid "path"
 msgstr ""
 
-#: tuimod.cpp:355 tuimod.cpp:358
+#: tuimod.cpp:360 tuimod.cpp:363
 msgid "get"
 msgstr ""
 
-#: tuimod.cpp:356
+#: tuimod.cpp:361
 msgid "set"
 msgstr ""
 
-#: tuimod.cpp:383 tuimod.cpp:493
+#: tuimod.cpp:388 tuimod.cpp:498
 msgid "*exit*"
 msgstr ""
 
-#: tuimod.cpp:411
-#, fuzzy
+#: tuimod.cpp:416
 msgid "QTStarterToolDis"
-msgstr "QTStarter панель инструментов"
+msgstr ""
 
-#: tuimod.cpp:414
+#: tuimod.cpp:419
 msgid "QTStarterTool"
 msgstr ""
 
-#: tuimod.cpp:417
+#: tuimod.cpp:422
 msgid "QTStarterMenuDis"
 msgstr ""
 
-#: tuimod.cpp:428 tuimod.cpp:431 tuimod.cpp:470 tuimod.cpp:473
+#: tuimod.cpp:433 tuimod.cpp:436 tuimod.cpp:475 tuimod.cpp:478
 msgid "QIcon icon();"
 msgstr ""
 
-#: tuimod.cpp:434 tuimod.cpp:457 tuimod.cpp:476
+#: tuimod.cpp:439 tuimod.cpp:462 tuimod.cpp:481
 msgid ":/images/oscada_qt.png"
 msgstr ""
 
-#: tuimod.cpp:439
+#: tuimod.cpp:444
 msgid "Descript"
 msgstr "Описание"
 
-#: tuimod.cpp:456
+#: tuimod.cpp:461
 msgid "OpenSCADA system QT-starter"
 msgstr "QT-пускатель системы OpenSCADA"
 
-#: tuimod.cpp:492
+#: tuimod.cpp:497
 msgid ":/images/exit.png"
 msgstr ""
 
-#: tuimod.cpp:492
+#: tuimod.cpp:497
 msgid "Exit from system"
 msgstr "Выйти из программы"
 
-#: tuimod.cpp:519
+#: tuimod.cpp:524
 #, c-format
 msgid "No translated QT message: '%s'"
 msgstr ""

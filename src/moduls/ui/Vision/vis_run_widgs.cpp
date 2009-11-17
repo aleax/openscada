@@ -203,7 +203,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     {
 	case -2:	//focus
 	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
-	    if( (bool)atoi(val.c_str()) )	setFocus(Qt::OtherFocusReason);
+	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
 	    return true;
 	case -3:	//perm
 	    setPermCntr( atoi(val.c_str())&SEQ_WR );

@@ -541,7 +541,7 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 		break;
 	}
     }
-    
+
     return false;
 }
 
@@ -566,10 +566,12 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	switch( event->type() )
 	{
 	    case QEvent::FocusIn:
+		if( !w->hasFocus() ) break;
 		w->attrSet("focus","1");
 		w->attrSet("event","ws_FocusIn");
 		break;
 	    case QEvent::FocusOut:
+		if( w->hasFocus() ) break;
 		w->attrSet("focus","0");
 		w->attrSet("event","ws_FocusOut");
 		break;

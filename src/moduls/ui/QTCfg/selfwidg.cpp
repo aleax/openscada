@@ -33,6 +33,7 @@
 #include <QItemEditorFactory>
 #include <QMetaProperty>
 #include <QSpinBox>
+#include <QCalendarWidget>
 
 #include <tsys.h>
 
@@ -158,11 +159,15 @@ void LineEdit::setType( LType tp )
 	case Date:
 	    ed_fld = new QDateEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
+	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
+	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
 	    break;
 	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
 	    ((QDateTimeEdit*)ed_fld)->setCalendarPopup(true);
+	    ((QDateTimeEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
+	    ((QDateTimeEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
 	    break;
 	case Combo:

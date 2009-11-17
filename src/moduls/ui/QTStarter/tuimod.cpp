@@ -34,6 +34,7 @@
 #include <QTextCodec>
 #include <QTimer>
 #include <QSplashScreen>
+#include <QLocale>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -105,7 +106,8 @@ TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(fal
 	"Duplex Printing","None","Long side","Short side","Options","&Options >>","&Options <<","&Print","Print to File (PDF)","Print to File (Postscript)",
 	"Local file","Write %1 file","Paper","Page size:","Width:","Height:","Paper source:","Orientation","Portrait","Landscape","Reverse landscape",
 	"Reverse portrait","Margins","top margin","left margin","right margin","bottom margin","Points (pt)","Inches (in)",
-	"Millimeters (mm)","Centimeters (cm)","Page","Advanced"
+	"Millimeters (mm)","Centimeters (cm)","Page","Advanced",
+	"Mon"
     };
 #endif
 }
@@ -257,6 +259,9 @@ void *TUIMod::Task( void * )
 #if OSC_DEBUG >= 2
     mess_debug(mod->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
+
+    //> Init locale setLocale
+    QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
     //> QT application object init
     QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );

@@ -37,6 +37,7 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QTimer>
+#include <QCalendarWidget>
 
 #include <tsys.h>
 
@@ -460,12 +461,16 @@ void LineEdit::setType( LType tp )
 	case Date:
 	    ed_fld = new QDateEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
+	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
+	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
 	    //if( mPrev ) applyReserve = true;
 	    break;
 	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
+	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
+	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
 	    //if( mPrev ) applyReserve = true;
 	    break;
@@ -514,6 +519,7 @@ void LineEdit::setValue( const QString &txt )
 	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
 	    break;
 	case Date: case DateTime:
+	    if( ((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible() ) break;
 	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
