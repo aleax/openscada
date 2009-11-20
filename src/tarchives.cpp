@@ -709,14 +709,14 @@ void *TArchiveS::ArhValTask( void *param )
     return NULL;
 }
 
-TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms )
+TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     if( iid == "messGet" && prms.size() >= 2 )
     {
 	vector<TMess::SRec> recs;
 	messGet( prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : ""), 
 	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : 0) );
-	TAreaObj *rez = new TAreaObj();
+	TArrayObj *rez = new TArrayObj();
 	for( int i_m = 0; i_m < recs.size(); i_m++ )
 	{
 	    TVarObj *am = new TVarObj();
@@ -730,7 +730,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms )
 	return rez;
     }
 
-    return TCntrNode::objFuncCall(iid,prms);
+    return TCntrNode::objFuncCall(iid,prms,user);
 }
 
 void TArchiveS::cntrCmdProc( XMLNode *opt )

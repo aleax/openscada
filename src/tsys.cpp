@@ -1064,14 +1064,14 @@ reload:
     return mktime(&ttm);
 }
 
-TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms )
+TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     if( iid == "message" && prms.size() >= 3 )
     {
 	message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() );
 	return 0;
     }
-    else if( iid == "system" && prms.size() >= 1 )
+    if( iid == "system" && prms.size() >= 1 )
     {
 	FILE *fp = popen(prms[0].getS().c_str(),"r");
 	if( !fp ) return string("");
@@ -1084,9 +1084,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms )
 	pclose(fp);
 	return rez;
     }
-    else if( iid == "XMLNode" )
-	return new XMLNodeObj( (prms.size()>=1) ? prms[0].getS() : "" );
-    else if( iid == "cntrReq" && prms.size() >= 1 )
+    if( iid == "XMLNode" ) return new XMLNodeObj( (prms.size()>=1) ? prms[0].getS() : "" );
+    if( iid == "cntrReq" && prms.size() >= 1 )
     {
 	XMLNode req;
 	if( !dynamic_cast<XMLNodeObj*>(prms[0].getO()) ) return string(_("1:Request is not object!"));
@@ -1094,20 +1093,62 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms )
 	string path = req.attr("path");
 	if( prms.size() < 2 || prms[1].getS().empty() )
 	{
-	    req.setAttr("user","root");
+	    req.setAttr("user",user);
 	    cntrCmd(&req);
 	}
 	else
 	{
 	    req.setAttr("path",prms[1].getS()+"/"+path);
-	    transport().at().cntrIfCmd(req,"xmlCntrReq","root");
+	    transport().at().cntrIfCmd(req,"xmlCntrReq",user);
 	    req.setAttr("path",path);
 	}
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
 	return string("0");
     }
+    if( iid == "time" )
+    {
+	if( prms.empty() ) return (int)time(NULL);
+	long long tm = curTime();
+	prms[0].setI(tm%1000000); prms[0].setModify();
+	return (int)(tm/1000000);
+    }
+    if( iid == "localtime" && prms.size() >= 2 )
+    {
+	time_t tm_t = prms[0].getI();
+	struct tm tm_tm;
+	localtime_r(&tm_t,&tm_tm);
 
-    return TCntrNode::objFuncCall(iid,prms);
+	prms[1].setI(tm_tm.tm_sec); prms[1].setModify();
+	if( prms.size() >= 3 ) { prms[2].setI(tm_tm.tm_min); prms[2].setModify(); }
+	if( prms.size() >= 4 ) { prms[3].setI(tm_tm.tm_hour); prms[3].setModify(); }
+	if( prms.size() >= 5 ) { prms[4].setI(tm_tm.tm_mday); prms[4].setModify(); }
+	if( prms.size() >= 6 ) { prms[5].setI(tm_tm.tm_mon); prms[5].setModify(); }
+	if( prms.size() >= 7 ) { prms[6].setI(1900+tm_tm.tm_year); prms[6].setModify(); }
+	if( prms.size() >= 8 ) { prms[7].setI(tm_tm.tm_wday); prms[7].setModify(); }
+	if( prms.size() >= 9 ) { prms[8].setI(tm_tm.tm_yday); prms[8].setModify(); }
+	if( prms.size() >= 10 ) { prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
+	return 0;
+    }
+    if( iid == "strftime" && !prms.empty() )
+    {
+	time_t tm_t = prms[0].getI();
+	struct tm tm_tm;
+	localtime_r(&tm_t,&tm_tm);
+	char buf[1000];
+	int rez = strftime( buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm );
+	return (rez>0) ? string(buf,rez) : "";
+    }
+    if( iid == "strptime" && !prms.empty() )
+    {
+	struct tm stm;
+	stm.tm_isdst = -1;
+	strptime( prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm );
+	return (int)mktime(&stm);
+    }
+    if( iid == "cron" && !prms.empty() )
+	return (int)cron( prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0 );
+
+    return TCntrNode::objFuncCall(iid,prms,user);
 }
 
 void TSYS::cntrCmdProc( XMLNode *opt )

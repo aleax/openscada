@@ -241,29 +241,29 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 }
 
 //***********************************************************
-//* TAreaObj                                                *
-//*   Area object included indexed properties               *
+//* TArrayObj                                                *
+//*   Array object included indexed properties               *
 //***********************************************************
-TVariant TAreaObj::propGet( const string &id )
+TVariant TArrayObj::propGet( const string &id )
 {
     if( id == "length" ) return (int)mEls.size();
 
     int vid = atoi(id.c_str());
-    if( vid < 0 || vid >= mEls.size() ) throw TError("AreaObj",_("Array element '%d' is not allow."),vid);
+    if( vid < 0 || vid >= mEls.size() ) throw TError("ArrayObj",_("Array element '%d' is not allow."),vid);
     return mEls[vid];
 }
 
-void TAreaObj::propSet( const string &id, TVariant val )
+void TArrayObj::propSet( const string &id, TVariant val )
 {
     int vid = atoi(id.c_str());
-    if( vid < 0 ) throw TError("AreaObj",_("Negative id is not allow for array."));
+    if( vid < 0 ) throw TError("ArrayObj",_("Negative id is not allow for array."));
     while( vid >= mEls.size() ) mEls.push_back(TVariant());
     mEls[vid] = val;
 }
 
-string TAreaObj::getStrXML( const string &oid )
+string TArrayObj::getStrXML( const string &oid )
 {
-    string nd("<TAreaObj");
+    string nd("<TArrayObj");
     if( !oid.empty() ) nd = nd + " p='" + oid + "'";
     nd = nd + ">\n";
     for( int ip = 0; ip < mEls.size(); ip++ )
@@ -275,12 +275,12 @@ string TAreaObj::getStrXML( const string &oid )
 	    case TVariant::Boolean:	nd += "<bool>"+mEls[ip].getS()+"</bool>\n"; break;
 	    case TVariant::Object:	nd += mEls[ip].getO()->getStrXML(); break;
 	}
-    nd += "</TAreaObj>\n";
+    nd += "</TArrayObj>\n";
 
     return nd;
 }
 
-TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
+TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if( id == "join" || id == "toString" || id == "valueOf" )
     {
@@ -289,7 +289,7 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	    rez += (i_e?sep:"")+mEls[i_e].getS();
 	return rez;
     }
-    if( id == "concat" && prms.size() && prms[0].type() == TVariant::Object && dynamic_cast<TAreaObj*>(prms[0].getO()) )
+    if( id == "concat" && prms.size() && prms[0].type() == TVariant::Object && dynamic_cast<TArrayObj*>(prms[0].getO()) )
     {
 	for( int i_p = 0; i_p < prms[0].getO()->propGet("length").getI(); i_p++ )
 	    mEls.push_back(prms[0].getO()->propGet(TSYS::int2str(i_p)));
@@ -302,7 +302,7 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "pop" )
     {
-	if( mEls.empty() ) throw TError("AreaObj",_("Array is empty."));
+	if( mEls.empty() ) throw TError("ArrayObj",_("Array is empty."));
 	TVariant val = mEls.back();
 	mEls.pop_back();
 	return val;
@@ -310,7 +310,7 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "reverse" )		{ reverse(mEls.begin(),mEls.end()); return this; }
     if( id == "shift" )
     {
-	if( mEls.empty() ) throw TError("AreaObj",_("Array is empty."));
+	if( mEls.empty() ) throw TError("ArrayObj",_("Array is empty."));
 	TVariant val = mEls.front();
 	mEls.erase(mEls.begin());
 	return val;
@@ -328,7 +328,7 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	if( prms.size()>=2 ) end = prms[1].getI();
 	if( end < 0 ) end = mEls.size()-1+end;
 	end = vmin(end,mEls.size()-1);
-	TAreaObj *rez = new TAreaObj();
+	TArrayObj *rez = new TArrayObj();
 	for( int i_p = beg; i_p <= end; i_p++ )
 	    rez->propSet( TSYS::int2str(i_p-beg), prms[i_p] );
 	return rez;
@@ -338,7 +338,7 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	int beg = vmax(0,prms[0].getI());
 	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
 	//> Delete elements
-	TAreaObj *rez = new TAreaObj();
+	TArrayObj *rez = new TArrayObj();
 	for( int i_c = 0; i_c < cnt && beg < mEls.size(); i_c++ )
 	{
 	    rez->propSet( TSYS::int2str(i_c), mEls[beg] );
@@ -355,10 +355,10 @@ TVariant TAreaObj::funcCall( const string &id, vector<TVariant> &prms )
 	return this;
     }
 
-    throw TError("AreaObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    throw TError("ArrayObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
 
-bool TAreaObj::compareLess( const TVariant &v1, const TVariant &v2 )
+bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
 {
     return v1.getS() < v2.getS();
 }
@@ -512,7 +512,7 @@ void XMLNodeObj::fromXMLNode( XMLNode &nd )
 //* TCntrNodeObj                                            *
 //*   TCntrNode object for access to system's objects       *
 //***********************************************************
-TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind )
+TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind, const string &iuser ) : mUser(iuser)
 {
     cnd = ind;
 }
@@ -523,7 +523,7 @@ TVariant TCntrNodeObj::propGet( const string &id )
     try
     {
 	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
-	return new TCntrNodeObj(nnd);
+	return new TCntrNodeObj(nnd,user());
     }catch(...){ }
 
     return cnd.at().objPropGet( id );
@@ -538,5 +538,5 @@ void TCntrNodeObj::propSet( const string &id, TVariant val )
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if( cnd.freeStat() ) return TVariant();
-    return cnd.at().objFuncCall( id, prms );
+    return cnd.at().objFuncCall( id, prms, user() );
 }

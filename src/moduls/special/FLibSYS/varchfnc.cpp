@@ -228,7 +228,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	int fftN = 0, iN = 0;
 	double *fftIn;
 
-	TAreaObj *ao = new TAreaObj();
+	TArrayObj *ao = new TArrayObj();
 	if( isArch() )
 	{
 	    string archivator = (prms.size()>=3) ? prms[2].getS() : "";

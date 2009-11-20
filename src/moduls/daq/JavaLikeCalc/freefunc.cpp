@@ -1060,7 +1060,7 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	case TVariant::Object:	return vl.getO()->propGet(prop);
 	case TVariant::Boolean:
 	    throw TError(nodePath().c_str(),_("Boolean type have not one properties."));
-	case TVariant::Integer: 
+	case TVariant::Integer:
 	    if( prop == "MAX_VALUE" )	return INT_MAX;
 	    if( prop == "MIN_VALUE" )	return INT_MIN;
 	    if( prop == "NaN" )		return EVAL_INT;
@@ -1085,7 +1085,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	case TVariant::Boolean:
 	    if( prop == "toString" )	return string(vl.getB() ? "true" : "false");
 	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
-	case TVariant::Integer: 
+	case TVariant::Integer:
 	case TVariant::Real:
 	    if( prop == "toExponential" )
 	    {
@@ -1158,10 +1158,10 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	    }
 	    if( prop == "split" && prms.size() )
 	    {
-		TAreaObj *rez = new TAreaObj();
+		TArrayObj *rez = new TArrayObj();
 		for( int posB = 0, i_p = 0; true; i_p++ )
 		{
-		    if( prms.size() > 1 && rez->size() >= prms[0].getI() ) break;
+		    if( prms.size() > 1 && rez->size() >= prms[1].getI() ) break;
 		    int posC = vl.getS().find(prms[0].getS(),posB);
 		    if( posC != posB )
 			rez->propSet( TSYS::int2str(i_p), vl.getS().substr(posB,posC-posB) );
@@ -1170,6 +1170,36 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		}
 		return rez;
 	    }
+	    if( prop == "insert" && prms.size() >= 2 )
+		return vl.getS().insert( vmax(0,vmin(vl.getS().size(),prms[0].getI())), prms[1].getS() );
+	    if( prop == "replace" && prms.size() >= 3 )
+	    {
+		int pos = prms[0].getI();
+		if( pos < 0 || pos >= vl.getS().size() ) return vl;
+		int n = prms[1].getI();
+		if( n < 0 ) n = vl.getS().size();
+		n = vmin(vl.getS().size()-pos,n);
+		return vl.getS().replace( pos, n, prms[2].getS() );
+	    }
+	    if( prop == "toReal" ) return atof(vl.getS().c_str());
+	    if( prop == "toInt" ) return (int)strtol(vl.getS().c_str(),NULL,0);
+	    if( prop == "parse" && prms.size() )
+	    {
+		int off = (prms.size() >= 3) ? prms[2].getI() : 0;
+		string rez = TSYS::strSepParse( vl.getS(), prms[0].getI(),
+		    (prms.size() >= 2 && prms[1].getS().size()) ? prms[1].getS()[0] : '.', &off );
+		if( prms.size() >= 3 ) { prms[2].setI(off); prms[2].setModify(); }
+		return rez;
+	    }
+	    if( prop == "parsePath" && prms.size() )
+	    {
+		int off = (prms.size() >= 2) ? prms[1].getI() : 0;
+		string rez = TSYS::pathLev( vl.getS(), prms[0].getI(), &off );
+		if( prms.size() >= 2 ) { prms[1].setI(off); prms[1].setModify(); }
+		return rez;
+	    }
+	    if( prop == "path2sep" )
+		return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
 
 	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s' or not enough parameters for it."),prop.c_str());
     }
@@ -1482,7 +1512,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Load array elements %d to reg %d.\n",*(uint8_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		TAreaObj *ar = new TAreaObj();
+		TArrayObj *ar = new TArrayObj();
 		int pcnt = *(uint8_t*)(cprg+3);
 		//>>> Fill array by empty elements number
 		if( pcnt == 1 )
@@ -1507,7 +1537,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Load system object %s(%d) to reg %d.\n",string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str(),*(uint8_t*)(cprg+3),*(uint16_t*)(cprg+1));
 #endif
-		reg[*(uint16_t*)(cprg+1)] = new TCntrNodeObj(SYS->nodeAt(string((char*)cprg+4,*(uint8_t*)(cprg+3)),0,'.'));
+		reg[*(uint16_t*)(cprg+1)] = new TCntrNodeObj(SYS->nodeAt(string((char*)cprg+4,*(uint8_t*)(cprg+3)),0,'.'),val->user());
 		cprg += 4+ *(uint8_t*)(cprg+3); break;
 	    }
 	    //>> Assign codes

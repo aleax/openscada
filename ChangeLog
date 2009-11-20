@@ -1,3 +1,9 @@
+2009-11-20 Roman
+- !:SYS: The User's system API, based on object TCntrNodeObj is expanded for user permition control. TAreaObj object is renamed to TArrayObj.
+- !!:SYS: User's API functions is added to OpenSCADA core object: time, localtime, strftime, strptime and cron.
+- !!:DAQ.JavaLikeCalc: User's API functions is added to string type value: insert, replace, toReal, toInt, parse, parsePath and path2sep.
+
+
 2009-11-17 Roman
 - FIX:UI.QTCfg, UI.Vision: The popup calendar of enter fields is improved for lock write new values,
     enable grid and set Monday as week start.
@@ -9,6 +15,7 @@
 - UI.QTCfg, UI.Vision: The popup calendar is enabled for Date and DateTime enter fields.
 - DAQ.BlockCalc: Disable to modify check for output links.
 - FIX:SYS: The configure.in is fixed for build on autoconf 2.64.
+
 
 2009-11-13 Roman
 - FIX:DAQ.JavaLikeCalc: Prevent to recompile equal functions is set.

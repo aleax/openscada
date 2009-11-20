@@ -84,7 +84,7 @@ class dbReqSQL : public TFunction
 	void calc( TValFunc *val )
 	{
 	    string sdb = TBDS::realDBName(val->getS(1));
-	    TAreaObj *rez = new TAreaObj();
+	    TArrayObj *rez = new TArrayObj();
 	    try
 	    {
 		vector< vector<string> > rtbl;
@@ -92,7 +92,7 @@ class dbReqSQL : public TFunction
 		db.at().sqlReq( val->getS(2), &rtbl );
 		for( int i_r = 0; i_r < rtbl.size(); i_r++ )
 		{
-		    TAreaObj *row = new TAreaObj();
+		    TArrayObj *row = new TArrayObj();
 		    for( int i_c = 0; i_c < rtbl[i_r].size(); i_c++ )
 			row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
 		    rez->propSet(TSYS::int2str(i_r),row);
@@ -128,7 +128,7 @@ class messGet : public TFunction
 	{
 	    vector<TMess::SRec> recs;
 	    SYS->archive().at().messGet( val->getI(1), val->getI(2), recs, val->getS(3), val->getI(4), val->getS(5) );
-	    TAreaObj *rez = new TAreaObj();
+	    TArrayObj *rez = new TArrayObj();
 	    for( int i_m = 0; i_m < recs.size(); i_m++ )
 	    {
 		TVarObj *am = new TVarObj();

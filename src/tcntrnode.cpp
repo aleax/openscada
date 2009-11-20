@@ -625,7 +625,7 @@ TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
 
 void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
 
-TVariant TCntrNode::objFuncCall( const string &id, vector<TVariant> &prms )
+TVariant TCntrNode::objFuncCall( const string &id, vector<TVariant> &prms, const string &user )
 {
     throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),id.c_str());
 }

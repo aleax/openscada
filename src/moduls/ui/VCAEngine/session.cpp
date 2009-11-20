@@ -477,7 +477,7 @@ bool Session::stlPropSet( const string &pid, const string &vl )
     return true;
 }
 
-TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms )
+TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const string &cuser )
 {
     if( iid == "user" )	return user();
     else if( iid == "alrmSndPlay" )
@@ -491,7 +491,7 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms )
 	alarmQuittance( (prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI() );
 	return 0;
     }
-    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
+    return TCntrNode::objFuncCall(iid,prms,cuser);
 }
 
 void Session::cntrCmdProc( XMLNode *opt )

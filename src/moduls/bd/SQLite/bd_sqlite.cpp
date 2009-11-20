@@ -103,7 +103,7 @@ string BDMod::optDescr( )
 
 void BDMod::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -123,7 +123,7 @@ void BDMod::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -=
+    //> Load parameters from config file
 
 }
 
@@ -259,7 +259,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);

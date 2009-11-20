@@ -804,7 +804,7 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
     SYS->protocol().at().at(prot).at().outMess( io, *this );
 }
 
-TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms )
+TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     if( iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object )
     {
@@ -830,7 +830,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms )
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
 	return 0;
     }
-    return TCntrNode::objFuncCall(iid,prms);
+    return TCntrNode::objFuncCall(iid,prms,user);
 }
 
 void TTransportOut::cntrCmdProc( XMLNode *opt )

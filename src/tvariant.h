@@ -116,14 +116,14 @@ class TVarObj
 };
 
 //***********************************************************
-//* TAreaObj                                                *
-//*   Area object included indexed properties               *
+//* TArrayOb                                                *
+//*   Array object included indexed properties              *
 //***********************************************************
-class TAreaObj : public TVarObj
+class TArrayObj : public TVarObj
 {
     public:
 	//Methods
-	TAreaObj( )	{ };
+	TArrayObj( )	{ };
 
 	int size( )	{ return mEls.size(); }
 
@@ -185,7 +185,11 @@ class TCntrNodeObj: public TVarObj
 {
     public:
 	//Methods
-	TCntrNodeObj( AutoHD<TCntrNode> nd );
+	TCntrNodeObj( AutoHD<TCntrNode> nd, const string &user );
+
+	string user( )	{ return mUser; }
+
+	void setUser( const string &user )	{ mUser = user; }
 
 	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
@@ -194,6 +198,7 @@ class TCntrNodeObj: public TVarObj
 
     private:
 	//Attributes
+	string	mUser;
 	AutoHD<TCntrNode> cnd;
 };
 

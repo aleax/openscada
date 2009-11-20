@@ -227,7 +227,7 @@ class TArchiveS : public TSubSYS
 	static void *ArhValTask( void *param );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	int messBufLen( )	{ return mBuf.size(); }
 	void setMessBufLen( int len );

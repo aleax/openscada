@@ -142,7 +142,7 @@ class TBD : public TCntrNode, public TConfig
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Private methods

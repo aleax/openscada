@@ -76,7 +76,7 @@ class wdgList : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    TAreaObj *rez = new TAreaObj();
+	    TArrayObj *rez = new TArrayObj();
 	    vector<string> ls;
 
 	    try
