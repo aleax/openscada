@@ -89,7 +89,7 @@ int TProt::sesOpen( const char *user,const char *pass )
     if( !SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass) )
 	return -1;
 
-    //- Check sesion and close old sesion -
+    //> Check sesion and close old sesion
     ResAlloc res(ses_res,true);
     int i_s = 0;
     while( i_s < auth_lst.size() )
@@ -97,7 +97,7 @@ int TProt::sesOpen( const char *user,const char *pass )
 	    auth_lst.erase(auth_lst.begin() + i_s);
 	else i_s++;
 
-    //- Make new sesion -
+    //> Make new sesion
     int id_ses = rand();
     auth_lst.push_back( TProt::SAuth(time(NULL), user, id_ses) );
 
@@ -146,7 +146,7 @@ string TProt::optDescr( )
 
 void TProt::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -166,7 +166,7 @@ void TProt::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config file
     setAuthTime( atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()) );
     setComprLev( atoi(TBDS::genDBGet(nodePath()+"ComprLev",TSYS::int2str(comprLev())).c_str()) );
     setComprBrd( atoi(TBDS::genDBGet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd())).c_str()) );
@@ -313,7 +313,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     int req_sz = 0;
     char user[256] = "", pass[256] = "";
 
-    //- Continue for full request -
+    //> Continue for full request
     if( m_nofull )
     {
 	req_buf = req_buf+request;
@@ -338,6 +338,11 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     }
     else if( req.substr(0,3) == "REQ" )
     {
+#if OSC_DEBUG >= 3
+	long long w_tm = TSYS::curTime();
+	mess_debug(nodePath().c_str(),_("Get request: '%s': %d"),req.c_str(),req_buf.size());
+#endif
+
 	TProt::SAuth auth(0,"",0);
 	if( sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2 )	auth = mod->sesGet(ses_id);
 	else if( sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3 )
@@ -351,23 +356,39 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 
 	try
 	{
-	    XMLNode req_node;
-	    if( req_buf.size() < req.size()+strlen("\n")+abs(req_sz) )
-	    { m_nofull = true; return true; }
+	    if( req_buf.size() < req.size()+strlen("\n")+abs(req_sz) ) { m_nofull = true; return true; }
 
-	    //- Decompress request -
+	    //> Decompress request
 	    if( req_sz < 0 )
 		req_buf.replace(req.size()+strlen("\n"),abs(req_sz),
 		    TSYS::strUncompr(req_buf.substr(req.size()+strlen("\n"))));
-	    //- Process request -
+
+	    //> Process request
+	    XMLNode req_node;
 	    req_node.load(req_buf.substr(req.size()+strlen("\n")));
 	    req_node.setAttr("user",auth.name);
-	    SYS->cntrCmd(&req_node);
-	    string resp = req_node.save()+"\n";
 
-	    //- Compress respond -
+#if OSC_DEBUG >= 3
+	    mess_debug(nodePath().c_str(),_("Unpack and load request: '%s': %d, time: %f ms."),req.c_str(),req_buf.size(),1e-3*(TSYS::curTime()-w_tm));
+	    w_tm = TSYS::curTime();
+#endif
+
+	    SYS->cntrCmd(&req_node);
+
+#if OSC_DEBUG >= 3
+	    mess_debug(nodePath().c_str(),_("Process request: '%s', time: %f ms."),req.c_str(),1e-3*(TSYS::curTime()-w_tm));
+	    w_tm = TSYS::curTime();
+#endif
+
+	    string resp = req_node.save(XMLNode::MissTagEnc|XMLNode::MissAttrEnc)+"\n";
+
+	    //> Compress respond
 	    bool respCompr = ((TProt&)owner()).comprLev() && resp.size() > ((TProt&)owner()).comprBrd();
 	    if( respCompr ) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
+
+#if OSC_DEBUG >= 3
+	    mess_debug(nodePath().c_str(),_("Save respond to stream and pack: '%s': %d, time: %f ms."),req.c_str(),resp.size(),1e-3*(TSYS::curTime()-w_tm));
+#endif
 
 	    answer="REZ 0 "+TSYS::int2str(resp.size()*(respCompr?-1:1))+"\n"+resp;
 	}

@@ -464,16 +464,16 @@ void LineEdit::setType( LType tp )
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
-	    //if( mPrev ) applyReserve = true;
 	    break;
 	case DateTime:
+	{
 	    ed_fld = new QDateTimeEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
-	    //if( mPrev ) applyReserve = true;
 	    break;
+	}
 	case Combo:
 	    ed_fld = new QComboBox(this);
 	    ((QComboBox*)ed_fld)->setEditable(true);

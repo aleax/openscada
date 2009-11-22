@@ -47,7 +47,8 @@ class XMLNode
 	    BrPrcInstrPast	= 0x10,		//Break after process instruction
 	    BrAllPast		= 0x1E,		//Break after all
 	    XMLHeader		= 0x20,		//Include XML header
-	    InclNode		= 0x80		//Included node, not root
+	    MissTagEnc		= 0x100,	//Miss tag name encode
+	    MissAttrEnc		= 0x200		//Miss attribute name encode
 	};
 
 	//Methods
@@ -78,6 +79,7 @@ class XMLNode
 	string	save( unsigned char flgs = 0 );
 	XMLNode* clear( );
 
+	bool	childEmpty( ) const		{ return mChildren.empty(); }
 	int	childSize( ) const		{ return mChildren.size(); }
 	void	childAdd( XMLNode *nd );
 	XMLNode* childAdd( const string &name = "" );
@@ -91,9 +93,11 @@ class XMLNode
 	XMLNode* childGet( const string &attr, const string &name, bool noex = false ) const;
 
 	XMLNode* parent( )			{ return mParent; }
+
     private:
 	//Methods
-	string encode( const string &s, bool text = false ) const;
+	void save( unsigned char flg, string &xml );
+	void encode( const string &s, string &rez, bool text = false ) const;
 
 	static void start_element( void *data, const char *el, const char **attr );
 	static void end_element( void *data, const char *el );

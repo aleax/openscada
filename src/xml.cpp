@@ -28,14 +28,14 @@
 //*************************************************
 XMLNode &XMLNode::operator=(XMLNode &prm)
 {
-    //- Delete self children and atributes -
+    //> Delete self children and atributes
     mAttr.clear();
     mPrcInstr.clear();
     for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
 	delete mChildren[i_ch];
     mChildren.clear();
 
-    //- Copy params (name,text, atributes and instructions) -
+    //> Copy params (name,text, atributes and instructions)
     setName( prm.name() );
     setText( prm.text() );
     vector<string> ls;
@@ -46,7 +46,7 @@ XMLNode &XMLNode::operator=(XMLNode &prm)
     for( int i_p = 0; i_p < ls.size(); i_p++)
 	setPrcInstr(ls[i_p],prm.prcInstr(ls[i_p]));
 
-    //- Recursive copy children -
+    //> Recursive copy children
     for( int i_ch = 0; i_ch < prm.childSize(); i_ch++ )
 	*childAdd() = *prm.childGet(i_ch);
 
@@ -235,58 +235,75 @@ XMLNode* XMLNode::clear()
 string XMLNode::save( unsigned char flg )
 {
     string xml;
-    if( (flg&XMLHeader) && !(flg&InclNode) )
+    xml.reserve(10000);
+
+    if( flg&XMLHeader )
     {
 	xml += "<?xml version='1.0' encoding='UTF-8' ?>";
-	if( flg&XMLNode::BrClosePast ) xml+="\n";
-	flg|=InclNode;
+	if( flg&XMLNode::BrClosePast ) xml += "\n";
     }
-
-    xml += ((flg&XMLNode::BrOpenPrev)?"\n<":"<") + encode(name());
-
-    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
-	xml = xml + " " + encode(mAttr[i_a].first) + "=\"" + Mess->codeConvOut("UTF-8",encode(mAttr[i_a].second)) + "\"";
-
-    if( !childSize() && text().empty() && mPrcInstr.empty() )
-	xml+= (flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast))?"/>\n":"/>";
-    else
-    {
-	xml = xml + ((flg&XMLNode::BrOpenPast)?">\n":">");
-	//- Save text -
-	if( !text().empty() )
-	    xml = xml + Mess->codeConvOut("UTF-8",encode(text(),true)) + (flg&XMLNode::BrTextPast?"\n":"");
-	//- Save process instructions -
-	for( int i_p = 0; i_p < mPrcInstr.size(); i_p++ )
-	    xml = xml + "<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>");
-	//- Save included childs -
-	for( int i_c = 0; i_c < childSize(); i_c++ )
-	{
-	    XMLNode *child = childGet(i_c);
-	    if( child )  xml += child->save(flg);
-	}
-	//- Close tag -
-	xml = xml + "</" + encode(name()) + (flg&XMLNode::BrClosePast?">\n":">");
-    }
-
+    
+    save(flg,xml);
     return xml;
 }
 
-string XMLNode::encode( const string &s, bool text ) const
+void XMLNode::save( unsigned char flg, string &xml )
 {
-    string sout = s;
+    xml.append( (flg&XMLNode::BrOpenPrev) ? "\n<" : "<" );
+    if( flg&XMLNode::MissTagEnc ) xml.append( name() ); else encode( name(), xml );
 
-    for( int i_sz = 0; i_sz < sout.size(); i_sz++ )
-	switch(sout[i_sz])
+    for( unsigned i_a = 0; i_a < mAttr.size(); i_a++ )
+    {
+	xml.append(" ");
+	if( flg&XMLNode::MissAttrEnc ) xml.append( mAttr[i_a].first ); else encode( mAttr[i_a].first, xml );
+	xml.append("=\"");
+	encode( Mess->codeConvOut("UTF-8",mAttr[i_a].second), xml );
+	xml.append("\"");
+    }
+
+    if( childEmpty() && text().empty() && mPrcInstr.empty() ) xml.append( (flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? "/>\n" : "/>" );
+    else
+    {
+	xml.append( (flg&XMLNode::BrOpenPast) ? ">\n" : ">" );
+	//> Save text
+	if( !text().empty() )
 	{
-	    case '>': sout.replace(i_sz,1,"&gt;"); i_sz+=3; break;
-	    case '<': sout.replace(i_sz,1,"&lt;"); i_sz+=3; break;
-	    case '"': sout.replace(i_sz,1,"&quot;"); i_sz+=5; break;
-	    case '&': sout.replace(i_sz,1,"&amp;"); i_sz+=4; break;
-	    case '\'': sout.replace(i_sz,1,"&#039;"); i_sz+=5; break;
-	    case '\n': if( !text ) { sout.replace(i_sz,1,"&#010;"); i_sz+=5; } break;
+	    encode( Mess->codeConvOut("UTF-8",text()), xml, true );
+	    xml.append( flg&XMLNode::BrTextPast ? "\n" : "" );
 	}
+	//> Save process instructions
+	for( int i_p = 0; i_p < mPrcInstr.size(); i_p++ )
+	    xml.append( "<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>") );
+	//> Save included childs
+	for( int i_c = 0; i_c < childSize(); i_c++ ) childGet(i_c)->save(flg,xml);
+	//> Close tag
+	xml.append("</");
+	if( flg&XMLNode::MissTagEnc ) xml.append(name() );
+	else encode( name(), xml );
+	xml.append( flg&XMLNode::BrClosePast ? ">\n" : ">" );
+    }
+}
 
-    return sout;
+void XMLNode::encode( const string &s, string &rez, bool text ) const
+{
+    int i_sz = 0, f_pos = 0;
+    const char *replStr = NULL;
+    do
+    {
+	switch( s[i_sz] )
+	{
+	    case '>': replStr = "&gt;"; break;
+	    case '<': replStr = "&lt;"; break;
+	    case '"': replStr = "&quot;"; break;
+	    case '&': replStr = "&amp;"; break;
+	    case '\'': replStr = "&#039;"; break;
+	    case '\n': if( !text ) replStr = "&#010;"; break;
+	}
+	i_sz++;
+	if( replStr && (i_sz-1) > f_pos ) rez.append(s,f_pos,i_sz-f_pos-1);
+	else if( i_sz >= s.size() && i_sz > f_pos ) rez.append(s,f_pos,i_sz-f_pos);
+	if( replStr ) { rez.append(replStr); replStr = NULL; f_pos = i_sz; }
+    }while( i_sz < s.size() );
 }
 
 void XMLNode::load( const string &s )

@@ -142,13 +142,14 @@ void TMess::setLang( const string &lng )
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
 {
+    if( fromCH == toCH ) return mess;
+
     //> Make convert to blocks 100 bytes !!!
-    string buf = "";
+    string buf;
+    buf.reserve(1000);
     char   *ibuf, outbuf[100], *obuf;
     size_t ilen, olen;
     iconv_t hd;
-
-    if( fromCH == toCH ) return mess;
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if( hd == (iconv_t)(-1) )

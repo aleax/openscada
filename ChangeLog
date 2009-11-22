@@ -1,3 +1,8 @@
+- !!!!:SYS.XML: XML node convert to stream, function save(), is made optimal for time.
+- Protocol.SelfSystem: Debug messages is added for input protocol tune allow.
+- FIX:UI.VCAEngine: Default command for speech synth ru_tts is fixed.
+
+
 2009-11-20 Roman
 - !:SYS: The User's system API, based on object TCntrNodeObj is expanded for user permition control. TAreaObj object is renamed to TArrayObj.
 - !!:SYS: User's API functions is added to OpenSCADA core object: time, localtime, strftime, strptime and cron.

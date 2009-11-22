@@ -908,8 +908,6 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthCom(opt->text());
     }
     else if( a_path == "/tts/comm_ls" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -t ogg -");
-    }
+	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -");
     else TUI::cntrCmdProc(opt);
 }
