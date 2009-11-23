@@ -1,3 +1,8 @@
+2009-11-23 Roman
+- FIX:SYS.XML: Optimal encode function to XML is fixed. Error post on parsing error is fixed.
+
+
+2009-11-22 Roman
 - !!!!:SYS.XML: XML node convert to stream, function save(), is made optimal for time.
 - Protocol.SelfSystem: Debug messages is added for input protocol tune allow.
 - FIX:UI.VCAEngine: Default command for speech synth ru_tts is fixed.

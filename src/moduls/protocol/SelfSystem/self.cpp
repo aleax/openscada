@@ -245,6 +245,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if( resp_size < 0 )	io.load(TSYS::strUncompr(resp.substr(head_end+sizeof('\n'))));
 	    else io.load(resp.substr(head_end+sizeof('\n')));
+
 	    return;
 	}
     }

@@ -300,9 +300,14 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    case '\n': if( !text ) replStr = "&#010;"; break;
 	}
 	i_sz++;
-	if( replStr && (i_sz-1) > f_pos ) rez.append(s,f_pos,i_sz-f_pos-1);
-	else if( i_sz >= s.size() && i_sz > f_pos ) rez.append(s,f_pos,i_sz-f_pos);
-	if( replStr ) { rez.append(replStr); replStr = NULL; f_pos = i_sz; }
+	if( replStr )
+	{
+	    if( (i_sz-1) > f_pos ) rez.append(s,f_pos,i_sz-f_pos-1);
+	    rez.append(replStr);
+	    replStr = NULL;
+	    f_pos = i_sz;
+	}
+	if( i_sz >= s.size() && i_sz > f_pos ) rez.append(s,f_pos,i_sz-f_pos);
     }while( i_sz < s.size() );
 }
 
@@ -323,16 +328,17 @@ void XMLNode::load( const string &s )
 
     if( !XML_Parse( p, s.c_str(), s.size(), true ) )
     {
+	int cL = XML_GetCurrentLineNumber(p);
+	string xmlErr = XML_ErrorString(XML_GetErrorCode(p));
 	XML_ParserFree( p );
 	mParent = lstParent;
-	throw TError("XMLNode","Parse error at line %d --- %s. Source string: '%s'",
-	    XML_GetCurrentLineNumber(p), XML_ErrorString(XML_GetErrorCode(p)), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
+	throw TError("XMLNode","Parse error at line %d --- %s. Source string: '%s'", cL, xmlErr.c_str(), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
     }
     XML_ParserFree( p );
     mParent = lstParent;
 }
 
-//- Parse/load XML attributes -
+//> Parse/load XML attributes
 void XMLNode::start_element( void *data, const char *el, const char **attr )
 {
     const char *a_n, *a_v;
