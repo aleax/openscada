@@ -286,9 +286,8 @@ void XMLNode::save( unsigned char flg, string &xml )
 
 void XMLNode::encode( const string &s, string &rez, bool text ) const
 {
-    int i_sz = 0, f_pos = 0;
     const char *replStr = NULL;
-    do
+    for( int i_sz = 0, f_pos = 0; true; )
     {
 	switch( s[i_sz] )
 	{
@@ -307,8 +306,12 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    replStr = NULL;
 	    f_pos = i_sz;
 	}
-	if( i_sz >= s.size() && i_sz > f_pos ) rez.append(s,f_pos,i_sz-f_pos);
-    }while( i_sz < s.size() );
+	if( i_sz >= s.size() )
+	{
+	    if( i_sz > f_pos ) rez.append(s,f_pos,i_sz-f_pos);
+	    break;
+	}
+    }
 }
 
 void XMLNode::load( const string &s )
