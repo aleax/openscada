@@ -112,7 +112,7 @@ class XMLNode
 	vector< pair<string,string> >	mPrcInstr;
 	XMLNode* mParent;
 
-	//- Parse/load XML attributes -
+	//> Parse/load XML attributes
 	vector<XMLNode*> node_stack;
 };
 

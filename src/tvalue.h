@@ -77,6 +77,12 @@ class TVal : public TCntrNode
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
 
+	bool resB1( )	{ return mResB1; }
+	bool resB2( )	{ return mResB2; }
+
+	bool setResB1( bool vl )	{ mResB1 = vl; }
+	bool setResB2( bool vl )	{ mResB2 = vl; }
+
 	TValue &owner( );
 	TFld &fld( );
 
@@ -97,7 +103,9 @@ class TVal : public TCntrNode
 	    char	val_b;		//boolean value
 	} val;
 
-	bool	mCfg;		//Config id
+	unsigned char	mCfg	: 1;		//Config id
+	unsigned char	mResB1	: 1;		//Reserve boolean
+	unsigned char	mResB2	: 1;		//Reserve boolean
 	union
 	{
 	    TFld *fld;

@@ -1,3 +1,9 @@
+2009-11-24 Roman
+- !!!!:SYS.Value, DAQ.DAQGate: Separated attributes request support is added. Used for access to archivated and often updated values.
+    All other values requested with sync period or after request to its. Used for decrease load and time at DAQGate exchanging to remote OpenSCADA station.
+- FIX:DAQ.ICP_DAS: The module I-87057 set BOOL_EVAL value is fixed.
+
+
 2009-11-23 Roman
 - FIX:SYS.XML: Optimal encode function to XML is fixed. Error post on parsing error is fixed.
 

@@ -671,7 +671,7 @@ void TMdPrm::getVals( )
 	    else acq_err.setVal(RetValue?_("10:Request to module error."):_("11:Respond from module error."));
 
 	    for( int i_v = 0; i_v < 16; i_v++ )
-		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (vl<0) ? EVAL_BOOL : (vl>>i_v)&0x01, 0, true );
+		vlAt(TSYS::strMess("o%d",i_v)).at().setB( (vl<0) ? EVAL_BOOL : (vl>>i_v)&0x01, 0, true );
 	    break;
 	}
     }

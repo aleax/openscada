@@ -22,6 +22,8 @@
 #ifndef DAQ_GATE_H
 #define DAQ_GATE_H
 
+#include <stdint.h>
+
 #include <tcontroller.h>
 #include <ttipdaq.h>
 #include <tparamcontr.h>
@@ -81,7 +83,8 @@ class TMdPrm : public TParamContr
 	TMdContr &owner( );
 
 	//Attrinutes
-	bool isPrcOK;
+	uint8_t isPrcOK	: 1;
+	uint8_t isEVAL	: 1;
 
     protected:
 	//Methods

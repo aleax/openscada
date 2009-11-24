@@ -161,24 +161,41 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//All attributes values
 	{
+	    long long vtm;
+	    string svl;
 	    AutoHD<TVal> vl;
+	    XMLNode *aNd;
 
 	    //> Put last attribute's values
-	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
-	    {
-		vl = vlAt(list_c[i_el]);
-		long long vtm = 0;
-		string svl = vl.at().getS(&vtm);
-		opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl)->setAttr("tm",TSYS::ll2str(vtm));
-	    }
+	    bool sepReq = atoi(opt->attr("sepReq").c_str());
+	    bool hostTm = atoi(opt->attr("hostTm").c_str());
+	    if( !sepReq )
+		for( int i_el = 0; i_el < list_c.size(); i_el++ )
+		{
+		    vl = vlAt(list_c[i_el]);
+		    vtm = 0; svl = vl.at().getS(&vtm);
+		    aNd = opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl);
+		    if( !hostTm ) aNd->setAttr("tm",TSYS::ll2str(vtm));
+		}
 
 	    //> Archives requests process
 	    for( int i_a = 0; i_a < opt->childSize(); i_a++ )
 	    {
-		XMLNode *aNd = opt->childGet(i_a);
-		if( aNd->name() != "ael" ) break;
+		aNd = opt->childGet(i_a);
+		if( !sepReq && aNd->name() != "ael" ) break;
+		if( (aNd->name() != "el" && aNd->name() != "ael") || !vlPresent(aNd->attr("id")) ) { opt->childDel(aNd); i_a--; continue; }
 		vl = vlAt(aNd->attr("id"));
 
+		//>> Separated element request
+		if( aNd->name() == "el" )
+		{
+		    vtm = 0; svl = vl.at().getS(&vtm);
+		    aNd->setText(svl);
+		    if( !hostTm ) aNd->setAttr("tm",TSYS::ll2str(vtm));
+		    continue;
+		}
+
+		//>> To archive of element request
 		if( vl.at().arch().freeStat() ) { opt->childDel(aNd); i_a--; continue; }
 
 		AutoHD<TVArchive> arch = vl.at().arch();
@@ -360,7 +377,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( ) : mCfg(false), mTime(0)
+TVal::TVal( ) : mCfg(false), mTime(0), mResB1(false), mResB2(false)
 {
     src.fld = NULL;
 }
@@ -445,7 +462,7 @@ TFld &TVal::fld()
 
 AutoHD<TVArchive> TVal::arch()	{ return mArch; }
 
-void TVal::setArch(const AutoHD<TVArchive> &vl)	{ mArch = vl; }
+void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
 
 string TVal::getSEL( long long *tm, bool sys )
 {

@@ -266,20 +266,20 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 {
     if( src == dst )	return;
 
-    //- Attach to source node -
+    //> Attach to source node
     AutoHD<TCntrNode> src_n = SYS->nodeAt(src);
 
-    //- Parse destination node path -
+    //> Parse destination node path
     string d_elp, d_el, t_el;
     int n_del = 0;
     for( int off = 0; !(t_el=TSYS::pathLev(dst,0,true,&off)).empty(); n_del++ )
     { if( n_del ) d_elp += ("/"+d_el); d_el = t_el; }
     if( !n_del ) throw TError(SYS->nodePath().c_str(),_("Copy from '%s' to '%s' is impossible"),src.c_str(),dst.c_str());
 
-    //- Connect to destination containers node -
+    //> Connect to destination containers node
     AutoHD<TCntrNode> dst_n = SYS->nodeAt(d_elp);
 
-    //- Get allow branches' containers and find want group -
+    //> Get allow branches' containers and find want group
     XMLNode br_req("info");
     br_req.setAttr("user",user)->setAttr("path","/%2fbr");
     dst_n.at().cntrCmd(&br_req);
@@ -299,7 +299,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     i_b = dst_n.at().grpId(n_grp);
     if( i_b < 0 ) throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
 
-    //- Connect or create new destination node -
+    //> Connect or create new destination node
     if( !dst_n.at().chldPresent( i_b, d_el ) )
     {
 	br_req.clear()->setName("add")->setAttr("user",user)->setAttr("path","/%2fbr%2f"+n_grp);
@@ -309,7 +309,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 	if( atoi(br_req.attr("rez").c_str()) )	throw TError(br_req.attr("mcat").c_str(),br_req.text().c_str());
     }
 
-    //- Same copy call -
+    //> Same copy call
     dst_n.at().chldAt( i_b, d_el ).at() = src_n.at();
 }
 
@@ -549,7 +549,7 @@ void TCntrNode::modifGClr( )
 
 void TCntrNode::load( )
 {
-    //- Self load -
+    //> Self load
     if( isModify(Self)&Self )
 	try
 	{
@@ -561,7 +561,7 @@ void TCntrNode::load( )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Loading node error."));
 	}
-    //- Childs load process -
+    //> Childs load process
     if( isModify(Child)&Child )
     {
 	ResAlloc res( hd_res, false );
@@ -574,7 +574,7 @@ void TCntrNode::load( )
 
 void TCntrNode::save( )
 {
-    //- Self load -
+    //> Self load
     if( isModify(Self)&Self )
 	try{ save_(); }
 	catch(TError err)
@@ -582,7 +582,7 @@ void TCntrNode::save( )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Saving node error."));
 	}
-    //- Childs load process -
+    //> Childs load process
     if( isModify(Child)&Child )
     {
 	ResAlloc res( hd_res, false );
@@ -637,7 +637,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    //- Check displaing node -
+    //> Check displaing node
     int itbr = 0;
     for( int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off )
 	if( reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)) )
@@ -647,7 +647,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	    break;
 	}
 
-    //- Check permission -
+    //> Check permission
     char n_acs = SYS->security().at().access(nd->attr("user"),SEQ_RD|SEQ_WR|SEQ_XT,user,grp,perm);
     if( !(n_acs&SEQ_RD) ) return NULL;
     if( itbr )	return nd;
@@ -660,7 +660,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	nd->setAttr("rez","0");
     }
 
-    //- Go to element -
+    //> Go to element
     for( ;(reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1=reqt )
     {
 	XMLNode *obj1 = obj->childGet("id",reqt,true);
@@ -672,7 +672,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     }
     obj->setName(n_nd)->setAttr("id",reqt1)->setAttr("dscr",dscr)->setAttr("acs",TSYS::int2str(n_acs));
 
-    //- Get addon attributes -
+    //> Get addon attributes
     if( n_attr )
     {
 	char *atr_id, *atr_vl;
