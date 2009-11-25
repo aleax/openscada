@@ -1,3 +1,7 @@
+2009-11-25 Roman
+- !!:FIX:UI.VCAEngine: The crash on mutable attributes modify is fixed. Mutable attribute's structure is not inherited now.
+
+
 2009-11-24 Roman
 - !!!!:SYS.Value, DAQ.DAQGate: Separated attributes request support is added. Used for access to archivated and often updated values.
     All other values requested with sync period or after request to its. Used for decrease load and time at DAQGate exchanging to remote OpenSCADA station.

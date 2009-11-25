@@ -233,11 +233,11 @@ class Widget : public TCntrNode
 	//> Generic data
 	string	mId;			//Widget identifier
 
-	char	mEnable	:1;		//Enable status
-	char	m_lnk	:1;		//Widget as link
-	char	attrId	:3;		//The widget's container id
-	char	inclWdg	:3;
-	char	mStlLock:1;		//Style lock
+	unsigned char	mEnable	:1;		//Enable status
+	unsigned char	m_lnk	:1;		//Widget as link
+	unsigned char	attrId	:3;		//The widget's container id
+	unsigned char	inclWdg	:3;
+	unsigned char	mStlLock:1;		//Style lock
 	string	mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;	//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators

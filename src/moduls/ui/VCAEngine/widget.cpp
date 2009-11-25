@@ -351,7 +351,7 @@ void Widget::inheritAttr( const string &iattr )
 	    continue;
 	}
 	pattr = parent().at().attrAt(ls[i_l]);
-	if( !(attr.at().flgSelf()&Attr::IsInher) ) attr.at().setFld(&pattr.at().fld(),true);
+	if( !(attr.at().flgSelf()&Attr::IsInher) && !(attr.at().flgGlob()&Attr::Mutable) ) attr.at().setFld(&pattr.at().fld(),true);
 	if( attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) )	continue;
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
 	if( !(attr.at().flgGlob( )&Attr::DirRead) )
