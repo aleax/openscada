@@ -1066,11 +1066,15 @@ reload:
 
 TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    if( iid == "message" && prms.size() >= 3 )
-    {
-	message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() );
-	return 0;
-    }
+    if( iid == "message" && prms.size() >= 3 )	{ message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() ); return 0; }
+    if( iid == "messDebug" && prms.size() >= 2 ){ mess_debug( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messInfo" && prms.size() >= 2 )	{ mess_info( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messNote" && prms.size() >= 2 )	{ mess_note( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messWarning" && prms.size() >= 2 )	{ mess_warning( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messErr" && prms.size() >= 2 )	{ mess_err( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messCrit" && prms.size() >= 2 )	{ mess_crit( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messAlert" && prms.size() >= 2 ){ mess_alert( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if( iid == "messEmerg" && prms.size() >= 2 ){ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     if( iid == "system" && prms.size() >= 1 )
     {
 	FILE *fp = popen(prms[0].getS().c_str(),"r");

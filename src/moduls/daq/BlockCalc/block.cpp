@@ -472,7 +472,8 @@ void Block::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/blck/cfg/descr",_("Description"),0664,"root","root",3,"tp","str","cols","90","rows","4");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),0664,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/prior",_("Prior block"),0664,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/blks");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/prior",_("Prior block"),0664,"root","root",4,"tp","str","dest","sel_ed","select","/blck/cfg/blks",
+		    "help",_("Priority block(s) calced before this block. Blocks list is separated by symbol ';'."));
 		ctrMkNode("fld",opt,-1,"/blck/cfg/func",_("Function"),(!func())?0664:0444,"root","root",3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
 		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",_("Go to function"),wFunc().empty()?0:0660,"root","root",1,"tp","lnk");
 	    }

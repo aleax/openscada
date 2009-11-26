@@ -1,3 +1,10 @@
+2009-11-26 Roman
+- SYS: Core dump creation is enabled into start scripts.
+- !!:SYS: User's API functions is added to OpenSCADA core object: messDebug, messInfo, messNote, messWarning, messErr, messCrit, messAlert and messEmerg.
+- DAQ.BlockCalc: Help is added to field the priority blocks list.
+- !!!:UI.Vision: An identical atributes of group widgets setup suport is added to the atributes inspector through group.
+
+
 2009-11-25 Roman
 - !!:FIX:UI.VCAEngine: The crash on mutable attributes modify is fixed. Mutable attribute's structure is not inherited now.
 

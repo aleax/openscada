@@ -1,5 +1,7 @@
 #!/bin/sh
 
+ulimit -c unlimited
+
 if [ ! -d ~/.openscada ]; then
     install -m 755 -d ~/.openscada/DATA ~/.openscada/ARCHIVES/{MESS,VAL}
     ln -s /var/spool/openscada/icons ~/.openscada/icons
