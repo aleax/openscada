@@ -143,7 +143,7 @@ class TSocketIn: public TTransportIn
 	bool		cl_free;		// Clients stoped
 	vector<SSockCl>	cl_id;			// Client's pids
 
-	//- Status atributes -
+	//> Status atributes
 	float		trIn, trOut;		// Traffic in and out counter
 	int		connNumb, clsConnByLim;	// Connections number
 };
@@ -165,19 +165,28 @@ class TSocketOut: public TTransportOut
 	~TSocketOut( );
 
 	string getStatus( );
-	int timeout( );
-	void setTimeout( int vl );
+
+	int timeout( )			{ return vmax(1,vmin(100000,mTms)); }
+	void setTimeout( int vl )	{ mTms = vl; modif(); }
 
 	void start( );
 	void stop( );
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
 
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
+	string		&mAPrms;		// Addon parameters
+	int		mTms;			// Timeout
+
 	int			sock_fd;
 
 	int			type;		// socket's types

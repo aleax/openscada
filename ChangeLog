@@ -1,3 +1,11 @@
+2009-11-28 Roman
+- FIX:DAQ.JavaLikeCalc: Get properties from constants crash is fixed.
+- DAQ.JavaLikeCalc: Get symbol from string by array notation "val"[1] support is added.
+- !!!!:Transport.SSL: Keep alive limits support is added. Reconection support is added, after connection close by server and prevent requests lost.
+- Transport.Socket: Used addon parameters DB field for store properties the output transport.
+- DemoDB: Some updated.
+
+
 2009-11-26 Roman
 - SYS: Core dump creation is enabled into start scripts.
 - !!:SYS: User's API functions is added to OpenSCADA core object: messDebug, messInfo, messNote, messWarning, messErr, messCrit, messAlert and messEmerg.

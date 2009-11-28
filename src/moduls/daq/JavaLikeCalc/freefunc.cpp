@@ -1031,7 +1031,7 @@ Reg *Func::cdProp( Reg *obj, const string &sprp, Reg *dprp )
 {
     uint16_t addr;
     Reg *ro = obj;
-    if( !ro->objEl() ) { ro = cdMove( NULL, ro, false ); ro->setObjEl(); }
+    if( !ro->objEl() ) { ro = cdMove( NULL, cdMvi(ro), false ); ro->setObjEl(); }
 
     if( !dprp )
     {
@@ -1069,10 +1069,10 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	    if( prop == "MAX_VALUE" )	return 3.4e300;
 	    if( prop == "MIN_VALUE" )	return -3.4e300;
 	    if( prop == "NaN" )		return EVAL_REAL;
-	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+	    throw TError(nodePath().c_str(),_("Real type have not properties '%s'."),prop.c_str());
 	case TVariant::String:
 	    if( prop == "length" )	return (int)vl.getS().size();
-	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+	    return vl.getS().substr(vmax(0,vmin(vl.getS().size()-1,atoi(prop.c_str()))),1);
     }
     throw TError(nodePath().c_str(),_("Get properties '%s' from value type '%d' error."),prop.c_str(),vl.type());
 }

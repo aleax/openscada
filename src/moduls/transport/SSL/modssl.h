@@ -68,17 +68,28 @@ class TSocketIn: public TTransportIn
 
 	int bufLen( )		{ return mBufLen; }
 	int maxFork( )		{ return mMaxFork; }
+	int keepAliveCon( )	{ return mKeepAliveCon; }
+	int keepAliveTm( )	{ return mKeepAliveTm; }
+	int taskPrior( )	{ return mTaskPrior; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
 	int opConnCnt( );
 
 	void setBufLen( int vl )		{ mBufLen = vl; modif(); }
 	void setMaxFork( int vl )		{ mMaxFork = vl; modif(); }
+	void setKeepAliveCon( int vl )		{ mKeepAliveCon = vl; modif(); }
+	void setKeepAliveTm( int vl )		{ mKeepAliveTm = vl; modif(); }
+	void setTaskPrior( int vl )		{ mTaskPrior = vmax(0,vmin(100,vl)); modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
 	void start( );
 	void stop( );
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
 
     private:
 	//Methods
@@ -100,15 +111,20 @@ class TSocketIn: public TTransportIn
 	bool		endrun;			// Command for stop task
 	bool		endrun_cl;		// Command for stop client tasks
 
-	int		&mBufLen;		// input buffer length
-	int		&mMaxFork;		// maximum forking (opened SSL)
-	string		&mCertKey,		// SSL certificate
-			&mKeyPass;		// SSL private key password
+	string		&mAPrms;		// Addon parameters
+
+	int		mMaxFork,		// maximum forking (opened SSL)
+			mBufLen,		// input buffer length
+			mKeepAliveCon,		// KeepAlive connections
+			mKeepAliveTm,		// KeepAlive timeout
+			mTaskPrior;		// Requests processing task prioritet
+	string		mCertKey,		// SSL certificate
+			mKeyPass;		// SSL private key password
 
 	bool		cl_free;		// Clients stoped
 	vector<pthread_t>	cl_id;		// Client's pids
 
-	//- Status atributes -
+	//> Status atributes
 	string		stErr;			// Last error messages
 	float		trIn, trOut;		// Traffic in and out counter
 	int		connNumb, clsConnByLim;	// Close connections by limit
@@ -136,13 +152,20 @@ class TSocketOut: public TTransportOut
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
 
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string		&mCertKey,		// SSL certificate
-			&mKeyPass;		// SSL private key password
+	string		&mAPrms;		// Addon parameters
+
+	string		mCertKey,		// SSL certificate
+			mKeyPass;		// SSL private key password
 
 	SSL_CTX		*ctx;
 	BIO		*conn;

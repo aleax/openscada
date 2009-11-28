@@ -100,10 +100,8 @@ void TTransSock::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"1000") );
-
-	//> Add self DB-fields to output transport
-	owner().outEl().fldAdd( new TFld("TMS",_("Timeout (ms)"),TFld::String,0,"30") );
+	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().outEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
     }
 }
 
@@ -153,7 +151,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 
 void TTransSock::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TTipTransport::cntrCmdProc(opt);
@@ -161,7 +159,7 @@ void TTransSock::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TTipTransport::cntrCmdProc(opt);
@@ -454,10 +452,10 @@ void *TSocketIn::Task(void *sock_in)
     pthread_attr_destroy(&pthr_attr);
 
     if( sock->type == SOCK_UDP ) delete []buf;
-    //- Client tasks stop command -
+    //> Client tasks stop command
     sock->endrun_cl = true;
     ResAlloc res(sock->sock_res,false);
-    //- Find already registry -
+    //> Find already registry
     for( int i_id = 0; i_id < sock->cl_id.size(); i_id++)
         pthread_kill(sock->cl_id[i_id].cl_id,SIGALRM);
     res.release();
@@ -659,10 +657,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), sock_fd(-1)
+TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), sock_fd(-1), mTms(10000),
+    mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("TCP:localhost:10002");
-    setTimeout(1000);
 }
 
 TSocketOut::~TSocketOut()
@@ -679,9 +677,27 @@ string TSocketOut::getStatus( )
     return rez;
 }
 
-int TSocketOut::timeout( )	{ return vmax(1,vmin(100000,cfg("TMS").getI())); }
+void TSocketOut::load_( )
+{
+    TTransportOut::load_();
 
-void TSocketOut::setTimeout( int vl )	{ cfg("TMS").setI(vl); modif(); }
+    try
+    {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(mAPrms);
+	vl = prmNd.attr("TMS");	if( !vl.empty() ) mTms = atoi(vl.c_str());
+    } catch(...){ }
+}
+
+void TSocketOut::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("TMS",TSYS::int2str(mTms));
+    mAPrms = prmNd.save(XMLNode::BrAllPast);
+
+    TTransportOut::save_();
+}
 
 void TSocketOut::start()
 {
