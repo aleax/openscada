@@ -152,7 +152,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
-    fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //- Parameter type bd structure -
     //-- Make enumerated --
@@ -235,37 +235,16 @@ void TMdContr::enable_(  )
 
 void TMdContr::start_( )
 {
-    //- Start the request data task -
-    if( !prc_st )
-    {
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( m_prior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=m_prior;
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-
-	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no started!"));
-    }
+    //> Start the request data task
+    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
 }
 
 void TMdContr::stop_( )
 {
-    //- Stop the request and calc data task -
-    if( prc_st )
-    {
-	endrun_req = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task no stoped!"));
-	pthread_join( procPthr, NULL );
-    }
-    //- Set Eval for parameters -
+    //> Stop the request and calc data task
+    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+
+    //> Set Eval for parameters
     ResAlloc res(en_res,true);
     for( int i_prm = 0; i_prm < p_hd.size(); i_prm++ )
         p_hd[i_prm].at().setEval();

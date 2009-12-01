@@ -99,7 +99,6 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	bool		endRunReq, prcSt;
-	pthread_t	fastPthr;
 	int		clcCnt;
 	ResString	acq_err;
 
@@ -153,8 +152,6 @@ class TMdContr: public TController
 	bool	prcSt,				//Process task active
 		endRunReq;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
-
-	pthread_t procPthr;			//Process task thread
 
 	double	tm_gath;			//Gathering time
 };

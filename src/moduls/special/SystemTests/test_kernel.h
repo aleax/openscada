@@ -56,8 +56,6 @@ class TTest: public TSpecial
 	void Test( const string &id, XMLNode *t_n );
 
 	//Attributes
-	pthread_t pthr_tsk;
-
 	bool	endrun;		// Stop pthread command
 };
 

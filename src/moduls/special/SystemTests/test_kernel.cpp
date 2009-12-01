@@ -175,25 +175,12 @@ void TTest::load_( )
 
 void TTest::modStart(  )
 {
-    if( run_st ) return;
-    pthread_attr_t pthr_attr;
-
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true, string(MOD_ID)+": Is starting....",5) )
-	throw TError(nodePath().c_str(),_("Not started!"));
+    if( !run_st ) SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
 }
 
 void TTest::modStop(  )
 {
-    if( !run_st ) return;
-
-    endrun = true;
-    if( TSYS::eventWait( run_st, false, string(MOD_ID)+": Is stopping....",5) )
-	throw TError(nodePath().c_str(),_("Not stopped!"));
-    pthread_join( pthr_tsk, NULL );
+    if( run_st ) SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
 }
 
 void *TTest::Task( void *CfgM )

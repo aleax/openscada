@@ -79,7 +79,7 @@ class TSocketIn: public TTransportIn
 	void setMaxFork( int vl )		{ mMaxFork = vl; modif(); }
 	void setKeepAliveCon( int vl )		{ mKeepAliveCon = vl; modif(); }
 	void setKeepAliveTm( int vl )		{ mKeepAliveTm = vl; modif(); }
-	void setTaskPrior( int vl )		{ mTaskPrior = vmax(0,vmin(100,vl)); modif(); }
+	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
@@ -104,7 +104,6 @@ class TSocketIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	pthread_t	pthr_tsk;
 	Res		sock_res;
 	SSL_CTX		*ctx;
 

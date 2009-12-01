@@ -104,7 +104,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
-    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("BUS",_("Bus"),TFld::Integer,TFld::NoFlag,"2","1") );
     fldAdd( new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::NoFlag,"6","115200") );
     fldAdd( new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000") );
@@ -196,19 +196,7 @@ void TMdContr::start_( )
 	    throw TError( nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1) );
 
 	//> Start the gathering data task
-	pthread_attr_t pthr_attr;
-	pthread_attr_init( &pthr_attr );
-	struct sched_param prior;
-	if( mPrior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
-	else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
-	prior.__sched_priority = mPrior;
-	pthread_attr_setschedparam( &pthr_attr, &prior );
-
-	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
-	pthread_attr_destroy( &pthr_attr );
-	if( TSYS::eventWait( prcSt, true, nodePath()+"start", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task is not started!") );
+	SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt );
     }
 }
 
@@ -217,11 +205,7 @@ void TMdContr::stop_( )
     if( prcSt )
     {
 	//> Stop the request and calc data task
-	endRunReq = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait( prcSt, false, nodePath()+"stop", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task is not stopped!") );
-	pthread_join( procPthr, NULL );
+	SYS->taskDestroy( nodePath('.',true), &prcSt, &endRunReq );
 
 	Close_Com( (mBus?mBus:1) );
 
@@ -491,14 +475,7 @@ void TMdPrm::disable()
 	vlAt(ls[i_el]).at().setS( EVAL_STR, 0, true );
 
     //> Stop fast task
-    if( prcSt )
-    {
-	endRunReq = true;
-	pthread_kill( fastPthr, SIGALRM );
-	if( TSYS::eventWait( prcSt, false, nodePath()+"stop", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering fast task is not stopped!") );
-	pthread_join( fastPthr, NULL );
-    }
+    if( prcSt ) SYS->taskDestroy( nodePath('.',true), &prcSt, &endRunReq );
 
     //> Free module object
     switch( modTp )
@@ -566,21 +543,7 @@ void TMdPrm::getVals( )
 	    //> Check for I8017 init
 	    if( !((PrmsI8017*)extPrms)->init ) { I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
 	    //> Check for I8017 fast task start
-	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt )
-	    {
-		//> Start task
-		pthread_attr_t pthr_attr;
-		pthread_attr_init( &pthr_attr );
-		struct sched_param prior;
-		pthread_attr_setschedpolicy( &pthr_attr, (SYS->user()=="root")?SCHED_RR:SCHED_OTHER );
-		prior.__sched_priority = 32;
-		pthread_attr_setschedparam( &pthr_attr, &prior );
-
-		pthread_create( &fastPthr, &pthr_attr, TMdPrm::fastTask, this );
-		pthread_attr_destroy( &pthr_attr );
-		if( TSYS::eventWait( prcSt, true, nodePath()+"start", 5 ) )
-		    mess_err( nodePath().c_str(), _("Fast gathering task is not started!") ); 
-	    }
+	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, TMdPrm::fastTask, this, &prcSt );
 	    //> Get values direct
 	    for( int i_v = 0; i_v < 8; i_v++ )
 		if( i_v >= ((PrmsI8017*)extPrms)->prmNum ) vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);

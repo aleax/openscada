@@ -43,10 +43,7 @@
 		    DESCRIPT=""
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
-		    START="1"
-		    BufLen="5"
-		    MaxClients="100"
-		    SocketsMaxQueue="10"/>
+		    START="1"/>
 		<fld
 		    ID="WEB_2"
 		    MODULE="Sockets"
@@ -54,10 +51,7 @@
 		    DESCRIPT=""
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
-		    START="1"
-		    BufLen="5"
-		    MaxClients="100"
-		    SocketsMaxQueue="10"/>
+		    START="1"/>
 		<fld
 		    ID="CNTR"
 		    MODULE="Sockets"
@@ -65,10 +59,7 @@
 		    DESCRIPT=""
 		    ADDR="TCP::10005:1"
 		    PROT="SelfSystem"
-		    START="1"
-		    BufLen="10"
-		    MaxClients="100"
-		    SocketsMaxQueue="10"/>
+		    START="1"/>
 	    </tbl>
 	</node>
 

@@ -125,7 +125,6 @@ class TMdContr: public TController
 	vector< AutoHD<TMdPrm> >  p_hd;
 
 	double	tm_calc;	// Scheme's calc time
-	pthread_t procPthr;	// Process task thread
 };
 
 //*************************************************

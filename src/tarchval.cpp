@@ -2130,14 +2130,7 @@ void TVArchivator::start()
     if( run_st ) return;
 
     //> Start archivator thread
-    pthread_attr_t pthr_attr;
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-
-    pthread_create(&mPthr,&pthr_attr,TVArchivator::Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait(run_st,true,nodePath()+"valArch_task_start",5) )
-	throw TError(nodePath().c_str(),_("Values archivation task is not started!"));
+    SYS->taskCreate( nodePath('.',true), 0, TVArchivator::Task, this, &run_st );
 }
 
 void TVArchivator::stop( bool full_del )
@@ -2145,11 +2138,7 @@ void TVArchivator::stop( bool full_del )
     if( !run_st ) return;
 
     //> Values acquisition task stop
-    endrunReq = true;
-    pthread_kill( mPthr, SIGALRM );
-    if( TSYS::eventWait(run_st,false,nodePath()+"valArch_task_stop",10) )
-	throw TError(nodePath().c_str(),_("Values archivation task is not stopped!"));
-    pthread_join( mPthr, NULL );
+    SYS->taskDestroy( nodePath('.',true), &run_st, &endrunReq );
 
     //> Detach from all archives
     ResAlloc res(a_res,false);

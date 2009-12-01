@@ -327,15 +327,7 @@ void TSocketIn::start()
 	listen(sock_fd,mMaxQueue);
     }
 
-    pthread_attr_init(&pthr_attr);
-    struct sched_param prior;
-    pthread_attr_setschedpolicy(&pthr_attr,(taskPrior()&&SYS->user()=="root")?SCHED_RR:SCHED_OTHER);
-    prior.__sched_priority=taskPrior();
-    pthread_attr_setschedparam(&pthr_attr,&prior);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true,nodePath()+"open",5) )
-	throw TError(nodePath().c_str(),_("Not opened!"));
+    SYS->taskCreate( nodePath('.',true), taskPrior(), Task, this, &run_st );
 }
 
 void TSocketIn::stop()
@@ -346,10 +338,7 @@ void TSocketIn::stop()
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
-    endrun = true;
-    if( TSYS::eventWait( run_st, false, nodePath()+"close",5) )
-	throw TError(nodePath().c_str(),_("Not closed!"));
-    pthread_join( pthr_tsk, NULL );
+    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
 
     shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd); 
@@ -571,7 +560,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 void TSocketIn::clientReg( pthread_t thrid, int i_sock )
 {
     ResAlloc res(sock_res,true);
-    //- Find already registry -
+    //> Find already registry
     for( unsigned i_id = 0; i_id < cl_id.size(); i_id++)
 	if( cl_id[i_id].cl_id == thrid ) return;
     SSockCl scl = { thrid, i_sock };

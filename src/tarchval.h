@@ -356,7 +356,6 @@ class TVArchivator : public TCntrNode, public TConfig
 	string	mDB;
 	//> Archivate process
 	double	tm_calc;	//Archiving time
-	pthread_t mPthr;
 };
 
 //*************************************************

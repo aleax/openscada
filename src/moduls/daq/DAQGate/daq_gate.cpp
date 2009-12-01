@@ -121,7 +121,7 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's DB structure
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
-    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000") );
     fldAdd( new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12") );
     fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000") );
@@ -277,19 +277,7 @@ void TMdContr::start_( )
     for( int i_st = 0; i_st < mStatWork.size(); i_st++ ) mStatWork[i_st].second = 0;
 
     //> Start the gathering data task
-    pthread_attr_t pthr_attr;
-    pthread_attr_init(&pthr_attr);
-    struct sched_param prior;
-    if( mPrior && SYS->user() == "root" )
-	pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-    else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    prior.__sched_priority = mPrior;
-    pthread_attr_setschedparam(&pthr_attr,&prior);
-
-    pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait(prcSt, true, nodePath()+"start",5) )
-	throw TError(nodePath().c_str(),_("Gathering task is not started!"));
+    SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt );
 }
 
 void TMdContr::stop_( )
@@ -297,11 +285,7 @@ void TMdContr::stop_( )
     if( !prcSt ) return;
 
     //> Stop the request and calc data task
-    endrunReq = true;
-    pthread_kill( procPthr, SIGALRM );
-    if( TSYS::eventWait(prcSt,false,nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Gathering task is not stopped!"));
-    pthread_join( procPthr, NULL );
+    SYS->taskDestroy( nodePath('.',true), &prcSt, &endrunReq );
 }
 
 void *TMdContr::Task( void *icntr )
@@ -377,12 +361,18 @@ void *TMdContr::Task( void *icntr )
 
 			    vector<string> listV;
 			    prm.at().vlList(listV);
+			    int rC = 0;
 			    for( int iV = 0; iV < listV.size(); iV++ )
 			    {
 				AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-				if( sepReq && (!vl.at().arch().freeStat() || vl.at().resB1()) ) prmNd->childAdd("el")->setAttr("id",listV[iV]);
+				if( sepReq && (!vl.at().arch().freeStat() || vl.at().resB1()) ) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 				if( !vl.at().arch().freeStat() )
 				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
+			    }
+			    if( sepReq && rC > listV.size()/2 )
+			    {
+				prmNd->childClear("el");
+				prmNd->setAttr( "sepReq", "0" );
 			    }
 			}
 		    }

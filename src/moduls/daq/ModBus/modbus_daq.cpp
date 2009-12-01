@@ -78,7 +78,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
-    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("PROT",_("Modbus protocol"),TFld::String,TFld::Selected,"5","TCP","TCP;RTU;ASCII",_("TCP/IP;RTU;ASCII")) );
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
@@ -196,19 +196,7 @@ void TMdContr::start_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
 
     //> Start the gathering data task
-    pthread_attr_t pthr_attr;
-    pthread_attr_init( &pthr_attr );
-    struct sched_param prior;
-    if( mPrior && SYS->user() == "root" )
-	pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
-    else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
-    prior.__sched_priority = mPrior;
-    pthread_attr_setschedparam( &pthr_attr, &prior );
-
-    pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
-    pthread_attr_destroy( &pthr_attr );
-    if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
-	throw TError( nodePath().c_str(), _("Gathering task is not started!") );
+    SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
 }
 
 void TMdContr::stop_( )
@@ -216,11 +204,7 @@ void TMdContr::stop_( )
     if( prc_st )
     {
 	//> Stop the request and calc data task
-	endrun_req = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait( prc_st, false, nodePath()+"stop", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task is not stopped!") );
-	pthread_join( procPthr, NULL );
+	SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 
 	//> Clear statistic
 	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;

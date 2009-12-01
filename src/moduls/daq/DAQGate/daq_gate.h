@@ -154,8 +154,6 @@ class TMdContr: public TController
 		endrunReq;			//Request to stop of the Process task
 	vector< pair<string,float> > mStatWork;	//Work stations and it status
 
-	pthread_t procPthr;			//Process task thread
-
 	double	tmGath;				//Gathering time
 };
 

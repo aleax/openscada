@@ -193,33 +193,14 @@ void TMdContr::start_( )
         SYS->transport().at().at("Serial").at().outAt(m_addr).at().start();
 
 	//> Start the gathering data task
-	pthread_attr_t pthr_attr;
-	pthread_attr_init( &pthr_attr );
-	struct sched_param prior;
-	if( m_prior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy( &pthr_attr, SCHED_RR );
-	else pthread_attr_setschedpolicy( &pthr_attr, SCHED_OTHER );
-	prior.__sched_priority = m_prior;
-	pthread_attr_setschedparam( &pthr_attr, &prior );
-
-	pthread_create( &procPthr, &pthr_attr, TMdContr::Task, this );
-	pthread_attr_destroy( &pthr_attr );
-	if( TSYS::eventWait( prc_st, true, nodePath()+"start", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task is not started!") );
+	SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
     }
 }
 
 void TMdContr::stop_( )
 {
-    if( prc_st )
-    {
-	//- Stop the request and calc data task -
-	endrun_req = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait( prc_st, false, nodePath()+"stop", 5 ) )
-	    throw TError( nodePath().c_str(), _("Gathering task is not stopped!") );
-	pthread_join( procPthr, NULL );
-    }
+    //> Stop the request and calc data task
+    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )

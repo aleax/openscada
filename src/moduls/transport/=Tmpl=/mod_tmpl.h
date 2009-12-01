@@ -67,8 +67,7 @@ class TTrIn: public TTransportIn
 
 	//Attributes
 	//!!! Thread's attributes
-	pthread_t	pthr_tsk;
-	bool		endrun;			// Command for stop task
+	bool	endrun;				// Command for stop task
 
 	//!!! Status interface atributes
 	float	trIn, trOut;			// Traffic in and out counter

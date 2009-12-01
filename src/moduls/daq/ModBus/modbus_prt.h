@@ -158,7 +158,6 @@ class Node : public TFunction, public TConfig
 	string	mDB;
 
 	bool	prcSt, endrunRun;
-	pthread_t pthrTsk;			// Process task thread
 
 	float	tmProc, cntReq;
 };

@@ -89,7 +89,7 @@ void XMLNode::childDel( XMLNode *nd )
 void XMLNode::childClear( const string &name )
 {
     for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
-	if( !name.size() || mChildren[i_ch]->name() == name )
+	if( name.empty() || mChildren[i_ch]->name() == name )
 	    childDel(i_ch--);
 }
 

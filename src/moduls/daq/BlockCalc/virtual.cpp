@@ -136,7 +136,7 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
     fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
-    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
     //Add parameter types
@@ -355,35 +355,13 @@ void Contr::start_( )
     res.release();
 
     //> Start the request and calc data task
-    if( !prc_st )
-    {
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( m_prior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=m_prior;
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-
-	pthread_create(&calcPthr,&pthr_attr,Contr::Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
-    }
+    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, Contr::Task, this, &prc_st );
 }
 
 void Contr::stop_( )
 {
     //> Stop the request and calc data task
-    if( prc_st )
-    {
-	endrun_req = true;
-	pthread_kill( calcPthr, SIGALRM );
-	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
-	pthread_join( calcPthr, NULL );
-    }
+    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 
     //> Make deprocess all blocks
     vector<string> lst;

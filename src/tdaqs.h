@@ -112,7 +112,6 @@ class TDAQS : public TSubSYS
 			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
 	float		mRdRestDtTm,		//Redundant history restore length time in hour
 			mRdPrcTm;		//Redundant process time
-	pthread_t	mRdPthr;
 	bool		prcStRd, endrunRd;
 	map<string,SStat> mSt;
 };

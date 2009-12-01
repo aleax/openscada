@@ -108,7 +108,6 @@ class TUIMod: public TUI
 
 	//Attributes
 	bool	demon_mode, end_run, start_com;
-	pthread_t pthr_tsk;
 	string	start_mod;
 
 	QApplication *QtApp;

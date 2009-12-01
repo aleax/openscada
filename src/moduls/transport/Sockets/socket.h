@@ -95,7 +95,7 @@ class TSocketIn: public TTransportIn
 	void setBufLen( int vl )	{ mBufLen = vl; modif(); }
 	void setKeepAliveCon( int vl )	{ mKeepAliveCon = vl; modif(); }
 	void setKeepAliveTm( int vl )	{ mKeepAliveTm = vl; modif(); }
-	void setTaskPrior( int vl )	{ mTaskPrior = vmax(0,vmin(100,vl)); modif(); }
+	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 
 	void start( );
 	void stop( );
@@ -118,7 +118,6 @@ class TSocketIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	pthread_t	pthr_tsk;
 	int		sock_fd;
 	Res		sock_res;
 

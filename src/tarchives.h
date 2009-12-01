@@ -182,7 +182,7 @@ class TArchiveS : public TSubSYS
 
 	void setMessPeriod( int ivl );
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
-	void setValPrior( int ivl )	{ mValPrior = ivl; modif(); }
+	void setValPrior( int ivl );
 
 	void subStart( );
 	void subStop( );
@@ -253,7 +253,6 @@ class TArchiveS : public TSubSYS
 	Res	vRes;			//Value access resource
 	int	mValPer;		//Value arhiving period
 	int	mValPrior;		//Value archive task priority
-	pthread_t mValPthr;		//Value get realtime pthread
 	bool	prcStVal;		//Process value flag
 	bool	endrunReqVal;		//Endrun value request
 	int	mAval;

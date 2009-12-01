@@ -73,10 +73,7 @@
 		    DESCRIPT_uk="Основний транспорт для WEB інтерфейсу."
 		    ADDR="TCP::10002:0"
 		    PROT="HTTP"
-		    START="1"
-		    BufLen="5"
-		    MaxClients="100"
-		    SocketsMaxQueue="10"/>
+		    START="1"/>
 		<fld
 		    ID="WEB_2"
 		    MODULE="Sockets"
@@ -88,10 +85,7 @@
 		    DESCRIPT_uk="Резервний транспорт для WEB інтерфейсу."
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
-		    START="1"
-		    BufLen="5"
-		    MaxClients="100"
-		    SocketsMaxQueue="10"/>
+		    START="1"/>
 	    </tbl>
 	    <tbl id="Transport_out">
 	        <fld

@@ -859,26 +859,13 @@ void Node::setEnable( bool vl )
 	}
 
 	//>> Start task
-	pthread_attr_t pthrAttr;
-	pthread_attr_init( &pthrAttr );
-	pthread_attr_setschedpolicy( &pthrAttr, SCHED_OTHER );
-	pthread_create( &pthrTsk, &pthrAttr, Task, this );
-	pthread_attr_destroy( &pthrAttr );
-	if( TSYS::eventWait(prcSt,true,nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Not started!"));
+	SYS->taskCreate( nodePath('.',true), 0, Task, this, &prcSt );
     }
     //> Disable node
     if( !vl )
     {
 	//> Stop the calc data task
-	if( prcSt )
-	{
-	    endrunRun = true;
-	    pthread_kill( pthrTsk, SIGALRM );
-	    if( TSYS::eventWait(prcSt,false,nodePath()+"stop",5) )
-		throw TError(nodePath().c_str(),_("Data process task is not stopped!"));
-	    pthread_join( pthrTsk, NULL );
-	}
+	if( prcSt ) SYS->taskDestroy( nodePath('.',true), &prcSt, &endrunRun );
 
 	//> Data structure delete
 	if( data ) { delete data; data = NULL; }

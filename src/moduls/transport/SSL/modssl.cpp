@@ -290,15 +290,7 @@ void TSocketIn::start()
     connNumb = clsConnByLim = 0;
 
     //> Wait connection main task start
-    pthread_attr_init(&pthr_attr);
-    struct sched_param prior;
-    pthread_attr_setschedpolicy(&pthr_attr,(taskPrior()&&SYS->user()=="root")?SCHED_RR:SCHED_OTHER);
-    prior.__sched_priority=taskPrior();
-    pthread_attr_setschedparam(&pthr_attr,&prior);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true,nodePath()+"open",5) )
-	throw TError(nodePath().c_str(),_("Not opened!"));
+    SYS->taskCreate( nodePath('.',true), taskPrior(), Task, this, &run_st );
 }
 
 void TSocketIn::stop()
@@ -311,10 +303,7 @@ void TSocketIn::stop()
     connNumb = clsConnByLim = 0;
 
     //> Wait connection main task stop
-    endrun = true;
-    if( TSYS::eventWait( run_st, false, nodePath()+"close",5) )
-	throw TError(nodePath().c_str(),_("Not closed!"));
-    pthread_join( pthr_tsk, NULL );
+    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
 }
 
 void *TSocketIn::Task( void *sock_in )
@@ -874,7 +863,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-    if( reqTry ) usleep(STD_WAIT_DELAY*1000);
+    if( reqTry ) usleep(500000);
     if( reqTry++ >= 3 )	throw TError(nodePath().c_str(),_("Connection error"));
     //> Write request
     if( obuf != NULL && len_ob > 0 && (ret=BIO_write(conn,obuf,len_ob)) <= 0 )
@@ -889,7 +878,7 @@ repeate:
     {
 	ret=BIO_read(conn,ibuf,len_ib);
 	if( ret > 0 ) trIn += (float)ret/1024;
-	else if( ret == 0 ) {  res.release(); stop(); start(); res.request(true); goto repeate; /*return 0;*/ }
+	else if( ret == 0 ) {  res.release(); stop(); start(); res.request(true); goto repeate; }
 	else if( ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -915,7 +904,7 @@ repeate:
 	    else if( FD_ISSET(sock_fd, &rd_fd) )
 	    {
 		ret = BIO_read(conn,ibuf,len_ib);
-		if( ret < 0 ) { res.release(); stop(); throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno)); }
+		if( ret < 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
 		trIn += (float)ret/1024;
 	    }
 	}

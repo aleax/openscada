@@ -123,10 +123,10 @@ void TUIMod::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//- Set QT environments -
+	//> Set QT environments
 	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
 
-	//- Check command line for options no help and no daemon -
+	//> Check command line for options no help and no daemon
 	bool isHelp = false;
 	int next_opt;
 	const char *short_opt="h";
@@ -149,31 +149,19 @@ void TUIMod::postEnable( int flag )
 	    }
 	} while(next_opt != -1);
 
-	//- Start main QT thread if no help and no daemon -
+	//> Start main QT thread if no help and no daemon
 	if( !(run_st || demon_mode || isHelp) )
 	{
 	    end_run = false;
 
-	    pthread_attr_t pthr_attr;
-	    pthread_attr_init(&pthr_attr);
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-	    pthread_attr_destroy(&pthr_attr);
-	    if( TSYS::eventWait( run_st, true, nodePath()+"start",5) )
-		throw TError(nodePath().c_str(),_("QT main thread is not started!"));
+	    SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
 	}
     }
 }
 
 void TUIMod::postDisable( int flag )
 {
-    if( run_st )
-    {
-	end_run = true;
-	if( TSYS::eventWait( run_st, false, nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("QT main thread is not stopped!"));
-	pthread_join(pthr_tsk,NULL);
-    }
+    if( run_st ) SYS->taskDestroy( nodePath('.',true), &run_st, &end_run );
 }
 
 void TUIMod::load_( )

@@ -124,7 +124,6 @@ class TMdContr: public TController
 	DSCB	dscb;
 	DSCADSETTINGS dscadsettings;
 
-	pthread_t ad_dsc_pthr;
 	bool	ad_dsc_st, endrun_req_ad_dsc;
 
 	Res	ai_res, ao_res, dio_res;

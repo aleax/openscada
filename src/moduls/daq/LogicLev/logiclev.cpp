@@ -130,7 +130,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
-    fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Logical"));
@@ -201,35 +201,13 @@ void TMdContr::start_( )
 	    prmEn(list_p[i_prm],true);
 
     //> Start the request data task
-    if( !prc_st )
-    {
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( m_prior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=m_prior;
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-
-	pthread_create(&procPthr,&pthr_attr,TMdContr::Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
-    }
+    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if( prc_st )
-    {
-	endrun_req = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
-	pthread_join( procPthr, NULL );
-    }
+    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 
     //> Clear process parameters list
     p_hd.clear();

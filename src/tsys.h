@@ -159,6 +159,10 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
+	//> Tasks control
+	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL );
+	void taskDestroy( const string &path, bool *startCntr = NULL, bool *endrunCntr = NULL );
+
 	//Public system static methods
 	//> Current system time (usec)
 	static long long curTime( );
@@ -214,6 +218,18 @@ class TSYS : public TCntrNode
 	void save_( );
 
     private:
+	//Data
+	class STask
+	{
+	    public:
+		STask( ) : thr(0), policy(0), prior(0) { }
+		STask( pthread_t ithr, char ipolicy, char iprior ) : 
+		    thr(ithr), policy(ipolicy), prior(iprior)	{ };
+
+		pthread_t thr;
+		char policy, prior;
+	};
+
 	//Private methods
 	string nodeName( )	{ return id(); }
 	bool cfgFileLoad( );
@@ -244,7 +260,9 @@ class TSYS : public TCntrNode
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id
 
-	Res	nRes;
+	map<string,STask>	mTasks;
+
+	Res	nRes, taskRes;
 
 	unsigned long long mSysclc;
 };

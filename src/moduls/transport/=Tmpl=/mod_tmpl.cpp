@@ -203,13 +203,7 @@ void TTrIn::start()
 
     //!!! Your code
 
-    pthread_attr_t pthr_attr;
-    pthread_attr_init(&pthr_attr);
-    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-    pthread_create(&pthr_tsk,&pthr_attr,Task,this);
-    pthread_attr_destroy(&pthr_attr);
-    if( TSYS::eventWait( run_st, true,nodePath()+"open",5) )
-	throw TError(nodePath().c_str(),_("Not opened!"));
+    SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
 }
 
 void TTrIn::stop()
@@ -220,10 +214,7 @@ void TTrIn::stop()
     trIn = trOut = 0;
     connNumb = 0;
 
-    endrun = true;
-    if( TSYS::eventWait( run_st, false, nodePath()+"close",5) )
-	throw TError(nodePath().c_str(),_("Not closed!"));
-    pthread_join( pthr_tsk, NULL );
+    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
 
     //!!! Your code
 }

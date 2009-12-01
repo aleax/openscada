@@ -144,7 +144,6 @@ class Session : public TCntrNode
 	bool	mBackgrnd;			//Backgrounded execution of a session
 	int	mConnects;			//Connections counter
 
-	pthread_t	calcPthr;		//Calc pthread
 	unsigned	mCalcClk;		//Calc clock
 	float		tm_calc;		//Scheme's calc time
 	float		rez_calc;

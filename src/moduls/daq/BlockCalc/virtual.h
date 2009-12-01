@@ -135,8 +135,6 @@ class Contr: public TController
 		&m_prior,	// Process data task priority
 		&m_iter;	// Iteration into clock
 
-	pthread_t calcPthr;	// Calc pthread
-
 	int	m_bl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
 	double	tm_calc;			// Scheme's calc time

@@ -241,8 +241,6 @@ class TMdContr: public TController
 	vector< SDataRec > acqBlks;	// Acquisition data blocks
 	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode
 
-	pthread_t	procPthr;	// Process task thread
-
 	daveInterface	*di;
 	daveConnection	*dc;
 

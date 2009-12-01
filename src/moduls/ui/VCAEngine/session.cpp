@@ -151,32 +151,12 @@ void Session::setStart( bool val )
 	    at(pg_ls[i_ls]).at().setProcess(true);
 
 	//> Start process task
-	if( !mStart )
-	{
-	    pthread_attr_t pthr_attr;
-	    pthread_attr_init(&pthr_attr);
-	    struct sched_param prior;
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	    prior.__sched_priority=2;
-	    pthread_attr_setschedparam(&pthr_attr,&prior);
-
-	    pthread_create(&calcPthr,&pthr_attr,Session::Task,this);
-	    pthread_attr_destroy(&pthr_attr);
-	    if( TSYS::eventWait(mStart, true, nodePath()+"start",5) )
-		throw TError(nodePath().c_str(),_("Session processing task is not started!"));
-	}
+	if( !mStart ) SYS->taskCreate( nodePath('.',true), 0, Session::Task, this, &mStart );
     }
     else
     {
 	//> Stop process task
-	if( mStart )
-	{
-	    endrun_req = true;
-	    pthread_kill( calcPthr, SIGALRM );
-	    if( TSYS::eventWait(mStart,false,nodePath()+"stop",5) )
-		throw TError(nodePath().c_str(),_("Sesion processing task is not stopped!"));
-	    pthread_join( calcPthr, NULL );
-	}
+	if( mStart ) SYS->taskDestroy( nodePath('.',true), &mStart, &endrun_req );
 
 	//> Process all pages is off
 	list(pg_ls);

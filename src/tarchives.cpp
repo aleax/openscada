@@ -98,19 +98,15 @@ TArchiveS::~TArchiveS(  )
     timer_delete(tmIdMess);
 
     //> Stop values archiving task
-    if( prcStVal )
-    {
-	endrunReqVal = true;
-	pthread_kill( mValPthr, SIGALRM );
-	TSYS::eventWait(prcStVal,false,nodePath()+"val_task_stop",5);
-	pthread_join( mValPthr, NULL );
-    }
+    if( prcStVal ) SYS->taskDestroy( nodePath('.',true)+".vals", &prcStVal, &endrunReqVal );
 
     //> Free other resources
     nodeDelAll();
 }
 
 int TArchiveS::valPeriod( )		{ return vmax(1,mValPer); }
+
+void TArchiveS::setValPrior( int ivl )	{ mValPrior = vmax(-1,vmin(99,ivl)); modif(); }
 
 void TArchiveS::load_( )
 {
@@ -327,22 +323,7 @@ void TArchiveS::subStart( )
     timer_settime(tmIdMess, 0, &itval, NULL);
 
     //> Start values acquisition task
-    if( !prcStVal )
-    {
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( valPrior() && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority = valPrior();
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-
-	pthread_create(&mValPthr,&pthr_attr,TArchiveS::ArhValTask,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prcStVal, true, nodePath()+"val_task_start",5) )
-	    throw TError(nodePath().c_str(),_("Values acquisition task is not started!"));
-    }
+    if( !prcStVal ) SYS->taskCreate( nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this, &prcStVal );
 
     TSubSYS::subStart( );
 }
@@ -364,14 +345,7 @@ void TArchiveS::subStop( )
 	throw TError(nodePath().c_str(),_("Archive messages thread is not stopped!"));
 
     //> Values acquisition task stop
-    if( prcStVal )
-    {
-	endrunReqVal = true;
-	pthread_kill( mValPthr, SIGALRM );
-	if( TSYS::eventWait(prcStVal,false,nodePath()+"val_task_stop",10) )
-	    throw TError(nodePath().c_str(),_("Archive values task is not stopped!"));
-	pthread_join( mValPthr, NULL );
-    }
+    if( prcStVal ) SYS->taskDestroy( nodePath('.',true)+".vals", &prcStVal, &endrunReqVal );
 
     //> Last messages archivation call
     sigval obj; obj.sival_ptr = this;
@@ -566,7 +540,7 @@ time_t TArchiveS::messEnd( const string &arch )
 	if( !arch.empty() ) return rez;
     }
 
-    //- Get records from archives -
+    //> Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
     AutoHD<TMArchivator> archtor;
@@ -953,7 +927,7 @@ void TTipArchivator::valAdd( const string &iid, const string &idb )
 
 void TTipArchivator::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
@@ -964,7 +938,7 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),0664,"root","Archive",5,"tp","br","idm","1","s_com","add,del","br_pref","val_","idSz","20");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/br/mess_" || a_path == "/arch/mess" )
     {
@@ -1021,7 +995,7 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     TMArchivator *src_n = dynamic_cast<TMArchivator*>(&node);
     if( !src_n ) return *this;
 
-    //- Configuration copy -
+    //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     cfg("MODUL").setS(owner().modId());

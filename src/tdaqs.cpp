@@ -285,16 +285,7 @@ void TDAQS::subStart(  )
     if( !SYS->archive().at().subStartStat( ) ) SYS->archive().at().subStart( );
 
     //> Redundant task start
-    if( !prcStRd )
-    {
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	pthread_create(&mRdPthr,&pthr_attr,TDAQS::RdTask,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prcStRd,true,nodePath()+"redundant_task_start",5) )
-	    throw TError(nodePath().c_str(),_("Redundant process task is not started!"));
-    }
+    if( !prcStRd ) SYS->taskCreate( nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this, &prcStRd );
 
     //> Controllers start
     TSubSYS::subStart( );
@@ -306,14 +297,7 @@ void TDAQS::subStop( )
     mess_debug(nodePath().c_str(),_("Stop subsystem."));
 #endif
 
-    if( prcStRd )
-    {
-	endrunRd = true;
-	pthread_kill( mRdPthr, SIGALRM );
-	if( TSYS::eventWait(prcStRd,false,nodePath()+"redundant_task_stop",10) )
-	    throw TError(nodePath().c_str(),_("Redundant process task is not stopped!"));
-	pthread_join( mRdPthr, NULL );
-    }
+    if( prcStRd ) SYS->taskDestroy( nodePath('.',true)+".redundant", &prcStRd, &endrunRd );
 
     vector<string> m_l;
 

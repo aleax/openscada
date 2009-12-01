@@ -153,7 +153,6 @@ class Contr: public TController, public TValFunc
 		&mFnc;		// Work function
 
 	long long mPer;
-	pthread_t procPthr;	// Process task thread
 };
 
 //*************************************************

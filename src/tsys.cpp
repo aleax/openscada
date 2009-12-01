@@ -911,6 +911,55 @@ long TSYS::HZ()
     return sysconf(_SC_CLK_TCK);
 }
 
+void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr )
+{
+    ResAlloc res(taskRes,false);
+    if( mTasks.find(path) != mTasks.end() )	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
+    res.release();
+
+    pthread_t procPthr;
+    pthread_attr_t pthr_attr;
+    pthread_attr_init(&pthr_attr);
+    struct sched_param prior;
+
+    int policy = SCHED_OTHER;    
+    if( priority < 0 )	policy = SCHED_BATCH;
+    else if( priority > 0 /*&& SYS->user() == "root"*/ )	policy = SCHED_RR;
+    pthread_attr_setschedpolicy(&pthr_attr,policy);
+    prior.__sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
+    pthread_attr_setschedparam(&pthr_attr,&prior);
+
+    pthread_create( &procPthr, &pthr_attr, start_routine, arg );
+    pthread_attr_destroy(&pthr_attr);
+
+    res.request(true);
+    mTasks[path] = STask( procPthr, policy, prior.__sched_priority );
+    res.release();
+    
+    if( startCntr && TSYS::eventWait( *startCntr, true, path+"start", 5 ) )
+	throw TError(nodePath().c_str(),_("Task '%s' is not started!"),path.c_str());
+}
+
+void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr )
+{
+    ResAlloc res(taskRes,false);
+    map<string,STask>::iterator it = mTasks.find(path);
+    if( it == mTasks.end() )	throw TError(nodePath().c_str(),_("Task '%s' is not present!"),path.c_str());
+    pthread_t thr = it->second.thr;
+    res.release();
+
+    if( endrunCntr ) *endrunCntr = true;
+    pthread_kill( thr, SIGALRM );
+
+    if( startCntr && TSYS::eventWait( *startCntr, false, path+"stop", 5 ) )
+	throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
+
+    pthread_join( thr, NULL );
+
+    res.request(true);
+    mTasks.erase( it );
+}
+
 void TSYS::taskSleep( long long per, time_t cron )
 {
     struct timespec sp_tm;
@@ -1203,9 +1252,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_arch",_("To archive"),0664,"root","root",1,"tp","bool");
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/subs",_("Subsystems")))
+	if( ctrMkNode("area",opt,-1,"/subs",_("Subsystems")) )
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",3,"idm","1","tp","br","br_pref","sub_");
-	if(ctrMkNode("area",opt,-1,"/hlp",_("Help")))
+	if( ctrMkNode("area",opt,-1,"/tasks",_("Tasks")) )
+	    if( ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),R_R___,"root","root") )
+	    {
+		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Priority"),R_R___,"root","root",1,"tp","dec");
+	    }
+	if( ctrMkNode("area",opt,-1,"/hlp",_("Help")) )
 	    ctrMkNode("fld",opt,-1,"/hlp/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
@@ -1324,6 +1381,22 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	list(lst);
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
+    }
+    else if( a_path == "/tasks/tasks" && ctrChkNode(opt,"get",R_R___,"root","root") )
+    {
+	XMLNode *n_path	= ctrMkNode("list",opt,-1,"/tasks/tasks/path","",R_R___,"root","root");
+	XMLNode *n_thr	= ctrMkNode("list",opt,-1,"/tasks/tasks/thrd","",R_R___,"root","root");
+	XMLNode *n_plc	= ctrMkNode("list",opt,-1,"/tasks/tasks/plc","",R_R___,"root","root");
+	XMLNode *n_prior= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
+
+	ResAlloc res(taskRes,false);
+	for( map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++ )
+	{
+	    if( n_path )	n_path->childAdd("el")->setText( it->first );
+	    if( n_thr )		n_thr->childAdd("el")->setText( TSYS::uint2str(it->second.thr) );
+	    if( n_plc )		n_plc->childAdd("el")->setText( (it->second.policy==SCHED_RR)?_("Round-robin"):((it->second.policy==SCHED_BATCH)?_("Style \"batch\""):_("Standard")) );
+	    if( n_prior )	n_prior->childAdd("el")->setText( TSYS::int2str(it->second.prior) );
+	}
     }
     else if( a_path == "/hlp/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) ) opt->setText(optDescr());
     else TCntrNode::cntrCmdProc(opt);

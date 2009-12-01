@@ -189,19 +189,19 @@ void TMdContr::load_( )
 
 void TMdContr::start_( )
 {
-    //- Check inited of Diamond API -
-    if( !mod->drvInitOk() )
-	throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
-
-    //- DSC strucures init -
-    ERRPARAMS errorParams;
-    DSCADSETTINGS dscadsettings;
-    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
-
-    //- Main DSC code -
-    if(!dataEmul())
+    //> Main DSC code
+    if( !dataEmul() )
     {
-	//-- Init Board --
+	//> Check inited of Diamond API
+	if( !mod->drvInitOk() )
+	    throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
+
+	//> DSC strucures init
+	ERRPARAMS errorParams;
+	DSCADSETTINGS dscadsettings;
+	memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
+
+	//>> Init Board
 	DSCCB dsccb;
 	dsccb.base_address = m_addr;
 	dsccb.int_level = cfg("INT").getI();
@@ -211,45 +211,28 @@ void TMdContr::start_( )
 	    throw TError(nodePath().c_str(),_("dscInitBoard %d(%xh) error: %s %s"),
 	        cfg("BOARD").getI(),m_addr,dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	}
-	//-- Set DIO config --
+	//>> Set DIO config
 	BYTE cfg_byte = cfg("DIO_CFG").getI()|0x80;
 	if( dscDIOSetConfig(dscb, &cfg_byte) != DE_NONE )
  	{
 	    dscGetLastError(&errorParams);
 	    throw TError(nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 	}
-	//-- Init AD acquisition --
+	//>> Init AD acquisition
 	dscadsettings.range = cfg("ADRANGE").getI();
 	dscadsettings.polarity = cfg("ADPOLAR").getI();
 	dscadsettings.gain = cfg("ADGAIN").getI();
 	dscadsettings.load_cal = 0;
     }
 
-    if(ad_int_mode)
-    {
-	//- Create interrupt AD DSC task -
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	pthread_create(&ad_dsc_pthr,&pthr_attr,AD_DSCTask,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(ad_dsc_st, true, nodePath()+"addsc_task_start",5) )
-	    throw TError(nodePath().c_str(),_("AD DSC driver task is not started!"));
-    }
+    //> Create interrupt AD DSC task
+    if( ad_int_mode ) SYS->taskCreate( nodePath('.',true)+".int", 0, AD_DSCTask, this, &ad_dsc_st );
 }
 
 void TMdContr::stop_( )
 {
-    //- Close AI DAQ task -
-    if( ad_dsc_st )
-    {
-	endrun_req_ad_dsc = true;
-	pthread_kill( ad_dsc_pthr, SIGALRM );
-	if( TSYS::eventWait(ad_dsc_st,false,nodePath()+"addsc_task_stop",5) )
-	    throw TError(nodePath().c_str(),_("AD DSC task is not stopped!"));
-	pthread_join( ad_dsc_pthr, NULL );
-    }
+    //> Close AI DAQ task
+    if( ad_dsc_st ) SYS->taskDestroy( nodePath('.',true)+".int", &ad_dsc_st, &endrun_req_ad_dsc );
 
     if( !dataEmul() )	dscFreeBoard(dscb);
 }

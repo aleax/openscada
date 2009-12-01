@@ -96,7 +96,7 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system") );
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40") );
     fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
-    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
+    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ITER",_("Iteration number in single calc"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
     //> Controller value db structure
@@ -495,35 +495,13 @@ void Contr::start_( )
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
 
     //> Start the request data task
-    if( !prc_st )
-    {
-	pthread_attr_t pthr_attr;
-	pthread_attr_init(&pthr_attr);
-	struct sched_param prior;
-	if( mPrior && SYS->user() == "root" )
-	    pthread_attr_setschedpolicy(&pthr_attr,SCHED_RR);
-	else pthread_attr_setschedpolicy(&pthr_attr,SCHED_OTHER);
-	prior.__sched_priority=mPrior;
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-
-	pthread_create(&procPthr,&pthr_attr,Contr::Task,this);
-	pthread_attr_destroy(&pthr_attr);
-	if( TSYS::eventWait(prc_st, true, nodePath()+"start",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task is not started!"));
-    }
+    if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, Contr::Task, this, &prc_st );
 }
 
 void Contr::stop_( )
 {
-    //- Stop the request and calc data task -
-    if( prc_st )
-    {
-	endrun_req = true;
-	pthread_kill( procPthr, SIGALRM );
-	if( TSYS::eventWait(prc_st,false,nodePath()+"stop",5) )
-	    throw TError(nodePath().c_str(),_("Acquisition task is not stopped!"));
-	pthread_join( procPthr, NULL );
-    }
+    //> Stop the request and calc data task
+    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 }
 
 void *Contr::Task( void *icntr )

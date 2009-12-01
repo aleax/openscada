@@ -1,3 +1,9 @@
+2009-12-01 Roman
+- !!!!:SYS: Global functions is added for central control for OpenSCADA tasks: taskCreate() and taskDestroy(). All OpenSCADA parts is used new tasks API.
+- DAQ.DAQGate: The limit (> 50%) is added for control by separated requested attributes and make full request instead.
+- FIX:Transport.SSL: Restore try time is rised to 0.5 s.
+
+
 2009-11-28 Roman
 - FIX:DAQ.JavaLikeCalc: Get properties from constants crash is fixed.
 - DAQ.JavaLikeCalc: Get symbol from string by array notation "val"[1] support is added.

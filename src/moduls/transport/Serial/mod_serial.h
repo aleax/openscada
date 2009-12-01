@@ -61,7 +61,6 @@ class TTrIn: public TTransportIn
 	string		&mTimings;
 	int		fd;
 
-	pthread_t	pthr_tsk;
 	bool		endrun;			// Command for stop task
 
 	float		trIn, trOut, tmMax;	// Traffic in and out counter
