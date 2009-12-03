@@ -104,6 +104,7 @@ class TMdPrm : public TParamContr
 
 	void	*extPrms;
 	float	wTm;
+	Res	pBusRes;	//Parallel bus devices resource
 };
 
 //******************************************************

@@ -710,9 +710,12 @@ void Block::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/lnk/otp" && enable() && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::FREE))->setText(_("Free"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::O_LOC))->setText(_("Local"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::O_GLB))->setText(_("Global"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::O_PRM))->setText(_("Parameter"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::O_LOC))->setText(_("Local out"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::O_GLB))->setText(_("Global out"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::O_PRM))->setText(_("Parameter out"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::I_LOC))->setText(_("Local in"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::I_GLB))->setText(_("Global in"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(Block::I_PRM))->setText(_("Parameter in"));
     }
     else TCntrNode::cntrCmdProc(opt);
 }

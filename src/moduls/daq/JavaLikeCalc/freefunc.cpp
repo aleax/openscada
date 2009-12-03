@@ -1058,8 +1058,7 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
     switch( vl.type() )
     {
 	case TVariant::Object:	return vl.getO()->propGet(prop);
-	case TVariant::Boolean:
-	    throw TError(nodePath().c_str(),_("Boolean type have not one properties."));
+	case TVariant::Boolean:	throw TError(nodePath().c_str(),_("Boolean type have not one properties."));
 	case TVariant::Integer:
 	    if( prop == "MAX_VALUE" )	return INT_MAX;
 	    if( prop == "MIN_VALUE" )	return INT_MIN;
@@ -1224,6 +1223,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 		case IO::Integer:	vl = io->getI(rg.val().io);	break;
 		case IO::Real:		vl = io->getR(rg.val().io);	break;
 		case IO::String:	vl = io->getS(rg.val().io);	break;
+		case IO::Object:	vl = io->getO(rg.val().io);	break;
 	    }
 	    break;
 	case Reg::PrmAttr:
@@ -1323,8 +1323,13 @@ TVarObj *Func::getValO( TValFunc *io, RegW &rg )
 {
     if( rg.propEmpty( ) )
     {
-	if( rg.type() != Reg::Obj ) throw TError(nodePath().c_str(),_("Get object from no object's register"));
-	return rg.val().o_el;
+	switch( rg.type() )
+	{
+	    case Reg::Obj:	return rg.val().o_el;
+	    case Reg::Var:
+		if( io->ioType(rg.val().io) == IO::Object ) return io->getO(rg.val().io);
+	}
+	throw TError(nodePath().c_str(),_("Get object from no object's register"));
     }
     else return getVal(io,rg).getO();
 }
@@ -1341,7 +1346,7 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 		    case TVariant::Integer:	io->setI(rg.val().io,val.getI());	break;
 		    case TVariant::Real:	io->setR(rg.val().io,val.getR());	break;
 		    case TVariant::String:	io->setS(rg.val().io,val.getS());	break;
-		    //case TVariant::Object:	io->setO(rg.val().io,val.getO());	break;
+		    case TVariant::Object:	io->setO(rg.val().io,val.getO());	break;
 		}
 		break;
 	    case Reg::PrmAttr:
@@ -1426,7 +1431,8 @@ void Func::setValO( TValFunc *io, RegW &rg, TVarObj *val )
     if( rg.propEmpty( ) )
 	switch( rg.type() )
 	{
-	    case Reg::Var: case Reg::PrmAttr:	break;
+	    case Reg::Var:	io->setO(rg.val().io,val);	break;
+	    case Reg::PrmAttr:	break;
 	    default: rg = val; break;
 	}
     else setVal(io,rg,val);
@@ -2198,6 +2204,7 @@ Reg::Type Reg::vType( Func *fnc )
 		case IO::Boolean:	return Bool;
 		case IO::Integer:	return Int;
 		case IO::Real:		return Real;
+		case IO::Object:	return Obj;
 	    }
 	case PrmAttr:
 	    switch(val().p_attr->at().fld().type())
@@ -2264,6 +2271,7 @@ Reg::Type RegW::vType( Func *fnc )
 		case IO::Boolean:	return Reg::Bool;
 		case IO::Integer:	return Reg::Int;
 		case IO::Real:		return Reg::Real;
+		case IO::Object:	return Reg::Obj;
 	    }
 	    break;
 	case Reg::PrmAttr:

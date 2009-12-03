@@ -1110,6 +1110,7 @@ void SessWdg::setProcess( bool val )
 	fio.ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,IO::Default,"1000",false),0);
 	fio.ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,IO::Default,"0",false),1);
 	fio.ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,IO::Default,"0",false),2);
+	fio.ioIns( new IO("this",_("This widget's object for access to user's API"),IO::Object,IO::Default),3);
 	//>>> Add calc widget's attributes
 	vector<string> iwls, als;
 	//>>> Self attributes check
@@ -1185,6 +1186,7 @@ void SessWdg::setProcess( bool val )
 	{
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
 	    TValFunc::setUser(ownerSess()->user());
+	    setO( 3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()) );
 	}
     }
     if( !val )
@@ -1399,8 +1401,6 @@ void SessWdg::calc( bool first, bool last )
 {
     if( !process() )	return;
 
-
-
     ResAlloc res(mCalcRes,true);
 
     string sw_attr, s_attr, obj_tp;
@@ -1475,7 +1475,7 @@ void SessWdg::calc( bool first, bool last )
 		setR(0,1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(1,first);
 		setB(2,last);
-		for( int i_io = 3; i_io < ioSize( ); i_io++ )
+		for( int i_io = 4; i_io < ioSize( ); i_io++ )
 		{
 		    if( func()->io(i_io)->rez().empty() ) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
@@ -1495,7 +1495,7 @@ void SessWdg::calc( bool first, bool last )
 		TValFunc::calc();
 
 		//>> Load data from calc area
-		for( int i_io = 3; i_io < ioSize( ); i_io++ )
+		for( int i_io = 4; i_io < ioSize( ); i_io++ )
 		{
 		    if( func()->io(i_io)->rez().empty() || !ioMdf(i_io) ) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
@@ -1624,6 +1624,51 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 	}catch(...)	{ }
     }
     return true;
+}
+
+TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    if( iid == "ownerSess" )	return new TCntrNodeObj(ownerSess(),user);
+    if( iid == "ownerPage" )
+    {
+	SessPage *opg = ownerPage();
+	if( !opg ) return 0;
+	return new TCntrNodeObj(opg,user);
+    }
+    if( iid == "ownerWdg" )
+    {
+	SessWdg *wdg = ownerSessWdg( prms.size() ? prms[0].getB() : 0 );
+	if( !wdg ) return 0;
+	return new TCntrNodeObj(wdg,user);
+    }
+    if( iid == "attrPresent" && prms.size() )	return attrPresent( prms[0].getS() );
+    if( iid == "attr" && prms.size() )
+    {
+	if( !attrPresent( prms[0].getS() ) ) return string("");
+	AutoHD<Attr> attr = attrAt(prms[0].getS());
+	switch( attr.at().type() )
+	{
+	    case TFld::String:	return attr.at().getS();
+	    case TFld::Integer:	return attr.at().getI();
+	    case TFld::Real:	return attr.at().getR();
+	    case TFld::Boolean:	return attr.at().getB();
+	}
+	return string("");
+    }
+    if( iid == "attrSet" && prms.size() >= 2 )
+    {
+	if( !attrPresent( prms[0].getS() ) ) return -1;
+	AutoHD<Attr> attr = attrAt(prms[0].getS());
+	switch( attr.at().type() )
+	{
+	    case TFld::String:	attr.at().setS(prms[1].getS());	break;
+	    case TFld::Integer:	attr.at().setI(prms[1].getI());	break;
+	    case TFld::Real:	attr.at().setR(prms[1].getR());	break;
+	    case TFld::Boolean:	attr.at().setB(prms[1].getB());	break;
+	}
+	return 0;
+    }
+    return TCntrNode::objFuncCall(iid,prms,user);
 }
 
 bool SessWdg::cntrCmdServ( XMLNode *opt )

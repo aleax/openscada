@@ -541,7 +541,7 @@ void TMdPrm::getVals( )
 	case 0x8017:
 	{
 	    //> Check for I8017 init
-	    if( !((PrmsI8017*)extPrms)->init ) { I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
+	    if( !((PrmsI8017*)extPrms)->init ) { ResAlloc res( pBusRes, true ); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
 	    //> Check for I8017 fast task start
 	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, TMdPrm::fastTask, this, &prcSt );
 	    //> Get values direct
@@ -549,6 +549,7 @@ void TMdPrm::getVals( )
 		if( i_v >= ((PrmsI8017*)extPrms)->prmNum ) vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);
 		else if( !((PrmsI8017*)extPrms)->fastPer )
 		{
+		    ResAlloc res( pBusRes, true );
 		    I8017_SetChannelGainMode(modSlot,i_v,((PrmsI8017*)extPrms)->cnlMode[i_v],0);
 		    vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(modSlot), 0, true );
 		}
@@ -561,7 +562,7 @@ void TMdPrm::getVals( )
 	}
 	case 0x8042:
 	{
-	    ResAlloc res( owner().reqRes, true );
+	    ResAlloc res( pBusRes, true );
 	    int c_vl = DI_16(modSlot);
 	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( !((c_vl>>i_v)&0x01), 0, true );
 	    c_vl = DO_16_RB(modSlot);
@@ -705,6 +706,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 		if( vlAt(TSYS::strMess("ha%d",i_v)).at().getB() == true )	hvl |= 1;
 		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
 	    }
+	    ResAlloc res( pBusRes, true );
 	    I8017_SetLed(modSlot,(lvl<<8)|hvl);
 	    break;
 	}
@@ -733,10 +735,10 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	}
 	case 0x8042:
 	{
-	    ResAlloc res( owner().reqRes, true );
-
 	    bool vl = valo.getB(0,true);
 	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
+
+	    ResAlloc res( pBusRes, true );
 	    DO_16( modSlot, vl ? (DO_16_RB(modSlot) | 0x01<<atoi(valo.name().c_str()+1)) :
 				 (DO_16_RB(modSlot) & ~(0x01<<atoi(valo.name().c_str()+1))) );
 	    break;
@@ -820,12 +822,14 @@ void *TMdPrm::fastTask( void *iprm )
 
     for( ;!prm.endRunReq && prm.owner().startStat(); ((PrmsI8017*)prm.extPrms)->curCnt++ )
     {
+	ResAlloc res( prm.pBusRes, true );
 	for( int i_c = 0; i_c < cnls.size(); i_c++ )
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
 	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
 	    cnls[i_c].at().setR( (10.0/(c_mode?2*c_mode:1))*(float)I8017HW_GetCurAdChannel_Hex(prm.modSlot)/8000, wTm, true );
 	}
+	res.release();
 
 	//> Calc next work time and sleep
 	wTm += (long long)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);

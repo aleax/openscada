@@ -407,13 +407,13 @@ string XMLNodeObj::getStrXML( const string &oid )	{ return ""; }
 
 TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    if( id == "name" )          { return name(); }
-    if( id == "text" )          { return text(); }
-    if( id == "attr" && prms.size() )           { return propGet(prms[0].getS()).getS(); }
-    if( id == "setName" && prms.size() )        { setName(prms[0].getS()); return this; }
-    if( id == "setText" && prms.size() )        { setText(prms[0].getS()); return this; }
-    if( id == "setAttr" && prms.size() >= 2 )   { propSet(prms[0].getS(),prms[1].getS()); return this; }
-    if( id == "childSize" )     { return childSize(); }
+    if( id == "name" )	return name();
+    if( id == "text" )	return text();
+    if( id == "attr" && prms.size() )	return propGet(prms[0].getS()).getS();
+    if( id == "setName" && prms.size() )	{ setName(prms[0].getS()); return this; }
+    if( id == "setText" && prms.size() )	{ setText(prms[0].getS()); return this; }
+    if( id == "setAttr" && prms.size() >= 2 )	{ propSet(prms[0].getS(),prms[1].getS()); return this; }
+    if( id == "childSize" )	return childSize();
     if( id == "childAdd" )
     {
 	XMLNodeObj *no = NULL;
@@ -432,8 +432,8 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	childIns( prms[0].getI(), no );
 	return no;
     }
-    if( id == "childDel" && prms.size() )       { childDel(prms[0].getI()); return this; }
-    if( id == "childGet" && prms.size() )       { return childGet(prms[0].getI()); }
+    if( id == "childDel" && prms.size() )	{ childDel(prms[0].getI()); return this; }
+    if( id == "childGet" && prms.size() )	return childGet(prms[0].getI());
     if( id == "load" && prms.size() )
     {
 	XMLNode nd;
@@ -537,6 +537,6 @@ void TCntrNodeObj::propSet( const string &id, TVariant val )
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    if( cnd.freeStat() ) return TVariant();
+    if( cnd.freeStat() )	return TVariant();
     return cnd.at().objFuncCall( id, prms, user() );
 }

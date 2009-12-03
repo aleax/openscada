@@ -538,6 +538,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
     string n_pr = id()+TSYS::int2str(sock);
     try
     {
+	if( !SYS->protocol().at().modPresent(protocol()) ) throw TError(nodePath().c_str(),_("The protocol '%s' is not present."),protocol().c_str());
 	proto = SYS->protocol().at().modAt(protocol());
 	if( prot_in.freeStat() )
 	{

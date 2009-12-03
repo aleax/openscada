@@ -224,6 +224,8 @@ class SessWdg : public Widget, public TValFunc
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 	bool attrChange( Attr &cfg, TVariant prev );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	unsigned int modifVal( Attr &cfg );
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 

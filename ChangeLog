@@ -1,3 +1,12 @@
+2009-12-03 Roman
+- DAQ.BlockCalc: Input links setup allow is added for output attributes.
+- DAQ.ICP_DAS: Parallel bus' devices access resource is added.
+- FIX:DAQ.JavaLikeCalc: The access to objects is fixed as functions parameter (IO).
+- Transport.Sockets: Protocol error message is added for empty or broken protocols.
+- !!!!:UI.VCAEngine: The special attribute "this" is added for direct access to control object (Widget or Page) from scripts.
+    To object "Widget" added functions of user's API: ownerSess(), ownerPage(), ownerWdg(), attrPresent(), attr() and attrSet().
+
+
 2009-12-01 Roman
 - !!!!:SYS: Global functions is added for central control for OpenSCADA tasks: taskCreate() and taskDestroy(). All OpenSCADA parts is used new tasks API.
 - DAQ.DAQGate: The limit (> 50%) is added for control by separated requested attributes and make full request instead.

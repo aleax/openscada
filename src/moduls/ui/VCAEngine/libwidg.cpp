@@ -982,7 +982,7 @@ void CWidget::inheritAttr( const string &attr )
 void CWidget::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);
