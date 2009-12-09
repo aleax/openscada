@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Protocol.HTTP file: mod_tmpl.h
+//OpenSCADA system module Protocol.Tmpl file: mod_tmpl.h
 /***************************************************************************
  *   Copyright (C) 2009 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,14 +31,14 @@
 //!!! OpenSCADA module's API includings. Add need for your module includings.
 #include <tprotocols.h>
 
-//!!! Individual module's translation function define. Not change it!
+//!!! Individual module's translation function define. Don't change it!
 #undef _
 #define _(mess) mod->I18N(mess)
 
 using std::string;
 using std::map;
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
+//!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl
 {
 
@@ -59,7 +59,7 @@ class TProtIn: public TProtocolIn
 	bool mess( const string &request, string &answer, const string &sender );
 };
 
-//!!! Root module's object define. Add methods and attributes for your need.
+//!!! Root module object define. Add methods and attributes for your need.
 //*************************************************
 //* ModTmpl::TProt                                *
 //*************************************************
@@ -67,9 +67,9 @@ class TProt: public TProtocol
 {
     public:
 	//Methods
-	//!!! Constructor for root module's object.
+	//!!! Constructor for root module object.
 	TProt( string name );
-	//!!! Destructor for root module's object.
+	//!!! Destructor for root module object.
 	~TProt( );
 
     protected:
@@ -90,7 +90,9 @@ class TProt: public TProtocol
 
 };
 
+//!!! The module root link
 extern TProt *mod;
+
 } //End namespace ModTmpl
 
 #endif //MOD_TMPL_H

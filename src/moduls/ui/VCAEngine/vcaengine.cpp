@@ -406,7 +406,7 @@ void Engine::save_( )
 {
     mess_info(nodePath().c_str(),_("Save module."));
 
-    //- Save parameters to DB -
+    //> Save parameters to DB
     TBDS::genDBSet( nodePath()+"SynthCom", synthCom() );
     TBDS::genDBSet( nodePath()+"SynthCode", synthCode() );
 }
@@ -415,13 +415,13 @@ void Engine::modStart()
 {
     mess_info(nodePath().c_str(),_("Start module."));
 
-    //- Libraries enable -
+    //> Libraries enable
     vector<string> ls;
     wlbList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	wlbAt(ls[l_id]).at().setEnable(true);
 
-    //- Projects enable -
+    //> Projects enable
     prjList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
 	prjAt(ls[l_id]).at().setEnable(true);
@@ -503,13 +503,13 @@ string Engine::callSynth( const string &itxt )
 
     string com = synthCom( );
 
-    //- Put text to command -
+    //> Put text to command
     bool textToPipe = false;
     if( (comPos=com.find("%t")) != string::npos )
 	com.replace( comPos, 2, txt );
     else textToPipe = true;
 
-    //- Put result file name to command -
+    //> Put result file name to command
     bool rezFromPipe = false;
     if( (comPos=com.find("%f")) != string::npos )
 	com.replace( comPos, 2, synthRez );
@@ -517,17 +517,17 @@ string Engine::callSynth( const string &itxt )
 
     if( rezFromPipe && textToPipe )	return "";
 
-    //- Open pipe -
+    //> Open pipe
     FILE *fp = popen( com.c_str(), textToPipe?"w":"r" );
     if( !fp )	return "";
-    //- Write text to pipe -
+    //> Write text to pipe
     if( textToPipe )	fwrite( txt.c_str(), txt.size(), 1, fp );
-    //- Read result from pipe -
+    //> Read result from pipe
     if( rezFromPipe )
 	while( comPos = fread( buf, 1, sizeof(buf), fp ) )
 	    rez.append(buf,comPos);
     pclose(fp);
-    //- Read result from result file -
+    //> Read result from result file
     if( !rezFromPipe )
     {
 	FILE *fp = fopen( synthRez, "r" );
@@ -796,7 +796,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TUI::cntrCmdProc(opt);
@@ -825,7 +825,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command for page -
+    //> Process command for page
     if( a_path == "/br/prj_" || a_path == "/prm/cfg/prj" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )

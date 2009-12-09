@@ -6,7 +6,7 @@ Release: 1
 Source: openscada-%version.tar.gz
 License: GPLv2
 Group: Applications/Engineering
-Packager: Roman Savochenko <rom_as@fromru.com>
+Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
 URL: http://oscada.org.ua
 
 %define srcname openscada-%version

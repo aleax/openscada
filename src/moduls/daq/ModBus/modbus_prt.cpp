@@ -305,7 +305,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if( prt == "TCP" )		// Modbus/TCP protocol process
 	{
 	    //> Encode MBAP (Modbus Application Protocol)
-	    mbap  = (char)0x15;			//Transaction ID MSB
+	    mbap.reserve( pdu.size()+7 );
+	    mbap += (char)0x15;			//Transaction ID MSB
 	    mbap += (char)0x01;			//Transaction ID LSB
 	    mbap += (char)0x00;			//Protocol ID MSB
 	    mbap += (char)0x00;			//Protocol ID LSB
@@ -333,10 +334,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	}
 	else if( prt == "RTU" )		// Modbus/RTU protocol process
 	{
-	    mbap = (uint8_t)node;			//Unit identifier
+	    mbap.reserve( pdu.size()+3 );
+	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
 	    uint16_t crc = CRC16( mbap );
-	    mbap += crc >> 8;
+	    mbap += (crc>>8);
 	    mbap += crc;
 
 	    //> Send request
@@ -355,7 +357,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	}
 	else if( prt == "ASCII" )	// Modbus/ASCII protocol process
 	{
-	    mbap = (uint8_t)node;			//Unit identifier
+	    mbap.reserve( pdu.size()+2 );
+	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
 	    mbap += LRC(mbap);
 	    mbap = ":"+DataToASCII(mbap)+"\r\n";
@@ -557,10 +560,12 @@ retry:
 	if( modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu) ) break;
     if( i_n >= nls.size() ) return false;
 
+    answer = "";
     if( prt == "TCP" )
     {
 	//> Encode MBAP (Modbus Application Protocol)
-	answer = reqst[0];			//Transaction ID MSB
+	answer.reserve(pdu.size()+7);
+	answer += reqst[0];			//Transaction ID MSB
 	answer += reqst[1];			//Transaction ID LSB
 	answer += reqst[2];			//Protocol ID MSB
 	answer += reqst[3];			//Protocol ID LSB
@@ -571,7 +576,8 @@ retry:
     }
     else if( prt == "RTU" )
     {
-	answer = (uint8_t)node;			//Unit identifier
+	answer.reserve(pdu.size()+3);
+	answer += (uint8_t)node;		//Unit identifier
 	answer += pdu;
 	uint16_t crc = modPrt->CRC16( answer );
 	answer += crc>>8;
@@ -579,7 +585,8 @@ retry:
     }
     else if( prt == "ASCII" )
     {
-	answer = (uint8_t)node;			//Unit identifier
+	answer.reserve(pdu.size()+2);
+	answer += (uint8_t)node;		//Unit identifier
 	answer += pdu;
 	answer += modPrt->LRC(answer);
 	answer = ":"+modPrt->DataToASCII(answer)+"\r\n";

@@ -1,3 +1,12 @@
+2009-12-09 Roman
+- SYS.Resource: String resources' functions is moved to library.
+- DAQ.ICP_DAS: Return value process for broken connections is added.
+- DAQ.ModBus: Memory reserve to request's buffers allocation is added for prevent memory reallocation.
+- !!:DAQ: Template module "=Tmpl=" for "DAQ" subsystem is created.
+- !!:DAQ: Start realisation of module "OPC_UA" is added.
+- FIX:Protocol.=Tmpl=: Some messages fixes is made.
+
+
 2009-12-03 Roman
 - DAQ.BlockCalc: Input links setup allow is added for output attributes.
 - DAQ.ICP_DAS: Parallel bus' devices access resource is added.

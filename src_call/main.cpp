@@ -1,8 +1,8 @@
 
 //OpenSCADA system file: main.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2007 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,9 +41,9 @@ int main(int argc, char *argv[], char *envp[] )
 	    if( pid == -1 )
 	    {
 		printf("Error: fork error!\n");
-		return(-1);
+		return -1;
 	    }
-	    if( pid != 0 )	return(0);
+	    if( pid != 0 )	return 0;
 
 	    //Prepare demon environment
 	    setsid();

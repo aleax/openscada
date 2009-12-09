@@ -1,8 +1,8 @@
 
 //OpenSCADA system file: resalloc.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2008 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -106,4 +106,28 @@ void ResAlloc::release()
     if( !mAlloc ) return;
     mId.resRelease( );
     mAlloc = false;
+}
+
+//********************************************
+//* String+resource for                      *
+//********************************************
+ResString::ResString( const string &vl ) : str(vl)
+{
+
+}
+ResString::~ResString( )
+{
+    ResAlloc wres( mRes, true );
+}
+
+void ResString::setVal( const string &vl )
+{
+    ResAlloc wres( mRes, true );
+    str = vl;
+}
+
+string ResString::getVal( )
+{
+    ResAlloc wres( mRes, false );
+    return str;
 }

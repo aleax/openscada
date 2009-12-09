@@ -3923,7 +3923,7 @@ msgstr ""
 msgid ""
 "Page: '%1'.\n"
 "View access is not permited."
-msgstr ""
+msgstr "Страница: '%1'.\nОтсутсвует доступ для просмотра."
 
 #: vis_run_widgs.cpp:277
 msgid "usr_"

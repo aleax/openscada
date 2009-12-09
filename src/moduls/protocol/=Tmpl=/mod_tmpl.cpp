@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Protocol.HTTP file: mod_tmpl.cpp
+//OpenSCADA system module Protocol.Tmpl file: mod_tmpl.cpp
 /***************************************************************************
  *   Copyright (C) 2009 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +49,7 @@
 
 ModTmpl::TProt *ModTmpl::mod;
 
-//!!! Required section for binding OpenSCADA kernel's to this module. Gives information and create module's root object.
+//!!! Required section for binding OpenSCADA core to this module. Gives information and create module's root object.
 //!!! Not remove this section!
 extern "C"
 {
@@ -67,7 +67,7 @@ extern "C"
     }
 }
 
-//!!! Include for default call into your module's namespace.
+//!!! Include for default enter to your module namespace.
 using namespace ModTmpl;
 
 //*************************************************
@@ -76,7 +76,7 @@ using namespace ModTmpl;
 //!!! Constructor for module's root object. Append into for your need.
 TProt::TProt( string name )
 {
-    //!!! Loading module's meta-information into root object. No change it.
+    //!!! Load module meta-information to root object. Don't change it!
     mId		= MOD_ID;
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
@@ -86,7 +86,7 @@ TProt::TProt( string name )
     mLicense	= LICENSE;
     mSource	= name;
 
-    //!!! Init shortcut to module's root object. No change it.
+    //!!! Init shortcut to module root object. Don't change it!
     mod		= this;
 }
 

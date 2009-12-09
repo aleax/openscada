@@ -533,7 +533,7 @@ void TMdPrm::saveExtPrms( )
 
 void TMdPrm::getVals( )
 {
-    int RetValue;
+    int RetValue = 0;
     WORD wT;
 
     switch( modTp )
@@ -582,7 +582,8 @@ void TMdPrm::getVals( )
 		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1+7*i_v), 0, true );
 
 	    //> Read Cold-Junction Compensation(CJC) temperature
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    if( !RetValue )
+		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
 	    vlAt("cvct").at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1), 0, true );
 	    acq_err.setVal(RetValue?_("10:Request to module error."):((szReceive[0]!='>')?_("11:Respond from module error."):""));
 	    break;
@@ -604,7 +605,8 @@ void TMdPrm::getVals( )
 	    //> Get data
 	    for( int i_v = 0; i_v < 4; i_v++ )
 	    {
-		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v).c_str(), szReceive, 1, 0, &wT );
+		if( !RetValue )
+		    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v).c_str(), szReceive, 1, 0, &wT );
 		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (RetValue||szReceive[0]!='!' ? EVAL_REAL : atof(szReceive+3)), 0, true );
 	    }
 	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
@@ -625,7 +627,8 @@ void TMdPrm::getVals( )
 	    }
 
 	    //> Get data
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X6",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    if( !RetValue )
+		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X6",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
 	    int vl = -1;
 	    if( !(RetValue||szReceive[0]!='!') )
 	    {

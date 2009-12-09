@@ -131,7 +131,7 @@ class TMdContr: public TController
 
 		int	off;			//Data block start offset
 		string	val;			//Data block values kadr
-		ResString	err;			//Acquisition error text
+		ResString	err;		//Acquisition error text
 	};
 
 	//Methods

@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.50)
 
-AC_INIT([OpenSCADA],[0.6.4],[rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.6.4],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="0:11:0"
 oscd_modulpref="oscd_"
@@ -152,6 +152,8 @@ AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build mod
 [ if test $enableval = yes; then ModSoundCard=true; else ModSoundCard=false; fi],[ ModSoundCard=true; ])
 AC_ARG_ENABLE(ICP_DAS,AC_HELP_STRING([--disable-ICP_DAS], [disable build module DAQ/ICP_DAS]),
 [ if test $enableval = yes; then ModICP_DAS=true; else ModICP_DAS=false; fi],[ ModICP_DAS=true; ])
+AC_ARG_ENABLE(OPC_UA,AC_HELP_STRING([--disable-OPC_UA], [disable build module DAQ/OPC_UA]),
+[ if test $enableval = yes; then ModOPC_UA=true; else ModOPC_UA=false; fi],[ ModOPC_UA=true; ])
 #> Archive modules
 AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable build module Archive/FSArch]),
 [ if test $enableval = yes; then ModFSArch=true; else ModFSArch=false; fi],[ ModFSArch=true; ])
@@ -317,6 +319,11 @@ if test ${ModICP_DAS} = true && test $target_cpu != "x86_64"; then
     AC_MSG_RESULT(Build module: DAQ/ICP_DAS)
     AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
     DAQSub_mod="${DAQSub_mod}ICP_DAS "
+fi
+if test ${ModOPC_UA} = true; then
+    AC_MSG_RESULT(Build module: DAQ/OPC_UA)
+    AC_CONFIG_FILES(src/moduls/daq/OPC_UA/Makefile)
+    DAQSub_mod="${DAQSub_mod}OPC_UA "
 fi
 #> Archive modules
 AC_SUBST(ArchSub_mod)
