@@ -441,7 +441,7 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of coils LSB
 		//>> Request to remote server
-		cntr.acqBlksCoil[i_b].err = cntr.modBusReq( pdu );
+		cntr.acqBlksCoil[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlksCoil[i_b].err.getVal().empty() )
 		{
 		    for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
@@ -467,7 +467,7 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
 		//>> Request to remote server
-		cntr.acqBlksCoilIn[i_b].err = cntr.modBusReq( pdu );
+		cntr.acqBlksCoilIn[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlksCoilIn[i_b].err.getVal().empty() )
 		{
 		    for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
@@ -493,7 +493,7 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		//>> Request to remote server
-		cntr.acqBlks[i_b].err = cntr.modBusReq( pdu );
+		cntr.acqBlks[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlks[i_b].err.getVal().empty() )
 		{
 		    cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
@@ -518,7 +518,7 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB
 		//>> Request to remote server
-		cntr.acqBlksIn[i_b].err = cntr.modBusReq( pdu );
+		cntr.acqBlksIn[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlksIn[i_b].err.getVal().empty() )
 		{
 		    cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlksIn[i_b].val.size());
@@ -551,10 +551,10 @@ void TMdContr::setCntrDelay( const string &err )
 {
     tmDelay = restTm;
     ResAlloc res( req_res, false );
-    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err = err;
-    for( int i_b = 0; i_b < acqBlksCoilIn.size(); i_b++ )	acqBlksCoilIn[i_b].err = err;
-    for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err = err;
-    for( int i_b = 0; i_b < acqBlksIn.size(); i_b++ )	acqBlksIn[i_b].err = err;
+    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err.setVal( err );
+    for( int i_b = 0; i_b < acqBlksCoilIn.size(); i_b++ )	acqBlksCoilIn[i_b].err.setVal( err );
+    for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err.setVal( err );
+    for( int i_b = 0; i_b < acqBlksIn.size(); i_b++ )	acqBlksIn[i_b].err.setVal( err );
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )

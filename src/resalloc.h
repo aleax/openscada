@@ -72,7 +72,7 @@ class ResString
 {
     public:
 	//Methods
-	ResString( const string &vl = "" );
+	explicit ResString( const string &vl = "" );
 	~ResString( );
 
 	void setVal( const string &vl );

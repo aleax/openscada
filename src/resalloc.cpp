@@ -111,10 +111,11 @@ void ResAlloc::release()
 //********************************************
 //* String+resource for                      *
 //********************************************
-ResString::ResString( const string &vl ) : str(vl)
+ResString::ResString( const string &vl )
 {
-
+    setVal(vl);
 }
+
 ResString::~ResString( )
 {
     ResAlloc wres( mRes, true );

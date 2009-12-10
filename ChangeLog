@@ -1,3 +1,9 @@
+2009-12-10 Roman
+- !!!!:FIX:DAQ.ModBus: Resource alloc lost on time data gathering is fixed.
+    By reason resourced string's assign for direct string set, by constructor.
+- FIX:SYS.Resource: Resource string implicit assign by constructor is prevented.
+
+
 2009-12-09 Roman
 - SYS.Resource: String resources' functions is moved to library.
 - DAQ.ICP_DAS: Return value process for broken connections is added.
