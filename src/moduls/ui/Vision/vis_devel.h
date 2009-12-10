@@ -43,6 +43,7 @@ namespace VISION
 
 class UserStBar;
 class WScaleStBar;
+class WMdfStBar;
 class ProjTree;
 class WdgTree;
 class InspAttrDock;
@@ -190,7 +191,7 @@ class VisDevelop : public QMainWindow
 	UserStBar	*mWUser;	//User status widget
 	QLabel		*mWStat;	//VCA engine station
 	QLabel		*mWVisScale;	//Current widget visual scaling
-	QLabel		*mStModify;	//VCA station modified
+	WMdfStBar	*mStModify;	//VCA station modified
 	WScaleStBar	*w_scale;	//Scale trigger
 	QTimer		*endRunTimer, *work_wdgTimer;
 	string		work_wdg, work_wdg_new,	//Work widget

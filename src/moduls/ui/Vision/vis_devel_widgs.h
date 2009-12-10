@@ -425,6 +425,23 @@ class WScaleStBar : public QLabel
 	bool isScale;
 };
 
+//*********************************************
+//* Status bar modify indicator               *
+//*********************************************
+class WMdfStBar : public QLabel
+{
+    Q_OBJECT
+
+    public:
+	WMdfStBar( QWidget *parent = 0 );
+
+    signals:
+	void press( );
+
+    protected:
+	void mousePressEvent( QMouseEvent * event );
+};
+
 //*************************************************
 //* Size points widget                            *
 //*************************************************

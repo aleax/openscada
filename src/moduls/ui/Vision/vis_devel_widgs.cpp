@@ -1922,6 +1922,19 @@ void WScaleStBar::mousePressEvent( QMouseEvent * event )
     setScale(!scale());
 }
 
+//*********************************************
+//* Status bar modify indicator               *
+//*********************************************
+WMdfStBar::WMdfStBar( QWidget *parent ) : QLabel(parent)
+{
+
+}
+
+void WMdfStBar::mousePressEvent( QMouseEvent * event )
+{
+    emit press();
+}
+
 //****************************************
 //* Shape widget view development mode   *
 //****************************************

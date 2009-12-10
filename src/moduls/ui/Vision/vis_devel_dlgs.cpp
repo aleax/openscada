@@ -584,9 +584,9 @@ void LibProjProp::selectIco( )
     QString fileName = QFileDialog::getOpenFileName(this,_("Load icon picture"),"",_("Images (*.png *.jpg)"));
 
     if( fileName.isEmpty() )	return;
-    if(!ico_t.load(fileName))
+    if( !ico_t.load(fileName) )
     {
-	mod->postMess( mod->nodePath().c_str(), 
+	mod->postMess( mod->nodePath().c_str(),
 		QString(_("Load icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;
     }

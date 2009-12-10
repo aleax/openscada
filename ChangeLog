@@ -2,6 +2,7 @@
 - !!!!:FIX:DAQ.ModBus: Resource alloc lost on time data gathering is fixed.
     By reason resourced string's assign for direct string set, by constructor.
 - FIX:SYS.Resource: Resource string implicit assign by constructor is prevented.
+- UI.Vision: Global saving is added to development mode.
 
 
 2009-12-09 Roman
