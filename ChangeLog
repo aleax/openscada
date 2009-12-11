@@ -1,3 +1,7 @@
+2009-12-11 Roman
+- FIX:UI.Vision: Modify status check into development mode is fixed.
+
+
 2009-12-10 Roman
 - !!!!:FIX:DAQ.ModBus: Resource alloc lost on time data gathering is fixed.
     By reason resourced string's assign for direct string set, by constructor.

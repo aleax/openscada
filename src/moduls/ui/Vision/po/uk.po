@@ -2811,7 +2811,7 @@ msgstr ""
 
 #: vis_devel_widgs.cpp:674
 msgid "Clear changes"
-msgstr ""
+msgstr "Очистити зміни"
 
 #: vis_devel_widgs.cpp:675
 msgid "Press to clear attribute's changes."

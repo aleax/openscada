@@ -546,7 +546,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     attrInsp = new InspAttrDock(this);
     connect(attrInsp, SIGNAL(modified(const string &)), this, SIGNAL(modifiedItem(const string &)));
-    connect(attrInsp, SIGNAL(modified(const string &)), this, SLOT(modifyToolUpdate(const string &)));
+    //connect(attrInsp, SIGNAL(modified(const string &)), this, SLOT(modifyToolUpdate(const string &)));
     attrInsp->setWhatsThis(_("Dock window for widget's attributes inspection."));
     lnkInsp  = new InspLnkDock(this);
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
@@ -842,7 +842,7 @@ void VisDevelop::updateMenuWindow( )
 void VisDevelop::itDBLoad( )
 {
     string own_wdg = work_wdg;
-    if( !own_wdg.empty() ) return;
+    if( own_wdg.empty() ) return;
 
     //> Request to confirm
     InputDlg dlg(this,actDBLoad->icon(),
