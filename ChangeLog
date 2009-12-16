@@ -1,3 +1,11 @@
+2009-12-16 Roman
+- !!:SYS.Archive: Adaptive generic request to archives is made.
+    For need period make archivator quality select. Prevent long time processin for big intervals.
+- FIX:DAQ.ICP_DAS: Main controller's task start flag set is made after first call.
+- DAQ.OPC_UA: Security connection establish request, base realisation, is added.
+- UI.QTCfg, UI.Vision: Text fields apply by Ctrl+Enter is added.
+    
+
 2009-12-11 Roman
 - FIX:UI.Vision: Modify status check into development mode is fixed.
 

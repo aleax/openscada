@@ -1523,6 +1523,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    if( tm < tm_grnd )	throw TError(nodePath().c_str(),"Range error");
 
+	    long long period = atoll(opt->attr("per").c_str());
+
 	    //>> Process of archive block request
 	    TValBuf buf( TValBuf::valType(), 100000, TValBuf::period(), true, true );
 
@@ -1535,8 +1537,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    else
 	    {
 		ResAlloc res( a_res, false );
-		for( int i_a = 0; i_a < arch_el.size(); i_a++ )
-		    if( (arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
+		for( int i_a = (arch_el.size()-1); i_a >= 0; i_a-- )
+		    if( ((arch.empty() && (!i_a || arch_el[i_a]->archivator().valPeriod() <= (period/1e6))) || arch == arch_el[i_a]->archivator().workId()) &&
 			(tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin()) )
 		    {
 			buf.setPeriod( (long long)(1000000.*arch_el[i_a]->archivator().valPeriod()) );
@@ -1551,7 +1553,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    string  text;
 	    text.reserve(100);
 	    int vpos_beg = 0, vpos_end = 0, vpos_cur;
-	    long long ibeg = buf.begin(), iend = buf.end(), period = vmax(atoll(opt->attr("per").c_str()),buf.period());
+	    long long ibeg = buf.begin(), iend = buf.end();
+	    period = vmax(period,buf.period());
 	    int mode = atoi(opt->attr("mode").c_str());
 	    if( mode < 0 || mode > 2 ) throw TError(nodePath().c_str(),"No support data mode '%d'",mode);
 	    switch(buf.valType())

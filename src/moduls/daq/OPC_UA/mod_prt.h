@@ -63,6 +63,9 @@ class TProtIn: public TProtocolIn
 
 	TProt &owner( );
 
+	//> Special
+	string mkError( uint32_t errId, const string &err );
+
     public:
 	//Attributes
 	bool mNotFull;

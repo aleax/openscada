@@ -118,6 +118,9 @@ class TextEdit : public QWidget
 	void cancel( );
 	void textChanged( const QString& );
 
+    protected:
+	bool event( QEvent * e );
+
     private slots:
 	//Private slots
 	void changed( );

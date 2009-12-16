@@ -586,7 +586,7 @@ void OrigDiagram::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect ) 
+    if( flag&TCntrNode::NodeConnect )
     {
 	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","black","","","20") );
 	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );

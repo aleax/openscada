@@ -225,6 +225,9 @@ namespace VISION
 	    void cancel( );
 	    void textChanged( const QString& );
 
+	protected:
+	    bool event( QEvent * e );
+
 	private slots:
 	    void changed( );
 	    void applySlot( );

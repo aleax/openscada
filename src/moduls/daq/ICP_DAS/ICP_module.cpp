@@ -258,6 +258,8 @@ void TMdContr::prmEn( const string &id, bool val )
 
 void *TMdContr::Task( void *icntr )
 {
+    float wTm = 0;
+
     TMdContr &cntr = *(TMdContr*)icntr;
 
 #if OSC_DEBUG >= 2
@@ -265,9 +267,7 @@ void *TMdContr::Task( void *icntr )
 #endif
 
     cntr.endRunReq = false;
-    cntr.prcSt = true;
 
-    float wTm = 0;
     //> Init watchdog and get previous state
     if( cntr.mBus == 0 ) wTm = atof(cntr.prmLP("wTm").c_str());
 
@@ -290,6 +290,8 @@ void *TMdContr::Task( void *icntr )
 
 	    //> Watchdog timer process
 	    if( cntr.mBus == 0 && wTm > 0 ) { ResAlloc res( cntr.reqRes, true ); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
+
+	    cntr.prcSt = true;
 
 	    //> Calc next work time and sleep
 	    TSYS::taskSleep((long long)(1e9*cntr.period()));

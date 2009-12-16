@@ -38,6 +38,7 @@
 #include <QCheckBox>
 #include <QTimer>
 #include <QCalendarWidget>
+#include <QApplication>
 
 #include <tsys.h>
 
@@ -732,6 +733,25 @@ void TextEdit::cancelSlot( )
     setText(m_text);
 
     emit cancel();
+}
+
+bool TextEdit::event( QEvent * e )
+{
+    if( but_box && e->type() == QEvent::KeyRelease )
+    {
+	QKeyEvent *keyEvent = (QKeyEvent *)e;
+	if( (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier )
+	{
+	    but_box->button(QDialogButtonBox::Apply)->animateClick( );
+	    return true;
+	}
+	else if( keyEvent->key() == Qt::Key_Escape )
+	{
+	    but_box->button(QDialogButtonBox::Cancel)->animateClick( );
+	    return true;
+	}
+    }
+    return QWidget::event(e);
 }
 
 //****************************************

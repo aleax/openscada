@@ -134,10 +134,10 @@ void LineEdit::setType( LType tp )
 {
     if( tp == m_tp ) return;
 
-    //- Delete previous -
+    //> Delete previous
     if( tp >= 0 && ed_fld ) delete ed_fld;
 
-    //- Create new widget -
+    //> Create new widget
     switch( tp )
     {
 	case Text:
@@ -407,6 +407,25 @@ void TextEdit::btCancel( )
 {
     but_box->setVisible(false);
     emit cancel();
+}
+
+bool TextEdit::event( QEvent * e )
+{
+    if( but_box && e->type() == QEvent::KeyRelease )
+    {
+	QKeyEvent *keyEvent = (QKeyEvent *)e;
+	if( (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier )
+	{
+	    but_box->button(QDialogButtonBox::Apply)->animateClick( );
+	    return true;
+	}
+	else if( keyEvent->key() == Qt::Key_Escape )
+	{
+	    but_box->button(QDialogButtonBox::Cancel)->animateClick( );
+	    return true;
+	}
+    }
+    return QWidget::event(e);
 }
 
 //*************************************************

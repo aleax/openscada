@@ -174,7 +174,7 @@ void TController::stop( )
 
     mess_info(nodePath().c_str(),_("Stop controller!"));
 
-    //- Stop for children -
+    //> Stop for children
     stop_();
 
     run_st = false;

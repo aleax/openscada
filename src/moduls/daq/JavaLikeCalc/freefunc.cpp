@@ -463,6 +463,8 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg.append((char *)&rez->val().r_el,sizeof(double));
 	    break;
 	case Reg::String:
+	    if( rez->val().s_el->size() > 255 )
+		throw TError(nodePath().c_str(),_("String constant size is more 255 symbols."));
 	    prg+=(uint8_t)Reg::MviS;
 	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg+=(uint8_t)rez->val().s_el->size();
