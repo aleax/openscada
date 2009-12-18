@@ -1126,6 +1126,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if( iid == "messEmerg" && prms.size() >= 2 ){ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     if( iid == "system" && prms.size() >= 1 )
     {
+	if( prms.size() >= 2 && prms[1].getB() ) return system( prms[0].getS().c_str() );
 	FILE *fp = popen(prms[0].getS().c_str(),"r");
 	if( !fp ) return string("");
 

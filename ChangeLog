@@ -1,6 +1,7 @@
 2009-12-18 Roman
 - FIX:DAQ, DAQ.BlockCalc, DAQ.LogicLev: First call missing is fixed on redundant station.
     The redundant flag set to false, by default, and set to true only for redundanted controllers on it enabling.
+- SYS: User's API function "system" is expanded by second parameter 'noPipe'.
 
 
 2009-12-16 Roman
