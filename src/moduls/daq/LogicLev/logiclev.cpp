@@ -259,8 +259,7 @@ void *TMdContr::Task( void *icntr )
 	if( is_stop ) break;
 	TSYS::taskSleep( (long long)cntr.period()*1000000 );
 	if( cntr.endrun_req ) is_stop = true;
-
-	is_start = false;
+	if( !cntr.redntUse() ) is_start = false;
     }
 
     cntr.prc_st = false;

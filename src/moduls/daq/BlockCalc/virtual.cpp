@@ -417,8 +417,8 @@ void *Contr::Task( void *icontr )
 
 	TSYS::taskSleep((long long)cntr.period()*1000000);
 
-	if(cntr.endrun_req) is_stop = true;
-	is_start = false;
+	if( cntr.endrun_req ) is_stop = true;
+	if( !cntr.redntUse() ) is_start = false;
     }
 
     cntr.prc_st = false;

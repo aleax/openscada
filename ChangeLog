@@ -1,3 +1,8 @@
+2009-12-18 Roman
+- FIX:DAQ, DAQ.BlockCalc, DAQ.LogicLev: First call missing is fixed on redundant station.
+    The redundant flag set to false, by default, and set to true only for redundanted controllers on it enabling.
+
+
 2009-12-16 Roman
 - !!:SYS.Archive: Adaptive generic request to archives is made.
     For need period make archivator quality select. Prevent long time processin for big intervals.

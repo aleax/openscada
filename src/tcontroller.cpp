@@ -28,7 +28,7 @@
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(true),
+    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false),
     mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
 {
     mId = id_c;
@@ -132,7 +132,7 @@ void TController::load_( )
 
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
-    //- Load parameters if enabled -
+    //> Load parameters if enabled
     if( en_st )	LoadParmCfg( );
 }
 
@@ -140,7 +140,7 @@ void TController::save_( )
 {
     mess_info(nodePath().c_str(),_("Save controller's configs!"));
 
-    //- Update type controller bd record -
+    //> Update type controller bd record
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
 }
 
@@ -191,6 +191,8 @@ void TController::enable( )
 
 	//> Load parameters
 	LoadParmCfg( );
+
+	mRedntUse = (bool)redntMode();
     }
 
     bool enErr = false;
