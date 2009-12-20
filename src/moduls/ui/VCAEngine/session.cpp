@@ -1039,6 +1039,13 @@ SessWdg::~SessWdg( )
 
 }
 
+void SessWdg::preDisable( int flag )
+{
+    if( process() ) setProcess( false );
+
+    Widget::preDisable( flag );
+}
+
 void SessWdg::postEnable( int flag )
 {
     Widget::postEnable(flag);

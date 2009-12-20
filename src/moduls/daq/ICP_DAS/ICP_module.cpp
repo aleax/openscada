@@ -192,11 +192,19 @@ void TMdContr::start_( )
     {
 	if( mBus == 0 && Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
 
-	if( Open_Com( (mBus?mBus:1), mBaud, Data8Bit, NonParity, OneStopBit ) > 0 )
-	    throw TError( nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1) );
+	try
+	{
+	    if( Open_Com( (mBus?mBus:1), mBaud, Data8Bit, NonParity, OneStopBit ) > 0 )
+		throw TError( nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1) );
 
-	//> Start the gathering data task
-	SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt );
+	    //> Start the gathering data task
+	    SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt, 10 );
+	}
+	catch(TError err)
+	{
+	    if( mBus == 0 )	Close_SlotAll();
+	    throw;
+	}
     }
 }
 
@@ -545,7 +553,7 @@ void TMdPrm::getVals( )
 	    //> Check for I8017 init
 	    if( !((PrmsI8017*)extPrms)->init ) { ResAlloc res( pBusRes, true ); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
 	    //> Check for I8017 fast task start
-	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, TMdPrm::fastTask, this, &prcSt );
+	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, fastTask, this, &prcSt );
 	    //> Get values direct
 	    for( int i_v = 0; i_v < 8; i_v++ )
 		if( i_v >= ((PrmsI8017*)extPrms)->prmNum ) vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);
@@ -825,10 +833,10 @@ void *TMdPrm::fastTask( void *iprm )
     for( int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++ )
 	cnls.push_back( prm.vlAt(TSYS::strMess("i%d",i_c)) );
 
-    for( ;!prm.endRunReq && prm.owner().startStat(); ((PrmsI8017*)prm.extPrms)->curCnt++ )
+    for( ; !prm.endRunReq; ((PrmsI8017*)prm.extPrms)->curCnt++ )
     {
 	ResAlloc res( prm.pBusRes, true );
-	for( int i_c = 0; i_c < cnls.size(); i_c++ )
+	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
 	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);

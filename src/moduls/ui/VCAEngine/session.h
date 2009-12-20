@@ -217,6 +217,7 @@ class SessWdg : public Widget, public TValFunc
     protected:
 	//Methods
 	void postEnable( int flag );
+	void preDisable( int flag );
 
 	bool cntrCmdServ( XMLNode *opt );
 	bool cntrCmdGeneric( XMLNode *opt );

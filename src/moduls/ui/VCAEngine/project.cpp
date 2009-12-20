@@ -1309,9 +1309,9 @@ Page &PageWdg::ownerPage()
 
 void PageWdg::postEnable( int flag )
 {
-    //- Call parent method -
+    //> Call parent method
     Widget::postEnable(flag);
-    //- Set parent page for this widget -
+    //> Set parent page for this widget
     cfg("IDW").setS(ownerPage().path());
 }
 
@@ -1533,7 +1533,7 @@ string PageWdg::resourceGet( const string &id, string *mime )
 void PageWdg::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);

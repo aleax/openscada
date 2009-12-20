@@ -911,7 +911,7 @@ long TSYS::HZ()
     return sysconf(_SC_CLK_TCK);
 }
 
-void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr )
+void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm )
 {
     ResAlloc res(taskRes,false);
     if( mTasks.find(path) != mTasks.end() )	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
@@ -932,15 +932,15 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     pthread_create( &procPthr, &pthr_attr, start_routine, arg );
     pthread_attr_destroy(&pthr_attr);
 
+    if( startCntr && TSYS::eventWait( *startCntr, true, nodePath()+": "+path+": start", wtm ) )
+	throw TError( nodePath().c_str(), _("Task '%s' is not started!"), path.c_str() );
+
     res.request(true);
     mTasks[path] = STask( procPthr, policy, prior.__sched_priority );
     res.release();
-    
-    if( startCntr && TSYS::eventWait( *startCntr, true, nodePath()+": "+path+": start", 5 ) )
-	throw TError(nodePath().c_str(),_("Task '%s' is not started!"),path.c_str());
 }
 
-void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr )
+void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, int wtm )
 {
     ResAlloc res(taskRes,false);
     map<string,STask>::iterator it = mTasks.find(path);
@@ -951,7 +951,7 @@ void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr )
     if( endrunCntr ) *endrunCntr = true;
     pthread_kill( thr, SIGALRM );
 
-    if( startCntr && TSYS::eventWait( *startCntr, false, nodePath()+": "+path+": stop", 5 ) )
+    if( startCntr && TSYS::eventWait( *startCntr, false, nodePath()+": "+path+": stop", wtm ) )
 	throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
 
     pthread_join( thr, NULL );

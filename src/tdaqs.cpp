@@ -474,8 +474,8 @@ void *TDAQS::RdTask( void *param )
 		}
 		else if( cntr.at().redntRun( ) == "<optimal>" )
 		{
-		    vector<string> cls;
-		    daq.rdActCntrList(cls,true);
+		    vector<string> cls_lc;
+		    daq.rdActCntrList(cls_lc,true);
 		    bool remPresent = false;
 		    for( sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++ )
 			if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() )
@@ -484,7 +484,7 @@ void *TDAQS::RdTask( void *param )
 			    int aCntr = 0;
 			    for( map<string,bool>::iterator scit = sit->second.actCntr.begin(); scit != sit->second.actCntr.end(); scit++ )
 				if( scit->second ) aCntr++;
-			    if( (cls.size()-aCntr) > 1 && cit->second ) break;
+			    if( (cls_lc.size()-aCntr) > 1 && cit->second ) break;
 			}
 		    cntr.at().setRedntUse( sit != daq.mSt.end() || remPresent );
 		}

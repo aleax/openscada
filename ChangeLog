@@ -1,3 +1,9 @@
+2009-12-20 Roman
+- SYS: The timeout field is added to functions taskCreate() and taskDestroy().
+- FIX:DAQ.ICP_DAS: Fast module I-8017 processing is fixed.
+- FIX:UI.VCAEngine: The processed widgets of session disabling is added on time parent widget deletion.
+
+
 2009-12-18 Roman
 - FIX:DAQ, DAQ.BlockCalc, DAQ.LogicLev: First call missing is fixed on redundant station.
     The redundant flag set to false, by default, and set to true only for redundanted controllers on it enabling.

@@ -160,8 +160,8 @@ class TSYS : public TCntrNode
 	static long HZ( );
 
 	//> Tasks control
-	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL );
-	void taskDestroy( const string &path, bool *startCntr = NULL, bool *endrunCntr = NULL );
+	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL, int wtm = 5 );
+	void taskDestroy( const string &path, bool *startCntr = NULL, bool *endrunCntr = NULL, int wtm = 5 );
 
 	//Public system static methods
 	//> Current system time (usec)
