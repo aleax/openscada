@@ -37,7 +37,7 @@
 //* TModule                                       *
 //*************************************************
 const char *TModule::l_info[] =
-    {"Module","Name","Type","Source","Version","Author","Description","License"};
+    {"Modul","Name","Type","Source","Version","Author","Descript","License"};
 
 TModule::TModule( )
 {
@@ -119,7 +119,7 @@ string TModule::modInfo( const string &name )
 
 void TModule::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
