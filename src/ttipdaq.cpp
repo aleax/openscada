@@ -64,8 +64,8 @@ void TTipDAQ::postEnable( int flag )
     if( redntAllow( ) )
     {
 	fldAdd( new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selected,"1","0",
-	    (TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)+";"+TSYS::int2str(TController::Symmetric)).c_str(),
-	    _("Off;Asymmetric;Symmetric")) );
+	    (TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)/*+";"+TSYS::int2str(TController::Symmetric)*/).c_str(),
+	    _("Off;Asymmetric"/*;Symmetric"*/)) );
 	fldAdd( new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>") );
     }
 }

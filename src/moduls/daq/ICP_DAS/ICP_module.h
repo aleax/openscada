@@ -104,7 +104,6 @@ class TMdPrm : public TParamContr
 
 	void	*extPrms;
 	float	wTm;
-	Res	pBusRes;	//Parallel bus devices resource
 };
 
 //******************************************************
@@ -143,7 +142,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res, reqRes;			//Resource for enable params and request values
+	Res	en_res, reqRes, pBusRes;	//Resource for enable params, request values and parallel bus devices
 	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...

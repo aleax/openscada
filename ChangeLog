@@ -1,3 +1,9 @@
+2009-12-21 Roman
+- DAQ: Not realised redundant mode "Symmetric" is commented.
+- FIX:DAQ.ICP_DAS: The parallel bus' devices resource is merge for use common resource to access the parallel bus.
+    Deletion parameter's attributes is made chekable to already presented self attributes.
+
+
 2009-12-21 Maxim
 - DB.SQLite, DB.MySQL, DB.FireBird,DB.DBF: Some fixes in the English translation variant are made.
 

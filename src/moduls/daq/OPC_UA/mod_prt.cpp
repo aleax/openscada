@@ -243,8 +243,41 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    string clntNonce( rd, mSz ); rd += mSz;		//ClientNonce
 	    int32_t reqLifeTm = *(int32_t*)rd; rd += 4;		//RequestedLifetime
 
+	    /*printf( "TEST 00: Open SecureChannel request: prtVer = %d, rBufSz = %d, wBufSz = %d, mMsgSz = %d, mChnk = %d, EndpntURL = '%s'\n", 
+		prtVer, rBufSz, wBufSz, mMsgSz, mChnk, EndpntURL.c_str() );*/
+
 	    //> Prepare respond message
-	    
+	    answer.reserve( 200 );
+	    answer.append( "OPNF" );							//OpenSecureChannel message type
+	    answer.append( (char*)&mSz, sizeof(mSz) );					//Message size
+	    uint32_t secChnId = 4;
+	    answer.append( (char*)&secChnId, sizeof(secChnId) );			//Secure channel identifier
+	    mSz = secPlcURI.size();
+	    answer.append( (char*)&mSz, sizeof(mSz) );					//Security policy URI
+	    answer.append( secPlcURI );
+	    answer.append( (char*)&senderCertLength, sizeof(senderCertLength) );	//SenderCertificateLength
+	    answer.append( (char*)&recCertThbLength, sizeof(recCertThbLength) );	//ReceiverCertificateThumbprintLength
+	    answer.append( (char*)&secNumb, sizeof(secNumb) );				//Sequence number
+	    answer.append( (char*)&reqId, sizeof(reqId) );				//RequestId
+											//> Extension Object
+	    eoTpId = 0x01C10001; answer.append( (char*)&eoTpId, sizeof(eoTpId) );	//TypeId (449 - NodeId)
+											//>> Body
+											//>>> RespondHeader
+	    tmStamp = 10*(TSYS::curTime()+11644473600000000);
+	    answer.append( (char*)&tmStamp, sizeof(tmStamp) );				//timestamp
+	    answer.append( (char*)&rqHndl, sizeof(rqHndl) );				//requestHandle
+	    int32_t stCode = 0;
+	    answer.append( (char*)&stCode, sizeof(stCode) );				//StatusCode
+	    answer.append( (char)0 );							//serviceDiagnostics
+	    /*
+ff ff ff ff- stringTable
+00 00 00 - Extensible parameter.NodeId (0)
+00 00 00 00- ServerProtocolVersion
+04 00 00 00 - Secure channel identifier
+01 00 00 00- TokenId 
+50 43 45 7c 9b 7a ca 01- CreatedAt
+c0 27 09 00- RevisedLifeTime (600000)
+01 00 00 00 01- nonce*/
 	}
     }
 

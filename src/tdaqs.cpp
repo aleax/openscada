@@ -577,8 +577,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root","DAQ",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Started"),RWRWR_,"root","DAQ",1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redundant"),RWRWR_,"root","DAQ",4,"tp","dec","dest","select",
-		    "sel_id",(TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)+";"+TSYS::int2str(TController::Symmetric)).c_str(),
-		    "sel_list",_("Off;Asymmetric;Symmetric"));
+		    "sel_id",(TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)/*+";"+TSYS::int2str(TController::Symmetric)*/).c_str(),
+		    "sel_list",_("Off;Asymmetric"/*;Symmetric"*/));
 		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Preferable run"),RWRWR_,"root","DAQ",4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
 		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remoted"),R_R_R_,"root","DAQ",1,"tp","bool");
 	    }

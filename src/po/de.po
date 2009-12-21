@@ -23,8 +23,8 @@
 #: tdaqs.cpp:176 tdaqs.cpp:191 tdaqs.cpp:392 tdaqs.cpp:634 tdaqs.cpp:635
 #: tdaqs.cpp:636 tdaqs.cpp:637 tdaqs.cpp:638 tdaqs.cpp:639 tdaqs.cpp:682
 #: tdaqs.cpp:683 tdaqs.cpp:684 tdaqs.cpp:685 tdaqs.cpp:686 tdaqs.cpp:687
-#: telem.cpp:193 telem.cpp:215 telem.cpp:220 telem.cpp:226 telem.cpp:242
-#: telem.cpp:297 telem.cpp:505 tfunction.cpp:262 tfunction.cpp:263
+#: telem.cpp:190 telem.cpp:212 telem.cpp:217 telem.cpp:223 telem.cpp:239
+#: telem.cpp:294 telem.cpp:502 tfunction.cpp:262 tfunction.cpp:263
 #: tfunction.cpp:264 tfunction.cpp:265 tfunction.cpp:266 tfunction.cpp:267
 #: tfunction.cpp:513 tmess.cpp:48 tmess.cpp:134 tmodschedul.cpp:434
 #: tmodschedul.cpp:435 tmodschedul.cpp:436 tmodschedul.cpp:437 tmodule.cpp:127
@@ -59,7 +59,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 11:05+0200\n"
+"POT-Creation-Date: 2009-12-21 17:41+0200\n"
 "PO-Revision-Date: 2009-08-26 12:03+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -289,7 +289,7 @@ msgstr "Nachrichtenkategorien"
 
 #: tarchives.cpp:55 tarchives.cpp:57 tarchives.cpp:75 tarchives.cpp:78
 #: tarchval.cpp:1767 tbds.cpp:37 tbds.cpp:45 tbds.cpp:738 tbds.cpp:750
-#: telem.cpp:511 tfunction.cpp:232 tfunction.cpp:237 tprmtmpl.cpp:240
+#: telem.cpp:508 tfunction.cpp:232 tfunction.cpp:237 tprmtmpl.cpp:240
 #: tprmtmpl.cpp:523 tsecurity.cpp:363
 msgid "100"
 msgstr ""
@@ -368,7 +368,7 @@ msgstr ""
 msgid "Period archiving (sec)"
 msgstr "Zeitintervall für die Archivierung (Sek)"
 
-#: tarchives.cpp:67 tdaqs.cpp:58 tdaqs.cpp:60 telem.cpp:511 tfunction.cpp:232
+#: tarchives.cpp:67 tdaqs.cpp:58 tdaqs.cpp:60 telem.cpp:508 tfunction.cpp:232
 #: tfunction.cpp:237 tprmtmpl.cpp:240
 msgid "4"
 msgstr ""
@@ -1130,7 +1130,7 @@ msgstr "Nachrichtarchiv"
 #: tbds.cpp:742 tbds.cpp:750 tbds.cpp:882 tcontroller.cpp:377
 #: tcontroller.cpp:378 tcontroller.cpp:379 tcontroller.cpp:380
 #: tcontroller.cpp:397 tcontroller.cpp:398 tdaqs.cpp:559 tdaqs.cpp:560
-#: tdaqs.cpp:561 tdaqs.cpp:562 tdaqs.cpp:563 tdaqs.cpp:588 telem.cpp:500
+#: tdaqs.cpp:561 tdaqs.cpp:562 tdaqs.cpp:563 tdaqs.cpp:588 telem.cpp:497
 #: tfunction.cpp:197 tfunction.cpp:200 tfunction.cpp:201 tfunction.cpp:202
 #: tfunction.cpp:217 tfunction.cpp:225 tfunction.cpp:242 tfunction.cpp:243
 #: tmodschedul.cpp:399 tmodschedul.cpp:400 tmodschedul.cpp:402
@@ -1195,8 +1195,8 @@ msgstr "Maximale Anzahl der Nachrichten"
 #: tdaqs.cpp:561 tdaqs.cpp:562 tdaqs.cpp:563 tdaqs.cpp:566 tdaqs.cpp:567
 #: tdaqs.cpp:568 tdaqs.cpp:569 tdaqs.cpp:570 tdaqs.cpp:571 tdaqs.cpp:573
 #: tdaqs.cpp:576 tdaqs.cpp:577 tdaqs.cpp:578 tdaqs.cpp:579 tdaqs.cpp:582
-#: tdaqs.cpp:583 tdaqs.cpp:587 tdaqs.cpp:588 telem.cpp:505 telem.cpp:510
-#: telem.cpp:513 telem.cpp:514 telem.cpp:515 tfunction.cpp:197
+#: tdaqs.cpp:583 tdaqs.cpp:587 tdaqs.cpp:588 telem.cpp:502 telem.cpp:507
+#: telem.cpp:510 telem.cpp:511 telem.cpp:512 tfunction.cpp:197
 #: tfunction.cpp:200 tfunction.cpp:201 tfunction.cpp:202 tfunction.cpp:208
 #: tfunction.cpp:209 tfunction.cpp:210 tfunction.cpp:211 tfunction.cpp:212
 #: tfunction.cpp:213 tfunction.cpp:217 tfunction.cpp:231 tfunction.cpp:234
@@ -1243,7 +1243,7 @@ msgstr ""
 #: tarchval.cpp:1732 tarchval.cpp:1752 tarchval.cpp:1767 tarchval.cpp:1768
 #: tarchval.cpp:1769 tarchval.cpp:1770 tarchval.cpp:2275 tarchval.cpp:2285
 #: tbds.cpp:895 tdaqs.cpp:560 tdaqs.cpp:561 tdaqs.cpp:562 tdaqs.cpp:569
-#: tdaqs.cpp:579 telem.cpp:513 tfunction.cpp:234 tfunction.cpp:242
+#: tdaqs.cpp:579 telem.cpp:510 tfunction.cpp:234 tfunction.cpp:242
 #: tmodschedul.cpp:404 tprmtmpl.cpp:234 tprmtmpl.cpp:249 tprmtmpl.cpp:252
 #: tprmtmpl.cpp:254 tprmtmpl.cpp:257 tsys.cpp:1241 tsys.cpp:1249 tsys.cpp:1264
 #: ttransports.cpp:864
@@ -1317,7 +1317,7 @@ msgstr "Kategoriemuster"
 #: tbds.cpp:882 tbds.cpp:895 tcontroller.cpp:377 tcontroller.cpp:380
 #: tcontroller.cpp:397 tcontroller.cpp:398 tdaqs.cpp:559 tdaqs.cpp:566
 #: tdaqs.cpp:567 tdaqs.cpp:571 tdaqs.cpp:576 tdaqs.cpp:577 tdaqs.cpp:582
-#: tdaqs.cpp:588 telem.cpp:505 telem.cpp:510 tfunction.cpp:200
+#: tdaqs.cpp:588 telem.cpp:502 telem.cpp:507 tfunction.cpp:200
 #: tfunction.cpp:201 tfunction.cpp:202 tfunction.cpp:208 tfunction.cpp:209
 #: tfunction.cpp:210 tfunction.cpp:211 tfunction.cpp:213 tfunction.cpp:231
 #: tfunction.cpp:237 tmodschedul.cpp:399 tmodschedul.cpp:400
@@ -1392,7 +1392,7 @@ msgstr "Archivar"
 #: tarchives.cpp:761 tarchives.cpp:1083 tarchval.cpp:1718 tarchval.cpp:1727
 #: tarchval.cpp:1728 tarchval.cpp:1730 tarchval.cpp:1754 tarchval.cpp:2266
 #: tcontroller.cpp:380 tcontroller.cpp:388 tcontroller.cpp:397 tdaqs.cpp:566
-#: tdaqs.cpp:579 tdaqs.cpp:582 telem.cpp:505 tprmtmpl.cpp:249 tprmtmpl.cpp:252
+#: tdaqs.cpp:579 tdaqs.cpp:582 telem.cpp:502 tprmtmpl.cpp:249 tprmtmpl.cpp:252
 #: tprmtmpl.cpp:254 tprmtmpl.cpp:257 tprmtmpl.cpp:262 tprmtmpl.cpp:516
 #: tsecurity.cpp:364 tsecurity.cpp:513 tsys.cpp:1237 tsys.cpp:1244
 #: ttransports.cpp:432 ttransports.cpp:667 ttransports.cpp:676
@@ -1403,7 +1403,7 @@ msgstr ""
 #: tarchives.cpp:761 tarchives.cpp:1083 tarchval.cpp:1718 tarchval.cpp:1727
 #: tarchval.cpp:1728 tarchval.cpp:1730 tarchval.cpp:1754 tarchval.cpp:2266
 #: tcontroller.cpp:380 tcontroller.cpp:388 tcontroller.cpp:397 tdaqs.cpp:566
-#: tdaqs.cpp:579 tdaqs.cpp:582 telem.cpp:505 tprmtmpl.cpp:249 tprmtmpl.cpp:252
+#: tdaqs.cpp:579 tdaqs.cpp:582 telem.cpp:502 tprmtmpl.cpp:249 tprmtmpl.cpp:252
 #: tprmtmpl.cpp:254 tprmtmpl.cpp:257 tprmtmpl.cpp:262 tprmtmpl.cpp:516
 #: tsecurity.cpp:364 tsecurity.cpp:513 tsys.cpp:1237 tsys.cpp:1244
 #: ttransports.cpp:432 ttransports.cpp:667 ttransports.cpp:676
@@ -1581,7 +1581,7 @@ msgid "Options help"
 msgstr "Optionen Hilfe"
 
 #: tarchives.cpp:779 tarchives.cpp:1092 tarchval.cpp:1725 tarchval.cpp:2273
-#: tbds.cpp:512 tbds.cpp:738 tbds.cpp:750 tdaqs.cpp:588 telem.cpp:511
+#: tbds.cpp:512 tbds.cpp:738 tbds.cpp:750 tdaqs.cpp:588 telem.cpp:508
 #: tfunction.cpp:202 tfunction.cpp:232 tfunction.cpp:237 tmodschedul.cpp:414
 #: tprmtmpl.cpp:240 tprmtmpl.cpp:523 tprotocols.cpp:79 tsecurity.cpp:247
 #: tspecials.cpp:74 tsys.cpp:1267 ttransports.cpp:438 ttransports.cpp:674
@@ -1597,7 +1597,7 @@ msgid "90"
 msgstr ""
 
 #: tarchives.cpp:779 tarchives.cpp:1092 tarchval.cpp:1725 tarchval.cpp:2273
-#: tbds.cpp:512 tbds.cpp:738 tbds.cpp:750 tdaqs.cpp:588 telem.cpp:511
+#: tbds.cpp:512 tbds.cpp:738 tbds.cpp:750 tdaqs.cpp:588 telem.cpp:508
 #: tfunction.cpp:202 tfunction.cpp:232 tfunction.cpp:237 tmodschedul.cpp:414
 #: tprmtmpl.cpp:240 tprmtmpl.cpp:245 tprmtmpl.cpp:263 tprmtmpl.cpp:523
 #: tprotocols.cpp:79 tsecurity.cpp:247 tspecials.cpp:74 tsys.cpp:1267
@@ -1804,7 +1804,7 @@ msgstr ""
 #: tarchives.cpp:1077 tarchval.cpp:1710 tarchval.cpp:2259 tbds.cpp:722
 #: tbds.cpp:878 tcntrnode.cpp:276 tcntrnode.cpp:489 tcntrnode.cpp:490
 #: tcntrnode.cpp:707 tcontroller.cpp:371 tdaqs.cpp:373 tdaqs.cpp:424
-#: telem.cpp:500 tfunction.cpp:193 tmodschedul.cpp:142 tmodule.cpp:126
+#: telem.cpp:497 tfunction.cpp:193 tmodschedul.cpp:142 tmodule.cpp:126
 #: tparamcontr.cpp:172 tprmtmpl.cpp:228 tprmtmpl.cpp:508 tsecurity.cpp:357
 #: tsecurity.cpp:509 tsubsys.cpp:130 tsys.cpp:588 tsys.cpp:621 tsys.cpp:1155
 #: tsys.cpp:1217 ttransports.cpp:660 ttransports.cpp:842 tuis.cpp:127
@@ -1852,7 +1852,7 @@ msgstr "Aktiv"
 #: tarchval.cpp:1733 tarchval.cpp:1734 tarchval.cpp:1742 tarchval.cpp:1743
 #: tarchval.cpp:1756 tarchval.cpp:2264 tarchval.cpp:2277 tbds.cpp:552
 #: tbds.cpp:729 tbds.cpp:742 tbds.cpp:895 tcontroller.cpp:378
-#: tcontroller.cpp:379 tdaqs.cpp:568 tdaqs.cpp:578 tdaqs.cpp:583 telem.cpp:515
+#: tcontroller.cpp:379 tdaqs.cpp:568 tdaqs.cpp:578 tdaqs.cpp:583 telem.cpp:512
 #: tfunction.cpp:197 tfunction.cpp:212 tfunction.cpp:217 tfunction.cpp:236
 #: tmodschedul.cpp:411 tparamcontr.cpp:179 tprmtmpl.cpp:233 tprmtmpl.cpp:515
 #: tsecurity.cpp:369 tspecials.cpp:99 tsys.cpp:1239 tsys.cpp:1250
@@ -1930,7 +1930,7 @@ msgid "/prm/cfg/nm"
 msgstr ""
 
 #: tarchives.cpp:1091 tarchval.cpp:1724 tarchval.cpp:1752 tarchval.cpp:2272
-#: tbds.cpp:737 telem.cpp:501 telem.cpp:505 tprmtmpl.cpp:239 tprmtmpl.cpp:522
+#: tbds.cpp:737 telem.cpp:498 telem.cpp:502 tprmtmpl.cpp:239 tprmtmpl.cpp:522
 #: tsecurity.cpp:362 tsecurity.cpp:512 tsys.cpp:1244 tsys.cpp:1249
 #: ttransports.cpp:673 ttransports.cpp:855
 msgid "len"
@@ -2046,8 +2046,8 @@ msgstr "Gittermodus unterstützt nicht das Einfügen alte Werte."
 msgid "Set too old value to buffer."
 msgstr "Einfügen von sehr alten Werten in den Speicher."
 
-#: tarchval.cpp:996 tdaqs.cpp:226 tdaqs.cpp:580 telem.cpp:200 telem.cpp:204
-#: telem.cpp:208 telem.cpp:212 telem.cpp:224 tprmtmpl.cpp:250 tprmtmpl.cpp:253
+#: tarchval.cpp:996 tdaqs.cpp:226 tdaqs.cpp:580 telem.cpp:197 telem.cpp:201
+#: telem.cpp:205 telem.cpp:209 telem.cpp:221 tprmtmpl.cpp:250 tprmtmpl.cpp:253
 #: tprmtmpl.cpp:255 tprmtmpl.cpp:258 tsecurity.cpp:489 tsecurity.cpp:495
 #: ttipdaq.cpp:67
 msgid ";"
@@ -2230,7 +2230,7 @@ msgstr ""
 
 #: tarchval.cpp:1731 tarchval.cpp:1744 tarchval.cpp:1753 tarchval.cpp:2265
 #: tarchval.cpp:2274 tarchval.cpp:2284 tbds.cpp:895 tdaqs.cpp:563
-#: tdaqs.cpp:570 telem.cpp:514 tfunction.cpp:235 tfunction.cpp:243
+#: tdaqs.cpp:570 telem.cpp:511 tfunction.cpp:235 tfunction.cpp:243
 #: tsys.cpp:1230 tsys.cpp:1231 ttransports.cpp:863
 msgid "real"
 msgstr ""
@@ -3733,13 +3733,13 @@ msgstr ""
 msgid "sel_id"
 msgstr ""
 
-#: tdaqs.cpp:581 telem.cpp:506 tprmtmpl.cpp:251 tprmtmpl.cpp:253
+#: tdaqs.cpp:581 telem.cpp:503 tprmtmpl.cpp:251 tprmtmpl.cpp:253
 #: tprmtmpl.cpp:256 tprmtmpl.cpp:259 ttransports.cpp:864
 msgid "sel_list"
 msgstr ""
 
 #: tdaqs.cpp:581 ttipdaq.cpp:68
-msgid "Off;Asymmetric;Symmetric"
+msgid "Off;Asymmetric"
 msgstr ""
 
 #: tdaqs.cpp:582 tdaqs.cpp:686
@@ -3816,77 +3816,77 @@ msgstr ""
 msgid "prefRun"
 msgstr ""
 
-#: telem.cpp:65 telem.cpp:77 telem.cpp:93 telem.cpp:114
+#: telem.cpp:62 telem.cpp:74 telem.cpp:90 telem.cpp:111
 msgid "Elem"
 msgstr "Element"
 
-#: telem.cpp:65 telem.cpp:114
+#: telem.cpp:62 telem.cpp:111
 msgid "Id error!"
 msgstr "Fehler des Bezeichners!"
 
-#: telem.cpp:77
+#: telem.cpp:74
 msgid "The element container is already attached!"
 msgstr "Elementencontainer ist schon eingeschaltet!"
 
-#: telem.cpp:93 tvalue.cpp:136
+#: telem.cpp:90 tvalue.cpp:136
 #, c-format
 msgid "Element <%s> is not present!"
 msgstr "Element <%s> ist nicht vorhanden!"
 
-#: telem.cpp:162
+#: telem.cpp:159
 #, c-format
 msgid "%d.%d"
 msgstr ""
 
-#: telem.cpp:307 telem.cpp:314 telem.cpp:321 telem.cpp:328 telem.cpp:334
-#: telem.cpp:410 telem.cpp:425 telem.cpp:440 telem.cpp:455
+#: telem.cpp:304 telem.cpp:311 telem.cpp:318 telem.cpp:325 telem.cpp:331
+#: telem.cpp:407 telem.cpp:422 telem.cpp:437 telem.cpp:452
 msgid "Field"
 msgstr "Feld"
 
-#: telem.cpp:307
+#: telem.cpp:304
 msgid "Field is not string."
 msgstr "Feld ist kein Text."
 
-#: telem.cpp:314
+#: telem.cpp:311
 msgid "Field is not integer."
 msgstr "Feld ist keine Ganzzahl."
 
-#: telem.cpp:321
+#: telem.cpp:318
 msgid "Field is not real."
 msgstr "Feld ist keine reele Zahl."
 
-#: telem.cpp:328
+#: telem.cpp:325
 msgid "Field is not boolean."
 msgstr "Feld ist nicht Logisch."
 
-#: telem.cpp:334
+#: telem.cpp:331
 msgid "Field is not select type!"
 msgstr "Feld ist nicht ausgewählter Typ!"
 
-#: telem.cpp:403 telem.cpp:418 telem.cpp:433 telem.cpp:448
+#: telem.cpp:400 telem.cpp:415 telem.cpp:430 telem.cpp:445
 msgid "Empty"
 msgstr "Leer"
 
-#: telem.cpp:410
+#: telem.cpp:407
 #, c-format
 msgid "Select error! Val: <%s>."
 msgstr "Auswahlfehler! Wert: <%s>."
 
-#: telem.cpp:425 telem.cpp:455
+#: telem.cpp:422 telem.cpp:452
 #, c-format
 msgid "Select error! Val: <%d>."
 msgstr "Auswahlfehler! Wert: <%d>."
 
-#: telem.cpp:440
+#: telem.cpp:437
 #, c-format
 msgid "Select error! Val: <%f>."
 msgstr "Auswahlfehler! Wert: <%f>."
 
-#: telem.cpp:513
+#: telem.cpp:510
 msgid "hex"
 msgstr ""
 
-#: telem.cpp:513
+#: telem.cpp:510
 msgid "oct"
 msgstr ""
 

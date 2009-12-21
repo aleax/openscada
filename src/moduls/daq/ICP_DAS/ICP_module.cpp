@@ -190,7 +190,11 @@ void TMdContr::start_( )
 {
     if( !prcSt )
     {
-	if( mBus == 0 && Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
+	if( mBus == 0 )
+	{ 
+	    ResAlloc res( pBusRes, true );
+	    if( Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
+	}
 
 	try
 	{
@@ -217,7 +221,7 @@ void TMdContr::stop_( )
 
 	Close_Com( (mBus?mBus:1) );
 
-	if( mBus == 0 )	Close_SlotAll();
+	if( mBus == 0 )	{ ResAlloc res( pBusRes, true ); Close_SlotAll(); }
     }
 }
 
@@ -424,9 +428,14 @@ void TMdPrm::enable()
     loadExtPrms( );
 
     //> Delete DAQ parameter's attributes
-    while( p_el.fldSize() > 0 )
+    for( int i_f = 0; i_f < p_el.fldSize(); i_f++ )
     {
-	try{ p_el.fldDel(0); }
+	if( atoi(p_el.fldAt(i_f).reserve().c_str()) == modTp ) continue;
+	try
+	{
+	    p_el.fldDel(i_f);
+	    i_f--;
+	}
 	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
@@ -436,33 +445,33 @@ void TMdPrm::enable()
 	case 0x8017:
 	    for( int i_i = 0; i_i < 8; i_i++ )
 	    {
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    }
 	    break;
 	case 0x8042:
 	    for( int i_i = 0; i_i < 16; i_i++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    for( int i_o = 0; i_o < 16; i_o++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    break;
 	case 0x87019:
-	    p_el.fldAdd( new TFld("cvct",_("Cold-Junction Compensation(CJC) temperature"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+	    p_el.fldAdd( new TFld("cvct",_("Cold-Junction Compensation(CJC) temperature"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    for( int i_i = 0; i_i < 8; i_i++ )
 	    {
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    }
 	    break;
 	case 0x87024:
 	    for( int i_o = 0; i_o < 4; i_o++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    break;
 	case 0x87057:
 	    for( int i_o = 0; i_o < 16; i_o++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
 	    break;
 	default: break;
     }
@@ -551,7 +560,7 @@ void TMdPrm::getVals( )
 	case 0x8017:
 	{
 	    //> Check for I8017 init
-	    if( !((PrmsI8017*)extPrms)->init ) { ResAlloc res( pBusRes, true ); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
+	    if( !((PrmsI8017*)extPrms)->init ) { ResAlloc res( owner().pBusRes, true ); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
 	    //> Check for I8017 fast task start
 	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, fastTask, this, &prcSt );
 	    //> Get values direct
@@ -559,7 +568,7 @@ void TMdPrm::getVals( )
 		if( i_v >= ((PrmsI8017*)extPrms)->prmNum ) vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);
 		else if( !((PrmsI8017*)extPrms)->fastPer )
 		{
-		    ResAlloc res( pBusRes, true );
+		    ResAlloc res( owner().pBusRes, true );
 		    I8017_SetChannelGainMode(modSlot,i_v,((PrmsI8017*)extPrms)->cnlMode[i_v],0);
 		    vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(modSlot), 0, true );
 		}
@@ -572,10 +581,13 @@ void TMdPrm::getVals( )
 	}
 	case 0x8042:
 	{
-	    ResAlloc res( pBusRes, true );
+	    ResAlloc res( owner().pBusRes, true );
 	    int c_vl = DI_16(modSlot);
+	    res.release();
 	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( !((c_vl>>i_v)&0x01), 0, true );
+	    res.request(true);
 	    c_vl = DO_16_RB(modSlot);
+	    res.release();
 	    for( int o_v = 0; o_v < 16; o_v++ ) vlAt(TSYS::strMess("o%d",o_v)).at().setB( (c_vl>>o_v)&0x01, 0, true );
 	    break;
 	}
@@ -719,7 +731,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 		if( vlAt(TSYS::strMess("ha%d",i_v)).at().getB() == true )	hvl |= 1;
 		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
 	    }
-	    ResAlloc res( pBusRes, true );
+	    ResAlloc res( owner().pBusRes, true );
 	    I8017_SetLed(modSlot,(lvl<<8)|hvl);
 	    break;
 	}
@@ -751,7 +763,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    bool vl = valo.getB(0,true);
 	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
 
-	    ResAlloc res( pBusRes, true );
+	    ResAlloc res( owner().pBusRes, true );
 	    DO_16( modSlot, vl ? (DO_16_RB(modSlot) | 0x01<<atoi(valo.name().c_str()+1)) :
 				 (DO_16_RB(modSlot) & ~(0x01<<atoi(valo.name().c_str()+1))) );
 	    break;
@@ -835,7 +847,7 @@ void *TMdPrm::fastTask( void *iprm )
 
     for( ; !prm.endRunReq; ((PrmsI8017*)prm.extPrms)->curCnt++ )
     {
-	ResAlloc res( prm.pBusRes, true );
+	ResAlloc res( prm.owner().pBusRes, true );
 	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
