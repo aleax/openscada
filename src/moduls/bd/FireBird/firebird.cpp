@@ -35,7 +35,7 @@
 #define VER_TYPE	VER_BD
 #define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"DB modul. Allow support of the DB FireBird."
+#define DESCRIPTION	"DB module. Provides support of the DB FireBird."
 #define LICENSE		"GPL"
 //******************************************************************************
 

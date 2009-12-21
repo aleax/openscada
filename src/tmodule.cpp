@@ -37,7 +37,7 @@
 //* TModule                                       *
 //*************************************************
 const char *TModule::l_info[] =
-    {"Modul","Name","Type","Source","Version","Author","Descript","License"};
+    {"Module","Name","Type","Source","Version","Author","Description","License"};
 
 TModule::TModule( )
 {

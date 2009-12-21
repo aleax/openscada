@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-06 17:49+0300\n"
+"POT-Creation-Date: 2009-11-30 13:28+0200\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -39,7 +39,7 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: my_sql.cpp:41
-msgid "BD modul. Allow support of the BD MySQL."
+msgid "BD module. Provides support of the BD MySQL."
 msgstr "Модуль БД. Предоставляет поддержку БД MySQL."
 
 #: my_sql.cpp:42

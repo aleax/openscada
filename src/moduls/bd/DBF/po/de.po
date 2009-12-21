@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:30+0300\n"
+"POT-Creation-Date: 2009-11-30 13:26+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -48,7 +48,7 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko "
 
 #: dbf_mod.cpp:45
-msgid "BD modul. Allow support of the *.dbf files, version 3.0."
+msgid "BD module. Provides support of the *.dbf files, version 3.0."
 msgstr "Modul unterstützt die *.dbf Datenbank Version 3.0."
 
 #: dbf_mod.cpp:46

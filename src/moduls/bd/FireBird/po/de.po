@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:31+0300\n"
+"POT-Creation-Date: 2009-11-30 13:43+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -41,7 +41,7 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko "
 
 #: firebird.cpp:38
-msgid "DB modul. Allow support of the DB FireBird."
+msgid "DB module. Provides support of the DB FireBird."
 msgstr "Modul unterstützt die FireBird Datenbank."
 
 #: firebird.cpp:39

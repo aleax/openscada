@@ -1,3 +1,7 @@
+2009-12-21 Maxim
+- DB.SQLite, DB.MySQL, DB.FireBird,DB.DBF: Some fixes in the English translation variant are made.
+
+
 2009-12-20 Roman
 - SYS: The timeout field is added to functions taskCreate() and taskDestroy().
 - FIX:DAQ.ICP_DAS: Fast module I-8017 processing is fixed.
