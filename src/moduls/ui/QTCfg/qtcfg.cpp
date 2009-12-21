@@ -784,7 +784,7 @@ void ConfApp::about( )
     snprintf(buf,sizeof(buf),_(
 	"%s v%s.\n%s\nAutor: %s\nLicense: %s\n\n"
 	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
-	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Descript").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
+	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
 	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE );
 
     QMessageBox::about(this,windowTitle(),buf);

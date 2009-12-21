@@ -429,7 +429,7 @@ bool WinControl::callQTModule( const string &nm )
 	act_1->setObjectName(list[i_l].c_str());
 	//act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
 	act_1->setToolTip(qt_mod.at().modName().c_str());
-	act_1->setWhatsThis(qt_mod.at().modInfo("Descript").c_str());
+	act_1->setWhatsThis(qt_mod.at().modInfo("Description").c_str());
 	QObject::connect(act_1, SIGNAL(activated()), this, SLOT(callQTModule()));
 
 	if( toolBar ) toolBar->addAction(act_1);
