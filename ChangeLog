@@ -1,3 +1,13 @@
+2009-12-25 Roman
+- DAQ:Redundant controllers' status gate is added. Include error code and message.
+- FIX:DAQ:A controller DB values copy prevent is added.
+- FIX:DAQ:The redundant policy "<Optimal>" is fixed.
+- UI.Vision, UI.WebVision: The 3px margin is added to horisontal labels of primitive "Diagram".
+- UI.Vision: Font rise for message of access denid to page view is added.
+- UI.Vision: The style display status field is hide for no one styles present.
+- FIX:Archive: Access to archive values from redundant station for no bounded arrays is fixed.
+
+
 2009-12-21 Roman
 - DAQ: Not realised redundant mode "Symmetric" is commented.
 - FIX:DAQ.ICP_DAS: The parallel bus' devices resource is merge for use common resource to access the parallel bus.

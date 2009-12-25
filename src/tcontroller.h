@@ -129,6 +129,7 @@ class TController : public TCntrNode, public TConfig
 	bool	&mAStart;
 
 	string	mDB;
+	ResString mRedntSt;
 
 	unsigned mPrm		: 2;
 	unsigned mRedntUse	: 1;

@@ -2427,6 +2427,7 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 	{
 	    long long firstEval = 0, curEval;
 	    long long cbeg = buf.begin(), lastHole = 0;
+	    iend = buf.end();
 	    string lstStat;
 	    XMLNode req("get");
 	    do

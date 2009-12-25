@@ -4841,7 +4841,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //>>> Draw generic grid line
 	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
-	    int begMarkBrd = -1;
+	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX+tArW;
 	    if( sclHor&0x2 && mrkHeight )
 	    {
@@ -4905,7 +4905,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			{
 			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str());
 			    endPosTm = tpos+wdth;
@@ -4916,7 +4916,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			{
 			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str());
 			    endPosDt = tpos+wdth;
@@ -5228,7 +5228,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    //>>> Draw generic grid line
 	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
-	    int begMarkBrd = -1;
+	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX+tArW;
 	    if( sclHor&0x2 && mrkHeight )
 	    {
@@ -5252,7 +5252,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
-		    if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+		    if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str());
 		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
 		}

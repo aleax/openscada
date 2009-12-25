@@ -73,7 +73,7 @@ void TTipDAQ::postEnable( int flag )
 void TTipDAQ::modStart( )
 {
     vector<string> lst;
-    //- Start all controllers -
+    //> Start all controllers
     list(lst);
     for(int i_l=0; i_l < lst.size(); i_l++)
 	if( at(lst[i_l]).at().toStart() )
@@ -120,7 +120,7 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 
     //> Add type
     int i_t = paramt.size();
-    paramt.push_back(new TTipParam(id, name, n_db) );
+    paramt.push_back( new TTipParam(id,name,n_db) );
     //> Add structure fields
     paramt[i_t]->fldAdd( new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
     paramt[i_t]->fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
@@ -139,7 +139,7 @@ int TTipDAQ::tpPrmToId( const string &name_t)
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
 {
-	throw TError(nodePath().c_str(),"Error attach new controller %s.",name.c_str()); 
+	throw TError(nodePath().c_str(),"Error attach new controller %s.",name.c_str());
 }
 
 string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )

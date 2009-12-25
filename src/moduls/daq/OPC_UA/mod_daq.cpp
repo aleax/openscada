@@ -268,7 +268,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
 
     //> Get page info
-    if( opt->name() == "info" )	
+    if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
 	return;

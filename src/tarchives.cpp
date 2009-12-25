@@ -774,13 +774,14 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/v_arch/per",_("Get data period (ms)"),0664,"root",my_gr.c_str(),1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Get data task priority level"),0664,"root",my_gr.c_str(),1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),0444,"root",my_gr.c_str(),1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),0664,"root",my_gr.c_str(),5,"tp","br","idm","1","s_com","add,del","br_pref","va_","idSz","20");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root",my_gr.c_str(),3,"tp","str","cols","90","rows","10");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     if( a_path == "/m_arch/max_am_req" )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(max_req_mess));
@@ -873,6 +874,15 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root",my_gr.c_str(),SEQ_RD) )	opt->setText( TSYS::int2str(valPrior()) );
 	if( ctrChkNode(opt,"set",0664,"root",my_gr.c_str(),SEQ_WR) )	setValPrior( atoi(opt->text().c_str()) );
+    }
+    else if( a_path == "/v_arch/nmb" && ctrChkNode(opt) )
+    {
+	vector<string> list;
+	valList(list);
+	int e_c = 0;
+	for( int i_a = 0; i_a < list.size(); i_a++ )
+	    if( valAt(list[i_a]).at().startStat() )	e_c++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),list.size(),e_c));
     }
     else if( a_path == "/br/va_" || a_path == "/v_arch/archs" )
     {
@@ -1070,7 +1080,7 @@ bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )
 
 void TMArchivator::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);

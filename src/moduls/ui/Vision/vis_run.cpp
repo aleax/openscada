@@ -911,7 +911,16 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     //> Get current style
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
-    if( !cntrIfCmd(req) ) setStyle( atoi(req.text().c_str()) );
+    if( !cntrIfCmd(req) )
+    {
+	setStyle( atoi(req.text().c_str()) );
+	//> Check for styles present
+	if( style() < 0 )
+	{
+	    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
+	    if( !cntrIfCmd(req) && req.childSize() <= 1 ) mStlBar->setVisible(false);
+	}
+    }
 
     //> Get project's flags
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");

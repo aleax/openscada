@@ -256,6 +256,12 @@ bool RunWdgView::event( QEvent *event )
 		pnt.setPen(QColor("red"));
 		to.setAlignment(Qt::AlignCenter);
 		to.setWrapMode(QTextOption::WordWrap);
+		if( rect().width() > 500 && rect().height() > 100 )
+		{
+		    QFont cfnt = pnt.font();
+		    cfnt.setPointSize( 16 );
+		    pnt.setFont( cfnt );
+		}
 		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permited.")).arg(id().c_str()),to);
 	    }
 	    return true;
@@ -639,7 +645,7 @@ VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
 void StylesStBar::setStyle( int istl, const string &nm )
 {
     mStyle = istl;
-    if( mStyle < 0 ) setText( _(" ") );
+    if( mStyle < 0 ) setText( _("No style") );
     else if( !nm.empty() ) setText( nm.c_str() );
     else
     {

@@ -45,11 +45,20 @@ TCntrNode &TController::operator=( TCntrNode &node )
     TController *src_n = dynamic_cast<TController*>(&node);
     if( !src_n ) return *this;
 
+    //> Individual DB names store
+    vector<string> dbNms;
+    for( int i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++ )
+	dbNms.push_back( cfg(owner().tpPrmAt(i_tp).db).getS() );
+
     //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     mId = tid;
     setDB(src_n->mDB);
+
+    //> Individual DB names restore
+    for( int i_tp = 0; i_tp < owner().tpPrmSize() && i_tp < dbNms.size(); i_tp++ )
+	cfg(owner().tpPrmAt(i_tp).db).setS(dbNms[i_tp]);
 
     //> Parameters copy
     if( src_n->enableStat( ) )
@@ -116,7 +125,17 @@ string TController::getStatus( )
     if( startStat() )
     {
 	rez = string("0:")+_("Started. ");
-	if( owner().redntAllow( ) && redntUse( ) ) rez += _("Geting data from remote station. ");
+	if( owner().redntAllow( ) && redntUse( ) )
+	{
+	    rez += _("Geting data from remote station: ");
+	    string rSt = mRedntSt.getVal();
+	    if( !rSt.empty() )
+	    {
+		int rOff = 0;
+		rez.replace(0,1,TSYS::strSepParse(rSt,0,':',&rOff));
+		rez.append(rSt.substr(rOff));
+	    }
+	}
     }
     else if( enableStat() ) rez = string("1:")+_("Enabled. ");
     else rez = string("2:")+_("Disabled. ");
@@ -316,6 +335,7 @@ void TController::redntDataUpdate( )
     //> Prepare group request to parameters
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
+    req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	prm = at(pls[i_p]);
@@ -339,12 +359,13 @@ void TController::redntDataUpdate( )
     catch(TError err) { return; }
 
     //> Write data to parameters
+    if( req.childSize() ) mRedntSt.setVal(req.childGet(0)->text());
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	prm = at(pls[i_p]);
-	for( int i_a = 0; i_a < req.childGet(i_p)->childSize(); i_a++ )
+	for( int i_a = 0; i_a < req.childGet(i_p+1)->childSize(); i_a++ )
 	{
-	    XMLNode *aNd = req.childGet(i_p)->childGet(i_a);
+	    XMLNode *aNd = req.childGet(i_p+1)->childGet(i_a);
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 

@@ -263,7 +263,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    eoTpId = 0x01C10001; answer.append( (char*)&eoTpId, sizeof(eoTpId) );	//TypeId (449 - NodeId)
 											//>> Body
 											//>>> RespondHeader
-	    tmStamp = 10*(TSYS::curTime()+11644473600000000ll);
+	    tmStamp = 10ll*(TSYS::curTime()+11644473600000000ll);
 	    answer.append( (char*)&tmStamp, sizeof(tmStamp) );				//timestamp
 	    answer.append( (char*)&rqHndl, sizeof(rqHndl) );				//requestHandle
 	    int32_t stCode = 0;

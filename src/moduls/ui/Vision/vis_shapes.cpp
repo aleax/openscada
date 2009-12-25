@@ -1525,7 +1525,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
 	    //>>> Draw full trend's data and time to the trend end position
-	    int begMarkBrd = -1;
+	    int begMarkBrd = -5;
 	    int endMarkBrd = tAr.x()+tAr.width();
 	    if( sclHor&0x2 )
 	    {
@@ -1551,7 +1551,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
 		    int wdth = pnt.fontMetrics().boundingRect(labH.c_str()).width();
 		    int tpos = vmax(h_pos-wdth/2,0);
-		    if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+		    if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, labH.c_str() );
 		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
 		}
@@ -1796,7 +1796,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
 	    //>>>> Draw full trend's data and time to the trend end position
-	    int begMarkBrd = -1;
+	    int begMarkBrd = -5;
 	    int endMarkBrd = tAr.x()+tAr.width();
 	    if( sclHor&0x2 )
 	    {
@@ -1860,7 +1860,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    {
 			wdth = pnt.fontMetrics().boundingRect(lab_tm.c_str()).width();
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			{
 			    pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str() );
 			    endPosTm = tpos+wdth;
@@ -1870,7 +1870,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    {
 			wdth = pnt.fontMetrics().boundingRect(lab_dt.c_str()).width();
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			{
 			    pnt.drawText( tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str() );
 			    endPosDt = tpos+wdth;
@@ -2404,6 +2404,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     bool toEnd = (tTimeGrnd >= valEnd());
     int  endBlks = 0;
     XMLNode req("get");
+
     m1:	req.clear()->
 	    setAttr("arch",shD->valArch)->
 	    setAttr("path",addr()+"/%2fserv%2fval")->
@@ -2413,7 +2414,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)view->size().height()));
-    if( view->cntrIfCmd(req,true) )	return;
+    if( view->cntrIfCmd(req,true) ) return;
 
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());

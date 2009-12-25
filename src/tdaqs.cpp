@@ -484,9 +484,9 @@ void *TDAQS::RdTask( void *param )
 			    int aCntr = 0;
 			    for( map<string,bool>::iterator scit = sit->second.actCntr.begin(); scit != sit->second.actCntr.end(); scit++ )
 				if( scit->second ) aCntr++;
-			    if( (cls_lc.size()-aCntr) > 1 && cit->second ) break;
+			    if( ((int)cls_lc.size()-aCntr) >= 0 && cit->second ) break;
 			}
-		    cntr.at().setRedntUse( sit != daq.mSt.end() || remPresent );
+		    cntr.at().setRedntUse( sit != daq.mSt.end() );
 		}
 		else
 		{
@@ -649,7 +649,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		{
 		    string cls;
 		    for( map<string,bool>::iterator cit = sit->second.actCntr.begin(); cit != sit->second.actCntr.end(); cit++ )
-			cls += cit->first+(cit->second?" (+) ;":" ;");
+			cls += cit->first+(cit->second?" (+); ":"; ");
 		    n_run->childAdd("el")->setText(cls);
 		}
 	    }

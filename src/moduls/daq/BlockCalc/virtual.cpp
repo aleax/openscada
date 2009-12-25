@@ -73,7 +73,7 @@ using namespace Virtual;
 //************************************************
 //* TipContr - BlockCalc type controller         *
 //************************************************
-TipContr::TipContr( string name ) 
+TipContr::TipContr( string name )
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -216,12 +216,12 @@ TCntrNode &Contr::operator=( TCntrNode &node )
     Contr *src_n = dynamic_cast<Contr*>(&node);
     if( !src_n ) return *this;
 
-    //- Blocks copy -
+    //> Blocks copy
     if( src_n->enableStat( ) )
     {
 	if( !enableStat( ) )    enable();
 
-	//-- Blocks copy --
+	//>> Blocks copy
 	vector<string> ls;
 	src_n->blkList(ls);
 	for( int i_l = 0; i_l < ls.size(); i_l++ )
@@ -271,7 +271,7 @@ void Contr::load_( )
 
     TController::load_( );
 
-    //- Load block's configuration -
+    //> Load block's configuration
     TConfig c_el(&mod->blockE());
     c_el.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
