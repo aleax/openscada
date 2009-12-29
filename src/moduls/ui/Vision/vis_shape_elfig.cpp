@@ -5862,7 +5862,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 {
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     QPainterPath path;
-    int flag, in_index;
+    int flag = -1, in_index = -1;
     bool flag_remove = false;
     bool flag_n1, flag_n2, flag_break;
     double arc_a,arc_b,t_start,t_end,t,ang;

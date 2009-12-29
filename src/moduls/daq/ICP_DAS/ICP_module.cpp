@@ -249,7 +249,7 @@ string TMdContr::prmLP( const string &prm )
 
 void TMdContr::setPrmLP( const string &prm, const string &vl )
 {
-    XMLNode prmNd;
+    XMLNode prmNd("prms");
     try { prmNd.load(mLPprms); } catch(...){ }
     prmNd.setAttr(prm,vl);
     mLPprms = prmNd.save(XMLNode::BrAllPast);
@@ -529,13 +529,14 @@ void TMdPrm::loadExtPrms( )
 
 void TMdPrm::saveExtPrms( )
 {
-    if( !enableStat() || !extPrms )	return;
+    if( !enableStat() )	return;
 
     XMLNode prmNd("prms");
 
     switch( modTp )
     {
 	case 0x8017:
+	    if( !extPrms ) return;
 	    prmNd.setAttr("cnls",TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
 	    prmNd.setAttr("fastPer",TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
 	    for( int i_c = 0; i_c < 8; i_c++ )
@@ -844,6 +845,7 @@ void *TMdPrm::fastTask( void *iprm )
     vector< AutoHD<TVal> > cnls;
     for( int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++ )
 	cnls.push_back( prm.vlAt(TSYS::strMess("i%d",i_c)) );
+    float vbuf[ cnls.size() ];
 
     for( ; !prm.endRunReq; ((PrmsI8017*)prm.extPrms)->curCnt++ )
     {
@@ -852,9 +854,12 @@ void *TMdPrm::fastTask( void *iprm )
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
 	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
-	    cnls[i_c].at().setR( (10.0/(c_mode?2*c_mode:1))*(float)I8017HW_GetCurAdChannel_Hex(prm.modSlot)/8000, wTm, true );
+	    vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017HW_GetCurAdChannel_Hex(prm.modSlot)/8000;
 	}
 	res.release();
+
+	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
+	    cnls[i_c].at().setR( vbuf[i_c], wTm, true );
 
 	//> Calc next work time and sleep
 	wTm += (long long)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);

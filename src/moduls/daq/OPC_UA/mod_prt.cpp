@@ -138,6 +138,102 @@ void TProt::cntrCmdProc( XMLNode *opt )
     else TProtocol::cntrCmdProc(opt);
 }
 
+int32_t TProt::iN( const string &rb, int &off, char vSz )
+{
+    off += vSz;
+    if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    switch( vSz )
+    {
+	case 1:	return *(int8_t*)(rb.data()+off-vSz);
+	case 2:	return *(int16_t*)(rb.data()+off-vSz);
+	case 4:	return *(int32_t*)(rb.data()+off-vSz);
+    }
+    throw TError(modPrt->nodePath().c_str(),_("Number size '%d' is error."),vSz);
+}
+
+uint32_t TProt::iNu( const string &rb, int &off, char vSz )
+{
+    off += vSz;
+    if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    switch( vSz )
+    {
+	case 1:	return *(uint8_t*)(rb.data()+off-vSz);
+	case 2:	return *(uint16_t*)(rb.data()+off-vSz);
+	case 4:	return *(uint32_t*)(rb.data()+off-vSz);
+    }
+    throw TError(modPrt->nodePath().c_str(),_("Number size '%d' is error."),vSz);
+}
+
+const char *TProt::iVal( const string &rb, int &off, char vSz )
+{
+    off += vSz;
+    if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    return rb.data()+off-vSz;
+}
+
+string TProt::iS( const string &rb, int &off )
+{
+    int sSz = vmax(0,iN(rb,off,4));
+    off += sSz;
+    if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested string."));
+    return rb.substr(off-sSz,sSz);
+}
+
+long long iTm( const string &rb, int &off )
+{
+    int64_t tmStamp = *(int64_t*)TProt::iVal(rb,off,8);
+    return (tmStamp/10ll)-11644473600000000ll;
+}
+
+int TProt::iNodeId( const string &rb, int &off, int *ns )
+{
+    off += 1;
+    if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
+    char enc = rb[off-1];
+    switch( enc )
+    {
+	case 0x00:
+	    if( ns ) *ns = 0;
+	    return iNu(rb,off,1);
+	case 0x01:
+	    off += 1;
+	    if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
+	    if( ns ) *ns = (uint8_t)rb[off-1];
+	    return iNu(rb,off,2);
+    }
+    throw TError(modPrt->nodePath().c_str(),_("NodeId type %d is error or not support."),enc);
+}
+
+void TProt::oN( string &buf, int32_t val, char sz )	{ buf.append( (char*)&val, sz ); }
+
+void TProt::oNu( string &buf, uint32_t val, char sz )	{ buf.append( (char*)&val, sz ); }
+
+void TProt::oS( string &buf, const string &val )
+{
+    oN(buf,(val.size()?val.size():-1),4);
+    buf.append(val);
+}
+
+void TProt::oNodeId( string &buf, int val, int ns )
+{
+    if( !ns && val <= 255 )
+    {
+	buf += (char)0x00;
+	buf += (char)val;
+    }
+    else
+    {
+	buf += (char)0x01;
+	buf += (char)ns;
+	buf.append( (char*)&val, 2 );
+    }
+}
+
+void TProt::oTm( string &buf, long long val )
+{
+    int64_t tmStamp = 10ll*(val+11644473600000000ll);
+    buf.append( (char*)&tmStamp, sizeof(tmStamp) );
+}
 
 //*************************************************
 //* TProtIn                                       *
@@ -158,37 +254,35 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
     uint32_t mSz;
     bool KeepAlive = false;
-    const char *rd = reqst.data();
-    const char *re = rd+reqst.size();
+    int off = 0;
 
     //> Continue for full request
     if( mNotFull )	{ mBuf = mBuf+reqst; mNotFull = false; }
     else mBuf = reqst;  //Save request to bufer
 
-    string &request = mBuf;
+    string &rb = mBuf;
 
     answer = "";
-    if( request.size() <= 0 ) return mNotFull;
+    if( rb.size() <= 0 ) return mNotFull;
 
 #if OSC_DEBUG >= 3
-    mess_debug(nodePath().c_str(),_("Content:\n%s"),request.c_str());
+    mess_debug(nodePath().c_str(),_("Content:\n%s"),rb.c_str());
 #endif
 
-    //printf("TEST 00: Request:\n%s\n",TSYS::strDecode(request,TSYS::Bin).c_str());
+    //printf("TEST 00: Request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
     //> Check for hello message type
-    if( (re-rd) > 8 && strncmp(rd,"HELF",4) == 0 )
+    if( rb.size() > 8 && rb.compare(0,4,"HELF") == 0 )
     {
-	rd += 4;
-	mSz = *(uint32_t*)rd; rd += 4;		//Message size
-	if( (re-rd+8) < mSz ) return (mNotFull=true);
-	uint32_t prtVer = *(uint32_t*)rd; rd += 4;	//Protocol version
-	uint32_t rBufSz = *(uint32_t*)rd; rd += 4;	//Recive buffer size
-	uint32_t wBufSz = *(uint32_t*)rd; rd += 4;	//Send buffer size
-	uint32_t mMsgSz = *(uint32_t*)rd; rd += 4;	//Max message size
-	uint32_t mChnk  = *(uint32_t*)rd; rd += 4;	//Max chunk count
-	mSz = vmax(0,*(int32_t*)rd); rd += 4;
-	string EndpntURL( rd, mSz ); rd += mSz;		//EndpointURL
+	off += 4;
+	mSz = TProt::iNu(rb,off,4);	//Message size
+	if( rb.size() < mSz ) return (mNotFull=true);
+	uint32_t prtVer = TProt::iNu(rb,off,4);	//Protocol version
+	uint32_t rBufSz = TProt::iNu(rb,off,4);	//Recive buffer size
+	uint32_t wBufSz = TProt::iNu(rb,off,4);	//Send buffer size
+	uint32_t mMsgSz = TProt::iNu(rb,off,4);	//Max message size
+	uint32_t mChnk  = TProt::iNu(rb,off,4);	//Max chunk count
+	string EndpntURL = TProt::iS(rb,off);	//EndpointURL
 
 	printf( "TEST 00: Hello request: prtVer = %d, rBufSz = %d, wBufSz = %d, mMsgSz = %d, mChnk = %d, EndpntURL = '%s'\n", 
 	    prtVer, rBufSz, wBufSz, mMsgSz, mChnk, EndpntURL.c_str() );
@@ -196,93 +290,91 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	//> Prepare acknowledge message
 	mSz = 28;
 	answer.reserve( mSz );
-	answer.append( "ACKF" );			//Acknowledge message type
-	answer.append( (char*)&mSz, sizeof(mSz) );	//Message size
-	answer.append( (char*)&prtVer, sizeof(prtVer) );//Protocol version
-	answer.append( (char*)&rBufSz, sizeof(rBufSz) );//Recive buffer size
-	answer.append( (char*)&wBufSz, sizeof(wBufSz) );//Send buffer size
-	answer.append( (char*)&mMsgSz, sizeof(mMsgSz) );//Max message size
-	answer.append( (char*)&mChnk, sizeof(mChnk) );	//Max chunk count
+	answer.append( "ACKF" );	//Acknowledge message type
+	TProt::oNu(answer,mSz,4);	//Message size
+	TProt::oNu(answer,prtVer,4);	//Protocol version
+	TProt::oNu(answer,rBufSz,4);	//Recive buffer size
+	TProt::oNu(answer,wBufSz,4);	//Send buffer size
+	TProt::oNu(answer,mMsgSz,4);	//Max message size
+	TProt::oNu(answer,mChnk,4);	//Max chunk count
 
 	return mNotFull;
     }
     //> Check for Open SecureChannel message type
-    if( (re-rd) > 8 && strncmp(rd,"OPNF",4) == 0 )
+    if( rb.size() > 8 && rb.compare(0,4,"OPNF") == 0 )
     {
-	rd += 4;
-	mSz = *(uint32_t*)rd; rd += 4;				//Message size
-	if( (re-rd+8) < mSz ) return (mNotFull=true);
-	uint32_t secChnId = *(uint32_t*)rd; rd += 4;		//Secure channel identifier
+	off += 4;
+	mSz = TProt::iNu(rb,off,4);			//Message size
+	if( rb.size() < mSz ) return (mNotFull=true);
+	uint32_t secChnId = TProt::iNu(rb,off,4);		//Secure channel identifier
 
 								//> Security Header
-	mSz = vmax(0,*(int32_t*)rd); rd += 4;
-	string secPlcURI( rd, mSz ); rd += mSz;			//Security policy URI
+	string secPlcURI = TProt::iS(rb,off);			//Security policy URI
 	if( secPlcURI == "http://opcfoundation.org/UA/SecurityPolicy#None" )
 	{
-	    int32_t senderCertLength = *(int32_t*)rd; rd += 4;	//SenderCertificateLength
-	    int32_t recCertThbLength = *(int32_t*)rd; rd += 4;	//ReceiverCertificateThumbprintLength
+	    int32_t senderCertLength = TProt::iN(rb,off,4);	//SenderCertificateLength
+	    int32_t recCertThbLength = TProt::iN(rb,off,4);	//ReceiverCertificateThumbprintLength
 								//> Sequence header
-	    uint32_t secNumb = *(uint32_t*)rd; rd += 4;		//Sequence number
-	    uint32_t reqId = *(uint32_t*)rd; rd += 4;		//RequestId
+	    uint32_t secNumb = TProt::iNu(rb,off,4);		//Sequence number
+	    uint32_t reqId = TProt::iNu(rb,off,4);		//RequestId
 								//> Extension body object
-	    uint16_t eoTpId = *(uint16_t*)(rd+2); rd += 4;	//TypeId
+	    uint16_t eoTpId = TProt::iNodeId(rb,off);		//TypeId
 								//>> Request Header
-	    rd += 2;						//Session AuthenticationToken
-	    int64_t tmStamp = *(int64_t*)rd; rd += 8;		//timestamp
-	    int32_t rqHndl = *(int32_t*)rd; rd += 4;		//requestHandle
-	    uint32_t retDgn = *(uint32_t*)rd; rd += 4;		//returnDiagnostics
-	    mSz = vmax(0,*(int32_t*)rd); rd += 4;
-	    string secPlcURI( rd, mSz ); rd += mSz;		//auditEntryId
-	    uint32_t tmHnt = *(uint32_t*)rd; rd += 4;		//timeoutHint
-	    rd += 3;						//Extensible parameter.NodeId (0)
-
-	    uint32_t clntPrtVer = *(uint32_t*)rd; rd += 4;	//ClientProtocolVersion
-	    uint32_t reqTp = *(uint32_t*)rd; rd += 4;		//RequestType
-	    uint32_t secMode = *(uint32_t*)rd; rd += 4;		//SecurityMode
-	    mSz = vmax(0,*(int32_t*)rd); rd += 4;
-	    string clntNonce( rd, mSz ); rd += mSz;		//ClientNonce
-	    int32_t reqLifeTm = *(int32_t*)rd; rd += 4;		//RequestedLifetime
+	    TProt::iVal(rb,off,2);				//Session AuthenticationToken
+	    long long tmStamp = TProt::iTm(rb,off);		//timestamp
+	    int32_t rqHndl = TProt::iN(rb,off,4);		//requestHandle
+	    uint32_t retDgn = TProt::iNu(rb,off,4);		//returnDiagnostics
+	    string secPlcURI = TProt::iS(rb,off);		//auditEntryId
+	    uint32_t tmHnt = TProt::iNu(rb,off,4);		//timeoutHint
+								//>>> Extensible parameter
+	    TProt::iNodeId(rb,off);				//TypeId (0)
+	    TProt::iNu(rb,off,1);				//Encoding
+								//>>>> Standard request
+	    uint32_t clntPrtVer = TProt::iNu(rb,off,4);		//ClientProtocolVersion
+	    uint32_t reqTp = TProt::iNu(rb,off,4);		//RequestType
+	    uint32_t secMode = TProt::iNu(rb,off,4);		//SecurityMode
+	    string clntNonce = TProt::iS(rb,off);		//ClientNonce
+	    int32_t reqLifeTm = TProt::iN(rb,off,4);		//RequestedLifetime
 
 	    /*printf( "TEST 00: Open SecureChannel request: prtVer = %d, rBufSz = %d, wBufSz = %d, mMsgSz = %d, mChnk = %d, EndpntURL = '%s'\n", 
 		prtVer, rBufSz, wBufSz, mMsgSz, mChnk, EndpntURL.c_str() );*/
 
 	    //> Prepare respond message
 	    answer.reserve( 200 );
-	    answer.append( "OPNF" );							//OpenSecureChannel message type
-	    answer.append( (char*)&mSz, sizeof(mSz) );					//Message size
-	    uint32_t secChnId = 4;
-	    answer.append( (char*)&secChnId, sizeof(secChnId) );			//Secure channel identifier
-	    mSz = secPlcURI.size();
-	    answer.append( (char*)&mSz, sizeof(mSz) );					//Security policy URI
-	    answer.append( secPlcURI );
-	    answer.append( (char*)&senderCertLength, sizeof(senderCertLength) );	//SenderCertificateLength
-	    answer.append( (char*)&recCertThbLength, sizeof(recCertThbLength) );	//ReceiverCertificateThumbprintLength
-	    answer.append( (char*)&secNumb, sizeof(secNumb) );				//Sequence number
-	    answer.append( (char*)&reqId, sizeof(reqId) );				//RequestId
-											//> Extension Object
-	    eoTpId = 0x01C10001; answer.append( (char*)&eoTpId, sizeof(eoTpId) );	//TypeId (449 - NodeId)
-											//>> Body
-											//>>> RespondHeader
-	    tmStamp = 10ll*(TSYS::curTime()+11644473600000000ll);
-	    answer.append( (char*)&tmStamp, sizeof(tmStamp) );				//timestamp
-	    answer.append( (char*)&rqHndl, sizeof(rqHndl) );				//requestHandle
-	    int32_t stCode = 0;
-	    answer.append( (char*)&stCode, sizeof(stCode) );				//StatusCode
-	    answer.append( (char)0 );							//serviceDiagnostics
-	    /*
-ff ff ff ff- stringTable
-00 00 00 - Extensible parameter.NodeId (0)
-00 00 00 00- ServerProtocolVersion
-04 00 00 00 - Secure channel identifier
-01 00 00 00- TokenId 
-50 43 45 7c 9b 7a ca 01- CreatedAt
-c0 27 09 00- RevisedLifeTime (600000)
-01 00 00 00 01- nonce*/
+	    answer.append( "OPNF" );				//OpenSecureChannel message type
+	    TProt::oNu(answer,mSz,4);				//Message size
+	    TProt::oNu(answer,4,4);				//Secure channel identifier
+	    TProt::oS(answer,secPlcURI);			//Security policy URI
+	    TProt::oN(answer,senderCertLength,4);		//SenderCertificateLength
+	    TProt::oN(answer,recCertThbLength,4);		//ReceiverCertificateThumbprintLength
+	    TProt::oNu(answer,secNumb,4);			//Sequence number
+	    TProt::oNu(answer,reqId,4);				//RequestId
+								//> Extension Object
+	    TProt::oNodeId(answer,449);				//TypeId (449 - NodeId)
+								//>> Body
+								//>>> RespondHeader
+	    TProt::oTm(answer,TSYS::curTime());			//timestamp
+	    TProt::oN(answer,rqHndl,4);				//requestHandle
+	    TProt::oN(answer,0,4);				//StatusCode
+	    answer.append( (char)0 );				//serviceDiagnostics
+	    TProt::oS(answer,"");				//stringTable
+								//>>> Extensible parameter
+	    TProt::oNodeId(answer,0);				//TypeId (0)
+	    TProt::oNu(answer,0,1);				//Encoding
+								//>>>> Standard respond
+	    TProt::oNu(answer,0,4);				//ServerProtocolVersion
+	    TProt::oNu(answer,4,4);				//Secure channel identifier
+	    TProt::oNu(answer,1,4);				//TokenId
+	    TProt::oTm(answer,TSYS::curTime());			//CreatedAt
+	    TProt::oN(answer,600000,4);				//RevisedLifeTime (600000)
+	    TProt::oS(answer,"\001");				//nonce
+
+	    return mNotFull;
 	}
     }
 
     //> Post error for unrecognized request
-    printf("TEST 01: Unsupported request:\n%s\n",TSYS::strDecode(request,TSYS::Bin).c_str());
+    printf("TEST 01: Unsupported request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
     answer = mkError( 1, _("Request message isn't recognize.") );
 

@@ -242,6 +242,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     //> Init status bar
     mWTime = new QLabel( this );
     mWTime->setVisible(false);
+    mWTime->setAlignment(Qt::AlignCenter);
     mWTime->setWhatsThis(_("This label displays curent system's time."));
     statusBar()->insertPermanentWidget(0,mWTime);
     mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
@@ -960,7 +961,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     QCoreApplication::processEvents();
 
-    //- Start timer -
+    //> Start timer
     updateTimer->start(period());
 }
 
@@ -1279,8 +1280,9 @@ void VisRun::updatePage( )
 
     if( mWTime->isVisible() && !(wPrcCnt%vmax(1000/period(),1)) )
     {
-	mWTime->setText(QTime::currentTime().toString("hh:mm:ss"));
-	mWTime->setToolTip(QDate::currentDate().toString("dddd, dd-MMM-yyyy"));
+	QDateTime dtm = QDateTime::currentDateTime();
+	mWTime->setText( locale().toString(dtm,"hh:mm:ss\nddd, d MMM") );
+	mWTime->setToolTip( locale().toString(dtm,"dddd, dd-MMM-yyyy") );
     }
 
     wPrcCnt++;

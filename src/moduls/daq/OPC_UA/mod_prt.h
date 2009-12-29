@@ -87,6 +87,20 @@ class TProt: public TProtocol
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
+	//> Protocol's data process
+	static int32_t iN( const string &rb, int &off, char vSz );
+	static uint32_t iNu( const string &rb, int &off, char vSz );
+	static const char *iVal( const string &buf, int &off, char vSz );
+	static string iS( const string &buf, int &off );
+	static long long iTm( const string &buf, int &off );
+	static int iNodeId( const string &buf, int &off, int *ns = NULL );
+
+	static void oN( string &buf, int32_t val, char sz );
+	static void oNu( string &buf, uint32_t val, char sz );
+	static void oS( string &buf, const string &val );
+	static void oNodeId( string &buf, int val, int ns = 0 );
+	static void oTm( string &buf, long long val );
+
     protected:
 	//Methods
 	void load_( );

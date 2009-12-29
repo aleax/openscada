@@ -1,3 +1,14 @@
+2009-12-29 Roman,Maxim
+- FIX:Archive.Val: The values archivation task is prevented for early start.
+- FIX:DAQ.ICP_DAS: LP-8x81 controller set and save watchdog timer value is fixed.
+    Serial modules save watchdog time value is fixed also.
+- DAQ.ICP_DAS: Write fast data to OpenSCADA attributes is moved from resource of access to parallel bus.
+- DAQ.OPC_UA: Binary protocol data access function is added and present request processing is rewrited.
+- FIX:Archive.FSArch: Double files creation is prevented.
+- FIX:UI.Vision: Time and date is localised and some updated into RunTime fullscreen mode.
+- FIX:UI.Vision: Shape item crash by no inited variables of primitive "ElFigure" is fixed.
+
+
 2009-12-25 Roman
 - DAQ:Redundant controllers' status gate is added. Include error code and message.
 - FIX:DAQ:A controller DB values copy prevent is added.

@@ -2223,12 +2223,12 @@ void *TVArchivator::Task( void *param )
     mess_debug(arch.nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
+    sleep( arch.archPeriod() );
+
     //> Archiving
     while( !arch.endrunReq )
 	try
 	{
-	    TSYS::taskSleep((long long)(1e9*arch.archPeriod( )));
-
 	    long long t_cnt = TSYS::curTime();
 
 	    ResAlloc res(arch.a_res,false);
@@ -2245,6 +2245,8 @@ void *TVArchivator::Task( void *param )
 	    res.release();
 
 	    arch.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+
+	    TSYS::taskSleep( (long long)(1e9*arch.archPeriod()) );
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
     arch.run_st = false;

@@ -619,14 +619,13 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
     realEnd = vmax(realEnd,buf.end());
 
     //> Put values to files
-    ResAlloc res(m_res,false);
+    ResAlloc res(m_res,true);
     for( int i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && beg <= end )
 	{
-	    //>> Check begin to creating want
+	    //>> Create new file for old data
 	    if( beg < arh_f[i_a]->begin() )
 	    {
-		//>>> Create new file(s) for old data
 		char c_buf[30];
 		time_t tm = beg/1000000;
 		struct tm tm_tm;
@@ -638,24 +637,22 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		if( (arh_f[i_a]->begin()-beg) > (long long)((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.)
 		    n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.);
 		else n_end = arh_f[i_a]->begin();
-
-		res.request(true);
-		arh_f.insert(arh_f.begin()+i_a,new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
-		res.request(false);
+		arh_f.insert( arh_f.begin()+i_a, new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
 	    }
 	    //>> Insert values to archive
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
 	    {
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
+		res.release();
 		arh_f[i_a]->setVals(buf,beg,n_end);
 		beg = n_end+(long long)(archivator().valPeriod()*1000000.);
+		res.request(true);
 	    }
 	}
-    //>> Check end to creating want
+    //> Create new file for new data
     while( end >= beg )
     {
-	res.request(true);
-	//>> Create new file(s) for new data
+
 	char c_buf[30];
 	time_t tm = beg/1000000;
 	struct tm tm_tm;
@@ -664,8 +661,10 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
 	long long n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.);
-	arh_f.push_back(new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
+	arh_f.push_back( new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
 	n_end = (end > n_end)?n_end:end;
+
+	res.release();
 	arh_f[arh_f.size()-1]->setVals(buf,beg,n_end);
 	beg = n_end+(long long)(archivator().valPeriod()*1000000.);
     }
@@ -1168,7 +1167,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     //Reserve memory for values buffer
     val_b.reserve(fixVl ? vSize*(vpos_end-vpos_beg+1)/2 : 10*(vpos_end-vpos_beg+1));
 
-    //- Get values, make value buffer and init the pack index table -
+    //> Get values, make value buffer and init the pack index table
     vpos_beg = 0;
     vpos_end = -1;
     while( ibeg <= iend )
