@@ -322,7 +322,7 @@ void TSocketIn::start()
 	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1)
 	{
 	    close( sock_fd );
-            throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to <%s>!"),addr().c_str());
+	    throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to <%s>!"),addr().c_str());
 	}
 	listen(sock_fd,mMaxQueue);
     }
@@ -341,7 +341,7 @@ void TSocketIn::stop()
     SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
 
     shutdown(sock_fd,SHUT_RDWR);
-    close(sock_fd); 
+    close(sock_fd);
     if( type == SOCK_UNIX ) remove( path.c_str() );
 }
 
@@ -487,7 +487,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd) ) continue;
 	r_len = read(s.cSock,buf,s.s->bufLen()*1000);
-	if(r_len <= 0) break;
+	if( r_len <= 0 ) break;
 	s.s->trIn += (float)r_len/1024;
 
 #if OSC_DEBUG >= 5
@@ -501,15 +501,19 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 5
 	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message <%d> to <%s>."), answ.size(), s.sender.c_str() );
 #endif
-	    r_len = write(s.cSock,answ.c_str(),answ.size()); s.s->trOut += (float)r_len/1024;
+	    for( int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL )
+	    {
+		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
+		s.s->trOut += (float)wL/1024;
+	    }
 	    answ = "";
 	    cnt++;
 	    tm = time(NULL);
 	}
 	sessOk = true;
-    }while( !s.s->endrun_cl && (!sessOk || 
-	    ((s.s->mode || !prot_in.freeStat()) && 
-	     (!s.s->keepAliveCon() || cnt < s.s->keepAliveCon()) && 
+    }while( !s.s->endrun_cl && (!sessOk ||
+	    ((s.s->mode || !prot_in.freeStat()) &&
+	     (!s.s->keepAliveCon() || cnt < s.s->keepAliveCon()) &&
 	     (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm())) ) );
 
     //> Close protocol on broken connection
@@ -829,13 +833,18 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 repeate:
     if( reqTry++ >= 2 ) throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
     //> Write request
-    if( obuf != NULL && len_ob > 0 && (kz=write(sock_fd,obuf,len_ob)) <= 0 )
-    {
-	res.release();
-	stop(); start();
-	res.request(true);
-	goto repeate;
-    }
+    if( obuf != NULL && len_ob > 0 )
+	for( int wOff = 0; wOff != len_ob; wOff += kz )
+	{
+	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);
+	    if( kz <= 0 )
+	    {
+		res.release();
+		stop(); start();
+		res.request(true);
+		goto repeate;
+	    }
+	}
     trOut += (float)kz/1024;
 
     //> Read reply
@@ -857,7 +866,7 @@ repeate:
 	else if( FD_ISSET(sock_fd, &rd_fd) )
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
-	    if(i_b <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	    if( i_b <= 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
 	    trIn += (float)i_b/1024;
 	}
     }

@@ -343,14 +343,24 @@ void TController::redntDataUpdate( )
 
 	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr");
 
+	//>> Prepare individual attributes list
+	prmNd->setAttr( "sepReq", "1" );
+
 	//>> Check attributes last present data time into archives
 	vector<string> listV;
 	prm.at().vlList(listV);
+	int rC = 0;
 	for( int iV = 0; iV < listV.size(); iV++ )
 	{
 	    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-	    if( vl.at().arch().freeStat() ) continue;
-	    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
+	    if( !vl.at().arch().freeStat() || vl.at().reqFlg() ) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
+	    if( !vl.at().arch().freeStat() )
+		prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
+	}
+	if( rC > listV.size()/2 )
+	{
+	    prmNd->childClear("el");
+	    prmNd->setAttr( "sepReq", "0" );
 	}
     }
 
@@ -369,7 +379,8 @@ void TController::redntDataUpdate( )
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if( aNd->name() == "el" ) vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true);
+	    if( aNd->name() == "el" ) 
+	    { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
 	    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 	    {
 		long long btm = atoll(aNd->attr("tm").c_str());

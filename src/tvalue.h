@@ -77,9 +77,11 @@ class TVal : public TCntrNode
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
 
+	bool reqFlg( )	{ return mReqFlg; }
 	bool resB1( )	{ return mResB1; }
 	bool resB2( )	{ return mResB2; }
 
+	bool setReqFlg( bool vl )	{ mReqFlg = vl; }
 	bool setResB1( bool vl )	{ mResB1 = vl; }
 	bool setResB2( bool vl )	{ mResB2 = vl; }
 
@@ -104,6 +106,7 @@ class TVal : public TCntrNode
 	} val;
 
 	unsigned char	mCfg	: 1;		//Config id
+	unsigned char	mReqFlg	: 1;		//Request to attribute flag
 	unsigned char	mResB1	: 1;		//Reserve boolean
 	unsigned char	mResB2	: 1;		//Reserve boolean
 	union

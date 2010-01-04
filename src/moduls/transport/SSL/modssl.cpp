@@ -493,6 +493,7 @@ void *TSocketIn::ClTask( void *s_inf )
     }
 
     int sock_fd = BIO_get_fd(s.bio,NULL);
+    BIO_get_ssl(s.bio,&ssl);
 
     //> Select mode
     struct  timeval tv;
@@ -502,11 +503,14 @@ void *TSocketIn::ClTask( void *s_inf )
 
     do
     {
-	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
+	if( !SSL_pending(ssl) )
+	{
+	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
 
-	int kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
-	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(sock_fd,&rd_fd) ) continue;
+	    int kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
+	    if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(sock_fd,&rd_fd) ) continue;
+	}
 
 	rez = BIO_read(s.bio,buf,sizeof(buf));
 	if( rez == 0 )	break;		//Connection closed by client
@@ -522,7 +526,8 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 4
             mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size <%d>."),answ.size());
 #endif
-	    rez = BIO_write(s.bio,answ.data(),answ.size()); s.s->trOut += (float)rez/1024;
+	    do { rez=BIO_write(s.bio,answ.data(),answ.size()); } while( rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE );
+	    s.s->trOut += (float)answ.size()/1024;
 	    answ = "";
 	    cnt++;
 	    tm = time(NULL);
@@ -866,8 +871,12 @@ repeate:
     if( reqTry ) usleep(500000);
     if( reqTry++ >= 3 )	throw TError(nodePath().c_str(),_("Connection error"));
     //> Write request
-    if( obuf != NULL && len_ob > 0 && (ret=BIO_write(conn,obuf,len_ob)) <= 0 )
-    { res.release(); stop(); start(); res.request(true); goto repeate; }
+    if( obuf != NULL && len_ob > 0 )
+    {
+	do { ret=BIO_write(conn,obuf,len_ob); } while( ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE );
+	if( ret <= 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
+    }
+
     trOut += (float)ret/1024;
 #if OSC_DEBUG >= 4
     if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size <%d>."),ret);
@@ -876,10 +885,10 @@ repeate:
     //> Read reply
     if( ibuf != NULL && len_ib > 0 )
     {
-	ret=BIO_read(conn,ibuf,len_ib);
+	ret = BIO_read(conn,ibuf,len_ib);
 	if( ret > 0 ) trIn += (float)ret/1024;
-	else if( ret == 0 ) {  res.release(); stop(); start(); res.request(true); goto repeate; }
-	else if( ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ )
+	else if( ret == 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	else if( ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE )
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 	    throw TError(nodePath().c_str(),"BIO_read: %s",err);
@@ -891,7 +900,6 @@ repeate:
 	    fd_set rd_fd;
 	    struct timeval tv;
 	    int sock_fd = BIO_get_fd(conn,NULL);
-
 	    do
 	    {
 		tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);

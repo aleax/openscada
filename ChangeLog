@@ -1,3 +1,13 @@
+2010-01-04 Roman
+- !!:DAQ, DAQ.DAQGate: Data request optimization by request size and time into reserve mode is added.
+    The flag of detect requests is set independent into OpenSCADA core.
+- DAQ.OPC_UA: OPC UA Binari protocol's parse functions is tested and updated.
+- !!!:FIX:Transport.Sockets, Transport.SSL: Not full writing into function write() is fixed.
+    Ordinary function write() is write limited buffer (~50kB) and for write big data blocks need check and repeat request.
+    Fixed checking for allow data into SSL-buffer for BIO_read() function of SSL.
+- FIX:UI.VCAEngine: Quitance flags reset is made for new alarm setting.
+
+
 2009-12-29 Roman,Maxim
 - FIX:Archive.Val: The values archivation task is prevented for early start.
 - FIX:DAQ.ICP_DAS: LP-8x81 controller set and save watchdog timer value is fixed.

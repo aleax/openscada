@@ -173,13 +173,13 @@ const char *TProt::iVal( const string &rb, int &off, char vSz )
 
 string TProt::iS( const string &rb, int &off )
 {
-    int sSz = vmax(0,iN(rb,off,4));
+    int sSz = iN(rb,off,4); sSz = vmax(0,sSz);
     off += sSz;
     if( off > rb.size() ) throw TError(modPrt->nodePath().c_str(),_("Buffer size is less for requested string."));
     return rb.substr(off-sSz,sSz);
 }
 
-long long iTm( const string &rb, int &off )
+long long TProt::iTm( const string &rb, int &off )
 {
     int64_t tmStamp = *(int64_t*)TProt::iVal(rb,off,8);
     return (tmStamp/10ll)-11644473600000000ll;
@@ -204,9 +204,17 @@ int TProt::iNodeId( const string &rb, int &off, int *ns )
     throw TError(modPrt->nodePath().c_str(),_("NodeId type %d is error or not support."),enc);
 }
 
-void TProt::oN( string &buf, int32_t val, char sz )	{ buf.append( (char*)&val, sz ); }
+void TProt::oN( string &buf, int32_t val, char sz, int off )
+{
+    if( off < 0 || (off+sz) > buf.size() ) buf.append( (char*)&val, sz );
+    else buf.replace( off, sz, (char*)&val, sz );
+}
 
-void TProt::oNu( string &buf, uint32_t val, char sz )	{ buf.append( (char*)&val, sz ); }
+void TProt::oNu( string &buf, uint32_t val, char sz, int off )
+{
+    if( off < 0 || (off+sz) > buf.size() ) buf.append( (char*)&val, sz );
+    else buf.replace( off, sz, (char*)&val, sz );
+}
 
 void TProt::oS( string &buf, const string &val )
 {
@@ -324,7 +332,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    long long tmStamp = TProt::iTm(rb,off);		//timestamp
 	    int32_t rqHndl = TProt::iN(rb,off,4);		//requestHandle
 	    uint32_t retDgn = TProt::iNu(rb,off,4);		//returnDiagnostics
-	    string secPlcURI = TProt::iS(rb,off);		//auditEntryId
+	    string AuditEntrId = TProt::iS(rb,off);		//auditEntryId
 	    uint32_t tmHnt = TProt::iNu(rb,off,4);		//timeoutHint
 								//>>> Extensible parameter
 	    TProt::iNodeId(rb,off);				//TypeId (0)
@@ -336,13 +344,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    string clntNonce = TProt::iS(rb,off);		//ClientNonce
 	    int32_t reqLifeTm = TProt::iN(rb,off,4);		//RequestedLifetime
 
-	    /*printf( "TEST 00: Open SecureChannel request: prtVer = %d, rBufSz = %d, wBufSz = %d, mMsgSz = %d, mChnk = %d, EndpntURL = '%s'\n", 
-		prtVer, rBufSz, wBufSz, mMsgSz, mChnk, EndpntURL.c_str() );*/
+	    printf( "TEST 00: Open SecureChannel request: prtVer = '%s'\n", secPlcURI.c_str() );
 
 	    //> Prepare respond message
 	    answer.reserve( 200 );
 	    answer.append( "OPNF" );				//OpenSecureChannel message type
-	    TProt::oNu(answer,mSz,4);				//Message size
+	    TProt::oNu(answer,0,4);				//Message size
 	    TProt::oNu(answer,4,4);				//Secure channel identifier
 	    TProt::oS(answer,secPlcURI);			//Security policy URI
 	    TProt::oN(answer,senderCertLength,4);		//SenderCertificateLength
@@ -356,7 +363,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    TProt::oTm(answer,TSYS::curTime());			//timestamp
 	    TProt::oN(answer,rqHndl,4);				//requestHandle
 	    TProt::oN(answer,0,4);				//StatusCode
-	    answer.append( (char)0 );				//serviceDiagnostics
+	    TProt::oN(answer,0,1);				//serviceDiagnostics
 	    TProt::oS(answer,"");				//stringTable
 								//>>> Extensible parameter
 	    TProt::oNodeId(answer,0);				//TypeId (0)
@@ -368,6 +375,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    TProt::oTm(answer,TSYS::curTime());			//CreatedAt
 	    TProt::oN(answer,600000,4);				//RevisedLifeTime (600000)
 	    TProt::oS(answer,"\001");				//nonce
+	    TProt::oNu(answer,answer.size(),4,4);		//Real message size
 
 	    return mNotFull;
 	}
@@ -384,13 +392,11 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 string TProtIn::mkError( uint32_t errId, const string &err )
 {
     string rez;
-
-    uint32_t mSz = 16*err.size();
-    rez.reserve(mSz);
+    rez.reserve(100);
     rez.append("ERRF");				//Error message type
-    rez.append((char*)&mSz,sizeof(mSz));	//Message size
-    rez.append((char*)&errId,sizeof(errId));	//Error code
-    mSz = err.size();
-    rez.append((char*)&mSz,sizeof(mSz));	//Error message
-    rez.append(err);
+    TProt::oNu(rez,16+err.size(),4);		//Message size
+    TProt::oNu(rez,errId,4);			//Error code
+    TProt::oS(rez,err); 			//Error message
+
+    return rez;
 }

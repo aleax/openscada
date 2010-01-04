@@ -377,7 +377,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( ) : mCfg(false), mTime(0), mResB1(false), mResB2(false)
+TVal::TVal( ) : mCfg(false), mTime(0), mResB1(false), mResB2(false), mReqFlg(false)
 {
     src.fld = NULL;
 }
@@ -487,6 +487,7 @@ string TVal::getS( long long *tm, bool sys )
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
 	case TFld::String:
+	    setReqFlg(true);
 	    //> Get from archive
 	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
 		return mArch.at().getS(tm);
@@ -514,16 +515,17 @@ int TVal::getI( long long *tm, bool sys )
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
 	case TFld::Integer:
-	    //- Get from archive -
+	    setReqFlg(true);
+	    //> Get from archive
 	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
 		return mArch.at().getI(tm);
-	    //- Get value from config -
+	    //> Get value from config
 	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getI( );
 	    }
-	    //- Get current value -
+	    //> Get current value
 	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
 	    if( tm ) *tm = time();
 	    return val.val_i;
@@ -541,6 +543,7 @@ double TVal::getR( long long *tm, bool sys )
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
 	case TFld::Real:
+	    setReqFlg(true);
 	    //> Get from archive
 	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
 		return mArch.at().getR(tm);
@@ -568,16 +571,17 @@ char TVal::getB( long long *tm, bool sys )
 	case TFld::Real:
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Boolean:
-	    //- Get from archive -
+	    setReqFlg(true);
+	    //> Get from archive
 	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
 		return mArch.at().getB(tm);
-	    //- Get value from config -
+	    //> Get value from config
 	    if( mCfg )
 	    {
 		if(tm) *tm = TSYS::curTime();
 		return src.cfg->getB( );
 	    }
-	    //- Get current value -
+	    //> Get current value
 	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
 	    if( tm ) *tm = time();
 	    return val.val_b;

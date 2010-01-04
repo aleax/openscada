@@ -365,7 +365,7 @@ void *TMdContr::Task( void *icntr )
 			    for( int iV = 0; iV < listV.size(); iV++ )
 			    {
 				AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-				if( sepReq && (!vl.at().arch().freeStat() || vl.at().resB1()) ) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
+				if( sepReq && (!vl.at().arch().freeStat() || vl.at().reqFlg()) ) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 				if( !vl.at().arch().freeStat() )
 				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
 			    }
@@ -400,7 +400,7 @@ void *TMdContr::Task( void *icntr )
 			    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
 			    if( aNd->name() == "el" )
-			    { vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true); vl.at().setResB1(false); }
+			    { vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true); vl.at().setReqFlg(false); }
 			    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 			    {
 				long long btm = atoll(aNd->attr("tm").c_str());
@@ -600,7 +600,6 @@ void TMdPrm::save_( )
 void TMdPrm::vlGet( TVal &val )
 {
     if( val.name() == "err" && (!enableStat() || !owner().startStat()) ) TParamContr::vlGet(val);
-    if( val.arch().freeStat() ) val.setResB1(true);
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )

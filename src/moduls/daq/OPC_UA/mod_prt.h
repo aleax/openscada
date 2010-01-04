@@ -95,8 +95,8 @@ class TProt: public TProtocol
 	static long long iTm( const string &buf, int &off );
 	static int iNodeId( const string &buf, int &off, int *ns = NULL );
 
-	static void oN( string &buf, int32_t val, char sz );
-	static void oNu( string &buf, uint32_t val, char sz );
+	static void oN( string &buf, int32_t val, char sz, int off = -1 );
+	static void oNu( string &buf, uint32_t val, char sz, int off = -1 );
 	static void oS( string &buf, const string &val );
 	static void oNodeId( string &buf, int val, int ns = 0 );
 	static void oTm( string &buf, long long val );

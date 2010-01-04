@@ -277,7 +277,7 @@ end:	/*empty*/	{ p_fnc->prg+=(char)Reg::End; $$ = p_fnc->prg.size(); }
 
 void sfErr(const string &mess, YYLTYPE *ps)
 {
-    snprintf(m_buf,sizeof(m_buf),_("%s, pos: (%d,%d)-(%d,%d).\n"),
+    snprintf(m_buf,sizeof(m_buf),_("%s, pos: (%d,%d)-(%d,%d)."),
 	mess.c_str(),ps->first_line,ps->first_column,ps->last_line,ps->last_column );
     yyerror(m_buf);
 }
@@ -376,7 +376,7 @@ retry:
 	{
 	    bool e_ok = (c=='e'||c=='E')?true:false;
 	    pos++; yylloc.last_column++;
-	    while( pos < prog.size() && (isdigit(c=prog[pos]) || c == 'E' || c == 'e' || 
+	    while( pos < prog.size() && (isdigit(c=prog[pos]) || c == 'E' || c == 'e' ||
 		((c == '+' || c == '-') && ((prog[pos-1]) == 'e' || (prog[pos-1]) == 'E'))) )
 	    {
 		if( c=='E' || c=='e' )

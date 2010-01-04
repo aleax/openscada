@@ -923,8 +923,7 @@ void SessPage::alarmSet( bool isSet )
     string aCur = attrAt("alarm").at().getS( );
     int alev = atoi(TSYS::strSepParse(aCur,0,'|').c_str()) & 0xFF;
     int atp  = atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
-    int aqtp = (aStCur>>16) & 0xFF & atp;
-    if( isSet ) aqtp |= atp;
+    int aqtp = isSet ? atp : (aStCur>>16) & 0xFF & atp;
 
     vector<string> lst;
     //> Included pages process
@@ -1327,8 +1326,7 @@ void SessWdg::alarmSet( bool isSet )
     string aCur = attrAt("alarm").at().getS( );
     int alev = atoi(TSYS::strSepParse(aCur,0,'|').c_str()) & 0xFF;
     int atp  = atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
-    int aqtp = (aStCur>>16) & 0xFF;
-    if( isSet )	aqtp |= atp;
+    int aqtp = isSet ? atp : (aStCur>>16) & 0xFF;
 
     vector<string> lst;
     //> Included widgets process

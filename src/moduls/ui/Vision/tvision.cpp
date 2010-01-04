@@ -206,7 +206,7 @@ QIcon TVision::icon()
 
 QMainWindow *TVision::openWindow()
 {
-    //- Register support widget's shapes -
+    //> Register support widget's shapes
     if( shapesWdg.empty() )
     {
 	shapesWdg.push_back( new ShapeElFigure );
