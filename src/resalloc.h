@@ -37,8 +37,8 @@ class Res
 	Res( );
 	~Res( );
 
-	void resRequestW( unsigned short tm = 0 );	// Write request, tm in seconds
-	void resRequestR( unsigned short tm = 0 );	// Read request, tm in seconds
+	void resRequestW( unsigned short tm = 0 );	// Write request, tm in milliseconds
+	void resRequestR( unsigned short tm = 0 );	// Read request, tm in milliseconds
 	void resRelease( );				// Release
 
     private:

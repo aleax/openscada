@@ -77,9 +77,9 @@ string TModSchedul::optDescr( )
     return(buf);
 }
 
-void TModSchedul::loadLibS(  )
+int TModSchedul::loadLibS(  )
 {
-    libLoad(SYS->modDir(),false);
+    return libLoad(SYS->modDir(),false);
 }
 
 void TModSchedul::load_( )
@@ -356,8 +356,9 @@ TModSchedul::SHD &TModSchedul::lib( const string &iname )
     throw TError(nodePath().c_str(),_("SO <%s> is not present!"),iname.c_str());
 }
 
-void TModSchedul::libLoad( const string &iname, bool full )
+int TModSchedul::libLoad( const string &iname, bool full )
 {
+    int ldCnt = 0;
     vector<string> files;
 
     ScanDir( iname, files );
@@ -382,10 +383,12 @@ void TModSchedul::libLoad( const string &iname, bool full )
 	libReg(files[i_f]);
 	if(st_auto)
 	{
-	    try{ libAtt(files[i_f],full); }
+	    try{ libAtt(files[i_f],full); ldCnt++; }
 	    catch( TError err ){ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
     }
+
+    return ldCnt;
 }
 
 void TModSchedul::cntrCmdProc( XMLNode *opt )

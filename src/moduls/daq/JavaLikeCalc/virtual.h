@@ -189,7 +189,7 @@ class TipContr : public TTipDAQ
 	//> BuildIn functions
 	BFunc *bFuncGet( const char *nm );
 
-	void compileFuncLangs( vector<string> &ls );
+	bool compileFuncLangs( vector<string> *ls = NULL );
 	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "" );
 
     protected:

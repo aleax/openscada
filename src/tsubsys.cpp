@@ -77,7 +77,7 @@ void TSubSYS::modDel( const string &name )
 
 AutoHD<TModule> TSubSYS::modAt( const string &name )
 {
-    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!")); 
+    if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
     return chldAt(m_mod,name);
 }
 
@@ -94,7 +94,7 @@ void TSubSYS::subStart( )
     if( !subModule() )	return;
     vector<string> list;
     modList(list);
-    for(unsigned i_m=0; i_m < list.size(); i_m++)
+    for( unsigned i_m=0; i_m < list.size(); i_m++ )
 	try{ modAt(list[i_m]).at().modStart( ); }
 	catch(TError err)
 	{

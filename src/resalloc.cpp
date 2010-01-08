@@ -47,7 +47,8 @@ void Res::resRequestW( unsigned short tm )
     {
 	timespec wtm;
 	clock_gettime(CLOCK_REALTIME,&wtm);
-	wtm.tv_sec += tm;
+	wtm.tv_nsec += 1000000*(tm%1000);
+	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc,&wtm);
     }
     if( rez == EDEADLK ) throw TError("ResAlloc",_("Resource is try deadlock a thread!"));
@@ -62,7 +63,8 @@ void Res::resRequestR( unsigned short tm )
     {
 	timespec wtm;
 	clock_gettime(CLOCK_REALTIME,&wtm);
-	wtm.tv_sec += tm;
+	wtm.tv_nsec += 1000000*(tm%1000);
+	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
     if( rez == EDEADLK ) throw TError("ResAlloc",_("Resource is try deadlock a thread!"));

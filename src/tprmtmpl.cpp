@@ -363,10 +363,15 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	vector<string>  ls;
 	switch(c_lv)
 	{
-	    case 0:	SYS->daq().at().modList(ls);	break;
+	    case 0:
+		SYS->daq().at().modList(ls);
+		for( int i_l = 0; i_l < ls.size(); i_l++ )
+		    if( !SYS->daq().at().at(ls[i_l]).at().compileFuncLangs() )
+		    { ls.erase(ls.begin()+i_l); i_l--; }
+		break;
 	    case 1:
 		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(ls);
+		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)

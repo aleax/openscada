@@ -61,7 +61,7 @@ class TTipDAQ : public TModule, public TElem
 	TTipParam &tpPrmAt( unsigned id );
 
 	//> Compile functions support API
-	virtual void compileFuncLangs( vector<string> &ls )	{ }
+	virtual bool compileFuncLangs( vector<string> *ls = NULL )	{ return false; }
 	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "" );
 
 	//> Redundance

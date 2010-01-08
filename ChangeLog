@@ -1,3 +1,13 @@
+2010-01-08 Roman
+- DAQ: The function TTipDAQ::compileFuncLangs() expanded for fast information getting about compilation procedures' languages support by module.
+- SYS: Errors level about directory change is degrade to "warning". "Final start" message is added.
+- SYS, ModShedule: No one module loaded detection is added for exit with error message print. The functions TModSchedul::loadLibS() and TModSchedul::libLoad()
+    is expanded for loaded modules nomber to return.
+- !!:FIX:SYS: Incorrect thread policy set is fixed. For set RealTime policy need set attribute PTHREAD_EXPLICIT_SCHED for thread.
+- Resource: Wait timeout changed to milliseconds.
+- DAQ.ICP_DAS: Replaced resources alloc from auto-variable to direct alloc functions for fast task. Into requests to output modules added timeouted resource.
+
+
 2010-01-04 Roman
 - !!:DAQ, DAQ.DAQGate: Data request optimization by request size and time into reserve mode is added.
     The flag of detect requests is set independent into OpenSCADA core.

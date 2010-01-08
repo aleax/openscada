@@ -191,7 +191,7 @@ void TMdContr::start_( )
     if( !prcSt )
     {
 	if( mBus == 0 )
-	{ 
+	{
 	    ResAlloc res( pBusRes, true );
 	    if( Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
 	}
@@ -582,13 +582,13 @@ void TMdPrm::getVals( )
 	}
 	case 0x8042:
 	{
-	    ResAlloc res( owner().pBusRes, true );
+	    owner().pBusRes.resRequestW();
 	    int c_vl = DI_16(modSlot);
-	    res.release();
+	    owner().pBusRes.resRelease();
 	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( !((c_vl>>i_v)&0x01), 0, true );
-	    res.request(true);
+	    owner().pBusRes.resRequestW();
 	    c_vl = DO_16_RB(modSlot);
-	    res.release();
+	    owner().pBusRes.resRelease();
 	    for( int o_v = 0; o_v < 16; o_v++ ) vlAt(TSYS::strMess("o%d",o_v)).at().setB( (c_vl>>o_v)&0x01, 0, true );
 	    break;
 	}
@@ -715,6 +715,8 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	return;
     }
     //> Direct write
+    try
+    {
     switch( modTp )
     {
 	case 0x8017:
@@ -732,8 +734,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 		if( vlAt(TSYS::strMess("ha%d",i_v)).at().getB() == true )	hvl |= 1;
 		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
 	    }
-	    ResAlloc res( owner().pBusRes, true );
+	    owner().pBusRes.resRequestW(1000);
 	    I8017_SetLed(modSlot,(lvl<<8)|hvl);
+	    owner().pBusRes.resRelease();
 	    break;
 	}
 	case 0x87019:
@@ -764,9 +767,10 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    bool vl = valo.getB(0,true);
 	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
 
-	    ResAlloc res( owner().pBusRes, true );
+	    owner().pBusRes.resRequestW(1000);
 	    DO_16( modSlot, vl ? (DO_16_RB(modSlot) | 0x01<<atoi(valo.name().c_str()+1)) :
 				 (DO_16_RB(modSlot) & ~(0x01<<atoi(valo.name().c_str()+1))) );
+	    owner().pBusRes.resRelease();
 	    break;
 	}
 	case 0x87024:
@@ -816,6 +820,11 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    break;
 	}
     }
+    }catch( TError err )
+    {
+	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),valo.name().c_str(),err.mess.c_str());
+	valo.setS( pvl.getS(), 0, true );
+    }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -849,14 +858,14 @@ void *TMdPrm::fastTask( void *iprm )
 
     for( ; !prm.endRunReq; ((PrmsI8017*)prm.extPrms)->curCnt++ )
     {
-	ResAlloc res( prm.owner().pBusRes, true );
+	prm.owner().pBusRes.resRequestW( );
 	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
 	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
 	    vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017HW_GetCurAdChannel_Hex(prm.modSlot)/8000;
 	}
-	res.release();
+	prm.owner().pBusRes.resRelease( );
 
 	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
 	    cnls[i_c].at().setR( vbuf[i_c], wTm, true );

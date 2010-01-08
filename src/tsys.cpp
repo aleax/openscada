@@ -100,7 +100,8 @@ string TSYS::workDir( )
 void TSYS::setWorkDir( const string &wdir )
 {
     if( chdir(wdir.c_str()) != 0 )
-	mess_err(nodePath().c_str(),_("Change work directory to '%s' error: %s"),wdir.c_str(),strerror(errno));
+	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
+	    wdir.c_str(),strerror(errno),workDir().c_str());
     modif( );
 }
 
@@ -331,7 +332,11 @@ void TSYS::load_()
 
 	//> Load modules
 	modSchedul().at().load();
-	modSchedul().at().loadLibS();
+	if( !modSchedul().at().loadLibS() )
+	{
+	    mess_err(nodePath().c_str(),_("No one module is loaded. Your configuration broken!"));
+	    stop();
+	}
 
 	//> First DB subsystem load
 	db().at().load();
@@ -382,7 +387,7 @@ int TSYS::start(  )
 
     mess_info(nodePath().c_str(),_("Start!"));
     for( unsigned i_a=0; i_a < lst.size(); i_a++ )
-	try{ at(lst[i_a]).at().subStart(); }
+	try { at(lst[i_a]).at().subStart(); }
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -390,6 +395,9 @@ int TSYS::start(  )
 	}
 
     cfgFileScan( true );
+
+    mess_info(nodePath().c_str(),_("Final started!"));
+
     unsigned int i_cnt = 1;
     while( !mStopSignal )
     {
@@ -913,30 +921,46 @@ long TSYS::HZ()
 
 void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm )
 {
-    ResAlloc res(taskRes,false);
+    ResAlloc res( taskRes, false );
     if( mTasks.find(path) != mTasks.end() )	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
     res.release();
 
     pthread_t procPthr;
     pthread_attr_t pthr_attr;
-    pthread_attr_init(&pthr_attr);
+    pthread_attr_init( &pthr_attr );
+    pthread_attr_setinheritsched( &pthr_attr, PTHREAD_EXPLICIT_SCHED );
     struct sched_param prior;
+    prior.sched_priority = 0;
 
-    int policy = SCHED_OTHER;    
+    int policy = SCHED_OTHER;
     if( priority < 0 )	policy = SCHED_BATCH;
     else if( priority > 0 /*&& SYS->user() == "root"*/ )	policy = SCHED_RR;
-    pthread_attr_setschedpolicy(&pthr_attr,policy);
-    prior.__sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
-    pthread_attr_setschedparam(&pthr_attr,&prior);
+    pthread_attr_setschedpolicy( &pthr_attr, policy );
+    if( policy == SCHED_RR )
+    {
+	prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
+	pthread_attr_setschedparam(&pthr_attr,&prior);
+    }
 
-    pthread_create( &procPthr, &pthr_attr, start_routine, arg );
-    pthread_attr_destroy(&pthr_attr);
+    int rez = pthread_create( &procPthr, &pthr_attr, start_routine, arg );
+    if( rez == EPERM )
+    {
+	mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
+	policy = SCHED_OTHER;
+	pthread_attr_setschedpolicy( &pthr_attr, policy );
+	prior.sched_priority = 0;
+	pthread_attr_setschedparam(&pthr_attr,&prior);
+	rez = pthread_create( &procPthr, &pthr_attr, start_routine, arg );
+    }
+    pthread_attr_destroy( &pthr_attr );
+
+    if( rez ) throw TError( nodePath().c_str(), _("Task creation error %d."), rez );
 
     if( startCntr && TSYS::eventWait( *startCntr, true, nodePath()+": "+path+": start", wtm ) )
 	throw TError( nodePath().c_str(), _("Task '%s' is not started!"), path.c_str() );
 
     res.request(true);
-    mTasks[path] = STask( procPthr, policy, prior.__sched_priority );
+    mTasks[path] = STask( procPthr, policy, prior.sched_priority );
     res.release();
 }
 

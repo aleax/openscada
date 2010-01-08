@@ -170,10 +170,14 @@ TController *TipContr::ContrAttach( const string &name, const string &daq_db )
     return new Contr(name,daq_db,this);
 }
 
-void TipContr::compileFuncLangs( vector<string> &ls )
+bool TipContr::compileFuncLangs( vector<string> *ls )
 {
-    ls.clear();
-    ls.push_back("JavaScript");
+    if( ls )
+    {
+	ls->clear();
+	ls->push_back("JavaScript");
+    }
+    return true;
 }
 
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )

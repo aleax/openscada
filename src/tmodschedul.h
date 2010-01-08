@@ -58,11 +58,11 @@ class TModSchedul : public TSubSYS
 	void setDenyList( const string &vl )	{ mDeny = vl; modif(); }
 	void setChkPer( int per )		{ mPer = per; modif(); }
 
-	void loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS
+	int loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS
 
 	SHD &lib( const string &name );			// Get stat share lib <name>
 	void libList( vector<string> &list );		// List present share libs
-	void libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
+	int libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
 	void libAtt( const string &name, bool full = false);	// Attach share libs
 	void libDet( const string &name );		// Detach share libs
 
