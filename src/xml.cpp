@@ -242,7 +242,7 @@ string XMLNode::save( unsigned char flg )
 	xml += "<?xml version='1.0' encoding='UTF-8' ?>";
 	if( flg&XMLNode::BrClosePast ) xml += "\n";
     }
-    
+
     save(flg,xml);
     return xml;
 }

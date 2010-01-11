@@ -140,14 +140,14 @@ void TMess::setLang( const string &lng )
     else mLang2Code = mLang2Code.substr(0,2);
 }
 
-string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess)
+string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess )
 {
     if( fromCH == toCH ) return mess;
 
-    //> Make convert to blocks 100 bytes !!!
+    //> Make convert to blocks 1000 bytes
     string buf;
-    buf.reserve(1000);
-    char   *ibuf, outbuf[100], *obuf;
+    buf.reserve(mess.size());
+    char   *ibuf, outbuf[1000], *obuf;
     size_t ilen, olen;
     iconv_t hd;
 
@@ -158,7 +158,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	return mess;
     }
 
-    ibuf = (char *)mess.c_str();
+    ibuf = (char *)mess.data();
     ilen = mess.size();
 
     while(ilen)
@@ -169,7 +169,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	if( rez == (size_t)(-1) && errno != E2BIG )
 	{
 	    mess_crit("IConv",_("Error input sequence convert: %s"),strerror(errno));
-	    mess_debug("IConv",_("Error converting from %s to %s for message: %s"),fromCH.c_str(),toCH.c_str(),mess.c_str());
+	    mess_debug("IConv",_("Error converting from %s to %s for message part: '%s'"),
+		fromCH.c_str(),toCH.c_str(),mess.substr(vmax(mess.size()-ilen-10,0),20).c_str());
 	    buf = mess;
 	    break;
 	}

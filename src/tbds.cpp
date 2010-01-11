@@ -611,12 +611,12 @@ TCntrNode &TBD::operator=( TCntrNode &node )
 	src_n->allowList(tbl_ls);
 	for( int i_l = 0; i_l < tbl_ls.size(); i_l++ )
 	{
-	    //-- Open source and destination tables --
+	    //> Open source and destination tables
 	    src_n->open(tbl_ls[i_l], false);
 	    open(tbl_ls[i_l], true);
-	    //-- Copy table --
+	    //> Copy table
 	    (TCntrNode&)at(tbl_ls[i_l]).at() = (TCntrNode&)src_n->at(tbl_ls[i_l]).at();
-	    //-- Close source and destination tables --
+	    //> Close source and destination tables
 	    src_n->close(tbl_ls[i_l]);
 	    close(tbl_ls[i_l]);
 	}

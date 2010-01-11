@@ -94,8 +94,9 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return vmax(m_per,0.1); }
-	int	prior( )	{ return m_prior; }
+	long long period( )	{ return mPer; }
+	string cron( )		{ return mSched; }
+	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -106,6 +107,8 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
@@ -113,15 +116,17 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	int	&m_per,		// s
-		&m_prior;	// Process task priority
+	int	&mPrior;	//Process task priority
+	string	&mSched,	//Calc schedule
+		&mAddr;		//Transport device address
+	long long mPer;
 
-	bool	prc_st,		// Process task active
-		endrun_req;	// Request to stop of the Process task
+	bool	prc_st,		//Process task active
+		endrun_req;	//Request to stop of the Process task
 
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tm_gath;	// Gathering time
+	double	tm_gath;	//Gathering time
 };
 
 //*************************************************

@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.6.4
+Version: 0.6.4.1
 Release: 1
 Source: openscada-%version.tar.gz
 License: GPLv2
@@ -112,10 +112,7 @@ The %name-devel package includes library archives and include files.
 %package demo
 Summary: Open SCADA demo data bases and config.
 Group: Graphics
-%if %_vendor == "alt"
-BuildArch: noarch
-%endif
-Requires: %name = %version-%release %name-DAQ.BlockCalc %name-Archive.FSArch 
+Requires: %name = %version-%release %name-DAQ.BlockCalc %name-Archive.FSArch
 Requires: %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System
 Requires: %name-DB.SQLite, %name-Protocol.HTTP %name-Protocol.SelfSystem
 Requires: %name-Special.FLibComplex1, %name-Special.FLibMath, %name-Special.FLibSYS, %name-Transport.Sockets,

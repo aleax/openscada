@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
 Name: openscada
-Version: 0.6.4
+Version: 0.6.4.1
 Release: 1
 Source: openscada-%version.tar.gz
 License: GPLv2
@@ -65,9 +65,6 @@ The %name-devel package includes library archives and include files.
 %package demo
 Summary: Open SCADA demo data bases and config
 Group: Graphics
-%if %_vendor == "alt"
-BuildArch: noarch
-%endif
 Requires: %name
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo_en>. For access use account "root" and password "openscada" or account "user" without password.

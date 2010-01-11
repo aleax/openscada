@@ -180,12 +180,12 @@ void MBD::disable( )
 {
     if( !enableStat() )  return;
 
-    //- Last commit -
+    //> Last commit
     if(commCnt) { commCnt = trans_reqs; sqlReq(""); }
 
     TBD::disable( );
 
-    //- Close DB -
+    //> Close DB
     ResAlloc res(conn_res,true);
     sqlite3_close(m_db);
 }
@@ -536,7 +536,7 @@ void MTable::fieldSet( TConfig &cfg )
     req += ";";
 
     //> Query
-    try{ owner().sqlReq( req ); }
+    try { owner().sqlReq( req ); }
     catch(TError err)
     {
 	if( (err.cod-100) == SQLITE_READONLY )	return;

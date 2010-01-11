@@ -114,12 +114,39 @@ TProtocolIn *TProt::in_open( const string &name )
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    string mbap, err, rez;
+    string rez;
     char buf[1000];
 
     ResAlloc resN( tro.nodeRes(), true );
 
-    //????
+    try
+    {
+	if( io.name() == "opc.tcp" )
+	{
+	    if( io.attr("id") == "HEL" )
+	    {
+		rez.reserve(50);
+		rez.append("HELF");			//HELLO message type
+		oNu(rez,0,4);				//> Message size
+		oNu(rez,0,4);				//> Protocol version
+		oNu(rez,65536,4);			//> Recive buffer size
+		oNu(rez,65536,4);			//> Send buffer size
+		oNu(rez,0x01000000,4);			//> Max message size
+		oNu(rez,5000,4);			//> Max chunk count
+		oS(rez,"opc.tcp://ocalhost:4840");	//> EndpointURL
+		oNu(rez,rez.size(),4,4);		//> Real message size
+
+		//> Send request
+		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
+	    }
+
+	}
+	io.setAttr("err",TSYS::strMess(_("11:OPC UA '%s': request '%s' don't supported."),io.name().c_str(),io.attr("id").c_str()))->setText("");
+	return;
+    }
+    catch(TError err) { }
+
+    io.setAttr("err",TSYS::strMess(_("10:OPC UA protocol '%s' don't supported."),io.name().c_str()))->setText("");
 }
 
 void TProt::cntrCmdProc( XMLNode *opt )

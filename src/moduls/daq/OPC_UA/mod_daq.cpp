@@ -104,8 +104,9 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
+    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
+    fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -122,7 +123,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
+	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mAddr(cfg("ADDR").getSd())
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -146,8 +147,24 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::start_( )
 {
+    //> Establish connection
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    try { tr.at().start(); }
+    catch( TError err ){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+
+    //> Establish OPC OA connection
+    //> Send HELLO message
+    XMLNode req("opc.tcp"); req.setAttr("id","HEL");
+    tr.at().messProtIO(req,"OPC_UA");
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("HELLO request error: %s"),req.attr("err").c_str());
+
+
+
     //> Start the gathering data task
-    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
+    if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
 }
 
 void TMdContr::stop_( )
@@ -204,6 +221,38 @@ void *TMdContr::Task( void *icntr )
 
     return NULL;
 }
+
+void TMdContr::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if( opt->name() == "info" )
+    {
+	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
+	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
+	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
+		"Seconds form is one real number (1.5, 1e-3).\n"
+		"Cron it is standard form '* * * * *'. Where:\n"
+		"  - minutes (0-59);\n"
+		"  - hours (0-23);\n"
+		"  - days (1-31);\n"
+		"  - month (1-12);\n"
+		"  - week day (0[sunday]-6)."));
+	return;
+    }
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/cntr/cfg/trLst" && ctrChkNode(opt) )
+    {
+	vector<string> sls;
+	SYS->transport().at().outTrList(sls);
+	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	    opt->childAdd("el")->setText(sls[i_s]);
+    }
+    else TController::cntrCmdProc(opt);
+}
+
 
 //*************************************************
 //* TMdPrm                                        *

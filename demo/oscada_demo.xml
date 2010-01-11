@@ -23,7 +23,7 @@
 
 	<node id="sub_BD">
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_ru="Основная БД" NAME_uk="Основна БД" ADDR="./DEMO/DemoSt.db" CODEPAGE="KOI8-U"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_ru="Основная БД" NAME_uk="Основна БД" ADDR="./DEMO/DemoSt.db" CODEPAGE="UTF-8"/>
 	    </tbl>
 	</node>
 
