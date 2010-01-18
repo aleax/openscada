@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 # Roman Savochenko <rom_as@fromru.com>, 2009.
 #
-#: mod_serial.cpp:58 mod_serial.cpp:382 mod_serial.cpp:396 mod_serial.cpp:398
+#: mod_serial.cpp:58 mod_serial.cpp:373 mod_serial.cpp:393 mod_serial.cpp:395
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:45+0300\n"
+"POT-Creation-Date: 2010-01-18 09:43+0200\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -68,11 +68,11 @@ msgstr ""
 msgid "5"
 msgstr ""
 
-#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:173 mod_serial.cpp:447
+#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:173 mod_serial.cpp:444
 msgid "TMS"
 msgstr ""
 
-#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:426 mod_serial.cpp:663
+#: mod_serial.cpp:101 mod_serial.cpp:104 mod_serial.cpp:423 mod_serial.cpp:642
 msgid "Timings"
 msgstr "Временные интервалы"
 
@@ -95,22 +95,22 @@ msgstr ""
 msgid "h"
 msgstr ""
 
-#: mod_serial.cpp:127 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
-#: mod_serial.cpp:663
+#: mod_serial.cpp:127 mod_serial.cpp:417 mod_serial.cpp:423 mod_serial.cpp:636
+#: mod_serial.cpp:642
 msgid "help"
 msgstr ""
 
-#: mod_serial.cpp:137 mod_serial.cpp:385
+#: mod_serial.cpp:137 mod_serial.cpp:376
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: mod_serial.cpp:156 mod_serial.cpp:417 mod_serial.cpp:654
+#: mod_serial.cpp:156 mod_serial.cpp:414 mod_serial.cpp:633
 msgid "info"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
-#: mod_serial.cpp:663
+#: mod_serial.cpp:159 mod_serial.cpp:417 mod_serial.cpp:423 mod_serial.cpp:636
+#: mod_serial.cpp:642
 msgid "fld"
 msgstr ""
 
@@ -122,19 +122,19 @@ msgstr ""
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:437
-#: mod_serial.cpp:438 mod_serial.cpp:657 mod_serial.cpp:663 mod_serial.cpp:675
-#: mod_serial.cpp:676
+#: mod_serial.cpp:159 mod_serial.cpp:417 mod_serial.cpp:423 mod_serial.cpp:434
+#: mod_serial.cpp:435 mod_serial.cpp:636 mod_serial.cpp:642 mod_serial.cpp:653
+#: mod_serial.cpp:654
 msgid "root"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
-#: mod_serial.cpp:663
+#: mod_serial.cpp:159 mod_serial.cpp:417 mod_serial.cpp:423 mod_serial.cpp:636
+#: mod_serial.cpp:642
 msgid "tp"
 msgstr ""
 
-#: mod_serial.cpp:159 mod_serial.cpp:420 mod_serial.cpp:426 mod_serial.cpp:657
-#: mod_serial.cpp:663
+#: mod_serial.cpp:159 mod_serial.cpp:417 mod_serial.cpp:423 mod_serial.cpp:636
+#: mod_serial.cpp:642
 msgid "str"
 msgstr ""
 
@@ -150,15 +150,15 @@ msgstr ""
 msgid "rows"
 msgstr ""
 
-#: mod_serial.cpp:164 mod_serial.cpp:434 mod_serial.cpp:672
+#: mod_serial.cpp:164 mod_serial.cpp:431 mod_serial.cpp:650
 msgid "path"
 msgstr ""
 
-#: mod_serial.cpp:165 mod_serial.cpp:437 mod_serial.cpp:675
+#: mod_serial.cpp:165 mod_serial.cpp:434 mod_serial.cpp:653
 msgid "get"
 msgstr ""
 
-#: mod_serial.cpp:175 mod_serial.cpp:449
+#: mod_serial.cpp:175 mod_serial.cpp:446
 msgid "/dev/ttyS0:19200:8E2"
 msgstr ""
 
@@ -166,91 +166,75 @@ msgstr ""
 msgid "0.57:320"
 msgstr ""
 
-#: mod_serial.cpp:189 mod_serial.cpp:463
+#: mod_serial.cpp:189
 #, c-format
 msgid "Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."
 msgstr ""
 "Трафик входящий %.4g кб, исходящий %.4g кб. Макс. время ожидания символа "
 "%.4g мс."
 
-#: mod_serial.cpp:200 mod_serial.cpp:474
+#: mod_serial.cpp:200 mod_serial.cpp:471
 msgid ":"
 msgstr ""
 
-#: mod_serial.cpp:216 mod_serial.cpp:490
+#: mod_serial.cpp:216 mod_serial.cpp:487
 #, c-format
 msgid "Serial port '%s' open error."
 msgstr "Ошибка открытия последовательного порта '%s'."
 
-#: mod_serial.cpp:246 mod_serial.cpp:520
+#: mod_serial.cpp:246 mod_serial.cpp:517
 #, c-format
 msgid "Speed '%d' error."
 msgstr "Ошибка скорости '%d'."
 
-#: mod_serial.cpp:252 mod_serial.cpp:526
+#: mod_serial.cpp:252 mod_serial.cpp:523
 #, c-format
 msgid "Asynchronous data format '%s' error."
 msgstr "Ошибка формата асинхронных данных '%s'."
 
-#: mod_serial.cpp:255 mod_serial.cpp:529
+#: mod_serial.cpp:255 mod_serial.cpp:526
 #, c-format
 msgid "Char length '%d' error."
 msgstr "Ошибка в длине символа '%d'."
 
-#: mod_serial.cpp:271 mod_serial.cpp:545
+#: mod_serial.cpp:271 mod_serial.cpp:542
 #, c-format
 msgid "Parity checking mode '%c' error."
 msgstr "Ошибка в режиме '%c' проверки чётности."
 
-#: mod_serial.cpp:277 mod_serial.cpp:551
+#: mod_serial.cpp:277 mod_serial.cpp:548
 #, c-format
 msgid "Stop bits '%d' error."
 msgstr "Ошибка в количестве стоп битов '%d'."
 
-#: mod_serial.cpp:288
-msgid "open"
-msgstr ""
-
-#: mod_serial.cpp:289
-msgid "Not opened!"
-msgstr "Не открылся!"
-
-#: mod_serial.cpp:306
-msgid "close"
-msgstr ""
-
-#: mod_serial.cpp:307
-msgid "Not closed!"
-msgstr "Не закрылся!"
-
-#: mod_serial.cpp:318
+#: mod_serial.cpp:309
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: mod_serial.cpp:369
+#: mod_serial.cpp:360
 #, c-format
 msgid "Serial received message <%d>."
 msgstr "Serial получил сообщение <%d>."
 
-#: mod_serial.cpp:386
+#: mod_serial.cpp:377
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
-#: mod_serial.cpp:393
+#: mod_serial.cpp:384
 #, c-format
 msgid "Serial replied message <%d>."
 msgstr "Serial ответил сообщением <%d>."
 
-#: mod_serial.cpp:420 mod_serial.cpp:657
+#: mod_serial.cpp:417 mod_serial.cpp:636
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: mod_serial.cpp:420 mod_serial.cpp:657
+#: mod_serial.cpp:417 mod_serial.cpp:636
 msgid "ADDR"
 msgstr ""
 
-#: mod_serial.cpp:421
+#: mod_serial.cpp:418
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
@@ -269,11 +253,11 @@ msgstr ""
 "    format - формат асинхронных данных '<размер><чётность><стоп>' (8N1, 7E1, "
 "5O2)."
 
-#: mod_serial.cpp:426 mod_serial.cpp:435 mod_serial.cpp:663 mod_serial.cpp:673
+#: mod_serial.cpp:423 mod_serial.cpp:432 mod_serial.cpp:642 mod_serial.cpp:651
 msgid "/prm/cfg/TMS"
 msgstr ""
 
-#: mod_serial.cpp:427
+#: mod_serial.cpp:424
 msgid ""
 "Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -284,27 +268,36 @@ msgstr ""
 "окончания фрейма, в мс;\n"
 "    frm - максимальная длина фрейма, в мс."
 
-#: mod_serial.cpp:438 mod_serial.cpp:676
+#: mod_serial.cpp:435 mod_serial.cpp:654
 msgid "set"
 msgstr ""
 
-#: mod_serial.cpp:450
-msgid "640:0.57:320"
+#: mod_serial.cpp:447
+msgid "640:0.57"
 msgstr ""
 
-#: mod_serial.cpp:584
+#: mod_serial.cpp:460
+#, c-format
+msgid "Traffic in %.4g kb, out %.4g kb. "
+msgstr "Трафик входящий %.4g кб, исходящий %.4g кб. "
+
+#: mod_serial.cpp:580
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-#: mod_serial.cpp:600
+#: mod_serial.cpp:597
 msgid "Writing request error."
 msgstr "Ошибка отправки запроса."
 
 #: mod_serial.cpp:617
-msgid "Respond from remote device is timeouted."
-msgstr "Исчерпано время ожидания ответа от устройства."
+msgid "Timeouted!"
+msgstr ""
 
-#: mod_serial.cpp:658
+#: mod_serial.cpp:618
+msgid "Serial error!"
+msgstr "Ошибка последовательного интерфейса!"
+
+#: mod_serial.cpp:637
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
@@ -323,15 +316,13 @@ msgstr ""
 "    format - формат асинхронных данных '<размер><чётность><стоп>' (8N1, 7E1, "
 "5O2)."
 
-#: mod_serial.cpp:664
+#: mod_serial.cpp:643
 msgid ""
-"Connection timings in format: \"[conn]:[symbol]:[frm]\". Where:\n"
+"Connection timings in format: \"[conn]:[symbol]\". Where:\n"
 "    conn - maximum time for connection respond wait, in ms;\n"
-"    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-"    frm - maximum frame length, in ms."
+"    symbol - one symbol maximum time, used for frame end detection, in ms."
 msgstr ""
-"Временные интервалы соединения в формате: \"[conn]:[symbol]:[frm]\". Где:\n"
+"Временные интервалы соединения в формате: \"[conn]:[symbol]\". Где:\n"
 "    conn - максимальное время ожидания ответа соединения, в мс;\n"
 "    symbol - максимальное время одного символа, используется для обнаружения "
-"окончания фрейма, в мс;\n"
-"    frm - максимальная длина фрейма, в мс."
+"окончания фрейма, в мс."

@@ -103,13 +103,14 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable( flag );
 
-    //- Controler's bd structure -
+    //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","0;100") );
     fldAdd( new TFld("ADDR",_("Serial transport"),TFld::String,TFld::NoFlag,"30","") );
+    fldAdd( new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10") );
 
-    //- Parameter type bd structure -
+    //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("I-7000 module type"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2;3;4;5;6",_("I-7051;I-7045;I-7063;I-7017;I-7024;NL-8AI;HostOK")) );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("I-7000 module address"),TFld::Integer,TFld::NoFlag|TCfg::NoVal,"20","1","0;255") );
@@ -118,7 +119,7 @@ void TTpContr::postEnable( int flag )
 
 void TTpContr::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt = "h";
     struct option long_opt[] =
@@ -156,7 +157,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0),
 	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()),
-	m_addr(cfg("ADDR").getSd())
+	m_addr(cfg("ADDR").getSd()), connTry(cfg("REQ_TRY").getId())
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
 }
@@ -234,21 +235,38 @@ string TMdContr::DCONReq( string &pdu )
 {
     ResAlloc res( req_res, true );
     char buf[1000];
-    string rez = "";
-
-    AutoHD<TTransportOut> tr;
-    try{ tr = SYS->transport().at().at("Serial").at().outAt(m_addr); }
-    catch(...) { tr.at().stop(); throw; }
-    if( !tr.at().startStat() )      tr.at().start();
+    string rez, err;
 
     try
     {
-	int resp_len = tr.at().messIO((pdu+"\r").data(),pdu.size()+1,buf,sizeof(buf));
-	rez.assign(buf,resp_len);
-    }catch( TError err ) { return _("14:Request error: ")+err.mess; }
-    pdu = rez;
+	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(m_addr);
+	if( !tr.at().startStat() ) tr.at().start();
+	pdu += "\r";
 
-    return "";
+	ResAlloc resN( tr.at().nodeRes(), true );
+
+	for( int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++ )
+	{
+	    int resp_len = tr.at().messIO( pdu.data(), pdu.size(), buf, sizeof(buf), 0, true );
+	    rez.assign(buf,resp_len);
+
+	    //> Wait tail
+	    while( rez.size() < 2 || rez[rez.size()-1] != '\r' )
+	    {
+		try{ resp_len = tr.at().messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError er){ break; }
+		rez.append( buf, resp_len );
+	    }
+	    if( rez.size() < 2 || rez[rez.size()-1] != '\r' )	{ err = _("13:Error respond: Not full."); continue; }
+	    pdu = rez.substr(0,rez.size()-1);
+	    err = "";
+	    break;
+	}
+    }
+    catch(TError er) { err = _("10:Transport error: ")+er.mess; }
+
+    if( !err.empty() ) pdu = "";
+
+    return err;
 }
 
 void *TMdContr::Task( void *icntr )

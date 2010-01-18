@@ -345,7 +345,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    for( int i_tr = 0; i_tr < reqTry; i_tr++ )
 	    {
 		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
-		rez.assign(buf,resp_len);
+		rez.assign( buf, resp_len );
+		//> Wait tail
+		while( true )
+		{
+		    try{ resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
+		    rez.append( buf, resp_len );
+		}
 
 		if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
 		if( CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
@@ -368,11 +374,17 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    {
 		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
 		rez.assign(buf,resp_len);
+		//> Wait tail
+		while( rez.size() < 3 || rez.substr(rez.size()-2,2) != "\r\n" )
+		{
+		    try{ resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
+		    rez.append( buf, resp_len );
+		}
 
 		if( rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\r\n" )
 		{ err = _("13:Error respond: Error format."); continue; }
 		string rezEnc = ASCIIToData(rez.substr(1,rez.size()-3));
-		if( LRC(rezEnc.substr(0,rezEnc.size()-1)) != rezEnc[rezEnc.size()-1] )
+		if( LRC(rezEnc.substr(0,rezEnc.size()-1)) != (uint8_t)rezEnc[rezEnc.size()-1] )
 		{ err = _("13:Error respond: LRC check error."); continue; }
 		pdu = rezEnc.substr(1,rezEnc.size()-2);
 		err = "";
@@ -519,7 +531,7 @@ retry:
     {
 	prt = "ASCII";
 	string req = modPrt->ASCIIToData(reqst.substr(1,reqst.size()-3));
-	if( modPrt->LRC(req.substr(0,req.size()-1)) != req[req.size()-1] ) return false;
+	if( modPrt->LRC(req.substr(0,req.size()-1)) != (uint8_t)req[req.size()-1] ) return false;
 	node = req[0];
 	pdu = req.substr( 1, req.size()-2 );
     }

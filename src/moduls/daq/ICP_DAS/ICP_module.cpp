@@ -108,6 +108,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("BUS",_("Bus"),TFld::Integer,TFld::NoFlag,"2","1") );
     fldAdd( new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::NoFlag,"6","115200") );
     fldAdd( new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000") );
+    fldAdd( new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -155,8 +156,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prcSt(false), endRunReq(false), tm_gath(0),
-	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId()), mLPprms(cfg("LP_PRMS").getSd())
+	TController( name_c, daq_db, cfgelem ), prcSt(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0),
+	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId()),
+	mLPprms(cfg("LP_PRMS").getSd()), connTry(cfg("REQ_TRY").getId())
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -171,7 +173,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. Serial requests %g, errors %g, respond errors %g. "),tm_gath,numReq,numErr,numErrResp);
 
     return val;
 }
@@ -198,8 +200,21 @@ void TMdContr::start_( )
 
 	try
 	{
-	    if( Open_Com( (mBus?mBus:1), mBaud, Data8Bit, NonParity, OneStopBit ) > 0 )
+	    if( Open_Com( (mBus?mBus:1), mBus?mBaud:115200, Data8Bit, NonParity, OneStopBit ) > 0 )
 		throw TError( nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1) );
+
+	    //> Create and init serial transport
+	    /*string trName = TSYS::strMess("%sCOM%d",MOD_ID,(mBus?mBus:1));
+	    if( !SYS->transport().at().at("Serial").at().outPresent(trName) )
+	    {
+		SYS->transport().at().at("Serial").at().outAdd(trName);
+		SYS->transport().at().at("Serial").at().outAt(trName).at().setAddr("/dev/ttySA0:115200:8N1");
+	    }
+	    if( SYS->transport().at().at("Serial").at().outAt(trName).at().startStat() )
+		SYS->transport().at().at("Serial").at().outAt(trName).at().stop();
+	    SYS->transport().at().at("Serial").at().outAt(trName).at().start();*/
+
+	    numReq = numErr = numErrResp = 0;
 
 	    //> Start the gathering data task
 	    SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt, 10 );
@@ -319,6 +334,54 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
+string TMdContr::serReq( string req, char mSlot )
+{
+    ResAlloc res( reqRes, true );
+    if( mBus == 0 && mSlot != mCurSlot )	{ pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
+
+    WORD wT;
+    char szReceive[255];
+    bool errTm = false, errResp = false;
+
+    numReq++;
+
+    /*AutoHD<TTransportOut> tr;
+    try
+    {
+	tr = SYS->transport().at().at("Serial").at().outAt(TSYS::strMess("%sCOM%d",MOD_ID,(mBus?mBus:1)));
+	if( !tr.at().startStat() ) tr.at().start();
+	req += "\r";
+    }
+    catch(...)	{ return ""; }*/
+
+    for( int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++ )
+    {
+	/*try
+	{
+	    int resp_len = tr.at().messIO( req.data(), req.size(), szReceive, sizeof(szReceive), 0, true );
+	    string rez( szReceive, resp_len );
+
+	    //> Wait tail
+	    while( rez.size() < 2 || rez[rez.size()-1] != '\r' )
+	    {
+		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError er){ break; }
+		rez.append( szReceive, resp_len );
+	    }
+	    if( rez.size() < 2 || rez[rez.size()-1] != '\r' )	{ errResp = true; continue; }
+	    return rez.substr(0,rez.size()-1);
+	}
+	catch(...) { errTm = true; continue; }*/
+
+	if( !Send_Receive_Cmd(mBus?mBus:1,(char*)req.c_str(),szReceive,1,0,&wT) ) return szReceive;
+    }
+
+    //if( errTm )
+    numErr++;
+    //if( errResp ) numErrResp++;
+
+    return "";
+}
+
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -335,7 +398,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/LPcfg/sn",_("Serial number"),R_R_R_,"root","DAQ",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/LPcfg/SDKv",_("SDK version"),R_R_R_,"root","DAQ",1,"tp","str");
 		//ctrMkNode("fld",opt,-1,"/LPcfg/RSW",_("Rotary switch ID"),R_R_R_,"root","DAQ",1,"tp","dec");
-		//ctrMkNode("fld",opt,-1,"/LPcfg/dipSW",_("DIP switch"),R_R_R_,"root","DAQ",1,"tp","hex");
+		ctrMkNode("fld",opt,-1,"/LPcfg/dipSW",_("DIP switch"),R_R_R_,"root","DAQ",1,"tp","hex");
 	    }
 	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root","DAQ",1,"tp","real");
 	}
@@ -380,12 +443,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	ResAlloc res( reqRes, true );
 	opt->setText( TSYS::int2str(GetRotaryID(0)) );
-    }
+    }*/
     else if( mBus == 0 && startStat() && a_path == "/LPcfg/dipSW" && ctrChkNode(opt) )
     {
-	ResAlloc res( reqRes, true );
-	opt->setText( TSYS::int2str(GetDIPswitch()) );
-    }*/
+	ResAlloc res( pBusRes, true );
+	if( !Open_Slot(9) )
+	{
+	    opt->setText( TSYS::int2str(GetDIPswitch()) );
+	    Close_Slot(9);
+	}
+    }
     else if( mBus == 0 && a_path == "/LPcfg/wTm" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( prmLP("wTm") );
@@ -553,8 +620,7 @@ void TMdPrm::saveExtPrms( )
 
 void TMdPrm::getVals( )
 {
-    int RetValue = 0;
-    WORD wT;
+    string rez;
 
     switch( modTp )
     {
@@ -593,72 +659,51 @@ void TMdPrm::getVals( )
 	    break;
 	}
 	case 0x87019:
-	{
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	    char szReceive[255];
-
-	    //> Read inputs
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("#%02X",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    rez = owner().serReq( TSYS::strMess("#%02X",(owner().mBus==0)?0:modAddr), modSlot );
 	    for( int i_v = 0; i_v < 8; i_v++ )
-		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1+7*i_v), 0, true );
+		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (rez.size() != 57 || rez[0] != '>') ? EVAL_REAL : atof(rez.data()+1+7*i_v), 0, true );
 
-	    //> Read Cold-Junction Compensation(CJC) temperature
-	    if( !RetValue )
-		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-	    vlAt("cvct").at().setR( (RetValue||szReceive[0]!='>') ? EVAL_REAL : atof(szReceive+1), 0, true );
-	    acq_err.setVal(RetValue?_("10:Request to module error."):((szReceive[0]!='>')?_("11:Respond from module error."):""));
+	    if( !rez.empty() )	rez = owner().serReq( TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr), modSlot );
+	    vlAt("cvct").at().setR( (rez.size() != 8 || rez[0] != '>') ? EVAL_REAL : atof(rez.data()+1), 0, true );
+	    acq_err.setVal( rez.empty() ? _("10:Request to module error.") : ((rez[0]!='>')?_("11:Respond from module error."):""));
+
 	    break;
-	}
 	case 0x87024:
-	{
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	    char szReceive[20];
-
 	    //> Host watchdog processing
+	    rez = "1";
 	    if( wTm >= 0.1 )
 	    {
-		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)).c_str(), szReceive, 1, 0, &wT );
-		if( RetValue ) { acq_err.setVal(_("10:Request to module error.")); break; }
+		rez = owner().serReq( TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)), modSlot );
+		if( rez.empty() ) { acq_err.setVal(_("10:Request to module error.")); break; }
 	    }
 
 	    //> Get data
 	    for( int i_v = 0; i_v < 4; i_v++ )
 	    {
-		if( !RetValue )
-		    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v).c_str(), szReceive, 1, 0, &wT );
-		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (RetValue||szReceive[0]!='!' ? EVAL_REAL : atof(szReceive+3)), 0, true );
+		if( !rez.empty() ) rez = owner().serReq( TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v), modSlot );
+		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (rez.size() != 10 || rez[0]!='!') ? EVAL_REAL : atof(rez.data()+3), 0, true );
 	    }
-	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
+	    acq_err.setVal( rez.empty()?_("10:Request to module error."):"" );
+
 	    break;
-	}
 	case 0x87057:
 	{
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	    char szReceive[20];
-
 	    //> Host watchdog processing
 	    if( wTm >= 0.1 )
 	    {
-		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)).c_str(), szReceive, 1, 0, &wT );
-		if( RetValue ) { acq_err.setVal(_("10:Request to module error.")); break; }
+		rez = owner().serReq( TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)), modSlot );
+		if( rez.empty() ) { acq_err.setVal(_("10:Request to module error.")); break; }
 	    }
 
 	    //> Get data
-	    if( !RetValue )
-		RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("$%02X6",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+	    if( !rez.empty() ) rez = owner().serReq( TSYS::strMess("$%02X6",(owner().mBus==0)?0:modAddr), modSlot );
 	    int vl = -1;
-	    if( !(RetValue||szReceive[0]!='!') )
+	    if( !(rez.size() != 7 || rez[0] != '!') )
 	    {
-		vl = strtoul(string(szReceive+1,4).c_str(),NULL,16);
+		vl = strtoul(rez.substr(1,4).c_str(),NULL,16);
 		acq_err.setVal("");
 	    }
-	    else acq_err.setVal(RetValue?_("10:Request to module error."):_("11:Respond from module error."));
+	    else acq_err.setVal(rez.empty()?_("10:Request to module error."):_("11:Respond from module error."));
 
 	    for( int i_v = 0; i_v < 16; i_v++ )
 		vlAt(TSYS::strMess("o%d",i_v)).at().setB( (vl<0) ? EVAL_BOOL : (vl>>i_v)&0x01, 0, true );
@@ -701,9 +746,7 @@ void TMdPrm::vlGet( TVal &val )
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if( !enableStat() || !owner().startStat() )	valo.setI( EVAL_INT, 0, true );
-    char szReceive[10];
-    WORD wT;
-    int RetValue;
+    string rez;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
@@ -745,9 +788,6 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    bool la = (valo.name().substr(0,2) == "la");
 	    if( !(ha||la) )	break;
 
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
 	    //> Create previous value
 	    int hvl = 0, lvl = 0;
 	    for( int i_v = 7; i_v >= 0; i_v-- )
@@ -758,8 +798,8 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 		if( vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true )	lvl |= 1;
 	    }
 
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("@%02XL%02X%02X",(owner().mBus==0)?0:modAddr,lvl,hvl).c_str(), szReceive, 1, 0, &wT );
-	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
+	    rez = owner().serReq( TSYS::strMess("@%02XL%02X%02X",(owner().mBus==0)?0:modAddr,lvl,hvl), modSlot );
+	    acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
 	    break;
 	}
 	case 0x8042:
@@ -778,21 +818,18 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    double vl = valo.getR(0,true);
 	    if( vl == EVAL_REAL || vl == pvl.getR() ) break;
 
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
 	    string cmd = TSYS::strMess("#%02X%d%+07.3f",(owner().mBus==0)?0:modAddr,atoi(valo.name().c_str()+1),vl);
 
 	    rep24:
-	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
+	    rez = owner().serReq( cmd, modSlot );
 	    //> Set watchdog flag is process
-	    if( !RetValue && szReceive[0] == '!' )
+	    if( !rez.empty() && rez[0] == '!' )
 	    {
-		Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+		owner().serReq( TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr), modSlot );
 		goto rep24;
 	    }
-	    valo.setR( (RetValue||szReceive[0]!='>' ? EVAL_REAL : vl), 0, true );
-	    acq_err.setVal(RetValue?_("10:Request to module error."):"");
+	    valo.setR( (rez.empty() || rez[0]!='>') ? EVAL_REAL : vl, 0, true );
+	    acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
 	    break;
 	}
 	case 0x87057:
@@ -800,23 +837,20 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    char vl = valo.getB(0,true);
 	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
 
-	    ResAlloc res( owner().reqRes, true );
-	    if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
 	    int daddr = atoi(valo.name().c_str()+1);
 	    string cmd = TSYS::strMess("#%02X%s%d%02X",(owner().mBus==0)?0:modAddr,(daddr/8)?"B":"A",daddr%8,vl);
 
 	    rep57:
-	    int RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)cmd.c_str(), szReceive, 1, 0, &wT );
+	    rez = owner().serReq( cmd, modSlot );
 	    //> Set watchdog flag is process
-	    if( !RetValue && szReceive[0] == '!' )
+	    if( !rez.empty() && rez[0] == '!' )
 	    {
-		Send_Receive_Cmd( owner().mBus?owner().mBus:1, (char*)TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
+		owner().serReq( TSYS::strMess("~%02X1",(owner().mBus==0)?0:modAddr), modSlot );
 		goto rep57;
 	    }
 
-	    valo.setB( (RetValue||szReceive[0]!='>' ? EVAL_BOOL : vl), 0, true );
-	    acq_err.setVal(RetValue?_("10:Request to module error."):((szReceive[0]!='>')?_("11:Respond from module error."):""));
+	    valo.setB( (rez.empty() || rez[0]!='>') ? EVAL_BOOL : vl, 0, true );
+	    acq_err.setVal(rez.empty()?_("10:Request to module error."):((rez[0]!='>')?_("11:Respond from module error."):""));
 	    break;
 	}
     }
@@ -885,9 +919,7 @@ void *TMdPrm::fastTask( void *iprm )
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    char szReceive[20];
-    WORD wT;
-    int RetValue;
+    string rez;
 
     //> Get page info
     if( opt->name() == "info" )
@@ -975,18 +1007,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( modTp == 0x87019 && enableStat() && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
 	{
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X8C%d",
-		(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())).c_str(), szReceive, 1, 0, &wT );
-	    opt->setText( (RetValue||szReceive[0]!='!') ? "-1" : TSYS::int2str(strtol(szReceive+6,NULL,16)) );
+	    rez = owner().serReq( TSYS::strMess("$%02X8C%d",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())), modSlot );
+	    opt->setText( (rez.size()!=8||rez[0]!='!') ? "-1" : TSYS::int2str(strtol(rez.data()+6,NULL,16)) );
 	}
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
-	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X7C%dR%02X",
-		(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())).c_str(), szReceive, 1, 0, &wT );
+	    owner().serReq( TSYS::strMess("$%02X7C%dR%02X",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())), modSlot );
     }
     else if( modTp == 0x87019 && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
     {
@@ -1025,105 +1052,80 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if( enableStat() && owner().startStat() && a_path == "/cfg/mod/wSt" && ctrChkNode(opt) )
     {
 	string wSt;
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-	if( !RetValue && szReceive[0]=='!' )
-	{
-	    wSt += (bool)strtol(szReceive+3,NULL,16) ? _("Set. ") : _("Clear. ");
 
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-	    if( !RetValue && szReceive[0]=='!' )
+	rez = owner().serReq( TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr), modSlot );
+	if( rez.size() == 5 && rez[0]=='!' )
+	{
+	    wSt += (bool)strtol(rez.data()+3,NULL,16) ? _("Set. ") : _("Clear. ");
+
+	    rez = owner().serReq( TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr), modSlot );
+	    if( rez.size() == 6 && rez[0]=='!' )
 	    {
-		wSt += (bool)strtol(string(szReceive+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
-		wSt += TSYS::real2str(0.1*strtol(szReceive+4,NULL,16))+_(" s.");
+		wSt += (bool)strtol(string(rez.data()+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
+		wSt += TSYS::real2str(0.1*strtol(rez.data()+4,NULL,16))+_(" s.");
 	    }
 	}
 	opt->setText(wSt);
     }
     else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt) )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	string rez;
+	string cnt;
 	for( int i_c = 0; i_c < 4; i_c++ )
 	{
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X7%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
-	    if( RetValue || szReceive[0]!='!' ) { rez = _("Error"); break; }
-	    rez = rez + (szReceive+3) + " ";
+	    rez = owner().serReq( TSYS::strMess("$%02X7%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
+	    if( rez.size() != 10 || rez[0] != '!' ) { cnt = _("Error"); break; }
+	    cnt = cnt + (rez.data()+3) + " ";
 	}
-	opt->setText(rez);
+	opt->setText(cnt);
     }
     else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 	for( int i_c = 0; i_c < 4; i_c++ )
-	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("$%02X4%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
+	    owner().serReq( TSYS::strMess("$%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
     }
     else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	string rez;
+	string cnt;
 	for( int i_c = 0; i_c < 4; i_c++ )
 	{
-	    RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X4%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
-	    if( RetValue || szReceive[0]!='!' ) { rez = _("Error"); break; }
-	    rez = rez + (szReceive+3) + " ";
+	    rez = owner().serReq( TSYS::strMess("~%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
+	    if( rez.size() != 10 || rez[0] != '!' ) { cnt = _("Error"); break; }
+	    cnt = cnt + (rez.data()+3) + " ";
 	}
-	opt->setText(rez);
+	opt->setText(cnt);
     }
     else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
 	for( int i_c = 0; i_c < 4; i_c++ )
-	    Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5%d",(owner().mBus==0)?0:modAddr,i_c).c_str(), szReceive, 1, 0, &wT );
+	    owner().serReq( TSYS::strMess("~%02X5%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
     }
     else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt) )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X4P",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-	if( RetValue || szReceive[0]!='!' ) opt->setText(_("Error"));
+	rez = owner().serReq( TSYS::strMess("~%02X4P",(owner().mBus==0)?0:modAddr), modSlot );
+	if( rez.size() != 7 || rez[0] != '!' ) opt->setText(_("Error"));
 	else
 	{
-	    string rez;
-	    int vl = strtol(szReceive+3,NULL,16);
-	    for( int i_o = 0; i_o < 16; i_o++ )	rez += ((vl>>i_o)&0x01)?"1 ":"0 ";
-	    opt->setText(rez);
+	    string cnt;
+	    int vl = strtol(rez.data()+3,NULL,16);
+	    for( int i_o = 0; i_o < 16; i_o++ )	cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    opt->setText(cnt);
 	}
     }
     else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
-    {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-	Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-    }
+	owner().serReq( TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr), modSlot );
     else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
     {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-
-	RetValue = Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X4S",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-	if( RetValue || szReceive[0]!='!' ) opt->setText(_("Error"));
+	rez = owner().serReq( TSYS::strMess("~%02X4S",(owner().mBus==0)?0:modAddr), modSlot );
+	if( rez.size() != 7 || rez[0] != '!' ) opt->setText(_("Error"));
 	else
 	{
-	    string rez;
-	    int vl = strtol(szReceive+3,NULL,16);
-	    for( int i_o = 0; i_o < 16; i_o++ )	rez += ((vl>>i_o)&0x01)?"1 ":"0 ";
-	    opt->setText(rez);
+	    string cnt;
+	    int vl = strtol(rez.data()+3,NULL,16);
+	    for( int i_o = 0; i_o < 16; i_o++ )	cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    opt->setText(cnt);
 	}
     }
     else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
-    {
-	ResAlloc res( owner().reqRes, true );
-	if( owner().mBus == 0 )	ChangeToSlot(modSlot);
-	Send_Receive_Cmd( owner().mBus?owner().mBus:1,(char*)TSYS::strMess("~%02X5S",(owner().mBus==0)?0:modAddr).c_str(), szReceive, 1, 0, &wT );
-    }
+	owner().serReq( TSYS::strMess("~%02X5S",(owner().mBus==0)?0:modAddr), modSlot );
     else TParamContr::cntrCmdProc(opt);
 }

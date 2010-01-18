@@ -156,12 +156,20 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
 
     //> Establish OPC OA connection
-    //> Send HELLO message
+    //>> Send HELLO message
     XMLNode req("opc.tcp"); req.setAttr("id","HEL");
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("HELLO request error: %s"),req.attr("err").c_str());
 
+    //>> Send Open SecureChannel message
+    req.setAttr("id","OPN")->setAttr("secPlcURI","http://opcfoundation.org/UA/SecurityPolicy#None");
+    tr.at().messProtIO(req,"OPC_UA");
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
 
+    //>> Send SecureChannel unknown message
+    req.setAttr("id","GetEndpoints");
+    tr.at().messProtIO(req,"OPC_UA");
+    //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
 
     //> Start the gathering data task
     if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
@@ -201,7 +209,7 @@ void *TMdContr::Task( void *icntr )
 	long long t_cnt = TSYS::curTime();
 
 	//> Update controller's data
-	cntr.en_res.resRequestR( );
+	/*cntr.en_res.resRequestR( );
 	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
 	    try
 	    {
@@ -211,10 +219,11 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resRelease( );
+	cntr.en_res.resRelease( );*/
+
 	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
-	TSYS::taskSleep((long long)(1e9*cntr.period()));
+	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
     }
 
     cntr.prc_st = false;

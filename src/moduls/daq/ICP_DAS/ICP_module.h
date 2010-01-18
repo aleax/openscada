@@ -128,6 +128,8 @@ class TMdContr: public TController
 	void prmEn( const string &id, bool val );
 	void setPrmLP( const string &prm, const string &vl );
 
+	string serReq( string req, char mSlot = 0 );
+
     protected:
 	//Methods
 	void disable_( );
@@ -146,7 +148,8 @@ class TMdContr: public TController
 	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
-		&mBaud;				//Baudrate
+		&mBaud,				//Baudrate
+		&connTry;			//Connections try
 	string	&mLPprms;			//LinPAC parameters
 
 	bool	prcSt,				//Process task active
@@ -154,6 +157,8 @@ class TMdContr: public TController
 	vector< AutoHD<TMdPrm> >  p_hd;
 
 	double	tm_gath;			//Gathering time
+	int	mCurSlot;
+	float	numReq, numErr, numErrResp;
 };
 
 //*************************************************

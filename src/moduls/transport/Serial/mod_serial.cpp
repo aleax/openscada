@@ -320,7 +320,7 @@ void *TTrIn::Task( void *tr_in )
     fd_set fdset;
 
     double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
-    wCharTm = vmax(0.001,wCharTm);
+    wCharTm = vmax(0.01,wCharTm);
     int wFrTm = atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
     wFrTm = 1000*vmin(10000,wFrTm);
     long long stFrTm, tmW = 0, tmTmp1;
@@ -332,7 +332,7 @@ void *TTrIn::Task( void *tr_in )
 	//>> Char timeout
 	while(true)
 	{
-	    tv.tv_sec = 0; tv.tv_usec = (int)(1500.0*wCharTm);
+	    tv.tv_sec = 0; tv.tv_usec = (int)(1.5e3*wCharTm);
 	    FD_ZERO( &fdset ); FD_SET( tr->fd, &fdset );
 
 	    if( select( tr->fd+1, &fdset, NULL, NULL, &tv ) <= 0 )
@@ -383,7 +383,13 @@ void *TTrIn::Task( void *tr_in )
 #if OSC_DEBUG >= 5
 	    mess_debug( nodePath().c_str(), _("Serial replied message <%d>."), answ.size() );
 #endif
-	    r_len = write( tr->fd, answ.c_str(), answ.size() ); tr->trOut += (float)r_len/1024;
+	    for( int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL )
+	    {
+		wL = write( tr->fd, answ.data()+wOff, answ.size()-wOff );
+		tr->trOut += (float)wL/1024;
+	    }
+	    //r_len = write( tr->fd, answ.data(), answ.size() );
+	    //tr->trOut += (float)r_len/1024;
 	    answ = "";
 	}
 	req = "";
@@ -435,10 +441,10 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0), tmMax(0)
+    TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0)
 {
     setAddr("/dev/ttyS0:19200:8E2");
-    setTimings("640:0.57:320");
+    setTimings("640:0.57");
 }
 
 TTrOut::~TTrOut()
@@ -451,7 +457,7 @@ string TTrOut::getStatus( )
     string rez = TTransportOut::getStatus( );
 
     if( startStat() )
-	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."),trIn,trOut,tmMax);
+	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. "),trIn,trOut);
 
     return rez;
 }
@@ -462,7 +468,7 @@ void TTrOut::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( speed )	setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str((11*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
+    if( speed )	setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str((11*1000)/(float)speed,2,'f'));
 }
 
 void TTrOut::start( )
@@ -470,7 +476,7 @@ void TTrOut::start( )
     if( run_st ) return;
 
     //> Status clear
-    trIn = trOut = tmMax = 0;
+    trIn = trOut = 0;
 
     try
     {
@@ -558,7 +564,7 @@ void TTrOut::stop()
     if( !run_st ) return;
 
     //> Status clear
-    trIn = trOut = tmMax = 0;
+    trIn = trOut = 0;
 
     close(fd); fd = -1;
 
@@ -567,74 +573,57 @@ void TTrOut::stop()
 
 int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
-    int blen = 0, off = 0;
-    fd_set fdset;
+    int blen = 0, off = 0, kz;
 
     if( !noRes ) ResAlloc res( nodeRes(), true );
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     int wReqTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
-    wReqTm = time?(1000*time):(1000*vmin(10000,wReqTm));
+    wReqTm = time ? time : vmin(10000,wReqTm);
     double wCharTm = atof(TSYS::strSepParse(timings(),0,':',&off).c_str());
-    wCharTm = vmax(0.001,wCharTm);
-    int wFrTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
-    wFrTm = 1000*vmin(10000,wFrTm);
+    wCharTm = vmax(0.01,vmin(1e3,wCharTm));
 
-    long long tmW = TSYS::curTime(), tmTmp1;
+    long long tmW = TSYS::curTime();
 
     //> Write request
     if( obuf && len_ob > 0 )
     {
-	if( (tmW-mLstReqTm) < (5500*wCharTm) ) usleep( (int)((5500*wCharTm)-(tmW-mLstReqTm)) );
-	tcflush( fd, TCIFLUSH );
-	if( write(fd,obuf,len_ob) == -1 ) throw TError(nodePath().c_str(),_("Writing request error."));
+	tcflush( fd, TCIOFLUSH );
+	if( (tmW-mLstReqTm) < (4000*wCharTm) ) kz = usleep( (int)((4000*wCharTm)-(tmW-mLstReqTm)) );
+	for( int wOff = 0, kz = 0; wOff != len_ob; wOff += kz )
+	{
+	    kz = write(fd,obuf+wOff,len_ob-wOff);
+	    if( kz <= 0 ) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Writing request error.")); }
+	}
 	trOut += (float)len_ob/1024;
     }
 
     //> Read reply
+    int i_b = 0;
     if( ibuf != NULL && len_ib > 0 )
     {
-	bool isEnter = true;
-	while( true )
-	{
-	    int bytes = 0;
-	    ioctl( fd, FIONREAD, &bytes );
-	    //>> Reset old broken session's data
-	    if( bytes > 2 ) break;
-	    //>> Connection timeout
-	    mLstReqTm = TSYS::curTime();
-	    if( (mLstReqTm-tmW) >= wReqTm )
-		throw TError(nodePath().c_str(),_("Respond from remote device is timeouted."));
-	    usleep( 1000 );
-	    isEnter = false;
-	}
-	//fcntl( fd, F_SETFL, 0 );
-	blen = read( fd, ibuf, len_ib );
-
-	//>> Wait tail
-	tmW = mLstReqTm;
+	fd_set rd_fd;
 	struct timeval tv;
-	while( true )
+
+	do
 	{
-	    //>> Char timeout
-	    tv.tv_sec = 0; tv.tv_usec = (int)(1500.0*wCharTm);
-	    FD_ZERO( &fdset ); FD_SET( fd, &fdset );
-
-	    if( select(fd+1,&fdset,NULL,NULL,&tv) <= 0 ) break;
-	    blen += read( fd, ibuf+blen, len_ib-blen );
-
-	    //>> Respond statistic
-	    tmTmp1 = TSYS::curTime();
-	    tmMax = vmax(tmMax,1e-3*(tmTmp1-mLstReqTm));
-	    mLstReqTm = tmTmp1;
-
-	    //>> Frame timeout
-	    if( (mLstReqTm-tmW) > wFrTm )	break;
+	    if( obuf && len_ob > 0 ) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
+	    else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
+	    //mess_debug(nodePath().c_str(),"TEST 00: %d\n",((tv.tv_sec*1000000)+tv.tv_usec));
+	    FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
+	    kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	}
-	mLstReqTm = TSYS::curTime();
-	trIn += (float)blen/1024;
+	while( kz == -1 && errno == EINTR );
+	if( kz == 0 )	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	else if( kz < 0){ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Serial error!")); }
+	else if( FD_ISSET(fd, &rd_fd) )
+	{
+	    blen = read(fd,ibuf,len_ib);
+	    trIn += (float)blen/1024;
+	}
     }
+    mLstReqTm = TSYS::curTime();
 
     return blen;
 }
@@ -652,10 +641,9 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
 	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
-	    _("Connection timings in format: \"[conn]:[symbol]:[frm]\". Where:\n"
+	    _("Connection timings in format: \"[conn]:[symbol]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
-	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-	    "    frm - maximum frame length, in ms."));
+	    "    symbol - one symbol maximum time, used for frame end detection, in ms."));
 	return;
     }
 

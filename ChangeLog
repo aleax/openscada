@@ -1,3 +1,12 @@
+2010-01-18 Roman
+- FIX:SYS: Task creation with policy SCHED_OTHER from task with policy SCHED_RR error is fixed.
+- !!:FIX:Transport.Serial, DAQ.DCON, DAQ.ModBus: Serial transport is made optimal and typical and fixed some bugs. The transport clients is adapted for new mechanism.
+- DAQ.DCON, DAQ.ICP_DAS: Request tries is added.
+- !!:DAQ.ICP_DAS: DIP switch status for LP-8781 is enabled. Serial message send function is moved to single function serReq() and all requests used it.
+- FIX:DAQ.ModBus: LRC check for protocol variant ASCII is fixed.
+- DAQ.OPC_UA: OpenSecureChannel and GetEndpoints message type first support is added.
+
+
 2010-01-11 Roman
 - !!!!:SYS: The source tree version is changed to 0.6.4.1. RPM-build speck files is changed for build version 0.6.4.1 packages.
 - FIX:SYS: RPM-build speck files is fixed for set package *-demo architecture dependent.
@@ -17,7 +26,7 @@
 
 
 2010-01-04 Roman
-- !!:DAQ, DAQ.DAQGate: Data request optimization by request size and time into reserve mode is added.
+- !!:DAQ, DAQ.DAQGate: Data request made optimal by request size and time into reserve mode is added.
     The flag of detect requests is set independent into OpenSCADA core.
 - DAQ.OPC_UA: OPC UA Binari protocol's parse functions is tested and updated.
 - !!!:FIX:Transport.Sockets, Transport.SSL: Not full writing into function write() is fixed.
@@ -180,7 +189,7 @@
 - FIX:DAQ.ModBus: ModBUS block's resource missing cause crash is fixed.
 - !:SYS: Multiply start preventing is added to demo-start and user-start scripts.
 - !!:SYS: User's API functions is added to OpenSCADA core object: system(), message(), XMLNode() and cntrReq().
-- !!!!:SYS.Function, DAQ.BlockCalc, DAQ.LogicLev, UI.VCAEngine: To check the parameters modify controll is added.
+- !!!!:SYS.Function, DAQ.BlockCalc, DAQ.LogicLev, UI.VCAEngine: To check controller's parameters the modify controll mechanism is added.
 - !!:DB: User's API functions SQLReq() is added to DB object.
 - !!:Archives: User's API function messGet() is added to Archive subsystem object.
 - FIX:UI.VCAEngine: Attributes type change is fixed for Mutable attributes of primitives "Text" and "FormEl".
@@ -200,7 +209,7 @@
 - FIX:DAQ.DAQGate: True status show is fixed on time connection try.
 - DAQ.ICP_DAS: Fast task priority is rised to 32.
 - Protocol.SelfSystem: Strong timeout set is removed for output transport's request.
-- UI.VCAEngine: Object's functions of user's API is added: user(), alrmSndPlay() and alrmQuittance().
+- !!:UI.VCAEngine: Object's functions of user's API is added: user(), alrmSndPlay() and alrmQuittance().
 
 
 2009-11-05 Roman

@@ -114,7 +114,7 @@ TProtocolIn *TProt::in_open( const string &name )
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    string rez;
+    string rez, err;
     char buf[1000];
 
     ResAlloc resN( tro.nodeRes(), true );
@@ -133,20 +133,150 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oNu(rez,65536,4);			//> Send buffer size
 		oNu(rez,0x01000000,4);			//> Max message size
 		oNu(rez,5000,4);			//> Max chunk count
-		oS(rez,"opc.tcp://ocalhost:4840");	//> EndpointURL
+		oS(rez,"opc.tcp://ocalhost:4841");	//> EndpointURL
 		oNu(rez,rez.size(),4,4);		//> Real message size
 
 		//> Send request
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
+		rez.assign( buf, resp_len );
+
+		int off = 4;
+		if( rez.size() < 8 || rez.compare(0,4,"ACKF") != 0 )	err = _("13:Error respond: Too short or not acknowledge.");
+		else if( TProt::iNu(rez,off,4) != rez.size() )		err = _("13:Error respond: Respond size is not coincedence.");
+		{
+		    iNu(rez,off,4);	//Protocol version
+		    iNu(rez,off,4);	//Recive buffer size
+		    iNu(rez,off,4);	//Send buffer size
+		    iNu(rez,off,4);	//Max message size
+		    iNu(rez,off,4);	//Max chunk count
+		}
 	    }
+	    else if( io.attr("id") == "OPN" )
+	    {
+		rez.reserve( 200 );
+		rez.append( "OPNF" );			//OpenSecureChannel message type
+		oNu(rez,0,4);				//Message size
+		oNu(rez,0,4);				//Secure channel identifier
+		if( io.attr("secPlcURI") == "http://opcfoundation.org/UA/SecurityPolicy#None" )
+		{
+							//> Security Header
+		    oS(rez,io.attr("secPlcURI"));	//Security policy URI
+		    oS(rez,"");				//SenderCertificate
+		    oS(rez,"");				//ReceiverCertificateThumbprint
+							//> Sequence header
+		    oNu(rez,0x33,4);			//Sequence number
+		    oNu(rez,1,4);			//RequestId
+							//> Extension body object
+		    oNodeId(rez,446,0);			//TypeId
+							//>> Request Header
+		    oNodeId(rez,0);			//Session AuthenticationToken
+		    oTm(rez,TSYS::curTime());		//timestamp
+		    oN(rez,0,4);			//requestHandle
+		    oNu(rez,0,4);			//returnDiagnostics
+		    oS(rez,"");				//auditEntryId
+		    oNu(rez,0,4);			//timeoutHint
+							//>>> Extensible parameter
+		    oNodeId(rez,0);			//TypeId (0)
+		    oNu(rez,0,1);			//Encoding
+							//>>>> Standard request
+		    oNu(rez,0,4);			//ClientProtocolVersion
+		    oNu(rez,0,4);			//RequestType
+		    oNu(rez,1,4);			//SecurityMode
+		    oS(rez,"\000");			//ClientNonce
+		    oN(rez,300000,4);			//RequestedLifetime
+		    oNu(rez,rez.size(),4,4);		//> Real message size
 
+		    //> Send request
+		    int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
+		    rez.assign( buf, resp_len );
+
+		    int off = 4;
+		    if( rez.size() < 8 || rez.compare(0,4,"OPNF") != 0 )	err = _("13:Error respond: Too short or not acknowledge.");
+		    else if( TProt::iNu(rez,off,4) != rez.size() )		err = _("13:Error respond: Respond size is not coincedence.");
+		    {
+			iNu(rez,off,4);			//Secure channel identifier
+			iS(rez,off);			//Security policy URI
+			iN(rez,off,4);			//SenderCertificateLength
+			iN(rez,off,4);			//ReceiverCertificateThumbprintLength
+			iNu(rez,off,4);			//Sequence number
+			iNu(rez,off,4);			//RequestId
+							//> Extension Object
+			iNodeId(rez,off);		//TypeId (449 - NodeId)
+							//>> Body
+							//>>> RespondHeader
+			iTm(rez,off);			//timestamp
+			iN(rez,off,4);			//requestHandle
+			iN(rez,off,4);			//StatusCode
+			iN(rez,off,1);			//serviceDiagnostics
+			iS(rez,off);			//stringTable
+							//>>> Extensible parameter
+			iNodeId(rez,off);		//TypeId (0)
+			iNu(rez,off,1);			//Encoding
+							//>>>> Standard respond
+			iNu(rez,off,4);			//ServerProtocolVersion
+			io.setAttr("secChnId",TSYS::int2str(iNu(rez,off,4)));		//Secure channel identifier
+			io.setAttr("secTokenId",TSYS::int2str(iNu(rez,off,4)));		//TokenId
+			iTm(rez,off);			//CreatedAt
+			iN(rez,off,4);			//RevisedLifeTime (600000)
+			iS(rez,off);			//nonce
+		    }
+		    printf("TEST 10: OPN respond:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+		}
+		else err = TSYS::strMess(_("12:OPC UA '%s': security policy '%s' is not supported."),io.name().c_str(),io.attr("secPlcURI").c_str());
+	    }
+	    else if( io.attr("id") == "GetEndpoints" )
+	    {
+		rez.reserve( 200 );
+		rez.append( "MSGF" );			//SecureChannel message
+		oNu(rez,0,4);				//Message size
+		oNu(rez,atoi(io.attr("secChnId").c_str()),4);		//Secure channel identifier
+		oNu(rez,atoi(io.attr("secTokenId").c_str()),4);		//TokenId
+							//> Sequence header
+		oNu(rez,0x34,4);			//Sequence number
+		oNu(rez,2,4);				//RequestId
+							//> Extension body object
+		oNodeId(rez,428,0);			//TypeId request: GetEndpoints
+							//>> Request Header
+		oNodeId(rez,0);				//Session AuthenticationToken
+		oTm(rez,TSYS::curTime());		//timestamp
+		oN(rez,1,4);				//requestHandle
+		oNu(rez,0,4);				//returnDiagnostics
+		oS(rez,"");				//auditEntryId
+		oNu(rez,3000,4);			//timeoutHint
+							//>>> Extensible parameter
+		oNodeId(rez,0);				//TypeId (0)
+		oNu(rez,0,1);				//Encoding
+							//>>>> Standard request ????
+		oS(rez,"opc.tcp://localhost:4841");	//endpointUrl
+		oS(rez,"");				//localeIds []
+		oS(rez,"");				//profileUris []
+		oNu(rez,rez.size(),4,4);		//> Real message size
+
+		printf("TEST 11a: Request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+
+		//> Send request
+		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
+		rez.assign( buf, resp_len );
+		int off = 4;
+		for( ; rez.size() < 8 || rez.size() < TProt::iNu(rez,off,4); off = 4 )
+		{
+		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true );
+		    rez.append( buf, resp_len );
+		}
+
+		printf("TEST 11b: Respond:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+		/*int off = 4;
+		if( rez.size() < 8 || rez.compare(0,4,"OPNF") != 0 )	err = _("13:Error respond: Too short or not acknowledge.");
+		else if( TProt::iNu(rez,off,4) != rez.size() )		err = _("13:Error respond: Respond size is not coincedence.");
+		{*/
+	    }
+	    else err = TSYS::strMess(_("11:OPC UA '%s': request '%s' is not supported."),io.name().c_str(),io.attr("id").c_str());
 	}
-	io.setAttr("err",TSYS::strMess(_("11:OPC UA '%s': request '%s' don't supported."),io.name().c_str(),io.attr("id").c_str()))->setText("");
-	return;
+	else err = TSYS::strMess(_("10:OPC UA protocol '%s' is not supported."),io.name().c_str());
     }
-    catch(TError err) { }
+    catch(TError er) { err = TSYS::strMess(_("14:Remote host error: %s"),er.mess.c_str()); }
 
-    io.setAttr("err",TSYS::strMess(_("10:OPC UA protocol '%s' don't supported."),io.name().c_str()))->setText("");
+    io.setAttr("err",err);
 }
 
 void TProt::cntrCmdProc( XMLNode *opt )
@@ -251,7 +381,7 @@ void TProt::oS( string &buf, const string &val )
 
 void TProt::oNodeId( string &buf, int val, int ns )
 {
-    if( !ns && val <= 255 )
+    if( ns<0 && val <= 255 )
     {
 	buf += (char)0x00;
 	buf += (char)val;
@@ -323,10 +453,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    prtVer, rBufSz, wBufSz, mMsgSz, mChnk, EndpntURL.c_str() );
 
 	//> Prepare acknowledge message
-	mSz = 28;
-	answer.reserve( mSz );
+	answer.reserve( 28 );
 	answer.append( "ACKF" );	//Acknowledge message type
-	TProt::oNu(answer,mSz,4);	//Message size
+	TProt::oNu(answer,28,4);	//Message size
 	TProt::oNu(answer,prtVer,4);	//Protocol version
 	TProt::oNu(answer,rBufSz,4);	//Recive buffer size
 	TProt::oNu(answer,wBufSz,4);	//Send buffer size
@@ -371,7 +500,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    string clntNonce = TProt::iS(rb,off);		//ClientNonce
 	    int32_t reqLifeTm = TProt::iN(rb,off,4);		//RequestedLifetime
 
-	    printf( "TEST 00: Open SecureChannel request: prtVer = '%s'\n", secPlcURI.c_str() );
+	    printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
 	    //> Prepare respond message
 	    answer.reserve( 200 );
@@ -384,7 +513,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    TProt::oNu(answer,secNumb,4);			//Sequence number
 	    TProt::oNu(answer,reqId,4);				//RequestId
 								//> Extension Object
-	    TProt::oNodeId(answer,449);				//TypeId (449 - NodeId)
+	    TProt::oNodeId(answer,449,0);			//TypeId (449 - NodeId)
 								//>> Body
 								//>>> RespondHeader
 	    TProt::oTm(answer,TSYS::curTime());			//timestamp
@@ -404,12 +533,14 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    TProt::oS(answer,"\001");				//nonce
 	    TProt::oNu(answer,answer.size(),4,4);		//Real message size
 
+	    printf("TEST 01a: Open sec respond:\n%s\n",TSYS::strDecode(answer,TSYS::Bin).c_str());
+
 	    return mNotFull;
 	}
     }
 
     //> Post error for unrecognized request
-    printf("TEST 01: Unsupported request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+    printf("TEST 05: Unsupported request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
     answer = mkError( 1, _("Request message isn't recognize.") );
 

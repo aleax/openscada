@@ -96,7 +96,7 @@ class TTrOut: public TTransportOut
 	int	fd;
 	long long mLstReqTm;
 
-	float	trIn, trOut, tmMax;		// Traffic in and out counter and maximum respond timeout
+	float	trIn, trOut;			// Traffic in and out counter and maximum respond timeout
 };
 
 //************************************************
