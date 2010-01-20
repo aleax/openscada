@@ -12,7 +12,7 @@
 	<prm id="StName_ru">Демо станция</prm>
 	<prm id="StName_uk">Демо станція</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
-	<prm id="Workdir">/var/spool/openscada</prm>
+	<prm id="Workdir">~/.openscada</prm>
 	<prm id="IcoDir">./icons</prm>
 	<prm id="ModDir">/usr/lib/openscada</prm>
 	<prm id="LogTarget">10</prm>

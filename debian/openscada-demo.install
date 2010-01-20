@@ -1,0 +1,5 @@
+demo/oscada_demo.xml /etc/
+demo/openscada_demo /usr/bin/
+demo/*.db /var/spool/openscada/DEMO
+demo/openscada_demo.png /usr/share/pixmaps/
+demo/openscada_demo.desktop /usr/share/applications/

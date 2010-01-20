@@ -1,0 +1,4 @@
+debian/tmp/usr/lib/*.so
+debian/tmp/usr/lib/*.*a
+*.h /usr/include/openscada/
+src/*.h /usr/include/openscada/

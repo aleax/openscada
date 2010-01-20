@@ -3,9 +3,11 @@
 ulimit -c unlimited
 
 if [ ! -d ~/.openscada ]; then
-    install -m 755 -d ~/.openscada/DATA ~/.openscada/ARCHIVES/{MESS,VAL}
+    install -m 755 -d ~/.openscada/ARCHIVES/{MESS,VAL}
     ln -s /var/spool/openscada/icons ~/.openscada/icons
 fi
+
+if [ ! -d ~/.openscada/DATA ]; then install -m 755 -d ~/.openscada/DATA; fi
 
 if [ ! -e ~/.openscada/oscada.xml ]; then install -m 644 /etc/oscada_start.xml ~/.openscada/oscada.xml; fi
 

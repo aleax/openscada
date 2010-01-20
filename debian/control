@@ -1,0 +1,32 @@
+Source: openscada
+Section: graphics
+Priority: optional
+Maintainer: Roman Savochenko <rom_as@oscada.org>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.7.3
+Homepage: <http://oscada.org>
+
+Package: openscada
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Open SCADA system project
+ Open SCADA system. For access use account "root" and password "openscada".
+
+Package: openscada-doc
+Architecture: all
+Description: Open SCADA documents
+ The openscada-doc package include documents files.
+
+Package: openscada-dev
+Architecture: any
+Depends: openscada
+Description: Open SCADA development
+ The openscada-dev package includes library archives and include files.
+
+Package: openscada-demo
+Architecture: all
+Depends: openscada
+Description: Open SCADA demo data bases and config
+ The openscada-demo package includes demo data bases and configs.
+ For start use command <openscada_demo>. For access use account "root" and password "openscada"
+ or account "user" without password.

@@ -1,3 +1,11 @@
+2010-01-20 Roman
+- SYS: RPM-spec files is updated for openscada_demo call and user's passwords fixing.
+- !!!!:SYS: The files debian/* is added for build Debian packages support.
+- !!:DemoDB: User call for Demo DB support is added for write to DB support.
+- FIX:Archive.Value: Last value archivator call is added on archive task stop for present data save.
+- FIX:SYS: Text encoding crash on error symbols into begin encoded text's is fixed.
+
+
 2010-01-18 Roman
 - FIX:SYS: Task creation with policy SCHED_OTHER from task with policy SCHED_RR error is fixed.
 - !!:FIX:Transport.Serial, DAQ.DCON, DAQ.ModBus: Serial transport is made optimal and typical and fixed some bugs. The transport clients is adapted for new mechanism.

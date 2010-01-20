@@ -67,13 +67,13 @@ Summary: Open SCADA demo data bases and config
 Group: Graphics
 Requires: %name
 %description demo
-The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo_en>. For access use account "root" and password "openscada" or account "user" without password.
+The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>. For access use account "root" and password "openscada" or account "user" and password "user".
 %description demo -l ru_RU.UTF8
-Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo_ru>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" без пароля.
+Пакет %{name}-demo включает демонстрационные базы данных и конфигурации. Для старта используйте команду <openscada_demo>. Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
 %description demo -l uk_UA.UTF8
-Пакет %{name}-demo включає демонстраційні бази даних та конфігурації. Для старту використовуйте команду <openscada_demo_ru>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" без пароля.
+Пакет %{name}-demo включає демонстраційні бази даних та конфігурації. Для старту використовуйте команду <openscada_demo>. Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
 %description demo -l de_DE.UTF8
-Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Starten wird Kommando <openscada_demo_en> benutzt. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
+Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Starten wird Kommando <openscada_demo> benutzt. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 
 %prep

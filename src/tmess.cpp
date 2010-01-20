@@ -170,7 +170,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	{
 	    mess_crit("IConv",_("Error input sequence convert: %s"),strerror(errno));
 	    mess_debug("IConv",_("Error converting from %s to %s for message part: '%s'"),
-		fromCH.c_str(),toCH.c_str(),mess.substr(vmax(mess.size()-ilen-10,0),20).c_str());
+		fromCH.c_str(),toCH.c_str(),mess.substr(vmax((int)mess.size()-(int)ilen-10,0),20).c_str());
 	    buf = mess;
 	    break;
 	}

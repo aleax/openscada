@@ -2,9 +2,19 @@
 
 ulimit -c unlimited
 
-if [ -f /tmp/.openscada_demo ]; then echo "OpenSCADA already started!"; exit 1; fi
-touch /tmp/.openscada_demo
+if [ ! -d ~/.openscada ]; then
+    install -m 755 -d ~/.openscada/ARCHIVES/{MESS,VAL}
+    ln -s /var/spool/openscada/icons ~/.openscada/icons
+fi
 
-openscada --Config=/etc/oscada_demo.xml $@
+if [ ! -d ~/.openscada/DEMO ]; then cp -R /var/spool/openscada/DEMO ~/.openscada/; fi
 
-rm -f /tmp/.openscada_demo
+if [ ! -e ~/.openscada/oscada_demo.xml ]; then install -m 644 /etc/oscada_demo.xml ~/.openscada/; fi
+
+if [ -f /tmp/.openscada_demo_`whoami` ]; then echo "OpenSCADA already started!"; exit 1; fi
+touch /tmp/.openscada_demo_`whoami`
+
+cd ~/.openscada
+openscada --Config=./oscada_demo.xml $@
+
+rm -f /tmp/.openscada_demo_`whoami`

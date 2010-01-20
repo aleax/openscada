@@ -1,0 +1,2 @@
+?package(openscada-demo):command="/usr/bin/openscada_demo" icon="/usr/share/pixmaps/openscada_demo.png" \
+	needs="X11|text|vc|wm" section="Applications/Graphics" title="Demo of open SCADA system"

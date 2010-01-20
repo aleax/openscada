@@ -2218,6 +2218,7 @@ void *TVArchivator::Task( void *param )
     TVArchivator &arch = *(TVArchivator*)param;
     arch.endrunReq = false;
     arch.run_st = true;
+    bool isLast = false;
 
 #if OSC_DEBUG >= 2
     mess_debug(arch.nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
@@ -2226,9 +2227,11 @@ void *TVArchivator::Task( void *param )
     sleep( arch.archPeriod() );
 
     //> Archiving
-    while( !arch.endrunReq )
+    while( true )
 	try
 	{
+	    if( arch.endrunReq ) isLast = true;
+
 	    long long t_cnt = TSYS::curTime();
 
 	    ResAlloc res(arch.a_res,false);
@@ -2245,6 +2248,8 @@ void *TVArchivator::Task( void *param )
 	    res.release();
 
 	    arch.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+
+	    if( isLast ) break;
 
 	    TSYS::taskSleep( (long long)(1e9*arch.archPeriod()) );
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }

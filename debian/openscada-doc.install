@@ -1,0 +1,3 @@
+doc/*.pdf /usr/share/doc/openscada
+doc/Modules /usr/share/doc/openscada
+
