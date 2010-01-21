@@ -1,3 +1,14 @@
+2010-01-21 Roman
+- !!:Archive.FSArch: Documents and translations is updated and released version 1.3.2.
+- !!:DAQ.BlockCalc: Documents and translations is updated and released version 1.3.0.
+- !!:DAQ.DAQGate: Documents and translations is updated and released version 0.9.0.
+- !!:DAQ.ICP_DAS: Documents and translations is updated and released version 0.7.0.
+- !!:DAQ.JavaLikeCalc: Documents and translations is updated and released version 1.6.0.
+- !!:DAQ.LogicLev: Documents and translations is updated and released version 1.1.0.
+- !!:DAQ.ModBus: Documents and translations is updated and released version 1.0.2.
+- !!:Protocol.ModBus: Documents and translations is updated and released version 0.5.1.
+
+
 2010-01-20 Roman
 - SYS: RPM-spec files is updated for openscada_demo call and user's passwords fixing.
 - !!!!:SYS: The files debian/* is added for build Debian packages support.
@@ -10,13 +21,13 @@
 - FIX:SYS: Task creation with policy SCHED_OTHER from task with policy SCHED_RR error is fixed.
 - !!:FIX:Transport.Serial, DAQ.DCON, DAQ.ModBus: Serial transport is made optimal and typical and fixed some bugs. The transport clients is adapted for new mechanism.
 - DAQ.DCON, DAQ.ICP_DAS: Request tries is added.
-- !!:DAQ.ICP_DAS: DIP switch status for LP-8781 is enabled. Serial message send function is moved to single function serReq() and all requests used it.
+- !!:DAQ.ICP_DAS: DIP switch status for LP-8781 is enabled. Serial message send functions is moved to common function serReq() and all requests used it.
 - FIX:DAQ.ModBus: LRC check for protocol variant ASCII is fixed.
 - DAQ.OPC_UA: OpenSecureChannel and GetEndpoints message type first support is added.
 
 
 2010-01-11 Roman
-- !!!!:SYS: The source tree version is changed to 0.6.4.1. RPM-build speck files is changed for build version 0.6.4.1 packages.
+- !!:SYS: The source tree version is changed to 0.6.4.1. RPM-build speck files is changed for build version 0.6.4.1 packages.
 - FIX:SYS: RPM-build speck files is fixed for set package *-demo architecture dependent.
 - FIX:SYS: The function TMess::codeConv() is improved for output buffer increase to 1000 and put error message with error caused of encoded test part.
 - DAQ.OPC_UA: The module expanded for output protocols support.

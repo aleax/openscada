@@ -1,23 +1,23 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Russian.
-# Copyright (C) 2005-2009 Roman Savochenko
+# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
-# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
 #: freefunc.cpp:153 freefunc.cpp:157 freefunc.cpp:267 freefunc.cpp:305
 #: freefunc.cpp:307 freefunc.cpp:314 freefunc.cpp:1119 freefunc.cpp:1157
 #: freefunc.cpp:2096 freefunc.cpp:2097 freefunc.cpp:2098 freefunc.cpp:2099
 #: freefunc.cpp:2100 freefunc.cpp:2101 freefunc.cpp:2294 freelib.cpp:159
-#: freelib.cpp:220 virtual.cpp:54 virtual.cpp:182 virtual.cpp:183
-#: virtual.cpp:260 virtual.cpp:263 virtual.cpp:268 virtual.cpp:271
-#: virtual.cpp:636 virtual.cpp:659 virtual.cpp:660 virtual.cpp:661
-#: virtual.cpp:662 virtual.cpp:663 virtual.cpp:786 freefunc.h:255 freelib.h:67
+#: freelib.cpp:220 virtual.cpp:54 virtual.cpp:186 virtual.cpp:187
+#: virtual.cpp:264 virtual.cpp:267 virtual.cpp:272 virtual.cpp:275
+#: virtual.cpp:640 virtual.cpp:663 virtual.cpp:664 virtual.cpp:665
+#: virtual.cpp:666 virtual.cpp:667 virtual.cpp:790 freefunc.h:255 freelib.h:67
 #: virtual.h:193 func_analise.ypp:75 func_analise.ypp:113 func_analise.ypp:265
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.5.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-16 20:15+0200\n"
+"POT-Creation-Date: 2010-01-21 11:57+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -44,14 +44,14 @@ msgstr ""
 #: freefunc.cpp:43 freefunc.cpp:93 freefunc.cpp:104 freefunc.cpp:148
 #: freefunc.cpp:200 freefunc.cpp:214 freelib.cpp:35 freelib.cpp:118
 #: virtual.cpp:103 virtual.cpp:111 virtual.cpp:117 virtual.cpp:125
-#: virtual.cpp:262 virtual.cpp:270 virtual.cpp:445 virtual.cpp:474
-#: virtual.cpp:482
+#: virtual.cpp:266 virtual.cpp:274 virtual.cpp:449 virtual.cpp:478
+#: virtual.cpp:486
 msgid "ID"
 msgstr ""
 
 #: freefunc.cpp:70 freefunc.cpp:319 freefunc.cpp:1462 freelib.cpp:137
-#: virtual.cpp:242 virtual.cpp:275 virtual.cpp:378 virtual.cpp:410
-#: virtual.cpp:534 virtual.cpp:755 virtual.cpp:804
+#: virtual.cpp:246 virtual.cpp:279 virtual.cpp:382 virtual.cpp:414
+#: virtual.cpp:538 virtual.cpp:759 virtual.cpp:808
 #, c-format
 msgid "%s"
 msgstr ""
@@ -90,9 +90,9 @@ msgid "_io/"
 msgstr ""
 
 #: freefunc.cpp:338 freefunc.cpp:341 freefunc.cpp:348 freelib.cpp:84
-#: freelib.cpp:102 freelib.cpp:111 freelib.cpp:128 virtual.cpp:260
-#: virtual.cpp:373 virtual.cpp:441 virtual.cpp:470 virtual.cpp:640
-#: virtual.cpp:643
+#: freelib.cpp:102 freelib.cpp:111 freelib.cpp:128 virtual.cpp:264
+#: virtual.cpp:377 virtual.cpp:445 virtual.cpp:474 virtual.cpp:644
+#: virtual.cpp:647
 msgid "."
 msgstr ""
 
@@ -642,8 +642,8 @@ msgstr ""
 msgid "Operation %c(%xh) error. Function <%s> is stoped."
 msgstr "Ошибка операции %c(%xh). Функция <%s> остановлена."
 
-#: freefunc.cpp:2056 freelib.cpp:155 virtual.cpp:309 virtual.cpp:598
-#: virtual.cpp:902
+#: freefunc.cpp:2056 freelib.cpp:155 virtual.cpp:313 virtual.cpp:602
+#: virtual.cpp:906
 msgid "info"
 msgstr ""
 
@@ -669,20 +669,20 @@ msgstr "Функция: "
 #: freelib.cpp:172 freelib.cpp:173 freelib.cpp:174 freelib.cpp:178
 #: freelib.cpp:186 freelib.cpp:187 freelib.cpp:191 freelib.cpp:192
 #: freelib.cpp:197 freelib.cpp:198 freelib.cpp:202 freelib.cpp:203
-#: freelib.cpp:207 freelib.cpp:214 freelib.cpp:215 virtual.cpp:312
-#: virtual.cpp:314 virtual.cpp:322 virtual.cpp:329 virtual.cpp:330
-#: virtual.cpp:582 virtual.cpp:585 virtual.cpp:601 virtual.cpp:602
-#: virtual.cpp:614 virtual.cpp:616 virtual.cpp:617 virtual.cpp:618
-#: virtual.cpp:621 virtual.cpp:624 virtual.cpp:626 virtual.cpp:657
-#: virtual.cpp:674 virtual.cpp:676 virtual.cpp:678 virtual.cpp:686
-#: virtual.cpp:688 virtual.cpp:710 virtual.cpp:711 virtual.cpp:905
+#: freelib.cpp:207 freelib.cpp:214 freelib.cpp:215 virtual.cpp:316
+#: virtual.cpp:318 virtual.cpp:326 virtual.cpp:333 virtual.cpp:334
+#: virtual.cpp:586 virtual.cpp:589 virtual.cpp:605 virtual.cpp:606
+#: virtual.cpp:618 virtual.cpp:620 virtual.cpp:621 virtual.cpp:622
+#: virtual.cpp:625 virtual.cpp:628 virtual.cpp:630 virtual.cpp:661
+#: virtual.cpp:678 virtual.cpp:680 virtual.cpp:682 virtual.cpp:690
+#: virtual.cpp:692 virtual.cpp:714 virtual.cpp:715 virtual.cpp:909
 msgid "root"
 msgstr ""
 
 #: freefunc.cpp:2060 freefunc.cpp:2061 freefunc.cpp:2062 freefunc.cpp:2078
 #: freelib.cpp:165 freelib.cpp:167 freelib.cpp:172 freelib.cpp:173
-#: freelib.cpp:174 virtual.cpp:601 virtual.cpp:602 virtual.cpp:626
-#: virtual.cpp:905
+#: freelib.cpp:174 virtual.cpp:605 virtual.cpp:606 virtual.cpp:630
+#: virtual.cpp:909
 msgid "fld"
 msgstr ""
 
@@ -691,7 +691,7 @@ msgid "/func/cfg/name"
 msgstr ""
 
 #: freefunc.cpp:2060 freefunc.cpp:2068 freelib.cpp:173 virtual.cpp:112
-#: virtual.cpp:118 virtual.cpp:126 virtual.cpp:617
+#: virtual.cpp:118 virtual.cpp:126 virtual.cpp:621
 msgid "Name"
 msgstr "Имя"
 
@@ -699,16 +699,16 @@ msgstr "Имя"
 #: freefunc.cpp:2068 freefunc.cpp:2069 freefunc.cpp:2072 freefunc.cpp:2075
 #: freefunc.cpp:2076 freefunc.cpp:2078 freelib.cpp:165 freelib.cpp:167
 #: freelib.cpp:172 freelib.cpp:173 freelib.cpp:174 freelib.cpp:178
-#: virtual.cpp:314 virtual.cpp:601 virtual.cpp:602 virtual.cpp:616
-#: virtual.cpp:617 virtual.cpp:618 virtual.cpp:621 virtual.cpp:624
-#: virtual.cpp:626
+#: virtual.cpp:318 virtual.cpp:605 virtual.cpp:606 virtual.cpp:620
+#: virtual.cpp:621 virtual.cpp:622 virtual.cpp:625 virtual.cpp:628
+#: virtual.cpp:630
 msgid "tp"
 msgstr ""
 
 #: freefunc.cpp:2060 freefunc.cpp:2061 freefunc.cpp:2067 freefunc.cpp:2068
 #: freefunc.cpp:2076 freefunc.cpp:2078 freelib.cpp:167 freelib.cpp:172
-#: freelib.cpp:173 freelib.cpp:174 virtual.cpp:601 virtual.cpp:602
-#: virtual.cpp:616 virtual.cpp:617 virtual.cpp:624 virtual.cpp:626
+#: freelib.cpp:173 freelib.cpp:174 virtual.cpp:605 virtual.cpp:606
+#: virtual.cpp:620 virtual.cpp:621 virtual.cpp:628 virtual.cpp:630
 msgid "str"
 msgstr ""
 
@@ -729,7 +729,7 @@ msgstr ""
 msgid "Description"
 msgstr "Описание"
 
-#: freefunc.cpp:2061 freelib.cpp:174 virtual.cpp:626
+#: freefunc.cpp:2061 freelib.cpp:174 virtual.cpp:630
 msgid "cols"
 msgstr ""
 
@@ -737,8 +737,8 @@ msgstr ""
 msgid "100"
 msgstr ""
 
-#: freefunc.cpp:2061 freefunc.cpp:2078 freelib.cpp:174 virtual.cpp:614
-#: virtual.cpp:626
+#: freefunc.cpp:2061 freefunc.cpp:2078 freelib.cpp:174 virtual.cpp:618
+#: virtual.cpp:630
 msgid "rows"
 msgstr ""
 
@@ -754,13 +754,13 @@ msgstr ""
 msgid "Maximum calc time (sec)"
 msgstr "Максимальное время вычисления (сек)"
 
-#: freefunc.cpp:2062 freefunc.cpp:2069 freefunc.cpp:2072 virtual.cpp:618
-#: virtual.cpp:621
+#: freefunc.cpp:2062 freefunc.cpp:2069 freefunc.cpp:2072 virtual.cpp:622
+#: virtual.cpp:625
 msgid "dec"
 msgstr ""
 
 #: freefunc.cpp:2063 freelib.cpp:161 freelib.cpp:163 freelib.cpp:170
-#: freelib.cpp:177 virtual.cpp:313 virtual.cpp:612
+#: freelib.cpp:177 virtual.cpp:317 virtual.cpp:616
 msgid "area"
 msgstr ""
 
@@ -768,11 +768,11 @@ msgstr ""
 msgid "/io"
 msgstr ""
 
-#: freefunc.cpp:2063 freefunc.cpp:2078 virtual.cpp:626
+#: freefunc.cpp:2063 freefunc.cpp:2078 virtual.cpp:630
 msgid "Programm"
 msgstr "Программа"
 
-#: freefunc.cpp:2065 virtual.cpp:614
+#: freefunc.cpp:2065 virtual.cpp:618
 msgid "table"
 msgstr ""
 
@@ -784,20 +784,20 @@ msgstr ""
 msgid "IO"
 msgstr ""
 
-#: freefunc.cpp:2065 freelib.cpp:178 virtual.cpp:314 virtual.cpp:614
+#: freefunc.cpp:2065 freelib.cpp:178 virtual.cpp:318 virtual.cpp:618
 msgid "s_com"
 msgstr ""
 
-#: freefunc.cpp:2065 virtual.cpp:614
+#: freefunc.cpp:2065 virtual.cpp:618
 msgid "add,del,ins,move"
 msgstr ""
 
 #: freefunc.cpp:2067 freefunc.cpp:2068 freefunc.cpp:2069 freefunc.cpp:2072
 #: freefunc.cpp:2075 freefunc.cpp:2076 freefunc.cpp:2096 freefunc.cpp:2097
 #: freefunc.cpp:2098 freefunc.cpp:2099 freefunc.cpp:2100 freefunc.cpp:2101
-#: freelib.cpp:178 virtual.cpp:314 virtual.cpp:616 virtual.cpp:617
-#: virtual.cpp:618 virtual.cpp:621 virtual.cpp:624 virtual.cpp:659
-#: virtual.cpp:660 virtual.cpp:661 virtual.cpp:662 virtual.cpp:663
+#: freelib.cpp:178 virtual.cpp:318 virtual.cpp:620 virtual.cpp:621
+#: virtual.cpp:622 virtual.cpp:625 virtual.cpp:628 virtual.cpp:663
+#: virtual.cpp:664 virtual.cpp:665 virtual.cpp:666 virtual.cpp:667
 msgid "list"
 msgstr ""
 
@@ -805,7 +805,7 @@ msgstr ""
 msgid "/io/io/0"
 msgstr ""
 
-#: freefunc.cpp:2067 freelib.cpp:172 virtual.cpp:616
+#: freefunc.cpp:2067 freelib.cpp:172 virtual.cpp:620
 msgid "Id"
 msgstr ""
 
@@ -817,47 +817,47 @@ msgstr ""
 msgid "/io/io/2"
 msgstr ""
 
-#: freefunc.cpp:2069 virtual.cpp:127 virtual.cpp:618
+#: freefunc.cpp:2069 virtual.cpp:127 virtual.cpp:622
 msgid "Type"
 msgstr "Тип"
 
 #: freefunc.cpp:2069 freefunc.cpp:2072 freelib.cpp:160 freelib.cpp:178
-#: virtual.cpp:312 virtual.cpp:314 virtual.cpp:618 virtual.cpp:621
+#: virtual.cpp:316 virtual.cpp:318 virtual.cpp:622 virtual.cpp:625
 msgid "idm"
 msgstr ""
 
 #: freefunc.cpp:2069 freefunc.cpp:2072 freefunc.cpp:2108 freelib.cpp:160
 #: freelib.cpp:178 freelib.cpp:186 virtual.cpp:98 virtual.cpp:100
-#: virtual.cpp:127 virtual.cpp:128 virtual.cpp:130 virtual.cpp:312
-#: virtual.cpp:314 virtual.cpp:618 virtual.cpp:621
+#: virtual.cpp:127 virtual.cpp:128 virtual.cpp:130 virtual.cpp:316
+#: virtual.cpp:318 virtual.cpp:622 virtual.cpp:625
 msgid "1"
 msgstr ""
 
-#: freefunc.cpp:2069 freefunc.cpp:2072 freelib.cpp:167 virtual.cpp:601
-#: virtual.cpp:602 virtual.cpp:618 virtual.cpp:621
+#: freefunc.cpp:2069 freefunc.cpp:2072 freelib.cpp:167 virtual.cpp:605
+#: virtual.cpp:606 virtual.cpp:622 virtual.cpp:625
 msgid "dest"
 msgstr ""
 
-#: freefunc.cpp:2069 freefunc.cpp:2072 freelib.cpp:167 virtual.cpp:601
-#: virtual.cpp:618 virtual.cpp:621
+#: freefunc.cpp:2069 freefunc.cpp:2072 freelib.cpp:167 virtual.cpp:605
+#: virtual.cpp:622 virtual.cpp:625
 msgid "select"
 msgstr ""
 
-#: freefunc.cpp:2070 freefunc.cpp:2073 virtual.cpp:619 virtual.cpp:622
+#: freefunc.cpp:2070 freefunc.cpp:2073 virtual.cpp:623 virtual.cpp:626
 msgid "sel_id"
 msgstr ""
 
-#: freefunc.cpp:2070 freefunc.cpp:2073 virtual.cpp:619 virtual.cpp:622
+#: freefunc.cpp:2070 freefunc.cpp:2073 virtual.cpp:623 virtual.cpp:626
 #: func_analise.ypp:473
 msgid ";"
 msgstr ""
 
-#: freefunc.cpp:2071 freefunc.cpp:2074 virtual.cpp:603 virtual.cpp:620
-#: virtual.cpp:623
+#: freefunc.cpp:2071 freefunc.cpp:2074 virtual.cpp:607 virtual.cpp:624
+#: virtual.cpp:627
 msgid "sel_list"
 msgstr ""
 
-#: freefunc.cpp:2071 virtual.cpp:620
+#: freefunc.cpp:2071 virtual.cpp:624
 msgid "Real;Integer;Boolean;String"
 msgstr "Веществ.;Целый;Логич.;Строка"
 
@@ -865,11 +865,11 @@ msgstr "Веществ.;Целый;Логич.;Строка"
 msgid "/io/io/3"
 msgstr ""
 
-#: freefunc.cpp:2072 virtual.cpp:128 virtual.cpp:621
+#: freefunc.cpp:2072 virtual.cpp:128 virtual.cpp:625
 msgid "Mode"
 msgstr "Режим"
 
-#: freefunc.cpp:2074 virtual.cpp:623
+#: freefunc.cpp:2074 virtual.cpp:627
 msgid "Input;Output;Return"
 msgstr "Вход;Выход;Возврат"
 
@@ -897,81 +897,81 @@ msgstr "Умолч."
 msgid "/io/prog"
 msgstr ""
 
-#: freefunc.cpp:2078 virtual.cpp:120 virtual.cpp:626
+#: freefunc.cpp:2078 virtual.cpp:120 virtual.cpp:630
 msgid "10"
 msgstr ""
 
-#: freefunc.cpp:2084 freelib.cpp:183 virtual.cpp:319 virtual.cpp:556
-#: virtual.cpp:563 virtual.cpp:576 virtual.cpp:828
+#: freefunc.cpp:2084 freelib.cpp:183 virtual.cpp:323 virtual.cpp:560
+#: virtual.cpp:567 virtual.cpp:580 virtual.cpp:832
 msgid "path"
 msgstr ""
 
 #: freefunc.cpp:2085 freefunc.cpp:2086 freefunc.cpp:2090 freefunc.cpp:2116
 #: freefunc.cpp:2134 freelib.cpp:187 freelib.cpp:192 freelib.cpp:198
-#: freelib.cpp:203 virtual.cpp:563 virtual.cpp:585 virtual.cpp:688
-#: virtual.cpp:711 virtual.cpp:827
+#: freelib.cpp:203 virtual.cpp:567 virtual.cpp:589 virtual.cpp:692
+#: virtual.cpp:715 virtual.cpp:831
 msgid "set"
 msgstr ""
 
 #: freefunc.cpp:2089 freefunc.cpp:2094 freefunc.cpp:2133 freelib.cpp:186
 #: freelib.cpp:191 freelib.cpp:197 freelib.cpp:202 freelib.cpp:207
-#: virtual.cpp:322 virtual.cpp:556 virtual.cpp:582 virtual.cpp:657
-#: virtual.cpp:710
+#: virtual.cpp:326 virtual.cpp:560 virtual.cpp:586 virtual.cpp:661
+#: virtual.cpp:714
 msgid "get"
 msgstr ""
 
 #: freefunc.cpp:2104 freefunc.cpp:2105 freefunc.cpp:2106 freefunc.cpp:2107
 #: freefunc.cpp:2108 freefunc.cpp:2109 freelib.cpp:212 freelib.cpp:220
-#: freelib.cpp:223 virtual.cpp:327 virtual.cpp:637 virtual.cpp:641
-#: virtual.cpp:653 virtual.cpp:667 virtual.cpp:668 virtual.cpp:669
-#: virtual.cpp:670 virtual.cpp:671 virtual.cpp:828
+#: freelib.cpp:223 virtual.cpp:331 virtual.cpp:641 virtual.cpp:645
+#: virtual.cpp:657 virtual.cpp:671 virtual.cpp:672 virtual.cpp:673
+#: virtual.cpp:674 virtual.cpp:675 virtual.cpp:832
 msgid "el"
 msgstr ""
 
-#: freefunc.cpp:2108 freelib.cpp:186 virtual.cpp:99 virtual.cpp:435
-#: virtual.cpp:436 virtual.cpp:865
+#: freefunc.cpp:2108 freelib.cpp:186 virtual.cpp:99 virtual.cpp:439
+#: virtual.cpp:440 virtual.cpp:869
 msgid "0"
 msgstr ""
 
-#: freefunc.cpp:2112 freelib.cpp:214 virtual.cpp:329 virtual.cpp:674
+#: freefunc.cpp:2112 freelib.cpp:214 virtual.cpp:333 virtual.cpp:678
 msgid "add"
 msgstr ""
 
-#: freefunc.cpp:2112 freefunc.cpp:2113 virtual.cpp:675 virtual.cpp:677
+#: freefunc.cpp:2112 freefunc.cpp:2113 virtual.cpp:679 virtual.cpp:681
 #: func_analise.ypp:456
 msgid "new"
 msgstr ""
 
-#: freefunc.cpp:2112 freefunc.cpp:2113 virtual.cpp:675 virtual.cpp:677
+#: freefunc.cpp:2112 freefunc.cpp:2113 virtual.cpp:679 virtual.cpp:681
 msgid "New IO"
 msgstr "Новый IO"
 
-#: freefunc.cpp:2113 virtual.cpp:676
+#: freefunc.cpp:2113 virtual.cpp:680
 msgid "ins"
 msgstr ""
 
 #: freefunc.cpp:2113 freefunc.cpp:2114 freefunc.cpp:2115 freefunc.cpp:2118
-#: virtual.cpp:677 virtual.cpp:680 virtual.cpp:687 virtual.cpp:690
+#: virtual.cpp:681 virtual.cpp:684 virtual.cpp:691 virtual.cpp:694
 msgid "row"
 msgstr ""
 
-#: freefunc.cpp:2114 freelib.cpp:215 virtual.cpp:330 virtual.cpp:678
+#: freefunc.cpp:2114 freelib.cpp:215 virtual.cpp:334 virtual.cpp:682
 msgid "del"
 msgstr ""
 
-#: freefunc.cpp:2115 virtual.cpp:686
+#: freefunc.cpp:2115 virtual.cpp:690
 msgid "move"
 msgstr ""
 
-#: freefunc.cpp:2115 virtual.cpp:687
+#: freefunc.cpp:2115 virtual.cpp:691
 msgid "to"
 msgstr ""
 
-#: freefunc.cpp:2119 virtual.cpp:691
+#: freefunc.cpp:2119 virtual.cpp:695
 msgid "col"
 msgstr ""
 
-#: freefunc.cpp:2121 virtual.cpp:693
+#: freefunc.cpp:2121 virtual.cpp:697
 msgid "Empty value is not valid."
 msgstr "Пустое значение не допустимо."
 
@@ -987,7 +987,7 @@ msgstr ""
 msgid "fnc_"
 msgstr ""
 
-#: freelib.cpp:84 freelib.cpp:111 freelib.cpp:128 virtual.cpp:268
+#: freelib.cpp:84 freelib.cpp:111 freelib.cpp:128 virtual.cpp:272
 msgid "lib/"
 msgstr ""
 
@@ -1003,7 +1003,7 @@ msgstr ""
 msgid "/br"
 msgstr ""
 
-#: freelib.cpp:160 virtual.cpp:312
+#: freelib.cpp:160 virtual.cpp:316
 msgid "grp"
 msgstr ""
 
@@ -1015,13 +1015,13 @@ msgstr ""
 msgid "Function"
 msgstr "Функция"
 
-#: freelib.cpp:160 freelib.cpp:178 virtual.cpp:312 virtual.cpp:314
+#: freelib.cpp:160 freelib.cpp:178 virtual.cpp:316 virtual.cpp:318
 msgid "idSz"
 msgstr ""
 
 #: freelib.cpp:160 freelib.cpp:178 virtual.cpp:103 virtual.cpp:111
 #: virtual.cpp:117 virtual.cpp:124 virtual.cpp:125 virtual.cpp:129
-#: virtual.cpp:312 virtual.cpp:314
+#: virtual.cpp:316 virtual.cpp:318
 msgid "20"
 msgstr ""
 
@@ -1029,7 +1029,7 @@ msgstr ""
 msgid "/lib"
 msgstr ""
 
-#: freelib.cpp:161 virtual.cpp:312
+#: freelib.cpp:161 virtual.cpp:316
 msgid "Library"
 msgstr "Библиотека"
 
@@ -1057,7 +1057,7 @@ msgstr ""
 msgid "Library DB"
 msgstr "БД библиотеки"
 
-#: freelib.cpp:167 virtual.cpp:601 virtual.cpp:602
+#: freelib.cpp:167 virtual.cpp:605 virtual.cpp:606
 msgid "sel_ed"
 msgstr ""
 
@@ -1065,7 +1065,7 @@ msgstr ""
 msgid "/db/tblList"
 msgstr ""
 
-#: freelib.cpp:168 virtual.cpp:232 virtual.cpp:604 virtual.cpp:906
+#: freelib.cpp:168 virtual.cpp:236 virtual.cpp:608 virtual.cpp:910
 msgid "help"
 msgstr ""
 
@@ -1107,21 +1107,21 @@ msgstr "Функции"
 msgid "/func/func"
 msgstr ""
 
-#: freelib.cpp:178 virtual.cpp:314
+#: freelib.cpp:178 virtual.cpp:318
 msgid "br"
 msgstr ""
 
-#: freelib.cpp:178 virtual.cpp:314
+#: freelib.cpp:178 virtual.cpp:318
 msgid "add,del"
 msgstr ""
 
-#: freelib.cpp:178 virtual.cpp:314
+#: freelib.cpp:178 virtual.cpp:318
 msgid "br_pref"
 msgstr ""
 
 #: freelib.cpp:212 freelib.cpp:214 freelib.cpp:215 freelib.cpp:220
-#: freelib.cpp:223 virtual.cpp:327 virtual.cpp:329 virtual.cpp:330
-#: virtual.cpp:584 virtual.cpp:589 virtual.cpp:828
+#: freelib.cpp:223 virtual.cpp:331 virtual.cpp:333 virtual.cpp:334
+#: virtual.cpp:588 virtual.cpp:593 virtual.cpp:832
 msgid "id"
 msgstr ""
 
@@ -1137,11 +1137,11 @@ msgstr ""
 msgid "Java-like based calculator"
 msgstr "Вычислитель на java подобном языке"
 
-#: virtual.cpp:38 virtual.cpp:582 virtual.cpp:585 virtual.cpp:601
-#: virtual.cpp:602 virtual.cpp:614 virtual.cpp:616 virtual.cpp:617
-#: virtual.cpp:618 virtual.cpp:621 virtual.cpp:624 virtual.cpp:626
-#: virtual.cpp:657 virtual.cpp:674 virtual.cpp:676 virtual.cpp:678
-#: virtual.cpp:686 virtual.cpp:688 virtual.cpp:710 virtual.cpp:711
+#: virtual.cpp:38 virtual.cpp:586 virtual.cpp:589 virtual.cpp:605
+#: virtual.cpp:606 virtual.cpp:618 virtual.cpp:620 virtual.cpp:621
+#: virtual.cpp:622 virtual.cpp:625 virtual.cpp:628 virtual.cpp:630
+#: virtual.cpp:661 virtual.cpp:678 virtual.cpp:680 virtual.cpp:682
+#: virtual.cpp:690 virtual.cpp:692 virtual.cpp:714 virtual.cpp:715
 msgid "DAQ"
 msgstr ""
 
@@ -1150,7 +1150,7 @@ msgid "LIB"
 msgstr ""
 
 #: virtual.cpp:41
-msgid "1.5.0"
+msgid "1.6.0"
 msgstr ""
 
 #: virtual.cpp:42
@@ -1174,11 +1174,11 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: virtual.cpp:83 virtual.cpp:314
+#: virtual.cpp:83 virtual.cpp:318
 msgid "lib_"
 msgstr ""
 
-#: virtual.cpp:96 virtual.cpp:107 virtual.cpp:357
+#: virtual.cpp:96 virtual.cpp:107 virtual.cpp:361
 msgid "PRM_BD"
 msgstr ""
 
@@ -1194,7 +1194,7 @@ msgstr ""
 msgid "system"
 msgstr ""
 
-#: virtual.cpp:97 virtual.cpp:355 virtual.cpp:601
+#: virtual.cpp:97 virtual.cpp:359 virtual.cpp:605
 msgid "FUNC"
 msgstr ""
 
@@ -1206,7 +1206,7 @@ msgstr "Функция контроллера"
 msgid "40"
 msgstr ""
 
-#: virtual.cpp:98 virtual.cpp:354 virtual.cpp:602
+#: virtual.cpp:98 virtual.cpp:358 virtual.cpp:606
 msgid "SCHEDULE"
 msgstr ""
 
@@ -1214,7 +1214,7 @@ msgstr ""
 msgid "Calc schedule"
 msgstr "Планирование вычисления"
 
-#: virtual.cpp:99 virtual.cpp:354
+#: virtual.cpp:99 virtual.cpp:358
 msgid "PRIOR"
 msgstr ""
 
@@ -1230,7 +1230,7 @@ msgstr ""
 msgid "-1;99"
 msgstr ""
 
-#: virtual.cpp:100 virtual.cpp:355
+#: virtual.cpp:100 virtual.cpp:359
 msgid "ITER"
 msgstr ""
 
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "IO ID"
 msgstr ""
 
-#: virtual.cpp:104 virtual.cpp:447 virtual.cpp:475
+#: virtual.cpp:104 virtual.cpp:451 virtual.cpp:479
 msgid "VAL"
 msgstr ""
 
@@ -1262,7 +1262,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандартный"
 
-#: virtual.cpp:108 virtual.cpp:749 virtual.cpp:763 virtual.cpp:905
+#: virtual.cpp:108 virtual.cpp:753 virtual.cpp:767 virtual.cpp:909
 msgid "FLD"
 msgstr ""
 
@@ -1422,25 +1422,25 @@ msgstr ""
 msgid "floor"
 msgstr ""
 
-#: virtual.cpp:176 virtual.cpp:181
+#: virtual.cpp:178 virtual.cpp:185
 msgid "JavaScript"
 msgstr ""
 
-#: virtual.cpp:181
+#: virtual.cpp:185
 #, c-format
 msgid "Compilation with the help of the program language %s is not supported."
 msgstr "Компиляция на языке программирования %s не поддерживается."
 
-#: virtual.cpp:182 virtual.cpp:183 virtual.cpp:185 virtual.cpp:206
+#: virtual.cpp:186 virtual.cpp:187 virtual.cpp:189 virtual.cpp:210
 msgid "sys_compile"
 msgstr ""
 
-#: virtual.cpp:208
+#: virtual.cpp:212
 #, c-format
 msgid "Compile error: %s\n"
 msgstr "Ошибка компиляции: %s\n"
 
-#: virtual.cpp:218
+#: virtual.cpp:222
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -1451,156 +1451,156 @@ msgstr ""
 "---------- Параметры секции <%s> модуля в конфигурационном файле ---------\n"
 "\n"
 
-#: virtual.cpp:229
+#: virtual.cpp:233
 msgid "h"
 msgstr ""
 
-#: virtual.cpp:263 virtual.cpp:271 virtual.cpp:329
+#: virtual.cpp:267 virtual.cpp:275 virtual.cpp:333
 msgid "*.*"
 msgstr ""
 
-#: virtual.cpp:267
+#: virtual.cpp:271
 msgid "<cfg>"
 msgstr ""
 
-#: virtual.cpp:276
+#: virtual.cpp:280
 msgid "Load function's libraries error."
 msgstr "Ошибка загрузки библиотеки функций."
 
-#: virtual.cpp:312 virtual.cpp:320
+#: virtual.cpp:316 virtual.cpp:324
 msgid "/br/lib_"
 msgstr ""
 
-#: virtual.cpp:313
+#: virtual.cpp:317
 msgid "/libs"
 msgstr ""
 
-#: virtual.cpp:313
+#: virtual.cpp:317
 msgid "Functions' Libraries"
 msgstr "Библиотеки функций"
 
-#: virtual.cpp:314 virtual.cpp:320
+#: virtual.cpp:318 virtual.cpp:324
 msgid "/libs/lb"
 msgstr ""
 
-#: virtual.cpp:314
+#: virtual.cpp:318
 msgid "Libraries"
 msgstr "Библиотеки"
 
-#: virtual.cpp:357
+#: virtual.cpp:361
 msgid "JavaLikePrm_"
 msgstr ""
 
-#: virtual.cpp:373 virtual.cpp:440 virtual.cpp:469
+#: virtual.cpp:377 virtual.cpp:444 virtual.cpp:473
 msgid "_val"
 msgstr ""
 
-#: virtual.cpp:389
+#: virtual.cpp:393
 #, c-format
 msgid "Call by period %g s. "
 msgstr "Вычисление с периодом %g с. "
 
-#: virtual.cpp:390
+#: virtual.cpp:394
 #, c-format
 msgid "Call by cron '%s'. "
 msgstr "Вычисление по крону '%s'. "
 
-#: virtual.cpp:391
+#: virtual.cpp:395
 #, c-format
 msgid "Calc time %.6g mks. "
 msgstr "Время вычисления %.6g мкс. "
 
-#: virtual.cpp:400
+#: virtual.cpp:404
 #, c-format
 msgid ""
 "Functions library <%s> is not present. Please, create functions library!"
 msgstr ""
 "Библиотека функций <%s> отсутствует. Пожалуйста. создайте библиотеку функций!"
 
-#: virtual.cpp:403
+#: virtual.cpp:407
 #, c-format
 msgid "Create new function <%s>."
 msgstr "Создание новой функции <%s>."
 
-#: virtual.cpp:411
+#: virtual.cpp:415
 msgid "Load function and its io error."
 msgstr "Ошибка загрузки функции и её IO."
 
-#: virtual.cpp:434 virtual.cpp:526
+#: virtual.cpp:438 virtual.cpp:530
 msgid "f_frq"
 msgstr ""
 
-#: virtual.cpp:434
+#: virtual.cpp:438
 msgid "Function calculate frequency (Hz)"
 msgstr "Частота вычисления функции (Гц)"
 
-#: virtual.cpp:434
+#: virtual.cpp:438
 msgid "1000"
 msgstr ""
 
-#: virtual.cpp:435 virtual.cpp:527
+#: virtual.cpp:439 virtual.cpp:531
 msgid "f_start"
 msgstr ""
 
-#: virtual.cpp:435
+#: virtual.cpp:439
 msgid "Function start flag"
 msgstr "Флаг запуска функции"
 
-#: virtual.cpp:436 virtual.cpp:528
+#: virtual.cpp:440 virtual.cpp:532
 msgid "f_stop"
 msgstr ""
 
-#: virtual.cpp:436
+#: virtual.cpp:440
 msgid "Function stop flag"
 msgstr "Флаг останова функции"
 
-#: virtual.cpp:512
+#: virtual.cpp:516
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: virtual.cpp:535
+#: virtual.cpp:539
 msgid "Calc controller's function error."
 msgstr "Ошибка вычисления функции контроллера"
 
-#: virtual.cpp:556 virtual.cpp:563
+#: virtual.cpp:560 virtual.cpp:567
 #, c-format
 msgid "/%2fserv%2ffncAttr"
 msgstr ""
 
-#: virtual.cpp:577
+#: virtual.cpp:581
 msgid "/serv/"
 msgstr ""
 
-#: virtual.cpp:579
+#: virtual.cpp:583
 msgid "/serv/fncAttr"
 msgstr ""
 
-#: virtual.cpp:581
+#: virtual.cpp:585
 msgid "No started or no present function."
 msgstr "Функция отсутствует или не запущена."
 
-#: virtual.cpp:584 virtual.cpp:589
+#: virtual.cpp:588 virtual.cpp:593
 msgid "a"
 msgstr ""
 
-#: virtual.cpp:601
+#: virtual.cpp:605
 msgid "/cntr/cfg/FUNC"
 msgstr ""
 
-#: virtual.cpp:601 virtual.cpp:632
+#: virtual.cpp:605 virtual.cpp:636
 msgid "/cntr/flst"
 msgstr ""
 
-#: virtual.cpp:602
+#: virtual.cpp:606
 msgid "/cntr/cfg/SCHEDULE"
 msgstr ""
 
-#: virtual.cpp:603
+#: virtual.cpp:607
 msgid "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"
 msgstr ""
 
-#: virtual.cpp:604
+#: virtual.cpp:608
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
@@ -1621,88 +1621,88 @@ msgstr ""
 "  - месяца (1-12);\n"
 "  - дни недели (0[воскресенье]-6)."
 
-#: virtual.cpp:612
+#: virtual.cpp:616
 msgid "/fnc"
 msgstr ""
 
-#: virtual.cpp:612
+#: virtual.cpp:616
 msgid "Calcing"
 msgstr "Вычисления"
 
-#: virtual.cpp:614 virtual.cpp:655
+#: virtual.cpp:618 virtual.cpp:659
 msgid "/fnc/io"
 msgstr ""
 
-#: virtual.cpp:614
+#: virtual.cpp:618
 msgid "Data"
 msgstr "Данные"
 
-#: virtual.cpp:614
+#: virtual.cpp:618
 msgid "15"
 msgstr ""
 
-#: virtual.cpp:616 virtual.cpp:659
+#: virtual.cpp:620 virtual.cpp:663
 msgid "/fnc/io/0"
 msgstr ""
 
-#: virtual.cpp:617 virtual.cpp:660
+#: virtual.cpp:621 virtual.cpp:664
 msgid "/fnc/io/1"
 msgstr ""
 
-#: virtual.cpp:618 virtual.cpp:661
+#: virtual.cpp:622 virtual.cpp:665
 msgid "/fnc/io/2"
 msgstr ""
 
-#: virtual.cpp:621 virtual.cpp:662
+#: virtual.cpp:625 virtual.cpp:666
 msgid "/fnc/io/3"
 msgstr ""
 
-#: virtual.cpp:624 virtual.cpp:663
+#: virtual.cpp:628 virtual.cpp:667
 msgid "/fnc/io/4"
 msgstr ""
 
-#: virtual.cpp:624
+#: virtual.cpp:628
 msgid "Value"
 msgstr "Значение"
 
-#: virtual.cpp:626 virtual.cpp:708
+#: virtual.cpp:630 virtual.cpp:712
 msgid "/fnc/prog"
 msgstr ""
 
-#: virtual.cpp:626
+#: virtual.cpp:630
 msgid "90"
 msgstr ""
 
-#: virtual.cpp:682
+#: virtual.cpp:686
 msgid "Deleting lock atribute in not allow."
 msgstr "Недопустимо удаление заблокированного атрибута."
 
-#: virtual.cpp:695
+#: virtual.cpp:699
 msgid "Changing locked atribute is not allowed."
 msgstr "Недопустимо изменение заблокированного атрибута."
 
-#: virtual.cpp:828
+#: virtual.cpp:832
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: virtual.cpp:861
+#: virtual.cpp:865
 msgid "err"
 msgstr ""
 
-#: virtual.cpp:863
+#: virtual.cpp:867
 msgid "2:Controller is stoped"
 msgstr "2:Контроллер остановлен!"
 
-#: virtual.cpp:864
+#: virtual.cpp:868
 msgid "1:Parameter is disabled"
 msgstr "1:Параметр отключен"
 
-#: virtual.cpp:905
+#: virtual.cpp:909
 msgid "/prm/cfg/FLD"
 msgstr ""
 
-#: virtual.cpp:906
+#: virtual.cpp:910
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<io>:<aid>:<anm>]\n"
@@ -1736,7 +1736,7 @@ msgstr ""
 
 #: func_analise.ypp:280
 #, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d).\n"
+msgid "%s, pos: (%d,%d)-(%d,%d)."
 msgstr ""
 
 #: func_analise.ypp:311

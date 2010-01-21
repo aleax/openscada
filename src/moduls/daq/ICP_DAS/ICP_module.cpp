@@ -37,7 +37,7 @@ extern "C"
 #define MOD_NAME	"ICP DAS hardware"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.5.0"
+#define VERSION		"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules."
 #define LICENSE		"GPL"
@@ -173,7 +173,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. Serial requests %g, errors %g, respond errors %g. "),tm_gath,numReq,numErr,numErrResp);
+    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. Serial requests %g, errors %g. "),tm_gath,numReq,numErr);
 
     return val;
 }

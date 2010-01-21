@@ -965,7 +965,7 @@ void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, i
 {
     ResAlloc res(taskRes,false);
     map<string,STask>::iterator it = mTasks.find(path);
-    if( it == mTasks.end() )	throw TError(nodePath().c_str(),_("Task '%s' is not present!"),path.c_str());
+    if( it == mTasks.end() )	return;//throw TError(nodePath().c_str(),_("Task '%s' is not present!"),path.c_str());
     pthread_t thr = it->second.thr;
     res.release();
 

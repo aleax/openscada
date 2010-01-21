@@ -38,7 +38,7 @@ using std::map;
 #define PRT_NAME	"ModBus"
 #define PRT_TYPE	"Protocol"
 #define PRT_SUBVER	VER_PROT
-#define PRT_MVER	"0.5.0"
+#define PRT_MVER	"0.5.1"
 #define PRT_AUTORS	"Roman Savochenko"
 #define PRT_DESCR	"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
 #define PRT_LICENSE	"GPL"
