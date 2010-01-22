@@ -1,7 +1,7 @@
 # OpenSCADA.UI.WebCfgD translate to Russian.
-# Copyright (C) 2008-2009 Roman Savochenko
+# Copyright (C) 2008-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
-# Roman Savochenko <rom_as@fromru.com>, 2008-2009.
+# Roman Savochenko <rom_as@fromru.com>, 2008-2010.
 #
 #: web_cfg.cpp:55 web_cfg.cpp:228 web_cfg.cpp:280 web_cfg.cpp:310
 #: web_cfg.cpp:435 web_cfg.cpp:439 web_cfg.cpp:451 web_cfg.cpp:498
@@ -9,9 +9,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.2\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-25 12:18+0300\n"
+"POT-Creation-Date: 2010-01-22 18:58+0200\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -35,7 +35,7 @@ msgid "WWW"
 msgstr ""
 
 #: web_cfg.cpp:42
-msgid "0.6.2"
+msgid "0.6.3"
 msgstr ""
 
 #: web_cfg.cpp:43

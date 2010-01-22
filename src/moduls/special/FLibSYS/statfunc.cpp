@@ -38,7 +38,7 @@
 #define MOD_LICENSE	"GPL"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
-#define VERSION		"0.9.0"
+#define VERSION		"0.9.1"
 //*************************************************
 
 FLibSYS::Lib *FLibSYS::mod;

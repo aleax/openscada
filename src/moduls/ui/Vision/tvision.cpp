@@ -46,7 +46,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"QT"
-#define VERSION		"0.9.0"
+#define VERSION		"0.9.5"
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Visual operation user interface."

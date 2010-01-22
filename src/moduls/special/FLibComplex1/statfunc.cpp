@@ -32,7 +32,7 @@
 #define MOD_TYPE	"Special"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.0.4"
+#define VERSION		"1.0.5"
 //*************************************************
 
 FLibComplex1::Lib *FLibComplex1::mod;

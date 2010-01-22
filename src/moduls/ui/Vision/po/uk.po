@@ -1,7 +1,7 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
-# Copyright (C) 2005-2009 Roman Savochenko
+# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
-# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
 #: tvision.cpp:71 tvision.cpp:175 tvision.cpp:176 tvision.cpp:177
 #: tvision.cpp:386 vis_devel.cpp:579 vis_devel.cpp:1080 vis_devel.cpp:1193
@@ -14,8 +14,8 @@
 #: vis_devel_widgs.cpp:2042 vis_devel_widgs.cpp:2215 vis_devel_widgs.cpp:2271
 #: vis_devel_widgs.cpp:2574 vis_devel_widgs.cpp:2585 vis_devel_widgs.cpp:2610
 #: vis_devel_widgs.cpp:2847 vis_devel_widgs.cpp:2852 vis_devel_widgs.cpp:2987
-#: vis_devel_widgs.cpp:2994 vis_run.cpp:809 vis_run.cpp:1005 vis_run.cpp:1080
-#: vis_run.cpp:1169 vis_run.cpp:1212 vis_run_widgs.cpp:61
+#: vis_devel_widgs.cpp:2994 vis_run.cpp:810 vis_run.cpp:1006 vis_run.cpp:1081
+#: vis_run.cpp:1170 vis_run.cpp:1213 vis_run_widgs.cpp:61
 #: vis_run_widgs.cpp:114 vis_run_widgs.cpp:119 vis_run_widgs.cpp:148
 #: vis_run_widgs.cpp:231 vis_run_widgs.cpp:303 vis_run_widgs.cpp:555
 #: vis_shape_elfig.cpp:169 vis_shape_elfig.cpp:207 vis_shape_elfig.cpp:1110
@@ -29,8 +29,8 @@
 #: vis_shape_elfig.cpp:1385 vis_shape_elfig.cpp:1392 vis_shape_elfig.cpp:1476
 #: vis_shape_elfig.cpp:1486 vis_shape_elfig.cpp:1487 vis_shape_elfig.cpp:1490
 #: vis_shape_elfig.cpp:1491 vis_shapes.cpp:1106 vis_shapes.cpp:1140
-#: vis_shapes.cpp:1639 vis_shapes.cpp:1981 vis_shapes.cpp:3301
-#: vis_shapes.cpp:3339 vis_shapes.cpp:3354 vis_widgs.cpp:126 vis_widgs.cpp:132
+#: vis_shapes.cpp:1639 vis_shapes.cpp:1981 vis_shapes.cpp:3302
+#: vis_shapes.cpp:3340 vis_shapes.cpp:3355 vis_widgs.cpp:126 vis_widgs.cpp:132
 #: vis_widgs.cpp:613 vis_widgs.cpp:672 vis_widgs.cpp:677 vis_widgs.cpp:787
 #: vis_widgs.cpp:878 vis_widgs.cpp:884 vis_widgs.cpp:915 vis_widgs.cpp:938
 #: vis_widgs.cpp:944 vis_widgs.cpp:958 vis_widgs.cpp:962 vis_widgs.cpp:972
@@ -41,9 +41,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.Vision 0.9.0\n"
+"Project-Id-Version: OpenSCADA.UI.Vision 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-24 15:07+0200\n"
+"POT-Creation-Date: 2010-01-22 16:29+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -72,7 +72,7 @@ msgid "QT"
 msgstr ""
 
 #: tvision.cpp:49
-msgid "0.9.0"
+msgid "0.9.5"
 msgstr ""
 
 #: tvision.cpp:50
@@ -125,7 +125,7 @@ msgstr "Запуск QT GUI"
 msgid "SubType"
 msgstr "Підтип"
 
-#: tvision.cpp:121 tvision.cpp:127 vis_devel.cpp:719 vis_run.cpp:713
+#: tvision.cpp:121 tvision.cpp:127 vis_devel.cpp:719 vis_run.cpp:714
 msgid "Developers"
 msgstr "Розробники"
 
@@ -208,11 +208,11 @@ msgstr ""
 #: vis_devel_dlgs.cpp:1053 vis_devel_dlgs.cpp:1260 vis_devel_dlgs.cpp:1398
 #: vis_devel_widgs.cpp:180 vis_devel_widgs.cpp:453 vis_devel_widgs.cpp:926
 #: vis_devel_widgs.cpp:1078 vis_devel_widgs.cpp:1298 vis_devel_widgs.cpp:1676
-#: vis_devel_widgs.cpp:1693 vis_devel_widgs.cpp:1760 vis_run.cpp:893
-#: vis_run.cpp:926 vis_run.cpp:1078 vis_run.cpp:1235 vis_run.cpp:1244
+#: vis_devel_widgs.cpp:1693 vis_devel_widgs.cpp:1760 vis_run.cpp:894
+#: vis_run.cpp:927 vis_run.cpp:1079 vis_run.cpp:1236 vis_run.cpp:1245
 #: vis_run_widgs.cpp:58 vis_run_widgs.cpp:105 vis_run_widgs.cpp:563
 #: vis_run_widgs.cpp:652 vis_run_widgs.cpp:664 vis_shapes.cpp:2358
-#: vis_shapes.cpp:2406 vis_shapes.cpp:2771 vis_widgs.cpp:207 vis_widgs.cpp:231
+#: vis_shapes.cpp:2406 vis_shapes.cpp:2772 vis_widgs.cpp:207 vis_widgs.cpp:231
 #: vis_widgs.cpp:880 vis_widgs.cpp:902
 msgid "get"
 msgstr ""
@@ -254,16 +254,16 @@ msgstr ""
 #: vis_devel_widgs.cpp:930 vis_devel_widgs.cpp:973 vis_devel_widgs.cpp:1048
 #: vis_devel_widgs.cpp:1079 vis_devel_widgs.cpp:1299 vis_devel_widgs.cpp:1694
 #: vis_devel_widgs.cpp:1726 vis_devel_widgs.cpp:1761 vis_devel_widgs.cpp:1793
-#: vis_devel_widgs.cpp:2386 vis_run.cpp:308 vis_run.cpp:721 vis_run.cpp:729
-#: vis_run.cpp:752 vis_run.cpp:794 vis_run.cpp:813 vis_run.cpp:879
-#: vis_run.cpp:893 vis_run.cpp:898 vis_run.cpp:909 vis_run.cpp:913
-#: vis_run.cpp:920 vis_run.cpp:926 vis_run.cpp:934 vis_run.cpp:955
-#: vis_run.cpp:999 vis_run.cpp:1078 vis_run.cpp:1085 vis_run.cpp:1198
-#: vis_run.cpp:1237 vis_run.cpp:1246 vis_run_widgs.cpp:59
+#: vis_devel_widgs.cpp:2386 vis_run.cpp:309 vis_run.cpp:722 vis_run.cpp:730
+#: vis_run.cpp:753 vis_run.cpp:795 vis_run.cpp:814 vis_run.cpp:880
+#: vis_run.cpp:894 vis_run.cpp:899 vis_run.cpp:910 vis_run.cpp:914
+#: vis_run.cpp:921 vis_run.cpp:927 vis_run.cpp:935 vis_run.cpp:956
+#: vis_run.cpp:1000 vis_run.cpp:1079 vis_run.cpp:1086 vis_run.cpp:1199
+#: vis_run.cpp:1238 vis_run.cpp:1247 vis_run_widgs.cpp:59
 #: vis_run_widgs.cpp:106 vis_run_widgs.cpp:533 vis_run_widgs.cpp:564
 #: vis_run_widgs.cpp:578 vis_run_widgs.cpp:586 vis_run_widgs.cpp:653
 #: vis_run_widgs.cpp:665 vis_shapes.cpp:2342 vis_shapes.cpp:2359
-#: vis_shapes.cpp:2409 vis_shapes.cpp:2737 vis_shapes.cpp:2774
+#: vis_shapes.cpp:2410 vis_shapes.cpp:2738 vis_shapes.cpp:2775
 #: vis_widgs.cpp:208 vis_widgs.cpp:232 vis_widgs.cpp:815 vis_widgs.cpp:881
 #: vis_widgs.cpp:903
 msgid "path"
@@ -298,8 +298,8 @@ msgid "-"
 msgstr ""
 
 #: tvision.cpp:267 vis_devel.cpp:925 vis_devel_widgs.cpp:1662
-#: vis_devel_widgs.cpp:1726 vis_devel_widgs.cpp:1752 vis_run.cpp:893
-#: vis_run.cpp:926
+#: vis_devel_widgs.cpp:1726 vis_devel_widgs.cpp:1752 vis_run.cpp:894
+#: vis_run.cpp:927
 msgid "/prj_"
 msgstr ""
 
@@ -313,7 +313,7 @@ msgstr "Зупинка модуля."
 
 #: tvision.cpp:329 vis_devel_dlgs.cpp:292 vis_devel_dlgs.cpp:1055
 #: vis_devel_dlgs.cpp:1263 vis_devel_widgs.cpp:179 vis_devel_widgs.cpp:929
-#: vis_shapes.cpp:2341 vis_shapes.cpp:2736
+#: vis_shapes.cpp:2341 vis_shapes.cpp:2737
 msgid "info"
 msgstr ""
 
@@ -347,7 +347,7 @@ msgstr "Станція рущія СВК"
 #: tvision.cpp:350 tvision.cpp:358 tvision.cpp:359 tvision.cpp:363
 #: tvision.cpp:364 tvision.cpp:368 tvision.cpp:369 tvision.cpp:373
 #: tvision.cpp:374 tvision.cpp:376 tvision.cpp:381 tvision.cpp:401
-#: tvision.cpp:402 vis_devel_widgs.cpp:1472 vis_run.cpp:283 vis_run.cpp:735
+#: tvision.cpp:402 vis_devel_widgs.cpp:1472 vis_run.cpp:284 vis_run.cpp:736
 #: vis_widgs.cpp:363
 msgid "root"
 msgstr ""
@@ -370,8 +370,8 @@ msgstr ""
 #: tvision.cpp:334 tvision.cpp:452 vis_devel.cpp:926 vis_devel.cpp:951
 #: vis_devel.cpp:1040 vis_devel.cpp:1245 vis_devel_dlgs.cpp:729
 #: vis_devel_widgs.cpp:496 vis_devel_widgs.cpp:930 vis_run_widgs.cpp:374
-#: vis_run_widgs.cpp:434 vis_shapes.cpp:570 vis_shapes.cpp:2413
-#: vis_shapes.cpp:2943 vis_shapes.cpp:3142 vis_widgs.cpp:319 vis_widgs.cpp:320
+#: vis_run_widgs.cpp:434 vis_shapes.cpp:570 vis_shapes.cpp:2414
+#: vis_shapes.cpp:2944 vis_shapes.cpp:3143 vis_widgs.cpp:319 vis_widgs.cpp:320
 #: vis_widgs.cpp:321 vis_widgs.cpp:322
 msgid "1"
 msgstr ""
@@ -508,8 +508,8 @@ msgstr ""
 #: vis_devel_dlgs.cpp:601 vis_devel_dlgs.cpp:617 vis_devel_dlgs.cpp:703
 #: vis_devel_dlgs.cpp:747 vis_devel_dlgs.cpp:776 vis_devel_dlgs.cpp:1440
 #: vis_devel_dlgs.cpp:1457 vis_devel_dlgs.cpp:1589 vis_devel_widgs.cpp:497
-#: vis_devel_widgs.cpp:1047 vis_devel_widgs.cpp:2385 vis_run.cpp:751
-#: vis_run.cpp:1085 vis_widgs.cpp:814
+#: vis_devel_widgs.cpp:1047 vis_devel_widgs.cpp:2385 vis_run.cpp:752
+#: vis_run.cpp:1086 vis_widgs.cpp:814
 msgid "set"
 msgstr ""
 
@@ -522,7 +522,7 @@ msgid "/Transport"
 msgstr ""
 
 #: tvision.cpp:386 tvision.cpp:388 tvision.cpp:392 tvision.cpp:396
-#: tvision.cpp:406 vis_run.cpp:1086 vis_run_widgs.cpp:113 vis_widgs.cpp:816
+#: tvision.cpp:406 vis_run.cpp:1087 vis_run_widgs.cpp:113 vis_widgs.cpp:816
 #: vis_widgs.cpp:914
 msgid "el"
 msgstr ""
@@ -543,7 +543,7 @@ msgstr ""
 #: vis_devel_widgs.cpp:1342 vis_devel_widgs.cpp:1357 vis_devel_widgs.cpp:1412
 #: vis_devel_widgs.cpp:1431 vis_devel_widgs.cpp:1444 vis_devel_widgs.cpp:1508
 #: vis_devel_widgs.cpp:1520 vis_devel_widgs.cpp:1701 vis_devel_widgs.cpp:1768
-#: vis_run.cpp:1086 vis_run_widgs.cpp:127 vis_run_widgs.cpp:140
+#: vis_run.cpp:1087 vis_run_widgs.cpp:127 vis_run_widgs.cpp:140
 #: vis_run_widgs.cpp:146 vis_run_widgs.cpp:656 vis_run_widgs.cpp:678
 #: vis_run_widgs.cpp:679 vis_widgs.cpp:816 vis_widgs.cpp:881 vis_widgs.cpp:925
 #: vis_widgs.cpp:936 vis_widgs.cpp:942
@@ -586,8 +586,8 @@ msgstr ""
 
 #: tvision.cpp:452 vis_devel.cpp:50 vis_devel.cpp:1252 vis_devel.cpp:1409
 #: vis_devel_widgs.cpp:496 vis_run_widgs.cpp:373 vis_run_widgs.cpp:435
-#: vis_shapes.cpp:575 vis_shapes.cpp:2361 vis_shapes.cpp:2415
-#: vis_shapes.cpp:2947 vis_shapes.cpp:3146 vis_widgs.cpp:319 vis_widgs.cpp:320
+#: vis_shapes.cpp:575 vis_shapes.cpp:2361 vis_shapes.cpp:2416
+#: vis_shapes.cpp:2948 vis_shapes.cpp:3147 vis_widgs.cpp:319 vis_widgs.cpp:320
 #: vis_widgs.cpp:321 vis_widgs.cpp:322
 msgid "0"
 msgstr ""
@@ -617,7 +617,7 @@ msgstr ""
 #: vis_devel_dlgs.cpp:1444 vis_devel_dlgs.cpp:1491 vis_devel_dlgs.cpp:1534
 #: vis_devel_dlgs.cpp:1557 vis_devel_dlgs.cpp:1596 vis_devel_widgs.cpp:1051
 #: vis_devel_widgs.cpp:1697 vis_devel_widgs.cpp:1764 vis_devel_widgs.cpp:2389
-#: vis_run.cpp:724 vis_run.cpp:755 vis_run.cpp:884
+#: vis_run.cpp:725 vis_run.cpp:756 vis_run.cpp:885
 msgid "mcat"
 msgstr ""
 
@@ -629,7 +629,7 @@ msgstr ""
 msgid "Vision developing"
 msgstr "Vision-розробка"
 
-#: vis_devel.cpp:72 vis_run.cpp:129 vis_run.cpp:999 vis_run_widgs.cpp:532
+#: vis_devel.cpp:72 vis_run.cpp:129 vis_run.cpp:1000 vis_run_widgs.cpp:532
 #: vis_run_widgs.cpp:577
 msgid "close"
 msgstr ""
@@ -791,11 +791,11 @@ msgstr "Натиснути для збереження даних елемент
 msgid "Ctrl+S"
 msgstr ""
 
-#: vis_devel.cpp:128 vis_run.cpp:818
+#: vis_devel.cpp:128 vis_run.cpp:819
 msgid "vision_prj_run"
 msgstr ""
 
-#: vis_devel.cpp:128 vis_run.cpp:818
+#: vis_devel.cpp:128 vis_run.cpp:819
 msgid ":/images/prj_run.png"
 msgstr ""
 
@@ -1671,7 +1671,7 @@ msgstr "Панель елементарних фігур"
 msgid "elFigTool"
 msgstr ""
 
-#: vis_devel.cpp:507 vis_run.cpp:248
+#: vis_devel.cpp:507 vis_run.cpp:249
 msgid "This label displays curent user."
 msgstr "Це маркування показує поточного користувача."
 
@@ -1679,7 +1679,7 @@ msgstr "Це маркування показує поточного корист
 msgid "Field for display the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: vis_devel.cpp:509 vis_run.cpp:250
+#: vis_devel.cpp:509 vis_run.cpp:251
 msgid "Double click to change user."
 msgstr "Подвійно клікнути для зміни користувача."
 
@@ -1747,7 +1747,7 @@ msgstr "Плаваюче вікно для інспектора посилань
 msgid "devWinState"
 msgstr ""
 
-#: vis_devel.cpp:587 vis_run.cpp:291
+#: vis_devel.cpp:587 vis_run.cpp:292
 msgid "Ready"
 msgstr "Готовий"
 
@@ -1783,7 +1783,7 @@ msgstr "Збереження візуальних елементів"
 msgid "Some visual items are changed. Save changings to DB on exit?"
 msgstr "Деякі візуальні елементи було змінено. Зберегти зміни у БД при виході?"
 
-#: vis_devel.cpp:717 vis_run.cpp:711
+#: vis_devel.cpp:717 vis_run.cpp:712
 msgid ""
 "%1 v%2.\n"
 "%3\n"
@@ -1811,23 +1811,23 @@ msgstr ""
 
 #: vis_devel.cpp:718 vis_devel.cpp:725 vis_devel_dlgs.cpp:966
 #: vis_devel_widgs.cpp:886 vis_devel_widgs.cpp:1169 vis_devel_widgs.cpp:1602
-#: vis_run.cpp:712 vis_run.cpp:763
+#: vis_run.cpp:713 vis_run.cpp:764
 msgid "Name"
 msgstr "Ім'я"
 
-#: vis_devel.cpp:718 vis_run.cpp:712
+#: vis_devel.cpp:718 vis_run.cpp:713
 msgid "Version"
 msgstr "Версія"
 
-#: vis_devel.cpp:718 vis_run.cpp:712
+#: vis_devel.cpp:718 vis_run.cpp:713
 msgid "Description"
 msgstr "Опис"
 
-#: vis_devel.cpp:719 vis_run.cpp:713
+#: vis_devel.cpp:719 vis_run.cpp:714
 msgid "Author"
 msgstr "Автор"
 
-#: vis_devel.cpp:719 vis_run.cpp:713
+#: vis_devel.cpp:719 vis_run.cpp:714
 msgid "License"
 msgstr "Ліцензія"
 
@@ -1846,7 +1846,7 @@ msgstr ""
 msgid "wlb_"
 msgstr ""
 
-#: vis_devel.cpp:800 vis_shapes.cpp:171 vis_shapes.cpp:2833 vis_widgs.cpp:317
+#: vis_devel.cpp:800 vis_shapes.cpp:171 vis_shapes.cpp:2834 vis_widgs.cpp:317
 #: vis_widgs.cpp:330
 msgid " "
 msgstr ""
@@ -1892,7 +1892,7 @@ msgstr "Завантаження даних візуального елемен�
 #: vis_devel_dlgs.cpp:1385 vis_devel_dlgs.cpp:1399 vis_devel_dlgs.cpp:1405
 #: vis_devel_dlgs.cpp:1441 vis_devel_dlgs.cpp:1458 vis_devel_dlgs.cpp:1531
 #: vis_devel_dlgs.cpp:1553 vis_devel_dlgs.cpp:1590 vis_devel_widgs.cpp:183
-#: vis_run.cpp:952 vis_run_widgs.cpp:44
+#: vis_run.cpp:953 vis_run_widgs.cpp:44
 msgid "/"
 msgstr ""
 
@@ -2021,7 +2021,7 @@ msgid "del"
 msgstr ""
 
 #: vis_devel.cpp:1106 vis_devel.cpp:1299 vis_devel.cpp:1306 vis_devel.cpp:1310
-#: vis_devel.cpp:1426 vis_devel.cpp:1427 vis_run.cpp:951 vis_run_widgs.cpp:48
+#: vis_devel.cpp:1426 vis_devel.cpp:1427 vis_run.cpp:952 vis_run_widgs.cpp:48
 msgid "pg_"
 msgstr ""
 
@@ -2034,7 +2034,7 @@ msgid "Widget's '%1' editing window is already opened."
 msgstr "Вікно редагування віджету '%1' вже відкрито."
 
 #: vis_devel.cpp:1183 vis_devel_widgs.cpp:1726 vis_devel_widgs.cpp:1793
-#: vis_run.cpp:898
+#: vis_run.cpp:899
 #, c-format
 msgid "/%2fico"
 msgstr ""
@@ -2102,7 +2102,7 @@ msgid "Copy page '%1' to '%2'.\n"
 msgstr "Копіювання сторінки '%1' до '%2'.\n"
 
 #: vis_devel.cpp:1306 vis_devel.cpp:1310 vis_devel.cpp:1317 vis_devel.cpp:1427
-#: vis_devel_widgs.cpp:1689 vis_run.cpp:1067 vis_run_widgs.cpp:47
+#: vis_devel_widgs.cpp:1689 vis_run.cpp:1068 vis_run_widgs.cpp:47
 msgid "wdg_"
 msgstr ""
 
@@ -2139,7 +2139,7 @@ msgstr ""
 msgid "dst"
 msgstr ""
 
-#: vis_devel.cpp:1387 vis_run.cpp:893
+#: vis_devel.cpp:1387 vis_run.cpp:894
 #, c-format
 msgid "/%2fobj%2fcfg%2fname"
 msgstr ""
@@ -2646,7 +2646,7 @@ msgid "/proc/w_lst"
 msgstr ""
 
 #: vis_devel_dlgs.cpp:1301 vis_devel_dlgs.cpp:1532 vis_devel_dlgs.cpp:1554
-#: vis_devel_dlgs.cpp:1591 vis_run.cpp:796 vis_run.cpp:1248 vis_run.cpp:1252
+#: vis_devel_dlgs.cpp:1591 vis_run.cpp:797 vis_run.cpp:1249 vis_run.cpp:1253
 msgid "wdg"
 msgstr ""
 
@@ -2737,7 +2737,7 @@ msgstr ""
 msgid "modif"
 msgstr ""
 
-#: vis_devel_widgs.cpp:291 vis_devel_widgs.cpp:500 vis_run.cpp:1078
+#: vis_devel_widgs.cpp:291 vis_devel_widgs.cpp:500 vis_run.cpp:1079
 #, c-format
 msgid "/%2fattr%2f"
 msgstr ""
@@ -2766,7 +2766,7 @@ msgstr ""
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: vis_devel_widgs.cpp:399 vis_devel_widgs.cpp:725 vis_shapes.cpp:2878
+#: vis_devel_widgs.cpp:399 vis_devel_widgs.cpp:725 vis_shapes.cpp:2879
 msgid "dd.MM.yyyy hh:mm:ss"
 msgstr ""
 
@@ -2775,7 +2775,7 @@ msgstr ""
 msgid "white"
 msgstr ""
 
-#: vis_devel_widgs.cpp:433 vis_run.cpp:421 vis_run.cpp:495 vis_shapes.cpp:168
+#: vis_devel_widgs.cpp:433 vis_run.cpp:422 vis_run.cpp:496 vis_shapes.cpp:168
 #: vis_widgs.cpp:327
 msgid "Arial"
 msgstr ""
@@ -2896,7 +2896,7 @@ msgid "/%2fserv%2fwlbBr"
 msgstr ""
 
 #: vis_devel_widgs.cpp:1303 vis_devel_widgs.cpp:1549 vis_devel_widgs.cpp:1740
-#: vis_run.cpp:1275 vis_widgs.cpp:907 vis_widgs.cpp:968 vis_widgs.cpp:983
+#: vis_run.cpp:1276 vis_widgs.cpp:907 vis_widgs.cpp:968 vis_widgs.cpp:983
 msgid "VCA DEBUG"
 msgstr ""
 
@@ -3162,15 +3162,15 @@ msgstr ""
 msgid "Save widget's image"
 msgstr "Збереження зображення віджету"
 
-#: vis_devel_widgs.cpp:2399 vis_run.cpp:599 vis_run.cpp:643
+#: vis_devel_widgs.cpp:2399 vis_run.cpp:600 vis_run.cpp:644
 msgid ".png"
 msgstr ""
 
-#: vis_devel_widgs.cpp:2399 vis_run.cpp:599 vis_run.cpp:643
+#: vis_devel_widgs.cpp:2399 vis_run.cpp:600 vis_run.cpp:644
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: vis_devel_widgs.cpp:2401 vis_run.cpp:601 vis_run.cpp:645 vis_run.cpp:690
+#: vis_devel_widgs.cpp:2401 vis_run.cpp:602 vis_run.cpp:646 vis_run.cpp:691
 msgid "Save to file '%1' is error."
 msgstr "Помилка збереження у файл '%1'."
 
@@ -3208,12 +3208,12 @@ msgstr ""
 msgid "Vision runtime"
 msgstr "Vision-виконання"
 
-#: vis_run.cpp:76 vis_run.cpp:382 vis_run.cpp:455 vis_run.cpp:538
-#: vis_run.cpp:624 vis_run.cpp:668
+#: vis_run.cpp:76 vis_run.cpp:383 vis_run.cpp:456 vis_run.cpp:539
+#: vis_run.cpp:625 vis_run.cpp:669
 msgid "print"
 msgstr ""
 
-#: vis_run.cpp:76 vis_run.cpp:382 vis_run.cpp:455 vis_run.cpp:538
+#: vis_run.cpp:76 vis_run.cpp:383 vis_run.cpp:456 vis_run.cpp:539
 msgid ":/images/print.png"
 msgstr ""
 
@@ -3245,7 +3245,7 @@ msgstr "Кнопка для друку вибраної сторінки"
 msgid "Press for printing of the selected page."
 msgstr "Натиснути для друку вибраної сторінки."
 
-#: vis_run.cpp:90 vis_run.cpp:116 vis_run.cpp:448 vis_run.cpp:617
+#: vis_run.cpp:90 vis_run.cpp:116 vis_run.cpp:449 vis_run.cpp:618
 #: vis_shapes.cpp:1244
 msgid "Diagram"
 msgstr "Діаграма"
@@ -3262,8 +3262,8 @@ msgstr "Кнопка для друку вибраної діаграми"
 msgid "Press for printing of the selected diagram."
 msgstr "Натиснути для друку вибраної діаграми."
 
-#: vis_run.cpp:96 vis_run.cpp:122 vis_run.cpp:531 vis_run.cpp:661
-#: vis_shapes.cpp:3000
+#: vis_run.cpp:96 vis_run.cpp:122 vis_run.cpp:532 vis_run.cpp:662
+#: vis_shapes.cpp:3001
 msgid "Document"
 msgstr "Документ"
 
@@ -3279,11 +3279,11 @@ msgstr "Кнопка для друку вибраного документу"
 msgid "Press for printing of the selected document."
 msgstr "Натиснути для друку вибраного документу."
 
-#: vis_run.cpp:103 vis_run.cpp:578
+#: vis_run.cpp:103 vis_run.cpp:579
 msgid "export"
 msgstr ""
 
-#: vis_run.cpp:103 vis_run.cpp:578 vis_run.cpp:624 vis_run.cpp:668
+#: vis_run.cpp:103 vis_run.cpp:579 vis_run.cpp:625 vis_run.cpp:669
 msgid ":/images/export.png"
 msgstr ""
 
@@ -3367,11 +3367,11 @@ msgstr "Натиснути для перемикання режиму \"На в�
 msgid "Press for display the programm and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
 
-#: vis_run.cpp:178 vis_run.cpp:180 vis_run.cpp:783
+#: vis_run.cpp:178 vis_run.cpp:180 vis_run.cpp:784
 msgid "alarmLev"
 msgstr ""
 
-#: vis_run.cpp:178 vis_run.cpp:1132
+#: vis_run.cpp:178 vis_run.cpp:1133
 msgid ":/images/alarmLev.png"
 msgstr ""
 
@@ -3387,7 +3387,7 @@ msgstr "Кнопка для квітації всіх порушень"
 msgid "Press for all alarms quitance."
 msgstr "Натиснути для квітації всіх порушень."
 
-#: vis_run.cpp:185 vis_run.cpp:187 vis_run.cpp:784
+#: vis_run.cpp:185 vis_run.cpp:187 vis_run.cpp:785
 msgid "alarmLight"
 msgstr ""
 
@@ -3407,7 +3407,7 @@ msgstr "Кнопка для квітації всіх порушень миго�
 msgid "Press for all blink alarms quitance."
 msgstr "Натиснути для квітації всіх порушень миготінням."
 
-#: vis_run.cpp:193 vis_run.cpp:195 vis_run.cpp:785
+#: vis_run.cpp:193 vis_run.cpp:195 vis_run.cpp:786
 msgid "alarmAlarm"
 msgstr ""
 
@@ -3431,7 +3431,7 @@ msgstr "Кнопка для квітації всіх порушень гудк�
 msgid "Press for all PC speaker alarms quitance."
 msgstr "Натиснути для квітації всіх порушень гудком."
 
-#: vis_run.cpp:201 vis_run.cpp:203 vis_run.cpp:786
+#: vis_run.cpp:201 vis_run.cpp:203 vis_run.cpp:787
 msgid "alarmSound"
 msgstr ""
 
@@ -3463,76 +3463,76 @@ msgstr "Порушення"
 msgid "Alarms (status)"
 msgstr "Порушення (статус)"
 
-#: vis_run.cpp:245
+#: vis_run.cpp:246
 msgid "This label displays curent system's time."
 msgstr "Це маркування показує поточний системний час."
 
-#: vis_run.cpp:249
+#: vis_run.cpp:250
 msgid "Field for display of the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: vis_run.cpp:254
+#: vis_run.cpp:255
 msgid "This label displays used VCA engine station."
 msgstr "Це маркування показує використану станцію рущія СВК"
 
-#: vis_run.cpp:255
+#: vis_run.cpp:256
 msgid "Field for display of the used VCA engine station."
 msgstr "Поле для відображення використаної станції рущія СВК"
 
-#: vis_run.cpp:258
+#: vis_run.cpp:259
 msgid "This label displays used interface style."
 msgstr "Це маркування показує використаний стиль інтерфейсу."
 
-#: vis_run.cpp:259
+#: vis_run.cpp:260
 msgid "Field for display the used interface style."
 msgstr "Поле для відображення використаного стилю інтерфейсу."
 
-#: vis_run.cpp:260
+#: vis_run.cpp:261
 msgid "Double click for style change."
 msgstr "Подвійно клікнути для зміни стилю."
 
-#: vis_run.cpp:307 vis_run.cpp:729
+#: vis_run.cpp:308 vis_run.cpp:730
 msgid "disconnect"
 msgstr ""
 
-#: vis_run.cpp:308 vis_run.cpp:721 vis_run.cpp:729 vis_run.cpp:813
-#: vis_run.cpp:879
+#: vis_run.cpp:309 vis_run.cpp:722 vis_run.cpp:730 vis_run.cpp:814
+#: vis_run.cpp:880
 #, c-format
 msgid "/%2fserv%2fsess"
 msgstr ""
 
-#: vis_run.cpp:308 vis_run.cpp:721 vis_run.cpp:729 vis_run.cpp:881
-#: vis_run.cpp:889
+#: vis_run.cpp:309 vis_run.cpp:722 vis_run.cpp:730 vis_run.cpp:882
+#: vis_run.cpp:890
 msgid "sess"
 msgstr ""
 
-#: vis_run.cpp:375
+#: vis_run.cpp:376
 msgid "Print page"
 msgstr "Друк сторінки"
 
-#: vis_run.cpp:375
+#: vis_run.cpp:376
 msgid "No one page for print is present!"
 msgstr "Немає жодної сторінки для друку!"
 
-#: vis_run.cpp:383
+#: vis_run.cpp:384
 msgid "Select page for print."
 msgstr "Вибір сторінки для друку."
 
-#: vis_run.cpp:383
+#: vis_run.cpp:384
 msgid "Page print."
 msgstr "Друк сторінки."
 
-#: vis_run.cpp:384 vis_run.cpp:580
+#: vis_run.cpp:385 vis_run.cpp:581
 msgid "Pages:"
 msgstr "Сторінки: "
 
-#: vis_run.cpp:389 vis_run.cpp:426 vis_run.cpp:462 vis_run.cpp:545
-#: vis_run.cpp:585 vis_run.cpp:631 vis_run.cpp:675
+#: vis_run.cpp:390 vis_run.cpp:427 vis_run.cpp:463 vis_run.cpp:546
+#: vis_run.cpp:586 vis_run.cpp:632 vis_run.cpp:676
 msgid " ("
 msgstr ""
 
-#: vis_run.cpp:389 vis_run.cpp:426 vis_run.cpp:462 vis_run.cpp:545
-#: vis_run.cpp:585 vis_run.cpp:631 vis_run.cpp:675 vis_shape_elfig.cpp:1103
+#: vis_run.cpp:390 vis_run.cpp:427 vis_run.cpp:463 vis_run.cpp:546
+#: vis_run.cpp:586 vis_run.cpp:632 vis_run.cpp:676 vis_shape_elfig.cpp:1103
 #: vis_shape_elfig.cpp:1108 vis_shape_elfig.cpp:1157 vis_shape_elfig.cpp:1162
 #: vis_shape_elfig.cpp:1167 vis_shape_elfig.cpp:1172 vis_shape_elfig.cpp:1177
 #: vis_shape_elfig.cpp:1226 vis_shape_elfig.cpp:1231 vis_shape_elfig.cpp:1236
@@ -3542,51 +3542,51 @@ msgstr ""
 msgid ")"
 msgstr ""
 
-#: vis_run.cpp:402
+#: vis_run.cpp:403
 msgid "Print page: \"%1\" (%2)"
 msgstr "Друк сторінки: \"%1\" (%2)"
 
-#: vis_run.cpp:424
+#: vis_run.cpp:425
 msgid "OpenSCADA project: \"%1\""
 msgstr "Проект OpenSCADA: \"%1\""
 
-#: vis_run.cpp:425
+#: vis_run.cpp:426
 msgid "User: \"%1\""
 msgstr "Користувач: \"%1\""
 
-#: vis_run.cpp:429 vis_run.cpp:501
+#: vis_run.cpp:430 vis_run.cpp:502
 msgid "d.MM.yyyy h:mm:ss"
 msgstr ""
 
-#: vis_run.cpp:440 vis_run.cpp:449
+#: vis_run.cpp:441 vis_run.cpp:450
 msgid "Print diagram"
 msgstr "Друк діаграми"
 
-#: vis_run.cpp:440 vis_run.cpp:523 vis_run.cpp:609 vis_run.cpp:653
+#: vis_run.cpp:441 vis_run.cpp:524 vis_run.cpp:610 vis_run.cpp:654
 msgid "No one page is present!"
 msgstr "Немає жодної сторінки!"
 
-#: vis_run.cpp:449 vis_run.cpp:618
+#: vis_run.cpp:450 vis_run.cpp:619
 msgid "No one diagram is present!"
 msgstr "Немає жодної діаграми!"
 
-#: vis_run.cpp:456
+#: vis_run.cpp:457
 msgid "Select diagramm for print."
 msgstr "Вибір діаграми для друку."
 
-#: vis_run.cpp:456
+#: vis_run.cpp:457
 msgid "Diagram print."
 msgstr "Друк діаграми."
 
-#: vis_run.cpp:457 vis_run.cpp:626
+#: vis_run.cpp:458 vis_run.cpp:627
 msgid "Diagrams:"
 msgstr "Діаграми:"
 
-#: vis_run.cpp:473
+#: vis_run.cpp:474
 msgid "Print diagram: \"%1\" (%2)"
 msgstr "Друк діаграми: \"%1\" (%2)"
 
-#: vis_run.cpp:500
+#: vis_run.cpp:501
 msgid ""
 "OpenSCADA project: \"%1\"\n"
 "%2 (%3)"
@@ -3594,7 +3594,7 @@ msgstr ""
 "Проект OpenSCADA: \"%1\"\n"
 "%2 (%3)"
 
-#: vis_run.cpp:501
+#: vis_run.cpp:502
 msgid ""
 "User: \"%1\"\n"
 "%2"
@@ -3602,95 +3602,95 @@ msgstr ""
 "Користувач: \"%1\"\n"
 "%2"
 
-#: vis_run.cpp:511
+#: vis_run.cpp:512
 msgid "%1 [%2...%3]"
 msgstr ""
 
-#: vis_run.cpp:523 vis_run.cpp:532
+#: vis_run.cpp:524 vis_run.cpp:533
 msgid "Print document"
 msgstr "Друк документа"
 
-#: vis_run.cpp:532 vis_run.cpp:662
+#: vis_run.cpp:533 vis_run.cpp:663
 msgid "No one document is present!"
 msgstr "Немає жодного документа!"
 
-#: vis_run.cpp:539
+#: vis_run.cpp:540
 msgid "Select document for print."
 msgstr "Вибір документа для друку."
 
-#: vis_run.cpp:539
+#: vis_run.cpp:540
 msgid "Document print."
 msgstr "Друк документа."
 
-#: vis_run.cpp:540 vis_run.cpp:670
+#: vis_run.cpp:541 vis_run.cpp:671
 msgid "Document:"
 msgstr "Документ:"
 
-#: vis_run.cpp:556
+#: vis_run.cpp:557
 msgid "Print document: \"%1\" (%2)"
 msgstr "Друк документа: \"%1\" (%2)"
 
-#: vis_run.cpp:571
+#: vis_run.cpp:572
 msgid "Export page"
 msgstr "Експорт сторінки"
 
-#: vis_run.cpp:571
+#: vis_run.cpp:572
 msgid "No one page for export is present!"
 msgstr "Немає жодної сторінки для експорту!"
 
-#: vis_run.cpp:579
+#: vis_run.cpp:580
 msgid "Select page for export."
 msgstr "Вибір сторінки для експорту."
 
-#: vis_run.cpp:579
+#: vis_run.cpp:580
 msgid "Page export."
 msgstr "Експорт сторінки."
 
-#: vis_run.cpp:598
+#: vis_run.cpp:599
 msgid "Save page's image"
 msgstr "Збереження зображення сторінки"
 
-#: vis_run.cpp:609 vis_run.cpp:618
+#: vis_run.cpp:610 vis_run.cpp:619
 msgid "Export diagram"
 msgstr "Експорт діаграми"
 
-#: vis_run.cpp:625
+#: vis_run.cpp:626
 msgid "Select diagramm for export."
 msgstr "Вибір діаграми для експорту."
 
-#: vis_run.cpp:625
+#: vis_run.cpp:626
 msgid "Diagram export."
 msgstr "Експорт діаграми."
 
-#: vis_run.cpp:642
+#: vis_run.cpp:643
 msgid "Save diagram's image"
 msgstr "Збереження зображення діаграми"
 
-#: vis_run.cpp:653 vis_run.cpp:662
+#: vis_run.cpp:654 vis_run.cpp:663
 msgid "Export document"
 msgstr "Експорт документа"
 
-#: vis_run.cpp:669
+#: vis_run.cpp:670
 msgid "Select document for export."
 msgstr "Вибір документа для експорту."
 
-#: vis_run.cpp:669
+#: vis_run.cpp:670
 msgid "Document export."
 msgstr "Експорт документа."
 
-#: vis_run.cpp:684
+#: vis_run.cpp:685
 msgid "Save document"
 msgstr "Збереження документа"
 
-#: vis_run.cpp:684
+#: vis_run.cpp:685
 msgid ".html"
 msgstr ""
 
-#: vis_run.cpp:684
+#: vis_run.cpp:685
 msgid "HTML (*.html)"
 msgstr ""
 
-#: vis_run.cpp:693 vis_shapes.cpp:3085
+#: vis_run.cpp:694 vis_shapes.cpp:3086
 msgid ""
 "<?xml version='1.0' ?>\n"
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -3700,81 +3700,81 @@ msgid ""
 "  <meta http-equiv='Content-Type' content='text/html; charset="
 msgstr ""
 
-#: vis_run.cpp:698 vis_shapes.cpp:3090
+#: vis_run.cpp:699 vis_shapes.cpp:3091
 msgid ""
 "'/>\n"
 "  <style type='text/css'>\n"
 msgstr ""
 
-#: vis_run.cpp:699 vis_shapes.cpp:3091
+#: vis_run.cpp:700 vis_shapes.cpp:3092
 msgid ""
 "</style>\n"
 "</head>\n"
 msgstr ""
 
-#: vis_run.cpp:702 vis_shapes.cpp:3094
+#: vis_run.cpp:703 vis_shapes.cpp:3095
 msgid "</html>"
 msgstr ""
 
-#: vis_run.cpp:720 vis_run.cpp:879
+#: vis_run.cpp:721 vis_run.cpp:880
 msgid "connect"
 msgstr ""
 
-#: vis_run.cpp:752 vis_run.cpp:794 vis_run.cpp:898 vis_run.cpp:909
-#: vis_run.cpp:913 vis_run.cpp:920 vis_run.cpp:934 vis_run.cpp:948
-#: vis_run.cpp:955 vis_run.cpp:999 vis_run.cpp:1198 vis_run.cpp:1237
-#: vis_run.cpp:1246 vis_run_widgs.cpp:533 vis_run_widgs.cpp:578
+#: vis_run.cpp:753 vis_run.cpp:795 vis_run.cpp:899 vis_run.cpp:910
+#: vis_run.cpp:914 vis_run.cpp:921 vis_run.cpp:935 vis_run.cpp:949
+#: vis_run.cpp:956 vis_run.cpp:1000 vis_run.cpp:1199 vis_run.cpp:1238
+#: vis_run.cpp:1247 vis_run_widgs.cpp:533 vis_run_widgs.cpp:578
 #: vis_run_widgs.cpp:586 vis_run_widgs.cpp:653 vis_run_widgs.cpp:665
 msgid "/ses_"
 msgstr ""
 
-#: vis_run.cpp:752 vis_run.cpp:913
+#: vis_run.cpp:753 vis_run.cpp:914
 #, c-format
 msgid "/%2fobj%2fcfg%2fstyle"
 msgstr ""
 
-#: vis_run.cpp:793
+#: vis_run.cpp:794
 msgid "quittance"
 msgstr ""
 
-#: vis_run.cpp:794 vis_run.cpp:1237 vis_run.cpp:1246
+#: vis_run.cpp:795 vis_run.cpp:1238 vis_run.cpp:1247
 #, c-format
 msgid "/%2fserv%2falarm"
 msgstr ""
 
-#: vis_run.cpp:795
+#: vis_run.cpp:796
 msgid "tmpl"
 msgstr ""
 
-#: vis_run.cpp:800 vis_run_widgs.cpp:283 vis_run_widgs.cpp:309
+#: vis_run.cpp:801 vis_run_widgs.cpp:283 vis_run_widgs.cpp:309
 #: vis_run_widgs.cpp:419 vis_run_widgs.cpp:431 vis_run_widgs.cpp:433
 #: vis_run_widgs.cpp:434 vis_run_widgs.cpp:435 vis_shape_elfig.cpp:2507
 #: vis_shape_elfig.cpp:2508 vis_shape_elfig.cpp:2509 vis_shape_elfig.cpp:2510
 #: vis_shape_elfig.cpp:2754 vis_shapes.cpp:571 vis_shapes.cpp:576
 #: vis_shapes.cpp:589 vis_shapes.cpp:598 vis_shapes.cpp:605 vis_shapes.cpp:611
 #: vis_shapes.cpp:617 vis_shapes.cpp:625 vis_shapes.cpp:635 vis_shapes.cpp:646
-#: vis_shapes.cpp:655 vis_shapes.cpp:1210 vis_shapes.cpp:2944
-#: vis_shapes.cpp:2948 vis_shapes.cpp:3143 vis_shapes.cpp:3147
+#: vis_shapes.cpp:655 vis_shapes.cpp:1210 vis_shapes.cpp:2945
+#: vis_shapes.cpp:2949 vis_shapes.cpp:3144 vis_shapes.cpp:3148
 msgid "event"
 msgstr ""
 
-#: vis_run.cpp:800
+#: vis_run.cpp:801
 msgid "ws_"
 msgstr ""
 
-#: vis_run.cpp:812
+#: vis_run.cpp:813
 msgid "list"
 msgstr ""
 
-#: vis_run.cpp:813 vis_run.cpp:880
+#: vis_run.cpp:814 vis_run.cpp:881
 msgid "prj"
 msgstr ""
 
-#: vis_run.cpp:820
+#: vis_run.cpp:821
 msgid "Select session for connection"
 msgstr "Вибір сеансу для підключення"
 
-#: vis_run.cpp:837
+#: vis_run.cpp:838
 msgid ""
 "Several sessions are already opened on the page %1. You can create new "
 "session or connect to present session. Please, select needed session and "
@@ -3785,124 +3785,126 @@ msgstr ""
 "натисніть 'Під'єднатися' або натисніть 'Створити' для створення нового, "
 "власного, сеансу."
 
-#: vis_run.cpp:861
+#: vis_run.cpp:862
 msgid "Connect"
 msgstr "Під'єднатися"
 
-#: vis_run.cpp:862
+#: vis_run.cpp:863
 msgid "Create"
 msgstr "Створити"
 
-#: vis_run.cpp:895
+#: vis_run.cpp:896
 msgid "Runing project: %1"
 msgstr "Виконання проекту: %1"
 
-#: vis_run.cpp:909
+#: vis_run.cpp:910
 #, c-format
 msgid "/%2fobj%2fcfg%2fper"
 msgstr ""
 
-#: vis_run.cpp:920 vis_run_widgs.cpp:653 vis_run_widgs.cpp:665
+#: vis_run.cpp:921 vis_run_widgs.cpp:653 vis_run_widgs.cpp:665
 #, c-format
 msgid "/%2fobj%2fcfg%2fstLst"
 msgstr ""
 
-#: vis_run.cpp:926
+#: vis_run.cpp:927
 #, c-format
 msgid "/%2fobj%2fcfg%2frunWin"
 msgstr ""
 
-#: vis_run.cpp:934 vis_run.cpp:1196
+#: vis_run.cpp:935 vis_run.cpp:1197
 msgid "openlist"
 msgstr ""
 
-#: vis_run.cpp:934 vis_run.cpp:955 vis_run.cpp:999 vis_run.cpp:1198
+#: vis_run.cpp:935 vis_run.cpp:956 vis_run.cpp:1000 vis_run.cpp:1199
 #: vis_run_widgs.cpp:533 vis_run_widgs.cpp:578 vis_run_widgs.cpp:586
 #, c-format
 msgid "/%2fserv%2fpg"
 msgstr ""
 
-#: vis_run.cpp:941 vis_run.cpp:1197 vis_run.cpp:1227 vis_run.cpp:1247
-#: vis_run.cpp:1251 vis_run_widgs.cpp:106 vis_shapes.cpp:2360
-#: vis_shapes.cpp:2364 vis_shapes.cpp:2410 vis_shapes.cpp:2420
-#: vis_shapes.cpp:2706 vis_shapes.cpp:2775
+#: vis_run.cpp:942 vis_run.cpp:1198 vis_run.cpp:1228 vis_run.cpp:1248
+#: vis_run.cpp:1252 vis_run_widgs.cpp:106 vis_shapes.cpp:2360
+#: vis_shapes.cpp:2364 vis_shapes.cpp:2411 vis_shapes.cpp:2421
+#: vis_shapes.cpp:2707 vis_shapes.cpp:2776
 msgid "tm"
 msgstr ""
 
-#: vis_run.cpp:955
+#: vis_run.cpp:956
 msgid "open"
 msgstr ""
 
-#: vis_run.cpp:955 vis_run.cpp:999 vis_run_widgs.cpp:533 vis_run_widgs.cpp:578
-#: vis_run_widgs.cpp:586
+#: vis_run.cpp:956 vis_run.cpp:1000 vis_run_widgs.cpp:533
+#: vis_run_widgs.cpp:578 vis_run_widgs.cpp:586
 msgid "pg"
 msgstr ""
 
-#: vis_run.cpp:990 vis_run_widgs.cpp:76 vis_run_widgs.cpp:213
+#: vis_run.cpp:991 vis_run_widgs.cpp:76 vis_run_widgs.cpp:213
 msgid "pgGrp"
 msgstr ""
 
-#: vis_run.cpp:991 vis_run_widgs.cpp:81 vis_run_widgs.cpp:86
+#: vis_run.cpp:992 vis_run_widgs.cpp:81 vis_run_widgs.cpp:86
 #: vis_run_widgs.cpp:87 vis_run_widgs.cpp:216
 msgid "pgOpenSrc"
 msgstr ""
 
-#: vis_run.cpp:994
+#: vis_run.cpp:995
 msgid "main"
 msgstr ""
 
-#: vis_run.cpp:1085 vis_widgs.cpp:815
+#: vis_run.cpp:1086 vis_widgs.cpp:815
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: vis_run.cpp:1107
+#: vis_run.cpp:1108
 msgid "/dev/input/by-path/platform-pcspkr-event-spkr"
 msgstr ""
 
-#: vis_run.cpp:1109
+#: vis_run.cpp:1110
 #, c-format
 msgid "Error open: %s"
 msgstr "Помилка відкриття: %s"
 
-#: vis_run.cpp:1130
+#: vis_run.cpp:1131
 msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"
 
-#: vis_run.cpp:1211 vis_run.cpp:1212 vis_shapes.cpp:3332 vis_shapes.cpp:3351
+#: vis_run.cpp:1212 vis_run.cpp:1213 vis_shapes.cpp:3333 vis_shapes.cpp:3352
 msgid "cntPg"
 msgstr ""
 
-#: vis_run.cpp:1224
+#: vis_run.cpp:1225
 msgid "updWdg"
 msgstr ""
 
-#: vis_run.cpp:1236 vis_run.cpp:1245 vis_shapes.cpp:2413
+#: vis_run.cpp:1237 vis_run.cpp:1246 vis_shapes.cpp:2414
 msgid "mode"
 msgstr ""
 
-#: vis_run.cpp:1236
+#: vis_run.cpp:1237
 msgid "stat"
 msgstr ""
 
-#: vis_run.cpp:1238
+#: vis_run.cpp:1239
 msgid "alarmSt"
 msgstr ""
 
-#: vis_run.cpp:1245
+#: vis_run.cpp:1246
 msgid "sound"
 msgstr ""
 
-#: vis_run.cpp:1275
+#: vis_run.cpp:1276
 #, c-format
 msgid "Session '%s' update time %f ms."
 msgstr "Час оновлення сеансу '%s' %f мс."
 
-#: vis_run.cpp:1282
-msgid "hh:mm:ss"
+#: vis_run.cpp:1284
+msgid ""
+"hh:mm:ss\n"
+"ddd, d MMM"
 msgstr ""
 
-#: vis_run.cpp:1283
+#: vis_run.cpp:1285
 msgid "dddd, dd-MMM-yyyy"
 msgstr ""
 
@@ -4219,7 +4221,7 @@ msgstr ""
 msgid "4"
 msgstr ""
 
-#: vis_run_widgs.cpp:379 vis_shapes.cpp:2414
+#: vis_run_widgs.cpp:379 vis_shapes.cpp:2415
 msgid "6"
 msgstr ""
 
@@ -4380,28 +4382,28 @@ msgid "key_mouseDblClick"
 msgstr ""
 
 #: vis_run_widgs.cpp:434 vis_run_widgs.cpp:435 vis_shapes.cpp:570
-#: vis_shapes.cpp:575 vis_shapes.cpp:2943 vis_shapes.cpp:2947
-#: vis_shapes.cpp:3142 vis_shapes.cpp:3146
+#: vis_shapes.cpp:575 vis_shapes.cpp:2944 vis_shapes.cpp:2948
+#: vis_shapes.cpp:3143 vis_shapes.cpp:3147
 msgid "focus"
 msgstr ""
 
-#: vis_run_widgs.cpp:434 vis_shapes.cpp:571 vis_shapes.cpp:2944
-#: vis_shapes.cpp:3143
+#: vis_run_widgs.cpp:434 vis_shapes.cpp:571 vis_shapes.cpp:2945
+#: vis_shapes.cpp:3144
 msgid "ws_FocusIn"
 msgstr ""
 
-#: vis_run_widgs.cpp:435 vis_shapes.cpp:576 vis_shapes.cpp:2948
-#: vis_shapes.cpp:3147
+#: vis_run_widgs.cpp:435 vis_shapes.cpp:576 vis_shapes.cpp:2949
+#: vis_shapes.cpp:3148
 msgid "ws_FocusOut"
 msgstr ""
 
 #: vis_run_widgs.cpp:503 vis_run_widgs.cpp:523 vis_run_widgs.cpp:583
-#: vis_shapes.cpp:3204
+#: vis_shapes.cpp:3205
 msgid "Box"
 msgstr ""
 
-#: vis_run_widgs.cpp:505 vis_run_widgs.cpp:506 vis_shapes.cpp:3301
-#: vis_shapes.cpp:3356
+#: vis_run_widgs.cpp:505 vis_run_widgs.cpp:506 vis_shapes.cpp:3302
+#: vis_shapes.cpp:3357
 msgid "inclPg"
 msgstr ""
 
@@ -4830,12 +4832,12 @@ msgstr ""
 msgid "curUSek"
 msgstr ""
 
-#: vis_shapes.cpp:2342 vis_shapes.cpp:2408 vis_shapes.cpp:2737
-#: vis_shapes.cpp:2773
+#: vis_shapes.cpp:2342 vis_shapes.cpp:2409 vis_shapes.cpp:2738
+#: vis_shapes.cpp:2774
 msgid "arch"
 msgstr ""
 
-#: vis_shapes.cpp:2342 vis_shapes.cpp:2359 vis_shapes.cpp:2409
+#: vis_shapes.cpp:2342 vis_shapes.cpp:2359 vis_shapes.cpp:2410
 #, c-format
 msgid "/%2fserv%2fval"
 msgstr ""
@@ -4844,116 +4846,116 @@ msgstr ""
 msgid "vtp"
 msgstr ""
 
-#: vis_shapes.cpp:2348 vis_shapes.cpp:2741
+#: vis_shapes.cpp:2348 vis_shapes.cpp:2742
 msgid "beg"
 msgstr ""
 
-#: vis_shapes.cpp:2349 vis_shapes.cpp:2742
+#: vis_shapes.cpp:2349 vis_shapes.cpp:2743
 msgid "end"
 msgstr ""
 
-#: vis_shapes.cpp:2350 vis_shapes.cpp:2412 vis_shapes.cpp:2421
+#: vis_shapes.cpp:2350 vis_shapes.cpp:2413 vis_shapes.cpp:2422
 msgid "per"
 msgstr ""
 
-#: vis_shapes.cpp:2361 vis_shapes.cpp:2411 vis_shapes.cpp:2419
-#: vis_shapes.cpp:2776
+#: vis_shapes.cpp:2361 vis_shapes.cpp:2412 vis_shapes.cpp:2420
+#: vis_shapes.cpp:2777
 msgid "tm_grnd"
 msgstr ""
 
-#: vis_shapes.cpp:2414
+#: vis_shapes.cpp:2415
 msgid "real_prec"
 msgstr ""
 
-#: vis_shapes.cpp:2415
+#: vis_shapes.cpp:2416
 msgid "round_perc"
 msgstr ""
 
-#: vis_shapes.cpp:2433
+#: vis_shapes.cpp:2434
 #, c-format
 msgid "%d %lf"
 msgstr ""
 
-#: vis_shapes.cpp:2507
+#: vis_shapes.cpp:2508
 msgid "Protocol"
 msgstr ""
 
-#: vis_shapes.cpp:2705
+#: vis_shapes.cpp:2706
 msgid "pos"
 msgstr ""
 
-#: vis_shapes.cpp:2706
+#: vis_shapes.cpp:2707
 msgid "Time"
 msgstr "Час"
 
-#: vis_shapes.cpp:2707
+#: vis_shapes.cpp:2708
 msgid "utm"
 msgstr ""
 
-#: vis_shapes.cpp:2707
+#: vis_shapes.cpp:2708
 msgid "mcsec"
 msgstr "мкс"
 
-#: vis_shapes.cpp:2708 vis_shapes.cpp:2778 vis_shapes.cpp:2786
-#: vis_shapes.cpp:2807
+#: vis_shapes.cpp:2709 vis_shapes.cpp:2779 vis_shapes.cpp:2787
+#: vis_shapes.cpp:2808
 msgid "lev"
 msgstr ""
 
-#: vis_shapes.cpp:2708
+#: vis_shapes.cpp:2709
 msgid "Level"
 msgstr "Рівень"
 
-#: vis_shapes.cpp:2709 vis_shapes.cpp:2777 vis_shapes.cpp:2786
-#: vis_shapes.cpp:2807
+#: vis_shapes.cpp:2710 vis_shapes.cpp:2778 vis_shapes.cpp:2787
+#: vis_shapes.cpp:2808
 msgid "cat"
 msgstr ""
 
-#: vis_shapes.cpp:2709
+#: vis_shapes.cpp:2710
 msgid "Category"
 msgstr "Категорія"
 
-#: vis_shapes.cpp:2710
+#: vis_shapes.cpp:2711
 msgid "mess"
 msgstr ""
 
-#: vis_shapes.cpp:2710
+#: vis_shapes.cpp:2711
 msgid "Message"
 msgstr "Повідомлення"
 
-#: vis_shapes.cpp:2737 vis_shapes.cpp:2774
+#: vis_shapes.cpp:2738 vis_shapes.cpp:2775
 #, c-format
 msgid "/Archive/%2fserv%2fmess"
 msgstr ""
 
-#: vis_shapes.cpp:2786 vis_shapes.cpp:2807
+#: vis_shapes.cpp:2787 vis_shapes.cpp:2808
 msgid "time"
 msgstr ""
 
-#: vis_shapes.cpp:2786 vis_shapes.cpp:2807
+#: vis_shapes.cpp:2787 vis_shapes.cpp:2808
 msgid "utime"
 msgstr ""
 
-#: vis_shapes.cpp:2996
+#: vis_shapes.cpp:2997
 msgid ""
 "<!DOCTYPE xhtml [\n"
 "  <!ENTITY nbsp \"&#160;\" >\n"
 "]>\n"
 msgstr ""
 
-#: vis_shapes.cpp:3078
+#: vis_shapes.cpp:3079
 #, c-format
 msgid "Document '%s' parsing is error: %s"
 msgstr "Помилка розбору документу '%s': %s"
 
-#: vis_shapes.cpp:3111
+#: vis_shapes.cpp:3112
 msgid "doc"
 msgstr ""
 
-#: vis_shapes.cpp:3191
+#: vis_shapes.cpp:3192
 msgid "Function"
 msgstr "Функція"
 
-#: vis_shapes.cpp:3317
+#: vis_shapes.cpp:3318
 msgid "Load page: '%1'."
 msgstr "Завантаження сторінки: '%1'."
 
