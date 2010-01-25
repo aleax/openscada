@@ -227,7 +227,7 @@
 		</tbl>-->
 	    </node>
 
-	    <node id="mod_CIF">
+	    <node id="mod_Siemens">
 		<!--
 		<tbl id="DAQ">
 		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"

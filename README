@@ -1,20 +1,22 @@
 
 	     Welcome to open SCADA system OpenSCADA.
 
-Documentation about this programm you may find together this document. Usually, OpenSCASA system is accompanied by next
+Documentation about this programm you may find together this document. Usually OpenSCASA system is accompanied by next
 documentetion:
- - AboutOpenSCADA.pdf: Contain the generic information about system;
- - APIOpenSCADA.pdf: Contain OpenSCADA system API for developers;
- - FAQ.pdf: Frequently ask questions about system;
- - Modules/*: Module's documentation directory;
+ - AboutOpenSCADA.pdf: Contain the generic information about system.
+ - DAQ.pdf: Data acquisition conception OpenSCADA.
+ - APIOpenSCADA.pdf: Contain OpenSCADA system API for developers.
+ - FAQ.pdf: Frequently ask questions about system.
+ - Modules/*: Module's documentation directory.
  - release_*.pdf: The release preview document for last version.
+ - openscada.pdf: Generic programm description document.
 
 For OpenSCADA starting you should write shell command <# openscada>. The system will be started in default configuration.
 This mode not have one DB configuration, but data into the configuration file enough for:
  - working into the graphical configurator UI.QTCfg;
  - working into WEB-configurators (adress: http://localhost:10002 or http://localhost:10004 )
 
-Default cofiguration can used for demon mode run. For starting the system into demon mode you should write shell command
+Default cofiguration can used for demon mode run. For starting the system into demon(server) mode you should write shell command
 <# service oscadad start>.
 
 For first experience geting you can use OpenSCADA demo package. This package contain DB with the system and subsystems
@@ -27,4 +29,4 @@ For using the system you can need passwords. Default configuration have next use
  - root: system administrator, have password: "openscada";
  - user: unprivileged user, have password: "user".
 
-If you have some questions then apply to WWW project site http://oscada.org for more information.
+If you have some questions then apply to WWW project's site http://oscada.org for more information.

@@ -49,23 +49,23 @@ void TSecurity::postEnable(int flag)
 {
     if(!(flag&TCntrNode::NodeRestore))
     {
-	//- Add surely users, groups and set their parameters -
-	//-- Administrator --
+	//> Add surely users, groups and set their parameters
+	//>> Administrator
 	usrAdd("root");
 	usrAt("root").at().setLName(_("Administrator (superuser)!!!"));
 	usrAt("root").at().setSysItem(true);
 	usrAt("root").at().setPass("openscada");
-	//-- Simple user --
+	//>> Simple user
 	usrAdd("user");
 	usrAt("user").at().setLName(_("Simple user."));
 	usrAt("user").at().setSysItem(true);
 	usrAt("user").at().setPass("user");
-	//-- Administrators group --
+	//>> Administrators group
 	grpAdd("root");
 	grpAt("root").at().setLName(_("Administrators group."));
 	grpAt("root").at().setSysItem(true);
 	grpAt("root").at().userAdd("root");
-	//-- Simple users group --
+	//>> Simple users group
 	grpAdd("users");
 	grpAt("users").at().setLName(_("Users group."));
 	grpAt("users").at().setSysItem(true);
@@ -224,8 +224,7 @@ string TSecurity::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"======================= Subsystem \"Security\" options ====================\n"
-	"------------ Parameters of section <%s> in config file -----------\n\n"
+	"======================= Subsystem \"Security\" options ====================\n\n"
 	),nodePath().c_str());
 
     return buf;

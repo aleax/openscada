@@ -58,39 +58,10 @@ TTpContr::~TTpContr()
 
 }
 
-string TTpContr::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	DAQ_TYPE,DAQ_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void TTpContr::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
 
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
 }
 
 void TTpContr::save_( )

@@ -1,3 +1,10 @@
+2010-01-25 Roman 0.6.4.1
+- !!:DOC: TODO and README documents is updated. README translation to Ukrainian is added.
+- SYS: Splash image is updated.
+- !!!!:/DOC: OpenSCADA manual documents and API document is updated for 0.6.4.1. The API OpenSCADA document's translation to English is added.
+- !:SYS, Archive.*, DB.*, DAQ.*, Protocol.SelfSystem, Transport.*, UI.VCAEngine, UI.WebCfg, UI.WebCfgD: Empty inforamtion about commandline options is removed.
+
+
 2010-01-22 Roman
 - !!:Protocol.SelfSystem: Documents and translations is updated and released version 0.9.2.
 - !!:Special.FLibComplex1: Documents and translations is updated and released version 1.0.5.

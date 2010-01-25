@@ -216,7 +216,6 @@ class TProt: public TProtocol
 	static uint8_t CRCLo[];
 
 	//Methods
-	string optDescr( );
 	TProtocolIn *in_open( const string &name );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

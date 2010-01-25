@@ -438,8 +438,7 @@ string TBDS::optDescr(  )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"========================= Subsystem \"DB\" options ========================\n"
-	"------------ Parameters of section <%s> in config file -----------\n\n"
+	"========================= Subsystem \"DB\" options ========================\n\n"
 	),nodePath().c_str());
 
     return(buf);

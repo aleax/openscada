@@ -108,8 +108,7 @@ string Engine::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n\n"),
 	    MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;

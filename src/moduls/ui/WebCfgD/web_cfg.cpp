@@ -131,40 +131,11 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void TWEB::load_( )
 {
-    //- Load parameters from command line -
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
+    //> Load parameters from command line
 
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-
-    //- Load parameters from config file -
+    //> Load parameters from config file
 }
 
 void TWEB::modStart()
@@ -517,7 +488,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
         return;
     }
 
@@ -528,7 +498,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	SYS->transport().at().setSysHost(false);
 	opt->setText("/Transport");
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

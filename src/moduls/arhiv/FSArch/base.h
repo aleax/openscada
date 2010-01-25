@@ -64,7 +64,6 @@ class ModArch: public TTipArchivator
 	//Methods
 	void load_( );
 	void postEnable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TMArchivator *AMess( const string &iid, const string &idb );
 	TVArchivator *AVal( const string &iid, const string &idb );
@@ -72,7 +71,6 @@ class ModArch: public TTipArchivator
     private:
 	//Methods
 	static void Task(union sigval obj);		//Checking archives task
-	string optDescr( );
 
 	//Attributes
 	bool	prc_st;

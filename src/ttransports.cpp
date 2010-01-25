@@ -318,8 +318,7 @@ string TTransportS::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"======================= Subsystem \"Transports\" options ==================\n"
-	"------------ Parameters of section <%s> in config file -----------\n\n"
+	"======================= Subsystem \"Transports\" options ==================\n\n"
 	),nodePath().c_str());
 
     return(buf);

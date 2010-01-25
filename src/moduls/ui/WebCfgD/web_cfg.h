@@ -91,7 +91,6 @@ class TWEB: public TUI
 	//> Controll system requests
 	int cntrIfCmd( XMLNode &node, const string &user );
 
-	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
 	string trMessReplace( const string &tsrc );

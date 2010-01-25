@@ -94,7 +94,6 @@ class TProt: public TProtocol
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );
-	string optDescr( );
 	TProtocolIn *in_open( const string &name );
 
 	//Attributes

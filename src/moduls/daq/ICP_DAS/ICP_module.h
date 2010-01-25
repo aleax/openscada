@@ -182,7 +182,6 @@ class TTpContr: public TTipDAQ
 	//Methods
 	void postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
-	string optDescr( );
 };
 
 extern TTpContr *mod;

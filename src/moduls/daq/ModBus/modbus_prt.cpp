@@ -92,38 +92,9 @@ void TProt::nAdd( const string &iid, const string &db )
     chldAdd( mNode, new Node(iid,db,&nodeEl()) );
 }
 
-string TProt::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	PRT_TYPE,PRT_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void TProt::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL, 0 }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
 
     //> Load DB
     //>> Search and create new nodes
@@ -464,7 +435,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    if( prtLen() )
 		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),0444,"root","DAQ",3,"tp","str","cols","90","rows","20");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -497,7 +467,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	for( int i_p = 0; i_p < mPrt.size(); i_p++ )
 	    opt->setText(opt->text()+mPrt[i_p]+"\n");
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
 }
 

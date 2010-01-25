@@ -282,7 +282,6 @@ class TTpContr: public TTipDAQ
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
-	string optDescr( );
 
 	//Attributes
 	bool	drv_CIF_OK;

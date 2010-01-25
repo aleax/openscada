@@ -93,18 +93,6 @@ TTpContr::~TTpContr( )
     if( drvCIFOK( ) )	DevCloseDriver( );
 }
 
-string TTpContr::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
@@ -147,27 +135,9 @@ void TTpContr::postEnable( int flag )
 
 void TTpContr::load_( )
 {
-    //- Load parameters from command line -
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
+    //> Load parameters from command line
 
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-
-    //-- Load CIF devices configuration --
+    //> Load CIF devices configuration
     TConfig cfg(&CIFDevE());
     string bd_tbl = modId()+"_CIFdevs";
     for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )

@@ -61,15 +61,11 @@ class ModArch: public TTipArchivator
 	void load_( );
 
 	void postEnable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TMArchivator *AMess( const string &id, const string &db );
 	TVArchivator *AVal( const string &id, const string &db );
 
     private:
-	//Methods
-	string optDescr( );
-
 	//Attributes
 	TElem el_arch, el_mess, el_vl_int, el_vl_real, el_vl_str;
 };

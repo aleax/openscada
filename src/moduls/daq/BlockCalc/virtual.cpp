@@ -92,40 +92,11 @@ TipContr::~TipContr()
     nodeDelAll();
 }
 
-string TipContr::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-    return(buf);
-}
-
 void TipContr::load_()
 {
-    //========== Load parameters from command line ============
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"      ,0,NULL,'h'},
-	{NULL        ,0,NULL,0  }
-    };
+    //> Load parameters from command line
 
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-
-    //========== Load parameters from config file =============
+    //> Load parameters from config file
 }
 
 void TipContr::postEnable( int flag )
@@ -175,21 +146,6 @@ void TipContr::preDisable(int flag)
 TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 {
     return new Contr(name,daq_db,this);
-}
-
-void TipContr::cntrCmdProc( XMLNode *opt )
-{
-    //Get page info
-    if( opt->name() == "info" )
-    {
-	TTipDAQ::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
-    }
-
-    //Process command to page
-    string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
-    else TTipDAQ::cntrCmdProc(opt);
 }
 
 //************************************************

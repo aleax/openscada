@@ -163,7 +163,6 @@ class TipContr: public TTipDAQ
 
     protected:
 	//Protected methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void load_( );
 
 	bool redntAllow( )	{ return true; }
@@ -172,7 +171,6 @@ class TipContr: public TTipDAQ
 	//Private methods
 	void postEnable( int flag );
 	void preDisable( int flag );
-	string optDescr( );
 
 	//Private attributes
 	TElem	blk_el;

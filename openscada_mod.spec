@@ -780,7 +780,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %config %_initdir/oscadad
 %_bindir/openscada
 %_bindir/openscada_start
-%doc README README_ru COPYING ChangeLog INSTALL TODO TODO_ru TODO_uk
+%doc README README_ru README_uk COPYING ChangeLog INSTALL TODO TODO_ru TODO_uk
 %_desktopdir/openscada.desktop
 %_iconsdir/openscada.png
 %_libdir/*.so.*

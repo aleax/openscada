@@ -23,7 +23,7 @@ To do tasks of the project OpenSCADA
   * Make realisation of SNMP protocol's agent.
 
 7. Subsystem “Protocols of transports”
-  * Make module to protocol HTTP for service requests by OPC XML DA.
+  * Make module to protocol HTTP for service requests by OPC UA.
 
 8. Subsystem “User interfaces”
 

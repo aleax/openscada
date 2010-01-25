@@ -132,39 +132,9 @@ TProt::SAuth TProt::sesGet(int id_ses)
     return TProt::SAuth(0,"",0);
 }
 
-string TProt::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return(buf);
-}
-
 void TProt::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
 
     //> Load parameters from config file
     setAuthTime( atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()) );
@@ -270,7 +240,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),0664,"root","root",4,"tp","dec","min","10","max","1000",
 		    "help",_("Value in bytes."));
 	    }
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -291,7 +260,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(comprBrd()) );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setComprBrd( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
 }
 

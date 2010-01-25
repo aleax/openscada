@@ -201,7 +201,6 @@ class TipContr : public TTipDAQ
 	bool redntAllow( )	{ return true; }
 
 	TController *ContrAttach( const string &name, const string &daq_db );
-	string optDescr( );
 
     private:
 	//Attributes

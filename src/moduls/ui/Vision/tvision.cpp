@@ -139,7 +139,7 @@ string TVision::optDescr( )
 	"RunPrjs     <list>    Run projects list on the module start.\n"
 	"RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive update,\n"
 	"		       1 - update only changed widgets).\n"
-	"VCAstation  <id>      VCA station id ('.' - local).\n"),
+	"VCAstation  <id>      VCA station id ('.' - local).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;

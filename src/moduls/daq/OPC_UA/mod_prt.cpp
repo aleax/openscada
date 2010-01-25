@@ -58,38 +58,10 @@ TProt::~TProt()
     nodeDelAll();
 }
 
-string TProt::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
-	PRT_TYPE,PRT_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void TProt::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL, 0 }
-    };
 
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
 }
 
 void TProt::save_( )
@@ -277,22 +249,6 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     catch(TError er) { err = TSYS::strMess(_("14:Remote host error: %s"),er.mess.c_str()); }
 
     io.setAttr("err",err);
-}
-
-void TProt::cntrCmdProc( XMLNode *opt )
-{
-    //> Get page info
-    if( opt->name() == "info" )
-    {
-	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
-	return;
-    }
-
-    //> Process command to page
-    string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
-    else TProtocol::cntrCmdProc(opt);
 }
 
 int32_t TProt::iN( const string &rb, int &off, char vSz )

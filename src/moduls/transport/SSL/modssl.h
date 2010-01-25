@@ -192,9 +192,6 @@ class TTransSock: public TTipTransport
 
     private:
 	//Methods
-	string optDescr( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-
 	void postEnable( int flag );
 
 	static unsigned long id_function( );

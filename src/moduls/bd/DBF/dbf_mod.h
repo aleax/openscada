@@ -128,7 +128,6 @@ class BDMod : public TTipBD
     private:
 	//Private methods
 	TBD *openBD( const string &iid );
-	string optDescr( );
 };
 
 extern BDMod *mod;

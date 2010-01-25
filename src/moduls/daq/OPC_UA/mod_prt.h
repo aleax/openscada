@@ -108,10 +108,7 @@ class TProt: public TProtocol
 
     private:
 	//Methods
-	string optDescr( );
 	TProtocolIn *in_open( const string &name );
-
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };
 
 extern TProt *modPrt;
