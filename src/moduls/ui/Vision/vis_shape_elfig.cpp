@@ -1667,10 +1667,15 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
             for( int i=0; i < inundationItems.size(); i++ )
                 if( inundationItems[i].path.contains(pop_pos) )
                 {
-                    bool fl = false;
+                    fill_index = i;
+                    QAction *actDeleteFill = new QAction( _("Delete the current fill"), w->mainWin() );
+                    actDeleteFill->setObjectName("delete_fill");
+                    actDeleteFill->setStatusTip(_("Press to delete the current fill"));
+                    connect( actDeleteFill, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                    menu.addAction(actDeleteFill);
+
                     if( inundationItems[i].brush < 0 )
                     {
-                        fl = true;
                         fill_index = i;
                         QAction *actDynamicFillColor = new QAction( _("Make fill color dynamic"), w->mainWin() );
                         actDynamicFillColor->setObjectName("fill_color");
@@ -1680,7 +1685,6 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     }
                     if( inundationItems[i].brush_img < 0 )
                     {
-                        fl = true;
                         fill_index = i;
                         QAction *actDynamicFillImage = new QAction( _("Make fill image dynamic"), w->mainWin() );
                         actDynamicFillImage->setObjectName("fill_image");
@@ -1688,7 +1692,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                         connect( actDynamicFillImage, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
                         menu.addAction(actDynamicFillImage);
                     }
-                    if( fl ) menu.addSeparator();
+                    menu.addSeparator();
                     break;
                 }
             if( flg )
@@ -2142,9 +2146,10 @@ void ElFigDt::dynamic( )
     else if(sender()->objectName() == "border_width") num = 3;
     else if(sender()->objectName() == "border_color") num = 4;
     else if(sender()->objectName() == "style") num = 5;
-    else if(sender()->objectName() == "fill_color") num = 6;
-    else if(sender()->objectName() == "fill_image") num = 7;
-    else if(sender()->objectName() == "static") num = 8;
+    else if(sender()->objectName() == "delete_fill") num = 6;
+    else if(sender()->objectName() == "fill_color") num = 7;
+    else if(sender()->objectName() == "fill_image") num = 8;
+    else if(sender()->objectName() == "static") num = 9;
     tmp = -5;
     real = -5;
     switch( num )
@@ -2253,6 +2258,15 @@ void ElFigDt::dynamic( )
         case 6:
             if( elF->index == -1 )
             {
+                inundationItems.remove(elF->fill_index);
+                elF->shapeSave( w );
+                elF->paintImage( w );
+                w->update();
+            }
+            break;
+        case 7:
+            if( elF->index == -1 )
+            {
                 temp_fc = (*colors)[inundationItems[elF->fill_index].brush];
                 tmp = inundationItems[elF->fill_index].brush;
                 i = 1;
@@ -2261,7 +2275,7 @@ void ElFigDt::dynamic( )
                 real = i;
             }
             break;
-        case 7:
+        case 8:
             if( elF->index == -1 )
             {
                 temp_fi = (*images)[inundationItems[elF->fill_index].brush_img];
@@ -2272,7 +2286,7 @@ void ElFigDt::dynamic( )
                 real = i;
             }
             break;
-        case 8:
+        case 9:
             for( int i = 0; i < shapeItems.size(); i++ )
             {
                     if( shapeItems[i].n1 > 0 )
@@ -3042,19 +3056,19 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                             //view->repaint();
                         }
+                        bool ell_present = false; // - check for an allipse presence -
                         if( ellipse_draw_startPath != newPath )
                         {
                             ellipse_draw_startPath = newPath;
-                            paintImage(view);
-                            view->repaint();
+                            ell_present = true;
                         }
                         if( ellipse_draw_endPath != newPath )
                         {
                             ellipse_draw_endPath = newPath;
-                            paintImage(view);
-                            view->repaint();
+                            ell_present = true;
 
                         }
+                        if( ell_present ) { paintImage(view); view->repaint(); }
                         // - calling moveItemTo for figures, connected with the arc, if there was moving 3 or 4 rects of the arc -
                         if( count_holds && (flag_arc_rect_3_4 || (flag_rect && shapeItems[index_array[0]].type==2)))
                         {
@@ -5863,7 +5877,6 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     QPainterPath path;
     int flag = -1, in_index = -1;
-    bool flag_remove = false;
     bool flag_n1, flag_n2, flag_break;
     double arc_a,arc_b,t_start,t_end,t,ang;
     QLineF line1,line2;

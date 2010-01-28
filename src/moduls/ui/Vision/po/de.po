@@ -45,7 +45,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-23 10:26+0200\n"
+"POT-Creation-Date: 2010-01-28 12:58+0200\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -54,6 +54,155 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: moc_vis_devel.cpp:70
+msgid ""
+"VISION::VisDevelopitem,forceitemmodifyToolUpdate(string)exitModifChk()aboutQt"
+"()updateMenuWindow()prjRun()visualItAdd(QAction*,QPointF,string,string),pnt,"
+"wid,pntvisualItAdd(QAction*)visualItDel(string)visualItProp()visualItClear"
+"(string)visualItCut()visualItPaste()endRunChk()"
+msgstr ""
+
+#: moc_vis_devel_dlgs.cpp:50
+msgid ""
+"VISION::LibProjPropselectIco()delMimeData()unloadMimeData()delStlItem()itb"
+msgstr ""
+
+#: moc_vis_devel_dlgs.cpp:134
+msgid ""
+"VISION::VisItPropselectIco()addAttr()changeAttr(QTreeWidgetItem*,int)"
+"tabChanged(int)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:38
+msgid "VISION::ModInspAttr"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:98
+msgid "VISION::InspAttr"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:161
+msgid "VISION::InspAttrDockmodified(string)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:223
+msgid "VISION::InspLnk"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:276
+msgid "VISION::LinkItemDelegateselItem(int)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:330
+msgid "VISION::InspLnkDock"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:392
+msgid ""
+"VISION::WdgTreeselectItem(string,bool)selectItem(string)updateTree()force"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:473
+msgid ""
+"VISION::ProjTreeselectItem(string,bool)selectItem(string)updateTree(string,"
+"QTreeWidgetItem*)vca_itctrTreePopup()selectItem(bool)"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:547
+msgid "VISION::LineEditProp"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:597
+msgid "VISION::WScaleStBar"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:643
+msgid "VISION::WMdfStBar"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:702
+msgid "VISION::SizePntWdg"
+msgstr ""
+
+#: moc_vis_devel_widgs.cpp:766
+msgid ""
+"VISION::DevelWdgViewapply(string)saveGeom(string)makeImage()incDecVisScale()"
+msgstr ""
+
+#: moc_vis_run.cpp:60
+msgid ""
+"VISION::VisRunprintPg()printDiag()printDoc()exportPg()exportDiag()exportDoc()"
+"oldUser,oldPassstyleChanged()updatePage()alarmAct(QAction*)"
+msgstr ""
+
+#: moc_vis_run_widgs.cpp:35
+msgid "VISION::RunWdgView"
+msgstr ""
+
+#: moc_vis_run_widgs.cpp:78
+msgid "VISION::RunPageView"
+msgstr ""
+
+#: moc_vis_run_widgs.cpp:124
+msgid "VISION::StylesStBar"
+msgstr ""
+
+#: moc_vis_shape_elfig.cpp:38
+msgid "VISION::ElFigDt"
+msgstr ""
+
+#: moc_vis_shape_elfig.cpp:91
+msgid "VISION::ShapeElFigure"
+msgstr ""
+
+#: moc_vis_shapes.cpp:35
+msgid "VISION::WdgShape"
+msgstr ""
+
+#: moc_vis_shapes.cpp:89
+msgid ""
+"VISION::ShapeFormEltextAccept()comboChange(QString)buttonPressed()"
+"buttonToggled(bool)"
+msgstr ""
+
+#: moc_vis_shapes.cpp:154
+msgid "VISION::ShapeDiagram"
+msgstr ""
+
+#: moc_vis_shapes.cpp:207
+msgid "VISION::ShapeProtocol"
+msgstr ""
+
+#: moc_vis_shapes.cpp:257
+msgid "VISION::ShapeDocument"
+msgstr ""
+
+#: moc_vis_widgs.cpp:38
+msgid "VISION::DlgUser"
+msgstr ""
+
+#: moc_vis_widgs.cpp:91
+msgid "VISION::FontDlg"
+msgstr ""
+
+#: moc_vis_widgs.cpp:144
+msgid "VISION::UserStBaruserChanged(QString,QString)"
+msgstr ""
+
+#: moc_vis_widgs.cpp:212
+msgid "VISION::LineEditvalChanged(QString)cancelSlot()"
+msgstr ""
+
+#: moc_vis_widgs.cpp:298
+msgid "VISION::TextEdittextChanged(QString)applySlot()"
+msgstr ""
+
+#: moc_vis_widgs.cpp:381
+msgid ""
+"VISION::WdgViewnewWdgItem(string)load(string,bool,bool,XMLNode*)item,load,"
+"inititem,loadload(string)"
+msgstr ""
 
 #: tvision.cpp:44
 msgid "Vision"
@@ -155,7 +304,8 @@ msgstr ""
 "RunTimeUpdt <mode>    Aktualiserungsmodus in RunTime (0 - adaptive "
 "periodische Aktualiserung aller Widgets,\n"
 "\t\t       1 - Aktualiserung nur der geänderten Widgets).\n"
-"VCAstation  <id>      Station mit der VCA Maschine ('.' - local).\n\n"
+"VCAstation  <id>      Station mit der VCA Maschine ('.' - local).\n"
+"\n"
 
 #: tvision.cpp:151
 msgid "Load module."
@@ -1051,7 +1201,7 @@ msgstr "Betätigen zum Ausschneiden des Elements."
 msgid "Ctrl+X"
 msgstr ""
 
-#: vis_devel.cpp:204 vis_devel.cpp:206 vis_shape_elfig.cpp:1815
+#: vis_devel.cpp:204 vis_devel.cpp:206 vis_shape_elfig.cpp:1819
 msgid "editcopy"
 msgstr ""
 
@@ -1079,7 +1229,7 @@ msgstr "Betätigen zum Kopieren des Elements."
 msgid "Ctrl+C"
 msgstr ""
 
-#: vis_devel.cpp:214 vis_devel.cpp:216 vis_shape_elfig.cpp:1829
+#: vis_devel.cpp:214 vis_devel.cpp:216 vis_shape_elfig.cpp:1833
 msgid "editpaste"
 msgstr ""
 
@@ -1175,7 +1325,7 @@ msgstr ""
 msgid "Rise widget"
 msgstr "Widget nach oben"
 
-#: vis_devel.cpp:244 vis_shape_elfig.cpp:1966
+#: vis_devel.cpp:244 vis_shape_elfig.cpp:1970
 msgid "level_rise"
 msgstr ""
 
@@ -1203,7 +1353,7 @@ msgstr ""
 msgid "Lower widget"
 msgstr "Widget nach unten"
 
-#: vis_devel.cpp:252 vis_shape_elfig.cpp:2043
+#: vis_devel.cpp:252 vis_shape_elfig.cpp:2047
 msgid "level_lower"
 msgstr ""
 
@@ -1403,7 +1553,7 @@ msgstr ""
 msgid "Cursor"
 msgstr "Cursor"
 
-#: vis_devel.cpp:314 vis_shape_elfig.cpp:1720 vis_shape_elfig.cpp:1807
+#: vis_devel.cpp:314 vis_shape_elfig.cpp:1724 vis_shape_elfig.cpp:1811
 msgid "cursor"
 msgstr ""
 
@@ -1431,8 +1581,8 @@ msgstr ""
 msgid "Add line"
 msgstr "Eine Linie hinzufügen"
 
-#: vis_devel.cpp:323 vis_shape_elfig.cpp:293 vis_shape_elfig.cpp:1720
-#: vis_shape_elfig.cpp:1725
+#: vis_devel.cpp:323 vis_shape_elfig.cpp:293 vis_shape_elfig.cpp:1724
+#: vis_shape_elfig.cpp:1729
 msgid "line"
 msgstr ""
 
@@ -1460,8 +1610,8 @@ msgstr ""
 msgid "Add arc"
 msgstr "Einen Bogen hinzufügen"
 
-#: vis_devel.cpp:332 vis_shape_elfig.cpp:412 vis_shape_elfig.cpp:1721
-#: vis_shape_elfig.cpp:1747
+#: vis_devel.cpp:332 vis_shape_elfig.cpp:412 vis_shape_elfig.cpp:1725
+#: vis_shape_elfig.cpp:1751
 msgid "arc"
 msgstr ""
 
@@ -1489,7 +1639,7 @@ msgstr ""
 msgid "Add besier curve"
 msgstr "Den Besie-Bogen hinzufügen"
 
-#: vis_devel.cpp:341 vis_shape_elfig.cpp:1721 vis_shape_elfig.cpp:1769
+#: vis_devel.cpp:341 vis_shape_elfig.cpp:1725 vis_shape_elfig.cpp:1773
 msgid "besier"
 msgstr ""
 
@@ -1517,7 +1667,7 @@ msgstr ""
 msgid "Connections"
 msgstr "Verbindungen"
 
-#: vis_devel.cpp:351 vis_shape_elfig.cpp:1723 vis_shape_elfig.cpp:1791
+#: vis_devel.cpp:351 vis_shape_elfig.cpp:1727 vis_shape_elfig.cpp:1795
 msgid "hold"
 msgstr ""
 
@@ -2081,7 +2231,7 @@ msgstr ""
 #: vis_shape_elfig.cpp:1451 vis_shape_elfig.cpp:1455 vis_shape_elfig.cpp:1456
 #: vis_shape_elfig.cpp:1462 vis_shape_elfig.cpp:1463 vis_shape_elfig.cpp:1476
 #: vis_shape_elfig.cpp:1486 vis_shape_elfig.cpp:1487 vis_shape_elfig.cpp:1490
-#: vis_shape_elfig.cpp:1491 vis_shape_elfig.cpp:1712
+#: vis_shape_elfig.cpp:1491 vis_shape_elfig.cpp:1716
 msgid "wdgAddr"
 msgstr ""
 
@@ -3768,9 +3918,9 @@ msgstr ""
 
 #: vis_run.cpp:801 vis_run_widgs.cpp:283 vis_run_widgs.cpp:309
 #: vis_run_widgs.cpp:419 vis_run_widgs.cpp:431 vis_run_widgs.cpp:433
-#: vis_run_widgs.cpp:434 vis_run_widgs.cpp:435 vis_shape_elfig.cpp:2507
-#: vis_shape_elfig.cpp:2508 vis_shape_elfig.cpp:2509 vis_shape_elfig.cpp:2510
-#: vis_shape_elfig.cpp:2754 vis_shapes.cpp:571 vis_shapes.cpp:576
+#: vis_run_widgs.cpp:434 vis_run_widgs.cpp:435 vis_shape_elfig.cpp:2521
+#: vis_shape_elfig.cpp:2522 vis_shape_elfig.cpp:2523 vis_shape_elfig.cpp:2524
+#: vis_shape_elfig.cpp:2768 vis_shapes.cpp:571 vis_shapes.cpp:576
 #: vis_shapes.cpp:589 vis_shapes.cpp:598 vis_shapes.cpp:605 vis_shapes.cpp:611
 #: vis_shapes.cpp:617 vis_shapes.cpp:625 vis_shapes.cpp:635 vis_shapes.cpp:646
 #: vis_shapes.cpp:655 vis_shapes.cpp:1210 vis_shapes.cpp:2945
@@ -4029,7 +4179,7 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: vis_run_widgs.cpp:324 vis_run_widgs.cpp:427 vis_shape_elfig.cpp:2507
+#: vis_run_widgs.cpp:324 vis_run_widgs.cpp:427 vis_shape_elfig.cpp:2521
 #: vis_shapes.cpp:1206
 msgid "Left"
 msgstr ""
@@ -4038,7 +4188,7 @@ msgstr ""
 msgid "Up"
 msgstr ""
 
-#: vis_run_widgs.cpp:326 vis_run_widgs.cpp:428 vis_shape_elfig.cpp:2508
+#: vis_run_widgs.cpp:326 vis_run_widgs.cpp:428 vis_shape_elfig.cpp:2522
 #: vis_shapes.cpp:1207
 msgid "Right"
 msgstr ""
@@ -4391,7 +4541,7 @@ msgstr ""
 msgid "key_mouseRels"
 msgstr ""
 
-#: vis_run_widgs.cpp:429 vis_shape_elfig.cpp:2509 vis_shapes.cpp:1208
+#: vis_run_widgs.cpp:429 vis_shape_elfig.cpp:2523 vis_shapes.cpp:1208
 msgid "Midle"
 msgstr ""
 
@@ -4448,7 +4598,7 @@ msgstr "Dokument zum Drucken auswählen."
 msgid "Style select"
 msgstr "Schrift auswählen"
 
-#: vis_shape_elfig.cpp:44 vis_shape_elfig.cpp:2124
+#: vis_shape_elfig.cpp:44 vis_shape_elfig.cpp:2128
 msgid "ElFigure"
 msgstr ""
 
@@ -4584,7 +4734,7 @@ msgstr ""
 msgid "Make this point dynamic"
 msgstr "Diesen Punkt dynamisch machen"
 
-#: vis_shape_elfig.cpp:1574 vis_shape_elfig.cpp:2139
+#: vis_shape_elfig.cpp:1574 vis_shape_elfig.cpp:2143
 msgid "point"
 msgstr ""
 
@@ -4596,7 +4746,7 @@ msgstr "Betätigen Sie, um diesen Punkt dynamisch zu machen."
 msgid "Make line width dynamic"
 msgstr "Die Linienstärke dynamisch machen"
 
-#: vis_shape_elfig.cpp:1587 vis_shape_elfig.cpp:2140
+#: vis_shape_elfig.cpp:1587 vis_shape_elfig.cpp:2144
 msgid "width"
 msgstr ""
 
@@ -4608,7 +4758,7 @@ msgstr "Betätigen, um die Linienstärke dynamisch zu machen."
 msgid "Make line color dynamic"
 msgstr "Linienfarbe dynamisch machen"
 
-#: vis_shape_elfig.cpp:1596 vis_shape_elfig.cpp:2141
+#: vis_shape_elfig.cpp:1596 vis_shape_elfig.cpp:2145
 msgid "color"
 msgstr ""
 
@@ -4620,7 +4770,7 @@ msgstr "Betätigen, um Linienfarbe dynamisch zu machen."
 msgid "Make border width dynamic"
 msgstr "Randbreite dynamisch machen"
 
-#: vis_shape_elfig.cpp:1607 vis_shape_elfig.cpp:2142
+#: vis_shape_elfig.cpp:1607 vis_shape_elfig.cpp:2146
 msgid "border_width"
 msgstr ""
 
@@ -4632,7 +4782,7 @@ msgstr "Betätigen, um die Randbreite dynamisch zu machen."
 msgid "Make border color dynamic"
 msgstr "Randfarbe dynamisch machen"
 
-#: vis_shape_elfig.cpp:1616 vis_shape_elfig.cpp:2143
+#: vis_shape_elfig.cpp:1616 vis_shape_elfig.cpp:2147
 msgid "border_color"
 msgstr ""
 
@@ -4644,7 +4794,7 @@ msgstr "Betätigen, um die Randfarbe dynamisch zu machen."
 msgid "Make line style dynamic"
 msgstr "Linienstil dynamisch machen"
 
-#: vis_shape_elfig.cpp:1626 vis_shape_elfig.cpp:2144
+#: vis_shape_elfig.cpp:1626 vis_shape_elfig.cpp:2148
 msgid "style"
 msgstr ""
 
@@ -4652,64 +4802,77 @@ msgstr ""
 msgid "Press to make line style dynamic"
 msgstr "Betätigen, um den Linienstil dynamisch zu machen."
 
-#: vis_shape_elfig.cpp:1675
+#: vis_shape_elfig.cpp:1671
+msgid "Delete the current fill"
+msgstr ""
+
+#: vis_shape_elfig.cpp:1672 vis_shape_elfig.cpp:2149
+msgid "delete_fill"
+msgstr ""
+
+#: vis_shape_elfig.cpp:1673
+#, fuzzy
+msgid "Press to delete the current fill"
+msgstr "Betätigen, um ein neues Projekt zu erstellen."
+
+#: vis_shape_elfig.cpp:1680
 msgid "Make fill color dynamic"
 msgstr "Füllfarbe dynamisch machen"
 
-#: vis_shape_elfig.cpp:1676 vis_shape_elfig.cpp:2145
+#: vis_shape_elfig.cpp:1681 vis_shape_elfig.cpp:2150
 msgid "fill_color"
 msgstr ""
 
-#: vis_shape_elfig.cpp:1677
+#: vis_shape_elfig.cpp:1682
 msgid "Press to make fill color dynamic"
 msgstr "Betätigen, um die Füllfarbe dynamisch zu machen."
 
-#: vis_shape_elfig.cpp:1685
+#: vis_shape_elfig.cpp:1689
 msgid "Make fill image dynamic"
 msgstr "Einfüllbild dynamisch machen"
 
-#: vis_shape_elfig.cpp:1686 vis_shape_elfig.cpp:2146
+#: vis_shape_elfig.cpp:1690 vis_shape_elfig.cpp:2151
 msgid "fill_image"
 msgstr ""
 
-#: vis_shape_elfig.cpp:1687
+#: vis_shape_elfig.cpp:1691
 msgid "Press to make fill image dynamic"
 msgstr "Betätigen, um Einfüllbild dynamisch zu machen."
 
-#: vis_shape_elfig.cpp:1696
+#: vis_shape_elfig.cpp:1700
 msgid "Make all values of the widget the static ones"
 msgstr "Alle Widgetsgrössen statisch machen"
 
-#: vis_shape_elfig.cpp:1697 vis_shape_elfig.cpp:2147
+#: vis_shape_elfig.cpp:1701 vis_shape_elfig.cpp:2152
 msgid "static"
 msgstr ""
 
-#: vis_shape_elfig.cpp:1698
+#: vis_shape_elfig.cpp:1702
 msgid "Press to make all values of the widget static ones"
 msgstr "Betätigen, um alle Widgetsgrössen statisch zu machen."
 
-#: vis_shape_elfig.cpp:2503 vis_shape_elfig.cpp:2751
+#: vis_shape_elfig.cpp:2517 vis_shape_elfig.cpp:2765
 msgid "ws_Fig"
 msgstr ""
 
-#: vis_shape_elfig.cpp:2507
+#: vis_shape_elfig.cpp:2521
 msgid "ws_FigLeft"
 msgstr ""
 
-#: vis_shape_elfig.cpp:2508
+#: vis_shape_elfig.cpp:2522
 msgid "ws_FigRight"
 msgstr ""
 
-#: vis_shape_elfig.cpp:2509
+#: vis_shape_elfig.cpp:2523
 msgid "ws_FigMiddle"
 msgstr ""
 
-#: vis_shape_elfig.cpp:2754
+#: vis_shape_elfig.cpp:2768
 msgid "DblClick"
 msgstr ""
 
-#: vis_shape_elfig.cpp:4021 vis_shape_elfig.cpp:4098 vis_shape_elfig.cpp:4189
-#: vis_shape_elfig.cpp:4219 vis_shape_elfig.cpp:4261
+#: vis_shape_elfig.cpp:4035 vis_shape_elfig.cpp:4112 vis_shape_elfig.cpp:4203
+#: vis_shape_elfig.cpp:4233 vis_shape_elfig.cpp:4275
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Koordinaten(x,y): (%1, %2)"
 
