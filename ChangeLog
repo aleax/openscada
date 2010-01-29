@@ -1,3 +1,11 @@
+2010-01-29 Maxim
+- FIX:UI.Vision: The MouseButtonDblClick event in runtime mode is fixed for the primitive ElFigure.
+- FIX:UI.Vision: Making the color and the image of the fill the dynamic ones is corrected for the primitive ElFigure.
+- FIX:UI.WebVision: The event's generation by the mouse events is fixed for the primitive ElFigure.
+
+- UI.Vision: Deleting of the Fill is added to the context menu of the ElFigure's widget.
+
+
 2010-01-28 Maxim
 - FIX:UI.Vision: Clearing the circles after connecting the both points of the one figure to the other one  simultaneously is fixed for the primitive ElFigure.
 - UI.Vision: Deleting of the Fill is added to the context menu of the ElFigure's widget.

@@ -2457,12 +2457,12 @@ void ElFigDt::dynamic( )
                 if( tmp != -5 )
                     (*styles).erase(tmp);
                 break;
-            case 6:
+            case 7:
                 inundationItems[elF->fill_index].brush = real;
                 if( tmp != -7 )
                     (*colors).erase(tmp);
                 break;
-            case 7:
+            case 8:
                 inundationItems[elF->fill_index].brush_img = real;
                 if( tmp != -5 )
                     (*images).erase(tmp);
@@ -2751,8 +2751,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         }
         case QEvent::MouseButtonDblClick:
         {
-            bool flag_arc_inund = false,
-		 flag_break_move, fl_brk;
+            bool fl_brk;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
@@ -2765,6 +2764,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			sev="ws_Fig"+TSYS::int2str(i);
 		if( !sev.empty() )
 		{
+                    if( !runW->hasFocus() )	runW->setFocus( Qt::MouseFocusReason );
+                    view->attrSet( "event", "ws_FigDblClick" );
 		    view->attrSet( "event", sev+"DblClick" );
 		    return true;
 		}

@@ -4055,7 +4055,7 @@ void VCAElFigure::postReq( SSess &ses )
 	    XMLNode req("set");
 	    req.setAttr("path",ses.url+"/%2fserv%2fattr");
             req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+key);
-            req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+clickFillNum+key);
+            req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+TSYS::int2str(clickFillNum)+key);
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
 	    req.childAdd("el")->setAttr("id","focus")->setText("1");
 	    mod->cntrIfCmd(req,ses.user);
