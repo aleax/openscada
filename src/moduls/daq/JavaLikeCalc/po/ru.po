@@ -115,17 +115,17 @@ msgstr "Размер строковой постоянной более 255 си
 #: freefunc.cpp:630
 #, c-format
 msgid "Operation %d don't support bool type"
-msgstr "Операция %d не поддеривает логический тип"
+msgstr "Операция %d не поддерживает логический тип"
 
 #: freefunc.cpp:639 freefunc.cpp:775
 #, c-format
 msgid "Operation %d don't support string type"
-msgstr "Операция %d не поддеривает строковый тип"
+msgstr "Операция %d не поддерживает строковый тип"
 
 #: freefunc.cpp:643 freefunc.cpp:779
 #, c-format
 msgid "Operation %d don't support for object type"
-msgstr "Операция %d не поддеривает обїектный тип"
+msgstr "Операция %d не поддерживает обїектный тип"
 
 #: freefunc.cpp:754 freefunc.cpp:830
 #, c-format

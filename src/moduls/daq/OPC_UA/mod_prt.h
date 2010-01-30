@@ -92,6 +92,7 @@ class TProt: public TProtocol
 	static uint32_t iNu( const string &rb, int &off, char vSz );
 	static const char *iVal( const string &buf, int &off, char vSz );
 	static string iS( const string &buf, int &off );
+	static string iSl( const string &buf, int &off, string *locale = NULL );
 	static long long iTm( const string &buf, int &off );
 	static int iNodeId( const string &buf, int &off, int *ns = NULL );
 

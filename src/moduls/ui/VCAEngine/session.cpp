@@ -1628,6 +1628,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		}
 	}catch(...)	{ }
     }
+
     return true;
 }
 

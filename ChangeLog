@@ -1,8 +1,16 @@
+2010-01-30 Roman
+- !!!!:/DOC: The DAQ document and generic document of OpenSCADA translation to English is added.
+- !!:DemoDB: View cadre and Result graphics scaling for present items is added. Some fixes is made.
+- FIX:Transport: Messages manual requests send is fixed for wait respond tail.
+- FIX:DAQ.JavaLikeCalc: Set binary operation result for object's elements to Dinamic type is fixed.
+- FIX:Transport.Serial: Symbol time value is enlarged.
+- UI.Vision: Scale checking into full screens modes is added for correction.
+
+
 2010-01-29 Maxim
 - FIX:UI.Vision: The MouseButtonDblClick event in runtime mode is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Making the color and the image of the fill the dynamic ones is corrected for the primitive ElFigure.
 - FIX:UI.WebVision: The event's generation by the mouse events is fixed for the primitive ElFigure.
-
 - UI.Vision: Deleting of the Fill is added to the context menu of the ElFigure's widget.
 
 

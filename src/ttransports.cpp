@@ -932,12 +932,12 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    long long stm = TSYS::curTime( );
 	    char buf[STR_BUF_LEN];
 	    ResAlloc resN( nodeRes(), true );
-	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),5000,true);
+	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
 	    answ.assign(buf,resp_len);
 
-	    while( resp_len == sizeof(buf) )
+	    while( true )
 	    {
-		resp_len = messIO(NULL,0,buf,sizeof(buf),1000,true);
+		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch( TError err ) { break; }
 		answ.append(buf,resp_len);
 	    }
 	    TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::real2str(1e-3*(TSYS::curTime()-stm)),opt->attr("user"));

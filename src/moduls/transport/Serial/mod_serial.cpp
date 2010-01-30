@@ -128,7 +128,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), trIn(0), trOut(0), tmMax(0), fd(-1), mTimings(cfg("TMS").getSd())
 {
     setAddr("/dev/ttyS0:19200:8E2");
-    setTimings("0.57:320");
+    setTimings("6:320");
 }
 
 TTrIn::~TTrIn()
@@ -152,7 +152,7 @@ void TTrIn::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( speed )	setTimings(TSYS::real2str((11*1000)/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
+    if( speed )	setTimings(TSYS::real2str(11e4/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
 }
 
 void TTrIn::start()
@@ -399,7 +399,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0)
 {
     setAddr("/dev/ttyS0:19200:8E2");
-    setTimings("640:0.57");
+    setTimings("640:6");
 }
 
 TTrOut::~TTrOut()
@@ -423,7 +423,7 @@ void TTrOut::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( speed )	setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str((11*1000)/(float)speed,2,'f'));
+    if( speed )	setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str(11e4/(float)speed,2,'f'));
 }
 
 void TTrOut::start( )

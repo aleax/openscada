@@ -1278,11 +1278,25 @@ void VisRun::updatePage( )
     }
 #endif
 
+    //> Time update
     if( mWTime->isVisible() && !(wPrcCnt%vmax(1000/period(),1)) )
     {
 	QDateTime dtm = QDateTime::currentDateTime();
 	mWTime->setText( locale().toString(dtm,"hh:mm:ss\nddd, d MMM") );
 	mWTime->setToolTip( locale().toString(dtm,"dddd, dd-MMM-yyyy") );
+    }
+
+    //> Scale for full screen check
+    if( (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) && !(wPrcCnt%vmax(1000/period(),1)) )
+    {
+	float xSc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
+	float ySc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
+	if( xSc < 1 || ySc < 1 )
+	{
+	    x_scale *= xSc;
+	    y_scale *= ySc;
+	    fullUpdatePgs();
+	}
     }
 
     wPrcCnt++;

@@ -721,6 +721,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     //>> Prepare operands
     op1 = cdMvi( op1 );
     Reg::Type op1_tp = op1->vType(this);
+    Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
     int op1_pos = op1->pos();
     if( op1_tp != Reg::Dynamic ) op2 = cdTypeConv(op2,op1_tp);
     else if( op2->pos() < 0 ) op2 = cdMvi( op2 );
@@ -729,7 +730,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     op2->free();
     //>> Prepare rezult
     Reg *rez = regAt(regNew());
-    rez->setType(op1_tp);
+    rez->setType(rez_tp);
     //>> Add code
     switch(cod)
     {

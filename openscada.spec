@@ -150,6 +150,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/DEMO/*.db
 
 %changelog
+* Mon Jan 25 2010 Roman Savochenko <rom_as@oscada.org>
+- Build 0.6.4.1 release.
+
 * Mon Oct 12 2009 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.4 release.
 

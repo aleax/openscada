@@ -1498,7 +1498,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys );	break;
 	case TFld::String:
 	{
-	    if( (!strongPrev && m_val.s_val->getVal() == val) || 
+	    if( (!strongPrev && m_val.s_val->getVal() == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
 	    string t_str = m_val.s_val->getVal();
 	    m_val.s_val->setVal(val);
@@ -1556,7 +1556,6 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
-
 	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )	m_val.r_val = t_val;
 	    else
 	    {

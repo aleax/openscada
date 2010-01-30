@@ -1031,6 +1031,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Mon Jan 25 2010 Roman Savochenko <rom_as@oscada.org>
+- Build 0.6.4.1 release.
+
 * Sun Oct 04 2009 Roman Savochenko <rom_as@oscada.org>
 - Move modules to separated packages
 
