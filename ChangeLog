@@ -1,3 +1,7 @@
+2010-02-03 Maxim
+- UI.Vision: The lowering and rising of the figures in developing mode is improved for the primitive ElFigure.
+
+
 2010-01-30 Roman
 - !!!!:/DOC: The DAQ document and generic document of OpenSCADA translation to English is added.
 - !!:DemoDB: View cadre and Result graphics scaling for present items is added. Some fixes is made.

@@ -1969,9 +1969,27 @@ void ShapeElFigure::toolAct( QAction *act )
     }
     else if( act->objectName() == "level_rise" )
     {
-        int index_array_inund;   
+        int index_array_inund; 
         if( index_array.size() && !status_hold && index_array[0] != -1 )
         {
+            //>sorting the fills
+            vector<int> rise_fill; //container of the fills to be rised
+            int fig_col; //quantity of the figures matched with the each fill's shapes
+            for( int j = 0; j < inundationItems.size(); j++  )
+            {
+                fig_col = 0;
+                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                    for(int i = 0; i < index_array.size(); i++)
+                        if( inundationItems[j].number_shape[p] == index_array[i] ) fig_col++;
+                if( fig_col == inundationItems[j].number_shape.size() )// addition the fill to the container
+                    rise_fill.push_back( j );
+            }
+            //>>replacing the fills
+            for(int i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
+            int off = 0;
+            for(int i = 0; i < rise_fill.size(); i++) { inundationItems.remove(rise_fill[i] - off); off++; }
+
+            //>sorting the figures
             ShapeItem item_temp;
             for( int i = 0; i < index_array.size(); i++  )
                 if( index_array[i] != -1 )
@@ -1999,6 +2017,23 @@ void ShapeElFigure::toolAct( QAction *act )
         {
             if( (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) )
                 index_array_copy = index_array;
+
+            //>sorting the fills
+            vector<int> rise_fill;
+            int fig_col;
+            for( int j = 0; j < inundationItems.size(); j++  )
+            {
+                fig_col = 0;
+                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                    for(int i = 0; i < index_array_copy.size(); i++)
+                        if( inundationItems[j].number_shape[p] == index_array_copy[i] ) fig_col++;
+                if( fig_col == inundationItems[j].number_shape.size() ) rise_fill.push_back( j );
+            }
+            for(int i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
+            int off = 0;
+            for(int i = 0; i < rise_fill.size(); i++) { inundationItems.remove(rise_fill[i] - off); off++; }
+
+            //>sorting the figures
             ShapeItem item_temp;
             for( int i = 0; i < index_array_copy.size(); i++  )
                 if( index_array_copy[i] != -1 )
@@ -2049,6 +2084,27 @@ void ShapeElFigure::toolAct( QAction *act )
         int index_array_inund;
         if( index_array.size() && !status_hold && index_array[0] != -1 )
         {
+            //>sorting the fills
+            vector<int> low_fill;
+            int fig_col;
+            for( int j = 0; j < inundationItems.size(); j++  )
+            {
+                fig_col = 0;
+                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                    for(int i = 0; i < index_array.size(); i++)
+                        if( inundationItems[j].number_shape[p] == index_array[i] ) fig_col++;
+                if( fig_col == inundationItems[j].number_shape.size() ) low_fill.push_back( j );
+            }
+            int off = 0;
+            for(int i = low_fill.size()-1; i > -1; i--)
+            {
+                inundationItems.prepend(inundationItems[low_fill[i] + off]);
+                off++;
+            }
+            off = 0;
+            for(int i = 0; i < low_fill.size(); i++) { inundationItems.remove(low_fill[i] + low_fill.size() - off); off++; }
+
+            //>sorting the figures
             ShapeItem item_temp;
             for( int i = 0; i < index_array.size(); i++  )
                 if( index_array[i] != -1 )
@@ -2076,6 +2132,28 @@ void ShapeElFigure::toolAct( QAction *act )
         {
             if( (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) )
                 index_array_copy = index_array;
+
+            //>sorting the fills
+            vector<int> low_fill;
+            int fig_col;
+            for( int j = 0; j < inundationItems.size(); j++  )
+            {
+                fig_col = 0;
+                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                    for(int i = 0; i < index_array_copy.size(); i++)
+                        if( inundationItems[j].number_shape[p] == index_array_copy[i] ) fig_col++;
+                if( fig_col == inundationItems[j].number_shape.size() ) low_fill.push_back( j );
+            }
+            int off = 0;
+            for(int i = low_fill.size()-1; i > -1; i--)
+            {
+                inundationItems.prepend(inundationItems[low_fill[i] + off]);
+                off++;
+            }
+            off = 0;
+            for(int i = 0; i < low_fill.size(); i++) { inundationItems.remove(low_fill[i] + low_fill.size() - off); off++; }
+
+            //>sorting the figures
             ShapeItem item_temp;
             for( int i = 0; i < index_array_copy.size(); i++  )
                 if( index_array_copy[i] != -1 )
