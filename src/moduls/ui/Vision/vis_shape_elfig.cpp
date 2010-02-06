@@ -5647,6 +5647,59 @@ void ShapeElFigure::paintImage( WdgView *view )
     for( int i=0; i < inundationItems.size(); i++ )
     {
         if( inundationItems[i].path == newPath ) continue;
+        //-- Sorting the figures in each fill(inundation) --
+        QVector<int> number_shape;
+        number_shape = inundationItems[i].number_shape;
+        std::sort(number_shape.begin(), number_shape.end());
+        //>> Making the array of the figures to be drawn before the each fill
+        vector<int> draw_before;
+        bool fl_numb;
+        for( int k=0; k < shapeItems.size(); k++ )
+        {
+            fl_numb = false;
+            for( int j = 0; j < number_shape.size(); j++ )
+                if( k >= number_shape[j] ){ fl_numb = true; break; }
+            if( !fl_numb ){ draw_before.push_back( k ); }
+            else continue;
+        }
+        //>>>Drawing the figures and push_bask them into the array of the already drawn figures
+        bool flag_dr;
+        for( int k=0; k < draw_before.size(); k++ )
+        {
+            flag_dr = true;
+            for( int j = 0; j < shape_inund_all.size(); j ++ )
+                if( draw_before[k] == shape_inund_all[j] )
+            {
+                flag_dr = false;
+                break;
+            }
+            if( flag_dr )//-- If the figure is out of this array, then draw it(it is the figures which are lower than the current fill ) --
+            {
+                shape_inund_all.push_back(k);
+                if( (*widths)[shapeItems[draw_before[k]].border_width] > 0.01 )
+                {
+                    pnt.setBrush( QBrush( (*colors)[shapeItems[draw_before[k]].lineColor], Qt::SolidPattern ) );
+                    pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].borderColor],
+                                (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].border_width]),
+                                 (*styles)[shapeItems[draw_before[k]].style], Qt::FlatCap, Qt::MiterJoin ) );
+                    pnt.drawPath( shapeItems[draw_before[k]].path );
+                }
+                else if( ( (*widths)[shapeItems[draw_before[k]].border_width] >= 0) && 
+                             (fabs((*widths)[shapeItems[draw_before[k]].border_width] - 0) < 0.01) )
+                {
+                    pnt.setBrush(Qt::NoBrush);
+                    if( (*widths)[shapeItems[draw_before[k]].width] < 3 )
+                        pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor], 
+                                    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]), 
+                                     (*styles)[shapeItems[draw_before[k]].style], Qt::SquareCap, Qt::RoundJoin ) );
+                    else
+                        pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor], 
+                                    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]), 
+                                     (*styles)[shapeItems[draw_before[k]].style], Qt::FlatCap, Qt::RoundJoin ) );
+                    pnt.drawPath( shapeItems[draw_before[k]].pathSimple );
+                }
+            }
+        }
         QImage img;
         string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
         img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
@@ -5861,10 +5914,7 @@ void ShapeElFigure::paintImage( WdgView *view )
             pnt.setPen( Qt::NoPen );
             pnt.drawPath( inundationItems[i].path );
         }
-        //-- Sorting the figures in each fill(inundation) --
-        QVector<int> number_shape;
-        number_shape = inundationItems[i].number_shape;
-        std::sort(number_shape.begin(), number_shape.end());
+        //-- Drawing the fills' figures --
         for( int j = 0; j < number_shape.size(); j++ )
         {
             //--- Making the resulting arrary of all figures which take part in all fills(inundations) ---
@@ -5913,16 +5963,23 @@ void ShapeElFigure::paintImage( WdgView *view )
             if( (*widths)[shapeItems[k].border_width] > 0.01 )
             {
                 pnt.setBrush( QBrush( (*colors)[shapeItems[k].lineColor], Qt::SolidPattern ) );
-                pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor], (int)TSYS::realRound((*widths)[shapeItems[k].border_width]), (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
+                pnt.setPen( QPen( (*colors)[shapeItems[k].borderColor],
+                                  (int)TSYS::realRound((*widths)[shapeItems[k].border_width]),
+                                  (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::MiterJoin ) );
                 pnt.drawPath( shapeItems[k].path );
             }
-            else if( ( (*widths)[shapeItems[k].border_width] >= 0) && (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
+            else if( ( (*widths)[shapeItems[k].border_width] >= 0) && 
+                       (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )
             {
                 pnt.setBrush(Qt::NoBrush);
                 if( (*widths)[shapeItems[k].width] < 3 )
-                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (int)TSYS::realRound((*widths)[shapeItems[k].width]), (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
+                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], 
+                                      (int)TSYS::realRound((*widths)[shapeItems[k].width]), 
+                                      (*styles)[shapeItems[k].style], Qt::SquareCap, Qt::RoundJoin ) );
                 else
-                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], (int)TSYS::realRound((*widths)[shapeItems[k].width]), (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
+                    pnt.setPen( QPen( (*colors)[shapeItems[k].lineColor], 
+                                      (int)TSYS::realRound((*widths)[shapeItems[k].width]), 
+                                      (*styles)[shapeItems[k].style], Qt::FlatCap, Qt::RoundJoin ) );
                 pnt.drawPath( shapeItems[k].pathSimple );
             }
         }

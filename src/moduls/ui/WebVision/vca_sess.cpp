@@ -2463,6 +2463,48 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                 flag_fill = false;
                 break;
             }
+            //-- Sorting the figures in each fill(inundation) and drawing the figures, which are to be under the each fill --
+            vector<int> number_shape;
+            number_shape = shape_temp;
+            std::sort(number_shape.begin(), number_shape.end());
+            //>>> Making the array of the figures to be drawn before the each fill
+            vector<int> draw_before;
+            bool fl_numb;
+            for( int k=0; k < shapeItems.size(); k++ )
+            {
+                fl_numb = false;
+                for( int j = 0; j < number_shape.size(); j++ )
+                    if( k >= number_shape[j] ){ fl_numb = true; break; }
+                if( !fl_numb ){ draw_before.push_back( k ); }
+                else continue;
+            }
+            //>>>Drawing the figures and push_bask them into the array of the already drawn figures
+            bool flag_dr;
+            for( int k=0; k < draw_before.size(); k++ )
+            {
+                flag_dr = true;
+                for( int j = 0; j < shape_temp_all.size(); j ++ )
+                    if( draw_before[k] == shape_temp_all[j] )
+                {
+                    flag_dr = false;
+                    break;
+                }
+                if( flag_dr )//-- If the figure is out of this array, then draw it(it is the figures which are lower than the current fill ) --
+                {
+                    shape_temp_all.push_back( draw_before[k] );
+                    gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+                    gdImageAlphaBlending(im2, 0);
+                    gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+                    gdImageAlphaBlending(im2, 1);
+                    paintFigure( im2, shapeItems[draw_before[k]], xSc, ySc, true, true );
+                    gdImageAlphaBlending(im,1);
+                    gdImageSaveAlpha(im, 1);
+                    gdImageAlphaBlending(im2,1);
+                    gdImageSaveAlpha(im2, 1);
+                    gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
+                }
+            }
         if( !flag_fill ) mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area. The 'fill' is not drawn."));
         else
         {
@@ -3885,7 +3927,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                             paintFill( im1, delta_point_center, inundationItems[i] );
                             if( clickPnt.x > -1 && clickPnt.y > -1 )
                             {
-                                if( gdImageGetPixel( im1, (int)TSYS::realRound(clickPnt.x,2,true), (int)TSYS::realRound(clickPnt.y,2,true) ) != gdImageColorResolveAlpha(im1,0,0,0,127) )
+                                if( gdImageGetPixel(im1, (int)TSYS::realRound(clickPnt.x,2,true), 
+                                                         (int)TSYS::realRound(clickPnt.y,2,true) ) != gdImageColorResolveAlpha(im1,0,0,0,127) )
                                 {
                                     if( im1 ) gdImageDestroy(im1);
                                     return i;
@@ -3910,35 +3953,19 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                 //- Painting all figures -
                 std::sort(shape_temp.begin(), shape_temp.end());
                 for( int j = 0; j < shape_temp.size(); j++ )
-                    if( shapeItems[shape_temp[j]].type == 2 )
-                    {
-                        gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-                        gdImageAlphaBlending(im2, 0);
-                        gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
-                        gdImageAlphaBlending(im2, 1);
-                        paintFigure( im2, shapeItems[shape_temp[j]], xSc, ySc, true, true );
-                        gdImageAlphaBlending(im1,1);
-                        gdImageSaveAlpha(im1, 1);
-                        gdImageAlphaBlending(im2,1);
-                        gdImageSaveAlpha(im2, 1);
-                        gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-                        if( im2 ) gdImageDestroy(im2);
-                    }
-                for( int j = 0; j < shape_temp.size(); j++ )
-                    if( shapeItems[shape_temp[j]].type != 2 )
-                    {
-                        gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-                        gdImageAlphaBlending(im2, 0);
-                        gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
-                        gdImageAlphaBlending(im2, 1);
-                        paintFigure( im2, shapeItems[shape_temp[j]], xSc, ySc, true, true );
-                        gdImageAlphaBlending(im1,1);
-                        gdImageSaveAlpha(im1,1);
-                        gdImageAlphaBlending(im2,1);
-                        gdImageSaveAlpha(im2, 1);
-                        gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-                        if( im2 ) gdImageDestroy(im2);
-                    }
+                {
+                    gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+                    gdImageAlphaBlending(im2, 0);
+                    gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+                    gdImageAlphaBlending(im2, 1);
+                    paintFigure( im2, shapeItems[shape_temp[j]], xSc, ySc, true, true );
+                    gdImageAlphaBlending(im1,1);
+                    gdImageSaveAlpha(im1,1);
+                    gdImageAlphaBlending(im2,1);
+                    gdImageSaveAlpha(im2, 1);
+                    gdImageCopy(im1, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+                    if( im2 ) gdImageDestroy(im2);
+                }
                 gdImageAlphaBlending(im,1);
                 gdImageSaveAlpha(im,1);
                 gdImageAlphaBlending(im1,1);
@@ -3959,31 +3986,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                     fl_paint = true;
                     break;
                 }
-            if( !fl_paint && shapeItems[j].type == 2 )
-            {
-                gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-                gdImageAlphaBlending(im2, 0);
-                gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
-                gdImageAlphaBlending(im2, 1);
-                paintFigure( im2, shapeItems[j], xSc, ySc, true, true );
-                gdImageAlphaBlending(im,1);
-                gdImageSaveAlpha(im, 1);
-                gdImageAlphaBlending(im2,1);
-                gdImageSaveAlpha(im2, 1);
-                gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-                if( im2 ) gdImageDestroy(im2);
-            }
-        }
-        for( int j = 0; j < shapeItems.size(); j++ )
-        {
-            bool fl_paint = false;
-            for( int i =0; i < shape_temp_all.size(); i++ )
-                if( j == shape_temp_all[i] )
-                {
-                    fl_paint = true;
-                    break;
-                }
-            if( !fl_paint && shapeItems[j].type != 2 )
+            if( !fl_paint )
             {
                 gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
                 gdImageAlphaBlending(im2, 0);

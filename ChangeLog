@@ -1,3 +1,8 @@
+2010-02-06 Maxim
+- FIX:UI.Vision: The priority of figures' drawing is corrected for the primitive ElFigure.
+- FIX:UI.WebVision: The priority of figures' drawing is corrected for the primitive ElFigure.
+
+
 2010-02-03 Maxim
 - UI.Vision: The lowering and rising of the figures in developing mode is improved for the primitive ElFigure.
 
