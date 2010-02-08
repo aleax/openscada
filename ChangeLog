@@ -1,6 +1,8 @@
 2010-02-08 Roman
 - DAQ.OPC_UA: Up to session establish is realised.
 - UI.QTCfg, UI.Vision: Text cursor position information is added to Text fields.
+- FIX:Value: Set value to archive error processing is added.
+- DAQ.ICP_DAS: Set EVAL value to parameters on connection lost time fixed for maximum time from current.
 
 
 2010-02-06 Maxim

@@ -379,7 +379,7 @@ void TController::redntDataUpdate( )
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if( aNd->name() == "el" ) 
+	    if( aNd->name() == "el" )
 	    { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
 	    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 	    {

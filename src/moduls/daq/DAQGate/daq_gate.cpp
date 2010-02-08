@@ -397,7 +397,8 @@ void *TMdContr::Task( void *icntr )
 			if( vLs[i_v] == "SHIFR" || vLs[i_v] == "NAME" || vLs[i_v] == "DESCR" ) continue;
 			AutoHD<TVal> vl = prm.at().vlAt(vLs[i_v]);
 			if( vl.at().getS() == EVAL_STR ) continue;
-			vl.at().setS( EVAL_STR, vl.at().arch().freeStat() ? 0 : vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm())), true );
+			vl.at().setS( EVAL_STR, vl.at().arch().freeStat() ? 0 :
+			    vmin(TSYS::curTime(),vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))), true );
 		    }
 		    prm.at().vlAt("err").at().setS(_("10:Data not allow."),0,true);
 		    prm.at().isEVAL = true;

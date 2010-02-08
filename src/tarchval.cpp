@@ -537,7 +537,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    (*buf.grid)[wcur] = value;
 	    return;
 	}
-	else if( npos < 0 )	throw TError("ValBuf",_("Grid mode doesn't support inserting too old values."));
+	else if( npos < 0 )	throw TError("ValBuf",_("Grid mode doesn't support inserting too old values %lld (%lld-%lld)."),tm,beg,end);
 	else
 	    while( npos-- )
 	    {

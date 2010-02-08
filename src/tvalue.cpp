@@ -622,7 +622,8 @@ void TVal::setS( const string &value, long long tm, bool sys )
 	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
-		mArch.at().setS(value,time());
+		try{ mArch.at().setS(value,time()); }
+		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
     }
 }
 
@@ -651,7 +652,8 @@ void TVal::setI( int value, long long tm, bool sys )
 	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
-		mArch.at().setI(value,time());
+		try{ mArch.at().setI(value,time()); }
+		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	}
     }
 }
@@ -681,7 +683,8 @@ void TVal::setR( double value, long long tm, bool sys )
 	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
-		mArch.at().setR(value,time());
+		try{ mArch.at().setR(value,time()); }
+		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	}
     }
 }
@@ -709,7 +712,8 @@ void TVal::setB( char value, long long tm, bool sys )
 	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
-		mArch.at().setB(value,time());
+		try{ mArch.at().setB(value,time()); }
+		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	}
     }
 }

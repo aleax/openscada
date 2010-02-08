@@ -59,7 +59,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-23 09:56+0200\n"
+"POT-Creation-Date: 2010-02-08 17:01+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -337,7 +337,7 @@ msgstr "Адреса"
 #: ttransports.cpp:686 ttransports.cpp:717 ttransports.cpp:875
 #: ttransports.cpp:901 ttransports.cpp:905 ttransports.cpp:908
 #: ttransports.cpp:916 ttransports.cpp:926 tuis.cpp:169 tvalue.cpp:322
-#: tvalue.cpp:324 tvalue.cpp:728 tvariant.cpp:461
+#: tvalue.cpp:324 tvalue.cpp:732 tvariant.cpp:461
 msgid "0"
 msgstr ""
 
@@ -676,7 +676,7 @@ msgstr ""
 #: tarchval.cpp:1696 tarchval.cpp:2393 tarchval.cpp:2399 tarchval.cpp:2456
 #: tarchval.cpp:2462 tarchval.cpp:2466 tcontroller.cpp:358 tcontroller.cpp:383
 #: tcontroller.cpp:386 tvalue.cpp:178 tvalue.cpp:194 tvalue.cpp:203
-#: tvalue.cpp:216 tvalue.cpp:227 tvalue.cpp:736 tvalue.cpp:738
+#: tvalue.cpp:216 tvalue.cpp:227 tvalue.cpp:740 tvalue.cpp:742
 msgid "tm"
 msgstr ""
 
@@ -711,7 +711,7 @@ msgstr ""
 #: ttransports.cpp:393 ttransports.cpp:396 ttransports.cpp:402
 #: ttransports.cpp:413 ttransports.cpp:441 ttransports.cpp:550
 #: ttransports.cpp:682 ttransports.cpp:871 tuis.cpp:140 tuis.cpp:166
-#: tvalue.cpp:142 tvalue.cpp:719
+#: tvalue.cpp:142 tvalue.cpp:723
 msgid "path"
 msgstr ""
 
@@ -728,7 +728,7 @@ msgstr ""
 #: tsecurity.cpp:353 tsecurity.cpp:505 tspecials.cpp:71 tspecials.cpp:94
 #: tsubsys.cpp:127 tsys.cpp:1234 ttipdaq.cpp:153 ttransports.cpp:421
 #: ttransports.cpp:537 ttransports.cpp:656 ttransports.cpp:838 tuis.cpp:133
-#: tuis.cpp:156 tvalue.cpp:242 tvalue.cpp:723 tvalue.cpp:748
+#: tuis.cpp:156 tvalue.cpp:242 tvalue.cpp:727 tvalue.cpp:752
 msgid "info"
 msgstr ""
 
@@ -908,8 +908,8 @@ msgstr ""
 #: ttransports.cpp:921 ttransports.cpp:923 tuis.cpp:136 tuis.cpp:161
 #: tuis.cpp:169 tuis.cpp:170 tvalue.cpp:147 tvalue.cpp:162 tvalue.cpp:234
 #: tvalue.cpp:245 tvalue.cpp:256 tvalue.cpp:259 tvalue.cpp:260 tvalue.cpp:268
-#: tvalue.cpp:286 tvalue.cpp:293 tvalue.cpp:301 tvalue.cpp:327 tvalue.cpp:723
-#: tvalue.cpp:732 tbds.h:242 tbds.h:243 tcntrnode.h:105 tcntrnode.h:106
+#: tvalue.cpp:286 tvalue.cpp:293 tvalue.cpp:301 tvalue.cpp:327 tvalue.cpp:727
+#: tvalue.cpp:736 tbds.h:242 tbds.h:243 tcntrnode.h:105 tcntrnode.h:106
 #: tcntrnode.h:107 tcntrnode.h:142 tconfig.h:138 tconfig.h:140 telem.h:112
 #: tfunction.h:158
 msgid "root"
@@ -917,15 +917,15 @@ msgstr ""
 
 #: tarchives.cpp:718 tarchives.cpp:726 tarchval.cpp:1496 tarchval.cpp:1513
 #: tarchval.cpp:1535 tarchval.cpp:1546 tarchval.cpp:1739 tarchval.cpp:2394
-#: tarchval.cpp:2457 tvalue.cpp:734
+#: tarchval.cpp:2457 tvalue.cpp:738
 msgid "arch"
 msgstr ""
 
-#: tarchives.cpp:719 tarchval.cpp:1497 tvalue.cpp:728
+#: tarchives.cpp:719 tarchval.cpp:1497 tvalue.cpp:732
 msgid "end"
 msgstr ""
 
-#: tarchives.cpp:720 tarchval.cpp:1498 tvalue.cpp:728
+#: tarchives.cpp:720 tarchval.cpp:1498 tvalue.cpp:732
 msgid "beg"
 msgstr ""
 
@@ -975,13 +975,13 @@ msgstr ""
 #: ttransports.cpp:880 ttransports.cpp:886 ttransports.cpp:891
 #: ttransports.cpp:896 ttransports.cpp:901 ttransports.cpp:904
 #: ttransports.cpp:908 ttransports.cpp:913 ttransports.cpp:921 tuis.cpp:141
-#: tuis.cpp:169 tvalue.cpp:162 tvalue.cpp:286 tvalue.cpp:301 tvalue.cpp:732
+#: tuis.cpp:169 tvalue.cpp:162 tvalue.cpp:286 tvalue.cpp:301 tvalue.cpp:736
 #: tcntrnode.h:106
 msgid "get"
 msgstr ""
 
 #: tarchives.cpp:725 tarchval.cpp:1512 tarchval.cpp:1697 tarchval.cpp:2455
-#: tarchval.cpp:2462 tarchval.cpp:2465 tvalue.cpp:734
+#: tarchval.cpp:2462 tarchval.cpp:2465 tvalue.cpp:738
 msgid "tm_grnd"
 msgstr ""
 
@@ -2051,9 +2051,10 @@ msgid "Value is not present."
 msgstr "Значення відсутне."
 
 #: tarchval.cpp:540
-msgid "Grid mode doesn't support inserting too old values."
+#, c-format
+msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
-"Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки."
+"Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки %lld (%lld-%lld)."
 
 #: tarchval.cpp:576
 msgid "Grid mode doesn't support inserting old values."
@@ -2134,16 +2135,16 @@ msgstr "%gмс"
 msgid "%g"
 msgstr ""
 
-#: tarchval.cpp:1492 tvalue.cpp:721
+#: tarchval.cpp:1492 tvalue.cpp:725
 msgid "/serv/val"
 msgstr ""
 
-#: tarchval.cpp:1499 tarchval.cpp:1700 tarchval.cpp:2468 tvalue.cpp:729
+#: tarchval.cpp:1499 tarchval.cpp:1700 tarchval.cpp:2468 tvalue.cpp:733
 msgid "vtp"
 msgstr ""
 
 #: tarchval.cpp:1500 tarchval.cpp:1506 tarchval.cpp:1526 tarchval.cpp:1698
-#: tarchval.cpp:2467 tcontroller.cpp:387 tvalue.cpp:216 tvalue.cpp:728
+#: tarchval.cpp:2467 tcontroller.cpp:387 tvalue.cpp:216 tvalue.cpp:732
 msgid "per"
 msgstr ""
 
@@ -4208,9 +4209,9 @@ msgid "Error input sequence convert: %s"
 msgstr "Помилка перетворення вхідної послідовності: %s"
 
 #: tmess.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Error converting from %s to %s for message part: '%s'"
-msgstr "Помилка перетворення з %s до %s для повідомлення: %s"
+msgstr "Помилка перетворення з %s до %s для частини повідомлення: %s"
 
 #: tmess.cpp:238 tmess.cpp:257 tmess.cpp:265
 msgid "MessLev"
@@ -6372,8 +6373,8 @@ msgstr ""
 msgid "key_atr"
 msgstr ""
 
-#: tvalue.cpp:469 tvalue.cpp:593 tvalue.cpp:617 tvalue.cpp:644 tvalue.cpp:674
-#: tvalue.cpp:704
+#: tvalue.cpp:469 tvalue.cpp:593 tvalue.cpp:617 tvalue.cpp:645 tvalue.cpp:676
+#: tvalue.cpp:707
 msgid "Val"
 msgstr ""
 
@@ -6381,11 +6382,16 @@ msgstr ""
 msgid "Not select type!"
 msgstr "Не вибірковий тип!"
 
-#: tvalue.cpp:617 tvalue.cpp:644 tvalue.cpp:674 tvalue.cpp:704
+#: tvalue.cpp:617 tvalue.cpp:645 tvalue.cpp:676 tvalue.cpp:707
 msgid "Write access is denied!"
 msgstr "Немає доступу на запис!"
 
-#: tvalue.cpp:741
+#: tvalue.cpp:626 tvalue.cpp:656 tvalue.cpp:687 tvalue.cpp:716
+#, c-format
+msgid "Write value to archive error: %s"
+msgstr "Помилка запису значення до архіву: %s"
+
+#: tvalue.cpp:745
 msgid "Attribute doesn't have archive"
 msgstr "Атрибут не має архіву"
 
