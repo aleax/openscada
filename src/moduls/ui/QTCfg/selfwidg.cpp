@@ -34,6 +34,8 @@
 #include <QMetaProperty>
 #include <QSpinBox>
 #include <QCalendarWidget>
+#include <QToolTip>
+#include <QStatusBar>
 
 #include <tsys.h>
 
@@ -344,6 +346,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     ed_fld = new QTextEdit(this);
     ed_fld->setTabStopWidth(40);
     connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
+    connect( ed_fld, SIGNAL( cursorPositionChanged() ), this, SLOT( curPosChange() ) );
     box->addWidget(ed_fld);
 
     if( !prev_dis )
@@ -409,7 +412,12 @@ void TextEdit::btCancel( )
     emit cancel();
 }
 
-bool TextEdit::event( QEvent * e )
+void TextEdit::curPosChange( )
+{
+    ((QMainWindow*)window())->statusBar()->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
+}
+
+bool TextEdit::event( QEvent *e )
 {
     if( but_box && e->type() == QEvent::KeyRelease )
     {

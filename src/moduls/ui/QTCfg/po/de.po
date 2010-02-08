@@ -6,14 +6,14 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: qtcfg.cpp:678 qtcfg.cpp:749 qtcfg.cpp:1094 qtcfg.cpp:1106 qtcfg.cpp:1294
 #: qtcfg.cpp:1303 qtcfg.cpp:1906 qtcfg.cpp:1907 qtcfg.cpp:2411 qtcfg.cpp:2654
-#: selfwidg.cpp:299 selfwidg.cpp:512 selfwidg.cpp:518 selfwidg.cpp:557
+#: selfwidg.cpp:301 selfwidg.cpp:520 selfwidg.cpp:526 selfwidg.cpp:565
 #: tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:82
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 11:52+0200\n"
+"POT-Creation-Date: 2010-02-04 21:18+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -22,6 +22,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: moc_qtcfg.cpp:77
+msgid ""
+"QTCFG::ConfAppexitModifChk()pageNext()itAdd()itCut()pageCyclRefrStart()"
+"userSel()enterWhatsThis()endRunChk()viewChild(QTreeWidgetItem*)onItem"
+"(QTreeWidgetItem*)treeUpdate()tabSelect(QWidget*)buttonClicked()listBoxGo"
+"(QListWidgetItem*)postableSet(int,int)applyButton()imgPopup(QPoint)"
+msgstr ""
+
+#: moc_selfwidg.cpp:44
+msgid "QTCFG::LineEditvalChanged(QString)"
+msgstr ""
+
+#: moc_selfwidg.cpp:129
+msgid "QTCFG::TextEdittextChanged(QString)btCancel()"
+msgstr ""
+
+#: moc_selfwidg.cpp:206
+msgid "QTCFG::ImgView"
+msgstr ""
+
+#: moc_selfwidg.cpp:252
+msgid "QTCFG::ReqIdNameDlg"
+msgstr ""
+
+#: moc_selfwidg.cpp:305
+msgid "QTCFG::DlgUser"
+msgstr ""
+
+#: moc_selfwidg.cpp:358
+msgid "QTCFG::UserStBar"
+msgstr ""
+
+#: moc_selfwidg.cpp:414
+#, fuzzy
+msgid "TableDelegate"
+msgstr "Löschen"
 
 #: qtcfg.cpp:78 qtcfg.cpp:616 qtcfg.cpp:1811 qtcfg.cpp:2164 tuimod.cpp:236
 msgid "info"
@@ -668,7 +705,7 @@ msgstr ""
 
 #: qtcfg.cpp:558 qtcfg.cpp:559 qtcfg.cpp:597 qtcfg.cpp:673 qtcfg.cpp:1758
 #: qtcfg.cpp:1767 qtcfg.cpp:2066 qtcfg.cpp:2167 qtcfg.cpp:2413
-#: selfwidg.cpp:278
+#: selfwidg.cpp:280
 msgid "\n"
 msgstr ""
 
@@ -1396,85 +1433,89 @@ msgstr "Ausgewähltes Element <%s> fehlt!"
 msgid "%s| Change <%s> to: <%s>!"
 msgstr "%s| Ändern <%s> in: <%s>!"
 
-#: selfwidg.cpp:89
+#: selfwidg.cpp:91
 msgid "Picture is not set!"
 msgstr "Es ist kein Bild hinterlegt!"
 
-#: selfwidg.cpp:121 selfwidg.cpp:727
+#: selfwidg.cpp:123 selfwidg.cpp:735
 msgid ":/images/ok.png"
 msgstr ""
 
-#: selfwidg.cpp:354
+#: selfwidg.cpp:357
 msgid "Apply"
 msgstr "Übernehmen"
 
-#: selfwidg.cpp:355 selfwidg.cpp:497 selfwidg.cpp:620
+#: selfwidg.cpp:358 selfwidg.cpp:505 selfwidg.cpp:628
 msgid "button_ok"
 msgstr ""
 
-#: selfwidg.cpp:355 selfwidg.cpp:497 selfwidg.cpp:620
+#: selfwidg.cpp:358 selfwidg.cpp:505 selfwidg.cpp:628
 msgid ":/images/button_ok.png"
 msgstr ""
 
-#: selfwidg.cpp:358 selfwidg.cpp:500 selfwidg.cpp:623
+#: selfwidg.cpp:361 selfwidg.cpp:508 selfwidg.cpp:631
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: selfwidg.cpp:359 selfwidg.cpp:501 selfwidg.cpp:624
+#: selfwidg.cpp:362 selfwidg.cpp:509 selfwidg.cpp:632
 msgid "button_cancel"
 msgstr ""
 
-#: selfwidg.cpp:359 selfwidg.cpp:501 selfwidg.cpp:624
+#: selfwidg.cpp:362 selfwidg.cpp:509 selfwidg.cpp:632
 msgid ":/images/button_cancel.png"
 msgstr ""
 
-#: selfwidg.cpp:468
-msgid "ID:"
+#: selfwidg.cpp:417
+msgid "Cursor = (%1:%2)"
 msgstr ""
 
 #: selfwidg.cpp:476
+msgid "ID:"
+msgstr ""
+
+#: selfwidg.cpp:484
 msgid "Name:"
 msgstr "Name:"
 
-#: selfwidg.cpp:496 selfwidg.cpp:619
+#: selfwidg.cpp:504 selfwidg.cpp:627
 msgid "Ok"
 msgstr ""
 
-#: selfwidg.cpp:547
+#: selfwidg.cpp:555
 msgid "Item type:"
 msgstr "Typ des Elements:"
 
-#: selfwidg.cpp:592
+#: selfwidg.cpp:600
 msgid "Select user"
 msgstr "Benutzer auswählen"
 
-#: selfwidg.cpp:600
+#: selfwidg.cpp:608
 msgid "User:"
 msgstr "Benutzer:"
 
-#: selfwidg.cpp:603
+#: selfwidg.cpp:611
 msgid "Password:"
 msgstr "Kennwort:"
 
-#: selfwidg.cpp:682
+#: selfwidg.cpp:690
 msgid "<font color='%1'>%2</font>"
 msgstr ""
 
-#: selfwidg.cpp:682 tuimod.cpp:241 tuimod.cpp:242 tuimod.cpp:243
+#: selfwidg.cpp:690 tuimod.cpp:241 tuimod.cpp:242 tuimod.cpp:243
 #: tuimod.cpp:245 tuimod.cpp:253 tuimod.cpp:254 tuimod.cpp:258 tuimod.cpp:259
 #: tuimod.cpp:261
 msgid "root"
 msgstr ""
 
-#: selfwidg.cpp:682
+#: selfwidg.cpp:690
 msgid "red"
 msgstr ""
 
-#: selfwidg.cpp:682
+#: selfwidg.cpp:690
 msgid "green"
 msgstr ""
 
-#: selfwidg.cpp:703 tuimod.cpp:185
+#: selfwidg.cpp:711 tuimod.cpp:185
 msgid "Auth is wrong!!!"
 msgstr "Falsches Kennwort"
 
@@ -1642,10 +1683,10 @@ msgstr ""
 msgid "/Transport"
 msgstr ""
 
-#: selfwidg.h:170
+#: selfwidg.h:171
 msgid "QTCfg dialog"
 msgstr "QTCfg Dialog"
 
-#: selfwidg.h:198
+#: selfwidg.h:199
 msgid "Node id and/or name select"
 msgstr "Auswahl des Bezeichners und/oder des Namens"

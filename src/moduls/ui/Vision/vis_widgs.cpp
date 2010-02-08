@@ -39,6 +39,8 @@
 #include <QTimer>
 #include <QCalendarWidget>
 #include <QApplication>
+#include <QStatusBar>
+#include <QToolTip>
 
 #include <tsys.h>
 
@@ -663,6 +665,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     ed_fld->setLineWrapMode(QTextEdit::NoWrap);
     setFocusProxy( ed_fld );
     connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
+    connect( ed_fld, SIGNAL( cursorPositionChanged() ), this, SLOT( curPosChange() ) );
     box->addWidget(ed_fld);
 
     if( !prev_dis )
@@ -735,6 +738,14 @@ void TextEdit::cancelSlot( )
     emit cancel();
 }
 
+void TextEdit::curPosChange( )
+{
+    QMainWindow *w = dynamic_cast<QMainWindow *>(window());
+    if( !w || !w->statusBar() ) w = dynamic_cast<QMainWindow *>(window()->parentWidget());
+    if( !w || !w->statusBar() ) return;
+    w->statusBar()->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
+}
+
 bool TextEdit::event( QEvent * e )
 {
     if( but_box && e->type() == QEvent::KeyRelease )
@@ -751,6 +762,12 @@ bool TextEdit::event( QEvent * e )
 	    return true;
 	}
     }
+    if( e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty() )
+    {
+	QToolTip::showText( ((QHelpEvent *)e)->globalPos(), QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1) );
+	return true;
+    }
+
     return QWidget::event(e);
 }
 

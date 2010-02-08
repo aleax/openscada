@@ -126,6 +126,7 @@ class TextEdit : public QWidget
 	void changed( );
 	void btApply( );
 	void btCancel( );
+	void curPosChange( );
 
     private:
 	//Private attributes

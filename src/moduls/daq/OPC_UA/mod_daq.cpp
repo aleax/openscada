@@ -137,10 +137,20 @@ void TMdContr::start_( )
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
 
-    //>> Send SecureChannel unknown message
-    req.setAttr("id","GetEndpoints");
+    //>> Send FindServers message
+    req.setAttr("id","FindServers");
     tr.at().messProtIO(req,"OPC_UA");
-    //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("FindServers request error: %s"),req.attr("err").c_str());
+
+    //>> Send CreateSession message
+    req.setAttr("id","CreateSession");
+    tr.at().messProtIO(req,"OPC_UA");
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("CreateSession request error: %s"),req.attr("err").c_str());
+
+    //>> Send ActivateSession message
+    req.setAttr("id","ActivateSession");
+    tr.at().messProtIO(req,"OPC_UA");
+    //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("CreateSession request error: %s"),req.attr("err").c_str());
 
     //> Start the gathering data task
     if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );

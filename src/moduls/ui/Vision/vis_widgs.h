@@ -232,6 +232,7 @@ namespace VISION
 	    void changed( );
 	    void applySlot( );
 	    void cancelSlot( );
+	    void curPosChange( );
 
 	private:
 	    bool		isInit;

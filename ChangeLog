@@ -1,3 +1,8 @@
+2010-02-08 Roman
+- DAQ.OPC_UA: Up to session establish is realised.
+- UI.QTCfg, UI.Vision: Text cursor position information is added to Text fields.
+
+
 2010-02-06 Maxim
 - FIX:UI.Vision: The priority of figures' drawing is corrected for the primitive ElFigure.
 - FIX:UI.WebVision: The priority of figures' drawing is corrected for the primitive ElFigure.
@@ -7,8 +12,9 @@
 - UI.Vision: The lowering and rising of the figures in developing mode is improved for the primitive ElFigure.
 
 
+>>>>>>> .r1061
 2010-01-30 Roman
-- !!!!:/DOC: The DAQ document and generic document of OpenSCADA translation to English is added.
+- !!!!:DOC: The DAQ document and generic document of OpenSCADA translation to English is added.
 - !!:DemoDB: View cadre and Result graphics scaling for present items is added. Some fixes is made.
 - FIX:Transport: Messages manual requests send is fixed for wait respond tail.
 - FIX:DAQ.JavaLikeCalc: Set binary operation result for object's elements to Dinamic type is fixed.
@@ -31,7 +37,7 @@
 2010-01-25 Roman 0.6.4.1
 - !!:DOC: TODO and README documents is updated. README translation to Ukrainian is added.
 - SYS: Splash image is updated.
-- !!!!:/DOC: OpenSCADA manual documents and API document is updated for 0.6.4.1. The API OpenSCADA document's translation to English is added.
+- !!!!:DOC: OpenSCADA manual documents and API document is updated for 0.6.4.1. The API OpenSCADA document's translation to English is added.
 - !:SYS, Archive.*, DB.*, DAQ.*, Protocol.SelfSystem, Transport.*, UI.VCAEngine, UI.WebCfg, UI.WebCfgD: Empty inforamtion about commandline options is removed.
 
 
