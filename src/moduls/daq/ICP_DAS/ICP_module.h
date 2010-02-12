@@ -79,14 +79,13 @@ class TMdPrm : public TParamContr
 	class PrmsI8017
 	{
 	    public:
-		PrmsI8017( ) : init(false), prmNum(8), fastPer(0), curCnt(0), prevCnt(0)
+		PrmsI8017( ) : init(false), prmNum(8), fastPer(0)
 		{ for( int ip = 0; ip < 8; ip++ ) cnlMode[ip] = 0; }
 
 		bool	init;
 		char	prmNum;
 		float	fastPer;
 		char	cnlMode[8];
-		int	curCnt, prevCnt;
 	};
 
 	//Methods
@@ -104,6 +103,7 @@ class TMdPrm : public TParamContr
 
 	void	*extPrms;
 	float	wTm;
+	int	dOutRev, dInRev;
 };
 
 //******************************************************
@@ -159,6 +159,8 @@ class TMdContr: public TController
 	double	tm_gath;			//Gathering time
 	int	mCurSlot;
 	float	numReq, numErr, numErrResp;
+
+	//AutoHD<TTransportOut> tr;
 };
 
 //*************************************************

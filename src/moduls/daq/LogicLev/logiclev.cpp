@@ -249,12 +249,12 @@ void TMdContr::redntDataUpdate( )
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	if( !at(pls[i_p]).at().enableStat( ) ) continue;
+	if( at(pls[i_p]).at().id().empty() ) printf("TEST 01: '%s'\n",pls[i_p].c_str());
 	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
     }
 
     //> Send request to first active station for this controller
-    try{ owner().owner().rdStRequest(workId(),req); }
-    catch(TError err) { return; }
+    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
 
     //> Redirect respond to local parameters
     req.setAttr("path","/");
@@ -269,7 +269,7 @@ void TMdContr::redntDataUpdate( )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false),
     id_freq(-1), id_start(-1), id_stop(-1), id_sh(-1), id_nm(-1), id_dscr(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
 {
@@ -833,7 +833,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     vector<string> list;
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
@@ -849,13 +849,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		{
 		    if( !(tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)) )
 			continue;
-		    //-- Check select param --
+		    //>> Check select param
 		    bool is_lnk = tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink;
 		    if( is_lnk && tmpl->val.func()->io(i_io)->def().size() && 
 			!atoi(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")).c_str()) )
 		    {
 			string nprm = TSYS::strSepParse(tmpl->val.func()->io(i_io)->def(),0,'|');
-			//-- Check already to present parameters --
+			//>> Check already to present parameters
 			bool f_ok = false;
 			for( int i_l = 0; i_l < list.size(); i_l++ )
 			    if( list[i_l] == nprm ) { f_ok = true; break; }
@@ -883,7 +883,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
     }
 
-    //- Process command to page -
+    //> Process command to page
     if( a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
 	try
 	{

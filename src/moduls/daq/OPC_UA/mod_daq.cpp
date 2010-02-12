@@ -150,6 +150,11 @@ void TMdContr::start_( )
     //>> Send ActivateSession message
     req.setAttr("id","ActivateSession");
     tr.at().messProtIO(req,"OPC_UA");
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("ActivateSession request error: %s"),req.attr("err").c_str());
+
+    //>> Read ServerStatus_State
+    req.setAttr("id","Read");
+    tr.at().messProtIO(req,"OPC_UA");
     //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("CreateSession request error: %s"),req.attr("err").c_str());
 
     //> Start the gathering data task

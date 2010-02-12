@@ -879,7 +879,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	{
 	    QPainter pnt( w );
 
-	    //- Prepare draw area -
+	    //> Prepare draw area
 	    QRect dA(w->rect().x(),w->rect().y(),
 		(int)TSYS::realRound(w->sizeF().width()/w->xScale(true),2,true)-2*shD->geomMargin,
 		(int)TSYS::realRound(w->sizeF().height()/w->yScale(true),2,true)-2*shD->geomMargin);
@@ -891,10 +891,24 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 #if QT_VERSION < 0x040400
 	    if( pnt.window()!=pnt.viewport() )	scale = 1;
 #endif
+	    QRect dR = dA;
+
+	    //> Draw decoration
+	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dR,shD->backGrnd.color());
+	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dR,shD->backGrnd.textureImage());
+
+	    //> Draw border
+	    if( shD->border.width() )
+	    {
+		borderDraw( pnt, dR, shD->border, shD->bordStyle );
+		dR.adjust( shD->border.width()+1, shD->border.width()+1, shD->border.width()-1, shD->border.width()-1);
+	    }
+
+	    //> Text translation
 	    pnt.translate( dA.width()/2+scale,dA.height()/2+scale );
 	    pnt.rotate(shD->orient);
 
-	    //- Calc whidth and hight draw rect at rotate -
+	    //> Calc whidth and hight draw rect at rotate
 	    double rad_angl  = fabs(3.14159*(double)shD->orient/180.);
 	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
 	    int wdth  = (int)(rect_rate*dA.size().width()+
@@ -902,20 +916,9 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    int heigt = (int)(rect_rate*dA.size().height()+
 			    sin(rad_angl)*(dA.size().width()-dA.size().height()));
 
-	    QRect dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
+	    dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
 
-	    //- Draw decoration -
-	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dR,shD->backGrnd.color());
-	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dR,shD->backGrnd.textureImage());
-
-	    //- Draw border -
-	    if( shD->border.width() )
-	    {
-		borderDraw( pnt, dR, shD->border, shD->bordStyle );
-		dR.adjust( shD->border.width()+1, shD->border.width()+1, shD->border.width()-1, shD->border.width()-1);
-	    }
-
-	    //- Draw text -
+	    //> Draw text
 	    pnt.setPen(shD->color);
 	    pnt.setFont(shD->font);
 

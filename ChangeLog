@@ -1,3 +1,12 @@
+2010-02-12 Roman
+- !!:FIX:DAQ, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.Siemens: Geting broken data into redundance code for no redundance tasks and for no one reserve station present.
+- DAQ:Function: A function using counter information is added.
+- FIX:DAQ.ICP_DAS: A lost tasks stoping is fixed.
+- DAQ.ICP_DAS: CPU module's data access is moved to self module object "LP-8781". Discrete IO reverse configuration support is added.
+- DAQ.OPC_UA: Up to "Read" request protocol OPC UA is discovered.
+- FIX:UI.Vision: The bacground and frame rotation is disabled for primitive "Text".
+
+
 2010-02-08 Roman
 - DAQ.OPC_UA: Up to session establish is realised.
 - UI.QTCfg, UI.Vision: Text cursor position information is added to Text fields.

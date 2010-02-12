@@ -530,8 +530,7 @@ void Contr::redntDataUpdate( )
     XMLNode req("get"); req.setAttr("path",nodePath(0,true)+"/%2fserv%2ffncAttr");
 
     //> Send request to first active station for this controller
-    try{ owner().owner().rdStRequest(workId(),req); }
-    catch(TError err) { return; }
+    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
 
     //> Redirect respond to local controller
     req.setName("set")->setAttr("path","/%2fserv%2ffncAttr");
@@ -597,7 +596,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Input;Output;Return"));
 		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),0664,"root","DAQ",1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),0664,"root","DAQ",3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),0664,"root","DAQ",2,"tp","str","rows","10");
 	}
 	return;
     }

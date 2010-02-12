@@ -296,6 +296,21 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(mReq,"");			//signature
 		    oS(mReq,"");			//algorithm
 		}
+		else if( io.attr("id") == "Read" )
+		{
+		    iTpId =  631;
+		    //>> Request
+		    oR(mReq,0,8);			//maxAge 0 ms
+		    oNu(mReq,1,4);			//timestampsTo Return (SERVER_1)
+							//> nodesToRead []
+		    oNu(mReq,1,4);			//nodes
+		    oNodeId(mReq,2259);			//nodeId (ServerStatus_State)
+		    oNu(mReq,13,4);			//attributeId (Value)
+		    oS(mReq,"");			//indexRange
+							//> dataEncoding
+		    oNu(mReq,0,2);			//namespaceIndex
+		    oS(mReq,"");			//name
+		}
 		else throw TError( 100, "OPC UA Bin", _("11:OPC UA '%s': request '%s' is not supported."),io.name().c_str(),io.attr("id").c_str());
 
 		rez.reserve( 200 );
@@ -461,6 +476,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    iS(rez,off);				//algorithm
 
 			    iNu(rez,off,4);				//maxRequest MessageSize
+			    break;
 			}
 			case 467:	//ActivateSession
 			{
@@ -468,6 +484,25 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    iS(rez,off);				//serverNonce
 			    iS(rez,off);				//results []
 			    iS(rez,off);				//diagnosticInfos []
+			    break;
+			}
+			case 631:	//Read
+			{
+			    if( oTpId != 634 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+									//> results []
+			    int resN = iNu(rez,off,4);			//Numbers
+			    for( int i_r = 0; i_r < resN; i_r++ )
+			    {
+									//>> value
+				iNu(rez,off,1);				//Encoding Mask
+									//>>> Variant
+				iNu(rez,off,1);				//Encoding Mask
+				iN(rez,off,4);				//Value (int32)
+				iTm(rez,off);				//sourceTimestamp
+				iTm(rez,off);				//serverTimestamp
+				iS(rez,off);				//diagnosticInfos []
+			    }
+			    break;
 			}
 		    }
                 }
@@ -1081,6 +1116,32 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oS(respEp,"");		//results []
 		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
+		}
+		case 631:	//ReadRequest
+		{
+		    //>> Request
+		    TProt::iR(rb,off,8);		//maxAge
+		    TProt::iNu(rb,off,4);		//timestampsTo Return
+							//> nodesToRead []
+		    TProt::iNu(rb,off,4);		//nodes
+		    TProt::iNodeId(rb,off);		//nodeId
+		    TProt::iNu(rb,off,4);		//attributeId
+		    TProt::iS(rb,off);			//indexRange
+							//> dataEncoding
+		    TProt::iNu(rb,off,2);		//namespaceIndex
+		    TProt::iS(rb,off);			//name
+
+		    //>> Respond
+		    reqTp = 634;
+		    TProt::oNu(respEp,1,4);		//Numbers
+							//>> value 1
+		    TProt::oNu(respEp,13,1);		//Encoding Mask
+							//>>> Variant
+		    TProt::oNu(respEp,6,1);		//Encoding Mask
+		    TProt::oN(respEp,0,4);		//Value (int32)
+		    TProt::oTm(respEp,TSYS::curTime());	//sourceTimestamp
+		    TProt::oTm(respEp,TSYS::curTime());	//serverTimestamp
+		    TProt::oS(respEp,"");		//diagnosticInfos []
 		}
 		default:
 		    throw TError(modPrt->nodePath().c_str(),_("No supported request id '%d'."),reqTp);

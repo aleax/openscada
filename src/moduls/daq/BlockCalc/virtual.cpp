@@ -397,8 +397,7 @@ void Contr::redntDataUpdate( )
     }
 
     //> Send request to first active station for this controller
-    try{ owner().owner().rdStRequest(workId(),req); }
-    catch(TError err) { return; }
+    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
 
     //> Redirect respond to local parameters
     req.setAttr("path","/");

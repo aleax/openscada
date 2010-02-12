@@ -179,7 +179,7 @@ void TController::start( )
     mess_info(nodePath().c_str(),_("Start controller!"));
 
     //> First archives synchronization
-    if( owner().redntAllow() ) redntDataUpdate( );
+    if( owner().redntAllow() && redntMode() ) redntDataUpdate( );
 
     //> Start for children
     start_();
@@ -365,8 +365,7 @@ void TController::redntDataUpdate( )
     }
 
     //> Send request to first active station for this controller
-    try{ owner().owner().rdStRequest(workId(),req); }
-    catch(TError err) { return; }
+    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
 
     //> Write data to parameters
     if( req.childSize() ) mRedntSt.setVal(req.childGet(0)->text());

@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <getopt.h>
 #include <signal.h>
 
 extern "C"
@@ -181,9 +180,10 @@ void TMdContr::start_( )
 		SYS->transport().at().at("Serial").at().outAdd(trName);
 		SYS->transport().at().at("Serial").at().outAt(trName).at().setAddr("/dev/ttySA0:115200:8N1");
 	    }
-	    if( SYS->transport().at().at("Serial").at().outAt(trName).at().startStat() )
-		SYS->transport().at().at("Serial").at().outAt(trName).at().stop();
-	    SYS->transport().at().at("Serial").at().outAt(trName).at().start();*/
+	    tr = SYS->transport().at().at("Serial").at().outAt(trName);
+
+	    if( tr.at().startStat() ) tr.at().stop();
+	    tr.at().start();*/
 
 	    numReq = numErr = numErrResp = 0;
 
@@ -200,15 +200,13 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    if( prcSt )
-    {
-	//> Stop the request and calc data task
-	SYS->taskDestroy( nodePath('.',true), &prcSt, &endRunReq );
+    //> Stop the request and calc data task
+    SYS->taskDestroy( nodePath('.',true), &prcSt, &endRunReq );
 
-	Close_Com( (mBus?mBus:1) );
+    //tr.free();
+    Close_Com( (mBus?mBus:1) );
 
-	if( mBus == 0 )	{ ResAlloc res( pBusRes, true ); Close_SlotAll(); }
-    }
+    if( mBus == 0 )	{ ResAlloc res( pBusRes, true ); Close_SlotAll(); }
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -316,10 +314,8 @@ string TMdContr::serReq( string req, char mSlot )
 
     numReq++;
 
-    /*AutoHD<TTransportOut> tr;
-    try
+    /*try
     {
-	tr = SYS->transport().at().at("Serial").at().outAt(TSYS::strMess("%sCOM%d",MOD_ID,(mBus?mBus:1)));
 	if( !tr.at().startStat() ) tr.at().start();
 	req += "\r";
     }
@@ -363,16 +359,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if( cfg("BAUD").view() )
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/BAUD",cfg("BAUD").fld().descr(),0664,"root","root",3,"tp","dec","dest","sel_ed","select","/cntr/cfg/boudLst");
 	if( mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC") )
-	{
-	    if( startStat() )
-	    {
-		ctrMkNode("fld",opt,-1,"/LPcfg/sn",_("Serial number"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/LPcfg/SDKv",_("SDK version"),R_R_R_,"root","DAQ",1,"tp","str");
-		//ctrMkNode("fld",opt,-1,"/LPcfg/RSW",_("Rotary switch ID"),R_R_R_,"root","DAQ",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/LPcfg/dipSW",_("DIP switch"),R_R_R_,"root","DAQ",1,"tp","hex");
-	    }
 	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root","DAQ",1,"tp","real");
-	}
 	return;
     }
     //> Process command to page
@@ -398,32 +385,6 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("576000");
 	opt->childAdd("el")->setText("921600");
     }
-    else if( mBus == 0 && startStat() && a_path == "/LPcfg/sn" && ctrChkNode(opt) )
-    {
-	ResAlloc res( reqRes, true );
-	unsigned char sN[8];
-	Read_SN(sN);
-	opt->setText( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]) );
-    }
-    else if( mBus == 0 && startStat() && a_path == "/LPcfg/SDKv" && ctrChkNode(opt) )
-    {
-	ResAlloc res( reqRes, true );
-	opt->setText( TSYS::strMess("%4.2f",GetSDKversion()) );
-    }
-    /*else if( mBus == 0 && startStat() && a_path == "/LPcfg/RSW" && ctrChkNode(opt) )
-    {
-	ResAlloc res( reqRes, true );
-	opt->setText( TSYS::int2str(GetRotaryID(0)) );
-    }*/
-    else if( mBus == 0 && startStat() && a_path == "/LPcfg/dipSW" && ctrChkNode(opt) )
-    {
-	ResAlloc res( pBusRes, true );
-	if( !Open_Slot(9) )
-	{
-	    opt->setText( TSYS::int2str(GetDIPswitch()) );
-	    Close_Slot(9);
-	}
-    }
     else if( mBus == 0 && a_path == "/LPcfg/wTm" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( prmLP("wTm") );
@@ -436,7 +397,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr( name, tp_prm ), p_el("w_attr"), extPrms(NULL), endRunReq(false), prcSt(false), clcCnt(0), wTm(0),
+    TParamContr( name, tp_prm ), p_el("w_attr"), extPrms(NULL), endRunReq(false), prcSt(false), clcCnt(0), wTm(0), dOutRev(0), dInRev(0),
     modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()), modPrms(cfg("MOD_PRMS").getSd())
 {
 
@@ -480,36 +441,41 @@ void TMdPrm::enable()
     //> Make DAQ parameter's attributes
     switch( modTp )
     {
+	case 0x8781:
+	    p_el.fldAdd( new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+	    p_el.fldAdd( new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+	    p_el.fldAdd( new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+	    break;
 	case 0x8017:
 	    for( int i_i = 0; i_i < 8; i_i++ )
 	    {
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    }
 	    break;
 	case 0x8042:
 	    for( int i_i = 0; i_i < 16; i_i++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    for( int i_o = 0; i_o < 16; i_o++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    break;
 	case 0x87019:
-	    p_el.fldAdd( new TFld("cvct",_("Cold-Junction Compensation(CJC) temperature"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+	    p_el.fldAdd( new TFld("cvct",_("Cold-Junction Compensation(CJC) temperature"),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    for( int i_i = 0; i_i < 8; i_i++ )
 	    {
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    }
 	    break;
 	case 0x87024:
 	    for( int i_o = 0; i_o < 4; i_o++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    break;
 	case 0x87057:
 	    for( int i_o = 0; i_o < 16; i_o++ )
-		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"",TSYS::real2str(EVAL_BOOL).c_str(),"","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd( new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
 	    break;
 	default: break;
     }
@@ -549,6 +515,12 @@ void TMdPrm::loadExtPrms( )
     try{ prmNd.load(modPrms); } catch(...){ }
     string  vl;
 
+    //> Generic
+    vl = prmNd.attr("wTm"); if( !vl.empty() ) wTm = vmin(25.5,vmax(0,atof(vl.c_str())));
+    vl = prmNd.attr("dInRev"); if( !vl.empty() ) dInRev = atoi(vl.c_str());
+    vl = prmNd.attr("dOutRev"); if( !vl.empty() ) dOutRev = atoi(vl.c_str());
+
+    //> By module
     switch( modTp )
     {
 	case 0x8017:
@@ -559,9 +531,6 @@ void TMdPrm::loadExtPrms( )
 		if( prmNd.childGet(i_n)->name() == "cnl" )
 		    ((PrmsI8017*)extPrms)->cnlMode[atoi(prmNd.childGet(i_n)->attr("id").c_str())] = atoi(prmNd.childGet(i_n)->text().c_str());
 	    break;
-	case 0x87024: case 0x87057:
-	    vl = prmNd.attr("wTm"); if( !vl.empty() ) wTm = vmin(25.5,vmax(0,atof(vl.c_str())));
-	    break;
     }
 }
 
@@ -571,6 +540,12 @@ void TMdPrm::saveExtPrms( )
 
     XMLNode prmNd("prms");
 
+    //> Generic
+    prmNd.setAttr("wTm",TSYS::real2str(wTm));
+    prmNd.setAttr("dInRev",TSYS::int2str(dInRev));
+    prmNd.setAttr("dOutRev",TSYS::int2str(dOutRev));
+
+    //> By module
     switch( modTp )
     {
 	case 0x8017:
@@ -579,9 +554,6 @@ void TMdPrm::saveExtPrms( )
 	    prmNd.setAttr("fastPer",TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
 	    for( int i_c = 0; i_c < 8; i_c++ )
 		prmNd.childAdd("cnl")->setAttr("id",TSYS::int2str(i_c))->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[i_c]));
-	    break;
-	case 0x87024: case 0x87057:
-	    prmNd.setAttr("wTm",TSYS::real2str(wTm));
 	    break;
     }
 
@@ -595,6 +567,29 @@ void TMdPrm::getVals( )
 
     switch( modTp )
     {
+	case 0x8781:
+	{
+	    //> Read serial number
+	    AutoHD<TVal> vl = vlAt("serial");
+	    if( vl.at().getS() == EVAL_STR )
+	    {
+		ResAlloc res( owner().reqRes, true );
+		unsigned char sN[8];
+		Read_SN(sN);
+		vl.at().setS( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]), 0, true );
+	    }
+	    //> Read SDK version
+	    vl = vlAt("SDK");
+	    if( vl.at().getR() == EVAL_REAL )	vl.at().setR( GetSDKversion(), 0, true );
+
+	    //> Read DIP switch status
+	    ResAlloc res( owner().pBusRes, true );
+	    int dpSw = EVAL_INT;
+	    if( !Open_Slot(9) ) { dpSw = GetDIPswitch(); Close_Slot(9); }
+	    res.release();
+	    vlAt("DIP").at().setI(dpSw,0,true);
+	    break;
+	}
 	case 0x8017:
 	{
 	    //> Check for I8017 init
@@ -610,11 +605,6 @@ void TMdPrm::getVals( )
 		    I8017_SetChannelGainMode(modSlot,i_v,((PrmsI8017*)extPrms)->cnlMode[i_v],0);
 		    vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(modSlot), 0, true );
 		}
-	    if( ((PrmsI8017*)extPrms)->fastPer )
-	    {
-		acq_err.setVal( (((PrmsI8017*)extPrms)->prevCnt==((PrmsI8017*)extPrms)->curCnt) ? _("10:Fast acquisition task is stoped or locked.") : "" );
-		((PrmsI8017*)extPrms)->prevCnt = ((PrmsI8017*)extPrms)->curCnt;
-	    }
 	    break;
 	}
 	case 0x8042:
@@ -622,11 +612,11 @@ void TMdPrm::getVals( )
 	    owner().pBusRes.resRequestW();
 	    int c_vl = DI_16(modSlot);
 	    owner().pBusRes.resRelease();
-	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( !((c_vl>>i_v)&0x01), 0, true );
+	    for( int i_v = 0; i_v < 16; i_v++ ) vlAt(TSYS::strMess("i%d",i_v)).at().setB( ((dInRev^c_vl)>>i_v)&0x01, 0, true );
 	    owner().pBusRes.resRequestW();
 	    c_vl = DO_16_RB(modSlot);
 	    owner().pBusRes.resRelease();
-	    for( int o_v = 0; o_v < 16; o_v++ ) vlAt(TSYS::strMess("o%d",o_v)).at().setB( (c_vl>>o_v)&0x01, 0, true );
+	    for( int o_v = 0; o_v < 16; o_v++ ) vlAt(TSYS::strMess("o%d",o_v)).at().setB( ((dOutRev^c_vl)>>o_v)&0x01, 0, true );
 	    break;
 	}
 	case 0x87019:
@@ -660,6 +650,7 @@ void TMdPrm::getVals( )
 	case 0x87057:
 	{
 	    //> Host watchdog processing
+	    rez = "1";
 	    if( wTm >= 0.1 )
 	    {
 		rez = owner().serReq( TSYS::strMess("~%02X31%02X",(owner().mBus==0)?0:modAddr,(int)(10*wTm)), modSlot );
@@ -777,10 +768,10 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	{
 	    bool vl = valo.getB(0,true);
 	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
+	    int chnl = atoi(valo.name().c_str()+1);
 
 	    owner().pBusRes.resRequestW(1000);
-	    DO_16( modSlot, vl ? (DO_16_RB(modSlot) | 0x01<<atoi(valo.name().c_str()+1)) :
-				 (DO_16_RB(modSlot) & ~(0x01<<atoi(valo.name().c_str()+1))) );
+	    DO_16( modSlot, ((vl^(dOutRev>>chnl))&1) ? (DO_16_RB(modSlot) | 0x01<<chnl) : (DO_16_RB(modSlot) & ~(0x01<<chnl)) );
 	    owner().pBusRes.resRelease();
 	    break;
 	}
@@ -806,10 +797,10 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	case 0x87057:
 	{
 	    char vl = valo.getB(0,true);
-	    if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
+	    if( !acq_err.getVal().empty() || vl == EVAL_BOOL || vl == pvl.getB() ) break;
 
 	    int daddr = atoi(valo.name().c_str()+1);
-	    string cmd = TSYS::strMess("#%02X%s%d%02X",(owner().mBus==0)?0:modAddr,(daddr/8)?"B":"A",daddr%8,vl);
+	    string cmd = TSYS::strMess("#%02X%s%d%02X",(owner().mBus==0)?0:modAddr,(daddr/8)?"B":"A",daddr%8,(vl^(dOutRev>>daddr))&1);
 
 	    rep57:
 	    rez = owner().serReq( cmd, modSlot );
@@ -861,7 +852,7 @@ void *TMdPrm::fastTask( void *iprm )
 	cnls.push_back( prm.vlAt(TSYS::strMess("i%d",i_c)) );
     float vbuf[ cnls.size() ];
 
-    for( ; !prm.endRunReq; ((PrmsI8017*)prm.extPrms)->curCnt++ )
+    while( !prm.endRunReq )
     {
 	prm.owner().pBusRes.resRequestW( );
 	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
@@ -895,6 +886,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if( opt->name() == "info" )
     {
+	cfg("MOD_SLOT").setView( modTp != 0x8781 );
 	cfg("MOD_ADDR").setView( (modTp>>12) != 8 && owner().mBus != 0 );
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),0664,"root","root",3,"tp","dec","dest","select","select","/prm/cfg/modLst");
@@ -907,6 +899,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if( ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")) )
 		    for( int i_v = 0; i_v < 8; i_v++ )
 			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		break;
+	    case 0x8042:
+		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
+		for( int i_o = 0; i_o < 16; i_o++ )
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revIn%d",i_o).c_str(),i_o?"":_("Inputs reverse"),RWRWR_,"root","DAQ",1,"tp","bool");
+		for( int i_o = 0; i_o < 16; i_o++ )
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Outputs reverse"),RWRWR_,"root","DAQ",1,"tp","bool");
 		break;
 	    case 0x87019:
 		if( !enableStat() || !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
@@ -925,6 +924,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		break;
 	    case 0x87057:
 		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
+		for( int i_o = 0; i_o < 16; i_o++ )
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Out reverse"),RWRWR_,"root","DAQ",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root","DAQ",3,"tp","real","min","0","max","25.5");
 		if( !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module")) ) break;
 		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root","DAQ",1,"tp","str");
@@ -932,7 +933,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
 		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
-		break;
 		break;
 	}
 	return;
@@ -943,6 +943,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	if( owner().mBus == 0 )
 	{
+	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8781))->setText("LP-8781");
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8017))->setText("I-8017");
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8042))->setText("I-8042");
 	}
@@ -1014,6 +1015,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","23")->setText(_("L Type"));
 	opt->childAdd("el")->setAttr("id","24")->setText(_("M Type"));
 	opt->childAdd("el")->setAttr("id","25")->setText(_("L Type (DIN43710C Type)"));
+    }
+    else if( enableStat() && a_path.substr(0,10) == "/cfg/revIn" )
+    {
+	int rin = atoi(a_path.substr(10).c_str());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( (dInRev&(1<<rin))?"1":"0" );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{ dInRev = atoi(opt->text().c_str()) ? (dInRev|(1<<rin)) : (dInRev & ~(1<<rin)); saveExtPrms(); }
+    }
+    else if( enableStat() && a_path.substr(0,11) == "/cfg/revOut" )
+    {
+	int rout = atoi(a_path.substr(11).c_str());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( (dOutRev&(1<<rout))?"1":"0" );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	{ dOutRev = atoi(opt->text().c_str()) ? (dOutRev|(1<<rout)) : (dOutRev & ~(1<<rout)); saveExtPrms(); }
     }
     else if( enableStat() && a_path == "/cfg/wTm" )
     {
