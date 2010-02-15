@@ -299,7 +299,6 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		else if( io.attr("id") == "Read" )
 		{
 		    iTpId =  631;
-		    //>> Request
 		    oR(mReq,0,8);			//maxAge 0 ms
 		    oNu(mReq,1,4);			//timestampsTo Return (SERVER_1)
 							//> nodesToRead []
@@ -310,6 +309,25 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 							//> dataEncoding
 		    oNu(mReq,0,2);			//namespaceIndex
 		    oS(mReq,"");			//name
+		}
+		else if( io.attr("id") == "Browse" )
+		{
+		    iTpId =  527;
+							//> view
+		    oNodeId(mReq,0);			//viewId (0)
+		    oTm(mReq,0);			//timestamp
+		    oNu(mReq,0,4);			//viewVersion
+
+		    oNu(mReq,100,4);			//requestedMax ReferencesPerNode
+							//> nodesToBrowse
+		    oNu(mReq,1,4);			//Nodes 1
+							//>> Node 1
+		    oNodeId(mReq,84);			//nodeId (RootFolder)
+		    oNu(mReq,0,4);			//browseDirection (FORWARD_0)
+		    oNodeId(mReq,33);			//referenceTypeId (HierarchicalReferences)
+		    oNu(mReq,1,1);			//includeSubtypes (true)
+		    oNu(mReq,0,4);			//nodeClassMask ( all NodeClasses )
+		    oNu(mReq,0x3f,4);			//resultMask ( all )
 		}
 		else throw TError( 100, "OPC UA Bin", _("11:OPC UA '%s': request '%s' is not supported."),io.name().c_str(),io.attr("id").c_str());
 
@@ -504,6 +522,31 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    }
 			    break;
 			}
+			case 527:	//Browse
+			{
+			    if( oTpId != 530 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+									//> results []
+			    int resN = iNu(rez,off,4);			//Numbers
+			    for( int i_r = 0; i_r < resN; i_r++ )
+			    {
+				iNu(rez,off,4);				//statusCode
+				iS(rez,off);				//continuationPoint
+									//>> References []
+				int refN = iNu(rez,off,4);		//Numbers
+				for( int i_rf = 0; i_rf < refN; i_rf++ )
+				{
+				    iNodeId(rez,off);			//referenceTypeId
+				    iNu(rez,off,1);			//isForward
+				    iNodeId(rez,off);			//nodeId
+				    iSqlf(rez,off);			//browseName
+				    iSl(rez,off);			//displayName
+				    iNu(rez,off,4);			//nodeClass
+				    iNodeId(rez,off);			//typeDefinition
+				}
+			    }
+			    iS(rez,off);				//diagnosticInfos []
+			    break;
+			}
 		    }
                 }
 	    }
@@ -576,6 +619,13 @@ string TProt::iSl( const string &rb, int &off, string *locale )
     return sloc;
 }
 
+string TProt::iSqlf( const string &rb, int &off, uint16_t *nsIdx )
+{
+    uint16_t tNsIdx = iNu(rb,off,2);
+    if( !nsIdx ) *nsIdx = tNsIdx;
+    return iS(rb,off);
+}
+
 long long TProt::iTm( const string &rb, int &off )
 {
     int64_t tmStamp = *(int64_t*)TProt::iVal(rb,off,8);
@@ -631,6 +681,12 @@ void TProt::oSl( string &buf, const string &val, const string &locale )
     oN(buf,(locale.empty()?0:0x01)|(val.empty()?0:0x02),1);
     if( !locale.empty() ) oS(buf,locale);
     if( !val.empty() ) oS(buf,val);
+}
+
+void TProt::oSqlf( string &buf, const string &val, uint16_t nsIdx )
+{
+    oN(buf,nsIdx,2);
+    oS(buf,val);
 }
 
 void TProt::oNodeId( string &buf, int val, int ns )
@@ -1142,6 +1198,64 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oTm(respEp,TSYS::curTime());	//sourceTimestamp
 		    TProt::oTm(respEp,TSYS::curTime());	//serverTimestamp
 		    TProt::oS(respEp,"");		//diagnosticInfos []
+		    break;
+		}
+		case 527:	//BrowseRequest
+		{
+		    //>> Request
+							//> view
+		    TProt::iNodeId(rb,off);		//viewId
+		    TProt::iTm(rb,off);			//timestamp
+		    TProt::iNu(rb,off,4);		//viewVersion
+
+		    TProt::iNu(rb,off,4);		//requestedMax ReferencesPerNode
+							//> nodesToBrowse
+		    uint32_t nc = TProt::iNu(rb,off,4);	//Nodes
+		    for( uint32_t i_c = 0; i_c < nc; i_c++ )
+		    {
+			TProt::iNodeId(rb,off);		//nodeId
+			TProt::iNu(rb,off,4);		//browseDirection
+			TProt::iNodeId(rb,off);		//referenceTypeId
+			TProt::iNu(rb,off,1);		//includeSubtypes
+			TProt::iNu(rb,off,4);		//nodeClassMask
+			TProt::iNu(rb,off,4);		//resultMask
+		    }
+		    //>> Respond
+		    reqTp = 530;
+							//> results []
+		    TProt::oNu(respEp,1,4);		//Numbers 1
+							//Number 1
+		    TProt::oNu(respEp,0,4);		//statusCode
+		    TProt::oS(respEp,"");		//continuationPoint
+							//>> References []
+		    TProt::oNu(respEp,3,4);		//Numbers 3
+							//References 1
+		    TProt::oNodeId(respEp,35);		//referenceTypeId (Organizes)
+		    TProt::oNu(respEp,1,1);		//isForward
+		    TProt::oNodeId(respEp,87);		//nodeId (ViewsFolder)
+		    TProt::oSqlf(respEp,"Views");	//browseName
+		    TProt::oSl(respEp,"Views","en");	//displayName
+		    TProt::oNu(respEp,1,4);		//nodeClass (OBJECT_1)
+		    TProt::oNodeId(respEp,61);		//typeDefinition (FolderType)
+							//References 2
+		    TProt::oNodeId(respEp,35);		//referenceTypeId (Organizes)
+		    TProt::oNu(respEp,1,1);		//isForward
+		    TProt::oNodeId(respEp,85);		//nodeId (ObjectsFolder)
+		    TProt::oSqlf(respEp,"Objects");	//browseName
+		    TProt::oSl(respEp,"Objects","en");	//displayName
+		    TProt::oNu(respEp,1,4);		//nodeClass (OBJECT_1)
+		    TProt::oNodeId(respEp,61);		//typeDefinition (FolderType)
+							//References 3
+		    TProt::oNodeId(respEp,35);		//referenceTypeId (Organizes)
+		    TProt::oNu(respEp,1,1);		//isForward
+		    TProt::oNodeId(respEp,86);		//nodeId (TypesFolder)
+		    TProt::oSqlf(respEp,"Types");	//browseName
+		    TProt::oSl(respEp,"Types","en");	//displayName
+		    TProt::oNu(respEp,1,4);		//nodeClass (OBJECT_1)
+		    TProt::oNodeId(respEp,61);		//typeDefinition (FolderType)
+
+		    TProt::oS(respEp,"");		//diagnosticInfos []
+		    break;
 		}
 		default:
 		    throw TError(modPrt->nodePath().c_str(),_("No supported request id '%d'."),reqTp);

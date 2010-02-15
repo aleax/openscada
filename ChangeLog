@@ -1,3 +1,8 @@
+2010-02-15 Roman
+- DAQ.JavaLikeCalc: The function isEVal() is added to base types for EVAL values detection. A function to compile stage is added correct EVAL values casting.
+- DAQ.OPC_UA: Up to "Browse" request protocol OPC UA is discovered.
+
+
 2010-02-12 Roman
 - !!:FIX:DAQ, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.Siemens: Geting broken data into redundance code for no redundance tasks and for no one reserve station present.
 - DAQ:Function: A function using counter information is added.

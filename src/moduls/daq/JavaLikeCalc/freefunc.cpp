@@ -529,13 +529,13 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		    switch(rez->vType(this))
 		    {
 		        case Reg::Int:
-			    *rez = (bool)rez->val().i_el;
+			    *rez = (char)((rez->val().i_el!=EVAL_INT) ? (bool)rez->val().i_el : EVAL_BOOL);
 			    break;
 			case Reg::Real:
-			    *rez = (bool)rez->val().r_el;
+			    *rez = (char)((rez->val().r_el!=EVAL_REAL) ? (bool)rez->val().r_el : EVAL_BOOL);
 			    break;
 			case Reg::String:
-			    *rez = (bool)atoi(rez->val().s_el->c_str());
+			    *rez = (char)((*rez->val().s_el!=EVAL_STR) ? (bool)atoi(rez->val().s_el->c_str()) : EVAL_BOOL);
 			    break;
 		    }
 		    break;
@@ -543,13 +543,13 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		    switch(rez->vType(this))
 		    {
 			case Reg::Bool:
-			    *rez = (int)rez->val().b_el;
+			    *rez = (rez->val().b_el!=EVAL_BOOL) ? (int)rez->val().b_el : EVAL_INT;
 			    break;
 			case Reg::Real:
 			//    *rez = (int)rez->val().r_el;
 			    break;
 			case Reg::String:
-			    *rez = atoi(rez->val().s_el->c_str());
+			    *rez = (*rez->val().s_el!=EVAL_STR) ? atoi(rez->val().s_el->c_str()) : EVAL_INT;
 			    break;
 		    }
 		    break;
@@ -557,13 +557,13 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		    switch(rez->vType(this))
 		    {
 			case Reg::Bool:
-			    *rez = (double)rez->val().b_el;
+			    *rez = (rez->val().b_el!=EVAL_BOOL) ? (double)rez->val().b_el : EVAL_REAL;
 			    break;
 			case Reg::Int:
-			    *rez = (double)rez->val().i_el;
+			    *rez = (rez->val().i_el!=EVAL_INT) ? (double)rez->val().i_el : EVAL_REAL;
 			    break;
 			case Reg::String:
-			    *rez = atof(rez->val().s_el->c_str());
+			    *rez = (*rez->val().s_el!=EVAL_STR) ? atof(rez->val().s_el->c_str()) : EVAL_REAL;
 			    break;
 		    }
 		    break;
@@ -571,13 +571,13 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		    switch(rez->vType(this))
 		    {
 			case Reg::Bool:
-			    *rez = TSYS::int2str(rez->val().b_el);
+			    *rez = (rez->val().b_el!=EVAL_BOOL) ? TSYS::int2str(rez->val().b_el) : EVAL_STR;
 			    break;
 			case Reg::Int:
-			    *rez = TSYS::int2str(rez->val().i_el);
+			    *rez = (rez->val().i_el!=EVAL_INT) ? TSYS::int2str(rez->val().i_el) : EVAL_STR;
 			    break;
 			case Reg::Real:
-			    *rez = TSYS::real2str(rez->val().r_el);
+			    *rez = (rez->val().r_el!=EVAL_REAL) ? TSYS::real2str(rez->val().r_el) : EVAL_STR;
 			    break;
 		    }
 		    break;
@@ -1085,10 +1085,13 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
     {
 	case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
 	case TVariant::Boolean:
+	    if( prop == "isEVal" )	return (vl.getB() == EVAL_BOOL);
 	    if( prop == "toString" )	return string(vl.getB() ? "true" : "false");
 	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
 	case TVariant::Integer:
+	    if( prop == "isEVal" )	return (vl.getI() == EVAL_INT);
 	case TVariant::Real:
+	    if( prop == "isEVal" )	return (vl.getR() == EVAL_REAL);
 	    if( prop == "toExponential" )
 	    {
 		int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : -1;
@@ -1114,6 +1117,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	    }
 	    throw TError(nodePath().c_str(),_("Integer type have not function '%s' or not enough parameters for it."),prop.c_str());
 	case TVariant::String:
+	    if( prop == "isEVal" )	return (vl.getS() == EVAL_STR);
 	    if( prop == "charAt" && prms.size() )
 	    {
 		int n = prms[0].getI();
@@ -1737,7 +1741,8 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    switch( op1.type() )
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[*(uint16_t*)(cprg+1)] = op1.getR() == getValR(val,reg[*(uint16_t*)(cprg+5)]); break;
+			    reg[*(uint16_t*)(cprg+1)] = op1.getR() == getValR(val,reg[*(uint16_t*)(cprg+5)]);
+			    break;
 			case TVariant::String:
 			    reg[*(uint16_t*)(cprg+1)] = op1.getS() == getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:

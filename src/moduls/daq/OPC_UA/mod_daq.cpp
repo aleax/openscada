@@ -155,7 +155,12 @@ void TMdContr::start_( )
     //>> Read ServerStatus_State
     req.setAttr("id","Read");
     tr.at().messProtIO(req,"OPC_UA");
-    //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("CreateSession request error: %s"),req.attr("err").c_str());
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Read request error: %s"),req.attr("err").c_str());
+
+    //>> Browse RootFolder
+    req.setAttr("id","Browse");
+    tr.at().messProtIO(req,"OPC_UA");
+    //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Browse request error: %s"),req.attr("err").c_str());
 
     //> Start the gathering data task
     if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );

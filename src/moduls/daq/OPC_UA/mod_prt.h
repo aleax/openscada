@@ -94,6 +94,7 @@ class TProt: public TProtocol
 	static double iR( const string &rb, int &off, char vSz = 4 );
 	static string iS( const string &buf, int &off );
 	static string iSl( const string &buf, int &off, string *locale = NULL );
+	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
 	static long long iTm( const string &buf, int &off );
 	static int iNodeId( const string &buf, int &off, int *ns = NULL );
 
@@ -102,6 +103,7 @@ class TProt: public TProtocol
 	static void oR( string &buf, double val, char sz = 4 );
 	static void oS( string &buf, const string &val );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
+	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
 	static void oNodeId( string &buf, int val, int ns = 0 );
 	static void oTm( string &buf, long long val );
 
