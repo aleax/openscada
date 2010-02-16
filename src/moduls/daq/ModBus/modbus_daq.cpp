@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <string.h>
+#include <stdint.h>
 
 #include <ttiparam.h>
 
@@ -188,8 +189,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
     if( icfg.fld().name() == "PROT" )
     {
-	if( icfg.getS() == "TCP" )	cfg("REQ_TRY").setView(false);
-	else				cfg("REQ_TRY").setView(true);
+	cfg("REQ_TRY").setView(icfg.getS()!="TCP");
 	if( startStat() ) stop();
     }
     else if( icfg.fld().name() == "FRAG_MERGE" && enableStat( ) ) disable( );
@@ -587,41 +587,58 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
-    //- Parse ModBus attributes and convert to strong list -
+    //> Parse ModBus attributes and convert to string list
     vector<string> als;
-    int  ai;
-    string sel, atp, aid, anm, awr;
+    string ai, sel, atp, atp_m, atp_sub, aid, anm, awr;
     for( int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
     {
 	atp = TSYS::strSepParse(sel,0,':');
 	if( atp.empty() ) atp = "R";
-	ai  = strtol(TSYS::strSepParse(sel,1,':').c_str(),NULL,0);
+	atp_m = TSYS::strSepParse(atp,0,'_');
+	atp_sub = TSYS::strSepParse(atp,1,'_');
+	ai  = TSYS::strSepParse(sel,1,':');
 	awr = TSYS::strSepParse(sel,2,':');
 	aid = TSYS::strSepParse(sel,3,':');
-	if( aid.empty() ) aid = TSYS::int2str(ai);
+	if( aid.empty() ) aid = ai;
 	anm = TSYS::strSepParse(sel,4,':');
-	if( anm.empty() ) anm = TSYS::int2str(ai);
+	if( anm.empty() ) anm = ai;
 
 	if( vlPresent(aid) && !p_el.fldPresent(aid) )	continue;
-	TFld::Type	tp  = (atp[0]=='C') ? TFld::Boolean : TFld::Integer;
+
+	TFld::Type tp = TFld::Integer;
+	if( atp[0]=='C' || (atp_sub.size() && atp_sub[0] == 'b') ) tp = TFld::Boolean;
+	else if( atp_sub == "f" ) tp = TFld::Real;
+
 	if( !p_el.fldPresent(aid) || p_el.fldAt(p_el.fldId(aid)).type() != tp )
 	{
 	    if( p_el.fldPresent(aid)) p_el.fldDel(p_el.fldId(aid));
-	    p_el.fldAdd( new TFld(aid.c_str(),"",tp,TFld::NoFlag,"",TSYS::int2str((atp[0]=='C')?EVAL_BOOL:EVAL_INT).c_str()) );
+	    p_el.fldAdd( new TFld(aid.c_str(),"",tp,TFld::NoFlag) );
 	}
 	int el_id = p_el.fldId(aid);
+
 	unsigned flg = (awr=="rw") ? TVal::DirWrite|TVal::DirRead :
 				     ((awr=="w") ? TVal::DirWrite : TFld::NoWrite|TVal::DirRead);
 	if( atp.size() >= 2 && atp[1] == 'I' )	flg = (flg & (~TVal::DirWrite)) | TFld::NoWrite;
 	p_el.fldAt(el_id).setFlg( flg );
 	p_el.fldAt(el_id).setDescr( anm );
-	p_el.fldAt(el_id).setReserve( atp+":"+TSYS::int2str(ai) );
-	if( flg&TVal::DirRead ) owner().regVal(ai,atp);
+
+	if( flg&TVal::DirRead )
+	{
+	    int reg = strtol(ai.c_str(),NULL,0);
+	    owner().regVal(reg,atp_m);
+	    if( atp[0] == 'R' && (atp_sub == "i4" || atp_sub == "f") )
+	    {
+		int reg2 = TSYS::strSepParse(ai,1,',').empty() ? (reg+1) : strtol(TSYS::strSepParse(ai,1,',').c_str(),NULL,0);
+		owner().regVal( reg2, atp_m );
+		ai = TSYS::int2str(reg)+","+TSYS::int2str(reg2);
+	    }
+	}
+	p_el.fldAt(el_id).setReserve( atp+":"+ai );
 
 	als.push_back(aid);
     }
 
-    //- Check for delete DAQ parameter's attributes -
+    //> Check for delete DAQ parameter's attributes
     for( int i_p = 0; i_p < p_el.fldSize(); i_p++ )
     {
 	int i_l;
@@ -640,7 +657,7 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
-    //- Set EVAL to parameter attributes -
+    //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
@@ -664,13 +681,35 @@ void TMdPrm::vlGet( TVal &val )
 
     int off = 0;
     string tp = TSYS::strSepParse(val.fld().reserve(),0,':',&off);
-    int aid = atoi(TSYS::strSepParse(val.fld().reserve(),0,':',&off).c_str());
+    string atp_sub = TSYS::strSepParse(tp,1,'_');
+    bool isInputs = (tp.size()>=2 && tp[1]=='I');
+    string aids = TSYS::strSepParse(val.fld().reserve(),0,':',&off);
+    int aid = strtol(aids.c_str(),NULL,0);
     if( !tp.empty() )
-	switch(val.fld().type())
+    {
+	if( tp[0] == 'C' ) val.setB(owner().getValC(aid,acq_err,isInputs),0,true);
+	if( tp[0] == 'R' )
 	{
-	    case TFld::Boolean:	val.setB(owner().getValC(aid,acq_err,tp=="CI"),0,true);	break;
-	    case TFld::Integer:	val.setI(owner().getValR(aid,acq_err,tp=="RI"),0,true);	break;
+	    int vl = owner().getValR(aid,acq_err,isInputs);
+	    if( !atp_sub.empty() && atp_sub[0] == 'b' ) val.setB((vl>>atoi(atp_sub.c_str()+1))&1,0,true);
+	    else if( !atp_sub.empty() && atp_sub == "f" )
+	    {
+		int vl2 = owner().getValR( strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err, isInputs );
+		if( vl == EVAL_INT || vl2 == EVAL_INT ) val.setR(EVAL_REAL,0,true);
+		union { uint32_t i; float f; } wl;
+		wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
+		val.setR(wl.f,0,true);
+	    }
+	    else if( !atp_sub.empty() && atp_sub == "i2" )	val.setI((int16_t)vl,0,true);
+	    else if( !atp_sub.empty() && atp_sub == "i4" )
+	    {
+		int vl2 = owner().getValR( strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err, isInputs );
+		if( vl == EVAL_INT || vl2 == EVAL_INT ) val.setI(EVAL_INT,0,true);
+		val.setI((int)(((vl2&0xffff)<<16)|(vl&0xffff)),0,true);
+	    }
+	    else val.setI(vl,0,true);
 	}
+    }
     else if( val.name() == "err" )
     {
 	if( acq_err.getVal().empty() )	val.setS("0",0,true);
@@ -692,21 +731,41 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	return;
     }
 
+    string vl = valo.getS(NULL,true);
+    if( vl == EVAL_STR || vl == pvl.getS() ) return;
+
     //> Direct write
-    int aid = atoi(TSYS::strSepParse(valo.fld().reserve(),1,':').c_str());
-    switch(valo.fld().type())
+    int off = 0;
+    string tp = TSYS::strSepParse(valo.fld().reserve(),0,':',&off);
+    string atp_sub = TSYS::strSepParse(tp,1,'_');
+    string aids = TSYS::strSepParse(valo.fld().reserve(),0,':',&off);
+    int aid = strtol(aids.c_str(),NULL,0);
+
+    if( !tp.empty() )
     {
-	case TFld::Boolean:
+	if( tp[0] == 'C' )	owner().setValC(valo.getB(NULL,true),aid,acq_err);
+	if( tp[0] == 'R' )
 	{
-	    char cvl = valo.getB(NULL,true);    
-	    if( cvl != pvl.getB() && cvl != EVAL_BOOL )	owner().setValC(cvl,aid,acq_err);
-	    break;
-	}
-	case TFld::Integer:
-	{
-	    int cvl = valo.getI(NULL,true);
-	    if( cvl != pvl.getI() && cvl != EVAL_INT )	owner().setValR(cvl,aid,acq_err);
-	    break;
+	    if( !atp_sub.empty() && atp_sub[0] == 'b' )
+	    {
+		int vl = owner().getValR(aid,acq_err);
+		if( vl != EVAL_INT )
+		    owner().setValR( valo.getB(NULL,true) ? (vl|(1<<atoi(atp_sub.c_str()+1))) : (vl & ~(1<<atoi(atp_sub.c_str()+1))), aid, acq_err);
+	    }
+	    else if( !atp_sub.empty() && atp_sub == "f" )
+	    {
+		union { uint32_t i; float f; } wl;
+		wl.f = valo.getR(NULL,true);
+		owner().setValR( wl.i&0xFFFF, aid, acq_err );
+		owner().setValR( (wl.i>>16)&0xFFFF, strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err );
+	    }
+	    else if( !atp_sub.empty() && atp_sub == "i4" )
+	    {
+		int vl = valo.getI(NULL,true);
+		owner().setValR( vl&0xFFFF, aid, acq_err );
+		owner().setValR( (vl>>16)&0xFFFF, strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err );
+	    }
+	    else owner().setValR(valo.getI(NULL,true),aid,acq_err);
 	}
     }
 }
@@ -722,23 +781,27 @@ void TMdPrm::vlArchMake( TVal &val )
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),0664,"root","root",1,
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
-		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil);\n"
+		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil).\n"
+		    "       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5;\n"
 		    "  numb - ModBus device's data address (dec, hex or octal);\n"
 		    "  rw - read-write mode (r-read; w-write; rw-readwrite);\n"
 		    "  id - created attribute identifier;\n"
 		    "  name - created attribute name.\n"
 		    "Example:\n"
 		    "  'R:0x300:rw:var:Variable' - register access;\n"
-		    "  'C:100:r:var1:Variable 1' - coin access."));
+		    "  'C:100:r:var1:Variable 1' - coin access;\n"
+		    "  'R_f:200:r:float:Float' - get float from registers 200 and 201;\n"
+		    "  'R_i4:300,400:r:int32:Int32' - get int32 from registers 300 and 400;\n"
+		    "  'R_b10:25:r:rBit:Reg bit' - get bit 10 from register 25."));
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     TParamContr::cntrCmdProc(opt);
 }

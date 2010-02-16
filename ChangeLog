@@ -1,3 +1,7 @@
+2010-02-16 Roman
+- !!!:DAQ.ModBus: The suffixes 'i2,i4,f,b0' to registers (R and RI) added for flexibly accessing by different data types.
+
+
 2010-02-15 Roman
 - DAQ.JavaLikeCalc: The function isEVal() is added to base types for EVAL values detection. A function to compile stage is added correct EVAL values casting.
 - DAQ.OPC_UA: Up to "Browse" request protocol OPC UA is discovered.

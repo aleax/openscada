@@ -540,7 +540,7 @@ class floatMergeWord : public TFunction
 	void calc( TValFunc *val )
 	{
 	    union { uint32_t i; float f; } wl;
-	    wl.i = ((val->getI(2)&0xffff)<<16) | val->getI(1)&0xffff;
+	    wl.i = ((val->getI(2)&0xffff)<<16) | (val->getI(1)&0xffff);
 	    val->setR(0,wl.f);
 	}
 };

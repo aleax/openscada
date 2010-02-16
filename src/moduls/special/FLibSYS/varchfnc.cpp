@@ -60,7 +60,7 @@ bool VArchObj::open( const string &inm )
 bool VArchObj::open( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres )
 {
     close();
-    
+
     mBuf = new TValBuf(vtp,isz,ipr,ihgrd,ihres);
     if( !mBuf )	return false;
     mIsArch = false;
@@ -79,7 +79,7 @@ void VArchObj::close( )
 AutoHD<TVArchive> VArchObj::arch( )
 {
     if( !isArch() || !mArch ) return AutoHD<TVArchive>();
-    return *mArch;    
+    return *mArch;
 }
 
 TValBuf *VArchObj::buf( )
