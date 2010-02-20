@@ -1463,7 +1463,10 @@ void VisItProp::isModify( )
 	update = true;
     }
     else if( oname == obj_parent->objectName() )
+    {
 	req.setText(((QComboBox*)sender())->currentText().toAscii().data());
+	update = true;
+    }
     else if( oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == proc_lang->objectName() )
     {
 	req.setText(((QComboBox*)sender())->currentText().toAscii().data());

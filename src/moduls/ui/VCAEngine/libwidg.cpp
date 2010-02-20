@@ -578,6 +578,13 @@ void LWidget::setCalcPer( int vl )
     modif();
 }
 
+void LWidget::setParentNm( const string &isw )
+{
+    if( enable() && mParent != isw ) setEnable(false);
+    mParent = isw;
+    modif();
+}
+
 void LWidget::load_( )
 {
     if( !SYS->chkSelDB(ownerLib().DB()) ) return;
@@ -805,6 +812,13 @@ void CWidget::setOwner( const string &iown )
 	SYS->security().at().usrGrpList(owner(),gls);
 	setGrp( gls.size() ? gls[0] : Widget::grp() );
     }
+    modif();
+}
+
+void CWidget::setParentNm( const string &isw )
+{
+    if( enable() && mParent != isw ) setEnable(false);
+    mParent = isw;
     modif();
 }
 

@@ -889,8 +889,9 @@ string Page::grp( )
 
 void Page::setParentNm( const string &isw )
 {
+    if( enable() && mParent != isw ) setEnable(false);
     mParent = isw;
-    if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )	
+    if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )
 	mParent = "..";
     modif();
 }
@@ -1341,7 +1342,7 @@ string PageWdg::owner( )
 void PageWdg::setOwner( const string &iown )
 {
     mOwner = iown;
-    //- Group update -
+    //> Group update
     if(SYS->security().at().grpAt("UI").at().user(iown))
 	setGrp("UI");
     else
@@ -1350,6 +1351,13 @@ void PageWdg::setOwner( const string &iown )
 	SYS->security().at().usrGrpList(owner(),gls);
 	setGrp( gls.size() ? gls[0] : Widget::grp() );
     }
+    modif();
+}
+
+void PageWdg::setParentNm( const string &isw )
+{
+    if( enable() && mParent != isw ) setEnable(false);
+    mParent = isw;
     modif();
 }
 

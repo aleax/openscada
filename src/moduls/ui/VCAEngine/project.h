@@ -275,7 +275,7 @@ class PageWdg : public Widget, public TConfig
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp )	{ mGrp = igrp; modif(); }
 	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
-	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
+	void setParentNm( const string &isw );
 
 	//> Storing
 	void loadIO( );

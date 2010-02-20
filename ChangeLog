@@ -1,3 +1,9 @@
+2010-02-20 Roman
+- !!!!:DAQ: The module AMRDevs is added.
+- !!:Transport.Serial: Flow control mode selection is added. Supported hardware (CRTSCTS) and software (IXON|IXOFF) flow controls.
+- UI.VCAEngine: A widget disable at it parent change is added.
+
+
 2010-02-16 Roman
 - !!!:DAQ.ModBus: The suffixes 'i2,i4,f,b0' to registers (R and RI) added for flexibly accessing by different data types.
 

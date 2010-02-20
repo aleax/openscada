@@ -283,6 +283,12 @@ void Widget::setEnable( bool val )
     mEnable = val;
 }
 
+void Widget::setParentNm( const string &isw )
+{
+    if( enable() && mParentNm != isw ) setEnable(false);
+    mParentNm = isw;
+}
+
 AutoHD<Widget> Widget::parent( )
 {
     return mParent;

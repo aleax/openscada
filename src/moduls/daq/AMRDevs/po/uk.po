@@ -1,0 +1,359 @@
+# OpenSCADA.DAQ.AMRDevs translate to Ukrainian.
+# Copyright (C) 2010 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
+# Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010.
+#
+#: mod_amr.cpp:53 mod_amr.cpp:103 mod_amr.cpp:106 mod_amr.cpp:113
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-20 17:56+0200\n"
+"PO-Revision-Date: 2010-02-16 16:54+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: mod_amr.cpp:36
+msgid "AMRDevs"
+msgstr ""
+
+#: mod_amr.cpp:37
+msgid "AMR devices"
+msgstr "Пристрої АСКО"
+
+#: mod_amr.cpp:38 mod_amr.cpp:220
+msgid "DAQ"
+msgstr ""
+
+#: mod_amr.cpp:40
+msgid "0.0.1"
+msgstr ""
+
+#: mod_amr.cpp:41
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: mod_amr.cpp:42
+msgid "Allow access to automatic meter reading devices. Supported devices: "
+msgstr ""
+"Надає доступ до пристроїв лічильників комерцевого обліку. Підтримуються "
+"пристрої: "
+
+#: mod_amr.cpp:43
+msgid "GPL"
+msgstr ""
+
+#: mod_amr.cpp:48
+msgid "C"
+msgstr ""
+
+#: mod_amr.cpp:103 mod_amr.cpp:112 mod_amr.cpp:129
+msgid "PRM_BD"
+msgstr ""
+
+#: mod_amr.cpp:103
+msgid "Parameteres table"
+msgstr "Таблиця параметрів"
+
+#: mod_amr.cpp:103 mod_amr.cpp:106 mod_amr.cpp:108
+msgid "30"
+msgstr ""
+
+#: mod_amr.cpp:104 mod_amr.cpp:126 mod_amr.cpp:220
+msgid "SCHEDULE"
+msgstr ""
+
+#: mod_amr.cpp:104
+msgid "Calc schedule"
+msgstr "Планування обчислення"
+
+#: mod_amr.cpp:104 mod_amr.cpp:113
+msgid "100"
+msgstr ""
+
+#: mod_amr.cpp:104 mod_amr.cpp:109
+msgid "1"
+msgstr ""
+
+#: mod_amr.cpp:105 mod_amr.cpp:126
+msgid "PRIOR"
+msgstr ""
+
+#: mod_amr.cpp:105
+msgid "Gather task priority"
+msgstr "Рівень пріорітету задачі збору даних"
+
+#: mod_amr.cpp:105
+msgid "2"
+msgstr ""
+
+#: mod_amr.cpp:105 mod_amr.cpp:107
+msgid "0"
+msgstr ""
+
+#: mod_amr.cpp:105
+msgid "-1;99"
+msgstr ""
+
+#: mod_amr.cpp:106 mod_amr.cpp:219
+msgid "BUS_ADDR"
+msgstr ""
+
+#: mod_amr.cpp:106
+msgid "Bus transport's address"
+msgstr "Адреса транспорту шини"
+
+#: mod_amr.cpp:107 mod_amr.cpp:127
+msgid "TM_REQ"
+msgstr ""
+
+#: mod_amr.cpp:107
+msgid "Connection timeout (ms)"
+msgstr "Час очікування з'єднання (мс)"
+
+#: mod_amr.cpp:107
+msgid "5"
+msgstr ""
+
+#: mod_amr.cpp:108 mod_amr.cpp:127
+msgid "TM_REST"
+msgstr ""
+
+#: mod_amr.cpp:108
+msgid "Restore timeout (s)"
+msgstr "Час відновлення (с)"
+
+#: mod_amr.cpp:108 mod_amr.cpp:109
+msgid "3"
+msgstr ""
+
+#: mod_amr.cpp:109 mod_amr.cpp:127
+msgid "REQ_TRY"
+msgstr ""
+
+#: mod_amr.cpp:109
+msgid "Request tries"
+msgstr "Спроб запиту"
+
+#: mod_amr.cpp:109
+msgid "1;10"
+msgstr ""
+
+#: mod_amr.cpp:112
+msgid "std"
+msgstr ""
+
+#: mod_amr.cpp:112
+msgid "Standard"
+msgstr "Стандарт"
+
+#: mod_amr.cpp:113 mod_amr.cpp:311
+msgid "OID_LS"
+msgstr ""
+
+#: mod_amr.cpp:113
+msgid "OID list (next line separated)"
+msgstr ""
+
+#: mod_amr.cpp:126
+msgid "ADDR"
+msgstr ""
+
+#: mod_amr.cpp:129
+msgid "TmplPrm_"
+msgstr ""
+
+#: mod_amr.cpp:142
+#, c-format
+msgid "Call by period %g s. "
+msgstr ""
+
+#: mod_amr.cpp:143
+#, c-format
+msgid "Call by cron '%s'. "
+msgstr ""
+
+#: mod_amr.cpp:144
+#, c-format
+msgid "Gather data time %.6g ms. "
+msgstr "Час збору даних %.6g мс. "
+
+#: mod_amr.cpp:183
+#, c-format
+msgid "Thread <%u> is started. TID: %ld"
+msgstr ""
+
+#: mod_amr.cpp:201
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: mod_amr.cpp:216 mod_amr.cpp:308
+msgid "info"
+msgstr ""
+
+#: mod_amr.cpp:219 mod_amr.cpp:220 mod_amr.cpp:311
+msgid "fld"
+msgstr ""
+
+#: mod_amr.cpp:219
+msgid "/cntr/cfg/BUS_ADDR"
+msgstr ""
+
+#: mod_amr.cpp:219 mod_amr.cpp:220 mod_amr.cpp:316
+msgid "root"
+msgstr ""
+
+#: mod_amr.cpp:219 mod_amr.cpp:220
+msgid "tp"
+msgstr ""
+
+#: mod_amr.cpp:219 mod_amr.cpp:220
+msgid "str"
+msgstr ""
+
+#: mod_amr.cpp:219 mod_amr.cpp:220
+msgid "dest"
+msgstr ""
+
+#: mod_amr.cpp:219
+msgid "select"
+msgstr ""
+
+#: mod_amr.cpp:219 mod_amr.cpp:234
+msgid "/cntr/cfg/trLst"
+msgstr ""
+
+#: mod_amr.cpp:220
+msgid "/cntr/cfg/SCHEDULE"
+msgstr ""
+
+#: mod_amr.cpp:220
+msgid "sel_ed"
+msgstr ""
+
+#: mod_amr.cpp:221
+msgid "sel_list"
+msgstr ""
+
+#: mod_amr.cpp:221
+msgid "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"
+msgstr ""
+
+#: mod_amr.cpp:222
+msgid "help"
+msgstr ""
+
+#: mod_amr.cpp:222
+msgid ""
+"Schedule is writed in seconds periodic form or in standard Cron form.\n"
+"Seconds form is one real number (1.5, 1e-3).\n"
+"Cron it is standard form '* * * * *'. Where:\n"
+"  - minutes (0-59);\n"
+"  - hours (0-23);\n"
+"  - days (1-31);\n"
+"  - month (1-12);\n"
+"  - week day (0[sunday]-6)."
+msgstr ""
+"Планування записується у формі секундної періодичності або у формі стандарту "
+"Cron.\n"
+"Секундна форма це одне реальне число (1.5, 1e-3).\n"
+"Форма стандарту Cron це '* * * * *'. Де:\n"
+"  - хвилини (0-59);\n"
+"  - години (0-23);\n"
+"  - дні (1-31);\n"
+"  - місяця (1-12);\n"
+"  - дні тижня (0[неділя]-6)."
+
+#: mod_amr.cpp:233 mod_amr.cpp:304
+msgid "path"
+msgstr ""
+
+#: mod_amr.cpp:239
+msgid "el"
+msgstr ""
+
+#: mod_amr.cpp:249
+msgid "w_attr"
+msgstr ""
+
+#: mod_amr.cpp:305
+msgid "/serv/"
+msgstr ""
+
+#: mod_amr.cpp:311 mod_amr.cpp:316
+msgid "/prm/cfg/OID_LS"
+msgstr ""
+
+#: mod_amr.cpp:316
+msgid "set"
+msgstr ""
+
+#: mod_amr.cpp:318
+#, fuzzy
+msgid "Parameter is enabled."
+msgstr "1:Параметр вимкнено."
+
+#~ msgid "Gather data period (s)"
+#~ msgstr "Період збору даних (с)"
+
+#~ msgid "DCON client"
+#~ msgstr "DCON клієнт"
+
+#~ msgid ""
+#~ "Allow realisation of DCON client service. Supported I-7000 DCON protocol."
+#~ msgstr ""
+#~ "Надає реалізацію клієнтського сервісу DCON. Підтримується I-7000 DCON "
+#~ "протокол."
+
+#~ msgid ""
+#~ "======================= The module <%s:%s> options "
+#~ "=======================\n"
+#~ "---------- Parameters of the module section <%s> in config file "
+#~ "----------\n"
+#~ "\n"
+#~ msgstr ""
+#~ "========================== Опції модуля <%s:%s> "
+#~ "==========================\n"
+#~ "-------- Параметри модульної секції <%s> у конфігураційному файлі "
+#~ "--------\n"
+#~ "\n"
+
+#~ msgid "Serial transport"
+#~ msgstr "Послідовний транспорт"
+
+#~ msgid "I-7000 module type"
+#~ msgstr "Тип модуля I-7000"
+
+#~ msgid "I-7000 module address"
+#~ msgstr "Адреса модуля I-7000"
+
+#~ msgid "CRC control"
+#~ msgstr "Контроль CRC"
+
+#~ msgid "Serial"
+#~ msgstr "Послідовний"
+
+#~ msgid "13:Error respond: Not full."
+#~ msgstr "13:Помилка відповіді: Не повна."
+
+#~ msgid "10:Transport error: "
+#~ msgstr "10:Помилка транспорту: "
+
+#~ msgid "No errors"
+#~ msgstr "Без помилок"
+
+#~ msgid "Module packet length error"
+#~ msgstr "Помилка довжини пакету модуля"
+
+#~ msgid "Invalid module response"
+#~ msgstr "Помилка відповіді модуля"
+
+#~ msgid "Invalid module CRC"
+#~ msgstr "Помилка контрольної суми"
+
+#~ msgid "2:Acquisition is stoped."
+#~ msgstr "2:Збір зупинено."

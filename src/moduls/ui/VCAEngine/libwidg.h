@@ -131,7 +131,7 @@ class LWidget : public Widget, public TConfig
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
-	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
+	void setParentNm( const string &isw );
 
 	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
@@ -199,7 +199,7 @@ class CWidget : public Widget, public TConfig
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp )	{ m_grp = igrp; modif(); }
 	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
-	void setParentNm( const string &isw )	{ mParent = isw; modif(); }
+	void setParentNm( const string &isw );
 
 	//> Storing
 	void loadIO( );

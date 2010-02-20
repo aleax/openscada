@@ -229,9 +229,19 @@ void TTrIn::start()
  	int stopbt = format[2]-'0';
 	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
 	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
-	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
+	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
+
+	//>> Set flow control
+	string fc = TSYS::strSepParse(addr(),3,':');
+	if( !fc.empty() )
+	    switch( tolower(fc[0]) )
+	    {
+		case 'h': tio.c_cflag |= CRTSCTS;	break;
+		case 's': tio.c_iflag |= (IXON|IXOFF|IXANY);	break;
+	    }
+
 	//>> Set port's data
-	tcflush( fd, TCIFLUSH );
+	tcflush( fd, TCIOFLUSH );
 	tcsetattr( fd, TCSANOW, &tio );
 
 	//> Start listen task
@@ -370,11 +380,12 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
-	    _("Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
+	    _("Serial transport has address format: \"[dev]:[speed]:[format]:[fc]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
-	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."));
+	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
+	    "    fc - flow control: 'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
 	    _("Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -473,6 +484,7 @@ void TTrOut::start( )
 	}
 	cfsetispeed( &tio, tspd );
 	cfsetospeed( &tio, tspd );
+
 	//>> Set asynchronous data format
 	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
 	if( format.size() != 3 ) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
@@ -501,8 +513,18 @@ void TTrOut::start( )
 	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
 	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
 	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
+
+	//>> Set flow control
+	string fc = TSYS::strSepParse(addr(),3,':');
+	if( !fc.empty() )
+	    switch( tolower(fc[0]) )
+	    {
+		case 'h': tio.c_cflag |= CRTSCTS;	break;
+		case 's': tio.c_iflag |= (IXON|IXOFF|IXANY);	break;
+	    }
+
 	//>> Set port's data
-	tcflush( fd, TCIFLUSH );
+	tcflush( fd, TCIOFLUSH );
 	tcsetattr( fd, TCSANOW, &tio );
     }
     catch(TError err)
@@ -590,11 +612,12 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	TTransportOut::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
-	    _("Serial transport has address format: \"[dev]:[speed]:[format]\". Where:\n"
+	    _("Serial transport has address format: \"[dev]:[speed]:[format]:[fc]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
-	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2)."));
+	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
+	    "    fc - flow control: 'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[symbol]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
