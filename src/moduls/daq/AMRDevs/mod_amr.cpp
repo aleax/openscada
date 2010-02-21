@@ -157,7 +157,7 @@ void TMdContr::start_( )
 {
     if( prc_st ) return;
 
-    SYS->transport().at().at("Serial").at().outAt(m_addr).at().start();
+    SYS->transport().at().at("Serial").at().outAt(mAddr).at().start();
 
     //> Start the gathering data task
     SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
