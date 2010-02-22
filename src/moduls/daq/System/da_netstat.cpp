@@ -37,8 +37,8 @@ using namespace SystemCntr;
 //*************************************************
 NetStat::NetStat( )
 {
-    fldAdd( new TFld("rcv",_("Receive (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("trns",_("Transmit (Kb)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    fldAdd( new TFld("rcv",_("Receive (Kb)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("trns",_("Transmit (Kb)"),TFld::Integer,TFld::NoWrite) );
 }
 
 NetStat::~NetStat( )

@@ -118,8 +118,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	addr( )		{ return m_addr; }
 	int	prm1( )		{ return m_prm1; }
 	int	prm2( )		{ return m_prm2; }
-	bool	toStart()	{ return m_start; }
-	bool	startStat()	{ return run_st; }
+	bool	toStart( )	{ return m_start; }
+	bool	startStat( )	{ return run_st; }
 	virtual	string getStatus( );
 
 	string DB( )		{ return m_db; }

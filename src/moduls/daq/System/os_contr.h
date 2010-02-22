@@ -59,9 +59,9 @@ class TMdPrm : public TParamContr
 	void autoC( bool val )	{ m_auto = val; }
 	bool autoC( )		{ return m_auto; }
 
-	//- Set perameter type -
+	//> Set perameter type
 	void setType( const string &da_id );
-	//- Get new value -
+	//> Get new value
 	void getVal( );
 	void setEval( );
 

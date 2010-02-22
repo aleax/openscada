@@ -103,6 +103,7 @@ class TCntrNode
 	//> Controll Field
 	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
 	    int perm=0777, const char *user="root", const char *grp="root", int n_attr=0, ... );
+	static bool ctrRemoveNode( XMLNode *nd, const char *path );
 	static bool ctrChkNode( XMLNode *nd, const char *cmd="get", int perm=0444, const char *user="root",
 	    const char *grp="root", char mode=04, const char *warn = NULL );
 

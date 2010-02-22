@@ -38,8 +38,8 @@ using namespace SystemCntr;
 //*************************************************
 HddStat::HddStat( )
 {
-    fldAdd( new TFld("rd",_("Read (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("wr",_("Write (Kb)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    fldAdd( new TFld("rd",_("Read (Kb)"),TFld::Real,TFld::NoWrite) );
+    fldAdd( new TFld("wr",_("Write (Kb)"),TFld::Real,TFld::NoWrite) );
 }
 
 HddStat::~HddStat( )

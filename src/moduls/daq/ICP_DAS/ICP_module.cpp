@@ -321,6 +321,7 @@ string TMdContr::serReq( string req, char mSlot )
     }
     catch(...)	{ return ""; }*/
 
+    //ResAlloc resN( tr.nodeRes(), true );
     for( int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++ )
     {
 	/*try

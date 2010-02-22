@@ -33,11 +33,11 @@ using namespace SystemCntr;
 //*************************************************
 CPU::CPU( )
 {
-    //- CPU value structure -
-    fldAdd( new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
-    fldAdd( new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+    //> CPU value structure
+    fldAdd( new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite) );
+    fldAdd( new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite) );
+    fldAdd( new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite) );
+    fldAdd( new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite) );
 }
 
 CPU::~CPU( )

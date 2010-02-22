@@ -152,8 +152,8 @@ void TConfig::setElem(TElem *Elements, bool first)
     }
 
     m_elem->valAtt(this);
-    for(unsigned i=0; i < m_elem->fldSize(); i++) 
-	value.insert( std::pair<string,TCfg*>(m_elem->fldAt(i).name(),new TCfg(m_elem->fldAt(i),*this)) );    
+    for( unsigned i=0; i < m_elem->fldSize(); i++ )
+	value.insert( std::pair<string,TCfg*>(m_elem->fldAt(i).name(),new TCfg(m_elem->fldAt(i),*this)) );
 }
 
 TElem &TConfig::elem()

@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/src
 
 oscd_modul_LTLIBRARIES = daq_AMRDevs.la
 daq_AMRDevs_la_LDFLAGS = -module -avoid-version -no-undefined
-daq_AMRDevs_la_SOURCES = mod_amr.cpp
+daq_AMRDevs_la_SOURCES = mod_amr.cpp da_FlowTEC.cpp da_Ergomera.cpp
 #daq_AMRdevs_la_LIBADD  = -lnetsnmp -lcrypto
 
 #PO files process and doc install
@@ -14,7 +14,7 @@ m_name = $(oscd_modulpref)AMRDevs
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	xgettext -o $$name -C -a *.cpp *.h ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

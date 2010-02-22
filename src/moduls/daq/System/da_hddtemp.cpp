@@ -31,10 +31,10 @@ using namespace SystemCntr;
 //*************************************************
 Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
-    //HDD value structure
-    fldAdd( new TFld("disk",_("Name"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
-    fldAdd( new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite,"",EVAL_STR) );
-    fldAdd( new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0",TSYS::int2str(EVAL_INT).c_str()) );
+    //> HDD value structure
+    fldAdd( new TFld("disk",_("Name"),TFld::String,TFld::NoWrite) );
+    fldAdd( new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite) );
+    fldAdd( new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0") );
 }
 
 Hddtemp::~Hddtemp( )

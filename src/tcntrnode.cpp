@@ -690,6 +690,23 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     return obj;
 }
 
+bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
+{
+    XMLNode *obj = nd;
+    if( obj->name() == "info" )	obj = nd->childGet(0,true);
+    if( !obj )	return false;
+
+    //> Find element
+    string reqt;
+    for( int woff = 0; (reqt=TSYS::pathLev(path,0,true,&woff)).size(); )
+    {
+	XMLNode *obj1 = obj->childGet("id",reqt,true);
+	if( !obj1 ) return false;
+	obj = obj1;
+    }
+    obj->parent()->childDel(obj);
+}
+
 bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode, const char *warn )
 {
     if( nd->name() != cmd ) return false;

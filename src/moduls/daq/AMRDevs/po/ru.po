@@ -3,251 +3,369 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 # Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010.
 #
-#: mod_amr.cpp:53 mod_amr.cpp:103 mod_amr.cpp:106 mod_amr.cpp:113
+#: mod_amr.cpp:55 mod_amr.cpp:105 mod_amr.cpp:115 mod_amr.cpp:313
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-20 17:56+0200\n"
+"POT-Creation-Date: 2010-02-22 13:05+0200\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: mod_amr.cpp:36
-msgid "AMRDevs"
+#: da_FlowTEC.cpp:37 da_FlowTEC.cpp:89 da_FlowTEC.cpp:90
+msgid "FirmwareVer"
 msgstr ""
 
-#: mod_amr.cpp:37
-msgid "AMR devices"
-msgstr "Устройства АСКУ"
+#: da_FlowTEC.cpp:40
+msgid "val"
+msgstr ""
 
-#: mod_amr.cpp:38 mod_amr.cpp:220
+#: da_FlowTEC.cpp:40
+msgid "Value"
+msgstr "Значение"
+
+#: da_FlowTEC.cpp:41
+msgid "p"
+msgstr ""
+
+#: da_FlowTEC.cpp:41
+msgid "Pressure"
+msgstr "Давление"
+
+#: da_FlowTEC.cpp:42
+msgid "t"
+msgstr ""
+
+#: da_FlowTEC.cpp:42
+msgid "Temperature"
+msgstr "Температура"
+
+#: da_FlowTEC.cpp:45 da_FlowTEC.cpp:53
+msgid "curF"
+msgstr ""
+
+#: da_FlowTEC.cpp:45 da_FlowTEC.cpp:53
+msgid "Current flow"
+msgstr "Текущий расход"
+
+#: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54
+msgid "qntDayStart"
+msgstr ""
+
+#: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54
+msgid "Quantity for start day"
+msgstr "Количество с начала суток"
+
+#: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55
+msgid "qntDayLast"
+msgstr ""
+
+#: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55
+msgid "Quantity for last day"
+msgstr "Количество за предыдущие сутки"
+
+#: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56
+msgid "qntStart"
+msgstr ""
+
+#: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56
+msgid "Quantity for start"
+msgstr "Количество с начала наблюдений"
+
+#: da_FlowTEC.cpp:52
+msgid "cal"
+msgstr ""
+
+#: da_FlowTEC.cpp:52
+msgid "Caloric"
+msgstr "Калорийность"
+
+#: da_FlowTEC.cpp:73 mod_amr.cpp:224 mod_amr.cpp:349
+msgid "info"
+msgstr ""
+
+#: da_FlowTEC.cpp:75 da_FlowTEC.cpp:76 mod_amr.cpp:227 mod_amr.cpp:352
+#: mod_amr.cpp:353
+msgid "fld"
+msgstr ""
+
+#: da_FlowTEC.cpp:75 da_FlowTEC.cpp:82
+msgid "/prm/cfg/DEV_ADDR"
+msgstr ""
+
+#: da_FlowTEC.cpp:75
+msgid "Thread number"
+msgstr "Номер нитки"
+
+#: da_FlowTEC.cpp:75 da_FlowTEC.cpp:76 da_FlowTEC.cpp:84 da_FlowTEC.cpp:85
+#: da_FlowTEC.cpp:89 da_FlowTEC.cpp:90 mod_amr.cpp:227 mod_amr.cpp:352
+#: mod_amr.cpp:353
+msgid "root"
+msgstr ""
+
+#: da_FlowTEC.cpp:75 da_FlowTEC.cpp:76 da_FlowTEC.cpp:84 da_FlowTEC.cpp:85
+#: da_FlowTEC.cpp:89 da_FlowTEC.cpp:90 mod_amr.cpp:40 mod_amr.cpp:227
+#: mod_amr.cpp:352 mod_amr.cpp:353
 msgid "DAQ"
 msgstr ""
 
-#: mod_amr.cpp:40
+#: da_FlowTEC.cpp:75 da_FlowTEC.cpp:76 mod_amr.cpp:227 mod_amr.cpp:352
+#: mod_amr.cpp:353
+msgid "tp"
+msgstr ""
+
+#: da_FlowTEC.cpp:75 da_FlowTEC.cpp:76
+msgid "dec"
+msgstr ""
+
+#: da_FlowTEC.cpp:76 da_FlowTEC.cpp:87
+msgid "/prm/cfg/FirmWareVer"
+msgstr ""
+
+#: da_FlowTEC.cpp:76
+msgid "Firmware version"
+msgstr "Версия ПО"
+
+#: da_FlowTEC.cpp:81 mod_amr.cpp:360
+msgid "path"
+msgstr ""
+
+#: da_FlowTEC.cpp:84 da_FlowTEC.cpp:89
+msgid "get"
+msgstr ""
+
+#: da_FlowTEC.cpp:85 da_FlowTEC.cpp:90
+msgid "set"
+msgstr ""
+
+#: mod_amr.cpp:38
+msgid "AMRDevs"
+msgstr ""
+
+#: mod_amr.cpp:39
+msgid "AMR devices"
+msgstr "Устройства АСКУ"
+
+#: mod_amr.cpp:42
 msgid "0.0.1"
 msgstr ""
 
-#: mod_amr.cpp:41
+#: mod_amr.cpp:43
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: mod_amr.cpp:42
+#: mod_amr.cpp:44
 msgid "Allow access to automatic meter reading devices. Supported devices: "
 msgstr ""
 "Предоставляет доступ к устройствам счётчиков коммерческого учёта. "
 "Поддерживаются устройства: "
 
-#: mod_amr.cpp:43
+#: mod_amr.cpp:45
 msgid "GPL"
 msgstr ""
 
-#: mod_amr.cpp:48
+#: mod_amr.cpp:50
 msgid "C"
 msgstr ""
 
-#: mod_amr.cpp:103 mod_amr.cpp:112 mod_amr.cpp:129
+#: mod_amr.cpp:105 mod_amr.cpp:113 mod_amr.cpp:133
 msgid "PRM_BD"
 msgstr ""
 
-#: mod_amr.cpp:103
+#: mod_amr.cpp:105
 msgid "Parameteres table"
 msgstr "Таблица параметров"
 
-#: mod_amr.cpp:103 mod_amr.cpp:106 mod_amr.cpp:108
+#: mod_amr.cpp:105 mod_amr.cpp:109 mod_amr.cpp:115
 msgid "30"
 msgstr ""
 
-#: mod_amr.cpp:104 mod_amr.cpp:126 mod_amr.cpp:220
+#: mod_amr.cpp:106 mod_amr.cpp:130 mod_amr.cpp:227
 msgid "SCHEDULE"
 msgstr ""
 
-#: mod_amr.cpp:104
+#: mod_amr.cpp:106
 msgid "Calc schedule"
 msgstr "Планирование вычисления"
 
-#: mod_amr.cpp:104 mod_amr.cpp:113
+#: mod_amr.cpp:106
 msgid "100"
 msgstr ""
 
-#: mod_amr.cpp:104 mod_amr.cpp:109
+#: mod_amr.cpp:106 mod_amr.cpp:110
 msgid "1"
 msgstr ""
 
-#: mod_amr.cpp:105 mod_amr.cpp:126
+#: mod_amr.cpp:107 mod_amr.cpp:130
 msgid "PRIOR"
 msgstr ""
 
-#: mod_amr.cpp:105
+#: mod_amr.cpp:107
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: mod_amr.cpp:105
+#: mod_amr.cpp:107
 msgid "2"
 msgstr ""
 
-#: mod_amr.cpp:105 mod_amr.cpp:107
+#: mod_amr.cpp:107 mod_amr.cpp:108
 msgid "0"
 msgstr ""
 
-#: mod_amr.cpp:105
+#: mod_amr.cpp:107
 msgid "-1;99"
 msgstr ""
 
-#: mod_amr.cpp:106 mod_amr.cpp:219
-msgid "BUS_ADDR"
-msgstr ""
-
-#: mod_amr.cpp:106
-msgid "Bus transport's address"
-msgstr "Адрес транспорта шины"
-
-#: mod_amr.cpp:107 mod_amr.cpp:127
+#: mod_amr.cpp:108 mod_amr.cpp:131
 msgid "TM_REQ"
 msgstr ""
 
-#: mod_amr.cpp:107
+#: mod_amr.cpp:108
 msgid "Connection timeout (ms)"
 msgstr "Время ожидания соединения (мс)"
 
-#: mod_amr.cpp:107
+#: mod_amr.cpp:108
 msgid "5"
 msgstr ""
 
-#: mod_amr.cpp:108 mod_amr.cpp:127
+#: mod_amr.cpp:109 mod_amr.cpp:131
 msgid "TM_REST"
 msgstr ""
 
-#: mod_amr.cpp:108
+#: mod_amr.cpp:109
 msgid "Restore timeout (s)"
 msgstr "Время восстановления (с)"
 
-#: mod_amr.cpp:108 mod_amr.cpp:109
+#: mod_amr.cpp:109 mod_amr.cpp:110
 msgid "3"
 msgstr ""
 
-#: mod_amr.cpp:109 mod_amr.cpp:127
+#: mod_amr.cpp:110 mod_amr.cpp:131
 msgid "REQ_TRY"
 msgstr ""
 
-#: mod_amr.cpp:109
+#: mod_amr.cpp:110
 msgid "Request tries"
 msgstr "Попыток запроса"
 
-#: mod_amr.cpp:109
+#: mod_amr.cpp:110
 msgid "1;10"
 msgstr ""
 
-#: mod_amr.cpp:112
+#: mod_amr.cpp:113
 msgid "std"
 msgstr ""
 
-#: mod_amr.cpp:112
+#: mod_amr.cpp:113
 msgid "Standard"
 msgstr "Стандарт"
 
-#: mod_amr.cpp:113 mod_amr.cpp:311
-msgid "OID_LS"
+#: mod_amr.cpp:114 mod_amr.cpp:247 mod_amr.cpp:341 mod_amr.cpp:352
+msgid "DEV_TP"
 msgstr ""
 
-#: mod_amr.cpp:113
-msgid "OID list (next line separated)"
+#: mod_amr.cpp:114
+msgid "Device type"
+msgstr "Тип устройства"
+
+#: mod_amr.cpp:114
+msgid "20"
 msgstr ""
 
-#: mod_amr.cpp:126
+#: mod_amr.cpp:115 mod_amr.cpp:247 mod_amr.cpp:353
 msgid "ADDR"
 msgstr ""
 
-#: mod_amr.cpp:129
-msgid "TmplPrm_"
+#: mod_amr.cpp:115
+msgid "Transport's address"
+msgstr "Адрес транспорта"
+
+#: mod_amr.cpp:116 mod_amr.cpp:247
+msgid "DEV_ADDR"
 msgstr ""
 
-#: mod_amr.cpp:142
+#: mod_amr.cpp:116
+msgid "Device address"
+msgstr "Адрес устройства"
+
+#: mod_amr.cpp:116
+msgid "50"
+msgstr ""
+
+#: mod_amr.cpp:117 mod_amr.cpp:247
+msgid "DEV_PRMS"
+msgstr ""
+
+#: mod_amr.cpp:117
+msgid "Device addon parameters"
+msgstr "Дополнительные параметры устройства"
+
+#: mod_amr.cpp:117
+msgid "1000"
+msgstr ""
+
+#: mod_amr.cpp:133
+msgid "AMRDevsPrm_"
+msgstr ""
+
+#: mod_amr.cpp:146
 #, c-format
 msgid "Call by period %g s. "
-msgstr ""
+msgstr "Вычисление с периодом %g с. "
 
-#: mod_amr.cpp:143
+#: mod_amr.cpp:147
 #, c-format
 msgid "Call by cron '%s'. "
-msgstr ""
+msgstr "Вычисление по расписанию '%s'. "
 
-#: mod_amr.cpp:144
+#: mod_amr.cpp:148
 #, c-format
 msgid "Gather data time %.6g ms. "
 msgstr "Время сбора данных %.6g мс. "
 
-#: mod_amr.cpp:183
+#: mod_amr.cpp:191
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: mod_amr.cpp:201
+#: mod_amr.cpp:209
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: mod_amr.cpp:216 mod_amr.cpp:308
-msgid "info"
-msgstr ""
-
-#: mod_amr.cpp:219 mod_amr.cpp:220 mod_amr.cpp:311
-msgid "fld"
-msgstr ""
-
-#: mod_amr.cpp:219
-msgid "/cntr/cfg/BUS_ADDR"
-msgstr ""
-
-#: mod_amr.cpp:219 mod_amr.cpp:220 mod_amr.cpp:316
-msgid "root"
-msgstr ""
-
-#: mod_amr.cpp:219 mod_amr.cpp:220
-msgid "tp"
-msgstr ""
-
-#: mod_amr.cpp:219 mod_amr.cpp:220
-msgid "str"
-msgstr ""
-
-#: mod_amr.cpp:219 mod_amr.cpp:220
-msgid "dest"
-msgstr ""
-
-#: mod_amr.cpp:219
-msgid "select"
-msgstr ""
-
-#: mod_amr.cpp:219 mod_amr.cpp:234
-msgid "/cntr/cfg/trLst"
-msgstr ""
-
-#: mod_amr.cpp:220
+#: mod_amr.cpp:227
 msgid "/cntr/cfg/SCHEDULE"
 msgstr ""
 
-#: mod_amr.cpp:220
+#: mod_amr.cpp:227 mod_amr.cpp:352 mod_amr.cpp:353
+msgid "str"
+msgstr ""
+
+#: mod_amr.cpp:227 mod_amr.cpp:352 mod_amr.cpp:353
+msgid "dest"
+msgstr ""
+
+#: mod_amr.cpp:227
 msgid "sel_ed"
 msgstr ""
 
-#: mod_amr.cpp:221
+#: mod_amr.cpp:228
 msgid "sel_list"
 msgstr ""
 
-#: mod_amr.cpp:221
+#: mod_amr.cpp:228
 msgid "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"
 msgstr ""
 
-#: mod_amr.cpp:222
+#: mod_amr.cpp:229
 msgid "help"
 msgstr ""
 
-#: mod_amr.cpp:222
+#: mod_amr.cpp:229
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
@@ -268,35 +386,68 @@ msgstr ""
 "  - месяца (1-12);\n"
 "  - дни недели (0[воскресенье]-6)."
 
-
-#: mod_amr.cpp:233 mod_amr.cpp:304
-msgid "path"
-msgstr ""
-
-#: mod_amr.cpp:239
-msgid "el"
-msgstr ""
-
-#: mod_amr.cpp:249
+#: mod_amr.cpp:247
 msgid "w_attr"
 msgstr ""
 
-#: mod_amr.cpp:305
-msgid "/serv/"
+#: mod_amr.cpp:279 mod_amr.cpp:364
+msgid "FLowTC_UGTAA55"
 msgstr ""
 
-#: mod_amr.cpp:311 mod_amr.cpp:316
-msgid "/prm/cfg/OID_LS"
+#: mod_amr.cpp:280 mod_amr.cpp:365
+msgid "Ergomera"
 msgstr ""
 
-#: mod_amr.cpp:316
-msgid "set"
-msgstr ""
+#: mod_amr.cpp:281
+msgid "No one device selected."
+msgstr "Не выбрано устройство."
 
 #: mod_amr.cpp:318
-#, fuzzy
-msgid "Parameter is enabled."
-msgstr "1:Параметр отключен."
+msgid "prms"
+msgstr ""
+
+#: mod_amr.cpp:352
+msgid "/prm/cfg/DEV_TP"
+msgstr ""
+
+#: mod_amr.cpp:352 mod_amr.cpp:353
+msgid "select"
+msgstr ""
+
+#: mod_amr.cpp:352 mod_amr.cpp:362
+msgid "/prm/cfg/devLst"
+msgstr ""
+
+#: mod_amr.cpp:353
+msgid "/prm/cfg/ADDR"
+msgstr ""
+
+#: mod_amr.cpp:353 mod_amr.cpp:367
+msgid "/prm/cfg/trLst"
+msgstr ""
+
+#: mod_amr.cpp:354
+msgid "/prm/cfg/DEV_PRMS"
+msgstr ""
+
+#: mod_amr.cpp:364 mod_amr.cpp:365 mod_amr.cpp:373
+msgid "el"
+msgstr ""
+
+#: mod_amr.cpp:364 mod_amr.cpp:365
+msgid "id"
+msgstr ""
+
+#: mod_amr.cpp:364
+msgid "FLowTEC UGT-AA55"
+msgstr ""
+
+#: mod_amr.cpp:370 mod_amr.cpp:371
+msgid "Serial"
+msgstr "Последовательный"
+
+#~ msgid "Parameter is enabled."
+#~ msgstr "1:Параметр отключен."
 
 #~ msgid "Gather data period (s)"
 #~ msgstr "Период сбора данных (с)"
@@ -334,9 +485,6 @@ msgstr "1:Параметр отключен."
 
 #~ msgid "CRC control"
 #~ msgstr "Проверка CRC"
-
-#~ msgid "Serial"
-#~ msgstr "Последовательный"
 
 #~ msgid "13:Error respond: Not full."
 #~ msgstr "13:Ошибка ответа: Не полный."

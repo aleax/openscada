@@ -33,15 +33,15 @@ using namespace SystemCntr;
 //*************************************************
 Mem::Mem( )
 {
-    //- Memory value structure -
-    fldAdd( new TFld("free",_("Free (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("total",_("Total (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("use",_("Use (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("buff",_("Buffers (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("cache",_("Cached (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sw_free",_("Swap free (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sw_total",_("Swap total (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sw_use",_("Swap use (kB)"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    //> Memory value structure
+    fldAdd( new TFld("free",_("Free (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("total",_("Total (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("use",_("Use (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("buff",_("Buffers (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("cache",_("Cached (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("sw_free",_("Swap free (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("sw_total",_("Swap total (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("sw_use",_("Swap use (kB)"),TFld::Integer,TFld::NoWrite) );
 }
 
 Mem::~Mem( )

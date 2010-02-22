@@ -35,12 +35,12 @@ UpTime::UpTime( )
 {
     st_tm = time(NULL);
 
-    //- Uptime value structure -
-    fldAdd( new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("hour",_("Hours"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
-    fldAdd( new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+    //> Uptime value structure
+    fldAdd( new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("hour",_("Hours"),TFld::Integer,TFld::NoWrite) );
+    fldAdd( new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite) );
 }
 
 UpTime::~UpTime( )

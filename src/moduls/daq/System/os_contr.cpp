@@ -109,7 +109,7 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //- Init DA sources -
+    //> Init DA sources
     daReg( new CPU() );
     daReg( new Mem() );
     daReg( new Sensors() );
@@ -119,14 +119,14 @@ void TTpContr::postEnable( int flag )
     daReg( new HddStat() );
     daReg( new NetStat() );
 
-    //- Controler's bd structure -
+    //> Controler's bd structure
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
-    //- Parameter type bd structure -
-    //-- Make enumerated --
+    //> Parameter type bd structure
+    //>> Make enumerated
     string el_id,el_name,el_def;
     vector<string> list;
     daList(list);
@@ -371,7 +371,7 @@ void TMdPrm::setType( const string &da_id )
 {
     if( m_da && da_id == m_da->id() )	return;
 
-    //- Free previous type -
+    //> Free previous type
     if( m_da )
     {
 	m_da->deInit(this);
@@ -379,7 +379,7 @@ void TMdPrm::setType( const string &da_id )
 	m_da = NULL;
     }
 
-    //- Create new type -
+    //> Create new type
     try
     {
 	if(da_id.size())
@@ -397,7 +397,7 @@ void TMdPrm::setType( const string &da_id )
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {
-    //- Change TYPE parameter -
+    //> Change TYPE parameter
     if( i_cfg.name() == "TYPE" )
     {
 	setType(i_cfg.getS());

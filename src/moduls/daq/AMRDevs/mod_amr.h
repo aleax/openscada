@@ -22,12 +22,16 @@
 #ifndef MOD_AMR_H
 #define MOD_AMR_H
 
+#include <stdint.h>
+
 #include <string>
 #include <vector>
 
 #include <tcontroller.h>
 #include <ttipdaq.h>
 #include <tparamcontr.h>
+
+#include "da.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -45,6 +49,7 @@ class TMdContr;
 
 class TMdPrm : public TParamContr
 {
+    friend class DA;
     public:
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
@@ -55,12 +60,27 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
+	string extPrmGet( const string &prm );
+	void extPrmSet( const string &prm, const string &val );
+
+	void getVals( );
+
 	TMdContr &owner( );
+
+	//Attributes
+	TElem	p_el;		//Work atribute elements
+	string	&mAddr,		//Transport device address
+		&devTp,		//Device type
+		&devAddr,	//Device address on a bus
+		&devPrms;	//Individual device extended parameters
+
+	ResString mErr;
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
+	bool cfgChange( TCfg &cfg );
 
     private:
 	//Methods
@@ -68,11 +88,7 @@ class TMdPrm : public TParamContr
 	void cntrCmdProc( XMLNode *opt );
 	void vlArchMake( TVal &val );
 
-	//Attributes
-	TElem	p_el;			//Work atribute elements
-	string	&devTp,		//Device type
-		&devAddr,	//Device address on a bus
-		&devPrms;	//Individual device extended parameters
+	DA	*mDA;
 };
 
 //*************************************************
@@ -91,6 +107,8 @@ class TMdContr: public TController
 	long long period( )	{ return mPer; }
 	string cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
+	int	restTm( )	{ return mRestTm; }
+	int	connTry( )	{ return mConnTry; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -109,12 +127,10 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	string	&mSched,	//Calc schedule
-		&mAddr;		//Transport device address
+	string	&mSched;	//Calc schedule
 	int	&mPrior,	//Process task priority
-		&reqTm,		//Request timeout in ms
-		&restTm,	//Restore timeout in s
-		&connTry;	//Connections try
+		&mRestTm,	//Restore timeout in s
+		&mConnTry;	//Connections try
 	long long mPer;
 
 	bool	prc_st,		// Process task active
@@ -135,6 +151,8 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
+	uint16_t	CRC16( const string &src );
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -148,7 +166,9 @@ class TTpContr: public TTipDAQ
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
 
-	string optDescr( );
+	//Attributes
+	static uint8_t CRCHi[];
+	static uint8_t CRCLo[];
 };
 
 extern TTpContr *mod;

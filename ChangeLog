@@ -1,3 +1,9 @@
+2010-02-22 Roman
+- SYS: The function TCntrNode::ctrRemoveNode() is added for nodes remove into control interface.
+- !!:DAQ.AMRDevs: Base support for device "FlowTEC UGT-AA55" is added.
+- DAQ.System: Some code has cleared.
+
+
 2010-02-20 Roman
 - !!!!:DAQ: The module AMRDevs is added.
 - !!:Transport.Serial: Flow control mode selection is added. Supported hardware (CRTSCTS) and software (IXON|IXOFF) flow controls.

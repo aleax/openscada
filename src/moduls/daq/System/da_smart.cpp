@@ -137,8 +137,7 @@ void HddSmart::getVal( TMdPrm *prm )
 	{
 	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
 	    string s_id = TSYS::int2str(id);
-	    if(!prm->vlPresent(s_id))
-		fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+	    if( !prm->vlPresent(s_id) )	fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite) );
 	    prm->vlAt(s_id).at().setI(val,0,true);
 	}
 	fclose(fp);
