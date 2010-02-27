@@ -1,3 +1,8 @@
+2010-02-27 Roman
+- !!:DAQ.AMRDevs: Base support for devices "Ergomera" is added.
+- FIX:UI.VCAEngine: Three level's widgets permition save is fixed on session run.
+
+
 2010-02-22 Roman
 - SYS: The function TCntrNode::ctrRemoveNode() is added for nodes remove into control interface.
 - !!:DAQ.AMRDevs: Base support for device "FlowTEC UGT-AA55" is added.

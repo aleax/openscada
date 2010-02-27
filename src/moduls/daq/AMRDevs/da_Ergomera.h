@@ -24,6 +24,8 @@
 
 #include "da.h"
 
+#define MaxLenReq 200
+
 namespace AMRDevs
 {
 
@@ -38,6 +40,33 @@ class Ergomera: public DA
 	~Ergomera( );
 
 	void getVals( );
+
+	bool cntrCmdProc( XMLNode *opt );
+
+    private:
+	//Data
+	class SDataRec
+	{
+	    public:
+		SDataRec( int ioff, int v_rez ) : off(ioff)
+		{ val.assign(v_rez,0); err.setVal("11:Value not gathered."); }
+
+		int	off;			//Data block start offset
+		string	val;			//Data block values kadr
+		ResString	err;		//Acquisition error text
+	};
+
+	//Methods
+	void regVal( int reg );			//Register value for acquisition
+	string modBusReq( string &pdu );
+	int getValR( int addr, ResString &err );
+
+	//Attributes
+	int	devAddr;			//Device address
+	string	mAttrs;
+	bool	mMerge;
+	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
+	float	numReg;
 };
 
 } //End namespace

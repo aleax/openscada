@@ -60,8 +60,8 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	string extPrmGet( const string &prm );
-	void extPrmSet( const string &prm, const string &val );
+	string extPrmGet( const string &prm, bool isText = false );
+	void extPrmSet( const string &prm, const string &val, bool isText = false, bool needApply = true );
 
 	void getVals( );
 
@@ -73,6 +73,7 @@ class TMdPrm : public TParamContr
 		&devTp,		//Device type
 		&devAddr,	//Device address on a bus
 		&devPrms;	//Individual device extended parameters
+	bool	needApply;	//Configuration changed and need apply
 
 	ResString mErr;
 
@@ -86,6 +87,7 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
+	void vlGet( TVal &val );
 	void vlArchMake( TVal &val );
 
 	DA	*mDA;

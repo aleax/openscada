@@ -165,7 +165,7 @@ void TTpContr::postEnable( int flag )
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("DEV_TP",_("Device type"),TFld::String,TCfg::NoVal,"20") );
-    tpPrmAt(t_prm).fldAdd( new TFld("ADDR",_("Transport's address"),TFld::String,TFld::NoFlag,"30","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("ADDR",_("Transport's address"),TFld::String,TCfg::NoVal,"30","") );
     tpPrmAt(t_prm).fldAdd( new TFld("DEV_ADDR",_("Device address"),TFld::String,TCfg::NoVal,"50") );
     tpPrmAt(t_prm).fldAdd( new TFld("DEV_PRMS",_("Device addon parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000") );
 }
@@ -291,7 +291,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), mDA(NULL),
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), mDA(NULL), needApply(false),
     p_el("w_attr"), mAddr(cfg("ADDR").getSd()), devTp(cfg("DEV_TP").getSd()), devAddr(cfg("DEV_ADDR").getSd()), devPrms(cfg("DEV_PRMS").getSd())
 {
 
@@ -305,7 +305,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
+    if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -329,6 +329,8 @@ void TMdPrm::enable()
     else throw TError(nodePath().c_str(),_("No one device selected."));
 
     owner().prmEn( id(), true );
+
+    needApply = false;
 }
 
 void TMdPrm::disable()
@@ -347,29 +349,39 @@ void TMdPrm::disable()
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
+
+    needApply = false;
 }
 
-string TMdPrm::extPrmGet( const string &prm )
+string TMdPrm::extPrmGet( const string &prm, bool isText )
 {
     try
     {
 	XMLNode prmNd;
 	ResAlloc res( nodeRes(), false );
 	prmNd.load(devPrms);
-	return prmNd.attr(prm);
+	if( !isText ) return prmNd.attr(prm);
+	return prmNd.childGet(prm)->text();
     } catch(...){ }
     return "";
 }
 
-void TMdPrm::extPrmSet( const string &prm, const string &val )
+void TMdPrm::extPrmSet( const string &prm, const string &val, bool isText, bool nApply )
 {
     XMLNode prmNd("prms");
     ResAlloc res( nodeRes(), false );
     try{ prmNd.load(devPrms); } catch(...){ }
-    prmNd.setAttr(prm,val);
+    if( !isText ) prmNd.setAttr(prm,val);
+    else
+    {
+	XMLNode *pNd = prmNd.childGet(prm,0,true);
+	if( !pNd ) pNd = prmNd.childAdd(prm);
+	pNd->setText(val);
+    }
     res.request(true);
     devPrms = prmNd.save(XMLNode::BrAllPast);
     modif();
+    if( nApply && enableStat() ) needApply = true;
 }
 
 void TMdPrm::getVals( )
@@ -402,6 +414,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),0444,"root","DAQ",1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_TP",cfg("DEV_TP").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","select","select","/prm/cfg/devLst");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","select","select","/prm/cfg/trLst");
 	ctrRemoveNode(opt,"/prm/cfg/DEV_PRMS");
@@ -411,11 +424,22 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( mDA && mDA->cntrCmdProc( opt ) ) ;
+    if( a_path == "/prm/st/status" && ctrChkNode(opt) )
+    {
+	string rez;
+	if( !enableStat() )		rez = TSYS::strMess("2:%s. ",_("Disabled"));
+	else if( !owner().startStat() )	rez = TSYS::strMess("1:%s. ",_("Enabled"));
+	else if( mErr.getVal().empty() )rez = TSYS::strMess("0:%s. ",_("Processed"));
+	else rez = TSYS::strMess("%s:%s. %s. ",
+	    TSYS::strSepParse(mErr.getVal(),0,':').c_str(),_("Processed"),TSYS::strSepParse(mErr.getVal(),1,':').c_str());
+	if( needApply )	rez += _("Need re-enable for configuration apply! ");
+	opt->setText(rez);
+    }
+    else if( mDA && mDA->cntrCmdProc( opt ) ) ;
     else if( a_path == "/prm/cfg/devLst" && ctrChkNode(opt) )
     {
-	opt->childAdd("el")->setAttr("id","FLowTC_UGTAA55")->setText("FLowTEC UGT-AA55");
-	opt->childAdd("el")->setAttr("id","Ergomera")->setText("Ergomera");
+	opt->childAdd("el")->setAttr("id","FLowTC_UGTAA55")->setText(_("FLowTEC UGT-AA55"));
+	opt->childAdd("el")->setAttr("id","Ergomera")->setText(_("Ergomera"));
     }
     else if( a_path == "/prm/cfg/trLst" && ctrChkNode(opt) )
     {
@@ -426,6 +450,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TParamContr::cntrCmdProc(opt);
+}
+
+void TMdPrm::vlGet( TVal &val )
+{
+    if( val.name() == "err" )
+    {
+	TParamContr::vlGet(val);
+	if( val.getS(NULL,true) == "0" && !mErr.getVal().empty() ) val.setS(mErr.getVal(),0,true);
+    }
 }
 
 void TMdPrm::vlArchMake( TVal &val )

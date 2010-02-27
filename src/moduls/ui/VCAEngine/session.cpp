@@ -1223,24 +1223,24 @@ string SessWdg::ico( )
 
 string SessWdg::owner( )
 {
-    SessWdg *sWdg = ownerSessWdg(false);
-    if( sWdg )	return sWdg->owner();
+    //SessWdg *sWdg = ownerSessWdg(false);
+    //if( sWdg )	return sWdg->owner();
     if( !parent().freeStat() )  return parent().at().owner();
     return Widget::owner();
 }
 
 string SessWdg::grp( )
 {
-    SessWdg *sWdg = ownerSessWdg(false);
-    if( sWdg )	return sWdg->grp();
+    //SessWdg *sWdg = ownerSessWdg(false);
+    //if( sWdg )	return sWdg->grp();
     if( !parent().freeStat() )  return parent().at().grp();
     return Widget::grp();
 }
 
 short SessWdg::permit( )
 {
-    SessWdg *sWdg = ownerSessWdg(false);
-    if( sWdg )	return sWdg->permit();
+    //SessWdg *sWdg = ownerSessWdg(false);
+    //if( sWdg )	return sWdg->permit();
     if( !parent().freeStat() )	return parent().at().permit();
     return Widget::permit();
 }
