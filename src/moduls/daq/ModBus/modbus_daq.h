@@ -42,7 +42,7 @@ using std::deque;
 //*************************************************
 //* DAQ modul info!                               *
 #define DAQ_ID		"ModBus"
-#define DAQ_NAME	"ModBus"
+#define DAQ_NAME	"ModBUS"
 #define DAQ_TYPE	"DAQ"
 #define DAQ_SUBVER	VER_CNTR
 #define DAQ_MVER	"1.0.2"

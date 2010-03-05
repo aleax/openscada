@@ -1,8 +1,8 @@
 
-//OpenSCADA system module Protocol.ModBus file: modbus_prt.h
+//OpenSCADA system module Protocol.UserProtocol file: user_prt.h
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2010 by Roman Savochenko                                *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,39 +19,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef MODBUS_PRT_H
-#define MODBUS_PRT_H
-
-#include <stdint.h>
+#ifndef USER_PRT_H
+#define USER_PRT_H
 
 #include <string>
 #include <map>
 
 #include <tprotocols.h>
 
+#undef _
+#define _(mess) mod->I18N(mess)
+
 using std::string;
 using std::map;
 
-//*************************************************
-//* Protocol modul info!                          *
-#define PRT_ID		"ModBus"
-#define PRT_NAME	"ModBUS"
-#define PRT_TYPE	"Protocol"
-#define PRT_SUBVER	VER_PROT
-#define PRT_MVER	"0.5.1"
-#define PRT_AUTORS	"Roman Savochenko"
-#define PRT_DESCR	"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
-#define PRT_LICENSE	"GPL"
-//*************************************************
-
-namespace ModBus
+namespace UserProtocol
 {
-
-//*************************************************
-//* TProtIn                                       *
-//*************************************************
 class TProt;
+class UserPrt;
 
+//*************************************************
+//* UserProtocol::TProtIn                         *
+//*************************************************
 class TProtIn: public TProtocolIn
 {
     public:
@@ -63,27 +52,21 @@ class TProtIn: public TProtocolIn
 
 	TProt &owner( );
 
-    public:
+    private:
 	//Attributes
-	string req_buf;
+	AutoHD<UserPrt> up;
+	TValFunc funcV;
 };
 
 //*************************************************
-//* Node: ModBus input protocol node.             *
+//* UserProtocol::UserPrt:                        *
 //*************************************************
-class Node : public TFunction, public TConfig
+class UserPrt : public TCntrNode, public TConfig
 {
     public:
-	//> Addition flags for IO
-	enum IONodeFlgs
-	{
-	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data
-	    LockAttr	= 0x20	//Lock attribute
-	};
-
 	//Methods
-	Node( const string &iid, const string &db, TElem *el );
-	~Node( );
+	UserPrt( const string &iid, const string &db, TElem *el );
+	~UserPrt( );
 
 	TCntrNode &operator=( TCntrNode &node );
 
@@ -92,14 +75,14 @@ class Node : public TFunction, public TConfig
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
-	int addr( );
 	string inTransport( );
-	string prt( );
-	int mode( );
-
-	double period( )	{ return mPer; }
-	string progLang( );
-	string prog( );
+	string inProgLang( );
+	string inProg( );
+	string outTransport( );
+	string outProgLang( );
+	string outProg( );
+	string workInProg( )	{ return mWorkInProg; }
+	string workOutProg( )	{ return mWorkOutProg; }
 
 	string getStatus( );
 
@@ -111,59 +94,43 @@ class Node : public TFunction, public TConfig
 	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
-	void setProgLang( const string &ilng );
-	void setProg( const string &iprg );
+	void setInTransport( const string &il );
+	void setInProgLang( const string &ilng );
+	void setInProg( const string &iprg );
+	void setOutTransport( const string &il );
+	void setOutProgLang( const string &ilng );
+	void setOutProg( const string &iprg );
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
-
 	TProt &owner( );
+
+	//Attributes
+	float	cntInReq, cntOutReq;
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
 
+	bool cfgChange( TCfg &cfg );
+
     private:
-	//Data
-	class SData
-	{
-	    public:
-		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0)	{ }
-
-		TValFunc	val;
-		map<int,AutoHD<TVal> > lnk;
-		map<int,int> reg, coil;
-		float rReg, wReg, rCoil, wCoil;
-	};
-
 	//Methods
 	string nodeName( )	{ return mId; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg );
-
-	static void *Task( void *icntr );
 
 	//Attributes
-	Res	nRes;
-	SData	*data;
 	string	&mId, &mName, &mDscr;
-	double	&mPer;
 	bool	&mAEn, mEn;
-	string	mDB;
-
-	bool	prcSt, endrunRun;
-
-	float	tmProc, cntReq;
+	string	mDB, mWorkInProg, mWorkOutProg;
 };
 
 //*************************************************
-//* TProt                                         *
+//* UserProtocol::TProt                           *
 //*************************************************
 class TProt: public TProtocol
 {
@@ -175,30 +142,16 @@ class TProt: public TProtocol
 	void modStart( );
 	void modStop( );
 
-	//> Node's functions
-	void nList( vector<string> &ls )	{ chldList(mNode,ls); }
-	bool nPresent( const string &id )	{ return chldPresent(mNode,id); }
-	void nAdd( const string &id, const string &db = "*.*" );
-	void nDel( const string &id )		{ chldDel(mNode,id); }
-	AutoHD<Node> nAt( const string &id )	{ return chldAt(mNode,id); }
+	//> User protocol's functions
+	void uPrtList( vector<string> &ls )	{ chldList(mPrtU,ls); }
+	bool uPrtPresent( const string &id )	{ return chldPresent(mPrtU,id); }
+	void uPrtAdd( const string &id, const string &db = "*.*" );
+	void uPrtDel( const string &id )	{ chldDel(mPrtU,id); }
+	AutoHD<UserPrt> uPrtAt( const string &id )	{ return chldAt(mPrtU,id); }
+
+	TElem &uPrtEl( )	{ return mUPrtEl; }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
-
-	//> Special modbus protocol's functions
-	uint16_t	CRC16( const string &mbap );
-	uint8_t	LRC( const string &mbap );
-	string	DataToASCII( const string &in );
-	string	ASCIIToData( const string &in );
-
-	//> Protocol
-	int prtLen( )		{ return mPrtLen; }
-	void setPrtLen( int vl );
-	void pushPrtMess( const string &vl );
-
-	TElem &nodeEl( )	{ return mNodeEl; }
-	TElem &nodeIOEl( )	{ return mNodeIOEl; }
-
-	Res &nodeRes( )		{ return nRes; }
 
     protected:
 	//Methods
@@ -206,29 +159,19 @@ class TProt: public TProtocol
 	void save_( );
 
     private:
-	//Attribute
-	//> Protocol
-	int	mPrtLen;
-	deque<string>	mPrt;
-
-	//> Special modbus protocol's attributes
-	static uint8_t CRCHi[];
-	static uint8_t CRCLo[];
-
 	//Methods
 	TProtocolIn *in_open( const string &name );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	int	mNode;
+	int	mPrtU;
 
-	TElem	mNodeEl, mNodeIOEl;
-
-	Res	nRes;
+	TElem	mUPrtEl;
 };
 
-extern TProt *modPrt;
-} //End namespace ModBus
+extern TProt *mod;
 
-#endif //MODBUS_PRT_H
+} //End namespace UserProtocol
+
+#endif //USER_PRT_H

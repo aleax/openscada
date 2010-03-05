@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,9 +40,9 @@ class ModMArch: public TMArchivator
 	~ModMArch( );
 
 	string archTbl( )		{ return "DBAMsg_"+id(); }
-	double maxSize( )		{ return m_max_size; }
+	double maxSize( )		{ return mMaxSize; }
 
-	void setMaxSize( double vl )	{ m_max_size = vl; modif(); }
+	void setMaxSize( double vl )	{ mMaxSize = vl; modif(); }
 
 	time_t begin( );
 	time_t end( );
@@ -56,6 +56,7 @@ class ModMArch: public TMArchivator
     protected:
 	//Methods
 	void load_( );
+	void save_( );
 
 	void postDisable( int flag );		//Delete all DB if flag 1
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -63,8 +64,10 @@ class ModMArch: public TMArchivator
     private:
 	//Attributes
 	double	tm_calc;			//Archiving time
-	time_t	m_beg, m_end;
-	double	&m_max_size;			//Maximum archive size (hours)
+	time_t	mBeg, mEnd;
+
+	string	&mAPrms;			// Addon parameters
+	double	mMaxSize;			//Maximum archive size (hours)
 };
 
 }

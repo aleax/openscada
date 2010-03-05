@@ -911,10 +911,8 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    //> Calc whidth and hight draw rect at rotate
 	    double rad_angl  = fabs(3.14159*(double)shD->orient/180.);
 	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
-	    int wdth  = (int)(rect_rate*dA.size().width()+
-			    sin(rad_angl)*(dA.size().height()-dA.size().width()));
-	    int heigt = (int)(rect_rate*dA.size().height()+
-			    sin(rad_angl)*(dA.size().width()-dA.size().height()));
+	    int wdth  = (int)(rect_rate*dA.size().width()+fabs(sin(rad_angl))*(dA.size().height()-dA.size().width()));
+	    int heigt = (int)(rect_rate*dA.size().height()+fabs(sin(rad_angl))*(dA.size().width()-dA.size().height()));
 
 	    dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
 

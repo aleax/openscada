@@ -216,9 +216,7 @@ string TProtIn::httpHead( const string &rcode, int cln, const string &addattr )
 	    "Server: "+PACKAGE_STRING+"\r\n"
 	    "Accept-Ranges: bytes\r\n"
 	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Keep-Alive: timeout=5, max=100\r\n"
-	    "Connection: Keep-Alive\r\n"
-	    "Content-type: text/html\r\n"
+	    "Content-Type: text/html\r\n"
 	    "Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 

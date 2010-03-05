@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@ using namespace DBArch;
 //* DBArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), m_max_size(cfg("DBArchSize").getRd())
+    TVArchivator(iid,idb,cf_el), mMaxSize(24), mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("*.*");
 }
@@ -57,6 +57,23 @@ void ModVArch::load_( )
     TVArchivator::load_();
 
     if( addr().empty() ) setAddr("*.*");
+
+    try
+    {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(mAPrms);
+	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(atof(vl.c_str()));
+    } catch(...){ }
+}
+
+void ModVArch::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("Size",TSYS::real2str(maxSize()));
+    mAPrms = prmNd.save(XMLNode::BrAllPast);
+
+    TVArchivator::save_();
 }
 
 void ModVArch::start()
@@ -83,17 +100,17 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TVArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",4,"tp","str","dest","select","select","/db/list",
 	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),0664,"root","Archive",1,"tp","real");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/sz" )
     {
@@ -107,25 +124,25 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 //* DBArch::ModVArchEl - Value archive element    *
 //*************************************************
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
-    TVArchEl(iachive,iarchivator), m_beg(0), m_end(0), m_per(0)
+    TVArchEl(iachive,iarchivator), mBeg(0), mEnd(0), mPer(0)
 {
-    //- Load message archive parameters -
+    //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
     if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg))
     {
-	m_beg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
-	m_end = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
-	m_per = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
-	//-- Check for delete archivator table --
-	if( m_end <= (TSYS::curTime()-(long long)(archivator().maxSize()*3600000000.)) )
+	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
+	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
+	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
+	//>> Check for delete archivator table
+	if( mEnd <= (TSYS::curTime()-(long long)(archivator().maxSize()*3600000000.)) )
 	{
 	    SYS->db().at().open(archivator().addr()+"."+archTbl());
 	    SYS->db().at().close(archivator().addr()+"."+archTbl(),true);
-	    m_beg = m_end = m_per = 0;
+	    mBeg = mEnd = mPer = 0;
 	}
     }
-    if( !m_per ) m_per = (long long)(archivator().valPeriod()*1000000.);
+    if( !mPer ) mPer = (long long)(archivator().valPeriod()*1000000.);
 }
 
 ModVArchEl::~ModVArchEl( )
@@ -244,18 +261,18 @@ TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 
 void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 {
-    //- Check border -
+    //> Check border
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
 
-    //- Table struct init -
+    //> Table struct init
     TConfig cfg( (archive().valType()==TFld::Real) ? (&mod->vlRealEl()) :
 		 (archive().valType()==TFld::String) ? (&mod->vlStrEl()) : &mod->vlIntEl() );
 
     AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(),true);
     if( tbl.freeStat() ) return;
-    //- Write data to table -
+    //> Write data to table
     for( long long ctm; beg <= end; beg++ )
     {
 	switch( archive().valType() )
@@ -269,32 +286,32 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	cfg.cfg("TM").setI(ctm/1000000);
 	cfg.cfg("TMU").setI(ctm%1000000);
 	tbl.at().fieldSet(cfg);
-	//- Archive time border update -
-	m_beg = m_beg ? vmin(m_beg,ctm) : ctm;
-	m_end = m_end ? vmax(m_end,ctm) : ctm;
+	//> Archive time border update
+	mBeg = mBeg ? vmin(mBeg,ctm) : ctm;
+	mEnd = mEnd ? vmax(mEnd,ctm) : ctm;
     }
 
     //> Archive size limit process
-    if( (m_end-m_beg) > (long long)(archivator().maxSize()*3600000000.) )
+    if( (mEnd-mBeg) > (long long)(archivator().maxSize()*3600000000.) )
     {
-	long long n_end = ((m_end-(long long)(archivator().maxSize()*3600000000.))/period())*period();
-	for( long long t_c = vmax(m_beg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
+	long long n_end = ((mEnd-(long long)(archivator().maxSize()*3600000000.))/period())*period();
+	for( long long t_c = vmax(mBeg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
 	{
 	    cfg.cfg("TM").setI(t_c/1000000,true);
 	    cfg.cfg("TMU").setI(t_c%1000000,true);
 	    tbl.at().fieldDel(cfg);
 	}
-	m_beg=n_end;
+	mBeg = n_end;
     }
     tbl.free();
     SYS->db().at().close(archivator().addr()+"."+archTbl());
 
-    //- Update archive info -
+    //> Update archive info
     cfg.setElem(&mod->archEl());
     cfg.cfgViewAll(false);
     cfg.cfg("TBL").setS(archTbl(),true);
-    cfg.cfg("BEGIN").setS(TSYS::ll2str(m_beg),true);
-    cfg.cfg("END").setS(TSYS::ll2str(m_end),true);
-    cfg.cfg("PRM1").setS(TSYS::ll2str(m_per),true);
+    cfg.cfg("BEGIN").setS(TSYS::ll2str(mBeg),true);
+    cfg.cfg("END").setS(TSYS::ll2str(mEnd),true);
+    cfg.cfg("PRM1").setS(TSYS::ll2str(mPer),true);
     SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg);
 }

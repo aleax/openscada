@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,8 +35,8 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), m_beg(0), m_end(0), tm_calc(0.0),
-    m_max_size(cfg("DBArchSize").getRd())
+    TMArchivator(iid,idb,cf_el), mBeg(0), mEnd(0), tm_calc(0.0), mMaxSize(24),
+    mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("*.*");
 }
@@ -78,16 +78,33 @@ void ModMArch::load_( )
     cfg.cfg("TBL").setS(archTbl());
     if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg))
     {
-	m_beg = atoi(cfg.cfg("BEGIN").getS().c_str());
-	m_end = atoi(cfg.cfg("END").getS().c_str());
+	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
+	mEnd = atoi(cfg.cfg("END").getS().c_str());
 	//>> Check for delete archivator table
-	if( m_end <= (time(NULL)-(time_t)(maxSize()*3600.)) )
+	if( mEnd <= (time(NULL)-(time_t)(maxSize()*3600.)) )
 	{
 	    SYS->db().at().open(addr()+"."+archTbl());
 	    SYS->db().at().close(addr()+"."+archTbl(),true);
-	    m_beg = m_end = 0;
+	    mBeg = mEnd = 0;
 	}
     }
+
+    try
+    {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(mAPrms);
+	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(atof(vl.c_str()));
+    } catch(...){ }
+}
+
+void ModMArch::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("Size",TSYS::real2str(maxSize()));
+    mAPrms = prmNd.save(XMLNode::BrAllPast);
+
+    TMArchivator::save_();
 }
 
 void ModMArch::start( )
@@ -107,12 +124,12 @@ void ModMArch::stop( )
 
 time_t ModMArch::begin( )
 {
-    return m_beg;
+    return mBeg;
 }
 
 time_t ModMArch::end()
 {
-    return m_end;
+    return mEnd;
 }
 
 void ModMArch::put( vector<TMess::SRec> &mess )
@@ -136,20 +153,20 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	cfg.cfg("LEV").setI(mess[i_m].level);
 	tbl.at().fieldSet(cfg);
 	//> Archive time border update
-	m_beg = m_beg ? vmin(m_beg,mess[i_m].time) : mess[i_m].time;
-	m_end = m_end ? vmax(m_end,mess[i_m].time) : mess[i_m].time;
+	mBeg = mBeg ? vmin(mBeg,mess[i_m].time) : mess[i_m].time;
+	mEnd = mEnd ? vmax(mEnd,mess[i_m].time) : mess[i_m].time;
     }
 
     //> Archive size limit process
-    if( (m_end-m_beg) > (time_t)(maxSize()*3600.) )
+    if( (mEnd-mBeg) > (time_t)(maxSize()*3600.) )
     {
-	time_t n_end = m_end-(time_t)(maxSize()*3600.);
-	for( time_t t_c = vmax(m_beg,n_end-3600); t_c < n_end; t_c++ )
+	time_t n_end = mEnd-(time_t)(maxSize()*3600.);
+	for( time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++ )
 	{
 	    cfg.cfg("TM").setI(t_c,true);
 	    tbl.at().fieldDel(cfg);
 	}
-	m_beg=n_end;
+	mBeg = n_end;
     }
     tbl.free();
     SYS->db().at().close(addr()+"."+archTbl());
@@ -158,8 +175,8 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     cfg.setElem(&mod->archEl());
     cfg.cfgViewAll(false);
     cfg.cfg("TBL").setS(archTbl(),true);
-    cfg.cfg("BEGIN").setS(TSYS::int2str(m_beg),true);
-    cfg.cfg("END").setS(TSYS::int2str(m_end),true);
+    cfg.cfg("BEGIN").setS(TSYS::int2str(mBeg),true);
+    cfg.cfg("END").setS(TSYS::int2str(mEnd),true);
     SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg);
 
     tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
@@ -204,18 +221,18 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root","Archive",1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",cfg("DBArchSize").fld().descr(),0664,"root","Archive",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),0664,"root","Archive",1,"tp","real");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
     else if( a_path == "/prm/cfg/sz" )

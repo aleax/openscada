@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: arch.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -85,11 +85,9 @@ void ModArch::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//> Add self DB-fields for messages archive
-	owner().messE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"20.5","24") );
-
-	//> Add self DB-fields for value archive
-	owner().valE().fldAdd( new TFld("DBArchSize",_("Archive size (hours)"),TFld::Real,TFld::NoFlag,"20.5","24") );
+	//> Add self DB-fields for archives
+	owner().messE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().valE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
 
 	//> Archivators info table DB structure
 	el_arch.fldAdd( new TFld("TBL",_("Table"),TFld::String,TCfg::Key,"50") );

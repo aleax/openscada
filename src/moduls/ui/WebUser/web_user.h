@@ -1,7 +1,7 @@
 
-//OpenSCADA system module UI.WebCfgD file: web_cfg.h
+//OpenSCADA system module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2010 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,15 +19,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef WEB_CFG_H
-#define WEB_CFG_H
+#ifndef WEB_USER_H
+#define WEB_USER_H
 
 #include <tuis.h>
 
 #undef _
 #define _(mess) mod->I18N(mess)
 
-namespace WebCfgD
+namespace WebUser
 {
 
 //*************************************************
@@ -37,8 +37,7 @@ class SSess
 {
     public:
 	//Methods
-	SSess( const string &iurl, const string &isender, const string &iuser,
-		vector<string> &ivars, const string &icontent );
+	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
 
 	//Attributes
 	string	url;			//request URL
@@ -50,7 +49,70 @@ class SSess
 	vector<string>		vars;	//request vars
 	map<string,string>	cnt;	//Parsed contain
 	map<string,string>	prm;	//URL parameters
-	map<string,string>	files;	//Post files
+};
+
+//*************************************************
+//* UserPage                                      *
+//*************************************************
+class TWEB;
+
+class UserPg : public TCntrNode, public TConfig
+{
+    public:
+	//Methods
+	UserPg( const string &iid, const string &db, TElem *el );
+	~UserPg( );
+
+	TCntrNode &operator=( TCntrNode &node );
+
+	const string &id( )	{ return mId; }
+	string name( );
+	string descr( )		{ return mDscr; }
+	bool toEnable( )	{ return mAEn; }
+	bool enableStat( )	{ return mEn; }
+	string progLang( );
+	string prog( );
+	string workProg( )	{ return mWorkProg; }
+
+	string getStatus( );
+
+	string DB( )		{ return mDB; }
+	string tbl( );
+	string fullDB( )	{ return DB()+'.'+tbl(); }
+
+	void setName( const string &name )	{ mName = name; modif(); }
+	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
+	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
+	void setEnable( bool vl );
+	void setProgLang( const string &ilng );
+	void setProg( const string &iprg );
+
+	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+
+	TWEB &owner( );
+
+	//Attributes
+	float	cntReq;
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
+	bool cfgChange( TCfg &cfg );
+
+    private:
+	//Methods
+	string nodeName( )	{ return mId; }
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	void postDisable( int flag );		//Delete all DB if flag 1
+
+	//Attributes
+	string	&mId, &mName, &mDscr;
+	bool	&mAEn, mEn;
+	string	mDB, mWorkProg;
 };
 
 //*************************************************
@@ -59,46 +121,52 @@ class SSess
 class TWEB: public TUI
 {
     public:
-	//Data
-	enum MessLev		{ Info, Warning, Error };
-
 	//Methods
 	TWEB( string name );
 	~TWEB( );
 
+	string defPg( )		{ return mDefPg; }
+	void setDefPg( const string &pg )	{ mDefPg = pg; modif(); }
+
 	void modStart( );
 	void modStop( );
+
+	//> User page's functions
+	void uPgList( vector<string> &ls )	{ chldList(mPgU,ls); }
+	bool uPgPresent( const string &id )	{ return chldPresent(mPgU,id); }
+	void uPgAdd( const string &id, const string &db = "*.*" );
+	void uPgDel( const string &id )		{ chldDel(mPgU,id); }
+	AutoHD<UserPg> uPgAt( const string &id ){ return chldAt(mPgU,id); }
+
+	TElem &uPgEl( )		{ return mUPgEl; }
 
     protected:
 	//Methods
 	void load_( );
+	void save_( );
 
     private:
 	//Methods
+	void colontDown( SSess &ses );
+
 	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
-	string pgHead( string head_els = "" );
-	string pgTail( );
 
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-	void getAbout( SSess &ses );
-	string getCookie( string name, vector<string> &vars );
-
 	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 
-	//> Get form content for name
-	string cntGet( SSess &ses, const string &nm );
-
-	//> Controll system requests
-	int cntrIfCmd( XMLNode &node, const string &user );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
-	string trMessReplace( const string &tsrc );
 
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	//Attributes
+	string	mDefPg;
+	int	mPgU;
+
+	TElem	mUPgEl;
 };
 
 extern TWEB *mod;
 }
 
-#endif //WEB_CFG_H
+#endif //WEB_USER_H

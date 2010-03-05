@@ -672,13 +672,13 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/p_mod");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
 	    }
 	}
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/status" && ctrChkNode(opt) )		opt->setText(getStatus());
     else if( a_path == "/prm/st/st" )
@@ -722,7 +722,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	SYS->protocol().at().modList(list);
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    opt->childAdd("el")->setText(list[i_a]);
+	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(SYS->protocol().at().modAt(list[i_a]).at().modName());
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -809,15 +809,8 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     {
 	string rez;
 	char buf[STR_BUF_LEN];
-	ResAlloc resN( nodeRes(), true );
-	int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? 1e3*prms[1].getR() : 1000, true );
+	int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? 1e3*prms[1].getR() : 0 );
 	rez.assign(buf,resp_len);
-
-	while( resp_len == sizeof(buf) )
-	{
-	    resp_len = messIO( NULL, 0, buf, sizeof(buf), 1000, true );
-	    rez.append(buf,resp_len);
-	}
 
 	return rez;
     }
@@ -861,6 +854,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time (ms)"),R_R___,"root","root",1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root","root",4,"tp","dec","dest","select","sel_id","0;1","sel_list",_("Text;Binary"));
+	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root","root",1,"tp","bool");
 	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__);
 	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root","root",3,"tp","str","cols","90","rows","5");
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),R_R___,"root","root",3,"tp","str","cols","90","rows","5");
@@ -908,6 +902,11 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRW__,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
 	if( ctrChkNode(opt,"set",RWRW__,"root","root",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
     }
+    else if( a_path == "/req/toTmOut" )
+    {
+	if( ctrChkNode(opt,"get",RWRW__,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+	if( ctrChkNode(opt,"set",RWRW__,"root","root",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
+    }
     else if( a_path == "/req/req" )
     {
 	if( ctrChkNode(opt,"get",RWRW__,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
@@ -935,7 +934,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
 	    answ.assign(buf,resp_len);
 
-	    while( true )
+	    while( resp_len == sizeof(buf) || atoi(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")).c_str()) )
 	    {
 		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch( TError err ) { break; }
 		answ.append(buf,resp_len);

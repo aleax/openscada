@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,7 +84,7 @@ TWEB::TWEB( string name )
 
     mod		= this;
 
-    //- Reg export functions -
+    //> Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
@@ -202,6 +202,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
     try
     {
 	string zero_lev = TSYS::pathLev(ses.url,0);
+
 	//> Get about module page
 	if( zero_lev == "about" )	getAbout(ses);
 	//> Get module icon and global image
@@ -268,7 +269,8 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    {
 		string itp = "png";
 		XMLNode req("get"); req.setAttr("path",ses.url+"/%2fico");
-		if( !mod->cntrIfCmd(req,ses.user) ) ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		if( !mod->cntrIfCmd(req,ses.user) )
+		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
 		else ses.page = TUIS::icoGet("disconnect",&itp);
 		page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 		return;
@@ -429,21 +431,21 @@ string TWEB::trMessReplace( const string &tsrc )
 
     int txtBeg = 0, i_s;
     for( i_s = 0; i_s < tsrc.size(); i_s++ )
-      if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
-      {
-        int i_r;
-        for( i_r = i_s+3; i_r < tsrc.size(); i_r++ )
-          if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
-            break;
-        if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
-        {
-          trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
-          trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
-          i_s = i_r+2;
-          txtBeg = i_r+3;
-          continue;
-        }
-      }
+	if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
+	{
+	    int i_r;
+	    for( i_r = i_s+3; i_r < tsrc.size(); i_r++ )
+		if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
+		    break;
+	    if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
+	    {
+		trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+		trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
+		i_s = i_r+2;
+		txtBeg = i_r+3;
+		continue;
+	    }
+	}
     if( txtBeg < i_s ) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
 
     return trez;
@@ -578,4 +580,3 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser,
 	}
     }
 }
-

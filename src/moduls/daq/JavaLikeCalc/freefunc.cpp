@@ -1128,7 +1128,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	    {
 		int n = prms[0].getI();
 		if( n < 0 || n >= vl.getS().size() )	return EVAL_INT;
-		return (int)vl.getS()[n];
+		return (int)(unsigned char)vl.getS()[n];
 	    }
 	    if( prop == "concat" && prms.size() )
 	    {

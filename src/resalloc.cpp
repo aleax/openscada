@@ -51,7 +51,7 @@ void Res::resRequestW( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc,&wtm);
     }
-    if( rez == EDEADLK ) throw TError("ResAlloc",_("Resource is try deadlock a thread!"));
+    if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
@@ -67,7 +67,7 @@ void Res::resRequestR( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
-    if( rez == EDEADLK ) throw TError("ResAlloc",_("Resource is try deadlock a thread!"));
+    if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
@@ -98,9 +98,12 @@ void ResAlloc::request( bool write, unsigned short tm )
 {
     if( mAlloc ) release();
     mAlloc = false;
-    if( write ) mId.resRequestW(tm);
-    else mId.resRequestR(tm);
-    mAlloc = true;
+    try
+    {
+	if( write ) mId.resRequestW(tm);
+	else mId.resRequestR(tm);
+	mAlloc = true;
+    }catch(TError err) { if(err.cod!=10) throw; }
 }
 
 void ResAlloc::release()

@@ -1222,6 +1222,13 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     if( iid == "cron" && !prms.empty() )
 	return (int)cron( prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0 );
+    if( iid == "strFromCharCode" )
+    {
+	string rez;
+	for( int i_p = 0; i_p < prms.size(); i_p++ )
+	    rez += (unsigned char)prms[i_p].getI();
+	return rez;
+    }
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }

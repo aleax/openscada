@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -50,21 +50,21 @@ class VFileArch
 
 	void attach( const string &name );
 
-	string	&name( )	{ return m_name; }
-	int	size( )		{ return m_size; }
-	long long begin( )	{ return m_beg; }
-	long long end( )	{ return m_end; }
-	long long period( )	{ return m_per; }
+	string	&name( )	{ return mName; }
+	int	size( )		{ return mSize; }
+	long long begin( )	{ return mBeg; }
+	long long end( )	{ return mEnd; }
+	long long period( )	{ return mPer; }
 	long long endData( );
-	TFld::Type type( )	{ return m_tp; }
-	bool	err( )		{ return m_err; }
-	bool	isPack( )	{ return m_pack; }
+	TFld::Type type( )	{ return mTp; }
+	bool	err( )		{ return mErr; }
+	bool	isPack( )	{ return mPack; }
 
 	void	setVals( TValBuf &buf, long long beg, long long end );
 	void	getVals( TValBuf &buf, long long beg, long long end );
 	TVariant getVal( int pos );
 
-	ModVArchEl &owner()	{ return *m_owner; }
+	ModVArchEl &owner()	{ return *mOwner; }
 
 	void check( );
 
@@ -102,28 +102,28 @@ class VFileArch
 
 	void repairFile(int hd, bool fix = true );
 
-	//- Base parameters -
-	string	m_name;		// Name Archive file
-	int	m_size;		// Arhive size
-	TFld::Type m_tp;	// Value typ
-	long long m_beg;	// Begin of archive file
-	long long m_end;	// End of archive file
-	long long m_per;	// Values period
+	//> Base parameters
+	string	mName;		// Name Archive file
+	int	mSize;		// Arhive size
+	TFld::Type mTp;		// Value typ
+	long long mBeg;		// Begin of archive file
+	long long mEnd;		// End of archive file
+	long long mPer;		// Values period
 
-	//- State parameters -
-	bool	m_err;		// Archive err
-	bool	m_pack;		// Archive packed
-	Res	m_res;		// resource to access
-	time_t	m_acces;	// Last access time
+	//> State parameters
+	bool	mErr;		// Archive err
+	bool	mPack;		// Archive packed
+	Res	mRes;		// resource to access
+	time_t	mAcces;		// Last access time
 
-	//- File access atributes -
+	//> File access atributes
 	bool	fixVl;		// Fix size values
 	int	vSize;		// Fix value size or address size (bytes)
 	string	eVal;		// Eval data type value
 	int	mpos;		// Maximum value position into file
 	char	tbt;		// Temporary byte
 
-	//- Cache parameters -
+	//> Cache parameters
 	struct CacheEl
 	{
 	    int pos;
@@ -133,8 +133,8 @@ class VFileArch
 	vector<CacheEl> cache;
 	CacheEl cach_pr_rd, cach_pr_wr;
 
-	//- Specific parameters -
-	ModVArchEl *m_owner;
+	//> Specific parameters
+	ModVArchEl *mOwner;
 };
 
 //************************************************
@@ -169,7 +169,7 @@ class ModVArchEl: public TVArchEl
 
     private:
 	//Attributes
-	Res	m_res;		// resource to access;
+	Res	mRes;		// resource to access;
 	deque<VFileArch *>	arh_f;
 	long long realEnd;
 };
@@ -189,29 +189,36 @@ class ModVArch: public TVArchivator
 	double	fileTimeSize()	{ return time_size; }
 	int	fileNumber()	{ return numb_files; }
 	double	roundProc()	{ return round_proc; }
-	int	checkTm()	{ return m_chk_tm; }
-	int	packTm()	{ return m_pack_tm; }
+	int	checkTm()	{ return mChkTm; }
+	int	packTm()	{ return mPackTm; }
+	bool	packInfoFiles()	{ return mPackInfoFiles; }
 
 	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
 	void setFileNumber( int vl )		{ numb_files = vl; modif(); }
 	void setRoundProc( double vl )		{ round_proc = vl; modif(); }
-	void setCheckTm( int vl )		{ m_chk_tm = vl; modif(); }
-	void setPackTm( int vl )		{ m_pack_tm = vl; modif(); }
+	void setCheckTm( int vl )		{ mChkTm = vl; modif(); }
+	void setPackTm( int vl )		{ mPackTm = vl; modif(); }
+	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
 
 	void start();
 	void stop();
 
 	void checkArchivator( bool now = false );
 
-	//- Packing archives -
+	//> Packing archives
 	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, long long *abeg, long long *aend, long long *aper );
 
-	//- Export archive data -
+	//> Export archive data
 	void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);
 
     public:
 	//Methods
 	bool	chkANow;
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
 
     private:
 	//Methods
@@ -219,11 +226,14 @@ class ModVArch: public TVArchivator
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	double	&time_size;			// number hours into one file
-	int	&numb_files;			// number of Archive files
-	double	&round_proc;			// numberic values rounding procent (0-50)
-	int	&m_chk_tm;			// period of check the archive files directory;
-	int	&m_pack_tm;			// pack the archive files timeout
+	string	&mAPrms;			// Addon parameters
+
+	double	time_size;			// number hours into one file
+	int	numb_files;			// number of Archive files
+	double	round_proc;			// numberic values rounding procent (0-50)
+	int	mChkTm;				// period of check the archive files directory;
+	int	mPackTm;			// pack the archive files timeout
+	bool	mPackInfoFiles;			// use info files for packed archives
 
 	time_t	mLstCheck;			// Last check directory time
     };

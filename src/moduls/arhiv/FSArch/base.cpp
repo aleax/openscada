@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -66,7 +66,7 @@ using namespace FSArch;
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name) : prc_st(false)
+ModArch::ModArch( const string &name) : prcSt(false)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -79,7 +79,7 @@ ModArch::ModArch( const string &name) : prc_st(false)
 
     mod		= this;
 
-    //- Create checking archivators timer -
+    //> Create checking archivators timer
     struct sigevent sigev;
     memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
@@ -95,28 +95,17 @@ void ModArch::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//- Add self DB-fields for messages archive -
-	owner().messE().fldAdd( new TFld("FSArchXML",_("XML archive files"),TFld::Boolean,TFld::NoFlag,"1","false") );
-	owner().messE().fldAdd( new TFld("FSArchMSize",_("Maximum archive file size (kB)"),TFld::Integer,TFld::NoFlag,"4","300") );
-	owner().messE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
-	owner().messE().fldAdd( new TFld("FSArchTmSize",_("File's time size (days)"),TFld::Integer,TFld::NoFlag,"3","30") );
-	owner().messE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
-	owner().messE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
+	//> Add self DB-fields for archives
+	owner().messE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().valE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
 
-	//- Add self DB-fields for value archive -
-	owner().valE().fldAdd( new TFld("FSArchTmSize",_("File's time size (hours)"),TFld::Real,TFld::NoFlag,"8.4","800") );
-	owner().valE().fldAdd( new TFld("FSArchNFiles",_("Maximum files number"),TFld::Integer,TFld::NoFlag,"3","10") );
-	owner().valE().fldAdd( new TFld("FSArchRound",_("Numberic values rounding (%)"),TFld::Real,TFld::NoFlag,"2.2","0.1","0;50") );
-	owner().valE().fldAdd( new TFld("FSArchPackTm",_("Pack files timeout (min)"),TFld::Integer,TFld::NoFlag,"2","10") );
-	owner().valE().fldAdd( new TFld("FSArchTm",_("Check archives period (min)"),TFld::Integer,TFld::NoFlag,"2","60") );
-
-	//- Pack files DB structure -
-	el_packfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
-	el_packfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
-	el_packfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
-	el_packfl.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
-	el_packfl.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
-	el_packfl.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
+	//> Pack files DB structure
+	elPackfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
+	elPackfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
     }
 }
 
@@ -134,8 +123,7 @@ string ModArch::filesDB()
 
 bool ModArch::filePack( const string &anm )
 {
-    if( anm.size() > 3 && anm.substr(anm.size()-3,3) == ".gz" )
-    return true;
+    if( anm.size() > 3 && anm.substr(anm.size()-3,3) == ".gz" ) return true;
     return false;
 }
 
@@ -195,22 +183,22 @@ void ModArch::modStop( )
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prc_st, false, nodePath()+"stop",5) )
+    if( TSYS::eventWait( prcSt, false, nodePath()+"stop",5) )
 	throw TError(nodePath().c_str(),_("Check archives thread is not stopped!"));
 }
 
 void ModArch::Task( union sigval obj )
 {
     ModArch *arh = (ModArch *)obj.sival_ptr;
-    if( arh->prc_st )  return;
-    arh->prc_st = true;
+    if( arh->prcSt )  return;
+    arh->prcSt = true;
 
 #if OSC_DEBUG >= 2
     mess_debug(arh->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
     vector<string> a_list;
-    //- Check message archivators -
+    //> Check message archivators
     arh->messList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
 	if( arh->messAt(a_list[i_a]).at().startStat( ) )
@@ -221,7 +209,7 @@ void ModArch::Task( union sigval obj )
 		mess_err(arh->nodePath().c_str(),_("Check message archivator <%s> error."),a_list[i_a].c_str());
 	    }
 
-    //- Check value archivators -
+    //> Check value archivators
     arh->valList(a_list);
     for( int i_a = 0; i_a < a_list.size(); i_a++ )
 	if( arh->valAt(a_list[i_a]).at().startStat( ) )
@@ -243,7 +231,7 @@ void ModArch::Task( union sigval obj )
 	    fld_cnt--;
 	}
 
-    arh->prc_st = false;
+    arh->prcSt = false;
 }
 
 TMArchivator *ModArch::AMess(const string &iid, const string &idb)

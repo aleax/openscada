@@ -325,7 +325,7 @@ void TVision::unregWin( QMainWindow *mwd )
 
 void TVision::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TUI::cntrCmdProc(opt);
@@ -351,7 +351,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_user" )
     {

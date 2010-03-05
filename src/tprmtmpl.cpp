@@ -117,9 +117,7 @@ void TPrmTempl::setStart( bool vl )
     if( startStat() == vl ) return;
     if(vl)
     {
-	//Check old compile function	????
-
-	//- Compile new function -
+	//> Compile new function
 	if(prog().size())
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 					compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
@@ -221,7 +219,7 @@ void TPrmTempl::preIOCfgChange()
 
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -265,7 +263,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     vector<string> list;
     string a_path = opt->attr("path");
     if( a_path == "/tmpl/st/st" )

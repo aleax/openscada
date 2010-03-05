@@ -1,0 +1,569 @@
+# OpenSCADA.Protocol.UserProtocol translate to Russian.
+# Copyright (C) 2010 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.Protocol.UserProtocol package module.
+# Roman Savochenko <rom_as@fromru.com>, 2010.
+#
+#: user_prt.cpp:51 user_prt.cpp:117 user_prt.cpp:125 user_prt.cpp:268
+#: user_prt.cpp:274 user_prt.cpp:428 user_prt.cpp:438 user_prt.cpp:536
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-05 16:47+0200\n"
+"PO-Revision-Date: 2010-03-04 21:26+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: user_prt.cpp:34
+msgid "UserProtocol"
+msgstr ""
+
+#: user_prt.cpp:35 user_prt.cpp:202 user_prt.cpp:463
+msgid "User protocol"
+msgstr "Пользовательский протокол"
+
+#: user_prt.cpp:36
+msgid "Protocol"
+msgstr "Протокол"
+
+#: user_prt.cpp:38
+msgid "0.1.0"
+msgstr ""
+
+#: user_prt.cpp:39
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: user_prt.cpp:40
+msgid "Allow creation self-user protocols on any OpenSCADA language."
+msgstr ""
+"Позволяет создавать собственные пользовательские протоколы на любом "
+"OpenSCADA языке."
+
+#: user_prt.cpp:41
+msgid "GPL"
+msgstr ""
+
+#: user_prt.cpp:46
+msgid "C"
+msgstr ""
+
+#: user_prt.cpp:80 user_prt.cpp:204
+msgid "up_"
+msgstr ""
+
+#: user_prt.cpp:83 user_prt.cpp:119 user_prt.cpp:127 user_prt.cpp:291
+msgid "ID"
+msgstr ""
+
+#: user_prt.cpp:83 user_prt.cpp:87 user_prt.cpp:89 user_prt.cpp:202
+#: user_prt.cpp:204
+msgid "20"
+msgstr ""
+
+#: user_prt.cpp:84 user_prt.cpp:291
+msgid "NAME"
+msgstr ""
+
+#: user_prt.cpp:84
+msgid "Name"
+msgstr "Имя"
+
+#: user_prt.cpp:84
+msgid "50"
+msgstr ""
+
+#: user_prt.cpp:85 user_prt.cpp:291
+msgid "DESCR"
+msgstr ""
+
+#: user_prt.cpp:85
+msgid "Description"
+msgstr "Описание"
+
+#: user_prt.cpp:85
+msgid "300"
+msgstr ""
+
+#: user_prt.cpp:86 user_prt.cpp:291
+msgid "EN"
+msgstr ""
+
+#: user_prt.cpp:86
+msgid "To enable"
+msgstr "Включать"
+
+#: user_prt.cpp:86 user_prt.cpp:202 user_prt.cpp:204 user_prt.cpp:508
+msgid "1"
+msgstr ""
+
+#: user_prt.cpp:86 user_prt.cpp:508
+msgid "0"
+msgstr ""
+
+#: user_prt.cpp:87 user_prt.cpp:332 user_prt.cpp:349 user_prt.cpp:482
+msgid "InTR"
+msgstr ""
+
+#: user_prt.cpp:87
+msgid "Input transport"
+msgstr "Входной транспорт"
+
+#: user_prt.cpp:87 user_prt.cpp:89 user_prt.cpp:177 user_prt.cpp:259
+#: user_prt.cpp:518 user_prt.cpp:526
+msgid "*"
+msgstr ""
+
+#: user_prt.cpp:88 user_prt.cpp:338 user_prt.cpp:344 user_prt.cpp:353
+#: user_prt.cpp:359
+msgid "InPROG"
+msgstr ""
+
+#: user_prt.cpp:88 user_prt.cpp:484
+msgid "Input program"
+msgstr "Входная программа"
+
+#: user_prt.cpp:88 user_prt.cpp:90
+msgid "10000"
+msgstr ""
+
+#: user_prt.cpp:89 user_prt.cpp:334 user_prt.cpp:376 user_prt.cpp:493
+msgid "OutTR"
+msgstr ""
+
+#: user_prt.cpp:89
+msgid "Out transport"
+msgstr "Выходной транспорт"
+
+#: user_prt.cpp:90 user_prt.cpp:365 user_prt.cpp:371 user_prt.cpp:380
+#: user_prt.cpp:386
+msgid "OutPROG"
+msgstr ""
+
+#: user_prt.cpp:90 user_prt.cpp:495
+msgid "Output program"
+msgstr "Выходная программа"
+
+#: user_prt.cpp:117 user_prt.cpp:540 user_prt.cpp:543
+msgid "."
+msgstr ""
+
+#: user_prt.cpp:117 user_prt.cpp:125 user_prt.cpp:330
+msgid "_uPrt"
+msgstr ""
+
+#: user_prt.cpp:120 user_prt.cpp:128 user_prt.h:148
+msgid "*.*"
+msgstr ""
+
+#: user_prt.cpp:124
+msgid "<cfg>"
+msgstr ""
+
+#: user_prt.cpp:132 user_prt.cpp:281 user_prt.cpp:323
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: user_prt.cpp:133
+msgid "Search and create new user protocol error."
+msgstr "Ошибка поиска и создания нового пользовательского протокола."
+
+#: user_prt.cpp:187 user_prt.cpp:202 user_prt.cpp:204 user_prt.cpp:212
+#: user_prt.cpp:219 user_prt.cpp:224 user_prt.cpp:467 user_prt.cpp:468
+#: user_prt.cpp:469 user_prt.cpp:474 user_prt.cpp:482 user_prt.cpp:483
+#: user_prt.cpp:484 user_prt.cpp:493 user_prt.cpp:494 user_prt.cpp:495
+#: user_prt.cpp:508 user_prt.cpp:509 user_prt.cpp:513 user_prt.cpp:514
+#: user_prt.cpp:561 user_prt.cpp:564 user_prt.cpp:565 user_prt.cpp:569
+#: user_prt.cpp:570 user_prt.cpp:574 user_prt.cpp:575 user_prt.cpp:579
+#: user_prt.cpp:580 user_prt.cpp:584 user_prt.cpp:585 user_prt.cpp:589
+#: user_prt.cpp:590
+msgid "root"
+msgstr ""
+
+#: user_prt.cpp:199 user_prt.cpp:459
+msgid "info"
+msgstr ""
+
+#: user_prt.cpp:202
+msgid "grp"
+msgstr ""
+
+#: user_prt.cpp:202 user_prt.cpp:210
+msgid "/br/up_"
+msgstr ""
+
+#: user_prt.cpp:202 user_prt.cpp:204
+msgid "idm"
+msgstr ""
+
+#: user_prt.cpp:202 user_prt.cpp:204
+msgid "idSz"
+msgstr ""
+
+#: user_prt.cpp:203 user_prt.cpp:463 user_prt.cpp:465 user_prt.cpp:472
+#: user_prt.cpp:480 user_prt.cpp:491
+msgid "area"
+msgstr ""
+
+#: user_prt.cpp:203 user_prt.cpp:463
+msgid "/up"
+msgstr ""
+
+#: user_prt.cpp:203
+msgid "User protocols"
+msgstr "Пользовательские протоколы"
+
+#: user_prt.cpp:204
+msgid "list"
+msgstr ""
+
+#: user_prt.cpp:204 user_prt.cpp:210
+msgid "/up/up"
+msgstr ""
+
+#: user_prt.cpp:204
+msgid "Protocols"
+msgstr "Протоколы"
+
+#: user_prt.cpp:204 user_prt.cpp:467 user_prt.cpp:468 user_prt.cpp:469
+#: user_prt.cpp:482 user_prt.cpp:483 user_prt.cpp:484 user_prt.cpp:493
+#: user_prt.cpp:494 user_prt.cpp:495
+msgid "tp"
+msgstr ""
+
+#: user_prt.cpp:204
+msgid "br"
+msgstr ""
+
+#: user_prt.cpp:204
+msgid "s_com"
+msgstr ""
+
+#: user_prt.cpp:204
+msgid "add,del"
+msgstr ""
+
+#: user_prt.cpp:204
+msgid "br_pref"
+msgstr ""
+
+#: user_prt.cpp:209 user_prt.cpp:504
+msgid "path"
+msgstr ""
+
+#: user_prt.cpp:212 user_prt.cpp:508 user_prt.cpp:513 user_prt.cpp:564
+#: user_prt.cpp:569 user_prt.cpp:574 user_prt.cpp:579 user_prt.cpp:584
+#: user_prt.cpp:589
+msgid "get"
+msgstr ""
+
+#: user_prt.cpp:217 user_prt.cpp:518 user_prt.cpp:522 user_prt.cpp:526
+#: user_prt.cpp:530 user_prt.cpp:537 user_prt.cpp:541 user_prt.cpp:559
+msgid "el"
+msgstr ""
+
+#: user_prt.cpp:217 user_prt.cpp:221 user_prt.cpp:224
+msgid "id"
+msgstr ""
+
+#: user_prt.cpp:219
+msgid "add"
+msgstr ""
+
+#: user_prt.cpp:224
+msgid "del"
+msgstr ""
+
+#: user_prt.cpp:339 user_prt.cpp:345 user_prt.cpp:353 user_prt.cpp:359
+#: user_prt.cpp:366 user_prt.cpp:372 user_prt.cpp:380 user_prt.cpp:386
+msgid "\n"
+msgstr ""
+
+#: user_prt.cpp:420 user_prt.cpp:432
+msgid "uprt_"
+msgstr ""
+
+#: user_prt.cpp:420
+msgid "_in"
+msgstr ""
+
+#: user_prt.cpp:421
+msgid "rez"
+msgstr ""
+
+#: user_prt.cpp:421
+msgid "Result"
+msgstr "Результат"
+
+#: user_prt.cpp:422
+msgid "request"
+msgstr ""
+
+#: user_prt.cpp:422
+msgid "Request"
+msgstr "Запрос"
+
+#: user_prt.cpp:423
+msgid "answer"
+msgstr ""
+
+#: user_prt.cpp:423
+msgid "Answer"
+msgstr "Ответ"
+
+#: user_prt.cpp:424
+msgid "sender"
+msgstr ""
+
+#: user_prt.cpp:424
+msgid "Sender"
+msgstr "Отправитель"
+
+#: user_prt.cpp:432
+msgid "_out"
+msgstr ""
+
+#: user_prt.cpp:433
+msgid "io"
+msgstr ""
+
+#: user_prt.cpp:433
+msgid "IO"
+msgstr ""
+
+#: user_prt.cpp:434
+msgid "tr"
+msgstr ""
+
+#: user_prt.cpp:434
+msgid "Transport"
+msgstr "Транспорт"
+
+#: user_prt.cpp:446
+msgid "Disabled. "
+msgstr "Отключен. "
+
+#: user_prt.cpp:449
+msgid "Enabled. "
+msgstr "Включен. "
+
+#: user_prt.cpp:450
+#, c-format
+msgid "Requests input %.4g, output %.4g."
+msgstr "Запрошено входов %.4g, выходов %.4g."
+
+#: user_prt.cpp:462
+msgid "oscada_cntr"
+msgstr ""
+
+#: user_prt.cpp:462
+msgid "/"
+msgstr ""
+
+#: user_prt.cpp:462
+msgid "User protocol: "
+msgstr "Пользовательский протокол: "
+
+#: user_prt.cpp:465
+msgid "/up/st"
+msgstr ""
+
+#: user_prt.cpp:465
+msgid "State"
+msgstr "Состояние"
+
+#: user_prt.cpp:467 user_prt.cpp:468 user_prt.cpp:469 user_prt.cpp:482
+#: user_prt.cpp:483 user_prt.cpp:484 user_prt.cpp:493 user_prt.cpp:494
+#: user_prt.cpp:495
+msgid "fld"
+msgstr ""
+
+#: user_prt.cpp:467 user_prt.cpp:505
+msgid "/up/st/status"
+msgstr ""
+
+#: user_prt.cpp:467
+msgid "Status"
+msgstr "Состояние"
+
+#: user_prt.cpp:467 user_prt.cpp:469 user_prt.cpp:482 user_prt.cpp:483
+#: user_prt.cpp:484 user_prt.cpp:493 user_prt.cpp:494 user_prt.cpp:495
+msgid "str"
+msgstr ""
+
+#: user_prt.cpp:468 user_prt.cpp:506
+msgid "/up/st/en_st"
+msgstr ""
+
+#: user_prt.cpp:468
+msgid "Enable"
+msgstr "Включен"
+
+#: user_prt.cpp:468
+msgid "bool"
+msgstr ""
+
+#: user_prt.cpp:469 user_prt.cpp:511
+msgid "/up/st/db"
+msgstr ""
+
+#: user_prt.cpp:469
+msgid "DB"
+msgstr "БД"
+
+#: user_prt.cpp:469 user_prt.cpp:482 user_prt.cpp:483 user_prt.cpp:493
+#: user_prt.cpp:494
+msgid "dest"
+msgstr ""
+
+#: user_prt.cpp:469 user_prt.cpp:482 user_prt.cpp:483 user_prt.cpp:493
+#: user_prt.cpp:494
+msgid "select"
+msgstr ""
+
+#: user_prt.cpp:469
+msgid "/db/list"
+msgstr ""
+
+#: user_prt.cpp:470 user_prt.cpp:485 user_prt.cpp:496
+msgid "help"
+msgstr ""
+
+#: user_prt.cpp:470
+msgid ""
+"DB address in format [<DB module>.<DB name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+#: user_prt.cpp:472 user_prt.cpp:474 user_prt.cpp:561
+msgid "/up/cfg"
+msgstr ""
+
+#: user_prt.cpp:472
+msgid "Config"
+msgstr "Конфигурация"
+
+#: user_prt.cpp:475
+msgid "/up/cfg/InTR"
+msgstr ""
+
+#: user_prt.cpp:476
+msgid "/up/cfg/InPROG"
+msgstr ""
+
+#: user_prt.cpp:477
+msgid "/up/cfg/OutTR"
+msgstr ""
+
+#: user_prt.cpp:478
+msgid "/up/cfg/OutPROG"
+msgstr ""
+
+#: user_prt.cpp:480
+msgid "/in"
+msgstr ""
+
+#: user_prt.cpp:480
+msgid "Input"
+msgstr "Вход"
+
+#: user_prt.cpp:482 user_prt.cpp:562
+msgid "/in/TR"
+msgstr ""
+
+#: user_prt.cpp:482 user_prt.cpp:483 user_prt.cpp:493 user_prt.cpp:494
+msgid "sel_ed"
+msgstr ""
+
+#: user_prt.cpp:482 user_prt.cpp:516
+msgid "/up/cfg/lsItr"
+msgstr ""
+
+#: user_prt.cpp:483 user_prt.cpp:567
+msgid "/in/PROGLang"
+msgstr ""
+
+#: user_prt.cpp:483
+msgid "Input program language"
+msgstr "Язык входной программы"
+
+#: user_prt.cpp:483 user_prt.cpp:532 user_prt.cpp:534
+msgid "/up/cfg/plangIls"
+msgstr ""
+
+#: user_prt.cpp:484 user_prt.cpp:572
+msgid "/in/PROG"
+msgstr ""
+
+#: user_prt.cpp:484 user_prt.cpp:495
+msgid "rows"
+msgstr ""
+
+#: user_prt.cpp:484 user_prt.cpp:495
+msgid "10"
+msgstr ""
+
+#: user_prt.cpp:485
+msgid ""
+"Next attributes has defined for input requests processing:\n"
+"   'rez' - processing result (0-full request;1-not full request);\n"
+"   'request' - request message;\n"
+"   'answer' - answer message;\n"
+"   'sender' - request sender."
+msgstr ""
+"Следующие атрибуты определены для обработки входных запросов:\n"
+"   'rez' - результат обработки (0-полный запрос;1-не полный запрос);\n"
+"   'request' - сообщение запроса;\n"
+"   'answer' - сообщение ответа;\n"
+"   'sender' - отправитель запроса."
+
+#: user_prt.cpp:491
+msgid "/out"
+msgstr ""
+
+#: user_prt.cpp:491
+msgid "Output"
+msgstr "Выход"
+
+#: user_prt.cpp:493 user_prt.cpp:577
+msgid "/out/TR"
+msgstr ""
+
+#: user_prt.cpp:493 user_prt.cpp:524
+msgid "/up/cfg/lsOtr"
+msgstr ""
+
+#: user_prt.cpp:494 user_prt.cpp:582
+msgid "/out/PROGLang"
+msgstr ""
+
+#: user_prt.cpp:494
+msgid "Output program language"
+msgstr "Язык выходной программы"
+
+#: user_prt.cpp:494 user_prt.cpp:532
+msgid "/up/cfg/plangOls"
+msgstr ""
+
+#: user_prt.cpp:495 user_prt.cpp:587
+msgid "/out/PROG"
+msgstr ""
+
+#: user_prt.cpp:496
+msgid ""
+"Next attributes has defined for output requests processing:\n"
+"   'io' - input/output interface's XMLNode object;\n"
+"   'tr' - associated transport."
+msgstr ""
+"Следующие атрибуты определены для обработки выходных запросов:\n"
+"   'io' - XMLNode объект интерфейса входа/выхода;\n"
+"   'tr' - ассоциированный транспорт."
+
+#: user_prt.cpp:509 user_prt.cpp:514 user_prt.cpp:565 user_prt.cpp:570
+#: user_prt.cpp:575 user_prt.cpp:580 user_prt.cpp:585 user_prt.cpp:590
+msgid "set"
+msgstr ""

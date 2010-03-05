@@ -173,6 +173,8 @@ AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable build module Protoc
 [ if test $enableval = yes; then ModHTTP=true; else ModHTTP=false; fi],[ ModHTTP=true; ])
 AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable build module Protocol.SelfSystem]),
 [ if test $enableval = yes; then ModSelfSystem=true; else ModSelfSystem=false; fi],[ ModSelfSystem=true; ])
+AC_ARG_ENABLE(UserProtocol,AC_HELP_STRING([--disable-UserProtocol], [disable build module Protocol.UserProtocol]),
+[ if test $enableval = yes; then ModUserProtocol=true; else ModUserProtocol=false; fi],[ ModUserProtocol=true; ])
 #> UI modules
 AC_ARG_ENABLE(VCAEngine,AC_HELP_STRING([--disable-VCAEngine], [disable build module UI.VCAEngine]),
 [ if test $enableval = yes; then ModVCAEngine=true; else ModVCAEngine=false; fi],[ ModVCAEngine=true; ])
@@ -188,6 +190,8 @@ AC_ARG_ENABLE(WebCfgD,AC_HELP_STRING([--disable-WebCfgD], [disable build module 
 [ if test $enableval = yes; then ModWebCfgD=true; else ModWebCfgD=false; fi],[ ModWebCfgD=true; ])
 AC_ARG_ENABLE(WebVision,AC_HELP_STRING([--disable-WebVision], [disable build module UI.WebVision]),
 [ if test $enableval = yes; then ModWebVision=true; else ModWebVision=false; fi],[ ModWebVision=true; ])
+AC_ARG_ENABLE(WebUser,AC_HELP_STRING([--disable-WebUser], [disable build module UI.WebUser]),
+[ if test $enableval = yes; then ModWebUser=true; else ModWebUser=false; fi],[ ModWebUser=true; ])
 #> Special modules
 AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special.SystemTests]),
 [ if test $enableval = yes; then ModSystemTests=true; else ModSystemTests=false; fi],[ ModSystemTests=true; ])
@@ -350,7 +354,7 @@ if test ${ModSockets} = true; then
     AC_MSG_RESULT(Build module: Transport.Sockets)
     AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
 fi
@@ -358,7 +362,7 @@ if test ${ModSSL} = true; then
     AC_MSG_RESULT(Build module: Transport.SSL)
     AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
     TranspSub_mod="${TranspSub_mod}SSL "
-    #--- Modules checkings ---
+    #>> Modules checkings
     AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
 	[AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
     AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
@@ -380,6 +384,11 @@ if test ${ModSelfSystem} = true; then
     AC_MSG_RESULT(Build module: Protocol.SelfSystem)
     AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
     ProtSub_mod="${ProtSub_mod}SelfSystem "
+fi
+if test ${ModUserProtocol} = true; then
+    AC_MSG_RESULT(Build module: Protocol.UserProtocol)
+    AC_CONFIG_FILES(src/moduls/protocol/UserProtocol/Makefile)
+    ProtSub_mod="${ProtSub_mod}UserProtocol "
 fi
 #> UI modules
 AC_SUBST(UISub_mod)
@@ -430,6 +439,11 @@ if test ${ModWebVision} = true; then
 	[AC_MSG_ERROR(UI.WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
     AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
+fi
+if test ${ModWebUser} = true; then
+    AC_MSG_RESULT(Build module: UI.WebUser)
+    AC_CONFIG_FILES(src/moduls/ui/WebUser/Makefile)
+    UISub_mod="${UISub_mod}WebUser "
 fi
 #> Special modules
 AC_SUBST(SpecSub_mod)

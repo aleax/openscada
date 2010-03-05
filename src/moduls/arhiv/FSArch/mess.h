@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -48,45 +48,45 @@ class MFileArch
 	void attach( const string &name, bool full = true );
 	void put( TMess::SRec mess );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level );
-	//- Write changes to Archive file -
+	//> Write changes to Archive file
 	//  free - surely free used memory
 	void check( bool free = false );
 
-	string	&name( )	{ return m_name; }
-	bool	xmlM( )		{ return m_xml; }
-	int	size( )		{ return m_size; }
-	time_t	begin( )	{ return m_beg; }
-	time_t	end( )		{ return m_end; }
-	string	charset( )	{ return m_chars; }
-	bool	err( )		{ return m_err; }
+	string	&name( )	{ return mName; }
+	bool	xmlM( )		{ return mXML; }
+	int	size( )		{ return mSize; }
+	time_t	begin( )	{ return mBeg; }
+	time_t	end( )		{ return mEnd; }
+	string	charset( )	{ return mChars; }
+	bool	err( )		{ return mErr; }
 
-	ModMArch &owner( )	{ return *m_owner; }
+	ModMArch &owner( )	{ return *mOwner; }
 
 	//Attributes
 	bool	scan;		// Archive scaned (for check deleted files). Use from ModMArch
 
     private:
-	//- Cache methods -
+	//> Cache methods
 	long	cacheGet( time_t tm );
 	void	cacheSet( time_t tm, long off, bool last = false );
 	void	cacheUpdate( time_t tm, long v_add );
 
-	//- Base parameters -
-	string	m_name;		// name Archive file;
-	bool	m_xml;		// XML mode file
-	int	m_size;		// Arhive size
-	string	m_chars;	// Archive charset;
-	//- State parameters -
-	bool	m_err;		// Archive err
-	bool	m_write;	// Archive had changed but no writed to file
-	bool	m_load;		// Archive load to m_node
+	//> Base parameters
+	string	mName;		// name Archive file;
+	bool	mXML;		// XML mode file
+	int	mSize;		// Arhive size
+	string	mChars;	// Archive charset;
+	//> State parameters
+	bool	mErr;		// Archive err
+	bool	mWrite;		// Archive had changed but no writed to file
+	bool	mLoad;		// Archive load to mNode
 	bool	mPack;		// Archive packed
 	time_t	mAcces;		// last of time acces to Archive file
-	time_t	m_beg;		// begin Archive file;
-	time_t	m_end;		// end Archive file;
-	//- XML-mode parametrs -
-	XMLNode	*m_node;	// XML-file tree
-	//- Cache parameters -
+	time_t	mBeg;		// begin Archive file;
+	time_t	mEnd;		// end Archive file;
+	//> XML-mode parametrs
+	XMLNode	*mNode;		// XML-file tree
+	//> Cache parameters
 	struct CacheEl
 	{
 	    time_t tm;
@@ -94,9 +94,9 @@ class MFileArch
 	};
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
-	//- Specific parameters -
-	Res	m_res;		// resource to access;
-	ModMArch *m_owner;
+	//> Specific parameters
+	Res	mRes;		// resource to access;
+	ModMArch *mOwner;
     };
 
 //************************************************
@@ -118,37 +118,47 @@ class ModMArch: public TMArchivator
 
 	int  size();
 
-	bool useXML( )		{ return m_use_xml; }
-	int  maxSize( )		{ return m_max_size; }
-	int  numbFiles( )	{ return m_numb_files; }
-	int  timeSize( )	{ return m_time_size; }
-	int  checkTm( )		{ return m_chk_tm; }
+	bool useXML( )		{ return mUseXml; }
+	int  maxSize( )		{ return mMaxSize; }
+	int  numbFiles( )	{ return mNumbFiles; }
+	int  timeSize( )	{ return mTimeSize; }
+	int  checkTm( )		{ return mChkTm; }
 	int  packTm( )		{ return mPackTm; }
+	bool packInfoFiles( )	{ return mPackInfoFiles; }
 
-	void setUseXML( bool vl )	{ m_use_xml = vl; modif(); }
-	void setMaxSize( int vl )	{ m_max_size = vl; modif(); }
-	void setNumbFiles( int vl )	{ m_numb_files = vl; modif(); }
-	void setTimeSize( int vl )	{ m_time_size = vl; modif(); }
-	void setCheckTm( int vl )	{ m_chk_tm = vl; modif(); }
+	void setUseXML( bool vl )	{ mUseXml = vl; modif(); }
+	void setMaxSize( int vl )	{ mMaxSize = vl; modif(); }
+	void setNumbFiles( int vl )	{ mNumbFiles = vl; modif(); }
+	void setTimeSize( int vl )	{ mTimeSize = vl; modif(); }
+	void setCheckTm( int vl )	{ mChkTm = vl; modif(); }
 	void setPackTm( int vl )	{ mPackTm = vl; modif(); }
+	void setPackInfoFiles( bool vl ){ mPackInfoFiles = vl; modif(); }
 
 	void checkArchivator( bool now = false );
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
 
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	bool	&m_use_xml;	// use XML for archive files
-	int	&m_max_size;	// maximum size kb of Archives file
-	int	&m_numb_files;	// number of Archive files
-	int	&m_time_size;	// number days to one file
-	int	&m_chk_tm;	// period of check archive files directory;
-	int	&mPackTm;	// pack the archive files timeout
+	string	&mAPrms;	// Addon parameters
 
-	Res	m_res;		// resource to access;
-	double	tm_calc;	// Archiving time
-	time_t	m_lst_check;	// Last check directory time
+	bool	mUseXml;	// use XML for archive files
+	int	mMaxSize;	// maximum size kb of Archives file
+	int	mNumbFiles;	// number of Archive files
+	int	mTimeSize;	// number days to one file
+	int	mChkTm;		// period of check archive files directory;
+	int	mPackTm;	// pack the archive files timeout
+	bool	mPackInfoFiles;	// use info files for packed archives
+
+	Res	mRes;		// resource to access;
+	double	tmCalc;		// Archiving time
+	time_t	mLstCheck;	// Last check directory time
 
 	deque<MFileArch *>  arh_s;
 };

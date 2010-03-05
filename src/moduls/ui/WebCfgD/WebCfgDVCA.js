@@ -1,8 +1,8 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008 by Roman Savochenko                                *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -445,7 +445,12 @@ function selectChildRecArea( node, aPath, cBlk )
   if( aPath == "/" )
   {
     //>> Set node icon
-    document.getElementById('pgIco').src = (nodeTextByTagId(node,'img','ico') != null) ? ('/'+MOD_ID+selPath+'?com=ico') : '';
+    if( nodeTextByTagId(node,'img','ico') != null )
+    {
+	document.getElementById('pgIco').src = '/'+MOD_ID+selPath+'?com=ico';
+	document.getElementById('pgIco').style.visibility = 'visible';
+    }
+    else document.getElementById('pgIco').style.visibility = 'hidden';
     //>> Set title
     setNodeText(document.getElementById('pgTitle'),node.getAttribute('dscr'));
     //>> Delete tabs of deleted areas

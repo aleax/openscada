@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -47,9 +47,9 @@ class ModVArchEl: public TVArchEl
 
 	void fullErase( );
 
-	long long begin( )	{ return m_beg;	}
-	long long end( )	{ return m_end; }
-	long long period( )	{ return m_per; }
+	long long begin( )	{ return mBeg; }
+	long long end( )	{ return mEnd; }
+	long long period( )	{ return mPer; }
 
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
@@ -61,7 +61,7 @@ class ModVArchEl: public TVArchEl
 
     private:
 	//Attributes
-	long long m_beg, m_end, m_per;
+	long long mBeg, mEnd, mPer;
 };
 
 //************************************************
@@ -74,9 +74,9 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
-	double maxSize( )		{ return m_max_size; }
+	double maxSize( )		{ return mMaxSize; }
 
-	void setMaxSize( double vl )	{ m_max_size = vl; modif(); }
+	void setMaxSize( double vl )	{ mMaxSize = vl; modif(); }
 	void setValPeriod( double iper );
 
 	void start( );
@@ -85,6 +85,7 @@ class ModVArch: public TVArchivator
     protected:
 	//Methods
 	void load_( );
+	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );
 
@@ -92,7 +93,8 @@ class ModVArch: public TVArchivator
 
     private:
 	//Attributes
-	double  &m_max_size;                    //Maximum archive size (hours)
+	string	&mAPrms;			// Addon parameters
+	double	mMaxSize;			//Maximum archive size (hours)
 };
 
 }

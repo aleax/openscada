@@ -1387,7 +1387,7 @@ function makeEl( pgBr, inclPg )
   elStyle+='width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
   this.place.style.cssText = elStyle;
   }
-  if( margBrdUpd ) for( var i in this.wdgs ) i.makeEl();
+  if( margBrdUpd ) for( var i in this.wdgs ) this.wdgs[i].makeEl();
   this.place.setAttribute('title',this.attrs['tipTool']);
   this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
 

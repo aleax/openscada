@@ -392,7 +392,7 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 	"Accept-Ranges: bytes\r\n"
 	"Content-Length: "+TSYS::int2str(cln)+"\r\n"
 	"Connection: close\r\n"
-	"Content-type: "+cnt_tp+"\r\n"
+	"Content-Type: "+cnt_tp+"\r\n"
 	"Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 

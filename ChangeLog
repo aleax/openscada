@@ -1,3 +1,20 @@
+2010-03-05 Roman
+- !!!!:Protocol: The module 'UserProtocol' is added for allow self-user protocols creation on any OpenSCADA language.
+- !!!!:UI: The module 'WebUser' is added for allow self-user Web-pages creation on any OpenSCADA language.
+- SYS.Resource: Deadlock warnings missing is added to ResAlloc.
+- SYS: User's API function "strFromCharCode" is added.
+- FIX:Transport.Input: Protocol selection is made. Direct user's API function messIO() is fixed.
+    User's request throw through output transport dialog is fixed for Sockets and SSL.
+- !!:Archive.FSArch, Archive.DBArch: Addon parameters storing is moved to XML-field "A_PRMS".
+- !!!:Archive.FSArch: Info files creation is added for packed archives and without this data storing into DB.
+    The function allow fast archives connection to other stations.
+- FIX:DAQ.JavaLikeCalc: User's API string function charCodeAt() is fixed for unsigned code return.
+- FIX:UI.VCAEngine: A project selection for a session is fixed.
+- FIX:UI.Vision: A text rotation of primitive "Text" is fixed fo angles more 180 degrees.
+- FIX:UI.WebCfgD: Empty icons hide on pages is added for browsers based on KHTML.
+- FIX:UI.WebVision: Internal widgets updation is fixed at borders changing.
+
+
 2010-02-27 Roman
 - !!:DAQ.AMRDevs: Base support for devices "Ergomera" is added.
 - FIX:UI.VCAEngine: Three level's widgets permition save is fixed on session run.
