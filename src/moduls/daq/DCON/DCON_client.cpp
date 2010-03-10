@@ -228,7 +228,7 @@ string TMdContr::DCONReq( string &pdu )
 		rez.append( buf, resp_len );
 	    }
 	    if( rez.size() < 2 || rez[rez.size()-1] != '\r' )	{ err = _("13:Error respond: Not full."); continue; }
-	    pdu = rez.substr(0,rez.size()-1);
+	    pdu = rez;//.substr(0,rez.size()-1);
 	    err = "";
 	    break;
 	}
