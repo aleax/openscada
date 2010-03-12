@@ -223,18 +223,18 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	funcV.setS(4,sender);
 	funcV.setS(5,user);
 	funcV.setO(6,new TVarObj());
-	for( int i_v = 0; i_v < vars.size(); i_v++ )
-	{
-	    int spos = vars[i_v].find(":");
-	    if( spos == string::npos ) continue;
-	    funcV.getO(6)->propSet(TSYS::strNoSpace(vars[i_v].substr(0,spos)),TSYS::strNoSpace(vars[i_v].substr(spos+1)));
-	}
+	for( map<string,string>::iterator iv = ses.vars.begin(); iv != ses.vars.end(); iv++ )
+	    funcV.getO(6)->propSet(iv->first,iv->second);
 	funcV.setO(7,new TVarObj());
 	for( map<string,string>::iterator ip = ses.prm.begin(); ip != ses.prm.end(); ip++ )
 	    funcV.getO(7)->propSet(ip->first,ip->second);
-	funcV.setO(8,new TVarObj());
-	for( map<string,string>::iterator ic = ses.cnt.begin(); ic != ses.cnt.end(); ic++ )
-	    funcV.getO(8)->propSet(ic->first,ic->second);
+	funcV.setO(8,new TArrayObj());
+	for( int ic = 0; ic < ses.cnt.size(); ic++ )
+	{
+	    XMLNodeObj *xo = new XMLNodeObj();
+	    xo->fromXMLNode(ses.cnt[ic]);
+	    ((TArrayObj*)funcV.getO(8))->propSet(TSYS::int2str(ic),xo);
+	}
 
 	//> Call processing
 	funcV.calc( );
@@ -284,18 +284,18 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	funcV.setS(4,sender);
 	funcV.setS(5,user);
 	funcV.setO(6,new TVarObj());
-	for( int i_v = 0; i_v < vars.size(); i_v++ )
-	{
-	    int spos = vars[i_v].find(":");
-	    if( spos == string::npos ) continue;
-	    funcV.getO(6)->propSet(TSYS::strNoSpace(vars[i_v].substr(0,spos)),TSYS::strNoSpace(vars[i_v].substr(spos+1)));
-	}
+	for( map<string,string>::iterator iv = ses.vars.begin(); iv != ses.vars.end(); iv++ )
+	    funcV.getO(6)->propSet(iv->first,iv->second);
 	funcV.setO(7,new TVarObj());
 	for( map<string,string>::iterator ip = ses.prm.begin(); ip != ses.prm.end(); ip++ )
 	    funcV.getO(7)->propSet(ip->first,ip->second);
-	funcV.setO(8,new TVarObj());
-	for( map<string,string>::iterator ic = ses.cnt.begin(); ic != ses.cnt.end(); ic++ )
-	    funcV.getO(8)->propSet(ic->first,ic->second);
+	funcV.setO(8,new TArrayObj());
+	for( int ic = 0; ic < ses.cnt.size(); ic++ )
+	{
+	    XMLNodeObj *xo = new XMLNodeObj();
+	    xo->fromXMLNode(ses.cnt[ic]);
+	    ((TArrayObj*)funcV.getO(8))->propSet(TSYS::int2str(ic),xo);
+	}
 
 	//> Call processing
 	funcV.calc( );
@@ -519,7 +519,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 			    "   'user' - auth user;\n"
 			    "   'HTTPvars' - HTTP variables into Object;\n"
 			    "   'URLprms' - URL's parameters into Object;\n"
-			    "   'cnts' - content items for POST into Object."));
+			    "   'cnts' - content items for POST into Array<XMLNodeObj>."));
 	    }
 	}
 	return;
@@ -584,7 +584,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), vars(ivars), content(icontent)
+    url(iurl), sender(isender), user(iuser), content(icontent)
 {
     //> URL parameters parse
     int prmSep = iurl.find("?");
@@ -601,48 +601,44 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	}
     }
 
+    //> Variables parse
+    for( int i_v = 0; i_v < ivars.size(); i_v++ )
+    {
+	int spos = ivars[i_v].find(":");
+	if( spos == string::npos ) continue;
+	vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
+    }
+
     //> Content parse
     int pos = 0, i_bnd;
-    string boundary;
     const char *c_bound = "boundary=";
     const char *c_term = "\r\n";
     const char *c_end = "--";
-    const char *c_fd = "Content-Disposition: form-data;";
-    const char *c_name = "name=\"";
-    const char *c_file = "filename=\"";
+    string boundary = vars["Content-Type"];
+    if( boundary.empty() || (pos=boundary.find(c_bound,0)+strlen(c_bound)) == string::npos ) return;
+    boundary = boundary.substr(pos,boundary.size()-pos);
+    if( boundary.empty() ) return;
 
-    for( int i_vr = 0; i_vr < vars.size(); i_vr++ )
-	if( vars[i_vr].substr(0,vars[i_vr].find(":",0)) == "Content-Type" )
-	{
-	    int pos = vars[i_vr].find(c_bound,0)+strlen(c_bound);
-	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
-	}
-    if( !boundary.size() ) return;
-
-    while(true)
+    for( pos = 0; true; )
     {
 	pos = content.find(boundary,pos);
-	if( pos == string::npos || content.substr(pos+boundary.size(),2) == "--" ) break;
-	    pos += boundary.size()+strlen(c_term);
-	string c_head = content.substr(pos, content.find(c_term,pos)-pos);
-	if( c_head.find(c_fd,0) == string::npos ) continue;
+	if( pos == string::npos || content.compare(pos+boundary.size(),2,"--") == 0 ) break;
+	pos += boundary.size()+strlen(c_term);
 
-	//>> Get name
-	i_bnd = c_head.find(c_name,0)+strlen(c_name);
-	string c_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-	i_bnd = c_head.find(c_file,0);
-	if( i_bnd == string::npos )
+	cnt.push_back(XMLNode("Content"));
+
+	//>> Get properties
+	while( pos < content.size() )
 	{
-	    //>>> Get value
-	    pos += c_head.size()+(2*strlen(c_term));
-	    if(pos >= content.size()) break;
-	    string c_val  = content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos);
-	    cnt[c_name] = c_val;
+	    string c_head = content.substr(pos, content.find(c_term,pos)-pos);
+	    pos += c_head.size()+strlen(c_term);
+	    if( c_head.empty() ) break;
+	    int spos = c_head.find(":");
+	    if( spos == string::npos ) return;
+	    cnt[cnt.size()-1].setAttr(TSYS::strNoSpace(c_head.substr(0,spos)),TSYS::strNoSpace(c_head.substr(spos+1)));
 	}
-	else
-	{
-	    i_bnd += strlen(c_file);
-	    cnt[c_name] = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-	}
+
+	if( pos >= content.size() ) return;
+	cnt[cnt.size()-1].setText( content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos) );
     }
 }

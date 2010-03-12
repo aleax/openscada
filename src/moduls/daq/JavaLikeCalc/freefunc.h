@@ -122,6 +122,7 @@ class Reg
 	    Neg,	//[CRRrr]: Negate real.
 	    If,		//[CRR00nn]: Construction [if(R)  else <00>; <nn>]
 	    Cycle,	//[CRRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
+	    CycleObj,	//[COObbRRnn]: Object cycles construction [for( RR in OO )<bb>;<nn>]
 	    Break,	//[C]: Break for cycles
 	    Continue,	//[C]: Continue for cycles
 	    FSin,	//[CRRrr]: Function sine.
@@ -309,6 +310,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdUnaryOp( Reg::Code cod, Reg *op );
 	Reg *cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn = NULL, Reg *els = NULL);
 	void cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter );
+	void cdCycleObj(int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var );
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL );
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 	Reg *cdObjFnc( Reg *obj, int p_cnt );

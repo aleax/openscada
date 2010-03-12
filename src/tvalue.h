@@ -92,6 +92,8 @@ class TVal : public TCntrNode
 	//Methods
 	void cntrCmdProc( XMLNode *opt );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	string nodeName( )	{ return name(); }

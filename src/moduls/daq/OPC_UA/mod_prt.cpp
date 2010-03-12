@@ -41,7 +41,7 @@ using namespace OPC_UA;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name )
+TProt::TProt( string name ) : mSecCnlIdLast(1)
 {
     mId		= PRT_ID;
     mType	= PRT_TYPE;
@@ -53,6 +53,17 @@ TProt::TProt( string name )
     mSource	= name;
 
     modPrt	= this;
+
+    mServer = grpAdd("s_");
+
+    //> Node DB structure
+    mServerEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
+    mServerEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    mServerEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
+    mServerEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
+    mServerEl.fldAdd( new TFld("EndPoint",_("End point"),TFld::String,0,"50","opc.tcp://localhost:4841") );
+    mServerEl.fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
+    mServerEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
 }
 
 TProt::~TProt()
@@ -60,10 +71,42 @@ TProt::~TProt()
     nodeDelAll();
 }
 
+void TProt::sAdd( const string &iid, const string &db )
+{
+    if( chldPresent(mServer,iid) ) return;
+    chldAdd( mServer, new OPCServer(iid,db,&serverEl()) );
+}
+
 void TProt::load_( )
 {
-    //> Load parameters from command line
+    //> Load DB
+    try
+    {
+	TConfig g_cfg(&serverEl());
+	g_cfg.cfgViewAll(false);
+	vector<string> db_ls;
 
+	//>> Search into DB
+	SYS->db().at().dbList(db_ls,true);
+	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_serv","",fld_cnt++,g_cfg); )
+	    {
+		string id = g_cfg.cfg("ID").getS();
+		if( !sPresent(id) )	sAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	    }
+
+	//>> Search into config file
+	if( SYS->chkSelDB("<cfg>") )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_serv",fld_cnt++,g_cfg); )
+	    {
+		string id = g_cfg.cfg("ID").getS();
+		if( !sPresent(id) )	sAdd(id,"*.*");
+	    }
+    }catch(TError err)
+    {
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Search and create new server error."));
+    }
 }
 
 void TProt::save_( )
@@ -73,12 +116,33 @@ void TProt::save_( )
 
 void TProt::modStart( )
 {
-
+    vector<string> ls;
+    sList(ls);
+    for( int i_n = 0; i_n < ls.size(); i_n++ )
+	if( sAt(ls[i_n]).at().toEnable( ) )
+	    sAt(ls[i_n]).at().setEnable(true);
 }
 
 void TProt::modStop( )
 {
+    vector<string> ls;
+    sList(ls);
+    for( int i_n = 0; i_n < ls.size(); i_n++ )
+	sAt(ls[i_n]).at().setEnable(false);
+}
 
+int TProt::chnlOpen( )
+{
+    ResAlloc res( nodeRes(), true );
+    if( !(++mSecCnlIdLast) ) mSecCnlIdLast = 0;
+    mSecCnl[mSecCnlIdLast] = SecCnl();
+    return mSecCnlIdLast;
+}
+
+void TProt::chnlClose( int cid )
+{
+    ResAlloc res( nodeRes(), true );
+    mSecCnl.erase( cid );
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -100,29 +164,38 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if( io.attr("id") == "HEL" )
 	    {
 		rez.reserve(50);
-		rez.append("HELF");			//HELLO message type
-		oNu(rez,0,4);				//> Message size
-		oNu(rez,0,4);				//> Protocol version
-		oNu(rez,65536,4);			//> Recive buffer size
-		oNu(rez,65536,4);			//> Send buffer size
-		oNu(rez,0x01000000,4);			//> Max message size
-		oNu(rez,5000,4);			//> Max chunk count
-		oS(rez,"opc.tcp://roman.home:4841");	//> EndpointURL
-		oNu(rez,rez.size(),4,4);		//> Real message size
+		rez.append("HELF");			//> HELLO message type
+		oNu(rez,0,4);				//Message size
+		oNu(rez,OpcUa_ProtocolVersion,4);	//Protocol version
+		oNu(rez,OpcUa_ReciveBufferSize,4);	//Recive buffer size
+		oNu(rez,OpcUa_SendBufferSize,4);	//Send buffer size
+		oNu(rez,OpcUa_MaxMessageSize,4);	//Max message size
+		oNu(rez,OpcUa_MaxChunkCount,4);		//Max chunk count
+		oS(rez,io.attr("EndPoint"));		//EndpointURL
+		oNu(rez,rez.size(),4,4);		//Real message size
 
 		//> Send request
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
 
 		int off = 4;
-		if( rez.size() < 8 || rez.compare(0,4,"ACKF") != 0 )	err = _("13:Error respond: Too short or not acknowledge.");
-		else if( iNu(rez,off,4) != rez.size() )	err = _("13:Error respond: Respond size is not coincedence.");
+		if( rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size() )
+		    err = _("13:Error respond: Respond size is not coincedence.");
+		else if( rez.compare(0,4,"ERRF") == 0 )
 		{
-		    iNu(rez,off,4);	//Protocol version
-		    iNu(rez,off,4);	//Recive buffer size
-		    iNu(rez,off,4);	//Send buffer size
-		    iNu(rez,off,4);	//Max message size
-		    iNu(rez,off,4);	//Max chunk count
+		    int merr = iNu(rez,off,4);		//Error
+		    string reas = iS(rez,off);		//Reason
+		    err = TSYS::uint2str(merr)+":"+reas;
+		}
+		else if( rez.compare(0,4,"ACKF") != 0 )
+		    err = _("13:Error respond: Too short or not acknowledge.");
+		else
+		{
+		    iNu(rez,off,4);			//Protocol version
+		    iNu(rez,off,4);			//Recive buffer size
+		    iNu(rez,off,4);			//Send buffer size
+		    iNu(rez,off,4);			//Max message size
+		    iNu(rez,off,4);			//Max chunk count
 		}
 	    }
 	    else if( io.attr("id") == "OPN" )
@@ -131,21 +204,24 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		rez.append( "OPNF" );			//OpenSecureChannel message type
 		oNu(rez,0,4);				//Message size
 		oNu(rez,0,4);				//Secure channel identifier
-		if( io.attr("secPlcURI") == "http://opcfoundation.org/UA/SecurityPolicy#None" )
+		if( io.attr("SecPolicy") == "None" )
 		{
 							//> Security Header
-		    oS(rez,io.attr("secPlcURI"));	//Security policy URI
+		    oS(rez,"http://opcfoundation.org/UA/SecurityPolicy#"+io.attr("SecPolicy"));	//Security policy URI
 		    oS(rez,"");				//SenderCertificate
 		    oS(rez,"");				//ReceiverCertificateThumbprint
 							//> Sequence header
-		    oNu(rez,0x33,4);			//Sequence number
-		    oNu(rez,1,4);			//RequestId
+		    io.setAttr("SeqNumber","33");
+		    oNu(rez,atoi(io.attr("SeqNumber").c_str()),4);	//Sequence number
+		    io.setAttr("SeqReqId","1");
+		    oNu(rez,atoi(io.attr("SeqReqId").c_str()),4);	//RequestId
 							//> Extension body object
 		    oNodeId(rez,446);			//TypeId
 							//>> Request Header
 		    oNodeId(rez,0);			//Session AuthenticationToken
 		    oTm(rez,TSYS::curTime());		//timestamp
-		    oN(rez,0,4);			//requestHandle
+		    io.setAttr("ReqHandle","0");
+		    oN(rez,atoi(io.attr("ReqHandle").c_str()),4);	//requestHandle
 		    oNu(rez,0,4);			//returnDiagnostics
 		    oS(rez,"");				//auditEntryId
 		    oNu(rez,0,4);			//timeoutHint
@@ -153,7 +229,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oNodeId(rez,0);			//TypeId (0)
 		    oNu(rez,0,1);			//Encoding
 							//>>>> Standard request
-		    oNu(rez,0,4);			//ClientProtocolVersion
+		    oNu(rez,OpcUa_ProtocolVersion,4);	//ClientProtocolVersion
 		    oNu(rez,0,4);			//RequestType
 		    oNu(rez,1,4);			//SecurityMode
 		    oS(rez,"\000");			//ClientNonce
@@ -197,7 +273,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    }
 		    printf("TEST 10: OPN respond:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 		}
-		else err = TSYS::strMess(_("12:OPC UA '%s': security policy '%s' is not supported."),io.name().c_str(),io.attr("secPlcURI").c_str());
+		else err = TSYS::strMess(_("12:OPC UA '%s': security policy '%s' is not supported."),io.name().c_str(),io.attr("SecPolicy").c_str());
 	    }
 	    else if( io.attr("id") == "CLO" )
 	    {
@@ -207,8 +283,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oNu(rez,atoi(io.attr("secChnId").c_str()),4);	//Secure channel identifier
 		oNu(rez,atoi(io.attr("secTokenId").c_str()),4);	//TokenId
 							//> Sequence header
-		oNu(rez,0x35,4);			//Sequence number
-		oNu(rez,3,4);				//RequestId
+		uint32_t SeqNumber = atoi(io.attr("SeqNumber").c_str())+1;
+		io.setAttr("SeqNumber",TSYS::int2str(SeqNumber));
+		uint32_t SeqReqId = atoi(io.attr("SeqReqId").c_str())+1;
+		io.setAttr("SeqReqId",TSYS::int2str(SeqReqId));
+		oNu(rez,SeqNumber,4);			//Sequence number
+		oNu(rez,SeqReqId,4);			//RequestId
 							//> Extension body object
 		oNodeId(rez,452);			//TypeId request: CloseSecureChannel
 							//>> Request Header
@@ -278,7 +358,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		else if( io.attr("id") == "ActivateSession" )
 		{
-		    iTpId =  467;
+		    iTpId = 467;
 							//> clientSignature
 		    oS(mReq,"");			//signature
 		    oS(mReq,"");			//algorithm
@@ -296,9 +376,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(mReq,"");			//signature
 		    oS(mReq,"");			//algorithm
 		}
+		else if( io.attr("id") == "CloseSession" )
+		{
+		    iTpId = 473;
+		    oNu(mReq,1,1);			//deleteSubscriptions
+		}
 		else if( io.attr("id") == "Read" )
 		{
-		    iTpId =  631;
+		    iTpId = 631;
 		    oR(mReq,0,8);			//maxAge 0 ms
 		    oNu(mReq,1,4);			//timestampsTo Return (SERVER_1)
 							//> nodesToRead []
@@ -312,7 +397,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		else if( io.attr("id") == "Browse" )
 		{
-		    iTpId =  527;
+		    iTpId = 527;
 							//> view
 		    oNodeId(mReq,0);			//viewId (0)
 		    oTm(mReq,0);			//timestamp
@@ -337,14 +422,20 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oNu(rez,atoi(io.attr("secChnId").c_str()),4);		//Secure channel identifier
 		oNu(rez,atoi(io.attr("secTokenId").c_str()),4);		//TokenId
 							//> Sequence header
-		oNu(rez,0x34,4);			//Sequence number
-		oNu(rez,2,4);				//RequestId
+		uint32_t SeqNumber = atoi(io.attr("SeqNumber").c_str())+1;
+		io.setAttr("SeqNumber",TSYS::int2str(SeqNumber));
+		uint32_t SeqReqId = atoi(io.attr("SeqReqId").c_str())+1;
+		io.setAttr("SeqReqId",TSYS::int2str(SeqReqId));
+		oNu(rez,SeqNumber,4);			//Sequence number
+		oNu(rez,SeqReqId,4);			//RequestId
 							//> Extension body object
 		oNodeId(rez,iTpId);			//TypeId request
 							//>> Request Header
 		oNodeId(rez,atoi(io.attr("authTokenId").c_str()));	//Session AuthenticationToken
 		oTm(rez,TSYS::curTime());		//timestamp
-		oN(rez,1,4);				//requestHandle
+		uint32_t ReqHandle = atoi(io.attr("ReqHandle").c_str())+1;
+		io.setAttr("ReqHandle",TSYS::int2str(ReqHandle));
+		oN(rez,ReqHandle,4);			//requestHandle
 		oNu(rez,0,4);				//returnDiagnostics
 		oS(rez,"");				//auditEntryId
 		oNu(rez,3000,4);			//timeoutHint
@@ -504,6 +595,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    iS(rez,off);				//diagnosticInfos []
 			    break;
 			}
+			case 473:	//CloseSession
+			    break;
 			case 631:	//Read
 			{
 			    if( oTpId != 634 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
@@ -710,6 +803,39 @@ void TProt::oTm( string &buf, long long val )
     buf.append( (char*)&tmStamp, sizeof(tmStamp) );
 }
 
+void TProt::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if( opt->name() == "info" )
+    {
+	TProtocol::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/s_",_("Server"),0664,"root","Protocol",2,"idm","1","idSz","20");
+	if( ctrMkNode("area",opt,0,"/serv",_("Servers")) )
+	    ctrMkNode("list",opt,-1,"/serv/serv",_("Servers"),0664,"root","Protocol",5,"tp","br","idm","1","s_com","add,del","br_pref","s_","idSz","20");
+	return;
+    }
+
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/br/s_" || a_path == "/serv/serv" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )
+	{
+	    vector<string> lst;
+	    sList(lst);
+	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(sAt(lst[i_f]).at().name());
+	}
+	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEQ_WR) )
+	{
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
+	    sAdd(vid); sAt(vid).at().setName(opt->text());
+	}
+	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mServer,opt->attr("id"),-1,1);
+    }
+    else TProtocol::cntrCmdProc(opt);
+}
+
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
@@ -754,6 +880,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	//> Check for hello message type
 	if( rb.compare(0,4,"HELF") == 0 )
 	{
+	    if( rb.size() > 4096 )	{ out = mkError(OpcUa_BadTcpEndpointUrlInvalid); return false; }
 	    off = 8;
 	    uint32_t prtVer = TProt::iNu(rb,off,4);	//Protocol version
 	    uint32_t rBufSz = TProt::iNu(rb,off,4);	//Recive buffer size
@@ -762,18 +889,33 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    uint32_t mChnk  = TProt::iNu(rb,off,4);	//Max chunk count
 	    string EndpntURL = TProt::iS(rb,off);	//EndpointURL
 
-	    printf( "TEST 00: Hello request: prtVer = %d, rBufSz = %d, wBufSz = %d, mMsgSz = %d, mChnk = %d, EndpntURL = '%s'\n",
-		prtVer, rBufSz, wBufSz, mMsgSz, mChnk, EndpntURL.c_str() );
+	    printf( "TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+
+	    //>> Find endpoint into allowed servers
+	    vector<string> sLs;
+	    owner().sList(sLs);
+	    AutoHD<OPCServer> tos;
+	    int i_os;
+	    for( i_os = 0; i_os < sLs.size(); i_os++ )
+	    {
+		tos = owner().sAt(sLs[i_os]);
+		if( tos.at().enableStat() && tos.at().endPoint() == EndpntURL &&
+			(tos.at().inTransport() == "*" || tos.at().inTransport() == srcTr()) )
+		    break;
+	    }
+	    if( i_os >= sLs.size() )	{ out = mkError(OpcUa_BadTcpEndpointUrlInvalid); return false; }
 
 	    //> Prepare acknowledge message
 	    out.reserve( 28 );
-	    out.append( "ACKF" );		//Acknowledge message type
-	    TProt::oNu(out,28,4);		//Message size
-	    TProt::oNu(out,prtVer,4);	//Protocol version
-	    TProt::oNu(out,rBufSz,4);	//Recive buffer size
-	    TProt::oNu(out,wBufSz,4);	//Send buffer size
-	    TProt::oNu(out,mMsgSz,4);	//Max message size
-	    TProt::oNu(out,mChnk,4);	//Max chunk count
+	    out.append( "ACKF" );			//Acknowledge message type
+	    TProt::oNu(out,28,4);			//Message size
+	    TProt::oNu(out,OpcUa_ProtocolVersion,4);	//Protocol version
+	    TProt::oNu(out,OpcUa_ReciveBufferSize,4);	//Recive buffer size
+	    TProt::oNu(out,OpcUa_SendBufferSize,4);	//Send buffer size
+	    TProt::oNu(out,OpcUa_MaxMessageSize,4);	//Max message size
+	    TProt::oNu(out,OpcUa_MaxChunkCount,4);	//Max chunk count
+
+	    printf( "TEST 01: Hello response:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
 
 	    return true;
 	}
@@ -813,11 +955,13 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 
 		printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
+		uint32_t chnlId = owner().chnlOpen();
+
 		//> Prepare respond message
 		out.reserve( 200 );
 		out.append( "OPNF" );				//OpenSecureChannel message type
 		TProt::oNu(out,0,4);				//Message size
-		TProt::oNu(out,4,4);				//Secure channel identifier
+		TProt::oNu(out,chnlId,4);			//Secure channel identifier
 		TProt::oS(out,secPlcURI);			//Security policy URI
 		TProt::oN(out,senderCertLength,4);		//SenderCertificateLength
 		TProt::oN(out,recCertThbLength,4);		//ReceiverCertificateThumbprintLength
@@ -836,11 +980,11 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		TProt::oNodeId(out,0);				//TypeId (0)
 		TProt::oNu(out,0,1);				//Encoding
 								//>>>> Standard respond
-		TProt::oNu(out,0,4);				//ServerProtocolVersion
-		TProt::oNu(out,4,4);				//Secure channel identifier
+		TProt::oNu(out,OpcUa_ProtocolVersion,4);	//ServerProtocolVersion
+		TProt::oNu(out,chnlId,4);			//Secure channel identifier
 		TProt::oNu(out,1,4);				//TokenId
 		TProt::oTm(out,TSYS::curTime());		//CreatedAt
-		TProt::oN(out,600000,4);			//RevisedLifeTime (600000)
+		TProt::oN(out,vmax(600000,reqLifeTm),4);	//RevisedLifeTime (600000, minimum)
 		TProt::oS(out,"\001");				//nonce
 		TProt::oNu(out,out.size(),4,4);			//Real message size
 
@@ -870,6 +1014,10 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 							//>>> Extensible parameter
 	    TProt::iNodeId(rb,off);			//TypeId (0)
 	    TProt::iNu(rb,off,1);			//Encoding
+
+	    printf( "TEST 01: Close SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+
+	    owner().chnlClose( secId );
 
 	    //> No respond. Close socket
 	    return false;
@@ -1173,6 +1321,15 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
 		}
+		case 473:	//CloseSessionRequest
+		{
+		    //>> Request
+		    TProt::iNu(rb,off,1);		//deleteSubscriptions
+
+		    //>> Respond
+		    reqTp = 476;
+		    break;
+		}
 		case 631:	//ReadRequest
 		{
 		    //>> Request
@@ -1309,4 +1466,142 @@ string TProtIn::mkError( uint32_t errId, const string &err )
     TProt::oS(rez,err); 			//Error message
 
     return rez;
+}
+
+//*************************************************
+//* OPCServer                                     *
+//*************************************************
+OPCServer::OPCServer( const string &iid, const string &idb, TElem *el ) :
+    TConfig(el), mDB(idb), mEn(false), cntReq(0),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
+{
+    mId = iid;
+}
+
+OPCServer::~OPCServer( )
+{
+    try{ setEnable(false); } catch(...) { }
+}
+
+TCntrNode &OPCServer::operator=( TCntrNode &node )
+{
+    OPCServer *src_n = dynamic_cast<OPCServer*>(&node);
+    if( !src_n ) return *this;
+
+    if( enableStat( ) )	setEnable(false);
+
+    //> Copy parameters
+    string prevId = mId;
+    *(TConfig*)this = *(TConfig*)src_n;
+    mId = prevId;
+    setDB(src_n->DB());
+
+    return *this;
+}
+
+void OPCServer::postDisable( int flag )
+{
+    try
+    {
+	if( flag ) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+    }catch(TError err)
+    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+TProt &OPCServer::owner( )	{ return *(TProt*)nodePrev(); }
+
+string OPCServer::name( )	{ return mName.size() ? mName : id(); }
+
+string OPCServer::tbl( )	{ return owner().modId()+"_serv"; }
+
+string OPCServer::endPoint( )	{ return cfg("EndPoint").getS(); }
+
+string OPCServer::inTransport( ){ return cfg("InTR").getS(); }
+
+bool OPCServer::cfgChange( TCfg &ce )
+{
+    modif();
+    return true;
+}
+
+void OPCServer::load_( )
+{
+    if( !SYS->chkSelDB(DB()) ) return;
+    cfgViewAll(true);
+    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+}
+
+void OPCServer::save_( )
+{
+    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+}
+
+void OPCServer::setEnable( bool vl )
+{
+    if( mEn == vl ) return;
+
+    cntReq = 0;
+
+    mEn = vl;
+}
+
+string OPCServer::getStatus( )
+{
+    string rez = _("Disabled. ");
+    if( enableStat( ) )
+    {
+	rez = _("Enabled. ");
+	rez += TSYS::strMess( _("Requests %.4g."), cntReq );
+    }
+
+    return rez;
+}
+
+void OPCServer::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if( opt->name() == "info" )
+    {
+	TCntrNode::cntrCmdProc(opt);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Server: ")+name(),0664,"root","root");
+	if( ctrMkNode("area",opt,-1,"/serv",_("Server")) )
+	{
+	    if( ctrMkNode("area",opt,-1,"/serv/st",_("State")) )
+	    {
+		ctrMkNode("fld",opt,-1,"/serv/st/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/serv/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/serv/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	    }
+	    if( ctrMkNode("area",opt,-1,"/serv/cfg",_("Config")) )
+	    {
+		TConfig::cntrCmdMake(opt,"/serv/cfg",0,"root","root",RWRWR_);
+		ctrMkNode("fld",opt,-1,"/serv/cfg/InTR",cfg("InTR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/serv/cfg/ls_itr");
+	    }
+	}
+	return;
+    }
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if( a_path == "/serv/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
+    else if( a_path == "/serv/st/en_st" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+    }
+    else if( a_path == "/serv/st/db" )
+    {
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
+    }
+    else if( a_path == "/serv/cfg/ls_itr" && ctrChkNode(opt) )
+    {
+	opt->childAdd("el")->setText("*");
+	vector<string> sls;
+	SYS->transport().at().inTrList(sls);
+	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	    opt->childAdd("el")->setText(sls[i_s]);
+    }
+    else if( a_path.substr(0,9) == "/serv/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
+    else TCntrNode::cntrCmdProc(opt);
 }

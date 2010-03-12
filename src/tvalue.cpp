@@ -718,6 +718,56 @@ void TVal::setB( char value, long long tm, bool sys )
     }
 }
 
+TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    if( iid == "get" )
+    {
+	try
+	{
+	    TVariant rez;
+	    long long tm = 0;
+	    if( prms.size() >= 1 ) tm = (long long)prms[0].getI()*1000000;
+	    if( prms.size() >= 2 ) tm += prms[1].getI();
+	    bool isSys = false;
+	    if( prms.size() >= 3 ) isSys = prms[2].getB();
+	    switch( fld().type() )
+	    {
+		case TFld::Boolean:	rez = getB(&tm,isSys);	break;
+		case TFld::Integer:	rez = getI(&tm,isSys);	break;
+		case TFld::Real:	rez = getR(&tm,isSys);	break;
+		case TFld::String:	rez = getS(&tm,isSys);	break;
+	    }
+	    if( prms.size() >= 1 )	{ prms[0].setI(tm/1000000); prms[0].setModify(); }
+	    if( prms.size() >= 2 )	{ prms[1].setI(tm%1000000); prms[1].setModify(); }
+
+	    return rez;
+	}catch(...){ }
+	return EVAL_REAL;
+    }
+    if( iid == "set" && prms.size() >= 1 )
+    {
+	try
+	{
+	    long long tm = 0;
+	    if( prms.size() >= 2 ) tm = (long long)prms[1].getI()*1000000;
+	    if( prms.size() >= 3 ) tm += prms[2].getI();
+	    bool isSys = false;
+	    if( prms.size() >= 4 ) isSys = prms[3].getB();
+	    switch( fld().type() )
+	    {
+		case TFld::Boolean:	setB(prms[0].getB(),tm,isSys);	break;
+		case TFld::Integer:	setI(prms[0].getI(),tm,isSys);	break;
+		case TFld::Real:	setR(prms[0].getR(),tm,isSys);	break;
+		case TFld::String:	setS(prms[0].getS(),tm,isSys);	break;
+	    }
+	    return false;
+	}catch(...){ }
+	return true;
+    }
+
+    return TCntrNode::objFuncCall(iid,prms,user);
+}
+
 void TVal::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");

@@ -97,6 +97,8 @@ class TMdContr: public TController
 	long long period( )	{ return mPer; }
 	string cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
+	string	endPoint( )	{ return mEndPoint; }
+	string	secPolicy( )	{ return mSecPolicy; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -107,6 +109,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
+	bool cfgChange( TCfg &cfg );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
@@ -118,7 +121,9 @@ class TMdContr: public TController
 	Res	en_res;		//Resource for enable params
 	int	&mPrior;	//Process task priority
 	string	&mSched,	//Calc schedule
-		&mAddr;		//Transport device address
+		&mAddr,		//Transport device address
+		&mEndPoint,	//Endpoint URL
+		&mSecPolicy;	//Security policy
 	long long mPer;
 
 	bool	prc_st,		//Process task active

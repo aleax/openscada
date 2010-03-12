@@ -111,6 +111,8 @@ void TProtocol::close( const string &name )
     chldDel(m_pr,name);
 }
 
+void TProtocol::itemListIn( vector<string> &ls, const string &curIt )	{ ls.clear(); }
+
 //************************************************
 //* TProtocolIn                                  *
 //************************************************
@@ -123,5 +125,7 @@ TProtocolIn::~TProtocolIn()
 {
 
 }
+
+
 
 TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }

@@ -35,6 +35,7 @@ using std::vector;
 //*************************************************
 class XMLNode;
 
+#pragma pack(push,1)
 class TFld
 {
     public:
@@ -107,7 +108,7 @@ class TFld
 	double	selNm2VlR( const string &name );
 	bool	selNm2VlB( const string &name );
 
-	//- Addition -
+	//> Addition
 	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos,
 				const string &user = "root", const string &grp = "root", int perm = 0664 );
 
@@ -131,7 +132,7 @@ class TFld
 	}m_val;
 	vector<string>     *m_sel;
 };
-
+#pragma pack(pop)
 
 //*************************************************
 //* TElem                                         *

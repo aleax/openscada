@@ -446,7 +446,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     switch(rez->type())
     {
 	case Reg::Free: case Reg::Dynamic:
-	    throw TError(nodePath().c_str(),_("Variable <%s> is used but undefined"),rez->name().c_str());
+	    throw TError(nodePath().c_str(),_("Variable '%s' is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
 	    prg+=(uint8_t)Reg::MviB;
 	    prg.append((char *)&addr,sizeof(uint16_t));
@@ -913,6 +913,36 @@ void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter
     prg.replace(p_cmd+3+2*a_sz,a_sz,((char *)&p_end),a_sz);
 }
 
+void Func::cdCycleObj( int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var )
+{
+    int p_body = p_solve-1;	//Include Reg::End command
+
+    var = cdMvi(var);
+    uint16_t p_var = var->pos();
+    var->free();
+
+    //> Mvi cond register (insert to programm)
+    string cd_tmp = prg.substr(p_body);
+    prg.erase(p_body);
+    cond = cdMvi(cond);
+    p_solve += prg.size()-p_body;
+    p_end += prg.size()-p_body;
+    prg += cd_tmp;
+    uint16_t p_cond = cond->pos();
+    cond->free();
+
+    //> Make apropos adress
+    p_solve -= p_cmd;
+    p_end   -= p_cmd;
+
+    //> [COObbRRnn]
+    prg[p_cmd] = (uint8_t)Reg::CycleObj;
+    prg.replace(p_cmd+1,sizeof(uint16_t),(char*)&p_cond,sizeof(uint16_t));
+    prg.replace(p_cmd+3,sizeof(uint16_t),((char *)&p_solve),sizeof(uint16_t));
+    prg.replace(p_cmd+3+sizeof(uint16_t),sizeof(uint16_t),(char*)&p_var,sizeof(uint16_t));
+    prg.replace(p_cmd+3+2*sizeof(uint16_t),sizeof(uint16_t),((char *)&p_end),sizeof(uint16_t));
+}
+
 Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 {
     Reg *rez;
@@ -954,11 +984,11 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	{ ret_ok=true; break; }
     //> Check IO and parameters count
     if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
-        throw TError(nodePath().c_str(),_("More than %d(%d) parameters are specified for function <%s>"),
+        throw TError(nodePath().c_str(),_("More than %d(%d) parameters are specified for function '%s'"),
 	    (funcAt(f_id)->func().at().ioSize()-ret_ok),p_cnt,funcAt(f_id)->func().at().id().c_str());
     //> Check the present return for fuction
     if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),_("Function is requested <%s>, but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
+	throw TError(nodePath().c_str(),_("Function is requested '%s', but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
     //> Mvi all parameters
     for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
 	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
@@ -1192,8 +1222,8 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 	    if( prop == "parse" && prms.size() )
 	    {
 		int off = (prms.size() >= 3) ? prms[2].getI() : 0;
-		string rez = TSYS::strSepParse( vl.getS(), prms[0].getI(),
-		    (prms.size() >= 2 && prms[1].getS().size()) ? prms[1].getS()[0] : '.', &off );
+		string rez = TSYS::strParse( vl.getS(), prms[0].getI(),
+		    (prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4) ? prms[3].getB() : false );
 		if( prms.size() >= 3 ) { prms[2].setI(off); prms[2].setModify(); }
 		return rez;
 	    }
@@ -1826,6 +1856,29 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		}
 		cprg = cprg + *(uint16_t*)(cprg+7);
 		continue;
+	    case Reg::CycleObj:
+	    {
+#if OSC_DEBUG >= 5
+		printf("CODE: CycleObj %d: %d|%d|%d.\n",*(uint16_t*)(cprg+1),*(uint16_t*)(cprg+3),*(uint16_t*)(cprg+5),*(uint16_t*)(cprg+7));
+#endif
+		TVariant obj = getVal(val,reg[*(uint16_t*)(cprg+1)]);
+		if( obj.type() == TVariant::Object )
+		{
+		    vector<string> pLs;
+		    obj.getO()->propList(pLs);
+		    for( int i_l = 0; i_l < pLs.size() && !(dt.flg&0x01); i_l++ )
+		    {
+			setValS(val,reg[*(uint16_t*)(cprg+5)],pLs[i_l]);
+			dt.flg &= ~0x06;
+			exec( val, reg, cprg + *(uint16_t*)(cprg+3), dt );
+			//Check break and continue operators
+			if( dt.flg&0x02 )	{ dt.flg=0; break; }
+			else if( dt.flg&0x04 )	dt.flg=0;
+		    }
+		}
+		cprg = cprg + *(uint16_t*)(cprg+7);
+		continue;
+	    }
 	    case Reg::Break:	dt.flg|=0x03;	break;
 	    case Reg::Continue:	dt.flg|=0x05;	break;
 	    //>> Buildin functions
@@ -2051,7 +2104,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    }
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function <%s> is stoped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function '%s' is stoped."),*cprg,*cprg,id().c_str());
 	}
     }
 }

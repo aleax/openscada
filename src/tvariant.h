@@ -102,6 +102,7 @@ class TVarObj
 	int connect( );
 	int disconnect( );
 
+	virtual void propList( vector<string> &ls );
 	virtual TVariant propGet( const string &id );
 	virtual void propSet( const string &id, TVariant val );
 

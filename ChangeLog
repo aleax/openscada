@@ -1,3 +1,24 @@
+2010-03-12 Roman
+- !!!!:SYS.TCntrNode, SYS.TCfg, SYS.TFld, DAQ.JavaLikeCalc.Attr : Structures (classes) pack is added by #pragma pack(push,1)
+- !!:Protocol: The function itemListIn() is added for protocol's items allow for select. Subsystem modules API version is changed to 3.
+- !!:Transport, DAQ.ModBus, Protocol.UserProtocol: Protocol's items selection, by function TProtocol::itemListIn(), support is added.
+- !!:SYS: The function strParse() is added for expand function strSepParse() to multisymbols separators support and one symbol separator's merging.
+- !!:SYS: Symbols shielding, like "\n", encoding "ShieldSimb" is added for function strEncode().
+- !!:DAQ.Value: User's API functions get() and set() attribute is added.
+- !!:SYS.TVarObj: The function propList() is added for attributes scan allow.
+- !!!!:DAQ.JavaLikeCalc: Cycle view for object's properties scan is added "for( <i> in <obj> ) <code>;".
+- FIX:DAQ.JavaLikeCalc: Error's collumn position calc is fixed for string constants and object's dots.
+- !!:DAQ.OPC_UA: Server object and security channel registartion is added. Test prototype realisation finished.
+    Integration for OpenSCADA objects is started.
+- FIX:UI.QTCfg. UI.Vision: Automatic RichText is disabled for text fields and information/error messages.
+- !!:UI.QTStarter: UI modules selection is added. Mutable attribute's fields inherit enabled and made safe.
+- !!:UI.WebUser: HTTP variables scan is made unified. Post content's items is full parsed and put to Array<XMLNodeObj> for user's procedure.
+
+
+2010-03-10 Roman
+- FIX:DAQ.DCON: Removing '\r' symbol from responds is fixed.
+
+
 2010-03-05 Roman
 - !!!!:Protocol: The module 'UserProtocol' is added for allow self-user protocols creation on any OpenSCADA language.
 - !!!!:UI: The module 'WebUser' is added for allow self-user Web-pages creation on any OpenSCADA language.

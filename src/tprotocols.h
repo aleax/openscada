@@ -22,7 +22,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define  VER_PROT 2    //ProtocolS type modules version
+#define  VER_PROT 3	//ProtocolS type modules version
 
 #include <string>
 
@@ -73,9 +73,12 @@ class TProtocol: public TModule
 	TProtocol( );
 	virtual ~TProtocol( );
 
+	//> Addon items list for input protocol addressing
+	virtual void itemListIn( vector<string> &ls, const string &curIt = "" );
+
 	//> Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
-	bool openStat( const string &name )		{ return chldPresent(m_pr,name); } 
+	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
 	void open( const string &name, const string &tr );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }

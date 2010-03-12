@@ -54,8 +54,8 @@ class TProtIn: public TProtocolIn
 
     private:
 	//Attributes
-	AutoHD<UserPrt> up;
 	TValFunc funcV;
+	AutoHD<UserPrt> up;
 };
 
 //*************************************************
@@ -75,7 +75,6 @@ class UserPrt : public TCntrNode, public TConfig
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
-	string inTransport( );
 	string inProgLang( );
 	string inProg( );
 	string outTransport( );
@@ -94,7 +93,6 @@ class UserPrt : public TCntrNode, public TConfig
 	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
-	void setInTransport( const string &il );
 	void setInProgLang( const string &ilng );
 	void setInProg( const string &iprg );
 	void setOutTransport( const string &il );
@@ -141,6 +139,8 @@ class TProt: public TProtocol
 
 	void modStart( );
 	void modStop( );
+
+	void itemListIn( vector<string> &ls, const string &curIt = "" );
 
 	//> User protocol's functions
 	void uPrtList( vector<string> &ls )	{ chldList(mPrtU,ls); }

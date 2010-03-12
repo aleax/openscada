@@ -1926,8 +1926,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    }
 		    else
 		    {
-			if(n_prc)	n_prc->childAdd("el")->setText("0"); 
-			if(n_end)	n_end->childAdd("el")->setText(""); 
+			if(n_prc)	n_prc->childAdd("el")->setText("0");
+			if(n_end)	n_end->childAdd("el")->setText("");
 			if(n_beg)	n_beg->childAdd("el")->setText("");
 		    }
 		}

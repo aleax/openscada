@@ -331,22 +331,31 @@ void *TUIMod::Task( void * )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQTmod");
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/st_mod" )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( startMod() );
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setStartMod( opt->text() );
+    }
+    else if( a_path == "/prm/cfg/lsQTmod" && ctrChkNode(opt) )
+    {
+	vector<string> list;
+	mod->owner().modList(list);
+	for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+	    if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+		    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+		opt->childAdd("el")->setText(list[i_l]);
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);

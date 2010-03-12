@@ -50,7 +50,7 @@ void sfErr( const string &mess, YYLTYPE *ps);
     char op[21];	//Object's properties.
 }
 
-%token	ERR IF ELSE WHILE FOR BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW ARRAY OBJECT
+%token	ERR VAR_DIR IF ELSE WHILE FOR IN BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW ARRAY OBJECT
 %token	<id>	FUNC B_FUNC B_FUNC1 B_FUNC2
 %token	<reg>	VAR CONST
 %token	<op>	O_PRP_F
@@ -85,6 +85,8 @@ solve:  assign ';'
 	    { try{ p_fnc->cdCycle($2,$4,$5,$8,0); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| FOR '(' assign ';' cycl expr end ';' assign end ')' solve end
 	    { try{ p_fnc->cdCycle($5,$6,$10,$13,$7); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| FOR '(' var IN cycl expr end ')' solve end
+	    { try{ p_fnc->cdCycleObj($5,$6,$7,$10,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| BREAK ';'	{ p_fnc->prg=p_fnc->prg+(char)Reg::Break; }
 	| CONTINUE ';'	{ p_fnc->prg=p_fnc->prg+(char)Reg::Continue; }
 	| RETURN ';'	{ p_fnc->prg+=(char)Reg::EndFull; }
@@ -109,6 +111,7 @@ solve:  assign ';'
 	    { try{ p_fnc->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '{' solver '}'
 var:	VAR			{ $$ = $1; }
+	| VAR_DIR VAR		{ $2->setType(Reg::String); $$ = $2; }
 	| var O_PRP_F		{ $$ = p_fnc->cdProp($1,$2); }
 	| var '[' expr ']'	{ $$ = p_fnc->cdProp($1,"",$3); }
 	| var O_PRP_F '(' prmlst ')'
@@ -125,7 +128,7 @@ assign: var '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Add,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -133,7 +136,7 @@ assign: var '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Sub,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -141,7 +144,7 @@ assign: var '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str()); 
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str()); 
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Mul,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -149,7 +152,7 @@ assign: var '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Div,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -157,7 +160,7 @@ assign: var '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Add,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
@@ -166,7 +169,7 @@ assign: var '=' expr
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
@@ -177,7 +180,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    $$ = $1;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -195,7 +198,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL,$1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Add,$1,reg));
@@ -205,7 +208,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$1->name().c_str());
+		    if( $1->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL,$1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($1,p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
@@ -215,7 +218,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$2->name().c_str());
+		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($2,p_fnc->cdBinaryOp(Reg::Add,$2,reg));
 		    $$ = $2;
@@ -225,7 +228,7 @@ expr:	CONST	{ $$ = $1; }
 	    {
 		try
 		{
-		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable <%s> is used but undefined"),$2->name().c_str());
+		    if( $2->type() == Reg::Free ) throw TError(p_fnc->nodePath().c_str(),_("Variable '%s' is used but undefined"),$2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
 		    p_fnc->cdAssign($2,p_fnc->cdBinaryOp(Reg::Sub,$2,reg));
 		    $$ = $2;
@@ -398,6 +401,7 @@ retry:
     {
 	st_pos = ++pos;
 	string rez_str;
+	yylloc.last_column++;
 	while( pos < prog.size() && prog[pos] != '"' && prog[pos] != '\n' )
 	{
 	    if( prog[pos] == '\\' && (pos+1) < prog.size() )
@@ -426,6 +430,7 @@ retry:
 	    yyerror(_("The next line symbol failed into string, "));
 	    return ERR;
 	}
+	yylloc.last_column++;
 
 	yylval.reg = p_fnc->regTmpNew();
 	*yylval.reg = rez_str;
@@ -572,6 +577,11 @@ retry:
 	}
 	//Check IO
 	if( yylval.reg=p_fnc->regAt(p_fnc->ioGet(smb_nm)) )	return VAR;
+
+	//Keywords
+	if( smb_nm == "in" )		return IN;
+	if( smb_nm == "var" )		return VAR_DIR;
+
 	//Get new register
 	yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
 	yylval.reg->setName(smb_nm);
@@ -582,6 +592,7 @@ retry:
     else if( c == '.' && (pos+1) < prog.size() )
     {
 	st_pos = ++pos;
+	yylloc.last_column++;
 	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
 	{ pos++; yylloc.last_column++; }
 	if( (pos-st_pos) > 20 ) { yyerror(_("Object's properties too long, ")); return ERR; }

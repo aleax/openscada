@@ -84,7 +84,6 @@ TProt::TProt( string name )
     mUPrtEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     mUPrtEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mUPrtEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPrtEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
     mUPrtEl.fldAdd( new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
     mUPrtEl.fldAdd( new TFld("OutTR",_("Out transport"),TFld::String,0,"20","*") );
     mUPrtEl.fldAdd( new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
@@ -93,6 +92,12 @@ TProt::TProt( string name )
 TProt::~TProt()
 {
     nodeDelAll();
+}
+
+void TProt::itemListIn( vector<string> &ls, const string &curIt )
+{
+    ls.clear();
+    if( TSYS::strParse(curIt,1,".").empty() )	uPrtList(ls);
 }
 
 void TProt::uPrtAdd( const string &iid, const string &db )
@@ -249,16 +254,11 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	//> Find user protocol for using
 	if( !funcV.func() )
 	{
-	    vector<string> upLs;
-	    owner().uPrtList(upLs);
-	    for( int i_up = 0; i_up < upLs.size(); i_up++ )
-	    {
-		AutoHD<UserPrt> tup = owner().uPrtAt(upLs[i_up]);
-		if( !tup.at().enableStat() || tup.at().workInProg().empty() ) continue;
-		if( tup.at().inTransport() == srcTr() ) { up = tup; break; }
-		if( tup.at().inTransport() == "*" && up.freeStat() ) up = tup;
-	    }
-	    if( up.freeStat() ) return false;
+	    string selNode = TSYS::strParse(SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().
+				    inAt(TSYS::strParse(srcTr(),1,".")).at().protocolFull(),1,".");
+	    if( !owner().uPrtPresent(selNode) ) return false;
+	    up = owner().uPrtAt(selNode);
+	    if( !up.at().enableStat() || up.at().workInProg().empty() ) return false;
 	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg(),1)).at());
 	}
 
@@ -329,8 +329,6 @@ string UserPrt::name( )		{ return mName.size() ? mName : id(); }
 
 string UserPrt::tbl( )		{ return owner().modId()+"_uPrt"; }
 
-string UserPrt::inTransport( )	{ return cfg("InTR").getS(); }
-
 string UserPrt::outTransport( )	{ return cfg("OutTR").getS(); }
 
 string UserPrt::inProgLang( )
@@ -345,8 +343,6 @@ string UserPrt::inProg( )
     int lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
-
-void UserPrt::setInTransport( const string &it )	{ cfg("InTR").setS(it); }
 
 void UserPrt::setInProgLang( const string &ilng )
 {
@@ -472,14 +468,12 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    if( ctrMkNode("area",opt,-1,"/up/cfg",_("Config")) )
 	    {
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root","root",RWRWR_);
-		ctrRemoveNode(opt,"/up/cfg/InTR");
 		ctrRemoveNode(opt,"/up/cfg/InPROG");
 		ctrRemoveNode(opt,"/up/cfg/OutTR");
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
 	    }
 	    if( ctrMkNode("area",opt,-1,"/in",_("Input")) )
 	    {
-		ctrMkNode("fld",opt,-1,"/in/TR",cfg("InTR").fld().descr().c_str(),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/up/cfg/lsItr");
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
 		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRWR_,"root","root",3,"tp","str","rows","10",
 		    "help",_("Next attributes has defined for input requests processing:\n"
@@ -512,14 +506,6 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
 	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
-    }
-    else if( a_path == "/up/cfg/lsItr" && ctrChkNode(opt) )
-    {
-	opt->childAdd("el")->setText("*");
-	vector<string> sls;
-	SYS->transport().at().inTrList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
-	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if( a_path == "/up/cfg/lsOtr" && ctrChkNode(opt) )
     {
@@ -559,11 +545,6 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if( a_path.substr(0,7) == "/up/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
-    else if( a_path == "/in/TR" )
-    {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(inTransport());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setInTransport(opt->text());
-    }
     else if( a_path == "/in/PROGLang" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(inProgLang());

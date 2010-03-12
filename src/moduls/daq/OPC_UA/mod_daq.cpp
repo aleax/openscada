@@ -78,6 +78,9 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
+    fldAdd( new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost:4841") );
+    fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
+    fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("None;Sign;Sign & Encrypt")) );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -94,7 +97,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mAddr(cfg("ADDR").getSd())
+	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mAddr(cfg("ADDR").getSd()),
+	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd())
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -128,12 +132,12 @@ void TMdContr::start_( )
 
     //> Establish OPC OA connection
     //>> Send HELLO message
-    XMLNode req("opc.tcp"); req.setAttr("id","HEL");
+    XMLNode req("opc.tcp"); req.setAttr("id","HEL")->setAttr("EndPoint",endPoint());
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("HELLO request error: %s"),req.attr("err").c_str());
 
     //>> Send Open SecureChannel message
-    req.setAttr("id","OPN")->setAttr("secPlcURI","http://opcfoundation.org/UA/SecurityPolicy#None");
+    req.setAttr("id","OPN")->setAttr("SecPolicy",secPolicy());
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
 
@@ -220,6 +224,22 @@ void *TMdContr::Task( void *icntr )
     cntr.prc_st = false;
 
     return NULL;
+}
+
+bool TMdContr::cfgChange( TCfg &icfg )
+{
+    TController::cfgChange(icfg);
+
+    if( icfg.name() == "SecPolicy" )
+    {
+	if( icfg.getS() == "None" && cfg("SecMessMode").getI() ) cfg("SecMessMode").setI(0);
+	if( icfg.getS() != "None" && !cfg("SecMessMode").getI() ) cfg("SecMessMode").setI(1);
+    }
+    else if( icfg.name() == "SecMessMode" &&
+	    ((icfg.getI() && cfg("SecPolicy").getS() == "None") || (!icfg.getI() && cfg("SecPolicy").getS() != "None")) )
+	return false;
+
+    return true;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )

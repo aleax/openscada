@@ -46,8 +46,8 @@ class SSess
 	string	user;			//sesion user
 	string	content;		//Contain
 
-	vector<string>		vars;	//request vars
-	map<string,string>	cnt;	//Parsed contain
+	vector<XMLNode>		cnt;	//Parsed contain
+	map<string,string>	vars;	//request vars
 	map<string,string>	prm;	//URL parameters
 };
 

@@ -245,8 +245,8 @@ void Widget::setEnable( bool val )
 	for( int i_l = 0; i_l < ls.size(); i_l++ )
 	{
 	    if( !(attrAt(ls[i_l]).at().flgGlob()&Attr::Generic) ) attrDel( ls[i_l], true );
-	    else if( attrAt(ls[i_l]).at().flgSelf( )&Attr::IsInher )
-		attrAt(ls[i_l]).at().setFld( new TFld(attrAt(ls[i_l]).at().fld()), false );
+	    //else if( attrAt(ls[i_l]).at().flgSelf( )&Attr::IsInher )
+	    //	attrAt(ls[i_l]).at().setFld( new TFld(attrAt(ls[i_l]).at().fld()), false );
 	}
 
 	//> Disable heritors widgets
@@ -357,7 +357,7 @@ void Widget::inheritAttr( const string &iattr )
 	    continue;
 	}
 	pattr = parent().at().attrAt(ls[i_l]);
-	if( !(attr.at().flgSelf()&Attr::IsInher) && !(attr.at().flgGlob()&Attr::Mutable) ) attr.at().setFld(&pattr.at().fld(),true);
+	if( !(attr.at().flgSelf()&Attr::IsInher) /*&& !(attr.at().flgGlob()&Attr::Mutable)*/ ) attr.at().setFld(&pattr.at().fld(),true);
 	if( attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) )	continue;
 	attr.at().setFlgSelf( (Attr::SelfAttrFlgs)pattr.at().flgSelf() );
 	if( !(attr.at().flgGlob( )&Attr::DirRead) )
@@ -1400,8 +1400,15 @@ void Attr::setFld( TFld *fld, bool inher )
 	    case TFld::Boolean:	m_val.b_val = atoi(fld->def().c_str());	break;
 	}
 
-    if( mFld && !(self_flg&Attr::IsInher) ) { delete mFld; mFld = NULL; }
+    if( mFld )
+    {
+	mFld->setLen(mFld->len()-1);
+	if( !mFld->len() ) delete mFld;
+	mFld = NULL;
+    }
     mFld = fld;
+    if( mFld && !inher )	mFld->setLen(1);
+    else if( mFld && inher )	mFld->setLen(mFld->len()+1);
     self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
 }
 

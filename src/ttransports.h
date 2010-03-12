@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,28 +44,29 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return mId; }
 	string workId( );
 	string name( );
-	string dscr( )		{ return m_dscr; }
-	string addr( )		{ return m_addr; }
-	string protocol( )	{ return m_prot; }
+	string dscr( )		{ return mDscr; }
+	string addr( )		{ return mAddr; }
+	string protocolFull( )	{ return mProt; }
+	string protocol( );
 	virtual string getStatus( );
 
-	bool toStart( ) 	{ return m_start; }
+	bool toStart( ) 	{ return mStart; }
 	bool startStat( )	{ return run_st; }
 
-	string DB( )		{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )		{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )		{ m_dscr = idscr; modif(); }
-	virtual void setAddr( const string &addr )	{ m_addr = addr; modif(); }
-	void setProtocol( const string &prt )		{ m_prot = prt; modif(); }
-	void setToStart( bool val )			{ m_start = val; modif(); }
+	void setName( const string &inm )		{ mName = inm; modif(); }
+	void setDscr( const string &idscr )		{ mDscr = idscr; modif(); }
+	virtual void setAddr( const string &addr )	{ mAddr = addr; modif(); }
+	void setProtocolFull( const string &prt )	{ mProt = prt; modif(); }
+	void setToStart( bool val )			{ mStart = val; modif(); }
 
-	void setDB( const string &vl )			{ m_db = vl; modifG(); }
+	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
 	virtual void start( )	{ };
 	virtual void stop( )	{ };
@@ -87,16 +88,16 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 
 	//Attributes
-	string	&m_id;
-	string	&m_name;
-	string	&m_dscr;
-	string	&m_addr;
-	string	&m_prot;
-	bool	&m_start;
-	string	m_db;
+	string	&mId;
+	string	&mName;
+	string	&mDscr;
+	string	&mAddr;
+	string	&mProt;
+	bool	&mStart;
+	string	mDB;
 };
 
 //************************************************
@@ -111,29 +112,29 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return mId; }
 	string	workId( );
 	string	name( );
-	string	dscr( )		{ return m_dscr; }
-	string	addr( )		{ return m_addr; }
-	int	prm1( )		{ return m_prm1; }
-	int	prm2( )		{ return m_prm2; }
-	bool	toStart( )	{ return m_start; }
+	string	dscr( )		{ return mDscr; }
+	string	addr( )		{ return mAddr; }
+	int	prm1( )		{ return mPrm1; }
+	int	prm2( )		{ return mPrm2; }
+	bool	toStart( )	{ return mStart; }
 	bool	startStat( )	{ return run_st; }
 	virtual	string getStatus( );
 
-	string DB( )		{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )		{ m_name = inm; modif(); }
-	void setDscr( const string &idscr )		{ m_dscr = idscr; modif(); }
-	virtual void setAddr( const string &addr )	{ m_addr = addr; modif(); }
-	void setPrm1( int vl )				{ m_prm1 = vl; }
-	void setPrm2( int vl )				{ m_prm2 = vl; }
-	void setToStart( bool val )			{ m_start = val; modif(); }
+	void setName( const string &inm )		{ mName = inm; modif(); }
+	void setDscr( const string &idscr )		{ mDscr = idscr; modif(); }
+	virtual void setAddr( const string &addr )	{ mAddr = addr; modif(); }
+	void setPrm1( int vl )				{ mPrm1 = vl; }
+	void setPrm2( int vl )				{ mPrm2 = vl; }
+	void setToStart( bool val )			{ mStart = val; modif(); }
 
-	void setDB( const string &vl )			{ m_db = vl; modifG(); }
+	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
 	virtual void start( )			{ };
 	virtual void stop( )			{ };
@@ -164,18 +165,18 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	string nodeName( )	{ return mId; }
 
 	//Attributes
-	string	&m_id;
-	string	&m_name;
-	string	&m_dscr;
-	string	&m_addr;
-	bool	&m_start;
-	string	m_db;
+	string	&mId;
+	string	&mName;
+	string	&mDscr;
+	string	&mAddr;
+	bool	&mStart;
+	string	mDB;
 
 	//> Reserve parameters
-	int	m_prm1, m_prm2;
+	int	mPrm1, mPrm2;
 	Res	nRes;
 };
 
@@ -192,18 +193,18 @@ class TTipTransport: public TModule
 	virtual ~TTipTransport( );
 
 	//> Input transports
-	void inList( vector<string> &list )			{ chldList(m_in,list); }
-	bool inPresent( const string &name )			{ return chldPresent(m_in,name); }
+	void inList( vector<string> &list )			{ chldList(mIn,list); }
+	bool inPresent( const string &name )			{ return chldPresent(mIn,name); }
 	void inAdd( const string &name, const string &db = "*.*" );
-	void inDel( const string &name, bool complete = false )	{ chldDel(m_in,name,-1,complete); }
-	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(m_in,name); }
+	void inDel( const string &name, bool complete = false )	{ chldDel(mIn,name,-1,complete); }
+	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(mIn,name); }
 
 	//> Output transports
-	void outList( vector<string> &list )			{ chldList(m_out,list); }
-	bool outPresent( const string &name )			{ return chldPresent(m_out,name); }
+	void outList( vector<string> &list )			{ chldList(mOut,list); }
+	bool outPresent( const string &name )			{ return chldPresent(mOut,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
-	void outDel( const string &name, bool complete = false ){ chldDel(m_out,name,-1,complete); }
-	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(m_out,name); }
+	void outDel( const string &name, bool complete = false ){ chldDel(mOut,name,-1,complete); }
+	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(mOut,name); }
 
 	TTransportS &owner( );
 
@@ -218,7 +219,7 @@ class TTipTransport: public TModule
 
     private:
 	//Attributes
-	int	m_in, m_out;
+	int	mIn, mOut;
 };
 
 //************************************************

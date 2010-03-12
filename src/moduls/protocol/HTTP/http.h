@@ -96,9 +96,11 @@ class TProt: public TProtocol
 	class SAuth
 	{
 	    public:
+		//Methods
 		SAuth( ) : tAuth(0), name("")	{ }
 		SAuth( string inm, time_t itAuth ) : tAuth(itAuth), name(inm)	{ }
 
+		//Attributes
 		time_t tAuth;
 		string name;
 	};

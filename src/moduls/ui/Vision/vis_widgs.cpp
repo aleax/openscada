@@ -661,7 +661,8 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
-    ed_fld->setTabStopWidth(40);
+    ed_fld->setTabStopWidth(20);
+    ed_fld->setAcceptRichText(false);
     ed_fld->setLineWrapMode(QTextEdit::NoWrap);
     setFocusProxy( ed_fld );
     connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );

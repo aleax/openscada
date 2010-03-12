@@ -206,6 +206,13 @@ int TVarObj::disconnect( )
     return mUseCnt;
 }
 
+void TVarObj::propList( vector<string> &ls )
+{
+    ls.clear();
+    for( map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++ )
+	ls.push_back(ip->first);
+}
+
 TVariant TVarObj::propGet( const string &id )
 {
     map<string,TVariant>::iterator vit = mProps.find(id);
@@ -409,7 +416,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if( id == "name" )	return name();
     if( id == "text" )	return text();
-    if( id == "attr" && prms.size() )	return propGet(prms[0].getS()).getS();
+    if( id == "attr" && prms.size() )		return propGet(prms[0].getS()).getS();
     if( id == "setName" && prms.size() )	{ setName(prms[0].getS()); return this; }
     if( id == "setText" && prms.size() )	{ setText(prms[0].getS()); return this; }
     if( id == "setAttr" && prms.size() >= 2 )	{ propSet(prms[0].getS(),prms[1].getS()); return this; }

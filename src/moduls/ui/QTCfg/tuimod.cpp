@@ -277,21 +277,21 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 
 void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type, QWidget *parent )
 {
-    //- Put system message. -
+    //> Put system message.
     message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
 	(type==TUIMod::Error)?TMess::Error:
 	(type==TUIMod::Warning)?TMess::Warning:TMess::Info,"%s",mess.c_str());
 
-    //- QT message -
+    QMessageBox msgBox(parent);
+    msgBox.setWindowTitle(_(MOD_NAME));
+    msgBox.setTextFormat(Qt::PlainText);
+    msgBox.setText(mess.c_str());
     switch(type)
     {
-	case TUIMod::Info:
-	    QMessageBox::information(parent,_(MOD_NAME),mess.c_str());	break;
-	case TUIMod::Warning:
-	    QMessageBox::warning(parent,_(MOD_NAME),mess.c_str());	break;
+	case TUIMod::Info:	msgBox.setIcon(QMessageBox::Information);	break;
+	case TUIMod::Warning:	msgBox.setIcon(QMessageBox::Warning);		break;
 	case TUIMod::Error:
-	    QMessageBox::critical(parent,_(MOD_NAME),mess.c_str());	break;
-	case TUIMod::Crit:
-	    QErrorMessage::qtHandler()->showMessage(mess.c_str());	break;
+	case TUIMod::Crit:	msgBox.setIcon(QMessageBox::Critical);		break;
     }
+    msgBox.exec();
 }

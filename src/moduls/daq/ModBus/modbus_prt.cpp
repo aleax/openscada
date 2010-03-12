@@ -60,7 +60,6 @@ TProt::TProt( string name ) : mPrtLen(0)
     mNodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mNodeEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
     mNodeEl.fldAdd( new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247") );
-    mNodeEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
     mNodeEl.fldAdd( new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")) );
     mNodeEl.fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("Data;Gateway node;Gateway net")) );
     //>> For "Data" mode
@@ -84,6 +83,12 @@ TProt::TProt( string name ) : mPrtLen(0)
 TProt::~TProt()
 {
     nodeDelAll();
+}
+
+void TProt::itemListIn( vector<string> &ls, const string &curIt )
+{
+    ls.clear();
+    if( TSYS::strParse(curIt,1,".").empty() )	nList(ls);
 }
 
 void TProt::nAdd( const string &iid, const string &db )
@@ -425,15 +430,15 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),0664,"root","Protocol",2,"idm","1","idSz","20");
 	if( ctrMkNode("area",opt,-1,"/node",_("Nodes")) )
-	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","n_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),0664,"root","Protocol",5,"tp","br","idm","1","s_com","add,del","br_pref","n_","idSz","20");
 	if( ctrMkNode("area",opt,-1,"/rep",_("Report")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),0664,"root","DAQ",4,"tp","dec","min","0","max","10000",
+	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),0664,"root","Protocol",4,"tp","dec","min","0","max","10000",
 		"help",_("Zero use for report disabling"));
 	    if( prtLen() )
-		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),0444,"root","DAQ",3,"tp","str","cols","90","rows","20");
+		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),0444,"root","Protocol",3,"tp","str","cols","90","rows","20");
 	}
 	return;
     }
@@ -442,24 +447,24 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/n_" || a_path == "/node/node" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )
 	{
 	    vector<string> lst;
 	    nList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEQ_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    nAdd(vid); nAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mNode,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mNode,opt->attr("id"),-1,1);
     }
     else if( a_path == "/rep/repLen" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(prtLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setPrtLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )	opt->setText( TSYS::int2str(prtLen()) );
+	if( ctrChkNode(opt,"set",0664,"root","Protocol",SEQ_WR) )	setPrtLen( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/rep/rep" && ctrChkNode(opt) )
     {
@@ -493,6 +498,8 @@ bool TProtIn::mess( const string &ireqst, string &answer, const string &sender )
     string prt, pdu;
     string reqst = ireqst;
     bool isBuf = false;
+    string selNode = TSYS::strParse(SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().inAt(TSYS::strParse(srcTr(),1,".")).at().protocolFull(),1,".");
+    if( !owner().nPresent(selNode) ) return false;
 
 retry:
     //>> ASCII check
@@ -534,17 +541,12 @@ retry:
     }
     req_buf = "";
 
-    vector<string> nls;
-    modPrt->nList(nls);
-    int i_n;
-    for( i_n = 0; i_n < nls.size(); i_n++ )
-	if( modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu) ) break;
-    if( i_n >= nls.size() ) return false;
+    if( !modPrt->nAt(selNode).at().req(prt,node,pdu) )	return false;
 
     answer = "";
+    //> Encode MBAP (Modbus Application Protocol)
     if( prt == "TCP" )
     {
-	//> Encode MBAP (Modbus Application Protocol)
 	answer.reserve(pdu.size()+7);
 	answer += reqst[0];			//Transaction ID MSB
 	answer += reqst[1];			//Transaction ID LSB
@@ -655,8 +657,6 @@ string Node::name( )		{ return mName.size() ? mName : id(); }
 string Node::tbl( )		{ return owner().modId()+"_node"; }
 
 int Node::addr( )		{ return cfg("ADDR").getI(); }
-
-string Node::inTransport( )	{ return cfg("InTR").getS(); }
 
 string Node::prt( )		{ return cfg("PRT").getS(); }
 
@@ -883,13 +883,12 @@ string Node::getStatus( )
     return rez;
 }
 
-bool Node::req( const string &itr, const string &iprt, unsigned char inode, string &pdu )
+bool Node::req( const string &iprt, unsigned char inode, string &pdu )
 {
     ResAlloc res(nRes,false);
 
     //> Check for allow request
     if( !enableStat( ) || pdu.empty() ||
-	!((inTransport( ) == "*" && mode()!=2) || inTransport( ) == itr) ||
 	!(addr( )==inode || mode()==2) ||
 	!(prt()=="*" || iprt==prt()) ) return false;
 
@@ -1121,13 +1120,9 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if( ctrMkNode("area",opt,-1,"/nd/cfg",_("Config")) )
 	    {
 		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root","root",RWRWR_);
-		//>> Append configuration properties
-		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
-		if( xt ) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
-		xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
+		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
 		if( xt ) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_otr");
-		xt = ctrId(opt->childGet(0),"/nd/cfg/DT_PROG",true);
-		if( xt ) xt->parent()->childDel(xt);
+		ctrRemoveNode(opt,"/nd/cfg/DT_PROG");
 	    }
 	}
 	if( mode( ) == 0 && ctrMkNode("area",opt,-1,"/dt",_("Data")) )
@@ -1164,14 +1159,6 @@ void Node::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
 	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
-    }
-    else if( a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt) )
-    {
-	if( mode() != 2 ) opt->childAdd("el")->setText("*");
-	vector<string> sls;
-	SYS->transport().at().inTrList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
-	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if( a_path == "/nd/cfg/ls_otr" && ctrChkNode(opt) )
     {

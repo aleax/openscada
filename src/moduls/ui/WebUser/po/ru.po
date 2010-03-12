@@ -4,13 +4,13 @@
 # Roman Savochenko <rom_as@fromru.com>, 2010.
 #
 #: web_user.cpp:54 web_user.cpp:137 web_user.cpp:145 web_user.cpp:200
-#: web_user.cpp:470 web_user.cpp:544 web_user.h:152
+#: web_user.cpp:470 web_user.cpp:544 web_user.h:154
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-05 16:47+0200\n"
+"POT-Creation-Date: 2010-03-12 15:39+0200\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -157,7 +157,7 @@ msgstr ""
 msgid "_uPg"
 msgstr ""
 
-#: web_user.cpp:140 web_user.cpp:148 web_user.h:137
+#: web_user.cpp:140 web_user.cpp:148 web_user.h:139
 msgid "*.*"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgid ""
 "Charset="
 msgstr ""
 
-#: web_user.cpp:192 web_user.cpp:608
+#: web_user.cpp:192 web_user.cpp:615
 msgid "\r\n"
 msgstr ""
 
@@ -217,10 +217,6 @@ msgstr "Ошибка страницы"
 
 #: web_user.cpp:220 web_user.cpp:459
 msgid "GET"
-msgstr ""
-
-#: web_user.cpp:228 web_user.cpp:289 web_user.cpp:615
-msgid ":"
 msgstr ""
 
 #: web_user.cpp:246 web_user.cpp:307
@@ -239,7 +235,7 @@ msgstr ""
 msgid "POST"
 msgstr ""
 
-#: web_user.cpp:312 web_user.h:152
+#: web_user.cpp:312 web_user.h:154
 msgid "text/html"
 msgstr ""
 
@@ -596,7 +592,7 @@ msgid ""
 "   'user' - auth user;\n"
 "   'HTTPvars' - HTTP variables into Object;\n"
 "   'URLprms' - URL's parameters into Object;\n"
-"   'cnts' - content items for POST into Object."
+"   'cnts' - content items for POST into Array<XMLNodeObj>."
 msgstr ""
 "Следующие атрибуты определены для обработки запросов:\n"
 "   'rez' - результат обработки (по умолчанию - 200 OK);\n"
@@ -607,7 +603,7 @@ msgstr ""
 "   'user' - аутентифицированный пользователь;\n"
 "   'HTTPvars' - HTTP переменные в Object;\n"
 "   'URLprms' - параметры URL в Object;\n"
-"   'cnts' - элементы содержимого для POST в Object."
+"   'cnts' - элементы содержимого для POST в Array<XMLNodeObj>."
 
 #: web_user.cpp:590
 msgid "?"
@@ -621,30 +617,22 @@ msgstr ""
 msgid "true"
 msgstr ""
 
-#: web_user.cpp:607
+#: web_user.cpp:607 web_user.cpp:636
+msgid ":"
+msgstr ""
+
+#: web_user.cpp:614
 msgid "boundary="
 msgstr ""
 
-#: web_user.cpp:609 web_user.cpp:625
+#: web_user.cpp:616 web_user.cpp:625
 msgid "--"
 msgstr ""
 
-#: web_user.cpp:610
-msgid "Content-Disposition: form-data;"
-msgstr ""
-
-#: web_user.cpp:611
-msgid "name=\""
-msgstr ""
-
-#: web_user.cpp:612
-msgid "filename=\""
-msgstr ""
-
-#: web_user.cpp:615
+#: web_user.cpp:617
 msgid "Content-Type"
 msgstr ""
 
-#: web_user.cpp:632 web_user.cpp:645
-msgid "\""
-msgstr ""
+#: web_user.cpp:628
+msgid "Content"
+msgstr "Содержимое"

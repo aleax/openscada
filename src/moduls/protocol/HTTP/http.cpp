@@ -241,7 +241,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     {
 	int	pos = 0;
 #if OSC_DEBUG >= 3
-	mess_debug(nodePath().c_str(),_("Content:\n%s"),request.c_str());
+	mess_debug(nodePath().c_str(),_("Content: %d:\n%s"),request.size(),request.c_str());
 #endif
 
 	//> Parse first record

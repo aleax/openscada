@@ -38,7 +38,7 @@ TTransportS::TTransportS( ) : TSubSYS("Transport","Transports",true)
     el_in.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_in.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
     el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
-    el_in.fldAdd( new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,"20") );
+    el_in.fldAdd( new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,"50") );
     el_in.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
     //> Output transport BD structure
@@ -507,8 +507,8 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTipTransport::TTipTransport()
 {
-    m_in = grpAdd("in_");
-    m_out = grpAdd("out_");
+    mIn = grpAdd("in_");
+    mOut = grpAdd("out_");
 }
 
 TTipTransport::~TTipTransport()
@@ -520,20 +520,20 @@ TTransportS &TTipTransport::owner( )	{ return (TTransportS&)TModule::owner(); }
 
 void TTipTransport::inAdd( const string &name, const string &idb )
 {
-    if( chldPresent(m_in,name) ) return;
-    chldAdd(m_in,In(name,idb));
+    if( chldPresent(mIn,name) ) return;
+    chldAdd(mIn,In(name,idb));
 }
 
 void TTipTransport::outAdd( const string &name, const string &idb )
 {
-    if( chldPresent(m_out,name) ) return;
-    chldAdd(m_out,Out(name,idb));
+    if( chldPresent(mOut,name) ) return;
+    chldAdd(mOut,Out(name,idb));
 }
 
 void TTipTransport::cntrCmdProc( XMLNode *opt )
 {
     vector<string> list;
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TModule::cntrCmdProc(opt);
@@ -546,7 +546,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/br/in_" || a_path == "/tr/in" )
     {
@@ -585,11 +585,11 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), m_db(idb), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_dscr(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), m_prot(cfg("PROT").getSd()),
-    m_start(cfg("START").getBd())
+    TConfig(el), run_st(false), mDB(idb), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
+    mDscr(cfg("DESCRIPT").getSd()), mAddr(cfg("ADDR").getSd()), mProt(cfg("PROT").getSd()),
+    mStart(cfg("START").getBd())
 {
-    m_id = iid;
+    mId = iid;
 }
 
 TTransportIn::~TTransportIn()
@@ -605,19 +605,21 @@ TCntrNode &TTransportIn::operator=( TCntrNode &node )
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     cfg("MODULE").setS(owner().modId());
-    m_id = tid;
-    setDB(src_n->m_db);
+    mId = tid;
+    setDB(src_n->mDB);
 
     return *this;
 }
 
 TTipTransport &TTransportIn::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportIn::name( )		{ return m_name.size()?m_name:m_id; }
+string TTransportIn::name( )		{ return mName.size()?mName:mId; }
 
 string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
+
+string TTransportIn::protocol( )	{ return TSYS::strParse(protocolFull(),0,"."); }
 
 void TTransportIn::postDisable(int flag)
 {
@@ -672,7 +674,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/cfg/p_mod");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
 	    }
 	}
@@ -709,8 +711,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/prm/cfg/prot" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(protocol());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setProtocol(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(protocolFull());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setProtocolFull(opt->text());
     }
     else if( a_path == "/prm/cfg/start" )
     {
@@ -720,9 +722,22 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/cfg/p_mod" && ctrChkNode(opt) )
     {
 	vector<string> list;
-	SYS->protocol().at().modList(list);
+	int c_lv = 0;
+	string c_path = "", c_el;
+	for( int c_off = 0; (c_el=TSYS::strSepParse(protocolFull(),0,'.',&c_off)).size(); c_lv++ )
+	{
+	    opt->childAdd("el")->setText(c_path);
+	    c_path += c_lv ? "."+c_el : c_el;
+	}
+	opt->childAdd("el")->setText(c_path);
+	if( c_lv == 0 ) SYS->protocol().at().modList(list);
+	else
+	{
+	    c_path += ".";
+	    SYS->protocol().at().at(protocol()).at().itemListIn(list,protocolFull());
+	}
 	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(SYS->protocol().at().modAt(list[i_a]).at().modName());
+	    opt->childAdd("el")->setText(c_path+list[i_a]);
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -731,11 +746,11 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), m_db(idb), run_st(false), m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_dscr(cfg("DESCRIPT").getSd()), m_addr(cfg("ADDR").getSd()), m_start(cfg("START").getBd()),
-    m_prm1(0), m_prm2(0)
+    TConfig(el), mDB(idb), run_st(false), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
+    mDscr(cfg("DESCRIPT").getSd()), mAddr(cfg("ADDR").getSd()), mStart(cfg("START").getBd()),
+    mPrm1(0), mPrm2(0)
 {
-    m_id = iid;
+    mId = iid;
 }
 
 TTransportOut::~TTransportOut( )
@@ -751,15 +766,15 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     cfg("MODULE").setS(owner().modId());
-    m_id = tid;
-    setDB(src_n->m_db);
+    mId = tid;
+    setDB(src_n->mDB);
 
     return *this;
 }
 
 TTipTransport &TTransportOut::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportOut::name()		{ return m_name.size()?m_name:m_id; }
+string TTransportOut::name()		{ return mName.size()?mName:mId; }
 
 string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 
@@ -925,7 +940,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	int mode = atoi(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")).c_str());
 	string req = TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user"));
 
-	if( mode == 1 ) req = TSYS::strEncode(req,TSYS::Bin);
+	if( mode == 0 ) req = TSYS::strEncode(req,TSYS::ShieldSimb);
+	else if( mode == 1 ) req = TSYS::strEncode(req,TSYS::Bin);
 	if( !req.empty() )
 	{
 	    long long stm = TSYS::curTime( );

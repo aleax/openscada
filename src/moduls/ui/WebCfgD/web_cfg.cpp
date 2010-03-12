@@ -547,7 +547,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser,
     {
 	pos = content.find(boundary,pos);
 	if( pos == string::npos || content.substr(pos+boundary.size(),2) == "--" ) break;
-	    pos += boundary.size()+strlen(c_term);
+	pos += boundary.size()+strlen(c_term);
 	string c_head = content.substr(pos, content.find(c_term,pos)-pos);
 	if( c_head.find(c_fd,0) == string::npos ) continue;
 

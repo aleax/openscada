@@ -85,6 +85,7 @@ typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 //***************************************************************
 class TVariant;
 
+#pragma pack(push,1)
 class TCntrNode
 {
     //* Controll scenaries language section *
@@ -228,5 +229,6 @@ class TCntrNode
 
 	char	m_flg;
 };
+#pragma pack(pop)
 
 #endif //TCNTRNODE_H

@@ -371,10 +371,10 @@ string Contr::getStatus( )
 void Contr::enable_( )
 {
     if( !mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
-	throw TError(nodePath().c_str(),_("Functions library <%s> is not present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
+	throw TError(nodePath().c_str(),_("Functions library '%s' is not present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
     if( !mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().present(TSYS::strSepParse(mFnc,1,'.')) )
     {
-	mess_info(nodePath().c_str(),_("Create new function <%s>."),mFnc.c_str());
+	mess_info(nodePath().c_str(),_("Create new function '%s'."),mFnc.c_str());
 	mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().add(TSYS::strSepParse(mFnc,1,'.').c_str());
     }
     setFunc( &mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().at(TSYS::strSepParse(mFnc,1,'.')).at() );

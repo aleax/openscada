@@ -37,6 +37,7 @@ using std::map;
 //*************************************************
 class TConfig;
 
+#pragma pack(push,1)
 class TCfg
 {
     public:
@@ -107,6 +108,7 @@ class TCfg
 	TFld	*mFld;
 	TConfig	&mOwner;
 };
+#pragma pack(pop)
 
 //*************************************************
 //* TConfig                                       *

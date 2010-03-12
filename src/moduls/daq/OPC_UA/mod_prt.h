@@ -47,6 +47,16 @@ using std::map;
 namespace OPC_UA
 {
 
+//> Constants
+#define OpcUa_ProtocolVersion		0
+#define OpcUa_ReciveBufferSize		0x10000
+#define OpcUa_SendBufferSize		0x10000
+#define OpcUa_MaxMessageSize		0x1000000
+#define OpcUa_MaxChunkCount		5000
+
+//> Status codes
+#define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
+
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
@@ -64,12 +74,86 @@ class TProtIn: public TProtocolIn
 	TProt &owner( );
 
 	//> Special
-	string mkError( uint32_t errId, const string &err );
+	string mkError( uint32_t errId, const string &err = "" );
 
     public:
 	//Attributes
 	bool mNotFull;
 	string mBuf;
+};
+
+//*************************************************
+//* OPCServer                                     *
+//*************************************************
+class OPCServer : public TCntrNode, public TConfig
+{
+    public:
+	//Methods
+	OPCServer( const string &iid, const string &db, TElem *el );
+	~OPCServer( );
+
+	TCntrNode &operator=( TCntrNode &node );
+
+	const string &id( )	{ return mId; }
+	string name( );
+	string descr( )		{ return mDscr; }
+	bool toEnable( )	{ return mAEn; }
+	bool enableStat( )	{ return mEn; }
+	string endPoint( );
+	string inTransport( );
+
+	string getStatus( );
+
+	string DB( )		{ return mDB; }
+	string tbl( );
+	string fullDB( )	{ return DB()+'.'+tbl(); }
+
+	void setName( const string &name )	{ mName = name; modif(); }
+	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
+	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
+	void setEnable( bool vl );
+
+	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+
+	TProt &owner( );
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
+    private:
+	//Data
+
+	//Methods
+	string nodeName( )	{ return mId; }
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	void postDisable( int flag );		//Delete all DB if flag 1
+	bool cfgChange( TCfg &cfg );
+
+	//Attributes
+	string	&mId, &mName, &mDscr;
+	bool	&mAEn, mEn;
+	string	mDB;
+
+	float	cntReq;
+};
+
+//*************************************************
+//* SecCnl                                        *
+//*************************************************
+class SecCnl
+{
+    public:
+	//Methods
+	SecCnl( ) : TokenId(1)	{ }
+
+	//Attributes
+	time_t		tCreate;
+	int32_t		tLife;
+	uint32_t	TokenId;
 };
 
 //*************************************************
@@ -84,6 +168,19 @@ class TProt: public TProtocol
 
 	void modStart( );
 	void modStop( );
+
+	//> Server's functions
+	void sList( vector<string> &ls )	{ chldList(mServer,ls); }
+	bool sPresent( const string &id )	{ return chldPresent(mServer,id); }
+	void sAdd( const string &id, const string &db = "*.*" );
+	void sDel( const string &id )		{ chldDel(mServer,id); }
+	AutoHD<OPCServer> sAt( const string &id )	{ return chldAt(mServer,id); }
+
+	//> Channel manipulation functions
+	int chnlOpen( );
+	void chnlClose( int cid );
+
+	TElem &serverEl( )			{ return mServerEl; }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -107,6 +204,8 @@ class TProt: public TProtocol
 	static void oNodeId( string &buf, int val, int ns = 0 );
 	static void oTm( string &buf, long long val );
 
+	Res &nodeRes( )		{ return nRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -115,6 +214,18 @@ class TProt: public TProtocol
     private:
 	//Methods
 	TProtocolIn *in_open( const string &name );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	//Attributes
+	int	mServer;
+
+	TElem	mServerEl;
+
+	map<int,SecCnl>	mSecCnl;
+	uint32_t mSecCnlIdLast;
+
+	Res	nRes;
 };
 
 extern TProt *modPrt;

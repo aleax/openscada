@@ -581,6 +581,34 @@ string TSYS::strSepParse( const string &path, int level, char sep, int *off )
     return "";
 }
 
+string TSYS::strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
+{
+    int an_dir = off ? *off : 0;
+    int t_lev = 0;
+    int t_dir;
+
+    if( an_dir >= path.size() || sep.empty() ) return "";
+    while(true)
+    {
+	t_dir = path.find(sep,an_dir);
+	if( t_dir == string::npos )
+	{
+	    if( off ) *off = path.size();
+	    return (t_lev == level) ? path.substr(an_dir) : "";
+	}
+	else if( t_lev == level )
+	{
+	    if( off ) *off = t_dir+1;
+	    return path.substr(an_dir,t_dir-an_dir);
+	}
+	if( mergeSepSymb && sep.size() == 1 )
+	    for( an_dir = t_dir; an_dir < path.size() && path[an_dir] == sep[0]; ) an_dir++;
+	else an_dir = t_dir+sep.size();
+	t_lev++;
+    }
+    return "";
+}
+
 string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 {
     int an_dir = off ? *off : 0;
@@ -675,7 +703,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    case '<':	sout+="&lt;";	break;
 		    case '"':	sout+="&quot;";	break;
 		    case '&':	sout+="&amp;";	break;
-		    case '\'':	sout+="&#039;";	break;
+		    case '\'':	sout+="&apos;";	break;
 		    default:	sout+=in[i_sz];
 		}
 	    break;
@@ -777,6 +805,25 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	}
 	case TSYS::Reverse:
 	    for( i_sz = in.size()-1; i_sz >= 0; i_sz-- ) sout += in[i_sz];
+	    break;
+	case TSYS::ShieldSimb:
+	    sout.reserve(in.size());
+	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+		if( in[i_sz] == '\\' && i_sz < (in.size()-1) )
+		{
+		    switch( in[i_sz+1] )
+		    {
+			case 'a':	sout += '\a';	break;
+			case 'b':	sout += '\b';	break;
+			case 'f':	sout += '\f';	break;
+			case 'n':	sout += '\n';	break;
+			case 'r':	sout += '\r';	break;
+			case 't':	sout += '\t';	break;
+			case 'v':	sout += '\v';	break;
+			default:	sout += in[i_sz+1];
+		    }
+		    i_sz++;
+		}else sout += in[i_sz];
 	    break;
     }
     return sout;
