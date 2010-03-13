@@ -116,7 +116,7 @@ class Node : public TFunction, public TConfig
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	bool req( const string &prt, unsigned char node, string &pdu );
+	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
 
 	TProt &owner( );
 
@@ -174,8 +174,6 @@ class TProt: public TProtocol
 
 	void modStart( );
 	void modStop( );
-
-	void itemListIn( vector<string> &ls, const string &curIt = "" );
 
 	//> Node's functions
 	void nList( vector<string> &ls )	{ chldList(mNode,ls); }
