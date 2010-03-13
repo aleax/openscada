@@ -824,8 +824,11 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     {
 	string rez;
 	char buf[STR_BUF_LEN];
-	int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? 1e3*prms[1].getR() : 0 );
-	rez.assign(buf,resp_len);
+	try
+	{
+	    int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? 1e3*prms[1].getR() : 0 );
+	    rez.assign(buf,resp_len);
+	}catch(TError) { }
 
 	return rez;
     }
