@@ -137,7 +137,7 @@ void TMdContr::start_( )
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("HELLO request error: %s"),req.attr("err").c_str());
 
     //>> Send Open SecureChannel message
-    req.setAttr("id","OPN")->setAttr("SecPolicy",secPolicy());
+    req.setAttr("id","OPN")->setAttr("SecPolicy",secPolicy())->setAttr("SecLifeTm","300000");
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
 

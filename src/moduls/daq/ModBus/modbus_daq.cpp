@@ -173,14 +173,11 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    if( prc_st )
-    {
-	//> Stop the request and calc data task
-	SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+    //> Stop the request and calc data task
+    SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 
-	//> Clear statistic
-	numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
-    }
+    //> Clear statistic
+    numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )

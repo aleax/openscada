@@ -55,7 +55,41 @@ namespace OPC_UA
 #define OpcUa_MaxChunkCount		5000
 
 //> Status codes
+#define OpcUa_BadUnexpectedError	0x80010000
+#define OpcUa_BadEncodingError		0x80060000
+#define OpcUa_BadDecodingError		0x80070000
+#define OpcUa_BadTimeout		0x800A0000
+#define OpcUa_BadServiceUnsupported	0x800B0000
+#define OpcUa_BadSecureChannelIdInvalid	0x80220000
+#define OpcUa_BadSessionIdInvalid	0x80250000
+#define OpcUa_BadNotSupported		0x803D0000
+#define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
+#define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
+#define OpcUa_BadSecureChannelClosed	0x80860000
+#define OpcUa_BadSecureChannelTokenUnknown	0x80870000
+#define OpcUa_BadRequestTooLarge	0x80B80000
+#define OpcUa_BadResponseTooLarge	0x80B90000
+#define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
+
+//> Requests types
+#define OpcUa_FindServersRequest	422
+#define OpcUa_FindServersResponse	425
+#define OpcUa_GetEndpointsRequest	428
+#define OpcUa_GetEndpointsResponse	431
+#define OpcUa_OpenSecureChannelRequest	446
+#define OpcUa_OpenSecureChannelResponse	449
+#define OpcUa_CloseSecureChannelRequest	452
+#define OpcUa_CreateSessionRequest	461
+#define OpcUa_CreateSessionResponse	464
+#define OpcUa_ActivateSessionRequest	467
+#define OpcUa_ActivateSessionResponse	470
+#define OpcUa_CloseSessionRequest	473
+#define OpcUa_CloseSessionResponse	476
+#define OpcUa_BrowseRequest		527
+#define OpcUa_BrowseResponse		530
+#define OpcUa_ReadRequest		631
+#define OpcUa_ReadResponse		634
 
 //*************************************************
 //* TProtIn                                       *
@@ -148,10 +182,12 @@ class SecCnl
 {
     public:
 	//Methods
-	SecCnl( ) : TokenId(1)	{ }
+	SecCnl( uint32_t iTokenId, int32_t iLifeTm ) :
+	    TokenId(iTokenId), tCreate(TSYS::curTime()), tLife(vmax(600000,iLifeTm))	{ }
+	SecCnl( ) : TokenId(0), tCreate(TSYS::curTime()), tLife(600000)	{ }
 
 	//Attributes
-	time_t		tCreate;
+	long long	tCreate;
 	int32_t		tLife;
 	uint32_t	TokenId;
 };
@@ -177,8 +213,9 @@ class TProt: public TProtocol
 	AutoHD<OPCServer> sAt( const string &id )	{ return chldAt(mServer,id); }
 
 	//> Channel manipulation functions
-	int chnlOpen( );
+	int chnlOpen( int32_t lifeTm = 0 );
 	void chnlClose( int cid );
+	SecCnl chnlGet( int cid );
 
 	TElem &serverEl( )			{ return mServerEl; }
 

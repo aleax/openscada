@@ -969,7 +969,8 @@ long TSYS::HZ()
 void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm )
 {
     ResAlloc res( taskRes, false );
-    if( mTasks.find(path) != mTasks.end() )	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
+    if( mTasks.find(path) != mTasks.end() && (!startCntr || (startCntr && *startCntr)) )
+	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
     res.release();
 
     pthread_t procPthr;

@@ -131,11 +131,15 @@ void TProt::modStop( )
 	sAt(ls[i_n]).at().setEnable(false);
 }
 
-int TProt::chnlOpen( )
+int TProt::chnlOpen( int32_t lifeTm )
 {
     ResAlloc res( nodeRes(), true );
-    if( !(++mSecCnlIdLast) ) mSecCnlIdLast = 0;
-    mSecCnl[mSecCnlIdLast] = SecCnl();
+    do
+    {
+	if( !(++mSecCnlIdLast) ) mSecCnlIdLast = 2;
+    } while( mSecCnl.find(mSecCnlIdLast) != mSecCnl.end() );
+
+    mSecCnl[mSecCnlIdLast] = SecCnl(1,lifeTm);
     return mSecCnlIdLast;
 }
 
@@ -143,6 +147,12 @@ void TProt::chnlClose( int cid )
 {
     ResAlloc res( nodeRes(), true );
     mSecCnl.erase( cid );
+}
+
+SecCnl TProt::chnlGet( int cid )
+{
+    ResAlloc res( nodeRes(), false );
+    return mSecCnl[cid];
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -216,7 +226,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    io.setAttr("SeqReqId","1");
 		    oNu(rez,atoi(io.attr("SeqReqId").c_str()),4);	//RequestId
 							//> Extension body object
-		    oNodeId(rez,446);			//TypeId
+		    oNodeId(rez,OpcUa_OpenSecureChannelRequest);	//TypeId
 							//>> Request Header
 		    oNodeId(rez,0);			//Session AuthenticationToken
 		    oTm(rez,TSYS::curTime());		//timestamp
@@ -233,7 +243,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oNu(rez,0,4);			//RequestType
 		    oNu(rez,1,4);			//SecurityMode
 		    oS(rez,"\000");			//ClientNonce
-		    oN(rez,300000,4);			//RequestedLifetime
+		    oN(rez,atoi(io.attr("SecLifeTm").c_str()),4);	//RequestedLifetime
 		    oNu(rez,rez.size(),4,4);		//> Real message size
 
 		    //> Send request
@@ -251,8 +261,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			iNu(rez,off,4);			//Sequence number
 			iNu(rez,off,4);			//RequestId
 							//> Extension Object
-			if( iNodeId(rez,off) != 449 )	//TypeId (449 - NodeId)
-			    throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			if( iNodeId(rez,off) != OpcUa_OpenSecureChannelResponse )	//TypeId
+			    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 							//>> Body
 							//>>> RespondHeader
 			iTm(rez,off);			//timestamp
@@ -265,10 +275,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			iNu(rez,off,1);			//Encoding
 							//>>>> Standard respond
 			iNu(rez,off,4);			//ServerProtocolVersion
-			io.setAttr("secChnId",TSYS::int2str(iNu(rez,off,4)));		//Secure channel identifier
-			io.setAttr("secTokenId",TSYS::int2str(iNu(rez,off,4)));		//TokenId
+			io.setAttr("SecChnId",TSYS::int2str(iNu(rez,off,4)));		//Secure channel identifier
+			io.setAttr("SecTokenId",TSYS::int2str(iNu(rez,off,4)));		//TokenId
 			iTm(rez,off);			//CreatedAt
-			iN(rez,off,4);			//RevisedLifeTime (600000)
+			io.setAttr("SecLifeTm",TSYS::int2str(iN(rez,off,4)));		//RevisedLifeTime
 			iS(rez,off);			//nonce
 		    }
 		    printf("TEST 10: OPN respond:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
@@ -280,17 +290,15 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		rez.reserve( 200 );
 		rez.append( "CLOF" );			//OpenSecureChannel close
 		oNu(rez,0,4);				//Message size
-		oNu(rez,atoi(io.attr("secChnId").c_str()),4);	//Secure channel identifier
-		oNu(rez,atoi(io.attr("secTokenId").c_str()),4);	//TokenId
+		oNu(rez,atoi(io.attr("SecChnId").c_str()),4);	//Secure channel identifier
+		oNu(rez,atoi(io.attr("SecTokenId").c_str()),4);	//TokenId
 							//> Sequence header
 		uint32_t SeqNumber = atoi(io.attr("SeqNumber").c_str())+1;
-		io.setAttr("SeqNumber",TSYS::int2str(SeqNumber));
 		uint32_t SeqReqId = atoi(io.attr("SeqReqId").c_str())+1;
-		io.setAttr("SeqReqId",TSYS::int2str(SeqReqId));
 		oNu(rez,SeqNumber,4);			//Sequence number
 		oNu(rez,SeqReqId,4);			//RequestId
 							//> Extension body object
-		oNodeId(rez,452);			//TypeId request: CloseSecureChannel
+		oNodeId(rez,OpcUa_CloseSecureChannelRequest);	//TypeId request: CloseSecureChannel
 							//>> Request Header
 		oNodeId(rez,0);				//Session AuthenticationToken
 		oTm(rez,TSYS::curTime());		//timestamp
@@ -312,21 +320,21 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		string mReq;
 		if( io.attr("id") == "FindServers" )
 		{
-		    iTpId = 422;
+		    iTpId = OpcUa_FindServersRequest;
 		    oS(mReq,"opc.tcp://roman.home:4841");	//endpointUrl
 		    oS(mReq,"");				//localeIds []
 		    oS(mReq,"");				//serverUris []
 		}
 		else if( io.attr("id") == "GetEndpoints" )
 		{
-		    iTpId = 428;
+		    iTpId = OpcUa_GetEndpointsRequest;
 		    oS(mReq,"opc.tcp://roman.home:4841");	//endpointUrl
 		    oS(mReq,"");				//localeIds []
 		    oS(mReq,"");				//profileUris []
 		}
 		else if( io.attr("id") == "CreateSession" )
 		{
-		    iTpId =  461;
+		    iTpId = OpcUa_CreateSessionRequest;
 							//> clientDescription (Application Description)
 		    oS(mReq,"");			//applicationUri
 		    oS(mReq,"");			//productUri
@@ -343,7 +351,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		    //>>> Certificate reading
 		    int hd = ::open("uaexpert.der",O_RDONLY);
-		    if( hd < 0 ) throw TError(100,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
+		    if( hd < 0 ) throw TError(OpcUa_BadUnexpectedError,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
 		    int cf_sz = lseek(hd,0,SEEK_END);
 		    lseek(hd,0,SEEK_SET);
 		    char *buf = (char *)malloc(cf_sz);
@@ -358,7 +366,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		else if( io.attr("id") == "ActivateSession" )
 		{
-		    iTpId = 467;
+		    iTpId = OpcUa_ActivateSessionRequest;
 							//> clientSignature
 		    oS(mReq,"");			//signature
 		    oS(mReq,"");			//algorithm
@@ -378,12 +386,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		else if( io.attr("id") == "CloseSession" )
 		{
-		    iTpId = 473;
+		    iTpId = OpcUa_CloseSessionRequest;
 		    oNu(mReq,1,1);			//deleteSubscriptions
 		}
 		else if( io.attr("id") == "Read" )
 		{
-		    iTpId = 631;
+		    iTpId = OpcUa_ReadRequest;
 		    oR(mReq,0,8);			//maxAge 0 ms
 		    oNu(mReq,1,4);			//timestampsTo Return (SERVER_1)
 							//> nodesToRead []
@@ -397,7 +405,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		else if( io.attr("id") == "Browse" )
 		{
-		    iTpId = 527;
+		    iTpId = OpcUa_BrowseRequest;
 							//> view
 		    oNodeId(mReq,0);			//viewId (0)
 		    oTm(mReq,0);			//timestamp
@@ -414,13 +422,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oNu(mReq,0,4);			//nodeClassMask ( all NodeClasses )
 		    oNu(mReq,0x3f,4);			//resultMask ( all )
 		}
-		else throw TError( 100, "OPC UA Bin", _("11:OPC UA '%s': request '%s' is not supported."),io.name().c_str(),io.attr("id").c_str());
+		else throw TError( OpcUa_BadNotSupported, "OPC UA Bin", _("11:OPC UA '%s': request '%s' is not supported."),io.name().c_str(),io.attr("id").c_str());
 
 		rez.reserve( 200 );
 		rez.append( "MSGF" );			//SecureChannel message
 		oNu(rez,0,4);				//Message size
-		oNu(rez,atoi(io.attr("secChnId").c_str()),4);		//Secure channel identifier
-		oNu(rez,atoi(io.attr("secTokenId").c_str()),4);		//TokenId
+		oNu(rez,atoi(io.attr("SecChnId").c_str()),4);		//Secure channel identifier
+		oNu(rez,atoi(io.attr("SecTokenId").c_str()),4);		//TokenId
 							//> Sequence header
 		uint32_t SeqNumber = atoi(io.attr("SeqNumber").c_str())+1;
 		io.setAttr("SeqNumber",TSYS::int2str(SeqNumber));
@@ -483,9 +491,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		    switch( iTpId )
 		    {
-			case 422:	//FindServers
+			case OpcUa_FindServersRequest:
 			{
-			    if( oTpId != 425 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( oTpId != OpcUa_FindServersResponse )
+				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 			    int AppDescrNub = iNu(rez,off,4);		//List items
 			    for( int i_l = 0; i_l < AppDescrNub; i_l++ )
 			    {
@@ -502,9 +511,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    }
 			    break;
 			}
-			case 428:	//GetEndpoints
+			case OpcUa_GetEndpointsRequest:
 			{
-			    if( oTpId != 431 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( oTpId != OpcUa_GetEndpointsResponse )
+				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 			    int EndpointDescrNub = iNu(rez,off,4);	//List items
 			    for( int i_l = 0; i_l < EndpointDescrNub; i_l++ )
 			    {
@@ -539,9 +549,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    }
 			    break;
 			}
-			case 461:	//CreateSession
+			case OpcUa_CreateSessionRequest:
 			{
-			    if( oTpId != 464 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( oTpId != OpcUa_CreateSessionResponse )
+				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 			    io.setAttr("sesId",TSYS::int2str(iNodeId(rez,off)));	//sessionId
 			    io.setAttr("authTokenId",TSYS::int2str(iNodeId(rez,off)));	//authentication Token
 			    iR(rez,off,8);				//revisedSession Timeout, ms
@@ -587,19 +598,21 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    iNu(rez,off,4);				//maxRequest MessageSize
 			    break;
 			}
-			case 467:	//ActivateSession
+			case OpcUa_ActivateSessionRequest:
 			{
-			    if( oTpId != 470 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( oTpId != OpcUa_ActivateSessionResponse )
+				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 			    iS(rez,off);				//serverNonce
 			    iS(rez,off);				//results []
 			    iS(rez,off);				//diagnosticInfos []
 			    break;
 			}
-			case 473:	//CloseSession
+			case OpcUa_CloseSessionRequest:
 			    break;
-			case 631:	//Read
+			case OpcUa_ReadRequest:
 			{
-			    if( oTpId != 634 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( oTpId != OpcUa_ReadResponse )
+				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
 			    for( int i_r = 0; i_r < resN; i_r++ )
@@ -615,9 +628,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    }
 			    break;
 			}
-			case 527:	//Browse
+			case OpcUa_BrowseRequest:
 			{
-			    if( oTpId != 530 )	throw TError( 100, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( oTpId != OpcUa_BrowseResponse )
+				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
 			    for( int i_r = 0; i_r < resN; i_r++ )
@@ -646,7 +660,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	}
 	else err = TSYS::strMess(_("10:OPC UA protocol '%s' is not supported."),io.name().c_str());
     }
-    catch(TError er) { err = (er.cod==100) ? er.mess : TSYS::strMess(_("14:Remote host error: %s"),er.mess.c_str()); }
+    catch(TError er) { err = (er.cod<0||er.cod>100) ? er.mess : TSYS::strMess(_("14:Remote host error: %s"),er.mess.c_str()); }
 
     io.setAttr("err",err);
 }
@@ -654,48 +668,48 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 const char *TProt::iVal( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if( off > rb.size() ) throw TError(100,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
     return rb.data()+off-vSz;
 }
 
 int32_t TProt::iN( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if( off > rb.size() ) throw TError(100,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
     switch( vSz )
     {
 	case 1:	return *(int8_t*)(rb.data()+off-vSz);
 	case 2:	return *(int16_t*)(rb.data()+off-vSz);
 	case 4:	return *(int32_t*)(rb.data()+off-vSz);
     }
-    throw TError(100,modPrt->nodePath().c_str(),_("Number size '%d' error."),vSz);
+    throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Number size '%d' error."),vSz);
 }
 
 uint32_t TProt::iNu( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if( off > rb.size() ) throw TError(100,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
     switch( vSz )
     {
 	case 1:	return *(uint8_t*)(rb.data()+off-vSz);
 	case 2:	return *(uint16_t*)(rb.data()+off-vSz);
 	case 4:	return *(uint32_t*)(rb.data()+off-vSz);
     }
-    throw TError(100,modPrt->nodePath().c_str(),_("Number size '%d' error."),vSz);
+    throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Number size '%d' error."),vSz);
 }
 
 double TProt::iR( const string &rb, int &off, char vSz )
 {
     if( vSz == 4 ) return *(float *)iVal(rb,off,vSz);
     else if( vSz == 8 ) return *(double *)iVal(rb,off,vSz);
-    throw TError(100,modPrt->nodePath().c_str(),_("Real number size '%d' error."),vSz);
+    throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Real number size '%d' error."),vSz);
 }
 
 string TProt::iS( const string &rb, int &off )
 {
     int sSz = iN(rb,off,4); sSz = vmax(0,sSz);
     off += sSz;
-    if( off > rb.size() ) throw TError(100,modPrt->nodePath().c_str(),_("Buffer size is less for requested string."));
+    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested string."));
     return rb.substr(off-sSz,sSz);
 }
 
@@ -728,7 +742,7 @@ long long TProt::iTm( const string &rb, int &off )
 int TProt::iNodeId( const string &rb, int &off, int *ns )
 {
     off += 1;
-    if( off > rb.size() ) throw TError(100,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
+    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
     char enc = rb[off-1];
     switch( enc )
     {
@@ -737,11 +751,11 @@ int TProt::iNodeId( const string &rb, int &off, int *ns )
 	    return iNu(rb,off,1);
 	case 0x01:
 	    off += 1;
-	    if( off > rb.size() ) throw TError(100,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
+	    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
 	    if( ns ) *ns = (uint8_t)rb[off-1];
 	    return iNu(rb,off,2);
     }
-    throw TError(100,modPrt->nodePath().c_str(),_("NodeId type %d error or don't support."),enc);
+    throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("NodeId type %d error or don't support."),enc);
 }
 
 void TProt::oN( string &buf, int32_t val, char sz, int off )
@@ -760,7 +774,7 @@ void TProt::oR( string &buf, double val, char sz )
 {
     if( sz == 4 ) { float vl = val; buf.append( (char*)&vl, sz ); }
     else if( sz == 8 ) buf.append( (char*)&val, sz );
-    else throw TError(100,modPrt->nodePath().c_str(),_("Real number size '%d' error."),sz);
+    else throw TError(OpcUa_BadEncodingError,modPrt->nodePath().c_str(),_("Real number size '%d' error."),sz);
 }
 
 void TProt::oS( string &buf, const string &val )
@@ -880,13 +894,13 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	//> Check for hello message type
 	if( rb.compare(0,4,"HELF") == 0 )
 	{
-	    if( rb.size() > 4096 )	{ out = mkError(OpcUa_BadTcpEndpointUrlInvalid); return false; }
+	    if( rb.size() > 4096 )	{ out = mkError(OpcUa_BadTcpMessageTooLarge); return false; }
 	    off = 8;
-	    uint32_t prtVer = TProt::iNu(rb,off,4);	//Protocol version
-	    uint32_t rBufSz = TProt::iNu(rb,off,4);	//Recive buffer size
-	    uint32_t wBufSz = TProt::iNu(rb,off,4);	//Send buffer size
-	    uint32_t mMsgSz = TProt::iNu(rb,off,4);	//Max message size
-	    uint32_t mChnk  = TProt::iNu(rb,off,4);	//Max chunk count
+	    TProt::iNu(rb,off,4);			//Protocol version
+	    TProt::iNu(rb,off,4);			//Recive buffer size
+	    TProt::iNu(rb,off,4);			//Send buffer size
+	    TProt::iNu(rb,off,4);			//Max message size
+	    TProt::iNu(rb,off,4);			//Max chunk count
 	    string EndpntURL = TProt::iS(rb,off);	//EndpointURL
 
 	    printf( "TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
@@ -920,7 +934,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    return true;
 	}
 	//> Check for Open SecureChannel message type
-	if( rb.size() > 8 && rb.compare(0,4,"OPNF") == 0 )
+	if( rb.compare(0,4,"OPNF") == 0 )
 	{
 	    off = 8;
 	    uint32_t secChnId = TProt::iNu(rb,off,4);		//Secure channel identifier
@@ -929,33 +943,37 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    string secPlcURI = TProt::iS(rb,off);			//Security policy URI
 	    if( secPlcURI == "http://opcfoundation.org/UA/SecurityPolicy#None" )
 	    {
-		int32_t senderCertLength = TProt::iN(rb,off,4);	//SenderCertificateLength
-		int32_t recCertThbLength = TProt::iN(rb,off,4);	//ReceiverCertificateThumbprintLength
+		//>> Find server with that policy
+		//????
+
+		TProt::iN(rb,off,4);				//SenderCertificateLength
+		TProt::iN(rb,off,4);				//ReceiverCertificateThumbprintLength
 								//> Sequence header
 		uint32_t secNumb = TProt::iNu(rb,off,4);	//Sequence number
 		uint32_t reqId = TProt::iNu(rb,off,4);		//RequestId
 								//> Extension body object
-		uint16_t eoTpId = TProt::iNodeId(rb,off);	//TypeId
+		if( TProt::iNodeId(rb,off) != OpcUa_OpenSecureChannelRequest )	//TypeId
+		    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge") );
 								//>> Request Header
 		TProt::iVal(rb,off,2);				//Session AuthenticationToken
-		long long tmStamp = TProt::iTm(rb,off);		//timestamp
+		TProt::iTm(rb,off);				//timestamp
 		int32_t rqHndl = TProt::iN(rb,off,4);		//requestHandle
-		uint32_t retDgn = TProt::iNu(rb,off,4);		//returnDiagnostics
-		string AuditEntrId = TProt::iS(rb,off);		//auditEntryId
-		uint32_t tmHnt = TProt::iNu(rb,off,4);		//timeoutHint
+		TProt::iNu(rb,off,4);				//returnDiagnostics
+		TProt::iS(rb,off);				//auditEntryId
+		TProt::iNu(rb,off,4);				//timeoutHint
 								//>>> Extensible parameter
 		TProt::iNodeId(rb,off);				//TypeId (0)
 		TProt::iNu(rb,off,1);				//Encoding
 								//>>>> Standard request
-		uint32_t clntPrtVer = TProt::iNu(rb,off,4);	//ClientProtocolVersion
-		uint32_t reqTp = TProt::iNu(rb,off,4);		//RequestType
-		uint32_t secMode = TProt::iNu(rb,off,4);	//SecurityMode
-		string clntNonce = TProt::iS(rb,off);		//ClientNonce
+		TProt::iNu(rb,off,4);				//ClientProtocolVersion
+		TProt::iNu(rb,off,4);				//RequestType
+		TProt::iNu(rb,off,4);				//SecurityMode
+		TProt::iS(rb,off);				//ClientNonce
 		int32_t reqLifeTm = TProt::iN(rb,off,4);	//RequestedLifetime
 
 		printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
-		uint32_t chnlId = owner().chnlOpen();
+		uint32_t chnlId = owner().chnlOpen(reqLifeTm);
 
 		//> Prepare respond message
 		out.reserve( 200 );
@@ -963,12 +981,12 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		TProt::oNu(out,0,4);				//Message size
 		TProt::oNu(out,chnlId,4);			//Secure channel identifier
 		TProt::oS(out,secPlcURI);			//Security policy URI
-		TProt::oN(out,senderCertLength,4);		//SenderCertificateLength
-		TProt::oN(out,recCertThbLength,4);		//ReceiverCertificateThumbprintLength
+		TProt::oN(out,-1,4);				//SenderCertificateLength
+		TProt::oN(out,-1,4);				//ReceiverCertificateThumbprintLength
 		TProt::oNu(out,secNumb,4);			//Sequence number
 		TProt::oNu(out,reqId,4);			//RequestId
 								//> Extension Object
-		TProt::oNodeId(out,449,0);			//TypeId (449 - NodeId)
+		TProt::oNodeId(out,OpcUa_OpenSecureChannelResponse,0);	//TypeId
 								//>> Body
 								//>>> RespondHeader
 		TProt::oTm(out,TSYS::curTime());		//timestamp
@@ -982,9 +1000,9 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 								//>>>> Standard respond
 		TProt::oNu(out,OpcUa_ProtocolVersion,4);	//ServerProtocolVersion
 		TProt::oNu(out,chnlId,4);			//Secure channel identifier
-		TProt::oNu(out,1,4);				//TokenId
-		TProt::oTm(out,TSYS::curTime());		//CreatedAt
-		TProt::oN(out,vmax(600000,reqLifeTm),4);	//RevisedLifeTime (600000, minimum)
+		TProt::oNu(out,owner().chnlGet(chnlId).TokenId,4);	//TokenId
+		TProt::oTm(out,owner().chnlGet(chnlId).tCreate);	//CreatedAt
+		TProt::oN(out,owner().chnlGet(chnlId).tLife,4);	//RevisedLifeTime (600000, minimum)
 		TProt::oS(out,"\001");				//nonce
 		TProt::oNu(out,out.size(),4,4);			//Real message size
 
@@ -994,20 +1012,21 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    }
 	}
 	//> Check for Close SecureChannel message type
-	if( rb.size() > 8 && rb.compare(0,4,"CLOF") == 0 )
+	if( rb.compare(0,4,"CLOF") == 0 )
 	{
 	    off = 8;
 	    uint32_t secId = TProt::iNu(rb,off,4);	//Secure channel identifier
 	    uint32_t tokId = TProt::iNu(rb,off,4);	//TokenId
 							//> Sequence header
-	    uint32_t seqN = TProt::iNu(rb,off,4);	//Sequence number
-	    uint32_t reqId = TProt::iNu(rb,off,4);	//RequestId
+	    TProt::iNu(rb,off,4);			//Sequence number
+	    TProt::iNu(rb,off,4);			//RequestId
 							//> Extension body object
-	    int reqTp = TProt::iNodeId(rb,off);		//TypeId request
+	    if( TProt::iNodeId(rb,off) != OpcUa_CloseSecureChannelRequest )	//TypeId
+		throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge") );
 							//>> Request Header
 	    TProt::iNodeId(rb,off);			//Session AuthenticationToken
 	    TProt::iTm(rb,off);				//timestamp
-	    int32_t reqHndl = TProt::iN(rb,off,4);	//requestHandle
+	    TProt::iN(rb,off,4);			//requestHandle
 	    TProt::iNu(rb,off,4);			//returnDiagnostics
 	    TProt::iS(rb,off);				//auditEntryId
 	    TProt::iNu(rb,off,4);			//timeoutHint
@@ -1030,13 +1049,20 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    off = 8;
 	    uint32_t secId = TProt::iNu(rb,off,4);	//Secure channel identifier
 	    uint32_t tokId = TProt::iNu(rb,off,4);	//TokenId
+	    //>> Secure channel and token check
+	    if( !owner().chnlGet(secId).TokenId )
+		throw TError( OpcUa_BadSecureChannelClosed, "OPC UA Bin", _("Secure channel closed") );
+	    if( owner().chnlGet(secId).TokenId != tokId )
+		throw TError( OpcUa_BadSecureChannelTokenUnknown, "OPC UA Bin", _("Secure channel unknown") );
 							//> Sequence header
 	    uint32_t seqN = TProt::iNu(rb,off,4);	//Sequence number
 	    uint32_t reqId = TProt::iNu(rb,off,4);	//RequestId
 							//> Extension body object
 	    int reqTp = TProt::iNodeId(rb,off);		//TypeId request
 							//>> Request Header
-	    TProt::iNodeId(rb,off);			//Session AuthenticationToken
+	    uint16_t sesTokId = TProt::iNodeId(rb,off);	//Session AuthenticationToken
+	    //>> Session check
+	    //????
 	    TProt::iTm(rb,off);				//timestamp
 	    int32_t reqHndl = TProt::iN(rb,off,4);	//requestHandle
 	    TProt::iNu(rb,off,4);			//returnDiagnostics
@@ -1050,7 +1076,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    string respEp;
 	    switch( reqTp )
 	    {
-		case 422:	//FindServers
+		case OpcUa_FindServersRequest:
 		    //>> Request
 		    TProt::iS(rb,off);			//endpointUrl
 		    TProt::iS(rb,off);			//localeIds []
@@ -1059,7 +1085,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    printf( "TEST 02a\n" );
 
 		    //>> Respond
-		    reqTp = 425;
+		    reqTp = OpcUa_FindServersResponse;
 		    TProt::oNu(respEp,1,4);		//ApplicationDescription list items
 							//>>>> ApplicationDescription 1
 		    TProt::oS(respEp,"roman.home/Vendor/UaDemoserver");//applicationUri
@@ -1072,7 +1098,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oNu(respEp,1,4);		//List items
 		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//discoveryUrl
 		    break;
-		case 428:	//GetEndpoints
+		case OpcUa_GetEndpointsRequest:
 		{
 		    //>> Request
 		    TProt::iS(rb,off);			//endpointUrl
@@ -1080,10 +1106,10 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::iS(rb,off);			//profileUris []
 
 		    //>> Respond
-		    reqTp = 431;
+		    reqTp = OpcUa_GetEndpointsResponse;
 		    //>>> Certificate reading
 		    int hd = open("uaservercpp.der",O_RDONLY);
-		    if( hd < 0 ) throw TError(nodePath().c_str(),_("Certificate uaservercpp.der open error."));
+		    if( hd < 0 ) throw TError(OpcUa_BadUnexpectedError,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
 		    int cf_sz = lseek(hd,0,SEEK_END);
 		    lseek(hd,0,SEEK_SET);
 		    char *buf = (char *)malloc(cf_sz);
@@ -1166,7 +1192,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oNu(respEp,0,1);		//securityLevel
 		    break;
 		}
-		case 461:	//CreateSessionRequest
+		case OpcUa_CreateSessionRequest:
 		{
 		    //>> Request
 							//> clientDescription (Application Description)
@@ -1187,10 +1213,10 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::iNu(rb,off,4);		//maxResponse MessageSize
 
 		    //>> Respond
-		    reqTp = 464;
+		    reqTp = OpcUa_CreateSessionResponse;
 		    //>>> Certificate reading
 		    int hd = open("uaservercpp.der",O_RDONLY);
-		    if( hd < 0 ) throw TError(nodePath().c_str(),_("Certificate uaservercpp.der open error."));
+		    if( hd < 0 ) throw TError(OpcUa_BadUnexpectedError,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
 		    int cf_sz = lseek(hd,0,SEEK_END);
 		    lseek(hd,0,SEEK_SET);
 		    char *buf = (char *)malloc(cf_sz);
@@ -1285,7 +1311,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oNu(respEp,0,4);		//maxRequest MessageSize
 		    break;
 		}
-		case 467:	//ActivateSessionRequest
+		case OpcUa_ActivateSessionRequest:
 		{
 		    //>> Request
 							//> clientSignature
@@ -1307,30 +1333,30 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 			    TProt::iS(rb,off);		//policyId
 			    break;
 			default:
-			    throw TError(modPrt->nodePath().c_str(),_("No supported userIdentityToken '%d'."),userIdTk);
+			    throw TError(OpcUa_BadUnexpectedError,modPrt->nodePath().c_str(),_("No supported userIdentityToken '%d'."),userIdTk);
 		    }
 							//> userTokenSignature
 		    TProt::iS(rb,off);			//signature
 		    TProt::iS(rb,off);			//algorithm
 
 		    //>> Respond
-		    reqTp = 470;
+		    reqTp = OpcUa_ActivateSessionResponse;
 		    respEp.reserve(100);
 		    TProt::oS(respEp,"");		//serverNonce
 		    TProt::oS(respEp,"");		//results []
 		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
 		}
-		case 473:	//CloseSessionRequest
+		case OpcUa_CloseSessionRequest:
 		{
 		    //>> Request
 		    TProt::iNu(rb,off,1);		//deleteSubscriptions
 
 		    //>> Respond
-		    reqTp = 476;
+		    reqTp = OpcUa_CloseSessionResponse;
 		    break;
 		}
-		case 631:	//ReadRequest
+		case OpcUa_ReadRequest:
 		{
 		    //>> Request
 		    TProt::iR(rb,off,8);		//maxAge
@@ -1345,7 +1371,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::iS(rb,off);			//name
 
 		    //>> Respond
-		    reqTp = 634;
+		    reqTp = OpcUa_ReadResponse;
 		    TProt::oNu(respEp,1,4);		//Numbers
 							//>> value 1
 		    TProt::oNu(respEp,13,1);		//Encoding Mask
@@ -1357,7 +1383,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
 		}
-		case 527:	//BrowseRequest
+		case OpcUa_BrowseRequest:
 		{
 		    //>> Request
 							//> view
@@ -1378,7 +1404,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 			TProt::iNu(rb,off,4);		//resultMask
 		    }
 		    //>> Respond
-		    reqTp = 530;
+		    reqTp = OpcUa_BrowseResponse;
 							//> results []
 		    TProt::oNu(respEp,1,4);		//Numbers 1
 							//Number 1
@@ -1415,7 +1441,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    break;
 		}
 		default:
-		    throw TError(modPrt->nodePath().c_str(),_("No supported request id '%d'."),reqTp);
+		    throw TError(OpcUa_BadNotSupported,modPrt->nodePath().c_str(),_("No supported request id '%d'."),reqTp);
 	    }
 
 	    out.reserve( 200 );
@@ -1446,7 +1472,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    return true;
 	}
     }
-    catch(TError er)	{ out = mkError(2,er.mess); return false; }
+    catch(TError er)	{ out = mkError(er.cod,er.mess); return false; }
 
     //> Post error for unrecognized request
     printf("TEST 05: Unsupported request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());

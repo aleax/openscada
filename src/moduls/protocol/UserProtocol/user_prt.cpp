@@ -35,7 +35,7 @@
 #define MOD_NAME	"User protocol"
 #define MOD_TYPE	"Protocol"
 #define VER_TYPE	VER_PROT
-#define M_VERSION	"0.1.0"
+#define M_VERSION	"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow creation self-user protocols on any OpenSCADA language."
 #define LICENSE		"GPL"
@@ -85,7 +85,7 @@ TProt::TProt( string name )
     mUPrtEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mUPrtEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
     mUPrtEl.fldAdd( new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
-    mUPrtEl.fldAdd( new TFld("OutTR",_("Out transport"),TFld::String,0,"20","*") );
+    mUPrtEl.fldAdd( new TFld("OutTR",_("Output transport"),TFld::String,0,"20","*") );
     mUPrtEl.fldAdd( new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
 }
 
@@ -477,7 +477,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
 		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRWR_,"root","root",3,"tp","str","rows","10",
 		    "help",_("Next attributes has defined for input requests processing:\n"
-			    "   'rez' - processing result (0-full request;1-not full request);\n"
+			    "   'rez' - processing result (false-full request;true-not full request);\n"
 			    "   'request' - request message;\n"
 			    "   'answer' - answer message;\n"
 			    "   'sender' - request sender."));

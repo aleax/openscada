@@ -1,3 +1,10 @@
+2010-03-15 Roman
+- FIX:SYS: Task creation forcing is fixed for already presented record.
+- FIX:DAQ.ModBus: Hung record about task already started is fixed.
+- !:DAQ.OPC_UA: The codes of node's types define is added.
+- !!!!:Protocol.UserProtocol: The document is added and version 0.5.0 released.
+
+
 2010-03-12 Roman
 - !!!!:SYS.TCntrNode, SYS.TCfg, SYS.TFld, DAQ.JavaLikeCalc.Attr : Structures (classes) pack is added by #pragma pack(push,1)
 - !!:Protocol: The function itemListIn() is added for protocol's items allow for select. Subsystem modules API version is changed to 3.
