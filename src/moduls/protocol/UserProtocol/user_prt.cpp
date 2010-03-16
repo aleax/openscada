@@ -336,12 +336,14 @@ string UserPrt::inProg( )
 void UserPrt::setInProgLang( const string &ilng )
 {
     cfg("InPROG").setS( ilng+"\n"+inProg() );
+    if( enableStat() ) setEnable(false);
     modif();
 }
 
 void UserPrt::setInProg( const string &iprg )
 {
     cfg("InPROG").setS( inProgLang()+"\n"+iprg );
+    if( enableStat() ) setEnable(false);
     modif();
 }
 
@@ -361,12 +363,14 @@ string UserPrt::outProg( )
 void UserPrt::setOutProgLang( const string &ilng )
 {
     cfg("OutPROG").setS( ilng+"\n"+outProg() );
+    if( enableStat() ) setEnable(false);
     modif();
 }
 
 void UserPrt::setOutProg( const string &iprg )
 {
     cfg("OutPROG").setS( outProgLang()+"\n"+iprg );
+    if( enableStat() ) setEnable(false);
     modif();
 }
 
