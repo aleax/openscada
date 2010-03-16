@@ -77,7 +77,6 @@ class UserPrt : public TCntrNode, public TConfig
 	bool enableStat( )	{ return mEn; }
 	string inProgLang( );
 	string inProg( );
-	string outTransport( );
 	string outProgLang( );
 	string outProg( );
 	string workInProg( )	{ return mWorkInProg; }
@@ -95,7 +94,6 @@ class UserPrt : public TCntrNode, public TConfig
 	void setEnable( bool vl );
 	void setInProgLang( const string &ilng );
 	void setInProg( const string &iprg );
-	void setOutTransport( const string &il );
 	void setOutProgLang( const string &ilng );
 	void setOutProg( const string &iprg );
 

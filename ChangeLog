@@ -1,3 +1,7 @@
+2010-03-16 Roman
+- !::Protocol.UserProtocol: Output user protocol address is made by IO attribute "ProtIt".
+
+
 2010-03-15 Roman
 - FIX:SYS: Task creation forcing is fixed for already presented record.
 - FIX:DAQ.ModBus: Hung record about task already started is fixed.
