@@ -38,7 +38,7 @@
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.1.0"
+#define MOD_VERSION	"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow creation self-user web-interfaces on any OpenSCADA language."
 #define LICENSE		"GPL"
@@ -67,7 +67,7 @@ using namespace WebUser;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name )
+TWEB::TWEB( string name ) : mDefPg("*")
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -213,7 +213,46 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    if( !tup.at().enableStat() || tup.at().workProg().empty() ) continue;
 	    if( uPg == upLs[i_up] ) { up = tup; break; }
 	}
-	if( up.freeStat() ) throw TError(nodePath().c_str(),_("Page error"));
+	if( up.freeStat() )
+	{
+	    if( uPg == "*" )
+	    {
+		page =	"<?xml version='1.0' ?>\n"
+			"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+			"'DTD/xhtml1-transitional.dtd'>\n"
+			"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
+			"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+			"<title>"PACKAGE_NAME"!</title>\n"
+			"<style type='text/css'>\n"
+			"  hr { width: 95%; }\n"
+			"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
+			"  body { background-color: #818181; margin: 0px; }\n"
+			"  h1.head { text-align: center; color: #ffff00; }\n"
+			"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
+			"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
+			"  table.work td { background-color:#cccccc; text-align: left; }\n"
+			"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+			"  table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
+			"</style>\n"
+			"</head>\n"
+			"<body>\n"
+			"<h1 class='head'>"PACKAGE_NAME"</h1>\n"
+			"<hr/><br/>\n"
+			"<center><table class='work' width='50%'>\n"
+			"<tr><td class='content'>"
+			"<p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p>"
+			"<tr><th>"+_("Present web-users pages")+"</th></tr>\n"
+			"<tr><td class='content'><ul>\n";
+		for( unsigned i_p = 0; i_p < upLs.size(); i_p++ )
+		    if( uPgAt(upLs[i_p]).at().enableStat() )
+			page += "<li><a href='"+upLs[i_p]+"/'>"+uPgAt(upLs[i_p]).at().name()+"</a></li>\n";
+		page += "</ul></td></tr></table></center>\n<hr/>\n</body>\n</html>\n";
+
+		page = httpHead("200 OK",page.size())+page;
+		return;
+	    }
+	    throw TError(nodePath().c_str(),_("Page error"));
+	}
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg(),1)).at());
 
 	//> Load inputs
@@ -321,7 +360,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/up_",_("User page"),RWRWR_,"root","root",2,"idm","1","idSz","20");
 	if( ctrMkNode("area",opt,-1,"/prm/up",_("User pages")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default page"),RWRWR_,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/up/up");
+	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default page"),RWRWR_,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/up/cup");
 	    ctrMkNode("list",opt,-1,"/prm/up/up",_("Pages"),RWRWR_,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","up_","idSz","20");
 	}
 	return;
@@ -334,10 +373,12 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(defPg());
 	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDefPg(opt->text());
     }
-    else if( a_path == "/br/up_" || a_path == "/prm/up/up" )
+    else if( a_path == "/br/up_" || a_path == "/prm/up/up" || a_path == "/prm/up/cup" )
     {
 	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )
 	{
+	    if( a_path == "/prm/up/cup" )
+		opt->childAdd("el")->setAttr("id","*")->setText(_("<Page index display>"));
 	    vector<string> lst;
 	    uPgList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )

@@ -330,6 +330,11 @@ if test ${ModOPC_UA} = true; then
     AC_MSG_RESULT(Build module: DAQ.OPC_UA)
     AC_CONFIG_FILES(src/moduls/daq/OPC_UA/Makefile)
     DAQSub_mod="${DAQSub_mod}OPC_UA "
+    #>> Modules checkings
+    AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
+	[AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
+    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
+	[AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
 if test ${ModAMRDevs} = true; then
     AC_MSG_RESULT(Build module: DAQ.AMRDevs)

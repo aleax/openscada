@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-10 17:52+0200\n"
+"POT-Creation-Date: 2010-03-17 15:16+0200\n"
 "PO-Revision-Date: 2009-08-17 13:09+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -867,8 +867,9 @@ msgstr ""
 msgid "sel_list"
 msgstr ""
 
-#: freefunc.cpp:2130 virtual.cpp:593
-msgid "Real;Integer;Boolean;String"
+#: freefunc.cpp:2130
+#, fuzzy
+msgid "Real;Integer;Boolean;String;Object"
 msgstr "Reellezahl;Ganzzahl;Logisch;Text"
 
 #: freefunc.cpp:2131 freefunc.cpp:2158
@@ -1650,6 +1651,10 @@ msgstr ""
 #: virtual.cpp:591 virtual.cpp:634
 msgid "/fnc/io/2"
 msgstr ""
+
+#: virtual.cpp:593
+msgid "Real;Integer;Boolean;String"
+msgstr "Reellezahl;Ganzzahl;Logisch;Text"
 
 #: virtual.cpp:594 virtual.cpp:635
 msgid "/fnc/io/3"

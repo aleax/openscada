@@ -607,15 +607,24 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), sock_fd(-1), mTms(10000),
+TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), sock_fd(-1),
     mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("TCP:localhost:10002");
+    setTimings("5:1");
 }
 
 TSocketOut::~TSocketOut()
 {
     if( startStat() )	stop();
+}
+
+void TSocketOut::setTimings( const string &vl )
+{
+    mTimings = vl;
+    mTmCon = vmin(60000,(int)(atof(TSYS::strParse(timings(),0,":").c_str())*1e3));
+    mTmNext = vmin(60000,(int)(atof(TSYS::strParse(timings(),1,":").c_str())*1e3));
+    modif();
 }
 
 string TSocketOut::getStatus( )
@@ -636,14 +645,14 @@ void TSocketOut::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("TMS");	if( !vl.empty() ) mTms = atoi(vl.c_str());
+	vl = prmNd.attr("tms");	if( !vl.empty() ) setTimings(vl);
     } catch(...){ }
 }
 
 void TSocketOut::save_( )
 {
     XMLNode prmNd("prms");
-    prmNd.setAttr("TMS",TSYS::int2str(mTms));
+    prmNd.setAttr("tms",timings());
     mAPrms = prmNd.save(XMLNode::BrAllPast);
 
     TTransportOut::save_();
@@ -709,7 +718,7 @@ void TSocketOut::start()
 	    struct timeval tv;
 	    socklen_t slen;
 	    fd_set fdset;
-	    tv.tv_sec = timeout()/1000; tv.tv_usec = 1000*(timeout()%1000);
+	    tv.tv_sec = tmCon()/1000; tv.tv_usec = 1000*(tmCon()%1000);
 	    FD_ZERO( &fdset ); FD_SET( sock_fd, &fdset );
 	    if( (res=select( sock_fd+1, NULL, &fdset, NULL, &tv )) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res ) res = 0;
 	    else res = -1;
@@ -720,21 +729,6 @@ void TSocketOut::start()
 	    sock_fd = -1;
 	    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
 	}
-
-	/*time_t wTm = time(NULL);
-	int res = -1;
-	do
-	{
-	    res = ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in));
-	    if( res == 0 || (res == -1 && !(errno == EINPROGRESS || errno == EALREADY)) ) break;
-	    usleep(10000);
-	}while( (time(NULL)-wTm) < timeout()/1000 );
-	if( res == -1 )
-	{
-	    close(sock_fd);
-	    sock_fd = -1;
-	    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
-	}*/
     }
     else if( type == SOCK_UNIX )
     {
@@ -744,7 +738,7 @@ void TSocketOut::start()
 	name_un.sun_family = AF_UNIX;
 	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
 	
-	//- Create socket -
+	//> Create socket
 	if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1)
 	    throw TError(nodePath().c_str(),_("Error creation UNIX socket: %s!"),strerror(errno));
 	if( ::connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
@@ -778,11 +772,13 @@ void TSocketOut::stop()
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     int kz = 0, reqTry = 0;
+    bool writeReq = false;
 
     if( !noRes ) ResAlloc resN( nodeRes(), true );
     ResAlloc res( wres, true );
-    int prevTmOut = timeout( );
-    if( time ) setTimeout(time);
+
+    int prevTmOut = 0;
+    if( time ) { prevTmOut = tmCon(); setTmCon(time); }
 
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
@@ -790,6 +786,7 @@ repeate:
     if( reqTry++ >= 2 ) throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
     //> Write request
     if( obuf != NULL && len_ob > 0 )
+    {
 	for( int wOff = 0; wOff != len_ob; wOff += kz )
 	{
 	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);
@@ -801,6 +798,13 @@ repeate:
 		goto repeate;
 	    }
 	}
+
+	if( !time ) time = mTmCon;
+	writeReq = true;
+    }
+    else time = mTmNext;
+    if( !time ) time = 5000;
+
     trOut += (float)kz/1024;
 
     //> Read reply
@@ -812,12 +816,12 @@ repeate:
 
 	do
 	{
-	    tv.tv_sec  = timeout()/1000; tv.tv_usec = 1000*(timeout()%1000);
+	    tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
 	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
 	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	}
 	while( kz == -1 && errno == EINTR );
-	if( kz == 0 )	{ res.release(); stop( ); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	if( kz == 0 )	{ res.release(); if(writeReq) stop( ); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if( kz < 0){ res.release(); stop( ); throw TError(nodePath().c_str(),_("Socket error!")); }
 	else if( FD_ISSET(sock_fd, &rd_fd) )
 	{
@@ -827,7 +831,7 @@ repeate:
 	}
     }
 
-    if( time ) setTimeout(prevTmOut);
+    if( prevTmOut ) setTmCon(prevTmOut);
 
     return i_b;
 }
@@ -848,16 +852,19 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "    port - network port (/etc/services).\n"
 	    "  UNIX:[name] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/tmOut",_("Timeout (ms)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
+	    _("Connection timings in format: \"[conn]:[next]\". Where:\n"
+	    "    conn - maximum time for connection respond wait, in seconds;\n"
+	    "    next - maximum time for continue respond wait, in seconds."));
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/tmOut" )
+    if( a_path == "/prm/cfg/TMS" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(timeout()));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTimeout(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(timings());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
 }

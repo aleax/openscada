@@ -25,6 +25,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "openssl/bio.h"
+#include "openssl/ssl.h"
+#include "openssl/err.h"
+#include <openssl/rand.h>
+
 #include <config.h>
 #include <tsys.h>
 #include <tmess.h>
@@ -54,16 +59,17 @@ TProt::TProt( string name ) : mSecCnlIdLast(1)
 
     modPrt	= this;
 
-    mServer = grpAdd("s_");
+    mEndPnt = grpAdd("ep_");
 
     //> Node DB structure
-    mServerEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    mServerEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    mServerEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    mServerEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mServerEl.fldAdd( new TFld("EndPoint",_("End point"),TFld::String,0,"50","opc.tcp://localhost:4841") );
-    mServerEl.fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
-    mServerEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
+    mEndPntEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
+    mEndPntEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
+    mEndPntEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
+    mEndPntEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
+    mEndPntEl.fldAdd( new TFld("EndPoint",_("End point"),TFld::String,0,"50","opc.tcp://localhost:4841") );
+    mEndPntEl.fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
+    mEndPntEl.fldAdd( new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
+    mEndPntEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
 }
 
 TProt::~TProt()
@@ -73,8 +79,8 @@ TProt::~TProt()
 
 void TProt::sAdd( const string &iid, const string &db )
 {
-    if( chldPresent(mServer,iid) ) return;
-    chldAdd( mServer, new OPCServer(iid,db,&serverEl()) );
+    if( chldPresent(mEndPnt,iid) ) return;
+    chldAdd( mEndPnt, new OPCEndPoint(iid,db,&endPntEl()) );
 }
 
 void TProt::load_( )
@@ -82,14 +88,14 @@ void TProt::load_( )
     //> Load DB
     try
     {
-	TConfig g_cfg(&serverEl());
+	TConfig g_cfg(&endPntEl());
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
 	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_serv","",fld_cnt++,g_cfg); )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep","",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
 		if( !sPresent(id) )	sAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
@@ -97,7 +103,7 @@ void TProt::load_( )
 
 	//>> Search into config file
 	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_serv",fld_cnt++,g_cfg); )
+	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
 		if( !sPresent(id) )	sAdd(id,"*.*");
@@ -117,7 +123,7 @@ void TProt::save_( )
 void TProt::modStart( )
 {
     vector<string> ls;
-    sList(ls);
+    epList(ls);
     for( int i_n = 0; i_n < ls.size(); i_n++ )
 	if( sAt(ls[i_n]).at().toEnable( ) )
 	    sAt(ls[i_n]).at().setEnable(true);
@@ -126,7 +132,7 @@ void TProt::modStart( )
 void TProt::modStop( )
 {
     vector<string> ls;
-    sList(ls);
+    epList(ls);
     for( int i_n = 0; i_n < ls.size(); i_n++ )
 	sAt(ls[i_n]).at().setEnable(false);
 }
@@ -348,21 +354,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(mReq,"opc.tcp://roman.home:4841");	//endpointUrl
 		    oS(mReq,"OpenSCADA client");	//sessionName
 		    oS(mReq,string(16,0)+string(4,0xFF)+string(12,0));	//clientNonce
-
-		    //>>> Certificate reading
-		    int hd = ::open("uaexpert.der",O_RDONLY);
-		    if( hd < 0 ) throw TError(OpcUa_BadUnexpectedError,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
-		    int cf_sz = lseek(hd,0,SEEK_END);
-		    lseek(hd,0,SEEK_SET);
-		    char *buf = (char *)malloc(cf_sz);
-		    read(hd,buf,cf_sz);
-		    ::close(hd);
-		    string cert(buf,cf_sz);
-		    free(buf);
-
-		    oS(mReq,cert);			//clientCertificate
+		    oS(mReq,certPEM2DER(io.childGet("ClientCert")->text()));	//clientCertificate
 		    oR(mReq,1.2e6,8);			//Requested SessionTimeout, ms
 		    oNu(mReq,0x1000000,4);		//maxResponse MessageSize
+		    io.childClear();
 		}
 		else if( io.attr("id") == "ActivateSession" )
 		{
@@ -817,26 +812,72 @@ void TProt::oTm( string &buf, long long val )
     buf.append( (char*)&tmStamp, sizeof(tmStamp) );
 }
 
+string TProt::certPEM2DER( const string &spem )
+{
+    string rez = "";
+    char err[255];
+
+    if( spem.empty() ) return rez;
+
+    BIO *bm = BIO_new(BIO_s_mem());
+    if( !bm )
+    {
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("BIO_new error: %s"),err);
+    }
+    if( BIO_write(bm,spem.data(),spem.size()) != spem.size() )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("BIO_write error: %s"),err);
+    }
+    X509 *x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
+    if( !x )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("PEM_read_bio_X509_AUX error: %s"),err);
+    }
+
+    int len = i2d_X509(x,NULL);
+    if( len > 0 )
+    {
+	char *buf = (char*)malloc(len);
+	unsigned char *p = (unsigned char *)buf;
+	if( buf )
+	{
+	    i2d_X509(x,&p);
+	    rez.assign(buf,len);
+	    free(buf);
+	}
+    }
+
+    BIO_free_all(bm);
+    X509_free(x);
+
+    return rez;
+}
+
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
     if( opt->name() == "info" )
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/s_",_("Server"),0664,"root","Protocol",2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,0,"/serv",_("Servers")) )
-	    ctrMkNode("list",opt,-1,"/serv/serv",_("Servers"),0664,"root","Protocol",5,"tp","br","idm","1","s_com","add,del","br_pref","s_","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/ep_",_("End point"),0664,"root","Protocol",2,"idm","1","idSz","20");
+	if( ctrMkNode("area",opt,0,"/ep",_("End points")) )
+	    ctrMkNode("list",opt,-1,"/ep/ep",_("End points"),0664,"root","Protocol",5,"tp","br","idm","1","s_com","add,del","br_pref","ep_","idSz","20");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/s_" || a_path == "/serv/serv" )
+    if( a_path == "/br/ep_" || a_path == "/ep/ep" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )
 	{
 	    vector<string> lst;
-	    sList(lst);
+	    epList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(sAt(lst[i_f]).at().name());
 	}
@@ -845,7 +886,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    sAdd(vid); sAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mServer,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -907,8 +948,8 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 
 	    //>> Find endpoint into allowed servers
 	    vector<string> sLs;
-	    owner().sList(sLs);
-	    AutoHD<OPCServer> tos;
+	    owner().epList(sLs);
+	    AutoHD<OPCEndPoint> tos;
 	    int i_os;
 	    for( i_os = 0; i_os < sLs.size(); i_os++ )
 	    {
@@ -1088,9 +1129,9 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    reqTp = OpcUa_FindServersResponse;
 		    TProt::oNu(respEp,1,4);		//ApplicationDescription list items
 							//>>>> ApplicationDescription 1
-		    TProt::oS(respEp,"roman.home/Vendor/UaDemoserver");//applicationUri
-		    TProt::oS(respEp,"Vendor/UaDemoserver");	//productUri
-		    TProt::oSl(respEp,"OpcDemoServer@roman.home","en");//applicationName
+		    TProt::oS(respEp,SYS->host()+"/OpenSCADA/DAQ.OPC_UA");//applicationUri
+		    TProt::oS(respEp,"OpenSCADA/DAQ.OPC_UA");	//productUri
+		    TProt::oSl(respEp,"OpenSCADAOPCServer@"+SYS->host(),"en");//applicationName
 		    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
 		    TProt::oS(respEp,"");		//gatewayServerUri
 		    TProt::oS(respEp,"");		//discoveryProfileUri
@@ -1495,23 +1536,23 @@ string TProtIn::mkError( uint32_t errId, const string &err )
 }
 
 //*************************************************
-//* OPCServer                                     *
+//* OPCEndPoint                                   *
 //*************************************************
-OPCServer::OPCServer( const string &iid, const string &idb, TElem *el ) :
+OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), mDB(idb), mEn(false), cntReq(0),
     mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
 {
     mId = iid;
 }
 
-OPCServer::~OPCServer( )
+OPCEndPoint::~OPCEndPoint( )
 {
     try{ setEnable(false); } catch(...) { }
 }
 
-TCntrNode &OPCServer::operator=( TCntrNode &node )
+TCntrNode &OPCEndPoint::operator=( TCntrNode &node )
 {
-    OPCServer *src_n = dynamic_cast<OPCServer*>(&node);
+    OPCEndPoint *src_n = dynamic_cast<OPCEndPoint*>(&node);
     if( !src_n ) return *this;
 
     if( enableStat( ) )	setEnable(false);
@@ -1525,7 +1566,7 @@ TCntrNode &OPCServer::operator=( TCntrNode &node )
     return *this;
 }
 
-void OPCServer::postDisable( int flag )
+void OPCEndPoint::postDisable( int flag )
 {
     try
     {
@@ -1534,35 +1575,39 @@ void OPCServer::postDisable( int flag )
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-TProt &OPCServer::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &OPCEndPoint::owner( )	{ return *(TProt*)nodePrev(); }
 
-string OPCServer::name( )	{ return mName.size() ? mName : id(); }
+string OPCEndPoint::name( )	{ return mName.size() ? mName : id(); }
 
-string OPCServer::tbl( )	{ return owner().modId()+"_serv"; }
+string OPCEndPoint::tbl( )	{ return owner().modId()+"_ep"; }
 
-string OPCServer::endPoint( )	{ return cfg("EndPoint").getS(); }
+string OPCEndPoint::endPoint( )	{ return cfg("EndPoint").getS(); }
 
-string OPCServer::inTransport( ){ return cfg("InTR").getS(); }
+string OPCEndPoint::inTransport( ){ return cfg("InTR").getS(); }
 
-bool OPCServer::cfgChange( TCfg &ce )
+string OPCEndPoint::secPolicy( ){ return cfg("SecPolicy").getS(); }
+
+string OPCEndPoint::cert( )	{ return cfg("Cert").getS(); }
+
+bool OPCEndPoint::cfgChange( TCfg &ce )
 {
     modif();
     return true;
 }
 
-void OPCServer::load_( )
+void OPCEndPoint::load_( )
 {
     if( !SYS->chkSelDB(DB()) ) return;
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-void OPCServer::save_( )
+void OPCEndPoint::save_( )
 {
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-void OPCServer::setEnable( bool vl )
+void OPCEndPoint::setEnable( bool vl )
 {
     if( mEn == vl ) return;
 
@@ -1571,7 +1616,7 @@ void OPCServer::setEnable( bool vl )
     mEn = vl;
 }
 
-string OPCServer::getStatus( )
+string OPCEndPoint::getStatus( )
 {
     string rez = _("Disabled. ");
     if( enableStat( ) )
@@ -1583,44 +1628,45 @@ string OPCServer::getStatus( )
     return rez;
 }
 
-void OPCServer::cntrCmdProc( XMLNode *opt )
+void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Server: ")+name(),0664,"root","root");
-	if( ctrMkNode("area",opt,-1,"/serv",_("Server")) )
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("End point: ")+name(),0664,"root","root");
+	if( ctrMkNode("area",opt,-1,"/ep",_("End point")) )
 	{
-	    if( ctrMkNode("area",opt,-1,"/serv/st",_("State")) )
+	    if( ctrMkNode("area",opt,-1,"/ep/st",_("State")) )
 	    {
-		ctrMkNode("fld",opt,-1,"/serv/st/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/serv/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/serv/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root","Protocol",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enable"),RWRWR_,"root","Protocol",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root","Protocol",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/serv/cfg",_("Config")) )
+	    if( ctrMkNode("area",opt,-1,"/ep/cfg",_("Config")) )
 	    {
-		TConfig::cntrCmdMake(opt,"/serv/cfg",0,"root","root",RWRWR_);
-		ctrMkNode("fld",opt,-1,"/serv/cfg/InTR",cfg("InTR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/serv/cfg/ls_itr");
+		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root","Protocol",RWRWR_);
+		ctrMkNode("fld",opt,-1,"/ep/cfg/InTR",cfg("InTR").fld().descr(),0664,"root","Protocol",3,"tp","str","dest","select","select","/ep/cfg/ls_itr");
+		ctrMkNode("fld",opt,-1,"/ep/cfg/Cert",cfg("Cert").fld().descr(),0660,"root","Protocol",3,"tp","str","cols","90","rows","7");
 	    }
 	}
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/serv/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
-    else if( a_path == "/serv/st/en_st" )
+    if( a_path == "/ep/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
+    else if( a_path == "/ep/st/en_st" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/serv/st/db" )
+    else if( a_path == "/ep/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEQ_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEQ_WR) )	setDB(opt->text());
     }
-    else if( a_path == "/serv/cfg/ls_itr" && ctrChkNode(opt) )
+    else if( a_path == "/ep/cfg/ls_itr" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setText("*");
 	vector<string> sls;
@@ -1628,6 +1674,6 @@ void OPCServer::cntrCmdProc( XMLNode *opt )
 	for( int i_s = 0; i_s < sls.size(); i_s++ )
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if( a_path.substr(0,9) == "/serv/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
+    else if( a_path.compare(0,7,"/ep/cfg") == 0 ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }

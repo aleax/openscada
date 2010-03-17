@@ -96,12 +96,8 @@ void TTr::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	//> Add self DB-fields to input transport
-	owner().inEl().fldAdd( new TFld("BufLen",_("Input buffer length (kB)"),TFld::Integer,0,"4","5") );
-	owner().inEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"30") );
-
-	//> Add self DB-fields to output transport
-	owner().outEl().fldAdd( new TFld("TMS",_("Timings"),TFld::String,0,"30") );
+	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().outEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
     }
 }
 
@@ -125,7 +121,7 @@ TTransportOut *TTr::Out( const string &name, const string &idb )
 //* TTrIn                                        *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), trIn(0), trOut(0), tmMax(0), fd(-1), mTimings(cfg("TMS").getSd())
+    TTransportIn(name,idb,el), trIn(0), trOut(0), tmMax(0), fd(-1), mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("6:320");
@@ -134,6 +130,28 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
 TTrIn::~TTrIn()
 {
     try{ stop(); }catch(...){ }
+}
+
+void TTrIn::load_( )
+{
+    TTransportIn::load_();
+
+    try
+    {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(mAPrms);
+	vl = prmNd.attr("TMS");	if( !vl.empty() ) setTimings(vl);
+    } catch(...){ }
+}
+
+void TTrIn::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("TMS",timings());
+    mAPrms = prmNd.save(XMLNode::BrAllPast);
+
+    TTransportIn::save_();
 }
 
 string TTrIn::getStatus( )
@@ -407,7 +425,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mTimings(cfg("TMS").getSd()), fd(-1), mLstReqTm(0)
+    TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("640:6");
@@ -416,6 +434,28 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
 TTrOut::~TTrOut()
 {
     if( startStat() )	stop();
+}
+
+void TTrOut::load_( )
+{
+    TTransportOut::load_();
+
+    try
+    {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(mAPrms);
+	vl = prmNd.attr("TMS");	if( !vl.empty() ) setTimings(vl);
+    } catch(...){ }
+}
+
+void TTrOut::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("TMS",timings());
+    mAPrms = prmNd.save(XMLNode::BrAllPast);
+
+    TTransportOut::save_();
 }
 
 string TTrOut::getStatus( )

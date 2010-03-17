@@ -81,6 +81,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost:4841") );
     fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
     fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("None;Sign;Sign & Encrypt")) );
+    fldAdd( new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -107,6 +108,8 @@ TMdContr::~TMdContr( )
 {
     if( run_st ) stop();
 }
+
+string TMdContr::cert( )	{ return cfg("Cert").getS(); }
 
 string TMdContr::getStatus( )
 {
@@ -147,7 +150,7 @@ void TMdContr::start_( )
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("FindServers request error: %s"),req.attr("err").c_str());
 
     //>> Send CreateSession message
-    req.setAttr("id","CreateSession");
+    req.setAttr("id","CreateSession")->childAdd("ClientCert")->setText(cert());
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("CreateSession request error: %s"),req.attr("err").c_str());
 
@@ -248,7 +251,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
 	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
 	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
@@ -259,6 +262,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		"  - days (1-31);\n"
 		"  - month (1-12);\n"
 		"  - week day (0[sunday]-6)."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/Cert",cfg("Cert").fld().descr(),0660,"root","DAQ",3,"tp","str","cols","90","rows","7");
 	return;
     }
     //> Process command to page

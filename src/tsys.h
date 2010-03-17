@@ -97,6 +97,7 @@ class TSYS : public TCntrNode
 	string name( )		{ return mName; }
 	void setName( const string &vl )	{ mName = vl; modif(); }
 	string user( )		{ return mUser; }	//Run user name
+	string host( );
 
 	void list( vector<string> &list )	{ chldList(mSubst,list); }
 	bool present( const string &name )	{ return chldPresent(mSubst,name); }

@@ -117,14 +117,14 @@ class TProtIn: public TProtocolIn
 };
 
 //*************************************************
-//* OPCServer                                     *
+//* OPCEndPoint                                   *
 //*************************************************
-class OPCServer : public TCntrNode, public TConfig
+class OPCEndPoint : public TCntrNode, public TConfig
 {
     public:
 	//Methods
-	OPCServer( const string &iid, const string &db, TElem *el );
-	~OPCServer( );
+	OPCEndPoint( const string &iid, const string &db, TElem *el );
+	~OPCEndPoint( );
 
 	TCntrNode &operator=( TCntrNode &node );
 
@@ -135,6 +135,8 @@ class OPCServer : public TCntrNode, public TConfig
 	bool enableStat( )	{ return mEn; }
 	string endPoint( );
 	string inTransport( );
+	string secPolicy( );
+	string cert( );
 
 	string getStatus( );
 
@@ -206,18 +208,18 @@ class TProt: public TProtocol
 	void modStop( );
 
 	//> Server's functions
-	void sList( vector<string> &ls )	{ chldList(mServer,ls); }
-	bool sPresent( const string &id )	{ return chldPresent(mServer,id); }
+	void epList( vector<string> &ls )	{ chldList(mEndPnt,ls); }
+	bool sPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
 	void sAdd( const string &id, const string &db = "*.*" );
-	void sDel( const string &id )		{ chldDel(mServer,id); }
-	AutoHD<OPCServer> sAt( const string &id )	{ return chldAt(mServer,id); }
+	void sDel( const string &id )		{ chldDel(mEndPnt,id); }
+	AutoHD<OPCEndPoint> sAt( const string &id )	{ return chldAt(mEndPnt,id); }
 
 	//> Channel manipulation functions
 	int chnlOpen( int32_t lifeTm = 0 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
 
-	TElem &serverEl( )			{ return mServerEl; }
+	TElem &endPntEl( )			{ return mEndPntEl; }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -241,6 +243,8 @@ class TProt: public TProtocol
 	static void oNodeId( string &buf, int val, int ns = 0 );
 	static void oTm( string &buf, long long val );
 
+	static string certPEM2DER( const string &spem );
+
 	Res &nodeRes( )		{ return nRes; }
 
     protected:
@@ -255,9 +259,9 @@ class TProt: public TProtocol
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	int	mServer;
+	int	mEndPnt;
 
-	TElem	mServerEl;
+	TElem	mEndPntEl;
 
 	map<int,SecCnl>	mSecCnl;
 	uint32_t mSecCnlIdLast;

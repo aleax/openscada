@@ -95,10 +95,11 @@ class TMdContr: public TController
 	string getStatus( );
 
 	long long period( )	{ return mPer; }
-	string cron( )		{ return mSched; }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 	string	endPoint( )	{ return mEndPoint; }
 	string	secPolicy( )	{ return mSecPolicy; }
+	string	cert( );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

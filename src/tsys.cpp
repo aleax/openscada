@@ -91,6 +91,12 @@ TSYS::~TSYS(  )
     delete Mess;
 }
 
+string TSYS::host( )
+{
+    utsname ubuf; uname(&ubuf);
+    return ubuf.nodename;
+}
+
 string TSYS::workDir( )
 {
     char buf[STR_BUF_LEN];
@@ -1352,11 +1358,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if( a_path == "/gen/host" && ctrChkNode(opt) )
-    {
-	utsname ubuf; uname(&ubuf);
-	opt->setText(ubuf.nodename);
-    }
+    else if( a_path == "/gen/host" && ctrChkNode(opt) )	opt->setText(host());
     else if( a_path == "/gen/sys" && ctrChkNode(opt) )
     {
 	utsname ubuf; uname(&ubuf);

@@ -51,6 +51,11 @@ class TTrIn: public TTransportIn
 	void start( );
 	void stop( );
 
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
     private:
 	//Methods
 	static void *Task( void * );
@@ -58,7 +63,9 @@ class TTrIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string		&mTimings;
+	string		&mAPrms;		// Addon parameters
+
+	string		mTimings;
 	int		fd;
 
 	bool		endrun;			// Command for stop task
@@ -87,12 +94,19 @@ class TTrOut: public TTransportOut
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
 
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string	&mTimings;
+	string	&mAPrms;			// Addon parameters
+
+	string	mTimings;
 	int	fd;
 	long long mLstReqTm;
 

@@ -653,11 +653,20 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("localhost:10042");
+    setTimings("5:1");
 }
 
 TSocketOut::~TSocketOut()
 {
     if( startStat() )	stop();
+}
+
+void TSocketOut::setTimings( const string &vl )
+{
+    mTimings = vl;
+    mTmCon = vmin(60000,(int)(atof(TSYS::strParse(timings(),0,":").c_str())*1e3));
+    mTmNext = vmin(60000,(int)(atof(TSYS::strParse(timings(),1,":").c_str())*1e3));
+    modif();
 }
 
 string TSocketOut::getStatus( )
@@ -678,17 +687,19 @@ void TSocketOut::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	if( prmNd.childGet("CertKey",0,true) ) mCertKey = prmNd.childGet("CertKey")->text();
-	mKeyPass = prmNd.attr("PKeyPass");
+	if( prmNd.childGet("CertKey",0,true) ) setCertKey( prmNd.childGet("CertKey")->text() );
+	vl = prmNd.attr("PKeyPass");	if( !vl.empty() ) setPKeyPass(vl);
+	vl = prmNd.attr("TMS");		if( !vl.empty() ) setTimings(vl);
     } catch(...){ }
 }
 
 void TSocketOut::save_( )
 {
     XMLNode prmNd("prms");
-    if( prmNd.childGet("CertKey",0,true) ) prmNd.childGet("CertKey")->setText(mCertKey);
-    else prmNd.childAdd("CertKey")->setText(mCertKey);
-    prmNd.setAttr("PKeyPass",mKeyPass);
+    if( prmNd.childGet("CertKey",0,true) ) prmNd.childGet("CertKey")->setText(certKey());
+    else prmNd.childAdd("CertKey")->setText(certKey());
+    prmNd.setAttr("PKeyPass",pKeyPass());
+    prmNd.setAttr("TMS",timings());
     mAPrms = prmNd.save(XMLNode::BrAllPast);
 
     TTransportOut::save_();
@@ -816,8 +827,8 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 {
     int		ret = 0, reqTry = 0;;
     char	err[255];
+    bool	writeReq = false;
 
-    if( !time ) time = 5000;
     if( !noRes ) ResAlloc resN( nodeRes(), true );
     ResAlloc res( wres, true );
 
@@ -831,7 +842,12 @@ repeate:
     {
 	do { ret=BIO_write(conn,obuf,len_ob); } while( ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE );
 	if( ret <= 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
+
+	if( !time ) time = mTmCon;
+	writeReq = true;
     }
+    else time = mTmNext;
+    if( !time ) time = 5000;
 
     trOut += (float)ret/1024;
 #if OSC_DEBUG >= 4
@@ -863,7 +879,7 @@ repeate:
 		kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	    }
 	    while( kz == -1 && errno == EINTR );
-	    if( kz == 0 ) { res.release(); stop(); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	    if( kz == 0 ) { res.release(); if(writeReq) stop(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	    else if( kz < 0) { res.release(); stop(); throw TError(nodePath().c_str(),_("Socket error!")); }
 	    else if( FD_ISSET(sock_fd, &rd_fd) )
 	    {
@@ -893,8 +909,13 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0660,"root","root",4,"tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0660,"root","root",4,"tp","str","cols","90","rows","7",
+	    "help",_("SSL PAM certificates chain and private key."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),0660,"root","root",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
+	    _("Connection timings in format: \"[conn]:[next]\". Where:\n"
+	    "    conn - maximum time for connection respond wait, in seconds;\n"
+	    "    next - maximum time for continue respond wait, in seconds."));
 	return;
     }
     //> Process command to page
@@ -908,6 +929,11 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(string(pKeyPass().size(),'*'));
 	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setPKeyPass(opt->text());
+    }
+    if( a_path == "/prm/cfg/TMS" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(timings());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
 }

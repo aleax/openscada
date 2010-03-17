@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef SOCKET_H
 #define SOCKET_H
 
@@ -165,8 +165,11 @@ class TSocketOut: public TTransportOut
 
 	string getStatus( );
 
-	int timeout( )			{ return vmax(1,vmin(100000,mTms)); }
-	void setTimeout( int vl )	{ mTms = vl; modif(); }
+	string timings( )		{ return mTimings; }
+	int tmCon( )			{ return vmax(1,vmin(60000,mTmCon)); }
+
+	void setTimings( const string &vl );
+	void setTmCon( int vl )		{ mTmCon = vl; }
 
 	void start( );
 	void stop( );
@@ -184,11 +187,13 @@ class TSocketOut: public TTransportOut
 
 	//Attributes
 	string		&mAPrms;		// Addon parameters
-	int		mTms;			// Timeout
+	string		mTimings;
+	unsigned short	mTmCon;
+	unsigned short	mTmNext;
 
-	int			sock_fd;
+	int		sock_fd;
 
-	int			type;		// socket's types
+	int		type;			// socket's types
 	struct sockaddr_in	name_in;
 	struct sockaddr_un	name_un;
 

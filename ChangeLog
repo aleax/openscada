@@ -1,3 +1,11 @@
+2010-03-17 Roman
+- FIX:DAQ.JavaLikeCalc: Object's type attribute display is added.
+- !:DAQ.OPC_UA: OPCServer class is renamed to OPCEndPoint. Certificates encoding from PEM to DER is added. And some other...
+- !!:Transport.SSL, Transport.Sockets: Timings is added to output transport for connection time and next response time control.
+- !!:Transport.Serial: Serial transport's timings store is moved to addon parameters field.
+- !!!!:UI.WebUser: Pages index is added. The document is added and version 0.5.0 released.
+
+
 2010-03-17 Maxim
 - !!:UI.WebVision: The rotation of the primitive Text is added.
 - FIX:UI.WebVision: The font correction for the primitive Diagram is fixed.

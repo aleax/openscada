@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = daq_OPC_UA.la
 daq_OPC_UA_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_OPC_UA_la_SOURCES = moduls.cpp mod_daq.cpp mod_prt.cpp
-#daq_OPC_UA_la_LIBADD  = -lnetsnmp -lcrypto
+daq_OPC_UA_la_LIBADD  = -lcrypto
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.OPC_UA
