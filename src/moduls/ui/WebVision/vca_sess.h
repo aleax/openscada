@@ -144,13 +144,13 @@ class VCAElFigure : public VCAObj
 			    double x3, double y3, double x4, double y4 );
         //vector<Point> floodFill( gdImagePtr im, int xMin, int yMin, int xMax, int yMax, int x, int y, int border_color);
 	double angle( const Point p1, const Point p2, const Point p3, const Point p4 );
-	double length( const Point pt1, const Point pt2 );
+	static double length( const Point pt1, const Point pt2 );
 	Point arc( double t, double a, double b );
 	Point unrotate(const Point pnt, double alpha, double a, double b);
 	Point rotate( const Point pnt, double alpha );
 	Point bezier( double t, Point p1, Point p2, Point p3, Point p4 );
 	double bezierDeltaT( Point p1, Point p2, Point p3, Point p4 );
-	double ABS(double var);
+	static double ABS(double var);
 	bool isPaintable( ShapeItem item, double xScale, double yScale );
 	void paintFigure( gdImagePtr im, ShapeItem item, double xScale, double yScale, bool flag_allocate, bool flag_style );
 	void paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double xScale, double yScale );
@@ -161,19 +161,19 @@ class VCAElFigure : public VCAObj
         Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
         int drawElF( SSess &ses, double xSc, double ySc, Point clickPnt );
 	//Attributes
-	double	width,		//Widget geometry
+	double	width,          //Widget geometry
 		height;
-	int	geomMargin,	//Margin
-		lineClr,
-		bordWdth,
-		bordClr,
-		lineWdth,
-		fillClr,
-                lineStyle,
-                scaleHeight,
-                scaleWidth;
+	int	geomMargin,     //Margin
+		lineClr,        //The color of the line
+		bordWdth,       //The border's width
+		bordClr,        //The border's color
+		lineWdth,       //The line's width
+		fillClr,        //The fill's color
+                lineStyle,      //The style of the line
+                scaleHeight,    //The vertical scale
+                scaleWidth;     //The horizontal scale
 	string	elLst;
-	double	orient;
+	double	orient;         //The orientation angle
 	bool	active,         //Active diagram
 		rel_list;
         gdImagePtr im;
@@ -188,6 +188,67 @@ class VCAElFigure : public VCAObj
 	vector<InundationItem> inundationItems;
 
 	Res	mRes;
+};
+
+class VCAText : public VCAObj
+{
+    private:
+	//Data
+	//- Argument object's class -
+        class ArgObj
+        {
+            public:
+		//Methods
+                ArgObj( )				{ };
+
+                string &cfg( )				{ return m_cfg; }
+                string &val( )				{ return m_val; }
+                int type( )				{ return m_type; }
+
+                void setCfg( const string &vl )	        { m_cfg = vl; }
+                void setVal( const string &vl )	        { m_val = vl; }
+                void setType( const int vl )	        { m_type = vl; }
+
+            private:
+		//Attributes
+                string	        m_val;
+                string  	m_cfg;
+                int             m_type;
+        };
+
+    public:
+	//Methods
+        VCAText( const string &iid );
+        ~VCAText( );
+
+        void getReq( SSess &ses );
+        void postReq( SSess &ses )  { }
+        void setAttrs( XMLNode &node, const string &user );
+        Point rot( const Point pnt, double alpha, const Point center );
+        vector<int> textRotate( double ang, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4 );
+
+	//Attributes
+        gdImagePtr im;
+        double	orient;
+        bool	active;         //Active diagram
+
+        double	width, height;  //Widget geometry
+        int     scaleHeight,    //Vertical scale
+                scaleWidth;     //Horizontal scale
+        int     textFontSize,   //The font's size of the text
+                textColor;      //The color of the text
+        short   alignHor :4;    //Horizontal align
+        short   alignVer :3;    //Vertical align
+        bool    wordWrap,       //Word wrap flag
+                underline,      //Underline text flag
+                strikeout,      //Strikeout text flag
+                bold;           //Bold text flag ( for calculating the underline and strikeout width )
+        string  text,           //The result text
+                text_tmpl,      //The text without the arguments
+                textFont;       //The text's font
+        vector<ArgObj>	args;   //The argument's vector
+
+        Res	mRes;
 };
 
 

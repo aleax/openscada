@@ -174,6 +174,7 @@ void VCASess::getReq( SSess &ses )
 	    req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2froot");
 	    mod->cntrIfCmd(req,ses.user);
 	    if( req.text() == "ElFigure" )	{ objAdd( new VCAElFigure(ses.url) ); new_obj = true; }
+            else if( req.text() == "Text" )     { objAdd( new VCAText(ses.url) ); new_obj = true; }
 	    else if( req.text() == "Diagram" )	{ objAdd( new VCADiagram(ses.url) ); new_obj = true; }
 	    if( new_obj )
 	    {
@@ -293,6 +294,19 @@ VCAElFigure::VCAElFigure( const string &iid ) : VCAObj(iid), im(NULL)
 }
 
 VCAElFigure::~VCAElFigure( )
+{
+    if( im ) gdImageDestroy(im);
+}
+
+//*************************************************
+//* Text                                      *
+//*************************************************
+VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL)
+{
+
+}
+
+VCAText::~VCAText( )
 {
     if( im ) gdImageDestroy(im);
 }
@@ -2317,7 +2331,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     {
         //- Detecting which figures correspond the points of each fill -
         bool flag_fill = true;
-        bool flag_fill_alpha = false;
         int num_pnt;
         int min_x, min_y, max_x, max_y;
         vector<int> fig;
@@ -4710,6 +4723,495 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 
     }
 }
+Point VCAText::rot( const Point pnt, double alpha, const Point center )
+{
+    return Point( center.x + ( (pnt.x - center.x)*cos((alpha*M_PI)/180) - (pnt.y - center.y)*sin((alpha*M_PI)/180) ),
+                  center.y + ( (pnt.x - center.x)*sin((alpha*M_PI)/180) + (pnt.y - center.y)*cos((alpha*M_PI)/180) ) );
+}
+vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4 )
+{
+    vector<int> wh;
+    wh.push_back(0); wh.push_back(0);
+    Point center = Point( (x2 - x4)/2, (y2 - y4)/2 );
+    Point p1_rot = rot( Point(x1,y1), ang, center ); Point p2_rot = rot( Point(x2,y2), ang, center );
+    Point p3_rot = rot( Point(x3,y3), ang, center ); Point p4_rot = rot( Point(x4,y4), ang, center );
+    if( ang > 0 && ang < 90 )
+    {
+        if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x),
+                    k2Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x);
+            Point p1Rez = Point( x1, p1_rot.y );
+            Point p3Rez = Point( x3, p3_rot.y );
+            double B1 = p1Rez.y - k1Rot*p1Rez.x;
+            double B2 = p3Rez.y - k2Rot*p3Rez.x;
+            Point p4Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p4Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p4Rez, p3Rez ), 2, true) );
+        }
+        else if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
+                    k2Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x);
+            Point p4Rez = Point( p4_rot.x, y4 );
+            Point p2Rez = Point( p2_rot.x, y2 );
+            double B1 = p2Rez.y - k1Rot*p2Rez.x;
+            double B2 = p4Rez.y - k2Rot*p4Rez.x;
+            Point p1Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p4Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p2Rez ), 2, true) );
+        }
+        else
+        {
+            int ln = (int)TSYS::realRound(VCAElFigure::length(  Point( x1, p1_rot.y ),
+                      Point( p2_rot.x, y2 ) ), 2, true);
+            wh[0] = wh[1] = ln;
+        }
+    }
+    else if( ang > 90 && ang < 180 )
+    {
+        if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x),
+                    k2Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x);
+            Point p2Rez = Point( x4, p2_rot.y );
+            Point p4Rez = Point( x1, p4_rot.y );
+            double B1 = p4Rez.y - k1Rot*p4Rez.x;
+            double B2 = p2Rez.y - k2Rot*p2Rez.x;
+            Point p1Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p4Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p2Rez ), 2, true) );
+        }
+        else if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
+                    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
+            Point p1Rez = Point( p1_rot.x, y2 );
+            Point p3Rez = Point( p3_rot.x, y1 );
+            double B1 = p1Rez.y - k1Rot*p1Rez.x;
+            double B2 = p3Rez.y - k2Rot*p3Rez.x;
+            Point p2Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p2Rez, p3Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p2Rez ), 2, true) );
+        }
+        else
+        {
+            int ln = (int)TSYS::realRound(VCAElFigure::length(  Point( p1_rot.x, y2 ),
+                                                                Point( x3, p2_rot.y ) ), 2, true);
+            wh[0] = wh[1] = ln;
+        }
+
+    }
+    else if( ang > 180 && ang < 270 )
+    {
+        if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
+                    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
+            Point p1Rez = Point( x4, p1_rot.y );
+            Point p3Rez = Point( x2, p3_rot.y );
+            double B1 = p1Rez.y - k1Rot*p1Rez.x;
+            double B2 = p3Rez.y - k2Rot*p3Rez.x;
+            Point p2Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p2Rez, p3Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p2Rez ), 2, true) );
+        }
+        else if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x),
+                    k2Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x);
+            Point p4Rez = Point( p4_rot.x, y2 );
+            Point p2Rez = Point( p2_rot.x, y1 );
+            double B1 = p2Rez.y - k1Rot*p2Rez.x;
+            double B2 = p4Rez.y - k2Rot*p4Rez.x;
+            Point p3Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p2Rez, p3Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p3Rez, p4Rez ), 2, true) );
+        }
+        else
+        {
+            int ln = (int)TSYS::realRound(VCAElFigure::length(  Point( x3, p1_rot.y ),
+                                                                Point( p2_rot.x, y4 ) ), 2, true);
+            wh[0] = wh[1] = ln;
+        }
+    }
+    else if( ang > 270 && ang < 360 )
+    {
+        if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x),
+                    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
+            Point p4Rez = Point( x4, p4_rot.y );
+            Point p2Rez = Point( x2, p2_rot.y );
+            double B1 = p4Rez.y - k1Rot*p4Rez.x;
+            double B2 = p2Rez.y - k2Rot*p2Rez.x;
+            Point p3Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p2Rez, p3Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p3Rez, p4Rez ), 2, true) );
+        }
+        else if( (int)TSYS::realRound(VCAElFigure::ABS(x1 - x3),2,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2 - y1),2,true) )
+        {
+            double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
+                    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
+            Point p1Rez = Point( p1_rot.x, y1 );
+            Point p3Rez = Point( p3_rot.x, y3 );
+            double B1 = p1Rez.y - k1Rot*p1Rez.x;
+            double B2 = p3Rez.y - k2Rot*p3Rez.x;
+            Point p2Rez = Point( (B2 - B1)/(k1Rot - k2Rot), k1Rot*(B2 - B1)/(k1Rot - k2Rot) + B1 );
+            wh[0] = ( (int)TSYS::realRound(VCAElFigure::length(  p2Rez, p3Rez ), 2, true) );
+            wh[1] = ( (int)TSYS::realRound(VCAElFigure::length(  p1Rez, p2Rez ), 2, true) );
+        }
+        else
+        {
+            int ln = (int)TSYS::realRound(VCAElFigure::length(  Point( p1_rot.x, y1 ),
+                                                                Point( x1, p2_rot.y ) ), 2, true);
+            wh[0] = wh[1] = ln;
+        }
+    }
+    return wh;
+}
+
+void VCAText::getReq( SSess &ses )
+{
+    ResAlloc res(mRes,false);
+    //- Prepare picture -
+    map< string, string >::iterator prmEl = ses.prm.find("xSc");
+    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    prmEl = ses.prm.find("ySc");
+    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+
+    scaleHeight = (int)TSYS::realRound(height*ySc, 2, true);
+    scaleWidth = (int)TSYS::realRound(width*xSc, 2, true);
+    int txtFontSize = 0;
+    txtFontSize = (int)((float)textFontSize*vmin(xSc,ySc));
+    if( im ) gdImageDestroy(im);
+    im = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+    if( !im ) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+    else
+    {
+        gdImageAlphaBlending(im, 0);
+        gdImageFilledRectangle( im, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im,0,0,0,127) );
+        gdImageAlphaBlending(im, 1);
+        int clr = gdImageColorResolveAlpha(im,0,0,0,0);
+        int rd = gdImageColorResolveAlpha(im,255,0,0,0);
+
+        int brect[8];
+        int x, y;
+        char *err;
+        gdFTStringExtra strex;
+        strex.flags =  gdFTEX_RESOLUTION;
+        strex.vdpi = 72;
+        strex.hdpi = 72;
+
+        int rotateWidth, rotateHeight, x_off, y_off, lnSpace = (int)txtFontSize/3;
+        if( (VCAElFigure::ABS(orient - 90) < 0.01) || (VCAElFigure::ABS(orient - 270) < 0.01)  ) 
+        {
+            rotateWidth = scaleHeight;
+            rotateHeight = scaleWidth;
+        }
+        else if( (VCAElFigure::ABS(orient - 180) < 0.01) || (VCAElFigure::ABS(orient - 360) < 0.01) ) 
+        {
+            rotateWidth = scaleWidth;
+            rotateHeight = scaleHeight;
+        }
+        else
+        {
+            vector<int> wh = textRotate( orient,scaleWidth,0.,scaleWidth,scaleHeight,0.,scaleHeight,0.,0. );
+            rotateWidth = wh[0];
+            rotateHeight = wh[1];
+        }
+        int brect_wrap[8];
+        int wrapWidth;
+        string wrap_text=text, wrap_end;
+        vector<string> str_wrap;
+        vector<int> hgt_wrap;
+        gdImageStringFTEx(NULL,&brect_wrap[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( text.c_str() ), &strex);
+        wrapWidth = brect_wrap[2]-brect_wrap[6];
+
+        //Word wrap algorithm
+        if( wordWrap && (wrapWidth > rotateWidth) )
+        {
+            string wrap_temp;
+            bool flWrapEnd = false;
+            do
+            {
+                int brect_wr[8];
+                size_t found, fnd;
+                found = wrap_text.find_first_of(" \t");
+                if( found != -1 )
+                {
+                    string wrap_before = wrap_text.substr(0,found+1);
+                    wrap_text = wrap_text.substr(found+1);
+                    //Connecting the words, divided with the " " till their sum length <= rotateWidth
+                    gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                    int wdtTmp = brect_wr[2]-brect_wr[6];
+                    gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_before.c_str() ), &strex);
+                    if( (brect_wr[2]-brect_wr[6]) + wdtTmp <= rotateWidth ) wrap_temp.append(wrap_before);
+                    //Check if the was no any append to the wrap_temp and the size of the wrap_before > rotateWidth
+                    else if( wrap_temp.size() == 0 )
+                    {
+                        //Erase the " " at the end of the string
+                        fnd = wrap_before.rfind(" ");
+                        if( fnd == wrap_before.size()-1)
+                            wrap_before.erase(fnd);
+
+                        str_wrap.push_back(wrap_before);
+                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                    }
+                    else
+                    { 
+                        wrap_text.insert(0,wrap_before);
+                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                        //Erase the " " at the end of the string
+                        fnd = wrap_temp.rfind(" ");
+                        if( fnd == wrap_temp.size()-1)
+                            wrap_temp.erase(fnd);
+
+                        str_wrap.push_back(wrap_temp);
+                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                        wrap_temp.clear();
+                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
+                        if( brect_wr[2]-brect_wr[6] <= rotateWidth )
+                        {
+                            fnd = wrap_text.rfind(" ");
+                            if( fnd == wrap_text.size()-1)
+                                wrap_text.erase(fnd);
+
+                            str_wrap.push_back(wrap_text);
+                            hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                            flWrapEnd = true;
+                        }
+                    }
+                }
+                else//If there is no " " in the string or in the rest of the string
+                {
+                    bool app = false;
+                    if( wrap_temp.size() )
+                    {
+                        //Check if the rest of the string without " " is small anough to append it the wrap_temp and push_back to the array
+                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                        int wdtTmp = brect_wr[2]-brect_wr[6];
+                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
+                        if( (brect_wr[2]-brect_wr[6]) + wdtTmp <= rotateWidth ){ wrap_temp.append(wrap_text); app = true; }
+                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                        //Erase the " " at the end of the string
+                        if( !app )
+                        {
+                            fnd = wrap_temp.rfind(" ");
+                            if( fnd == wrap_temp.size()-1)
+                                wrap_temp.erase(fnd);
+                        }
+
+                        str_wrap.push_back(wrap_temp);
+                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                    }
+                    if( !app )
+                    {
+                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
+                        str_wrap.push_back(wrap_text);
+                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                    }
+                    flWrapEnd = true;
+                }
+            }
+            while(!flWrapEnd);
+        }
+        else
+        {
+            int brect_wr[8];
+            gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( text.c_str() ), &strex);
+            str_wrap.push_back(text);
+            hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+        }
+        //Calculating the summary height of the all strings in the array plus the linespacing interval between them
+        int wrapHgt = 0;
+        for(int f = 0; f < str_wrap.size(); f++ ){ wrapHgt += hgt_wrap[f]; }
+        wrapHgt += str_wrap.size()*lnSpace;
+
+        gdImagePtr im_txt = gdImageCreateTrueColor( rotateWidth, rotateHeight );
+        //Calculating the offset from the top left corner of the 'rotate' image(with the rotateWidth and rotateHeight)
+        int offsetY = 0, offsetX = 0;
+        if( alignVer == 1 )         offsetY  = 0;
+        else if( alignVer == 2 )    offsetY  = wrapHgt - (rotateHeight-2);
+        else if( alignVer == 3 )    offsetY  = (wrapHgt - (rotateHeight-2))/2;
+        gdImageAlphaBlending(im_txt, 0);
+        gdImageFilledRectangle( im_txt, 0, 0, rotateWidth-1, rotateHeight-1, gdImageColorResolveAlpha(im_txt,0,0,0,127) );
+        gdImageAlphaBlending(im_txt, 1);
+        int clr_txt = gdImageColorResolveAlpha( im_txt, (uint8_t)(textColor>>16), (uint8_t)(textColor>>8), (uint8_t)textColor, 127 - (uint8_t)(textColor>>24) );
+
+        //Drawing the all strings from the array
+        int y_new = 0;
+        for( int k = 0; k < str_wrap.size(); k++ )
+        {
+            gdImageStringFTEx(NULL,&brect[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( str_wrap[k].c_str() ), &strex );
+            if( alignHor == 1 ) offsetX = 1;
+            else if( alignHor == 2 ) offsetX = rotateWidth - (brect[4] - brect[0]);
+            else if( alignHor == 3 ) offsetX = (rotateWidth - (brect[4] - brect[0]))/2;
+            else if( alignHor == 4 ) offsetX = 0;
+            int realY = hgt_wrap[k]-offsetY+y_new;
+
+            char *rez = gdImageStringFTEx(im_txt,&brect[0],clr_txt,(char*)textFont.c_str(),txtFontSize,0.0,offsetX,realY,(char*)( str_wrap[k].c_str() ), &strex);
+            if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s\n"),textFont.c_str(),rez);
+            else
+            {
+                int wdt = bold?(int)TSYS::realRound(txtFontSize/6,2,true):(int)TSYS::realRound(txtFontSize/12,2,true);
+                gdImageSetThickness(im_txt, wdt);
+                if( underline )gdImageLine(im_txt,offsetX,realY+(int)lnSpace/2,offsetX+(brect[4] - brect[0]), realY+(int)lnSpace/2,clr_txt);
+                if( strikeout )gdImageLine(im_txt,offsetX,realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,offsetX+(brect[4] - brect[0]),
+                                                          realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,clr_txt);
+            }
+            y_new += hgt_wrap[k] + lnSpace;
+        }
+        gdImageSaveAlpha(im_txt, 1);
+        gdImageCopyRotated(im, im_txt, scaleWidth/2, scaleHeight/2, 0, 0, rotateWidth, rotateHeight, 360-orient);
+        gdImageDestroy(im_txt);
+        gdImageSaveAlpha(im, 1);
+        //- Get image and transfer it -
+        int img_sz;
+        char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+        ses.page.assign(img_ptr,img_sz);
+        ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+        gdFree(img_ptr);
+    }
+}
+
+void VCAText::setAttrs( XMLNode &node, const string &user )
+{
+    ResAlloc res(mRes,true);
+    XMLNode *req_el;
+    bool reform = false;
+    for( int i_a = 0; i_a < node.childSize(); i_a++ )
+    {
+        req_el = node.childGet(i_a);
+        if( req_el->name() != "el" )	continue;
+        int uiPrmPos = atoi(req_el->attr("p").c_str());
+        switch( uiPrmPos )
+        {
+            case 9: 	//width
+                width = atof(req_el->text().c_str());
+                break;
+            case 10:	//height
+                height = atof(req_el->text().c_str());
+                break;
+            case 25:	//font
+            {
+                char family[101]; strcpy(family,"Arial");
+                int bld = 0, italic = 0, undLine = 0, strOut = 0;
+                textFontSize = 10;
+                sscanf(req_el->text().c_str(),"%100s %d %d %d %d %d",family,&textFontSize,&bld,&italic,&undLine,&strOut);
+                textFont = family;
+                for( int p = 0; p < textFont.size(); p++ ) if( textFont[p] == '_' ) textFont[p] = ' ';
+                if( bld )      {textFont += ":bold"; bold = true;}
+                else            bold = false;
+                if( italic )    textFont += ":italic";
+                if( undLine )   underline = true;
+                else            underline = false;
+                if( strOut )    strikeout = true;
+                else            strikeout = false;
+                break;
+            }
+            case 26:	//color
+                textColor =  mod->colorParse(req_el->text());
+                break;
+            case 27:	//orient
+            {
+                orient = atof(req_el->text().c_str());
+                break;
+            }
+            case 28:	//wordWrap
+            {
+                if( atoi(req_el->text().c_str()) )  wordWrap = true;
+                else                                wordWrap = false;
+                break;
+            }
+            case 29:    //align
+            {
+                int txtAlign = atoi(req_el->text().c_str());
+                switch(txtAlign&0x3)
+                {
+                    case 0: alignHor = 1; break;
+                    case 1: alignHor = 2; break;
+                    case 2: alignHor = 3; break;
+                    case 3: alignHor = 4; break;
+                }
+                switch(txtAlign>>2)
+                {
+                    case 0: alignVer = 1; break;
+                    case 1: alignVer = 2; break;
+                    case 2: alignVer = 3; break;
+                }
+                break;
+            }
+            case 30:	//text
+            {
+                if( text_tmpl == req_el->text().c_str() )	break;
+                text_tmpl = req_el->text().c_str();
+                reform = true;
+                break;
+            }
+            case 40:	//numbArg
+            {
+                int numbArg = atoi(req_el->text().c_str());
+                while( args.size() < numbArg )	args.push_back(ArgObj());
+                while( args.size() > numbArg )	args.pop_back();
+                reform = true;
+                break;
+            }
+            default:
+	    //- Individual arguments process -
+                if( uiPrmPos >= 50 )
+                {
+                    int argN = (uiPrmPos/10)-5;
+                    if( argN >= args.size() )	break;
+                    if( (uiPrmPos%10) == 0 ) args[argN].setVal(req_el->text());
+                    else if( (uiPrmPos%10) == 1 ) args[argN].setType(atoi(req_el->text().c_str()));
+                    else if( (uiPrmPos%10) == 2 ) args[argN].setCfg(req_el->text().c_str());
+                    reform = true;
+                }
+        }
+
+    }
+    if( reform )
+    {
+        string txt = text_tmpl.c_str();
+        string argVal;
+        for( int i_a = 0; i_a < args.size(); i_a++ )
+        {
+            switch( args[i_a].type())
+            {
+                case 0: case 2:
+                {
+                    argVal = args[i_a].val();
+                    break;
+                }
+                case 1:
+                {
+                    double vl = atof(args[i_a].val().c_str());
+                    if( TSYS::strSepParse(args[i_a].cfg(),1,';') == "f" )
+                        argVal = TSYS::real2str(vl,atoi(TSYS::strSepParse(args[i_a].cfg(),2,';').c_str()),'f');
+                    else if( TSYS::strSepParse(args[i_a].cfg(),1,';') == "g" )
+                        argVal = TSYS::real2str(vl,atoi(TSYS::strSepParse(args[i_a].cfg(),2,';').c_str()),'g'); 
+                    else argVal = TSYS::real2str(vl); 
+                    break;
+                }
+            }
+            int argSize = atoi(TSYS::strSepParse(args[i_a].cfg(),0,';').c_str());
+            string argPad = "";
+            for( int j = argVal.length(); j < VCAElFigure::ABS(argSize); j++ ) argPad+=' ';
+            if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;
+            string rep = "%"+TSYS::int2str(i_a+1);
+            size_t fnd = txt.find(rep);
+            if( fnd != -1 )
+            do
+            {
+                txt.replace( fnd, rep.length(), argVal );
+                fnd = txt.find(rep);
+            }
+            while( fnd != -1 );
+        }
+        if( txt != text.c_str() ) text = txt;
+    }
+}
 
 //*************************************************
 //* VCADiagram                                    *
@@ -4793,6 +5295,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     tArW = imW-2*(geomMargin+bordWidth+1),
     tArH = imH-2*(geomMargin+bordWidth+1);
 
+    //> Setting the resolution for the text's font
+    gdFTStringExtra strex;
+    strex.flags =  gdFTEX_RESOLUTION;
+    strex.vdpi = 72;
+    strex.hdpi = 72;
+
     if( sclHor&0x3 || sclVer&0x3 )
     {
 	//>> Set grid color
@@ -4804,8 +5312,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
 	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
-	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
-	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
+            char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000", &strex);
+	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
@@ -4854,14 +5362,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
+                gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = markBrd;
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str());
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
+                gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
+                gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str(), &strex);
 		markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str());
+                gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
 	    }
 
 	    //>>> Draw grid and/or markers
@@ -4905,23 +5413,23 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    if( lab_tm.size() )
 		    {
-			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
+                        gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str(), &strex);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			{
-			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str());
+                            gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
 			    endPosTm = tpos+wdth;
 			}
 		    }
 		    if( lab_dt.size() )
 		    {
-			gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
+                        gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
 			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
 			{
-			    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str());
+                            gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -5025,8 +5533,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		{
 		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-mrkHeight) < tArY;
-		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-			(char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
+		    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
+                                      (char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str(), &strex);
 		}
 	    }
 	}
@@ -5183,6 +5691,12 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     tArW = imW-2*(geomMargin+bordWidth+1),
     tArH = imH-2*(geomMargin+bordWidth+1);
 
+    //> Setting the resolution for the text's font
+    gdFTStringExtra strex;
+    strex.flags =  gdFTEX_RESOLUTION;
+    strex.vdpi = 72;
+    strex.hdpi = 72;
+
     //> Process scale
     if( sclHor&0x3 || sclVer&0x3 )
     {
@@ -5195,8 +5709,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));
 	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
-	    char *rez = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000");
-	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
+            char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000", &strex);
+	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
@@ -5236,10 +5750,10 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    if( sclHor&0x2 && mrkHeight )
 	    {
 		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
-		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
+                gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str(), &strex);
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str());
+                gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str(), &strex);
 	    }
 	    //>>> Draw grid and/or markers
 	    for( double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h+=hDiv )
@@ -5252,11 +5766,11 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		if( sclHor&0x2 && mrkHeight )
 		{
 		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
-		    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str());
+                    gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str(), &strex);
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
 		    if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
-			gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str());
+                        gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str(), &strex);
 		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
 		}
 	    }
@@ -5336,8 +5850,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		{
 		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-mrkHeight) < tArY;
-		    gdImageStringFT(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-			(char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
+		    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
+                                      (char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str(), &strex);
 		}
 	    }
 	}
@@ -5529,10 +6043,10 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		if( bold ) sclMarkFont += ":bold";
 		if( italic ) sclMarkFont += ":italic";
 		//> Font size correct
-		int brect[8];
+		/*int brect[8];
 		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.,0,0,"Test");
 		if( (brect[3]-brect[7]) > sclMarkFontSize )
-		    sclMarkFontSize = (int)((float)sclMarkFontSize*((float)sclMarkFontSize/(float)(brect[3]-brect[7])));
+		    sclMarkFontSize = (int)((float)sclMarkFontSize*((float)sclMarkFontSize/(float)(brect[3]-brect[7])));*/
 		break;
 	    }
 	    case 38:	//valArch

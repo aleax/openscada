@@ -801,7 +801,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
         //- Repainting all shapes by calling moveItemTo to each shape -
         QVector<int> inundation_fig_num;
-        bool flag_push_back, fl_brk;
+        bool flag_push_back;
         for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
         {
             bool unDel = false;
@@ -1288,11 +1288,7 @@ bool ShapeElFigure::shapeSave( WdgView *w )
     {
         bool flag_n1 = false;
         bool flag_n2 = false;
-        bool fl_br   = false;
-        bool exist_fill = false;
         QVector<int> temp;
-        int index_element = -1;
-        bool flag_for_break = false;
 	elList += "fill:";
 
 	for( int k=0; k < inundationItems[i].number_shape.size()-1; k++ )
@@ -1712,7 +1708,6 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
 void ShapeElFigure::toolAct( QAction *act )
 {
-    bool ptr_line,ptr_arc,ptr_bezier;
     WdgView *w = (WdgView*)TSYS::str2addr(act->property("wdgAddr").toString().toAscii().data());
     if( !w ) return;
     ElFigDt *elFD = (ElFigDt*)w->shpData;
@@ -2568,7 +2563,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     ColorMap *colors = &elFD->shapeColors;
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
-    bool flag_hold_rect = false;
     switch( event->type() )
     {
         case QEvent::Paint:
@@ -3459,7 +3453,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 					}
 					if( flag_break_move ) break;
 				    }
-                            flag_hold_rect = true;
                             paintImage(view);
                             view->repaint();
                         }
@@ -3632,7 +3625,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_ctrl    = false;
                             flag_rect    = false;
                             flag_arc_rect_3_4 = false;
-                            flag_hold_rect    = false;
                             index_array.clear();
                         }
                         flag_first_move = false;  

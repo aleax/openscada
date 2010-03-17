@@ -577,53 +577,59 @@ function makeEl( pgBr, inclPg )
     if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
     if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
-    var txtAlign = parseInt(this.attrs['alignment']);
-    var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; ';
-    switch(txtAlign&0x3)
+    if( parseInt(this.attrs['orient']) == 0 )
     {
-      case 0: spanStyle+='text-align: left; '; break;
-      case 1: spanStyle+='text-align: right; '; break;
-      case 2: spanStyle+='text-align: center; '; break;
-      case 3: spanStyle+='text-align: justify; '; break;
-    }
-    switch(txtAlign>>2)
-    {
-      case 0: spanStyle+='vertical-align: top; '; break;
-      case 1: spanStyle+='vertical-align: bottom; '; break;
-      case 2: spanStyle+='vertical-align: middle; '; break;
-    }
-    spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
-    spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
-    var txtVal = this.attrs['text'];
-    for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
-    {
-      var argVal;
-      var argCfg = new Array();
-      switch(parseInt(this.attrs['arg'+i+'tp']))
+      var txtAlign = parseInt(this.attrs['alignment']);
+      var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; ';
+      switch(txtAlign&0x3)
       {
-	case 0: case 2:
-	  argCfg[0]=this.attrs['arg'+i+'cfg'];
-	  argVal=this.attrs['arg'+i+'val'];
-	  break;
-	case 1:
-	  argCfg=this.attrs['arg'+i+'cfg'].split(';');
-	  if( argCfg[1] == 'g' )      argVal=parseFloat(this.attrs['arg'+i+'val']).toPrecision(argCfg[2]);
-	  else if( argCfg[1] == 'f' ) argVal=parseFloat(this.attrs['arg'+i+'val']).toFixed(argCfg[2]);
-	  else argVal=this.attrs['arg'+i+'val'];
-	  break;
+        case 0: spanStyle+='text-align: left; '; break;
+        case 1: spanStyle+='text-align: right; '; break;
+        case 2: spanStyle+='text-align: center; '; break;
+        case 3: spanStyle+='text-align: justify; '; break;
       }
-      var argSize = parseInt(argCfg[0]);
-      var argPad = '';
-      for( var j = argVal.length; j < Math.abs(argSize); j++ ) argPad+='&nbsp;';
-      if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;
-      txtVal = txtVal.replace('%'+(i+1),argVal);
-    }
-    var txtVal1 = '';
-    for( var j = 0; j < txtVal.length; j++ )
-      if( txtVal[j] == '\n' ) txtVal1+='<br />'; else txtVal1+=txtVal[j];
+      switch(txtAlign>>2)
+      {
+        case 0: spanStyle+='vertical-align: top; '; break;
+        case 1: spanStyle+='vertical-align: bottom; '; break;
+        case 2: spanStyle+='vertical-align: middle; '; break;
+      }
+      spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
+      spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
+      var txtVal = this.attrs['text'];
+      for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
+      {
+        var argVal;
+        var argCfg = new Array();
+        switch(parseInt(this.attrs['arg'+i+'tp']))
+        {
+	  case 0: case 2:
+	    argCfg[0]=this.attrs['arg'+i+'cfg'];
+	    argVal=this.attrs['arg'+i+'val'];
+	    break;
+	  case 1:
+	    argCfg=this.attrs['arg'+i+'cfg'].split(';');
+	    if( argCfg[1] == 'g' )      argVal=parseFloat(this.attrs['arg'+i+'val']).toPrecision(argCfg[2]);
+	    else if( argCfg[1] == 'f' ) argVal=parseFloat(this.attrs['arg'+i+'val']).toFixed(argCfg[2]);
+	    else argVal=this.attrs['arg'+i+'val'];
+	    break;
+        }
+        var argSize = parseInt(argCfg[0]);
+        var argPad = '';
+        for( var j = argVal.length; j < Math.abs(argSize); j++ ) argPad+='&nbsp;';
+        if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;
+        txtVal = txtVal.replace('%'+(i+1),argVal);
+      }
+      var txtVal1 = '';
+      for( var j = 0; j < txtVal.length; j++ )
+        if( txtVal[j] == '\n' ) txtVal1+='<br />'; else txtVal1+=txtVal[j];
 //    txtVal.replace(/\n/g,'<br />');
 //    while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
-    this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
+      this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
+    }
+    else
+      this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
+
     this.place.wdgLnk = this;
     if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
       this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };

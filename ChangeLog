@@ -1,3 +1,8 @@
+2010-03-17 Maxim
+- !!:UI.WebVision: The rotation of the primitive Text is added.
+- FIX:UI.WebVision: The font correction for the primitive Diagram is fixed.
+
+
 2010-03-16 Roman
 - !::Protocol.UserProtocol: Output user protocol address is made by IO attribute "ProtIt".
 
