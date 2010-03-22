@@ -1030,6 +1030,7 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
 {
     if( !obj->objEl( ) )
 	throw TError(nodePath().c_str(),_("No object variable for function"));
+    if( p_cnt > 255 ) throw TError(nodePath().c_str(),_("Object's function have more 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
