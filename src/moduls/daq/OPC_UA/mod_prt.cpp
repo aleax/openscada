@@ -66,10 +66,11 @@ TProt::TProt( string name ) : mSecCnlIdLast(1)
     mEndPntEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     mEndPntEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mEndPntEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mEndPntEl.fldAdd( new TFld("EndPoint",_("End point"),TFld::String,0,"50","opc.tcp://localhost:4841") );
-    mEndPntEl.fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
-    mEndPntEl.fldAdd( new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
-    mEndPntEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
+    mEndPntEl.fldAdd( new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selected,"1","0","0",_("Binary")) );
+    mEndPntEl.fldAdd( new TFld("URL",_("URL"),TFld::String,0,"50","opc.tcp://localhost:4841") );
+    mEndPntEl.fldAdd( new TFld("SecPolicies",_("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1") );
+    mEndPntEl.fldAdd( new TFld("ServCert",_("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
+    mEndPntEl.fldAdd( new TFld("ServPvKey",_("Server private key (PEM)"),TFld::String,TFld::FullText,"10000") );
 }
 
 TProt::~TProt()
@@ -77,10 +78,25 @@ TProt::~TProt()
     nodeDelAll();
 }
 
-void TProt::sAdd( const string &iid, const string &db )
+void TProt::epAdd( const string &iid, const string &db )
 {
     if( chldPresent(mEndPnt,iid) ) return;
     chldAdd( mEndPnt, new OPCEndPoint(iid,db,&endPntEl()) );
+}
+
+void TProt::discoveryUrls( vector<string> &ls )
+{
+    ls.clear();
+    //>> Get allowed enpoints list
+    vector<string> epLs;
+    epList(epLs);
+    for( int i_ep = 0; i_ep < epLs.size(); i_ep++ )
+    {
+	AutoHD<OPCEndPoint> ep = epAt(epLs[i_ep]);
+	if( !ep.at().enableStat() ) continue;
+	ls.push_back(ep.at().url());
+	break;
+    }
 }
 
 void TProt::load_( )
@@ -98,7 +114,7 @@ void TProt::load_( )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep","",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !sPresent(id) )	sAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if( !epPresent(id) )	epAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>> Search into config file
@@ -106,7 +122,7 @@ void TProt::load_( )
 	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !sPresent(id) )	sAdd(id,"*.*");
+		if( !epPresent(id) )	epAdd(id,"*.*");
 	    }
     }catch(TError err)
     {
@@ -125,8 +141,8 @@ void TProt::modStart( )
     vector<string> ls;
     epList(ls);
     for( int i_n = 0; i_n < ls.size(); i_n++ )
-	if( sAt(ls[i_n]).at().toEnable( ) )
-	    sAt(ls[i_n]).at().setEnable(true);
+	if( epAt(ls[i_n]).at().toEnable( ) )
+	    epAt(ls[i_n]).at().setEnable(true);
 }
 
 void TProt::modStop( )
@@ -134,10 +150,10 @@ void TProt::modStop( )
     vector<string> ls;
     epList(ls);
     for( int i_n = 0; i_n < ls.size(); i_n++ )
-	sAt(ls[i_n]).at().setEnable(false);
+	epAt(ls[i_n]).at().setEnable(false);
 }
 
-int TProt::chnlOpen( int32_t lifeTm )
+int TProt::chnlOpen( const string &iEp, int32_t lifeTm )
 {
     ResAlloc res( nodeRes(), true );
     do
@@ -145,7 +161,7 @@ int TProt::chnlOpen( int32_t lifeTm )
 	if( !(++mSecCnlIdLast) ) mSecCnlIdLast = 2;
     } while( mSecCnl.find(mSecCnlIdLast) != mSecCnl.end() );
 
-    mSecCnl[mSecCnlIdLast] = SecCnl(1,lifeTm);
+    mSecCnl[mSecCnlIdLast] = SecCnl(iEp,1,lifeTm);
     return mSecCnlIdLast;
 }
 
@@ -158,6 +174,7 @@ void TProt::chnlClose( int cid )
 SecCnl TProt::chnlGet( int cid )
 {
     ResAlloc res( nodeRes(), false );
+    if( mSecCnl.find(cid) == mSecCnl.end() ) return SecCnl();
     return mSecCnl[cid];
 }
 
@@ -196,15 +213,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		int off = 4;
 		if( rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size() )
-		    err = _("13:Error respond: Respond size is not coincedence.");
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincedence."));
 		else if( rez.compare(0,4,"ERRF") == 0 )
-		{
-		    int merr = iNu(rez,off,4);		//Error
-		    string reas = iS(rez,off);		//Reason
-		    err = TSYS::uint2str(merr)+":"+reas;
-		}
+		    err = TSYS::strMess("0x%x:%s",iNu(rez,off,4),iS(rez,off).c_str());
 		else if( rez.compare(0,4,"ACKF") != 0 )
-		    err = _("13:Error respond: Too short or not acknowledge.");
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
 		else
 		{
 		    iNu(rez,off,4);			//Protocol version
@@ -257,8 +270,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.assign( buf, resp_len );
 
 		    int off = 4;
-		    if( rez.size() < 8 || rez.compare(0,4,"OPNF") != 0 )	err = _("13:Error respond: Too short or not acknowledge.");
-		    else if( iNu(rez,off,4) != rez.size() )	err = _("13:Error respond: Respond size is not coincedence.");
+		    if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
+			err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincedence."));
+		    else if( rez.compare(0,4,"ERRF") == 0 )
+			err = TSYS::strMess("0x%x:%s",iNu(rez,off,4),iS(rez,off).c_str());
+		    else if( rez.compare(0,4,"OPNF") != 0 )
+			err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
+		    else
 		    {
 			iNu(rez,off,4);			//Secure channel identifier
 			iS(rez,off);			//Security policy URI
@@ -268,7 +286,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			iNu(rez,off,4);			//RequestId
 							//> Extension Object
 			if( iNodeId(rez,off) != OpcUa_OpenSecureChannelResponse )	//TypeId
-			    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC_UA Bin", _("Respond's NodeId don't acknowledge") );
 							//>> Body
 							//>>> RespondHeader
 			iTm(rez,off);			//timestamp
@@ -289,7 +307,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    }
 		    printf("TEST 10: OPN respond:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 		}
-		else err = TSYS::strMess(_("12:OPC UA '%s': security policy '%s' is not supported."),io.name().c_str(),io.attr("SecPolicy").c_str());
+		else err = TSYS::strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,_("Security policy isn't supported."));
 	    }
 	    else if( io.attr("id") == "CLO" )
 	    {
@@ -317,6 +335,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oNu(rez,0,1);				//Encoding
 		oNu(rez,rez.size(),4,4);		//> Real message size
 
+		//> Parameters clear
+		io.setAttr("SecChnId",""); io.setAttr("SecTokenId","");
+		io.setAttr("SeqNumber",""); io.setAttr("SeqReqId","");
+
 		//> Send request and don't wait response
 		tro.messIO( rez.data(), rez.size(), NULL, 0, 0, true );
 	    }
@@ -327,16 +349,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		if( io.attr("id") == "FindServers" )
 		{
 		    iTpId = OpcUa_FindServersRequest;
-		    oS(mReq,"opc.tcp://roman.home:4841");	//endpointUrl
-		    oS(mReq,"");				//localeIds []
-		    oS(mReq,"");				//serverUris []
+		    oS(mReq,io.attr("EndPoint"));	//endpointUrl
+		    oS(mReq,"");			//localeIds []
+		    oS(mReq,"");			//serverUris []
 		}
 		else if( io.attr("id") == "GetEndpoints" )
 		{
 		    iTpId = OpcUa_GetEndpointsRequest;
-		    oS(mReq,"opc.tcp://roman.home:4841");	//endpointUrl
-		    oS(mReq,"");				//localeIds []
-		    oS(mReq,"");				//profileUris []
+		    oS(mReq,io.attr("EndPoint"));	//endpointUrl
+		    oS(mReq,"");			//localeIds []
+		    oS(mReq,"");			//profileUris []
 		}
 		else if( io.attr("id") == "CreateSession" )
 		{
@@ -351,8 +373,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(mReq,"");			//discoveryUrls
 
 		    oS(mReq,"");			//serverUri
-		    oS(mReq,"opc.tcp://roman.home:4841");	//endpointUrl
-		    oS(mReq,"OpenSCADA client");	//sessionName
+		    oS(mReq,io.attr("EndPoint"));	//endpointUrl
+		    oS(mReq,"OpenSCADA station "+SYS->id());	//sessionName
 		    oS(mReq,string(16,0)+string(4,0xFF)+string(12,0));	//clientNonce
 		    oS(mReq,certPEM2DER(io.childGet("ClientCert")->text()));	//clientCertificate
 		    oR(mReq,1.2e6,8);			//Requested SessionTimeout, ms
@@ -417,7 +439,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oNu(mReq,0,4);			//nodeClassMask ( all NodeClasses )
 		    oNu(mReq,0x3f,4);			//resultMask ( all )
 		}
-		else throw TError( OpcUa_BadNotSupported, "OPC UA Bin", _("11:OPC UA '%s': request '%s' is not supported."),io.name().c_str(),io.attr("id").c_str());
+		else throw TError(OpcUa_BadNotSupported,"OPC UA Bin",_("Request '%s' isn't supported."),io.attr("id").c_str());
 
 		rez.reserve( 200 );
 		rez.append( "MSGF" );			//SecureChannel message
@@ -463,8 +485,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		printf("TEST 11b: Respond '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		off = 4;
-		if( rez.size() < 8 || rez.compare(0,4,"MSGF") != 0 )	err = _("13:Error respond: Too short or not acknowledge.");
-		else if( iNu(rez,off,4) != rez.size() )	err = _("13:Error respond: Respond size is not coincedence.");
+		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincedence."));
+		else if( rez.compare(0,4,"ERRF") == 0 )
+		    err = TSYS::strMess("0x%x:%s",iNu(rez,off,4),iS(rez,off).c_str());
+		else if( rez.compare(0,4,"MSGF") != 0 )
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
+		else
 		{
 		    iNu(rez,off,4);				//Secure channel identifier
 		    iNu(rez,off,4);				//Symmetric Algorithm Security Header : TokenId
@@ -477,77 +504,80 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 								//>>> RespondHeader
 		    iTm(rez,off);				//timestamp
 		    iN(rez,off,4);				//requestHandle
-		    iN(rez,off,4);				//StatusCode
+		    uint32_t stCode = iN(rez,off,4);		//StatusCode
 		    iN(rez,off,1);				//serviceDiagnostics
 		    iS(rez,off);				//stringTable
 								//>>> Extensible parameter
 		    iNodeId(rez,off);				//TypeId (0)
 		    iNu(rez,off,1);				//Encoding
 
-		    switch( iTpId )
+		    switch( oTpId )
 		    {
-			case OpcUa_FindServersRequest:
+			case OpcUa_FindServersResponse:
 			{
-			    if( oTpId != OpcUa_FindServersResponse )
-				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( iTpId != OpcUa_FindServersRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 			    int AppDescrNub = iNu(rez,off,4);		//List items
 			    for( int i_l = 0; i_l < AppDescrNub; i_l++ )
 			    {
-				iS(rez,off);				//applicationUri
-				iS(rez,off);				//productUri
-				iSl(rez,off);				//applicationName
-				iNu(rez,off,4);				//applicationType
-				iS(rez,off);				//gatewayServerUri
-				iS(rez,off);				//discoveryProfileUri
+				XMLNode *ad = io.childAdd("ApplicationDescription");
+				ad->setAttr("applicationUri",iS(rez,off));	//applicationUri
+				ad->setAttr("productUri",iS(rez,off));		//productUri
+				ad->setAttr("applicationName",iSl(rez,off));	//applicationName
+				ad->setAttr("applicationType",TSYS::uint2str(iNu(rez,off,4)));	//applicationType
+				ad->setAttr("gatewayServerUri",iS(rez,off));	//gatewayServerUri
+				ad->setAttr("discoveryProfileUri",iS(rez,off));	//discoveryProfileUri
 									//>>>> discoveryUrls
 				int discoveryUrlsN = iNu(rez,off,4);	//List items
 				for( int i_l2 = 0; i_l2 < discoveryUrlsN; i_l2++ )
-				    iS(rez,off);			//discoveryUrl
+				    ad->childAdd("discoveryUrl")->setText(iS(rez,off));	//discoveryUrl
 			    }
 			    break;
 			}
-			case OpcUa_GetEndpointsRequest:
+			case OpcUa_GetEndpointsResponse:
 			{
-			    if( oTpId != OpcUa_GetEndpointsResponse )
-				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( iTpId != OpcUa_GetEndpointsRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 			    int EndpointDescrNub = iNu(rez,off,4);	//List items
 			    for( int i_l = 0; i_l < EndpointDescrNub; i_l++ )
 			    {
+				XMLNode *xep = io.childAdd("EndpointDescription");
 									//>>> EndpointDescription
-				iS(rez,off);				//endpointUrl
+				xep->setAttr("endpointUrl",iS(rez,off));	//endpointUrl
 									//>>>> server (ApplicationDescription)
-				iS(rez,off);				//applicationUri
-				iS(rez,off);				//productUri
-				iSl(rez,off);				//applicationName
-				iNu(rez,off,4);				//applicationType
-				iS(rez,off);				//gatewayServerUri
-				iS(rez,off);				//discoveryProfileUri
+				xep->setAttr("applicationUri",iS(rez,off));	//applicationUri
+				xep->setAttr("productUri",iS(rez,off));	//productUri
+				xep->setAttr("applicationName",iSl(rez,off));	//applicationName
+				xep->setAttr("applicationType",TSYS::uint2str(iNu(rez,off,4)));	//applicationType
+				xep->setAttr("gatewayServerUri",iS(rez,off));	//gatewayServerUri
+				xep->setAttr("discoveryProfileUri",iS(rez,off));//discoveryProfileUri
 									//>>>> discoveryUrls
 				int discoveryUrlsN = iNu(rez,off,4);	//List items
 				for( int i_l2 = 0; i_l2 < discoveryUrlsN; i_l2++ )
-				    iS(rez,off);			//discoveryUrl
-				iS(rez,off);				//>>> serverCertificate
-				iNu(rez,off,4);				//securityMode
-				iS(rez,off);				//securityPolicyUri
+				    xep->childAdd("discoveryUrl")->setText(iS(rez,off));//discoveryUrl
+				xep->childAdd("serverCertificate")->setText(iS(rez,off));	//>>> serverCertificate
+				xep->setAttr("securityMode",TSYS::uint2str(iNu(rez,off,4)));	//securityMode
+				xep->setAttr("securityPolicyUri",iS(rez,off));	//securityPolicyUri
 									//>>>> userIdentityTokens
 				int userIdentityTokensN = iNu(rez,off,4);//List items
 				for( int i_l2 = 0; i_l2 < userIdentityTokensN; i_l2++ )
 				{
-				    iS(rez,off);			//policyId
-				    iNu(rez,off,4);			//tokenType
-				    iS(rez,off);			//issuedTokenType
-				    iS(rez,off);			//issuerEndpointUrl
-				    iS(rez,off);			//securityPolicyUri
+				    XMLNode *xit = xep->childAdd("userIdentityToken");
+				    xit->setAttr("policyId",iS(rez,off));	//policyId
+				    xit->setAttr("tokenType",TSYS::uint2str(iNu(rez,off,4)));	//tokenType
+				    xit->setAttr("issuedTokenType",iS(rez,off));	//issuedTokenType
+				    xit->setAttr("issuerEndpointUrl",iS(rez,off));	//issuerEndpointUrl
+				    xit->setAttr("securityPolicyUri",iS(rez,off));	//securityPolicyUri
 				}
-				iS(rez,off);				//transportProfileUri
-				iNu(rez,off,1);				//securityLevel
+				xep->setAttr("transportProfileUri",iS(rez,off));	//transportProfileUri
+				xep->setAttr("securityLevel",TSYS::uint2str(iNu(rez,off,1)));	//securityLevel
 			    }
 			    break;
 			}
-			case OpcUa_CreateSessionRequest:
+			case OpcUa_CreateSessionResponse:
 			{
-			    if( oTpId != OpcUa_CreateSessionResponse )
-				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( iTpId != OpcUa_CreateSessionRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 			    io.setAttr("sesId",TSYS::int2str(iNodeId(rez,off)));	//sessionId
 			    io.setAttr("authTokenId",TSYS::int2str(iNodeId(rez,off)));	//authentication Token
 			    iR(rez,off,8);				//revisedSession Timeout, ms
@@ -593,21 +623,25 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    iNu(rez,off,4);				//maxRequest MessageSize
 			    break;
 			}
-			case OpcUa_ActivateSessionRequest:
+			case OpcUa_ActivateSessionResponse:
 			{
-			    if( oTpId != OpcUa_ActivateSessionResponse )
-				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( iTpId != OpcUa_ActivateSessionRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 			    iS(rez,off);				//serverNonce
 			    iS(rez,off);				//results []
 			    iS(rez,off);				//diagnosticInfos []
 			    break;
 			}
-			case OpcUa_CloseSessionRequest:
+			case OpcUa_CloseSessionResponse:
+			    if( iTpId != OpcUa_CloseSessionRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+			    io.setAttr("sesId","");			//sessionId
+			    io.setAttr("authTokenId","");		//authentication Token
 			    break;
-			case OpcUa_ReadRequest:
+			case OpcUa_ReadResponse:
 			{
-			    if( oTpId != OpcUa_ReadResponse )
-				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( iTpId != OpcUa_ReadRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
 			    for( int i_r = 0; i_r < resN; i_r++ )
@@ -623,10 +657,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    }
 			    break;
 			}
-			case OpcUa_BrowseRequest:
+			case OpcUa_BrowseResponse:
 			{
-			    if( oTpId != OpcUa_BrowseResponse )
-				throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("15:Respond's NodeId don't acknowledge") );
+			    if( iTpId != OpcUa_BrowseRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
 			    for( int i_r = 0; i_r < resN; i_r++ )
@@ -649,13 +683,20 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    iS(rez,off);				//diagnosticInfos []
 			    break;
 			}
+			case OpcUa_ServiceFault:
+			    err = TSYS::strMess("0x%x:%s",stCode,_("Service fault"));
+			    break;
 		    }
                 }
 	    }
 	}
-	else err = TSYS::strMess(_("10:OPC UA protocol '%s' is not supported."),io.name().c_str());
+	else err = TSYS::strMess("0x%x:%s",OpcUa_BadServiceUnsupported,TSYS::strMess(_("OPC_UA protocol '%s' isn't supported."),io.name().c_str()).c_str());
     }
-    catch(TError er) { err = (er.cod<0||er.cod>100) ? er.mess : TSYS::strMess(_("14:Remote host error: %s"),er.mess.c_str()); }
+    catch(TError er)
+    {
+	if( er.cod < 0 || er.cod > 100 ) err = TSYS::strMess("0x%x:%s",er.cod,er.mess.c_str());
+	else err = TSYS::strMess("0x%x:%s",OpcUa_BadInvalidArgument,_("Remote host error"),er.mess.c_str());
+    }
 
     io.setAttr("err",err);
 }
@@ -724,7 +765,7 @@ string TProt::iSl( const string &rb, int &off, string *locale )
 string TProt::iSqlf( const string &rb, int &off, uint16_t *nsIdx )
 {
     uint16_t tNsIdx = iNu(rb,off,2);
-    if( !nsIdx ) *nsIdx = tNsIdx;
+    if( nsIdx ) *nsIdx = tNsIdx;
     return iS(rb,off);
 }
 
@@ -812,6 +853,12 @@ void TProt::oTm( string &buf, long long val )
     buf.append( (char*)&tmStamp, sizeof(tmStamp) );
 }
 
+string TProt::applicationUri( )		{ return SYS->host()+"/OpenSCADA/DAQ.OPC_UA"; }
+
+string TProt::productUri( )		{ return "OpenSCADA/DAQ.OPC_UA"; }
+
+string TProt::applicationName( )	{ return "OpenScadaOpcServer@"+SYS->host(); }
+
 string TProt::certPEM2DER( const string &spem )
 {
     string rez = "";
@@ -879,12 +926,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    epList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(sAt(lst[i_f]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(epAt(lst[i_f]).at().name());
 	}
 	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEQ_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    sAdd(vid); sAt(vid).at().setName(opt->text());
+	    epAdd(vid); epAt(vid).at().setName(opt->text());
 	}
 	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
@@ -936,6 +983,9 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	if( rb.compare(0,4,"HELF") == 0 )
 	{
 	    if( rb.size() > 4096 )	{ out = mkError(OpcUa_BadTcpMessageTooLarge); return false; }
+
+	    printf( "TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+
 	    off = 8;
 	    TProt::iNu(rb,off,4);			//Protocol version
 	    TProt::iNu(rb,off,4);			//Recive buffer size
@@ -944,21 +994,14 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    TProt::iNu(rb,off,4);			//Max chunk count
 	    string EndpntURL = TProt::iS(rb,off);	//EndpointURL
 
-	    printf( "TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-
-	    //>> Find endpoint into allowed servers
-	    vector<string> sLs;
-	    owner().epList(sLs);
-	    AutoHD<OPCEndPoint> tos;
-	    int i_os;
-	    for( i_os = 0; i_os < sLs.size(); i_os++ )
-	    {
-		tos = owner().sAt(sLs[i_os]);
-		if( tos.at().enableStat() && tos.at().endPoint() == EndpntURL &&
-			(tos.at().inTransport() == "*" || tos.at().inTransport() == srcTr()) )
+	    //>> Find accessable endpoint
+	    vector<string> epLs;
+	    owner().epList(epLs);
+	    int i_ep;
+	    for( i_ep = 0; i_ep < epLs.size(); i_ep++ )
+		if( owner().epAt(epLs[i_ep]).at().enableStat() )
 		    break;
-	    }
-	    if( i_os >= sLs.size() )	{ out = mkError(OpcUa_BadTcpEndpointUrlInvalid); return false; }
+	    if( i_ep >= epLs.size() )	{ out = mkError(OpcUa_BadTcpEndpointUrlInvalid); return false; }
 
 	    //> Prepare acknowledge message
 	    out.reserve( 28 );
@@ -970,23 +1013,36 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    TProt::oNu(out,OpcUa_MaxMessageSize,4);	//Max message size
 	    TProt::oNu(out,OpcUa_MaxChunkCount,4);	//Max chunk count
 
-	    printf( "TEST 01: Hello response:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
+	    printf( "TEST 00a: Hello response:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
 
 	    return true;
 	}
 	//> Check for Open SecureChannel message type
 	if( rb.compare(0,4,"OPNF") == 0 )
 	{
+	    printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+
 	    off = 8;
 	    uint32_t secChnId = TProt::iNu(rb,off,4);		//Secure channel identifier
-
 								//> Security Header
-	    string secPlcURI = TProt::iS(rb,off);			//Security policy URI
-	    if( secPlcURI == "http://opcfoundation.org/UA/SecurityPolicy#None" )
+	    string secPlcURI = TProt::iS(rb,off);		//Security policy URI
+	    //>> Find server with that policy
+	    string secPlc = TSYS::strParse(secPlcURI,1,"#");
+	    vector<string> epLs;
+	    owner().epList(epLs);
+	    int i_epOk = -1;
+	    for( int i_ep = 0; i_epOk < 0 && i_ep < epLs.size(); i_ep++ )
 	    {
-		//>> Find server with that policy
-		//????
+		AutoHD<OPCEndPoint> ep = owner().epAt(epLs[i_ep]);
+		if( !ep.at().enableStat() ) continue;
+		for( int i_s = 0; i_epOk < 0 && i_s < ep.at().secSize(); i_s++ )
+		    if( ep.at().secPolicy(i_s) == secPlc )
+			i_epOk = i_ep;
+	    }
+	    if( i_epOk < 0 ) { out = mkError(OpcUa_BadSecurityPolicyRejected); return false; }
 
+	    if( secPlc == "None" )
+	    {
 		TProt::iN(rb,off,4);				//SenderCertificateLength
 		TProt::iN(rb,off,4);				//ReceiverCertificateThumbprintLength
 								//> Sequence header
@@ -1012,9 +1068,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		TProt::iS(rb,off);				//ClientNonce
 		int32_t reqLifeTm = TProt::iN(rb,off,4);	//RequestedLifetime
 
-		printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-
-		uint32_t chnlId = owner().chnlOpen(reqLifeTm);
+		uint32_t chnlId = owner().chnlOpen(epLs[i_epOk],reqLifeTm);
 
 		//> Prepare respond message
 		out.reserve( 200 );
@@ -1055,6 +1109,8 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	//> Check for Close SecureChannel message type
 	if( rb.compare(0,4,"CLOF") == 0 )
 	{
+	    printf( "TEST 01: Close SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+
 	    off = 8;
 	    uint32_t secId = TProt::iNu(rb,off,4);	//Secure channel identifier
 	    uint32_t tokId = TProt::iNu(rb,off,4);	//TokenId
@@ -1075,8 +1131,6 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    TProt::iNodeId(rb,off);			//TypeId (0)
 	    TProt::iNu(rb,off,1);			//Encoding
 
-	    printf( "TEST 01: Close SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-
 	    owner().chnlClose( secId );
 
 	    //> No respond. Close socket
@@ -1088,13 +1142,14 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    printf( "TEST 02: SecureChannel message:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 
 	    off = 8;
+	    uint32_t stCode = 0;
 	    uint32_t secId = TProt::iNu(rb,off,4);	//Secure channel identifier
 	    uint32_t tokId = TProt::iNu(rb,off,4);	//TokenId
+	    SecCnl scHd = owner().chnlGet(secId);
 	    //>> Secure channel and token check
-	    if( !owner().chnlGet(secId).TokenId )
-		throw TError( OpcUa_BadSecureChannelClosed, "OPC UA Bin", _("Secure channel closed") );
-	    if( owner().chnlGet(secId).TokenId != tokId )
-		throw TError( OpcUa_BadSecureChannelTokenUnknown, "OPC UA Bin", _("Secure channel unknown") );
+	    if( !scHd.TokenId )	throw TError( OpcUa_BadSecureChannelClosed, "OPC UA Bin", _("Secure channel closed") );
+	    if( scHd.TokenId != tokId )	throw TError( OpcUa_BadSecureChannelTokenUnknown, "OPC UA Bin", _("Secure channel unknown") );
+	    AutoHD<OPCEndPoint> wep = owner().epAt(scHd.endPoint);
 							//> Sequence header
 	    uint32_t seqN = TProt::iNu(rb,off,4);	//Sequence number
 	    uint32_t reqId = TProt::iNu(rb,off,4);	//RequestId
@@ -1103,7 +1158,8 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 							//>> Request Header
 	    uint16_t sesTokId = TProt::iNodeId(rb,off);	//Session AuthenticationToken
 	    //>> Session check
-	    //????
+	    if( sesTokId && !wep.at().sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest) )
+	    { stCode = OpcUa_BadSessionIdInvalid; reqTp = OpcUa_ServiceFault; }
 	    TProt::iTm(rb,off);				//timestamp
 	    int32_t reqHndl = TProt::iN(rb,off,4);	//requestHandle
 	    TProt::iNu(rb,off,4);			//returnDiagnostics
@@ -1118,6 +1174,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    switch( reqTp )
 	    {
 		case OpcUa_FindServersRequest:
+		{
 		    //>> Request
 		    TProt::iS(rb,off);			//endpointUrl
 		    TProt::iS(rb,off);			//localeIds []
@@ -1129,16 +1186,20 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    reqTp = OpcUa_FindServersResponse;
 		    TProt::oNu(respEp,1,4);		//ApplicationDescription list items
 							//>>>> ApplicationDescription 1
-		    TProt::oS(respEp,SYS->host()+"/OpenSCADA/DAQ.OPC_UA");//applicationUri
-		    TProt::oS(respEp,"OpenSCADA/DAQ.OPC_UA");	//productUri
-		    TProt::oSl(respEp,"OpenSCADAOPCServer@"+SYS->host(),"en");//applicationName
+		    TProt::oS(respEp,TProt::applicationUri());		//applicationUri
+		    TProt::oS(respEp,TProt::productUri());		//productUri
+		    TProt::oSl(respEp,TProt::applicationName(),"en");	//applicationName
 		    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
 		    TProt::oS(respEp,"");		//gatewayServerUri
 		    TProt::oS(respEp,"");		//discoveryProfileUri
 							//>>>> discoveryUrls
-		    TProt::oNu(respEp,1,4);		//List items
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//discoveryUrl
+		    vector<string> duLs;
+		    owner().discoveryUrls(duLs);
+		    TProt::oNu(respEp,duLs.size(),4);	//List items
+		    for( int i_du = 0; i_du < duLs.size(); i_du++ )
+			TProt::oS(respEp,duLs[i_du]);	//discoveryUrl
 		    break;
+		}
 		case OpcUa_GetEndpointsRequest:
 		{
 		    //>> Request
@@ -1148,89 +1209,61 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 
 		    //>> Respond
 		    reqTp = OpcUa_GetEndpointsResponse;
-		    //>>> Certificate reading
-		    int hd = open("uaservercpp.der",O_RDONLY);
-		    if( hd < 0 ) throw TError(OpcUa_BadUnexpectedError,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
-		    int cf_sz = lseek(hd,0,SEEK_END);
-		    lseek(hd,0,SEEK_SET);
-		    char *buf = (char *)malloc(cf_sz);
-		    read(hd,buf,cf_sz);
-		    close(hd);
-		    string cert(buf,cf_sz);
-		    free(buf);
 
 		    respEp.reserve(2000);
-		    TProt::oNu(respEp,2,4);		//EndpointDescrNubers list items
+		    TProt::oNu(respEp,0,4);			//EndpointDescrNubers list items
+		    //>> Get enpoints policies list
+		    vector<string> epLs;
+		    owner().epList(epLs);
+		    int epCnt = 0;
+		    for( int i_ep = 0; i_ep < epLs.size(); i_ep++ )
+		    {
+			AutoHD<OPCEndPoint> ep = owner().epAt(epLs[i_ep]);
+			if( !ep.at().enableStat() ) continue;
+								//>>> EndpointDescription
+			for( int i_sec = 0; i_sec < ep.at().secSize( ); i_sec++, epCnt++ )
+			{
+			    TProt::oS(respEp,ep.at().url());	//endpointUrl
+								//>>>> server (ApplicationDescription)
+			    TProt::oS(respEp,TProt::applicationUri());		//applicationUri
+			    TProt::oS(respEp,TProt::productUri());		//productUri
+			    TProt::oSl(respEp,TProt::applicationName(),"en");	//applicationName
+			    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
+			    TProt::oS(respEp,"");		//gatewayServerUri
+			    TProt::oS(respEp,"");		//discoveryProfileUri
 
-							//>>> EndpointDescription 1
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//endpointUrl
-							//>>>> server (ApplicationDescription)
-		    TProt::oS(respEp,"roman.home/Vendor/UaDemoserver");//applicationUri
-		    TProt::oS(respEp,"");		//productUri
-		    TProt::oSl(respEp,"OpcDemoServer@roman.home","en");//applicationName
-		    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
-		    TProt::oS(respEp,"");		//gatewayServerUri
-		    TProt::oS(respEp,"");		//discoveryProfileUri
-							//>>>> discoveryUrls
-		    TProt::oNu(respEp,1,4);		//List items
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//discoveryUrl
+								//>>>> discoveryUrls
+			    vector<string> duLs;
+			    owner().discoveryUrls(duLs);
+			    TProt::oNu(respEp,duLs.size(),4);	//List items
+			    for( int i_du = 0; i_du < duLs.size(); i_du++ )
+				TProt::oS(respEp,duLs[i_du]);	//discoveryUrl
 
-		    TProt::oS(respEp,cert);		//>>> serverCertificate
-		    TProt::oNu(respEp,1,4);		//securityMode:MessageSecurityMode (NONE)
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#None");	//securityPolicyUri
+			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().servCert()));	//>>> serverCertificate
+			    TProt::oNu(respEp,ep.at().secMessageMode(i_sec),4);	//securityMode:MessageSecurityMode
+			    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#"+ep.at().secPolicy(i_sec));	//securityPolicyUri
 
-							//>>>> userIdentityTokens
-		    TProt::oNu(respEp,2,4);		//List items
-							//>>>> userIdentityToken 1
-		    TProt::oS(respEp,"Anonymous");	//policyId
-		    TProt::oNu(respEp,0,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"");		//securityPolicyUri
-							//>>>> userIdentityToken 2
-		    TProt::oS(respEp,"UserName");	//policyId
-		    TProt::oNu(respEp,1,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
+								//>>>> userIdentityTokens
+			    TProt::oNu(respEp,2,4);		//List items
+								//>>>> userIdentityToken 1
+			    TProt::oS(respEp,"Anonymous");	//policyId
+			    TProt::oNu(respEp,0,4);		//tokenType
+			    TProt::oS(respEp,"");		//issuedTokenType
+			    TProt::oS(respEp,"");		//issuerEndpointUrl
+			    TProt::oS(respEp,"");		//securityPolicyUri
+								//>>>> userIdentityToken 2
+			    TProt::oS(respEp,"UserName");	//policyId
+			    TProt::oNu(respEp,1,4);		//tokenType
+			    TProt::oS(respEp,"");		//issuedTokenType
+			    TProt::oS(respEp,"");		//issuerEndpointUrl
+			    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
-		    TProt::oS(respEp,"");		//transportProfileUri
-		    TProt::oNu(respEp,0,1);		//securityLevel
+			    TProt::oS(respEp,"");		//transportProfileUri
+			    TProt::oNu(respEp,0,1);		//securityLevel
+			}
+		    }
+		    TProt::oNu(respEp,epCnt,4,0);			//EndpointDescrNubers list items
 
-							//>>> EndpointDescription 2
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//endpointUrl
-							//>>>> server (ApplicationDescription)
-		    TProt::oS(respEp,"roman.home/Vendor/UaDemoserver");//applicationUri
-		    TProt::oS(respEp,"");		//productUri
-		    TProt::oSl(respEp,"OpcDemoServer@roman.home","en");//applicationName
-		    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
-		    TProt::oS(respEp,"");		//gatewayServerUri
-		    TProt::oS(respEp,"");		//discoveryProfileUri
-							//>>>> discoveryUrls
-		    TProt::oNu(respEp,1,4);		//List items
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//discoveryUrl
-
-		    TProt::oS(respEp,cert);		//>>> serverCertificate
-		    TProt::oNu(respEp,3,4);		//securityMode:MessageSecurityMode (SIGNANDENCRYPT)
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
-
-							//>>>> userIdentityTokens
-		    TProt::oNu(respEp,2,4);		//List items
-							//>>>> userIdentityToken 1
-		    TProt::oS(respEp,"Anonymous");	//policyId
-		    TProt::oNu(respEp,0,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"");		//securityPolicyUri
-							//>>>> userIdentityToken 2
-		    TProt::oS(respEp,"UserName");	//policyId
-		    TProt::oNu(respEp,1,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
-
-		    TProt::oS(respEp,"");		//transportProfileUri
-		    TProt::oNu(respEp,0,1);		//securityLevel
 		    break;
 		}
 		case OpcUa_CreateSessionRequest:
@@ -1247,109 +1280,84 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 
 		    TProt::iS(rb,off);			//serverUri
 		    TProt::iS(rb,off);			//endpointUrl
-		    TProt::iS(rb,off);			//sessionName
+		    string sessNm = TProt::iS(rb,off);	//sessionName
 		    TProt::iS(rb,off);			//clientNonce
 		    TProt::iS(rb,off);			//clientCertificate
 		    double rStm = TProt::iR(rb,off,8);	//Requested SessionTimeout, ms
 		    TProt::iNu(rb,off,4);		//maxResponse MessageSize
 
+		    int sessId = wep.at().sessCreate( sessNm, rStm );
+
 		    //>> Respond
 		    reqTp = OpcUa_CreateSessionResponse;
-		    //>>> Certificate reading
-		    int hd = open("uaservercpp.der",O_RDONLY);
-		    if( hd < 0 ) throw TError(OpcUa_BadUnexpectedError,nodePath().c_str(),_("Certificate uaservercpp.der open error."));
-		    int cf_sz = lseek(hd,0,SEEK_END);
-		    lseek(hd,0,SEEK_SET);
-		    char *buf = (char *)malloc(cf_sz);
-		    read(hd,buf,cf_sz);
-		    close(hd);
-		    string cert(buf,cf_sz);
-		    free(buf);
 
 		    respEp.reserve(2000);
-		    TProt::oNodeId(respEp,1);		//sessionId
-		    TProt::oNodeId(respEp,1);		//authentication Token
-		    TProt::oR(respEp,1.2e6,8);		//revisedSession Timeout, ms
+		    TProt::oNodeId(respEp,sessId);	//sessionId
+		    TProt::oNodeId(respEp,sessId);	//authentication Token
+		    TProt::oR(respEp,wep.at().sessGet(sessId).tInact,8);	//revisedSession Timeout, ms
 		    TProt::oS(respEp,"");		//serverNonce
-		    TProt::oS(respEp,cert);		//serverCertificate
+		    TProt::oS(respEp,TProt::certPEM2DER(wep.at().servCert()));	//serverCertificate
 							//> EndpointDescr []
-		    TProt::oNu(respEp,2,4);		//EndpointDescrNubers list items
-							//>>> EndpointDescription 1
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//endpointUrl
-							//>>>> server (ApplicationDescription)
-		    TProt::oS(respEp,"roman.home/Vendor/UaDemoserver");//applicationUri
-		    TProt::oS(respEp,"");		//productUri
-		    TProt::oSl(respEp,"OpcDemoServer@roman.home","en");//applicationName
-		    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
-		    TProt::oS(respEp,"");		//gatewayServerUri
-		    TProt::oS(respEp,"");		//discoveryProfileUri
-							//>>>> discoveryUrls
-		    TProt::oNu(respEp,1,4);		//List items
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//discoveryUrl
+		    int enpNumperPos = respEp.size();
+		    TProt::oNu(respEp,0,4);			//EndpointDescrNubers list items
+		    //>> Get enpoints policies list
+		    vector<string> epLs;
+		    owner().epList(epLs);
+		    int epCnt = 0;
+		    for( int i_ep = 0; i_ep < epLs.size(); i_ep++ )
+		    {
+			AutoHD<OPCEndPoint> ep = owner().epAt(epLs[i_ep]);
+			if( !ep.at().enableStat() ) continue;
+								//>>> EndpointDescription
+			for( int i_sec = 0; i_sec < ep.at().secSize( ); i_sec++, epCnt++ )
+			{
+			    TProt::oS(respEp,ep.at().url());	//endpointUrl
+								//>>>> server (ApplicationDescription)
+			    TProt::oS(respEp,TProt::applicationUri());		//applicationUri
+			    TProt::oS(respEp,TProt::productUri());		//productUri
+			    TProt::oSl(respEp,TProt::applicationName(),"en");	//applicationName
+			    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
+			    TProt::oS(respEp,"");		//gatewayServerUri
+			    TProt::oS(respEp,"");		//discoveryProfileUri
 
-		    TProt::oS(respEp,cert);		//>>> serverCertificate
-		    TProt::oNu(respEp,1,4);		//securityMode:MessageSecurityMode (NONE)
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#None");	//securityPolicyUri
+								//>>>> discoveryUrls
+			    vector<string> duLs;
+			    owner().discoveryUrls(duLs);
+			    TProt::oNu(respEp,duLs.size(),4);	//List items
+			    for( int i_du = 0; i_du < duLs.size(); i_du++ )
+				TProt::oS(respEp,duLs[i_du]);	//discoveryUrl
 
-							//>>>> userIdentityTokens
-		    TProt::oNu(respEp,2,4);		//List items
-							//>>>> userIdentityToken 1
-		    TProt::oS(respEp,"Anonymous");	//policyId
-		    TProt::oNu(respEp,0,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"");		//securityPolicyUri
-							//>>>> userIdentityToken 2
-		    TProt::oS(respEp,"UserName");	//policyId
-		    TProt::oNu(respEp,1,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
+			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().servCert()));	//>>> serverCertificate
+			    TProt::oNu(respEp,ep.at().secMessageMode(i_sec),4);	//securityMode:MessageSecurityMode
+			    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#"+ep.at().secPolicy(i_sec));	//securityPolicyUri
 
-		    TProt::oS(respEp,"");		//transportProfileUri
-		    TProt::oNu(respEp,0,1);		//securityLevel
+								//>>>> userIdentityTokens
+			    TProt::oNu(respEp,2,4);		//List items
+								//>>>> userIdentityToken 1
+			    TProt::oS(respEp,"Anonymous");	//policyId
+			    TProt::oNu(respEp,0,4);		//tokenType
+			    TProt::oS(respEp,"");		//issuedTokenType
+			    TProt::oS(respEp,"");		//issuerEndpointUrl
+			    TProt::oS(respEp,"");		//securityPolicyUri
+								//>>>> userIdentityToken 2
+			    TProt::oS(respEp,"UserName");	//policyId
+			    TProt::oNu(respEp,1,4);		//tokenType
+			    TProt::oS(respEp,"");		//issuedTokenType
+			    TProt::oS(respEp,"");		//issuerEndpointUrl
+			    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
-							//>>> EndpointDescription 2
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//endpointUrl
-							//>>>> server (ApplicationDescription)
-		    TProt::oS(respEp,"roman.home/Vendor/UaDemoserver");//applicationUri
-		    TProt::oS(respEp,"");		//productUri
-		    TProt::oSl(respEp,"OpcDemoServer@roman.home","en");//applicationName
-		    TProt::oNu(respEp,0,4);		//applicationType (SERVER)
-		    TProt::oS(respEp,"");		//gatewayServerUri
-		    TProt::oS(respEp,"");		//discoveryProfileUri
-							//>>>> discoveryUrls
-		    TProt::oNu(respEp,1,4);		//List items
-		    TProt::oS(respEp,"opc.tcp://roman.home:4841");	//discoveryUrl
+			    TProt::oS(respEp,"");		//transportProfileUri
+			    TProt::oNu(respEp,0,1);		//securityLevel
+			}
+		    }
+		    TProt::oNu(respEp,epCnt,4,enpNumperPos);	//EndpointDescrNubers real list items
 
-		    TProt::oS(respEp,cert);		//>>> serverCertificate
-		    TProt::oNu(respEp,3,4);		//securityMode:MessageSecurityMode (SIGNANDENCRYPT)
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
+		    TProt::oS(respEp,"");			//serverSoftware Certificates []
+								//> serverSignature
+		    TProt::oS(respEp,"");			//signature
+		    TProt::oS(respEp,"");			//algorithm
 
-							//>>>> userIdentityTokens
-		    TProt::oNu(respEp,2,4);		//List items
-							//>>>> userIdentityToken 1
-		    TProt::oS(respEp,"Anonymous");	//policyId
-		    TProt::oNu(respEp,0,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"");		//securityPolicyUri
-							//>>>> userIdentityToken 2
-		    TProt::oS(respEp,"UserName");	//policyId
-		    TProt::oNu(respEp,1,4);		//tokenType
-		    TProt::oS(respEp,"");		//issuedTokenType
-		    TProt::oS(respEp,"");		//issuerEndpointUrl
-		    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
-
-		    TProt::oS(respEp,"");		//transportProfileUri
-		    TProt::oNu(respEp,0,1);		//securityLevel
-
-		    TProt::oS(respEp,"");		//serverSoftware Certificates []
-							//> serverSignature
-		    TProt::oS(respEp,"");		//signature
-		    TProt::oS(respEp,"");		//algorithm
-
-		    TProt::oNu(respEp,0,4);		//maxRequest MessageSize
+		    TProt::oNu(respEp,0,4);			//maxRequest MessageSize
 		    break;
 		}
 		case OpcUa_ActivateSessionRequest:
@@ -1481,6 +1489,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
 		}
+		case OpcUa_ServiceFault:	break;
 		default:
 		    throw TError(OpcUa_BadNotSupported,modPrt->nodePath().c_str(),_("No supported request id '%d'."),reqTp);
 	    }
@@ -1499,7 +1508,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 							//>>> RespondHeader
 	    TProt::oTm(out,TSYS::curTime());		//timestamp
 	    TProt::oN(out,reqHndl,4);			//requestHandle
-	    TProt::oN(out,0,4);				//StatusCode
+	    TProt::oN(out,stCode,4);			//StatusCode
 	    TProt::oN(out,0,1);				//serviceDiagnostics
 	    TProt::oS(out,"");				//stringTable
 							//>>> Extensible parameter
@@ -1508,7 +1517,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    out.append(respEp);
 	    TProt::oNu(out,out.size(),4,4);		//Real message size
 
-	    printf("TEST 01b: SecureChannel message respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
+	    printf("TEST 02a: SecureChannel message respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
 
 	    return true;
 	}
@@ -1540,9 +1549,11 @@ string TProtIn::mkError( uint32_t errId, const string &err )
 //*************************************************
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), mDB(idb), mEn(false), cntReq(0),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
+    mSerType(cfg("SerialzType").getId()), mURL(cfg("URL").getSd())
 {
     mId = iid;
+    mURL = "opc.tcp://"+SYS->host()+":4841";
 }
 
 OPCEndPoint::~OPCEndPoint( )
@@ -1581,13 +1592,63 @@ string OPCEndPoint::name( )	{ return mName.size() ? mName : id(); }
 
 string OPCEndPoint::tbl( )	{ return owner().modId()+"_ep"; }
 
-string OPCEndPoint::endPoint( )	{ return cfg("EndPoint").getS(); }
+string OPCEndPoint::servCert( )	{ return cfg("ServCert").getS(); }
 
-string OPCEndPoint::inTransport( ){ return cfg("InTR").getS(); }
+string OPCEndPoint::servPvKey( ){ return cfg("ServPvKey").getS(); }
 
-string OPCEndPoint::secPolicy( ){ return cfg("SecPolicy").getS(); }
+string OPCEndPoint::secPolicy( int isec )
+{
+    ResAlloc res( nodeRes(), false );
+    if( isec < 0 || isec >= mSec.size() ) throw TError(nodePath().c_str(),_("Security setting %d error."));
+    return mSec[isec].policy;
+}
 
-string OPCEndPoint::cert( )	{ return cfg("Cert").getS(); }
+int OPCEndPoint::sessCreate( const string &iName, double iTInact )
+{
+    ResAlloc res( nodeRes(), true );
+    int i_s = 0;
+    for( ; i_s < mSess.size(); i_s++ )
+	if( !mSess[i_s].tAccess ) break;
+    if( i_s < mSess.size() ) mSess[i_s] = OPCSess(iName,iTInact);
+    else mSess.push_back(OPCSess(iName,iTInact));
+
+    return i_s+1;
+}
+
+bool OPCEndPoint::sessActivate( int sid, uint32_t secCnl, bool check )
+{
+    ResAlloc res( nodeRes(), true );
+    if( sid <= 0 || sid > mSess.size() || !mSess[sid-1].tAccess ) return false;
+    mSess[sid-1].tAccess = TSYS::curTime();
+    int i_s = 0;
+    for( ; i_s < mSess[sid-1].secCnls.size(); i_s++ )
+	if( mSess[sid-1].secCnls[i_s] == secCnl )
+	    break;
+    if( check && i_s >= mSess[sid-1].secCnls.size() ) return false;
+    if( i_s >= mSess[sid-1].secCnls.size() ) mSess[sid-1].secCnls.push_back(secCnl);
+    return true;
+}
+
+void OPCEndPoint::sessClose( int sid )
+{
+    ResAlloc res( nodeRes(), true );
+    if( sid <= 0 || sid > mSess.size() || !mSess[sid-1].tAccess ) throw TError(nodePath().c_str(),_("No session %d present."),sid-1);
+    mSess[sid-1] = OPCSess();
+}
+
+OPCSess OPCEndPoint::sessGet( int sid )
+{
+    ResAlloc res( nodeRes(), false );
+    if( sid <= 0 || sid > mSess.size() ) return OPCSess();
+    return mSess[sid-1];
+}
+
+OPCEndPoint::MessageSecurityMode OPCEndPoint::secMessageMode( int isec )
+{
+    ResAlloc res( nodeRes(), false );
+    if( isec < 0 || isec >= mSec.size() ) throw TError(nodePath().c_str(),_("Security setting %d error."));
+    return mSec[isec].messageMode;
+}
 
 bool OPCEndPoint::cfgChange( TCfg &ce )
 {
@@ -1600,10 +1661,25 @@ void OPCEndPoint::load_( )
     if( !SYS->chkSelDB(DB()) ) return;
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+
+    //Security policies parse
+    string sp = cfg("SecPolicies").getS();
+    string spi;
+    ResAlloc res( nodeRes(), true );
+    mSec.clear();
+    for( int off = 0; (spi=TSYS::strParse(sp,0,"\n",&off)).size(); )
+	mSec.push_back( SecuritySetting(TSYS::strParse(spi,0,":"),atoi(TSYS::strParse(spi,1,":").c_str())) );
 }
 
 void OPCEndPoint::save_( )
 {
+    //Security policies store
+    string sp;
+    ResAlloc res( nodeRes(), false );
+    for( int i_p = 0; i_p < mSec.size(); i_p++ )
+	sp += mSec[i_p].policy + ":" + TSYS::int2str(mSec[i_p].messageMode)+"\n";
+    cfg("SecPolicies").setS(sp);
+
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
@@ -1647,8 +1723,14 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    if( ctrMkNode("area",opt,-1,"/ep/cfg",_("Config")) )
 	    {
 		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root","Protocol",RWRWR_);
-		ctrMkNode("fld",opt,-1,"/ep/cfg/InTR",cfg("InTR").fld().descr(),0664,"root","Protocol",3,"tp","str","dest","select","select","/ep/cfg/ls_itr");
-		ctrMkNode("fld",opt,-1,"/ep/cfg/Cert",cfg("Cert").fld().descr(),0660,"root","Protocol",3,"tp","str","cols","90","rows","7");
+		ctrMkNode("fld",opt,-1,"/ep/cfg/ServCert",cfg("ServCert").fld().descr(),0660,"root","Protocol",3,"tp","str","cols","90","rows","7");
+		ctrMkNode("fld",opt,-1,"/ep/cfg/ServPvKey",cfg("ServPvKey").fld().descr(),0660,"root","Protocol",3,"tp","str","cols","90","rows","7");
+		ctrRemoveNode(opt,"/ep/cfg/SecPolicies");
+		if( ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",cfg("SecPolicies").fld().descr(),0664,"root","Protocol",1,"s_com","add,del") )
+		{
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),0664,"root","Protocol",3,"tp","str","dest","select","sel_list","None;Basic128;Basic128Rsa15;Basic256");
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),0664,"root","Protocol",4,"tp","dec","dest","select","sel_id","0;1;2","sel_list",_("None;Sign;Sign&Encrypt"));
+		}
 	    }
 	}
 	return;
@@ -1673,6 +1755,36 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	SYS->transport().at().inTrList(sls);
 	for( int i_s = 0; i_s < sls.size(); i_s++ )
 	    opt->childAdd("el")->setText(sls[i_s]);
+    }
+    else if( a_path == "/ep/cfg/secPlc" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )
+	{
+	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",0664);
+	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",0664);
+	    ResAlloc res( nodeRes(), false );
+	    for( int i_p = 0; i_p < mSec.size(); i_p++ )
+	    {
+		if( n_pol )	n_pol->childAdd("el")->setText(mSec[i_p].policy);
+		if( n_mm )	n_mm->childAdd("el")->setText(TSYS::int2str(mSec[i_p].messageMode));
+	    }
+	    return;
+	}
+	ResAlloc res( nodeRes(), true );
+	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEQ_WR) )
+	{ mSec.push_back( SecuritySetting("None",OPCEndPoint::None) ); modif(); return; }
+	int row = atoi(opt->attr("row").c_str());
+	if( row < 0 || row >= mSec.size() )
+	    throw TError(nodePath().c_str(),_("No present seleted row."));
+	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )
+	{ mSec.erase(mSec.begin()+row); modif(); return; }
+	if( ctrChkNode(opt,"set",0664,"root","Protocol",SEQ_WR) )
+	{
+	    int col = atoi(opt->attr("col").c_str());
+	    if( col == 0 )	mSec[row].policy = opt->text();
+	    else if( col == 1 )	mSec[row].messageMode = (OPCEndPoint::MessageSecurityMode)atoi(opt->text().c_str());
+	    modif();
+	}
     }
     else if( a_path.compare(0,7,"/ep/cfg") == 0 ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
     else TCntrNode::cntrCmdProc(opt);

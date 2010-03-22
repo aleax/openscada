@@ -80,12 +80,12 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost:4841") );
     fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
-    fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("None;Sign;Sign & Encrypt")) );
+    fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("None;Sign;Sign&Encrypt")) );
     fldAdd( new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("VAR_LS",_("Variables list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -145,9 +145,10 @@ void TMdContr::start_( )
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
 
     //>> Send FindServers message
-    req.setAttr("id","FindServers");
+    /*req.setAttr("id","FindServers");
     tr.at().messProtIO(req,"OPC_UA");
     if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("FindServers request error: %s"),req.attr("err").c_str());
+    req.childClear();*/
 
     //>> Send CreateSession message
     req.setAttr("id","CreateSession")->childAdd("ClientCert")->setText(cert());
@@ -167,7 +168,7 @@ void TMdContr::start_( )
     //>> Browse RootFolder
     req.setAttr("id","Browse");
     tr.at().messProtIO(req,"OPC_UA");
-    //if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Browse request error: %s"),req.attr("err").c_str());
+    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Browse request error: %s"),req.attr("err").c_str());
 
     //> Start the gathering data task
     if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
@@ -176,7 +177,7 @@ void TMdContr::start_( )
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+    SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
 }
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -281,7 +282,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr")
 {
 

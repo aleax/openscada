@@ -1,3 +1,8 @@
+2010-03-22 Roman
+- !!:DAQ.OPC_UA: Session control for server is added. Errors generation and processing is made unified for server and client.
+- FIX:UI.QTCfg: Tables generation size is some fixed.
+
+
 2010-03-17 Roman
 - FIX:DAQ.JavaLikeCalc: Object's type attribute display is added.
 - !:DAQ.OPC_UA: OPCServer class is renamed to OPCEndPoint. Certificates encoding from PEM to DER is added. And some other...

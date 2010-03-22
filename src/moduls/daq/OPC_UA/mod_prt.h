@@ -63,16 +63,19 @@ namespace OPC_UA
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
 #define OpcUa_BadNotSupported		0x803D0000
+#define OpcUa_BadSecurityPolicyRejected	0x80550000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
 #define OpcUa_BadSecureChannelClosed	0x80860000
 #define OpcUa_BadSecureChannelTokenUnknown	0x80870000
+#define OpcUa_BadInvalidArgument	0x80AB0000
 #define OpcUa_BadRequestTooLarge	0x80B80000
 #define OpcUa_BadResponseTooLarge	0x80B90000
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
 
 //> Requests types
+#define OpcUa_ServiceFault		397
 #define OpcUa_FindServersRequest	422
 #define OpcUa_FindServersResponse	425
 #define OpcUa_GetEndpointsRequest	428
@@ -117,11 +120,43 @@ class TProtIn: public TProtocolIn
 };
 
 //*************************************************
+//* OPCSess                                       *
+//*************************************************
+class OPCSess
+{
+    public:
+	//Methods
+	OPCSess( const string &iName, double iTInact ) :
+	    name(iName), tInact(vmax(iTInact,1)), tAccess(SYS->curTime())	{ }
+	OPCSess( ) : tInact(0), tAccess(0)	{ }
+
+	//Attributes
+	string		name;
+	vector<uint32_t> secCnls;
+	double		tInact;
+	long long	tAccess;
+};
+
+//*************************************************
 //* OPCEndPoint                                   *
 //*************************************************
 class OPCEndPoint : public TCntrNode, public TConfig
 {
     public:
+	//Data
+	enum SerializerType	{ Binary };
+	enum MessageSecurityMode{ None, Sign, SignAndEncrypt };
+
+	class SecuritySetting
+	{
+	    public:
+		SecuritySetting( const string &iplc, char imMode ) :
+		    policy(iplc), messageMode((MessageSecurityMode)imMode) { }
+
+	    string		policy;
+	    MessageSecurityMode	messageMode;
+	};
+
 	//Methods
 	OPCEndPoint( const string &iid, const string &db, TElem *el );
 	~OPCEndPoint( );
@@ -133,10 +168,10 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
-	string endPoint( );
-	string inTransport( );
-	string secPolicy( );
-	string cert( );
+	SerializerType serType( )	{ return (SerializerType)mSerType; }
+	string url( )		{ return mURL; }
+	string servCert( );
+	string servPvKey( );
 
 	string getStatus( );
 
@@ -151,6 +186,17 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
+	//> Security policies
+	int secSize( )				{ return mSec.size(); }
+	string secPolicy( int isec );
+	MessageSecurityMode secMessageMode( int isec );
+
+	//> Sessions
+	int sessCreate( const string &iName, double iTInact );
+	bool sessActivate( int sid, uint32_t secCnl, bool check = false );
+	void sessClose( int sid );
+	OPCSess sessGet( int sid );
+
 	TProt &owner( );
 
     protected:
@@ -159,8 +205,6 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	void save_( );
 
     private:
-	//Data
-
 	//Methods
 	string nodeName( )	{ return mId; }
 
@@ -170,11 +214,14 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	bool cfgChange( TCfg &cfg );
 
 	//Attributes
-	string	&mId, &mName, &mDscr;
+	string	&mId, &mName, &mDscr, &mURL;
+	int	&mSerType;
 	bool	&mAEn, mEn;
 	string	mDB;
 
 	float	cntReq;
+	vector<SecuritySetting>	mSec;
+	vector<OPCSess>		mSess;
 };
 
 //*************************************************
@@ -184,14 +231,16 @@ class SecCnl
 {
     public:
 	//Methods
-	SecCnl( uint32_t iTokenId, int32_t iLifeTm ) :
-	    TokenId(iTokenId), tCreate(TSYS::curTime()), tLife(vmax(600000,iLifeTm))	{ }
+	SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm ) :
+	    TokenId(iTokenId), tCreate(TSYS::curTime()), tLife(vmax(600000,iLifeTm)), endPoint(iEp)	{ }
 	SecCnl( ) : TokenId(0), tCreate(TSYS::curTime()), tLife(600000)	{ }
 
 	//Attributes
+	string		endPoint;
 	long long	tCreate;
 	int32_t		tLife;
 	uint32_t	TokenId;
+	string		clCert;
 };
 
 //*************************************************
@@ -209,19 +258,26 @@ class TProt: public TProtocol
 
 	//> Server's functions
 	void epList( vector<string> &ls )	{ chldList(mEndPnt,ls); }
-	bool sPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
-	void sAdd( const string &id, const string &db = "*.*" );
-	void sDel( const string &id )		{ chldDel(mEndPnt,id); }
-	AutoHD<OPCEndPoint> sAt( const string &id )	{ return chldAt(mEndPnt,id); }
+	bool epPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
+	void epAdd( const string &id, const string &db = "*.*" );
+	void epDel( const string &id )		{ chldDel(mEndPnt,id); }
+	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
+
+	void discoveryUrls( vector<string> &ls );
 
 	//> Channel manipulation functions
-	int chnlOpen( int32_t lifeTm = 0 );
+	int chnlOpen( const string &iEp, int32_t lifeTm = 0 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
 
 	TElem &endPntEl( )			{ return mEndPntEl; }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
+
+	//> Generic variables
+	static string applicationUri( );
+	static string productUri( );
+	static string applicationName( );
 
 	//> Protocol's data process
 	static const char *iVal( const string &buf, int &off, char vSz );
@@ -263,8 +319,8 @@ class TProt: public TProtocol
 
 	TElem	mEndPntEl;
 
-	map<int,SecCnl>	mSecCnl;
-	uint32_t mSecCnlIdLast;
+	map<uint32_t,SecCnl>	mSecCnl;
+	uint32_t		mSecCnlIdLast;
 
 	Res	nRes;
 };
