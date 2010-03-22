@@ -490,6 +490,7 @@ Reg *Func::cdMviObject( )
 
 Reg *Func::cdMviArray( int p_cnt )
 {
+    if( p_cnt > 255 ) throw TError(nodePath().c_str(),_("Array have more 255 items."));
     deque<int> p_pos;
 
     //> Mvi all parameters
