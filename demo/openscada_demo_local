@@ -3,17 +3,8 @@
 # Use for core dump creation on programm crash
 ulimit -c unlimited
 
-# User directory prepare
-if [ ! -d ~/.openscada ]; then
-    install -m 755 -d ~/.openscada/ARCHIVES/{MESS,VAL}
-    ln -s /var/spool/openscada/icons ~/.openscada/icons
-fi
-if [ ! -d ~/.openscada/DEMO ]; then cp -R /var/spool/openscada/DEMO ~/.openscada/; fi
-if [ ! -e ~/.openscada/oscada_demo.xml ]; then install -m 644 /etc/oscada_demo.xml ~/.openscada/; fi
-cd ~/.openscada
-
 # Programm command and lock file
-pCmd="openscada --Config=./oscada_demo.xml"
+pCmd="./openscada --Config=$(pwd)/../etc/oscada_demo.xml"
 pLock=".demo.lock"
 
 # Check for already started programm present

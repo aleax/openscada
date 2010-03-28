@@ -1150,7 +1150,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    }
 
 			    thd_it->setData(Qt::DisplayRole,elms.at(sel_n));
-			    thd_it->setData(Qt::UserRole,elms);
+			    thd_it->setData(Qt::UserRole,elms);    
 			}
 			else if( t_linf->attr("tp") == "time" )
 			{
@@ -1172,11 +1172,12 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    tbl->resizeColumnsToContents();
 
 		    //>>> Resize too long columns
-		    int max_col_sz = vmax(700/tbl->columnCount(),50);
+		    int max_col_sz = vmax(800/tbl->columnCount(),50);
 		    for( int i_c = 0; i_c < tbl->columnCount(); i_c++ )
 			tbl->setColumnWidth(i_c,vmin(max_col_sz,tbl->columnWidth(i_c)));
+
+		    tbl->resizeRowsToContents();
 		}
-		tbl->resizeRowsToContents();
 		tbl->setMinimumSize( QSize( 100, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
 		tbl->setMaximumSize( QSize( 32767, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
 

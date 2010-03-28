@@ -1,3 +1,12 @@
+2010-03-28 Roman
+- SYS: New modules is added to modules-separated rpm build spec-file.
+- !:FIX:SYS: Multiply program call mechanism is fixed for locked process' PID check, by reason old locks deletion from /tmp directory by system.
+- DemoDB: Special call script and config is added for local OpenSCADA build and demo call.
+- !:DAQ.OPC_UA: Session control and unified request function reqOPC() is added to DAQ. Nodes browser's list is added to DAQ-controller.
+    NodeId-class is added for string nodes support and generic support for all.
+- FIX:UI.QTCfg: Tables build is fixed.
+
+
 2010-03-22 Roman
 - !!:DAQ.OPC_UA: Session control for server is added. Errors generation and processing is made unified for server and client.
 - FIX:UI.QTCfg: Tables generation size is some fixed.

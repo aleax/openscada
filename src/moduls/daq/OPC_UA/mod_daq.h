@@ -22,6 +22,8 @@
 #ifndef MOD_OPC_UA_H
 #define MOD_OPC_UA_H
 
+#include <stdint.h>
+
 #include <string>
 #include <vector>
 
@@ -100,8 +102,11 @@ class TMdContr: public TController
 	string	endPoint( )	{ return mEndPoint; }
 	string	secPolicy( )	{ return mSecPolicy; }
 	string	cert( );
+	int	pAttrLim( )	{ return mPAttrLim; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+
+	void reqOPC( XMLNode &io );
 
     protected:
 	//Methods
@@ -125,12 +130,29 @@ class TMdContr: public TController
 		&mAddr,		//Transport device address
 		&mEndPoint,	//Endpoint URL
 		&mSecPolicy;	//Security policy
+	int	&mPAttrLim;	//Parameter attributes number limit
 	long long mPer;
 
 	bool	prc_st,		//Process task active
 		endrun_req;	//Request to stop of the Process task
 
 	vector< AutoHD<TMdPrm> >  p_hd;
+
+	struct
+	{
+	    uint32_t	secChnl;
+	    uint32_t	secToken;
+	    uint32_t	sqNumb;
+	    uint32_t	sqReqId;
+	    uint32_t	reqHndl;
+	    int		secRevTime;
+	    int		sesId;
+	    int		authTkId;
+	    long long	sesAccess;
+	    double	sesActiveTime;
+	} sess;
+
+	string	mBrwsVar;
 
 	double	tm_gath;	//Gathering time
 };

@@ -48,6 +48,7 @@ URL: http://oscada.org.ua
 #===== Transport protocol modules =====
 %def_enable HTTP
 %def_enable SelfSystem
+%def_enable UserProtocol
 
 #===== UI modules =====
 %def_enable VCAEngine
@@ -57,6 +58,7 @@ URL: http://oscada.org.ua
 %def_enable WebCfg
 %def_enable WebCfgD
 %def_enable WebVision
+%def_enable WebUser
 
 #===== Special modules =====
 %def_enable SystemTests
@@ -548,6 +550,19 @@ The %{name}-Protocol.SelfSystem package - self OpenSCADA protocol, support gener
 Das Paket %{name}-Protocol.SelfSystem - allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA.
 %endif
 
+%if_enabled UserProtocol
+%package Protocol.UserProtocol
+Summary: User protocol.
+Group: Graphics
+Requires: %name = %version-%release
+%description Protocol.UserProtocol
+The %{name}-Protocol.UserProtocol package - allow creation self-user protocols on any OpenSCADA language.
+%description Protocol.UserProtocol -l ru_RU.UTF8
+Пакет %{name}-Protocol.UserProtocol - позволяет создавать собственные пользовательские протоколы на любом OpenSCADA языке.
+%description Protocol.UserProtocol -l uk_UA.UTF8
+Пакет %{name}-Protocol.UserProtocol - дозволяє створювати власні протоколи користувача на будьякій мові OpenSCADA.
+%endif
+
 #===== UI modules =====
 %if_enabled VCAEngine
 %package UI.VCAEngine
@@ -654,6 +669,19 @@ The %{name}-UI.WebVision package - web operation user interface for visual contr
 Das Paket %{name}-UI.WebVision - web Benutzerschnittstelle für die Steuerung der sichtbaren Bereiche (VCA).
 %endif
 
+%if_enabled WebUser
+%package UI.WebUser
+Summary: Web interface from user.
+Group: Graphics
+Requires: %name = %version-%release %name-Protocol.HTTP
+%description UI.WebUser
+The %{name}-UI.WebUser package - allow creation self-user web-interfaces on any OpenSCADA language.
+%description UI.WebUser -l ru_RU.UTF8
+Пакет %{name}-UI.WebUser - позволяет создавать собственные пользовательские web-интерфейсы на любом языке OpenSCADA.
+%description UI.WebUser -l uk_UA.UTF8
+Пакет %{name}-UI.WebUser - дозволяє створювати користувачу власні web-інтерфейси на будьякій мові OpenSCADA.
+%endif
+
 #===== Special modules =====
 %if_enabled SystemTests
 %package Special.SystemTests
@@ -726,9 +754,9 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
     %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} \
     %{subst_enable FSArch} %{subst_enable DBArch} \
     %{subst_enable Sockets} %{subst_enable SSL} %{subst_enable Serial} \
-    %{subst_enable HTTP} %{subst_enable SelfSystem} \
+    %{subst_enable HTTP} %{subst_enable SelfSystem} %{subst_enable UserProtocol} \
     %{subst_enable VCAEngine} %{subst_enable Vision} %{subst_enable QTStarter} %{subst_enable QTCfg} \
-    %{subst_enable WebCfg} %{subst_enable WebCfgD} %{subst_enable WebVision} \
+    %{subst_enable WebCfg} %{subst_enable WebCfgD} %{subst_enable WebVision} %{subst_enable WebUser} \
     %{subst_enable SystemTests} %{subst_enable FLibComplex1} %{subst_enable FLibMath} %{subst_enable FLibSYS}
 %make
 
@@ -961,6 +989,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_datadir/locale/*/LC_MESSAGES/oscd_SelfSystem.mo
 %endif
 
+%if_enabled UserProtocol
+%files Protocol.UserProtocol
+%_libdir/openscada/prot_UserProtocol.so
+%_datadir/locale/*/LC_MESSAGES/oscd_UserProtocol.mo
+%endif
+
 #===== UI modules =====
 %if_enabled VCAEngine
 %files UI.VCAEngine
@@ -1002,6 +1036,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %files UI.WebVision
 %_libdir/openscada/ui_WebVision.so
 %_datadir/locale/*/LC_MESSAGES/oscd_WebVision.mo
+%endif
+
+%if_enabled WebUser
+%files UI.WebUser
+%_libdir/openscada/ui_WebUser.so
+%_datadir/locale/*/LC_MESSAGES/oscd_WebUser.mo
 %endif
 
 #===== Special modules =====

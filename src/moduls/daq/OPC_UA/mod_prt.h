@@ -56,6 +56,7 @@ namespace OPC_UA
 
 //> Status codes
 #define OpcUa_BadUnexpectedError	0x80010000
+#define OpcUa_BadCommunicationError	0x80050000
 #define OpcUa_BadEncodingError		0x80060000
 #define OpcUa_BadDecodingError		0x80070000
 #define OpcUa_BadTimeout		0x800A0000
@@ -93,6 +94,17 @@ namespace OPC_UA
 #define OpcUa_BrowseResponse		530
 #define OpcUa_ReadRequest		631
 #define OpcUa_ReadResponse		634
+#define OpcUa_PublishRequest		826
+#define OpcUa_PublishResponse		829
+
+//> Object Identifiers
+#define OpcUa_RootFolder		84
+#define OpcUa_ObjectsFolder		85
+#define OpcUa_TypesFolder		86
+#define OpcUa_ViewsFolder		87
+
+//> Variable Identifiers
+#define OpcUa_Server_ServerStatus_State	2259
 
 //*************************************************
 //* TProtIn                                       *
@@ -244,11 +256,54 @@ class SecCnl
 };
 
 //*************************************************
+//* NodeId object                                 *
+//*************************************************
+class NodeId
+{
+    public:
+	//Data
+	enum Type	{ Numeric, String };
+
+	//Methods
+	NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
+	NodeId( uint32_t in, uint16_t ins = 0 );
+	NodeId( const string istr, uint16_t ins = 0 );
+	~NodeId( );
+
+	Type type( ) const	{ return mTp; }
+
+	uint16_t ns( ) const	{ return mNs; }
+	uint32_t numbVal( ) const;
+	string   strVal( ) const;
+
+	void setNs( uint16_t ins )	{ mNs = ins; }
+	void setNumbVal( uint32_t in );
+	void setStrVal( const string istr );
+
+	//> Static
+	static NodeId fromAddr( const string &strAddr );
+	string toAddr( );
+
+    private:
+	//Attributes
+	uint16_t mNs;
+	Type	mTp;
+	union
+	{
+	    uint32_t	numb;
+	    string	*str;
+	};
+};
+
+//*************************************************
 //* TProt                                         *
 //*************************************************
 class TProt: public TProtocol
 {
     public:
+	//Data
+	enum browseDirection	{ FORWARD_0, INVERSE_1, BOTH_2 };
+
 	//Methods
 	TProt( string name );
 	~TProt( );
@@ -288,7 +343,7 @@ class TProt: public TProtocol
 	static string iSl( const string &buf, int &off, string *locale = NULL );
 	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
 	static long long iTm( const string &buf, int &off );
-	static int iNodeId( const string &buf, int &off, int *ns = NULL );
+	static NodeId iNodeId( const string &buf, int &off );
 
 	static void oN( string &buf, int32_t val, char sz, int off = -1 );
 	static void oNu( string &buf, uint32_t val, char sz, int off = -1 );
@@ -296,7 +351,7 @@ class TProt: public TProtocol
 	static void oS( string &buf, const string &val );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
 	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
-	static void oNodeId( string &buf, int val, int ns = 0 );
+	static void oNodeId( string &buf, const NodeId &val );
 	static void oTm( string &buf, long long val );
 
 	static string certPEM2DER( const string &spem );

@@ -1,20 +1,37 @@
 #!/bin/sh
 
+# Use for core dump creation on programm crash
 ulimit -c unlimited
 
+# User directory prepare
 if [ ! -d ~/.openscada ]; then
     install -m 755 -d ~/.openscada/ARCHIVES/{MESS,VAL}
     ln -s /var/spool/openscada/icons ~/.openscada/icons
 fi
-
 if [ ! -d ~/.openscada/DATA ]; then install -m 755 -d ~/.openscada/DATA; fi
-
 if [ ! -e ~/.openscada/oscada.xml ]; then install -m 644 /etc/oscada_start.xml ~/.openscada/oscada.xml; fi
-
-if [ -f /tmp/.openscada_`whoami` ]; then echo "OpenSCADA already started!"; exit 1; fi
-touch /tmp/.openscada_`whoami`
-
 cd ~/.openscada
-openscada --Config=./oscada.xml $@
 
-rm -f /tmp/.openscada_`whoami`
+# Programm command and lock file
+pCmd="openscada --Config=./oscada.xml"
+pLock=".start.lock"
+
+# Check for already started programm present
+if [ -f $pLock ] && ps -ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
+    echo "OpenSCADA station already started!";
+    exit 1;
+fi
+
+# Call programm
+$pCmd $@ &
+pPid=$!
+
+# Create lock file
+echo $pPid > $pLock
+
+# Wait for programm stop
+wait $pPid
+echo "Programm result: $?"
+
+# Remove lock file
+rm -f $pLock

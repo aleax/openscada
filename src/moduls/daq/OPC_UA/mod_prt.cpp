@@ -207,6 +207,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oS(rez,io.attr("EndPoint"));		//EndpointURL
 		oNu(rez,rez.size(),4,4);		//Real message size
 
+		printf("TEST 10: HELLO request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+
 		//> Send request
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
@@ -220,6 +222,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
 		else
 		{
+		    printf("TEST 10a: HELLO response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 		    iNu(rez,off,4);			//Protocol version
 		    iNu(rez,off,4);			//Recive buffer size
 		    iNu(rez,off,4);			//Send buffer size
@@ -240,16 +243,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(rez,"");				//SenderCertificate
 		    oS(rez,"");				//ReceiverCertificateThumbprint
 							//> Sequence header
-		    io.setAttr("SeqNumber","33");
 		    oNu(rez,atoi(io.attr("SeqNumber").c_str()),4);	//Sequence number
-		    io.setAttr("SeqReqId","1");
 		    oNu(rez,atoi(io.attr("SeqReqId").c_str()),4);	//RequestId
 							//> Extension body object
-		    oNodeId(rez,OpcUa_OpenSecureChannelRequest);	//TypeId
+		    oNodeId(rez,NodeId(OpcUa_OpenSecureChannelRequest));	//TypeId
 							//>> Request Header
 		    oNodeId(rez,0);			//Session AuthenticationToken
 		    oTm(rez,TSYS::curTime());		//timestamp
-		    io.setAttr("ReqHandle","0");
 		    oN(rez,atoi(io.attr("ReqHandle").c_str()),4);	//requestHandle
 		    oNu(rez,0,4);			//returnDiagnostics
 		    oS(rez,"");				//auditEntryId
@@ -264,6 +264,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(rez,"\000");			//ClientNonce
 		    oN(rez,atoi(io.attr("SecLifeTm").c_str()),4);	//RequestedLifetime
 		    oNu(rez,rez.size(),4,4);		//> Real message size
+
+		    printf("TEST 11: OPN request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		    //> Send request
 		    int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
@@ -285,7 +287,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			iNu(rez,off,4);			//Sequence number
 			iNu(rez,off,4);			//RequestId
 							//> Extension Object
-			if( iNodeId(rez,off) != OpcUa_OpenSecureChannelResponse )	//TypeId
+			if( iNodeId(rez,off).numbVal() != OpcUa_OpenSecureChannelResponse )	//TypeId
 			    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC_UA Bin", _("Respond's NodeId don't acknowledge") );
 							//>> Body
 							//>>> RespondHeader
@@ -299,13 +301,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			iNu(rez,off,1);			//Encoding
 							//>>>> Standard respond
 			iNu(rez,off,4);			//ServerProtocolVersion
-			io.setAttr("SecChnId",TSYS::int2str(iNu(rez,off,4)));		//Secure channel identifier
-			io.setAttr("SecTokenId",TSYS::int2str(iNu(rez,off,4)));		//TokenId
+			io.setAttr("SecChnId",TSYS::uint2str(iNu(rez,off,4)));		//Secure channel identifier
+			io.setAttr("SecTokenId",TSYS::uint2str(iNu(rez,off,4)));	//TokenId
 			iTm(rez,off);			//CreatedAt
 			io.setAttr("SecLifeTm",TSYS::int2str(iN(rez,off,4)));		//RevisedLifeTime
 			iS(rez,off);			//nonce
 		    }
-		    printf("TEST 10: OPN respond:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+		    printf("TEST 11a: OPN response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 		}
 		else err = TSYS::strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,_("Security policy isn't supported."));
 	    }
@@ -338,6 +340,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		//> Parameters clear
 		io.setAttr("SecChnId",""); io.setAttr("SecTokenId","");
 		io.setAttr("SeqNumber",""); io.setAttr("SeqReqId","");
+
+		printf("TEST 12: CLO request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		//> Send request and don't wait response
 		tro.messIO( rez.data(), rez.size(), NULL, 0, 0, true );
@@ -377,7 +381,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(mReq,"OpenSCADA station "+SYS->id());	//sessionName
 		    oS(mReq,string(16,0)+string(4,0xFF)+string(12,0));	//clientNonce
 		    oS(mReq,certPEM2DER(io.childGet("ClientCert")->text()));	//clientCertificate
-		    oR(mReq,1.2e6,8);			//Requested SessionTimeout, ms
+		    oR(mReq,atof(io.attr("sesTm").c_str()),8);	//Requested SessionTimeout, ms
 		    oNu(mReq,0x1000000,4);		//maxResponse MessageSize
 		    io.childClear();
 		}
@@ -409,16 +413,17 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		else if( io.attr("id") == "Read" )
 		{
 		    iTpId = OpcUa_ReadRequest;
-		    oR(mReq,0,8);			//maxAge 0 ms
-		    oNu(mReq,1,4);			//timestampsTo Return (SERVER_1)
+		    oR(mReq,atof(io.attr("maxAge").c_str()),8);	//maxAge 0 ms
+		    oNu(mReq,atoi(io.attr("timestampsToReturn").c_str()),4);//timestampsTo Return (SERVER_1)
 							//> nodesToRead []
-		    oNu(mReq,1,4);			//nodes
-		    oNodeId(mReq,2259);			//nodeId (ServerStatus_State)
-		    oNu(mReq,13,4);			//attributeId (Value)
-		    oS(mReq,"");			//indexRange
-							//> dataEncoding
-		    oNu(mReq,0,2);			//namespaceIndex
-		    oS(mReq,"");			//name
+		    oNu(mReq,io.childSize(),4);		//nodes
+		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
+		    {
+			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
+			oNu(mReq,strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
+			oS(mReq,"");			//indexRange
+			oSqlf(mReq,"");			//dataEncoding
+		    }
 		}
 		else if( io.attr("id") == "Browse" )
 		{
@@ -430,14 +435,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		    oNu(mReq,100,4);			//requestedMax ReferencesPerNode
 							//> nodesToBrowse
-		    oNu(mReq,1,4);			//Nodes 1
-							//>> Node 1
-		    oNodeId(mReq,84);			//nodeId (RootFolder)
-		    oNu(mReq,0,4);			//browseDirection (FORWARD_0)
-		    oNodeId(mReq,33);			//referenceTypeId (HierarchicalReferences)
-		    oNu(mReq,1,1);			//includeSubtypes (true)
-		    oNu(mReq,0,4);			//nodeClassMask ( all NodeClasses )
-		    oNu(mReq,0x3f,4);			//resultMask ( all )
+		    oNu(mReq,io.childSize(),4);			//Nodes 1
+		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
+		    {
+			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId (RootFolder)
+			oNu(mReq,strtoul(io.childGet(i_n)->attr("browseDirection").c_str(),NULL,0),4);	//browseDirection (FORWARD_0)
+			oNodeId(mReq,33);		//referenceTypeId (HierarchicalReferences)
+			oNu(mReq,1,1);			//includeSubtypes (true)
+			oNu(mReq,0,4);			//nodeClassMask ( all NodeClasses )
+			oNu(mReq,0x3f,4);		//resultMask ( all )
+		    }
 		}
 		else throw TError(OpcUa_BadNotSupported,"OPC UA Bin",_("Request '%s' isn't supported."),io.attr("id").c_str());
 
@@ -470,7 +477,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		rez.append(mReq);			//Same request
 		oNu(rez,rez.size(),4,4);		//> Real message size
 
-		printf("TEST 11a: Request '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
+		printf("TEST 13: Request '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		//> Send request and wait respond
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
@@ -482,7 +489,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.append( buf, resp_len );
 		}
 
-		printf("TEST 11b: Respond '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
+		printf("TEST 13a: Response '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		off = 4;
 		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
@@ -499,7 +506,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    iNu(rez,off,4);				//Sequence number
 		    iNu(rez,off,4);				//RequestId
 								//> Extension Object
-		    int oTpId = iNodeId(rez,off);		//TypeId
+		    int oTpId = iNodeId(rez,off).numbVal();		//TypeId
 								//>> Body
 								//>>> RespondHeader
 		    iTm(rez,off);				//timestamp
@@ -578,9 +585,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			{
 			    if( iTpId != OpcUa_CreateSessionRequest )
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
-			    io.setAttr("sesId",TSYS::int2str(iNodeId(rez,off)));	//sessionId
-			    io.setAttr("authTokenId",TSYS::int2str(iNodeId(rez,off)));	//authentication Token
-			    iR(rez,off,8);				//revisedSession Timeout, ms
+			    io.setAttr("sesId",TSYS::int2str(iNodeId(rez,off).numbVal()));	//sessionId
+			    io.setAttr("authTokenId",TSYS::int2str(iNodeId(rez,off).numbVal()));//authentication Token
+			    io.setAttr("sesTm",TSYS::real2str(iR(rez,off,8)));		//revisedSession Timeout, ms
 			    iS(rez,off);				//serverNonce
 			    iS(rez,off);				//serverCertificate
 			    int EndpointDescrNub = iNu(rez,off,4);	//List items
@@ -663,21 +670,23 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
-			    for( int i_r = 0; i_r < resN; i_r++ )
+			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
 			    {
-				iNu(rez,off,4);				//statusCode
+				XMLNode *rno = io.childGet(i_r);
+				rno->setAttr("statusCode",TSYS::uint2str(iNu(rez,off,4)));	//statusCode
 				iS(rez,off);				//continuationPoint
 									//>> References []
 				int refN = iNu(rez,off,4);		//Numbers
 				for( int i_rf = 0; i_rf < refN; i_rf++ )
 				{
-				    iNodeId(rez,off);			//referenceTypeId
-				    iNu(rez,off,1);			//isForward
-				    iNodeId(rez,off);			//nodeId
-				    iSqlf(rez,off);			//browseName
-				    iSl(rez,off);			//displayName
-				    iNu(rez,off,4);			//nodeClass
-				    iNodeId(rez,off);			//typeDefinition
+				    XMLNode *bno = rno->childAdd("bNode");
+				    bno->setAttr("referenceTypeId",TSYS::uint2str(iNodeId(rez,off).numbVal()));	//referenceTypeId
+				    bno->setAttr("isForward",iNu(rez,off,1)?"1":"0");				//isForward
+				    bno->setAttr("nodeId",iNodeId(rez,off).toAddr());				//nodeId
+				    bno->setAttr("browseName",iSqlf(rez,off));					//browseName
+				    bno->setAttr("displayName",iSl(rez,off));					//displayName
+				    bno->setAttr("nodeClass",TSYS::uint2str(iNu(rez,off,4)));			//nodeClass
+				    bno->setAttr("typeDefinition",TSYS::uint2str(iNodeId(rez,off).numbVal()));	//typeDefinition
 				}
 			    }
 			    iS(rez,off);				//diagnosticInfos []
@@ -775,21 +784,29 @@ long long TProt::iTm( const string &rb, int &off )
     return (tmStamp/10ll)-11644473600000000ll;
 }
 
-int TProt::iNodeId( const string &rb, int &off, int *ns )
+NodeId TProt::iNodeId( const string &rb, int &off )
 {
     off += 1;
     if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
     char enc = rb[off-1];
     switch( enc )
     {
-	case 0x00:
-	    if( ns ) *ns = 0;
-	    return iNu(rb,off,1);
+	case 0x00:	return NodeId(iNu(rb,off,1));
 	case 0x01:
-	    off += 1;
-	    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
-	    if( ns ) *ns = (uint8_t)rb[off-1];
-	    return iNu(rb,off,2);
+	{
+	    uint8_t ns = iNu(rb,off,1);
+	    return NodeId(iNu(rb,off,2),ns);
+	}
+	case 0x02:
+	{
+	    uint16_t ns = iNu(rb,off,2);
+	    return NodeId(iNu(rb,off,4),ns);
+	}
+	case 0x03:
+	{
+	    uint16_t ns = iNu(rb,off,2);
+	    return NodeId(iS(rb,off),ns);
+	}
     }
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("NodeId type %d error or don't support."),enc);
 }
@@ -832,18 +849,33 @@ void TProt::oSqlf( string &buf, const string &val, uint16_t nsIdx )
     oS(buf,val);
 }
 
-void TProt::oNodeId( string &buf, int val, int ns )
+void TProt::oNodeId( string &buf, const NodeId &val )
 {
-    if( ns == 0 && val <= 255 )
+    if( val.type() == NodeId::Numeric )
     {
-	buf += (char)0x00;
-	buf += (char)val;
+	if( val.ns() == 0 && val.numbVal() <= 255 )
+	{
+	    buf += (char)0x00;
+	    buf += (char)val.numbVal();
+	}
+	else if( val.ns() <= 255 && val.numbVal() <= 65535 )
+	{
+	    buf += (char)0x01;
+	    buf += (char)val.ns();
+	    oNu(buf,val.numbVal(),2);
+	}
+	else
+	{
+	    buf += (char)0x01;
+	    oNu(buf,val.ns(),2);
+	    oNu(buf,val.numbVal(),4);
+	}
     }
-    else
+    else if( val.type() == NodeId::String )
     {
-	buf += (char)0x01;
-	buf += (char)ns;
-	buf.append( (char*)&val, 2 );
+	buf += (char)0x03;
+	oNu(buf,val.ns(),2);
+	oS(buf,val.strVal());
     }
 }
 
@@ -936,6 +968,67 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);
+}
+
+//*************************************************
+//* NodeId object                                 *
+//*************************************************
+NodeId::NodeId( uint32_t in, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
+{
+    setNumbVal(in);
+}
+
+NodeId::NodeId( const string istr, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
+{
+    setStrVal(istr);
+}
+
+NodeId::~NodeId( )
+{
+    if( type() == NodeId::String ) delete str;
+}
+
+uint32_t NodeId::numbVal( ) const
+{
+    if( type() != NodeId::Numeric ) return 0;
+    return numb;
+}
+
+string NodeId::strVal( ) const
+{
+    if( type() != NodeId::String ) return "";
+    return *str;
+}
+
+void NodeId::setNumbVal( uint32_t in )
+{
+    if( type() == NodeId::String ) delete str;
+    mTp = NodeId::Numeric;
+    numb = in;
+}
+
+void NodeId::setStrVal( const string istr )
+{
+    if( type() != NodeId::String ) str = new string(istr);
+    mTp = NodeId::String;
+    *str = istr;
+}
+
+NodeId NodeId::fromAddr( const string &strAddr )
+{
+    uint16_t ns = strtoul(TSYS::strParse(strAddr,0,":").c_str(),NULL,0);
+    string vl = TSYS::strParse(strAddr,1,":");
+    bool isStr = false;
+    for( int i_s = 0; i_s < vl.size() && !isStr; i_s++ )
+	if( !isdigit(vl[i_s]) ) isStr = true;
+    if( isStr ) return NodeId(vl,ns);
+    return NodeId(strtoul(vl.c_str(),NULL,0),ns);
+}
+
+string NodeId::toAddr( )
+{
+    if( type() == NodeId::Numeric )	return TSYS::uint2str(ns())+":"+TSYS::uint2str(numbVal());
+    return TSYS::uint2str(ns())+":"+strVal();
 }
 
 //*************************************************
@@ -1049,7 +1142,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		uint32_t secNumb = TProt::iNu(rb,off,4);	//Sequence number
 		uint32_t reqId = TProt::iNu(rb,off,4);		//RequestId
 								//> Extension body object
-		if( TProt::iNodeId(rb,off) != OpcUa_OpenSecureChannelRequest )	//TypeId
+		if( TProt::iNodeId(rb,off).numbVal() != OpcUa_OpenSecureChannelRequest )	//TypeId
 		    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge") );
 								//>> Request Header
 		TProt::iVal(rb,off,2);				//Session AuthenticationToken
@@ -1081,7 +1174,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		TProt::oNu(out,secNumb,4);			//Sequence number
 		TProt::oNu(out,reqId,4);			//RequestId
 								//> Extension Object
-		TProt::oNodeId(out,OpcUa_OpenSecureChannelResponse,0);	//TypeId
+		TProt::oNodeId(out,NodeId(OpcUa_OpenSecureChannelResponse));	//TypeId
 								//>> Body
 								//>>> RespondHeader
 		TProt::oTm(out,TSYS::curTime());		//timestamp
@@ -1118,7 +1211,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    TProt::iNu(rb,off,4);			//Sequence number
 	    TProt::iNu(rb,off,4);			//RequestId
 							//> Extension body object
-	    if( TProt::iNodeId(rb,off) != OpcUa_CloseSecureChannelRequest )	//TypeId
+	    if( TProt::iNodeId(rb,off).numbVal() != OpcUa_CloseSecureChannelRequest )	//TypeId
 		throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge") );
 							//>> Request Header
 	    TProt::iNodeId(rb,off);			//Session AuthenticationToken
@@ -1154,9 +1247,9 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    uint32_t seqN = TProt::iNu(rb,off,4);	//Sequence number
 	    uint32_t reqId = TProt::iNu(rb,off,4);	//RequestId
 							//> Extension body object
-	    int reqTp = TProt::iNodeId(rb,off);		//TypeId request
+	    int reqTp = TProt::iNodeId(rb,off).numbVal();	//TypeId request
 							//>> Request Header
-	    uint16_t sesTokId = TProt::iNodeId(rb,off);	//Session AuthenticationToken
+	    uint16_t sesTokId = TProt::iNodeId(rb,off).numbVal();	//Session AuthenticationToken
 	    //>> Session check
 	    if( sesTokId && !wep.at().sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest) )
 	    { stCode = OpcUa_BadSessionIdInvalid; reqTp = OpcUa_ServiceFault; }
@@ -1373,7 +1466,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    for( int i_l; i_l < ln; i_l++ )
 			TProt::iS(rb,off);		//localeId
 							//> userIdentityToken
-		    int userIdTk = TProt::iNodeId(rb,off);//TypeId
+		    int userIdTk = TProt::iNodeId(rb,off).numbVal();//TypeId
 		    TProt::iNu(rb,off,1);		//Encode
 		    TProt::iNu(rb,off,4);		//Length
 		    switch( userIdTk )
