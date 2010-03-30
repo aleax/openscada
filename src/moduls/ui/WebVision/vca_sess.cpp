@@ -5168,7 +5168,8 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
                 break;
             case 27:	//orient
             {
-                orient = atof(req_el->text().c_str());
+                orient = (atof(req_el->text().c_str()) < 0) ? 360 + atof(req_el->text().c_str()):
+                                                              atof(req_el->text().c_str());
                 break;
             }
             case 28:	//wordWrap
@@ -5228,6 +5229,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
     {
         string txt = text_tmpl.c_str();
         string argVal;
+        //- Placing the arguments to the text -
         for( int i_a = 0; i_a < args.size(); i_a++ )
         {
             switch( args[i_a].type())

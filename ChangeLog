@@ -1,4 +1,8 @@
 2010-03-30 Maxim
+- FIX:UI.WebVision: The negative rotation angle set is fixed for the Text primitive.
+
+
+2010-03-30 Maxim
 - FIX:UI.WebVision: The rotation of the primitive Text is improved for the strings with "\n" characters and fixed a little.
 
 
