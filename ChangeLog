@@ -1,3 +1,7 @@
+2010-03-30 Maxim
+- FIX:UI.WebVision: The rotation of the primitive Text is improved for the strings with "\n" characters and fixed a little.
+
+
 2010-03-28 Roman
 - SYS: New modules is added to modules-separated rpm build spec-file.
 - !:FIX:SYS: Multiply program call mechanism is fixed for locked process' PID check, by reason old locks deletion from /tmp directory by system.

@@ -4920,109 +4920,162 @@ void VCAText::getReq( SSess &ses )
             rotateWidth = wh[0];
             rotateHeight = wh[1];
         }
-        int brect_wrap[8];
-        int wrapWidth;
+
+        //- Replacing the "\t" in the source string with the " " -
+        size_t fnd = text.find("\t");
+        if( fnd != -1 )
+        do
+        {
+            text.replace( fnd, 1, " " );
+            fnd = text.find("\t");
+        }
+        while( fnd != -1 );
+
+        //- Formation of the string's vector from the source string using the "\n" separator -
         string wrap_text=text, wrap_end;
         vector<string> str_wrap;
         vector<int> hgt_wrap;
-        gdImageStringFTEx(NULL,&brect_wrap[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( text.c_str() ), &strex);
-        wrapWidth = brect_wrap[2]-brect_wrap[6];
-
-        //Word wrap algorithm
-        if( wordWrap && (wrapWidth > rotateWidth) )
+        fnd = wrap_text.find("\n");
+        vector<string> wrp_txt;
+        if( fnd != -1 )
         {
-            string wrap_temp;
-            bool flWrapEnd = false;
+            bool flg = false;
             do
             {
-                int brect_wr[8];
-                size_t found, fnd;
-                found = wrap_text.find_first_of(" \t");
-                if( found != -1 )
+                wrp_txt.push_back(wrap_text.substr(0,fnd));
+                wrap_text = wrap_text.substr(fnd+1);
+                fnd = wrap_text.find("\n");
+                if( fnd == -1 ){ wrp_txt.push_back(wrap_text); flg = true; }
+            }
+            while( flg == false );
+        }
+        else wrp_txt.push_back(wrap_text);
+
+        //- Word wrap algorithm -
+        if( wordWrap )
+        {
+            //-- Parsing each string in the formed vector and makin wordWrap in it --
+            for(int f = 0; f < wrp_txt.size(); f++ )
+            {
+                int brect_wrap[8];
+                int wrapWidth;
+                gdImageStringFTEx(NULL,&brect_wrap[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrp_txt[f].c_str() ), &strex);
+                wrapWidth = brect_wrap[2]-brect_wrap[6];
+                //--- Check if the width of the string is more than the width of the image ---
+                if(wrapWidth > rotateWidth)
                 {
-                    string wrap_before = wrap_text.substr(0,found+1);
-                    wrap_text = wrap_text.substr(found+1);
-                    //Connecting the words, divided with the " " till their sum length <= rotateWidth
-                    gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
-                    int wdtTmp = brect_wr[2]-brect_wr[6];
-                    gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_before.c_str() ), &strex);
-                    if( (brect_wr[2]-brect_wr[6]) + wdtTmp <= rotateWidth ) wrap_temp.append(wrap_before);
-                    //Check if the was no any append to the wrap_temp and the size of the wrap_before > rotateWidth
-                    else if( wrap_temp.size() == 0 )
+                    wrap_text = wrp_txt[f];
+                    string wrap_temp;
+                    bool flWrapEnd = false;
+                    do
                     {
-                        //Erase the " " at the end of the string
-                        fnd = wrap_before.rfind(" ");
-                        if( fnd == wrap_before.size()-1)
-                            wrap_before.erase(fnd);
-
-                        str_wrap.push_back(wrap_before);
-                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
-                    }
-                    else
-                    { 
-                        wrap_text.insert(0,wrap_before);
-                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
-                        //Erase the " " at the end of the string
-                        fnd = wrap_temp.rfind(" ");
-                        if( fnd == wrap_temp.size()-1)
-                            wrap_temp.erase(fnd);
-
-                        str_wrap.push_back(wrap_temp);
-                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
-                        wrap_temp.clear();
-                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
-                        if( brect_wr[2]-brect_wr[6] <= rotateWidth )
+                        int brect_wr[8];
+                        size_t found, fnd;
+                        found = wrap_text.find_first_of(" ");
+                        if( found != -1 )
                         {
-                            fnd = wrap_text.rfind(" ");
-                            if( fnd == wrap_text.size()-1)
-                                wrap_text.erase(fnd);
+                            string wrap_before = wrap_text.substr(0,found+1);
+                            wrap_text = wrap_text.substr(found+1);
+                            //Connecting the words, divided with the " " till their sum length <= rotateWidth
+                            gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                            int wdtTmp = brect_wr[2]-brect_wr[6];
+                            gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_before.c_str() ), &strex);
+                            if( (brect_wr[2]-brect_wr[6]) + wdtTmp <= rotateWidth ) wrap_temp.append(wrap_before);
+                            //Check if the was no any append to the wrap_temp and the size of the wrap_before > rotateWidth
+                            else if( wrap_temp.size() == 0 )
+                            {
+                                //Erase the " " at the end of the string
+                                fnd = wrap_before.rfind(" ");
+                                if( fnd == wrap_before.size()-1)
+                                    wrap_before.erase(fnd);
 
-                            str_wrap.push_back(wrap_text);
-                            hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                                str_wrap.push_back(wrap_before);
+                                hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                            }
+                            else
+                            { 
+                                wrap_text.insert(0,wrap_before);
+                                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                                //Erase the " " at the end of the string
+                                fnd = wrap_temp.rfind(" ");
+                                if( fnd == wrap_temp.size()-1)
+                                    wrap_temp.erase(fnd);
+
+                                str_wrap.push_back(wrap_temp);
+                                hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                                wrap_temp.clear();
+                                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
+                                if( brect_wr[2]-brect_wr[6] <= rotateWidth )
+                                {
+                                    fnd = wrap_text.rfind(" ");
+                                    if( fnd == wrap_text.size()-1)
+                                        wrap_text.erase(fnd);
+
+                                    str_wrap.push_back(wrap_text);
+                                    hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                                    flWrapEnd = true;
+                                }
+                            }
+                        }
+                        else//If there is no " " in the string or in the rest of the string
+                        {
+                            bool app = false;
+                            if( wrap_temp.size() )
+                            {
+                                //Check if the rest of the string without " " is small anough to append it the wrap_temp and push_back to the array
+                                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                                int wdtTmp = brect_wr[2]-brect_wr[6];
+                                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
+                                if( (brect_wr[2]-brect_wr[6]) + wdtTmp <= rotateWidth ){ wrap_temp.append(wrap_text); app = true; }
+                                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
+                                //Erase the " " at the end of the string
+                                if( !app )
+                                {
+                                    fnd = wrap_temp.rfind(" ");
+                                    if( fnd == wrap_temp.size()-1)
+                                        wrap_temp.erase(fnd);
+                                }
+
+                                str_wrap.push_back(wrap_temp);
+                                hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                            }
+                            if( !app )
+                            {
+                                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
+                                str_wrap.push_back(wrap_text);
+                                hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+                            }
                             flWrapEnd = true;
                         }
                     }
+                    while(!flWrapEnd);
                 }
-                else//If there is no " " in the string or in the rest of the string
+                else
                 {
-                    bool app = false;
-                    if( wrap_temp.size() )
-                    {
-                        //Check if the rest of the string without " " is small anough to append it the wrap_temp and push_back to the array
-                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
-                        int wdtTmp = brect_wr[2]-brect_wr[6];
-                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
-                        if( (brect_wr[2]-brect_wr[6]) + wdtTmp <= rotateWidth ){ wrap_temp.append(wrap_text); app = true; }
-                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_temp.c_str() ), &strex);
-                        //Erase the " " at the end of the string
-                        if( !app )
-                        {
-                            fnd = wrap_temp.rfind(" ");
-                            if( fnd == wrap_temp.size()-1)
-                                wrap_temp.erase(fnd);
-                        }
-
-                        str_wrap.push_back(wrap_temp);
-                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
-                    }
-                    if( !app )
-                    {
-                        gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( wrap_text.c_str() ), &strex);
-                        str_wrap.push_back(wrap_text);
-                        hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
-                    }
-                    flWrapEnd = true;
+                    string res;
+                    int brect_wr[8];
+                    //Check if the string is empty and if it is so, change it with the "text" for the normal string height
+                    if(wrp_txt[f] != "") res =  wrp_txt[f];
+                    else res = "text";
+                    gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)(  res.c_str() ), &strex);
+                    str_wrap.push_back(wrp_txt[f]);
+                    hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
                 }
             }
-            while(!flWrapEnd);
         }
         else
-        {
-            int brect_wr[8];
-            gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)( text.c_str() ), &strex);
-            str_wrap.push_back(text);
-            hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
-        }
+            for(int f = 0; f < wrp_txt.size(); f++ )
+            {
+                string res;
+                int brect_wr[8];
+                //Check if the string is empty and if it is so, change it with the "text" for the normal string height
+                if(wrp_txt[f] != "") res =  wrp_txt[f];
+                else res = "text";
+                gdImageStringFTEx(NULL,&brect_wr[0],0,(char*)textFont.c_str(),txtFontSize,0.0,0,0,(char*)(  res.c_str() ), &strex);
+                str_wrap.push_back(wrp_txt[f]);
+                hgt_wrap.push_back(brect_wr[3]-brect_wr[7]);
+
+            }
         //Calculating the summary height of the all strings in the array plus the linespacing interval between them
         int wrapHgt = 0;
         for(int f = 0; f < str_wrap.size(); f++ ){ wrapHgt += hgt_wrap[f]; }
@@ -5049,18 +5102,18 @@ void VCAText::getReq( SSess &ses )
             else if( alignHor == 3 ) offsetX = (rotateWidth - (brect[4] - brect[0]))/2;
             else if( alignHor == 4 ) offsetX = 0;
             int realY = hgt_wrap[k]-offsetY+y_new;
-
             char *rez = gdImageStringFTEx(im_txt,&brect[0],clr_txt,(char*)textFont.c_str(),txtFontSize,0.0,offsetX,realY,(char*)( str_wrap[k].c_str() ), &strex);
             if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s\n"),textFont.c_str(),rez);
             else
             {
                 int wdt = bold?(int)TSYS::realRound(txtFontSize/6,2,true):(int)TSYS::realRound(txtFontSize/12,2,true);
                 gdImageSetThickness(im_txt, wdt);
-                if( underline )gdImageLine(im_txt,offsetX,realY+(int)lnSpace/2,offsetX+(brect[4] - brect[0]), realY+(int)lnSpace/2,clr_txt);
-                if( strikeout )gdImageLine(im_txt,offsetX,realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,offsetX+(brect[4] - brect[0]),
-                                                          realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,clr_txt);
+                if( underline && !str_wrap[k].empty() )gdImageLine(im_txt,offsetX,realY+(int)lnSpace/2,offsetX+(brect[4] - brect[0]), realY+(int)lnSpace/2,clr_txt);
+                if( strikeout && !str_wrap[k].empty() )gdImageLine(im_txt,offsetX,realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,offsetX+(brect[4] - brect[0]),
+                                                                   realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,clr_txt);
             }
             y_new += hgt_wrap[k] + lnSpace;
+            int rd = gdImageColorResolveAlpha(im_txt,0,255,0,0);
         }
         gdImageSaveAlpha(im_txt, 1);
         gdImageCopyRotated(im, im_txt, scaleWidth/2, scaleHeight/2, 0, 0, rotateWidth, rotateHeight, 360-orient);
