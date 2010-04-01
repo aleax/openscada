@@ -135,39 +135,42 @@ string Ergomera::modBusReq( string &pdu )
     string mbap, err, rez;
     char buf[1000];
 
-    //> Connect to transport
-    AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->mAddr);
-    if( !tr.at().startStat() ) tr.at().start();
-
-    mbap.reserve( pdu.size()+3 );
-    mbap += devAddr;		//Unit identifier
-    mbap += (devAddr>>8);	//Unit identifier
-    mbap += pdu;
-    uint16_t crc = mod->CRC16( mbap );
-    mbap += (crc>>8);
-    mbap += crc;
-
-    ResAlloc resN( tr.at().nodeRes(), true );
-
-    //> Send request
-    for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
+    try
     {
-	int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 0, true );
-	rez.assign( buf, resp_len );
-	//> Wait tail
-	while( true )
-	{
-	    try{ resp_len = tr.at().messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
-	    rez.append( buf, resp_len );
-	}
+	//> Connect to transport
+	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->mAddr);
+	if( !tr.at().startStat() ) tr.at().start();
 
-	if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
-	if( mod->CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
-	{ err = _("13:Error respond: CRC check error."); continue; }
-	pdu = rez.substr( 2, rez.size()-4 );
-	err = "";
-	break;
-    }
+	mbap.reserve( pdu.size()+3 );
+	mbap += devAddr;		//Unit identifier
+	mbap += (devAddr>>8);	//Unit identifier
+	mbap += pdu;
+	uint16_t crc = mod->CRC16( mbap );
+	mbap += (crc>>8);
+	mbap += crc;
+
+	ResAlloc resN( tr.at().nodeRes(), true );
+
+	//> Send request
+	for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
+	{
+	    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 0, true );
+	    rez.assign( buf, resp_len );
+	    //> Wait tail
+	    while( true )
+	    {
+		try{ resp_len = tr.at().messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
+		rez.append( buf, resp_len );
+	    }
+
+	    if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
+	    if( mod->CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
+	    { err = _("13:Error respond: CRC check error."); continue; }
+	    pdu = rez.substr( 2, rez.size()-4 );
+	    err = "";
+	    break;
+	}
+    }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     return err;
 }
@@ -220,7 +223,7 @@ void Ergomera::getVals( )
 	    if( vl == EVAL_INT || vl2 == EVAL_INT ) val.at().setI(EVAL_INT,0,true);
 	    val.at().setI((int)(((vl2&0xffff)<<16)|(vl&0xffff)),0,true);
 	}
-	else val.at().setI((int16_t)vl,0,true);
+	else val.at().setI( (vl==EVAL_INT) ? EVAL_INT : (int16_t)vl, 0, true );
     }
 }
 

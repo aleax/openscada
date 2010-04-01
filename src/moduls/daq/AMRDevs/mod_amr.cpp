@@ -212,6 +212,9 @@ void TMdContr::start_( )
 {
     if( prc_st ) return;
 
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+
     //> Start the gathering data task
     SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
 }
