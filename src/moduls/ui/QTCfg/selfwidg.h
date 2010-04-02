@@ -278,7 +278,7 @@ class TableDelegate : public QItemDelegate
     Q_OBJECT
 
     public:
-	//- Public attributes -
+	//> Public attributes
 	TableDelegate( QObject *parent = 0 );
 
 	void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
@@ -291,7 +291,7 @@ class TableDelegate : public QItemDelegate
 	void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 
     private:
-	//- Private attributes -
+	//> Private attributes
 	bool eventFilter( QObject *object, QEvent *event );
 };
 

@@ -151,7 +151,6 @@ string Ergomera::modBusReq( string &pdu )
 
 	ResAlloc resN( tr.at().nodeRes(), true );
 
-	printf("TEST 00: Request:\n%s\n",TSYS::strDecode(mbap,TSYS::Bin).c_str());
 	//> Send request
 	for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
 	{
@@ -167,7 +166,6 @@ string Ergomera::modBusReq( string &pdu )
 	    if( rez.size() < 3 )	{ err = _("13:Error respond: Too short."); continue; }
 	    if( mod->CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
 	    { err = _("13:Error respond: CRC check error."); continue; }
-	    printf("TEST 00: Response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
 	    pdu = rez.substr( 2, rez.size()-4 );
 	    err = "";
 	    break;
@@ -193,7 +191,7 @@ void Ergomera::getVals( )
 	acqBlks[i_b].err.setVal( modBusReq(pdu) );
 	if( acqBlks[i_b].err.getVal().empty() )
 	{
-	    if( acqBlks[i_b].val.size() != (pdu.size()-3) ) acqBlks[i_b].err.setVal("15:Response PDU size error.");
+	    if( acqBlks[i_b].val.size() != (pdu.size()-3) ) acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
 	    else
 	    {
 		acqBlks[i_b].val.replace(0,acqBlks[i_b].val.size(),pdu.data()+3,acqBlks[i_b].val.size());

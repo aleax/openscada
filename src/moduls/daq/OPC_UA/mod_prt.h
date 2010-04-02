@@ -54,6 +54,32 @@ namespace OPC_UA
 #define OpcUa_MaxMessageSize		0x1000000
 #define OpcUa_MaxChunkCount		5000
 
+//> Built-in Data Types
+#define OpcUa_Boolean 1
+#define OpcUa_SByte 2
+#define OpcUa_Byte 3
+#define OpcUa_Int16 4
+#define OpcUa_UInt16 5
+#define OpcUa_Int32 6
+#define OpcUa_UInt32 7
+#define OpcUa_Int64 8
+#define OpcUa_UInt64 9
+#define OpcUa_Float 10
+#define OpcUa_Double 11
+#define OpcUa_String 12
+#define OpcUa_DateTime 13
+#define OpcUa_Guid 14
+#define OpcUa_ByteString 15
+#define OpcUa_XmlElement 16
+#define OpcUa_NodeId 17
+#define OpcUa_ExpandedNodeId 18
+#define OpcUa_StatusCode 19
+#define OpcUa_QualifiedName 20
+#define OpcUa_LocalizedText 21
+#define OpcUa_Structure 22
+#define OpcUa_DataValue 23
+#define OpcUa_DiagnosticInfo 25
+
 //> Status codes
 #define OpcUa_BadUnexpectedError	0x80010000
 #define OpcUa_BadCommunicationError	0x80050000
@@ -94,6 +120,8 @@ namespace OPC_UA
 #define OpcUa_BrowseResponse		530
 #define OpcUa_ReadRequest		631
 #define OpcUa_ReadResponse		634
+#define OpcUa_WriteRequest		671
+#define OpcUa_WriteResponse		674
 #define OpcUa_PublishRequest		826
 #define OpcUa_PublishResponse		829
 
@@ -302,7 +330,10 @@ class TProt: public TProtocol
 {
     public:
 	//Data
-	enum browseDirection	{ FORWARD_0, INVERSE_1, BOTH_2 };
+	enum NodeClasses	{ NC_Unspecified, NC_Object, NC_Variable, NC_Method=4, NC_ObjectType=8, NC_VariableType=16, NC_ReferenceType=32, NC_DataType=64, NC_View=128 };
+	enum browseDirection	{ BD_FORWARD, BD_INVERSE, BD_BOTH };
+	enum timestampsToReturn	{ TS_SOURCE, TS_SERVER, TS_BOTH, TS_NEITHER };
+	enum Access		{ ACS_Read = 0x01, ACS_Write = 0x02, ACS_HistRead = 0x04, ACS_HistWrite = 0x08, ACS_SemChange = 0x10 };
 
 	//Methods
 	TProt( string name );

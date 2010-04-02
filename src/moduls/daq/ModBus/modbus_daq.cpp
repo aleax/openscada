@@ -404,17 +404,22 @@ void *TMdContr::Task( void *icntr )
 		if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x1;					//Function, read multiple coils
-		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);	//Address MSB
-		pdu += (char)cntr.acqBlksCoil[i_b].off;		//Address LSB
+		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);		//Address MSB
+		pdu += (char)cntr.acqBlksCoil[i_b].off;			//Address LSB
 		pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
-		pdu += (char)cntr.acqBlksCoil[i_b].val.size();	//Number of coils LSB
+		pdu += (char)cntr.acqBlksCoil[i_b].val.size();		//Number of coils LSB
 		//>> Request to remote server
 		cntr.acqBlksCoil[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlksCoil[i_b].err.getVal().empty() )
 		{
-		    for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
-			cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
-		    cntr.numRCoil += cntr.acqBlksCoil[i_b].val.size();
+		    if( (cntr.acqBlksCoil[i_b].val.size()/8+((cntr.acqBlksCoil[i_b].val.size()%8)?1:0)) != (pdu.size()-2) )
+			cntr.acqBlksCoil[i_b].err.setVal(_("15:Response PDU size error."));
+		    else
+		    {
+			for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
+			    cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+			cntr.numRCoil += cntr.acqBlksCoil[i_b].val.size();
+		    }
 		}
 		else if( atoi(cntr.acqBlksCoil[i_b].err.getVal().c_str()) == 14 )
 		{
@@ -438,9 +443,14 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlksCoilIn[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlksCoilIn[i_b].err.getVal().empty() )
 		{
-		    for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
-			cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
-		    cntr.numRCoilIn += cntr.acqBlksCoilIn[i_b].val.size();
+		    if( (cntr.acqBlksCoilIn[i_b].val.size()/8+((cntr.acqBlksCoilIn[i_b].val.size()%8)?1:0)) != (pdu.size()-2) )
+			cntr.acqBlksCoilIn[i_b].err.setVal(_("15:Response PDU size error."));
+		    else
+		    {
+			for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
+			    cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+			cntr.numRCoilIn += cntr.acqBlksCoilIn[i_b].val.size();
+		    }
 		}
 		else if( atoi(cntr.acqBlksCoilIn[i_b].err.getVal().c_str()) == 14 )
 		{
@@ -464,8 +474,12 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlks[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlks[i_b].err.getVal().empty() )
 		{
-		    cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlks[i_b].val.size());
-		    cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
+		    if( cntr.acqBlks[i_b].val.size() != (pdu.size()-2) ) cntr.acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
+		    else
+		    {
+			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.data()+2,cntr.acqBlks[i_b].val.size());
+			cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
+		    }
 		}
 		else if( atoi(cntr.acqBlks[i_b].err.getVal().c_str()) == 14 )
 		{
@@ -489,8 +503,12 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlksIn[i_b].err.setVal( cntr.modBusReq(pdu) );
 		if( cntr.acqBlksIn[i_b].err.getVal().empty() )
 		{
-		    cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.substr(2).c_str(),cntr.acqBlksIn[i_b].val.size());
-		    cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
+		    if( cntr.acqBlksIn[i_b].val.size() != (pdu.size()-2) ) cntr.acqBlksIn[i_b].err.setVal(_("15:Response PDU size error."));
+		    else
+		    {
+			cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.data()+2,cntr.acqBlksIn[i_b].val.size());
+			cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
+		    }
 		}
 		else if( atoi(cntr.acqBlksIn[i_b].err.getVal().c_str()) == 14 )
 		{

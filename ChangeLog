@@ -1,3 +1,11 @@
+2010-04-02 Roman
+- FIX:DAQ.AMRDevs: Acquisition task is fixed. Old Ergomera protocol is fixed and PDU size control is added.
+- FIX:DAQ.ModBus: PDU size control is added.
+- !!:DAQ.OPC_UA: OPC UA clien acquisition is made work. OPC UA server nodes browser is added to client's controller.
+- !:UI.QTCfg: Rows adjusting is added for tables after new rows add. Table's content copy to clipboard is added.
+- FIX:UI.QTCfg: QT bug for no updation first row a table at some cases is hacked.
+
+
 2010-03-30 Maxim
 - FIX:UI.WebVision: The negative rotation angle set is fixed for the Text primitive.
 

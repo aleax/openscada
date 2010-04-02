@@ -425,6 +425,20 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			oSqlf(mReq,"");			//dataEncoding
 		    }
 		}
+		/*else if( io.attr("id") == "Write" )
+		{
+		    iTpId = OpcUa_WriteRequest;
+							//> nodesToWrite []
+		    oNu(mReq,io.childSize(),4);		//nodes
+		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
+		    {
+			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
+			oNu(mReq,strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
+			oS(mReq,"");			//indexRange
+							//>> value
+			//????
+		    }
+		}*/
 		else if( io.attr("id") == "Browse" )
 		{
 		    iTpId = OpcUa_BrowseRequest;
@@ -650,18 +664,64 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    if( iTpId != OpcUa_ReadRequest )
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
-			    int resN = iNu(rez,off,4);			//Numbers
-			    for( int i_r = 0; i_r < resN; i_r++ )
+			    int resN = iNu(rez,off,4);			//Nodes number
+			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
 			    {
-									//>> value
-				iNu(rez,off,1);				//Encoding Mask
+				XMLNode *nd = io.childGet(i_r);
+				nd->setAttr("Status","");
+									//>> Data Value
+				uint8_t em = iNu(rez,off,1);		//Encoding Mask
+				if( em&0x01 )				//Value
+				{
 									//>>> Variant
-				iNu(rez,off,1);				//Encoding Mask
-				iN(rez,off,4);				//Value (int32)
-				iTm(rez,off);				//sourceTimestamp
-				iTm(rez,off);				//serverTimestamp
-				iS(rez,off);				//diagnosticInfos []
+				    uint8_t emv = iNu(rez,off,1);	//Encoding Mask
+				    nd->setAttr("EncodingMask",TSYS::uint2str(emv));
+				    int32_t arrL = 1;
+				    if( emv&0x80 )	arrL = iNu(rez,off,4);	//ArrayLength
+				    string rezVl;
+				    for( int i_v = 0; i_v < arrL; i_v++ )
+				    {
+					if( arrL > 1 && i_v ) rezVl += "; ";
+					switch( emv&0x3F )
+					{
+					    case OpcUa_Boolean:
+					    case OpcUa_SByte:	rezVl += TSYS::int2str(iN(rez,off,1));	break;
+					    case OpcUa_Byte:	rezVl += TSYS::int2str(iNu(rez,off,1));	break;
+					    case OpcUa_Int16:	rezVl += TSYS::int2str(iN(rez,off,2));	break;
+					    case OpcUa_UInt16:	rezVl += TSYS::uint2str(iNu(rez,off,2));	break;
+					    case OpcUa_Int32:	rezVl += TSYS::int2str(iN(rez,off,4));	break;
+					    case OpcUa_UInt32:	rezVl += TSYS::uint2str(iNu(rez,off,4));	break;
+					    case OpcUa_Int64:	rezVl += TSYS::strMess("%lld",*(int64_t*)iVal(rez,off,8));	break;
+					    case OpcUa_UInt64:	rezVl += TSYS::strMess("%llu",*(uint64_t*)iVal(rez,off,8));	break;
+					    case OpcUa_Float:	rezVl += TSYS::real2str(iR(rez,off,4));	break;
+					    case OpcUa_Double:	rezVl += TSYS::real2str(iR(rez,off,8));	break;
+					    case OpcUa_String:
+					    case OpcUa_ByteString:	rezVl += iS(rez,off);	break;
+					    case OpcUa_NodeId:	rezVl += iNodeId(rez,off).toAddr();	break;
+					    case OpcUa_StatusCode:	rezVl += TSYS::strMess("0x%x",iNu(rez,off,4));	break;
+					    case OpcUa_QualifiedName:	rezVl += iSqlf(rez,off);	break;
+					    case OpcUa_LocalizedText:	rezVl += iSl(rez,off);		break;
+					    default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."));
+					}
+				    }
+				    nd->setText(rezVl);
+				    //> ArrayDimension
+				    if( emv&0x40 ) throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("ArrayDimensions field don't supported now."));
+				    //????
+				}
+				if( em&0x02 )				//Status
+				    nd->setAttr("Status",TSYS::strMess("0x%x",iNu(rez,off,4)));
+				if( em&0x04 )				//SourceTimestamp
+				    nd->setAttr("SourceTimestamp",TSYS::ll2str(iTm(rez,off)));
+				if( em&0x10 )				//SourcePicoseconds
+				    nd->setAttr("SourcePicoseconds",TSYS::uint2str(iNu(rez,off,2)));
+				if( em&0x08 )				//ServerTimestamp
+				    nd->setAttr("ServerTimestamp",TSYS::ll2str(iTm(rez,off)));
+				if( em&0x20 )				//ServerPicoseconds
+				    nd->setAttr("ServerPicoseconds",TSYS::uint2str(iNu(rez,off,2)));
 			    }
+									//>> diagnosticInfos []
+			    iNu(rez,off,4);				//Items number
 			    break;
 			}
 			case OpcUa_BrowseResponse:

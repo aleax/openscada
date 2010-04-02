@@ -1266,18 +1266,18 @@ void VisDevelop::visualItPaste( )
     for( int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf.substr(1),0,';',&w_off)).size(); )
     {
 	string s_elp, d_elp, s_el, d_el, t_el, t1_el;
-	//- Destination elements calc -
+	//> Destination elements calc
 	int n_del = 0;
 	for( int off = 0; !(t_el=TSYS::pathLev(work_wdg_work,0,true,&off)).empty(); n_del++ )
 	{ if( n_del ) d_elp += ("/"+d_el); d_el = t_el; }
-	//- Src elements calc -
+	//> Src elements calc
 	int n_sel = 0;
 	for( int off = 0; !(t_el=TSYS::pathLev(copy_buf_el,0,true,&off)).empty(); n_sel++ )
 	{ if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
 
-	//- Copy visual item -
+	//> Copy visual item
 	XMLNode req("get");
-	//-- Project copy --
+	//>> Project copy
 	if( s_el.substr(0,4)=="prj_" )
 	{
 	    t_el = (QString((copy_buf[0] == '1') ? _("Project '%1' move.\n") : _("Project '%1' copy.\n"))+
@@ -1286,7 +1286,7 @@ void VisDevelop::visualItPaste( )
 	    d_el = "prj_";
 	    t1_el = s_el.substr(4);
 	}
-	//-- Widget's library copy --
+	//>> Widget's library copy
 	else if( s_el.substr(0,4)=="wlb_" )
 	{
 	    t_el = (QString((copy_buf[0] == '1') ? _("Widget's library '%1' move.\n") : _("Widget's library '%1' copy.\n"))+
@@ -1295,7 +1295,7 @@ void VisDevelop::visualItPaste( )
 	    d_el = "wlb_";
 	    t1_el = s_el.substr(4);
 	}
-	//-- Page copy --
+	//>> Page copy
 	else if( s_el.substr(0,3)=="pg_" && (d_el.substr(0,4)=="prj_" || d_el.substr(0,3)=="pg_" || d_el.substr(0,4)=="wlb_") )
 	{
 	    t_el = (QString((copy_buf[0] == '1') ? _("Move page '%1' to '%2'.\n") : _("Copy page '%1' to '%2'.\n"))+
@@ -1306,7 +1306,7 @@ void VisDevelop::visualItPaste( )
 	    d_el = (d_el.substr(0,4)=="wlb_") ? "wdg_" : "pg_";
 	    t1_el = s_el.substr(3);
 	}
-	//-- Widget copy --
+	//>> Widget copy
 	else if( s_el.substr(0,4)=="wdg_" && (d_el.substr(0,3)=="pg_" || d_el.substr(0,4)=="wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4)=="wlb_" && n_del==2)) )
 	{
 	    t_el = (QString((copy_buf[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
@@ -1317,15 +1317,15 @@ void VisDevelop::visualItPaste( )
 	    d_el = "wdg_";
 	    t1_el = s_el.substr(4);
 	}
-	//-- Copy scheme error --
+	//>> Copy scheme error
 	else
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Copy/move scheme from '%1' to '%2' is not supported.")).
 		arg(copy_buf_el.c_str()).arg(work_wdg_work.c_str()),TVision::Error,this);
 	    return;
 	}
-	//-- Prepare new widget identifier --
-	//--- Remove digits from end of new identifier ---
+	//>> Prepare new widget identifier
+	//>>> Remove digits from end of new identifier
 	int i_w = 0;
 	if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else
@@ -1338,7 +1338,7 @@ void VisDevelop::visualItPaste( )
 		int no_numb = t1_el.size()-1;
 		while( no_numb >= 0 && t1_el[no_numb]>='0' && t1_el[no_numb]<='9' ) no_numb--;
 		if( no_numb >= 0 ) t1_el = t1_el.substr(0,no_numb+1);
-		//--- New identifier generator ---
+		//>>> New identifier generator
 		int i_c = 1, i_w = 0;
 		while( i_w < req.childSize() )
 		    if( req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c) ) { i_w = 0; i_c++; }
@@ -1346,10 +1346,10 @@ void VisDevelop::visualItPaste( )
 		t1_el += TSYS::int2str(i_c);
 	    }
 	}
-	//-- Make request dialog --
+	//>> Make request dialog
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
-	//-- Add Link flag for copy operation --
+	//>> Add Link flag for copy operation
 	if( copy_buf[0] != '1' && d_el.substr(0,4) != "prj_" && d_el.substr(0,4) != "wlb_" )
 	{
 	    dlg.edLay()->addWidget( new QLabel(_("Inherit:"),&dlg), 2, 0 );

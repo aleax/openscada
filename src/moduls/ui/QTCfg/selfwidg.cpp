@@ -762,12 +762,12 @@ QWidget *TableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
     return w_del;
 }
 
-void TableDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
 {
     QVariant value = index.data(Qt::DisplayRole);
     QVariant val_user = index.data(Qt::UserRole);
 
-    if(dynamic_cast<QComboBox*>(editor))
+    if( dynamic_cast<QComboBox*>(editor) )
     {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	if(value.type() == QVariant::Bool)	comb->setCurrentIndex(value.toBool());
@@ -778,7 +778,7 @@ void TableDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
 	}
 	return;
     }
-    if(dynamic_cast<QLineEdit*>(editor))
+    if( dynamic_cast<QLineEdit*>(editor) )
     {
 	QLineEdit *led = dynamic_cast<QLineEdit*>(editor);
 	led->setText(value.toString());
@@ -786,7 +786,7 @@ void TableDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
     }
 }
 
-void TableDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
 {
     if(dynamic_cast<QComboBox*>(editor))
     {
@@ -805,18 +805,18 @@ void TableDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, con
     }
 }
 
-void TableDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const
+void TableDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
 {
     editor->setGeometry(option.rect);
 }
 
-bool TableDelegate::eventFilter(QObject *object, QEvent *event)
+bool TableDelegate::eventFilter( QObject *object, QEvent *event )
 {
-    if(dynamic_cast<QComboBox*>(object))
+    if( dynamic_cast<QComboBox*>(object) )
     {
 	QComboBox *comb = dynamic_cast<QComboBox*>(object);
-	if(event->type() == QEvent::KeyRelease)
-	    switch (static_cast<QKeyEvent *>(event)->key()) 
+	if( event->type() == QEvent::KeyRelease )
+	    switch( static_cast<QKeyEvent *>(event)->key() )
 	    {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:

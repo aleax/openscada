@@ -85,7 +85,7 @@ TTpContr::TTpContr( string name )
 
     mod		= this;
 
-    //- Once init of Net-SNMP -
+    //> Once init of Net-SNMP
     init_snmp("OpenSCADA SNMP client");
 }
 
@@ -104,7 +104,7 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //- Controler's bd structure -
+    //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
@@ -112,7 +112,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public") );
     fldAdd( new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
 
-    //- Parameter type bd structure -
+    //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
 }
@@ -185,7 +185,7 @@ void *TMdContr::Task( void *icntr )
     int		el_cnt;
     string	soid;
 
-    //- Start SNMP-net session -
+    //> Start SNMP-net session
     struct snmp_session session;
     struct snmp_pdu *response;
     struct variable_list *vars;
@@ -208,10 +208,10 @@ void *TMdContr::Task( void *icntr )
     {
 	long long t_cnt = TSYS::curTime();
 
-	//-- Update controller's data --
+	//>> Update controller's data
 	el_cnt = 0;
 	cntr.en_res.resRequestR( );
-	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
+	for( unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
 	    try
 	    {
 		oid oid_root[MAX_OID_LEN], oid_next[MAX_OID_LEN];
@@ -219,49 +219,49 @@ void *TMdContr::Task( void *icntr )
 
 		TMdPrm &cprm = cntr.p_hd[i_p].at();
 
-		for(int ioid = 0; ioid < cprm.lsOID().size();ioid++)
+		for( int ioid = 0; ioid < cprm.lsOID().size(); ioid++ )
 		{
-		    oid_root_len=oid_next_len=cprm.lsOID()[ioid].size()/sizeof(oid);
+		    oid_root_len = oid_next_len=cprm.lsOID()[ioid].size()/sizeof(oid);
 		    memmove(oid_root,cprm.lsOID()[ioid].c_str(),oid_root_len*sizeof(oid));
 		    memmove(oid_next,oid_root,oid_root_len*sizeof(oid));
 
 		    bool running = true;
-		    while(running && (el_cnt++) < cntr.pAttrLimit())
+		    while( running && (el_cnt++) < cntr.pAttrLimit() )
 		    {
 			struct snmp_pdu *pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
 			snmp_add_null_var(pdu, oid_next, oid_next_len);
 			int status = snmp_sess_synch_response(ss,pdu,&response);
-			if(status == STAT_SUCCESS)
+			if( status == STAT_SUCCESS )
 			{
-			    if(response->errstat == SNMP_ERR_NOERROR)
-				for (vars = response->variables; vars; vars = vars->next_variable)
+			    if( response->errstat == SNMP_ERR_NOERROR )
+				for( vars = response->variables; vars; vars = vars->next_variable )
 				{
-				    if((vars->name_length < oid_root_len) || (memcmp(oid_root,vars->name,oid_root_len*sizeof(oid)) != 0))
+				    if( (vars->name_length < oid_root_len) || (memcmp(oid_root,vars->name,oid_root_len*sizeof(oid)) != 0) )
 				    {
 					running = 0;
 					continue;
 				    }
-				    //-- Get or create element --
+				    //>> Get or create element
 				    soid = cntr.oid2str(vars->name,vars->name_length);
-				    if(!cprm.elem().fldPresent(soid))
+				    if( !cprm.elem().fldPresent(soid) )
 				    {
 					char tbuf[100];
 					snprint_objid(tbuf,sizeof(tbuf),vars->name,vars->name_length);
-					switch(vars->type)
+					switch( vars->type )
 					{
 					    case ASN_OCTET_STR:
-						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::String,TFld::NoWrite,"",EVAL_STR) );
+						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::String,TFld::NoWrite) );
 						break;
 					    case ASN_INTEGER:
-						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Integer,TFld::NoWrite,"",TSYS::int2str(EVAL_INT).c_str()) );
+						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Integer,TFld::NoWrite) );
 						break;
 					    case ASN_COUNTER:
-						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Real,TFld::NoWrite,"",TSYS::real2str(EVAL_REAL).c_str()) );
+						cprm.elem().fldAdd( new TFld(soid.c_str(),tbuf,TFld::Real,TFld::NoWrite) );
 						break;
 					}
 				    }
-				    //-- Set value --
-				    switch(vars->type)
+				    //>> Set value
+				    switch( vars->type )
 				    {
 					case ASN_OCTET_STR:
 					    cprm.vlAt(soid).at().setS(string((char*)vars->val.string,vars->val_len),0,true);
@@ -288,13 +288,13 @@ void *TMdContr::Task( void *icntr )
 				}
 			    else running = 0;
 			}
-			else if (status == STAT_TIMEOUT)
+			else if( status == STAT_TIMEOUT )
 			{
 			    mess_err(mod->nodePath().c_str(),_("Timeout: No Response from %s."),session.peername);
 			    running = 0;
 			}
 			else running = 0;
-			if(response) snmp_free_pdu(response);
+			if( response ) snmp_free_pdu(response);
 		    }
 		}
 	    }
@@ -313,7 +313,7 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-string TMdContr::oid2str(oid *ioid, size_t isz)
+string TMdContr::oid2str( oid *ioid, size_t isz )
 {
     string rez;
     for(int i_el = 0; i_el < isz; i_el++)
@@ -324,7 +324,7 @@ string TMdContr::oid2str(oid *ioid, size_t isz)
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr"), m_oid(cfg("OID_LS").getSd())
 {
 
@@ -343,7 +343,7 @@ void TMdPrm::postEnable( int flag )
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if( enableStat() )	return;
 
@@ -352,7 +352,7 @@ void TMdPrm::enable()
     owner().prmEn( id(), true );
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
     if( !enableStat() )  return;
 
@@ -360,7 +360,7 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
-    //- Set EVAL to parameter attributes -
+    //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
@@ -374,7 +374,7 @@ void TMdPrm::load_( )
     parseOIDList(m_oid);
 }
 
-void TMdPrm::parseOIDList(const string &ioid)
+void TMdPrm::parseOIDList( const string &ioid )
 {
     m_oid = ioid;
 
@@ -387,26 +387,26 @@ void TMdPrm::parseOIDList(const string &ioid)
     for( int ioff = 0; (sel=TSYS::strSepParse(m_oid,0,'\n',&ioff)).size(); )
     {
 	tmpoid_len = MAX_OID_LEN;
-	if(snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len))
+	if( snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len) )
 	    ls_oid.push_back(string((char*)tmpoid,tmpoid_len*sizeof(oid)));
     }
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //- Service commands process -
+    //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
+    if( a_path.substr(0,6) == "/serv/" )	{ TParamContr::cntrCmdProc(opt); return; }
 
-    //- Get page info -
-    if( opt->name() == "info" )	
+    //> Get page info
+    if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?0444:0664);
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
     {
 	if( enableStat() )	throw TError(nodePath().c_str(),"Parameter is enabled.");

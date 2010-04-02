@@ -78,6 +78,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
+    fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000") );
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost:4841") );
     fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None;Basic128;Basic128Rsa15;Basic256")) );
@@ -87,7 +88,7 @@ void TTpContr::postEnable( int flag )
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("VAR_LS",_("Variables list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000","") );
+    tpPrmAt(t_prm).fldAdd( new TFld("ND_LS",_("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000","") );
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -99,8 +100,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), mBrwsVar("Root folder (0:84)"),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mAddr(cfg("ADDR").getSd()),
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), mBrwsVar("Root folder (0:84)"), mPCfgCh(false),
+	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mAddr(cfg("ADDR").getSd()),
 	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()), mPAttrLim(cfg("AttrsLimit").getId())
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
@@ -132,6 +133,7 @@ string TMdContr::getStatus( )
 void TMdContr::reqOPC( XMLNode &io )
 {
     ResAlloc res( nodeRes(), true );
+    io.setAttr("err","");
 
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
     try { tr.at().start(); }
@@ -161,7 +163,7 @@ void TMdContr::reqOPC( XMLNode &io )
     io.setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken));
 
     string ireq = io.attr("id");
-    if( ireq != "FindServers" && ireq != "GetEndpoints" && 
+    if( ireq != "FindServers" && ireq != "GetEndpoints" &&
 	(!sess.authTkId || 1e-3*(TSYS::curTime()-sess.sesAccess) > sess.sesActiveTime) )
     {
 	//>> Send CreateSession message
@@ -181,6 +183,7 @@ void TMdContr::reqOPC( XMLNode &io )
 	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
     }
 
+    sess.sesAccess = TSYS::curTime();
     io.setAttr("authTokenId",TSYS::int2str(sess.authTkId))->setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->
 	setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++));
     tr.at().messProtIO(io,"OPC_UA");
@@ -258,10 +261,13 @@ void TMdContr::prmEn( const string &id, bool val )
 
     if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
     if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
+    if( startStat() ) mPCfgCh = true;
 }
 
 void *TMdContr::Task( void *icntr )
 {
+    vector<string>	als;
+    string		nId;
     TMdContr &cntr = *(TMdContr *)icntr;
 
 #if OSC_DEBUG >= 2
@@ -271,22 +277,51 @@ void *TMdContr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while( !cntr.endrun_req )
+    XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
+
+    for( unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++ )
     {
+	if( cntr.redntUse() )	{ sleep(1); continue; }
+
 	long long t_cnt = TSYS::curTime();
+	unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;
 
-	//> Update controller's data
-	/*cntr.en_res.resRequestR( );
-	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
-	    try
+	ResAlloc res(cntr.en_res,false);
+	if( !req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()) )
+	{
+	    if( div && (it_cnt%div) < cntr.p_hd.size() ) cntr.p_hd[it_cnt%div].at().attrPrc();
+
+	    //> Prepare nodes list
+	    req.childClear();
+	    for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
 	    {
-
-
-		//????
+		cntr.p_hd[i_p].at().vlList(als);
+		for( int i_a = 0; i_a < als.size(); i_a++ )
+		{
+		    nId = cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve();
+		    if( nId.empty() ) continue;
+		    req.childAdd("node")->setAttr("prmId",cntr.p_hd[i_p].at().id())->setAttr("prmAttr",als[i_a])->setAttr("nodeId",nId)->setAttr("attributeId","13");
+		}
 	    }
-	    catch(TError err)
-	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resRelease( );*/
+	    cntr.mPCfgCh = false;
+	}
+	res.release();
+
+	cntr.reqOPC(req);
+
+	//> Place results
+	if( req.attr("err").empty() )
+	{
+	    res.request(false);
+	    for( int i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++ )
+	    {
+		XMLNode *cnX = req.childGet(i_c);
+		while( cnX->attr("prmId") != cntr.p_hd[i_p].at().id() ) i_p++;
+		if( cntr.p_hd[i_p].at().vlPresent(cnX->attr("prmAttr")) )
+		    cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr")).at().setS(cnX->text());
+	    }
+	    res.release();
+	}
 
 	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
@@ -335,7 +370,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if( enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser")) )
 	{
 	    ctrMkNode("fld",opt,-1,"/ndBrws/nd",_("Node"),RWRWR_,"root","DAQ",3,"tp","str","dest","select","select","/ndBrws/ndLst");
-	    //if( ctrMkNode("table",opt,-1,"/ndBrws/nd",_("Node"),RWRWR_,"root","DAQ",3,"tp","str","dest","select","select","/ndBrws/ndLst");
+	    if( ctrMkNode("table",opt,-1,"/ndBrws/attrs",_("Attributes"),R_R_R_,"root","DAQ") )
+	    {
+		ctrMkNode("list",opt,-1,"/ndBrws/attrs/0",_("Attribute"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ndBrws/attrs/1",_("Value"),R_R_R_,"root","DAQ",1,"tp","str");
+	    }
 	}
 	return;
     }
@@ -353,6 +392,101 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(mBrwsVar);
 	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	mBrwsVar = opt->text();
     }
+    else if( enableStat() && a_path == "/ndBrws/attrs" && ctrChkNode(opt) )
+    {
+	XMLNode *n_attr	= ctrMkNode("list",opt,-1,"/ndBrws/attrs/0","",R_R_R_);
+	XMLNode *n_val	= ctrMkNode("list",opt,-1,"/ndBrws/attrs/1","",R_R_R_);
+
+	//>> Prepare request for all typical
+	string cNodeId = "0:84";
+	int stP = mBrwsVar.find("(");
+	int stC = mBrwsVar.find(")",stP);;
+	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
+
+	XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
+	for( int i_a = 1; i_a <= 22; i_a++ )
+	    req.childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("attributeId",TSYS::int2str(i_a));
+	reqOPC(req);
+	if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
+
+	//>> Get result
+	for( int i_a = 0; i_a < req.childSize(); i_a++ )
+	{
+	    if( !req.childGet(i_a)->attr("Status").empty() ) continue;
+	    string nANm = _("Unknown");
+	    string nAVl = req.childGet(i_a)->text();
+	    switch( i_a+1 )
+	    {
+		case 1:	nANm = _("NodeId");	break;
+		case 2:
+		    nANm = _("NodeClass");
+		    switch(atoi(nAVl.c_str()))
+		    {
+			case TProt::NC_Object:		nAVl = _("Object");	break;
+			case TProt::NC_Variable:	nAVl = _("Variable");	break;
+			case TProt::NC_Method:		nAVl = _("Method");	break;
+			case TProt::NC_ObjectType:	nAVl = _("ObjectType");	break;
+			case TProt::NC_VariableType:	nAVl = _("VariableType");	break;
+			case TProt::NC_ReferenceType:	nAVl = _("ReferenceType");	break;
+			case TProt::NC_DataType:	nAVl = _("DataType");	break;
+			case TProt::NC_View:		nAVl = _("View");	break;
+		    }
+		    break;
+		case 3:	nANm = _("BrowseName");	break;
+		case 4:	nANm = _("DisplayName");break;
+		case 5:	nANm = _("Description");break;
+		case 6:	nANm = _("WriteMask");	break;
+		case 7:	nANm = _("UserWriteMask");	break;
+		case 8:	nANm = _("IsAbstract");	break;
+		case 9:	nANm = _("Symmetric");	break;
+		case 10:nANm = _("InverseName");	break;
+		case 11:nANm = _("ContainsNoLoops");	break;
+		case 12:nANm = _("EventNotifier");	break;
+		case 13:nANm = _("Value");	break;
+		case 14:
+		{
+		    nANm = _("DataType");
+		    XMLNode reqTp("opc.tcp");
+		    reqTp.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER))->
+			childAdd("node")->setAttr("nodeId",nAVl)->setAttr("attributeId","3");
+		    reqOPC(reqTp);
+		    if( reqTp.attr("err").empty() && reqTp.childSize() ) nAVl = reqTp.childGet(0)->text();
+		    break;
+		}
+		case 15:nANm = _("ValueRank");	break;
+		case 16:nANm = _("ArrayDimensions");	break;
+		case 17:
+		{
+		    nANm = _("AccessLevel");
+		    char cRW = atoi(nAVl.c_str());
+		    nAVl = "";
+		    if( cRW & TProt::ACS_Read )		nAVl += _("Readable, ");
+		    if( cRW & TProt::ACS_Write )	nAVl += _("Writible, ");
+		    if( cRW & TProt::ACS_HistRead )	nAVl += _("History readable, ");
+		    if( cRW & TProt::ACS_HistWrite )	nAVl += _("History writible, ");
+		    if( cRW & TProt::ACS_SemChange )	nAVl += _("Semantic change, ");
+		    break;
+		}
+		case 18:
+		{
+		    nANm = _("UserAccessLevel");
+		    char cRW = atoi(nAVl.c_str());
+		    nAVl = "";
+		    if( cRW & TProt::ACS_Read )		nAVl += _("Readable, ");
+		    if( cRW & TProt::ACS_Write )	nAVl += _("Writible, ");
+		    if( cRW & TProt::ACS_HistRead )	nAVl += _("History readable, ");
+		    if( cRW & TProt::ACS_HistWrite )	nAVl += _("History writible, ");
+		    break;
+		}
+		case 19:nANm = _("MinimumSamplingInterval");	break;
+		case 20:nANm = _("Historizing");	break;
+		case 21:nANm = _("Executable");	break;
+		case 22:nANm = _("UserExecutable");	break;
+	    }
+	    if( n_attr )	n_attr->childAdd("el")->setText(nANm);
+	    if( n_val )		n_val->childAdd("el")->setText(nAVl);
+	}
+    }
     else if( enableStat() && a_path == "/ndBrws/ndLst" && ctrChkNode(opt) )
     {
 	//>> Get current node references by call browse
@@ -360,7 +494,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	int stP = mBrwsVar.find("(");
 	int stC = mBrwsVar.find(")",stP);;
 	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
-	XMLNode req("opc.tcp"); req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",TSYS::int2str(TProt::BOTH_2));
+	XMLNode req("opc.tcp"); req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH));
 	reqOPC(req);
 	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 	XMLNode *rn = req.childGet(0);
@@ -387,8 +521,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr")
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), p_el("w_attr"), mNdLst(cfg("ND_LS").getSd())
 {
 
 }
@@ -401,7 +534,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
+    if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -411,6 +544,8 @@ void TMdPrm::enable()
     if( enableStat() )	return;
 
     TParamContr::enable();
+
+    attrPrc();
 
     owner().prmEn( id(), true );
 }
@@ -423,6 +558,13 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
+    //> Delete no used fields
+    for( int i_fld = 0; i_fld < p_el.fldSize(); i_fld++ )
+    {
+	try{ p_el.fldDel(i_fld); i_fld--; }
+	catch( TError err )	{  }
+    }
+
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
@@ -433,6 +575,76 @@ void TMdPrm::disable()
 void TMdPrm::load_( )
 {
     TParamContr::load_();
+}
+
+string TMdPrm::attrPrc( )
+{
+    ResAlloc res( nodeRes(), true );
+
+    bool srchOK = false;
+    XMLNode req("opc.tcp");
+    vector<string> als;
+
+    //> Nodes list process and parameter's attributes creation
+    string snd;
+    for( int off = 0; (snd=TSYS::strParse(mNdLst,0,"\n",&off)).size(); )
+    {
+	//>> Request for node class request
+	req.clear()->setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","2");	//NodeClass
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","3");	//BrowseName
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","4");	//DisplayName
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","13");	//Value
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","17");	//AccessLevel
+	owner().reqOPC(req);
+	if( !req.attr("err").empty() ) return req.attr("err");
+	if( !req.childGet(0)->attr("Status").empty() )	continue;
+
+	//>> Variable node's attribute creation
+	if( atoi(req.childGet(0)->text().c_str()) == TProt::NC_Variable && atoi(req.childGet(4)->text().c_str())&TProt::ACS_Read )
+	{
+	    srchOK = false;
+	    //>> Find for already presented attribute
+	    for( int i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++ )
+		if( p_el.fldAt(i_a).reserve() == snd ) srchOK = true;
+
+	    //>> Create new attribute
+	    if( !srchOK )
+	    {
+		//>>> Prepare attribute id
+		string aid = TSYS::strEncode(req.childGet(1)->text(),TSYS::oscdID);
+		if( vlPresent(aid) )
+		    for( int i_v = 1; true; i_v++ )
+			if( !vlPresent(aid+TSYS::int2str(i_v)) )
+			{ aid += TSYS::int2str(i_v); break; }
+
+		//>>> Value type prepare
+		TFld::Type vtp = TFld::String;
+		switch( atoi(req.childGet(3)->attr("EncodingMask").c_str()) & 0x3F )
+		{
+		    case OpcUa_Boolean:
+			vtp = TFld::Boolean;	break;
+		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16: case OpcUa_Int32: case OpcUa_UInt32:
+			vtp = TFld::Integer;	break;
+		    case OpcUa_Int64: case OpcUa_UInt64: case OpcUa_Float: case OpcUa_Double:
+			vtp = TFld::Real;	break;
+		}
+
+		//>>> Flags prepare
+		unsigned vflg = TVal::DirWrite;
+		if( !(atoi(req.childGet(4)->text().c_str())&TProt::ACS_Write) )	vflg |= TFld::NoWrite;
+
+		p_el.fldAdd( new TFld(aid.c_str(),req.childGet(2)->text().c_str(),vtp,vflg,"","","","",snd.c_str()) );
+	    }
+	}
+
+	//>> Browse request for get child nodes
+	/*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH));
+	reqOPC(req);
+	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
+	XMLNode *rn = req.childGet(0);*/
+    }
+    return "";
 }
 
 void TMdPrm::save_( )
@@ -450,7 +662,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/VAR_LS",cfg("VAR_LS").fld().descr(),RWRWR_,"root","DAQ",1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",cfg("ND_LS").fld().descr(),RWRWR_,"root","DAQ",1,
 	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
 		"Variables writed by separated lines into format: [ns:id].\n"
 		"Where:\n"
@@ -458,7 +670,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"  id - node identifier into number or string.\n"
 		"Example:\n"
 		"  '0:84' - root folder;\n"
-		"  '0:0x54' - root folder in hex number;\n"
 		"  '3:BasicDevices2' - basic devices node into namespace 3."));
 	return;
     }

@@ -58,6 +58,7 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QScrollBar>
+#include <QClipboard>
 
 #include <tmess.h>
 #include <tsys.h>
@@ -1063,6 +1064,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    {
 		//>>>> Collumns adjusting flag
 		bool adjCol = widget || !tbl->rowCount();
+		bool adjRow = false;
 
 		//>>>> Copy values to info tree
 		for( int i_col = 0; i_col < req.childSize(); i_col++ )
@@ -1080,12 +1082,12 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		int n_row = (n_col)?t_s.childGet(0)->childSize():0;
 
 		if( tbl->columnCount() != n_col )	tbl->setColumnCount(n_col);
-		if( tbl->rowCount() != n_row )	tbl->setRowCount(n_row);
+		if( tbl->rowCount() != n_row )		{ tbl->setRowCount(n_row); adjRow = true; }
 
 		for( unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++ )
 		{
 		    XMLNode *t_linf = t_s.childGet(i_lst);
-		    if(!t_linf) continue;
+		    if( !t_linf ) continue;
 		    bool c_wr = wr && (atoi(t_linf->attr("acs").c_str())&SEQ_WR);
 
 		    QTableWidgetItem *thd_it = tbl->horizontalHeaderItem(i_lst);
@@ -1150,7 +1152,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    }
 
 			    thd_it->setData(Qt::DisplayRole,elms.at(sel_n));
-			    thd_it->setData(Qt::UserRole,elms);    
+			    thd_it->setData(Qt::UserRole,elms);
 			}
 			else if( t_linf->attr("tp") == "time" )
 			{
@@ -1163,8 +1165,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			else thd_it->setData(Qt::DisplayRole,t_linf->childGet(i_el)->text().c_str());
 
 			//>>>> Set access
-			if( !c_wr ) thd_it->setFlags(Qt::ItemIsEnabled);
-			else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
+			if( !c_wr ) thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
+			else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable);
 		    }
 		}
 		if( adjCol && tbl->columnCount() )
@@ -1175,11 +1177,11 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    int max_col_sz = vmax(800/tbl->columnCount(),50);
 		    for( int i_c = 0; i_c < tbl->columnCount(); i_c++ )
 			tbl->setColumnWidth(i_c,vmin(max_col_sz,tbl->columnWidth(i_c)));
-
-		    tbl->resizeRowsToContents();
 		}
+		if( adjRow ) tbl->resizeRowsToContents();
 		tbl->setMinimumSize( QSize( 100, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
 		tbl->setMaximumSize( QSize( 32767, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
+		tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first woe update missing.
 
 		tbl_init = false;
 	    }
@@ -2505,7 +2507,7 @@ void ConfApp::tablePopup( const QPoint &pos )
     QTableWidget *tbl = (QTableWidget *)sender();
     string el_path = sel_path+"/"+tbl->objectName().toAscii().data();
 
-    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown;
+    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy;
     last_it=actAdd=actIns=actDel=actMoveUp=actMoveDown=NULL;
 
     int row = tbl->currentRow();
@@ -2540,13 +2542,42 @@ void ConfApp::tablePopup( const QPoint &pos )
 		popup.addAction(actMoveDown);
 	    }
 	}
-	if(last_it)
+	if( !tbl->selectedItems().isEmpty() )
+	{
+	    popup.addSeparator();
+	    actCopy = last_it = new QAction(_("Copy"),this);
+	    popup.addAction(actCopy);
+	}
+
+	if( last_it )
 	{
 	    bool ok;
 	    QString text;
 
 	    QAction *rez = popup.exec(QCursor::pos());
-	    if(!rez)	{ popup.clear(); return; }
+	    if( !rez )	{ popup.clear(); return; }
+
+	    if( rez == actCopy )
+	    {
+		QString cbRez;
+		bool firstRow = false, firstClm = false;
+		for( int i_r = 0; i_r < tbl->rowCount(); i_r++ )
+		{
+		    //if( firstRow && firstClm ) cbRez += "\n";
+		    firstClm = false;
+		    for( int i_c = 0; i_c < tbl->columnCount(); i_c++ )
+		    {
+			if( !tbl->item(i_r,i_c)->isSelected() ) continue;
+			if( firstClm ) cbRez += "\t";
+			if( !firstClm && firstRow ) cbRez += "\n";
+			cbRez += tbl->item(i_r,i_c)->text();
+			firstClm = firstRow = true;
+		    }
+		}
+		QApplication::clipboard()->setText(cbRez);
+		popup.clear();
+		return;
+	    }
 
 	    XMLNode n_el1;
 	    n_el1.setAttr("path",el_path);
@@ -2574,7 +2605,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		}
 		else
 		{
-		    //-- Get Key columns --
+		    //>> Get Key columns
 		    string key;
 		    for( int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
 		        for( int i_el = 0; i_el < n_el->childSize(); i_el++ )
