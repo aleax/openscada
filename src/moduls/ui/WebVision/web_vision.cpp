@@ -481,7 +481,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			"<table border='0' cellspacing='3px' width='100%'>\n";
 		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
 		    {
-			if( !SYS->security().at().access(user,SEQ_WR,"root","root",RWRWR_) && self_sess.find(req.childGet(i_ch)->text()+";",0) != string::npos )
+			if( !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_sess.find(req.childGet(i_ch)->text()+";",0) != string::npos )
 			    continue;
 			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
 			    req.childGet(i_ch)->text()+"</a></td></tr>";
@@ -661,8 +661,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )   opt->setText( TSYS::int2str(sessTime()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )   setSessTime( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )   opt->setText( TSYS::int2str(sessTime()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )   setSessTime( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);

@@ -433,7 +433,7 @@ function makeEl( pgBr, inclPg )
   var elBorder = 0;
   if( this.attrs['bordWidth'] ) elBorder=parseInt(this.attrs['bordWidth']);
   var elStyle = '';
-  if( !(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEQ_RD)) ) elStyle+='visibility : hidden; ';
+  if( !(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEC_RD)) ) elStyle+='visibility : hidden; ';
   var geomX = parseFloat(this.attrs['geomX']);
   var geomY = parseFloat(this.attrs['geomY']);
   if( this.pg ) geomX = geomY = 0;
@@ -470,7 +470,7 @@ function makeEl( pgBr, inclPg )
 
   if( parseInt(this.attrs['focus']) ) setFocus(this.addr,true);
 
-  if( !(parseInt(this.attrs['perm'])&SEQ_RD) )
+  if( !(parseInt(this.attrs['perm'])&SEC_RD) )
   {
     if( this.pg )
     {
@@ -493,7 +493,7 @@ function makeEl( pgBr, inclPg )
       this.place.appendChild(figObj);
     }
     figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
-    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
     {
       figObj.onclick = function(e)
       {
@@ -567,7 +567,7 @@ function makeEl( pgBr, inclPg )
       }
     }
     this.place.wdgLnk = this;
-    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
       this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
     else this.place.onclick = '';
   }
@@ -631,7 +631,7 @@ function makeEl( pgBr, inclPg )
       this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
 
     this.place.wdgLnk = this;
-    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
       this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
     else this.place.onclick = '';
   }
@@ -654,7 +654,7 @@ function makeEl( pgBr, inclPg )
 	this.width = cWdth * this.wdgLnk.xScale(true);
 	this.height = cHeight * this.wdgLnk.yScale(true);
     }
-    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+    if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
     {
       if( parseInt(this.attrs['areas']) )
       {
@@ -700,7 +700,7 @@ function makeEl( pgBr, inclPg )
     {
       case 0:	//Line edit
 	var formObj = this.place.ownerDocument.createElement('input');
-	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR );
+	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	this.place.appendChild(formObj);
 	var geomWint = geomW-4;
@@ -708,7 +708,7 @@ function makeEl( pgBr, inclPg )
 	formObj.style.cssText = 'position: absolute; top: '+((geomH-20)/2)+'px; width: '+geomWint+'px; height: '+Math.min(geomH,16)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px;';
 	this.place.view = parseInt(this.attrs['view']);
 	this.place.cfg = this.attrs['cfg'];
-	if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+	if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
 	{
 	 switch(this.place.view)
 	 {
@@ -992,7 +992,7 @@ function makeEl( pgBr, inclPg )
 	break;
       case 1:	//Text edit
 	var formObj = this.place.ownerDocument.createElement('textarea');
-	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR );
+	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	formObj.wdgLnk = this;
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px;';
@@ -1020,7 +1020,7 @@ function makeEl( pgBr, inclPg )
 	var tblCell = this.place.ownerDocument.createElement('div');
 	tblCell.style.cssText = 'position: absolute; top: '+((geomH-15)/2)+'px; width: '+geomW+'px; height: '+Math.min(geomH,15)+'px; text-align: left; font: '+fontCfg+'; ';
 	var formObj = this.place.ownerDocument.createElement('input');
-	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR );
+	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	formObj.type='checkbox'; formObj.checked=parseInt(this.attrs['value']);
 	formObj.wdgLnk = this;
@@ -1040,7 +1040,7 @@ function makeEl( pgBr, inclPg )
 	  if( this.attrs['colorText'] ) elStyle+='color: '+getColor(this.attrs['colorText'])+'; ';
 	  if( this.attrs['color'] ) elStyle+='background-color: '+getColor(this.attrs['color'])+'; ';
 	  else elStyle+='background-color: snow; ';
-	  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR )
+	  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
 	  {
 	    this.place.onmouseup  = function() { if( !this.checkable ) this.style.borderStyle='outset'; };
 	    this.place.onmousedown= function() { if( !this.checkable ) this.style.borderStyle='inset';  };
@@ -1072,7 +1072,7 @@ function makeEl( pgBr, inclPg )
 	else
 	{
 	  formObj = this.place.ownerDocument.createElement('input');
-	  formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR );
+	  formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	  formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	  formObj.style.font = fontCfg;
 	  formObj.type='button';
@@ -1087,7 +1087,7 @@ function makeEl( pgBr, inclPg )
 	break;
       case 4: case 5:	//Combo box, List
 	var formObj = this.place.ownerDocument.createElement('select');
-	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR );
+	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	formObj.style.cssText = 'position: absolute; top: '+((elTp==4)?(geomH-20)/2:0)+'px; height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: '+(geomW-4)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px; ';
 	formObj.wdgLnk = this;
@@ -1135,7 +1135,7 @@ function makeEl( pgBr, inclPg )
       dgrObj.border = 0;
       anchObj.appendChild(dgrObj); this.place.appendChild(anchObj);
     }
-    anchObj.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+    anchObj.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
     anchObj.href = '#';
     anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
     anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
@@ -1169,7 +1169,7 @@ function makeEl( pgBr, inclPg )
     {
       this.place.appendChild(document.createElement('table'));
       this.place.firstChild.wdgLnk = this;
-      this.place.firstChild.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+      this.place.firstChild.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
       this.place.firstChild.onclick = function(e)
       {
 	if( this.isActive ) setFocus(this.wdgLnk.addr);
@@ -1398,7 +1398,7 @@ function makeEl( pgBr, inclPg )
   this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
 
   //> Context menu setup
-  if( parseInt(this.attrs['perm'])&(SEQ_RD|SEQ_WR) && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length )
+  if( parseInt(this.attrs['perm'])&(SEC_RD|SEC_WR) && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length )
   {
     var ctxEv = function(e)
     {
@@ -1432,7 +1432,7 @@ function makeEl( pgBr, inclPg )
   else this.place.oncontextmenu = this.place.onmousedown = null;
 
   //> Child widgets process
-  if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEQ_RD )
+  if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD )
     for( var j = 0; j < pgBr.childNodes.length; j++ )
     {
       if( pgBr.childNodes[j].nodeName != 'w' ) continue;
@@ -1490,7 +1490,7 @@ function perUpdt( )
 		"</head>"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+"</html>");
     frDoc.close();
     frDoc.body.wdgLnk = this;
-    frDoc.body.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEQ_WR);
+    frDoc.body.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
     frDoc.body.onclick = function(e)
     {
       if( this.isActive ) setFocus(this.wdgLnk.addr);
@@ -1614,9 +1614,9 @@ function getPopup( )
 /***************************************************
  * Main start code                                 *
  ***************************************************/
-SEQ_XT = 0x01;	//Extended
-SEQ_WR = 0x02;	//Write access
-SEQ_RD = 0x04;	//Read access
+SEC_XT = 0x01;	//Extended
+SEC_WR = 0x02;	//Write access
+SEC_RD = 0x04;	//Read access
 //Call session identifier
 sessId = location.pathname.split('/');
 for( var i_el = sessId.length-1; i_el >= 0; i_el-- )

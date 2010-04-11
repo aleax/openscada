@@ -425,14 +425,14 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/ms/mod_deny" && ctrChkNode(opt,"get") )	opt->setText(denyList());
     else if( a_path == "/ms/chk_per" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(chkPer()));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setChkPer(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(TSYS::int2str(chkPer()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setChkPer(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(optDescr());
-    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	libLoad(SYS->modDir(),true);
+    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEC_RD) )	opt->setText(optDescr());
+    else if( a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	libLoad(SYS->modDir(),true);
     else if( a_path == "/ms/libs" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/ms/libs/path","");
 	    XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/ms/libs/tm","");
@@ -453,7 +453,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 		if( n_en ) n_en->childAdd("el")->setText(TSYS::TSYS::int2str((bool)SchHD[i_sl].hd));
 	    }
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    if( opt->attr("col") == "en" )
 		if( atoi(opt->text().c_str()) ) libAtt(opt->attr("key_path"),true);

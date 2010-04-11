@@ -555,7 +555,7 @@ void ConfApp::itAdd( )
     //> Load branches list
     vector<string> brs;
     for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 	    brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n"+branch->childGet(i_b)->attr("idm")+"\n"+
 			   branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
     if( !brs.size() )	{ mod->postMess(mod->nodePath().c_str(),_("No one editable container is present."),TUIMod::Info,this); return; }
@@ -622,7 +622,7 @@ void ConfApp::itDel( const string &iit )
 	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	    {
 		string b_id = branch->childGet(i_b)->attr("id");
-		if( b_id == sel_el.substr(0,b_id.size()) && atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+		if( b_id == sel_el.substr(0,b_id.size()) && atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 		{
 		    bool idm = atoi(branch->childGet(i_b)->attr("idm").c_str());
 		    req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
@@ -663,12 +663,12 @@ void ConfApp::itPaste( )
     { mod->postMess( mod->nodePath().c_str(), _("Copy is imposible."), TUIMod::Error, this ); return; }
 
     vector<string> brs;
-    if( atoi(root->attr("acs").c_str())&SEQ_WR ) brs.push_back(string("-1\n0\n\n")+_("Selected"));
+    if( atoi(root->attr("acs").c_str())&SEC_WR ) brs.push_back(string("-1\n0\n\n")+_("Selected"));
 
     XMLNode *branch = root->childGet("id","br",true);
     if( branch )
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 	    {
 		string gbrId = branch->childGet(i_b)->attr("id");
 		brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n0\n"+gbrId+"\n"+branch->childGet(i_b)->attr("dscr"));
@@ -718,7 +718,7 @@ void ConfApp::itPaste( )
 
 void ConfApp::editToolUpdate( )
 {
-    actItCut->setEnabled( (!sel_path.empty()&&root&&atoi(root->attr("acs").c_str())&SEQ_WR) ? true : false );
+    actItCut->setEnabled( (!sel_path.empty()&&root&&atoi(root->attr("acs").c_str())&SEC_WR) ? true : false );
     actItCopy->setEnabled( !sel_path.empty() );
     actItPaste->setEnabled( false );
 
@@ -733,9 +733,9 @@ void ConfApp::editToolUpdate( )
     XMLNode *branch = root->childGet("id","br",true);
     if( branch )
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 	    { actItPaste->setEnabled(true); break; }
-    if( atoi(root->attr("acs").c_str())&SEQ_WR ) actItPaste->setEnabled(true);
+    if( atoi(root->attr("acs").c_str())&SEC_WR ) actItPaste->setEnabled(true);
 }
 
 void ConfApp::treeUpdate( )
@@ -952,7 +952,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	XMLNode &t_s = *node.childGet(i_cf);
 
 	//>> Check access to node
-	bool wr = atoi(t_s.attr("acs").c_str())&SEQ_WR;
+	bool wr = atoi(t_s.attr("acs").c_str())&SEC_WR;
 
 	//>> View areas
 	if( t_s.name() == "area" )
@@ -1088,7 +1088,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		{
 		    XMLNode *t_linf = t_s.childGet(i_lst);
 		    if( !t_linf ) continue;
-		    bool c_wr = wr && (atoi(t_linf->attr("acs").c_str())&SEQ_WR);
+		    bool c_wr = wr && (atoi(t_linf->attr("acs").c_str())&SEC_WR);
 
 		    QTableWidgetItem *thd_it = tbl->horizontalHeaderItem(i_lst);
 		    if( !thd_it )
@@ -1829,10 +1829,10 @@ void ConfApp::pageDisplay( const string &path )
     {
 	XMLNode *branch = root->childGet("id","br");
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 	    { actItAdd->setEnabled(true); break; }
     }
-    actItDel->setEnabled( root&&atoi(root->attr("acs").c_str())&SEQ_WR );
+    actItDel->setEnabled( root&&atoi(root->attr("acs").c_str())&SEC_WR );
 
     //> Load and Save allow check
     actDBLoad->setEnabled(false); actDBSave->setEnabled(false);
@@ -2347,7 +2347,7 @@ void ConfApp::listBoxPopup( )
 	    popup.addAction(actBr);
 	    popup.addSeparator();
 	}
-	if( (atoi(n_el->attr("acs").c_str())&SEQ_WR) && n_el->attr("s_com").size() )
+	if( (atoi(n_el->attr("acs").c_str())&SEC_WR) && n_el->attr("s_com").size() )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
 	    {
@@ -2516,7 +2516,7 @@ void ConfApp::tablePopup( const QPoint &pos )
     {
 	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(tbl->objectName().toAscii().data(),TSYS::PathEl) );
 	
-	if( (atoi(n_el->attr("acs").c_str())&SEQ_WR) && n_el->attr("s_com").size() )
+	if( (atoi(n_el->attr("acs").c_str())&SEC_WR) && n_el->attr("s_com").size() )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
 	    {
@@ -2665,7 +2665,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 	    save_img = last_it = new QAction(_("Save image"),this);
 	    popup.addAction(save_img);
 	}
-	if(atoi(n_el->attr("acs").c_str())&SEQ_WR)
+	if(atoi(n_el->attr("acs").c_str())&SEC_WR)
 	{
 	    load_img = last_it = new QAction(_("Load image"),this);
 	    popup.addAction(load_img);

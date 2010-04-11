@@ -437,10 +437,10 @@ void Block::cntrCmdProc( XMLNode *opt )
 	if( a_path == "/serv/attr" )
 	{
 	    if( !enable() || !func() ) throw TError(nodePath().c_str(),_("Block disabled or error."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
 		for( int i_a = 0; i_a < ioSize(); i_a++ )
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
 		{
 		    int io_id = -1;
@@ -534,39 +534,39 @@ void Block::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     if( a_path == "/blck/st/en" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(enable()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(enable()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
     }
     else if( a_path == "/blck/st/prc" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(process()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setProcess(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(process()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setProcess(atoi(opt->text().c_str()));
     }
     else if( a_path == "/blck/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/blck/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setName(opt->text());
     }
     else if( a_path == "/blck/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(descr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(descr());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setDescr(opt->text());
     }
     else if( a_path == "/blck/cfg/toen" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( toEnable() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setToEnable( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( toEnable() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setToEnable( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/blck/cfg/toprc" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( toProcess() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setToProcess( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( toProcess() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setToProcess( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/blck/cfg/prior" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( prior() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setPrior( opt->text() );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( prior() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setPrior( opt->text() );
     }
     else if( a_path == "/blck/cfg/blks" && ctrChkNode(opt) )
     {
@@ -578,10 +578,10 @@ void Block::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/blck/cfg/func" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( wFunc() );
-	if( !func() && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setWFunc( opt->text() );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( wFunc() );
+	if( !func() && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setWFunc( opt->text() );
     }
-    else if( a_path == "/blck/cfg/func_lnk" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )
+    else if( a_path == "/blck/cfg/func_lnk" && ctrChkNode(opt,"get",0440,"root","root",SEC_RD) )
 	opt->setText(TSYS::sepstr2path(wFunc(),'.'));
     else if( a_path == "/blck/cfg/fncs" && ctrChkNode(opt) )
     {
@@ -601,20 +601,20 @@ void Block::cntrCmdProc( XMLNode *opt )
     }
     else if( (a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	TBDS::genDBSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,7) == "/lio/io" && enable() )
     {
 	int id = ioId(TSYS::pathLev(a_path,2));
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	    opt->setText( (ioType(id)==IO::Real) ? TSYS::real2str(getR(id),6) : getS(id));
-	if( !linkActive(id) && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( !linkActive(id) && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{ setS(id,opt->text()); modif(); }
     }
     else if( a_path.substr(0,7) == "/lnk/io" && enable() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> list;
 	    char lev = TSYS::pathLev(a_path,2)[0];
@@ -691,7 +691,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    opt->childAdd("el")->setText(c_path+list[i_a]);
 	    }
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    char lev = TSYS::pathLev(a_path,2)[0];
 	    int id = ioId(TSYS::pathLev(a_path,2).substr(2));

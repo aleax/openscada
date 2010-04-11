@@ -256,13 +256,13 @@ bool Ergomera::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/attrs" )
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(mPrm->extPrmGet("Attrs",true));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	mPrm->extPrmSet("Attrs",opt->text(),true);
+	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("Attrs",true));
+	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("Attrs",opt->text(),true);
     }
     else if( a_path == "/prm/cfg/FragMerge" )
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(mPrm->extPrmGet("FragMerge"));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	mPrm->extPrmSet("FragMerge",opt->text());
+	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("FragMerge"));
+	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("FragMerge",opt->text());
     }
     else return false;
 

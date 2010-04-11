@@ -1013,19 +1013,19 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/ep_" || a_path == "/ep/ep" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEC_RD) )
 	{
 	    vector<string> lst;
 	    epList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(epAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    epAdd(vid); epAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )	chldDel(mEndPnt,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEC_WR) )	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -1893,13 +1893,13 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ep/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
     else if( a_path == "/ep/st/en_st" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD) )	opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
     }
     else if( a_path == "/ep/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR) )	setDB(opt->text());
     }
     else if( a_path == "/ep/cfg/ls_itr" && ctrChkNode(opt) )
     {
@@ -1911,7 +1911,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/ep/cfg/secPlc" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEC_RD) )
 	{
 	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",0664);
 	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",0664);
@@ -1924,14 +1924,14 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    return;
 	}
 	ResAlloc res( nodeRes(), true );
-	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEC_WR) )
 	{ mSec.push_back( SecuritySetting("None",OPCEndPoint::None) ); modif(); return; }
 	int row = atoi(opt->attr("row").c_str());
 	if( row < 0 || row >= mSec.size() )
 	    throw TError(nodePath().c_str(),_("No present seleted row."));
-	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEQ_WR) )
+	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEC_WR) )
 	{ mSec.erase(mSec.begin()+row); modif(); return; }
-	if( ctrChkNode(opt,"set",0664,"root","Protocol",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","Protocol",SEC_WR) )
 	{
 	    int col = atoi(opt->attr("col").c_str());
 	    if( col == 0 )	mSec[row].policy = opt->text();

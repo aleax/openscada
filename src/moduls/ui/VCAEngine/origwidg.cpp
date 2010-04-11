@@ -85,7 +85,7 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEQ_RD) )
+    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEC_RD) )
 	opt->setText(parentNm());
     else return Widget::cntrCmdGeneric(opt);
 

@@ -293,15 +293,15 @@ void TipContr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/lib_" || a_path == "/libs/lb" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> lst;
 	    lbList(lst);
 	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(lbAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	lbUnreg(opt->attr("id"),1);
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	lbUnreg(opt->attr("id"),1);
     }
     else TTipDAQ::cntrCmdProc(opt);
 }
@@ -552,10 +552,10 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if( a_path == "/serv/fncAttr" )
 	{
 	    if( !startStat( ) || !func( ) ) throw TError(nodePath().c_str(),_("No started or no present function."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
 		for( int i_a = 0; i_a < ioSize(); i_a++ )
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
 		{
 		    int io_id = -1;
@@ -627,7 +627,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/fnc/io" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )
 	{
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/fnc/io/0","",0664);
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/fnc/io/1","",0664);
@@ -644,11 +644,11 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","DAQ",SEC_WR) )
 	{ ((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) ); modif(); }
-	if( ctrChkNode(opt,"ins",0664,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"ins",0664,"root","DAQ",SEC_WR) )
 	{ ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) ); modif(); }
-	if( ctrChkNode(opt,"del",0664,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"del",0664,"root","DAQ",SEC_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    if( func()->io(row)->flg()&Func::SysAttr )
@@ -656,9 +656,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    ((Func *)func())->ioDel( row ); 
 	    modif();
 	}
-	if( ctrChkNode(opt,"move",0664,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"move",0664,"root","DAQ",SEC_WR) )
 	{ ((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
@@ -680,8 +680,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/fnc/prog" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText(((Func *)func())->prog());
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText(((Func *)func())->prog());
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )
 	{
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();

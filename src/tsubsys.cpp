@@ -147,7 +147,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if( subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
+    else if( subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEC_RD) )
     {
 	vector<string> list;
 	modList(list);

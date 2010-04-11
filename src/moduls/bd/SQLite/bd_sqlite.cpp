@@ -244,7 +244,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     }
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) && commCnt )
+    if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) && commCnt )
     { commCnt = trans_reqs; sqlReq(""); }
     else TBD::cntrCmdProc(opt);
 }

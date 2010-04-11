@@ -345,8 +345,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/st_mod" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( startMod() );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setStartMod( opt->text() );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( startMod() );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setStartMod( opt->text() );
     }
     else if( a_path == "/prm/cfg/lsQTmod" && ctrChkNode(opt) )
     {

@@ -495,7 +495,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+    if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )
     {
 	SYS->transport().at().setSysHost(false);
 	opt->setText("/Transport");

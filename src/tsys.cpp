@@ -1370,8 +1370,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/gen/stat" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setName(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setName(opt->text());
     }
     else if( a_path == "/gen/frq" && ctrChkNode(opt) )	opt->setText(TSYS::real2str((float)sysClk()/1000000.,6));
     else if( a_path == "/gen/clk_res" && ctrChkNode(opt) )
@@ -1384,43 +1384,43 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/gen/config" && ctrChkNode(opt) )	opt->setText(mConfFile);
     else if( a_path == "/gen/wrk_db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText(mWorkDB);
-	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) setWorkDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEC_RD) ) opt->setText(mWorkDB);
+	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEC_WR) ) setWorkDB(opt->text());
     }
     else if( a_path == "/gen/saveExit" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText( int2str(saveAtExit()) );
-	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) setSaveAtExit( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEC_RD) ) opt->setText( int2str(saveAtExit()) );
+	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEC_WR) ) setSaveAtExit( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/gen/savePeriod" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEQ_RD) ) opt->setText( int2str(savePeriod()) );
-	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEQ_WR) ) setSavePeriod( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root",db().at().subId().c_str(),SEC_RD) ) opt->setText( int2str(savePeriod()) );
+	if( ctrChkNode(opt,"set",0664,"root",db().at().subId().c_str(),SEC_WR) ) setSavePeriod( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/gen/workdir" )
     {
-	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(workDir());
-	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setWorkDir(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0440,"root","root",SEC_RD) )	opt->setText(workDir());
+	if( ctrChkNode(opt,"set",0440,"root","root",SEC_WR) )	setWorkDir(opt->text().c_str());
     }
     else if( a_path == "/gen/icodir" )
     {
-	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(icoDir());
-	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setIcoDir(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0440,"root","root",SEC_RD) )	opt->setText(icoDir());
+	if( ctrChkNode(opt,"set",0440,"root","root",SEC_WR) )	setIcoDir(opt->text().c_str());
     }
     else if( a_path == "/gen/moddir" )
     {
-	if( ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )	opt->setText(modDir());
-	if( ctrChkNode(opt,"set",0440,"root","root",SEQ_WR) )	setModDir(opt->text().c_str());
+	if( ctrChkNode(opt,"get",0440,"root","root",SEC_RD) )	opt->setText(modDir());
+	if( ctrChkNode(opt,"set",0440,"root","root",SEC_WR) )	setModDir(opt->text().c_str());
     }
     else if( a_path == "/gen/lang" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(Mess->lang());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLang(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(Mess->lang());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setLang(opt->text());
     }
     else if( a_path == "/gen/baseLang" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(Mess->lang2CodeBase());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLang2CodeBase(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(Mess->lang2CodeBase());
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setLang2CodeBase(opt->text());
     }
     else if( a_path == "/gen/baseLangLs" && ctrChkNode(opt) )
     {
@@ -1431,30 +1431,30 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/gen/mess/lev" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TSYS::int2str(Mess->messLevel()));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setMessLevel(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(TSYS::int2str(Mess->messLevel()));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setMessLevel(atoi(opt->text().c_str()));
     }
     else if( a_path == "/gen/mess/log_sysl" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText((Mess->logDirect()&0x01)?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText((Mess->logDirect()&0x01)?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
     }
     else if( a_path == "/gen/mess/log_stdo" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText((Mess->logDirect()&0x02)?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText((Mess->logDirect()&0x02)?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
     }
     else if( a_path == "/gen/mess/log_stde" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText((Mess->logDirect()&0x04)?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText((Mess->logDirect()&0x04)?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
     }
     else if( a_path == "/gen/mess/log_arch" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText((Mess->logDirect()&0x08)?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText((Mess->logDirect()&0x08)?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
     }
-    else if( (a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",0444,"root","root",SEQ_RD) )
+    else if( (a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",0444,"root","root",SEC_RD) )
     {
 	vector<string> lst;
 	list(lst);
@@ -1477,6 +1477,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if( n_prior )	n_prior->childAdd("el")->setText( TSYS::int2str(it->second.prior) );
 	}
     }
-    else if( a_path == "/hlp/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) ) opt->setText(optDescr());
+    else if( a_path == "/hlp/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEC_RD) ) opt->setText(optDescr());
     else TCntrNode::cntrCmdProc(opt);
 }

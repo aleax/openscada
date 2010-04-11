@@ -272,18 +272,18 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/q_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/cl_n" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(maxFork()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setMaxFork( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/bf_ln" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(bufLen()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setBufLen( atoi(opt->text().c_str()) );
     }
     else TTransportIn::cntrCmdProc(opt);
 }

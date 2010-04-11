@@ -817,10 +817,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	{
 	    ResAlloc res(moderes,false);
 	    if( mode( ) != TMdPrm::Template || !tmpl->val.func( ) ) throw TError(nodePath().c_str(),_("No template parameter or error."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
 		for( int i_a = 0; i_a < tmpl->val.ioSize(); i_a++ )
 		    opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(i_a)->id())->setText(tmpl->val.getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
 		{
 		    int io_id = -1;
@@ -884,13 +884,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    if( a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+    if( a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
 	try
 	{
 	    m_mode = atoi(opt->text().c_str());
 	    mode( (TMdPrm::Mode)m_mode, m_prm = "" );
 	} catch(...) { disable(); throw; }
-    else if( a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+    else if( a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
 	try
 	{
 	    m_prm = opt->text();
@@ -935,12 +935,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/cfg/attr_only" && mode() == TMdPrm::Template )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(mod->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	TBDS::genDBSet(mod->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,12) == "/cfg/prm/pr_" && mode() == TMdPrm::Template )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
@@ -948,7 +948,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if( c_lvl==4 ) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
 	    else opt->setText(lnk_val);	
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    bool noonly_no_set = true;
 	    string no_set;
@@ -1032,7 +1032,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,12) == "/cfg/prm/el_" && mode() == TMdPrm::Template )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
 	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
@@ -1040,7 +1040,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    else if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
 		opt->setText(tmpl->val.getS(i_io));
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
 	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )

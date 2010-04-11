@@ -253,27 +253,27 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root",subId().c_str()) )	opt->setText(optDescr());
     else if( a_path == "/br/usr_" || a_path == "/usgr/users" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEC_RD) )
 	{
 	    vector<string> list;
 	    usrList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	usrAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
-	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	usrDel(opt->text(),true);
+	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEC_WR) )	usrAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
+	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEC_WR) )	usrDel(opt->text(),true);
     }
     else if( a_path == "/br/grp_" || a_path == "/usgr/grps" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root",subId().c_str(),SEC_RD) )
 	{
 	    vector<string> list;
 	    grpList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEQ_WR) )	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
-	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEQ_WR) )	grpDel(opt->text(),true);
+	if( ctrChkNode(opt,"add",0664,"root",subId().c_str(),SEC_WR) )	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
+	if( ctrChkNode(opt,"del",0664,"root",subId().c_str(),SEC_WR) )	grpDel(opt->text(),true);
     }
     else TSubSYS::cntrCmdProc(opt);
 }
@@ -375,28 +375,28 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	opt->setText( TSYS::int2str(auth(opt->attr("password"))) );
     else if( a_path == "/prm/db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEC_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/name" && ctrChkNode(opt) )	opt->setText(name());
     else if( a_path == "/prm/pct" || a_path == "/ico" )
     {
-	if( ctrChkNode(opt,"get",0664,name().c_str(),owner().subId().c_str(),SEQ_RD) )	opt->setText(picture());
-	if( ctrChkNode(opt,"set",0664,name().c_str(),owner().subId().c_str(),SEQ_WR) )	setPicture(opt->text());
+	if( ctrChkNode(opt,"get",0664,name().c_str(),owner().subId().c_str(),SEC_RD) )	opt->setText(picture());
+	if( ctrChkNode(opt,"set",0664,name().c_str(),owner().subId().c_str(),SEC_WR) )	setPicture(opt->text());
     }
     else if( a_path == "/prm/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,name().c_str(),owner().subId().c_str(),SEQ_RD) )	opt->setText(lName());
-	if( ctrChkNode(opt,"set",0664,name().c_str(),owner().subId().c_str(),SEQ_WR) )	setLName(opt->text());
+	if( ctrChkNode(opt,"get",0664,name().c_str(),owner().subId().c_str(),SEC_RD) )	opt->setText(lName());
+	if( ctrChkNode(opt,"set",0664,name().c_str(),owner().subId().c_str(),SEC_WR) )	setLName(opt->text());
     }
     else if( a_path == "/prm/pass" )
     {
-	if( ctrChkNode(opt,"get",0660,name().c_str(),owner().subId().c_str(),SEQ_RD) )	opt->setText("**********");
-	if( ctrChkNode(opt,"set",0660,name().c_str(),owner().subId().c_str(),SEQ_WR) )	setPass(opt->text());
+	if( ctrChkNode(opt,"get",0660,name().c_str(),owner().subId().c_str(),SEC_RD) )	opt->setText("**********");
+	if( ctrChkNode(opt,"set",0660,name().c_str(),owner().subId().c_str(),SEC_WR) )	setPass(opt->text());
     }
     else if( a_path == "/prm/grps" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","Security",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0660,"root","Security",SEC_RD) )
 	{
 	    //-- Prepare headers --
 	    XMLNode *grp = ctrMkNode("list",opt,-1,"/prm/grps/grp","",0440);
@@ -409,7 +409,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 		if(vl)	vl->childAdd("el")->setText(TSYS::int2str(owner().grpAt(ls[i_g]).at().user(name())));
 	    }
 	}
-	/*if( ctrChkNode(opt,"set",0660,"root","Security",SEQ_WR) )
+	/*if( ctrChkNode(opt,"set",0660,"root","Security",SEC_WR) )
 	{
 	    if(atoi(opt->text().c_str()))
 		owner().grpAt(opt->attr("key_grp")).at().userAdd(name());
@@ -519,26 +519,26 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root",SYS->db().at().subId().c_str(),SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",0664,"root",SYS->db().at().subId().c_str(),SEC_WR) )	setDB(opt->text());
     }
-    else if( a_path == "/prm/name" && ctrChkNode(opt,"get",0444,"root",owner().subId().c_str(),SEQ_RD) )
+    else if( a_path == "/prm/name" && ctrChkNode(opt,"get",0444,"root",owner().subId().c_str(),SEC_RD) )
 	opt->setText(name());
     else if( a_path == "/prm/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",owner().subId().c_str(),SEQ_RD) )	opt->setText(lName());
-	if( ctrChkNode(opt,"set",0664,"root",owner().subId().c_str(),SEQ_WR) )	setLName(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root",owner().subId().c_str(),SEC_RD) )	opt->setText(lName());
+	if( ctrChkNode(opt,"set",0664,"root",owner().subId().c_str(),SEC_WR) )	setLName(opt->text());
     }
     else if( a_path == "/prm/users" )
     {
-	if( ctrChkNode(opt,"get",0664,"root",owner().subId().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root",owner().subId().c_str(),SEC_RD) )
 	{
 	    string val;
 	    for( int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
 		opt->childAdd("el")->setText(val);
 	}
-	if( ctrChkNode(opt,"add",0664,"root",owner().subId().c_str(),SEQ_WR) )	userAdd(opt->text());
-	if( ctrChkNode(opt,"del",0664,"root",owner().subId().c_str(),SEQ_WR) )	userDel(opt->text());
+	if( ctrChkNode(opt,"add",0664,"root",owner().subId().c_str(),SEC_WR) )	userAdd(opt->text());
+	if( ctrChkNode(opt,"del",0664,"root",owner().subId().c_str(),SEC_WR) )	userDel(opt->text());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

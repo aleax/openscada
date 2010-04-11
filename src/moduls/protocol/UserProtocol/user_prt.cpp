@@ -205,19 +205,19 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/up_" || a_path == "/up/up" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> lst;
 	    uPrtList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    uPrtAdd(vid); uPrtAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mPrtU,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(mPrtU,opt->attr("id"),-1,1);
     }
 
     else TProtocol::cntrCmdProc(opt);
@@ -488,13 +488,13 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     if( a_path == "/up/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
     else if( a_path == "/up/st/en_st" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
     }
     else if( a_path == "/up/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setDB(opt->text());
     }
     else if( (a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt) )
     {
@@ -528,23 +528,23 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     else if( a_path.substr(0,7) == "/up/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
     else if( a_path == "/in/PROGLang" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(inProgLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setInProgLang(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(inProgLang());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setInProgLang(opt->text());
     }
     else if( a_path == "/in/PROG" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(inProg());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setInProg(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(inProg());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setInProg(opt->text());
     }
     else if( a_path == "/out/PROGLang" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(outProgLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setOutProgLang(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(outProgLang());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setOutProgLang(opt->text());
     }
     else if( a_path == "/out/PROG" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(outProg());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setOutProg(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(outProg());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setOutProg(opt->text());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

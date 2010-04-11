@@ -702,7 +702,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
     //> Service commands process
     if( a_path == "/serv/sess" )	//Session operation
     {
-	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEQ_RD) ) //List session for some project
+	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEC_RD) ) //List session for some project
 	{
 	    string prj = opt->attr("prj");
 	    vector<string> ls;
@@ -711,18 +711,18 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		if( prj.empty() || sesAt(ls[i_l]).at().projNm() == prj )
 		{
 		    AutoHD<Project> prj = sesAt(ls[i_l]).at().parent();
-		    if( SYS->security().at().access(opt->attr("user"),SEQ_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+		    if( SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
 			opt->childAdd("el")->setText(ls[i_l]);
 		}
 	}
-	else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEQ_WR) )
+	else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEC_WR) )
 	{
 	    string sess = opt->attr("sess");
 	    string prj  = opt->attr("prj");
 
 	    //>> User permission check
 	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
-	    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()) )
+	    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()) )
 		throw TError(nodePath().c_str(),_("Connection to session is not permited for '%s'."),opt->attr("user").c_str());
 	    //>> Connect to present session
 	    if( !sess.empty() )	sesAt(sess).at().connect();
@@ -740,7 +740,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("sess",sess);
 	    }else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
 	}
-	else if( ctrChkNode(opt,"disconnect",RWRWRW,"root","root",SEQ_WR) )
+	else if( ctrChkNode(opt,"disconnect",RWRWRW,"root","root",SEC_WR) )
 	{
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect();
@@ -827,7 +827,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
     //> Process command for page
     if( a_path == "/br/prj_" || a_path == "/prm/cfg/prj" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )
 	{
 	    vector<string> lst;
 	    prjList(lst);
@@ -837,36 +837,36 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		if( chkUserPerm )
 		{
 		    AutoHD<Project> prj = prjAt(lst[i_a]);
-		    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+		    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
 			continue;
 		}
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(prjAt(lst[i_a]).at().name());
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    prjAdd(vid,opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
 	}
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   prjDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )   prjDel(opt->attr("id"),true);
     }
     else if( a_path == "/br/wlb_" || a_path == "/prm/cfg/wlb" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )
 	{
 	    vector<string> lst;
 	    wlbList(lst);
 	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(wlbAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )	wlbAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID),opt->text());
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )	wlbDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )	wlbAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID),opt->text());
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )	wlbDel(opt->attr("id"),true);
     }
-    else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEQ_WR) )
+    else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEC_WR) )
 	nodeCopy( nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user") );
     else if( a_path == "/br/ses_" || a_path == "/ses/ses" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )
 	{
 	    vector<string> lst;
 	    sesList(lst);
@@ -876,18 +876,18 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		if( chkUserPerm )
 		{
 		    AutoHD<Project> prj = sesAt(lst[i_a]).at().parent();
-		    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+		    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
 			continue;
 		}
 		opt->childAdd("el")->setAttr("user",sesAt(lst[i_a]).at().user())->setText(lst[i_a]);
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->text(),TSYS::oscdID);
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEQ_WR) )   sesDel(opt->text(),true);
+	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )   sesDel(opt->text(),true);
     }
     else if( a_path == "/br/vca" && ctrChkNode(opt) )
     {
@@ -898,13 +898,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/tts/code" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthCode());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthCode(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(synthCode());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setSynthCode(opt->text());
     }
     else if( a_path == "/tts/comm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(synthCom());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setSynthCom(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(synthCom());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setSynthCom(opt->text());
     }
     else if( a_path == "/tts/comm_ls" && ctrChkNode(opt) )
 	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -");

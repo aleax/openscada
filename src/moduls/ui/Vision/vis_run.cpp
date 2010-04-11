@@ -281,7 +281,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
 
     alrmPlay = new SndPlay(this);
 
-    menuBar()->setVisible(SYS->security().at().access(user(),SEQ_WR,"root","root",RWRWR_));
+    menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     resize( 600, 400 );
 
@@ -733,7 +733,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     //> Update pages after user change
     pgCacheClear();
     bool oldMenuVis = menuBar()->isVisible();
-    menuBar()->setVisible(SYS->security().at().access(user(),SEQ_WR,"root","root",RWRWR_));
+    menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     QApplication::processEvents();
     if( master_pg )
     {

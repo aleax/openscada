@@ -206,8 +206,8 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
 	    return true;
 	case -3:	//perm
-	    setPermCntr( atoi(val.c_str())&SEQ_WR );
-	    setPermView( atoi(val.c_str())&SEQ_RD );
+	    setPermCntr( atoi(val.c_str())&SEC_WR );
+	    setPermView( atoi(val.c_str())&SEC_RD );
 	    return true;
 	case 4:		//pgGrp
 	    setProperty("pgGrp",val.c_str());

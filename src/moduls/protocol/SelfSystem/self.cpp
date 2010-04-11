@@ -247,18 +247,18 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(authTime()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setAuthTime( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(authTime()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setAuthTime( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/compr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(comprLev()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setComprLev( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(comprLev()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setComprLev( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/comprBrd" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(comprBrd()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setComprBrd( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(comprBrd()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setComprBrd( atoi(opt->text().c_str()) );
     }
     else TProtocol::cntrCmdProc(opt);
 }

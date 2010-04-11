@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-17 17:21+0200\n"
+"POT-Creation-Date: 2010-04-08 17:36+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -20,7 +20,11 @@ msgstr ""
 msgid "Sockets"
 msgstr "Sockets"
 
-#: socket.cpp:47
+#: socket.cpp:47 socket.cpp:552 socket.cpp:564 socket.cpp:565 socket.cpp:566
+#: socket.cpp:567 socket.cpp:568 socket.cpp:569 socket.cpp:576 socket.cpp:577
+#: socket.cpp:581 socket.cpp:582 socket.cpp:586 socket.cpp:587 socket.cpp:591
+#: socket.cpp:592 socket.cpp:596 socket.cpp:597 socket.cpp:601 socket.cpp:602
+#: socket.cpp:845 socket.cpp:855 socket.cpp:866 socket.cpp:867
 msgid "Transport"
 msgstr "Transport"
 
@@ -152,7 +156,7 @@ msgstr ""
 #: socket.cpp:567 socket.cpp:568 socket.cpp:569 socket.cpp:576 socket.cpp:577
 #: socket.cpp:581 socket.cpp:582 socket.cpp:586 socket.cpp:587 socket.cpp:591
 #: socket.cpp:592 socket.cpp:596 socket.cpp:597 socket.cpp:601 socket.cpp:602
-#: socket.cpp:847 socket.cpp:857 socket.cpp:868 socket.cpp:869
+#: socket.cpp:845 socket.cpp:855 socket.cpp:866 socket.cpp:867
 msgid "root"
 msgstr ""
 
@@ -212,33 +216,33 @@ msgstr ""
 msgid "Error request to protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
 
-#: socket.cpp:549 socket.cpp:844
+#: socket.cpp:549 socket.cpp:842
 msgid "info"
 msgstr ""
 
 #: socket.cpp:552 socket.cpp:564 socket.cpp:565 socket.cpp:566 socket.cpp:567
-#: socket.cpp:568 socket.cpp:569 socket.cpp:847 socket.cpp:857
+#: socket.cpp:568 socket.cpp:569 socket.cpp:845 socket.cpp:855
 msgid "fld"
 msgstr ""
 
-#: socket.cpp:552 socket.cpp:847
+#: socket.cpp:552 socket.cpp:845
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: socket.cpp:552 socket.cpp:847
+#: socket.cpp:552 socket.cpp:845
 msgid "ADDR"
 msgstr ""
 
 #: socket.cpp:552 socket.cpp:564 socket.cpp:565 socket.cpp:566 socket.cpp:567
-#: socket.cpp:568 socket.cpp:569 socket.cpp:847 socket.cpp:857
+#: socket.cpp:568 socket.cpp:569 socket.cpp:845 socket.cpp:855
 msgid "tp"
 msgstr ""
 
-#: socket.cpp:552 socket.cpp:847 socket.cpp:857
+#: socket.cpp:552 socket.cpp:845 socket.cpp:855
 msgid "str"
 msgstr ""
 
-#: socket.cpp:552 socket.cpp:564 socket.cpp:565 socket.cpp:847 socket.cpp:857
+#: socket.cpp:552 socket.cpp:564 socket.cpp:565 socket.cpp:845 socket.cpp:855
 msgid "help"
 msgstr ""
 
@@ -331,17 +335,17 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: socket.cpp:573 socket.cpp:865
+#: socket.cpp:573 socket.cpp:863
 msgid "path"
 msgstr ""
 
 #: socket.cpp:576 socket.cpp:581 socket.cpp:586 socket.cpp:591 socket.cpp:596
-#: socket.cpp:601 socket.cpp:868
+#: socket.cpp:601 socket.cpp:866
 msgid "get"
 msgstr ""
 
 #: socket.cpp:577 socket.cpp:582 socket.cpp:587 socket.cpp:592 socket.cpp:597
-#: socket.cpp:602 socket.cpp:869
+#: socket.cpp:602 socket.cpp:867
 msgid "set"
 msgstr ""
 
@@ -405,20 +409,15 @@ msgstr "Transport ist nicht gestartet!"
 msgid "Read reply error: %s"
 msgstr "Fehler des Lesens der Antwort: %s"
 
-#: socket.cpp:808
-#, c-format
-msgid "TEST 00: %d\n"
-msgstr ""
-
-#: socket.cpp:826
+#: socket.cpp:824
 msgid "Timeouted!"
 msgstr "Wartezeit ist aus!"
 
-#: socket.cpp:827
+#: socket.cpp:825
 msgid "Socket error!"
 msgstr "Fehler des Sockets!"
 
-#: socket.cpp:848
+#: socket.cpp:846
 msgid ""
 "Socket's output transport has address format:\n"
 "  TCP:[addr]:[port] - TCP socket:\n"
@@ -440,15 +439,15 @@ msgstr ""
 "  UNIX:[name] - UNIX Socket:\n"
 "    name - Name der Datei des UNIX-Sockets."
 
-#: socket.cpp:857 socket.cpp:866
+#: socket.cpp:855 socket.cpp:864
 msgid "/prm/cfg/TMS"
 msgstr ""
 
-#: socket.cpp:857
+#: socket.cpp:855
 msgid "Timings"
 msgstr ""
 
-#: socket.cpp:858
+#: socket.cpp:856
 msgid ""
 "Connection timings in format: \"[conn]:[next]\". Where:\n"
 "    conn - maximum time for connection respond wait, in seconds;\n"

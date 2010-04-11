@@ -21,7 +21,6 @@
 
 #include <sys/stat.h>
 #include <signal.h>
-#include <getopt.h>
 #include <string.h>
 #include <string>
 
@@ -169,7 +168,7 @@ void ModArch::load_( )
 
 void ModArch::modStart( )
 {
-    //- Start interval timer for checking archivators -
+    //> Start interval timer for checking archivators
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = CHECK_ARH_PER;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -178,7 +177,7 @@ void ModArch::modStart( )
 
 void ModArch::modStop( )
 {
-    //- Stop interval timer for periodic thread creating -
+    //> Stop interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;

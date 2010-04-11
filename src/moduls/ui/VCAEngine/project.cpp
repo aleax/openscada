@@ -507,33 +507,33 @@ void Project::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/obj/st/en" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(enable()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setEnable( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(enable()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setEnable( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/obj/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( fullDB() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setFullDB( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( fullDB() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setFullDB( opt->text() );
     }
     else if( a_path == "/obj/cfg/owner" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( owner() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setOwner( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( owner() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setOwner( opt->text() );
     }
     else if( a_path == "/obj/cfg/grp" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( grp() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setGrp( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( grp() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setGrp( opt->text() );
     }
     else if( a_path == "/obj/cfg/u_a" || a_path == "/obj/cfg/g_a" || a_path == "/obj/cfg/o_a" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    if( a_path == "/obj/cfg/u_a" )	opt->setText( TSYS::int2str((permit()>>6)&0x7) );
 	    if( a_path == "/obj/cfg/g_a" )	opt->setText( TSYS::int2str((permit()>>3)&0x7) );
 	    if( a_path == "/obj/cfg/o_a" )	opt->setText( TSYS::int2str(permit()&0x7) );
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    if( a_path == "/obj/cfg/u_a" )	setPermit( (permit()&(~(0x07<<6)))|(atoi(opt->text().c_str())<<6) );
 	    if( a_path == "/obj/cfg/g_a" )	setPermit( (permit()&(~(0x07<<3)))|(atoi(opt->text().c_str())<<3) );
@@ -542,46 +542,46 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/obj/cfg/ico" || a_path == "/ico" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( ico() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setIco( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( ico() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setIco( opt->text() );
     }
     else if( a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root","UI") )	opt->setText(id());
     else if( a_path == "/obj/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( name() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setName( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setName( opt->text() );
     }
     else if( a_path == "/obj/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( descr() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setDescr( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( descr() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setDescr( opt->text() );
     }
     else if( a_path == "/obj/cfg/per" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(period()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setPeriod( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(period()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setPeriod( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/obj/cfg/runWin" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(prjFlags()&(Maximize|FullScreen)) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(prjFlags()&(Maximize|FullScreen)) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	    setPrjFlags( (prjFlags()&(~(Maximize|FullScreen)))|atoi(opt->text().c_str()) );
     }
     else if( a_path == "/br/pg_" || a_path == "/page/page" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    vector<string> lst;
 	    list(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	del(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )	del(opt->attr("id"),true);
     }
     else if( a_path == "/obj/u_lst" && ctrChkNode(opt) )
     {
@@ -603,7 +603,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	string idmime = opt->attr("key_id");
 	string idcol  = opt->attr("col");
 
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    if( !idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()) )
 	    {
@@ -628,9 +628,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    }
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	mimeDataSet("newMime","image/new;0","");
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	mimeDataDel(opt->attr("key_id"));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )	mimeDataSet("newMime","image/new;0","");
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )	mimeDataDel(opt->attr("key_id"));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    //>> Request data
 	    if( idcol == "id" )
@@ -660,8 +660,8 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/style/style" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(stlCurent()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(stlCurent()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    if( atoi(opt->text().c_str()) >= -1 ) stlCurentSet( atoi(opt->text().c_str()) );
 	    else
@@ -689,8 +689,8 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/style/name" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::strSepParse(stlGet(stlCurent()),0,';') );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::strSepParse(stlGet(stlCurent()),0,';') );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    string sprv = stlGet(stlCurent());
 	    stlSet(stlCurent(),opt->text());
@@ -698,7 +698,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/style/props" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) && stlCurent() >=0 && stlCurent() < stlSize() )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) && stlCurent() >=0 && stlCurent() < stlSize() )
 	{
 	    XMLNode *n_id = ctrMkNode("list",opt,-1,"/style/props/id","");
 	    XMLNode *n_vl = ctrMkNode("list",opt,-1,"/style/props/vl","");
@@ -711,19 +711,19 @@ void Project::cntrCmdProc( XMLNode *opt )
 		if( n_vl )	n_vl->childAdd("el")->setText(iStPrp->second[stlCurent()]);
 	    }
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    ResAlloc res( mStRes, true );
 	    if( mStProp.find(opt->attr("key_id")) != mStProp.end() ) { mStProp.erase(opt->attr("key_id")); modif(); }
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) && opt->attr("col") == "vl" && stlCurent() >=0 && stlCurent() < stlSize() )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) && opt->attr("col") == "vl" && stlCurent() >=0 && stlCurent() < stlSize() )
 	{
 	    ResAlloc res( mStRes, true );
 	    map< string, vector<string> >::iterator iStPrp = mStProp.find(opt->attr("key_id"));
 	    if( iStPrp != mStProp.end() ) { iStPrp->second[stlCurent()] = opt->text(); modif(); }
 	}
     }
-    else if( a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) && stlCurent() >=0 && stlCurent() < stlSize() )
+    else if( a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) && stlCurent() >=0 && stlCurent() < stlSize() )
     {
 	ResAlloc res( mStRes, true );
 	map< string, vector<string> >::iterator iStPrp;
@@ -1222,8 +1222,8 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	opt->childIns(0,"el")->setText("..");
     else if( a_path == "/wdg/st/pgTp" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(prjFlags()&(Page::Container|Page::Template|Page::Empty)) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(prjFlags()&(Page::Container|Page::Template|Page::Empty)) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	    setPrjFlags( prjFlags()^((prjFlags()^atoi(opt->text().c_str()))&(Page::Container|Page::Template|Page::Empty)) );
     }
     else if( a_path == "/wdg/st/pgTpLst" && ctrChkNode(opt) )
@@ -1236,19 +1236,19 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     }
     else if( a_path == "/br/pg_" || a_path == "/page/page" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    vector<string> lst;
 	    pageList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    pageAdd(opt->attr("id").c_str(),opt->text().c_str());
 	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	pageDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )	pageDel(opt->attr("id"),true);
     }
     else return Widget::cntrCmdGeneric(opt);
 

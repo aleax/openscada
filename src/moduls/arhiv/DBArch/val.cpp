@@ -114,8 +114,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/sz" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEQ_RD) ) opt->setText(TSYS::real2str( maxSize() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEQ_WR) ) setMaxSize( atof(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) ) opt->setText(TSYS::real2str( maxSize() ));
+	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) ) setMaxSize( atof(opt->text().c_str()) );
     }
     else TVArchivator::cntrCmdProc(opt);
 }

@@ -460,7 +460,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //- Process command to page -
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+    if( a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )
     {
 	SYS->transport().at().setSysHost(true);
 	opt->setText("/Transport");
@@ -658,8 +658,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/st/type" && ctrChkNode(opt) )   opt->setText(type().descr);
     else if( a_path == "/prm/st/en" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )   opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )   opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    if( !owner().enableStat() ) throw TError(nodePath().c_str(),"Controller is not started!");
 	    else atoi(opt->text().c_str())?enable():disable();

@@ -442,24 +442,24 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/n_" || a_path == "/node/node" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> lst;
 	    nList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    nAdd(vid); nAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mNode,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(mNode,opt->attr("id"),-1,1);
     }
     else if( a_path == "/rep/repLen" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::int2str(prtLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEQ_WR) )	setPrtLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText( TSYS::int2str(prtLen()) );
+	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )	setPrtLen( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/rep/rep" && ctrChkNode(opt) )
     {
@@ -1157,13 +1157,13 @@ void Node::cntrCmdProc( XMLNode *opt )
     if( a_path == "/nd/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
     else if( a_path == "/nd/st/en_st" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(enableStat()?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
     }
     else if( a_path == "/nd/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setDB(opt->text());
     }
     else if( a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt) )
     {
@@ -1183,7 +1183,7 @@ void Node::cntrCmdProc( XMLNode *opt )
     else if( a_path.substr(0,7) == "/nd/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
     else if( a_path == "/dt/io" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )
 	{
 	    XMLNode *nId   = ctrMkNode("list",opt,-1,"/dt/io/id","");
 	    XMLNode *nNm   = ctrMkNode("list",opt,-1,"/dt/io/nm","");
@@ -1200,17 +1200,17 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if( nVal )	nVal->childAdd("el")->setText( (data && data->val.func()) ? data->val.getS(id) : io(id)->def() );
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","root",SEC_WR) )
 	{
 	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    ioAdd( new IO("new",_("New IO"),IO::Integer,IO::Default) ); modif();
 	}
-	if( ctrChkNode(opt,"ins",RWRWR_,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"ins",RWRWR_,"root","root",SEC_WR) )
 	{
 	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    ioIns( new IO("new",_("New IO"),IO::Integer,IO::Default), atoi(opt->attr("row").c_str()) ); modif();
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"del",RWRWR_,"root","root",SEC_WR) )
 	{
 	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    int row = atoi(opt->attr("row").c_str());
@@ -1219,12 +1219,12 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    ioDel( row );
 	    modif();
 	}
-	if( ctrChkNode(opt,"move",RWRWR_,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"move",RWRWR_,"root","root",SEC_WR) )
 	{
 	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif();
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    string col = opt->attr("col");
@@ -1241,13 +1241,13 @@ void Node::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/dt/progLang" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(progLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setProgLang(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(progLang());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setProgLang(opt->text());
     }
     else if( a_path == "/dt/prog" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEQ_RD) )	opt->setText(prog());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEQ_WR) )	setProg(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(prog());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setProg(opt->text());
     }
     else if( a_path == "/dt/plang_ls" && ctrChkNode(opt) )
     {
@@ -1316,9 +1316,9 @@ void Node::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,8) == "/lnk/el_" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	    opt->setText(io(atoi(a_path.substr(8).c_str()))->rez());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{ io(atoi(a_path.substr(8).c_str()))->setRez(opt->text()); modif(); }
     }
     else TCntrNode::cntrCmdProc(opt);

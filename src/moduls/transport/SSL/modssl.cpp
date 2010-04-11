@@ -590,57 +590,58 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
 	    _("SSL input transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0664,"root","root",4,"tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),0664,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),0664,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRWR_,"root","Transport",4,
+	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRWR_,"root","Transport",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRWR_,"root","Transport",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRWR_,"root","Transport",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root","Transport",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root","Transport",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root","Transport",1,"tp","dec");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/certKey" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(certKey());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setCertKey(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(certKey());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setCertKey(opt->text());
     }
     else if( a_path == "/prm/cfg/pkey_pass" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(string(pKeyPass().size(),'*'));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setPKeyPass(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(string(pKeyPass().size(),'*'));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setPKeyPass(opt->text());
     }
     else if( a_path == "/prm/cfg/cl_n" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(maxFork()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMaxFork( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/bf_ln" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(bufLen()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setBufLen( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/keepAliveCon" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(keepAliveCon()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setKeepAliveCon( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(keepAliveCon()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setKeepAliveCon( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/keepAliveTm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(keepAliveTm()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setKeepAliveTm( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(keepAliveTm()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setKeepAliveTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/taskPrior" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(taskPrior()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTaskPrior( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(taskPrior()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTaskPrior( atoi(opt->text().c_str()) );
     }
 
     else TTransportIn::cntrCmdProc(opt);
@@ -903,16 +904,16 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
 	    _("SSL output transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),0660,"root","root",4,"tp","str","cols","90","rows","7",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root","Transport",4,"tp","str","cols","90","rows","7",
 	    "help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),0660,"root","root",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),0664,"root","root",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root","Transport",1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root","Transport",2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[next]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
 	    "    next - maximum time for continue respond wait, in seconds."));
@@ -922,18 +923,18 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/certKey" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(certKey());
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setCertKey(opt->text());
+	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(certKey());
+	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )	setCertKey(opt->text());
     }
     else if( a_path == "/prm/cfg/pkey_pass" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(string(pKeyPass().size(),'*'));
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setPKeyPass(opt->text());
+	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(string(pKeyPass().size(),'*'));
+	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )	setPKeyPass(opt->text());
     }
     if( a_path == "/prm/cfg/TMS" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(timings());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTimings(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(timings());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
 }

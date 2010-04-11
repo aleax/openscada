@@ -339,7 +339,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+    if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
     {
 	if( enableStat() )	throw TError(nodePath().c_str(),"Parameter is enabled.");
 //	parseOIDList(opt->text());

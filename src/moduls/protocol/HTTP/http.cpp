@@ -189,8 +189,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/lf_tm" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( TSYS::int2str(authTime()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setAuthTime( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(authTime()) );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setAuthTime( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);

@@ -55,6 +55,14 @@ void Res::resRequestW( unsigned short tm )
     else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
+bool Res::resTryW( )
+{
+    int rez = pthread_rwlock_trywrlock(&rwc);
+    if( rez == EBUSY ) return false;
+    else if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
+    return true;
+}
+
 void Res::resRequestR( unsigned short tm )
 {
     int rez = 0;
@@ -69,6 +77,14 @@ void Res::resRequestR( unsigned short tm )
     }
     if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
+}
+
+bool Res::resTryR( )
+{
+    int rez = pthread_rwlock_tryrdlock(&rwc);
+    if( rez == EBUSY ) return false;
+    else if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
+    return true;
 }
 
 void Res::resRelease( )

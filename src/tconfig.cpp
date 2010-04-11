@@ -180,12 +180,12 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 	return;
     }
     TCfg &cel = cfg(elem);
-    if( TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEQ_RD) )
+    if( TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD) )
     {
 	if( cel.fld().flg()&TFld::Selected )	opt->setText(cel.getSEL());
 	else					opt->setText(cel.getS());
     }
-    if( TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEQ_WR) )
+    if( TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR) )
     {
 	if( cel.fld().flg()&TFld::Selected )	cel.setSEL(opt->text());
 	else					cel.setS(opt->text());

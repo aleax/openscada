@@ -29,6 +29,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+#define CHECK_TR_PER 10
+
 namespace Serial
 {
 
@@ -48,6 +50,27 @@ class TTrIn: public TTransportIn
 	void setAddr( const string &addr );
 	void setTimings( const string &vl )	{ mTimings = vl; modif(); }
 
+	//> Modem functions
+	int	mdmTm( )			{ return mMdmTm; }
+	float	mdmPreInit( )			{ return mMdmPreInit; }
+	float	mdmPostInit( )			{ return mMdmPostInit; }
+	string	mdmInitStr1( )			{ return mMdmInitStr1; }
+	string	mdmInitStr2( )			{ return mMdmInitStr2; }
+	string	mdmInitResp( )			{ return mMdmInitResp; }
+	string	mdmRingReq( )			{ return mMdmRingReq; }
+	string	mdmRingAnswer( )		{ return mMdmRingAnswer; }
+	string	mdmRingAnswerResp( )		{ return mMdmRingAnswerResp; }
+
+	void	setMdmTm( int vl )		{ mMdmTm = vl; modif(); }
+	void	setMdmPreInit( float vl )	{ mMdmPreInit = vl; modif(); }
+	void	setMdmPostInit( float vl )	{ mMdmPostInit = vl; modif(); }
+	void	setMdmInitStr1( const string &vl )	{ mMdmInitStr1 = vl; modif(); }
+	void	setMdmInitStr2( const string &vl )	{ mMdmInitStr2 = vl; modif(); }
+	void	setMdmInitResp( const string &vl )	{ mMdmInitResp = vl; modif(); }
+	void	setMdmRingReq( const string &vl )	{ mMdmRingReq = vl; modif(); }
+	void	setMdmRingAnswer( const string &vl )	{ mMdmRingAnswer = vl; modif(); }
+	void	setMdmRingAnswerResp( const string &vl ){ mMdmRingAnswerResp = vl; modif(); }
+
 	void start( );
 	void stop( );
 
@@ -58,19 +81,27 @@ class TTrIn: public TTransportIn
 
     private:
 	//Methods
+	void connect( );
 	static void *Task( void * );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string		&mAPrms;		// Addon parameters
+	string	&mAPrms;			// Addon parameters
 
-	string		mTimings;
-	int		fd;
+	string	mTimings, mDevPort;
+	int	fd;
 
-	bool		endrun;			// Command for stop task
+	bool	endrun;				// Command for stop task
 
-	float		trIn, trOut, tmMax;	// Traffic in and out counter
+	float	trIn, trOut, tmMax;		// Traffic in and out counter
+
+	//> Modem properties
+	int	mMdmTm;
+	float	mMdmPreInit, mMdmPostInit;
+	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
+	string	mMdmRingReq, mMdmRingAnswer, mMdmRingAnswerResp;
+	bool	mMdmMode, mMdmDataMode;
 };
 
 //************************************************
@@ -89,8 +120,41 @@ class TTrOut: public TTransportOut
 	void setAddr( const string &addr );
 	void setTimings( const string &vl )	{ mTimings = vl; modif(); }
 
+	//> Modem functions
+	int	mdmTm( )			{ return mMdmTm; }
+	int	mdmLifeTime( )			{ return mMdmLifeTime; }
+	float	mdmPreInit( )			{ return mMdmPreInit; }
+	float	mdmPostInit( )			{ return mMdmPostInit; }
+	string	mdmInitStr1( )			{ return mMdmInitStr1; }
+	string	mdmInitStr2( )			{ return mMdmInitStr2; }
+	string	mdmInitResp( )			{ return mMdmInitResp; }
+	string	mdmDialStr( )			{ return mMdmDialStr; }
+	string	mdmCnctResp( )			{ return mMdmCnctResp; }
+	string	mdmBusyResp( )			{ return mMdmBusyResp; }
+	string	mdmNoCarResp( )			{ return mMdmNoCarResp; }
+	string	mdmNoDialToneResp( )		{ return mMdmNoDialToneResp; }
+	string	mdmHangUp( )			{ return mMdmHangUp; }
+	string	mdmHangUpResp( )		{ return mMdmHangUpResp; }
+
+	void	setMdmTm( int vl )		{ mMdmTm = vl; modif(); }
+	void	setMdmLifeTime( int vl )	{ mMdmLifeTime = vl; modif(); }
+	void	setMdmPreInit( float vl )	{ mMdmPreInit = vl; modif(); }
+	void	setMdmPostInit( float vl )	{ mMdmPostInit = vl; modif(); }
+	void	setMdmInitStr1( const string &vl )	{ mMdmInitStr1 = vl; modif(); }
+	void	setMdmInitStr2( const string &vl )	{ mMdmInitStr2 = vl; modif(); }
+	void	setMdmInitResp( const string &vl )	{ mMdmInitResp = vl; modif(); }
+	void	setMdmDialStr( const string &vl )	{ mMdmDialStr = vl; modif(); }
+	void	setMdmCnctResp( const string &vl )	{ mMdmCnctResp = vl; modif(); }
+	void	setMdmBusyResp( const string &vl )	{ mMdmBusyResp = vl; modif(); }
+	void	setMdmNoCarResp( const string &vl )	{ mMdmNoCarResp = vl; modif(); }
+	void	setMdmNoDialToneResp( const string &vl ){ mMdmNoDialToneResp = vl; modif(); }
+	void	setMdmHangUp( const string &vl )	{ mMdmHangUp = vl; modif(); }
+	void	setMdmHangUpResp( const string &vl )	{ mMdmHangUpResp = vl; modif(); }
+
 	void start( );
 	void stop( );
+
+	void check( );
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
 
@@ -106,11 +170,19 @@ class TTrOut: public TTransportOut
 	//Attributes
 	string	&mAPrms;			// Addon parameters
 
-	string	mTimings;
+	string	mDevPort, mTimings;
 	int	fd;
 	long long mLstReqTm;
 
 	float	trIn, trOut;			// Traffic in and out counter and maximum respond timeout
+
+	//> Modem properties
+	int	mMdmTm, mMdmLifeTime;
+	float	mMdmPreInit, mMdmPostInit;
+	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
+	string	mMdmDialStr, mMdmCnctResp, mMdmBusyResp, mMdmNoCarResp, mMdmNoDialToneResp;
+	string	mMdmHangUp, mMdmHangUpResp;
+	bool	mMdmMode, mMdmDataMode;
 };
 
 //************************************************
@@ -122,8 +194,20 @@ class TTr: public TTipTransport
 	TTr( string name );
 	~TTr( );
 
+	void modStart( );
+	void modStop( );
+
+	AutoHD<TTrIn> inAt( const string &name );
+	AutoHD<TTrOut> outAt( const string &name );
+
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	static void writeLine( int fd, const string &ln );
+	static string expect( int fd, const string& expLst, int tm );
+
+	bool devLock( const string &dn, bool check = false );
+	void devUnLock( const string &dn );
 
     protected:
 	void load_( );
@@ -131,6 +215,14 @@ class TTr: public TTipTransport
     private:
 	//Methods
 	void postEnable( int flag );
+
+	static void Task( union sigval obj );	//Transports checking task
+
+	//Attributes
+	bool	prcSt;
+	timer_t	tmId;				//Thread timer
+
+	map<string,bool> mDevLock;
 };
 
 extern TTr *mod;

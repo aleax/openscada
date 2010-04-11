@@ -546,7 +546,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
     //> Service commands process -
     if( a_path == "/serv/attr" )	//Attribute's access
     {
-	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEQ_RD) )		//Get values
+	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD) )		//Get values
 	{
 	    vector<string> ls;
 	    attrList(ls);
@@ -560,11 +560,11 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 				     setText(attr.at().getS());
 	    }
 	}
-	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEQ_WR) )	//Set values
+	else if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEC_WR) )	//Set values
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
 	        attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
     }
-    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","root",SEQ_RD) )	//Get attributes all updated elements' of the branch
+    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD) )	//Get attributes all updated elements' of the branch
     {
 	//>> Self attributes put
 	vector<string> ls;
@@ -658,36 +658,36 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if( a_path == "/wdg/st/en" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(enable()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setEnable( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(enable()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setEnable( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/wdg/st/parent" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( parentNm() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setParentNm( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( parentNm() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setParentNm( opt->text() );
     }
     else if( a_path == "/wdg/st/goparent" &&
-	    ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) && !parent().freeStat() )
+	    ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) && !parent().freeStat() )
 	opt->setText(parent().at().nodePath(0,true));
     else if( a_path == "/wdg/cfg/owner" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( owner() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setOwner( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( owner() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setOwner( opt->text() );
     }
     else if( a_path == "/wdg/cfg/grp" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( grp() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setGrp( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( grp() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setGrp( opt->text() );
     }
     else if( a_path == "/wdg/cfg/u_a" || a_path == "/wdg/cfg/g_a" || a_path == "/wdg/cfg/o_a" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    if( a_path == "/wdg/cfg/u_a" )	opt->setText(TSYS::int2str((permit()>>6)&0x7));
 	    if( a_path == "/wdg/cfg/g_a" )	opt->setText(TSYS::int2str((permit()>>3)&0x7));
 	    if( a_path == "/wdg/cfg/o_a" )	opt->setText(TSYS::int2str(permit()&0x7));
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    if( a_path == "/wdg/cfg/u_a" )	setPermit( (permit()&(~(0x07<<6)))|(atoi(opt->text().c_str())<<6) );
 	    if( a_path == "/wdg/cfg/g_a" )	setPermit( (permit()&(~(0x07<<3)))|(atoi(opt->text().c_str())<<3) );
@@ -696,8 +696,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if( a_path == "/wdg/cfg/ico" || a_path == "/ico" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( ico() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setIco( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( ico() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setIco( opt->text() );
     }
     else if( a_path == "/wdg/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/wdg/cfg/type" && ctrChkNode(opt) )	opt->setText(type());
@@ -706,13 +706,13 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	opt->setText((isLink()&&atoi(opt->attr("resLink").c_str())) ? parentNoLink().at().path() : path());
     else if( a_path == "/wdg/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( name() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setName( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setName( opt->text() );
     }
     else if( a_path == "/wdg/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( descr() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setDescr( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( descr() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setDescr( opt->text() );
     }
     else if( a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root","UI") )
     {
@@ -771,25 +771,25 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if( a_path == "/br/wdg_" || a_path == "/inclwdg/wdg" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
-	    if( !chkUserPerm || SYS->security().at().access(opt->attr("user"),SEQ_RD,owner(),grp(),permit()) )
+	    if( !chkUserPerm || SYS->security().at().access(opt->attr("user"),SEC_RD,owner(),grp(),permit()) )
 	    {
 		vector<string>  lst;
 		wdgList(lst);
 		for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		{
 		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
-		    if( chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEQ_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()) )
+		    if( chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEC_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()) )
 			continue;
 		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(iwdg.at().name());
 		}
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )
 	    wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text(),"");
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	wdgDel(opt->attr("id").c_str(),true);
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )	wdgDel(opt->attr("id").c_str(),true);
     }
     else return false;
 
@@ -821,12 +821,12 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
     if( a_path.substr(0,6) == "/attr/" )
     {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
-	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEC_RD) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )	opt->setText(attr.at().getSEL());
 	    else opt->setText(attr.at().getS());
 	}
-	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root","UI",SEC_WR) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )	{ attr.at().setSEL(opt->text()); opt->setText(attr.at().getSEL()); }
 	    else { attr.at().setS(opt->text()); opt->setText(attr.at().getS()); }
@@ -912,9 +912,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/links/showAttr" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"showAttr",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,14) == "/links/lnk/pr_" )
@@ -935,7 +935,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 		{ nattr = a_ls[i_a]; break; }
 	}
 
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    string cfg_val = srcwdg.at().attrAt(nattr).at().cfgVal();
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
@@ -965,7 +965,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 
 	    opt->setText(rez);
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    bool noonly_no_set = true;
 	    string no_set;
@@ -1107,9 +1107,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	if( nattr.size() )	srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 	
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
 	    if( srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst )
@@ -1159,13 +1159,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/proc/wdg" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
 	    opt->setText(wattr);
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/proc/w_lst" && ctrChkNode(opt) )
@@ -1183,7 +1183,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	if( wattr != "." && !wdgPresent(wattr) )	wattr = ".";
 	
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/proc/attr/id","");
 	    XMLNode *n_name	= ctrMkNode("list",opt,-1,"/proc/attr/name","");
@@ -1209,7 +1209,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if( n_cfgtmpl )	n_cfgtmpl->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().cfgTempl());
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
@@ -1217,7 +1217,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    wdg.at().attrAt("newAttr").at().setModif(1);
 	    wdg.at().modif();
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    if( !wdg.at().attrPresent(opt->attr("key_id")) )
@@ -1228,7 +1228,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    else throw TError(nodePath().c_str(),_("Deletint the not user element error."));
 	    wdg.at().modif();
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    //>> Request data
 	    string idattr = opt->attr("key_id");
@@ -1298,18 +1298,18 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     }
     else if( a_path == "/proc/calc/progLng" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText(calcLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setCalcLang(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText(calcLang());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setCalcLang(opt->text());
     }
     else if( a_path == "/proc/calc/per" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText(TSYS::int2str(calcPer()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setCalcPer(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText(TSYS::int2str(calcPer()));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setCalcPer(atoi(opt->text().c_str()));
     }
     else if( a_path == "/proc/calc/prog" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText(calcProg());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setCalcProg(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText(calcProg());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setCalcProg(opt->text());
     }
     else if( a_path == "/proc/calc/plangLs" && ctrChkNode(opt) )
     {

@@ -31,9 +31,9 @@ ndNext = new Array();	//Next nodes array
 pgInfo = document.createElement('info');	//Curent page XML tree.
 root = document.createElement('oscada_cntr');	//Root page's node.
 selPath = '';		//Select item path
-SEQ_XT = 0x01;		//Extended
-SEQ_WR = 0x02;		//Write access
-SEQ_RD = 0x04;		//Read access
+SEC_XT = 0x01;		//Extended
+SEC_WR = 0x02;		//Write access
+SEC_RD = 0x04;		//Read access
 copyBuf = '0';		//Copy node address buffer
 //> Browser type detect
 var isNN = navigator.appName.indexOf('Netscape') != -1;
@@ -395,11 +395,11 @@ function pageDisplay( path )
     if( root.childNodes[i_ch].getAttribute('id') == 'br' )
     {
       for( var i_g = 0; i_g < root.childNodes[i_ch].childNodes.length; i_g++ )
-        if( parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEQ_WR )
+        if( parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEC_WR )
         { actEnable('actAddIt',true); break; }
       break;
     }
-  actEnable('actDelIt',parseInt(root.getAttribute('acs'))&SEQ_WR)
+  actEnable('actDelIt',parseInt(root.getAttribute('acs'))&SEC_WR)
 
   //> Load and Save allow check
   var reqModif = servGet(selPath,'com=modify');
@@ -414,7 +414,7 @@ function pageDisplay( path )
  ***************************************************/
 function editToolUpdate( )
 {
-  actEnable('actCut',(selPath.length&&parseInt(root.getAttribute('acs'))&SEQ_WR));
+  actEnable('actCut',(selPath.length&&parseInt(root.getAttribute('acs'))&SEC_WR));
   actEnable('actCopy',selPath.length);
   actEnable('actPaste',false);
 
@@ -429,11 +429,11 @@ function editToolUpdate( )
     if( root.childNodes[i_ch].getAttribute('id') == 'br' )
     {
       for( var i_g = 0; i_g < root.childNodes[i_ch].childNodes.length; i_g++ )
-        if( parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEQ_WR )
+        if( parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEC_WR )
         { actEnable('actPaste',true); break; }
       break;
     }
-  if( parseInt(root.getAttribute('acs'))&SEQ_WR ) actEnable('actPaste',true);
+  if( parseInt(root.getAttribute('acs'))&SEC_WR ) actEnable('actPaste',true);
 }
 /***************************************************
  * selectChildRecArea - Make page content          *
@@ -511,7 +511,7 @@ function selectChildRecArea( node, aPath, cBlk )
     var t_s = node.childNodes[i_cf];
 
     //>> Check access to node
-    var wr = parseInt(t_s.getAttribute('acs'))&SEQ_WR;
+    var wr = parseInt(t_s.getAttribute('acs'))&SEC_WR;
 
     //>> View areas
     if( t_s.nodeName.toLowerCase() == 'area' )
@@ -551,7 +551,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	  var optEl = '';
 	  if( this.srcNode.getAttribute('tp') == 'br' && this.selectedIndex >= 0 )
 	    optEl += "<option posId='go'>###Go###</option><option disabled='true'>------------</option>";
-	  if( (parseInt(this.srcNode.getAttribute('acs'))&SEQ_WR) && this.srcNode.getAttribute('s_com') )
+	  if( (parseInt(this.srcNode.getAttribute('acs'))&SEC_WR) && this.srcNode.getAttribute('s_com') )
 	  {
 	    if( this.srcNode.getAttribute('s_com').search('add') != -1 ) optEl += "<option posId='add'>###Add###</option>";
 	    if( this.srcNode.getAttribute('s_com').search('ins') != -1 && this.selectedIndex >= 0 ) optEl += "<option posId='ins'>###Insert###</option>";
@@ -893,7 +893,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 	      }
 	    }
-	    else if( i_rw && wr && parseInt(t_s.childNodes[table.childNodes[i_rw].childNodes.length-1].getAttribute('acs'))&SEQ_WR )
+	    else if( i_rw && wr && parseInt(t_s.childNodes[table.childNodes[i_rw].childNodes.length-1].getAttribute('acs'))&SEC_WR )
 	      cCell.ondblclick = function( )
 	      {
 		this.isEnter = true;
@@ -1967,7 +1967,7 @@ function itAdd( )
   //> Load branches list
   var typeCfg = '';
   for( var i_b = 0; i_b < branchS.childNodes.length; i_b++ )
-    if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEQ_WR )
+    if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR )
       typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
 		     "' gid='"+branchS.childNodes[i_b].getAttribute('id')+
 		     "' idm='"+(parseInt(branchS.childNodes[i_b].getAttribute('idm'))?"1":"0")+"'>"+
@@ -2035,7 +2035,7 @@ function itDel( iit )
     for( var i_b = 0; i_b < branch.childNodes.length; i_b++ )
     {
       var b_id = branch.childNodes[i_b].getAttribute('id');
-      if( b_id == sel_el.substr(0,b_id.length) && parseInt(branch.childNodes[i_b].getAttribute('acs'))&SEQ_WR )
+      if( b_id == sel_el.substr(0,b_id.length) && parseInt(branch.childNodes[i_b].getAttribute('acs'))&SEC_WR )
       {
 	var idm = parseInt(branch.childNodes[i_b].getAttribute('idm'));
 	var com = idm ? ("<del id='"+sel_el.substr(b_id.length)+"'/>") :
@@ -2081,13 +2081,13 @@ function itPaste( )
 
   if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('###Copy is imposible.###'); return; }
 
-  if( parseInt(root.getAttribute('acs'))&SEQ_WR ) { typeCfg+="<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
+  if( parseInt(root.getAttribute('acs'))&SEC_WR ) { typeCfg+="<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
   for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
     if( root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
       branchS =  root.childNodes[i_ch];
   if( branchS )
     for( var i_b = 0; i_b < branchS.childNodes.length; i_b++, itCnt++ )
-      if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEQ_WR )
+      if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR )
       {
 	var gbrId = branchS.childNodes[i_b].getAttribute('id');
 	typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+"' gid='"+gbrId+"'>"+branchS.childNodes[i_b].getAttribute('dscr')+"</option>";

@@ -254,7 +254,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	for( int i_a = 0; i_a < root->childSize(); i_a++ )
 	{
 	    XMLNode *gnd = root->childGet(i_a);
-	    if( grpW && !(atoi(gnd->attr("acs").c_str())&SEQ_WR) ) continue;
+	    if( grpW && !(atoi(gnd->attr("acs").c_str())&SEC_WR) ) continue;
 
 	    string a_id = gnd->attr("id");
 	    string a_nm = gnd->attr("dscr");
@@ -282,7 +282,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    if( grpW && ga_id >= 0 ) { cur_it->child(ga_id)->setWdgs(itId); continue; }
 	    if( ga_id < 0 ) ga_id = cur_it->childInsert( a_id, -1, Item::Attr );
 	    cur_it->child(ga_id)->setName( a_nm );
-	    cur_it->child(ga_id)->setEdited( atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	    cur_it->child(ga_id)->setEdited( atoi(gnd->attr("acs").c_str())&SEC_WR );
 	    cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );
 	    cur_it->child(ga_id)->setModify( grpW ? false : atoi(gnd->attr("modif").c_str()) );
 	    if( grpW ) cur_it->child(ga_id)->setWdgs(itId);

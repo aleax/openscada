@@ -150,13 +150,13 @@ bool FlowTEC::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/Thread" )
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(mPrm->extPrmGet("Thread"));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	mPrm->extPrmSet("Thread",opt->text());
+	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("Thread"));
+	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("Thread",opt->text());
     }
     else if( a_path == "/prm/cfg/FirmWareVer" )
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(mPrm->extPrmGet("FirmwareVer"));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	mPrm->extPrmSet("FirmwareVer",opt->text());
+	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("FirmwareVer"));
+	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("FirmwareVer",opt->text());
     }
     else return false;
 

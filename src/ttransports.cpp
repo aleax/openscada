@@ -442,8 +442,8 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0444) ) opt->setText(optDescr());
     else if( a_path == "/sub/sysHosts" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","Transport",SEQ_RD) )	opt->setText( TSYS::int2str(sysHost()) );
-	if( ctrChkNode(opt,"set",0660,"root","Transport",SEQ_WR) )	setSysHost( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(sysHost()) );
+	if( ctrChkNode(opt,"set",0660,"root","Transport",SEC_WR) )	setSysHost( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/sub/transps" && ctrChkNode(opt) )
     {
@@ -456,7 +456,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     {
 	TConfig c_el(&el_ext);
 	c_el.cfg("OP_USER").setS(opt->attr("user"));
-	if( ctrChkNode(opt,"get",0666,"root","Transport",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0666,"root","Transport",SEC_RD) )
 	{
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",0666);
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",0666);
@@ -478,11 +478,11 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if( n_pass )	n_pass->childAdd("el")->setText(host.pass.size()?"*******":"");
 	    }
 	}
-	if( ctrChkNode(opt,"add",0666,"root","Transport",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0666,"root","Transport",SEC_WR) )
 	    extHostSet(ExtHost(sysHost()?"*":opt->attr("user"),"newHost","New external host","","",opt->attr("user"),""));
-	if( ctrChkNode(opt,"del",0666,"root","Transport",SEQ_WR) )
+	if( ctrChkNode(opt,"del",0666,"root","Transport",SEC_WR) )
 	    extHostDel(sysHost()?"*":opt->attr("user"),opt->attr("key_id") );
-	if( ctrChkNode(opt,"set",0666,"root","Transport",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0666,"root","Transport",SEC_WR) )
 	{
 	    string col  = opt->attr("col");
 	    ExtHost host = extHostGet(sysHost()?"*":opt->attr("user"),opt->attr("key_id"));
@@ -550,33 +550,33 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/in_" || a_path == "/tr/in" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    inList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",list[i_a])->setText(inAt(list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    inAdd(vid); inAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	inDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	inDel(opt->attr("id"),true);
     }
     else if( a_path == "/br/out_" || a_path == "/tr/out" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    outList(list);
 	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",list[i_a])->setText(outAt(list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    outAdd(vid); outAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	outDel(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	outDel(opt->attr("id"),true);
     }
     else TModule::cntrCmdProc(opt);
 }
@@ -658,24 +658,24 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Input transport: ")+name()).c_str(),0664,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Input transport: ")+name()).c_str(),RWRWR_,"root","Transport");
 	if(ctrMkNode("area",opt,-1,"/prm",_("Transport")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root","Transport",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root","Transport",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root","Transport",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","90","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root","Transport",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),RWRWR_,"root","Transport",3,"tp","str","cols","90","rows","3");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),RWRWR_,"root","Transport",3,"tp","str","dest","select","select","/prm/cfg/p_mod");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root","Transport",1,"tp","bool");
 	    }
 	}
 	return;
@@ -685,39 +685,39 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/st/status" && ctrChkNode(opt) )		opt->setText(getStatus());
     else if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	atoi(opt->text().c_str())?start():stop();
     }
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setName(opt->text());
     }
     else if( a_path == "/prm/cfg/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )  	opt->setText(dscr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDscr(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(dscr());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setDscr(opt->text());
     }
     else if( a_path == "/prm/cfg/addr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(addr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setAddr(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(addr());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setAddr(opt->text());
     }
     else if( a_path == "/prm/cfg/prot" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(protocolFull());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setProtocolFull(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(protocolFull());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setProtocolFull(opt->text());
     }
     else if( a_path == "/prm/cfg/start" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( toStart() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setToStart( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( toStart() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setToStart( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/p_mod" && ctrChkNode(opt) )
     {
@@ -849,33 +849,33 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Output transport: ")+name()).c_str(),0664,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",(_("Output transport: ")+name()).c_str(),RWRWR_,"root","Transport");
 	if( ctrMkNode("area",opt,-1,"/prm",_("Transport")) )
 	{
 	    if( ctrMkNode("area",opt,-1,"/prm/st",_("State")) )
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),0664,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root","Transport",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root","Transport",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root","Transport",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if( ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")) )
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),0664,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),0664,"root","root",3,"tp","str","cols","90","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root","Transport",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),RWRWR_,"root","Transport",3,"tp","str","cols","90","rows","3");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root","Transport",1,"tp","bool");
 	    }
 	}
-	if( startStat() && ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root","root") )
+	if( startStat() && ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root","Transport") )
 	{
-	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time (ms)"),R_R___,"root","root",1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root","root",4,"tp","dec","dest","select","sel_id","0;1","sel_list",_("Text;Binary"));
-	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root","root",1,"tp","bool");
-	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__);
-	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root","root",3,"tp","str","cols","90","rows","5");
-	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),R_R___,"root","root",3,"tp","str","cols","90","rows","5");
+	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time (ms)"),R_R___,"root","Transport",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root","Transport",4,"tp","dec","dest","select","sel_id","0;1","sel_list",_("Text;Binary"));
+	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root","Transport",1,"tp","bool");
+	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__,"root","Transport");
+	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root","Transport",3,"tp","str","cols","90","rows","5");
+	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),R_R___,"root","Transport",3,"tp","str","cols","90","rows","5");
 	}
 	return;
     }
@@ -884,60 +884,60 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/st/status" && ctrChkNode(opt) )		opt->setText(getStatus());
     else if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?start():stop();
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	atoi(opt->text().c_str())?start():stop();
     }
     else if( a_path == "/prm/st/db" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDB(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(DB());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setDB(opt->text());
     }
     else if( a_path == "/prm/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/prm/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(name());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(name());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setName(opt->text());
     }
     else if( a_path == "/prm/cfg/dscr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(dscr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDscr(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(dscr());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setDscr(opt->text());
     }
     else if( a_path == "/prm/cfg/addr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(addr());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setAddr(opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(addr());
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setAddr(opt->text());
     }
     else if( a_path == "/prm/cfg/start" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( toStart() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setToStart( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( toStart() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setToStart( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root","root",SEQ_RD) )
+    else if( a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root","Transport",SEC_RD) )
 	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
     else if( a_path == "/req/mode" )
     {
-	if( ctrChkNode(opt,"get",RWRW__,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",RWRW__,"root","root",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )	TBDS::genDBSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/req/toTmOut" )
     {
-	if( ctrChkNode(opt,"get",RWRW__,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",RWRW__,"root","root",SEQ_WR) )	TBDS::genDBSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )	TBDS::genDBSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/req/req" )
     {
-	if( ctrChkNode(opt,"get",RWRW__,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
-	if( ctrChkNode(opt,"set",RWRW__,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
+	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )
 	{
 	    if( atoi(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")).c_str()) == 1 )
 		TBDS::genDBSet(owner().nodePath()+"ReqReq",TSYS::strDecode(TSYS::strEncode(opt->text(),TSYS::Bin),TSYS::Bin),opt->attr("user"));
 	    else TBDS::genDBSet(owner().nodePath()+"ReqReq",opt->text(),opt->attr("user"));
 	}
     }
-    else if( a_path == "/req/answ" && ctrChkNode(opt,"get",R_R___,"root","root",SEQ_RD) )
+    else if( a_path == "/req/answ" && ctrChkNode(opt,"get",R_R___,"root","Transport",SEC_RD) )
 	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
-    else if( a_path == "/req/send" && startStat() && ctrChkNode(opt,"set",RWRW__,"root","root",SEQ_WR) )
+    else if( a_path == "/req/send" && startStat() && ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )
     {
 	string answ;
 	int mode = atoi(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")).c_str());

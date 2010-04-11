@@ -388,8 +388,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     else if( mBus == 0 && a_path == "/LPcfg/wTm" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( prmLP("wTm") );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	setPrmLP("wTm",opt->text());
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( prmLP("wTm") );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setPrmLP("wTm",opt->text());
     }
     else TController::cntrCmdProc(opt);
 }
@@ -954,20 +954,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/prms" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 	{ ((PrmsI8017*)extPrms)->prmNum = atoi(opt->text().c_str()); saveExtPrms(); }
     }
     else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/fastPer" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 	{ ((PrmsI8017*)extPrms)->fastPer = atof(opt->text().c_str()); saveExtPrms(); }
     }
     else if( modTp == 0x8017 && enableStat() && a_path.substr(0,12) == "/cfg/mode/in" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 	{ ((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()); saveExtPrms(); }
     }
     else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
@@ -980,12 +980,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( modTp == 0x87019 && enableStat() && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
 	{
 	    rez = owner().serReq( TSYS::strMess("$%02X8C%d",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())), modSlot );
 	    opt->setText( (rez.size()!=8||rez[0]!='!') ? "-1" : TSYS::int2str(strtol(rez.data()+6,NULL,16)) );
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 	    owner().serReq( TSYS::strMess("$%02X7C%dR%02X",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())), modSlot );
     }
     else if( modTp == 0x87019 && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
@@ -1020,21 +1020,21 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if( enableStat() && a_path.substr(0,10) == "/cfg/revIn" )
     {
 	int rin = atoi(a_path.substr(10).c_str());
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( (dInRev&(1<<rin))?"1":"0" );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( (dInRev&(1<<rin))?"1":"0" );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 	{ dInRev = atoi(opt->text().c_str()) ? (dInRev|(1<<rin)) : (dInRev & ~(1<<rin)); saveExtPrms(); }
     }
     else if( enableStat() && a_path.substr(0,11) == "/cfg/revOut" )
     {
 	int rout = atoi(a_path.substr(11).c_str());
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( (dOutRev&(1<<rout))?"1":"0" );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( (dOutRev&(1<<rout))?"1":"0" );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 	{ dOutRev = atoi(opt->text().c_str()) ? (dOutRev|(1<<rout)) : (dOutRev & ~(1<<rout)); saveExtPrms(); }
     }
     else if( enableStat() && a_path == "/cfg/wTm" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText( TSYS::real2str(wTm) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	{ wTm = atof(opt->text().c_str()); saveExtPrms(); }
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( TSYS::real2str(wTm) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	{ wTm = atof(opt->text().c_str()); saveExtPrms(); }
     }
     else if( enableStat() && owner().startStat() && a_path == "/cfg/mod/wSt" && ctrChkNode(opt) )
     {
@@ -1065,7 +1065,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	opt->setText(cnt);
     }
-    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
     {
 	for( int i_c = 0; i_c < 4; i_c++ )
 	    owner().serReq( TSYS::strMess("$%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
@@ -1081,7 +1081,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	opt->setText(cnt);
     }
-    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
     {
 	for( int i_c = 0; i_c < 4; i_c++ )
 	    owner().serReq( TSYS::strMess("~%02X5%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
@@ -1098,7 +1098,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->setText(cnt);
 	}
     }
-    else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
 	owner().serReq( TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr), modSlot );
     else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
     {
@@ -1112,7 +1112,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->setText(cnt);
 	}
     }
-    else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEQ_WR) )
+    else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
 	owner().serReq( TSYS::strMess("~%02X5S",(owner().mBus==0)?0:modAddr), modSlot );
     else TParamContr::cntrCmdProc(opt);
 }

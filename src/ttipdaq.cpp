@@ -162,19 +162,19 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/cntr_" || a_path == "/tctr/ctr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> c_list;
 	    list(c_list);
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid); at(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);
     }
     else TModule::cntrCmdProc(opt);
 }

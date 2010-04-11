@@ -24,9 +24,9 @@
 
 #include "tbds.h"
 
-#define SEQ_XT 0x01
-#define SEQ_WR 0x02
-#define SEQ_RD 0x04
+#define SEC_XT 0x01
+#define SEC_WR 0x02
+#define SEC_RD 0x04
 
 //*************************************************
 //* TUser					  *

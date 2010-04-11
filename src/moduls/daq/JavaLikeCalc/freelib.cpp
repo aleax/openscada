@@ -183,36 +183,36 @@ void Lib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/lib/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startStat() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( startStat() ? "1" : "0" );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStart( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/lib/st/db" && DB().size() )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText( fullDB() );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )	setFullDB( opt->text() );
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( fullDB() );
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setFullDB( opt->text() );
     }
     else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/lib/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( name() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setName( opt->text() );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setName( opt->text() );
     }
     else if( a_path == "/lib/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( descr() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setDescr( opt->text() );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( descr() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setDescr( opt->text() );
     }
     else if( a_path == "/br/fnc_" || a_path == "/func/func" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> lst;
 	    list(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(mFnc,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(mFnc,opt->attr("id"),-1,1);
     }
     else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
     {

@@ -355,25 +355,25 @@ void TVision::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_user" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(startUser());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setStartUser(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(startUser());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setStartUser(opt->text());
     }
     if( a_path == "/prm/cfg/u_pass" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText("*******");
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setUserPass(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText("*******");
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setUserPass(opt->text());
     }
     else if( a_path == "/prm/cfg/run_prj" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(runPrjs());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setRunPrjs(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(runPrjs());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setRunPrjs(opt->text());
     }
     else if( a_path == "/prm/cfg/stationVCA" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(VCAStation());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setVCAStation(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(VCAStation());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setVCAStation(opt->text());
     }
-    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","UI",SEQ_RD) )
+    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","UI",SEC_RD) )
     {
 	SYS->transport().at().setSysHost(true);
 	opt->setText("/Transport");
@@ -398,8 +398,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/alarm/plComm" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEQ_RD) )	opt->setText(playCom());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEQ_WR) )	setPlayCom(opt->text());
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(playCom());
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setPlayCom(opt->text());
     }
     else if( a_path == "/alarm/plComLs" && ctrChkNode(opt) )
     {

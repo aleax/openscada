@@ -423,7 +423,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		if(n_pbspd)	n_pbspd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].pbspeed));
 	    }
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    int brd = atoi(opt->attr("row").c_str());
 	    string col  = opt->attr("col");
@@ -452,9 +452,9 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/PB/dev" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/PB/lifels" && ctrChkNode(opt) )
@@ -1713,10 +1713,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if( a_path == "/serv/tmplAttr" )
 	{
 	    if( !enableStat() || !func() ) throw TError(nodePath().c_str(),_("Parameter disabled or error."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )
+	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
 		for( int i_a = 0; i_a < ioSize(); i_a++ )
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )
+	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
 		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
 		{
 		    int io_id = -1;
@@ -1775,7 +1775,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //- Process command to page -
-    if( a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+    if( a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
     {
 	m_tmpl = opt->text();
 	disable();
@@ -1807,14 +1807,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/cfg/only_off" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	    TBDS::genDBSet(mod->nodePath()+"onlOff",opt->text(),opt->attr("user"));
     }
     else if( a_path.substr(0,12) == "/cfg/prm/pr_" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
 	    string sdb = TSYS::strSepParse(lnk(lnk_id).db_addr,0,'.');
@@ -1823,7 +1823,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if((off-t_off)>0)	sdb=sdb+"."+TSYS::int2str(off-t_off);
 	    opt->setText(sdb);
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    string p_nm, cp_nm;
 	    int off, coff, cbit, csz;
@@ -1851,7 +1851,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path.substr(0,12) == "/cfg/prm/el_" && enableStat() )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
 	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
@@ -1859,7 +1859,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
 		opt->setText(getS(i_io));
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
 	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )

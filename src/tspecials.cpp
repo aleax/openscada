@@ -103,8 +103,8 @@ void TSpecial::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	atoi(opt->text().c_str())?modStart():modStop();
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	atoi(opt->text().c_str())?modStart():modStop();
     }
     else TModule::cntrCmdProc(opt);
 }

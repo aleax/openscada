@@ -289,7 +289,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     int i_b;
     for( i_b = 0; i_b < branch->childSize(); i_b++ )
 	if( branch->childGet(i_b)->attr("id") == d_el.substr(0,branch->childGet(i_b)->attr("id").size()) && 
-		atoi(branch->childGet(i_b)->attr("acs").c_str())&SEQ_WR )
+		atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 	    break;
     if( i_b >= branch->childSize() )
         throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
@@ -648,8 +648,8 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	}
 
     //> Check permission
-    char n_acs = SYS->security().at().access(nd->attr("user"),SEQ_RD|SEQ_WR|SEQ_XT,user,grp,perm);
-    if( !(n_acs&SEQ_RD) ) return NULL;
+    char n_acs = SYS->security().at().access(nd->attr("user"),SEC_RD|SEC_WR|SEC_XT,user,grp,perm);
+    if( !(n_acs&SEC_RD) ) return NULL;
     if( itbr )	return nd;
 
     XMLNode *obj = nd;
@@ -730,14 +730,14 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	//>> Get node modify flag
 	if( ctrChkNode(opt,"modify",R_R_R_) )	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	//>> Do load node
-	else if( ctrChkNode(opt,"load",RWRWRW,"root","root",SEQ_WR) )	load( );
+	else if( ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR) )	load( );
 	//>> Do save node
-	else if( ctrChkNode(opt,"save",RWRWRW,"root","root",SEQ_WR) )	save( );
+	else if( ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR) )	save( );
 	//>> Do copy node
-	else if( ctrChkNode(opt,"copy",RWRWRW,"root","root",SEQ_WR) )
+	else if( ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR) )
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
 	//>> Request node childs parameters
-	else if( ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEQ_RD) )
+	else if( ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEC_RD) )
 	{
 	    string chGrp = opt->attr("grp");
 	    bool icoCheck = atoi(opt->attr("icoCheck").c_str());

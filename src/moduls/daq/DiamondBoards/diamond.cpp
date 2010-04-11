@@ -476,7 +476,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path.substr(0,11) == "/board/dio/" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    string port_n = TSYS::pathLev(a_path,2);
 	    int	cfg_b = cfg("DIO_CFG").getI();
@@ -486,7 +486,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    else if( port_n == "c2" )	cfg_b&=0x08;
 	    opt->setText(cfg_b?"1":"0");
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 	{
 	    string port_n = TSYS::pathLev(a_path,2);
 	    int cfg_b = cfg("DIO_CFG").getI();

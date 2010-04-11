@@ -325,45 +325,45 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/obj/st/en" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( TSYS::int2str(enable()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setEnable( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(enable()) );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setEnable( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/obj/st/db" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( fullDB() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setFullDB( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( fullDB() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setFullDB( opt->text() );
     }
     else if( a_path == "/obj/cfg/ico" || a_path == "/ico" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( ico() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setIco( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( ico() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setIco( opt->text() );
     }
     else if( a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root","UI") ) opt->setText(id());
     else if( a_path == "/obj/cfg/name" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( name() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setName( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( name() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setName( opt->text() );
     }
     else if( a_path == "/obj/cfg/descr" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )	opt->setText( descr() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )	setDescr( opt->text() );
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( descr() );
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setDescr( opt->text() );
     }
     else if( a_path == "/br/wdg_" || a_path == "/wdg/wdg" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    vector<string> lst;
 	    list(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) ) del(opt->attr("id"),true);
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) ) del(opt->attr("id"),true);
     }
     else if( a_path == "/mime/mime" )
     {
@@ -371,7 +371,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	string idmime = opt->attr("key_id");
 	string idcol  = opt->attr("col");
 
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
 	{
 	    if( !idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()) )
 	    {
@@ -396,9 +396,9 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		    }
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEQ_WR) )	mimeDataSet("newMime","image/new;0","");
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEQ_WR) )	mimeDataDel(opt->attr("key_id"));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEQ_WR) )
+	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )	mimeDataSet("newMime","image/new;0","");
+	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )	mimeDataDel(opt->attr("key_id"));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
 	{
 	    //>> Request data
 	    if( idcol == "id" )

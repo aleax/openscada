@@ -480,7 +480,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     //> Service commands process
     if( a_path == "/serv/pg" )	//Pages operations
     {
-	if( ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	//Open pages list
+	if( ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEC_RD) )	//Open pages list
 	{
 	    unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	    vector<string> &lst = openList();
@@ -493,7 +493,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		{
 		    //> Permission to view page check
 		    AutoHD<SessWdg> swdg = nodeAt(lst[i_f],1);
-		    if( !SYS->security().at().access(opt->attr("user"),SEQ_RD,swdg.at().owner(),swdg.at().grp(),swdg.at().permit()) )
+		    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,swdg.at().owner(),swdg.at().grp(),swdg.at().permit()) )
 			continue;
 		    //> Changed widgets list add
 		    vector<string> updEl;
@@ -503,15 +503,15 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    }
 	    opt->setAttr("tm",TSYS::uint2str(calcClk()));
 	}
-	else if( ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )		//Open pages
+	else if( ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEC_WR) )		//Open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true);
-	else if( ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEQ_WR) )		//Close open pages
+	else if( ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR) )		//Close open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
 	return;
     }
     else if( a_path == "/serv/alarm" )	//Alarm operations
     {
-	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD) )
 	{
 	    //> Get alarm status
 	    int aSt = alarmStat();
@@ -545,7 +545,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		}else mAlrmSndPlay = -1;
 	    } else if( !((aSt>>16) & Engine::Sound) ) mAlrmSndPlay = -1;
 	}
-	else if( ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )
+	else if( ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR) )
 	    alarmQuittance(opt->attr("wdg"),~atoi(opt->attr("tmpl").c_str()));
 	return;
     }
@@ -605,13 +605,13 @@ void Session::cntrCmdProc( XMLNode *opt )
     if( a_path == "/ico" && ctrChkNode(opt) )   opt->setText(ico());
     else if( a_path == "/obj/st/en" )
     {
-	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(enable()));
-	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	setEnable(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD) )	opt->setText(TSYS::int2str(enable()));
+	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	setEnable(atoi(opt->text().c_str()));
     }
     else if( a_path == "/obj/st/start" )
     {
-	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(start()));
-	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	setStart(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD) )	opt->setText(TSYS::int2str(start()));
+	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	setStart(atoi(opt->text().c_str()));
     }
     else if( a_path == "/obj/st/user" && ctrChkNode(opt) )	opt->setText(user());
     else if( a_path == "/obj/st/owner" && ctrChkNode(opt) )	opt->setText(owner());
@@ -624,8 +624,8 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/obj/st/prj" )
     {
-	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(projNm());
-	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	setProjNm(opt->text());
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD) )	opt->setText(projNm());
+	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	setProjNm(opt->text());
     }
     else if( a_path == "/obj/st/backgrnd" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(backgrnd()));
     else if( a_path == "/obj/st/connect" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(connects()));
@@ -639,13 +639,13 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/obj/cfg/per" )
     {
-	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText(TSYS::int2str(period()));
-	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	setPeriod(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD) )	opt->setText(TSYS::int2str(period()));
+	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	setPeriod(atoi(opt->text().c_str()));
     }
     else if( a_path == "/obj/cfg/style" )
     {
-	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEQ_RD) )	opt->setText( TSYS::int2str(stlCurent()) );
-	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	stlCurentSet( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD) )	opt->setText( TSYS::int2str(stlCurent()) );
+	if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	stlCurentSet( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/obj/cfg/stLst" && ctrChkNode(opt) )
     {
@@ -1006,9 +1006,9 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags( )&Page::Empty) )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEC_RD) )
 	    opt->setText(TSYS::int2str(attrAt("pgOpen").at().getB()));
-	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) )
+	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR) )
 	    attrAt("pgOpen").at().setB(atoi(opt->text().c_str()));
     }
     else if( (a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt) )
@@ -1682,12 +1682,12 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/serv/attr" )		//Attribute's value operations
     {
-	if( ctrChkNode(opt,"get",R_R_R_,"root","UI",SEQ_RD) )	//Get values
+	if( ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD) )	//Get values
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
 	    if( !tm )
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
-		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEQ_RD|SEQ_WR,owner(),grp(),permit())) );
+		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())) );
 	    if( !tm || modifChk(tm,mMdfClc) )
 	    {
 		AutoHD<Attr> attr;
@@ -1703,7 +1703,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		}
 	    }
 	}
-	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEQ_WR) )	//Set values
+	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	//Set values
 	{
 	    if( ownerSess()->user() != opt->attr("user") ) ownerSess()->setUser(opt->attr("user"));
 	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
@@ -1714,10 +1714,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
     }
-    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEQ_RD) )	//Get attributes all updated elements' of the branch
+    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD) )	//Get attributes all updated elements' of the branch
     {
 	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
-	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEQ_RD:SEQ_RD|SEQ_WR),owner(),grp(),permit());
+	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
 
 	//>> Self attributes put
 	if( !tm || modifChk(tm,mMdfClc) )
@@ -1738,7 +1738,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	}
 
 	//>> Child widgets process
-	if( enable() && perm&SEQ_RD )
+	if( enable() && perm&SEC_RD )
 	{
 	    vector<string>	lst;
 	    wdgList(lst);
@@ -1777,8 +1777,8 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/wdg/st/proc" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEQ_RD) ) opt->setText(TSYS::int2str(process()));
-	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEQ_WR) ) setProcess(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEC_RD) ) opt->setText(TSYS::int2str(process()));
+	if( ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR) ) setProcess(atoi(opt->text().c_str()));
     }
     else return Widget::cntrCmdGeneric(opt);
 
@@ -1810,12 +1810,12 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt )
     if( a_path.substr(0,6) == "/attr/" )
     {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
-	if( ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEQ_RD) )
+	if( ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD) )
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )  opt->setText(attr.at().getSEL());
 	    else                                        opt->setText(attr.at().getS());
 	}
-	if( ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEQ_WR) )
+	if( ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR) )
 	{
 	    if( attr.at().id() == "event" )	eventAdd(opt->text()+"\n");
 	    else if( attr.at().fld().flg()&TFld::Selected )

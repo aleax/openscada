@@ -389,8 +389,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     else if( enableStat() && a_path == "/ndBrws/nd" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEQ_RD) )	opt->setText(mBrwsVar);
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEQ_WR) )	mBrwsVar = opt->text();
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mBrwsVar);
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mBrwsVar = opt->text();
     }
     else if( enableStat() && a_path == "/ndBrws/attrs" && ctrChkNode(opt) )
     {

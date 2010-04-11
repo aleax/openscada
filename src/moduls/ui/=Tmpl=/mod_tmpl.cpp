@@ -208,11 +208,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/trnds" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	    for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
 		opt->childAdd("el")->setText(trnd_lst[i_el]);
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )	{ trnd_lst.push_back(opt->text()); modif(); }
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	{ trnd_lst.push_back(opt->text()); modif(); }
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )
 	    for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
 		if( trnd_lst[i_el] == opt->text() )
 		{
@@ -224,27 +224,27 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/prm/cfg/col" )
     {
 	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(nCol()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setNCol( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setNCol( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/hsize" )
     {
 	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(hSize()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setHSize( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setHSize( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/vsize" )
     {
 	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(vSize()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setVSize( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setVSize( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/trnd_tm" )
     {
 	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(trndTm()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTrndTm( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setTrndTm( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/prm/cfg/trnd_len" )
     {
 	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(trndLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setTrndLen( atoi(opt->text().c_str()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setTrndLen( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);

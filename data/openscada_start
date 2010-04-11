@@ -17,7 +17,7 @@ pCmd="openscada --Config=./oscada.xml"
 pLock=".start.lock"
 
 # Check for already started programm present
-if [ -f $pLock ] && ps -ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
+if [ -f $pLock ] && ps -Ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
     echo "OpenSCADA station already started!";
     exit 1;
 fi

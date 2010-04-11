@@ -250,15 +250,15 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/start_path" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startPath() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStartPath( opt->text() );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( startPath() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStartPath( opt->text() );
     }
     else if( a_path == "/prm/cfg/start_user" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText( startUser() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStartUser( opt->text() );
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( startUser() );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStartUser( opt->text() );
     }
-    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )
+    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )
     {
 	SYS->transport().at().setSysHost(false);
 	opt->setText("/Transport");

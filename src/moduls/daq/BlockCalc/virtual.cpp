@@ -451,23 +451,23 @@ void Contr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/br/blk_" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    vector<string> lst;
 	    blkList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
     }
     else if( a_path == "/scheme/sch" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 	{
 	    if( !startStat() )
 	    {
@@ -483,12 +483,12 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    opt->childAdd("el")->setAttr("id",clc_blks[i_b].at().id())->setText(clc_blks[i_b].at().name());
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEQ_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
     }
     else if( a_path == "/scheme/nmb" && ctrChkNode(opt) )
     {

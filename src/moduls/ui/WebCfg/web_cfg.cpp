@@ -421,7 +421,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 {
     string	path = string("/")+MOD_ID+ses.url;
 
-    bool wr = atoi(node.attr("acs").c_str())&SEQ_WR;
+    bool wr = atoi(node.attr("acs").c_str())&SEC_WR;
     if( node.name() == "fld" )
     {
 	XMLNode dt_req("get");
@@ -658,7 +658,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		XMLNode *t_lsel = req.childGet(i_cl);
 		XMLNode *t_linf = node.childGet("id",t_lsel->attr("id"),true);
 		if(!t_linf) continue;
-		bool c_wr = wr && (atoi(t_linf->attr("acs").c_str())&SEQ_WR);
+		bool c_wr = wr && (atoi(t_linf->attr("acs").c_str())&SEC_WR);
 
 		XMLNode *x_el = t_lsel->childGet(i_rw);
 		if( t_linf->attr("tp") == "time" )
@@ -845,7 +845,7 @@ int  TWEB::postVal( SSess &ses, XMLNode &node, string prs_path)
     for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
     {
 	XMLNode *t_c = node.childGet(i_cf);
-	if( (t_c->name() == "fld") && (atoi(t_c->attr("acs").c_str())&SEQ_WR) &&
+	if( (t_c->name() == "fld") && (atoi(t_c->attr("acs").c_str())&SEC_WR) &&
 		t_c->attr("tp") != "bool" && !valPrepare( ses, *t_c,prs_path, true ) )
 	    ses.cnt.erase(t_c->attr("id"));
     }
@@ -854,7 +854,7 @@ int  TWEB::postVal( SSess &ses, XMLNode &node, string prs_path)
     for( unsigned i_cf = 0; i_cf < node.childSize(); i_cf++)
     {
 	XMLNode *t_c = node.childGet(i_cf);
-	if( t_c->name() == "fld" && (atoi(t_c->attr("acs").c_str())&SEQ_WR) )
+	if( t_c->name() == "fld" && (atoi(t_c->attr("acs").c_str())&SEC_WR) )
 	{
 	    if( !valPrepare( ses, *t_c,prs_path, true ) )
 		continue;
@@ -1056,7 +1056,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
     string	f_path, l_path, l_com;
     int		op_cnt = 0;
 
-    bool wr = atoi(node.attr("acs").c_str())&SEQ_WR;
+    bool wr = atoi(node.attr("acs").c_str())&SEC_WR;
     if( !wr )	return 0x01;
 
     //- Get command name and path -
@@ -1086,7 +1086,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 	    XMLNode *t_lsel = dt_tbl.childGet(i_cl);
 	    XMLNode *t_linf = node.childGet("id",t_lsel->attr("id"),true);
 	    if(!t_linf) continue;
-	    if(wr && (atoi(t_linf->attr("acs").c_str())&SEQ_WR) )
+	    if(wr && (atoi(t_linf->attr("acs").c_str())&SEC_WR) )
 		for( int i_rw=0; i_rw < t_lsel->childSize(); i_rw++)
 		{
 		    XMLNode *w_el = t_lsel->childGet(i_rw);

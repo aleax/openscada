@@ -254,14 +254,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/func/st/st" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	setStart(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(run_st?"1":"0");
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStart(atoi(opt->text().c_str()));
     }
     else if( a_path == "/func/st/use" && ctrChkNode(opt) )	{ ResAlloc res(f_res,false); opt->setText(TSYS::int2str(used.size())); }
     else if( a_path == "/func/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
     else if( a_path == "/func/cfg/name" && ctrChkNode(opt) )	opt->setText(name());
     else if( a_path == "/func/cfg/descr" && ctrChkNode(opt) )	opt->setText(descr());
-    else if( a_path == "/io/io" && ctrChkNode(opt,"get",0440,"root","root",SEQ_RD) )
+    else if( a_path == "/io/io" && ctrChkNode(opt,"get",0440,"root","root",SEC_RD) )
     {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","");
 	XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","");
@@ -300,8 +300,8 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/exec/en" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEQ_RD) )	opt->setText(mTVal?"1":"0");
-	if( ctrChkNode(opt,"set",0660,"root","root",SEQ_WR) )
+	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText(mTVal?"1":"0");
+	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
 	{
 	    bool to_en_exec = atoi(opt->text().c_str());
 	    if( to_en_exec && !mTVal )	{ mTVal = new TValFunc(id()+"_exec",this); mTVal->setDimens(true); }
@@ -310,8 +310,8 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/exec/n_clc" && mTVal )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
     else if( a_path == "/exec/tm" && mTVal && ctrChkNode(opt) )opt->setText(TSYS::real2str(mTVal->calcTm(),6));
     else if( a_path.substr(0,8) == "/exec/io" && mTVal )
@@ -320,14 +320,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	for( int i_io = 0; i_io < mIO.size(); i_io++ )
 	    if( io_id == io(i_io)->id() )
 	    {
-		if( ctrChkNode(opt,"get",0664,"root","root",SEQ_RD) )
+		if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
 		    opt->setText( (mTVal->ioType(i_io)==IO::Real) ? TSYS::real2str(mTVal->getR(i_io),6) : mTVal->getS(i_io) );
-		if( ctrChkNode(opt,"set",0664,"root","root",SEQ_WR) )
+		if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
 		    mTVal->setS(i_io,opt->text());
 		break;
 	    }
     }
-    else if( a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",0666,"root","root",SEQ_WR) )
+    else if( a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",0666,"root","root",SEC_WR) )
     {
 	double c_rez = 0;
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());

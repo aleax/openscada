@@ -311,7 +311,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
 	//>> Enable stat
 	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
-	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toAscii().data(),TSYS::PathEl));
@@ -319,7 +319,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
 	//>> DB value
 	gnd=TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
-	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toAscii().data(),TSYS::PathEl));
@@ -335,7 +335,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
 	//>> User
 	gnd=TCntrNode::ctrId(root,obj_user->objectName().toAscii().data(),true);
-	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_user->objectName().toAscii().data(),TSYS::PathEl));
@@ -352,7 +352,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
 	//>> Group
 	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);
-	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toAscii().data(),TSYS::PathEl));
@@ -369,7 +369,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
 	//>> Icon
 	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
-	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;
+	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEC_WR;
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl));
@@ -381,7 +381,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	//>> Permition
 	string wstr;
 	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);
-	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    obj_accuser->clear( );
@@ -391,7 +391,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) )	obj_accuser->setCurrentIndex( obj_accuser->findData(atoi(req.text().c_str())) );
 	}
 	gnd=TCntrNode::ctrId(root,obj_accgrp->objectName().toAscii().data(),true);
-	obj_accgrp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_accgrp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    obj_accgrp->clear( );
@@ -401,7 +401,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) )	obj_accgrp->setCurrentIndex( obj_accgrp->findData(atoi(req.text().c_str())) );
 	}
 	gnd=TCntrNode::ctrId(root,obj_accother->objectName().toAscii().data(),true);
-	obj_accother->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_accother->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    obj_accother->clear( );
@@ -419,7 +419,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
 	//>> Name
 	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);
-	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_name->objectName().toAscii().data(),TSYS::PathEl));
@@ -427,7 +427,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}
  	//>> Description
 	gnd=TCntrNode::ctrId(root,obj_descr->objectName().toAscii().data(),true);
-	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toAscii().data(),TSYS::PathEl));
@@ -440,7 +440,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	prj_ctm->setVisible(gnd); ((QLabel *)TSYS::str2addr(prj_ctm->windowIconText().toAscii().data()))->setVisible(gnd);
 	if( gnd )
 	{
-	    prj_ctm->setEnabled( atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	    prj_ctm->setEnabled( atoi(gnd->attr("acs").c_str())&SEC_WR );
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(prj_ctm->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) prj_ctm->setValue(req.text().c_str());
 	}
@@ -471,7 +471,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
 	//>> Style
 	gnd = TCntrNode::ctrId(root,stl_select->objectName().toAscii().data(),true);
-	stl_select->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	stl_select->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(stl_select->objectName().toAscii().data(),TSYS::PathEl));
@@ -489,11 +489,11 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
 	//>> Style delete button
 	gnd = TCntrNode::ctrId(root,buttStlDel->objectName().toAscii().data(),true);
-	buttStlDel->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	buttStlDel->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 
 	//>> Name
 	gnd = TCntrNode::ctrId(root,stl_name->objectName().toAscii().data(),true);
-	stl_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	stl_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(stl_name->objectName().toAscii().data(),TSYS::PathEl));
@@ -502,7 +502,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
 	//>> Load table data
 	gnd = TCntrNode::ctrId(root,stl_table->objectName().toAscii().data(),true);
-	stl_table->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	stl_table->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	buttStlTableDel->setEnabled( stl_table->isEnabled() );
 	if( gnd )
 	{
@@ -1075,7 +1075,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
 	//-- Enable stat --
 	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
-	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toAscii().data(),TSYS::PathEl));
@@ -1083,12 +1083,12 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}
 	//-- Parent widget --
 	gnd=TCntrNode::ctrId(root,obj_parent->objectName().toAscii().data(),true);
-	obj_parent->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_parent->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd ) selectParent( );
 
 	//-- User --
 	gnd=TCntrNode::ctrId(root,obj_user->objectName().toAscii().data(),true);
-	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_user->objectName().toAscii().data(),TSYS::PathEl));
@@ -1104,7 +1104,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}
 	//-- Group --
 	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);
-	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toAscii().data(),TSYS::PathEl));
@@ -1121,7 +1121,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
 	//-- Icon --
 	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
-	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR;
+	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEC_WR;
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl));
@@ -1133,7 +1133,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	//-- Permition --
 	string wstr;
 	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);
-	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    obj_accuser->clear( );
@@ -1143,7 +1143,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) )	obj_accuser->setCurrentIndex( obj_accuser->findData(atoi(req.text().c_str())) );
 	}
 	gnd=TCntrNode::ctrId(root,obj_accgrp->objectName().toAscii().data(),true);
-	obj_accgrp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_accgrp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    obj_accgrp->clear( );
@@ -1153,7 +1153,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) )	obj_accgrp->setCurrentIndex( obj_accgrp->findData(atoi(req.text().c_str())) );
 	}
 	gnd=TCntrNode::ctrId(root,obj_accother->objectName().toAscii().data(),true);
-	obj_accother->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_accother->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    obj_accother->clear( );
@@ -1186,7 +1186,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}
 	//-- Name --
 	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);
-	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_name->objectName().toAscii().data(),TSYS::PathEl));
@@ -1194,7 +1194,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}
 	//-- Description --
 	gnd=TCntrNode::ctrId(root,obj_descr->objectName().toAscii().data(),true);
-	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
 	    req.clear();
@@ -1208,7 +1208,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	pg_tp->setVisible(gnd); ((QLabel *)TSYS::str2addr(pg_tp->windowIconText().toAscii().data()))->setVisible(gnd);
 	if( gnd )
 	{
-	    pg_tp->setEnabled( atoi(gnd->attr("acs").c_str())&SEQ_WR );
+	    pg_tp->setEnabled( atoi(gnd->attr("acs").c_str())&SEC_WR );
 
 	    int sel_val = 0;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(pg_tp->objectName().toAscii().data(),TSYS::PathEl));
@@ -1354,7 +1354,7 @@ void VisItProp::tabChanged( int itb )
 
 	    //--- Calc period ---
 	    gnd = TCntrNode::ctrId(root,proc_per->objectName().toAscii().data(),true);
-	    proc_per->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    proc_per->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )
 	    {
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toAscii().data(),TSYS::PathEl));
@@ -1362,7 +1362,7 @@ void VisItProp::tabChanged( int itb )
 	    }
 	    //--- Calc language ---
 	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toAscii().data(),true);
-	    proc_lang->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    proc_lang->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )
 	    {
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toAscii().data(),TSYS::PathEl));
@@ -1379,7 +1379,7 @@ void VisItProp::tabChanged( int itb )
 	    }
 	    //--- Calc procedure ---
 	    gnd=TCntrNode::ctrId(root,proc_text->objectName().toAscii().data(),true);
-	    proc_text->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEQ_WR);
+	    proc_text->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )
 	    {
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_text->objectName().toAscii().data(),TSYS::PathEl));

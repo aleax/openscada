@@ -1,3 +1,11 @@
+2010-04-11 Roman
+- !!:FIX:SYS: Wrong security defines SEQ_RD, SEQ_WR and SEQ_XT is renamed to SEC_RD, SEC_WR and SEC_XT
+- FIX:SYS: Start scripts is fixed for global prevent multiply starting.
+- FIX:Transport: Control interface's permitions is fixed to group "Transport".
+- SYS: Function resTryW() and resTryR() is added to Resource object.
+- !!!!:Transport.Serial: Modem mode support is added for all input and output transports.
+
+
 2010-04-02 Roman
 - FIX:DAQ.AMRDevs: Acquisition task is fixed. Old Ergomera protocol is fixed and PDU size control is added.
 - FIX:DAQ.ModBus: PDU size control is added.
