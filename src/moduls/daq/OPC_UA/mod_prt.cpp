@@ -425,20 +425,63 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			oSqlf(mReq,"");			//dataEncoding
 		    }
 		}
-		/*else if( io.attr("id") == "Write" )
+		else if( io.attr("id") == "Write" )
 		{
 		    iTpId = OpcUa_WriteRequest;
 							//> nodesToWrite []
 		    oNu(mReq,io.childSize(),4);		//nodes
 		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
 		    {
-			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
-			oNu(mReq,strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
+			XMLNode *nd = io.childGet(i_n);
+			oNodeId(mReq,NodeId::fromAddr(nd->attr("nodeId")));	//nodeId
+			oNu(mReq,strtoul(nd->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
 			oS(mReq,"");			//indexRange
 							//>> value
+			oNu(mReq,0x0D,1);		//Encoding Mask: Value, SourceTimestamp, ServerTimestamp
+							//>>> Variant
+			uint8_t emv = atoi(nd->attr("EncodingMask").c_str());
+			oNu(mReq,emv,1);		//Encoding Mask
+			int32_t arrL = 1;
+			if( emv&0x80 )			//Array process
+			{
+			    arrL = 0;
+			    for( int off = 0; TSYS::strParse(nd->text(),0,"\n",&off).size(); ) arrL++;
+			    oNu(mReq,arrL,4);		//ArrayLength
+			}
+			for( int i_v = 0, off = 0; i_v < arrL; i_v++ )
+			{
+			    string setVl = (arrL==1) ? nd->text() : TSYS::strParse(nd->text(),0,"\n",&off);
+			    switch( emv&0x3F )
+			    {
+				case OpcUa_Boolean:
+				case OpcUa_SByte:	oN(mReq,atoi(setVl.c_str()),1);		break;
+				case OpcUa_Byte:	oNu(mReq,atoi(setVl.c_str()),1);	break;
+				case OpcUa_Int16:	oN(mReq,atoi(setVl.c_str()),2);		break;
+				case OpcUa_UInt16:	oNu(mReq,atoi(setVl.c_str()),2);	break;
+				case OpcUa_Int32:	oN(mReq,strtol(setVl.c_str(),NULL,10),4);	break;
+				case OpcUa_UInt32:	oNu(mReq,strtoul(setVl.c_str(),NULL,10),4);	break;
+				case OpcUa_Int64:	{ int64_t vl = strtoll(setVl.c_str(),NULL,10); mReq.append((char*)&vl,8); break; }
+				case OpcUa_UInt64:	{ uint64_t vl = strtoull(setVl.c_str(),NULL,10); mReq.append((char*)&vl,8); break; }
+				case OpcUa_Float:	oR(mReq,atof(setVl.c_str()),4);		break;
+				case OpcUa_Double:	oR(mReq,atof(setVl.c_str()),8);		break;
+				case OpcUa_String:
+				case OpcUa_ByteString:	oS(mReq,setVl);	break;
+				case OpcUa_NodeId:	oNodeId(mReq,NodeId::fromAddr(setVl));	break;
+				case OpcUa_StatusCode:	oNu(mReq,strtoll(setVl.c_str(),NULL,0),4);	break;
+				case OpcUa_QualifiedName:	oSqlf(mReq,setVl);		break;
+				case OpcUa_LocalizedText:	oSl(mReq,setVl,"en");		break;
+				default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."),emv&0x3F);
+			    }
+			}
+			//> ArrayDimension
+			if( emv&0x40 ) throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("ArrayDimensions field don't supported now."));
 			//????
+			long long stm = strtoll(nd->attr("SourceTimestamp").c_str(),NULL,10);
+			oTm(mReq,stm?stm:TSYS::curTime());
+			stm = strtoll(nd->attr("ServerTimestamp").c_str(),NULL,10);
+			oTm(mReq,stm?stm:TSYS::curTime());
 		    }
-		}*/
+		}
 		else if( io.attr("id") == "Browse" )
 		{
 		    iTpId = OpcUa_BrowseRequest;
@@ -681,7 +724,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 				    string rezVl;
 				    for( int i_v = 0; i_v < arrL; i_v++ )
 				    {
-					if( arrL > 1 && i_v ) rezVl += "; ";
+					if( arrL > 1 && i_v ) rezVl += "\n";
 					switch( emv&0x3F )
 					{
 					    case OpcUa_Boolean:
@@ -701,7 +744,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 					    case OpcUa_StatusCode:	rezVl += TSYS::strMess("0x%x",iNu(rez,off,4));	break;
 					    case OpcUa_QualifiedName:	rezVl += iSqlf(rez,off);	break;
 					    case OpcUa_LocalizedText:	rezVl += iSl(rez,off);		break;
-					    default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."));
+					    default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."),emv&0x3F);
 					}
 				    }
 				    nd->setText(rezVl);
@@ -720,6 +763,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 				if( em&0x20 )				//ServerPicoseconds
 				    nd->setAttr("ServerPicoseconds",TSYS::uint2str(iNu(rez,off,2)));
 			    }
+									//>> diagnosticInfos []
+			    iNu(rez,off,4);				//Items number
+			    break;
+			}
+			case OpcUa_WriteRequest:
+			{
+			    if( iTpId != OpcUa_WriteRequest )
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+									//> results []
+			    int resN = iNu(rez,off,4);			//Number
+			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
+				io.childGet(i_r)->setAttr("Status",TSYS::strMess("0x%x",iNu(rez,off,4)));
 									//>> diagnosticInfos []
 			    iNu(rez,off,4);				//Items number
 			    break;

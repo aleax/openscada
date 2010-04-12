@@ -1,3 +1,10 @@
+2010-04-12 Roman
+- !!:Protocol.UserProtocol, UI.WebUser: The documents translation to English, by Maksim Lisenko is added.
+- !:DAQ.OPC_UA: Write support is added and read is fixed.
+- FIX:Transport.Serial: Device unlock is fixed on "Busy", "No carrier" and other connection errors.
+- Transport.Serial: Documents is updated.
+
+
 2010-04-11 Roman
 - !!:FIX:SYS: Wrong security defines SEQ_RD, SEQ_WR and SEQ_XT is renamed to SEC_RD, SEC_WR and SEC_XT
 - FIX:SYS: Start scripts is fixed for global prevent multiply starting.

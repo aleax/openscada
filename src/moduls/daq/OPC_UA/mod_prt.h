@@ -120,8 +120,8 @@ namespace OPC_UA
 #define OpcUa_BrowseResponse		530
 #define OpcUa_ReadRequest		631
 #define OpcUa_ReadResponse		634
-#define OpcUa_WriteRequest		671
-#define OpcUa_WriteResponse		674
+#define OpcUa_WriteRequest		673
+#define OpcUa_WriteResponse		676
 #define OpcUa_PublishRequest		826
 #define OpcUa_PublishResponse		829
 
@@ -382,8 +382,8 @@ class TProt: public TProtocol
 	static void oS( string &buf, const string &val );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
 	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
-	static void oNodeId( string &buf, const NodeId &val );
 	static void oTm( string &buf, long long val );
+	static void oNodeId( string &buf, const NodeId &val );
 
 	static string certPEM2DER( const string &spem );
 

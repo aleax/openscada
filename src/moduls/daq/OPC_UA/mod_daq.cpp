@@ -318,7 +318,7 @@ void *TMdContr::Task( void *icntr )
 		XMLNode *cnX = req.childGet(i_c);
 		while( cnX->attr("prmId") != cntr.p_hd[i_p].at().id() ) i_p++;
 		if( cntr.p_hd[i_p].at().vlPresent(cnX->attr("prmAttr")) )
-		    cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr")).at().setS(cnX->text());
+		    cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr")).at().setS(cnX->text(),0,true);
 	    }
 	    res.release();
 	}
@@ -412,7 +412,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	//>> Get result
 	for( int i_a = 0; i_a < req.childSize(); i_a++ )
 	{
-	    if( !req.childGet(i_a)->attr("Status").empty() ) continue;
+	    if( strtol(req.childGet(i_a)->attr("Status").c_str(),NULL,0) ) continue;
 	    string nANm = _("Unknown");
 	    string nAVl = req.childGet(i_a)->text();
 	    switch( i_a+1 )
@@ -598,7 +598,7 @@ string TMdPrm::attrPrc( )
 	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","17");	//AccessLevel
 	owner().reqOPC(req);
 	if( !req.attr("err").empty() ) return req.attr("err");
-	if( !req.childGet(0)->attr("Status").empty() )	continue;
+	if( strtol(req.childGet(0)->attr("Status").c_str(),NULL,0) )	continue;
 
 	//>> Variable node's attribute creation
 	if( atoi(req.childGet(0)->text().c_str()) == TProt::NC_Variable && atoi(req.childGet(4)->text().c_str())&TProt::ACS_Read )
@@ -634,7 +634,7 @@ string TMdPrm::attrPrc( )
 		unsigned vflg = TVal::DirWrite;
 		if( !(atoi(req.childGet(4)->text().c_str())&TProt::ACS_Write) )	vflg |= TFld::NoWrite;
 
-		p_el.fldAdd( new TFld(aid.c_str(),req.childGet(2)->text().c_str(),vtp,vflg,"","","","",snd.c_str()) );
+		p_el.fldAdd( new TFld(aid.c_str(),req.childGet(2)->text().c_str(),vtp,vflg,req.childGet(3)->attr("EncodingMask").c_str(),"","","",snd.c_str()) );
 	    }
 	}
 
@@ -675,6 +675,33 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     TParamContr::cntrCmdProc(opt);
+}
+
+void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+{
+    if( !enableStat() )	valo.setS( EVAL_STR, 0, true );
+
+    //> Send to active reserve station
+    if( owner().redntUse( ) )
+    {
+	if( valo.getS(NULL,true) == pvl.getS() ) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    string vl = valo.getS(NULL,true);
+    if( vl == EVAL_STR || vl == pvl.getS() ) return;
+
+    //> Direct write
+    XMLNode req("opc.tcp");
+    req.setAttr("id","Write")->
+	childAdd("node")->setAttr("nodeId",valo.fld().reserve())->
+			  setAttr("attributeId","13")->
+			  setAttr("EncodingMask",TSYS::int2str(valo.fld().len()))->
+			  setText(vl);
+    owner().reqOPC(req);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

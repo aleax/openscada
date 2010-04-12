@@ -556,7 +556,6 @@ void *TTrIn::Task( void *tr_in )
 		continue;
 	    }
 	}
-
 	//> Send message to protocol
 	try
 	{
@@ -787,13 +786,14 @@ void TTrOut::start( )
 
     //> Status clear
     trIn = trOut = 0;
+    bool isLock = false;
 
     try
     {
 	//> Open and setup device
 	mDevPort = TSYS::strSepParse(addr(),0,':');
 	//>> Lock device for all serial transports
-	if( !mod->devLock(mDevPort) ) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
+	if( !(isLock=mod->devLock(mDevPort)) ) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
 
 	//>> Serial port open
 	fd = open( mDevPort.c_str(), O_RDWR|O_NOCTTY );
@@ -936,6 +936,7 @@ void TTrOut::start( )
 	if( mMdmMode ) TTr::writeLine(fd,mdmHangUp());
 
 	if( fd >= 0 ) { close(fd); fd = -1; }
+	if( isLock ) mod->devUnLock(mDevPort);
 	run_st = mMdmMode = false;
 	throw;
     }

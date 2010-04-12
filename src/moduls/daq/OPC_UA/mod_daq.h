@@ -80,6 +80,7 @@ class TMdPrm : public TParamContr
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	void vlArchMake( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 
 	string	&mNdLst;		//Nodes list
 
