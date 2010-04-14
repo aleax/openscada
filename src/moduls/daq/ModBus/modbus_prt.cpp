@@ -214,7 +214,7 @@ uint8_t TProt::LRC( const string &mbap )
     for( int i_b = 0; i_b < mbap.size(); i_b++ )
 	ch += (uint8_t)mbap[i_b];
 
-    return ch;
+    return -ch;
 }
 
 string TProt::DataToASCII( const string &in )

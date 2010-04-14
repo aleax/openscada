@@ -1,3 +1,7 @@
+2010-04-14 Roman
+- FIX:DAQ.ModBus: LRC calc is fixed for ModBus/ASCII.
+
+
 2010-04-12 Roman
 - !!:Protocol.UserProtocol, UI.WebUser: The documents translation to English, by Maksim Lisenko is added.
 - !:DAQ.OPC_UA: Write support is added and read is fixed.
