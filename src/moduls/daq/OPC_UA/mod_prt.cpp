@@ -207,7 +207,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oS(rez,io.attr("EndPoint"));		//EndpointURL
 		oNu(rez,rez.size(),4,4);		//Real message size
 
+#if OSC_DEBUG >= 5
 		printf("TEST 10: HELLO request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+#endif
 
 		//> Send request
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
@@ -222,7 +224,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
 		else
 		{
+#if OSC_DEBUG >= 5
 		    printf("TEST 10a: HELLO response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+#endif
 		    iNu(rez,off,4);			//Protocol version
 		    iNu(rez,off,4);			//Recive buffer size
 		    iNu(rez,off,4);			//Send buffer size
@@ -235,7 +239,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		rez.reserve( 200 );
 		rez.append( "OPNF" );			//OpenSecureChannel message type
 		oNu(rez,0,4);				//Message size
-		oNu(rez,0,4);				//Secure channel identifier
+		oNu(rez,atoi(io.attr("SecChnId").c_str()),4);	//Secure channel identifier
 		if( io.attr("SecPolicy") == "None" )
 		{
 							//> Security Header
@@ -248,14 +252,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 							//> Extension body object
 		    oNodeId(rez,NodeId(OpcUa_OpenSecureChannelRequest));	//TypeId
 							//>> Request Header
-		    oNodeId(rez,0);			//Session AuthenticationToken
+		    oNodeId(rez,0u);			//Session AuthenticationToken
 		    oTm(rez,TSYS::curTime());		//timestamp
 		    oN(rez,atoi(io.attr("ReqHandle").c_str()),4);	//requestHandle
 		    oNu(rez,0,4);			//returnDiagnostics
 		    oS(rez,"");				//auditEntryId
 		    oNu(rez,0,4);			//timeoutHint
 							//>>> Extensible parameter
-		    oNodeId(rez,0);			//TypeId (0)
+		    oNodeId(rez,0u);			//TypeId (0)
 		    oNu(rez,0,1);			//Encoding
 							//>>>> Standard request
 		    oNu(rez,OpcUa_ProtocolVersion,4);	//ClientProtocolVersion
@@ -265,7 +269,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oN(rez,atoi(io.attr("SecLifeTm").c_str()),4);	//RequestedLifetime
 		    oNu(rez,rez.size(),4,4);		//> Real message size
 
+#if OSC_DEBUG >= 5
 		    printf("TEST 11: OPN request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+#endif
 
 		    //> Send request
 		    int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
@@ -307,7 +313,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			io.setAttr("SecLifeTm",TSYS::int2str(iN(rez,off,4)));		//RevisedLifeTime
 			iS(rez,off);			//nonce
 		    }
+#if OSC_DEBUG >= 5
 		    printf("TEST 11a: OPN response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+#endif
 		}
 		else err = TSYS::strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,_("Security policy isn't supported."));
 	    }
@@ -326,14 +334,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 							//> Extension body object
 		oNodeId(rez,OpcUa_CloseSecureChannelRequest);	//TypeId request: CloseSecureChannel
 							//>> Request Header
-		oNodeId(rez,0);				//Session AuthenticationToken
+		oNodeId(rez,0u);			//Session AuthenticationToken
 		oTm(rez,TSYS::curTime());		//timestamp
 		oN(rez,0,4);				//requestHandle
 		oNu(rez,0,4);				//returnDiagnostics
 		oS(rez,"");				//auditEntryId
 		oNu(rez,0,4);				//timeoutHint
 							//>>> Extensible parameter
-		oNodeId(rez,0);				//TypeId (0)
+		oNodeId(rez,0u);       			//TypeId (0)
 		oNu(rez,0,1);				//Encoding
 		oNu(rez,rez.size(),4,4);		//> Real message size
 
@@ -341,8 +349,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		io.setAttr("SecChnId",""); io.setAttr("SecTokenId","");
 		io.setAttr("SeqNumber",""); io.setAttr("SeqReqId","");
 
+#if OSC_DEBUG >= 5
 		printf("TEST 12: CLO request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-
+#endif
 		//> Send request and don't wait response
 		tro.messIO( rez.data(), rez.size(), NULL, 0, 0, true );
 	    }
@@ -433,60 +442,17 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
 		    {
 			XMLNode *nd = io.childGet(i_n);
-			oNodeId(mReq,NodeId::fromAddr(nd->attr("nodeId")));	//nodeId
-			oNu(mReq,strtoul(nd->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
-			oS(mReq,"");			//indexRange
-							//>> value
-			oNu(mReq,0x0D,1);		//Encoding Mask: Value, SourceTimestamp, ServerTimestamp
-							//>>> Variant
-			uint8_t emv = atoi(nd->attr("EncodingMask").c_str());
-			oNu(mReq,emv,1);		//Encoding Mask
-			int32_t arrL = 1;
-			if( emv&0x80 )			//Array process
-			{
-			    arrL = 0;
-			    for( int off = 0; TSYS::strParse(nd->text(),0,"\n",&off).size(); ) arrL++;
-			    oNu(mReq,arrL,4);		//ArrayLength
-			}
-			for( int i_v = 0, off = 0; i_v < arrL; i_v++ )
-			{
-			    string setVl = (arrL==1) ? nd->text() : TSYS::strParse(nd->text(),0,"\n",&off);
-			    switch( emv&0x3F )
-			    {
-				case OpcUa_Boolean:
-				case OpcUa_SByte:	oN(mReq,atoi(setVl.c_str()),1);		break;
-				case OpcUa_Byte:	oNu(mReq,atoi(setVl.c_str()),1);	break;
-				case OpcUa_Int16:	oN(mReq,atoi(setVl.c_str()),2);		break;
-				case OpcUa_UInt16:	oNu(mReq,atoi(setVl.c_str()),2);	break;
-				case OpcUa_Int32:	oN(mReq,strtol(setVl.c_str(),NULL,10),4);	break;
-				case OpcUa_UInt32:	oNu(mReq,strtoul(setVl.c_str(),NULL,10),4);	break;
-				case OpcUa_Int64:	{ int64_t vl = strtoll(setVl.c_str(),NULL,10); mReq.append((char*)&vl,8); break; }
-				case OpcUa_UInt64:	{ uint64_t vl = strtoull(setVl.c_str(),NULL,10); mReq.append((char*)&vl,8); break; }
-				case OpcUa_Float:	oR(mReq,atof(setVl.c_str()),4);		break;
-				case OpcUa_Double:	oR(mReq,atof(setVl.c_str()),8);		break;
-				case OpcUa_String:
-				case OpcUa_ByteString:	oS(mReq,setVl);	break;
-				case OpcUa_NodeId:	oNodeId(mReq,NodeId::fromAddr(setVl));	break;
-				case OpcUa_StatusCode:	oNu(mReq,strtoll(setVl.c_str(),NULL,0),4);	break;
-				case OpcUa_QualifiedName:	oSqlf(mReq,setVl);		break;
-				case OpcUa_LocalizedText:	oSl(mReq,setVl,"en");		break;
-				default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."),emv&0x3F);
-			    }
-			}
-			//> ArrayDimension
-			if( emv&0x40 ) throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("ArrayDimensions field don't supported now."));
-			//????
-			long long stm = strtoll(nd->attr("SourceTimestamp").c_str(),NULL,10);
-			oTm(mReq,stm?stm:TSYS::curTime());
-			stm = strtoll(nd->attr("ServerTimestamp").c_str(),NULL,10);
-			oTm(mReq,stm?stm:TSYS::curTime());
+			oNodeId(mReq,NodeId::fromAddr(nd->attr("nodeId")));			//nodeId
+			oNu(mReq,strtoul(nd->attr("attributeId").c_str(),NULL,0),4);		//attributeId (Value)
+			oS(mReq,"");								//indexRange
+			oDataValue(mReq,0x0D,nd->text(),atoi(nd->attr("EncodingMask").c_str()));//value
 		    }
 		}
 		else if( io.attr("id") == "Browse" )
 		{
 		    iTpId = OpcUa_BrowseRequest;
 							//> view
-		    oNodeId(mReq,0);			//viewId (0)
+		    oNodeId(mReq,0u);			//viewId (0)
 		    oTm(mReq,0);			//timestamp
 		    oNu(mReq,0,4);			//viewVersion
 
@@ -497,10 +463,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    {
 			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId (RootFolder)
 			oNu(mReq,strtoul(io.childGet(i_n)->attr("browseDirection").c_str(),NULL,0),4);	//browseDirection (FORWARD_0)
-			oNodeId(mReq,33);		//referenceTypeId (HierarchicalReferences)
-			oNu(mReq,1,1);			//includeSubtypes (true)
-			oNu(mReq,0,4);			//nodeClassMask ( all NodeClasses )
-			oNu(mReq,0x3f,4);		//resultMask ( all )
+			oNodeId(mReq,OpcUa_HierarchicalReferences);	//referenceTypeId (HierarchicalReferences)
+			oNu(mReq,1,1);					//includeSubtypes (true)
+			oNu(mReq,strtoul(io.childGet(i_n)->attr("nodeClassMask").c_str(),NULL,0),4);	//nodeClassMask
+			oNu(mReq,strtoul(io.childGet(i_n)->attr("resultMask").c_str(),NULL,0),4);	//resultMask
 		    }
 		}
 		else throw TError(OpcUa_BadNotSupported,"OPC UA Bin",_("Request '%s' isn't supported."),io.attr("id").c_str());
@@ -529,13 +495,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oS(rez,"");				//auditEntryId
 		oNu(rez,3000,4);			//timeoutHint
 							//>>> Extensible parameter
-		oNodeId(rez,0);				//TypeId (0)
+		oNodeId(rez,0u);       			//TypeId (0)
 		oNu(rez,0,1);				//Encoding
 		rez.append(mReq);			//Same request
 		oNu(rez,rez.size(),4,4);		//> Real message size
 
+#if OSC_DEBUG >= 5
 		printf("TEST 13: Request '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
-
+#endif
 		//> Send request and wait respond
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
@@ -546,7 +513,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.append( buf, resp_len );
 		}
 
+#if OSC_DEBUG >= 5
 		printf("TEST 13a: Response '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
+#endif
 
 		off = 4;
 		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
@@ -709,65 +678,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 									//> results []
 			    int resN = iNu(rez,off,4);			//Nodes number
 			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
-			    {
-				XMLNode *nd = io.childGet(i_r);
-				nd->setAttr("Status","");
-									//>> Data Value
-				uint8_t em = iNu(rez,off,1);		//Encoding Mask
-				if( em&0x01 )				//Value
-				{
-									//>>> Variant
-				    uint8_t emv = iNu(rez,off,1);	//Encoding Mask
-				    nd->setAttr("EncodingMask",TSYS::uint2str(emv));
-				    int32_t arrL = 1;
-				    if( emv&0x80 )	arrL = iNu(rez,off,4);	//ArrayLength
-				    string rezVl;
-				    for( int i_v = 0; i_v < arrL; i_v++ )
-				    {
-					if( arrL > 1 && i_v ) rezVl += "\n";
-					switch( emv&0x3F )
-					{
-					    case OpcUa_Boolean:
-					    case OpcUa_SByte:	rezVl += TSYS::int2str(iN(rez,off,1));	break;
-					    case OpcUa_Byte:	rezVl += TSYS::int2str(iNu(rez,off,1));	break;
-					    case OpcUa_Int16:	rezVl += TSYS::int2str(iN(rez,off,2));	break;
-					    case OpcUa_UInt16:	rezVl += TSYS::uint2str(iNu(rez,off,2));	break;
-					    case OpcUa_Int32:	rezVl += TSYS::int2str(iN(rez,off,4));	break;
-					    case OpcUa_UInt32:	rezVl += TSYS::uint2str(iNu(rez,off,4));	break;
-					    case OpcUa_Int64:	rezVl += TSYS::strMess("%lld",*(int64_t*)iVal(rez,off,8));	break;
-					    case OpcUa_UInt64:	rezVl += TSYS::strMess("%llu",*(uint64_t*)iVal(rez,off,8));	break;
-					    case OpcUa_Float:	rezVl += TSYS::real2str(iR(rez,off,4));	break;
-					    case OpcUa_Double:	rezVl += TSYS::real2str(iR(rez,off,8));	break;
-					    case OpcUa_String:
-					    case OpcUa_ByteString:	rezVl += iS(rez,off);	break;
-					    case OpcUa_NodeId:	rezVl += iNodeId(rez,off).toAddr();	break;
-					    case OpcUa_StatusCode:	rezVl += TSYS::strMess("0x%x",iNu(rez,off,4));	break;
-					    case OpcUa_QualifiedName:	rezVl += iSqlf(rez,off);	break;
-					    case OpcUa_LocalizedText:	rezVl += iSl(rez,off);		break;
-					    default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."),emv&0x3F);
-					}
-				    }
-				    nd->setText(rezVl);
-				    //> ArrayDimension
-				    if( emv&0x40 ) throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("ArrayDimensions field don't supported now."));
-				    //????
-				}
-				if( em&0x02 )				//Status
-				    nd->setAttr("Status",TSYS::strMess("0x%x",iNu(rez,off,4)));
-				if( em&0x04 )				//SourceTimestamp
-				    nd->setAttr("SourceTimestamp",TSYS::ll2str(iTm(rez,off)));
-				if( em&0x10 )				//SourcePicoseconds
-				    nd->setAttr("SourcePicoseconds",TSYS::uint2str(iNu(rez,off,2)));
-				if( em&0x08 )				//ServerTimestamp
-				    nd->setAttr("ServerTimestamp",TSYS::ll2str(iTm(rez,off)));
-				if( em&0x20 )				//ServerPicoseconds
-				    nd->setAttr("ServerPicoseconds",TSYS::uint2str(iNu(rez,off,2)));
-			    }
+				iDataValue(rez,off,*io.childGet(i_r));
 									//>> diagnosticInfos []
 			    iNu(rez,off,4);				//Items number
 			    break;
 			}
-			case OpcUa_WriteRequest:
+			case OpcUa_WriteResponse:
 			{
 			    if( iTpId != OpcUa_WriteRequest )
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
@@ -788,20 +704,21 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
 			    {
 				XMLNode *rno = io.childGet(i_r);
-				rno->setAttr("statusCode",TSYS::uint2str(iNu(rez,off,4)));	//statusCode
+				uint32_t resMask = strtoul(rno->attr("resultMask").c_str(),NULL,0);	//resultMask
+				rno->setAttr("statusCode",TSYS::uint2str(iNu(rez,off,4)));		//statusCode
 				iS(rez,off);				//continuationPoint
 									//>> References []
 				int refN = iNu(rez,off,4);		//Numbers
 				for( int i_rf = 0; i_rf < refN; i_rf++ )
 				{
 				    XMLNode *bno = rno->childAdd("bNode");
-				    bno->setAttr("referenceTypeId",TSYS::uint2str(iNodeId(rez,off).numbVal()));	//referenceTypeId
-				    bno->setAttr("isForward",iNu(rez,off,1)?"1":"0");				//isForward
-				    bno->setAttr("nodeId",iNodeId(rez,off).toAddr());				//nodeId
-				    bno->setAttr("browseName",iSqlf(rez,off));					//browseName
-				    bno->setAttr("displayName",iSl(rez,off));					//displayName
-				    bno->setAttr("nodeClass",TSYS::uint2str(iNu(rez,off,4)));			//nodeClass
-				    bno->setAttr("typeDefinition",TSYS::uint2str(iNodeId(rez,off).numbVal()));	//typeDefinition
+				    bno->setAttr("referenceTypeId",TSYS::uint2str(iNodeId(rez,off).numbVal()));
+				    bno->setAttr("isForward",iNu(rez,off,1)?"1":"0");
+				    bno->setAttr("nodeId",iNodeId(rez,off).toAddr());
+				    bno->setAttr("browseName",iSqlf(rez,off));
+				    bno->setAttr("displayName",iSl(rez,off));
+				    bno->setAttr("nodeClass",TSYS::uint2str(iNu(rez,off,4)));
+				    bno->setAttr("typeDefinition",TSYS::uint2str(iNodeId(rez,off).numbVal()));
 				}
 			    }
 			    iS(rez,off);				//diagnosticInfos []
@@ -926,6 +843,73 @@ NodeId TProt::iNodeId( const string &rb, int &off )
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("NodeId type %d error or don't support."),enc);
 }
 
+void TProt::iDataValue( const string &buf, int &off, XMLNode &nd )
+{
+    nd.setAttr("Status","");
+    //>> Data Value
+    uint8_t em = iNu(buf,off,1);	//Encoding Mask
+    if( em&0x01 )			//Value
+    {
+	//>>> Variant
+	uint8_t emv = iNu(buf,off,1);	//Encoding Mask
+	nd.setAttr("EncodingMask",TSYS::uint2str(emv));
+	int32_t arrL = 1;
+	if( emv&0x80 )	arrL = iNu(buf,off,4);	//ArrayLength
+	string rezVl;
+	for( int i_v = 0; i_v < arrL; i_v++ )
+	{
+	    if( arrL > 1 && i_v ) rezVl += "\n";
+	    switch( emv&0x3F )
+	    {
+		case OpcUa_Boolean:
+		case OpcUa_SByte:	rezVl += TSYS::int2str(iN(buf,off,1));	break;
+		case OpcUa_Byte:	rezVl += TSYS::int2str(iNu(buf,off,1));	break;
+		case OpcUa_Int16:	rezVl += TSYS::int2str(iN(buf,off,2));	break;
+		case OpcUa_UInt16:	rezVl += TSYS::uint2str(iNu(buf,off,2));break;
+		case OpcUa_Int32:	rezVl += TSYS::int2str(iN(buf,off,4));	break;
+		case OpcUa_UInt32:	rezVl += TSYS::uint2str(iNu(buf,off,4));break;
+		case OpcUa_Int64:	rezVl += TSYS::strMess("%lld",*(int64_t*)iVal(buf,off,8));	break;
+		case OpcUa_UInt64:	rezVl += TSYS::strMess("%llu",*(uint64_t*)iVal(buf,off,8));	break;
+		case OpcUa_Float:	rezVl += TSYS::real2str(iR(buf,off,4));	break;
+		case OpcUa_Double:	rezVl += TSYS::real2str(iR(buf,off,8));	break;
+		case OpcUa_String:
+		case OpcUa_ByteString:	rezVl += iS(buf,off);	break;
+		case OpcUa_NodeId:	rezVl += iNodeId(buf,off).toAddr();	break;
+		case OpcUa_StatusCode:	rezVl += TSYS::strMess("0x%x",iNu(buf,off,4));	break;
+		case OpcUa_QualifiedName:
+		{
+		    uint16_t ns;
+		    string vl = iSqlf(buf,off,&ns);
+		    rezVl += TSYS::uint2str(ns)+":"+vl;
+		    break;
+		}
+		case OpcUa_LocalizedText:
+		{
+		    string loc, vl;
+		    vl = iSl(buf,off,&loc);
+		    rezVl += loc+":"+vl;
+		    break;
+		}
+		default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."),emv&0x3F);
+	    }
+	}
+	nd.setText(rezVl);
+	//> ArrayDimension
+	if( emv&0x40 ) throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("ArrayDimensions field don't supported now."));
+	//????
+    }
+    if( em&0x02 )	//Status
+	nd.setAttr("Status",TSYS::strMess("0x%x",iNu(buf,off,4)));
+    if( em&0x04 )	//SourceTimestamp
+	nd.setAttr("SourceTimestamp",TSYS::ll2str(iTm(buf,off)));
+    if( em&0x10 )	//SourcePicoseconds
+	nd.setAttr("SourcePicoseconds",TSYS::uint2str(iNu(buf,off,2)));
+    if( em&0x08 )	//ServerTimestamp
+	nd.setAttr("ServerTimestamp",TSYS::ll2str(iTm(buf,off)));
+    if( em&0x20 )	//ServerPicoseconds
+	nd.setAttr("ServerPicoseconds",TSYS::uint2str(iNu(buf,off,2)));
+}
+
 void TProt::oN( string &buf, int32_t val, char sz, int off )
 {
     if( off < 0 || (off+sz) > buf.size() ) buf.append( (char*)&val, sz );
@@ -998,6 +982,68 @@ void TProt::oTm( string &buf, long long val )
 {
     int64_t tmStamp = 10ll*(val+11644473600000000ll);
     buf.append( (char*)&tmStamp, sizeof(tmStamp) );
+}
+
+void TProt::oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
+	bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef )
+{
+    if( resMask&RdRm_RefType ) oNodeId(buf,refTypeId);		else oNodeId(buf,0);
+    if( resMask&RdRm_IsForward ) oNu(buf,isForward,1);		else oNu(buf,0,1);
+    oNodeId(buf,nodeId);
+    if( resMask&RdRm_BrowseName ) oSqlf(buf,name,nodeId.ns());	else oSqlf(buf,"");
+    if( resMask&RdRm_DisplayName ) oSl(buf,name,"en");		else oSl(buf,"");
+    if( resMask&RdRm_NodeClass ) oNu(buf,nodeClass,4);		else oNu(buf,0,4);
+    if( resMask&RdRm_TypeDef ) oNodeId(buf,typeDef);		else oNodeId(buf,0);
+}
+
+void TProt::oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk, long long srcTmStmp )
+{
+    eMsk = eMsk & (~0x30);	//Exclude picoseconds parts
+    if( eMsk & 0x02 )	eMsk = eMsk & (~0x01);
+
+    oNu(buf,eMsk,1);		//Encoding Mask
+    if( eMsk & 0x01 )		//> Variant
+    {
+	oNu(buf,vEMsk,1);	//Encoding Mask
+	int32_t arrL = 1;
+	if( vEMsk&0x80 )	//Array process
+	{
+	    arrL = 0;
+	    for( int off = 0; TSYS::strParse(vl.getS(),0,"\n",&off).size(); ) arrL++;
+	    oNu(buf,arrL,4);	//ArrayLength
+	}
+	for( int i_v = 0, off = 0; i_v < arrL; i_v++ )
+	{
+	    TVariant setVl = (arrL==1) ? vl : TSYS::strParse(vl.getS(),0,"\n",&off);
+	    switch( vEMsk&0x3F )
+	    {
+		case OpcUa_Boolean:
+		case OpcUa_SByte:	oN(buf,setVl.getI(),1);		break;
+		case OpcUa_Byte:	oNu(buf,setVl.getI(),1);	break;
+		case OpcUa_Int16:	oN(buf,setVl.getI(),2);		break;
+		case OpcUa_UInt16:	oNu(buf,setVl.getI(),2);	break;
+		case OpcUa_Int32:	oN(buf,setVl.getI(),4);		break;
+		case OpcUa_UInt32:	oNu(buf,strtoul(setVl.getS().c_str(),NULL,10),4);	break;
+		case OpcUa_Int64:	{ int64_t vl = strtoll(setVl.getS().c_str(),NULL,10); buf.append((char*)&vl,8); break; }
+		case OpcUa_UInt64:	{ uint64_t vl = strtoull(setVl.getS().c_str(),NULL,10); buf.append((char*)&vl,8); break; }
+		case OpcUa_Float:	oR(buf,setVl.getR(),4);		break;
+		case OpcUa_Double:	oR(buf,setVl.getR(),8);		break;
+		case OpcUa_String:
+		case OpcUa_ByteString:	oS(buf,setVl.getS());		break;
+		case OpcUa_NodeId:	oNodeId(buf,NodeId::fromAddr(setVl.getS()));	break;
+		case OpcUa_StatusCode:	oNu(buf,strtoll(setVl.getS().c_str(),NULL,0),4);	break;
+		case OpcUa_QualifiedName:	oSqlf(buf,setVl.getS());	break;
+		case OpcUa_LocalizedText:	oSl(buf,setVl.getS(),Mess->lang2Code());	break;
+		default: throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("Data type '%d' isn't supported."),vEMsk&0x3F);
+	    }
+	}
+	//> ArrayDimension
+	if( vEMsk & 0x40 ) throw TError(OpcUa_BadDecodingError,"OPC_UA Bin",_("ArrayDimensions field don't supported now."));
+	//????
+    }
+    if( eMsk & 0x02 )	oN(buf,vl.getI(),4);		//Status
+    if( eMsk & 0x04 )	oTm(buf,srcTmStmp?srcTmStmp:TSYS::curTime());	//SourceTimestamp
+    if( eMsk & 0x08 )	oTm(buf,TSYS::curTime());	//ServerTimestamp
 }
 
 string TProt::applicationUri( )		{ return SYS->host()+"/OpenSCADA/DAQ.OPC_UA"; }
@@ -1093,26 +1139,43 @@ NodeId::NodeId( uint32_t in, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
     setNumbVal(in);
 }
 
-NodeId::NodeId( const string istr, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
+NodeId::NodeId( const string &istr, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
 {
     setStrVal(istr);
 }
 
 NodeId::~NodeId( )
 {
-    if( type() == NodeId::String ) delete str;
+    if( type() == NodeId::String )
+    {
+	delete str;
+	mTp = NodeId::Numeric;
+    }
+}
+
+NodeId &NodeId::operator=( NodeId &node )
+{
+    setNs(node.ns());
+    switch( node.type() )
+    {
+	case NodeId::Numeric:	setNumbVal(node.numbVal());	break;
+	case NodeId::String:	setStrVal(node.strVal());	break;
+    }
+    return *this;
 }
 
 uint32_t NodeId::numbVal( ) const
 {
-    if( type() != NodeId::Numeric ) return 0;
-    return numb;
+    if( type() == NodeId::Numeric )	return numb;
+    if( type() == NodeId::String )	return strtoul(str->c_str(),NULL,0);
+    return 0;
 }
 
 string NodeId::strVal( ) const
 {
-    if( type() != NodeId::String ) return "";
-    return *str;
+    if( type() == NodeId::String )	return *str;
+    if( type() == NodeId::Numeric )	return TSYS::uint2str(numb);
+    return "";
 }
 
 void NodeId::setNumbVal( uint32_t in )
@@ -1122,7 +1185,7 @@ void NodeId::setNumbVal( uint32_t in )
     numb = in;
 }
 
-void NodeId::setStrVal( const string istr )
+void NodeId::setStrVal( const string &istr )
 {
     if( type() != NodeId::String ) str = new string(istr);
     mTp = NodeId::String;
@@ -1137,10 +1200,10 @@ NodeId NodeId::fromAddr( const string &strAddr )
     for( int i_s = 0; i_s < vl.size() && !isStr; i_s++ )
 	if( !isdigit(vl[i_s]) ) isStr = true;
     if( isStr ) return NodeId(vl,ns);
-    return NodeId(strtoul(vl.c_str(),NULL,0),ns);
+    return NodeId((uint32_t)strtoul(vl.c_str(),NULL,0),ns);
 }
 
-string NodeId::toAddr( )
+string NodeId::toAddr( ) const
 {
     if( type() == NodeId::Numeric )	return TSYS::uint2str(ns())+":"+TSYS::uint2str(numbVal());
     return TSYS::uint2str(ns())+":"+strVal();
@@ -1161,7 +1224,7 @@ TProtIn::~TProtIn()
 
 TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
-bool TProtIn::mess( const string &reqst, string &out, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
 {
     uint32_t mSz;
     bool KeepAlive = false;
@@ -1173,26 +1236,24 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 
     string &rb = mBuf;
 
-    out = "";
+    answ = "";
     if( rb.size() <= 0 ) return mNotFull;
 
-#if OSC_DEBUG >= 3
-    mess_debug(nodePath().c_str(),_("Content:\n%s"),rb.c_str());
-#endif
-
-    //printf("TEST 00: Request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-
+nextReq:
+    string out;
     off = 4;
-    if( rb.size() < 8 || rb.size() < TProt::iNu(rb,off,4) ) return (mNotFull=true);
+    if( rb.size() < 8 || rb.size() < (mSz=TProt::iNu(rb,off,4)) ) return (mNotFull=true);
 
     try
     {
 	//> Check for hello message type
 	if( rb.compare(0,4,"HELF") == 0 )
 	{
-	    if( rb.size() > 4096 )	{ out = mkError(OpcUa_BadTcpMessageTooLarge); return false; }
+	    if( rb.size() > 4096 )	throw TError(OpcUa_BadTcpMessageTooLarge,"","");
 
+#if OSC_DEBUG >= 5
 	    printf( "TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+#endif
 
 	    off = 8;
 	    TProt::iNu(rb,off,4);			//Protocol version
@@ -1209,7 +1270,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    for( i_ep = 0; i_ep < epLs.size(); i_ep++ )
 		if( owner().epAt(epLs[i_ep]).at().enableStat() )
 		    break;
-	    if( i_ep >= epLs.size() )	{ out = mkError(OpcUa_BadTcpEndpointUrlInvalid); return false; }
+	    if( i_ep >= epLs.size() )	throw TError(OpcUa_BadTcpEndpointUrlInvalid,"","");
 
 	    //> Prepare acknowledge message
 	    out.reserve( 28 );
@@ -1221,14 +1282,16 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    TProt::oNu(out,OpcUa_MaxMessageSize,4);	//Max message size
 	    TProt::oNu(out,OpcUa_MaxChunkCount,4);	//Max chunk count
 
+#if OSC_DEBUG >= 5
 	    printf( "TEST 00a: Hello response:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
-
-	    return true;
+#endif
 	}
 	//> Check for Open SecureChannel message type
-	if( rb.compare(0,4,"OPNF") == 0 )
+	else if( rb.compare(0,4,"OPNF") == 0 )
 	{
+#if OSC_DEBUG >= 5
 	    printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+#endif
 
 	    off = 8;
 	    uint32_t secChnId = TProt::iNu(rb,off,4);		//Secure channel identifier
@@ -1247,7 +1310,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    if( ep.at().secPolicy(i_s) == secPlc )
 			i_epOk = i_ep;
 	    }
-	    if( i_epOk < 0 ) { out = mkError(OpcUa_BadSecurityPolicyRejected); return false; }
+	    if( i_epOk < 0 ) throw TError(OpcUa_BadSecurityPolicyRejected,"","");
 
 	    if( secPlc == "None" )
 	    {
@@ -1298,7 +1361,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		TProt::oN(out,0,1);				//serviceDiagnostics
 		TProt::oS(out,"");				//stringTable
 								//>>> Extensible parameter
-		TProt::oNodeId(out,0);				//TypeId (0)
+		TProt::oNodeId(out,0u);				//TypeId (0)
 		TProt::oNu(out,0,1);				//Encoding
 								//>>>> Standard respond
 		TProt::oNu(out,OpcUa_ProtocolVersion,4);	//ServerProtocolVersion
@@ -1309,15 +1372,17 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		TProt::oS(out,"\001");				//nonce
 		TProt::oNu(out,out.size(),4,4);			//Real message size
 
+#if OSC_DEBUG >= 5
 		printf("TEST 01a: Open sec respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
-
-		return true;
+#endif
 	    }
 	}
 	//> Check for Close SecureChannel message type
-	if( rb.compare(0,4,"CLOF") == 0 )
+	else if( rb.compare(0,4,"CLOF") == 0 )
 	{
+#if OSC_DEBUG >= 5
 	    printf( "TEST 01: Close SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+#endif
 
 	    off = 8;
 	    uint32_t secId = TProt::iNu(rb,off,4);	//Secure channel identifier
@@ -1345,9 +1410,11 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    return false;
 	}
 	//> Check for SecureChannel message type
-	if( rb.compare(0,4,"MSGF") == 0 )
+	else if( rb.compare(0,4,"MSGF") == 0 )
 	{
+#if OSC_DEBUG >= 5
 	    printf( "TEST 02: SecureChannel message:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+#endif
 
 	    off = 8;
 	    uint32_t stCode = 0;
@@ -1366,7 +1433,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 							//>> Request Header
 	    uint16_t sesTokId = TProt::iNodeId(rb,off).numbVal();	//Session AuthenticationToken
 	    //>> Session check
-	    if( sesTokId && !wep.at().sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest) )
+	    if( sesTokId && reqTp!=OpcUa_CreateSessionRequest && !wep.at().sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest) )
 	    { stCode = OpcUa_BadSessionIdInvalid; reqTp = OpcUa_ServiceFault; }
 	    TProt::iTm(rb,off);				//timestamp
 	    int32_t reqHndl = TProt::iN(rb,off,4);	//requestHandle
@@ -1387,8 +1454,6 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::iS(rb,off);			//endpointUrl
 		    TProt::iS(rb,off);			//localeIds []
 		    TProt::iS(rb,off);			//serverUris []
-
-		    printf( "TEST 02a\n" );
 
 		    //>> Respond
 		    reqTp = OpcUa_FindServersResponse;
@@ -1494,7 +1559,11 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    double rStm = TProt::iR(rb,off,8);	//Requested SessionTimeout, ms
 		    TProt::iNu(rb,off,4);		//maxResponse MessageSize
 
-		    int sessId = wep.at().sessCreate( sessNm, rStm );
+		    //>> Try for session reusing
+		    int sessId = 0;
+		    if( !sesTokId && wep.at().sessActivate(sesTokId,secId,true) ) sessId = sesTokId;
+		    //>> Create new session
+		    if( !sessId ) sessId = wep.at().sessCreate( sessNm, rStm );
 
 		    //>> Respond
 		    reqTp = OpcUa_CreateSessionResponse;
@@ -1578,7 +1647,7 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    TProt::iNu(rb,off,4);		//clientSoftwareCertificates []
 							//> localeIds []
 		    uint32_t ln = TProt::iNu(rb,off,4);	//List number
-		    for( int i_l; i_l < ln; i_l++ )
+		    for( int i_l = 0; i_l < ln; i_l++ )
 			TProt::iS(rb,off);		//localeId
 							//> userIdentityToken
 		    int userIdTk = TProt::iNodeId(rb,off).numbVal();//TypeId
@@ -1605,98 +1674,25 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 		    break;
 		}
 		case OpcUa_CloseSessionRequest:
-		{
 		    //>> Request
 		    TProt::iNu(rb,off,1);		//deleteSubscriptions
+		    wep.at().sessClose( sesTokId );
 
 		    //>> Respond
 		    reqTp = OpcUa_CloseSessionResponse;
 		    break;
-		}
 		case OpcUa_ReadRequest:
-		{
-		    //>> Request
-		    TProt::iR(rb,off,8);		//maxAge
-		    TProt::iNu(rb,off,4);		//timestampsTo Return
-							//> nodesToRead []
-		    TProt::iNu(rb,off,4);		//nodes
-		    TProt::iNodeId(rb,off);		//nodeId
-		    TProt::iNu(rb,off,4);		//attributeId
-		    TProt::iS(rb,off);			//indexRange
-							//> dataEncoding
-		    TProt::iNu(rb,off,2);		//namespaceIndex
-		    TProt::iS(rb,off);			//name
-
-		    //>> Respond
+		    respEp = wep.at().tcpReq( reqTp, rb.substr(off) );
 		    reqTp = OpcUa_ReadResponse;
-		    TProt::oNu(respEp,1,4);		//Numbers
-							//>> value 1
-		    TProt::oNu(respEp,13,1);		//Encoding Mask
-							//>>> Variant
-		    TProt::oNu(respEp,6,1);		//Encoding Mask
-		    TProt::oN(respEp,0,4);		//Value (int32)
-		    TProt::oTm(respEp,TSYS::curTime());	//sourceTimestamp
-		    TProt::oTm(respEp,TSYS::curTime());	//serverTimestamp
-		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
-		}
 		case OpcUa_BrowseRequest:
-		{
-		    //>> Request
-							//> view
-		    TProt::iNodeId(rb,off);		//viewId
-		    TProt::iTm(rb,off);			//timestamp
-		    TProt::iNu(rb,off,4);		//viewVersion
-
-		    TProt::iNu(rb,off,4);		//requestedMax ReferencesPerNode
-							//> nodesToBrowse
-		    uint32_t nc = TProt::iNu(rb,off,4);	//Nodes
-		    for( uint32_t i_c = 0; i_c < nc; i_c++ )
-		    {
-			TProt::iNodeId(rb,off);		//nodeId
-			TProt::iNu(rb,off,4);		//browseDirection
-			TProt::iNodeId(rb,off);		//referenceTypeId
-			TProt::iNu(rb,off,1);		//includeSubtypes
-			TProt::iNu(rb,off,4);		//nodeClassMask
-			TProt::iNu(rb,off,4);		//resultMask
-		    }
-		    //>> Respond
+		    respEp = wep.at().tcpReq( reqTp, rb.substr(off) );
 		    reqTp = OpcUa_BrowseResponse;
-							//> results []
-		    TProt::oNu(respEp,1,4);		//Numbers 1
-							//Number 1
-		    TProt::oNu(respEp,0,4);		//statusCode
-		    TProt::oS(respEp,"");		//continuationPoint
-							//>> References []
-		    TProt::oNu(respEp,3,4);		//Numbers 3
-							//References 1
-		    TProt::oNodeId(respEp,35);		//referenceTypeId (Organizes)
-		    TProt::oNu(respEp,1,1);		//isForward
-		    TProt::oNodeId(respEp,87);		//nodeId (ViewsFolder)
-		    TProt::oSqlf(respEp,"Views");	//browseName
-		    TProt::oSl(respEp,"Views","en");	//displayName
-		    TProt::oNu(respEp,1,4);		//nodeClass (OBJECT_1)
-		    TProt::oNodeId(respEp,61);		//typeDefinition (FolderType)
-							//References 2
-		    TProt::oNodeId(respEp,35);		//referenceTypeId (Organizes)
-		    TProt::oNu(respEp,1,1);		//isForward
-		    TProt::oNodeId(respEp,85);		//nodeId (ObjectsFolder)
-		    TProt::oSqlf(respEp,"Objects");	//browseName
-		    TProt::oSl(respEp,"Objects","en");	//displayName
-		    TProt::oNu(respEp,1,4);		//nodeClass (OBJECT_1)
-		    TProt::oNodeId(respEp,61);		//typeDefinition (FolderType)
-							//References 3
-		    TProt::oNodeId(respEp,35);		//referenceTypeId (Organizes)
-		    TProt::oNu(respEp,1,1);		//isForward
-		    TProt::oNodeId(respEp,86);		//nodeId (TypesFolder)
-		    TProt::oSqlf(respEp,"Types");	//browseName
-		    TProt::oSl(respEp,"Types","en");	//displayName
-		    TProt::oNu(respEp,1,4);		//nodeClass (OBJECT_1)
-		    TProt::oNodeId(respEp,61);		//typeDefinition (FolderType)
-
-		    TProt::oS(respEp,"");		//diagnosticInfos []
 		    break;
-		}
+		case OpcUa_WriteRequest:
+		    respEp = wep.at().tcpReq( reqTp, rb.substr(off) );
+		    reqTp = OpcUa_WriteResponse;
+		    break;
 		case OpcUa_ServiceFault:	break;
 		default:
 		    throw TError(OpcUa_BadNotSupported,modPrt->nodePath().c_str(),_("No supported request id '%d'."),reqTp);
@@ -1720,24 +1716,25 @@ bool TProtIn::mess( const string &reqst, string &out, const string &sender )
 	    TProt::oN(out,0,1);				//serviceDiagnostics
 	    TProt::oS(out,"");				//stringTable
 							//>>> Extensible parameter
-	    TProt::oNodeId(out,0);			//TypeId (0)
+	    TProt::oNodeId(out,0u);			//TypeId (0)
 	    TProt::oNu(out,0,1);			//Encoding
 	    out.append(respEp);
 	    TProt::oNu(out,out.size(),4,4);		//Real message size
 
+#if OSC_DEBUG >= 5
 	    printf("TEST 02a: SecureChannel message respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
-
-	    return true;
+#endif
 	}
+	else throw TError(OpcUa_BadNotSupported,"","");
     }
-    catch(TError er)	{ out = mkError(er.cod,er.mess); return false; }
+    catch(TError er)	{ answ.append(mkError(er.cod,er.mess)); return false; }
 
-    //> Post error for unrecognized request
-    printf("TEST 05: Unsupported request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+    answ.append(out);
 
-    out = mkError( 1, _("Request message isn't recognize.") );
+    //> Check for multiply requests into the message
+    if( rb.size() > mSz ) { rb.erase(0,mSz); goto nextReq; }
 
-    return false;
+    return true;
 }
 
 string TProtIn::mkError( uint32_t errId, const string &err )
@@ -1758,7 +1755,7 @@ string TProtIn::mkError( uint32_t errId, const string &err )
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), mDB(idb), mEn(false), cntReq(0),
     mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
-    mSerType(cfg("SerialzType").getId()), mURL(cfg("URL").getSd())
+    mSerType(cfg("SerialzType").getId()), mURL(cfg("URL").getSd()), objTree("root")
 {
     mId = iid;
     mURL = "opc.tcp://"+SYS->host()+":4841";
@@ -1809,6 +1806,52 @@ string OPCEndPoint::secPolicy( int isec )
     ResAlloc res( nodeRes(), false );
     if( isec < 0 || isec >= mSec.size() ) throw TError(nodePath().c_str(),_("Security setting %d error."));
     return mSec[isec].policy;
+}
+
+XMLNode *OPCEndPoint::nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
+	int ndClass, const NodeId &refTypeId, const NodeId &typeDef )
+{
+    XMLNode *cNx = NULL;
+    map<string,XMLNode*>::iterator rN, cN;
+    //> Find already presented node
+    cN = ndMap.find(ndId.toAddr());
+    if( cN != ndMap.end() ) cNx = cN->second;
+    else
+    {
+	if( parent.isNull() ) { cNx = &objTree; cNx->clear(); }
+	else
+	{
+	    rN = ndMap.find(parent.toAddr());
+	    if( rN == ndMap.end() )
+		throw TError(nodePath().c_str(),_("Parent node '%s' no present for node '%s'."),parent.toAddr().c_str(),ndId.toAddr().c_str());
+	    cNx = rN->second->childAdd("nd");
+	}
+    }
+    cNx->setAttr("NodeId",ndId.toAddr())->
+	setAttr("name",name)->
+	setAttr("NodeClass",TSYS::int2str(ndClass))->
+	setAttr("referenceTypeId",refTypeId.toAddr())->
+	setAttr("typeDefinition",typeDef.toAddr());
+
+    switch(ndClass)
+    {
+	case TProt::NC_Object:
+	    cNx->setAttr("EventNotifier","0");
+	    break;
+	case TProt::NC_ObjectType: case TProt::NC_DataType:
+	    cNx->setAttr("IsAbstract","0");
+	    break;
+	case TProt::NC_ReferenceType:
+	    cNx->setAttr("IsAbstract","0")->setAttr("Symmetric","0");
+	    break;
+	case TProt::NC_VariableType:
+	    cNx->setAttr("IsAbstract","0")->setAttr("DataType","0:0")->setAttr("ValueRank","-2");
+	    break;
+    }
+
+    ndMap[ndId.toAddr()] = cNx;
+
+    return cNx;
 }
 
 int OPCEndPoint::sessCreate( const string &iName, double iTInact )
@@ -1897,6 +1940,72 @@ void OPCEndPoint::setEnable( bool vl )
 
     cntReq = 0;
 
+    if( vl )
+    {
+     //> Objects tree and nodes map init
+     nodeReg(0u,OpcUa_RootFolder,"Root",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+      nodeReg(OpcUa_RootFolder,OpcUa_ViewsFolder,"Views",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+      nodeReg(OpcUa_RootFolder,OpcUa_ObjectsFolder,"Objects",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+       nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),1),SYS->daq().at().subId(),TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType)->setAttr("DisplayName",SYS->daq().at().subName());
+      nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+       nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+	nodeReg(OpcUa_ObjectTypesFolder,OpcUa_BaseObjectType,"BaseObjectType",TProt::NC_ObjectType,OpcUa_Organizes);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_BaseEventType,"BaseEventType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_ServerCapabilitiesType,"ServerCapabilitiesType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_ServerDiagnosticsType,"ServerDiagnosticsType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_SessionsDiagnosticsSummaryType,"SessionsDiagnosticsSummaryType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_SessionDiagnosticsObjectType,"SessionDiagnosticsObjectType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_VendorServerInfoType,"VendorServerInfoType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_ServerRedundancyType,"ServerRedundancyType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_ModellingRuleType,"ModellingRuleType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_FolderType,"FolderType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_DataTypeEncodingType,"DataTypeEncodingType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_DataTypeSystemType,"DataTypeSystemType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_StateType,"StateType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_TransitionType,"TransitionType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_ServerType,"ServerType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,NodeId("DAQModuleObjectType",1),"DAQModuleObjectType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,NodeId("DAQControllerObjectType",1),"DAQControllerObjectType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",1),"DAQParameterObjectType",TProt::NC_ObjectType,OpcUa_HasSubtype);
+       nodeReg(OpcUa_TypesFolder,OpcUa_VariableTypesFolder,"VariableTypes",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+	nodeReg(OpcUa_VariableTypesFolder,OpcUa_BaseVariableType,"BaseVariableType",TProt::NC_VariableType,OpcUa_Organizes);
+	 nodeReg(OpcUa_BaseVariableType,OpcUa_BaseDataVariableType,"BaseDataVariableType",TProt::NC_VariableType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseVariableType,OpcUa_PropertyType,"PropertyType",TProt::NC_VariableType,OpcUa_HasSubtype);
+       nodeReg(OpcUa_TypesFolder,OpcUa_ReferenceTypesFolder,"ReferenceTypes",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+	nodeReg(OpcUa_ReferenceTypesFolder,OpcUa_References,"References",TProt::NC_ReferenceType,OpcUa_Organizes,OpcUa_FolderType)->setAttr("IsAbstract","1")->setAttr("Symmetric","1");
+	 nodeReg(OpcUa_References,OpcUa_HierarchicalReferences,"HierarchicalReferences",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	  nodeReg(OpcUa_HierarchicalReferences,OpcUa_HasChild,"HasChild",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	   nodeReg(OpcUa_HasChild,OpcUa_Aggregates,"Aggregates",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	    nodeReg(OpcUa_Aggregates,OpcUa_HasComponent,"HasComponent",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","ComponentOf");
+	    nodeReg(OpcUa_Aggregates,OpcUa_HasProperty,"HasProperty",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","PropertyOf");
+	   nodeReg(OpcUa_HasChild,OpcUa_HasSubtype,"HasSubtype",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","SubtypeOf");
+	  nodeReg(OpcUa_HierarchicalReferences,OpcUa_HasEventSource,"HasEventSource",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","EventSourceOf");
+	  nodeReg(OpcUa_HierarchicalReferences,OpcUa_Organizes,"Organizes",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","OrganizedBy");
+	 nodeReg(OpcUa_References,OpcUa_NonHierarchicalReferences,"NonHierarchicalReferences",TProt::NC_ReferenceType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+       nodeReg(OpcUa_TypesFolder,OpcUa_DataTypesFolder,"DataTypes",TProt::NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+	nodeReg(OpcUa_DataTypesFolder,OpcUa_BaseDataType,"BaseDataType",TProt::NC_DataType,OpcUa_Organizes)->setAttr("IsAbstract","1");
+	 nodeReg(OpcUa_BaseDataType,OpcUa_Boolean,"Boolean",TProt::NC_DataType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseDataType,OpcUa_Number,"Number",TProt::NC_DataType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	  nodeReg(OpcUa_Number,OpcUa_Integer,"Integer",TProt::NC_DataType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	   nodeReg(OpcUa_Integer,OpcUa_SByte,"SByte",TProt::NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_Integer,OpcUa_Int16,"Int16",TProt::NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_Integer,OpcUa_Int32,"Int32",TProt::NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_Integer,OpcUa_Int64,"Int64",TProt::NC_DataType,OpcUa_HasSubtype);
+	  nodeReg(OpcUa_Number,OpcUa_UInteger,"UInteger",TProt::NC_DataType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	   nodeReg(OpcUa_UInteger,OpcUa_Byte,"Byte",TProt::NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_UInteger,OpcUa_UInt16,"UInt16",TProt::NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_UInteger,OpcUa_UInt32,"UInt32",TProt::NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_UInteger,OpcUa_UInt64,"UInt64",TProt::NC_DataType,OpcUa_HasSubtype);
+	  nodeReg(OpcUa_Number,OpcUa_Double,"Double",TProt::NC_DataType,OpcUa_HasSubtype);
+	  nodeReg(OpcUa_Number,OpcUa_Float,"Float",TProt::NC_DataType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseDataType,OpcUa_String,"String",TProt::NC_DataType,OpcUa_HasSubtype);
+    }
+    else
+    {
+	ndMap.clear();
+	objTree.clear();
+    }
+
     mEn = vl;
 }
 
@@ -1910,6 +2019,419 @@ string OPCEndPoint::getStatus( )
     }
 
     return rez;
+}
+
+string OPCEndPoint::tcpReq( int reqTp, const string &rb )
+{
+    string respEp;
+    int off = 0;
+    switch( reqTp )
+    {
+	case OpcUa_BrowseRequest:
+	{
+	    //>> Request
+						//> view
+	    TProt::iNodeId(rb,off);		//viewId
+	    TProt::iTm(rb,off);			//timestamp
+	    TProt::iNu(rb,off,4);		//viewVersion
+
+	    uint32_t nMaxRef = TProt::iNu(rb,off,4);	//requestedMax ReferencesPerNode
+						//> nodesToBrowse
+	    uint32_t nc = TProt::iNu(rb,off,4);	//Nodes
+
+	    //>> Respond
+						//> results []
+	    TProt::oNu(respEp,nc,4);		//Nodes
+
+	    //>>> Nodes list processing
+	    for( uint32_t i_c = 0; i_c < nc; i_c++ )
+	    {
+		NodeId nid = TProt::iNodeId(rb,off);	//nodeId
+		uint32_t bd = TProt::iNu(rb,off,4);	//browseDirection
+		NodeId rtId = TProt::iNodeId(rb,off);	//referenceTypeId
+		bool incSubTp = TProt::iNu(rb,off,1);	//includeSubtypes
+		uint32_t nClass = TProt::iNu(rb,off,4);	//nodeClassMask
+		uint32_t resMask = TProt::iNu(rb,off,4);//resultMask
+
+		uint32_t stCode = 0, refNumb = 0;
+		int stCodeOff = respEp.size(); TProt::oNu(respEp,stCode,4);	//statusCode
+		TProt::oS(respEp,"");						//continuationPoint
+		int refNumbOff = respEp.size(); TProt::oNu(respEp,refNumb,4);	//References [] = 0
+
+		if( rtId.numbVal() != OpcUa_HierarchicalReferences && rtId.numbVal() != OpcUa_References ) continue;
+
+		map<string,XMLNode*>::iterator ndX = ndMap.find(nid.toAddr());
+		if( ndX == ndMap.end() )
+		{
+		    stCode = OpcUa_BadBrowseNameInvalid;
+#if OSC_DEBUG >= 5
+		    printf("TEST 101: Browse request to unknown node: %s\n",nid.toAddr().c_str());
+#endif
+		}
+		else
+		{
+		    //> typeDefinition reference process
+		    if( rtId.numbVal() == OpcUa_References && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) )
+		    {
+			map<string,XMLNode*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
+			if( ndTpDef != ndMap.end() )
+			{
+			    int cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
+			    if( !nClass || nClass == cnClass )
+			    {
+				TProt::oRef(respEp,resMask,NodeId::fromAddr(ndTpDef->second->attr("NodeId")),
+				    NodeId::fromAddr(ndTpDef->second->attr("referenceTypeId")),1,
+				    ndTpDef->second->attr("name"),cnClass,
+				    NodeId::fromAddr(ndTpDef->second->attr("typeDefinition")));
+				refNumb++;
+			    }
+			}
+		    }
+		    //> Forward hierarchical references process
+		    for( int i_ch = 0; (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++ )
+		    {
+			XMLNode *chNd = ndX->second->childGet(i_ch);
+			int cnClass = atoi(chNd->attr("NodeClass").c_str());
+			if( nClass && nClass != cnClass ) continue;
+			TProt::oRef(respEp,resMask,NodeId::fromAddr(chNd->attr("NodeId")),
+			    NodeId::fromAddr(chNd->attr("referenceTypeId")),1,chNd->attr("name"),cnClass,
+			    NodeId::fromAddr(chNd->attr("typeDefinition")));
+			refNumb++;
+		    }
+		    //> Inverse hierarchical references process
+		    if( (bd == TProt::BD_INVERSE || bd == TProt::BD_BOTH) && ndX->second->parent() )
+		    {
+			XMLNode *chNd = ndX->second->parent();
+			int cnClass = atoi(chNd->attr("NodeClass").c_str());
+			if( !nClass || nClass == cnClass )
+			{
+			    TProt::oRef(respEp,resMask,NodeId::fromAddr(chNd->attr("NodeId")),
+				NodeId::fromAddr(chNd->attr("referenceTypeId")),0,chNd->attr("name"),cnClass,
+				NodeId::fromAddr(chNd->attr("typeDefinition")));
+			    refNumb++;
+			}
+		    }
+
+		}
+		//> Check for DAQ subsystem data
+		if( nid.ns() == 1 && TSYS::strParse(nid.strVal(),0,".") == SYS->daq().at().subId() )
+		{
+		    vector<string> chLs;
+		    stCode = 0;
+		    //>> Connect to DAQ node
+		    AutoHD<TCntrNode> cNd = SYS->daq();
+		    string sel;
+		    int nLev = 0;
+		    for( int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++ )
+			try { cNd = cNd.at().nodeAt(sel); }
+			catch( TError err ) { stCode = OpcUa_BadBrowseNameInvalid; break; }
+		    if( !stCode )
+		    {
+			//> typeDefinition reference browse
+			if( nLev && rtId.numbVal() == OpcUa_References && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) )
+			{
+			    map<string,XMLNode*>::iterator ndTpDef;
+			    switch( nLev )
+			    {
+				case 1:	ndTpDef = ndMap.find(NodeId("DAQModuleObjectType",1).toAddr());	break;
+				case 2:	ndTpDef = ndMap.find(NodeId("DAQControllerObjectType",1).toAddr());	break;
+				case 3:	ndTpDef = ndMap.find(NodeId("DAQParameterObjectType",1).toAddr());	break;
+				case 4:	ndTpDef = ndMap.find(NodeId(OpcUa_BaseDataVariableType).toAddr());	break;
+			    }
+			    if( ndTpDef != ndMap.end() )
+			    {
+				int cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
+				if( !nClass || nClass == cnClass )
+				{
+				    TProt::oRef(respEp,resMask,NodeId::fromAddr(ndTpDef->second->attr("NodeId")),
+					NodeId::fromAddr(ndTpDef->second->attr("referenceTypeId")),1,
+					ndTpDef->second->attr("name"),cnClass,
+					NodeId::fromAddr(ndTpDef->second->attr("typeDefinition")));
+				    refNumb++;
+				}
+			    }
+			}
+			//>> Forward browse
+			if( (!nClass || nClass == TProt::NC_Object) && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) )
+			{
+			    switch( nLev )
+			    {
+				case 0:		//>>> Subsystem
+				    ((AutoHD<TDAQS>)cNd).at().modList( chLs );
+				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_Organizes,
+					    true,chLs[i_ch],TProt::NC_Object,NodeId("DAQModuleObjectType",1));
+				    break;
+				case 1:		//>>> Module
+				    ((AutoHD<TTipDAQ>)cNd).at().list( chLs );
+				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_Organizes,
+					    true,chLs[i_ch],TProt::NC_Object,NodeId("DAQControllerObjectType",1));
+				    break;
+				case 2:		//>>> Controller
+				    ((AutoHD<TController>)cNd).at().list( chLs );
+				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_Organizes,
+					    true,chLs[i_ch],TProt::NC_Object,NodeId("DAQParameterObjectType",1));
+				    break;
+				case 3:		//>>> Parameter
+				    ((AutoHD<TParamContr>)cNd).at().vlList( chLs );
+				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_HasComponent,
+					    true,chLs[i_ch],TProt::NC_Variable,OpcUa_BaseDataVariableType);
+				    break;
+			    }
+			}
+			//>> Inverse browse
+			if( (!nClass || nClass == TProt::NC_Object) && (bd == TProt::BD_INVERSE || bd == TProt::BD_BOTH) && nid.strVal() != "DAQ" )
+			{
+			    TProt::oRef(respEp,resMask,NodeId(nid.strVal().substr(0,nid.strVal().rfind(".")),1),OpcUa_Organizes,
+				false,TSYS::strParse(nid.strVal(),nLev,"."),TProt::NC_Object,OpcUa_FolderType);
+			    refNumb++;
+			}
+		    }
+		}
+		if( stCode )	TProt::oNu(respEp,stCode,4,stCodeOff);
+		if( refNumb )	TProt::oNu(respEp,refNumb,4,refNumbOff);
+	    }
+	    TProt::oS(respEp,"");		//diagnosticInfos []
+	    break;
+	}
+	case OpcUa_ReadRequest:
+	{
+	    //>> Request
+	    TProt::iR(rb,off,8);			//maxAge
+	    uint32_t tmStRet = TProt::iNu(rb,off,4);	//timestampsTo Return
+							//> nodesToRead []
+	    uint32_t nc = TProt::iNu(rb,off,4);		//nodes
+	    uint8_t eMsk = 0x01;
+	    switch( tmStRet )
+	    {
+		case TProt::TS_SOURCE:	eMsk |= 0x04;	break;
+		case TProt::TS_SERVER:	eMsk |= 0x08;	break;
+		case TProt::TS_BOTH:	eMsk |= 0x0C;	break;
+	    }
+
+	    //>> Respond
+	    TProt::oNu(respEp,nc,4);			//Numbers
+
+	    //>>> Nodes list processing
+	    for( uint32_t i_c = 0; i_c < nc; i_c++ )
+	    {
+		NodeId nid = TProt::iNodeId(rb,off);	//nodeId
+		uint32_t aid = TProt::iNu(rb,off,4);	//attributeId
+		TProt::iS(rb,off);			//indexRange
+		TProt::iSqlf(rb,off);			//dataEncoding
+
+		//> For temporary ????
+		if( nid.ns() == 0 && nid.numbVal() == OpcUa_Server_ServerStatus_State )
+		{
+		    switch( aid )
+		    {
+			case TProt::AId_NodeId:	TProt::oDataValue(respEp,eMsk,nid.toAddr(),OpcUa_NodeId);	break;
+			case TProt::AId_Value:	TProt::oDataValue(respEp,eMsk,0,OpcUa_Int32);		break;
+			default: TProt::oDataValue(respEp,0x02,(int)OpcUa_BadAttributeIdInvalid);	break;
+		    }
+		    continue;
+		}
+
+		//> Get node from objects tree
+		map<string,XMLNode*>::iterator ndX = ndMap.find(nid.toAddr());
+		if( ndX != ndMap.end() )
+		{
+		    if( aid == TProt::AId_NodeId )	TProt::oDataValue(respEp,eMsk,nid.toAddr(),OpcUa_NodeId);
+		    else if( aid == TProt::AId_NodeClass )
+			TProt::oDataValue(respEp,eMsk,ndX->second->attr("NodeClass"),OpcUa_Int32);
+		    else if( aid == TProt::AId_BrowseName )
+			TProt::oDataValue(respEp,eMsk,ndX->second->attr("name"),OpcUa_QualifiedName);
+		    else if( aid == TProt::AId_DisplayName )
+			TProt::oDataValue(respEp,eMsk,ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"),OpcUa_LocalizedText);
+		    else if( aid == TProt::AId_WriteMask || aid == TProt::AId_UserWriteMask )
+			TProt::oDataValue(respEp,eMsk,0,OpcUa_UInt32);
+		    else if( aid == TProt::AId_IsAbstract && !ndX->second->attr("IsAbstract").empty() )
+			TProt::oDataValue(respEp,eMsk,atoi(ndX->second->attr("IsAbstract").c_str()),OpcUa_Boolean);
+		    else if( aid == TProt::AId_Symmetric && !ndX->second->attr("Symmetric").empty() )
+			TProt::oDataValue(respEp,eMsk,atoi(ndX->second->attr("Symmetric").c_str()),OpcUa_Boolean);
+		    else if( aid == TProt::AId_InverseName && !ndX->second->attr("InverseName").empty() )
+			TProt::oDataValue(respEp,eMsk,ndX->second->attr("InverseName"),OpcUa_LocalizedText);
+		    else if( aid == TProt::AId_EventNotifier && !ndX->second->attr("EventNotifier").empty() )
+			TProt::oDataValue(respEp,eMsk,atoi(ndX->second->attr("EventNotifier").c_str()),OpcUa_Byte);
+		    else if( aid == TProt::AId_DataType && !ndX->second->attr("DataType").empty() )
+			TProt::oDataValue(respEp,eMsk,ndX->second->attr("DataType"),OpcUa_NodeId);
+		    else if( aid == TProt::AId_ValueRank && !ndX->second->attr("ValueRank").empty() )
+			TProt::oDataValue(respEp,eMsk,atoi(ndX->second->attr("ValueRank").c_str()),OpcUa_Int32);
+		    else TProt::oDataValue(respEp,0x02,(int)OpcUa_BadAttributeIdInvalid);
+		    continue;
+		}
+
+		//OpenSCADA DAQ parameter's attribute
+		if( nid.ns() == 1 )
+		{
+		    //>> Connect to DAQ node
+		    AutoHD<TCntrNode> cNd = SYS->daq();
+		    string sel;
+		    int nLev = 0;
+		    for( int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++ )
+			try { cNd = cNd.at().nodeAt(sel); }
+			catch( TError err ) { break; }
+
+		    if( sel.empty() )
+		    {
+			switch( aid )
+			{
+			    case TProt::AId_NodeId:
+				TProt::oDataValue(respEp,eMsk,nid.toAddr(),OpcUa_NodeId);
+				break;
+			    case TProt::AId_BrowseName:
+				TProt::oDataValue(respEp,eMsk,cNd.at().nodeName(),OpcUa_QualifiedName);
+				break;
+			    case TProt::AId_WriteMask: case TProt::AId_UserWriteMask:
+				TProt::oDataValue(respEp,eMsk,0,OpcUa_UInt32);
+				break;
+			    default:
+				//>>> Variable
+				if( dynamic_cast<TVal*>(&cNd.at()) )
+				    switch( aid )
+				    {
+					case TProt::AId_NodeClass:
+					    TProt::oDataValue(respEp,eMsk,TProt::NC_Variable,OpcUa_Int32);
+					    break;
+					case TProt::AId_DisplayName:
+					    TProt::oDataValue(respEp,eMsk,cNd.at().nodeName(),OpcUa_LocalizedText);
+					    break;
+					case TProt::AId_Descr:
+					    TProt::oDataValue(respEp,eMsk,((AutoHD<TVal>)cNd).at().fld().descr(),OpcUa_String);
+					    break;
+					case TProt::AId_Value:
+					    switch( ((AutoHD<TVal>)cNd).at().fld().type() )
+					    {
+						case TFld::Boolean:
+						    TProt::oDataValue(respEp,eMsk,((AutoHD<TVal>)cNd).at().getB(),OpcUa_Boolean);
+						    break;
+						case TFld::Integer:
+						    TProt::oDataValue(respEp,eMsk,((AutoHD<TVal>)cNd).at().getI(),OpcUa_Int32);
+						    break;
+						case TFld::Real:
+						    TProt::oDataValue(respEp,eMsk,((AutoHD<TVal>)cNd).at().getR(),OpcUa_Double);
+						    break;
+						case TFld::String:
+						    TProt::oDataValue(respEp,eMsk,((AutoHD<TVal>)cNd).at().getS(),OpcUa_String);
+						    break;
+					    }
+					    break;
+					case TProt::AId_DataType:
+					{
+					    NodeId dt;
+					    switch(((AutoHD<TVal>)cNd).at().fld().type())
+					    {
+						case TFld::Boolean:	dt.setNumbVal(OpcUa_Boolean);	break;
+						case TFld::Integer:	dt.setNumbVal(OpcUa_Int32);	break;
+						case TFld::Real:	dt.setNumbVal(OpcUa_Double);	break;
+						case TFld::String:	dt.setNumbVal(OpcUa_String);	break;
+					    }
+					    TProt::oDataValue(respEp,eMsk,dt.toAddr(),OpcUa_NodeId);
+					    break;
+					}
+					case TProt::AId_ValueRank:
+					    TProt::oDataValue(respEp,eMsk,-1,OpcUa_Int32);
+					    break;
+					case TProt::AId_ArrayDimensions:
+					    TProt::oDataValue(respEp,eMsk,"",0x80|OpcUa_Int32);
+					    break;
+					case TProt::AId_AccessLevel: case TProt::AId_UserAccessLevel:
+					    TProt::oDataValue( respEp,eMsk, TProt::ACS_Read | ( ((AutoHD<TVal>)cNd).at().fld().flg()&TFld::NoWrite ? 0 : TProt::ACS_Write ), OpcUa_Byte );
+					    break;
+					case TProt::AId_MinimumSamplingInterval:
+					    TProt::oDataValue(respEp,eMsk,0,OpcUa_Double);
+					    break;
+					case TProt::AId_Historizing:
+					    TProt::oDataValue(respEp,eMsk,false,OpcUa_Boolean);
+					    break;
+					default: TProt::oDataValue(respEp,0x02,(int)OpcUa_BadAttributeIdInvalid);
+				    }
+				//>>> Objects
+				else
+				    switch( aid )
+				    {
+					case TProt::AId_NodeClass:
+					    TProt::oDataValue(respEp,eMsk,TProt::NC_Object,OpcUa_Int32);
+					    break;
+					case TProt::AId_DisplayName:
+					    if( dynamic_cast<TModule*>(&cNd.at()) )
+						TProt::oDataValue(respEp,eMsk,((AutoHD<TModule>)cNd).at().modName(),OpcUa_LocalizedText);
+					    else if( dynamic_cast<TController*>(&cNd.at()) )
+						TProt::oDataValue(respEp,eMsk,((AutoHD<TController>)cNd).at().name(),OpcUa_LocalizedText);
+					    else if( dynamic_cast<TParamContr*>(&cNd.at()) )
+						TProt::oDataValue(respEp,eMsk,((AutoHD<TParamContr>)cNd).at().name(),OpcUa_LocalizedText);
+					    else TProt::oDataValue(respEp,eMsk,cNd.at().nodeName(),OpcUa_LocalizedText);
+					    break;
+					case TProt::AId_Descr:
+					    if( dynamic_cast<TModule*>(&cNd.at()) )
+						TProt::oDataValue(respEp,eMsk,((AutoHD<TModule>)cNd).at().modInfo("Description"),OpcUa_LocalizedText);
+					    else if( dynamic_cast<TController*>(&cNd.at()) )
+						TProt::oDataValue(respEp,eMsk,((AutoHD<TController>)cNd).at().descr(),OpcUa_LocalizedText);
+					    else if( dynamic_cast<TParamContr*>(&cNd.at()) )
+						TProt::oDataValue(respEp,eMsk,((AutoHD<TParamContr>)cNd).at().descr(),OpcUa_LocalizedText);
+					    else TProt::oDataValue(respEp,0x02,(int)OpcUa_BadAttributeIdInvalid);
+					    break;
+					case TProt::AId_EventNotifier:
+					    TProt::oDataValue(respEp,eMsk,0,OpcUa_Byte);	break;
+					default: TProt::oDataValue(respEp,0x02,(int)OpcUa_BadAttributeIdInvalid);
+				    }
+			}
+			continue;
+		    }
+		}
+
+		TProt::oDataValue(respEp,0x02,(int)OpcUa_BadNodeIdUnknown);
+	    }
+	    TProt::oS(respEp,"");		//diagnosticInfos []
+	    break;
+	}
+	case OpcUa_WriteRequest:
+	{
+	    //>> Request
+							//> nodesToWrite []
+	    uint32_t nc = TProt::iNu(rb,off,4);		//nodes
+
+	    //>> Respond
+	    TProt::oNu(respEp,nc,4);			//Numbers
+	    for( int i_n = 0; i_n < nc; i_n++ )
+	    {
+		uint32_t rezSt = 0;
+		NodeId nid = TProt::iNodeId(rb,off);	//nodeId
+		uint32_t aid = TProt::iNu(rb,off,4);	//attributeId (Value)
+		TProt::iS(rb,off);			//indexRange
+		XMLNode nVal;
+		TProt::iDataValue(rb,off,nVal);		//value
+
+		//> Get node from objects tree
+		map<string,XMLNode*>::iterator ndX = ndMap.find(nid.toAddr());
+		if( ndX != ndMap.end() ) rezSt = OpcUa_BadNothingToDo;
+		else if( nid.ns() == 1 )
+		{
+		    //>> Connect to DAQ node
+		    AutoHD<TCntrNode> cNd = SYS->daq();
+		    string sel;
+		    int nLev = 0;
+		    for( int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++ )
+			try { cNd = cNd.at().nodeAt(sel); }
+			catch( TError err ) { break; }
+
+		    if( !sel.empty() )	rezSt = OpcUa_BadNodeIdUnknown;
+		    else if( aid != TProt::AId_Value || !dynamic_cast<TVal*>(&cNd.at()) )
+			rezSt = OpcUa_BadNothingToDo;
+		    else ((AutoHD<TVal>)cNd).at().setS(nVal.text());
+		}
+
+		//>>> Write result status code
+		TProt::oNu(respEp,rezSt,4);		//StatusCode
+	    }
+	    TProt::oS(respEp,"");		//diagnosticInfos []
+	    break;
+	}
+    }
+    return respEp;
 }
 
 void OPCEndPoint::cntrCmdProc( XMLNode *opt )

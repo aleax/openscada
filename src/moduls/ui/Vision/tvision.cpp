@@ -89,7 +89,7 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : end_run(false), vca_station("."), mPlayCom("play -q %f")
+TVision::TVision( string name ) : end_run(false), vca_station("."), mPlayCom("play -q %f"), mCachePgLife(1)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -171,12 +171,13 @@ void TVision::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file and DB -
+    //> Load parameters from config file and DB
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",""));
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
+    setCachePgLife(atof(TBDS::genDBGet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife())).c_str()));
 }
 
 void TVision::save_( )
@@ -184,12 +185,13 @@ void TVision::save_( )
 #if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
-    //- Save parameters to DB -
+    //> Save parameters to DB
     TBDS::genDBSet(nodePath()+"StartUser",startUser());
     TBDS::genDBSet(nodePath()+"UserPass",userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
     TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
     TBDS::genDBSet(nodePath()+"PlayCom",playCom());
+    TBDS::genDBSet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife()));
 }
 
 void TVision::postEnable( int flag )
@@ -339,6 +341,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","UI",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),0664,"root","UI",1,"tp","str");
 	    }
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),0664,"root","UI",2,"tp","real",
+		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),0664,"root","UI",2,"tp","str",
 		"help",_("Automatic started project's list separated by symbol ';'.\nFor opening a project's window to need display (1) use project's name format: 'PrjName-1'."));
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","UI",1,"tp","lnk");
@@ -358,10 +362,15 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(startUser());
 	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setStartUser(opt->text());
     }
-    if( a_path == "/prm/cfg/u_pass" )
+    else if( a_path == "/prm/cfg/u_pass" )
     {
 	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText("*******");
 	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setUserPass(opt->text());
+    }
+    else if( a_path == "/prm/cfg/cachePgLife" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(TSYS::real2str(cachePgLife()));
+	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setCachePgLife(atof(opt->text().c_str()));
     }
     else if( a_path == "/prm/cfg/run_prj" )
     {
@@ -410,11 +419,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
 
 void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type, QWidget *parent )
 {
-    //- Put system message. -
+    //> Put system message
     message(cat.toAscii().data(),(type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
 			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toAscii().data());
-    //- QT message -
+    //> QT message
     switch(type)
     {
 	case TVision::Info:

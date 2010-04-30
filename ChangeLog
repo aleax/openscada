@@ -1,3 +1,10 @@
+2010-04-30 Roman
+- SYS: "TVariant::TVariant( const char *var )" constructor is added for string type.
+- UI.Vision: The control for cached pages lifetime into runtime mode is added.
+- !!!!:DAQ.OPC_UA: DAQ and protocol module is released to version 0.5.0.
+    Base support for OPC_UA client and servers is added into no secure mode.
+
+
 2010-04-14 Roman
 - FIX:DAQ.ModBus: LRC calc is fixed for ModBus/ASCII.
 

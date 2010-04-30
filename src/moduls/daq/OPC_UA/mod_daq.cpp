@@ -110,10 +110,10 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     sess.sqNumb = 33;
     sess.sqReqId = 1;
     sess.reqHndl = 0;
-    sess.secRevTime = 0;
+    sess.secLifeTime = 0;
     sess.sesId = sess.authTkId = 0;
     sess.sesAccess = 0;
-    sess.sesActiveTime = 1.2e6;
+    sess.sesLifeTime = 1.2e6;
 }
 
 TMdContr::~TMdContr( )
@@ -140,16 +140,19 @@ void TMdContr::reqOPC( XMLNode &io )
     catch( TError err )
     { io.setAttr("err",TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
 
+    nextTry:
     XMLNode req("opc.tcp");
-    if( !sess.secChnl || !sess.secToken )
+    if( !sess.secChnl || !sess.secToken || (1e-3*(TSYS::curTime()-sess.sesAccess) >= sess.secLifeTime) )
     {
+	if( sess.secChnl && sess.secToken ) sess.authTkId = 0;
 	//>> Send HELLO message
 	req.setAttr("id","HEL")->setAttr("EndPoint",endPoint());
 	tr.at().messProtIO(req,"OPC_UA");
 	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
 
 	//>> Send Open SecureChannel message
-	req.setAttr("id","OPN")->setAttr("SecPolicy",secPolicy())->setAttr("SecLifeTm","300000")->
+	req.setAttr("id","OPN")->setAttr("SecChnId","0"/*TSYS::uint2str(sess.secChnl)*/)->
+	    setAttr("SecPolicy",secPolicy())->setAttr("SecLifeTm","300000")->
 	    setAttr("SeqNumber","51")->setAttr("SeqReqId","1")->setAttr("ReqHandle","0");
 	tr.at().messProtIO(req,"OPC_UA");
 	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
@@ -158,24 +161,25 @@ void TMdContr::reqOPC( XMLNode &io )
 	sess.reqHndl = 0;
 	sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
 	sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
-	sess.secRevTime = atoi(req.attr("SecLifeTm").c_str());
+	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
     }
     io.setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken));
 
     string ireq = io.attr("id");
     if( ireq != "FindServers" && ireq != "GetEndpoints" &&
-	(!sess.authTkId || 1e-3*(TSYS::curTime()-sess.sesAccess) > sess.sesActiveTime) )
+	(!sess.authTkId || 1e-3*(TSYS::curTime()-sess.sesAccess) >= sess.sesLifeTime) )
     {
 	//>> Send CreateSession message
 	req.setAttr("id","CreateSession")->setAttr("EndPoint",endPoint())->setAttr("sesTm","1.2e6")->
 	    setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken))->
 	    setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++))->
-	    setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->childAdd("ClientCert")->setText(cert());
+	    setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->setAttr("authTokenId",TSYS::int2str(sess.authTkId))->
+	    childAdd("ClientCert")->setText(cert());
 	tr.at().messProtIO(req,"OPC_UA");
 	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
 	sess.sesId = atoi(req.attr("sesId").c_str());
 	sess.authTkId = atoi(req.attr("authTokenId").c_str());
-	sess.sesActiveTime = atof(req.attr("sesTm").c_str());
+	sess.sesLifeTime = atof(req.attr("sesTm").c_str());
 
 	//>> Send ActivateSession message
 	req.setAttr("id","ActivateSession");
@@ -187,6 +191,11 @@ void TMdContr::reqOPC( XMLNode &io )
     io.setAttr("authTokenId",TSYS::int2str(sess.authTkId))->setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->
 	setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++));
     tr.at().messProtIO(io,"OPC_UA");
+    if( strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument )
+    {
+	sess.secChnl = sess.authTkId = 0;
+	goto nextTry;
+    }
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -203,43 +212,6 @@ void TMdContr::start_( )
 
     //> Schedule process
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
-
-    //> Establish OPC OA connection
-    //>> Send HELLO message
-    /*XMLNode req("opc.tcp"); req.setAttr("id","HEL")->setAttr("EndPoint",endPoint());
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("HELLO request error: %s"),req.attr("err").c_str());
-
-    //>> Send Open SecureChannel message
-    req.setAttr("id","OPN")->setAttr("SecPolicy",secPolicy())->setAttr("SecLifeTm","300000");
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Open SecureChannel request error: %s"),req.attr("err").c_str());
-
-    //>> Send FindServers message
-    req.setAttr("id","FindServers");
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("FindServers request error: %s"),req.attr("err").c_str());
-    req.childClear();
-
-    //>> Send CreateSession message
-    req.setAttr("id","CreateSession")->setAttr("sesTm","1.2e6")->childAdd("ClientCert")->setText(cert());
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("CreateSession request error: %s"),req.attr("err").c_str());
-
-    //>> Send ActivateSession message
-    req.setAttr("id","ActivateSession");
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("ActivateSession request error: %s"),req.attr("err").c_str());
-
-    //>> Read ServerStatus_State
-    req.setAttr("id","Read");
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Read request error: %s"),req.attr("err").c_str());
-
-    //>> Browse RootFolder
-    req.setAttr("id","Browse");
-    tr.at().messProtIO(req,"OPC_UA");
-    if( !req.attr("err").empty() ) throw TError(nodePath().c_str(),_("Browse request error: %s"),req.attr("err").c_str());*/
 
     //> Start the gathering data task
     if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
@@ -417,8 +389,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    string nAVl = req.childGet(i_a)->text();
 	    switch( i_a+1 )
 	    {
-		case 1:	nANm = _("NodeId");	break;
-		case 2:
+		case TProt::AId_NodeId:	nANm = _("NodeId");	break;
+		case TProt::AId_NodeClass:
 		    nANm = _("NodeClass");
 		    switch(atoi(nAVl.c_str()))
 		    {
@@ -432,18 +404,18 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 			case TProt::NC_View:		nAVl = _("View");	break;
 		    }
 		    break;
-		case 3:	nANm = _("BrowseName");	break;
-		case 4:	nANm = _("DisplayName");break;
-		case 5:	nANm = _("Description");break;
-		case 6:	nANm = _("WriteMask");	break;
-		case 7:	nANm = _("UserWriteMask");	break;
-		case 8:	nANm = _("IsAbstract");	break;
-		case 9:	nANm = _("Symmetric");	break;
-		case 10:nANm = _("InverseName");	break;
-		case 11:nANm = _("ContainsNoLoops");	break;
-		case 12:nANm = _("EventNotifier");	break;
-		case 13:nANm = _("Value");	break;
-		case 14:
+		case TProt::AId_BrowseName:	nANm = _("BrowseName");	break;
+		case TProt::AId_DisplayName:	nANm = _("DisplayName");break;
+		case TProt::AId_Descr:		nANm = _("Description");break;
+		case TProt::AId_WriteMask:	nANm = _("WriteMask");	break;
+		case TProt::AId_UserWriteMask:	nANm = _("UserWriteMask");	break;
+		case TProt::AId_IsAbstract:	nANm = _("IsAbstract");	break;
+		case TProt::AId_Symmetric:	nANm = _("Symmetric");	break;
+		case TProt::AId_InverseName:	nANm = _("InverseName");	break;
+		case TProt::AId_ContainsNoLoops:nANm = _("ContainsNoLoops");	break;
+		case TProt::AId_EventNotifier:	nANm = _("EventNotifier");	break;
+		case TProt::AId_Value:		nANm = _("Value");	break;
+		case TProt::AId_DataType:
 		{
 		    nANm = _("DataType");
 		    XMLNode reqTp("opc.tcp");
@@ -453,9 +425,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    if( reqTp.attr("err").empty() && reqTp.childSize() ) nAVl = reqTp.childGet(0)->text();
 		    break;
 		}
-		case 15:nANm = _("ValueRank");	break;
-		case 16:nANm = _("ArrayDimensions");	break;
-		case 17:
+		case TProt::AId_ValueRank:	nANm = _("ValueRank");	break;
+		case TProt::AId_ArrayDimensions:nANm = _("ArrayDimensions");	break;
+		case TProt::AId_AccessLevel:
 		{
 		    nANm = _("AccessLevel");
 		    char cRW = atoi(nAVl.c_str());
@@ -467,7 +439,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    if( cRW & TProt::ACS_SemChange )	nAVl += _("Semantic change, ");
 		    break;
 		}
-		case 18:
+		case TProt::AId_UserAccessLevel:
 		{
 		    nANm = _("UserAccessLevel");
 		    char cRW = atoi(nAVl.c_str());
@@ -478,10 +450,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    if( cRW & TProt::ACS_HistWrite )	nAVl += _("History writible, ");
 		    break;
 		}
-		case 19:nANm = _("MinimumSamplingInterval");	break;
-		case 20:nANm = _("Historizing");	break;
-		case 21:nANm = _("Executable");	break;
-		case 22:nANm = _("UserExecutable");	break;
+		case TProt::AId_MinimumSamplingInterval:nANm = _("MinimumSamplingInterval");	break;
+		case TProt::AId_Historizing:		nANm = _("Historizing");	break;
+		case TProt::AId_Executable:		nANm = _("Executable");	break;
+		case TProt::AId_UserExecutable:		nANm = _("UserExecutable");	break;
 	    }
 	    if( n_attr )	n_attr->childAdd("el")->setText(nANm);
 	    if( n_val )		n_val->childAdd("el")->setText(nAVl);
@@ -494,7 +466,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	int stP = mBrwsVar.find("(");
 	int stC = mBrwsVar.find(")",stP);;
 	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
-	XMLNode req("opc.tcp"); req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH));
+	XMLNode req("opc.tcp"); req.setAttr("id","Browse");
+	req.childAdd("node")->setAttr("nodeId",cNodeId)->
+			      setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH))->
+			      setAttr("resultMask",TSYS::int2str(0x3f/*TProt::RdRm_IsForward|TProt::RdRm_BrowseName*/));
 	reqOPC(req);
 	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 	XMLNode *rn = req.childGet(0);
@@ -591,11 +566,11 @@ string TMdPrm::attrPrc( )
     {
 	//>> Request for node class request
 	req.clear()->setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
-	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","2");	//NodeClass
-	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","3");	//BrowseName
-	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","4");	//DisplayName
-	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","13");	//Value
-	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId","17");	//AccessLevel
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_NodeClass));
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_BrowseName));
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_DisplayName));
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_Value));
+	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_AccessLevel));
 	owner().reqOPC(req);
 	if( !req.attr("err").empty() ) return req.attr("err");
 	if( strtol(req.childGet(0)->attr("Status").c_str(),NULL,0) )	continue;
@@ -630,11 +605,16 @@ string TMdPrm::attrPrc( )
 			vtp = TFld::Real;	break;
 		}
 
+		//>> Browse name
+		string aNm = req.childGet(2)->text();
+		int nmPos = aNm.find(":");
+		if( nmPos!=string::npos ) aNm.erase(0,nmPos+1);
+
 		//>>> Flags prepare
 		unsigned vflg = TVal::DirWrite;
 		if( !(atoi(req.childGet(4)->text().c_str())&TProt::ACS_Write) )	vflg |= TFld::NoWrite;
 
-		p_el.fldAdd( new TFld(aid.c_str(),req.childGet(2)->text().c_str(),vtp,vflg,req.childGet(3)->attr("EncodingMask").c_str(),"","","",snd.c_str()) );
+		p_el.fldAdd( new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,req.childGet(3)->attr("EncodingMask").c_str(),"","","",snd.c_str()) );
 	    }
 	}
 
@@ -698,7 +678,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     XMLNode req("opc.tcp");
     req.setAttr("id","Write")->
 	childAdd("node")->setAttr("nodeId",valo.fld().reserve())->
-			  setAttr("attributeId","13")->
+			  setAttr("attributeId",TSYS::int2str(TProt::AId_Value))->
 			  setAttr("EncodingMask",TSYS::int2str(valo.fld().len()))->
 			  setText(vl);
     owner().reqOPC(req);

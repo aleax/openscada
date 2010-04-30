@@ -56,12 +56,14 @@ class TVision : public TUI
 	string runPrjs( )			{ return run_prjs; }
 	string VCAStation( )			{ return vca_station; }
 	string playCom( )			{ return mPlayCom; }
+	float cachePgLife( )			{ return mCachePgLife; }
 
 	void setStartUser( const string &user )	{ start_user = user; modif(); }
 	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
+	void setCachePgLife( float vl )		{ mCachePgLife = vl; modif(); }
 
 	void modStart( );
 	void modStop( );
@@ -105,6 +107,7 @@ class TVision : public TUI
 				run_prjs;	//Run projects list on the module start
 	vector<WdgShape*>	shapesWdg;
 	bool			end_run;	//End run command. Close all windows
+	float			mCachePgLife;	//Cached pages lifetime
 
 	string			vca_station;	//VCA station id ('.' - for local station)
 

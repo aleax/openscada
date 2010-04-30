@@ -38,7 +38,7 @@ using std::map;
 #define PRT_NAME	"OPC UA"
 #define PRT_TYPE	"Protocol"
 #define PRT_SUBVER	VER_PROT
-#define PRT_MVER	"0.0.1"
+#define PRT_MVER	"0.5.0"
 #define PRT_AUTOR	"Roman Savochenko"
 #define PRT_DESCR	"Allow realisation of OPC UA protocol."
 #define PRT_LICENSE	"GPL"
@@ -87,10 +87,15 @@ namespace OPC_UA
 #define OpcUa_BadDecodingError		0x80070000
 #define OpcUa_BadTimeout		0x800A0000
 #define OpcUa_BadServiceUnsupported	0x800B0000
+#define OpcUa_BadNothingToDo		0x800F0000
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
+#define OpcUa_BadNodeIdInvalid		0x80330000
+#define OpcUa_BadNodeIdUnknown		0x80340000
+#define OpcUa_BadAttributeIdInvalid	0x80350000
 #define OpcUa_BadNotSupported		0x803D0000
 #define OpcUa_BadSecurityPolicyRejected	0x80550000
+#define OpcUa_BadBrowseNameInvalid	0x80600000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
@@ -130,9 +135,115 @@ namespace OPC_UA
 #define OpcUa_ObjectsFolder		85
 #define OpcUa_TypesFolder		86
 #define OpcUa_ViewsFolder		87
+#define OpcUa_ObjectTypesFolder		88
+#define OpcUa_VariableTypesFolder	89
+#define OpcUa_DataTypesFolder		90
+#define OpcUa_ReferenceTypesFolder	91
+
+//> ObjectType Identifiers
+#define OpcUa_BaseObjectType		58
+#define OpcUa_FolderType		61
+#define OpcUa_DataTypeSystemType	75
+#define OpcUa_DataTypeEncodingType	76
+#define OpcUa_ModellingRuleType		77
+#define OpcUa_ServerType		2004
+#define OpcUa_ServerCapabilitiesType	2013
+#define OpcUa_ServerDiagnosticsType	2020
+#define OpcUa_SessionsDiagnosticsSummaryType	2026
+#define OpcUa_SessionDiagnosticsObjectType	2029
+#define OpcUa_VendorServerInfoType	2033
+#define OpcUa_ServerRedundancyType	2034
+#define OpcUa_TransparentRedundancyType	2036
+#define OpcUa_NonTransparentRedundancyType	2039
+#define OpcUa_BaseEventType		2041
+#define OpcUa_StateType			2307
+#define OpcUa_TransitionType		2310
 
 //> Variable Identifiers
+#define OpcUa_BaseVariableType		62
+#define OpcUa_BaseDataVariableType	63
+#define OpcUa_PropertyType		68
 #define OpcUa_Server_ServerStatus_State	2259
+
+//> ReferenceType Identifiers
+#define OpcUa_References		31
+#define OpcUa_NonHierarchicalReferences	32
+#define OpcUa_HierarchicalReferences	33
+#define OpcUa_HasChild			34
+#define OpcUa_Organizes			35
+#define OpcUa_HasEventSource		36
+#define OpcUa_HasModellingRule		37
+#define OpcUa_HasEncoding		38
+#define OpcUa_HasDescription		39
+#define OpcUa_HasTypeDefinition		40
+#define OpcUa_GeneratesEvent		41
+#define OpcUa_Aggregates		44
+#define OpcUa_HasSubtype		45
+#define OpcUa_HasProperty		46
+#define OpcUa_HasComponent		47
+#define OpcUa_HasModelParent		50
+
+//> DataType Identifiers
+#define OpcUa_BaseDataType		24
+#define OpcUa_Number			26
+#define OpcUa_Integer			27
+#define OpcUa_UInteger			28
+#define OpcUa_Enumeration		29
+#define OpcUa_Boolean			1
+#define OpcUa_SByte			2
+#define OpcUa_Byte			3
+#define OpcUa_Int16			4
+#define OpcUa_UInt16			5
+#define OpcUa_Int32			6
+#define OpcUa_UInt32			7
+#define OpcUa_Int64			8
+#define OpcUa_UInt64			9
+#define OpcUa_Float			10
+#define OpcUa_Double			11
+#define OpcUa_String			12
+
+//*************************************************
+//* NodeId object                                 *
+//*************************************************
+class NodeId
+{
+    public:
+	//Data
+	enum Type	{ Numeric, String };
+
+	//Methods
+	NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
+	NodeId( uint32_t in, uint16_t ins = 0 );
+	NodeId( const string &istr, uint16_t ins = 0 );
+	~NodeId( );
+
+	NodeId &operator=( NodeId &node );
+
+	Type type( ) const	{ return mTp; }
+	bool isNull( ) const	{ return (mTp == Numeric && numb == 0); }
+
+	uint16_t ns( ) const	{ return mNs; }
+	uint32_t numbVal( ) const;
+	string   strVal( ) const;
+
+	void setNs( uint16_t ins )	{ mNs = ins; }
+	void setNumbVal( uint32_t in );
+	void setStrVal( const string &istr );
+
+	//> Static
+	static NodeId fromAddr( const string &strAddr );
+	string toAddr( ) const;
+
+    private:
+	//Attributes
+	uint16_t mNs;
+	Type	mTp;
+	union
+	{
+	    uint32_t	numb;
+	    string	*str;
+	};
+};
 
 //*************************************************
 //* TProtIn                                       *
@@ -237,6 +348,8 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	void sessClose( int sid );
 	OPCSess sessGet( int sid );
 
+	string tcpReq( int reqTp, const string &rb );
+
 	TProt &owner( );
 
     protected:
@@ -253,6 +366,9 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &cfg );
 
+	XMLNode *nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
+	    int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
+
 	//Attributes
 	string	&mId, &mName, &mDscr, &mURL;
 	int	&mSerType;
@@ -262,6 +378,9 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	float	cntReq;
 	vector<SecuritySetting>	mSec;
 	vector<OPCSess>		mSess;
+
+	XMLNode	objTree;
+	map<string,XMLNode*>	ndMap;
 };
 
 //*************************************************
@@ -284,56 +403,22 @@ class SecCnl
 };
 
 //*************************************************
-//* NodeId object                                 *
-//*************************************************
-class NodeId
-{
-    public:
-	//Data
-	enum Type	{ Numeric, String };
-
-	//Methods
-	NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
-	NodeId( uint32_t in, uint16_t ins = 0 );
-	NodeId( const string istr, uint16_t ins = 0 );
-	~NodeId( );
-
-	Type type( ) const	{ return mTp; }
-
-	uint16_t ns( ) const	{ return mNs; }
-	uint32_t numbVal( ) const;
-	string   strVal( ) const;
-
-	void setNs( uint16_t ins )	{ mNs = ins; }
-	void setNumbVal( uint32_t in );
-	void setStrVal( const string istr );
-
-	//> Static
-	static NodeId fromAddr( const string &strAddr );
-	string toAddr( );
-
-    private:
-	//Attributes
-	uint16_t mNs;
-	Type	mTp;
-	union
-	{
-	    uint32_t	numb;
-	    string	*str;
-	};
-};
-
-//*************************************************
 //* TProt                                         *
 //*************************************************
 class TProt: public TProtocol
 {
     public:
 	//Data
-	enum NodeClasses	{ NC_Unspecified, NC_Object, NC_Variable, NC_Method=4, NC_ObjectType=8, NC_VariableType=16, NC_ReferenceType=32, NC_DataType=64, NC_View=128 };
+	enum NodeClasses	{ NC_Object=1, NC_Variable=2, NC_Method=4, NC_ObjectType=8, NC_VariableType=16, NC_ReferenceType=32, NC_DataType=64, NC_View=128 };
 	enum browseDirection	{ BD_FORWARD, BD_INVERSE, BD_BOTH };
 	enum timestampsToReturn	{ TS_SOURCE, TS_SERVER, TS_BOTH, TS_NEITHER };
-	enum Access		{ ACS_Read = 0x01, ACS_Write = 0x02, ACS_HistRead = 0x04, ACS_HistWrite = 0x08, ACS_SemChange = 0x10 };
+	enum Access		{ ACS_Read=0x01, ACS_Write=0x02, ACS_HistRead=0x04, ACS_HistWrite=0x08, ACS_SemChange=0x10 };
+	enum RefDscrResMask	{ RdRm_RefType=0x01, RdRm_IsForward=0x02, RdRm_NodeClass=0x04, RdRm_BrowseName=0x08,
+				    RdRm_DisplayName=0x10, RdRm_TypeDef=0x20 };
+	enum AttrIds		{ AId_NodeId=1, AId_NodeClass, AId_BrowseName, AId_DisplayName, AId_Descr, AId_WriteMask, AId_UserWriteMask,
+				    AId_IsAbstract, AId_Symmetric, AId_InverseName, AId_ContainsNoLoops, AId_EventNotifier, AId_Value,
+				    AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
+				    AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
 
 	//Methods
 	TProt( string name );
@@ -375,6 +460,7 @@ class TProt: public TProtocol
 	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
 	static long long iTm( const string &buf, int &off );
 	static NodeId iNodeId( const string &buf, int &off );
+	static void iDataValue( const string &buf, int &off, XMLNode &nVal );
 
 	static void oN( string &buf, int32_t val, char sz, int off = -1 );
 	static void oNu( string &buf, uint32_t val, char sz, int off = -1 );
@@ -384,6 +470,9 @@ class TProt: public TProtocol
 	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
 	static void oTm( string &buf, long long val );
 	static void oNodeId( string &buf, const NodeId &val );
+	static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
+	    bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
+	static void oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk = 0, long long srcTmStmp = 0 );
 
 	static string certPEM2DER( const string &spem );
 

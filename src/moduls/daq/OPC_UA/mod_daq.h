@@ -41,7 +41,7 @@ using std::vector;
 #define DAQ_NAME	"OPC UA"
 #define DAQ_TYPE	"DAQ"
 #define DAQ_SUBVER	VER_CNTR
-#define DAQ_MVER	"0.0.1"
+#define DAQ_MVER	"0.5.0"
 #define DAQ_AUTOR	"Roman Savochenko"
 #define DAQ_DESCR	"Allow realisation of OPC UA client service."
 #define DAQ_LICENSE	"GPL"
@@ -153,11 +153,11 @@ class TMdContr: public TController
 	    uint32_t	sqNumb;
 	    uint32_t	sqReqId;
 	    uint32_t	reqHndl;
-	    int		secRevTime;
+	    int		secLifeTime;
 	    int		sesId;
 	    int		authTkId;
 	    long long	sesAccess;
-	    double	sesActiveTime;
+	    double	sesLifeTime;
 	} sess;
 
 	string	mBrwsVar;

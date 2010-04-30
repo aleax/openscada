@@ -46,7 +46,7 @@ TModule::TModule( )
 
 TModule::~TModule(  )
 {
-    //- Clean export function list -
+    //> Clean export function list
     for(int i=0; i < m_efunc.size(); i++)
         delete m_efunc[i];
 }
@@ -137,7 +137,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/ico" && ctrChkNode(opt) )
     {
@@ -161,5 +161,3 @@ string TModule::I18Ns( const string &mess )
 {
     return I18N(mess.c_str());
 }
-
-

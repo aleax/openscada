@@ -88,13 +88,13 @@ class TModule : public TCntrNode
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
 
-	//- Export functions -
+	//> Export functions
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
 
-	//- Translate functions -
+	//> Translate functions
 	const char *I18N( const char *mess );
 	string I18Ns( const string &mess );
 
@@ -105,7 +105,7 @@ class TModule : public TCntrNode
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//- Reg export function -
+	//> Reg export function
 	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
 
 	//Attributes

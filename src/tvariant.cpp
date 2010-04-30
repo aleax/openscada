@@ -46,6 +46,8 @@ TVariant::TVariant( TVarObj *ivl )		{ vl.assign(1,(char)TVariant::Null); setO(iv
 
 TVariant::TVariant( const TVariant &var )	{ operator=(var); }
 
+TVariant::TVariant( const char *var )		{ operator=(string(var)); }
+
 TVariant::~TVariant( )				{ setType(TVariant::Null); }
 
 void TVariant::setType( Type tp )

@@ -51,11 +51,11 @@ class TSubSYS : public TCntrNode
 
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 
-	//- Start procedures -
+	//> Start procedures
 	virtual void subStart( );
 	virtual void subStop( );
 
-	//- Modules -
+	//> Modules
 	void modList( vector<string> &list );
 	bool modPresent( const string &name );
 	void modAdd( TModule *modul );

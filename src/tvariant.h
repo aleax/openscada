@@ -59,6 +59,7 @@ class TVariant
 	TVariant( const string &ivl );
 	TVariant( TVarObj *ivl );
 	TVariant( const TVariant &var );
+	TVariant( const char *var );
 
 	~TVariant( );
 
