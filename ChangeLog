@@ -1,3 +1,7 @@
+2010-05-06 Maxim
+- !:UI.Vision: The QImage is changed to QPixmap for drawing the primitive ElFigure, this has significantly improved the performance.
+
+
 2010-04-30 Roman
 - SYS: "TVariant::TVariant( const char *var )" constructor is added for string type.
 - UI.Vision: The control for cached pages lifetime into runtime mode is added.

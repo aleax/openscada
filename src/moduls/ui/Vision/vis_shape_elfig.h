@@ -128,7 +128,7 @@ class ElFigDt : public QObject
         ImageMap shapeImages, shapeImages_temp;
         StyleMap shapeStyles, shapeStyles_temp;
         WdgView *w;
-        QImage  pictObj;
+        QPixmap pictObj;
     private slots:
         void dynamic();
 };
@@ -253,7 +253,7 @@ class ShapeElFigure : public WdgShape
         double angle_temp;
         bool flag_angle_temp, flag_geom;
         int rect_dyn;
-        QImage rect_img;
+        QPixmap rect_img;
     };
 }
 

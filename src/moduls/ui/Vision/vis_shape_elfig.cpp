@@ -2569,9 +2569,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         {
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt_v( view );
-            pnt_v.drawImage( QPoint(0,0),elFD->pictObj );
+            pnt_v.drawPixmap( QPoint(0,0),elFD->pictObj );
             if( dashedRect.isValid() )
-                pnt_v.drawImage( QPoint(0,0), rect_img );
+                pnt_v.drawPixmap( QPoint(0,0), rect_img );
             pnt_v.end();
             return true;
         }
@@ -3576,8 +3576,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_move = true;
                     }
                     else dashedRect = QRect( stPointDashedRect, ev->pos() ).normalized();
-                    rect_img = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
-                    rect_img.fill(0);
+                    //rect_img = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
+                    rect_img = QPixmap(view->width(), view->height());
+                    rect_img.fill(Qt::transparent);
                     QPainter pnt_rect( &rect_img );
                     int margin = elFD->geomMargin;
                     QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);
@@ -5623,11 +5624,10 @@ void ShapeElFigure::paintImage( WdgView *view )
     ColorMap *colors = &elFD->shapeColors;
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
-
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
     RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-    elFD->pictObj = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
-    elFD->pictObj.fill(0);
+    elFD->pictObj = QPixmap(view->width(), view->height());
+    elFD->pictObj.fill(Qt::transparent);
     QPainter pnt( &elFD->pictObj );
     //- Prepare draw area -
     int margin = elFD->geomMargin;
