@@ -254,6 +254,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     mWStat = new QLabel( VCAStation().c_str(), this );
     mWStat->setWhatsThis(_("This label displays used VCA engine station."));
     mWStat->setToolTip(_("Field for display of the used VCA engine station."));
+    mWStat->setVisible( VCAStation() != "." );
     statusBar()->insertPermanentWidget(0,mWStat);
     mStlBar = new StylesStBar( -1, this );
     mStlBar->setWhatsThis(_("This label displays used interface style."));

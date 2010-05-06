@@ -117,11 +117,11 @@ class ShapeFormEl : public WdgShape
 
     public slots:
 	//Public slots
-	//-- Edit line events --
+	//>> Edit line events
 	void lineAccept( );
-	//-- Edit text events --
+	//>> Edit text events
 	void textAccept( );
-	//-- Check box events --
+	//>> Check box events
 	void checkChange(int);
 	//-- Combo box and list events --
 	void comboChange(const QString&);
@@ -363,7 +363,7 @@ class ShapeDiagram : public WdgShape
 		QColor	curColor, sclColor, sclMarkColor;
 		QBrush	backGrnd;
 		QPen		border;
-		QPicture	pictObj;
+		QImage		pictObj;
 		QRect		pictRect;
 		QFont		sclMarkFont;
 		QTimer 		*trcTimer;

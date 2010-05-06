@@ -28,6 +28,7 @@ URL: http://oscada.org.ua
 %def_enable DCON
 %def_enable DAQGate
 %def_enable SoundCard
+%def_enable OPC_UA
 %ifnarch %ix86
 %force_disable DiamondBoards
 %force_disable ICP_DAS
@@ -442,6 +443,19 @@ The %{name}-DAQ.ICP_DAS package allow realisation of ICP DAS hardware support. I
 Пакет %{name}-DAQ.ICP_DAS надає реалізацію підтримки обладнання ICP DAS. Включаючи I-87000 та I-7000 DCON модулі та I-8000 швидкі модулі.
 %endif
 
+%if_enabled OPC_UA
+%package DAQ.OPC_UA
+Summary: OPC UA
+Group: Graphics
+Requires: %name = %version-%release
+%description DAQ.OPC_UA
+The %{name}-DAQ.OPC_UA package allow realisation of OPC UA protocol.
+%description DAQ.OPC_UA -l ru_RU.UTF8
+Пакет %{name}-DAQ.OPC_UA предоставляет реализацию OPC UA протокола.
+%description DAQ.OPC_UA -l uk_UA.UTF8
+Пакет %{name}-DAQ.OPC_UA надає реалізацію OPC UA протокола.
+%endif
+
 #=====  Archive modules =====
 %if_enabled FSArch
 %package Archive.FSArch
@@ -751,7 +765,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
     %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} \
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
-    %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} \
+    %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} \
     %{subst_enable FSArch} %{subst_enable DBArch} \
     %{subst_enable Sockets} %{subst_enable SSL} %{subst_enable Serial} \
     %{subst_enable HTTP} %{subst_enable SelfSystem} %{subst_enable UserProtocol} \
@@ -942,6 +956,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %files DAQ.ICP_DAS
 %_libdir/openscada/daq_ICP_DAS.so
 %_datadir/locale/*/LC_MESSAGES/oscd_ICP_DAS.mo
+%endif
+
+%if_enabled OPC_UA
+%files DAQ.OPC_UA
+%_libdir/openscada/daq_OPC_UA.so
+%_datadir/locale/*/LC_MESSAGES/oscd_OPC_UA.mo
 %endif
 
 #=====  Archive modules =====

@@ -1,5 +1,13 @@
+2010-05-06 Roman
+- !:SYS: RPM-build spec file for separated modules is updated for DAQ.OPC_UA support.
+- !!:DAQ.OPC_UA: Secure modes is locked for select. Document is added.
+- !!:UI.Vision: VCA station display field, into runtime window status, is made hiden for local station.
+    For primitive "Diagram" building used QImage instead QPicture and for significant the performance improved.
+
+
 2010-05-06 Maxim
-- !:UI.Vision: The QImage is changed to QPixmap for drawing the primitive ElFigure, this has significantly improved the performance.
+- !:UI.Vision: The QImage is changed to QPixmap for drawing the primitive ElFigure, this has significantly
+    improved the performance.
 
 
 2010-04-30 Roman

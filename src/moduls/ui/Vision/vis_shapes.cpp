@@ -816,7 +816,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	default:
-	    //- Individual arguments process -
+	    //> Individual arguments process
 	    if( uiPrmPos >= 50 )
 	    {
 		int argN = (uiPrmPos/10)-5;
@@ -839,7 +839,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }else up = false;
     }
 
-    //- Text reformation -
+    //> Text reformation
     if( reform && !w->allAttrLoad() )
     {
 	QString text = shD->text_tmpl.c_str();
@@ -1463,6 +1463,9 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     //> Prepare picture
+    shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
+    shD->pictObj.fill(qRgba(0,0,0,0));
+
     QPainter pnt( &shD->pictObj );
 
     //> Get generic parameters
@@ -1724,7 +1727,14 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
+#if OSC_DEBUG >= 3
+    long long t_cnt = TSYS::curTime();
+#endif
+
     //> Prepare picture
+    shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
+    shD->pictObj.fill(qRgba(0,0,0,0));
+
     QPainter pnt( &shD->pictObj );
 
     //> Get generic parameters
@@ -2092,6 +2102,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     shD->pictRect = tAr;
     shD->tPict = tPict;
+
+#if OSC_DEBUG >= 3
+    mess_debug("VCA DEBUG",_("Trend build: %f ms."),1e-3*(TSYS::curTime()-t_cnt));
+#endif
 }
 
 void ShapeDiagram::tracing( )
@@ -2124,6 +2138,9 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     {
 	case QEvent::Paint:
 	{
+#if OSC_DEBUG >= 3
+	    long long t_cnt = TSYS::curTime();
+#endif
 	    QPainter pnt( w );
 	
 	    //> Decoration draw
@@ -2139,7 +2156,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
 
 	    //> Trend's picture
-	    pnt.drawPicture(shD->border.width(),shD->border.width(),shD->pictObj);
+	    pnt.drawImage(shD->border.width(),shD->border.width(),shD->pictObj);
 
 	    //> Draw focused border
 	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
@@ -2165,6 +2182,10 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		pnt.setPen(curpen);
 		pnt.drawLine(curPos,shD->pictRect.y(),curPos,shD->pictRect.y()+shD->pictRect.height());
 	    }
+
+#if OSC_DEBUG >= 3
+	    mess_debug("VCA DEBUG",_("Trend draw: %f ms."),1e-3*(TSYS::curTime()-t_cnt));
+#endif
 
 	    return true;
 	}

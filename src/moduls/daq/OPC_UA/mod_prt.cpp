@@ -2458,8 +2458,8 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/ep/cfg/SecPolicies");
 		if( ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",cfg("SecPolicies").fld().descr(),0664,"root","Protocol",1,"s_com","add,del") )
 		{
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),0664,"root","Protocol",3,"tp","str","dest","select","sel_list","None;Basic128;Basic128Rsa15;Basic256");
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),0664,"root","Protocol",4,"tp","dec","dest","select","sel_id","0;1;2","sel_list",_("None;Sign;Sign&Encrypt"));
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),0664,"root","Protocol",3,"tp","str","dest","select","sel_list","None"/*;Basic128;Basic128Rsa15;Basic256"*/);
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),0664,"root","Protocol",4,"tp","dec","dest","select","sel_id","0;1;2","sel_list",_("None"/*;Sign;Sign&Encrypt"*/));
 		}
 	    }
 	}
