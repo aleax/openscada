@@ -170,7 +170,7 @@ namespace VISION
 	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
 	    //Methods
-	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
+	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false, bool resApply = true );
 
 	    LType type( )	{ return m_tp; }
 	    QString value( );
@@ -199,7 +199,7 @@ namespace VISION
 	private:
 	    LType	m_tp;
 	    QString	m_val;
-	    bool	mPrev, applyReserve;
+	    bool	mPrev, applyReserve, needReserver;
 	    QWidget	*ed_fld;
 	    QPushButton	*bt_fld;
 	    QTimer	*bt_tm;

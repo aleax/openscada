@@ -220,7 +220,7 @@ void *TMdContr::Task( void *icntr )
 	    long long t_cnt = TSYS::curTime();
 	    cntr.en_res.resRequestR( );
 	    for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
-		try{ cntr.p_hd[i_p].at().calc(is_start,is_stop); }
+		try { cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 		catch(TError err)
 		{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    cntr.en_res.resRelease( );
@@ -249,7 +249,6 @@ void TMdContr::redntDataUpdate( )
     for( int i_p = 0; i_p < pls.size(); i_p++ )
     {
 	if( !at(pls[i_p]).at().enableStat( ) ) continue;
-	if( at(pls[i_p]).at().id().empty() ) printf("TEST 01: '%s'\n",pls[i_p].c_str());
 	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
     }
 

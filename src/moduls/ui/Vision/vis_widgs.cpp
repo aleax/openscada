@@ -395,8 +395,9 @@ bool UserStBar::userSel()
 //* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
 //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
 //*********************************************************************************************
-LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
-    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), bt_tm(NULL), ed_fld(NULL), mPrev(!prev_dis)
+LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
+    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), bt_tm(NULL), ed_fld(NULL),
+    mPrev(!prev_dis), applyReserve(resApply)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin(0);
@@ -433,7 +434,7 @@ bool LineEdit::isEdited( )	{ return bt_fld; }
 
 void LineEdit::setType( LType tp )
 {
-    applyReserve = false;
+    needReserver = false;
     if( tp == m_tp ) return;
 
     //> Delete previous
@@ -449,17 +450,17 @@ void LineEdit::setType( LType tp )
 	case Integer:
 	    ed_fld = new QSpinBox(this);
 	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
-	    if( mPrev ) applyReserve = true;
+	    if( mPrev ) needReserver = true;
 	    break;
 	case Real:
 	    ed_fld = new QDoubleSpinBox(this);
 	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
-	    if( mPrev ) applyReserve = true;
+	    if( mPrev ) needReserver = true;
 	    break;
 	case Time:
 	    ed_fld = new QTimeEdit(this);
 	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
-	    if( mPrev ) applyReserve = true;
+	    if( mPrev ) needReserver = true;
 	    break;
 	case Date:
 	    ed_fld = new QDateEdit(this);
@@ -484,7 +485,7 @@ void LineEdit::setType( LType tp )
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
-    if( applyReserve )
+    if( applyReserve && needReserver )
     {
 	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
 	((QBoxLayout*)layout())->setAlignment(ed_fld,Qt::AlignLeft);
@@ -642,7 +643,7 @@ bool LineEdit::event( QEvent * e )
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
-    else if( e->type() == QEvent::Resize && applyReserve )
+    else if( e->type() == QEvent::Resize && applyReserve && needReserver )
     {
 	ed_fld->setMaximumWidth(width()-12);
 	ed_fld->setMinimumWidth(width()-12);

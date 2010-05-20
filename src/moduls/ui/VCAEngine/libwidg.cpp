@@ -601,7 +601,7 @@ void LWidget::load_( )
     {
 	if( !attrPresent(als[i_a]) ) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+	if( attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos )
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -611,7 +611,7 @@ void LWidget::load_( )
     //> Load generic attributes
     mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", m_attrs, true );
 
-    //> Other attributes load
+    //> Load all other attributes
     loadIO();
 }
 
@@ -623,7 +623,7 @@ void LWidget::loadIO( )
     mod->attrsLoad( *this, ownerLib().DB()+"."+ownerLib().tbl(), cfg("DBV").getI(), id(), "", m_attrs );
 
     //> Load cotainer widgets
-    if( !enable() || !isContainer() ) return;
+    if( !isContainer() ) return;
     TConfig c_el(&mod->elInclWdg());
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
@@ -636,7 +636,7 @@ void LWidget::loadIO( )
 	    if( wdgPresent(sid) )	wdgDel(sid);
 	    continue;
 	}
-	if( !wdgPresent(sid) ) 
+	if( !wdgPresent(sid) )
 	    try{ wdgAdd(sid,"",""); }
 	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
@@ -833,13 +833,12 @@ void CWidget::setEnable( bool val )
 
     Widget::setEnable(val);
 
-    //- Disable heritors widgets -
+    //> Enable heritors widgets
     if( val )
 	for( int i_h = 0; i_h < ownerLWdg().herit().size(); i_h++ )
-	    if( ownerLWdg().herit()[i_h].at().wdgPresent(id()) && !ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable( ) )
-	    try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
-	    catch(...)
-            { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
+	    if( !ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable( ) && ownerLWdg().herit()[i_h].at().wdgPresent(id()) )
+		try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
+		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
 }
 
 string CWidget::calcId( )
@@ -882,7 +881,7 @@ void CWidget::load_( )
     {
 	if( !attrPresent(als[i_a]) ) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && m_attrs.find(als[i_a]) == string::npos )
+	if( attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos )
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -892,7 +891,7 @@ void CWidget::load_( )
     //> Load generic attributes
     mod->attrsLoad( *this, db+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), m_attrs, true );
 
-    //> Load widget's attributes
+    //> Load all other attributes
     loadIO();
 }
 

@@ -3,8 +3,8 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus package module.
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
-#: modbus_daq.cpp:68 modbus_daq.cpp:72 modbus_daq.cpp:81 modbus_daq.cpp:376
-#: modbus_daq.cpp:615 modbus_prt.cpp:110 modbus_prt.cpp:118 modbus_prt.cpp:331
+#: modbus_daq.cpp:68 modbus_daq.cpp:72 modbus_daq.cpp:81 modbus_daq.cpp:373
+#: modbus_daq.cpp:630 modbus_prt.cpp:110 modbus_prt.cpp:118 modbus_prt.cpp:331
 #: modbus_prt.cpp:361 modbus_prt.cpp:387 modbus_prt.cpp:532 modbus_prt.cpp:535
 #: modbus_prt.cpp:544 modbus_prt.cpp:729 modbus_prt.cpp:735
 #: modbus_prt.cpp:1188 modbus_prt.cpp:1189 modbus_prt.cpp:1190
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-16 10:49+0200\n"
+"POT-Creation-Date: 2010-05-14 16:27+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -34,13 +34,13 @@ msgstr "Таблица параметров"
 msgid "30"
 msgstr ""
 
-#: modbus_daq.cpp:69 modbus_daq.cpp:106 modbus_daq.cpp:538
+#: modbus_daq.cpp:69 modbus_daq.cpp:106 modbus_daq.cpp:553
 msgid "SCHEDULE"
 msgstr ""
 
 #: modbus_daq.cpp:69
-msgid "Calc schedule"
-msgstr "Планирование вычисления"
+msgid "Acquisition schedule"
+msgstr "Планирование опроса"
 
 #: modbus_daq.cpp:69 modbus_prt.cpp:80
 msgid "100"
@@ -65,7 +65,7 @@ msgstr "Уровень приоритета задачи сбора данных
 msgid "2"
 msgstr ""
 
-#: modbus_daq.cpp:70 modbus_daq.cpp:74 modbus_daq.cpp:75 modbus_daq.cpp:715
+#: modbus_daq.cpp:70 modbus_daq.cpp:74 modbus_daq.cpp:75 modbus_daq.cpp:730
 #: modbus_prt.cpp:61 modbus_prt.cpp:65 modbus_prt.cpp:433 modbus_prt.cpp:631
 #: modbus_prt.cpp:632 modbus_prt.cpp:1160 modbus_prt.cpp:1199
 msgid "0"
@@ -75,7 +75,7 @@ msgstr ""
 msgid "-1;99"
 msgstr ""
 
-#: modbus_daq.cpp:71 modbus_daq.cpp:106 modbus_daq.cpp:190
+#: modbus_daq.cpp:71 modbus_daq.cpp:106 modbus_daq.cpp:187
 msgid "PROT"
 msgstr ""
 
@@ -87,7 +87,7 @@ msgstr "Modbus протокол"
 msgid "5"
 msgstr ""
 
-#: modbus_daq.cpp:71 modbus_daq.cpp:192 modbus_prt.cpp:276 modbus_prt.cpp:519
+#: modbus_daq.cpp:71 modbus_daq.cpp:189 modbus_prt.cpp:276 modbus_prt.cpp:519
 #: modbus_prt.cpp:545
 msgid "TCP"
 msgstr ""
@@ -100,7 +100,7 @@ msgstr ""
 msgid "TCP/IP;RTU;ASCII"
 msgstr ""
 
-#: modbus_daq.cpp:72 modbus_daq.cpp:107 modbus_daq.cpp:537 modbus_prt.cpp:62
+#: modbus_daq.cpp:72 modbus_daq.cpp:107 modbus_daq.cpp:552 modbus_prt.cpp:62
 #: modbus_prt.cpp:657 modbus_prt.cpp:696 modbus_prt.cpp:702 modbus_prt.cpp:703
 msgid "ADDR"
 msgstr ""
@@ -127,7 +127,7 @@ msgstr ""
 msgid "0;255"
 msgstr ""
 
-#: modbus_daq.cpp:74 modbus_daq.cpp:107 modbus_daq.cpp:195
+#: modbus_daq.cpp:74 modbus_daq.cpp:107 modbus_daq.cpp:192
 msgid "FRAG_MERGE"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr "Время восстановления (с)"
 msgid "3"
 msgstr ""
 
-#: modbus_daq.cpp:77 modbus_daq.cpp:108 modbus_daq.cpp:192
+#: modbus_daq.cpp:77 modbus_daq.cpp:108 modbus_daq.cpp:189
 msgid "REQ_TRY"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: modbus_daq.cpp:81 modbus_daq.cpp:566 modbus_daq.cpp:788
+#: modbus_daq.cpp:81 modbus_daq.cpp:581 modbus_daq.cpp:803
 msgid "ATTR_LS"
 msgstr ""
 
@@ -226,81 +226,84 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: modbus_daq.cpp:207 modbus_daq.cpp:596 modbus_daq.h:109
+#: modbus_daq.cpp:204 modbus_daq.cpp:611 modbus_daq.h:109
 msgid "R"
 msgstr ""
 
-#: modbus_daq.cpp:207 modbus_daq.cpp:209
+#: modbus_daq.cpp:204 modbus_daq.cpp:206
 msgid "RI"
 msgstr ""
 
-#: modbus_daq.cpp:242 moduls.cpp:25
+#: modbus_daq.cpp:239 moduls.cpp:25
 msgid "C"
 msgstr ""
 
-#: modbus_daq.cpp:242 modbus_daq.cpp:244
+#: modbus_daq.cpp:239 modbus_daq.cpp:241
 msgid "CI"
 msgstr ""
 
-#: modbus_daq.cpp:361 modbus_daq.cpp:729 modbus_prt.cpp:267 modbus_prt.cpp:450
+#: modbus_daq.cpp:358 modbus_daq.cpp:744 modbus_prt.cpp:267 modbus_prt.cpp:450
 #: modbus_prt.cpp:454 modbus_prt.cpp:457 modbus_prt.cpp:998
 #: modbus_prt.cpp:1233 modbus_prt.cpp:1234
 msgid "id"
 msgstr ""
 
-#: modbus_daq.cpp:362 modbus_prt.cpp:268
+#: modbus_daq.cpp:359 modbus_prt.cpp:268
 msgid "reqTm"
 msgstr ""
 
-#: modbus_daq.cpp:363 modbus_prt.cpp:269 modbus_prt.cpp:998
+#: modbus_daq.cpp:360 modbus_prt.cpp:269 modbus_prt.cpp:998
 msgid "node"
 msgstr ""
 
-#: modbus_daq.cpp:364 modbus_prt.cpp:270 modbus_prt.cpp:998
+#: modbus_daq.cpp:361 modbus_prt.cpp:270 modbus_prt.cpp:998
 msgid "reqTry"
 msgstr ""
 
-#: modbus_daq.cpp:367 modbus_prt.cpp:999 modbus_daq.h:44 modbus_daq.h:45
-#: modbus_prt.h:37 modbus_prt.h:38
+#: modbus_daq.cpp:364 modbus_prt.cpp:999 modbus_daq.h:44 modbus_prt.h:37
 msgid "ModBus"
 msgstr ""
 
-#: modbus_daq.cpp:369 modbus_daq.cpp:371 modbus_daq.cpp:373 modbus_daq.cpp:671
-#: modbus_daq.cpp:713 modbus_prt.cpp:388 modbus_prt.cpp:1001
+#: modbus_daq.cpp:366 modbus_daq.cpp:368 modbus_daq.cpp:370 modbus_daq.cpp:686
+#: modbus_daq.cpp:728 modbus_prt.cpp:388 modbus_prt.cpp:1001
 msgid "err"
 msgstr ""
 
-#: modbus_daq.cpp:385 modbus_prt.cpp:1016
+#: modbus_daq.cpp:382 modbus_prt.cpp:1016
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: modbus_daq.cpp:399
+#: modbus_daq.cpp:396
 msgid "Fetch coils' and registers' blocks."
 msgstr "Получение блоков битов и регистров."
 
-#: modbus_daq.cpp:407 modbus_daq.cpp:433 modbus_daq.cpp:459 modbus_daq.cpp:484
+#: modbus_daq.cpp:404 modbus_daq.cpp:435 modbus_daq.cpp:466 modbus_daq.cpp:495
 #: modbus_prt.cpp:377
 msgid "4:Server failure."
 msgstr "4:Ошибка сервера."
 
-#: modbus_daq.cpp:534 modbus_daq.cpp:785 modbus_prt.cpp:425
+#: modbus_daq.cpp:416 modbus_daq.cpp:447 modbus_daq.cpp:477 modbus_daq.cpp:506
+msgid "15:Response PDU size error."
+msgstr ""
+
+#: modbus_daq.cpp:549 modbus_daq.cpp:800 modbus_prt.cpp:425
 #: modbus_prt.cpp:1108
 msgid "info"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_daq.cpp:538 modbus_daq.cpp:788 modbus_prt.cpp:433
+#: modbus_daq.cpp:552 modbus_daq.cpp:553 modbus_daq.cpp:803 modbus_prt.cpp:433
 #: modbus_prt.cpp:436 modbus_prt.cpp:1116 modbus_prt.cpp:1117
 #: modbus_prt.cpp:1118 modbus_prt.cpp:1145 modbus_prt.cpp:1146
 #: modbus_prt.cpp:1151
 msgid "fld"
 msgstr ""
 
-#: modbus_daq.cpp:537
+#: modbus_daq.cpp:552
 msgid "/cntr/cfg/ADDR"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_daq.cpp:538 modbus_daq.cpp:788 modbus_prt.cpp:428
+#: modbus_daq.cpp:552 modbus_daq.cpp:553 modbus_daq.cpp:803 modbus_prt.cpp:428
 #: modbus_prt.cpp:430 modbus_prt.cpp:433 modbus_prt.cpp:436 modbus_prt.cpp:445
 #: modbus_prt.cpp:452 modbus_prt.cpp:457 modbus_prt.cpp:461 modbus_prt.cpp:462
 #: modbus_prt.cpp:1111 modbus_prt.cpp:1116 modbus_prt.cpp:1117
@@ -317,7 +320,7 @@ msgstr ""
 msgid "root"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_daq.cpp:538 modbus_prt.cpp:430 modbus_prt.cpp:433
+#: modbus_daq.cpp:552 modbus_daq.cpp:553 modbus_prt.cpp:430 modbus_prt.cpp:433
 #: modbus_prt.cpp:436 modbus_prt.cpp:1116 modbus_prt.cpp:1117
 #: modbus_prt.cpp:1118 modbus_prt.cpp:1137 modbus_prt.cpp:1138
 #: modbus_prt.cpp:1139 modbus_prt.cpp:1142 modbus_prt.cpp:1143
@@ -326,57 +329,57 @@ msgstr ""
 msgid "tp"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_daq.cpp:538 modbus_prt.cpp:436
+#: modbus_daq.cpp:552 modbus_daq.cpp:553 modbus_prt.cpp:436
 #: modbus_prt.cpp:1116 modbus_prt.cpp:1118 modbus_prt.cpp:1137
 #: modbus_prt.cpp:1138 modbus_prt.cpp:1143 modbus_prt.cpp:1145
 #: modbus_prt.cpp:1146 modbus_prt.cpp:1152
 msgid "str"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_daq.cpp:538 modbus_prt.cpp:1118
+#: modbus_daq.cpp:552 modbus_daq.cpp:553 modbus_prt.cpp:1118
 #: modbus_prt.cpp:1126 modbus_prt.cpp:1128 modbus_prt.cpp:1139
 #: modbus_prt.cpp:1145 modbus_prt.cpp:1152
 msgid "dest"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_prt.cpp:1118 modbus_prt.cpp:1126
+#: modbus_daq.cpp:552 modbus_prt.cpp:1118 modbus_prt.cpp:1126
 #: modbus_prt.cpp:1128 modbus_prt.cpp:1139 modbus_prt.cpp:1145
 #: modbus_prt.cpp:1152
 msgid "select"
 msgstr ""
 
-#: modbus_daq.cpp:537 modbus_daq.cpp:552
+#: modbus_daq.cpp:552 modbus_daq.cpp:567
 msgid "/cntr/cfg/trLst"
 msgstr ""
 
-#: modbus_daq.cpp:538
+#: modbus_daq.cpp:553
 msgid "/cntr/cfg/SCHEDULE"
 msgstr ""
 
-#: modbus_daq.cpp:538 modbus_prt.cpp:433 modbus_prt.cpp:436 modbus_prt.cpp:461
-#: modbus_prt.cpp:462 modbus_daq.h:46
+#: modbus_daq.cpp:553 modbus_daq.cpp:803 modbus_prt.cpp:433 modbus_prt.cpp:436
+#: modbus_prt.cpp:461 modbus_prt.cpp:462 modbus_daq.h:46
 msgid "DAQ"
 msgstr ""
 
-#: modbus_daq.cpp:538 modbus_prt.cpp:1126 modbus_prt.cpp:1128
+#: modbus_daq.cpp:553 modbus_prt.cpp:1126 modbus_prt.cpp:1128
 #: modbus_prt.cpp:1145 modbus_prt.cpp:1152
 msgid "sel_ed"
 msgstr ""
 
-#: modbus_daq.cpp:539 modbus_prt.cpp:1141
+#: modbus_daq.cpp:554 modbus_prt.cpp:1141
 msgid "sel_list"
 msgstr ""
 
-#: modbus_daq.cpp:539
+#: modbus_daq.cpp:554
 msgid "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"
 msgstr ""
 
-#: modbus_daq.cpp:540 modbus_daq.cpp:789 modbus_prt.cpp:434
+#: modbus_daq.cpp:555 modbus_daq.cpp:804 modbus_prt.cpp:434
 #: modbus_prt.cpp:1119
 msgid "help"
 msgstr ""
 
-#: modbus_daq.cpp:540
+#: modbus_daq.cpp:555
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
@@ -397,12 +400,12 @@ msgstr ""
 "  - месяца (1-12);\n"
 "  - дни недели (0[воскресенье]-6)."
 
-#: modbus_daq.cpp:551 modbus_daq.cpp:729 modbus_prt.cpp:442
+#: modbus_daq.cpp:566 modbus_daq.cpp:744 modbus_prt.cpp:442
 #: modbus_prt.cpp:1156
 msgid "path"
 msgstr ""
 
-#: modbus_daq.cpp:557 modbus_daq.cpp:729 modbus_prt.cpp:450
+#: modbus_daq.cpp:572 modbus_daq.cpp:744 modbus_prt.cpp:450
 #: modbus_prt.cpp:1170 modbus_prt.cpp:1174 modbus_prt.cpp:1181
 #: modbus_prt.cpp:1196 modbus_prt.cpp:1197 modbus_prt.cpp:1198
 #: modbus_prt.cpp:1199 modbus_prt.cpp:1200 modbus_prt.cpp:1257
@@ -411,62 +414,62 @@ msgstr ""
 msgid "el"
 msgstr ""
 
-#: modbus_daq.cpp:566
+#: modbus_daq.cpp:581
 msgid "w_attr"
 msgstr ""
 
-#: modbus_daq.cpp:610 modbus_daq.cpp:629 modbus_daq.cpp:695 modbus_daq.cpp:755
+#: modbus_daq.cpp:625 modbus_daq.cpp:644 modbus_daq.cpp:710 modbus_daq.cpp:770
 msgid "f"
 msgstr ""
 
-#: modbus_daq.cpp:619
+#: modbus_daq.cpp:634
 msgid "rw"
 msgstr ""
 
-#: modbus_daq.cpp:620
+#: modbus_daq.cpp:635
 msgid "w"
 msgstr ""
 
-#: modbus_daq.cpp:629 modbus_daq.cpp:704 modbus_daq.cpp:762
+#: modbus_daq.cpp:644 modbus_daq.cpp:719 modbus_daq.cpp:777
 msgid "i4"
 msgstr ""
 
-#: modbus_daq.cpp:633
+#: modbus_daq.cpp:648
 msgid ","
 msgstr ""
 
-#: modbus_daq.cpp:636 modbus_prt.cpp:341 modbus_prt.cpp:573
+#: modbus_daq.cpp:651 modbus_prt.cpp:341 modbus_prt.cpp:573
 msgid ":"
 msgstr ""
 
-#: modbus_daq.cpp:673
+#: modbus_daq.cpp:688
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-#: modbus_daq.cpp:674
+#: modbus_daq.cpp:689
 msgid "2:Acquisition is stoped."
 msgstr "2:Опрос остановлен."
 
-#: modbus_daq.cpp:703
+#: modbus_daq.cpp:718
 msgid "i2"
 msgstr ""
 
-#: modbus_daq.cpp:728 modbus_prt.cpp:462 modbus_prt.cpp:1161
+#: modbus_daq.cpp:743 modbus_prt.cpp:462 modbus_prt.cpp:1161
 #: modbus_prt.cpp:1166 modbus_prt.cpp:1227 modbus_prt.cpp:1245
 #: modbus_prt.cpp:1250 modbus_prt.cpp:1321
 msgid "set"
 msgstr ""
 
-#: modbus_daq.cpp:729
+#: modbus_daq.cpp:744
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: modbus_daq.cpp:788
+#: modbus_daq.cpp:803
 msgid "/prm/cfg/ATTR_LS"
 msgstr ""
 
-#: modbus_daq.cpp:789
+#: modbus_daq.cpp:804
 msgid ""
 "Attributes configuration list. List must be written by lines in format: [dt:"
 "numb:rw:id:name]\n"
@@ -489,8 +492,10 @@ msgstr ""
 "Список конфигурации атрибутов. Список формируется строками в формате: [dt:"
 "numb:rw:id:name]\n"
 "Где:\n"
-"  dt - ModBus тип данных (R-регистр, C-бит, RI-регистр входа, CI-бит входа).\n"
-"       R и RI могут быть расширены суффиксами: i2-Int16, i4-Int32, f-Float, b5-Bit5;\n"
+"  dt - ModBus тип данных (R-регистр, C-бит, RI-регистр входа, CI-бит "
+"входа).\n"
+"       R и RI могут быть расширены суффиксами: i2-Int16, i4-Int32, f-Float, "
+"b5-Bit5;\n"
 "  numb - адрес ModBus устройства (десят., шестн., или восьмеричн.);\n"
 "  rw - режим чтения-записи (r-чтение; w-запись, rw-запись и чтение);\n"
 "  id - идентификатор создаваемого атрибута;\n"
@@ -1293,6 +1298,11 @@ msgstr "Пустое значение недопустимо."
 msgid "lnk"
 msgstr ""
 
+#: modbus_daq.h:45 modbus_prt.h:38
+#, fuzzy
+msgid "ModBUS"
+msgstr "Режим"
+
 #: modbus_daq.h:48
 msgid "1.0.2"
 msgstr ""
@@ -1328,3 +1338,6 @@ msgid ""
 msgstr ""
 "Предоставляет реализацию протоколов ModBus. Поддерживаются Modbus/TCP, "
 "Modbus/RTU и Modbus/ASCII протоколы."
+
+#~ msgid "Calc schedule"
+#~ msgstr "Планирование вычисления"

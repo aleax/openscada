@@ -551,6 +551,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
     c_el.cfg("IDW").setS(idw);
     if( vDB == 2 ) c_el.cfg("IDC").setS(idc);
     string tstr;
+
     for( int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); )
     {
 	if( !w.attrPresent(tstr) ) continue;
@@ -570,7 +571,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 
-    if( ldGen ) return;
+    if( ldGen )	return;
 
     //> Load widget's user attributes
     wdb = fullDB+"_uio";

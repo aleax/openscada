@@ -160,6 +160,10 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
+	bool   cntrEmpty( );
+	double cntrGet( const string &id );
+	void   cntrSet( const string &id, double vl );
+
 	//Public system static methods
 	//> Current system time (usec)
 	static long long curTime( );
@@ -267,6 +271,8 @@ class TSYS : public TCntrNode
 	Res	nRes, taskRes;
 
 	unsigned long long mSysclc;
+
+	map<string,double>	mCntrs;
 };
 
 extern TSYS *SYS;

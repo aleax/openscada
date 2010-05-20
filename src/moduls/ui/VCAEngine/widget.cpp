@@ -334,7 +334,9 @@ void Widget::inheritAttr( const string &iattr )
     }
 
     setStlLock(true);
-    parent().at().setStlLock(true);
+    if( !loadDef ) parent().at().setStlLock(true);
+
+
 
     //> Configuration inherit
     AutoHD<Attr> attr, pattr;
@@ -380,7 +382,9 @@ void Widget::inheritAttr( const string &iattr )
     }
 
     setStlLock(false);
-    parent().at().setStlLock(false);
+    if( !loadDef ) parent().at().setStlLock(false);
+
+
 }
 
 void Widget::inheritIncl( const string &iwdg )

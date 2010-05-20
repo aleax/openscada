@@ -972,6 +972,26 @@ long TSYS::HZ()
     return sysconf(_SC_CLK_TCK);
 }
 
+bool TSYS::cntrEmpty( )
+{
+    ResAlloc res( nodeRes(), false );
+    return mCntrs.empty();
+}
+
+double TSYS::cntrGet( const string &id )
+{
+    ResAlloc res( nodeRes(), false );
+    map<string,double>::iterator icnt = mCntrs.find(id);
+    if( icnt == mCntrs.end() )	return 0;
+    return icnt->second;
+}
+
+void TSYS::cntrSet( const string &id, double vl )
+{
+    ResAlloc res( nodeRes(), true );
+    mCntrs[id] = vl;
+}
+
 void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm )
 {
     ResAlloc res( taskRes, false );
@@ -1345,6 +1365,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Priority"),R_R___,"root","root",1,"tp","dec");
 	    }
+	if( !cntrEmpty() && ctrMkNode("area",opt,-1,"/cntr",_("Counters")) )
+	    if( ctrMkNode("table",opt,-1,"/cntr/cntr",_("Counters"),R_R___,"root","root") )
+	    {
+		ctrMkNode("list",opt,-1,"/cntr/cntr/id","ID",R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/cntr/cntr/vl",_("Value"),R_R___,"root","root",1,"tp","real");
+	    }
 	if( ctrMkNode("area",opt,-1,"/hlp",_("Help")) )
 	    ctrMkNode("fld",opt,-1,"/hlp/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
@@ -1475,6 +1501,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if( n_thr )		n_thr->childAdd("el")->setText( TSYS::uint2str(it->second.thr) );
 	    if( n_plc )		n_plc->childAdd("el")->setText( (it->second.policy==SCHED_RR)?_("Round-robin"):((it->second.policy==SCHED_BATCH)?_("Style \"batch\""):_("Standard")) );
 	    if( n_prior )	n_prior->childAdd("el")->setText( TSYS::int2str(it->second.prior) );
+	}
+    }
+    if( !cntrEmpty() && a_path == "/cntr/cntr" && ctrChkNode(opt,"get",R_R___,"root","root") )
+    {
+	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/cntr/cntr/id","",R_R___,"root","root");
+	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/cntr/cntr/vl","",R_R___,"root","root");
+
+	ResAlloc res( nodeRes(), false );
+	for( map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++ )
+	{
+	    if( n_id )	n_id->childAdd("el")->setText( icnt->first );
+	    if( n_vl )	n_vl->childAdd("el")->setText( TSYS::real2str(icnt->second) );
 	}
     }
     else if( a_path == "/hlp/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEC_RD) ) opt->setText(optDescr());

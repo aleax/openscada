@@ -1,3 +1,13 @@
+2010-05-20 Roman
+- !!!!:SYS: The document "Quick start" is added.
+- DemoDB: Updated for the document "Quick start".
+- !!:SYS: Debug counters interface is added to TSYS.
+- FIX:Archive.FSArch: Some checking for decompression errors is added. Some integer's limits is fixed for long periods.
+- DAQ.ICP_DAS: Slot 9 open is moved to all other slors open/close place.
+- UI.VCAEngine: An attribute check, into changed attributes list, is improved for end symbol ';' include.
+- FIX:UI.Vision: Spin boxed "Line Edit" field crawl at changing, into project's properties dialog, is fixed.
+
+
 2010-05-06 Roman
 - !:SYS: RPM-build spec file for separated modules is updated for DAQ.OPC_UA support.
 - !!:DAQ.OPC_UA: Secure modes is locked for select. Document is added.

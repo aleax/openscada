@@ -166,6 +166,7 @@ void TMdContr::start_( )
 	{
 	    ResAlloc res( pBusRes, true );
 	    if( Open_SlotAll() > 0 ) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
+	    if( Open_Slot(9) > 0 ) { Close_SlotAll(); throw TError( nodePath().c_str(), _("Open LP-slot 9 error.") ); }
 	}
 
 	try
@@ -192,7 +193,7 @@ void TMdContr::start_( )
 	}
 	catch(TError err)
 	{
-	    if( mBus == 0 )	Close_SlotAll();
+	    if( mBus == 0 )	{ Close_Slot(9); Close_SlotAll(); }
 	    throw;
 	}
     }
@@ -206,7 +207,7 @@ void TMdContr::stop_( )
     //tr.free();
     Close_Com( (mBus?mBus:1) );
 
-    if( mBus == 0 )	{ ResAlloc res( pBusRes, true ); Close_SlotAll(); }
+    if( mBus == 0 )	{ pBusRes.resRequestW(); Close_Slot(9); Close_SlotAll(); pBusRes.resRelease(); }
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -306,7 +307,7 @@ void *TMdContr::Task( void *icntr )
 string TMdContr::serReq( string req, char mSlot )
 {
     ResAlloc res( reqRes, true );
-    if( mBus == 0 && mSlot != mCurSlot )	{ pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
+    if( mBus == 0 && mSlot != mCurSlot ) { pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
 
     WORD wT;
     char szReceive[255];
@@ -577,6 +578,7 @@ void TMdPrm::getVals( )
 		ResAlloc res( owner().reqRes, true );
 		unsigned char sN[8];
 		Read_SN(sN);
+		res.release();
 		vl.at().setS( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]), 0, true );
 	    }
 	    //> Read SDK version
@@ -584,17 +586,17 @@ void TMdPrm::getVals( )
 	    if( vl.at().getR() == EVAL_REAL )	vl.at().setR( GetSDKversion(), 0, true );
 
 	    //> Read DIP switch status
-	    ResAlloc res( owner().pBusRes, true );
-	    int dpSw = EVAL_INT;
-	    if( !Open_Slot(9) ) { dpSw = GetDIPswitch(); Close_Slot(9); }
-	    res.release();
+	    owner().pBusRes.resRequestW();
+	    int dpSw = GetDIPswitch();
+	    owner().pBusRes.resRelease();
 	    vlAt("DIP").at().setI(dpSw,0,true);
 	    break;
 	}
 	case 0x8017:
 	{
 	    //> Check for I8017 init
-	    if( !((PrmsI8017*)extPrms)->init ) { ResAlloc res( owner().pBusRes, true ); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; }
+	    if( !((PrmsI8017*)extPrms)->init )
+	    { owner().pBusRes.resRequestW(); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; owner().pBusRes.resRelease(); }
 	    //> Check for I8017 fast task start
 	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, fastTask, this, &prcSt );
 	    //> Get values direct

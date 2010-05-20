@@ -164,8 +164,8 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //>>> Specific parameter: project calc time
     lab = new QLabel(_("Calc period (ms):"),tab_w);
     glay->addWidget(lab,6,0);
-    prj_ctm = new LineEdit(tab_w,LineEdit::Integer);
-    prj_ctm->setCfg("0:10000");
+    prj_ctm = new LineEdit(tab_w,LineEdit::Integer,false,false);
+    prj_ctm->setCfg("0:10000:10");
     prj_ctm->setObjectName("/obj/cfg/per");
     prj_ctm->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(prj_ctm, SIGNAL(apply()), this, SLOT(isModify()));

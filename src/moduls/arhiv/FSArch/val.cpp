@@ -53,7 +53,7 @@ void ModVArch::setValPeriod( double iper )
 {
     TVArchivator::setValPeriod(iper);
 
-    time_size=vmax(0.2,1000.*valPeriod());
+    time_size=vmax(0.2,1e3*valPeriod());
 }
 
 void ModVArch::load_( )
@@ -154,7 +154,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 	if( infoOK ) return true;
 
-	a_fnm = mod->unPackArch(anm,false);
+	try{ a_fnm = mod->unPackArch(anm,false); } catch(TError){ return false; }
 	unpck = true;
     }
     //> Get params from file
@@ -276,7 +276,7 @@ void ModVArch::checkArchivator( bool now )
 void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
 {
     long long buf_sz = 100000;
-    long long buf_per = (long long)(valPeriod()*1000000.);
+    long long buf_per = (long long)(valPeriod()*1e6);
     long long c_tm, c_tm1;
 
     TValBuf buf( TFld::Real, buf_sz, buf_per, true, true );
@@ -491,7 +491,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	{
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
-	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1000000.,6));
+	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1e6,6));
 	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(iel->second->archive().size()));
 	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)iel->second)->size()/1024.,4,'f'));
 	}
@@ -676,12 +676,12 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 	if( ibeg > iend ) break;
 	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
 	{
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1000000.) )
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1e6) )
 		buf.setI(EVAL_INT,ibeg);
 	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
 	    ibeg = arh_f[i_a]->end()+1;
 	}
-    for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1000000.) )
+    for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1e6) )
 	buf.setI(EVAL_INT,ibeg);
 }
 
@@ -698,7 +698,7 @@ TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getVal(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
-    if(tm) { per = (long long)(archivator().valPeriod()*1000000.); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
+    if(tm) { per = (long long)(archivator().valPeriod()*1e6); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_REAL;
 }
 
@@ -730,7 +730,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		if( (arh_f[i_a]->begin()-beg) > (long long)((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.)
 		    n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.);
 		else n_end = arh_f[i_a]->begin();
-		arh_f.insert( arh_f.begin()+i_a, new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
+		arh_f.insert( arh_f.begin()+i_a, new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1e6),archive().valType(),this) );
 	    }
 	    //>> Insert values to archive
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
@@ -738,7 +738,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
 		res.release();
 		arh_f[i_a]->setVals(buf,beg,n_end);
-		beg = n_end+(long long)(archivator().valPeriod()*1000000.);
+		beg = n_end+(long long)(archivator().valPeriod()*1e6);
 		res.request(true);
 	    }
 	}
@@ -753,13 +753,13 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	strftime(c_buf,sizeof(c_buf)," %F %T.val",&tm_tm);
 	string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
-	long long n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.);
-	arh_f.push_back( new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1000000.),archive().valType(),this) );
+	long long n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*3600e6);
+	arh_f.push_back( new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1e6),archive().valType(),this) );
 	n_end = (end > n_end)?n_end:end;
 
 	res.release();
 	arh_f[arh_f.size()-1]->setVals(buf,beg,n_end);
-	beg = n_end+(long long)(archivator().valPeriod()*1000000.);
+	beg = n_end+(long long)(archivator().valPeriod()*1e6);
     }
 }
 
@@ -1042,7 +1042,7 @@ long long VFileArch::endData( )
     if( mPack )
     {
 	res.request(true);
-	mName = mod->unPackArch(mName);
+	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
 	mPack = false;
 	res.request(false);
     }
@@ -1063,7 +1063,7 @@ long long VFileArch::endData( )
     mAcces = time(NULL);
     res.release();
 
-    return begin() + curPos*period();
+    return begin() + (long long)curPos*period();
 }
 
 void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
@@ -1087,7 +1087,7 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
     if( mPack )
     {
 	res.request(true);
-	mName = mod->unPackArch(mName);
+	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
 	mPack = false;
 	res.request(false);
     }
@@ -1162,16 +1162,16 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 	switch(type())
 	{
 	    case TFld::Boolean:
-		buf.setB((char)*(val_b+voff_beg),begin()+vpos_beg*period());
+		buf.setB((char)*(val_b+voff_beg),begin()+(long long)vpos_beg*period());
 		break;
 	    case TFld::Integer:
-		buf.setI(*(int*)(val_b+voff_beg),begin()+vpos_beg*period());
+		buf.setI(*(int*)(val_b+voff_beg),begin()+(long long)vpos_beg*period());
 		break;
 	    case TFld::Real:
-		buf.setR(*(double*)(val_b+voff_beg),begin()+vpos_beg*period());
+		buf.setR(*(double*)(val_b+voff_beg),begin()+(long long)vpos_beg*period());
 		break;
 	    case TFld::String:
-		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+vpos_beg*period());
+		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+(long long)vpos_beg*period());
 		break;
 	}
 	vpos_beg++;
@@ -1201,7 +1201,7 @@ TVariant VFileArch::getVal( int vpos )
     if( mPack )
     {
 	res.request(true);
-	mName = mod->unPackArch(mName);
+	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
 	mPack = false;
 	res.release();
     }
@@ -1258,7 +1258,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     if( mPack )
     {
 	res.request(true);
-	mName = mod->unPackArch(mName);
+	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
 	mPack = false;
 	res.request(false);
     }
@@ -1661,7 +1661,7 @@ void VFileArch::repairFile( int hd, bool fix )
 	    if( !dt )	return;
 	    mess_err(owner().archivator().nodePath().c_str(),
 		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
-	    //- Fix file -
+	    //> Fix file
 	    if(fix)
 	    {
 		if(dt>0)

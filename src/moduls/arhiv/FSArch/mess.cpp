@@ -486,7 +486,7 @@ void MFileArch::attach( const string &iname, bool full )
 		return;
 	    }
 
-	    mName = mod->unPackArch(name());
+	    try{ mName = mod->unPackArch(name()); } catch(TError){ mErr = true; return; }
 	    mPack = false;
 	}
 
@@ -614,8 +614,7 @@ void MFileArch::put( TMess::SRec mess )
 
     if( mPack )
     {
-	try{ mName = mod->unPackArch(name()); } 
-	catch(TError err) { mErr = true; throw; }
+	try{ mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
 	mPack = false;
     }
     if( !mLoad )
@@ -748,8 +747,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 
     if( mPack )
     {
-	try{ mName = mod->unPackArch(name()); }
-	catch(TError err) { mErr = true; throw; }
+	try{ mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
 	mPack = false;
     }
     if( !mLoad )

@@ -995,7 +995,7 @@ void Page::load_( )
     {
 	if( !attrPresent(als[i_a]) ) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && mAttrs.find(als[i_a]) == string::npos )
+	if( attr.at().modif() && mAttrs.find(als[i_a]+";") == string::npos )
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -1022,7 +1022,7 @@ void Page::load_( )
     for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
 	pageAt(f_lst[i_ls]).at().load();
 
-    //> Load widget attributes
+    //> Load all widget attributes
     loadIO();
 
     setStlLock(false);
@@ -1036,7 +1036,7 @@ void Page::loadIO( )
     mod->attrsLoad( *this, ownerProj()->DB()+"."+ownerProj()->tbl(), cfg("DBV").getI(), path(), "", mAttrs );
 
     //> Load cotainer widgets
-    if( !enable() || !isContainer() ) return;
+    if( !isContainer() ) return;
     TConfig c_el(&mod->elInclWdg());
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
@@ -1097,8 +1097,8 @@ void Page::setEnable( bool val )
 
     Widget::setEnable(val);
 
-    //- Enable/disable included pages -
-    vector<string>      ls;
+    //> Enable/disable included pages
+    vector<string> ls;
     pageList(ls);
     for(int i_l = 0; i_l < ls.size(); i_l++ )
         try{ pageAt(ls[i_l]).at().setEnable(val); }
@@ -1423,7 +1423,7 @@ void PageWdg::load_( )
     {
 	if( !attrPresent(als[i_a]) ) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && mAttrs.find(als[i_a]) == string::npos )
+	if( attr.at().modif() && mAttrs.find(als[i_a]+";") == string::npos )
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -1433,7 +1433,7 @@ void PageWdg::load_( )
     //> Load generic attributes
     mod->attrsLoad( *this, db+"."+ownerPage().ownerProj()->tbl(), cfg("DBV").getI(), ownerPage().path(), id(), mAttrs, true );
 
-    //> Load widget's attributes
+    //> Load all other attributes
     loadIO();
 
     setStlLock(false);
