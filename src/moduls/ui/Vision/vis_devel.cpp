@@ -576,8 +576,15 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     prjTree->updateTree();
 
     //Restore main window state
-    string st = TSYS::strDecode(TBDS::genDBGet(mod->nodePath()+"devWinState","",user()),TSYS::base64);
+    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()),TSYS::base64);
     restoreState(QByteArray(st.data(),st.size()));
+    //Restore ToolBars icons size
+    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
+    {
+	if( !qobject_cast<QToolBar*>(children()[i_ch]) ) continue;
+	int icSz = atoi(mod->uiPropGet((children()[i_ch]->objectName()+"_icSz").toAscii().data(),user()).c_str());
+	if( icSz ) ((QToolBar*)children()[i_ch])->setIconSize(QSize(icSz,icSz));
+    }
 
     //Hide specific tools
     wdgToolView->setVisible(false);
@@ -591,15 +598,15 @@ VisDevelop::~VisDevelop()
 {
     winClose = true;
 
-    //- Save main window state -
+    //> Save main window state
     QByteArray st = saveState();
-    TBDS::genDBSet(mod->nodePath()+"devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
+    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
 
-    //- Timers stop -
+    //> Timers stop
     endRunTimer->stop();
     work_wdgTimer->stop();
 
-    //- Other data clean -
+    //> Other data clean
     if( prjLibPropDlg )	delete prjLibPropDlg;
     if( visItPropDlg )	delete visItPropDlg;
 
@@ -650,15 +657,70 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
 {
     winClose = true;
 
-    work_space->closeAllWindows();
-
     if( !SYS->stopSignal() && !exitModifChk( ) )
     {
 	ce->ignore();
+	winClose = false;
 	return;
     }
 
+    work_space->closeAllWindows();
     ce->accept();
+}
+
+QMenu *VisDevelop::createPopupMenu( )
+{
+    QMenu *mn = QMainWindow::createPopupMenu( );
+    if( !mn ) return mn;
+
+    //> Check for widget under cursor
+    QWidget *ucw = childAt(mapFromGlobal(QCursor::pos()));
+    if( qobject_cast<QToolBar*>(ucw) && !mn->children().isEmpty() )
+    {
+	QAction *first = mn->actions().isEmpty() ? NULL : mn->actions()[0];
+	QMenu *iSz = new QMenu(_("Icons size"));
+	mn->insertMenu(first,iSz);
+	mn->insertSeparator(first);
+
+	QAction *act = new QAction(_("Small (16x16)"),iSz);
+	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	act->setObjectName("16"); 
+	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
+	iSz->addAction( act );
+
+	act = new QAction(_("Medium (22x22)"),iSz);
+	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	act->setObjectName("22"); 
+	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
+	iSz->addAction( act );
+
+	act = new QAction(_("Big (32x32)"),iSz);
+	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	act->setObjectName("32"); 
+	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
+	iSz->addAction( act );
+
+	act = new QAction(_("Huge (48x48)"),iSz);
+	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	act->setObjectName("32"); 
+	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
+	iSz->addAction( act );
+    }
+
+    return mn;
+}
+
+void VisDevelop::setToolIconSize( )
+{
+    if( !sender() ) return;
+
+    QToolBar *tb = qobject_cast<QToolBar*>((QToolBar*)TSYS::str2addr(sender()->property("toolAddr").toString().toAscii().data()));
+    int icSz = atoi(sender()->objectName().toAscii().data());
+    if( tb )
+    {
+	tb->setIconSize(QSize(icSz,icSz));
+	mod->uiPropSet((tb->objectName()+"_icSz").toAscii().data(),TSYS::int2str(icSz),user());
+    }
 }
 
 bool VisDevelop::exitModifChk( )

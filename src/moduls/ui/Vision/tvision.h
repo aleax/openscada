@@ -57,6 +57,7 @@ class TVision : public TUI
 	string VCAStation( )			{ return vca_station; }
 	string playCom( )			{ return mPlayCom; }
 	float cachePgLife( )			{ return mCachePgLife; }
+	string uiPropGet( const string &prop, const string &user = "root" );
 
 	void setStartUser( const string &user )	{ start_user = user; modif(); }
 	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
@@ -64,6 +65,7 @@ class TVision : public TUI
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
 	void setCachePgLife( float vl )		{ mCachePgLife = vl; modif(); }
+	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
 
 	void modStart( );
 	void modStop( );
@@ -78,12 +80,12 @@ class TVision : public TUI
 
 	QIcon icon( );
 
-	//- Put message -
+	//> Put message
 	void postMess( const QString &cat, const QString &mess, MessLev type = Info, QWidget *parent = NULL );
 
 	static QWidget *getFocusedWdg( QWidget *wcntr );
 
-	//- Request to OpenSCADA control interface -
+	//> Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );
 
 	//Attributes
@@ -100,7 +102,6 @@ class TVision : public TUI
 	string optDescr( );
 	QMainWindow *openWindow();
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-
 
 	string			start_user,	//No question start user
 				user_pass,	//No quest user password

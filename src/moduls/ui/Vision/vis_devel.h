@@ -178,11 +178,13 @@ class VisDevelop : public QMainWindow
     protected:
 	//Protected methods
 	void closeEvent( QCloseEvent* );
+	QMenu *createPopupMenu( );
 
     private slots:
 	//Private slots
 	void applyWorkWdg( );	//Timeouted apply work widget
 	void endRunChk( );	//End run flag check
+	void setToolIconSize( );
 
     private:
 	//Private attributes

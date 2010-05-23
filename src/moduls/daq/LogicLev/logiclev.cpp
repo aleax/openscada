@@ -530,20 +530,29 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
     m_wprm = prm;
 }
 
-void TMdPrm::initTmplLnks()
+void TMdPrm::initTmplLnks( bool checkNoLink )
 {
     if( mode() != TMdPrm::Template )    return;
     //> Init links
     chk_lnk_need = false;
+    int off;
+    string nmod, ncntr, nprm, nattr;
+
     for( int i_l = 0; i_l < lnkSize(); i_l++ )
     {
+	if( checkNoLink && !lnk(i_l).aprm.freeStat() ) continue;
 	try
 	{
 	    lnk(i_l).aprm.free();
-	    lnk(i_l).aprm = SYS->daq().at().at(TSYS::strSepParse(lnk(i_l).prm_attr,0,'.')).at().
-					    at(TSYS::strSepParse(lnk(i_l).prm_attr,1,'.')).at().
-					    at(TSYS::strSepParse(lnk(i_l).prm_attr,2,'.')).at().
-					    vlAt(TSYS::strSepParse(lnk(i_l).prm_attr,3,'.'));
+
+	    off = 0;
+	    nmod = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
+	    ncntr = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
+	    nprm = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
+	    nattr = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
+	    if( nmod.empty() || ncntr.empty() || nprm.empty() || nattr.empty() ) continue;
+
+	    lnk(i_l).aprm = SYS->daq().at().at(nmod).at().at(ncntr).at().at(nprm).at().vlAt(nattr);
 	    tmpl->val.setS(lnk(i_l).io_id,lnk(i_l).aprm.at().getS());
 	}catch(TError err){ chk_lnk_need = true; }
     }
@@ -727,7 +736,7 @@ void TMdPrm::calc( bool first, bool last )
     {
 	ResAlloc res(moderes,false);
 	ResAlloc cres(calcRes,true);
-	if(chk_lnk_need) initTmplLnks();
+	if( chk_lnk_need ) initTmplLnks(true);
 
 	tmpl->val.setMdfChk(true);
 
@@ -798,7 +807,6 @@ void TMdPrm::calc( bool first, bool last )
 	//> Put fixed system attributes
 	if( id_nm >= 0 )	setName(tmpl->val.getS(id_nm));
 	if( id_dscr >= 0 )	setDescr(tmpl->val.getS(id_dscr));
-
     }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());

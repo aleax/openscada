@@ -1,3 +1,10 @@
+2010-05-23 Roman
+- FIX:DAQ.LogicLev: Full parameter's links recheck for a broken link present is passed.
+    Link is set to broken for broken address is passed.
+- !!:UI.Vision: UI properties support is added. Icons size for toolbars management and save it is added.
+- FIX:UI.Vision: Development window restor after close canceling is fixed.
+
+
 2010-05-20 Roman
 - !!!!:SYS: The document "Quick start" is added.
 - DemoDB: Updated for the document "Quick start".

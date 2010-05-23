@@ -199,6 +199,32 @@ void TVision::postEnable( int flag )
    TModule::postEnable(flag);
 }
 
+string TVision::uiPropGet( const string &prop, const string &user )
+{
+    ResAlloc res(nodeRes(),false);
+
+    XMLNode prmNd;
+    try
+    {
+	prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user));
+	return prmNd.attr(prop);
+    }
+    catch(TError err)	{ }
+
+    return "";
+}
+
+void TVision::uiPropSet( const string &prop, const string &vl, const string &user )
+{
+    ResAlloc res(nodeRes(),true);
+
+    XMLNode prmNd("UI");
+    try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
+    catch(TError err)	{ }
+    prmNd.setAttr(prop,vl);
+    TBDS::genDBSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
+}
+
 QIcon TVision::icon()
 {
     QImage ico_t;

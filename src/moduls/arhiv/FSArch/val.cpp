@@ -224,7 +224,7 @@ void ModVArch::checkArchivator( bool now )
 	}
 
 	//>> Scan opened directory
-	while((scan_dirent = readdir(IdDir)) != NULL)
+	while( (scan_dirent = readdir(IdDir)) != NULL )
 	{
 	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
 
@@ -574,7 +574,7 @@ void ModVArchEl::checkArchivator( bool now )
 	if(IdDir == NULL) return;
 
 	//>> Check to allow files
-	while((scan_dirent = readdir(IdDir)) != NULL)
+	while( (scan_dirent = readdir(IdDir)) != NULL )
 	{
 	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name )	continue;
 

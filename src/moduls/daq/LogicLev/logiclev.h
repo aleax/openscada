@@ -110,9 +110,9 @@ class TMdPrm : public TParamContr
 	int lnkId( const string &id );
 	SLnk &lnk( int num );
 
-	void loadIO();
-	void saveIO();
-	void initTmplLnks();
+	void loadIO( );
+	void saveIO( );
+	void initTmplLnks( bool checkNoLink = false );
 
 	//Attributes
 	string	&m_prm, m_wprm;
