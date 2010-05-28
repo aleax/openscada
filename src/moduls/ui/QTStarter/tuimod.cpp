@@ -46,7 +46,7 @@
 #define MOD_NAME	"QT GUI starter"
 #define MOD_TYPE	"UI"
 #define VER_TYPE	VER_UI
-#define VERSION		"1.5.3"
+#define VERSION		"1.5.4"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow QT GUI starter. It is single for all QT GUI modules!"
 #define LICENSE		"GPL"

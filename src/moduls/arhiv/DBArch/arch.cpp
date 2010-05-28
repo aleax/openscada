@@ -36,7 +36,7 @@
 #define MOD_NAME	"To DB archivator"
 #define MOD_TYPE	"Archive"
 #define VER_TYPE	VER_ARH
-#define VERSION		"0.9.0"
+#define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to DB."
 #define LICENSE		"GPL"

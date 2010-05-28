@@ -45,7 +45,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-23 11:47+0300\n"
+"POT-Creation-Date: 2010-05-26 18:39+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -78,7 +78,7 @@ msgid "QT"
 msgstr ""
 
 #: tvision.cpp:49
-msgid "0.9.5"
+msgid "0.9.6"
 msgstr ""
 
 #: tvision.cpp:50

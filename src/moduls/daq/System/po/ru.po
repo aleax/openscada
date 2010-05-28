@@ -3,21 +3,15 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 # Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
-#: da_cpu.cpp:37 da_cpu.cpp:38 da_cpu.cpp:39 da_cpu.cpp:40 da_cpu.cpp:53
-#: da_hddstat.cpp:41 da_hddstat.cpp:42 da_hddtemp.cpp:35 da_hddtemp.cpp:36
-#: da_mem.cpp:37 da_mem.cpp:38 da_mem.cpp:39 da_mem.cpp:40 da_mem.cpp:41
-#: da_mem.cpp:42 da_mem.cpp:43 da_mem.cpp:44 da_netstat.cpp:40
-#: da_netstat.cpp:41 da_netstat.cpp:74 da_netstat.cpp:75 da_netstat.cpp:93
-#: da_netstat.cpp:94 da_sensors.cpp:108 da_sensors.cpp:124 da_sensors.cpp:146
-#: da_smart.cpp:87 da_smart.cpp:132 da_smart.cpp:141 da_uptime.cpp:39
-#: da_uptime.cpp:40 da_uptime.cpp:41 da_uptime.cpp:42 da_uptime.cpp:43
-#: da_uptime.cpp:55 os_contr.cpp:65 os_contr.cpp:170
+#: da_cpu.cpp:53 da_netstat.cpp:74 da_netstat.cpp:75 da_netstat.cpp:93
+#: da_netstat.cpp:94 da_smart.cpp:87 da_smart.cpp:132 da_uptime.cpp:55
+#: os_contr.cpp:65 os_contr.cpp:141
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.7.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:41+0300\n"
+"POT-Creation-Date: 2010-05-25 13:10+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -61,8 +55,8 @@ msgstr "Простой (%)"
 #: da_hddstat.cpp:96 da_hddstat.cpp:149 da_hddtemp.cpp:48 da_hddtemp.cpp:84
 #: da_hddtemp.cpp:150 da_mem.cpp:54 da_mem.cpp:59 da_netstat.cpp:51
 #: da_netstat.cpp:96 da_netstat.cpp:131 da_sensors.cpp:61 da_sensors.cpp:67
-#: da_smart.cpp:52 da_smart.cpp:114 da_smart.cpp:163 da_uptime.cpp:54
-#: da_uptime.cpp:67 da_uptime.cpp:96 da_uptime.cpp:108 os_contr.cpp:170
+#: da_smart.cpp:52 da_smart.cpp:114 da_smart.cpp:162 da_uptime.cpp:54
+#: da_uptime.cpp:67 da_uptime.cpp:96 da_uptime.cpp:108 os_contr.cpp:141
 msgid "SUBT"
 msgstr ""
 
@@ -72,8 +66,8 @@ msgstr ""
 
 #: da_cpu.cpp:58 da_cpu.cpp:120 da_cpu.cpp:156 da_hddstat.cpp:78
 #: da_hddstat.cpp:97 da_hddstat.cpp:120 da_mem.cpp:67 da_mem.cpp:97
-#: da_netstat.cpp:77 da_netstat.cpp:97 da_sensors.cpp:44 da_sensors.cpp:139
-#: da_sensors.cpp:205 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:133
+#: da_netstat.cpp:77 da_netstat.cpp:97 da_sensors.cpp:44 da_sensors.cpp:137
+#: da_sensors.cpp:202 da_smart.cpp:78 da_smart.cpp:88 da_smart.cpp:133
 #: da_uptime.cpp:71 da_uptime.cpp:89
 msgid "r"
 msgstr ""
@@ -93,7 +87,7 @@ msgstr "В общем"
 
 #: da_cpu.cpp:70 da_cpu.cpp:75 da_cpu.cpp:76 da_hddstat.cpp:61
 #: da_hddtemp.cpp:57 da_netstat.cpp:60 da_smart.cpp:61 da_uptime.cpp:58
-#: os_contr.cpp:165 os_contr.cpp:166
+#: os_contr.cpp:136 os_contr.cpp:137
 msgid ";"
 msgstr ""
 
@@ -125,14 +119,14 @@ msgid "Full CPU Load"
 msgstr "Общая нагрузка процессора"
 
 #: da_cpu.cpp:172 da_cpu.cpp:185 da_hddstat.cpp:148 da_hddtemp.cpp:149
-#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:220 da_smart.cpp:162
-#: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:169 os_contr.cpp:341
-#: os_contr.cpp:354 os_contr.cpp:451
+#: da_mem.cpp:103 da_netstat.cpp:130 da_sensors.cpp:217 da_smart.cpp:161
+#: da_uptime.cpp:95 da_uptime.cpp:107 os_contr.cpp:140 os_contr.cpp:291
+#: os_contr.cpp:304 os_contr.cpp:401
 msgid "TYPE"
 msgstr ""
 
 #: da_cpu.cpp:174 da_cpu.cpp:187 da_hddstat.cpp:150 da_hddtemp.cpp:151
-#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:221 da_smart.cpp:164
+#: da_mem.cpp:104 da_netstat.cpp:132 da_sensors.cpp:218 da_smart.cpp:163
 #: da_uptime.cpp:97 da_uptime.cpp:109
 msgid "EN"
 msgstr ""
@@ -236,7 +230,7 @@ msgstr ""
 msgid "Temperature"
 msgstr "Температура"
 
-#: da_hddtemp.cpp:37 os_contr.cpp:152 os_contr.cpp:155 os_contr.cpp:391
+#: da_hddtemp.cpp:37 os_contr.cpp:123 os_contr.cpp:126 os_contr.cpp:341
 msgid "0"
 msgstr ""
 
@@ -244,8 +238,8 @@ msgstr ""
 msgid "Disk"
 msgstr "Диск"
 
-#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:131
-#: os_contr.cpp:315 os_contr.cpp:445
+#: da_hddtemp.cpp:77 da_hddtemp.cpp:96 da_hddtemp.cpp:155 os_contr.cpp:265
+#: os_contr.cpp:395
 #, c-format
 msgid "%s"
 msgstr ""
@@ -422,24 +416,24 @@ msgstr ""
 msgid "/etc/sensors.conf"
 msgstr ""
 
-#: da_sensors.cpp:105 da_sensors.cpp:121
+#: da_sensors.cpp:105 da_sensors.cpp:120
 msgid "_"
 msgstr ""
 
-#: da_sensors.cpp:107 da_sensors.cpp:123
+#: da_sensors.cpp:107 da_sensors.cpp:122
 msgid " "
 msgstr ""
 
-#: da_sensors.cpp:144 da_sensors.cpp:209
+#: da_sensors.cpp:142 da_sensors.cpp:206
 #, c-format
 msgid "%31s : %f"
 msgstr ""
 
-#: da_sensors.cpp:157
+#: da_sensors.cpp:154
 msgid "SensorsData"
 msgstr ""
 
-#: da_sensors.cpp:218
+#: da_sensors.cpp:215
 msgid "Data sensors"
 msgstr "Данные сенсоров"
 
@@ -461,11 +455,11 @@ msgstr ""
 msgid "%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n"
 msgstr ""
 
-#: da_smart.cpp:150
+#: da_smart.cpp:149
 msgid "Smart_"
 msgstr ""
 
-#: da_smart.cpp:160
+#: da_smart.cpp:159
 msgid "HD smart: "
 msgstr ""
 
@@ -559,7 +553,7 @@ msgid "DAQ"
 msgstr ""
 
 #: os_contr.cpp:52
-msgid "1.7.0"
+msgid "1.7.1"
 msgstr ""
 
 #: os_contr.cpp:53
@@ -582,148 +576,109 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: os_contr.cpp:107
-#, c-format
-msgid ""
-"======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
-"\n"
-msgstr ""
-"======================= Опции модуля <%s:%s> =============================\n"
-"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
-"\n"
-
-#: os_contr.cpp:118
-msgid "h"
-msgstr ""
-
-#: os_contr.cpp:121
-msgid "help"
-msgstr ""
-
-#: os_contr.cpp:152 os_contr.cpp:227
+#: os_contr.cpp:123 os_contr.cpp:198
 msgid "AUTO_FILL"
 msgstr ""
 
-#: os_contr.cpp:152
+#: os_contr.cpp:123
 msgid "Auto create active DA"
 msgstr "Авт. создавать активные ист. данных"
 
-#: os_contr.cpp:152
+#: os_contr.cpp:123
 msgid "1"
 msgstr ""
 
-#: os_contr.cpp:153 os_contr.cpp:168 os_contr.cpp:205
+#: os_contr.cpp:124 os_contr.cpp:139 os_contr.cpp:176
 msgid "PRM_BD"
 msgstr ""
 
-#: os_contr.cpp:153
+#: os_contr.cpp:124
 msgid "System parameteres table"
 msgstr "Таблица ситемных параметров"
 
-#: os_contr.cpp:153
+#: os_contr.cpp:124
 msgid "30"
 msgstr ""
 
-#: os_contr.cpp:153
+#: os_contr.cpp:124
 msgid "system"
 msgstr ""
 
-#: os_contr.cpp:154 os_contr.cpp:203
+#: os_contr.cpp:125 os_contr.cpp:174
 msgid "PERIOD"
 msgstr ""
 
-#: os_contr.cpp:154
+#: os_contr.cpp:125
 msgid "Request data period (ms)"
 msgstr "Период опроса данных (мс)"
 
-#: os_contr.cpp:154
+#: os_contr.cpp:125
 msgid "5"
 msgstr ""
 
-#: os_contr.cpp:154
+#: os_contr.cpp:125
 msgid "1000"
 msgstr ""
 
-#: os_contr.cpp:154
+#: os_contr.cpp:125
 msgid "0;10000"
 msgstr ""
 
-#: os_contr.cpp:155 os_contr.cpp:203
+#: os_contr.cpp:126 os_contr.cpp:174
 msgid "PRIOR"
 msgstr ""
 
-#: os_contr.cpp:155
+#: os_contr.cpp:126
 msgid "Request task priority"
 msgstr "Приоритет задачи опроса"
 
-#: os_contr.cpp:155
+#: os_contr.cpp:126
 msgid "2"
 msgstr ""
 
-#: os_contr.cpp:155
-msgid "0;100"
+#: os_contr.cpp:126
+msgid "-1;99"
 msgstr ""
 
-#: os_contr.cpp:168
+#: os_contr.cpp:139
 msgid "std"
 msgstr ""
 
-#: os_contr.cpp:168
+#: os_contr.cpp:139
 msgid "Standard"
 msgstr "Стандартный"
 
-#: os_contr.cpp:169
+#: os_contr.cpp:140
 msgid "System part"
 msgstr "Часть системы"
 
-#: os_contr.cpp:169 os_contr.cpp:170
+#: os_contr.cpp:140 os_contr.cpp:141
 msgid "10"
 msgstr ""
 
-#: os_contr.cpp:205
+#: os_contr.cpp:176
 msgid "OSPrm_"
 msgstr ""
 
-#: os_contr.cpp:216
+#: os_contr.cpp:187
 #, c-format
 msgid "Get data %.6g ms. "
 msgstr "Получение данных %.6g мс. "
 
-#: os_contr.cpp:244
-msgid "root"
-msgstr ""
-
-#: os_contr.cpp:252
-msgid "start"
-msgstr ""
-
-#: os_contr.cpp:253
-msgid "Acquisition task no started!"
-msgstr "Задача сбора не запущена!"
-
-#: os_contr.cpp:264
-msgid "stop"
-msgstr ""
-
-#: os_contr.cpp:265
-msgid "Acquisition task no stoped!"
-msgstr "Задача сбора не остановлена!"
-
-#: os_contr.cpp:293
+#: os_contr.cpp:243
 #, c-format
 msgid "Thread <%u> started. TID: %ld"
 msgstr ""
 
-#: os_contr.cpp:387
+#: os_contr.cpp:337
 msgid "err"
 msgstr ""
 
-#: os_contr.cpp:389
+#: os_contr.cpp:339
 msgid "2:Controller stoped"
 msgstr "2:Контроллер остановлен"
 
-#: os_contr.cpp:390
+#: os_contr.cpp:340
 msgid "1:Parameter disabled"
 msgstr "1:Параметр отключен"
 
@@ -786,3 +741,22 @@ msgstr ""
 #: da_uptime.h:41
 msgid "Up time"
 msgstr "Время работы"
+
+#~ msgid ""
+#~ "======================= The module <%s:%s> options "
+#~ "=======================\n"
+#~ "---------- Parameters of the module section <%s> in config file "
+#~ "----------\n"
+#~ "\n"
+#~ msgstr ""
+#~ "======================= Опции модуля <%s:%s> "
+#~ "=============================\n"
+#~ "------- Параметры модульной секции <%s> в конфигурационном файле "
+#~ "---------\n"
+#~ "\n"
+
+#~ msgid "Acquisition task no started!"
+#~ msgstr "Задача сбора не запущена!"
+
+#~ msgid "Acquisition task no stoped!"
+#~ msgstr "Задача сбора не остановлена!"

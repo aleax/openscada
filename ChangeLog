@@ -1,3 +1,31 @@
+2010-05-28 Roman 0.6.4.2
+- SYS: Splash image is updated.
+- !!!!:DOC: OpenSCADA manual documents, TODO and API document is updated for 0.6.4.2.
+- !!:SYS: The source tree version is changed to 0.6.4.2. RPM-build speck files is changed for build version 0.6.4.2 packages.
+- DemoDB: Demo DB is updated for UI.Vision panels replacement.
+- !!:Archive.FSArch: Documents and translations is updated and released version 1.4.0.
+- !!:Archive.DBArch: Documents and translations is updated and released version 0.9.1.
+- !!:DAQ.BlockCalc: Documents and translations is updated and released version 1.3.1.
+- !!:DAQ.DCON: Documents and translations is updated and released version 0.3.2.
+- !!:DAQ.ICP_DAS: Documents and translations is updated and released version 0.7.1.
+- !!:DAQ.JavaLikeCalc: Documents and translations is updated and released version 1.7.0.
+- !!:DAQ.LogicLev: Documents and translations is updated and released version 1.1.1.
+- !!:DAQ.ModBus: Documents and translations is updated and released version 1.1.0.
+- !!:DAQ.Siemens: Documents and translations is updated and released version 1.2.2.
+- !!:DAQ.System: Documents and translations is updated and released version 1.7.1.
+- !!:Protocol.ModBus: Documents and translations is updated and released version 0.6.0.
+- !!:Transport.SSL: Documents and translations is updated and released version 0.9.1.
+- !!:Transport.Serial: Documents and translations is updated and released version 0.7.0.
+- !!:Transport.Sockets: Documents and translations is updated and released version 1.4.2.
+- !!:UI.QTCfg: Documents and translations is updated and released version 1.8.3.
+- !!:UI.QTStarter: Documents and translations is updated and released version 1.5.4.
+- !!:UI.VCAEngine: Documents and translations is updated and released version 0.9.6.
+- !!:UI.Vision: Documents and translations is updated and released version 0.9.6.
+- !!:UI.WebCfgD: Documents and translations is updated and released version 0.6.4.
+- !!:UI.WebVision: Documents and translations is updated and released version 0.8.0.
+- FIX:UI.QTCfg, UI.Vision: Checking for equal value into combo-text fields is added.
+
+
 2010-05-23 Roman
 - FIX:DAQ.LogicLev: Full parameter's links recheck for a broken link present is passed.
     Link is set to broken for broken address is passed.
@@ -46,7 +74,7 @@
 
 
 2010-04-11 Roman
-- !!:FIX:SYS: Wrong security defines SEQ_RD, SEQ_WR and SEQ_XT is renamed to SEC_RD, SEC_WR and SEC_XT
+- FIX:SYS: Wrong security defines SEQ_RD, SEQ_WR and SEQ_XT is renamed to SEC_RD, SEC_WR and SEC_XT
 - FIX:SYS: Start scripts is fixed for global prevent multiply starting.
 - FIX:Transport: Control interface's permitions is fixed to group "Transport".
 - SYS: Function resTryW() and resTryR() is added to Resource object.
@@ -97,7 +125,7 @@
 
 
 2010-03-16 Roman
-- !::Protocol.UserProtocol: Output user protocol address is made by IO attribute "ProtIt".
+- !:Protocol.UserProtocol: Output user protocol address is made by IO attribute "ProtIt".
 
 
 2010-03-15 Roman
@@ -108,7 +136,7 @@
 
 
 2010-03-12 Roman
-- !!!!:SYS.TCntrNode, SYS.TCfg, SYS.TFld, DAQ.JavaLikeCalc.Attr : Structures (classes) pack is added by #pragma pack(push,1)
+- !!!!:SYS.TCntrNode, SYS.TCfg, SYS.TFld, DAQ.JavaLikeCalc.Attr : Structures (classes) data pack is added by #pragma pack(push,1)
 - !!:Protocol: The function itemListIn() is added for protocol's items allow for select. Subsystem modules API version is changed to 3.
 - !!:Transport, DAQ.ModBus, Protocol.UserProtocol: Protocol's items selection, by function TProtocol::itemListIn(), support is added.
 - !!:SYS: The function strParse() is added for expand function strSepParse() to multisymbols separators support and one symbol separator's merging.
@@ -120,7 +148,8 @@
 - !!:DAQ.OPC_UA: Server object and security channel registartion is added. Test prototype realisation finished.
     Integration for OpenSCADA objects is started.
 - FIX:UI.QTCfg. UI.Vision: Automatic RichText is disabled for text fields and information/error messages.
-- !!:UI.QTStarter: UI modules selection is added. Mutable attribute's fields inherit enabled and made safe.
+- UI.QTStarter: UI modules selection is added.
+- !!:UI.VCAEngine: Mutable attribute's fields inherit enabled and made safe.
 - !!:UI.WebUser: HTTP variables scan is made unified. Post content's items is full parsed and put to Array<XMLNodeObj> for user's procedure.
 
 
@@ -132,7 +161,7 @@
 - !!!!:Protocol: The module 'UserProtocol' is added for allow self-user protocols creation on any OpenSCADA language.
 - !!!!:UI: The module 'WebUser' is added for allow self-user Web-pages creation on any OpenSCADA language.
 - SYS.Resource: Deadlock warnings missing is added to ResAlloc.
-- SYS: User's API function "strFromCharCode" is added.
+- !:SYS: User's API function "strFromCharCode" is added.
 - FIX:Transport.Input: Protocol selection is made. Direct user's API function messIO() is fixed.
     User's request throw through output transport dialog is fixed for Sockets and SSL.
 - !!:Archive.FSArch, Archive.DBArch: Addon parameters storing is moved to XML-field "A_PRMS".
@@ -167,7 +196,7 @@
 
 
 2010-02-15 Roman
-- DAQ.JavaLikeCalc: The function isEVal() is added to base types for EVAL values detection. A function to compile stage is added correct EVAL values casting.
+- !:DAQ.JavaLikeCalc: The function isEVal() is added to base types for EVAL values detection. A function to compile stage is added correct EVAL values casting.
 - DAQ.OPC_UA: Up to "Browse" request protocol OPC UA is discovered.
 
 
@@ -196,7 +225,6 @@
 - UI.Vision: The lowering and rising of the figures in developing mode is improved for the primitive ElFigure.
 
 
->>>>>>> .r1061
 2010-01-30 Roman
 - !!!!:DOC: The DAQ document and generic document of OpenSCADA translation to English is added.
 - !!:DemoDB: View cadre and Result graphics scaling for present items is added. Some fixes is made.

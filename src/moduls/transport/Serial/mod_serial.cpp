@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,7 @@
 #define MOD_NAME	"Serial interfaces"
 #define MOD_TYPE	"Transport"
 #define VER_TYPE	VER_TR
-#define VERSION		"0.6.0"
+#define VERSION		"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other."
 #define LICENSE		"GPL"

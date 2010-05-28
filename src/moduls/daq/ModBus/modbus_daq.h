@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -45,7 +45,7 @@ using std::deque;
 #define DAQ_NAME	"ModBUS"
 #define DAQ_TYPE	"DAQ"
 #define DAQ_SUBVER	VER_CNTR
-#define DAQ_MVER	"1.0.2"
+#define DAQ_MVER	"1.1.0"
 #define DAQ_AUTORS	"Roman Savochenko"
 #define DAQ_DESCR	"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
 #define DAQ_LICENSE	"GPL"

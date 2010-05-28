@@ -17,13 +17,11 @@ To do tasks of the project OpenSCADA
   * Make DB module for DBMS Oracle support.
 
 5. Subsystem “Data acquisition” (DAQ)
-  * Make data acquisition module for gathering data from OPC-servers by OPC UA.
 
 6. Subsystem “Transports”
   * Make realisation of SNMP protocol's agent.
 
 7. Subsystem “Protocols of transports”
-  * Make module to protocol HTTP for service requests by OPC UA.
 
 8. Subsystem “User interfaces”
 
@@ -46,7 +44,6 @@ To do tasks of the project OpenSCADA
 11. Subsystem “Special”
 
 12. Documentation
-  * Make manual for quick starting.
 
 13. Project site
   * Add changes tracker and continued works at project tracker.

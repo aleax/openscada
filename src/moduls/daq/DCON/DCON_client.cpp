@@ -39,7 +39,7 @@
 #define MOD_NAME	"DCON client"
 #define MOD_TYPE	"DAQ"
 #define VER_TYPE	VER_CNTR
-#define VERSION		"0.3.0"
+#define VERSION		"0.3.2"
 #define AUTORS		"Roman Savochenko, Almaz Karimov"
 #define DESCRIPTION	"Allow realisation of DCON client service. Supported I-7000 DCON protocol."
 #define LICENSE		"GPL"

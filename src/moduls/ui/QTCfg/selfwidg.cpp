@@ -303,12 +303,12 @@ QString LineEdit::value()
 
 void LineEdit::applySlot( )
 {
-    emit valChanged(value());
-
     viewApplyBt(false);
 
+    if( m_val == value() ) return;
     m_val = value();
 
+    emit valChanged(value());
     emit apply();
 }
 

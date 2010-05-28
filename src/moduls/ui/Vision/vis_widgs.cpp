@@ -482,6 +482,7 @@ void LineEdit::setType( LType tp )
 	    ed_fld = new QComboBox(this);
 	    ((QComboBox*)ed_fld)->setEditable(true);
 	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
+	    connect( (QComboBox*)ed_fld, SIGNAL( activated(int) ), this, SLOT( applySlot() ) );
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
@@ -620,6 +621,7 @@ void LineEdit::applySlot( )
 {
     viewApplyBt(false);
 
+    if( m_val == value() ) return;
     m_val = value();
 
     emit apply();
