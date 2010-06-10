@@ -30,6 +30,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+#define cntBnd "asdfeeeeqqwe34QWEasd4rserv$WERwar34q2fsdFWEra345tfSDFasefavt5rtaew@#"
+
 using std::string;
 using std::map;
 
@@ -76,6 +78,8 @@ class TProt: public TProtocol
 	int authTime( )			{ return mTAuth; }
 
 	void setAuthTime( int vl )	{ mTAuth = vl; modif(); }
+
+	void outMess( XMLNode &io, TTransportOut &tro );
 
 	//> Auth session manipulation functions
 	int sesOpen( string name );

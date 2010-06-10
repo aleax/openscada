@@ -604,7 +604,7 @@ string TSYS::strParse( const string &path, int level, const string &sep, int *of
 	}
 	else if( t_lev == level )
 	{
-	    if( off ) *off = t_dir+1;
+	    if( off ) *off = t_dir+sep.size();
 	    return path.substr(an_dir,t_dir-an_dir);
 	}
 	if( mergeSepSymb && sep.size() == 1 )

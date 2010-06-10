@@ -1,3 +1,10 @@
+2010-06-10 Roman
+- FIX:SYS: The function TSYS::strParse() is fixed for multiply separators offset position.
+- FIX:DAQ.JavaLikeCalc: Line count is fixed for commented blocks by /* */.
+- !!:Protocol.HTTP: Outgoing protocol's function is added.
+- FIX:Protocol.HTTP, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.Vision: HTTP-parameter's "Content-Type" value is fixed for item "Charset".
+
+
 2010-05-28 Roman 0.6.4.2
 - SYS: Splash image is updated.
 - !!!!:DOC: OpenSCADA manual documents, TODO and API document is updated for 0.6.4.2.

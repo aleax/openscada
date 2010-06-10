@@ -322,7 +322,7 @@ retry:
 	pos+=2;
 	while( pos < prog.size() && prog.substr(pos-1,2) != "*/" )
 	{
-	    if( c == '\n' )	{ yylloc.last_column = 1; yylloc.last_line++; }
+	    if( prog[pos] == '\n' )	{ yylloc.last_column = 1; yylloc.last_line++; }
 	    else yylloc.last_column++;
 	    pos++;
 	}

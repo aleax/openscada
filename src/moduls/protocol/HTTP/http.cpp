@@ -173,6 +173,114 @@ string TProt::sesCheck( int sid )
     return "";
 }
 
+void TProt::outMess( XMLNode &io, TTransportOut &tro )
+{
+    string req, resp, hostTr, tw, cnt;
+    char buf[1000];
+    string host = io.attr("Host");
+    string uri = io.attr("URI");
+    if( uri.empty() ) uri = "/";
+    XMLNode *nd;
+
+    ResAlloc resN( tro.nodeRes(), true );
+
+    try
+    {
+	//> Get host address from transport
+	if( tro.owner().modId() == "Sockets" ) hostTr = TSYS::strParse(tro.addr(),1,":")+":"+TSYS::strParse(tro.addr(),2,":");
+	else hostTr = tro.addr();
+
+	//> Set new address
+	if( !host.empty() && host != hostTr )
+	{
+	    tro.stop();
+	    if( tro.owner().modId() == "Sockets" ) tro.setAddr("TCP:"+host);
+	    else tro.setAddr(host);
+	}
+	host = hostTr;
+
+	//> Prepare request
+	if( io.name() == "GET" ) ;
+	else if( io.name() == "POST" )
+	{
+	    //> Content process
+	    bool isCnt = false;
+	    for( int cnt_c = 0; cnt_c < io.childSize(); cnt_c++ )
+	    {
+		if( io.childGet(cnt_c)->name() != "cnt" ) continue;
+		cnt += "--"cntBnd"\r\n";
+		cnt += "Content-Disposition: form-data; \""+io.childGet(cnt_c)->attr("name")+
+		       "\"; filename=\""+io.childGet(cnt_c)->attr("filename")+"\"\r\n";
+		//>> Place appended content properties
+		for( int ch_c = 0; ch_c < io.childGet(cnt_c)->childSize(); ch_c++ )
+		    if( io.childGet(cnt_c)->childGet(ch_c)->name() == "prm" )
+			cnt += io.childGet(cnt_c)->childGet(ch_c)->attr("id")+": "+
+			   io.childGet(cnt_c)->childGet(ch_c)->text()+"\r\n";
+		cnt += "\r\n"+io.childGet(cnt_c)->text();
+		isCnt = true;
+	    }
+	    if( isCnt ) cnt += "--"cntBnd"--\r\n";
+	    io.childAdd("prm")->setAttr("id","Content-Length")->setText(TSYS::int2str(cnt.size()));
+	    io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary="cntBnd);
+	}
+	else throw TError(nodePath().c_str(),TSYS::strMess(_("HTTP method '%s' error or don't support."),io.name().c_str()).c_str());
+
+	//> Place HTTP head
+	req = TSYS::strMess("%s %s HTTP/1.1\r\n",io.name().c_str(),uri.c_str());
+	//>> Place main HTTP properties
+	req += TSYS::strMess("Host: %s\r\n",host.c_str());
+	req += "User-Agent: "PACKAGE_NAME" v"VERSION"\r\n";
+	//>> Place appended HTTP-properties
+	for( int ch_c = 0; ch_c < io.childSize(); ch_c++ )
+	    if( io.childGet(ch_c)->name() == "prm" )
+		req += io.childGet(ch_c)->attr("id")+": "+io.childGet(ch_c)->text()+"\r\n";
+	req += "\r\n"+cnt;
+
+	io.childClear();
+
+	//> Start transport
+	if( !tro.startStat() ) tro.start();
+
+	//> Put request
+	int resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
+	resp.assign(buf,resp_len);
+
+	//> Parse first record
+	int pos = 0;
+	tw = TSYS::strParse(resp,0,"\r\n",&pos);
+	string protocol	= TSYS::strParse(tw,0," ");
+	string rcod	= TSYS::strParse(tw,1," ");
+	string rstr	= TSYS::strParse(tw,2," ");
+	if( (protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty() )
+	    throw TError(nodePath().c_str(),_("HTTP respond error"));
+	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
+
+	//> Parse parameters
+	int c_lng = -1;
+	while( true )
+	{
+	    tw = TSYS::strParse(resp,0,"\r\n",&pos);
+	    if( tw.empty() ) break;
+	    int sepPos = tw.find(":",0);
+	    if( sepPos == 0 || sepPos == string::npos ) continue;
+	    nd = io.childAdd("prm")->setAttr("id",tw.substr(0,sepPos))->setText(tw.substr(sepPos+1));
+	    if( strcasecmp(nd->attr("id").c_str(),"content-length") == 0 ) c_lng = atoi(nd->text().c_str());
+	}
+
+	//>> Wait tail
+	while( c_lng >= 0 && c_lng > (resp.size()-pos) )
+	{
+	    resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
+	    resp.append(buf,resp_len);
+	}
+
+	io.setText(resp.substr(pos));
+    }
+    catch( TError err )	{ io.setAttr("err",err.mess); return; }
+
+    io.setAttr("err","");
+}
+
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -216,8 +324,7 @@ string TProtIn::httpHead( const string &rcode, int cln, const string &addattr )
 	    "Server: "+PACKAGE_STRING+"\r\n"
 	    "Accept-Ranges: bytes\r\n"
 	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Content-Type: text/html\r\n"
-	    "Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+	    "Content-Type: text/html;charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )

@@ -154,9 +154,8 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 	    "Server: "+PACKAGE_STRING+"\r\n"
 	    "Accept-Ranges: bytes\r\n"
 	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Content-Type: "+cnt_tp+"\r\n"
-	    "Cache-Control: no-cache\r\n"
-	    "Charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+	    "Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\r\n"
+	    "Cache-Control: no-cache\r\n"+addattr+"\r\n";
 }
 
 string TWEB::pgHead( string head_els )
