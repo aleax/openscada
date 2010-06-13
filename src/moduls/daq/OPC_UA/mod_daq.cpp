@@ -100,7 +100,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), mBrwsVar("Root folder (0:84)"), mPCfgCh(false),
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), mBrwsVar(_("Root folder (84)")), mPCfgCh(false),
 	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mAddr(cfg("ADDR").getSd()),
 	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()), mPAttrLim(cfg("AttrsLimit").getId())
 {
@@ -370,7 +370,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_val	= ctrMkNode("list",opt,-1,"/ndBrws/attrs/1","",R_R_R_);
 
 	//>> Prepare request for all typical
-	string cNodeId = "0:84";
+	string cNodeId = "84";
 	int stP = mBrwsVar.find("(");
 	int stC = mBrwsVar.find(")",stP);;
 	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
@@ -462,16 +462,17 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else if( enableStat() && a_path == "/ndBrws/ndLst" && ctrChkNode(opt) )
     {
 	//>> Get current node references by call browse
-	string cNodeId = "0:84";
+	string cNodeId = "84";
 	int stP = mBrwsVar.find("(");
 	int stC = mBrwsVar.find(")",stP);;
 	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
 	XMLNode req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
 			      setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH))->
-			      setAttr("resultMask",TSYS::int2str(0x3f/*TProt::RdRm_IsForward|TProt::RdRm_BrowseName*/));
-	reqOPC(req);
-	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
+			      setAttr("resultMask",TSYS::int2str(/*0x3f*/TProt::RdRm_IsForward|TProt::RdRm_BrowseName));
+	try{ reqOPC(req); } catch(TError) { opt->childAdd("el")->setText(_("Root folder (84)")); return; }
+	if( !req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize() )
+	{ opt->childAdd("el")->setText(_("Root folder (84)")); return; }
 	XMLNode *rn = req.childGet(0);
 
 	//>> Process inverse references

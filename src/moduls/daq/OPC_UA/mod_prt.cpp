@@ -823,21 +823,32 @@ NodeId TProt::iNodeId( const string &rb, int &off )
     char enc = rb[off-1];
     switch( enc )
     {
-	case 0x00:	return NodeId(iNu(rb,off,1));
-	case 0x01:
+	case 0x00:	//Two Byte
+	    return NodeId(iNu(rb,off,1));
+	case 0x01:	//Four Byte
 	{
 	    uint8_t ns = iNu(rb,off,1);
 	    return NodeId(iNu(rb,off,2),ns);
 	}
-	case 0x02:
+	case 0x02:	//Numeric
 	{
 	    uint16_t ns = iNu(rb,off,2);
 	    return NodeId(iNu(rb,off,4),ns);
 	}
-	case 0x03:
+	case 0x03:	//String
 	{
 	    uint16_t ns = iNu(rb,off,2);
 	    return NodeId(iS(rb,off),ns);
+	}
+	case 0x04:	//Guid
+	{
+	    uint16_t ns = iNu(rb,off,2);
+	    return NodeId(string(iVal(rb,off,16),16),ns,NodeId::Guid);
+	}
+	case 0x05:	//Opaque
+	{
+	    uint16_t ns = iNu(rb,off,2);
+	    return NodeId(iS(rb,off),ns,NodeId::Opaque);
 	}
     }
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("NodeId type %d error or don't support."),enc);
@@ -950,31 +961,42 @@ void TProt::oSqlf( string &buf, const string &val, uint16_t nsIdx )
 
 void TProt::oNodeId( string &buf, const NodeId &val )
 {
-    if( val.type() == NodeId::Numeric )
+    switch( val.type() )
     {
-	if( val.ns() == 0 && val.numbVal() <= 255 )
-	{
-	    buf += (char)0x00;
-	    buf += (char)val.numbVal();
-	}
-	else if( val.ns() <= 255 && val.numbVal() <= 65535 )
-	{
-	    buf += (char)0x01;
-	    buf += (char)val.ns();
-	    oNu(buf,val.numbVal(),2);
-	}
-	else
-	{
-	    buf += (char)0x01;
+	case NodeId::Numeric:
+	    if( val.ns() == 0 && val.numbVal() <= 255 )
+	    {
+		buf += (char)0x00;
+		buf += (char)val.numbVal();
+	    }
+	    else if( val.ns() <= 255 && val.numbVal() <= 65535 )
+	    {
+		buf += (char)0x01;
+		buf += (char)val.ns();
+		oNu(buf,val.numbVal(),2);
+	    }
+	    else
+	    {
+		buf += (char)0x02;
+		oNu(buf,val.ns(),2);
+		oNu(buf,val.numbVal(),4);
+	    }
+	    break;
+	case NodeId::String:
+	    buf += (char)0x03;
 	    oNu(buf,val.ns(),2);
-	    oNu(buf,val.numbVal(),4);
-	}
-    }
-    else if( val.type() == NodeId::String )
-    {
-	buf += (char)0x03;
-	oNu(buf,val.ns(),2);
-	oS(buf,val.strVal());
+	    oS(buf,val.strVal());
+	    break;
+	case NodeId::Guid:
+	    buf += (char)0x04;
+	    oNu(buf,val.ns(),2);
+	    buf += val.strVal().substr(0,16);
+	    break;
+	case NodeId::Opaque:
+	    buf += (char)0x05;
+	    oNu(buf,val.ns(),2);
+	    oS(buf,val.strVal());
+	    break;
     }
 }
 
@@ -1139,14 +1161,14 @@ NodeId::NodeId( uint32_t in, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
     setNumbVal(in);
 }
 
-NodeId::NodeId( const string &istr, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
+NodeId::NodeId( const string &istr, uint16_t ins, NodeId::Type tp ) : mTp(NodeId::Numeric), mNs(ins)
 {
-    setStrVal(istr);
+    setStrVal(istr,tp);
 }
 
 NodeId::~NodeId( )
 {
-    if( type() == NodeId::String )
+    if( type() != NodeId::Numeric )
     {
 	delete str;
 	mTp = NodeId::Numeric;
@@ -1155,11 +1177,12 @@ NodeId::~NodeId( )
 
 NodeId &NodeId::operator=( NodeId &node )
 {
-    setNs(node.ns());
+    setNs( node.ns() );
     switch( node.type() )
     {
 	case NodeId::Numeric:	setNumbVal(node.numbVal());	break;
-	case NodeId::String:	setStrVal(node.strVal());	break;
+	case NodeId::String: case NodeId::Guid: case NodeId::Opaque:
+	    setStrVal(node.strVal(),node.type());	break;
     }
     return *this;
 }
@@ -1167,15 +1190,13 @@ NodeId &NodeId::operator=( NodeId &node )
 uint32_t NodeId::numbVal( ) const
 {
     if( type() == NodeId::Numeric )	return numb;
-    if( type() == NodeId::String )	return strtoul(str->c_str(),NULL,0);
-    return 0;
+    return strtoul(str->c_str(),NULL,0);
 }
 
 string NodeId::strVal( ) const
 {
-    if( type() == NodeId::String )	return *str;
     if( type() == NodeId::Numeric )	return TSYS::uint2str(numb);
-    return "";
+    return *str;
 }
 
 void NodeId::setNumbVal( uint32_t in )
@@ -1185,17 +1206,64 @@ void NodeId::setNumbVal( uint32_t in )
     numb = in;
 }
 
-void NodeId::setStrVal( const string &istr )
+void NodeId::setStrVal( const string &istr, NodeId::Type tp )
 {
-    if( type() != NodeId::String ) str = new string(istr);
-    mTp = NodeId::String;
+    if( tp == NodeId::Numeric ) return;
+    if( type() == NodeId::Numeric ) str = new string(istr);
+    mTp = tp;
     *str = istr;
 }
 
 NodeId NodeId::fromAddr( const string &strAddr )
 {
-    uint16_t ns = strtoul(TSYS::strParse(strAddr,0,":").c_str(),NULL,0);
-    string vl = TSYS::strParse(strAddr,1,":");
+    int off = 0;
+    string vl, dt, rez;
+    char bf[3];
+    uint16_t ns = strtoul(TSYS::strParse(strAddr,0,":",&off).c_str(),NULL,0);
+    if( off < strAddr.size() ) vl = strAddr.substr(off);
+    else { vl = strAddr; ns = 0; }
+
+    //> Check for Guid
+    if( vl.size() == 38 && vl[0] == '{' && vl[vl.size()-1] == '}' && 
+	vl[9] == '-' && vl[14] == '-' && vl[19] == '-' && vl[24] == '-' )
+    {
+	bf[2] = 0;
+	//>> Get Data1
+	dt = vl.substr(1,8);
+	for( int i_s = (dt.size()-2); i_s >= 0; i_s-=2 )
+	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	//>> Get Data2
+	dt = vl.substr(10,4);
+	for( int i_s = (dt.size()-2); i_s >= 0; i_s-=2 )
+	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	//>> Get Data3
+	dt = vl.substr(15,4);
+	for( int i_s = (dt.size()-2); i_s >= 0; i_s-=2 )
+	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	//>> Get Data4a
+	dt = vl.substr(20,4);
+	for( int i_s = 0; i_s < dt.size(); i_s+=2 )
+	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	//>> Get Data4b
+	dt = vl.substr(25,12);
+	for( int i_s = 0; i_s < dt.size(); i_s+=2 )
+	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	return NodeId(rez,ns,NodeId::Guid);
+    }
+
+    //> Check for string or opaque
+    if( vl.size() >= 2 && vl[0] == '\"' && vl[vl.size()-1] == '\"' )
+    {
+	bf[2] = 0;
+	char *endptr = 0;
+	rez = "";
+	for( int i_s = 1; !(vl.size()%2) && (!endptr || *endptr == 0) && i_s < (vl.size()-1); i_s+=2 )
+	{ bf[0] = vl[i_s]; bf[1] = vl[i_s+1]; rez += (char)strtol(bf,&endptr,16); }
+	if( rez.size() == (vl.size()-2)/2 )	return NodeId(rez,ns,NodeId::Opaque);
+	return NodeId(vl.substr(1,vl.size()-2),ns);
+    }
+
+    //> Check for number
     bool isStr = false;
     for( int i_s = 0; i_s < vl.size() && !isStr; i_s++ )
 	if( !isdigit(vl[i_s]) ) isStr = true;
@@ -1205,8 +1273,53 @@ NodeId NodeId::fromAddr( const string &strAddr )
 
 string NodeId::toAddr( ) const
 {
-    if( type() == NodeId::Numeric )	return TSYS::uint2str(ns())+":"+TSYS::uint2str(numbVal());
-    return TSYS::uint2str(ns())+":"+strVal();
+    string vl;
+    if( ns() ) vl = TSYS::uint2str(ns())+":";
+    switch( type() )
+    {
+	case NodeId::Numeric:	vl += TSYS::uint2str(numbVal());	break;
+	case NodeId::String:	vl += "\""+strVal()+"\"";		break;
+	case NodeId::Guid:
+	{
+	    vl += "{";
+	    //>> Get Data1
+	    string svl = strVal().substr(0,4);
+	    for( int i_sz = (svl.size()-1); i_sz >= 0; i_sz-- )
+		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    //>> Get Data2
+	    vl += "-";
+	    svl = strVal().substr(4,2);
+	    for( int i_sz = (svl.size()-1); i_sz >= 0; i_sz-- )
+		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    //>> Get Data3
+	    vl += "-";
+	    svl = strVal().substr(6,2);
+	    for( int i_sz = (svl.size()-1); i_sz >= 0; i_sz-- )
+		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    //>> Get Data4a
+	    vl += "-";
+	    svl = strVal().substr(8,2);
+	    for( int i_sz = 0; i_sz < svl.size(); i_sz++ )
+		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    //>> Get Data4b
+	    vl += "-";
+	    svl = strVal().substr(10,6);
+	    for( int i_sz = 0; i_sz < svl.size(); i_sz++ )
+		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    vl += "}";
+	    break;
+	}
+	case NodeId::Opaque:
+	{
+	    vl += "\"";
+	    string svl = strVal();
+	    for( int i_sz = 0; i_sz < svl.size(); i_sz++ )
+		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    vl += "\"";
+	    break;
+	}
+    }
+    return vl;
 }
 
 //*************************************************

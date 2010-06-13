@@ -85,6 +85,7 @@ namespace OPC_UA
 #define OpcUa_BadCommunicationError	0x80050000
 #define OpcUa_BadEncodingError		0x80060000
 #define OpcUa_BadDecodingError		0x80070000
+#define OpcUa_BadEncodingLimitsExceeded	0x80080000
 #define OpcUa_BadTimeout		0x800A0000
 #define OpcUa_BadServiceUnsupported	0x800B0000
 #define OpcUa_BadNothingToDo		0x800F0000
@@ -209,12 +210,12 @@ class NodeId
 {
     public:
 	//Data
-	enum Type	{ Numeric, String };
+	enum Type	{ Numeric, String, Guid, Opaque };
 
 	//Methods
 	NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
 	NodeId( uint32_t in, uint16_t ins = 0 );
-	NodeId( const string &istr, uint16_t ins = 0 );
+	NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
 	~NodeId( );
 
 	NodeId &operator=( NodeId &node );
@@ -228,7 +229,7 @@ class NodeId
 
 	void setNs( uint16_t ins )	{ mNs = ins; }
 	void setNumbVal( uint32_t in );
-	void setStrVal( const string &istr );
+	void setStrVal( const string &istr, Type tp = String );
 
 	//> Static
 	static NodeId fromAddr( const string &strAddr );
