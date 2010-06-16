@@ -1,3 +1,8 @@
+2010-06-16 Roman
+- DAQ.OPC_UA: Root node insert for return into browser for nodes without parent nodes.
+    NodesId encoding for symbols '(' and ')' is added to browser for bad NodesId browse fix.
+
+
 2010-06-13 Roman
 - FIX:DAQ.OPC_UA: Full sized numberic NodeId identifier is fixed.
 - !!:DAQ.OPC_UA: NodeId expanded for Guid and Opaque (ByteString) support.

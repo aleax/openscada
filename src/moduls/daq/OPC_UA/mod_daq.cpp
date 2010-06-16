@@ -371,9 +371,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
 	//>> Prepare request for all typical
 	string cNodeId = "84";
-	int stP = mBrwsVar.find("(");
-	int stC = mBrwsVar.find(")",stP);;
-	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
+	int stC = mBrwsVar.rfind(")");
+	int stP = mBrwsVar.rfind("(",stC);
+	if( stP != string::npos && stC != string::npos ) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
 	XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
 	for( int i_a = 1; i_a <= 22; i_a++ )
@@ -463,9 +463,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	//>> Get current node references by call browse
 	string cNodeId = "84";
-	int stP = mBrwsVar.find("(");
-	int stC = mBrwsVar.find(")",stP);;
-	if( stP != string::npos && stC != string::npos ) cNodeId = mBrwsVar.substr(stP+1,stC-stP-1);
+	int stC = mBrwsVar.rfind(")");
+	int stP = mBrwsVar.rfind("(",stC);
+	if( stP != string::npos && stC != string::npos ) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XMLNode req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
 			      setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH))->
@@ -476,18 +476,24 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	XMLNode *rn = req.childGet(0);
 
 	//>> Process inverse references
+	bool invRefPr = false;
 	for( int i_n = 0; i_n < rn->childSize(); i_n++ )
 	{
 	    if( atoi(rn->childGet(i_n)->attr("isForward").c_str()) )	continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+" ("+rn->childGet(i_n)->attr("nodeId")+")");
+	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
+		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	    invRefPr = true;
 	}
+	if( !invRefPr && mBrwsVar != _("Root folder (84)") ) opt->childAdd("el")->setText(_("Root folder (84)"));
+
 	//>> Append self address
 	opt->childAdd("el")->setText(mBrwsVar);
 	//>> Process forward references
 	for( int i_n = 0; i_n < rn->childSize(); i_n++ )
 	{
 	    if( !atoi(rn->childGet(i_n)->attr("isForward").c_str()) )	continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+" ("+rn->childGet(i_n)->attr("nodeId")+")");
+	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
+		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
     }
     else TController::cntrCmdProc(opt);
