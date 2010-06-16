@@ -1,6 +1,7 @@
 2010-06-16 Roman
 - DAQ.OPC_UA: Root node insert for return into browser for nodes without parent nodes.
     NodesId encoding for symbols '(' and ')' is added to browser for bad NodesId browse fix.
+- SYS: Symbols '.' and ',' shielding is added to function strEncode() for oscdID method.
 
 
 2010-06-13 Roman

@@ -795,7 +795,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    case '`': case '@': case '%': case '^': case '-':
 		    case '+': case '=': case '*': case '{': case '}':
 		    case ':': case ';': case '"': case '\'': case '<':
-		    case '>': case '?':
+		    case '>': case '?': case '.': case ',':
 			sout+="_";	break;
 		    default:	sout+=in[i_sz];
 		}
