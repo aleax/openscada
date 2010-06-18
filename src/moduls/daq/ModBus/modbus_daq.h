@@ -160,7 +160,7 @@ class TMdContr: public TController
 	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils
 	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
 
-	double	tmGath;			//Gathering time
+	double	tmGath;				//Gathering time
 	float	tmDelay;			//Delay time for next try connect
 
 	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;

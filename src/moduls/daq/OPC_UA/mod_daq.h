@@ -80,6 +80,7 @@ class TMdPrm : public TParamContr
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	void vlArchMake( TVal &val );
+	void vlGet( TVal &val );
 	void vlSet( TVal &val, const TVariant &pvl );
 
 	string	&mNdLst;		//Nodes list
@@ -162,7 +163,10 @@ class TMdContr: public TController
 
 	string	mBrwsVar;
 
-	double	tm_gath;	//Gathering time
+	ResString	acq_err;
+
+	double		tm_gath;	//Gathering time
+	float		tmDelay;	//Delay time for next try connect
 };
 
 //*************************************************

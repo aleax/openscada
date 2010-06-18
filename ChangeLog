@@ -1,3 +1,7 @@
+2010-06-18 Roman
+- DAQ.OPC_UA: Data acquisition errors processing and connection restore timeout is added into controller.
+
+
 2010-06-16 Roman
 - DAQ.OPC_UA: Root node insert for return into browser for nodes without parent nodes.
     NodesId encoding for symbols '(' and ')' is added to browser for bad NodesId browse fix.

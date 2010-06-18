@@ -389,9 +389,10 @@ void *TMdContr::Task( void *icntr )
     {
 	while( !cntr.endrun_req )
 	{
+	    if( cntr.tmDelay > 0 )	{ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+
 	    long long t_cnt = TSYS::curTime();
 
-	    if( cntr.tmDelay > 0 )	{ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 #if OSC_DEBUG >= 3
 	    mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
 #endif

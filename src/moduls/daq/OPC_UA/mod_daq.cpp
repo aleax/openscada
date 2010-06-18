@@ -100,7 +100,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), mBrwsVar(_("Root folder (84)")), mPCfgCh(false),
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), tmDelay(0),
+	mBrwsVar(_("Root folder (84)")), mPCfgCh(false),
 	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mAddr(cfg("ADDR").getSd()),
 	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()), mPAttrLim(cfg("AttrsLimit").getId())
 {
@@ -126,7 +127,21 @@ string TMdContr::cert( )	{ return cfg("Cert").getS(); }
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+
+    if( startStat( ) && !redntUse( ) )
+    {
+	if( tmDelay > -1 )
+	{
+	    rez += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
+	    rez.replace(0,1,"10");
+	}
+	else
+	{
+	    if( period() ) rez += TSYS::strMess(_("Gather data by period %g s. "),(1e-9*period()));
+	    else rez += TSYS::strMess(_("Gather data by cron '%s'. "),cron().c_str());
+	    rez += TSYS::strMess(_("Spend time %.6g ms. Requests %.6g."),tm_gath,-tmDelay);
+	}
+    }
     return rez;
 }
 
@@ -196,6 +211,7 @@ void TMdContr::reqOPC( XMLNode &io )
 	sess.secChnl = sess.authTkId = 0;
 	goto nextTry;
     }
+    if( io.attr("err").empty() ) tmDelay--;
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -251,54 +267,65 @@ void *TMdContr::Task( void *icntr )
 
     XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
 
-    for( unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++ )
+    try
     {
-	if( cntr.redntUse() )	{ sleep(1); continue; }
-
-	long long t_cnt = TSYS::curTime();
-	unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;
-
-	ResAlloc res(cntr.en_res,false);
-	if( !req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()) )
+	for( unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++ )
 	{
-	    if( div && (it_cnt%div) < cntr.p_hd.size() ) cntr.p_hd[it_cnt%div].at().attrPrc();
+	    if( cntr.redntUse() )	{ sleep(1); continue; }
+	    if( cntr.tmDelay > 0 )	{ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
-	    //> Prepare nodes list
-	    req.childClear();
-	    for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
+	    long long t_cnt = TSYS::curTime();
+	    unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;
+
+	    ResAlloc res(cntr.en_res,false);
+
+	    if( !req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()) )
 	    {
-		cntr.p_hd[i_p].at().vlList(als);
-		for( int i_a = 0; i_a < als.size(); i_a++ )
+		if( div && (it_cnt%div) < cntr.p_hd.size() ) cntr.p_hd[it_cnt%div].at().attrPrc();
+
+		//> Prepare nodes list
+		req.childClear();
+		for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
 		{
-		    nId = cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve();
-		    if( nId.empty() ) continue;
-		    req.childAdd("node")->setAttr("prmId",cntr.p_hd[i_p].at().id())->setAttr("prmAttr",als[i_a])->setAttr("nodeId",nId)->setAttr("attributeId","13");
+		    cntr.p_hd[i_p].at().vlList(als);
+		    for( int i_a = 0; i_a < als.size(); i_a++ )
+		    {
+			nId = cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve();
+			if( nId.empty() ) continue;
+			req.childAdd("node")->setAttr("prmId",cntr.p_hd[i_p].at().id())->setAttr("prmAttr",als[i_a])->setAttr("nodeId",nId)->setAttr("attributeId","13");
+		    }
 		}
+		cntr.mPCfgCh = false;
 	    }
-	    cntr.mPCfgCh = false;
-	}
-	res.release();
+	    res.release();
 
-	cntr.reqOPC(req);
+	    cntr.reqOPC(req);
 
-	//> Place results
-	if( req.attr("err").empty() )
-	{
+	    //> Place results
+	    bool isErr = !req.attr("err").empty();
 	    res.request(false);
 	    for( int i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++ )
 	    {
 		XMLNode *cnX = req.childGet(i_c);
 		while( cnX->attr("prmId") != cntr.p_hd[i_p].at().id() ) i_p++;
 		if( cntr.p_hd[i_p].at().vlPresent(cnX->attr("prmAttr")) )
-		    cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr")).at().setS(cnX->text(),0,true);
+		    cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr")).at().setS(isErr?EVAL_STR:cnX->text(),0,true);
 	    }
+	    if( isErr )
+	    {
+		cntr.acq_err.setVal(req.attr("err"));
+		cntr.tmDelay = cntr.syncPer();
+		continue;
+	    }
+	    else if( cntr.tmDelay == -1 ) cntr.acq_err.setVal("");
 	    res.release();
+
+	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+
+	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	}
-
-	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
-
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
     }
+    catch( TError err ){ mess_err( err.cat.c_str(), err.mess.c_str() ); }
 
     cntr.prc_st = false;
 
@@ -662,6 +689,22 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     TParamContr::cntrCmdProc(opt);
+}
+
+void TMdPrm::vlGet( TVal &val )
+{
+    if( val.name() != "err" )	return;
+
+    if( !enableStat() || !owner().startStat() )
+    {
+	if( !enableStat() )		val.setS(_("1:Parameter is disabled."),0,true);
+	else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
+	return;
+    }
+    if( owner().redntUse( ) ) return;
+
+    if( owner().acq_err.getVal().empty() )	val.setS("0",0,true);
+    else	val.setS(owner().acq_err.getVal(),0,true);
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )

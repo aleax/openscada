@@ -561,7 +561,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 	    }
 
-	    //- Calc next work time and sleep -
+	    //> Calc next work time and sleep
 	    clock_gettime( CLOCK_REALTIME, &get_tm );
 	    work_tm = (((long long)get_tm.tv_sec*1000000000+get_tm.tv_nsec)/(long long)(cntr.period()*1000000000) + 1)*(long long)(cntr.period()*1000000000);
 	    if( last_tm == work_tm )	work_tm += (long long)(cntr.period()*1000000000);	//Fix early call
