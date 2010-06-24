@@ -1,3 +1,10 @@
+2010-06-24 Roman
+- !!:SYS: The function TSYS::taskCreate() is expanded for self destroied task creation.
+- !!:Transport.Sockets, Transport.SSL: Used unified function TSYS::taskCreate() for client's task creation.
+- FIX:DAQ.OPC_UA: MessageSecurityMode is fixed for server. Client nodes' resources is separated.
+- DAQ.OPC_UA: Security policy first part is added, for server and policy "Basic128Rsa15".
+
+
 2010-06-18 Roman
 - DAQ.OPC_UA: Data acquisition errors processing and connection restore timeout is added into controller.
 

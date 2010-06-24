@@ -297,7 +297,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
     public:
 	//Data
 	enum SerializerType	{ Binary };
-	enum MessageSecurityMode{ None, Sign, SignAndEncrypt };
+	enum MessageSecurityMode{ None = 1, Sign, SignAndEncrypt };
 
 	class SecuritySetting
 	{
@@ -322,8 +322,8 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	bool enableStat( )	{ return mEn; }
 	SerializerType serType( )	{ return (SerializerType)mSerType; }
 	string url( )		{ return mURL; }
-	string servCert( );
-	string servPvKey( );
+	string cert( );
+	string pvKey( );
 
 	string getStatus( );
 
@@ -475,7 +475,9 @@ class TProt: public TProtocol
 	    bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
 	static void oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk = 0, long long srcTmStmp = 0 );
 
-	static string certPEM2DER( const string &spem );
+	static string certPEM2DER( const string &certPem );
+	static string certThumbprint( const string &certPem );
+	static string messDecPKey( const string &mess, const string &keyPem );
 
 	Res &nodeRes( )		{ return nRes; }
 

@@ -697,11 +697,11 @@ void MTable::fieldFix( TConfig &cfg )
 
     owner().transCommit(&trans);
 
-    //- Get config fields list -
+    //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //- Prepare request for fix structure -
+    //> Prepare request for fix structure
     string req = "ALTER TABLE \""+mod->sqlReqCode(name(),'"')+"\" "
     "DROP CONSTRAINT \"pk_"+mod->sqlReqCode(name(),'"')+"\", ";
 
@@ -709,7 +709,7 @@ void MTable::fieldFix( TConfig &cfg )
     for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
-	//-- Check primary key --
+	//>> Check primary key
 	if( u_cfg.fld().flg()&TCfg::Key )
 	{
 	    if( !next_key ) next_key = true;
@@ -734,12 +734,12 @@ void MTable::fieldFix( TConfig &cfg )
 		case TFld::Real:	if( tblStrct[i_fld][1] == "27" )continue;	break;
 		case TFld::Boolean:	if( tblStrct[i_fld][1] == "7" ) continue;	break;
 	    }
-	    //-- Change field --
+	    //>> Change field
 	    if( !next ) next = true; else req=req+",";
 	    req=req+"DROP \""+mod->sqlReqCode(cf_el[i_cf],'"')+"\" ";
 	}
 	if( !next ) next = true; else req=req+",";
-	//-- Add field --
+	//>> Add field
 	req=req+"ADD \""+mod->sqlReqCode(cf_el[i_cf],'"')+"\" ";
 	switch(u_cfg.fld().type())
 	{
@@ -759,7 +759,7 @@ void MTable::fieldFix( TConfig &cfg )
 		break;
 	}
     }
-    //- DROP fields -
+    //> DROP fields
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
 	if( !cfg.cfgPresent(tblStrct[i_fld][0]) )
 	{

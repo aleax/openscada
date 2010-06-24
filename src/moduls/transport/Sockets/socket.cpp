@@ -313,13 +313,8 @@ void *TSocketIn::Task(void *sock_in)
     mess_debug(sock->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
-    pthread_t      th;
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
-    struct sched_param prior;
-    pthread_attr_setschedpolicy(&pthr_attr,(sock->taskPrior()&&SYS->user()=="root")?SCHED_RR:SCHED_OTHER);
-    prior.__sched_priority = sock->taskPrior();
-    pthread_attr_setschedparam(&pthr_attr,&prior);
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
 
     sock->run_st    = true;
@@ -350,9 +345,17 @@ void *TSocketIn::Task(void *sock_in)
 		    close(sock_fd_CL);
 		    continue;
 		}
-		if( pthread_create( &th, &pthr_attr, ClTask, new SSockIn( sock, sock_fd_CL, inet_ntoa(name_cl.sin_addr) ) ) < 0)
+		SSockIn *sin = new SSockIn(sock,sock_fd_CL,inet_ntoa(name_cl.sin_addr));
+		try
+		{
+		    SYS->taskCreate( sock->nodePath()+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    sock->connNumb++;
+		}catch(TError err)
+		{
+		    delete sin;
+		    mess_err(err.cat.c_str(),err.mess.c_str());
 		    mess_err(sock->nodePath().c_str(),_("Error creation of the thread!"));
-		else sock->connNumb++;
+		}
 	    }
 	}
 	else if( sock->type == SOCK_UNIX )
@@ -366,9 +369,17 @@ void *TSocketIn::Task(void *sock_in)
 		    close(sock_fd_CL);
 		    continue;
 		}
-		if( pthread_create( &th, &pthr_attr, ClTask, new SSockIn(sock,sock_fd_CL,"") ) < 0 )
+		SSockIn *sin = new SSockIn(sock,sock_fd_CL,"");
+		try
+		{
+		    SYS->taskCreate( sock->nodePath()+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    sock->connNumb++;
+		}catch(TError err)
+		{
+		    delete sin;
+		    mess_err(err.cat.c_str(),err.mess.c_str());
 		    mess_err(sock->nodePath().c_str(),_("Error creation of the thread!"));
-		else sock->connNumb++;
+		}
 	    }
 	}
 	else if( sock->type == SOCK_UDP )

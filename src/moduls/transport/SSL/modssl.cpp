@@ -275,14 +275,9 @@ void *TSocketIn::Task( void *sock_in )
     mess_debug(s.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
 #endif
 
-    //> Client's sockets attrs init
-    pthread_t th;
+    //> Client's sockets pthreads attrs init
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
-    struct sched_param prior;
-    pthread_attr_setschedpolicy(&pthr_attr,(s.taskPrior()&&SYS->user()=="root")?SCHED_RR:SCHED_OTHER);
-    prior.__sched_priority = s.taskPrior();
-    pthread_attr_setschedparam(&pthr_attr,&prior);
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
 
     //> SSL context init
@@ -384,13 +379,20 @@ void *TSocketIn::Task( void *sock_in )
 
 	    if( s.maxFork() <= s.opConnCnt() )	{ s.clsConnByLim++; /*BIO_reset(cbio);*/ close(BIO_get_fd(cbio,NULL)); BIO_free(cbio); }
 	    //> Make client's socket thread
-	    else if( pthread_create( &th, &pthr_attr, ClTask, new SSockIn(&s,cbio) ) < 0 )
+	    else
 	    {
-		mess_err(s.nodePath().c_str(),_("Error creation of the thread!"));
-		BIO_reset(cbio);
-		BIO_free(cbio);
+		SSockIn *sin = new SSockIn(&s,cbio);
+		try
+		{
+		    SYS->taskCreate( s.nodePath()+TSYS::int2str(s.opConnCnt()), s.taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    s.connNumb++;
+		}catch(TError err)
+		{
+		    delete sin;
+		    mess_err(err.cat.c_str(),err.mess.c_str());
+		    mess_err(s.nodePath().c_str(),_("Error creation of the thread!"));
+		}
 	    }
-	    else s.connNumb++;
 	}
     }catch(TError err)	{ s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 

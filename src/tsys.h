@@ -169,7 +169,7 @@ class TSYS : public TCntrNode
 	static long long curTime( );
 
 	//> Tasks control
-	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL, int wtm = 5 );
+	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL, int wtm = 5, pthread_attr_t *pAttr = NULL );
 	void taskDestroy( const string &path, bool *startCntr = NULL, bool *endrunCntr = NULL, int wtm = 5 );
 
 	//> Sleep task for period grid <per> on ns or to cron time.

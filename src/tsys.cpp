@@ -992,38 +992,44 @@ void TSYS::cntrSet( const string &id, double vl )
     mCntrs[id] = vl;
 }
 
-void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm )
+void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm, pthread_attr_t *pAttr )
 {
+    pthread_t procPthr;
+    pthread_attr_t locPAttr, *pthr_attr;
+
     ResAlloc res( taskRes, false );
-    if( mTasks.find(path) != mTasks.end() && (!startCntr || (startCntr && *startCntr)) )
+    if( mTasks.find(path) != mTasks.end() && startCntr && *startCntr )
 	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
     res.release();
 
-    pthread_t procPthr;
-    pthread_attr_t pthr_attr;
-    pthread_attr_init( &pthr_attr );
-    pthread_attr_setinheritsched( &pthr_attr, PTHREAD_EXPLICIT_SCHED );
+    if( pAttr ) pthr_attr = pAttr;
+    else
+    {
+	pthr_attr = &locPAttr;
+	pthread_attr_init( pthr_attr );
+    }
+    pthread_attr_setinheritsched( pthr_attr, PTHREAD_EXPLICIT_SCHED );
     struct sched_param prior;
     prior.sched_priority = 0;
 
     int policy = SCHED_OTHER;
     if( priority < 0 )	policy = SCHED_BATCH;
     else if( priority > 0 /*&& SYS->user() == "root"*/ )	policy = SCHED_RR;
-    pthread_attr_setschedpolicy( &pthr_attr, policy );
+    pthread_attr_setschedpolicy( pthr_attr, policy );
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
-    pthread_attr_setschedparam(&pthr_attr,&prior);
+    pthread_attr_setschedparam(pthr_attr,&prior);
 
-    int rez = pthread_create( &procPthr, &pthr_attr, start_routine, arg );
+    int rez = pthread_create( &procPthr, pthr_attr, start_routine, arg );
     if( rez == EPERM )
     {
 	mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
 	policy = SCHED_OTHER;
-	pthread_attr_setschedpolicy( &pthr_attr, policy );
+	pthread_attr_setschedpolicy( pthr_attr, policy );
 	prior.sched_priority = 0;
-	pthread_attr_setschedparam(&pthr_attr,&prior);
-	rez = pthread_create( &procPthr, &pthr_attr, start_routine, arg );
+	pthread_attr_setschedparam(pthr_attr,&prior);
+	rez = pthread_create( &procPthr, pthr_attr, start_routine, arg );
     }
-    pthread_attr_destroy( &pthr_attr );
+    if( !pAttr ) pthread_attr_destroy( pthr_attr );
 
     if( rez ) throw TError( nodePath().c_str(), _("Task creation error %d."), rez );
 

@@ -1081,6 +1081,7 @@ string TProt::certPEM2DER( const string &spem )
 
     if( spem.empty() ) return rez;
 
+    //> Load PEM cert form
     BIO *bm = BIO_new(BIO_s_mem());
     if( !bm )
     {
@@ -1101,6 +1102,7 @@ string TProt::certPEM2DER( const string &spem )
 	throw TError(mod->nodePath().c_str(),_("PEM_read_bio_X509_AUX error: %s"),err);
     }
 
+    //> Save to DER cert form
     int len = i2d_X509(x,NULL);
     if( len > 0 )
     {
@@ -1114,8 +1116,102 @@ string TProt::certPEM2DER( const string &spem )
 	}
     }
 
+    //> Free temporary data
     BIO_free_all(bm);
     X509_free(x);
+
+    return rez;
+}
+
+string TProt::certThumbprint( const string &spem )
+{
+    char err[255];
+
+    if( spem.empty() ) return "";
+
+    //> Load PEM cert form
+    BIO *bm = BIO_new(BIO_s_mem());
+    if( !bm )
+    {
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("BIO_new error: %s"),err);
+    }
+    if( BIO_write(bm,spem.data(),spem.size()) != spem.size() )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("BIO_write error: %s"),err);
+    }
+    X509 *x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
+    if( !x )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("PEM_read_bio_X509_AUX error: %s"),err);
+    }
+
+    //> Generate thumbprint
+    unsigned int n;
+    unsigned char md[EVP_MAX_MD_SIZE];
+    X509_digest(x,EVP_sha1(),md,&n);
+
+    //> Free temporary data
+    BIO_free_all(bm);
+    X509_free(x);
+
+    return string((char*)md,n);
+}
+
+string TProt::messDecPKey( const string &mess, const string &keyPem )
+{
+    string rez = "";
+    char err[255];
+
+    if( keyPem.empty() || mess.empty() ) return rez;
+
+    //> Load PEM cert form
+    BIO *bm = BIO_new(BIO_s_mem());
+    if( !bm )
+    {
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("BIO_new error: %s"),err);
+    }
+    if( BIO_write(bm,keyPem.data(),keyPem.size()) != keyPem.size() )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("BIO_write error: %s"),err);
+    }
+    EVP_PKEY *pkey = PEM_read_bio_PrivateKey(bm,NULL,0,(char*)"keypass");
+    if( !pkey )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("PEM_read_bio_PrivateKey error: %s"),err);
+    }
+    RSA *rsa = EVP_PKEY_get1_RSA(pkey);
+    EVP_PKEY_free(pkey);
+    if( !rsa )
+    {
+	BIO_free_all(bm);
+	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	throw TError(mod->nodePath().c_str(),_("EVP_PKEY_get1_RSA error: %s"),err);
+    }
+
+    //> Decrypt message
+    int keysize = RSA_size(rsa);
+    if( mess.size() % keysize )	throw TError(mod->nodePath().c_str(),_("Message size don't correspond to keysize"));
+    unsigned char rsaOut[keysize];
+
+    for( int i_b = 0; i_b < mess.size()/keysize; i_b++ )
+    {
+	int blen = RSA_private_decrypt( keysize, (const unsigned char *)(mess.data()+i_b*keysize), rsaOut, rsa, RSA_PKCS1_PADDING );
+	rez.append((char*)rsaOut,blen);
+    }
+
+    //> Free temporary data
+    BIO_free_all(bm);
+    RSA_free(rsa);
 
     return rez;
 }
@@ -1412,23 +1508,25 @@ nextReq:
 	    string secPlcURI = TProt::iS(rb,off);		//Security policy URI
 	    //>> Find server with that policy
 	    string secPlc = TSYS::strParse(secPlcURI,1,"#");
+
 	    vector<string> epLs;
 	    owner().epList(epLs);
 	    int i_epOk = -1;
+	    AutoHD<OPCEndPoint> wep;
 	    for( int i_ep = 0; i_epOk < 0 && i_ep < epLs.size(); i_ep++ )
 	    {
-		AutoHD<OPCEndPoint> ep = owner().epAt(epLs[i_ep]);
-		if( !ep.at().enableStat() ) continue;
-		for( int i_s = 0; i_epOk < 0 && i_s < ep.at().secSize(); i_s++ )
-		    if( ep.at().secPolicy(i_s) == secPlc )
+		wep = owner().epAt(epLs[i_ep]);
+		if( !wep.at().enableStat() ) continue;
+		for( int i_s = 0; i_epOk < 0 && i_s < wep.at().secSize(); i_s++ )
+		    if( wep.at().secPolicy(i_s) == secPlc )
 			i_epOk = i_ep;
 	    }
 	    if( i_epOk < 0 ) throw TError(OpcUa_BadSecurityPolicyRejected,"","");
 
 	    if( secPlc == "None" )
 	    {
-		TProt::iN(rb,off,4);				//SenderCertificateLength
-		TProt::iN(rb,off,4);				//ReceiverCertificateThumbprintLength
+		TProt::iS(rb,off);				//SenderCertificate
+		TProt::iS(rb,off);				//ReceiverCertificateThumbprint
 								//> Sequence header
 		uint32_t secNumb = TProt::iNu(rb,off,4);	//Sequence number
 		uint32_t reqId = TProt::iNu(rb,off,4);		//RequestId
@@ -1489,6 +1587,50 @@ nextReq:
 		printf("TEST 01a: Open sec respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
 #endif
 	    }
+	    else if( secPlc == "Basic128Rsa15" )
+	    {
+		string sndSert = TProt::iS(rb,off);		//SenderCertificate
+		if( TProt::iS(rb,off) != TProt::certThumbprint(wep.at().cert()) )	//ReceiverCertificateThumbprint
+		    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Server certificate thumbprint error.") );
+
+		//> Decode message block
+		rb.replace(off,rb.size()-off,TProt::messDecPKey(rb.substr(off),wep.at().pvKey()));
+#if OSC_DEBUG >= 5
+		printf( "TEST 01a: Open SecureChannel decrypted request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+#endif
+								//> Sequence header
+		uint32_t secNumb = TProt::iNu(rb,off,4);	//Sequence number
+		uint32_t reqId = TProt::iNu(rb,off,4);		//RequestId
+								//> Extension body object
+		if( TProt::iNodeId(rb,off).numbVal() != OpcUa_OpenSecureChannelRequest )	//TypeId
+		    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge") );
+								//>> Request Header
+		TProt::iVal(rb,off,2);				//Session AuthenticationToken
+		TProt::iTm(rb,off);				//timestamp
+		int32_t rqHndl = TProt::iN(rb,off,4);		//requestHandle
+		TProt::iNu(rb,off,4);				//returnDiagnostics
+		TProt::iS(rb,off);				//auditEntryId
+		TProt::iNu(rb,off,4);				//timeoutHint
+								//>>> Extensible parameter
+		TProt::iNodeId(rb,off);				//TypeId (0)
+		TProt::iNu(rb,off,1);				//Encoding
+								//>>>> Standard request
+		TProt::iNu(rb,off,4);				//ClientProtocolVersion
+		TProt::iNu(rb,off,4);				//RequestType
+		uint32_t secMode = TProt::iNu(rb,off,4);	//SecurityMode
+		string clNonce = TProt::iS(rb,off);		//ClientNonce
+		int32_t reqLifeTm = TProt::iN(rb,off,4);	//RequestedLifetime
+		off += TProt::iNu(rb,off,1);			//Pass padding
+		if( (rb.size()-off) != 128 )		//Check Signature
+		    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Signature size error") );
+
+		//printf("TEST 20: OK\n");
+
+		//uint32_t chnlId = owner().chnlOpen(epLs[i_epOk],reqLifeTm);
+
+		throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel for the policy error.") );
+	    }
+	    else throw TError( OpcUa_BadSecurityPolicyRejected, "OPC UA Bin", _("Requested security policy error.") );
 	}
 	//> Check for Close SecureChannel message type
 	else if( rb.compare(0,4,"CLOF") == 0 )
@@ -1625,7 +1767,7 @@ nextReq:
 			    for( int i_du = 0; i_du < duLs.size(); i_du++ )
 				TProt::oS(respEp,duLs[i_du]);	//discoveryUrl
 
-			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().servCert()));	//>>> serverCertificate
+			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().cert()));	//>>> serverCertificate
 			    TProt::oNu(respEp,ep.at().secMessageMode(i_sec),4);	//securityMode:MessageSecurityMode
 			    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#"+ep.at().secPolicy(i_sec));	//securityPolicyUri
 
@@ -1686,7 +1828,7 @@ nextReq:
 		    TProt::oNodeId(respEp,sessId);	//authentication Token
 		    TProt::oR(respEp,wep.at().sessGet(sessId).tInact,8);	//revisedSession Timeout, ms
 		    TProt::oS(respEp,"");		//serverNonce
-		    TProt::oS(respEp,TProt::certPEM2DER(wep.at().servCert()));	//serverCertificate
+		    TProt::oS(respEp,TProt::certPEM2DER(wep.at().cert()));	//serverCertificate
 							//> EndpointDescr []
 		    int enpNumperPos = respEp.size();
 		    TProt::oNu(respEp,0,4);			//EndpointDescrNubers list items
@@ -1717,7 +1859,7 @@ nextReq:
 			    for( int i_du = 0; i_du < duLs.size(); i_du++ )
 				TProt::oS(respEp,duLs[i_du]);	//discoveryUrl
 
-			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().servCert()));	//>>> serverCertificate
+			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().cert()));	//>>> serverCertificate
 			    TProt::oNu(respEp,ep.at().secMessageMode(i_sec),4);	//securityMode:MessageSecurityMode
 			    TProt::oS(respEp,"http://opcfoundation.org/UA/SecurityPolicy#"+ep.at().secPolicy(i_sec));	//securityPolicyUri
 
@@ -1910,9 +2052,9 @@ string OPCEndPoint::name( )	{ return mName.size() ? mName : id(); }
 
 string OPCEndPoint::tbl( )	{ return owner().modId()+"_ep"; }
 
-string OPCEndPoint::servCert( )	{ return cfg("ServCert").getS(); }
+string OPCEndPoint::cert( )	{ return cfg("ServCert").getS(); }
 
-string OPCEndPoint::servPvKey( ){ return cfg("ServPvKey").getS(); }
+string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
 string OPCEndPoint::secPolicy( int isec )
 {
@@ -2571,8 +2713,8 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/ep/cfg/SecPolicies");
 		if( ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",cfg("SecPolicies").fld().descr(),0664,"root","Protocol",1,"s_com","add,del") )
 		{
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),0664,"root","Protocol",3,"tp","str","dest","select","sel_list","None"/*;Basic128;Basic128Rsa15;Basic256"*/);
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),0664,"root","Protocol",4,"tp","dec","dest","select","sel_id","0;1;2","sel_list",_("None"/*;Sign;Sign&Encrypt"*/));
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),0664,"root","Protocol",3,"tp","str","dest","select","sel_list","None;Basic128;Basic128Rsa15;Basic256");
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),0664,"root","Protocol",4,"tp","dec","dest","select","sel_id","1;2;3","sel_list",_("None;Sign;Sign&Encrypt"));
 		}
 	    }
 	}

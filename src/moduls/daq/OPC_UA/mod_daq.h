@@ -70,6 +70,8 @@ class TMdPrm : public TParamContr
 
 	string attrPrc( );
 
+	Res &nodeRes( )		{ return prmRes; }
+
     protected:
 	//Methods
 	void load_( );
@@ -87,6 +89,8 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;			//Work atribute elements
+
+	Res	prmRes;
 };
 
 //*************************************************
@@ -114,6 +118,8 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void reqOPC( XMLNode &io );
+
+	Res &nodeRes( )		{ return cntrRes; }
 
     protected:
 	//Methods
@@ -167,6 +173,8 @@ class TMdContr: public TController
 
 	double		tm_gath;	//Gathering time
 	float		tmDelay;	//Delay time for next try connect
+
+	Res		cntrRes;
 };
 
 //*************************************************

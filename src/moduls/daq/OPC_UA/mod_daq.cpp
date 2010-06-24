@@ -23,6 +23,10 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <string.h>
+
+#include "openssl/evp.h"
+#include "openssl/hmac.h"
 
 #include <terror.h>
 #include <tsys.h>
@@ -147,6 +151,23 @@ string TMdContr::getStatus( )
 
 void TMdContr::reqOPC( XMLNode &io )
 {
+    //>====== Test key derivery part ======
+    /*const unsigned char secret[] = {0xB8,0xCF,0xD0,0xAB,0xBF,0x17,0x87,0xC7,0x0A,0x61,0x40,0xA5,0x76,0x8E,0x7F,0x30};
+    const unsigned char seed[] = {0xDB,0x83,0x0F,0x04,0xBA,0xCF,0x25,0x4F,0x57,0x46,0xE5,0x61,0x76,0xAF,0x5B,0xCA};
+    int keyLen = 16*3;
+
+    int hashCnt = keyLen/20 + ((keyLen%20)?1:0);
+    unsigned char hashRez[20*hashCnt], hashTmp[20];
+    HMAC( EVP_sha1(), secret, sizeof(secret), seed, sizeof(seed), hashTmp, 0 );
+    for( int i_c = 0; i_c < hashCnt; i_c++ )
+    {
+	HMAC(EVP_sha1(), secret, sizeof(secret), hashTmp, sizeof(seed)+20, hashRez+20*i_c, 0);
+	HMAC(EVP_sha1(), secret, sizeof(secret), hashTmp, 20, hashTmp, 0);
+    }
+    printf("TEST 00: %s\n",TSYS::strDecode(string((const char*)hashRez,keyLen),TSYS::Bin).c_str());*/
+
+    //>====== Test key derivery part ======
+
     ResAlloc res( nodeRes(), true );
     io.setAttr("err","");
 
