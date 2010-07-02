@@ -112,8 +112,14 @@ class TMdContr: public TController
 	double	syncPer( )	{ return mSync; }
 	string	endPoint( )	{ return mEndPoint; }
 	string	secPolicy( )	{ return mSecPolicy; }
+	int	secMessMode( )	{ return mSecMessMode; }
 	string	cert( );
+	string	pvKey( );
 	int	pAttrLim( )	{ return mPAttrLim; }
+
+	void	setEndPoint( const string &iep ){ if( mEndPoint != iep ) { mEndPoint = iep; modif(); } }
+	void	setSecPolicy( const string &isp )	{ mSecPolicy = isp; modif(); }
+	void	setSecMessMode( int smm )	{ mSecMessMode = smm; modif(); }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -132,6 +138,41 @@ class TMdContr: public TController
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
+	//Data
+	class SSess
+	{
+	    public:
+		SSess( )		{ clearFull( ); }
+		void clearSess( )	{ sesId = authTkId = 0; sesLifeTime = 1.2e6; }
+		void clearFull( )
+		{
+		    endPoint = servCert = clKey = servKey = "";
+		    secPolicy = "None"; secMessMode = 1;
+		    secChnl = secToken = reqHndl = 0;
+		    sqNumb = 33;
+		    sqReqId = 1; 
+		    secLifeTime = 0; 
+		    sesAccess = 0;
+		    clearSess( );
+		}
+
+		string		endPoint;
+		uint32_t	secChnl;
+		uint32_t	secToken;
+		uint32_t	sqNumb;
+		uint32_t	sqReqId;
+		uint32_t	reqHndl;
+		int		secLifeTime;
+		uint32_t	sesId;
+		uint32_t	authTkId;
+		long long	sesAccess;
+		double		sesLifeTime;
+		string		servCert;
+		string		secPolicy;
+		char		secMessMode;
+		string		clKey, servKey;
+	};
+
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
@@ -144,28 +185,17 @@ class TMdContr: public TController
 		&mAddr,		//Transport device address
 		&mEndPoint,	//Endpoint URL
 		&mSecPolicy;	//Security policy
-	int	&mPAttrLim;	//Parameter attributes number limit
+	int	&mSecMessMode,	//Security policy mode
+		&mPAttrLim;	//Parameter attributes number limit
 	long long mPer;
 
 	bool	prc_st,		//Process task active
 		endrun_req,	//Request to stop of the Process task
 		mPCfgCh;	//Parameter's configuration is changed
 
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> > p_hd;
 
-	struct
-	{
-	    uint32_t	secChnl;
-	    uint32_t	secToken;
-	    uint32_t	sqNumb;
-	    uint32_t	sqReqId;
-	    uint32_t	reqHndl;
-	    int		secLifeTime;
-	    int		sesId;
-	    int		authTkId;
-	    long long	sesAccess;
-	    double	sesLifeTime;
-	} sess;
+	SSess	sess;
 
 	string	mBrwsVar;
 
@@ -174,6 +204,7 @@ class TMdContr: public TController
 	double		tm_gath;	//Gathering time
 	float		tmDelay;	//Delay time for next try connect
 
+	uint32_t	servSt;
 	Res		cntrRes;
 };
 

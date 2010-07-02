@@ -34,7 +34,7 @@ namespace VCA
 //************************************************
 class Widget;
 
-#pragma pack(push,1)
+//#pragma pack(push,1)
 class Attr : public TCntrNode
 {
     public:
@@ -128,7 +128,7 @@ class Attr : public TCntrNode
 
 	string	cfg;			//Config template and value
 };
-#pragma pack(pop)
+//#pragma pack(pop)
 
 //************************************************
 //* Widget                                       *

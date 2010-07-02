@@ -1,3 +1,11 @@
+2010-07-02 Roman
+- !!:FIX:SYS: Class structures pack by #pragma pack(push,1) is disabled by reason the obscurity bug with threads hang and block
+    present into OpenSCADA FirmWare of PLC LP8x81.
+- DAQ.JavaLikeCalc: Object's properies length limit is expanded to 255 symbols.
+- !!:FIX:DAQ.OPC_UA: More bugs is fixed.
+- !!!!:DAQ.OPC_UA: Support of the security policies 'Base128Rsa15' and 'Base256' is added.
+
+
 2010-06-24 Roman
 - !!:SYS: The function TSYS::taskCreate() is expanded for self destroied task creation.
 - !!:Transport.Sockets, Transport.SSL: Used unified function TSYS::taskCreate() for client's task creation.

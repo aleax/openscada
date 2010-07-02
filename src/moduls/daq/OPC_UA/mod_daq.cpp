@@ -85,9 +85,10 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000") );
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost:4841") );
-    fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128;Basic128Rsa15;Basic256",_("None"/*;Basic128;Basic128Rsa15;Basic256"*/)) );
-    fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("None;Sign;Sign&Encrypt")) );
+    fldAdd( new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128Rsa15;Basic256",_("None;Basic128Rsa15;Basic256")) );
+    fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","1","1;2;3",_("None;Sign;Sign&Encrypt")) );
     fldAdd( new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
+    fldAdd( new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000") );
     fldAdd( new TFld("AttrsLimit",_("Parameter attributes number limit"),TFld::Integer,TFld::NoFlag,"3","100") );
 
     //> Parameter type bd structure
@@ -104,21 +105,13 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), tmDelay(0),
+	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), tmDelay(0), servSt(0),
 	mBrwsVar(_("Root folder (84)")), mPCfgCh(false),
 	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mAddr(cfg("ADDR").getSd()),
-	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()), mPAttrLim(cfg("AttrsLimit").getId())
+	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()), mSecMessMode(cfg("SecMessMode").getId()),
+	mPAttrLim(cfg("AttrsLimit").getId())
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
-
-    sess.secChnl = sess.secToken = 0;
-    sess.sqNumb = 33;
-    sess.sqReqId = 1;
-    sess.reqHndl = 0;
-    sess.secLifeTime = 0;
-    sess.sesId = sess.authTkId = 0;
-    sess.sesAccess = 0;
-    sess.sesLifeTime = 1.2e6;
 }
 
 TMdContr::~TMdContr( )
@@ -127,6 +120,8 @@ TMdContr::~TMdContr( )
 }
 
 string TMdContr::cert( )	{ return cfg("Cert").getS(); }
+
+string TMdContr::pvKey( )	{ return cfg("PvKey").getS(); }
 
 string TMdContr::getStatus( )
 {
@@ -144,6 +139,7 @@ string TMdContr::getStatus( )
 	    if( period() ) rez += TSYS::strMess(_("Gather data by period %g s. "),(1e-9*period()));
 	    else rez += TSYS::strMess(_("Gather data by cron '%s'. "),cron().c_str());
 	    rez += TSYS::strMess(_("Spend time %.6g ms. Requests %.6g."),tm_gath,-tmDelay);
+	    if( servSt ) rez.replace(0,1,TSYS::strMess("0x%x",servSt));
 	}
     }
     return rez;
@@ -151,23 +147,6 @@ string TMdContr::getStatus( )
 
 void TMdContr::reqOPC( XMLNode &io )
 {
-    //>====== Test key derivery part ======
-    /*const unsigned char secret[] = {0xB8,0xCF,0xD0,0xAB,0xBF,0x17,0x87,0xC7,0x0A,0x61,0x40,0xA5,0x76,0x8E,0x7F,0x30};
-    const unsigned char seed[] = {0xDB,0x83,0x0F,0x04,0xBA,0xCF,0x25,0x4F,0x57,0x46,0xE5,0x61,0x76,0xAF,0x5B,0xCA};
-    int keyLen = 16*3;
-
-    int hashCnt = keyLen/20 + ((keyLen%20)?1:0);
-    unsigned char hashRez[20*hashCnt], hashTmp[20];
-    HMAC( EVP_sha1(), secret, sizeof(secret), seed, sizeof(seed), hashTmp, 0 );
-    for( int i_c = 0; i_c < hashCnt; i_c++ )
-    {
-	HMAC(EVP_sha1(), secret, sizeof(secret), hashTmp, sizeof(seed)+20, hashRez+20*i_c, 0);
-	HMAC(EVP_sha1(), secret, sizeof(secret), hashTmp, 20, hashTmp, 0);
-    }
-    printf("TEST 00: %s\n",TSYS::strDecode(string((const char*)hashRez,keyLen),TSYS::Bin).c_str());*/
-
-    //>====== Test key derivery part ======
-
     ResAlloc res( nodeRes(), true );
     io.setAttr("err","");
 
@@ -178,17 +157,42 @@ void TMdContr::reqOPC( XMLNode &io )
 
     nextTry:
     XMLNode req("opc.tcp");
-    if( !sess.secChnl || !sess.secToken || (1e-3*(TSYS::curTime()-sess.sesAccess) >= sess.secLifeTime) )
+    if( !sess.secChnl || !sess.secToken ||
+	(1e-3*(TSYS::curTime()-sess.sesAccess) >= sess.secLifeTime) ||
+	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode() )
     {
-	if( sess.secChnl && sess.secToken ) sess.authTkId = 0;
+	//> Close previous session for policy or endpoint change
+	if( sess.authTkId )
+	{
+	    req.setAttr("id","CloseSession")->
+		setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken))->
+		setAttr("authTokenId",TSYS::uint2str(sess.authTkId))->setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->
+		setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++))->
+		setAttr("SecPolicy",sess.secPolicy)->setAttr("SecurityMode",TSYS::int2str(sess.secMessMode))->
+		setAttr("clKey",sess.clKey)->setAttr("servKey",sess.servKey);
+	    tr.at().messProtIO(req,"OPC_UA");
+	    sess.clearSess();
+	}
+	//> Close previous secure channel
+	if( sess.secChnl && sess.secToken )
+	{
+	    req.setAttr("id","CLO")->
+		setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken))->
+		setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++))->
+		setAttr("SecPolicy",sess.secPolicy)->setAttr("SecurityMode",TSYS::int2str(sess.secMessMode))->
+		setAttr("clKey",sess.clKey)->setAttr("servKey",sess.servKey);
+	    tr.at().messProtIO(req,"OPC_UA");
+	    sess.clearFull();
+	}
+
 	//>> Send HELLO message
 	req.setAttr("id","HEL")->setAttr("EndPoint",endPoint());
 	tr.at().messProtIO(req,"OPC_UA");
 	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
 
-	//>> Send Open SecureChannel message
+	//>> Send Open SecureChannel message for no secure policy
 	req.setAttr("id","OPN")->setAttr("SecChnId","0"/*TSYS::uint2str(sess.secChnl)*/)->
-	    setAttr("SecPolicy",secPolicy())->setAttr("SecLifeTm","300000")->
+	    setAttr("SecPolicy","None")->setAttr("SecurityMode","1")->setAttr("SecLifeTm","300000")->
 	    setAttr("SeqNumber","51")->setAttr("SeqReqId","1")->setAttr("ReqHandle","0");
 	tr.at().messProtIO(req,"OPC_UA");
 	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
@@ -198,8 +202,61 @@ void TMdContr::reqOPC( XMLNode &io )
 	sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
 	sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
 	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
+
+	if( secPolicy() != "None" )
+	{
+	    //>> Send GetEndpoints request for certificate retrieve and for secure policy check
+	    req.setAttr("id","GetEndpoints")->setAttr("EndPoint",endPoint());
+	    tr.at().messProtIO(req,"OPC_UA");
+	    if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+	    //>>> Find endoint with need secure policy
+	    int i_ep;
+	    for( i_ep = 0; i_ep < req.childSize(); i_ep++ )
+		if( req.childGet(i_ep)->name() == "EndpointDescription" &&
+			TSYS::strParse(req.childGet(i_ep)->attr("securityPolicyUri"),1,"#") == secPolicy() &&
+			atoi(req.childGet(i_ep)->attr("securityMode").c_str()) == secMessMode() )
+		    break;
+	    if( i_ep >= req.childSize() )
+	    { io.setAttr("err",TSYS::strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,"No secure policy found")); return; }
+	    setEndPoint(req.childGet(i_ep)->attr("endpointUrl"));
+	    string servCert = req.childGet(i_ep)->childGet("serverCertificate")->text();
+	    int secMessMode = atoi(req.childGet(i_ep)->attr("securityMode").c_str());
+	    req.childClear();
+
+	    //>> Send Close request for no secure channel
+	    req.setAttr("id","CLO");
+	    tr.at().messProtIO(req,"OPC_UA");
+	    if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+	    sess.clearFull();
+
+	    //>> Send HELLO message
+	    req.setAttr("id","HEL")->setAttr("EndPoint",endPoint());
+	    tr.at().messProtIO(req,"OPC_UA");
+	    if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+
+	    //>> Send Open SecureChannel message for secure policy
+	    req.setAttr("id","OPN")->setAttr("SecChnId","0")->
+		setAttr("ClntCert",cert())->setAttr("ServCert",servCert)->setAttr("PvKey",pvKey())->
+		setAttr("SecPolicy",secPolicy())->setAttr("SecurityMode",TSYS::int2str(secMessMode))->
+		setAttr("SecLifeTm","3600000")->setAttr("SeqNumber","51")->setAttr("SeqReqId","1")->setAttr("ReqHandle","0");
+	    tr.at().messProtIO(req,"OPC_UA");
+	    if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+	    sess.sqNumb = 51;
+	    sess.sqReqId = 1;
+	    sess.reqHndl = 0;
+	    sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
+	    sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
+	    sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
+	    sess.servCert = servCert;
+	    sess.secMessMode = secMessMode;
+	    sess.clKey = req.attr("clKey");
+	    sess.servKey = req.attr("servKey");
+	}
+	sess.endPoint = endPoint( );
+	sess.secPolicy = secPolicy( );
     }
-    io.setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken));
+    io.setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken))->
+	setAttr("SecPolicy",sess.secPolicy)->setAttr("SecurityMode",TSYS::int2str(sess.secMessMode));
 
     string ireq = io.attr("id");
     if( ireq != "FindServers" && ireq != "GetEndpoints" &&
@@ -209,12 +266,14 @@ void TMdContr::reqOPC( XMLNode &io )
 	req.setAttr("id","CreateSession")->setAttr("EndPoint",endPoint())->setAttr("sesTm","1.2e6")->
 	    setAttr("SecChnId",TSYS::uint2str(sess.secChnl))->setAttr("SecTokenId",TSYS::uint2str(sess.secToken))->
 	    setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++))->
-	    setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->setAttr("authTokenId",TSYS::int2str(sess.authTkId))->
+	    setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->setAttr("authTokenId",TSYS::uint2str(sess.authTkId))->
+	    setAttr("SecPolicy",sess.secPolicy)->setAttr("SecurityMode",TSYS::int2str(sess.secMessMode))->
+	    setAttr("clKey",sess.clKey)->setAttr("servKey",sess.servKey)->
 	    childAdd("ClientCert")->setText(cert());
 	tr.at().messProtIO(req,"OPC_UA");
-	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
-	sess.sesId = atoi(req.attr("sesId").c_str());
-	sess.authTkId = atoi(req.attr("authTokenId").c_str());
+	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); sess.clearFull(); return; }
+	sess.sesId = strtoul(req.attr("sesId").c_str(),NULL,10);
+	sess.authTkId = strtoul(req.attr("authTokenId").c_str(),NULL,10);
 	sess.sesLifeTime = atof(req.attr("sesTm").c_str());
 
 	//>> Send ActivateSession message
@@ -224,14 +283,11 @@ void TMdContr::reqOPC( XMLNode &io )
     }
 
     sess.sesAccess = TSYS::curTime();
-    io.setAttr("authTokenId",TSYS::int2str(sess.authTkId))->setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->
-	setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++));
+    io.setAttr("authTokenId",TSYS::uint2str(sess.authTkId))->setAttr("ReqHandle",TSYS::uint2str(sess.reqHndl++))->
+	setAttr("SeqNumber",TSYS::uint2str(sess.sqNumb++))->setAttr("SeqReqId",TSYS::uint2str(sess.sqReqId++))->
+	setAttr("clKey",sess.clKey)->setAttr("servKey",sess.servKey);
     tr.at().messProtIO(io,"OPC_UA");
-    if( strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument )
-    {
-	sess.secChnl = sess.authTkId = 0;
-	goto nextTry;
-    }
+    if( strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument ) { sess.clearFull(); goto nextTry; }
     if( io.attr("err").empty() ) tmDelay--;
 }
 
@@ -249,6 +305,8 @@ void TMdContr::start_( )
 
     //> Schedule process
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+
+    tmDelay = 0;
 
     //> Start the gathering data task
     if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
@@ -306,6 +364,8 @@ void *TMdContr::Task( void *icntr )
 
 		//> Prepare nodes list
 		req.childClear();
+		req.childAdd("node")->setAttr("prmId","OPC_UA_Server")->setAttr("prmAttr","ServerStatus_State")->
+		    setAttr("nodeId","2259")->setAttr("attributeId","13");
 		for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
 		{
 		    cntr.p_hd[i_p].at().vlList(als);
@@ -319,18 +379,26 @@ void *TMdContr::Task( void *icntr )
 		cntr.mPCfgCh = false;
 	    }
 	    res.release();
-
 	    cntr.reqOPC(req);
 
 	    //> Place results
-	    bool isErr = !req.attr("err").empty();
+	    bool isErr = !req.attr("err").empty(), ndSt = 0;
+	    AutoHD<TVal> vl;
 	    res.request(false);
 	    for( int i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++ )
 	    {
 		XMLNode *cnX = req.childGet(i_c);
+		if( cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State" )
+		{ cntr.servSt = strtoul(cnX->text().c_str(),NULL,10); continue; }
 		while( cnX->attr("prmId") != cntr.p_hd[i_p].at().id() ) i_p++;
+		if( i_p >= cntr.p_hd.size() ) break;
 		if( cntr.p_hd[i_p].at().vlPresent(cnX->attr("prmAttr")) )
-		    cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr")).at().setS(isErr?EVAL_STR:cnX->text(),0,true);
+		{
+		    ndSt = strtol(cnX->attr("Status").c_str(),NULL,0);
+		    vl = cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr"));
+		    vl.at().setS((isErr||ndSt)?EVAL_STR:cnX->text(),0,true);
+		    vl.at().fld().setLen(ndSt);
+		}
 	    }
 	    if( isErr )
 	    {
@@ -359,11 +427,12 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
     if( icfg.name() == "SecPolicy" )
     {
-	if( icfg.getS() == "None" && cfg("SecMessMode").getI() ) cfg("SecMessMode").setI(0);
-	if( icfg.getS() != "None" && !cfg("SecMessMode").getI() ) cfg("SecMessMode").setI(1);
+	if( icfg.getS() == "None" && secMessMode() != OPCEndPoint::None ) setSecMessMode(OPCEndPoint::None);
+	if( icfg.getS() != "None" && secMessMode() == OPCEndPoint::None ) setSecMessMode(OPCEndPoint::Sign);
     }
     else if( icfg.name() == "SecMessMode" &&
-	    ((icfg.getI() && cfg("SecPolicy").getS() == "None") || (!icfg.getI() && cfg("SecPolicy").getS() != "None")) )
+	    ((icfg.getI() != OPCEndPoint::None && secPolicy() == "None") ||
+	    (icfg.getI() == OPCEndPoint::None && secPolicy() != "None")) )
 	return false;
 
     return true;
@@ -724,8 +793,23 @@ void TMdPrm::vlGet( TVal &val )
     }
     if( owner().redntUse( ) ) return;
 
-    if( owner().acq_err.getVal().empty() )	val.setS("0",0,true);
-    else	val.setS(owner().acq_err.getVal(),0,true);
+    if( !owner().acq_err.getVal().empty() ) val.setS(owner().acq_err.getVal(),0,true);
+    else
+    {
+	//> Check remote attribuutes for error status
+	uint32_t firstErr = 0;
+	vector<uint32_t> astls;
+	ResAlloc res( nodeRes(), true );
+	for( int i_a = 0; i_a < p_el.fldSize(); i_a++ )
+	{
+	    astls.push_back(p_el.fldAt(i_a).len());
+	    if( p_el.fldAt(i_a).len() && !firstErr ) firstErr = p_el.fldAt(i_a).len();
+	}
+	res.release();
+	string aLs;
+	for( int i_a = 0; i_a < astls.size(); i_a++ ) aLs += TSYS::strMess(":0x%x",astls[i_a]);
+	val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
+    }
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )

@@ -595,7 +595,7 @@ retry:
 	yylloc.last_column++;
 	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
 	{ pos++; yylloc.last_column++; }
-	if( (pos-st_pos) > 20 ) { yyerror(_("Object's properties too long, ")); return ERR; }
+	if( (pos-st_pos) > 255 ) { yyerror(_("Object's properties too long, ")); return ERR; }
 	strncpy(yylval.op,prog.substr(st_pos,pos-st_pos).data(),20);
 	// p_fnc->o_prpf.push_back(prog.substr(st_pos,pos-st_pos));
 	return O_PRP_F;

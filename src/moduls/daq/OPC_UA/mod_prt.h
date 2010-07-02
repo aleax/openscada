@@ -95,7 +95,9 @@ namespace OPC_UA
 #define OpcUa_BadNodeIdUnknown		0x80340000
 #define OpcUa_BadAttributeIdInvalid	0x80350000
 #define OpcUa_BadNotSupported		0x803D0000
+#define OpcUa_BadSecurityModeRejected	0x80540000
 #define OpcUa_BadSecurityPolicyRejected	0x80550000
+#define OpcUa_BadApplicationSignatureInvalid	0x80580000
 #define OpcUa_BadBrowseNameInvalid	0x80600000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
@@ -287,6 +289,7 @@ class OPCSess
 	vector<uint32_t> secCnls;
 	double		tInact;
 	long long	tAccess;
+	string		servNonce;
 };
 
 //*************************************************
@@ -345,6 +348,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
 	//> Sessions
 	int sessCreate( const string &iName, double iTInact );
+	void sessServNonceSet( int sid, const string &servNonce );
 	bool sessActivate( int sid, uint32_t secCnl, bool check = false );
 	void sessClose( int sid );
 	OPCSess sessGet( int sid );
@@ -391,16 +395,20 @@ class SecCnl
 {
     public:
 	//Methods
-	SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm ) :
-	    TokenId(iTokenId), tCreate(TSYS::curTime()), tLife(vmax(600000,iLifeTm)), endPoint(iEp)	{ }
-	SecCnl( ) : TokenId(0), tCreate(TSYS::curTime()), tLife(600000)	{ }
+	SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode ) :
+	    TokenId(iTokenId), tCreate(TSYS::curTime()), tLife(vmax(600000,iLifeTm)), endPoint(iEp), clCert(iClCert),
+	    secPolicy(iSecPolicy), secMessMode(iSecMessMode)	{ }
+	SecCnl( ) : TokenId(0), tCreate(TSYS::curTime()), tLife(600000), secMessMode(0)	{ }
 
 	//Attributes
 	string		endPoint;
+	string		secPolicy;
+	char		secMessMode;
 	long long	tCreate;
 	int32_t		tLife;
 	uint32_t	TokenId;
 	string		clCert;
+	string		servKey, clKey;
 };
 
 //*************************************************
@@ -438,9 +446,10 @@ class TProt: public TProtocol
 	void discoveryUrls( vector<string> &ls );
 
 	//> Channel manipulation functions
-	int chnlOpen( const string &iEp, int32_t lifeTm = 0 );
+	int chnlOpen( const string &iEp, int32_t lifeTm = 0, const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
+	void chnlSecSet( int cid, const string &servKey, const string &clKey );
 
 	TElem &endPntEl( )			{ return mEndPntEl; }
 
@@ -452,6 +461,7 @@ class TProt: public TProtocol
 	static string applicationName( );
 
 	//> Protocol's data process
+	static string iErr( const string &buf, int &off );
 	static const char *iVal( const string &buf, int &off, char vSz );
 	static int32_t iN( const string &rb, int &off, char vSz );
 	static uint32_t iNu( const string &rb, int &off, char vSz );
@@ -475,9 +485,19 @@ class TProt: public TProtocol
 	    bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
 	static void oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk = 0, long long srcTmStmp = 0 );
 
+	static string randBytes( int num );
 	static string certPEM2DER( const string &certPem );
+	static string certDER2PEM( const string &certDer );
 	static string certThumbprint( const string &certPem );
-	static string messDecPKey( const string &mess, const string &keyPem );
+	static string asymmetricEncrypt( const string &mess, const string &certPem, const string &secPolicy );
+	static string asymmetricDecrypt( const string &mess, const string &pvKeyPem, const string &secPolicy );
+	static bool asymmetricVerify( const string &mess, const string &sign, const string &certPem );
+	static string asymmetricSign( const string &mess, const string &pvPem );
+	static int asymmetricKeyLength( const string &keyCertPem );
+	static string deriveKey( const string &secret, const string &seed, int keyLen );
+	static string symmetricEncrypt( const string &mess, const string &keySet, const string &secPolicy );
+	static string symmetricDecrypt( const string &mess, const string &keySet, const string &secPolicy );
+	static string symmetricSign( const string &mess, const string &keySet, const string &secPolicy );
 
 	Res &nodeRes( )		{ return nRes; }
 
