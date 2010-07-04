@@ -770,11 +770,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
 		"Variables writed by separated lines into format: [ns:id].\n"
 		"Where:\n"
-		"  ns - name space number;\n"
-		"  id - node identifier into number or string.\n"
+		"  ns - names scope, number, zero value can missed;\n"
+		"  id - node identifier, number, string, bytes string and GUID.\n"
 		"Example:\n"
-		"  '0:84' - root folder;\n"
-		"  '3:BasicDevices2' - basic devices node into namespace 3."));
+		"  84 - root folder;\n"
+		"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string view;\n"
+		"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
+		"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and GUID view."));
 	return;
     }
 

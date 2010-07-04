@@ -3,9 +3,9 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA module.
 # Roman Savochenko <rom_as@oscada.org>, 2010.
 #
-#: mod_daq.cpp:82 mod_daq.cpp:86 mod_daq.cpp:96 mod_daq.cpp:150
-#: mod_daq.cpp:404 mod_daq.cpp:481 mod_daq.cpp:482 mod_daq.cpp:546
-#: mod_daq.cpp:558 mod_daq.cpp:736 mod_daq.cpp:746 mod_prt.cpp:115
+#: mod_daq.cpp:82 mod_daq.cpp:86 mod_daq.cpp:96 mod_daq.cpp:151
+#: mod_daq.cpp:409 mod_daq.cpp:486 mod_daq.cpp:487 mod_daq.cpp:551
+#: mod_daq.cpp:563 mod_daq.cpp:741 mod_daq.cpp:751 mod_prt.cpp:115
 #: mod_prt.cpp:123 mod_prt.cpp:254 mod_prt.cpp:275 mod_prt.cpp:284
 #: mod_prt.cpp:395 mod_prt.cpp:423 mod_prt.cpp:424 mod_prt.cpp:440
 #: mod_prt.cpp:441 mod_prt.cpp:447 mod_prt.cpp:448 mod_prt.cpp:454
@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-02 15:00+0300\n"
+"POT-Creation-Date: 2010-07-04 15:53+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -51,7 +51,7 @@ msgstr "Таблиця параметрів"
 msgid "30"
 msgstr ""
 
-#: mod_daq.cpp:83 mod_daq.cpp:110 mod_daq.cpp:443
+#: mod_daq.cpp:83 mod_daq.cpp:110 mod_daq.cpp:448
 msgid "SCHEDULE"
 msgstr ""
 
@@ -63,8 +63,8 @@ msgstr "Планування обчислення"
 msgid "100"
 msgstr ""
 
-#: mod_daq.cpp:83 mod_daq.cpp:89 mod_daq.cpp:194 mod_daq.cpp:195
-#: mod_daq.cpp:240 mod_prt.cpp:69 mod_prt.cpp:70 mod_prt.cpp:832
+#: mod_daq.cpp:83 mod_daq.cpp:89 mod_daq.cpp:195 mod_daq.cpp:196
+#: mod_daq.cpp:241 mod_prt.cpp:69 mod_prt.cpp:70 mod_prt.cpp:832
 #: mod_prt.cpp:1558 mod_prt.cpp:1560 mod_prt.cpp:2635 mod_prt.cpp:2636
 #: mod_prt.cpp:2637 mod_prt.cpp:2638 mod_prt.cpp:2644 mod_prt.cpp:2646
 #: mod_prt.cpp:2648 mod_prt.cpp:2649 mod_prt.cpp:2654 mod_prt.cpp:3133
@@ -83,8 +83,8 @@ msgstr "Рівень пріорітету задачі збору даних"
 msgid "2"
 msgstr ""
 
-#: mod_daq.cpp:84 mod_daq.cpp:193 mod_daq.cpp:195 mod_daq.cpp:237
-#: mod_daq.cpp:240 mod_prt.cpp:69 mod_prt.cpp:70 mod_prt.cpp:832
+#: mod_daq.cpp:84 mod_daq.cpp:194 mod_daq.cpp:196 mod_daq.cpp:238
+#: mod_daq.cpp:241 mod_prt.cpp:69 mod_prt.cpp:70 mod_prt.cpp:832
 #: mod_prt.cpp:2492 mod_prt.cpp:2495 mod_prt.cpp:2498 mod_prt.cpp:2501
 #: mod_prt.cpp:3133
 msgid "0"
@@ -114,7 +114,7 @@ msgstr ""
 msgid "0;1000"
 msgstr ""
 
-#: mod_daq.cpp:86 mod_daq.cpp:110 mod_daq.cpp:442
+#: mod_daq.cpp:86 mod_daq.cpp:110 mod_daq.cpp:447
 msgid "ADDR"
 msgstr ""
 
@@ -122,8 +122,8 @@ msgstr ""
 msgid "Transport address"
 msgstr "Адреса транспорту"
 
-#: mod_daq.cpp:87 mod_daq.cpp:111 mod_daq.cpp:188 mod_daq.cpp:208
-#: mod_daq.cpp:232 mod_daq.cpp:265 mod_prt.cpp:216 mod_prt.cpp:439
+#: mod_daq.cpp:87 mod_daq.cpp:111 mod_daq.cpp:189 mod_daq.cpp:209
+#: mod_daq.cpp:233 mod_daq.cpp:266 mod_prt.cpp:216 mod_prt.cpp:439
 #: mod_prt.cpp:446 mod_prt.cpp:463
 msgid "EndPoint"
 msgstr ""
@@ -140,9 +140,9 @@ msgstr ""
 msgid "opc.tcp://localhost:4841"
 msgstr ""
 
-#: mod_daq.cpp:88 mod_daq.cpp:111 mod_daq.cpp:170 mod_daq.cpp:181
-#: mod_daq.cpp:194 mod_daq.cpp:239 mod_daq.cpp:258 mod_daq.cpp:269
-#: mod_daq.cpp:423 mod_prt.cpp:250 mod_prt.cpp:401 mod_prt.cpp:475
+#: mod_daq.cpp:88 mod_daq.cpp:111 mod_daq.cpp:171 mod_daq.cpp:182
+#: mod_daq.cpp:195 mod_daq.cpp:240 mod_daq.cpp:259 mod_daq.cpp:270
+#: mod_daq.cpp:428 mod_prt.cpp:250 mod_prt.cpp:401 mod_prt.cpp:475
 #: mod_prt.cpp:585 mod_prt.cpp:766
 msgid "SecPolicy"
 msgstr ""
@@ -155,8 +155,8 @@ msgstr "Політика безпеки"
 msgid "20"
 msgstr ""
 
-#: mod_daq.cpp:88 mod_daq.cpp:194 mod_daq.cpp:205 mod_daq.cpp:425
-#: mod_daq.cpp:426 mod_daq.cpp:429 mod_daq.cpp:430 mod_prt.cpp:251
+#: mod_daq.cpp:88 mod_daq.cpp:195 mod_daq.cpp:206 mod_daq.cpp:430
+#: mod_daq.cpp:431 mod_daq.cpp:434 mod_daq.cpp:435 mod_prt.cpp:251
 #: mod_prt.cpp:475 mod_prt.cpp:766 mod_prt.cpp:1846 mod_prt.cpp:2253
 #: mod_prt.cpp:2273 mod_prt.cpp:3165 mod_daq.h:150 mod_prt.h:449
 msgid "None"
@@ -166,7 +166,7 @@ msgstr "Немає"
 msgid "None;Basic128Rsa15;Basic256"
 msgstr "Немає;Basic128Rsa15;Basic256"
 
-#: mod_daq.cpp:89 mod_daq.cpp:111 mod_daq.cpp:428
+#: mod_daq.cpp:89 mod_daq.cpp:111 mod_daq.cpp:433
 msgid "SecMessMode"
 msgstr ""
 
@@ -182,7 +182,7 @@ msgstr ""
 msgid "None;Sign;Sign&Encrypt"
 msgstr "Немає;Підпис;Підпис&Кодування"
 
-#: mod_daq.cpp:90 mod_daq.cpp:122 mod_daq.cpp:453
+#: mod_daq.cpp:90 mod_daq.cpp:122 mod_daq.cpp:458
 msgid "Cert"
 msgstr ""
 
@@ -194,7 +194,7 @@ msgstr "Сертифікат (PEM)"
 msgid "10000"
 msgstr ""
 
-#: mod_daq.cpp:91 mod_daq.cpp:124 mod_daq.cpp:238 mod_prt.cpp:298
+#: mod_daq.cpp:91 mod_daq.cpp:124 mod_daq.cpp:239 mod_prt.cpp:298
 #: mod_prt.cpp:339 mod_prt.cpp:483
 msgid "PvKey"
 msgstr ""
@@ -211,7 +211,7 @@ msgstr ""
 msgid "Parameter attributes number limit"
 msgstr "Обмеження кількості атрибутів параметру"
 
-#: mod_daq.cpp:92 mod_daq.cpp:535
+#: mod_daq.cpp:92 mod_daq.cpp:540
 msgid "3"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgstr ""
 msgid "Standard"
 msgstr "Стандарт"
 
-#: mod_daq.cpp:96 mod_daq.cpp:618 mod_daq.cpp:764
+#: mod_daq.cpp:96 mod_daq.cpp:623 mod_daq.cpp:769
 msgid "ND_LS"
 msgstr ""
 
@@ -235,7 +235,7 @@ msgstr "Перелік вузлів"
 msgid "1000"
 msgstr ""
 
-#: mod_daq.cpp:109 mod_daq.cpp:585 mod_daq.cpp:587 mod_daq.cpp:599
+#: mod_daq.cpp:109 mod_daq.cpp:590 mod_daq.cpp:592 mod_daq.cpp:604
 msgid "Root folder (84)"
 msgstr "Корнева тека (84)"
 
@@ -267,16 +267,21 @@ msgstr "Збір даних за розкладом '%s'. "
 msgid "Spend time %.6g ms. Requests %.6g."
 msgstr "Витрачено часу %.6g мс. Запитів %.6g."
 
-#: mod_daq.cpp:150 mod_daq.cpp:155 mod_daq.cpp:190 mod_daq.cpp:197
-#: mod_daq.cpp:210 mod_daq.cpp:219 mod_daq.cpp:228 mod_daq.cpp:234
-#: mod_daq.cpp:242 mod_daq.cpp:273 mod_daq.cpp:281 mod_daq.cpp:289
-#: mod_daq.cpp:290 mod_daq.cpp:383 mod_daq.cpp:400 mod_daq.cpp:494
-#: mod_daq.cpp:537 mod_daq.cpp:586 mod_daq.cpp:694 mod_daq.cpp:781
+#: mod_daq.cpp:142 mod_prt.cpp:809 mod_prt.cpp:1012 mod_prt.cpp:1036
+#, c-format
+msgid "0x%x"
+msgstr ""
+
+#: mod_daq.cpp:151 mod_daq.cpp:156 mod_daq.cpp:191 mod_daq.cpp:198
+#: mod_daq.cpp:211 mod_daq.cpp:220 mod_daq.cpp:229 mod_daq.cpp:235
+#: mod_daq.cpp:243 mod_daq.cpp:274 mod_daq.cpp:282 mod_daq.cpp:290
+#: mod_daq.cpp:291 mod_daq.cpp:385 mod_daq.cpp:405 mod_daq.cpp:499
+#: mod_daq.cpp:542 mod_daq.cpp:591 mod_daq.cpp:699 mod_daq.cpp:788
 #: mod_prt.cpp:858
 msgid "err"
 msgstr ""
 
-#: mod_daq.cpp:155 mod_daq.cpp:219 mod_prt.cpp:233 mod_prt.cpp:236
+#: mod_daq.cpp:156 mod_daq.cpp:220 mod_prt.cpp:233 mod_prt.cpp:236
 #: mod_prt.cpp:320 mod_prt.cpp:323 mod_prt.cpp:625 mod_prt.cpp:628
 #: mod_prt.cpp:844 mod_prt.cpp:850 mod_prt.cpp:854 mod_prt.cpp:855
 #: mod_prt.cpp:865
@@ -284,16 +289,16 @@ msgstr ""
 msgid "0x%x:%s"
 msgstr ""
 
-#: mod_daq.cpp:158 mod_daq.cpp:346 mod_daq.cpp:490 mod_daq.cpp:533
-#: mod_daq.cpp:581 mod_daq.cpp:679 mod_daq.cpp:828 mod_prt.cpp:204
+#: mod_daq.cpp:159 mod_daq.cpp:347 mod_daq.cpp:495 mod_daq.cpp:538
+#: mod_daq.cpp:586 mod_daq.cpp:684 mod_daq.cpp:835 mod_prt.cpp:204
 msgid "opc.tcp"
 msgstr ""
 
-#: mod_daq.cpp:166 mod_daq.cpp:178 mod_daq.cpp:188 mod_daq.cpp:193
-#: mod_daq.cpp:208 mod_daq.cpp:226 mod_daq.cpp:232 mod_daq.cpp:237
-#: mod_daq.cpp:260 mod_daq.cpp:265 mod_daq.cpp:279 mod_daq.cpp:346
-#: mod_daq.cpp:490 mod_daq.cpp:534 mod_daq.cpp:581 mod_daq.cpp:687
-#: mod_daq.cpp:819 mod_daq.cpp:829 mod_prt.cpp:206 mod_prt.cpp:246
+#: mod_daq.cpp:167 mod_daq.cpp:179 mod_daq.cpp:189 mod_daq.cpp:194
+#: mod_daq.cpp:209 mod_daq.cpp:227 mod_daq.cpp:233 mod_daq.cpp:238
+#: mod_daq.cpp:261 mod_daq.cpp:266 mod_daq.cpp:280 mod_daq.cpp:347
+#: mod_daq.cpp:495 mod_daq.cpp:539 mod_daq.cpp:586 mod_daq.cpp:692
+#: mod_daq.cpp:826 mod_daq.cpp:836 mod_prt.cpp:206 mod_prt.cpp:246
 #: mod_prt.cpp:375 mod_prt.cpp:436 mod_prt.cpp:443 mod_prt.cpp:450
 #: mod_prt.cpp:471 mod_prt.cpp:499 mod_prt.cpp:504 mod_prt.cpp:519
 #: mod_prt.cpp:533 mod_prt.cpp:554 mod_prt.cpp:607 mod_prt.cpp:620
@@ -301,238 +306,252 @@ msgstr ""
 msgid "id"
 msgstr ""
 
-#: mod_daq.cpp:166 mod_prt.cpp:499
+#: mod_daq.cpp:167 mod_prt.cpp:499
 msgid "CloseSession"
 msgstr ""
 
-#: mod_daq.cpp:167 mod_daq.cpp:179 mod_daq.cpp:193 mod_daq.cpp:201
-#: mod_daq.cpp:237 mod_daq.cpp:246 mod_daq.cpp:257 mod_daq.cpp:266
+#: mod_daq.cpp:168 mod_daq.cpp:180 mod_daq.cpp:194 mod_daq.cpp:202
+#: mod_daq.cpp:238 mod_daq.cpp:247 mod_daq.cpp:258 mod_daq.cpp:267
 #: mod_prt.cpp:259 mod_prt.cpp:359 mod_prt.cpp:380 mod_prt.cpp:423
 #: mod_prt.cpp:559
 msgid "SecChnId"
 msgstr ""
 
-#: mod_daq.cpp:167 mod_daq.cpp:179 mod_daq.cpp:202 mod_daq.cpp:247
-#: mod_daq.cpp:257 mod_daq.cpp:266 mod_prt.cpp:360 mod_prt.cpp:381
+#: mod_daq.cpp:168 mod_daq.cpp:180 mod_daq.cpp:203 mod_daq.cpp:248
+#: mod_daq.cpp:258 mod_daq.cpp:267 mod_prt.cpp:360 mod_prt.cpp:381
 #: mod_prt.cpp:423 mod_prt.cpp:560
 msgid "SecTokenId"
 msgstr ""
 
-#: mod_daq.cpp:168 mod_daq.cpp:268 mod_daq.cpp:275 mod_daq.cpp:285
+#: mod_daq.cpp:169 mod_daq.cpp:269 mod_daq.cpp:276 mod_daq.cpp:286
 #: mod_prt.cpp:572 mod_prt.cpp:726 mod_prt.cpp:788
 msgid "authTokenId"
 msgstr ""
 
-#: mod_daq.cpp:168 mod_daq.cpp:195 mod_daq.cpp:240 mod_daq.cpp:268
-#: mod_daq.cpp:285 mod_prt.cpp:273 mod_prt.cpp:574 mod_prt.cpp:575
+#: mod_daq.cpp:169 mod_daq.cpp:196 mod_daq.cpp:241 mod_daq.cpp:269
+#: mod_daq.cpp:286 mod_prt.cpp:273 mod_prt.cpp:574 mod_prt.cpp:575
 msgid "ReqHandle"
 msgstr ""
 
-#: mod_daq.cpp:169 mod_daq.cpp:180 mod_daq.cpp:195 mod_daq.cpp:240
-#: mod_daq.cpp:267 mod_daq.cpp:286 mod_prt.cpp:266 mod_prt.cpp:384
+#: mod_daq.cpp:170 mod_daq.cpp:181 mod_daq.cpp:196 mod_daq.cpp:241
+#: mod_daq.cpp:268 mod_daq.cpp:287 mod_prt.cpp:266 mod_prt.cpp:384
 #: mod_prt.cpp:424 mod_prt.cpp:563 mod_prt.cpp:564
 msgid "SeqNumber"
 msgstr ""
 
-#: mod_daq.cpp:169 mod_daq.cpp:180 mod_daq.cpp:195 mod_daq.cpp:240
-#: mod_daq.cpp:267 mod_daq.cpp:286 mod_prt.cpp:267 mod_prt.cpp:385
+#: mod_daq.cpp:170 mod_daq.cpp:181 mod_daq.cpp:196 mod_daq.cpp:241
+#: mod_daq.cpp:268 mod_daq.cpp:287 mod_prt.cpp:267 mod_prt.cpp:385
 #: mod_prt.cpp:424 mod_prt.cpp:565 mod_prt.cpp:566
 msgid "SeqReqId"
 msgstr ""
 
-#: mod_daq.cpp:170 mod_daq.cpp:181 mod_daq.cpp:194 mod_daq.cpp:239
-#: mod_daq.cpp:258 mod_daq.cpp:269 mod_prt.cpp:283 mod_prt.cpp:402
+#: mod_daq.cpp:171 mod_daq.cpp:182 mod_daq.cpp:195 mod_daq.cpp:240
+#: mod_daq.cpp:259 mod_daq.cpp:270 mod_prt.cpp:283 mod_prt.cpp:402
 #: mod_prt.cpp:586
 msgid "SecurityMode"
 msgstr ""
 
-#: mod_daq.cpp:171 mod_daq.cpp:182 mod_daq.cpp:251 mod_daq.cpp:270
-#: mod_daq.cpp:287 mod_prt.cpp:367 mod_prt.cpp:636
+#: mod_daq.cpp:172 mod_daq.cpp:183 mod_daq.cpp:252 mod_daq.cpp:271
+#: mod_daq.cpp:288 mod_prt.cpp:367 mod_prt.cpp:636
 msgid "clKey"
 msgstr ""
 
-#: mod_daq.cpp:171 mod_daq.cpp:182 mod_daq.cpp:252 mod_daq.cpp:270
-#: mod_daq.cpp:287 mod_prt.cpp:368 mod_prt.cpp:405 mod_prt.cpp:589
+#: mod_daq.cpp:172 mod_daq.cpp:183 mod_daq.cpp:253 mod_daq.cpp:271
+#: mod_daq.cpp:288 mod_prt.cpp:368 mod_prt.cpp:405 mod_prt.cpp:589
 msgid "servKey"
 msgstr ""
 
-#: mod_daq.cpp:172 mod_daq.cpp:183 mod_daq.cpp:189 mod_daq.cpp:196
-#: mod_daq.cpp:209 mod_daq.cpp:227 mod_daq.cpp:233 mod_daq.cpp:241
-#: mod_daq.cpp:272 mod_daq.cpp:280 mod_daq.cpp:288 mod_daq.h:40 mod_prt.h:37
+#: mod_daq.cpp:173 mod_daq.cpp:184 mod_daq.cpp:190 mod_daq.cpp:197
+#: mod_daq.cpp:210 mod_daq.cpp:228 mod_daq.cpp:234 mod_daq.cpp:242
+#: mod_daq.cpp:273 mod_daq.cpp:281 mod_daq.cpp:289 mod_daq.h:40 mod_prt.h:37
 msgid "OPC_UA"
 msgstr ""
 
-#: mod_daq.cpp:178 mod_daq.cpp:226 mod_prt.cpp:375
+#: mod_daq.cpp:179 mod_daq.cpp:227 mod_prt.cpp:375
 msgid "CLO"
 msgstr ""
 
-#: mod_daq.cpp:188 mod_daq.cpp:232 mod_prt.cpp:206
+#: mod_daq.cpp:189 mod_daq.cpp:233 mod_prt.cpp:206
 msgid "HEL"
 msgstr ""
 
-#: mod_daq.cpp:193 mod_daq.cpp:237 mod_prt.cpp:246
+#: mod_daq.cpp:194 mod_daq.cpp:238 mod_prt.cpp:246
 msgid "OPN"
 msgstr ""
 
-#: mod_daq.cpp:194 mod_daq.cpp:203 mod_daq.cpp:240 mod_daq.cpp:248
+#: mod_daq.cpp:195 mod_daq.cpp:204 mod_daq.cpp:241 mod_daq.cpp:249
 #: mod_prt.cpp:286 mod_prt.cpp:362
 msgid "SecLifeTm"
 msgstr ""
 
-#: mod_daq.cpp:194
+#: mod_daq.cpp:195
 msgid "300000"
 msgstr ""
 
-#: mod_daq.cpp:195 mod_daq.cpp:240
+#: mod_daq.cpp:196 mod_daq.cpp:241
 msgid "51"
 msgstr ""
 
-#: mod_daq.cpp:208 mod_daq.cpp:261 mod_prt.cpp:443
+#: mod_daq.cpp:209 mod_daq.cpp:262 mod_prt.cpp:443
 msgid "GetEndpoints"
 msgstr ""
 
-#: mod_daq.cpp:214 mod_prt.cpp:688
+#: mod_daq.cpp:215 mod_prt.cpp:688
 msgid "EndpointDescription"
 msgstr ""
 
-#: mod_daq.cpp:215 mod_prt.cpp:704 mod_prt.cpp:714
+#: mod_daq.cpp:216 mod_prt.cpp:704 mod_prt.cpp:714
 msgid "securityPolicyUri"
 msgstr ""
 
-#: mod_daq.cpp:215 mod_prt.cpp:1843
+#: mod_daq.cpp:216 mod_prt.cpp:1843
 msgid "#"
 msgstr ""
 
-#: mod_daq.cpp:216 mod_daq.cpp:222 mod_prt.cpp:703
+#: mod_daq.cpp:217 mod_daq.cpp:223 mod_prt.cpp:703
 msgid "securityMode"
 msgstr ""
 
-#: mod_daq.cpp:219
+#: mod_daq.cpp:220
 msgid "No secure policy found"
 msgstr "Не знайдено політики безпеки"
 
-#: mod_daq.cpp:220 mod_prt.cpp:690
+#: mod_daq.cpp:221 mod_prt.cpp:690
 msgid "endpointUrl"
 msgstr ""
 
-#: mod_daq.cpp:221 mod_prt.cpp:702
+#: mod_daq.cpp:222 mod_prt.cpp:702
 msgid "serverCertificate"
 msgstr ""
 
-#: mod_daq.cpp:238 mod_prt.cpp:262 mod_prt.cpp:292 mod_prt.cpp:336
+#: mod_daq.cpp:239 mod_prt.cpp:262 mod_prt.cpp:292 mod_prt.cpp:336
 msgid "ClntCert"
 msgstr ""
 
-#: mod_daq.cpp:238 mod_prt.cpp:73 mod_prt.cpp:263 mod_prt.cpp:303
+#: mod_daq.cpp:239 mod_prt.cpp:73 mod_prt.cpp:263 mod_prt.cpp:303
 #: mod_prt.cpp:370 mod_prt.cpp:483 mod_prt.cpp:2453 mod_prt.cpp:3116
 msgid "ServCert"
 msgstr ""
 
-#: mod_daq.cpp:240
+#: mod_daq.cpp:241
 msgid "3600000"
 msgstr ""
 
-#: mod_daq.cpp:261 mod_prt.cpp:436
+#: mod_daq.cpp:262 mod_prt.cpp:436
 msgid "FindServers"
 msgstr ""
 
-#: mod_daq.cpp:265 mod_prt.cpp:450
+#: mod_daq.cpp:266 mod_prt.cpp:450
 msgid "CreateSession"
 msgstr ""
 
-#: mod_daq.cpp:265 mod_daq.cpp:276 mod_prt.cpp:468 mod_prt.cpp:727
+#: mod_daq.cpp:266 mod_daq.cpp:277 mod_prt.cpp:468 mod_prt.cpp:727
 msgid "sesTm"
 msgstr ""
 
-#: mod_daq.cpp:265
+#: mod_daq.cpp:266
 msgid "1.2e6"
 msgstr ""
 
-#: mod_daq.cpp:271 mod_prt.cpp:467 mod_prt.cpp:768
+#: mod_daq.cpp:272 mod_prt.cpp:467 mod_prt.cpp:768
 msgid "ClientCert"
 msgstr ""
 
-#: mod_daq.cpp:274 mod_prt.cpp:725 mod_prt.cpp:787
+#: mod_daq.cpp:275 mod_prt.cpp:725 mod_prt.cpp:787
 msgid "sesId"
 msgstr ""
 
-#: mod_daq.cpp:279 mod_prt.cpp:471
+#: mod_daq.cpp:280 mod_prt.cpp:471
 msgid "ActivateSession"
 msgstr ""
 
-#: mod_daq.cpp:303 mod_daq.cpp:494 mod_prt.cpp:130 mod_prt.cpp:2444
+#: mod_daq.cpp:304 mod_daq.cpp:499 mod_prt.cpp:130 mod_prt.cpp:2444
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: mod_daq.cpp:340
+#: mod_daq.cpp:341
 #, c-format
 msgid "Thread <%u> is started. TID: %ld"
 msgstr ""
 
-#: mod_daq.cpp:346 mod_daq.cpp:490 mod_daq.cpp:534 mod_daq.cpp:687
+#: mod_daq.cpp:347 mod_daq.cpp:495 mod_daq.cpp:539 mod_daq.cpp:692
 #: mod_prt.cpp:504
 msgid "Read"
 msgstr ""
 
-#: mod_daq.cpp:346 mod_daq.cpp:490 mod_daq.cpp:534 mod_daq.cpp:687
+#: mod_daq.cpp:347 mod_daq.cpp:495 mod_daq.cpp:539 mod_daq.cpp:692
 #: mod_prt.cpp:508
 msgid "timestampsToReturn"
 msgstr ""
 
-#: mod_daq.cpp:373 mod_daq.cpp:492 mod_daq.cpp:535 mod_daq.cpp:582
-#: mod_daq.cpp:688 mod_daq.cpp:689 mod_daq.cpp:690 mod_daq.cpp:691
-#: mod_daq.cpp:692 mod_daq.cpp:830
+#: mod_daq.cpp:367 mod_daq.cpp:376 mod_daq.cpp:497 mod_daq.cpp:540
+#: mod_daq.cpp:587 mod_daq.cpp:693 mod_daq.cpp:694 mod_daq.cpp:695
+#: mod_daq.cpp:696 mod_daq.cpp:697 mod_daq.cpp:837
 msgid "node"
 msgstr ""
 
-#: mod_daq.cpp:373 mod_daq.cpp:389
+#: mod_daq.cpp:367 mod_daq.cpp:376 mod_daq.cpp:391 mod_daq.cpp:393
 msgid "prmId"
 msgstr ""
 
-#: mod_daq.cpp:373 mod_daq.cpp:390 mod_daq.cpp:393
+#: mod_daq.cpp:367 mod_daq.cpp:391
+msgid "OPC_UA_Server"
+msgstr ""
+
+#: mod_daq.cpp:367 mod_daq.cpp:376 mod_daq.cpp:391 mod_daq.cpp:395
+#: mod_daq.cpp:398
 msgid "prmAttr"
 msgstr ""
 
-#: mod_daq.cpp:373 mod_daq.cpp:492 mod_daq.cpp:535 mod_daq.cpp:582
-#: mod_daq.cpp:596 mod_daq.cpp:608 mod_daq.cpp:688 mod_daq.cpp:689
-#: mod_daq.cpp:690 mod_daq.cpp:691 mod_daq.cpp:692 mod_daq.cpp:830
-#: mod_prt.cpp:513 mod_prt.cpp:527 mod_prt.cpp:546 mod_prt.cpp:833
+#: mod_daq.cpp:367 mod_daq.cpp:391
+msgid "ServerStatus_State"
+msgstr ""
+
+#: mod_daq.cpp:368 mod_daq.cpp:376 mod_daq.cpp:497 mod_daq.cpp:540
+#: mod_daq.cpp:587 mod_daq.cpp:601 mod_daq.cpp:613 mod_daq.cpp:693
+#: mod_daq.cpp:694 mod_daq.cpp:695 mod_daq.cpp:696 mod_daq.cpp:697
+#: mod_daq.cpp:837 mod_prt.cpp:513 mod_prt.cpp:527 mod_prt.cpp:546
+#: mod_prt.cpp:833
 msgid "nodeId"
 msgstr ""
 
-#: mod_daq.cpp:373 mod_daq.cpp:492 mod_daq.cpp:535 mod_daq.cpp:688
-#: mod_daq.cpp:689 mod_daq.cpp:690 mod_daq.cpp:691 mod_daq.cpp:692
-#: mod_daq.cpp:831 mod_prt.cpp:514 mod_prt.cpp:528
+#: mod_daq.cpp:368
+msgid "2259"
+msgstr ""
+
+#: mod_daq.cpp:368 mod_daq.cpp:376 mod_daq.cpp:497 mod_daq.cpp:540
+#: mod_daq.cpp:693 mod_daq.cpp:694 mod_daq.cpp:695 mod_daq.cpp:696
+#: mod_daq.cpp:697 mod_daq.cpp:838 mod_prt.cpp:514 mod_prt.cpp:528
 msgid "attributeId"
 msgstr ""
 
-#: mod_daq.cpp:373
+#: mod_daq.cpp:368 mod_daq.cpp:376
 msgid "13"
 msgstr ""
 
-#: mod_daq.cpp:392 mod_daq.cpp:499 mod_daq.cpp:695 mod_prt.cpp:809
+#: mod_daq.cpp:397 mod_daq.cpp:504 mod_daq.cpp:700 mod_prt.cpp:809
 #: mod_prt.cpp:982 mod_prt.cpp:1036 mod_prt.cpp:3108
 msgid "Status"
 msgstr "Стан"
 
-#: mod_daq.cpp:439 mod_daq.cpp:761 mod_prt.cpp:1555 mod_prt.cpp:3100
+#: mod_daq.cpp:444 mod_daq.cpp:766 mod_prt.cpp:1555 mod_prt.cpp:3100
 msgid "info"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:443 mod_daq.cpp:453 mod_daq.cpp:456
-#: mod_daq.cpp:764 mod_prt.cpp:3108 mod_prt.cpp:3109 mod_prt.cpp:3110
+#: mod_daq.cpp:447 mod_daq.cpp:448 mod_daq.cpp:458 mod_daq.cpp:461
+#: mod_daq.cpp:769 mod_prt.cpp:3108 mod_prt.cpp:3109 mod_prt.cpp:3110
 #: mod_prt.cpp:3116 mod_prt.cpp:3117
 msgid "fld"
 msgstr ""
 
-#: mod_daq.cpp:442
+#: mod_daq.cpp:447
 msgid "/cntr/cfg/ADDR"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:443 mod_daq.cpp:453 mod_daq.cpp:456
-#: mod_daq.cpp:457 mod_daq.cpp:459 mod_daq.cpp:460 mod_daq.cpp:476
-#: mod_daq.cpp:477 mod_daq.cpp:764 mod_prt.cpp:1558 mod_prt.cpp:1560
+#: mod_daq.cpp:447 mod_daq.cpp:448 mod_daq.cpp:458 mod_daq.cpp:461
+#: mod_daq.cpp:462 mod_daq.cpp:464 mod_daq.cpp:465 mod_daq.cpp:481
+#: mod_daq.cpp:482 mod_daq.cpp:769 mod_prt.cpp:1558 mod_prt.cpp:1560
 #: mod_prt.cpp:1568 mod_prt.cpp:1575 mod_prt.cpp:1580 mod_prt.cpp:2411
 #: mod_prt.cpp:3103 mod_prt.cpp:3108 mod_prt.cpp:3109 mod_prt.cpp:3110
 #: mod_prt.cpp:3115 mod_prt.cpp:3116 mod_prt.cpp:3117 mod_prt.cpp:3119
@@ -542,60 +561,60 @@ msgstr ""
 msgid "root"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:443 mod_daq.cpp:453 mod_daq.cpp:456
-#: mod_daq.cpp:457 mod_daq.cpp:459 mod_daq.cpp:460 mod_daq.cpp:476
-#: mod_daq.cpp:477 mod_daq.cpp:764 mod_prt.cpp:2846 mod_daq.h:42
+#: mod_daq.cpp:447 mod_daq.cpp:448 mod_daq.cpp:458 mod_daq.cpp:461
+#: mod_daq.cpp:462 mod_daq.cpp:464 mod_daq.cpp:465 mod_daq.cpp:481
+#: mod_daq.cpp:482 mod_daq.cpp:769 mod_prt.cpp:2846 mod_daq.h:42
 msgid "DAQ"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:443 mod_daq.cpp:453 mod_daq.cpp:456
-#: mod_daq.cpp:459 mod_daq.cpp:460 mod_prt.cpp:1560 mod_prt.cpp:3108
+#: mod_daq.cpp:447 mod_daq.cpp:448 mod_daq.cpp:458 mod_daq.cpp:461
+#: mod_daq.cpp:464 mod_daq.cpp:465 mod_prt.cpp:1560 mod_prt.cpp:3108
 #: mod_prt.cpp:3109 mod_prt.cpp:3110 mod_prt.cpp:3116 mod_prt.cpp:3117
 #: mod_prt.cpp:3121 mod_prt.cpp:3122
 msgid "tp"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:443 mod_daq.cpp:453 mod_daq.cpp:456
-#: mod_daq.cpp:459 mod_daq.cpp:460 mod_prt.cpp:3108 mod_prt.cpp:3110
+#: mod_daq.cpp:447 mod_daq.cpp:448 mod_daq.cpp:458 mod_daq.cpp:461
+#: mod_daq.cpp:464 mod_daq.cpp:465 mod_prt.cpp:3108 mod_prt.cpp:3110
 #: mod_prt.cpp:3116 mod_prt.cpp:3117 mod_prt.cpp:3121
 msgid "str"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:443 mod_daq.cpp:456 mod_prt.cpp:3110
+#: mod_daq.cpp:447 mod_daq.cpp:448 mod_daq.cpp:461 mod_prt.cpp:3110
 #: mod_prt.cpp:3121 mod_prt.cpp:3122
 msgid "dest"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:456 mod_prt.cpp:3110 mod_prt.cpp:3121
+#: mod_daq.cpp:447 mod_daq.cpp:461 mod_prt.cpp:3110 mod_prt.cpp:3121
 #: mod_prt.cpp:3122
 msgid "select"
 msgstr ""
 
-#: mod_daq.cpp:442 mod_daq.cpp:467
+#: mod_daq.cpp:447 mod_daq.cpp:472
 msgid "/cntr/cfg/trLst"
 msgstr ""
 
-#: mod_daq.cpp:443
+#: mod_daq.cpp:448
 msgid "/cntr/cfg/SCHEDULE"
 msgstr ""
 
-#: mod_daq.cpp:443
+#: mod_daq.cpp:448
 msgid "sel_ed"
 msgstr ""
 
-#: mod_daq.cpp:444 mod_prt.cpp:3121 mod_prt.cpp:3122
+#: mod_daq.cpp:449 mod_prt.cpp:3121 mod_prt.cpp:3122
 msgid "sel_list"
 msgstr ""
 
-#: mod_daq.cpp:444
+#: mod_daq.cpp:449
 msgid "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"
 msgstr ""
 
-#: mod_daq.cpp:445 mod_daq.cpp:765 mod_prt.cpp:3111
+#: mod_daq.cpp:450 mod_daq.cpp:770 mod_prt.cpp:3111
 msgid "help"
 msgstr ""
 
-#: mod_daq.cpp:445
+#: mod_daq.cpp:450
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
@@ -616,364 +635,370 @@ msgstr ""
 "  - місяця (1-12);\n"
 "  - дні тижня (0[неділя]-6)."
 
-#: mod_daq.cpp:453
+#: mod_daq.cpp:458
 msgid "/cntr/cfg/Cert"
 msgstr ""
 
-#: mod_daq.cpp:453 mod_prt.cpp:3116 mod_prt.cpp:3117
+#: mod_daq.cpp:458 mod_prt.cpp:3116 mod_prt.cpp:3117
 msgid "cols"
 msgstr ""
 
-#: mod_daq.cpp:453 mod_prt.cpp:3116 mod_prt.cpp:3117
+#: mod_daq.cpp:458 mod_prt.cpp:3116 mod_prt.cpp:3117
 msgid "90"
 msgstr ""
 
-#: mod_daq.cpp:453 mod_prt.cpp:3116 mod_prt.cpp:3117
+#: mod_daq.cpp:458 mod_prt.cpp:3116 mod_prt.cpp:3117
 msgid "rows"
 msgstr ""
 
-#: mod_daq.cpp:453 mod_prt.cpp:3116 mod_prt.cpp:3117
+#: mod_daq.cpp:458 mod_prt.cpp:3116 mod_prt.cpp:3117
 msgid "7"
 msgstr ""
 
-#: mod_daq.cpp:454 mod_prt.cpp:1559 mod_prt.cpp:3104 mod_prt.cpp:3106
+#: mod_daq.cpp:459 mod_prt.cpp:1559 mod_prt.cpp:3104 mod_prt.cpp:3106
 #: mod_prt.cpp:3113
 msgid "area"
 msgstr ""
 
-#: mod_daq.cpp:454
+#: mod_daq.cpp:459
 msgid "/ndBrws"
 msgstr ""
 
-#: mod_daq.cpp:454
+#: mod_daq.cpp:459
 msgid "Server nodes browser"
 msgstr "Огляд вузлів серверу"
 
-#: mod_daq.cpp:456 mod_daq.cpp:474
+#: mod_daq.cpp:461 mod_daq.cpp:479
 msgid "/ndBrws/nd"
 msgstr ""
 
-#: mod_daq.cpp:456
+#: mod_daq.cpp:461
 msgid "Node"
 msgstr "Вузол"
 
-#: mod_daq.cpp:456 mod_daq.cpp:574
+#: mod_daq.cpp:461 mod_daq.cpp:579
 msgid "/ndBrws/ndLst"
 msgstr ""
 
-#: mod_daq.cpp:457 mod_prt.cpp:3119
+#: mod_daq.cpp:462 mod_prt.cpp:3119
 msgid "table"
 msgstr ""
 
-#: mod_daq.cpp:457 mod_daq.cpp:479
+#: mod_daq.cpp:462 mod_daq.cpp:484
 msgid "/ndBrws/attrs"
 msgstr ""
 
-#: mod_daq.cpp:457
+#: mod_daq.cpp:462
 msgid "Attributes"
 msgstr "Атрибути"
 
-#: mod_daq.cpp:459 mod_daq.cpp:460 mod_daq.cpp:481 mod_daq.cpp:482
+#: mod_daq.cpp:464 mod_daq.cpp:465 mod_daq.cpp:486 mod_daq.cpp:487
 #: mod_prt.cpp:1560 mod_prt.cpp:3121 mod_prt.cpp:3122 mod_prt.cpp:3153
 #: mod_prt.cpp:3154
 msgid "list"
 msgstr ""
 
-#: mod_daq.cpp:459 mod_daq.cpp:481
+#: mod_daq.cpp:464 mod_daq.cpp:486
 msgid "/ndBrws/attrs/0"
 msgstr ""
 
-#: mod_daq.cpp:459
+#: mod_daq.cpp:464
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: mod_daq.cpp:460 mod_daq.cpp:482
+#: mod_daq.cpp:465 mod_daq.cpp:487
 msgid "/ndBrws/attrs/1"
 msgstr ""
 
-#: mod_daq.cpp:460 mod_daq.cpp:529
+#: mod_daq.cpp:465 mod_daq.cpp:534
 msgid "Value"
 msgstr "Значення"
 
-#: mod_daq.cpp:466 mod_daq.cpp:757 mod_daq.cpp:819 mod_prt.cpp:1565
+#: mod_daq.cpp:471 mod_daq.cpp:762 mod_daq.cpp:826 mod_prt.cpp:1565
 #: mod_prt.cpp:3129
 msgid "path"
 msgstr ""
 
-#: mod_daq.cpp:472 mod_daq.cpp:570 mod_daq.cpp:571 mod_daq.cpp:585
-#: mod_daq.cpp:587 mod_daq.cpp:595 mod_daq.cpp:599 mod_daq.cpp:602
-#: mod_daq.cpp:607 mod_daq.cpp:819 mod_prt.cpp:1573 mod_prt.cpp:3143
+#: mod_daq.cpp:477 mod_daq.cpp:575 mod_daq.cpp:576 mod_daq.cpp:590
+#: mod_daq.cpp:592 mod_daq.cpp:600 mod_daq.cpp:604 mod_daq.cpp:607
+#: mod_daq.cpp:612 mod_daq.cpp:826 mod_prt.cpp:1573 mod_prt.cpp:3143
 #: mod_prt.cpp:3147 mod_prt.cpp:3158 mod_prt.cpp:3159
 msgid "el"
 msgstr ""
 
-#: mod_daq.cpp:476 mod_prt.cpp:1568 mod_prt.cpp:3133 mod_prt.cpp:3138
+#: mod_daq.cpp:481 mod_prt.cpp:1568 mod_prt.cpp:3133 mod_prt.cpp:3138
 #: mod_prt.cpp:3151
 msgid "get"
 msgstr ""
 
-#: mod_daq.cpp:477 mod_daq.cpp:818 mod_prt.cpp:3134 mod_prt.cpp:3139
+#: mod_daq.cpp:482 mod_daq.cpp:825 mod_prt.cpp:3134 mod_prt.cpp:3139
 #: mod_prt.cpp:3171
 msgid "set"
 msgstr ""
 
-#: mod_daq.cpp:485 mod_daq.cpp:577
+#: mod_daq.cpp:490 mod_daq.cpp:582
 msgid "84"
 msgstr ""
 
-#: mod_daq.cpp:486 mod_daq.cpp:578 mod_daq.cpp:596 mod_daq.cpp:608
+#: mod_daq.cpp:491 mod_daq.cpp:583 mod_daq.cpp:601 mod_daq.cpp:613
 msgid ")"
 msgstr ""
 
-#: mod_daq.cpp:487 mod_daq.cpp:579
+#: mod_daq.cpp:492 mod_daq.cpp:584
 msgid "("
 msgstr ""
 
-#: mod_daq.cpp:500
+#: mod_daq.cpp:505
 msgid "Unknown"
 msgstr "Невідомий"
 
-#: mod_daq.cpp:504 mod_prt.cpp:2483 mod_prt.cpp:2742 mod_prt.cpp:2756
+#: mod_daq.cpp:509 mod_prt.cpp:2483 mod_prt.cpp:2742 mod_prt.cpp:2756
 #: mod_prt.cpp:2768 mod_prt.cpp:2806
 msgid "NodeId"
 msgstr "Ід.Вузла"
 
-#: mod_daq.cpp:506 mod_prt.cpp:2485 mod_prt.cpp:2739 mod_prt.cpp:2754
+#: mod_daq.cpp:511 mod_prt.cpp:2485 mod_prt.cpp:2739 mod_prt.cpp:2754
 #: mod_prt.cpp:2765 mod_prt.cpp:2803 mod_prt.cpp:2904
 msgid "NodeClass"
 msgstr "КласВузла"
 
-#: mod_daq.cpp:509
+#: mod_daq.cpp:514
 msgid "Object"
 msgstr "Об’єкт"
 
-#: mod_daq.cpp:510
+#: mod_daq.cpp:515
 msgid "Variable"
 msgstr "Змінна"
 
-#: mod_daq.cpp:511
+#: mod_daq.cpp:516
 msgid "Method"
 msgstr "Метод"
 
-#: mod_daq.cpp:512
+#: mod_daq.cpp:517
 msgid "ObjectType"
 msgstr "ТипОб’єкта"
 
-#: mod_daq.cpp:513
+#: mod_daq.cpp:518
 msgid "VariableType"
 msgstr "ТипЗмінної"
 
-#: mod_daq.cpp:514
+#: mod_daq.cpp:519
 msgid "ReferenceType"
 msgstr "ТипПосилання"
 
-#: mod_daq.cpp:515 mod_daq.cpp:532 mod_prt.cpp:2501 mod_prt.cpp:2919
+#: mod_daq.cpp:520 mod_daq.cpp:537 mod_prt.cpp:2501 mod_prt.cpp:2919
 #: mod_prt.cpp:2920
 msgid "DataType"
 msgstr "ТипДаних"
 
-#: mod_daq.cpp:516
+#: mod_daq.cpp:521
 msgid "View"
 msgstr "Вигляд"
 
-#: mod_daq.cpp:519
+#: mod_daq.cpp:524
 msgid "BrowseName"
 msgstr "Ім’яОгляду"
 
-#: mod_daq.cpp:520 mod_prt.cpp:2609 mod_prt.cpp:2908
+#: mod_daq.cpp:525 mod_prt.cpp:2609 mod_prt.cpp:2908
 msgid "DisplayName"
 msgstr "Ім’яВідображення"
 
-#: mod_daq.cpp:521 mod_prt.cpp:68 mod_prt.cpp:3030
+#: mod_daq.cpp:526 mod_prt.cpp:68 mod_prt.cpp:3030
 msgid "Description"
 msgstr "Опис"
 
-#: mod_daq.cpp:522
+#: mod_daq.cpp:527
 msgid "WriteMask"
 msgstr "МаскаЗапису"
 
-#: mod_daq.cpp:523
+#: mod_daq.cpp:528
 msgid "UserWriteMask"
 msgstr "МаскаЗаписуКорист"
 
-#: mod_daq.cpp:524 mod_prt.cpp:2495 mod_prt.cpp:2498 mod_prt.cpp:2501
+#: mod_daq.cpp:529 mod_prt.cpp:2495 mod_prt.cpp:2498 mod_prt.cpp:2501
 #: mod_prt.cpp:2635 mod_prt.cpp:2636 mod_prt.cpp:2637 mod_prt.cpp:2638
 #: mod_prt.cpp:2644 mod_prt.cpp:2646 mod_prt.cpp:2648 mod_prt.cpp:2649
 #: mod_prt.cpp:2654 mod_prt.cpp:2911 mod_prt.cpp:2912
 msgid "IsAbstract"
 msgstr "Абстрактний"
 
-#: mod_daq.cpp:525 mod_prt.cpp:2498 mod_prt.cpp:2635 mod_prt.cpp:2913
+#: mod_daq.cpp:530 mod_prt.cpp:2498 mod_prt.cpp:2635 mod_prt.cpp:2913
 #: mod_prt.cpp:2914
 msgid "Symmetric"
 msgstr "Симетричний"
 
-#: mod_daq.cpp:526 mod_prt.cpp:2639 mod_prt.cpp:2640 mod_prt.cpp:2641
+#: mod_daq.cpp:531 mod_prt.cpp:2639 mod_prt.cpp:2640 mod_prt.cpp:2641
 #: mod_prt.cpp:2642 mod_prt.cpp:2643 mod_prt.cpp:2915 mod_prt.cpp:2916
 msgid "InverseName"
 msgstr "ІнверснеІм’я"
 
-#: mod_daq.cpp:527
+#: mod_daq.cpp:532
 msgid "ContainsNoLoops"
 msgstr "НеМіститьКіл"
 
-#: mod_daq.cpp:528 mod_prt.cpp:2492 mod_prt.cpp:2917 mod_prt.cpp:2918
+#: mod_daq.cpp:533 mod_prt.cpp:2492 mod_prt.cpp:2917 mod_prt.cpp:2918
 msgid "EventNotifier"
 msgstr "СповіщенняПроДії"
 
-#: mod_daq.cpp:540 mod_prt.cpp:2501 mod_prt.cpp:2921 mod_prt.cpp:2922
+#: mod_daq.cpp:545 mod_prt.cpp:2501 mod_prt.cpp:2921 mod_prt.cpp:2922
 msgid "ValueRank"
 msgstr "РангЗначення"
 
-#: mod_daq.cpp:541
+#: mod_daq.cpp:546
 msgid "ArrayDimensions"
 msgstr "ВимірМасиву"
 
-#: mod_daq.cpp:544
+#: mod_daq.cpp:549
 msgid "AccessLevel"
 msgstr "РівеньДоступу"
 
-#: mod_daq.cpp:547 mod_daq.cpp:559
+#: mod_daq.cpp:552 mod_daq.cpp:564
 msgid "Readable, "
 msgstr "Читати, "
 
-#: mod_daq.cpp:548 mod_daq.cpp:560
+#: mod_daq.cpp:553 mod_daq.cpp:565
 msgid "Writible, "
 msgstr "Писати, "
 
-#: mod_daq.cpp:549 mod_daq.cpp:561
+#: mod_daq.cpp:554 mod_daq.cpp:566
 msgid "History readable, "
 msgstr "Читати архів, "
 
-#: mod_daq.cpp:550 mod_daq.cpp:562
+#: mod_daq.cpp:555 mod_daq.cpp:567
 msgid "History writible, "
 msgstr "Писати архів, "
 
-#: mod_daq.cpp:551
+#: mod_daq.cpp:556
 msgid "Semantic change, "
 msgstr "Семантичні зміни, "
 
-#: mod_daq.cpp:556
+#: mod_daq.cpp:561
 msgid "UserAccessLevel"
 msgstr "РівеньДоступуКорист"
 
-#: mod_daq.cpp:565
+#: mod_daq.cpp:570
 msgid "MinimumSamplingInterval"
 msgstr "МінімальнийІнтервалОпитування"
 
-#: mod_daq.cpp:566
+#: mod_daq.cpp:571
 msgid "Historizing"
 msgstr "Архівація"
 
-#: mod_daq.cpp:567
+#: mod_daq.cpp:572
 msgid "Executable"
 msgstr "Виконуваний"
 
-#: mod_daq.cpp:568
+#: mod_daq.cpp:573
 msgid "UserExecutable"
 msgstr "ВиконуванийКорист"
 
-#: mod_daq.cpp:581 mod_prt.cpp:533
+#: mod_daq.cpp:586 mod_prt.cpp:533
 msgid "Browse"
 msgstr "Огляд"
 
-#: mod_daq.cpp:583 mod_prt.cpp:547
+#: mod_daq.cpp:588 mod_prt.cpp:547
 msgid "browseDirection"
 msgstr ""
 
-#: mod_daq.cpp:584 mod_prt.cpp:551 mod_prt.cpp:823
+#: mod_daq.cpp:589 mod_prt.cpp:551 mod_prt.cpp:823
 msgid "resultMask"
 msgstr ""
 
-#: mod_daq.cpp:594 mod_daq.cpp:606 mod_prt.cpp:832
+#: mod_daq.cpp:599 mod_daq.cpp:611 mod_prt.cpp:832
 msgid "isForward"
 msgstr ""
 
-#: mod_daq.cpp:595 mod_daq.cpp:607 mod_prt.cpp:834
+#: mod_daq.cpp:600 mod_daq.cpp:612 mod_prt.cpp:834
 msgid "browseName"
 msgstr ""
 
-#: mod_daq.cpp:596 mod_daq.cpp:608
+#: mod_daq.cpp:601 mod_daq.cpp:613
 msgid " ("
 msgstr ""
 
-#: mod_daq.cpp:596 mod_daq.cpp:608
+#: mod_daq.cpp:601 mod_daq.cpp:613
 msgid "()"
 msgstr ""
 
-#: mod_daq.cpp:618
+#: mod_daq.cpp:623
 msgid "w_attr"
 msgstr ""
 
-#: mod_daq.cpp:684 mod_prt.cpp:995 mod_prt.cpp:1157 mod_prt.cpp:1162
+#: mod_daq.cpp:689 mod_prt.cpp:995 mod_prt.cpp:1157 mod_prt.cpp:1162
 #: mod_prt.cpp:2581 mod_prt.cpp:2591
 msgid "\n"
 msgstr ""
 
-#: mod_daq.cpp:717 mod_daq.cpp:736 mod_daq.cpp:832 mod_prt.cpp:530
+#: mod_daq.cpp:722 mod_daq.cpp:741 mod_daq.cpp:839 mod_prt.cpp:530
 #: mod_prt.cpp:989
 msgid "EncodingMask"
 msgstr ""
 
-#: mod_daq.cpp:729 mod_prt.cpp:1017 mod_prt.cpp:1024 mod_prt.cpp:1651
+#: mod_daq.cpp:734 mod_prt.cpp:1017 mod_prt.cpp:1024 mod_prt.cpp:1651
 #: mod_prt.cpp:1706 mod_prt.cpp:2582 mod_prt.cpp:2591
 msgid ":"
 msgstr ""
 
-#: mod_daq.cpp:758
+#: mod_daq.cpp:763
 msgid "/serv/"
 msgstr ""
 
-#: mod_daq.cpp:764
+#: mod_daq.cpp:769
 msgid "/prm/cfg/ND_LS"
 msgstr ""
 
-#: mod_daq.cpp:765
+#: mod_daq.cpp:770
 msgid ""
 "Variables and it containers (Objects) list. All variables will put into the "
 "parameter attributes list.\n"
 "Variables writed by separated lines into format: [ns:id].\n"
 "Where:\n"
-"  ns - name space number;\n"
-"  id - node identifier into number or string.\n"
+"  ns - names scope, number, zero value can missed;\n"
+"  id - node identifier, number, string, bytes string and GUID.\n"
 "Example:\n"
-"  '0:84' - root folder;\n"
-"  '3:BasicDevices2' - basic devices node into namespace 3."
+"  84 - root folder;\n"
+"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string "
+"view;\n"
+"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and "
+"GUID view."
 msgstr ""
 "Перелік змінних та контейнерів (Об’єктів). Всі змінні будуть розташовані у "
 "переліку атрибутів параметру.\n"
 "Змінні записуються окремими строками у форматі: [ns:id].\n"
 "Де:\n"
-"  ns - область імен, числом;\n"
-"  id - ідентифікатор вузла, числом або строкою.\n"
+"  ns - область імен, числом; нульове значення може бути опущено;\n"
+"  id - ідентифікатор вузла, числом, строкою, строкою байт ибо GUID.\n"
 "Приклад:\n"
-"  '0:84' - корнева директорія;\n"
-"  '3:BasicDevices2' - вузел базових пристроїв у області імен 3."
+"  84 - корнева директорія;\n"
+"  3:\"BasicDevices2\" - вузол базових пристроїв у області імен 3 та у вигляді строки;\n"
+"  4:\"61626364\" - вузол у області імен 4 та у вигляді строки байтів;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - вузол у області імен 4 та у вигляді GUID."
 
-#: mod_daq.cpp:785
+#: mod_daq.cpp:792
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-#: mod_daq.cpp:786
+#: mod_daq.cpp:793
 msgid "2:Acquisition is stoped."
 msgstr "2:Збір зупинено."
 
-#: mod_daq.cpp:805
+#: mod_daq.cpp:812
 #, c-format
 msgid ":0x%x"
 msgstr ""
 
-#: mod_daq.cpp:806
+#: mod_daq.cpp:813
 #, c-format
 msgid "0x%x: Attribute's errors %s"
 msgstr "0x%x: Помилки атрибутів %s"
 
-#: mod_daq.cpp:819
+#: mod_daq.cpp:826
 #, c-format
 msgid "/%2fserv%2fattr"
 msgstr ""
 
-#: mod_daq.cpp:829 mod_prt.cpp:519
+#: mod_daq.cpp:836 mod_prt.cpp:519
 msgid "Write"
 msgstr "Запис"
 
@@ -1300,11 +1325,6 @@ msgstr ""
 #: mod_prt.cpp:769 mod_prt.cpp:2276
 msgid "Application signature error"
 msgstr "Помилка підпису застосування"
-
-#: mod_prt.cpp:809 mod_prt.cpp:1012 mod_prt.cpp:1036
-#, c-format
-msgid "0x%x"
-msgstr ""
 
 #: mod_prt.cpp:824
 msgid "statusCode"

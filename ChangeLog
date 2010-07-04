@@ -1,3 +1,9 @@
+2010-07-04 Roman
+- !!:DOC: Translation to English by Maksim Lisenko for "Quick start" document is added.
+- !!:DOC: Generic document "OpenSCADA" at English is updateds for include "Quick start" and DAQ.OPC_UA parts.
+- !!:DAQ.OPC_UA: Flow help for attributes is updated. Documents updated and translation to English by Maksim Lisenko is added.
+
+
 2010-07-02 Roman
 - !!:FIX:SYS: Class structures pack by #pragma pack(push,1) is disabled by reason the obscurity bug with threads hang and block
     present into OpenSCADA FirmWare of PLC LP8x81.
