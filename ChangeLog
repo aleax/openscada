@@ -1,3 +1,8 @@
+2010-07-05 Roman
+- SYS: Error message is added for connection to node error into TCntrNodeObj.
+- DAQ.JavaLikeCalc: Object's properies length limit is final expanded to 255 symbols.
+
+
 2010-07-04 Roman
 - !!:DOC: Translation to English by Maksim Lisenko for "Quick start" document is added.
 - !!:DOC: Generic document "OpenSCADA" at English is updateds for include "Quick start" and DAQ.OPC_UA parts.

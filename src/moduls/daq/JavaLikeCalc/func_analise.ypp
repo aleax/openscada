@@ -47,7 +47,7 @@ void sfErr( const string &mess, YYLTYPE *ps);
     Reg	*reg;		//Variable and Constant registers list index and function list index
     int	fp_cnt;		//Function parameters counter
     int	prg_cd;		//Programm code
-    char op[21];	//Object's properties.
+    char op[256];	//Object's properties.
 }
 
 %token	ERR VAR_DIR IF ELSE WHILE FOR IN BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW ARRAY OBJECT
@@ -596,7 +596,7 @@ retry:
 	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
 	{ pos++; yylloc.last_column++; }
 	if( (pos-st_pos) > 255 ) { yyerror(_("Object's properties too long, ")); return ERR; }
-	strncpy(yylval.op,prog.substr(st_pos,pos-st_pos).data(),20);
+	strncpy(yylval.op,prog.substr(st_pos,pos-st_pos).data(),255);
 	// p_fnc->o_prpf.push_back(prog.substr(st_pos,pos-st_pos));
 	return O_PRP_F;
     }

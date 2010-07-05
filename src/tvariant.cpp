@@ -533,9 +533,12 @@ TVariant TCntrNodeObj::propGet( const string &id )
     {
 	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
 	return new TCntrNodeObj(nnd,user());
-    }catch(...){ }
+    }
+    catch(...) { }
 
-    return cnd.at().objPropGet( id );
+    TVariant rez = cnd.at().objPropGet( id );
+    if( rez.isNull() ) mess_err(cnd.at().nodePath().c_str(),_("Get node properties '%s' error."),id.c_str());
+    return rez;
 }
 
 void TCntrNodeObj::propSet( const string &id, TVariant val )
