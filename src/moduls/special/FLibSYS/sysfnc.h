@@ -43,7 +43,7 @@ class sysCall : public TFunction
     public:
 	sysCall( ) : TFunction("sysCall")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return|IO::FullText) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return|IO::FullText) );
 	    ioAdd( new IO("com",_("Command"),IO::String,IO::Default) );
 	}
 
@@ -73,7 +73,7 @@ class dbReqSQL : public TFunction
     public:
 	dbReqSQL( ) : TFunction("dbReqSQL")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Object,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("addr",_("DB address"),IO::String,IO::Default) );
 	    ioAdd( new IO("req",_("SQL request"),IO::String,IO::Default) );
 	}
@@ -113,7 +113,7 @@ class messGet : public TFunction
     public:
 	messGet( ) : TFunction("messGet")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Object,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("btm",_("Begin time"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("etm",_("End time"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("cat",_("Category"),IO::String,IO::Default) );
@@ -176,7 +176,7 @@ class strSize : public TFunction
     public:
 	strSize( ) : TFunction("strSize")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Integer,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
 	}
 
@@ -197,7 +197,7 @@ class strSubstr : public TFunction
     public:
 	strSubstr( ) : TFunction("strSubstr")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
 	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("n"  ,_("Number"),IO::Integer,IO::Default,"-1") );
@@ -280,7 +280,7 @@ class strParse : public TFunction
     public:
 	strParse( ) : TFunction("strParse")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
 	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("sep",_("Separator"),IO::String,IO::Default,".") );
@@ -307,7 +307,7 @@ class strParsePath : public TFunction
     public:
 	strParsePath( ) : TFunction("strParsePath")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("path",_("Path"),IO::String,IO::Default) );
 	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("off",_("Offset"),IO::Integer,IO::Output) );
@@ -332,7 +332,7 @@ class strPath2Sep : public TFunction
     public:
 	strPath2Sep( ) : TFunction("strPath2Sep")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
 	    ioAdd( new IO("sep",_("Separator"),IO::String,IO::Default,".") );
 	}
@@ -354,7 +354,7 @@ class strEnc2HTML : public TFunction
     public:
 	strEnc2HTML( ) : TFunction("strEnc2HTML")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
 	}
 
@@ -375,7 +375,7 @@ class strEnc2Bin : public TFunction
     public:
 	strEnc2Bin( ) : TFunction("strEnc2Bin")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
 	}
 
@@ -396,7 +396,7 @@ class strDec4Bin : public TFunction
     public:
 	strDec4Bin( ) : TFunction("strDec4Bin")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
 	}
 
@@ -417,7 +417,7 @@ class real2str : public TFunction
     public:
 	real2str( ) : TFunction("real2str")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
 	    ioAdd( new IO("prc",_("Precision"),IO::Integer,IO::Default,"4") );
 	    ioAdd( new IO("tp",_("Type"),IO::String,IO::Default,"f") );
@@ -440,7 +440,7 @@ class int2str : public TFunction
     public:
 	int2str( ) : TFunction("int2str")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("base",_("Base"),IO::Integer,IO::Default,"10") );
 	}
@@ -468,7 +468,7 @@ class str2real : public TFunction
     public:
 	str2real( ) : TFunction("str2real")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Real,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Real,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
 	}
 
@@ -486,7 +486,7 @@ class str2int : public TFunction
     public:
 	str2int( ) : TFunction("str2int")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Integer,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
 	}
 
@@ -529,7 +529,7 @@ class floatMergeWord : public TFunction
     public:
 	floatMergeWord( ) : TFunction("floatMergeWord")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Real,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Real,IO::Return) );
 	    ioAdd( new IO("w1",_("Word 1"),IO::Integer,IO::Default) );
 	    ioAdd( new IO("w2",_("Word 2"),IO::Integer,IO::Default) );
 	}

@@ -309,10 +309,6 @@ void *TSocketIn::Task(void *sock_in)
     TSocketIn *sock = (TSocketIn *)sock_in;
     AutoHD<TProtocolIn> prot_in;
 
-#if OSC_DEBUG >= 2
-    mess_debug(sock->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
@@ -348,7 +344,7 @@ void *TSocketIn::Task(void *sock_in)
 		SSockIn *sin = new SSockIn(sock,sock_fd_CL,inet_ntoa(name_cl.sin_addr));
 		try
 		{
-		    SYS->taskCreate( sock->nodePath()+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    SYS->taskCreate( sock->nodePath('.',true)+"."+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
 		    sock->connNumb++;
 		}catch(TError err)
 		{
@@ -372,7 +368,7 @@ void *TSocketIn::Task(void *sock_in)
 		SSockIn *sin = new SSockIn(sock,sock_fd_CL,"");
 		try
 		{
-		    SYS->taskCreate( sock->nodePath()+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    SYS->taskCreate( sock->nodePath('.',true)+"."+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
 		    sock->connNumb++;
 		}catch(TError err)
 		{
@@ -428,9 +424,6 @@ void *TSocketIn::ClTask( void *s_inf )
     int cnt = 0;		//> Requests counter
     int tm = time(NULL);	//> Last connection time
 
-#if OSC_DEBUG >= 2
-    mess_debug(s.s->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
 #if OSC_DEBUG >= 3
     mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str() );
 #endif

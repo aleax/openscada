@@ -2220,10 +2220,6 @@ void *TVArchivator::Task( void *param )
     arch.run_st = true;
     bool isLast = false;
 
-#if OSC_DEBUG >= 2
-    mess_debug(arch.nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     sleep( arch.archPeriod() );
 
     //> Archiving

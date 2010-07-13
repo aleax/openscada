@@ -3,83 +3,78 @@
 # This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
 # Roman Savochenko <rom_as@fromru.com>, 2003-2009.
 #
-#: test_kernel.cpp:55 test_kernel.cpp:923 test_kernel.cpp:929
-#: test_kernel.cpp:932 test_kernel.cpp:936 test_kernel.cpp:939
-#: test_kernel.cpp:955 test_kernel.cpp:960 test_kernel.cpp:975
-#: test_kernel.cpp:983 test_kernel.cpp:989 test_kernel.cpp:1015
-#: test_kernel.cpp:1020 test_kernel.cpp:1035 test_kernel.cpp:1043
-#: test_kernel.cpp:1049 test_kernel.cpp:1075 test_kernel.cpp:1080
-#: test_kernel.cpp:1096 test_kernel.cpp:1105 test_kernel.cpp:1111
-#: test_kernel.cpp:1137 test_kernel.cpp:1142 test_kernel.cpp:1158
-#: test_kernel.cpp:1167 test_kernel.cpp:1173 test_kernel.cpp:1199
-#: test_kernel.cpp:1204 test_kernel.cpp:1220 test_kernel.cpp:1229
-#: test_kernel.cpp:1235 test_kernel.cpp:1261 test_kernel.cpp:1266
-#: test_kernel.cpp:1282 test_kernel.cpp:1291 test_kernel.cpp:1297
-#: test_kernel.cpp:1324 test_kernel.cpp:1328 test_kernel.cpp:1343
-#: test_kernel.cpp:1351 test_kernel.cpp:1357 test_kernel.cpp:1384
-#: test_kernel.cpp:1388 test_kernel.cpp:1403 test_kernel.cpp:1409
-#: test_kernel.cpp:1415 test_kernel.cpp:1442 test_kernel.cpp:1446
-#: test_kernel.cpp:1461 test_kernel.cpp:1467 test_kernel.cpp:1473
-#: test_kernel.cpp:1500 test_kernel.cpp:1504 test_kernel.cpp:1519
-#: test_kernel.cpp:1525 test_kernel.cpp:1531 test_kernel.cpp:1566
-#: test_kernel.cpp:1573 test_kernel.cpp:1580 test_kernel.cpp:1587
-#: test_kernel.cpp:1594 test_kernel.cpp:1601 test_kernel.cpp:1608
-#: test_kernel.cpp:1615 test_kernel.cpp:1622 test_kernel.cpp:1630
-#: test_kernel.cpp:1637 test_kernel.cpp:1645 test_kernel.cpp:1652
-#: test_kernel.cpp:1659 test_kernel.cpp:1697
+#: mod_tests.cpp:67 test_archive.h:67 test_archive.h:81 test_archive.h:95
+#: test_archive.h:109 test_archive.h:123 test_archive.h:138 test_archive.h:153
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.3.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-16 18:06+0300\n"
+"POT-Creation-Date: 2010-07-13 16:44+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: test_kernel.cpp:37
+#: mod_tests.cpp:49
 msgid "SystemTests"
 msgstr ""
 
-#: test_kernel.cpp:38
+#: mod_tests.cpp:50
 msgid "OpenSCADA system's tests"
 msgstr "Тести системи OpenSCADA"
 
-#: test_kernel.cpp:39
+#: mod_tests.cpp:51
 msgid "Special"
 msgstr "Спеціальні"
 
-#: test_kernel.cpp:41
+#: mod_tests.cpp:53
 msgid "TEST"
 msgstr ""
 
-#: test_kernel.cpp:42
+#: mod_tests.cpp:54
 msgid "1.3.7"
 msgstr ""
 
-#: test_kernel.cpp:43
+#: mod_tests.cpp:55
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: test_kernel.cpp:44
+#: mod_tests.cpp:56
 msgid "Allow the group tests for OpenSCADA system."
 msgstr "Надає групу тестів для системи OpenSCADA."
 
-#: test_kernel.cpp:45
+#: mod_tests.cpp:57
 msgid "GPL"
 msgstr ""
 
-#: test_kernel.cpp:50
+#: mod_tests.cpp:62
 msgid "C"
 msgstr ""
 
-#: test_kernel.cpp:92 test_kernel.cpp:99
+#: mod_tests.cpp:96 mod_tests.cpp:284
+msgid "test_"
+msgstr ""
+
+#: mod_tests.cpp:130
+msgid "TEST:"
+msgstr ""
+
+#: mod_tests.cpp:130
+msgid ":"
+msgstr ""
+
+#: mod_tests.cpp:141 mod_tests.cpp:202 mod_tests.cpp:253
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: mod_tests.cpp:146 mod_tests.cpp:153
 msgid "SubType"
 msgstr "Підтип"
 
-#: test_kernel.cpp:107
+#: mod_tests.cpp:161
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -89,39 +84,6 @@ msgid ""
 "  on           on test's flag;\n"
 "  per          repeat period (sek).\n"
 "       *** Test's options ***\n"
-"PARAM        Parameter test:\n"
-"  name         paremeter full name (OperationSystem.AutoDA.CPULoad).\n"
-"XML          XML parsing test:\n"
-"  file         file for XML parsing.\n"
-"MESS         Messages archive test:\n"
-"  arhtor       archivator name (StatErrors.BaseArh);\n"
-"  categ        messages category pattern.\n"
-"SOAttDet     Attach/Detach module test:\n"
-"  name         name modul (path to module);\n"
-"  full         full attach(to start).\n"
-"Val          Parameter atributes value test:\n"
-"  name         parameter attribute (OperationSystem.AutoDA.CPULoad.load);\n"
-"  arch_len     archive value getting depth;\n"
-"  arch_per     archive value getting period.\n"
-"BD           Full database test:\n"
-"  type         type BD;\n"
-"  bd           name BD;\n"
-"  table        table;\n"
-"  size         fields number.\n"
-"TrOut        Output transport test:\n"
-"  addr         input transport address;\n"
-"  type         transport type;\n"
-"  req          request to a input transport.\n"
-"Func\t      Function API test;\n"
-"SysContrLang System control language test:\n"
-"  path         path to language element (/Archive/BaseArh/mess_StatErrors/%%"
-"2fprm%%2fst).\n"
-"ValBuf       Value buffer tests;\n"
-"Archive      Value archive allocation tests:\n"
-"  arch         value archive;\n"
-"  period       values period (us).\n"
-"Base64Code   Mime Base64 algorithm tests.\n"
-"\n"
 msgstr ""
 "========================== Опції модуля <%s:%s> ==========================\n"
 "-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
@@ -130,1068 +92,1228 @@ msgstr ""
 "  on           ввімкнення тесту;\n"
 "  per          період повтору (сек).\n"
 "       *** Опції тестів ***\n"
-"PARAM        Тест параметру:\n"
-"  name         повне ім'я параметру (OperationSystem.AutoDA.CPULoad).\n"
-"XML          тест XML парсингу:\n"
-"  file         файл для XML парсингу.\n"
-"MESS         Тест архіву повідомлень:\n"
-"  arhtor       ім'я архіватору (StatErrors.BaseArh);\n"
-"  categ        категорія повідомлень.\n"
-"SOAttDet     Тест на під'єднання/від'єднання модуля:\n"
-"  name         ім'я модуля;\n"
-"  full         повністтю під'єднувати(запускати).\n"
-"Val          Тест значеннь атрибутів параметру:\n"
-"  name         атрибут параметру (OperationSystem.AutoDA.CPULoad.load).\n"
-"  arch_len     глибина опитування архіву значень;\n"
-"  arch_per     період опитування архіву значень.\n"
-"BD           Повний тест БД:\n"
-"  type         тип БД;\n"
-"  bd           ім'я БД;\n"
-"  table        таблиця;\n"
-"  size         кількість записів.\n"
-"TrOut        Тест вихідного транспорту:\n"
-"  addr         адреса вхідного транспорту;\n"
-"  type         тип транспорту;\n"
-"  req          запит до вхідного транспорту;\n"
-"Func\t       Тест підсистеми функції;\n"
-"SysContrLang Тест мови контролю системи:\n"
-"  path         шлях до елементу мови (/Archive/BaseArh/mess_StatErrors/%%"
-"2fprm%%2fst).\n"
-"ValBuf       Тести буферу значень;\n"
-"Archive      Тести розміщення архіву значень:\n"
-"  arch         архів значень;\n"
-"  period       період значень (мксек).\n"
-"Base64Code   Тест алгоритму Mime Base64.\n"
-"\n"
 
-#: test_kernel.cpp:155
+#: mod_tests.cpp:174
+#, c-format
+msgid "%s\t%s\n"
+msgstr ""
+
+#: mod_tests.cpp:178
+#, c-format
+msgid "  %s\t  %s\n"
+msgstr ""
+
+#: mod_tests.cpp:189
 msgid "h"
 msgstr ""
 
-#: test_kernel.cpp:158
+#: mod_tests.cpp:192
 msgid "help"
 msgstr ""
 
-#: test_kernel.cpp:168 test_kernel.cpp:230
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: test_kernel.cpp:185
-msgid ": Is starting...."
-msgstr ""
-
-#: test_kernel.cpp:186
-msgid "Not started!"
-msgstr ""
-
-#: test_kernel.cpp:194
-msgid ": Is stopping...."
-msgstr ""
-
-#: test_kernel.cpp:195
-msgid "Not stopped!"
-msgstr ""
-
-#: test_kernel.cpp:208
-#, c-format
-msgid "Thread <%u> is started. TID: %ld"
-msgstr ""
-
-#: test_kernel.cpp:225
+#: mod_tests.cpp:241
 msgid "prm"
 msgstr ""
 
-#: test_kernel.cpp:226
-msgid "on"
-msgstr ""
-
-#: test_kernel.cpp:226 test_kernel.cpp:419
-msgid "1"
-msgstr ""
-
-#: test_kernel.cpp:226 test_kernel.cpp:337
-msgid "per"
-msgstr ""
-
-#: test_kernel.cpp:228 test_kernel.cpp:418 test_kernel.cpp:429
-#: test_kernel.cpp:443 test_kernel.cpp:460 test_kernel.cpp:469
-#: test_kernel.cpp:471 test_kernel.cpp:487 test_kernel.cpp:492
-#: test_kernel.cpp:504 test_kernel.cpp:509
+#: mod_tests.cpp:242 mod_tests.cpp:245 mod_tests.cpp:295 test_DB.h:87
+#: test_DB.h:98 test_DB.h:112 test_DB.h:129 test_DB.h:138 test_DB.h:139
+#: test_DB.h:154 test_DB.h:158 test_DB.h:170 test_DB.h:175
 msgid "id"
 msgstr ""
 
-#: test_kernel.cpp:244
-msgid "PARAM"
+#: mod_tests.cpp:242
+msgid "on"
 msgstr ""
 
-#: test_kernel.cpp:246 test_kernel.cpp:250 test_kernel.cpp:305
-#: test_kernel.cpp:354 test_kernel.cpp:365 test_kernel.cpp:415
-#: test_kernel.cpp:426 test_kernel.cpp:440 test_kernel.cpp:454
-#: test_kernel.cpp:459 test_kernel.cpp:462 test_kernel.cpp:464
-#: test_kernel.cpp:482 test_kernel.cpp:484 test_kernel.cpp:486
-#: test_kernel.cpp:491 test_kernel.cpp:499 test_kernel.cpp:501
-#: test_kernel.cpp:503 test_kernel.cpp:508 test_kernel.cpp:523
+#: mod_tests.cpp:242 mod_tests.cpp:280 mod_tests.cpp:284 test_DB.h:88
+#: test_SOAttach.h:41
+msgid "1"
+msgstr ""
+
+#: mod_tests.cpp:243
+msgid "per"
+msgstr ""
+
+#: mod_tests.cpp:246
+msgid "stdcalc"
+msgstr ""
+
+#: mod_tests.cpp:252 mod_tests.cpp:280 mod_tests.cpp:283 mod_tests.cpp:284
+#: mod_tests.cpp:290 test_SysContrLang.h:60
+msgid "root"
+msgstr ""
+
+#: mod_tests.cpp:264
+#, c-format
+msgid "%s{%d <%s>, text <%s>, childs - %d."
+msgstr "%s{%d <%s>, текст <%s>, нащадків - %d."
+
+#: mod_tests.cpp:268
+#, c-format
+msgid "        Attr <%s> = <%s>."
+msgstr "        Атрибут <%s> = <%s>."
+
+#: mod_tests.cpp:271
+#, c-format
+msgid "%s}%d <%s>"
+msgstr ""
+
+#: mod_tests.cpp:277 test_SysContrLang.h:59
+msgid "info"
+msgstr ""
+
+#: mod_tests.cpp:280
+msgid "grp"
+msgstr ""
+
+#: mod_tests.cpp:280 mod_tests.cpp:290
+msgid "/br/test_"
+msgstr ""
+
+#: mod_tests.cpp:280
+msgid "Test"
+msgstr "Тест"
+
+#: mod_tests.cpp:280 mod_tests.cpp:284
+msgid "idm"
+msgstr ""
+
+#: mod_tests.cpp:280 mod_tests.cpp:284
+msgid "idSz"
+msgstr ""
+
+#: mod_tests.cpp:280 mod_tests.cpp:284 test_DB.h:84 test_DB.h:148
+msgid "20"
+msgstr ""
+
+#: mod_tests.cpp:281
+msgid "area"
+msgstr ""
+
+#: mod_tests.cpp:281
+msgid "/tests"
+msgstr ""
+
+#: mod_tests.cpp:281 mod_tests.cpp:284
+msgid "Tests"
+msgstr "Тести"
+
+#: mod_tests.cpp:283
+msgid "fld"
+msgstr ""
+
+#: mod_tests.cpp:283 mod_tests.cpp:297
+msgid "/tests/nmb"
+msgstr ""
+
+#: mod_tests.cpp:283
+msgid "Number"
+msgstr "Кількість"
+
+#: mod_tests.cpp:283 mod_tests.cpp:284
+msgid "tp"
+msgstr ""
+
+#: mod_tests.cpp:283
+msgid "str"
+msgstr ""
+
+#: mod_tests.cpp:284
+msgid "list"
+msgstr ""
+
+#: mod_tests.cpp:284 mod_tests.cpp:290
+msgid "/tests/tests"
+msgstr ""
+
+#: mod_tests.cpp:284
+msgid "br"
+msgstr ""
+
+#: mod_tests.cpp:284
+msgid "br_pref"
+msgstr ""
+
+#: mod_tests.cpp:289 test_SysContrLang.h:39 test_SysContrLang.h:60
+msgid "path"
+msgstr ""
+
+#: mod_tests.cpp:290
+msgid "get"
+msgstr ""
+
+#: mod_tests.cpp:295
+msgid "el"
+msgstr ""
+
+#: mod_tests.cpp:304
+#, c-format
+msgid "All: %d; Accessing: %d"
+msgstr "Взагалі: %d; Доступні: %d"
+
+#: test_archive.h:36
+msgid "Archive"
+msgstr "Архів"
+
+#: test_archive.h:38 test_Base64Code.h:38 test_DB.h:38 test_mess.h:38
+#: test_prm.h:38 test_SOAttach.h:38 test_SysContrLang.h:38 test_TrOut.h:38
+#: test_ValBuf.h:38 test_val.h:38 test_xml.h:38
+msgid "rez"
+msgstr ""
+
+#: test_archive.h:38 test_Base64Code.h:38 test_DB.h:38 test_mess.h:38
+#: test_prm.h:38 test_SOAttach.h:38 test_SysContrLang.h:38 test_TrOut.h:38
+#: test_ValBuf.h:38 test_val.h:38 test_xml.h:38
+msgid "Result"
+msgstr "Результат"
+
+#: test_archive.h:39
+msgid "arch"
+msgstr ""
+
+#: test_archive.h:39 test_archive.h:43
+msgid "Value archive"
+msgstr "Архів значень"
+
+#: test_archive.h:40
+msgid "period"
+msgstr ""
+
+#: test_archive.h:40
+msgid "Values period (us)"
+msgstr "Період значень (мкс)"
+
+#: test_archive.h:40 test_val.h:41
+msgid "1000000"
+msgstr ""
+
+#: test_archive.h:44
+msgid ""
+"Value archive allocation tests.\n"
+"Contain 7(8) tests for value archivator for check to correct working the "
+"consecutive pack mechanism."
+msgstr ""
+"Тест розташування у архіві значень."
+"Містить 7(8) тестів архіватора значень на перевірку коректності функціонування послідовного механізму упакування."
+
+#: test_archive.h:51 test_Base64Code.h:48 test_DB.h:61 test_mess.h:51
+#: test_prm.h:54 test_SOAttach.h:51 test_SysContrLang.h:54 test_TrOut.h:52
+#: test_ValBuf.h:53 test_val.h:52 test_xml.h:49
+msgid "Test: Start"
+msgstr "Тест: Запуск"
+
+#: test_archive.h:64
+msgid "Test1: Simple fill and check archive."
+msgstr "Тест1: Просте заповнення та перевірка архіву."
+
+#: test_archive.h:74
+msgid "Test1: Failed."
+msgstr "Тест1: Помилка."
+
+#: test_archive.h:76 test_Base64Code.h:58
+msgid "Test1: Passed."
+msgstr "Тест1: Виконано."
+
+#: test_archive.h:78
+msgid "Test2: Internal insert double value (down)."
+msgstr "Тест2: Внутрішня вставка реального значення (до долу)."
+
+#: test_archive.h:88
+msgid "Test2: Failed."
+msgstr "Тест2: Помилка."
+
+#: test_archive.h:90 test_Base64Code.h:67
+msgid "Test2: Passed."
+msgstr "Тест2: Виконано."
+
+#: test_archive.h:92
+msgid "Test3: Internal insert double value (up)."
+msgstr "Тест3: Внутрішня вставка реального значення (з верху)."
+
+#: test_archive.h:102
+msgid "Test3: Failed."
+msgstr "Тест3: Помилка."
+
+#: test_archive.h:104
+msgid "Test3: Passed."
+msgstr "Тест3: Виконано."
+
+#: test_archive.h:106
+msgid "Test4: Internal insert double value (down)."
+msgstr "Тест4: Внутрішня вставка реального значення (до долу)."
+
+#: test_archive.h:116
+msgid "Test4: Failed."
+msgstr "Тест4: Помилка."
+
+#: test_archive.h:118
+msgid "Test4: Passed."
+msgstr "Тест4: Виконано."
+
+#: test_archive.h:120
+msgid "Test5: Internal insert no double value."
+msgstr "Тест5: Внутрішня вставка не реального значення."
+
+#: test_archive.h:131
+msgid "Test5: Failed."
+msgstr "Тест5: Помилка."
+
+#: test_archive.h:133
+msgid "Test5: Passed."
+msgstr "Тест5: Виконано."
+
+#: test_archive.h:135
+msgid "Test6: Internal insert double value (up)."
+msgstr "Тест6: Внутрішня вставка реального значення (з верху)."
+
+#: test_archive.h:146
+msgid "Test6: Failed."
+msgstr "Тест6: Помилка."
+
+#: test_archive.h:148
+msgid "Test6: Passed."
+msgstr "Тест6: Виконано."
+
+#: test_archive.h:150
+msgid "Test7: Internal insert value instaead double value."
+msgstr "Тест7: Внутрішня вставка значення замість реального значення."
+
+#: test_archive.h:160
+msgid "Test7: Failed"
+msgstr "Тест7: Помилка."
+
+#: test_archive.h:162
+msgid "Test7: Passed."
+msgstr "Тест7: Виконано."
+
+#: test_archive.h:179 test_Base64Code.h:69 test_DB.h:204 test_mess.h:64
+#: test_prm.h:107 test_SOAttach.h:64 test_SysContrLang.h:64 test_TrOut.h:73
+#: test_ValBuf.h:688 test_val.h:75 test_xml.h:63
+msgid "Test: Passed"
+msgstr "Тест: Виконано"
+
+#: test_archive.h:180 test_Base64Code.h:70 test_DB.h:205 test_mess.h:65
+#: test_prm.h:108 test_SOAttach.h:65 test_SysContrLang.h:65 test_TrOut.h:74
+#: test_ValBuf.h:689 test_val.h:76 test_xml.h:64
+msgid "Passed"
+msgstr "Виконано"
+
+#: test_archive.h:184 test_Base64Code.h:74 test_DB.h:209 test_mess.h:69
+#: test_prm.h:112 test_SOAttach.h:69 test_SysContrLang.h:69 test_TrOut.h:78
+#: test_val.h:80 test_xml.h:68
+#, c-format
+msgid "Test: Failed: %s"
+msgstr "Тест: Помилка: %s"
+
+#: test_archive.h:185 test_Base64Code.h:75 test_DB.h:210 test_mess.h:70
+#: test_prm.h:113 test_SOAttach.h:70 test_SysContrLang.h:70 test_TrOut.h:79
+#: test_val.h:81 test_xml.h:69
+#, c-format
+msgid "Failed: %s"
+msgstr "Помилка: %s"
+
+#: test_Base64Code.h:36
+msgid "Base64Code"
+msgstr ""
+
+#: test_Base64Code.h:41
+msgid "Base64 encoding"
+msgstr "Base64 кодування"
+
+#: test_Base64Code.h:42
+msgid "Mime Base64 encoding algorithm tests."
+msgstr "Тести кодування алгоритмом Mime Base64."
+
+#: test_Base64Code.h:53
+msgid "Test1: Encoding."
+msgstr "Тест1: Кодування."
+
+#: test_Base64Code.h:56
+#, c-format
+msgid "Encoded text by length %d for time %f ms."
+msgstr "Текст довжиною %d закодовано за час %f мс."
+
+#: test_Base64Code.h:57
+#, c-format
+msgid "Encoded text: %s"
+msgstr "Закодований текст: %s"
+
+#: test_Base64Code.h:60
+msgid "Test2: Decoding."
+msgstr "Тест2: Декодування."
+
+#: test_Base64Code.h:63
+#, c-format
+msgid "Decoded text by length %d for time %f ms."
+msgstr "Текст довжиною %d декодовано за час %f мс."
+
+#: test_Base64Code.h:66
+msgid "Test2: Failed. Decoding error."
+msgstr "Тест2: Помилка. Помилка декодування."
+
+#: test_DB.h:36
+msgid "DB"
+msgstr ""
+
+#: test_DB.h:39 test_TrOut.h:40
+msgid "type"
+msgstr ""
+
+#: test_DB.h:39
+msgid "DB type"
+msgstr "Тип БД"
+
+#: test_DB.h:39
+msgid "SQLite"
+msgstr ""
+
+#: test_DB.h:40 test_TrOut.h:39
+msgid "addr"
+msgstr ""
+
+#: test_DB.h:40
+msgid "DB address"
+msgstr "Адреса БД"
+
+#: test_DB.h:40
+msgid "./DATA/test.db"
+msgstr ""
+
+#: test_DB.h:41
+msgid "table"
+msgstr ""
+
+#: test_DB.h:41
+msgid "DB table"
+msgstr "Таблиця БД"
+
+#: test_DB.h:41
+msgid "test"
+msgstr ""
+
+#: test_DB.h:42
+msgid "size"
+msgstr ""
+
+#: test_DB.h:42
+msgid "Records number"
+msgstr "Кількість записів"
+
+#: test_DB.h:42
+msgid "1000"
+msgstr ""
+
+#: test_DB.h:45
+msgid "DB test"
+msgstr "Тест БД"
+
+#: test_DB.h:46
+msgid ""
+"Full database test. Make:\n"
+"  - make/open DB;\n"
+"  - make/open table;\n"
+"  - make multiply records for determined structure;\n"
+"  - modify multiply records;\n"
+"  - get and check values for multiply records;\n"
+"  - modify record and table structure;\n"
+"  - remove multiply records;\n"
+"  - close/remove table;\n"
+"  - close/remove DB."
+msgstr ""
+"Повний тест БД. Виконує:\n"
+"  - створення/відкриття БД;\n"
+"  - створення/відкриття таблиці;\n"
+"  - створення множини записів (рядків) визначиною структурою;\n"
+"  - модифікація множини записів;\n"
+"  - отримання та перевірка значень множини записів;\n"
+"  - модифікація структури запису та таблиці;\n"
+"  - видалення записів;\n"
+"  - закриття/видалення таблиці;\n"
+"  - закриття/видалення БД."
+
+#: test_DB.h:65
+msgid "test_bd"
+msgstr ""
+
+#: test_DB.h:72
+#, c-format
+msgid "Open DB '%s'."
+msgstr "Відкриття БД '%s'."
+
+#: test_DB.h:77
+#, c-format
+msgid "Open table '%s'."
+msgstr "Відкриття таблиці '%s'."
+
+#: test_DB.h:79
+#, c-format
+msgid "Connect to table '%s'."
+msgstr "Підключення до таблиці '%s'."
+
+#: test_DB.h:82
+msgid "Create DB config."
+msgstr "Створення конфігурації БД."
+
+#: test_DB.h:84 test_DB.h:95 test_DB.h:109 test_DB.h:123 test_DB.h:128
+#: test_DB.h:131 test_DB.h:133 test_DB.h:149 test_DB.h:151 test_DB.h:153
+#: test_DB.h:157 test_DB.h:165 test_DB.h:167 test_DB.h:169 test_DB.h:174
+#: test_DB.h:189 test_prm.h:39 test_SOAttach.h:39 test_val.h:39
 msgid "name"
 msgstr ""
 
-#: test_kernel.cpp:250
+#: test_DB.h:84
+msgid "Name field"
+msgstr "Поле ім'я"
+
+#: test_DB.h:85 test_DB.h:96 test_DB.h:110 test_DB.h:128 test_DB.h:134
+#: test_DB.h:136 test_DB.h:153 test_DB.h:157 test_DB.h:169 test_DB.h:174
+msgid "descr"
+msgstr ""
+
+#: test_DB.h:85
+msgid "Description field"
+msgstr "Поле опису"
+
+#: test_DB.h:85
+msgid "50"
+msgstr ""
+
+#: test_DB.h:86 test_DB.h:97 test_DB.h:111 test_DB.h:129 test_DB.h:158
+#: test_DB.h:175
+msgid "val"
+msgstr ""
+
+#: test_DB.h:86
+msgid "Field value"
+msgstr "Поле значення"
+
+#: test_DB.h:86
+msgid "10.2"
+msgstr ""
+
+#: test_DB.h:86
+msgid "5"
+msgstr ""
+
+#: test_DB.h:87
+msgid "Field id"
+msgstr "Поле ідентифікатору"
+
+#: test_DB.h:87
+msgid "7"
+msgstr ""
+
+#: test_DB.h:87
+msgid "34"
+msgstr ""
+
+#: test_DB.h:88 test_DB.h:99 test_DB.h:113 test_DB.h:129 test_DB.h:140
+#: test_DB.h:141 test_DB.h:154 test_DB.h:158 test_DB.h:170 test_DB.h:175
+msgid "stat"
+msgstr ""
+
+#: test_DB.h:88
+msgid "Field stat"
+msgstr "Поле стану"
+
+#: test_DB.h:91
+msgid "Create records."
+msgstr "Створення записів."
+
+#: test_DB.h:95 test_DB.h:109 test_DB.h:123 test_DB.h:131 test_DB.h:133
+#: test_DB.h:189
+msgid "Sh"
+msgstr ""
+
+#: test_DB.h:96
+msgid "Shifr "
+msgstr ""
+
+#: test_DB.h:102
 #, c-format
-msgid "-------- Begin parameter <%s> test ----------"
+msgid "Created %d records for time %f sec."
+msgstr "Створено %d записів за час %f сек."
+
+#: test_DB.h:105
+msgid "Update records."
+msgstr "Оновлено записів."
+
+#: test_DB.h:110 test_DB.h:134 test_DB.h:136
+msgid "New shifr "
 msgstr ""
 
-#: test_kernel.cpp:255
+#: test_DB.h:116
 #, c-format
-msgid "Value attrbutes present: %d"
-msgstr ""
+msgid "Updated %d records for time %f sec."
+msgstr "Оновлено %d записів за час %f сек."
 
-#: test_kernel.cpp:260 test_kernel.cpp:283
+#: test_DB.h:119
+msgid "Check records."
+msgstr "Перевірка записів."
+
+#: test_DB.h:127
 #, c-format
-msgid "%s(SELECT): %s"
-msgstr ""
+msgid "Record #155='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."
+msgstr "Запис #155='%s'; Опис='%s'; Значення=%f; Id=%d; Стан=%d."
 
-#: test_kernel.cpp:264 test_kernel.cpp:287
+#: test_DB.h:132
 #, c-format
-msgid "%s(STRING): %s"
-msgstr ""
+msgid "Field <Sh> '%s' != '%s' error."
+msgstr "Помилка поля <Sh> '%s' != '%s'."
 
-#: test_kernel.cpp:267 test_kernel.cpp:290
+#: test_DB.h:135
 #, c-format
-msgid "%s(INTEGER): %d"
-msgstr ""
+msgid "Field <descr> '%s' != '%s' error."
+msgstr "Помилка поля <descr> '%s' != '%s'."
 
-#: test_kernel.cpp:270 test_kernel.cpp:293
+#: test_DB.h:139
 #, c-format
-msgid "%s(REAL): %f"
-msgstr ""
+msgid "Field <id> %d != %d error."
+msgstr "Помилка поля <id> %d != %d."
 
-#: test_kernel.cpp:273 test_kernel.cpp:296
+#: test_DB.h:141
 #, c-format
-msgid "%s(BOOLEAN): %d"
-msgstr ""
+msgid "Field <stat> %d != %d error."
+msgstr "Помилка поля <stat> %d != %d."
 
-#: test_kernel.cpp:279
+#: test_DB.h:143
 #, c-format
-msgid "Configs throw control: %d"
+msgid "Got %d records for time %f sec."
+msgstr "Отримано %d записів за час %f сек."
+
+#: test_DB.h:146
+msgid "Change DB structure."
+msgstr "Зміна структури БД."
+
+#: test_DB.h:148 test_DB.h:164
+msgid "fix"
 msgstr ""
 
-#: test_kernel.cpp:305
+#: test_DB.h:148
+msgid "DB fix test"
+msgstr "Тест виправлення БД"
+
+#: test_DB.h:149 test_DB.h:165
+msgid "Sh1"
+msgstr ""
+
+#: test_DB.h:151 test_DB.h:153 test_DB.h:167 test_DB.h:169
+msgid "Sh2"
+msgstr ""
+
+#: test_DB.h:153 test_DB.h:169
+msgid "New shifr 2"
+msgstr ""
+
+#: test_DB.h:156 test_DB.h:173
 #, c-format
-msgid "-------- End parameter <%s> test ----------"
+msgid "Record #2='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."
+msgstr "Запис #2='%s'; Опис='%s'; Значення=%f; Id=%d; Стан=%d."
+
+#: test_DB.h:159
+msgid "Add column error."
+msgstr "Помилка додання стовпчика."
+
+#: test_DB.h:161
+msgid "Add column ok."
+msgstr "Вдале додання стовпчика."
+
+#: test_DB.h:176
+msgid "Del column error."
+msgstr "Помилка видалення стовпчика."
+
+#: test_DB.h:178
+msgid "Del column ok."
+msgstr "Вдале видалення стовпчика."
+
+#: test_DB.h:192
+#, c-format
+msgid "Del %d records for time %f sec."
+msgstr "Видалено %d записів за час %f сек."
+
+#: test_DB.h:196
+#, c-format
+msgid "Close and delete table '%s'."
+msgstr "Закриття та видалення таблиці '%s'."
+
+#: test_DB.h:199
+#, c-format
+msgid "Close and delete DB '%s'."
+msgstr "Закриття та видалення БД '%s'."
+
+#: test_mess.h:36
+msgid "Mess"
 msgstr ""
 
-#: test_kernel.cpp:309
-msgid "XML"
-msgstr ""
-
-#: test_kernel.cpp:311
-msgid "file"
-msgstr ""
-
-#: test_kernel.cpp:314
-msgid "-------- Begin XML parsing test ----------"
-msgstr ""
-
-#: test_kernel.cpp:325
-msgid "-------- End XML parsing test ----------"
-msgstr ""
-
-#: test_kernel.cpp:330
-msgid "MESS"
-msgstr ""
-
-#: test_kernel.cpp:334
+#: test_mess.h:39
 msgid "arhtor"
 msgstr ""
 
-#: test_kernel.cpp:335
-#, c-format
-msgid "-------- Begin message archive test for archivator %s ----------"
+#: test_mess.h:39
+msgid "Archivator"
+msgstr "Архіватор"
+
+#: test_mess.h:39
+msgid "FSArch.StatErrors"
 msgstr ""
 
-#: test_kernel.cpp:337
+#: test_mess.h:40
 msgid "categ"
 msgstr ""
 
-#: test_kernel.cpp:338
-#, c-format
-msgid "New messages present %d."
+#: test_mess.h:40
+msgid "Messages category pattern"
+msgstr "Шаблон категорії повідомлення"
+
+#: test_mess.h:41
+msgid "depth"
 msgstr ""
 
-#: test_kernel.cpp:344
+#: test_mess.h:41
+msgid "Messages depth (s)"
+msgstr "Глибина повідомлень (с)"
+
+#: test_mess.h:41 test_val.h:40
+msgid "10"
+msgstr ""
+
+#: test_mess.h:44
+msgid "Messages"
+msgstr "Повідомлення"
+
+#: test_mess.h:45
+msgid ""
+"Messages archive test. Periodic read new messages from archive, for selected "
+"archivator."
+msgstr ""
+"Тест архіву повідомлень. Періодично вичитує нові повідомлення з архіву, для "
+"вказаного архиватору."
+
+#: test_mess.h:57
+#, c-format
+msgid "New messages present %d."
+msgstr "Наявно %d нових повідомлень."
+
+#: test_mess.h:61
 #, c-format
 msgid "<%s> : <%s> : <%s>"
 msgstr ""
 
-#: test_kernel.cpp:346
+#: test_mess.h:61
+msgid "\n"
+msgstr ""
+
+#: test_prm.h:36 test_prm.h:42
+msgid "Param"
+msgstr "Параметр"
+
+#: test_prm.h:39
+msgid "DAQ parameter address"
+msgstr "Адреса DAQ параметру"
+
+#: test_prm.h:39
+msgid "System.AutoDA.CPULoad"
+msgstr ""
+
+#: test_prm.h:43
+msgid ""
+"DAQ parameters test. Make read a parameter's attributes and config fields."
+msgstr ""
+"Тест DAQ параметрів. Вичитує атрибути та конфігураційні поля параметру."
+
+#: test_prm.h:58
 #, c-format
-msgid "-------- End message archive test for archivator %s ----------"
-msgstr ""
+msgid "Value attrbutes present: %d"
+msgstr "Наявно значень атрибутів: %d"
 
-#: test_kernel.cpp:350
-msgid "SOAttDet"
-msgstr ""
-
-#: test_kernel.cpp:356
+#: test_prm.h:63 test_prm.h:86
 #, c-format
-msgid "-------- Begin SO <%s> test ----------"
+msgid "%s(SELECT): %s"
+msgstr "%s(ВИБІР): %s"
+
+#: test_prm.h:67 test_prm.h:90
+#, c-format
+msgid "%s(STRING): %s"
+msgstr "%s(СТРОКА): %s"
+
+#: test_prm.h:70 test_prm.h:93
+#, c-format
+msgid "%s(INTEGER): %d"
+msgstr "%s(ЦІЛЕ): %d"
+
+#: test_prm.h:73 test_prm.h:96
+#, c-format
+msgid "%s(REAL): %f"
+msgstr "%s(РЕАЛЬНЕ): %f"
+
+#: test_prm.h:76 test_prm.h:99
+#, c-format
+msgid "%s(BOOLEAN): %d"
+msgstr "%s(ЛОГІЧНЕ): %d"
+
+#: test_prm.h:82
+#, c-format
+msgid "Config fields: %d"
+msgstr "Полів конфігурації: %d"
+
+#: test_SOAttach.h:36
+msgid "SOAttach"
 msgstr ""
 
-#: test_kernel.cpp:358
+#: test_SOAttach.h:39
+msgid "Path to module"
+msgstr "Шлях до модуля"
+
+#: test_SOAttach.h:40
+msgid "mode"
+msgstr ""
+
+#: test_SOAttach.h:40
+msgid "Mode (1-attach;-1-detach;0-change)"
+msgstr "Режим (1-підключ.;-1-виключ.;0-змінити)"
+
+#: test_SOAttach.h:40
+msgid "0"
+msgstr ""
+
+#: test_SOAttach.h:41
 msgid "full"
 msgstr ""
 
-#: test_kernel.cpp:359
-#, c-format
-msgid "-------- End SO <%s> test ----------"
-msgstr ""
-
-#: test_kernel.cpp:363
-msgid "Val"
-msgstr ""
-
-#: test_kernel.cpp:366
-msgid "arch_len"
-msgstr ""
-
-#: test_kernel.cpp:367
-msgid "arch_per"
-msgstr ""
-
-#: test_kernel.cpp:369
-#, c-format
-msgid "Value of: %s."
-msgstr ""
-
-#: test_kernel.cpp:376
-#, c-format
-msgid "Last value = %s"
-msgstr ""
-
-#: test_kernel.cpp:383
-#, c-format
-msgid "Value %d = %s."
-msgstr ""
-
-#: test_kernel.cpp:389
-msgid "BD"
-msgstr "БД"
-
-#: test_kernel.cpp:392 test_kernel.cpp:546
-msgid "type"
-msgstr ""
-
-#: test_kernel.cpp:393
-msgid "test_bd"
-msgstr ""
-
-#: test_kernel.cpp:394
-msgid "bd"
-msgstr ""
-
-#: test_kernel.cpp:395
-msgid "table"
-msgstr ""
-
-#: test_kernel.cpp:396
-msgid "size"
-msgstr ""
-
-#: test_kernel.cpp:400
-msgid "***** Begin DB tests block *****"
-msgstr ""
-
-#: test_kernel.cpp:402
-#, c-format
-msgid "Open DB: <%s>"
-msgstr ""
-
-#: test_kernel.cpp:408
-#, c-format
-msgid "Open Table: <%s>"
-msgstr ""
-
-#: test_kernel.cpp:410
-#, c-format
-msgid "Connect to table: <%s>"
-msgstr ""
-
-#: test_kernel.cpp:413
-msgid "Create DB config"
-msgstr ""
-
-#: test_kernel.cpp:415
-msgid "Name fields"
-msgstr ""
-
-#: test_kernel.cpp:415 test_kernel.cpp:481
-msgid "20"
-msgstr ""
-
-#: test_kernel.cpp:416 test_kernel.cpp:427 test_kernel.cpp:441
-#: test_kernel.cpp:459 test_kernel.cpp:465 test_kernel.cpp:467
-#: test_kernel.cpp:486 test_kernel.cpp:491 test_kernel.cpp:503
-#: test_kernel.cpp:508
-msgid "descr"
-msgstr ""
-
-#: test_kernel.cpp:416
-msgid "Description fields"
-msgstr ""
-
-#: test_kernel.cpp:416
-msgid "50"
-msgstr ""
-
-#: test_kernel.cpp:417 test_kernel.cpp:428 test_kernel.cpp:442
-#: test_kernel.cpp:460 test_kernel.cpp:492 test_kernel.cpp:509
-msgid "val"
-msgstr ""
-
-#: test_kernel.cpp:417
-msgid "Field value"
-msgstr ""
-
-#: test_kernel.cpp:417
-msgid "10.2"
-msgstr ""
-
-#: test_kernel.cpp:417
-msgid "5"
-msgstr ""
-
-#: test_kernel.cpp:418
-msgid "Field id"
-msgstr ""
-
-#: test_kernel.cpp:418
-msgid "7"
-msgstr ""
-
-#: test_kernel.cpp:418
-msgid "34"
-msgstr ""
-
-#: test_kernel.cpp:419 test_kernel.cpp:430 test_kernel.cpp:444
-#: test_kernel.cpp:460 test_kernel.cpp:472 test_kernel.cpp:474
-#: test_kernel.cpp:487 test_kernel.cpp:492 test_kernel.cpp:504
-#: test_kernel.cpp:509
-msgid "stat"
-msgstr ""
-
-#: test_kernel.cpp:419
-msgid "Field stat"
-msgstr ""
-
-#: test_kernel.cpp:422
-msgid "Create fields!"
-msgstr ""
-
-#: test_kernel.cpp:426 test_kernel.cpp:440 test_kernel.cpp:454
-#: test_kernel.cpp:462 test_kernel.cpp:464 test_kernel.cpp:523
-msgid "Sh"
-msgstr ""
-
-#: test_kernel.cpp:427
-msgid "Shifr "
-msgstr ""
-
-#: test_kernel.cpp:433
-#, c-format
-msgid "Create %d fields time <%f>sek!"
-msgstr ""
-
-#: test_kernel.cpp:436
-msgid "Update fields!"
-msgstr ""
-
-#: test_kernel.cpp:441 test_kernel.cpp:465 test_kernel.cpp:467
-msgid "New shifr "
-msgstr ""
-
-#: test_kernel.cpp:447
-#, c-format
-msgid "Update %d fields time <%f>sek!"
-msgstr ""
-
-#: test_kernel.cpp:450
-msgid "Check fields!"
-msgstr ""
-
-#: test_kernel.cpp:458
-#, c-format
-msgid "Field #155=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!"
-msgstr ""
-
-#: test_kernel.cpp:463
-#, c-format
-msgid "Field <Sh> <%s>!=<%s> error!"
-msgstr ""
-
-#: test_kernel.cpp:466
-#, c-format
-msgid "Field <descr> <%s>!=<%s> error!"
-msgstr ""
-
-#: test_kernel.cpp:470
-#, c-format
-msgid "Field <id> <%d>!=<%d> error!"
-msgstr ""
-
-#: test_kernel.cpp:473
-#, c-format
-msgid "Field <stat> <%d>!=<%d> error!"
-msgstr ""
-
-#: test_kernel.cpp:476
-#, c-format
-msgid "Get %d fields time <%f>sek!"
-msgstr ""
-
-#: test_kernel.cpp:479
-msgid "Change DB structure!"
-msgstr ""
-
-#: test_kernel.cpp:481 test_kernel.cpp:498
-msgid "fix"
-msgstr ""
-
-#: test_kernel.cpp:481
-msgid "BD fix test"
-msgstr ""
-
-#: test_kernel.cpp:482 test_kernel.cpp:499
-msgid "Sh1"
-msgstr ""
-
-#: test_kernel.cpp:484 test_kernel.cpp:486 test_kernel.cpp:501
-#: test_kernel.cpp:503
-msgid "Sh2"
-msgstr ""
-
-#: test_kernel.cpp:486 test_kernel.cpp:503
-msgid "New shifr 2"
-msgstr ""
-
-#: test_kernel.cpp:489
-msgid "Add column error!"
-msgstr ""
-
-#: test_kernel.cpp:490 test_kernel.cpp:507
-#, c-format
-msgid "Field #2=<%s>; Descr=<%s>; Value=<%f>; Id=<%d>; Stat=<%d>!"
-msgstr ""
-
-#: test_kernel.cpp:495
-msgid "Add column ok!"
-msgstr ""
-
-#: test_kernel.cpp:506
-msgid "Del column error!"
-msgstr ""
-
-#: test_kernel.cpp:512
-msgid "Del column ok!"
-msgstr ""
-
-#: test_kernel.cpp:526
-#, c-format
-msgid "Del %d fields time <%f>sek!"
-msgstr ""
-
-#: test_kernel.cpp:530
-#, c-format
-msgid "Close and delete table: <%s>"
-msgstr ""
-
-#: test_kernel.cpp:533
-#, c-format
-msgid "Close and delete DB: <%s>"
-msgstr ""
-
-#: test_kernel.cpp:538
-msgid "***** End BD tests block *****"
-msgstr ""
-
-#: test_kernel.cpp:542
-msgid "TrOut"
-msgstr ""
-
-#: test_kernel.cpp:545
-msgid "addr"
-msgstr ""
-
-#: test_kernel.cpp:547
-msgid "req"
-msgstr ""
-
-#: test_kernel.cpp:561
-#, c-format
-msgid "%s: Put <%s>. Get: <%s>"
-msgstr ""
-
-#: test_kernel.cpp:564
-msgid "Func"
-msgstr ""
-
-#: test_kernel.cpp:901
+#: test_SOAttach.h:41
+msgid "Full attach(to start)"
+msgstr "Повне підключення (на старті)"
+
+#: test_SOAttach.h:44
+msgid "Attach SO"
+msgstr "Підключення SO"
+
+#: test_SOAttach.h:45
+msgid "Attach/detach module test."
+msgstr "Тест підключення/виключення модулів."
+
+#: test_SysContrLang.h:36
 msgid "SysContrLang"
 msgstr ""
 
-#: test_kernel.cpp:903 test_kernel.cpp:907
-msgid "path"
-msgstr ""
+#: test_SysContrLang.h:39
+msgid "Path to language element"
+msgstr "Шлях до елементу мови"
 
-#: test_kernel.cpp:904
+#: test_SysContrLang.h:39
 #, c-format
-msgid "SysContr tests for path <%s>."
+msgid "/Archive/BaseArh/mess_StatErrors/%2fprm%2fst"
 msgstr ""
 
-#: test_kernel.cpp:906
-msgid "info"
-msgstr ""
+#: test_SysContrLang.h:42
+msgid "System control language"
+msgstr "Мова контролю системи"
 
-#: test_kernel.cpp:907
+#: test_SysContrLang.h:43
+#, c-format
+msgid ""
+"System control language test.\n"
+"Make request to language elements by full path set.\n"
+"Full path to language element have view </Archive/%2fbd%2fm_per>.\n"
+"Full path contained two included path.\n"
+"First </d_Archive/> is path to the node of the control tree.\n"
+"Second </bd/m_per> is path to concrete node's element."
+msgstr ""
+"Тест мови контролю системи.\n"
+"Виконує запит елементів мови за посередництвом повного шляху.\n"
+"Повний шлях до елемента мови має вигляд </Archive/%2fbd%2fm_per>.\n"
+"Повний шлях складається з двох вкладених шляхів.\n"
+"Перший </d_Archive/> це шлях до вузла дерева контроля.\n"
+"Другий </bd/m_per> це шлях до конкретного елемента вузла."
+
+#: test_SysContrLang.h:57
+#, c-format
+msgid "SysContr test for path '%s'."
+msgstr "Тест SysContr за шляхом '%s'."
+
+#: test_SysContrLang.h:60
 msgid "user"
 msgstr ""
 
-#: test_kernel.cpp:907
-msgid "root"
+#: test_TrOut.h:36
+msgid "TrOut"
 msgstr ""
 
-#: test_kernel.cpp:912
+#: test_TrOut.h:39
+msgid "Address"
+msgstr "Адреса"
+
+#: test_TrOut.h:39
+msgid "TCP:127.0.0.1:10001"
+msgstr ""
+
+#: test_TrOut.h:40
+msgid "Transport module"
+msgstr "Модуль транспорту"
+
+#: test_TrOut.h:40
+msgid "Sockets"
+msgstr ""
+
+#: test_TrOut.h:41
+msgid "req"
+msgstr ""
+
+#: test_TrOut.h:41
+msgid "Request text"
+msgstr "Текст запиту"
+
+#: test_TrOut.h:44
+msgid "Transport"
+msgstr "Транспорт"
+
+#: test_TrOut.h:45
+msgid ""
+"Output and/or input transports test.\n"
+"Make test for output transport by send the request to selected input "
+"transport."
+msgstr ""
+"Тест вихідних та/або вхідних транспортів.\n"
+"Виконує тестування вихідного транспорту шляхом надсилання запиту до "
+"вказаного вхідного транспорту."
+
+#: test_TrOut.h:71
+#, c-format
+msgid "%s: Put '%s'. Get: '%s'."
+msgstr "%s: Надіслано '%s'. Отримано: '%s'."
+
+#: test_ValBuf.h:36
 msgid "ValBuf"
 msgstr ""
 
-#: test_kernel.cpp:917
-msgid "*** Begin value buffer tests. ***"
-msgstr ""
+#: test_ValBuf.h:41
+msgid "Value buffer"
+msgstr "Буфер значень"
 
-#: test_kernel.cpp:919
+#: test_ValBuf.h:42
 msgid ""
-"Test1. Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, "
+"Value buffer tests.\n"
+"Contain 13 tests for all aspects of value buffer (subsystem \"Archives\")."
+msgstr ""
+"Тести буферу значень. Містить 13 тестів всіх аспектів буферу значень "
+"(підсистема \"Архіви\")."
+
+#: test_ValBuf.h:56 test_ValBuf.h:64 test_ValBuf.h:82 test_ValBuf.h:88
+#: test_ValBuf.h:149 test_ValBuf.h:210 test_ValBuf.h:273 test_ValBuf.h:336
+#: test_ValBuf.h:398 test_ValBuf.h:459 test_ValBuf.h:519 test_ValBuf.h:575
+#: test_ValBuf.h:633
+#, c-format
+msgid "Test%d"
+msgstr "Тест%d"
+
+#: test_ValBuf.h:57
+#, c-format
+msgid ""
+"%s: Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, "
 "HighRes = no."
 msgstr ""
+"%s: Створення буферу: Дані = строка, Розмір = 10, Періо = 1с, ЖорстГратка = "
+"так, ВисРоздЗд = ні."
 
-#: test_kernel.cpp:922 test_kernel.cpp:1575 test_kernel.cpp:1698
-msgid "Test1 passed."
-msgstr ""
+#: test_ValBuf.h:60 test_ValBuf.h:79 test_ValBuf.h:85 test_ValBuf.h:145
+#: test_ValBuf.h:206 test_ValBuf.h:269 test_ValBuf.h:332 test_ValBuf.h:394
+#: test_ValBuf.h:455 test_ValBuf.h:515 test_ValBuf.h:571 test_ValBuf.h:629
+#: test_ValBuf.h:685
+#, c-format
+msgid "%s: Passed."
+msgstr "%s: Виконано."
 
-#: test_kernel.cpp:923
-msgid "Test1 failed! Create buffer error!"
-msgstr ""
+#: test_ValBuf.h:61
+msgid "Create buffer error."
+msgstr "Збій створення буферу."
 
-#: test_kernel.cpp:926
-msgid "Test2. Change buffer mode."
-msgstr ""
+#: test_ValBuf.h:65
+#, c-format
+msgid "%s: Change buffer mode."
+msgstr "%s: Зміна режиму буфера."
 
-#: test_kernel.cpp:928
-msgid "  Disable hard griding ok."
-msgstr ""
+#: test_ValBuf.h:67
+msgid "Disable hard griding ok."
+msgstr "Вдала зміна жорсткої гратки."
 
-#: test_kernel.cpp:929
-msgid "Test2 failed! Disable hard griding failed!"
-msgstr ""
+#: test_ValBuf.h:68
+msgid "Disable hard griding failed."
+msgstr "Збій зміни жорсткої гратки."
 
-#: test_kernel.cpp:931
-msgid "  Set high resolution time ok."
-msgstr ""
+#: test_ValBuf.h:70
+msgid "Set high resolution time ok."
+msgstr "Вдале встановлення високої роздільної здатності часу."
 
-#: test_kernel.cpp:932
-msgid "Test2 failed! Set high resolution time failed!"
-msgstr ""
+#: test_ValBuf.h:71
+msgid "Set high resolution time failed."
+msgstr "Збій встановлення високої роздільної здатності часу."
 
-#: test_kernel.cpp:935
-msgid "  Change buffer size ok."
-msgstr ""
+#: test_ValBuf.h:74
+msgid "Change buffer size ok."
+msgstr "Вдала зміна розміру буфера."
 
-#: test_kernel.cpp:936
-msgid "Test2 failed! Change buffer size failed!"
-msgstr ""
+#: test_ValBuf.h:75
+msgid "Change buffer size failed."
+msgstr "Збій зміни розміру буфера."
 
-#: test_kernel.cpp:938
-msgid "  Change period ok."
-msgstr ""
+#: test_ValBuf.h:77
+msgid "Change period ok."
+msgstr "Вдала зміна періоду."
 
-#: test_kernel.cpp:939
-msgid "Test2 failed! Change period failed!"
-msgstr ""
+#: test_ValBuf.h:78
+msgid "Change period failed."
+msgstr "Збій зміни періоду."
 
-#: test_kernel.cpp:940 test_kernel.cpp:1589
-msgid "Test2 passed."
-msgstr ""
+#: test_ValBuf.h:83
+#, c-format
+msgid "%s: Destroy buffer."
+msgstr "%s: Видалення буферу."
 
-#: test_kernel.cpp:943
-msgid "Test3. Destroy buffer."
-msgstr ""
+#: test_ValBuf.h:89
+#, c-format
+msgid "%s: Fill and check hard time griding string buffer."
+msgstr "%s: Заповнення та перевірка строкового буферу з жорсткою граткою часу."
 
-#: test_kernel.cpp:945 test_kernel.cpp:1603
-msgid "Test3 passed."
-msgstr ""
-
-#: test_kernel.cpp:948
-msgid "Test4. Fill and check hard time griding string buffer."
-msgstr ""
-
-#: test_kernel.cpp:953 test_kernel.cpp:959 test_kernel.cpp:970
-#: test_kernel.cpp:971 test_kernel.cpp:972 test_kernel.cpp:982
-#: test_kernel.cpp:996 test_kernel.cpp:1073 test_kernel.cpp:1079
-#: test_kernel.cpp:1090 test_kernel.cpp:1091 test_kernel.cpp:1092
-#: test_kernel.cpp:1093 test_kernel.cpp:1104 test_kernel.cpp:1118
-#: test_kernel.cpp:1197 test_kernel.cpp:1203 test_kernel.cpp:1214
-#: test_kernel.cpp:1215 test_kernel.cpp:1216 test_kernel.cpp:1217
-#: test_kernel.cpp:1228 test_kernel.cpp:1242 test_kernel.cpp:1322
-#: test_kernel.cpp:1327 test_kernel.cpp:1337 test_kernel.cpp:1338
-#: test_kernel.cpp:1339 test_kernel.cpp:1340 test_kernel.cpp:1350
-#: test_kernel.cpp:1364 test_kernel.cpp:1440 test_kernel.cpp:1445
-#: test_kernel.cpp:1455 test_kernel.cpp:1456 test_kernel.cpp:1457
-#: test_kernel.cpp:1458 test_kernel.cpp:1466 test_kernel.cpp:1480
+#: test_ValBuf.h:94 test_ValBuf.h:100 test_ValBuf.h:111 test_ValBuf.h:112
+#: test_ValBuf.h:113 test_ValBuf.h:123 test_ValBuf.h:137 test_ValBuf.h:216
+#: test_ValBuf.h:222 test_ValBuf.h:233 test_ValBuf.h:234 test_ValBuf.h:235
+#: test_ValBuf.h:236 test_ValBuf.h:247 test_ValBuf.h:261 test_ValBuf.h:342
+#: test_ValBuf.h:348 test_ValBuf.h:359 test_ValBuf.h:360 test_ValBuf.h:361
+#: test_ValBuf.h:362 test_ValBuf.h:373 test_ValBuf.h:386 test_ValBuf.h:466
+#: test_ValBuf.h:471 test_ValBuf.h:481 test_ValBuf.h:482 test_ValBuf.h:483
+#: test_ValBuf.h:484 test_ValBuf.h:494 test_ValBuf.h:507 test_ValBuf.h:582
+#: test_ValBuf.h:587 test_ValBuf.h:597 test_ValBuf.h:598 test_ValBuf.h:599
+#: test_ValBuf.h:600 test_ValBuf.h:608 test_ValBuf.h:621
 msgid "Test: "
-msgstr ""
+msgstr "Тест: "
 
-#: test_kernel.cpp:955
-msgid "Test4 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
+#: test_ValBuf.h:96 test_ValBuf.h:157 test_ValBuf.h:218 test_ValBuf.h:281
+#: test_ValBuf.h:344 test_ValBuf.h:406 test_ValBuf.h:468 test_ValBuf.h:528
+#: test_ValBuf.h:584 test_ValBuf.h:642
+msgid "Buffer begin or/and end error, at filling half buffer."
+msgstr "Збій початку або/та кінця буферу, під час заповнення половини буферу."
 
-#: test_kernel.cpp:960
-msgid "Test4 failed! Write a half buffer values error!"
-msgstr ""
+#: test_ValBuf.h:101 test_ValBuf.h:162 test_ValBuf.h:223 test_ValBuf.h:286
+#: test_ValBuf.h:349 test_ValBuf.h:410 test_ValBuf.h:472 test_ValBuf.h:531
+#: test_ValBuf.h:588 test_ValBuf.h:645
+msgid "Write a half buffer values error."
+msgstr "Збії запису половини буферу значень."
 
-#: test_kernel.cpp:962 test_kernel.cpp:1022 test_kernel.cpp:1082
-#: test_kernel.cpp:1144 test_kernel.cpp:1206 test_kernel.cpp:1268
-#: test_kernel.cpp:1329 test_kernel.cpp:1389 test_kernel.cpp:1447
-#: test_kernel.cpp:1505
-msgid "  Write a half buffer ok."
-msgstr ""
+#: test_ValBuf.h:103 test_ValBuf.h:164 test_ValBuf.h:225 test_ValBuf.h:288
+#: test_ValBuf.h:351 test_ValBuf.h:412 test_ValBuf.h:473 test_ValBuf.h:532
+#: test_ValBuf.h:589 test_ValBuf.h:646
+msgid "Write a half buffer ok."
+msgstr "Вдалий запис половини буферу."
 
-#: test_kernel.cpp:975
-msgid "Test4 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
+#: test_ValBuf.h:116 test_ValBuf.h:177 test_ValBuf.h:239 test_ValBuf.h:302
+#: test_ValBuf.h:365 test_ValBuf.h:426 test_ValBuf.h:487 test_ValBuf.h:546
+#: test_ValBuf.h:603 test_ValBuf.h:660
+msgid "Buffer begin or/and end error, at roll filling buffer."
+msgstr "Збій початку або/та кінця буферу, під час заповнення по колу."
 
-#: test_kernel.cpp:980 test_kernel.cpp:1101 test_kernel.cpp:1225
+#: test_ValBuf.h:121 test_ValBuf.h:244 test_ValBuf.h:370
 msgid "Test: 11"
 msgstr ""
 
-#: test_kernel.cpp:983
-msgid "Test4 failed! Write a roll buffer values error!"
-msgstr ""
+#: test_ValBuf.h:124 test_ValBuf.h:185 test_ValBuf.h:248 test_ValBuf.h:311
+#: test_ValBuf.h:374 test_ValBuf.h:435 test_ValBuf.h:495 test_ValBuf.h:551
+#: test_ValBuf.h:609 test_ValBuf.h:665
+msgid "Write a roll buffer values error."
+msgstr "Збій запису буферу по колу."
 
-#: test_kernel.cpp:985 test_kernel.cpp:1045 test_kernel.cpp:1107
-#: test_kernel.cpp:1169 test_kernel.cpp:1231 test_kernel.cpp:1293
-#: test_kernel.cpp:1353 test_kernel.cpp:1411 test_kernel.cpp:1469
-#: test_kernel.cpp:1527
-msgid "  Write a roll buffer ok."
-msgstr ""
+#: test_ValBuf.h:126 test_ValBuf.h:187 test_ValBuf.h:250 test_ValBuf.h:313
+#: test_ValBuf.h:376 test_ValBuf.h:437 test_ValBuf.h:497 test_ValBuf.h:553
+#: test_ValBuf.h:611 test_ValBuf.h:667
+msgid "Write a roll buffer ok."
+msgstr "Вдалий запис буферу по колу."
 
-#: test_kernel.cpp:987 test_kernel.cpp:988 test_kernel.cpp:1109
-#: test_kernel.cpp:1110 test_kernel.cpp:1233 test_kernel.cpp:1234
-#: test_kernel.cpp:1355 test_kernel.cpp:1356 test_kernel.cpp:1471
-#: test_kernel.cpp:1472
+#: test_ValBuf.h:128 test_ValBuf.h:129 test_ValBuf.h:252 test_ValBuf.h:253
+#: test_ValBuf.h:378 test_ValBuf.h:379 test_ValBuf.h:499 test_ValBuf.h:500
+#: test_ValBuf.h:613 test_ValBuf.h:614
 msgid "Test up."
 msgstr ""
 
-#: test_kernel.cpp:989
-msgid "Test4 failed! Update buffer end error!"
-msgstr ""
+#: test_ValBuf.h:130 test_ValBuf.h:191 test_ValBuf.h:254 test_ValBuf.h:317
+#: test_ValBuf.h:379 test_ValBuf.h:440 test_ValBuf.h:500 test_ValBuf.h:556
+#: test_ValBuf.h:614 test_ValBuf.h:670
+msgid "Update buffer end error."
+msgstr "Збій оновлення кінця буферу."
 
-#: test_kernel.cpp:990 test_kernel.cpp:1050 test_kernel.cpp:1112
-#: test_kernel.cpp:1174 test_kernel.cpp:1236 test_kernel.cpp:1298
-#: test_kernel.cpp:1358 test_kernel.cpp:1416 test_kernel.cpp:1474
-#: test_kernel.cpp:1532
-msgid "  Update buffer end ok."
-msgstr ""
+#: test_ValBuf.h:131 test_ValBuf.h:192 test_ValBuf.h:255 test_ValBuf.h:318
+#: test_ValBuf.h:380 test_ValBuf.h:441 test_ValBuf.h:501 test_ValBuf.h:557
+#: test_ValBuf.h:615 test_ValBuf.h:671
+msgid "Update buffer end ok."
+msgstr "Вдале оновлення кінця буферу."
 
-#: test_kernel.cpp:997 test_kernel.cpp:1057 test_kernel.cpp:1119
-#: test_kernel.cpp:1181 test_kernel.cpp:1243 test_kernel.cpp:1305
-#: test_kernel.cpp:1365 test_kernel.cpp:1423 test_kernel.cpp:1481
-#: test_kernel.cpp:1539
+#: test_ValBuf.h:138 test_ValBuf.h:199 test_ValBuf.h:262 test_ValBuf.h:325
+#: test_ValBuf.h:387 test_ValBuf.h:448 test_ValBuf.h:508 test_ValBuf.h:564
+#: test_ValBuf.h:622 test_ValBuf.h:678
 #, c-format
-msgid "  Write 1000 values time %f ms!"
-msgstr ""
+msgid "Wrote 1000 values for time %f ms."
+msgstr "Записано 1000 значень за час %f мс."
 
-#: test_kernel.cpp:1002 test_kernel.cpp:1062 test_kernel.cpp:1124
-#: test_kernel.cpp:1186 test_kernel.cpp:1248 test_kernel.cpp:1310
-#: test_kernel.cpp:1370 test_kernel.cpp:1428 test_kernel.cpp:1486
-#: test_kernel.cpp:1544
+#: test_ValBuf.h:143 test_ValBuf.h:204 test_ValBuf.h:267 test_ValBuf.h:330
+#: test_ValBuf.h:392 test_ValBuf.h:453 test_ValBuf.h:513 test_ValBuf.h:569
+#: test_ValBuf.h:627 test_ValBuf.h:683
 #, c-format
-msgid "  Read 1000 values time %f ms!"
-msgstr ""
+msgid "Read 1000 values for time %f ms."
+msgstr "Прочитано 1000 значень за час %f мс."
 
-#: test_kernel.cpp:1004 test_kernel.cpp:1617
-msgid "Test4 passed."
+#: test_ValBuf.h:150
+#, c-format
+msgid "%s: Fill and check hard time griding integer buffer."
 msgstr ""
+"%s: Заповнення та перевірка цілочисельного буферу з жорсткою граткою часу."
 
-#: test_kernel.cpp:1008
-msgid "Test5. Fill and check hard time griding integer buffer."
+#: test_ValBuf.h:211
+#, c-format
+msgid "%s: Fill and check soft time griding string buffer (high time)."
 msgstr ""
+"%s: Заповнення та перевірка строкового буферу з м'якою граткою часу (висока "
+"розд. здатн. часу)."
 
-#: test_kernel.cpp:1015
-msgid "Test5 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1020
-msgid "Test5 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1035
-msgid "Test5 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1043
-msgid "Test5 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1049
-msgid "Test5 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1064 test_kernel.cpp:1632
-msgid "Test5 passed."
-msgstr ""
-
-#: test_kernel.cpp:1068
-msgid "Test6. Fill and check soft time griding string buffer (high time)."
-msgstr ""
-
-#: test_kernel.cpp:1075
-msgid "Test6 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1080
-msgid "Test6 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1096
-msgid "Test6 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1103 test_kernel.cpp:1227
+#: test_ValBuf.h:246 test_ValBuf.h:372
 msgid "Test: 12"
 msgstr ""
 
-#: test_kernel.cpp:1105 test_kernel.cpp:1229
-msgid "Test6 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1111
-msgid "Test6 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1126 test_kernel.cpp:1647
-msgid "Test6 passed."
-msgstr ""
-
-#: test_kernel.cpp:1130
-msgid "Test7. Fill and check soft time griding integer buffer (high time)."
-msgstr ""
-
-#: test_kernel.cpp:1137
-msgid "Test7 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1142
-msgid "Test7 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1158
-msgid "Test7 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1167
-msgid "Test7 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1173
-msgid "Test7 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1188 test_kernel.cpp:1661
-msgid "Test7 passed."
-msgstr ""
-
-#: test_kernel.cpp:1192
-msgid "Test8. Fill and check soft time griding string buffer (low time)."
-msgstr ""
-
-#: test_kernel.cpp:1199
-msgid "Test8 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1204
-msgid "Test8 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1220
-msgid "Test8 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1235
-msgid "Test8 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1250
-msgid "Test8 passed."
-msgstr ""
-
-#: test_kernel.cpp:1254
-msgid "Test9. Fill and check soft time griding integer buffer (low time)."
-msgstr ""
-
-#: test_kernel.cpp:1261
-msgid "Test9 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1266
-msgid "Test9 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1282
-msgid "Test9 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1291
-msgid "Test9 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1297
-msgid "Test9 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1312
-msgid "Test9 passed."
-msgstr ""
-
-#: test_kernel.cpp:1316
-msgid "Test10. Fill and check free time string buffer (high time)."
-msgstr ""
-
-#: test_kernel.cpp:1324
-msgid "Test10 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1328
-msgid "Test10 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1343
-msgid "Test10 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1351
-msgid "Test10 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1357
-msgid "Test10 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1372
-msgid "Test10 passed."
-msgstr ""
-
-#: test_kernel.cpp:1376
-msgid "Test11. Fill and check free time integer buffer (high time)."
-msgstr ""
-
-#: test_kernel.cpp:1384
-msgid "Test11 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1388
-msgid "Test11 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1403
-msgid "Test11 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1409
-msgid "Test11 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1415
-msgid "Test11 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1430
-msgid "Test11 passed."
-msgstr ""
-
-#: test_kernel.cpp:1434
-msgid "Test12. Fill and check free time string buffer (low time)."
-msgstr ""
-
-#: test_kernel.cpp:1442
-msgid "Test12 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1446
-msgid "Test12 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1461
-msgid "Test12 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1467
-msgid "Test12 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1473
-msgid "Test12 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1488
-msgid "Test12 passed."
-msgstr ""
-
-#: test_kernel.cpp:1492
-msgid "Test13. Fill and check free time integer buffer (low time)."
-msgstr ""
-
-#: test_kernel.cpp:1500
-msgid "Test13 failed! Buffer begin or/and end error, at filling half buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1504
-msgid "Test13 failed! Write a half buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1519
-msgid "Test13 failed! Buffer begin or/and end error, at roll filling buffer!"
-msgstr ""
-
-#: test_kernel.cpp:1525
-msgid "Test13 failed! Write a roll buffer values error!"
-msgstr ""
-
-#: test_kernel.cpp:1531
-msgid "Test13 failed! Update buffer end error!"
-msgstr ""
-
-#: test_kernel.cpp:1546
-msgid "Test13 passed."
-msgstr ""
-
-#: test_kernel.cpp:1549
-msgid "Archive"
-msgstr ""
-
-#: test_kernel.cpp:1551
-msgid "arch"
-msgstr ""
-
-#: test_kernel.cpp:1552
-msgid "period"
-msgstr ""
-
-#: test_kernel.cpp:1554
+#: test_ValBuf.h:274
 #, c-format
-msgid "*** Begin archive <%s> tests. ***"
+msgid "%s: Fill and check soft time griding integer buffer (high time)."
 msgstr ""
+"%s: Заповнення та перевірка цілочисельного буферу з м'якою граткою часу "
+"(висока розд. здатн. часу)."
 
-#: test_kernel.cpp:1563
-msgid "Test1. Simple fill and check archive."
-msgstr ""
-
-#: test_kernel.cpp:1573
-msgid "Test1 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1577
-msgid "Test2. Internal insert double value (down)."
-msgstr ""
-
-#: test_kernel.cpp:1587
-msgid "Test2 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1591
-msgid "Test3. Internal insert double value (up)."
-msgstr ""
-
-#: test_kernel.cpp:1601
-msgid "Test3 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1605
-msgid "Test4. Internal insert double value (down)."
-msgstr ""
-
-#: test_kernel.cpp:1615
-msgid "Test4 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1619
-msgid "Test5. Internal insert no double value."
-msgstr ""
-
-#: test_kernel.cpp:1630
-msgid "Test5 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1634
-msgid "Test6. Internal insert double (up) value."
-msgstr ""
-
-#: test_kernel.cpp:1645
-msgid "Test6 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1649
-msgid "Test7. Internal insert value instaead double value."
-msgstr ""
-
-#: test_kernel.cpp:1659
-msgid "Test7 failed!"
-msgstr ""
-
-#: test_kernel.cpp:1677
+#: test_ValBuf.h:337
 #, c-format
-msgid "*** End archive <%s> tests. ***"
+msgid "%s: Fill and check soft time griding string buffer (low time)."
 msgstr ""
+"%s: Заповнення та перевірка строкового буферу з м'якою граткою часу (низька "
+"розд. здатн. часу)."
 
-#: test_kernel.cpp:1679
-msgid "Base64Code"
-msgstr ""
-
-#: test_kernel.cpp:1681
-msgid "*** Begin Base64 coding and encoding test. ***"
-msgstr ""
-
-#: test_kernel.cpp:1683
-msgid "Test1. Coding test."
-msgstr ""
-
-#: test_kernel.cpp:1689
+#: test_ValBuf.h:399
 #, c-format
-msgid "  Code %d size text time %f ms!"
+msgid "%s: Fill and check soft time griding integer buffer (low time)."
 msgstr ""
+"%s: Заповнення та перевірка цілочисельного буферу з м'якою граткою часу "
+"(низька розд. здатн. часу)."
 
-#: test_kernel.cpp:1690
-msgid "  Coded text: "
-msgstr ""
-
-#: test_kernel.cpp:1694
+#: test_ValBuf.h:460
 #, c-format
-msgid "  Encode %d size text time %f ms!"
+msgid "%s: Fill and check free time string buffer (high time)."
 msgstr ""
+"%s: Заповнення та перевірка строкового буферу з вільним часом (висока розд. "
+"здатн. часу)."
 
-#: test_kernel.cpp:1697
-msgid "Test1 failed! Coding error!"
-msgstr ""
-
-#: test_kernel.cpp:1709
+#: test_ValBuf.h:520
 #, c-format
-msgid "%s{%d <%s>, text <%s>, childs - %d!"
+msgid "%s: Fill and check free time integer buffer (high time)."
+msgstr ""
+"%s: Заповнення та перевірка цілочисельного буферу з вільним часом (висока "
+"розд. здатн. часу)."
+
+#: test_ValBuf.h:576
+#, c-format
+msgid "%s: Fill and check free time string buffer (low time)."
+msgstr ""
+"%s: Заповнення та перевірка строкового буферу з вільним часом (низька розд. "
+"здатн. часу)."
+
+#: test_ValBuf.h:634
+#, c-format
+msgid "%s: Fill and check free time integer buffer (low time)."
+msgstr ""
+"%s: Заповнення та перевірка цілочисельного з вільним часом (низька розд. "
+"здатн. часу)."
+
+#: test_ValBuf.h:694
+#, c-format
+msgid "%s: Failed: %s"
+msgstr "%s: Помилка: %s"
+
+#: test_ValBuf.h:695
+#, c-format
+msgid "Failed: %s: %s"
+msgstr "Помилка: %s: %s"
+
+#: test_val.h:36
+msgid "Val"
 msgstr ""
 
-#: test_kernel.cpp:1713
-#, c-format
-msgid "        Attr <%s> = <%s>!"
+#: test_val.h:39
+msgid "Parameter attribute path"
+msgstr "Шлях до атрибуту параметра"
+
+#: test_val.h:39
+msgid "System.AutoDA.CPULoad.load"
 msgstr ""
 
-#: test_kernel.cpp:1716
-#, c-format
-msgid "%s}%d <%s>"
+#: test_val.h:40
+msgid "arch_len"
 msgstr ""
+
+#: test_val.h:40
+msgid "Archive value getting depth (s)"
+msgstr "Глибина отримання значень архіву (с)"
+
+#: test_val.h:41
+msgid "arch_per"
+msgstr ""
+
+#: test_val.h:41
+msgid "Archive value getting period (us)"
+msgstr "Період отримання значень архіву (мкс)"
+
+#: test_val.h:44
+msgid "Parameter atribute"
+msgstr "Атрибут параметру"
+
+#: test_val.h:45
+msgid ""
+"Parameter atribute's value test.\n"
+"Periodic make gathering for last value of selected attribute, and also "
+"gathering from archive for selected depth."
+msgstr ""
+"Тест значень атрибуту параметра.\n"
+"Виконує періодичне опитування останнього значення вказаного атрибуту, а "
+"також опитування архіву на потрібну глибину."
+
+#: test_val.h:58
+#, c-format
+msgid "Value of: %s."
+msgstr "Значення з: %s."
+
+#: test_val.h:64
+#, c-format
+msgid "Last value = %s"
+msgstr "Останне значення = %s"
+
+#: test_val.h:71
+#, c-format
+msgid "Value %d = %s."
+msgstr "Значення %d = %s."
+
+#: test_xml.h:36
+msgid "XML"
+msgstr ""
+
+#: test_xml.h:39
+msgid "file"
+msgstr ""
+
+#: test_xml.h:39
+msgid "XML file"
+msgstr "XML файл"
+
+#: test_xml.h:42
+msgid "XML parsing"
+msgstr "Розбір XML"
+
+#: test_xml.h:43
+msgid "XML file parsing test. Parse and show selected file structure."
+msgstr ""
+"Тест розбору XML файлу. Розбирає та відображає структуру вказаного файлу."
+
+#: test_xml.h:52
+#, c-format
+msgid "Open file '%s' error."
+msgstr "Помилка відкриття файлу '%s'."

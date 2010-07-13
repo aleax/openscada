@@ -361,10 +361,6 @@ void *Session::Task( void *icontr )
     vector<string> pls;
     Session &ses = *(Session *)icontr;
 
-#if OSC_DEBUG >= 2
-    mess_debug(ses.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     ses.endrun_req = false;
     ses.mStart    = true;
 

@@ -49,7 +49,8 @@ bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) :
     mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(0), mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
+    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(0), mMultCPU(false),
+    mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -60,9 +61,16 @@ TSYS::TSYS( int argi, char ** argb, char **env ) :
 
     if( getenv("USER") ) mUser = getenv("USER");
 
-    //Init system clock
+    //> Init system clock
     clkCalc();
 
+    //> Multi CPU allow check
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    CPU_SET(1,&cpuset);
+    mMultCPU = !pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+
+    //> Set signal handlers
     signal(SIGINT,sighandler);
     signal(SIGTERM,sighandler);
     //signal(SIGCHLD,sighandler);
@@ -1019,7 +1027,11 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
 
-    int rez = pthread_create( &procPthr, pthr_attr, start_routine, arg );
+    //> New version
+    STask htsk;
+    htsk.task = start_routine;
+    htsk.taskArg = arg;
+    int rez = pthread_create( &procPthr, pthr_attr, taskWrap, &htsk );
     if( rez == EPERM )
     {
 	mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
@@ -1027,7 +1039,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	pthread_attr_setschedpolicy( pthr_attr, policy );
 	prior.sched_priority = 0;
 	pthread_attr_setschedparam(pthr_attr,&prior);
-	rez = pthread_create( &procPthr, pthr_attr, start_routine, arg );
+	rez = pthread_create( &procPthr, pthr_attr, taskWrap, &htsk );
     }
     if( !pAttr ) pthread_attr_destroy( pthr_attr );
 
@@ -1036,9 +1048,22 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if( startCntr && TSYS::eventWait( *startCntr, true, nodePath()+": "+path+": start", wtm ) )
 	throw TError( nodePath().c_str(), _("Task '%s' is not started!"), path.c_str() );
 
-    res.request(true);
-    mTasks[path] = STask( procPthr, policy, prior.sched_priority );
-    res.release();
+    //> Wait for thread structure initialization finish
+    while( !htsk.thr ) usleep(STD_WAIT_DELAY*1000);
+
+    //> Load and init CPU set
+    if( multCPU() )
+    {
+	htsk.cpuSet = TBDS::genDBGet(nodePath()+"CpuSet:"+path);
+	cpu_set_t cpuset;
+	CPU_ZERO(&cpuset);
+	string sval;
+	for( int off = 0; (sval=TSYS::strParse(htsk.cpuSet,0,":",&off)).size(); )
+	    CPU_SET(atoi(sval.c_str()),&cpuset);
+	pthread_setaffinity_np(htsk.thr, sizeof(cpu_set_t), &cpuset);
+    }
+
+    res.request(true); mTasks[path] = htsk; res.release();
 }
 
 void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, int wtm )
@@ -1059,6 +1084,36 @@ void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, i
 
     res.request(true);
     mTasks.erase( it );
+}
+
+void *TSYS::taskWrap( void *stas )
+{
+    //> Get temporary task structure
+    STask *tsk = (STask *)stas;
+
+    //> Store call parameters
+    void *(*wTask) (void *) = tsk->task;
+    void *wTaskArg = tsk->taskArg;
+
+    //> Get current policy and priority
+    int policy;
+    struct sched_param param;
+    pthread_getschedparam(pthread_self(), &policy, &param);
+    tsk->policy = policy;
+    tsk->prior = param.sched_priority;
+
+    //> Final set for init finish indicate
+    tsk->tid = syscall(224);
+    tsk->thr = pthread_self();
+
+    //> Call work task
+    try{ return wTask(wTaskArg); }
+    catch(TError err)
+    {
+	mess_err(err.cat.c_str(),err.mess.c_str());
+	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exeption."),tsk->thr);
+	return NULL;
+    }
 }
 
 void TSYS::taskSleep( long long per, time_t cron )
@@ -1364,12 +1419,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if( ctrMkNode("area",opt,-1,"/subs",_("Subsystems")) )
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",3,"idm","1","tp","br","br_pref","sub_");
 	if( ctrMkNode("area",opt,-1,"/tasks",_("Tasks")) )
-	    if( ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),R_R___,"root","root") )
+	    if( ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path") )
 	    {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/tid",_("TID"),R_R___,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Priority"),R_R___,"root","root",1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
+		if( multCPU( ) )
+		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
 	    }
 	if( !cntrEmpty() && ctrMkNode("area",opt,-1,"/cntr",_("Counters")) )
 	    if( ctrMkNode("table",opt,-1,"/cntr/cntr",_("Counters"),R_R___,"root","root") )
@@ -1493,20 +1551,45 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
     }
-    else if( a_path == "/tasks/tasks" && ctrChkNode(opt,"get",R_R___,"root","root") )
+    else if( a_path == "/tasks/tasks" )
     {
-	XMLNode *n_path	= ctrMkNode("list",opt,-1,"/tasks/tasks/path","",R_R___,"root","root");
-	XMLNode *n_thr	= ctrMkNode("list",opt,-1,"/tasks/tasks/thrd","",R_R___,"root","root");
-	XMLNode *n_plc	= ctrMkNode("list",opt,-1,"/tasks/tasks/plc","",R_R___,"root","root");
-	XMLNode *n_prior= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
-
-	ResAlloc res(taskRes,false);
-	for( map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++ )
+	if( ctrChkNode(opt,"get",RWRW__,"root","root") )
 	{
-	    if( n_path )	n_path->childAdd("el")->setText( it->first );
-	    if( n_thr )		n_thr->childAdd("el")->setText( TSYS::uint2str(it->second.thr) );
-	    if( n_plc )		n_plc->childAdd("el")->setText( (it->second.policy==SCHED_RR)?_("Round-robin"):((it->second.policy==SCHED_BATCH)?_("Style \"batch\""):_("Standard")) );
-	    if( n_prior )	n_prior->childAdd("el")->setText( TSYS::int2str(it->second.prior) );
+	    XMLNode *n_path	= ctrMkNode("list",opt,-1,"/tasks/tasks/path","",R_R___,"root","root");
+	    XMLNode *n_thr	= ctrMkNode("list",opt,-1,"/tasks/tasks/thrd","",R_R___,"root","root");
+	    XMLNode *n_tid	= ctrMkNode("list",opt,-1,"/tasks/tasks/tid","",R_R___,"root","root");
+	    XMLNode *n_plc	= ctrMkNode("list",opt,-1,"/tasks/tasks/plc","",R_R___,"root","root");
+	    XMLNode *n_prior	= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
+	    XMLNode *n_cpuSet	= (multCPU() ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL);
+
+	    ResAlloc res(taskRes,false);
+	    for( map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++ )
+	    {
+		if( n_path )	n_path->childAdd("el")->setText( it->first );
+		if( n_thr )	n_thr->childAdd("el")->setText( TSYS::uint2str(it->second.thr) );
+		if( n_tid )	n_tid->childAdd("el")->setText( TSYS::int2str(it->second.tid) );
+		if( n_plc )	n_plc->childAdd("el")->setText( (it->second.policy==SCHED_RR)?_("Round-robin"):((it->second.policy==SCHED_BATCH)?_("Style \"batch\""):_("Standard")) );
+		if( n_prior )	n_prior->childAdd("el")->setText( TSYS::int2str(it->second.prior) );
+		if( n_cpuSet )	n_cpuSet->childAdd("el")->setText( it->second.cpuSet );
+	    }
+	}
+	if( multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet" )
+	{
+	    ResAlloc res(taskRes,true);
+	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
+	    if( it == mTasks.end() ) throw TError(nodePath().c_str(),_("No present task '%s'."));
+	    it->second.cpuSet = opt->text();
+
+	    cpu_set_t cpuset;
+	    CPU_ZERO(&cpuset);
+	    string sval;
+	    for( int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); )
+		CPU_SET(atoi(sval.c_str()),&cpuset);
+	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
+	    res.release();
+	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first,opt->text());
+	    if( rez == EINVAL && opt->text().size() ) throw TError(nodePath().c_str(),_("Set no allowed processors."));
+	    if( rez && opt->text().size() ) throw TError(nodePath().c_str(),_("CPU set for thread error."));
 	}
     }
     if( !cntrEmpty() && a_path == "/cntr/cntr" && ctrChkNode(opt,"get",R_R___,"root","root") )

@@ -607,10 +607,6 @@ void TArchiveS::ArhMessTask( union sigval obj )
     if( arh.prcStMess )  return;
     arh.prcStMess = true;
 
-#if OSC_DEBUG >= 2
-    mess_debug(arh.nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     //> Message bufer read
     if( arh.headLstread != arh.headBuf )
 	try
@@ -655,10 +651,6 @@ void *TArchiveS::ArhValTask( void *param )
     TArchiveS &arh = *(TArchiveS *)param;
     arh.endrunReqVal = false;
     arh.prcStVal = true;
-
-#if OSC_DEBUG >= 2
-    mess_debug(arh.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
 
     while( !arh.endrunReqVal )
     {

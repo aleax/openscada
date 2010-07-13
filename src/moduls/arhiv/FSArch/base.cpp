@@ -192,10 +192,6 @@ void ModArch::Task( union sigval obj )
     if( arh->prcSt )  return;
     arh->prcSt = true;
 
-#if OSC_DEBUG >= 2
-    mess_debug(arh->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     vector<string> a_list;
     //> Check message archivators
     arh->messList(a_list);

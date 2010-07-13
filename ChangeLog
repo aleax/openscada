@@ -1,3 +1,13 @@
+2010-07-13 Roman
+- !!:SYS: CPU affinity set for OpenSCADA threads at multiply CPU systems is added. Added into task manager.
+- !!:SYS: OpenSCADA tasks wrapper is added for some specific function allow. Added TID to task manager.
+    Added "TError" exeption processing for tasks into wrapper.
+- DAQ.JavaLikeCalc: Type copy at compile mode for automatic variables is added.
+- !!!:Special.SystemTests: All tests is made unified, moved to separated files and realised as user's API functions.
+- FIX:Transport.SSL, Transport.Sockets: Task names is fixed for typical.
+- Demo: Demo config file oscada_demo.xml updated for module Special.SystemTests changes.
+
+
 2010-07-05 Roman
 - SYS: Error message is added for connection to node error into TCntrNodeObj.
 - DAQ.JavaLikeCalc: Object's properies length limit is final expanded to 255 symbols.

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_kernel.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,27 +36,42 @@ namespace KernelTest
 class TTest: public TSpecial
 {
     public:
+	//Methods
 	TTest( string name );
 	~TTest( );
 
 	void modStart( );
 	void modStop( );
 
+	static string cat( );
+	void mess( const string &test, const char *fmt,  ... );
+	void prXMLNode( const string &cat, XMLNode *node, int level = 0 );
+
+	//> Test's functions
+	void testList( vector<string> &ls )		{ chldList(mTest,ls); }
+	bool testPresent( const string &id )		{ return chldPresent(mTest,id); }
+	void testReg( TFunction *test )			{ chldAdd(mTest, test); }
+	AutoHD<TFunction> testAt( const string &id )	{ return chldAt(mTest,id); }
+
     protected:
+	//Methods
 	void load_( );
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:
 	//Methods
-	void pr_XMLNode( const char *cat, XMLNode *node, int level );
+	void postEnable( int flag );
+
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
 
 	static void *Task(void *);
-	void Test( const string &id, XMLNode *t_n );
 
 	//Attributes
 	bool	endrun;		// Stop pthread command
+
+	int	mTest;
 };
 
 extern TTest *mod;

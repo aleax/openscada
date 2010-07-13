@@ -140,8 +140,9 @@ class TSYS : public TCntrNode
 
 	static void sighandler( int signal );
 
-        //> Short time dimensions
-	unsigned long long sysClk( )		{ return mSysclc; }
+	//> Short time dimensions
+	bool multCPU( )			{ return mMultCPU; }
+	unsigned long long sysClk( )	{ return mSysclc; }
 	void clkCalc( )
 	{
 	    unsigned long long st_pnt = shrtCnt( );
@@ -232,8 +233,12 @@ class TSYS : public TCntrNode
 		STask( pthread_t ithr, char ipolicy, char iprior ) : 
 		    thr(ithr), policy(ipolicy), prior(iprior)	{ };
 
-		pthread_t thr;
-		char policy, prior;
+		pthread_t	thr;
+		char		policy, prior;
+		pid_t		tid;
+		string		cpuSet;
+		void *(*task) (void *);
+		void		*taskArg;
 	};
 
 	//Private methods
@@ -246,6 +251,8 @@ class TSYS : public TCntrNode
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	static unsigned char getBase64Code( unsigned char asymb );
+
+	static void *taskWrap( void *stas );
 
 	//Private attributes
 	string	mUser,		// A owner user name!
@@ -270,6 +277,7 @@ class TSYS : public TCntrNode
 
 	Res	nRes, taskRes;
 
+	bool	mMultCPU;
 	unsigned long long mSysclc;
 
 	map<string,double>	mCntrs;

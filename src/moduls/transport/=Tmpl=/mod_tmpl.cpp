@@ -225,10 +225,6 @@ void *TTrIn::Task( void *tr_in )
     TTrIn *tr = (TTrIn *)tr_in;
     AutoHD<TProtocolIn> prot_in;
 
-#if OSC_DEBUG >= 2
-    mess_debug(sock->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     tr->run_st	= true;
     tr->endrun	= false;
 

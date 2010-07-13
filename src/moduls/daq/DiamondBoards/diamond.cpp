@@ -277,10 +277,6 @@ void *TMdContr::AD_DSCTask( void *param )
     cntr.endrun_req_ad_dsc = false;
     cntr.ad_dsc_st = true;
 
-#if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     //- DSC strucures init -
     BYTE result;
     ERRPARAMS errorParams;

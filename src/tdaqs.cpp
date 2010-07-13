@@ -398,10 +398,6 @@ void *TDAQS::RdTask( void *param )
     daq.endrunRd = false;
     daq.prcStRd = true;
 
-#if OSC_DEBUG >= 2
-    mess_debug(arh.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     vector<string> cls;
     XMLNode req("st");
     AutoHD<TController> cntr;

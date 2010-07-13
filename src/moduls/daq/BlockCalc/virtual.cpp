@@ -331,10 +331,6 @@ void *Contr::Task( void *icontr )
 {
     Contr &cntr = *(Contr *)icontr;
 
-#if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     cntr.endrun_req = false;
     cntr.prc_st = true;
 

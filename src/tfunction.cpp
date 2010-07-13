@@ -242,9 +242,9 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 			}
 		    }
 		//>> Add Calc button and Calc time
-		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number calcs"),0664,"root","root",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/exec/tm",_("Calc time (mks)"),0444,"root","root",1,"tp","real");
-		ctrMkNode("comm",opt,-1,"/exec/calc",_("Calc"),0666);
+		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number runs"),0664,"root","root",1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/exec/tm",_("Time for execute (mks)"),0444,"root","root",1,"tp","real");
+		ctrMkNode("comm",opt,-1,"/exec/calc",_("Execute"),0666);
 	    }
 	}
         return;

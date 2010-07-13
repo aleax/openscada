@@ -244,10 +244,6 @@ void *TUIMod::Task( void * )
     time_t st_time = time(NULL);
     vector<TMess::SRec> recs;
 
-#if OSC_DEBUG >= 2
-    mess_debug(mod->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     //> Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 

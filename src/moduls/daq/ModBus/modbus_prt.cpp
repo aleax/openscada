@@ -1012,10 +1012,6 @@ void *Node::Task( void *ind )
 {
     Node &nd = *(Node*)ind;
 
-#if OSC_DEBUG >= 2
-    mess_debug(nd.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     nd.endrunRun = false;
     nd.prcSt = true;
 

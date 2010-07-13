@@ -596,6 +596,13 @@ void Func::cdAssign( Reg *rez, Reg *op )
     prg += (uint8_t)Reg::Ass;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     addr = op->pos();  prg.append((char*)&addr,sizeof(uint16_t));
+
+    //> Set variable type to assigned value type
+    if( rez->lock() && !rez->objEl() && rez->type() != op->type() && 
+	    (op->type() == Reg::Bool || op->type() == Reg::Int || op->type() == Reg::Real || op->type() == Reg::String) &&
+	    (rez->type() == Reg::Bool || rez->type() == Reg::Int || rez->type() == Reg::Real || rez->type() == Reg::String) )
+	rez->setType(op->type());
+
     op->free();		//> Free temp operands
 }
 
@@ -1280,6 +1287,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
     for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
     {
 	if( fObj && i_p == (rg.propSize( )-1) ) break;
+	if( vl.isNull() ) throw TError(nodePath().c_str(),_("Value error. Get property from null value try."));
 	vl = oPropGet(vl,rg.propGet(i_p));
     }
 
@@ -1413,7 +1421,7 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 	TVariant vl(rg.val().o_el);
 	for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
 	    if( i_p < (rg.propSize( )-1) ) vl = vl.getO()->propGet(rg.propGet(i_p));
-	    else vl.getO()->propSet(rg.propGet(i_p),val);    
+	    else vl.getO()->propSet(rg.propGet(i_p),val);
     }
 }
 

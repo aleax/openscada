@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 11:40+0200\n"
+"POT-Creation-Date: 2010-07-06 20:36+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -212,8 +212,8 @@ msgstr ""
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:116 sysfnc.h:179 sysfnc.h:200 sysfnc.h:283
 #: sysfnc.h:310 sysfnc.h:335 sysfnc.h:357 sysfnc.h:378 sysfnc.h:399
 #: sysfnc.h:420 sysfnc.h:443 sysfnc.h:471 sysfnc.h:489 sysfnc.h:532
-#: xmlfnc.h:41 xmlfnc.h:59
-msgid "Rezult"
+#: varchfnc.h:72 varchfnc.h:95 xmlfnc.h:41 xmlfnc.h:59
+msgid "Result"
 msgstr "Результат"
 
 #: sysfnc.h:47
@@ -874,10 +874,6 @@ msgstr "Планирование времени по стандарту cron."
 #: varchfnc.h:70
 msgid "vArh"
 msgstr ""
-
-#: varchfnc.h:72 varchfnc.h:95
-msgid "Result"
-msgstr "Результат"
 
 #: varchfnc.h:73 xmlfnc.h:42
 msgid "name"

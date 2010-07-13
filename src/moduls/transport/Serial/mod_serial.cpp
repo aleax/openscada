@@ -174,10 +174,6 @@ void TTr::Task( union sigval obj )
     if( mod->prcSt ) return;
     mod->prcSt = true;
 
-#if OSC_DEBUG >= 2
-    mess_debug(arh->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     //> Check all output transports
     vector<string> ls;
     mod->outList(ls);
@@ -469,10 +465,6 @@ void TTrIn::stop()
 void *TTrIn::Task( void *tr_in )
 {
     TTrIn *tr = (TTrIn*)tr_in;
-
-#if OSC_DEBUG >= 2
-    mess_debug(sock->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
 
     tr->run_st	= true;
     tr->endrun	= false;

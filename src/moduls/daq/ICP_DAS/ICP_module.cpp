@@ -259,10 +259,6 @@ void *TMdContr::Task( void *icntr )
 
     TMdContr &cntr = *(TMdContr*)icntr;
 
-#if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     cntr.endRunReq = false;
 
     //> Init watchdog and get previous state
@@ -838,10 +834,6 @@ void TMdPrm::vlArchMake( TVal &val )
 void *TMdPrm::fastTask( void *iprm )
 {
     TMdPrm &prm = *(TMdPrm*)iprm;
-
-#if OSC_DEBUG >= 2
-    mess_debug(prm.nodePath().c_str(),_("Thread <%u> started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
 
     prm.endRunReq = false;
     prm.prcSt = true;

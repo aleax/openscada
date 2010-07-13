@@ -271,10 +271,6 @@ void *TSocketIn::Task( void *sock_in )
     AutoHD<TProtocolIn> prot_in;
     string cfile;
 
-#if OSC_DEBUG >= 2
-    mess_debug(s.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     //> Client's sockets pthreads attrs init
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
@@ -384,7 +380,7 @@ void *TSocketIn::Task( void *sock_in )
 		SSockIn *sin = new SSockIn(&s,cbio);
 		try
 		{
-		    SYS->taskCreate( s.nodePath()+TSYS::int2str(s.opConnCnt()), s.taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    SYS->taskCreate( s.nodePath('.',true)+"."+TSYS::int2str(s.opConnCnt()), s.taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
 		    s.connNumb++;
 		}catch(TError err)
 		{
@@ -426,9 +422,6 @@ void *TSocketIn::ClTask( void *s_inf )
 
     int cSock = s.s->clientReg( pthread_self() );
 
-#if OSC_DEBUG >= 2
-    mess_debug(s.s->nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
 #if OSC_DEBUG >= 3
     mess_debug(s.s->nodePath().c_str(),_("Connecting to the socket (%d)."),cSock);
 #endif

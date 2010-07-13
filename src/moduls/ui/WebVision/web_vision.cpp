@@ -369,10 +369,6 @@ void TWEB::TaskSessCheck( union sigval obj )
     if( web->chck_st )  return;
     web->chck_st = true;
 
-#if OSC_DEBUG >= 2
-    mess_debug(web->nodePath().c_str(),_("Timer's thread <%u> call. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     time_t cur_tm = time(NULL);
 
     //> Check for opened sessions timeout close

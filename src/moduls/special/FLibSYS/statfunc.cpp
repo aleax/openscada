@@ -78,7 +78,7 @@ Lib::Lib( string src )
 
     mod		= this;
 
-    m_fnc = grpAdd("fnc_",true);
+    mFnc = grpAdd("fnc_",true);
 }
 
 Lib::~Lib()

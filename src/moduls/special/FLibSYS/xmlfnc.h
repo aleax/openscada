@@ -38,7 +38,7 @@ class xmlNode : public TFunction
     public:
 	xmlNode( ) : TFunction("xmlNode")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Object,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("name",_("Name"),IO::String,IO::Default) );
 	}
 
@@ -56,7 +56,7 @@ class xmlCntrReq : public TFunction
     public:
 	xmlCntrReq( ) : TFunction("xmlCntrReq")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::String,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("req",_("Request"),IO::Object,IO::Default) );
 	    ioAdd( new IO("stat",_("Station"),IO::String,IO::Default) );
 	}

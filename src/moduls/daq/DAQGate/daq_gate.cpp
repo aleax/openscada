@@ -264,10 +264,6 @@ void *TMdContr::Task( void *icntr )
     map<string,float>::iterator sti;
     TMdContr &cntr = *(TMdContr *)icntr;
 
-#if OSC_DEBUG >= 2
-    mess_debug(cntr.nodePath().c_str(),_("Thread <%u> is started. TID: %ld"),pthread_self(),(long int)syscall(224));
-#endif
-
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
