@@ -1,3 +1,9 @@
+2010-07-15 Roman
+- FIX:SYS, Special.FLibSYS: User API functions SYS.cntrReq() and Special.FLibSYS.xmlCntrReq() is fixed for remote station requests.
+- !:FIX:Special.Complex1: User API function "PID" is fixed for minimum scale border correct support.
+- !:DAQ.BlockCalc: Constant attributes support is added to DAQ parameters.
+
+
 2010-07-13 Roman
 - !!:SYS: CPU affinity set for OpenSCADA threads at multiply CPU systems is added. Added into task manager.
 - !!:SYS: OpenSCADA tasks wrapper is added for some specific function allow. Added TID to task manager.

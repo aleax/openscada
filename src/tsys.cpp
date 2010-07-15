@@ -1308,8 +1308,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	else
 	{
-	    req.setAttr("path",prms[1].getS()+"/"+path);
-	    transport().at().cntrIfCmd(req,"xmlCntrReq",user);
+	    req.setAttr("path","/"+prms[1].getS()+path);
+	    transport().at().cntrIfCmd(req,"cntrReq");
 	    req.setAttr("path",path);
 	}
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);

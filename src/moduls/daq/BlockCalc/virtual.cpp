@@ -527,13 +527,15 @@ Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
 void Prm::enable()
 {
     if( enableStat() )  return;
+    string ioLs = cfg("IO").getS();
 
     //> Check and delete no used fields
     for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
     {
+	if( v_el.fldAt(i_fld).reserve().empty() ) continue;
 	string fel;
-	for( int io_off = 0; (fel=TSYS::strSepParse(cfg("IO").getS(),0,'\n',&io_off)).size(); )
-	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
+	for( int io_off = 0; (fel=TSYS::strSepParse(ioLs,0,'\n',&io_off)).size(); )
+	    if(  TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
 	if( fel.empty() )
 	{
 	    try{ v_el.fldDel(i_fld); i_fld--; }
@@ -545,39 +547,68 @@ void Prm::enable()
     //> Init elements
     vector<string> pls;
     AutoHD<Block> blk;
-    int io;
+    int io, if_off, id_off;
     string mio, ioaddr, ioblk, ioid, aid, anm;
-    for( int io_off = 0; (mio=TSYS::strSepParse(cfg("IO").getS(),0,'\n',&io_off)).size(); )
+    for( int io_off = 0; (mio=TSYS::strParse(ioLs,0,"\n",&io_off)).size(); )
     {
-	ioaddr = TSYS::strSepParse(mio,0,':');
-	ioblk  = TSYS::strSepParse(ioaddr,0,'.');
-	ioid   = TSYS::strSepParse(ioaddr,1,'.');
-	aid    = TSYS::strSepParse(mio,1,':');
-	anm    = TSYS::strSepParse(mio,2,':');
-	if( aid.empty() ) aid = ioblk+"_"+ioid;
-	if( !((Contr&)owner()).blkPresent(ioblk) ) continue;
-	blk = ((Contr&)owner()).blkAt(ioblk);
-	if( (io=blk.at().ioId(ioid)) < 0 )	continue;
+	if_off = id_off = 0;
+	ioaddr = TSYS::strParse(mio,0,":",&if_off);
+	ioblk  = TSYS::strParse(ioaddr,0,".",&id_off);
+	ioid   = ioaddr.substr(id_off);
+	aid    = TSYS::strParse(mio,0,":",&if_off);
+	anm    = TSYS::strParse(mio,0,":",&if_off);
 
-	unsigned	flg = TVal::DirWrite|TVal::DirRead;
+	if( ioblk.empty() || ioid.empty() ) continue;
+
+	unsigned	flg = 0;
 	TFld::Type	tp  = TFld::String;
-	string		def;
-	switch( blk.at().ioType(io) )
+	string		reserve;
+
+	//>> Constant attributes
+	if( ioblk[0] == '*' )
 	{
-	    case IO::String:	tp = TFld::String; def = EVAL_STR; break;
-	    case IO::Integer:	tp = TFld::Integer; def = TSYS::int2str(EVAL_INT);	break;
-	    case IO::Real:	tp = TFld::Real; def = TSYS::real2str(EVAL_REAL);	break;
-	    case IO::Boolean:	tp = TFld::Boolean; def = TSYS::int2str(EVAL_BOOL);	break;
+	    if( aid.empty() ) continue;
+	    if( anm.empty() ) anm = aid;
+	    if( ioblk.size() > 1 )
+		switch( ioblk[1] )
+		{
+		    case 's': case 'S':	tp = TFld::String;	break;
+		    case 'i': case 'I':	tp = TFld::Integer;	break;
+		    case 'r': case 'R':	tp = TFld::Real;	break;
+		    case 'b': case 'B':	tp = TFld::Boolean;	break;
+		}
+	    flg = TFld::NoWrite;
 	}
-	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp ||
-	    v_el.fldAt(v_el.fldId(aid)).flg() != flg )
+	//>> Links to block's io
+	else
 	{
-	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
-	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg,"",def.c_str()) );
+	    if( aid.empty() ) aid = ioblk+"_"+ioid;
+	    if( !((Contr&)owner()).blkPresent(ioblk) ) continue;
+	    blk = ((Contr&)owner()).blkAt(ioblk);
+	    if( (io=blk.at().ioId(ioid)) < 0 )	continue;
+	    if( anm.empty() ) anm = blk.at().func()->io(io)->name();
+
+	    switch( blk.at().ioType(io) )
+	    {
+		case IO::String:	tp = TFld::String;	break;
+		case IO::Integer:	tp = TFld::Integer;	break;
+		case IO::Real:		tp = TFld::Real;	break;
+		case IO::Boolean:	tp = TFld::Boolean;	break;
+	    }
+	    flg = TVal::DirWrite|TVal::DirRead;
+	    reserve = ioaddr;
+	}
+
+	//>> Attribute creation
+	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
+	{
+	    if( v_el.fldPresent(aid) ) v_el.fldDel(v_el.fldId(aid));
+	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg) );
 	}
 	int el_id = v_el.fldId(aid);
-	v_el.fldAt(el_id).setDescr( anm.empty() ? blk.at().func()->io(io)->name() : anm );
+	v_el.fldAt(el_id).setDescr( anm );
 	v_el.fldAt(el_id).setReserve( ioaddr );
+	if( ioblk[0] == '*' ) vlAt(aid).at().setS(ioid,0,true);
 
 	pls.push_back(aid);
     }

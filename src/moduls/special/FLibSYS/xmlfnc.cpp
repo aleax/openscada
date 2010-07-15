@@ -41,8 +41,8 @@ void xmlCntrReq::calc( TValFunc *val )
 	}
 	else
 	{
-	    req.setAttr("path",val->getS(2)+"/"+path);
-	    SYS->transport().at().cntrIfCmd(req,"xmlCntrReq",val->user());
+	    req.setAttr("path","/"+val->getS(2)+path);
+	    SYS->transport().at().cntrIfCmd(req,"xmlCntrReq");
 	    req.setAttr("path",path);
 	}
 	((XMLNodeObj*)val->getO(1))->fromXMLNode(req);
