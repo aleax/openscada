@@ -720,8 +720,12 @@ void Prm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),0664,"root","root",1,
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 	    "Where:\n"
-	    "  blk - block identifier from block's scheme;\n"
-	    "  blk_io - block's parameter from block's scheme;\n"
+	    "  blk - block identifier from block's scheme; for constant value set to:\n"
+	    "    '*s' - string type;\n"
+	    "    '*i' - integer type;\n"
+	    "    '*r' - real type;\n"
+	    "    '*b' - boolean type.\n"
+	    "  blk_io - block's parameter from block's scheme; for constant value set to attribute value;\n"
 	    "  aid - created attribute identifier;\n"
 	    "  anm - created attribute name.\n"
 	    "If 'aid' or 'anm' are not set they will be generated from selected block's parameter."));
