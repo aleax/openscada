@@ -1,3 +1,7 @@
+2010-07-16 Roman
+- FIX:DAQ.DCON: Attributes of parameter deletion is fixed at a paramter second enable.
+
+
 2010-07-15 Roman
 - FIX:SYS, Special.FLibSYS: User API functions SYS.cntrReq() and Special.FLibSYS.xmlCntrReq() is fixed for remote station requests.
 - !:FIX:Special.Complex1: User API function "PID" is fixed for minimum scale border correct support.

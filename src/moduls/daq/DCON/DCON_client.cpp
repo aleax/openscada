@@ -625,115 +625,77 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
-    //- Delete DAQ parameter's attributes -
-    while(p_el.fldSize()>0)
+    //> Delete DAQ parameter's attributes
+    for( int i_f = 0; i_f < p_el.fldSize(); i_f++ )
     {
-	try{ p_el.fldDel(0); }
+	if( atoi(p_el.fldAt(i_f).reserve().c_str()) == mod_tp ) continue;
+	try
+	{
+	    p_el.fldDel(i_f);
+	    i_f--;
+	}
 	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    //- Make DAQ parameter's attributes
+    string smodTp = TSYS::int2str(mod_tp);
+    //> Make DAQ parameter's attributes
     switch(mod_tp)
     {
-	//- Make DAQ parameter's for I-7051 module
+	//>> Make DAQ parameter's for I-7051 module
 	case 0:
 	{
-	    p_el.fldAdd( new TFld("module_err", "module_err", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI0", "DI0", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI1", "DI1", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI2", "DI2", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI3", "DI3", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI4", "DI4", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI5", "DI5", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI6", "DI6", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI7", "DI7", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI8", "DI8", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI9", "DI9", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI10", "DI10", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI11", "DI11", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI12", "DI12", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI13", "DI13", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI14", "DI14", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI15", "DI15", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
+	    p_el.fldAdd( new TFld("module_err","module_err",TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 16; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("DI%d",i_p).c_str(),TSYS::strMess("DI%d",i_p).c_str(),
+		    TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
 	    break;
 	}
-	//- Make DAQ parameter's for I-7045 module
+	//>> Make DAQ parameter's for I-7045 module
 	case 1:
 	{
-	    p_el.fldAdd( new TFld("module_err", "module_err", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO0", "DO0", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO1", "DO1", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO2", "DO2", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO3", "DO3", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO4", "DO4", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO5", "DO5", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO6", "DO6", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO7", "DO7", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO8", "DO8", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO9", "DO9", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO10", "DO10", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO11", "DO11", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO12", "DO12", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO13", "DO13", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO14", "DO14", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO15", "DO15", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
+	    p_el.fldAdd( new TFld("module_err","module_err",TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 16; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("DO%d",i_p).c_str(),TSYS::strMess("DO%d",i_p).c_str(),
+		    TFld::Boolean,TVal::DirRead|TVal::DirWrite,"","","","",smodTp.c_str()) );
 	    break;
 	}
-	//- Make DAQ parameter's for I-7063 module
+	//> Make DAQ parameter's for I-7063 module
 	case 2:
 	{
-	    p_el.fldAdd( new TFld("module_err", "module_err", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI0", "DI0", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI1", "DI1", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI2", "DI2", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI3", "DI3", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI4", "DI4", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI5", "DI5", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI6", "DI6", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DI7", "DI7", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-
-	    p_el.fldAdd( new TFld("DO0", "DO0", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO1", "DO1", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO2", "DO2", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
+	    p_el.fldAdd( new TFld("module_err","module_err",TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 8; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("DI%d",i_p).c_str(),TSYS::strMess("DI%d",i_p).c_str(),
+		    TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 3; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("DO%d",i_p).c_str(),TSYS::strMess("DO%d",i_p).c_str(),
+		    TFld::Boolean,TVal::DirRead|TVal::DirWrite,"","","","",smodTp.c_str()) );
 	    break;
 	}
 	case 3:
 	{
-	    p_el.fldAdd( new TFld("module_err", "module_err", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI0", "AI0", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI1", "AI1", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI2", "AI2", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI3", "AI3", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI4", "AI4", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI5", "AI5", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI6", "AI6", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI7", "AI7", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
+	    p_el.fldAdd( new TFld("module_err","module_err",TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 8; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("AI%d",i_p).c_str(),TSYS::strMess("AI%d",i_p).c_str(),
+		    TFld::Real,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
 	    break;
 	}
 	case 4:
 	{
-	    p_el.fldAdd( new TFld("module_err", "module_err", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AO0", "AO0", TFld::Real, TVal::DirRead|TVal::DirWrite,"20","1","4;20") );
-	    p_el.fldAdd( new TFld("AO1", "AO1", TFld::Real, TVal::DirRead|TVal::DirWrite,"20","1","4;20") );
-	    p_el.fldAdd( new TFld("AO2", "AO2", TFld::Real, TVal::DirRead|TVal::DirWrite,"20","1","4;20") );
-	    p_el.fldAdd( new TFld("AO3", "AO3", TFld::Real, TVal::DirRead|TVal::DirWrite,"20","1","4;20") );
+	    p_el.fldAdd( new TFld("module_err","module_err",TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 4; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("AO%d",i_p).c_str(),TSYS::strMess("AO%d",i_p).c_str(),
+		    TFld::Real,TVal::DirRead|TVal::DirWrite,"20","1","4;20","",smodTp.c_str()) );
 	    break;
 	}
 	case 5:
 	{
-	    p_el.fldAdd( new TFld("module_err", "module_err", TFld::Boolean, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI0", "AI0", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI1", "AI1", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI2", "AI2", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI3", "AI3", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI4", "AI4", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI5", "AI5", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI6", "AI6", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-	    p_el.fldAdd( new TFld("AI7", "AI7", TFld::Real, TFld::NoWrite|TVal::DirRead, "", "", "" ) );
-
-	    p_el.fldAdd( new TFld("DO0", "DO0", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO1", "DO1", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
-	    p_el.fldAdd( new TFld("DO2", "DO2", TFld::Boolean, TVal::DirRead|TVal::DirWrite, "", "", "" ) );
+	    p_el.fldAdd( new TFld("module_err","module_err",TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 8; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("AI%d",i_p).c_str(),TSYS::strMess("AI%d",i_p).c_str(),
+		    TFld::Real,TFld::NoWrite|TVal::DirRead,"","","","",smodTp.c_str()) );
+	    for( int i_p = 0; i_p < 3; i_p++ )
+		p_el.fldAdd( new TFld(TSYS::strMess("DO%d",i_p).c_str(),TSYS::strMess("DO%d",i_p).c_str(),
+		    TFld::Boolean,TVal::DirRead|TVal::DirWrite,"","","","",smodTp.c_str()) );
 	    break;
 	}
 	case 6:
