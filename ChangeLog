@@ -1,3 +1,8 @@
+2010-07-23 Roman
+- SYS: OpenSCADA start script is changed for split check for ~/.openscada directory items present.
+- !:DAQ.JavaLikeCalc: Variable's type check is full disable on compile for unary and binary operations.
+
+
 2010-07-16 Roman
 - FIX:DAQ.DCON: Attributes of parameter deletion is fixed at a paramter second enable.
 

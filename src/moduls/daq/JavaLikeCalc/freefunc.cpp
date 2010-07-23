@@ -598,10 +598,10 @@ void Func::cdAssign( Reg *rez, Reg *op )
     addr = op->pos();  prg.append((char*)&addr,sizeof(uint16_t));
 
     //> Set variable type to assigned value type
-    if( rez->lock() && !rez->objEl() && rez->type() != op->type() && 
+    /*if( rez->lock() && !rez->objEl() && rez->type() != op->type() && 
 	    (op->type() == Reg::Bool || op->type() == Reg::Int || op->type() == Reg::Real || op->type() == Reg::String) &&
 	    (rez->type() == Reg::Bool || rez->type() == Reg::Int || rez->type() == Reg::Real || rez->type() == Reg::String) )
-	rez->setType(op->type());
+	rez->setType(op->type());*/
 
     op->free();		//> Free temp operands
 }
@@ -628,7 +628,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
     //> Check allowing type operations
-    if( !op1->objEl() )
+    /*if( !op1->objEl() )
 	switch( op1->vType(this) )
 	{
 	    case Reg::Bool:
@@ -649,7 +649,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		break;
 	    case Reg::Obj:
 		throw TError(nodePath().c_str(),_("Operation %d don't support for object type"),cod);
-	}
+	}*/
 
     //> Check allow the buildin calc and calc
     if( op1->pos() < 0 && op2->pos() < 0 )
@@ -774,7 +774,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
     //> Check allowing type operations
-    if( !op->objEl() )
+    /*if( !op->objEl() )
 	switch( op->type() )
 	{
 	    case Reg::String:
@@ -786,7 +786,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		break;
 	    case Reg::Obj:
 		throw TError(nodePath().c_str(),_("Operation %d don't support for object type"),cod);
-	}
+	}*/
 
     //> Check allow the buildin calc and calc
     if( op->pos() < 0 )
