@@ -1,3 +1,8 @@
+2010-07-24 Roman
+- SYS: Tooltip help message is added to task manager for use CPU set.
+- UI.VCAEngine: Widget enable message is updated.
+
+
 2010-07-23 Roman
 - SYS: OpenSCADA start script is changed for split check for ~/.openscada directory items present.
 - !:DAQ.JavaLikeCalc: Variable's type check is full disable on compile for unary and binary operations.

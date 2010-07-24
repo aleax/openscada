@@ -1419,7 +1419,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if( ctrMkNode("area",opt,-1,"/subs",_("Subsystems")) )
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",3,"idm","1","tp","br","br_pref","sub_");
 	if( ctrMkNode("area",opt,-1,"/tasks",_("Tasks")) )
-	    if( ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path") )
+	    if( ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",2,"key","path",
+		"help",!multCPU()?"":_("For CPU set use processors numbers string separated by symbol ':'.\n"
+				       "CPU numbers started from 0.")) )
 	    {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");

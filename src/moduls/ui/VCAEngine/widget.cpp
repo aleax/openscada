@@ -227,7 +227,7 @@ void Widget::setEnable( bool val )
 		parent().at().heritReg(this);
 	    }catch(TError err)
 	    {
-		mess_err(err.cat.c_str(),err.mess.c_str());
+		mess_err(nodePath().c_str(),_("Widget enable error: %s"),err.mess.c_str());
 		mParent.free();
 		throw;
 	    }
