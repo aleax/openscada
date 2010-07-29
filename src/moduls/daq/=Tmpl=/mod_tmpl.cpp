@@ -46,7 +46,7 @@
 #define VERSION		"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"DAQ's subsystem template module."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 ModTmpl::TTpContr *ModTmpl::mod;  //Pointer for direct access to module

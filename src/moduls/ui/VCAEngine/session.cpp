@@ -1274,7 +1274,7 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
     if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if( wdgPresent(iid) ) return;
 
-    chldAdd(inclWdg,new SessWdg(iid,iparent,ownerSess()));
+    chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
 }
 
 void SessWdg::inheritAttr( const string &aid )
@@ -1643,6 +1643,33 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	if( !wdg ) return 0;
 	return new TCntrNodeObj(wdg,user);
     }
+    // Add new widget
+    //  wid - widget identifier
+    //  wname - widget name
+    //  parent - parent widget
+    if( iid == "wdgAdd" && prms.size() >= 3 )
+    {
+	try
+	{
+	    //> Create widget
+	    wdgAdd(prms[0].getS(), prms[1].getS(), prms[2].getS());
+	    //> Enable widget
+	    AutoHD<SessWdg> nw = wdgAt(prms[0].getS());
+	    nw.at().setEnable(true);
+	    nw.at().setProcess(true);
+
+	    return new TCntrNodeObj(&nw.at(),user);
+	}
+	catch(TError err){ return false; }
+    }
+    // Delete widget
+    //  wid - widget identifier
+    if( iid == "wdgDel" && prms.size() )
+    {
+	try { wdgDel(prms[0].getS()); }
+	catch(TError err){ return false; }
+	return true;
+    }    
     if( iid == "attrPresent" && prms.size() )	return attrPresent( prms[0].getS() );
     if( iid == "attr" && prms.size() )
     {
@@ -1668,7 +1695,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    case TFld::Real:	attr.at().setR(prms[1].getR());	break;
 	    case TFld::Boolean:	attr.at().setB(prms[1].getB());	break;
 	}
-	return 0;
+	return new TCntrNodeObj(this,user);
     }
     return TCntrNode::objFuncCall(iid,prms,user);
 }

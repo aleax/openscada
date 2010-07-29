@@ -46,7 +46,7 @@
 #define VERSION		"0.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 Serial::TTr *Serial::mod;

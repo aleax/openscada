@@ -42,7 +42,7 @@
 #define VERSION		"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow access to automatic meter reading devices. Supported devices: "
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 AMRDevs::TTpContr *AMRDevs::mod;  //Pointer for direct access to module

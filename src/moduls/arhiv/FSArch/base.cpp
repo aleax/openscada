@@ -39,7 +39,7 @@
 #define VERSION		"1.4.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to file system."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 FSArch::ModArch *FSArch::mod;

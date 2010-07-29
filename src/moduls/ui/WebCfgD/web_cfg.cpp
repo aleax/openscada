@@ -42,7 +42,7 @@
 #define MOD_VERSION	"0.6.4"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 WebCfgD::TWEB *WebCfgD::mod;

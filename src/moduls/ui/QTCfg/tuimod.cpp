@@ -42,7 +42,7 @@
 #define VERSION		"1.8.3"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow the QT based OpenSCADA system configurator."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 QTCFG::TUIMod *QTCFG::mod;

@@ -35,7 +35,7 @@
 #define MOD_TYPE	"Special"
 #define MOD_AUTOR	"Roman Savochenko"
 #define MOD_DESCR	"Allow system API functions library of the user programming area."
-#define MOD_LICENSE	"GPL"
+#define MOD_LICENSE	"GPL2"
 #define VER_TYPE	VER_SPC
 #define SUB_TYPE	"LIB"
 #define VERSION		"0.9.1"

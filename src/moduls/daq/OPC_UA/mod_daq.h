@@ -44,7 +44,7 @@ using std::vector;
 #define DAQ_MVER	"0.5.0"
 #define DAQ_AUTOR	"Roman Savochenko"
 #define DAQ_DESCR	"Allow realisation of OPC UA client service."
-#define DAQ_LICENSE	"GPL"
+#define DAQ_LICENSE	"GPL2"
 //*************************************************
 
 namespace OPC_UA

@@ -46,7 +46,7 @@
 #define VERSION		"1.2.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 Siemens::TTpContr *Siemens::mod;	//Pointer for direct access to module

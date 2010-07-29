@@ -43,7 +43,7 @@
 #define VERSION		"1.1.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow logic level parameters."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to module

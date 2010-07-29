@@ -27,7 +27,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QDialogButtonBox>
 #include <QComboBox>
 #include <QTextEdit>
 #include <QItemEditorFactory>
@@ -441,7 +440,7 @@ bool TextEdit::event( QEvent *e )
 //* InputDlg: Id and name input dialog.           *
 //*************************************************
 InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-	const QString &ndlg, int with_id, int with_nm ) :
+	const QString &ndlg, int with_id, int with_nm, QDialogButtonBox::StandardButtons buttons ) :
 		QDialog(parent), mId(NULL), mName(NULL)
 {
     setWindowTitle(ndlg);
@@ -499,17 +498,22 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     sep->setFrameShadow( QFrame::Raised );
     dlg_lay->addWidget( sep );
 
-    QDialogButtonBox *but_box = new QDialogButtonBox( QDialogButtonBox::Ok|
-						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    QDialogButtonBox *but_box = new QDialogButtonBox( buttons, Qt::Horizontal, this );
     QImage ico_t;
-    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
-    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
-    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
-    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    if( buttons & QDialogButtonBox::Ok )
+    {
+	but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+	if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+	but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+	connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
+    }
+    if( buttons & QDialogButtonBox::Cancel )
+    {
+	but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+	connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
+    }
     dlg_lay->addWidget( but_box );
 
     resize(400,150+(35*(with_nm?1:0))+(35*(with_id?1:0)));

@@ -37,7 +37,7 @@
 #define VERSION		"0.9.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Self OpenSCADA protocol, support generic functions."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 SelfPr::TProt *SelfPr::mod;

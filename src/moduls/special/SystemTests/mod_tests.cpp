@@ -54,7 +54,7 @@
 #define VERSION		"1.3.7"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow the group tests for OpenSCADA system."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 KernelTest::TTest *KernelTest::mod;

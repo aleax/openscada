@@ -36,7 +36,7 @@
 #define VERSION		"0.9.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //******************************************************
 
 DAQGate::TTpContr *DAQGate::mod;  //Pointer for direct access to main module object

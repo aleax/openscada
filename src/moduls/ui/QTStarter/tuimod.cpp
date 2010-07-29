@@ -49,7 +49,7 @@
 #define VERSION		"1.5.4"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow QT GUI starter. It is single for all QT GUI modules!"
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 QTStarter::TUIMod *QTStarter::mod;

@@ -38,7 +38,7 @@
 #define M_VERSION	"1.4.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow support HTTP for WWW based UIs."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 PrHTTP::TProt *PrHTTP::mod;

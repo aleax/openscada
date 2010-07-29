@@ -36,7 +36,7 @@
 #define VERSION     "0.6.0"
 #define AUTORS      "Roman Savochenko"
 #define DESCRIPTION "Allow access to sound card data."
-#define LICENSE     "GPL"
+#define LICENSE     "GPL2"
 //*************************************************
 
 SoundCard::TTpContr *SoundCard::mod;

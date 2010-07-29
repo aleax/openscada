@@ -52,7 +52,7 @@
 #define VERSION		"1.7.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 SystemCntr::TTpContr *SystemCntr::mod;  //Pointer for direct access to module

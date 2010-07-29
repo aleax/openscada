@@ -72,7 +72,7 @@ TDAQS::~TDAQS( )
 
 void TDAQS::setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
 
-void TDAQS::setRdTaskPer( int vl )	{ mRdTaskPer = vmin(255,vmax(1,vl)); modif(); }
+void TDAQS::setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
 
 void TDAQS::setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
 
@@ -203,7 +203,7 @@ void TDAQS::load_( )
 
     //> Load parameters from config file and SYS DB
     setRdStLevel(atoi(TBDS::genDBGet(nodePath()+"RdStLevel",TSYS::int2str(rdStLevel())).c_str()));
-    setRdTaskPer(atoi(TBDS::genDBGet(nodePath()+"RdTaskPer",TSYS::int2str(rdTaskPer())).c_str()));
+    setRdTaskPer(atof(TBDS::genDBGet(nodePath()+"RdTaskPer",TSYS::real2str(rdTaskPer())).c_str()));
     setRdRestConnTm(atoi(TBDS::genDBGet(nodePath()+"RdRestConnTm",TSYS::int2str(rdRestConnTm())).c_str()));
     setRdRestDtTm(atof(TBDS::genDBGet(nodePath()+"RdRestDtTm",TSYS::real2str(rdRestDtTm())).c_str()));
     string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
@@ -217,7 +217,7 @@ void TDAQS::save_( )
 {
     //> Save parameters to SYS DB
     TBDS::genDBSet(nodePath()+"RdStLevel",TSYS::int2str(rdStLevel()));
-    TBDS::genDBSet(nodePath()+"RdTaskPer",TSYS::int2str(rdTaskPer()));
+    TBDS::genDBSet(nodePath()+"RdTaskPer",TSYS::real2str(rdTaskPer()));
     TBDS::genDBSet(nodePath()+"RdRestConnTm",TSYS::int2str(rdRestConnTm()));
     TBDS::genDBSet(nodePath()+"RdRestDtTm",TSYS::real2str(rdRestDtTm()));
     ResAlloc res(nodeRes(),false);
@@ -554,7 +554,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root","DAQ",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root","DAQ",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root","DAQ",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root","DAQ",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root","DAQ",1,"tp","real");
 	    if( ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root","DAQ",2,"key","st","s_com","add,del") )
@@ -609,8 +609,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     }
     else if( a_path == "/redund/tskPer" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(rdTaskPer()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setRdTaskPer(atoi(opt->text().c_str()));
+	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::real2str(rdTaskPer()));
+	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setRdTaskPer(atof(opt->text().c_str()));
     }
     else if( a_path == "/redund/restConn" )
     {

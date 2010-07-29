@@ -50,7 +50,7 @@
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Visual operation user interface."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 VISION::TVision *VISION::mod;

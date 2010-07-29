@@ -36,7 +36,7 @@
 #define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"DB module. Provides support of the DB FireBird."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //******************************************************************************
 
 FireBird::BDMod *FireBird::mod;

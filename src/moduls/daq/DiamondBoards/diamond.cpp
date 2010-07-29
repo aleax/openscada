@@ -42,7 +42,7 @@
 #define VERSION		"1.2.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow access to Diamond systems DA boards. Include support of Athena board."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 Diamond::TTpContr *Diamond::mod;

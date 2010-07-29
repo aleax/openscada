@@ -39,7 +39,7 @@ extern "C"
 #define VERSION		"0.7.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 ICP_DAS_DAQ::TTpContr *ICP_DAS_DAQ::mod;  //Pointer for direct access to module

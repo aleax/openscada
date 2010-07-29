@@ -38,7 +38,7 @@
 #define VERSION		"1.6.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD module. Provides support of the BD SQLite."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //******************************************************************************
 
 BDSQLite::BDMod *BDSQLite::mod;

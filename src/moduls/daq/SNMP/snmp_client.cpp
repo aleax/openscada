@@ -46,7 +46,7 @@
 #define VERSION		"0.4.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realising of SNMP client service."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to module

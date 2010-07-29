@@ -42,7 +42,7 @@
 #define VERSION		"0.3.2"
 #define AUTORS		"Roman Savochenko, Almaz Karimov"
 #define DESCRIPTION	"Allow realisation of DCON client service. Supported I-7000 DCON protocol."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 DCONDAQ::TTpContr *DCONDAQ::mod;  //Pointer for direct access to module

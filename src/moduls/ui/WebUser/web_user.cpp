@@ -41,7 +41,7 @@
 #define MOD_VERSION	"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow creation self-user web-interfaces on any OpenSCADA language."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 WebUser::TWEB *WebUser::mod;

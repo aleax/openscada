@@ -67,7 +67,7 @@ Lib::Lib( string src )
     mVers	= VERSION;
     mAutor	= "Roman Savochenko";
     mDescr	= "Allow mathematic static function library.";
-    mLicense	= "GPL";
+    mLicense	= "GPL2";
     mSource	= src;
 
     mod		= this;

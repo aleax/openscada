@@ -43,7 +43,7 @@
 #define MOD_VERSION	"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"UI subsystem template module."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 ModTmpl::TWEB *ModTmpl::mod;

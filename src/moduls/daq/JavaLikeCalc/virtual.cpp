@@ -41,7 +41,7 @@
 #define VERSION		"1.7.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 JavaLikeCalc::TipContr *JavaLikeCalc::mod;

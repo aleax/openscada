@@ -44,7 +44,7 @@
 #define M_VERSION	"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Protocol's subsystem template module."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 ModTmpl::TProt *ModTmpl::mod;

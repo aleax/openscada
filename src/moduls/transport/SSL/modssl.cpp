@@ -42,7 +42,7 @@
 #define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 MSSL::TTransSock *MSSL::mod;

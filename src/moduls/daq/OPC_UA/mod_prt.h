@@ -41,7 +41,7 @@ using std::map;
 #define PRT_MVER	"0.5.0"
 #define PRT_AUTOR	"Roman Savochenko"
 #define PRT_DESCR	"Allow realisation of OPC UA protocol."
-#define PRT_LICENSE	"GPL"
+#define PRT_LICENSE	"GPL2"
 //*************************************************
 
 namespace OPC_UA

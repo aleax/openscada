@@ -49,7 +49,7 @@
 #define VERSION		"1.4.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 Sockets::TTransSock *Sockets::mod;

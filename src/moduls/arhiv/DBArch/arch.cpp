@@ -39,7 +39,7 @@
 #define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to DB."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 DBArch::ModArch *DBArch::mod;

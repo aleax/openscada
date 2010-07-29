@@ -63,8 +63,8 @@ class TDAQS : public TSubSYS
 	bool rdActive( );
 	int rdStLevel( )		{ return mRdStLevel; }
 	void setRdStLevel( int vl );
-	int rdTaskPer( )		{ return mRdTaskPer; }
-	void setRdTaskPer( int vl );
+	float rdTaskPer( )		{ return mRdTaskPer; }
+	void setRdTaskPer( float vl );
 	int rdRestConnTm( )		{ return mRdRestConnTm; }
 	void setRdRestConnTm( int vl );
 	float rdRestDtTm( )		{ return mRdRestDtTm; }
@@ -108,9 +108,9 @@ class TDAQS : public TSubSYS
 	int	mTmplib;
 
 	unsigned char	mRdStLevel,		//Current station level
-			mRdTaskPer,		//Redundant task period in seconds
 			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
-	float		mRdRestDtTm,		//Redundant history restore length time in hour
+	float		mRdTaskPer,		//Redundant task period in seconds
+			mRdRestDtTm,		//Redundant history restore length time in hour
 			mRdPrcTm;		//Redundant process time
 	bool		prcStRd, endrunRd;
 	map<string,SStat> mSt;

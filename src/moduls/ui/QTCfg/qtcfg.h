@@ -87,6 +87,9 @@ class ConfApp: public QMainWindow
 	void pageCyclRefrStart( );
 	void pageCyclRefrStop( );
 
+	void stMessChanged( const QString &mess );
+	void stHistCall( );
+
 	void userSel( );
 
 	void about( );
@@ -165,6 +168,8 @@ class ConfApp: public QMainWindow
 	int		que_sz;
 	vector<string>	prev;
 	vector<string>	next;
+
+	vector<string>	stMess;
 
 	bool 		tbl_init;
     };

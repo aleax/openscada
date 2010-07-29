@@ -43,7 +43,7 @@
 #define VERSION		"2.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD module. Provides support of the *.dbf files, version 3.0."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 BDDBF::BDMod *BDDBF::mod;

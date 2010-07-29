@@ -45,7 +45,7 @@
 #define VERSION		"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Transport's subsystem template module."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 ModTmpl::TTr *ModTmpl::mod;

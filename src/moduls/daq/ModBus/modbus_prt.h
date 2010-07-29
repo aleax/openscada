@@ -41,7 +41,7 @@ using std::map;
 #define PRT_MVER	"0.6.0"
 #define PRT_AUTORS	"Roman Savochenko"
 #define PRT_DESCR	"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
-#define PRT_LICENSE	"GPL"
+#define PRT_LICENSE	"GPL2"
 //*************************************************
 
 namespace ModBus

@@ -39,7 +39,7 @@
 #define VERSION		"1.6.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD module. Provides support of the BD MySQL."
-#define MOD_LICENSE	"GPL"
+#define MOD_LICENSE	"GPL2"
 //************************************************
 
 BDMySQL::BDMod *BDMySQL::mod;

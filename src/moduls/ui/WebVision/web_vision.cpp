@@ -40,7 +40,7 @@
 #define AUTORS		"Roman Savochenko"
 #define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 #define DESCRIPTION	"Web operation user interface for visual control area (VCA) projects playing."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 WebVision::TWEB *WebVision::mod;

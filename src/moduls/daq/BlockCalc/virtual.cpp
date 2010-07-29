@@ -47,7 +47,7 @@
 #define VERSION		"1.3.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow block based calculator."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //************************************************
 
 Virtual::TipContr *Virtual::mod;

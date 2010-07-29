@@ -40,7 +40,7 @@
 #define VERSION		"0.9.6"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Generic visual control area engine."
-#define LICENSE		"GPL"
+#define LICENSE		"GPL2"
 //*************************************************
 
 VCA::Engine *VCA::mod;

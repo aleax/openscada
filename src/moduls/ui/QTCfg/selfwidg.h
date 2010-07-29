@@ -31,6 +31,7 @@
 #include <QDialog>
 #include <QDateTimeEdit>
 #include <QItemDelegate>
+#include <QDialogButtonBox>
 
 using std::string;
 using std::vector;
@@ -168,7 +169,8 @@ class InputDlg : public QDialog
     public:
 	//Methods
 	InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-		const QString &ndlg = "QTCfg dialog", int with_id = 0, int with_nm = 200 );
+	    const QString &ndlg = "QTCfg dialog", int with_id = 0, int with_nm = 200,
+	    QDialogButtonBox::StandardButtons buttons = QDialogButtonBox::Ok|QDialogButtonBox::Cancel );
 
 	QString id( );
 	QString name( );

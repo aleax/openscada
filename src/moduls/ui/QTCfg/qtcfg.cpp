@@ -59,6 +59,7 @@
 #include <QFileDialog>
 #include <QScrollBar>
 #include <QClipboard>
+#include <QTextBrowser>
 
 #include <tmess.h>
 #include <tsys.h>
@@ -372,7 +373,8 @@ ConfApp::ConfApp( string open_user ) :
     toolBar->addAction(actStartUpd);
     toolBar->addAction(actStopUpd);
 
-    //- Init status bar -
+    //> Init status bar
+    connect( statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
     w_user = new UserStBar(open_user.c_str(), this);
     w_user->setWhatsThis(_("This label displays curent user."));
     w_user->setToolTip(_("Field for display of the current user."));
@@ -384,6 +386,15 @@ ConfApp::ConfApp( string open_user ) :
     mStModify->setWhatsThis(_("This label displays the local station modifying."));
     mStModify->setToolTip(_("Field for display of the local station modifying."));
     statusBar()->insertPermanentWidget(0,mStModify);
+
+    if(!ico_t.load(TUIS::icoPath("combar").c_str())) ico_t.load(":/images/combar.png");
+    QPushButton *stBt = new QPushButton(QPixmap::fromImage(ico_t),"",this);
+    stBt->setWhatsThis(_("This button for call status bar history."));
+    stBt->setToolTip(_("Button for call status bar history."));
+    stBt->setMaximumSize( QSize(16,18) );
+    stBt->setFlat(true);
+    statusBar()->insertPermanentWidget(0,stBt);
+    connect(stBt, SIGNAL(released()), this, SLOT(stHistCall()));
 
     statusBar()->showMessage(_("Ready"), 2000 );
 
@@ -776,6 +787,26 @@ void ConfApp::pageCyclRefrStop( )
     actStartUpd->setEnabled(true);
 
     autoUpdTimer->stop();
+}
+
+void ConfApp::stMessChanged( const QString &mess )
+{
+    if( mess.isEmpty() ) return;
+    
+    stMess.push_back(mess.toStdString());
+    if( stMess.size() > 100 ) stMess.erase(stMess.begin());
+}
+
+void ConfApp::stHistCall( )
+{
+    InputDlg dlg(this,QIcon(),QString(_("Status bar messages list:")),_("Status messages"),0,0,QDialogButtonBox::Ok);
+    QTextBrowser *tb = new QTextBrowser(&dlg);
+    dlg.ed_lay->addWidget(tb, 0, 0);
+    string textv;
+    for( int i_e = stMess.size()-1; i_e >=0; i_e-- )
+	textv += stMess[i_e]+"\n";
+    tb->setPlainText(textv.c_str());
+    dlg.exec();
 }
 
 void ConfApp::about( )

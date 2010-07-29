@@ -383,8 +383,6 @@ void Widget::inheritAttr( const string &iattr )
 
     setStlLock(false);
     if( !loadDef ) parent().at().setStlLock(false);
-
-
 }
 
 void Widget::inheritIncl( const string &iwdg )

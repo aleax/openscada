@@ -67,7 +67,7 @@ Lib::Lib( string src )
     mVers	= VERSION;
     mAutor	= "Roman Savochenko";
     mDescr	= "Allow static function library Complex1 (SCADA Complex1 functions).";
-    mLicense	= "GPL";
+    mLicense	= "GPL2";
     mSource	= src;
 
     mod		= this;

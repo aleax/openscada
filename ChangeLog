@@ -1,3 +1,11 @@
+2010-07-29 Roman
+- DAQ: Redundant task period type is changed to real type.
+- SYS: License version for all modules is changed to GPL2.
+- !!!:UI.VCAEngine: New session's user-API functions wdgAdd() and wdgDel() is added.
+    Return for attrSet() is changed to current object.
+- UI.QTCfg: Status bar messages history display is added.
+
+
 2010-07-24 Roman
 - SYS: Tooltip help message is added to task manager for use CPU set.
 - UI.VCAEngine: Widget enable message is updated.
