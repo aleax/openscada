@@ -59,7 +59,7 @@ TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error"),
     el_tmpl_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50") );
     el_tmpl_io.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
 
-    //> Error atributes
+    //> Error attributes
     el_err.fldAdd( new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
 }
 

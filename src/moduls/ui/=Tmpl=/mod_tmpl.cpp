@@ -193,7 +193,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",_("Display parameter atributes trends"),0664,"root","root",1,"s_com","add,del");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",_("Display parameter attributes trends"),0664,"root","root",1,"s_com","add,del");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",_("Collums"),0664,"root","root",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",_("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");

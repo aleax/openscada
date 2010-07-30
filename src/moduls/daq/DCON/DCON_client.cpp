@@ -286,7 +286,7 @@ void *TMdContr::Task( void *icntr )
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
 				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
-				//Set DAQ atributes
+				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>4))
 				{
 				    unsigned int DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);
@@ -351,7 +351,7 @@ void *TMdContr::Task( void *icntr )
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
 				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
-				//Set DAQ atributes
+				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>4))
 				{
 				    unsigned int DI = strtoul(pdu.substr(3,2).c_str(),NULL,16);
@@ -400,7 +400,7 @@ void *TMdContr::Task( void *icntr )
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
 				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
-				//Set DAQ atributes
+				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>56))
 				{
 				    cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());
@@ -509,7 +509,7 @@ void *TMdContr::Task( void *icntr )
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
 				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
-				//Set DAQ atributes
+				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>56))
 				{
 				    cntr.p_hd[i_p].at().AI[0]=atof(pdu.substr(1,7).c_str());

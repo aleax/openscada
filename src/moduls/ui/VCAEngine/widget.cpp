@@ -846,7 +846,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
     {
 	if(ctrMkNode("area",opt,-1,"/links",_("Links")))
 	{
-	    ctrMkNode("fld",opt,-1,"/links/showAttr",_("Atributes show"),RWRWR_,"root","UI",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/links/showAttr",_("Attributes show"),RWRWR_,"root","UI",1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links")))
 	    {
 		bool shwAttr =	atoi(opt->attr("showAttr").c_str()) ||
@@ -1008,7 +1008,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 	    if(!prm.freeStat() || !dstwdg.freeStat())
 	    {
                 if( noonly_no_set )     throw TError(nodePath().c_str(),_("Destination has no any necessary attribute!"));
-		else if( no_set.size() )throw TError(nodePath().c_str(),_("Destination has no atributes: %s !"),no_set.c_str());
+		else if( no_set.size() )throw TError(nodePath().c_str(),_("Destination has no attributes: %s !"),no_set.c_str());
 	    }
 	}
     }
@@ -1372,7 +1372,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 }
 
 //************************************************
-//* Attr: Widget atribute                        *
+//* Attr: Widget attribute                       *
 //************************************************
 Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0)
 {

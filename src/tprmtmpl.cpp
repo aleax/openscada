@@ -312,7 +312,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    if( io(row)->flg()&TPrmTempl::LockAttr )
-		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
+		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
 	    ioDel( row );
 	    modif();
 	}
@@ -321,7 +321,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
-	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if( (col == 0 || col == 1) && !opt->text().size() )	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    switch(col)
 	    {

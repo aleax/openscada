@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 16:20+0300\n"
+"POT-Creation-Date: 2010-06-10 14:54+0300\n"
 "PO-Revision-Date: 2009-08-17 12:33+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -399,7 +399,7 @@ msgid "/cfg/attr_only"
 msgstr ""
 
 #: logiclev.cpp:853
-msgid "Only atributes are to be shown"
+msgid "Only attributes are to be shown"
 msgstr "Nur Attribute zeigen"
 
 #: logiclev.cpp:853 logiclev.cpp:884
@@ -455,29 +455,10 @@ msgid ","
 msgstr ""
 
 #: logiclev.cpp:995
-msgid "Parameter has no one atribute!"
+msgid "Parameter has no one attribute!"
 msgstr "Parameter hat kein Attribut!"
 
 #: logiclev.cpp:996
 #, c-format
-msgid "Parameter has not atributes: %s !"
+msgid "Parameter has not attributes: %s !"
 msgstr "Parameter hat keine Attribute: %s !"
-
-#~ msgid ""
-#~ "======================= The module <%s:%s> options "
-#~ "=======================\n"
-#~ "---------- Parameters of the module section <%s> in config file "
-#~ "----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "========================== Optionen des Moduls <%s:%s> "
-#~ "==========================\n"
-#~ "-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
-#~ "--------\n"
-#~ "\n"
-
-#~ msgid "Acquisition task is not started!"
-#~ msgstr "Datenerfassung ist nicht gestartet!"
-
-#~ msgid "Acquisition task is not stopped!"
-#~ msgstr "Datenerfassung ist nicht angehalten!"

@@ -546,10 +546,10 @@ retry:
 	    return VAR;
 	}
 
-	//> Global atributes and object's parameters.
+	//> Global attributes and object's parameters.
 	if( is_dot )
 	{
-	    //>> Check to parameter atribute (TValue)
+	    //>> Check to parameter attribute (TValue)
 	    try
 	    {
 		AutoHD<TVal> vl = SYS->daq().at().at(TSYS::strSepParse(smb_nm,0,'.')).at().

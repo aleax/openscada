@@ -1857,8 +1857,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if( a_path == "/cfg/srcm_ls" && ctrChkNode(opt) )
     {
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::Passive))->setText(_("Passive"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::PassiveAttr))->setText(_("Passive param. atribute"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::ActiveAttr))->setText(_("Active param. atribute"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::PassiveAttr))->setText(_("Passive param. attribute"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::ActiveAttr))->setText(_("Active param. attribute"));
     }
     else if( a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt) )
     {

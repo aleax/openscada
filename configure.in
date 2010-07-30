@@ -127,6 +127,8 @@ AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable build module DB
 [ if test $enableval = yes; then ModSQLite=true; else ModSQLite=false; fi],[ ModSQLite=true; ])
 AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable build module DB.FireBird]),
 [ if test $enableval = yes; then ModFireBird=true; else ModFireBird=false; fi],[ ModFireBird=true; ])
+AC_ARG_ENABLE(PostgreSQL,AC_HELP_STRING([--disable-PostgreSQL], [disable build module DB.PostgreSQL]),
+[ if test $enableval = yes; then ModPostgreSQL=true; else ModPostgreSQL=false; fi],[ ModPostgreSQL=true; ])
 #> DAQ modules
 AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [disable build module DAQ.System]),
 [ if test $enableval = yes; then ModSystem=true; else ModSystem=false; fi],[ ModSystem=true; ])
@@ -234,6 +236,14 @@ if test ${ModFireBird} = true; then
     #>> Modules checkings
     AX_LIB_FIREBIRD([2.0.0])
     if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
+fi
+if test ${ModPostgreSQL} = true; then
+    AC_MSG_RESULT(Build module: DB.PostgreSQL)
+    AC_CONFIG_FILES(src/moduls/bd/PostgreSQL/Makefile)
+    DBSub_mod="${DBSub_mod}PostgreSQL "
+    #>> Modules checkings
+    AX_LIB_POSTGRESQL([8.3.0])
+    if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
 fi
 #> DAQ modules
 AC_SUBST(DAQSub_mod)

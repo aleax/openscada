@@ -1569,7 +1569,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 {
     Widget::attrChange( cfg, prev );
 
-    //> Special session atributes process
+    //> Special session attributes process
     //>> Focus attribute process for active active
     if( cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus") )
 	cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );

@@ -648,7 +648,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    if( func()->io(row)->flg()&Func::SysAttr )
-		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
+		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
 	    ((Func *)func())->ioDel( row ); 
 	    modif();
 	}
@@ -661,7 +661,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    if( (col == 0 || col == 1) && !opt->text().size() )
 		throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if( func()->io(row)->flg()&Func::SysAttr )
-		throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+		throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    switch( col )
 	    {
 		case 0:	func()->io(row)->setId(opt->text());	break;

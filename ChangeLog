@@ -1,3 +1,8 @@
+2010-07-30 Maxim
+- SYS: Syntax error in word "attribute" is fixed everywhere.
+- !!!:DB: Module for base realization of DB PostgreSQL is added.
+ 
+
 2010-07-29 Roman
 - DAQ: Redundant task period type is changed to real type.
 - SYS: License version for all modules is changed to GPL2.

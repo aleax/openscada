@@ -128,7 +128,7 @@ void HddSmart::getVal( TMdPrm *prm )
 	fclose(fp);
     }*/
 
-    //- SMART atributes -
+    //> SMART attributes
     string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");
     FILE *fp = popen(cmd.c_str(),"r");
     if( fp )

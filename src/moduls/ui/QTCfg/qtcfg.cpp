@@ -1944,7 +1944,7 @@ bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
 	    str_ch = true;
 	}
 
-	//> Sync node parameters (text and atributes)
+	//> Sync node parameters (text and attributes)
 	w_nd.childGet(i_w)->setText(n_nd.childGet(i_n)->text());
 	vector<string> ls;
 	n_nd.childGet(i_n)->attrList(ls);

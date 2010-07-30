@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-24 20:10+0300\n"
+"POT-Creation-Date: 2010-07-29 22:57+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1241,11 +1241,11 @@ msgstr ""
 #: tarchives.cpp:1115 tarchives.cpp:1117 tarchval.cpp:1727 tarchval.cpp:1728
 #: tarchval.cpp:1732 tarchval.cpp:1752 tarchval.cpp:1767 tarchval.cpp:1768
 #: tarchval.cpp:1769 tarchval.cpp:1770 tarchval.cpp:2278 tarchval.cpp:2288
-#: tbds.cpp:894 tdaqs.cpp:556 tdaqs.cpp:557 tdaqs.cpp:558 tdaqs.cpp:565
-#: tdaqs.cpp:575 telem.cpp:510 tfunction.cpp:199 tfunction.cpp:237
-#: tfunction.cpp:245 tmodschedul.cpp:407 tprmtmpl.cpp:232 tprmtmpl.cpp:247
-#: tprmtmpl.cpp:250 tprmtmpl.cpp:252 tprmtmpl.cpp:255 tsys.cpp:1404
-#: tsys.cpp:1412 tsys.cpp:1428 tsys.cpp:1430 ttransports.cpp:874
+#: tbds.cpp:894 tdaqs.cpp:556 tdaqs.cpp:558 tdaqs.cpp:565 tdaqs.cpp:575
+#: telem.cpp:510 tfunction.cpp:199 tfunction.cpp:237 tfunction.cpp:245
+#: tmodschedul.cpp:407 tprmtmpl.cpp:232 tprmtmpl.cpp:247 tprmtmpl.cpp:250
+#: tprmtmpl.cpp:252 tprmtmpl.cpp:255 tsys.cpp:1404 tsys.cpp:1412 tsys.cpp:1428
+#: tsys.cpp:1430 ttransports.cpp:874
 msgid "dec"
 msgstr ""
 
@@ -2254,9 +2254,10 @@ msgid "/prm/cfg/b_per"
 msgstr ""
 
 #: tarchval.cpp:1731 tarchval.cpp:1744 tarchval.cpp:1753 tarchval.cpp:2268
-#: tarchval.cpp:2277 tarchval.cpp:2287 tbds.cpp:894 tdaqs.cpp:559
-#: tdaqs.cpp:566 telem.cpp:511 tfunction.cpp:238 tfunction.cpp:246
-#: tsys.cpp:1393 tsys.cpp:1394 tsys.cpp:1438 ttransports.cpp:873
+#: tarchval.cpp:2277 tarchval.cpp:2287 tbds.cpp:894 tdaqs.cpp:557
+#: tdaqs.cpp:559 tdaqs.cpp:566 telem.cpp:511 tfunction.cpp:238
+#: tfunction.cpp:246 tsys.cpp:1393 tsys.cpp:1394 tsys.cpp:1438
+#: ttransports.cpp:873
 msgid "real"
 msgstr ""
 
@@ -2465,11 +2466,11 @@ msgid "Passive"
 msgstr "Пасивний"
 
 #: tarchval.cpp:1860
-msgid "Passive param. atribute"
+msgid "Passive param. attribute"
 msgstr "Пасивний атрибут параметру"
 
 #: tarchval.cpp:1861
-msgid "Active param. atribute"
+msgid "Active param. attribute"
 msgstr "Активний атрибут параметру"
 
 #: tarchval.cpp:1938 tbds.cpp:942 tdaqs.cpp:655 tdaqs.cpp:706
@@ -4322,6 +4323,11 @@ msgstr ""
 msgid ".."
 msgstr ""
 
+#: tmodschedul.cpp:164
+#, fuzzy, c-format
+msgid "Module <%s> error: %s !"
+msgstr "SO <%s> помилка: %s !"
+
 #: tmodschedul.cpp:203 tmodschedul.cpp:288 tmodschedul.cpp:318
 #: tmodschedul.cpp:356
 #, c-format
@@ -4656,7 +4662,7 @@ msgstr "Реальний;Цілий;Логічний;Строка"
 msgid "Input;Output"
 msgstr "Вхід;Вихід"
 
-#: tprmtmpl.cpp:252
+#: tprmtmpl.cpp:252 tvalue.cpp:259
 msgid "Attribute"
 msgstr "Атрибут"
 
@@ -4713,7 +4719,7 @@ msgid "row"
 msgstr ""
 
 #: tprmtmpl.cpp:315
-msgid "Deleting lock atribute in not allow."
+msgid "Deleting lock attribute in not allow."
 msgstr "Видалення заблокованого атрибуту неможливе."
 
 #: tprmtmpl.cpp:319
@@ -4725,7 +4731,7 @@ msgid "to"
 msgstr ""
 
 #: tprmtmpl.cpp:324
-msgid "Changing locked atribute is not allowed."
+msgid "Changing locked attribute is not allowed."
 msgstr "Зміна заблокованого атрибуту неможлива."
 
 #: tprmtmpl.cpp:325
@@ -5887,7 +5893,8 @@ msgid ""
 "For CPU set use processors numbers string separated by symbol ':'.\n"
 "CPU numbers started from 0."
 msgstr ""
-"Для встановлення процесорів використовуйте строку номерів, поділену символом ':'.\n"
+"Для встановлення процесорів використовуйте строку номерів, поділену символом "
+"':'.\n"
 "Номера процесорів починаються з 0."
 
 #: tsys.cpp:1426 tsys.cpp:1560
@@ -6447,7 +6454,7 @@ msgid "v"
 msgstr ""
 
 #: tvalue.cpp:246
-msgid "Atributes"
+msgid "Attributes"
 msgstr "Атрибути"
 
 #: tvalue.cpp:253 tvalue.cpp:256 tvalue.cpp:260
@@ -6461,10 +6468,6 @@ msgstr ""
 #: tvalue.cpp:259 tvalue.cpp:305
 msgid "/arch/arch/atr"
 msgstr ""
-
-#: tvalue.cpp:259
-msgid "Atribute"
-msgstr "Атрибут"
 
 #: tvalue.cpp:260 tvalue.cpp:306
 msgid "/arch/arch/prc"
@@ -6963,18 +6966,3 @@ msgstr "Вихідні транспорти не підтримуються!"
 #: tvariant.h:33
 msgid "<EVAL>"
 msgstr ""
-
-#~ msgid "Timer's thread <%u> call. TID: %ld"
-#~ msgstr "Виклик потоку таймеру <%u>. TID: %ld"
-
-#~ msgid "Thread <%u> started. TID: %ld"
-#~ msgstr "Запуск потоку <%u>. TID: %ld"
-
-#~ msgid "Number calcs"
-#~ msgstr "Кількість обчислень"
-
-#~ msgid "Calc time (mks)"
-#~ msgstr "Час обрахування (мкс)"
-
-#~ msgid "Calc"
-#~ msgstr "Обрахувати"

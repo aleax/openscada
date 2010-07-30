@@ -1211,7 +1211,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    int row = atoi(opt->attr("row").c_str());
 	    if( io(row)->flg()&TPrmTempl::LockAttr )
-		throw TError(nodePath().c_str(),_("Deleting lock atribute in not allow."));
+		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
 	    ioDel( row );
 	    modif();
 	}
@@ -1225,7 +1225,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    string col = opt->attr("col");
 	    if( enableStat( ) && col != "vl" ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked atribute is not allowed."));
+	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if( (col == "id" || col == "nm") && !opt->text().size() )	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if( col == "id" )		io(row)->setId(opt->text());
 	    else if( col == "nm" )	io(row)->setName(opt->text());

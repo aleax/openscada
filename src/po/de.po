@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-24 20:10+0300\n"
+"POT-Creation-Date: 2010-07-29 22:57+0300\n"
 "PO-Revision-Date: 2009-08-26 12:03+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -1249,11 +1249,11 @@ msgstr ""
 #: tarchives.cpp:1115 tarchives.cpp:1117 tarchval.cpp:1727 tarchval.cpp:1728
 #: tarchval.cpp:1732 tarchval.cpp:1752 tarchval.cpp:1767 tarchval.cpp:1768
 #: tarchval.cpp:1769 tarchval.cpp:1770 tarchval.cpp:2278 tarchval.cpp:2288
-#: tbds.cpp:894 tdaqs.cpp:556 tdaqs.cpp:557 tdaqs.cpp:558 tdaqs.cpp:565
-#: tdaqs.cpp:575 telem.cpp:510 tfunction.cpp:199 tfunction.cpp:237
-#: tfunction.cpp:245 tmodschedul.cpp:407 tprmtmpl.cpp:232 tprmtmpl.cpp:247
-#: tprmtmpl.cpp:250 tprmtmpl.cpp:252 tprmtmpl.cpp:255 tsys.cpp:1404
-#: tsys.cpp:1412 tsys.cpp:1428 tsys.cpp:1430 ttransports.cpp:874
+#: tbds.cpp:894 tdaqs.cpp:556 tdaqs.cpp:558 tdaqs.cpp:565 tdaqs.cpp:575
+#: telem.cpp:510 tfunction.cpp:199 tfunction.cpp:237 tfunction.cpp:245
+#: tmodschedul.cpp:407 tprmtmpl.cpp:232 tprmtmpl.cpp:247 tprmtmpl.cpp:250
+#: tprmtmpl.cpp:252 tprmtmpl.cpp:255 tsys.cpp:1404 tsys.cpp:1412 tsys.cpp:1428
+#: tsys.cpp:1430 ttransports.cpp:874
 msgid "dec"
 msgstr ""
 
@@ -2254,9 +2254,10 @@ msgid "/prm/cfg/b_per"
 msgstr ""
 
 #: tarchval.cpp:1731 tarchval.cpp:1744 tarchval.cpp:1753 tarchval.cpp:2268
-#: tarchval.cpp:2277 tarchval.cpp:2287 tbds.cpp:894 tdaqs.cpp:559
-#: tdaqs.cpp:566 telem.cpp:511 tfunction.cpp:238 tfunction.cpp:246
-#: tsys.cpp:1393 tsys.cpp:1394 tsys.cpp:1438 ttransports.cpp:873
+#: tarchval.cpp:2277 tarchval.cpp:2287 tbds.cpp:894 tdaqs.cpp:557
+#: tdaqs.cpp:559 tdaqs.cpp:566 telem.cpp:511 tfunction.cpp:238
+#: tfunction.cpp:246 tsys.cpp:1393 tsys.cpp:1394 tsys.cpp:1438
+#: ttransports.cpp:873
 msgid "real"
 msgstr ""
 
@@ -2462,11 +2463,11 @@ msgid "Passive"
 msgstr "Passiv"
 
 #: tarchval.cpp:1860
-msgid "Passive param. atribute"
+msgid "Passive param. attribute"
 msgstr "Passives Parameterattribut"
 
 #: tarchval.cpp:1861
-msgid "Active param. atribute"
+msgid "Active param. attribute"
 msgstr "Aktives Attribut des Parameters"
 
 #: tarchval.cpp:1938 tbds.cpp:942 tdaqs.cpp:655 tdaqs.cpp:706
@@ -4318,6 +4319,11 @@ msgstr ""
 msgid ".."
 msgstr ""
 
+#: tmodschedul.cpp:164
+#, fuzzy, c-format
+msgid "Module <%s> error: %s !"
+msgstr "SO <%s> Fehler: %s !"
+
 #: tmodschedul.cpp:203 tmodschedul.cpp:288 tmodschedul.cpp:318
 #: tmodschedul.cpp:356
 #, c-format
@@ -4653,7 +4659,7 @@ msgstr "Reele Zahl;Ganzzahl;Logisch;Text"
 msgid "Input;Output"
 msgstr "Eingang;Ausgang"
 
-#: tprmtmpl.cpp:252
+#: tprmtmpl.cpp:252 tvalue.cpp:259
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -4710,7 +4716,7 @@ msgid "row"
 msgstr ""
 
 #: tprmtmpl.cpp:315
-msgid "Deleting lock atribute in not allow."
+msgid "Deleting lock attribute in not allow."
 msgstr "Löschen des blockierten Attributs ist nicht zulässig."
 
 #: tprmtmpl.cpp:319
@@ -4722,7 +4728,7 @@ msgid "to"
 msgstr ""
 
 #: tprmtmpl.cpp:324
-msgid "Changing locked atribute is not allowed."
+msgid "Changing locked attribute is not allowed."
 msgstr "Änderung des blockierten Attributs ist nicht zulässig."
 
 #: tprmtmpl.cpp:325
@@ -6456,8 +6462,9 @@ msgid "v"
 msgstr ""
 
 #: tvalue.cpp:246
-msgid "Atributes"
-msgstr "Attribute"
+#, fuzzy
+msgid "Attributes"
+msgstr "Attribut"
 
 #: tvalue.cpp:253 tvalue.cpp:256 tvalue.cpp:260
 msgid "Archiving"
@@ -6470,10 +6477,6 @@ msgstr ""
 #: tvalue.cpp:259 tvalue.cpp:305
 msgid "/arch/arch/atr"
 msgstr ""
-
-#: tvalue.cpp:259
-msgid "Atribute"
-msgstr "Attribut"
 
 #: tvalue.cpp:260 tvalue.cpp:306
 msgid "/arch/arch/prc"
@@ -6973,85 +6976,3 @@ msgstr "Ausgangsübertragung wird nicht unterstüzt!"
 #: tvariant.h:33
 msgid "<EVAL>"
 msgstr ""
-
-#~ msgid "Timer's thread <%u> call. TID: %ld"
-#~ msgstr "Der Thread <%u> des Timers wird aufgerufen. TID: %ld"
-
-#~ msgid "Thread <%u> started. TID: %ld"
-#~ msgstr "Der Thread <%u> ist gestartet. TID: %ld"
-
-#~ msgid "Number calcs"
-#~ msgstr "Anzahl Berechnungen"
-
-#~ msgid "Calc time (mks)"
-#~ msgstr "Rechenzeit (usek)"
-
-#~ msgid "Calc"
-#~ msgstr "Berechnen"
-
-#~ msgid ""
-#~ "======================= Subsystem \"Transports\" options "
-#~ "==================\n"
-#~ "------------ Parameters of section <%s> in config file -----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "=================== Subsystemoptionen \"Übertragung\" "
-#~ "=======================\n"
-#~ "--------------- Parameter des Abschnitts %s in der Konfiguratonsdatei "
-#~ "--------------\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "======================= Subsystem \"Security\" options "
-#~ "====================\n"
-#~ "------------ Parameters of section <%s> in config file -----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "================== Optionen des Subsystems \"Sicherheit\" "
-#~ "======================\n"
-#~ "--------------- Parameter des Abschnitts %s in der Konfigurationsdatei "
-#~ "--------------\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "========================= Subsystem \"DB\" options "
-#~ "========================\n"
-#~ "------------ Parameters of section <%s> in config file -----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "======================== Optionen des Subsystems \"Datenbank\" "
-#~ "==========================\n"
-#~ "--------------- Parameter des Abschnitts %s in der Konfigurationsdatei "
-#~ "--------------\n"
-#~ "\n"
-
-#, fuzzy
-#~ msgid "Task '%s' is not present!"
-#~ msgstr "IO <%s> ist nicht vorhanden!"
-
-#~ msgid "Change work directory to '%s' error: %s"
-#~ msgstr "Fehler beim Ändern des Arbeitsverzeichnisses '%s': %s"
-
-#~ msgid "Modul"
-#~ msgstr "Modul"
-
-#~ msgid "Descript"
-#~ msgstr "Beschreibung"
-
-#~ msgid "Values acquisition task is not started!"
-#~ msgstr "Datenerfassung ist nicht gestartet!"
-
-#~ msgid "Values archivation task is not started!"
-#~ msgstr "Archivierung der Werte ist nicht gestartet!"
-
-#~ msgid "Values archivation task is not stopped!"
-#~ msgstr "Archivierung der Werte ist nicht angehalten!"
-
-#~ msgid "Redundant process task is not stopped!"
-#~ msgstr "Redundante Bearbeitung ist nicht angehalten!"
-
-#~ msgid "Timeouted!"
-#~ msgstr "Zeitüberschreitung"
-
-#~ msgid "Access"
-#~ msgstr "Zugriff"

@@ -28,7 +28,7 @@ namespace KernelTest
 {
 
 //*************************************************
-//* TestVal: Parameter atribute's value test.     *
+//* TestVal: Parameter attribute's value test.    *
 //*************************************************
 class TestVal : public TFunction
 {
@@ -41,8 +41,8 @@ class TestVal : public TFunction
 	    ioAdd( new IO("arch_per",_("Archive value getting period (us)"),IO::Integer,IO::Default,"1000000") );
 	}
 
-	string name( )	{ return _("Parameter atribute"); }
-	string descr( )	{ return _("Parameter atribute's value test.\nPeriodic make gathering for last value of selected attribute,"
+	string name( )	{ return _("Parameter attribute"); }
+	string descr( )	{ return _("Parameter attribute's value test.\nPeriodic make gathering for last value of selected attribute,"
 				    " and also gathering from archive for selected depth."); }
 
 	void calc( TValFunc *val )

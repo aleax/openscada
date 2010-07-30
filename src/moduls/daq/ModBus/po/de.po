@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 17:16+0300\n"
+"POT-Creation-Date: 2010-06-10 14:57+0300\n"
 "PO-Revision-Date: 2009-08-17 13:28+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -1259,7 +1259,7 @@ msgid "row"
 msgstr ""
 
 #: modbus_prt.cpp:1218
-msgid "Deleting lock atribute in not allow."
+msgid "Deleting lock attribute in not allow."
 msgstr "Löschen Verriegelungsattribut ist nicht erlaubt."
 
 #: modbus_prt.cpp:1222
@@ -1279,7 +1279,7 @@ msgid "vl"
 msgstr ""
 
 #: modbus_prt.cpp:1232
-msgid "Changing locked atribute is not allowed."
+msgid "Changing locked attribute is not allowed."
 msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
 
 #: modbus_prt.cpp:1233 modbus_prt.cpp:1235

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 16:20+0300\n"
+"POT-Creation-Date: 2010-06-10 14:54+0300\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -395,7 +395,7 @@ msgid "/cfg/attr_only"
 msgstr ""
 
 #: logiclev.cpp:853
-msgid "Only atributes are to be shown"
+msgid "Only attributes are to be shown"
 msgstr "Показывать только атрибуты"
 
 #: logiclev.cpp:853 logiclev.cpp:884
@@ -451,10 +451,9 @@ msgid ","
 msgstr ""
 
 #: logiclev.cpp:995
-msgid "Parameter has no one atribute!"
+msgid "Parameter has no one attribute!"
 msgstr "Параметр не имеет ни одного атрибута!"
 
 #: logiclev.cpp:996
-#, c-format
-msgid "Parameter has not atributes: %s !"
+msgid "Parameter has not attributes: %s !"
 msgstr "Параметр не имеет атрибутов: %s !"

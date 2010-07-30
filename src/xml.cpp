@@ -28,14 +28,14 @@
 //*************************************************
 XMLNode &XMLNode::operator=(XMLNode &prm)
 {
-    //> Delete self children and atributes
+    //> Delete self children and attributes
     mAttr.clear();
     mPrcInstr.clear();
     for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
 	delete mChildren[i_ch];
     mChildren.clear();
 
-    //> Copy params (name,text, atributes and instructions)
+    //> Copy params (name,text, attributes and instructions)
     setName( prm.name() );
     setText( prm.text() );
     vector<string> ls;

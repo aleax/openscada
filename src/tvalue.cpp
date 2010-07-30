@@ -243,9 +243,9 @@ void TValue::cntrCmdProc( XMLNode *opt )
     {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName(),0664,"root","root");
-	if(ctrMkNode("area",opt,-1,"/val",_("Atributes")))
+	if(ctrMkNode("area",opt,-1,"/val",_("Attributes")))
 	{
-	    //>>> Add atributes list
+	    //>>> Add attributes list
 	    vlList(list_c);
 	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
 		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);
@@ -256,7 +256,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),0664,"root","root",1,"key","atr"))
 	    {
 		vector<string> list_c2;
-		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Atribute"),0444,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Attribute"),0444,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),0664,"root","root",1,"tp","bool");
 		SYS->archive().at().modList(list_c);
 		for( int i_ta = 0; i_ta < list_c.size(); i_ta++ )

@@ -846,7 +846,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
 	if( mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only atributes are to be shown"),0664,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),0664,"root","root",1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for( int i_io = 0; i_io < tmpl->val.ioSize(); i_io++ )
 		{
@@ -988,8 +988,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		}
 	    if(!prm.freeStat())
 	    {
-		if( noonly_no_set )	throw TError(nodePath().c_str(),_("Parameter has no one atribute!"));
-		else if( no_set.size() )throw TError(nodePath().c_str(),_("Parameter has not atributes: %s !"),no_set.c_str());
+		if( noonly_no_set )	throw TError(nodePath().c_str(),_("Parameter has no one attribute!"));
+		else if( no_set.size() )throw TError(nodePath().c_str(),_("Parameter has not attributes: %s !"),no_set.c_str());
 		mode( (TMdPrm::Mode)m_mode, m_prm );
 	    }
 	}
