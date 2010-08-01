@@ -1,3 +1,9 @@
+2010-08-01 Roman
+- !!!:UI.VCAEngine: New session's user-API functions for links link() and linkSet() is added.
+    Links info for run sessions' widgets is added. Default text synth string is updated.
+- !!:UI.Vision: Atrribute and link value copy is added to context menu for attribute and link inspectors.
+
+
 2010-07-30 Maxim
 - SYS: Syntax error in word "attribute" is fixed everywhere.
 - !!!:DB: Module for base realization of DB PostgreSQL is added.

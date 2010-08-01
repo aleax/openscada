@@ -221,7 +221,7 @@ class Widget : public TCntrNode
 	virtual bool cntrCmdServ( XMLNode *opt );
 	virtual bool cntrCmdGeneric( XMLNode *opt );
 	virtual bool cntrCmdAttributes( XMLNode *opt );
-	virtual bool cntrCmdLinks( XMLNode *opt );
+	virtual bool cntrCmdLinks( XMLNode *opt, bool lnk_ro = false );
 	virtual bool cntrCmdProcess( XMLNode *opt );
 
 	virtual bool attrChange( Attr &cfg, TVariant prev );   //Process attribute change local and into terminator

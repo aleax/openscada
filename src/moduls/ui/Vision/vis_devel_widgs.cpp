@@ -46,6 +46,7 @@
 #include <QFontDialog>
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QClipboard>
 
 #include <tsys.h>
 
@@ -644,7 +645,8 @@ bool InspAttr::event( QEvent *event )
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 {
     string nattr, nwdg;
-    QAction *actClr = NULL;
+    QAction *actClr, *actCopy;
+    actClr = actCopy = NULL;
     ModInspAttr::Item *it = NULL;
 
     //Attribute
@@ -666,19 +668,29 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     QMenu popup;
 
     //Add actions
-    //> Changes clear action
-    if( it && it->modify() )
+    if( it )
     {
+	//> Copy action
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
-	actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
-	actClr->setStatusTip(_("Press to clear attribute's changes."));
-	popup.addAction(actClr);
+	if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+	actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
+	popup.addAction(actCopy);
+
+	//> Changes clear action
+	if( it->modify() )
+	{
+	    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
+	    actClr->setStatusTip(_("Press to clear attribute's changes."));
+	    popup.addAction(actClr);
+	}
     }
 
     if( !popup.isEmpty() )
     {
 	QAction *rez = popup.exec(QCursor::pos());
+	if( actCopy && rez == actCopy )
+	    QApplication::clipboard()->setText(it->data().toString());
 	if( actClr && rez == actClr )
 	{
 	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
@@ -908,6 +920,29 @@ bool InspLnk::event( QEvent *event )
 	return true;
     }
     return QTreeWidget::event( event );
+}
+
+void InspLnk::contextMenuEvent( QContextMenuEvent *event )
+{
+    QAction *actCopy = NULL;
+    if( !currentItem() ) return;
+
+    QMenu popup;
+
+    //Add actions
+    QImage ico_t;
+    if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+    actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
+    popup.addAction(actCopy);
+
+    if( !popup.isEmpty() )
+    {
+	QAction *rez = popup.exec(QCursor::pos());
+	if( actCopy && rez == actCopy )
+	    QApplication::clipboard()->setText(currentItem()->data(1,Qt::DisplayRole).toString());
+
+	popup.clear();
+    }
 }
 
 void InspLnk::setWdg( const string &iwdg )

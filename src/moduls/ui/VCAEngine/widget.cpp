@@ -839,7 +839,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
     return true;
 }
 
-bool Widget::cntrCmdLinks( XMLNode *opt )
+bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 {
     //> Get page info
     if( opt->name() == "info" )
@@ -888,7 +888,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 				if( list[i_l] == nprm ) { f_ok = true; break; }
 			    if(!f_ok)
 			    {
-				ctrMkNode("fld",opt,-1,(string("/links/lnk/pr_")+idprm).c_str(),nprm,RWRWR_,"root","UI",
+				ctrMkNode("fld",opt,-1,(string("/links/lnk/pr_")+idprm).c_str(),nprm,(lnk_ro?R_R_R_:RWRWR_),"root","UI",
 				    3,"tp","str","dest","sel_ed","select",(string("/links/lnk/pl_")+idprm).c_str());
 				list.push_back(nprm);
 			    }
@@ -897,10 +897,10 @@ bool Widget::cntrCmdLinks( XMLNode *opt )
 			{
 			    XMLNode *nel = NULL;
 			    if( wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst )
-				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,RWRWR_,"root","UI",2,"tp","str","elGrp",grpprm.c_str());
+				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,(lnk_ro?R_R_R_:RWRWR_),"root","UI",2,"tp","str","elGrp",grpprm.c_str());
 			    else
 				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
-				    nprm,RWRWR_,"root","UI",4,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
+				    nprm,(lnk_ro?R_R_R_:RWRWR_),"root","UI",4,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
 			    if( nel && atoi(opt->attr("inclValue").c_str()) ) nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
 			}
 		    }

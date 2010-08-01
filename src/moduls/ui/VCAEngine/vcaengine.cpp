@@ -66,7 +66,8 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name ) : mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b -r 10000 -c 1 -v 0.8 - -t ogg -"), mFrcClr(false)
+Engine::Engine( string name ) : 
+    mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mFrcClr(false)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;

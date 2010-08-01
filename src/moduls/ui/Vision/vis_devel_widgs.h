@@ -252,6 +252,7 @@ class InspLnk: public QTreeWidget
     private:
 	//Private methods
 	bool event( QEvent *event );
+	void contextMenuEvent( QContextMenuEvent *event );
 
 	//Private attributes
 	bool show_init;
