@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lisenko                                   *
+ *   Copyright (C) 2010 by Maxim Lysenko                                   *
  *   mlisenko@oscada.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	"BD"
 #define VER_TYPE	VER_BD
 #define VERSION		"0.1.0"
-#define AUTORS		"Maxim Lisenko"
+#define AUTORS		"Maxim Lysenko"
 #define DESCRIPTION	"BD module. Provides support of the BD PostgreSQL."
 #define MOD_LICENSE	"GPL2"
 //************************************************
@@ -106,26 +106,38 @@ MBD::~MBD( )
 
 }
 
-
 void MBD::postDisable(int flag)
 {
     TBD::postDisable(flag);
 
-    /*if( flag && owner().fullDeleteDB() )
+    if( flag && owner().fullDeleteDB() )
     {
-	MYSQL connect;
-
-	if(!mysql_init(&connect)) throw TError(TSYS::DBInit,nodePath().c_str(),_("Error initializing client."));
-	connect.reconnect = 1;
-	if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
-	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),mysql_error(&connect));
-
-	string req = "DROP DATABASE `"+bd+"`";
-	if(mysql_real_query(&connect,req.c_str(),req.size()))
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s"),mysql_error(&connect));
-
-	mysql_close(&connect);
-    }*/
+        PGconn * connection;
+        PGresult *res;
+        if( PQstatus( connection ) != CONNECTION_OK  )
+        {
+            string conninfo;
+            conninfo = "host = " + host + " hostaddr = " + hostaddr + " port = " + port + " dbname = template1" + " user = " + user + 
+                    " password = " + pass + " connect_timeout = " + connect_timeout;
+            if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
+                throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+            if( PQstatus( connection ) != CONNECTION_OK )
+                throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+        }
+        string req = "DROP DATABASE \""+db+"\"";
+        if( (res = PQexec(connection,req.c_str())) == NULL )
+            throw TError(TSYS::DBRequest,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+        if( ( PQresultStatus( res ) != PGRES_COMMAND_OK ) && ( PQresultStatus( res ) != PGRES_TUPLES_OK ) )
+        {
+            string err, err1;
+            err = PQresStatus( PQresultStatus( res ));
+            err1 = PQresultErrorMessage( res );
+            PQclear( res );
+            throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
+        }
+        else PQclear( res );
+        PQfinish( connection );
+    }
 }
 
 void MBD::enable( )
@@ -146,9 +158,15 @@ void MBD::enable( )
                    " password = " + pass + " connect_timeout = " + connect_timeout;
     cd_pg  = codePage().size()?codePage():Mess->charset();
     if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
+    {
+        PQfinish( connection );
         throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+    }
     if( PQstatus( connection ) != CONNECTION_OK )
+    {
+        PQfinish( connection );
         throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+    }
     TBD::enable( );
 
     vector< vector<string> > tbl;
@@ -159,17 +177,28 @@ void MBD::enable( )
         sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
         PQfinish( connection );
         if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+        {
+            PQfinish( connection );
             throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+        }
         if( PQstatus( connection ) != CONNECTION_OK )
+        {
+            PQfinish( connection );
             throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+        }
     }
     else
     {
-        PQfinish( connection );
         if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+        {
+            PQfinish( connection );
             throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+        }
         if( PQstatus( connection ) != CONNECTION_OK )
+        {
+            PQfinish( connection );
             throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+        }
     }
 }
 
@@ -279,7 +308,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	    "tp","str","help",
 	    _("PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;<db>;<port>;<connect_timeout>].\n"
 	      "Where:\n"
-	      "  host - PostgreSQL server hostname;\n"
+              "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'), it specifies Unix domain communication rather than TCP/IP communication;\n"
               "  hostaddr - PostgreSQL server host address;\n"
 	      "  user - DB user name;\n"
 	      "  pass - user's password for DB access;\n"

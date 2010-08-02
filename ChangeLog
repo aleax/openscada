@@ -1,3 +1,8 @@
+2010-08-02 Maxim
+- FIX:DB:PostgreSQL: 'enable' function is fixed.
+- DB:PostgreSQL: 'postDisable' function is added.
+
+
 2010-08-01 Roman
 - !!!:UI.VCAEngine: New session's user-API functions for links link() and linkSet() is added.
     Links info for run sessions' widgets is added. Default text synth string is updated.
