@@ -642,7 +642,7 @@ class PID : public TFunction
 	    if( max <= min )	return;
 
 	    //> Prepare values
-	    sp = 100.*(sp-min)/(max-min);
+	    sp = vmin(100,vmax(0,100.*(sp-min)/(max-min)));
 	    val = 100.*(val-min)/(max-min);
 	    val += k1*in1 + k2*in2;
 	    val = vmin(100.,vmax(-100.,val));

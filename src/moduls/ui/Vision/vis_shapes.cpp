@@ -2367,7 +2367,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	else
 	{
 	    val_tp  = atoi(req.attr("vtp").c_str());
-	    arh_beg = atoll(req.attr("beg").c_str());
+	    //arh_beg = atoll(req.attr("beg").c_str());
 	    arh_end = atoll(req.attr("end").c_str());
 	    arh_per = atoi(req.attr("per").c_str());
 	}

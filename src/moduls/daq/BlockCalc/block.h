@@ -109,10 +109,13 @@ class Block : public TCntrNode, public TValFunc, public TConfig
     private:
 	//Data
 	//> Define input interblock link structure
-	struct SLIBlk
+	class SLIBlk
 	{
-	    AutoHD<Block>	w_bl;	//Block AutoHD
-	    unsigned		w_id;	//IO index
+	    public:
+		SLIBlk( ) : w_id(-1) { }
+
+		AutoHD<Block>	w_bl;	//Block AutoHD
+		int		w_id;	//IO index
 	};
 
 	//> Define link structures

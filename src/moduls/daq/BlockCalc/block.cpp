@@ -280,7 +280,7 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	    switch( lnk )
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
-		    m_lnk[iid].iblk = new SLIBlk;	break;
+		    m_lnk[iid].iblk = new SLIBlk();	break;
 		case I_PRM: case O_PRM:
 		    m_lnk[iid].aprm = new AutoHD<TVal>;	break;
 	    }
@@ -354,14 +354,30 @@ void Block::calc( bool first, bool last )
 	    switch( m_lnk[i_ln].tp )
 	    {
 		case I_LOC: case I_GLB:
-		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() && m_lnk[i_ln].iblk->w_bl.at().enable() )
-			switch(ioType(i_ln))
+		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() )
+		    {
+			//> Use link
+			if( m_lnk[i_ln].iblk->w_bl.at().enable() )
 			{
-			    case IO::String:	setS(i_ln,m_lnk[i_ln].iblk->w_bl.at().getS(m_lnk[i_ln].iblk->w_id));	break;
-			    case IO::Integer:	setI(i_ln,m_lnk[i_ln].iblk->w_bl.at().getI(m_lnk[i_ln].iblk->w_id));	break;
-			    case IO::Real:	setR(i_ln,m_lnk[i_ln].iblk->w_bl.at().getR(m_lnk[i_ln].iblk->w_id));	break;
-			    case IO::Boolean:	setB(i_ln,m_lnk[i_ln].iblk->w_bl.at().getB(m_lnk[i_ln].iblk->w_id));	break;
+			    //> Early disconnected link init try
+			    if( m_lnk[i_ln].iblk->w_id == -100 )
+			    {
+				lnk_res.resRelease( );
+				try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
+				lnk_res.resRequestR( );
+				if( m_lnk[i_ln].iblk->w_bl.freeStat() ) break;
+			    }
+			    switch(ioType(i_ln))
+			    {
+				case IO::String:	setS(i_ln,m_lnk[i_ln].iblk->w_bl.at().getS(m_lnk[i_ln].iblk->w_id));	break;
+				case IO::Integer:	setI(i_ln,m_lnk[i_ln].iblk->w_bl.at().getI(m_lnk[i_ln].iblk->w_id));	break;
+				case IO::Real:		setR(i_ln,m_lnk[i_ln].iblk->w_bl.at().getR(m_lnk[i_ln].iblk->w_id));	break;
+				case IO::Boolean:	setB(i_ln,m_lnk[i_ln].iblk->w_bl.at().getB(m_lnk[i_ln].iblk->w_id));	break;
+			    }
 			}
+			//> Check for link disable need
+			else	m_lnk[i_ln].iblk->w_id = -100;
+		    }
 		    break;
 		case I_PRM:
 		    if( !m_lnk[i_ln].aprm->freeStat() )
@@ -378,6 +394,7 @@ void Block::calc( bool first, bool last )
     {
 	err_cnt++;
 	lnk_res.resRelease( );
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	throw TError(nodePath().c_str(),_("Error reading block's <%s> links."),id().c_str());
     }
     lnk_res.resRelease( );
@@ -398,14 +415,30 @@ void Block::calc( bool first, bool last )
 	    switch( m_lnk[i_ln].tp )
 	    {
 		case O_LOC: case O_GLB:
-		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() && m_lnk[i_ln].iblk->w_bl.at().enable() )
-			switch(ioType(i_ln))
+		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() )
+		    {
+			//> Use link
+			if( m_lnk[i_ln].iblk->w_bl.at().enable() )
 			{
-			    case IO::String:	m_lnk[i_ln].iblk->w_bl.at().setS(m_lnk[i_ln].iblk->w_id,getS(i_ln));	break;
-			    case IO::Integer:	m_lnk[i_ln].iblk->w_bl.at().setI(m_lnk[i_ln].iblk->w_id,getI(i_ln));	break;
-			    case IO::Real:	m_lnk[i_ln].iblk->w_bl.at().setR(m_lnk[i_ln].iblk->w_id,getR(i_ln));	break;
-			    case IO::Boolean:	m_lnk[i_ln].iblk->w_bl.at().setB(m_lnk[i_ln].iblk->w_id,getB(i_ln));	break;
+			    //> Early disconnected link init try
+			    if( m_lnk[i_ln].iblk->w_id == -100 )
+			    {
+				lnk_res.resRelease( );
+				try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
+				lnk_res.resRequestR( );
+				if( m_lnk[i_ln].iblk->w_bl.freeStat() ) break;
+			    }
+			    switch(ioType(i_ln))
+			    {
+				case IO::String:	m_lnk[i_ln].iblk->w_bl.at().setS(m_lnk[i_ln].iblk->w_id,getS(i_ln));	break;
+				case IO::Integer:	m_lnk[i_ln].iblk->w_bl.at().setI(m_lnk[i_ln].iblk->w_id,getI(i_ln));	break;
+				case IO::Real:	m_lnk[i_ln].iblk->w_bl.at().setR(m_lnk[i_ln].iblk->w_id,getR(i_ln));	break;
+				case IO::Boolean:	m_lnk[i_ln].iblk->w_bl.at().setB(m_lnk[i_ln].iblk->w_id,getB(i_ln));	break;
+			    }
 			}
+			//> Check for link disable need
+			else m_lnk[i_ln].iblk->w_id = -100;
+		    }
 		    break;
 		case O_PRM:
 		    if( !m_lnk[i_ln].aprm->freeStat() )

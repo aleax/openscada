@@ -1,3 +1,14 @@
+2010-08-08 Roman
+- Value: Return values for error set to EVAL.
+- FIX:Archive.FSArch: New files creation for old data fixed and made imrovement.
+- DB.PostgreSQL: Translation for Russian an Ukrainian is updated and for German, by Irina Popkova, is added.
+- FIX:DAQ.BlockCalc: Links reinit is added for disabled blocks on run.
+- DAQ.LogicLev: Parameter's object disable is added for the metod and the address changing.
+- Special.FLibComplex1: The limit by scale for setpoint of PID is added.
+- FIX:UI.QTCfg: A page content update for error into combobox data changing is fixed.
+- UI.Vision: A value archive limit by begin is removed for primitive Diagram for archive data getting from reserve station allow.
+
+
 2010-08-02 Maxim
 - FIX:DB:PostgreSQL: 'enable' function is fixed.
 - DB:PostgreSQL: 'postDisable' function is added.

@@ -103,7 +103,7 @@ class Contr: public TController
 	void blkDel( const string &id )		{ chldDel(m_bl,id); }
 	AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
 
-	Res &res( )				{ return hd_res; }
+	//Res &res( )				{ return hd_res; }
 
 	TipContr &owner( );
 

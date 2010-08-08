@@ -514,7 +514,7 @@ string TValFunc::getS( unsigned id )
 	case IO::String:	return mVal[id].val.s->getVal();
 	case IO::Object:	return mVal[id].val.o->getStrXML();
     }
-    return "";
+    return EVAL_STR;
 }
 
 int TValFunc::getI( unsigned id )
@@ -527,7 +527,7 @@ int TValFunc::getI( unsigned id )
 	case IO::Boolean:	return (mVal[id].val.b!=EVAL_BOOL) ? (bool)mVal[id].val.b : EVAL_INT;
 	case IO::Integer:	return mVal[id].val.i;
     }
-    return 0;
+    return EVAL_INT;
 }
 
 double TValFunc::getR( unsigned id )
@@ -540,7 +540,7 @@ double TValFunc::getR( unsigned id )
 	case IO::Boolean:	return (mVal[id].val.b!=EVAL_BOOL) ? (bool)mVal[id].val.b : EVAL_REAL;
 	case IO::Real:		return mVal[id].val.r;
     }
-    return 0.0;
+    return EVAL_REAL;
 }
 
 char TValFunc::getB( unsigned id )
@@ -553,7 +553,7 @@ char TValFunc::getB( unsigned id )
 	case IO::Real:		return (mVal[id].val.r!=EVAL_REAL) ? (bool)mVal[id].val.r : EVAL_BOOL;
 	case IO::Boolean:	return mVal[id].val.b;
     }
-    return false;
+    return EVAL_BOOL;
 }
 
 TVarObj *TValFunc::getO( unsigned id )

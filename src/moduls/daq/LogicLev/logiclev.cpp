@@ -890,12 +890,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if( a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
 	try
 	{
+	    if( enableStat() ) disable();
 	    m_mode = atoi(opt->text().c_str());
 	    mode( (TMdPrm::Mode)m_mode, m_prm = "" );
 	} catch(...) { disable(); throw; }
     else if( a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
 	try
 	{
+	    if( enableStat() ) disable();
 	    m_prm = opt->text();
 	    if( m_mode == TMdPrm::DirRefl && m_prm == owner().owner().modId()+"."+owner().id()+"."+id() )
 		m_prm = owner().owner().modId()+"."+owner().id();

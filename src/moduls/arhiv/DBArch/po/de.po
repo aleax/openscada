@@ -1,23 +1,25 @@
 # OpenSCADA.Archive.DBArch translate to German.
-# Copyright (C) 2008-2009 Irina Popkova
+# Copyright (C) 2008-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Archive.DBArch module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: arch.cpp:52 mess.cpp:59 mess.cpp:79 mess.cpp:180 mess.cpp:198 val.cpp:132
 #: val.cpp:163 val.cpp:193 val.cpp:209 val.cpp:222 val.cpp:247 val.cpp:316
 #: mess.h:51
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 12:55+0300\n"
+"POT-Creation-Date: 2010-08-04 20:16+0300\n"
 "PO-Revision-Date: 2009-08-17 10:37+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -50,7 +52,7 @@ msgstr ""
 "Datenbank."
 
 #: arch.cpp:42
-msgid "GPL"
+msgid "GPL2"
 msgstr ""
 
 #: arch.cpp:47
@@ -333,19 +335,3 @@ msgstr ""
 #: mess.h:42
 msgid "DBAMsg_"
 msgstr ""
-
-#~ msgid ""
-#~ "======================= The module <%s:%s> options "
-#~ "=======================\n"
-#~ "---------- Parameters of the module section <%s> in config file "
-#~ "----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "========================== Оptionen des Moduls  <%s:%s> "
-#~ "==========================\n"
-#~ "-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
-#~ "--------\n"
-#~ "\n"
-
-#~ msgid "Options help"
-#~ msgstr "Optionen Hilfe"

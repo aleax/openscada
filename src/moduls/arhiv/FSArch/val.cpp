@@ -708,6 +708,9 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
+    long long b_prev = 0;
+    long long f_sz = (long long)(((ModVArch&)archivator()).fileTimeSize()*3600e6);
+    long long v_per = (long long)(archivator().valPeriod()*1e6);
 
     realEnd = vmax(realEnd,buf.end());
 
@@ -719,18 +722,21 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	    //>> Create new file for old data
 	    if( beg < arh_f[i_a]->begin() )
 	    {
+		//>>> Calc file limits
+		long long n_end, n_beg;	//New file end position
+		if( (arh_f[i_a]->begin()-beg) > f_sz ) n_end = beg+f_sz;
+		else n_end = arh_f[i_a]->begin()-v_per;
+		n_beg = vmax(b_prev,n_end-f_sz);
+
+		//>>> Create file name
 		char c_buf[30];
-		time_t tm = beg/1000000;
+		time_t tm = n_beg/1000000;
 		struct tm tm_tm;
 		localtime_r(&tm,&tm_tm);
 		strftime(c_buf,sizeof(c_buf)," %F %T.val",&tm_tm);
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
-		long long n_end;	//New file end position
-		if( (arh_f[i_a]->begin()-beg) > (long long)((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.)
-		    n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*60.*60.*1000000.);
-		else n_end = arh_f[i_a]->begin();
-		arh_f.insert( arh_f.begin()+i_a, new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1e6),archive().valType(),this) );
+		arh_f.insert(arh_f.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(),this));
 	    }
 	    //>> Insert values to archive
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
@@ -738,9 +744,10 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
 		res.release();
 		arh_f[i_a]->setVals(buf,beg,n_end);
-		beg = n_end+(long long)(archivator().valPeriod()*1e6);
+		beg = n_end+v_per;
 		res.request(true);
 	    }
+	    b_prev = arh_f[i_a]->end()+v_per;
 	}
     //> Create new file for new data
     while( end >= beg )
@@ -753,13 +760,13 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	strftime(c_buf,sizeof(c_buf)," %F %T.val",&tm_tm);
 	string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
-	long long n_end = beg+(long long)(((ModVArch &)archivator()).fileTimeSize()*3600e6);
-	arh_f.push_back( new VFileArch(AName,beg,n_end,(long long)(archivator().valPeriod()*1e6),archive().valType(),this) );
+	long long n_end = beg+f_sz;
+	arh_f.push_back( new VFileArch(AName,beg,n_end,v_per,archive().valType(),this) );
 	n_end = (end > n_end)?n_end:end;
 
 	res.release();
 	arh_f[arh_f.size()-1]->setVals(buf,beg,n_end);
-	beg = n_end+(long long)(archivator().valPeriod()*1e6);
+	beg = n_end+v_per;
     }
 }
 
