@@ -356,7 +356,6 @@ void Block::calc( bool first, bool last )
 		case I_LOC: case I_GLB:
 		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() )
 		    {
-			//> Use link
 			if( m_lnk[i_ln].iblk->w_bl.at().enable() )
 			{
 			    //> Early disconnected link init try
@@ -367,6 +366,7 @@ void Block::calc( bool first, bool last )
 				lnk_res.resRequestR( );
 				if( m_lnk[i_ln].iblk->w_bl.freeStat() ) break;
 			    }
+			    //> Use link
 			    switch(ioType(i_ln))
 			    {
 				case IO::String:	setS(i_ln,m_lnk[i_ln].iblk->w_bl.at().getS(m_lnk[i_ln].iblk->w_id));	break;
@@ -417,7 +417,6 @@ void Block::calc( bool first, bool last )
 		case O_LOC: case O_GLB:
 		    if( !m_lnk[i_ln].iblk->w_bl.freeStat() )
 		    {
-			//> Use link
 			if( m_lnk[i_ln].iblk->w_bl.at().enable() )
 			{
 			    //> Early disconnected link init try
@@ -428,6 +427,7 @@ void Block::calc( bool first, bool last )
 				lnk_res.resRequestR( );
 				if( m_lnk[i_ln].iblk->w_bl.freeStat() ) break;
 			    }
+			    //> Use link
 			    switch(ioType(i_ln))
 			    {
 				case IO::String:	m_lnk[i_ln].iblk->w_bl.at().setS(m_lnk[i_ln].iblk->w_id,getS(i_ln));	break;
