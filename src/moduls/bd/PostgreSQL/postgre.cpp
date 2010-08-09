@@ -112,31 +112,36 @@ void MBD::postDisable(int flag)
 
     if( flag && owner().fullDeleteDB() )
     {
-        PGconn * connection;
+        PGconn * connection = NULL;
         PGresult *res;
-        if( PQstatus( connection ) != CONNECTION_OK  )
+        string conninfo;
+        try
         {
-            string conninfo;
             conninfo = "host = " + host + " hostaddr = " + hostaddr + " port = " + port + " dbname = template1" + " user = " + user + 
                     " password = " + pass + " connect_timeout = " + connect_timeout;
             if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
                 throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
             if( PQstatus( connection ) != CONNECTION_OK )
                 throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+            string req = "DROP DATABASE \""+db+"\"";
+            if( (res = PQexec(connection,req.c_str())) == NULL )
+                throw TError(TSYS::DBRequest,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+            if( ( PQresultStatus( res ) != PGRES_COMMAND_OK ) && ( PQresultStatus( res ) != PGRES_TUPLES_OK ) )
+            {
+                string err, err1;
+                err = PQresStatus( PQresultStatus( res ));
+                err1 = PQresultErrorMessage( res );
+                PQclear( res );
+                throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
+            }
+            else PQclear( res );
+            PQfinish( connection );
         }
-        string req = "DROP DATABASE \""+db+"\"";
-        if( (res = PQexec(connection,req.c_str())) == NULL )
-            throw TError(TSYS::DBRequest,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
-        if( ( PQresultStatus( res ) != PGRES_COMMAND_OK ) && ( PQresultStatus( res ) != PGRES_TUPLES_OK ) )
+        catch(...)
         {
-            string err, err1;
-            err = PQresStatus( PQresultStatus( res ));
-            err1 = PQresultErrorMessage( res );
-            PQclear( res );
-            throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
+            if( connection ) PQfinish( connection );
+            throw;
         }
-        else PQclear( res );
-        PQfinish( connection );
     }
 }
 
@@ -157,49 +162,41 @@ void MBD::enable( )
     conninfoReal = "host = " + host + " hostaddr = " + hostaddr + " port = " + port + " dbname = " + db + " user = " + user + 
                    " password = " + pass + " connect_timeout = " + connect_timeout;
     cd_pg  = codePage().size()?codePage():Mess->charset();
-    if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
+    try
     {
-        PQfinish( connection );
-        throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-    }
-    if( PQstatus( connection ) != CONNECTION_OK )
-    {
-        PQfinish( connection );
-        throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
-    }
-    TBD::enable( );
+        if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
+            throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+        if( PQstatus( connection ) != CONNECTION_OK )
+            throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+        TBD::enable( );
 
-    vector< vector<string> > tbl;
-    string req = "SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '" + db + "'";
-    sqlReq(req,&tbl);
-    if( tbl.size() == 2 && tbl[1][0] == "0" )
-    {
-        sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
-        PQfinish( connection );
-        if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+        vector< vector<string> > tbl;
+        string req = "SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '" + db + "'";
+        sqlReq(req,&tbl);
+        if( tbl.size() == 2 && tbl[1][0] == "0" )
         {
+            sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
             PQfinish( connection );
-            throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+            if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+                throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+            if( PQstatus( connection ) != CONNECTION_OK )
+                throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
         }
-        if( PQstatus( connection ) != CONNECTION_OK )
+        else
         {
             PQfinish( connection );
-            throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
-        }
-    }
-    else
-    {
-        if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
-        {
-            PQfinish( connection );
-            throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-        }
-        if( PQstatus( connection ) != CONNECTION_OK )
-        {
-            PQfinish( connection );
-            throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+            if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+                throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+            if( PQstatus( connection ) != CONNECTION_OK )
+                throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
         }
     }
+    catch(...)
+    {
+        if( connection ) PQfinish( connection );
+        throw;
+    }
+
 }
 
 void MBD::disable( )
@@ -233,6 +230,39 @@ TTable *MBD::openTable( const string &inm, bool create )
 	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),inm.c_str());
     return new MTable(inm,this,create);
 }
+
+void MBD::transOpen( )
+{
+    PGTransactionStatusType tp;
+    tp = PQtransactionStatus( connection );
+
+    if( tp == PQTRANS_INTRANS ) return;
+    PGresult   *res;
+    res = PQexec(connection, "BEGIN");
+    if (!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+    {
+        PQclear(res);
+        throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error!"));
+    }
+    else PQclear(res);
+}
+
+void MBD::transCommit( )
+{
+    PGTransactionStatusType tp;
+    tp = PQtransactionStatus( connection );
+
+    if( tp == PQTRANS_IDLE ) return;
+    PGresult   *res;
+    res = PQexec(connection, "COMMIT");
+    if (!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+    {
+        PQclear(res);
+        throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop trasaction error!"));
+    }
+    else PQclear(res);
+}
+
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
 {
@@ -308,8 +338,10 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	    "tp","str","help",
 	    _("PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;<db>;<port>;<connect_timeout>].\n"
 	      "Where:\n"
-              "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'), it specifies Unix domain communication rather than TCP/IP communication;\n"
-              "  hostaddr - PostgreSQL server host address;\n"
+              "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
+              "         it specifies Unix domain communication rather than TCP/IP communication;\n"
+              "         the value is the name of the directory in which the socket file is stored.\n"
+              "  hostaddr - Numeric IP address of host to connect to;\n"
 	      "  user - DB user name;\n"
 	      "  pass - user's password for DB access;\n"
 	      "  db - DB name;\n"
@@ -357,6 +389,7 @@ MTable::~MTable(  )
 
 void MTable::postDisable(int flag)
 {
+    owner().transCommit();
     if( flag )
     {
 	try
@@ -372,6 +405,7 @@ MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
 void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 {
     //- Get generic data structure -
+    owner().transCommit();
     string req = "SELECT a.attname as \"Field\", pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Type\" "
                  "FROM pg_catalog.pg_attribute a "
                  "WHERE a.attnum > 0 "
@@ -429,7 +463,7 @@ void MTable::fieldStruct( TConfig &cfg )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg) );
         else if( tblStrct[i_fld][1] == "double precision" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg) );
-        else if( tblStrct[i_fld][1] == "boolean" )
+        else if( tblStrct[i_fld][1] == "smallint" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Boolean,flg) );
         else if( tblStrct[i_fld][1] == "timestamp with time zone" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg|TFld::DateTimeDec,"10") );
@@ -442,7 +476,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-
+    owner().transCommit();
     string sid;
     //> Make SELECT and WHERE
     string req = "SELECT ";
@@ -499,7 +533,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-
+    owner().transCommit();
     string sid;
     //> Prepare request
     string req = "SELECT ";
@@ -555,7 +589,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-
+    owner().transOpen();
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
@@ -641,7 +675,7 @@ void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-
+    owner().transOpen();
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -666,7 +700,7 @@ void MTable::fieldDel( TConfig &cfg )
 void MTable::fieldFix( TConfig &cfg )
 {
     bool next = false, next_key = false;
-
+    owner().transCommit();
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
 
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -709,7 +743,7 @@ void MTable::fieldFix( TConfig &cfg )
                             isEqual = true;
                         break;
                     case TFld::Real:	if( tblStrct[i_fld][1] == "double precision" ) isEqual = true;	break;
-                    case TFld::Boolean:	if( tblStrct[i_fld][1] == "boolean" ) isEqual = true;	break;
+                    case TFld::Boolean:	if( tblStrct[i_fld][1] == "smallint" ) isEqual = true;	break;
                 }
                 if( isEqual ) break;
                 continue;
@@ -754,7 +788,7 @@ void MTable::fieldFix( TConfig &cfg )
                 f_tp="DOUBLE PRECISION DEFAULT '"+TSYS::real2str(atof(u_cfg.fld().def().c_str()))+"' ";
                 break;
             case TFld::Boolean:
-                f_tp="BOOLEAN DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
+                f_tp="SMALLINT DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
                 break;
         }
 
@@ -787,6 +821,7 @@ void MTable::fieldFix( TConfig &cfg )
 	//> Update structure information
         getStructDB( name(), tblStrct );
     }
+    owner().transOpen();
 }
 
 

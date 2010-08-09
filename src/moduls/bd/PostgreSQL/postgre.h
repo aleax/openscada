@@ -90,6 +90,10 @@ class MBD : public TBD
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+        
+        void transOpen( );
+        void transCommit( );
+
 
     protected:
 	//Protected methods
