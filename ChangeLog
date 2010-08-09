@@ -1,4 +1,8 @@
 2010-08-09 Maxim
+- FIX:DB:PostgreSQL: the variables types' manipulations in the functions 'fieldStruct' and 'fieldFix' are fixed.
+
+
+2010-08-09 Maxim
 - FIX:DB:PostgreSQL: try->catch is added to the 'enable' and 'postDisable' functions to simplify the finishing of the connection to DB.
 - DB:PostgreSQL: transactions processing is added to improve the performance of the DB module.
 

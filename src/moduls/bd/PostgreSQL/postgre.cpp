@@ -457,9 +457,7 @@ void MTable::fieldStruct( TConfig &cfg )
         else if( sscanf(tblStrct[i_fld][1].c_str(),"character(%d)",&pr1) ||
                  sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1) )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,TSYS::int2str(pr1).c_str()) );
-        else if( (tblStrct[i_fld][1] == "text") || (tblStrct[i_fld][1] == "character varying") )
-            cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215") );
-        else if( (tblStrct[i_fld][1] == "smallint") || (tblStrct[i_fld][1] == "integer") || (tblStrct[i_fld][1] == "bigint") )
+        else if( (tblStrct[i_fld][1] == "integer") || (tblStrct[i_fld][1] == "bigint") )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg) );
         else if( tblStrct[i_fld][1] == "double precision" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg) );
@@ -730,16 +728,16 @@ void MTable::fieldFix( TConfig &cfg )
                         if( (tblStrct[i_fld][1] == "text") || (tblStrct[i_fld][1] == "character varying") )
                             isEqual = true;
                         else if( ( sscanf(tblStrct[i_fld][1].c_str(),"character(%d)",&pr1) ||
-                                sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1) ) && 
-                                (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0 )
+                                   sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1) ) && 
+                                 (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0 )
                             isEqual = true;
                         break;
                     }
                     case TFld::Integer:	
                         if( u_cfg.fld().flg()&TFld::DateTimeDec && (tblStrct[i_fld][1] == "timestamp with time zone") )
                             isEqual = true;
-                        else if( (tblStrct[i_fld][1] == "smallint") || (tblStrct[i_fld][1] == "integer") || 
-                                (tblStrct[i_fld][1] == "bigint") )
+                        else if( (tblStrct[i_fld][1] == "integer") || 
+                                 (tblStrct[i_fld][1] == "bigint") )
                             isEqual = true;
                         break;
                     case TFld::Real:	if( tblStrct[i_fld][1] == "double precision" ) isEqual = true;	break;
