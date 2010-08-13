@@ -479,7 +479,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if( ctrChkNode(opt,"add",0666,"root","Transport",SEC_WR) )
-	    extHostSet(ExtHost(sysHost()?"*":opt->attr("user"),"newHost","New external host","","",opt->attr("user"),""));
+	    extHostSet(ExtHost(sysHost()?"*":opt->attr("user"),"newHost",_("New external host"),"","",opt->attr("user"),""));
 	if( ctrChkNode(opt,"del",0666,"root","Transport",SEC_WR) )
 	    extHostDel(sysHost()?"*":opt->attr("user"),opt->attr("key_id") );
 	if( ctrChkNode(opt,"set",0666,"root","Transport",SEC_WR) )

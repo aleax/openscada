@@ -32,8 +32,8 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const char *id, const char *name, const string &lib_db ) :
-    TConfig(&mod->elLib()), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
-    mDescr(cfg("DESCR").getSd()), mDB(cfg("DB").getSd()), work_lib_db(lib_db)
+    TConfig(&mod->elLib()), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
+    mDB(cfg("DB").getSd()), mProgTr(cfg("PROG_TR").getBd()), work_lib_db(lib_db)
 {
     mId = id;
     mName = name;
@@ -172,6 +172,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?0444:0664,"root","root",2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?0444:0664,"root","root",3,"tp","str","cols","100","rows","5");
+		if( !DB().empty() )
+		    ctrMkNode("fld",opt,-1,"/lib/cfg/progTr",_("Program's text translation"),0664,"root","root",1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
@@ -201,6 +203,11 @@ void Lib::cntrCmdProc( XMLNode *opt )
     {
 	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( descr() );
 	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setDescr( opt->text() );
+    }
+    else if( a_path == "/lib/cfg/progTr" )
+    {
+	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(progTr()) );
+	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setProgTr( atoi(opt->text().c_str()) );
     }
     else if( a_path == "/br/fnc_" || a_path == "/func/func" )
     {

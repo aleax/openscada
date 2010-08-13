@@ -132,6 +132,7 @@ void Func::load_( )
 {
     if( owner().DB().empty() || (!SYS->chkSelDB(owner().DB())) )	return;
 
+    cfg("FORMULA").setNoTransl(!owner().progTr());
     SYS->db().at().dataGet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
     loadIO( );
@@ -179,6 +180,7 @@ void Func::save_( )
 {
     if( owner().DB().empty() )  return;
 
+    cfg("FORMULA").setNoTransl(!owner().progTr());
     SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
     //> Save io config
@@ -597,12 +599,6 @@ void Func::cdAssign( Reg *rez, Reg *op )
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     addr = op->pos();  prg.append((char*)&addr,sizeof(uint16_t));
 
-    //> Set variable type to assigned value type
-    /*if( rez->lock() && !rez->objEl() && rez->type() != op->type() && 
-	    (op->type() == Reg::Bool || op->type() == Reg::Int || op->type() == Reg::Real || op->type() == Reg::String) &&
-	    (rez->type() == Reg::Bool || rez->type() == Reg::Int || rez->type() == Reg::Real || rez->type() == Reg::String) )
-	rez->setType(op->type());*/
-
     op->free();		//> Free temp operands
 }
 
@@ -627,30 +623,6 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
-    //> Check allowing type operations
-    /*if( !op1->objEl() )
-	switch( op1->vType(this) )
-	{
-	    case Reg::Bool:
-		switch(cod)
-		{
-		    case Reg::BitShLeft: case Reg::BitShRight:
-			throw TError(nodePath().c_str(),_("Operation %d don't support bool type"),cod);
-		}
-		break;
-	    case Reg::String:
-		switch(cod)
-		{
-		    case Reg::Sub: case Reg::Mul: case Reg::Div: case Reg::RstI: case Reg::BitOr: case Reg::BitAnd:
-		    case Reg::BitXor: case Reg::BitShLeft: case Reg::BitShRight: case Reg::LOr: case Reg::LAnd:
-		    case Reg::LT: case Reg::GT: case Reg::LEQ: case Reg::GEQ:
-			throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
-		}
-		break;
-	    case Reg::Obj:
-		throw TError(nodePath().c_str(),_("Operation %d don't support for object type"),cod);
-	}*/
-
     //> Check allow the buildin calc and calc
     if( op1->pos() < 0 && op2->pos() < 0 )
     {
@@ -773,21 +745,6 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
-    //> Check allowing type operations
-    /*if( !op->objEl() )
-	switch( op->type() )
-	{
-	    case Reg::String:
-		switch(cod)
-		{
-		    case Reg::Not: case Reg::BitNot: case Reg::Neg:
-			throw TError(nodePath().c_str(),_("Operation %d don't support string type"),cod);
-		}
-		break;
-	    case Reg::Obj:
-		throw TError(nodePath().c_str(),_("Operation %d don't support for object type"),cod);
-	}*/
-
     //> Check allow the buildin calc and calc
     if( op->pos() < 0 )
     {
@@ -2021,52 +1978,64 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    case Reg::CProc:
 	    case Reg::CFunc:
 	    {
-		TValFunc vfnc("JavaLikeFuncCalc",&funcAt(*(uint8_t*)(cprg+1))->func().at());
+		TValFunc *vfnc = val->ctxGet(*(uint8_t*)(cprg+1));
+		if( !vfnc )
+		{
+		    vfnc = new TValFunc("JavaLikeFuncCalc",&funcAt(*(uint8_t*)(cprg+1))->func().at());
+		    val->ctxSet(*(uint8_t*)(cprg+1),vfnc);
+		}
+		/*if( val->vctx.find(*(uint8_t*)(cprg+1)) == val->vctx.end() )
+		    val->vctx[*(uint8_t*)(cprg+1)] = new TValFunc("JavaLikeFuncCalc",&funcAt(*(uint8_t*)(cprg+1))->func().at());
+		TValFunc *vfnc = val->vctx[*(uint8_t*)(cprg+1)];*/
 #if OSC_DEBUG >= 5
-		printf("CODE: Call function/procedure %d = %s(%d).\n",*(uint16_t*)(cprg+3),vfnc.func()->id().c_str(),*(uint8_t*)(cprg+2));
+		printf("CODE: Call function/procedure %d = %s(%d).\n",*(uint16_t*)(cprg+3),vfnc->func()->id().c_str(),*(uint8_t*)(cprg+2));
 #endif
 		//>>> Get return position
 		int r_pos, i_p, p_p;
-		for( r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++ )
-		    if( vfnc.ioFlg(r_pos)&IO::Return ) break;
+		for( r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++ )
+		    if( vfnc->ioFlg(r_pos)&IO::Return ) break;
 		//>>> Process parameters
-		for( i_p = 0; i_p < *(uint8_t*)(cprg+2); i_p++ )
+		for( i_p = p_p = 0; true; i_p++ )
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
-		    switch(vfnc.ioType(p_p))
+		    if( p_p >= vfnc->func()->ioSize() ) break;
+		    //>>>> Set default value
+		    if( i_p >= *(uint8_t*)(cprg+2) )	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
+		    switch(vfnc->ioType(p_p))
 		    {
-			case IO::String:	vfnc.setS(p_p,getValS(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Integer:	vfnc.setI(p_p,getValI(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Real:		vfnc.setR(p_p,getValR(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Boolean:	vfnc.setB(p_p,getValB(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Object:	vfnc.setO(p_p,getValO(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::String:	vfnc->setS(p_p,getValS(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Integer:	vfnc->setI(p_p,getValI(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Real:		vfnc->setR(p_p,getValR(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Boolean:	vfnc->setB(p_p,getValB(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::Object:	vfnc->setO(p_p,getValO(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))])); break;
 		    }
 		}
 		//>>> Make calc
-		vfnc.calc(vfnc.user());
+		vfnc->calc(vfnc->user());
 		//>>> Process outputs
 		for( i_p = 0; i_p < *(uint8_t*)(cprg+2); i_p++ )
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
-		    if( vfnc.ioFlg(p_p)&IO::Output )
-			switch(vfnc.ioType(p_p))
+		    if( p_p >= vfnc->func()->ioSize() ) break;
+		    if( vfnc->ioFlg(p_p)&IO::Output )
+			switch(vfnc->ioType(p_p))
 			{
-			    case IO::String:	setValS(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getS(p_p)); break;
-			    case IO::Integer:	setValI(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getI(p_p)); break;
-			    case IO::Real:	setValR(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getR(p_p)); break;
-			    case IO::Boolean:	setValB(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getB(p_p)); break;
-			    case IO::Object:	setValO(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc.getO(p_p)); break;
+			    case IO::String:	setValS(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc->getS(p_p)); break;
+			    case IO::Integer:	setValI(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc->getI(p_p)); break;
+			    case IO::Real:	setValR(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc->getR(p_p)); break;
+			    case IO::Boolean:	setValB(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc->getB(p_p)); break;
+			    case IO::Object:	setValO(val,reg[*(uint16_t*)(cprg+5+i_p*sizeof(uint16_t))],vfnc->getO(p_p)); break;
 			}
 		}
 		//>>> Set return
 		if( *cprg == Reg::CFunc )
-		    switch(vfnc.ioType(r_pos))
+		    switch(vfnc->ioType(r_pos))
 		    {
-			case IO::String:	reg[*(uint16_t*)(cprg+3)] = vfnc.getS(r_pos); break;
-			case IO::Integer:	reg[*(uint16_t*)(cprg+3)] = vfnc.getI(r_pos); break;
-			case IO::Real:		reg[*(uint16_t*)(cprg+3)] = vfnc.getR(r_pos); break;
-			case IO::Boolean:	reg[*(uint16_t*)(cprg+3)] = vfnc.getB(r_pos); break;
-			case IO::Object:	reg[*(uint16_t*)(cprg+3)] = vfnc.getO(r_pos); break;
+			case IO::String:	reg[*(uint16_t*)(cprg+3)] = vfnc->getS(r_pos); break;
+			case IO::Integer:	reg[*(uint16_t*)(cprg+3)] = vfnc->getI(r_pos); break;
+			case IO::Real:		reg[*(uint16_t*)(cprg+3)] = vfnc->getR(r_pos); break;
+			case IO::Boolean:	reg[*(uint16_t*)(cprg+3)] = vfnc->getB(r_pos); break;
+			case IO::Object:	reg[*(uint16_t*)(cprg+3)] = vfnc->getO(r_pos); break;
 		    }
 
 		cprg += 5 + (*(uint8_t*)(cprg+2))*sizeof(uint16_t); break;
@@ -2076,7 +2045,6 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Call object's function %d = %d(%d).\n",*(uint16_t*)(cprg+4),*(uint16_t*)(cprg+1),*(uint8_t*)(cprg+3));
 #endif
-
 		if( reg[*(uint16_t*)(cprg+1)].propEmpty() )
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
 

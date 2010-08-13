@@ -51,6 +51,7 @@ class Lib : public TCntrNode, public TConfig
 	string name( );
 	string descr( )		{ return mDescr; }
 	bool startStat( )	{ return run_st; }
+	bool progTr( )		{ return mProgTr; }
 
 	string DB( )		{ return work_lib_db; }
 	string tbl( )		{ return mDB; }
@@ -60,6 +61,7 @@ class Lib : public TCntrNode, public TConfig
 	void setDescr( const string &idscr )	{ mDescr = idscr; modif(); }
 	void setStart( bool val );
 	void setFullDB( const string &idb );
+	void setProgTr( bool val )		{ mProgTr = val; modif(); }
 
 	void list( vector<string> &ls )		{ chldList(mFnc,ls); }
 	bool present( const string &id )	{ return chldPresent(mFnc,id); }
@@ -83,6 +85,7 @@ class Lib : public TCntrNode, public TConfig
 	bool	run_st;
 	int	mFnc;
 	string	&mId, &mName, &mDescr, &mDB, work_lib_db;
+	bool	&mProgTr;
 };
 
 } //End namespace FreeLib

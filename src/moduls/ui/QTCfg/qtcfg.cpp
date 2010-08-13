@@ -1212,7 +1212,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if( adjRow ) tbl->resizeRowsToContents();
 		tbl->setMinimumSize( QSize( 100, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
 		tbl->setMaximumSize( QSize( 32767, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
-		tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first woe update missing.
+		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 
 		tbl_init = false;
 	    }
@@ -2659,24 +2659,14 @@ void ConfApp::tablePopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(),_("%s| Move <%s> record from %d to %d."),
 			w_user->user().toAscii().data(), el_path.c_str(), row, r_new );
 	    }
-	    if( cntrIfCmd(n_el1) )
-	    {
-		mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this);
-		return;
-	    }
-
-	    autoUpdTimer->setSingleShot(true);
-	    autoUpdTimer->start(CH_REFR_TM);
+	    if( cntrIfCmd(n_el1) )	throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
 
 	    popup.clear();
 	}
-    }catch(TError err)
-    {
-	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
+    }catch(TError err)	{ mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-	autoUpdTimer->setSingleShot(true);
-	autoUpdTimer->start(CH_REFR_TM);	//Redraw
-    }
+    autoUpdTimer->setSingleShot(true);
+    autoUpdTimer->start(CH_REFR_TM);	//Redraw
 }
 
 void ConfApp::imgPopup( const QPoint &pos )

@@ -178,7 +178,7 @@ void WidgetLib::setEnable( bool val )
 {
     if( val == enable() )       return;
 
-    mess_info(nodePath().c_str(),val ? _("Enable widget library.") : _("Disable widget library."));
+    mess_info(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
 
     vector<string> f_lst;
     list(f_lst);

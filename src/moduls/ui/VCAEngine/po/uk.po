@@ -212,11 +212,11 @@ msgid "Save widget library."
 msgstr "Збереження бібліотеки віджетів."
 
 #: libwidg.cpp:181
-msgid "Enable widget library."
+msgid "Enable widgets library."
 msgstr "Ввімкнення бібліотеки віджетів."
 
 #: libwidg.cpp:181
-msgid "Disable widget library."
+msgid "Disable widgets library."
 msgstr "Вимкнення бібліотеки віджетів."
 
 #: libwidg.cpp:188

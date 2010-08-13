@@ -100,7 +100,7 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     //> Attribute get
@@ -111,7 +111,7 @@ void VCASess::getReq( SSess &ses )
 
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     //> Widget's (page) full attributes branch request
@@ -149,7 +149,7 @@ void VCASess::getReq( SSess &ses )
 	}
 
 	//>> Send request to browser
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
     }
     //> Resources request (images and other files)
@@ -6282,7 +6282,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	else
 	{
 	    val_tp  = atoi(req.attr("vtp").c_str());
-	    arh_beg = atoll(req.attr("beg").c_str());
+	    //arh_beg = atoll(req.attr("beg").c_str());
 	    arh_end = atoll(req.attr("end").c_str());
 	    arh_per = atoi(req.attr("per").c_str());
 	}

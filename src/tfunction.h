@@ -174,22 +174,23 @@ class TValFunc
 	int  ioSize( );
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("%s: Id or IO %d error!"),"ioType()",id);
 	    return mFunc->io(id)->type();
 	}
 	unsigned ioFlg( unsigned id )
 	{
-	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( !mFunc )		throw TError("ValFunc",_("%s: No function set!"),"ioFlg()",id);
+	    if( id >= mVal.size() )	throw TError("ValFunc",_("%s: Id or IO %d error for function '%s'!"),"ioFlg()",id,mFunc->nodePath().c_str());
 	    return mFunc->io(id)->flg();
 	}
 	bool ioHide( unsigned id )
 	{
-	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("%s: Id or IO %d error!"),"ioHide()",id);
 	    return mFunc->io(id)->hide();
 	}
 	bool ioMdf( unsigned id )
 	{
-	    if( id >= mVal.size() )    throw TError("ValFunc",_("Id or IO %d error!"),id);
+	    if( id >= mVal.size() )    throw TError("ValFunc",_("%s: Id or IO %d error!"),"ioMdf()",id);
 	    return mVal[id].mdf;
 	}
 
@@ -219,6 +220,10 @@ class TValFunc
 
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
+
+	//> Context operations
+	TValFunc *ctxGet( int key );
+	void ctxSet( int key, TValFunc *val );
 
     protected:
 	//Data
@@ -253,6 +258,7 @@ class TValFunc
 	double tm_calc;		//Calc time in mikroseconds
 
 	TFunction	*mFunc;
+	map<int,TValFunc* >	vctx;
 };
 
 #endif //TFUNCTIONS_H

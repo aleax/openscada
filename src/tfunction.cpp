@@ -177,10 +177,7 @@ void TFunction::valDet( TValFunc *vfnc )
     f_res.resRequestW();
     for(unsigned i=0; i < used.size() ;i++)
 	if(used[i] == vfnc)
-	{
-	    used.erase(used.begin()+i);
-	    break;
-	}
+	{ used.erase(used.begin()+i); break; }
     f_res.resRelease();
 }
 
@@ -436,7 +433,7 @@ TValFunc::~TValFunc( )
 
 void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 {
-    if( mFunc ) funcDisConnect(att_det);
+    if( mFunc )	funcDisConnect(att_det);
     if( ifunc )
     {
 	mFunc = ifunc;
@@ -465,6 +462,10 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 
 void TValFunc::funcDisConnect( bool det )
 {
+    //> Included value contexts clear
+    for( map<int,TValFunc* >::iterator ivcx = vctx.begin(); ivcx != vctx.end(); ivcx++ ) delete ivcx->second;
+    vctx.clear();
+
     if( mFunc )
     {
 	for( int i_vl = 0; i_vl < mVal.size(); i_vl++ )
@@ -505,7 +506,7 @@ int TValFunc::ioSize( )
 
 string TValFunc::getS( unsigned id )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getS()",id);
     switch(mVal[id].tp)
     {
 	case IO::Integer:	return (mVal[id].val.i!=EVAL_INT) ? TSYS::int2str(mVal[id].val.i) : EVAL_STR;
@@ -519,7 +520,7 @@ string TValFunc::getS( unsigned id )
 
 int TValFunc::getI( unsigned id )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getI()",id);
     switch( mVal[id].tp )
     {
 	case IO::String:	return (mVal[id].val.s->getVal()!=EVAL_STR) ? atoi(mVal[id].val.s->getVal().c_str()) : EVAL_INT;
@@ -532,7 +533,7 @@ int TValFunc::getI( unsigned id )
 
 double TValFunc::getR( unsigned id )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getR()",id);
     switch( mVal[id].tp )
     {
 	case IO::String:	return (mVal[id].val.s->getVal()!=EVAL_STR) ? atof(mVal[id].val.s->getVal().c_str()) : EVAL_REAL;
@@ -545,7 +546,7 @@ double TValFunc::getR( unsigned id )
 
 char TValFunc::getB( unsigned id )
 {
-    if( id >= mVal.size() )	throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getB()",id);
     switch( mVal[id].tp )
     {
 	case IO::String:	return (mVal[id].val.s->getVal()!=EVAL_STR) ? (bool)atoi(mVal[id].val.s->getVal().c_str()) : EVAL_BOOL;
@@ -558,14 +559,14 @@ char TValFunc::getB( unsigned id )
 
 TVarObj *TValFunc::getO( unsigned id )
 {
-    if( id >= mVal.size() )	throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getO()",id);
     if( mVal[id].tp != IO::Object )	throw TError("ValFnc",_("Get object from not object's IO %d error!"),id);
     return mVal[id].val.o;
 }
 
 void TValFunc::setS( unsigned id, const string &val )
 {
-    if( id >= mVal.size() )	throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"setS()",id);
     if( mdfChk() && val != getS(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
@@ -578,7 +579,7 @@ void TValFunc::setS( unsigned id, const string &val )
 
 void TValFunc::setI( unsigned id, int val )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"setI()",id);
     if( mdfChk() && val != getI(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
@@ -591,8 +592,8 @@ void TValFunc::setI( unsigned id, int val )
 
 void TValFunc::setR( unsigned id, double val )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
-    if( isnan(val) ) val = 0.;	//Check for 'Not a Number'
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"setR()",id);
+    if( isnan(val) ) val = 0;	//Check for 'Not a Number'
     if( mdfChk() && val != getR(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
@@ -605,7 +606,7 @@ void TValFunc::setR( unsigned id, double val )
 
 void TValFunc::setB( unsigned id, char val )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"setB()",id);
     if( mdfChk() && val != getB(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
@@ -618,7 +619,7 @@ void TValFunc::setB( unsigned id, char val )
 
 void TValFunc::setO( unsigned id, TVarObj *val )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("Id or IO %d error!"),id);
+    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"setO()",id);
     if( mVal[id].tp != IO::Object )	throw TError("ValFnc",_("Set object to not object's IO %d error!"),id);
     if( mVal[id].val.o && !mVal[id].val.o->disconnect() ) delete mVal[id].val.o;
     mVal[id].val.o = val;
@@ -654,4 +655,22 @@ void TValFunc::preIOCfgChange( )
 void TValFunc::postIOCfgChange( )
 {
     setFunc( mFunc, false );
+}
+
+TValFunc *TValFunc::ctxGet( int key )
+{
+    map<int,TValFunc* >::iterator vc = vctx.find(key);
+    if( vc == vctx.end() ) return NULL;
+    return vc->second;
+}
+
+void TValFunc::ctxSet( int key, TValFunc *val )
+{
+    map<int,TValFunc* >::iterator vc = vctx.find(key);
+    if( vc == vctx.end() ) vctx[key] = val;
+    else
+    {
+	if( vc->second ) delete vc->second;
+	vc->second = val;
+    }
 }

@@ -1,8 +1,17 @@
+2010-08-13 Roman
+- !!!!:Demo: Demo DB is updated for include new technological devices' models library and all model adatation.
+- DB: Opened tables identifier limit is expanded to 255.
+- !!:TFunction, DAQ.JavaLikeCalc: Included function's context for performance rise for external functions call.
+- SYS: The interface translation to German is updated by Irina Popkova.
+- DAQ.AMRDevs: The interface translation to German is added by Irina Popkova.
+- DAQ.JavaLikeCalc: A libray function's formula translation disable allow is added.
+- FIX:UI.QTCfg: A table size change on it modify is disabled. Context update after errors into combobox and table commands is fixed.
+- FIX:UI.WebVision: Konqueror 4 text encoding on XML is final fixed. Konqueror 4 detect is fixed.
+- !!:UI.WebVision: Generic mouse events generation is added. Events process functions stack is added for some sources' events processing allow.
+
+
 2010-08-09 Maxim
 - FIX:DB:PostgreSQL: the variables types' manipulations in the functions 'fieldStruct' and 'fieldFix' are fixed.
-
-
-2010-08-09 Maxim
 - FIX:DB:PostgreSQL: try->catch is added to the 'enable' and 'postDisable' functions to simplify the finishing of the connection to DB.
 - DB:PostgreSQL: transactions processing is added to improve the performance of the DB module.
 

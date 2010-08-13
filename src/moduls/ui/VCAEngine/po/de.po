@@ -215,11 +215,11 @@ msgid "Save widget library."
 msgstr "Widgetsbibliothek speichern."
 
 #: libwidg.cpp:181
-msgid "Enable widget library."
+msgid "Enable widgets library."
 msgstr "Widgetsbibliothek einschalten."
 
 #: libwidg.cpp:181
-msgid "Disable widget library."
+msgid "Disable widgets library."
 msgstr "Widgetsbibliothek abschalten."
 
 #: libwidg.cpp:188

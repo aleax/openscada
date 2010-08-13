@@ -720,7 +720,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name(),0664,"root","BD");
 	ctrMkNode("branches",opt,-1,"/br","",0444);
-	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root","BD");
+	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),0664,"root","BD",1,"idSz","255");
 	if(ctrMkNode("area",opt,0,"/prm",_("Data base")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
@@ -742,8 +742,9 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),0444))
-	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),0664,"root","BD",4,
-		"tp","br","s_com","add,del","br_pref","tbl_","help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
+	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),0664,"root","BD",5,
+		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
+		"help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
 	if( enableStat( ) && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root","BD") )
 	{
 	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root","BD",3,"tp","str","cols","100","rows","5");

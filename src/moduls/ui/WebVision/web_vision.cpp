@@ -601,7 +601,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
-	    ses.page = req.save();
+	    ses.page = req.save(XMLNode::XMLHeader);
 	    page = httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
 	    return;
 	}

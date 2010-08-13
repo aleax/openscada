@@ -23,7 +23,7 @@ MOD_ID = 'WebVision';
 var isNN = navigator.appName.indexOf('Netscape') != -1;
 var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
-var isKonq = navigator.appName.indexOf('Konqueror') != -1;
+var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 /***************************************************
  * pathLev - Path parsing function.                *
  ***************************************************/
@@ -459,6 +459,9 @@ function makeEl( pgBr, inclPg )
   var ySc = this.yScale(true);
   geomW = realRound(geomW*xSc); geomH = realRound(geomH*ySc);
 
+  this.mousedown = new Array();
+  this.mouseup = new Array();
+
   //> Set included window geometry to widget size
 //  if( this == masterPage ) resizeTo(geomW,geomH);
   if( this.pg && this.window )
@@ -599,10 +602,10 @@ function makeEl( pgBr, inclPg )
       var txtVal = this.attrs['text'];
       for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
       {
-        var argVal;
-        var argCfg = new Array();
-        switch(parseInt(this.attrs['arg'+i+'tp']))
-        {
+	var argVal;
+	var argCfg = new Array();
+	switch(parseInt(this.attrs['arg'+i+'tp']))
+	{
 	  case 0: case 2:
 	    argCfg[0]=this.attrs['arg'+i+'cfg'];
 	    argVal=this.attrs['arg'+i+'val'];
@@ -1042,8 +1045,8 @@ function makeEl( pgBr, inclPg )
 	  else elStyle+='background-color: snow; ';
 	  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
 	  {
-	    this.place.onmouseup  = function() { if( !this.checkable ) this.style.borderStyle='outset'; };
-	    this.place.onmousedown= function() { if( !this.checkable ) this.style.borderStyle='inset';  };
+	    this.mouseup[this.mouseup.length] = function(e,el)		{ if( !el.checkable ) el.style.borderStyle='outset'; };
+	    this.mousedown[this.mousedown.length] = function(e,el)	{ if( !el.checkable ) el.style.borderStyle="inset"; };
 	    this.place.onmouseout = function() { if( !this.checkable ) this.style.borderStyle='outset'; };
 	    this.place.onclick = function()
 	    {
@@ -1397,22 +1400,40 @@ function makeEl( pgBr, inclPg )
   this.place.setAttribute('title',this.attrs['tipTool']);
   this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
 
+  //> Generic mouse events process
+  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
+  {
+    this.mousedown[this.mousedown.length] = function(e,el)
+    {
+      if(!e) e = window.event;
+      setWAttrs(el.wdgLnk.addr,'event','key_mousePres'+evMouseGet(e));
+    }
+    this.mouseup[this.mouseup.length] = function(e,el)
+    {
+      if(!e) e = window.event;
+      setWAttrs(el.wdgLnk.addr,'event','key_mouseRels'+evMouseGet(e));
+    }
+    this.place.ondblclick = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_mouseDblClick'); return false; }
+  }
+  else this.place.ondblclick = '';
+
   //> Context menu setup
   if( parseInt(this.attrs['perm'])&(SEC_RD|SEC_WR) && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length )
   {
-    var ctxEv = function(e)
+    var ctxEv = function(e,el)
     {
+      var cel = el ? el : this;
       if( !e ) e = window.event;
       if( (isKonq || isOpera) && evMouseGet(e) != 'Right' ) return true;
       var popUpMenu = getPopup();
       var optEl = '';
-      var cntxEls = this.wdgLnk.attrs['contextMenu'].split('\n');
+      var cntxEls = cel.wdgLnk.attrs['contextMenu'].split('\n');
       for( var i_ce = 0; i_ce < cntxEls.length; i_ce++ )
 	optEl += "<option sign='"+cntxEls[i_ce].split(':')[1]+"'>"+cntxEls[i_ce].split(':')[0]+"</option>";
       popUpMenu.childNodes[0].innerHTML = optEl;
       if( popUpMenu.childNodes[0].childNodes.length )
       {
-	popUpMenu.childNodes[0].wdgLnk = this.wdgLnk;
+	popUpMenu.childNodes[0].wdgLnk = cel.wdgLnk;
 	popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
 	popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
 	popUpMenu.childNodes[0].selectedIndex = -1;
@@ -1426,10 +1447,26 @@ function makeEl( pgBr, inclPg )
       }
       return false;
     }
-    if( isKonq || isOpera ) this.place.onmousedown = ctxEv;
+    if( isKonq || isOpera ) this.mousedown[this.mousedown.length] = ctxEv;
     else this.place.oncontextmenu = ctxEv;
   }
-  else this.place.oncontextmenu = this.place.onmousedown = null;
+  else this.place.oncontextmenu = null;
+
+  //> Common mouse events process
+  if( this.mousedown.length )
+    this.place.onmousedown = function(e)
+    {
+      for( var i_on = 0; i_on < this.wdgLnk.mousedown.length; i_on++ )
+	this.wdgLnk.mousedown[i_on](e,this);
+      return false;
+    }
+  if( this.mouseup.length )
+    this.place.onmouseup = function(e)
+    {
+      for( var i_on = 0; i_on < this.wdgLnk.mouseup.length; i_on++ )
+	this.wdgLnk.mouseup[i_on](e,this);
+      return false;
+    }
 
   //> Child widgets process
   if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD )

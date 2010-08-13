@@ -1,8 +1,8 @@
-# OpenSCADA.DAQ.AMRDevs translate to Russian.
-# Copyright (C) 2010 Roman Savochenko
+# OpenSCADA.DAQ.AMRDevs translate to German.
+# Copyright (C) 2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 #
-# Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 #
 #: da_Ergomera.cpp:60 da_Ergomera.cpp:170 mod_amr.cpp:55 mod_amr.cpp:159
 #: mod_amr.cpp:168 mod_amr.cpp:365
@@ -12,11 +12,15 @@ msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-13 16:03+0300\n"
-"PO-Revision-Date: 2010-02-16 16:54+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
-"Language-Team: <ru@li.org>\n"
+"PO-Revision-Date: 2010-08-09 22:58+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: da_Ergomera.cpp:37 da_Ergomera.cpp:259 da_Ergomera.cpp:260
 msgid "Attrs"
@@ -44,23 +48,25 @@ msgstr ""
 
 #: da_Ergomera.cpp:141 da_FlowTEC.cpp:71 mod_amr.cpp:446 mod_amr.cpp:447
 msgid "Serial"
-msgstr "Последовательный"
+msgstr "Aufeinanderfolgend"
 
 #: da_Ergomera.cpp:166
 msgid "13:Error respond: Too short."
-msgstr "13:Ошибка ответа: Не полный."
+msgstr "13:Fehler der Antwort: Zu kurz."
 
 #: da_Ergomera.cpp:168
 msgid "13:Error respond: CRC check error."
-msgstr "13:Ошибка ответа: Ошибка проверки CRC."
+msgstr "13:Fehler der Antwort :Der CRC Checkfehler."
 
 #: da_Ergomera.cpp:173
+#, fuzzy, c-format
 msgid "14:Connection error - %s"
-msgstr "14:Ошибка соединения - %s"
+msgstr "14:Fehler der Verbindung oder die Antwort ist kurz."
 
 #: da_Ergomera.cpp:194
+#, fuzzy
 msgid "15:Response PDU size error."
-msgstr "15:Ошибка в размере PDU ответа."
+msgstr "10:Fehler der Antwort."
 
 #: da_Ergomera.cpp:237 da_FlowTEC.cpp:141 mod_amr.cpp:271 mod_amr.cpp:413
 msgid "info"
@@ -132,7 +138,7 @@ msgstr ""
 
 #: da_Ergomera.cpp:240
 msgid "Attributes list"
-msgstr "Список атрибутов"
+msgstr "Die Attributenliste"
 
 #: da_Ergomera.cpp:240 mod_amr.cpp:274 mod_amr.cpp:416 mod_amr.cpp:417
 #: mod_amr.cpp:418
@@ -173,17 +179,19 @@ msgid ""
 "  'F:200:float:Float' - get float from registers 200 and 201;\n"
 "  'LI:300:int32:Int32' - get int32 from registers 300 and 301."
 msgstr ""
-"Список конфигурации атрибутов. Список должен формироваться строками в "
-"формате: [dt:numb:id:name]\n"
-"Где:\n"
-"  dt - тип данных: I-целое(16),LI-целое длинное(32),F-вещественное;\n"
-"  numb - номер регистра (десят., шестн., или восьмеричн.);\n"
-"  id - идентификатор создаваемого атрибута;\n"
-"  name - имя создаваемого атрибута.\n"
+"Die Liste der Konfiguration der Attribute. Die Liste muss mit den Zeilen "
+"gebildet werden im Format: [dt:numb:id:name]\n"
+"Wo:\n"
+"  dt - Der Datentyp: I-die ganye Zahl(16),LI-die lange ganze Zahl (32),F-die "
+"reelle Zahl;\n"
+"  numb - die Registernummer (dec., hex., oder oktal.);\n"
+"  id - der Bezeichner des gebildeten Attributs;\n"
+"  name - der Name des gebildeten Attributs.\n"
 "Пример:\n"
-"  'I:0x300:var:Variable' - доступ как к целому;\n"
-"  'F:200:float:Float' - получение вещественного из регистров 200 и 201;\n"
-"  'LI:300:int32:Int32' - получение int32 из регистров 300 и 301."
+"  'I:0x300:var:Variable' - der Zugang wie zum Ganzen;\n"
+"  'F:200:float:Float' - das Erhalten der reellen Zahl aus den Registern 200 "
+"und 201;\n"
+"  'LI:300:int32:Int32' -das Erhalten von int32 aus den Registern 300 und 301."
 
 #: da_Ergomera.cpp:251 da_Ergomera.cpp:262
 msgid "/prm/cfg/FragMerge"
@@ -191,7 +199,7 @@ msgstr ""
 
 #: da_Ergomera.cpp:251
 msgid "Registers' fragments merge"
-msgstr "Объединение фрагментов регистров"
+msgstr "Die Verbindung der Registerfragmente"
 
 #: da_Ergomera.cpp:251
 msgid "bool"
@@ -217,7 +225,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:38 da_FlowTEC.cpp:153 da_FlowTEC.cpp:154
 msgid "Thread"
-msgstr "Нить"
+msgstr "Der Faden"
 
 #: da_FlowTEC.cpp:41 da_FlowTEC.cpp:117
 msgid "val"
@@ -225,7 +233,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:41
 msgid "Value"
-msgstr "Значение"
+msgstr "Die Bedeutung"
 
 #: da_FlowTEC.cpp:42 da_FlowTEC.cpp:118
 msgid "p"
@@ -233,7 +241,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:42
 msgid "Pressure"
-msgstr "Давление"
+msgstr "Der Druck"
 
 #: da_FlowTEC.cpp:43 da_FlowTEC.cpp:119
 msgid "t"
@@ -241,7 +249,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:43
 msgid "Temperature"
-msgstr "Температура"
+msgstr "Die Temperatur"
 
 #: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54 da_FlowTEC.cpp:122 da_FlowTEC.cpp:130
 msgid "curF"
@@ -249,7 +257,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54
 msgid "Current flow"
-msgstr "Текущий расход"
+msgstr "Laufender Verbrauch"
 
 #: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55 da_FlowTEC.cpp:123 da_FlowTEC.cpp:131
 msgid "qntDayStart"
@@ -257,7 +265,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55
 msgid "Quantity for start day"
-msgstr "Количество с начала суток"
+msgstr "Die Quantität seit dem Tagesanfang"
 
 #: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56 da_FlowTEC.cpp:124 da_FlowTEC.cpp:132
 msgid "qntDayLast"
@@ -265,7 +273,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56
 msgid "Quantity for last day"
-msgstr "Количество за предыдущие сутки"
+msgstr "Die Quantität für die letzten vierundzwanzig Stunden"
 
 #: da_FlowTEC.cpp:49 da_FlowTEC.cpp:57 da_FlowTEC.cpp:125 da_FlowTEC.cpp:133
 msgid "qntStart"
@@ -273,7 +281,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:49 da_FlowTEC.cpp:57
 msgid "Quantity for start"
-msgstr "Количество с начала наблюдений"
+msgstr "Die Quantität nach dem Starten der Kontrolle"
 
 #: da_FlowTEC.cpp:53 da_FlowTEC.cpp:129
 msgid "cal"
@@ -281,23 +289,23 @@ msgstr ""
 
 #: da_FlowTEC.cpp:53
 msgid "Caloric"
-msgstr "Калорийность"
+msgstr "Kaloriengehalt"
 
 #: da_FlowTEC.cpp:112
 msgid "14:Connection error or respond size short."
-msgstr "14:Ошибка соединения или ответ короткий."
+msgstr "14:Fehler der Verbindung oder die Antwort ist kurz."
 
 #: da_FlowTEC.cpp:113
 msgid "10:Respond error."
-msgstr "10:Ошибка ответа."
+msgstr "10:Fehler der Antwort."
 
 #: da_FlowTEC.cpp:114
 msgid "11:Request broken."
-msgstr "11:Ошибка запроса."
+msgstr "11:Requestfehler."
 
 #: da_FlowTEC.cpp:115
 msgid "15:Respond thread broken."
-msgstr "15:Ошибка нити ответа."
+msgstr "15:Fehler des Antwortsfadens."
 
 #: da_FlowTEC.cpp:143
 msgid "255"
@@ -309,7 +317,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:144
 msgid "Thread number"
-msgstr "Номер нитки"
+msgstr "Nummer des Fadens"
 
 #: da_FlowTEC.cpp:144 mod_amr.cpp:162 mod_amr.cpp:163
 msgid "3"
@@ -321,7 +329,7 @@ msgstr ""
 
 #: da_FlowTEC.cpp:145
 msgid "Firmware version"
-msgstr "Версия ПО"
+msgstr "Die Firmwareversion"
 
 #: mod_amr.cpp:38
 msgid "AMRDevs"
@@ -329,7 +337,7 @@ msgstr ""
 
 #: mod_amr.cpp:39
 msgid "AMR devices"
-msgstr "Устройства АСКУ"
+msgstr "Die AMR-Devices"
 
 #: mod_amr.cpp:42
 msgid "0.0.1"
@@ -337,13 +345,13 @@ msgstr ""
 
 #: mod_amr.cpp:43
 msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
+msgstr "Roman Savotschenko"
 
 #: mod_amr.cpp:44
 msgid "Allow access to automatic meter reading devices. Supported devices: "
 msgstr ""
-"Предоставляет доступ к устройствам счётчиков коммерческого учёта. "
-"Поддерживаются устройства: "
+"Ermöglicht den Zugang zu den Zählerwerken der kommerziellen Inventur. Es "
+"werden die Anlagen unterstützt: "
 
 #: mod_amr.cpp:45
 msgid "GPL2"
@@ -359,7 +367,7 @@ msgstr ""
 
 #: mod_amr.cpp:159
 msgid "Parameteres table"
-msgstr "Таблица параметров"
+msgstr "Parametertabelle"
 
 #: mod_amr.cpp:159 mod_amr.cpp:162 mod_amr.cpp:168
 msgid "30"
@@ -371,7 +379,7 @@ msgstr ""
 
 #: mod_amr.cpp:160
 msgid "Calc schedule"
-msgstr "Планирование вычисления"
+msgstr "Planung der Berechnung"
 
 #: mod_amr.cpp:161 mod_amr.cpp:183
 msgid "PRIOR"
@@ -379,7 +387,7 @@ msgstr ""
 
 #: mod_amr.cpp:161
 msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgstr "Prioritätsniveau der Aufgabe des Datenempfangs"
 
 #: mod_amr.cpp:161
 msgid "2"
@@ -399,7 +407,7 @@ msgstr ""
 
 #: mod_amr.cpp:162
 msgid "Restore timeout (s)"
-msgstr "Время восстановления (с)"
+msgstr "Wiederaufbauzeit (s)"
 
 #: mod_amr.cpp:163 mod_amr.cpp:184
 msgid "REQ_TRY"
@@ -407,7 +415,7 @@ msgstr ""
 
 #: mod_amr.cpp:163
 msgid "Request tries"
-msgstr "Попыток запроса"
+msgstr "Anfrageversuche"
 
 #: mod_amr.cpp:163
 msgid "1;10"
@@ -419,7 +427,7 @@ msgstr ""
 
 #: mod_amr.cpp:166
 msgid "Standard"
-msgstr "Стандарт"
+msgstr "Standard"
 
 #: mod_amr.cpp:167 mod_amr.cpp:294 mod_amr.cpp:405 mod_amr.cpp:417
 msgid "DEV_TP"
@@ -427,7 +435,7 @@ msgstr ""
 
 #: mod_amr.cpp:167
 msgid "Device type"
-msgstr "Тип устройства"
+msgstr "Anlagetyp"
 
 #: mod_amr.cpp:167
 msgid "20"
@@ -439,11 +447,11 @@ msgstr ""
 
 #: mod_amr.cpp:168
 msgid "Transport's address"
-msgstr "Адрес транспорта"
+msgstr "Adresse des Transports"
 
 #: mod_amr.cpp:169
 msgid "Device address"
-msgstr "Адрес устройства"
+msgstr "Adresse der Anlage"
 
 #: mod_amr.cpp:169
 msgid "50"
@@ -455,7 +463,7 @@ msgstr ""
 
 #: mod_amr.cpp:170
 msgid "Device addon parameters"
-msgstr "Дополнительные параметры устройства"
+msgstr "Zusätzliche Parameter der Anlage"
 
 #: mod_amr.cpp:170
 msgid "1000"
@@ -468,17 +476,17 @@ msgstr ""
 #: mod_amr.cpp:199
 #, c-format
 msgid "Call by period %g s. "
-msgstr "Вычисление с периодом %g с. "
+msgstr "Berechnung mit der Periode %g s. "
 
 #: mod_amr.cpp:200
 #, c-format
 msgid "Call by cron '%s'. "
-msgstr "Вычисление по расписанию '%s'. "
+msgstr "Berechnung nach dem Plan '%s'. "
 
 #: mod_amr.cpp:201
 #, c-format
 msgid "Gather data time %.6g ms. "
-msgstr "Время сбора данных %.6g мс. "
+msgstr "Zeit des Datenempfangs %.6g ms. "
 
 #: mod_amr.cpp:255
 #, c-format
@@ -516,15 +524,15 @@ msgid ""
 "  - month (1-12);\n"
 "  - week day (0[sunday]-6)."
 msgstr ""
-"Планирование записывается в форме секундной периодичности или в форме "
-"стандарта Cron.\n"
-"Секундная форма это одно вещественное число (1.5, 1e-3).\n"
-"Форма стандарта Cron это '* * * * *'. Где:\n"
-"  - минуты (0-59);\n"
-"  - часы (0-23);\n"
-"  - дни (1-31);\n"
-"  - месяца (1-12);\n"
-"  - дни недели (0[воскресенье]-6)."
+"Planung wird im Form der Sekundenperiodizität oder im Form des Standards "
+"Cron eingeschrieben.\n"
+"Sekundenform ist eine reele Zahl (1.5, 1e-3).\n"
+"Form des Standardes Cron ist '* * * * *'. Wo:\n"
+"  - Minuten (0-59);\n"
+"  - Stunden (0-23);\n"
+"  - Tage (1-31);\n"
+"  - Monate (1-12);\n"
+"  - Wochentage (0[Sonntag]-6)."
 
 #: mod_amr.cpp:294
 msgid "w_attr"
@@ -536,11 +544,11 @@ msgstr ""
 
 #: mod_amr.cpp:327 mod_amr.cpp:441
 msgid "Ergomera"
-msgstr "Эргомера"
+msgstr "Ergomera"
 
 #: mod_amr.cpp:328
 msgid "No one device selected."
-msgstr "Не выбрано устройство."
+msgstr "Die Anlage ist nicht gewählt."
 
 #: mod_amr.cpp:370
 msgid "prms"
@@ -552,7 +560,7 @@ msgstr ""
 
 #: mod_amr.cpp:416
 msgid "Status"
-msgstr "Статус"
+msgstr "Status"
 
 #: mod_amr.cpp:417
 msgid "/prm/cfg/DEV_TP"
@@ -585,7 +593,7 @@ msgstr ""
 
 #: mod_amr.cpp:429
 msgid "Disabled"
-msgstr "Отключен"
+msgstr "Deaktiviert"
 
 #: mod_amr.cpp:430
 #, c-format
@@ -594,7 +602,7 @@ msgstr ""
 
 #: mod_amr.cpp:430
 msgid "Enabled"
-msgstr "Включен"
+msgstr "Eingeschaltet"
 
 #: mod_amr.cpp:431
 #, c-format
@@ -603,7 +611,7 @@ msgstr ""
 
 #: mod_amr.cpp:431 mod_amr.cpp:433
 msgid "Processed"
-msgstr "Обработка"
+msgstr "Bearbeitung"
 
 #: mod_amr.cpp:432
 #, c-format
@@ -612,7 +620,7 @@ msgstr ""
 
 #: mod_amr.cpp:434
 msgid "Need re-enable for configuration apply! "
-msgstr "Необходимо перевключить для активации конфигурации! "
+msgstr "Es ist notwendig für die Konfigurationsaktivierung re-einzuschalten! "
 
 #: mod_amr.cpp:440 mod_amr.cpp:441 mod_amr.cpp:449
 msgid "el"
@@ -624,7 +632,7 @@ msgstr ""
 
 #: mod_amr.cpp:440
 msgid "FLowTEC UGT-AA55"
-msgstr "ФлоуТЭК UGT-AA55"
+msgstr "FlowTEC UGT-AA55"
 
 #: mod_amr.cpp:456
 msgid "err"
@@ -632,4 +640,4 @@ msgstr ""
 
 #: da_Ergomera.h:52
 msgid "11:Value not gathered."
-msgstr "11:Значение не получено."
+msgstr "11:Der Wert ist nicht empfangen."
