@@ -103,11 +103,12 @@ class MBD : public TBD
 	//Private methods
 	void postDisable(int flag);
 	TTable *openTable( const string &name, bool create );
+        
 
 	//Private attributes
         string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg;
         //int    port, connect_timeout;
-
+        string ntData;
         PGconn * connection;
 	Res    conn_res;
 };

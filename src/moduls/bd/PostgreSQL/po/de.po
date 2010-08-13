@@ -4,15 +4,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 #
-#: postgre.cpp:50 postgre.cpp:152 postgre.cpp:153 postgre.cpp:157
-#: postgre.cpp:158 postgre.cpp:311 postgre.cpp:439 postgre.cpp:511
-#: postgre.cpp:641 postgre.cpp:644 postgre.cpp:837 postgre.cpp:861
+#: postgre.cpp:50 postgre.cpp:157 postgre.cpp:158 postgre.cpp:162
+#: postgre.cpp:163 postgre.cpp:319 postgre.cpp:447 postgre.cpp:519
+#: postgre.cpp:649 postgre.cpp:652 postgre.cpp:845 postgre.cpp:869
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-13 16:07+0300\n"
+"POT-Creation-Date: 2010-08-13 16:44+0300\n"
 "PO-Revision-Date: 2010-08-03 19:12+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -30,12 +30,12 @@ msgstr ""
 msgid "DB PostgreSQL"
 msgstr ""
 
-#: postgre.cpp:35 postgre.cpp:337
+#: postgre.cpp:35 postgre.cpp:345
 msgid "BD"
 msgstr "DB"
 
 #: postgre.cpp:37
-msgid "0.1.0"
+msgid "0.5.0"
 msgstr ""
 
 #: postgre.cpp:38
@@ -54,100 +54,100 @@ msgstr ""
 msgid "C"
 msgstr ""
 
-#: postgre.cpp:120 postgre.cpp:160 postgre.cpp:162
+#: postgre.cpp:125 postgre.cpp:165 postgre.cpp:167
 msgid "host = "
 msgstr ""
 
-#: postgre.cpp:120 postgre.cpp:160 postgre.cpp:162
+#: postgre.cpp:125 postgre.cpp:165 postgre.cpp:167
 msgid " hostaddr = "
 msgstr ""
 
-#: postgre.cpp:120 postgre.cpp:160 postgre.cpp:162
+#: postgre.cpp:125 postgre.cpp:165 postgre.cpp:167
 msgid " port = "
 msgstr ""
 
-#: postgre.cpp:120 postgre.cpp:160
+#: postgre.cpp:125 postgre.cpp:165
 msgid " dbname = template1"
 msgstr ""
 
-#: postgre.cpp:120 postgre.cpp:160 postgre.cpp:162
+#: postgre.cpp:125 postgre.cpp:165 postgre.cpp:167
 msgid " user = "
 msgstr ""
 
-#: postgre.cpp:121 postgre.cpp:161 postgre.cpp:163
+#: postgre.cpp:126 postgre.cpp:166 postgre.cpp:168
 msgid " password = "
 msgstr ""
 
-#: postgre.cpp:121 postgre.cpp:161 postgre.cpp:163
+#: postgre.cpp:126 postgre.cpp:166 postgre.cpp:168
 msgid " connect_timeout = "
 msgstr ""
 
-#: postgre.cpp:123 postgre.cpp:168 postgre.cpp:181 postgre.cpp:189
+#: postgre.cpp:128 postgre.cpp:173 postgre.cpp:186 postgre.cpp:195
 msgid "Fatal error - unable to allocate connection."
 msgstr "Fataler Fehler - es ist unmöglich die Verbindung herzustellen"
 
-#: postgre.cpp:125 postgre.cpp:128 postgre.cpp:170 postgre.cpp:183
-#: postgre.cpp:191 postgre.cpp:286
+#: postgre.cpp:130 postgre.cpp:133 postgre.cpp:175 postgre.cpp:188
+#: postgre.cpp:197 postgre.cpp:294
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Fehler: %s beim Verbinden mit der Datenbank"
 
-#: postgre.cpp:126
+#: postgre.cpp:131
 msgid "DROP DATABASE \""
 msgstr ""
 
-#: postgre.cpp:126 postgre.cpp:397 postgre.cpp:498 postgre.cpp:503
-#: postgre.cpp:555 postgre.cpp:560 postgre.cpp:619 postgre.cpp:640
-#: postgre.cpp:661 postgre.cpp:690 postgre.cpp:764
+#: postgre.cpp:131 postgre.cpp:405 postgre.cpp:506 postgre.cpp:511
+#: postgre.cpp:563 postgre.cpp:568 postgre.cpp:627 postgre.cpp:648
+#: postgre.cpp:669 postgre.cpp:698 postgre.cpp:772
 msgid "\""
 msgstr ""
 
-#: postgre.cpp:135 postgre.cpp:293
+#: postgre.cpp:140 postgre.cpp:301
 #, fuzzy, c-format
 msgid "Query to DB error: %s. %s"
 msgstr "Fehler bei der Abfrage an Datenbank: %s"
 
-#: postgre.cpp:152
+#: postgre.cpp:157
 msgid "localhost"
 msgstr ""
 
-#: postgre.cpp:153
+#: postgre.cpp:158
 msgid "127.0.0.1"
 msgstr ""
 
-#: postgre.cpp:157
+#: postgre.cpp:162
 msgid "5432"
 msgstr ""
 
-#: postgre.cpp:158 postgre.cpp:467
+#: postgre.cpp:163 postgre.cpp:475
 msgid "10"
 msgstr ""
 
-#: postgre.cpp:162
+#: postgre.cpp:167
 msgid " dbname = "
 msgstr ""
 
-#: postgre.cpp:174
+#: postgre.cpp:179
 msgid "SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '"
 msgstr ""
 
-#: postgre.cpp:174 postgre.cpp:178 postgre.cpp:375 postgre.cpp:643
+#: postgre.cpp:179 postgre.cpp:183 postgre.cpp:383
 msgid "'"
 msgstr ""
 
-#: postgre.cpp:176 postgre.cpp:377
+#: postgre.cpp:181 postgre.cpp:385
 msgid "0"
 msgstr ""
 
-#: postgre.cpp:178
+#: postgre.cpp:183
 msgid "CREATE DATABASE \""
 msgstr ""
 
-#: postgre.cpp:178
+#: postgre.cpp:183
 msgid "\" ENCODING = '"
 msgstr ""
 
-#: postgre.cpp:214
+#: postgre.cpp:222
 msgid ""
 "SELECT c.relname as \"TableName\" FROM pg_catalog.pg_class c JOIN pg_catalog."
 "pg_roles r ON r.oid = c.relowner LEFT JOIN pg_catalog.pg_namespace n ON n."
@@ -156,60 +156,60 @@ msgid ""
 "(c.oid)"
 msgstr ""
 
-#: postgre.cpp:230
+#: postgre.cpp:238
 #, c-format
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle <%s>. Datenbank ist abgeschaltet."
 
-#: postgre.cpp:241
+#: postgre.cpp:249
 msgid "BEGIN"
 msgstr ""
 
-#: postgre.cpp:245
+#: postgre.cpp:253
 msgid "Start trasaction error!"
 msgstr ""
 
-#: postgre.cpp:257
+#: postgre.cpp:265
 msgid "COMMIT"
 msgstr ""
 
-#: postgre.cpp:261
+#: postgre.cpp:269
 msgid "Stop trasaction error!"
 msgstr ""
 
-#: postgre.cpp:334
+#: postgre.cpp:342
 msgid "info"
 msgstr ""
 
-#: postgre.cpp:337
+#: postgre.cpp:345
 msgid "fld"
 msgstr ""
 
-#: postgre.cpp:337
+#: postgre.cpp:345
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: postgre.cpp:337
+#: postgre.cpp:345
 msgid "ADDR"
 msgstr ""
 
-#: postgre.cpp:337
+#: postgre.cpp:345
 msgid "root"
 msgstr ""
 
-#: postgre.cpp:338
+#: postgre.cpp:346
 msgid "tp"
 msgstr ""
 
-#: postgre.cpp:338
+#: postgre.cpp:346
 msgid "str"
 msgstr ""
 
-#: postgre.cpp:338
+#: postgre.cpp:346
 msgid "help"
 msgstr ""
 
-#: postgre.cpp:339
+#: postgre.cpp:347
 #, fuzzy
 msgid ""
 "PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;"
@@ -244,7 +244,7 @@ msgstr ""
 "Für entfernte Datenbank: [server.nm.org;192.168.2.1;roman;123456;"
 "OpenSCADA;5432;10]."
 
-#: postgre.cpp:367
+#: postgre.cpp:375
 msgid ""
 "SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_roles r ON r."
 "oid = c.relowner LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c."
@@ -253,24 +253,24 @@ msgid ""
 "(c.oid) AND c.relname = '"
 msgstr ""
 
-#: postgre.cpp:379
+#: postgre.cpp:387
 msgid "CREATE TABLE \""
 msgstr ""
 
-#: postgre.cpp:379
+#: postgre.cpp:387
 msgid "\"(\"name\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)"
 msgstr ""
 
-#: postgre.cpp:397
+#: postgre.cpp:405
 msgid "DROP TABLE \""
 msgstr ""
 
-#: postgre.cpp:399
+#: postgre.cpp:407
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: postgre.cpp:409
+#: postgre.cpp:417
 msgid ""
 "SELECT a.attname as \"Field\", pg_catalog.format_type(a.atttypid, a."
 "atttypmod) as \"Type\" FROM pg_catalog.pg_attribute a WHERE a.attnum > 0 AND "
@@ -279,245 +279,252 @@ msgid ""
 "relname ~ '^("
 msgstr ""
 
-#: postgre.cpp:418
+#: postgre.cpp:426
 msgid ")$' AND pg_catalog.pg_table_is_visible(c.oid) )"
 msgstr ""
 
-#: postgre.cpp:426
+#: postgre.cpp:434
 msgid ""
 "SELECT a.attname FROM pg_class c, pg_class c2, pg_index i, pg_attribute a "
 "WHERE c.relname = '"
 msgstr ""
 
-#: postgre.cpp:428
+#: postgre.cpp:436
 msgid ""
 "' AND c.oid = i.indrelid AND i.indexrelid = c2.oid AND i.indisprimary AND i."
 "indisunique AND a.attrelid=c2.oid AND a.attnum>0;"
 msgstr ""
 
-#: postgre.cpp:433
+#: postgre.cpp:441
 msgid "Key"
 msgstr ""
 
-#: postgre.cpp:439 postgre.cpp:454
+#: postgre.cpp:447 postgre.cpp:462
 msgid "PRI"
 msgstr ""
 
-#: postgre.cpp:442
+#: postgre.cpp:450
 msgid "Table is not present!"
 msgstr "Die Tabelle ist nicht vorhanden!"
 
-#: postgre.cpp:447 postgre.cpp:475 postgre.cpp:532 postgre.cpp:588
-#: postgre.cpp:674 postgre.cpp:702
+#: postgre.cpp:455 postgre.cpp:483 postgre.cpp:540 postgre.cpp:596
+#: postgre.cpp:682 postgre.cpp:710
 msgid "Table is empty!"
 msgstr "Tabelle ist leer!"
 
-#: postgre.cpp:455 postgre.cpp:728
+#: postgre.cpp:463 postgre.cpp:736
 msgid "text"
 msgstr ""
 
-#: postgre.cpp:455 postgre.cpp:728
+#: postgre.cpp:463 postgre.cpp:736
 msgid "character varying"
 msgstr ""
 
-#: postgre.cpp:456
+#: postgre.cpp:464
 msgid "16777215"
 msgstr ""
 
-#: postgre.cpp:457 postgre.cpp:730
+#: postgre.cpp:465 postgre.cpp:738
 #, c-format
 msgid "character(%d)"
 msgstr ""
 
-#: postgre.cpp:458 postgre.cpp:731
+#: postgre.cpp:466 postgre.cpp:739
 #, c-format
 msgid "character varying(%d)"
 msgstr ""
 
-#: postgre.cpp:460 postgre.cpp:739
+#: postgre.cpp:468 postgre.cpp:747
 msgid "integer"
 msgstr ""
 
-#: postgre.cpp:460 postgre.cpp:740
+#: postgre.cpp:468 postgre.cpp:748
 msgid "bigint"
 msgstr ""
 
-#: postgre.cpp:462 postgre.cpp:743
+#: postgre.cpp:470 postgre.cpp:751
 msgid "double precision"
 msgstr ""
 
-#: postgre.cpp:464 postgre.cpp:744
+#: postgre.cpp:472 postgre.cpp:752
 msgid "smallint"
 msgstr ""
 
-#: postgre.cpp:466 postgre.cpp:737
+#: postgre.cpp:474 postgre.cpp:745
 msgid "timestamp with time zone"
 msgstr ""
 
-#: postgre.cpp:480 postgre.cpp:537
+#: postgre.cpp:488 postgre.cpp:545
 msgid "SELECT "
 msgstr ""
 
-#: postgre.cpp:481 postgre.cpp:612
+#: postgre.cpp:489 postgre.cpp:620
 msgid "WHERE "
 msgstr ""
 
-#: postgre.cpp:488 postgre.cpp:519 postgre.cpp:545 postgre.cpp:576
-#: postgre.cpp:605 postgre.cpp:606 postgre.cpp:641 postgre.cpp:659
-#: postgre.cpp:719 postgre.cpp:804 postgre.cpp:809
+#: postgre.cpp:496 postgre.cpp:527 postgre.cpp:553 postgre.cpp:584
+#: postgre.cpp:613 postgre.cpp:614 postgre.cpp:649 postgre.cpp:667
+#: postgre.cpp:727 postgre.cpp:812 postgre.cpp:817
 msgid "#"
 msgstr ""
 
-#: postgre.cpp:498 postgre.cpp:555 postgre.cpp:619 postgre.cpp:690
+#: postgre.cpp:506 postgre.cpp:563 postgre.cpp:627 postgre.cpp:698
 msgid "AND \""
 msgstr ""
 
-#: postgre.cpp:498 postgre.cpp:555 postgre.cpp:619 postgre.cpp:661
-#: postgre.cpp:690
+#: postgre.cpp:506 postgre.cpp:563 postgre.cpp:627 postgre.cpp:698
 msgid "\"='"
 msgstr ""
 
-#: postgre.cpp:498 postgre.cpp:555 postgre.cpp:619 postgre.cpp:643
-#: postgre.cpp:644 postgre.cpp:661 postgre.cpp:690 postgre.cpp:777
-#: postgre.cpp:778 postgre.cpp:782 postgre.cpp:783 postgre.cpp:786
-#: postgre.cpp:789
+#: postgre.cpp:506 postgre.cpp:563 postgre.cpp:627 postgre.cpp:651
+#: postgre.cpp:652 postgre.cpp:669 postgre.cpp:698 postgre.cpp:785
+#: postgre.cpp:786 postgre.cpp:790 postgre.cpp:791 postgre.cpp:794
+#: postgre.cpp:797
 msgid "' "
 msgstr ""
 
-#: postgre.cpp:503 postgre.cpp:560 postgre.cpp:640 postgre.cpp:641
-#: postgre.cpp:661 postgre.cpp:764
+#: postgre.cpp:511 postgre.cpp:568 postgre.cpp:648 postgre.cpp:649
+#: postgre.cpp:669 postgre.cpp:772
 msgid ",\""
 msgstr ""
 
-#: postgre.cpp:510 postgre.cpp:564
+#: postgre.cpp:518 postgre.cpp:572
 msgid " FROM \""
 msgstr ""
 
-#: postgre.cpp:510 postgre.cpp:625 postgre.cpp:631 postgre.cpp:640
-#: postgre.cpp:641 postgre.cpp:751 postgre.cpp:797 postgre.cpp:809
+#: postgre.cpp:518 postgre.cpp:633 postgre.cpp:639 postgre.cpp:648
+#: postgre.cpp:649 postgre.cpp:759 postgre.cpp:805 postgre.cpp:817
 msgid "\" "
 msgstr ""
 
-#: postgre.cpp:511
+#: postgre.cpp:519
 msgid " LIMIT 1 OFFSET "
 msgstr ""
 
-#: postgre.cpp:564 postgre.cpp:682
+#: postgre.cpp:572 postgre.cpp:690
 msgid "\" WHERE "
 msgstr ""
 
-#: postgre.cpp:568
+#: postgre.cpp:576
 msgid "Row is not present!"
 msgstr "Die Zeile ist nicht vorhanden!"
 
-#: postgre.cpp:625
+#: postgre.cpp:633
 msgid "SELECT 1 FROM \""
 msgstr ""
 
-#: postgre.cpp:631
+#: postgre.cpp:639
 msgid "INSERT INTO \""
 msgstr ""
 
-#: postgre.cpp:643 postgre.cpp:644
-msgid ",'"
+#: postgre.cpp:651 postgre.cpp:652
+msgid ",E'"
 msgstr ""
 
-#: postgre.cpp:647
+#: postgre.cpp:651
+msgid "E'"
+msgstr ""
+
+#: postgre.cpp:655
 msgid "("
 msgstr ""
 
-#: postgre.cpp:647
+#: postgre.cpp:655
 msgid ") VALUES ("
 msgstr ""
 
-#: postgre.cpp:647
+#: postgre.cpp:655
 msgid ")"
 msgstr ""
 
-#: postgre.cpp:652
+#: postgre.cpp:660
 msgid "UPDATE \""
 msgstr ""
 
-#: postgre.cpp:652
+#: postgre.cpp:660
 msgid "\" SET "
 msgstr ""
 
-#: postgre.cpp:682
+#: postgre.cpp:669
+msgid "\"=E'"
+msgstr ""
+
+#: postgre.cpp:690
 msgid "DELETE FROM \""
 msgstr ""
 
-#: postgre.cpp:710
+#: postgre.cpp:718
 msgid "ALTER TABLE \""
 msgstr ""
 
-#: postgre.cpp:710
+#: postgre.cpp:718
 msgid "\" DROP CONSTRAINT \""
 msgstr ""
 
-#: postgre.cpp:710
+#: postgre.cpp:718
 msgid "_pkey\", "
 msgstr ""
 
-#: postgre.cpp:751
+#: postgre.cpp:759
 msgid ",DROP \""
 msgstr ""
 
-#: postgre.cpp:751
+#: postgre.cpp:759
 msgid "DROP \""
 msgstr ""
 
-#: postgre.cpp:777
+#: postgre.cpp:785
 msgid "CHARACTER VARYING("
 msgstr ""
 
-#: postgre.cpp:777
+#: postgre.cpp:785
 msgid ") DEFAULT '"
 msgstr ""
 
-#: postgre.cpp:778
+#: postgre.cpp:786
 msgid "TEXT DEFAULT '"
 msgstr ""
 
-#: postgre.cpp:782
+#: postgre.cpp:790
 msgid "TIMESTAMP WITH TIME ZONE DEFAULT '"
 msgstr ""
 
-#: postgre.cpp:783
+#: postgre.cpp:791
 msgid "INTEGER DEFAULT '"
 msgstr ""
 
-#: postgre.cpp:786
+#: postgre.cpp:794
 msgid "DOUBLE PRECISION DEFAULT '"
 msgstr ""
 
-#: postgre.cpp:789
+#: postgre.cpp:797
 msgid "SMALLINT DEFAULT '"
 msgstr ""
 
-#: postgre.cpp:795
+#: postgre.cpp:803
 msgid ","
 msgstr ""
 
-#: postgre.cpp:797
+#: postgre.cpp:805
 msgid "ADD COLUMN \""
 msgstr ""
 
-#: postgre.cpp:809
+#: postgre.cpp:817
 msgid ",ADD \""
 msgstr ""
 
-#: postgre.cpp:809
+#: postgre.cpp:817
 msgid "ADD \""
 msgstr ""
 
-#: postgre.cpp:814
+#: postgre.cpp:822
 msgid ",ADD PRIMARY KEY ("
 msgstr ""
 
-#: postgre.cpp:814
+#: postgre.cpp:822
 msgid ") "
 msgstr ""
 
-#: postgre.cpp:859 postgre.cpp:867
+#: postgre.cpp:867 postgre.cpp:875
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr ""

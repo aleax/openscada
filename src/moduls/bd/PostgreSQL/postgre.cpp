@@ -1,4 +1,4 @@
-
+// 
 //OpenSCADA system module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
  *   Copyright (C) 2010 by Maxim Lysenko                                   *
@@ -34,7 +34,7 @@
 #define MOD_NAME	"DB PostgreSQL"
 #define MOD_TYPE	"BD"
 #define VER_TYPE	VER_BD
-#define VERSION		"0.1.0"
+#define VERSION		"0.5.0"
 #define AUTORS		"Maxim Lysenko"
 #define DESCRIPTION	"BD module. Provides support of the BD PostgreSQL."
 #define MOD_LICENSE	"GPL2"
@@ -104,6 +104,11 @@ MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 MBD::~MBD( )
 {
 
+}
+
+//Override the default notice processor with the empty one. This is done to avoid the notice messages printing on stderr
+void MyNoticeProcessor(void *arg, const char *message)
+{
 }
 
 void MBD::postDisable(int flag)
@@ -181,6 +186,7 @@ void MBD::enable( )
                 throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
             if( PQstatus( connection ) != CONNECTION_OK )
                 throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+            else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
         }
         else
         {
@@ -189,6 +195,8 @@ void MBD::enable( )
                 throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
             if( PQstatus( connection ) != CONNECTION_OK )
                 throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+            else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
+
         }
     }
     catch(...)
@@ -640,8 +648,8 @@ void MTable::fieldSet( TConfig &cfg )
 	    ins_name = ins_name + (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "\" " +
 		       ( isTransl ? (",\"" + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL) + "\" ") : "" );
 	    sval = getVal(u_cfg);
-	    ins_value = ins_value + (next?",'":"'") + TSYS::strEncode(sval,TSYS::SQL) + "' " +
-		        ( isTransl ? (",'" + TSYS::strEncode(sval,TSYS::SQL) + "' ") : "" );
+	    ins_value = ins_value + (next?",E'":"E'") + TSYS::strEncode(sval,TSYS::SQL) + "' " +
+		        ( isTransl ? (",E'" + TSYS::strEncode(sval,TSYS::SQL) + "' ") : "" );
 	    next = true;
 	}
 	req = req + "("+ins_name+") VALUES ("+ins_value+")";
@@ -658,7 +666,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
-	    req = req + (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL) + "\"='" + TSYS::strEncode(sval,TSYS::SQL) + "' ";
+	    req = req + (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL) + "\"=E'" + TSYS::strEncode(sval,TSYS::SQL) + "' ";
 	    next = true;
 	}
 	req = req + req_where;

@@ -1,3 +1,9 @@
+2010-08-13 Maxim
+- DB:PostgreSQL: escape string syntax is added to INSERT and UPDATE commands.
+- DB:PostgreSQL: NOTICE processing is overridden with the purpose of not sending the messages to stderr.
+- DB:PostgreSQL: an icon for the DB module is added.
+
+
 2010-08-13 Roman
 - !!!!:Demo: Demo DB is updated for include new technological devices' models library and all model adatation.
 - DB: Opened tables identifier limit is expanded to 255.
