@@ -7,7 +7,7 @@ Source: openscada-%version.tar.gz
 License: GPLv2
 Group: Applications/Engineering
 Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
-URL: http://oscada.org.ua
+URL: http://oscada.org
 
 %define srcname openscada-%version
 
@@ -16,6 +16,7 @@ URL: http://oscada.org.ua
 %def_enable SQLite
 %def_enable MySQL
 %def_enable FireBird
+%def_enable PostgreSQL
 
 #===== DAQ modules =====
 %def_enable System
@@ -72,7 +73,7 @@ URL: http://oscada.org.ua
 %if %_vendor == "alt"
 %set_verify_elf_method no
 BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel libportaudio2-devel libfftw3-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql8.3-devel libportaudio2-devel libfftw3-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -159,7 +160,7 @@ Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch
 %endif
-Requires: %name = %version-%release %name-DB.SQLite %name-DB.MySQL %name-DB.FireBird %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc
+Requires: %name = %version-%release %name-DB.SQLite %name-DB.MySQL %name-DB.FireBird %name-DB.PostgreSQL %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc
 Requires: %name-DAQ.LogicLev %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard
 Requires: %name-Archive.FSArch %name-Archive.DBArch %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.HTTP
 Requires: %name-Protocol.SelfSystem %name-UI.VCAEngine %name-UI.WebCfg %name-UI.WebCfgD %name-UI.WebVision %name-Special.FLibComplex1 %name-Special.FLibMath
@@ -247,6 +248,21 @@ The %{name}-DB.FireBird package allow support of the DB FireBird.
 Пакет %{name}-DB.FireBird надає підтримку БД FireBird.
 %description DB.FireBird -l de_DE.UTF8
 Das Paket %{name}-DB.FireBird unterstützt die FireBird Datenbank.
+%endif
+
+%if_enabled PostgreSQL
+%package DB.PostgreSQL
+Summary: DB PostgreSQL support.
+Group: Graphics
+Requires: %name = %version-%release
+%description DB.PostgreSQL
+The %{name}-DB.PostgreSQL package allow support of the DB PostgreSQL.
+%description DB.PostgreSQL -l ru_RU.UTF8
+Пакет %{name}-DB.PostgreSQL предоставляет поддержку БД PostgreSQL.
+%description DB.PostgreSQL -l uk_UA.UTF8
+Пакет %{name}-DB.PostgreSQL надає підтримку БД PostgreSQL.
+%description DB.PostgreSQL -l de_DE.UTF8
+Das Paket %{name}-DB.PostgreSQL unterstützt die PostgreSQL Datenbank.
 %endif
 
 #===== DAQ modules =====
@@ -762,7 +778,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 
 %build
 %configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated" \
-    %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} \
+    %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} %{subst_enable PostgreSQL} \
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
     %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} \
@@ -883,6 +899,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %files DB.FireBird
 %_libdir/openscada/bd_FireBird.so
 %_datadir/locale/*/LC_MESSAGES/oscd_FireBird.mo
+%endif
+
+%if_enabled PostgreSQL
+%files DB.PostgreSQL
+%_libdir/openscada/bd_PostgreSQL.so
+%_datadir/locale/*/LC_MESSAGES/oscd_PostgreSQL.mo
 %endif
 
 #===== DAQ modules =====

@@ -107,12 +107,12 @@ void ModArch::postEnable( int flag )
 	//> Boolean and integer value DB archive DB structure
 	el_vl_int.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_vl_int.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
-	el_vl_int.fldAdd( new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"10") );
+	el_vl_int.fldAdd( new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag) );
 
 	//> Real value DB archive DB structure
 	el_vl_real.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_vl_real.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10") );
-	el_vl_real.fldAdd( new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"30.15") );
+	el_vl_real.fldAdd( new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag) );
 
 	//> String value DB archive DB structure
 	el_vl_str.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );

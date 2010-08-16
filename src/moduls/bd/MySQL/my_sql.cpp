@@ -330,8 +330,12 @@ void MTable::fieldStruct( TConfig &cfg )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"65535") );
 	else if( tblStrct[i_fld][1] == "mediumtext" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215") );
+	else if( tblStrct[i_fld][1] == "int" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg) );
 	else if( sscanf(tblStrct[i_fld][1].c_str(),"int(%d)",&pr1) )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg,TSYS::int2str(pr1).c_str()) );
+	else if( tblStrct[i_fld][1] == "double" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg) );
 	else if( sscanf(tblStrct[i_fld][1].c_str(),"double(%d,%d)",&pr1,&pr2) )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg,(TSYS::int2str(pr1)+"."+TSYS::int2str(pr2)).c_str()) );
 	else if( tblStrct[i_fld][1] == "tinyint(1)" )
@@ -619,10 +623,12 @@ void MTable::fieldFix( TConfig &cfg )
 		    break;
 		case TFld::Integer:
 		    if( u_cfg.fld().flg()&TFld::DateTimeDec )	f_tp = "datetime";
+		    else if( !u_cfg.fld().len() ) f_tp = "int";
 		    else f_tp = "int("+TSYS::int2str(vmax(1,u_cfg.fld().len()))+")";
 		    break;
 		case TFld::Real:
-		    f_tp = "double("+TSYS::int2str(vmax(3,u_cfg.fld().len()))+","+TSYS::int2str(vmax(2,u_cfg.fld().dec()))+")";
+		    if( !u_cfg.fld().len() ) f_tp = "double";
+		    else f_tp = "double("+TSYS::int2str(vmax(3,u_cfg.fld().len()))+","+TSYS::int2str(vmax(2,u_cfg.fld().dec()))+")";
 		    break;
 		case TFld::Boolean:
 		    f_tp = "tinyint(1)";
@@ -693,7 +699,7 @@ void MTable::fieldFix( TConfig &cfg )
 
 void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 {
-    //- Type param -
+    //> Type param
     switch(cfg.fld().type())
     {
 	case TFld::String:
@@ -706,11 +712,13 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 	    break;
 	case TFld::Integer:
 	    if( cfg.fld().flg()&TFld::DateTimeDec )
-	    	req=req+"datetime NOT NULL DEFAULT '"+UTCtoSQL(atoi(cfg.fld().def().c_str()))+"' ";
+		req=req+"datetime NOT NULL DEFAULT '"+UTCtoSQL(atoi(cfg.fld().def().c_str()))+"' ";
+	    else if( !cfg.fld().len() ) req=req+"int NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
 	    else req=req+"int("+SYS->int2str(vmax(1,cfg.fld().len()))+") NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
 	    break;
 	case TFld::Real:
-	    req=req+"double("+SYS->int2str(vmax(3,cfg.fld().len()))+","+SYS->int2str(vmax(2,cfg.fld().dec()))+") NOT NULL DEFAULT '"+TSYS::real2str(atof(cfg.fld().def().c_str()))+"' ";
+	    if( !cfg.fld().len() ) req=req+"double NOT NULL DEFAULT '"+TSYS::real2str(atof(cfg.fld().def().c_str()))+"' ";
+	    else req=req+"double("+SYS->int2str(vmax(3,cfg.fld().len()))+","+SYS->int2str(vmax(2,cfg.fld().dec()))+") NOT NULL DEFAULT '"+TSYS::real2str(atof(cfg.fld().def().c_str()))+"' ";
 	    break;
 	case TFld::Boolean:
 	    req=req+"tinyint(1) NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
@@ -728,7 +736,12 @@ string MTable::getVal( TCfg &cfg )
 	case TFld::Integer:
 	    if( cfg.fld().flg()&TFld::DateTimeDec )	return UTCtoSQL(cfg.getI());
 	    else		return SYS->int2str(cfg.getI());
-	case TFld::Real:	return SYS->real2str(cfg.getR());
+	case TFld::Real:
+	{
+	    double vl = cfg.getR();
+	    if( vl == EVAL_REAL ) return SYS->real2str(EVAL_REAL_MYSQL);
+	    return SYS->real2str(vl);
+	}
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
     }
     return "";
@@ -743,7 +756,12 @@ void MTable::setVal( TCfg &cfg, const string &val )
 	    if( cfg.fld().flg()&TFld::DateTimeDec )	cfg.setI(SQLtoUTC(val));
 	    else cfg.setI(atoi(val.c_str()));
 	    break;
-	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
+	case TFld::Real:
+	{
+	    double vl = atof(val.c_str());
+	    cfg.setR( (vl!=EVAL_REAL_MYSQL) ? vl : EVAL_REAL );
+	    break;
+	}
 	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
     }
 }

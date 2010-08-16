@@ -2,6 +2,9 @@
 - !!:DB: Automatic present table open is added at request.
 - FIX:UI.QTCfg: Found node view follow is added for nodes tree.
 - !!:UI.QTCfg, UI.Vision: Text string find support is added to TextEdit element.
+- SYS: RPM-spec files is updated for module DP.PostgreSQL package build.
+- FIX:Archive.DBArch: Values limits is removed for Real and Integer types for EVAL write support.
+- !:DB.MySQL: No limited Real and Integer values type support is added. For Real type EVAL conversion is added.
 
 
 2010-08-13 Maxim

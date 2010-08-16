@@ -7,14 +7,15 @@ Source: openscada-%version.tar.gz
 License: GPLv2
 Group: Applications/Engineering
 Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
-URL: http://oscada.org.ua
+URL: http://oscada.org
 
 %define srcname openscada-%version
 
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel libnet-snmp-devel libqt4-devel firebird-devel libportaudio2-devel libfftw3-devel
+BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql8.3-devel libportaudio2-devel libfftw3-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications

@@ -660,7 +660,7 @@ void MTable::fieldFix( TConfig &cfg )
     req += ", PRIMARY KEY ("+pr_keys+"));";
     owner().sqlReq( req );
 
-    //- Copy data from temporary DB -
+    //> Copy data from temporary DB
     if( fix )
     {
 	req = "INSERT INTO '"+mod->sqlReqCode(name())+"'("+all_flds+") SELECT "+all_flds+" FROM 'temp_"+mod->sqlReqCode(name())+"';"
@@ -668,7 +668,7 @@ void MTable::fieldFix( TConfig &cfg )
 	owner().sqlReq( req );
     }
 
-    //- Update table structure -
+    //> Update table structure
     req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq( req, &tblStrct );
 }

@@ -30,6 +30,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+#define EVAL_REAL_MYSQL -1.79E308
+
 using std::string;
 
 namespace BDMySQL
