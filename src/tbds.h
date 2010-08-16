@@ -144,6 +144,8 @@ class TBD : public TCntrNode, public TConfig
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
+	AutoHD<TCntrNode> chldAt( char igr, const string &name, const string &user = "" );
+
     private:
 	//Private methods
 	void postEnable( int flag );

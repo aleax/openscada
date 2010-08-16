@@ -233,12 +233,15 @@ namespace VISION
 	    void applySlot( );
 	    void cancelSlot( );
 	    void curPosChange( );
+	    void ctrTreePopup( );
+	    void find( );
 
 	private:
 	    bool		isInit;
 	    QString		m_text;
 	    QTextEdit		*ed_fld;
 	    QDialogButtonBox	*but_box;
+	    QAction		*actFind, *actFindNext;
     };
 
     //****************************************

@@ -28,6 +28,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QTextEdit>
 #include <QItemEditorFactory>
 #include <QMetaProperty>
@@ -35,6 +36,7 @@
 #include <QCalendarWidget>
 #include <QToolTip>
 #include <QStatusBar>
+#include <QMenu>
 
 #include <tsys.h>
 
@@ -343,11 +345,24 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
+    ed_fld->setContextMenuPolicy(Qt::CustomContextMenu);
     ed_fld->setTabStopWidth(20);
     ed_fld->setAcceptRichText(false);
-    connect( ed_fld, SIGNAL( textChanged() ), this, SLOT( changed() ) );
-    connect( ed_fld, SIGNAL( cursorPositionChanged() ), this, SLOT( curPosChange() ) );
+    connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()));
+    connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()));
+    connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
     box->addWidget(ed_fld);
+
+    QImage ico_t;
+    if( !ico_t.load(TUIS::icoPath("find").c_str()) ) ico_t.load(":/images/find.png");
+    actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
+    actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+    connect(actFind, SIGNAL(activated()), this, SLOT(find()));
+    ed_fld->addAction(actFind);
+    actFindNext = new QAction(_("Find next"), ed_fld);
+    actFindNext->setShortcut(Qt::Key_F3);
+    connect(actFindNext, SIGNAL(activated()), this, SLOT(find()));
+    ed_fld->addAction(actFindNext);
 
     if( !prev_dis )
     {
@@ -434,6 +449,56 @@ bool TextEdit::event( QEvent *e )
 	}
     }
     return QWidget::event(e);
+}
+
+void TextEdit::ctrTreePopup( )
+{
+    QMenu *menu = ed_fld->createStandardContextMenu();
+    menu->addSeparator();
+    menu->addAction(actFind);
+    menu->addAction(actFindNext);
+    menu->exec(QCursor::pos());
+    delete menu;
+}
+
+void TextEdit::find( )
+{
+    bool isFind = false;
+    int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',0,0).toInt();
+    QString fstr = actFind->objectName().section(':',1);
+    if( sender() == actFind )
+    {
+	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
+	QLineEdit *le = new QLineEdit(fstr,&dlg);
+	dlg.ed_lay->addWidget(le, 0, 0);
+	QCheckBox *bw = new QCheckBox(_("Backward"),&dlg);
+	if( fopt & QTextDocument::FindBackward ) bw->setCheckState(Qt::Checked);
+	dlg.ed_lay->addWidget(bw, 1, 0);
+	QCheckBox *cs = new QCheckBox(_("Case sensitively"),&dlg);
+	if( fopt & QTextDocument::FindCaseSensitively ) cs->setCheckState(Qt::Checked);
+	dlg.ed_lay->addWidget(cs, 2, 0);
+	QCheckBox *ww = new QCheckBox(_("Whole words"),&dlg);
+	if( fopt & QTextDocument::FindWholeWords ) ww->setCheckState(Qt::Checked);
+	dlg.ed_lay->addWidget(ww, 3, 0);
+	le->setFocus(Qt::OtherFocusReason);
+	dlg.resize(400,210);
+	if( dlg.exec() == QDialog::Accepted && !le->text().isEmpty() )
+	{
+	    fopt = (QTextDocument::FindFlag)0;
+	    if( bw->checkState()==Qt::Checked ) fopt |= QTextDocument::FindBackward;
+	    if( cs->checkState()==Qt::Checked ) fopt |= QTextDocument::FindCaseSensitively;
+	    if( ww->checkState()==Qt::Checked ) fopt |= QTextDocument::FindWholeWords;
+	    fstr = le->text();
+	    isFind = true;
+	}
+    }
+    else if( sender() == actFindNext && !fstr.isEmpty() ) isFind = true;
+
+    if( isFind )
+    {
+	ed_fld->find(fstr,(QTextDocument::FindFlag)fopt);
+	actFind->setObjectName(QString::number(fopt)+":"+fstr);
+    }
 }
 
 //*************************************************

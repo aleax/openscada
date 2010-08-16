@@ -187,7 +187,7 @@ class TCntrNode
 	void setNodeMode( char mode )		{ m_flg = (m_flg&(~0x03))|(mode&0x03); }
 
 	//> Childs
-	AutoHD<TCntrNode> chldAt( char igr, const string &name, const string &user = "" );
+	virtual AutoHD<TCntrNode> chldAt( char igr, const string &name, const string &user = "" );
 	void chldList( char igr, vector<string> &list );
 	bool chldPresent( char igr, const string &name );
 	void chldAdd( char igr, TCntrNode *node, int pos = -1 );

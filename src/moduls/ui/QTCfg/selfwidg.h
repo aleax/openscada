@@ -57,10 +57,10 @@ class LineEdit : public QWidget
     Q_OBJECT
 
     public:
-	//- Data -
+	//> Data
 	enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
-	//- Methods -
+	//> Methods
 	LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
 
 	LType type( )		{ return m_tp; }
@@ -120,7 +120,7 @@ class TextEdit : public QWidget
 	void textChanged( const QString& );
 
     protected:
-	bool event( QEvent * e );
+	bool event( QEvent *e );
 
     private slots:
 	//Private slots
@@ -128,10 +128,13 @@ class TextEdit : public QWidget
 	void btApply( );
 	void btCancel( );
 	void curPosChange( );
+	void ctrTreePopup( );
+	void find( );
 
     private:
 	//Private attributes
-	bool	isInit;
+	bool		isInit;
+	QAction		*actFind, *actFindNext;
 	QTextEdit	*ed_fld;
 	QDialogButtonBox *but_box;
 };
@@ -267,10 +270,8 @@ class UserStBar : public QLabel
 
     private:
 	//Attributes
-	QString     user_txt;
+	QString	user_txt;
 };
-
-}
 
 //*************************************************
 //* TableDelegate: Combobox table delegate        *
@@ -296,5 +297,7 @@ class TableDelegate : public QItemDelegate
 	//> Private attributes
 	bool eventFilter( QObject *object, QEvent *event );
 };
+
+}
 
 #endif //SELFWIDG_H

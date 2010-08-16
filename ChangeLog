@@ -1,3 +1,9 @@
+2010-08-16 Roman
+- !!:DB: Automatic present table open is added at request.
+- FIX:UI.QTCfg: Found node view follow is added for nodes tree.
+- !!:UI.QTCfg, UI.Vision: Text string find support is added to TextEdit element.
+
+
 2010-08-13 Maxim
 - DB:PostgreSQL: escape string syntax is added to INSERT and UPDATE commands.
 - DB:PostgreSQL: NOTICE processing is overridden with the purpose of not sending the messages to stderr.

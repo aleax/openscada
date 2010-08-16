@@ -712,6 +712,20 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 
+AutoHD<TCntrNode> TBD::chldAt( char igr, const string &name, const string &user )
+{
+    try{ return TCntrNode::chldAt(igr, name, user); }
+    catch(...)
+    {
+	if( igr == mTbl && !openStat(name) )
+	{
+	    open(name,false);
+	    return TCntrNode::chldAt(igr, name, user);
+	}
+	else throw;
+    }
+}
+
 void TBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
@@ -726,8 +740,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),0664,"root","BD",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),0664,"root","BD",3,
-		    "tp","str","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
+		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),0664,"root","BD",4,
+		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
 		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load system from this DB"),0660,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
