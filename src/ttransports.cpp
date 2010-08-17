@@ -826,19 +826,24 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	char buf[STR_BUF_LEN];
 	try
 	{
+	    if( !startStat() ) start();
 	    int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? 1e3*prms[1].getR() : 0 );
 	    rez.assign(buf,resp_len);
-	}catch(TError) { }
+	}catch(TError) { return ""; }
 
 	return rez;
     }
     else if( iid == "messIO" && prms.size() >= 2 && dynamic_cast<XMLNodeObj*>(prms[0].getO()) )
     {
-	XMLNode req;
-	((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
-	messProtIO(req,prms[1].getS());
-	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
-	return 0;
+	try
+	{
+	    XMLNode req;
+	    if( !startStat() ) start();
+	    ((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
+	    messProtIO(req,prms[1].getS());
+	    ((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
+	    return 0;
+	}catch(TError err) { return err.mess; }
     }
     return TCntrNode::objFuncCall(iid,prms,user);
 }
