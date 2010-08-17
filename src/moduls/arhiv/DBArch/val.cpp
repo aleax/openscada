@@ -180,7 +180,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
     if( iend < ibeg )	return;
 
     //> Get values
-    for( long long c_tm = ibegIn; c_tm < ibeg; c_tm += period() ) buf.setI(EVAL_INT);
+    for( long long c_tm = ibegIn; c_tm < ibeg; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
     switch(archive().valType())
     {
 	case TFld::Boolean: case TFld::Integer:
@@ -226,7 +226,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
 	    break;
 	}
     }
-    for( long long c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setI(EVAL_INT);
+    for( long long c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
 }
 
 TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )

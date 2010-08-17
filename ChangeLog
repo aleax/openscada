@@ -1,3 +1,7 @@
+2010-08-17 Roman
+- FIX:Archive.DBArch: Fill EVAL values for gevValue() request is fixed.
+
+
 2010-08-16 Roman
 - !!:DB: Automatic present table open is added at request.
 - FIX:UI.QTCfg: Found node view follow is added for nodes tree.
