@@ -117,6 +117,7 @@ void MBD::postDisable(int flag)
 
     if( flag && owner().fullDeleteDB() )
     {
+        ResAlloc resource(conn_res,true);
         PGconn * connection = NULL;
         PGresult *res;
         string conninfo;
@@ -241,6 +242,7 @@ TTable *MBD::openTable( const string &inm, bool create )
 
 void MBD::transOpen( )
 {
+    ResAlloc resource(conn_res,true);
     PGTransactionStatusType tp;
     tp = PQtransactionStatus( connection );
 
@@ -257,6 +259,7 @@ void MBD::transOpen( )
 
 void MBD::transCommit( )
 {
+    ResAlloc resource(conn_res,true);
     PGTransactionStatusType tp;
     tp = PQtransactionStatus( connection );
 

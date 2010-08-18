@@ -1,3 +1,7 @@
+2010-08-18 Maxim
+- FIX:DB:PostgreSQL: r=resource allocation is added for transaction open and commit functions.
+
+
 2010-08-17 Roman
 - FIX:Archive.DBArch: Fill EVAL values for gevValue() request is fixed.
 - FIX:Transport: Start for stoped output transport is added to user API functions messIO().
