@@ -717,7 +717,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),0664,"root","root",1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),0664,"root","root",2,"rows","10",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  blk - block identifier from block's scheme; for constant value set to:\n"

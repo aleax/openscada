@@ -1279,6 +1279,7 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
 
 void SessWdg::inheritAttr( const string &aid )
 {
+    ResAlloc res(mCalcRes,true);
     Widget::inheritAttr(aid);
 
     if( !aid.empty() && ownerSess( )->start( ) && attrPresent(aid) )

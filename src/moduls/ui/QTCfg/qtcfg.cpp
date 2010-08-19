@@ -654,78 +654,93 @@ void ConfApp::itDel( const string &iit )
 
 void ConfApp::itCut( )
 {
-    copy_buf = "1"+sel_path;
+    copy_buf = "1";
+    QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
+    if( sel_ls.size() <= 1 ) copy_buf += sel_path;
+	else for( int i_el = 0; i_el < sel_ls.size(); i_el++ )
+	    copy_buf += sel_ls.at(i_el)->text(2).toStdString()+"\n";
     editToolUpdate();
 }
 
 void ConfApp::itCopy( )
 {
-    copy_buf = "0"+sel_path;
+    copy_buf = "0";
+    QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
+    if( sel_ls.size() <= 1 ) copy_buf += sel_path;
+	else for( int i_el = 0; i_el < sel_ls.size(); i_el++ )
+	    copy_buf += sel_ls.at(i_el)->text(2).toStdString()+"\n";
     editToolUpdate();
 }
 
 void ConfApp::itPaste( )
 {
     int off;
-    string s_el, s_elp, t_el, b_grp;
+    string s_el, s_elp, t_el, b_grp, copyEl;
 
-    //> Src elements calc
-    int n_sel = 0;
-    for( off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); n_sel++ )
-    { if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
+    bool isCut = (copy_buf[0] == '1');
 
-    if( TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) )
-    { mod->postMess( mod->nodePath().c_str(), _("Copy is imposible."), TUIMod::Error, this ); return; }
-
-    vector<string> brs;
-    if( atoi(root->attr("acs").c_str())&SEC_WR ) brs.push_back(string("-1\n0\n\n")+_("Selected"));
-
-    XMLNode *branch = root->childGet("id","br",true);
-    if( branch )
-	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
-	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
-	    {
-		string gbrId = branch->childGet(i_b)->attr("id");
-		brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n0\n"+gbrId+"\n"+branch->childGet(i_b)->attr("dscr"));
-		if( s_el.substr(0,gbrId.size()) == gbrId ) { brs[brs.size()-1] = brs[brs.size()-1]+"\n1"; b_grp = gbrId; }
-	    }
-
-    //> Make request dialog
-    ReqIdNameDlg dlg(this,actItAdd->icon(),"",_("Move or copy node"));
-    dlg.setTargets(brs);
-    dlg.setMess( QString((copy_buf[0] == '1') ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).
-		arg(copy_buf.substr(1).c_str()).arg(sel_path.c_str()) );
-    dlg.setId( s_el.substr(b_grp.size()).c_str() );
-    if( dlg.exec() != QDialog::Accepted ) return;
-
-    string stat_nm, src_nm, dst_nm;
-    off = 1; stat_nm = TSYS::pathLev(copy_buf,0,true,&off); src_nm = copy_buf.substr(off);
-    off = 0; stat_nm = TSYS::pathLev(sel_path,0,true,&off); dst_nm = sel_path.substr(off);
-
-    if( atoi(TSYS::strSepParse(dlg.target( ),0,'\n').c_str()) >= 0 )
+    for( int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
     {
-	dst_nm = dst_nm + "/" +TSYS::strSepParse(dlg.target( ),2,'\n') + dlg.id().toAscii().data();
-	//> Check for already present node
-	XMLNode req("get");
-	req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+	//> Src elements calc
+	int n_sel = 0;
+	for( off = 0; !(t_el=TSYS::pathLev(copyEl,0,true,&off)).empty(); n_sel++ )
+	{ if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
+
+	if( TSYS::pathLev(copyEl,0) != TSYS::pathLev(sel_path,0) )
+	{ mod->postMess( mod->nodePath().c_str(), _("Copy is impossible."), TUIMod::Error, this ); return; }
+
+	vector<string> brs;
+	if( atoi(root->attr("acs").c_str())&SEC_WR ) brs.push_back(string("-1\n0\n\n")+_("Selected"));
+
+	XMLNode *branch = root->childGet("id","br",true);
+	if( branch )
+	    for( int i_b = 0; i_b < branch->childSize(); i_b++ )
+		if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
+		{
+		    string gbrId = branch->childGet(i_b)->attr("id");
+		    brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n0\n"+gbrId+"\n"+branch->childGet(i_b)->attr("dscr"));
+		    if( s_el.substr(0,gbrId.size()) == gbrId ) { brs[brs.size()-1] = brs[brs.size()-1]+"\n1"; b_grp = gbrId; }
+		}
+
+	//> Make request dialog
+	ReqIdNameDlg dlg(this,actItAdd->icon(),"",_("Move or copy node"));
+	dlg.setTargets(brs);
+	dlg.setMess( QString(isCut ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).
+		arg(copyEl.c_str()).arg(sel_path.c_str()) );
+	dlg.setId( s_el.substr(b_grp.size()).c_str() );
+	if( dlg.exec() != QDialog::Accepted ) return;
+
+	string stat_nm, src_nm, dst_nm;
+	off = 0; stat_nm = TSYS::pathLev(copyEl,0,true,&off); src_nm = copyEl.substr(off);
+	off = 0; stat_nm = TSYS::pathLev(sel_path,0,true,&off); dst_nm = sel_path.substr(off);
+
+	if( atoi(TSYS::strSepParse(dlg.target( ),0,'\n').c_str()) >= 0 )
+	{
+	    dst_nm = dst_nm + "/" +TSYS::strSepParse(dlg.target( ),2,'\n') + dlg.id().toAscii().data();
+	    //> Check for already present node
+	    XMLNode req("get");
+	    req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+	    if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+	    for( int i_lel = 0; i_lel < req.childSize(); i_lel++ )
+		if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
+		    (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
+		{
+		    InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),0,0);
+		    if( dlg1.exec() != QDialog::Accepted ) return;
+		    break;
+		}
+	}
+
+	//> Copy visual item
+	XMLNode req("copy");
+	req.setAttr("path","/"+stat_nm+"/%2fobj")->setAttr("src",src_nm)->setAttr("dst",dst_nm);
 	if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
-	for( int i_lel = 0; i_lel < req.childSize(); i_lel++ )
-	    if( (req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
-		(!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
-	    {
-		InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),0,0);
-		if( dlg1.exec() != QDialog::Accepted ) return;
-		break;
-	    }
+
+	//> Remove source widget
+	if( isCut ) itDel(copyEl);
     }
 
-    //> Copy visual item
-    XMLNode req("copy");
-    req.setAttr("path","/"+stat_nm+"/%2fobj")->setAttr("src",src_nm)->setAttr("dst",dst_nm);
-    if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
-
-    //> Remove source widget
-    if( copy_buf[0] == '1' ) { itDel(copy_buf.substr(1)); copy_buf = "0"; }
+    if( isCut ) copy_buf = "0";
 
     treeUpdate( );
     pageRefresh( );
@@ -737,20 +752,23 @@ void ConfApp::editToolUpdate( )
     actItCopy->setEnabled( !sel_path.empty() );
     actItPaste->setEnabled( false );
 
-    //> Src and destination elements calc
-    if( copy_buf.size() <= 1 || copy_buf.substr(1) == sel_path ||
-	    TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) )
-	return;
-    string s_elp, s_el, t_el;
-    for( int off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); )
-    { s_elp += ("/"+s_el); s_el = t_el; }
+    if( TSYS::strParse(copy_buf,1,"\n").empty() )
+    {
+	//> Src and destination elements calc
+	if( copy_buf.size() <= 1 || copy_buf.substr(1) == sel_path || TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) )
+	    return;
+	string s_elp, s_el, t_el;
+	for( int off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); )
+	{ s_elp += ("/"+s_el); s_el = t_el; }
+
+	if( atoi(root->attr("acs").c_str())&SEC_WR ) actItPaste->setEnabled(true);
+    }
 
     XMLNode *branch = root->childGet("id","br",true);
     if( branch )
 	for( int i_b = 0; i_b < branch->childSize(); i_b++ )
 	    if( atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR )
 	    { actItPaste->setEnabled(true); break; }
-    if( atoi(root->attr("acs").c_str())&SEC_WR ) actItPaste->setEnabled(true);
 }
 
 void ConfApp::treeUpdate( )

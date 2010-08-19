@@ -60,10 +60,9 @@ int main(int argc, char *argv[], char *envp[] )
 	rez = SYS->start();
 
 	delete SYS;
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    printf("OpenSCADA system is correctly exited.\n");
+    printf("OpenSCADA system is correctly exited by cause %d.\n",rez);
 
     return rez;
 }

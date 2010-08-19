@@ -1,5 +1,13 @@
+2010-08-19 Roman
+- SYS:Program finish reason is added to last message. User exit reason is changed to SIGUSR1(10).
+- DAQ.BlockCalc: Attributes configuration field of a parameter is expanded to 10 rows.
+- DAQ.OPC_UA: OpenSSL left includes is moved from mod_daq.cpp file to mod_prt.cpp.
+- !!:UI.QTCfg: Selected nodes list copy is added.
+- UI.VCAEngine: Calc resource is added to inherit attributes function of a session for hot and safe links update allow in development.
+
+
 2010-08-18 Maxim
-- FIX:DB:PostgreSQL: r=resource allocation is added for transaction open and commit functions.
+- FIX:DB:PostgreSQL: resource allocation is added for transaction open and commit functions.
 
 
 2010-08-17 Roman

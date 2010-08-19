@@ -745,7 +745,7 @@ msgid "1"
 msgstr ""
 
 #: qtcfg.cpp:678
-msgid "Copy is imposible."
+msgid "Copy is impossible."
 msgstr "Копирование невозможно."
 
 #: qtcfg.cpp:681

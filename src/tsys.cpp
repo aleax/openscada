@@ -447,7 +447,7 @@ int TSYS::start(  )
 
 void TSYS::stop( )
 {
-    mStopSignal = SIGINT;
+    mStopSignal = SIGUSR1;
 }
 
 bool TSYS::chkSelDB( const string& wDB )

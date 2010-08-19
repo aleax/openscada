@@ -25,9 +25,6 @@
 #include <fcntl.h>
 #include <string.h>
 
-#include "openssl/evp.h"
-#include "openssl/hmac.h"
-
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
