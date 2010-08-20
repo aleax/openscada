@@ -963,7 +963,7 @@ void Page::setPrjFlags( int val )
     int dif = mFlgs^val;
     if( dif&Page::Empty )
     {
-	//- Clear page -
+	//> Clear page
 	setParentNm("");
 	if( enable() )
 	{
@@ -1096,6 +1096,11 @@ void Page::setEnable( bool val )
     if( prjFlags()&Page::Empty ) mParent = "root";
 
     Widget::setEnable(val);
+    if( val && !parent().freeStat() && parent().at().rootId() != "Box" )
+    {
+	Widget::setEnable(false);
+	throw TError(nodePath().c_str(),_("For page can use only Box-based widgets!"));
+    }
 
     //> Enable/disable included pages
     vector<string> ls;
@@ -1297,10 +1302,13 @@ PageWdg::~PageWdg( )
 
 TCntrNode &PageWdg::operator=( TCntrNode &node )
 {
-    Widget::operator=( node );
-
     if( ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id()) )
-	setParentNm( ownerPage().parent().at().path()+"/wdg_"+id() );
+    {
+	setParentNm(ownerPage().parent().at().path()+"/wdg_"+id());
+	setEnable(true);
+    }
+
+    Widget::operator=( node );
 }
 
 Page &PageWdg::ownerPage()

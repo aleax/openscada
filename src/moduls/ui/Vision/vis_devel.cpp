@@ -1028,25 +1028,25 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	    !((DevelWdgView*)((QScrollArea*)work_space->activeWindow())->widget())->edit()  )
 	return;
 
-    //- Count level -
+    //> Count level
     int p_el_cnt = 0;
     for( int i_off = 0; TSYS::pathLev(own_wdg,0,true,&i_off).size(); p_el_cnt++ ) ;
     string sid1 = TSYS::pathLev(own_wdg,0);
 
-    //- Make request id and name dialog -
+    //> Make request id and name dialog
     InputDlg dlg(this,cact->icon(),
 	    _("Enter new widget's/page's identifier and name."),_("Create widget/page"),true,true);
     dlg.setIdLen(30);
     if( p_el_cnt > 1 && iWid.empty() )
     {
-	//-- New include item id generator --
-	//--- Present include widgets list request ---
+	//>> New include item id generator
+	//>>> Present include widgets list request
 	if( sid1.substr(0,4) == "prj_" && pnt.isNull() ) req.setAttr("path",own_wdg+"/%2fpage%2fpage");
 	else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg");
 	if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else
 	{
-	    //--- Get parent widget id ---
+	    //>>> Get parent widget id
 	    string base_nm = "item";
 	    if( !par_nm.empty() )	base_nm = TSYS::pathLev(par_nm,1,true).substr(4);
 	    int i_c = 1, i_w = 0;
@@ -1058,13 +1058,13 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	}
     }
 
-    //-- Execute dialog --
+    //>> Execute dialog
     if( !iWid.empty() || dlg.exec() == QDialog::Accepted )
     {
 	string w_id = iWid.empty() ? dlg.id().toAscii().data() : iWid;
 	string w_nm = iWid.empty() ? dlg.name().toAscii().data() : iWnm;
 
-	//-- Check for widget's library --
+	//>> Check for widget's library
 	req.clear()->setName("add");
 	string new_wdg;
 	if( sid1.substr(0,4) == "wlb_" )
@@ -1087,22 +1087,22 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		new_wdg=own_wdg+"/wdg_"+w_id;
 	    }
 	}
-	//-- Create widget --
+	//>> Create widget
 	int err = cntrIfCmd(req);
 	if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	else
 	{
-	    //--- Set some parameters ---
+	    //>>> Set some parameters
 	    req.clear()->setName("set");
 	    if( !par_nm.empty() )
 	    {
-		//---- Set parent widget name and enable item ----
+		//>>>> Set parent widget name and enable item
 		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
 		err = cntrIfCmd(req);
 		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
 		err = cntrIfCmd(req);
 	    }
-	    //---- Set geometry for include widget ----
+	    //>>>> Set geometry for include widget
 	    if( !err && !pnt.isNull() )
 	    {
 		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::real2str(pnt.x()));
@@ -1111,7 +1111,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		err = cntrIfCmd(req);
 	    }
 	    if( err ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	    else emit modifiedItem(new_wdg);
+	    emit modifiedItem(new_wdg);
 	}
     }
     cact->setChecked(false);

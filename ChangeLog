@@ -1,3 +1,11 @@
+2010-08-20 Roman
+- DB.PostgreSQL: Translation for German, by Irina Popkova, is updated.
+- DAQ.BlockCalc: Attributes configuration field of a parameter size is decreased to 8 rows.
+- UI.VCAEngine: Check for insert a widget of no Box type to page role is added.
+- FIX:UI.VCAEngine: A tamplate used pages copy is fixed.
+- UI.Vision: Mouse wheel zoom is increased.
+
+
 2010-08-20 Maxim
 - DB: The template of the DB module is added.
 

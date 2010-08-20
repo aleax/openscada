@@ -2919,7 +2919,7 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::Wheel:
 		if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) ) break;
-		setVisScale( visScale()+(float)((QWheelEvent*)event)->delta()/12000 );
+		setVisScale( visScale()+(float)((QWheelEvent*)event)->delta()/1200 );
 		return true;
 	    case QEvent::FocusIn:
 		if( edit() )    break;
