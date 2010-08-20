@@ -87,12 +87,6 @@ TBD *BDMod::openBD( const string &name )
     return new MBD(name,&owner().openDB_E());
 }
 
-void BDMod::load_( )
-{
-    //> Load parameters from command line
-
-}
-
 //************************************************
 //* BDPostgreSQL::MBD				 *
 //************************************************
@@ -481,6 +475,7 @@ void MTable::fieldStruct( TConfig &cfg )
 
 bool MTable::fieldSeek( int row, TConfig &cfg )
 {
+    printf("fieldSeek\n");
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));

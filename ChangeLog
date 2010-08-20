@@ -1,3 +1,7 @@
+2010-08-20 Maxim
+- DB: The template of the DB module is added.
+
+
 2010-08-19 Roman
 - SYS:Program finish reason is added to last message. User exit reason is changed to SIGUSR1(10).
 - DAQ.BlockCalc: Attributes configuration field of a parameter is expanded to 10 rows.
