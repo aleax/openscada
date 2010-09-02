@@ -1,3 +1,19 @@
+2010-09-02 Roman
+- !!:DemoDB: Demo DB is updated for:
+    - Compressors SO KM201, KM301, KM202 add KM302.
+    - Manual variable input support is added to control panel.
+    - Translation is updated.
+    - Some bugs is fixed.
+- !!!!:DB, DB.*: Subsystem modules API version is changed to 3.
+    Transaction control is added to function sqlReq() and function transCloseCheck() is added.
+- !!:DB.SQLite: Transaction mechanism is improved for support into user's SQL-requsts and old transactions close.
+- TFunction, DAQ.JavaLikeCalc: Included function's context clear function is added and used.
+- FIX:DAQ.JavaLikeCalc: External functions call context clear is added for TValFunc objects on the function compile.
+- UI.QTCfg: Miss dialogs option for each item of multiply copy is added.
+- UI.VCAEngine: The property "len" clean is added for widget's attributes.
+- FIX:UI.Vision: Scale/resize mode toggle on Ctrl+Move is improved.
+
+
 2010-08-20 Roman
 - DB.PostgreSQL: Translation for German, by Irina Popkova, is updated.
 - DAQ.BlockCalc: Attributes configuration field of a parameter size is decreased to 8 rows.

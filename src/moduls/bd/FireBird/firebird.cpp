@@ -232,7 +232,7 @@ void MBD::transCommit( isc_tr_handle *trans )
     *trans = 0;
 }
 
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
     sqlReq(NULL,ireq,tbl);
 }

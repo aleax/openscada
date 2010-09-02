@@ -1856,7 +1856,7 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt )
 	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
 	    {
 		XMLNode *el = attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,owner().c_str(),grp().c_str(),permit()|R_R_R_);
-		if( el ) el->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()));
+		if(el) el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()));
 	    }
 	}
 	return true;

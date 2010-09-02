@@ -90,7 +90,7 @@ class MBD : public TBD
 	void disable( );
 
 	void allowList( vector<string> &list );
-	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
     protected:
 	//Protected methods

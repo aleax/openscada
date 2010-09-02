@@ -60,7 +60,7 @@ class MTable : public TTable
 	void postDisable(int flag);
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-        void getStructDB( string name, vector< vector<string> > &tblStrct );
+	void getStructDB( string name, vector< vector<string> > &tblStrct );
 
 	string getVal( TCfg &cfg );
 	void   setVal( TCfg &cfg, const string &vl );
@@ -89,11 +89,10 @@ class MBD : public TBD
 	void disable( );
 
 	void allowList( vector<string> &list );
-	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
-        
-        void transOpen( );
-        void transCommit( );
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
+	void transOpen( );
+	void transCommit( );
 
     protected:
 	//Protected methods
@@ -103,12 +102,11 @@ class MBD : public TBD
 	//Private methods
 	void postDisable(int flag);
 	TTable *openTable( const string &name, bool create );
-        
 
 	//Private attributes
-        string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg;
-        //int    port, connect_timeout;
-        PGconn * connection;
+	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg;
+	//int    port, connect_timeout;
+	PGconn * connection;
 	Res    conn_res;
 };
 

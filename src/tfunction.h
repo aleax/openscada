@@ -137,6 +137,7 @@ class TFunction : public TCntrNode
 	string		mId;
 	bool		run_st;
 	TValFunc	*mTVal;
+	vector<TValFunc*>	used;
 
     private:
 	//Methods
@@ -145,7 +146,6 @@ class TFunction : public TCntrNode
 	//Attributes
 	Res		f_res;
 	vector<IO*>	mIO;
-	vector<TValFunc*>	used;
 };
 
 //*************************************************
@@ -224,6 +224,7 @@ class TValFunc
 	//> Context operations
 	TValFunc *ctxGet( int key );
 	void ctxSet( int key, TValFunc *val );
+	void ctxClear( );
 
     protected:
 	//Data

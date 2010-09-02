@@ -676,8 +676,11 @@ void ConfApp::itPaste( )
 {
     int off;
     string s_el, s_elp, t_el, b_grp, copyEl;
+    QCheckBox *prcReq = NULL, *prcAlrPres = NULL;
+    bool prcReqMiss = false, prcAlrPresMiss = false;
 
     bool isCut = (copy_buf[0] == '1');
+    bool isMult = !TSYS::strParse(copy_buf,1,"\n").empty();
 
     for( int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
     {
@@ -708,7 +711,13 @@ void ConfApp::itPaste( )
 	dlg.setMess( QString(isCut ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).
 		arg(copyEl.c_str()).arg(sel_path.c_str()) );
 	dlg.setId( s_el.substr(b_grp.size()).c_str() );
-	if( dlg.exec() != QDialog::Accepted ) return;
+	if( isMult )
+	{
+	    prcReq = new QCheckBox(_("Do not the question anymore."),&dlg);
+	    dlg.ed_lay->addWidget(prcReq,5,0,1,2);
+	}
+	if( !prcReqMiss && dlg.exec() != QDialog::Accepted ) return;
+	if( !prcReqMiss && prcReq && prcReq->checkState() == Qt::Checked ) prcReqMiss = true;
 
 	string stat_nm, src_nm, dst_nm;
 	off = 0; stat_nm = TSYS::pathLev(copyEl,0,true,&off); src_nm = copyEl.substr(off);
@@ -726,7 +735,13 @@ void ConfApp::itPaste( )
 		    (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toAscii().data()) )
 		{
 		    InputDlg dlg1(this,actItPaste->icon(),QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()).toAscii().data(),_("Move or copy node"),0,0);
-		    if( dlg1.exec() != QDialog::Accepted ) return;
+		    if( isMult )
+		    {
+			prcAlrPres = new QCheckBox(_("Do not the question anymore."),&dlg1);
+			dlg1.ed_lay->addWidget(prcAlrPres,5,0,5,1);
+		    }
+		    if( !prcAlrPresMiss && dlg1.exec() != QDialog::Accepted ) return;
+		    if( !prcAlrPresMiss && prcAlrPres && prcAlrPres->checkState() == Qt::Checked ) prcAlrPresMiss = true;
 		    break;
 		}
 	}

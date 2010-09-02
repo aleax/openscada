@@ -111,6 +111,9 @@ void TBDS::closeOldTables( int secOld )
 			db.at().close(tbls[i_tbl]);
 		    }
 		}
+
+		//> Check for transaction close
+		db.at().transCloseCheck();
 	    }
 	}
     }catch(...){  }
@@ -585,7 +588,8 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
     mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
-    mAddr(cfg("ADDR").getSd()), mCodepage(cfg("CODEPAGE").getSd()), mToEn(cfg("EN").getBd()), mEn(false)
+    mAddr(cfg("ADDR").getSd()), mCodepage(cfg("CODEPAGE").getSd()), mToEn(cfg("EN").getBd()),
+    mEn(false), userSQLTrans(EVAL_BOOL)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -698,7 +702,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 	try
 	{
 	    vector< vector<string> > rtbl;
-	    sqlReq( prms[0].getS(), &rtbl );
+	    sqlReq(prms[0].getS(), &rtbl, ((prms.size()>=2)?prms[1].getB():EVAL_BOOL));
 	    for( int i_r = 0; i_r < rtbl.size(); i_r++ )
 	    {
 		TArrayObj *row = new TArrayObj();
@@ -762,6 +766,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if( enableStat( ) && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root","BD") )
 	{
 	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root","BD",3,"tp","str","cols","100","rows","5");
+	    ctrMkNode("fld",opt,-1,"/sql/trans",_("Transaction"),RWRW__,"root","BD",4,"tp","dec","dest","select",
+		"sel_id","0;1;2","sel_list",_("Out;Into;No matter"));
 	    ctrMkNode("comm",opt,-1,"/sql/send",_("Send"),RWRW__,"root","BD");
 	    ctrMkNode("table",opt,-1,"/sql/tbl",_("Result"),R_R___,"root","BD");
 	}
@@ -840,8 +846,13 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"get",RWRW__,"root","BD") )	opt->setText(userSQLReq);
 	if( ctrChkNode(opt,"set",RWRW__,"root","BD") )	userSQLReq = opt->text();
     }
+    else if( a_path == "/sql/trans" )
+    {
+	if( ctrChkNode(opt,"get",RWRW__,"root","BD") )	opt->setText(TSYS::int2str(userSQLTrans));
+	if( ctrChkNode(opt,"set",RWRW__,"root","BD") )	userSQLTrans = atoi(opt->text().c_str());
+    }
     else if( a_path == "/sql/send" && enableStat( ) && ctrChkNode(opt,"set",RWRW__,"root","BD",SEC_WR) )
-	sqlReq(userSQLReq,&userSQLResTbl);
+	sqlReq(userSQLReq,&userSQLResTbl,userSQLTrans);
     else if( a_path == "/sql/tbl" && ctrChkNode(opt,"get",R_R___,"root","BD",SEC_RD) )
 	for( int i_r = 0; i_r < userSQLResTbl.size(); i_r++ )
 	    for( int i_c = 0; i_c < userSQLResTbl[i_r].size(); i_c++ )

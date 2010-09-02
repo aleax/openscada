@@ -182,7 +182,7 @@ TTable *MBD::openTable( const string &inm, bool create )
     return new MTable(inm,this,create);
 }
 
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
     MYSQL_RES *res = NULL;
 

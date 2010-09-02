@@ -269,7 +269,7 @@ void MBD::transCommit( )
 }
 
 
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
     PGresult *res;
 

@@ -22,7 +22,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define  VER_BD 2    //BDS type modules version
+#define  VER_BD 3    //BDS type modules version
 
 #include <stdio.h>
 
@@ -32,6 +32,7 @@
 
 #include "resalloc.h"
 #include "tsubsys.h"
+#include "tvariant.h"
 #include "tconfig.h"
 
 using std::string;
@@ -125,8 +126,10 @@ class TBD : public TCntrNode, public TConfig
 	AutoHD<TTable> at( const string &name )	{ return chldAt(mTbl,name); }
 
 	//> SQL request interface
-	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL )
+	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL )
 	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"sqlReq"); }
+
+	virtual void transCloseCheck( )		{ }
 
 	TTipBD &owner( );
 
@@ -167,6 +170,7 @@ class TBD : public TCntrNode, public TConfig
 
 	string	userSQLReq;
 	vector< vector<string> >	userSQLResTbl;
+	char	userSQLTrans;
 };
 
 //************************************************
@@ -228,7 +232,7 @@ class TBDS : public TSubSYS, public TElem
 	static string realDBName( const string &bdn );
 	void dbList( vector<string> &ls, bool checkSel = false );
 
-	void closeOldTables( int secOld = 60 );
+	void closeOldTables( int secOld = 600 );
 
 	//> Open/close table.
 	AutoHD<TTable> open( const string &bdn, bool create = false );

@@ -107,7 +107,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* BDSQLite::MBD				 *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), trans_reqs(1)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), commCntTm(0), trans_reqs(1)
 {
 
 }
@@ -150,7 +150,7 @@ void MBD::disable( )
     if( !enableStat() )  return;
 
     //> Last commit
-    if(commCnt) { commCnt = trans_reqs; sqlReq(""); }
+    if( commCnt ) transCommit();
 
     TBD::disable( );
 
@@ -177,7 +177,7 @@ TTable *MBD::openTable( const string &inm, bool create )
     return new MTable(inm,this,create);
 }
 
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
     char *zErrMsg;
     int rc,nrow=0,ncol=0;
@@ -190,21 +190,13 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     string req = ireq;
 
     ResAlloc res(conn_res,true);
-    if( trans_reqs > 1 )
-    {
-	if(!commCnt) req=string("BEGIN;")+req;
-	if((++commCnt) >= trans_reqs )
-	{
-	    req+="COMMIT;";
-	    commCnt=0;
-	}
-    }
+    if( intoTrans && intoTrans != EVAL_BOOL && !commCnt )	transOpen();
+    else if( !intoTrans && commCnt )	transCommit();
+
     //> Put request
     rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
     if( rc != SQLITE_OK )
     {
-	//>> Fix transaction
-	if( trans_reqs>1 && (commCnt-1)<0 )	commCnt=trans_reqs;
 	//mess_err(nodePath().c_str(),_("Request error: %s"),req.c_str());
 	throw TError(100+rc,nodePath().c_str(),_("Getting table error: %s"),zErrMsg);
     }
@@ -226,6 +218,27 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
     sqlite3_free_table(result);
 }
 
+void MBD::transOpen( )
+{
+    ResAlloc resource(conn_res,true);
+    if( !commCnt ) sqlReq("BEGIN;");
+    commCnt++;
+    commCntTm = time(NULL);
+}
+
+void MBD::transCommit( )
+{
+    ResAlloc resource(conn_res,true);
+    if( commCnt ) sqlReq("COMMIT;");
+    commCnt = commCntTm = 0;
+}
+
+void MBD::transCloseCheck( )
+{
+    if( commCnt && (commCnt > 1000 || (time(NULL)-commCntTm) > 10*60) )
+	transCommit();
+}
+
 void MBD::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -234,18 +247,17 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
 		    "tp","str","help",
-		    _("SQLite DB address must be written as: [<FileDBPath>;<nTransReq>].\n"
+		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
-		      "  FileDBPath - full path to DB file (./oscada/Main.db);\n"
-		      "  nTransReq - number requests into transaction (default 1)."));
+		      "  FileDBPath - full path to DB file (./oscada/Main.db)."));
 	if( commCnt )
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),0660);
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) && commCnt )
-    { commCnt = trans_reqs; sqlReq(""); }
+	transCommit();
     else TBD::cntrCmdProc(opt);
 }
 
@@ -261,7 +273,7 @@ MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)
 	string req = "SELECT * FROM '"+mod->sqlReqCode(name())+"' LIMIT 0;";	//!! Need for table present checking
 	owner().sqlReq(req);
 	req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
-	owner().sqlReq( req, &tblStrct );
+	owner().sqlReq(req, &tblStrct);
     }
     catch(...) { if( !create ) throw; }
 }
@@ -273,6 +285,7 @@ MTable::~MTable(  )
 
 void MTable::postDisable(int flag)
 {
+    owner().transCommit();
     if( flag )
     {
 	try{ owner().sqlReq("DROP TABLE '"+mod->sqlReqCode(name())+"';"); }
@@ -309,6 +322,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
+    //owner().transCommit();
+
     string sid;
     //> Make WHERE
     string req = "SELECT ";
@@ -342,7 +357,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //> Request
     if( first_sel ) return false;
     req = req + " FROM '" + mod->sqlReqCode(name()) + "' " + ((next)?req_where:"") + " LIMIT " +  TSYS::int2str(row) + ",1;";
-    owner().sqlReq( req, &tbl );
+    owner().sqlReq(req, &tbl, false);
     if( tbl.size() < 2 ) return false;
     //> Processing of query
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -366,6 +381,8 @@ void MTable::fieldGet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
+
+    //owner().transCommit();
 
     string sid;
     //> Prepare request
@@ -399,7 +416,7 @@ void MTable::fieldGet( TConfig &cfg )
     req = req + " FROM '" + mod->sqlReqCode(name()) + "' WHERE " + req_where + ";";
 
     //> Query
-    owner().sqlReq( req, &tbl );
+    owner().sqlReq(req, &tbl, false);
     if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present."));
 
     //> Processing of query
@@ -419,6 +436,8 @@ void MTable::fieldGet( TConfig &cfg )
 void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
+
+    //owner().transOpen();
 
     if( tblStrct.empty() ) fieldFix(cfg);
     mLstUse = time(NULL);
@@ -457,11 +476,11 @@ void MTable::fieldSet( TConfig &cfg )
 
     //> Prepare query
     string req = "SELECT 1 FROM '" + mod->sqlReqCode(name()) + "' " + req_where + ";";
-    try{ owner().sqlReq( req, &tbl ); }
+    try{ owner().sqlReq(req, &tbl, true); }
     catch(TError err)
     {
 	if( (err.cod-100) == SQLITE_READONLY )	return;
-	fieldFix(cfg); owner().sqlReq( req );
+	fieldFix(cfg); owner().sqlReq(req, NULL, true);
     }
     if( tbl.size() < 2 )
     {
@@ -505,11 +524,11 @@ void MTable::fieldSet( TConfig &cfg )
     req += ";";
 
     //> Query
-    try { owner().sqlReq( req ); }
+    try { owner().sqlReq(req, NULL, true); }
     catch(TError err)
     {
 	if( (err.cod-100) == SQLITE_READONLY )	return;
-	fieldFix(cfg); owner().sqlReq( req );
+	fieldFix(cfg); owner().sqlReq(req, NULL, true);
     }
 }
 
@@ -517,6 +536,8 @@ void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
+
+    //owner().transOpen();
 
     //> Get config fields list
     vector<string> cf_el;
@@ -536,7 +557,7 @@ void MTable::fieldDel( TConfig &cfg )
 	}
     }
     req += ";";
-    try{ owner().sqlReq( req ); }
+    try{ owner().sqlReq(req, NULL, true); }
     catch( TError err )
     {
 	if( (err.cod-100) == SQLITE_READONLY )
@@ -556,6 +577,8 @@ void MTable::fieldFix( TConfig &cfg )
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
+
+    //owner().transCommit();
 
     if( !tblStrct.empty() )
     {
@@ -614,7 +637,7 @@ void MTable::fieldFix( TConfig &cfg )
 	req = "CREATE TEMPORARY TABLE 'temp_"+mod->sqlReqCode(name())+"'("+all_flds+");"
 	    "INSERT INTO 'temp_"+mod->sqlReqCode(name())+"' SELECT "+all_flds+" FROM '"+mod->sqlReqCode(name())+"';"
 	    "DROP TABLE '"+mod->sqlReqCode(name())+"';";
-	owner().sqlReq( req );
+	owner().sqlReq(req, NULL, false);
     }
 
     //> Create new table
@@ -658,19 +681,21 @@ void MTable::fieldFix( TConfig &cfg )
 	}
     }
     req += ", PRIMARY KEY ("+pr_keys+"));";
-    owner().sqlReq( req );
+    owner().sqlReq(req, NULL, false);
 
     //> Copy data from temporary DB
     if( fix )
     {
 	req = "INSERT INTO '"+mod->sqlReqCode(name())+"'("+all_flds+") SELECT "+all_flds+" FROM 'temp_"+mod->sqlReqCode(name())+"';"
 	    "DROP TABLE 'temp_"+mod->sqlReqCode(name())+"';";
-	owner().sqlReq( req );
+	owner().sqlReq(req, NULL, false);
     }
 
     //> Update table structure
     req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
-    owner().sqlReq( req, &tblStrct );
+    owner().sqlReq(req, &tblStrct, false);
+
+    //owner().transOpen();
 }
 
 string MTable::getVal( TCfg &cfg )

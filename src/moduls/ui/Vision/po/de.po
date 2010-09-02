@@ -45,7 +45,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-16 09:31+0300\n"
+"POT-Creation-Date: 2010-08-28 08:39+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -5079,7 +5079,8 @@ msgid "Function"
 msgstr "Funktion"
 
 #: vis_shapes.cpp:3340
-msgid "Load page: '%1'."
+#, fuzzy
+msgid "Loading page: '%1'."
 msgstr "Seite laden: '%1'."
 
 #: vis_widgs.cpp:89

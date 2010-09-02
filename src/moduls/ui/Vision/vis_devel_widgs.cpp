@@ -2468,8 +2468,8 @@ void DevelWdgView::editExit( )
 
 void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 {
-    if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mainWin()->setWdgScale(true);
-    bool isScale = mainWin()->wdgScale( );
+    bool isScale = mainWin()->wdgScale();
+    if( QApplication::keyboardModifiers()&Qt::ControlModifier ) isScale = !isScale;
     if( isScale )	fMakeScale = true;
 
     if( fHoldChild )

@@ -3337,7 +3337,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			wlay->addWidget(shD->inclScrl);
 		    }
 
-		    QLabel *lab = new QLabel(QString("Load page: '%1'.").arg(val.c_str()),shD->inclWidget);
+		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()),shD->inclWidget);
 		    lab->setAlignment(Qt::AlignCenter);
 		    lab->setWordWrap(true);
 		    lab->resize(w->size());

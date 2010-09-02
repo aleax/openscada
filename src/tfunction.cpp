@@ -462,13 +462,11 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 
 void TValFunc::funcDisConnect( bool det )
 {
-    //> Included value contexts clear
-    for( map<int,TValFunc* >::iterator ivcx = vctx.begin(); ivcx != vctx.end(); ivcx++ ) delete ivcx->second;
-    vctx.clear();
+    ctxClear();
 
-    if( mFunc )
+    if(mFunc)
     {
-	for( int i_vl = 0; i_vl < mVal.size(); i_vl++ )
+	for(int i_vl = 0; i_vl < mVal.size(); i_vl++)
 	    switch( mVal[i_vl].tp )
 	    {
 		case IO::String:	delete mVal[i_vl].val.s;	break;
@@ -673,4 +671,11 @@ void TValFunc::ctxSet( int key, TValFunc *val )
 	if( vc->second ) delete vc->second;
 	vc->second = val;
     }
+}
+
+void TValFunc::ctxClear( )
+{
+    for( map<int,TValFunc* >::iterator ivcx = vctx.begin(); ivcx != vctx.end(); ivcx++ )
+	delete ivcx->second;
+    vctx.clear();
 }

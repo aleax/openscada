@@ -303,6 +303,9 @@ void Func::progCompile( )
     ResAlloc res(parse_res,true);
     ResAlloc res1(calc_res,true);
 
+    //> Context clear for usings
+    for( int i=0; i < used.size(); i++ ) used[i]->ctxClear();
+
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
     la_pos = 0;		//LA position

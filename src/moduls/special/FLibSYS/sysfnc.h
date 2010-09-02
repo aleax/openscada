@@ -76,6 +76,7 @@ class dbReqSQL : public TFunction
 	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("addr",_("DB address"),IO::String,IO::Default) );
 	    ioAdd( new IO("req",_("SQL request"),IO::String,IO::Default) );
+	    ioAdd( new IO("trans",_("Transaction"),IO::Boolean,IO::Default,TSYS::int2str(EVAL_BOOL).c_str()) );
 	}
 
 	string name( )	{ return _("DB: SQL request"); }
@@ -89,7 +90,7 @@ class dbReqSQL : public TFunction
 	    {
 		vector< vector<string> > rtbl;
 		AutoHD<TBD> db = SYS->db().at().nodeAt(sdb,0,'.');
-		db.at().sqlReq( val->getS(2), &rtbl );
+		db.at().sqlReq(val->getS(2), &rtbl, val->getB(3));
 		for( int i_r = 0; i_r < rtbl.size(); i_r++ )
 		{
 		    TArrayObj *row = new TArrayObj();

@@ -83,7 +83,11 @@ class MBD : public TBD
 	void disable( );
 
 	void allowList( vector<string> &list );
-	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
+
+	void transOpen( );
+	void transCommit( );
+	void transCloseCheck( );
 
     protected:
 	//Protected methods
@@ -98,6 +102,7 @@ class MBD : public TBD
 	string	cd_pg;
 	sqlite3	*m_db;
 	int	commCnt;
+	time_t	commCntTm;
 	Res	conn_res;
 	int	trans_reqs;
 };
