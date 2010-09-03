@@ -240,15 +240,20 @@ void MBD::transOpen( )
     PGTransactionStatusType tp;
     tp = PQtransactionStatus( connection );
 
-    if( tp == PQTRANS_INTRANS ) return;
-    PGresult   *res;
-    res = PQexec(connection, "BEGIN");
-    if (!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+    if( tp != PQTRANS_INTRANS )
     {
+        PGresult   *res;
+        res = PQexec(connection, "BEGIN");
+        if (!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+        {
+            PQclear(res);
+            throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error!"));
+        }
         PQclear(res);
-        throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error!"));
+        commTrOpen = time(NULL);
     }
-    else PQclear(res);
+    commCnt++;
+    commCntTm = time(NULL);
 }
 
 void MBD::transCommit( )
@@ -256,18 +261,26 @@ void MBD::transCommit( )
     ResAlloc resource(conn_res,true);
     PGTransactionStatusType tp;
     tp = PQtransactionStatus( connection );
-
-    if( tp == PQTRANS_IDLE ) return;
-    PGresult   *res;
-    res = PQexec(connection, "COMMIT");
-    if (!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+    if( tp != PQTRANS_IDLE )
     {
+        PGresult   *res;
+        res = PQexec(connection, "COMMIT");
+        if (!res || PQresultStatus(res) != PGRES_COMMAND_OK)
+        {
+            PQclear(res);
+            throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop trasaction error!"));
+        }
         PQclear(res);
-        throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop trasaction error!"));
     }
-    else PQclear(res);
+    commCnt = commCntTm = 0;
 }
 
+
+void MBD::transCloseCheck( )
+{
+    if( commCnt && (commCnt > 1000 || (time(NULL)-commCntTm) > 10*60 || (time(NULL)-commTrOpen) > 10*60 )  )
+        transCommit();
+}
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
@@ -279,6 +292,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
 
     ResAlloc resource(conn_res,true);
+    if( intoTrans && intoTrans != EVAL_BOOL && !commCnt )	transOpen();
+    else if( !intoTrans && commCnt )	transCommit();
 
     if( PQstatus( connection ) != CONNECTION_OK  )
     {
@@ -475,12 +490,11 @@ void MTable::fieldStruct( TConfig &cfg )
 
 bool MTable::fieldSeek( int row, TConfig &cfg )
 {
-    printf("fieldSeek\n");
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    owner().transCommit();
+    //owner().transCommit();
     string sid;
     //> Make SELECT and WHERE
     string req = "SELECT ";
@@ -515,7 +529,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     if( first_sel ) return false;
     req = req + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " +
 	((next)?req_where:"") + " LIMIT 1 OFFSET " + TSYS::int2str(row);
-    owner().sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl, false );
     if( tbl.size() < 2 ) return false;
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
     {
@@ -537,7 +551,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    owner().transCommit();
+    //owner().transCommit();
     string sid;
     //> Prepare request
     string req = "SELECT ";
@@ -570,7 +584,7 @@ void MTable::fieldGet( TConfig &cfg )
     req = req + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" WHERE " + req_where;
 
     //> Query
-    owner().sqlReq( req, &tbl );
+    owner().sqlReq( req, &tbl, false );
     if( tbl.size() < 2 ) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present!"));
 
     //> Processing of query
@@ -593,7 +607,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    owner().transOpen();
+    //owner().transOpen();
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
@@ -629,8 +643,8 @@ void MTable::fieldSet( TConfig &cfg )
     //> Prepare query
     //>> Try for get already present field
     string req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " + req_where;
-    try{ owner().sqlReq( req, &tbl ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
+    try{ owner().sqlReq( req, &tbl, true ); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req, NULL, true ); }
     if( tbl.size() < 2 )
     {
 	//>> Add new record
@@ -671,15 +685,15 @@ void MTable::fieldSet( TConfig &cfg )
     }
 
     //> Query
-    try{ owner().sqlReq( req ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
+    try{ owner().sqlReq( req, NULL, true ); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req, NULL, true ); }
 }
 
 void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    owner().transOpen();
+    //owner().transOpen();
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -698,13 +712,13 @@ void MTable::fieldDel( TConfig &cfg )
 	}
     }
 
-    owner().sqlReq( req );
+    owner().sqlReq( req, NULL, true );
 }
 
 void MTable::fieldFix( TConfig &cfg )
 {
     bool next = false, next_key = false;
-    owner().transCommit();
+    //owner().transCommit();
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
 
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -821,11 +835,11 @@ void MTable::fieldFix( TConfig &cfg )
 
     if( next )
     {
-	owner().sqlReq( req );
+	owner().sqlReq( req, NULL, false );
 	//> Update structure information
         getStructDB( name(), tblStrct );
     }
-    owner().transOpen();
+    //owner().transOpen();
 }
 
 

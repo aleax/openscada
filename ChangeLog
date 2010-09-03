@@ -1,3 +1,7 @@
+2010-09-03 Maxim
+- !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests. 
+                    Several flags to limit the transacton life are added.
+
 2010-09-02 Roman
 - !!:DemoDB: Demo DB is updated for:
     - Compressors SO KM201, KM301, KM202 add KM302.
