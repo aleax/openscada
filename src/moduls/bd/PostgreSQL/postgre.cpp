@@ -90,7 +90,7 @@ TBD *BDMod::openBD( const string &name )
 //************************************************
 //* BDPostgreSQL::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), commCntTm(0), commTrOpen(0)
 {
 
 }

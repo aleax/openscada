@@ -1,3 +1,6 @@
+2010-08-20 Maxim
+- FIX:DB:PostgreSQL: The default values for the transaction flags are added to the constructor of the object.
+
 2010-09-03 Maxim
 - !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests. 
                     Several flags to limit the transacton life are added.
