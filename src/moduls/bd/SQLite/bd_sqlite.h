@@ -102,7 +102,7 @@ class MBD : public TBD
 	string	cd_pg;
 	sqlite3	*m_db;
 	int	commCnt;
-	time_t	commCntTm;
+	time_t	commCntTm, trOpenTm;
 	Res	conn_res;
 	int	trans_reqs;
 };

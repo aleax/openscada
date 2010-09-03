@@ -1,7 +1,13 @@
-2010-08-20 Maxim
-- FIX:DB:PostgreSQL: The default values for the transaction flags are added to the constructor of the object.
+2010-09-03 Roman
+- FIX:DemoDB: Control panel is fixed for alarm borders show.
+- DB.SQLite: Start transaction control is added for transaction close.
+- UI.Vision, UI.WebVision: Special symbols encode is added to name field of Button view of primitive "FormEl"
+    for next line set support, like string "Standard\nbuton".
+- FIX:UI.WebVision: Event process onmousedown is fixed for return true and allow standard functions.
+
 
 2010-09-03 Maxim
+- FIX:DB:PostgreSQL: The default values for the transaction flags are added to the constructor of the object.
 - !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests. 
                     Several flags to limit the transacton life are added.
 

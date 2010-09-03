@@ -107,7 +107,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* BDSQLite::MBD				 *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), commCntTm(0), trans_reqs(1)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), commCntTm(0), trOpenTm(0), trans_reqs(1)
 {
 
 }
@@ -221,7 +221,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 void MBD::transOpen( )
 {
     ResAlloc resource(conn_res,true);
-    if( !commCnt ) sqlReq("BEGIN;");
+    if( !commCnt )
+    {
+	sqlReq("BEGIN;");
+	trOpenTm = time(NULL);
+    }
     commCnt++;
     commCntTm = time(NULL);
 }
@@ -235,7 +239,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if( commCnt && (commCnt > 1000 || (time(NULL)-commCntTm) > 10*60) )
+    if( commCnt && (commCnt > 1000 || (time(NULL)-commCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60) )
 	transCommit();
 }
 

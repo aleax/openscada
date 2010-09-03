@@ -315,7 +315,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    rel_cfg = true;
 	    break;
 	case 26:	//name
-	    shD->name = val;
+	    shD->name = TSYS::strEncode(val,TSYS::ShieldSimb);
 	    if( shD->welType == 2)	((QCheckBox*)shD->addrWdg)->setText(val.c_str());
 	    else if( shD->welType == 3 )	((QPushButton*)shD->addrWdg)->setText(val.c_str());
 	    break;

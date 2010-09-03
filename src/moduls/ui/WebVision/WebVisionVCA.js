@@ -1014,7 +1014,7 @@ function makeEl( pgBr, inclPg )
 	okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-35)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
 	okImg.onclick = function() { var attrs = new Object(); attrs.value = this.parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept'; setWAttrs(this.parentNode.childNodes[0].wdgLnk.addr,attrs); this.parentNode.childNodes[0].setModify(false); return false; };
 	var cancelImg = this.place.ownerDocument.createElement('img');
-	cancelImg.src = '/"MOD_ID"/img_button_cancel';
+	cancelImg.src = '/'+MOD_ID+'/img_button_cancel';
 	cancelImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-16)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
 	cancelImg.onclick = function() { this.parentNode.childNodes[0].value = this.parentNode.childNodes[0].saveVal; this.parentNode.childNodes[0].setModify(false); return false; };
 	this.place.appendChild(formObj); this.place.appendChild(okImg); this.place.appendChild(cancelImg);
@@ -1061,15 +1061,17 @@ function makeEl( pgBr, inclPg )
 	    };
 	    this.place.wdgLnk = this;
 	  }
+	  var txtVal1 = '';
 	  if( iconImg )
+	    txtVal1 += "<IMG src='/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"' "+
+			"width='"+Math.min(geomW-8,geomH-8)+"' height='"+Math.min(geomW-8,geomH-8)+"' float='left'/>";
+	  if( this.attrs['name'].length )
 	  {
-	    var btImg = this.place.ownerDocument.createElement('IMG');
-	    btImg.src = '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['img'];
-	    btImg.width = btImg.height = Math.min(geomW-8,geomH-8);
-	    btImg.float = 'left';
-	    formObj.appendChild(btImg);
+	    for( var j = 0; j < this.attrs['name'].length; j++ )
+		if( this.attrs['name'].substr(j,2) == '\\n' ) { txtVal1+='<br />'; j++; }
+		else txtVal1+=this.attrs['name'][j];
 	  }
-	  if( this.attrs['name'].length ) formObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name']));
+	  formObj.innerHTML = txtVal1;
 	  geomW-=6; geomH-=6;
 	}
 	else
@@ -1079,7 +1081,7 @@ function makeEl( pgBr, inclPg )
 	  formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	  formObj.style.font = fontCfg;
 	  formObj.type='button';
-	  formObj.value=this.attrs['name'];
+	  formObj.value = this.attrs['name'].replace('\\n','\n');
 	  formObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); return false; }
 	  formObj.wdgLnk = this;
 	  if( this.attrs['color'] ) formObj.style.backgroundColor=getColor(this.attrs['color']);
@@ -1458,7 +1460,7 @@ function makeEl( pgBr, inclPg )
     {
       for( var i_on = 0; i_on < this.wdgLnk.mousedown.length; i_on++ )
 	this.wdgLnk.mousedown[i_on](e,this);
-      return false;
+      return true;
     }
   if( this.mouseup.length )
     this.place.onmouseup = function(e)
