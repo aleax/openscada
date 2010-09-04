@@ -336,7 +336,7 @@ void TController::redntDataUpdate( )
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
     req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
-    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    for(int i_p = 0; i_p < pls.size(); i_p++)
     {
 	prm = at(pls[i_p]);
 	if( !prm.at().enableStat( ) ) { pls.erase(pls.begin()+i_p); i_p--; continue; }
@@ -350,14 +350,14 @@ void TController::redntDataUpdate( )
 	vector<string> listV;
 	prm.at().vlList(listV);
 	int rC = 0;
-	for( int iV = 0; iV < listV.size(); iV++ )
+	for(int iV = 0; iV < listV.size(); iV++)
 	{
 	    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
 	    if( !vl.at().arch().freeStat() || vl.at().reqFlg() ) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 	    if( !vl.at().arch().freeStat() )
 		prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
 	}
-	if( rC > listV.size()/2 )
+	if(rC > listV.size()/2)
 	{
 	    prmNd->childClear("el");
 	    prmNd->setAttr( "sepReq", "0" );

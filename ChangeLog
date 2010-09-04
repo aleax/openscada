@@ -1,3 +1,7 @@
+2010-09-04 Roman
+- FIX:DemoDB: Model's AGLKS mnemo is removed from template project. Compressor widget is fixed for attribute "com" present.
+
+
 2010-09-03 Roman
 - FIX:DemoDB: Control panel is fixed for alarm borders show.
 - DB.SQLite: Start transaction control is added for transaction close.
@@ -9,7 +13,7 @@
 2010-09-03 Maxim
 - FIX:DB:PostgreSQL: The default values for the transaction flags are added to the constructor of the object.
 - !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests. 
-                    Several flags to limit the transacton life are added.
+    Several flags to limit the transacton life are added.
 
 2010-09-02 Roman
 - !!:DemoDB: Demo DB is updated for:
