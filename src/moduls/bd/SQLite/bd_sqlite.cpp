@@ -107,7 +107,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* BDSQLite::MBD				 *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), commCntTm(0), trOpenTm(0), trans_reqs(1)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), trans_reqs(1)
 {
 
 }
@@ -150,7 +150,7 @@ void MBD::disable( )
     if( !enableStat() )  return;
 
     //> Last commit
-    if( commCnt ) transCommit();
+    if( reqCnt ) transCommit();
 
     TBD::disable( );
 
@@ -188,10 +188,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     //> Commit set
     string req = ireq;
-
     ResAlloc res(conn_res,true);
-    if( intoTrans && intoTrans != EVAL_BOOL && !commCnt )	transOpen();
-    else if( !intoTrans && commCnt )	transCommit();
+    if( intoTrans && intoTrans != EVAL_BOOL )	transOpen();
+    else if( !intoTrans && reqCnt )	transCommit();
 
     //> Put request
     rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
@@ -220,26 +219,29 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
 void MBD::transOpen( )
 {
+    //> Check for limit into one trinsaction
+    if( reqCnt > 1000 ) transCommit( );
+
     ResAlloc resource(conn_res,true);
-    if( !commCnt )
+    if( !reqCnt )
     {
 	sqlReq("BEGIN;");
 	trOpenTm = time(NULL);
     }
-    commCnt++;
-    commCntTm = time(NULL);
+    reqCnt++;
+    reqCntTm = time(NULL);
 }
 
 void MBD::transCommit( )
 {
     ResAlloc resource(conn_res,true);
-    if( commCnt ) sqlReq("COMMIT;");
-    commCnt = commCntTm = 0;
+    if( reqCnt ) sqlReq("COMMIT;");
+    reqCnt = reqCntTm = 0;
 }
 
 void MBD::transCloseCheck( )
 {
-    if( commCnt && (commCnt > 1000 || (time(NULL)-commCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60) )
+    if( enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60) )
 	transCommit();
 }
 
@@ -254,13 +256,13 @@ void MBD::cntrCmdProc( XMLNode *opt )
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db)."));
-	if( commCnt )
+	if( reqCnt )
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),0660);
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) && commCnt )
+    if( a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) && reqCnt )
 	transCommit();
     else TBD::cntrCmdProc(opt);
 }
@@ -326,8 +328,6 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
-    //owner().transCommit();
-
     string sid;
     //> Make WHERE
     string req = "SELECT ";
@@ -386,8 +386,6 @@ void MTable::fieldGet( TConfig &cfg )
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
-    //owner().transCommit();
-
     string sid;
     //> Prepare request
     string req = "SELECT ";
@@ -440,8 +438,6 @@ void MTable::fieldGet( TConfig &cfg )
 void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
-
-    //owner().transOpen();
 
     if( tblStrct.empty() ) fieldFix(cfg);
     mLstUse = time(NULL);
@@ -541,8 +537,6 @@ void MTable::fieldDel( TConfig &cfg )
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
-    //owner().transOpen();
-
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -581,8 +575,6 @@ void MTable::fieldFix( TConfig &cfg )
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
-
-    //owner().transCommit();
 
     if( !tblStrct.empty() )
     {
@@ -698,8 +690,6 @@ void MTable::fieldFix( TConfig &cfg )
     //> Update table structure
     req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
     owner().sqlReq(req, &tblStrct, false);
-
-    //owner().transOpen();
 }
 
 string MTable::getVal( TCfg &cfg )

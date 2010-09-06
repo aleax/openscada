@@ -108,8 +108,8 @@ class MBD : public TBD
 	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg;
 	//int    port, connect_timeout;
 	PGconn * connection;
-        int	commCnt;
-        time_t	commCntTm, commTrOpen;
+        int	reqCnt;
+        time_t	reqCntTm, trOpenTm;
 	Res    conn_res;
 };
 

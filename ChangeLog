@@ -1,3 +1,7 @@
+2010-09-06 Roman
+- FIX:DB.SQLite, DB:PostgreSQL: Requests limit control into a transaction is fixed.
+
+
 2010-09-04 Roman
 - FIX:DemoDB: Model's AGLKS mnemo is removed from template project. Compressor widget is fixed for attribute "com" present.
 

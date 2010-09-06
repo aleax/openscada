@@ -90,7 +90,7 @@ TBD *BDMod::openBD( const string &name )
 //************************************************
 //* BDPostgreSQL::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el), commCnt(0), commCntTm(0), commTrOpen(0)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0)
 {
 
 }
@@ -199,7 +199,6 @@ void MBD::enable( )
         if( connection ) PQfinish( connection );
         throw;
     }
-
 }
 
 void MBD::disable( )
@@ -236,6 +235,9 @@ TTable *MBD::openTable( const string &inm, bool create )
 
 void MBD::transOpen( )
 {
+    //> Check for limit into one trinsaction
+    if( reqCnt > 1000 ) transCommit( );
+
     ResAlloc resource(conn_res,true);
     PGTransactionStatusType tp;
     tp = PQtransactionStatus( connection );
@@ -250,10 +252,10 @@ void MBD::transOpen( )
             throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error!"));
         }
         PQclear(res);
-        commTrOpen = time(NULL);
+        trOpenTm = time(NULL);
     }
-    commCnt++;
-    commCntTm = time(NULL);
+    reqCnt++;
+    reqCntTm = time(NULL);
 }
 
 void MBD::transCommit( )
@@ -272,13 +274,13 @@ void MBD::transCommit( )
         }
         PQclear(res);
     }
-    commCnt = commCntTm = 0;
+    reqCnt = reqCntTm = 0;
 }
 
 
 void MBD::transCloseCheck( )
 {
-    if( commCnt && (commCnt > 1000 || (time(NULL)-commCntTm) > 10*60 || (time(NULL)-commTrOpen) > 10*60 )  )
+    if( reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60 ) )
         transCommit();
 }
 
@@ -292,8 +294,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
 
     ResAlloc resource(conn_res,true);
-    if( intoTrans && intoTrans != EVAL_BOOL && !commCnt )	transOpen();
-    else if( !intoTrans && commCnt )	transCommit();
+    if( intoTrans && intoTrans != EVAL_BOOL )	transOpen();
+    else if( !intoTrans && reqCnt )	transCommit();
 
     if( PQstatus( connection ) != CONNECTION_OK  )
     {

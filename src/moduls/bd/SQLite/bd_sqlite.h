@@ -101,8 +101,8 @@ class MBD : public TBD
 	//Private attributes
 	string	cd_pg;
 	sqlite3	*m_db;
-	int	commCnt;
-	time_t	commCntTm, trOpenTm;
+	int	reqCnt;
+	time_t	reqCntTm, trOpenTm;
 	Res	conn_res;
 	int	trans_reqs;
 };
