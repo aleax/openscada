@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <math.h>
+#include <algorithm>
 
 #include <QVBoxLayout>
 #include <QIcon>

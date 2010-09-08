@@ -606,6 +606,7 @@ TCntrNode &TBD::operator=( TCntrNode &node )
 	*(TConfig*)this = *(TConfig*)src_n;
 	cfg("TYPE").setS(owner().modId());
 	mId = tid;
+	modif();
     }
 
     if( src_n->enableStat() && enableStat() )
@@ -696,6 +697,8 @@ void TBD::save_( )
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // Array SQLReq(string req) - formation of the SQL-request to the DB.
+    //  req - SQL-request text
     if( iid == "SQLReq" && prms.size() >= 1 )
     {
 	TArrayObj *rez = new TArrayObj();

@@ -559,7 +559,7 @@ void MTable::fieldDel( TConfig &cfg )
     catch( TError err )
     {
 	if( (err.cod-100) == SQLITE_READONLY )
-	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion is not permited. Data base is read only.\n"));
+	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion is not permited. Data base is read only."));
 	throw;
     }
 }

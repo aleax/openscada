@@ -1271,7 +1271,14 @@ reload:
 
 TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // int message(string cat, int level, string mess) - formation of the system message <mess> with the category <cat>, level <level>
+    //  cat - message category
+    //  level - message level
+    //  mess - message text
     if( iid == "message" && prms.size() >= 3 )	{ message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() ); return 0; }
+    // int messDebug(string cat, string mess) - formation of the system message <mess> with the category <cat> and the appropriate level
+    //  cat - message category
+    //  mess - message text
     if( iid == "messDebug" && prms.size() >= 2 ){ mess_debug( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     if( iid == "messInfo" && prms.size() >= 2 )	{ mess_info( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     if( iid == "messNote" && prms.size() >= 2 )	{ mess_note( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
@@ -1280,6 +1287,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if( iid == "messCrit" && prms.size() >= 2 )	{ mess_crit( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     if( iid == "messAlert" && prms.size() >= 2 ){ mess_alert( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     if( iid == "messEmerg" && prms.size() >= 2 ){ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
+    //  cmd - command text
+    //  noPipe - pipe result disable for background call
     if( iid == "system" && prms.size() >= 1 )
     {
 	if( prms.size() >= 2 && prms[1].getB() ) return system( prms[0].getS().c_str() );
@@ -1294,7 +1304,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	pclose(fp);
 	return rez;
     }
+    // XMLNodeObj XMLNode(string name = "") - creation of the XML node object with the name <name>
+    //  name - XML node name
     if( iid == "XMLNode" ) return new XMLNodeObj( (prms.size()>=1) ? prms[0].getS() : "" );
+    // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the system via XML
+    //  req - request's XML node
+    //  stat - remote OpenSCADA-station for request
     if( iid == "cntrReq" && prms.size() >= 1 )
     {
 	XMLNode req;
@@ -1315,6 +1330,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
 	return string("0");
     }
+    // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
+    //  usec - microseconds of time
     if( iid == "time" )
     {
 	if( prms.empty() ) return (int)time(NULL);
@@ -1322,6 +1339,18 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	prms[0].setI(tm%1000000); prms[0].setModify();
 	return (int)(tm/1000000);
     }
+    // int localtime(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst) 
+    //      - returns the full date based on the absolute time in seconds <fullsec> from the epoch 1.1.1970
+    //  fullsec - source time ins seconds from the epoch 1.1.1970
+    //  sec - seconds
+    //  min - minutes
+    //  hour - hours
+    //  mday - days of the month
+    //  month - months
+    //  year - years
+    //  wday - days in the week
+    //  yday - days in the year
+    //  isdst - sign of summer time
     if( iid == "localtime" && prms.size() >= 2 )
     {
 	time_t tm_t = prms[0].getI();
@@ -1339,6 +1368,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if( prms.size() >= 10 ) { prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
 	return 0;
     }
+    // string strftime(int sec, string form = "%Y-%m-%d %H:%M:%S") - converts an absolute time <sec> to the string of the desired format <form>
+    //  sec - time ins seconds from the epoch 1.1.1970
+    //  form - result string format
     if( iid == "strftime" && !prms.empty() )
     {
 	time_t tm_t = prms[0].getI();
@@ -1348,6 +1380,10 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int rez = strftime( buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm );
 	return (rez>0) ? string(buf,rez) : "";
     }
+    // int strptime(int str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
+    //      based on the string record of time <str>, in accordance with the specified template <form>
+    //  str - source time in string
+    //  form - string's time template in format POSIX-function "strptime"
     if( iid == "strptime" && !prms.empty() )
     {
 	struct tm stm;
@@ -1355,8 +1391,14 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	strptime( prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm );
 	return (int)mktime(&stm);
     }
+    // int cron(string cronreq, int base = 0) - returns the time, planned in the format of the standard Cron <cronreq>,
+    //      beginning from basic time <base> or from the current, if the basic is not specified
+    //  cronreq - shedule in standard Cron format
+    //  base - base time
     if( iid == "cron" && !prms.empty() )
 	return (int)cron( prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0 );
+    // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
+    //  char1, char2. char3 - symbol's codes
     if( iid == "strFromCharCode" )
     {
 	string rez;

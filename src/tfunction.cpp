@@ -604,7 +604,7 @@ void TValFunc::setR( unsigned id, double val )
 
 void TValFunc::setB( unsigned id, char val )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"setB()",id);
+    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"setB()",id);
     if( mdfChk() && val != getB(id) ) mVal[id].mdf = true;
     switch( mVal[id].tp )
     {
@@ -617,11 +617,18 @@ void TValFunc::setB( unsigned id, char val )
 
 void TValFunc::setO( unsigned id, TVarObj *val )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"setO()",id);
-    if( mVal[id].tp != IO::Object )	throw TError("ValFnc",_("Set object to not object's IO %d error!"),id);
-    if( mVal[id].val.o && !mVal[id].val.o->disconnect() ) delete mVal[id].val.o;
-    mVal[id].val.o = val;
-    mVal[id].val.o->connect();
+    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"setO()",id);
+    switch( mVal[id].tp )
+    {
+	case IO::String:	setS(id, val->getStrXML());	break;
+	case IO::Integer: case IO::Real: case IO::Boolean:
+				setB(id, true);			break;
+	case IO::Object:
+	    if( mVal[id].val.o && !mVal[id].val.o->disconnect() ) delete mVal[id].val.o;
+	    mVal[id].val.o = val;
+	    mVal[id].val.o->connect();
+	    break;
+    }
 }
 
 void TValFunc::setMdfChk( bool set )

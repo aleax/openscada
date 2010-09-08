@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include <stdint.h>
-
 #include <string.h>
+#include <algorithm>
 
 #include <tsys.h>
 #include <tmess.h>

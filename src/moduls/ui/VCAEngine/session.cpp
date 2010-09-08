@@ -455,13 +455,19 @@ bool Session::stlPropSet( const string &pid, const string &vl )
 
 TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const string &cuser )
 {
+    // string user( ) - the session user
     if( iid == "user" )	return user();
+    // string alrmSndPlay( ) - the widget's path for that on this time played the alarm message.
     else if( iid == "alrmSndPlay" )
     {
 	ResAlloc res( mAlrmRes, false );
 	if( mAlrmSndPlay < 0 || mAlrmSndPlay >= mAlrm.size() ) return string("");
 	return mAlrm[mAlrmSndPlay].path;
     }
+    // int alrmQuittance(int quit_tmpl, string wpath = "") - alarm quittance <wpath> with template <quit_tmpl>. If <wpath> is empty
+    //        string then make global quittance.
+    //  quit_tmpl - quittance template
+    //  wpath - path to widget
     else if( iid == "alrmQuittance" && prms.size() >= 1 )
     {
 	alarmQuittance( (prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI() );

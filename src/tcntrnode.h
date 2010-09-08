@@ -44,7 +44,7 @@ using std::vector;
 
 class TCntrNode;
 
-#if OSC_ORDLISTMAP
+#ifndef OSC_HASHMAP
 
 #include <map>
 using std::map;

@@ -1247,8 +1247,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			tbl->setColumnWidth(i_c,vmin(max_col_sz,tbl->columnWidth(i_c)));
 		}
 		if( adjRow ) tbl->resizeRowsToContents();
-		tbl->setMinimumSize( QSize( 100, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
-		tbl->setMaximumSize( QSize( 32767, vmax(70,vmin(300,30+30*tbl->rowCount())) ) );
+		tbl->setMinimumSize( QSize( 100, vmax(100,vmin(300,30+30*tbl->rowCount())) ) );
+		tbl->setMaximumSize( QSize( 32767, vmax(100,vmin(300,30+30*tbl->rowCount())) ) );
 		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 
 		tbl_init = false;

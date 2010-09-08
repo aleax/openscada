@@ -720,6 +720,9 @@ void TVal::setB( char value, long long tm, bool sys )
 
 TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
+    //  tm, utm - time for requested value
+    //  sys - system request, direct from object
     if( iid == "get" )
     {
 	try
@@ -744,6 +747,10 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}catch(...){ }
 	return EVAL_REAL;
     }
+    // bool set(ElTp val, int tm = 0, int utm = 0, bool sys = false) - write value <val> to attribute with time label <tm:utm> and system
+    //       access flag <sys>
+    //  tm, utm - time for set value
+    //  sys - system request, direct to object
     if( iid == "set" && prms.size() >= 1 )
     {
 	try

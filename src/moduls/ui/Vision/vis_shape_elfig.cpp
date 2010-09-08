@@ -1,3 +1,4 @@
+
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@oscada.org.ua)
@@ -18,8 +19,10 @@
  *   Free Software Foundation, Inc.,
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  ***************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 
 #include <QToolBar>
 #include <QEvent>

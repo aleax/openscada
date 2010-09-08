@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <algorithm>
 
 #include <tsys.h>
 #include "tvariant.h"
@@ -102,6 +103,7 @@ char TVariant::getB( ) const
 	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_BOOL : (bool)getI();
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_BOOL : (bool)getR();
 	case TVariant::Boolean:	return vl[1];
+	case TVariant::Object:	return true;
     }
     return EVAL_BOOL;
 }
@@ -114,6 +116,7 @@ int TVariant::getI( ) const
 	case TVariant::Integer:	return *(int*)(vl.data()+1);
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
+	case TVariant::Object:	return 1;
     }
     return EVAL_INT;
 }
@@ -126,6 +129,7 @@ double TVariant::getR( ) const
 	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_REAL : getI();
 	case TVariant::Real:	return *(double*)(vl.data()+1);
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
+	case TVariant::Object:	return 1;
     }
     return EVAL_REAL;
 }
@@ -291,6 +295,8 @@ string TArrayObj::getStrXML( const string &oid )
 
 TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 {
+    // string join(string sep = ",") - join items to string
+    //  sep - items separator
     if( id == "join" || id == "toString" || id == "valueOf" )
     {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
@@ -298,17 +304,22 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	    rez += (i_e?sep:"")+mEls[i_e].getS();
 	return rez;
     }
+    // TArrayObj concat(TArrayObj arr) - concatenate array
+    //  arr - source array
     if( id == "concat" && prms.size() && prms[0].type() == TVariant::Object && dynamic_cast<TArrayObj*>(prms[0].getO()) )
     {
 	for( int i_p = 0; i_p < prms[0].getO()->propGet("length").getI(); i_p++ )
 	    mEls.push_back(prms[0].getO()->propGet(TSYS::int2str(i_p)));
 	return this;
     }
+    // int push(ElTp var, ...) - push variables to array
+    //  var - variable
     if( id == "push" && prms.size() )
     {
 	for( int i_p = 0; i_p < prms.size(); i_p++ ) mEls.push_back(prms[i_p]);
 	return (int)mEls.size();
     }
+    // ElTp pop( ) - pop variable from array
     if( id == "pop" )
     {
 	if( mEls.empty() ) throw TError("ArrayObj",_("Array is empty."));
@@ -316,7 +327,9 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	mEls.pop_back();
 	return val;
     }
+    // Array reverse( ) - reverse array's items order
     if( id == "reverse" )		{ reverse(mEls.begin(),mEls.end()); return this; }
+    // ElTp shift( ) - shift array's items upward
     if( id == "shift" )
     {
 	if( mEls.empty() ) throw TError("ArrayObj",_("Array is empty."));
@@ -324,11 +337,16 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	mEls.erase(mEls.begin());
 	return val;
     }
+    // int unshift(ElTp var, ...) - shift items to array upward
+    //  var - variable
     if( id == "unshift" && prms.size() )
     {
 	for( int i_p = 0; i_p < prms.size(); i_p++ ) mEls.insert(mEls.begin()+i_p,prms[i_p]);
 	return (int)mEls.size();
     }
+    // Array slice(int beg, int end) - get array part from positon <beg> to <end>
+    //  beg - begin position
+    //  end - end position
     if( id == "slice" && prms.size() )
     {
 	int beg = prms[0].getI();
@@ -342,6 +360,10 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	    rez->propSet( TSYS::int2str(i_p-beg), prms[i_p] );
 	return rez;
     }
+    // Array splice(int beg, int remN, ElTp val1, ElTp val2, ...) - insert, remove or replace array's items
+    //  beg - start position
+    //  remN - removed items number
+    //  val1, val2 - values for insert
     if( id == "splice" && prms.size() >= 1 )
     {
 	int beg = vmax(0,prms[0].getI());
@@ -358,6 +380,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
 	return rez;
     }
+    // Array sort( ) - lexicographic items sorting
     if( id == "sort" )
     {
 	sort(mEls.begin(),mEls.end(),compareLess);
@@ -416,13 +439,27 @@ string XMLNodeObj::getStrXML( const string &oid )	{ return ""; }
 
 TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
+    // string name( ) - node name
     if( id == "name" )	return name();
+    // string text( ) - node text
     if( id == "text" )	return text();
+    // string attr(string id) - get node attribute
+    //  id - attribute identifier
     if( id == "attr" && prms.size() )		return propGet(prms[0].getS()).getS();
+    // XMLNodeObj setName(string vl) - set node name
+    //  vl - value for node name
     if( id == "setName" && prms.size() )	{ setName(prms[0].getS()); return this; }
+    // XMLNodeObj setText(string vl) - set node text
+    //  vl - value for node text
     if( id == "setText" && prms.size() )	{ setText(prms[0].getS()); return this; }
+    // XMLNodeObj setAttr(string id, string vl) - set attribute to value
+    //  id - attribute identifier
+    //  vl - value for attribute
     if( id == "setAttr" && prms.size() >= 2 )	{ propSet(prms[0].getS(),prms[1].getS()); return this; }
+    // int childSize( ) - return childs counter for node
     if( id == "childSize" )	return childSize();
+    // XMLNodeObj childAdd(ElTp no = XMLNodeObj) - add node <no> as child to the node
+    //  no - node object or name for new node
     if( id == "childAdd" )
     {
 	XMLNodeObj *no = NULL;
@@ -432,6 +469,9 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	childAdd( no );
 	return no;
     }
+    // XMLNodeObj childIns(int id, ElTp no = XMLNodeObj) - insert node <no> as child to the node
+    //  id - insert position
+    //  no - node object or name for new node
     if( id == "childIns" && prms.size() )
     {
 	XMLNodeObj *no = NULL;
@@ -441,8 +481,15 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	childIns( prms[0].getI(), no );
 	return no;
     }
+    // XMLNodeObj childDel(int id) - remove child node from position <id>
+    //  id - child node position
     if( id == "childDel" && prms.size() )	{ childDel(prms[0].getI()); return this; }
+    // XMLNodeObj childGet(int id) - get node from position <id>
+    //  id - child node position
     if( id == "childGet" && prms.size() )	return childGet(prms[0].getI());
+    // string load(string str, bool file = false) - load XML tree from XML-stream from string or file
+    //  str - source stream string or file name, for <file> = true
+    //  file - load XML-tree from file (true) or stram (false)
     if( id == "load" && prms.size() )
     {
 	XMLNode nd;
@@ -469,6 +516,15 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	fromXMLNode(nd);
 	return string("0");
     }
+    // string save(int opt = 0, string path = "") - save XML-tree to string or file stream
+    //  opt - save options:
+    //   0x01 - interrupt the string before the opening tag;
+    //   0x02 - interrupt the string after the opening tag;
+    //   0x04 - interrupt the string after a closing tag;
+    //   0x08 - interrupt the string after the text;
+    //   0x10 - interrupt the string after the instruction;
+    //   0x1E - interrupt the string after all.
+    //  path - file path for save to file
     if( id == "save" )
     {
 	XMLNode nd;
@@ -537,7 +593,7 @@ TVariant TCntrNodeObj::propGet( const string &id )
     catch(...) { }
 
     TVariant rez = cnd.at().objPropGet( id );
-    if( rez.isNull() ) mess_err(cnd.at().nodePath().c_str(),_("Get node properties '%s' error."),id.c_str());
+    if( rez.isNull() ) return TVariant();
     return rez;
 }
 
@@ -549,6 +605,6 @@ void TCntrNodeObj::propSet( const string &id, TVariant val )
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    if( cnd.freeStat() )	return TVariant();
-    return cnd.at().objFuncCall( id, prms, user() );
+    if( cnd.freeStat() ) throw TError("TCntrNodeObj",_("The object don't attached to node of OpenSCADA tree."));
+    return cnd.at().objFuncCall(id, prms, user());
 }

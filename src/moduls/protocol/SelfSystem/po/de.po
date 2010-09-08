@@ -4,6 +4,7 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+#
 #: self.cpp:50 self.cpp:132 self.cpp:315 self.cpp:347
 #, fuzzy
 msgid ""

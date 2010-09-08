@@ -24,6 +24,7 @@
 #include <signal.h>
 #include <sys/time.h>
 #include <string.h>
+#include <algorithm>
 
 #include "tsys.h"
 #include "tarchives.h"
@@ -677,6 +678,13 @@ void *TArchiveS::ArhValTask( void *param )
 
 TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // Area messGet(int btm, int etm, string cat = "", int lev = 0, string arch = ""); - request of the system messages for the time from <btm>
+    //       to <etm> for the category <cat>, level <lev> and archiver <arch>
+    //  btm - begin time
+    //  etm - end time
+    //  cat - messages' category
+    //  lev - messages level
+    //  arch - messages archivator
     if( iid == "messGet" && prms.size() >= 2 )
     {
 	vector<TMess::SRec> recs;

@@ -1060,155 +1060,217 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
     switch( vl.type() )
     {
 	case TVariant::Object:	return vl.getO()->propGet(prop);
-	case TVariant::Boolean:	throw TError(nodePath().c_str(),_("Boolean type have not one properties."));
+	case TVariant::Boolean:	return TVariant();
 	case TVariant::Integer:
 	    if( prop == "MAX_VALUE" )	return INT_MAX;
 	    if( prop == "MIN_VALUE" )	return INT_MIN;
 	    if( prop == "NaN" )		return EVAL_INT;
-	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s'."),prop.c_str());
+	    return TVariant();
 	case TVariant::Real:
 	    if( prop == "MAX_VALUE" )	return 3.4e300;
 	    if( prop == "MIN_VALUE" )	return -3.4e300;
 	    if( prop == "NaN" )		return EVAL_REAL;
-	    throw TError(nodePath().c_str(),_("Real type have not properties '%s'."),prop.c_str());
+	    return TVariant();
 	case TVariant::String:
 	    if( prop == "length" )	return (int)vl.getS().size();
 	    return vl.getS().substr(vmax(0,vmin(vl.getS().size()-1,atoi(prop.c_str()))),1);
     }
-    throw TError(nodePath().c_str(),_("Get properties '%s' from value type '%d' error."),prop.c_str(),vl.type());
+    return TVariant();
 }
 
 TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prms )
 {
-    switch( vl.type() )
+    try
     {
-	case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
-	case TVariant::Boolean:
-	    if( prop == "isEVal" )	return (vl.getB() == EVAL_BOOL);
-	    if( prop == "toString" )	return string(vl.getB() ? "true" : "false");
-	    throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
-	case TVariant::Integer:
-	    if( prop == "isEVal" )	return (vl.getI() == EVAL_INT);
-	case TVariant::Real:
-	    if( prop == "isEVal" )	return (vl.getR() == EVAL_REAL);
-	    if( prop == "toExponential" )
-	    {
-		int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : -1;
-		if( n < 0 )	return TSYS::strMess("%e",vl.getR());
-		return TSYS::strMess("%.*e",n,vl.getR());
-	    }
-	    if( prop == "toFixed" )
-	    {
-		int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : 0;
-		return TSYS::strMess("%.*f",n,vl.getR());
-	    }
-	    if( prop == "toPrecision" )
-	    {
-		int n = prms.size() ? vmax(1,vmin(21,prms[0].getI())) : -1;
-		if( n < 0 )	return TSYS::strMess("%g",vl.getR());
-		return TSYS::strMess("%.*g",n,vl.getR());
-	    }
-	    if( prop == "toString" )
-	    {
-		int n = 10;
-		if( prms.size() ) n = prms[0].getI();
-		return TSYS::strMess( (n==16)?"%x":((n==8)?"%o":"%d"),vl.getI() );
-	    }
-	    throw TError(nodePath().c_str(),_("Integer type have not function '%s' or not enough parameters for it."),prop.c_str());
-	case TVariant::String:
-	    if( prop == "isEVal" )	return (vl.getS() == EVAL_STR);
-	    if( prop == "charAt" && prms.size() )
-	    {
-		int n = prms[0].getI();
-		if( n < 0 || n >= vl.getS().size() )	return string("");
-		return vl.getS().substr(n,1);
-	    }
-	    if( prop == "charCodeAt" && prms.size() )
-	    {
-		int n = prms[0].getI();
-		if( n < 0 || n >= vl.getS().size() )	return EVAL_INT;
-		return (int)(unsigned char)vl.getS()[n];
-	    }
-	    if( prop == "concat" && prms.size() )
-	    {
-		string rez = vl.getS();
-		for( int i_p = 0; i_p < prms.size(); i_p++ )
-		    rez += prms[i_p].getS();
-		return rez;
-	    }
-	    if( prop == "indexOf" && prms.size() )
-	    {
-		int sp = 0;
-		if( prms.size() > 1 ) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
-		sp = vl.getS().find(prms[0].getS(),sp);
-		return (sp==string::npos)?-1:sp;
-	    }
-	    if( prop == "lastIndexOf" && prms.size() )
-	    {
-		int sp = vl.getS().size()-1;
-		if( prms.size() > 1 ) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
-		sp = vl.getS().rfind(prms[0].getS(),sp);
-		return (sp==string::npos)?-1:sp;
-	    }
-	    if( (prop == "slice" || prop == "substring") && prms.size() )
-	    {
-		int beg = prms[0].getI();
-		if( beg < 0 ) beg = vl.getS().size()+beg;
-		int end = vl.getS().size();
-		if( prms.size()>=2 ) end = prms[1].getI();
-		if( end < 0 ) end = vl.getS().size()+end;
-		end = vmin(end,vl.getS().size());
-		if( beg >= end ) return string("");
-		return vl.getS().substr(beg,end-beg);
-	    }
-	    if( prop == "split" && prms.size() )
-	    {
-		TArrayObj *rez = new TArrayObj();
-		for( int posB = 0, i_p = 0; true; i_p++ )
+	switch(vl.type())
+	{
+	    case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
+	    case TVariant::Boolean:
+		// bool isEVal( ) - check value to "EVAL"
+		if( prop == "isEVal" )	return (vl.getB() == EVAL_BOOL);
+		// string toString( ) - performs the value as the string “true” or “false”
+		if( prop == "toString" )return string(vl.getB() ? "true" : "false");
+		throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
+	    case TVariant::Integer:
+		// bool isEVal( ) - check value to "EVAL"
+		if( prop == "isEVal" )	return (vl.getI() == EVAL_INT);
+	    case TVariant::Real:
+		// bool isEVal( ) - check value to "EVAL"
+		if( prop == "isEVal" )	return (vl.getR() == EVAL_REAL);
+		// string toExponential(int numbs) - return the string of the number, formatted in exponential notation, 
+		//      and with the number of significant digits <numbs>
+		//  numbs - number of significant digits, if is missing the number of digits will have as much as needed
+		if( prop == "toExponential" )
 		{
-		    if( prms.size() > 1 && rez->size() >= prms[1].getI() ) break;
-		    int posC = vl.getS().find(prms[0].getS(),posB);
-		    if( posC != posB )
-			rez->propSet( TSYS::int2str(i_p), vl.getS().substr(posB,posC-posB) );
-		    if( posC == string::npos ) break;
-		    posB = posC+prms[0].getS().size();
+		    int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : -1;
+		    if( n < 0 )	return TSYS::strMess("%e",vl.getR());
+		    return TSYS::strMess("%.*e",n,vl.getR());
 		}
-		return rez;
-	    }
-	    if( prop == "insert" && prms.size() >= 2 )
-		return vl.getS().insert( vmax(0,vmin(vl.getS().size(),prms[0].getI())), prms[1].getS() );
-	    if( prop == "replace" && prms.size() >= 3 )
-	    {
-		int pos = prms[0].getI();
-		if( pos < 0 || pos >= vl.getS().size() ) return vl;
-		int n = prms[1].getI();
-		if( n < 0 ) n = vl.getS().size();
-		n = vmin(vl.getS().size()-pos,n);
-		return vl.getS().replace( pos, n, prms[2].getS() );
-	    }
-	    if( prop == "toReal" ) return atof(vl.getS().c_str());
-	    if( prop == "toInt" ) return (int)strtol(vl.getS().c_str(),NULL,0);
-	    if( prop == "parse" && prms.size() )
-	    {
-		int off = (prms.size() >= 3) ? prms[2].getI() : 0;
-		string rez = TSYS::strParse( vl.getS(), prms[0].getI(),
-		    (prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4) ? prms[3].getB() : false );
-		if( prms.size() >= 3 ) { prms[2].setI(off); prms[2].setModify(); }
-		return rez;
-	    }
-	    if( prop == "parsePath" && prms.size() )
-	    {
-		int off = (prms.size() >= 2) ? prms[1].getI() : 0;
-		string rez = TSYS::pathLev( vl.getS(), prms[0].getI(), &off );
-		if( prms.size() >= 2 ) { prms[1].setI(off); prms[1].setModify(); }
-		return rez;
-	    }
-	    if( prop == "path2sep" )
-		return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
+		// string toFixed(int numbs) - return the string of the number, formatted in the notation of fixed-point,
+		//      and with the number of significant digits after the decimal point <numbs>
+		//  numbs - the number of significant digits after the decimal point, if <numbs> is missing the number
+		//          of digits after the decimal point is equal to zero
+		if( prop == "toFixed" )
+		{
+		    int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : 0;
+		    return TSYS::strMess("%.*f",n,vl.getR());
+		}
+		// string toPrecision(int prec) - return the string of the formatted number with the number of significant digits <prec>
+		//  prec - number of significant digits
+		if( prop == "toPrecision" )
+		{
+		    int n = prms.size() ? vmax(1,vmin(21,prms[0].getI())) : -1;
+		    if( n < 0 )	return TSYS::strMess("%g",vl.getR());
+		    return TSYS::strMess("%.*g",n,vl.getR());
+		}
+		// string toString(int base) - return the string of the formatted number of integer type
+		//  base - representation base: octal , decimal, hex
+		if( prop == "toString" )
+		{
+		    int n = 10;
+		    if( prms.size() ) n = prms[0].getI();
+		    return TSYS::strMess( (n==16)?"%x":((n==8)?"%o":"%d"),vl.getI() );
+		}
+		throw TError(nodePath().c_str(),_("Integer type have not function '%s' or not enough parameters for it."),prop.c_str());
+	    case TVariant::String:
+		// bool isEVal( ) - check value to "EVAL"
+		if( prop == "isEVal" )	return (vl.getS() == EVAL_STR);
+		// string charAt(int symb) - extracts from the string the symbol <symb>
+		//  symb - symbol position
+		if( prop == "charAt" && prms.size() )
+		{
+		    int n = prms[0].getI();
+		    if( n < 0 || n >= vl.getS().size() ) return string("");
+		    return vl.getS().substr(n,1);
+		}
+		// int charCodeAt(int symb) - extracts from the string the symbol code <symb>
+		//  symb - symbol position
+		if( prop == "charCodeAt" && prms.size() )
+		{
+		    int n = prms[0].getI();
+		    if( n < 0 || n >= vl.getS().size() )	return EVAL_INT;
+		    return (int)(unsigned char)vl.getS()[n];
+		}
+		// string concat(string val1, string val2, ...) - returns a new string formed by joining the values <val1> etc
+		//  val1, val2 - appended values
+		if( prop == "concat" && prms.size() )
+		{
+		    string rez = vl.getS();
+		    for( int i_p = 0; i_p < prms.size(); i_p++ )
+			rez += prms[i_p].getS();
+		    return rez;
+		}
+		// int indexOf(string substr, int start) - returns the position of the required string <substr> in the original
+		//       row from the position <start>
+		//  substr - requested substring value
+		//  start - start position for search
+		if( prop == "indexOf" && prms.size() )
+		{
+		    int sp = 0;
+		    if( prms.size() > 1 ) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
+		    sp = vl.getS().find(prms[0].getS(),sp);
+		    return (sp==string::npos)?-1:sp;
+		}
+		// int lastIndexOf(string substr, int start) - returns the position of the search string <substr> in the original
+		//       one beginning from the position of <start> when searching from the end
+		//  substr - requested substring value
+		//  start - start position for search from end
+		if( prop == "lastIndexOf" && prms.size() )
+		{
+		    int sp = vl.getS().size()-1;
+		    if( prms.size() > 1 ) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
+		    sp = vl.getS().rfind(prms[0].getS(),sp);
+		    return (sp==string::npos)?-1:sp;
+		}
+		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
+		//       and ending be the <end>
+		//  beg - begin position
+		//  end - end position
+		if( (prop == "slice" || prop == "substring") && prms.size() )
+		{
+		    int beg = prms[0].getI();
+		    if( beg < 0 ) beg = vl.getS().size()+beg;
+		    int end = vl.getS().size();
+		    if( prms.size()>=2 ) end = prms[1].getI();
+		    if( end < 0 ) end = vl.getS().size()+end;
+		    end = vmin(end,vl.getS().size());
+		    if( beg >= end ) return string("");
+		    return vl.getS().substr(beg,end-beg);
+		}
+		// Array split(string sep, int limit) - return the array of strings separated by <sep> with the limit of the number of elements <limit>
+		//  sep - items separator
+		//  limit - items limit
+		if( prop == "split" && prms.size() )
+		{
+		    TArrayObj *rez = new TArrayObj();
+		    for( int posB = 0, i_p = 0; true; i_p++ )
+		    {
+			if( prms.size() > 1 && rez->size() >= prms[1].getI() ) break;
+			int posC = vl.getS().find(prms[0].getS(),posB);
+			if( posC != posB )
+			    rez->propSet( TSYS::int2str(i_p), vl.getS().substr(posB,posC-posB) );
+			if( posC == string::npos ) break;
+			posB = posC+prms[0].getS().size();
+		    }
+		    return rez;
+		}
+		// string insert(int pos, string substr) - insert substring <substr> into this string's position <pos>
+		//  pos - position for insert
+		//  substr - substring for insert
+		if( prop == "insert" && prms.size() >= 2 )
+		    return vl.getS().insert( vmax(0,vmin(vl.getS().size(),prms[0].getI())), prms[1].getS() );
+		// string replace(int pos, int n, string substr) - replace substring into position <pos> and length <n> to string <substr>
+		//  pos - position for start replace
+		//  n - number symbols for replace
+		//  substr - substring for replace
+		if( prop == "replace" && prms.size() >= 3 )
+		{
+		    int pos = prms[0].getI();
+		    if( pos < 0 || pos >= vl.getS().size() ) return vl;
+		    int n = prms[1].getI();
+		    if( n < 0 ) n = vl.getS().size();
+		    n = vmin(vl.getS().size()-pos,n);
+		    return vl.getS().replace( pos, n, prms[2].getS() );
+		}
+		// real toReal() - convert this string to real number
+		if( prop == "toReal" ) return atof(vl.getS().c_str());
+		// int toInt() - convert this string to integer number
+		if( prop == "toInt" ) return (int)strtol(vl.getS().c_str(),NULL,0);
+		// string parse(int pos, string sep = ".", int off = 0) - get token with numbet <pos> from the string when separated by <sep>
+		//       and from offset <off>
+		//  pos - item position
+		//  sep - items separator
+		//  off - start position
+		if( prop == "parse" && prms.size() )
+		{
+		    int off = (prms.size() >= 3) ? prms[2].getI() : 0;
+		    string rez = TSYS::strParse( vl.getS(), prms[0].getI(),
+			(prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4) ? prms[3].getB() : false );
+		    if( prms.size() >= 3 ) { prms[2].setI(off); prms[2].setModify(); }
+		    return rez;
+		}
+		// string parsePath(int pos, int off = 0) - get path token with numbet <pos> from the string and from offset <off>
+		//  pos - item position
+		//  off - start position
+		if( prop == "parsePath" && prms.size() )
+		{
+		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
+		    string rez = TSYS::pathLev( vl.getS(), prms[0].getI(), &off );
+		    if( prms.size() >= 2 ) { prms[1].setI(off); prms[1].setModify(); }
+		    return rez;
+		}
+		// string path2sep(string sep = ".") - convert path into this string to separated by <sep> string.
+		//  sep - item separator
+		if( prop == "path2sep" )
+		    return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
 
-	    throw TError(nodePath().c_str(),_("Integer type have not properties '%s' or not enough parameters for it."),prop.c_str());
+		throw TError(nodePath().c_str(),_("Integer type have not properties '%s' or not enough parameters for it."),prop.c_str());
+	}
+	return false;
+	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
     }
-    return TVariant();
+    catch(TError err){ mess_debug(nodePath().c_str(),"%s",err.mess.c_str()); }
+    return false;
 }
 
 TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
@@ -1216,7 +1278,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
     TVariant vl(string(EVAL_STR));
 
     //> Get base value
-    switch( rg.type() )
+    switch(rg.type())
     {
 	case Reg::Bool:		vl = rg.val().b_el;	break;
 	case Reg::Int:		vl = rg.val().i_el;	break;
@@ -1265,7 +1327,7 @@ string Func::getValS( TValFunc *io, RegW &rg )
 	    case Reg::String:	return *rg.val().s_el;
 	    case Reg::Var:	return io->getS(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().p_attr->at().getS();
-//	    case Reg::Obj:	return vl.getO();
+	    case Reg::Obj:	return rg.val().o_el->getStrXML();
 	}
     else return getVal(io,rg).getS();
 
@@ -1283,7 +1345,7 @@ int Func::getValI( TValFunc *io, RegW &rg )
 	    case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? atoi(rg.val().s_el->c_str()) : EVAL_INT;
 	    case Reg::Var:	return io->getI(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().p_attr->at().getI();
-//	    case Reg::Obj:	return vl.getO();
+	    case Reg::Obj:	return 1;
 	}
     else return getVal(io,rg).getI();
 
@@ -1301,7 +1363,7 @@ double Func::getValR( TValFunc *io, RegW &rg )
 	    case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? atof(rg.val().s_el->c_str()) : EVAL_REAL;
 	    case Reg::Var:	return io->getR(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().p_attr->at().getR();
-//	    case Reg::Obj:	return vl.getO();
+	    case Reg::Obj:	return 1;
 	}
     else return getVal(io,rg).getR();
 
@@ -1319,7 +1381,7 @@ char Func::getValB( TValFunc *io, RegW &rg )
 	    case Reg::String:	return ((*rg.val().s_el)!=EVAL_STR) ? (bool)atoi(rg.val().s_el->c_str()) : EVAL_BOOL;
 	    case Reg::Var:	return io->getB(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().p_attr->at().getB();
-//	    case Reg::Obj:	return vl.getO();
+	    case Reg::Obj:	return true;
 	}
     else return getVal(io,rg).getB();
 

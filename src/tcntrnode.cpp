@@ -625,9 +625,41 @@ TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
 
 void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
 
-TVariant TCntrNode::objFuncCall( const string &id, vector<TVariant> &prms, const string &user )
+TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),id.c_str());
+    // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
+    //  grp - nodes group
+    //  path - path to source node
+    if( iid == "nodeList" )
+    {
+	try
+	{
+	    AutoHD<TCntrNode> nd = (prms.size() >= 2) ? nodeAt(prms[1].getS()) : AutoHD<TCntrNode>(this);
+	    TArrayObj *rez = new TArrayObj();
+	    vector<string> nls;
+	    nd.at().nodeList(nls, (prms.size() >= 1) ? prms[0].getS() : string(""));
+	    for( int i_l = 0; i_l < nls.size(); i_l++ )
+		rez->propSet(TSYS::int2str(i_l),nls[i_l]);
+	    return rez;
+	}
+	catch(TError)	{ }
+	return false;
+    }
+    // TCntrNodeObj nodeAt(string path, string sep="") - attach to node
+    //  path - path to node
+    //  sep - the symbol separator for separated string path
+    if( iid == "nodeAt" && prms.size() >= 1 )
+    {
+	try
+	{
+	    AutoHD<TCntrNode> nd = nodeAt(prms[0].getS());
+	    return new TCntrNodeObj(nd,user);
+	}
+	catch(TError)	{ }
+	return false;
+    }
+
+    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }
 
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,

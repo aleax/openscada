@@ -4,13 +4,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+#
 #: http.cpp:51 http.cpp:173 http.cpp:281 http.cpp:346 http.h:56 http.h:59
 #: http.h:60 http.h:104
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-10 09:45+0300\n"
+"POT-Creation-Date: 2010-09-08 09:24+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -45,7 +47,7 @@ msgid "Allow support HTTP for WWW based UIs."
 msgstr "HTTP-Unterstützung für eine WWW basierte Benutzerschnittstelle."
 
 #: http.cpp:41
-msgid "GPL"
+msgid "GPL2"
 msgstr ""
 
 #: http.cpp:46
@@ -134,9 +136,8 @@ msgid "Content-Disposition: form-data; \""
 msgstr ""
 
 #: http.cpp:212
-#, fuzzy
 msgid "name"
-msgstr "Name"
+msgstr ""
 
 #: http.cpp:213
 msgid "\"; filename=\""
@@ -182,7 +183,7 @@ msgstr ""
 #: http.cpp:226
 #, c-format
 msgid "HTTP method '%s' error or don't support."
-msgstr ""
+msgstr "Fehler oder die HTTP-Methode wird nicht unterstützt '%s'."
 
 #: http.cpp:229
 #, c-format
@@ -216,7 +217,7 @@ msgstr ""
 
 #: http.cpp:255
 msgid "HTTP respond error"
-msgstr ""
+msgstr "Fehle der HTTP-Antwort "
 
 #: http.cpp:256
 msgid "RezCod"
@@ -256,7 +257,7 @@ msgstr ""
 
 #: http.cpp:291
 msgid "Life time of the authentication (min)"
-msgstr "Lebensdauer der Authentifizierung (Min.)"
+msgstr "Lebensdauer der Authentifizierung (Min)"
 
 #: http.cpp:291 http.cpp:292 http.cpp:300 http.cpp:301
 msgid "root"

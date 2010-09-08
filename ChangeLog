@@ -1,3 +1,15 @@
+2010-09-08 Roman
+- FIX:DemoDB: Pipes gradient is fixed for rotated angles. Some other fixes.
+- !!:DemoDB: The script of main project page is rewrited to use new user's API object's functions.
+- SYS: The user's API functions of object model is added comments.
+- FIX:DB: Modify flag set at object DB copy is fixed.
+- !!!!:SYS: Switch to use traditional map instead hash_map for all object's containers is made for decrease memory consumption.
+- SYS: New user's API functions is added for object TCntrNode: nodeList() and nodeAt().
+- SYS: User object TVarObj conversion to Boolean, Integer and Real is set to values false, 1 and 1.
+- Special.FLibSYS, Protocol.HTTP, Protocol.UserProtocol: Translation to German by Irina Popkova is updated.
+- !!:SYS, DAQ.JavaLikeCalc: Object's properties and functions call and exceptions processing is made unified.
+
+
 2010-09-06 Roman
 - FIX:DB.SQLite, DB:PostgreSQL: Requests limit control into a transaction is fixed.
 

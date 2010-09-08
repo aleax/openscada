@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <math.h>
+#include <algorithm>
 
 #include <QEvent>
 #include <QPainter>
