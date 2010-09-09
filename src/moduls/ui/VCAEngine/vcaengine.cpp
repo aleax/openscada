@@ -247,7 +247,23 @@ void Engine::postEnable( int flag )
 
 void Engine::preDisable( int flag )
 {
-    modStop();
+    if(startStat()) modStop();
+
+    vector<string> ls;
+    //> Sessions disable
+    sesList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	sesAt(ls[l_id]).at().setEnable(false);
+
+    //> Projects disable
+    prjList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	prjAt(ls[l_id]).at().setEnable(false);
+
+    //> Libraries disable
+    wlbList(ls);
+    for( int l_id = 0; l_id < ls.size(); l_id++ )
+	wlbAt(ls[l_id]).at().setEnable(false);
 
     TModule::preDisable( flag );
 }
@@ -415,16 +431,12 @@ void Engine::modStart()
 {
     mess_info(nodePath().c_str(),_("Start module."));
 
-    //> Libraries enable
     vector<string> ls;
-    wlbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-	wlbAt(ls[l_id]).at().setEnable(true);
 
-    //> Projects enable
-    prjList(ls);
+    //> Start sessions
+    sesList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
-	prjAt(ls[l_id]).at().setEnable(true);
+	sesAt(ls[l_id]).at().setStart(true);
 
     run_st = true;
 }
@@ -438,17 +450,7 @@ void Engine::modStop()
     //> Stop sessions
     sesList(ls);
     for( int l_id = 0; l_id < ls.size(); l_id++ )
-	sesAt(ls[l_id]).at().setEnable(false);
-
-    //> Projects stop
-    prjList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-	prjAt(ls[l_id]).at().setEnable(false);
-
-    //> Libraries stop
-    wlbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
-	wlbAt(ls[l_id]).at().setEnable(false);
+	sesAt(ls[l_id]).at().setStart(false);
 
     run_st = false;
 }

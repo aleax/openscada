@@ -6826,7 +6826,7 @@ msgstr ""
 
 #: tvariant.cpp:608
 msgid "The object don't attached to node of OpenSCADA tree."
-msgstr ""
+msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."
 
 #: xml.cpp:73 xml.cpp:119
 #, c-format

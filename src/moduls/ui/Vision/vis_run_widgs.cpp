@@ -487,8 +487,10 @@ RunPageView *RunPageView::parent( )
 RunPageView *RunPageView::findOpenPage( const string &ipg )
 {
     RunPageView *pg;
+
     //> Self check
     if( id() == ipg ) return this;
+
     //> Check to included widgets
     for( int i_ch = 0; i_ch < children().size(); i_ch++ )
     {

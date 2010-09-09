@@ -135,7 +135,7 @@ class TCntrNode
 
 	//Methods
 	virtual Res &nodeRes( )		{ return hd_res; }
-	virtual string nodeName( )	{ return "NO Named!"; }
+	virtual string nodeName( ) = 0;
 	string nodePath( char sep = 0, bool from_root = false );
 
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list

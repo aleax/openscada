@@ -1309,7 +1309,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
     for( int i_p = 0; i_p < rg.propSize( ); i_p++ )
     {
 	if( fObj && i_p == (rg.propSize( )-1) ) break;
-	if( vl.isNull() ) throw TError(nodePath().c_str(),_("Value error. Get property from null value try."));
+	if( vl.isNull() ) return false;	//throw TError(nodePath().c_str(),_("Value error. Get property from null value try."));
 	vl = oPropGet(vl,rg.propGet(i_p));
     }
 

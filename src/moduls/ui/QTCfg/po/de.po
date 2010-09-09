@@ -791,7 +791,7 @@ msgstr "Kopieren des Knotens '%1' nach '%2'.\n"
 
 #: qtcfg.cpp:716 qtcfg.cpp:740
 msgid "Do not the question anymore."
-msgstr ""
+msgstr "Mehr nicht fragen."
 
 #: qtcfg.cpp:737
 msgid "Node '%1' is already present. Continue?"
@@ -1729,7 +1729,3 @@ msgstr "QTCfg Dialog"
 #: selfwidg.h:204
 msgid "Node id and/or name select"
 msgstr "Auswahl des Bezeichners und/oder des Namens"
-
-#, fuzzy
-#~ msgid "TableDelegate"
-#~ msgstr "Löschen"

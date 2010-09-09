@@ -1209,7 +1209,7 @@ void VisRun::updatePage( )
 	    for( i_ch = 0; i_ch < req.childSize(); i_ch++ )
 		if( pgList[i_p] == req.childGet(i_ch)->text() )
 		    break;
-	    if( i_ch < req.childSize() || !(pg=master_pg->findOpenPage(pgList[i_p])) ) continue;
+	    if( i_ch < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[i_p]))) ) continue;
 	    if( !pg->property("cntPg").toString().isEmpty() )
 		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toAscii().data()))->setPgOpenSrc("");
 	    else
@@ -1218,6 +1218,7 @@ void VisRun::updatePage( )
 		if( pg == master_pg )	master_pg = NULL;
 	    }
 	}
+
 	//>> Process opened pages
 	pgList.clear();
 	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )

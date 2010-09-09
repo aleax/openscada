@@ -66,6 +66,8 @@ void Session::setUser( const string &it )
 
 void Session::setEnable( bool val )
 {
+    ResAlloc res(mCalcRes, true);
+
     if( val == enable() )	return;
 
     vector<string> pg_ls;
@@ -129,6 +131,8 @@ void Session::setEnable( bool val )
 
 void Session::setStart( bool val )
 {
+    ResAlloc res(mCalcRes, true);
+
     vector<string> pg_ls;
 
     if( val )

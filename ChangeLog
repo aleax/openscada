@@ -1,3 +1,9 @@
+2010-09-09 Roman
+- FIX:DemoDB: The script of main project page is fixed for SO names set.
+- FIX:UI.VCAEngine: Session start/stop and enable/disable at module start/stop is fixed.
+- FIX:UI.Vision: Include page of run session deletion is fixed on master page early delete.
+
+
 2010-09-08 Roman
 - FIX:DemoDB: Pipes gradient is fixed for rotated angles. Some other fixes.
 - !!:DemoDB: The script of main project page is rewrited to use new user's API object's functions.
