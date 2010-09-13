@@ -28,6 +28,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //********************************************
 //* Resource object                          *
 //********************************************
@@ -84,5 +87,7 @@ class ResString
 	Res	mRes;
 	string	str;
 };
+
+}
 
 #endif // RESALLOC_H

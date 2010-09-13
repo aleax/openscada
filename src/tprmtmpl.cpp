@@ -22,6 +22,8 @@
 #include "tsys.h"
 #include "tprmtmpl.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TPrmTempl                                     *
 //*************************************************

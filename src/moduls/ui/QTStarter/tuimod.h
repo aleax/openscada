@@ -23,7 +23,6 @@
 #define TUIMOD_H
 
 #include <QObject>
-#include <QApplication>
 #include <QTranslator>
 
 #include <tuis.h>
@@ -32,6 +31,8 @@
 #define _(mess) mod->I18N(mess)
 
 class QTimer;
+
+using namespace OSCADA;
 
 namespace QTStarter
 {
@@ -109,8 +110,6 @@ class TUIMod: public TUI
 	//Attributes
 	bool	demon_mode, end_run, start_com;
 	string	start_mod;
-
-	QApplication *QtApp;
 };
 
 extern TUIMod *mod;

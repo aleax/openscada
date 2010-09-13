@@ -26,6 +26,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TError                                        *
 //*************************************************
@@ -41,5 +44,7 @@ class TError
 	string	cat;
 	string	mess;
 };
+
+}
 
 #endif // TERROR_H

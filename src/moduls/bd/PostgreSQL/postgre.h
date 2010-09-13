@@ -31,6 +31,7 @@
 #define _(mess) mod->I18N(mess)
 
 using std::string;
+using namespace OSCADA;
 
 namespace BDPostgreSQL
 {

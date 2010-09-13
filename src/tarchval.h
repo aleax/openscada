@@ -34,6 +34,9 @@ using std::string;
 using std::vector;
 using std::map;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* Value archivator                              *
 //*************************************************
@@ -241,7 +244,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	//Private attributes
 	Res	a_res;
@@ -342,7 +345,7 @@ class TVArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
@@ -399,5 +402,7 @@ class TVArchEl
 
 	long long mLastGet;
 };
+
+}
 
 #endif // TArchVal_H

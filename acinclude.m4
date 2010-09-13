@@ -1048,8 +1048,6 @@ AC_DEFUN([BNV_PATH_QT_DIRECT],
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 9
-
 AC_DEFUN([AX_LIB_POSTGRESQL],
 [
     AC_ARG_WITH([postgresql],

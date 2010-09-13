@@ -2,13 +2,12 @@
 
 EXTRA_DIST = *.h qtcfg.qrc images/* po/* doc/*
 
-INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -DQT_EDITION=QT_EDITION_DESKTOP \
-    -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
+INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
 
 oscd_modul_LTLIBRARIES = ui_QTCfg.la
 ui_QTCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
-ui_QTCfg_la_LIBADD = -L$(QT4_LIB) -lQtGui
+ui_QTCfg_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui
 
 qrc_qtcfg.cpp: qtcfg.qrc
 	$(QT4_RCC) -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp

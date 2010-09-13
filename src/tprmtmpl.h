@@ -31,6 +31,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TPrmTempl                                     *
 //*************************************************
@@ -84,7 +87,7 @@ class TPrmTempl: public TFunction, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 
 	//Attributes
 	string	&m_id, &m_prog, work_prog;
@@ -138,12 +141,14 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 
 	//Attributes
 	bool	run_st;
 	int	m_ptmpl;
 	string	&m_id, &m_db, work_lib_db;
 };
+
+}
 
 #endif // TPRMTMPL_H

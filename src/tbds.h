@@ -39,6 +39,9 @@ using std::string;
 using std::vector;
 using std::deque;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TTable                                        *
 //*************************************************
@@ -53,7 +56,7 @@ class TTable : public TCntrNode
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string &name( )		{ return mName; }
+	const string &name( )	{ return mName; }
 	time_t lstUse( )	{ return mLstUse; }
 
 	virtual void fieldStruct( TConfig &cfg )
@@ -78,10 +81,10 @@ class TTable : public TCntrNode
 
     private:
 	//Private methods
-	string nodeName( )	{ return mName; }
+	const string &nodeName( )	{ return mName; }
 
 	//Private attributes
-	string	mName;
+	const string	mName;
 };
 
 //************************************************
@@ -152,7 +155,7 @@ class TBD : public TCntrNode, public TConfig
     private:
 	//Private methods
 	void postEnable( int flag );
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	//Private attributes
 	//> Base options
@@ -272,5 +275,7 @@ class TBDS : public TSubSYS, public TElem
 
 	Res	nRes;
 };
+
+}
 
 #endif // TBDS_H

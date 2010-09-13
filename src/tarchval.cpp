@@ -34,6 +34,7 @@
 #include "tarchives.h"
 #include "tarchval.h"
 
+using namespace OSCADA;
 
 //*************************************************
 //* Value archivator                              *

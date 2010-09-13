@@ -32,6 +32,9 @@ using std::string;
 using std::vector;
 using std::map;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TCfg                                          *
 //*************************************************
@@ -159,5 +162,7 @@ class TConfig: public TValElem
 	char		single		: 1;
 	char		mNoTransl	: 1;
 };
+
+}
 
 #endif // TCONFIG_H

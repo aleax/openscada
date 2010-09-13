@@ -25,6 +25,7 @@
 #include <string>
 
 using std::string;
+using namespace OSCADA;
 
 namespace DBArch
 {

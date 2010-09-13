@@ -108,7 +108,7 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );

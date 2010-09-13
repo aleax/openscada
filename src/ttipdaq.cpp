@@ -30,6 +30,8 @@
 #include "ttiparam.h"
 #include "ttipdaq.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TTipDAQ                                       *
 //*************************************************

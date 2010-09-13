@@ -26,6 +26,8 @@
 #include "tmess.h"
 #include "tsecurity.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TSecurity					  *
 //*************************************************

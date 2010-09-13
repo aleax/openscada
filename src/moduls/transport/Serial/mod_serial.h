@@ -31,6 +31,8 @@
 
 #define CHECK_TR_PER 10
 
+using namespace OSCADA;
+
 namespace Serial
 {
 

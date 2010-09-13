@@ -37,6 +37,8 @@
 #define SOCK_UDP  1
 #define SOCK_UNIX 2
 
+using namespace OSCADA;
+
 namespace Sockets
 {
 

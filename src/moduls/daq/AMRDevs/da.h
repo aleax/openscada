@@ -22,6 +22,8 @@
 #ifndef DA_H
 #define DA_H
 
+using namespace OSCADA;
+
 namespace AMRDevs
 {
 

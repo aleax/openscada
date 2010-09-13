@@ -30,6 +30,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //************************************************
 //* TProtocolIn                                  *
 //************************************************
@@ -55,10 +58,10 @@ class TProtocolIn : public TCntrNode
 
     private:
 	//Methods
-	string nodeName( )	{ return mName; }
+	const string &nodeName( )	{ return mName; }
 
 	//Attributes
-	string		mName;
+	const string	mName;
 	string		mSrcTr;
 };
 
@@ -117,5 +120,7 @@ class TProtocolS : public TSubSYS
     private:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
+
+}
 
 #endif // TPROTOCOLS_H

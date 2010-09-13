@@ -30,7 +30,6 @@
 #include "base.h"
 #include "mess.h"
 
-
 using namespace FSArch;
 
 //************************************************
@@ -458,7 +457,7 @@ void MFileArch::attach( const string &iname, bool full )
 		{
 		    buf[rsz] = 0;
 		    char bChars[21];
-		    if( sscanf(buf,"%lx %lx %20s %d",&mBeg,&mEnd,bChars,&mXML) == 4 ) { mChars = bChars; infoOK = true; }
+		    if( sscanf(buf,"%lx %lx %20s %hhd",&mBeg,&mEnd,bChars,&mXML) == 4 ) { mChars = bChars; infoOK = true; }
 		}
 		close(hd);
 	    }

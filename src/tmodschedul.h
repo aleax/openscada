@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -26,6 +26,9 @@
 
 #include "tsubsys.h"
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
@@ -45,6 +48,7 @@ class TModSchedul : public TSubSYS
 		vector<string>	use;		// if share lib attached to show who modules used
 		time_t		tm;		// data modify of share lib for automatic update
 		string		name;		// share lib path
+		string		err;		// Error message for broken modules
 	};
 
 	//Methods
@@ -60,7 +64,7 @@ class TModSchedul : public TSubSYS
 
 	int loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS
 
-	SHD &lib( const string &name );			// Get stat share lib <name>
+	SHD lib( const string &name );			// Get stat share lib <name>
 	void libList( vector<string> &list );		// List present share libs
 	int libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
 	void libAtt( const string &name, bool full = false);	// Attach share libs
@@ -76,12 +80,12 @@ class TModSchedul : public TSubSYS
 
     private:
 	//Methods
-	string optDescr( );					// Description of config help
+	string optDescr( );				// Description of config help
 	void ScanDir( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
-	bool CheckFile( const string &name );			//Check file to OpenSCADA share libs
-	int  libReg( const string &name );			//Registre present share lib
-	void libUnreg( const string &name );			//Unreg deleted share lib
-	bool chkAllowMod( const string &name );			//Check for allow file to attaching
+	bool CheckFile( const string &name );		//Check file to OpenSCADA share libs
+	int  libReg( const string &name );		//Registre present share lib
+	void libUnreg( const string &name );		//Unreg deleted share lib
+	bool chkAllowMod( const string &name );		//Check for allow file to attaching
 
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
@@ -95,5 +99,7 @@ class TModSchedul : public TSubSYS
 
 	Res		nRes;
 };
+
+}
 
 #endif // TMODSCHEDUL_H

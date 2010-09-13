@@ -31,6 +31,7 @@
 
 using std::string;
 using std::deque;
+using namespace OSCADA;
 
 namespace FSArch
 {

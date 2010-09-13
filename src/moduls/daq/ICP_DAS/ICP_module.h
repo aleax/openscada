@@ -35,6 +35,7 @@
 using std::string;
 using std::vector;
 using std::map;
+using namespace OSCADA;
 
 namespace ICP_DAS_DAQ
 {

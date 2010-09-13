@@ -29,6 +29,9 @@ using std::string;
 #include "tcntrnode.h"
 #include "tvalue.h"
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
@@ -82,7 +85,7 @@ class TParamContr : public TConfig, public TValue
 
     private:
 	//Methods
-	string nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 
 	//Attributes
 	string	&m_id;
@@ -91,5 +94,7 @@ class TParamContr : public TConfig, public TValue
 
 	TTipParam	*tipparm;
 };
+
+}
 
 #endif // TPARAMCONTR_H

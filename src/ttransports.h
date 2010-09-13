@@ -30,6 +30,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //************************************************
 //* TTransportIn				 *
 //************************************************
@@ -88,7 +91,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	//Attributes
 	string	&mId;
@@ -165,7 +168,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	//Attributes
 	string	&mId;
@@ -295,5 +298,7 @@ class TTransportS : public TSubSYS
 	Res	extHostRes;             //External hosts resource
 	vector<ExtHost> extHostLs;      //External hosts list
 };
+
+}
 
 #endif // TTRANSPORTS_H

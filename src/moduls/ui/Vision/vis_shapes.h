@@ -46,6 +46,7 @@
 using std::string;
 using std::deque;
 using std::vector;
+using namespace OSCADA;
 
 class QEvent;
 class QAction;

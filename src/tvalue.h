@@ -32,6 +32,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TVal                                          *
 //*************************************************
@@ -96,7 +99,7 @@ class TVal : public TCntrNode
 
     private:
 	//Methods
-	string nodeName( )	{ return name(); }
+	const string &nodeName( )	{ return name(); }
 
 	//Attributes
 	union
@@ -171,5 +174,7 @@ class TValue: public TCntrNode, public TValElem
 	short int	l_cfg;		// Config len
 	TConfig*	mCfg;		// Configs (static parts)
 };
+
+}
 
 #endif // TVALUE_H

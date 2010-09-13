@@ -27,6 +27,8 @@
 #include "tmodule.h"
 #include "tbds.h"
 
+using namespace OSCADA;
+
 //************************************************
 //* TBDS                                         *
 //************************************************
@@ -471,8 +473,8 @@ void TBDS::load_( )
 
     //> Load parameters from config file
 
-    //> Open DB load
-    //>> Load and enable other DB stored into DB
+    //> DB open
+    //>> Open, load and enable generic DB
     string db_tp = TSYS::strSepParse(fullDB(),0,'.');
     string db_nm = TSYS::strSepParse(fullDB(),1,'.');
     if( !at(db_tp).at().openStat(db_nm) )
@@ -482,10 +484,10 @@ void TBDS::load_( )
 	at(db_tp).at().at(db_nm).at().enable();
     }
 
-    string id,type;
-    //> Search and open new DB
+    //>> Open other DB stored into table 'DB' and config file
     try
     {
+	string id,type;
 	if( SYS->chkSelDB(fullDB()) )
 	{
 	    TConfig c_el(&el_db);

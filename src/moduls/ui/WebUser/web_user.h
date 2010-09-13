@@ -27,6 +27,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+using namespace OSCADA;
+
 namespace WebUser
 {
 
@@ -103,7 +105,7 @@ class UserPg : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

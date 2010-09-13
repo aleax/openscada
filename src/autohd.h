@@ -31,6 +31,9 @@
 using std::string;
 using std::bad_cast;
 
+namespace OSCADA
+{
+
 //***************************************************************
 //* AutoHD - for auto released HD resources			*
 //***************************************************************
@@ -82,5 +85,7 @@ template <class ORes> class AutoHD
     private:
 	ORes *m_node;
 };
+
+}
 
 #endif //AUTOHD_H

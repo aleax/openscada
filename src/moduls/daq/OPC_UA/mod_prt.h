@@ -31,6 +31,7 @@
 
 using std::string;
 using std::map;
+using namespace OSCADA;
 
 //*************************************************
 //* Protocol modul info!                          *
@@ -364,7 +365,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

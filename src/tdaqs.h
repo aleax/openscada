@@ -32,6 +32,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
@@ -115,5 +118,7 @@ class TDAQS : public TSubSYS
 	bool		prcStRd, endrunRd;
 	map<string,SStat> mSt;
 };
+
+}
 
 #endif // TDAQS_H

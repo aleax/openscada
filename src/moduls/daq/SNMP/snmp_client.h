@@ -34,6 +34,7 @@
 
 using std::string;
 using std::vector;
+using namespace OSCADA;
 
 namespace SNMP_DAQ
 {

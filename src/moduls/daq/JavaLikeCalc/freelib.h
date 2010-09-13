@@ -72,7 +72,7 @@ class Lib : public TCntrNode, public TConfig
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
     protected:
-	string nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );

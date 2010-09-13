@@ -33,6 +33,7 @@
 #define EVAL_REAL_MYSQL -1.79E308
 
 using std::string;
+using namespace OSCADA;
 
 namespace BDMySQL
 {

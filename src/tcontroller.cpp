@@ -24,6 +24,8 @@
 #include "ttiparam.h"
 #include "tcontroller.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TController					  *
 //*************************************************

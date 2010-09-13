@@ -52,7 +52,7 @@ class TestSOAttach : public TFunction
 
 		SYS->modSchedul();
 		string SO_name = val->getS(1);
-		TModSchedul::SHD &so_st = SYS->modSchedul().at().lib(SO_name);
+		TModSchedul::SHD so_st = SYS->modSchedul().at().lib(SO_name);
 		if( val->getI(2) > 0 )		SYS->modSchedul().at().libAtt(so_st.name, val->getB(3));
 		else if( val->getI(2) < 0 )	SYS->modSchedul().at().libDet(so_st.name);
 		else

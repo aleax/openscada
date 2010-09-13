@@ -36,6 +36,7 @@
 
 using std::string;
 using std::vector;
+using namespace OSCADA;
 
 class QMainWindow;
 class QComboBox;

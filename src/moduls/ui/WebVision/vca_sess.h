@@ -50,10 +50,10 @@ typedef map<int,int> ColorMap;
 typedef map<int,string> ImageMap;
 typedef map<int,int> StyleMap;
 
-
 using std::string;
 using std::vector;
 using std::map;
+using namespace OSCADA;
 
 namespace WebVision
 {
@@ -84,10 +84,10 @@ class VCAObj : public TCntrNode
 
     private:
 	//Methods
-	string nodeName( )		{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 
 	//Attributes
-	string	m_id;
+	const string	m_id;
 };
 
 //*************************************************
@@ -408,11 +408,11 @@ class VCASess : public TCntrNode
 	};
 
 	//Methods
-	string nodeName( )		{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 	void postDisable( int flag );
 
 	//Attributes
-	string	m_id;
+	const string	m_id;
 	int	id_objs;			//Primitive object's container identifier
 	time_t	lst_ses_req;
 	bool	mIsCreate;

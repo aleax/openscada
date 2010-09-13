@@ -34,6 +34,8 @@
 
 #define CHECK_ARH_PER 60
 
+using namespace OSCADA;
+
 namespace FSArch
 {
 

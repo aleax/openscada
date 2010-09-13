@@ -27,6 +27,8 @@
 #include "tprotocols.h"
 #include "ttransports.h"
 
+using namespace OSCADA;
+
 //************************************************
 //* TTransportS					 *
 //************************************************

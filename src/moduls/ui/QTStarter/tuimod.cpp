@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <QApplication>
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QToolBar>

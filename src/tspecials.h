@@ -30,6 +30,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TSpecial                                      *
 //*************************************************
@@ -63,5 +66,7 @@ class TSpecialS : public TSubSYS
 	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
+
+}
 
 #endif // TSPECIALS_H

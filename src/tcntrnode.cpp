@@ -34,6 +34,8 @@
 #include "tvariant.h"
 #include "tcntrnode.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TCntrNode                                     *
 //*************************************************

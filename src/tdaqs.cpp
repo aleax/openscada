@@ -29,6 +29,7 @@
 #include "tvalue.h"
 #include "tdaqs.h"
 
+using namespace OSCADA;
 
 //*************************************************
 //* TDAQS                                         *

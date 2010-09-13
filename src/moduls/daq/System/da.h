@@ -24,6 +24,8 @@
 
 #include <tcontroller.h>
 
+using namespace OSCADA;
+
 namespace SystemCntr
 {
 

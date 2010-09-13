@@ -31,6 +31,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TTipParam                                     *
 //*************************************************
@@ -46,5 +49,7 @@ class TTipParam : public TElem
 	string descr;
 	string db;
 };
+
+}
 
 #endif // TTIPARAM_H

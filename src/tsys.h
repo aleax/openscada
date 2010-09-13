@@ -59,6 +59,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TSYS					  *
 //*************************************************
@@ -93,7 +96,7 @@ class TSYS : public TCntrNode
 	int stopSignal( )	{ return mStopSignal; }
 
 	//> Programms options
-	string id( )		{ return mId; }
+	const string &id( )	{ return mId; }
 	string name( )		{ return mName; }
 	void setName( const string &vl )	{ mName = vl; modif(); }
 	string user( )		{ return mUser; }	//Run user name
@@ -197,7 +200,6 @@ class TSYS : public TCntrNode
 	static void *str2addr( const string &str );
 
 	//> Path and string parse
-	static string fNameFix( const string &fname );
 	static string strNoSpace( const string &val );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
@@ -242,7 +244,7 @@ class TSYS : public TCntrNode
 	};
 
 	//Private methods
-	string nodeName( )	{ return id(); }
+	const string &nodeName( )	{ return id(); }
 	bool cfgFileLoad( );
 	void cfgPrmLoad( );
 	void cfgFileScan( bool first = false );
@@ -284,5 +286,6 @@ class TSYS : public TCntrNode
 };
 
 extern TSYS *SYS;
+}
 
 #endif // TSYS_H

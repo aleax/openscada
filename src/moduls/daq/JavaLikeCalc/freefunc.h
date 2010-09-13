@@ -34,6 +34,7 @@
 using std::string;
 using std::vector;
 using std::deque;
+using namespace OSCADA;
 
 namespace JavaLikeCalc
 {

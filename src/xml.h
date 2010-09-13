@@ -31,6 +31,9 @@ using std::string;
 using std::vector;
 using std::pair;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* XMLNode                                       *
 //*************************************************
@@ -115,5 +118,7 @@ class XMLNode
 	//> Parse/load XML attributes
 	vector<XMLNode*> node_stack;
 };
+
+}
 
 #endif  //XML_H

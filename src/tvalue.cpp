@@ -26,6 +26,8 @@
 #include "tcontroller.h"
 #include "tvalue.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TValue                                        *
 //*************************************************

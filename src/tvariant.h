@@ -32,6 +32,9 @@ using std::string;
 #define EVAL_REAL -3.3E308
 #define EVAL_STR  "<EVAL>"
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TVariant                                      *
 //*************************************************
@@ -203,5 +206,7 @@ class TCntrNodeObj: public TVarObj
 	string	mUser;
 	AutoHD<TCntrNode> cnd;
 };
+
+}
 
 #endif // TVARIANT_H

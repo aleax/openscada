@@ -27,6 +27,20 @@
 #include <string>
 #include <vector>
 
+#include "xml.h"
+#include "autohd.h"
+#include "resalloc.h"
+
+#ifndef OSC_HASHMAP
+#include <map>
+using std::map;
+#else
+#include <ext/hash_map>
+using __gnu_cxx::hash_map;
+//#include <unordered_map>
+//using std::unordered_map;
+#endif
+
 //> Security standard permissions
 #define R_R_R_  0444
 #define R_R___  0440
@@ -38,23 +52,17 @@
 #define RWR___  0640
 #define RW____  0600
 
-
 using std::string;
 using std::vector;
+
+namespace OSCADA
+{
 
 class TCntrNode;
 
 #ifndef OSC_HASHMAP
-
-#include <map>
-using std::map;
 typedef map<string, TCntrNode* > TMap;
-
 #else
-
-#include <ext/hash_map>
-using __gnu_cxx::hash_map;
-
 namespace __gnu_cxx
 {
 template <> class hash<string>
@@ -68,15 +76,9 @@ template <> class hash<string>
 }
 typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 
-//#include <unordered_map>
-//using std::unordered_map;
 //typedef unordered_map<string, TCntrNode* > TMap;
 
 #endif
-
-#include "xml.h"
-#include "autohd.h"
-#include "resalloc.h"
 
 #define DEF_TIMEOUT 2
 
@@ -135,7 +137,7 @@ class TCntrNode
 
 	//Methods
 	virtual Res &nodeRes( )		{ return hd_res; }
-	virtual string nodeName( ) = 0;
+	virtual const string &nodeName( ) = 0;
 	string nodePath( char sep = 0, bool from_root = false );
 
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
@@ -230,5 +232,7 @@ class TCntrNode
 	char	m_flg;
 };
 //#pragma pack(pop)
+
+}
 
 #endif //TCNTRNODE_H

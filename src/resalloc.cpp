@@ -24,6 +24,8 @@
 #include "tsys.h"
 #include "resalloc.h"
 
+using namespace OSCADA;
+
 //********************************************
 //* Resource object                          *
 //********************************************

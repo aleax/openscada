@@ -28,7 +28,6 @@
 #include "arch.h"
 #include "mess.h"
 
-
 using namespace DBArch;
 
 //************************************************

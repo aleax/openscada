@@ -31,6 +31,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TModule                                       *
 //*************************************************
@@ -120,7 +123,7 @@ class TModule : public TCntrNode
 
     private:
 	//Methods
-	string nodeName( )       { return modId(); }
+	const string &nodeName( )	{ return modId(); }
 
 	//Attributes
 	string		lc_id;		// Locale id. For gettext.
@@ -128,5 +131,7 @@ class TModule : public TCntrNode
 
 	static const char *l_info[];	// list of the present info options
 };
+
+}
 
 #endif // TMODULE_H

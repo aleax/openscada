@@ -31,6 +31,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+using namespace OSCADA;
+
 namespace VCA
 {
 

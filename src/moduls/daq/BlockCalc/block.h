@@ -29,6 +29,7 @@
 
 using std::string;
 using std::vector;
+using namespace OSCADA;
 
 namespace Virtual
 {
@@ -100,7 +101,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
 
-	string nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );

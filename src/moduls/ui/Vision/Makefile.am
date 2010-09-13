@@ -2,15 +2,14 @@
 
 EXTRA_DIST = *.h vision.qrc images/* po/* doc/*
 
-INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -DQT_EDITION=QT_EDITION_DESKTOP \
-    -DQT_USE_APPROXIMATE_CURSORS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_GUI_LIB -DQT_CORE_LIB
+INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
 
 oscd_modul_LTLIBRARIES = ui_Vision.la
 ui_Vision_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_Vision_la_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
-ui_Vision_la_LIBADD = -L$(QT4_LIB) -lQtGui -lfftw3
+ui_Vision_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui -lfftw3
 
 qrc_vision.cpp: vision.qrc
 	$(QT4_RCC) -name Vision vision.qrc -o qrc_vision.cpp

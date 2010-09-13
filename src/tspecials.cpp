@@ -25,6 +25,8 @@
 #include "tmess.h"
 #include "tspecials.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TSpecialS                                     *
 //*************************************************

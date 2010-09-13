@@ -38,6 +38,8 @@
 #include "resalloc.h"
 #include "tmess.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TMess                                         *
 //*************************************************
@@ -103,7 +105,7 @@ void TMess::put( const char *categ, char level, const char *fmt,  ... )
 	    case Emerg:		level_sys = LOG_EMERG;	break;
 	    default: 		level_sys = LOG_DEBUG;
 	}
-	syslog(level_sys,TSYS::strEncode(s_mess,TSYS::FormatPrint).c_str());
+	syslog(level_sys,"%s",s_mess.c_str());
     }
     if( mLogDir&2 ) fprintf(stdout,"%s \n",s_mess.c_str());
     if( mLogDir&4 ) fprintf(stderr,"%s \n",s_mess.c_str());

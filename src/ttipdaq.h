@@ -30,6 +30,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //************************************************
 //* TTipDAQ                                      *
 //************************************************
@@ -80,5 +83,7 @@ class TTipDAQ : public TModule, public TElem
 	vector<TTipParam *>	paramt;		// List type parameter and Structure configs of parameter.
 	int	m_cntr;
 };
+
+}
 
 #endif // TTIPCONTROLLER_H

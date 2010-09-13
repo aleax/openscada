@@ -30,6 +30,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TFld                                          *
 //*************************************************
@@ -185,5 +188,6 @@ class TValElem
 	virtual void delFld( TElem *el, unsigned id ) = 0;
 };
 
+}
 
 #endif // TELEM_H

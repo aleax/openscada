@@ -81,8 +81,8 @@ class WidgetLib : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string nodeName()       { return mId; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	const string &nodeName( )		{ return mId; }
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
 	void save_( );

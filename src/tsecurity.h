@@ -28,6 +28,9 @@
 #define SEC_WR 0x02
 #define SEC_RD 0x04
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TUser					  *
 //*************************************************
@@ -69,7 +72,7 @@ class TUser : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return m_name; }
+	const string &nodeName( )	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
@@ -120,7 +123,7 @@ class TGroup : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	string nodeName( )	{ return m_name; }
+	const string &nodeName( )	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
@@ -178,6 +181,8 @@ class TSecurity : public TSubSYS
 
 	unsigned	hd_res;
 };
+
+}
 
 #endif // TSECURITY_H
 

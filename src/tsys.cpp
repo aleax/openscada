@@ -42,9 +42,11 @@
 #include "tmess.h"
 #include "tsys.h"
 
+using namespace OSCADA;
+
 //Continuously access variable
-TMess	*Mess;
-TSYS	*SYS;
+TMess	*OSCADA::Mess;
+TSYS	*OSCADA::SYS;
 bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) :
@@ -520,28 +522,6 @@ long long TSYS::curTime()
     timeval cur_tm;
     gettimeofday(&cur_tm,NULL);
     return (long long)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
-}
-
-string TSYS::fNameFix( const string &fname )
-{
-    string tmp;
-    char   buf[STR_BUF_LEN];
-
-    for( string::const_iterator it = fname.begin(); it != fname.end(); ++it )
-    {
-	if( *(it) == '.' && *(it+1) == '.' && *(it+2) == '/')
-	{
-	    string cur = getcwd(buf,sizeof(buf));
-	    if(chdir("..") != 0) return "";
-	    tmp += getcwd(buf,sizeof(buf));
-	    chdir(cur.c_str());
-	    it++;
-	}
-	else if( *(it) == '.' && *(it+1) == '/' )
-	    tmp += getcwd(buf,sizeof(buf));
-	else tmp += *(it);
-    }
-    return tmp;
 }
 
 bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t tm )

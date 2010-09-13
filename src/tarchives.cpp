@@ -32,6 +32,8 @@
 #define BUF_SIZE_DEF 500
 #define BUF_SIZE_MAX 100000
 
+using namespace OSCADA;
+
 //************************************************
 //* Archive subsystem                            *
 //************************************************

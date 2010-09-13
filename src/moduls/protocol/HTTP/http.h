@@ -34,6 +34,7 @@
 
 using std::string;
 using std::map;
+using namespace OSCADA;
 
 namespace PrHTTP
 {

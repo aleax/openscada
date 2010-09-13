@@ -25,6 +25,8 @@
 #include <tmess.h>
 #include "tfunction.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* Function abstract object                      *
 //*************************************************

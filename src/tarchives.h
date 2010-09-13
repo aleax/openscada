@@ -35,6 +35,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //************************************************
 //* Message archivator                           *
 //************************************************
@@ -102,7 +105,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	string nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id; }
 
 	//Private attributes
 	string	&m_id,		//Mess arch id
@@ -259,5 +262,7 @@ class TArchiveS : public TSubSYS
 
 	vector< AutoHD<TVArchive> > actUpSrc;
 };
+
+}
 
 #endif // TARCHIVES_H

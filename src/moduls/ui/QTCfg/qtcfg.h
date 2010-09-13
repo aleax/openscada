@@ -46,6 +46,8 @@ class QHBoxLayout;
 class QLabel;
 class QTabWidget;
 
+using namespace OSCADA;
+
 namespace QTCFG
 {
 

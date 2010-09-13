@@ -336,8 +336,6 @@ void Widget::inheritAttr( const string &iattr )
     setStlLock(true);
     if( !loadDef ) parent().at().setStlLock(true);
 
-
-
     //> Configuration inherit
     AutoHD<Attr> attr, pattr;
     for( int i_l = 0; i_l < ls.size(); i_l++ )
@@ -1414,15 +1412,15 @@ void Attr::setFld( TFld *fld, bool inher )
     self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
 }
 
-string Attr::id( )	{ return fld().name(); }
+const string &Attr::id( )	{ return fld().name(); }
 
-string Attr::name( )	{ return fld().descr(); }
+string Attr::name( )		{ return fld().descr(); }
 
-TFld::Type Attr::type( ){ return fld().type(); }
+TFld::Type Attr::type( )	{ return fld().type(); }
 
-Widget *Attr::owner( )	{ return (Widget *)nodePrev(); }
+Widget *Attr::owner( )		{ return (Widget *)nodePrev(); }
 
-int Attr::flgGlob( )	{ return fld().flg(); }
+int Attr::flgGlob( )		{ return fld().flg(); }
 
 string Attr::getSEL( bool sys )
 {

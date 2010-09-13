@@ -25,6 +25,8 @@
 #include "tmess.h"
 #include "tprotocols.h"
 
+using namespace OSCADA;
+
 //************************************************
 //* TProtocolS                                   *
 //************************************************

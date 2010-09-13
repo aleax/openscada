@@ -37,6 +37,7 @@ struct CRYPTO_dynlock_value
     pthread_mutex_t mutex;
 };
 
+using namespace OSCADA;
 
 namespace MSSL
 {

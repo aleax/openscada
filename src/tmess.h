@@ -46,6 +46,9 @@ using std::string;
 using std::vector;
 using std::exception;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TMess                                         *
 //*************************************************
@@ -116,5 +119,7 @@ class TMess
 };
 
 extern TMess *Mess;
+
+}
 
 #endif // TMESSAGE_H

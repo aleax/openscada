@@ -30,6 +30,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
@@ -43,7 +46,7 @@ class TSubSYS : public TCntrNode
 	TSubSYS( const char *id, const char *name, bool mod = false );
 	virtual ~TSubSYS( );
 
-	string subId( )		{ return m_id; }
+	const string &subId( )	{ return m_id; }
 	string subName( );
 	bool subStartStat( )	{ return mStart; }
 
@@ -73,14 +76,16 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	string nodeName( )	{ return subId(); }
+	const string &nodeName( )	{ return subId(); }
 
 	//Private attributes
 	bool	m_mod_sys;
 	int	m_mod;
 
-	string	m_id;		//Id
-	string	m_name;		//Name
+	const string	m_id;		//Id
+	string		m_name;		//Name
 };
+
+}
 
 #endif // TGRPMODULE_H

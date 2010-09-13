@@ -32,6 +32,9 @@
 using std::string;
 using std::vector;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* IO                                            *
 //*************************************************
@@ -134,14 +137,14 @@ class TFunction : public TCntrNode
 	void preDisable( int flag );
 
 	//Attributes
-	string		mId;
-	bool		run_st;
-	TValFunc	*mTVal;
+	string			mId;
+	bool			run_st;
+	TValFunc		*mTVal;
 	vector<TValFunc*>	used;
 
     private:
 	//Methods
-	string nodeName( )	{ return id(); }
+	const string &nodeName( )	{ return id(); }
 
 	//Attributes
 	Res		f_res;
@@ -261,5 +264,7 @@ class TValFunc
 	TFunction	*mFunc;
 	map<int,TValFunc* >	vctx;
 };
+
+}
 
 #endif //TFUNCTIONS_H

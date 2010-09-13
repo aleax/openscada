@@ -31,6 +31,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TUI                                           *
 //*************************************************
@@ -75,5 +78,7 @@ class TUIS : public TSubSYS
 	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
+
+}
 
 #endif // TUIS_H

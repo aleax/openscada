@@ -27,6 +27,7 @@
 #include <tarchives.h>
 
 using std::string;
+using namespace OSCADA;
 
 namespace DBArch
 {

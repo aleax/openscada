@@ -28,6 +28,8 @@
 #include "ttiparam.h"
 #include "tparamcontr.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TParamContr                                   *
 //*************************************************

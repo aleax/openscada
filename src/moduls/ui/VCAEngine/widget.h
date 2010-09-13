@@ -26,6 +26,8 @@
 #include <tvariant.h>
 #include <tconfig.h>
 
+using namespace OSCADA;
+
 namespace VCA
 {
 
@@ -74,7 +76,7 @@ class Attr : public TCntrNode
 	Attr( TFld *fld, bool inher );
 	~Attr( );
 
-	string id( );
+	const string &id( );
 	string name( );
 	TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
@@ -109,7 +111,7 @@ class Attr : public TCntrNode
 
     protected:
 	//Methods
-	string nodeName( )	{ return id(); }
+	const string &nodeName( )	{ return id(); }
 
     private:
 	//Data
@@ -213,7 +215,7 @@ class Widget : public TCntrNode
 
     protected:
 	//Methods
-	string nodeName()	{ return mId; }
+	const string &nodeName()	{ return mId; }
 
 	void postEnable( int flag );
 	void preDisable( int flag );

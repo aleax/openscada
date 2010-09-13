@@ -25,6 +25,8 @@
 #include "tmess.h"
 #include "tsys.h"
 
+using namespace OSCADA;
+
 int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0, i_krn = 0;

@@ -32,6 +32,7 @@
 
 using std::string;
 using std::vector;
+using namespace OSCADA;
 
 namespace FireBird
 {

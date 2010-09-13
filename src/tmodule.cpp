@@ -33,6 +33,8 @@
 #include "tsubsys.h"
 #include "tmodule.h"
 
+using namespace OSCADA;
+
 //*************************************************
 //* TModule                                       *
 //*************************************************

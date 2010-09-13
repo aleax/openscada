@@ -30,6 +30,9 @@
 
 using std::string;
 
+namespace OSCADA
+{
+
 //*************************************************
 //* TController                                   *
 //*************************************************
@@ -119,7 +122,7 @@ class TController : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	string nodeName( )       { return mId; }
+	const string &nodeName( )	{ return mId; }
 
 	void LoadParmCfg(  );
 
@@ -135,5 +138,6 @@ class TController : public TCntrNode, public TConfig
 	unsigned mRedntUse	: 1;
 };
 
+}
 
 #endif // TCONTROLLER_H

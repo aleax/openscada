@@ -1,3 +1,13 @@
+2010-09-13 Roman
+- !!!!:SYS: OpenSCADA core library version is rised to 1:0:0
+- !!!!:SYS: OpenSCADA core librarie's code is moved to namespace OSCADA
+- !:SYS: To node name call function is changed to const string &TCntrNode::nodeName( )
+- !!:Modules: Module check and init code is updated for exclude shared libraries init twice.
+    Error set is added for loaded modules.
+- SYS: Remove function TSYS::fNameFix();
+- UI.QTStarter, UI.QTCfg, UI.Vision: QT compile options updated to last QT4 versions.
+
+
 2010-09-09 Roman
 - FIX:DemoDB: The script of main project page is fixed for SO names set.
 - FIX:UI.VCAEngine: Session start/stop and enable/disable at module start/stop is fixed.

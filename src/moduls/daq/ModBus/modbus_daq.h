@@ -38,6 +38,7 @@ using std::string;
 using std::vector;
 using std::map;
 using std::deque;
+using namespace OSCADA;
 
 //*************************************************
 //* DAQ modul info!                               *
