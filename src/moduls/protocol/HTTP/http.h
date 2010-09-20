@@ -53,12 +53,12 @@ class TProtIn: public TProtocolIn
 
     private:
 	//Methods
-	string getIndex( const string &user );
-	string getAuth( const string& url = "/", const string &mess = "" );
-	void getCnt( const vector<string> &vars, const string &content, map<string,string> &cnt );
+	string getIndex(const string &user, const string &sender);
+	string getAuth(const string& url = "/", const string &mess = "");
+	void getCnt(const vector<string> &vars, const string &content, map<string,string> &cnt);
 
-	string httpHead( const string &rcode, int cln, const string &addattr = "" );
-	string pgHead( string head_els = "" );
+	string httpHead(const string &rcode, int cln, const string &addattr = "");
+	string pgHead(string head_els = "");
 	string pgTail( );
 
 	//Attributes
@@ -86,6 +86,9 @@ class TProt: public TProtocol
 	int sesOpen( string name );
 	string sesCheck( int sid );
 
+	//> Auto-login
+	string autoLogGet( const string &sender );
+
 	Res &nodeRes( )			{ return nRes; }
 
     protected:
@@ -110,6 +113,20 @@ class TProt: public TProtocol
 		string name;
 	};
 
+	//*************************************************
+	//* SAutoLogin                                    *
+	//*************************************************
+	class SAutoLogin
+	{
+	    public:
+		//Methods
+		SAutoLogin( ) : addrs(""), user("")	{ }
+		SAutoLogin(string iaddrs, string iuser) : addrs(iaddrs), user(iuser)	{ }
+
+		//Attributes
+		string addrs, user;
+	};
+
 	//Methods
 	string optDescr( );
 	TProtocolIn *in_open( const string &name );
@@ -120,6 +137,8 @@ class TProt: public TProtocol
 	map<int,SAuth>	mAuth;
 	int		mTAuth;
 	time_t		lst_ses_chk;
+
+	vector<SAutoLogin>	mALog;
 
 	Res		nRes;
 };

@@ -47,7 +47,7 @@ void VCASess::postDisable( int flag )
 {
     TCntrNode::postDisable(flag);
 
-    //- Disconnect/delete session -
+    //> Disconnect/delete session
     if( mIsCreate )
     {
 	XMLNode req("disconnect");
@@ -100,8 +100,8 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Attribute get
     else if( wp_com == "attr" )
@@ -111,8 +111,8 @@ void VCASess::getReq( SSess &ses )
 
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Widget's (page) full attributes branch request
     else if( wp_com == "attrsBr" )
@@ -149,8 +149,8 @@ void VCASess::getReq( SSess &ses )
 	}
 
 	//>> Send request to browser
-	ses.page = req.save(XMLNode::XMLHeader);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+	ses.page = req.save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Resources request (images and other files)
     else if( wp_com == "res" )

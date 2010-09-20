@@ -6,13 +6,13 @@
 #: qtcfg.cpp:391 qtcfg.cpp:709 qtcfg.cpp:798 qtcfg.cpp:1164 qtcfg.cpp:1176
 #: qtcfg.cpp:1367 qtcfg.cpp:1376 qtcfg.cpp:1979 qtcfg.cpp:1980 qtcfg.cpp:2484
 #: qtcfg.cpp:2746 selfwidg.cpp:302 selfwidg.cpp:590 selfwidg.cpp:596
-#: selfwidg.cpp:635 tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:82
+#: selfwidg.cpp:635 tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:84
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-02 17:29+0300\n"
+"POT-Creation-Date: 2010-09-18 15:56+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"

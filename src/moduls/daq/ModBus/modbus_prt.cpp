@@ -426,13 +426,13 @@ void TProt::cntrCmdProc( XMLNode *opt )
     {
 	TProtocol::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),0664,"root","root",2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,-1,"/node",_("Nodes")) )
+	if(ctrMkNode("area",opt,0,"/node",_("Nodes")))
 	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","n_","idSz","20");
-	if( ctrMkNode("area",opt,-1,"/rep",_("Report")) )
+	if(ctrMkNode("area",opt,1,"/rep",_("Report")))
 	{
 	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),0664,"root","DAQ",4,"tp","dec","min","0","max","10000",
 		"help",_("Zero use for report disabling"));
-	    if( prtLen() )
+	    if(prtLen())
 		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),0444,"root","DAQ",3,"tp","str","cols","90","rows","20");
 	}
 	return;

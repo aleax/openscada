@@ -1149,7 +1149,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),RWRWR_,"root","UI",3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calc period (ms)"),RWRWR_,"root","UI",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root","UI",3,"tp","str","cols","100","rows","8");
+		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root","UI",2,"tp","str","rows","10");
 	    }
 	}
 	return true;

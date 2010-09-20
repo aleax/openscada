@@ -1,3 +1,15 @@
+2010-09-20 Roman
+- DB: The subsystem's option "SYSStPref" is added for disable using the station id prefix into generic table allow.
+- DB,Security: The control interface's permitions is made unified.
+- Security: Groups selection allow is added into user-page.
+- !!:Protocol.HTTP: Auto-login support is added.
+- FIX:UI.WebCfgD, UI.WebVision: HTTP-field "Content-Type" generation is fixed for charset.
+    For now charset is correct for all supported browsers.
+- FIX:UI.WebVision: Image update for primitive "Diagram" is made adaptive for real images loading, use for prevent to server overload.
+    Result for event onmouseup process set to "true" for images suffice prevent into browser Konqueror.
+- !!:UI.WebVision: Sessions access and control is adapted for sender use.
+
+
 2010-09-13 Roman
 - !!!!:SYS: OpenSCADA core library version is rised to 1:0:0
 - !!!!:SYS: OpenSCADA core librarie's code is moved to namespace OSCADA
@@ -46,6 +58,7 @@
 - FIX:DB:PostgreSQL: The default values for the transaction flags are added to the constructor of the object.
 - !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests. 
     Several flags to limit the transacton life are added.
+
 
 2010-09-02 Roman
 - !!:DemoDB: Demo DB is updated for:

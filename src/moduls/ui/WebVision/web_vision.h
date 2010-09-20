@@ -83,7 +83,7 @@ class TWEB: public TUI
 	void setSessTime( time_t vl )			{ mTSess = vl; modif(); }
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
-	//- VCA sessions -
+	//> VCA sessions
 	void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
 	bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
 	void vcaSesAdd( const string &name, bool isCreate );
@@ -93,7 +93,7 @@ class TWEB: public TUI
 	void modStart( );
 	void modStop( );
 
-	//- Web process methods -
+	//> Web process methods
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 	void getAbout( SSess &ses );
 	void getAuth( SSess &ses );
@@ -124,7 +124,7 @@ class TWEB: public TUI
 	//Methods
 	static void TaskSessCheck( union sigval obj );	//Sessions check task
 
-	//- Post message dialog -
+	//> Post message dialog
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 
 	//Attributes

@@ -375,7 +375,10 @@ class VCASess : public TCntrNode
 	VCASess( const string &iid, bool isCreate );
 
 	const string &id( )		{ return m_id; }
+	const string &sender( )		{ return mSender; }
 	time_t lstReq( )		{ return lst_ses_req; }
+
+	void senderSet(const string &val)	{ mSender = val; }
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -412,10 +415,11 @@ class VCASess : public TCntrNode
 	void postDisable( int flag );
 
 	//Attributes
-	const string	m_id;
-	int	id_objs;			//Primitive object's container identifier
-	time_t	lst_ses_req;
-	bool	mIsCreate;
+	const string		m_id;
+	int			id_objs;	//Primitive object's container identifier
+	time_t			lst_ses_req;
+	string			mSender;
+	bool			mIsCreate;
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 
 	Res	nRes;

@@ -272,6 +272,7 @@ class TBDS : public TSubSYS, public TElem
 	//Private attributes
 	TElem	el_db;
 	deque<TConfig*> genDBCache;
+	bool	mSYSStPref;
 
 	Res	nRes;
 };

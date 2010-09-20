@@ -1157,6 +1157,8 @@ function makeEl( pgBr, inclPg )
       return false;
     }
     var dgrObj = anchObj.childNodes[0];
+    dgrObj.isLoad = false;
+    dgrObj.onload = function( )	{ this.isLoad = true; }
     dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
     this.perUpdtEn( this.isEnabled() && parseInt(this.attrs['trcPer']) );
   }
@@ -1211,7 +1213,7 @@ function makeEl( pgBr, inclPg )
 	    if( !parseInt(this.attrs['headVis']) ) colCfg += "<th/>";
 	    else colCfg += "<th ind='"+clm[c_off]+"' "+
 			   "style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
-						    (clm[c_off]=='tm') ? '###Time###' :
+						    (clm[c_off]=='tm') ? '###Date and time###' :
 						    (clm[c_off]=='utm') ? '###mcsec###' :
 						    (clm[c_off]=='lev') ? '###Level###' :
 						    (clm[c_off]=='cat') ? '###Category###' :
@@ -1467,7 +1469,7 @@ function makeEl( pgBr, inclPg )
     {
       for( var i_on = 0; i_on < this.wdgLnk.mouseup.length; i_on++ )
 	this.wdgLnk.mouseup[i_on](e,this);
-      return false;
+      return true;
     }
 
   //> Child widgets process
@@ -1505,7 +1507,11 @@ function perUpdt( )
   else if( this.attrs['root'] == 'Diagram' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 )
   {
     var dgrObj = this.place.childNodes[0].childNodes[0];
-    if( dgrObj ) dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
+    if( dgrObj && dgrObj.isLoad )
+    {
+      dgrObj.isLoad = false;
+      dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
+    }
   }
   else if( this.attrs['root'] == 'Protocol' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 ) this.loadData();
   else if( this.attrs['root'] == 'Document' )

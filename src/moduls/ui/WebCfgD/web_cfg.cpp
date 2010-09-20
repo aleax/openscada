@@ -154,7 +154,7 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 	    "Server: "+PACKAGE_STRING+"\r\n"
 	    "Accept-Ranges: bytes\r\n"
 	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\r\n"
+	    "Content-Type: "+cnt_tp+"; charset="+Mess->charset()+"\r\n"
 	    "Cache-Control: no-cache\r\n"+addattr+"\r\n";
 }
 
@@ -317,7 +317,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		    mod->cntrIfCmd(req,ses.user);
 		}
 		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
 	    else if( wp_com == "info" )
@@ -325,7 +325,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		XMLNode req("info"); req.setAttr("path",ses.url);
 		mod->cntrIfCmd(req,ses.user);
 		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
 	    else if( wp_com == "modify" )
@@ -333,7 +333,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		XMLNode req("modify"); req.setAttr("path",ses.url+"/%2fobj");
 		mod->cntrIfCmd(req,ses.user);
 		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
 	    else if( wp_com == "get" )
@@ -341,7 +341,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		XMLNode req("get"); req.setAttr("path",ses.url);
 		mod->cntrIfCmd(req,ses.user);
 		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
 	    else if( wp_com == "img" )
@@ -411,7 +411,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save();
-	page = httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     else if( wp_com == "img" )
     {
@@ -535,7 +535,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser,
     const char *c_file = "filename=\"";
 
     for( int i_vr = 0; i_vr < vars.size(); i_vr++ )
-	if( vars[i_vr].substr(0,vars[i_vr].find(":",0)) == "Content-Type" )
+	if(vars[i_vr].find("Content-Type:") == 0)
 	{
 	    int pos = vars[i_vr].find(c_bound,0)+strlen(c_bound);
 	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);

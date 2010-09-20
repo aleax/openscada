@@ -883,7 +883,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
 			continue;
 		}
-		opt->childAdd("el")->setAttr("user",sesAt(lst[i_a]).at().user())->setText(lst[i_a]);
+		opt->childAdd("el")->setAttr("user",sesAt(lst[i_a]).at().user())->
+				     setAttr("proj",sesAt(lst[i_a]).at().projNm())->
+				     setText(lst[i_a]);
 	    }
 	}
 	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )

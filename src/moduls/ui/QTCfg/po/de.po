@@ -7,19 +7,20 @@
 #: qtcfg.cpp:391 qtcfg.cpp:709 qtcfg.cpp:798 qtcfg.cpp:1164 qtcfg.cpp:1176
 #: qtcfg.cpp:1367 qtcfg.cpp:1376 qtcfg.cpp:1979 qtcfg.cpp:1980 qtcfg.cpp:2484
 #: qtcfg.cpp:2746 selfwidg.cpp:302 selfwidg.cpp:590 selfwidg.cpp:596
-#: selfwidg.cpp:635 tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:82
+#: selfwidg.cpp:635 tuimod.cpp:55 tuimod.cpp:271 qtcfg.h:84
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 1.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-02 17:29+0300\n"
+"POT-Creation-Date: 2010-09-18 15:56+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -569,14 +570,13 @@ msgid ":/images/combar.png"
 msgstr ""
 
 #: qtcfg.cpp:392
-#, fuzzy
 msgid "This button for call status bar history."
-msgstr "Schaltfläche für das Speichern der Elemente in die Datenbank"
+msgstr ""
+"Diese Schaltfläche ist für den Aufruf der Geschichte der Zeile des Statuts"
 
 #: qtcfg.cpp:393
-#, fuzzy
 msgid "Button for call status bar history."
-msgstr "Schaltfläche für das Speichern der Elemente in die Datenbank"
+msgstr "Schaltfläche für den Aufruf der Geschichte der Zeile des Statuts"
 
 #: qtcfg.cpp:399
 msgid "Ready"
@@ -847,7 +847,6 @@ msgid "Version"
 msgstr "Version"
 
 #: qtcfg.cpp:856
-#, fuzzy
 msgid "Description"
 msgstr "Beschreib"
 

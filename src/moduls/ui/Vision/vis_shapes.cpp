@@ -2727,7 +2727,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    if( shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString() == clm.c_str() )
 		break;
 	if( clm == "pos" )	shD->addrWdg->verticalHeader()->setVisible(true);
-	else if( clm == "tm" )	{ clmNm = _("Time"); c_tm = ncl; }
+	else if( clm == "tm" )	{ clmNm = _("Date and time"); c_tm = ncl; }
 	else if( clm == "utm" )	{ clmNm = _("mcsec"); c_tmu = ncl; }
 	else if( clm == "lev" )	{ clmNm = _("Level"); c_lev = ncl; }
 	else if( clm == "cat" )	{ clmNm = _("Category"); c_cat = ncl; }

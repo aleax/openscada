@@ -1440,7 +1440,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if( ctrMkNode("area",opt,-1,"/subs",_("Subsystems")) )
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),0444,"root","root",3,"idm","1","tp","br","br_pref","sub_");
-	if( ctrMkNode("area",opt,-1,"/tasks",_("Tasks")) )
+	if( ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___) )
 	    if( ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",2,"key","path",
 		"help",!multCPU()?"":_("For CPU set use processors numbers string separated by symbol ':'.\n"
 				       "CPU numbers started from 0.")) )
@@ -1459,8 +1459,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/cntr/cntr/id","ID",R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/cntr/cntr/vl",_("Value"),R_R___,"root","root",1,"tp","real");
 	    }
-	if( ctrMkNode("area",opt,-1,"/hlp",_("Help")) )
-	    ctrMkNode("fld",opt,-1,"/hlp/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	if( ctrMkNode("area",opt,-1,"/hlp",_("Help"),R_R___) )
+	    ctrMkNode("fld",opt,-1,"/hlp/g_help",_("Options help"),R_R___,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
 

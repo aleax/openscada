@@ -118,12 +118,27 @@ void TProt::load_( )
     } while(next_opt != -1);
 
     //> Load parameters from config file
-    mTAuth = atoi( TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(mTAuth)).c_str() );
+    mTAuth = atoi(TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(mTAuth)).c_str());
+    //>> Load auto-login config
+    ResAlloc res(nodeRes(),true);
+    XMLNode aLogNd("aLog");
+    try
+    {
+	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
+	for(int i_n = 0; i_n < aLogNd.childSize(); i_n++)
+	    mALog.push_back(SAutoLogin(aLogNd.childGet(i_n)->attr("addrs"),aLogNd.childGet(i_n)->attr("user")));
+    }catch(...){ }
 }
 
 void TProt::save_( )
 {
     TBDS::genDBSet(nodePath()+"AuthTime",TSYS::int2str(mTAuth));
+    //>> Save auto-login config
+    ResAlloc res(nodeRes(),false);
+    XMLNode aLogNd("aLog");
+    for(int i_n = 0; i_n < mALog.size(); i_n++)
+	aLogNd.childAdd("it")->setAttr("addrs",mALog[i_n].addrs)->setAttr("user",mALog[i_n].user);
+    TBDS::genDBSet(nodePath()+"AutoLogin",aLogNd.save());
 }
 
 TProtocolIn *TProt::in_open( const string &name )
@@ -170,6 +185,17 @@ string TProt::sesCheck( int sid )
 	authEl->second.tAuth = cur_tm;
 	return authEl->second.name;
     }
+    return "";
+}
+
+string TProt::autoLogGet( const string &sender )
+{
+    string addr;
+    //printf("TEST 00: '%s'\n",sender.c_str());
+    ResAlloc res(nodeRes(),false);
+    for(int i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
+	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )
+	    if(TMess::chkPattern(sender,addr)) return mALog[i_a].user;
     return "";
 }
 
@@ -288,8 +314,16 @@ void TProt::cntrCmdProc( XMLNode *opt )
     {
 	TProtocol::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm",_("Protocol")))
-	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),0660,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	{
+	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root","Protocol",1,"tp","dec");
+	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root","Protocol",2,"s_com","add,del,ins",
+		"help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
+	    {
+		ctrMkNode("list",opt,-1,"/prm/alog/addrs",_("Address"),RWRWR_,"root","Protocol",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/alog/user",_("User"),RWRWR_,"root","Protocol",3,"tp","str","dest","select","select","/prm/usr_ls");
+	    }
+	}
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Module help"),R_R_R_,"root","Protocol",3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -297,10 +331,48 @@ void TProt::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if( a_path == "/prm/lf_tm" )
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(authTime()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setAuthTime( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD))	opt->setText( TSYS::int2str(authTime()) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR))	setAuthTime( atoi(opt->text().c_str()) );
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
+    else if( a_path == "/prm/alog" )
+    {
+	int idrow = atoi(opt->attr("row").c_str());
+	string idcol = opt->attr("col");
+	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD) )
+	{
+	    XMLNode *n_addrs	= ctrMkNode("list",opt,-1,"/prm/alog/addrs","");
+	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/alog/user","");
+
+	    ResAlloc res(nodeRes(),false);
+	    for(int i_a = 0; i_a < mALog.size(); i_a++)
+	    {
+		if(n_addrs)	n_addrs->childAdd("el")->setText(mALog[i_a].addrs);
+		if(n_user)	n_user->childAdd("el")->setText(mALog[i_a].user);
+	    }
+	    return;
+	}
+	ResAlloc res(nodeRes(),true);
+	modif();
+	if(ctrChkNode(opt,"add",RWRWR_,"root","Protocol",SEC_WR))	mALog.push_back(SAutoLogin());
+	else if(ctrChkNode(opt,"ins",RWRWR_,"root","Protocol",SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	    mALog.insert(mALog.begin()+idrow, SAutoLogin());
+	else if(ctrChkNode(opt,"del",RWRWR_,"root","Protocol",SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	    mALog.erase(mALog.begin()+idrow);
+	else if(ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	{
+	    if( idcol == "addrs" ) mALog[idrow].addrs = opt->text();
+	    if( idcol == "user" ) mALog[idrow].user = opt->text();
+	}
+    }
+    else if(a_path == "/prm/usr_ls" && ctrChkNode(opt))
+    {
+	vector<string> ls;
+	SYS->security().at().usrList(ls);
+	for(int i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(ls[i_l]);
+    }
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",RWRWR_,"root","Protocol"))
+	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
 }
 
@@ -320,11 +392,11 @@ TProtIn::~TProtIn()
 
 string TProtIn::httpHead( const string &rcode, int cln, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\r\n"
-	    "Server: "+PACKAGE_STRING+"\r\n"
-	    "Accept-Ranges: bytes\r\n"
-	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Content-Type: text/html;charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+    return "HTTP/1.0 "+rcode+"\r\n"
+	   "Server: "+PACKAGE_STRING+"\r\n"
+	   "Accept-Ranges: bytes\r\n"
+	   "Content-Length: "+TSYS::int2str(cln)+"\r\n"
+	   "Content-Type: text/html;charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
@@ -355,9 +427,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	req = TSYS::strSepParse(request,0,'\n',&pos);
 	if( !req.empty() ) req.resize(req.size()-1);
 	string method   = TSYS::strSepParse(req,0,' ');
-	string url      = TSYS::strSepParse(req,1,' ');
+	string urls     = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
-	string user;
+	string user, url;
 
 	//> Parse parameters
 	int c_lng=-1;
@@ -405,9 +477,9 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	}
 
 	int url_pos = 0;
-	string name_mod = TSYS::pathLev(url,0,false,&url_pos);
-	while( url_pos < url.size() && url[url_pos] == '/' ) url_pos++;
-	url = "/"+url.substr(url_pos);
+	string name_mod = TSYS::pathLev(urls,0,false,&url_pos);
+	while( url_pos < urls.size() && urls[url_pos] == '/' ) url_pos++;
+	url = "/"+urls.substr(url_pos);
 
 	//> Process internal commands
 	if( name_mod == "login" )
@@ -421,10 +493,10 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		if( cnt.find("auth_enter") != cnt.end() )
 		{
 		    string pass;
-		    if( (cntEl=cnt.find("user")) != cnt.end() )	user = cntEl->second;
-		    if( (cntEl=cnt.find("pass")) != cnt.end() )	pass = cntEl->second;
+		    if((cntEl=cnt.find("user")) != cnt.end())	user = cntEl->second;
+		    if((cntEl=cnt.find("pass")) != cnt.end())	pass = cntEl->second;
 
-		    if( SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass) )
+		    if(mod->autoLogGet(sender) == user || (SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
 			answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>")+
 			    "<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
@@ -449,12 +521,23 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	try
 	{
 	    AutoHD<TModule> wwwmod = SYS->ui().at().modAt(name_mod);
-	    if( wwwmod.at().modInfo("SubType") != "WWW" ) throw TError(nodePath().c_str(),"Find no one WWW subtype module!");
-	    if( atoi(wwwmod.at().modInfo("Auth").c_str()) && user.empty() )
+	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),"Find no one WWW subtype module!");
+	    if(atoi(wwwmod.at().modInfo("Auth").c_str()) && user.empty())
 	    {
-		answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>")+
-		    "<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n"+pgTail();
-		answer = httpHead("200 OK",answer.size())+answer;
+		//>> Check for auto-login
+		user = mod->autoLogGet(sender);
+		if(!user.empty())
+		{
+		    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>")+
+			"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
+		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\r\n")+answer;
+		}
+		else
+		{
+		    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>")+
+			"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n"+pgTail();
+		    answer = httpHead("200 OK",answer.size())+answer;
+		}
 		return m_nofull||KeepAlive;
 	    }
 
@@ -493,7 +576,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		answer = httpHead("501 Method Not Implemented",answer.size())+answer;
 	    }
 	}
-	catch(TError err){ answer = getIndex(user); }
+	catch(TError err){ answer = getIndex(user,sender); }
     }
 
     return m_nofull||KeepAlive;
@@ -511,7 +594,7 @@ string TProtIn::pgHead( string head_els )
 	"<title>"+PACKAGE_NAME+"!"+"</title>\n"
 	"<style type='text/css'>\n"
 	"  hr { width: 95%; }\n"
-	"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
+	"  p { margin: 0px; text-indent: 15px; margin-bottom: 5px; }\n"
 	"  body { background-color: #818181; margin: 0px; }\n"
 	"  h1.head { text-align: center; color: #ffff00; }\n"
 	"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
@@ -534,7 +617,7 @@ string TProtIn::pgTail()
 	"</html>\n";
 }
 
-string TProtIn::getIndex( const string &user )
+string TProtIn::getIndex(const string &user, const string &sender)
 {
     string answer = pgHead()+"<center><table class='work' width='50%'>\n"
 	"<tr><th>"+_("Login")+"</th></tr>"
@@ -542,12 +625,17 @@ string TProtIn::getIndex( const string &user )
 	"<p>"+_("Welcome to Web-interfaces of OpenSCADA system.")+"</p>";
     if( !user.empty() )
 	answer = answer +
-	    "<p style='color: green;'>"+TSYS::strMess(_("You are login as <b>'%s'</b>."),user.c_str())+"</p>"
+	    "<p style='color: green;'>"+TSYS::strMess(_("You are login as \"<b>%s</b>\"."),user.c_str())+"</p>"
 	    "<p>"+_("Select need Web-module from list below or press <a href='/logout'>here</a> for logout or <a href='/login'>here</a> for login as other user.")+"</p>";
     else
+    {
 	answer = answer +
 	    "<p style='color: #CF8122;'>"+_("You are not login now!")+"</p>"
 	    "<p>"+_("For use some modules you must be login. For login now click <a href='/login'>here</a>.")+"</p>";
+	string a_log = mod->autoLogGet(sender);
+	if(!a_log.empty())
+	    answer += "<p>"+TSYS::strMess(_("You can auto-login from user \"<b>%s</b>\" simple select module."),a_log.c_str())+"</p>";
+    }
     answer += "</td></tr>";
 
     answer = answer +

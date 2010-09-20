@@ -80,13 +80,13 @@ TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
     mod		= this;
     id_vcases	= grpAdd("ses_");
 
-    //- Reg export functions -
+    //> Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
 
-    //- Create check sessions timer -
+    //> Create check sessions timer
     struct sigevent sigev;
     memset(&sigev,0,sizeof(sigev));
     sigev.sigev_notify = SIGEV_THREAD;
@@ -95,7 +95,7 @@ TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
     sigev.sigev_notify_attributes = NULL;
     timer_create(CLOCK_REALTIME,&sigev,&chkSessTm);
 
-    //- Create named colors' container -
+    //> Create named colors' container
     colors["aliceblue"] = rgb(240, 248, 255);
     colors["antiquewhite"] = rgb(250, 235, 215);
     colors["aqua"] = rgb( 0, 255, 255);
@@ -264,7 +264,7 @@ TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
 	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n";
 
 #if 0
-    char mess[][100] = { "Time", "Level", "Category", "Message", "mcsec", "Ready" };
+    char mess[][100] = { "Date and time", "Level", "Category", "Message", "mcsec", "Ready" };
 #endif
 }
 
@@ -341,7 +341,7 @@ void TWEB::save_( )
 
 void TWEB::modStart( )
 {
-    //- Start interval timer for periodic thread creating of DB syncing -
+    //> Start interval timer for periodic thread creating of DB syncing
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_value.tv_sec = 10;
     itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
@@ -352,7 +352,7 @@ void TWEB::modStart( )
 
 void TWEB::modStop( )
 {
-    //- Stop interval timer for periodic thread creating -
+    //> Stop interval timer for periodic thread creating
     struct itimerspec itval;
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
     itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
@@ -388,7 +388,7 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 	"Accept-Ranges: bytes\r\n"
 	"Content-Length: "+TSYS::int2str(cln)+"\r\n"
 	"Connection: close\r\n"
-	"Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+	"Content-Type: "+cnt_tp+"; charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
 }
 
 string TWEB::pgHead( const string &head_els, const string &title )
@@ -446,60 +446,81 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    "<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n"
 		    "<center><table class='work'>\n";
 		//>> Get present sessions list
+		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		string self_sess;
-		if( req.childSize() )
+		for(int i_ch = 0; i_ch < req.childSize(); i_ch++)
+		{
+		    if(req.childGet(i_ch)->attr("user") != user ||
+			    (vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender))
+			continue;
+		    prjSesEls += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
+			req.childGet(i_ch)->text()+"</a></td></tr>";
+		    self_prjSess += req.childGet(i_ch)->attr("proj")+";";
+		}
+		if(!prjSesEls.empty())
 		{
 		    ses.page = ses.page+
 			"<tr><th>"+_("Connect to opened session")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
-			"<table border='0' cellspacing='3px' width='100%'>\n";
-		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-		    {
-			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
-			    req.childGet(i_ch)->text()+"</a></td></tr>";
-			if( req.childGet(i_ch)->attr("user") == user ) self_sess += req.childGet(i_ch)->text()+";";
-		    }
-		    ses.page += "</table></td></tr>\n";
+			"<table border='0' cellspacing='3px' width='100%'>\n"+
+			prjSesEls+
+			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
 		//>> Get present projects list
+		prjSesEls = "";
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		if( req.childSize() )
+		for(int i_ch = 0; i_ch < req.childSize(); i_ch++)
+		{
+		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(i_ch)->attr("id")+";") != string::npos)
+			continue;
+		    prjSesEls += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
+			req.childGet(i_ch)->text()+"</a></td></tr>";
+		}
+		if(!prjSesEls.empty())
 		{
 		    ses.page = ses.page +
 			"<tr><th>"+_("Create new session for present project")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
-			"<table border='0' cellspacing='3px' width='100%'>\n";
-		    for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
-		    {
-			if( !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_sess.find(req.childGet(i_ch)->text()+";",0) != string::npos )
-			    continue;
-			ses.page += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
-			    req.childGet(i_ch)->text()+"</a></td></tr>";
-		    }
-		    ses.page += "</table></td></tr>\n";
+			"<table border='0' cellspacing='3px' width='100%'>\n"+
+			prjSesEls+
+			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
 		ses.page += "</table></center>";
+
 		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects of VCA engine are present for user!"),TWEB::Warning);
 	    }
 	    //> New session create
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "prj_" )
 	    {
-		XMLNode req("connect");
-		req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
-		if( cntrIfCmd(req,ses.user) )
-		    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
-		else
+		string sName;
+		//>> Find for early created session for user and sender
+		XMLNode req("get");
+		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
+		cntrIfCmd(req,ses.user);
+		for(int i_ch = 0; i_ch < req.childSize(); i_ch++)
+		    if(req.childGet(i_ch)->attr("user") == user &&
+			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
+		    { sName = req.childGet(i_ch)->text(); break; }
+		if(sName.empty())
 		{
-		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/ses_"+req.attr("sess")+"/'/>")+
-			"<center>Open new session '"+req.attr("sess")+"' for project: '"+zero_lev.substr(4)+"'</center>\n<br/>";
-		    vcaSesAdd(req.attr("sess"),true);
+		    req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
+		    if(cntrIfCmd(req,ses.user))
+			messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
+		    else
+		    {
+			sName = req.attr("sess");
+			vcaSesAdd(sName,true);
+			vcaSesAt(sName).at().senderSet(sender);
+		    }
 		}
+		if(!sName.empty())
+		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/ses_"+sName+"/'/>")+
+			"<center>Go to session '"+sName+"' for project: '"+zero_lev.substr(4)+"'</center>\n<br/>";
 	    }
 	    //> Main session page data prepare
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
@@ -518,6 +539,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    if( !vcaSesPresent(sesnm) )
 		    {
 			vcaSesAdd(sesnm,false);
+			vcaSesAt(sesnm).at().senderSet(sender);
 			vcaSesAt(sesnm).at().getReq(ses);
 		    }
 		    else throw;
@@ -601,8 +623,8 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	{
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
-	    ses.page = req.save(XMLNode::XMLHeader);
-	    page = httpHead("200 OK",ses.page.size(),"text/xml; charset=UTF-8")+ses.page;
+	    ses.page = req.save();
+	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 	    return;
 	}
 
@@ -642,7 +664,7 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	TUI::cntrCmdProc(opt);
@@ -652,7 +674,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/prm/cfg/lf_tm" )
     {
@@ -670,24 +692,24 @@ int TWEB::colorParse( const string &tclr )
     size_t found = clr.find("-");
     if (found != string::npos)
     {
-        clr = tclr.substr(0,found);
-        alpha =  atoi(tclr.substr(found+1).c_str());
+	clr = tclr.substr(0,found);
+	alpha =  atoi(tclr.substr(found+1).c_str());
     }
     else alpha = 255;
 
     if( clr.size() >= 4 && clr[0] == '#' )
     {
 	int el_sz = clr.size()/3;
-        return ((int)vmin(127,(alpha/2+0.5))<<24)+
-               (strtol(clr.substr(1,el_sz).c_str(),NULL,16)<<16)+
-               (strtol(clr.substr(1+el_sz,el_sz).c_str(),NULL,16)<<8)+
+	return ((int)vmin(127,(alpha/2+0.5))<<24)+
+		(strtol(clr.substr(1,el_sz).c_str(),NULL,16)<<16)+
+		(strtol(clr.substr(1+el_sz,el_sz).c_str(),NULL,16)<<8)+
 		strtol(clr.substr(1+2*el_sz,el_sz).c_str(),NULL,16);
     }
     else if( clr.size() )
     {
 	map<string,int>::iterator iclr = colors.find(clr);
-        if( iclr != colors.end() )
-            return ((int)vmin(127,(alpha/2+0.5))<<24)+ iclr->second;
+	if( iclr != colors.end() )
+	    return ((int)vmin(127,(alpha/2+0.5))<<24)+ iclr->second;
     }
     return -1;
 }
@@ -724,7 +746,7 @@ string TWEB::trMessReplace( const string &tsrc )
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
     url(iurl), sender(isender), user(iuser), vars(ivars), content(icontent)
 {
-    //- URL parameters parse -
+    //> URL parameters parse
     int prmSep = iurl.find("?");
     if( prmSep != string::npos )
     {
@@ -739,7 +761,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	}
     }
 
-    //- Content parse -
+    //> Content parse
     int pos = 0, i_bnd;
     string boundary;
     const char *c_bound = "boundary=";
@@ -765,13 +787,13 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	string c_head = content.substr(pos, content.find(c_term,pos)-pos);
 	if( c_head.find(c_fd,0) == string::npos ) continue;
 
-	//-- Get name --
+	//>> Get name
 	i_bnd = c_head.find(c_name,0)+strlen(c_name);
 	string c_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
 	i_bnd = c_head.find(c_file,0);
 	if( i_bnd == string::npos )
 	{
-	    //--- Get value ---
+	    //>>> Get value
 	    pos += c_head.size()+(2*strlen(c_term));
 	    if(pos >= content.size()) break;
 	    string c_val  = content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos);
