@@ -8,6 +8,7 @@
 - FIX:UI.WebVision: Image update for primitive "Diagram" is made adaptive for real images loading, use for prevent to server overload.
     Result for event onmouseup process set to "true" for images suffice prevent into browser Konqueror.
 - !!:UI.WebVision: Sessions access and control is adapted for sender use.
+- !!:Transport.SSL: Get sender address support is added.
 
 
 2010-09-13 Roman

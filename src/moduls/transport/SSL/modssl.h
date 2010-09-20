@@ -50,10 +50,11 @@ class TSocketIn;
 class SSockIn
 {
     public:
-	SSockIn( TSocketIn *is, BIO *ibio ) : s(is), bio(ibio)	{ }
+	SSockIn( TSocketIn *is, BIO *ibio );
 
 	TSocketIn	*s;
 	BIO		*bio;
+	string		sender;
 };
 
 //************************************************
@@ -100,7 +101,7 @@ class TSocketIn: public TTransportIn
 	int clientReg( pthread_t thrid );
 	void clientUnreg( pthread_t thrid );
 
-	void messPut( int sock, string &request, string &answer, AutoHD<TProtocolIn> &prot_in );
+	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

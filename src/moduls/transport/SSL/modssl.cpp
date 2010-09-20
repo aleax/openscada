@@ -25,6 +25,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <arpa/inet.h>
 #include <openssl/rand.h>
 
 #include <tsys.h>
@@ -423,7 +424,7 @@ void *TSocketIn::ClTask( void *s_inf )
     int cSock = s.s->clientReg( pthread_self() );
 
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Connecting to the socket (%d)."),cSock);
+    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str() );
 #endif
 
     if( BIO_do_handshake(s.bio) <= 0 )
@@ -471,7 +472,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	req.assign(buf,rez);
 	s.s->trIn += (float)rez/1024;
 
-	s.s->messPut(cSock,req,answ,prot_in);
+	s.s->messPut(cSock,req,answ,s.sender,prot_in);
 	if( answ.size() )
 	{
 #if OSC_DEBUG >= 4
@@ -513,7 +514,7 @@ void *TSocketIn::ClTask( void *s_inf )
     pthread_exit(NULL);
 }
 
-void TSocketIn::messPut( int sock, string &request, string &answer, AutoHD<TProtocolIn> &prot_in )
+void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
 {
     AutoHD<TProtocol> proto;
     string n_pr = mod->modId()+"_"+id()+"_"+TSYS::int2str(sock);
@@ -525,7 +526,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, AutoHD<TProt
 	    if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr, workId() );
 	    prot_in = proto.at().at( n_pr );
 	}
-	if( prot_in.at().mess(request,answer,"") ) return;
+	if( prot_in.at().mess(request,answer,sender) ) return;
 	prot_in.free();
 	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
     }catch(TError err)
@@ -932,4 +933,15 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
+}
+
+//************************************************
+//* Sockets::SSockIn				 *
+//************************************************
+SSockIn::SSockIn( TSocketIn *is, BIO *ibio ) : s(is), bio(ibio)
+{
+    struct sockaddr_in	name_cl;
+    socklen_t		name_cl_len = sizeof(name_cl);
+    getpeername(BIO_get_fd(bio,NULL), (sockaddr *)&name_cl, &name_cl_len);
+    sender = inet_ntoa(name_cl.sin_addr);
 }
