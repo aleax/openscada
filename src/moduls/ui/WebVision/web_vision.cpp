@@ -66,7 +66,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : mTSess(10), chck_st(false)
+TWEB::TWEB( string name ) : mTSess(10), mSessLimit(5), chck_st(false)
 {
     mId		= MOD_ID;
     mName	= MOD_NAME;
@@ -331,12 +331,14 @@ void TWEB::load_( )
     } while(next_opt != -1);
 
     //> Load parameters from config file
-    mTSess = atoi( TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(mTSess)).c_str() );
+    setSessTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime())).c_str()));
+    setSessLimit(atoi(TBDS::genDBGet(nodePath()+"SessLimit",TSYS::int2str(sessLimit())).c_str()));
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(mTSess));
+    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime()));
+    TBDS::genDBSet(nodePath()+"SessLimit",TSYS::int2str(sessLimit()));
 }
 
 void TWEB::modStart( )
@@ -452,11 +454,16 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		cntrIfCmd(req,ses.user);
 		for(int i_ch = 0; i_ch < req.childSize(); i_ch++)
 		{
-		    if(req.childGet(i_ch)->attr("user") != user ||
-			    (vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender))
+		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
+			    (req.childGet(i_ch)->attr("user") != user ||
+			    (vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)))
 			continue;
 		    prjSesEls += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
-			req.childGet(i_ch)->text()+"</a></td></tr>";
+			req.childGet(i_ch)->text()+"</a>";
+		    if(req.childGet(i_ch)->attr("user") != user) prjSesEls += " - "+req.childGet(i_ch)->attr("user");
+		    if(vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)
+			prjSesEls += " - "+vcaSesAt(req.childGet(i_ch)->text()).at().sender();
+		    prjSesEls += "</td></tr>";
 		    self_prjSess += req.childGet(i_ch)->attr("proj")+";";
 		}
 		if(!prjSesEls.empty())
@@ -508,14 +515,21 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    { sName = req.childGet(i_ch)->text(); break; }
 		if(sName.empty())
 		{
-		    req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
-		    if(cntrIfCmd(req,ses.user))
-			messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
+		    vector<string> vcaLs;
+		    vcaSesList(vcaLs);
+		    if(vcaLs.size() >= mod->sessLimit())
+		        messPost(ses.page,nodePath(),_("Sorry, openned sessions number reach limit!"),TWEB::Warning);
 		    else
 		    {
-			sName = req.attr("sess");
-			vcaSesAdd(sName,true);
-			vcaSesAt(sName).at().senderSet(sender);
+			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
+			if(cntrIfCmd(req,ses.user))
+			    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
+			else
+			{
+			    sName = req.attr("sess");
+			    vcaSesAdd(sName,true);
+			    vcaSesAt(sName).at().senderSet(sender);
+			}
 		    }
 		}
 		if(!sName.empty())
@@ -665,23 +679,31 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),0660,"root","root",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_))
+	{
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),RWRWR_,"root","UI",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root","UI",1,"tp","dec");
+	}
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root","UI",2,"tp","str","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/lf_tm" )
+    if(a_path == "/prm/cfg/lf_tm")
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )   opt->setText( TSYS::int2str(sessTime()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )   setSessTime( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))	opt->setText(TSYS::int2str(sessTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))	setSessTime(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
+    else if(a_path == "/prm/cfg/sesLimit")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))	opt->setText(TSYS::int2str(sessLimit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))	setSessLimit(atoi(opt->text().c_str()));
+    }
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root","UI")) opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

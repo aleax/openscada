@@ -77,10 +77,12 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	time_t sessTime( )				{ return mTSess; }
-	string CSStables( )				{ return mCSStables; }
+	time_t	sessTime( )				{ return mTSess; }
+	int	sessLimit( )				{ return mSessLimit; }
+	string	CSStables( )				{ return mCSStables; }
 
 	void setSessTime( time_t vl )			{ mTSess = vl; modif(); }
+	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	//> VCA sessions
@@ -129,6 +131,7 @@ class TWEB: public TUI
 
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)
+	int		mSessLimit;			//Sessions limit
 	timer_t		chkSessTm;			//Check session's timer
 	bool		chck_st;			//Check session's status
 	int		id_vcases;			//VCA session's container identifier

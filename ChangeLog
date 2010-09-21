@@ -1,3 +1,7 @@
+2010-09-21 Roman
+- UI.WebVision: The opened sessions limit is added. Detailed all opened sessions info is added for user "root" and users into group "root".
+
+
 2010-09-20 Roman
 - DB: The subsystem's option "SYSStPref" is added for disable using the station id prefix into generic table allow.
 - DB,Security: The control interface's permitions is made unified.

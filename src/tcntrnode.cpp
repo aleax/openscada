@@ -230,7 +230,7 @@ void TCntrNode::nodeList( vector<string> &list, const string &gid )
     for( int i_gr = 0; chGrp && i_gr < chGrp->size(); i_gr++ )
 	if( gid.empty() || gid == (*chGrp)[i_gr].id )
 	{
-	    chldList( i_gr, tls );
+	    chldList(i_gr, tls);
 	    for( int i_l = 0; i_l < tls.size(); i_l++ )
 		list.push_back((*chGrp)[i_gr].id+tls[i_l]);
 	    if( !gid.empty() )	break;
@@ -345,7 +345,7 @@ TCntrNode::GrpEl &TCntrNode::grpAt( char iid )
     return (*chGrp)[iid];
 }
 
-void TCntrNode::chldList( char igr, vector<string> &list )
+void TCntrNode::chldList(char igr, vector<string> &list)
 {
     ResAlloc res(hd_res,false);
     if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
