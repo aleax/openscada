@@ -297,8 +297,8 @@ void Project::mimeDataList( vector<string> &list, const string &idb )
 
 bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb )
 {
-    bool is_file = (iid.size()>5 && iid.substr(0,5) == "file:");
-    bool is_res  = (iid.size()>4 && iid.substr(0,4) == "res:");
+    bool is_file = (iid.compare(0,5,"file:")==0);
+    bool is_res  = (iid.compare(0,4,"res:")==0);
 
     if( !is_file )
     {
@@ -326,7 +326,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 	int hd = open(filepath.c_str(),O_RDONLY);
 	if( hd == -1 )  return false;
 
-	while( len = read(hd,buf,sizeof(buf)) ) rez.append(buf,len);
+	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);
 
 	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());

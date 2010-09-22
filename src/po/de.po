@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-20 15:53+0300\n"
+"POT-Creation-Date: 2010-09-22 09:55+0300\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -7025,9 +7025,9 @@ msgid "ioFlg()"
 msgstr ""
 
 #: tfunction.h:186
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Id or IO %d error for function '%s'!"
-msgstr "%s: Fehler des Bezeichners oder IO %d!"
+msgstr "%s: Fehler des Bezeichners oder IO %d für die Funktion %s'!"
 
 #: tfunction.h:191
 msgid "ioHide()"

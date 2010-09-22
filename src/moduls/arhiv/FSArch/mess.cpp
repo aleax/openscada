@@ -453,7 +453,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    if( hd > 0 )
 	    {
 		int rsz = read(hd,buf,sizeof(buf));
-		if( rsz < sizeof(buf) )
+		if(rsz > 0 && rsz < sizeof(buf))
 		{
 		    buf[rsz] = 0;
 		    char bChars[21];
@@ -523,7 +523,7 @@ void MFileArch::attach( const string &iname, bool full )
 		string s_buf;
 
 		//>> Read full file to buffer
-		while( r_cnt = fread(buf,1,sizeof(buf),f) )
+		while(r_cnt = fread(buf,1,sizeof(buf),f))
 		    s_buf.append(buf,r_cnt);
 		fclose(f); f = NULL;
 

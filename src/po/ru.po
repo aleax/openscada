@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.6.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-20 15:53+0300\n"
+"POT-Creation-Date: 2010-09-22 08:41+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -2674,6 +2674,7 @@ msgid "_"
 msgstr ""
 
 #: tbds.cpp:458
+#, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "----------- The config file station <%s> parameters -----------\n"
@@ -2682,7 +2683,8 @@ msgid ""
 msgstr ""
 "========================= Опции подсистемы \"БД\" =========================\n"
 "-------------- Параметры станции <%s> в конфигурационном файле ------------\n"
-"SYSStPref    <1>   Использовать идентификатор станции в общей (SYS) таблице.\n"
+"SYSStPref    <1>   Использовать идентификатор станции в общей (SYS) "
+"таблице.\n"
 "\n"
 
 #: tbds.cpp:489

@@ -1,3 +1,8 @@
+2010-09-22 Roman
+- UI.QTStarter: Set to splash loading from file name depended from station ID: {StId}_splash.png.
+- FIX:SYS, Archive.FSArch, DB.DBF, UI.QTCfg, UI.VCAEngine: read() function's result checking is added for prevent crash at directory read try.
+
+
 2010-09-21 Roman
 - UI.WebVision: The opened sessions limit is added. Detailed all opened sessions info is added for user "root" and users into group "root".
 

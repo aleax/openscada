@@ -498,16 +498,21 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	//> Load from file
 	if( prms.size() >= 2 && prms[1].getB() )
 	{
+	    string s_buf;
 	    int hd = open(prms[0].getS().c_str(),O_RDONLY);
 	    if( hd < 0 ) return TSYS::strMess(_("2:Open file <%s> error: %s"),prms[0].getS().c_str(),strerror(errno));
 	    int cf_sz = lseek(hd,0,SEEK_END);
-	    lseek(hd,0,SEEK_SET);
-	    char *buf = (char *)malloc(cf_sz+1);
-	    read(hd,buf,cf_sz);
-	    buf[cf_sz] = 0;
+	    if(cf_sz > 0)
+	    {
+		lseek(hd,0,SEEK_SET);
+		char *buf = (char *)malloc(cf_sz+1);
+		read(hd,buf,cf_sz);
+		buf[cf_sz] = 0;
+		s_buf = buf;
+		free(buf);
+	    }
 	    close(hd);
-	    string s_buf = buf;
-	    free(buf);
+
 	    try{ nd.load(s_buf); }
 	    catch( TError err ) { return "1:"+err.mess; }
 	}

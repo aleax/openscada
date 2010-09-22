@@ -116,8 +116,7 @@ string TUIS::icoGet(const string &inm, string *tp )
     if( hd != -1 )
     {
 	if( tp ) *tp = types[i_t];
-	while( len = read(hd,buf,sizeof(buf)) )
-	    rez.append(buf,len);
+	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);
     }
 

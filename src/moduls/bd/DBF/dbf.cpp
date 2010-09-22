@@ -75,7 +75,7 @@ int TBasaDBF::LoadFile( char *Name )
     off_t f_len = lseek( hd, 0, SEEK_END );
     lseek( hd, 0, SEEK_SET );
     read( hd, &db_head_temp, sizeof( db_head ) );	// read of dbf-file header
-    if( f_len != ( db_head_temp.len_head + ( db_head_temp.len_rec * db_head_temp.numb_rec ) + 1 ) )
+    if( f_len <= 0 || f_len != ( db_head_temp.len_head + ( db_head_temp.len_rec * db_head_temp.numb_rec ) + 1 ) )
     {
 	close( hd );
 	return -1;

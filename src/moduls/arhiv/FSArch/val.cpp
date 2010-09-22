@@ -118,7 +118,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	{
 	    char ibuf[80];
 	    int rsz = read(hd,ibuf,sizeof(ibuf));
-	    if( rsz < sizeof(ibuf) )
+	    if(rsz > 0 && rsz < sizeof(ibuf))
 	    {
 		ibuf[rsz] = 0;
 		long long tBeg, tEnd, tPer;
@@ -162,10 +162,9 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     if( hd <= 0 )   return false;
     //>> Read Header
     VFileArch::FHead head;
-    read(hd,&head,sizeof(VFileArch::FHead));
+    int r_len = read(hd,&head,sizeof(VFileArch::FHead));
     close(hd);
-    if( VFileArch::afl_id != head.f_tp || head.term != 0x55 )
-	return false;
+    if( r_len < sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55 ) return false;
     //>> Check to archive present
     if( archive )	{ strncpy(buf,head.archive,20); *archive = buf; }
     if( abeg )		*abeg = head.beg;

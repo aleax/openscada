@@ -274,14 +274,19 @@ bool TSYS::cfgFileLoad()
     if( hd < 0 ) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
+	string s_buf;
 	int cf_sz = lseek(hd,0,SEEK_END);
-	lseek(hd,0,SEEK_SET);
-	char *buf = (char *)malloc(cf_sz+1);
-	read(hd,buf,cf_sz);
-	buf[cf_sz] = 0;
+	if(cf_sz > 0)
+	{
+	    lseek(hd,0,SEEK_SET);
+	    char *buf = (char *)malloc(cf_sz+1);
+	    read(hd,buf,cf_sz);
+	    buf[cf_sz] = 0;
+	    s_buf = buf;
+	    free(buf);
+	}
 	close(hd);
-	string s_buf = buf;
-	free(buf);
+
 	try
 	{
 	    ResAlloc res(nodeRes(),true);
