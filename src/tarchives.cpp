@@ -235,7 +235,7 @@ void TArchiveS::save_( )
 {
     vector<string> t_lst, o_lst;
 
-    //- Save parameters -
+    //> Save parameters
     TBDS::genDBSet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen()));
     TBDS::genDBSet(nodePath()+"MessPeriod",TSYS::int2str(messPeriod()));
     TBDS::genDBSet(nodePath()+"ValPeriod",TSYS::int2str(valPeriod()));

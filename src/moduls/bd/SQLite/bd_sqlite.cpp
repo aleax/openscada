@@ -255,8 +255,10 @@ void MBD::cntrCmdProc( XMLNode *opt )
 		    "tp","str","help",
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
-		      "  FileDBPath - full path to DB file (./oscada/Main.db)."));
-	if( reqCnt )
+		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
+		      "               Use empty path for a private, temporary on-disk database create.\n"
+		      "               Use \":memory:\" for a private, temporary in-memory database create."));
+	if(reqCnt)
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),0660);
 	return;
     }

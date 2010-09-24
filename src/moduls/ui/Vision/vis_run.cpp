@@ -738,7 +738,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     QApplication::processEvents();
     if( master_pg )
     {
-	if( oldMenuVis != menuBar()->isVisible() )
+	if( oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) )
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();

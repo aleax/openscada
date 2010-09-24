@@ -1,3 +1,9 @@
+2010-09-24 Roman
+- FIX:Security: Groups save on user saving is fixed.
+- DB.SQLite: Specific DB addres' value description is added.
+- FIX:UI.Vision: Master page scale is excluded for no maximizwd or full-screen run-window.
+
+
 2010-09-22 Roman
 - UI.QTStarter: Set to splash loading from file name depended from station ID: {StId}_splash.png.
 - FIX:SYS, Archive.FSArch, DB.DBF, UI.QTCfg, UI.VCAEngine: read() function's result checking is added for prevent crash at directory read try.

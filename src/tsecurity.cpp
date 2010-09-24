@@ -351,8 +351,7 @@ void TUser::save_( )
     vector<string> ls;
     owner().grpList(ls);
     for(int i_g = 0; i_g < ls.size(); i_g++)
-	if( owner().grpAt(ls[i_g]).at().user(name()) )
-	    owner().grpAt(ls[i_g]).at().save();
+	owner().grpAt(ls[i_g]).at().save();
 }
 
 void TUser::cntrCmdProc( XMLNode *opt )

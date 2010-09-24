@@ -119,6 +119,10 @@ void Widget::postEnable( int flag )
 	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
+	/*attrAdd( new TFld("owner",_("Owner"),TFld::String,Attr::Generic,"","root:UI") );
+	attrAdd( new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
+	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
+	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")) );*/
 	attrAdd( new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","1") );
 	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
 	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
@@ -1395,7 +1399,9 @@ void Attr::setFld( TFld *fld, bool inher )
 		m_val.s_val    = new ResString();
 		m_val.s_val->setVal(fld->def());
 		break;
-	    case TFld::Integer:	m_val.i_val = atoi(fld->def().c_str());	break;
+	    case TFld::Integer:
+		m_val.i_val = strtol(fld->def().c_str(),NULL,(fld->flg()&TFld::HexDec)?16:((fld->flg()&TFld::OctDec)?8:10));
+		break;
 	    case TFld::Real:	m_val.r_val = atof(fld->def().c_str());	break;
 	    case TFld::Boolean:	m_val.b_val = atoi(fld->def().c_str());	break;
 	}
