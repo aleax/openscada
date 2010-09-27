@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 # Roman Savochenko <rom_as@fromru.com>, 2006-2010.
 #
-#: libwidg.cpp:80 libwidg.cpp:149 libwidg.cpp:293 libwidg.cpp:294
-#: libwidg.cpp:383 libwidg.cpp:384 libwidg.cpp:385 libwidg.cpp:399
-#: libwidg.cpp:419 libwidg.cpp:492 libwidg.cpp:525 libwidg.cpp:565
-#: libwidg.cpp:612 libwidg.cpp:623 libwidg.cpp:640 libwidg.cpp:655
-#: libwidg.cpp:669 libwidg.cpp:676 libwidg.cpp:796 libwidg.cpp:847
-#: libwidg.cpp:853 libwidg.cpp:859 libwidg.cpp:974 origwidg.cpp:51
+#: libwidg.cpp:80 libwidg.cpp:149 libwidg.cpp:294 libwidg.cpp:295
+#: libwidg.cpp:384 libwidg.cpp:385 libwidg.cpp:386 libwidg.cpp:400
+#: libwidg.cpp:420 libwidg.cpp:493 libwidg.cpp:526 libwidg.cpp:566
+#: libwidg.cpp:613 libwidg.cpp:624 libwidg.cpp:641 libwidg.cpp:656
+#: libwidg.cpp:670 libwidg.cpp:677 libwidg.cpp:797 libwidg.cpp:848
+#: libwidg.cpp:854 libwidg.cpp:860 libwidg.cpp:975 origwidg.cpp:51
 #: origwidg.cpp:82 origwidg.cpp:142 origwidg.cpp:143 origwidg.cpp:144
 #: origwidg.cpp:145 origwidg.cpp:146 origwidg.cpp:147 origwidg.cpp:148
 #: origwidg.cpp:149 origwidg.cpp:150 origwidg.cpp:200 origwidg.cpp:202
@@ -50,42 +50,45 @@
 #: project.cpp:945 project.cpp:967 project.cpp:1006 project.cpp:1016
 #: project.cpp:1036 project.cpp:1053 project.cpp:1068 project.cpp:1082
 #: project.cpp:1089 project.cpp:1218 project.cpp:1342 project.cpp:1395
-#: project.cpp:1401 project.cpp:1407 project.cpp:1528 session.cpp:145
-#: session.cpp:176 session.cpp:282 session.cpp:417 session.cpp:462
-#: session.cpp:467 session.cpp:496 session.cpp:554 session.cpp:555
-#: session.cpp:568 session.cpp:570 session.cpp:670 session.cpp:671
-#: session.cpp:672 session.cpp:673 session.cpp:674 session.cpp:675
-#: session.cpp:676 session.cpp:837 session.cpp:869 session.cpp:995
-#: session.cpp:1134 session.cpp:1157 session.cpp:1163 session.cpp:1164
-#: session.cpp:1167 session.cpp:1217 session.cpp:1247 session.cpp:1253
-#: session.cpp:1309 session.cpp:1314 session.cpp:1576 session.cpp:1685
-#: session.cpp:1694 session.cpp:1720 vcaengine.cpp:53 vcaengine.cpp:300
-#: vcaengine.cpp:303 vcaengine.cpp:308 vcaengine.cpp:311 vcaengine.cpp:345
-#: vcaengine.cpp:348 vcaengine.cpp:353 vcaengine.cpp:356 vcaengine.cpp:518
-#: vcaengine.cpp:522 vcaengine.cpp:534 vcaengine.cpp:616 vcaengine.cpp:793
-#: widget.cpp:105 widget.cpp:122 widget.cpp:125 widget.cpp:126 widget.cpp:127
-#: widget.cpp:128 widget.cpp:129 widget.cpp:130 widget.cpp:131 widget.cpp:132
-#: widget.cpp:133 widget.cpp:134 widget.cpp:135 widget.cpp:136 widget.cpp:137
-#: widget.cpp:154 widget.cpp:356 widget.cpp:357 widget.cpp:402 widget.cpp:409
-#: widget.cpp:442 widget.cpp:635 widget.cpp:638 widget.cpp:640 widget.cpp:647
-#: widget.cpp:649 widget.cpp:746 widget.cpp:793 widget.cpp:965 widget.cpp:976
-#: widget.cpp:1053 widget.cpp:1190 widget.cpp:1191 widget.cpp:1192
-#: widget.cpp:1193 widget.cpp:1194 widget.cpp:1195 widget.cpp:1196
-#: widget.cpp:1274 widget.cpp:1320 widget.cpp:1619 libwidg.h:68 libwidg.h:69
-#: libwidg.h:70 libwidg.h:71 libwidg.h:77 libwidg.h:112 libwidg.h:147
-#: libwidg.h:182 libwidg.h:211 project.h:87 project.h:93 project.h:94
-#: project.h:95 project.h:96 project.h:106 project.h:163 project.h:206
-#: project.h:214 project.h:256 project.h:287 session.h:45 session.h:81
-#: session.h:98 session.h:120 session.h:215 session.h:273 vcaengine.h:72
-#: vcaengine.h:79 vcaengine.h:86 vcaFuncs.h:56 vcaFuncs.h:187 vcaFuncs.h:235
-#: widget.h:142 widget.h:151 widget.h:157 widget.h:158 widget.h:193
-#: widget.h:194 widget.h:212
+#: project.cpp:1401 project.cpp:1407 project.cpp:1528 session.cpp:153
+#: session.cpp:184 session.cpp:290 session.cpp:425 session.cpp:472
+#: session.cpp:481 session.cpp:510 session.cpp:568 session.cpp:569
+#: session.cpp:582 session.cpp:584 session.cpp:684 session.cpp:685
+#: session.cpp:686 session.cpp:687 session.cpp:688 session.cpp:689
+#: session.cpp:690 session.cpp:851 session.cpp:883 session.cpp:1009
+#: session.cpp:1148 session.cpp:1171 session.cpp:1177 session.cpp:1178
+#: session.cpp:1181 session.cpp:1231 session.cpp:1261 session.cpp:1267
+#: session.cpp:1323 session.cpp:1328 session.cpp:1471 session.cpp:1594
+#: session.cpp:1631 session.cpp:1700 session.cpp:1709 session.cpp:1735
+#: session.cpp:1874 vcaengine.cpp:53 vcaengine.cpp:316 vcaengine.cpp:319
+#: vcaengine.cpp:324 vcaengine.cpp:327 vcaengine.cpp:361 vcaengine.cpp:364
+#: vcaengine.cpp:369 vcaengine.cpp:372 vcaengine.cpp:555 vcaengine.cpp:559
+#: vcaengine.cpp:571 vcaengine.cpp:653 vcaengine.cpp:830 vcaengine.cpp:947
+#: vcaengine.cpp:948 vcaengine.cpp:949 vcaengine.cpp:962 widget.cpp:124
+#: widget.cpp:141 widget.cpp:142 widget.cpp:145 widget.cpp:148 widget.cpp:149
+#: widget.cpp:150 widget.cpp:151 widget.cpp:152 widget.cpp:153 widget.cpp:154
+#: widget.cpp:155 widget.cpp:156 widget.cpp:157 widget.cpp:158 widget.cpp:159
+#: widget.cpp:160 widget.cpp:177 widget.cpp:415 widget.cpp:416 widget.cpp:461
+#: widget.cpp:468 widget.cpp:501 widget.cpp:516 widget.cpp:762 widget.cpp:765
+#: widget.cpp:767 widget.cpp:774 widget.cpp:776 widget.cpp:873 widget.cpp:920
+#: widget.cpp:941 widget.cpp:1092 widget.cpp:1103 widget.cpp:1180
+#: widget.cpp:1317 widget.cpp:1318 widget.cpp:1319 widget.cpp:1320
+#: widget.cpp:1321 widget.cpp:1322 widget.cpp:1323 widget.cpp:1401
+#: widget.cpp:1447 widget.cpp:1746 libwidg.h:68 libwidg.h:69 libwidg.h:70
+#: libwidg.h:71 libwidg.h:77 libwidg.h:112 libwidg.h:147 libwidg.h:182
+#: libwidg.h:211 project.h:87 project.h:93 project.h:94 project.h:95
+#: project.h:96 project.h:106 project.h:163 project.h:206 project.h:214
+#: project.h:256 project.h:287 session.h:45 session.h:81 session.h:98
+#: session.h:120 session.h:215 session.h:273 vcaengine.h:74 vcaengine.h:81
+#: vcaengine.h:88 vcaFuncs.h:56 vcaFuncs.h:187 vcaFuncs.h:235 widget.h:148
+#: widget.h:157 widget.h:163 widget.h:164 widget.h:199 widget.h:200
+#: widget.h:218
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 0.9.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-20 16:26+0300\n"
+"POT-Creation-Date: 2010-09-26 16:19+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -93,25 +96,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #: libwidg.cpp:37 libwidg.cpp:148 libwidg.cpp:202 libwidg.cpp:218
-#: libwidg.cpp:252 libwidg.cpp:264 libwidg.cpp:441 libwidg.cpp:633
-#: libwidg.cpp:691 libwidg.cpp:758 libwidg.cpp:929 libwidg.cpp:935
+#: libwidg.cpp:253 libwidg.cpp:265 libwidg.cpp:442 libwidg.cpp:634
+#: libwidg.cpp:692 libwidg.cpp:759 libwidg.cpp:930 libwidg.cpp:936
 #: origwidg.cpp:921 origwidg.cpp:927 origwidg.cpp:964 origwidg.cpp:979
 #: project.cpp:37 project.cpp:182 project.cpp:202 project.cpp:236
 #: project.cpp:246 project.cpp:295 project.cpp:311 project.cpp:344
 #: project.cpp:356 project.cpp:746 project.cpp:1014 project.cpp:1046
 #: project.cpp:1125 project.cpp:1293 project.cpp:1481 project.cpp:1487
-#: session.cpp:89 session.cpp:427 vcaengine.cpp:125 vcaengine.cpp:132
+#: session.cpp:93 session.cpp:435 vcaengine.cpp:125 vcaengine.cpp:132
 #: vcaengine.cpp:137 vcaengine.cpp:150 vcaengine.cpp:161 vcaengine.cpp:170
 #: vcaengine.cpp:179 vcaengine.cpp:193 vcaengine.cpp:207 vcaengine.cpp:211
-#: vcaengine.cpp:302 vcaengine.cpp:310 vcaengine.cpp:347 vcaengine.cpp:355
-#: vcaengine.cpp:565 vcaengine.cpp:566 vcaengine.cpp:586 vcaengine.cpp:636
-#: vcaengine.cpp:637 vcaengine.cpp:652 vcaengine.cpp:653 vcaengine.cpp:677
-#: vcaengine.cpp:688
+#: vcaengine.cpp:318 vcaengine.cpp:326 vcaengine.cpp:363 vcaengine.cpp:371
+#: vcaengine.cpp:602 vcaengine.cpp:603 vcaengine.cpp:623 vcaengine.cpp:673
+#: vcaengine.cpp:674 vcaengine.cpp:689 vcaengine.cpp:690 vcaengine.cpp:714
+#: vcaengine.cpp:725 vcaengine.cpp:855
 msgid "ID"
 msgstr ""
 
 #: libwidg.cpp:37 project.cpp:37 vcaengine.cpp:126 vcaengine.cpp:171
-#: vcaengine.cpp:180 vcaengine.cpp:601 vcaengine.cpp:659
+#: vcaengine.cpp:180 vcaengine.cpp:638 vcaengine.cpp:696
 msgid "NAME"
 msgstr ""
 
@@ -119,7 +122,7 @@ msgstr ""
 msgid "DESCR"
 msgstr ""
 
-#: libwidg.cpp:38 libwidg.cpp:437 project.cpp:38 project.cpp:742
+#: libwidg.cpp:38 libwidg.cpp:438 project.cpp:38 project.cpp:742
 #: vcaengine.cpp:129 vcaengine.cpp:138 vcaengine.cpp:183 vcaengine.cpp:194
 msgid "ICO"
 msgstr ""
@@ -128,12 +131,12 @@ msgstr ""
 msgid "DB_TBL"
 msgstr ""
 
-#: libwidg.cpp:42 libwidg.cpp:60 vcaengine.cpp:83 vcaengine.cpp:758
-#: vcaengine.cpp:811
+#: libwidg.cpp:42 libwidg.cpp:60 vcaengine.cpp:83 vcaengine.cpp:795
+#: vcaengine.cpp:848
 msgid "wlb_"
 msgstr ""
 
-#: libwidg.cpp:43 libwidg.cpp:313 widget.cpp:37 widget.cpp:646 widget.cpp:767
+#: libwidg.cpp:43 libwidg.cpp:314 widget.cpp:39 widget.cpp:773 widget.cpp:894
 msgid "wdg_"
 msgstr ""
 
@@ -144,14 +147,14 @@ msgid "originals"
 msgstr ""
 
 #: libwidg.cpp:102 libwidg.cpp:130 libwidg.cpp:141 libwidg.cpp:159
-#: libwidg.cpp:201 libwidg.cpp:219 libwidg.cpp:239 libwidg.cpp:256
-#: libwidg.cpp:265 libwidg.cpp:464 libwidg.cpp:469 libwidg.cpp:474
-#: libwidg.cpp:479 libwidg.cpp:595 libwidg.cpp:612 libwidg.cpp:623
-#: libwidg.cpp:631 libwidg.cpp:655 libwidg.cpp:658 libwidg.cpp:669
-#: libwidg.cpp:692 libwidg.cpp:694 libwidg.cpp:875 libwidg.cpp:892
-#: libwidg.cpp:903 libwidg.cpp:918 libwidg.cpp:920 libwidg.cpp:930
-#: libwidg.cpp:934 libwidg.cpp:936 libwidg.cpp:942 libwidg.cpp:945
-#: libwidg.cpp:953 libwidg.cpp:956 libwidg.cpp:967 origwidg.cpp:922
+#: libwidg.cpp:201 libwidg.cpp:219 libwidg.cpp:239 libwidg.cpp:257
+#: libwidg.cpp:266 libwidg.cpp:465 libwidg.cpp:470 libwidg.cpp:475
+#: libwidg.cpp:480 libwidg.cpp:596 libwidg.cpp:613 libwidg.cpp:624
+#: libwidg.cpp:632 libwidg.cpp:656 libwidg.cpp:659 libwidg.cpp:670
+#: libwidg.cpp:693 libwidg.cpp:695 libwidg.cpp:876 libwidg.cpp:893
+#: libwidg.cpp:904 libwidg.cpp:919 libwidg.cpp:921 libwidg.cpp:931
+#: libwidg.cpp:935 libwidg.cpp:937 libwidg.cpp:943 libwidg.cpp:946
+#: libwidg.cpp:954 libwidg.cpp:957 libwidg.cpp:968 origwidg.cpp:922
 #: origwidg.cpp:928 origwidg.cpp:966 origwidg.cpp:981 project.cpp:104
 #: project.cpp:163 project.cpp:174 project.cpp:208 project.cpp:225
 #: project.cpp:226 project.cpp:294 project.cpp:312 project.cpp:332
@@ -162,43 +165,43 @@ msgstr ""
 #: project.cpp:1425 project.cpp:1442 project.cpp:1455 project.cpp:1470
 #: project.cpp:1472 project.cpp:1482 project.cpp:1486 project.cpp:1488
 #: project.cpp:1494 project.cpp:1497 project.cpp:1506 project.cpp:1509
-#: project.cpp:1521 session.cpp:90 session.cpp:429 session.cpp:1157
-#: session.cpp:1485 session.cpp:1505 vcaengine.cpp:300 vcaengine.cpp:345
-#: widget.cpp:869 widget.cpp:870 widget.cpp:883 widget.cpp:1138
-#: widget.cpp:1139 widget.cpp:1166 widget.cpp:1167 widget.cpp:1177
-#: widget.cpp:1185 widget.cpp:1186 widget.cpp:1198 widget.cpp:1216
-#: widget.cpp:1224 widget.cpp:1238 widget.cpp:1324 widget.cpp:1327
+#: project.cpp:1521 session.cpp:94 session.cpp:437 session.cpp:1171
+#: session.cpp:1503 session.cpp:1523 vcaengine.cpp:316 vcaengine.cpp:361
+#: widget.cpp:996 widget.cpp:997 widget.cpp:1010 widget.cpp:1265
+#: widget.cpp:1266 widget.cpp:1293 widget.cpp:1294 widget.cpp:1304
+#: widget.cpp:1312 widget.cpp:1313 widget.cpp:1325 widget.cpp:1343
+#: widget.cpp:1351 widget.cpp:1365 widget.cpp:1451 widget.cpp:1454
 msgid "."
 msgstr ""
 
-#: libwidg.cpp:102 libwidg.cpp:141 libwidg.cpp:159 vcaengine.cpp:308
+#: libwidg.cpp:102 libwidg.cpp:141 libwidg.cpp:159 vcaengine.cpp:324
 msgid "LIB/"
 msgstr ""
 
-#: libwidg.cpp:109 libwidg.cpp:110 libwidg.cpp:469 libwidg.cpp:930
-#: libwidg.cpp:942 project.cpp:111 project.cpp:112 project.cpp:844
-#: project.cpp:987 project.cpp:1482 project.cpp:1494 vcaengine.cpp:546
-#: vcaengine.cpp:647 vcaengine.cpp:675 vcaengine.cpp:680
+#: libwidg.cpp:109 libwidg.cpp:110 libwidg.cpp:470 libwidg.cpp:931
+#: libwidg.cpp:943 project.cpp:111 project.cpp:112 project.cpp:844
+#: project.cpp:987 project.cpp:1482 project.cpp:1494 vcaengine.cpp:583
+#: vcaengine.cpp:684 vcaengine.cpp:712 vcaengine.cpp:717
 msgid "_io"
 msgstr ""
 
-#: libwidg.cpp:112 libwidg.cpp:113 libwidg.cpp:474 libwidg.cpp:934
-#: libwidg.cpp:936 libwidg.cpp:945 project.cpp:114 project.cpp:115
+#: libwidg.cpp:112 libwidg.cpp:113 libwidg.cpp:475 libwidg.cpp:935
+#: libwidg.cpp:937 libwidg.cpp:946 project.cpp:114 project.cpp:115
 #: project.cpp:849 project.cpp:1486 project.cpp:1488 project.cpp:1497
-#: vcaengine.cpp:578 vcaengine.cpp:667 vcaengine.cpp:686 vcaengine.cpp:693
+#: vcaengine.cpp:615 vcaengine.cpp:704 vcaengine.cpp:723 vcaengine.cpp:730
 msgid "_uio"
 msgstr ""
 
-#: libwidg.cpp:115 libwidg.cpp:116 libwidg.cpp:479 libwidg.cpp:629
-#: libwidg.cpp:688 libwidg.cpp:874 libwidg.cpp:918 libwidg.cpp:920
-#: libwidg.cpp:956 project.cpp:117 project.cpp:118 project.cpp:854
+#: libwidg.cpp:115 libwidg.cpp:116 libwidg.cpp:480 libwidg.cpp:630
+#: libwidg.cpp:689 libwidg.cpp:875 libwidg.cpp:919 libwidg.cpp:921
+#: libwidg.cpp:957 project.cpp:117 project.cpp:118 project.cpp:854
 #: project.cpp:1042 project.cpp:1122 project.cpp:1424 project.cpp:1470
 #: project.cpp:1472 project.cpp:1509
 msgid "_incl"
 msgstr ""
 
 #: libwidg.cpp:118 libwidg.cpp:119 libwidg.cpp:195 libwidg.cpp:214
-#: libwidg.cpp:249 libwidg.cpp:261 project.cpp:120 project.cpp:121
+#: libwidg.cpp:250 libwidg.cpp:262 project.cpp:120 project.cpp:121
 #: project.cpp:288 project.cpp:307 project.cpp:341 project.cpp:353
 msgid "_mime"
 msgstr ""
@@ -228,27 +231,27 @@ msgstr "Ошибка включения/отключения виджета '%s'
 msgid "file:"
 msgstr ""
 
-#: libwidg.cpp:208 libwidg.cpp:379 libwidg.cpp:391 libwidg.cpp:408
-#: libwidg.cpp:418 libwidg.cpp:424 project.cpp:301 project.cpp:611
+#: libwidg.cpp:208 libwidg.cpp:380 libwidg.cpp:392 libwidg.cpp:409
+#: libwidg.cpp:419 libwidg.cpp:425 project.cpp:301 project.cpp:611
 #: project.cpp:623 project.cpp:640 project.cpp:650 project.cpp:656
 msgid "res:"
 msgstr ""
 
-#: libwidg.cpp:217 libwidg.cpp:222 libwidg.cpp:254 libwidg.cpp:255
+#: libwidg.cpp:217 libwidg.cpp:222 libwidg.cpp:255 libwidg.cpp:256
 #: project.cpp:310 project.cpp:315 project.cpp:346 project.cpp:347
 #: vcaengine.cpp:134
 msgid "DATA"
 msgstr ""
 
-#: libwidg.cpp:221 libwidg.cpp:253 project.cpp:314 project.cpp:345
+#: libwidg.cpp:221 libwidg.cpp:254 project.cpp:314 project.cpp:345
 #: vcaengine.cpp:133
 msgid "MIME"
 msgstr ""
 
-#: libwidg.cpp:239 libwidg.cpp:419 libwidg.cpp:425 libwidg.cpp:604
-#: libwidg.cpp:884 project.cpp:332 project.cpp:651 project.cpp:657
-#: project.cpp:998 project.cpp:1434 session.cpp:1171 session.cpp:1180
-#: vcaengine.cpp:630
+#: libwidg.cpp:239 libwidg.cpp:420 libwidg.cpp:426 libwidg.cpp:605
+#: libwidg.cpp:885 project.cpp:332 project.cpp:651 project.cpp:657
+#: project.cpp:998 project.cpp:1434 session.cpp:1185 session.cpp:1194
+#: vcaengine.cpp:667
 msgid ";"
 msgstr ""
 
@@ -256,44 +259,45 @@ msgstr ""
 msgid "file/unknown;"
 msgstr ""
 
-#: libwidg.cpp:289 libwidg.cpp:736 libwidg.cpp:999 origwidg.cpp:77
+#: libwidg.cpp:290 libwidg.cpp:737 libwidg.cpp:1000 origwidg.cpp:77
 #: origwidg.cpp:100 project.cpp:445 project.cpp:1204 project.cpp:1268
-#: project.cpp:1553 session.cpp:550 session.cpp:985 session.cpp:1826
-#: session.cpp:1848 session.cpp:1893 vcaengine.cpp:801 widget.cpp:612
-#: widget.cpp:804 widget.cpp:845 widget.cpp:1133
+#: project.cpp:1553 session.cpp:564 session.cpp:999 session.cpp:1841
+#: session.cpp:1863 session.cpp:1908 vcaengine.cpp:838 widget.cpp:739
+#: widget.cpp:931 widget.cpp:972 widget.cpp:1260
 msgid "info"
 msgstr ""
 
-#: libwidg.cpp:292 libwidg.cpp:742 libwidg.cpp:1003 origwidg.cpp:80
-#: project.cpp:448 project.cpp:1207 project.cpp:1557 session.cpp:553
-#: session.cpp:988 widget.cpp:615
+#: libwidg.cpp:293 libwidg.cpp:743 libwidg.cpp:1004 origwidg.cpp:80
+#: project.cpp:448 project.cpp:1207 project.cpp:1557 session.cpp:567
+#: session.cpp:1002 widget.cpp:742
 msgid "oscada_cntr"
 msgstr ""
 
-#: libwidg.cpp:292 libwidg.cpp:742 libwidg.cpp:929 libwidg.cpp:935
-#: libwidg.cpp:1003 origwidg.cpp:80 project.cpp:179 project.cpp:180
+#: libwidg.cpp:293 libwidg.cpp:743 libwidg.cpp:930 libwidg.cpp:936
+#: libwidg.cpp:1004 origwidg.cpp:80 project.cpp:179 project.cpp:180
 #: project.cpp:448 project.cpp:805 project.cpp:806 project.cpp:1011
 #: project.cpp:1207 project.cpp:1481 project.cpp:1487 project.cpp:1557
-#: session.cpp:553 session.cpp:893 session.cpp:988 session.cpp:1082
-#: session.cpp:1084 session.cpp:1085 session.cpp:1158 session.cpp:1384
-#: vcaengine.cpp:565 vcaengine.cpp:636 vcaengine.cpp:652 widget.cpp:615
-#: widget.cpp:752 widget.cpp:771 widget.cpp:952 widget.cpp:1002
-#: widget.cpp:1058 widget.cpp:1101 vcaFuncs.h:189 vcaFuncs.h:237
+#: session.cpp:567 session.cpp:907 session.cpp:1002 session.cpp:1096
+#: session.cpp:1098 session.cpp:1099 session.cpp:1172 session.cpp:1398
+#: session.cpp:1470 session.cpp:1630 vcaengine.cpp:602 vcaengine.cpp:673
+#: vcaengine.cpp:689 widget.cpp:742 widget.cpp:879 widget.cpp:898
+#: widget.cpp:1079 widget.cpp:1129 widget.cpp:1185 widget.cpp:1228
+#: vcaFuncs.h:189 vcaFuncs.h:237
 msgid "/"
 msgstr ""
 
-#: libwidg.cpp:292
+#: libwidg.cpp:293
 msgid "Widget's library: "
 msgstr "Библиотека виджетов: "
 
-#: libwidg.cpp:292 libwidg.cpp:295 libwidg.cpp:300 libwidg.cpp:301
-#: libwidg.cpp:306 libwidg.cpp:307 libwidg.cpp:308 libwidg.cpp:309
-#: libwidg.cpp:313 libwidg.cpp:315 libwidg.cpp:317 libwidg.cpp:318
-#: libwidg.cpp:319 libwidg.cpp:328 libwidg.cpp:329 libwidg.cpp:333
-#: libwidg.cpp:334 libwidg.cpp:338 libwidg.cpp:339 libwidg.cpp:341
-#: libwidg.cpp:344 libwidg.cpp:345 libwidg.cpp:349 libwidg.cpp:350
-#: libwidg.cpp:354 libwidg.cpp:361 libwidg.cpp:366 libwidg.cpp:374
-#: libwidg.cpp:399 libwidg.cpp:400 libwidg.cpp:401 libwidg.cpp:1003
+#: libwidg.cpp:293 libwidg.cpp:296 libwidg.cpp:301 libwidg.cpp:302
+#: libwidg.cpp:307 libwidg.cpp:308 libwidg.cpp:309 libwidg.cpp:310
+#: libwidg.cpp:314 libwidg.cpp:316 libwidg.cpp:318 libwidg.cpp:319
+#: libwidg.cpp:320 libwidg.cpp:329 libwidg.cpp:330 libwidg.cpp:334
+#: libwidg.cpp:335 libwidg.cpp:339 libwidg.cpp:340 libwidg.cpp:342
+#: libwidg.cpp:345 libwidg.cpp:346 libwidg.cpp:350 libwidg.cpp:351
+#: libwidg.cpp:355 libwidg.cpp:362 libwidg.cpp:367 libwidg.cpp:375
+#: libwidg.cpp:400 libwidg.cpp:401 libwidg.cpp:402 libwidg.cpp:1004
 #: project.cpp:138 project.cpp:448 project.cpp:451 project.cpp:456
 #: project.cpp:457 project.cpp:462 project.cpp:463 project.cpp:464
 #: project.cpp:465 project.cpp:466 project.cpp:467 project.cpp:468
@@ -313,330 +317,335 @@ msgstr "Библиотека виджетов: "
 #: project.cpp:1207 project.cpp:1211 project.cpp:1212 project.cpp:1217
 #: project.cpp:1219 project.cpp:1230 project.cpp:1231 project.cpp:1244
 #: project.cpp:1251 project.cpp:1256 project.cpp:1557 session.cpp:37
-#: session.cpp:38 session.cpp:556 session.cpp:563 session.cpp:564
-#: session.cpp:565 session.cpp:566 session.cpp:568 session.cpp:570
-#: session.cpp:573 session.cpp:574 session.cpp:575 session.cpp:581
-#: session.cpp:585 session.cpp:587 session.cpp:589 session.cpp:590
-#: session.cpp:591 session.cpp:592 session.cpp:593 session.cpp:594
-#: session.cpp:595 session.cpp:994 session.cpp:996 session.cpp:1716
-#: session.cpp:1729 session.cpp:1742 session.cpp:1774 vcaengine.cpp:142
-#: vcaengine.cpp:152 vcaengine.cpp:184 vcaengine.cpp:198 vcaengine.cpp:707
-#: vcaengine.cpp:720 vcaengine.cpp:745 vcaengine.cpp:804 vcaengine.cpp:805
-#: vcaengine.cpp:806 vcaengine.cpp:807 vcaengine.cpp:808 vcaengine.cpp:810
-#: vcaengine.cpp:811 vcaengine.cpp:813 vcaengine.cpp:814 vcaengine.cpp:815
-#: vcaengine.cpp:817 vcaengine.cpp:824 vcaengine.cpp:832 vcaengine.cpp:848
-#: vcaengine.cpp:853 vcaengine.cpp:857 vcaengine.cpp:864 vcaengine.cpp:865
-#: vcaengine.cpp:867 vcaengine.cpp:871 vcaengine.cpp:887 vcaengine.cpp:892
-#: vcaengine.cpp:903 vcaengine.cpp:904 vcaengine.cpp:908 vcaengine.cpp:909
-#: widget.cpp:122 widget.cpp:210 widget.cpp:532 widget.cpp:551 widget.cpp:565
-#: widget.cpp:569 widget.cpp:615 widget.cpp:620 widget.cpp:621 widget.cpp:623
-#: widget.cpp:627 widget.cpp:628 widget.cpp:629 widget.cpp:630 widget.cpp:631
-#: widget.cpp:632 widget.cpp:633 widget.cpp:634 widget.cpp:635 widget.cpp:636
-#: widget.cpp:638 widget.cpp:640 widget.cpp:642 widget.cpp:646 widget.cpp:648
-#: widget.cpp:663 widget.cpp:664 widget.cpp:668 widget.cpp:669 widget.cpp:672
-#: widget.cpp:676 widget.cpp:677 widget.cpp:681 widget.cpp:682 widget.cpp:686
-#: widget.cpp:692 widget.cpp:701 widget.cpp:702 widget.cpp:711 widget.cpp:712
-#: widget.cpp:716 widget.cpp:717 widget.cpp:719 widget.cpp:776 widget.cpp:792
-#: widget.cpp:794 widget.cpp:813 widget.cpp:826 widget.cpp:831 widget.cpp:849
-#: widget.cpp:891 widget.cpp:900 widget.cpp:903 widget.cpp:917 widget.cpp:919
-#: widget.cpp:940 widget.cpp:970 widget.cpp:1112 widget.cpp:1114
-#: widget.cpp:1137 widget.cpp:1140 widget.cpp:1142 widget.cpp:1143
-#: widget.cpp:1144 widget.cpp:1145 widget.cpp:1146 widget.cpp:1147
-#: widget.cpp:1148 widget.cpp:1152 widget.cpp:1153 widget.cpp:1154
-#: widget.cpp:1164 widget.cpp:1170 widget.cpp:1188 widget.cpp:1214
-#: widget.cpp:1222 widget.cpp:1233 widget.cpp:1303 widget.cpp:1304
-#: widget.cpp:1308 widget.cpp:1309 widget.cpp:1313 widget.cpp:1314
-#: origwidg.h:44 widget.h:153
+#: session.cpp:38 session.cpp:570 session.cpp:577 session.cpp:578
+#: session.cpp:579 session.cpp:580 session.cpp:582 session.cpp:584
+#: session.cpp:587 session.cpp:588 session.cpp:589 session.cpp:595
+#: session.cpp:599 session.cpp:601 session.cpp:603 session.cpp:604
+#: session.cpp:605 session.cpp:606 session.cpp:607 session.cpp:608
+#: session.cpp:609 session.cpp:1008 session.cpp:1010 session.cpp:1731
+#: session.cpp:1744 session.cpp:1757 session.cpp:1789 vcaengine.cpp:184
+#: vcaengine.cpp:744 vcaengine.cpp:757 vcaengine.cpp:782 vcaengine.cpp:841
+#: vcaengine.cpp:842 vcaengine.cpp:843 vcaengine.cpp:844 vcaengine.cpp:845
+#: vcaengine.cpp:847 vcaengine.cpp:848 vcaengine.cpp:850 vcaengine.cpp:852
+#: vcaengine.cpp:853 vcaengine.cpp:855 vcaengine.cpp:856 vcaengine.cpp:857
+#: vcaengine.cpp:860 vcaengine.cpp:862 vcaengine.cpp:869 vcaengine.cpp:877
+#: vcaengine.cpp:893 vcaengine.cpp:898 vcaengine.cpp:902 vcaengine.cpp:909
+#: vcaengine.cpp:910 vcaengine.cpp:912 vcaengine.cpp:916 vcaengine.cpp:934
+#: vcaengine.cpp:939 vcaengine.cpp:945 vcaengine.cpp:962 vcaengine.cpp:963
+#: vcaengine.cpp:964 vcaengine.cpp:994 vcaengine.cpp:995 vcaengine.cpp:999
+#: vcaengine.cpp:1000 widget.cpp:145 widget.cpp:271 widget.cpp:659
+#: widget.cpp:678 widget.cpp:692 widget.cpp:696 widget.cpp:742 widget.cpp:747
+#: widget.cpp:748 widget.cpp:750 widget.cpp:754 widget.cpp:755 widget.cpp:756
+#: widget.cpp:757 widget.cpp:758 widget.cpp:759 widget.cpp:760 widget.cpp:761
+#: widget.cpp:762 widget.cpp:763 widget.cpp:765 widget.cpp:767 widget.cpp:769
+#: widget.cpp:773 widget.cpp:775 widget.cpp:790 widget.cpp:791 widget.cpp:795
+#: widget.cpp:796 widget.cpp:799 widget.cpp:803 widget.cpp:804 widget.cpp:808
+#: widget.cpp:809 widget.cpp:813 widget.cpp:819 widget.cpp:828 widget.cpp:829
+#: widget.cpp:838 widget.cpp:839 widget.cpp:843 widget.cpp:844 widget.cpp:846
+#: widget.cpp:903 widget.cpp:919 widget.cpp:921 widget.cpp:940 widget.cpp:953
+#: widget.cpp:958 widget.cpp:976 widget.cpp:1018 widget.cpp:1027
+#: widget.cpp:1030 widget.cpp:1044 widget.cpp:1046 widget.cpp:1067
+#: widget.cpp:1097 widget.cpp:1239 widget.cpp:1241 widget.cpp:1264
+#: widget.cpp:1267 widget.cpp:1269 widget.cpp:1270 widget.cpp:1271
+#: widget.cpp:1272 widget.cpp:1273 widget.cpp:1274 widget.cpp:1275
+#: widget.cpp:1279 widget.cpp:1280 widget.cpp:1281 widget.cpp:1291
+#: widget.cpp:1297 widget.cpp:1315 widget.cpp:1341 widget.cpp:1349
+#: widget.cpp:1360 widget.cpp:1430 widget.cpp:1431 widget.cpp:1435
+#: widget.cpp:1436 widget.cpp:1440 widget.cpp:1441 origwidg.h:44
 msgid "root"
 msgstr ""
 
-#: libwidg.cpp:292 libwidg.cpp:295 libwidg.cpp:300 libwidg.cpp:301
-#: libwidg.cpp:306 libwidg.cpp:307 libwidg.cpp:308 libwidg.cpp:309
-#: libwidg.cpp:313 libwidg.cpp:315 libwidg.cpp:317 libwidg.cpp:318
-#: libwidg.cpp:319 libwidg.cpp:328 libwidg.cpp:329 libwidg.cpp:333
-#: libwidg.cpp:334 libwidg.cpp:338 libwidg.cpp:339 libwidg.cpp:341
-#: libwidg.cpp:344 libwidg.cpp:345 libwidg.cpp:349 libwidg.cpp:350
-#: libwidg.cpp:354 libwidg.cpp:361 libwidg.cpp:366 libwidg.cpp:374
-#: libwidg.cpp:399 libwidg.cpp:400 libwidg.cpp:401 libwidg.cpp:504
-#: libwidg.cpp:505 libwidg.cpp:808 libwidg.cpp:1003 project.cpp:143
-#: project.cpp:150 project.cpp:151 project.cpp:156 project.cpp:448
-#: project.cpp:451 project.cpp:456 project.cpp:457 project.cpp:462
-#: project.cpp:463 project.cpp:464 project.cpp:465 project.cpp:466
-#: project.cpp:467 project.cpp:468 project.cpp:470 project.cpp:472
-#: project.cpp:474 project.cpp:476 project.cpp:481 project.cpp:483
-#: project.cpp:485 project.cpp:486 project.cpp:487 project.cpp:491
-#: project.cpp:494 project.cpp:495 project.cpp:497 project.cpp:498
-#: project.cpp:500 project.cpp:510 project.cpp:511 project.cpp:515
-#: project.cpp:516 project.cpp:520 project.cpp:521 project.cpp:525
-#: project.cpp:526 project.cpp:530 project.cpp:536 project.cpp:545
-#: project.cpp:546 project.cpp:548 project.cpp:551 project.cpp:552
-#: project.cpp:556 project.cpp:557 project.cpp:561 project.cpp:562
-#: project.cpp:566 project.cpp:567 project.cpp:572 project.cpp:579
-#: project.cpp:584 project.cpp:606 project.cpp:631 project.cpp:632
-#: project.cpp:633 project.cpp:663 project.cpp:664 project.cpp:692
-#: project.cpp:693 project.cpp:701 project.cpp:714 project.cpp:719
-#: project.cpp:726 project.cpp:874 project.cpp:875 project.cpp:1207
-#: project.cpp:1211 project.cpp:1212 project.cpp:1217 project.cpp:1219
-#: project.cpp:1230 project.cpp:1231 project.cpp:1244 project.cpp:1251
-#: project.cpp:1256 project.cpp:1354 project.cpp:1355 project.cpp:1557
-#: session.cpp:38 session.cpp:556 session.cpp:563 session.cpp:564
-#: session.cpp:565 session.cpp:566 session.cpp:568 session.cpp:570
-#: session.cpp:573 session.cpp:574 session.cpp:575 session.cpp:581
-#: session.cpp:585 session.cpp:587 session.cpp:589 session.cpp:590
-#: session.cpp:591 session.cpp:592 session.cpp:593 session.cpp:594
-#: session.cpp:595 session.cpp:994 session.cpp:996 session.cpp:1742
-#: session.cpp:1774 vcaengine.cpp:37 vcaengine.cpp:143 vcaengine.cpp:153
-#: vcaengine.cpp:185 vcaengine.cpp:199 vcaengine.cpp:804 vcaengine.cpp:805
-#: vcaengine.cpp:806 vcaengine.cpp:807 vcaengine.cpp:808 vcaengine.cpp:810
-#: vcaengine.cpp:811 vcaengine.cpp:813 vcaengine.cpp:814 vcaengine.cpp:815
-#: vcaengine.cpp:817 vcaengine.cpp:824 vcaengine.cpp:832 vcaengine.cpp:848
-#: vcaengine.cpp:853 vcaengine.cpp:857 vcaengine.cpp:864 vcaengine.cpp:865
-#: vcaengine.cpp:867 vcaengine.cpp:871 vcaengine.cpp:887 vcaengine.cpp:892
-#: vcaengine.cpp:903 vcaengine.cpp:904 vcaengine.cpp:908 vcaengine.cpp:909
-#: widget.cpp:615 widget.cpp:620 widget.cpp:621 widget.cpp:623 widget.cpp:627
-#: widget.cpp:628 widget.cpp:629 widget.cpp:630 widget.cpp:631 widget.cpp:632
-#: widget.cpp:633 widget.cpp:634 widget.cpp:635 widget.cpp:636 widget.cpp:638
-#: widget.cpp:640 widget.cpp:642 widget.cpp:646 widget.cpp:648 widget.cpp:663
-#: widget.cpp:664 widget.cpp:668 widget.cpp:669 widget.cpp:672 widget.cpp:676
-#: widget.cpp:677 widget.cpp:681 widget.cpp:682 widget.cpp:686 widget.cpp:692
-#: widget.cpp:701 widget.cpp:702 widget.cpp:711 widget.cpp:712 widget.cpp:716
-#: widget.cpp:717 widget.cpp:719 widget.cpp:776 widget.cpp:792 widget.cpp:794
-#: widget.cpp:813 widget.cpp:826 widget.cpp:831 widget.cpp:849 widget.cpp:891
-#: widget.cpp:900 widget.cpp:903 widget.cpp:917 widget.cpp:919 widget.cpp:940
-#: widget.cpp:970 widget.cpp:1112 widget.cpp:1114 widget.cpp:1137
-#: widget.cpp:1140 widget.cpp:1142 widget.cpp:1143 widget.cpp:1144
-#: widget.cpp:1145 widget.cpp:1146 widget.cpp:1147 widget.cpp:1148
-#: widget.cpp:1152 widget.cpp:1153 widget.cpp:1154 widget.cpp:1164
-#: widget.cpp:1170 widget.cpp:1188 widget.cpp:1214 widget.cpp:1222
-#: widget.cpp:1233 widget.cpp:1303 widget.cpp:1304 widget.cpp:1308
-#: widget.cpp:1309 widget.cpp:1313 widget.cpp:1314 widget.h:154
+#: libwidg.cpp:293 libwidg.cpp:296 libwidg.cpp:301 libwidg.cpp:302
+#: libwidg.cpp:307 libwidg.cpp:308 libwidg.cpp:309 libwidg.cpp:310
+#: libwidg.cpp:314 libwidg.cpp:316 libwidg.cpp:318 libwidg.cpp:319
+#: libwidg.cpp:320 libwidg.cpp:329 libwidg.cpp:330 libwidg.cpp:334
+#: libwidg.cpp:335 libwidg.cpp:339 libwidg.cpp:340 libwidg.cpp:342
+#: libwidg.cpp:345 libwidg.cpp:346 libwidg.cpp:350 libwidg.cpp:351
+#: libwidg.cpp:355 libwidg.cpp:362 libwidg.cpp:367 libwidg.cpp:375
+#: libwidg.cpp:400 libwidg.cpp:401 libwidg.cpp:402 libwidg.cpp:1004
+#: project.cpp:143 project.cpp:150 project.cpp:151 project.cpp:156
+#: project.cpp:448 project.cpp:451 project.cpp:456 project.cpp:457
+#: project.cpp:462 project.cpp:463 project.cpp:464 project.cpp:465
+#: project.cpp:466 project.cpp:467 project.cpp:468 project.cpp:470
+#: project.cpp:472 project.cpp:474 project.cpp:476 project.cpp:481
+#: project.cpp:483 project.cpp:485 project.cpp:486 project.cpp:487
+#: project.cpp:491 project.cpp:494 project.cpp:495 project.cpp:497
+#: project.cpp:498 project.cpp:500 project.cpp:510 project.cpp:511
+#: project.cpp:515 project.cpp:516 project.cpp:520 project.cpp:521
+#: project.cpp:525 project.cpp:526 project.cpp:530 project.cpp:536
+#: project.cpp:545 project.cpp:546 project.cpp:548 project.cpp:551
+#: project.cpp:552 project.cpp:556 project.cpp:557 project.cpp:561
+#: project.cpp:562 project.cpp:566 project.cpp:567 project.cpp:572
+#: project.cpp:579 project.cpp:584 project.cpp:606 project.cpp:631
+#: project.cpp:632 project.cpp:633 project.cpp:663 project.cpp:664
+#: project.cpp:692 project.cpp:693 project.cpp:701 project.cpp:714
+#: project.cpp:719 project.cpp:726 project.cpp:1207 project.cpp:1211
+#: project.cpp:1212 project.cpp:1217 project.cpp:1219 project.cpp:1230
+#: project.cpp:1231 project.cpp:1244 project.cpp:1251 project.cpp:1256
+#: project.cpp:1557 session.cpp:38 session.cpp:570 session.cpp:577
+#: session.cpp:578 session.cpp:579 session.cpp:580 session.cpp:582
+#: session.cpp:584 session.cpp:587 session.cpp:588 session.cpp:589
+#: session.cpp:595 session.cpp:599 session.cpp:601 session.cpp:603
+#: session.cpp:604 session.cpp:605 session.cpp:606 session.cpp:607
+#: session.cpp:608 session.cpp:609 session.cpp:1008 session.cpp:1010
+#: session.cpp:1757 session.cpp:1789 vcaengine.cpp:37 vcaengine.cpp:185
+#: vcaengine.cpp:841 vcaengine.cpp:842 vcaengine.cpp:843 vcaengine.cpp:844
+#: vcaengine.cpp:845 vcaengine.cpp:847 vcaengine.cpp:848 vcaengine.cpp:850
+#: vcaengine.cpp:852 vcaengine.cpp:853 vcaengine.cpp:855 vcaengine.cpp:856
+#: vcaengine.cpp:857 vcaengine.cpp:860 vcaengine.cpp:862 vcaengine.cpp:869
+#: vcaengine.cpp:877 vcaengine.cpp:893 vcaengine.cpp:898 vcaengine.cpp:902
+#: vcaengine.cpp:909 vcaengine.cpp:910 vcaengine.cpp:912 vcaengine.cpp:916
+#: vcaengine.cpp:934 vcaengine.cpp:939 vcaengine.cpp:945 vcaengine.cpp:962
+#: vcaengine.cpp:963 vcaengine.cpp:964 vcaengine.cpp:994 vcaengine.cpp:995
+#: vcaengine.cpp:999 vcaengine.cpp:1000 widget.cpp:209 widget.cpp:742
+#: widget.cpp:747 widget.cpp:748 widget.cpp:750 widget.cpp:754 widget.cpp:755
+#: widget.cpp:756 widget.cpp:757 widget.cpp:758 widget.cpp:759 widget.cpp:760
+#: widget.cpp:761 widget.cpp:762 widget.cpp:763 widget.cpp:765 widget.cpp:767
+#: widget.cpp:769 widget.cpp:773 widget.cpp:775 widget.cpp:790 widget.cpp:791
+#: widget.cpp:795 widget.cpp:796 widget.cpp:799 widget.cpp:803 widget.cpp:804
+#: widget.cpp:808 widget.cpp:809 widget.cpp:813 widget.cpp:819 widget.cpp:828
+#: widget.cpp:829 widget.cpp:838 widget.cpp:839 widget.cpp:843 widget.cpp:844
+#: widget.cpp:846 widget.cpp:903 widget.cpp:919 widget.cpp:921 widget.cpp:940
+#: widget.cpp:953 widget.cpp:958 widget.cpp:976 widget.cpp:1018
+#: widget.cpp:1027 widget.cpp:1030 widget.cpp:1044 widget.cpp:1046
+#: widget.cpp:1067 widget.cpp:1097 widget.cpp:1239 widget.cpp:1241
+#: widget.cpp:1264 widget.cpp:1267 widget.cpp:1269 widget.cpp:1270
+#: widget.cpp:1271 widget.cpp:1272 widget.cpp:1273 widget.cpp:1274
+#: widget.cpp:1275 widget.cpp:1279 widget.cpp:1280 widget.cpp:1281
+#: widget.cpp:1291 widget.cpp:1297 widget.cpp:1315 widget.cpp:1341
+#: widget.cpp:1349 widget.cpp:1360 widget.cpp:1430 widget.cpp:1431
+#: widget.cpp:1435 widget.cpp:1436 widget.cpp:1440 widget.cpp:1441
 msgid "UI"
 msgstr "Интерфейс пользователя"
 
-#: libwidg.cpp:293 libwidg.cpp:309 origwidg.cpp:306 origwidg.cpp:346
-#: project.cpp:449 project.cpp:465 session.cpp:554 widget.cpp:633
-#: widget.cpp:649
+#: libwidg.cpp:294 libwidg.cpp:310 origwidg.cpp:306 origwidg.cpp:346
+#: project.cpp:449 project.cpp:465 session.cpp:568 widget.cpp:760
+#: widget.cpp:776
 msgid "img"
 msgstr ""
 
-#: libwidg.cpp:293 libwidg.cpp:336 project.cpp:449 project.cpp:543
-#: session.cpp:554 session.cpp:601 widget.cpp:649 widget.cpp:699
+#: libwidg.cpp:294 libwidg.cpp:337 project.cpp:449 project.cpp:543
+#: session.cpp:568 session.cpp:615 widget.cpp:776 widget.cpp:826
 msgid "/ico"
 msgstr ""
 
-#: libwidg.cpp:294 project.cpp:450 project.cpp:1218 session.cpp:555
-#: session.cpp:995 widget.cpp:647
+#: libwidg.cpp:295 project.cpp:450 project.cpp:1218 session.cpp:569
+#: session.cpp:1009 widget.cpp:774
 msgid "branches"
 msgstr ""
 
-#: libwidg.cpp:294 project.cpp:450 project.cpp:1218 session.cpp:555
-#: session.cpp:995 widget.cpp:647
+#: libwidg.cpp:295 project.cpp:450 project.cpp:1218 session.cpp:569
+#: session.cpp:1009 widget.cpp:774
 msgid "/br"
 msgstr ""
 
-#: libwidg.cpp:295 project.cpp:451 project.cpp:1219 session.cpp:556
-#: session.cpp:996 vcaengine.cpp:804 vcaengine.cpp:805 vcaengine.cpp:806
-#: vcaengine.cpp:807 widget.cpp:648
+#: libwidg.cpp:296 project.cpp:451 project.cpp:1219 session.cpp:570
+#: session.cpp:1010 vcaengine.cpp:841 vcaengine.cpp:842 vcaengine.cpp:843
+#: vcaengine.cpp:844 widget.cpp:775
 msgid "grp"
 msgstr ""
 
-#: libwidg.cpp:295 libwidg.cpp:352 widget.cpp:648 widget.cpp:774
+#: libwidg.cpp:296 libwidg.cpp:353 widget.cpp:775 widget.cpp:901
 msgid "/br/wdg_"
 msgstr ""
 
-#: libwidg.cpp:295 project.cpp:1208 session.cpp:589 widget.cpp:616
-#: widget.cpp:648 widget.cpp:1137
+#: libwidg.cpp:296 project.cpp:1208 session.cpp:603 widget.cpp:743
+#: widget.cpp:775 widget.cpp:1264
 msgid "Widget"
 msgstr "Виджет"
 
-#: libwidg.cpp:295 libwidg.cpp:313 project.cpp:451 project.cpp:481
-#: project.cpp:1212 project.cpp:1217 project.cpp:1219 session.cpp:556
-#: session.cpp:572 session.cpp:585 session.cpp:994 session.cpp:996
-#: vcaengine.cpp:804 vcaengine.cpp:805 vcaengine.cpp:807 vcaengine.cpp:810
-#: vcaengine.cpp:811 widget.cpp:646 widget.cpp:648 widget.cpp:1144
-#: widget.cpp:1147
+#: libwidg.cpp:296 libwidg.cpp:314 project.cpp:451 project.cpp:481
+#: project.cpp:1212 project.cpp:1217 project.cpp:1219 session.cpp:570
+#: session.cpp:586 session.cpp:599 session.cpp:1008 session.cpp:1010
+#: vcaengine.cpp:841 vcaengine.cpp:842 vcaengine.cpp:844 vcaengine.cpp:847
+#: vcaengine.cpp:848 widget.cpp:773 widget.cpp:775 widget.cpp:1271
+#: widget.cpp:1274
 msgid "idm"
 msgstr ""
 
-#: libwidg.cpp:295 libwidg.cpp:313 origwidg.cpp:142 origwidg.cpp:208
+#: libwidg.cpp:296 libwidg.cpp:314 origwidg.cpp:142 origwidg.cpp:208
 #: origwidg.cpp:330 origwidg.cpp:336 origwidg.cpp:423 origwidg.cpp:424
 #: origwidg.cpp:516 origwidg.cpp:556 origwidg.cpp:598 origwidg.cpp:659
 #: origwidg.cpp:661 origwidg.cpp:667 origwidg.cpp:740 origwidg.cpp:1164
 #: origwidg.cpp:1200 project.cpp:451 project.cpp:481 project.cpp:1212
-#: project.cpp:1217 project.cpp:1219 session.cpp:556 session.cpp:572
-#: session.cpp:585 session.cpp:994 session.cpp:996 session.cpp:1576
+#: project.cpp:1217 project.cpp:1219 session.cpp:570 session.cpp:586
+#: session.cpp:599 session.cpp:1008 session.cpp:1010 session.cpp:1594
 #: vcaengine.cpp:146 vcaengine.cpp:156 vcaengine.cpp:201 vcaengine.cpp:203
-#: vcaengine.cpp:804 vcaengine.cpp:805 vcaengine.cpp:807 vcaengine.cpp:810
-#: vcaengine.cpp:811 widget.cpp:122 widget.cpp:125 widget.cpp:131
-#: widget.cpp:132 widget.cpp:646 widget.cpp:648 widget.cpp:1144
-#: widget.cpp:1147 vcaFuncs.h:136
+#: vcaengine.cpp:841 vcaengine.cpp:842 vcaengine.cpp:844 vcaengine.cpp:847
+#: vcaengine.cpp:848 widget.cpp:145 widget.cpp:148 widget.cpp:154
+#: widget.cpp:155 widget.cpp:773 widget.cpp:775 widget.cpp:1271
+#: widget.cpp:1274 vcaFuncs.h:136
 msgid "1"
 msgstr ""
 
-#: libwidg.cpp:295 libwidg.cpp:313 project.cpp:451 project.cpp:481
-#: project.cpp:1217 project.cpp:1219 vcaengine.cpp:804 vcaengine.cpp:805
-#: vcaengine.cpp:810 vcaengine.cpp:811 widget.cpp:646 widget.cpp:648
+#: libwidg.cpp:296 libwidg.cpp:314 project.cpp:451 project.cpp:481
+#: project.cpp:1217 project.cpp:1219 vcaengine.cpp:841 vcaengine.cpp:842
+#: vcaengine.cpp:847 vcaengine.cpp:848 widget.cpp:773 widget.cpp:775
 msgid "idSz"
 msgstr ""
 
-#: libwidg.cpp:295 libwidg.cpp:313 origwidg.cpp:428 origwidg.cpp:616
+#: libwidg.cpp:296 libwidg.cpp:314 origwidg.cpp:428 origwidg.cpp:616
 #: origwidg.cpp:653 origwidg.cpp:748 project.cpp:451 project.cpp:481
 #: project.cpp:1217 project.cpp:1219 vcaengine.cpp:125 vcaengine.cpp:128
 #: vcaengine.cpp:132 vcaengine.cpp:133 vcaengine.cpp:137 vcaengine.cpp:150
 #: vcaengine.cpp:160 vcaengine.cpp:164 vcaengine.cpp:169 vcaengine.cpp:175
 #: vcaengine.cpp:179 vcaengine.cpp:182 vcaengine.cpp:193 vcaengine.cpp:207
-#: vcaengine.cpp:211 vcaengine.cpp:804 vcaengine.cpp:805 vcaengine.cpp:810
-#: vcaengine.cpp:811 widget.cpp:646 widget.cpp:648
+#: vcaengine.cpp:211 vcaengine.cpp:841 vcaengine.cpp:842 vcaengine.cpp:847
+#: vcaengine.cpp:848 widget.cpp:773 widget.cpp:775
 msgid "30"
 msgstr ""
 
-#: libwidg.cpp:296 libwidg.cpp:298 libwidg.cpp:304 libwidg.cpp:312
-#: libwidg.cpp:314 origwidg.cpp:536 project.cpp:452 project.cpp:454
+#: libwidg.cpp:297 libwidg.cpp:299 libwidg.cpp:305 libwidg.cpp:313
+#: libwidg.cpp:315 origwidg.cpp:536 project.cpp:452 project.cpp:454
 #: project.cpp:460 project.cpp:480 project.cpp:482 project.cpp:489
-#: project.cpp:1208 project.cpp:1216 session.cpp:557 session.cpp:559
-#: session.cpp:577 session.cpp:584 session.cpp:586 session.cpp:993
-#: session.cpp:1851 vcaengine.cpp:808 vcaengine.cpp:813 vcaengine.cpp:815
-#: widget.cpp:616 widget.cpp:618 widget.cpp:625 widget.cpp:645 widget.cpp:806
-#: widget.cpp:847 widget.cpp:850 widget.cpp:1135 widget.cpp:1150
+#: project.cpp:1208 project.cpp:1216 session.cpp:571 session.cpp:573
+#: session.cpp:591 session.cpp:598 session.cpp:600 session.cpp:1007
+#: session.cpp:1866 vcaengine.cpp:845 vcaengine.cpp:850 vcaengine.cpp:860
+#: widget.cpp:743 widget.cpp:745 widget.cpp:752 widget.cpp:772 widget.cpp:933
+#: widget.cpp:974 widget.cpp:977 widget.cpp:1262 widget.cpp:1277
 msgid "area"
 msgstr ""
 
-#: libwidg.cpp:296 project.cpp:452 session.cpp:557
+#: libwidg.cpp:297 project.cpp:452 session.cpp:571
 msgid "/obj"
 msgstr ""
 
-#: libwidg.cpp:296
+#: libwidg.cpp:297
 msgid "Library"
 msgstr "Библиотека"
 
-#: libwidg.cpp:298 project.cpp:454 session.cpp:559
+#: libwidg.cpp:299 project.cpp:454 session.cpp:573
 msgid "/obj/st"
 msgstr ""
 
-#: libwidg.cpp:298 project.cpp:454 session.cpp:559 widget.cpp:618
+#: libwidg.cpp:299 project.cpp:454 session.cpp:573 widget.cpp:745
 msgid "State"
 msgstr "Состояние"
 
-#: libwidg.cpp:300 libwidg.cpp:301 libwidg.cpp:306 libwidg.cpp:307
-#: libwidg.cpp:308 origwidg.cpp:81 project.cpp:456 project.cpp:457
+#: libwidg.cpp:301 libwidg.cpp:302 libwidg.cpp:307 libwidg.cpp:308
+#: libwidg.cpp:309 origwidg.cpp:81 project.cpp:456 project.cpp:457
 #: project.cpp:462 project.cpp:463 project.cpp:464 project.cpp:466
 #: project.cpp:467 project.cpp:468 project.cpp:470 project.cpp:472
 #: project.cpp:474 project.cpp:476 project.cpp:491 project.cpp:494
-#: project.cpp:1211 project.cpp:1212 session.cpp:561 session.cpp:562
-#: session.cpp:563 session.cpp:564 session.cpp:565 session.cpp:566
-#: session.cpp:568 session.cpp:570 session.cpp:572 session.cpp:573
-#: session.cpp:574 session.cpp:575 session.cpp:579 session.cpp:580
-#: session.cpp:990 session.cpp:1829 vcaengine.cpp:817 vcaengine.cpp:824
-#: widget.cpp:620 widget.cpp:621 widget.cpp:627 widget.cpp:628 widget.cpp:629
-#: widget.cpp:630 widget.cpp:631 widget.cpp:632 widget.cpp:634 widget.cpp:635
-#: widget.cpp:636 widget.cpp:638 widget.cpp:640 widget.cpp:849 widget.cpp:891
-#: widget.cpp:900 widget.cpp:902 widget.cpp:1137 widget.cpp:1152
-#: widget.cpp:1153 widget.cpp:1154
+#: project.cpp:1211 project.cpp:1212 session.cpp:575 session.cpp:576
+#: session.cpp:577 session.cpp:578 session.cpp:579 session.cpp:580
+#: session.cpp:582 session.cpp:584 session.cpp:586 session.cpp:587
+#: session.cpp:588 session.cpp:589 session.cpp:593 session.cpp:594
+#: session.cpp:1004 session.cpp:1844 vcaengine.cpp:862 vcaengine.cpp:869
+#: widget.cpp:747 widget.cpp:748 widget.cpp:754 widget.cpp:755 widget.cpp:756
+#: widget.cpp:757 widget.cpp:758 widget.cpp:759 widget.cpp:761 widget.cpp:762
+#: widget.cpp:763 widget.cpp:765 widget.cpp:767 widget.cpp:976 widget.cpp:1018
+#: widget.cpp:1027 widget.cpp:1029 widget.cpp:1264 widget.cpp:1279
+#: widget.cpp:1280 widget.cpp:1281
 msgid "fld"
 msgstr ""
 
-#: libwidg.cpp:300 libwidg.cpp:326 project.cpp:456 project.cpp:508
-#: session.cpp:561 session.cpp:602
+#: libwidg.cpp:301 libwidg.cpp:327 project.cpp:456 project.cpp:508
+#: session.cpp:575 session.cpp:616
 msgid "/obj/st/en"
 msgstr ""
 
-#: libwidg.cpp:300 project.cpp:456 session.cpp:561 widget.cpp:620
+#: libwidg.cpp:301 project.cpp:456 session.cpp:575 widget.cpp:747
 msgid "Enable"
 msgstr "Включен"
 
-#: libwidg.cpp:300 libwidg.cpp:301 libwidg.cpp:306 libwidg.cpp:307
-#: libwidg.cpp:308 libwidg.cpp:313 libwidg.cpp:317 libwidg.cpp:318
-#: libwidg.cpp:319 libwidg.cpp:414 origwidg.cpp:82 origwidg.cpp:449
+#: libwidg.cpp:301 libwidg.cpp:302 libwidg.cpp:307 libwidg.cpp:308
+#: libwidg.cpp:309 libwidg.cpp:314 libwidg.cpp:318 libwidg.cpp:319
+#: libwidg.cpp:320 libwidg.cpp:415 origwidg.cpp:82 origwidg.cpp:449
 #: origwidg.cpp:459 project.cpp:456 project.cpp:457 project.cpp:462
 #: project.cpp:463 project.cpp:464 project.cpp:466 project.cpp:467
 #: project.cpp:468 project.cpp:470 project.cpp:472 project.cpp:474
 #: project.cpp:476 project.cpp:481 project.cpp:485 project.cpp:486
 #: project.cpp:487 project.cpp:491 project.cpp:494 project.cpp:497
 #: project.cpp:498 project.cpp:646 project.cpp:1211 project.cpp:1212
-#: project.cpp:1217 session.cpp:561 session.cpp:562 session.cpp:563
-#: session.cpp:564 session.cpp:565 session.cpp:566 session.cpp:568
-#: session.cpp:570 session.cpp:572 session.cpp:573 session.cpp:574
-#: session.cpp:575 session.cpp:579 session.cpp:580 session.cpp:581
-#: session.cpp:585 session.cpp:589 session.cpp:590 session.cpp:591
-#: session.cpp:592 session.cpp:593 session.cpp:594 session.cpp:595
-#: session.cpp:990 session.cpp:994 session.cpp:1829 vcaengine.cpp:810
-#: vcaengine.cpp:811 vcaengine.cpp:814 vcaengine.cpp:817 vcaengine.cpp:824
-#: widget.cpp:620 widget.cpp:621 widget.cpp:623 widget.cpp:627 widget.cpp:628
-#: widget.cpp:629 widget.cpp:630 widget.cpp:631 widget.cpp:632 widget.cpp:634
-#: widget.cpp:635 widget.cpp:636 widget.cpp:638 widget.cpp:640 widget.cpp:646
-#: widget.cpp:849 widget.cpp:892 widget.cpp:900 widget.cpp:903 widget.cpp:1137
-#: widget.cpp:1142 widget.cpp:1143 widget.cpp:1144 widget.cpp:1145
-#: widget.cpp:1146 widget.cpp:1147 widget.cpp:1148 widget.cpp:1152
-#: widget.cpp:1153 widget.cpp:1154
+#: project.cpp:1217 session.cpp:575 session.cpp:576 session.cpp:577
+#: session.cpp:578 session.cpp:579 session.cpp:580 session.cpp:582
+#: session.cpp:584 session.cpp:586 session.cpp:587 session.cpp:588
+#: session.cpp:589 session.cpp:593 session.cpp:594 session.cpp:595
+#: session.cpp:599 session.cpp:603 session.cpp:604 session.cpp:605
+#: session.cpp:606 session.cpp:607 session.cpp:608 session.cpp:609
+#: session.cpp:1004 session.cpp:1008 session.cpp:1844 vcaengine.cpp:847
+#: vcaengine.cpp:848 vcaengine.cpp:852 vcaengine.cpp:855 vcaengine.cpp:856
+#: vcaengine.cpp:857 vcaengine.cpp:862 vcaengine.cpp:869 widget.cpp:747
+#: widget.cpp:748 widget.cpp:750 widget.cpp:754 widget.cpp:755 widget.cpp:756
+#: widget.cpp:757 widget.cpp:758 widget.cpp:759 widget.cpp:761 widget.cpp:762
+#: widget.cpp:763 widget.cpp:765 widget.cpp:767 widget.cpp:773 widget.cpp:976
+#: widget.cpp:1019 widget.cpp:1027 widget.cpp:1030 widget.cpp:1264
+#: widget.cpp:1269 widget.cpp:1270 widget.cpp:1271 widget.cpp:1272
+#: widget.cpp:1273 widget.cpp:1274 widget.cpp:1275 widget.cpp:1279
+#: widget.cpp:1280 widget.cpp:1281
 msgid "tp"
 msgstr ""
 
-#: libwidg.cpp:300 project.cpp:456 session.cpp:561 session.cpp:562
-#: session.cpp:573 session.cpp:990 session.cpp:1829 widget.cpp:620
-#: widget.cpp:849 widget.cpp:1146
+#: libwidg.cpp:301 project.cpp:456 session.cpp:575 session.cpp:576
+#: session.cpp:587 session.cpp:1004 session.cpp:1844 widget.cpp:747
+#: widget.cpp:976 widget.cpp:1273
 msgid "bool"
 msgstr ""
 
-#: libwidg.cpp:301 libwidg.cpp:331 project.cpp:457 project.cpp:513
+#: libwidg.cpp:302 libwidg.cpp:332 project.cpp:457 project.cpp:513
 msgid "/obj/st/db"
 msgstr ""
 
-#: libwidg.cpp:301
+#: libwidg.cpp:302
 msgid "Library DB"
 msgstr "БД библиотеки"
 
-#: libwidg.cpp:301 libwidg.cpp:306 libwidg.cpp:307 libwidg.cpp:308
-#: libwidg.cpp:317 libwidg.cpp:318 libwidg.cpp:319 origwidg.cpp:82
+#: libwidg.cpp:302 libwidg.cpp:307 libwidg.cpp:308 libwidg.cpp:309
+#: libwidg.cpp:318 libwidg.cpp:319 libwidg.cpp:320 origwidg.cpp:82
 #: project.cpp:457 project.cpp:462 project.cpp:463 project.cpp:464
 #: project.cpp:466 project.cpp:467 project.cpp:485 project.cpp:486
 #: project.cpp:487 project.cpp:494 project.cpp:497 project.cpp:498
-#: project.cpp:1211 project.cpp:1212 session.cpp:563 session.cpp:564
-#: session.cpp:565 session.cpp:572 session.cpp:581 session.cpp:589
-#: session.cpp:591 session.cpp:592 session.cpp:595 vcaengine.cpp:817
-#: vcaengine.cpp:824 widget.cpp:621 widget.cpp:627 widget.cpp:628
-#: widget.cpp:629 widget.cpp:630 widget.cpp:631 widget.cpp:632 widget.cpp:634
-#: widget.cpp:635 widget.cpp:892 widget.cpp:900 widget.cpp:903 widget.cpp:1137
-#: widget.cpp:1142 widget.cpp:1143 widget.cpp:1145 widget.cpp:1148
-#: widget.cpp:1152 widget.cpp:1154
+#: project.cpp:1211 project.cpp:1212 session.cpp:577 session.cpp:578
+#: session.cpp:579 session.cpp:586 session.cpp:595 session.cpp:603
+#: session.cpp:605 session.cpp:606 session.cpp:609 vcaengine.cpp:855
+#: vcaengine.cpp:856 vcaengine.cpp:857 vcaengine.cpp:862 vcaengine.cpp:869
+#: widget.cpp:748 widget.cpp:754 widget.cpp:755 widget.cpp:756 widget.cpp:757
+#: widget.cpp:758 widget.cpp:759 widget.cpp:761 widget.cpp:762 widget.cpp:1019
+#: widget.cpp:1027 widget.cpp:1030 widget.cpp:1264 widget.cpp:1269
+#: widget.cpp:1270 widget.cpp:1272 widget.cpp:1275 widget.cpp:1279
+#: widget.cpp:1281
 msgid "str"
 msgstr ""
 
-#: libwidg.cpp:301 libwidg.cpp:319 origwidg.cpp:82 project.cpp:457
+#: libwidg.cpp:302 libwidg.cpp:320 origwidg.cpp:82 project.cpp:457
 #: project.cpp:466 project.cpp:467 project.cpp:468 project.cpp:470
 #: project.cpp:472 project.cpp:476 project.cpp:487 project.cpp:491
-#: project.cpp:1212 session.cpp:566 session.cpp:568 session.cpp:570
-#: session.cpp:572 session.cpp:580 vcaengine.cpp:817 widget.cpp:621
-#: widget.cpp:634 widget.cpp:635 widget.cpp:636 widget.cpp:638 widget.cpp:640
-#: widget.cpp:892 widget.cpp:903 widget.cpp:1137 widget.cpp:1144
-#: widget.cpp:1147 widget.cpp:1152
+#: project.cpp:1212 session.cpp:580 session.cpp:582 session.cpp:584
+#: session.cpp:586 session.cpp:594 vcaengine.cpp:856 vcaengine.cpp:857
+#: vcaengine.cpp:862 widget.cpp:748 widget.cpp:761 widget.cpp:762
+#: widget.cpp:763 widget.cpp:765 widget.cpp:767 widget.cpp:1019
+#: widget.cpp:1030 widget.cpp:1264 widget.cpp:1271 widget.cpp:1274
+#: widget.cpp:1279
 msgid "dest"
 msgstr ""
 
-#: libwidg.cpp:301 project.cpp:457 vcaengine.cpp:817 widget.cpp:621
-#: widget.cpp:892 widget.cpp:903 widget.cpp:1152
+#: libwidg.cpp:302 project.cpp:457 vcaengine.cpp:862 widget.cpp:748
+#: widget.cpp:1019 widget.cpp:1030 widget.cpp:1279
 msgid "sel_ed"
 msgstr ""
 
-#: libwidg.cpp:301 project.cpp:457 project.cpp:466 project.cpp:467
+#: libwidg.cpp:302 project.cpp:457 project.cpp:466 project.cpp:467
 #: project.cpp:468 project.cpp:470 project.cpp:472 project.cpp:476
-#: project.cpp:491 project.cpp:1212 session.cpp:566 session.cpp:568
-#: session.cpp:570 session.cpp:572 session.cpp:580 vcaengine.cpp:817
-#: widget.cpp:621 widget.cpp:634 widget.cpp:635 widget.cpp:636 widget.cpp:638
-#: widget.cpp:640 widget.cpp:892 widget.cpp:903 widget.cpp:1137
-#: widget.cpp:1144 widget.cpp:1147 widget.cpp:1152
+#: project.cpp:491 project.cpp:1212 session.cpp:580 session.cpp:582
+#: session.cpp:584 session.cpp:586 session.cpp:594 vcaengine.cpp:856
+#: vcaengine.cpp:857 vcaengine.cpp:862 widget.cpp:748 widget.cpp:761
+#: widget.cpp:762 widget.cpp:763 widget.cpp:765 widget.cpp:767 widget.cpp:1019
+#: widget.cpp:1030 widget.cpp:1264 widget.cpp:1271 widget.cpp:1274
+#: widget.cpp:1279
 msgid "select"
 msgstr ""
 
-#: libwidg.cpp:301 project.cpp:457
+#: libwidg.cpp:302 project.cpp:457
 msgid "/db/tblList"
 msgstr ""
 
-#: libwidg.cpp:302 project.cpp:458 project.cpp:475 vcaengine.cpp:264
-#: vcaengine.cpp:817 vcaengine.cpp:824
+#: libwidg.cpp:303 project.cpp:458 project.cpp:475 vcaengine.cpp:280
+#: vcaengine.cpp:862 vcaengine.cpp:869
 msgid "help"
 msgstr ""
 
-#: libwidg.cpp:302 project.cpp:458
+#: libwidg.cpp:303 project.cpp:458
 msgid ""
 "DB address in format [<DB module>.<DB name>.<Table name>].\n"
 "For use main work DB set '*.*'."
@@ -644,420 +653,405 @@ msgstr ""
 "Адрес БД в формате [<Модуль БД>.<Имя БД>.<Имя таблицы>].\n"
 "Для использования основной рабочей БД установить '*.*'."
 
-#: libwidg.cpp:304 project.cpp:460 session.cpp:577
+#: libwidg.cpp:305 project.cpp:460 session.cpp:591
 msgid "/obj/cfg"
 msgstr ""
 
-#: libwidg.cpp:304 origwidg.cpp:331 origwidg.cpp:360 project.cpp:460
-#: project.cpp:1208 session.cpp:577 widget.cpp:625 widget.cpp:1147
+#: libwidg.cpp:305 origwidg.cpp:331 origwidg.cpp:360 project.cpp:460
+#: project.cpp:1208 session.cpp:591 widget.cpp:752 widget.cpp:1274
 msgid "Config"
 msgstr "Конфигурация"
 
-#: libwidg.cpp:306 libwidg.cpp:341 project.cpp:462 project.cpp:548
+#: libwidg.cpp:307 libwidg.cpp:342 project.cpp:462 project.cpp:548
 msgid "/obj/cfg/id"
 msgstr ""
 
-#: libwidg.cpp:306 libwidg.cpp:317 project.cpp:462 project.cpp:485
-#: project.cpp:497 widget.cpp:119 widget.cpp:627 widget.cpp:1142
+#: libwidg.cpp:307 libwidg.cpp:318 project.cpp:462 project.cpp:485
+#: project.cpp:497 widget.cpp:138 widget.cpp:754 widget.cpp:1269
 msgid "Id"
 msgstr ""
 
-#: libwidg.cpp:307 libwidg.cpp:342 project.cpp:463 project.cpp:549
+#: libwidg.cpp:308 libwidg.cpp:343 project.cpp:463 project.cpp:549
 msgid "/obj/cfg/name"
 msgstr ""
 
-#: libwidg.cpp:307 project.cpp:463 project.cpp:494 vcaengine.cpp:126
-#: vcaengine.cpp:171 vcaengine.cpp:180 widget.cpp:123 widget.cpp:631
-#: widget.cpp:1143
+#: libwidg.cpp:308 project.cpp:463 project.cpp:494 vcaengine.cpp:126
+#: vcaengine.cpp:171 vcaengine.cpp:180 widget.cpp:146 widget.cpp:758
+#: widget.cpp:1270
 msgid "Name"
 msgstr "Имя"
 
-#: libwidg.cpp:307
+#: libwidg.cpp:308 session.cpp:1874 widget.cpp:941
 msgid "len"
 msgstr ""
 
-#: libwidg.cpp:307 origwidg.cpp:332 origwidg.cpp:337 origwidg.cpp:341
+#: libwidg.cpp:308 origwidg.cpp:332 origwidg.cpp:337 origwidg.cpp:341
 #: origwidg.cpp:350 origwidg.cpp:356 origwidg.cpp:420 origwidg.cpp:514
 #: vcaengine.cpp:126 vcaengine.cpp:180
 msgid "50"
 msgstr ""
 
-#: libwidg.cpp:308 libwidg.cpp:347 project.cpp:464 project.cpp:554
+#: libwidg.cpp:309 libwidg.cpp:348 project.cpp:464 project.cpp:554
 msgid "/obj/cfg/descr"
 msgstr ""
 
-#: libwidg.cpp:308 project.cpp:464 vcaengine.cpp:127 vcaengine.cpp:181
-#: widget.cpp:124 widget.cpp:632
+#: libwidg.cpp:309 project.cpp:464 vcaengine.cpp:127 vcaengine.cpp:181
+#: widget.cpp:147 widget.cpp:759
 msgid "Description"
 msgstr "Описание"
 
-#: libwidg.cpp:308 project.cpp:464 widget.cpp:632 widget.cpp:1154
+#: libwidg.cpp:309 project.cpp:464 widget.cpp:759
 msgid "cols"
 msgstr ""
 
-#: libwidg.cpp:308 origwidg.cpp:360 origwidg.cpp:532 origwidg.cpp:662
+#: libwidg.cpp:309 origwidg.cpp:360 origwidg.cpp:532 origwidg.cpp:662
 #: project.cpp:464 vcaengine.cpp:149 vcaengine.cpp:159 vcaengine.cpp:168
 #: vcaengine.cpp:171 vcaengine.cpp:187 vcaengine.cpp:192 vcaengine.cpp:212
 #: vcaengine.cpp:213 vcaengine.cpp:214 vcaengine.cpp:215 vcaengine.cpp:216
 #: vcaengine.cpp:217 vcaengine.cpp:218 vcaengine.cpp:219 vcaengine.cpp:220
-#: vcaengine.cpp:221 widget.cpp:129 widget.cpp:130 widget.cpp:632
-#: widget.cpp:1154
+#: vcaengine.cpp:221 widget.cpp:152 widget.cpp:153 widget.cpp:759
 msgid "100"
 msgstr ""
 
-#: libwidg.cpp:308 project.cpp:464 widget.cpp:632 widget.cpp:1154
+#: libwidg.cpp:309 project.cpp:464 widget.cpp:759 widget.cpp:1281
 msgid "rows"
 msgstr ""
 
-#: libwidg.cpp:308 origwidg.cpp:418 origwidg.cpp:422 origwidg.cpp:512
+#: libwidg.cpp:309 origwidg.cpp:418 origwidg.cpp:422 origwidg.cpp:512
 #: origwidg.cpp:532 origwidg.cpp:595 origwidg.cpp:1263 origwidg.cpp:1269
-#: project.cpp:464 project.cpp:820 vcaengine.cpp:144 vcaengine.cpp:154
-#: vcaengine.cpp:186 vcaengine.cpp:200
+#: project.cpp:464 project.cpp:820 vcaengine.cpp:186
 msgid "3"
 msgstr ""
 
-#: libwidg.cpp:309 libwidg.cpp:336 project.cpp:465 project.cpp:543
+#: libwidg.cpp:310 libwidg.cpp:337 project.cpp:465 project.cpp:543
 msgid "/obj/cfg/ico"
 msgstr ""
 
-#: libwidg.cpp:309 project.cpp:465 vcaengine.cpp:129 vcaengine.cpp:138
-#: vcaengine.cpp:183 vcaengine.cpp:194 widget.cpp:633
+#: libwidg.cpp:310 project.cpp:465 vcaengine.cpp:129 vcaengine.cpp:138
+#: vcaengine.cpp:183 vcaengine.cpp:194 widget.cpp:760
 msgid "Icon"
 msgstr "Иконка"
 
-#: libwidg.cpp:309 project.cpp:465 widget.cpp:633
+#: libwidg.cpp:310 project.cpp:465 widget.cpp:760
 msgid "v_sz"
 msgstr ""
 
-#: libwidg.cpp:309 project.cpp:465 widget.cpp:633
+#: libwidg.cpp:310 project.cpp:465 widget.cpp:760
 msgid "64"
 msgstr ""
 
-#: libwidg.cpp:309 project.cpp:465 widget.cpp:633
+#: libwidg.cpp:310 project.cpp:465 widget.cpp:760
 msgid "h_sz"
 msgstr ""
 
-#: libwidg.cpp:312 project.cpp:1208 widget.cpp:616
+#: libwidg.cpp:313 project.cpp:1208 widget.cpp:743
 msgid "/wdg"
 msgstr ""
 
-#: libwidg.cpp:312 libwidg.cpp:313 widget.cpp:646
+#: libwidg.cpp:313 libwidg.cpp:314 widget.cpp:773
 msgid "Widgets"
 msgstr "Виджет"
 
-#: libwidg.cpp:313 libwidg.cpp:317 libwidg.cpp:318 libwidg.cpp:319
-#: libwidg.cpp:383 libwidg.cpp:384 libwidg.cpp:385 project.cpp:481
+#: libwidg.cpp:314 libwidg.cpp:318 libwidg.cpp:319 libwidg.cpp:320
+#: libwidg.cpp:384 libwidg.cpp:385 libwidg.cpp:386 project.cpp:481
 #: project.cpp:485 project.cpp:486 project.cpp:487 project.cpp:497
 #: project.cpp:498 project.cpp:615 project.cpp:616 project.cpp:617
-#: project.cpp:703 project.cpp:704 project.cpp:1217 session.cpp:581
-#: session.cpp:585 session.cpp:589 session.cpp:590 session.cpp:591
-#: session.cpp:592 session.cpp:593 session.cpp:594 session.cpp:595
-#: session.cpp:670 session.cpp:671 session.cpp:672 session.cpp:673
-#: session.cpp:674 session.cpp:675 session.cpp:676 session.cpp:994
-#: vcaengine.cpp:707 vcaengine.cpp:810 vcaengine.cpp:811 vcaengine.cpp:814
-#: widget.cpp:646 widget.cpp:1142 widget.cpp:1143 widget.cpp:1144
-#: widget.cpp:1145 widget.cpp:1146 widget.cpp:1147 widget.cpp:1148
-#: widget.cpp:1190 widget.cpp:1191 widget.cpp:1192 widget.cpp:1193
-#: widget.cpp:1194 widget.cpp:1195 widget.cpp:1196 vcaFuncs.h:68
-#: vcaFuncs.h:134
+#: project.cpp:703 project.cpp:704 project.cpp:1217 session.cpp:595
+#: session.cpp:599 session.cpp:603 session.cpp:604 session.cpp:605
+#: session.cpp:606 session.cpp:607 session.cpp:608 session.cpp:609
+#: session.cpp:684 session.cpp:685 session.cpp:686 session.cpp:687
+#: session.cpp:688 session.cpp:689 session.cpp:690 session.cpp:1008
+#: vcaengine.cpp:744 vcaengine.cpp:847 vcaengine.cpp:848 vcaengine.cpp:852
+#: vcaengine.cpp:855 vcaengine.cpp:856 vcaengine.cpp:857 vcaengine.cpp:947
+#: vcaengine.cpp:948 vcaengine.cpp:949 widget.cpp:773 widget.cpp:1269
+#: widget.cpp:1270 widget.cpp:1271 widget.cpp:1272 widget.cpp:1273
+#: widget.cpp:1274 widget.cpp:1275 widget.cpp:1317 widget.cpp:1318
+#: widget.cpp:1319 widget.cpp:1320 widget.cpp:1321 widget.cpp:1322
+#: widget.cpp:1323 vcaFuncs.h:68 vcaFuncs.h:134
 msgid "list"
 msgstr ""
 
-#: libwidg.cpp:313 libwidg.cpp:352
+#: libwidg.cpp:314 libwidg.cpp:353
 msgid "/wdg/wdg"
 msgstr ""
 
-#: libwidg.cpp:313 project.cpp:481 project.cpp:1217 session.cpp:585
-#: session.cpp:994 vcaengine.cpp:810 vcaengine.cpp:811 vcaengine.cpp:814
-#: widget.cpp:646
+#: libwidg.cpp:314 project.cpp:481 project.cpp:1217 session.cpp:599
+#: session.cpp:1008 vcaengine.cpp:847 vcaengine.cpp:848 vcaengine.cpp:852
+#: widget.cpp:773
 msgid "br"
 msgstr ""
 
-#: libwidg.cpp:313 libwidg.cpp:315 project.cpp:481 project.cpp:483
-#: project.cpp:495 project.cpp:1217 vcaengine.cpp:810 vcaengine.cpp:811
-#: vcaengine.cpp:814 widget.cpp:646 widget.cpp:1140
+#: libwidg.cpp:314 libwidg.cpp:316 project.cpp:481 project.cpp:483
+#: project.cpp:495 project.cpp:1217 vcaengine.cpp:847 vcaengine.cpp:848
+#: vcaengine.cpp:852 vcaengine.cpp:853 widget.cpp:773 widget.cpp:1267
 msgid "s_com"
 msgstr ""
 
-#: libwidg.cpp:313 libwidg.cpp:315 project.cpp:481 project.cpp:483
-#: project.cpp:1217 vcaengine.cpp:810 vcaengine.cpp:811 vcaengine.cpp:814
-#: widget.cpp:646 widget.cpp:1140
+#: libwidg.cpp:314 libwidg.cpp:316 project.cpp:481 project.cpp:483
+#: project.cpp:1217 vcaengine.cpp:847 vcaengine.cpp:848 vcaengine.cpp:852
+#: vcaengine.cpp:853 widget.cpp:773 widget.cpp:1267
 msgid "add,del"
 msgstr ""
 
-#: libwidg.cpp:313 project.cpp:481 project.cpp:1217 session.cpp:585
-#: session.cpp:994 vcaengine.cpp:810 vcaengine.cpp:811 vcaengine.cpp:814
-#: widget.cpp:646
+#: libwidg.cpp:314 project.cpp:481 project.cpp:1217 session.cpp:599
+#: session.cpp:1008 vcaengine.cpp:847 vcaengine.cpp:848 vcaengine.cpp:852
+#: widget.cpp:773
 msgid "br_pref"
 msgstr ""
 
-#: libwidg.cpp:314 project.cpp:482
+#: libwidg.cpp:315 project.cpp:482
 msgid "/mime"
 msgstr ""
 
-#: libwidg.cpp:314 libwidg.cpp:315 project.cpp:482 project.cpp:483
+#: libwidg.cpp:315 libwidg.cpp:316 project.cpp:482 project.cpp:483
 #: vcaengine.cpp:134
 msgid "Mime data"
 msgstr "Mime данные"
 
-#: libwidg.cpp:315 project.cpp:483 project.cpp:495 session.cpp:587
-#: widget.cpp:1140
+#: libwidg.cpp:316 project.cpp:483 project.cpp:495 session.cpp:601
+#: vcaengine.cpp:853 widget.cpp:1267
 msgid "table"
 msgstr ""
 
-#: libwidg.cpp:315 libwidg.cpp:368 project.cpp:483 project.cpp:600
+#: libwidg.cpp:316 libwidg.cpp:369 project.cpp:483 project.cpp:600
 msgid "/mime/mime"
 msgstr ""
 
-#: libwidg.cpp:315 project.cpp:483 project.cpp:495 widget.cpp:1140
+#: libwidg.cpp:316 project.cpp:483 project.cpp:495 vcaengine.cpp:853
+#: widget.cpp:1267
 msgid "key"
 msgstr ""
 
-#: libwidg.cpp:315 libwidg.cpp:359 libwidg.cpp:363 libwidg.cpp:366
-#: libwidg.cpp:404 project.cpp:483 project.cpp:495 project.cpp:577
+#: libwidg.cpp:316 libwidg.cpp:360 libwidg.cpp:364 libwidg.cpp:367
+#: libwidg.cpp:405 project.cpp:483 project.cpp:495 project.cpp:577
 #: project.cpp:581 project.cpp:584 project.cpp:636 project.cpp:685
 #: project.cpp:687 project.cpp:688 project.cpp:1236 project.cpp:1237
 #: project.cpp:1238 project.cpp:1239 project.cpp:1240 project.cpp:1249
-#: project.cpp:1253 project.cpp:1254 project.cpp:1256 session.cpp:634
-#: session.cpp:648 session.cpp:651 session.cpp:665 session.cpp:1015
-#: session.cpp:1746 session.cpp:1757 session.cpp:1768 session.cpp:1783
-#: session.cpp:1791 session.cpp:1811 vcaengine.cpp:772 vcaengine.cpp:782
-#: vcaengine.cpp:793 vcaengine.cpp:845 vcaengine.cpp:850 vcaengine.cpp:853
-#: vcaengine.cpp:862 vcaengine.cpp:864 vcaengine.cpp:865 vcaengine.cpp:899
-#: widget.cpp:119 widget.cpp:530 widget.cpp:560 widget.cpp:567 widget.cpp:579
-#: widget.cpp:600 widget.cpp:658 widget.cpp:788 widget.cpp:793 widget.cpp:794
-#: widget.cpp:1140 widget.cpp:1240 widget.cpp:1257 widget.cpp:1347
-#: widget.cpp:1348 widget.cpp:1349 widget.cpp:1350 widget.cpp:1351
-#: widget.cpp:1352 widget.cpp:1353 widget.cpp:1354 widget.cpp:1355
-#: widget.cpp:1356 widget.cpp:1357 widget.cpp:1358 widget.cpp:1362
-#: widget.cpp:1363 widget.cpp:1364 widget.cpp:1365 widget.cpp:1366
-#: widget.cpp:1367
+#: project.cpp:1253 project.cpp:1254 project.cpp:1256 session.cpp:648
+#: session.cpp:662 session.cpp:665 session.cpp:679 session.cpp:1029
+#: session.cpp:1761 session.cpp:1772 session.cpp:1783 session.cpp:1798
+#: session.cpp:1806 session.cpp:1826 vcaengine.cpp:426 vcaengine.cpp:459
+#: vcaengine.cpp:809 vcaengine.cpp:819 vcaengine.cpp:830 vcaengine.cpp:853
+#: vcaengine.cpp:890 vcaengine.cpp:895 vcaengine.cpp:898 vcaengine.cpp:907
+#: vcaengine.cpp:909 vcaengine.cpp:910 vcaengine.cpp:966 vcaengine.cpp:990
+#: widget.cpp:138 widget.cpp:657 widget.cpp:687 widget.cpp:694 widget.cpp:706
+#: widget.cpp:727 widget.cpp:785 widget.cpp:915 widget.cpp:920 widget.cpp:921
+#: widget.cpp:1267 widget.cpp:1367 widget.cpp:1384 widget.cpp:1474
+#: widget.cpp:1475 widget.cpp:1476 widget.cpp:1477 widget.cpp:1478
+#: widget.cpp:1479 widget.cpp:1480 widget.cpp:1481 widget.cpp:1482
+#: widget.cpp:1483 widget.cpp:1484 widget.cpp:1485 widget.cpp:1489
+#: widget.cpp:1490 widget.cpp:1491 widget.cpp:1492 widget.cpp:1493
+#: widget.cpp:1494
 msgid "id"
 msgstr ""
 
-#: libwidg.cpp:317 libwidg.cpp:383 project.cpp:485 project.cpp:615
+#: libwidg.cpp:318 libwidg.cpp:384 project.cpp:485 project.cpp:615
 msgid "/mime/mime/id"
 msgstr ""
 
-#: libwidg.cpp:318 libwidg.cpp:384 project.cpp:486 project.cpp:616
+#: libwidg.cpp:319 libwidg.cpp:385 project.cpp:486 project.cpp:616
 msgid "/mime/mime/tp"
 msgstr ""
 
-#: libwidg.cpp:318 project.cpp:486 vcaengine.cpp:133
+#: libwidg.cpp:319 project.cpp:486 vcaengine.cpp:133
 msgid "Mime type"
 msgstr "Mime тип"
 
-#: libwidg.cpp:319 libwidg.cpp:385 project.cpp:487 project.cpp:617
+#: libwidg.cpp:320 libwidg.cpp:386 project.cpp:487 project.cpp:617
 msgid "/mime/mime/dt"
 msgstr ""
 
-#: libwidg.cpp:319 project.cpp:487
+#: libwidg.cpp:320 project.cpp:487
 msgid "Data"
 msgstr "Данные"
 
-#: libwidg.cpp:319 libwidg.cpp:376 project.cpp:487 project.cpp:608
+#: libwidg.cpp:320 libwidg.cpp:377 project.cpp:487 project.cpp:608
 msgid "data"
 msgstr ""
 
-#: libwidg.cpp:325 origwidg.cpp:87 project.cpp:507 project.cpp:1225
-#: session.cpp:475 session.cpp:1002 session.cpp:1717 session.cpp:1718
-#: session.cpp:1730 session.cpp:1731 session.cpp:1739 session.cpp:1807
-#: session.cpp:1811 session.cpp:1834 session.cpp:1866 vcaengine.cpp:703
-#: widget.cpp:120 widget.cpp:531 widget.cpp:547 widget.cpp:598 widget.cpp:600
-#: widget.cpp:654 widget.cpp:822 widget.cpp:914 widget.cpp:1161 vcaFuncs.h:196
-#: vcaFuncs.h:244
+#: libwidg.cpp:326 origwidg.cpp:87 project.cpp:507 project.cpp:1225
+#: session.cpp:489 session.cpp:1016 session.cpp:1732 session.cpp:1733
+#: session.cpp:1745 session.cpp:1746 session.cpp:1754 session.cpp:1822
+#: session.cpp:1826 session.cpp:1849 session.cpp:1881 vcaengine.cpp:740
+#: widget.cpp:139 widget.cpp:658 widget.cpp:674 widget.cpp:725 widget.cpp:727
+#: widget.cpp:781 widget.cpp:949 widget.cpp:1041 widget.cpp:1288
+#: vcaFuncs.h:196 vcaFuncs.h:244
 msgid "path"
 msgstr ""
 
-#: libwidg.cpp:328 libwidg.cpp:333 libwidg.cpp:338 libwidg.cpp:341
-#: libwidg.cpp:344 libwidg.cpp:349 libwidg.cpp:354 libwidg.cpp:374
+#: libwidg.cpp:329 libwidg.cpp:334 libwidg.cpp:339 libwidg.cpp:342
+#: libwidg.cpp:345 libwidg.cpp:350 libwidg.cpp:355 libwidg.cpp:375
 #: origwidg.cpp:88 project.cpp:510 project.cpp:515 project.cpp:520
 #: project.cpp:525 project.cpp:530 project.cpp:545 project.cpp:548
 #: project.cpp:551 project.cpp:556 project.cpp:561 project.cpp:566
 #: project.cpp:572 project.cpp:606 project.cpp:663 project.cpp:692
-#: project.cpp:701 project.cpp:1230 project.cpp:1244 session.cpp:510
-#: session.cpp:604 session.cpp:609 session.cpp:623 session.cpp:638
-#: session.cpp:643 session.cpp:1005 session.cpp:1715 session.cpp:1742
-#: session.cpp:1774 session.cpp:1806 session.cpp:1837 session.cpp:1870
-#: vcaengine.cpp:754 vcaengine.cpp:832 vcaengine.cpp:857 vcaengine.cpp:871
-#: vcaengine.cpp:903 vcaengine.cpp:908 widget.cpp:551 widget.cpp:569
-#: widget.cpp:598 widget.cpp:663 widget.cpp:668 widget.cpp:672 widget.cpp:676
-#: widget.cpp:681 widget.cpp:686 widget.cpp:701 widget.cpp:711 widget.cpp:716
-#: widget.cpp:776 widget.cpp:826 widget.cpp:917 widget.cpp:940 widget.cpp:1112
-#: widget.cpp:1164 widget.cpp:1188 widget.cpp:1303 widget.cpp:1308
-#: widget.cpp:1313 vcaFuncs.h:195
+#: project.cpp:701 project.cpp:1230 project.cpp:1244 session.cpp:524
+#: session.cpp:618 session.cpp:623 session.cpp:637 session.cpp:652
+#: session.cpp:657 session.cpp:1019 session.cpp:1730 session.cpp:1757
+#: session.cpp:1789 session.cpp:1821 session.cpp:1852 session.cpp:1885
+#: vcaengine.cpp:791 vcaengine.cpp:877 vcaengine.cpp:902 vcaengine.cpp:916
+#: vcaengine.cpp:945 vcaengine.cpp:994 vcaengine.cpp:999 widget.cpp:678
+#: widget.cpp:696 widget.cpp:725 widget.cpp:790 widget.cpp:795 widget.cpp:799
+#: widget.cpp:803 widget.cpp:808 widget.cpp:813 widget.cpp:828 widget.cpp:838
+#: widget.cpp:843 widget.cpp:903 widget.cpp:953 widget.cpp:1044
+#: widget.cpp:1067 widget.cpp:1239 widget.cpp:1291 widget.cpp:1315
+#: widget.cpp:1430 widget.cpp:1435 widget.cpp:1440 vcaFuncs.h:195
 msgid "get"
 msgstr ""
 
-#: libwidg.cpp:329 libwidg.cpp:334 libwidg.cpp:339 libwidg.cpp:345
-#: libwidg.cpp:350 libwidg.cpp:401 project.cpp:511 project.cpp:516
+#: libwidg.cpp:330 libwidg.cpp:335 libwidg.cpp:340 libwidg.cpp:346
+#: libwidg.cpp:351 libwidg.cpp:402 project.cpp:511 project.cpp:516
 #: project.cpp:521 project.cpp:526 project.cpp:536 project.cpp:546
 #: project.cpp:552 project.cpp:557 project.cpp:562 project.cpp:567
 #: project.cpp:633 project.cpp:664 project.cpp:693 project.cpp:719
-#: project.cpp:726 project.cpp:1231 session.cpp:605 session.cpp:610
-#: session.cpp:624 session.cpp:639 session.cpp:644 session.cpp:1007
-#: session.cpp:1728 session.cpp:1763 session.cpp:1838 session.cpp:1875
-#: vcaengine.cpp:867 vcaengine.cpp:904 vcaengine.cpp:909 widget.cpp:565
-#: widget.cpp:664 widget.cpp:669 widget.cpp:677 widget.cpp:682 widget.cpp:692
-#: widget.cpp:702 widget.cpp:712 widget.cpp:717 widget.cpp:719 widget.cpp:831
-#: widget.cpp:919 widget.cpp:970 widget.cpp:1114 widget.cpp:1170
-#: widget.cpp:1233 widget.cpp:1304 widget.cpp:1309 widget.cpp:1314
-#: vcaFuncs.h:243
+#: project.cpp:726 project.cpp:1231 session.cpp:619 session.cpp:624
+#: session.cpp:638 session.cpp:653 session.cpp:658 session.cpp:1021
+#: session.cpp:1743 session.cpp:1778 session.cpp:1853 session.cpp:1890
+#: vcaengine.cpp:912 vcaengine.cpp:964 vcaengine.cpp:995 vcaengine.cpp:1000
+#: widget.cpp:692 widget.cpp:791 widget.cpp:796 widget.cpp:804 widget.cpp:809
+#: widget.cpp:819 widget.cpp:829 widget.cpp:839 widget.cpp:844 widget.cpp:846
+#: widget.cpp:958 widget.cpp:1046 widget.cpp:1097 widget.cpp:1241
+#: widget.cpp:1297 widget.cpp:1360 widget.cpp:1431 widget.cpp:1436
+#: widget.cpp:1441 vcaFuncs.h:243
 msgid "set"
 msgstr ""
 
-#: libwidg.cpp:359 libwidg.cpp:393 libwidg.cpp:394 libwidg.cpp:395
+#: libwidg.cpp:360 libwidg.cpp:394 libwidg.cpp:395 libwidg.cpp:396
 #: project.cpp:577 project.cpp:591 project.cpp:598 project.cpp:625
 #: project.cpp:626 project.cpp:627 project.cpp:685 project.cpp:687
 #: project.cpp:688 project.cpp:710 project.cpp:711 project.cpp:1227
 #: project.cpp:1236 project.cpp:1237 project.cpp:1238 project.cpp:1239
-#: project.cpp:1240 project.cpp:1249 session.cpp:634 session.cpp:648
-#: session.cpp:651 session.cpp:658 session.cpp:665 session.cpp:681
-#: session.cpp:682 session.cpp:683 session.cpp:684 session.cpp:685
-#: session.cpp:686 session.cpp:687 session.cpp:1015 session.cpp:1746
-#: session.cpp:1757 session.cpp:1783 session.cpp:1791 vcaengine.cpp:717
-#: vcaengine.cpp:845 vcaengine.cpp:862 vcaengine.cpp:884 vcaengine.cpp:899
-#: vcaengine.cpp:912 widget.cpp:560 widget.cpp:579 widget.cpp:734
-#: widget.cpp:741 widget.cpp:749 widget.cpp:753 widget.cpp:771 widget.cpp:788
-#: widget.cpp:1044 widget.cpp:1045 widget.cpp:1046 widget.cpp:1053
-#: widget.cpp:1054 widget.cpp:1059 widget.cpp:1101 widget.cpp:1177
-#: widget.cpp:1179 widget.cpp:1203 widget.cpp:1204 widget.cpp:1205
-#: widget.cpp:1207 widget.cpp:1209 widget.cpp:1210 widget.cpp:1211
-#: widget.cpp:1321 widget.cpp:1325 widget.cpp:1343 widget.cpp:1347
-#: widget.cpp:1348 widget.cpp:1349 widget.cpp:1350 widget.cpp:1351
-#: widget.cpp:1352 widget.cpp:1353 widget.cpp:1354 widget.cpp:1355
-#: widget.cpp:1356 widget.cpp:1357 widget.cpp:1358 widget.cpp:1362
-#: widget.cpp:1363 widget.cpp:1364 widget.cpp:1365 widget.cpp:1366
-#: widget.cpp:1367
+#: project.cpp:1240 project.cpp:1249 session.cpp:648 session.cpp:662
+#: session.cpp:665 session.cpp:672 session.cpp:679 session.cpp:695
+#: session.cpp:696 session.cpp:697 session.cpp:698 session.cpp:699
+#: session.cpp:700 session.cpp:701 session.cpp:1029 session.cpp:1761
+#: session.cpp:1772 session.cpp:1798 session.cpp:1806 vcaengine.cpp:754
+#: vcaengine.cpp:890 vcaengine.cpp:907 vcaengine.cpp:929 vcaengine.cpp:954
+#: vcaengine.cpp:955 vcaengine.cpp:956 vcaengine.cpp:978 vcaengine.cpp:983
+#: vcaengine.cpp:990 vcaengine.cpp:1003 widget.cpp:687 widget.cpp:706
+#: widget.cpp:861 widget.cpp:868 widget.cpp:876 widget.cpp:880 widget.cpp:898
+#: widget.cpp:915 widget.cpp:1171 widget.cpp:1172 widget.cpp:1173
+#: widget.cpp:1180 widget.cpp:1181 widget.cpp:1186 widget.cpp:1228
+#: widget.cpp:1304 widget.cpp:1306 widget.cpp:1330 widget.cpp:1331
+#: widget.cpp:1332 widget.cpp:1334 widget.cpp:1336 widget.cpp:1337
+#: widget.cpp:1338 widget.cpp:1448 widget.cpp:1452 widget.cpp:1470
+#: widget.cpp:1474 widget.cpp:1475 widget.cpp:1476 widget.cpp:1477
+#: widget.cpp:1478 widget.cpp:1479 widget.cpp:1480 widget.cpp:1481
+#: widget.cpp:1482 widget.cpp:1483 widget.cpp:1484 widget.cpp:1485
+#: widget.cpp:1489 widget.cpp:1490 widget.cpp:1491 widget.cpp:1492
+#: widget.cpp:1493 widget.cpp:1494
 msgid "el"
 msgstr ""
 
-#: libwidg.cpp:361 libwidg.cpp:399 project.cpp:579 project.cpp:631
-#: project.cpp:1251 vcaengine.cpp:848 vcaengine.cpp:864 vcaengine.cpp:887
-#: widget.cpp:792 widget.cpp:1214
+#: libwidg.cpp:362 libwidg.cpp:400 project.cpp:579 project.cpp:631
+#: project.cpp:1251 vcaengine.cpp:893 vcaengine.cpp:909 vcaengine.cpp:934
+#: vcaengine.cpp:962 widget.cpp:919 widget.cpp:1341
 msgid "add"
 msgstr ""
 
-#: libwidg.cpp:364 project.cpp:582 project.cpp:1254 session.cpp:458
-#: session.cpp:492 session.cpp:1716 session.cpp:1729 session.cpp:1747
-#: session.cpp:1765 session.cpp:1777 session.cpp:1807 session.cpp:1811
-#: vcaengine.cpp:716 vcaengine.cpp:727 vcaengine.cpp:728 vcaengine.cpp:739
-#: vcaengine.cpp:842 vcaengine.cpp:851 vcaengine.cpp:868 vcaengine.cpp:881
-#: vcaengine.cpp:884 vcaengine.cpp:890 widget.cpp:779 widget.cpp:786
-#: widget.cpp:853 widget.cpp:918 widget.cpp:920 widget.cpp:1138
-#: widget.cpp:1166 widget.cpp:1171 widget.cpp:1185 vcaFuncs.h:40
-#: vcaFuncs.h:196 vcaFuncs.h:244
+#: libwidg.cpp:365 project.cpp:582 project.cpp:1254 session.cpp:467
+#: session.cpp:506 session.cpp:1731 session.cpp:1744 session.cpp:1762
+#: session.cpp:1780 session.cpp:1792 session.cpp:1822 session.cpp:1826
+#: vcaengine.cpp:428 vcaengine.cpp:461 vcaengine.cpp:753 vcaengine.cpp:764
+#: vcaengine.cpp:765 vcaengine.cpp:776 vcaengine.cpp:887 vcaengine.cpp:896
+#: vcaengine.cpp:913 vcaengine.cpp:926 vcaengine.cpp:929 vcaengine.cpp:937
+#: vcaengine.cpp:972 widget.cpp:906 widget.cpp:913 widget.cpp:980
+#: widget.cpp:1045 widget.cpp:1047 widget.cpp:1265 widget.cpp:1293
+#: widget.cpp:1298 widget.cpp:1312 vcaFuncs.h:40 vcaFuncs.h:196 vcaFuncs.h:244
 msgid "user"
 msgstr ""
 
-#: libwidg.cpp:366 libwidg.cpp:400 project.cpp:495 project.cpp:584
-#: project.cpp:632 project.cpp:714 project.cpp:1256 vcaengine.cpp:853
-#: vcaengine.cpp:865 vcaengine.cpp:892 widget.cpp:794 widget.cpp:1222
+#: libwidg.cpp:367 libwidg.cpp:401 project.cpp:495 project.cpp:584
+#: project.cpp:632 project.cpp:714 project.cpp:1256 vcaengine.cpp:898
+#: vcaengine.cpp:910 vcaengine.cpp:939 vcaengine.cpp:963 widget.cpp:921
+#: widget.cpp:1349
 msgid "del"
 msgstr ""
 
-#: libwidg.cpp:371 libwidg.cpp:400 project.cpp:603 project.cpp:632
-#: project.cpp:717 project.cpp:722 widget.cpp:1225 widget.cpp:1227
-#: widget.cpp:1228 widget.cpp:1229 widget.cpp:1236
+#: libwidg.cpp:372 libwidg.cpp:401 project.cpp:603 project.cpp:632
+#: project.cpp:717 project.cpp:722 vcaengine.cpp:944 widget.cpp:1352
+#: widget.cpp:1354 widget.cpp:1355 widget.cpp:1356 widget.cpp:1363
 msgid "key_id"
 msgstr ""
 
-#: libwidg.cpp:372 origwidg.cpp:749 project.cpp:604 project.cpp:719
-#: widget.cpp:1237
+#: libwidg.cpp:373 origwidg.cpp:749 project.cpp:604 project.cpp:719
+#: vcaengine.cpp:943 widget.cpp:1364
 msgid "col"
 msgstr ""
 
-#: libwidg.cpp:376 libwidg.cpp:421 project.cpp:608 project.cpp:653
+#: libwidg.cpp:377 libwidg.cpp:422 project.cpp:608 project.cpp:653
 msgid "dt"
 msgstr ""
 
-#: libwidg.cpp:399 project.cpp:631
+#: libwidg.cpp:400 project.cpp:631
 msgid "newMime"
 msgstr ""
 
-#: libwidg.cpp:399 project.cpp:631
+#: libwidg.cpp:400 project.cpp:631
 msgid "image/new;0"
 msgstr ""
 
-#: libwidg.cpp:437 project.cpp:742 vcaengine.cpp:140 vcaengine.cpp:196
+#: libwidg.cpp:438 project.cpp:742 vcaengine.cpp:140 vcaengine.cpp:196
 msgid "PROC"
 msgstr ""
 
-#: libwidg.cpp:437 project.cpp:742 vcaengine.cpp:141 vcaengine.cpp:197
+#: libwidg.cpp:438 project.cpp:742 vcaengine.cpp:141 vcaengine.cpp:197
 msgid "PROC_PER"
 msgstr ""
 
-#: libwidg.cpp:438 libwidg.cpp:755 project.cpp:39 project.cpp:743
-#: project.cpp:1291 vcaengine.cpp:142 vcaengine.cpp:152 vcaengine.cpp:184
-#: vcaengine.cpp:198
-msgid "USER"
-msgstr ""
-
-#: libwidg.cpp:438 libwidg.cpp:755 project.cpp:39 project.cpp:743
-#: project.cpp:1291 vcaengine.cpp:143 vcaengine.cpp:153 vcaengine.cpp:185
-#: vcaengine.cpp:199
-msgid "GRP"
-msgstr ""
-
-#: libwidg.cpp:438 libwidg.cpp:755 project.cpp:39 project.cpp:744
-#: project.cpp:1291 vcaengine.cpp:144 vcaengine.cpp:154 vcaengine.cpp:186
-#: vcaengine.cpp:200
-msgid "PERMIT"
-msgstr ""
-
-#: libwidg.cpp:439 libwidg.cpp:634 libwidg.cpp:692 libwidg.cpp:754
+#: libwidg.cpp:440 libwidg.cpp:635 libwidg.cpp:693 libwidg.cpp:755
 #: project.cpp:744 project.cpp:1047 project.cpp:1126 project.cpp:1290
 #: vcaengine.cpp:139 vcaengine.cpp:151 vcaengine.cpp:195
 msgid "PARENT"
 msgstr ""
 
-#: libwidg.cpp:439 libwidg.cpp:754 project.cpp:744 project.cpp:1290
+#: libwidg.cpp:440 libwidg.cpp:755 project.cpp:744 project.cpp:1290
 #: vcaengine.cpp:145 vcaengine.cpp:155 vcaengine.cpp:202
 msgid "ATTRS"
 msgstr ""
 
-#: libwidg.cpp:468 libwidg.cpp:473 libwidg.cpp:478 libwidg.cpp:630
-#: libwidg.cpp:690 libwidg.cpp:783 libwidg.cpp:926 libwidg.cpp:933
-#: libwidg.cpp:941 libwidg.cpp:944 origwidg.cpp:919 origwidg.cpp:963
+#: libwidg.cpp:469 libwidg.cpp:474 libwidg.cpp:479 libwidg.cpp:631
+#: libwidg.cpp:691 libwidg.cpp:784 libwidg.cpp:927 libwidg.cpp:934
+#: libwidg.cpp:942 libwidg.cpp:945 origwidg.cpp:919 origwidg.cpp:963
 #: origwidg.cpp:978 project.cpp:843 project.cpp:848 project.cpp:853
 #: project.cpp:1043 project.cpp:1124 project.cpp:1324 project.cpp:1478
-#: project.cpp:1485 project.cpp:1493 project.cpp:1496 session.cpp:88
-#: session.cpp:426 vcaengine.cpp:149 vcaengine.cpp:159 vcaengine.cpp:168
-#: vcaengine.cpp:206 vcaengine.cpp:552 vcaengine.cpp:581 vcaengine.cpp:622
-#: vcaengine.cpp:624
+#: project.cpp:1485 project.cpp:1493 project.cpp:1496 session.cpp:92
+#: session.cpp:434 vcaengine.cpp:149 vcaengine.cpp:159 vcaengine.cpp:168
+#: vcaengine.cpp:206 vcaengine.cpp:589 vcaengine.cpp:618 vcaengine.cpp:659
+#: vcaengine.cpp:661
 msgid "IDW"
 msgstr ""
 
-#: libwidg.cpp:485 libwidg.cpp:770
+#: libwidg.cpp:486 libwidg.cpp:771
 msgid "/wlb_"
 msgstr ""
 
-#: libwidg.cpp:485 libwidg.cpp:770 project.cpp:1307 project.cpp:1336
-#: session.cpp:1076 session.cpp:1082 widget.cpp:186
+#: libwidg.cpp:486 libwidg.cpp:771 project.cpp:1307 project.cpp:1336
+#: session.cpp:1090 session.cpp:1096 widget.cpp:247
 msgid "/wdg_"
 msgstr ""
 
-#: libwidg.cpp:527
+#: libwidg.cpp:528
 msgid "L_"
 msgstr ""
 
-#: libwidg.cpp:527 project.cpp:906 project.cpp:907 session.cpp:1157
-#: widget.cpp:194
+#: libwidg.cpp:528 project.cpp:906 project.cpp:907 session.cpp:1171
+#: widget.cpp:255
 msgid "_"
 msgstr ""
 
-#: libwidg.cpp:536 libwidg.cpp:538 libwidg.cpp:541 libwidg.cpp:550
-#: libwidg.cpp:565 libwidg.cpp:571 project.cpp:916 project.cpp:918
+#: libwidg.cpp:537 libwidg.cpp:539 libwidg.cpp:542 libwidg.cpp:551
+#: libwidg.cpp:566 libwidg.cpp:572 project.cpp:916 project.cpp:918
 #: project.cpp:921 project.cpp:930 project.cpp:945 project.cpp:951
-#: session.cpp:1550 session.cpp:1769 session.cpp:1877 widget.cpp:1613
-#: widget.cpp:1618 widget.cpp:1626 widget.cpp:1627 widget.cpp:1639
-#: widget.cpp:1640 vcaFuncs.h:157
+#: session.cpp:1568 session.cpp:1784 session.cpp:1892 widget.cpp:1740
+#: widget.cpp:1745 widget.cpp:1753 widget.cpp:1754 widget.cpp:1766
+#: widget.cpp:1767 vcaFuncs.h:157
 msgid "\n"
 msgstr ""
 
-#: libwidg.cpp:612 libwidg.cpp:623 libwidg.cpp:652 libwidg.cpp:655
-#: libwidg.cpp:669 libwidg.cpp:892 libwidg.cpp:903 libwidg.cpp:923
-#: libwidg.cpp:938 libwidg.cpp:951 libwidg.cpp:953 libwidg.cpp:967
+#: libwidg.cpp:613 libwidg.cpp:624 libwidg.cpp:653 libwidg.cpp:656
+#: libwidg.cpp:670 libwidg.cpp:893 libwidg.cpp:904 libwidg.cpp:924
+#: libwidg.cpp:939 libwidg.cpp:952 libwidg.cpp:954 libwidg.cpp:968
 #: project.cpp:1006 project.cpp:1036 project.cpp:1065 project.cpp:1068
 #: project.cpp:1082 project.cpp:1442 project.cpp:1455 project.cpp:1475
 #: project.cpp:1490 project.cpp:1503 project.cpp:1506 project.cpp:1521
@@ -1065,16 +1059,16 @@ msgstr ""
 msgid "DBV"
 msgstr ""
 
-#: libwidg.cpp:634 libwidg.cpp:692 libwidg.cpp:917 project.cpp:1047
+#: libwidg.cpp:635 libwidg.cpp:693 libwidg.cpp:918 project.cpp:1047
 #: project.cpp:1126 project.cpp:1469
 msgid "<deleted>"
 msgstr ""
 
-#: libwidg.cpp:681 project.cpp:1115 session.cpp:1274 widget.cpp:506
+#: libwidg.cpp:682 project.cpp:1115 session.cpp:1288 widget.cpp:633
 msgid "Widget is not container!"
 msgstr "Виджет не контейнер!"
 
-#: libwidg.cpp:695 project.cpp:1129
+#: libwidg.cpp:696 project.cpp:1129
 #, c-format
 msgid ""
 "You try to create widget with name '%s' of the widget that was the early "
@@ -1083,22 +1077,22 @@ msgstr ""
 "Вы пытаетесь создать виджет с именем '%s' виджета который был ранее "
 "наследован и удалён из базового контейнера!"
 
-#: libwidg.cpp:742
+#: libwidg.cpp:743
 msgid "Library widget: "
 msgstr "Библиотечный виджет: "
 
-#: libwidg.cpp:841 project.cpp:1389
+#: libwidg.cpp:842 project.cpp:1389
 #, c-format
 msgid "Inheriting widget <%s> enable error"
 msgstr "Ошибка включения наследующего виджета <%s>"
 
-#: libwidg.cpp:941 libwidg.cpp:944 project.cpp:1493 project.cpp:1496
-#: vcaengine.cpp:160 vcaengine.cpp:169 vcaengine.cpp:553 vcaengine.cpp:582
-#: vcaengine.cpp:623 vcaengine.cpp:625
+#: libwidg.cpp:942 libwidg.cpp:945 project.cpp:1493 project.cpp:1496
+#: vcaengine.cpp:160 vcaengine.cpp:169 vcaengine.cpp:590 vcaengine.cpp:619
+#: vcaengine.cpp:660 vcaengine.cpp:662
 msgid "IDC"
 msgstr ""
 
-#: libwidg.cpp:1003
+#: libwidg.cpp:1004
 msgid "Link to widget: "
 msgstr "Ссылка на виджет: "
 
@@ -1114,12 +1108,12 @@ msgstr ""
 msgid "Base widget: "
 msgstr "Базовый виджет: "
 
-#: origwidg.cpp:81 origwidg.cpp:88 project.cpp:1211 widget.cpp:621
-#: widget.cpp:666
+#: origwidg.cpp:81 origwidg.cpp:88 project.cpp:1211 widget.cpp:748
+#: widget.cpp:793
 msgid "/wdg/st/parent"
 msgstr ""
 
-#: origwidg.cpp:81 project.cpp:1211 widget.cpp:121 widget.cpp:621
+#: origwidg.cpp:81 project.cpp:1211 widget.cpp:140 widget.cpp:748
 msgid "Parent"
 msgstr "Родитель"
 
@@ -1150,8 +1144,7 @@ msgstr ""
 #: origwidg.cpp:142 origwidg.cpp:277 origwidg.cpp:347 origwidg.cpp:348
 #: origwidg.cpp:359 origwidg.cpp:414 origwidg.cpp:421 origwidg.cpp:508
 #: origwidg.cpp:591 origwidg.cpp:737 origwidg.cpp:823 origwidg.cpp:1265
-#: vcaengine.cpp:142 vcaengine.cpp:143 vcaengine.cpp:152 vcaengine.cpp:153
-#: vcaengine.cpp:184 vcaengine.cpp:185 vcaengine.cpp:198 vcaengine.cpp:199
+#: vcaengine.cpp:184 vcaengine.cpp:185
 msgid "20"
 msgstr ""
 
@@ -1192,9 +1185,9 @@ msgstr "Линия:стиль"
 #: origwidg.cpp:663 origwidg.cpp:702 origwidg.cpp:743 origwidg.cpp:746
 #: origwidg.cpp:747 origwidg.cpp:781 origwidg.cpp:827 origwidg.cpp:828
 #: origwidg.cpp:829 origwidg.cpp:878 origwidg.cpp:883 origwidg.cpp:1164
-#: origwidg.cpp:1267 project.cpp:1236 session.cpp:1051 session.cpp:1113
-#: session.cpp:1114 vcaengine.cpp:201 widget.cpp:126 widget.cpp:127
-#: widget.cpp:128 widget.cpp:133 widget.cpp:134 widget.cpp:853 widget.cpp:918
+#: origwidg.cpp:1267 project.cpp:1236 session.cpp:1065 session.cpp:1127
+#: session.cpp:1128 vcaengine.cpp:201 widget.cpp:149 widget.cpp:150
+#: widget.cpp:151 widget.cpp:156 widget.cpp:157 widget.cpp:980 widget.cpp:1045
 #: vcaFuncs.h:70
 msgid "0"
 msgstr ""
@@ -1317,8 +1310,8 @@ msgid "fill"
 msgstr ""
 
 #: origwidg.cpp:197 origwidg.cpp:199 origwidg.cpp:201 origwidg.cpp:230
-#: origwidg.cpp:231 session.cpp:1746 session.cpp:1758 session.cpp:1783
-#: session.cpp:1792 widget.cpp:561 widget.cpp:580
+#: origwidg.cpp:231 session.cpp:1761 session.cpp:1773 session.cpp:1798
+#: session.cpp:1807 widget.cpp:688 widget.cpp:707
 msgid "p"
 msgstr ""
 
@@ -1342,8 +1335,8 @@ msgstr ""
 msgid ":y"
 msgstr ""
 
-#: origwidg.cpp:206 origwidg.cpp:207 origwidg.cpp:236 session.cpp:1811
-#: vcaengine.cpp:521 vcaengine.cpp:782 widget.cpp:600
+#: origwidg.cpp:206 origwidg.cpp:207 origwidg.cpp:236 session.cpp:1826
+#: vcaengine.cpp:558 vcaengine.cpp:819 widget.cpp:727
 msgid "w"
 msgstr ""
 
@@ -1423,7 +1416,7 @@ msgid "view"
 msgstr "вид"
 
 #: origwidg.cpp:291 origwidg.cpp:320 origwidg.cpp:331 origwidg.cpp:360
-#: origwidg.cpp:450 origwidg.cpp:463 widget.cpp:1289
+#: origwidg.cpp:450 origwidg.cpp:463 widget.cpp:1416
 msgid "cfg"
 msgstr ""
 
@@ -1439,8 +1432,8 @@ msgid "wordWrap"
 msgstr ""
 
 #: origwidg.cpp:302 origwidg.cpp:311 origwidg.cpp:342 origwidg.cpp:351
-#: widget.cpp:123 widget.cpp:159 widget.cpp:164 widget.cpp:1240
-#: widget.cpp:1262
+#: widget.cpp:146 widget.cpp:182 widget.cpp:187 widget.cpp:1367
+#: widget.cpp:1389
 msgid "name"
 msgstr "имя"
 
@@ -1467,9 +1460,9 @@ msgstr ""
 msgid "Value"
 msgstr "Значение"
 
-#: origwidg.cpp:328 origwidg.cpp:354 origwidg.cpp:380 session.cpp:1052
+#: origwidg.cpp:328 origwidg.cpp:354 origwidg.cpp:380 session.cpp:1066
 #: vcaengine.cpp:139 vcaengine.cpp:151 vcaengine.cpp:195 vcaengine.cpp:206
-#: widget.cpp:138
+#: widget.cpp:161
 msgid "200"
 msgstr ""
 
@@ -1487,7 +1480,7 @@ msgstr "Текст;Combo;Целое;Веществ.;Время;Дата;Дата
 
 #: origwidg.cpp:332 origwidg.cpp:337 origwidg.cpp:341 origwidg.cpp:350
 #: origwidg.cpp:356 origwidg.cpp:420 origwidg.cpp:739 origwidg.cpp:826
-#: widget.cpp:1356
+#: widget.cpp:1483
 msgid "Font"
 msgstr "Шрифт"
 
@@ -1500,7 +1493,7 @@ msgstr ""
 msgid "Word wrap"
 msgstr "Перенос слов"
 
-#: origwidg.cpp:346 widget.cpp:1355
+#: origwidg.cpp:346 widget.cpp:1482
 msgid "Image"
 msgstr "Изображение"
 
@@ -1581,7 +1574,7 @@ msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
 msgstr ""
 "Нет;Точечный;Пунктирный;Сплошной;Двойной;Канавка;Кромка;Вдавлен;Выступающий"
 
-#: origwidg.cpp:421 widget.cpp:1354
+#: origwidg.cpp:421 widget.cpp:1481
 msgid "Color"
 msgstr "Цвет"
 
@@ -1672,7 +1665,7 @@ msgstr "Медиа виджет конечной визуализации."
 msgid "#FFFFFF"
 msgstr ""
 
-#: origwidg.cpp:514 vcaengine.cpp:868
+#: origwidg.cpp:514 vcaengine.cpp:913
 msgid "src"
 msgstr ""
 
@@ -1689,12 +1682,12 @@ msgid "Fit to widget size"
 msgstr "Заполнять виджет"
 
 #: origwidg.cpp:516 origwidg.cpp:525 origwidg.cpp:598 origwidg.cpp:621
-#: widget.cpp:1240 widget.cpp:1263
+#: widget.cpp:1367 widget.cpp:1390
 msgid "type"
 msgstr ""
 
-#: origwidg.cpp:516 origwidg.cpp:598 session.cpp:593 widget.cpp:628
-#: widget.cpp:1144
+#: origwidg.cpp:516 origwidg.cpp:598 session.cpp:607 widget.cpp:755
+#: widget.cpp:1271
 msgid "Type"
 msgstr "Тип"
 
@@ -1790,7 +1783,7 @@ msgstr ""
 msgid "Trend;Spectrum"
 msgstr "График;Спектр"
 
-#: origwidg.cpp:606 origwidg.cpp:651 session.cpp:1575 widget.cpp:126
+#: origwidg.cpp:606 origwidg.cpp:651 session.cpp:1593 widget.cpp:149
 msgid "active"
 msgstr ""
 
@@ -2082,7 +2075,7 @@ msgid "Archivator"
 msgstr "Архиватор"
 
 #: origwidg.cpp:745 origwidg.cpp:769 origwidg.cpp:782 origwidg.cpp:824
-#: origwidg.cpp:844 origwidg.cpp:852 origwidg.cpp:951 session.cpp:545
+#: origwidg.cpp:844 origwidg.cpp:852 origwidg.cpp:951 session.cpp:559
 msgid "tmpl"
 msgstr ""
 
@@ -2095,7 +2088,7 @@ msgstr "Шаблон"
 msgid "lev"
 msgstr ""
 
-#: origwidg.cpp:746 session.cpp:590
+#: origwidg.cpp:746 session.cpp:604
 msgid "Level"
 msgstr "Уровень"
 
@@ -2133,9 +2126,9 @@ msgstr ""
 
 #: origwidg.cpp:750
 msgid "Item's properties"
-msgstr ""
+msgstr "Свойства элемента"
 
-#: origwidg.cpp:760
+#: origwidg.cpp:760 vcaengine.cpp:459
 msgid "it"
 msgstr ""
 
@@ -2248,15 +2241,15 @@ msgid "Document "
 msgstr "Документ "
 
 #: origwidg.cpp:915 origwidg.cpp:959 origwidg.cpp:974 project.cpp:123
-#: project.cpp:124 project.cpp:223 session.cpp:90 session.cpp:429
+#: project.cpp:124 project.cpp:223 session.cpp:94 session.cpp:437
 msgid "_ses"
 msgstr ""
 
 #: origwidg.cpp:923 origwidg.cpp:929 origwidg.cpp:965 origwidg.cpp:980
-#: session.cpp:91 session.cpp:428 vcaengine.cpp:162 vcaengine.cpp:173
-#: vcaengine.cpp:208 vcaengine.cpp:569 vcaengine.cpp:604 vcaengine.cpp:605
-#: vcaengine.cpp:606 vcaengine.cpp:638 vcaengine.cpp:640 vcaengine.cpp:654
-#: vcaengine.cpp:656
+#: session.cpp:95 session.cpp:436 vcaengine.cpp:162 vcaengine.cpp:173
+#: vcaengine.cpp:208 vcaengine.cpp:606 vcaengine.cpp:641 vcaengine.cpp:642
+#: vcaengine.cpp:643 vcaengine.cpp:675 vcaengine.cpp:677 vcaengine.cpp:691
+#: vcaengine.cpp:693
 msgid "IO_VAL"
 msgstr ""
 
@@ -2285,7 +2278,7 @@ msgstr ""
 msgid "JavaLikeCalc.JavaScript"
 msgstr ""
 
-#: origwidg.cpp:1042 session.cpp:1811 widget.cpp:600 vcaFuncs.h:107
+#: origwidg.cpp:1042 session.cpp:1826 widget.cpp:727 vcaFuncs.h:107
 #: vcaFuncs.h:198
 msgid "rez"
 msgstr ""
@@ -2446,8 +2439,8 @@ msgstr "Группа элементов"
 msgid "Elements box widget of the finite visualisation."
 msgstr "Виджет группы элементов конечной визуализации."
 
-#: origwidg.cpp:1263 project.cpp:820 session.cpp:282 session.cpp:283
-#: session.cpp:837 session.cpp:840
+#: origwidg.cpp:1263 project.cpp:820 session.cpp:290 session.cpp:291
+#: session.cpp:851 session.cpp:854
 msgid "pgOpenSrc"
 msgstr ""
 
@@ -2464,12 +2457,24 @@ msgid "Page:group"
 msgstr "Страница:группа"
 
 #: origwidg.cpp:1264 project.cpp:819 vcaengine.cpp:187 vcaengine.cpp:189
-#: widget.cpp:632
+#: widget.cpp:759
 msgid "4"
 msgstr ""
 
 #: project.cpp:38 vcaengine.cpp:188
 msgid "STYLE"
+msgstr ""
+
+#: project.cpp:39 vcaengine.cpp:184
+msgid "USER"
+msgstr ""
+
+#: project.cpp:39 vcaengine.cpp:185
+msgid "GRP"
+msgstr ""
+
+#: project.cpp:39 vcaengine.cpp:186
+msgid "PERMIT"
 msgstr ""
 
 #: project.cpp:39 vcaengine.cpp:187
@@ -2480,17 +2485,17 @@ msgstr ""
 msgid "FLGS"
 msgstr ""
 
-#: project.cpp:44 project.cpp:62 vcaengine.cpp:84 vcaengine.cpp:810
+#: project.cpp:44 project.cpp:62 vcaengine.cpp:84 vcaengine.cpp:847
 msgid "prj_"
 msgstr ""
 
 #: project.cpp:45 project.cpp:481 project.cpp:748 project.cpp:1217
-#: session.cpp:42 session.cpp:222 session.cpp:236 session.cpp:585
-#: session.cpp:711 session.cpp:994
+#: session.cpp:42 session.cpp:230 session.cpp:244 session.cpp:599
+#: session.cpp:725 session.cpp:1008
 msgid "pg_"
 msgstr ""
 
-#: project.cpp:104 project.cpp:174 project.cpp:208 vcaengine.cpp:353
+#: project.cpp:104 project.cpp:174 project.cpp:208 vcaengine.cpp:369
 msgid "PRJ/"
 msgstr ""
 
@@ -2520,9 +2525,9 @@ msgstr "Включение проекта."
 msgid "Disable project."
 msgstr "Отключение проекта."
 
-#: project.cpp:263 project.cpp:1110 session.cpp:104 session.cpp:378
-#: session.cpp:760 vcaengine.cpp:275 vcaengine.cpp:330 vcaengine.cpp:375
-#: widget.cpp:215 widget.cpp:258 widget.cpp:279
+#: project.cpp:263 project.cpp:1110 session.cpp:108 session.cpp:386
+#: session.cpp:774 vcaengine.cpp:291 vcaengine.cpp:346 vcaengine.cpp:391
+#: widget.cpp:276 widget.cpp:319 widget.cpp:340
 #, c-format
 msgid "%s"
 msgstr ""
@@ -2530,7 +2535,7 @@ msgstr ""
 #: project.cpp:365 project.cpp:374 project.cpp:388 project.cpp:396
 #: project.cpp:407 project.cpp:415 project.cpp:433 project.cpp:672
 #: project.cpp:675 project.cpp:676 project.cpp:678 project.cpp:709
-#: session.cpp:437 session.cpp:448
+#: session.cpp:445 session.cpp:456
 msgid "<Styles>"
 msgstr ""
 
@@ -2539,15 +2544,16 @@ msgid "Project: "
 msgstr "Проект: "
 
 #: project.cpp:451 project.cpp:570 project.cpp:1219 project.cpp:1242
-#: session.cpp:556 session.cpp:660 session.cpp:996 session.cpp:1010
+#: session.cpp:570 session.cpp:674 session.cpp:1010 session.cpp:1024
 msgid "/br/pg_"
 msgstr ""
 
-#: project.cpp:451 project.cpp:1219 session.cpp:556 session.cpp:996
+#: project.cpp:451 project.cpp:1219 session.cpp:570 session.cpp:1010
 msgid "Page"
 msgstr "Страница"
 
-#: project.cpp:452 session.cpp:572 vcaengine.cpp:804 vcaengine.cpp:810
+#: project.cpp:452 session.cpp:586 vcaengine.cpp:841 vcaengine.cpp:847
+#: vcaengine.cpp:856
 msgid "Project"
 msgstr "Проект"
 
@@ -2559,7 +2565,7 @@ msgstr "БД проекта"
 msgid "/obj/cfg/owner"
 msgstr ""
 
-#: project.cpp:466 widget.cpp:634
+#: project.cpp:466 widget.cpp:761
 msgid "Owner and group"
 msgstr "Владелец и группа"
 
@@ -2579,39 +2585,39 @@ msgstr ""
 msgid "/obj/cfg/u_a"
 msgstr ""
 
-#: project.cpp:468 session.cpp:566 widget.cpp:636
+#: project.cpp:468 session.cpp:580 widget.cpp:142 widget.cpp:763
 msgid "Access"
 msgstr "Доступ"
 
 #: project.cpp:468 project.cpp:470 project.cpp:472 project.cpp:474
-#: project.cpp:476 project.cpp:491 session.cpp:566 session.cpp:568
-#: session.cpp:570 session.cpp:579 session.cpp:580 session.cpp:590
-#: widget.cpp:636 widget.cpp:638 widget.cpp:640 widget.cpp:1144
-#: widget.cpp:1147 widget.cpp:1153
+#: project.cpp:476 project.cpp:491 session.cpp:580 session.cpp:582
+#: session.cpp:584 session.cpp:593 session.cpp:594 session.cpp:604
+#: widget.cpp:763 widget.cpp:765 widget.cpp:767 widget.cpp:1271
+#: widget.cpp:1274 widget.cpp:1280
 msgid "dec"
 msgstr ""
 
 #: project.cpp:469 project.cpp:471 project.cpp:473 project.cpp:477
-#: session.cpp:567 session.cpp:569 session.cpp:571 widget.cpp:637
-#: widget.cpp:639 widget.cpp:641
+#: session.cpp:581 session.cpp:583 session.cpp:585 widget.cpp:764
+#: widget.cpp:766 widget.cpp:768
 msgid "sel_id"
 msgstr ""
 
-#: project.cpp:469 project.cpp:471 project.cpp:473 session.cpp:567
-#: session.cpp:569 session.cpp:571 widget.cpp:637 widget.cpp:639
-#: widget.cpp:641
+#: project.cpp:469 project.cpp:471 project.cpp:473 session.cpp:581
+#: session.cpp:583 session.cpp:585 widget.cpp:764 widget.cpp:766
+#: widget.cpp:768
 msgid "0;4;6"
 msgstr ""
 
 #: project.cpp:469 project.cpp:471 project.cpp:473 project.cpp:477
-#: session.cpp:567 session.cpp:569 session.cpp:571 widget.cpp:637
-#: widget.cpp:639 widget.cpp:641
+#: session.cpp:581 session.cpp:583 session.cpp:585 widget.cpp:764
+#: widget.cpp:766 widget.cpp:768
 msgid "sel_list"
 msgstr ""
 
-#: project.cpp:469 project.cpp:471 project.cpp:473 session.cpp:567
-#: session.cpp:569 session.cpp:571 widget.cpp:637 widget.cpp:639
-#: widget.cpp:641
+#: project.cpp:469 project.cpp:471 project.cpp:473 session.cpp:581
+#: session.cpp:583 session.cpp:585 widget.cpp:764 widget.cpp:766
+#: widget.cpp:768
 msgid "No access;View;View and control"
 msgstr "Нет доступа;Обзор;Обзор и управление"
 
@@ -2623,7 +2629,7 @@ msgstr ""
 msgid "/obj/cfg/o_a"
 msgstr ""
 
-#: project.cpp:474 project.cpp:559 session.cpp:579 session.cpp:636
+#: project.cpp:474 project.cpp:559 session.cpp:593 session.cpp:650
 msgid "/obj/cfg/per"
 msgstr ""
 
@@ -2647,18 +2653,18 @@ msgstr "Окно исполнения"
 msgid "Original size;Maximize;Full screen"
 msgstr "Оригинальный размер;Максимизировать;На весь экран"
 
-#: project.cpp:480 project.cpp:1216 session.cpp:584 session.cpp:993
+#: project.cpp:480 project.cpp:1216 session.cpp:598 session.cpp:1007
 msgid "/page"
 msgstr ""
 
 #: project.cpp:480 project.cpp:481 project.cpp:1216 project.cpp:1217
-#: session.cpp:584 session.cpp:585 session.cpp:993 session.cpp:994
+#: session.cpp:598 session.cpp:599 session.cpp:1007 session.cpp:1008
 #: vcaFuncs.h:70
 msgid "Pages"
 msgstr "Страницы"
 
 #: project.cpp:481 project.cpp:570 project.cpp:1217 project.cpp:1242
-#: session.cpp:585 session.cpp:660 session.cpp:994 session.cpp:1010
+#: session.cpp:599 session.cpp:674 session.cpp:1008 session.cpp:1024
 msgid "/page/page"
 msgstr ""
 
@@ -2674,7 +2680,7 @@ msgstr "Стили"
 msgid "/style/style"
 msgstr ""
 
-#: project.cpp:491 session.cpp:580
+#: project.cpp:491 session.cpp:594
 msgid "Style"
 msgstr "Стиль"
 
@@ -2702,7 +2708,7 @@ msgstr ""
 msgid "/style/props/vl"
 msgstr ""
 
-#: project.cpp:500 widget.cpp:623 widget.cpp:642
+#: project.cpp:500 widget.cpp:750 widget.cpp:769
 msgid "comm"
 msgstr ""
 
@@ -2718,16 +2724,16 @@ msgstr "Удалить"
 msgid "New style"
 msgstr "Новый стиль"
 
-#: project.cpp:685 session.cpp:648 vcaengine.cpp:141 vcaengine.cpp:188
+#: project.cpp:685 session.cpp:662 vcaengine.cpp:141 vcaengine.cpp:188
 #: vcaengine.cpp:197
 msgid "-1"
 msgstr ""
 
-#: project.cpp:685 session.cpp:648
+#: project.cpp:685 session.cpp:662
 msgid "No style"
 msgstr "Нет стиля"
 
-#: project.cpp:688 session.cpp:1576
+#: project.cpp:688 session.cpp:1594
 msgid "-2"
 msgstr ""
 
@@ -2739,7 +2745,7 @@ msgstr "Создать новый стиль"
 msgid "vl"
 msgstr ""
 
-#: project.cpp:799 project.cpp:805 session.cpp:721 session.cpp:1084
+#: project.cpp:799 project.cpp:805 session.cpp:735 session.cpp:1098
 msgid "/pg_"
 msgstr ""
 
@@ -2747,10 +2753,10 @@ msgstr ""
 msgid "/prj_"
 msgstr ""
 
-#: project.cpp:817 session.cpp:503 session.cpp:505 session.cpp:732
-#: session.cpp:750 session.cpp:776 session.cpp:826 session.cpp:908
-#: session.cpp:909 session.cpp:1006 session.cpp:1008 session.cpp:1506
-#: session.cpp:1522
+#: project.cpp:817 session.cpp:517 session.cpp:519 session.cpp:746
+#: session.cpp:764 session.cpp:790 session.cpp:840 session.cpp:922
+#: session.cpp:923 session.cpp:1020 session.cpp:1022 session.cpp:1524
+#: session.cpp:1540
 msgid "pgOpen"
 msgstr ""
 
@@ -2758,7 +2764,7 @@ msgstr ""
 msgid "Page:open state"
 msgstr "Страница:открыта"
 
-#: project.cpp:818 session.cpp:776 session.cpp:836
+#: project.cpp:818 session.cpp:790 session.cpp:850
 msgid "pgNoOpenProc"
 msgstr ""
 
@@ -2767,7 +2773,7 @@ msgid "Page:process no opened"
 msgstr "Страница:обрабатывать закрытой"
 
 #: project.cpp:828 project.cpp:895 project.cpp:1227 project.cpp:1305
-#: widget.cpp:216 widget.cpp:762 widget.cpp:766
+#: widget.cpp:277 widget.cpp:889 widget.cpp:893
 msgid ".."
 msgstr ""
 
@@ -2787,7 +2793,7 @@ msgstr "Страница не контейнер или шаблон!"
 msgid "Project page: "
 msgstr "Страница проекта: "
 
-#: project.cpp:1208 widget.cpp:625
+#: project.cpp:1208 widget.cpp:752
 msgid "/wdg/cfg"
 msgstr ""
 
@@ -2803,7 +2809,7 @@ msgstr "Тип страницы"
 msgid "/wdg/st/pgTpLst"
 msgstr ""
 
-#: project.cpp:1226 widget.cpp:621 widget.cpp:743
+#: project.cpp:1226 widget.cpp:748 widget.cpp:870
 msgid "/wdg/w_lst"
 msgstr ""
 
@@ -2827,525 +2833,542 @@ msgstr "Контейнер и шаблон"
 msgid "Widget link: "
 msgstr "Виджет ссылка: "
 
-#: session.cpp:88 session.cpp:426
+#: session.cpp:73
+msgid "Enable session."
+msgstr "Включение сеанса."
+
+#: session.cpp:73
+msgid "Disable session."
+msgstr "Отключение сеанса."
+
+#: session.cpp:92 session.cpp:434
 msgid "<Style>"
 msgstr ""
 
-#: session.cpp:237 session.cpp:1542 vcaengine.cpp:145 vcaengine.cpp:155
+#: session.cpp:138
+msgid "Start session."
+msgstr "Запуск сеанса."
+
+#: session.cpp:138
+msgid "Stop session."
+msgstr "Останов сеанса."
+
+#: session.cpp:245 session.cpp:1560 vcaengine.cpp:145 vcaengine.cpp:155
 #: vcaengine.cpp:202
 msgid "*"
 msgstr ""
 
-#: session.cpp:237 session.cpp:245 session.cpp:256 session.cpp:268
+#: session.cpp:245 session.cpp:253 session.cpp:264 session.cpp:276
 msgid "$"
 msgstr ""
 
-#: session.cpp:237 session.cpp:258
+#: session.cpp:245 session.cpp:266
 msgid "next"
 msgstr ""
 
-#: session.cpp:237 session.cpp:259
+#: session.cpp:245 session.cpp:267
 msgid "prev"
 msgstr ""
 
-#: session.cpp:331 session.cpp:514 session.cpp:918 session.cpp:929
-#: session.cpp:939 session.cpp:945 session.cpp:953 session.cpp:957
-#: session.cpp:1051 session.cpp:1163 session.cpp:1322 session.cpp:1333
-#: session.cpp:1339 session.cpp:1347 session.cpp:1351 session.cpp:1580
+#: session.cpp:339 session.cpp:528 session.cpp:932 session.cpp:943
+#: session.cpp:953 session.cpp:959 session.cpp:967 session.cpp:971
+#: session.cpp:1065 session.cpp:1177 session.cpp:1336 session.cpp:1347
+#: session.cpp:1353 session.cpp:1361 session.cpp:1365 session.cpp:1598
 msgid "alarmSt"
 msgstr ""
 
-#: session.cpp:379
+#: session.cpp:387
 #, c-format
 msgid "Session '%s' calc error."
 msgstr "Ошибка вычисления сессии '%s'."
 
-#: session.cpp:459
+#: session.cpp:469
 msgid "alrmSndPlay"
 msgstr ""
 
-#: session.cpp:465
+#: session.cpp:479
 msgid "alrmQuittance"
 msgstr ""
 
-#: session.cpp:477
+#: session.cpp:491
 msgid "/serv/pg"
 msgstr ""
 
-#: session.cpp:479
+#: session.cpp:493
 msgid "openlist"
 msgstr ""
 
-#: session.cpp:481 session.cpp:500 session.cpp:519 session.cpp:520
-#: session.cpp:1744 session.cpp:1776 session.cpp:1807 session.cpp:1811
+#: session.cpp:495 session.cpp:514 session.cpp:533 session.cpp:534
+#: session.cpp:1759 session.cpp:1791 session.cpp:1822 session.cpp:1826
 msgid "tm"
 msgstr ""
 
-#: session.cpp:485 session.cpp:503 session.cpp:505 vcaFuncs.h:70
+#: session.cpp:499 session.cpp:517 session.cpp:519 vcaFuncs.h:70
 msgid "pg"
 msgstr ""
 
-#: session.cpp:497
+#: session.cpp:511
 msgid "updWdg"
 msgstr ""
 
-#: session.cpp:502
+#: session.cpp:516
 msgid "open"
 msgstr ""
 
-#: session.cpp:504
+#: session.cpp:518
 msgid "close"
 msgstr ""
 
-#: session.cpp:508
+#: session.cpp:522
 msgid "/serv/alarm"
 msgstr ""
 
-#: session.cpp:517
+#: session.cpp:531
 msgid "mode"
 msgstr ""
 
-#: session.cpp:517
+#: session.cpp:531
 msgid "sound"
 msgstr ""
 
-#: session.cpp:524 session.cpp:536 session.cpp:545 widget.cpp:1183
+#: session.cpp:538 session.cpp:550 session.cpp:559 widget.cpp:1310
 msgid "wdg"
 msgstr ""
 
-#: session.cpp:544
+#: session.cpp:558
 msgid "quittance"
 msgstr ""
 
-#: session.cpp:553
+#: session.cpp:567
 msgid "Session: "
 msgstr "Сеанс: "
 
-#: session.cpp:557 vcaengine.cpp:806
+#: session.cpp:571 vcaengine.cpp:843
 msgid "Session"
 msgstr "Сеанс"
 
-#: session.cpp:562 session.cpp:607
+#: session.cpp:576 session.cpp:621
 msgid "/obj/st/start"
 msgstr ""
 
-#: session.cpp:562
+#: session.cpp:576
 msgid "Start"
 msgstr "Запущен"
 
-#: session.cpp:563 session.cpp:612
+#: session.cpp:577 session.cpp:626
 msgid "/obj/st/user"
 msgstr ""
 
-#: session.cpp:563 vcaengine.cpp:142 vcaengine.cpp:152 vcaengine.cpp:184
-#: vcaengine.cpp:198 vcaFuncs.h:40
+#: session.cpp:577 vcaengine.cpp:184 vcaengine.cpp:857 vcaFuncs.h:40
 msgid "User"
 msgstr "Пользователь"
 
-#: session.cpp:564 session.cpp:613
+#: session.cpp:578 session.cpp:627
 msgid "/obj/st/owner"
 msgstr ""
 
-#: session.cpp:564 vcaengine.cpp:192
+#: session.cpp:578 vcaengine.cpp:192 widget.cpp:141
 msgid "Owner"
 msgstr "Владелец"
 
-#: session.cpp:565 session.cpp:614
+#: session.cpp:579 session.cpp:628
 msgid "/obj/st/grp"
 msgstr ""
 
-#: session.cpp:565 vcaengine.cpp:143 vcaengine.cpp:153 vcaengine.cpp:185
-#: vcaengine.cpp:199
+#: session.cpp:579 vcaengine.cpp:185
 msgid "Group"
 msgstr "Группа"
 
-#: session.cpp:566 session.cpp:615 session.cpp:617
+#: session.cpp:580 session.cpp:629 session.cpp:631
 msgid "/obj/st/u_a"
 msgstr ""
 
-#: session.cpp:568 session.cpp:615 session.cpp:618
+#: session.cpp:582 session.cpp:629 session.cpp:632
 msgid "/obj/st/g_a"
 msgstr ""
 
-#: session.cpp:570 session.cpp:615 session.cpp:619
+#: session.cpp:584 session.cpp:629 session.cpp:633
 msgid "/obj/st/o_a"
 msgstr ""
 
-#: session.cpp:572 session.cpp:621
+#: session.cpp:586 session.cpp:635
 msgid "/obj/st/prj"
 msgstr ""
 
-#: session.cpp:572 session.cpp:629
+#: session.cpp:586 session.cpp:643
 msgid "/obj/prj_ls"
 msgstr ""
 
-#: session.cpp:573 session.cpp:626
+#: session.cpp:587 session.cpp:640
 msgid "/obj/st/backgrnd"
 msgstr ""
 
-#: session.cpp:573
+#: session.cpp:587
 msgid "Background execution mode"
 msgstr "Фоновый режим исполнения"
 
-#: session.cpp:574 session.cpp:627
+#: session.cpp:588 session.cpp:641
 msgid "/obj/st/connect"
 msgstr ""
 
-#: session.cpp:574
+#: session.cpp:588
 msgid "Connections counter"
 msgstr "Счётчик подключений"
 
-#: session.cpp:574
+#: session.cpp:588
 msgid "int"
 msgstr ""
 
-#: session.cpp:575 session.cpp:628
+#: session.cpp:589 session.cpp:642
 msgid "/obj/st/calc_tm"
 msgstr ""
 
-#: session.cpp:575
+#: session.cpp:589
 msgid "Calc session time (ms)"
 msgstr "Время вычисления сеанса (мс)"
 
-#: session.cpp:575
+#: session.cpp:589
 msgid "real"
 msgstr ""
 
-#: session.cpp:579
+#: session.cpp:593
 msgid "Period (ms)"
 msgstr "Период (мс)"
 
-#: session.cpp:580 session.cpp:641
+#: session.cpp:594 session.cpp:655
 msgid "/obj/cfg/style"
 msgstr ""
 
-#: session.cpp:580 session.cpp:646
+#: session.cpp:594 session.cpp:660
 msgid "/obj/cfg/stLst"
 msgstr ""
 
-#: session.cpp:581 session.cpp:654
+#: session.cpp:595 session.cpp:668
 msgid "/obj/cfg/openPg"
 msgstr ""
 
-#: session.cpp:581
+#: session.cpp:595
 msgid "Opened pages"
 msgstr "Открытые страницы"
 
-#: session.cpp:586
+#: session.cpp:600
 msgid "/alarm"
 msgstr ""
 
-#: session.cpp:586
+#: session.cpp:600
 msgid "Alarms"
 msgstr "Нарушения"
 
-#: session.cpp:587 session.cpp:667
+#: session.cpp:601 session.cpp:681
 msgid "/alarm/alarm"
 msgstr ""
 
-#: session.cpp:587
+#: session.cpp:601
 msgid "Alarms list"
 msgstr "Список нарушений"
 
-#: session.cpp:589 session.cpp:670
+#: session.cpp:603 session.cpp:684
 msgid "/alarm/alarm/wdg"
 msgstr ""
 
-#: session.cpp:590 session.cpp:671
+#: session.cpp:604 session.cpp:685
 msgid "/alarm/alarm/lev"
 msgstr ""
 
-#: session.cpp:591 session.cpp:672
+#: session.cpp:605 session.cpp:686
 msgid "/alarm/alarm/cat"
 msgstr ""
 
-#: session.cpp:591
+#: session.cpp:605
 msgid "Category"
 msgstr "Категория"
 
-#: session.cpp:592 session.cpp:673
+#: session.cpp:606 session.cpp:687
 msgid "/alarm/alarm/mess"
 msgstr ""
 
-#: session.cpp:592
+#: session.cpp:606
 msgid "Messages"
 msgstr "Сообщение"
 
-#: session.cpp:593 session.cpp:674
+#: session.cpp:607 session.cpp:688
 msgid "/alarm/alarm/tp"
 msgstr ""
 
-#: session.cpp:593 session.cpp:594
+#: session.cpp:607 session.cpp:608
 msgid "hex"
 msgstr ""
 
-#: session.cpp:594 session.cpp:675
+#: session.cpp:608 session.cpp:689
 msgid "/alarm/alarm/qtp"
 msgstr ""
 
-#: session.cpp:594
+#: session.cpp:608
 msgid "Quitance"
 msgstr "Квитация"
 
-#: session.cpp:595 session.cpp:676
+#: session.cpp:609 session.cpp:690
 msgid "/alarm/alarm/tpArg"
 msgstr ""
 
-#: session.cpp:595
+#: session.cpp:609
 msgid "Type argument"
 msgstr "Аргумент типа"
 
-#: session.cpp:856 session.cpp:899
+#: session.cpp:870 session.cpp:913
 msgid "<page>"
 msgstr ""
 
-#: session.cpp:860 session.cpp:882 session.cpp:902 session.cpp:1437
-#: session.cpp:1594 widget.cpp:948 widget.cpp:951 widget.cpp:982
-#: widget.cpp:1042 widget.cpp:1045 widget.cpp:1057 widget.cpp:1070
-#: widget.cpp:1078 widget.cpp:1089 widget.cpp:1094
+#: session.cpp:874 session.cpp:896 session.cpp:916 session.cpp:1451
+#: session.cpp:1612 widget.cpp:1075 widget.cpp:1078 widget.cpp:1109
+#: widget.cpp:1169 widget.cpp:1172 widget.cpp:1184 widget.cpp:1197
+#: widget.cpp:1205 widget.cpp:1216 widget.cpp:1221
 msgid "prm:"
 msgstr ""
 
-#: session.cpp:865 session.cpp:1452 session.cpp:1610 widget.cpp:948
-#: widget.cpp:951 widget.cpp:984 widget.cpp:1042 widget.cpp:1046
-#: widget.cpp:1057 widget.cpp:1071 widget.cpp:1080
+#: session.cpp:879 session.cpp:1466 session.cpp:1628 widget.cpp:1075
+#: widget.cpp:1078 widget.cpp:1111 widget.cpp:1169 widget.cpp:1173
+#: widget.cpp:1184 widget.cpp:1198 widget.cpp:1207
 msgid "wdg:"
 msgstr ""
 
-#: session.cpp:865 session.cpp:902
+#: session.cpp:879 session.cpp:916
 msgid "/a_"
 msgstr ""
 
-#: session.cpp:919 session.cpp:1052 session.cpp:1164 session.cpp:1323
-#: session.cpp:1578
+#: session.cpp:933 session.cpp:1066 session.cpp:1178 session.cpp:1337
+#: session.cpp:1596
 msgid "alarm"
 msgstr ""
 
-#: session.cpp:988
+#: session.cpp:1002
 msgid "Session page: "
 msgstr "Страница сеанса: "
 
-#: session.cpp:990 session.cpp:1003
+#: session.cpp:1004 session.cpp:1017
 msgid "/wdg/st/open"
 msgstr ""
 
-#: session.cpp:990
+#: session.cpp:1004
 msgid "Open"
 msgstr "Открыт"
 
-#: session.cpp:1026
+#: session.cpp:1040
 msgid "_wdg"
 msgstr ""
 
-#: session.cpp:1050 session.cpp:1162 session.cpp:1300 session.cpp:1303
-#: session.cpp:1309 session.cpp:1313 session.cpp:1314 session.cpp:1473
-#: session.cpp:1769 session.cpp:1877
+#: session.cpp:1064 session.cpp:1176 session.cpp:1314 session.cpp:1317
+#: session.cpp:1323 session.cpp:1327 session.cpp:1328 session.cpp:1491
+#: session.cpp:1784 session.cpp:1892
 msgid "event"
 msgstr ""
 
-#: session.cpp:1050
+#: session.cpp:1064
 msgid "Events"
 msgstr "События"
 
-#: session.cpp:1051 session.cpp:1163
+#: session.cpp:1065 session.cpp:1177
 msgid "Alarm status"
 msgstr "Статус нарушения"
 
-#: session.cpp:1051 vcaengine.cpp:141 vcaengine.cpp:163 vcaengine.cpp:174
-#: vcaengine.cpp:197 widget.cpp:125
+#: session.cpp:1065 vcaengine.cpp:141 vcaengine.cpp:163 vcaengine.cpp:174
+#: vcaengine.cpp:197 widget.cpp:148
 msgid "5"
 msgstr ""
 
-#: session.cpp:1052 session.cpp:1164
+#: session.cpp:1066 session.cpp:1178
 msgid "Alarm"
 msgstr "Нарушение"
 
-#: session.cpp:1085
+#: session.cpp:1099
 msgid "/ses_"
 msgstr ""
 
-#: session.cpp:1112
+#: session.cpp:1126
 msgid "f_frq"
 msgstr ""
 
-#: session.cpp:1112
+#: session.cpp:1126
 msgid "Function calculate frequency (Hz)"
 msgstr "Частота обсчёта функции (Гц)"
 
-#: session.cpp:1112 vcaengine.cpp:165 vcaengine.cpp:176
+#: session.cpp:1126 vcaengine.cpp:165 vcaengine.cpp:176
 msgid "1000"
 msgstr ""
 
-#: session.cpp:1113
+#: session.cpp:1127
 msgid "f_start"
 msgstr ""
 
-#: session.cpp:1113
+#: session.cpp:1127
 msgid "Function start flag"
 msgstr "Флаг запуска функции"
 
-#: session.cpp:1114
+#: session.cpp:1128
 msgid "f_stop"
 msgstr ""
 
-#: session.cpp:1114
+#: session.cpp:1128
 msgid "Function stop flag"
 msgstr "Флаг останова функции"
 
-#: session.cpp:1115
+#: session.cpp:1129
 msgid "this"
 msgstr ""
 
-#: session.cpp:1115
+#: session.cpp:1129
 msgid "This widget's object for access to user's API"
-msgstr ""
+msgstr "Этот объект виджета для доступа к пользовательскому API"
 
-#: session.cpp:1124 session.cpp:1147 session.cpp:1575 session.cpp:1576
+#: session.cpp:1138 session.cpp:1161 session.cpp:1593 session.cpp:1594
 msgid "focus"
 msgstr ""
 
-#: session.cpp:1134
+#: session.cpp:1148
 msgid "./"
 msgstr ""
 
-#: session.cpp:1162
+#: session.cpp:1176
 msgid "Event"
 msgstr "Событие"
 
-#: session.cpp:1163
+#: session.cpp:1177
 msgid "./alarmSt"
 msgstr ""
 
-#: session.cpp:1164
+#: session.cpp:1178
 msgid "./alarm"
 msgstr ""
 
-#: session.cpp:1183
+#: session.cpp:1197
 #, c-format
 msgid "Compile function '%s' by language '%s' for widget error: %s"
 msgstr "Ошибка компиляции функции '%s' на языке '%s' для виджета: %s"
 
-#: session.cpp:1435 session.cpp:1591 widget.cpp:943 widget.cpp:975
-#: widget.cpp:1041
+#: session.cpp:1449 session.cpp:1609 vcaengine.cpp:429 vcaengine.cpp:460
+#: vcaengine.cpp:461 vcaengine.cpp:955 vcaengine.cpp:956 vcaengine.cpp:971
+#: vcaengine.cpp:972 widget.cpp:202 widget.cpp:207 widget.cpp:220
+#: widget.cpp:225 widget.cpp:1070 widget.cpp:1102 widget.cpp:1168
 msgid ":"
 msgstr ""
 
-#: session.cpp:1436 vcaengine.cpp:645 vcaengine.cpp:665 widget.cpp:1042
+#: session.cpp:1450 vcaengine.cpp:682 vcaengine.cpp:702 widget.cpp:1169
 msgid "val:"
 msgstr ""
 
-#: session.cpp:1443
+#: session.cpp:1457
 msgid "/DAQ"
 msgstr ""
 
-#: session.cpp:1535 widget.cpp:138
+#: session.cpp:1553 widget.cpp:161
 msgid "evProc"
 msgstr ""
 
-#: session.cpp:1550
+#: session.cpp:1568
 msgid ":/"
 msgstr ""
 
-#: session.cpp:1564
+#: session.cpp:1582
 msgid "Widget calculation error. Process is disabled."
 msgstr "Ошибка вычисления виджета. Обработка отключена."
 
-#: session.cpp:1576
+#: session.cpp:1594
 msgid "Focus"
 msgstr "Фокус"
 
-#: session.cpp:1576
+#: session.cpp:1594
 msgid "false"
 msgstr ""
 
-#: session.cpp:1635
+#: session.cpp:1650
 msgid "ownerSess"
 msgstr ""
 
-#: session.cpp:1637
+#: session.cpp:1652
 msgid "ownerPage"
 msgstr ""
 
-#: session.cpp:1645
+#: session.cpp:1660
 msgid "ownerWdg"
 msgstr ""
 
-#: session.cpp:1655
+#: session.cpp:1670
 msgid "wdgAdd"
 msgstr ""
 
-#: session.cpp:1672
+#: session.cpp:1687
 msgid "wdgDel"
 msgstr ""
 
-#: session.cpp:1680
+#: session.cpp:1695
 msgid "attrPresent"
 msgstr ""
 
-#: session.cpp:1683 widget.cpp:721 widget.cpp:722 widget.cpp:724
-#: widget.cpp:725 vcaFuncs.h:172 vcaFuncs.h:221
+#: session.cpp:1698 widget.cpp:848 widget.cpp:849 widget.cpp:851
+#: widget.cpp:852 vcaFuncs.h:172 vcaFuncs.h:221
 msgid "attr"
 msgstr ""
 
-#: session.cpp:1697
+#: session.cpp:1712
 msgid "attrSet"
 msgstr ""
 
-#: session.cpp:1713
+#: session.cpp:1728
 msgid "link"
 msgstr ""
 
-#: session.cpp:1717 session.cpp:1730
+#: session.cpp:1732 session.cpp:1745
 #, c-format
 msgid "/links/lnk/pr_%s"
 msgstr ""
 
-#: session.cpp:1718 session.cpp:1731
+#: session.cpp:1733 session.cpp:1746
 #, c-format
 msgid "/links/lnk/el_%s"
 msgstr ""
 
-#: session.cpp:1726
+#: session.cpp:1741
 msgid "linkSet"
 msgstr ""
 
-#: session.cpp:1740 widget.cpp:549
+#: session.cpp:1755 widget.cpp:676
 msgid "/serv/attr"
 msgstr ""
 
-#: session.cpp:1746 session.cpp:1783
+#: session.cpp:1761 session.cpp:1798 widget.cpp:142 widget.cpp:230
+#: widget.cpp:235
 msgid "perm"
 msgstr ""
 
-#: session.cpp:1746 session.cpp:1783
+#: session.cpp:1761 session.cpp:1798
 msgid "-3"
 msgstr ""
 
-#: session.cpp:1774 widget.cpp:569
+#: session.cpp:1789 widget.cpp:696
 msgid "/serv/attrBr"
 msgstr ""
 
-#: session.cpp:1829 session.cpp:1835
+#: session.cpp:1844 session.cpp:1850
 msgid "/wdg/st/proc"
 msgstr ""
 
-#: session.cpp:1829 widget.cpp:1135 widget.cpp:1146
+#: session.cpp:1844 widget.cpp:1262 widget.cpp:1273
 msgid "Process"
 msgstr "Обработка"
 
-#: session.cpp:1851 session.cpp:1858 widget.cpp:806 widget.cpp:813
+#: session.cpp:1866 session.cpp:1873 widget.cpp:933 widget.cpp:940
 msgid "/attr"
 msgstr ""
 
-#: session.cpp:1851 widget.cpp:806 widget.cpp:1140
+#: session.cpp:1866 widget.cpp:933 widget.cpp:1267
 msgid "Attributes"
 msgstr "Атрибуты"
 
-#: session.cpp:1859 widget.cpp:814
+#: session.cpp:1874 widget.cpp:941
 msgid "wdgFlg"
 msgstr ""
 
-#: session.cpp:1867 widget.cpp:823
+#: session.cpp:1882 widget.cpp:950
 msgid "/attr/"
 msgstr ""
 
@@ -3381,7 +3404,7 @@ msgstr ""
 msgid "echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"
 msgstr ""
 
-#: vcaengine.cpp:85 vcaengine.cpp:814 vcaFuncs.h:53
+#: vcaengine.cpp:85 vcaengine.cpp:852 vcaFuncs.h:53
 msgid "ses_"
 msgstr ""
 
@@ -3435,14 +3458,6 @@ msgstr "Текст и язык программирования процедур
 msgid "Procedure calc period"
 msgstr "Периодичность вычисления процедуры"
 
-#: vcaengine.cpp:144 vcaengine.cpp:154 vcaengine.cpp:186 vcaengine.cpp:200
-msgid "Permision"
-msgstr "Права доступа"
-
-#: vcaengine.cpp:144 vcaengine.cpp:154 vcaengine.cpp:186 vcaengine.cpp:200
-msgid "436"
-msgstr ""
-
 #: vcaengine.cpp:145 vcaengine.cpp:155 vcaengine.cpp:202
 msgid "Changed attributes"
 msgstr "Изменённые атрибуты"
@@ -3471,8 +3486,8 @@ msgstr "Значение атрибута"
 msgid "100000"
 msgstr ""
 
-#: vcaengine.cpp:163 vcaengine.cpp:174 vcaengine.cpp:570 vcaengine.cpp:607
-#: vcaengine.cpp:641 vcaengine.cpp:661
+#: vcaengine.cpp:163 vcaengine.cpp:174 vcaengine.cpp:607 vcaengine.cpp:644
+#: vcaengine.cpp:678 vcaengine.cpp:698
 msgid "SELF_FLG"
 msgstr ""
 
@@ -3480,8 +3495,8 @@ msgstr ""
 msgid "Attribute self flags"
 msgstr "Собственные флаги атрибута"
 
-#: vcaengine.cpp:164 vcaengine.cpp:175 vcaengine.cpp:571 vcaengine.cpp:608
-#: vcaengine.cpp:642 vcaengine.cpp:662
+#: vcaengine.cpp:164 vcaengine.cpp:175 vcaengine.cpp:608 vcaengine.cpp:645
+#: vcaengine.cpp:679 vcaengine.cpp:699
 msgid "CFG_TMPL"
 msgstr ""
 
@@ -3489,8 +3504,8 @@ msgstr ""
 msgid "Configuration template"
 msgstr "Конфигурационный шаблон"
 
-#: vcaengine.cpp:165 vcaengine.cpp:176 vcaengine.cpp:572 vcaengine.cpp:609
-#: vcaengine.cpp:643 vcaengine.cpp:646 vcaengine.cpp:663 vcaengine.cpp:666
+#: vcaengine.cpp:165 vcaengine.cpp:176 vcaengine.cpp:609 vcaengine.cpp:646
+#: vcaengine.cpp:680 vcaengine.cpp:683 vcaengine.cpp:700 vcaengine.cpp:703
 msgid "CFG_VAL"
 msgstr ""
 
@@ -3498,7 +3513,7 @@ msgstr ""
 msgid "Configuration value"
 msgstr "Значение конфигурации"
 
-#: vcaengine.cpp:172 vcaengine.cpp:587 vcaengine.cpp:660
+#: vcaengine.cpp:172 vcaengine.cpp:624 vcaengine.cpp:697
 msgid "IO_TYPE"
 msgstr ""
 
@@ -3506,11 +3521,19 @@ msgstr ""
 msgid "Attribute generic flags and type"
 msgstr "Основные флаги и тип атрибута"
 
-#: vcaengine.cpp:172 widget.cpp:130
+#: vcaengine.cpp:172 widget.cpp:153 widget.cpp:1281
 msgid "10"
 msgstr ""
 
-#: vcaengine.cpp:187 widget.cpp:1153
+#: vcaengine.cpp:186
+msgid "Permision"
+msgstr "Права доступа"
+
+#: vcaengine.cpp:186
+msgid "436"
+msgstr ""
+
+#: vcaengine.cpp:187 widget.cpp:1280
 msgid "Calc period (ms)"
 msgstr "Период вычисления (мс)"
 
@@ -3610,226 +3633,262 @@ msgstr "Библиотека базовых виджетов"
 msgid "VCA.lwdg_root"
 msgstr ""
 
-#: vcaengine.cpp:257
+#: vcaengine.cpp:273
 msgid "Load module."
 msgstr "Загрузка модуля."
 
-#: vcaengine.cpp:261
+#: vcaengine.cpp:277
 msgid "h"
 msgstr ""
 
-#: vcaengine.cpp:265
+#: vcaengine.cpp:281
 msgid "VCADBClearForce"
 msgstr ""
 
-#: vcaengine.cpp:282 vcaengine.cpp:410
+#: vcaengine.cpp:298 vcaengine.cpp:452
 msgid "SynthCom"
 msgstr ""
 
-#: vcaengine.cpp:283 vcaengine.cpp:411
+#: vcaengine.cpp:299 vcaengine.cpp:453
 msgid "SynthCode"
 msgstr ""
 
-#: vcaengine.cpp:303 vcaengine.cpp:311 vcaengine.cpp:348 vcaengine.cpp:356
-#: libwidg.h:42 project.h:48 vcaengine.h:72 vcaengine.h:79
+#: vcaengine.cpp:319 vcaengine.cpp:327 vcaengine.cpp:364 vcaengine.cpp:372
+#: libwidg.h:42 project.h:48 vcaengine.h:74 vcaengine.h:81
 msgid "*.*"
 msgstr ""
 
-#: vcaengine.cpp:307 vcaengine.cpp:352
+#: vcaengine.cpp:323 vcaengine.cpp:368
 msgid "<cfg>"
 msgstr ""
 
-#: vcaengine.cpp:324
+#: vcaengine.cpp:340
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr "Время загрузки библиотеки '%s': %f мс."
 
-#: vcaengine.cpp:331
+#: vcaengine.cpp:347
 msgid "Load widget's libraries error."
 msgstr "Ошибка загрузки библиотеки виджетов."
 
-#: vcaengine.cpp:369
+#: vcaengine.cpp:385
 #, c-format
 msgid "Load project '%s' time: %f ms."
 msgstr "Время загрузки проекта '%s': %f мс."
 
-#: vcaengine.cpp:376
+#: vcaengine.cpp:392
 msgid "Load projects error."
 msgstr "Ошибка загрузки проектов."
 
-#: vcaengine.cpp:386
+#: vcaengine.cpp:402
 #, c-format
 msgid "Enable library '%s' time: %f ms."
 msgstr "Время включения библиотеки '%s': %f мс."
 
-#: vcaengine.cpp:397
+#: vcaengine.cpp:413
 #, c-format
 msgid "Enable project '%s' time: %f ms."
 msgstr "Время включения проекта '%s': %f мс."
 
-#: vcaengine.cpp:407
+#: vcaengine.cpp:420 vcaengine.cpp:457
+msgid "Sess"
+msgstr ""
+
+#: vcaengine.cpp:423 vcaengine.cpp:462
+msgid "AutoSess"
+msgstr ""
+
+#: vcaengine.cpp:427 vcaengine.cpp:460 vcaengine.cpp:746 vcaengine.cpp:760
+msgid "prj"
+msgstr ""
+
+#: vcaengine.cpp:449
 msgid "Save module."
 msgstr "Сохранение модуля."
 
-#: vcaengine.cpp:416
+#: vcaengine.cpp:467
 msgid "Start module."
 msgstr "Старт модуля."
 
-#: vcaengine.cpp:434
+#: vcaengine.cpp:481
 msgid "Stop module."
 msgstr "Останов модуля."
 
-#: vcaengine.cpp:499
+#: vcaengine.cpp:536
 msgid "/var/tmp/oscadaSynthTmp"
 msgstr ""
 
-#: vcaengine.cpp:508
+#: vcaengine.cpp:545
 msgid "%t"
 msgstr ""
 
-#: vcaengine.cpp:514
+#: vcaengine.cpp:551
 #, c-format
 msgid "%f"
 msgstr ""
 
-#: vcaengine.cpp:521 vcaengine.cpp:533
+#: vcaengine.cpp:558 vcaengine.cpp:570
 msgid "r"
 msgstr ""
 
-#: vcaengine.cpp:656 vcaengine.cpp:657 widget.cpp:1207
+#: vcaengine.cpp:693 vcaengine.cpp:694 widget.cpp:1334
 msgid "|"
 msgstr ""
 
-#: vcaengine.cpp:705
+#: vcaengine.cpp:742
 msgid "/serv/sess"
 msgstr ""
 
-#: vcaengine.cpp:709 vcaengine.cpp:723
-msgid "prj"
-msgstr ""
-
-#: vcaengine.cpp:720
+#: vcaengine.cpp:757
 msgid "connect"
 msgstr ""
 
-#: vcaengine.cpp:722 vcaengine.cpp:742 vcaengine.cpp:747
+#: vcaengine.cpp:759 vcaengine.cpp:779 vcaengine.cpp:784
 msgid "sess"
 msgstr ""
 
-#: vcaengine.cpp:728
+#: vcaengine.cpp:765
 #, c-format
 msgid "Connection to session is not permited for '%s'."
 msgstr "Недопустимо подключение к сеансу пользователя '%s'."
 
-#: vcaengine.cpp:743
+#: vcaengine.cpp:780
 msgid "Connect/create session arguments error."
 msgstr "Ошибка аргументов подключения/создания сеанса."
 
-#: vcaengine.cpp:745
+#: vcaengine.cpp:782
 msgid "disconnect"
 msgstr ""
 
-#: vcaengine.cpp:754
+#: vcaengine.cpp:791
 msgid "/serv/wlbBr"
 msgstr ""
 
-#: vcaengine.cpp:756
+#: vcaengine.cpp:793
 msgid "item"
 msgstr ""
 
-#: vcaengine.cpp:772
+#: vcaengine.cpp:809
 msgid "wlb"
 msgstr ""
 
-#: vcaengine.cpp:773 vcaengine.cpp:783 vcaengine.cpp:793
+#: vcaengine.cpp:810 vcaengine.cpp:820 vcaengine.cpp:830
 msgid "ico"
 msgstr ""
 
-#: vcaengine.cpp:782 widget.cpp:121 widget.cpp:533
+#: vcaengine.cpp:819 widget.cpp:140 widget.cpp:660
 msgid "parent"
 msgstr ""
 
-#: vcaengine.cpp:793
+#: vcaengine.cpp:830
 msgid "cw"
 msgstr ""
 
-#: vcaengine.cpp:804 vcaengine.cpp:830
+#: vcaengine.cpp:841 vcaengine.cpp:875
 msgid "/br/prj_"
 msgstr ""
 
-#: vcaengine.cpp:805 vcaengine.cpp:855
+#: vcaengine.cpp:842 vcaengine.cpp:900
 msgid "/br/wlb_"
 msgstr ""
 
-#: vcaengine.cpp:805
+#: vcaengine.cpp:842
 msgid "Widget's library"
 msgstr "Библиотека виджетов"
 
-#: vcaengine.cpp:806 vcaengine.cpp:869
+#: vcaengine.cpp:843 vcaengine.cpp:914
 msgid "/br/ses_"
 msgstr ""
 
-#: vcaengine.cpp:807 vcaengine.cpp:894
+#: vcaengine.cpp:844 vcaengine.cpp:985
 msgid "/br/vca"
 msgstr ""
 
-#: vcaengine.cpp:807
+#: vcaengine.cpp:844
 msgid "Functions"
 msgstr "Функции"
 
-#: vcaengine.cpp:808
+#: vcaengine.cpp:845
 msgid "/prm/cfg"
 msgstr ""
 
-#: vcaengine.cpp:808
+#: vcaengine.cpp:845
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: vcaengine.cpp:810 vcaengine.cpp:830
+#: vcaengine.cpp:847 vcaengine.cpp:875
 msgid "/prm/cfg/prj"
 msgstr ""
 
-#: vcaengine.cpp:811 vcaengine.cpp:855
+#: vcaengine.cpp:848 vcaengine.cpp:900
 msgid "/prm/cfg/wlb"
 msgstr ""
 
-#: vcaengine.cpp:811
+#: vcaengine.cpp:848
 msgid "Widget's libraries"
 msgstr "Библиотеки виджетов"
 
-#: vcaengine.cpp:813
+#: vcaengine.cpp:850
 msgid "/ses"
 msgstr ""
 
-#: vcaengine.cpp:813 vcaengine.cpp:814
+#: vcaengine.cpp:850 vcaengine.cpp:852
 msgid "Sessions"
 msgstr "Сеансы"
 
-#: vcaengine.cpp:814 vcaengine.cpp:869
+#: vcaengine.cpp:852 vcaengine.cpp:914
 msgid "/ses/ses"
 msgstr ""
 
-#: vcaengine.cpp:815
+#: vcaengine.cpp:853 vcaengine.cpp:941
+msgid "/ses/ast"
+msgstr ""
+
+#: vcaengine.cpp:853
+msgid "Auto create and start"
+msgstr "Автоматическое создание и запуск"
+
+#: vcaengine.cpp:855 vcaengine.cpp:947
+msgid "/ses/ast/id"
+msgstr ""
+
+#: vcaengine.cpp:856 vcaengine.cpp:948
+msgid "/ses/ast/proj"
+msgstr ""
+
+#: vcaengine.cpp:856 vcaengine.cpp:980
+msgid "/ses/prj_ls"
+msgstr ""
+
+#: vcaengine.cpp:857 vcaengine.cpp:949
+msgid "/ses/ast/user"
+msgstr ""
+
+#: vcaengine.cpp:857 vcaengine.cpp:975
+msgid "/ses/usr_ls"
+msgstr ""
+
+#: vcaengine.cpp:860
 msgid "/tts"
 msgstr ""
 
-#: vcaengine.cpp:815
+#: vcaengine.cpp:860
 msgid "Speech text synthesis"
 msgstr "Синтез речи из текста"
 
-#: vcaengine.cpp:817 vcaengine.cpp:906
+#: vcaengine.cpp:862 vcaengine.cpp:997
 msgid "/tts/comm"
 msgstr ""
 
-#: vcaengine.cpp:817
+#: vcaengine.cpp:862
 msgid "Command"
 msgstr "Команда"
 
-#: vcaengine.cpp:817 vcaengine.cpp:911
+#: vcaengine.cpp:862 vcaengine.cpp:1002
 msgid "/tts/comm_ls"
 msgstr ""
 
-#: vcaengine.cpp:818
+#: vcaengine.cpp:863
 msgid ""
 "Command line for call of speech synthesis from the text engine.\n"
 "Use next words for replace:\n"
@@ -3847,638 +3906,672 @@ msgstr ""
 "Если используется файл результата и не используется %t то синтезируемый техт "
 "отправляется в канал."
 
-#: vcaengine.cpp:824 vcaengine.cpp:901
+#: vcaengine.cpp:869 vcaengine.cpp:992
 msgid "/tts/code"
 msgstr ""
 
-#: vcaengine.cpp:824
+#: vcaengine.cpp:869
 msgid "Text code"
 msgstr "Кодировка текста"
 
-#: vcaengine.cpp:824
+#: vcaengine.cpp:869
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодировка текста движка для перекодирования в неё."
 
-#: vcaengine.cpp:836 vcaengine.cpp:875 widget.cpp:778
+#: vcaengine.cpp:881 vcaengine.cpp:920 widget.cpp:905
 msgid "chkUserPerm"
 msgstr ""
 
-#: vcaengine.cpp:867
+#: vcaengine.cpp:912
 msgid "/prm/cfg/cp/cp"
 msgstr ""
 
-#: vcaengine.cpp:868
+#: vcaengine.cpp:913
 msgid "dst"
 msgstr ""
 
-#: vcaengine.cpp:912
+#: vcaengine.cpp:930 vcaengine.cpp:971
+msgid "proj"
+msgstr ""
+
+#: vcaengine.cpp:962
+msgid "NewSessId"
+msgstr ""
+
+#: vcaengine.cpp:1003
 msgid ""
 "echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -"
 msgstr ""
 
-#: widget.cpp:38 vcaFuncs.h:190 vcaFuncs.h:238
-msgid "a_"
-msgstr ""
-
-#: widget.cpp:120 widget.cpp:630
+#: widget.cpp:139 widget.cpp:757
 msgid "Path"
 msgstr "Путь"
 
-#: widget.cpp:122 widget.cpp:629
+#: widget.cpp:141 widget.cpp:202 widget.cpp:207 widget.cpp:220 widget.cpp:225
+msgid "owner"
+msgstr "Владелец"
+
+#: widget.cpp:141
+msgid "root:UI"
+msgstr ""
+
+#: widget.cpp:142
+msgid "0664"
+msgstr ""
+
+#: widget.cpp:143
+msgid "0;0400;0440;0444;0600;0640;0644;0660;0664;0666"
+msgstr ""
+
+#: widget.cpp:144
+msgid ""
+"No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
+msgstr "Нет доступа;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
+
+#: widget.cpp:145 widget.cpp:756
 msgid "Root"
 msgstr "Корень"
 
-#: widget.cpp:124 widget.cpp:169 widget.cpp:174
+#: widget.cpp:147 widget.cpp:192 widget.cpp:197
 msgid "dscr"
 msgstr ""
 
-#: widget.cpp:125
+#: widget.cpp:148
 msgid "en"
 msgstr ""
 
-#: widget.cpp:125
+#: widget.cpp:148
 msgid "Enabled"
 msgstr "Включен"
 
-#: widget.cpp:126
+#: widget.cpp:149
 msgid "Active"
 msgstr "Активный"
 
-#: widget.cpp:126
+#: widget.cpp:149
 msgid "6"
 msgstr ""
 
-#: widget.cpp:127
+#: widget.cpp:150
 msgid "geomX"
 msgstr ""
 
-#: widget.cpp:127
+#: widget.cpp:150
 msgid "Geometry:x"
 msgstr "Геометрия:x"
 
-#: widget.cpp:127 widget.cpp:128 widget.cpp:129 widget.cpp:130
+#: widget.cpp:150 widget.cpp:151 widget.cpp:152 widget.cpp:153
 msgid "0;10000"
 msgstr ""
 
-#: widget.cpp:127
+#: widget.cpp:150
 msgid "7"
 msgstr ""
 
-#: widget.cpp:128
+#: widget.cpp:151
 msgid "geomY"
 msgstr ""
 
-#: widget.cpp:128
+#: widget.cpp:151
 msgid "Geometry:y"
 msgstr "Геометрия:y"
 
-#: widget.cpp:128 widget.cpp:1154
+#: widget.cpp:151
 msgid "8"
 msgstr ""
 
-#: widget.cpp:129
+#: widget.cpp:152
 msgid "geomW"
 msgstr ""
 
-#: widget.cpp:129
+#: widget.cpp:152
 msgid "Geometry:width"
 msgstr "Геометрия:ширина"
 
-#: widget.cpp:129
+#: widget.cpp:152
 msgid "9"
 msgstr ""
 
-#: widget.cpp:130
+#: widget.cpp:153
 msgid "geomH"
 msgstr ""
 
-#: widget.cpp:130
+#: widget.cpp:153
 msgid "Geometry:height"
 msgstr "Геометрия:высота"
 
-#: widget.cpp:131
+#: widget.cpp:154
 msgid "geomXsc"
 msgstr ""
 
-#: widget.cpp:131
+#: widget.cpp:154
 msgid "Geometry:x scale"
 msgstr "Геометрия:x масштаб"
 
-#: widget.cpp:131 widget.cpp:132
+#: widget.cpp:154 widget.cpp:155
 msgid "0.1;100"
 msgstr ""
 
-#: widget.cpp:131
+#: widget.cpp:154
 msgid "13"
 msgstr ""
 
-#: widget.cpp:132
+#: widget.cpp:155
 msgid "geomYsc"
 msgstr ""
 
-#: widget.cpp:132
+#: widget.cpp:155
 msgid "Geometry:y scale"
 msgstr "Геометрия:y масштаб"
 
-#: widget.cpp:132
+#: widget.cpp:155
 msgid "14"
 msgstr ""
 
-#: widget.cpp:133
+#: widget.cpp:156
 msgid "geomZ"
 msgstr ""
 
-#: widget.cpp:133
+#: widget.cpp:156
 msgid "Geometry:z"
 msgstr "Геометрия:z"
 
-#: widget.cpp:133
+#: widget.cpp:156
 msgid "0;1000000"
 msgstr ""
 
-#: widget.cpp:133
+#: widget.cpp:156
 msgid "11"
 msgstr ""
 
-#: widget.cpp:134
+#: widget.cpp:157
 msgid "geomMargin"
 msgstr ""
 
-#: widget.cpp:134
+#: widget.cpp:157
 msgid "Geometry:margin"
 msgstr "Геометрия:отступ"
 
-#: widget.cpp:134
+#: widget.cpp:157
 msgid "0;1000"
 msgstr ""
 
-#: widget.cpp:134
+#: widget.cpp:157
 msgid "12"
 msgstr ""
 
-#: widget.cpp:135
+#: widget.cpp:158
 msgid "tipTool"
 msgstr ""
 
-#: widget.cpp:135
+#: widget.cpp:158
 msgid "Tip:tool"
 msgstr "Помощь:подсказка"
 
-#: widget.cpp:135
+#: widget.cpp:158
 msgid "15"
 msgstr ""
 
-#: widget.cpp:136
+#: widget.cpp:159
 msgid "tipStatus"
 msgstr ""
 
-#: widget.cpp:136
+#: widget.cpp:159
 msgid "Tip:status"
 msgstr "Помощь:состояние"
 
-#: widget.cpp:136
+#: widget.cpp:159
 msgid "16"
 msgstr ""
 
-#: widget.cpp:137
+#: widget.cpp:160
 msgid "contextMenu"
 msgstr ""
 
-#: widget.cpp:137
+#: widget.cpp:160
 msgid "Context menu"
 msgstr "Контекстное меню"
 
-#: widget.cpp:137
+#: widget.cpp:160
 msgid "17"
 msgstr ""
 
-#: widget.cpp:138
+#: widget.cpp:161
 msgid "Events process"
 msgstr "Обработка событий"
 
-#: widget.cpp:215
+#: widget.cpp:276
 msgid "Empty parent or parent identical self!"
 msgstr "Родительский элемент пуст или идентичен себе!"
 
-#: widget.cpp:230
+#: widget.cpp:291
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Ошибка включения виджета: %s"
 
-#: widget.cpp:259
+#: widget.cpp:320
 #, c-format
 msgid "Ingeriting widget <%s> disable error"
 msgstr "Ошибка отключения наследующего виджета <%s>"
 
-#: widget.cpp:280
+#: widget.cpp:341
 #, c-format
 msgid "Child widget <%s> enable/disable error"
 msgstr "Ошибка включения/отключения дочернего виджета <%s>"
 
-#: widget.cpp:591
+#: widget.cpp:563 widget.cpp:592
+msgid "Attribute <%s> is not present!"
+msgstr "Атрибут <%s> отсутствует!"
+
+#: widget.cpp:588
+#, c-format
+msgid "Attribute attach access error: %d."
+msgstr "Ошибка доступа подсоединения %d к атрибуту."
+
+#: widget.cpp:718
 msgid "lnkPath"
 msgstr ""
 
-#: widget.cpp:615
+#: widget.cpp:742
 msgid "Widget: "
 msgstr "Виджет: "
 
-#: widget.cpp:618
+#: widget.cpp:745
 msgid "/wdg/st"
 msgstr ""
 
-#: widget.cpp:620 widget.cpp:661
+#: widget.cpp:747 widget.cpp:788
 msgid "/wdg/st/en"
 msgstr ""
 
-#: widget.cpp:623 widget.cpp:671
+#: widget.cpp:750 widget.cpp:798
 msgid "/wdg/st/goparent"
 msgstr ""
 
-#: widget.cpp:623
+#: widget.cpp:750
 msgid "Go to parent"
 msgstr "Перейти к родителю"
 
-#: widget.cpp:623
+#: widget.cpp:750
 msgid "lnk"
 msgstr ""
 
-#: widget.cpp:627 widget.cpp:704
+#: widget.cpp:754 widget.cpp:831
 msgid "/wdg/cfg/id"
 msgstr ""
 
-#: widget.cpp:628 widget.cpp:705
+#: widget.cpp:755 widget.cpp:832
 msgid "/wdg/cfg/type"
 msgstr ""
 
-#: widget.cpp:629 widget.cpp:706
+#: widget.cpp:756 widget.cpp:833
 msgid "/wdg/cfg/root"
 msgstr ""
 
-#: widget.cpp:630 widget.cpp:707
+#: widget.cpp:757 widget.cpp:834
 msgid "/wdg/cfg/path"
 msgstr ""
 
-#: widget.cpp:631 widget.cpp:709
+#: widget.cpp:758 widget.cpp:836
 msgid "/wdg/cfg/name"
 msgstr ""
 
-#: widget.cpp:632 widget.cpp:714
+#: widget.cpp:759 widget.cpp:841
 msgid "/wdg/cfg/descr"
 msgstr ""
 
-#: widget.cpp:633 widget.cpp:699
+#: widget.cpp:760 widget.cpp:826
 msgid "/wdg/cfg/ico"
 msgstr ""
 
-#: widget.cpp:634 widget.cpp:674
+#: widget.cpp:761 widget.cpp:801
 msgid "/wdg/cfg/owner"
 msgstr ""
 
-#: widget.cpp:634 widget.cpp:729
+#: widget.cpp:761 widget.cpp:856
 msgid "/wdg/u_lst"
 msgstr ""
 
-#: widget.cpp:635 widget.cpp:679
+#: widget.cpp:762 widget.cpp:806
 msgid "/wdg/cfg/grp"
 msgstr ""
 
-#: widget.cpp:635 widget.cpp:736
+#: widget.cpp:762 widget.cpp:863
 msgid "/wdg/g_lst"
 msgstr ""
 
-#: widget.cpp:636 widget.cpp:684 widget.cpp:688 widget.cpp:694
+#: widget.cpp:763 widget.cpp:811 widget.cpp:815 widget.cpp:821
 msgid "/wdg/cfg/u_a"
 msgstr ""
 
-#: widget.cpp:638 widget.cpp:684 widget.cpp:689 widget.cpp:695
+#: widget.cpp:765 widget.cpp:811 widget.cpp:816 widget.cpp:822
 msgid "/wdg/cfg/g_a"
 msgstr ""
 
-#: widget.cpp:640 widget.cpp:684 widget.cpp:690 widget.cpp:696
+#: widget.cpp:767 widget.cpp:811 widget.cpp:817 widget.cpp:823
 msgid "/wdg/cfg/o_a"
 msgstr ""
 
-#: widget.cpp:642 widget.cpp:719
+#: widget.cpp:769 widget.cpp:846
 msgid "/wdg/cfg/clear"
 msgstr ""
 
-#: widget.cpp:642
+#: widget.cpp:769
 msgid "Clear widget's changing"
 msgstr "Очистка изменений виджета"
 
-#: widget.cpp:645
+#: widget.cpp:772
 msgid "/inclwdg"
 msgstr ""
 
-#: widget.cpp:645
+#: widget.cpp:772
 msgid "Include widgets"
 msgstr "Вложенные виджеты"
 
-#: widget.cpp:646 widget.cpp:774
+#: widget.cpp:773 widget.cpp:901
 msgid "/inclwdg/wdg"
 msgstr ""
 
-#: widget.cpp:655
+#: widget.cpp:782
 msgid "/wdg/res"
 msgstr ""
 
-#: widget.cpp:659
+#: widget.cpp:786
 msgid "mime"
 msgstr ""
 
-#: widget.cpp:708
+#: widget.cpp:835
 msgid "resLink"
 msgstr ""
 
-#: widget.cpp:815
+#: widget.cpp:942
 msgid "modif"
 msgstr ""
 
-#: widget.cpp:847
+#: widget.cpp:974
 msgid "/links"
 msgstr ""
 
-#: widget.cpp:847 widget.cpp:850
+#: widget.cpp:974 widget.cpp:977
 msgid "Links"
 msgstr "Связи"
 
-#: widget.cpp:849 widget.cpp:915
+#: widget.cpp:976 widget.cpp:1042
 msgid "/links/showAttr"
 msgstr ""
 
-#: widget.cpp:849
+#: widget.cpp:976
 msgid "Attributes show"
 msgstr "Показывать атрибуты"
 
-#: widget.cpp:850
+#: widget.cpp:977
 msgid "/links/lnk"
 msgstr ""
 
-#: widget.cpp:852 widget.cpp:853 widget.cpp:918 widget.cpp:920
+#: widget.cpp:979 widget.cpp:980 widget.cpp:1045 widget.cpp:1047
 msgid "showAttr"
 msgstr ""
 
-#: widget.cpp:891 widget.cpp:922
+#: widget.cpp:1018 widget.cpp:1049
 msgid "/links/lnk/pr_"
 msgstr ""
 
-#: widget.cpp:892 widget.cpp:1015 widget.cpp:1023
+#: widget.cpp:1019 widget.cpp:1142 widget.cpp:1150
 msgid "/links/lnk/pl_"
 msgstr ""
 
-#: widget.cpp:900 widget.cpp:902 widget.cpp:1104
+#: widget.cpp:1027 widget.cpp:1029 widget.cpp:1231
 msgid "/links/lnk/el_"
 msgstr ""
 
-#: widget.cpp:900 widget.cpp:903
+#: widget.cpp:1027 widget.cpp:1030
 msgid "elGrp"
 msgstr ""
 
-#: widget.cpp:903 widget.cpp:1015
+#: widget.cpp:1030 widget.cpp:1142
 msgid "/links/lnk/ls_"
 msgstr ""
 
-#: widget.cpp:904
+#: widget.cpp:1031
 msgid "inclValue"
 msgstr ""
 
-#: widget.cpp:944
+#: widget.cpp:1071
 msgid "Custom"
 msgstr "Раздельно"
 
-#: widget.cpp:957
+#: widget.cpp:1084
 msgid ": "
 msgstr ""
 
-#: widget.cpp:963
+#: widget.cpp:1090
 msgid ", "
 msgstr ""
 
-#: widget.cpp:987 widget.cpp:1074 widget.cpp:1083
+#: widget.cpp:1114 widget.cpp:1201 widget.cpp:1210
 msgid "self"
 msgstr ""
 
-#: widget.cpp:1005
+#: widget.cpp:1132
 msgid ","
 msgstr ""
 
-#: widget.cpp:1010
+#: widget.cpp:1137
 msgid "Destination has no any necessary attribute!"
 msgstr "Цель не имеет ни одного нужного атрибута!"
 
-#: widget.cpp:1011
+#: widget.cpp:1138
 #, c-format
 msgid "Destination has no attributes: %s !"
 msgstr "Цель не имеет атрибутов: %s !"
 
-#: widget.cpp:1026 widget.cpp:1034
+#: widget.cpp:1153 widget.cpp:1161
 msgid "Variable is not link"
 msgstr "Переменная не является связью"
 
-#: widget.cpp:1044
+#: widget.cpp:1171
 msgid "val:Constant value"
 msgstr "val:Постоянная"
 
-#: widget.cpp:1135
+#: widget.cpp:1262
 msgid "/proc"
 msgstr ""
 
-#: widget.cpp:1137 widget.cpp:1162
+#: widget.cpp:1264 widget.cpp:1289
 msgid "/proc/wdg"
 msgstr ""
 
-#: widget.cpp:1137 widget.cpp:1173
+#: widget.cpp:1264 widget.cpp:1300
 msgid "/proc/w_lst"
 msgstr ""
 
-#: widget.cpp:1138 widget.cpp:1166 widget.cpp:1171 widget.cpp:1185
+#: widget.cpp:1265 widget.cpp:1293 widget.cpp:1298 widget.cpp:1312
 msgid "wdgAttr"
 msgstr ""
 
-#: widget.cpp:1140 widget.cpp:1181
+#: widget.cpp:1267 widget.cpp:1308
 msgid "/proc/attr"
 msgstr ""
 
-#: widget.cpp:1142 widget.cpp:1190
+#: widget.cpp:1269 widget.cpp:1317
 msgid "/proc/attr/id"
 msgstr ""
 
-#: widget.cpp:1143 widget.cpp:1191
+#: widget.cpp:1270 widget.cpp:1318
 msgid "/proc/attr/name"
 msgstr ""
 
-#: widget.cpp:1144 widget.cpp:1192
+#: widget.cpp:1271 widget.cpp:1319
 msgid "/proc/attr/type"
 msgstr ""
 
-#: widget.cpp:1144 widget.cpp:1345
+#: widget.cpp:1271 widget.cpp:1472
 msgid "/proc/tp_ls"
 msgstr ""
 
-#: widget.cpp:1145 widget.cpp:1193
+#: widget.cpp:1272 widget.cpp:1320
 msgid "/proc/attr/wa"
 msgstr ""
 
-#: widget.cpp:1145
+#: widget.cpp:1272
 msgid "Work area"
 msgstr "Рабочая область"
 
-#: widget.cpp:1146 widget.cpp:1194
+#: widget.cpp:1273 widget.cpp:1321
 msgid "/proc/attr/proc"
 msgstr ""
 
-#: widget.cpp:1147 widget.cpp:1195
+#: widget.cpp:1274 widget.cpp:1322
 msgid "/proc/attr/cfg"
 msgstr ""
 
-#: widget.cpp:1147 widget.cpp:1360
+#: widget.cpp:1274 widget.cpp:1487
 msgid "/proc/lnk_ls"
 msgstr ""
 
-#: widget.cpp:1148 widget.cpp:1196
+#: widget.cpp:1275 widget.cpp:1323
 msgid "/proc/attr/cfgtmpl"
 msgstr ""
 
-#: widget.cpp:1148
+#: widget.cpp:1275
 msgid "Config template"
 msgstr "Конфигурационный шаблон"
 
-#: widget.cpp:1150
+#: widget.cpp:1277
 msgid "/proc/calc"
 msgstr ""
 
-#: widget.cpp:1150
+#: widget.cpp:1277
 msgid "Calculate"
 msgstr "Вычисление"
 
-#: widget.cpp:1152 widget.cpp:1301
+#: widget.cpp:1279 widget.cpp:1428
 msgid "/proc/calc/progLng"
 msgstr ""
 
-#: widget.cpp:1152
+#: widget.cpp:1279
 msgid "Programm language"
 msgstr "Язык программы"
 
-#: widget.cpp:1152 widget.cpp:1316
+#: widget.cpp:1279 widget.cpp:1443
 msgid "/proc/calc/plangLs"
 msgstr ""
 
-#: widget.cpp:1153 widget.cpp:1306
+#: widget.cpp:1280 widget.cpp:1433
 msgid "/proc/calc/per"
 msgstr ""
 
-#: widget.cpp:1154 widget.cpp:1311
+#: widget.cpp:1281 widget.cpp:1438
 msgid "/proc/calc/prog"
 msgstr ""
 
-#: widget.cpp:1154
+#: widget.cpp:1281
 msgid "Programm"
 msgstr "Программа"
 
-#: widget.cpp:1217 widget.cpp:1218 widget.cpp:1219
+#: widget.cpp:1344 widget.cpp:1345 widget.cpp:1346
 msgid "newAttr"
 msgstr ""
 
-#: widget.cpp:1217
+#: widget.cpp:1344
 msgid "New attribute"
 msgstr "Новый атрибут"
 
-#: widget.cpp:1226
+#: widget.cpp:1353
 msgid "Deleting the enclosed widget's elements error."
 msgstr "Ошибка. Удаление элементов вложенных виджетов."
 
-#: widget.cpp:1230
+#: widget.cpp:1357
 msgid "Deletint the not user element error."
 msgstr "Ошибка. Удаление не пользовательского элемента."
 
-#: widget.cpp:1240 widget.cpp:1268
+#: widget.cpp:1367 widget.cpp:1395
 msgid "wa"
 msgstr ""
 
-#: widget.cpp:1251
+#: widget.cpp:1378
 msgid "Changing of not user attribute is no permited"
 msgstr "Модификация не пользовательских атрибутов не допустима"
 
-#: widget.cpp:1260
+#: widget.cpp:1387
 #, c-format
 msgid "New attribute's ID '%s' already present."
 msgstr "Новый идентификатор атрибута '%s' уже присутствует."
 
-#: widget.cpp:1283
+#: widget.cpp:1410
 msgid "proc"
 msgstr ""
 
-#: widget.cpp:1296
+#: widget.cpp:1423
 msgid "cfgtmpl"
 msgstr ""
 
-#: widget.cpp:1347
+#: widget.cpp:1474
 msgid "Boolean"
 msgstr "Логический"
 
-#: widget.cpp:1348
+#: widget.cpp:1475
 msgid "Integer"
 msgstr "Целый"
 
-#: widget.cpp:1349
+#: widget.cpp:1476
 msgid "Real"
 msgstr "Вещественный"
 
-#: widget.cpp:1350
+#: widget.cpp:1477
 msgid "String"
 msgstr "Строка"
 
-#: widget.cpp:1351
+#: widget.cpp:1478
 msgid "Select integer"
 msgstr "Выбор целых"
 
-#: widget.cpp:1352
+#: widget.cpp:1479
 msgid "Select real"
 msgstr "Выбор вещественных"
 
-#: widget.cpp:1353
+#: widget.cpp:1480
 msgid "Select string"
 msgstr "Выбор строк"
 
-#: widget.cpp:1357
+#: widget.cpp:1484
 msgid "DateTime"
 msgstr "ДатаВремя"
 
-#: widget.cpp:1358 vcaFuncs.h:41 vcaFuncs.h:69 vcaFuncs.h:108 vcaFuncs.h:135
+#: widget.cpp:1485 vcaFuncs.h:41 vcaFuncs.h:69 vcaFuncs.h:108 vcaFuncs.h:135
 #: vcaFuncs.h:171 vcaFuncs.h:219
 msgid "Address"
 msgstr "Адрес"
 
-#: widget.cpp:1362
+#: widget.cpp:1489
 msgid "Not"
 msgstr "Нет"
 
-#: widget.cpp:1363
+#: widget.cpp:1490
 msgid "Constant"
 msgstr "Постоянная"
 
-#: widget.cpp:1364
+#: widget.cpp:1491
 msgid "Input link"
 msgstr "Входная связь"
 
-#: widget.cpp:1365
+#: widget.cpp:1492
 msgid "Output link"
 msgstr "Выходная связь"
 
-#: widget.cpp:1366
+#: widget.cpp:1493
 msgid "Full link"
 msgstr "Полная связь"
 
-#: widget.cpp:1367
+#: widget.cpp:1494
 msgid "From style"
 msgstr "Из стиля"
 
-#: widget.cpp:1429 widget.cpp:1496
+#: widget.cpp:1556 widget.cpp:1623
 msgid "Cfg"
 msgstr ""
 
-#: widget.cpp:1429 widget.cpp:1496
+#: widget.cpp:1556 widget.cpp:1623
 msgid "Element type is not selected!"
 msgstr "Элемент не выборного типа!"
 
@@ -4518,11 +4611,11 @@ msgstr ""
 msgid "SessPage"
 msgstr ""
 
-#: vcaengine.h:59
+#: vcaengine.h:61
 msgid "VCALibs"
 msgstr ""
 
-#: vcaengine.h:60
+#: vcaengine.h:62
 msgid "VCAPrjs"
 msgstr ""
 
@@ -4615,6 +4708,10 @@ msgstr "Запрос атрибута"
 msgid "Getting widget's attribute value."
 msgstr "Запрос значения атрибута виджета."
 
+#: vcaFuncs.h:190 vcaFuncs.h:238
+msgid "a_"
+msgstr ""
+
 #: vcaFuncs.h:196 vcaFuncs.h:244
 #, c-format
 msgid "/%2fattr%2f"
@@ -4632,6 +4729,6 @@ msgstr "Установка атрибута"
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
 
-#: widget.h:152
+#: widget.h:158
 msgid "Generic"
 msgstr ""

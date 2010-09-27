@@ -740,8 +740,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 Page::Page( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elPage()),
 	mIco(cfg("ICO").getSd()), mProc(cfg("PROC").getSd()), mProcPer(cfg("PROC_PER").getId()),
-	mFlgs(cfg("FLGS").getId()), mOwner(cfg("USER").getSd()), mGrp(cfg("GRP").getSd()), 
-	mPermit(cfg("PERMIT").getId()), mParent(cfg("PARENT").getSd()), mAttrs(cfg("ATTRS").getSd())
+	mFlgs(cfg("FLGS").getId()), mParent(cfg("PARENT").getSd()), mAttrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
 
@@ -860,31 +859,6 @@ string Page::ico( )
     if( mIco.size() )          return mIco;
     if( !parent().freeStat() )  return parent().at().ico();
     return "";
-}
-
-string Page::owner( )
-{
-    return SYS->security().at().usrPresent(mOwner) ? mOwner : Widget::owner( );
-}
-
-void Page::setOwner( const string &iown )
-{
-    mOwner = iown;
-    //- Group update -
-    if(SYS->security().at().grpAt("UI").at().user(iown))
-	setGrp("UI");
-    else
-    {
-	vector<string> gls;
-	SYS->security().at().usrGrpList(owner(),gls);
-	setGrp(gls.size()?gls[0]:Widget::grp());
-    }
-    modif();
-}
-
-string Page::grp( )
-{
-    return SYS->security().at().grpPresent(mGrp) ? mGrp : Widget::grp( );
 }
 
 void Page::setParentNm( const string &isw )
@@ -1221,7 +1195,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	return true;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
     if( a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template )
 	opt->childIns(0,"el")->setText("..");
@@ -1264,7 +1238,7 @@ void Page::cntrCmdProc( XMLNode *opt )
 {
     if( cntrCmdServ(opt) ) return;
 
-    //- Get page info -
+    //> Get page info
     if( opt->name() == "info" )
     {
 	cntrCmdGeneric(opt);
@@ -1277,7 +1251,7 @@ void Page::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || (parent( ).freeStat() ? false : cntrCmdLinks(opt) || cntrCmdProcess(opt))) )
 	TCntrNode::cntrCmdProc(opt);
 }
@@ -1287,8 +1261,7 @@ void Page::cntrCmdProc( XMLNode *opt )
 //************************************************
 PageWdg::PageWdg( const string &iid, const string &isrcwdg ) :
         Widget(iid), TConfig(&mod->elInclWdg()), delMark(false),
-        mParent(cfg("PARENT").getSd()), mAttrs(cfg("ATTRS").getSd()),
-        mOwner(cfg("USER").getSd()), mGrp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId())
+        mParent(cfg("PARENT").getSd()), mAttrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -1342,36 +1315,11 @@ string PageWdg::ico( )
     return "";
 }
 
-string PageWdg::owner( )
-{
-    return SYS->security().at().usrPresent(mOwner) ? mOwner : Widget::owner( );
-}
-
-void PageWdg::setOwner( const string &iown )
-{
-    mOwner = iown;
-    //> Group update
-    if(SYS->security().at().grpAt("UI").at().user(iown))
-	setGrp("UI");
-    else
-    {
-	vector<string> gls;
-	SYS->security().at().usrGrpList(owner(),gls);
-	setGrp( gls.size() ? gls[0] : Widget::grp() );
-    }
-    modif();
-}
-
 void PageWdg::setParentNm( const string &isw )
 {
     if( enable() && mParent != isw ) setEnable(false);
     mParent = isw;
     modif();
-}
-
-string PageWdg::grp( )
-{
-    return SYS->security().at().grpPresent(mGrp) ? mGrp : Widget::grp( );
 }
 
 void PageWdg::setEnable( bool val )

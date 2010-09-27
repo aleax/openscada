@@ -139,9 +139,6 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
     wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calc period"),TFld::Integer,TFld::NoFlag,"5","-1") );
-    wdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
-    wdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
-    wdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
     wdg_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
@@ -149,9 +146,6 @@ void Engine::postEnable( int flag )
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    inclwdg_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
-    inclwdg_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
-    inclwdg_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
     inclwdg_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
@@ -195,9 +189,6 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     page_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
     page_el.fldAdd( new TFld("PROC_PER",_("Procedure calc period"),TFld::Integer,TFld::NoFlag,"5","-1") );
-    page_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
-    page_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
-    page_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
     page_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
@@ -415,6 +406,32 @@ void Engine::load_( )
 #endif
     }
 
+    //> Auto-sessions load and enable
+    ResAlloc res(nodeRes(),true);
+    XMLNode aSess("Sess");
+    try
+    {
+	aSess.load(TBDS::genDBGet(nodePath()+"AutoSess"));
+	for(int i_n = 0; i_n < aSess.childSize(); i_n++)
+	{
+	    string sId	= aSess.childGet(i_n)->attr("id");
+	    string sPrj	= aSess.childGet(i_n)->attr("prj");
+	    string sUser= aSess.childGet(i_n)->attr("user");
+	    mSessAuto[sId] = sPrj+":"+sUser;
+
+	    try
+	    {
+		if(!sesPresent(sId) && prjAt(sPrj).at().enable())
+		{
+		    sesAdd(sId, sPrj);
+		    sesAt(sId).at().setUser(sUser);
+		    sesAt(sId).at().setBackgrnd(true);
+		    sesAt(sId).at().setEnable(true);
+		}
+	    }catch(...){ }
+	}
+    }catch(...){ }
+
     modifGClr( );
 }
 
@@ -425,6 +442,15 @@ void Engine::save_( )
     //> Save parameters to DB
     TBDS::genDBSet( nodePath()+"SynthCom", synthCom() );
     TBDS::genDBSet( nodePath()+"SynthCode", synthCode() );
+
+    //> Auto-sessions save
+    ResAlloc res(nodeRes(),false);
+    XMLNode aSess("Sess");
+    for(map<string,string>::iterator ias = mSessAuto.begin(); ias != mSessAuto.end(); ias++)
+	aSess.childAdd("it")->setAttr("id",ias->first)->
+			      setAttr("prj",TSYS::strParse(ias->second,0,":"))->
+			      setAttr("user",TSYS::strParse(ias->second,1,":"));
+    TBDS::genDBSet(nodePath()+"AutoSess",aSess.save());
 }
 
 void Engine::modStart()
@@ -638,12 +664,12 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
 	    if( vDB == 2 ) c_el.cfg("ID").setS( als[i_a] );
 	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		    (attr.at().flgSelf()&Attr::CfgConst || (attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().substr(0,4) == "val:"))) );
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
@@ -654,7 +680,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    if( vDB == 1 ) c_elu.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
 	    if( vDB == 2 ) c_elu.cfg("ID").setS( als[i_a] );
 	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
 		    attr.at().fld().values()+"|"+
 		    attr.at().fld().selNames());
@@ -663,7 +689,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_elu.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		    (attr.at().flgSelf()&Attr::CfgConst || (attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().substr(0,4) == "val:"))) );
 	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu);
@@ -737,7 +763,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		sess = prj;
 		for( int p_cnt = 0; sesPresent(sess); p_cnt++ )
 		    sess = prj+TSYS::int2str(p_cnt);
-		sesAdd( sess, prj );
+		sesAdd(sess, prj);
 		sesAt(sess).at().setUser(opt->attr("user"));
 		sesAt(sess).at().setStart(true);
 		sesAt(sess).at().connect();
@@ -813,7 +839,15 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","wlb_","idSz","30");
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","UI"))
+	{
 	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
+	    if(ctrMkNode("table",opt,-1,"/ses/ast",_("Auto create and start"),RWRWR_,"root","UI",2,"s_com","add,del","key","id"))
+	    {
+		ctrMkNode("list",opt,-1,"/ses/ast/id",_("ID"),RWRWR_,"root","UI",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ses/ast/proj",_("Project"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/ses/prj_ls");
+		ctrMkNode("list",opt,-1,"/ses/ast/user",_("User"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/ses/usr_ls");
+	    }
+	}
 	if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),0444,"root","UI"))
 	{
 	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
@@ -894,6 +928,50 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
 	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )   sesDel(opt->text(),true);
+    }
+    else if( a_path == "/ses/ast" )
+    {
+	string idcol = opt->attr("col").c_str();
+	string idvl = opt->attr("key_id");
+	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
+	{
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/ses/ast/id","");
+	    XMLNode *n_proj	= ctrMkNode("list",opt,-1,"/ses/ast/proj","");
+	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/ses/ast/user","");
+
+	    ResAlloc res(nodeRes(),false);
+	    for(map<string,string>::iterator isa = mSessAuto.begin(); isa != mSessAuto.end(); isa++)
+	    {
+		if(n_id)	n_id->childAdd("el")->setText(isa->first);
+		if(n_proj)	n_proj->childAdd("el")->setText(TSYS::strParse(isa->second,0,":"));
+		if(n_user)	n_user->childAdd("el")->setText(TSYS::strParse(isa->second,1,":"));
+	    }
+	    return;
+	}
+	ResAlloc res(nodeRes(),true);
+	modif();
+	if(ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR))	mSessAuto["NewSessId"] = "";
+	else if(ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR))mSessAuto.erase(idvl);
+	else if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))
+	{
+	    if(idcol == "id")
+	    {
+		mSessAuto[opt->text()] = mSessAuto[idvl];
+		mSessAuto.erase(idvl);
+	    }
+	    if(idcol == "proj")	mSessAuto[idvl] = opt->text()+":"+TSYS::strParse(mSessAuto[idvl],1,":");
+	    if(idcol == "user")	mSessAuto[idvl] = TSYS::strParse(mSessAuto[idvl],0,":")+":"+opt->text();
+	}
+    }
+    else if(a_path == "/ses/usr_ls" && ctrChkNode(opt))
+    {
+	vector<string> ls; SYS->security().at().usrList(ls);
+	for(int i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
+    }
+    else if(a_path == "/ses/prj_ls" && ctrChkNode(opt))
+    {
+	vector<string> ls; prjList(ls);
+	for(int i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
     }
     else if( a_path == "/br/vca" && ctrChkNode(opt) )
     {

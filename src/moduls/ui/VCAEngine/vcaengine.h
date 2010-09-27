@@ -137,6 +137,8 @@ class Engine : public TUI
 	string	mSynthCom, mSynthCode;	//Synth parameters
 
 	Res	mSynthRes;	//Synth resource
+
+	map<string,string>	mSessAuto;
 };
 
 extern  Engine *mod;

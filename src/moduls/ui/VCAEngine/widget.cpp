@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <errno.h>
+
 #include <resalloc.h>
 #include <tsys.h>
 
@@ -32,15 +34,32 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), m_lnk(false), mStlLock(false), mParentNm(isrcwdg)
+    mId(id), mEnable(false), m_lnk(false), mStlLock(false), mParentNm(isrcwdg), attrAtLockCnt(0)
 {
     inclWdg = grpAdd("wdg_");
-    attrId  = grpAdd("a_",true);
+
+    //> Attributes mutex create
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_ERRORCHECK);
+    pthread_mutex_init(&mtxAttr, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 Widget::~Widget()
 {
-    nodeDelAll( );
+    //> Remove attributes
+    pthread_mutex_lock(&mtxAttr);
+    map<string,Attr*>::iterator p;
+    while((p = mAttrs.begin()) != mAttrs.end())
+    {
+	delete p->second;
+	mAttrs.erase(p);
+    }
+    pthread_mutex_unlock(&mtxAttr);
+
+    //> Attributes mutex destroy
+    pthread_mutex_destroy(&mtxAttr);
 }
 
 TCntrNode &Widget::operator=( TCntrNode &node )
@@ -119,10 +138,10 @@ void Widget::postEnable( int flag )
 	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
 	attrAdd( new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
-	/*attrAdd( new TFld("owner",_("Owner"),TFld::String,Attr::Generic,"","root:UI") );
+	attrAdd( new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic,"","root:UI") );
 	attrAdd( new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
-	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")) );*/
+	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")) );
 	attrAdd( new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","1") );
 	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
 	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
@@ -176,6 +195,44 @@ string Widget::descr( )
 void Widget::setDescr( const string &idscr )
 {
     attrAt("dscr").at().setS(idscr);
+}
+
+string Widget::owner( )
+{
+    return TSYS::strParse(attrAt("owner").at().getS(),0,":");
+}
+
+void Widget::setOwner( const string &iown )
+{
+    attrAt("owner").at().setS(iown+":"+grp());
+    //> Group update
+    if(SYS->security().at().grpAt("UI").at().user(iown)) setGrp("UI");
+    else
+    {
+	vector<string> gls;
+	SYS->security().at().usrGrpList(owner(),gls);
+	setGrp(gls.size()?gls[0]:Widget::grp());
+    }
+}
+
+string Widget::grp( )
+{
+    return TSYS::strParse(attrAt("owner").at().getS(),1,":");
+}
+
+void Widget::setGrp( const string &igrp )
+{
+    attrAt("owner").at().setS(owner()+":"+igrp);
+}
+
+short Widget::permit( )
+{
+    return attrAt("perm").at().getI();
+}
+
+void Widget::setPermit( short iperm )
+{
+    attrAt("perm").at().setI(iperm);
 }
 
 bool Widget::isContainer( )
@@ -449,15 +506,42 @@ void Widget::wClear( )
     modif();
 }
 
-void Widget::attrAdd( TFld *attr, int pos, bool inher )
+void Widget::attrList( vector<string> &list )
+{
+    pthread_mutex_lock(&mtxAttr);
+    list.clear();
+    list.reserve(mAttrs.size());
+    for( map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p )
+    {
+	while( p->second->mOi >= list.size() )	list.push_back("");
+	list[p->second->mOi] = p->first;
+    }
+    pthread_mutex_unlock(&mtxAttr);
+}
+
+void Widget::attrAdd(TFld *attr, int pos, bool inher)
 {
     string anm = attr->name();
-    if( attrPresent(anm) )
+
+    if(attrPresent(anm) || TSYS::strNoSpace(anm).empty())
     {
 	if( !inher ) delete attr;
 	return;
     }
-    chldAdd( attrId, new Attr(attr,inher), pos );
+    try
+    {
+	pthread_mutex_lock(&mtxAttr);
+	map<string, Attr* >::iterator p;
+	Attr *a = new Attr(attr,inher);
+	a->mOwner = this;
+	pos = (pos < 0 || pos > mAttrs.size()) ? mAttrs.size() : pos;
+	a->mOi = pos;
+	for(p = mAttrs.begin(); p != mAttrs.end(); p++)
+	    if( p->second->mOi >= pos ) p->second->mOi++;
+	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
+    }
+    catch(...){ }
+    pthread_mutex_unlock(&mtxAttr);
 }
 
 void Widget::attrDel( const string &attr, bool allInher  )
@@ -471,7 +555,46 @@ void Widget::attrDel( const string &attr, bool allInher  )
 		m_herit[i_h].at().attrDel( attr );
 
     //> Self delete
-    chldDel(attrId,attr);
+    try
+    {
+	pthread_mutex_lock(&mtxAttr);
+
+	map<string, Attr* >::iterator p = mAttrs.find(attr);
+	if(p == mAttrs.end())	throw TError(nodePath().c_str(),"Attribute <%s> is not present!", attr.c_str());
+	int pos = p->second->mOi;
+	for( map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1 )
+	    if( p1->second->mOi > pos ) p1->second->mOi--;
+	delete p->second;
+	mAttrs.erase(p);
+    }
+    catch(...){ }
+    pthread_mutex_unlock(&mtxAttr);
+}
+
+bool Widget::attrPresent(const string &attr)
+{
+    pthread_mutex_lock(&mtxAttr);
+    bool rez = (mAttrs.find(attr) != mAttrs.end());
+    pthread_mutex_unlock(&mtxAttr);
+    return rez;
+}
+
+AutoHD<Attr> Widget::attrAt(const string &attr)
+{
+    int rez = pthread_mutex_lock(&mtxAttr);
+    if(rez && (rez != EDEADLK || !attrAtLockCnt))
+	throw TError(nodePath().c_str(),_("Attribute attach access error: %d."),rez);
+
+    map<string, Attr* >::iterator p = mAttrs.find(attr);
+    if(p == mAttrs.end())
+	throw TError(nodePath().c_str(),"Attribute <%s> is not present!", attr.c_str());
+
+    return AutoHD<Attr>(p->second);
+}
+
+int  Widget::attrPos(const string &inm)
+{
+    return attrAt(inm).at().mOi;
 }
 
 void Widget::calc( Widget *base )
@@ -1376,7 +1499,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget attribute                       *
 //************************************************
-Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mOwner(NULL)
 {
     setFld( ifld, inher );
 }
@@ -1396,8 +1519,8 @@ void Attr::setFld( TFld *fld, bool inher )
 	    case TFld::String:
 		m_val.s_val = NULL;
 		if( fld->flg()&Attr::DirRead ) break;
-		m_val.s_val    = new ResString();
-		m_val.s_val->setVal(fld->def());
+		m_val.s_val    = new string();
+		*m_val.s_val = fld->def();
 		break;
 	    case TFld::Integer:
 		m_val.i_val = strtol(fld->def().c_str(),NULL,(fld->flg()&TFld::HexDec)?16:((fld->flg()&TFld::OctDec)?8:10));
@@ -1424,8 +1547,6 @@ string Attr::name( )		{ return fld().descr(); }
 
 TFld::Type Attr::type( )	{ return fld().type(); }
 
-Widget *Attr::owner( )		{ return (Widget *)nodePrev(); }
-
 int Attr::flgGlob( )		{ return fld().flg(); }
 
 string Attr::getSEL( bool sys )
@@ -1447,10 +1568,10 @@ string Attr::getS( bool sys )
 
     switch( fld().type() )
     {
-	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
-	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
-	case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
-	case TFld::String:	return m_val.s_val->getVal();
+	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
+	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
+	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
+	case TFld::String:	return *m_val.s_val;
     }
 }
 
@@ -1460,9 +1581,9 @@ int Attr::getI( bool sys )
     if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getI(true),false).getI();
     switch( fld().type() )
     {
-	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? atoi(m_val.s_val->getVal().c_str()) : EVAL_INT;
-	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
-	case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
+	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? atoi(m_val.s_val->c_str()) : EVAL_INT;
+	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
+	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
 	case TFld::Integer:	return m_val.i_val;
     }
 }
@@ -1473,9 +1594,9 @@ double Attr::getR( bool sys )
     if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getR(true),false).getR();
     switch( fld().type() )
     {
-	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? atof(m_val.s_val->getVal().c_str()) : EVAL_REAL;
-	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? m_val.i_val : EVAL_REAL;
-	case TFld::Boolean:	return (m_val.b_val!=EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
+	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? atof(m_val.s_val->c_str()) : EVAL_REAL;
+	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? m_val.i_val : EVAL_REAL;
+	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
 	case TFld::Real:	return m_val.r_val;
     }
 }
@@ -1486,9 +1607,9 @@ char Attr::getB( bool sys )
     if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getB(true),false).getB();
     switch( fld().type() )
     {
-	case TFld::String:	return (m_val.s_val->getVal()!=EVAL_STR) ? (bool)atoi(m_val.s_val->getVal().c_str()) : EVAL_BOOL;
-	case TFld::Integer:	return (m_val.i_val!=EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
-	case TFld::Real:	return (m_val.r_val!=EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
+	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? (bool)atoi(m_val.s_val->c_str()) : EVAL_BOOL;
+	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
+	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
 	case TFld::Boolean:	return m_val.b_val;
     }
 }
@@ -1517,11 +1638,11 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys );	break;
 	case TFld::String:
 	{
-	    if( (!strongPrev && m_val.s_val->getVal() == val) ||
+	    if( (!strongPrev && *m_val.s_val == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
-	    string t_str = m_val.s_val->getVal();
-	    m_val.s_val->setVal(val);
-	    if( !sys && !owner()->attrChange(*this,TVariant(t_str)) )	m_val.s_val->setVal(t_str);
+	    string t_str = *m_val.s_val;
+	    *m_val.s_val = val;
+	    if( !sys && !owner()->attrChange(*this,TVariant(t_str)) )	*m_val.s_val = t_str;
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1660,4 +1781,15 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
 	unsigned imdf = owner()->modifVal(*this);
 	m_modif = imdf ? imdf : m_modif+1;
     }
+}
+
+void Attr::AHDConnect( )
+{
+    owner()->attrAtLockCnt++;
+}
+
+void Attr::AHDDisConnect( )
+{
+    owner()->attrAtLockCnt--;
+    if(!owner()->attrAtLockCnt) pthread_mutex_unlock(&owner()->mtxAttr);
 }

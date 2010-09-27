@@ -178,9 +178,6 @@ class SessWdg : public Widget, public TValFunc
 	string ownerFullId( bool contr = false );
 	string type( )		{ return "SessWidget"; }
 	string ico( );
-	string owner( );
-	string grp( );
-	short  permit( );
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );

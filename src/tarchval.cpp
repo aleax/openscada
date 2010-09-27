@@ -34,6 +34,8 @@
 #include "tarchives.h"
 #include "tarchval.h"
 
+#define HalfDivMinWin	5
+
 using namespace OSCADA;
 
 //*************************************************
@@ -401,22 +403,31 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 
     if( (up_ord && tm > end) || (!up_ord && tm < beg) )	throw TError("ValBuf",_("Value is not present."));
     tm = up_ord ? vmax(tm,beg) : vmin(tm,end);
+    //> Process hard grid buffer
     if( hrd_grd )
     {
-	//> Process hard grid buffer
 	int npos = up_ord?(end-tm)/per:(long long)buf.grid->size()-1-(tm-beg)/per;
 	if( npos < 0 || npos >= buf.grid->size() ) { if(itm) *itm = 0; return eval; }
 	if( itm )	*itm = end-npos*per;
 	return (*buf.grid)[((cur-npos-1)>=0)?(cur-npos-1):(buf.grid->size()+(cur-npos-1))];
     }
+    //> Process soft grid buffer
     else if( per )
     {
-	//> Process soft grid buffer
 	int npos = (up_ord?(end-tm):(tm-beg))/per;
 	if( hg_res_tm )
 	{
-	    int c_cur  = (cur)?cur-1:buf.tm_high->size()-1;
+	    int c_cur = (cur)?cur-1:buf.tm_high->size()-1;
 	    int c_end = c_cur;
+
+	    //>> Half divider
+	    for(int d_win = buf.tm_high->size()/2; d_win > HalfDivMinWin; d_win/=2)
+	    {
+		int c_cnext = c_end-d_win;
+		if(c_cnext < 0) c_cnext += buf.tm_high->size();
+		if(tm < (*buf.tm_high)[c_cnext].tm) c_end=c_cnext;
+	    }
+	    //>> Proving
 	    do
 	    {
 		int w_pos = (up_ord?end-(*buf.tm_high)[c_end].tm:(*buf.tm_high)[c_end].tm-beg)/per;
@@ -440,6 +451,15 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	{
 	    int c_cur = (cur)?cur-1:buf.tm_low->size()-1;
 	    int c_end = c_cur;
+
+	    //>> Half divider
+	    for(int d_win = buf.tm_low->size()/2; d_win > HalfDivMinWin; d_win/=2)
+	    {
+		int c_cnext = c_end-d_win;
+		if(c_cnext < 0) c_cnext += buf.tm_low->size();
+		if(tm < (long long)(*buf.tm_low)[c_cnext].tm*1000000) c_end=c_cnext;
+	    }
+	    //>> Proving
 	    do
 	    {
 		int w_pos = (up_ord?end-(long long)(*buf.tm_low)[c_end].tm*1000000:(long long)(*buf.tm_low)[c_end].tm*1000000-beg)/per;
@@ -460,18 +480,18 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	    return eval;
 	}
     }
+    //> Proccess flow buffer
     else
     {
-	//- Proccess flow buffer -
 	if( hg_res_tm )
 	{
 	    int c_end = buf.tm_high->size()-1;
-	    //-- Half divider --
-	    for( int d_win = c_end/2; d_win > 10; d_win/=2 )
+	    //>> Half divider
+	    for( int d_win = c_end/2; d_win > HalfDivMinWin; d_win/=2 )
 		if( !((!up_ord && tm >= (*buf.tm_high)[c_end-d_win].tm) ||
 			(up_ord && tm <= (*buf.tm_high)[buf.tm_high->size()-(c_end-d_win)-1].tm)) )
 		    c_end-=d_win;
-	    //-- Scan last window --
+	    //>> Scan last window
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm >= (*buf.tm_high)[c_end].tm )
@@ -492,12 +512,12 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	else
 	{
 	    int c_end = buf.tm_low->size()-1;
-	    //-- Half divider --
-	    for( int d_win = c_end/2; d_win>10; d_win/=2 )
+	    //>> Half divider
+	    for( int d_win = c_end/2; d_win > HalfDivMinWin; d_win/=2 )
 		if( !((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end-d_win].tm) ||
 			(up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-(c_end-d_win)-1].tm*1000000)) )
 		    c_end-=d_win;
-	    //-- Scan last window --
+	    //>> Scan last window
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm )
@@ -524,9 +544,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
     if( !end )	end = (per) ? per*(tm/per-1) : tm;
     if( !beg )	beg = (per) ? per*(tm/per) : tm;
 
+    //> Process hard grid buffer
     if( hrd_grd )
     {
-	//> Process hard grid buffer
 	int npos = (tm-end)/per;
 	//>> Set value
 	if( npos <= 0 && (-npos) < buf.grid->size() )
@@ -569,9 +589,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		end += per;
 	    }
     }
+    //> Process soft grid buffer
     else if( per )
     {
-	//> Process soft grid buffer
 	int npos = (tm-end)/per;
 	//>> Set value
         if( npos < 0 )	throw TError("ValBuf",_("Grid mode doesn't support inserting old values."));
@@ -744,9 +764,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    }
 	}
     }
+    //> Proccess flow buffer
     else
     {
-	//> Proccess flow buffer
 	if( hg_res_tm )
 	{
 	    SHg b_el = { tm, value };
@@ -756,7 +776,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 
 	    //>> Half divider
 	    int d_win = buf.tm_high->size()/2;
-	    while( d_win>10 )
+	    while(d_win > HalfDivMinWin)
 	    {
 		if( tm > (*buf.tm_high)[c_pos+d_win].tm ) c_pos+=d_win;
 		d_win/=2;
@@ -795,7 +815,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 	    int c_pos = 0;
 	    //>> Half divider
 	    int d_win = buf.tm_low->size()/2;
-	    while( d_win > 10 )
+	    while(d_win > HalfDivMinWin)
 	    {
 		if( tm/1000000 > (*buf.tm_low)[c_pos+d_win].tm ) c_pos += d_win;
 		d_win /= 2;

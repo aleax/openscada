@@ -1,3 +1,13 @@
+2010-09-27 Roman
+- !!:DemoDB: New UI-permitions mechanism is implemented. Real read access for simple users ("user") is granted.
+- !:Archive: Read access speed to values from soft grid buffer is rised.
+- !:Elem, UI.VCAEngine: The flag TFld::NoStrTransl is added for translation prevent for system's string fields.
+- !!!!:UI.VCAEngine: Rip attribute object "Attr" from object "TCntrNode", memory consumption is decreased to 25%.
+    Resource access to widget's attributes is made global by mutex.
+    The access properties of widgets is made by widget's attributes "owner" and "perm" for flexible control.
+    Auto sessions create and start on load mechanism is added.
+
+
 2010-09-24 Roman
 - FIX:Security: Groups save on user saving is fixed.
 - DB.SQLite: Specific DB addres' value description is added.

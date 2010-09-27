@@ -70,6 +70,8 @@ void Session::setEnable( bool val )
 
     if( val == enable() )	return;
 
+    mess_info(nodePath().c_str(),val ? _("Enable session.") : _("Disable session."));
+
     vector<string> pg_ls;
 
     if( val )
@@ -132,6 +134,8 @@ void Session::setEnable( bool val )
 void Session::setStart( bool val )
 {
     ResAlloc res(mCalcRes, true);
+
+    mess_info(nodePath().c_str(),val ? _("Start session.") : _("Stop session."));
 
     vector<string> pg_ls;
 
@@ -1227,30 +1231,6 @@ string SessWdg::ico( )
     return "";
 }
 
-string SessWdg::owner( )
-{
-    //SessWdg *sWdg = ownerSessWdg(false);
-    //if( sWdg )	return sWdg->owner();
-    if( !parent().freeStat() )  return parent().at().owner();
-    return Widget::owner();
-}
-
-string SessWdg::grp( )
-{
-    //SessWdg *sWdg = ownerSessWdg(false);
-    //if( sWdg )	return sWdg->grp();
-    if( !parent().freeStat() )  return parent().at().grp();
-    return Widget::grp();
-}
-
-short SessWdg::permit( )
-{
-    //SessWdg *sWdg = ownerSessWdg(false);
-    //if( sWdg )	return sWdg->permit();
-    if( !parent().freeStat() )	return parent().at().permit();
-    return Widget::permit();
-}
-
 string SessWdg::calcLang( )
 {
     if( !parent().freeStat() )    return parent().at().calcLang();
@@ -1461,16 +1441,20 @@ void SessWdg::calc( bool first, bool last )
 		    }
 		    else if( obj_tp == "wdg:" )
 		    {
-			try{ attr1 = mod->nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
-			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
-			
-			switch( attr.at().type() )
+			try
 			{
-			    case TFld::Boolean:	attr.at().setB(attr1.at().getB()); break;
-			    case TFld::Integer:	attr.at().setI(attr1.at().getI()); break;
-			    case TFld::Real:	attr.at().setR(attr1.at().getR()); break;
-			    case TFld::String:	attr.at().setS(attr1.at().getS()); break;
+			    int a_pos = attr.at().cfgVal().rfind("/");
+			    if(a_pos == string::npos) throw TError("","");
+			    attr1 = ((AutoHD<Widget>)mod->nodeAt(attr.at().cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(attr.at().cfgVal().substr(a_pos+3));
+			    switch( attr.at().type() )
+			    {
+				case TFld::Boolean:	attr.at().setB(attr1.at().getB()); break;
+				case TFld::Integer:	attr.at().setI(attr1.at().getI()); break;
+				case TFld::Real:	attr.at().setR(attr1.at().getR()); break;
+				case TFld::String:	attr.at().setS(attr1.at().getS()); break;
+			    }
 			}
+			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 		    }
 		}
 		else if( attr.at().flgSelf()&Attr::CfgLnkIn )	attr.at().setS(EVAL_STR);
@@ -1618,21 +1602,18 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		        break;
 		}
 	    else if( obj_tp == "wdg:" )
+	    {
+		int a_pos = cfg.cfgVal().rfind("/");
+		if(a_pos == string::npos) throw TError("","");
+		AutoHD<Attr> wattr = ((AutoHD<Widget>)mod->nodeAt(cfg.cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(cfg.cfgVal().substr(a_pos+3));
 		switch( cfg.type() )
 		{
-		    case TFld::Boolean:
-		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
-		        break;
-		    case TFld::Integer:
-		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setI(cfg.getI());
-		        break;
-		    case TFld::Real:
-		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setR(cfg.getR());
-		        break;
-		    case TFld::String:
-		        ((AutoHD<Attr>)mod->nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
-		        break;
+		    case TFld::Boolean:	wattr.at().setB(cfg.getB());	break;
+		    case TFld::Integer:	wattr.at().setI(cfg.getI());	break;
+		    case TFld::Real:	wattr.at().setR(cfg.getR());	break;
+		    case TFld::String:	wattr.at().setS(cfg.getS());	break;
 		}
+	    }
 	}catch(...)	{ }
     }
 

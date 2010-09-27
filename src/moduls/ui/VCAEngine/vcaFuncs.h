@@ -150,7 +150,7 @@ class attrList : public TFunction
 		nd.at().attrList(ls);
 		if( val->getB(2) )
 		for( int i_a = 0; i_a < ls.size(); i_a++ )
-		    if( nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser )
+		    if(nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser)
 		    { ls.erase(ls.begin()+i_a); i_a--; }
 	    }
 	    catch(TError err) { }

@@ -37,8 +37,10 @@ namespace VCA
 class Widget;
 
 //#pragma pack(push,1)
-class Attr : public TCntrNode
+class Attr
 {
+    friend class Widget;
+
     public:
 	//Data
 	//> Attribute flags
@@ -73,7 +75,7 @@ class Attr : public TCntrNode
 
 	//Methods
 	//> Main
-	Attr( TFld *fld, bool inher );
+	Attr(TFld *fld, bool inher);
 	~Attr( );
 
 	const string &id( );
@@ -105,30 +107,32 @@ class Attr : public TCntrNode
 	void setB( char val, bool strongPrev = false, bool sys = false );
 
 	TFld &fld( )			{ return *mFld; }
-	void setFld( TFld *fld, bool inher );
+	void setFld(TFld *fld, bool inher);
 
-	Widget *owner( );
+	void AHDConnect( );
+	void AHDDisConnect( );
 
-    protected:
-	//Methods
-	const string &nodeName( )	{ return id(); }
+	Widget *owner( )		{ return mOwner; }
 
     private:
 	//Data
 	//> Storing
 	union
 	{
-	    ResString	*s_val;		//String
+	    string	*s_val;		//String
 	    double	r_val;		//Real
 	    int		i_val;		//Integer
 	    char	b_val;		//Boolean
 	}m_val;
 	//> Attributes
-	TFld	*mFld;			//Base field
-	unsigned m_modif;		//Modify counter
-	short	self_flg;		//Self attributes flags
+	TFld		*mFld;		//Base field
+	unsigned	m_modif;	//Modify counter
+	short		self_flg;	//Self attributes flags
+	unsigned char	mOi;		//Order index
 
 	string	cfg;			//Config template and value
+
+	Widget	*mOwner;
 };
 //#pragma pack(pop)
 
@@ -152,9 +156,9 @@ class Widget : public TCntrNode
 	virtual string descr( );				//Description
 	virtual string ico( )		{ return ""; }		//Icon
 	virtual string type( )		{ return "Generic"; }	//Widget hierarchy type
-	virtual string owner( )		{ return "root"; }	//Widget owner
-	virtual string grp( )		{ return "UI"; }	//Widget group
-	virtual short  permit( )	{ return 0644; }	//Permition for access to widget
+	string owner( );					//Widget owner
+	string grp( );						//Widget group
+	short  permit( );					//Permition for access to widget
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( )	{ return ""; }		//Calc procedure language
 	virtual string calcProg( )	{ return ""; }		//Calc procedure
@@ -166,9 +170,9 @@ class Widget : public TCntrNode
 	virtual void setName( const string &inm );
 	virtual void setDescr( const string &idscr );
 	virtual void setIco( const string &ico )	{ };
-	virtual void setOwner( const string &iown )	{ };
-	virtual void setGrp( const string &igrp )	{ };
-	virtual void setPermit( short iperm )		{ };
+	void setOwner( const string &iown );
+	void setGrp( const string &igrp );
+	void setPermit( short iperm );
 	virtual void setCalcLang( const string &ilng )	{ };
 	virtual void setCalcProg( const string &iprg )	{ };
 	virtual void setCalcPer( int vl )		{ };
@@ -196,12 +200,12 @@ class Widget : public TCntrNode
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
 	//> Widget's attributes
-	void attrList( vector<string> &list )		{ chldList(attrId,list); }
-	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
-	void attrDel( const string &attr, bool allInher = false );
-	bool attrPresent( const string &attr )		{ return chldPresent(attrId,attr); }
-	int  attrPos( const string &attr )		{ return attrAt(attr).at().nodePos(); }
-	AutoHD<Attr> attrAt( const string &attr )	{ return chldAt(attrId,attr); }
+	void attrList(vector<string> &list);
+	void attrAdd(TFld *attr, int pos = -1, bool inher = false);
+	void attrDel(const string &attr, bool allInher = false);
+	bool attrPresent(const string &attr);
+	int  attrPos(const string &iattr);
+	AutoHD<Attr> attrAt(const string &attr);
 
 	//> Include widgets
 	void wdgList( vector<string> &list );
@@ -235,18 +239,19 @@ class Widget : public TCntrNode
 
 	//Attributes
 	//> Generic data
-	string	mId;			//Widget identifier
+	string		mId;			//Widget identifier
 
-	unsigned char	mEnable	:1;		//Enable status
-	unsigned char	m_lnk	:1;		//Widget as link
-	unsigned char	attrId	:3;		//The widget's container id
-	unsigned char	inclWdg	:3;
-	unsigned char	mStlLock:1;		//Style lock
-	string	mParentNm;		//Parent widget name
-	AutoHD<Widget>	mParent;	//Parent widget
+	unsigned char	mEnable		:1;	//Enable status
+	unsigned char	m_lnk		:1;	//Widget as link
+	unsigned char	inclWdg		:3;
+	unsigned char	mStlLock	:1;	//Style lock
+	unsigned char	attrAtLockCnt	:8;	//attr at lock cnt
+	string	mParentNm;			//Parent widget name
+	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
+	map<string, Attr* >	mAttrs;
+	pthread_mutex_t		mtxAttr;
 };
-
 
 }
 

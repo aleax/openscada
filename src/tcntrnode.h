@@ -61,7 +61,15 @@ namespace OSCADA
 class TCntrNode;
 
 #ifndef OSC_HASHMAP
-typedef map<string, TCntrNode* > TMap;
+/*struct StrPntLess
+{
+    bool operator()(const string *s1, const string *s2) const
+    {
+	return s1->compare(*s2) < 0;
+    }
+};*/
+
+typedef map<string, TCntrNode*> TMap;
 #else
 namespace __gnu_cxx
 {
@@ -220,10 +228,10 @@ class TCntrNode
 
 	//Attributes
 	//> Childs
-	Res	hd_res;			//Resource HD
-	static pthread_mutex_t connM;	//Connection mutex
+	Res			hd_res;	//Resource HD
+	static pthread_mutex_t	connM;	//Connection mutex
 
-	vector<GrpEl>	*chGrp;		//Child groups
+	vector<GrpEl>		*chGrp;	//Child groups
 
 	//> Curent node
 	unsigned short int	mUse;	//Use counter

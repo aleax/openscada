@@ -436,7 +436,6 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elWdg()),
 	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
-	m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId()),
 	mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
@@ -491,31 +490,6 @@ string LWidget::ico( )
     if( m_ico.size() )          return m_ico;
     if( !parent().freeStat() )  return parent().at().ico();
     return "";
-}
-
-string LWidget::owner( )
-{
-    return SYS->security().at().usrPresent(m_owner) ? m_owner : Widget::owner( );
-}
-
-void LWidget::setOwner( const string &iown )
-{
-    m_owner = iown;
-    //- Group update -
-    if(SYS->security().at().grpAt("UI").at().user(iown))
-	setGrp("UI");
-    else
-    {
-	vector<string> gls;
-	SYS->security().at().usrGrpList(owner(),gls);
-	setGrp(gls.size()?gls[0]:Widget::grp());
-    }
-    modif();
-}
-
-string LWidget::grp( )
-{
-    return SYS->security().at().grpPresent(m_grp)?m_grp:Widget::grp( );
 }
 
 string LWidget::calcId( )
@@ -751,10 +725,8 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //* CWidget: Container stored widget             *
 //************************************************
 CWidget::CWidget( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()),
-        mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd()),
-        m_owner(cfg("USER").getSd()), m_grp(cfg("GRP").getSd()), mPermit(cfg("PERMIT").getId()),
-        delMark(false)
+        Widget(iid), TConfig(&mod->elInclWdg()), delMark(false),
+        mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -797,35 +769,11 @@ string CWidget::ico( )
     return "";
 }
 
-string CWidget::owner( )
-{
-    return SYS->security().at().usrPresent(m_owner) ? m_owner : Widget::owner( );
-}
-
-void CWidget::setOwner( const string &iown )
-{
-    m_owner = iown;
-    //> Group update
-    if( SYS->security().at().grpAt("UI").at().user(iown) ) setGrp("UI");
-    else
-    {
-	vector<string> gls;
-	SYS->security().at().usrGrpList(owner(),gls);
-	setGrp( gls.size() ? gls[0] : Widget::grp() );
-    }
-    modif();
-}
-
 void CWidget::setParentNm( const string &isw )
 {
     if( enable() && mParent != isw ) setEnable(false);
     mParent = isw;
     modif();
-}
-
-string CWidget::grp( )
-{
-    return SYS->security().at().grpPresent(m_grp) ? m_grp : Widget::grp( );
 }
 
 void CWidget::setEnable( bool val )

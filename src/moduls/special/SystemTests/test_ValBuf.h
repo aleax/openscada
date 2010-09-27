@@ -86,7 +86,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 4 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),4);
-		mod->mess(id(),("%s: Fill and check hard time griding string buffer."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check hard time griding string buffer."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 100000, true, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill

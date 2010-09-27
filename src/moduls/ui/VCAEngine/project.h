@@ -168,9 +168,6 @@ class Page : public Widget, public TConfig
 	string path( );
 	string ico( );
 	string type( )		{ return "ProjPage"; }
-	string owner( );
-	string grp( );
-	short  permit( )	{ return mPermit; }
 	string calcId( );
 	string calcLang( );
 	string calcProg( );
@@ -180,9 +177,6 @@ class Page : public Widget, public TConfig
 	string parentNm( )	{ return mParent; }
 
 	void setIco( const string &iico )	{ mIco = iico; modif(); }
-	void setOwner( const string &iown );
-	void setGrp( const string &igrp )	{ mGrp = igrp; modif(); }
-	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
@@ -236,13 +230,10 @@ class Page : public Widget, public TConfig
 	//Attributes
 	int	mPage;		//Page container identifier
 	string	&mIco,		//Widget icon
-		&mOwner,	//Widget owner
-		&mGrp,		//Widget group
 		&mProc,		//Widget procedure
 		&mParent,	//Widget parent
 		&mAttrs;	//Changed attributes list
-	int	&mPermit,	//Widget permission
-		&mFlgs,		//Project's flags
+	int	&mFlgs,		//Project's flags
 		&mProcPer;	//Process period
 };
 
@@ -262,9 +253,6 @@ class PageWdg : public Widget, public TConfig
 	string path( );
 	string ico( );
 	string type( )		{ return "ProjLink"; }
-	string owner( );
-	string grp( );
-	short  permit( )	{ return mPermit; }
 	string calcId( );
 	string calcLang( );
 	string calcProg( );
@@ -272,9 +260,6 @@ class PageWdg : public Widget, public TConfig
 	string parentNm( )	{ return mParent; }
 
 	void setEnable( bool val );
-	void setOwner( const string &iown );
-	void setGrp( const string &igrp )	{ mGrp = igrp; modif(); }
-	void setPermit( short iperm )		{ mPermit = iperm; modif(); }
 	void setParentNm( const string &isw );
 
 	//> Storing
@@ -304,8 +289,7 @@ class PageWdg : public Widget, public TConfig
 
 	//Attributes
 	bool	delMark;
-	string	&mParent, &mAttrs, &mOwner, &mGrp;
-	int	&mPermit;
+	string	&mParent, &mAttrs;
 };
 
 }
