@@ -489,12 +489,13 @@ class str2int : public TFunction
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
+	    ioAdd( new IO("base",_("Base"),IO::Integer,IO::Default,"0") );
 	}
 
 	string name( )	{ return _("String: String to integer"); }
 	string descr( )	{ return _("Convert string to integer."); }
 
-	void calc( TValFunc *val )	{ val->setI(0,strtol(val->getS(1).c_str(),NULL,0)); }
+	void calc( TValFunc *val )	{ val->setI(0,strtol(val->getS(1).c_str(),NULL,val->getI(2))); }
 };
 
 //*************************************************

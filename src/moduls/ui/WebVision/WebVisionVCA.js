@@ -1422,7 +1422,7 @@ function makeEl( pgBr, inclPg )
   else this.place.ondblclick = '';
 
   //> Context menu setup
-  if( parseInt(this.attrs['perm'])&(SEC_RD|SEC_WR) && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length )
+  if( parseInt(this.attrs['perm'])&SEC_WR && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length )
   {
     var ctxEv = function(e,el)
     {

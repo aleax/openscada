@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-30 11:29+0300\n"
+"POT-Creation-Date: 2010-10-01 10:10+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -185,11 +185,11 @@ msgstr ""
 msgid "xmlCntrReq"
 msgstr ""
 
-#: xmlfnc.cpp:49 sysfnc.h:203 sysfnc.h:231 sysfnc.h:256 timefnc.h:42
-#: timefnc.h:68 timefnc.h:69 timefnc.h:70 timefnc.h:71 timefnc.h:72
-#: timefnc.h:73 timefnc.h:74 timefnc.h:75 timefnc.h:76 timefnc.h:77
-#: timefnc.h:109 timefnc.h:136 timefnc.h:161 timefnc.h:163 varchfnc.h:99
-#: varchfnc.h:100
+#: xmlfnc.cpp:49 sysfnc.h:203 sysfnc.h:231 sysfnc.h:256 sysfnc.h:492
+#: timefnc.h:42 timefnc.h:68 timefnc.h:69 timefnc.h:70 timefnc.h:71
+#: timefnc.h:72 timefnc.h:73 timefnc.h:74 timefnc.h:75 timefnc.h:76
+#: timefnc.h:77 timefnc.h:109 timefnc.h:136 timefnc.h:161 timefnc.h:163
+#: varchfnc.h:99 varchfnc.h:100
 msgid "0"
 msgstr ""
 
@@ -204,14 +204,14 @@ msgstr ""
 
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:117 sysfnc.h:180 sysfnc.h:201 sysfnc.h:284
 #: sysfnc.h:311 sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
-#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:533
+#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:534
 #: xmlfnc.h:41 xmlfnc.h:59
 msgid "rez"
 msgstr ""
 
 #: sysfnc.h:46 sysfnc.h:76 sysfnc.h:117 sysfnc.h:180 sysfnc.h:201 sysfnc.h:284
 #: sysfnc.h:311 sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
-#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:533
+#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:534
 #: varchfnc.h:72 varchfnc.h:95 xmlfnc.h:41 xmlfnc.h:59
 msgid "Result"
 msgstr "Результат"
@@ -570,12 +570,12 @@ msgstr ""
 msgid "real2str"
 msgstr ""
 
-#: sysfnc.h:422 sysfnc.h:445 sysfnc.h:473 sysfnc.h:491 sysfnc.h:508
+#: sysfnc.h:422 sysfnc.h:445 sysfnc.h:473 sysfnc.h:491 sysfnc.h:509
 #: timefnc.h:41
 msgid "val"
 msgstr ""
 
-#: sysfnc.h:422 sysfnc.h:445 sysfnc.h:473 sysfnc.h:491 sysfnc.h:508
+#: sysfnc.h:422 sysfnc.h:445 sysfnc.h:473 sysfnc.h:491 sysfnc.h:509
 msgid "Value"
 msgstr "Значення"
 
@@ -611,13 +611,13 @@ msgstr "Перетворення реального у строку."
 msgid "int2str"
 msgstr ""
 
-#: sysfnc.h:446 timefnc.h:163
+#: sysfnc.h:446 sysfnc.h:492 timefnc.h:163
 msgid "base"
 msgstr ""
 
-#: sysfnc.h:446
+#: sysfnc.h:446 sysfnc.h:492
 msgid "Base"
-msgstr ""
+msgstr "Основа"
 
 #: sysfnc.h:446
 msgid "10"
@@ -647,51 +647,51 @@ msgstr "Перетворення строки у реальне."
 msgid "str2int"
 msgstr ""
 
-#: sysfnc.h:494
+#: sysfnc.h:495
 msgid "String: String to integer"
 msgstr "Строка: Строка у ціле"
 
-#: sysfnc.h:495
+#: sysfnc.h:496
 msgid "Convert string to integer."
 msgstr "Перетворення строки у ціле."
 
-#: sysfnc.h:506
+#: sysfnc.h:507
 msgid "floatSplitWord"
 msgstr ""
 
-#: sysfnc.h:509 sysfnc.h:534
+#: sysfnc.h:510 sysfnc.h:535
 msgid "w1"
 msgstr ""
 
-#: sysfnc.h:509 sysfnc.h:534
+#: sysfnc.h:510 sysfnc.h:535
 msgid "Word 1"
 msgstr "Слово 1"
 
-#: sysfnc.h:510 sysfnc.h:535
+#: sysfnc.h:511 sysfnc.h:536
 msgid "w2"
 msgstr ""
 
-#: sysfnc.h:510 sysfnc.h:535
+#: sysfnc.h:511 sysfnc.h:536
 msgid "Word 2"
 msgstr "Слово 2"
 
-#: sysfnc.h:513
+#: sysfnc.h:514
 msgid "Float: Split to words"
 msgstr "Float: Розділення на слова"
 
-#: sysfnc.h:514
+#: sysfnc.h:515
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Розділення float (4 байтів) на слова (2 байти)."
 
-#: sysfnc.h:531
+#: sysfnc.h:532
 msgid "floatMergeWord"
 msgstr ""
 
-#: sysfnc.h:538
+#: sysfnc.h:539
 msgid "Float: Merge from words"
 msgstr "Float: Об'єднання зі слів"
 
-#: sysfnc.h:539
+#: sysfnc.h:540
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Об'єднання float (4 байтів) зі слів (2 байти)."
 
@@ -982,12 +982,3 @@ msgstr "XML: Запит інтерфейсу керування"
 #: xmlfnc.h:65
 msgid "Control request to system by XML."
 msgstr "Запит інтерфейсу керування до системи за допомогою XML."
-
-#~ msgid "Deletion child '%d' error."
-#~ msgstr "Помилка видалення нащадка '%d'."
-
-#~ msgid "Child '%d' is not allow."
-#~ msgstr "Нащадок '%d' не присутній."
-
-#~ msgid "2:Open file <%s> error: %s"
-#~ msgstr "2:Помилка відкриття файлу <%s>: %s"

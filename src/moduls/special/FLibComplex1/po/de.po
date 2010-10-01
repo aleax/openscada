@@ -1,8 +1,8 @@
 # OpenSCADA.Special.FLibComplex1 translate to German.
-# Copyright (C) 2009 Irina Popkova
+# Copyright (C) 2009-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Special.FLibComplex1 package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #: statfunc.cpp:45
 #, fuzzy
@@ -10,13 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 11:15+0200\n"
+"POT-Creation-Date: 2010-09-27 16:34+0300\n"
 "PO-Revision-Date: 2009-08-19 09:50+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -54,7 +55,7 @@ msgstr ""
 "Zugriff auf die statische Bibliothek Complex1 (Funktionen SCADA Complex1)."
 
 #: statfunc.cpp:70
-msgid "GPL"
+msgid "GPL2"
 msgstr ""
 
 #: statfunc.cpp:75 statfunc.cpp:141
@@ -666,9 +667,8 @@ msgid "manIn"
 msgstr ""
 
 #: libcompl1.h:576
-#, fuzzy
 msgid "Manual input (%)"
-msgstr "Ausgang (%)"
+msgstr "Manualer Eingang (%)"
 
 #: libcompl1.h:577
 msgid "Output (%)"
@@ -719,9 +719,8 @@ msgid "Tzd"
 msgstr ""
 
 #: libcompl1.h:584
-#, fuzzy
 msgid "Td lag (ms)"
-msgstr "T-Filter (msek)"
+msgstr "Verspätungszeit des Differentiales (msek)"
 
 #: libcompl1.h:585
 msgid "Hup"
@@ -832,9 +831,8 @@ msgid "lag"
 msgstr ""
 
 #: libcompl1.h:604
-#, fuzzy
 msgid "Differencial lag"
-msgstr "Wert des Differentials"
+msgstr "Verspätung der Differenzierung"
 
 #: libcompl1.h:607 libcompl1.h:608
 msgid "PID regulator"
@@ -963,9 +961,3 @@ msgid ""
 msgstr ""
 "Verzögerung nach der Formel:\n"
 "y = y - Klag*( y - x );"
-
-#~ msgid "Lag value"
-#~ msgstr "Wert Verzög./Regelabweichung"
-
-#~ msgid "Calc cycle (ms)"
-#~ msgstr "Berechnungszyklus (msek)"

@@ -266,7 +266,8 @@ bool RunWdgView::event( QEvent *event )
 	    }
 	    return true;
 	case QEvent::MouseButtonPress:
-	    if( ((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && property("active").toBool() && permCntr() )
+	    if( ((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && 
+		property("active").toBool() && permCntr() )
 	    {
 		QAction *actTmp;
 		QMenu popup;

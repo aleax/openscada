@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 11:15+0200\n"
+"POT-Creation-Date: 2010-09-27 16:34+0300\n"
 "PO-Revision-Date: 2007-10-24 16:47+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Complex1)."
 
 #: statfunc.cpp:70
-msgid "GPL"
+msgid "GPL2"
 msgstr ""
 
 #: statfunc.cpp:75 statfunc.cpp:141

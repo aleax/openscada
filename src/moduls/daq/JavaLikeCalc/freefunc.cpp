@@ -1234,8 +1234,9 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		}
 		// real toReal() - convert this string to real number
 		if( prop == "toReal" ) return atof(vl.getS().c_str());
-		// int toInt() - convert this string to integer number
-		if( prop == "toInt" ) return (int)strtol(vl.getS().c_str(),NULL,0);
+		// int toInt(int base = 0) - convert this string to integer number
+		//  base - radix of subject sequence
+		if( prop == "toInt" ) return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
 		// string parse(int pos, string sep = ".", int off = 0) - get token with numbet <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position

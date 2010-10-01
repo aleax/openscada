@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 # Roman Savochenko <rom_as@fromru.com>, 2009-2010.
 #
-#: mod_serial.cpp:59 mod_serial.cpp:215 mod_serial.cpp:223 mod_serial.cpp:392
-#: mod_serial.cpp:406 mod_serial.cpp:531 mod_serial.cpp:545 mod_serial.cpp:563
-#: mod_serial.cpp:565 mod_serial.cpp:674 mod_serial.cpp:871 mod_serial.cpp:885
+#: mod_serial.cpp:59 mod_serial.cpp:227 mod_serial.cpp:235 mod_serial.cpp:404
+#: mod_serial.cpp:418 mod_serial.cpp:547 mod_serial.cpp:561 mod_serial.cpp:579
+#: mod_serial.cpp:581 mod_serial.cpp:690 mod_serial.cpp:888 mod_serial.cpp:902
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-10 21:56+0300\n"
+"POT-Creation-Date: 2010-09-27 16:38+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,35 +26,35 @@ msgstr ""
 msgid "Serial interfaces"
 msgstr "Последовательный интерфейс"
 
-#: mod_serial.cpp:44 mod_serial.cpp:587 mod_serial.cpp:595 mod_serial.cpp:599
-#: mod_serial.cpp:601 mod_serial.cpp:602 mod_serial.cpp:603 mod_serial.cpp:604
-#: mod_serial.cpp:605 mod_serial.cpp:606 mod_serial.cpp:607 mod_serial.cpp:608
-#: mod_serial.cpp:609 mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:623
-#: mod_serial.cpp:624 mod_serial.cpp:628 mod_serial.cpp:629 mod_serial.cpp:633
-#: mod_serial.cpp:634 mod_serial.cpp:638 mod_serial.cpp:639 mod_serial.cpp:643
-#: mod_serial.cpp:644 mod_serial.cpp:648 mod_serial.cpp:649 mod_serial.cpp:653
-#: mod_serial.cpp:654 mod_serial.cpp:658 mod_serial.cpp:659 mod_serial.cpp:663
-#: mod_serial.cpp:664 mod_serial.cpp:1017 mod_serial.cpp:1025
-#: mod_serial.cpp:1029 mod_serial.cpp:1031 mod_serial.cpp:1032
-#: mod_serial.cpp:1033 mod_serial.cpp:1034 mod_serial.cpp:1035
-#: mod_serial.cpp:1036 mod_serial.cpp:1037 mod_serial.cpp:1038
-#: mod_serial.cpp:1039 mod_serial.cpp:1040 mod_serial.cpp:1041
-#: mod_serial.cpp:1042 mod_serial.cpp:1043 mod_serial.cpp:1044
-#: mod_serial.cpp:1053 mod_serial.cpp:1054 mod_serial.cpp:1058
-#: mod_serial.cpp:1059 mod_serial.cpp:1063 mod_serial.cpp:1064
-#: mod_serial.cpp:1068 mod_serial.cpp:1069 mod_serial.cpp:1073
-#: mod_serial.cpp:1074 mod_serial.cpp:1078 mod_serial.cpp:1079
-#: mod_serial.cpp:1083 mod_serial.cpp:1084 mod_serial.cpp:1088
-#: mod_serial.cpp:1089 mod_serial.cpp:1093 mod_serial.cpp:1094
-#: mod_serial.cpp:1098 mod_serial.cpp:1099 mod_serial.cpp:1103
-#: mod_serial.cpp:1104 mod_serial.cpp:1108 mod_serial.cpp:1109
-#: mod_serial.cpp:1113 mod_serial.cpp:1114 mod_serial.cpp:1118
-#: mod_serial.cpp:1119 mod_serial.cpp:1123 mod_serial.cpp:1124
+#: mod_serial.cpp:44 mod_serial.cpp:603 mod_serial.cpp:611 mod_serial.cpp:615
+#: mod_serial.cpp:617 mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:620
+#: mod_serial.cpp:621 mod_serial.cpp:622 mod_serial.cpp:623 mod_serial.cpp:624
+#: mod_serial.cpp:625 mod_serial.cpp:634 mod_serial.cpp:635 mod_serial.cpp:639
+#: mod_serial.cpp:640 mod_serial.cpp:644 mod_serial.cpp:645 mod_serial.cpp:649
+#: mod_serial.cpp:650 mod_serial.cpp:654 mod_serial.cpp:655 mod_serial.cpp:659
+#: mod_serial.cpp:660 mod_serial.cpp:664 mod_serial.cpp:665 mod_serial.cpp:669
+#: mod_serial.cpp:670 mod_serial.cpp:674 mod_serial.cpp:675 mod_serial.cpp:679
+#: mod_serial.cpp:680 mod_serial.cpp:1035 mod_serial.cpp:1043
+#: mod_serial.cpp:1047 mod_serial.cpp:1049 mod_serial.cpp:1050
+#: mod_serial.cpp:1051 mod_serial.cpp:1052 mod_serial.cpp:1053
+#: mod_serial.cpp:1054 mod_serial.cpp:1055 mod_serial.cpp:1056
+#: mod_serial.cpp:1057 mod_serial.cpp:1058 mod_serial.cpp:1059
+#: mod_serial.cpp:1060 mod_serial.cpp:1061 mod_serial.cpp:1062
+#: mod_serial.cpp:1071 mod_serial.cpp:1072 mod_serial.cpp:1076
+#: mod_serial.cpp:1077 mod_serial.cpp:1081 mod_serial.cpp:1082
+#: mod_serial.cpp:1086 mod_serial.cpp:1087 mod_serial.cpp:1091
+#: mod_serial.cpp:1092 mod_serial.cpp:1096 mod_serial.cpp:1097
+#: mod_serial.cpp:1101 mod_serial.cpp:1102 mod_serial.cpp:1106
+#: mod_serial.cpp:1107 mod_serial.cpp:1111 mod_serial.cpp:1112
+#: mod_serial.cpp:1116 mod_serial.cpp:1117 mod_serial.cpp:1121
+#: mod_serial.cpp:1122 mod_serial.cpp:1126 mod_serial.cpp:1127
+#: mod_serial.cpp:1131 mod_serial.cpp:1132 mod_serial.cpp:1136
+#: mod_serial.cpp:1137 mod_serial.cpp:1141 mod_serial.cpp:1142
 msgid "Transport"
 msgstr "Транспорт"
 
 #: mod_serial.cpp:46
-msgid "0.6.0"
+msgid "0.7.0"
 msgstr ""
 
 #: mod_serial.cpp:47
@@ -70,14 +70,14 @@ msgstr ""
 "через последовательные интерфейсы типа RS232, RS485, GSM и другое."
 
 #: mod_serial.cpp:49
-msgid "GPL"
+msgid "GPL2"
 msgstr ""
 
 #: mod_serial.cpp:54
 msgid "C"
 msgstr ""
 
-#: mod_serial.cpp:111 mod_serial.cpp:112 mod_serial.cpp:222 mod_serial.cpp:673
+#: mod_serial.cpp:111 mod_serial.cpp:112 mod_serial.cpp:234 mod_serial.cpp:689
 msgid "A_PRMS"
 msgstr ""
 
@@ -97,248 +97,238 @@ msgstr ""
 msgid "Check archives thread is not stopped!"
 msgstr ""
 
-#: mod_serial.cpp:162
-#, c-format
-msgid "Timer's thread <%u> call. TID: %ld"
-msgstr ""
-
-#: mod_serial.cpp:177
+#: mod_serial.cpp:189
 msgid "\r\n"
 msgstr ""
 
-#: mod_serial.cpp:180
+#: mod_serial.cpp:192
 msgid "Write line error."
 msgstr "Ошибка записи строки."
 
-#: mod_serial.cpp:205
+#: mod_serial.cpp:217
 msgid "Read from serial error."
 msgstr "Ошибка чтения последовательного интерфейса."
 
-#: mod_serial.cpp:210 mod_serial.cpp:897
+#: mod_serial.cpp:222 mod_serial.cpp:914
 msgid "\n"
 msgstr ""
 
-#: mod_serial.cpp:223 mod_serial.cpp:674
+#: mod_serial.cpp:235 mod_serial.cpp:690
 msgid "ATZ"
 msgstr ""
 
-#: mod_serial.cpp:223 mod_serial.cpp:674 mod_serial.cpp:676
+#: mod_serial.cpp:235 mod_serial.cpp:690 mod_serial.cpp:692
 msgid "OK"
 msgstr ""
 
-#: mod_serial.cpp:224
+#: mod_serial.cpp:236
 msgid "RING"
 msgstr ""
 
-#: mod_serial.cpp:224
+#: mod_serial.cpp:236
 msgid "ATA"
 msgstr ""
 
-#: mod_serial.cpp:224 mod_serial.cpp:675
+#: mod_serial.cpp:236 mod_serial.cpp:691
 msgid "CONNECT"
 msgstr ""
 
-#: mod_serial.cpp:227 mod_serial.cpp:678
+#: mod_serial.cpp:239 mod_serial.cpp:694
 msgid "/dev/ttyS0:19200:8E2"
 msgstr ""
 
-#: mod_serial.cpp:228
+#: mod_serial.cpp:240
 msgid "6:320"
 msgstr ""
 
-#: mod_serial.cpp:245 mod_serial.cpp:261 mod_serial.cpp:696 mod_serial.cpp:717
+#: mod_serial.cpp:257 mod_serial.cpp:273 mod_serial.cpp:712 mod_serial.cpp:733
 msgid "TMS"
 msgstr ""
 
-#: mod_serial.cpp:246 mod_serial.cpp:262 mod_serial.cpp:697 mod_serial.cpp:718
+#: mod_serial.cpp:258 mod_serial.cpp:274 mod_serial.cpp:713 mod_serial.cpp:734
 msgid "MdmTm"
 msgstr ""
 
-#: mod_serial.cpp:247 mod_serial.cpp:263 mod_serial.cpp:699 mod_serial.cpp:720
+#: mod_serial.cpp:259 mod_serial.cpp:275 mod_serial.cpp:715 mod_serial.cpp:736
 msgid "MdmPreInit"
 msgstr ""
 
-#: mod_serial.cpp:248 mod_serial.cpp:264 mod_serial.cpp:700 mod_serial.cpp:721
+#: mod_serial.cpp:260 mod_serial.cpp:276 mod_serial.cpp:716 mod_serial.cpp:737
 msgid "MdmPostInit"
 msgstr ""
 
-#: mod_serial.cpp:249 mod_serial.cpp:265 mod_serial.cpp:701 mod_serial.cpp:722
+#: mod_serial.cpp:261 mod_serial.cpp:277 mod_serial.cpp:717 mod_serial.cpp:738
 msgid "MdmInitStr1"
 msgstr ""
 
-#: mod_serial.cpp:250 mod_serial.cpp:266 mod_serial.cpp:702 mod_serial.cpp:723
+#: mod_serial.cpp:262 mod_serial.cpp:278 mod_serial.cpp:718 mod_serial.cpp:739
 msgid "MdmInitStr2"
 msgstr ""
 
-#: mod_serial.cpp:251 mod_serial.cpp:267 mod_serial.cpp:703 mod_serial.cpp:724
+#: mod_serial.cpp:263 mod_serial.cpp:279 mod_serial.cpp:719 mod_serial.cpp:740
 msgid "MdmInitResp"
 msgstr ""
 
-#: mod_serial.cpp:252 mod_serial.cpp:268
+#: mod_serial.cpp:264 mod_serial.cpp:280
 msgid "MdmRingReq"
 msgstr ""
 
-#: mod_serial.cpp:253 mod_serial.cpp:269
+#: mod_serial.cpp:265 mod_serial.cpp:281
 msgid "MdmRingAnswer"
 msgstr ""
 
-#: mod_serial.cpp:254 mod_serial.cpp:270
+#: mod_serial.cpp:266 mod_serial.cpp:282
 msgid "MdmRingAnswerResp"
 msgstr ""
 
-#: mod_serial.cpp:260 mod_serial.cpp:716
+#: mod_serial.cpp:272 mod_serial.cpp:732
 msgid "prms"
 msgstr ""
 
-#: mod_serial.cpp:281
+#: mod_serial.cpp:293
 #, c-format
 msgid "Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."
 msgstr ""
 "Трафик входящий %.4g кб, исходящий %.4g кб. Макс. время ожидания символа "
 "%.4g мс."
 
-#: mod_serial.cpp:292 mod_serial.cpp:599 mod_serial.cpp:754
-#: mod_serial.cpp:1029
+#: mod_serial.cpp:304 mod_serial.cpp:615 mod_serial.cpp:770
+#: mod_serial.cpp:1047
 msgid ":"
 msgstr ""
 
-#: mod_serial.cpp:305 mod_serial.cpp:775
+#: mod_serial.cpp:317 mod_serial.cpp:792
 #, c-format
 msgid "Serial port '%s' open error."
 msgstr "Ошибка открытия последовательного порта '%s'."
 
-#: mod_serial.cpp:335 mod_serial.cpp:807
+#: mod_serial.cpp:347 mod_serial.cpp:824
 #, c-format
 msgid "Speed '%d' error."
 msgstr "Ошибка скорости '%d'."
 
-#: mod_serial.cpp:341 mod_serial.cpp:814
+#: mod_serial.cpp:353 mod_serial.cpp:831
 #, c-format
 msgid "Asynchronous data format '%s' error."
 msgstr "Ошибка формата асинхронных данных '%s'."
 
-#: mod_serial.cpp:344 mod_serial.cpp:818
+#: mod_serial.cpp:356 mod_serial.cpp:835
 #, c-format
 msgid "Char length '%d' error."
 msgstr "Ошибка в длине символа '%d'."
 
-#: mod_serial.cpp:360 mod_serial.cpp:835
+#: mod_serial.cpp:372 mod_serial.cpp:852
 #, c-format
 msgid "Parity checking mode '%c' error."
 msgstr "Ошибка в режиме '%c' проверки чётности."
 
-#: mod_serial.cpp:366 mod_serial.cpp:842
+#: mod_serial.cpp:378 mod_serial.cpp:859
 #, c-format
 msgid "Stop bits '%d' error."
 msgstr "Ошибка в количестве стоп битов '%d'."
 
-#: mod_serial.cpp:397 mod_serial.cpp:411 mod_serial.cpp:876 mod_serial.cpp:890
+#: mod_serial.cpp:409 mod_serial.cpp:423 mod_serial.cpp:893 mod_serial.cpp:907
 #, c-format
 msgid "No response to init request '%s'."
 msgstr "Нет ответа на запрос инициализации '%s'."
 
-#: mod_serial.cpp:456
-#, c-format
-msgid "Thread <%u> is started. TID: %ld"
-msgstr ""
-
-#: mod_serial.cpp:521
+#: mod_serial.cpp:532
 #, c-format
 msgid "Serial received message <%d>."
 msgstr "Serial получил сообщение <%d>."
 
-#: mod_serial.cpp:548
+#: mod_serial.cpp:564
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: mod_serial.cpp:549
+#: mod_serial.cpp:565
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
-#: mod_serial.cpp:556
+#: mod_serial.cpp:572
 #, c-format
 msgid "Serial replied message <%d>."
 msgstr "Serial ответил сообщением <%d>."
 
-#: mod_serial.cpp:584 mod_serial.cpp:1014
+#: mod_serial.cpp:600 mod_serial.cpp:1032
 msgid "info"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:595 mod_serial.cpp:601 mod_serial.cpp:602
-#: mod_serial.cpp:603 mod_serial.cpp:604 mod_serial.cpp:605 mod_serial.cpp:606
-#: mod_serial.cpp:607 mod_serial.cpp:608 mod_serial.cpp:609
-#: mod_serial.cpp:1017 mod_serial.cpp:1025 mod_serial.cpp:1031
-#: mod_serial.cpp:1032 mod_serial.cpp:1033 mod_serial.cpp:1034
-#: mod_serial.cpp:1035 mod_serial.cpp:1036 mod_serial.cpp:1037
-#: mod_serial.cpp:1038 mod_serial.cpp:1039 mod_serial.cpp:1040
-#: mod_serial.cpp:1041 mod_serial.cpp:1042 mod_serial.cpp:1043
-#: mod_serial.cpp:1044
+#: mod_serial.cpp:603 mod_serial.cpp:611 mod_serial.cpp:617 mod_serial.cpp:618
+#: mod_serial.cpp:619 mod_serial.cpp:620 mod_serial.cpp:621 mod_serial.cpp:622
+#: mod_serial.cpp:623 mod_serial.cpp:624 mod_serial.cpp:625
+#: mod_serial.cpp:1035 mod_serial.cpp:1043 mod_serial.cpp:1049
+#: mod_serial.cpp:1050 mod_serial.cpp:1051 mod_serial.cpp:1052
+#: mod_serial.cpp:1053 mod_serial.cpp:1054 mod_serial.cpp:1055
+#: mod_serial.cpp:1056 mod_serial.cpp:1057 mod_serial.cpp:1058
+#: mod_serial.cpp:1059 mod_serial.cpp:1060 mod_serial.cpp:1061
+#: mod_serial.cpp:1062
 msgid "fld"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:1017
+#: mod_serial.cpp:603 mod_serial.cpp:1035
 msgid "/prm/cfg/addr"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:1017
+#: mod_serial.cpp:603 mod_serial.cpp:1035
 msgid "ADDR"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:595 mod_serial.cpp:599 mod_serial.cpp:601
-#: mod_serial.cpp:602 mod_serial.cpp:603 mod_serial.cpp:604 mod_serial.cpp:605
-#: mod_serial.cpp:606 mod_serial.cpp:607 mod_serial.cpp:608 mod_serial.cpp:609
-#: mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:623 mod_serial.cpp:624
-#: mod_serial.cpp:628 mod_serial.cpp:629 mod_serial.cpp:633 mod_serial.cpp:634
-#: mod_serial.cpp:638 mod_serial.cpp:639 mod_serial.cpp:643 mod_serial.cpp:644
-#: mod_serial.cpp:648 mod_serial.cpp:649 mod_serial.cpp:653 mod_serial.cpp:654
-#: mod_serial.cpp:658 mod_serial.cpp:659 mod_serial.cpp:663 mod_serial.cpp:664
-#: mod_serial.cpp:1017 mod_serial.cpp:1025 mod_serial.cpp:1029
-#: mod_serial.cpp:1031 mod_serial.cpp:1032 mod_serial.cpp:1033
-#: mod_serial.cpp:1034 mod_serial.cpp:1035 mod_serial.cpp:1036
-#: mod_serial.cpp:1037 mod_serial.cpp:1038 mod_serial.cpp:1039
-#: mod_serial.cpp:1040 mod_serial.cpp:1041 mod_serial.cpp:1042
-#: mod_serial.cpp:1043 mod_serial.cpp:1044 mod_serial.cpp:1053
-#: mod_serial.cpp:1054 mod_serial.cpp:1058 mod_serial.cpp:1059
-#: mod_serial.cpp:1063 mod_serial.cpp:1064 mod_serial.cpp:1068
-#: mod_serial.cpp:1069 mod_serial.cpp:1073 mod_serial.cpp:1074
-#: mod_serial.cpp:1078 mod_serial.cpp:1079 mod_serial.cpp:1083
-#: mod_serial.cpp:1084 mod_serial.cpp:1088 mod_serial.cpp:1089
-#: mod_serial.cpp:1093 mod_serial.cpp:1094 mod_serial.cpp:1098
-#: mod_serial.cpp:1099 mod_serial.cpp:1103 mod_serial.cpp:1104
-#: mod_serial.cpp:1108 mod_serial.cpp:1109 mod_serial.cpp:1113
-#: mod_serial.cpp:1114 mod_serial.cpp:1118 mod_serial.cpp:1119
-#: mod_serial.cpp:1123 mod_serial.cpp:1124
+#: mod_serial.cpp:603 mod_serial.cpp:611 mod_serial.cpp:615 mod_serial.cpp:617
+#: mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:620 mod_serial.cpp:621
+#: mod_serial.cpp:622 mod_serial.cpp:623 mod_serial.cpp:624 mod_serial.cpp:625
+#: mod_serial.cpp:634 mod_serial.cpp:635 mod_serial.cpp:639 mod_serial.cpp:640
+#: mod_serial.cpp:644 mod_serial.cpp:645 mod_serial.cpp:649 mod_serial.cpp:650
+#: mod_serial.cpp:654 mod_serial.cpp:655 mod_serial.cpp:659 mod_serial.cpp:660
+#: mod_serial.cpp:664 mod_serial.cpp:665 mod_serial.cpp:669 mod_serial.cpp:670
+#: mod_serial.cpp:674 mod_serial.cpp:675 mod_serial.cpp:679 mod_serial.cpp:680
+#: mod_serial.cpp:1035 mod_serial.cpp:1043 mod_serial.cpp:1047
+#: mod_serial.cpp:1049 mod_serial.cpp:1050 mod_serial.cpp:1051
+#: mod_serial.cpp:1052 mod_serial.cpp:1053 mod_serial.cpp:1054
+#: mod_serial.cpp:1055 mod_serial.cpp:1056 mod_serial.cpp:1057
+#: mod_serial.cpp:1058 mod_serial.cpp:1059 mod_serial.cpp:1060
+#: mod_serial.cpp:1061 mod_serial.cpp:1062 mod_serial.cpp:1071
+#: mod_serial.cpp:1072 mod_serial.cpp:1076 mod_serial.cpp:1077
+#: mod_serial.cpp:1081 mod_serial.cpp:1082 mod_serial.cpp:1086
+#: mod_serial.cpp:1087 mod_serial.cpp:1091 mod_serial.cpp:1092
+#: mod_serial.cpp:1096 mod_serial.cpp:1097 mod_serial.cpp:1101
+#: mod_serial.cpp:1102 mod_serial.cpp:1106 mod_serial.cpp:1107
+#: mod_serial.cpp:1111 mod_serial.cpp:1112 mod_serial.cpp:1116
+#: mod_serial.cpp:1117 mod_serial.cpp:1121 mod_serial.cpp:1122
+#: mod_serial.cpp:1126 mod_serial.cpp:1127 mod_serial.cpp:1131
+#: mod_serial.cpp:1132 mod_serial.cpp:1136 mod_serial.cpp:1137
+#: mod_serial.cpp:1141 mod_serial.cpp:1142
 msgid "root"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:595 mod_serial.cpp:601 mod_serial.cpp:602
-#: mod_serial.cpp:603 mod_serial.cpp:604 mod_serial.cpp:605 mod_serial.cpp:606
-#: mod_serial.cpp:607 mod_serial.cpp:608 mod_serial.cpp:609
-#: mod_serial.cpp:1017 mod_serial.cpp:1025 mod_serial.cpp:1031
-#: mod_serial.cpp:1032 mod_serial.cpp:1033 mod_serial.cpp:1034
-#: mod_serial.cpp:1035 mod_serial.cpp:1036 mod_serial.cpp:1037
-#: mod_serial.cpp:1038 mod_serial.cpp:1039 mod_serial.cpp:1040
-#: mod_serial.cpp:1041 mod_serial.cpp:1042 mod_serial.cpp:1043
-#: mod_serial.cpp:1044
+#: mod_serial.cpp:603 mod_serial.cpp:611 mod_serial.cpp:617 mod_serial.cpp:618
+#: mod_serial.cpp:619 mod_serial.cpp:620 mod_serial.cpp:621 mod_serial.cpp:622
+#: mod_serial.cpp:623 mod_serial.cpp:624 mod_serial.cpp:625
+#: mod_serial.cpp:1035 mod_serial.cpp:1043 mod_serial.cpp:1049
+#: mod_serial.cpp:1050 mod_serial.cpp:1051 mod_serial.cpp:1052
+#: mod_serial.cpp:1053 mod_serial.cpp:1054 mod_serial.cpp:1055
+#: mod_serial.cpp:1056 mod_serial.cpp:1057 mod_serial.cpp:1058
+#: mod_serial.cpp:1059 mod_serial.cpp:1060 mod_serial.cpp:1061
+#: mod_serial.cpp:1062
 msgid "tp"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:595 mod_serial.cpp:604 mod_serial.cpp:605
-#: mod_serial.cpp:606 mod_serial.cpp:607 mod_serial.cpp:608 mod_serial.cpp:609
-#: mod_serial.cpp:1017 mod_serial.cpp:1025 mod_serial.cpp:1035
-#: mod_serial.cpp:1036 mod_serial.cpp:1037 mod_serial.cpp:1038
-#: mod_serial.cpp:1039 mod_serial.cpp:1040 mod_serial.cpp:1041
-#: mod_serial.cpp:1042 mod_serial.cpp:1043 mod_serial.cpp:1044
+#: mod_serial.cpp:603 mod_serial.cpp:611 mod_serial.cpp:620 mod_serial.cpp:621
+#: mod_serial.cpp:622 mod_serial.cpp:623 mod_serial.cpp:624 mod_serial.cpp:625
+#: mod_serial.cpp:1035 mod_serial.cpp:1043 mod_serial.cpp:1053
+#: mod_serial.cpp:1054 mod_serial.cpp:1055 mod_serial.cpp:1056
+#: mod_serial.cpp:1057 mod_serial.cpp:1058 mod_serial.cpp:1059
+#: mod_serial.cpp:1060 mod_serial.cpp:1061 mod_serial.cpp:1062
 msgid "str"
 msgstr ""
 
-#: mod_serial.cpp:587 mod_serial.cpp:595 mod_serial.cpp:1017
-#: mod_serial.cpp:1025
+#: mod_serial.cpp:603 mod_serial.cpp:611 mod_serial.cpp:1035
+#: mod_serial.cpp:1043
 msgid "help"
 msgstr ""
 
-#: mod_serial.cpp:588
+#: mod_serial.cpp:604
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[mdm]\". "
 "Where:\n"
@@ -365,16 +355,16 @@ msgstr ""
 "(IXON|IXOFF);\n"
 "    mdm - режим модема, ожидание 'RING'."
 
-#: mod_serial.cpp:595 mod_serial.cpp:616 mod_serial.cpp:1025
-#: mod_serial.cpp:1051
+#: mod_serial.cpp:611 mod_serial.cpp:632 mod_serial.cpp:1043
+#: mod_serial.cpp:1069
 msgid "/prm/cfg/TMS"
 msgstr ""
 
-#: mod_serial.cpp:595 mod_serial.cpp:1025
+#: mod_serial.cpp:611 mod_serial.cpp:1043
 msgid "Timings"
 msgstr "Временные интервалы"
 
-#: mod_serial.cpp:596
+#: mod_serial.cpp:612
 msgid ""
 "Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -385,262 +375,267 @@ msgstr ""
 "окончания фрейма, в мс;\n"
 "    frm - максимальная длина фрейма, в мс."
 
-#: mod_serial.cpp:599 mod_serial.cpp:1029
+#: mod_serial.cpp:615 mod_serial.cpp:1047
 msgid "area"
 msgstr ""
 
-#: mod_serial.cpp:599 mod_serial.cpp:1029
+#: mod_serial.cpp:615 mod_serial.cpp:1047
 msgid "/mod"
 msgstr ""
 
-#: mod_serial.cpp:599 mod_serial.cpp:1029
+#: mod_serial.cpp:615 mod_serial.cpp:1047
 msgid "Modem"
 msgstr "Модем"
 
-#: mod_serial.cpp:601 mod_serial.cpp:621 mod_serial.cpp:1031
-#: mod_serial.cpp:1056
+#: mod_serial.cpp:617 mod_serial.cpp:637 mod_serial.cpp:1049
+#: mod_serial.cpp:1074
 msgid "/mod/tm"
 msgstr ""
 
-#: mod_serial.cpp:601 mod_serial.cpp:1031
+#: mod_serial.cpp:617 mod_serial.cpp:1049
 msgid "Timeout (sec)"
 msgstr "Время ожидания (с)"
 
-#: mod_serial.cpp:601 mod_serial.cpp:1031 mod_serial.cpp:1032
+#: mod_serial.cpp:617 mod_serial.cpp:1049 mod_serial.cpp:1050
 msgid "dec"
 msgstr ""
 
-#: mod_serial.cpp:601 mod_serial.cpp:602 mod_serial.cpp:603
-#: mod_serial.cpp:1031 mod_serial.cpp:1032 mod_serial.cpp:1033
-#: mod_serial.cpp:1034
+#: mod_serial.cpp:617 mod_serial.cpp:618 mod_serial.cpp:619
+#: mod_serial.cpp:1049 mod_serial.cpp:1050 mod_serial.cpp:1051
+#: mod_serial.cpp:1052
 msgid "min"
 msgstr ""
 
-#: mod_serial.cpp:601 mod_serial.cpp:1031
+#: mod_serial.cpp:617 mod_serial.cpp:1049
 msgid "1"
 msgstr ""
 
-#: mod_serial.cpp:601 mod_serial.cpp:602 mod_serial.cpp:603
-#: mod_serial.cpp:1031 mod_serial.cpp:1032 mod_serial.cpp:1033
-#: mod_serial.cpp:1034
+#: mod_serial.cpp:617 mod_serial.cpp:618 mod_serial.cpp:619
+#: mod_serial.cpp:1049 mod_serial.cpp:1050 mod_serial.cpp:1051
+#: mod_serial.cpp:1052
 msgid "max"
 msgstr ""
 
-#: mod_serial.cpp:601 mod_serial.cpp:1031 mod_serial.cpp:1032
+#: mod_serial.cpp:617 mod_serial.cpp:1049 mod_serial.cpp:1050
 msgid "120"
 msgstr ""
 
-#: mod_serial.cpp:602 mod_serial.cpp:626 mod_serial.cpp:1033
-#: mod_serial.cpp:1066
+#: mod_serial.cpp:618 mod_serial.cpp:642 mod_serial.cpp:1051
+#: mod_serial.cpp:1084
 msgid "/mod/preInitDl"
 msgstr ""
 
-#: mod_serial.cpp:602 mod_serial.cpp:1033
+#: mod_serial.cpp:618 mod_serial.cpp:1051
 msgid "Pre-init delay (sec)"
 msgstr "Выдержка пре-инициал. (с)"
 
-#: mod_serial.cpp:602 mod_serial.cpp:603 mod_serial.cpp:1033
-#: mod_serial.cpp:1034
+#: mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:1051
+#: mod_serial.cpp:1052
 msgid "real"
 msgstr ""
 
-#: mod_serial.cpp:602 mod_serial.cpp:1032 mod_serial.cpp:1033
+#: mod_serial.cpp:618 mod_serial.cpp:1050 mod_serial.cpp:1051
 msgid "0"
 msgstr ""
 
-#: mod_serial.cpp:602 mod_serial.cpp:603 mod_serial.cpp:1033
-#: mod_serial.cpp:1034
+#: mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:1051
+#: mod_serial.cpp:1052
 msgid "3"
 msgstr ""
 
-#: mod_serial.cpp:603 mod_serial.cpp:631 mod_serial.cpp:1034
-#: mod_serial.cpp:1071
+#: mod_serial.cpp:619 mod_serial.cpp:647 mod_serial.cpp:1052
+#: mod_serial.cpp:1089
 msgid "/mod/postInitDl"
 msgstr ""
 
-#: mod_serial.cpp:603 mod_serial.cpp:1034
+#: mod_serial.cpp:619 mod_serial.cpp:1052
 msgid "Post-init delay (sec)"
 msgstr "Выдержка после-инициал. (с)"
 
-#: mod_serial.cpp:603 mod_serial.cpp:1034
+#: mod_serial.cpp:619 mod_serial.cpp:1052
 msgid "0.01"
 msgstr ""
 
-#: mod_serial.cpp:604 mod_serial.cpp:636 mod_serial.cpp:1035
-#: mod_serial.cpp:1076
+#: mod_serial.cpp:620 mod_serial.cpp:652 mod_serial.cpp:1053
+#: mod_serial.cpp:1094
 msgid "/mod/initStr1"
 msgstr ""
 
-#: mod_serial.cpp:604 mod_serial.cpp:1035
+#: mod_serial.cpp:620 mod_serial.cpp:1053
 msgid "Initialization string 1"
 msgstr "Строка инициализ. 1"
 
-#: mod_serial.cpp:605 mod_serial.cpp:641 mod_serial.cpp:1036
-#: mod_serial.cpp:1081
+#: mod_serial.cpp:621 mod_serial.cpp:657 mod_serial.cpp:1054
+#: mod_serial.cpp:1099
 msgid "/mod/initStr2"
 msgstr ""
 
-#: mod_serial.cpp:605 mod_serial.cpp:1036
+#: mod_serial.cpp:621 mod_serial.cpp:1054
 msgid "Initialization string 2"
 msgstr "Строка инициализ. 2"
 
-#: mod_serial.cpp:606 mod_serial.cpp:646 mod_serial.cpp:1037
-#: mod_serial.cpp:1086
+#: mod_serial.cpp:622 mod_serial.cpp:662 mod_serial.cpp:1055
+#: mod_serial.cpp:1104
 msgid "/mod/initResp"
 msgstr ""
 
-#: mod_serial.cpp:606 mod_serial.cpp:1037
+#: mod_serial.cpp:622 mod_serial.cpp:1055
 msgid "Init response"
 msgstr "Инициализация, результат"
 
-#: mod_serial.cpp:607 mod_serial.cpp:651
+#: mod_serial.cpp:623 mod_serial.cpp:667
 msgid "/mod/ringReq"
 msgstr ""
 
-#: mod_serial.cpp:607
+#: mod_serial.cpp:623
 msgid "Ring request"
 msgstr "Запрос звонка"
 
-#: mod_serial.cpp:608 mod_serial.cpp:656
+#: mod_serial.cpp:624 mod_serial.cpp:672
 msgid "/mod/ringAnswer"
 msgstr ""
 
-#: mod_serial.cpp:608
+#: mod_serial.cpp:624
 msgid "Ring answer"
 msgstr "Ответ на звонок"
 
-#: mod_serial.cpp:609 mod_serial.cpp:661
+#: mod_serial.cpp:625 mod_serial.cpp:677
 msgid "/mod/ringAnswerResp"
 msgstr ""
 
-#: mod_serial.cpp:609
+#: mod_serial.cpp:625
 msgid "Ring answer response"
 msgstr "Ответ на звонок, результат"
 
-#: mod_serial.cpp:615 mod_serial.cpp:1050
+#: mod_serial.cpp:631 mod_serial.cpp:1068
 msgid "path"
 msgstr ""
 
-#: mod_serial.cpp:618 mod_serial.cpp:623 mod_serial.cpp:628 mod_serial.cpp:633
-#: mod_serial.cpp:638 mod_serial.cpp:643 mod_serial.cpp:648 mod_serial.cpp:653
-#: mod_serial.cpp:658 mod_serial.cpp:663 mod_serial.cpp:1053
-#: mod_serial.cpp:1058 mod_serial.cpp:1063 mod_serial.cpp:1068
-#: mod_serial.cpp:1073 mod_serial.cpp:1078 mod_serial.cpp:1083
-#: mod_serial.cpp:1088 mod_serial.cpp:1093 mod_serial.cpp:1098
-#: mod_serial.cpp:1103 mod_serial.cpp:1108 mod_serial.cpp:1113
-#: mod_serial.cpp:1118 mod_serial.cpp:1123
+#: mod_serial.cpp:634 mod_serial.cpp:639 mod_serial.cpp:644 mod_serial.cpp:649
+#: mod_serial.cpp:654 mod_serial.cpp:659 mod_serial.cpp:664 mod_serial.cpp:669
+#: mod_serial.cpp:674 mod_serial.cpp:679 mod_serial.cpp:1071
+#: mod_serial.cpp:1076 mod_serial.cpp:1081 mod_serial.cpp:1086
+#: mod_serial.cpp:1091 mod_serial.cpp:1096 mod_serial.cpp:1101
+#: mod_serial.cpp:1106 mod_serial.cpp:1111 mod_serial.cpp:1116
+#: mod_serial.cpp:1121 mod_serial.cpp:1126 mod_serial.cpp:1131
+#: mod_serial.cpp:1136 mod_serial.cpp:1141
 msgid "get"
 msgstr ""
 
-#: mod_serial.cpp:619 mod_serial.cpp:624 mod_serial.cpp:629 mod_serial.cpp:634
-#: mod_serial.cpp:639 mod_serial.cpp:644 mod_serial.cpp:649 mod_serial.cpp:654
-#: mod_serial.cpp:659 mod_serial.cpp:664 mod_serial.cpp:1054
-#: mod_serial.cpp:1059 mod_serial.cpp:1064 mod_serial.cpp:1069
-#: mod_serial.cpp:1074 mod_serial.cpp:1079 mod_serial.cpp:1084
-#: mod_serial.cpp:1089 mod_serial.cpp:1094 mod_serial.cpp:1099
-#: mod_serial.cpp:1104 mod_serial.cpp:1109 mod_serial.cpp:1114
-#: mod_serial.cpp:1119 mod_serial.cpp:1124
+#: mod_serial.cpp:635 mod_serial.cpp:640 mod_serial.cpp:645 mod_serial.cpp:650
+#: mod_serial.cpp:655 mod_serial.cpp:660 mod_serial.cpp:665 mod_serial.cpp:670
+#: mod_serial.cpp:675 mod_serial.cpp:680 mod_serial.cpp:1072
+#: mod_serial.cpp:1077 mod_serial.cpp:1082 mod_serial.cpp:1087
+#: mod_serial.cpp:1092 mod_serial.cpp:1097 mod_serial.cpp:1102
+#: mod_serial.cpp:1107 mod_serial.cpp:1112 mod_serial.cpp:1117
+#: mod_serial.cpp:1122 mod_serial.cpp:1127 mod_serial.cpp:1132
+#: mod_serial.cpp:1137 mod_serial.cpp:1142
 msgid "set"
 msgstr ""
 
-#: mod_serial.cpp:675
+#: mod_serial.cpp:691
 msgid "ATDT"
 msgstr ""
 
-#: mod_serial.cpp:675
+#: mod_serial.cpp:691
 msgid "BUSY"
 msgstr ""
 
-#: mod_serial.cpp:675
+#: mod_serial.cpp:691
 msgid "NO CARRIER"
 msgstr ""
 
-#: mod_serial.cpp:675
+#: mod_serial.cpp:691
 msgid "NO DIALTONE"
 msgstr ""
 
-#: mod_serial.cpp:676
+#: mod_serial.cpp:692
 msgid "+++ATH"
 msgstr ""
 
-#: mod_serial.cpp:679
+#: mod_serial.cpp:695
 msgid "640:6"
 msgstr ""
 
-#: mod_serial.cpp:698 mod_serial.cpp:719
+#: mod_serial.cpp:714 mod_serial.cpp:735
 msgid "MdmLifeTime"
 msgstr ""
 
-#: mod_serial.cpp:704 mod_serial.cpp:725
+#: mod_serial.cpp:720 mod_serial.cpp:741
 msgid "MdmDialStr"
 msgstr ""
 
-#: mod_serial.cpp:705 mod_serial.cpp:726
+#: mod_serial.cpp:721 mod_serial.cpp:742
 msgid "MdmCnctResp"
 msgstr ""
 
-#: mod_serial.cpp:706 mod_serial.cpp:727
+#: mod_serial.cpp:722 mod_serial.cpp:743
 msgid "MdmBusyResp"
 msgstr ""
 
-#: mod_serial.cpp:707 mod_serial.cpp:728
+#: mod_serial.cpp:723 mod_serial.cpp:744
 msgid "MdmNoCarResp"
 msgstr ""
 
-#: mod_serial.cpp:708 mod_serial.cpp:729
+#: mod_serial.cpp:724 mod_serial.cpp:745
 msgid "MdmNoDialToneResp"
 msgstr ""
 
-#: mod_serial.cpp:709 mod_serial.cpp:730
+#: mod_serial.cpp:725 mod_serial.cpp:746
 msgid "MdmHangUp"
 msgstr ""
 
-#: mod_serial.cpp:710 mod_serial.cpp:731
+#: mod_serial.cpp:726 mod_serial.cpp:747
 msgid "MdmHangUpResp"
 msgstr ""
 
-#: mod_serial.cpp:742
+#: mod_serial.cpp:758
 #, c-format
 msgid "Traffic in %.4g kb, out %.4g kb. "
 msgstr "Трафик входящий %.4g кб, исходящий %.4g кб. "
 
-#: mod_serial.cpp:753
+#: mod_serial.cpp:769
 msgid "5000:1000"
 msgstr ""
 
-#: mod_serial.cpp:899
+#: mod_serial.cpp:788
+#, c-format
+msgid "Device '%s' is used now."
+msgstr ""
+
+#: mod_serial.cpp:916
 msgid "Modem busy"
 msgstr "Модем занят"
 
-#: mod_serial.cpp:900
+#: mod_serial.cpp:917
 msgid "Modem no carrier"
 msgstr "Модем, нет несущей"
 
-#: mod_serial.cpp:901
+#: mod_serial.cpp:918
 msgid "Modem no dial tone"
 msgstr "Модем, нет гудка"
 
-#: mod_serial.cpp:902
+#: mod_serial.cpp:919
 msgid "Modem no connected"
 msgstr "Модем не подключился"
 
-#: mod_serial.cpp:960
+#: mod_serial.cpp:978
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-#: mod_serial.cpp:977
+#: mod_serial.cpp:995
 msgid "Writing request error."
 msgstr "Ошибка отправки запроса."
 
-#: mod_serial.cpp:998
+#: mod_serial.cpp:1016
 msgid "Timeouted!"
 msgstr "Время исчерпано!"
 
-#: mod_serial.cpp:999
+#: mod_serial.cpp:1017
 msgid "Serial error!"
 msgstr "Ошибка последовательного интерфейса!"
 
-#: mod_serial.cpp:1018
+#: mod_serial.cpp:1036
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]"
 "\". Where:\n"
@@ -669,7 +664,7 @@ msgstr ""
 "    modTel - телефон модема, присутствие этого поля переключает транспорт на "
 "работу в режиме модема."
 
-#: mod_serial.cpp:1026
+#: mod_serial.cpp:1044
 msgid ""
 "Connection timings in format: \"[conn]:[symbol]\". Where:\n"
 "    conn - maximum time for connection respond wait, in ms;\n"
@@ -680,66 +675,66 @@ msgstr ""
 "    symbol - максимальное время одного символа, используется для обнаружения "
 "окончания фрейма, в мс."
 
-#: mod_serial.cpp:1032 mod_serial.cpp:1061
+#: mod_serial.cpp:1050 mod_serial.cpp:1079
 msgid "/mod/lifeTm"
 msgstr ""
 
-#: mod_serial.cpp:1032
+#: mod_serial.cpp:1050
 msgid "Life time (sec)"
 msgstr "Время жизни (с)"
 
-#: mod_serial.cpp:1038 mod_serial.cpp:1091
+#: mod_serial.cpp:1056 mod_serial.cpp:1109
 msgid "/mod/dialStr"
 msgstr ""
 
-#: mod_serial.cpp:1038
+#: mod_serial.cpp:1056
 msgid "Dial string"
 msgstr "Строка дозвона"
 
-#: mod_serial.cpp:1039 mod_serial.cpp:1096
+#: mod_serial.cpp:1057 mod_serial.cpp:1114
 msgid "/mod/cnctResp"
 msgstr ""
 
-#: mod_serial.cpp:1039
+#: mod_serial.cpp:1057
 msgid "Connect response"
 msgstr "Соединение, результат"
 
-#: mod_serial.cpp:1040 mod_serial.cpp:1101
+#: mod_serial.cpp:1058 mod_serial.cpp:1119
 msgid "/mod/busyResp"
 msgstr ""
 
-#: mod_serial.cpp:1040
+#: mod_serial.cpp:1058
 msgid "Busy response"
 msgstr "Занят, результат"
 
-#: mod_serial.cpp:1041 mod_serial.cpp:1106
+#: mod_serial.cpp:1059 mod_serial.cpp:1124
 msgid "/mod/noCarResp"
 msgstr ""
 
-#: mod_serial.cpp:1041
+#: mod_serial.cpp:1059
 msgid "No carrier response"
 msgstr "Нет несущей, результат"
 
-#: mod_serial.cpp:1042 mod_serial.cpp:1111
+#: mod_serial.cpp:1060 mod_serial.cpp:1129
 msgid "/mod/noDialToneResp"
 msgstr ""
 
-#: mod_serial.cpp:1042
+#: mod_serial.cpp:1060
 msgid "No dial tone response"
 msgstr "Нет гудка, результат"
 
-#: mod_serial.cpp:1043 mod_serial.cpp:1116
+#: mod_serial.cpp:1061 mod_serial.cpp:1134
 msgid "/mod/hangUp"
 msgstr ""
 
-#: mod_serial.cpp:1043
+#: mod_serial.cpp:1061
 msgid "Hangup string"
 msgstr "Повесить трубку"
 
-#: mod_serial.cpp:1044 mod_serial.cpp:1121
+#: mod_serial.cpp:1062 mod_serial.cpp:1139
 msgid "/mod/hangUpResp"
 msgstr ""
 
-#: mod_serial.cpp:1044
+#: mod_serial.cpp:1062
 msgid "Hangup response"
 msgstr "Повесить трубку, результат"

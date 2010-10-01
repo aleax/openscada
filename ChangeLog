@@ -1,3 +1,8 @@
+2010-10-01 Roman
+- DAQ.JavaLikeCalc, Special.FLibSYS: To user's API function string::toInt() and str2int() is added base argument for radix determine.
+- FIX:UI.WebVision: User context menu display is made permit for write access.
+
+
 2010-09-27 Roman
 - !!:DemoDB: New UI-permitions mechanism is implemented. Real read access for simple users ("user") is granted.
 - !:Archive: Read access speed to values from soft grid buffer is rised.
