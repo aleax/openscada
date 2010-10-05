@@ -35,7 +35,7 @@
 #define MOD_ID		"DBArch"
 #define MOD_NAME	"To DB archivator"
 #define MOD_TYPE	"Archive"
-#define VER_TYPE	VER_ARH
+#define VER_TYPE	SARH_VER
 #define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to DB."

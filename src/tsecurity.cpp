@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,7 +31,7 @@ using namespace OSCADA;
 //*************************************************
 //* TSecurity					  *
 //*************************************************
-TSecurity::TSecurity( ) : TSubSYS("Security","Security",false)
+TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,"Security",false)
 {
     m_usr = TCntrNode::grpAdd("usr_");
     m_grp = TCntrNode::grpAdd("grp_");
@@ -235,47 +235,47 @@ string TSecurity::optDescr( )
 void TSecurity::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),RWRWR_,"root","Security",1,"idSz","20");
-	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),RWRWR_,"root","Security",1,"idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/usr_",_("User"),RWRWR_,"root",SSEC_ID,1,"idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/grp_",_("Group"),RWRWR_,"root",SSEC_ID,1,"idSz","20");
 	if(ctrMkNode("area",opt,1,"/usgr",_("Users and groups")))
 	{
-	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),RWRWR_,"root","Security",4,"tp","br","s_com","add,del","br_pref","usr_","idSz","20");
-	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),RWRWR_,"root","Security",4,"tp","br","s_com","add,del","br_pref","grp_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),RWRWR_,"root",SSEC_ID,4,"tp","br","s_com","add,del","br_pref","usr_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),RWRWR_,"root",SSEC_ID,4,"tp","br","s_com","add,del","br_pref","grp_","idSz","20");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root","Security",3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SSEC_ID,3,"tp","str","cols","90","rows","10");
 
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root","Security"))	opt->setText(optDescr());
+    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SSEC_ID))	opt->setText(optDescr());
     else if(a_path == "/br/usr_" || a_path == "/usgr/users")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","Security",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
 	{
 	    vector<string> list;
 	    usrList(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < list.size(); i_a++)
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root","Security",SEC_WR))	usrAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
-	if(ctrChkNode(opt,"del",RWRWR_,"root","Security",SEC_WR))	usrDel(opt->text(),true);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	usrAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	usrDel(opt->text(),true);
     }
     else if(a_path == "/br/grp_" || a_path == "/usgr/grps")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","Security",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
 	{
 	    vector<string> list;
 	    grpList(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < list.size(); i_a++)
 	        opt->childAdd("el")->setText(list[i_a]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root","Security",SEC_WR))	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
-	if(ctrChkNode(opt,"del",RWRWR_,"root","Security",SEC_WR))	grpDel(opt->text(),true);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	grpDel(opt->text(),true);
     }
     else TSubSYS::cntrCmdProc(opt);
 }
@@ -357,22 +357,22 @@ void TUser::save_( )
 void TUser::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),RWRWR_,name().c_str(),"Security");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),RWRWR_,name().c_str(),SSEC_ID);
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/prm",_("User")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,name().c_str(),"Security",2,"tp","str","len","50");
-	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),RWRWR_,name().c_str(),"Security",1,"v_sz","100");
-	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root","BD",4,"tp","str","dest","select","select","/db/list",
+	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,2,"tp","str","len","50");
+	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,1,"v_sz","100");
+	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
-	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),RWRW__,name().c_str(),"Security",1,"tp","str");
-	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root","Security",1,"key","grp");
-	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),R_R_R_,"root","Security",1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),RWRWR_,"root","Security",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),RWRW__,name().c_str(),SSEC_ID,1,"tp","str");
+	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp");
+	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),R_R_R_,"root",SSEC_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),RWRWR_,"root",SSEC_ID,1,"tp","bool");
 	}
 	return;
     }
@@ -382,28 +382,28 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	opt->setText( TSYS::int2str(auth(opt->attr("password"))) );
     else if(a_path == "/prm/db")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","BD",SEC_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","BD",SEC_WR) )	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/prm/name" && ctrChkNode(opt))	opt->setText(name());
     else if(a_path == "/prm/pct" || a_path == "/ico")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,name().c_str(),"Security",SEC_RD))	opt->setText(picture());
-	if(ctrChkNode(opt,"set",RWRWR_,name().c_str(),"Security",SEC_WR))	setPicture(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,name().c_str(),SSEC_ID,SEC_RD))	opt->setText(picture());
+	if(ctrChkNode(opt,"set",RWRWR_,name().c_str(),SSEC_ID,SEC_WR))	setPicture(opt->text());
     }
     else if(a_path == "/prm/dscr")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,name().c_str(),"Security",SEC_RD))	opt->setText(lName());
-	if(ctrChkNode(opt,"set",RWRWR_,name().c_str(),"Security",SEC_WR))	setLName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,name().c_str(),SSEC_ID,SEC_RD))	opt->setText(lName());
+	if(ctrChkNode(opt,"set",RWRWR_,name().c_str(),SSEC_ID,SEC_WR))	setLName(opt->text());
     }
     else if(a_path == "/prm/pass")
     {
-	if(ctrChkNode(opt,"get",RWRW__,name().c_str(),"Security",SEC_RD))	opt->setText("**********");
-	if(ctrChkNode(opt,"set",RWRW__,name().c_str(),"Security",SEC_WR))	setPass(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,name().c_str(),SSEC_ID,SEC_RD))	opt->setText("**********");
+	if(ctrChkNode(opt,"set",RWRW__,name().c_str(),SSEC_ID,SEC_WR))	setPass(opt->text());
     }
     else if(a_path == "/prm/grps")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","Security",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
 	{
 	    //>> Prepare headers
 	    XMLNode *grp = ctrMkNode("list",opt,-1,"/prm/grps/grp","",R_R_R_);
@@ -416,7 +416,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 		if(vl)	vl->childAdd("el")->setText(TSYS::int2str(owner().grpAt(ls[i_g]).at().user(name())));
 	    }
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root","Security",SEC_WR))
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))
 	{
 	    if(atoi(opt->text().c_str())) owner().grpAt(opt->attr("key_grp")).at().userAdd(name());
 	    else owner().grpAt(opt->attr("key_grp")).at().userDel(name());
@@ -509,16 +509,16 @@ void TGroup::userDel( const string &name )
 void TGroup::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),RWRWR_,"root","Security");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),RWRWR_,"root",SSEC_ID);
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
-	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root","Security",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root","Security",2,"tp","str","len","50");
-	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root","BD",4,"tp","str","dest","select","select","/db/list",
+	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","len","50");
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
 	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
-	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),RWRWR_,"root","Security",2,"tp","str","s_com","add,del");
+	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","s_com","add,del");
 	return;
     }
 
@@ -526,26 +526,26 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/db")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","BD",SEC_RD))	opt->setText(DB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","BD",SEC_WR))	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
     }
-    else if(a_path == "/prm/name" && ctrChkNode(opt,"get",R_R_R_,"root","Security",SEC_RD))
+    else if(a_path == "/prm/name" && ctrChkNode(opt,"get",R_R_R_,"root",SSEC_ID,SEC_RD))
 	opt->setText(name());
     else if(a_path == "/prm/dscr")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","Security",SEC_RD))	opt->setText(lName());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","Security",SEC_WR))	setLName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(lName());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setLName(opt->text());
     }
     else if(a_path == "/prm/users")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","Security",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
 	{
 	    string val;
-	    for( int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
+	    for(int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
 		opt->childAdd("el")->setText(val);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root","Security",SEC_WR))	userAdd(opt->text());
-	if(ctrChkNode(opt,"del",RWRWR_,"root","Security",SEC_WR))	userDel(opt->text());
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	userAdd(opt->text());
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	userDel(opt->text());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

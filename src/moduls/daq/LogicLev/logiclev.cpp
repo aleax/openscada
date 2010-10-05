@@ -39,7 +39,7 @@
 #define MOD_ID		"LogicLev"
 #define MOD_NAME	"Logic level"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"1.1.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow logic level parameters."

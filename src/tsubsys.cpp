@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsubsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -126,34 +126,34 @@ void TSubSYS::subStop( )
 void TSubSYS::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName(),0444);
-	ctrMkNode("branches",opt,-1,"/br","",0444);
-	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",0444);
-	if( subModule() )
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName(),R_R_R_);
+	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
+	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
+	if(subModule())
 	{
-	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),0444,"root","root",1,"idm","1");
-	    if(ctrMkNode("area",opt,-1,"/mod",_("Modules"),0444,"root","root"))
-		ctrMkNode("list",opt,-1,"/mod/br",_("Modules"),0444,"root","root",3,"tp","br","idm","1","br_pref","mod_");
+	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),R_R_R_,"root","root",1,"idm","1");
+	    if(ctrMkNode("area",opt,-1,"/mod",_("Modules"),R_R_R_,"root","root"))
+		ctrMkNode("list",opt,-1,"/mod/br",_("Modules"),R_R_R_,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
 	ctrMkNode("area",opt,-1,"/help",_("Help"));
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/ico" && ctrChkNode(opt) )
+    if(a_path == "/ico" && ctrChkNode(opt))
     {
 	string itp;
 	opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if( subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",0444,"root","root",SEC_RD) )
+    else if(subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD))
     {
 	vector<string> list;
 	modList(list);
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	for(unsigned i_a=0; i_a < list.size(); i_a++)
 	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
     }
     else TCntrNode::cntrCmdProc(opt);

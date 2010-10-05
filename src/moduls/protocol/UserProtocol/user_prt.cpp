@@ -34,7 +34,7 @@
 #define MOD_ID		"UserProtocol"
 #define MOD_NAME	"User protocol"
 #define MOD_TYPE	"Protocol"
-#define VER_TYPE	VER_PROT
+#define VER_TYPE	SPRT_VER
 #define M_VERSION	"0.5.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow creation self-user protocols on any OpenSCADA language."

@@ -32,7 +32,7 @@
 #define MOD_ID		"FireBird"
 #define MOD_NAME	"DB FireBird"
 #define MOD_TYPE	"BD"
-#define VER_TYPE	VER_BD
+#define VER_TYPE	SDB_VER
 #define VERSION		"0.9.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"DB module. Provides support of the DB FireBird."
@@ -122,8 +122,8 @@ void MBD::postDisable(int flag)
 
     if( flag && owner().fullDeleteDB() )
     {
-	//- Attach to DB -
-	//-- Prepare database parameter buffer (DPB) --
+	//> Attach to DB
+	//>> Prepare database parameter buffer (DPB)
 	char  *dpb = (char *)malloc(50);
 	short dpb_length = 0;
 	isc_modify_dpb(&dpb, &dpb_length, isc_dpb_user_name, user.c_str(),user.size());
@@ -141,14 +141,14 @@ void MBD::enable( )
 {
     if( enableStat() )  return;
 
-    //- DB address parsing -
+    //> DB address parsing
     fdb   = TSYS::strSepParse(addr(),0,';');
     user  = TSYS::strSepParse(addr(),1,';');
     pass  = TSYS::strSepParse(addr(),2,';');
     cd_pg = codePage().size()?codePage():Mess->charset();
 
-    //- Attach to DB -
-    //-- Prepare database parameter buffer (DPB) --
+    //> Attach to DB
+    //>> Prepare database parameter buffer (DPB)
     char  *dpb = (char *)malloc(50);
     short dpb_length = 0;
     isc_modify_dpb(&dpb, &dpb_length, isc_dpb_user_name, user.c_str(),user.size());
@@ -157,7 +157,7 @@ void MBD::enable( )
     ISC_STATUS_ARRAY status;
     if( isc_attach_database( status, 0, fdb.c_str(), &hdb, dpb_length, dpb) )
     {
-	//--- Make try for create DB ---
+	//>>> Make try for create DB
 	isc_tr_handle trans = 0;
 	if( isc_dsql_execute_immediate(status, &hdb, &trans, 0, 
 		    ("CREATE DATABASE '"+fdb+"' USER '"+user+"' PASSWORD '"+pass+"'").c_str(), 3, NULL) )
@@ -255,12 +255,12 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 
     try
     {
-	//- Prepare statement -
+	//> Prepare statement
 	if( isc_dsql_allocate_statement(status, &hdb, &stmt) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Allocate statement error: %s"),getErr(status).c_str());
 	if( !trans && isc_start_transaction(status, &trans, 1, &hdb, 0, NULL) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error: %s"),getErr(status).c_str());
-	//- Prepare output data structure -
+	//> Prepare output data structure
 	if( isc_dsql_prepare(status, &trans, &stmt, 0, Mess->codeConvOut(cd_pg.c_str(),ireq).c_str(), 3, NULL) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL prepare error: %s"),getErr(status).c_str());
 	if( isc_dsql_describe(status, &stmt, 1, out_sqlda) )
@@ -274,8 +274,8 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 	    out_sqlda->version = SQLDA_VERSION1;
 	    isc_dsql_describe(status, &stmt, 1, out_sqlda);
 	}
-	//-- Setup SQLDA --
-	//--- Data buffer size calc ---
+	//>> Setup SQLDA
+	//>>> Data buffer size calc
 	for( int i = 0; i < out_sqlda->sqld; i++ )
 	{
 	    dtBufLen += out_sqlda->sqlvar[i].sqllen + sizeof(short);
@@ -296,7 +296,7 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 	    }
 	}
 
-	//-- Get data --
+	//>> Get data
 	if( isc_dsql_execute(status, &trans, &stmt, 1, NULL) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL execute error: %s"),getErr(status).c_str());
 	if( tbl && out_sqlda->sqld )
@@ -307,14 +307,14 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 	    long  fetch_stat;
 	    while( (fetch_stat = isc_dsql_fetch(status, &stmt, 1, out_sqlda)) == 0 )
 	    {
-		//-- Add head --
+		//>> Add head
 		if( row.empty() )
 		{
 		    for( int i = 0; i < out_sqlda->sqld; i++ )
 			row.push_back(out_sqlda->sqlvar[i].sqlname);
 		    tbl->push_back(row);
 		}
-		//-- Add row --
+		//>> Add row
 		row.clear();
 		for( int i = 0; i < out_sqlda->sqld; i++ )
 		{
@@ -347,7 +347,7 @@ void MBD::sqlReq( isc_tr_handle *itrans, const string &ireq, vector< vector<stri
 			    break;
 			case SQL_BLOB:
 			{
-			    //- Read blob data -
+			    //> Read blob data
 			    ISC_QUAD blob_id = *((ISC_QUAD*)var.sqldata);
 			    ISC_STATUS blob_stat;
 			    isc_blob_handle blob_handle = 0;
@@ -408,8 +408,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
-	    "tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
 	    _("FireBird address to DB must be written as: [<file>;<user>;<pass>].\n"
 	      "Where:\n"
 	      "  file - full DB file;\n"
@@ -435,7 +434,7 @@ MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm), trans(0)
 	    "CONSTRAINT \"pk_"+mod->sqlReqCode(name(),'"')+"\" PRIMARY KEY(\"name\") )'; END";
 	owner().sqlReq(req);
     }
-    //- Get table structure description -
+    //> Get table structure description
     getStructDB( tblStrct );
     if( tblStrct.size() <= 1 )
 	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Table '%s' is not present."),name().c_str());
@@ -461,14 +460,14 @@ MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
 
 void MTable::getStructDB( vector< vector<string> > &tblStrct )
 {
-    //- Get generic data structure -
+    //> Get generic data structure
     owner().transCommit(&trans);
     owner().sqlReq("SELECT R.RDB$FIELD_NAME, F.RDB$FIELD_TYPE, F.RDB$FIELD_LENGTH "
 	"FROM RDB$FIELDS F, RDB$RELATION_FIELDS R where F.RDB$FIELD_NAME = R.RDB$FIELD_SOURCE and "
 	"R.RDB$SYSTEM_FLAG = 0 and R.RDB$RELATION_NAME = '"+mod->sqlReqCode(name())+"'",&tblStrct);
     if( tblStrct.size( ) > 1 )
     {
-	//- Get keys -
+	//> Get keys
 	vector< vector<string> > keyLst;
 	owner().sqlReq(&trans,"SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE "
 	    "FROM RDB$RELATION_CONSTRAINTS C, RDB$INDEX_SEGMENTS I "

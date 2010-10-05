@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +22,8 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define  VER_ARH 3    //ArchiveS type modules version
+#define SARH_VER	3		//ArchiveS type modules version
+#define SARH_ID		"Archive"
 
 #include <time.h>
 
@@ -177,7 +178,7 @@ class TArchiveS : public TSubSYS
 	TArchiveS( );
 	~TArchiveS( );
 
-	int subVer( )		{ return VER_ARH; }
+	int subVer( )		{ return SARH_VER; }
 
 	int messPeriod( )	{ return mMessPer; }
 	int valPeriod( );

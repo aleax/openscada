@@ -38,7 +38,7 @@
 #define MOD_ID		"AMRDevs"
 #define MOD_NAME	"AMR devices"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow access to automatic meter reading devices. Supported devices: "

@@ -1,3 +1,8 @@
+2010-10-05 Roman
+- !!!!:SYS: Permitions to all control interface's items is made unified.
+- !!:SYS: Core translation to Russian, Ukrainian and German is updated.
+
+
 2010-10-01 Roman
 - DAQ.JavaLikeCalc, Special.FLibSYS: To user's API function string::toInt() and str2int() is added base argument for radix determine.
 - FIX:UI.WebVision: User context menu display is made permit for write access.

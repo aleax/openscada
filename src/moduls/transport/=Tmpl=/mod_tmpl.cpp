@@ -41,7 +41,7 @@
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	"Transport template"
 #define MOD_TYPE	"Transport"
-#define VER_TYPE	VER_TR
+#define VER_TYPE	STR_VER
 #define VERSION		"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Transport's subsystem template module."

@@ -39,7 +39,7 @@
 #define MOD_ID		"DBF"
 #define MOD_NAME	"DB DBF"
 #define MOD_TYPE	"BD"
-#define VER_TYPE	VER_BD
+#define VER_TYPE	SDB_VER
 #define VERSION		"2.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD module. Provides support of the *.dbf files, version 3.0."
@@ -165,11 +165,10 @@ TTable *MBD::openTable( const string &nm, bool create )
 void MBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
-	    "tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
 	    _("For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 	      "For example: /opt/dbf ."));
 	return;

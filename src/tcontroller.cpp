@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -401,35 +401,35 @@ void TController::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),0664,"root","DAQ");
-	ctrMkNode("branches",opt,-1,"/br","",0444);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),0444,"root","DAQ",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),0664,"root","DAQ",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),0664,"root","DAQ",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),0664,"root","DAQ",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),RWRWR_,"root","DAQ",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),RWRWR_,"root","DAQ",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root","DAQ",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")) )
+	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
 	    {
-		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","DAQ",0664);
+		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","DAQ",RWRWR_);
 		//>> Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/REDNT_RUN",true);
-		if( xt ) xt->setAttr("dest","select")->setAttr("select","/cntr/redRunLst");
+		if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/redRunLst");
 	    }
 	}
-	if( owner().tpPrmSize() )
+	if(owner().tpPrmSize())
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),0660,"root","DAQ",2,"idm","1","idSz","20");
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRW__,"root","DAQ",2,"idm","1","idSz","20");
 	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
-		if( owner().tpPrmSize() > 1 )
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),0660,"root","DAQ",3,"tp","str","dest","select","select","/prm/t_lst");
-		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),0444,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),0660,"root","DAQ",5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
+		if(owner().tpPrmSize() > 1)
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),RWRW__,"root","DAQ",3,"tp","str","dest","select","select","/prm/t_lst");
+		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRW__,"root","DAQ",5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
 	    }
 	}
 	return;
@@ -438,67 +438,67 @@ void TController::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     vector<string> c_list;
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
-    else if( a_path == "/prm/nmb" && ctrChkNode(opt) )
+    if(a_path == "/cntr/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
+    else if(a_path == "/prm/nmb" && ctrChkNode(opt))
     {
 	list(c_list);
 	int e_c = 0;
-	for( int i_a = 0; i_a < c_list.size(); i_a++ )
-	    if( at(c_list[i_a]).at().enableStat( ) )	e_c++;
+	for(int i_a = 0; i_a < c_list.size(); i_a++)
+	    if(at(c_list[i_a]).at().enableStat( ))	e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
-    else if( a_path == "/prm/t_prm" && owner().tpPrmSize() )
+    else if(a_path == "/prm/t_prm" && owner().tpPrmSize())
     {
-	if( ctrChkNode(opt,"get",0660,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRW__,"root","DAQ",SEC_RD))
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
-	if( ctrChkNode(opt,"set",0660,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
 	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
-    else if( (a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize() )
+    else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize())
     {
-	if( ctrChkNode(opt,"get",0660,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRW__,"root","DAQ",SEC_RD))
 	{
 	    list(c_list);
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0660,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRW__,"root","DAQ",SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
 	    at(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0660,"root","DAQ",SEC_WR) )	del(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRW__,"root","DAQ",SEC_WR))	del(opt->attr("id"),true);
     }
-    else if( a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",0444) )
+    else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_))
     {
-	for( unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++ )
+	for(unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++)
 	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(i_a).name)->setText(owner().tpPrmAt(i_a).descr);
     }
-    else if( a_path == "/cntr/st/db" )
+    else if(a_path == "/cntr/st/db")
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	setDB(opt->text());
     }
-    else if( a_path == "/cntr/st/en_st" )
+    else if(a_path == "/cntr/st/en_st")
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText(en_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )	atoi(opt->text().c_str())?enable():disable();
+	if(ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD))	opt->setText(en_st?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	atoi(opt->text().c_str())?enable():disable();
     }
-    else if( a_path == "/cntr/st/run_st" )
+    else if(a_path == "/cntr/st/run_st")
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )	atoi(opt->text().c_str())?start():stop();
+	if(ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	atoi(opt->text().c_str())?start():stop();
     }
-    else if( a_path.substr(0,9) == "/cntr/cfg" )
+    else if(a_path.substr(0,9) == "/cntr/cfg")
     {
-	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","DAQ",0664);
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )
-	    for( int i_t = 0; i_t < owner().tpPrmSize( ); i_t++ )
-		if( owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2) )
+	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","DAQ",RWRWR_);
+	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
+	    for(int i_t = 0; i_t < owner().tpPrmSize( ); i_t++)
+		if(owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2))
 		     modifG( );
     }
-    else if( a_path == "/cntr/redRunLst" && ctrChkNode(opt) )
+    else if(a_path == "/cntr/redRunLst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id","<high>")->setText(_("<High level>"));
 	opt->childAdd("el")->setAttr("id","<low>")->setText(_("<Low level>"));

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +22,8 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define  VER_CNTR 3    //ControllerS type modules version
+#define SDAQ_VER	3	//ControllerS type modules version
+#define SDAQ_ID		"DAQ"
 
 #include <string>
 
@@ -48,7 +49,7 @@ class TDAQS : public TSubSYS
 	TDAQS( );
 	~TDAQS( );
 
-	int subVer( )	{ return VER_CNTR; }
+	int subVer( )	{ return SDAQ_VER; }
 	void subStart(  );
 	void subStop( );
 

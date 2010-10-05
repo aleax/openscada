@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +22,8 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define  VER_BD 3    //BDS type modules version
+#define SDB_VER		3		//BDS type modules version
+#define SDB_ID		"BD"
 
 #include <stdio.h>
 
@@ -230,7 +231,7 @@ class TBDS : public TSubSYS, public TElem
 	TBDS( );
 	~TBDS( );
 
-	int subVer( )		{ return VER_BD; }
+	int subVer( )		{ return SDB_VER; }
 
 	static string realDBName( const string &bdn );
 	void dbList( vector<string> &ls, bool checkSel = false );

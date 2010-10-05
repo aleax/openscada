@@ -49,7 +49,7 @@
 #define MOD_ID		"SystemTests"
 #define MOD_NAME	"OpenSCADA system's tests"
 #define MOD_TYPE	"Special"
-#define VER_TYPE	VER_SPC
+#define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
 #define VERSION		"1.3.7"
 #define AUTORS		"Roman Savochenko"

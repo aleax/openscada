@@ -30,7 +30,7 @@
 #define MOD_ID		"FLibComplex1"
 #define MOD_NAME	"Complex1 function's lib"
 #define MOD_TYPE	"Special"
-#define VER_TYPE	VER_SPC
+#define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
 #define VERSION		"1.0.5"
 //*************************************************

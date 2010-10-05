@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-27 16:38+0300\n"
+"POT-Creation-Date: 2010-10-01 23:55+0400\n"
 "PO-Revision-Date: 2009-08-20 10:16+0200\n"
-"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
-"Language-Team: de <>\n"
+"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Language-Team: <de@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -88,7 +88,7 @@ msgstr ""
 
 #: mod_serial.cpp:111 mod_serial.cpp:112
 msgid "Addon parameters"
-msgstr ""
+msgstr "Zusätzliche Parameter"
 
 #: mod_serial.cpp:111 mod_serial.cpp:112
 msgid "10000"
@@ -235,7 +235,7 @@ msgstr "Fehler in der Anzahl der Stopbits '%d'."
 #: mod_serial.cpp:409 mod_serial.cpp:423 mod_serial.cpp:893 mod_serial.cpp:907
 #, c-format
 msgid "No response to init request '%s'."
-msgstr ""
+msgstr "Keine Antwort auf die Initialisierungsanfrage '%s'."
 
 #: mod_serial.cpp:532
 #, c-format
@@ -349,6 +349,8 @@ msgid ""
 msgstr ""
 "Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:[format]:"
 "[fc]:[mdm]\". Wo:\n"
+"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:[format]:"
+"[fc]:[mdm]\". Wo:\n"
 "    dev - Schnittstelle des Seriellen Anschlusses (/dev/ttyS0);\n"
 "    speed - Geschwindigkeit der Seriellen Schnittstelle (300, 600, 1200, "
 "2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -357,6 +359,8 @@ msgstr ""
 "    format - Format der asynchronen Daten '<Grösse><Parität><Stop>' (8N1, "
 "7E1, 5O2).    fc - Stromregierung: 'h' - hardware (CRTSCTS), 's' - software "
 "(IXON|IXOFF);\n"
+"    mdm - modem Regime, warten auf den 'RING'.    fc - Stromregierung: 'h' - "
+"hardware (CRTSCTS), 's' - software (IXON|IXOFF);\n"
 "    mdm - modem Regime, warten auf den 'RING'."
 
 #: mod_serial.cpp:611 mod_serial.cpp:632 mod_serial.cpp:1043
@@ -398,7 +402,7 @@ msgstr ""
 
 #: mod_serial.cpp:617 mod_serial.cpp:1049
 msgid "Timeout (sec)"
-msgstr ""
+msgstr "Wartezeit (sec)"
 
 #: mod_serial.cpp:617 mod_serial.cpp:1049 mod_serial.cpp:1050
 msgid "dec"
@@ -431,7 +435,7 @@ msgstr ""
 
 #: mod_serial.cpp:618 mod_serial.cpp:1051
 msgid "Pre-init delay (sec)"
-msgstr ""
+msgstr "Pre-init Ausdauer (sek)"
 
 #: mod_serial.cpp:618 mod_serial.cpp:619 mod_serial.cpp:1051
 #: mod_serial.cpp:1052
@@ -454,7 +458,7 @@ msgstr ""
 
 #: mod_serial.cpp:619 mod_serial.cpp:1052
 msgid "Post-init delay (sec)"
-msgstr ""
+msgstr "Aufhalten der Post-Initialisation (sek)"
 
 #: mod_serial.cpp:619 mod_serial.cpp:1052
 msgid "0.01"
@@ -467,7 +471,7 @@ msgstr ""
 
 #: mod_serial.cpp:620 mod_serial.cpp:1053
 msgid "Initialization string 1"
-msgstr ""
+msgstr "Initialisierungszeile 1"
 
 #: mod_serial.cpp:621 mod_serial.cpp:657 mod_serial.cpp:1054
 #: mod_serial.cpp:1099
@@ -476,7 +480,7 @@ msgstr ""
 
 #: mod_serial.cpp:621 mod_serial.cpp:1054
 msgid "Initialization string 2"
-msgstr ""
+msgstr "Initialisierungszeile 2"
 
 #: mod_serial.cpp:622 mod_serial.cpp:662 mod_serial.cpp:1055
 #: mod_serial.cpp:1104
@@ -485,7 +489,7 @@ msgstr ""
 
 #: mod_serial.cpp:622 mod_serial.cpp:1055
 msgid "Init response"
-msgstr ""
+msgstr "Initialisierung, Ergebnis"
 
 #: mod_serial.cpp:623 mod_serial.cpp:667
 msgid "/mod/ringReq"
@@ -501,7 +505,7 @@ msgstr ""
 
 #: mod_serial.cpp:624
 msgid "Ring answer"
-msgstr ""
+msgstr "Ring Antwort"
 
 #: mod_serial.cpp:625 mod_serial.cpp:677
 msgid "/mod/ringAnswerResp"
@@ -509,7 +513,7 @@ msgstr ""
 
 #: mod_serial.cpp:625
 msgid "Ring answer response"
-msgstr ""
+msgstr "Ring Antwort, Ergebnis"
 
 #: mod_serial.cpp:631 mod_serial.cpp:1068
 msgid "path"
@@ -609,19 +613,19 @@ msgstr ""
 
 #: mod_serial.cpp:916
 msgid "Modem busy"
-msgstr ""
+msgstr "Modem ist beschäftigt"
 
 #: mod_serial.cpp:917
 msgid "Modem no carrier"
-msgstr ""
+msgstr "Modem, keine Tragende"
 
 #: mod_serial.cpp:918
 msgid "Modem no dial tone"
-msgstr ""
+msgstr "Modem, kein Signal"
 
 #: mod_serial.cpp:919
 msgid "Modem no connected"
-msgstr ""
+msgstr "Modem nicht connected"
 
 #: mod_serial.cpp:978
 msgid "Transport is not started!"
@@ -633,7 +637,7 @@ msgstr "Fehler beim Senden der Anfrage."
 
 #: mod_serial.cpp:1016
 msgid "Timeouted!"
-msgstr ""
+msgstr "Zeit ist aus!"
 
 #: mod_serial.cpp:1017
 msgid "Serial error!"
@@ -641,8 +645,8 @@ msgstr "Serielle Fehler"
 
 #: mod_serial.cpp:1036
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]"
-"\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:"
+"[modTel]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
@@ -654,8 +658,8 @@ msgid ""
 "    modTel - modem telephone, the field presence do switch transport to work "
 "with modem mode."
 msgstr ""
-"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:[format]"
-"\". Wo:\n"
+"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:"
+"[format]\". Wo:\n"
 "    dev - Schnittstelle des Seriellen Anschlusses (/dev/ttyS0);\n"
 "    speed - Geschwindigkeit der Seriellen Schnittstelle (300, 600, 1200, "
 "2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -664,6 +668,9 @@ msgstr ""
 "    format - Format der asynchronen Daten '<Grösse><Parität><Stop>' (8N1, "
 "7E1, 5O2).    fc - Stromregierung: 'h' - hardware (CRTSCTS), 's' - software "
 "(IXON|IXOFF);\n"
+"    modTel - Telefon des Modems, Anwesenheit deises Feldes schaltet die "
+"Übertragung auf die Arbeit im Regime des Modems um    fc - Stromregierung: "
+"'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF);\n"
 "    modTel - Telefon des Modems, Anwesenheit deises Feldes schaltet die "
 "Übertragung auf die Arbeit im Regime des Modems um"
 
@@ -684,7 +691,7 @@ msgstr ""
 
 #: mod_serial.cpp:1050
 msgid "Life time (sec)"
-msgstr ""
+msgstr "Lebenszeit (sek)"
 
 #: mod_serial.cpp:1056 mod_serial.cpp:1109
 msgid "/mod/dialStr"
@@ -692,7 +699,7 @@ msgstr ""
 
 #: mod_serial.cpp:1056
 msgid "Dial string"
-msgstr ""
+msgstr "Dialzeile"
 
 #: mod_serial.cpp:1057 mod_serial.cpp:1114
 msgid "/mod/cnctResp"
@@ -700,7 +707,7 @@ msgstr ""
 
 #: mod_serial.cpp:1057
 msgid "Connect response"
-msgstr ""
+msgstr "Anschluss, Ergebnis"
 
 #: mod_serial.cpp:1058 mod_serial.cpp:1119
 msgid "/mod/busyResp"
@@ -708,7 +715,7 @@ msgstr ""
 
 #: mod_serial.cpp:1058
 msgid "Busy response"
-msgstr ""
+msgstr "Beschäftigt, Ergebnis"
 
 #: mod_serial.cpp:1059 mod_serial.cpp:1124
 msgid "/mod/noCarResp"
@@ -716,7 +723,7 @@ msgstr ""
 
 #: mod_serial.cpp:1059
 msgid "No carrier response"
-msgstr ""
+msgstr "Keine Tragende, Ergebnis"
 
 #: mod_serial.cpp:1060 mod_serial.cpp:1129
 msgid "/mod/noDialToneResp"
@@ -724,7 +731,7 @@ msgstr ""
 
 #: mod_serial.cpp:1060
 msgid "No dial tone response"
-msgstr ""
+msgstr "Kein Signal, Ergebnis"
 
 #: mod_serial.cpp:1061 mod_serial.cpp:1134
 msgid "/mod/hangUp"
@@ -732,7 +739,7 @@ msgstr ""
 
 #: mod_serial.cpp:1061
 msgid "Hangup string"
-msgstr ""
+msgstr "den Hörer legen"
 
 #: mod_serial.cpp:1062 mod_serial.cpp:1139
 msgid "/mod/hangUpResp"
@@ -740,4 +747,4 @@ msgstr ""
 
 #: mod_serial.cpp:1062
 msgid "Hangup response"
-msgstr ""
+msgstr "den Hörer legen, Ergebnis"

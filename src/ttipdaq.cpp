@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttipdaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -152,31 +152,31 @@ string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 void TTipDAQ::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
-	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","cntr_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","cntr_","idSz","20");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/cntr_" || a_path == "/tctr/ctr" )
+    if(a_path == "/br/cntr_" || a_path == "/tctr/ctr")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    vector<string> c_list;
 	    list(c_list);
-	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < c_list.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid); at(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(m_cntr,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_cntr,opt->attr("id"),-1,1);
     }
     else TModule::cntrCmdProc(opt);
 }

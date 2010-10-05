@@ -36,7 +36,7 @@
 #define MOD_ID		"WebUser"
 #define MOD_NAME	"Web interface from user"
 #define MOD_TYPE	"UI"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.5.0"
 #define AUTORS		"Roman Savochenko"

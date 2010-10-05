@@ -30,7 +30,7 @@
 #define MOD_ID		"FLibMath"
 #define MOD_NAME	"Math function's lib"
 #define MOD_TYPE	"Special"
-#define VER_TYPE	VER_SPC
+#define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
 #define VERSION		"0.5.1"
 //*************************************************

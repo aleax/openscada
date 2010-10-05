@@ -39,7 +39,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS("ModSched","Modules sheduler",false), mPer(10), mAllow("*")
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,"Modules sheduler",false), mPer(10), mAllow("*")
 {
 
 }
@@ -408,24 +408,24 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/ms",_("Subsystem"),0444,"root","root"))
+	if(ctrMkNode("area",opt,0,"/ms",_("Subsystem"),R_R_R_,"root",SMSH_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),0444,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),0444,"root","root",2,"tp","str",
+	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),R_R_R_,"root",SMSH_ID,2,"tp","str",
 		"help",_("List of shared libs(modules) allow for auto conection.\nElements separated by symbol ';'.\nValue '*' is used for allow all modules."));
-	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),0444,"root","root",2,"tp","str",
+	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),R_R_R_,"root",SMSH_ID,2,"tp","str",
 		"help",_("List of shared libs(modules) deny for auto conection.\nElements separated by symbol ';'."));
-	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),0660,"root","root");
-	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),0664,"root","root",1,"key","path"))
+	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
+	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path"))
 	    {
-		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),0444,"root","root",1,"tp","time");
-		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enable"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),R_R_R_,"root",SMSH_ID,1,"tp","time");
+		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),R_R_R_,"root",SMSH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enable"),RWRWR_,"root",SMSH_ID,1,"tp","bool");
 	    }
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SMSH_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
 
@@ -436,25 +436,25 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/ms/mod_deny" && ctrChkNode(opt,"get"))	opt->setText(denyList());
     else if(a_path == "/ms/chk_per")
     {
-	if(ctrChkNode(opt,"get",0664,"root","root",SEC_RD))	opt->setText(TSYS::int2str(chkPer()));
-	if(ctrChkNode(opt,"set",0664,"root","root",SEC_WR))	setChkPer(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SMSH_ID,SEC_RD))	opt->setText(TSYS::int2str(chkPer()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SMSH_ID,SEC_WR))	setChkPer(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root",SEC_RD))opt->setText(optDescr());
-    else if(a_path == "/ms/chk_now" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR))	libLoad(SYS->modDir(),true);
-    else if(a_path == "/ms/libs" )
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SMSH_ID,SEC_RD))	opt->setText(optDescr());
+    else if(a_path == "/ms/chk_now" && ctrChkNode(opt,"set",RWRW__,"root",SMSH_ID,SEC_WR))	libLoad(SYS->modDir(),true);
+    else if(a_path == "/ms/libs")
     {
-	if(ctrChkNode(opt,"get",0664,"root","root",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SMSH_ID,SEC_RD))
 	{
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/ms/libs/path","");
 	    XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/ms/libs/tm","");
 	    XMLNode *n_mods	= ctrMkNode("list",opt,-1,"/ms/libs/mods","");
 	    XMLNode *n_en	= ctrMkNode("list",opt,-1,"/ms/libs/en","");
 	    ResAlloc res(nodeRes(),false);
-	    for( int i_sl = 0; i_sl < SchHD.size(); i_sl++ )
+	    for(int i_sl = 0; i_sl < SchHD.size(); i_sl++)
 	    {
-		if( n_nm ) n_nm->childAdd("el")->setText(SchHD[i_sl].name);
-		if( n_tm ) n_tm->childAdd("el")->setText(TSYS::TSYS::int2str(SchHD[i_sl].tm));
-		if( n_mods )
+		if(n_nm)	n_nm->childAdd("el")->setText(SchHD[i_sl].name);
+		if(n_tm)	n_tm->childAdd("el")->setText(TSYS::TSYS::int2str(SchHD[i_sl].tm));
+		if(n_mods)
 		{
 		    string useLs;
 		    if( !SchHD[i_sl].hd && !SchHD[i_sl].err.empty() ) useLs = SchHD[i_sl].err;
@@ -463,10 +463,10 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 			    useLs += SchHD[i_sl].use[i_el]+"; ";
 		    n_mods->childAdd("el")->setText(useLs);
 		}
-		if( n_en ) n_en->childAdd("el")->setText(TSYS::TSYS::int2str((bool)SchHD[i_sl].hd));
+		if(n_en)	n_en->childAdd("el")->setText(TSYS::TSYS::int2str((bool)SchHD[i_sl].hd));
 	    }
 	}
-	if(ctrChkNode(opt,"set",0664,"root","root",SEC_WR))
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SMSH_ID,SEC_WR))
 	{
 	    if(opt->attr("col") == "en")
 		if(atoi(opt->text().c_str())) libAtt(opt->attr("key_path"),true);

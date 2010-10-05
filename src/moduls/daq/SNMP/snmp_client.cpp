@@ -42,7 +42,7 @@
 #define MOD_ID		"SNMP"
 #define MOD_NAME	"SNMP client"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"0.4.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow realising of SNMP client service."

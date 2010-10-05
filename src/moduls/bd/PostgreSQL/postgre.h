@@ -94,7 +94,7 @@ class MBD : public TBD
 
 	void transOpen( );
 	void transCommit( );
-        void transCloseCheck( );
+	void transCloseCheck( );
 
     protected:
 	//Protected methods
@@ -108,10 +108,10 @@ class MBD : public TBD
 	//Private attributes
 	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg;
 	//int    port, connect_timeout;
-	PGconn * connection;
-        int	reqCnt;
-        time_t	reqCntTm, trOpenTm;
-	Res    conn_res;
+	PGconn	*connection;
+	int	reqCnt;
+	time_t	reqCntTm, trOpenTm;
+	Res	conn_res;
 };
 
 //************************************************

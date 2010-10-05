@@ -38,7 +38,7 @@ using namespace OSCADA;
 #define PRT_ID		"OPC_UA"
 #define PRT_NAME	"OPC UA"
 #define PRT_TYPE	"Protocol"
-#define PRT_SUBVER	VER_PROT
+#define PRT_SUBVER	SPRT_VER
 #define PRT_MVER	"0.5.0"
 #define PRT_AUTOR	"Roman Savochenko"
 #define PRT_DESCR	"Allow realisation of OPC UA protocol."

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -122,32 +122,32 @@ string TModule::modInfo( const string &name )
 void TModule::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),0444);
-	ctrMkNode("branches",opt,-1,"/br","",0444);
-	if(TUIS::icoPresent(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",0444);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),R_R_R_);
+	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
+	if(TUIS::icoPresent(owner().subId()+"."+modId())) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/help",_("Help")))
 	    if(ctrMkNode("area",opt,-1,"/help/m_inf",_("Module information")))
 	    {
 		vector<string> list;
 		modInfo(list);
-		for( int i_l = 0; i_l < list.size(); i_l++)
-		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),0444,"root","root",1,"tp","str");
+		for(int i_l = 0; i_l < list.size(); i_l++)
+		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),R_R_R_,"root","root",1,"tp","str");
 	    }
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/ico" && ctrChkNode(opt) )
+    if(a_path == "/ico" && ctrChkNode(opt))
     {
 	string itp;
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if( a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt) )
+    else if(a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt))
 	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }

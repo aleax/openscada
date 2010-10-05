@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,7 +23,8 @@
 #ifndef TUIS_H
 #define TUIS_H
 
-#define  VER_UI 1    //UIS type modules version
+#define SUI_VER		1	//UIS type modules version
+#define SUI_ID		"UI"
 
 #include <string>
 
@@ -60,7 +61,7 @@ class TUIS : public TSubSYS
     public:
 	TUIS( );
 
-	int subVer( )		{ return VER_UI; }
+	int subVer( )		{ return SUI_VER; }
 	void subStart( );
 	void subStop( );
 

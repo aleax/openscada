@@ -34,7 +34,7 @@
 #define MOD_ID		"HTTP"
 #define MOD_NAME	"HTTP-realisation"
 #define MOD_TYPE	"Protocol"
-#define VER_TYPE	VER_PROT
+#define VER_TYPE	SPRT_VER
 #define M_VERSION	"1.4.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow support HTTP for WWW based UIs."

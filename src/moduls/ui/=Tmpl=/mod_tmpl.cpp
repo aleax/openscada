@@ -38,7 +38,7 @@
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	"UI template"
 #define MOD_TYPE	"UI"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.0.1"
 #define AUTORS		"Roman Savochenko"

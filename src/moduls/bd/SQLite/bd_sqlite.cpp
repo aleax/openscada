@@ -34,7 +34,7 @@
 #define MOD_ID		"SQLite"
 #define MOD_NAME	"DB SQLite"
 #define MOD_TYPE	"BD"
-#define VER_TYPE	VER_BD
+#define VER_TYPE	SDB_VER
 #define VERSION		"1.6.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD module. Provides support of the BD SQLite."
@@ -251,8 +251,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
-		    "tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"

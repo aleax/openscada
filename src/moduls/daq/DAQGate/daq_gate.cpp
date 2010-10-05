@@ -32,7 +32,7 @@
 #define MOD_ID		"DAQGate"
 #define MOD_NAME	"Data sources gate"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"0.9.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station."

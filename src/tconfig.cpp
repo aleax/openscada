@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -174,7 +174,7 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
 {
-    if( elem.size() > 4 && elem.substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt) )
+    if(elem.size() > 4 && elem.substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt))
     {
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
 	for( unsigned i_a=0; i_a < n_e_fld.selNm().size(); i_a++ )
@@ -182,14 +182,14 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 	return;
     }
     TCfg &cel = cfg(elem);
-    if( TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD) )
+    if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD))
     {
-	if( cel.fld().flg()&TFld::Selected )	opt->setText(cel.getSEL());
+	if(cel.fld().flg()&TFld::Selected)	opt->setText(cel.getSEL());
 	else					opt->setText(cel.getS());
     }
-    if( TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR) )
+    if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR))
     {
-	if( cel.fld().flg()&TFld::Selected )	cel.setSEL(opt->text());
+	if(cel.fld().flg()&TFld::Selected)	cel.setSEL(opt->text());
 	else					cel.setS(opt->text());
     }
 }

@@ -36,7 +36,7 @@
 #define MOD_NAME	"Visual control area engine"
 #define MOD_TYPE	"UI"
 #define MOD_SUBTYPE	"VCAEngine"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define VERSION		"0.9.6"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Generic visual control area engine."

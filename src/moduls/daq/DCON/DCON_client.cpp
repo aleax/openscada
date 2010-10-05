@@ -38,7 +38,7 @@
 #define MOD_ID		"DCON"
 #define MOD_NAME	"DCON client"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"0.3.2"
 #define AUTORS		"Roman Savochenko, Almaz Karimov"
 #define DESCRIPTION	"Allow realisation of DCON client service. Supported I-7000 DCON protocol."

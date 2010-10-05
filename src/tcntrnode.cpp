@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -755,7 +755,7 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
     if( opt->name() == "info" )
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName(),0444,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName(),R_R_R_,"root","root");
 
     //> Process command to page
     string a_path = opt->attr("path");

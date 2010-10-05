@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -143,13 +143,13 @@ void TValue::cntrCmdProc( XMLNode *opt )
     vector<string> list_c;
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/attr"  )		//Attributes access
+    if(a_path == "/serv/attr")		//Attributes access
     {
 	vlList(list_c);
-	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEC_RD) )	//Full info attributes list
+	if(ctrChkNode(opt,"list",RWRWRW,"root",SDAQ_ID,SEC_RD))	//Full info attributes list
 	{
 	    AutoHD<TVal> attr;
-	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
+	    for(int i_el = 0; i_el < list_c.size(); i_el++)
 	    {
 		attr = vlAt(list_c[i_el]);
 		opt->childAdd("el")->
@@ -161,7 +161,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    setAttr("names",attr.at().fld().selNames());
 	    }
 	}
-	if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD) )		//All attributes values
+	if(ctrChkNode(opt,"get",RWRWRW,"root",SDAQ_ID,SEC_RD))		//All attributes values
 	{
 	    long long vtm;
 	    string svl;
@@ -171,34 +171,34 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    //> Put last attribute's values
 	    bool sepReq = atoi(opt->attr("sepReq").c_str());
 	    bool hostTm = atoi(opt->attr("hostTm").c_str());
-	    if( !sepReq )
-		for( int i_el = 0; i_el < list_c.size(); i_el++ )
+	    if(!sepReq)
+		for(int i_el = 0; i_el < list_c.size(); i_el++)
 		{
 		    vl = vlAt(list_c[i_el]);
 		    vtm = 0; svl = vl.at().getS(&vtm);
 		    aNd = opt->childAdd("el")->setAttr("id",list_c[i_el])->setText(svl);
-		    if( !hostTm ) aNd->setAttr("tm",TSYS::ll2str(vtm));
+		    if(!hostTm) aNd->setAttr("tm",TSYS::ll2str(vtm));
 		}
 
 	    //> Archives requests process
-	    for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+	    for(int i_a = 0; i_a < opt->childSize(); i_a++)
 	    {
 		aNd = opt->childGet(i_a);
-		if( !sepReq && aNd->name() != "ael" ) break;
-		if( (aNd->name() != "el" && aNd->name() != "ael") || !vlPresent(aNd->attr("id")) ) { opt->childDel(aNd); i_a--; continue; }
+		if(!sepReq && aNd->name() != "ael") break;
+		if((aNd->name() != "el" && aNd->name() != "ael") || !vlPresent(aNd->attr("id"))) { opt->childDel(aNd); i_a--; continue; }
 		vl = vlAt(aNd->attr("id"));
 
 		//>> Separated element request
-		if( aNd->name() == "el" )
+		if(aNd->name() == "el")
 		{
 		    vtm = 0; svl = vl.at().getS(&vtm);
 		    aNd->setText(svl);
-		    if( !hostTm ) aNd->setAttr("tm",TSYS::ll2str(vtm));
+		    if(!hostTm) aNd->setAttr("tm",TSYS::ll2str(vtm));
 		    continue;
 		}
 
 		//>> To archive of element request
-		if( vl.at().arch().freeStat() ) { opt->childDel(aNd); i_a--; continue; }
+		if(vl.at().arch().freeStat()) { opt->childDel(aNd); i_a--; continue; }
 
 		AutoHD<TVArchive> arch = vl.at().arch();
 		long long vper = arch.at().period(BUF_ARCH_NM);
@@ -207,12 +207,12 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		long long vend = arch.at().end(BUF_ARCH_NM);
 
 		//>>> Longing to equivalent archivators
-		if( vbeg == arch.at().begin(BUF_ARCH_NM) )
+		if(vbeg == arch.at().begin(BUF_ARCH_NM))
 		{
 		    vector<string> archLs;
 		    arch.at().archivatorList(archLs);
-		    for( int i_a = 0; i_a < archLs.size(); i_a++ )
-			if( arch.at().period(archLs[i_a]) == vper )
+		    for(int i_a = 0; i_a < archLs.size(); i_a++)
+			if(arch.at().period(archLs[i_a]) == vper)
 			    vbeg = vmax(reqBeg,arch.at().begin(archLs[i_a]));
 		}
 		aNd->setAttr("tm",TSYS::ll2str(vbeg))->setAttr("per",TSYS::ll2str(vper));
@@ -222,52 +222,52 @@ void TValue::cntrCmdProc( XMLNode *opt )
 
 		bool firstVal = true;
 		string vl;
-		for( vbeg = buf.begin(); vbeg <= buf.end(); vbeg++ )
+		for(vbeg = buf.begin(); vbeg <= buf.end(); vbeg++)
 		{
 		    vl = buf.getS(&vbeg,true);
-		    if( firstVal && vl == EVAL_STR ) continue;
-		    if( firstVal && vl != EVAL_STR ) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
+		    if(firstVal && vl == EVAL_STR) continue;
+		    if(firstVal && vl != EVAL_STR) { aNd->setAttr("tm",TSYS::ll2str(vbeg)); firstVal = false; }
 		    aNd->childAdd("v")->setText(vl);
 		}
 
-		if( !aNd->childSize() ) { opt->childDel(aNd); i_a--; }
+		if(!aNd->childSize()) { opt->childDel(aNd); i_a--; }
 	    }
 	}
-	if( ctrChkNode(opt,"set",RWRWRW,"root","root",SEC_WR) )		//Multi attributes set
-	    for( int i_el = 0; i_el < opt->childSize(); i_el++ )
+	if(ctrChkNode(opt,"set",RWRWRW,"root",SDAQ_ID,SEC_WR))		//Multi attributes set
+	    for(int i_el = 0; i_el < opt->childSize(); i_el++)
 		vlAt(opt->childGet(i_el)->attr("id")).at().setS(opt->childGet(i_el)->text());
 	return;
     }
 
     //> Interface comands process
     //>> Info command process
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName(),0664,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("area",opt,-1,"/val",_("Attributes")))
 	{
 	    //>>> Add attributes list
 	    vlList(list_c);
-	    for( int i_el = 0; i_el < list_c.size(); i_el++ )
+	    for(int i_el = 0; i_el < list_c.size(); i_el++)
 		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
 	{
 	    //>>> Archiving
-	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),0664,"root","root",1,"key","atr"))
+	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),RWRWR_,"root",SARH_ID,1,"key","atr"))
 	    {
 		vector<string> list_c2;
-		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Attribute"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Attribute"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		SYS->archive().at().modList(list_c);
-		for( int i_ta = 0; i_ta < list_c.size(); i_ta++ )
+		for(int i_ta = 0; i_ta < list_c.size(); i_ta++)
 		{
 		    SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
-		    for( int i_a = 0; i_a < list_c2.size(); i_a++ )
+		    for(int i_a = 0; i_a < list_c2.size(); i_a++)
 		    {
 			string a_id = SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId();
-			ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,0664,"root","root",1,"tp","bool");
+			ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,RWRWR_,"root",SARH_ID,1,"tp","bool");
 		    }
 		}
 	    }
@@ -275,48 +275,48 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //>> Process command to page
-    if( a_path.substr(0,4) == "/val" )
+    if(a_path.substr(0,4) == "/val")
     {
-	if( a_path.size() > 9 && a_path.substr(0,9) == "/val/sel_" && ctrChkNode(opt) )
+	if(a_path.size() > 9 && a_path.substr(0,9) == "/val/sel_" && ctrChkNode(opt))
 	{
 	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
-	    for( int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++ )
+	    for(int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++)
 		opt->childAdd("el")->setText(vl.at().fld().selNm()[i_a]);
 	    return;
 	}
 	AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
-	if( ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?0440:0660,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R___:RWRW__,"root",SDAQ_ID,SEC_RD))
 	{
 	    if( vl.at().fld().flg()&TFld::Selected )	opt->setText(vl.at().getSEL());
 	    else opt->setText( (vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(vl.at().getR(),6)) : 
 		    vl.at().getS() );
 	}
-	if( ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?0440:0660,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R___:RWRW__,"root",SDAQ_ID,SEC_WR))
 	{
-	    if( vl.at().fld().flg()&TFld::Selected )	vl.at().setSEL(opt->text());
+	    if(vl.at().fld().flg()&TFld::Selected)	vl.at().setSEL(opt->text());
 	    else					vl.at().setS(opt->text());
 	}
     }
-    else if( a_path == "/arch/arch" )
+    else if(a_path == "/arch/arch")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))
 	{
 	    vector<string> list_c2;
 	    //>>> Prepare headers
-	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",0444);
-	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",0664);
+	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",R_R_R_);
+	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",RWRWR_);
 	    SYS->archive().at().modList(list_c);
-	    for( int i_ta = 0; i_ta < list_c.size(); i_ta++ )
+	    for(int i_ta = 0; i_ta < list_c.size(); i_ta++)
 	    {
 		SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
-		for( int i_a = 0; i_a < list_c2.size(); i_a++ )
-		    ctrMkNode("list",opt,-1,("/arch/arch/"+SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId()).c_str(),"",0664);
+		for(int i_a = 0; i_a < list_c2.size(); i_a++)
+		    ctrMkNode("list",opt,-1,("/arch/arch/"+SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId()).c_str(),"",RWRWR_);
 	    }
 	    //>>> Fill table
 	    vlList(list_c);
-	    for( int i_v = 0; i_v < list_c.size(); i_v++ )
-		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+	    for(int i_v = 0; i_v < list_c.size(); i_v++)
+		for(int i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    XMLNode *chld = opt->childGet(i_a);
 		    string c_id = chld->attr("id");
@@ -326,7 +326,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			setText(vlAt(list_c[i_v]).at().arch().freeStat()?"0":(vlAt(list_c[i_v]).at().arch().at().archivatorPresent(c_id)?"1":"0"));
 		}
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))
 	{
 	    bool create = false;	//Create archive
 	    bool v_get = atoi(opt->text().c_str());
@@ -334,16 +334,16 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    string col  = opt->attr("col");
 
 	    //>>> Check for create new
-	    if( v_get && vlAt(attr).at().arch().freeStat() )
+	    if(v_get && vlAt(attr).at().arch().freeStat())
 	    {
 		//>>>> Make archive name
 		string a_nm = nodeName()+"_"+attr;
-		if( a_nm.size() > 20 ) a_nm = (nodeName().substr(0,nodeName().size()-nodeName().size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
+		if(a_nm.size() > 20) a_nm = (nodeName().substr(0,nodeName().size()-nodeName().size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
 		string rez_nm = a_nm;
-		for( int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++ )
+		for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
 		{
 		    rez_nm = a_nm+TSYS::int2str(p_cnt);
-		    if( rez_nm.size() > 20 ) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
+		    if(rez_nm.size() > 20) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
 		}
 		//>>>> Create new archive
 		SYS->archive().at().valAdd(rez_nm);
@@ -356,21 +356,20 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		modif();
 	    }
 	    //>>> Check for delete archive
-	    if( col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat() )
+	    if(col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat())
 	    {
 		string a_id = vlAt(attr).at().arch().at().id();
 		SYS->archive().at().valDel(a_id,true);
 		modif();
 	    }
 	    //>>> Change archivator status
-	    if( col != "prc" && !vlAt(attr).at().arch().freeStat() )
+	    if(col != "prc" && !vlAt(attr).at().arch().freeStat())
 	    {
-		if( v_get )	vlAt(attr).at().arch().at().archivatorAttach(col);
+		if(v_get)	vlAt(attr).at().arch().at().archivatorAttach(col);
 		else		vlAt(attr).at().arch().at().archivatorDetach(col,true);
 		modif();
 		vlAt(attr).at().arch().at().modif();
 	    }
-
 	}
     }
     else TCntrNode::cntrCmdProc(opt);
@@ -781,26 +780,26 @@ void TVal::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/val"  )		//Values access
+    if(a_path == "/serv/val")		//Values access
     {
-	if( ctrChkNode(opt,"info",RWRWRW,"root","root",SEC_RD) )	//Value's data information
+	if(ctrChkNode(opt,"info",RWRWRW,"root",SDAQ_ID,SEC_RD) )	//Value's data information
 	{
-	    if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+	    if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
 	    else
 	    {
 		opt->setAttr("end","0")->setAttr("beg","0")->setAttr("per","0");
 		opt->setAttr("vtp",TSYS::int2str(fld().type()));
 	    }
 	}
-	else if( ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD) )    //Value's data request
+	else if(ctrChkNode(opt,"get",RWRWRW,"root",SDAQ_ID,SEC_RD))	//Value's data request
 	{
-	    if( !atoll(opt->attr("tm_grnd").c_str()) && opt->attr("arch").empty() )
+	    if(!atoll(opt->attr("tm_grnd").c_str()) && opt->attr("arch").empty())
 	    {
 		long long tm = atoll(opt->attr("tm").c_str());
 		opt->setText(getS(&tm));
 		opt->setAttr("tm",TSYS::ll2str(tm));
 	    }
-	    else if( !arch().freeStat() ) arch().at().cntrCmdProc(opt);
+	    else if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
 	    else throw TError(nodePath().c_str(),"Attribute doesn't have archive");
 	}
 	return;
@@ -808,7 +807,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 
     //> Interface comands process
     //>> Info command process
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
 	return;

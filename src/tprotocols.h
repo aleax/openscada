@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +22,8 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define  VER_PROT 3	//ProtocolS type modules version
+#define SPRT_VER	3		//ProtocolS type modules version
+#define SPRT_ID		"Protocol"
 
 #include <string>
 
@@ -108,14 +109,14 @@ class TProtocolS : public TSubSYS
 	TProtocolS( );
 	~TProtocolS( );
 
-	int subVer( ) 		{ return(VER_PROT); }
+	int subVer( )		{ return SPRT_VER; }
 
 	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }
 
 	string optDescr( );
 
     protected:
-	void load_();
+	void load_( );
 
     private:
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

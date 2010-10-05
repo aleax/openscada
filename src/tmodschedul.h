@@ -22,6 +22,8 @@
 #ifndef TMODSCHEDUL_H
 #define TMODSCHEDUL_H
 
+#define SMSH_ID		"ModSched"
+
 #include <pthread.h>
 
 #include "tsubsys.h"

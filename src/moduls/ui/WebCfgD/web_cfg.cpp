@@ -37,7 +37,7 @@
 #define MOD_ID		"WebCfgD"
 #define MOD_NAME	"Dynamic WEB configurator"
 #define MOD_TYPE	"UI"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.6.4"
 #define AUTORS		"Roman Savochenko"

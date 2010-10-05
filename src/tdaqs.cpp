@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,7 +34,7 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS("DAQ","Data acquisition",true), el_err("Error"),
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,"Data acquisition",true), el_err("Error"),
     mRdStLevel(0), mRdTaskPer(1), mRdRestConnTm(30), mRdRestDtTm(1), prcStRd(false), endrunRd(false), mRdPrcTm(0)
 {
     mTmplib = grpAdd("tmplb_");
@@ -531,7 +531,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     //> Service commands process
     if( a_path == "/serv/redundant" )	//Redundant service requests
     {
-	if( ctrChkNode(opt,"st",RWRWR_,"root","DAQ",SEC_RD) )
+	if( ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD) )
 	{
 	    opt->setAttr("StLevel",TSYS::int2str(rdStLevel()));
 	    map<string,bool> cntrLs;
@@ -550,99 +550,99 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root","DAQ",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
 	if( ctrMkNode("area",opt,0,"/redund",_("Redundance")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root","DAQ",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root","DAQ",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root","DAQ",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root","DAQ",1,"tp","real");
-	    if( ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root","DAQ",2,"key","st","s_com","add,del") )
+	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+	    if( ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root",SDAQ_ID,2,"key","st","s_com","add,del") )
 	    {
-		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root","DAQ",3,"tp","str","dest","select","select","/redund/lsSt");
-		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root","DAQ",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root","DAQ",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root","DAQ",1,"tp","real");
-		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
+		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root",SDAQ_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
-	    if( ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root","DAQ",1,"key","id") )
+	    if( ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root",SDAQ_ID,1,"key","id") )
 	    {
-		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Started"),RWRWR_,"root","DAQ",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redundant"),RWRWR_,"root","DAQ",4,"tp","dec","dest","select",
+		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Started"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redundant"),RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
 		    "sel_id",(TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)/*+";"+TSYS::int2str(TController::Symmetric)*/).c_str(),
 		    "sel_list",_("Off;Asymmetric"/*;Symmetric"*/));
-		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Preferable run"),RWRWR_,"root","DAQ",4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
-		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remoted"),R_R_R_,"root","DAQ",1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Preferable run"),RWRWR_,"root",SDAQ_ID,4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
+		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remoted"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
 	if( ctrMkNode("area",opt,1,"/tpllibs",_("Template libraries")) )
-	    ctrMkNode("list",opt,-1,"/tpllibs/lb",_("Template libraries"),RWRWR_,"root","DAQ",5,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_","idSz","20");
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root","DAQ",3,"tp","str","cols","90","rows","10");
+	    ctrMkNode("list",opt,-1,"/tpllibs/lb",_("Template libraries"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_","idSz","20");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SDAQ_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
 
     //> Process command to page
-    if( a_path == "/br/tmplb_" || a_path == "/tpllibs/lb" )
+    if(a_path == "/br/tmplb_" || a_path == "/tpllibs/lb")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    tmplLibList(lst);
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(tmplLibAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
-	if( ctrChkNode(opt,"del",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibUnreg(opt->attr("id"),1);
     }
-    else if( a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root","DAQ") )
+    else if(a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root",SDAQ_ID))
 	opt->setText(TSYS::strMess(_("Process time %.6g ms."),mRdPrcTm));
-    else if( a_path == "/redund/statLev" )
+    else if(a_path == "/redund/statLev")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(rdStLevel()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setRdStLevel(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(rdStLevel()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdStLevel(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/redund/tskPer" )
+    else if(a_path == "/redund/tskPer")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::real2str(rdTaskPer()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setRdTaskPer(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::real2str(rdTaskPer()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdTaskPer(atof(opt->text().c_str()));
     }
-    else if( a_path == "/redund/restConn" )
+    else if(a_path == "/redund/restConn")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(rdRestConnTm()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setRdRestConnTm(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(rdRestConnTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdRestConnTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/redund/restDtTm" )
+    else if(a_path == "/redund/restDtTm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::real2str(rdRestDtTm()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setRdRestDtTm(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::real2str(rdRestDtTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdRestDtTm(atof(opt->text().c_str()));
     }
-    else if( a_path == "/redund/sts" )
+    else if(a_path == "/redund/sts")
     {
 	ResAlloc res(nodeRes(),true);
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    XMLNode *n_st	= ctrMkNode("list",opt,-1,"/redund/sts/st","",RWRWR_,"root","DAQ");
-	    XMLNode *n_name	= ctrMkNode("list",opt,-1,"/redund/sts/name","",R_R_R_,"root","DAQ");
-	    XMLNode *n_live	= ctrMkNode("list",opt,-1,"/redund/sts/live","",R_R_R_,"root","DAQ");
-	    XMLNode *n_lev	= ctrMkNode("list",opt,-1,"/redund/sts/lev","",R_R_R_,"root","DAQ");
-	    XMLNode *n_cnt	= ctrMkNode("list",opt,-1,"/redund/sts/cnt","",R_R_R_,"root","DAQ");
-	    XMLNode *n_run	= ctrMkNode("list",opt,-1,"/redund/sts/run","",R_R_R_,"root","DAQ");
+	    XMLNode *n_st	= ctrMkNode("list",opt,-1,"/redund/sts/st","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *n_name	= ctrMkNode("list",opt,-1,"/redund/sts/name","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *n_live	= ctrMkNode("list",opt,-1,"/redund/sts/live","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *n_lev	= ctrMkNode("list",opt,-1,"/redund/sts/lev","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *n_cnt	= ctrMkNode("list",opt,-1,"/redund/sts/cnt","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *n_run	= ctrMkNode("list",opt,-1,"/redund/sts/run","",R_R_R_,"root",SDAQ_ID);
 
-	    for( map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++ )
+	    for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	    {
-		if( n_st ) n_st->childAdd("el")->setText(sit->first);
-		if( n_name ) n_name->childAdd("el")->setText(SYS->transport().at().extHostGet("*",sit->first).name);
-		if( n_live ) n_live->childAdd("el")->setText(sit->second.isLive?"1":"0");
-		if( n_lev ) n_lev->childAdd("el")->setText(TSYS::int2str(sit->second.lev));
-		if( n_cnt ) n_cnt->childAdd("el")->setText(TSYS::real2str(sit->second.cnt));
-		if( n_run )
+		if(n_st) n_st->childAdd("el")->setText(sit->first);
+		if(n_name) n_name->childAdd("el")->setText(SYS->transport().at().extHostGet("*",sit->first).name);
+		if(n_live) n_live->childAdd("el")->setText(sit->second.isLive?"1":"0");
+		if(n_lev) n_lev->childAdd("el")->setText(TSYS::int2str(sit->second.lev));
+		if(n_cnt) n_cnt->childAdd("el")->setText(TSYS::real2str(sit->second.cnt));
+		if(n_run)
 		{
 		    string cls;
 		    for( map<string,bool>::iterator cit = sit->second.actCntr.begin(); cit != sit->second.actCntr.end(); cit++ )
@@ -651,77 +651,77 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","DAQ",SEC_WR) )	{ mSt["<newStat>"] = SStat(); modif(); }
-	if( ctrChkNode(opt,"del",RWRWR_,"root","DAQ",SEC_WR) )	{ mSt.erase(opt->attr("key_st")); modif(); }
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) && opt->attr("col") == "st" )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt["<newStat>"] = SStat(); modif(); }
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt.erase(opt->attr("key_st")); modif(); }
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && opt->attr("col") == "st")
 	{
 	    mSt.erase(opt->attr("key_st"));
 	    mSt[opt->text()] = SStat();
 	    modif();
 	}
     }
-    else if( a_path == "/redund/lsSt" && ctrChkNode(opt) )
+    else if(a_path == "/redund/lsSt" && ctrChkNode(opt))
     {
 	vector<string> hls;
 	SYS->transport().at().extHostList("*",hls);
-	for( int i_h = 0; i_h < hls.size(); i_h++ )
+	for(int i_h = 0; i_h < hls.size(); i_h++)
 	    opt->childAdd("el")->setText(hls[i_h]);
     }
-    else if( a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD) )
+    else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD))
     {
 	SYS->transport().at().setSysHost(true);
 	opt->setText("/Transport");
     }
-    else if( a_path == "/redund/cntr" )
+    else if(a_path == "/redund/cntr")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/redund/cntr/id","",R_R_R_,"root","DAQ");
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/redund/cntr/nm","",R_R_R_,"root","DAQ");
-	    XMLNode *n_start	= ctrMkNode("list",opt,-1,"/redund/cntr/start","",RWRWR_,"root","DAQ");
-	    XMLNode *n_rdndt	= ctrMkNode("list",opt,-1,"/redund/cntr/rdndt","",RWRWR_,"root","DAQ");
-	    XMLNode *n_prefRun	= ctrMkNode("list",opt,-1,"/redund/cntr/prefRun","",RWRWR_,"root","DAQ");
-	    XMLNode *n_rem	= ctrMkNode("list",opt,-1,"/redund/cntr/remoted","",R_R_R_,"root","DAQ");
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/redund/cntr/id","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/redund/cntr/nm","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *n_start	= ctrMkNode("list",opt,-1,"/redund/cntr/start","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *n_rdndt	= ctrMkNode("list",opt,-1,"/redund/cntr/rdndt","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *n_prefRun	= ctrMkNode("list",opt,-1,"/redund/cntr/prefRun","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *n_rem	= ctrMkNode("list",opt,-1,"/redund/cntr/remoted","",R_R_R_,"root",SDAQ_ID);
 
 	    vector<string> mls, cls;
 	    modList(mls);
 	    AutoHD<TController> cntr;
-	    for( int i_m = 0; i_m < mls.size(); i_m++ )
+	    for(int i_m = 0; i_m < mls.size(); i_m++)
 	    {
-		if( !at(mls[i_m]).at().redntAllow() ) continue;
+		if(!at(mls[i_m]).at().redntAllow()) continue;
 		at(mls[i_m]).at().list(cls);
-		for( int i_c = 0; i_c < cls.size(); i_c++ )
+		for(int i_c = 0; i_c < cls.size(); i_c++)
 		{
 		    cntr = at(mls[i_m]).at().at(cls[i_c]);
-		    if( n_id )		n_id->childAdd("el")->setText(mls[i_m]+"."+cls[i_c]);
-		    if( n_nm )		n_nm->childAdd("el")->setText(cntr.at().name());
-		    if( n_start )	n_start->childAdd("el")->setText(cntr.at().startStat()?"1":"0");
-		    if( n_rdndt )	n_rdndt->childAdd("el")->setText(TSYS::int2str(cntr.at().redntMode()));
-		    if( n_prefRun )	n_prefRun->childAdd("el")->setText(cntr.at().redntRun());
-		    if( n_rem )		n_rem->childAdd("el")->setText(cntr.at().redntUse( )?"1":"0");
+		    if(n_id)		n_id->childAdd("el")->setText(mls[i_m]+"."+cls[i_c]);
+		    if(n_nm)		n_nm->childAdd("el")->setText(cntr.at().name());
+		    if(n_start)		n_start->childAdd("el")->setText(cntr.at().startStat()?"1":"0");
+		    if(n_rdndt)		n_rdndt->childAdd("el")->setText(TSYS::int2str(cntr.at().redntMode()));
+		    if(n_prefRun)	n_prefRun->childAdd("el")->setText(cntr.at().redntRun());
+		    if(n_rem)		n_rem->childAdd("el")->setText(cntr.at().redntUse( )?"1":"0");
 		}
 	    }
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string col = opt->attr("col");
 	    AutoHD<TController> cntr  = at(TSYS::strSepParse(opt->attr("key_id"),0,'.')).at().
 					at(TSYS::strSepParse(opt->attr("key_id"),1,'.'));
-	    if( col == "start" ) atoi(opt->text().c_str()) ? cntr.at().start() : cntr.at().stop();
-	    else if( col == "rdndt" ) cntr.at().setRedntMode((TController::Redundant)atoi(opt->text().c_str()));
-	    else if( col == "prefRun" ) cntr.at().setRedntRun(opt->text());
+	    if(col == "start") atoi(opt->text().c_str()) ? cntr.at().start() : cntr.at().stop();
+	    else if(col == "rdndt") cntr.at().setRedntMode((TController::Redundant)atoi(opt->text().c_str()));
+	    else if(col == "prefRun") cntr.at().setRedntRun(opt->text());
 	}
     }
-    else if( a_path == "/redund/lsMode" && ctrChkNode(opt) )
+    else if(a_path == "/redund/lsMode" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id","<high>")->setText(_("<High level>"));
 	opt->childAdd("el")->setAttr("id","<low>")->setText(_("<Low level>"));
 	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
 	vector<string> sls;
 	rdStList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root","DAQ") )	opt->setText(optDescr());
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID))	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }

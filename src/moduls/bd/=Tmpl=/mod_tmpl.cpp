@@ -37,7 +37,7 @@
 #define MOD_ID		"PostgreSQL"
 #define MOD_NAME	"DB PostgreSQL"
 #define MOD_TYPE	"BD"
-#define VER_TYPE	VER_BD
+#define VER_TYPE	SDB_VER
 #define VERSION		"0.5.0"
 #define AUTORS		"Maxim Lysenko"
 #define DESCRIPTION	"BD module. Provides support of the BD PostgreSQL."

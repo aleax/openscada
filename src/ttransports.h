@@ -22,7 +22,8 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define  VER_TR 1    //TransportS type modules version
+#define STR_VER		1		//TransportS type modules version
+#define STR_ID		"Transport"
 
 #include <string>
 
@@ -256,7 +257,7 @@ class TTransportS : public TSubSYS
 	TTransportS( );
 	~TTransportS( );
 
-	int subVer( )			{ return VER_TR; }
+	int subVer( )			{ return STR_VER; }
 	void inTrList( vector<string> &ls );
 	void outTrList( vector<string> &ls );
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -165,37 +165,37 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
 
     //> Service commands process
-    if( a_path.substr(0,6) == "/serv/" ) { TValue::cntrCmdProc(opt); return; }
+    if(a_path.substr(0,6) == "/serv/")	{ TValue::cntrCmdProc(opt); return; }
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TValue::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name(),0664,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),0444,"root","root",1,"tp","str");
-		if( owner().enableStat() )
-		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		if(owner().enableStat())
+		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root","root",0664);
+		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDAQ_ID,RWRWR_);
 	}
         return;
     }
     //> Process command to page
-    if( a_path == "/prm/st/type" && ctrChkNode(opt) )	opt->setText(type().name);
-    else if( a_path == "/prm/st/en" )
+    if(a_path == "/prm/st/type" && ctrChkNode(opt))	opt->setText(type().name);
+    else if(a_path == "/prm/st/en")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    if( !owner().enableStat() )	throw TError(nodePath().c_str(),"Controller is not started!");
+	    if(!owner().enableStat())	throw TError(nodePath().c_str(),"Controller is not started!");
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }
-    else if( a_path.substr(0,8) == "/prm/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",0664);
+    else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
     else TValue::cntrCmdProc(opt);
 }

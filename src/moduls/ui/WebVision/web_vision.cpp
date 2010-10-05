@@ -34,7 +34,7 @@
 #define MOD_ID		"WebVision"
 #define MOD_NAME	"Operation user interface (WEB)"
 #define MOD_TYPE	"UI"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.8.0"
 #define AUTORS		"Roman Savochenko"

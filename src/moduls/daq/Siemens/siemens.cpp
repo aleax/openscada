@@ -42,7 +42,7 @@
 #define MOD_ID		"Siemens"
 #define MOD_NAME	"Siemens DAQ"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"1.2.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."

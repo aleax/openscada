@@ -45,7 +45,7 @@
 #define MOD_ID		"Sockets"
 #define MOD_NAME	"Sockets"
 #define MOD_TYPE	"Transport"
-#define VER_TYPE	VER_TR
+#define VER_TYPE	STR_VER
 #define VERSION		"1.4.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."

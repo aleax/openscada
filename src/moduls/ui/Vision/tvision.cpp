@@ -44,7 +44,7 @@
 #define MOD_ID		"Vision"
 #define MOD_NAME	"Operation user interface (QT)"
 #define MOD_TYPE	"UI"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
 #define VERSION		"0.9.6"
 #define AUTORS		"Roman Savochenko"

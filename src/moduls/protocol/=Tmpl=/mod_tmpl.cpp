@@ -40,7 +40,7 @@
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	"Protocol template"
 #define MOD_TYPE	"Protocol"
-#define VER_TYPE	VER_PROT
+#define VER_TYPE	SPRT_VER
 #define M_VERSION	"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Protocol's subsystem template module."

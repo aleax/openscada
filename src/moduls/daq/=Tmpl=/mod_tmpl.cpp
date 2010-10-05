@@ -42,7 +42,7 @@
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	"DAQ template"
 #define MOD_TYPE	"DAQ"
-#define VER_TYPE	VER_CNTR
+#define VER_TYPE	SDAQ_VER
 #define VERSION		"0.0.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"DAQ's subsystem template module."

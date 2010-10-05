@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define DAQ_ID		"OPC_UA"
 #define DAQ_NAME	"OPC UA"
 #define DAQ_TYPE	"DAQ"
-#define DAQ_SUBVER	VER_CNTR
+#define DAQ_SUBVER	SDAQ_VER
 #define DAQ_MVER	"0.5.0"
 #define DAQ_AUTOR	"Roman Savochenko"
 #define DAQ_DESCR	"Allow realisation of OPC UA client service."

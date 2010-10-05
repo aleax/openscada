@@ -35,7 +35,7 @@
 #define MOD_ID		"FSArch"
 #define MOD_NAME	"File system archivator"
 #define MOD_TYPE	"Archive"
-#define VER_TYPE	VER_ARH
+#define VER_TYPE	SARH_VER
 #define VERSION		"1.4.0"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to file system."

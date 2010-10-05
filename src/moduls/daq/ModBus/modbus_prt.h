@@ -38,7 +38,7 @@ using namespace OSCADA;
 #define PRT_ID		"ModBus"
 #define PRT_NAME	"ModBUS"
 #define PRT_TYPE	"Protocol"
-#define PRT_SUBVER	VER_PROT
+#define PRT_SUBVER	SPRT_VER
 #define PRT_MVER	"0.6.0"
 #define PRT_AUTORS	"Roman Savochenko"
 #define PRT_DESCR	"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."

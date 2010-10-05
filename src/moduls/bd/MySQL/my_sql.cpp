@@ -35,7 +35,7 @@
 #define MOD_ID		"MySQL"
 #define MOD_NAME	"DB MySQL"
 #define MOD_TYPE	"BD"
-#define VER_TYPE	VER_BD
+#define VER_TYPE	SDB_VER
 #define VERSION		"1.6.1"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"BD module. Provides support of the BD MySQL."
@@ -228,11 +228,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	MYSQL_ROW row;
 
 	vector<string> fld;
-	//- Add head -
+	//> Add head
 	for( int i=0; i < num_fields; i++ )
 	    fld.push_back(mysql_fetch_field_direct(res,i)->name);
 	tbl->push_back(fld);
-	//- Add data -
+	//> Add data
 	while( (row = mysql_fetch_row(res)) )
 	{
 	    fld.clear();
@@ -251,8 +251,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
-	    "tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
 	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>].\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
@@ -284,7 +283,7 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 	    TSYS::strEncode(name,TSYS::SQL)+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
 	owner().sqlReq( req );
     }
-    //- Get table structure description -
+    //> Get table structure description
     req ="DESCRIBE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name,TSYS::SQL)+"`";
     owner().sqlReq(req,&tblStrct);
     //req = "SELECT * FROM `"+TSYS::strEncode(name,TSYS::SQL)+"` LIMIT 0,1";
@@ -724,7 +723,7 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
 	    req=req+"tinyint(1) NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
 	    break;
     }
-    //- Position param -
+    //> Position param
     //if( last.size() )	req=req+"AFTER `"+last+"` ";
 }
 

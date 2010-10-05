@@ -37,7 +37,7 @@
 #define MOD_ID		"QTCfg"
 #define MOD_NAME	"System configurator (QT)"
 #define MOD_TYPE	"UI"
-#define VER_TYPE	VER_UI
+#define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
 #define VERSION		"1.8.3"
 #define AUTORS		"Roman Savochenko"

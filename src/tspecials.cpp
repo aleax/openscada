@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tspecials.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,7 +30,7 @@ using namespace OSCADA;
 //*************************************************
 //* TSpecialS                                     *
 //*************************************************
-TSpecialS::TSpecialS( ) : TSubSYS("Special","Specials",true)
+TSpecialS::TSpecialS( ) : TSubSYS(SSPC_ID,"Specials",true)
 {
 
 }
@@ -43,7 +43,7 @@ string TSpecialS::optDescr( )
 
 void TSpecialS::load_( )
 {
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -63,22 +63,22 @@ void TSpecialS::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config file
 
 }
 
 void TSpecialS::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SSPC_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","root") )	opt->setText(optDescr());
+    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SSPC_ID))	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -92,21 +92,21 @@ TSpecial::TSpecial() : run_st(false)
 
 void TSpecial::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/prm",_("Special"));
 	ctrMkNode("area",opt,-1,"/prm/st",_("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),0664,"root","root",1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SSPC_ID,1,"tp","bool");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/st" )
+    if(a_path == "/prm/st/st")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	atoi(opt->text().c_str())?modStart():modStop();
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSPC_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSPC_ID,SEC_WR))	atoi(opt->text().c_str())?modStart():modStop();
     }
     else TModule::cntrCmdProc(opt);
 }

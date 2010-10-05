@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -21,6 +21,8 @@
 
 #ifndef TSECURITY_H
 #define TSECURITY_H
+
+#define SSEC_ID		"Security"
 
 #include "tbds.h"
 
@@ -147,7 +149,7 @@ class TSecurity : public TSubSYS
 
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 
-	//- Users -
+	//> Users
 	void usrList( vector<string> &list )		{ chldList(m_usr,list); }
 	void usrGrpList( const string &name, vector<string> &list );
 	bool usrPresent( const string &name )		{ return chldPresent(m_usr,name); }
@@ -155,7 +157,7 @@ class TSecurity : public TSubSYS
 	void usrDel( const string &name, bool complete = false );
 	AutoHD<TUser> usrAt( const string &name )	{ return chldAt(m_usr,name); }
 
-	//- Groups -
+	//> Groups
 	void grpList( vector<string> &list )		{ chldList(m_grp,list); }
 	bool grpPresent( const string &name )		{ return chldPresent(m_grp,name); }
 	void grpAdd( const string &name, const string &db = "*.*" );

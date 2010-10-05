@@ -33,7 +33,7 @@
 #define MOD_ID		"SelfSystem"
 #define MOD_NAME	"Self system OpenSCADA protocol"
 #define MOD_TYPE	"Protocol"
-#define VER_TYPE	VER_PROT
+#define VER_TYPE	SPRT_VER
 #define VERSION		"0.9.2"
 #define AUTORS		"Roman Savochenko"
 #define DESCRIPTION	"Self OpenSCADA protocol, support generic functions."

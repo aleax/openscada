@@ -1,6 +1,6 @@
 //OpenSCADA system file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,7 +34,7 @@ using namespace OSCADA;
 //*************************************************
 //* TUIS                                          *
 //*************************************************
-TUIS::TUIS( ) : TSubSYS("UI","User interfaces",true)
+TUIS::TUIS( ) : TSubSYS(SUI_ID,"User interfaces",true)
 {
     gdFTUseFontConfig(1);
 }
@@ -131,15 +131,15 @@ string TUIS::icoPath( const string &ico, const string &tp )
 void TUIS::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","10");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) ) opt->setText(optDescr());
+    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -159,16 +159,16 @@ void TUI::cntrCmdProc( XMLNode *opt )
 	TModule::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm",_("User interface")))
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
-		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Runing"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Runing"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/r_st" )
+    if(a_path == "/prm/st/r_st")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(run_st?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	atoi(opt->text().c_str())?modStart():modStop();
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	atoi(opt->text().c_str())?modStart():modStop();
     }
     else TModule::cntrCmdProc(opt);
 }
