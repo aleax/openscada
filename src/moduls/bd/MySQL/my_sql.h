@@ -47,7 +47,7 @@ class MTable : public TTable
     public:
 	//Public methods
 	MTable(string name, MBD *iown, bool create);
-	~MTable(  );
+	~MTable( );
 
 	//- Field's functions -
 	void fieldStruct( TConfig &cfg );

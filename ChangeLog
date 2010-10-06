@@ -1,3 +1,12 @@
+2010-10-06 Roman
+- !!:SYS: The source tree version is changed to 0.7.0. RPM-build speck files is changed for build version 0.7.0 packages.
+- SYS: Some DB-modules icons is updated.
+- FIX:Archives: Archive's items loading is fixed for some modules missing.
+- !!!!:DB.FireBird: Multi-language support is added. Transaction support is made unified.
+- FIX:DB.PostgreSQL: Some fixes is added.
+- Special.SystemTests: DB modules tests is expanded for special symbols ["] and ['] into text's values test.
+
+
 2010-10-05 Roman
 - !!!!:SYS: Permitions to all control interface's items is made unified.
 - !!:SYS: Core translation to Russian, Ukrainian and German is updated.

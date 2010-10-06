@@ -93,7 +93,7 @@ class TestDB : public TFunction
 		for(int i_fld = 0; i_fld < experem; i_fld++)
 		{
 		    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
-		    bd_cfg.cfg("descr").setS("Shifr "+SYS->int2str(i_fld));
+		    bd_cfg.cfg("descr").setS("Shifr '"+SYS->int2str(i_fld)+"'");
 		    bd_cfg.cfg("val").setR(sqrt(i_fld));
 		    bd_cfg.cfg("id").setI(i_fld);
 		    bd_cfg.cfg("stat").setB((i_fld%2)==0?true:false);
@@ -107,7 +107,7 @@ class TestDB : public TFunction
 		for(int i_fld = 0; i_fld < experem; i_fld++)
 		{
 		    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));
-		    bd_cfg.cfg("descr").setS("New shifr "+SYS->int2str(i_fld));
+		    bd_cfg.cfg("descr").setS("New shifr \""+SYS->int2str(i_fld)+"\"");
 		    bd_cfg.cfg("val").setR(2.*sqrt(i_fld));
 		    bd_cfg.cfg("id").setI(2*i_fld);
 		    bd_cfg.cfg("stat").setB((i_fld%2)==0?false:true);
@@ -131,7 +131,7 @@ class TestDB : public TFunction
 		    if( bd_cfg.cfg("name").getS() != (string("Sh")+SYS->int2str(i_fld)) )
 			throw TError(nodePath().c_str(),_("Field <Sh> '%s' != '%s' error."),
 			    bd_cfg.cfg("name").getS().c_str(),(string("Sh")+SYS->int2str(i_fld)).c_str());
-		    if( bd_cfg.cfg("descr").getS() != (string("New shifr ")+SYS->int2str(i_fld)) )
+		    if( bd_cfg.cfg("descr").getS() != (string("New shifr \"")+SYS->int2str(i_fld)+"\"") )
 			throw TError(nodePath().c_str(),_("Field <descr> '%s' != '%s' error."),
 			    bd_cfg.cfg("descr").getS().c_str(),(string("New shifr ")+SYS->int2str(i_fld)).c_str() );
 		    //ceil(100.*bd_cfg.cfg("val").getR()) != ceil(2.*sqrt(i_fld)) ||
@@ -150,7 +150,7 @@ class TestDB : public TFunction
 		tbl.at().fieldSet(bd_cfg);
 		bd_cfg.cfg("name").setS("Sh2");
 		tbl.at().fieldGet(bd_cfg);
-		if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr 2" ||
+		if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr \"2\"" ||
 		    bd_cfg.cfg("id").getI() != 4 || bd_cfg.cfg("stat").getB() != false )
 		{
 		    mod->mess(id(),_("Record #2='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."),
@@ -166,7 +166,7 @@ class TestDB : public TFunction
 		tbl.at().fieldSet(bd_cfg);
 		bd_cfg.cfg("name").setS("Sh2");
 		tbl.at().fieldGet(bd_cfg);
-		if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr 2" ||
+		if( bd_cfg.cfg("name").getS() != "Sh2" || bd_cfg.cfg("descr").getS() != "New shifr \"2\"" ||
 		    bd_cfg.cfg("id").getI() != 4 || bd_cfg.cfg("stat").getB() != false )
 		{
 

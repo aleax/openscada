@@ -68,7 +68,6 @@ class MTable : public TTable
 
 	//Private attributes
 	vector< vector<string> > tblStrct;
-	isc_tr_handle		trans;
 };
 
 //************************************************
@@ -87,11 +86,11 @@ class MBD : public TBD
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
-	void sqlReq( isc_tr_handle *trans, const string &req, vector< vector<string> > *tbl = NULL );
 	string clrEndSpace( const string &vl );
 
-	void transOpen( isc_tr_handle *trans );
-	void transCommit( isc_tr_handle *trans );
+	void transOpen( );
+	void transCommit( );
+	void transCloseCheck( );
 
     protected:
 	//Protected methods
@@ -107,6 +106,9 @@ class MBD : public TBD
 	//Private attributes
 	string		user, pass, fdb, cd_pg;
 	isc_db_handle	hdb;
+	isc_tr_handle	htrans;
+	int		reqCnt;
+	time_t		reqCntTm, trOpenTm;
 	Res		conn_res;
 };
 

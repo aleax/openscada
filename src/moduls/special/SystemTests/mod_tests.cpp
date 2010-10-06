@@ -278,7 +278,7 @@ void TTest::cntrCmdProc( XMLNode *opt )
     {
 	TSpecial::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root","root",2,"idm","1","idSz","20");
-	if(ctrMkNode("area",opt,-1,"/tests",_("Tests")))
+	if(ctrMkNode("area",opt,1,"/tests",_("Tests")))
 	{
 	    ctrMkNode("fld",opt,-1,"/tests/nmb",_("Number"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/tests/tests",_("Tests"),R_R_R_,"root","root",4,"tp","br","idm","1","br_pref","test_","idSz","20");

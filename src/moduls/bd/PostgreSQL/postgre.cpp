@@ -204,6 +204,10 @@ void MBD::disable( )
 {
     if( !enableStat() )  return;
     TBD::disable( );
+
+    //> Last commit
+    if(reqCnt) transCommit();
+
     ResAlloc resource(conn_res,true);
     PQfinish( connection );
 }
@@ -235,7 +239,7 @@ TTable *MBD::openTable( const string &inm, bool create )
 void MBD::transOpen( )
 {
     //> Check for limit into one trinsaction
-    if( reqCnt > 1000 ) transCommit( );
+    if(reqCnt > 1000) transCommit( );
 
     ResAlloc resource(conn_res,true);
     PGTransactionStatusType tp;
@@ -425,7 +429,6 @@ MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
 void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 {
     //> Get generic data structure
-    owner().transCommit();
     string req = "SELECT a.attname as \"Field\", pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Type\" "
 		 "FROM pg_catalog.pg_attribute a "
 		 "WHERE a.attnum > 0 "
@@ -438,7 +441,7 @@ void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 		    "WHERE c.relname ~ '^(" + TSYS::strEncode(name,TSYS::SQL) + ")$' "
 		    "AND pg_catalog.pg_table_is_visible(c.oid) "
 		 ")";
-    owner().sqlReq(req,&tblStrct);
+    owner().sqlReq(req,&tblStrct,false);
     if( tblStrct.size( ) > 1 )
     {
 	//> Get keys
@@ -449,7 +452,7 @@ void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 	      "AND i.indisprimary AND i.indisunique "
 	      "AND a.attrelid=c2.oid "
 	      "AND a.attnum>0;";
-	owner().sqlReq(req,&keyLst);
+	owner().sqlReq(req,&keyLst,false);
 	tblStrct[0].push_back("Key");
 	for( int i_f = 1; i_f < tblStrct.size(); i_f++ )
 	{
@@ -494,7 +497,6 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    //owner().transCommit();
     string sid;
     //> Make SELECT and WHERE
     string req = "SELECT ";
@@ -527,8 +529,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     //> Request
     if( first_sel ) return false;
-    req = req + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " +
-	((next)?req_where:"") + " LIMIT 1 OFFSET " + TSYS::int2str(row);
+    req = req + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " + (next?req_where:"") + " LIMIT 1 OFFSET " + TSYS::int2str(row);
     owner().sqlReq( req, &tbl, false );
     if( tbl.size() < 2 ) return false;
     for( int i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -551,7 +552,6 @@ void MTable::fieldGet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    //owner().transCommit();
     string sid;
     //> Prepare request
     string req = "SELECT ";
@@ -607,7 +607,6 @@ void MTable::fieldSet( TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    //owner().transOpen();
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
@@ -693,7 +692,7 @@ void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = time(NULL);
-    //owner().transOpen();
+
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -718,7 +717,6 @@ void MTable::fieldDel( TConfig &cfg )
 void MTable::fieldFix( TConfig &cfg )
 {
     bool next = false, next_key = false;
-    //owner().transCommit();
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
 
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -735,7 +733,7 @@ void MTable::fieldFix( TConfig &cfg )
 	int i_cf;
 	for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	    if( cf_el[i_cf] == tblStrct[i_fld][0] ||
-		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 && 
+		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 &&
 		    tblStrct[i_fld][0].substr(2) == ("#"+cf_el[i_cf]) && tblStrct[i_fld][0].substr(0,2) != Mess->lang2CodeBase()) )
 	    {
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
@@ -769,6 +767,8 @@ void MTable::fieldFix( TConfig &cfg )
 	if( i_cf >= cf_el.size() )
 	{
 	    req = req + (next?",DROP \"":"DROP \"") + TSYS::strEncode(tblStrct[i_fld][0],TSYS::SQL) + "\" ";
+	    tblStrct.erase(tblStrct.begin()+i_fld);
+	    i_fld--;
 	    next = true;
 	}
     }
@@ -814,7 +814,7 @@ void MTable::fieldFix( TConfig &cfg )
 	{
 	    if( !next ) next = true; else req=req+",";
 	    //>> Add field
-	    req=req+"ADD COLUMN \""+TSYS::strEncode(cf_el[i_cf],TSYS::SQL)+"\" "+f_tp;
+	    req = req + "ADD \"" + TSYS::strEncode(cf_el[i_cf],TSYS::SQL) + "\" " + f_tp;
 	}
 	//> Check other languages
 	if( u_cfg.fld().flg()&TCfg::TransltText )
@@ -826,7 +826,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    tblStrct[i_c][0].substr(0,2) == Mess->lang2Code() ) break;
 	    if( i_c >= tblStrct.size() && isVarTextTransl )
 	    {
-		req = req + (next?",ADD \"":"ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_cf],TSYS::SQL) + "\" "+f_tp;
+		req = req + (next?",ADD \"":"ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_cf],TSYS::SQL) + "\" " + f_tp;
 		next = true;
 	    }
 	}
@@ -839,7 +839,6 @@ void MTable::fieldFix( TConfig &cfg )
 	//> Update structure information
 	getStructDB( name(), tblStrct );
     }
-    //owner().transOpen();
 }
 
 

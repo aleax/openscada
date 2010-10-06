@@ -26,7 +26,8 @@
 #include <vector>
 
 #include <tcntrnode.h>
-#include <freefunc.h>
+
+#include "freefunc.h"
 
 using std::string;
 using std::vector;

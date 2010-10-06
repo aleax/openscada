@@ -23,7 +23,6 @@
 #include <getopt.h>
 #include <string.h>
 
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>

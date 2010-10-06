@@ -33,7 +33,6 @@
 #include "openssl/hmac.h"
 #include "openssl/evp.h"
 
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>

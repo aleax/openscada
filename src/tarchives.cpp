@@ -151,20 +151,21 @@ void TArchiveS::load_( )
 
 	//>> Search int DB and create new archivators
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc","",fld_cnt++,c_el); )
+	for(int i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc","",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
-		if( !at(type).at().messPresent(id) ) at(type).at().messAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(modPresent(type) && !at(type).at().messPresent(id))
+		    at(type).at().messAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 	//>> Search into config file and create new archivators
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
-		if( !at(type).at().messPresent(id) ) at(type).at().messAdd(id,"*.*");
+		if(modPresent(type) && !at(type).at().messPresent(id)) at(type).at().messAdd(id,"*.*");
 	    }
     }catch( TError err )
     {
@@ -181,20 +182,21 @@ void TArchiveS::load_( )
 
 	//>> Search into DB and create new archivators
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc","",fld_cnt++,c_el); )
+	for(int i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc","",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
-		if( !at(type).at().valPresent(id) ) at(type).at().valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(modPresent(type) && !at(type).at().valPresent(id))
+		    at(type).at().valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 	//>> Search into config file and create new archivators
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
-		if( !at(type).at().valPresent(id) ) at(type).at().valAdd(id,"*.*");
+		if(modPresent(type) && !at(type).at().valPresent(id)) at(type).at().valAdd(id,"*.*");
 	    }
     }catch( TError err )
     {
@@ -211,20 +213,20 @@ void TArchiveS::load_( )
 
 	//>> Search into DB and create new archives
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val","",fld_cnt++,c_el); )
+	for(int i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val","",fld_cnt++,c_el); )
 	    {
 	        id = c_el.cfg("ID").getS();
-	        if( !valPresent(id) ) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	        if(!valPresent(id)) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 	//>> Search into config file and create new archives
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
-		if( !valPresent(id) ) valAdd(id,"*.*");
+		if(!valPresent(id)) valAdd(id,"*.*");
 	    }
-    }catch( TError err )
+    }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Value archives load error."));
