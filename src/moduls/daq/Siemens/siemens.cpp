@@ -72,9 +72,10 @@ using namespace Siemens;
 //************************************************
 //* TTpContr                                     *
 //************************************************
-TTpContr::TTpContr( string name ) : drv_CIF_OK(false)
+TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), drv_CIF_OK(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -82,8 +83,6 @@ TTpContr::TTpContr( string name ) : drv_CIF_OK(false)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TTpContr::~TTpContr( )

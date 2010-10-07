@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,12 +30,12 @@
 //******************************************************************************
 //* Modul info!                                                                *
 #define MOD_ID		"FireBird"
-#define MOD_NAME	"DB FireBird"
-#define MOD_TYPE	"BD"
+#define MOD_NAME	_("DB FireBird")
+#define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define VERSION		"0.9.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"DB module. Provides support of the DB FireBird."
+#define VERSION		"0.9.5"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
 //******************************************************************************
 
@@ -62,9 +62,10 @@ using namespace FireBird;
 //*************************************************
 //* FireBird::BDMod				  *
 //*************************************************
-BDMod::BDMod(string name)
+BDMod::BDMod(string name) : TTipBD(MOD_ID)
 {
-    mId 	= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -72,8 +73,6 @@ BDMod::BDMod(string name)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 BDMod::~BDMod( )
@@ -425,10 +424,10 @@ string MBD::clrEndSpace( const string &vl )
 void MBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","help",
 	    _("FireBird address to DB must be written as: [<file>;<user>;<pass>].\n"
 	      "Where:\n"
 	      "  file - full DB file;\n"
@@ -446,7 +445,7 @@ MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)/*, trans(0)*/
 {
     setNodePrev(iown);
 
-    if( create )
+    if(create)
     {
 	string req = "EXECUTE BLOCK AS BEGIN "
 	    "if (not exists(select 1 from rdb$relations where rdb$relation_name = '"+mod->sqlReqCode(name())+"')) then "
@@ -456,7 +455,7 @@ MTable::MTable(string inm, MBD *iown, bool create ) : TTable(inm)/*, trans(0)*/
     }
     //> Get table structure description
     getStructDB( tblStrct );
-    if( tblStrct.size() <= 1 )
+    if(tblStrct.size() <= 1)
 	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Table '%s' is not present."),name().c_str());
 }
 
@@ -468,10 +467,9 @@ MTable::~MTable(  )
 void MTable::postDisable(int flag)
 {
     owner().transCommit( );
-    if( flag )
+    if(flag)
     {
-	try
-	{ owner().sqlReq("DROP TABLE \""+mod->sqlReqCode(name(),'"')+"\""); }
+	try { owner().sqlReq("DROP TABLE \""+mod->sqlReqCode(name(),'"')+"\""); }
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }

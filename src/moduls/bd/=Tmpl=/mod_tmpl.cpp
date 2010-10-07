@@ -36,7 +36,7 @@
 //* Modul info!                                  *
 #define MOD_ID		"PostgreSQL"
 #define MOD_NAME	"DB PostgreSQL"
-#define MOD_TYPE	"BD"
+#define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
 #define VERSION		"0.5.0"
 #define AUTORS		"Maxim Lysenko"
@@ -71,10 +71,12 @@ using namespace BDPostgreSQL;
 //************************************************
 //* BDPostgreSQL::BDMod				 *
 //************************************************
-BDMod::BDMod(string name)
+BDMod::BDMod(string name) : TTipBD(MOD_ID)
 {
+    //!!! Init shortcut to module root object. Don't change it!
+    mod		= this;
+
     //!!! Load module meta-information to root object. Don't change it!
-    mId		= MOD_ID;
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -82,9 +84,6 @@ BDMod::BDMod(string name)
     mDescr	= DESCRIPTION;
     mLicense	= MOD_LICENSE;
     mSource	= name;
-
-    //!!! Init shortcut to module root object. Don't change it!
-    mod		= this;
 }
 
 //!!! Destructor for Root module object.
@@ -199,7 +198,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","BD",2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,
 	    "tp","str","help",
 	    _(//!!! Type here the help information about the db address of your module
              ));

@@ -7,6 +7,7 @@ oscd_modul_LTLIBRARIES = daq_SoundCard.la
 daq_SoundCard_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_SoundCard_la_SOURCES = sound.cpp
 daq_SoundCard_la_LIBADD  = -lportaudio
+daq_SoundCard_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.SoundCard

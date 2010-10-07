@@ -42,7 +42,7 @@ class TTipDAQ : public TModule, public TElem
 {
     public:
 	//Public methods
-	TTipDAQ( );
+	TTipDAQ( const string &id );
 	virtual ~TTipDAQ( );
 
 	void modStart( );

@@ -10,6 +10,7 @@ ui_Vision_la_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cp
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp
 ui_Vision_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui -lfftw3
+ui_Vision_la_LIBTOOLFLAGS = --tag=disable-static
 
 qrc_vision.cpp: vision.qrc
 	$(QT4_RCC) -name Vision vision.qrc -o qrc_vision.cpp

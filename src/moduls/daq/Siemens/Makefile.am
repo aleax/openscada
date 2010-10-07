@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src -DLINUX -DDAVE_LITTLE_ENDIAN
 oscd_modul_LTLIBRARIES = daq_Siemens.la
 daq_Siemens_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_Siemens_la_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
+daq_Siemens_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.Siemens

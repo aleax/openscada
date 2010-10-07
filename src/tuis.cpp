@@ -34,7 +34,7 @@ using namespace OSCADA;
 //*************************************************
 //* TUIS                                          *
 //*************************************************
-TUIS::TUIS( ) : TSubSYS(SUI_ID,"User interfaces",true)
+TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User interfaces"),true)
 {
     gdFTUseFontConfig(1);
 }
@@ -146,7 +146,7 @@ void TUIS::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TUI                                           *
 //*************************************************
-TUI::TUI() : run_st(false)
+TUI::TUI( const string &id ) : TModule(id), run_st(false)
 {
 
 }

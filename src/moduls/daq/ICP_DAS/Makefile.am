@@ -8,6 +8,7 @@ oscd_modul_LTLIBRARIES = daq_ICP_DAS.la
 daq_ICP_DAS_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_ICP_DAS_la_SOURCES = ICP_module.cpp
 daq_ICP_DAS_la_LIBADD  = -L./ -li8k
+daq_ICP_DAS_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.ICP_DAS

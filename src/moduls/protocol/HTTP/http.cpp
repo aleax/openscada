@@ -64,9 +64,10 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : mTAuth(10), lst_ses_chk(0)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), lst_ses_chk(0)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
     mVers	= M_VERSION;
@@ -74,8 +75,6 @@ TProt::TProt( string name ) : mTAuth(10), lst_ses_chk(0)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TProt::~TProt()

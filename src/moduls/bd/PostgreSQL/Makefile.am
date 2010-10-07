@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src $(POSTGRESQL_CFLAGS)
 oscd_modul_LTLIBRARIES = bd_PostgreSQL.la
 bd_PostgreSQL_la_LDFLAGS = -module -avoid-version -no-undefined $(POSTGRESQL_LDFLAGS)
 bd_PostgreSQL_la_SOURCES = postgre.cpp
+bd_PostgreSQL_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.PostgreSQL
@@ -15,7 +16,7 @@ m_name = $(oscd_modulpref)PostgreSQL
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done
@@ -29,8 +30,8 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-#	install -m 755 -d $(doc_name)
-#	install -m 644 doc/*.pdf $(doc_name)
+	install -m 755 -d $(doc_name)
+	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

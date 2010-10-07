@@ -22,7 +22,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		1		//TransportS type modules version
+#define STR_VER		5		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -193,7 +193,7 @@ class TTipTransport: public TModule
 {
     public:
 	//Methods
-	TTipTransport( );
+	TTipTransport( const string &id );
 	virtual ~TTipTransport( );
 
 	//> Input transports

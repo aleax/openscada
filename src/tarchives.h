@@ -22,7 +22,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	3		//ArchiveS type modules version
+#define SARH_VER	5		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <time.h>
@@ -133,7 +133,7 @@ class TTipArchivator: public TModule
 {
     public:
 	//Public methods
-	TTipArchivator( );
+	TTipArchivator( const string &id );
 	virtual ~TTipArchivator( );
 
 	//> Messages
@@ -157,9 +157,9 @@ class TTipArchivator: public TModule
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	virtual TMArchivator *AMess( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),"Message arhiv no support!"); }
+	{ throw TError(nodePath().c_str(),_("Message arhiv no support!")); }
 	virtual TVArchivator *AVal( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),"Value arhiv no support!"); }	
+	{ throw TError(nodePath().c_str(),_("Value arhiv no support!")); }
 
     private:
 	//Private attributes

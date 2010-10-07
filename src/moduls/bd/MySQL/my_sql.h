@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.h
 /***************************************************************************
- *   Copyright (C) 2003-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -49,7 +49,7 @@ class MTable : public TTable
 	MTable(string name, MBD *iown, bool create);
 	~MTable( );
 
-	//- Field's functions -
+	//> Field's functions
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg );
 	void fieldGet( TConfig &cfg );

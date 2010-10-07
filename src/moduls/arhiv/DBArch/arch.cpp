@@ -33,12 +33,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"DBArch"
-#define MOD_NAME	"To DB archivator"
-#define MOD_TYPE	"Archive"
+#define MOD_NAME	_("To DB archivator")
+#define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define VERSION		"0.9.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to DB."
+#define VERSION		"0.9.2"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("The Archive module. Allow functions for messages and values arhiving to DB.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -65,9 +65,10 @@ using namespace DBArch;
 //*************************************************
 //* DBArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name)
+ModArch::ModArch( const string &name ) : TTipArchivator(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -75,8 +76,6 @@ ModArch::ModArch( const string &name)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 void ModArch::postEnable( int flag )
@@ -86,16 +85,16 @@ void ModArch::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	//> Add self DB-fields for archives
-	owner().messE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
-	owner().valE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().messE().fldAdd( new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000") );
+	owner().valE().fldAdd( new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000") );
 
 	//> Archivators info table DB structure
-	el_arch.fldAdd( new TFld("TBL",_("Table"),TFld::String,TCfg::Key,"50") );
-	el_arch.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
-	el_arch.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
-	el_arch.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
-	el_arch.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
-	el_arch.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
+	el_arch.fldAdd( new TFld("TBL","Table",TFld::String,TCfg::Key,"50") );
+	el_arch.fldAdd( new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20") );
+	el_arch.fldAdd( new TFld("END","End",TFld::String,TFld::NoFlag,"20") );
+	el_arch.fldAdd( new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20") );
+	el_arch.fldAdd( new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20") );
+	el_arch.fldAdd( new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20") );
 
 	//> Message DB archive DB structure
 	el_mess.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );

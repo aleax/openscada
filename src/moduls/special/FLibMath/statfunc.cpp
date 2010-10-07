@@ -58,10 +58,11 @@ using namespace FLibMath;
 //*************************************************
 //* Lib: Complex1 functions library               *
 //*************************************************
-Lib::Lib( string src )
+Lib::Lib( string src ) : TSpecial(MOD_ID)
 {
-    //- Set modul info! -
-    mId		= MOD_ID;
+    mod		= this;
+
+    //> Set modul info
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -69,8 +70,6 @@ Lib::Lib( string src )
     mDescr	= "Allow mathematic static function library.";
     mLicense	= "GPL2";
     mSource	= src;
-
-    mod		= this;
 
     m_fnc = grpAdd("fnc_");
 }

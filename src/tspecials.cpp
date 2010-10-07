@@ -30,7 +30,7 @@ using namespace OSCADA;
 //*************************************************
 //* TSpecialS                                     *
 //*************************************************
-TSpecialS::TSpecialS( ) : TSubSYS(SSPC_ID,"Specials",true)
+TSpecialS::TSpecialS( ) : TSubSYS(SSPC_ID,_("Specials"),true)
 {
 
 }
@@ -85,7 +85,7 @@ void TSpecialS::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TSpecial                                      *
 //*************************************************
-TSpecial::TSpecial() : run_st(false)
+TSpecial::TSpecial( const string &id ) : TModule(id), run_st(false)
 {
 
 }

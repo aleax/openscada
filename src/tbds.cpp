@@ -32,11 +32,11 @@ using namespace OSCADA;
 //************************************************
 //* TBDS                                         *
 //************************************************
-TBDS::TBDS( ) : TSubSYS(SDB_ID,"Data Bases",true), mSYSStPref(true)
+TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
 {
     //> Generic system DB
     fldAdd( new TFld("user","User",TFld::String,TCfg::Key,"20") );
-    fldAdd( new TFld("id","Value ID",TFld::String,TCfg::Key,"100") );
+    fldAdd( new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100") );
     fldAdd( new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000") );
 
     //> Open data bases DB structure
@@ -540,7 +540,7 @@ void TBDS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTipBD                                       *
 //************************************************
-TTipBD::TTipBD( ) : full_db_del(false)
+TTipBD::TTipBD( const string &id ) : TModule(id), full_db_del(false)
 {
     m_db = grpAdd("db_");
 }
@@ -967,7 +967,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    {
 		eid = req.elem().fldAt(i_f).name();
 		if( !(req.elem().fldAt(i_f).flg()&TCfg::Key) ) continue;
-		req.cfg(eid).setS(_("newReqKey"));
+		req.cfg(eid).setS("newReqKey");
 	    }
 	    req.cfgViewAll(false);
 	    fieldSet(req);

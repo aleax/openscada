@@ -66,10 +66,11 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name ) : 
+Engine::Engine( string name ) : TUI(MOD_ID),
     mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mFrcClr(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -77,8 +78,6 @@ Engine::Engine( string name ) :
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     idWlb = grpAdd("wlb_");
     idPrj = grpAdd("prj_");

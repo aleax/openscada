@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = prot_SelfSystem.la
 prot_SelfSystem_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_SelfSystem_la_SOURCES = self.cpp
+prot_SelfSystem_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Protocol.SelfSystem

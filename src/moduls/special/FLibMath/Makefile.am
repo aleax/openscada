@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = spec_FLibMath.la
 spec_FLibMath_la_LDFLAGS = -module -avoid-version -no-undefined
 spec_FLibMath_la_SOURCES = statfunc.cpp
+spec_FLibMath_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Special.FLibMath

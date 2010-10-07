@@ -221,23 +221,23 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root","Archive",1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",4,"tp","str","dest","select","select","/db/list",
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),0664,"root","Archive",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/tarch" && ctrChkNode(opt) ) 	opt->setText(TSYS::real2str(tm_calc,6));
-    else if( a_path == "/prm/cfg/sz" )
+    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::real2str(tm_calc,6));
+    else if(a_path == "/prm/cfg/sz")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) ) opt->setText(TSYS::real2str( maxSize() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) ) setMaxSize( atof(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(maxSize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(atof(opt->text().c_str()));
     }
     else TMArchivator::cntrCmdProc(opt);
 }

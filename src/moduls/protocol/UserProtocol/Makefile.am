@@ -8,6 +8,7 @@ oscd_modul_LTLIBRARIES = prot_UserProtocol.la
 prot_UserProtocol_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_UserProtocol_la_SOURCES = user_prt.cpp
 #prot_Tmpl_la_LIBADD  = -lnetsnmp -lcrypto
+prot_UserProtocol_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Protocol.UserProtocol

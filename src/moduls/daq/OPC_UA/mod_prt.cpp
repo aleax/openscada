@@ -48,9 +48,10 @@ using namespace OPC_UA;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : mSecCnlIdLast(1)
+TProt::TProt( string name ) : TProtocol(PRT_ID), mSecCnlIdLast(1)
 {
-    mId		= PRT_ID;
+    modPrt	= this;
+
     mType	= PRT_TYPE;
     mName	= PRT_NAME;
     mVers	= PRT_MVER;
@@ -58,8 +59,6 @@ TProt::TProt( string name ) : mSecCnlIdLast(1)
     mDescr	= PRT_DESCR;
     mLicense	= PRT_LICENSE;
     mSource	= name;
-
-    modPrt	= this;
 
     mEndPnt = grpAdd("ep_");
 

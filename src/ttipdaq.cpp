@@ -35,7 +35,7 @@ using namespace OSCADA;
 //*************************************************
 //* TTipDAQ                                       *
 //*************************************************
-TTipDAQ::TTipDAQ( )
+TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
 {
     m_cntr = grpAdd("cntr_");
 
@@ -141,12 +141,12 @@ int TTipDAQ::tpPrmToId( const string &name_t)
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
 {
-	throw TError(nodePath().c_str(),"Error attach new controller %s.",name.c_str());
+    throw TError(nodePath().c_str(),_("Error attach new controller %s."),name.c_str());
 }
 
 string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
-	throw TError(nodePath().c_str(),"Module doesn't support the function for compilation programming languages.");
+    throw TError(nodePath().c_str(),_("Module doesn't support the function for compilation programming languages."));
 }
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )

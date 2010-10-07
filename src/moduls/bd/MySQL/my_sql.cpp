@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,12 +33,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"MySQL"
-#define MOD_NAME	"DB MySQL"
-#define MOD_TYPE	"BD"
+#define MOD_NAME	_("DB MySQL")
+#define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define VERSION		"1.6.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"BD module. Provides support of the BD MySQL."
+#define VERSION		"1.6.2"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
@@ -65,9 +65,10 @@ using namespace BDMySQL;
 //************************************************
 //* BDMySQL::BDMod				 *
 //************************************************
-BDMod::BDMod(string name)
+BDMod::BDMod(string name) : TTipBD(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -75,8 +76,6 @@ BDMod::BDMod(string name)
     mDescr	= DESCRIPTION;
     mLicense	= MOD_LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 BDMod::~BDMod()
@@ -248,10 +247,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 void MBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","help",
 	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>].\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"

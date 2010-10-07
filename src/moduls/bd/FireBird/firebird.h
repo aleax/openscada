@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -48,7 +48,7 @@ class MTable : public TTable
 	MTable( string name, MBD *bd, bool create );
 	~MTable( );
 
-	//- Field's operations -
+	//> Field's operations
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg );
 	void fieldGet( TConfig &cfg );

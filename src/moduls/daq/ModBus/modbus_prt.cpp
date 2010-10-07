@@ -38,9 +38,10 @@ using namespace ModBus;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : mPrtLen(0)
+TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
 {
-    mId		= PRT_ID;
+    modPrt	= this;
+
     mType	= PRT_TYPE;
     mName	= PRT_NAME;
     mVers	= PRT_MVER;
@@ -48,8 +49,6 @@ TProt::TProt( string name ) : mPrtLen(0)
     mDescr	= PRT_DESCR;
     mLicense	= PRT_LICENSE;
     mSource	= name;
-
-    modPrt	= this;
 
     mNode = grpAdd("n_");
 

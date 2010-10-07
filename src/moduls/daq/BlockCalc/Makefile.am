@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = daq_BlockCalc.la
 daq_BlockCalc_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_BlockCalc_la_SOURCES = virtual.cpp block.cpp
+daq_BlockCalc_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.BlockCalc

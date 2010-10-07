@@ -1,3 +1,17 @@
+2010-10-07 Roman
+- !!!!:SYS: Check for libtool version 2.0 more is added. Enable only shared library build for modules.
+    Module identifier is put to class constructor for early text translation init.
+    For all translation used new xgettext parameters "-C --no-location --no-wrap -k_". Used for trash clean into translation's files.
+    All subsystem's modules API version is changed to 5.
+- !!:Archive.FSArch: Documents and translations is updated and released version 1.4.1.
+- !!:Archive.DBArch: Documents and translations is updated and released version 0.9.2.
+- !!:DB.DBF: Documents and translations is updated and released version 2.0.2.
+- !!:DB.MySQL: Documents and translations is updated and released version 1.6.2.
+- !!:DB.SQLite: Documents and translations is updated and released version 1.6.2.
+- !!:DB.FireBird: Documents and translations is updated and released version 0.9.5.
+- !!:DB.PostgreSQL: Documents and translations is updated and released version 0.9.0.
+
+
 2010-10-06 Roman
 - !!:SYS: The source tree version is changed to 0.7.0. RPM-build speck files is changed for build version 0.7.0 packages.
 - SYS: Some DB-modules icons is updated.
@@ -51,7 +65,7 @@
     For now charset is correct for all supported browsers.
 - FIX:UI.WebVision: Image update for primitive "Diagram" is made adaptive for real images loading, use for prevent to server overload.
     Result for event onmouseup process set to "true" for images suffice prevent into browser Konqueror.
-- !!:UI.WebVision: Sessions access and control is adapted for sender use.
+- !!:UI.WebVision: Sessions access and control is adapted for sender user.
 - !!:Transport.SSL: Get sender address support is added.
 
 
@@ -80,7 +94,7 @@
 - SYS: New user's API functions is added for object TCntrNode: nodeList() and nodeAt().
 - SYS: User object TVarObj conversion to Boolean, Integer and Real is set to values false, 1 and 1.
 - Special.FLibSYS, Protocol.HTTP, Protocol.UserProtocol: Translation to German by Irina Popkova is updated.
-- !!:SYS, DAQ.JavaLikeCalc: Object's properties and functions call and exceptions processing is made unified.
+- !!:SYS, DAQ.JavaLikeCalc: Object's properties and functions call and exceptions processing of user's API is made unified.
 
 
 2010-09-06 Roman
@@ -101,7 +115,7 @@
 
 2010-09-03 Maxim
 - FIX:DB:PostgreSQL: The default values for the transaction flags are added to the constructor of the object.
-- !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests. 
+- !!:DB:PostgreSQL: Transaction open and commit mechanism is changed to support the user's SQL-requests.
     Several flags to limit the transacton life are added.
 
 
@@ -153,10 +167,10 @@
 2010-08-16 Roman
 - !!:DB: Automatic present table open is added at request.
 - FIX:UI.QTCfg: Found node view follow is added for nodes tree.
-- !!:UI.QTCfg, UI.Vision: Text string find support is added to TextEdit element.
+- !!:UI.QTCfg, UI.Vision: Text string find support is added to "TextEdit" element.
 - SYS: RPM-spec files is updated for module DP.PostgreSQL package build.
 - FIX:Archive.DBArch: Values limits is removed for Real and Integer types for EVAL write support.
-- !:DB.MySQL: No limited Real and Integer values type support is added. For Real type EVAL conversion is added.
+- !:DB.MySQL: No limited "Real" and "Integer" values type support is added. For Real type EVAL conversion is added.
 
 
 2010-08-13 Maxim
@@ -168,7 +182,7 @@
 2010-08-13 Roman
 - !!!!:Demo: Demo DB is updated for include new technological devices' models library and all model adatation.
 - DB: Opened tables identifier limit is expanded to 255.
-- !!:TFunction, DAQ.JavaLikeCalc: Included function's context for performance rise for external functions call.
+- !!:TFunction, DAQ.JavaLikeCalc: Included function's context is added for performance rise for external functions call.
 - SYS: The interface translation to German is updated by Irina Popkova.
 - DAQ.AMRDevs: The interface translation to German is added by Irina Popkova.
 - DAQ.JavaLikeCalc: A libray function's formula translation disable allow is added.
@@ -294,7 +308,7 @@
 - FIX:SYS: The function TSYS::strParse() is fixed for multiply separators offset position.
 - FIX:DAQ.JavaLikeCalc: Line count is fixed for commented blocks by /* */.
 - !!:Protocol.HTTP: Outgoing protocol's function is added.
-- FIX:Protocol.HTTP, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.Vision: HTTP-parameter's "Content-Type" value is fixed for item "Charset".
+- !!:FIX:Protocol.HTTP, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.Vision: HTTP-parameter's "Content-Type" value is fixed for item "Charset".
 
 
 2010-05-28 Roman 0.6.4.2

@@ -22,7 +22,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define SPRT_VER	3		//ProtocolS type modules version
+#define SPRT_VER	5		//ProtocolS type modules version
 #define SPRT_ID		"Protocol"
 
 #include <string>
@@ -74,7 +74,7 @@ class TTransportOut;
 class TProtocol: public TModule
 {
     public:
-	TProtocol( );
+	TProtocol( const string &id );
 	virtual ~TProtocol( );
 
 	//> Addon items list for input protocol addressing

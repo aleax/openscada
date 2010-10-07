@@ -89,9 +89,10 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : end_run(false), vca_station("."), mPlayCom("play -q %f"), mCachePgLife(1)
+TVision::TVision( string name ) : TUI(MOD_ID), end_run(false), vca_station("."), mPlayCom("play -q %f"), mCachePgLife(1)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -99,16 +100,15 @@ TVision::TVision( string name ) : end_run(false), vca_station("."), mPlayCom("pl
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-    mod		= this;
 
-    //- Export functions -
+    //> Export functions
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
 }
 
 TVision::~TVision()
 {
-    //- Free widget's shapes -
+    //> Free widget's shapes
     for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
 	delete shapesWdg[i_sw];
     shapesWdg.clear();

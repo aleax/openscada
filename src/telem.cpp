@@ -399,7 +399,7 @@ string TFld::selVl2Nm( const string &val )
     if( flg()&TFld::Selected && type() == TFld::String )
     {
 	int sz = vmin(m_sel->size(), m_val.v_s->size());
-	if( !sz ) return("Empty");
+	if( !sz ) return _("Empty");
 	int i_val = 0;
 	for(i_val = 0; i_val < sz; i_val++)
 	    if((*m_val.v_s)[i_val] == val) break;
@@ -414,7 +414,7 @@ string TFld::selVl2Nm( int val )
     if( flg()&TFld::Selected && type()==TFld::Integer )
     {
 	int sz = vmin(m_sel->size(), m_val.v_i->size());
-	if( !sz ) return("Empty");
+	if( !sz ) return _("Empty");
 	int i_val = 0;
 	for(i_val = 0; i_val < sz; i_val++)
 	    if((*m_val.v_i)[i_val] == val) break;
@@ -429,7 +429,7 @@ string TFld::selVl2Nm( double val )
     if( flg()&TFld::Selected && type()==TFld::Real )
     {
 	int sz = vmin(m_sel->size(), m_val.v_r->size());
-	if( !sz ) return("Empty");
+	if( !sz ) return _("Empty");
 	int i_val = 0;
 	for(i_val = 0; i_val < sz; i_val++)
 	    if((*m_val.v_r)[i_val] == val) break;
@@ -444,7 +444,7 @@ string TFld::selVl2Nm( bool val )
     if( flg()&TFld::Selected && type()==TFld::Boolean )
     {
 	int sz = vmin(m_sel->size(), m_val.v_b->size());
-	if( !sz ) return("Empty");
+	if( !sz ) return _("Empty");
 	int i_val;
 	for(i_val = 0; i_val < sz; i_val++)
 	    if( (*m_val.v_b)[i_val] == val ) break;

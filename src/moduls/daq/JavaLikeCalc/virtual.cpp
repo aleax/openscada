@@ -67,9 +67,10 @@ using namespace JavaLikeCalc;
 //*************************************************
 //* TipContr                                      *
 //*************************************************
-TipContr::TipContr( string src )
+TipContr::TipContr( string src ) : TTipDAQ(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -77,8 +78,6 @@ TipContr::TipContr( string src )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= src;
-
-    mod		= this;
 
     mLib = grpAdd("lib_");
 }

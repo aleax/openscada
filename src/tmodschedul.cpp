@@ -39,7 +39,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,"Modules sheduler",false), mPer(10), mAllow("*")
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules sheduler"),false), mPer(10), mAllow("*")
 {
 
 }

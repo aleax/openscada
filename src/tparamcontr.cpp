@@ -192,7 +192,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    if(!owner().enableStat())	throw TError(nodePath().c_str(),"Controller is not started!");
+	    if(!owner().enableStat())	throw TError(nodePath().c_str(),_("Controller is not started!"));
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }

@@ -66,9 +66,10 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : mTSess(10), mSessLimit(5), chck_st(false)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VERSION;
@@ -77,7 +78,6 @@ TWEB::TWEB( string name ) : mTSess(10), mSessLimit(5), chck_st(false)
     mLicense	= LICENSE;
     mSource	= name;
 
-    mod		= this;
     id_vcases	= grpAdd("ses_");
 
     //> Reg export functions

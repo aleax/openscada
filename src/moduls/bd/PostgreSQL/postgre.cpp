@@ -31,12 +31,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"PostgreSQL"
-#define MOD_NAME	"DB PostgreSQL"
-#define MOD_TYPE	"BD"
+#define MOD_NAME	_("DB PostgreSQL")
+#define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define VERSION		"0.5.0"
-#define AUTORS		"Maxim Lysenko"
-#define DESCRIPTION	"BD module. Provides support of the BD PostgreSQL."
+#define VERSION		"0.9.0"
+#define AUTORS		_("Maxim Lysenko")
+#define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
@@ -63,9 +63,10 @@ using namespace BDPostgreSQL;
 //************************************************
 //* BDPostgreSQL::BDMod				 *
 //************************************************
-BDMod::BDMod(string name)
+BDMod::BDMod(string name) : TTipBD(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -73,8 +74,6 @@ BDMod::BDMod(string name)
     mDescr	= DESCRIPTION;
     mLicense	= MOD_LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 BDMod::~BDMod()
@@ -103,6 +102,7 @@ MBD::~MBD( )
 //Override the default notice processor with the empty one. This is done to avoid the notice messages printing on stderr
 void MyNoticeProcessor(void *arg, const char *message)
 {
+
 }
 
 void MBD::postDisable(int flag)
@@ -359,7 +359,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","help",
 	    _("PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;<db>;<port>;<connect_timeout>].\n"
 	      "Where:\n"
 	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"

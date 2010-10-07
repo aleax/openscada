@@ -67,9 +67,10 @@ using namespace WebCfg;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name )
+TWEB::TWEB( string name ) : TUI(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VERSION;
@@ -78,15 +79,13 @@ TWEB::TWEB( string name )
     mLicense	= LICENSE;
     mSource	= name;
 
-    mod		= this;
-
-    //- Reg export functions -
+    //> Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
 
-    //- Default CSS init -
+    //> Default CSS init
     mCSStables =
 	"hr { width: 100%; }\n"
 	"body { background-color: #818181; }\n"

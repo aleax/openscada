@@ -22,7 +22,7 @@
 #ifndef TSPECIALS_H
 #define TSPECIALS_H
 
-#define SSPC_VER	1		//SpecialS type modules version
+#define SSPC_VER	5		//SpecialS type modules version
 #define SSPC_ID		"Special"
 
 #include <string>
@@ -40,7 +40,7 @@ namespace OSCADA
 class TSpecial : public TModule
 {
     public:
-	TSpecial( );
+	TSpecial( const string &id );
 
     protected:
 	//Methods

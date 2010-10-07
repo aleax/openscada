@@ -72,7 +72,7 @@ XMLNode* XMLNode::childAdd( const string &name )
 
 void XMLNode::childDel( const unsigned id )
 {
-    if( id >= childSize() ) throw TError("XMLNode","Child %d is not present.",id);
+    if( id >= childSize() ) throw TError("XMLNode",_("Child %d is not present."),id);
     delete mChildren[id];
     mChildren.erase( mChildren.begin()+id );
 }
@@ -118,7 +118,7 @@ XMLNode* XMLNode::childGet( const int index, bool noex ) const
 {
     if( index >= 0 && index < childSize() )	return mChildren[index];
     if( noex )	return NULL;
-    throw TError("XMLNode","Child %d is not present.",index);
+    throw TError("XMLNode",_("Child %d is not present."),index);
 }
 
 XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) const
@@ -128,7 +128,7 @@ XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) cons
 	    return childGet(i_ch);
 
     if( noex ) return NULL;
-    throw TError("XMLNode","Child %s:%d is not found!",name.c_str(),numb);
+    throw TError("XMLNode",_("Child %s:%d is not found!"),name.c_str(),numb);
 }
 
 XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) const
@@ -137,7 +137,7 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
 	if( childGet(i_f)->attr(attr) == val ) return childGet(i_f);
 
     if( noex ) return NULL;
-    throw TError("XMLNode","Child with attribut %s=%s is not present.",attr.c_str(),val.c_str());
+    throw TError("XMLNode",_("Child with attribut %s=%s is not present."),attr.c_str(),val.c_str());
 }
 
 void XMLNode::attrList( vector<string> & list ) const
@@ -321,7 +321,7 @@ void XMLNode::load( const string &s )
     clear();
 
     XML_Parser p = XML_ParserCreate("UTF-8");
-    if( !p ) throw TError("XMLNode","Couldn't allocate memory for parser.");
+    if( !p ) throw TError("XMLNode",_("Couldn't allocate memory for parser."));
 
     XML_SetElementHandler( p, start_element, end_element );
     XML_SetCharacterDataHandler( p, characters );
@@ -337,7 +337,7 @@ void XMLNode::load( const string &s )
 	string xmlErr = XML_ErrorString(XML_GetErrorCode(p));
 	XML_ParserFree( p );
 	mParent = lstParent;
-	throw TError("XMLNode","Parse error at line %d --- %s. Source string: '%s'", cL, xmlErr.c_str(), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
+	throw TError("XMLNode",_("Parse error at line %d --- %s. Source string: '%s'"), cL, xmlErr.c_str(), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
     }
     XML_ParserFree( p );
     mParent = lstParent;

@@ -8,6 +8,7 @@ oscd_modul_LTLIBRARIES = daq_DiamondBoards.la
 daq_DiamondBoards_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DiamondBoards_la_SOURCES = diamond.cpp
 daq_DiamondBoards_la_LIBADD  = -L./ -ldscud5
+daq_DiamondBoards_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.DiamondBoards

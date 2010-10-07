@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = prot_HTTP.la
 prot_HTTP_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_HTTP_la_SOURCES = http.cpp
+prot_HTTP_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Protocol.HTTP

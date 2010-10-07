@@ -64,9 +64,10 @@ using namespace UserProtocol;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name )
+TProt::TProt( string name ) : TProtocol(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
     mVers	= M_VERSION;
@@ -74,8 +75,6 @@ TProt::TProt( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     mPrtU = grpAdd("up_");
 

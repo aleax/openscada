@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = daq_ModBus.la
 daq_ModBus_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_ModBus_la_SOURCES = moduls.cpp modbus_daq.cpp modbus_prt.cpp
+daq_ModBus_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.ModBus

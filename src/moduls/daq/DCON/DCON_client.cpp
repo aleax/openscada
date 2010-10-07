@@ -68,9 +68,10 @@ using namespace DCONDAQ;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name )
+TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -78,8 +79,6 @@ TTpContr::TTpContr( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TTpContr::~TTpContr()

@@ -8,6 +8,7 @@ oscd_modul_LTLIBRARIES = daq_SNMP.la
 daq_SNMP_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_SNMP_la_SOURCES = snmp_client.cpp
 daq_SNMP_la_LIBADD  = -lnetsnmp -lcrypto
+daq_SNMP_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.SNMP

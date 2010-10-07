@@ -4,13 +4,14 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-#: base.cpp:52 val.cpp:485 val.cpp:486 val.cpp:487 val.cpp:488 mess.h:115
+# Roman Savochenko <rom_as@oscada.org>, 2010
+#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.FSArch 1.3.2\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 12:49+0300\n"
+"POT-Creation-Date: 2010-10-07 15:27+0300\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -20,36 +21,12 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: base.cpp:35
-msgid "FSArch"
-msgstr ""
-
-#: base.cpp:36
 msgid "File system archivator"
 msgstr "Archivar für das Dateisystem"
 
-#: base.cpp:37 mess.cpp:316 mess.cpp:317 mess.cpp:318 mess.cpp:320
-#: mess.cpp:322 mess.cpp:323 mess.cpp:324 mess.cpp:325 mess.cpp:326
-#: mess.cpp:327 mess.cpp:328 mess.cpp:329 mess.cpp:340 mess.cpp:341
-#: mess.cpp:345 mess.cpp:346 mess.cpp:350 mess.cpp:351 mess.cpp:355
-#: mess.cpp:356 mess.cpp:360 mess.cpp:361 mess.cpp:365 mess.cpp:366
-#: mess.cpp:370 mess.cpp:371 mess.cpp:374 val.cpp:417 val.cpp:418 val.cpp:420
-#: val.cpp:422 val.cpp:423 val.cpp:424 val.cpp:425 val.cpp:426 val.cpp:427
-#: val.cpp:428 val.cpp:433 val.cpp:453 val.cpp:454 val.cpp:458 val.cpp:459
-#: val.cpp:463 val.cpp:464 val.cpp:468 val.cpp:469 val.cpp:473 val.cpp:474
-#: val.cpp:478 val.cpp:479 val.cpp:481
-msgid "Archive"
-msgstr "Archiv"
-
-#: base.cpp:39
-msgid "1.4.0"
-msgstr ""
-
-#: base.cpp:40
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: base.cpp:41
 msgid ""
 "The Archive module. Allow functions for messages and values arhiving to file "
 "system."
@@ -57,756 +34,148 @@ msgstr ""
 "Archivmodul. Funktionen zum Archivieren von Nachrichten und Werten in "
 "dasDateisystem"
 
-#: base.cpp:42
-msgid "GPL"
-msgstr ""
-
-#: base.cpp:47
-msgid "C"
-msgstr ""
-
-#: base.cpp:98 base.cpp:99 mess.cpp:42 val.cpp:42
-msgid "A_PRMS"
-msgstr ""
-
-#: base.cpp:98 base.cpp:99
-msgid "Addon parameters"
-msgstr ""
-
-#: base.cpp:98 base.cpp:99
-msgid "10000"
-msgstr ""
-
-#: base.cpp:102 base.cpp:227 mess.cpp:470 mess.cpp:878 val.cpp:143 val.cpp:184
-#: val.cpp:1017
-msgid "FILE"
-msgstr ""
-
-#: base.cpp:102
-msgid "File"
-msgstr ""
-
-#: base.cpp:102
-msgid "100"
-msgstr ""
-
-#: base.cpp:103 mess.cpp:473 mess.cpp:879 val.cpp:146 val.cpp:185 val.cpp:1018
-msgid "BEGIN"
-msgstr ""
-
-#: base.cpp:103 mess.cpp:407 mess.cpp:543 mess.cpp:586 val.cpp:434
-msgid "Begin"
-msgstr "Beginn"
-
-#: base.cpp:103 base.cpp:104 base.cpp:105 base.cpp:106 base.cpp:107
-msgid "20"
-msgstr ""
-
-#: base.cpp:104 mess.cpp:474 mess.cpp:880 val.cpp:147 val.cpp:186 val.cpp:1019
-msgid "END"
-msgstr ""
-
-#: base.cpp:104 mess.cpp:408 mess.cpp:544 mess.cpp:587 mess.cpp:648
-#: val.cpp:435
-msgid "End"
-msgstr "Ende"
-
-#: base.cpp:105 mess.cpp:475 mess.cpp:881 val.cpp:148 val.cpp:188 val.cpp:1020
-msgid "PRM1"
-msgstr ""
-
-#: base.cpp:105
-msgid "Parameter 1"
-msgstr "Parameter 1"
-
-#: base.cpp:106 mess.cpp:476 mess.cpp:882 val.cpp:149 val.cpp:189 val.cpp:1021
-msgid "PRM2"
-msgstr ""
-
-#: base.cpp:106
-msgid "Parameter 2"
-msgstr "Parameter 2"
-
-#: base.cpp:107 val.cpp:150 val.cpp:190 val.cpp:1022
-msgid "PRM3"
-msgstr ""
-
-#: base.cpp:107
-msgid "Parameter 3"
-msgstr "Parameter 3"
-
-#: base.cpp:120 mess.cpp:213 val.cpp:229 val.cpp:322 val.cpp:383 val.cpp:579
-msgid "."
-msgstr ""
-
-#: base.cpp:120
-msgid "_Pack"
-msgstr ""
-
-#: base.cpp:125 base.cpp:131
-msgid ".gz"
-msgstr ""
-
-#: base.cpp:134
-msgid "gzip -c \""
-msgstr ""
-
-#: base.cpp:134 base.cpp:151
-msgid "\" > \""
-msgstr ""
-
-#: base.cpp:134 base.cpp:151
-msgid "\""
-msgstr ""
-
-#: base.cpp:139
 msgid "Compress error!"
 msgstr "Fehler bei der Komprimierung"
 
-#: base.cpp:151
-msgid "gzip -cd \""
-msgstr ""
-
-#: base.cpp:156
 #, c-format
 msgid "Decompress error: '%s'!"
 msgstr "Fehler '%s' beim Entpacken!"
 
-#: base.cpp:185
-msgid "stop"
-msgstr ""
-
-#: base.cpp:186
 msgid "Check archives thread is not stopped!"
 msgstr "Der Thread für die Archivprüfung ist nicht angehalten"
 
-#: base.cpp:196
-#, c-format
-msgid "Timer's thread <%u> call. TID: %ld"
-msgstr "Timer Thread <%u> Aufruf. TID: %ld"
-
-#: base.cpp:207 base.cpp:218 mess.cpp:601 val.cpp:989
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: base.cpp:208
 #, c-format
 msgid "Check message archivator <%s> error."
 msgstr "Fehler beim Prüfen des Nachrichtnarchivars <%s> "
 
-#: base.cpp:219
 #, c-format
 msgid "Check value archivator <%s> error."
 msgstr "Fehler beim Prüfen des Wertearchivars <%s> "
 
-#: base.cpp:226 base.cpp:229 mess.cpp:471 mess.cpp:883 val.cpp:144 val.cpp:191
-#: val.cpp:1023
-msgid "Pack/"
-msgstr ""
-
-#: mess.cpp:61 mess.cpp:75
-msgid "XML"
-msgstr ""
-
-#: mess.cpp:62 mess.cpp:76
-msgid "MSize"
-msgstr ""
-
-#: mess.cpp:63 mess.cpp:77 val.cpp:69 val.cpp:82
-msgid "NFiles"
-msgstr ""
-
-#: mess.cpp:64 mess.cpp:78 val.cpp:68 val.cpp:81
-msgid "TmSize"
-msgstr ""
-
-#: mess.cpp:65 mess.cpp:79 val.cpp:71 val.cpp:84
-msgid "PackTm"
-msgstr ""
-
-#: mess.cpp:66 mess.cpp:80 val.cpp:72 val.cpp:85
-msgid "CheckTm"
-msgstr ""
-
-#: mess.cpp:67 mess.cpp:81 val.cpp:73 val.cpp:86
-msgid "PackInfoFiles"
-msgstr ""
-
-#: mess.cpp:74 val.cpp:80
-msgid "prms"
-msgstr ""
-
-#: mess.cpp:131 mess.cpp:179
 msgid "Archive is not started!"
 msgstr "Archiv ist nicht gestartet!"
 
-#: mess.cpp:160
-msgid "/%F %T.msg"
-msgstr ""
-
-#: mess.cpp:164
 #, c-format
 msgid "Error create new archive file <%s>!"
 msgstr "Fehler beim Erstellen der Archivdatei <%s>!"
 
-#: mess.cpp:202 val.cpp:222
 #, c-format
 msgid "Can not create dir <%s>."
 msgstr "Kann das Verzeichnis <%s> nicht erstellen !"
 
-#: mess.cpp:213 val.cpp:229 val.cpp:579
-msgid ".."
-msgstr ""
-
-#: mess.cpp:214 val.cpp:233 val.cpp:582 val.cpp:727 val.cpp:754
-msgid "/"
-msgstr ""
-
-#: mess.cpp:218
-msgid ".msg"
-msgstr ""
-
-#: mess.cpp:218
-msgid ".msg.gz"
-msgstr ""
-
-#: mess.cpp:286 mess.cpp:453 mess.cpp:885 val.cpp:116 val.cpp:193 val.cpp:606
-#: val.cpp:901 val.cpp:1025
-msgid ".info"
-msgstr ""
-
-#: mess.cpp:313 val.cpp:414
-msgid "info"
-msgstr ""
-
-#: mess.cpp:316 mess.cpp:317 mess.cpp:318 mess.cpp:322 mess.cpp:323
-#: mess.cpp:324 mess.cpp:325 mess.cpp:326 mess.cpp:327 mess.cpp:328
-#: val.cpp:417 val.cpp:418 val.cpp:422 val.cpp:423 val.cpp:424 val.cpp:425
-#: val.cpp:426 val.cpp:427 val.cpp:433 val.cpp:434 val.cpp:435 val.cpp:436
-#: val.cpp:437
-msgid "fld"
-msgstr ""
-
-#: mess.cpp:316 mess.cpp:336 val.cpp:417 val.cpp:443
-msgid "/prm/st/fsz"
-msgstr ""
-
-#: mess.cpp:316
 msgid "Archivator files size (kB)"
 msgstr "Grösse der Archivardateien (kB)"
 
-#: mess.cpp:316 mess.cpp:317 mess.cpp:318 mess.cpp:320 mess.cpp:322
-#: mess.cpp:323 mess.cpp:324 mess.cpp:325 mess.cpp:326 mess.cpp:327
-#: mess.cpp:328 mess.cpp:329 mess.cpp:340 mess.cpp:341 mess.cpp:345
-#: mess.cpp:346 mess.cpp:350 mess.cpp:351 mess.cpp:355 mess.cpp:356
-#: mess.cpp:360 mess.cpp:361 mess.cpp:365 mess.cpp:366 mess.cpp:370
-#: mess.cpp:371 mess.cpp:374 val.cpp:417 val.cpp:418 val.cpp:420 val.cpp:422
-#: val.cpp:423 val.cpp:424 val.cpp:425 val.cpp:426 val.cpp:427 val.cpp:428
-#: val.cpp:430 val.cpp:433 val.cpp:434 val.cpp:435 val.cpp:436 val.cpp:437
-#: val.cpp:453 val.cpp:454 val.cpp:458 val.cpp:459 val.cpp:463 val.cpp:464
-#: val.cpp:468 val.cpp:469 val.cpp:473 val.cpp:474 val.cpp:478 val.cpp:479
-#: val.cpp:481 val.cpp:511
-msgid "root"
-msgstr ""
-
-#: mess.cpp:316 mess.cpp:317 mess.cpp:319 mess.cpp:322 mess.cpp:323
-#: mess.cpp:324 mess.cpp:325 mess.cpp:326 mess.cpp:327 mess.cpp:328
-#: val.cpp:417 val.cpp:419 val.cpp:422 val.cpp:423 val.cpp:424 val.cpp:425
-#: val.cpp:426 val.cpp:427 val.cpp:430 val.cpp:433 val.cpp:434 val.cpp:435
-#: val.cpp:436 val.cpp:437
-msgid "tp"
-msgstr ""
-
-#: mess.cpp:316 mess.cpp:317 val.cpp:417 val.cpp:422 val.cpp:424 val.cpp:430
-msgid "real"
-msgstr ""
-
-#: mess.cpp:317 mess.cpp:337
-msgid "/prm/st/tarch"
-msgstr ""
-
-#: mess.cpp:317
 msgid "Archiving time (msek)"
 msgstr "Archivierungszeit (msek)"
 
-#: mess.cpp:318 val.cpp:418
-msgid "/prm/cfg/addr"
-msgstr ""
-
-#: mess.cpp:318 val.cpp:418
-msgid "ADDR"
-msgstr ""
-
-#: mess.cpp:319 val.cpp:419 val.cpp:433 val.cpp:436 val.cpp:437
-msgid "str"
-msgstr ""
-
-#: mess.cpp:319 val.cpp:419
-msgid "help"
-msgstr ""
-
-#: mess.cpp:319
 msgid "Path to directory for archivator's of messages files."
 msgstr "Verzeichnispfad zu den Dateien des Nachrichtarchivars"
 
-#: mess.cpp:320 val.cpp:420
-msgid "area"
-msgstr ""
-
-#: mess.cpp:320 val.cpp:420
-msgid "/prm/add"
-msgstr ""
-
-#: mess.cpp:320 val.cpp:420
 msgid "Additional options"
 msgstr "Zusätzliche Optionen"
 
-#: mess.cpp:322 mess.cpp:338
-msgid "/prm/add/xml"
-msgstr ""
-
-#: mess.cpp:322
 msgid "XML archive files"
 msgstr "XML Archivdateien"
 
-#: mess.cpp:322 mess.cpp:328 val.cpp:427
-msgid "bool"
-msgstr ""
-
-#: mess.cpp:323 mess.cpp:343
-msgid "/prm/add/sz"
-msgstr ""
-
-#: mess.cpp:323
 msgid "Maximum archive file size (kB)"
 msgstr "Maximale Dateigrösse des Archivs (kB)"
 
-#: mess.cpp:323 mess.cpp:324 mess.cpp:325 mess.cpp:326 mess.cpp:327
-#: val.cpp:423 val.cpp:425 val.cpp:426
-msgid "dec"
-msgstr ""
-
-#: mess.cpp:324 mess.cpp:348
-msgid "/prm/add/fl"
-msgstr ""
-
-#: mess.cpp:324 val.cpp:423
 msgid "Maximum files number"
 msgstr "Maximale Dateianzahl"
 
-#: mess.cpp:325 mess.cpp:353
-msgid "/prm/add/len"
-msgstr ""
-
-#: mess.cpp:325
 msgid "File's time size (days)"
 msgstr "Dateiumfang (Tage)"
 
-#: mess.cpp:326 mess.cpp:358 val.cpp:425 val.cpp:466
-msgid "/prm/add/pcktm"
-msgstr ""
-
-#: mess.cpp:326 val.cpp:425
 msgid "Pack files timeout (min)"
 msgstr "Zeitüberschreitung beim Packen der Dateien (min)"
 
-#: mess.cpp:327 mess.cpp:363 val.cpp:422 val.cpp:451
-msgid "/prm/add/tm"
-msgstr ""
-
-#: mess.cpp:327 val.cpp:426
 msgid "Check archives period (min)"
 msgstr "Zyklus Prüfung der Archive (min)"
 
-#: mess.cpp:328 mess.cpp:368 val.cpp:427 val.cpp:476
-msgid "/prm/add/pack_info_fl"
-msgstr ""
-
-#: mess.cpp:328 val.cpp:427
 msgid "Use info files for packed archives"
-msgstr ""
+msgstr "Verwenden Sie Info-Dateien für gepackten Archiven"
 
-#: mess.cpp:329 val.cpp:428 val.cpp:431
-msgid "comm"
-msgstr ""
-
-#: mess.cpp:329 mess.cpp:374 val.cpp:428 val.cpp:481
-msgid "/prm/add/chk_nw"
-msgstr ""
-
-#: mess.cpp:329 val.cpp:428
 msgid "Check archivator directory now"
 msgstr "Archivarverzeichnis prüfen"
 
-#: mess.cpp:335 val.cpp:442
-msgid "path"
-msgstr ""
-
-#: mess.cpp:340 mess.cpp:345 mess.cpp:350 mess.cpp:355 mess.cpp:360
-#: mess.cpp:365 mess.cpp:370 val.cpp:453 val.cpp:458 val.cpp:463 val.cpp:468
-#: val.cpp:473 val.cpp:478
-msgid "get"
-msgstr ""
-
-#: mess.cpp:340
-msgid "1"
-msgstr ""
-
-#: mess.cpp:340
-msgid "0"
-msgstr ""
-
-#: mess.cpp:341 mess.cpp:346 mess.cpp:351 mess.cpp:356 mess.cpp:361
-#: mess.cpp:366 mess.cpp:371 mess.cpp:374 val.cpp:454 val.cpp:459 val.cpp:464
-#: val.cpp:469 val.cpp:474 val.cpp:479 val.cpp:481 val.cpp:511
-msgid "set"
-msgstr ""
-
-#: mess.cpp:383 mess.cpp:401 mess.cpp:542 mess.h:45
-msgid "UTF-8"
-msgstr ""
-
-#: mess.cpp:396 val.cpp:793
 #, c-format
 msgid "Can not create file: <%s>!"
 msgstr "Kann die Datei: <%s> nicht erstellen!"
 
-#: mess.cpp:406 mess.cpp:418 mess.cpp:668
-msgid "Version"
-msgstr "Version"
-
-#: mess.cpp:409
-msgid "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
-msgstr ""
-
-#: mess.cpp:411 mess.cpp:420
 #, c-format
 msgid "Write to file error: %s"
 msgstr "Fehler: %s beim Schreiben in die Datei"
 
-#: mess.cpp:417 mess.cpp:667
-#, c-format
-msgid "%s %s %8s %8x %8x\n"
-msgstr ""
-
-#: mess.cpp:461
-#, c-format
-msgid "%lx %lx %20s %d"
-msgstr ""
-
-#: mess.cpp:493 mess.cpp:790
-msgid "r"
-msgstr ""
-
-#: mess.cpp:499
 #, c-format
 msgid "File %s header error!"
 msgstr "Datei <%s> Dateikopf Fehler!"
 
-#: mess.cpp:500
-#, c-format
-msgid "%*s %8s %x %x"
-msgstr ""
-
-#: mess.cpp:535
 #, c-format
 msgid "Archive file: <%s> is not mine."
 msgstr "Nicht meine Archivdatei <%s>."
 
-#: mess.cpp:560 mess.cpp:569
 #, c-format
 msgid "Archive <%s> file error."
 msgstr "Archiv <%s> Dateifehler."
 
-#: mess.cpp:611
 msgid "Inserting message to an error Archive file!"
 msgstr "Hinzufügen einer Nachricht in das Fehler-Archivdatei"
 
-#: mess.cpp:626
 #, c-format
 msgid "Archive file '%s' isn't attached!"
 msgstr "Archivdatei '%s' ist nicht verbunden!"
 
-#: mess.cpp:636 mess.cpp:640 mess.cpp:766
-msgid "tm"
-msgstr ""
-
-#: mess.cpp:639
-msgid "m"
-msgstr ""
-
-#: mess.cpp:641 mess.cpp:767
-msgid "tmu"
-msgstr ""
-
-#: mess.cpp:642 mess.cpp:769
-msgid "lv"
-msgstr ""
-
-#: mess.cpp:643 mess.cpp:768
-msgid "cat"
-msgstr ""
-
-#: mess.cpp:656 mess.cpp:657 val.cpp:1317
-msgid " "
-msgstr ""
-
-#: mess.cpp:659
-msgid "r+"
-msgstr ""
-
-#: mess.cpp:672 mess.cpp:698
-#, c-format
-msgid "%x:%d %d %s %s\n"
-msgstr ""
-
-#: mess.cpp:673 mess.cpp:674 mess.cpp:699 mess.cpp:700
-msgid ""
-" \n"
-"\t%"
-msgstr ""
-
-#: mess.cpp:692
-#, c-format
-msgid "%x %*d"
-msgstr ""
-
-#: mess.cpp:744
 msgid "Getting messages from an error Archive file!"
 msgstr "Empfange Nachrichten aus der Fehler-Archivdatei!"
 
-#: mess.cpp:756
 msgid "Archive file isn't attached!"
 msgstr "Archivdatei ist nicht verbunden!"
 
-#: mess.cpp:803
-#, c-format
-msgid "%50s %d"
-msgstr ""
-
-#: mess.cpp:812
-#, c-format
-msgid "%*x:%*d %*d %1000s %1000s"
-msgstr ""
-
-#: mess.cpp:888
-#, c-format
-msgid "%lx %lx %s %d"
-msgstr ""
-
-#: val.cpp:70 val.cpp:83
-msgid "Round"
-msgstr ""
-
-#: val.cpp:126
-#, c-format
-msgid "%llx %llx %20s %llx %d"
-msgstr ""
-
-#: val.cpp:196 val.cpp:1028
-#, c-format
-msgid "%llx %llx %s %llx %d"
-msgstr ""
-
-#: val.cpp:239
-msgid ".val"
-msgstr ""
-
-#: val.cpp:239
-msgid ".val.gz"
-msgstr ""
-
-#: val.cpp:286 val.cpp:509
-msgid "wav"
-msgstr ""
-
-#: val.cpp:310
-msgid "RIFF"
-msgstr ""
-
-#: val.cpp:312
-msgid "WAVE"
-msgstr ""
-
-#: val.cpp:313
-msgid "fmt "
-msgstr ""
-
-#: val.cpp:327
-msgid "data"
-msgstr ""
-
-#: val.cpp:395
-#, c-format
-msgid "%g\n"
-msgstr ""
-
-#: val.cpp:417
-#, fuzzy
 msgid "Full archives size (MB)"
-msgstr "Dateiumfang (МB)"
+msgstr "Vollständige Archive Größe (МB)"
 
-#: val.cpp:419
 msgid "Path to directory for archivator's of values files."
 msgstr "Verzeichnispfad zu den Dateien des Wertearchivars"
 
-#: val.cpp:422
 msgid "File's time size (hours)"
 msgstr "Dateiumfang (Stunden)"
 
-#: val.cpp:423 val.cpp:456
-msgid "/prm/add/fn"
-msgstr ""
-
-#: val.cpp:424 val.cpp:461
-msgid "/prm/add/round"
-msgstr ""
-
-#: val.cpp:424
 msgid "Numberic values rounding (%)"
 msgstr "Rundung der numerischen Werte (%)"
 
-#: val.cpp:426 val.cpp:471
-msgid "/prm/add/tmout"
-msgstr ""
-
-#: val.cpp:430 val.cpp:485 val.cpp:486 val.cpp:487 val.cpp:488
-msgid "list"
-msgstr ""
-
-#: val.cpp:430 val.cpp:488
-msgid "/arch/arch/3"
-msgstr ""
-
-#: val.cpp:430
 msgid "Files size (Mb)"
 msgstr "Dateiumfang (МB)"
 
-#: val.cpp:431 val.cpp:511
-msgid "/arch/exp"
-msgstr ""
-
-#: val.cpp:431
 msgid "Export"
 msgstr "Export"
 
-#: val.cpp:433
-msgid "/arch/exp/arch"
-msgstr ""
+msgid "Archive"
+msgstr "Archiv"
 
-#: val.cpp:433 val.cpp:436
-msgid "dest"
-msgstr ""
+msgid "Begin"
+msgstr "Beginn"
 
-#: val.cpp:433 val.cpp:436
-msgid "select"
-msgstr ""
+msgid "End"
+msgstr "Ende"
 
-#: val.cpp:433 val.cpp:499
-msgid "/arch/lst"
-msgstr ""
-
-#: val.cpp:434
-msgid "/arch/exp/beg"
-msgstr ""
-
-#: val.cpp:434 val.cpp:435
-msgid "time"
-msgstr ""
-
-#: val.cpp:435
-msgid "/arch/exp/end"
-msgstr ""
-
-#: val.cpp:436
-msgid "/arch/exp/tfl"
-msgstr ""
-
-#: val.cpp:436
 msgid "Type"
 msgstr "Typ"
 
-#: val.cpp:436 val.cpp:506
-msgid "/arch/tpflst"
-msgstr ""
-
-#: val.cpp:437
-msgid "/arch/exp/file"
-msgstr ""
-
-#: val.cpp:437
 msgid "To file"
 msgstr "Zur Datei"
 
-#: val.cpp:482
-msgid "/arch/arch"
-msgstr ""
-
-#: val.cpp:485
-msgid "/arch/arch/0"
-msgstr ""
-
-#: val.cpp:486
-msgid "/arch/arch/1"
-msgstr ""
-
-#: val.cpp:487
-msgid "/arch/arch/2"
-msgstr ""
-
-#: val.cpp:493 val.cpp:494 val.cpp:495 val.cpp:496 val.cpp:504 val.cpp:508
-#: val.cpp:509
-msgid "el"
-msgstr ""
-
-#: val.cpp:508
-msgid "ascii"
-msgstr ""
-
-#: val.cpp:512
-msgid "arch"
-msgstr ""
-
-#: val.cpp:513
-msgid "beg"
-msgstr ""
-
-#: val.cpp:514
-msgid "end"
-msgstr ""
-
-#: val.cpp:515
-msgid "tfl"
-msgstr ""
-
-#: val.cpp:516
-msgid "file"
-msgstr ""
-
-#: val.cpp:726 val.cpp:753
-msgid " %F %T.val"
-msgstr ""
-
-#: val.cpp:769
-msgid "OpenSCADA Val Arch."
-msgstr ""
-
-#: val.cpp:962
 #, c-format
 msgid "Archive file <%s> no openned!"
 msgstr "Archivdatei <%s> ist nicht geöffnet!"
 
-#: val.cpp:990
 #, c-format
 msgid "Attach file <%s> error."
 msgstr "Fehler beim Verbinden der Datei <%s>."
 
-#: val.cpp:1040 val.cpp:1075 val.cpp:1200 val.cpp:1252
 msgid "Archive file error!"
 msgstr "Fehler in der Archivdatei!"
 
-#: val.cpp:1663
 #, c-format
 msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
 msgstr ""

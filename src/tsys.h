@@ -24,8 +24,8 @@
 
 //> Programm constants
 #define PACKAGE_LICENSE	"GPL v2"
-#define PACKAGE_DESCR	"Open Supervisory Control And Data Acquisition"
-#define PACKAGE_AUTHOR	"Roman Savochenko"
+#define PACKAGE_DESCR	_("Open Supervisory Control And Data Acquisition")
+#define PACKAGE_AUTHOR	_("Roman Savochenko")
 #define PACKAGE_SITE	"http://oscada.org"
 
 //> Other system's constants

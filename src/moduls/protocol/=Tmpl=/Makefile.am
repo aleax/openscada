@@ -12,6 +12,7 @@ prot_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_Tmpl_la_SOURCES = mod_tmpl.cpp
 #!!! The module depending libraryes list
 #prot_Tmpl_la_LIBADD  = -lnetsnmp -lcrypto
+prot_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 #!!! The module documents directory

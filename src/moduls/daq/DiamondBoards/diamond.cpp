@@ -68,10 +68,10 @@ using namespace Diamond;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) :
-    m_init(false), elem_ai("AI"), elem_ao("AO"), elem_di("DI"), elem_do("DO")
+TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), m_init(false), elem_ai("AI"), elem_ao("AO"), elem_di("DI"), elem_do("DO")
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -79,8 +79,6 @@ TTpContr::TTpContr( string name ) :
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TTpContr::~TTpContr()

@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = daq_DAQGate.la
 daq_DAQGate_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DAQGate_la_SOURCES = daq_gate.cpp
+daq_DAQGate_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.DAQGate

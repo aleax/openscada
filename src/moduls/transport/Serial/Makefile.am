@@ -6,6 +6,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = tr_Serial.la
 tr_Serial_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_Serial_la_SOURCES = mod_serial.cpp
+tr_Serial_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Transport.Serial

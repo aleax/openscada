@@ -41,9 +41,10 @@ using namespace OPC_UA;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name )
+TTpContr::TTpContr( string name ) : TTipDAQ(DAQ_ID)
 {
-    mId		= DAQ_ID;
+    mod		= this;
+
     mName	= DAQ_NAME;
     mType	= DAQ_TYPE;
     mVers	= DAQ_MVER;
@@ -51,8 +52,6 @@ TTpContr::TTpContr( string name )
     mDescr	= DAQ_DESCR;
     mLicense	= DAQ_LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TTpContr::~TTpContr()

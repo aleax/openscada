@@ -31,7 +31,7 @@ using namespace OSCADA;
 //*************************************************
 //* TSecurity					  *
 //*************************************************
-TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,"Security",false)
+TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"),false)
 {
     m_usr = TCntrNode::grpAdd("usr_");
     m_grp = TCntrNode::grpAdd("grp_");

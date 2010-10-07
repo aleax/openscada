@@ -506,7 +506,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTipTransport                                *
 //************************************************
-TTipTransport::TTipTransport()
+TTipTransport::TTipTransport( const string &id ) : TModule(id)
 {
     mIn = grpAdd("in_");
     mOut = grpAdd("out_");

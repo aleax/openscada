@@ -34,7 +34,7 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,"Data acquisition",true), el_err("Error"),
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     mRdStLevel(0), mRdTaskPer(1), mRdRestConnTm(30), mRdRestDtTm(1), prcStRd(false), endrunRd(false), mRdPrcTm(0)
 {
     mTmplib = grpAdd("tmplb_");
@@ -651,7 +651,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt["<newStat>"] = SStat(); modif(); }
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt[_("<newStat>")] = SStat(); modif(); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt.erase(opt->attr("key_st")); modif(); }
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && opt->attr("col") == "st")
 	{

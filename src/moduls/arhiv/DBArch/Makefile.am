@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = arh_DBArch.la
 arh_DBArch_la_LDFLAGS = -module -avoid-version -no-undefined
 arh_DBArch_la_SOURCES = arch.cpp mess.cpp val.cpp
-# arh_DBArch_la_LIBTOOLFLAGS = --tags=disable-static
+arh_DBArch_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Archive.DBArch
@@ -14,7 +14,7 @@ m_name = $(oscd_modulpref)DBArch
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

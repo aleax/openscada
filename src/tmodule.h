@@ -79,7 +79,7 @@ class TModule : public TCntrNode
 	};
 
 	//Methods
-	TModule( );
+	TModule( const string &id );
 	virtual ~TModule(  );
 
 	const string &modId( )		{ return mId; }
@@ -99,7 +99,6 @@ class TModule : public TCntrNode
 
 	//> Translate functions
 	const char *I18N( const char *mess );
-	string I18Ns( const string &mess );
 
 	TSubSYS &owner( );
 
@@ -112,7 +111,6 @@ class TModule : public TCntrNode
 	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
 
 	//Attributes
-	string mId;				// Identificator
 	string mName;				// Name
 	string mDescr;				// Describe
 	string mType;				// Type
@@ -126,6 +124,7 @@ class TModule : public TCntrNode
 	const string &nodeName( )	{ return modId(); }
 
 	//Attributes
+	string		mId;		// Identificator
 	string		lc_id;		// Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list
 

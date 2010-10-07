@@ -67,9 +67,10 @@ using namespace WebUser;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name ) : mDefPg("*")
+TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VERSION;
@@ -77,8 +78,6 @@ TWEB::TWEB( string name ) : mDefPg("*")
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //> Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",

@@ -33,12 +33,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FSArch"
-#define MOD_NAME	"File system archivator"
-#define MOD_TYPE	"Archive"
+#define MOD_NAME	_("File system archivator")
+#define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define VERSION		"1.4.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"The Archive module. Allow functions for messages and values arhiving to file system."
+#define VERSION		"1.4.1"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("The Archive module. Allow functions for messages and values arhiving to file system.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -65,9 +65,10 @@ using namespace FSArch;
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name) : prcSt(false)
+ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), prcSt(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -75,8 +76,6 @@ ModArch::ModArch( const string &name) : prcSt(false)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //> Create checking archivators timer
     struct sigevent sigev;
@@ -95,16 +94,16 @@ void ModArch::postEnable( int flag )
     if( flag&TCntrNode::NodeConnect )
     {
 	//> Add self DB-fields for archives
-	owner().messE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
-	owner().valE().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().messE().fldAdd( new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000") );
+	owner().valE().fldAdd( new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000") );
 
 	//> Pack files DB structure
-	elPackfl.fldAdd( new TFld("FILE",_("File"),TFld::String,TCfg::Key,"100") );
-	elPackfl.fldAdd( new TFld("BEGIN",_("Begin"),TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("END",_("End"),TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("PRM1",_("Parameter 1"),TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("PRM2",_("Parameter 2"),TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("PRM3",_("Parameter 3"),TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("FILE","File",TFld::String,TCfg::Key,"100") );
+	elPackfl.fldAdd( new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("END","End",TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd( new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20") );
     }
 }
 

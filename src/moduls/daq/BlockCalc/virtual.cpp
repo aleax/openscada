@@ -73,9 +73,10 @@ using namespace Virtual;
 //************************************************
 //* TipContr - BlockCalc type controller         *
 //************************************************
-TipContr::TipContr( string name )
+TipContr::TipContr( string name ) : TTipDAQ(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -83,8 +84,6 @@ TipContr::TipContr( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TipContr::~TipContr()

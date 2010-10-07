@@ -71,9 +71,10 @@ using namespace WebCfgD;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name )
+TWEB::TWEB( string name ) : TUI(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VERSION;
@@ -81,8 +82,6 @@ TWEB::TWEB( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //> Reg export functions
     modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",

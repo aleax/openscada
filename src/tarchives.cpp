@@ -910,7 +910,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTipArchivator                               *
 //************************************************
-TTipArchivator::TTipArchivator()
+TTipArchivator::TTipArchivator( const string &id ) : TModule(id)
 {
     mVal = grpAdd("val_");
     mMess = grpAdd("mess_");

@@ -6,6 +6,7 @@ oscd_modul_LTLIBRARIES = daq_AMRDevs.la
 daq_AMRDevs_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_AMRDevs_la_SOURCES = mod_amr.cpp da_FlowTEC.cpp da_Ergomera.cpp
 #daq_AMRdevs_la_LIBADD  = -lnetsnmp -lcrypto
+daq_AMRDevs_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DAQ.AMRDevs

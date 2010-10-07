@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src $(FIREBIRD_CFLAGS)
 oscd_modul_LTLIBRARIES = bd_FireBird.la
 bd_FireBird_la_LDFLAGS = -module -avoid-version -no-undefined $(FIREBIRD_LDFLAGS)
 bd_FireBird_la_SOURCES = firebird.cpp
+bd_FireBird_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.FireBird
@@ -15,7 +16,7 @@ m_name = $(oscd_modulpref)FireBird
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

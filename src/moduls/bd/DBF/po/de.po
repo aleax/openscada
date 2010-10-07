@@ -4,12 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-#: dbf_mod.cpp:56 dbf_mod.cpp:542
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.DBF 2.0.1\n"
+"Project-Id-Version: OpenSCADA.DB.DBF 2.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 13:26+0200\n"
+"POT-Creation-Date: 2010-10-07 16:04+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -19,136 +20,29 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: dbf.cpp:122
-msgid "\r"
-msgstr ""
-
-#: dbf.cpp:125
-msgid ""
-msgstr ""
-
-#: dbf_mod.cpp:39
-msgid "DBF"
-msgstr ""
-
-#: dbf_mod.cpp:40
 msgid "DB DBF"
 msgstr "DB DBF"
 
-#: dbf_mod.cpp:41 dbf_mod.cpp:202
-msgid "BD"
-msgstr "DB"
-
-#: dbf_mod.cpp:43
-msgid "2.0.1"
-msgstr ""
-
-#: dbf_mod.cpp:44
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko "
 
-#: dbf_mod.cpp:45
 msgid "BD module. Provides support of the *.dbf files, version 3.0."
 msgstr "Modul unterstützt die *.dbf Datenbank Version 3.0."
 
-#: dbf_mod.cpp:46
-msgid "GPL"
-msgstr ""
-
-#: dbf_mod.cpp:51
-msgid "C"
-msgstr ""
-
-#: dbf_mod.cpp:101
-#, c-format
-msgid ""
-"======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
-"\n"
-msgstr ""
-"========================== Optionen des Moduls <%s:%s> "
-"==========================\n"
-"-------- Die Parameter des Abschnitts <%s> in der Konfigurationsdatei "
-"--------\n"
-"\n"
-
-#: dbf_mod.cpp:112
-msgid "h"
-msgstr ""
-
-#: dbf_mod.cpp:115 dbf_mod.cpp:203
-msgid "help"
-msgstr ""
-
-#: dbf_mod.cpp:125 dbf_mod.cpp:252
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: dbf_mod.cpp:153
 msgid "Delete DB error!"
 msgstr "Fehler beim Löschen der Datenbank!"
 
-#: dbf_mod.cpp:162
 #, c-format
 msgid "Error create DB directory <%s>!"
 msgstr "Fehler beim Erstellen des Datenbank-Verzeichnisses <%s>!"
 
-#: dbf_mod.cpp:163
 msgid "Restore previous directory as current error."
 msgstr "Wiederherstellung des vorherigen Verzeichnisses ist nicht erlaubt."
 
-#: dbf_mod.cpp:180
-msgid ".."
-msgstr ""
-
-#: dbf_mod.cpp:180 dbf_mod.cpp:181 dbf_mod.cpp:184
-msgid "."
-msgstr ""
-
-#: dbf_mod.cpp:181 dbf_mod.cpp:221 dbf_mod.cpp:222 dbf_mod.cpp:248
-#: dbf_mod.cpp:249
-msgid ".dbf"
-msgstr ""
-
-#: dbf_mod.cpp:182 dbf_mod.cpp:251
-msgid "/"
-msgstr ""
-
-#: dbf_mod.cpp:192
 #, c-format
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle <%s>, die Datenbank ist abgeschaltet."
 
-#: dbf_mod.cpp:199
-msgid "info"
-msgstr ""
-
-#: dbf_mod.cpp:202
-msgid "fld"
-msgstr ""
-
-#: dbf_mod.cpp:202
-msgid "/prm/cfg/addr"
-msgstr ""
-
-#: dbf_mod.cpp:202
-msgid "ADDR"
-msgstr ""
-
-#: dbf_mod.cpp:202
-msgid "root"
-msgstr ""
-
-#: dbf_mod.cpp:203
-msgid "tp"
-msgstr ""
-
-#: dbf_mod.cpp:203
-msgid "str"
-msgstr ""
-
-#: dbf_mod.cpp:204
 msgid ""
 "For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
@@ -157,44 +51,24 @@ msgstr ""
 "beinhaltet.\n"
 "Zum Beispiel: /opt/dbf ."
 
-#: dbf_mod.cpp:231
 msgid "Open table error!"
 msgstr "Fehler beim Öffnen der Tabelle!"
 
-#: dbf_mod.cpp:285 dbf_mod.cpp:323 dbf_mod.cpp:412 dbf_mod.cpp:469
 msgid "Cell error!"
 msgstr "Fehler in der Zelle!"
 
-#: dbf_mod.cpp:303 dbf_mod.cpp:434
 msgid "Field is not present!"
 msgstr "Das Feld ist nicht vorhanden!"
 
-#: dbf_mod.cpp:356 dbf_mod.cpp:382
 msgid "Column error!"
 msgstr "Fehler in der Spalte!"
 
-#: dbf_mod.cpp:394
 msgid "Delete field error!"
 msgstr "Fehler beim Löschen des Feldes!"
 
-#: dbf_mod.cpp:429
 msgid "Line error!"
 msgstr "Fehler in der Zeile!"
 
-#: dbf_mod.cpp:465
 #, c-format
 msgid "Key column <%s> is not present!"
 msgstr "Die Schlüsselzeile <%s> ist nicht vorhanden!"
-
-#: dbf_mod.cpp:537
-#, c-format
-msgid "%*.*f"
-msgstr ""
-
-#: dbf_mod.cpp:540
-msgid "T"
-msgstr ""
-
-#: dbf_mod.cpp:540
-msgid "F"
-msgstr ""

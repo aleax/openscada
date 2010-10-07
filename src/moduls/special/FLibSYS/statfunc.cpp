@@ -64,10 +64,11 @@ using namespace FLibSYS;
 //*************************************************
 //* Lib: Complex1 functions library               *
 //*************************************************
-Lib::Lib( string src )
+Lib::Lib( string src ) : TSpecial(MOD_ID)
 {
+    mod		= this;
+
     //> Set modul info!
-    mId		= MOD_ID;
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -75,8 +76,6 @@ Lib::Lib( string src )
     mDescr	= MOD_DESCR;
     mLicense	= MOD_LICENSE;
     mSource	= src;
-
-    mod		= this;
 
     mFnc = grpAdd("fnc_",true);
 }

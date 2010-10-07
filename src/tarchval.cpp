@@ -1196,7 +1196,7 @@ void TVArchive::archivatorAttach( const string &arch )
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().valAt(TSYS::strSepParse(arch,1,'.'));
 
     if(!archivat.at().startStat())
-	throw TError(nodePath().c_str(),"Archivator <%s> error or it is not started.",arch.c_str());
+	throw TError(nodePath().c_str(),_("Archivator <%s> error or it is not started."),arch.c_str());
 
     //> Find already present archivator
     for( int i_l = 0; i_l < arch_el.size(); i_l++ )
@@ -1542,7 +1542,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm",TSYS::ll2str(tm));
 		return;
 	    }
-	    if(tm < tm_grnd)	throw TError(nodePath().c_str(),"Range error");
+	    if(tm < tm_grnd)	throw TError(nodePath().c_str(),_("Range error"));
 
 	    long long period = atoll(opt->attr("per").c_str());
 
@@ -1577,7 +1577,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    long long ibeg = buf.begin(), iend = buf.end();
 	    period = vmax(period,buf.period());
 	    int mode = atoi(opt->attr("mode").c_str());
-	    if(mode < 0 || mode > 2) throw TError(nodePath().c_str(),"No support data mode '%d'",mode);
+	    if(mode < 0 || mode > 2) throw TError(nodePath().c_str(),_("No support data mode '%d'"),mode);
 	    switch(buf.valType())
 	    {
 		case TFld::Boolean:
@@ -1702,7 +1702,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 					text+=TSYS::int2str(vpos_end)+" "+TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";
 				    tval_pr1 = tval_pr;
 				    break;
-				case 2: throw TError(nodePath().c_str(),"Binary mode no support for string data");
+				case 2: throw TError(nodePath().c_str(),_("Binary mode no support for string data"));
 			    }
 			tval_pr = tval;
 			vpos_end = vpos_cur;

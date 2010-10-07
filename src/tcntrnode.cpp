@@ -97,7 +97,7 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
     }
 
     if(noex) return NULL;
-    throw TError("XML","Field id = %s(%s) no present!",name_id.c_str(),s_el.c_str());
+    throw TError("XML",_("Field id = %s(%s) no present!"),name_id.c_str(),s_el.c_str());
 }
 
 void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
@@ -147,7 +147,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 void TCntrNode::nodeEn( int flag )
 {
     if( nodeMode() == Enable )	return;		//throw TError(nodePath().c_str(),"Node already enabled!");
-    if( nodeMode() != Disable )	throw TError(nodePath().c_str(),"Node already in process!");
+    if( nodeMode() != Disable )	throw TError(nodePath().c_str(),_("Node already in process!"));
 
     ResAlloc res( hd_res, true );
     setNodeMode( MkEnable );
@@ -172,7 +172,7 @@ void TCntrNode::nodeEn( int flag )
 void TCntrNode::nodeDis( long tm, int flag )
 {
     if( nodeMode() == Disable )	return;		//throw TError(nodePath().c_str(),"Node already disabled!");
-    if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node already in process!");
+    if( nodeMode() != Enable )	throw TError(nodePath().c_str(),_("Node already in process!"));
 
     preDisable( flag );
 
@@ -348,7 +348,7 @@ TCntrNode::GrpEl &TCntrNode::grpAt( char iid )
 void TCntrNode::chldList(char igr, vector<string> &list)
 {
     ResAlloc res(hd_res,false);
-    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
+    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     list.clear();
@@ -379,7 +379,7 @@ void TCntrNode::chldList(char igr, vector<string> &list)
 bool TCntrNode::chldPresent( char igr, const string &name )
 {
     ResAlloc res(hd_res,false);
-    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
+    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name);
@@ -391,14 +391,14 @@ bool TCntrNode::chldPresent( char igr, const string &name )
 void TCntrNode::chldAdd( char igr, TCntrNode *node, int pos )
 {
     ResAlloc res(hd_res,false);
-    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
-    if( nodeMode() != Enable )	throw TError(nodePath().c_str(),"Node is not enabled!");
+    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
+    if( nodeMode() != Enable )	throw TError(nodePath().c_str(),_("Node is not enabled!"));
 
     TMap::iterator p;
     if( TSYS::strNoSpace(node->nodeName()).empty() )
     {
 	delete node;
-	throw TError(nodePath().c_str(),"Add child id is empty!");
+	throw TError(nodePath().c_str(),_("Add child id is empty!"));
     }
 
     if( (p = (*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end() )
@@ -428,13 +428,13 @@ void TCntrNode::chldDel( char igr, const string &name, long tm, int flag, bool s
 {
     if( tm < 0 )	tm = DEF_TIMEOUT;
     ResAlloc res(hd_res,false);
-    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
+    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if( !(nodeMode() == Enable || nodeMode() == Disable) )
-        throw TError(nodePath().c_str(),"Node is beign processed now!");
+        throw TError(nodePath().c_str(),_("Node is beign processed now!"));
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name);
     if( p == (*chGrp)[igr].elem.end() )
-	throw TError(nodePath().c_str(),"Child <%s> is not present!", name.c_str());
+	throw TError(nodePath().c_str(),_("Child <%s> is not present!"), name.c_str());
 
     if( p->second->nodeMode() == Enable )
 	p->second->nodeDis( tm, (flag<<8)|(shDel?NodeShiftDel:0) );
@@ -497,13 +497,13 @@ TCntrNode *TCntrNode::nodePrev( bool noex )
 {
     if( prev.node ) return prev.node;
     if( noex )	return NULL;
-    throw TError(nodePath().c_str(),"Node is the root or is not connected!");
+    throw TError(nodePath().c_str(),_("Node is the root or is not connected!"));
 }
 
 AutoHD<TCntrNode> TCntrNode::chldAt( char igr, const string &name, const string &user )
 {
     ResAlloc res( hd_res, false );
-    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),"Group of childs %d error!",igr);
+    if( !chGrp || igr >= chGrp->size() ) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name);

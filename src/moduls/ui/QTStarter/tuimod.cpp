@@ -76,9 +76,10 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), end_run(false), demon_mode(false), start_com(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -86,8 +87,6 @@ TUIMod::TUIMod( string name ) : end_run(false), demon_mode(false), start_com(fal
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //> Massages not for compile but for indexing by gettext
 #if 0

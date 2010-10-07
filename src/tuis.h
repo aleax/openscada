@@ -23,7 +23,7 @@
 #ifndef TUIS_H
 #define TUIS_H
 
-#define SUI_VER		1	//UIS type modules version
+#define SUI_VER		5	//UIS type modules version
 #define SUI_ID		"UI"
 
 #include <string>
@@ -41,7 +41,7 @@ namespace OSCADA
 class TUI : public TModule
 {
     public:
-	TUI( );
+	TUI( const string &id );
 
 	bool startStat( )	{ return run_st; }
 

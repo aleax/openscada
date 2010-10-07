@@ -309,68 +309,68 @@ int ModMArch::size()
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size (kB)"),0444,"root","Archive",1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),0444,"root","Archive",1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","Archive",2,
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size (kB)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,2,
 	    "tp","str","help",_("Path to directory for archivator's of messages files."));
-	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),0444,"root","Archive"))
+	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/add/xml",_("XML archive files"),RWRWR_,"root","Archive",1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Maximum archive file size (kB)"),RWRWR_,"root","Archive",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/fl",_("Maximum files number"),RWRWR_,"root","Archive",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/len",_("File's time size (days)"),RWRWR_,"root","Archive",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root","Archive",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Check archives period (min)"),RWRWR_,"root","Archive",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root","Archive",1,"tp","bool");
-	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),0660,"root","Archive");
+	    ctrMkNode("fld",opt,-1,"/prm/add/xml",_("XML archive files"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Maximum archive file size (kB)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/add/fl",_("Maximum files number"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/add/len",_("File's time size (days)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID);
 	}
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/fsz" && ctrChkNode(opt) )		opt->setText(TSYS::real2str((double)size()/1024.,6));
-    else if( a_path == "/prm/st/tarch" && ctrChkNode(opt) )	opt->setText(TSYS::real2str(tmCalc,6));
-    else if( a_path == "/prm/add/xml" )
+    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::real2str((double)size()/1024.,6));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::real2str(tmCalc,6));
+    else if(a_path == "/prm/add/xml")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText( useXML() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setUseXML( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(useXML() ? "1" : "0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setUseXML(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/add/sz" )
+    else if(a_path == "/prm/add/sz")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText(TSYS::int2str( maxSize() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setMaxSize( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(maxSize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/add/fl" )
+    else if(a_path == "/prm/add/fl")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText(TSYS::int2str( numbFiles() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setNumbFiles( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(numbFiles()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setNumbFiles(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/add/len" )
+    else if(a_path == "/prm/add/len")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText(TSYS::int2str( timeSize() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setTimeSize( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(timeSize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setTimeSize(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/add/pcktm" )
+    else if(a_path == "/prm/add/pcktm")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText(TSYS::int2str( packTm() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setPackTm( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(packTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPackTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/add/tm" )
+    else if(a_path == "/prm/add/tm")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText(TSYS::int2str( checkTm() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setCheckTm( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(checkTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setCheckTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/add/pack_info_fl" )
+    else if(a_path == "/prm/add/pack_info_fl")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Archive",SEC_RD) )	opt->setText(TSYS::int2str( packInfoFiles() ));
-	if( ctrChkNode(opt,"set",0664,"root","Archive",SEC_WR) )	setPackInfoFiles( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(packInfoFiles()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPackInfoFiles(atoi(opt->text().c_str()));
     }
 
-    else if( a_path == "/prm/add/chk_nw" && ctrChkNode(opt,"set",0660,"root","Archive",SEC_WR) )	checkArchivator(true);
+    else if(a_path == "/prm/add/chk_nw" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	checkArchivator(true);
     else TMArchivator::cntrCmdProc(opt);
 }
 

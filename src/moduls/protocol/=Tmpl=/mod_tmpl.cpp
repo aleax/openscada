@@ -74,10 +74,12 @@ using namespace ModTmpl;
 //* TProt                                         *
 //*************************************************
 //!!! Constructor for module's root object. Append into for your need.
-TProt::TProt( string name )
+TProt::TProt( string name ) : TProtocol(MOD_ID)
 {
+    //!!! Init shortcut to module root object. Don't change it!
+    mod		= this;
+
     //!!! Load module meta-information to root object. Don't change it!
-    mId		= MOD_ID;
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
     mVers	= M_VERSION;
@@ -85,9 +87,6 @@ TProt::TProt( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    //!!! Init shortcut to module root object. Don't change it!
-    mod		= this;
 }
 
 //!!! Destructor for module's root object. Append into for your need.

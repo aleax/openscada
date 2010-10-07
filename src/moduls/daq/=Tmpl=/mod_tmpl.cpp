@@ -76,10 +76,12 @@ using namespace ModTmpl;
 //* TTpContr                                      *
 //*************************************************
 //!!! Constructor for Root module object.
-TTpContr::TTpContr( string name )
+TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 {
+    //!!! Init shortcut to module root object. Don't change it!
+    mod		= this;
+
     //!!! Load module meta-information to root object. Don't change it!
-    mId		= MOD_ID;
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -87,9 +89,6 @@ TTpContr::TTpContr( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    //!!! Init shortcut to module root object. Don't change it!
-    mod		= this;
 }
 
 //!!! Destructor for Root module object.

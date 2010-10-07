@@ -41,9 +41,15 @@ using namespace OSCADA;
 const char *TModule::l_info[] =
     {"Module","Name","Type","Source","Version","Author","Description","License"};
 
-TModule::TModule( )
+TModule::TModule( const string &id ) : mId(id)
 {
+    lc_id = string("oscd_")+mId;
+    bindtextdomain(lc_id.c_str(),LOCALEDIR);
 
+    //> Dynamic string translation hook
+#if 0
+    char mess[][100] = { _("Author"), _("License") };
+#endif
 }
 
 TModule::~TModule(  )
@@ -55,17 +61,14 @@ TModule::~TModule(  )
 
 string TModule::modName()
 {
-    return I18Ns(mName);
+    return mName;
 }
 
 void TModule::postEnable( int flag )
 {
-    if( flag&TCntrNode::NodeRestore )	return;
+    if(flag&TCntrNode::NodeRestore)	return;
 
     mess_info(nodePath().c_str(),_("Connect module!"));
-
-    lc_id = string("oscd_")+mId;
-    bindtextdomain(lc_id.c_str(),LOCALEDIR);
 }
 
 TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
@@ -107,14 +110,14 @@ string TModule::modInfo( const string &name )
 {
     string info;
 
-    if( name == l_info[0] )      info=mId;
-    else if( name == l_info[1] ) info=I18Ns(mName);
-    else if( name == l_info[2] ) info=I18Ns(mType);
-    else if( name == l_info[3] ) info=mSource;
-    else if( name == l_info[4] ) info=I18Ns(mVers);
-    else if( name == l_info[5] ) info=I18Ns(mAutor);
-    else if( name == l_info[6] ) info=I18Ns(mDescr);
-    else if( name == l_info[7] ) info=I18Ns(mLicense);
+    if(name == l_info[0])	info = mId;
+    else if(name == l_info[1]) info = mName;
+    else if(name == l_info[2]) info = mType;
+    else if(name == l_info[3]) info = mSource;
+    else if(name == l_info[4]) info = mVers;
+    else if(name == l_info[5]) info = mAutor;
+    else if(name == l_info[6]) info = mDescr;
+    else if(name == l_info[7]) info = mLicense;
 
     return info;
 }
@@ -134,7 +137,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 		vector<string> list;
 		modInfo(list);
 		for(int i_l = 0; i_l < list.size(); i_l++)
-		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),I18Ns(list[i_l]),R_R_R_,"root","root",1,"tp","str");
+		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),_(list[i_l].c_str()),R_R_R_,"root","root",1,"tp","str");
 	    }
 	return;
     }
@@ -157,9 +160,4 @@ const char *TModule::I18N( const char *mess )
     const char *rez = Mess->I18N(mess,lc_id.c_str());
     if( !strcmp(mess,rez) ) rez = _(mess);
     return rez;
-}
-
-string TModule::I18Ns( const string &mess ) 
-{
-    return I18N(mess.c_str());
 }

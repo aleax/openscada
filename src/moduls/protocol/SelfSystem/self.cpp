@@ -63,9 +63,10 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : m_t_auth(60), mComprLev(0), mComprBrd(80)
+TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mComprBrd(80)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -73,8 +74,6 @@ TProt::TProt( string name ) : m_t_auth(60), mComprLev(0), mComprBrd(80)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TProt::~TProt( )

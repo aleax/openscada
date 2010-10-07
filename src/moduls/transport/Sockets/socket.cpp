@@ -75,9 +75,10 @@ using namespace Sockets;
 //************************************************
 //* TTransSock					 *
 //************************************************
-TTransSock::TTransSock( string name )
+TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -85,8 +86,6 @@ TTransSock::TTransSock( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 TTransSock::~TTransSock()

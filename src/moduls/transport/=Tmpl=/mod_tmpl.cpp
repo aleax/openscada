@@ -75,10 +75,12 @@ using namespace ModTmpl;
 //* TTr						 *
 //************************************************
 //!!! Constructor for module's root object. Append into for your need.
-TTr::TTr( string name )
+TTr::TTr( string name ) : TTipTransport(MOD_ID)
 {
+    //!!! Init shortcut to module's root object. No change it.
+    mod		= this;
+
     //!!! Loading module's meta-information into root object. No change it.
-    mId		= MOD_ID;
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -86,9 +88,6 @@ TTr::TTr( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    //!!! Init shortcut to module's root object. No change it.
-    mod		= this;
 }
 
 //!!! Destructor for module's root object. Append into for your need.

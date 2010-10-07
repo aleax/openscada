@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = ui_WebCfg.la
 ui_WebCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebCfg_la_SOURCES = web_cfg.cpp
+ui_WebCfg_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)UI.WebCfg

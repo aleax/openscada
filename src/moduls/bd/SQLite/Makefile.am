@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src $(SQLITE3_CFLAGS)
 oscd_modul_LTLIBRARIES = bd_SQLite.la
 bd_SQLite_la_LDFLAGS = -module -avoid-version -no-undefined $(SQLITE3_LDFLAGS)
 bd_SQLite_la_SOURCES = bd_sqlite.cpp
+bd_SQLite_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)DB.SQLite
@@ -15,7 +16,7 @@ m_name = $(oscd_modulpref)SQLite
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h &> /dev/null ; \
+	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

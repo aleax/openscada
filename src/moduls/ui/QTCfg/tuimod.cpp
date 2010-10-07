@@ -68,9 +68,10 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), start_path(string("/")+SYS->id()), end_run(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -78,8 +79,6 @@ TUIMod::TUIMod( string name ) : start_path(string("/")+SYS->id()), end_run(false
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //Public export functions
     modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon) );

@@ -80,9 +80,10 @@ using namespace KernelTest;
 //*************************************************
 //* BDTest::TTest                                 *
 //*************************************************
-TTest::TTest( string name )
+TTest::TTest( string name ) : TSpecial(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -90,8 +91,6 @@ TTest::TTest( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     mTest = grpAdd("test_",true);
 }

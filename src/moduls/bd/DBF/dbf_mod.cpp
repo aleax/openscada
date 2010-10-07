@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,12 +37,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"DBF"
-#define MOD_NAME	"DB DBF"
-#define MOD_TYPE	"BD"
+#define MOD_NAME	_("DB DBF")
+#define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define VERSION		"2.0.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"BD module. Provides support of the *.dbf files, version 3.0."
+#define VERSION		"2.0.2"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -69,9 +69,10 @@ using namespace BDDBF;
 //************************************************
 //* BDDBF::BDMod                                 *
 //************************************************
-BDMod::BDMod( string name )
+BDMod::BDMod( string name ) : TTipBD(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -79,8 +80,6 @@ BDMod::BDMod( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 }
 
 BDMod::~BDMod(  )
@@ -168,7 +167,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","BD",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","help",
 	    _("For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 	      "For example: /opt/dbf ."));
 	return;
@@ -185,7 +184,7 @@ MTable::MTable(const string &inm, MBD *iown, bool create) :
     string tbl_nm = name();
     setNodePrev(iown);
 
-    //- Set file extend -
+    //> Set file extend
     if( !(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf") )
 	tbl_nm=tbl_nm+".dbf";
 
@@ -212,7 +211,7 @@ void MTable::postDisable(int flag)
     if( flag )
     {
 	string n_tbl = name();
-	//- Set file extend -
+	//> Set file extend
 	if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
 	    n_tbl=n_tbl+".dbf";
 	
@@ -385,10 +384,10 @@ void MTable::fieldSet( TConfig &cfg )
 
 void MTable::fieldDel( TConfig &cfg )
 {
-    //- Alloc resource -
+    //> Alloc resource
     ResAlloc res(m_res,true);
 
-    //- Get key line -
+    //> Get key line
     bool i_ok = false;
     int i_ln;
     while((i_ln = findKeyLine(cfg,0,true)) >= 0)

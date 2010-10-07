@@ -73,10 +73,12 @@ using namespace ModTmpl;
 //* TWEB                                         *
 //************************************************
 //!!! Constructor for module's root object. Append into for your need.
-TWEB::TWEB( string name )
+TWEB::TWEB( string name ) : TUI(MOD_ID)
 {
+    //!!! Init shortcut to module's root object. No change it.
+    mod		= this;
+
     //!!! Loading module's meta-information into root object. No change it.
-    mId		= MOD_ID;
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VERSION;
@@ -84,9 +86,6 @@ TWEB::TWEB( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    //!!! Init shortcut to module's root object. No change it.
-    mod		= this;
 
     //!!! Register your module's export functions. Used, for example, for call from HTTP module, and use this OpenSCADA module as HTTP user interface module.
     //> Reg export functions

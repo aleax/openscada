@@ -72,9 +72,10 @@ using namespace Serial;
 //************************************************
 //* TTr						 *
 //************************************************
-TTr::TTr( string name ) : prcSt(false)
+TTr::TTr( string name ) : TTipTransport(MOD_ID), prcSt(false)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -82,8 +83,6 @@ TTr::TTr( string name ) : prcSt(false)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //> Create transports checking timer
     struct sigevent sigev;

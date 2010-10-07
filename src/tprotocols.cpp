@@ -30,7 +30,7 @@ using namespace OSCADA;
 //************************************************
 //* TProtocolS                                   *
 //************************************************
-TProtocolS::TProtocolS( ) : TSubSYS("Protocol","Transport protocols",true)
+TProtocolS::TProtocolS( ) : TSubSYS("Protocol",_("Transport protocols"),true)
 {
 
 }
@@ -91,7 +91,7 @@ void TProtocolS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TProtocol                                    *
 //************************************************
-TProtocol::TProtocol()
+TProtocol::TProtocol( const string &id ) : TModule(id)
 {
     m_pr = grpAdd("pr_");
 }

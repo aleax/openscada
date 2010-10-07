@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = tr_Tmpl.la
 tr_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_Tmpl_la_SOURCES = mod_tmpl.cpp
+tr_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)Transport.Tmpl

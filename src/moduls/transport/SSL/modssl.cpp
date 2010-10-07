@@ -69,9 +69,10 @@ using namespace MSSL;
 //************************************************
 //* TTransSock					 *
 //************************************************
-TTransSock::TTransSock( string name )
+TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
 {
-    mId		= MOD_ID;
+    mod		= this;
+
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
@@ -79,8 +80,6 @@ TTransSock::TTransSock( string name )
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    mod		= this;
 
     //> CRYPTO reentrant init
     mutex_buf = (pthread_mutex_t *)malloc( CRYPTO_num_locks( ) * sizeof(pthread_mutex_t) );
