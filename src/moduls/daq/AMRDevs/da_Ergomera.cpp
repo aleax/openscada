@@ -234,10 +234,10 @@ void Ergomera::getVals( )
 bool Ergomera::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root","DAQ",3,"tp","dec","min","1","max","65535");
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/attrs",_("Attributes list"),RWRWR_,"root","DAQ",4,"tp","str","cols","100","rows","4",
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","65535");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/attrs",_("Attributes list"),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:id:name]\n"
 		    "Where:\n"
 		    "  dt - data type: I-integer(16),LI-long integer(32),F-float;\n"
@@ -248,21 +248,21 @@ bool Ergomera::cntrCmdProc( XMLNode *opt )
 		    "  'I:0x300:var:Variable' - integer access;\n"
 		    "  'F:200:float:Float' - get float from registers 200 and 201;\n"
 		    "  'LI:300:int32:Int32' - get int32 from registers 300 and 301."));
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/FragMerge",_("Registers' fragments merge"),RWRWR_,"root","DAQ",1,"tp","bool");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/FragMerge",_("Registers' fragments merge"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	return true;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/attrs" )
+    if(a_path == "/prm/cfg/attrs")
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("Attrs",true));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("Attrs",opt->text(),true);
+	if(mPrm->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(mPrm->extPrmGet("Attrs",true));
+	if(mPrm->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	mPrm->extPrmSet("Attrs",opt->text(),true);
     }
-    else if( a_path == "/prm/cfg/FragMerge" )
+    else if(a_path == "/prm/cfg/FragMerge")
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("FragMerge"));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("FragMerge",opt->text());
+	if(mPrm->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(mPrm->extPrmGet("FragMerge"));
+	if(mPrm->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	mPrm->extPrmSet("FragMerge",opt->text());
     }
     else return false;
 

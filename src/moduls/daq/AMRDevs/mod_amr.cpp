@@ -36,12 +36,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"AMRDevs"
-#define MOD_NAME	"AMR devices"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("AMR devices")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define VERSION		"0.0.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow access to automatic meter reading devices. Supported devices: "
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow access to automatic meter reading devices. Supported devices: ")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -267,11 +267,11 @@ void *TMdContr::Task( void *icntr )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
-	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed",
+	    "sel_list","1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *",
 	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
 		    "Seconds form is one real number (1.5, 1e-3).\n"
 		    "Cron it is standard form '* * * * *'. Where:\n"
@@ -409,12 +409,12 @@ bool TMdPrm::cfgChange( TCfg &icfg )
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),0444,"root","DAQ",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_TP",cfg("DEV_TP").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","select","select","/prm/cfg/devLst");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","select","select","/prm/cfg/trLst");
+	ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_TP",cfg("DEV_TP").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/cfg/devLst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/cfg/trLst");
 	ctrRemoveNode(opt,"/prm/cfg/DEV_PRMS");
 	if( mDA ) mDA->cntrCmdProc( opt );
 	return;
@@ -422,29 +422,29 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/st/status" && ctrChkNode(opt) )
+    if(a_path == "/prm/st/status" && ctrChkNode(opt))
     {
 	string rez;
-	if( !enableStat() )		rez = TSYS::strMess("2:%s. ",_("Disabled"));
-	else if( !owner().startStat() )	rez = TSYS::strMess("1:%s. ",_("Enabled"));
-	else if( mErr.getVal().empty() )rez = TSYS::strMess("0:%s. ",_("Processed"));
+	if(!enableStat())		rez = TSYS::strMess("2:%s. ",_("Disabled"));
+	else if(!owner().startStat())	rez = TSYS::strMess("1:%s. ",_("Enabled"));
+	else if(mErr.getVal().empty())	rez = TSYS::strMess("0:%s. ",_("Processed"));
 	else rez = TSYS::strMess("%s:%s. %s. ",
 	    TSYS::strSepParse(mErr.getVal(),0,':').c_str(),_("Processed"),TSYS::strSepParse(mErr.getVal(),1,':').c_str());
-	if( needApply )	rez += _("Need re-enable for configuration apply! ");
+	if(needApply)	rez += _("Need re-enable for configuration apply! ");
 	opt->setText(rez);
     }
-    else if( mDA && mDA->cntrCmdProc( opt ) ) ;
-    else if( a_path == "/prm/cfg/devLst" && ctrChkNode(opt) )
+    else if(mDA && mDA->cntrCmdProc(opt)) ;
+    else if(a_path == "/prm/cfg/devLst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id","FLowTC_UGTAA55")->setText(_("FLowTEC UGT-AA55"));
 	opt->childAdd("el")->setAttr("id","Ergomera")->setText(_("Ergomera"));
     }
-    else if( a_path == "/prm/cfg/trLst" && ctrChkNode(opt) )
+    else if(a_path == "/prm/cfg/trLst" && ctrChkNode(opt))
     {
 	vector<string> sls;
-	if( SYS->transport().at().modPresent("Serial") )
+	if(SYS->transport().at().modPresent("Serial"))
 	    SYS->transport().at().at("Serial").at().outList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TParamContr::cntrCmdProc(opt);

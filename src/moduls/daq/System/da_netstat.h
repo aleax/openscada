@@ -38,7 +38,7 @@ class NetStat: public DA
 	~NetStat( );
 
 	string id( )	{ return "netstat"; }
-	string name( )	{ return "Net statistic"; }
+	string name( )	{ return _("Net statistic"); }
 
 	void init( TMdPrm *prm );
 	void getVal( TMdPrm *prm );

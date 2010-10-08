@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2010 by Roman Savochenko                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@ extern "C"
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"ICP_DAS"
-#define MOD_NAME	"ICP DAS hardware"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("ICP DAS hardware")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.7.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules."
+#define VERSION		"0.7.2"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -349,22 +349,22 @@ string TMdContr::serReq( string req, char mSlot )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",cfg("BUS").fld().descr(),0664,"root","root",3,"tp","dec","dest","select","select","/cntr/cfg/busLst");
-	if( cfg("BAUD").view() )
-	    ctrMkNode("fld",opt,-1,"/cntr/cfg/BAUD",cfg("BAUD").fld().descr(),0664,"root","root",3,"tp","dec","dest","sel_ed","select","/cntr/cfg/boudLst");
-	if( mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC") )
-	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root","DAQ",1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",cfg("BUS").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/cntr/cfg/busLst");
+	if(cfg("BAUD").view())
+	    ctrMkNode("fld",opt,-1,"/cntr/cfg/BAUD",cfg("BAUD").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","sel_ed","select","/cntr/cfg/boudLst");
+	if(mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC"))
+	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/cfg/busLst" && ctrChkNode(opt) )
-	for( int i_s = 0; i_s < 11; i_s++ )
+    if(a_path == "/cntr/cfg/busLst" && ctrChkNode(opt))
+	for(int i_s = 0; i_s < 11; i_s++)
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(i_s))->setText("COM "+TSYS::int2str(i_s?i_s:1)+(i_s==0?_(" (Master LP-8x81)"):""));
-    else if( a_path == "/cntr/cfg/boudLst" && ctrChkNode(opt) )
+    else if(a_path == "/cntr/cfg/boudLst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setText("300");
 	opt->childAdd("el")->setText("600");
@@ -382,10 +382,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("576000");
 	opt->childAdd("el")->setText("921600");
     }
-    else if( mBus == 0 && a_path == "/LPcfg/wTm" )
+    else if(mBus == 0 && a_path == "/LPcfg/wTm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( prmLP("wTm") );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	setPrmLP("wTm",opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prmLP("wTm"));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setPrmLP("wTm",opt->text());
     }
     else TController::cntrCmdProc(opt);
 }
@@ -878,64 +878,64 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string rez;
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	cfg("MOD_SLOT").setView( modTp != 0x8781 );
 	cfg("MOD_ADDR").setView( (modTp>>12) != 8 && owner().mBus != 0 );
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),0664,"root","root",3,"tp","dec","dest","select","select","/prm/cfg/modLst");
-	switch( modTp )
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/prm/cfg/modLst");
+	switch(modTp)
 	{
 	    case 0x8017:
-		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
-		ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root","DAQ",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root","DAQ",1,"tp","real");
-		if( ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")) )
-		    for( int i_v = 0; i_v < 8; i_v++ )
-			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
+		ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+		if(ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")))
+		    for(int i_v = 0; i_v < 8; i_v++)
+			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/cfg/tpLst");
 		break;
 	    case 0x8042:
-		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
-		for( int i_o = 0; i_o < 16; i_o++ )
-		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revIn%d",i_o).c_str(),i_o?"":_("Inputs reverse"),RWRWR_,"root","DAQ",1,"tp","bool");
-		for( int i_o = 0; i_o < 16; i_o++ )
-		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Outputs reverse"),RWRWR_,"root","DAQ",1,"tp","bool");
+		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
+		for(int i_o = 0; i_o < 16; i_o++)
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revIn%d",i_o).c_str(),i_o?"":_("Inputs reverse"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		for(int i_o = 0; i_o < 16; i_o++)
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Outputs reverse"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		break;
 	    case 0x87019:
-		if( !enableStat() || !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
-		for( int i_v = 0; i_v < 8; i_v++ )
-		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),TSYS::strMess(_("Input %d type"),i_v).c_str(),RWRWR_,"root","DAQ",3,"tp","dec","dest","select","select","/cfg/tpLst");
+		if(!enableStat() || !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
+		for(int i_v = 0; i_v < 8; i_v++)
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),TSYS::strMess(_("Input %d type"),i_v).c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/cfg/tpLst");
 		break;
 	    case 0x87024:
-		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
-		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root","DAQ",3,"tp","real","min","0","max","25.5");
-		if( !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module")) ) break;
-		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
-		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
+		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
+		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
+		if(!owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) break;
+		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root",SDAQ_ID);
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root",SDAQ_ID);
 		break;
 	    case 0x87057:
-		if( !enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration")) ) break;
-		for( int i_o = 0; i_o < 16; i_o++ )
-		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Out reverse"),RWRWR_,"root","DAQ",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root","DAQ",3,"tp","real","min","0","max","25.5");
-		if( !owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module")) ) break;
-		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root","DAQ");
-		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root","DAQ");
+		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
+		for(int i_o = 0; i_o < 16; i_o++)
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Out reverse"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
+		if(!owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) break;
+		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root",SDAQ_ID);
+		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root",SDAQ_ID);
 		break;
 	}
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/modLst" && ctrChkNode(opt) )
+    if(a_path == "/prm/cfg/modLst" && ctrChkNode(opt))
     {
-	if( owner().mBus == 0 )
+	if(owner().mBus == 0)
 	{
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8781))->setText("LP-8781");
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(0x8017))->setText("I-8017");
@@ -945,25 +945,25 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87024))->setText("I-87024");
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(0x87057))->setText("I-87057");
     }
-    else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/prms" )
+    else if(modTp == 0x8017 && enableStat() && a_path == "/cfg/prms" )
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->prmNum));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ ((PrmsI8017*)extPrms)->prmNum = atoi(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/fastPer" )
+    else if(modTp == 0x8017 && enableStat() && a_path == "/cfg/fastPer")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ ((PrmsI8017*)extPrms)->fastPer = atof(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( modTp == 0x8017 && enableStat() && a_path.substr(0,12) == "/cfg/mode/in" )
+    else if(modTp == 0x8017 && enableStat() && a_path.substr(0,12) == "/cfg/mode/in")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ ((PrmsI8017*)extPrms)->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( modTp == 0x8017 && enableStat() && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
+    else if(modTp == 0x8017 && enableStat() && a_path == "/cfg/tpLst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("-10V to +10V"));
 	opt->childAdd("el")->setAttr("id","1")->setText(_("-5V to +5V"));
@@ -971,17 +971,17 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","3")->setText(_("-1.25V to +1.25V"));
 	opt->childAdd("el")->setAttr("id","4")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
     }
-    else if( modTp == 0x87019 && enableStat() && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp" )
+    else if(modTp == 0x87019 && enableStat() && owner().startStat() && a_path.substr(0,9) == "/cfg/inTp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    rez = owner().serReq( TSYS::strMess("$%02X8C%d",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())), modSlot );
-	    opt->setText( (rez.size()!=8||rez[0]!='!') ? "-1" : TSYS::int2str(strtol(rez.data()+6,NULL,16)) );
+	    rez = owner().serReq(TSYS::strMess("$%02X8C%d",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str())), modSlot);
+	    opt->setText((rez.size()!=8||rez[0]!='!') ? "-1" : TSYS::int2str(strtol(rez.data()+6,NULL,16)));
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
-	    owner().serReq( TSYS::strMess("$%02X7C%dR%02X",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())), modSlot );
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    owner().serReq(TSYS::strMess("$%02X7C%dR%02X",(owner().mBus==0)?0:modAddr,atoi(a_path.substr(9).c_str()),atoi(opt->text().c_str())), modSlot);
     }
-    else if( modTp == 0x87019 && a_path == "/cfg/tpLst" && ctrChkNode(opt) )
+    else if(modTp == 0x87019 && a_path == "/cfg/tpLst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id","-1")->setText(_("Error"));
 	opt->childAdd("el")->setAttr("id","0")->setText(_("-15mV to +15mV"));
@@ -1010,36 +1010,36 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","24")->setText(_("M Type"));
 	opt->childAdd("el")->setAttr("id","25")->setText(_("L Type (DIN43710C Type)"));
     }
-    else if( enableStat() && a_path.substr(0,10) == "/cfg/revIn" )
+    else if(enableStat() && a_path.substr(0,10) == "/cfg/revIn")
     {
 	int rin = atoi(a_path.substr(10).c_str());
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( (dInRev&(1<<rin))?"1":"0" );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText((dInRev&(1<<rin))?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ dInRev = atoi(opt->text().c_str()) ? (dInRev|(1<<rin)) : (dInRev & ~(1<<rin)); saveExtPrms(); }
     }
-    else if( enableStat() && a_path.substr(0,11) == "/cfg/revOut" )
+    else if(enableStat() && a_path.substr(0,11) == "/cfg/revOut")
     {
 	int rout = atoi(a_path.substr(11).c_str());
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( (dOutRev&(1<<rout))?"1":"0" );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText((dOutRev&(1<<rout))?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ dOutRev = atoi(opt->text().c_str()) ? (dOutRev|(1<<rout)) : (dOutRev & ~(1<<rout)); saveExtPrms(); }
     }
-    else if( enableStat() && a_path == "/cfg/wTm" )
+    else if(enableStat() && a_path == "/cfg/wTm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText( TSYS::real2str(wTm) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	{ wTm = atof(opt->text().c_str()); saveExtPrms(); }
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::real2str(wTm));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ wTm = atof(opt->text().c_str()); saveExtPrms(); }
     }
-    else if( enableStat() && owner().startStat() && a_path == "/cfg/mod/wSt" && ctrChkNode(opt) )
+    else if(enableStat() && owner().startStat() && a_path == "/cfg/mod/wSt" && ctrChkNode(opt))
     {
 	string wSt;
 
-	rez = owner().serReq( TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr), modSlot );
-	if( rez.size() == 5 && rez[0]=='!' )
+	rez = owner().serReq(TSYS::strMess("~%02X0",(owner().mBus==0)?0:modAddr), modSlot);
+	if(rez.size() == 5 && rez[0]=='!')
 	{
 	    wSt += (bool)strtol(rez.data()+3,NULL,16) ? _("Set. ") : _("Clear. ");
 
-	    rez = owner().serReq( TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr), modSlot );
-	    if( rez.size() == 6 && rez[0]=='!' )
+	    rez = owner().serReq(TSYS::strMess("~%02X2",(owner().mBus==0)?0:modAddr), modSlot);
+	    if(rez.size() == 6 && rez[0]=='!')
 	    {
 		wSt += (bool)strtol(string(rez.data()+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
 		wSt += TSYS::real2str(0.1*strtol(rez.data()+4,NULL,16))+_(" s.");
@@ -1047,65 +1047,65 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	opt->setText(wSt);
     }
-    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt) )
+    else if(modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt))
     {
 	string cnt;
-	for( int i_c = 0; i_c < 4; i_c++ )
+	for(int i_c = 0; i_c < 4; i_c++)
 	{
 	    rez = owner().serReq( TSYS::strMess("$%02X7%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
-	    if( rez.size() != 10 || rez[0] != '!' ) { cnt = _("Error"); break; }
+	    if(rez.size() != 10 || rez[0] != '!') { cnt = _("Error"); break; }
 	    cnt = cnt + (rez.data()+3) + " ";
 	}
 	opt->setText(cnt);
     }
-    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
+    else if(modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
     {
-	for( int i_c = 0; i_c < 4; i_c++ )
-	    owner().serReq( TSYS::strMess("$%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
+	for(int i_c = 0; i_c < 4; i_c++)
+	    owner().serReq(TSYS::strMess("$%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot);
     }
-    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
+    else if(modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt))
     {
 	string cnt;
-	for( int i_c = 0; i_c < 4; i_c++ )
+	for(int i_c = 0; i_c < 4; i_c++)
 	{
-	    rez = owner().serReq( TSYS::strMess("~%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
-	    if( rez.size() != 10 || rez[0] != '!' ) { cnt = _("Error"); break; }
+	    rez = owner().serReq(TSYS::strMess("~%02X4%d",(owner().mBus==0)?0:modAddr,i_c), modSlot);
+	    if(rez.size() != 10 || rez[0] != '!') { cnt = _("Error"); break; }
 	    cnt = cnt + (rez.data()+3) + " ";
 	}
 	opt->setText(cnt);
     }
-    else if( modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
+    else if(modTp == 0x87024 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
     {
-	for( int i_c = 0; i_c < 4; i_c++ )
-	    owner().serReq( TSYS::strMess("~%02X5%d",(owner().mBus==0)?0:modAddr,i_c), modSlot );
+	for(int i_c = 0; i_c < 4; i_c++)
+	    owner().serReq(TSYS::strMess("~%02X5%d",(owner().mBus==0)?0:modAddr,i_c), modSlot);
     }
-    else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt) )
+    else if(modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPon" && ctrChkNode(opt))
     {
-	rez = owner().serReq( TSYS::strMess("~%02X4P",(owner().mBus==0)?0:modAddr), modSlot );
-	if( rez.size() != 7 || rez[0] != '!' ) opt->setText(_("Error"));
+	rez = owner().serReq(TSYS::strMess("~%02X4P",(owner().mBus==0)?0:modAddr), modSlot);
+	if(rez.size() != 7 || rez[0] != '!') opt->setText(_("Error"));
 	else
 	{
 	    string cnt;
 	    int vl = strtol(rez.data()+3,NULL,16);
-	    for( int i_o = 0; i_o < 16; i_o++ )	cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    for(int i_o = 0; i_o < 16; i_o++)	cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
 	    opt->setText(cnt);
 	}
     }
-    else if( modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
-	owner().serReq( TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr), modSlot );
-    else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt) )
+    else if(modTp == 0x87057 && enableStat() && owner().startStat() && a_path == "/cfg/mod/vPonSet" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	owner().serReq(TSYS::strMess("~%02X5P",(owner().mBus==0)?0:modAddr), modSlot);
+    else if(modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSf" && ctrChkNode(opt))
     {
 	rez = owner().serReq( TSYS::strMess("~%02X4S",(owner().mBus==0)?0:modAddr), modSlot );
-	if( rez.size() != 7 || rez[0] != '!' ) opt->setText(_("Error"));
+	if(rez.size() != 7 || rez[0] != '!') opt->setText(_("Error"));
 	else
 	{
 	    string cnt;
 	    int vl = strtol(rez.data()+3,NULL,16);
-	    for( int i_o = 0; i_o < 16; i_o++ )	cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    for(int i_o = 0; i_o < 16; i_o++)	cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
 	    opt->setText(cnt);
 	}
     }
-    else if( modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
-	owner().serReq( TSYS::strMess("~%02X5S",(owner().mBus==0)?0:modAddr), modSlot );
+    else if(modTp == 0x87057 && owner().startStat() && owner().startStat() && a_path == "/cfg/mod/vSfSet" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	owner().serReq(TSYS::strMess("~%02X5S",(owner().mBus==0)?0:modAddr), modSlot);
     else TParamContr::cntrCmdProc(opt);
 }

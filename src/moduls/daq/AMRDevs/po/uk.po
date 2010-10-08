@@ -4,162 +4,34 @@
 #
 # Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010.
 #
-#: da_Ergomera.cpp:60 da_Ergomera.cpp:170 mod_amr.cpp:55 mod_amr.cpp:159
-#: mod_amr.cpp:168 mod_amr.cpp:365
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-13 16:03+0300\n"
+"POT-Creation-Date: 2010-10-08 10:24+0300\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: da_Ergomera.cpp:37 da_Ergomera.cpp:259 da_Ergomera.cpp:260
-msgid "Attrs"
-msgstr ""
-
-#: da_Ergomera.cpp:38 da_Ergomera.cpp:264 da_Ergomera.cpp:265
-msgid "FragMerge"
-msgstr ""
-
-#: da_Ergomera.cpp:45
-msgid "I"
-msgstr ""
-
-#: da_Ergomera.cpp:55 da_Ergomera.cpp:70 da_Ergomera.cpp:216
-msgid "F"
-msgstr ""
-
-#: da_Ergomera.cpp:70 da_Ergomera.cpp:224
-msgid "LI"
-msgstr ""
-
-#: da_Ergomera.cpp:71
-msgid ":"
-msgstr ""
-
-#: da_Ergomera.cpp:141 da_FlowTEC.cpp:71 mod_amr.cpp:446 mod_amr.cpp:447
-msgid "Serial"
-msgstr "Послідовний"
-
-#: da_Ergomera.cpp:166
 msgid "13:Error respond: Too short."
 msgstr "13:Помилка відповіді: Не повна."
 
-#: da_Ergomera.cpp:168
 msgid "13:Error respond: CRC check error."
 msgstr "13:Помилка відповіді: Помилка перевірки CRC."
 
-#: da_Ergomera.cpp:173
+#, c-format
 msgid "14:Connection error - %s"
 msgstr "14:Помилка підключення - %s"
 
-#: da_Ergomera.cpp:194
 msgid "15:Response PDU size error."
 msgstr "15:Помилка розміру PDU відповіді."
 
-#: da_Ergomera.cpp:237 da_FlowTEC.cpp:141 mod_amr.cpp:271 mod_amr.cpp:413
-msgid "info"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_Ergomera.cpp:240 da_Ergomera.cpp:251
-#: da_FlowTEC.cpp:143 da_FlowTEC.cpp:144 da_FlowTEC.cpp:145 mod_amr.cpp:274
-#: mod_amr.cpp:416 mod_amr.cpp:417 mod_amr.cpp:418
-msgid "fld"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_FlowTEC.cpp:143
-msgid "/prm/cfg/DEV_ADDR"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_FlowTEC.cpp:143 mod_amr.cpp:169 mod_amr.cpp:294
-msgid "DEV_ADDR"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_Ergomera.cpp:240 da_Ergomera.cpp:251
-#: da_Ergomera.cpp:259 da_Ergomera.cpp:260 da_Ergomera.cpp:264
-#: da_Ergomera.cpp:265 da_FlowTEC.cpp:143 da_FlowTEC.cpp:144
-#: da_FlowTEC.cpp:145 da_FlowTEC.cpp:153 da_FlowTEC.cpp:154 da_FlowTEC.cpp:158
-#: da_FlowTEC.cpp:159 mod_amr.cpp:274 mod_amr.cpp:416 mod_amr.cpp:417
-#: mod_amr.cpp:418
-msgid "root"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_Ergomera.cpp:240 da_Ergomera.cpp:251
-#: da_Ergomera.cpp:259 da_Ergomera.cpp:260 da_Ergomera.cpp:264
-#: da_Ergomera.cpp:265 da_FlowTEC.cpp:143 da_FlowTEC.cpp:144
-#: da_FlowTEC.cpp:145 da_FlowTEC.cpp:153 da_FlowTEC.cpp:154 da_FlowTEC.cpp:158
-#: da_FlowTEC.cpp:159 mod_amr.cpp:40 mod_amr.cpp:274 mod_amr.cpp:416
-#: mod_amr.cpp:417 mod_amr.cpp:418
-msgid "DAQ"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_Ergomera.cpp:240 da_Ergomera.cpp:251
-#: da_FlowTEC.cpp:143 da_FlowTEC.cpp:144 da_FlowTEC.cpp:145 mod_amr.cpp:274
-#: mod_amr.cpp:416 mod_amr.cpp:417 mod_amr.cpp:418
-msgid "tp"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_FlowTEC.cpp:143 da_FlowTEC.cpp:144
-#: da_FlowTEC.cpp:145
-msgid "dec"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_FlowTEC.cpp:143 da_FlowTEC.cpp:144
-msgid "min"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_FlowTEC.cpp:143 da_FlowTEC.cpp:144 mod_amr.cpp:160
-#: mod_amr.cpp:163
-msgid "1"
-msgstr ""
-
-#: da_Ergomera.cpp:239 da_FlowTEC.cpp:143 da_FlowTEC.cpp:144
-msgid "max"
-msgstr ""
-
-#: da_Ergomera.cpp:239
-msgid "65535"
-msgstr ""
-
-#: da_Ergomera.cpp:240 da_Ergomera.cpp:257
-msgid "/prm/cfg/attrs"
-msgstr ""
-
-#: da_Ergomera.cpp:240
 msgid "Attributes list"
 msgstr "Перелік атрибутів"
 
-#: da_Ergomera.cpp:240 mod_amr.cpp:274 mod_amr.cpp:416 mod_amr.cpp:417
-#: mod_amr.cpp:418
-msgid "str"
-msgstr ""
-
-#: da_Ergomera.cpp:240
-msgid "cols"
-msgstr ""
-
-#: da_Ergomera.cpp:240 mod_amr.cpp:160
-msgid "100"
-msgstr ""
-
-#: da_Ergomera.cpp:240
-msgid "rows"
-msgstr ""
-
-#: da_Ergomera.cpp:240
-msgid "4"
-msgstr ""
-
-#: da_Ergomera.cpp:241 mod_amr.cpp:276
-msgid "help"
-msgstr ""
-
-#: da_Ergomera.cpp:241
 msgid ""
 "Attributes configuration list. List must be written by lines in format: [dt:"
 "numb:id:name]\n"
@@ -185,327 +57,104 @@ msgstr ""
 "  'F:200:float:Float' - отримання реального з регістрів 200 та 201;\n"
 "  'LI:300:int32:Int32' - отримання int32 з регістрів 300 та 301."
 
-#: da_Ergomera.cpp:251 da_Ergomera.cpp:262
-msgid "/prm/cfg/FragMerge"
-msgstr ""
-
-#: da_Ergomera.cpp:251
 msgid "Registers' fragments merge"
 msgstr "Поєднання фрагментів регістрів"
 
-#: da_Ergomera.cpp:251
-msgid "bool"
-msgstr ""
-
-#: da_Ergomera.cpp:256 da_FlowTEC.cpp:150 mod_amr.cpp:425
-msgid "path"
-msgstr ""
-
-#: da_Ergomera.cpp:259 da_Ergomera.cpp:264 da_FlowTEC.cpp:153
-#: da_FlowTEC.cpp:158
-msgid "get"
-msgstr ""
-
-#: da_Ergomera.cpp:260 da_Ergomera.cpp:265 da_FlowTEC.cpp:154
-#: da_FlowTEC.cpp:159
-msgid "set"
-msgstr ""
-
-#: da_FlowTEC.cpp:37 da_FlowTEC.cpp:158 da_FlowTEC.cpp:159
-msgid "FirmwareVer"
-msgstr ""
-
-#: da_FlowTEC.cpp:38 da_FlowTEC.cpp:153 da_FlowTEC.cpp:154
-msgid "Thread"
-msgstr "Нитка"
-
-#: da_FlowTEC.cpp:41 da_FlowTEC.cpp:117
-msgid "val"
-msgstr ""
-
-#: da_FlowTEC.cpp:41
 msgid "Value"
 msgstr "Значення"
 
-#: da_FlowTEC.cpp:42 da_FlowTEC.cpp:118
-msgid "p"
-msgstr ""
-
-#: da_FlowTEC.cpp:42
 msgid "Pressure"
 msgstr "Тиск"
 
-#: da_FlowTEC.cpp:43 da_FlowTEC.cpp:119
-msgid "t"
-msgstr ""
-
-#: da_FlowTEC.cpp:43
 msgid "Temperature"
 msgstr "Температура"
 
-#: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54 da_FlowTEC.cpp:122 da_FlowTEC.cpp:130
-msgid "curF"
-msgstr ""
-
-#: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54
 msgid "Current flow"
 msgstr "Поточні витрати"
 
-#: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55 da_FlowTEC.cpp:123 da_FlowTEC.cpp:131
-msgid "qntDayStart"
-msgstr ""
-
-#: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55
 msgid "Quantity for start day"
 msgstr "Кількість з початку доби"
 
-#: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56 da_FlowTEC.cpp:124 da_FlowTEC.cpp:132
-msgid "qntDayLast"
-msgstr ""
-
-#: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56
 msgid "Quantity for last day"
 msgstr "Кількість за попередню добу"
 
-#: da_FlowTEC.cpp:49 da_FlowTEC.cpp:57 da_FlowTEC.cpp:125 da_FlowTEC.cpp:133
-msgid "qntStart"
-msgstr ""
-
-#: da_FlowTEC.cpp:49 da_FlowTEC.cpp:57
 msgid "Quantity for start"
 msgstr "Кількість з початку вимірювання"
 
-#: da_FlowTEC.cpp:53 da_FlowTEC.cpp:129
-msgid "cal"
-msgstr ""
-
-#: da_FlowTEC.cpp:53
 msgid "Caloric"
 msgstr "Калорійність"
 
-#: da_FlowTEC.cpp:112
 msgid "14:Connection error or respond size short."
 msgstr "14:Помилка підключення або коротка відповідь."
 
-#: da_FlowTEC.cpp:113
 msgid "10:Respond error."
 msgstr "10:Помилка відповіді."
 
-#: da_FlowTEC.cpp:114
 msgid "11:Request broken."
 msgstr "11:Помилка запиту."
 
-#: da_FlowTEC.cpp:115
 msgid "15:Respond thread broken."
 msgstr "15:Помилкова нитка у відповіді."
 
-#: da_FlowTEC.cpp:143
-msgid "255"
-msgstr ""
-
-#: da_FlowTEC.cpp:144 da_FlowTEC.cpp:151
-msgid "/prm/cfg/Thread"
-msgstr ""
-
-#: da_FlowTEC.cpp:144
 msgid "Thread number"
 msgstr "Номер нитки"
 
-#: da_FlowTEC.cpp:144 mod_amr.cpp:162 mod_amr.cpp:163
-msgid "3"
-msgstr ""
-
-#: da_FlowTEC.cpp:145 da_FlowTEC.cpp:156
-msgid "/prm/cfg/FirmWareVer"
-msgstr ""
-
-#: da_FlowTEC.cpp:145
 msgid "Firmware version"
 msgstr "Версія ПЗ"
 
-#: mod_amr.cpp:38
-msgid "AMRDevs"
-msgstr ""
-
-#: mod_amr.cpp:39
 msgid "AMR devices"
 msgstr "Пристрої АСКО"
 
-#: mod_amr.cpp:42
-msgid "0.0.1"
-msgstr ""
-
-#: mod_amr.cpp:43
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: mod_amr.cpp:44
 msgid "Allow access to automatic meter reading devices. Supported devices: "
 msgstr ""
 "Надає доступ до пристроїв лічильників комерцевого обліку. Підтримуються "
 "пристрої: "
 
-#: mod_amr.cpp:45
-msgid "GPL2"
-msgstr ""
-
-#: mod_amr.cpp:50
-msgid "C"
-msgstr ""
-
-#: mod_amr.cpp:159 mod_amr.cpp:166 mod_amr.cpp:186
-msgid "PRM_BD"
-msgstr ""
-
-#: mod_amr.cpp:159
 msgid "Parameteres table"
 msgstr "Таблиця параметрів"
 
-#: mod_amr.cpp:159 mod_amr.cpp:162 mod_amr.cpp:168
-msgid "30"
-msgstr ""
-
-#: mod_amr.cpp:160 mod_amr.cpp:183 mod_amr.cpp:274
-msgid "SCHEDULE"
-msgstr ""
-
-#: mod_amr.cpp:160
 msgid "Calc schedule"
 msgstr "Планування обчислення"
 
-#: mod_amr.cpp:161 mod_amr.cpp:183
-msgid "PRIOR"
-msgstr ""
-
-#: mod_amr.cpp:161
 msgid "Gather task priority"
 msgstr "Рівень пріорітету задачі збору даних"
 
-#: mod_amr.cpp:161
-msgid "2"
-msgstr ""
-
-#: mod_amr.cpp:161 mod_amr.cpp:459
-msgid "0"
-msgstr ""
-
-#: mod_amr.cpp:161
-msgid "-1;99"
-msgstr ""
-
-#: mod_amr.cpp:162 mod_amr.cpp:184
-msgid "TM_REST"
-msgstr ""
-
-#: mod_amr.cpp:162
 msgid "Restore timeout (s)"
 msgstr "Час відновлення (с)"
 
-#: mod_amr.cpp:163 mod_amr.cpp:184
-msgid "REQ_TRY"
-msgstr ""
-
-#: mod_amr.cpp:163
 msgid "Request tries"
 msgstr "Спроб запиту"
 
-#: mod_amr.cpp:163
-msgid "1;10"
-msgstr ""
-
-#: mod_amr.cpp:166
-msgid "std"
-msgstr ""
-
-#: mod_amr.cpp:166
 msgid "Standard"
 msgstr "Стандарт"
 
-#: mod_amr.cpp:167 mod_amr.cpp:294 mod_amr.cpp:405 mod_amr.cpp:417
-msgid "DEV_TP"
-msgstr ""
-
-#: mod_amr.cpp:167
 msgid "Device type"
 msgstr "Тип пристрою"
 
-#: mod_amr.cpp:167
-msgid "20"
-msgstr ""
-
-#: mod_amr.cpp:168 mod_amr.cpp:294 mod_amr.cpp:418
-msgid "ADDR"
-msgstr ""
-
-#: mod_amr.cpp:168
 msgid "Transport's address"
 msgstr "Адреса транспорту"
 
-#: mod_amr.cpp:169
 msgid "Device address"
 msgstr "Адреса пристрою"
 
-#: mod_amr.cpp:169
-msgid "50"
-msgstr ""
-
-#: mod_amr.cpp:170 mod_amr.cpp:294
-msgid "DEV_PRMS"
-msgstr ""
-
-#: mod_amr.cpp:170
 msgid "Device addon parameters"
 msgstr "Додаткові параметри пристрою"
 
-#: mod_amr.cpp:170
-msgid "1000"
-msgstr ""
-
-#: mod_amr.cpp:186
-msgid "AMRDevsPrm_"
-msgstr ""
-
-#: mod_amr.cpp:199
 #, c-format
 msgid "Call by period %g s. "
 msgstr "Виклик за періодом %g с. "
 
-#: mod_amr.cpp:200
 #, c-format
 msgid "Call by cron '%s'. "
 msgstr "Виклик за розкладом '%s'. "
 
-#: mod_amr.cpp:201
 #, c-format
 msgid "Gather data time %.6g ms. "
 msgstr "Час збору даних %.6g мс. "
 
-#: mod_amr.cpp:255
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: mod_amr.cpp:274
-msgid "/cntr/cfg/SCHEDULE"
-msgstr ""
-
-#: mod_amr.cpp:274 mod_amr.cpp:417 mod_amr.cpp:418
-msgid "dest"
-msgstr ""
-
-#: mod_amr.cpp:274
-msgid "sel_ed"
-msgstr ""
-
-#: mod_amr.cpp:275
-msgid "sel_list"
-msgstr ""
-
-#: mod_amr.cpp:275
-msgid "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"
-msgstr ""
-
-#: mod_amr.cpp:276
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
@@ -526,110 +175,29 @@ msgstr ""
 "  - місяця (1-12);\n"
 "  - дні тижня (0[неділя]-6)."
 
-#: mod_amr.cpp:294
-msgid "w_attr"
-msgstr ""
-
-#: mod_amr.cpp:326 mod_amr.cpp:440
-msgid "FLowTC_UGTAA55"
-msgstr ""
-
-#: mod_amr.cpp:327 mod_amr.cpp:441
-msgid "Ergomera"
-msgstr "Ергомера"
-
-#: mod_amr.cpp:328
 msgid "No one device selected."
 msgstr "Не вибрано пристрій."
 
-#: mod_amr.cpp:370
-msgid "prms"
-msgstr ""
-
-#: mod_amr.cpp:416 mod_amr.cpp:426
-msgid "/prm/st/status"
-msgstr ""
-
-#: mod_amr.cpp:416
 msgid "Status"
 msgstr "Стан"
 
-#: mod_amr.cpp:417
-msgid "/prm/cfg/DEV_TP"
-msgstr ""
-
-#: mod_amr.cpp:417 mod_amr.cpp:418
-msgid "select"
-msgstr ""
-
-#: mod_amr.cpp:417 mod_amr.cpp:438
-msgid "/prm/cfg/devLst"
-msgstr ""
-
-#: mod_amr.cpp:418
-msgid "/prm/cfg/ADDR"
-msgstr ""
-
-#: mod_amr.cpp:418 mod_amr.cpp:443
-msgid "/prm/cfg/trLst"
-msgstr ""
-
-#: mod_amr.cpp:419
-msgid "/prm/cfg/DEV_PRMS"
-msgstr ""
-
-#: mod_amr.cpp:429
-#, c-format
-msgid "2:%s. "
-msgstr ""
-
-#: mod_amr.cpp:429
 msgid "Disabled"
 msgstr "Виключено"
 
-#: mod_amr.cpp:430
-#, c-format
-msgid "1:%s. "
-msgstr ""
-
-#: mod_amr.cpp:430
 msgid "Enabled"
 msgstr "Включено"
 
-#: mod_amr.cpp:431
-#, c-format
-msgid "0:%s. "
-msgstr ""
-
-#: mod_amr.cpp:431 mod_amr.cpp:433
 msgid "Processed"
 msgstr "Обслуговування"
 
-#: mod_amr.cpp:432
-#, c-format
-msgid "%s:%s. %s. "
-msgstr ""
-
-#: mod_amr.cpp:434
 msgid "Need re-enable for configuration apply! "
 msgstr "Потрібно переувімкнути для активації конфігурації! "
 
-#: mod_amr.cpp:440 mod_amr.cpp:441 mod_amr.cpp:449
-msgid "el"
-msgstr ""
-
-#: mod_amr.cpp:440 mod_amr.cpp:441
-msgid "id"
-msgstr ""
-
-#: mod_amr.cpp:440
 msgid "FLowTEC UGT-AA55"
 msgstr "ФлоуТЕК  UGT-AA55"
 
-#: mod_amr.cpp:456
-msgid "err"
-msgstr ""
+msgid "Ergomera"
+msgstr "Ергомера"
 
-#: da_Ergomera.h:52
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримано."

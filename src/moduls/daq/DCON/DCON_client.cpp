@@ -36,12 +36,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"DCON"
-#define MOD_NAME	"DCON client"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("DCON client")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.3.2"
-#define AUTORS		"Roman Savochenko, Almaz Karimov"
-#define DESCRIPTION	"Allow realisation of DCON client service. Supported I-7000 DCON protocol."
+#define VERSION		"0.3.3"
+#define AUTORS		_("Roman Savochenko, Almaz Karimov")
+#define DESCRIPTION	_("Allow realisation of DCON client service. Supported I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -575,20 +575,20 @@ void *TMdContr::Task( void *icntr )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/serDevLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/serDevLst");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt) )
+    if(a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt))
     {
 	vector<string> sls;
-	if( SYS->transport().at().modPresent("Serial") )
+	if(SYS->transport().at().modPresent("Serial"))
 	    SYS->transport().at().at("Serial").at().outList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
             opt->childAdd("el")->setText(sls[i_s]);
     }
     else TController::cntrCmdProc(opt);

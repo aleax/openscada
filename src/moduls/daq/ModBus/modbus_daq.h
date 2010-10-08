@@ -43,12 +43,12 @@ using namespace OSCADA;
 //*************************************************
 //* DAQ modul info!                               *
 #define DAQ_ID		"ModBus"
-#define DAQ_NAME	"ModBUS"
-#define DAQ_TYPE	"DAQ"
+#define DAQ_NAME	_("ModBUS")
+#define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.1.0"
-#define DAQ_AUTORS	"Roman Savochenko"
-#define DAQ_DESCR	"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
+#define DAQ_MVER	"1.1.1"
+#define DAQ_AUTORS	_("Roman Savochenko")
+#define DAQ_DESCR	_("Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
 //*************************************************
 
@@ -127,8 +127,7 @@ class TMdContr: public TController
 	class SDataRec
 	{
 	    public:
-		SDataRec( int ioff, int v_rez ) : off(ioff)
-		{ val.assign(v_rez,0); err.setVal("11:Value not gathered."); }
+		SDataRec( int ioff, int v_rez );
 
 		int	off;			//Data block start offset
 		string	val;			//Data block values kadr

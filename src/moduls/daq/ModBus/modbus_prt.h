@@ -36,12 +36,12 @@ using namespace OSCADA;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"ModBus"
-#define PRT_NAME	"ModBUS"
-#define PRT_TYPE	"Protocol"
+#define PRT_NAME	_("ModBUS")
+#define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"0.6.0"
-#define PRT_AUTORS	"Roman Savochenko"
-#define PRT_DESCR	"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
+#define PRT_MVER	"0.6.1"
+#define PRT_AUTORS	_("Roman Savochenko")
+#define PRT_DESCR	_("Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 

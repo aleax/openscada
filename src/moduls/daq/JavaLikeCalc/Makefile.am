@@ -16,7 +16,7 @@ m_name = $(oscd_modulpref)JavaLikeCalc
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C -a *.cpp *.h *.ypp &> /dev/null ; \
+	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h *.ypp ; \
 	for cat in $$catalogs; do \
 	msgmerge -U $$cat $$name ; \
 	done

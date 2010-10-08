@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -1676,7 +1676,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) + getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		else
 		{
@@ -1688,7 +1688,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[*(uint16_t*)(cprg+1)] = op1.getS() + getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
 		cprg+=7; break;
@@ -1796,7 +1796,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) == getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		else
 		{
@@ -1809,7 +1809,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[*(uint16_t*)(cprg+1)] = op1.getS() == getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		}
 		cprg+=7; break;
@@ -1827,7 +1827,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[*(uint16_t*)(cprg+1)] = getValS(val,reg[*(uint16_t*)(cprg+3)]) != getValS(val,reg[*(uint16_t*)(cprg+5)]);
 			    break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		else
 		{
@@ -1839,7 +1839,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[*(uint16_t*)(cprg+1)] = op1.getS() != getValS(val,reg[*(uint16_t*)(cprg+5)]); break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'\n"));
+			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
 		cprg+=7; break;
@@ -2156,53 +2156,53 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 void Func::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TFunction::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),owner().DB().empty()?0444:0664,"root","root");
-	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?0444:0664,"root","root",2,"tp","str","len","50");
-	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?0444:0664,"root","root",3,"tp","str","cols","100","rows","5");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calc time (sec)"),0664,"root","root",1,"tp","dec");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
+	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
+	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calc time (sec)"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	if(ctrMkNode("area",opt,-1,"/io",_("Programm")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),0664,"root","root",1,"s_com","add,del,ins,move"))
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move"))
 	    {
-		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),0664,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)+";"+TSYS::int2str(IO::Object)).c_str(),
 		    "sel_list",_("Real;Integer;Boolean;String;Object"));
-		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),0664,"root","root",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)+";"+TSYS::int2str(IO::Return)).c_str(),
 		    "sel_list",_("Input;Output;Return"));
-		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),0664,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),0664,"root","root",2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRWR_,"root",SDAQ_ID,2,"tp","str","rows","10");
 	}
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/func/cfg/name" && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )		setName( opt->text() );
-    else if( a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setDescr( opt->text() );
-    else if( a_path == "/func/cfg/m_calc_tm" )
+    if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+    else if(a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    else if(a_path == "/func/cfg/m_calc_tm")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(maxCalcTm()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setMaxCalcTm( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(maxCalcTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMaxCalcTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/io/io" )
+    else if(a_path == "/io/io")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","",0664);
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","",0664);
-	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/io/io/2","",0664);
-	    XMLNode *n_mode	= ctrMkNode("list",opt,-1,"/io/io/3","",0664);
-	    XMLNode *n_hide	= ctrMkNode("list",opt,-1,"/io/io/4","",0664);
-	    XMLNode *n_def	= ctrMkNode("list",opt,-1,"/io/io/5","",0664);
-	    for( int id = 0; id < ioSize(); id++ )
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","",RWRWR_);
+	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","",RWRWR_);
+	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/io/io/2","",RWRWR_);
+	    XMLNode *n_mode	= ctrMkNode("list",opt,-1,"/io/io/3","",RWRWR_);
+	    XMLNode *n_hide	= ctrMkNode("list",opt,-1,"/io/io/4","",RWRWR_);
+	    XMLNode *n_def	= ctrMkNode("list",opt,-1,"/io/io/5","",RWRWR_);
+	    for(int id = 0; id < ioSize(); id++)
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
@@ -2212,29 +2212,29 @@ void Func::cntrCmdProc( XMLNode *opt )
 		if(n_def)	n_def->childAdd("el")->setText(io(id)->def());
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	ioAdd( new IO("new",_("New IO"),IO::Real,IO::Default) );
-	if( ctrChkNode(opt,"ins",0664,"root","root",SEC_WR) )	ioIns( new IO("new",_("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()) );
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	ioDel( atoi(opt->attr("row").c_str()) );
-	if( ctrChkNode(opt,"move",0664,"root","root",SEC_WR) )	ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str()));
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioDel(atoi(opt->attr("row").c_str()));
+	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioMove(atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
-	    if( (col == 0 || col == 1) && !opt->text().size() )
+	    if((col == 0 || col == 1) && !opt->text().size())
 	        throw TError(nodePath().c_str(),_("Empty value is not valid."));
-	    if( col == 0 )	io(row)->setId(opt->text());
-	    else if( col == 1 )	io(row)->setName(opt->text());
-	    else if( col == 2 )	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
-	    else if( col == 3 )	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
-	    else if( col == 4 )	io(row)->setHide(atoi(opt->text().c_str()));
-	    else if( col == 5 )	io(row)->setDef(opt->text());
+	    if(col == 0)	io(row)->setId(opt->text());
+	    else if(col == 1)	io(row)->setName(opt->text());
+	    else if(col == 2)	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
+	    else if(col == 3)	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
+	    else if(col == 4)	io(row)->setHide(atoi(opt->text().c_str()));
+	    else if(col == 5)	io(row)->setDef(opt->text());
 	    if(!owner().DB().empty()) modif();
 	}
     }
-    else if( a_path == "/io/prog" )
+    else if(a_path == "/io/prog")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( prog() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	{ setProg( opt->text() ); progCompile(); }
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
     }
     else TFunction::cntrCmdProc(opt);
 }

@@ -38,7 +38,7 @@ class Mem: public DA
 	~Mem( );
 
 	string id( )	{ return "MEM"; }
-	string name( )	{ return "Memory"; }
+	string name( )	{ return _("Memory"); }
 
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );

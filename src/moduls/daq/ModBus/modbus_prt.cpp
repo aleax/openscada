@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2008-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -420,49 +420,49 @@ void TProt::pushPrtMess( const string &vl )
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/n_",_("Node"),RWRWR_,"root",SPRT_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,0,"/node",_("Nodes")))
-	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","n_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/node/node",_("Nodes"),RWRWR_,"root",SPRT_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","n_","idSz","20");
 	if(ctrMkNode("area",opt,1,"/rep",_("Report")))
 	{
-	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),0664,"root","DAQ",4,"tp","dec","min","0","max","10000",
+	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","0","max","10000",
 		"help",_("Zero use for report disabling"));
 	    if(prtLen())
-		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),0444,"root","DAQ",3,"tp","str","cols","90","rows","20");
+		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),R_R_R_,"root",SPRT_ID,3,"tp","str","cols","90","rows","20");
 	}
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/n_" || a_path == "/node/node" )
+    if(a_path == "/br/n_" || a_path == "/node/node")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    nList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    nAdd(vid); nAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(mNode,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode,opt->attr("id"),-1,1);
     }
-    else if( a_path == "/rep/repLen" )
+    else if(a_path == "/rep/repLen")
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText( TSYS::int2str(prtLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )	setPrtLen( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(prtLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setPrtLen(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/rep/rep" && ctrChkNode(opt) )
+    else if(a_path == "/rep/rep" && ctrChkNode(opt))
     {
 	ResAlloc res(nodeRes(),true);
-	for( int i_p = 0; i_p < mPrt.size(); i_p++ )
+	for(int i_p = 0; i_p < mPrt.size(); i_p++)
 	    opt->setText(opt->text()+mPrt[i_p]+"\n");
     }
     else TProtocol::cntrCmdProc(opt);
@@ -1099,85 +1099,85 @@ void *Node::Task( void *ind )
 void Node::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+name(),0664,"root","root");
-	if( ctrMkNode("area",opt,-1,"/nd",_("Node")) )
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+name(),RWRWR_,"root",SPRT_ID);
+	if(ctrMkNode("area",opt,-1,"/nd",_("Node")))
 	{
-	    if( ctrMkNode("area",opt,-1,"/nd/st",_("State")) )
+	    if(ctrMkNode("area",opt,-1,"/nd/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/nd/st/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/nd/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/nd/cfg",_("Config")) )
+	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Config")))
 	    {
-		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root","root",RWRWR_);
+		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root",SPRT_ID,RWRWR_);
 		//>> Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
-		if( xt ) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
+		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
 		xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
-		if( xt ) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_otr");
+		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_otr");
 		xt = ctrId(opt->childGet(0),"/nd/cfg/DT_PROG",true);
-		if( xt ) xt->parent()->childDel(xt);
+		if(xt) xt->parent()->childDel(xt);
 	    }
 	}
-	if( mode( ) == 0 && ctrMkNode("area",opt,-1,"/dt",_("Data")) )
+	if(mode() == 0 && ctrMkNode("area",opt,-1,"/dt",_("Data")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root","root",2,"s_com","add,del,ins,move","rows","15"))
+	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins,move","rows","15"))
 	    {
-		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),RWRWR_,"root","root",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),RWRWR_,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
 		    "sel_list",_("Real;Integer;Boolean;String"));
-		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Programm language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Programm"),RWRWR_,"root","root",2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Programm language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Programm"),RWRWR_,"root",SPRT_ID,2,"tp","str","rows","10");
 	}
-	if( mode( ) == 0 && ctrMkNode("area",opt,-1,"/lnk",_("Links")) )
-	    for( int i_io = 0; i_io < ioSize(); i_io++ )
-		if( io(i_io)->flg()&IsLink )
-		    ctrMkNode("fld",opt,-1,("/lnk/el_"+TSYS::int2str(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root","root",
+	if(mode() == 0 && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
+	    for(int i_io = 0; i_io < ioSize(); i_io++)
+		if(io(i_io)->flg()&IsLink)
+		    ctrMkNode("fld",opt,-1,("/lnk/el_"+TSYS::int2str(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root",SPRT_ID,
 			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+TSYS::int2str(i_io)).c_str());
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/nd/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
-    else if( a_path == "/nd/st/en_st" )
+    if(a_path == "/nd/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
+    else if(a_path == "/nd/st/en_st")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/nd/st/db" )
+    else if(a_path == "/nd/st/db")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
     }
-    else if( a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt) )
+    else if(a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt))
     {
-	if( mode() != 2 ) opt->childAdd("el")->setText("*");
+	if(mode() != 2) opt->childAdd("el")->setText("*");
 	vector<string> sls;
 	SYS->transport().at().inTrList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if( a_path == "/nd/cfg/ls_otr" && ctrChkNode(opt) )
+    else if(a_path == "/nd/cfg/ls_otr" && ctrChkNode(opt))
     {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if( a_path.substr(0,7) == "/nd/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
-    else if( a_path == "/dt/io" )
+    else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
+    else if(a_path == "/dt/io")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	{
 	    XMLNode *nId   = ctrMkNode("list",opt,-1,"/dt/io/id","");
 	    XMLNode *nNm   = ctrMkNode("list",opt,-1,"/dt/io/nm","");
@@ -1185,71 +1185,71 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    XMLNode *nLnk  = ctrMkNode("list",opt,-1,"/dt/io/lnk","");
 	    XMLNode *nVal  = ctrMkNode("list",opt,-1,"/dt/io/vl","");
 
-	    for( int id = 0; id < ioSize(); id++ )
+	    for(int id = 0; id < ioSize(); id++)
 	    {
-		if( nId )	nId->childAdd("el")->setText(io(id)->id());
-		if( nNm )	nNm->childAdd("el")->setText(io(id)->name());
-		if( nType )	nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
-		if( nLnk )	nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
-		if( nVal )	nVal->childAdd("el")->setText( (data && data->val.func()) ? data->val.getS(id) : io(id)->def() );
+		if(nId)		nId->childAdd("el")->setText(io(id)->id());
+		if(nNm)		nNm->childAdd("el")->setText(io(id)->name());
+		if(nType)	nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if(nLnk)	nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
+		if(nVal)	nVal->childAdd("el")->setText( (data && data->val.func()) ? data->val.getS(id) : io(id)->def() );
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
-	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    ioAdd( new IO("new",_("New IO"),IO::Integer,IO::Default) ); modif();
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Default)); modif();
 	}
-	if( ctrChkNode(opt,"ins",RWRWR_,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
-	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    ioIns( new IO("new",_("New IO"),IO::Integer,IO::Default), atoi(opt->attr("row").c_str()) ); modif();
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    ioIns(new IO("new",_("New IO"),IO::Integer,IO::Default), atoi(opt->attr("row").c_str())); modif();
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
-	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    int row = atoi(opt->attr("row").c_str());
-	    if( io(row)->flg()&TPrmTempl::LockAttr )
+	    if(io(row)->flg()&TPrmTempl::LockAttr)
 		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
-	    ioDel( row );
+	    ioDel(row);
 	    modif();
 	}
-	if( ctrChkNode(opt,"move",RWRWR_,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"move",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
-	    if( enableStat( ) ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif();
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    ioMove(atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str())); modif();
 	}
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    string col = opt->attr("col");
-	    if( enableStat( ) && col != "vl" ) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    if( io(row)->flg()&TPrmTempl::LockAttr )	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
-	    if( (col == "id" || col == "nm") && !opt->text().size() )	throw TError(nodePath().c_str(),_("Empty value is not valid."));
-	    if( col == "id" )		io(row)->setId(opt->text());
-	    else if( col == "nm" )	io(row)->setName(opt->text());
-	    else if( col == "tp" )	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
-	    else if( col == "lnk" )	io(row)->setFlg( atoi(opt->text().c_str()) ? (io(row)->flg()|Node::IsLink) : (io(row)->flg() & ~Node::IsLink) );
-	    else if( col == "vl" )	(data && data->val.func()) ? data->val.setS(row,opt->text()) : io(row)->setDef(opt->text());
+	    if(enableStat( ) && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
+	    if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
+	    if(col == "id")		io(row)->setId(opt->text());
+	    else if(col == "nm")	io(row)->setName(opt->text());
+	    else if(col == "tp")	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
+	    else if(col == "lnk")	io(row)->setFlg( atoi(opt->text().c_str()) ? (io(row)->flg()|Node::IsLink) : (io(row)->flg() & ~Node::IsLink) );
+	    else if(col == "vl")	(data && data->val.func()) ? data->val.setS(row,opt->text()) : io(row)->setDef(opt->text());
 	    modif();
 	}
     }
-    else if( a_path == "/dt/progLang" )
+    else if(a_path == "/dt/progLang")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(progLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(progLang());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if( a_path == "/dt/prog" )
+    else if(a_path == "/dt/prog")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(prog());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(prog());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProg(opt->text());
     }
-    else if( a_path == "/dt/plang_ls" && ctrChkNode(opt) )
+    else if(a_path == "/dt/plang_ls" && ctrChkNode(opt))
     {
 	string tplng = progLang();
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -1260,59 +1260,59 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for( int i_l = 0; i_l < ls.size(); i_l++ )
-		    if( !SYS->daq().at().at(ls[i_l]).at().compileFuncLangs() )
+		for(int i_l = 0; i_l < ls.size(); i_l++)
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
 		    { ls.erase(ls.begin()+i_l); i_l--; }
 		break;
 	    case 1:
-		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
+		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt) )
+    else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt))
     {
 	int c_lv = 0;
 	string l_prm = io(atoi(a_path.substr(8).c_str()))->rez();
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
-	if( c_lv ) c_path+=".";
+	if(c_lv) c_path+=".";
 	string prm0 = TSYS::strSepParse(l_prm,0,'.');
 	string prm1 = TSYS::strSepParse(l_prm,1,'.');
 	string prm2 = TSYS::strSepParse(l_prm,2,'.');
 	vector<string>  ls;
-	switch( c_lv )
+	switch(c_lv)
 	{
 	    case 0:	SYS->daq().at().modList(ls);	break;
 	    case 1:
-		if( SYS->daq().at().modPresent(prm0) )
+		if(SYS->daq().at().modPresent(prm0))
 		    SYS->daq().at().at(prm0).at().list(ls);
 		break;
 	    case 2:
-		if( SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1) )
+		if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
 		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
 		break;
 	    case 3:
-		if( SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
-			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2) )
+		if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
+			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2))
 		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path.substr(0,8) == "/lnk/el_" )
+    else if(a_path.substr(0,8) == "/lnk/el_")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	    opt->setText(io(atoi(a_path.substr(8).c_str()))->rez());
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ io(atoi(a_path.substr(8).c_str()))->setRez(opt->text()); modif(); }
     }
     else TCntrNode::cntrCmdProc(opt);

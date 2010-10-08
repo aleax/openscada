@@ -138,25 +138,25 @@ void FlowTEC::getVals( )
 bool FlowTEC::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root","DAQ",3,"tp","dec","min","1","max","255");
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/Thread",_("Thread number"),RWRWR_,"root","DAQ",3,"tp","dec","min","1","max","3");
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/FirmWareVer",_("Firmware version"),RWRWR_,"root","DAQ",1,"tp","dec");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","255");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/Thread",_("Thread number"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","3");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/FirmWareVer",_("Firmware version"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	return true;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/Thread" )
+    if(a_path == "/prm/cfg/Thread")
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("Thread"));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("Thread",opt->text());
+	if(mPrm->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(mPrm->extPrmGet("Thread"));
+	if(mPrm->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	mPrm->extPrmSet("Thread",opt->text());
     }
-    else if( a_path == "/prm/cfg/FirmWareVer" )
+    else if(a_path == "/prm/cfg/FirmWareVer")
     {
-	if( mPrm->ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )	opt->setText(mPrm->extPrmGet("FirmwareVer"));
-	if( mPrm->ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )	mPrm->extPrmSet("FirmwareVer",opt->text());
+	if(mPrm->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(mPrm->extPrmGet("FirmwareVer"));
+	if(mPrm->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	mPrm->extPrmSet("FirmwareVer",opt->text());
     }
     else return false;
 

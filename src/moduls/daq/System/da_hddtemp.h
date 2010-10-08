@@ -38,7 +38,7 @@ class Hddtemp: public DA
 	~Hddtemp( );
 
 	string id( )	{ return "hddtemp"; }
-	string name( )	{ return "HDD temperature"; }
+	string name( )	{ return _("HDD temperature"); }
 
 	void init( TMdPrm *prm );
 	void getVal( TMdPrm *prm );

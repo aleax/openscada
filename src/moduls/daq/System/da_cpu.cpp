@@ -156,7 +156,7 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
     FILE *f = fopen("/proc/stat","r");
     if( f == NULL ) return;
 
-    //- Check for allow CPU -
+    //> Check for allow CPU
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
 	int n_cpu;

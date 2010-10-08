@@ -2,19 +2,15 @@
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.Siemens package module.
 #
-#
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-#: siemens.cpp:59 siemens.cpp:101 siemens.cpp:112 siemens.cpp:131
-#: siemens.cpp:407 siemens.cpp:408 siemens.cpp:409 siemens.cpp:410
-#: siemens.cpp:411 siemens.cpp:412 siemens.cpp:413 siemens.cpp:1103
-#: siemens.cpp:1131 siemens.cpp:1160 siemens.cpp:1192 siemens.cpp:1245
-#: siemens.cpp:1255 siemens.cpp:1652 siemens.cpp:1787 siemens.h:87
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 16:28+0300\n"
+"POT-Creation-Date: 2010-10-08 14:38+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -24,27 +20,12 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: siemens.cpp:42
-msgid "Siemens"
-msgstr ""
-
-#: siemens.cpp:43
 msgid "Siemens DAQ"
 msgstr "Datenerfassung Siemens"
 
-#: siemens.cpp:44 siemens.cpp:1716 siemens.cpp:1719
-msgid "DAQ"
-msgstr ""
-
-#: siemens.cpp:46
-msgid "1.2.2"
-msgstr ""
-
-#: siemens.cpp:47
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: siemens.cpp:48
 msgid ""
 "Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol "
 "and library Libnodave for other."
@@ -52,871 +33,270 @@ msgstr ""
 "Ermöglicht Datenquelle Siemens PLC-Karten mit Hilscher CIF. Für Andere "
 "werden MPI-Protokoll und Bibliothek Libnodave verwendet."
 
-#: siemens.cpp:49
-msgid "GPL"
-msgstr ""
-
-#: siemens.cpp:54 cif_dev_i.h:52 cif_user.h:54 nodave.h:29 openSocket.h:26
-#: rcsdef.h:28 rcs_user.h:30 setport.h:25
-msgid "C"
-msgstr ""
-
-#: siemens.cpp:101 siemens.cpp:111 siemens.cpp:488 siemens.cpp:504
-msgid "PRM_BD"
-msgstr ""
-
-#: siemens.cpp:101
 msgid "Parameteres table"
 msgstr "Tabelle der Parameter"
 
-#: siemens.cpp:101
-msgid "30"
-msgstr ""
-
-#: siemens.cpp:102 siemens.cpp:485
-msgid "PERIOD"
-msgstr ""
-
-#: siemens.cpp:102
 msgid "Request data period (ms)"
 msgstr "Datenerfassungsperiode (msek)"
 
-#: siemens.cpp:102 siemens.cpp:120
-msgid "5"
-msgstr ""
-
-#: siemens.cpp:102
-msgid "1000"
-msgstr ""
-
-#: siemens.cpp:102
-msgid "0;10000"
-msgstr ""
-
-#: siemens.cpp:103 siemens.cpp:485
-msgid "PRIOR"
-msgstr ""
-
-#: siemens.cpp:103
 msgid "Request task priority"
 msgstr "Priorität der Datenerfassung"
 
-#: siemens.cpp:103 siemens.cpp:108 siemens.cpp:445
-msgid "2"
-msgstr ""
-
-#: siemens.cpp:103 siemens.cpp:104 siemens.cpp:105 siemens.cpp:109
-#: siemens.cpp:443 siemens.cpp:456 siemens.cpp:462 siemens.cpp:1384
-#: siemens.cpp:1523 siemens.cpp:1748 siemens.cpp:1811
-msgid "0"
-msgstr ""
-
-#: siemens.cpp:103
-msgid "-1;99"
-msgstr ""
-
-#: siemens.cpp:104 siemens.cpp:485
-msgid "ASINC_WR"
-msgstr ""
-
-#: siemens.cpp:104
 msgid "Asynchronous write mode"
 msgstr "Asynchroner Schreibmodus"
 
-#: siemens.cpp:104 siemens.cpp:105 siemens.cpp:109 siemens.cpp:119
-#: siemens.cpp:121 siemens.cpp:389 siemens.cpp:444
-msgid "1"
-msgstr ""
-
-#: siemens.cpp:105 siemens.cpp:485 siemens.cpp:530 siemens.cpp:580
-msgid "TYPE"
-msgstr ""
-
-#: siemens.cpp:105
 msgid "Connection type"
 msgstr "Typ der Verbindung"
 
-#: siemens.cpp:106
-msgid ";"
-msgstr ""
-
-#: siemens.cpp:106
-msgid "CIF_PB;ISO_TCP"
-msgstr ""
-
-#: siemens.cpp:107 siemens.cpp:120 siemens.cpp:148 siemens.cpp:163
-#: siemens.cpp:486
-msgid "ADDR"
-msgstr ""
-
-#: siemens.cpp:107
 msgid "Remote controller address"
 msgstr "Adresse des entfernen Kontrollers"
 
-#: siemens.cpp:107
-msgid "40"
-msgstr ""
-
-#: siemens.cpp:107
-msgid "10"
-msgstr ""
-
-#: siemens.cpp:108 siemens.cpp:486
-msgid "SLOT"
-msgstr ""
-
-#: siemens.cpp:108
 msgid "Slot CPU"
 msgstr "CP-Slot"
 
-#: siemens.cpp:108
-msgid "0;30"
-msgstr ""
-
-#: siemens.cpp:109 siemens.cpp:486 siemens.cpp:582
-msgid "CIF_DEV"
-msgstr ""
-
-#: siemens.cpp:109
 msgid "CIF board"
 msgstr "CIF Karte"
 
-#: siemens.cpp:109
-msgid "0;3"
-msgstr ""
-
-#: siemens.cpp:111
-msgid "logic"
-msgstr ""
-
-#: siemens.cpp:111
 msgid "Logical"
 msgstr "Logisch"
 
-#: siemens.cpp:112 siemens.cpp:1313 siemens.cpp:1736
-msgid "TMPL"
-msgstr ""
-
-#: siemens.cpp:112
 msgid "Parameter template"
 msgstr "Vorlage des Parameters"
 
-#: siemens.cpp:112
-msgid "50"
-msgstr ""
-
-#: siemens.cpp:114 siemens.cpp:1339 siemens.cpp:1438 siemens.cpp:1465
-msgid "PRM_ID"
-msgstr ""
-
-#: siemens.cpp:114
 msgid "Parameter ID"
 msgstr "Bezeichner des Parameters"
 
-#: siemens.cpp:114 siemens.cpp:115
-msgid "20"
-msgstr ""
-
-#: siemens.cpp:115 siemens.cpp:119 siemens.cpp:145 siemens.cpp:162
-#: siemens.cpp:1443 siemens.cpp:1470
 msgid "ID"
 msgstr ""
 
-#: siemens.cpp:116 siemens.cpp:1447 siemens.cpp:1448 siemens.cpp:1472
-#: siemens.cpp:1473
-msgid "VALUE"
-msgstr ""
-
-#: siemens.cpp:116
 msgid "Value"
 msgstr "Wert"
 
-#: siemens.cpp:116
-msgid "200"
-msgstr ""
-
-#: siemens.cpp:120
 msgid "Address"
 msgstr "Adresse"
 
-#: siemens.cpp:120 siemens.cpp:446
-msgid "3"
-msgstr ""
-
-#: siemens.cpp:121 siemens.cpp:149 siemens.cpp:164
-msgid "SPEED"
-msgstr ""
-
-#: siemens.cpp:121
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
-#: siemens.cpp:121 siemens.cpp:449
-msgid "7"
-msgstr ""
-
-#: siemens.cpp:130
 msgid "No device"
 msgstr "Kein Baustein"
 
-#: siemens.cpp:142 siemens.cpp:159
-msgid "_CIFdevs"
-msgstr ""
-
-#: siemens.cpp:146 siemens.cpp:165 siemens.cpp:504 siemens.cpp:1337
-#: siemens.cpp:1439 siemens.cpp:1466 siemens.cpp:1791 siemens.cpp:1794
-#: siemens.cpp:1823 siemens.cpp:1842 siemens.cpp:1844
-msgid "."
-msgstr ""
-
-#: siemens.cpp:244
 #, c-format
 msgid "CIF device %d or device driver error!"
 msgstr "Fehler im CIF-Baustein %d oder im Treiber!"
 
-#: siemens.cpp:252
 #, c-format
 msgid "CIF device %d running (DevSetHostState(HOST_READY)) error!"
 msgstr "CIF-Baustein %d Laufehler! (DevSetHostState(HOST_READY))!  "
 
-#: siemens.cpp:259
 #, c-format
 msgid "CIF device %d. DevPutTaskParameter() error!"
 msgstr "CIF-Baustein %d. Fehler DevPutTaskParameter()!"
 
-#: siemens.cpp:278
 #, c-format
 msgid "CIF device %d. DevPutMessage() error!"
 msgstr "CIF-Baustein %d. Fehler DevPutMessage()!"
 
-#: siemens.cpp:280
 #, c-format
 msgid "CIF device %d. DevGetMessage() error!"
 msgstr "CIF-Baustein %d. Fehler DevGetMessage()!"
 
-#: siemens.cpp:321
 #, c-format
 msgid "Sending request error: %d."
 msgstr "Fehler beim Senden der Anfrage: %d."
 
-#: siemens.cpp:323
 #, c-format
 msgid "Getting request error: %d."
 msgstr "Fehler: %d beim Empfang der Anfrage."
 
-#: siemens.cpp:340 siemens.cpp:780 siemens.cpp:915
 #, c-format
 msgid "15:Board %d is not present."
 msgstr "15:Karte %d fehlt."
 
-#: siemens.cpp:364
 #, c-format
 msgid "12:Sending request error %d."
 msgstr "12:Fehler beim Senden der Anfrage %d."
 
-#: siemens.cpp:366
 #, c-format
 msgid "13:Getting request error %d."
 msgstr "13:Fehler beim Empfang der Anfrage %d."
 
-#: siemens.cpp:374 siemens.cpp:1733
-msgid "info"
-msgstr ""
-
-#: siemens.cpp:377 siemens.cpp:379 siemens.cpp:392 siemens.cpp:1737
-#: siemens.cpp:1740
-msgid "area"
-msgstr ""
-
-#: siemens.cpp:377
-msgid "/mod"
-msgstr ""
-
-#: siemens.cpp:377
 msgid "CIF"
 msgstr ""
 
-#: siemens.cpp:379
-msgid "/mod/st"
-msgstr ""
-
-#: siemens.cpp:379
 msgid "Status"
 msgstr "Status"
 
-#: siemens.cpp:380 siemens.cpp:394 siemens.cpp:1736 siemens.cpp:1739
-#: siemens.cpp:1757 siemens.cpp:1771
-msgid "fld"
-msgstr ""
-
-#: siemens.cpp:380 siemens.cpp:401
-msgid "/mod/st/drv"
-msgstr ""
-
-#: siemens.cpp:380
 msgid "CIF driver"
 msgstr "CIF-Treiber"
 
-#: siemens.cpp:380 siemens.cpp:381 siemens.cpp:383 siemens.cpp:384
-#: siemens.cpp:385 siemens.cpp:386 siemens.cpp:387 siemens.cpp:388
-#: siemens.cpp:389 siemens.cpp:394 siemens.cpp:395 siemens.cpp:426
-#: siemens.cpp:455 siemens.cpp:457 siemens.cpp:1716 siemens.cpp:1719
-#: siemens.cpp:1736 siemens.cpp:1739 siemens.cpp:1757 siemens.cpp:1771
-#: siemens.cpp:1778 siemens.cpp:1810 siemens.cpp:1812 siemens.cpp:1817
-#: siemens.cpp:1826 siemens.cpp:1854 siemens.cpp:1862
-msgid "root"
-msgstr ""
-
-#: siemens.cpp:380 siemens.cpp:383 siemens.cpp:384 siemens.cpp:385
-#: siemens.cpp:386 siemens.cpp:387 siemens.cpp:388 siemens.cpp:389
-#: siemens.cpp:394 siemens.cpp:395 siemens.cpp:1736 siemens.cpp:1739
-#: siemens.cpp:1757 siemens.cpp:1771
-msgid "tp"
-msgstr ""
-
-#: siemens.cpp:380 siemens.cpp:1739 siemens.cpp:1769
-msgid "bool"
-msgstr ""
-
-#: siemens.cpp:381
-msgid "table"
-msgstr ""
-
-#: siemens.cpp:381 siemens.cpp:402
-msgid "/mod/dev"
-msgstr ""
-
-#: siemens.cpp:381
 msgid "CIF devices"
 msgstr "CIF-Bausteine"
 
-#: siemens.cpp:383 siemens.cpp:384 siemens.cpp:385 siemens.cpp:386
-#: siemens.cpp:387 siemens.cpp:388 siemens.cpp:389 siemens.cpp:395
-#: siemens.cpp:407 siemens.cpp:408 siemens.cpp:409 siemens.cpp:410
-#: siemens.cpp:411 siemens.cpp:412 siemens.cpp:413
-msgid "list"
-msgstr ""
-
-#: siemens.cpp:383 siemens.cpp:407
-msgid "/mod/dev/brd"
-msgstr ""
-
-#: siemens.cpp:383
 msgid "Board"
 msgstr "Karte"
 
-#: siemens.cpp:383 siemens.cpp:386 siemens.cpp:395 siemens.cpp:1736
-#: siemens.cpp:1757 siemens.cpp:1763
-msgid "str"
-msgstr ""
-
-#: siemens.cpp:384 siemens.cpp:408
-msgid "/mod/dev/fwnm"
-msgstr ""
-
-#: siemens.cpp:384
 msgid "Firmware name"
 msgstr "Name der Firmware"
 
-#: siemens.cpp:384 siemens.cpp:1768
-msgid "real"
-msgstr ""
-
-#: siemens.cpp:385 siemens.cpp:409
-msgid "/mod/dev/fwver"
-msgstr ""
-
-#: siemens.cpp:385
 msgid "Firmware version"
 msgstr "Version der Firmware"
 
-#: siemens.cpp:385 siemens.cpp:387 siemens.cpp:388 siemens.cpp:389
-#: siemens.cpp:394 siemens.cpp:1767
-msgid "dec"
-msgstr ""
-
-#: siemens.cpp:386 siemens.cpp:410
-msgid "/mod/dev/phAddr"
-msgstr ""
-
-#: siemens.cpp:386
 msgid "Physical address"
 msgstr "Physikalische Adresse"
 
-#: siemens.cpp:387 siemens.cpp:411
-msgid "/mod/dev/irq"
-msgstr ""
-
-#: siemens.cpp:387
 msgid "IRQ"
 msgstr ""
 
-#: siemens.cpp:388 siemens.cpp:412
-msgid "/mod/dev/addr"
-msgstr ""
-
-#: siemens.cpp:388
 msgid "PB address"
 msgstr "PB Adresse"
 
-#: siemens.cpp:389 siemens.cpp:413
-msgid "/mod/dev/speed"
-msgstr ""
-
-#: siemens.cpp:389
 msgid "PB speed"
 msgstr "PB (Profibus) Geschwindigkeit"
 
-#: siemens.cpp:389
-msgid "idm"
-msgstr ""
-
-#: siemens.cpp:389 siemens.cpp:1736
-msgid "dest"
-msgstr ""
-
-#: siemens.cpp:389 siemens.cpp:1736
-msgid "select"
-msgstr ""
-
-#: siemens.cpp:389 siemens.cpp:441
-msgid "/mod/dev/lsspd"
-msgstr ""
-
-#: siemens.cpp:392
-msgid "/PB"
-msgstr ""
-
-#: siemens.cpp:392
 msgid "Profibus"
 msgstr ""
 
-#: siemens.cpp:394 siemens.cpp:453
-msgid "/PB/dev"
-msgstr ""
-
-#: siemens.cpp:394
 msgid "CIF device"
 msgstr "CIF Baustein"
 
-#: siemens.cpp:395 siemens.cpp:460
-msgid "/PB/lifels"
-msgstr ""
-
-#: siemens.cpp:395
 msgid "Life stations list"
 msgstr "Liste von aktiven Stationen"
 
-#: siemens.cpp:400 siemens.cpp:1287 siemens.cpp:1291 siemens.cpp:1298
-#: siemens.cpp:1535 siemens.cpp:1710
-msgid "path"
-msgstr ""
-
-#: siemens.cpp:417 siemens.cpp:418 siemens.cpp:419 siemens.cpp:420
-#: siemens.cpp:421 siemens.cpp:422 siemens.cpp:423 siemens.cpp:443
-#: siemens.cpp:444 siemens.cpp:445 siemens.cpp:446 siemens.cpp:447
-#: siemens.cpp:448 siemens.cpp:449 siemens.cpp:450 siemens.cpp:451
-#: siemens.cpp:470 siemens.cpp:471 siemens.cpp:472 siemens.cpp:475
-#: siemens.cpp:1535 siemens.cpp:1788 siemens.cpp:1792 siemens.cpp:1806
-msgid "el"
-msgstr ""
-
-#: siemens.cpp:426 siemens.cpp:457 siemens.cpp:1302 siemens.cpp:1534
-#: siemens.cpp:1719 siemens.cpp:1778 siemens.cpp:1812 siemens.cpp:1826
-#: siemens.cpp:1862
-msgid "set"
-msgstr ""
-
-#: siemens.cpp:428
-msgid "row"
-msgstr ""
-
-#: siemens.cpp:429
-msgid "col"
-msgstr ""
-
-#: siemens.cpp:430
 #, c-format
 msgid "Board number %d error!"
 msgstr "Fehler in der Karte, Nummer %d!"
 
-#: siemens.cpp:431 siemens.cpp:437
-msgid "addr"
-msgstr ""
-
-#: siemens.cpp:436 siemens.cpp:437
-msgid "speed"
-msgstr ""
-
-#: siemens.cpp:443 siemens.cpp:444 siemens.cpp:445 siemens.cpp:446
-#: siemens.cpp:447 siemens.cpp:448 siemens.cpp:449 siemens.cpp:450
-#: siemens.cpp:451 siemens.cpp:1535 siemens.cpp:1718 siemens.cpp:1723
-msgid "id"
-msgstr ""
-
-#: siemens.cpp:443
 msgid "9600Baud"
 msgstr "9600Baud"
 
-#: siemens.cpp:444
 msgid "19.2kBaud"
 msgstr "19.2kBaud"
 
-#: siemens.cpp:445
 msgid "93.75kBaud"
 msgstr "93.75kBaud"
 
-#: siemens.cpp:446
 msgid "187.5kBaud"
 msgstr "187.5kBaud"
 
-#: siemens.cpp:447
-msgid "4"
-msgstr ""
-
-#: siemens.cpp:447
 msgid "500kBaud"
 msgstr "500kBaud"
 
-#: siemens.cpp:448
-msgid "6"
-msgstr ""
-
-#: siemens.cpp:448
 msgid "1.5MBaud"
 msgstr "1.5MBaud"
 
-#: siemens.cpp:449
 msgid "3MBaud"
 msgstr "3MBaud"
 
-#: siemens.cpp:450
-msgid "8"
-msgstr ""
-
-#: siemens.cpp:450
 msgid "6MBaud"
 msgstr "6МBaud"
 
-#: siemens.cpp:451
-msgid "9"
-msgstr ""
-
-#: siemens.cpp:451
 msgid "12MBaud"
 msgstr "12Мbaud"
 
-#: siemens.cpp:455 siemens.cpp:1291 siemens.cpp:1716 siemens.cpp:1810
-#: siemens.cpp:1817 siemens.cpp:1854
-msgid "get"
-msgstr ""
-
-#: siemens.cpp:456 siemens.cpp:458 siemens.cpp:462
-msgid "lifeLsDev"
-msgstr ""
-
-#: siemens.cpp:456 siemens.cpp:458 siemens.cpp:462 siemens.cpp:1748
-#: siemens.cpp:1811 siemens.cpp:1813
-msgid "user"
-msgstr ""
-
-#: siemens.cpp:470
 msgid " : -------"
 msgstr ""
 
-#: siemens.cpp:471
 msgid " : Active station"
 msgstr " : Aktive Station"
 
-#: siemens.cpp:472
 msgid " : Passive station"
 msgstr " : Passive Station"
 
-#: siemens.cpp:488
-msgid "CIFPrm_"
-msgstr ""
-
-#: siemens.cpp:504 siemens.cpp:1337 siemens.cpp:1340 siemens.cpp:1439
-#: siemens.cpp:1444 siemens.cpp:1466 siemens.cpp:1474
-msgid "_io"
-msgstr ""
-
-#: siemens.cpp:509 siemens.cpp:1263 siemens.cpp:1343 siemens.cpp:1702
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: siemens.cpp:515
 #, c-format
 msgid "Acquisition time %.6g ms. "
 msgstr "Erfassungszeit %.6g msek. "
 
-#: siemens.cpp:672 siemens.cpp:1241 siemens.cpp:1252
 msgid "-1:No data"
-msgstr ""
+msgstr "-1:Keine Daten"
 
-#: siemens.cpp:682
 msgid "No one driver or board are present."
 msgstr "Treiber oder CP (Karte) sind nicht vorhanden."
 
-#: siemens.cpp:689
 msgid "Open socket of remote PLC error."
 msgstr "Fehler beim Öffnen des Sockets des entfernten PLC."
 
-#: siemens.cpp:690
-msgid "IF"
-msgstr ""
-
-#: siemens.cpp:698
 msgid "Connection to PLC error."
 msgstr "Fehler beim Anschluss an PLC."
 
-#: siemens.cpp:753
 #, c-format
 msgid "Connection type '%d' is not supported."
 msgstr "Verbindungstyp '%d' wird nicht unterstützt."
 
-#: siemens.cpp:779
 msgid "14:Request block is too big."
 msgstr "14:Der angefragte Block ist zu gross."
 
-#: siemens.cpp:811 siemens.cpp:948
 msgid "12:Sending request is timeouted."
 msgstr "12:Zeitüberschreitung beim Senden der Anfrage."
 
-#: siemens.cpp:819 siemens.cpp:958
 #, c-format
 msgid "19:Request to DB error %d."
 msgstr "19:Fehler der Datenbank-Anfrage: %d."
 
-#: siemens.cpp:820
 msgid "13:Get request is timeouted."
 msgstr "13:Zeitüberschreitung beim Empfang der Anfrage."
 
-#: siemens.cpp:821 siemens.cpp:960
 msgid "17:There is no response from the remote station."
 msgstr "17:Keine Antwort von der entfernten Station."
 
-#: siemens.cpp:822 siemens.cpp:961
 msgid "18:Master is out of the logical token ring."
 msgstr "18:Master ist nicht Teil des logischen Rings."
 
-#: siemens.cpp:823 siemens.cpp:962
 msgid "20:Specified offset address or DB error."
 msgstr "20:Fehler im vorgegebenen Offset oder in der Datenbank."
 
-#: siemens.cpp:851
 #, c-format
 msgid "Read block '%d' error: %d"
 msgstr "Fehler beim Lesen des Blocks '%d': %d"
 
-#: siemens.cpp:852
 msgid "Read DB from controller error."
 msgstr "Fehler beim Lesen der Datenbank aus dem Kontroller."
 
-#: siemens.cpp:914
 msgid "16:Transmitted block is too big."
 msgstr "16:Übermittelter Block ist zu gross."
 
-#: siemens.cpp:959
 msgid "13:Getting request is timeouted."
 msgstr "13:Zeitüberschreitung beim Empfang der Anfrage."
 
-#: siemens.cpp:970
 #, c-format
 msgid "Write block '%d' error: %d"
 msgstr "Fehler beim Schreibens des Blocks '%d': %d"
 
-#: siemens.cpp:971
 msgid "Write DB to controller error."
 msgstr "Fehler beim Schreiben der Datenbank in den Kontroller"
 
-#: siemens.cpp:1023 siemens.cpp:1045 siemens.cpp:1066 siemens.cpp:1083
 msgid "11:Value is not gathered."
 msgstr "11:Wert wurde nicht erfasst."
 
-#: siemens.cpp:1213
 msgid "Value type error."
 msgstr "Fehler im Wertetyp."
 
-#: siemens.cpp:1221
-#, c-format
-msgid "Thread <%u> is started. TID: %ld"
-msgstr ""
-
-#: siemens.cpp:1287
-msgid "CntrReqs"
-msgstr ""
-
-#: siemens.cpp:1291
-msgid "/prm_"
-msgstr ""
-
-#: siemens.cpp:1291
-#, c-format
-msgid "/%2fserv%2ftmplAttr"
-msgstr ""
-
-#: siemens.cpp:1298
-msgid "/"
-msgstr ""
-
-#: siemens.cpp:1301 siemens.cpp:1482 siemens.cpp:1519
-msgid "err"
-msgstr ""
-
-#: siemens.cpp:1311
-msgid "CIFprm"
-msgstr ""
-
-#: siemens.cpp:1311
-msgid "cif_attr"
-msgstr ""
-
-#: siemens.cpp:1393
-msgid "f_frq"
-msgstr ""
-
-#: siemens.cpp:1394
-msgid "f_start"
-msgstr ""
-
-#: siemens.cpp:1395
-msgid "f_stop"
-msgstr ""
-
-#: siemens.cpp:1396
-msgid "f_err"
-msgstr ""
-
-#: siemens.cpp:1485
-msgid "1:Parameter is disabled."
-msgstr "1:Parameter ist abgeschaltet."
-
-#: siemens.cpp:1487
-msgid "2:Controller is stoped."
-msgstr "2:Kontroller ist angehalten."
-
-#: siemens.cpp:1535
-#, c-format
-msgid "/%2fserv%2fattr"
-msgstr ""
-
-#: siemens.cpp:1595 siemens.cpp:1602 siemens.cpp:1612
-msgid "Parameter is disabled."
-msgstr "Parameter ist abgeschaltet."
-
-#: siemens.cpp:1622
-msgid "Parameter is disabled or id error."
-msgstr "Parameter ist abgeschaltet oder Fehler des Bezeichners."
-
-#: siemens.cpp:1634
-#, c-format
-msgid "DB%d.%d.%d"
-msgstr ""
-
-#: siemens.cpp:1637
-#, c-format
-msgid "DB%d.%d"
-msgstr ""
-
-#: siemens.cpp:1703
-msgid "Error calc template."
-msgstr "Fehler bei der Berechnung der Vorlage."
-
-#: siemens.cpp:1711
-msgid "/serv/"
-msgstr ""
-
-#: siemens.cpp:1713
-msgid "/serv/tmplAttr"
-msgstr ""
-
-#: siemens.cpp:1715
-msgid "Parameter disabled or error."
-msgstr "Parameter ist abgeschaltet oder Fehler."
-
-#: siemens.cpp:1718 siemens.cpp:1723
-msgid "a"
-msgstr ""
-
-#: siemens.cpp:1736 siemens.cpp:1778
-msgid "/prm/cfg/TMPL"
-msgstr ""
-
-#: siemens.cpp:1736
-msgid "sel_ed"
-msgstr ""
-
-#: siemens.cpp:1736 siemens.cpp:1784
-msgid "/cfg/prmp_lst"
-msgstr ""
-
-#: siemens.cpp:1737
-msgid "/cfg"
-msgstr ""
-
-#: siemens.cpp:1737
-msgid "Template config"
-msgstr "Konfiguration der Vorlage"
-
-#: siemens.cpp:1739 siemens.cpp:1808
-msgid "/cfg/only_off"
-msgstr ""
-
-#: siemens.cpp:1739
-msgid "Only DB offsets are to be shown"
-msgstr "Nur Datenbank Offsets anzeigen"
-
-#: siemens.cpp:1740
-msgid "/cfg/prm"
-msgstr ""
-
-#: siemens.cpp:1740
-msgid "Parameters"
-msgstr "Parameter"
-
-#: siemens.cpp:1748 siemens.cpp:1811 siemens.cpp:1813
-msgid "onlOff"
-msgstr ""
-
-#: siemens.cpp:1757 siemens.cpp:1815
-msgid "/cfg/prm/pr_"
-msgstr ""
-
-#: siemens.cpp:1771 siemens.cpp:1852
-msgid "/cfg/prm/el_"
-msgstr ""
-
-#: siemens.cpp:1838
-#, c-format
-msgid "%d.%d"
-msgstr ""
-
-#: cif_types.h:54
-#, c-format
-msgid "::%s(L%.4d): "
-msgstr ""
-
-#: siemens.h:221
 msgid "11:Value not gathered."
 msgstr "11:Wert wurde nicht erfasst."
 
-#~ msgid ""
-#~ "======================= The module <%s:%s> options "
-#~ "=======================\n"
-#~ "---------- Parameters of the module section <%s> in config file "
-#~ "----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "========================== Optionen des Moduls <%s:%s> "
-#~ "==========================\n"
-#~ "-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
-#~ "--------\n"
-#~ "\n"
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter ist abgeschaltet."
 
-#~ msgid "Acquisition task is not started!"
-#~ msgstr "Datenerfassung ist nicht gestartet!"
+msgid "2:Controller is stoped."
+msgstr "2:Kontroller ist angehalten."
 
-#~ msgid "Acquisition task is not stopped!"
-#~ msgstr "Datenerfassungs ist nicht angehalten!"
+msgid "Parameter is disabled."
+msgstr "Parameter ist abgeschaltet."
+
+msgid "Parameter is disabled or id error."
+msgstr "Parameter ist abgeschaltet oder Fehler des Bezeichners."
+
+msgid "Error calc template."
+msgstr "Fehler bei der Berechnung der Vorlage."
+
+msgid "Parameter disabled or error."
+msgstr "Parameter ist abgeschaltet oder Fehler."
+
+msgid "Template config"
+msgstr "Konfiguration der Vorlage"
+
+msgid "Only DB offsets are to be shown"
+msgstr "Nur Datenbank Offsets anzeigen"
+
+msgid "Parameters"
+msgstr "Parameter"

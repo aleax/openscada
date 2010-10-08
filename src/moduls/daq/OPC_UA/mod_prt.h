@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,12 +36,12 @@ using namespace OSCADA;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"OPC_UA"
-#define PRT_NAME	"OPC UA"
-#define PRT_TYPE	"Protocol"
+#define PRT_NAME	_("OPC UA")
+#define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"0.5.0"
-#define PRT_AUTOR	"Roman Savochenko"
-#define PRT_DESCR	"Allow realisation of OPC UA protocol."
+#define PRT_MVER	"0.6.0"
+#define PRT_AUTOR	_("Roman Savochenko")
+#define PRT_DESCR	_("Allow realisation of OPC UA protocol.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 

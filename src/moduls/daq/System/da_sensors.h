@@ -38,7 +38,7 @@ class Sensors: public DA
 	~Sensors( );
 
 	string id( )	{ return "sensors"; }
-	string name( )	{ return "Sensors"; }
+	string name( )	{ return _("Sensors"); }
 
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );

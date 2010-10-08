@@ -38,7 +38,7 @@ class UpTime: public DA
 	~UpTime( );
 
 	string id( )	{ return "uptime"; }
-	string name( )	{ return "Up time"; }
+	string name( )	{ return _("Up time"); }
 
 	void init( TMdPrm *prm );
 	void getVal( TMdPrm *prm );

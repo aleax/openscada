@@ -1,281 +1,74 @@
 # OpenSCADA.DAQ.SoundCard translate to Ukrainian.
-# Copyright (C) 2008-2009 Roman Savochenko
+# Copyright (C) 2008-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SoundCard package module.
-# Roman Savochenko <rom_as@fromru.com>, 2008-2009.
 #
-#: sound.cpp:49 sound.cpp:118
+# Roman Savochenko <rom_as@fromru.com>, 2008-2010.
+#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 15:41+0300\n"
+"POT-Creation-Date: 2010-10-08 11:17+0300\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: sound.cpp:32
-msgid "SoundCard"
-msgstr ""
-
-#: sound.cpp:33
 msgid "Sound card"
 msgstr "Звукова карта"
 
-#: sound.cpp:34
-msgid "DAQ"
-msgstr ""
-
-#: sound.cpp:36
-msgid "0.6.0"
-msgstr ""
-
-#: sound.cpp:37
 msgid "Roman Savochenko"
-msgstr ""
+msgstr "Роман Савоченко"
 
-#: sound.cpp:38
 msgid "Allow access to sound card data."
 msgstr "Надає доступ до даних звукової карти."
 
-#: sound.cpp:39
-msgid "GPL"
-msgstr ""
-
-#: sound.cpp:44
-msgid "C"
-msgstr ""
-
-#: sound.cpp:82
-#, c-format
-msgid "Pa_Terminate: %s"
-msgstr ""
-
-#: sound.cpp:90
-#, c-format
-msgid "Pa_Initialize: %s"
-msgstr ""
-
-#: sound.cpp:93 sound.cpp:100 sound.cpp:116
-msgid "PRM_BD"
-msgstr ""
-
-#: sound.cpp:93
 msgid "Parameters' table"
 msgstr "Таблиця параметрів"
 
-#: sound.cpp:93
-msgid "30"
-msgstr ""
-
-#: sound.cpp:94 sound.cpp:114 sound.cpp:313
-msgid "CARD"
-msgstr ""
-
-#: sound.cpp:94
 msgid "Card device"
 msgstr "Пристрій карти"
 
-#: sound.cpp:94
-msgid "20"
-msgstr ""
-
-#: sound.cpp:94 sound.cpp:141 sound.cpp:201
-msgid "<default>"
-msgstr ""
-
-#: sound.cpp:95 sound.cpp:114 sound.cpp:314
-msgid "SMPL_RATE"
-msgstr ""
-
-#: sound.cpp:95
 msgid "Card sample rate (Hz)"
 msgstr "Частота вибірки значень (Гц)"
 
-#: sound.cpp:95 sound.cpp:96
-msgid "5"
-msgstr ""
-
-#: sound.cpp:95
-msgid "8000"
-msgstr ""
-
-#: sound.cpp:96 sound.cpp:114
-msgid "SMPL_TYPE"
-msgstr ""
-
-#: sound.cpp:96
 msgid "Card sample type"
 msgstr "Тип вибірки карти"
 
-#: sound.cpp:97
-msgid ";"
-msgstr ""
-
-#: sound.cpp:97
 msgid "Float 32;Int 32;Int 16"
 msgstr "Реальне 32;Ціле 32;Ціле 16"
 
-#: sound.cpp:100
-msgid "std"
-msgstr ""
-
-#: sound.cpp:100
 msgid "Standard"
-msgstr ""
+msgstr "Стандарт"
 
-#: sound.cpp:101 sound.cpp:335 sound.cpp:394
-msgid "CHANNEL"
-msgstr ""
-
-#: sound.cpp:101
 msgid "Channel"
 msgstr "Канал"
 
-#: sound.cpp:101
-msgid "2"
-msgstr ""
-
-#: sound.cpp:101
-msgid "0"
-msgstr ""
-
-#: sound.cpp:101
-msgid "0;100"
-msgstr ""
-
-#: sound.cpp:113
-msgid "w_attr"
-msgstr ""
-
-#: sound.cpp:116
-msgid "SoundCard_"
-msgstr ""
-
-#: sound.cpp:118 sound.cpp:272
-msgid "val"
-msgstr ""
-
-#: sound.cpp:118
 msgid "Value"
 msgstr "Значення"
 
-#: sound.cpp:132
 #, c-format
 msgid "Allowed %d input channels"
 msgstr "Наявно %d вхідних каналів"
 
-#: sound.cpp:133
 #, c-format
 msgid "Gathering from %d channels. Recieved %.2f MB."
 msgstr "Збір з %d каналів. Отримано %.2f МБ."
 
-#: sound.cpp:206
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
 msgstr "Помилка вибраного пристрою '%s' або пристрій по замовченню не наявний."
 
-#: sound.cpp:207
 msgid "No one channel is configured for acquisition."
 msgstr "Жодного каналу не налаштовано для збору."
 
-#: sound.cpp:208
 msgid "Sample type set is error."
 msgstr "Помилка встановлення типу вибірки."
 
-#: sound.cpp:216
-#, c-format
-msgid "Pa_OpenStream: %s"
-msgstr ""
-
-#: sound.cpp:219
-#, c-format
-msgid "Pa_StartStream: %s"
-msgstr ""
-
-#: sound.cpp:228
-msgid "stream_stop"
-msgstr ""
-
-#: sound.cpp:229
 msgid "Sound input stream is not stopped!"
 msgstr "Звуковий потік не зупинено!"
 
-#: sound.cpp:231
-#, c-format
-msgid "Pa_CloseStream: %s"
-msgstr ""
-
-#: sound.cpp:263
 msgid "Sound card's counter run from system time is corrected."
-msgstr ""
-
-#: sound.cpp:310 sound.cpp:391
-msgid "info"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:314 sound.cpp:394
-msgid "fld"
-msgstr ""
-
-#: sound.cpp:313
-msgid "/cntr/cfg/CARD"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:314 sound.cpp:394
-msgid "root"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:315 sound.cpp:394
-msgid "tp"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:315 sound.cpp:394
-msgid "str"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:315 sound.cpp:394
-msgid "dest"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:394
-msgid "select"
-msgstr ""
-
-#: sound.cpp:313 sound.cpp:321
-msgid "/cntr/cfg/lst_SMPL_RATE"
-msgstr ""
-
-#: sound.cpp:314
-msgid "/cntr/cfg/SMPL_RATE"
-msgstr ""
-
-#: sound.cpp:315
-msgid "sel_ed"
-msgstr ""
-
-#: sound.cpp:315
-msgid "sel_list"
-msgstr ""
-
-#: sound.cpp:315
-msgid "8000;16000;22050;44100;48000;96000"
-msgstr ""
-
-#: sound.cpp:320 sound.cpp:399
-msgid "path"
-msgstr ""
-
-#: sound.cpp:325 sound.cpp:403
-msgid "el"
-msgstr ""
-
-#: sound.cpp:394
-msgid "/prm/cfg/CHANNEL"
-msgstr ""
-
-#: sound.cpp:394 sound.cpp:400
-msgid "/prm/cfg/lst_CHANNEL"
-msgstr ""
+msgstr "Виконано корекцію відхилення лічильника звукової карти від системного часу."

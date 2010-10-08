@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -542,12 +542,12 @@ void TMdContr::setCntrDelay( const string &err )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/trLst");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
-	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed",
+	    "sel_list","1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *",
 	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
 		     "Seconds form is one real number (1.5, 1e-3).\n"
 		     "Cron it is standard form '* * * * *'. Where:\n"
@@ -560,14 +560,20 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/cfg/trLst" && ctrChkNode(opt) )
+    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
     {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TController::cntrCmdProc(opt);
+}
+
+TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
+{
+    val.assign(v_rez,0);
+    err.setVal(_("11:Value not gathered."));
 }
 
 //******************************************************
@@ -793,10 +799,10 @@ void TMdPrm::vlArchMake( TVal &val )
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),RWRWR_,"root","DAQ",1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
 		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil).\n"

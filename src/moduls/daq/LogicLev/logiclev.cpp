@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,12 +37,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"LogicLev"
-#define MOD_NAME	"Logic level"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Logic level")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.1.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow logic level parameters."
+#define VERSION		"1.1.2"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow logic level parameters.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -813,20 +813,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )
+    if(a_path.substr(0,6) == "/serv/")
     {
-	if( a_path == "/serv/tmplAttr" )
+	if(a_path == "/serv/tmplAttr")
 	{
 	    ResAlloc res(moderes,false);
-	    if( mode( ) != TMdPrm::Template || !tmpl->val.func( ) ) throw TError(nodePath().c_str(),_("No template parameter or error."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
-		for( int i_a = 0; i_a < tmpl->val.ioSize(); i_a++ )
+	    if(mode() != TMdPrm::Template || !tmpl->val.func()) throw TError(nodePath().c_str(),_("No template parameter or error."));
+	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+		for(int i_a = 0; i_a < tmpl->val.ioSize(); i_a++)
 		    opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(i_a)->id())->setText(tmpl->val.getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
-		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+		for(int i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
-		    if( opt->childGet(i_a)->name() != "ta" || (io_id=tmpl->val.ioId(opt->childGet(i_a)->attr("id"))) < 0 ) continue;
+		    if(opt->childGet(i_a)->name() != "ta" || (io_id=tmpl->val.ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
 		    tmpl->val.setS(io_id,opt->childGet(i_a)->text());
 		}
 	}
@@ -836,34 +836,34 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     vector<string> list;
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MODE",cfg("MODE").fld().descr(),0660,"root","root",4,"tp","str","dest","select",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MODE",cfg("MODE").fld().descr(),RWRW__,"root",SDAQ_ID,4,"tp","str","dest","select",
 	    "sel_id",(TSYS::int2str(TMdPrm::Free)+";"+TSYS::int2str(TMdPrm::DirRefl)+";"+TSYS::int2str(TMdPrm::Template)).c_str(),
 	    "sel_list",_("Free;Direct reflection;Template"));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
-	if( mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")) )
+	ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
+	if(mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")))
 	{
-	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),0664,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
-		for( int i_io = 0; i_io < tmpl->val.ioSize(); i_io++ )
+		for(int i_io = 0; i_io < tmpl->val.ioSize(); i_io++)
 		{
-		    if( !(tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)) )
+		    if(!(tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)))
 			continue;
 		    //>> Check select param
 		    bool is_lnk = tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink;
-		    if( is_lnk && tmpl->val.func()->io(i_io)->def().size() && 
-			!atoi(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")).c_str()) )
+		    if(is_lnk && tmpl->val.func()->io(i_io)->def().size() &&
+			!atoi(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")).c_str()))
 		    {
 			string nprm = TSYS::strSepParse(tmpl->val.func()->io(i_io)->def(),0,'|');
 			//>> Check already to present parameters
 			bool f_ok = false;
-			for( int i_l = 0; i_l < list.size(); i_l++ )
-			    if( list[i_l] == nprm ) { f_ok = true; break; }
+			for(int i_l = 0; i_l < list.size(); i_l++)
+			    if(list[i_l] == nprm) { f_ok = true; break; }
 			if(!f_ok)
 			{
-			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,0664,"root","root",
+			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
 				    3,"tp","str","dest","sel_ed","select",(string("/cfg/prm/pl_")+TSYS::int2str(i_io)).c_str());
 			    list.push_back(nprm);
 			}
@@ -871,14 +871,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    else
 		    {
 			const char *tip = "str";
-			if( !is_lnk )
+			if(!is_lnk)
 			    switch(tmpl->val.ioType(i_io))
 			    {
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
 			    }
-			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),tmpl->val.func()->io(i_io)->name(),0664,"root","root",
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),tmpl->val.func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,
 			    3,"tp",tip,"dest",is_lnk?"sel_ed":"","select",is_lnk?(string("/cfg/prm/ls_")+TSYS::int2str(i_io)).c_str():"");
 		    }
 		}
@@ -886,28 +886,28 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    if( a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
+    if(a_path == "/prm/cfg/MODE" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	try
 	{
-	    if( enableStat() ) disable();
+	    if(enableStat()) disable();
 	    m_mode = atoi(opt->text().c_str());
-	    mode( (TMdPrm::Mode)m_mode, m_prm = "" );
+	    mode((TMdPrm::Mode)m_mode, m_prm = "");
 	} catch(...) { disable(); throw; }
-    else if( a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
+    else if(a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	try
 	{
-	    if( enableStat() ) disable();
+	    if(enableStat()) disable();
 	    m_prm = opt->text();
-	    if( m_mode == TMdPrm::DirRefl && m_prm == owner().owner().modId()+"."+owner().id()+"."+id() )
+	    if(m_mode == TMdPrm::DirRefl && m_prm == owner().owner().modId()+"."+owner().id()+"."+id())
 		m_prm = owner().owner().modId()+"."+owner().id();
-	    mode( (TMdPrm::Mode)m_mode, m_prm );
+	    mode((TMdPrm::Mode)m_mode, m_prm);
 	} catch(...){ disable(); throw; }
-    else if( a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt) )
+    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt))
     {
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(m_prm,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(m_prm,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -919,32 +919,32 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	switch(c_lv)
 	{
 	    case 0:
-		if( m_mode == DirRefl )		SYS->daq().at().modList(ls);
-		if( m_mode == Template )	SYS->daq().at().tmplLibList(ls);
+		if(m_mode == DirRefl)	SYS->daq().at().modList(ls);
+		if(m_mode == Template)	SYS->daq().at().tmplLibList(ls);
 		break;
 	    case 1:
-		if( m_mode == DirRefl && SYS->daq().at().modPresent(prm0) )
+		if(m_mode == DirRefl && SYS->daq().at().modPresent(prm0))
 		    SYS->daq().at().at(prm0).at().list(ls);
-		if( m_mode == Template && SYS->daq().at().tmplLibPresent(prm0) )
+		if(m_mode == Template && SYS->daq().at().tmplLibPresent(prm0))
 		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
 		break;
 	    case 2:
-		if( m_mode == DirRefl && SYS->daq().at().modPresent(prm0) &&
-			SYS->daq().at().at(prm0).at().present(prm1) )
+		if(m_mode == DirRefl && SYS->daq().at().modPresent(prm0) &&
+			SYS->daq().at().at(prm0).at().present(prm1))
 		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path == "/cfg/attr_only" && mode() == TMdPrm::Template )
+    else if(a_path == "/cfg/attr_only" && mode() == TMdPrm::Template)
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	TBDS::genDBSet(mod->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genDBSet(mod->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
-    else if( a_path.substr(0,12) == "/cfg/prm/pr_" && mode() == TMdPrm::Template )
+    else if(a_path.substr(0,12) == "/cfg/prm/pr_" && mode() == TMdPrm::Template)
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
@@ -952,36 +952,36 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if( c_lvl==4 ) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
 	    else opt->setText(lnk_val);	
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    bool noonly_no_set = true;
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
 	    string p_vl = opt->text();
 	    int c_lvl = 0;
-	    for( int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++ );
+	    for(int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++);
 	    AutoHD<TValue> prm;
 	    if(c_lvl==3)
 	    {
-		if( TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() &&
+		if(TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(p_vl,1,'.') == owner().id() &&
-			TSYS::strSepParse(p_vl,2,'.') == id() )
+			TSYS::strSepParse(p_vl,2,'.') == id())
 		    throw TError(nodePath().c_str(),_("Self to self linking error."));
 		prm = SYS->daq().at().at(TSYS::strSepParse(p_vl,0,'.')).at().
 				      at(TSYS::strSepParse(p_vl,1,'.')).at().
 				      at(TSYS::strSepParse(p_vl,2,'.'));
 	    }
-	    for( int i_l = 0; i_l < lnkSize(); i_l++ )
-		if( p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).io_id)->def(),0,'|') )
+	    for(int i_l = 0; i_l < lnkSize(); i_l++)
+		if(p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).io_id)->def(),0,'|'))
 		{
 		    lnk(i_l).prm_attr = p_vl;
 		    string p_attr = TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).io_id)->def(),1,'|');
-		    if( !prm.freeStat() )
+		    if(!prm.freeStat())
 		    {
-			if( prm.at().vlPresent(p_attr) )
+			if(prm.at().vlPresent(p_attr))
 			{
 			    lnk(i_l).prm_attr= p_vl+"."+p_attr;
-			    modif( );
+			    modif();
 			    noonly_no_set = false;
 			}
 			else no_set+=p_attr+",";
@@ -989,23 +989,23 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		}
 	    if(!prm.freeStat())
 	    {
-		if( noonly_no_set )	throw TError(nodePath().c_str(),_("Parameter has no one attribute!"));
-		else if( no_set.size() )throw TError(nodePath().c_str(),_("Parameter has not attributes: %s !"),no_set.c_str());
-		mode( (TMdPrm::Mode)m_mode, m_prm );
+		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Parameter has no one attribute!"));
+		else if(no_set.size())	throw TError(nodePath().c_str(),_("Parameter has not attributes: %s !"),no_set.c_str());
+		mode((TMdPrm::Mode)m_mode, m_prm);
 	    }
 	}
     }
-    else if( (a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") &&
-	    mode() == TMdPrm::Template && ctrChkNode(opt) )
+    else if((a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") &&
+	    mode() == TMdPrm::Template && ctrChkNode(opt))
     {
 	int c_lv = 0;
 	string l_prm = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	bool is_pl = (a_path.substr(0,12) == "/cfg/prm/pl_");
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++)
 	{
-	    if( is_pl && c_lv>2 ) break;
+	    if(is_pl && c_lv>2) break;
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
@@ -1014,8 +1014,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	string prm1 = TSYS::strSepParse(l_prm,1,'.');
 	string prm2 = TSYS::strSepParse(l_prm,2,'.');
 	vector<string>  ls;
-	switch( c_lv )
-        {
+	switch(c_lv)
+	{
 	    case 0:	SYS->daq().at().modList(ls);	break;
 	    case 1:
 		if(SYS->daq().at().modPresent(prm0))
@@ -1027,36 +1027,36 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		break;
 	    case 3:
 		if(!is_pl && SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
-			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2) )
+			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2))
 		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path.substr(0,12) == "/cfg/prm/el_" && mode() == TMdPrm::Template )
+    else if(a_path.substr(0,12) == "/cfg/prm/el_" && mode() == TMdPrm::Template)
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
-	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 		opt->setText(lnk(lnkId(i_io)).prm_attr);
-	    else if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
+	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)
 		opt->setText(tmpl->val.getS(i_io));
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
-	    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    {
-		if( TSYS::strSepParse(opt->text(),0,'.') == owner().owner().modId() &&
+		if(TSYS::strSepParse(opt->text(),0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(opt->text(),1,'.') == owner().id() &&
-			TSYS::strSepParse(opt->text(),2,'.') == id() )
+			TSYS::strSepParse(opt->text(),2,'.') == id())
 		    throw TError(nodePath().c_str(),_("Self to self linking error."));
 		lnk(lnkId(i_io)).prm_attr = opt->text();
-		mode( (TMdPrm::Mode)m_mode, m_prm );
+		mode((TMdPrm::Mode)m_mode, m_prm);
 	    }
-	    else if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
+	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)
 		tmpl->val.setS(i_io,opt->text());
 	    modif();
 	}

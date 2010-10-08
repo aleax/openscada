@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -1552,32 +1552,32 @@ string TProt::symmetricSign( const string &mess, const string &keySet, const str
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/ep_",_("End point"),0664,"root","Protocol",2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,0,"/ep",_("End points")) )
-	    ctrMkNode("list",opt,-1,"/ep/ep",_("End points"),0664,"root","Protocol",5,"tp","br","idm","1","s_com","add,del","br_pref","ep_","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/ep_",_("End point"),RWRWR_,"root",SPRT_ID,2,"idm","1","idSz","20");
+	if(ctrMkNode("area",opt,0,"/ep",_("End points")))
+	    ctrMkNode("list",opt,-1,"/ep/ep",_("End points"),RWRWR_,"root",SPRT_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","ep_","idSz","20");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/ep_" || a_path == "/ep/ep" )
+    if(a_path == "/br/ep_" || a_path == "/ep/ep")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    epList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(epAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    epAdd(vid); epAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEC_WR) )	chldDel(mEndPnt,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -3097,29 +3097,29 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("End point: ")+name(),0664,"root","root");
-	if( ctrMkNode("area",opt,-1,"/ep",_("End point")) )
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("End point: ")+name(),RWRWR_,"root",SPRT_ID);
+	if(ctrMkNode("area",opt,-1,"/ep",_("End point")))
 	{
-	    if( ctrMkNode("area",opt,-1,"/ep/st",_("State")) )
+	    if(ctrMkNode("area",opt,-1,"/ep/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root","Protocol",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enable"),RWRWR_,"root","Protocol",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root","Protocol",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/ep/cfg",_("Config")) )
+	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Config")))
 	    {
-		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root","Protocol",RWRWR_);
-		ctrMkNode("fld",opt,-1,"/ep/cfg/ServCert",cfg("ServCert").fld().descr(),0660,"root","Protocol",3,"tp","str","cols","90","rows","7");
-		ctrMkNode("fld",opt,-1,"/ep/cfg/ServPvKey",cfg("ServPvKey").fld().descr(),0660,"root","Protocol",3,"tp","str","cols","90","rows","7");
+		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);
+		ctrMkNode("fld",opt,-1,"/ep/cfg/ServCert",cfg("ServCert").fld().descr(),RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
+		ctrMkNode("fld",opt,-1,"/ep/cfg/ServPvKey",cfg("ServPvKey").fld().descr(),RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
 		ctrRemoveNode(opt,"/ep/cfg/SecPolicies");
-		if( ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",cfg("SecPolicies").fld().descr(),0664,"root","Protocol",1,"s_com","add,del") )
+		if(ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",cfg("SecPolicies").fld().descr(),RWRWR_,"root",SPRT_ID,1,"s_com","add,del"))
 		{
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),0664,"root","Protocol",3,"tp","str","dest","select","sel_list","None;Basic128Rsa15;Basic256");
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),0664,"root","Protocol",4,"tp","dec","dest","select","sel_id","1;2;3","sel_list",_("None;Sign;Sign&Encrypt"));
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","sel_list","None;Basic128Rsa15;Basic256");
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),RWRWR_,"root",SPRT_ID,4,"tp","dec","dest","select","sel_id","1;2;3","sel_list",_("None;Sign;Sign&Encrypt"));
 		}
 	    }
 	}
@@ -3127,55 +3127,55 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/ep/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
-    else if( a_path == "/ep/st/en_st" )
+    if(a_path == "/ep/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
+    else if(a_path == "/ep/st/en_st")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/ep/st/db" )
+    else if(a_path == "/ep/st/db")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR) )	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
     }
-    else if( a_path == "/ep/cfg/ls_itr" && ctrChkNode(opt) )
+    else if(a_path == "/ep/cfg/ls_itr" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setText("*");
 	vector<string> sls;
 	SYS->transport().at().inTrList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if( a_path == "/ep/cfg/secPlc" )
+    else if(a_path == "/ep/cfg/secPlc")
     {
-	if( ctrChkNode(opt,"get",0664,"root","Protocol",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	{
-	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",0664);
-	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",0664);
-	    ResAlloc res( nodeRes(), false );
-	    for( int i_p = 0; i_p < mSec.size(); i_p++ )
+	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",RWRWR_);
+	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",RWRWR_);
+	    ResAlloc res(nodeRes(), false);
+	    for(int i_p = 0; i_p < mSec.size(); i_p++)
 	    {
-		if( n_pol )	n_pol->childAdd("el")->setText(mSec[i_p].policy);
-		if( n_mm )	n_mm->childAdd("el")->setText(TSYS::int2str(mSec[i_p].messageMode));
+		if(n_pol)	n_pol->childAdd("el")->setText(mSec[i_p].policy);
+		if(n_mm)	n_mm->childAdd("el")->setText(TSYS::int2str(mSec[i_p].messageMode));
 	    }
 	    return;
 	}
-	ResAlloc res( nodeRes(), true );
-	if( ctrChkNode(opt,"add",0664,"root","Protocol",SEC_WR) )
-	{ mSec.push_back( SecuritySetting("None",OPCEndPoint::None) ); modif(); return; }
+	ResAlloc res(nodeRes(), true);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
+	{ mSec.push_back(SecuritySetting("None",OPCEndPoint::None)); modif(); return; }
 	int row = atoi(opt->attr("row").c_str());
-	if( row < 0 || row >= mSec.size() )
+	if(row < 0 || row >= mSec.size())
 	    throw TError(nodePath().c_str(),_("No present seleted row."));
-	if( ctrChkNode(opt,"del",0664,"root","Protocol",SEC_WR) )
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ mSec.erase(mSec.begin()+row); modif(); return; }
-	if( ctrChkNode(opt,"set",0664,"root","Protocol",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    int col = atoi(opt->attr("col").c_str());
-	    if( col == 0 )	mSec[row].policy = opt->text();
-	    else if( col == 1 )	mSec[row].messageMode = (OPCEndPoint::MessageSecurityMode)atoi(opt->text().c_str());
+	    if(col == 0)	mSec[row].policy = opt->text();
+	    else if(col == 1)	mSec[row].messageMode = (OPCEndPoint::MessageSecurityMode)atoi(opt->text().c_str());
 	    modif();
 	}
     }
-    else if( a_path.compare(0,7,"/ep/cfg") == 0 ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
+    else if(a_path.compare(0,7,"/ep/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }

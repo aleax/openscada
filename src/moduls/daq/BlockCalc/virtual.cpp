@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -41,12 +41,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"BlockCalc"
-#define MOD_NAME	"Block based calculator"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Block based calculator")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.3.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow block based calculator."
+#define VERSION		"1.4.0"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow block based calculator.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -431,69 +431,69 @@ void Contr::blkProc( const string &id, bool val )
 void Contr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
-	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),0444,"root","root",1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
+	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
 	}
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/blk_" )
+    if(a_path == "/br/blk_")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    blkList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_bl,opt->attr("id"),-1,1);
     }
-    else if( a_path == "/scheme/sch" )
+    else if(a_path == "/scheme/sch")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    if( !startStat() )
+	    if(!startStat())
 	    {
 		vector<string> lst;
 		blkList(lst);
-		for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+		for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	    }
 	    else
 	    {
 		ResAlloc sres(hd_res,false);
-		for( unsigned i_b=0; i_b < clc_blks.size(); i_b++ )
+		for(unsigned i_b=0; i_b < clc_blks.size(); i_b++)
 		    opt->childAdd("el")->setAttr("id",clc_blks[i_b].at().id())->setText(clc_blks[i_b].at().name());
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(m_bl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_bl,opt->attr("id"),-1,1);
     }
-    else if( a_path == "/scheme/nmb" && ctrChkNode(opt) )
+    else if(a_path == "/scheme/nmb" && ctrChkNode(opt))
     {
 	vector<string> lst;
 	blkList(lst);
 	int enCnt = 0, prcCnt = 0;
-	for( int i_b = 0; i_b < lst.size(); i_b++ )
+	for(int i_b = 0; i_b < lst.size(); i_b++)
 	{
-	    if( blkAt(lst[i_b]).at().enable( ) )	enCnt++;
-	    if( blkAt(lst[i_b]).at().process( ) )	prcCnt++;
+	    if(blkAt(lst[i_b]).at().enable())	enCnt++;
+	    if(blkAt(lst[i_b]).at().process())	prcCnt++;
 	}
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d; Process: %d"),lst.size(),enCnt,prcCnt));
     }
@@ -713,10 +713,10 @@ void Prm::vlArchMake( TVal &val )
 void Prm::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),0664,"root","root",2,"rows","8",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"rows","8",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  blk - block identifier from block's scheme; for constant value set to:\n"

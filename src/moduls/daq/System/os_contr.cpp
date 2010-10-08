@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,12 +46,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"System"
-#define MOD_NAME	"System DA"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("System DA")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.7.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other."
+#define VERSION		"1.7.2"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other.")
 #define LICENSE		"GPL2"
 //*************************************************
 

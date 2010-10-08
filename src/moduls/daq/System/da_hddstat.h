@@ -38,7 +38,7 @@ class HddStat: public DA
 	~HddStat( );
 
 	string id( )	{ return "hddstat"; }
-	string name( )	{ return "HDD statistic"; }
+	string name( )	{ return _("HDD statistic"); }
 
 	void init( TMdPrm *prm );
 	void getVal( TMdPrm *prm );

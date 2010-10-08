@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_daq.h
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,12 +39,12 @@ using namespace OSCADA;
 //*************************************************
 //* DAQ modul info!                               *
 #define DAQ_ID		"OPC_UA"
-#define DAQ_NAME	"OPC UA"
-#define DAQ_TYPE	"DAQ"
+#define DAQ_NAME	_("OPC UA")
+#define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"0.5.0"
-#define DAQ_AUTOR	"Roman Savochenko"
-#define DAQ_DESCR	"Allow realisation of OPC UA client service."
+#define DAQ_MVER	"0.6.0"
+#define DAQ_AUTOR	_("Roman Savochenko")
+#define DAQ_DESCR	_("Allow realisation of OPC UA client service.")
 #define DAQ_LICENSE	"GPL2"
 //*************************************************
 

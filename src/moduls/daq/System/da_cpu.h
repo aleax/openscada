@@ -38,7 +38,7 @@ class CPU: public DA
 	~CPU( );
 
 	string id( )	{ return "CPU"; }
-	string name( )	{ return "CPU"; }
+	string name( )	{ return _("CPU"); }
 
 	void init( TMdPrm *prm );
 	void getVal( TMdPrm *prm );

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -218,8 +218,7 @@ class TMdContr: public TController
 	class SDataRec
 	{
 	    public:
-		SDataRec( int idb, int ioff, int v_rez ) : db(idb), off(ioff)
-		{ val.assign(v_rez,0); err="11:Value not gathered."; }
+		SDataRec( int idb, int ioff, int v_rez );
 
 		int db;			//Data block
 		int off;		//Data block start offset

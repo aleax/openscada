@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,12 +36,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"DiamondBoards"
-#define MOD_NAME	"Diamond DA boards"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Diamond DA boards")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.2.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow access to Diamond systems DA boards. Include support of Athena board."
+#define VERSION		"1.2.1"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow access to Diamond systems DA boards. Include support of Athena board.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -451,43 +451,43 @@ void *TMdContr::AD_DSCTask( void *param )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/board",_("Board config")))
 	    if(ctrMkNode("area",opt,-1,"/board/dio",_("Digital IO ports. Select input!")))
 	    {
-		ctrMkNode("fld",opt,-1,"/board/dio/a",_("Port A"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/b",_("Port B"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/c1",_("Port C1"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/c2",_("Port C2"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/a",_("Port A"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/b",_("Port B"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/c1",_("Port C1"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/board/dio/c2",_("Port C2"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path.substr(0,11) == "/board/dio/" )
+    if(a_path.substr(0,11) == "/board/dio/")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
-	{
-	    string port_n = TSYS::pathLev(a_path,2);
-	    int	cfg_b = cfg("DIO_CFG").getI();
-	    if( port_n == "a" )		cfg_b&=0x10;
-	    else if( port_n == "b" )	cfg_b&=0x02;
-	    else if( port_n == "c1" )	cfg_b&=0x01;
-	    else if( port_n == "c2" )	cfg_b&=0x08;
-	    opt->setText(cfg_b?"1":"0");
-	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    string port_n = TSYS::pathLev(a_path,2);
 	    int cfg_b = cfg("DIO_CFG").getI();
-	    if( port_n == "a" )		cfg_b = atoi(opt->text().c_str())?cfg_b|0x10:cfg_b&(~0x10);
-	    else if( port_n == "b" )	cfg_b = atoi(opt->text().c_str())?cfg_b|0x02:cfg_b&(~0x02);
-	    else if( port_n == "c1" )	cfg_b = atoi(opt->text().c_str())?cfg_b|0x01:cfg_b&(~0x01);
-	    else if( port_n == "c2" )	cfg_b = atoi(opt->text().c_str())?cfg_b|0x08:cfg_b&(~0x08);
+	    if(port_n == "a")		cfg_b&=0x10;
+	    else if(port_n == "b")	cfg_b&=0x02;
+	    else if(port_n == "c1")	cfg_b&=0x01;
+	    else if(port_n == "c2")	cfg_b&=0x08;
+	    opt->setText(cfg_b?"1":"0");
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	{
+	    string port_n = TSYS::pathLev(a_path,2);
+	    int cfg_b = cfg("DIO_CFG").getI();
+	    if(port_n == "a")		cfg_b = atoi(opt->text().c_str())?cfg_b|0x10:cfg_b&(~0x10);
+	    else if(port_n == "b")	cfg_b = atoi(opt->text().c_str())?cfg_b|0x02:cfg_b&(~0x02);
+	    else if(port_n == "c1")	cfg_b = atoi(opt->text().c_str())?cfg_b|0x01:cfg_b&(~0x01);
+	    else if(port_n == "c2")	cfg_b = atoi(opt->text().c_str())?cfg_b|0x08:cfg_b&(~0x08);
 	    cfg("DIO_CFG").setI(cfg_b);
 	}
     }

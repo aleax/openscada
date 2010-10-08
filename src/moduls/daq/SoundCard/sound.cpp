@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,12 +30,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SoundCard"
-#define MOD_NAME	"Sound card"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Sound card")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.6.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow access to sound card data."
+#define VERSION		"0.6.1"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow access to sound card data.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -306,21 +306,21 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/CARD",cfg("CARD").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/cntr/cfg/lst_SMPL_RATE");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_RATE",cfg("SMPL_RATE").fld().descr(),0664,"root","root",
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/CARD",cfg("CARD").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/lst_SMPL_RATE");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_RATE",cfg("SMPL_RATE").fld().descr(),RWRWR_,"root",SDAQ_ID,
 	    3,"tp","str","dest","sel_ed","sel_list","8000;16000;22050;44100;48000;96000");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/cfg/lst_SMPL_RATE" && ctrChkNode(opt) )
+    if(a_path == "/cntr/cfg/lst_SMPL_RATE" && ctrChkNode(opt))
     {
-	for( int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++ )
-	    if( Pa_GetDeviceInfo(i_d)->maxInputChannels )
+	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
+	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels)
 		opt->childAdd("el")->setText(Pa_GetDeviceInfo(i_d)->name);
     }
     else TController::cntrCmdProc(opt);
@@ -387,18 +387,18 @@ void TMdPrm::vlArchMake( TVal &val )
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/CHANNEL",cfg("CHANNEL").fld().descr(),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/lst_CHANNEL");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/CHANNEL",cfg("CHANNEL").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/cfg/lst_CHANNEL");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/lst_CHANNEL" && ctrChkNode(opt) )
+    if(a_path == "/prm/cfg/lst_CHANNEL" && ctrChkNode(opt))
     {
-	for( int i_c = 0; i_c < owner().channelAllow( ); i_c++ )
+	for(int i_c = 0; i_c < owner().channelAllow( ); i_c++)
 	    opt->childAdd("el")->setText(TSYS::int2str(i_c));
     }
     else TParamContr::cntrCmdProc(opt);

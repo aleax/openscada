@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -152,82 +152,82 @@ void Lib::del( const char *id )
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),0664,"root","root");
-	if(ctrMkNode("branches",opt,-1,"/br","",0444))
-	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),RWRWR_,"root",SDAQ_ID);
+	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
+	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size())
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),0664,"root","root",4,"tp","str","dest","sel_ed","select","/db/tblList",
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","sel_ed","select","/db/tblList",
 			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
 	    {
-		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?0444:0664,"root","root",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?0444:0664,"root","root",3,"tp","str","cols","100","rows","5");
-		if( !DB().empty() )
-		    ctrMkNode("fld",opt,-1,"/lib/cfg/progTr",_("Program's text translation"),0664,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
+		if(!DB().empty())
+		    ctrMkNode("fld",opt,-1,"/lib/cfg/progTr",_("Program's text translation"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
-	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","fnc_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/func/func",_("Functions"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","fnc_","idSz","20");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/lib/st/st" )
+    if(a_path == "/lib/st/st")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( startStat() ? "1" : "0" );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStart( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/lib/st/db" && DB().size() )
+    else if(a_path == "/lib/st/db" && DB().size())
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( fullDB() );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setFullDB( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(fullDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setFullDB(opt->text());
     }
-    else if( a_path == "/lib/cfg/id" && ctrChkNode(opt) )	opt->setText(id());
-    else if( a_path == "/lib/cfg/name" )
+    else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
+    else if(a_path == "/lib/cfg/name")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( name() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setName( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     }
-    else if( a_path == "/lib/cfg/descr" )
+    else if(a_path == "/lib/cfg/descr")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( descr() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setDescr( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     }
-    else if( a_path == "/lib/cfg/progTr" )
+    else if(a_path == "/lib/cfg/progTr")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(progTr()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setProgTr( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(progTr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProgTr(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/br/fnc_" || a_path == "/func/func" )
+    else if(a_path == "/br/fnc_" || a_path == "/func/func")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    list(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(mFnc,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"),-1,1);
     }
-    else if( a_path == "/func/ls_lib" && ctrChkNode(opt) )
+    else if(a_path == "/func/ls_lib" && ctrChkNode(opt))
     {
 	vector<string> lst;
 	opt->childAdd("el")->setAttr("id","")->setText("");
 	mod->lbList(lst);
-	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(mod->lbAt(lst[i_a]).at().name());
     }
     else TCntrNode::cntrCmdProc(opt);

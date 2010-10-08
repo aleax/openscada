@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,13 +34,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"JavaLikeCalc"
-#define MOD_NAME	"Java-like based calculator"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Java-like based calculator")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.7.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
+#define VERSION		"1.8.0"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -255,7 +255,7 @@ void TipContr::modStart( )
 {
     vector<string> lst;
 
-    //- Start functions -
+    //> Start functions
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().setStart(true);
@@ -265,13 +265,13 @@ void TipContr::modStart( )
 
 void TipContr::modStop( )
 {
-    //- Stop and disable all JavaLike-controllers -
+    //> Stop and disable all JavaLike-controllers
     vector<string> lst;
     list(lst);
     for(int i_l=0; i_l<lst.size(); i_l++)
 	at(lst[i_l]).at().disable( );
 
-    //- Stop functions -
+    //> Stop functions
     lbList(lst);
     for(int i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().setStart(false);
@@ -279,29 +279,29 @@ void TipContr::modStop( )
 
 void TipContr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TTipDAQ::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
-	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","lib_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","lib_","idSz","20");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/lib_" || a_path == "/libs/lb" )
+    if(a_path == "/br/lib_" || a_path == "/libs/lb")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    lbList(lst);
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(lbAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	lbUnreg(opt->attr("id"),1);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
     }
     else TTipDAQ::cntrCmdProc(opt);
 }
@@ -543,19 +543,19 @@ void Contr::cntrCmdProc( XMLNode *opt )
 {
     //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )
+    if(a_path.substr(0,6) == "/serv/")
     {
-	if( a_path == "/serv/fncAttr" )
+	if(a_path == "/serv/fncAttr")
 	{
-	    if( !startStat( ) || !func( ) ) throw TError(nodePath().c_str(),_("No started or no present function."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
-		for( int i_a = 0; i_a < ioSize(); i_a++ )
+	    if(!startStat() || !func()) throw TError(nodePath().c_str(),_("No started or no present function."));
+	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
-		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+		for(int i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
-		    if( opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0 ) continue;
+		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
 		    setS(io_id,opt->childGet(i_a)->text());
 		}
 	}
@@ -564,12 +564,12 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),0664,"root","DAQ",3,"tp","str","dest","sel_ed","select","/cntr/flst");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),0664,"root","DAQ",4,"tp","str","dest","sel_ed",
-	    "sel_list",_("1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"),
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed",
+	    "sel_list","1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *",
 	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
 		     "Seconds form is one real number (1.5, 1e-3).\n"
 		     "Cron it is standard form '* * * * *'. Where:\n"
@@ -578,33 +578,33 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		     "  - days (1-31);\n"
 		     "  - month (1-12);\n"
 		     "  - week day (0[sunday]-6)."));
-	if( enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calcing")) )
+	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calcing")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),0664,"root","DAQ",2,"s_com","add,del,ins,move","rows","15"))
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15"))
 	    {
-		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),0664,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),0664,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),0664,"root","DAQ",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
 		    "sel_list",_("Real;Integer;Boolean;String"));
-		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),0664,"root","DAQ",5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)+";"+TSYS::int2str(IO::Return)).c_str(),
 		    "sel_list",_("Input;Output;Return"));
-		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),0664,"root","DAQ",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),0664,"root","DAQ",2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),RWRWR_,"root",SDAQ_ID,2,"tp","str","rows","10");
 	}
 	return;
     }
 
     //> Process command to page
-    if( a_path == "/cntr/flst" && ctrChkNode(opt) )
+    if(a_path == "/cntr/flst" && ctrChkNode(opt))
     {
 	vector<string> lst;
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(mFnc,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(mFnc,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -614,24 +614,24 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:	mod->lbList(lst); break;
 	    case 1:
-		if( mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
+		if(mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')))
 		    mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().list(lst);
 		break;
 	}
-	for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	    opt->childAdd("el")->setText(c_path+lst[i_a]);
     }
-    else if( a_path == "/fnc/io" && enableStat() )
+    else if(a_path == "/fnc/io" && enableStat())
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/fnc/io/0","",0664);
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/fnc/io/1","",0664);
-	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/fnc/io/2","",0664);
-	    XMLNode *n_mode	= ctrMkNode("list",opt,-1,"/fnc/io/3","",0664);
-	    XMLNode *n_val	= ctrMkNode("list",opt,-1,"/fnc/io/4","",0664);
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/fnc/io/0","",RWRWR_);
+	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/fnc/io/1","",RWRWR_);
+	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/fnc/io/2","",RWRWR_);
+	    XMLNode *n_mode	= ctrMkNode("list",opt,-1,"/fnc/io/3","",RWRWR_);
+	    XMLNode *n_val	= ctrMkNode("list",opt,-1,"/fnc/io/4","",RWRWR_);
 
-	    for( int id = 0; id < func()->ioSize(); id++ )
+	    for(int id = 0; id < func()->ioSize(); id++)
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(func()->io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(func()->io(id)->name());
@@ -640,29 +640,29 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ ((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) ); modif(); }
-	if( ctrChkNode(opt,"ins",0664,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), atoi(opt->attr("row").c_str()) ); modif(); }
-	if( ctrChkNode(opt,"del",0664,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int row = atoi(opt->attr("row").c_str());
-	    if( func()->io(row)->flg()&Func::SysAttr )
+	    if(func()->io(row)->flg()&Func::SysAttr)
 		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
-	    ((Func *)func())->ioDel( row ); 
+	    ((Func *)func())->ioDel(row); 
 	    modif();
 	}
-	if( ctrChkNode(opt,"move",0664,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{ ((Func *)func())->ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    int col = atoi(opt->attr("col").c_str());
-	    if( (col == 0 || col == 1) && !opt->text().size() )
+	    if((col == 0 || col == 1) && !opt->text().size())
 		throw TError(nodePath().c_str(),_("Empty value is not valid."));
-	    if( func()->io(row)->flg()&Func::SysAttr )
+	    if(func()->io(row)->flg()&Func::SysAttr)
 		throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
-	    switch( col )
+	    switch(col)
 	    {
 		case 0:	func()->io(row)->setId(opt->text());	break;
 		case 1:	func()->io(row)->setName(opt->text());	break;
@@ -671,13 +671,13 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		case 4:	setS(row,opt->text());	break;
 	    }
 	    modif();
-	    if( !((Func *)func())->owner().DB().empty() ) ((Func *)func())->modif();
+	    if(!((Func *)func())->owner().DB().empty()) ((Func *)func())->modif();
 	}
     }
-    else if( a_path == "/fnc/prog" && enableStat() )
+    else if(a_path == "/fnc/prog" && enableStat())
     {
-	if( ctrChkNode(opt,"get",0664,"root","DAQ",SEC_RD) )	opt->setText(((Func *)func())->prog());
-	if( ctrChkNode(opt,"set",0664,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(((Func *)func())->prog());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
@@ -868,10 +868,10 @@ void Prm::vlArchMake( TVal &val )
 void Prm::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),0664,"root","root",1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  io - calc function's IO;\n"

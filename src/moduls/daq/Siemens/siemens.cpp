@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,12 +40,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Siemens"
-#define MOD_NAME	"Siemens DAQ"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Siemens DAQ")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.2.2"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."
+#define VERSION		"1.2.3"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -369,40 +369,40 @@ void TTpContr::getLifeListPB( unsigned board, string &buffer )
 
 void TTpContr::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TTipDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/mod",_("CIF")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/mod/st",_("Status")))
-		ctrMkNode("fld",opt,-1,"/mod/st/drv",_("CIF driver"),0444,"root","root",1,"tp","bool");
-	    if( ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),0664,"root","root"))
+		ctrMkNode("fld",opt,-1,"/mod/st/drv",_("CIF driver"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
+	    if(ctrMkNode("table",opt,-1,"/mod/dev",_("CIF devices"),RWRWR_,"root",SDAQ_ID))
 	    {
-		ctrMkNode("list",opt,-1,"/mod/dev/brd",_("Board"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mod/dev/fwnm",_("Firmware name"),0444,"root","root",1,"tp","real");
-		ctrMkNode("list",opt,-1,"/mod/dev/fwver",_("Firmware version"),0444,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mod/dev/phAddr",_("Physical address"),0444,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mod/dev/irq",_("IRQ"),0444,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mod/dev/addr",_("PB address"),0664,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("PB speed"),0664,"root","root",4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
+		ctrMkNode("list",opt,-1,"/mod/dev/brd",_("Board"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mod/dev/fwnm",_("Firmware name"),R_R_R_,"root",SDAQ_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/mod/dev/fwver",_("Firmware version"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mod/dev/phAddr",_("Physical address"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mod/dev/irq",_("IRQ"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mod/dev/addr",_("PB address"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mod/dev/speed",_("PB speed"),RWRWR_,"root",SDAQ_ID,4,"tp","dec","idm","1","dest","select","select","/mod/dev/lsspd");
 	    }
 	}
 	if(ctrMkNode("area",opt,1,"/PB",_("Profibus")))
 	{
-	    ctrMkNode("fld",opt,-1,"/PB/dev",_("CIF device"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("list",opt,-1,"/PB/lifels",_("Life stations list"),0444,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/PB/dev",_("CIF device"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+	    ctrMkNode("list",opt,-1,"/PB/lifels",_("Life stations list"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	}
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/mod/st/drv" && ctrChkNode(opt) )	opt->setText(TSYS::int2str(drvCIFOK()));
-    else if( a_path == "/mod/dev" )
+    if(a_path == "/mod/st/drv" && ctrChkNode(opt))	opt->setText(TSYS::int2str(drvCIFOK()));
+    else if(a_path == "/mod/dev")
     {
 	if(ctrChkNode(opt))
 	{
-	    //- Fill Archives table -
+	    //> Fill Archives table
 	    XMLNode *n_brd  = ctrMkNode("list",opt,-1,"/mod/dev/brd","");
 	    XMLNode *n_fwnm = ctrMkNode("list",opt,-1,"/mod/dev/fwnm","");
 	    XMLNode *n_fwver= ctrMkNode("list",opt,-1,"/mod/dev/fwver","");
@@ -411,7 +411,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_pba  = ctrMkNode("list",opt,-1,"/mod/dev/addr","");
 	    XMLNode *n_pbspd= ctrMkNode("list",opt,-1,"/mod/dev/speed","");
 
-	    for( int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++ )
+	    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
 	    {
 		if(n_brd)	n_brd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].board));
 		if(n_fwnm)	n_fwnm->childAdd("el")->setText(cif_devs[i_b].fwname);
@@ -422,48 +422,48 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		if(n_pbspd)	n_pbspd->childAdd("el")->setText(TSYS::int2str(cif_devs[i_b].pbspeed));
 	    }
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int brd = atoi(opt->attr("row").c_str());
 	    string col  = opt->attr("col");
-	    if( brd < 0 || brd > 3 )	throw TError(nodePath().c_str(),_("Board number %d error!"),brd);
-	    if( col == "addr" )
+	    if(brd < 0 || brd > 3)	throw TError(nodePath().c_str(),_("Board number %d error!"),brd);
+	    if(col == "addr")
 	    {
 		int addr = atoi(opt->text().c_str());
 		cif_devs[brd].pbaddr = (addr<0)?0:(addr>126)?126:addr;
 	    }
-	    else if( col == "speed" )	cif_devs[brd].pbspeed = atoi(opt->text().c_str());
-	    if( col == "addr" || col == "speed" ) initCIF(brd);
+	    else if(col == "speed")	cif_devs[brd].pbspeed = atoi(opt->text().c_str());
+	    if(col == "addr" || col == "speed") initCIF(brd);
 	    modif();
 	}
     }
-    else if( a_path == "/mod/dev/lsspd" && ctrChkNode(opt) )
+    else if(a_path == "/mod/dev/lsspd" && ctrChkNode(opt))
     {
-	opt->childAdd("el")->setAttr("id","0")->setText("9600Baud");
-	opt->childAdd("el")->setAttr("id","1")->setText("19.2kBaud");
-	opt->childAdd("el")->setAttr("id","2")->setText("93.75kBaud");
-	opt->childAdd("el")->setAttr("id","3")->setText("187.5kBaud");
-	opt->childAdd("el")->setAttr("id","4")->setText("500kBaud");
-	opt->childAdd("el")->setAttr("id","6")->setText("1.5MBaud");
-	opt->childAdd("el")->setAttr("id","7")->setText("3MBaud");
-	opt->childAdd("el")->setAttr("id","8")->setText("6MBaud");
-	opt->childAdd("el")->setAttr("id","9")->setText("12MBaud");
+	opt->childAdd("el")->setAttr("id","0")->setText(_("9600Baud"));
+	opt->childAdd("el")->setAttr("id","1")->setText(_("19.2kBaud"));
+	opt->childAdd("el")->setAttr("id","2")->setText(_("93.75kBaud"));
+	opt->childAdd("el")->setAttr("id","3")->setText(_("187.5kBaud"));
+	opt->childAdd("el")->setAttr("id","4")->setText(_("500kBaud"));
+	opt->childAdd("el")->setAttr("id","6")->setText(_("1.5MBaud"));
+	opt->childAdd("el")->setAttr("id","7")->setText(_("3MBaud"));
+	opt->childAdd("el")->setAttr("id","8")->setText(_("6MBaud"));
+	opt->childAdd("el")->setAttr("id","9")->setText(_("12MBaud"));
     }
-    else if( a_path == "/PB/dev" )
+    else if(a_path == "/PB/dev")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
     }
-    else if( a_path == "/PB/lifels" && ctrChkNode(opt) )
+    else if(a_path == "/PB/lifels" && ctrChkNode(opt))
     {
 	int board = atoi(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")).c_str());
 	string lifeLst;
 	try
 	{
 	    getLifeListPB(board, lifeLst);
-	    for( int i_st = 0; i_st < lifeLst.size(); i_st++ )
+	    for(int i_st = 0; i_st < lifeLst.size(); i_st++)
 		switch((unsigned char)lifeLst[i_st])
 		{
 		    case 0xFF:	opt->childAdd("el")->setText(TSYS::int2str(i_st)+_(" : -------"));	break;
@@ -1299,6 +1299,12 @@ void TMdContr::redntDataUpdate( )
     cntrCmd(&req);
 }
 
+TMdContr::SDataRec::SDataRec( int idb, int ioff, int v_rez ) : db(idb), off(ioff)
+{
+    val.assign(v_rez,0);
+    err = _("11:Value not gathered.");
+}
+
 //************************************************
 //* TMdPrm                                       *
 //************************************************
@@ -1703,19 +1709,19 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )
+    if(a_path.substr(0,6) == "/serv/")
     {
-	if( a_path == "/serv/tmplAttr" )
+	if(a_path == "/serv/tmplAttr")
 	{
-	    if( !enableStat() || !func() ) throw TError(nodePath().c_str(),_("Parameter disabled or error."));
-	    if( ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD) )
-		for( int i_a = 0; i_a < ioSize(); i_a++ )
+	    if(!enableStat() || !func()) throw TError(nodePath().c_str(),_("Parameter disabled or error."));
+	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
-	    if( ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR) )
-		for( int i_a = 0; i_a < opt->childSize(); i_a++ )
+	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+		for(int i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
-		    if( opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0 ) continue;
+		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
 		    setS(io_id,opt->childGet(i_a)->text());
 		}
 	}
@@ -1724,64 +1730,64 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     vector<string> list;
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),0660,"root","root",3,"tp","str","dest","sel_ed","select","/cfg/prmp_lst");
-	if( enableStat() && ctrMkNode("area",opt,1,"/cfg",_("Template config")) )
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cfg/prmp_lst");
+	if(enableStat() && ctrMkNode("area",opt,1,"/cfg",_("Template config")) )
 	{
-	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),0664,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
-		for( int i_io = 0; i_io < ioSize(); i_io++ )
+		for(int i_io = 0; i_io < ioSize(); i_io++)
 		{
-		    if( !(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)) )
+		    if(!(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)))
 			continue;
-		    //-- Check select param --
+		    //>> Check select param
 		    bool is_lnk = func()->io(i_io)->flg()&TPrmTempl::CfgLink;
-		    if( is_lnk && func()->io(i_io)->def().size() && 
-			!atoi(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")).c_str()) )
+		    if(is_lnk && func()->io(i_io)->def().size() &&
+			!atoi(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")).c_str()))
 		    {
 			string nprm = TSYS::strSepParse(func()->io(i_io)->def(),0,'|');
-			//-- Check already to present parameters --
+			//>> Check already to present parameters
 			bool f_ok = false;
-			for( int i_l = 0; i_l < list.size(); i_l++ )
-			    if( list[i_l] == nprm ) { f_ok = true; break; }
+			for(int i_l = 0; i_l < list.size(); i_l++)
+			    if(list[i_l] == nprm) { f_ok = true; break; }
 			if(!f_ok)
 			{
-			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,0664,"root","root",1,"tp","str");
+			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,1,"tp","str");
 			    list.push_back(nprm);
 			}
 		    }
 		    else
 		    {
 			const char *tip = "str";
-			if( !is_lnk )
+			if(!is_lnk)
 			    switch(ioType(i_io))
 			    {
-				case IO::Integer:   tip = "dec";    break;
-				case IO::Real:      tip = "real";   break;
-				case IO::Boolean:   tip = "bool";   break;
+				case IO::Integer:	tip = "dec";	break;
+				case IO::Real:		tip = "real";	break;
+				case IO::Boolean:	tip = "bool";	break;
 			    }
-			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),0664,"root","root",1,"tp",tip);
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
 		    }
 		}
 	}
 	return;
     }
-    //- Process command to page -
-    if( a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )
+    //> Process command to page
+    if(a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
     {
 	m_tmpl = opt->text();
 	disable();
 	modif();
     }
-    else if( a_path == "/cfg/prmp_lst" && ctrChkNode(opt) )
+    else if(a_path == "/cfg/prmp_lst" && ctrChkNode(opt))
     {
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(m_tmpl,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(m_tmpl,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -1793,23 +1799,23 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:	SYS->daq().at().tmplLibList(ls);	break;
 	    case 1:
-		if( SYS->daq().at().tmplLibPresent(prm0))
+		if(SYS->daq().at().tmplLibPresent(prm0))
 		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
 	    break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path == "/cfg/only_off" && enableStat() )
+    else if(a_path == "/cfg/only_off" && enableStat())
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"onlOff","0",opt->attr("user")));
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"onlOff",opt->text(),opt->attr("user"));
     }
-    else if( a_path.substr(0,12) == "/cfg/prm/pr_" && enableStat() )
+    else if(a_path.substr(0,12) == "/cfg/prm/pr_" && enableStat())
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
 	    string sdb = TSYS::strSepParse(lnk(lnk_id).db_addr,0,'.');
@@ -1818,7 +1824,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if((off-t_off)>0)	sdb=sdb+"."+TSYS::int2str(off-t_off);
 	    opt->setText(sdb);
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string p_nm, cp_nm;
 	    int off, coff, cbit, csz;
@@ -1827,12 +1833,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    off = atoi(TSYS::strSepParse(opt->text(),1,'.').c_str());
 	    p_nm = TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),0,'|');
 
-	    for( int i_l = 0; i_l < lnkSize(); i_l++ )
+	    for(int i_l = 0; i_l < lnkSize(); i_l++)
 	    {
 		cp_nm = TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),0,'|');
 		sscanf(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),1,'|').c_str(),"%d.%d",&coff,&cbit);
 		csz   = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());
-		if( p_nm == cp_nm )
+		if(p_nm == cp_nm)
 		{
 		    lnk(i_l).db_addr = sdb+"."+TSYS::int2str(off+coff);
 		    if(ioType(lnk(i_l).io_id)==IO::Boolean)
@@ -1844,25 +1850,25 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    initLnks();
 	}
     }
-    else if( a_path.substr(0,12) == "/cfg/prm/el_" && enableStat() )
+    else if(a_path.substr(0,12) == "/cfg/prm/el_" && enableStat())
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
-	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 		opt->setText(lnk(lnkId(i_io)).db_addr);
-	    else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
+	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)
 		opt->setText(getS(i_io));
 	}
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
-	    if( func()->io(i_io)->flg()&TPrmTempl::CfgLink )
+	    if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    {
 		lnk(lnkId(i_io)).db_addr = opt->text();
 		initLnks();
 	    }
-	    else if( func()->io(i_io)->flg()&TPrmTempl::CfgPublConst )
+	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)
 		setS(i_io,opt->text());
 	    modif();
 	}

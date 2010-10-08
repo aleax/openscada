@@ -40,12 +40,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	"DAQ template"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("DAQ template")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define VERSION		"0.0.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"DAQ's subsystem template module."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("DAQ's subsystem template module.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -323,20 +323,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )  { TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
 
     //> Get page info
-    if( opt->name() == "info" )	
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?0444:0664);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 
     //> Process command to page
-    if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+    if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
     {
-	if( enableStat() )	throw TError(nodePath().c_str(),"Parameter is enabled.");
+	if(enableStat())	throw TError(nodePath().c_str(),"Parameter is enabled.");
 //	parseOIDList(opt->text());
     }
     else TParamContr::cntrCmdProc(opt);

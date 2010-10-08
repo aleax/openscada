@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,12 +40,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SNMP"
-#define MOD_NAME	"SNMP client"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("SNMP client")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.4.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow realising of SNMP client service."
+#define VERSION		"0.4.1"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow realising of SNMP client service.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -391,20 +391,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //> Service commands process
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/serv/" )	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?0444:0664);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 
     //> Process command to page
-    if( a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+    if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
     {
-	if( enableStat() )	throw TError(nodePath().c_str(),"Parameter is enabled.");
+	if(enableStat())	throw TError(nodePath().c_str(),_("Parameter is enabled."));
 	parseOIDList(opt->text());
     }
     else TParamContr::cntrCmdProc(opt);

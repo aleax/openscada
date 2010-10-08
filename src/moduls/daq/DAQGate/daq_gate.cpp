@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,12 +30,12 @@
 //******************************************************
 //* Modul info!                                        *
 #define MOD_ID		"DAQGate"
-#define MOD_NAME	"Data sources gate"
-#define MOD_TYPE	"DAQ"
+#define MOD_NAME	_("Data sources gate")
+#define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.9.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station."
+#define VERSION		"0.9.1"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station.")
 #define LICENSE		"GPL2"
 //******************************************************
 
@@ -440,22 +440,22 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool lockErr )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/STATIONS",cfg("STATIONS").fld().descr(),0664,"root","root",4,"tp","str","cols","100","rows","4",
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/STATIONS",cfg("STATIONS").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."));
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/CNTRPRM",cfg("CNTRPRM").fld().descr(),0664,"root","root",4,"tp","str","cols","100","rows","4",
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/CNTRPRM",cfg("CNTRPRM").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Remote OpenSCADA full controller's or separated controller's parameters list. Address example:\n"
 		     "  System.AutoDA - for controller;\n"
 		     "  System.AutoDA.UpTimeStation - for controller's parameter."));
-	ctrMkNode("comm",opt,-1,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
+	ctrMkNode("comm",opt,-1,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SDAQ_ID,1,"tp","lnk");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )
+    if(a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
     {
 	SYS->transport().at().setSysHost(true);
 	opt->setText("/Transport");
@@ -610,10 +610,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
 
     //> Service commands process
-    if( a_path.substr(0,6) == "/serv/" ) { TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.substr(0,6) == "/serv/") { TParamContr::cntrCmdProc(opt); return; }
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TValue::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name());
@@ -621,11 +621,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),0444,"root","root",1,"tp","str");
-		if( owner().enableStat() )
-		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),0664,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Id"),0444,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),0444,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		if(owner().enableStat())
+		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Config"));
 	    if(cfgN)
@@ -633,14 +633,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		//>> Get remote parameter's config section
 		string scntr;
 		XMLNode req("info");
-		for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
+		for(int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 		    try
 		    {
 			req.clear()->setAttr("path",scntr+id()+"/%2fprm%2fcfg");
-			if( owner().cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
+			if(owner().cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),req.text().c_str());
 			break;
 		    }catch(TError err) { continue; }
-		if( req.childSize() )
+		if(req.childSize())
 		{
 		    *cfgN = *req.childGet(0);
 		    cfgN->setAttr("dscr",_("Remote station config"));
@@ -650,27 +650,27 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //> Process command to page
-    if( a_path == "/prm/st/type" && ctrChkNode(opt) )   opt->setText(type().descr);
-    else if( a_path == "/prm/st/en" )
+    if(a_path == "/prm/st/type" && ctrChkNode(opt))		opt->setText(type().descr);
+    else if(a_path == "/prm/st/en")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )   opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    if( !owner().enableStat() ) throw TError(nodePath().c_str(),"Controller is not started!");
+	    if(!owner().enableStat()) throw TError(nodePath().c_str(),_("Controller is not started!"));
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }
-    else if( a_path == "/prm/st/id" && ctrChkNode(opt) )opt->setText(id());
-    else if( a_path == "/prm/st/nm" && ctrChkNode(opt) )opt->setText(name());
-    else if( a_path.substr(0,8) == "/prm/cfg" )
+    else if(a_path == "/prm/st/id" && ctrChkNode(opt))	opt->setText(id());
+    else if(a_path == "/prm/st/nm" && ctrChkNode(opt))	opt->setText(name());
+    else if(a_path.substr(0,8) == "/prm/cfg")
     {
 	//> Request to remote host
 	string scntr;
-	for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
+	for(int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	    try
 	    {
 		opt->setAttr("path",scntr+id()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
-		if( owner().cntrIfCmd(*opt) ) throw TError(opt->attr("mcat").c_str(),opt->text().c_str());
+		if(owner().cntrIfCmd(*opt)) throw TError(opt->attr("mcat").c_str(),opt->text().c_str());
 	    }catch(TError err) { continue; }
 	opt->setAttr("path",a_path);
     }
@@ -684,19 +684,19 @@ TMdPrm &TMdVl::owner( )	{ return *(dynamic_cast<TMdPrm*>(nodePrev())); }
 
 void TMdVl::cntrCmdProc( XMLNode *opt )
 {
-    if( !arch( ).freeStat() ) { TVal::cntrCmdProc(opt); return; }
+    if(!arch( ).freeStat()) { TVal::cntrCmdProc(opt); return; }
 
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/val" && owner().owner().restDtTm() )	//Values access
+    if(a_path == "/serv/val" && owner().owner().restDtTm())	//Values access
     {
 	//>> Request to remote station
 	string scntr;
-	for( int c_off = 0; (scntr=TSYS::strSepParse(owner().cntrAdr(),0,';',&c_off)).size(); )
+	for(int c_off = 0; (scntr=TSYS::strSepParse(owner().cntrAdr(),0,';',&c_off)).size(); )
 	    try
 	    {
 		opt->setAttr("path",scntr+owner().id()+"/"+name()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
-		if( !owner().owner().cntrIfCmd(*opt) ) break;
+		if(!owner().owner().cntrIfCmd(*opt)) break;
 	    }catch(TError err) { continue; }
 	opt->setAttr("path",a_path);
 	return;

@@ -1,3 +1,19 @@
+2010-10-08 Roman
+- !!:DAQ.DiamondBoards: Documents and translations is updated and released version 1.2.1.
+- !!:DAQ.System: Documents and translations is updated and released version 1.7.2.
+- !!:DAQ.BlockCalc: Documents and translations is updated and released version 1.4.0.
+- !!:DAQ.JavaLikeCalc: Documents and translations is updated and released version 1.8.0.
+- !!:DAQ.LogicLev: Documents and translations is updated and released version 1.1.2.
+- !!:DAQ.SNMP: Documents and translations is updated and released version 0.4.1.
+- !!:DAQ.Siemens: Documents and translations is updated and released version 1.2.3.
+- !!:DAQ.ModBus: Documents and translations is updated and released version 1.1.1.
+- !!:DAQ.DCON: Documents and translations is updated and released version 0.3.3.
+- !!:DAQ.ICP_DAS: Documents and translations is updated and released version 0.7.2.
+- !!:DAQ.DAQGate: Documents and translations is updated and released version 0.9.1.
+- !!:DAQ.SoundCard: Documents and translations is updated and released version 0.6.1.
+- !!:DAQ.OPC_UA: Documents and translations is updated and released version 0.6.0.
+
+
 2010-10-07 Roman
 - !!!!:SYS: Check for libtool version 2.0 more is added. Enable only shared library build for modules.
     Module identifier is put to class constructor for early text translation init.
