@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,14 +31,14 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibSYS"
-#define MOD_NAME	"System API functions"
-#define MOD_TYPE	"Special"
-#define MOD_AUTOR	"Roman Savochenko"
-#define MOD_DESCR	"Allow system API functions library of the user programming area."
-#define MOD_LICENSE	"GPL2"
+#define MOD_NAME	_("System API functions")
+#define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"0.9.1"
+#define VERSION		"0.9.2"
+#define MOD_AUTOR	_("Roman Savochenko")
+#define MOD_DESCR	_("Allow system API functions library of the user programming area.")
+#define MOD_LICENSE	"GPL2"
 //*************************************************
 
 FLibSYS::Lib *FLibSYS::mod;
@@ -155,20 +155,20 @@ void Lib::modStop( )
 void Lib::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TSpecial::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"idm","1");
-	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
+	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),R_R_R_,"root",SSPC_ID,1,"idm","1");
+	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),R_R_R_,"root",SSPC_ID,3,"tp","br","idm","1","br_pref","fnc_");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( (a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt) )
+    if((a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt))
     {
 	vector<string> lst;
 	list(lst);
-	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
     else TSpecial::cntrCmdProc(opt);

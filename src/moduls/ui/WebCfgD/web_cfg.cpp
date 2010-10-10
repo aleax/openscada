@@ -35,13 +35,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfgD"
-#define MOD_NAME	"Dynamic WEB configurator"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("Dynamic WEB configurator")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.6.4"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -93,20 +93,20 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 #if 0
     char mess[][100] =
     {
-	"OpenSCADA. Dynamic WEB configurator", "About",
-	"Load", "Save", "Up", "Previous", "Next", "Add item","Delete item",
-	"Copy item", "Cut item", "Paste item",
-	"Reload item and tree", "Start periodic update", "Stop periodic update",
-	"Ready",
-	"Go", "Add", "Insert", "Edit", "Delete", "Item up", "Item down",
-	"Add new element.", "Insert new element.", "Rename element.",
-	"Select image file for download to picture field.",
-	"Add row", "Insert row", "Delete row", "Up row", "Down row",
-	"No one editable container present.", "Add item to node '%1'.", "Item '%1' already present.",
-	"You sure for delete node '%1'?",
-	"Copy is imposible.", "Selected", "Move node '%1' to '%2'.", "Copy node '%1' to '%2'.", "Node '%1' already present. Continue?",
-	"Element type:", "ID:", "Name:", "Ok", "Close",
-	"Page loaded."
+	_("OpenSCADA. Dynamic WEB configurator"), _("About"),
+	_("Load"), _("Save"), _("Up"), _("Previous"), _("Next"), _("Add item"),_("Delete item"),
+	_("Copy item"), _("Cut item"), _("Paste item"),
+	_("Reload item and tree"), _("Start periodic update"), _("Stop periodic update"),
+	_("Ready"),
+	_("Go"), _("Add"), _("Insert"), _("Edit"), _("Delete"), _("Item up"), _("Item down"),
+	_("Add new element."), _("Insert new element."), _("Rename element."),
+	_("Select image file for download to picture field."),
+	_("Add row"), _("Insert row"), _("Delete row"), _("Up row"), _("Down row"),
+	_("No one editable container present."), _("Add item to node '%1'."), _("Item '%1' already present."),
+	_("You sure for delete node '%1'?"),
+	_("Copy is imposible."), _("Selected"), _("Move node '%1' to '%2'."), _("Copy node '%1' to '%2'."), _("Node '%1' already present. Continue?"),
+	_("Element type:", "ID:"), _("Name:"), _("Ok"), _("Close"),
+	_("Page loaded.")
     };
 #endif
 }
@@ -483,17 +483,17 @@ string TWEB::cntGet( SSess &ses, const string &nm )
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
-        return;
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
+	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )
+    if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD))
     {
 	SYS->transport().at().setSysHost(false);
 	opt->setText("/Transport");

@@ -46,7 +46,6 @@
 #include <tsys.h>
 
 #include "vis_shapes.h"
-#include "tvision.h"
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
 

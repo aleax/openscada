@@ -47,13 +47,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SystemTests"
-#define MOD_NAME	"OpenSCADA system's tests"
-#define MOD_TYPE	"Special"
+#define MOD_NAME	_("OpenSCADA system's tests")
+#define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define VERSION		"1.3.7"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow the group tests for OpenSCADA system."
+#define VERSION		"1.5.0"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow the group tests for OpenSCADA system.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -273,33 +273,33 @@ void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )
 void TTest::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TSpecial::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root",SSPC_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,1,"/tests",_("Tests")))
 	{
-	    ctrMkNode("fld",opt,-1,"/tests/nmb",_("Number"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/tests/tests",_("Tests"),R_R_R_,"root","root",4,"tp","br","idm","1","br_pref","test_","idSz","20");
+	    ctrMkNode("fld",opt,-1,"/tests/nmb",_("Number"),R_R_R_,"root",SSPC_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/tests/tests",_("Tests"),R_R_R_,"root",SSPC_ID,4,"tp","br","idm","1","br_pref","test_","idSz","20");
 	}
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if( (a_path == "/br/test_" || a_path == "/tests/tests") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD) )
+    if((a_path == "/br/test_" || a_path == "/tests/tests") && ctrChkNode(opt,"get",R_R_R_,"root",SSPC_ID,SEC_RD))
     {
 	vector<string> lst;
 	testList(lst);
-	for( unsigned i_t=0; i_t < lst.size(); i_t++ )
+	for(unsigned i_t=0; i_t < lst.size(); i_t++)
 	    opt->childAdd("el")->setAttr("id",lst[i_t])->setText(testAt(lst[i_t]).at().name());
     }
-    else if( a_path == "/tests/nmb" && ctrChkNode(opt) )
+    else if(a_path == "/tests/nmb" && ctrChkNode(opt))
     {
 	vector<string> lst;
 	testList(lst);
 	int enCnt = 0;
-	for( int i_t = 0; i_t < lst.size(); i_t++ )
-	    if( testAt(lst[i_t]).at().startStat( ) )	enCnt++;
+	for(int i_t = 0; i_t < lst.size(); i_t++)
+	    if(testAt(lst[i_t]).at().startStat( ))	enCnt++;
 	opt->setText(TSYS::strMess(_("All: %d; Accessing: %d"),lst.size(),enCnt));
     }
     else TSpecial::cntrCmdProc(opt);

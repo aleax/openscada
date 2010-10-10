@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,13 +35,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTCfg"
-#define MOD_NAME	"System configurator (QT)"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("System configurator (QT)")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
 #define VERSION		"1.8.3"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow the QT based OpenSCADA system configurator."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow the QT based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -231,39 +231,39 @@ void TUIMod::unregWin( QMainWindow *win )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),0664,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),0664,"root","root",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","root",1,"tp","lnk");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),RWRWR_,"root",SUI_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/start_path" )
+    if(a_path == "/prm/cfg/start_path")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( startPath() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStartPath( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startPath());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartPath(opt->text());
     }
-    else if( a_path == "/prm/cfg/start_user" )
+    else if(a_path == "/prm/cfg/start_user" )
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( startUser() );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setStartUser( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
     }
-    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )
+    else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD))
     {
 	SYS->transport().at().setSysHost(false);
 	opt->setText("/Transport");
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
+    else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt))
     {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);

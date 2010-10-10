@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2008 by Roman Savochenko (rom_as@diyaorg.dp.ua)
+ *                 2006-2010 by Roman Savochenko (rom_as@oscada.org)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -42,14 +42,14 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Vision"
-#define MOD_NAME	"Operation user interface (QT)"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("Operation user interface (QT)")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
 #define VERSION		"0.9.6"
-#define AUTORS		"Roman Savochenko"
-#define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-#define DESCRIPTION	"Visual operation user interface."
+#define AUTORS		_("Roman Savochenko")
+#define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
+#define DESCRIPTION	_("Visual operation user interface.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -354,67 +354,67 @@ void TVision::unregWin( QMainWindow *mwd )
 void TVision::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),0664,"root","UI",4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
-	    if( VCAStation() == "." )
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","UI",3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
+	    if(VCAStation() == ".")
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    else
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),0664,"root","UI",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),0664,"root","UI",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),0664,"root","UI",2,"tp","real",
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),RWRWR_,"root",SUI_ID,2,"tp","real",
 		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),0664,"root","UI",2,"tp","str",
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,2,"tp","str",
 		"help",_("Automatic started project's list separated by symbol ';'.\nFor opening a project's window to need display (1) use project's name format: 'PrjName-1'."));
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),0660,"root","UI",1,"tp","lnk");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	}
-	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),0444,"root","UI"))
-	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
+	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
+	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
 		    _("Command line for call sounds play.\n"
 		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","UI",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/start_user" )
+    if(a_path == "/prm/cfg/start_user")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(startUser());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setStartUser(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
     }
-    else if( a_path == "/prm/cfg/u_pass" )
+    else if(a_path == "/prm/cfg/u_pass")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText("*******");
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setUserPass(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText("*******");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setUserPass(opt->text());
     }
-    else if( a_path == "/prm/cfg/cachePgLife" )
+    else if(a_path == "/prm/cfg/cachePgLife")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(TSYS::real2str(cachePgLife()));
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setCachePgLife(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::real2str(cachePgLife()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgLife(atof(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/run_prj" )
+    else if(a_path == "/prm/cfg/run_prj")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(runPrjs());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setRunPrjs(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runPrjs());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjs(opt->text());
     }
-    else if( a_path == "/prm/cfg/stationVCA" )
+    else if(a_path == "/prm/cfg/stationVCA")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(VCAStation());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setVCAStation(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(VCAStation());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVCAStation(opt->text());
     }
-    else if( a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",0660,"root","UI",SEC_RD) )
+    else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD))
     {
 	SYS->transport().at().setSysHost(true);
 	opt->setText("/Transport");
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440,"root","UI") )	opt->setText(optDescr());
-    else if( a_path == "/prm/cfg/u_lst" && ctrChkNode(opt) )
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
+    else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt))
     {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
@@ -422,24 +422,22 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	for(int i_u = 0; i_u < ls.size(); i_u++)
 	    opt->childAdd("el")->setText(ls[i_u]);
     }
-    else if( a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt) )
+    else if(a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id",".")->setText("Local");
 	vector<string> lst;
 	SYS->transport().at().extHostList("*",lst);
-	for( int i_ls = 0; i_ls < lst.size(); i_ls++ )
+	for(int i_ls = 0; i_ls < lst.size(); i_ls++)
 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
 		setText(SYS->transport().at().extHostGet("*",lst[i_ls]).name);
     }
-    else if( a_path == "/alarm/plComm" )
+    else if(a_path == "/alarm/plComm")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(playCom());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setPlayCom(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(playCom());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPlayCom(opt->text());
     }
-    else if( a_path == "/alarm/plComLs" && ctrChkNode(opt) )
-    {
+    else if(a_path == "/alarm/plComLs" && ctrChkNode(opt))
 	opt->childAdd("el")->setText("play %f");
-    }
     else TUI::cntrCmdProc(opt);
 }
 

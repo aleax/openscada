@@ -74,18 +74,17 @@ void PrWidget::setEnable( bool val )
 bool PrWidget::cntrCmdGeneric( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Base widget: ")+id());
-	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,owner().c_str(),grp().c_str(),
-		2,"tp","str","dest","");
+	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,owner().c_str(),grp().c_str(),2,"tp","str","dest","");
 	return true;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEC_RD) )
+    if(a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
 	opt->setText(parentNm());
     else return Widget::cntrCmdGeneric(opt);
 
@@ -94,10 +93,10 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
 
 void PrWidget::cntrCmdProc( XMLNode *opt )
 {
-    if( cntrCmdServ(opt) ) return;
+    if(cntrCmdServ(opt)) return;
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt );
@@ -105,7 +104,7 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
+    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))
 	TCntrNode::cntrCmdProc(opt);
 }
 
@@ -553,7 +552,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		fnmp = fnm+TSYS::int2str(i_p);
 		if( cfg.owner()->attrPresent( fidp+"shp" ) ) continue;
 		cfg.owner()->attrAdd( new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),
-					       TFld::Integer,TFld::Selected|Attr::Mutable,"1","0","0;1;2","Rect;Poly;Circle",TSYS::int2str(40+3*i_p).c_str()) );
+					       TFld::Integer,TFld::Selected|Attr::Mutable,"1","0","0;1;2",_("Rect;Poly;Circle"),TSYS::int2str(40+3*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),
 					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(41+3*i_p).c_str()) );
 		cfg.owner()->attrAdd( new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),

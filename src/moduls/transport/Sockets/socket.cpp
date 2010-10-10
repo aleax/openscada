@@ -43,12 +43,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Sockets"
-#define MOD_NAME	"Sockets"
-#define MOD_TYPE	"Transport"
+#define MOD_NAME	_("Sockets")
+#define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define VERSION		"1.4.2"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
+#define VERSION		"1.4.5"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -410,7 +410,7 @@ void *TSocketIn::Task(void *sock_in)
     for( int i_id = 0; i_id < sock->cl_id.size(); i_id++)
         pthread_kill(sock->cl_id[i_id].cl_id,SIGALRM);
     res.release();
-    TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->id()+" client task is stopping....");
+    TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
 
     sock->run_st = false;
 
@@ -549,10 +549,10 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's input transport has address format:\n"
 	    "  TCP:[addr]:[port]:[mode] - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
@@ -564,45 +564,45 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:[name]:[mode] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),RWRWR_,"root","Transport",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root","Transport",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root","Transport",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/qLn" )
+    if(a_path == "/prm/cfg/qLn")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxQueue()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxQueue(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/clMax" )
+    else if(a_path == "/prm/cfg/clMax")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxFork()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/bfLn" )
+    else if(a_path == "/prm/cfg/bfLn")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(bufLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/keepAliveCon" )
+    else if(a_path == "/prm/cfg/keepAliveCon")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(keepAliveCon()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setKeepAliveCon( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(keepAliveCon()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveCon(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/keepAliveTm" )
+    else if(a_path == "/prm/cfg/keepAliveTm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(keepAliveTm()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setKeepAliveTm( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(keepAliveTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/taskPrior" )
+    else if(a_path == "/prm/cfg/taskPrior")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(taskPrior()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTaskPrior( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(taskPrior()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(atoi(opt->text().c_str()));
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -842,10 +842,10 @@ repeate:
 void TSocketOut::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's output transport has address format:\n"
 	    "  TCP:[addr]:[port] - TCP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"
@@ -855,7 +855,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "    port - network port (/etc/services).\n"
 	    "  UNIX:[name] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[next]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
 	    "    next - maximum time for continue respond wait, in seconds."));
@@ -864,10 +864,10 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/TMS" )
+    if(a_path == "/prm/cfg/TMS")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(timings());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTimings(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
 }

@@ -1,984 +1,373 @@
 # OpenSCADA.Special.FLibSYS translate to Russian.
 # Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
+#
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#: statfunc.cpp:51 varchfnc.cpp:107 varchfnc.cpp:119 varchfnc.cpp:131
-#: varchfnc.cpp:144 varchfnc.cpp:200 varchfnc.cpp:213 varchfnc.cpp:234
-#: sysfnc.h:459 timefnc.h:41 timefnc.h:56 timefnc.h:137
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.1\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-01 10:10+0300\n"
+"POT-Creation-Date: 2010-10-09 10:02+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: statfunc.cpp:33
-msgid "FLibSYS"
-msgstr ""
-
-#: statfunc.cpp:34
 msgid "System API functions"
 msgstr "Функции системного API"
 
-#: statfunc.cpp:35
-msgid "Special"
-msgstr "Специальные"
-
-#: statfunc.cpp:36
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: statfunc.cpp:37
 msgid "Allow system API functions library of the user programming area."
 msgstr ""
 "Предоставляет в систему библиотеку системного API среды пользовательского "
 "программирования."
 
-#: statfunc.cpp:38
-msgid "GPL2"
-msgstr ""
-
-#: statfunc.cpp:40
-msgid "LIB"
-msgstr ""
-
-#: statfunc.cpp:41
-msgid "0.9.1"
-msgstr ""
-
-#: statfunc.cpp:46
-msgid "C"
-msgstr ""
-
-#: statfunc.cpp:81 statfunc.cpp:163
-msgid "fnc_"
-msgstr ""
-
-#: statfunc.cpp:159
-msgid "info"
-msgstr ""
-
-#: statfunc.cpp:162
-msgid "grp"
-msgstr ""
-
-#: statfunc.cpp:162 statfunc.cpp:168
-msgid "/br/fnc_"
-msgstr ""
-
-#: statfunc.cpp:162
 msgid "Function"
 msgstr "Функция"
 
-#: statfunc.cpp:162 statfunc.cpp:163
-msgid "root"
-msgstr ""
-
-#: statfunc.cpp:162 statfunc.cpp:163
-msgid "idm"
-msgstr ""
-
-#: statfunc.cpp:162 statfunc.cpp:163 varchfnc.h:96
-msgid "1"
-msgstr ""
-
-#: statfunc.cpp:163
-msgid "list"
-msgstr ""
-
-#: statfunc.cpp:163 statfunc.cpp:168
-msgid "/prm/func"
-msgstr ""
-
-#: statfunc.cpp:163
 msgid "Functions"
 msgstr "Функции"
 
-#: statfunc.cpp:163 sysfnc.h:424 varchfnc.h:96
-msgid "tp"
-msgstr ""
-
-#: statfunc.cpp:163
-msgid "br"
-msgstr ""
-
-#: statfunc.cpp:163
-msgid "br_pref"
-msgstr ""
-
-#: statfunc.cpp:167 xmlfnc.cpp:36 xmlfnc.cpp:44 xmlfnc.cpp:46 sysfnc.h:312
-msgid "path"
-msgstr ""
-
-#: statfunc.cpp:173
-msgid "el"
-msgstr ""
-
-#: statfunc.cpp:173
-msgid "id"
-msgstr ""
-
-#: varchfnc.cpp:93 varchfnc.cpp:98 varchfnc.cpp:268
-msgid "VArchObj"
-msgstr ""
-
-#: varchfnc.cpp:93 varchfnc.cpp:98
 msgid "Properties no supported by object."
 msgstr "Свойства не поддерживаются объектом."
 
-#: varchfnc.cpp:103
-msgid "isNull"
-msgstr ""
-
-#: varchfnc.cpp:104
-msgid "begin"
-msgstr ""
-
-#: varchfnc.cpp:116
-msgid "end"
-msgstr ""
-
-#: varchfnc.cpp:128
-msgid "period"
-msgstr ""
-
-#: varchfnc.cpp:140
-msgid "get"
-msgstr ""
-
-#: varchfnc.cpp:160
-msgid "set"
-msgstr ""
-
-#: varchfnc.cpp:183
-msgid "copy"
-msgstr ""
-
-#: varchfnc.cpp:224
-msgid "FFT"
-msgstr ""
-
-#: varchfnc.cpp:268
 #, c-format
 msgid "Function '%s' error or not enough parameters."
 msgstr "Ошибка функции '%s' или не достаточно параметров."
 
-#: xmlfnc.cpp:34
 msgid "1:Request is not object!"
 msgstr "1:Запрос не объект!"
 
-#: xmlfnc.cpp:39
-msgid "user"
-msgstr ""
-
-#: xmlfnc.cpp:44
-msgid "/"
-msgstr ""
-
-#: xmlfnc.cpp:45 xmlfnc.h:57
-msgid "xmlCntrReq"
-msgstr ""
-
-#: xmlfnc.cpp:49 sysfnc.h:203 sysfnc.h:231 sysfnc.h:256 sysfnc.h:492
-#: timefnc.h:42 timefnc.h:68 timefnc.h:69 timefnc.h:70 timefnc.h:71
-#: timefnc.h:72 timefnc.h:73 timefnc.h:74 timefnc.h:75 timefnc.h:76
-#: timefnc.h:77 timefnc.h:109 timefnc.h:136 timefnc.h:161 timefnc.h:163
-#: varchfnc.h:99 varchfnc.h:100
-msgid "0"
-msgstr ""
-
-#: xmlfnc.cpp:50
 #, c-format
 msgid "1:Request error: %s"
 msgstr "1:Ошибка запроса: %s"
 
-#: sysfnc.h:44
-msgid "sysCall"
-msgstr ""
-
-#: sysfnc.h:46 sysfnc.h:76 sysfnc.h:117 sysfnc.h:180 sysfnc.h:201 sysfnc.h:284
-#: sysfnc.h:311 sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
-#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:534
-#: xmlfnc.h:41 xmlfnc.h:59
-msgid "rez"
-msgstr ""
-
-#: sysfnc.h:46 sysfnc.h:76 sysfnc.h:117 sysfnc.h:180 sysfnc.h:201 sysfnc.h:284
-#: sysfnc.h:311 sysfnc.h:336 sysfnc.h:358 sysfnc.h:379 sysfnc.h:400
-#: sysfnc.h:421 sysfnc.h:444 sysfnc.h:472 sysfnc.h:490 sysfnc.h:534
-#: varchfnc.h:72 varchfnc.h:95 xmlfnc.h:41 xmlfnc.h:59
 msgid "Result"
 msgstr "Результат"
 
-#: sysfnc.h:47
-msgid "com"
-msgstr ""
-
-#: sysfnc.h:47
 msgid "Command"
 msgstr "Команда"
 
-#: sysfnc.h:50
 msgid "Sys: Call"
 msgstr "Сист: Вызов"
 
-#: sysfnc.h:51
 msgid "System call commands."
 msgstr "Вызов системных команд."
 
-#: sysfnc.h:55
-msgid "r"
-msgstr ""
-
-#: sysfnc.h:74
-msgid "dbReqSQL"
-msgstr ""
-
-#: sysfnc.h:77
-msgid "addr"
-msgstr ""
-
-#: sysfnc.h:77
 msgid "DB address"
 msgstr "Адрес БД"
 
-#: sysfnc.h:78 xmlfnc.h:60
-msgid "req"
-msgstr ""
-
-#: sysfnc.h:78
 msgid "SQL request"
 msgstr "SQL запрос"
 
-#: sysfnc.h:79
-msgid "trans"
-msgstr ""
-
-#: sysfnc.h:79
 msgid "Transaction"
 msgstr "Транзакция"
 
-#: sysfnc.h:82
 msgid "DB: SQL request"
 msgstr "DB: SQL запрос"
 
-#: sysfnc.h:83
 msgid "Send SQL request to DB."
 msgstr "Отсылка SQL запроса в БД."
 
-#: sysfnc.h:115
-msgid "messGet"
-msgstr ""
-
-#: sysfnc.h:118
-msgid "btm"
-msgstr ""
-
-#: sysfnc.h:118
 msgid "Begin time"
 msgstr "Время начала"
 
-#: sysfnc.h:119
-msgid "etm"
-msgstr ""
-
-#: sysfnc.h:119
 msgid "End time"
 msgstr "Время конца"
 
-#: sysfnc.h:120 sysfnc.h:155
-msgid "cat"
-msgstr ""
-
-#: sysfnc.h:120 sysfnc.h:155
 msgid "Category"
 msgstr "Категория"
 
-#: sysfnc.h:121 sysfnc.h:156 sysfnc.h:286 sysfnc.h:313
-msgid "lev"
-msgstr ""
-
-#: sysfnc.h:121 sysfnc.h:156 sysfnc.h:286 sysfnc.h:313
 msgid "Level"
 msgstr "Уровень"
 
-#: sysfnc.h:122
-msgid "arch"
-msgstr ""
-
-#: sysfnc.h:122
 msgid "Archivator"
 msgstr "Архиватор"
 
-#: sysfnc.h:125
 msgid "Mess: Get"
 msgstr "Mess: Получить"
 
-#: sysfnc.h:126
 msgid "Get messages from system."
 msgstr "Получить сообщения системы."
 
-#: sysfnc.h:136
-msgid "tm"
-msgstr ""
-
-#: sysfnc.h:137
-msgid "utm"
-msgstr ""
-
-#: sysfnc.h:138
-msgid "categ"
-msgstr ""
-
-#: sysfnc.h:139
-msgid "level"
-msgstr ""
-
-#: sysfnc.h:140 sysfnc.h:157
-msgid "mess"
-msgstr ""
-
-#: sysfnc.h:153
-msgid "messPut"
-msgstr ""
-
-#: sysfnc.h:157
 msgid "Message"
 msgstr "Сообщение"
 
-#: sysfnc.h:160
 msgid "Mess: Put"
 msgstr "Mess: Поместить"
 
-#: sysfnc.h:161
 msgid "Put message to system."
 msgstr "Поместить сообщение в систему."
 
-#: sysfnc.h:165
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: sysfnc.h:178
-msgid "strSize"
-msgstr ""
-
-#: sysfnc.h:181 sysfnc.h:202 sysfnc.h:230 sysfnc.h:255 sysfnc.h:285
-#: timefnc.h:137 timefnc.h:162
-msgid "str"
-msgstr ""
-
-#: sysfnc.h:181 sysfnc.h:202 sysfnc.h:230 sysfnc.h:255 sysfnc.h:285
 msgid "String"
 msgstr "Строка"
 
-#: sysfnc.h:184
 msgid "String: Get size"
 msgstr "Строка: Получение размера"
 
-#: sysfnc.h:185
 msgid "Use for string size getting."
 msgstr "Используется для получения размера строки."
 
-#: sysfnc.h:199
-msgid "strSubstr"
-msgstr ""
-
-#: sysfnc.h:203 sysfnc.h:231 sysfnc.h:256
-msgid "pos"
-msgstr ""
-
-#: sysfnc.h:203 sysfnc.h:231 sysfnc.h:256
 msgid "Position"
 msgstr "Позиция"
 
-#: sysfnc.h:204 sysfnc.h:257
-msgid "n"
-msgstr ""
-
-#: sysfnc.h:204 sysfnc.h:257
 msgid "Number"
 msgstr "Количество"
 
-#: sysfnc.h:204 sysfnc.h:257 timefnc.h:110
-msgid "-1"
-msgstr ""
-
-#: sysfnc.h:207
 msgid "String: Get substring"
 msgstr "Строка: Получить подстроку"
 
-#: sysfnc.h:208
 msgid "Use for substring getting."
 msgstr "Используется для выделения подстроки."
 
-#: sysfnc.h:228
-msgid "strInsert"
-msgstr ""
-
-#: sysfnc.h:232
-msgid "ins"
-msgstr ""
-
-#: sysfnc.h:232
 msgid "Insert string"
 msgstr "Вставляемая строка"
 
-#: sysfnc.h:235
 msgid "String: Insert string to other string"
 msgstr "Строка: Вставка строки в другую строку"
 
-#: sysfnc.h:236
 msgid "Use for insertion string to other string."
 msgstr "Используется для вставки строки в другую строку."
 
-#: sysfnc.h:253
-msgid "strReplace"
-msgstr ""
-
-#: sysfnc.h:258
-msgid "repl"
-msgstr ""
-
-#: sysfnc.h:258
 msgid "Replace string"
 msgstr "Заменяющая строка"
 
-#: sysfnc.h:261
 msgid "String: Replace part string on other string"
 msgstr "Строка: Замена части строки другой строкой"
 
-#: sysfnc.h:262
 msgid "Use for replacing part string on other string."
 msgstr "Используется для замены части строки другой строкой."
 
-#: sysfnc.h:282
-msgid "strParse"
-msgstr ""
-
-#: sysfnc.h:287 sysfnc.h:338
-msgid "sep"
-msgstr ""
-
-#: sysfnc.h:287 sysfnc.h:338
 msgid "Separator"
 msgstr "Разделитель"
 
-#: sysfnc.h:287 sysfnc.h:338
-msgid "."
-msgstr ""
-
-#: sysfnc.h:288 sysfnc.h:314
-msgid "off"
-msgstr ""
-
-#: sysfnc.h:288 sysfnc.h:314
 msgid "Offset"
 msgstr "Смещение"
 
-#: sysfnc.h:291
 msgid "String: Parse on separator"
 msgstr "Строка: Разбор по разделителю"
 
-#: sysfnc.h:292
 msgid "Use for parse string on separator."
 msgstr "Используется для разбора строки по разделителю."
 
-#: sysfnc.h:309
-msgid "strParsePath"
-msgstr ""
-
-#: sysfnc.h:312
 msgid "Path"
 msgstr "Путь"
 
-#: sysfnc.h:317
 msgid "String: Path parse"
 msgstr "Строка: Разбор пути"
 
-#: sysfnc.h:318
 msgid "Use for parse path on elements."
 msgstr "Используется для разбора пути на элементы."
 
-#: sysfnc.h:334
-msgid "strPath2Sep"
-msgstr ""
-
-#: sysfnc.h:337 sysfnc.h:359 sysfnc.h:380 sysfnc.h:401
-msgid "src"
-msgstr ""
-
-#: sysfnc.h:337 sysfnc.h:359 sysfnc.h:380 sysfnc.h:401
 msgid "Source"
 msgstr "Источник"
 
-#: sysfnc.h:341
 msgid "String: Path to separated string"
 msgstr "Строка: Путь в строку с разделителем"
 
-#: sysfnc.h:342
 msgid "Use for convert path to separated string."
 msgstr "Используется для преобразования пути в строку с разделителем."
 
-#: sysfnc.h:356
-msgid "strEnc2HTML"
-msgstr ""
-
-#: sysfnc.h:362
 msgid "String: Encode string to HTML"
 msgstr "Строка: Кодирование строки в HTML"
 
-#: sysfnc.h:363
 msgid "Use for encode string for use into HTML source."
 msgstr ""
 "Используется для кодирования строки для использования в исходнике HTML."
 
-#: sysfnc.h:377
-msgid "strEnc2Bin"
-msgstr "Строка"
-
-#: sysfnc.h:383
 msgid "String: Encode text to bin"
 msgstr "Строка: Кодирование текста в бинарный вид"
 
-#: sysfnc.h:384
 msgid "Use for encode text to bin, from format <00 A0 FA DE>."
 msgstr ""
 "Используется для кодирования текста в бинарный вид, из формата <00 A0 FA DE>."
 
-#: sysfnc.h:398
-msgid "strDec4Bin"
-msgstr ""
-
-#: sysfnc.h:404
 msgid "String: Decode text from bin"
 msgstr "Строка: Декодирование текста из бинарного вида"
 
-#: sysfnc.h:405
 msgid "Use for decode text from bin to format <00 A0 FA DE>."
 msgstr ""
 "Используется для декодирования текста из бинарного вида в формат <00 A0 FA "
 "DE>."
 
-#: sysfnc.h:419
-msgid "real2str"
-msgstr ""
-
-#: sysfnc.h:422 sysfnc.h:445 sysfnc.h:473 sysfnc.h:491 sysfnc.h:509
-#: timefnc.h:41
-msgid "val"
-msgstr ""
-
-#: sysfnc.h:422 sysfnc.h:445 sysfnc.h:473 sysfnc.h:491 sysfnc.h:509
 msgid "Value"
 msgstr "Значение"
 
-#: sysfnc.h:423
-msgid "prc"
-msgstr ""
-
-#: sysfnc.h:423
 msgid "Precision"
 msgstr "Точность"
 
-#: sysfnc.h:423
-msgid "4"
-msgstr ""
-
-#: sysfnc.h:424 varchfnc.h:96
 msgid "Type"
 msgstr "Тип"
 
-#: sysfnc.h:424
-msgid "f"
-msgstr ""
-
-#: sysfnc.h:427
 msgid "String: Real to string"
 msgstr "Строка: Вещественное в строку"
 
-#: sysfnc.h:428
 msgid "Convert real to string."
 msgstr "Преобразование вещественного в строку."
 
-#: sysfnc.h:442
-msgid "int2str"
-msgstr ""
-
-#: sysfnc.h:446 sysfnc.h:492 timefnc.h:163
-msgid "base"
-msgstr ""
-
-#: sysfnc.h:446 sysfnc.h:492
 msgid "Base"
 msgstr "Основа"
 
-#: sysfnc.h:446
-msgid "10"
-msgstr ""
-
-#: sysfnc.h:449
 msgid "String: Integer to string"
 msgstr "Строка: Целое в строку"
 
-#: sysfnc.h:450
 msgid "Convert integer to string."
 msgstr "Преобразование целого в строку."
 
-#: sysfnc.h:470
-msgid "str2real"
-msgstr ""
-
-#: sysfnc.h:476
 msgid "String: String to real"
 msgstr "Строка: Строка в вещественное"
 
-#: sysfnc.h:477
 msgid "Convert string to real."
 msgstr "Преобразование строки в вещественное."
 
-#: sysfnc.h:488
-msgid "str2int"
-msgstr "Строка"
-
-#: sysfnc.h:495
 msgid "String: String to integer"
 msgstr "Строка: Строку в целое"
 
-#: sysfnc.h:496
 msgid "Convert string to integer."
 msgstr "Преобразование строки в целое."
 
-#: sysfnc.h:507
-msgid "floatSplitWord"
-msgstr ""
-
-#: sysfnc.h:510 sysfnc.h:535
-msgid "w1"
-msgstr ""
-
-#: sysfnc.h:510 sysfnc.h:535
 msgid "Word 1"
 msgstr "Слово 1"
 
-#: sysfnc.h:511 sysfnc.h:536
-msgid "w2"
-msgstr ""
-
-#: sysfnc.h:511 sysfnc.h:536
 msgid "Word 2"
 msgstr "Слово 2"
 
-#: sysfnc.h:514
 msgid "Float: Split to words"
 msgstr "Float: Резделение на слова"
 
-#: sysfnc.h:515
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Разделение float (4 байтов) на слова (2 байта)."
 
-#: sysfnc.h:532
-msgid "floatMergeWord"
-msgstr ""
-
-#: sysfnc.h:539
 msgid "Float: Merge from words"
 msgstr "Float: Объединение из слов"
 
-#: sysfnc.h:540
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Объединение float (4 байтов) из слов (2 байта)."
 
-#: timefnc.h:39
-msgid "tmFStr"
-msgstr ""
-
-#: timefnc.h:41 timefnc.h:137
 msgid "Date and time string"
 msgstr "Строка даты и времени"
 
-#: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
-msgid "sec"
-msgstr ""
-
-#: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
 msgid "Seconds"
 msgstr "Секунды"
 
-#: timefnc.h:43 timefnc.h:138
-msgid "form"
-msgstr ""
-
-#: timefnc.h:43 timefnc.h:138
 msgid "Date and time format"
 msgstr "Формат даты и времени"
 
-#: timefnc.h:43 timefnc.h:138
-msgid "%Y-%m-%d %H:%M:%S"
-msgstr ""
-
-#: timefnc.h:46
 msgid "Time: String time"
 msgstr "Time: Строка времени"
 
-#: timefnc.h:47
 msgid "Formated string time."
 msgstr "Форматированная строка времени."
 
-#: timefnc.h:66
-msgid "tmDate"
-msgstr ""
-
-#: timefnc.h:68
-msgid "fullsec"
-msgstr ""
-
-#: timefnc.h:68
 msgid "Full seconds"
 msgstr "Полные секунды"
 
-#: timefnc.h:70
-msgid "min"
-msgstr ""
-
-#: timefnc.h:70
 msgid "Minutes"
 msgstr "Минуты"
 
-#: timefnc.h:71
-msgid "hour"
-msgstr ""
-
-#: timefnc.h:71
 msgid "Hours"
 msgstr "Часы"
 
-#: timefnc.h:72
-msgid "mday"
-msgstr ""
-
-#: timefnc.h:72
 msgid "Day of the month"
 msgstr "День месяца"
 
-#: timefnc.h:73
-msgid "month"
-msgstr ""
-
-#: timefnc.h:73
 msgid "Month"
 msgstr "Месяц"
 
-#: timefnc.h:74
-msgid "year"
-msgstr ""
-
-#: timefnc.h:74
 msgid "Year"
 msgstr "Год"
 
-#: timefnc.h:75
-msgid "wday"
-msgstr ""
-
-#: timefnc.h:75
 msgid "Day of the week"
 msgstr "День недели"
 
-#: timefnc.h:76
-msgid "yday"
-msgstr ""
-
-#: timefnc.h:76
 msgid "Day of the year"
 msgstr "День в году"
 
-#: timefnc.h:77
-msgid "isdst"
-msgstr ""
-
-#: timefnc.h:77
 msgid "Daylight saving time"
 msgstr "Летнее время"
 
-#: timefnc.h:80
 msgid "Time: Date"
 msgstr "Time: Дата"
 
-#: timefnc.h:81
 msgid "Full date."
 msgstr "Полная дата"
 
-#: timefnc.h:107
-msgid "tmTime"
-msgstr ""
-
-#: timefnc.h:110
-msgid "usec"
-msgstr ""
-
-#: timefnc.h:110
 msgid "Microseconds"
 msgstr "Микросекунды"
 
-#: timefnc.h:113
 msgid "Time: Time"
 msgstr "Time: Время"
 
-#: timefnc.h:114
 msgid "Full time (since 01.01.1970)."
 msgstr "Полное время (с 01.01.1970)."
 
-#: timefnc.h:134
-msgid "tmStrPTime"
-msgstr ""
-
-#: timefnc.h:141
 msgid "Time: String to time"
 msgstr "Time: Строку во время"
 
-#: timefnc.h:142
 msgid "Convert a string representation of time to a time."
 msgstr "Преобразование строкового представления времени в абсолютное время."
 
-#: timefnc.h:159
-msgid "tmCron"
-msgstr ""
-
-#: timefnc.h:161 varchfnc.h:72 varchfnc.h:95
-msgid "res"
-msgstr ""
-
-#: timefnc.h:161
 msgid "Result, seconds"
 msgstr "Результат, секунды"
 
-#: timefnc.h:162
 msgid "Cron"
 msgstr ""
 
-#: timefnc.h:162
-msgid "* * * * *"
-msgstr ""
-
-#: timefnc.h:163
 msgid "Base time, seconds"
 msgstr "Базовое время, секунды"
 
-#: timefnc.h:166
 msgid "Time: Cron plane time"
 msgstr "Time: Время планирования Cron"
 
-#: timefnc.h:167
 msgid "Plane time by cron standard."
 msgstr "Планирование времени по стандарту cron."
 
-#: varchfnc.h:70
-msgid "vArh"
-msgstr ""
-
-#: varchfnc.h:73 xmlfnc.h:42
-msgid "name"
-msgstr ""
-
-#: varchfnc.h:73 xmlfnc.h:42
 msgid "Name"
 msgstr "Имя"
 
-#: varchfnc.h:76
 msgid "Val: Archive"
 msgstr "Val: Архив"
 
-#: varchfnc.h:77
 msgid "Get value archive object."
 msgstr "Получение объекта архива значений."
 
-#: varchfnc.h:93
-msgid "vArhBuf"
-msgstr ""
-
-#: varchfnc.h:97
-msgid "sz"
-msgstr ""
-
-#: varchfnc.h:97
 msgid "Size"
 msgstr "Размер"
 
-#: varchfnc.h:97
-msgid "100"
-msgstr ""
-
-#: varchfnc.h:98
-msgid "per"
-msgstr ""
-
-#: varchfnc.h:98
 msgid "Period (us)"
 msgstr "Период (мкс)"
 
-#: varchfnc.h:98
-msgid "1000000"
-msgstr ""
-
-#: varchfnc.h:99
-msgid "hgrd"
-msgstr ""
-
-#: varchfnc.h:99
 msgid "Hard grid"
 msgstr "Жесткая сетка"
 
-#: varchfnc.h:100
-msgid "hres"
-msgstr ""
-
-#: varchfnc.h:100
 msgid "High resolution"
 msgstr "Высокое разрешение"
 
-#: varchfnc.h:103
 msgid "Val: Archive buffer"
 msgstr "Val: Буфер архива"
 
-#: varchfnc.h:104
 msgid "Get value buffer object for temporary values storing."
 msgstr "Получение объекта буфера значений для временного хранения значений."
 
-#: xmlfnc.h:39
-msgid "xmlNode"
-msgstr ""
-
-#: xmlfnc.h:45
 msgid "XML: Node"
 msgstr "XML: Узел"
 
-#: xmlfnc.h:46
 msgid "XML node object creation."
 msgstr "Создание объекта узла XML."
 
-#: xmlfnc.h:60
 msgid "Request"
 msgstr "Запрос"
 
-#: xmlfnc.h:61
-msgid "stat"
-msgstr ""
-
-#: xmlfnc.h:61
 msgid "Station"
 msgstr "Станция"
 
-#: xmlfnc.h:64
 msgid "XML: Control request"
 msgstr "XML: Запрос интерфейса управления"
 
-#: xmlfnc.h:65
 msgid "Control request to system by XML."
 msgstr "Запрос интерфейса управления к системе посредством XML."

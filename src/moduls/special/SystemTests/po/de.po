@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-#: mod_tests.cpp:67 test_archive.h:67 test_archive.h:81 test_archive.h:95
-#: test_archive.h:109 test_archive.h:123 test_archive.h:138 test_archive.h:153
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.SystemTests 1.3.6\n"
+"Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-29 23:01+0300\n"
+"POT-Creation-Date: 2010-10-09 10:05+0300\n"
 "PO-Revision-Date: 2009-08-19 11:39+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -20,64 +20,15 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mod_tests.cpp:49
-msgid "SystemTests"
-msgstr ""
-
-#: mod_tests.cpp:50
 msgid "OpenSCADA system's tests"
 msgstr "OpenSCADA-Systemtest"
 
-#: mod_tests.cpp:51
-msgid "Special"
-msgstr "Zusatz"
-
-#: mod_tests.cpp:53
-msgid "TEST"
-msgstr ""
-
-#: mod_tests.cpp:54
-msgid "1.3.7"
-msgstr ""
-
-#: mod_tests.cpp:55
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: mod_tests.cpp:56
 msgid "Allow the group tests for OpenSCADA system."
 msgstr "Ermöglicht Gruppentests für das OpenSCADA-System."
 
-#: mod_tests.cpp:57
-msgid "GPL2"
-msgstr ""
-
-#: mod_tests.cpp:62
-msgid "C"
-msgstr ""
-
-#: mod_tests.cpp:96 mod_tests.cpp:284
-msgid "test_"
-msgstr ""
-
-#: mod_tests.cpp:130
-msgid "TEST:"
-msgstr ""
-
-#: mod_tests.cpp:130
-msgid ":"
-msgstr ""
-
-#: mod_tests.cpp:141 mod_tests.cpp:202 mod_tests.cpp:253
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: mod_tests.cpp:146 mod_tests.cpp:153
-msgid "SubType"
-msgstr "Subtyp"
-
-#: mod_tests.cpp:161
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -89,419 +40,164 @@ msgid ""
 "       *** Test's options ***\n"
 msgstr ""
 
-#: mod_tests.cpp:174
-#, c-format
-msgid "%d) %s\t%s\n"
-msgstr ""
-
-#: mod_tests.cpp:178
-#, c-format
-msgid "  %d:%s\t%s\n"
-msgstr ""
-
-#: mod_tests.cpp:189
-msgid "h"
-msgstr ""
-
-#: mod_tests.cpp:192
-msgid "help"
-msgstr ""
-
-#: mod_tests.cpp:241
-msgid "prm"
-msgstr ""
-
-#: mod_tests.cpp:242 mod_tests.cpp:245 mod_tests.cpp:295 test_DB.h:87
-#: test_DB.h:98 test_DB.h:112 test_DB.h:129 test_DB.h:138 test_DB.h:139
-#: test_DB.h:154 test_DB.h:158 test_DB.h:170 test_DB.h:175
-msgid "id"
-msgstr ""
-
-#: mod_tests.cpp:242
-msgid "on"
-msgstr ""
-
-#: mod_tests.cpp:242 mod_tests.cpp:280 mod_tests.cpp:284 test_DB.h:88
-#: test_SOAttach.h:41
-msgid "1"
-msgstr ""
-
-#: mod_tests.cpp:243
-msgid "per"
-msgstr ""
-
-#: mod_tests.cpp:246
-msgid "stdcalc"
-msgstr ""
-
-#: mod_tests.cpp:252 mod_tests.cpp:280 mod_tests.cpp:283 mod_tests.cpp:284
-#: mod_tests.cpp:290 test_SysContrLang.h:60
-msgid "root"
-msgstr ""
-
-#: mod_tests.cpp:264
 #, c-format
 msgid "%s{%d <%s>, text <%s>, childs - %d."
 msgstr ""
 
-#: mod_tests.cpp:268
 #, c-format
 msgid "        Attr <%s> = <%s>."
 msgstr ""
 
-#: mod_tests.cpp:271
-#, c-format
-msgid "%s}%d <%s>"
-msgstr ""
-
-#: mod_tests.cpp:277 test_SysContrLang.h:59
-msgid "info"
-msgstr ""
-
-#: mod_tests.cpp:280
-msgid "grp"
-msgstr ""
-
-#: mod_tests.cpp:280 mod_tests.cpp:290
-msgid "/br/test_"
-msgstr ""
-
-#: mod_tests.cpp:280
 msgid "Test"
 msgstr ""
 
-#: mod_tests.cpp:280 mod_tests.cpp:284
-msgid "idm"
-msgstr ""
-
-#: mod_tests.cpp:280 mod_tests.cpp:284
-msgid "idSz"
-msgstr ""
-
-#: mod_tests.cpp:280 mod_tests.cpp:284 test_DB.h:84 test_DB.h:148
-msgid "20"
-msgstr ""
-
-#: mod_tests.cpp:281
-msgid "area"
-msgstr ""
-
-#: mod_tests.cpp:281
-msgid "/tests"
-msgstr ""
-
-#: mod_tests.cpp:281 mod_tests.cpp:284
 msgid "Tests"
 msgstr ""
 
-#: mod_tests.cpp:283
-msgid "fld"
-msgstr ""
-
-#: mod_tests.cpp:283 mod_tests.cpp:297
-msgid "/tests/nmb"
-msgstr ""
-
-#: mod_tests.cpp:283
 msgid "Number"
 msgstr ""
 
-#: mod_tests.cpp:283 mod_tests.cpp:284
-msgid "tp"
-msgstr ""
-
-#: mod_tests.cpp:283
-msgid "str"
-msgstr ""
-
-#: mod_tests.cpp:284
-msgid "list"
-msgstr ""
-
-#: mod_tests.cpp:284 mod_tests.cpp:290
-msgid "/tests/tests"
-msgstr ""
-
-#: mod_tests.cpp:284
-msgid "br"
-msgstr ""
-
-#: mod_tests.cpp:284
-msgid "br_pref"
-msgstr ""
-
-#: mod_tests.cpp:289 test_SysContrLang.h:39 test_SysContrLang.h:60
-msgid "path"
-msgstr ""
-
-#: mod_tests.cpp:290
-msgid "get"
-msgstr ""
-
-#: mod_tests.cpp:295
-msgid "el"
-msgstr ""
-
-#: mod_tests.cpp:304
 #, c-format
 msgid "All: %d; Accessing: %d"
 msgstr ""
 
-#: test_archive.h:36
-msgid "Archive"
-msgstr ""
-
-#: test_archive.h:38 test_Base64Code.h:38 test_DB.h:38 test_mess.h:38
-#: test_prm.h:38 test_SOAttach.h:38 test_SysContrLang.h:38 test_TrOut.h:38
-#: test_ValBuf.h:38 test_val.h:38 test_xml.h:38
-msgid "rez"
-msgstr ""
-
-#: test_archive.h:38 test_Base64Code.h:38 test_DB.h:38 test_mess.h:38
-#: test_prm.h:38 test_SOAttach.h:38 test_SysContrLang.h:38 test_TrOut.h:38
-#: test_ValBuf.h:38 test_val.h:38 test_xml.h:38
 msgid "Result"
 msgstr ""
 
-#: test_archive.h:39
-msgid "arch"
-msgstr ""
-
-#: test_archive.h:39 test_archive.h:43
 msgid "Value archive"
 msgstr ""
 
-#: test_archive.h:40
-msgid "period"
-msgstr ""
-
-#: test_archive.h:40
 msgid "Values period (us)"
 msgstr ""
 
-#: test_archive.h:40 test_val.h:41
-msgid "1000000"
-msgstr ""
-
-#: test_archive.h:44
 msgid ""
 "Value archive allocation tests.\n"
 "Contain 7(8) tests for value archivator for check to correct working the "
 "consecutive pack mechanism."
 msgstr ""
 
-#: test_archive.h:51 test_Base64Code.h:48 test_DB.h:61 test_mess.h:51
-#: test_prm.h:54 test_SOAttach.h:51 test_SysContrLang.h:54 test_TrOut.h:52
-#: test_ValBuf.h:53 test_val.h:52 test_xml.h:49
 msgid "Test: Start"
 msgstr ""
 
-#: test_archive.h:64
 msgid "Test1: Simple fill and check archive."
 msgstr ""
 
-#: test_archive.h:74
 msgid "Test1: Failed."
 msgstr ""
 
-#: test_archive.h:76 test_Base64Code.h:58
 msgid "Test1: Passed."
 msgstr ""
 
-#: test_archive.h:78
 msgid "Test2: Internal insert double value (down)."
 msgstr ""
 
-#: test_archive.h:88
 msgid "Test2: Failed."
 msgstr ""
 
-#: test_archive.h:90 test_Base64Code.h:67
 msgid "Test2: Passed."
 msgstr ""
 
-#: test_archive.h:92
 msgid "Test3: Internal insert double value (up)."
 msgstr ""
 
-#: test_archive.h:102
 msgid "Test3: Failed."
 msgstr ""
 
-#: test_archive.h:104
 msgid "Test3: Passed."
 msgstr ""
 
-#: test_archive.h:106
 msgid "Test4: Internal insert double value (down)."
 msgstr ""
 
-#: test_archive.h:116
 msgid "Test4: Failed."
 msgstr ""
 
-#: test_archive.h:118
 msgid "Test4: Passed."
 msgstr ""
 
-#: test_archive.h:120
 msgid "Test5: Internal insert no double value."
 msgstr ""
 
-#: test_archive.h:131
 msgid "Test5: Failed."
 msgstr ""
 
-#: test_archive.h:133
 msgid "Test5: Passed."
 msgstr ""
 
-#: test_archive.h:135
 msgid "Test6: Internal insert double value (up)."
 msgstr ""
 
-#: test_archive.h:146
 msgid "Test6: Failed."
 msgstr ""
 
-#: test_archive.h:148
 msgid "Test6: Passed."
 msgstr ""
 
-#: test_archive.h:150
 msgid "Test7: Internal insert value instaead double value."
 msgstr ""
 
-#: test_archive.h:160
 msgid "Test7: Failed"
 msgstr ""
 
-#: test_archive.h:162
 msgid "Test7: Passed."
 msgstr ""
 
-#: test_archive.h:179 test_Base64Code.h:69 test_DB.h:204 test_mess.h:64
-#: test_prm.h:107 test_SOAttach.h:64 test_SysContrLang.h:64 test_TrOut.h:73
-#: test_ValBuf.h:688 test_val.h:75 test_xml.h:63
 msgid "Test: Passed"
 msgstr ""
 
-#: test_archive.h:180 test_Base64Code.h:70 test_DB.h:205 test_mess.h:65
-#: test_prm.h:108 test_SOAttach.h:65 test_SysContrLang.h:65 test_TrOut.h:74
-#: test_ValBuf.h:689 test_val.h:76 test_xml.h:64
 msgid "Passed"
 msgstr ""
 
-#: test_archive.h:184 test_Base64Code.h:74 test_DB.h:209 test_mess.h:69
-#: test_prm.h:112 test_SOAttach.h:69 test_SysContrLang.h:69 test_TrOut.h:78
-#: test_val.h:80 test_xml.h:68
 #, c-format
 msgid "Test: Failed: %s"
 msgstr ""
 
-#: test_archive.h:185 test_Base64Code.h:75 test_DB.h:210 test_mess.h:70
-#: test_prm.h:113 test_SOAttach.h:70 test_SysContrLang.h:70 test_TrOut.h:79
-#: test_val.h:81 test_xml.h:69
 #, c-format
 msgid "Failed: %s"
 msgstr ""
 
-#: test_Base64Code.h:36
-msgid "Base64Code"
-msgstr ""
-
-#: test_Base64Code.h:41
 msgid "Base64 encoding"
 msgstr ""
 
-#: test_Base64Code.h:42
 msgid "Mime Base64 encoding algorithm tests."
 msgstr ""
 
-#: test_Base64Code.h:53
 msgid "Test1: Encoding."
 msgstr ""
 
-#: test_Base64Code.h:56
 #, c-format
 msgid "Encoded text by length %d for time %f ms."
 msgstr ""
 
-#: test_Base64Code.h:57
 #, c-format
 msgid "Encoded text: %s"
 msgstr ""
 
-#: test_Base64Code.h:60
 msgid "Test2: Decoding."
 msgstr ""
 
-#: test_Base64Code.h:63
 #, c-format
 msgid "Decoded text by length %d for time %f ms."
 msgstr ""
 
-#: test_Base64Code.h:66
 msgid "Test2: Failed. Decoding error."
 msgstr ""
 
-#: test_DB.h:36
-msgid "DB"
-msgstr ""
-
-#: test_DB.h:39 test_TrOut.h:40
-msgid "type"
-msgstr ""
-
-#: test_DB.h:39
 msgid "DB type"
 msgstr ""
 
-#: test_DB.h:39
-msgid "SQLite"
-msgstr ""
-
-#: test_DB.h:40 test_TrOut.h:39
-msgid "addr"
-msgstr ""
-
-#: test_DB.h:40
 msgid "DB address"
 msgstr ""
 
-#: test_DB.h:40
-msgid "./DATA/test.db"
-msgstr ""
-
-#: test_DB.h:41
-msgid "table"
-msgstr ""
-
-#: test_DB.h:41
 msgid "DB table"
 msgstr ""
 
-#: test_DB.h:41
-msgid "test"
-msgstr ""
-
-#: test_DB.h:42
-msgid "size"
-msgstr ""
-
-#: test_DB.h:42
 msgid "Records number"
 msgstr ""
 
-#: test_DB.h:42
-msgid "1000"
-msgstr ""
-
-#: test_DB.h:45
 msgid "DB test"
 msgstr ""
 
-#: test_DB.h:46
 msgid ""
 "Full database test. Make:\n"
 "  - make/open DB;\n"
@@ -515,382 +211,191 @@ msgid ""
 "  - close/remove DB."
 msgstr ""
 
-#: test_DB.h:65
-msgid "test_bd"
-msgstr ""
-
-#: test_DB.h:72
 #, c-format
 msgid "Open DB '%s'."
 msgstr ""
 
-#: test_DB.h:77
 #, c-format
 msgid "Open table '%s'."
 msgstr ""
 
-#: test_DB.h:79
 #, c-format
 msgid "Connect to table '%s'."
 msgstr ""
 
-#: test_DB.h:82
 msgid "Create DB config."
 msgstr ""
 
-#: test_DB.h:84 test_DB.h:95 test_DB.h:109 test_DB.h:123 test_DB.h:128
-#: test_DB.h:131 test_DB.h:133 test_DB.h:149 test_DB.h:151 test_DB.h:153
-#: test_DB.h:157 test_DB.h:165 test_DB.h:167 test_DB.h:169 test_DB.h:174
-#: test_DB.h:189 test_prm.h:39 test_SOAttach.h:39 test_val.h:39
-msgid "name"
-msgstr ""
-
-#: test_DB.h:84
 msgid "Name field"
 msgstr ""
 
-#: test_DB.h:85 test_DB.h:96 test_DB.h:110 test_DB.h:128 test_DB.h:134
-#: test_DB.h:136 test_DB.h:153 test_DB.h:157 test_DB.h:169 test_DB.h:174
-msgid "descr"
-msgstr ""
-
-#: test_DB.h:85
 msgid "Description field"
 msgstr ""
 
-#: test_DB.h:85
-msgid "50"
-msgstr ""
-
-#: test_DB.h:86 test_DB.h:97 test_DB.h:111 test_DB.h:129 test_DB.h:158
-#: test_DB.h:175
-msgid "val"
-msgstr ""
-
-#: test_DB.h:86
 msgid "Field value"
 msgstr ""
 
-#: test_DB.h:86
-msgid "10.2"
-msgstr ""
-
-#: test_DB.h:86
-msgid "5"
-msgstr ""
-
-#: test_DB.h:87
 msgid "Field id"
 msgstr ""
 
-#: test_DB.h:87
-msgid "7"
-msgstr ""
-
-#: test_DB.h:87
-msgid "34"
-msgstr ""
-
-#: test_DB.h:88 test_DB.h:99 test_DB.h:113 test_DB.h:129 test_DB.h:140
-#: test_DB.h:141 test_DB.h:154 test_DB.h:158 test_DB.h:170 test_DB.h:175
-msgid "stat"
-msgstr ""
-
-#: test_DB.h:88
 msgid "Field stat"
 msgstr ""
 
-#: test_DB.h:91
 msgid "Create records."
 msgstr ""
 
-#: test_DB.h:95 test_DB.h:109 test_DB.h:123 test_DB.h:131 test_DB.h:133
-#: test_DB.h:189
-msgid "Sh"
-msgstr ""
-
-#: test_DB.h:96
-msgid "Shifr "
-msgstr ""
-
-#: test_DB.h:102
 #, c-format
 msgid "Created %d records for time %f sec."
 msgstr ""
 
-#: test_DB.h:105
 msgid "Update records."
 msgstr ""
 
-#: test_DB.h:110 test_DB.h:134 test_DB.h:136
-msgid "New shifr "
-msgstr ""
-
-#: test_DB.h:116
 #, c-format
 msgid "Updated %d records for time %f sec."
 msgstr ""
 
-#: test_DB.h:119
 msgid "Check records."
 msgstr ""
 
-#: test_DB.h:127
 #, c-format
 msgid "Record #155='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."
 msgstr ""
 
-#: test_DB.h:132
 #, c-format
 msgid "Field <Sh> '%s' != '%s' error."
 msgstr ""
 
-#: test_DB.h:135
 #, c-format
 msgid "Field <descr> '%s' != '%s' error."
 msgstr ""
 
-#: test_DB.h:139
 #, c-format
 msgid "Field <id> %d != %d error."
 msgstr ""
 
-#: test_DB.h:141
 #, c-format
 msgid "Field <stat> %d != %d error."
 msgstr ""
 
-#: test_DB.h:143
 #, c-format
 msgid "Got %d records for time %f sec."
 msgstr ""
 
-#: test_DB.h:146
 msgid "Change DB structure."
 msgstr ""
 
-#: test_DB.h:148 test_DB.h:164
-msgid "fix"
-msgstr ""
-
-#: test_DB.h:148
 msgid "DB fix test"
 msgstr ""
 
-#: test_DB.h:149 test_DB.h:165
-msgid "Sh1"
-msgstr ""
-
-#: test_DB.h:151 test_DB.h:153 test_DB.h:167 test_DB.h:169
-msgid "Sh2"
-msgstr ""
-
-#: test_DB.h:153 test_DB.h:169
-msgid "New shifr 2"
-msgstr ""
-
-#: test_DB.h:156 test_DB.h:173
 #, c-format
 msgid "Record #2='%s'; Descr='%s'; Value=%f; Id=%d; Stat=%d."
 msgstr ""
 
-#: test_DB.h:159
 msgid "Add column error."
 msgstr ""
 
-#: test_DB.h:161
 msgid "Add column ok."
 msgstr ""
 
-#: test_DB.h:176
 msgid "Del column error."
 msgstr ""
 
-#: test_DB.h:178
 msgid "Del column ok."
 msgstr ""
 
-#: test_DB.h:192
 #, c-format
 msgid "Del %d records for time %f sec."
 msgstr ""
 
-#: test_DB.h:196
 #, c-format
 msgid "Close and delete table '%s'."
 msgstr ""
 
-#: test_DB.h:199
 #, c-format
 msgid "Close and delete DB '%s'."
 msgstr ""
 
-#: test_mess.h:36
-msgid "Mess"
-msgstr ""
-
-#: test_mess.h:39
-msgid "arhtor"
-msgstr ""
-
-#: test_mess.h:39
 msgid "Archivator"
 msgstr ""
 
-#: test_mess.h:39
-msgid "FSArch.StatErrors"
-msgstr ""
-
-#: test_mess.h:40
-msgid "categ"
-msgstr ""
-
-#: test_mess.h:40
 msgid "Messages category pattern"
 msgstr ""
 
-#: test_mess.h:41
-msgid "depth"
-msgstr ""
-
-#: test_mess.h:41
 msgid "Messages depth (s)"
 msgstr ""
 
-#: test_mess.h:41 test_val.h:40
-msgid "10"
-msgstr ""
-
-#: test_mess.h:44
 msgid "Messages"
 msgstr ""
 
-#: test_mess.h:45
 msgid ""
 "Messages archive test. Periodic read new messages from archive, for selected "
 "archivator."
 msgstr ""
 
-#: test_mess.h:57
 #, c-format
 msgid "New messages present %d."
 msgstr ""
 
-#: test_mess.h:61
-#, c-format
-msgid "<%s> : <%s> : <%s>"
-msgstr ""
-
-#: test_mess.h:61
-msgid "\n"
-msgstr ""
-
-#: test_prm.h:36 test_prm.h:42
-msgid "Param"
-msgstr ""
-
-#: test_prm.h:39
 msgid "DAQ parameter address"
 msgstr ""
 
-#: test_prm.h:39
-msgid "System.AutoDA.CPULoad"
+msgid "Param"
 msgstr ""
 
-#: test_prm.h:43
 msgid ""
 "DAQ parameters test. Make read a parameter's attributes and config fields."
 msgstr ""
 
-#: test_prm.h:58
 #, c-format
 msgid "Value attrbutes present: %d"
 msgstr "Wertattribute sind vorhanden: %d"
 
-#: test_prm.h:63 test_prm.h:86
 #, c-format
 msgid "%s(SELECT): %s"
 msgstr ""
 
-#: test_prm.h:67 test_prm.h:90
 #, c-format
 msgid "%s(STRING): %s"
 msgstr ""
 
-#: test_prm.h:70 test_prm.h:93
 #, c-format
 msgid "%s(INTEGER): %d"
 msgstr ""
 
-#: test_prm.h:73 test_prm.h:96
 #, c-format
 msgid "%s(REAL): %f"
 msgstr ""
 
-#: test_prm.h:76 test_prm.h:99
 #, c-format
 msgid "%s(BOOLEAN): %d"
 msgstr ""
 
-#: test_prm.h:82
 #, c-format
 msgid "Config fields: %d"
 msgstr ""
 
-#: test_SOAttach.h:36
-msgid "SOAttach"
-msgstr ""
-
-#: test_SOAttach.h:39
 msgid "Path to module"
 msgstr ""
 
-#: test_SOAttach.h:40
-msgid "mode"
-msgstr ""
-
-#: test_SOAttach.h:40
 msgid "Mode (1-attach;-1-detach;0-change)"
 msgstr ""
 
-#: test_SOAttach.h:40
-msgid "0"
-msgstr ""
-
-#: test_SOAttach.h:41
-msgid "full"
-msgstr ""
-
-#: test_SOAttach.h:41
 msgid "Full attach(to start)"
 msgstr ""
 
-#: test_SOAttach.h:44
 msgid "Attach SO"
 msgstr ""
 
-#: test_SOAttach.h:45
 msgid "Attach/detach module test."
 msgstr ""
 
-#: test_SysContrLang.h:36
-msgid "SysContrLang"
-msgstr ""
-
-#: test_SysContrLang.h:39
 msgid "Path to language element"
 msgstr ""
 
-#: test_SysContrLang.h:39
-#, c-format
-msgid "/Archive/BaseArh/mess_StatErrors/%2fprm%2fst"
-msgstr ""
-
-#: test_SysContrLang.h:42
 msgid "System control language"
 msgstr ""
 
-#: test_SysContrLang.h:43
 #, c-format
 msgid ""
 "System control language test.\n"
@@ -901,476 +406,208 @@ msgid ""
 "Second </bd/m_per> is path to concrete node's element."
 msgstr ""
 
-#: test_SysContrLang.h:57
 #, c-format
 msgid "SysContr test for path '%s'."
 msgstr ""
 
-#: test_SysContrLang.h:60
-msgid "user"
-msgstr ""
-
-#: test_TrOut.h:36
-msgid "TrOut"
-msgstr ""
-
-#: test_TrOut.h:39
 msgid "Address"
 msgstr ""
 
-#: test_TrOut.h:39
-msgid "TCP:127.0.0.1:10001"
-msgstr ""
-
-#: test_TrOut.h:40
 msgid "Transport module"
 msgstr ""
 
-#: test_TrOut.h:40
-msgid "Sockets"
-msgstr ""
-
-#: test_TrOut.h:41
-msgid "req"
-msgstr ""
-
-#: test_TrOut.h:41
 msgid "Request text"
 msgstr ""
 
-#: test_TrOut.h:44
 msgid "Transport"
 msgstr ""
 
-#: test_TrOut.h:45
 msgid ""
 "Output and/or input transports test.\n"
 "Make test for output transport by send the request to selected input "
 "transport."
 msgstr ""
 
-#: test_TrOut.h:71
 #, c-format
 msgid "%s: Put '%s'. Get: '%s'."
 msgstr ""
 
-#: test_ValBuf.h:36
-msgid "ValBuf"
-msgstr ""
-
-#: test_ValBuf.h:41
 msgid "Value buffer"
 msgstr ""
 
-#: test_ValBuf.h:42
 msgid ""
 "Value buffer tests.\n"
 "Contain 13 tests for all aspects of value buffer (subsystem \"Archives\")."
 msgstr ""
 
-#: test_ValBuf.h:56 test_ValBuf.h:64 test_ValBuf.h:82 test_ValBuf.h:88
-#: test_ValBuf.h:149 test_ValBuf.h:210 test_ValBuf.h:273 test_ValBuf.h:336
-#: test_ValBuf.h:398 test_ValBuf.h:459 test_ValBuf.h:519 test_ValBuf.h:575
-#: test_ValBuf.h:633
 #, c-format
 msgid "Test%d"
 msgstr ""
 
-#: test_ValBuf.h:57
 #, c-format
 msgid ""
 "%s: Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, "
 "HighRes = no."
 msgstr ""
 
-#: test_ValBuf.h:60 test_ValBuf.h:79 test_ValBuf.h:85 test_ValBuf.h:145
-#: test_ValBuf.h:206 test_ValBuf.h:269 test_ValBuf.h:332 test_ValBuf.h:394
-#: test_ValBuf.h:455 test_ValBuf.h:515 test_ValBuf.h:571 test_ValBuf.h:629
-#: test_ValBuf.h:685
 #, c-format
 msgid "%s: Passed."
 msgstr ""
 
-#: test_ValBuf.h:61
 msgid "Create buffer error."
 msgstr ""
 
-#: test_ValBuf.h:65
 #, c-format
 msgid "%s: Change buffer mode."
 msgstr ""
 
-#: test_ValBuf.h:67
 msgid "Disable hard griding ok."
 msgstr ""
 
-#: test_ValBuf.h:68
 msgid "Disable hard griding failed."
 msgstr ""
 
-#: test_ValBuf.h:70
 msgid "Set high resolution time ok."
 msgstr ""
 
-#: test_ValBuf.h:71
 msgid "Set high resolution time failed."
 msgstr ""
 
-#: test_ValBuf.h:74
 msgid "Change buffer size ok."
 msgstr ""
 
-#: test_ValBuf.h:75
 msgid "Change buffer size failed."
 msgstr ""
 
-#: test_ValBuf.h:77
 msgid "Change period ok."
 msgstr ""
 
-#: test_ValBuf.h:78
 msgid "Change period failed."
 msgstr ""
 
-#: test_ValBuf.h:83
 #, c-format
 msgid "%s: Destroy buffer."
 msgstr ""
 
-#: test_ValBuf.h:89
 #, c-format
 msgid "%s: Fill and check hard time griding string buffer."
 msgstr ""
 
-#: test_ValBuf.h:94 test_ValBuf.h:100 test_ValBuf.h:111 test_ValBuf.h:112
-#: test_ValBuf.h:113 test_ValBuf.h:123 test_ValBuf.h:137 test_ValBuf.h:216
-#: test_ValBuf.h:222 test_ValBuf.h:233 test_ValBuf.h:234 test_ValBuf.h:235
-#: test_ValBuf.h:236 test_ValBuf.h:247 test_ValBuf.h:261 test_ValBuf.h:342
-#: test_ValBuf.h:348 test_ValBuf.h:359 test_ValBuf.h:360 test_ValBuf.h:361
-#: test_ValBuf.h:362 test_ValBuf.h:373 test_ValBuf.h:386 test_ValBuf.h:466
-#: test_ValBuf.h:471 test_ValBuf.h:481 test_ValBuf.h:482 test_ValBuf.h:483
-#: test_ValBuf.h:484 test_ValBuf.h:494 test_ValBuf.h:507 test_ValBuf.h:582
-#: test_ValBuf.h:587 test_ValBuf.h:597 test_ValBuf.h:598 test_ValBuf.h:599
-#: test_ValBuf.h:600 test_ValBuf.h:608 test_ValBuf.h:621
-msgid "Test: "
-msgstr ""
-
-#: test_ValBuf.h:96 test_ValBuf.h:157 test_ValBuf.h:218 test_ValBuf.h:281
-#: test_ValBuf.h:344 test_ValBuf.h:406 test_ValBuf.h:468 test_ValBuf.h:528
-#: test_ValBuf.h:584 test_ValBuf.h:642
 msgid "Buffer begin or/and end error, at filling half buffer."
 msgstr ""
 
-#: test_ValBuf.h:101 test_ValBuf.h:162 test_ValBuf.h:223 test_ValBuf.h:286
-#: test_ValBuf.h:349 test_ValBuf.h:410 test_ValBuf.h:472 test_ValBuf.h:531
-#: test_ValBuf.h:588 test_ValBuf.h:645
 msgid "Write a half buffer values error."
 msgstr ""
 
-#: test_ValBuf.h:103 test_ValBuf.h:164 test_ValBuf.h:225 test_ValBuf.h:288
-#: test_ValBuf.h:351 test_ValBuf.h:412 test_ValBuf.h:473 test_ValBuf.h:532
-#: test_ValBuf.h:589 test_ValBuf.h:646
 msgid "Write a half buffer ok."
 msgstr ""
 
-#: test_ValBuf.h:116 test_ValBuf.h:177 test_ValBuf.h:239 test_ValBuf.h:302
-#: test_ValBuf.h:365 test_ValBuf.h:426 test_ValBuf.h:487 test_ValBuf.h:546
-#: test_ValBuf.h:603 test_ValBuf.h:660
 msgid "Buffer begin or/and end error, at roll filling buffer."
 msgstr ""
 
-#: test_ValBuf.h:121 test_ValBuf.h:244 test_ValBuf.h:370
-msgid "Test: 11"
-msgstr ""
-
-#: test_ValBuf.h:124 test_ValBuf.h:185 test_ValBuf.h:248 test_ValBuf.h:311
-#: test_ValBuf.h:374 test_ValBuf.h:435 test_ValBuf.h:495 test_ValBuf.h:551
-#: test_ValBuf.h:609 test_ValBuf.h:665
 msgid "Write a roll buffer values error."
 msgstr ""
 
-#: test_ValBuf.h:126 test_ValBuf.h:187 test_ValBuf.h:250 test_ValBuf.h:313
-#: test_ValBuf.h:376 test_ValBuf.h:437 test_ValBuf.h:497 test_ValBuf.h:553
-#: test_ValBuf.h:611 test_ValBuf.h:667
 msgid "Write a roll buffer ok."
 msgstr ""
 
-#: test_ValBuf.h:128 test_ValBuf.h:129 test_ValBuf.h:252 test_ValBuf.h:253
-#: test_ValBuf.h:378 test_ValBuf.h:379 test_ValBuf.h:499 test_ValBuf.h:500
-#: test_ValBuf.h:613 test_ValBuf.h:614
-msgid "Test up."
-msgstr ""
-
-#: test_ValBuf.h:130 test_ValBuf.h:191 test_ValBuf.h:254 test_ValBuf.h:317
-#: test_ValBuf.h:379 test_ValBuf.h:440 test_ValBuf.h:500 test_ValBuf.h:556
-#: test_ValBuf.h:614 test_ValBuf.h:670
 msgid "Update buffer end error."
 msgstr ""
 
-#: test_ValBuf.h:131 test_ValBuf.h:192 test_ValBuf.h:255 test_ValBuf.h:318
-#: test_ValBuf.h:380 test_ValBuf.h:441 test_ValBuf.h:501 test_ValBuf.h:557
-#: test_ValBuf.h:615 test_ValBuf.h:671
 msgid "Update buffer end ok."
 msgstr ""
 
-#: test_ValBuf.h:138 test_ValBuf.h:199 test_ValBuf.h:262 test_ValBuf.h:325
-#: test_ValBuf.h:387 test_ValBuf.h:448 test_ValBuf.h:508 test_ValBuf.h:564
-#: test_ValBuf.h:622 test_ValBuf.h:678
 #, c-format
 msgid "Wrote 1000 values for time %f ms."
 msgstr ""
 
-#: test_ValBuf.h:143 test_ValBuf.h:204 test_ValBuf.h:267 test_ValBuf.h:330
-#: test_ValBuf.h:392 test_ValBuf.h:453 test_ValBuf.h:513 test_ValBuf.h:569
-#: test_ValBuf.h:627 test_ValBuf.h:683
 #, c-format
 msgid "Read 1000 values for time %f ms."
 msgstr ""
 
-#: test_ValBuf.h:150
 #, c-format
 msgid "%s: Fill and check hard time griding integer buffer."
 msgstr ""
 
-#: test_ValBuf.h:211
 #, c-format
 msgid "%s: Fill and check soft time griding string buffer (high time)."
 msgstr ""
 
-#: test_ValBuf.h:246 test_ValBuf.h:372
-msgid "Test: 12"
-msgstr ""
-
-#: test_ValBuf.h:274
 #, c-format
 msgid "%s: Fill and check soft time griding integer buffer (high time)."
 msgstr ""
 
-#: test_ValBuf.h:337
 #, c-format
 msgid "%s: Fill and check soft time griding string buffer (low time)."
 msgstr ""
 
-#: test_ValBuf.h:399
 #, c-format
 msgid "%s: Fill and check soft time griding integer buffer (low time)."
 msgstr ""
 
-#: test_ValBuf.h:460
 #, c-format
 msgid "%s: Fill and check free time string buffer (high time)."
 msgstr ""
 
-#: test_ValBuf.h:520
 #, c-format
 msgid "%s: Fill and check free time integer buffer (high time)."
 msgstr ""
 
-#: test_ValBuf.h:576
 #, c-format
 msgid "%s: Fill and check free time string buffer (low time)."
 msgstr ""
 
-#: test_ValBuf.h:634
 #, c-format
 msgid "%s: Fill and check free time integer buffer (low time)."
 msgstr ""
 
-#: test_ValBuf.h:694
 #, c-format
 msgid "%s: Failed: %s"
 msgstr ""
 
-#: test_ValBuf.h:695
 #, c-format
 msgid "Failed: %s: %s"
 msgstr ""
 
-#: test_val.h:36
-msgid "Val"
-msgstr ""
-
-#: test_val.h:39
 msgid "Parameter attribute path"
 msgstr ""
 
-#: test_val.h:39
-msgid "System.AutoDA.CPULoad.load"
-msgstr ""
-
-#: test_val.h:40
-msgid "arch_len"
-msgstr ""
-
-#: test_val.h:40
 msgid "Archive value getting depth (s)"
 msgstr ""
 
-#: test_val.h:41
-msgid "arch_per"
-msgstr ""
-
-#: test_val.h:41
 msgid "Archive value getting period (us)"
 msgstr ""
 
-#: test_val.h:44
 msgid "Parameter attribute"
 msgstr ""
 
-#: test_val.h:45
 msgid ""
 "Parameter attribute's value test.\n"
 "Periodic make gathering for last value of selected attribute, and also "
 "gathering from archive for selected depth."
 msgstr ""
 
-#: test_val.h:58
 #, c-format
 msgid "Value of: %s."
 msgstr ""
 
-#: test_val.h:64
 #, c-format
 msgid "Last value = %s"
 msgstr ""
 
-#: test_val.h:71
 #, c-format
 msgid "Value %d = %s."
 msgstr ""
 
-#: test_xml.h:36
-msgid "XML"
-msgstr ""
-
-#: test_xml.h:39
-msgid "file"
-msgstr ""
-
-#: test_xml.h:39
 msgid "XML file"
 msgstr ""
 
-#: test_xml.h:42
 msgid "XML parsing"
 msgstr ""
 
-#: test_xml.h:43
 msgid "XML file parsing test. Parse and show selected file structure."
 msgstr ""
 
-#: test_xml.h:52
 #, c-format
 msgid "Open file '%s' error."
 msgstr ""
-
-#~ msgid ""
-#~ "======================= The module <%s:%s> options "
-#~ "=======================\n"
-#~ "---------- Parameters of the module section <%s> in config file "
-#~ "----------\n"
-#~ "All tests main options:\n"
-#~ "  id           test's id;\n"
-#~ "  on           on test's flag;\n"
-#~ "  per          repeat period (sek).\n"
-#~ "       *** Test's options ***\n"
-#~ "PARAM        Parameter test:\n"
-#~ "  name         paremeter full name (OperationSystem.AutoDA.CPULoad).\n"
-#~ "XML          XML parsing test:\n"
-#~ "  file         file for XML parsing.\n"
-#~ "MESS         Messages archive test:\n"
-#~ "  arhtor       archivator name (StatErrors.BaseArh);\n"
-#~ "  categ        messages category pattern.\n"
-#~ "SOAttDet     Attach/Detach module test:\n"
-#~ "  name         name modul (path to module);\n"
-#~ "  full         full attach(to start).\n"
-#~ "Val          Parameter attributes value test:\n"
-#~ "  name         parameter attribute (OperationSystem.AutoDA.CPULoad."
-#~ "load);\n"
-#~ "  arch_len     archive value getting depth;\n"
-#~ "  arch_per     archive value getting period.\n"
-#~ "BD           Full database test:\n"
-#~ "  type         type BD;\n"
-#~ "  bd           name BD;\n"
-#~ "  table        table;\n"
-#~ "  size         fields number.\n"
-#~ "TrOut        Output transport test:\n"
-#~ "  addr         input transport address;\n"
-#~ "  type         transport type;\n"
-#~ "  req          request to a input transport.\n"
-#~ "Func\t      Function API test;\n"
-#~ "SysContrLang System control language test:\n"
-#~ "  path         path to language element (/Archive/BaseArh/mess_StatErrors/"
-#~ "%%2fprm%%2fst).\n"
-#~ "ValBuf       Value buffer tests;\n"
-#~ "Archive      Value archive allocation tests:\n"
-#~ "  arch         value archive;\n"
-#~ "  period       values period (us).\n"
-#~ "Base64Code   Mime Base64 algorithm tests.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "========================== Optionen des Moduls <%s:%s> "
-#~ "==========================\n"
-#~ "-------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
-#~ "--------\n"
-#~ "Allgemeine Optionen aller Tests:\n"
-#~ "  id           Testbezeichner;\n"
-#~ "  on           Wert für Aktivierung des Testes;\n"
-#~ "  per          Zeit für Wiederholung (sek).\n"
-#~ "       *** Optionen des Tests ***\n"
-#~ "PARAM        Parameter Test:\n"
-#~ "  name         Name des Parameters (OperationSystem.AutoDA.CPULoad).\n"
-#~ "XML          Test XML Analyse:\n"
-#~ "  file         Datei für XML Analyse.\n"
-#~ "MESS         Prüfung des Nachrichtarchivs:\n"
-#~ "  arhtor       Archivarsname (StatErrors.BaseArh);\n"
-#~ "  categ        Vorlage der Kategorie der Nachricht.\n"
-#~ "SOAttDet     Prüfung Anschluss/Abschalten des Moduls:\n"
-#~ "  name         Name des Moduls;\n"
-#~ "  full         ganz anschliessen(starten).\n"
-#~ "Val          Prüfung der Werte der Parameterattribute :\n"
-#~ "  name         Attribut des Parameters (OperationSystem.AutoDA.CPULoad."
-#~ "load);\n"
-#~ "  arch_len     Tiefe der empfangenen Werte des Archivs;\n"
-#~ "  arch_per     Zeit der empfangenen Werte des Archivs.\n"
-#~ "BD           Datenbank-Test:\n"
-#~ "  type         Datenbank Typ;\n"
-#~ "  bd           Datenbank Name;\n"
-#~ "  table        Tabelle;\n"
-#~ "  size         Anzahl der Felder.\n"
-#~ "TrOut        Test des Ausgangsübertragung:\n"
-#~ "  addr         Adresse des Eingangsübertragung;\n"
-#~ "  type         Art des Übertragung;\n"
-#~ "  req          Anfrage an die Eingangsübertragung.\n"
-#~ "Func\t       Test des Subsystems der Funktionen;\n"
-#~ "SysContrLang Sprachentest der Systemsteuerung:\n"
-#~ "  path         Pfad zum Sprachenelement (/Archive/BaseArh/mess_StatErrors/"
-#~ "%%2fprm%%2fst).\n"
-#~ "ValBuf       Test Wertespeicher;\n"
-#~ "Archive      Test Archivierung des Wertespeichers:\n"
-#~ "  arch         Wertenarchiv;\n"
-#~ "  period       Wiederholung der Werte (usek).\n"
-#~ "Base64Code   Teste des Algorythmus Mime Base64.\n"
-#~ "\n"
-
-#~ msgid ": Is starting...."
-#~ msgstr ": Start...."
-
-#~ msgid "Not started!"
-#~ msgstr "Nicht gestartet!"
-
-#~ msgid ": Is stopping...."
-#~ msgstr ": Anahlten...."
-
-#~ msgid "Not stopped!"
-#~ msgstr "Nicht angehalten"
-
-#~ msgid "Thread <%u> is started. TID: %ld"
-#~ msgstr "Thread <%u> ist gestartet. TID: %ld"
-
-#~ msgid "-------- Begin parameter <%s> test ----------"
-#~ msgstr "-------- Beginn des Testparameters <%s> ----------"
-
-#~ msgid "BD"
-#~ msgstr "DB"

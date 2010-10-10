@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,12 +44,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTStarter"
-#define MOD_NAME	"QT GUI starter"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("QT GUI starter")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define VERSION		"1.5.4"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow QT GUI starter. It is single for all QT GUI modules!"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow QT GUI starter. It is single for all QT GUI modules!")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -92,22 +92,22 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), end_run(false), demon_mode(false), 
 #if 0
     char mess[][100] =
     {
-	"&Yes","&No","Cancel","&OK","Apply","Close","Back","Forward","Parent Directory",
-	"Look in:","Computer","File","Folder","File &name:","Open","&Open","Cancel","Save","&Save","Date Modified","All Files (*)",
-	"Create New Folder","List View","Detail View","Files of type:","New Folder","&New Folder","Show &hidden files","&Delete","&Rename","Remove",
-	"&Undo","&Redo","Cu&t","&Copy","&Paste","Delete","Select All","Insert Unicode control character",
-	"%1 bytes","%1 KB",
-	"Are sure you want to delete '%1'?",
-	"<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.</p><p>Please see <a href=\"http://www.trolltech.com/company/model/\">www.trolltech.com/company/model/</a> for an overview of Qt licensing.</p>",
-	"<h3>About Qt</h3>%1<p>Qt is a C++ toolkit for cross-platform application development.</p><p>Qt provides single-source portability across MS&nbsp;Windows, Mac&nbsp;OS&nbsp;X, Linux, and all major commercial Unix variants. Qt is also available for embedded devices as Qt for Embedded Linux and Qt for Windows CE.</p><p>Qt is a Nokia product. See <a href=\"http://www.trolltech.com/qt/\">www.trolltech.com/qt/</a> for more information.</p>",
-	"Hu&e:","&Sat:","&Val:","&Red:","&Green:","Bl&ue:","A&lpha channel:","&Basic colors","&Custom colors","&Add to Custom Colors","Select color",
-	"Form","Printer","&Name:","P&roperties","Location:","Preview","Type:","Output &file:","Print range","Print all",
-	"Pages from","to","Selection","Output Settings","Copies:","Collate","Reverse","Copies","Color Mode","Color","Grayscale",
-	"Duplex Printing","None","Long side","Short side","Options","&Options >>","&Options <<","&Print","Print to File (PDF)","Print to File (Postscript)",
-	"Local file","Write %1 file","Paper","Page size:","Width:","Height:","Paper source:","Orientation","Portrait","Landscape","Reverse landscape",
-	"Reverse portrait","Margins","top margin","left margin","right margin","bottom margin","Points (pt)","Inches (in)",
-	"Millimeters (mm)","Centimeters (cm)","Page","Advanced",
-	"Mon"
+	_("&Yes"),_("&No"),_("Cancel"),_("&OK"),_("Apply"),_("Close"),_("Back"),_("Forward"),_("Parent Directory"),
+	_("Look in:"),_("Computer"),_("File"),_("Folder"),_("File &name:"),_("Open"),_("&Open"),_("Cancel"),_("Save"),_("&Save"),_("Date Modified"),_("All Files (*)"),
+	_("Create New Folder"),_("List View"),_("Detail View"),_("Files of type:"),_("New Folder"),_("&New Folder"),_("Show &hidden files"),_("&Delete"),_("&Rename"),_("Remove"),
+	_("&Undo"),_("&Redo"),_("Cu&t"),_("&Copy"),_("&Paste"),_("Delete"),_("Select All"),_("Insert Unicode control character"),
+	_("%1 bytes"),_("%1 KB"),
+	_("Are sure you want to delete '%1'?"),
+	_("<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.</p><p>Please see <a href=\"http://www.trolltech.com/company/model/\">www.trolltech.com/company/model/</a> for an overview of Qt licensing.</p>"),
+	_("<h3>About Qt</h3>%1<p>Qt is a C++ toolkit for cross-platform application development.</p><p>Qt provides single-source portability across MS&nbsp;Windows, Mac&nbsp;OS&nbsp;X, Linux, and all major commercial Unix variants. Qt is also available for embedded devices as Qt for Embedded Linux and Qt for Windows CE.</p><p>Qt is a Nokia product. See <a href=\"http://www.trolltech.com/qt/\">www.trolltech.com/qt/</a> for more information.</p>"),
+	_("Hu&e:"),_("&Sat:"),_("&Val:"),_("&Red:"),_("&Green:"),_("Bl&ue:"),_("A&lpha channel:"),_("&Basic colors"),_("&Custom colors"),_("&Add to Custom Colors"),_("Select color"),
+	_("Form"),_("Printer"),_("&Name:"),_("P&roperties"),_("Location:"),_("Preview"),_("Type:"),_("Output &file:"),_("Print range"),_("Print all"),
+	_("Pages from"),_("to"),_("Selection"),_("Output Settings"),_("Copies:"),_("Collate"),_("Reverse"),_("Copies"),_("Color Mode"),_("Color"),_("Grayscale"),
+	_("Duplex Printing"),_("None"),_("Long side"),_("Short side"),_("Options"),_("&Options >>"),_("&Options <<"),_("&Print"),_("Print to File (PDF)"),_("Print to File (Postscript)"),
+	_("Local file"),_("Write %1 file"),_("Paper"),_("Page size:"),_("Width:"),_("Height:"),_("Paper source:"),_("Orientation"),_("Portrait"),_("Landscape"),_("Reverse landscape"),
+	_("Reverse portrait"),_("Margins"),_("top margin"),_("left margin"),_("right margin"),_("bottom margin"),_("Points (pt)"),_("Inches (in)"),
+	_("Millimeters (mm)"),_("Centimeters (cm)"),_("Page"),_("Advanced"),
+	_("Mon")
     };
 #endif
 }
@@ -328,32 +328,32 @@ void *TUIMod::Task( void * )
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),0660,"root","root",3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQTmod");
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start QT modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQTmod");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/st_mod" )
+    if(a_path == "/prm/cfg/st_mod")
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( startMod() );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setStartMod( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startMod());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartMod(opt->text());
     }
-    else if( a_path == "/prm/cfg/lsQTmod" && ctrChkNode(opt) )
+    else if(a_path == "/prm/cfg/lsQTmod" && ctrChkNode(opt))
     {
 	vector<string> list;
 	mod->owner().modList(list);
-	for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-	    if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-		    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+	for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	    if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+		    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[i_l]);
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

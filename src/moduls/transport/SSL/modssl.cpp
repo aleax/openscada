@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,12 +37,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"SSL"
-#define MOD_NAME	"SSL"
-#define MOD_TYPE	"Transport"
+#define MOD_NAME	_("SSL")
+#define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define VERSION		"0.9.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1."
+#define VERSION		"0.9.5"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -394,7 +394,7 @@ void *TSocketIn::Task( void *sock_in )
 
     //> Client tasks stop command
     s.endrun_cl = true;
-    TSYS::eventWait( s.cl_free, true, string(MOD_ID)+": "+s.id()+" client tasks is stopping....");
+    TSYS::eventWait( s.cl_free, true, string(MOD_ID)+": "+s.id()+_(" client tasks is stopping...."));
 
     //> Free context
     if( abio )	BIO_reset(abio);
@@ -582,63 +582,62 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("SSL input transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRWR_,"root","Transport",4,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRWR_,"root","Transport",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root","Transport",1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root","Transport",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRWR_,"root",STR_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/certKey" )
+    if(a_path == "/prm/cfg/certKey")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(certKey());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setCertKey(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(certKey());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
-    else if( a_path == "/prm/cfg/pkey_pass" )
+    else if(a_path == "/prm/cfg/pkey_pass")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(string(pKeyPass().size(),'*'));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setPKeyPass(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(string(pKeyPass().size(),'*'));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setPKeyPass(opt->text());
     }
-    else if( a_path == "/prm/cfg/cl_n" )
+    else if(a_path == "/prm/cfg/cl_n")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxFork()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/bf_ln" )
+    else if(a_path == "/prm/cfg/bf_ln")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(bufLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/keepAliveCon" )
+    else if(a_path == "/prm/cfg/keepAliveCon")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(keepAliveCon()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setKeepAliveCon( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(keepAliveCon()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveCon(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/keepAliveTm" )
+    else if(a_path == "/prm/cfg/keepAliveTm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(keepAliveTm()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setKeepAliveTm( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(keepAliveTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/taskPrior" )
+    else if(a_path == "/prm/cfg/taskPrior")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText( TSYS::int2str(taskPrior()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTaskPrior( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(taskPrior()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(atoi(opt->text().c_str()));
     }
-
     else TTransportIn::cntrCmdProc(opt);
 }
 
@@ -896,19 +895,19 @@ repeate:
 void TSocketOut::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("SSL output transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root","Transport",4,"tp","str","cols","90","rows","7",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","7",
 	    "help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root","Transport",1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[next]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
 	    "    next - maximum time for continue respond wait, in seconds."));
@@ -916,20 +915,20 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/certKey" )
+    if(a_path == "/prm/cfg/certKey")
     {
-	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(certKey());
-	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )	setCertKey(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKey());
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
-    else if( a_path == "/prm/cfg/pkey_pass" )
+    else if(a_path == "/prm/cfg/pkey_pass")
     {
-	if( ctrChkNode(opt,"get",RWRW__,"root","Transport",SEC_RD) )	opt->setText(string(pKeyPass().size(),'*'));
-	if( ctrChkNode(opt,"set",RWRW__,"root","Transport",SEC_WR) )	setPKeyPass(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(string(pKeyPass().size(),'*'));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setPKeyPass(opt->text());
     }
-    if( a_path == "/prm/cfg/TMS" )
+    else if(a_path == "/prm/cfg/TMS")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(timings());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTimings(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
 }

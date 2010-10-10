@@ -1,3 +1,18 @@
+2010-10-10 Roman
+- !!:Transport.Sockets: Documents and translations is updated and released version 1.4.5.
+- !!:Transport.SSL: Documents and translations is updated and released version 0.9.5.
+- !!:Transport.Serial: Documents and translations is updated and released version 0.7.1.
+- !!:Protocol.HTTP: Documents and translations is updated and released version 1.5.0.
+- !!:Protocol.SelfSystem: Documents and translations is updated and released version 0.9.3.
+- !!:Protocol.UserProtocol: Documents and translations is updated and released version 0.6.0.
+- !!:Protocol.ModBus: Documents and translations is updated and released version 0.6.1.
+- !!:Protocol.OPC_UA: Documents and translations is updated and released version 0.6.0.
+- !!:Special.FLibComplex1: Documents and translations is updated and released version 1.0.6.
+- !!:Special.FLibMath: Documents and translations is updated and released version 0.5.2.
+- !!:Special.FLibSYS: Documents and translations is updated and released version 0.9.2.
+- !!:Special.SystemTests: Documents and translations is updated and released version 1.5.0.
+
+
 2010-10-08 Roman
 - !!:DAQ.DiamondBoards: Documents and translations is updated and released version 1.2.1.
 - !!:DAQ.System: Documents and translations is updated and released version 1.7.2.

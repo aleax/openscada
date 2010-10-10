@@ -287,97 +287,97 @@ AutoHD<LWidget> WidgetLib::at( const string &id )
 void WidgetLib::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id(),RWRWR_,"root","UI");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id(),RWRWR_,"root",SUI_ID);
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
-	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root","UI",2,"idm","1","idSz","30");
+	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Library")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,"root","UI",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root","UI",4,"tp","str","dest","sel_ed","select","/db/tblList",
+		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/db/tblList",
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
 	    {
-		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root","UI",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root","UI",2,"tp","str","len","50");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root","UI",3,"tp","str","cols","100","rows","3");
-		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root","UI",2,"v_sz","64","h_sz","64");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root",SUI_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root",SUI_ID,3,"tp","str","cols","100","rows","3");
+		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root",SUI_ID,2,"v_sz","64","h_sz","64");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
-	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
+	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root","UI",2,"s_com","add,del","key","id"))
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
 	    {
-		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root","UI",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root","UI",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root","UI",2,"tp","str","dest","data");
+		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
 	    }
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/obj/st/en" )
+    if(a_path == "/obj/st/en")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( TSYS::int2str(enable()) );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setEnable( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(enable()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/obj/st/db" )
+    else if(a_path == "/obj/st/db")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( fullDB() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setFullDB( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
     }
-    else if( a_path == "/obj/cfg/ico" || a_path == "/ico" )
+    else if(a_path == "/obj/cfg/ico" || a_path == "/ico")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( ico() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setIco( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setIco(opt->text());
     }
-    else if( a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root","UI") ) opt->setText(id());
-    else if( a_path == "/obj/cfg/name" )
+    else if(a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID)) opt->setText(id());
+    else if(a_path == "/obj/cfg/name")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( name() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setName( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(name());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(opt->text());
     }
-    else if( a_path == "/obj/cfg/descr" )
+    else if(a_path == "/obj/cfg/descr")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )	opt->setText( descr() );
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )	setDescr( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(descr());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(opt->text());
     }
-    else if( a_path == "/br/wdg_" || a_path == "/wdg/wdg" )
+    else if(a_path == "/br/wdg_" || a_path == "/wdg/wdg")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    list(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) ) del(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) del(opt->attr("id"),true);
     }
-    else if( a_path == "/mime/mime" )
+    else if(a_path == "/mime/mime")
     {
 	//>> Request data
 	string idmime = opt->attr("key_id");
 	string idcol  = opt->attr("col");
 
-	if( ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
-	    if( !idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()) )
+	    if(!idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str()))
 	    {
 		string mimeType, mimeData;
-		if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) ) opt->setText( mimeData );
+		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
 	    }
 	    else
 	    {
@@ -389,41 +389,41 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		string mimeType;
 		mimeDataList(lst);
 		for(int i_el = 0; i_el < lst.size(); i_el++)
-		    if( mimeDataGet("res:"+lst[i_el],mimeType) )
+		    if(mimeDataGet("res:"+lst[i_el],mimeType))
 		    {
-			if( n_id )	n_id->childAdd("el")->setText(lst[i_el]);
-			if( n_tp )	n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
-			if( n_dt )	n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
+			if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
+			if(n_tp)	n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
+			if(n_dt)	n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
 		    }
 	    }
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR) )	mimeDataSet("newMime","image/new;0","");
-	if( ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR) )	mimeDataDel(opt->attr("key_id"));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime","image/new;0","");
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataDel(opt->attr("key_id"));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    //>> Request data
-	    if( idcol == "id" )
+	    if(idcol == "id")
 	    {
 		string mimeType, mimeData;
 		//>>> Copy mime data to new record
-		if( mimeDataGet( "res:"+idmime, mimeType, &mimeData ) )
+		if(mimeDataGet("res:"+idmime, mimeType, &mimeData))
 		{
-		    mimeDataSet( opt->text(), mimeType, mimeData );
-		    mimeDataDel( idmime );
+		    mimeDataSet(opt->text(), mimeType, mimeData);
+		    mimeDataDel(idmime);
 		}
 	    }
-	    else if( idcol == "tp" )
+	    else if(idcol == "tp")
 	    {
 		string mimeType;
 		//>>> Copy mime data to new record
-		if( mimeDataGet( "res:"+idmime, mimeType ) )
-		    mimeDataSet( idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
+		if(mimeDataGet("res:"+idmime, mimeType))
+		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
-	    else if( idcol == "dt" )
+	    else if(idcol == "dt")
 	    {
 		string mimeType;
-		if( mimeDataGet( "res:"+idmime, mimeType ) )
-		    mimeDataSet( idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text() );
+		if(mimeDataGet("res:"+idmime, mimeType))
+		    mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text());
 	    }
 	}
     }
@@ -706,9 +706,9 @@ void LWidget::inheritAttr( const string &attr )
 
 void LWidget::cntrCmdProc( XMLNode *opt )
 {
-    if( cntrCmdServ(opt) ) return;
+    if(cntrCmdServ(opt)) return;
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt );
@@ -717,7 +717,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id());
 	return;
     }
-    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) )
+    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)))
 	TCntrNode::cntrCmdProc(opt);
 }
 
@@ -943,15 +943,15 @@ void CWidget::inheritAttr( const string &attr )
 
 void CWidget::cntrCmdProc( XMLNode *opt )
 {
-    if( cntrCmdServ(opt) ) return;
+    if(cntrCmdServ(opt)) return;
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id(),RWRWR_,"root","UI");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id(),RWRWR_,"root",SUI_ID);
 	return;
     }
-    if( !(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)) )
+    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))
 	TCntrNode::cntrCmdProc(opt);
 }

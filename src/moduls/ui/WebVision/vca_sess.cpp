@@ -5103,7 +5103,7 @@ void VCAText::getReq( SSess &ses )
             else if( alignHor == 4 ) offsetX = 0;
             int realY = hgt_wrap[k]-offsetY+y_new;
             char *rez = gdImageStringFTEx(im_txt,&brect[0],clr_txt,(char*)textFont.c_str(),txtFontSize,0.0,offsetX,realY,(char*)( str_wrap[k].c_str() ), &strex);
-            if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s\n"),textFont.c_str(),rez);
+            if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s."),textFont.c_str(),rez);
             else
             {
                 int wdt = bold?(int)TSYS::realRound(txtFontSize/6,2,true):(int)TSYS::realRound(txtFontSize/12,2,true);
@@ -5368,7 +5368,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
             char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000", &strex);
-	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
+	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
@@ -5765,7 +5765,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
             char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,"000000", &strex);
-	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s\n"),sclMarkFont.c_str(),rez);
+	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {

@@ -40,12 +40,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Serial"
-#define MOD_NAME	"Serial interfaces"
-#define MOD_TYPE	"Transport"
+#define MOD_NAME	_("Serial interfaces")
+#define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define VERSION		"0.7.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other."
+#define VERSION		"0.7.1"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -133,7 +133,7 @@ void TTr::modStop( )
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
     if( TSYS::eventWait( prcSt, false, nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Check archives thread is not stopped!"));
+	throw TError(nodePath().c_str(),_("Check transports thread is not stopped!"));
 }
 
 void TTr::load_( )
@@ -596,10 +596,10 @@ void *TTrIn::Task( void *tr_in )
 void TTrIn::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[mdm]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -607,76 +607,76 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
 	    "    fc - flow control: 'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF);\n"
 	    "    mdm - modem mode, listen for 'RING'."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"[symbol]:[frm]\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    frm - maximum frame length, in ms."));
-	if( atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root","Transport") )
+	if(atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root","Transport",3,"tp","dec","min","1","max","120");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root","Transport",3,"tp","real","min","0","max","3");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root","Transport",3,"tp","real","min","0.01","max","3");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/ringReq",_("Ring request"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/ringAnswer",_("Ring answer"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/ringAnswerResp",_("Ring answer response"),RWRWR_,"root","Transport",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,3,"tp","dec","min","1","max","120");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0","max","3");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0.01","max","3");
+	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/ringReq",_("Ring request"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/ringAnswer",_("Ring answer"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/ringAnswerResp",_("Ring answer response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	}
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/TMS" )
+    if(a_path == "/prm/cfg/TMS")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(timings());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTimings(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
-    else if( a_path == "/mod/tm" )
+    else if(a_path == "/mod/tm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::int2str(mdmTm()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmTm(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(mdmTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/mod/preInitDl" )
+    else if(a_path == "/mod/preInitDl")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::real2str(mdmPreInit()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmPreInit(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::real2str(mdmPreInit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPreInit(atof(opt->text().c_str()));
     }
-    else if( a_path == "/mod/postInitDl" )
+    else if(a_path == "/mod/postInitDl")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::real2str(mdmPostInit()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmPostInit(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::real2str(mdmPostInit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPostInit(atof(opt->text().c_str()));
     }
-    else if( a_path == "/mod/initStr1" )
+    else if(a_path == "/mod/initStr1")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmInitStr1());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmInitStr1(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr1());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr1(opt->text());
     }
-    else if( a_path == "/mod/initStr2" )
+    else if(a_path == "/mod/initStr2")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmInitStr2());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmInitStr2(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr2());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr2(opt->text());
     }
-    else if( a_path == "/mod/initResp" )
+    else if(a_path == "/mod/initResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmInitResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmInitResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitResp(opt->text());
     }
-    else if( a_path == "/mod/ringReq" )
+    else if(a_path == "/mod/ringReq")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmRingReq());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmRingReq(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmRingReq());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmRingReq(opt->text());
     }
-    else if( a_path == "/mod/ringAnswer" )
+    else if(a_path == "/mod/ringAnswer")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmRingAnswer());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmRingAnswer(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmRingAnswer());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmRingAnswer(opt->text());
     }
-    else if( a_path == "/mod/ringAnswerResp" )
+    else if(a_path == "/mod/ringAnswerResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmRingAnswerResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmRingAnswerResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmRingAnswerResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmRingAnswerResp(opt->text());
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -1028,10 +1028,10 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 void TTrOut::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -1039,106 +1039,106 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
 	    "    fc - flow control: 'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF);\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root","Transport",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[symbol]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms."));
-	if( TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root","Transport") )
+	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root","Transport",3,"tp","dec","min","1","max","120");
-	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root","Transport",3,"tp","dec","min","0","max","120");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root","Transport",3,"tp","real","min","0","max","3");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root","Transport",3,"tp","real","min","0.01","max","3");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/dialStr",_("Dial string"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/cnctResp",_("Connect response"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/busyResp",_("Busy response"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/noCarResp",_("No carrier response"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/noDialToneResp",_("No dial tone response"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/hangUp",_("Hangup string"),RWRWR_,"root","Transport",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/hangUpResp",_("Hangup response"),RWRWR_,"root","Transport",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,3,"tp","dec","min","1","max","120");
+	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,3,"tp","dec","min","0","max","120");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0","max","3");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0.01","max","3");
+	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/dialStr",_("Dial string"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/cnctResp",_("Connect response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/busyResp",_("Busy response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/noCarResp",_("No carrier response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/noDialToneResp",_("No dial tone response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/hangUp",_("Hangup string"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/hangUpResp",_("Hangup response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	}
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/TMS" )
+    if(a_path == "/prm/cfg/TMS")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(timings());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setTimings(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
-    else if( a_path == "/mod/tm" )
+    else if(a_path == "/mod/tm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::int2str(mdmTm()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmTm(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(mdmTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/mod/lifeTm" )
+    else if(a_path == "/mod/lifeTm")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::int2str(mdmLifeTime()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmLifeTime(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(mdmLifeTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmLifeTime(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/mod/preInitDl" )
+    else if(a_path == "/mod/preInitDl")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::real2str(mdmPreInit()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmPreInit(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::real2str(mdmPreInit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPreInit(atof(opt->text().c_str()));
     }
-    else if( a_path == "/mod/postInitDl" )
+    else if(a_path == "/mod/postInitDl")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(TSYS::real2str(mdmPostInit()));
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmPostInit(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(TSYS::real2str(mdmPostInit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPostInit(atof(opt->text().c_str()));
     }
-    else if( a_path == "/mod/initStr1" )
+    else if(a_path == "/mod/initStr1")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmInitStr1());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmInitStr1(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr1());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr1(opt->text());
     }
-    else if( a_path == "/mod/initStr2" )
+    else if(a_path == "/mod/initStr2")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmInitStr2());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmInitStr2(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr2());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr2(opt->text());
     }
-    else if( a_path == "/mod/initResp" )
+    else if(a_path == "/mod/initResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmInitResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmInitResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitResp(opt->text());
     }
-    else if( a_path == "/mod/dialStr" )
+    else if(a_path == "/mod/dialStr")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmDialStr());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmDialStr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmDialStr());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmDialStr(opt->text());
     }
-    else if( a_path == "/mod/cnctResp" )
+    else if(a_path == "/mod/cnctResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmCnctResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmCnctResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmCnctResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmCnctResp(opt->text());
     }
-    else if( a_path == "/mod/busyResp" )
+    else if(a_path == "/mod/busyResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmBusyResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmBusyResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmBusyResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmBusyResp(opt->text());
     }
-    else if( a_path == "/mod/noCarResp" )
+    else if(a_path == "/mod/noCarResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmNoCarResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmNoCarResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmNoCarResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmNoCarResp(opt->text());
     }
-    else if( a_path == "/mod/noDialToneResp" )
+    else if(a_path == "/mod/noDialToneResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmNoDialToneResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmNoDialToneResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmNoDialToneResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmNoDialToneResp(opt->text());
     }
-    else if( a_path == "/mod/hangUp" )
+    else if(a_path == "/mod/hangUp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmHangUp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmHangUp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmHangUp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmHangUp(opt->text());
     }
-    else if( a_path == "/mod/hangUpResp" )
+    else if(a_path == "/mod/hangUpResp")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Transport",SEC_RD) )	opt->setText(mdmHangUpResp());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","Transport",SEC_WR) )	setMdmHangUpResp(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmHangUpResp());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmHangUpResp(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
 }

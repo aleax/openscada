@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.BlockCalc module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
 #, fuzzy
@@ -10,14 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:26+0300\n"
-"PO-Revision-Date: 2009-08-17 11:46+0200\n"
-"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
-"Language-Team: de <>\n"
+"POT-Creation-Date: 2010-10-09 21:48+0300\n"
+"PO-Revision-Date: 2010-10-09 22:40+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"Language: \n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, c-format
@@ -80,9 +81,11 @@ msgid "Prior block"
 msgstr "Priorität Block"
 
 msgid ""
-"Priority block(s) calced before this block. Blocks list is separated by symbol ';'."
+"Priority block(s) calced before this block. Blocks list is separated by "
+"symbol ';'."
 msgstr ""
-"Priorität Block(e) vor diesem Block Calced. Blockiert Liste wird von Symbol getrennt ';'."
+"Priorität Block(e) vor diesem Block Calced. Blockiert Liste wird von Symbol "
+"getrennt ';'."
 
 msgid "Function"
 msgstr "Funktion"
@@ -117,25 +120,20 @@ msgstr "Parameter"
 msgid "Local out"
 msgstr "Lokal"
 
-#, fuzzy
 msgid "Global out"
-msgstr "Global"
+msgstr "Globaler Ausgang"
 
-#, fuzzy
 msgid "Parameter out"
-msgstr "Parameter"
+msgstr "Parameter-ein"
 
-#, fuzzy
 msgid "Local in"
-msgstr "Lokal"
+msgstr "Lokaler Eingang"
 
-#, fuzzy
 msgid "Global in"
-msgstr "Global"
+msgstr "Globaler Eingang"
 
-#, fuzzy
 msgid "Parameter in"
-msgstr "Parameter"
+msgstr "Parameter-aus"
 
 msgid "Block based calculator"
 msgstr "Blockrechner"
@@ -185,9 +183,9 @@ msgstr "Verbindung"
 msgid "Link's value"
 msgstr "Verbindungswert"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Calc time %g us. "
-msgstr "Rechenzeit (usek)"
+msgstr "Rechenzeit %g (usek)"
 
 #, c-format
 msgid "Enable block <%s> error."
@@ -224,7 +222,6 @@ msgstr "1:Parameter ist abgeschaltet."
 msgid "2:Controller is stoped."
 msgstr "2:Kontroller ist angehalten."
 
-#, fuzzy
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<blk>.<blk_io>:<aid>:<anm>]\n"
@@ -241,12 +238,18 @@ msgid ""
 "If 'aid' or 'anm' are not set they will be generated from selected block's "
 "parameter."
 msgstr ""
-"Liste der Konfiguration der Attribute. Die Liste wird zeilenweise im Format "
-"[<blk>.<blk_io>:<aid>:<anm>] angegeben\n"
+"Liste der Konfiguration der Attribute. Die Liste wird gemacht zeilenweise im "
+"Format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 "Wo:\n"
-"  blk - Bezeichner des Blocks, des Blocksschema;\n"
-"  blk_io - Parameter des Blocks, des Blocksschema;\n"
-"  aid - Bezeichner des erstellten Attributs;\n"
-"  anm - Name des erstellten Attributs.\n"
-"Falls 'aid' oder 'anm' nicht agegebene sind, werden diese Attribute aus  dem "
-"Parameter des Blocks erstellt."
+"  blk - Blockbezeichner, des Blockschemas; für die Konstane wird die "
+"Bedeutung  bestimmt:\n"
+"    '*s' - Zeilentyp;\n"
+"    '*i' - integer-bedeutend;\n"
+"    '*r' - sachlicher Typ;\n"
+"    '*b' - logischer Typ.\n"
+"  blk_io - Blocksparameter, des Blockschemas; für die Konstante die "
+"Bedeutungwird im Sinne eines Attributs bestimmt;\n"
+"  aid - Bezeichner des gebildeten Attributs;\n"
+"  anm - Name des gebildeten Attributs.\n"
+"Falls 'aid' oder 'anm' nicht eingesetzt sind werden sie aus dem gewählten "
+"Blocksparameter generiert."

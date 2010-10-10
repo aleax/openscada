@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,14 +32,14 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"WebVision"
-#define MOD_NAME	"Operation user interface (WEB)"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("Operation user interface (WEB)")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.8.0"
-#define AUTORS		"Roman Savochenko"
-#define DEVELOPERS	"Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-#define DESCRIPTION	"Web operation user interface for visual control area (VCA) projects playing."
+#define AUTORS		_("Roman Savochenko")
+#define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
+#define DESCRIPTION	_("Web operation user interface for visual control area (VCA) projects playing.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -264,7 +264,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
 	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n";
 
 #if 0
-    char mess[][100] = { "Date and time", "Level", "Category", "Message", "mcsec", "Ready" };
+    char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready") };
 #endif
 }
 
@@ -684,10 +684,10 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),RWRWR_,"root","UI",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root","UI",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root","UI",2,"tp","str","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,2,"tp","str","rows","5");
 	return;
     }
 
@@ -695,15 +695,15 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/lf_tm")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))	opt->setText(TSYS::int2str(sessTime()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))	setSessTime(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(sessTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessTime(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/sesLimit")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))	opt->setText(TSYS::int2str(sessLimit()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))	setSessLimit(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(sessLimit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root","UI")) opt->setText(optDescr());
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)) opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

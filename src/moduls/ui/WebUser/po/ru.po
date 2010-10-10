@@ -1,683 +1,137 @@
 # OpenSCADA.UI.WebUser translate to Russian.
 # Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
+#
 # Roman Savochenko <rom_as@fromru.com>, 2010.
 #
-#: web_user.cpp:54 web_user.cpp:137 web_user.cpp:145 web_user.cpp:200
-#: web_user.cpp:510 web_user.cpp:584 web_user.h:152
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-16 18:06+0200\n"
+"POT-Creation-Date: 2010-10-09 19:47+0300\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: web_user.cpp:36
-msgid "WebUser"
-msgstr ""
-
-#: web_user.cpp:37
 msgid "Web interface from user"
 msgstr "Web-интерфейс от пользователя"
 
-#: web_user.cpp:38
-msgid "UI"
-msgstr "Интерфейс пользователя"
-
-#: web_user.cpp:40
-msgid "WWW"
-msgstr ""
-
-#: web_user.cpp:41
-msgid "0.5.0"
-msgstr ""
-
-#: web_user.cpp:42
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: web_user.cpp:43
 msgid "Allow creation self-user web-interfaces on any OpenSCADA language."
 msgstr ""
 "Позволяет создавать собственные пользовательские web-интерфейсы на любом "
 "языке OpenSCADA."
 
-#: web_user.cpp:44
-msgid "GPL"
-msgstr ""
-
-#: web_user.cpp:49
-msgid "C"
-msgstr ""
-
-#: web_user.cpp:70 web_user.cpp:218 web_user.cpp:380
-msgid "*"
-msgstr ""
-
-#: web_user.cpp:84
-msgid ""
-"void HttpGet(const string&,string&,const string&,vector<string>&,const "
-"string&);"
-msgstr ""
-
-#: web_user.cpp:85
-msgid "Process Get comand from http protocol's!"
-msgstr ""
-
-#: web_user.cpp:86
-msgid ""
-"void HttpPost(const string&,string&,const string&,vector<string>&,const "
-"string&);"
-msgstr ""
-
-#: web_user.cpp:87
-msgid "Process Set comand from http protocol's!"
-msgstr ""
-
-#: web_user.cpp:89 web_user.cpp:363
-msgid "up_"
-msgstr ""
-
-#: web_user.cpp:92 web_user.cpp:139 web_user.cpp:147 web_user.cpp:401
 msgid "ID"
 msgstr ""
 
-#: web_user.cpp:92 web_user.cpp:359 web_user.cpp:363
-msgid "20"
-msgstr ""
-
-#: web_user.cpp:93 web_user.cpp:401
-msgid "NAME"
-msgstr ""
-
-#: web_user.cpp:93
 msgid "Name"
 msgstr "Имя"
 
-#: web_user.cpp:93
-msgid "50"
-msgstr ""
-
-#: web_user.cpp:94 web_user.cpp:401
-msgid "DESCR"
-msgstr ""
-
-#: web_user.cpp:94
 msgid "Description"
 msgstr "Описание"
 
-#: web_user.cpp:94
-msgid "300"
-msgstr ""
-
-#: web_user.cpp:95 web_user.cpp:401
-msgid "EN"
-msgstr ""
-
-#: web_user.cpp:95
 msgid "To enable"
 msgstr "Включать"
 
-#: web_user.cpp:95 web_user.cpp:359 web_user.cpp:362 web_user.cpp:363
-#: web_user.cpp:572
-msgid "1"
-msgstr ""
-
-#: web_user.cpp:95 web_user.cpp:107 web_user.cpp:572
-msgid "0"
-msgstr ""
-
-#: web_user.cpp:96 web_user.cpp:444 web_user.cpp:450 web_user.cpp:457
-#: web_user.cpp:463
-msgid "PROG"
-msgstr ""
-
-#: web_user.cpp:96 web_user.cpp:549 web_user.cpp:552
 msgid "Program"
 msgstr "Программа"
 
-#: web_user.cpp:96
-msgid "10000"
-msgstr ""
-
-#: web_user.cpp:106 web_user.cpp:114
-msgid "SubType"
-msgstr "Подтип"
-
-#: web_user.cpp:107 web_user.cpp:115
-msgid "Auth"
-msgstr ""
-
-#: web_user.cpp:137 web_user.cpp:588 web_user.cpp:591
-msgid "."
-msgstr ""
-
-#: web_user.cpp:137 web_user.cpp:145 web_user.cpp:440
-msgid "_uPg"
-msgstr ""
-
-#: web_user.cpp:140 web_user.cpp:148 web_user.h:137
-msgid "*.*"
-msgstr ""
-
-#: web_user.cpp:144
-msgid "<cfg>"
-msgstr ""
-
-#: web_user.cpp:152 web_user.cpp:433
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: web_user.cpp:153
 msgid "Search and create new user page error."
 msgstr "Ошибка поиска и создание новой страницы пользователя."
 
-#: web_user.cpp:156 web_user.cpp:161
-msgid "DefPg"
-msgstr ""
-
-#: web_user.cpp:187
-msgid "HTTP/1.0 "
-msgstr ""
-
-#: web_user.cpp:187
-msgid ""
-"\r\n"
-"Server: "
-msgstr ""
-
-#: web_user.cpp:188
-msgid ""
-"\r\n"
-"Accept-Ranges: bytes\r\n"
-"Content-Length: "
-msgstr ""
-
-#: web_user.cpp:190
-msgid ""
-"\r\n"
-"Content-Type: "
-msgstr ""
-
-#: web_user.cpp:191
-msgid ""
-"\r\n"
-"Charset="
-msgstr ""
-
-#: web_user.cpp:192 web_user.cpp:655
-msgid "\r\n"
-msgstr ""
-
-#: web_user.cpp:220
-msgid ""
-"<?xml version='1.0' ?>\n"
-"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-"'DTD/xhtml1-transitional.dtd'>\n"
-"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-"<head>\n"
-"<meta http-equiv='Content-Type' content='text/html; charset="
-msgstr ""
-
-#: web_user.cpp:224
-msgid ""
-"'/>\n"
-"<title>"
-msgstr ""
-
-#: web_user.cpp:225
-msgid ""
-"!</title>\n"
-"<style type='text/css'>\n"
-"  hr { width: 95%; }\n"
-"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
-"  body { background-color: #818181; margin: 0px; }\n"
-"  h1.head { text-align: center; color: #ffff00; }\n"
-"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: "
-"0px; border-width: 0px; }\n"
-"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; "
-"padding: 2px;  }\n"
-"  table.work td { background-color:#cccccc; text-align: left; }\n"
-"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-"  table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
-"</style>\n"
-"</head>\n"
-"<body>\n"
-"<h1 class='head'>"
-msgstr ""
-
-#: web_user.cpp:239
-msgid ""
-"</h1>\n"
-"<hr/><br/>\n"
-"<center><table class='work' width='50%'>\n"
-"<tr><td class='content'><p>"
-msgstr ""
-
-#: web_user.cpp:243
 msgid "Welcome to Web-users pages of OpenSCADA system."
 msgstr "Добро пожаловать на Web-страницы пользователей системы OpenSCADA."
 
-#: web_user.cpp:243
-msgid "</p><tr><th>"
-msgstr ""
-
-#: web_user.cpp:244
 msgid "Present web-users pages"
 msgstr "Присутствующие Web-страницы пользователей"
 
-#: web_user.cpp:244
-msgid ""
-"</th></tr>\n"
-"<tr><td class='content'><ul>\n"
-msgstr ""
-
-#: web_user.cpp:247
-msgid "<li><a href='"
-msgstr ""
-
-#: web_user.cpp:247
-msgid "/'>"
-msgstr ""
-
-#: web_user.cpp:247
-msgid "</a></li>\n"
-msgstr ""
-
-#: web_user.cpp:248
-msgid ""
-"</ul></td></tr></table></center>\n"
-"<hr/>\n"
-"</body>\n"
-"</html>\n"
-msgstr ""
-
-#: web_user.cpp:250 web_user.cpp:498
-msgid "200 OK"
-msgstr ""
-
-#: web_user.cpp:253 web_user.cpp:315
 msgid "Page error"
 msgstr "Ошибка страницы"
 
-#: web_user.cpp:258 web_user.cpp:499
-msgid "GET"
-msgstr ""
-
-#: web_user.cpp:284 web_user.cpp:345
-msgid "Page '"
-msgstr ""
-
-#: web_user.cpp:284 web_user.cpp:345
-msgid "' error: "
-msgstr ""
-
-#: web_user.cpp:285 web_user.cpp:346
-msgid "404 Not Found"
-msgstr ""
-
-#: web_user.cpp:319
-msgid "POST"
-msgstr ""
-
-#: web_user.cpp:350 web_user.h:152
-msgid "text/html"
-msgstr ""
-
-#: web_user.cpp:356 web_user.cpp:531
-msgid "info"
-msgstr ""
-
-#: web_user.cpp:359
-msgid "grp"
-msgstr ""
-
-#: web_user.cpp:359 web_user.cpp:375
-msgid "/br/up_"
-msgstr ""
-
-#: web_user.cpp:359 web_user.cpp:535
 msgid "User page"
 msgstr "Страница пользователя"
 
-#: web_user.cpp:359 web_user.cpp:362 web_user.cpp:363 web_user.cpp:372
-#: web_user.cpp:373 web_user.cpp:377 web_user.cpp:386 web_user.cpp:391
-#: web_user.cpp:539 web_user.cpp:540 web_user.cpp:541 web_user.cpp:546
-#: web_user.cpp:551 web_user.cpp:552 web_user.cpp:572 web_user.cpp:573
-#: web_user.cpp:577 web_user.cpp:578 web_user.cpp:609 web_user.cpp:612
-#: web_user.cpp:613 web_user.cpp:617 web_user.cpp:618
-msgid "root"
-msgstr ""
-
-#: web_user.cpp:359 web_user.cpp:362 web_user.cpp:363
-msgid "idm"
-msgstr ""
-
-#: web_user.cpp:359 web_user.cpp:363
-msgid "idSz"
-msgstr ""
-
-#: web_user.cpp:360 web_user.cpp:535 web_user.cpp:537 web_user.cpp:544
-#: web_user.cpp:549
-msgid "area"
-msgstr ""
-
-#: web_user.cpp:360
-msgid "/prm/up"
-msgstr ""
-
-#: web_user.cpp:360
 msgid "User pages"
 msgstr "Страницы пользователя"
 
-#: web_user.cpp:362 web_user.cpp:539 web_user.cpp:540 web_user.cpp:541
-#: web_user.cpp:551 web_user.cpp:552
-msgid "fld"
-msgstr ""
-
-#: web_user.cpp:362 web_user.cpp:370
-msgid "/prm/up/dfPg"
-msgstr ""
-
-#: web_user.cpp:362
 msgid "Default page"
 msgstr "Страница по умолчанию"
 
-#: web_user.cpp:362 web_user.cpp:363 web_user.cpp:539 web_user.cpp:540
-#: web_user.cpp:541 web_user.cpp:551 web_user.cpp:552
-msgid "tp"
-msgstr ""
-
-#: web_user.cpp:362 web_user.cpp:539 web_user.cpp:541 web_user.cpp:551
-#: web_user.cpp:552
-msgid "str"
-msgstr ""
-
-#: web_user.cpp:362 web_user.cpp:541 web_user.cpp:551
-msgid "dest"
-msgstr ""
-
-#: web_user.cpp:362 web_user.cpp:541 web_user.cpp:551
-msgid "select"
-msgstr ""
-
-#: web_user.cpp:362 web_user.cpp:375 web_user.cpp:379
-msgid "/prm/up/cup"
-msgstr ""
-
-#: web_user.cpp:363
-msgid "list"
-msgstr ""
-
-#: web_user.cpp:363 web_user.cpp:375
-msgid "/prm/up/up"
-msgstr ""
-
-#: web_user.cpp:363
 msgid "Pages"
 msgstr "Страницы"
 
-#: web_user.cpp:363
-msgid "br"
-msgstr ""
-
-#: web_user.cpp:363
-msgid "s_com"
-msgstr ""
-
-#: web_user.cpp:363
-msgid "add,del"
-msgstr ""
-
-#: web_user.cpp:363
-msgid "br_pref"
-msgstr ""
-
-#: web_user.cpp:369 web_user.cpp:568
-msgid "path"
-msgstr ""
-
-#: web_user.cpp:372 web_user.cpp:377 web_user.cpp:572 web_user.cpp:577
-#: web_user.cpp:612 web_user.cpp:617
-msgid "get"
-msgstr ""
-
-#: web_user.cpp:373 web_user.cpp:573 web_user.cpp:578 web_user.cpp:613
-#: web_user.cpp:618
-msgid "set"
-msgstr ""
-
-#: web_user.cpp:380 web_user.cpp:384 web_user.cpp:585 web_user.cpp:589
-#: web_user.cpp:607
-msgid "el"
-msgstr ""
-
-#: web_user.cpp:380 web_user.cpp:384 web_user.cpp:388 web_user.cpp:391
-msgid "id"
-msgstr ""
-
-#: web_user.cpp:380
 msgid "<Page index display>"
 msgstr "<Отображать индекс страниц>"
 
-#: web_user.cpp:386
-msgid "add"
-msgstr ""
-
-#: web_user.cpp:391
-msgid "del"
-msgstr ""
-
-#: web_user.cpp:445 web_user.cpp:451 web_user.cpp:457 web_user.cpp:463
-msgid "\n"
-msgstr ""
-
-#: web_user.cpp:497
-msgid "upg_"
-msgstr ""
-
-#: web_user.cpp:498
-msgid "rez"
-msgstr ""
-
-#: web_user.cpp:498
 msgid "Result"
 msgstr "Результат"
 
-#: web_user.cpp:499
-msgid "HTTPreq"
-msgstr ""
-
-#: web_user.cpp:499
 msgid "HTTP request"
 msgstr "HTTP запрос"
 
-#: web_user.cpp:500
-msgid "url"
-msgstr ""
-
-#: web_user.cpp:500
 msgid "URL"
 msgstr ""
 
-#: web_user.cpp:501
-msgid "page"
-msgstr ""
-
-#: web_user.cpp:501
 msgid "Page"
 msgstr "Страница"
 
-#: web_user.cpp:502
-msgid "sender"
-msgstr ""
-
-#: web_user.cpp:502
 msgid "Sender"
 msgstr "Отправитель"
 
-#: web_user.cpp:503
-msgid "user"
-msgstr ""
-
-#: web_user.cpp:503
 msgid "User"
 msgstr "Пользователь"
 
-#: web_user.cpp:504
-msgid "HTTPvars"
-msgstr ""
-
-#: web_user.cpp:504
 msgid "HTTP variables"
 msgstr "HTTP переменные"
 
-#: web_user.cpp:505
-msgid "URLprms"
-msgstr ""
-
-#: web_user.cpp:505
 msgid "URL's parameters"
 msgstr "Параметры URL"
 
-#: web_user.cpp:506
-msgid "cnts"
-msgstr ""
-
-#: web_user.cpp:506
 msgid "Content items"
 msgstr "Элементы содержания"
 
-#: web_user.cpp:518
 msgid "Disabled. "
 msgstr "Отключен. "
 
-#: web_user.cpp:521
 msgid "Enabled. "
 msgstr "Включен. "
 
-#: web_user.cpp:522
 #, c-format
 msgid "Requests %.4g."
 msgstr "Запросов %.4g."
 
-#: web_user.cpp:534
-msgid "oscada_cntr"
-msgstr ""
-
-#: web_user.cpp:534
-msgid "/"
-msgstr ""
-
-#: web_user.cpp:534
 msgid "User page: "
 msgstr "Страница пользователя: "
 
-#: web_user.cpp:535
-msgid "/up"
-msgstr ""
-
-#: web_user.cpp:537
-msgid "/up/st"
-msgstr ""
-
-#: web_user.cpp:537
 msgid "State"
 msgstr "Состояние"
 
-#: web_user.cpp:539 web_user.cpp:569
-msgid "/up/st/status"
-msgstr ""
-
-#: web_user.cpp:539
 msgid "Status"
 msgstr "Состояние"
 
-#: web_user.cpp:540 web_user.cpp:570
-msgid "/up/st/en_st"
-msgstr ""
-
-#: web_user.cpp:540
 msgid "Enable"
 msgstr "Включен"
 
-#: web_user.cpp:540
-msgid "bool"
-msgstr ""
-
-#: web_user.cpp:541 web_user.cpp:575
-msgid "/up/st/db"
-msgstr ""
-
-#: web_user.cpp:541
 msgid "DB"
 msgstr "БД"
 
-#: web_user.cpp:541
-msgid "/db/list"
-msgstr ""
-
-#: web_user.cpp:542 web_user.cpp:553
-msgid "help"
-msgstr ""
-
-#: web_user.cpp:542
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
 msgstr ""
 
-#: web_user.cpp:544 web_user.cpp:546 web_user.cpp:609
-msgid "/up/cfg"
-msgstr ""
-
-#: web_user.cpp:544
 msgid "Config"
 msgstr "Конфигурация"
 
-#: web_user.cpp:547
-msgid "/up/cfg/PROG"
-msgstr ""
-
-#: web_user.cpp:549
-msgid "/prgm"
-msgstr ""
-
-#: web_user.cpp:551 web_user.cpp:610
-msgid "/prgm/PROGLang"
-msgstr ""
-
-#: web_user.cpp:551
 msgid "Program language"
 msgstr "Язык программы"
 
-#: web_user.cpp:551
-msgid "sel_ed"
-msgstr ""
-
-#: web_user.cpp:551 web_user.cpp:580
-msgid "/up/cfg/plangLs"
-msgstr ""
-
-#: web_user.cpp:552 web_user.cpp:615
-msgid "/prgm/PROG"
-msgstr ""
-
-#: web_user.cpp:552
-msgid "rows"
-msgstr ""
-
-#: web_user.cpp:552
-msgid "10"
-msgstr ""
-
-#: web_user.cpp:553
 msgid ""
 "Next attributes has defined for requests processing:\n"
 "   'rez' - processing result (by default - 200 OK);\n"
@@ -700,35 +154,3 @@ msgstr ""
 "   'HTTPvars' - HTTP переменные в Object;\n"
 "   'URLprms' - параметры URL в Object;\n"
 "   'cnts' - элементы содержимого для POST в Array<XMLNodeObj>."
-
-#: web_user.cpp:630
-msgid "?"
-msgstr ""
-
-#: web_user.cpp:638
-msgid "="
-msgstr ""
-
-#: web_user.cpp:639
-msgid "true"
-msgstr ""
-
-#: web_user.cpp:647 web_user.cpp:676
-msgid ":"
-msgstr ""
-
-#: web_user.cpp:654
-msgid "boundary="
-msgstr ""
-
-#: web_user.cpp:656 web_user.cpp:665
-msgid "--"
-msgstr ""
-
-#: web_user.cpp:657
-msgid "Content-Type"
-msgstr ""
-
-#: web_user.cpp:668
-msgid "Content"
-msgstr "Содержимое"

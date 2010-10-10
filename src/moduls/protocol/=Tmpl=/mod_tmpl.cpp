@@ -38,12 +38,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	"Protocol template"
-#define MOD_TYPE	"Protocol"
+#define MOD_NAME	_("Protocol template")
+#define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define M_VERSION	"0.0.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Protocol's subsystem template module."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Protocol's subsystem template module.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -152,16 +152,16 @@ TProtocolIn *TProt::in_open( const string &name )
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SPRT_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
+    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SPRT_ID))	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
 }
 

@@ -1,423 +1,167 @@
 # OpenSCADA.Special.FLibMath translate to Ukrainian.
-# Copyright (C) 2005-2009 Roman Savochenko
+# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.FLibMath package module.
-# Roman Savochenko <rom_as@fromru.com>, 2005-2009.
 #
-#: statfunc.cpp:45
+# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
+#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.1\n"
+"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 19:54+0300\n"
+"POT-Creation-Date: 2010-10-09 10:00+0300\n"
 "PO-Revision-Date: 2007-10-24 18:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: statfunc.cpp:30
-msgid "FLibMath"
-msgstr ""
-
-#: statfunc.cpp:31
 msgid "Math function's lib"
 msgstr "Бібліотека математичних функцій"
 
-#: statfunc.cpp:32
-msgid "Special"
-msgstr "Спеціальні"
-
-#: statfunc.cpp:34
-msgid "LIB"
-msgstr ""
-
-#: statfunc.cpp:35
-msgid "0.5.1"
-msgstr ""
-
-#: statfunc.cpp:40
-msgid "C"
-msgstr ""
-
-#: statfunc.cpp:68
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: statfunc.cpp:69
 msgid "Allow mathematic static function library."
 msgstr "Надає статичну бібліотеку математичних функцій."
 
-#: statfunc.cpp:70
-msgid "GPL"
-msgstr ""
-
-#: statfunc.cpp:75 statfunc.cpp:136
-msgid "fnc_"
-msgstr ""
-
-#: statfunc.cpp:132
-msgid "info"
-msgstr ""
-
-#: statfunc.cpp:135
-msgid "grp"
-msgstr ""
-
-#: statfunc.cpp:135 statfunc.cpp:142
-msgid "/br/fnc_"
-msgstr ""
-
-#: statfunc.cpp:135
 msgid "Function"
 msgstr "Функція"
 
-#: statfunc.cpp:135 statfunc.cpp:136
-msgid "root"
-msgstr ""
-
-#: statfunc.cpp:135 statfunc.cpp:136
-msgid "idm"
-msgstr ""
-
-#: statfunc.cpp:135 statfunc.cpp:136 stdmath.h:449
-msgid "1"
-msgstr ""
-
-#: statfunc.cpp:136
-msgid "list"
-msgstr ""
-
-#: statfunc.cpp:136 statfunc.cpp:142
-msgid "/prm/func"
-msgstr ""
-
-#: statfunc.cpp:136
 msgid "Functions"
 msgstr "Функції"
 
-#: statfunc.cpp:136
-msgid "tp"
-msgstr ""
-
-#: statfunc.cpp:136
-msgid "br"
-msgstr ""
-
-#: statfunc.cpp:136
-msgid "br_pref"
-msgstr ""
-
-#: statfunc.cpp:141
-msgid "path"
-msgstr ""
-
-#: statfunc.cpp:147
-msgid "el"
-msgstr ""
-
-#: statfunc.cpp:147
-msgid "id"
-msgstr ""
-
-#: stdmath.h:50
-msgid "acos"
-msgstr ""
-
-#: stdmath.h:52 stdmath.h:74 stdmath.h:96 stdmath.h:118 stdmath.h:140
-#: stdmath.h:162 stdmath.h:184 stdmath.h:206 stdmath.h:228 stdmath.h:251
-#: stdmath.h:273 stdmath.h:295 stdmath.h:317 stdmath.h:339 stdmath.h:361
-#: stdmath.h:383 stdmath.h:405 stdmath.h:427 stdmath.h:448
-msgid "y"
-msgstr ""
-
-#: stdmath.h:52 stdmath.h:74 stdmath.h:96
 msgid "Y(rad.)"
 msgstr "Y(рад.)"
 
-#: stdmath.h:52 stdmath.h:53 stdmath.h:74 stdmath.h:75 stdmath.h:96
-#: stdmath.h:97 stdmath.h:118 stdmath.h:119 stdmath.h:140 stdmath.h:141
-#: stdmath.h:162 stdmath.h:163 stdmath.h:184 stdmath.h:185 stdmath.h:206
-#: stdmath.h:207 stdmath.h:228 stdmath.h:229 stdmath.h:230 stdmath.h:251
-#: stdmath.h:252 stdmath.h:273 stdmath.h:274 stdmath.h:295 stdmath.h:296
-#: stdmath.h:317 stdmath.h:318 stdmath.h:339 stdmath.h:340 stdmath.h:361
-#: stdmath.h:362 stdmath.h:383 stdmath.h:384 stdmath.h:405 stdmath.h:406
-#: stdmath.h:427 stdmath.h:448 stdmath.h:450 stdmath.h:451
-msgid "0"
-msgstr ""
-
-#: stdmath.h:53 stdmath.h:75 stdmath.h:97 stdmath.h:119 stdmath.h:141
-#: stdmath.h:163 stdmath.h:185 stdmath.h:207 stdmath.h:229 stdmath.h:252
-#: stdmath.h:274 stdmath.h:296 stdmath.h:318 stdmath.h:340 stdmath.h:362
-#: stdmath.h:384 stdmath.h:406
-msgid "x"
-msgstr ""
-
-#: stdmath.h:53 stdmath.h:75 stdmath.h:97 stdmath.h:141 stdmath.h:163
-#: stdmath.h:185 stdmath.h:207 stdmath.h:229 stdmath.h:274 stdmath.h:296
-#: stdmath.h:340 stdmath.h:362 stdmath.h:384 stdmath.h:406
 msgid "X"
 msgstr ""
 
-#: stdmath.h:56
 msgid "ArcCos"
 msgstr "Арккосинус"
 
-#: stdmath.h:57
 msgid "Arc cosine math function."
 msgstr "Мат. функція арккосинус."
 
-#: stdmath.h:72
-msgid "asin"
-msgstr ""
-
-#: stdmath.h:78
 msgid "ArcSin"
 msgstr "Арксинус"
 
-#: stdmath.h:79
 msgid "Arc sine math function."
 msgstr "Мат. функція арксинус."
 
-#: stdmath.h:94
-msgid "atan"
-msgstr ""
-
-#: stdmath.h:100
 msgid "ArcTan"
 msgstr "Арктангенс"
 
-#: stdmath.h:101
 msgid "Arc tangent math function."
 msgstr "Мат. функція арктангенс."
 
-#: stdmath.h:116
-msgid "cos"
-msgstr ""
-
-#: stdmath.h:118 stdmath.h:140 stdmath.h:162 stdmath.h:184 stdmath.h:206
-#: stdmath.h:228 stdmath.h:251 stdmath.h:273 stdmath.h:295 stdmath.h:317
-#: stdmath.h:339 stdmath.h:361 stdmath.h:383 stdmath.h:405 stdmath.h:427
-#: stdmath.h:448
 msgid "Y"
 msgstr ""
 
-#: stdmath.h:119 stdmath.h:252 stdmath.h:318
 msgid "X(rad.)"
 msgstr "X(рад.)"
 
-#: stdmath.h:122
 msgid "Cosine"
 msgstr "Косинус"
 
-#: stdmath.h:123
 msgid "Cosine math function."
 msgstr "Мат. функція косинус"
 
-#: stdmath.h:138
-msgid "cosh"
-msgstr ""
-
-#: stdmath.h:144
 msgid "Cosine hyperbolical"
 msgstr "Косинус гіпербалічний"
 
-#: stdmath.h:145
 msgid "Cosine hyperbolical math function."
 msgstr "Мат. функція косинус гіпербалічний."
 
-#: stdmath.h:160
-msgid "exp"
-msgstr ""
-
-#: stdmath.h:166
 msgid "Exponent"
 msgstr "Експонента"
 
-#: stdmath.h:167
 msgid "Exponent math function."
 msgstr "Мат. функція експонента."
 
-#: stdmath.h:182
-msgid "ln"
-msgstr ""
-
-#: stdmath.h:188
 msgid "Natural logarithm"
 msgstr "Натуральний логарифм"
 
-#: stdmath.h:189
 msgid "Natural logarithm math function."
 msgstr "Мат. функція натуральний логарифм."
 
-#: stdmath.h:204
-msgid "lg"
-msgstr ""
-
-#: stdmath.h:210
 msgid "Decimal logarithm"
 msgstr "Десятичний логарифм"
 
-#: stdmath.h:211
 msgid "Decimal logarithm math function."
 msgstr "Мат. функція десятичній логарифм."
 
-#: stdmath.h:226
-msgid "pow"
-msgstr ""
-
-#: stdmath.h:230
-msgid "p"
-msgstr ""
-
-#: stdmath.h:230 stdmath.h:233
 msgid "Power"
 msgstr "Степінь"
 
-#: stdmath.h:234
 msgid "Power math function."
 msgstr "Мат. функція возведення у степінь"
 
-#: stdmath.h:249
-msgid "sin"
-msgstr ""
-
-#: stdmath.h:255
 msgid "Sine"
 msgstr "Синус"
 
-#: stdmath.h:256
 msgid "Sine math function."
 msgstr "Мат. функція синус."
 
-#: stdmath.h:271
-msgid "sinh"
-msgstr ""
-
-#: stdmath.h:277
 msgid "Sine hyperbolical"
 msgstr "Синус гіпербалічний"
 
-#: stdmath.h:278
 msgid "Sine hyperbolical math function."
 msgstr "Мат. функція синус гіпербалічний."
 
-#: stdmath.h:293
-msgid "sqrt"
-msgstr ""
-
-#: stdmath.h:299
 msgid "Square root"
 msgstr "Корінь квадратний"
 
-#: stdmath.h:300
 msgid "Square root math function."
 msgstr "Мат. функція корінь квадратний."
 
-#: stdmath.h:315
-msgid "tan"
-msgstr ""
-
-#: stdmath.h:321
 msgid "Tangent"
 msgstr "Тангенс"
 
-#: stdmath.h:322
 msgid "Tangent math function."
 msgstr "Мат. функція тангенс."
 
-#: stdmath.h:337
-msgid "tanh"
-msgstr ""
-
-#: stdmath.h:343
 msgid "Tangent hyperbolical"
 msgstr "Тангенс гіпербалічний"
 
-#: stdmath.h:344
 msgid "Tangent hyperbolical math function."
 msgstr "Мат. функція тангенс гіпербалічний."
 
-#: stdmath.h:359
-msgid "ceil"
-msgstr ""
-
-#: stdmath.h:365
 msgid "Ceil"
 msgstr "Округл. до більшого"
 
-#: stdmath.h:366
 msgid "Ceil math function."
 msgstr "Мат. функція округлення до більшого цілого."
 
-#: stdmath.h:381
-msgid "abs"
-msgstr ""
-
-#: stdmath.h:387
 msgid "Absolute"
 msgstr "Модуль"
 
-#: stdmath.h:388
 msgid "Absolute math function."
 msgstr "Мат. функція модуль значення."
 
-#: stdmath.h:403
-msgid "floor"
-msgstr ""
-
-#: stdmath.h:409
 msgid "Floor"
 msgstr "Округл. до меншого"
 
-#: stdmath.h:410
 msgid "Floor math function."
 msgstr "Мат. функція округлення до меншого цілого."
 
-#: stdmath.h:425
-msgid "rand"
-msgstr ""
-
-#: stdmath.h:430
 msgid "Rand"
 msgstr "Випадк. число"
 
-#: stdmath.h:431
 msgid "Rand math function."
 msgstr "Мат. функція генерації випадкових чисел."
 
-#: stdmath.h:446
-msgid "if"
-msgstr ""
-
-#: stdmath.h:449
-msgid "cond"
-msgstr ""
-
-#: stdmath.h:449
 msgid "Condition"
 msgstr "Умова"
 
-#: stdmath.h:450
-msgid "true"
-msgstr ""
-
-#: stdmath.h:450
 msgid "True value"
 msgstr "Дійсне значення"
 
-#: stdmath.h:451
-msgid "false"
-msgstr ""
-
-#: stdmath.h:451
 msgid "False value"
 msgstr "Помилкове значення"
 
-#: stdmath.h:454
 msgid "IF condition"
 msgstr "Умова Якщо"
 
-#: stdmath.h:455
 msgid "Function's type 'if'-condition."
 msgstr "Функція типу 'якщо'-умова."

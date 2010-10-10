@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,12 +32,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"HTTP"
-#define MOD_NAME	"HTTP-realisation"
-#define MOD_TYPE	"Protocol"
+#define MOD_NAME	_("HTTP-realisation")
+#define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define M_VERSION	"1.4.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow support HTTP for WWW based UIs."
+#define M_VERSION	"1.5.0"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow support HTTP for WWW based UIs.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -309,35 +309,35 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm",_("Protocol")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root","Protocol",1,"tp","dec");
-	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root","Protocol",2,"s_com","add,del,ins",
+	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		"help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 	    {
-		ctrMkNode("list",opt,-1,"/prm/alog/addrs",_("Address"),RWRWR_,"root","Protocol",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/alog/user",_("User"),RWRWR_,"root","Protocol",3,"tp","str","dest","select","select","/prm/usr_ls");
+		ctrMkNode("list",opt,-1,"/prm/alog/addrs",_("Address"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/alog/user",_("User"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","select","/prm/usr_ls");
 	    }
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Module help"),R_R_R_,"root","Protocol",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Module help"),R_R_R_,"root",SPRT_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/lf_tm" )
+    if(a_path == "/prm/lf_tm")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD))	opt->setText( TSYS::int2str(authTime()) );
-	if(ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR))	setAuthTime( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(authTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/alog" )
+    else if(a_path == "/prm/alog")
     {
 	int idrow = atoi(opt->attr("row").c_str());
 	string idcol = opt->attr("col");
-	if( ctrChkNode(opt,"get",RWRWR_,"root","Protocol",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	{
 	    XMLNode *n_addrs	= ctrMkNode("list",opt,-1,"/prm/alog/addrs","");
 	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/alog/user","");
@@ -352,15 +352,15 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	}
 	ResAlloc res(nodeRes(),true);
 	modif();
-	if(ctrChkNode(opt,"add",RWRWR_,"root","Protocol",SEC_WR))	mALog.push_back(SAutoLogin());
-	else if(ctrChkNode(opt,"ins",RWRWR_,"root","Protocol",SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	mALog.push_back(SAutoLogin());
+	else if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
 	    mALog.insert(mALog.begin()+idrow, SAutoLogin());
-	else if(ctrChkNode(opt,"del",RWRWR_,"root","Protocol",SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	else if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
 	    mALog.erase(mALog.begin()+idrow);
-	else if(ctrChkNode(opt,"set",RWRWR_,"root","Protocol",SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	else if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
 	{
-	    if( idcol == "addrs" ) mALog[idrow].addrs = opt->text();
-	    if( idcol == "user" ) mALog[idrow].user = opt->text();
+	    if(idcol == "addrs")mALog[idrow].addrs = opt->text();
+	    if(idcol == "user")	mALog[idrow].user = opt->text();
 	}
     }
     else if(a_path == "/prm/usr_ls" && ctrChkNode(opt))
@@ -370,7 +370,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",RWRWR_,"root","Protocol"))
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID))
 	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
 }
@@ -520,7 +520,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	try
 	{
 	    AutoHD<TModule> wwwmod = SYS->ui().at().modAt(name_mod);
-	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),"Find no one WWW subtype module!");
+	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("Find no one WWW subtype module!"));
 	    if(atoi(wwwmod.at().modInfo("Auth").c_str()) && user.empty())
 	    {
 		//>> Check for auto-login

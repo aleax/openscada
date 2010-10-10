@@ -2,7 +2,7 @@
 //!!! Module name, file name and module's license. Change for your need.
 //OpenSCADA system module Transport.Tmpl file: mod_tmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2010 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,12 +39,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	"Transport template"
-#define MOD_TYPE	"Transport"
+#define MOD_NAME	_("Transport template")
+#define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
 #define VERSION		"0.0.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Transport's subsystem template module."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Transport's subsystem template module.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -152,16 +152,16 @@ TTransportOut *TTr::Out( const string &name, const string &idb )
 void TTr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTipTransport::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",STR_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )   opt->setText(optDescr());
+    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",STR_ID))	opt->setText(optDescr());
     else TTipTransport::cntrCmdProc(opt);
 }
 
@@ -243,10 +243,10 @@ void *TTrIn::Task( void *tr_in )
 void TTrIn::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's input transport has address format:\n"
 	    "  TCP:[addr]:[port]:[mode] - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
@@ -258,27 +258,27 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:[name]:[mode] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/q_ln",_("Queue length"),0660,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),0660,"root","root",2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),0660,"root","root",1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/q_ln",_("Queue length"),RWRW__,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRW__,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRW__,"root",STR_ID,1,"tp","dec");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/q_ln" )
+    if(a_path == "/prm/cfg/q_ln")
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(maxQueue()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setMaxQueue( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxQueue()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setMaxQueue(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/cl_n" )
+    else if(a_path == "/prm/cfg/cl_n")
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(maxFork()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setMaxFork( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxFork()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setMaxFork(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/bf_ln" )
+    else if(a_path == "/prm/cfg/bf_ln")
     {
-	if( ctrChkNode(opt,"get",0660,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(bufLen()) );
-	if( ctrChkNode(opt,"set",0660,"root","root",SEC_WR) )	setBufLen( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(bufLen()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setBufLen(atoi(opt->text().c_str()));
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -349,10 +349,10 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 void TTrOut::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),0664,"root","root",2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's output transport has address format:\n"
 	    "  TCP:[addr]:[port] - TCP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"

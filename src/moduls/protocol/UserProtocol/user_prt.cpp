@@ -32,12 +32,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"UserProtocol"
-#define MOD_NAME	"User protocol"
-#define MOD_TYPE	"Protocol"
+#define MOD_NAME	_("User protocol")
+#define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define M_VERSION	"0.5.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow creation self-user protocols on any OpenSCADA language."
+#define M_VERSION	"0.6.0"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow creation self-user protocols on any OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -194,29 +194,29 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),0664,"root","root",2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),RWRWR_,"root",SPRT_ID,2,"idm","1","idSz","20");
 	if( ctrMkNode("area",opt,0,"/up",_("User protocols")) )
-	    ctrMkNode("list",opt,-1,"/up/up",_("Protocols"),0664,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","up_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/up/up",_("Protocols"),RWRWR_,"root",SPRT_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","up_","idSz","20");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/br/up_" || a_path == "/up/up" )
+    if(a_path == "/br/up_" || a_path == "/up/up")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    uPrtList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    uPrtAdd(vid); uPrtAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )	chldDel(mPrtU,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"),-1,1);
     }
 
     else TProtocol::cntrCmdProc(opt);
@@ -442,39 +442,39 @@ string UserPrt::getStatus( )
 void UserPrt::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("User protocol: ")+name());
-	if( ctrMkNode("area",opt,-1,"/up",_("User protocol")) )
+	if(ctrMkNode("area",opt,-1,"/up",_("User protocol")))
 	{
-	    if( ctrMkNode("area",opt,-1,"/up/st",_("State")) )
+	    if(ctrMkNode("area",opt,-1,"/up/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/up/cfg",_("Config")) )
+	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Config")))
 	    {
-		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root","root",RWRWR_);
+		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
 		ctrRemoveNode(opt,"/up/cfg/InPROG");
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
 	    }
-	    if( ctrMkNode("area",opt,-1,"/in",_("Input")) )
+	    if(ctrMkNode("area",opt,-1,"/in",_("Input")))
 	    {
-		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
-		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRWR_,"root","root",3,"tp","str","rows","10",
+		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
+		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10",
 		    "help",_("Next attributes has defined for input requests processing:\n"
 			    "   'rez' - processing result (false-full request;true-not full request);\n"
 			    "   'request' - request message;\n"
 			    "   'answer' - answer message;\n"
 			    "   'sender' - request sender."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/out",_("Output")) )
+	    if(ctrMkNode("area",opt,-1,"/out",_("Output")))
 	    {
-		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/up/cfg/plangOls");
-		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRWR_,"root","root",3,"tp","str","rows","10",
+		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangOls");
+		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10",
 		    "help",_("Next attributes has defined for output requests processing:\n"
 			    "   'io' - input/output interface's XMLNode object;\n"
 			    "   'tr' - associated transport."));
@@ -484,24 +484,24 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/up/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
-    else if( a_path == "/up/st/en_st" )
+    if(a_path == "/up/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
+    else if(a_path == "/up/st/en_st")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/up/st/db" )
+    else if(a_path == "/up/st/db")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
     }
-    else if( (a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt) )
+    else if((a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt))
     {
 	string tplng = (a_path=="/up/cfg/plangIls") ? inProgLang() : outProgLang();
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -512,38 +512,38 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for( int i_l = 0; i_l < ls.size(); i_l++ )
-		    if( !SYS->daq().at().at(ls[i_l]).at().compileFuncLangs() )
+		for(int i_l = 0; i_l < ls.size(); i_l++)
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
 		    { ls.erase(ls.begin()+i_l); i_l--; }
 		break;
 	    case 1:
-		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
+		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path.substr(0,7) == "/up/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
-    else if( a_path == "/in/PROGLang" )
+    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
+    else if(a_path == "/in/PROGLang")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(inProgLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setInProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());
     }
-    else if( a_path == "/in/PROG" )
+    else if(a_path == "/in/PROG")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(inProg());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setInProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(inProg());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setInProg(opt->text());
     }
-    else if( a_path == "/out/PROGLang" )
+    else if(a_path == "/out/PROGLang")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(outProgLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setOutProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setOutProgLang(opt->text());
     }
-    else if( a_path == "/out/PROG" )
+    else if(a_path == "/out/PROG")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(outProg());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setOutProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(outProg());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setOutProg(opt->text());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

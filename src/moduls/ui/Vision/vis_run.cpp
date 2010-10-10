@@ -1108,7 +1108,7 @@ void VisRun::alarmSet( unsigned alarm )
     {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
-	if( hd < 0 )	mess_warning(mod->nodePath().c_str(),"Error open: %s",spkEvDev);
+	if( hd < 0 )	mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
 	else
 	{
 	    input_event ev;

@@ -2,7 +2,7 @@
 //!!! Module name, file name and module's license. Change for your need.
 //OpenSCADA system module UI.Tmpl file: mod_tmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2008 by Roman Savochenko                                *
+ *   Copyright (C) 2010 by Roman Savochenko                                *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,13 +36,13 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	"UI template"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("UI template")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.0.1"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"UI subsystem template module."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("UI subsystem template module.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -187,65 +187,65 @@ void TWEB::save_( )
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
-	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",_("Display parameter attributes trends"),0664,"root","root",1,"s_com","add,del");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",_("Collums"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",_("Horizontal trend size (pixel)"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),0664,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time (sec)"),0664,"root","root",1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length (sec)"),0664,"root","root",1,"tp","dec");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",_("Display parameter attributes trends"),RWRWR_,"root",SUI_ID,1,"s_com","add,del");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",_("Collums"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",_("Horizontal trend size (pixel)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time (sec)"),RWRWR_,"root",SUI_ID,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length (sec)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),0440,"root","root",3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/trnds" )
+    if(a_path == "/prm/cfg/trnds")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )
-	    for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
+	    for(unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
 		opt->childAdd("el")->setText(trnd_lst[i_el]);
-	if( ctrChkNode(opt,"add",0664,"root","root",SEC_WR) )	{ trnd_lst.push_back(opt->text()); modif(); }
-	if( ctrChkNode(opt,"del",0664,"root","root",SEC_WR) )
-	    for( unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
-		if( trnd_lst[i_el] == opt->text() )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	{ trnd_lst.push_back(opt->text()); modif(); }
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))
+	    for(unsigned i_el=0; i_el < trnd_lst.size(); i_el++)
+		if(trnd_lst[i_el] == opt->text() )
 		{
 		    trnd_lst.erase(trnd_lst.begin()+i_el);
 		    modif();
 		    break;
 		}
     }
-    else if( a_path == "/prm/cfg/col" )
+    else if(a_path == "/prm/cfg/col")
     {
-	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(nCol()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setNCol( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(nCol()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setNCol(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/hsize" )
+    else if(a_path == "/prm/cfg/hsize")
     {
-	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(hSize()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setHSize( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(hSize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setHSize(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/vsize" )
+    else if(a_path == "/prm/cfg/vsize")
     {
-	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(vSize()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setVSize( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(vSize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVSize(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/trnd_tm" )
+    else if(a_path == "/prm/cfg/trnd_tm")
     {
-	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(trndTm()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setTrndTm( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(trndTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setTrndTm(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/trnd_len" )
+    else if(a_path == "/prm/cfg/trnd_len")
     {
-	if( ctrChkNode(opt,"get",0664) )			opt->setText( TSYS::int2str(trndLen()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setTrndLen( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(trndLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setTrndLen(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/help/g_help" && ctrChkNode(opt,"get",0440) )	opt->setText(optDescr());
+    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

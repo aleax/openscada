@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-#: statfunc.cpp:45
+#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.5\n"
+"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-27 16:34+0300\n"
+"POT-Creation-Date: 2010-10-09 09:58+0300\n"
 "PO-Revision-Date: 2009-08-19 09:50+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -21,276 +21,69 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: statfunc.cpp:30
-msgid "FLibComplex1"
-msgstr ""
-
-#: statfunc.cpp:31
 msgid "Complex1 function's lib"
 msgstr "Complex1 Bibliothek"
 
-#: statfunc.cpp:32
-msgid "Special"
-msgstr "Zusatz"
-
-#: statfunc.cpp:34
-msgid "LIB"
-msgstr ""
-
-#: statfunc.cpp:35
-msgid "1.0.5"
-msgstr ""
-
-#: statfunc.cpp:40
-msgid "C"
-msgstr ""
-
-#: statfunc.cpp:68
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: statfunc.cpp:69
 msgid "Allow static function library Complex1 (SCADA Complex1 functions)."
 msgstr ""
 "Zugriff auf die statische Bibliothek Complex1 (Funktionen SCADA Complex1)."
 
-#: statfunc.cpp:70
-msgid "GPL2"
-msgstr ""
-
-#: statfunc.cpp:75 statfunc.cpp:141
-msgid "fnc_"
-msgstr ""
-
-#: statfunc.cpp:137
-msgid "info"
-msgstr ""
-
-#: statfunc.cpp:140
-msgid "grp"
-msgstr ""
-
-#: statfunc.cpp:140 statfunc.cpp:146
-msgid "/br/fnc_"
-msgstr ""
-
-#: statfunc.cpp:140
 msgid "Function"
 msgstr "Funktion"
 
-#: statfunc.cpp:140 statfunc.cpp:141
-msgid "root"
-msgstr ""
-
-#: statfunc.cpp:140 statfunc.cpp:141
-msgid "idm"
-msgstr ""
-
-#: statfunc.cpp:140 statfunc.cpp:141 libcompl1.h:101 libcompl1.h:145
-#: libcompl1.h:147 libcompl1.h:149 libcompl1.h:179 libcompl1.h:181
-#: libcompl1.h:183 libcompl1.h:185 libcompl1.h:219 libcompl1.h:221
-#: libcompl1.h:222 libcompl1.h:224 libcompl1.h:225 libcompl1.h:259
-#: libcompl1.h:261 libcompl1.h:263 libcompl1.h:265 libcompl1.h:299
-#: libcompl1.h:301 libcompl1.h:303 libcompl1.h:305 libcompl1.h:336
-#: libcompl1.h:338 libcompl1.h:340 libcompl1.h:342 libcompl1.h:375
-#: libcompl1.h:377 libcompl1.h:379 libcompl1.h:381 libcompl1.h:383
-#: libcompl1.h:385 libcompl1.h:423 libcompl1.h:425 libcompl1.h:427
-#: libcompl1.h:429 libcompl1.h:431 libcompl1.h:469 libcompl1.h:470
-#: libcompl1.h:503 libcompl1.h:505 libcompl1.h:506 libcompl1.h:508
-#: libcompl1.h:510 libcompl1.h:511 libcompl1.h:580 libcompl1.h:582
-#: libcompl1.h:587 libcompl1.h:588 libcompl1.h:599 libcompl1.h:733
-#: libcompl1.h:734 libcompl1.h:736 libcompl1.h:767 libcompl1.h:769
-#: libcompl1.h:771 libcompl1.h:773 libcompl1.h:810 libcompl1.h:812
-#: libcompl1.h:814 libcompl1.h:816
-msgid "1"
-msgstr ""
-
-#: statfunc.cpp:141
-msgid "list"
-msgstr ""
-
-#: statfunc.cpp:141 statfunc.cpp:146
-msgid "/prm/func"
-msgstr ""
-
-#: statfunc.cpp:141
 msgid "Functions"
 msgstr "Funktionen"
 
-#: statfunc.cpp:141
-msgid "tp"
-msgstr ""
-
-#: statfunc.cpp:141
-msgid "br"
-msgstr ""
-
-#: statfunc.cpp:141
-msgid "br_pref"
-msgstr ""
-
-#: statfunc.cpp:145
-msgid "path"
-msgstr ""
-
-#: statfunc.cpp:151
-msgid "el"
-msgstr ""
-
-#: statfunc.cpp:151
-msgid "id"
-msgstr ""
-
-#: libcompl1.h:50
-msgid "digitBlock"
-msgstr ""
-
-#: libcompl1.h:52
-msgid "cmdOpen"
-msgstr ""
-
-#: libcompl1.h:52
 msgid "Command \"Open\""
 msgstr "Kommando \"Öffnen\""
 
-#: libcompl1.h:52 libcompl1.h:53 libcompl1.h:54 libcompl1.h:55 libcompl1.h:56
-#: libcompl1.h:59 libcompl1.h:60 libcompl1.h:106 libcompl1.h:109
-#: libcompl1.h:177 libcompl1.h:217 libcompl1.h:257 libcompl1.h:298
-#: libcompl1.h:335 libcompl1.h:374 libcompl1.h:422 libcompl1.h:468
-#: libcompl1.h:500 libcompl1.h:572 libcompl1.h:573 libcompl1.h:575
-#: libcompl1.h:576 libcompl1.h:577 libcompl1.h:578 libcompl1.h:579
-#: libcompl1.h:583 libcompl1.h:584 libcompl1.h:586 libcompl1.h:590
-#: libcompl1.h:591 libcompl1.h:592 libcompl1.h:593 libcompl1.h:594
-#: libcompl1.h:595 libcompl1.h:596 libcompl1.h:597 libcompl1.h:602
-#: libcompl1.h:603 libcompl1.h:604 libcompl1.h:697 libcompl1.h:698
-#: libcompl1.h:700 libcompl1.h:731 libcompl1.h:732 libcompl1.h:735
-#: libcompl1.h:764 libcompl1.h:807 libcompl1.h:847 libcompl1.h:848
-msgid "0"
-msgstr ""
-
-#: libcompl1.h:53
-msgid "cmdClose"
-msgstr ""
-
-#: libcompl1.h:53
 msgid "Command \"Close\""
 msgstr "Kommando \"Schliessen\""
 
-#: libcompl1.h:54
-msgid "cmdStop"
-msgstr ""
-
-#: libcompl1.h:54
 msgid "Command \"Stop\""
 msgstr "Kommando \"Anhalten\""
 
-#: libcompl1.h:55
-msgid "stOpen"
-msgstr ""
-
-#: libcompl1.h:55
 msgid "Stat \"Opened\""
 msgstr "Zustand \"Geöffnet\""
 
-#: libcompl1.h:56
-msgid "stClose"
-msgstr ""
-
-#: libcompl1.h:56
 msgid "Stat \"Closed\""
 msgstr "Zustand \"Geschlossen\""
 
-#: libcompl1.h:57
-msgid "tCmd"
-msgstr ""
-
-#: libcompl1.h:57
 msgid "Command hold time (s)"
 msgstr "Kommando Haltezeit (sek)"
 
-#: libcompl1.h:57
-msgid "5"
-msgstr ""
-
-#: libcompl1.h:58
-msgid "frq"
-msgstr ""
-
-#: libcompl1.h:58
 msgid "Calc period (ms)"
 msgstr "Rechenzeit (msek)"
 
-#: libcompl1.h:58 libcompl1.h:581
-msgid "1000"
-msgstr ""
-
-#: libcompl1.h:59
-msgid "w_tm"
-msgstr ""
-
-#: libcompl1.h:59
 msgid "Process command clock"
 msgstr "Bearbeitung Kommandouhr"
 
-#: libcompl1.h:60
-msgid "last_cmd"
-msgstr ""
-
-#: libcompl1.h:60
 msgid "Last command"
 msgstr "Letztes Kommando"
 
-#: libcompl1.h:63
 msgid "Digital block"
 msgstr "Funktionsblock"
 
-#: libcompl1.h:64
 msgid "Digital assemble block."
 msgstr "Bearbeitung Funktionsblock."
 
-#: libcompl1.h:97
-msgid "sum"
-msgstr ""
-
-#: libcompl1.h:101 libcompl1.h:145 libcompl1.h:177 libcompl1.h:217
-#: libcompl1.h:257 libcompl1.h:298 libcompl1.h:335 libcompl1.h:374
-#: libcompl1.h:422 libcompl1.h:468 libcompl1.h:500 libcompl1.h:577
-#: libcompl1.h:697 libcompl1.h:764 libcompl1.h:807
-msgid "out"
-msgstr ""
-
-#: libcompl1.h:101 libcompl1.h:145 libcompl1.h:177 libcompl1.h:217
-#: libcompl1.h:257 libcompl1.h:298 libcompl1.h:335 libcompl1.h:374
-#: libcompl1.h:422 libcompl1.h:468 libcompl1.h:500 libcompl1.h:697
-#: libcompl1.h:764 libcompl1.h:807
 msgid "Output"
 msgstr "Ausgang"
 
-#: libcompl1.h:104
-#, c-format
-msgid "in%d_1"
-msgstr ""
-
-#: libcompl1.h:105
 #, c-format
 msgid "Input %d.1"
 msgstr "Eingang %d.1"
 
-#: libcompl1.h:107
-#, c-format
-msgid "in%d_2"
-msgstr ""
-
-#: libcompl1.h:108
 #, c-format
 msgid "Input %d.2"
 msgstr "Eingang %d.2"
 
-#: libcompl1.h:113
 msgid "Simple summator"
 msgstr "Einfache Summe"
 
-#: libcompl1.h:116
 msgid ""
 "Simple summator per formula:\n"
 "out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
@@ -300,37 +93,15 @@ msgstr ""
 "out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
 "    in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;"
 
-#: libcompl1.h:143
-msgid "mult"
-msgstr ""
-
-#: libcompl1.h:147 libcompl1.h:179 libcompl1.h:219 libcompl1.h:259
-#: libcompl1.h:425 libcompl1.h:503 libcompl1.h:767 libcompl1.h:810
-msgid "in1_"
-msgstr ""
-
-#: libcompl1.h:147 libcompl1.h:179 libcompl1.h:219 libcompl1.h:259
-#: libcompl1.h:425 libcompl1.h:503 libcompl1.h:767 libcompl1.h:810
 msgid "Input 1."
 msgstr "Eingang 1."
 
-#: libcompl1.h:149 libcompl1.h:181 libcompl1.h:221 libcompl1.h:261
-#: libcompl1.h:301 libcompl1.h:338 libcompl1.h:377 libcompl1.h:427
-#: libcompl1.h:505 libcompl1.h:769 libcompl1.h:812
-msgid "in2_"
-msgstr ""
-
-#: libcompl1.h:149 libcompl1.h:181 libcompl1.h:221 libcompl1.h:261
-#: libcompl1.h:301 libcompl1.h:338 libcompl1.h:377 libcompl1.h:427
-#: libcompl1.h:505 libcompl1.h:769 libcompl1.h:812
 msgid "Input 2."
 msgstr "Eingang 2."
 
-#: libcompl1.h:152
 msgid "Simple multiplicator"
 msgstr "Einfache Multiplikation"
 
-#: libcompl1.h:155
 msgid ""
 "Simple moltiplicator per formula:\n"
 "out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"
@@ -338,37 +109,15 @@ msgstr ""
 "Einfache Multiplikation nach der Formel:\n"
 "out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"
 
-#: libcompl1.h:175
-msgid "multDiv"
-msgstr ""
-
-#: libcompl1.h:183 libcompl1.h:263 libcompl1.h:303 libcompl1.h:340
-#: libcompl1.h:379 libcompl1.h:429 libcompl1.h:771 libcompl1.h:814
-msgid "in3_"
-msgstr ""
-
-#: libcompl1.h:183 libcompl1.h:263 libcompl1.h:303 libcompl1.h:340
-#: libcompl1.h:379 libcompl1.h:429 libcompl1.h:771 libcompl1.h:814
 msgid "Input 3."
 msgstr "Eingang 3."
 
-#: libcompl1.h:185 libcompl1.h:224 libcompl1.h:265 libcompl1.h:305
-#: libcompl1.h:342 libcompl1.h:381 libcompl1.h:431 libcompl1.h:508
-#: libcompl1.h:773 libcompl1.h:816
-msgid "in4_"
-msgstr ""
-
-#: libcompl1.h:185 libcompl1.h:224 libcompl1.h:265 libcompl1.h:305
-#: libcompl1.h:342 libcompl1.h:381 libcompl1.h:431 libcompl1.h:508
-#: libcompl1.h:773 libcompl1.h:816
 msgid "Input 4."
 msgstr "Eingang 4."
 
-#: libcompl1.h:188
 msgid "Multiplicator+divider"
 msgstr "Multiplikation und Division"
 
-#: libcompl1.h:191
 msgid ""
 "Multiplicator+divider per formula:\n"
 "out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
@@ -378,31 +127,15 @@ msgstr ""
 "out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
 "          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
 
-#: libcompl1.h:215
-msgid "exp"
-msgstr ""
-
-#: libcompl1.h:222 libcompl1.h:506 libcompl1.h:595
-msgid "in3"
-msgstr ""
-
-#: libcompl1.h:222 libcompl1.h:506 libcompl1.h:595
 msgid "Input 3"
 msgstr "Eingang 3"
 
-#: libcompl1.h:225
-msgid "in5"
-msgstr ""
-
-#: libcompl1.h:225
 msgid "Input 5"
 msgstr "Eingang 5"
 
-#: libcompl1.h:228
 msgid "Exponent"
 msgstr "Exponent"
 
-#: libcompl1.h:231
 msgid ""
 "Exponent per formula:\n"
 "out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
@@ -414,15 +147,9 @@ msgstr ""
 "         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5"
 "+in5) );"
 
-#: libcompl1.h:255
-msgid "pow"
-msgstr ""
-
-#: libcompl1.h:268
 msgid "Power"
 msgstr "Potenz"
 
-#: libcompl1.h:271
 msgid ""
 "Power per formula:\n"
 "out=(in1_1*in1_2*in1_3*in1_4*in1_5)^(in2_1*in2_2*in2_3*in2_4*in2_5 +\n"
@@ -432,23 +159,12 @@ msgstr ""
 "out=(in1_1*in1_2*in1_3*in1_4*in1_5)^(in2_1*in2_2*in2_3*in2_4*in2_5 +\n"
 "\t(in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
 
-#: libcompl1.h:296
-msgid "cond_lt"
-msgstr ""
-
-#: libcompl1.h:299 libcompl1.h:336 libcompl1.h:375 libcompl1.h:591
-msgid "in1"
-msgstr ""
-
-#: libcompl1.h:299 libcompl1.h:336 libcompl1.h:375 libcompl1.h:591
 msgid "Input 1"
 msgstr "Eingang 1"
 
-#: libcompl1.h:308
 msgid "Condition '<'"
 msgstr "Bedingung '<'"
 
-#: libcompl1.h:311
 msgid ""
 "Condition '<' per formula:\n"
 "out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
@@ -458,15 +174,9 @@ msgstr ""
 "out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
 "    else in4_1*in4_2*in4_3*in4_4;"
 
-#: libcompl1.h:333
-msgid "cond_gt"
-msgstr ""
-
-#: libcompl1.h:345
 msgid "Condition '>'"
 msgstr "Bedingung '>'"
 
-#: libcompl1.h:348
 msgid ""
 "Condition '>' per formula:\n"
 "out=if( in1>(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
@@ -476,31 +186,15 @@ msgstr ""
 "out=if( in1>(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
 "    else in4_1*in4_2*in4_3*in4_4;"
 
-#: libcompl1.h:372
-msgid "cond_full"
-msgstr ""
-
-#: libcompl1.h:383 libcompl1.h:510
-msgid "in5_"
-msgstr ""
-
-#: libcompl1.h:383 libcompl1.h:510
 msgid "Input 5."
 msgstr "Eingang 5."
 
-#: libcompl1.h:385
-msgid "in6_"
-msgstr ""
-
-#: libcompl1.h:385
 msgid "Input 6."
 msgstr "Eingang 6."
 
-#: libcompl1.h:388
 msgid "Full condition"
 msgstr "Verschachtelte Bedingung"
 
-#: libcompl1.h:391
 msgid ""
 "Full condition per formula:\n"
 "out = if( in1<(in2_1*in2_2*in2_3*in2_4) )    then in3_1*in3_2*in3_3*in3_4;\n"
@@ -512,23 +206,12 @@ msgstr ""
 "      else if( in1>(in4_1*in4_2*in4_3*in4_4) then in5_1*in5_2*in5_3*in5_4;\n"
 "      else in6_1*in6_2*in6_3*in6_4;"
 
-#: libcompl1.h:420
-msgid "select"
-msgstr ""
-
-#: libcompl1.h:423
-msgid "sel"
-msgstr ""
-
-#: libcompl1.h:423
 msgid "Select"
 msgstr "Auswahl"
 
-#: libcompl1.h:434
 msgid "Selector"
 msgstr "Auswahl"
 
-#: libcompl1.h:437
 msgid ""
 "Selector per formula:\n"
 "out = if( sel = 1 )  then in1_1*in1_2*in1_3*in1_4;\n"
@@ -542,51 +225,21 @@ msgstr ""
 "      if( sel = 3 )  then in3_1*in3_2*in3_3*in3_4;\n"
 "      if( sel = 4 )  then in4_1*in4_2*in4_3*in4_4;"
 
-#: libcompl1.h:466
-msgid "increment"
-msgstr ""
-
-#: libcompl1.h:469
-msgid "in"
-msgstr ""
-
-#: libcompl1.h:469
 msgid "Input"
 msgstr "Eingang"
 
-#: libcompl1.h:470
-msgid "prev"
-msgstr ""
-
-#: libcompl1.h:470
 msgid "Previous"
 msgstr "Vorhergehend"
 
-#: libcompl1.h:471
-msgid "k+"
-msgstr ""
-
-#: libcompl1.h:471
 msgid "Positive koef"
 msgstr "Positiver Koeffizient"
 
-#: libcompl1.h:471 libcompl1.h:472 libcompl1.h:849
-msgid "0.1"
-msgstr ""
-
-#: libcompl1.h:472
-msgid "k-"
-msgstr ""
-
-#: libcompl1.h:472
 msgid "Negative koef"
 msgstr "Negativer Koeffizient"
 
-#: libcompl1.h:475
 msgid "Incrementator"
 msgstr "Inkrement"
 
-#: libcompl1.h:478
 msgid ""
 "Incrementator per formula:\n"
 "out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);"
@@ -594,23 +247,12 @@ msgstr ""
 "Inkrement nach der Formel:\n"
 "out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);"
 
-#: libcompl1.h:498
-msgid "div"
-msgstr ""
-
-#: libcompl1.h:511
-msgid "in6"
-msgstr ""
-
-#: libcompl1.h:511
 msgid "Input 6"
 msgstr "Eingang 6"
 
-#: libcompl1.h:514
 msgid "Divider"
 msgstr "Division"
 
-#: libcompl1.h:517
 msgid ""
 "Divider per formula:\n"
 "out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + "
@@ -622,247 +264,102 @@ msgstr ""
 "in3) /\n"
 "      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);"
 
-#: libcompl1.h:569
-msgid "pid"
-msgstr ""
-
-#: libcompl1.h:572
-msgid "var"
-msgstr ""
-
-#: libcompl1.h:572
 msgid "Variable"
 msgstr "Variable"
 
-#: libcompl1.h:573
-msgid "sp"
-msgstr ""
-
-#: libcompl1.h:573
 msgid "Setpoint"
 msgstr "Sollwert"
 
-#: libcompl1.h:574 libcompl1.h:699
-msgid "max"
-msgstr ""
-
-#: libcompl1.h:574
 msgid "Max scale"
 msgstr "Maximaler Bereich"
 
-#: libcompl1.h:574 libcompl1.h:585 libcompl1.h:699
-msgid "100"
-msgstr ""
-
-#: libcompl1.h:575 libcompl1.h:700
-msgid "min"
-msgstr ""
-
-#: libcompl1.h:575
 msgid "Min scale"
 msgstr "Minimaler Bereich"
 
-#: libcompl1.h:576
-msgid "manIn"
-msgstr ""
-
-#: libcompl1.h:576
 msgid "Manual input (%)"
 msgstr "Manualer Eingang (%)"
 
-#: libcompl1.h:577
 msgid "Output (%)"
 msgstr "Ausgang (%)"
 
-#: libcompl1.h:578
-msgid "auto"
-msgstr ""
-
-#: libcompl1.h:578
 msgid "Auto mode"
 msgstr "Auto"
 
-#: libcompl1.h:579
-msgid "casc"
-msgstr ""
-
-#: libcompl1.h:579
 msgid "Cascade mode"
 msgstr "Kaskadierter Modus"
 
-#: libcompl1.h:580
 msgid "Kp"
 msgstr ""
 
-#: libcompl1.h:581
-msgid "Ti"
-msgstr ""
-
-#: libcompl1.h:581
 msgid "Ti (ms)"
 msgstr "Ti (msek)"
 
-#: libcompl1.h:582
 msgid "Kd"
 msgstr ""
 
-#: libcompl1.h:583
-msgid "Td"
-msgstr ""
-
-#: libcompl1.h:583
 msgid "Td (ms)"
 msgstr "Td (msek)"
 
-#: libcompl1.h:584
-msgid "Tzd"
-msgstr ""
-
-#: libcompl1.h:584
 msgid "Td lag (ms)"
 msgstr "Verspätungszeit des Differentiales (msek)"
 
-#: libcompl1.h:585
-msgid "Hup"
-msgstr ""
-
-#: libcompl1.h:585
 msgid "Out up limit (%)"
 msgstr "Obergrenze Ausgang (%)"
 
-#: libcompl1.h:586
-msgid "Hdwn"
-msgstr ""
-
-#: libcompl1.h:586
 msgid "Out down limit (%)"
 msgstr "Untergrenze Ausgang (%)"
 
-#: libcompl1.h:587
-msgid "Zi"
-msgstr ""
-
-#: libcompl1.h:587
 msgid "Insensibility (%)"
 msgstr "Unempfindlichkeit (%)"
 
-#: libcompl1.h:588
-msgid "followSp"
-msgstr ""
-
-#: libcompl1.h:588
 msgid "Follow sp from var on manual"
-msgstr ""
+msgstr "Folgen Sie sp aus var auf manuellen"
 
-#: libcompl1.h:590 libcompl1.h:733
-msgid "K1"
-msgstr ""
-
-#: libcompl1.h:590
 msgid "K input 1"
 msgstr "K Eingang 1"
 
-#: libcompl1.h:592 libcompl1.h:734
-msgid "K2"
-msgstr ""
-
-#: libcompl1.h:592
 msgid "K input 2"
 msgstr "K Eingang 2"
 
-#: libcompl1.h:593
-msgid "in2"
-msgstr ""
-
-#: libcompl1.h:593
 msgid "Input 2"
 msgstr "Eingang 2"
 
-#: libcompl1.h:594 libcompl1.h:735
-msgid "K3"
-msgstr ""
-
-#: libcompl1.h:594
 msgid "K input 3"
 msgstr "K Eingang 3"
 
-#: libcompl1.h:596 libcompl1.h:736
-msgid "K4"
-msgstr ""
-
-#: libcompl1.h:596
 msgid "K input 4"
 msgstr "K Eingang 4"
 
-#: libcompl1.h:597
-msgid "in4"
-msgstr ""
-
-#: libcompl1.h:597
 msgid "Input 4"
 msgstr "Eingang 4"
 
-#: libcompl1.h:599
-msgid "f_frq"
-msgstr ""
-
-#: libcompl1.h:599
 msgid "Calc frequency (Hz)"
-msgstr ""
+msgstr "Calc Frequenz (Hz)"
 
-#: libcompl1.h:602
-msgid "int"
-msgstr ""
-
-#: libcompl1.h:602
 msgid "Integral value"
 msgstr "Wert des Integrals"
 
-#: libcompl1.h:603
-msgid "dif"
-msgstr ""
-
-#: libcompl1.h:603
 msgid "Differencial value"
 msgstr "Wert des Differentials"
 
-#: libcompl1.h:604 libcompl1.h:845
-msgid "lag"
-msgstr ""
-
-#: libcompl1.h:604
 msgid "Differencial lag"
 msgstr "Verspätung der Differenzierung"
 
-#: libcompl1.h:607 libcompl1.h:608
 msgid "PID regulator"
 msgstr "PID Regler"
 
-#: libcompl1.h:695
-msgid "alarm"
-msgstr ""
-
-#: libcompl1.h:698
-msgid "val"
-msgstr ""
-
-#: libcompl1.h:698
 msgid "Value"
 msgstr "Wert"
 
-#: libcompl1.h:699
 msgid "Maximum"
 msgstr "Maximum"
 
-#: libcompl1.h:700
 msgid "Minimum"
 msgstr "Minimum"
 
-#: libcompl1.h:703
 msgid "Alarm"
 msgstr "Alarm"
 
-#: libcompl1.h:706
 msgid ""
 "Scale parameter alarm:\n"
 "out = if (val>max || val<min) then true; else false;"
@@ -870,27 +367,24 @@ msgstr ""
 "Alarm im Bereich des Wertes:\n"
 "out = if (val>max || val<min) then true; else false;"
 
-#: libcompl1.h:729
-msgid "flow"
-msgstr ""
-
-#: libcompl1.h:731
-msgid "f"
-msgstr ""
-
-#: libcompl1.h:731 libcompl1.h:739
 msgid "Flow"
 msgstr "Durchfluss"
 
-#: libcompl1.h:732 libcompl1.h:848
-msgid "x"
-msgstr ""
-
-#: libcompl1.h:732
 msgid "X positon"
 msgstr "X Position"
 
-#: libcompl1.h:742
+msgid "K1"
+msgstr ""
+
+msgid "K2"
+msgstr ""
+
+msgid "K3"
+msgstr ""
+
+msgid "K4"
+msgstr ""
+
 msgid ""
 "Flow calc per formule:\n"
 "f = K1*((K3+K4*x)^K2);"
@@ -898,15 +392,9 @@ msgstr ""
 "Berechnung des Durchflusses nach der Formel:\n"
 "f = K1*((K3+K4*x)^K2);"
 
-#: libcompl1.h:762
-msgid "sum_mult"
-msgstr ""
-
-#: libcompl1.h:776
 msgid "Sum and mult"
 msgstr "Summe und Multiplikation"
 
-#: libcompl1.h:779
 msgid ""
 "Sum and mult per formule:\n"
 "out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
@@ -916,15 +404,9 @@ msgstr ""
 "out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
 "      in3_1*in3_2*(in3_3*in3_4+in3_5) + in4_1*in4_2*(in4_3*in4_4+in4_5);"
 
-#: libcompl1.h:805
-msgid "sum_div"
-msgstr ""
-
-#: libcompl1.h:819
 msgid "Sum and divide"
 msgstr "Summe und Division"
 
-#: libcompl1.h:822
 msgid ""
 "Sum and divide per formule:\n"
 "out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
@@ -934,27 +416,18 @@ msgstr ""
 "out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
 "      in3_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);"
 
-#: libcompl1.h:847
-msgid "y"
-msgstr ""
-
-#: libcompl1.h:847
 msgid "Y"
 msgstr "Ausgang"
 
-#: libcompl1.h:848
 msgid "X"
 msgstr "Eingang"
 
-#: libcompl1.h:849
 msgid "Klag"
 msgstr "Verzögerung"
 
-#: libcompl1.h:852
 msgid "Lag"
 msgstr "Verzögerung"
 
-#: libcompl1.h:855
 msgid ""
 "Lag per formule:\n"
 "y = y - Klag*( y - x );"

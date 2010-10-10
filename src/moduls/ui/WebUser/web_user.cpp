@@ -34,13 +34,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebUser"
-#define MOD_NAME	"Web interface from user"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("Web interface from user")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"0.5.0"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow creation self-user web-interfaces on any OpenSCADA language."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow creation self-user web-interfaces on any OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -352,42 +352,42 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/up_",_("User page"),RWRWR_,"root","root",2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,-1,"/prm/up",_("User pages")) )
+	ctrMkNode("grp",opt,-1,"/br/up_",_("User page"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","20");
+	if(ctrMkNode("area",opt,-1,"/prm/up",_("User pages")))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default page"),RWRWR_,"root","root",4,"tp","str","idm","1","dest","select","select","/prm/up/cup");
-	    ctrMkNode("list",opt,-1,"/prm/up/up",_("Pages"),RWRWR_,"root","root",5,"tp","br","idm","1","s_com","add,del","br_pref","up_","idSz","20");
+	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default page"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/up/cup");
+	    ctrMkNode("list",opt,-1,"/prm/up/up",_("Pages"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","up_","idSz","20");
 	}
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/up/dfPg" )
+    if(a_path == "/prm/up/dfPg")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(defPg());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setDefPg(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(defPg());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDefPg(opt->text());
     }
-    else if( a_path == "/br/up_" || a_path == "/prm/up/up" || a_path == "/prm/up/cup" )
+    else if(a_path == "/br/up_" || a_path == "/prm/up/up" || a_path == "/prm/up/cup")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
-	    if( a_path == "/prm/up/cup" )
+	    if(a_path == "/prm/up/cup")
 		opt->childAdd("el")->setAttr("id","*")->setText(_("<Page index display>"));
 	    vector<string> lst;
 	    uPgList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPgAt(lst[i_f]).at().name());
 	}
-	if( ctrChkNode(opt,"add",RWRWR_,"root","root",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    uPgAdd(vid); uPgAt(vid).at().setName(opt->text());
 	}
-	if( ctrChkNode(opt,"del",RWRWR_,"root","root",SEC_WR) )	chldDel(mPgU,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"),-1,1);
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -527,28 +527,28 @@ string UserPg::getStatus( )
 void UserPg::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("User page: ")+name());
-	if( ctrMkNode("area",opt,-1,"/up",_("User page")) )
+	if(ctrMkNode("area",opt,-1,"/up",_("User page")))
 	{
-	    if( ctrMkNode("area",opt,-1,"/up/st",_("State")) )
+	    if(ctrMkNode("area",opt,-1,"/up/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if( ctrMkNode("area",opt,-1,"/up/cfg",_("Config")) )
+	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Config")))
 	    {
-		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root","root",RWRWR_);
+		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
 		ctrRemoveNode(opt,"/up/cfg/PROG");
 	    }
-	    if( ctrMkNode("area",opt,-1,"/prgm",_("Program")) )
+	    if(ctrMkNode("area",opt,-1,"/prgm",_("Program")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prgm/PROGLang",_("Program language"),RWRWR_,"root","root",3,"tp","str","dest","sel_ed","select","/up/cfg/plangLs");
-		ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Program"),RWRWR_,"root","root",3,"tp","str","rows","10",
+		ctrMkNode("fld",opt,-1,"/prgm/PROGLang",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangLs");
+		ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Program"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10",
 		    "help",_("Next attributes has defined for requests processing:\n"
 			    "   'rez' - processing result (by default - 200 OK);\n"
 			    "   'HTTPreq' - HTTP request method (GET,POST);\n"
@@ -565,24 +565,24 @@ void UserPg::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/up/st/status" && ctrChkNode(opt) )	opt->setText(getStatus());
-    else if( a_path == "/up/st/en_st" )
+    if(a_path == "/up/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
+    else if(a_path == "/up/st/en_st")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(enableStat()?"1":"0");
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/up/st/db" )
+    else if(a_path == "/up/st/db")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(DB());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
     }
-    else if( a_path == "/up/cfg/plangLs" && ctrChkNode(opt) )
+    else if(a_path == "/up/cfg/plangLs" && ctrChkNode(opt))
     {
 	string tplng = progLang();
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for( int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -593,28 +593,28 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for( int i_l = 0; i_l < ls.size(); i_l++ )
-		    if( !SYS->daq().at().at(ls[i_l]).at().compileFuncLangs() )
+		for(int i_l = 0; i_l < ls.size(); i_l++)
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
 		    { ls.erase(ls.begin()+i_l); i_l--; }
 		break;
 	    case 1:
-		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
+		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
 	for(int i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if( a_path.substr(0,7) == "/up/cfg" ) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","root",RWRWR_);
-    else if( a_path == "/prgm/PROGLang" )
+    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
+    else if(a_path == "/prgm/PROGLang")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(progLang());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(progLang());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if( a_path == "/prgm/PROG" )
+    else if(a_path == "/prgm/PROG")
     {
-	if( ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD) )	opt->setText(prog());
-	if( ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) )	setProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(prog());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setProg(opt->text());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

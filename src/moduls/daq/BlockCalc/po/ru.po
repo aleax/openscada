@@ -110,7 +110,7 @@ msgid "Global"
 msgstr "Глобальная"
 
 msgid "Parameter"
-msgstr "Параметер"
+msgstr "Параметр"
 
 msgid "Local out"
 msgstr "Локальный выход"
@@ -119,7 +119,7 @@ msgid "Global out"
 msgstr "Глобальный выход"
 
 msgid "Parameter out"
-msgstr "Параметер выход"
+msgstr "Параметр выход"
 
 msgid "Local in"
 msgstr "Локальный вход"
@@ -128,7 +128,7 @@ msgid "Global in"
 msgstr "Глобальный вход"
 
 msgid "Parameter in"
-msgstr "Параметер вход"
+msgstr "Параметр вход"
 
 msgid "Block based calculator"
 msgstr "Блочный вычислитель"
@@ -140,7 +140,7 @@ msgid "Allow block based calculator."
 msgstr "Предоставляет блочный вычислитель."
 
 msgid "Parameters table"
-msgstr "Таблица параметеров"
+msgstr "Таблица параметров"
 
 msgid "Block's table"
 msgstr "Таблица блоков"

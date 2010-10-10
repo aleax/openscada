@@ -34,6 +34,8 @@
 
 #include <xml.h>
 
+#include "tvision.h"
+
 using std::string;
 using std::vector;
 using namespace OSCADA;
@@ -56,7 +58,7 @@ namespace VISION
     {
 	public:
 	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-		    const QString &ndlg = "Vision dialog", bool with_id = false, bool with_nm = true );
+		    const QString &ndlg = _("Vision dialog"), bool with_id = false, bool with_nm = true );
 
 	    QString id( );
 	    QString name( );

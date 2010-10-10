@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,13 +34,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfg"
-#define MOD_NAME	"System configurator (WEB)"
-#define MOD_TYPE	"UI"
+#define MOD_NAME	_("System configurator (WEB)")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VERSION	"1.5.3"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Allow the WEB based OpenSCADA system configurator."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow the WEB based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -791,7 +791,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    ses.cnt.erase(cntEl);
 	    int kz = postArea( ses, *ses.root, prs_comm );
 
-	    if( !(kz&0x01) ) messPost(ses.page,nodePath(),"Post request broken!",TWEB::Error);
+	    if( !(kz&0x01) ) messPost(ses.page,nodePath(),_("Post request broken!"),TWEB::Error);
 	    else if( !(kz&0x02) )
 	    {
 		ses.pg_info.setName("info");

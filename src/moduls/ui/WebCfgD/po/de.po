@@ -1,48 +1,27 @@
 # OpenSCADA.UI.WebCfgD translate to German.
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
+#
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
-#: web_cfg.cpp:55 web_cfg.cpp:199 web_cfg.cpp:252 web_cfg.cpp:283
-#: web_cfg.cpp:408 web_cfg.cpp:412 web_cfg.cpp:424 web_cfg.cpp:471
-#: web_cfg.cpp:475 web_cfg.h:78 web_cfg.h:79
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-26 17:47+0300\n"
+"POT-Creation-Date: 2010-10-09 19:45+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de @li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: web_cfg.cpp:37
-msgid "WebCfgD"
-msgstr ""
-
-#: web_cfg.cpp:38
 msgid "Dynamic WEB configurator"
 msgstr "Dynamischer WEB Configurator"
 
-#: web_cfg.cpp:39
-msgid "UI"
-msgstr "Nutzersinterface"
-
-#: web_cfg.cpp:41
-msgid "WWW"
-msgstr ""
-
-#: web_cfg.cpp:42
-msgid "0.6.4"
-msgstr ""
-
-#: web_cfg.cpp:43
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: web_cfg.cpp:44
 msgid ""
 "Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS "
 "and JavaScript technologies."
@@ -50,723 +29,165 @@ msgstr ""
 "Gewährt den dynamischen WEB begründeten Configurator. Benutzt XHTML, CSS und "
 "JavaScript Technologien."
 
-#: web_cfg.cpp:45
-msgid "GPL"
-msgstr ""
-
-#: web_cfg.cpp:50
-msgid "C"
-msgstr ""
-
-#: web_cfg.cpp:88
-msgid ""
-"void HttpGet(const string&,string&,const string&,vector<string>&,const "
-"string&);"
-msgstr ""
-
-#: web_cfg.cpp:89
-msgid "Process Get comand from http protocol's!"
-msgstr ""
-
-#: web_cfg.cpp:90
-msgid ""
-"void HttpPost(const string&,string&,const string&,vector<string>&,const "
-"string&);"
-msgstr ""
-
-#: web_cfg.cpp:91
-msgid "Process Set comand from http protocol's!"
-msgstr ""
-
-#: web_cfg.cpp:97
 msgid "OpenSCADA. Dynamic WEB configurator"
 msgstr "OpenSCADA. Dynamischer WEB Configurator"
 
-#: web_cfg.cpp:97
 msgid "About"
 msgstr "Über..."
 
-#: web_cfg.cpp:98
 msgid "Load"
 msgstr "Laden"
 
-#: web_cfg.cpp:98
 msgid "Save"
 msgstr "Speichern"
 
-#: web_cfg.cpp:98
 msgid "Up"
 msgstr "Eine Stufe höher"
 
-#: web_cfg.cpp:98
 msgid "Previous"
 msgstr "Vorig"
 
-#: web_cfg.cpp:98
 msgid "Next"
 msgstr "Nächst"
 
-#: web_cfg.cpp:98
 msgid "Add item"
 msgstr "Das Element addieren"
 
-#: web_cfg.cpp:98
 msgid "Delete item"
 msgstr "Das Element löschen"
 
-#: web_cfg.cpp:99
 msgid "Copy item"
 msgstr "Das Element kopieren"
 
-#: web_cfg.cpp:99
 msgid "Cut item"
 msgstr "Das Element ausschneiden"
 
-#: web_cfg.cpp:99
 msgid "Paste item"
 msgstr "Das Element einsetzen"
 
-#: web_cfg.cpp:100
 msgid "Reload item and tree"
 msgstr "Das Element und den Baum umladen"
 
-#: web_cfg.cpp:100
 msgid "Start periodic update"
 msgstr "Periodisches Update starten"
 
-#: web_cfg.cpp:100
 msgid "Stop periodic update"
 msgstr "Periodisches Update stoppen"
 
-#: web_cfg.cpp:101
 msgid "Ready"
 msgstr "Fertig"
 
-#: web_cfg.cpp:102
 msgid "Go"
 msgstr "Übergehen"
 
-#: web_cfg.cpp:102
 msgid "Add"
 msgstr "Addieren"
 
-#: web_cfg.cpp:102
 msgid "Insert"
 msgstr "Einsetzen"
 
-#: web_cfg.cpp:102
 msgid "Edit"
 msgstr "Redigieren"
 
-#: web_cfg.cpp:102
 msgid "Delete"
 msgstr "Löschen"
 
-#: web_cfg.cpp:102
 msgid "Item up"
 msgstr "Item nach oben"
 
-#: web_cfg.cpp:102
 msgid "Item down"
 msgstr "Item nach unten"
 
-#: web_cfg.cpp:103
 msgid "Add new element."
 msgstr "Das neue Element addieren."
 
-#: web_cfg.cpp:103
 msgid "Insert new element."
 msgstr "Das neue Element einsetzen."
 
-#: web_cfg.cpp:103
 msgid "Rename element."
 msgstr "Das neue Element umnennen."
 
-#: web_cfg.cpp:104
 msgid "Select image file for download to picture field."
 msgstr "Die Imagedatei für das Laden ins Imagefeld wählen."
 
-#: web_cfg.cpp:105
 msgid "Add row"
 msgstr "Die Zeile addieren"
 
-#: web_cfg.cpp:105
 msgid "Insert row"
 msgstr "Die Zeile einsetzen"
 
-#: web_cfg.cpp:105
 msgid "Delete row"
 msgstr "Die Zeile löschen"
 
-#: web_cfg.cpp:105
 msgid "Up row"
 msgstr "Zeile nach oben"
 
-#: web_cfg.cpp:105
 msgid "Down row"
 msgstr "Zeile nach unten"
 
-#: web_cfg.cpp:106
 msgid "No one editable container present."
 msgstr "Es gibt keinen redigierenden Container."
 
-#: web_cfg.cpp:106
 msgid "Add item to node '%1'."
 msgstr "Das Element wird in den Knoten '%1' addiert."
 
-#: web_cfg.cpp:106
 msgid "Item '%1' already present."
 msgstr "Das Element '%1' ist schon vorhanden."
 
-#: web_cfg.cpp:107
 msgid "You sure for delete node '%1'?"
 msgstr "Wollen Sie wirklich den Knoten '%1' löschen?"
 
-#: web_cfg.cpp:108
 msgid "Copy is imposible."
 msgstr "Kopierung ist unmöglich."
 
-#: web_cfg.cpp:108
 msgid "Selected"
 msgstr "Gewählt"
 
-#: web_cfg.cpp:108
 msgid "Move node '%1' to '%2'."
 msgstr "Den Knoten '%1' in '%2' umsetzen."
 
-#: web_cfg.cpp:108
 msgid "Copy node '%1' to '%2'."
 msgstr "Kopierung des Knotens '%1' в '%2'."
 
-#: web_cfg.cpp:108
 msgid "Node '%1' already present. Continue?"
 msgstr "Der Knoten '%1' ist schon vorhanden. Weiter?"
 
-#: web_cfg.cpp:109
 msgid "Element type:"
 msgstr "Typ des Elements:"
 
-#: web_cfg.cpp:109
-msgid "ID:"
-msgstr "ID:"
-
-#: web_cfg.cpp:109
 msgid "Name:"
 msgstr "Name:"
 
-#: web_cfg.cpp:109
 msgid "Ok"
 msgstr "Annehmen"
 
-#: web_cfg.cpp:109
 msgid "Close"
 msgstr "Schliessen"
 
-#: web_cfg.cpp:110
 msgid "Page loaded."
 msgstr "Die Seite ist geladet."
 
-#: web_cfg.cpp:122 web_cfg.cpp:130
-msgid "SubType"
-msgstr "SubTyp"
-
-#: web_cfg.cpp:123 web_cfg.cpp:131
-msgid "Auth"
-msgstr ""
-
-#: web_cfg.cpp:123 web_cfg.cpp:311 web_cfg.cpp:317
-msgid "1"
-msgstr ""
-
-#: web_cfg.cpp:153
-msgid "HTTP/1.0 "
-msgstr ""
-
-#: web_cfg.cpp:153
-msgid ""
-"\r\n"
-"Server: "
-msgstr ""
-
-#: web_cfg.cpp:154
-msgid ""
-"\r\n"
-"Accept-Ranges: bytes\r\n"
-"Content-Length: "
-msgstr ""
-
-#: web_cfg.cpp:156
-msgid ""
-"\r\n"
-"Content-Type: "
-msgstr ""
-
-#: web_cfg.cpp:157
-msgid ""
-"\r\n"
-"Cache-Control: no-cache\r\n"
-"Charset="
-msgstr ""
-
-#: web_cfg.cpp:159 web_cfg.cpp:532
-msgid "\r\n"
-msgstr ""
-
-#: web_cfg.cpp:165
-msgid ""
-"<?xml version='1.0' ?>\n"
-"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-"'DTD/xhtml1-transitional.dtd'>\n"
-"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-"<head>\n"
-"  <meta http-equiv='Content-Type' content='text/html; charset="
-msgstr ""
-
-#: web_cfg.cpp:170
-msgid ""
-"'/>\n"
-"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-"
-"revalidate'/>\n"
-"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
-"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
-msgstr ""
-
-#: web_cfg.cpp:175
-msgid "  <link rel='shortcut icon' href='/"
-msgstr ""
-
-#: web_cfg.cpp:175
-msgid ""
-"/ico' type='image' />\n"
-"  <title>"
-msgstr ""
-
-#: web_cfg.cpp:176
-msgid ". "
-msgstr ""
-
-#: web_cfg.cpp:176
-msgid ""
-"</title>\n"
-"  <style type='text/css'>\n"
-"    hr { width: 95%; }\n"
-"    body { background-color: #818181; }\n"
-"    h1.head { text-align: center; color:#ffff00; }\n"
-"    h2.title { text-align: center; font-style: italic; margin: 0px; padding: "
-"0px; border-width: 0px; }\n"
-"    table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; "
-"padding: 2px; }\n"
-"    table.work td { background-color:#cccccc; text-align: left; }\n"
-"    table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-"    table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
-"  </style>\n"
-"</head>\n"
-"<body>\n"
-msgstr ""
-
-#: web_cfg.cpp:193
-msgid ""
-"</body>\n"
-"</html>"
-msgstr ""
-
-#: web_cfg.cpp:207
-msgid "about"
-msgstr ""
-
-#: web_cfg.cpp:209 web_cfg.cpp:212 web_cfg.cpp:268
-msgid "ico"
-msgstr ""
-
-#: web_cfg.cpp:209
-msgid "img_"
-msgstr ""
-
-#: web_cfg.cpp:212
-msgid "UI."
-msgstr ""
-
-#: web_cfg.cpp:214
-msgid "filtr"
-msgstr ""
-
-#: web_cfg.cpp:215
-msgid "gray"
-msgstr ""
-
-#: web_cfg.cpp:218 web_cfg.cpp:234 web_cfg.cpp:270 web_cfg.cpp:350
-msgid "png"
-msgstr ""
-
-#: web_cfg.cpp:219 web_cfg.cpp:235
-msgid "jpg"
-msgstr ""
-
-#: web_cfg.cpp:220 web_cfg.cpp:236
-msgid "gif"
-msgstr ""
-
-#: web_cfg.cpp:246 web_cfg.cpp:257 web_cfg.cpp:264 web_cfg.cpp:275
-#: web_cfg.cpp:321 web_cfg.cpp:329 web_cfg.cpp:337 web_cfg.cpp:345
-#: web_cfg.cpp:355 web_cfg.cpp:372 web_cfg.cpp:415
-msgid "200 OK"
-msgstr ""
-
-#: web_cfg.cpp:246 web_cfg.cpp:275 web_cfg.cpp:355
-msgid "image/"
-msgstr ""
-
-#: web_cfg.cpp:251 web_cfg.cpp:407 web_cfg.cpp:410
-msgid "com"
-msgstr ""
-
-#: web_cfg.cpp:254
-msgid "script.js"
-msgstr ""
-
-#: web_cfg.cpp:257
-msgid "text/javascript"
-msgstr ""
-
-#: web_cfg.cpp:264 web_cfg.h:78
-msgid "text/html"
-msgstr ""
-
-#: web_cfg.cpp:271 web_cfg.cpp:301 web_cfg.cpp:340 web_cfg.cpp:342
-#: web_cfg.cpp:351 web_cfg.cpp:498
-msgid "get"
-msgstr ""
-
-#: web_cfg.cpp:271 web_cfg.cpp:301 web_cfg.cpp:305 web_cfg.cpp:317
-#: web_cfg.cpp:326 web_cfg.cpp:334 web_cfg.cpp:342 web_cfg.cpp:351
-#: web_cfg.cpp:412 web_cfg.cpp:421 web_cfg.cpp:497
-msgid "path"
-msgstr ""
-
-#: web_cfg.cpp:271 web_cfg.cpp:301
-#, c-format
-msgid "/%2fico"
-msgstr ""
-
-#: web_cfg.cpp:274
-msgid "disconnect"
-msgstr ""
-
-#: web_cfg.cpp:279 web_cfg.cpp:281
-msgid "chlds"
-msgstr ""
-
-#: web_cfg.cpp:282 web_cfg.cpp:317
-msgid "grp"
-msgstr ""
-
-#: web_cfg.cpp:294 web_cfg.cpp:298
-msgid "el"
-msgstr ""
-
-#: web_cfg.cpp:294 web_cfg.cpp:298
-msgid "id"
-msgstr ""
-
-#: web_cfg.cpp:301 web_cfg.cpp:305
-msgid "/"
-msgstr ""
-
-#: web_cfg.cpp:302 web_cfg.cpp:303
-msgid "icoSize"
-msgstr ""
-
-#: web_cfg.cpp:302
-msgid "1000"
-msgstr ""
-
-#: web_cfg.cpp:305 web_cfg.cpp:324 web_cfg.cpp:326 web_cfg.cpp:488
-msgid "info"
-msgstr ""
-
-#: web_cfg.cpp:305
-#, c-format
-msgid "/%2fbr"
-msgstr ""
-
-#: web_cfg.cpp:311
-msgid "chPresent"
-msgstr ""
-
-#: web_cfg.cpp:317 web_cfg.cpp:334
-#, c-format
-msgid "/%2fobj"
-msgstr ""
-
-#: web_cfg.cpp:317
-msgid "icoCheck"
-msgstr ""
-
-#: web_cfg.cpp:321 web_cfg.cpp:329 web_cfg.cpp:337 web_cfg.cpp:345
-#: web_cfg.cpp:415
-msgid "text/xml; charset=UTF-8"
-msgstr ""
-
-#: web_cfg.cpp:332 web_cfg.cpp:334
-msgid "modify"
-msgstr ""
-
-#: web_cfg.cpp:348 web_cfg.cpp:417
-msgid "img"
-msgstr ""
-
-#: web_cfg.cpp:352 web_cfg.cpp:460 web_cfg.cpp:462
-msgid "rez"
-msgstr ""
-
-#: web_cfg.cpp:353
-msgid "stop"
-msgstr ""
-
-#: web_cfg.cpp:360
 #, c-format
 msgid "Unknown command: %s."
 msgstr "Unbekanntes Kommando: %s."
 
-#: web_cfg.cpp:361
-msgid "<center>Call page/widget '"
-msgstr ""
-
-#: web_cfg.cpp:361
-msgid "' command: '"
-msgstr ""
-
-#: web_cfg.cpp:361
-msgid ""
-"'</center>\n"
-"<br/>"
-msgstr ""
-
-#: web_cfg.cpp:366
-msgid "Page <"
-msgstr ""
-
-#: web_cfg.cpp:366
-msgid "> error: "
-msgstr ""
-
-#: web_cfg.cpp:367
-msgid "404 Not Found"
-msgstr ""
-
-#: web_cfg.cpp:377
-msgid ""
-"<center>\n"
-"<table class='work'>\n"
-"<TR><th>"
-msgstr ""
-
-#: web_cfg.cpp:379 web_cfg.cpp:389
-msgid " v"
-msgstr ""
-
-#: web_cfg.cpp:379
-msgid ""
-"</th></TR>\n"
-"<TR><TD class='content'>\n"
-"<table border='0px' cellspacing='3px'>\n"
-"<TR><TD style='color: blue;'>"
-msgstr ""
-
-#: web_cfg.cpp:382 web_cfg.cpp:392
 msgid "Name: "
 msgstr "Name: "
 
-#: web_cfg.cpp:382 web_cfg.cpp:383 web_cfg.cpp:384 web_cfg.cpp:385
-#: web_cfg.cpp:392 web_cfg.cpp:393 web_cfg.cpp:394 web_cfg.cpp:395
-msgid "</TD><TD>"
-msgstr ""
-
-#: web_cfg.cpp:382 web_cfg.cpp:383 web_cfg.cpp:384 web_cfg.cpp:392
-#: web_cfg.cpp:393 web_cfg.cpp:394
-msgid ""
-"</TD></TR>\n"
-"<TR><TD style='color: blue;'>"
-msgstr ""
-
-#: web_cfg.cpp:383
 msgid "Desription: "
 msgstr "Beschreibung: "
 
-#: web_cfg.cpp:384 web_cfg.cpp:393
 msgid "License: "
 msgstr "Lizenz: "
 
-#: web_cfg.cpp:385 web_cfg.cpp:394
 msgid "Author: "
 msgstr "Autor: "
 
-#: web_cfg.cpp:385
-msgid ""
-"</TD></TR>\n"
-"</table>\n"
-"</TD></TR>\n"
-"</table><br/>\n"
-"<table class='work'>\n"
-"<TR><th>"
-msgstr ""
-
-#: web_cfg.cpp:389
-msgid ""
-"</th></TR>\n"
-"<TR><TD class='content'>\n"
-"<table border='0' cellspacing='3px'>\n"
-"<TR><TD style='color: blue;'>"
-msgstr ""
-
-#: web_cfg.cpp:395
 msgid "Web site: "
 msgstr "Web Seite: "
 
-#: web_cfg.cpp:395
-msgid ""
-"</TD></TR>\n"
-"</table>\n"
-"</TD></TR></table><br/>\n"
-"</center>\n"
-msgstr ""
-
-#: web_cfg.cpp:419
-msgid "name"
-msgstr ""
-
-#: web_cfg.cpp:421
-msgid "set"
-msgstr ""
-
-#: web_cfg.cpp:424
-msgid "204 No Content"
-msgstr ""
-
-#: web_cfg.cpp:434 web_cfg.cpp:438
-msgid "###"
-msgstr ""
-
-#: web_cfg.cpp:458
-msgid "UIWebCfg"
-msgstr ""
-
-#: web_cfg.cpp:460
-msgid "mcat"
-msgstr ""
-
-#: web_cfg.cpp:460
-msgid "10"
-msgstr ""
-
-#: web_cfg.cpp:468 web_cfg.cpp:539
-msgid ":"
-msgstr ""
-
-#: web_cfg.cpp:468
-msgid "Cookie"
-msgstr ""
-
-#: web_cfg.cpp:470 web_cfg.cpp:522
-msgid "="
-msgstr ""
-
-#: web_cfg.cpp:473
-msgid ";"
-msgstr ""
-
-#: web_cfg.cpp:482
-msgid "<empty>"
-msgstr ""
-
-#: web_cfg.cpp:491
-msgid "area"
-msgstr ""
-
-#: web_cfg.cpp:491
-msgid "/prm/cfg"
-msgstr ""
-
-#: web_cfg.cpp:491
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-#: web_cfg.cpp:492
-msgid "comm"
-msgstr ""
-
-#: web_cfg.cpp:492 web_cfg.cpp:498
-msgid "/prm/cfg/host_lnk"
-msgstr ""
-
-#: web_cfg.cpp:492
 msgid "Go to remote stations list configuration"
 msgstr "Zur Konfiguration der Liste von entfernten Stationen übergehen"
-
-#: web_cfg.cpp:492 web_cfg.cpp:498
-msgid "root"
-msgstr ""
-
-#: web_cfg.cpp:492
-msgid "tp"
-msgstr ""
-
-#: web_cfg.cpp:492
-msgid "lnk"
-msgstr ""
-
-#: web_cfg.cpp:501
-msgid "/Transport"
-msgstr ""
-
-#: web_cfg.cpp:514
-msgid "?"
-msgstr ""
-
-#: web_cfg.cpp:523
-msgid "true"
-msgstr ""
-
-#: web_cfg.cpp:531
-msgid "boundary="
-msgstr ""
-
-#: web_cfg.cpp:533 web_cfg.cpp:549
-msgid "--"
-msgstr ""
-
-#: web_cfg.cpp:534
-msgid "Content-Disposition: form-data;"
-msgstr ""
-
-#: web_cfg.cpp:535
-msgid "name=\""
-msgstr ""
-
-#: web_cfg.cpp:536
-msgid "filename=\""
-msgstr ""
-
-#: web_cfg.cpp:539 web_cfg.cpp:573
-msgid "Content-Type"
-msgstr ""
-
-#: web_cfg.cpp:556 web_cfg.cpp:568
-msgid "\""
-msgstr ""
-
-#~ msgid ""
-#~ "======================= The module <%s:%s> options "
-#~ "=======================\n"
-#~ "---------- Parameters of the module section <%s> in config file "
-#~ "----------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "======================== Optionen des Moduls <%s:%s> "
-#~ "============================\n"
-#~ "------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
-#~ "---------\n"
-#~ "\n"
-
-#~ msgid "Options help"
-#~ msgstr "Optionen Hilfe"

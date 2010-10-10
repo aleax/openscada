@@ -1,227 +1,62 @@
 # OpenSCADA.Protocol.SelfSystem translate to Russian.
 # Copyright (C) 2007-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
+#
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
-#: self.cpp:50 self.cpp:132 self.cpp:315 self.cpp:347
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.2\n"
+"Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 10:49+0200\n"
+"POT-Creation-Date: 2010-10-08 20:16+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: self.cpp:33
-msgid "SelfSystem"
-msgstr ""
-
-#: self.cpp:34
 msgid "Self system OpenSCADA protocol"
 msgstr "Собственный протокол системы OpenSCADA"
 
-#: self.cpp:35
-msgid "Protocol"
-msgstr "Протокол"
-
-#: self.cpp:37
-msgid "0.9.2"
-msgstr ""
-
-#: self.cpp:38
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: self.cpp:39
 msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Собственный протокол OpenSCADA, поддерживает основные функции."
 
-#: self.cpp:40
-msgid "GPL"
-msgstr ""
-
-#: self.cpp:45
-msgid "C"
-msgstr ""
-
-#: self.cpp:140
-#, c-format
-msgid ""
-"======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
-"\n"
-msgstr ""
-"======================= Опции модуля <%s:%s> =============================\n"
-"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
-"\n"
-
-#: self.cpp:151
-msgid "h"
-msgstr ""
-
-#: self.cpp:154 self.cpp:266 self.cpp:271
-msgid "help"
-msgstr ""
-
-#: self.cpp:164
-#, c-format
-msgid "%s"
-msgstr ""
-
-#: self.cpp:170 self.cpp:177
-msgid "SessTimeLife"
-msgstr ""
-
-#: self.cpp:171 self.cpp:178
-msgid "ComprLev"
-msgstr ""
-
-#: self.cpp:172 self.cpp:179
-msgid "ComprBrd"
-msgstr ""
-
-#: self.cpp:195
-msgid "rqDir"
-msgstr ""
-
-#: self.cpp:196
-msgid "rqUser"
-msgstr ""
-
-#: self.cpp:197
-msgid "rqPass"
-msgstr ""
-
-#: self.cpp:208
-msgid "SES_OPEN "
-msgstr ""
-
-#: self.cpp:208 self.cpp:222 self.cpp:223
-msgid " "
-msgstr ""
-
-#: self.cpp:208 self.cpp:222 self.cpp:223 self.cpp:234 self.cpp:325
-#: self.cpp:332 self.cpp:360 self.cpp:364 self.cpp:365 self.cpp:369
-#: self.cpp:384 self.cpp:394 self.cpp:398
-msgid "\n"
-msgstr ""
-
-#: self.cpp:212 self.cpp:230
-#, c-format
-msgid "REZ %d %255s\n"
-msgstr ""
-
-#: self.cpp:213
 #, c-format
 msgid "Station <%s> auth error: %s!"
 msgstr "Станция <%s> ошибка аутентификации: %s!"
 
-#: self.cpp:214
 #, c-format
 msgid "Station <%s> error: %s!"
 msgstr "Станция <%s> ошибка: %s!"
 
-#: self.cpp:222
-msgid "REQDIR "
-msgstr ""
-
-#: self.cpp:223
-msgid "REQ "
-msgstr ""
-
-#: self.cpp:231
 #, c-format
 msgid "Station respond <%s> error!"
 msgstr "Ошибка ответа станции <%s>!"
 
-#: self.cpp:233
 #, c-format
 msgid "Station <%s> error: %d:%s!"
 msgstr "Ошибка станции <%s>: %d:%s!"
 
-#: self.cpp:236
 #, c-format
 msgid "Station <%s> error: Respond is broken!"
 msgstr "Ошибка станции <%s>: Ответ не корректен!"
 
-#: self.cpp:258
-msgid "info"
-msgstr ""
-
-#: self.cpp:261 self.cpp:262
-msgid "area"
-msgstr ""
-
-#: self.cpp:261
-msgid "/prm"
-msgstr ""
-
-#: self.cpp:261
 msgid "Parameters"
 msgstr "Параметры"
 
-#: self.cpp:262
-msgid "/prm/cfg"
-msgstr ""
-
-#: self.cpp:262
 msgid "Module options"
 msgstr "Опции модуля"
 
-#: self.cpp:264 self.cpp:265 self.cpp:270 self.cpp:273
-msgid "fld"
-msgstr ""
-
-#: self.cpp:264 self.cpp:279
-msgid "/prm/cfg/lf_tm"
-msgstr ""
-
-#: self.cpp:264
 msgid "Life time of auth sesion(min)"
 msgstr "Время жизни сессии (мин)"
 
-#: self.cpp:264 self.cpp:265 self.cpp:270 self.cpp:273 self.cpp:281
-#: self.cpp:282 self.cpp:286 self.cpp:287 self.cpp:291 self.cpp:292
-msgid "root"
-msgstr ""
-
-#: self.cpp:264 self.cpp:265 self.cpp:270 self.cpp:273
-msgid "tp"
-msgstr ""
-
-#: self.cpp:264 self.cpp:265 self.cpp:270
-msgid "dec"
-msgstr ""
-
-#: self.cpp:265 self.cpp:284
-msgid "/prm/cfg/compr"
-msgstr ""
-
-#: self.cpp:265
 msgid "Compression level"
 msgstr "Уровень компрессии"
 
-#: self.cpp:265 self.cpp:270
-msgid "min"
-msgstr ""
-
-#: self.cpp:265
-msgid "-1"
-msgstr ""
-
-#: self.cpp:265 self.cpp:270
-msgid "max"
-msgstr ""
-
-#: self.cpp:265
-msgid "9"
-msgstr ""
-
-#: self.cpp:266
 msgid ""
 "ZLib compression level:\n"
 "  -1  - optimal speed-size;\n"
@@ -233,146 +68,24 @@ msgstr ""
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
 
-#: self.cpp:270 self.cpp:289
-msgid "/prm/cfg/comprBrd"
-msgstr ""
-
-#: self.cpp:270
 msgid "Lower compression border"
 msgstr "Нижняя граница компрессии"
 
-#: self.cpp:270
-msgid "10"
-msgstr ""
-
-#: self.cpp:270
-msgid "1000"
-msgstr ""
-
-#: self.cpp:271
 msgid "Value in bytes."
 msgstr "Значение в байтах."
 
-#: self.cpp:273 self.cpp:294
-msgid "/help/g_help"
-msgstr ""
-
-#: self.cpp:273
-msgid "Options help"
-msgstr "Помощь по опциям"
-
-#: self.cpp:273
-msgid "str"
-msgstr ""
-
-#: self.cpp:273
-msgid "cols"
-msgstr ""
-
-#: self.cpp:273
-msgid "90"
-msgstr ""
-
-#: self.cpp:273
-msgid "rows"
-msgstr ""
-
-#: self.cpp:273
-msgid "5"
-msgstr ""
-
-#: self.cpp:278
-msgid "path"
-msgstr ""
-
-#: self.cpp:281 self.cpp:286 self.cpp:291 self.cpp:294
-msgid "get"
-msgstr ""
-
-#: self.cpp:282 self.cpp:287 self.cpp:292
-msgid "set"
-msgstr ""
-
-#: self.cpp:327
-msgid "SES_OPEN"
-msgstr ""
-
-#: self.cpp:329
-#, c-format
-msgid "SES_OPEN %255s %255s"
-msgstr ""
-
-#: self.cpp:331
-msgid "REZ 1 Auth error. User or password error.\n"
-msgstr "REZ 1 Ошибка аутентификации. Ошибка пользователя или пароля.\n"
-
-#: self.cpp:332 self.cpp:394
-msgid "REZ 0 "
-msgstr ""
-
-#: self.cpp:334
-msgid "SES_CLOSE"
-msgstr ""
-
-#: self.cpp:336
-#, c-format
-msgid "SES_CLOSE %d"
-msgstr ""
-
-#: self.cpp:338
-msgid "REZ 0\n"
-msgstr ""
-
-#: self.cpp:340
-msgid "REQ"
-msgstr ""
-
-#: self.cpp:344
 #, c-format
 msgid "Get request: '%s': %d"
-msgstr ""
+msgstr "Запрос Get: '%s': %d"
 
-#: self.cpp:348
-#, c-format
-msgid "REQ %d %d"
-msgstr ""
-
-#: self.cpp:349
-#, c-format
-msgid "REQDIR %255s %255s %d"
-msgstr ""
-
-#: self.cpp:354 self.cpp:401
-msgid "REZ 3 Command format error.\n"
-msgstr "REZ 3 Ошибка формата команды.\n"
-
-#: self.cpp:356
-msgid "REZ 1 Auth error. Session no valid.\n"
-msgstr "REZ 1 Ошибка аутентификации. Сессия не корректна.\n"
-
-#: self.cpp:370
-msgid "user"
-msgstr ""
-
-#: self.cpp:373
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
-msgstr ""
+msgstr "Распаковка и загрузка запроса: '%s': %d, время: %f мс."
 
-#: self.cpp:380
 #, c-format
 msgid "Process request: '%s', time: %f ms."
-msgstr ""
+msgstr "Обработка запроса: '%s', время: %f мс."
 
-#: self.cpp:391
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
-msgstr ""
-
-#: self.cpp:398
-msgid "REZ 2 "
-msgstr ""
-
-#: self.cpp:398
-msgid ":"
-msgstr ""
+msgstr "Сохранение ответа в поток и упаковка: '%s': %d, время: %f мс."

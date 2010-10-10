@@ -42,8 +42,8 @@ class PrWidget : public LWidget
 	string ico( );
 	string type( )		{ return "Terminator"; }
 	string parentNm( )	{ return "root"; }
-	string name( )		{ return "Root primitive"; }
-	string descr( )		{ return "Abstract root primitive"; }
+	string name( )		{ return _("Root primitive"); }
+	string descr( )		{ return _("Abstract root primitive"); }
 
 	void setName( const string &inm )	{ }
 	void setDescr( const string &idscr )	{ }

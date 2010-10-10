@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibComplex1 file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,11 +28,14 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibComplex1"
-#define MOD_NAME	"Complex1 function's lib"
-#define MOD_TYPE	"Special"
+#define MOD_NAME	_("Complex1 function's lib")
+#define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.0.5"
+#define VERSION		"1.0.6"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Allow static function library Complex1 (SCADA Complex1 functions).")
+#define LICENSE		"GPL2"
 //*************************************************
 
 FLibComplex1::Lib *FLibComplex1::mod;
@@ -66,9 +69,9 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= VERSION;
-    mAutor	= "Roman Savochenko";
-    mDescr	= "Allow static function library Complex1 (SCADA Complex1 functions).";
-    mLicense	= "GPL2";
+    mAutor	= AUTORS;
+    mDescr	= DESCRIPTION;
+    mLicense	= LICENSE;
     mSource	= src;
 
     m_fnc = grpAdd("fnc_");
@@ -132,21 +135,21 @@ void Lib::modStop( )
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TSpecial::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),0444,"root","root",1,"idm","1");
-	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),0444,"root","root",3,"tp","br","idm","1","br_pref","fnc_");
+	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),R_R_R_,"root",SSPC_ID,1,"idm","1");
+	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),R_R_R_,"root",SSPC_ID,3,"tp","br","idm","1","br_pref","fnc_");
 	return;
     }
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( (a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt) )
+    if((a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt))
     {
 	vector<string> lst;
 	list(lst);
-	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
     else TSpecial::cntrCmdProc(opt);

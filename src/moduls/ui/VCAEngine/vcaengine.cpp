@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           * 
+ *   Copyright (C) 2006-2010 by Roman Savochenko                           * 
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,13 +33,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"VCAEngine"
-#define MOD_NAME	"Visual control area engine"
-#define MOD_TYPE	"UI"
-#define MOD_SUBTYPE	"VCAEngine"
+#define MOD_NAME	_("Visual control area engine")
+#define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
+#define MOD_SUBTYPE	"VCAEngine"
 #define VERSION		"0.9.6"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Generic visual control area engine."
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Generic visual control area engine.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -729,38 +729,38 @@ void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/sess" )	//Session operation
+    if(a_path == "/serv/sess")	//Session operation
     {
-	if( ctrChkNode(opt,"list",RWRWRW,"root","root",SEC_RD) ) //List session for some project
+	if(ctrChkNode(opt,"list",RWRWRW,"root",SUI_ID,SEC_RD))	//List session for some project
 	{
 	    string prj = opt->attr("prj");
 	    vector<string> ls;
 	    sesList(ls);
-	    for( int i_l = 0; i_l < ls.size(); i_l++ )
-		if( prj.empty() || sesAt(ls[i_l]).at().projNm() == prj )
+	    for(int i_l = 0; i_l < ls.size(); i_l++)
+		if(prj.empty() || sesAt(ls[i_l]).at().projNm() == prj)
 		{
 		    AutoHD<Project> prj = sesAt(ls[i_l]).at().parent();
-		    if( SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+		    if(SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			opt->childAdd("el")->setText(ls[i_l]);
 		}
 	}
-	else if( ctrChkNode(opt,"connect",RWRWRW,"root","root",SEC_WR) )
+	else if(ctrChkNode(opt,"connect",RWRWRW,"root",SUI_ID,SEC_WR))
 	{
 	    string sess = opt->attr("sess");
 	    string prj  = opt->attr("prj");
 
 	    //>> User permission check
 	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
-	    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()) )
+	    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()))
 		throw TError(nodePath().c_str(),_("Connection to session is not permited for '%s'."),opt->attr("user").c_str());
 	    //>> Connect to present session
-	    if( !sess.empty() )	sesAt(sess).at().connect();
+	    if(!sess.empty())	sesAt(sess).at().connect();
 	    //>> Create session
-	    else if( !prj.empty() )
+	    else if(!prj.empty())
 	    {
 		//>>> Prepare session name
 		sess = prj;
-		for( int p_cnt = 0; sesPresent(sess); p_cnt++ )
+		for(int p_cnt = 0; sesPresent(sess); p_cnt++)
 		    sess = prj+TSYS::int2str(p_cnt);
 		sesAdd(sess, prj);
 		sesAt(sess).at().setUser(opt->attr("user"));
@@ -769,32 +769,32 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("sess",sess);
 	    }else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
 	}
-	else if( ctrChkNode(opt,"disconnect",RWRWRW,"root","root",SEC_WR) )
+	else if(ctrChkNode(opt,"disconnect",RWRWRW,"root",SUI_ID,SEC_WR))
 	{
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect();
-	    if( sesAt(sess).at().connects( ) == 0 && !sesAt(sess).at().backgrnd( ) )
+	    if(sesAt(sess).at().connects( ) == 0 && !sesAt(sess).at().backgrnd())
 		sesDel(sess);
 	}
 	return;
     }
-    else if( a_path == "/serv/wlbBr" && ctrChkNode(opt,"get") )
+    else if(a_path == "/serv/wlbBr" && ctrChkNode(opt,"get"))
     {
 	string item = opt->attr("item");
 	string upd_lb   = TSYS::pathLev(item,0);
-	if( upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_" )	return;
-	if( upd_lb.size() > 4 )		upd_lb = upd_lb.substr(4);
+	if(upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_")	return;
+	if(upd_lb.size() > 4)	upd_lb = upd_lb.substr(4);
 	string upd_wdg  = TSYS::pathLev(item,1);
-	if( upd_wdg.size() > 4 )	upd_wdg = upd_wdg.substr(4);
+	if(upd_wdg.size() > 4)	upd_wdg = upd_wdg.substr(4);
 	string upd_wdgi = TSYS::pathLev(item,2);
-	if( upd_wdgi.size() > 4 )	upd_wdgi = upd_wdgi.substr(4);
+	if(upd_wdgi.size() > 4)	upd_wdgi = upd_wdgi.substr(4);
 
 	//>> Widgets libraries
 	vector<string> ls;
 	wlbList(ls);
-	for( int i_wlb = 0; i_wlb < ls.size(); i_wlb++ )
+	for(int i_wlb = 0; i_wlb < ls.size(); i_wlb++)
 	{
-	    if( !upd_lb.empty() && upd_lb != ls[i_wlb] ) continue;
+	    if(!upd_lb.empty() && upd_lb != ls[i_wlb]) continue;
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
 	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(wlb.at().name());
 	    wlbN->childAdd("ico")->setText(wlb.at().ico());
@@ -802,9 +802,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    //>> Widgets
 	    vector<string> wls;
 	    wlb.at().list(wls);
-	    for( int i_w = 0; i_w < wls.size(); i_w++ )
+	    for(int i_w = 0; i_w < wls.size(); i_w++)
 	    {
-		if( !upd_wdg.empty() && upd_wdg != wls[i_w] )	continue;
+		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
 		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentNm())->setText(w.at().name());
 		wN->childAdd("ico")->setText(w.at().ico());
@@ -812,10 +812,10 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		//>> Child widgets
 		vector<string> cwls;
 		w.at().wdgList(cwls);
-		if( cwls.size() < 1000 )
-		    for( int i_c = 0; i_c < cwls.size(); i_c++ )
+		if(cwls.size() < 1000)
+		    for(int i_c = 0; i_c < cwls.size(); i_c++)
 		    {
-			if( !upd_wdgi.empty() && upd_wdgi != cwls[i_c] )	continue;
+			if(!upd_wdgi.empty() && upd_wdgi != cwls[i_c])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
 			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(cw.at().name())->childAdd("ico")->setText((cwls.size()>=100)?"":cw.at().ico());
 		    }
@@ -825,95 +825,95 @@ void Engine::cntrCmdProc( XMLNode *opt )
     }
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),0664,"root","UI",2,"idm","1","idSz","30");
-	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),0664,"root","UI",2,"idm","1","idSz","30");
-	ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),0664,"root","UI");
-	ctrMkNode("grp",opt,-1,"/br/vca",_("Functions"),R_R_R_,"root","UI",1,"idm","1");
-	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),0444,"root","UI"))
+	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
+	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
+	ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),RWRWR_,"root",SUI_ID);
+	ctrMkNode("grp",opt,-1,"/br/vca",_("Functions"),R_R_R_,"root",SUI_ID,1,"idm","1");
+	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),R_R_R_,"root",SUI_ID))
 	{
-	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),0664,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","prj_","idSz","30");
-	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),0664,"root","UI",5,"tp","br","idm","1","s_com","add,del","br_pref","wlb_","idSz","30");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","prj_","idSz","30");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wlb_","idSz","30");
 	}
-	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),0444,"root","UI"))
+	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),R_R_R_,"root",SUI_ID))
 	{
-	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),0664,"root","UI",3,"tp","br","s_com","add,del","br_pref","ses_");
-	    if(ctrMkNode("table",opt,-1,"/ses/ast",_("Auto create and start"),RWRWR_,"root","UI",2,"s_com","add,del","key","id"))
+	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),RWRWR_,"root",SUI_ID,3,"tp","br","s_com","add,del","br_pref","ses_");
+	    if(ctrMkNode("table",opt,-1,"/ses/ast",_("Auto create and start"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
 	    {
-		ctrMkNode("list",opt,-1,"/ses/ast/id",_("ID"),RWRWR_,"root","UI",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/ses/ast/proj",_("Project"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/ses/prj_ls");
-		ctrMkNode("list",opt,-1,"/ses/ast/user",_("User"),RWRWR_,"root","UI",3,"tp","str","dest","select","select","/ses/usr_ls");
+		ctrMkNode("list",opt,-1,"/ses/ast/id",_("ID"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ses/ast/proj",_("Project"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/ses/prj_ls");
+		ctrMkNode("list",opt,-1,"/ses/ast/user",_("User"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/ses/usr_ls");
 	    }
 	}
-	if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),0444,"root","UI"))
+	if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),R_R_R_,"root",SUI_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),0664,"root","UI",4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
+	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
 		_("Command line for call of speech synthesis from the text engine.\n"
 		  "Use next words for replace:\n"
 		  "  %t - synthesis text;\n"
 		  "  %f - result file name.\n"
 		  "If result file name is not used result is read from pipe.\n"
 		  "If result file name is used and  %t is not used synthesis text is sent to pipe."));
-	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),0664,"root","UI",2,"tp","str","help",_("Engine text codepage for text encode into it."));
+	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),RWRWR_,"root",SUI_ID,2,"tp","str","help",_("Engine text codepage for text encode into it."));
 	}
 	return;
     }
 
     //> Process command for page
-    if( a_path == "/br/prj_" || a_path == "/prm/cfg/prj" )
+    if(a_path == "/br/prj_" || a_path == "/prm/cfg/prj")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    prjList(lst);
 	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	    {
-		if( chkUserPerm )
+		if(chkUserPerm)
 		{
 		    AutoHD<Project> prj = prjAt(lst[i_a]);
-		    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(prjAt(lst[i_a]).at().name());
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    prjAdd(vid,opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
 	}
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )   prjDel(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	prjDel(opt->attr("id"),true);
     }
-    else if( a_path == "/br/wlb_" || a_path == "/prm/cfg/wlb" )
+    else if(a_path == "/br/wlb_" || a_path == "/prm/cfg/wlb")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    wlbList(lst);
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(wlbAt(lst[i_a]).at().name());
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )	wlbAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID),opt->text());
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )	wlbDel(opt->attr("id"),true);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	wlbAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID),opt->text());
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wlbDel(opt->attr("id"),true);
     }
-    else if( a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",0660,"root","UI",SEC_WR) )
-	nodeCopy( nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user") );
-    else if( a_path == "/br/ses_" || a_path == "/ses/ses" )
+    else if(a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
+	nodeCopy(nodePath(0,true)+opt->attr("src"), nodePath(0,true)+opt->attr("dst"), opt->attr("user"));
+    else if(a_path == "/br/ses_" || a_path == "/ses/ses")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    sesList(lst);
 	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
-	    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	    {
-		if( chkUserPerm )
+		if(chkUserPerm)
 		{
 		    AutoHD<Project> prj = sesAt(lst[i_a]).at().parent();
-		    if( !SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) )
+		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
 		opt->childAdd("el")->setAttr("user",sesAt(lst[i_a]).at().user())->
@@ -921,18 +921,18 @@ void Engine::cntrCmdProc( XMLNode *opt )
 				     setText(lst[i_a]);
 	    }
 	}
-	if( ctrChkNode(opt,"add",0664,"root","UI",SEC_WR) )
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->text(),TSYS::oscdID);
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
-	if( ctrChkNode(opt,"del",0664,"root","UI",SEC_WR) )   sesDel(opt->text(),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	sesDel(opt->text(),true);
     }
-    else if( a_path == "/ses/ast" )
+    else if(a_path == "/ses/ast")
     {
 	string idcol = opt->attr("col").c_str();
 	string idvl = opt->attr("key_id");
-	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD) )
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/ses/ast/id","");
 	    XMLNode *n_proj	= ctrMkNode("list",opt,-1,"/ses/ast/proj","");
@@ -949,9 +949,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	ResAlloc res(nodeRes(),true);
 	modif();
-	if(ctrChkNode(opt,"add",RWRWR_,"root","UI",SEC_WR))	mSessAuto["NewSessId"] = "";
-	else if(ctrChkNode(opt,"del",RWRWR_,"root","UI",SEC_WR))mSessAuto.erase(idvl);
-	else if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))		mSessAuto["NewSessId"] = "";
+	else if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mSessAuto.erase(idvl);
+	else if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    if(idcol == "id")
 	    {
@@ -972,24 +972,24 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	vector<string> ls; prjList(ls);
 	for(int i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
     }
-    else if( a_path == "/br/vca" && ctrChkNode(opt) )
+    else if(a_path == "/br/vca" && ctrChkNode(opt))
     {
 	vector<string> lst;
 	fList(lst);
-	for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(fAt(lst[i_f]).at().name());
     }
-    else if( a_path == "/tts/code" )
+    else if(a_path == "/tts/code")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(synthCode());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setSynthCode(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(synthCode());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSynthCode(opt->text());
     }
-    else if( a_path == "/tts/comm" )
+    else if(a_path == "/tts/comm")
     {
-	if( ctrChkNode(opt,"get",0664,"root","UI",SEC_RD) )	opt->setText(synthCom());
-	if( ctrChkNode(opt,"set",0664,"root","UI",SEC_WR) )	setSynthCom(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(synthCom());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSynthCom(opt->text());
     }
-    else if( a_path == "/tts/comm_ls" && ctrChkNode(opt) )
+    else if(a_path == "/tts/comm_ls" && ctrChkNode(opt))
 	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -");
     else TUI::cntrCmdProc(opt);
 }

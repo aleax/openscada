@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,12 +31,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SelfSystem"
-#define MOD_NAME	"Self system OpenSCADA protocol"
-#define MOD_TYPE	"Protocol"
+#define MOD_NAME	_("Self system OpenSCADA protocol")
+#define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define VERSION		"0.9.2"
-#define AUTORS		"Roman Savochenko"
-#define DESCRIPTION	"Self OpenSCADA protocol, support generic functions."
+#define VERSION		"0.9.3"
+#define AUTORS		_("Roman Savochenko")
+#define DESCRIPTION	_("Self OpenSCADA protocol, support generic functions.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -223,41 +223,41 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 void TProt::cntrCmdProc( XMLNode *opt )
 {
-    //- Get page info -
-    if( opt->name() == "info" )
+    //> Get page info
+    if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),0664,"root","root",1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),0664,"root","root",4,"tp","dec","min","-1","max","9",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
 		    "help",_("ZLib compression level:\n"
 			     "  -1  - optimal speed-size;\n"
 			     "  0   - disable;\n"
 			     "  1-9 - direct level."));
-		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),0664,"root","root",4,"tp","dec","min","10","max","1000",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","10","max","1000",
 		    "help",_("Value in bytes."));
 	    }
 	return;
     }
 
-    //- Process command to page -
+    //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/prm/cfg/lf_tm" )
+    if(a_path == "/prm/cfg/lf_tm")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(authTime()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setAuthTime( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(authTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/compr" )
+    else if(a_path == "/prm/cfg/compr")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(comprLev()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setComprLev( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(comprLev()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprLev(atoi(opt->text().c_str()));
     }
-    else if( a_path == "/prm/cfg/comprBrd" )
+    else if(a_path == "/prm/cfg/comprBrd")
     {
-	if( ctrChkNode(opt,"get",0664,"root","root",SEC_RD) )	opt->setText( TSYS::int2str(comprBrd()) );
-	if( ctrChkNode(opt,"set",0664,"root","root",SEC_WR) )	setComprBrd( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(comprBrd()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprBrd(atoi(opt->text().c_str()));
     }
     else TProtocol::cntrCmdProc(opt);
 }
