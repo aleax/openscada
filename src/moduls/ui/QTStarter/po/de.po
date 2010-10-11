@@ -4,6 +4,8 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.5.3\n"
@@ -248,7 +250,7 @@ msgid "Pages from"
 msgstr "Seiten von"
 
 msgid "to"
-msgstr ""
+msgstr "nach"
 
 msgid "Selection"
 msgstr "Auswahl"
@@ -421,24 +423,4 @@ msgstr "System verlassen"
 
 #, c-format
 msgid "No translated QT message: '%s'"
-msgstr ""
-
-#~ msgid "UI"
-#~ msgstr "Benutzerschnittstelle"
-
-#~ msgid "SubType"
-#~ msgstr "Subtyp"
-
-#, fuzzy
-#~ msgid "select"
-#~ msgstr "Löschen"
-
-#, fuzzy
-#~ msgid "Description"
-#~ msgstr "Beschreibung"
-
-#~ msgid "QT main thread is not started!"
-#~ msgstr "QT-Hauptthread ist nicht gestartet!"
-
-#~ msgid "QT main thread is not stopped!"
-#~ msgstr "QT-Hauptthread ist nicht angehalten!"
+msgstr "Keine übersetzt QT Nachricht: '%s'"

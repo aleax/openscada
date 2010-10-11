@@ -2,7 +2,7 @@
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
 #, fuzzy
@@ -10,22 +10,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 14:45+0300\n"
-"PO-Revision-Date: 2009-08-17 13:28+0200\n"
-"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
-"Language-Team: de <>\n"
+"POT-Creation-Date: 2010-10-11 09:13+0300\n"
+"PO-Revision-Date: 2010-10-10 23:11+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"Language: \n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Parameteres table"
 msgstr "Tabelle der Parameter"
 
-#, fuzzy
 msgid "Acquisition schedule"
-msgstr "2:Anfrage ist angehalten."
+msgstr "Planung der Befragung"
 
 msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
@@ -64,13 +64,13 @@ msgstr "Liste der Attribute"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Call by period %g s. "
-msgstr "Daten Rechenzeit (sek)"
+msgstr "Herausforderung mit der Periode  %g s."
 
 #, c-format
 msgid "Call by cron '%s'. "
-msgstr ""
+msgstr "Herausforderung nach dem Cron '%s'."
 
 #, c-format
 msgid ""
@@ -88,7 +88,7 @@ msgid "4:Server failure."
 msgstr "4:Serverfehler."
 
 msgid "15:Response PDU size error."
-msgstr ""
+msgstr "Fehler des Umfangs der PDU - Antwort."
 
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
@@ -100,6 +100,15 @@ msgid ""
 "  - month (1-12);\n"
 "  - week day (0[sunday]-6)."
 msgstr ""
+"Planung wird eingeschrieben in der Form der Sekundenperiodizität oder des "
+"Standardes Cron.\n"
+"Sekundenform ist eine reele Zahl (1.5, 1e-3).\n"
+"Form des Standardes Cron ist '* * * * *'. Wo:\n"
+"  - Minuten (0-59);\n"
+"  - Stunden (0-23);\n"
+"  - Tage (1-31);\n"
+"  - Monate (1-12);\n"
+"  - Wochentage (0[Sonntag]-6)."
 
 msgid "11:Value not gathered."
 msgstr "11:Werte sind nicht erfasst."
@@ -110,7 +119,6 @@ msgstr "1:Parameter ist abgeschaltet."
 msgid "2:Acquisition is stoped."
 msgstr "2:Anfrage ist angehalten."
 
-#, fuzzy
 msgid ""
 "Attributes configuration list. List must be written by lines in format: [dt:"
 "numb:rw:id:name]\n"
@@ -130,18 +138,26 @@ msgid ""
 "  'R_i4:300,400:r:int32:Int32' - get int32 from registers 300 and 400;\n"
 "  'R_b10:25:r:rBit:Reg bit' - get bit 10 from register 25."
 msgstr ""
-"Liste der Attributenkonfiguration. Die Liste wird zeilenweise angegeben im "
+"Liste der Konfiguration der Attribute. Die Liste wird gemacht zeilenweise im "
 "Format: [dt:numb:rw:id:name]\n"
 "Wo:\n"
-"  dt - ModBus Datentyp (R-Register, C-Bit, RI-Eingangsregister, CI-"
-"Eingangsbit);\n"
-"  numb - Adresse des ModBus-Bausteins  (dezimal,hex, oder oktal.);\n"
-"  rw - Lese-/Schreibmodus (r-Lesen; w-Schreiben, rw-Schreiben und Lesen);\n"
-"  id - Bezeichner des erstellten Attributs;\n"
-"  name - Name des erstellten Attributs.\n"
+"  dt - ModBus Datentyp (R-Register, C-Bit, RI-Eingansregister, CI-Bit des "
+"Eingangs).\n"
+"       R und RI können mit den Suffixen erweitert werden: i2-Int16, i4-"
+"Int32, f-Float, b5-Bit5;\n"
+"  numb - Adresse der ModBus - Anlage (dec., hex., oder octal);\n"
+"  rw - Regime Lesen-Einschreiben (r-lesen; w-einschreiben, rw-lesen und "
+"einschreiben);\n"
+"  id - Bezeichner des gebildeten Attributs;\n"
+"  name - Name des gebildeten Attributs .\n"
 "Beispiel:\n"
 "  'R:0x300:rw:var:Variable' - Zugang zum Register;\n"
-"  'C:100:r:var1:Variable 1' - Zugang zum Bit."
+"  'C:100:r:var1:Variable 1' - Zugang zum Bit;\n"
+"  'R_f:200:r:float:Float' - das Reele bekommen aus den Registern 200 und "
+"201;\n"
+"  'R_i4:300,400:r:int32:Int32' - bekommen int32 aus den Registern 300 und "
+"400;\n"
+"  'R_b10:25:r:rBit:Reg bit' - Bit 10 aus dem Register 25 bekommen."
 
 msgid "ID"
 msgstr ""
@@ -383,9 +399,8 @@ msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
 msgid "Empty value is not valid."
 msgstr "Leerer Wert ist nicht zulässig."
 
-#, fuzzy
 msgid "ModBUS"
-msgstr "Modus"
+msgstr ""
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"

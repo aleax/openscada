@@ -1,3 +1,14 @@
+2010-10-11 Roman
+- !!:UI.QTStarter: Documents and translations is updated and released version 1.6.0.
+- !!:UI.QTCfg: Documents and translations is updated and released version 1.9.0.
+- !!:UI.WebCfg: Documents and translations is updated and released version 1.5.4.
+- !!:UI.WebCfgD: Documents and translations is updated and released version 0.6.5.
+- !!:UI.VCAEngine: Documents and translations is updated and released version 1.0.0.
+- !!:UI.Vision: Documents and translations is updated and released version 1.0.0.
+- !!:UI.WebVision: Documents and translations is updated and released version 0.9.0.
+- !!:UI.WebUser: Documents and translations is updated and released version 0.6.0.
+
+
 2010-10-10 Roman
 - !!:Transport.Sockets: Documents and translations is updated and released version 1.4.5.
 - !!:Transport.SSL: Documents and translations is updated and released version 0.9.5.
@@ -871,9 +882,9 @@
 2009-10-29 Roman
 - Special.FLibComplex1: The function's PID setpoint is made output.
 - FIX:UI.VCAEngine: The modify for items check is unified, expanded and some fixed.
-- FIX:UI.Vision, UI.WebVison: The logical values trand's display is fixed for no borders set.
+- FIX:UI.Vision, UI.WebVision: The logical values trand's display is fixed for no borders set.
 - FIX:UI.Vision: Editable mode for primitive protocol at noactive status is fixed.
-- FIX:UI.WebVison: Save alpha channel for images of primitive "Diagram" is fixed.
+- FIX:UI.WebVision: Save alpha channel for images of primitive "Diagram" is fixed.
 
 
 2009-10-26 Roman

@@ -39,7 +39,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
-#define VERSION		"1.8.3"
+#define VERSION		"1.9.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the QT based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"

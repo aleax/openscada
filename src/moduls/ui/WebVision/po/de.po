@@ -4,11 +4,12 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@oscada.org>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebVision 0.7.5\n"
+"Project-Id-Version: OpenSCADA.UI.WebVision 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-09 19:52+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
@@ -54,11 +55,11 @@ msgstr ""
 
 #, c-format
 msgid "gdImageStringFTex for font '%s' error: %s."
-msgstr ""
+msgstr "gdImageStringFTex für Schrift '%s' Fehler: %s."
 
 #, c-format
 msgid "gdImageStringFTEx for font '%s' error: %s."
-msgstr ""
+msgstr "gdImageStringFTEx für Schrift '%s' Fehler: %s."
 
 #, c-format
 msgid "%ds"
@@ -85,7 +86,7 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-msgstr ""
+msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
 
 msgid ""
 "Web operation user interface for visual control area (VCA) projects playing."
@@ -93,7 +94,7 @@ msgstr ""
 "Web Benutzerschnittstelle für die Steuerung der sichtbaren Bereiche (VCA)."
 
 msgid "Date and time"
-msgstr ""
+msgstr "Datum und Uhrzeit"
 
 msgid "Level"
 msgstr "Stufe"
@@ -127,7 +128,7 @@ msgstr ""
 "\n"
 
 msgid "Checking if session is not stopped!"
-msgstr ""
+msgstr "Prüfen, ob Session wird nicht gestoppt!"
 
 msgid "Connect to opened session"
 msgstr "Verbindung zur geöffneten Sitzung"
@@ -140,7 +141,7 @@ msgstr ""
 "Keine Sitzung und Projekte der VCA Maschine für den Benutzer vorhanden!"
 
 msgid "Sorry, openned sessions number reach limit!"
-msgstr ""
+msgstr "Leider erreichen openned Sitzungen Anzahl unbegrenzt!"
 
 #, c-format
 msgid "An unaccessible request is received: '%s'"
@@ -180,7 +181,7 @@ msgid "Life time of session (min)"
 msgstr "Lebensdauer der Sitzung (Min)"
 
 msgid "Sessions limit"
-msgstr ""
+msgstr "Sessions Grenze"
 
 msgid "Options help"
 msgstr "Optionen Hilfe"

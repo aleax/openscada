@@ -8,7 +8,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.3\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-09 19:38+0300\n"
 "PO-Revision-Date: 2009-08-26 08:08+0200\n"

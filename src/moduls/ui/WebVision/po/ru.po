@@ -1,14 +1,15 @@
 # OpenSCADA.UI.WebVision translate to Russian.
 # Copyright (C) 2007-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
+#
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebVision 0.8.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebVision 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:52+0300\n"
+"POT-Creation-Date: 2010-10-11 13:04+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -51,6 +52,7 @@ msgstr ""
 msgid "gdImageStringFTex for font '%s' error: %s."
 msgstr "gdImageStringFTex для шрифта '%s', ошибка: %s."
 
+#, c-format
 msgid "gdImageStringFTEx for font '%s' error: %s."
 msgstr "gdImageStringFTEx для шрифта '%s', ошибка: %s."
 
