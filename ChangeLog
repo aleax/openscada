@@ -1,3 +1,10 @@
+2010-10-13 Roman
+- !!!!:DOC: OpenSCADA manual documents and API document is updated for 0.7.0.
+- !!!!:FIX:SYS: Task create function is fixed for prevent crash at auto closed task for fast close.
+- !!!!:FIX:Transport.SSL: Wait for respond data is final fixed by reason wait for data processing into BIO_read().
+- !!:FIX:Transport.Sockets: Tail wait result at zero is fixed for DAQ.System.HDDTemp.
+
+
 2010-10-11 Roman
 - !!:UI.QTStarter: Documents and translations is updated and released version 1.6.0.
 - !!:UI.QTCfg: Documents and translations is updated and released version 1.9.0.

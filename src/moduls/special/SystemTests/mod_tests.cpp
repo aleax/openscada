@@ -177,6 +177,7 @@ string TTest::optDescr( )
 	    rez += TSYS::strMess("  %d:%s\t%s\n",i_prm,fnc.at().io(i_prm)->id().c_str(),fnc.at().io(i_prm)->name().c_str());
 	}
     }
+    rez += "\n";
 
     return rez;
 }

@@ -231,16 +231,23 @@ class TSYS : public TCntrNode
 	class STask
 	{
 	    public:
+		//Data
+		enum Flgs	{ Detached };
+
+		//Methods
 		STask( ) : thr(0), policy(0), prior(0) { }
 		STask( pthread_t ithr, char ipolicy, char iprior ) : 
-		    thr(ithr), policy(ipolicy), prior(iprior)	{ };
+		    thr(ithr), policy(ipolicy), prior(iprior), flgs(0)	{ };
 
+		//Attributes
+		string		path;
 		pthread_t	thr;
 		char		policy, prior;
 		pid_t		tid;
 		string		cpuSet;
 		void *(*task) (void *);
 		void		*taskArg;
+		unsigned	flgs;
 	};
 
 	//Private methods

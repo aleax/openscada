@@ -829,14 +829,14 @@ repeate:
 	else if( FD_ISSET(sock_fd, &rd_fd) )
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
-	    if( i_b <= 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
-	    trIn += (float)i_b/1024;
+	    if(i_b <= 0 && obuf) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	    trIn += (float)vmax(0,i_b)/1024;
 	}
     }
 
-    if( prevTmOut ) setTmCon(prevTmOut);
+    if(prevTmOut) setTmCon(prevTmOut);
 
-    return i_b;
+    return vmax(0,i_b);
 }
 
 void TSocketOut::cntrCmdProc( XMLNode *opt )

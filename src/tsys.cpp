@@ -987,66 +987,57 @@ void TSYS::cntrSet( const string &id, double vl )
 
 void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm, pthread_attr_t *pAttr )
 {
+    int detachStat = 0;
     pthread_t procPthr;
     pthread_attr_t locPAttr, *pthr_attr;
 
-    ResAlloc res( taskRes, false );
-    if( mTasks.find(path) != mTasks.end() && startCntr && *startCntr )
+    ResAlloc res(taskRes, false);
+    if(mTasks.find(path) != mTasks.end() && startCntr && *startCntr)
 	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
     res.release();
 
-    if( pAttr ) pthr_attr = pAttr;
+    if(pAttr) pthr_attr = pAttr;
     else
     {
 	pthr_attr = &locPAttr;
-	pthread_attr_init( pthr_attr );
+	pthread_attr_init(pthr_attr);
     }
-    pthread_attr_setinheritsched( pthr_attr, PTHREAD_EXPLICIT_SCHED );
+    pthread_attr_setinheritsched(pthr_attr, PTHREAD_EXPLICIT_SCHED);
     struct sched_param prior;
     prior.sched_priority = 0;
 
     int policy = SCHED_OTHER;
-    if( priority < 0 )	policy = SCHED_BATCH;
-    else if( priority > 0 /*&& SYS->user() == "root"*/ )	policy = SCHED_RR;
+    if(priority < 0)	policy = SCHED_BATCH;
+    else if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
     pthread_attr_setschedpolicy( pthr_attr, policy );
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
 
-    //> New version
     STask htsk;
+    htsk.path = path;
     htsk.task = start_routine;
     htsk.taskArg = arg;
+    pthread_attr_getdetachstate(pthr_attr,&detachStat);
+    if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
     int rez = pthread_create( &procPthr, pthr_attr, taskWrap, &htsk );
-    if( rez == EPERM )
+    if(rez == EPERM)
     {
 	mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
 	policy = SCHED_OTHER;
 	pthread_attr_setschedpolicy( pthr_attr, policy );
 	prior.sched_priority = 0;
 	pthread_attr_setschedparam(pthr_attr,&prior);
-	rez = pthread_create( &procPthr, pthr_attr, taskWrap, &htsk );
+	rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
     }
-    if( !pAttr ) pthread_attr_destroy( pthr_attr );
+    if(!pAttr) pthread_attr_destroy( pthr_attr );
 
-    if( rez ) throw TError( nodePath().c_str(), _("Task creation error %d."), rez );
+    if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
 
-    if( startCntr && TSYS::eventWait( *startCntr, true, nodePath()+": "+path+": start", wtm ) )
-	throw TError( nodePath().c_str(), _("Task '%s' is not started!"), path.c_str() );
+    if(startCntr && TSYS::eventWait(*startCntr, true, nodePath()+": "+path+": start", wtm))
+	throw TError(nodePath().c_str(), _("Task '%s' is not started!"), path.c_str());
 
     //> Wait for thread structure initialization finish
-    while( !htsk.thr ) usleep(STD_WAIT_DELAY*1000);
-
-    //> Load and init CPU set
-    if( multCPU() )
-    {
-	htsk.cpuSet = TBDS::genDBGet(nodePath()+"CpuSet:"+path);
-	cpu_set_t cpuset;
-	CPU_ZERO(&cpuset);
-	string sval;
-	for( int off = 0; (sval=TSYS::strParse(htsk.cpuSet,0,":",&off)).size(); )
-	    CPU_SET(atoi(sval.c_str()),&cpuset);
-	pthread_setaffinity_np(htsk.thr, sizeof(cpu_set_t), &cpuset);
-    }
+    while(!htsk.thr) pthread_yield();//usleep(STD_WAIT_DELAY*1000);
 
     res.request(true); mTasks[path] = htsk; res.release();
 }
@@ -1086,6 +1077,19 @@ void *TSYS::taskWrap( void *stas )
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
     tsk->prior = param.sched_priority;
+
+    //> Load and init CPU set
+    if(SYS->multCPU() && !(tsk->flgs & STask::Detached))
+    {
+	tsk->cpuSet = TBDS::genDBGet(SYS->nodePath()+"CpuSet:"+tsk->path);
+	cpu_set_t cpuset;
+	CPU_ZERO(&cpuset);
+	string sval;
+	bool cpuSetOK = false;
+	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true)
+	    CPU_SET(atoi(sval.c_str()),&cpuset);
+	if(cpuSetOK) pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+    }
 
     //> Final set for init finish indicate
     tsk->tid = syscall(224);
@@ -1607,6 +1611,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ResAlloc res(taskRes,true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
 	    if(it == mTasks.end()) throw TError(nodePath().c_str(),_("No present task '%s'."));
+	    if(it->second.flgs & STask::Detached) return;
+
 	    it->second.cpuSet = opt->text();
 
 	    cpu_set_t cpuset;

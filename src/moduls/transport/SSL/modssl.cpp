@@ -830,7 +830,6 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-    if( reqTry ) usleep(500000);
     if( reqTry++ >= 3 )	throw TError(nodePath().c_str(),_("Connection error"));
     //> Write request
     if( obuf != NULL && len_ob > 0 )
@@ -879,7 +878,8 @@ repeate:
 	    else if( FD_ISSET(sock_fd, &rd_fd) )
 	    {
 		ret = BIO_read(conn,ibuf,len_ib);
-		if( ret < 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
+		if(ret == -1) while((ret=BIO_read(conn,ibuf,len_ib))==-1) pthread_yield();
+		if(ret < 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 		trIn += (float)ret/1024;
 	    }
 	}

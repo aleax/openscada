@@ -697,7 +697,6 @@ void MTable::fieldSet( TConfig &cfg )
     try{ owner().sqlReq(reqi, NULL, true); }
     catch(TError err)
     {
-	printf("TEST 00: '%s'\n'%s'\n",err.mess.c_str(),reqi.c_str());
 	//>> Update present record
 	string requ = "UPDATE \"" + mod->sqlReqCode(name(),'"') + "\" SET ";
 	next = false;

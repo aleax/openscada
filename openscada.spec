@@ -123,7 +123,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_iconsdir/openscada.png
 %_libdir/*.so.*
 %_libdir/openscada/*.so
-%exclude %_libdir/openscada/*.a
+#exclude %_libdir/openscada/*.a
 %exclude %_libdir/openscada/*.la
 %_datadir/locale/*/LC_MESSAGES/*
 /var/spool/openscada/DATA/.info
