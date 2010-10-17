@@ -190,7 +190,6 @@ string TProt::sesCheck( int sid )
 string TProt::autoLogGet( const string &sender )
 {
     string addr;
-    //printf("TEST 00: '%s'\n",sender.c_str());
     ResAlloc res(nodeRes(),false);
     for(int i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
 	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )

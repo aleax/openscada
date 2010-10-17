@@ -1851,7 +1851,7 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
     try
     {
 	//> Delete ViewItem childs
-	while( i->childCount() ) delete i->takeChild(0);
+	while(i->childCount()) delete i->takeChild(0);
 	viewChildRecArea(i);
 	CtrTree->resizeColumnToContents(0);
     }
@@ -2221,7 +2221,10 @@ void ConfApp::initHosts( )
 	    nit->setText(1,_("Remote station"));
 	    nit->setText(2,("/"+host.id).c_str());
 	}
+	//? Used for rechange status for fix indicator hide after all childs remove on bad connection
+	nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	nit->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
+	nit->setExpanded(false);
 	//>>>> Check icon
 	QImage img; string simg;
 	XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
@@ -2235,15 +2238,15 @@ void ConfApp::initHosts( )
 	//>>>> Process groups
 	QStringList it_grp;
 	XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
-	if( cntrIfCmd(brReq) == 10 ) errCon = 10;
-	for( int i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++ )
+	if(cntrIfCmd(brReq) == 10) errCon = 10;
+	for(int i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++)
 	    it_grp.push_back(("1\n"+brReq.childGet(0)->childGet(i_br)->attr("id")+"\n"+brReq.childGet(0)->childGet(i_br)->attr("dscr")).c_str());
 	nit->setData(2,Qt::UserRole,it_grp);
 
-	if( errCon == 10 )
+	if(errCon == 10)
 	{
 	    simg = TUIS::icoGet("disconnect");
-	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+	    if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 		nit->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	    nit->setExpanded(false);
 	}

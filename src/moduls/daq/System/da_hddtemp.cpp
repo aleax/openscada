@@ -84,16 +84,16 @@ void Hddtemp::getVal( TMdPrm *prm )
 	string	dev = prm->cfg("SUBT").getS(),
 		val = getHDDTemp( ),
 		c_el;
-	for( int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5 )
-	    if( c_el == dev )
+	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt+=5)
+	    if(c_el == dev)
 	    {
-		prm->vlAt("disk").at().setS( TSYS::strSepParse(val,p_cnt+2,'|'), 0, true );
-		prm->vlAt("t").at().setI( atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), 0, true );
-		prm->vlAt("ed").at().setS( TSYS::strSepParse(val,p_cnt+4,'|'), 0, true );
+		prm->vlAt("disk").at().setS(parseName(TSYS::strSepParse(val,p_cnt+2,'|')), 0, true);
+		prm->vlAt("t").at().setI(atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), 0, true);
+		prm->vlAt("ed").at().setS(TSYS::strSepParse(val,p_cnt+4,'|'), 0, true);
 		break;
 	    }
     }
-    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string Hddtemp::getHDDTemp( )
@@ -153,4 +153,18 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
 	}
     }
     catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+string Hddtemp::parseName( const string &val )
+{
+    int beg = -1, end = -1;
+
+    for(int i_s = 0; i_s < val.size(); i_s++)
+	if(val[i_s] != ' ' &&  val[i_s] != '\t' && isalnum(val[i_s]))
+	{
+	    if(beg < 0) beg = i_s;
+	    end = i_s;
+	}
+
+    return (beg>=0) ? val.substr(beg,end-beg+1) : "";
 }

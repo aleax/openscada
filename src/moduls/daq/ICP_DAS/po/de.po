@@ -2,7 +2,7 @@
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
 #, fuzzy
@@ -11,17 +11,17 @@ msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-08 10:40+0300\n"
-"PO-Revision-Date: 2009-08-17 12:04+0200\n"
-"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
-"Language-Team: de <>\n"
+"PO-Revision-Date: 2010-10-13 22:21+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "ICP DAS hardware"
-msgstr ""
+msgstr "Ausstattung ICP DAS"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
@@ -42,70 +42,64 @@ msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
 
 msgid "Bus"
-msgstr ""
+msgstr "Bus"
 
 msgid "Baudrate"
-msgstr ""
+msgstr "Geschwindigkeit"
 
-#, fuzzy
 msgid "LinPAC parameters"
-msgstr "Adresse des Moduls I-7000"
+msgstr "Parameter LinPAC"
 
-#, fuzzy
 msgid "Serial request tries"
-msgstr "Serielle Übertragung"
+msgstr "Versuche der konsequenten Anfragen"
 
 msgid "Standard"
 msgstr "Standard"
 
-#, fuzzy
 msgid "Module type"
-msgstr "Typ des Moduls I-7000"
+msgstr "Typ des Moduls"
 
-#, fuzzy
 msgid "Module address"
-msgstr "Adresse des Moduls I-7000"
+msgstr "Adresse des Moduls"
 
 msgid "Module slot"
-msgstr ""
+msgstr "Slot des Moduls"
 
-#, fuzzy
 msgid "Module addon parameters"
-msgstr "Adresse des Moduls I-7000"
+msgstr "Zusätzliche Parameter des Moduls"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Gather data time %.6g ms. Serial requests %g, errors %g. "
-msgstr "Datenerfassungszeit %.6g (msek)"
+msgstr "Zeit der Datenerfassung %.6g ms. Konsequente Anfragen %g, Fehler %g. "
 
 msgid "Open All LP-slots error."
-msgstr ""
+msgstr "Fehler der Öffnung aller LP-Slots."
 
 msgid "Open LP-slot 9 error."
-msgstr ""
+msgstr "Fehler der Öffnung des LP-Slots 9."
 
 #, c-format
 msgid "Open COM%d port error."
-msgstr ""
+msgstr "Fehler der Öffnung des COM%d Ports."
 
 msgid "Watchdog timeout (s)"
-msgstr ""
+msgstr "Zeit des Watchdogs (s)"
 
 msgid " (Master LP-8x81)"
-msgstr ""
+msgstr " (Haupt- LP-8x81)"
 
-#, fuzzy
 msgid "Serial number"
-msgstr "Serielle Übertragung"
+msgstr "Seriennummer"
 
 msgid "SDK version"
-msgstr ""
+msgstr "SDK-Version"
 
 msgid "DIP switch"
-msgstr ""
+msgstr "DIP-Umschalter"
 
 #, c-format
 msgid "Input %d"
-msgstr ""
+msgstr "Eingang %d"
 
 #, c-format
 msgid "H/A %d"
@@ -117,17 +111,16 @@ msgstr ""
 
 #, c-format
 msgid "Out %d"
-msgstr ""
+msgstr "Ausgang %d"
 
 msgid "Cold-Junction Compensation(CJC) temperature"
-msgstr ""
+msgstr "Temperatur der Kompensation der kalten Fugen"
 
-#, fuzzy
 msgid "10:Request to module error."
-msgstr "14:Anfragefehler: "
+msgstr "10:Fehler der Anfrage ans Modul."
 
 msgid "11:Respond from module error."
-msgstr ""
+msgstr "11:Fehler in der Antwort des Moduls."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
@@ -137,139 +130,137 @@ msgstr "2:Erfassung ist angehalten."
 
 #, c-format
 msgid "Write value to attribute '%s' error: %s"
-msgstr ""
+msgstr "Fehler der Speicherung der Werte ins Attribut '%s': %s"
 
 msgid "Configuration"
-msgstr ""
+msgstr "Konfiguration"
 
 msgid "Process parameters"
-msgstr ""
+msgstr "Parameterbearbeitung"
 
-#, fuzzy
 msgid "Fast data get period (s)"
-msgstr "Datenerfassungsperiode (sek)"
+msgstr "Periode der schnellen Datenerfassun (s)"
 
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 msgid "Inputs reverse"
-msgstr ""
+msgstr "Eingängerevers"
 
 msgid "Outputs reverse"
-msgstr ""
+msgstr "Ausgängerevers"
 
 #, c-format
 msgid "Input %d type"
-msgstr ""
+msgstr "Eingangstyp %d"
 
 msgid "Host watchdog timeout (s)"
-msgstr ""
+msgstr "Zeit des Hostwatchdogs (s)"
 
-#, fuzzy
 msgid "Module"
-msgstr "Typ des Moduls I-7000"
+msgstr "Modul"
 
 msgid "Host watchdog status"
-msgstr ""
+msgstr "Zustand des  Hostwatchdogs"
 
 msgid "Power on values"
-msgstr ""
+msgstr "Werte beim Einschalten der Speisung"
 
 msgid "Set power on values from curent"
-msgstr ""
+msgstr "Wiederherstellung der Werte  beim Einschalten der Speisung aus den laufenden"
 
 msgid "Safe values"
-msgstr ""
+msgstr "Sichere Werte"
 
 msgid "Set safe values from curent"
-msgstr ""
+msgstr "Wiederherstellung der sicheren Werte aus den laufenden"
 
 msgid "Out reverse"
-msgstr ""
+msgstr "Inversion des Eingangs"
 
 msgid "-10V to +10V"
-msgstr ""
+msgstr "-10В bis +10В"
 
 msgid "-5V to +5V"
-msgstr ""
+msgstr "-5В bis +5В"
 
 msgid "-2.5V to +2.5V"
-msgstr ""
+msgstr "-2.5В bis +2.5В"
 
 msgid "-1.25V to +1.25V"
-msgstr ""
+msgstr "-1.25В bis +1.25B"
 
 msgid "-20mA to +20mA (with 125 ohms resistor)"
-msgstr ""
+msgstr "-20мА bis +20мА (mit dem Resister 125 Ом)"
 
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 msgid "-15mV to +15mV"
-msgstr ""
+msgstr "-15мВ bis +15мВ"
 
 msgid "-50mV to +50mV"
-msgstr ""
+msgstr "-50мВ bis +50мВ"
 
 msgid "-100mV to +100mV"
-msgstr ""
+msgstr "-100мВ bis +100мВ"
 
 msgid "-500mV to +500mV"
-msgstr ""
+msgstr "-500мВ bis +500мВ"
 
 msgid "-1V to +1V"
-msgstr ""
+msgstr "-1В bis +1В"
 
 msgid "-150mV to +150mV"
-msgstr ""
+msgstr "-150мВ bis +150мВ"
 
 msgid "J Type"
-msgstr ""
+msgstr "J Typ"
 
 msgid "K Type"
-msgstr ""
+msgstr "K Typ"
 
 msgid "T Type"
-msgstr ""
+msgstr "T Typ"
 
 msgid "E Type"
-msgstr ""
+msgstr "E Typ"
 
 msgid "R Type"
-msgstr ""
+msgstr "R Typ"
 
 msgid "S Type"
-msgstr ""
+msgstr "S Typ"
 
 msgid "B Type"
-msgstr ""
+msgstr "B Typ"
 
 msgid "N Type"
-msgstr ""
+msgstr "N Typ"
 
 msgid "C Type"
-msgstr ""
+msgstr "C Typ"
 
 msgid "L Type"
-msgstr ""
+msgstr "L Typ"
 
 msgid "M Type"
-msgstr ""
+msgstr "H Typ"
 
 msgid "L Type (DIN43710C Type)"
-msgstr ""
+msgstr "L Typ (DIN43710C Typ)"
 
 msgid "Set. "
-msgstr ""
+msgstr "Installiert. "
 
 msgid "Clear. "
-msgstr ""
+msgstr "Rein. "
 
 msgid "Enabled, "
-msgstr ""
+msgstr "Eingeschaltet, "
 
 msgid "Disabled, "
-msgstr ""
+msgstr "Ausgeschaltet, "
 
 msgid " s."
-msgstr ""
+msgstr " s."

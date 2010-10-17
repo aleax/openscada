@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 10:05+0300\n"
+"POT-Creation-Date: 2010-10-17 14:18+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -455,9 +455,11 @@ msgstr ""
 "Виконує тестування вихідного транспорту шляхом надсилання запиту до "
 "вказаного вхідного транспорту."
 
-#, c-format
-msgid "%s: Put '%s'. Get: '%s'."
-msgstr "%s: Надіслано '%s'. Отримано: '%s'."
+msgid "%s: Put '%s'. Get: '%s'. Time = %g ms."
+msgstr "%s: Надіслано '%s'. Отримано: '%s'. Час = %g мс."
+
+msgid "Passed. Time = %g ms."
+msgstr "Виконано. Час = %g мс."
 
 msgid "Value buffer"
 msgstr "Буфер значень"

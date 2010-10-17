@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 
+#include <syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -1037,7 +1038,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	throw TError(nodePath().c_str(), _("Task '%s' is not started!"), path.c_str());
 
     //> Wait for thread structure initialization finish
-    while(!htsk.thr) pthread_yield();//usleep(STD_WAIT_DELAY*1000);
+    while(!htsk.thr) pthread_yield();
 
     res.request(true); mTasks[path] = htsk; res.release();
 }
@@ -1090,9 +1091,10 @@ void *TSYS::taskWrap( void *stas )
 	    CPU_SET(atoi(sval.c_str()),&cpuset);
 	if(cpuSetOK) pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
     }
+    else if(SYS->multCPU() && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
 
     //> Final set for init finish indicate
-    tsk->tid = syscall(224);
+    tsk->tid = syscall(SYS_gettid);
     tsk->thr = pthread_self();
 
     //> Call work task

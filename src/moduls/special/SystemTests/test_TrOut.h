@@ -58,6 +58,8 @@ class TestTrOut : public TFunction
 
 		char buf[200];
 
+		long long stTm = TSYS::curTime();
+
 		AutoHD<TTipTransport> tr = SYS->transport().at().modAt(type);
 		if( !tr.at().outPresent(addr) )
 		{
@@ -68,10 +70,10 @@ class TestTrOut : public TFunction
 		int len = tr.at().outAt(addr).at().messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,1000);
 		tr.at().outAt(addr).at().stop();
 		buf[len] = 0;
-		mod->mess(id(),_("%s: Put '%s'. Get: '%s'."),addr.c_str(),req.c_str(),buf);
+		mod->mess(id(),_("%s: Put '%s'. Get: '%s'. Time = %g ms."),addr.c_str(),req.c_str(),buf,(1e-3*(TSYS::curTime()-stTm)));
 
 		mod->mess(id(),_("Test: Passed"));
-		val->setS(0,_("Passed"));
+		val->setS(0,TSYS::strMess(_("Passed. Time = %g ms."),(1e-3*(TSYS::curTime()-stTm))));
 	    }
 	    catch( TError err )
 	    {

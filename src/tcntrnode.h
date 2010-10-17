@@ -165,7 +165,7 @@ class TCntrNode
 	void modifG( );						//Set group modify
 	void modifClr( ){ m_flg &= ~(SelfModify); }		//Clear modify
 	void modifGClr( );					//Modify group clear
-	void load( );						//Load node, if modified
+	void load( bool force = false );			//Load node, if modified
 	void save( );						//Save node, if modified
 
 	//> Connections counter

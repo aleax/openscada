@@ -276,7 +276,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			    SchHD[i_sh].use.push_back(list[i_sub]+"."+LdMod->modId());
 			    if(full)
 			    {
-				owner().at(list[i_sub]).at().load();
+				owner().at(list[i_sub]).at().load(true);
 				owner().at(list[i_sub]).at().subStart();
 			    }
 			    add_mod++;

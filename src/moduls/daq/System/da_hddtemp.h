@@ -50,6 +50,8 @@ class Hddtemp: public DA
 	string getHDDTemp( );
 	void dList( vector<string> &list );
 
+	string parseName( const string &vl );
+
 	//Attributes
 	Res	m_res;		//Resource for access to HDDTemp transport
 	string	t_tr, n_tr;

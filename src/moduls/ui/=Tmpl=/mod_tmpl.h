@@ -30,6 +30,7 @@
 
 using std::string;
 using std::vector;
+using namespace OSCADA;
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
 #include <tuis.h>

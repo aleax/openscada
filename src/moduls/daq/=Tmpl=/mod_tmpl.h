@@ -39,6 +39,7 @@
 
 using std::string;
 using std::vector;
+using namespace OSCADA;
 
 //!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl

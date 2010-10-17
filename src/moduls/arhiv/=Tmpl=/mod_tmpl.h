@@ -1,8 +1,8 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Protocol.Tmpl file: mod_tmpl.h
+//OpenSCADA system module Archive.Tmpl file: mod_tmpl.h
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2010 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,75 +24,52 @@
 #ifndef MOD_TMPL_H
 #define MOD_TMPL_H
 
-//!!! System's includings. Add need for your module includings.
-#include <string>
-#include <map>
-
 //!!! OpenSCADA module's API includings. Add need for your module includings.
-#include <tprotocols.h>
+#include <tarchives.h>
 
-//!!! Individual module's translation function define. Don't change it!
+//!!! Self your module's includings. Add need for your module includings.
+#include "val.h"
+#include "mess.h"
+
+//!!! Individual module's translation function define. Not change it!
 #undef _
 #define _(mess) mod->I18N(mess)
 
-using std::string;
-using std::map;
 using namespace OSCADA;
 
-//!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
+//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl
 {
 
-//!!! Input protocol realisation object define. Add methods and attributes for your need.
+//!!! Root module's object define. Add methods and attributes for your need.
 //*************************************************
-//* ModTmpl::TProtIn                              *
+//* ModTmpl::ModArch                              *
 //*************************************************
-class TProtIn: public TProtocolIn
+class ModArch: public TTipArchivator
 {
     public:
-	//Methods
-	//!!! Constructor for input protocol object.
-	TProtIn( string name );
-	//!!! Destructor for input protocol object.
-	~TProtIn( );
+	//!!! Constructor for root module's object.
+	ModArch( const string &name );
+	//!!! Destructor for root module's object.
+	~ModArch();
 
-	//!!! The inherited (virtual) function of process input and preparint output data for called input transport
-	bool mess( const string &request, string &answer, const string &sender );
-};
-
-//!!! Root module object define. Add methods and attributes for your need.
-//*************************************************
-//* ModTmpl::TProt                                *
-//*************************************************
-class TProt: public TProtocol
-{
-    public:
-	//Methods
-	//!!! Constructor for root module object.
-	TProt( string name );
-	//!!! Destructor for root module object.
-	~TProt( );
+	//AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
+	//AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
 
     protected:
 	//Methods
 	//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
 	void load_( );
-	void save_( );
 
-    private:
-	//Methods
-	//!!! Module's comandline options for print help function.
-	string optDescr( );
-	//!!! Main subsystem API function for self modules input protocol object creation.
-	TProtocolIn *in_open( const string &name );
+	//!!! Module's post enable call. Add your module objects initialize code.
+	void postEnable( int flag );
 
-	//!!! OpenSCADA control interface comands process virtual function.
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
+	//!!! Main subsystem API functions for self modules message and value archive objects creation.
+	TMArchivator *AMess( const string &id, const string &db );
+	TVArchivator *AVal( const string &id, const string &db );
 };
 
-//!!! The module root link
-extern TProt *mod;
+extern ModArch *mod;
 
 } //End namespace ModTmpl
 

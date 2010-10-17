@@ -549,27 +549,27 @@ void TCntrNode::modifGClr( )
 	    p->second->modifGClr( );
 }
 
-void TCntrNode::load( )
+void TCntrNode::load( bool force )
 {
     //> Self load
-    if( isModify(Self)&Self )
+    if((isModify(Self)&Self) || force)
 	try
 	{
 	    if( nodeMode( ) == TCntrNode::Disable )	nodeEn( NodeRestore|NodeShiftDel );
 	    load_( );
 	}
-	catch( TError err )
+	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Loading node error."));
 	}
     //> Childs load process
-    if( isModify(Child)&Child )
+    if((isModify(Child)&Child) || force)
     {
 	ResAlloc res( hd_res, false );
-	for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-	    for( TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-		if( p->second->isModify(Self|Child) )	p->second->load( );
+	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+		if(p->second->isModify(Self|Child))	p->second->load(force);
     }
     modifClr( );
 }

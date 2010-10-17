@@ -35,6 +35,7 @@
 #define _(mess) mod->I18N(mess)
 
 using std::string;
+using namespace OSCADA;
 
 //!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
 namespace BDPostgreSQL

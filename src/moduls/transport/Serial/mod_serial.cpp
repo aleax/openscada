@@ -1007,7 +1007,6 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	{
 	    if( obuf && len_ob > 0 ) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
 	    else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
-	    //mess_debug(nodePath().c_str(),"TEST 00: %d\n",((tv.tv_sec*1000000)+tv.tv_usec));
 	    FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
 	    kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	}

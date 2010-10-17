@@ -1,3 +1,10 @@
+2010-10-17 Roman
+- !!:Archive, Special: Template module "=Templ=" is added for the subsystems.
+- FIX:SYS.TCntrNode, SYS.ModSchedul: Force loading is added by properties "force" to function TCntrNode::load().
+    Force loading at module enable is fixed.
+- FIX:SYS: Pass for detached tasks CPU affinity is fixed. Get thread's TID for x86_64 and other non x86 is fixed.
+
+
 2010-10-13 Roman
 - !!!!:DOC: OpenSCADA manual documents and API document is updated for 0.7.0.
 - !!!!:FIX:SYS: Task create function is fixed for prevent crash at auto closed task for fast close.
@@ -170,7 +177,7 @@
 
 2010-09-02 Roman
 - !!:DemoDB: Demo DB is updated for:
-    - Compressors SO KM201, KM301, KM202 add KM302.
+    - Compressors SO KM201, KM301, KM202 and KM302 add.
     - Manual variable input support is added to control panel.
     - Translation is updated.
     - Some bugs is fixed.

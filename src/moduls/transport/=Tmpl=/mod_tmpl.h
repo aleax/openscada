@@ -34,6 +34,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+using namespace OSCADA;
+
 //!!! All module's object's include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl
 {

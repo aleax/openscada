@@ -232,10 +232,10 @@ class TSYS : public TCntrNode
 	{
 	    public:
 		//Data
-		enum Flgs	{ Detached };
+		enum Flgs	{ Detached = 0x01 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0) { }
+		STask( ) : thr(0), policy(0), prior(0), flgs(0)		{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) : 
 		    thr(ithr), policy(ipolicy), prior(iprior), flgs(0)	{ };
 
