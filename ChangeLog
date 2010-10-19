@@ -1,3 +1,7 @@
+2010-10-19 Roman
+- FIX:Archives: No permited user's access to main subsystem's data is fixed.
+
+
 2010-10-17 Roman
 - !!:Archive, Special: Template module "=Templ=" is added for the subsystems.
 - FIX:SYS.TCntrNode, SYS.ModSchedul: Force loading is added by properties "force" to function TCntrNode::load().

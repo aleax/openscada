@@ -1,5 +1,5 @@
 
-AC_PREREQ(2.50)
+AC_PREREQ([2.50])
 
 AC_INIT([OpenSCADA],[0.7.0],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
@@ -31,7 +31,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
-LT_PREREQ(2.0)
+LT_PREREQ([2.0])
 
 #Gettext utilites check
 AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
