@@ -1757,17 +1757,17 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archivators"),R_R_R_,"root",SARH_ID))
 	{
-	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archivators"),RWRWR_,"root","root",1,"key","arch"))
+	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archivators"),RWRWR_,"root",SARH_ID,1,"key","arch"))
 	    {
-		ctrMkNode("list",opt,-1,"/arch/arch/arch",_("Archivator"),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/arch/arch/start",_("Start"),R_R_R_,"root","root",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/arch/arch/proc",_("Process"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/arch/arch/per",_("Period (s)"),R_R_R_,"root","root",1,"tp","real");
-		ctrMkNode("list",opt,-1,"/arch/arch/beg",_("Begin"),R_R_R_,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/arch/arch/end",_("End"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/arch",_("Archivator"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/start",_("Start"),R_R_R_,"root",SARH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/arch/arch/proc",_("Process"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/arch/arch/per",_("Period (s)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/arch/arch/beg",_("Begin"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/end",_("End"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    }
 	}
-	if( run_st && ctrMkNode("area",opt,-1,"/val",_("Values"),R_R_R_,"root",SARH_ID) )
+	if( run_st && ctrMkNode("area",opt,-1,"/val",_("Values"),R_R___,"root",SARH_ID) )
 	{
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,4,"tp","dec","len","6","min","0","max","999999");
@@ -1903,12 +1903,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))
 	{
 	    //Fill Archivators table
-	    XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/arch","",R_R_R_);
-	    XMLNode *n_start= ctrMkNode("list",opt,-1,"/arch/arch/start","",R_R_R_);
-	    XMLNode *n_prc  = ctrMkNode("list",opt,-1,"/arch/arch/proc","",RWRWR_);
-	    XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/per","",R_R_R_);
-	    XMLNode *n_beg  = ctrMkNode("list",opt,-1,"/arch/arch/beg","",R_R_R_);
-	    XMLNode *n_end  = ctrMkNode("list",opt,-1,"/arch/arch/end","",R_R_R_);
+	    XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/arch","",R_R_R_,"root",SARH_ID);
+	    XMLNode *n_start= ctrMkNode("list",opt,-1,"/arch/arch/start","",R_R_R_,"root",SARH_ID);
+	    XMLNode *n_prc  = ctrMkNode("list",opt,-1,"/arch/arch/proc","",RWRWR_,"root",SARH_ID);
+	    XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/per","",R_R_R_,"root",SARH_ID);
+	    XMLNode *n_beg  = ctrMkNode("list",opt,-1,"/arch/arch/beg","",R_R_R_,"root",SARH_ID);
+	    XMLNode *n_end  = ctrMkNode("list",opt,-1,"/arch/arch/end","",R_R_R_,"root",SARH_ID);
 
 	    vector<string> t_arch_ls, arch_ls;
 	    owner().modList(t_arch_ls);

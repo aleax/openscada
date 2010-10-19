@@ -1,5 +1,7 @@
 2010-10-19 Roman
 - FIX:Archives: No permited user's access to main subsystem's data is fixed.
+- FIX:Archives: Permition for assign archivators to an archive is fixed.
+- FIX:Special.SystemTests: The test "Archive" is fixed for new archive API.
 
 
 2010-10-17 Roman

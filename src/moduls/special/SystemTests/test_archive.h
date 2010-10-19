@@ -65,12 +65,11 @@ class TestArchive : public TFunction
 		for( int i_el = 0; i_el < buf_sz; i_el++)
 		    buf.setI((int)pow(10,i_el),wtm+i_el*per);
 		o_arch.at().setVals(buf,buf.begin(),buf.end(),"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getI(&ttm);
-		    if( (i_el < buf_sz && val != pow(10,i_el)) ||
-			    (i_el >= buf_sz && val != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && val != pow(10,i_el)) || (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test1: Failed."));
 		}
 		mod->mess(id(),_("Test1: Passed."));
@@ -79,12 +78,13 @@ class TestArchive : public TFunction
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    if( (i_el < buf_sz && i_el != 3 && o_arch.at().getI(&ttm) != pow(10,i_el)) || 
-			    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
-			    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
+			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
+			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test2: Failed."));
 		}
 		mod->mess(id(),_("Test2: Passed."));
@@ -93,12 +93,13 @@ class TestArchive : public TFunction
 		buf.clear();
 		buf.setI((int)pow(10,4),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    if( (i_el < buf_sz && i_el != 3 && o_arch.at().getI(&ttm) != pow(10,i_el)) ||
-			    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,4)) ||
-			    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
+			    (i_el < buf_sz && i_el == 3 && val != pow(10,4)) ||
+			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test3: Failed."));
 		}
 		mod->mess(id(),_("Test3: Passed."));
@@ -107,12 +108,13 @@ class TestArchive : public TFunction
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    if( (i_el < buf_sz && i_el != 3 && o_arch.at().getI(&ttm) != pow(10,i_el)) ||
-			    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
-			    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
+			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
+			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test4: Failed."));
 		}
 		mod->mess(id(),_("Test4: Passed."));
@@ -121,13 +123,14 @@ class TestArchive : public TFunction
 		buf.clear();
 		buf.setI((int)pow(10,9),wtm+per);
 		o_arch.at().setVals(buf,wtm+per,wtm+per,"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    if( (i_el < buf_sz && i_el != 3 && i_el != 1 && o_arch.at().getI(&ttm) != pow(10,i_el)) ||
-			    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
-			    (i_el < buf_sz && i_el == 1 && o_arch.at().getI(&ttm) != pow(10,9)) ||
-			    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && i_el != 3 && i_el != 1 && val != pow(10,i_el)) ||
+			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
+			    (i_el < buf_sz && i_el == 1 && val != pow(10,9)) ||
+			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test5: Failed."));
 		}
 		mod->mess(id(),_("Test5: Passed."));
@@ -136,13 +139,14 @@ class TestArchive : public TFunction
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+per);
 		o_arch.at().setVals(buf,wtm+per,wtm+per,"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    if( (i_el < buf_sz && i_el != 3 && i_el != 1 && o_arch.at().getI(&ttm) != pow(10,i_el)) ||
-			    (i_el < buf_sz && i_el == 3 && o_arch.at().getI(&ttm) != pow(10,2)) ||
-			    (i_el < buf_sz && i_el == 1 && o_arch.at().getI(&ttm) != pow(10,2)) ||
-			    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && i_el != 3 && i_el != 1 && val != pow(10,i_el)) ||
+			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
+			    (i_el < buf_sz && i_el == 1 && val != pow(10,2)) ||
+			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test6: Failed."));
 		}
 		mod->mess(id(),_("Test6: Passed."));
@@ -151,12 +155,13 @@ class TestArchive : public TFunction
 		buf.clear();
 		buf.setI((int)pow(10,3),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for( int i_el = 0; i_el < buf_sz+2; i_el++)
+		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    if( (i_el < buf_sz && i_el != 1 && o_arch.at().getI(&ttm) != pow(10,i_el)) ||
-			    (i_el < buf_sz && i_el == 1 && o_arch.at().getI(&ttm) != pow(10,2)) ||
-			    (i_el >= buf_sz && o_arch.at().getI(&ttm) != EVAL_INT) )
+		    int val = o_arch.at().getVal(&ttm).getI();
+		    if((i_el < buf_sz && i_el != 1 && val != pow(10,i_el)) ||
+			    (i_el < buf_sz && i_el == 1 && val != pow(10,2)) ||
+			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test7: Failed"));
 		}
 		mod->mess(id(),_("Test7: Passed."));

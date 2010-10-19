@@ -290,13 +290,7 @@
 		    START="1"
 		    CATEG="/DemoStation*"
 		    LEVEL="4"
-		    ADDR="ARCHIVES/MESS/stError/"
-		    FSArchMSize="300"
-		    FSArchNFiles="10"
-		    FSArchTmSize="30"
-		    FSArchXML="1"
-		    FSArchPackTm="10"
-		    FSArchTm="60"/>
+		    ADDR="ARCHIVES/MESS/stError/"/>
 		<fld
 		    ID="NetRequsts"
 		    MODUL="FSArch"
@@ -309,13 +303,7 @@
 		    START="1"
 		    CATEG="/DemoStation/Transport/Sockets*"
 		    LEVEL="1"
-		    ADDR="ARCHIVES/MESS/Net/"
-		    FSArchMSize="300"
-		    FSArchNFiles="10"
-		    FSArchTmSize="30"
-		    FSArchXML="1"
-		    FSArchPackTm="10"
-		    FSArchTm="60"/>
+		    ADDR="ARCHIVES/MESS/Net/"/>
 	    </tbl>
 	    <tbl id="Archive_val_proc">
 		<fld
@@ -330,12 +318,7 @@
 		    START="1"
 		    ADDR="ARCHIVES/VAL/1h/"
 		    V_PER="360"
-		    A_PER="60"
-		    FSArchTmSize="8640"
-		    FSArchNFiles="10"
-		    FSArchRound="0.1"
-		    FSArchPackTm="10"
-		    FSArchTm="60"/>
+		    A_PER="60"/>
 	    </tbl>
 	    <tbl id="Archive_val">
 	        <fld
@@ -397,7 +380,7 @@
 	    <node id="mod_SystemTests">
 		<prm id="PARAM" on="0" per="5" name="LogicLev.experiment.F3"/>
 		<prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
-		<prm id="MESS" on="0" per="10" categ="" arhtor="DBArch.test3"/>
+		<prm id="Mess" on="0" per="10" categ="" arhtor="DBArch.test3" depth="10"/>
 		<prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" full="1"/>
 		<prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000"/>
 		<prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
