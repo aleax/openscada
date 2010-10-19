@@ -250,7 +250,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    //>>> Add attributes list
 	    vlList(list_c);
 	    for(int i_el = 0; i_el < list_c.size(); i_el++)
-		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1);
+		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1,"root",SDAQ_ID,RWRWR_);
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
 	{
@@ -285,14 +285,14 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    return;
 	}
 	AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
-	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R___:RWRW__,"root",SDAQ_ID,SEC_RD))
+	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    if( vl.at().fld().flg()&TFld::Selected )	opt->setText(vl.at().getSEL());
 	    else opt->setText( (vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(vl.at().getR(),6)) : 
 		    vl.at().getS() );
 	}
-	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R___:RWRW__,"root",SDAQ_ID,SEC_WR))
+	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    if(vl.at().fld().flg()&TFld::Selected)	vl.at().setSEL(opt->text());
 	    else					vl.at().setS(opt->text());

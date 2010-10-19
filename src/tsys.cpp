@@ -1430,11 +1430,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
+	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
-	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root",SDB_ID,2,"tp","bool",
+	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Select for automatic system saving to DB on exit."));
-	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root",SDB_ID,2,"tp","dec",
+	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
@@ -1509,18 +1509,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/config" && ctrChkNode(opt))		opt->setText(mConfFile);
     else if(a_path == "/gen/wrk_db" )
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(mWorkDB);
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setWorkDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(mWorkDB);
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setWorkDB(opt->text());
     }
     else if(a_path == "/gen/saveExit")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText( int2str(saveAtExit()) );
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setSaveAtExit( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText( int2str(saveAtExit()) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit( atoi(opt->text().c_str()) );
     }
     else if(a_path == "/gen/savePeriod")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText( int2str(savePeriod()) );
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setSavePeriod( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText( int2str(savePeriod()) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod( atoi(opt->text().c_str()) );
     }
     else if(a_path == "/gen/workdir")
     {

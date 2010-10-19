@@ -367,7 +367,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,2,"tp","str","len","50");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,1,"v_sz","100");
-	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
+	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),RWRW__,name().c_str(),SSEC_ID,1,"tp","str");
 	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp");
@@ -382,8 +382,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	opt->setText( TSYS::int2str(auth(opt->attr("password"))) );
     else if(a_path == "/prm/db")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/prm/name" && ctrChkNode(opt))	opt->setText(name());
     else if(a_path == "/prm/pct" || a_path == "/ico")
@@ -516,7 +516,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","len","50");
-	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SDB_ID,4,"tp","str","dest","select","select","/db/list",
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,"tp","str","dest","select","select","/db/list",
 	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","s_com","add,del");
 	return;
@@ -526,8 +526,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/db")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(DB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/prm/name" && ctrChkNode(opt,"get",R_R_R_,"root",SSEC_ID,SEC_RD))
 	opt->setText(name());

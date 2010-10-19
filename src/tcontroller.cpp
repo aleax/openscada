@@ -407,15 +407,15 @@ void TController::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),RWRWR_,"root","DAQ",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),RWRWR_,"root","DAQ",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root","DAQ",4,"tp","str","dest","select","select","/db/list",
+		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
 	    {
-		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root","DAQ",RWRWR_);
+		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
 		//>> Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/REDNT_RUN",true);
 		if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/redRunLst");
@@ -423,13 +423,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
 	if(owner().tpPrmSize())
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRW__,"root","DAQ",2,"idm","1","idSz","20");
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
 	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if(owner().tpPrmSize() > 1)
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),RWRW__,"root","DAQ",3,"tp","str","dest","select","select","/prm/t_lst");
-		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root","DAQ",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRW__,"root","DAQ",5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/t_lst");
+		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
 	    }
 	}
 	return;
@@ -449,26 +449,26 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize())
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root","DAQ",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","DAQ",SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR) )
 	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
     else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize())
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root","DAQ",SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    list(c_list);
 	    for( unsigned i_a=0; i_a < c_list.size(); i_a++ )
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRW__,"root","DAQ",SEC_WR))
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid,owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
 	    at(vid).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRW__,"root","DAQ",SEC_WR))	del(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
     }
     else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_))
     {
@@ -477,22 +477,22 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/cntr/st/db")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD))	opt->setText(DB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	setDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/cntr/st/en_st")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD))	opt->setText(en_st?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	atoi(opt->text().c_str())?enable():disable();
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(en_st?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	atoi(opt->text().c_str())?enable():disable();
     }
     else if(a_path == "/cntr/st/run_st")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","DAQ",SEC_RD))	opt->setText(run_st?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	atoi(opt->text().c_str())?start():stop();
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	atoi(opt->text().c_str())?start():stop();
     }
     else if(a_path.substr(0,9) == "/cntr/cfg")
     {
-	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root","DAQ",RWRWR_);
+	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
 	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
 	    for(int i_t = 0; i_t < owner().tpPrmSize( ); i_t++)
 		if(owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2))
@@ -505,7 +505,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
 	vector<string> sls;
 	owner().owner().rdStList(sls);
-	for( int i_s = 0; i_s < sls.size(); i_s++ )
+	for(int i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
     else TCntrNode::cntrCmdProc(opt);

@@ -1,7 +1,9 @@
 2010-10-19 Roman
-- FIX:Archives: No permited user's access to main subsystem's data is fixed.
+- FIX:Archives, DAQ: No permited user's access to main subsystem's data is fixed.
 - FIX:Archives: Permition for assign archivators to an archive is fixed.
 - FIX:Special.SystemTests: The test "Archive" is fixed for new archive API.
+- DB: Access for select DB for all subsystems' items is set to it subsystem's permition.
+- FIX:UI.QTStarter: Translation for message "&Cancel" is enabled.
 
 
 2010-10-17 Roman
