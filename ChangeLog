@@ -1,3 +1,8 @@
+2010-10-20 Roman
+- DB.DBF: Disable inset "SQL" for that module's DB.
+- Special.SystemTests: Translation to German is updated by Irina Popkova.
+
+
 2010-10-19 Roman
 - FIX:Archives, DAQ: No permited user's access to main subsystem's data is fixed.
 - FIX:Archives: Permition for assign archivators to an archive is fixed.

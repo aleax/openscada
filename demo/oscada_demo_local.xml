@@ -384,10 +384,10 @@
 		<prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" full="1"/>
 		<prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000"/>
 		<prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/>
-		<prm id="BD" on="0" per="10" type="MySQL" bd="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
-		<prm id="BD" on="0" per="10" type="DBF" bd="./DATA/DBF" table="test.dbf" size="1000"/>
-		<prm id="BD" on="0" per="10" type="SQLite" bd="./DATA/test.db" table="test" size="1000"/>
-		<prm id="BD" on="0" per="10" type="FireBird" bd="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/>
+		<prm id="DB" on="0" per="10" type="MySQL" addr="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/>
+		<prm id="DB" on="0" per="10" type="DBF" addr="./DATA/DBF" table="test.dbf" size="1000"/>
+		<prm id="DB" on="0" per="10" type="SQLite" addr="./DATA/test.db" table="test" size="1000"/>
+		<prm id="DB" on="0" per="10" type="FireBird" addr="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/>
 		<prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/>
 		<prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/>
