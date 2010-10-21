@@ -33,7 +33,7 @@ namespace KernelTest
 class TestVal : public TFunction
 {
     public:
-	TestVal( ) : TFunction("Val")
+	TestVal( ) : TFunction("Val",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("name",_("Parameter attribute path"),IO::String,IO::Default,"System.AutoDA.CPULoad.load") );

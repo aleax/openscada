@@ -98,7 +98,7 @@ class TFunction : public TCntrNode
 {
     public:
 	//Methods
-	TFunction( const string &id );
+	TFunction( const string &id, const char *grp = "root" );
 	virtual ~TFunction( );
 
 	TFunction &operator=( TFunction &func );
@@ -141,6 +141,7 @@ class TFunction : public TCntrNode
 	bool			run_st;
 	TValFunc		*mTVal;
 	vector<TValFunc*>	used;
+	const char		*grp;
 
     private:
 	//Methods

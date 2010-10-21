@@ -67,7 +67,7 @@ class VArchObj : public TVarObj
 class vArh : public TFunction
 {
     public:
-	vArh( ) : TFunction("vArh")
+	vArh( ) : TFunction("vArh",SSPC_ID)
 	{
 	    ioAdd( new IO("res",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("name",_("Name"),IO::String,IO::Default) );
@@ -90,7 +90,7 @@ class vArh : public TFunction
 class vArhBuf : public TFunction
 {
     public:
-	vArhBuf( ) : TFunction("vArhBuf")
+	vArhBuf( ) : TFunction("vArhBuf",SSPC_ID)
 	{
 	    ioAdd( new IO("res",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("tp",_("Type"),IO::Integer,IO::Default,"1") );

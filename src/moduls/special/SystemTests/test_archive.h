@@ -33,7 +33,7 @@ namespace KernelTest
 class TestArchive : public TFunction
 {
     public:
-	TestArchive( ) : TFunction("Archive")
+	TestArchive( ) : TFunction("Archive",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("arch",_("Value archive"),IO::String,IO::Default) );

@@ -41,7 +41,7 @@ namespace FLibSYS
 class sysCall : public TFunction
 {
     public:
-	sysCall( ) : TFunction("sysCall")
+	sysCall( ) : TFunction("sysCall",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return|IO::FullText) );
 	    ioAdd( new IO("com",_("Command"),IO::String,IO::Default) );
@@ -71,7 +71,7 @@ class sysCall : public TFunction
 class dbReqSQL : public TFunction
 {
     public:
-	dbReqSQL( ) : TFunction("dbReqSQL")
+	dbReqSQL( ) : TFunction("dbReqSQL",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("addr",_("DB address"),IO::String,IO::Default) );
@@ -112,7 +112,7 @@ class dbReqSQL : public TFunction
 class messGet : public TFunction
 {
     public:
-	messGet( ) : TFunction("messGet")
+	messGet( ) : TFunction("messGet",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("btm",_("Begin time"),IO::Integer,IO::Default) );
@@ -150,7 +150,7 @@ class messGet : public TFunction
 class messPut : public TFunction
 {
     public:
-	messPut( ) : TFunction("messPut")
+	messPut( ) : TFunction("messPut",SSPC_ID)
 	{
 	    ioAdd( new IO("cat",_("Category"),IO::String,IO::Default) );
 	    ioAdd( new IO("lev",_("Level"),IO::Integer,IO::Default) );
@@ -175,7 +175,7 @@ class messPut : public TFunction
 class strSize : public TFunction
 {
     public:
-	strSize( ) : TFunction("strSize")
+	strSize( ) : TFunction("strSize",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
@@ -196,7 +196,7 @@ class strSize : public TFunction
 class strSubstr : public TFunction
 {
     public:
-	strSubstr( ) : TFunction("strSubstr")
+	strSubstr( ) : TFunction("strSubstr",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
@@ -225,7 +225,7 @@ class strSubstr : public TFunction
 class strInsert : public TFunction
 {
     public:
-	strInsert( ) : TFunction("strInsert")
+	strInsert( ) : TFunction("strInsert",SSPC_ID)
 	{
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Output) );
 	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
@@ -250,7 +250,7 @@ class strInsert : public TFunction
 class strReplace : public TFunction
 {
     public:
-	strReplace( ) : TFunction("strReplace")
+	strReplace( ) : TFunction("strReplace",SSPC_ID)
 	{
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Output) );
 	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
@@ -279,7 +279,7 @@ class strReplace : public TFunction
 class strParse : public TFunction
 {
     public:
-	strParse( ) : TFunction("strParse")
+	strParse( ) : TFunction("strParse",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
@@ -306,7 +306,7 @@ class strParse : public TFunction
 class strParsePath : public TFunction
 {
     public:
-	strParsePath( ) : TFunction("strParsePath")
+	strParsePath( ) : TFunction("strParsePath",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("path",_("Path"),IO::String,IO::Default) );
@@ -331,7 +331,7 @@ class strParsePath : public TFunction
 class strPath2Sep : public TFunction
 {
     public:
-	strPath2Sep( ) : TFunction("strPath2Sep")
+	strPath2Sep( ) : TFunction("strPath2Sep",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
@@ -353,7 +353,7 @@ class strPath2Sep : public TFunction
 class strEnc2HTML : public TFunction
 {
     public:
-	strEnc2HTML( ) : TFunction("strEnc2HTML")
+	strEnc2HTML( ) : TFunction("strEnc2HTML",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
@@ -374,7 +374,7 @@ class strEnc2HTML : public TFunction
 class strEnc2Bin : public TFunction
 {
     public:
-	strEnc2Bin( ) : TFunction("strEnc2Bin")
+	strEnc2Bin( ) : TFunction("strEnc2Bin",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
@@ -395,7 +395,7 @@ class strEnc2Bin : public TFunction
 class strDec4Bin : public TFunction
 {
     public:
-	strDec4Bin( ) : TFunction("strDec4Bin")
+	strDec4Bin( ) : TFunction("strDec4Bin",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("src",_("Source"),IO::String,IO::Default) );
@@ -416,7 +416,7 @@ class strDec4Bin : public TFunction
 class real2str : public TFunction
 {
     public:
-	real2str( ) : TFunction("real2str")
+	real2str( ) : TFunction("real2str",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
@@ -439,7 +439,7 @@ class real2str : public TFunction
 class int2str : public TFunction
 {
     public:
-	int2str( ) : TFunction("int2str")
+	int2str( ) : TFunction("int2str",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::Integer,IO::Default) );
@@ -467,7 +467,7 @@ class int2str : public TFunction
 class str2real : public TFunction
 {
     public:
-	str2real( ) : TFunction("str2real")
+	str2real( ) : TFunction("str2real",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Real,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
@@ -485,7 +485,7 @@ class str2real : public TFunction
 class str2int : public TFunction
 {
     public:
-	str2int( ) : TFunction("str2int")
+	str2int( ) : TFunction("str2int",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Integer,IO::Return) );
 	    ioAdd( new IO("val",_("Value"),IO::String,IO::Default) );
@@ -504,7 +504,7 @@ class str2int : public TFunction
 class floatSplitWord : public TFunction
 {
     public:
-	floatSplitWord( ) : TFunction("floatSplitWord")
+	floatSplitWord( ) : TFunction("floatSplitWord",SSPC_ID)
 	{
 	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default) );
 	    ioAdd( new IO("w1",_("Word 1"),IO::Integer,IO::Output) );
@@ -529,7 +529,7 @@ class floatSplitWord : public TFunction
 class floatMergeWord : public TFunction
 {
     public:
-	floatMergeWord( ) : TFunction("floatMergeWord")
+	floatMergeWord( ) : TFunction("floatMergeWord",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Real,IO::Return) );
 	    ioAdd( new IO("w1",_("Word 1"),IO::Integer,IO::Default) );

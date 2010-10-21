@@ -36,7 +36,7 @@ namespace FLibSYS
 class tmFStr : public TFunction
 {
     public:
-	tmFStr( ) : TFunction("tmFStr")
+	tmFStr( ) : TFunction("tmFStr",SSPC_ID)
 	{
 	    ioAdd( new IO("val",_("Date and time string"),IO::String,IO::Return,"") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0") );
@@ -63,7 +63,7 @@ class tmFStr : public TFunction
 class tmDate : public TFunction
 {
     public:
-	tmDate( ) : TFunction("tmDate")
+	tmDate( ) : TFunction("tmDate",SSPC_ID)
 	{
 	    ioAdd( new IO("fullsec",_("Full seconds"),IO::Integer,IO::Default,"0") );
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Output,"0") );
@@ -104,7 +104,7 @@ class tmDate : public TFunction
 class tmTime : public TFunction
 {
     public:
-	tmTime( ) : TFunction("tmTime")
+	tmTime( ) : TFunction("tmTime",SSPC_ID)
 	{
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0") );
 	    ioAdd( new IO("usec",_("Microseconds"),IO::Integer,IO::Output,"-1") );
@@ -131,7 +131,7 @@ class tmTime : public TFunction
 class tmStr2Tm : public TFunction
 {
     public:
-	tmStr2Tm( ) : TFunction("tmStrPTime")
+	tmStr2Tm( ) : TFunction("tmStrPTime",SSPC_ID)
 	{
 	    ioAdd( new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0") );
 	    ioAdd( new IO("str",_("Date and time string"),IO::String,IO::Default,"") );
@@ -156,7 +156,7 @@ class tmStr2Tm : public TFunction
 class tmCron : public TFunction
 {
     public:
-	tmCron( ) : TFunction("tmCron")
+	tmCron( ) : TFunction("tmCron",SSPC_ID)
 	{
 	    ioAdd( new IO("res",_("Result, seconds"),IO::Integer,IO::Return,"0") );
 	    ioAdd( new IO("str",_("Cron"),IO::String,IO::Default,"* * * * *") );

@@ -7,7 +7,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-08 11:06+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"

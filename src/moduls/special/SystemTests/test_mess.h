@@ -33,7 +33,7 @@ namespace KernelTest
 class TestMess : public TFunction
 {
     public:
-	TestMess( ) : TFunction("Mess")
+	TestMess( ) : TFunction("Mess",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("arhtor",_("Archivator"),IO::String,IO::Default,"FSArch.StatErrors") );

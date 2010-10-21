@@ -36,7 +36,7 @@ namespace FLibSYS
 class xmlNode : public TFunction
 {
     public:
-	xmlNode( ) : TFunction("xmlNode")
+	xmlNode( ) : TFunction("xmlNode",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
 	    ioAdd( new IO("name",_("Name"),IO::String,IO::Default) );
@@ -54,7 +54,7 @@ class xmlNode : public TFunction
 class xmlCntrReq : public TFunction
 {
     public:
-	xmlCntrReq( ) : TFunction("xmlCntrReq")
+	xmlCntrReq( ) : TFunction("xmlCntrReq",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("req",_("Request"),IO::Object,IO::Default) );

@@ -47,7 +47,7 @@ namespace FLibComplex1
 class DigitBlock : public TFunction
 {
     public:
-	DigitBlock( ) : TFunction("digitBlock")
+	DigitBlock( ) : TFunction("digitBlock",SSPC_ID)
 	{
 	    ioAdd( new IO("cmdOpen",_("Command \"Open\""),IO::Boolean,IO::Output,"0") );
 	    ioAdd( new IO("cmdClose",_("Command \"Close\""),IO::Boolean,IO::Output,"0") );
@@ -94,7 +94,7 @@ class DigitBlock : public TFunction
 class Sum : public TFunction
 {
     public:
-	Sum( ) : TFunction("sum")
+	Sum( ) : TFunction("sum",SSPC_ID)
 	{
 	    char id_buf[10], nm_buf[20];
 
@@ -140,7 +140,7 @@ class Sum : public TFunction
 class Mult : public TFunction
 {
     public:
-	Mult( ) : TFunction("mult")
+	Mult( ) : TFunction("mult",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"1") );
 	    for( int i_c = 1; i_c <= 6; i_c++ )
@@ -172,7 +172,7 @@ class Mult : public TFunction
 class MultDiv : public TFunction
 {
     public:
-	MultDiv( ) : TFunction("multDiv")
+	MultDiv( ) : TFunction("multDiv",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
@@ -212,7 +212,7 @@ class MultDiv : public TFunction
 class Exp : public TFunction
 {
     public:
-	Exp( ) : TFunction("exp")
+	Exp( ) : TFunction("exp",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
@@ -252,7 +252,7 @@ class Exp : public TFunction
 class Pow : public TFunction
 {
     public:
-	Pow( ) : TFunction("pow")
+	Pow( ) : TFunction("pow",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    for( int i_c = 1; i_c <= 5; i_c++ )
@@ -293,7 +293,7 @@ class Pow : public TFunction
 class Cond1 : public TFunction
 {
     public:
-	Cond1( ) : TFunction("cond_lt")
+	Cond1( ) : TFunction("cond_lt",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in1",_("Input 1"),IO::Real,IO::Default,"1") );
@@ -330,7 +330,7 @@ class Cond1 : public TFunction
 class Cond2 : public TFunction
 {
     public:
-	Cond2( ) : TFunction("cond_gt")
+	Cond2( ) : TFunction("cond_gt",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in1",_("Input 1"),IO::Real,IO::Default,"1") );
@@ -369,7 +369,7 @@ class Cond2 : public TFunction
 class Cond3 : public TFunction
 {
     public:
-	Cond3( ) : TFunction("cond_full")
+	Cond3( ) : TFunction("cond_full",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in1",_("Input 1"),IO::Real,IO::Default,"1") );
@@ -417,7 +417,7 @@ class Cond3 : public TFunction
 class Select : public TFunction
 {
     public:
-	Select( ) : TFunction("select")
+	Select( ) : TFunction("select",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("sel",_("Select"),IO::Integer,IO::Default,"1") );
@@ -463,7 +463,7 @@ class Select : public TFunction
 class Increm : public TFunction
 {
     public:
-	Increm( ) : TFunction("increment")
+	Increm( ) : TFunction("increment",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in",_("Input"),IO::Real,IO::Default,"1") );
@@ -495,7 +495,7 @@ class Increm : public TFunction
 class Divider : public TFunction
 {
     public:
-	Divider( ) : TFunction("div")
+	Divider( ) : TFunction("div",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 
@@ -566,7 +566,7 @@ class Divider : public TFunction
 class PID : public TFunction
 {
     public:
-	PID( ) : TFunction("pid")
+	PID( ) : TFunction("pid",SSPC_ID)
 	{
 	    //Inputs
 	    ioAdd( new IO("var",_("Variable"),IO::Real,IO::Default,"0") );
@@ -692,7 +692,7 @@ class PID : public TFunction
 class Alarm : public TFunction
 {
     public:
-	Alarm( ) : TFunction("alarm")
+	Alarm( ) : TFunction("alarm",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Boolean,IO::Return,"0") );
 	    ioAdd( new IO("val",_("Value"),IO::Real,IO::Default,"0") );
@@ -726,7 +726,7 @@ class Alarm : public TFunction
 class Flow : public TFunction
 {
     public:
-	Flow( ) : TFunction("flow")
+	Flow( ) : TFunction("flow",SSPC_ID)
 	{
 	    ioAdd( new IO("f",_("Flow"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X positon"),IO::Real,IO::Default,"0") );
@@ -759,7 +759,7 @@ class Flow : public TFunction
 class SumMult : public TFunction
 {
     public:
-	SumMult( ) : TFunction("sum_mult")
+	SumMult( ) : TFunction("sum_mult",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 
@@ -802,7 +802,7 @@ class SumMult : public TFunction
 class SumDiv : public TFunction
 {
     public:
-	SumDiv( ) : TFunction("sum_div")
+	SumDiv( ) : TFunction("sum_div",SSPC_ID)
 	{
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 
@@ -842,7 +842,7 @@ class SumDiv : public TFunction
 class Lag : public TFunction
 {
     public:
-	Lag( ) : TFunction("lag")
+	Lag( ) : TFunction("lag",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );

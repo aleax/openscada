@@ -1,0 +1,479 @@
+# OpenSCADA.DAQ.OPC_UA translate to German.
+# Copyright (C) 2010 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
+#
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-10-08 11:06+0300\n"
+"PO-Revision-Date: 2010-10-21 00:33+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Lokalize 1.0\n"
+
+msgid "Parameteres table"
+msgstr "Parametertabelle"
+
+msgid "Calc schedule"
+msgstr "Planung der Berechnung"
+
+msgid "Gather task priority"
+msgstr "Niveau der Priorität der Datenempfangaufgabe"
+
+msgid "Sync inter remote station period (s)"
+msgstr "Periode der Sznchronisierung mit der entfernten Station (sek)"
+
+msgid "Transport address"
+msgstr "Adresse des Transports"
+
+msgid "End point"
+msgstr "Endknoten"
+
+msgid "Security policy"
+msgstr "Politik der Sicherheit"
+
+msgid "None;Basic128Rsa15;Basic256"
+msgstr "Keine;Basic128Rsa15;Basic256"
+
+msgid "Message security mode"
+msgstr "Regime der Sicherheit der Nachricht"
+
+msgid "None;Sign;Sign&Encrypt"
+msgstr "Keine;Unterschrift;Unterschrift&Kodierung"
+
+msgid "Certificate (PEM)"
+msgstr "Zertifikat (PEM)"
+
+msgid "Private key (PEM)"
+msgstr "Privatschlüssel (PEM)"
+
+msgid "Parameter attributes number limit"
+msgstr "Beschränkung der Quantität der Parameterattribute"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Nodes list"
+msgstr "Liste von den Knoten"
+
+msgid "Root folder (84)"
+msgstr "Wurzeldirektorie (84)"
+
+#, c-format
+msgid "Connection error. Restoring in %.6g s."
+msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
+
+#, c-format
+msgid "Gather data by period %g s. "
+msgstr "Datenemfang mit der Periode %g s. "
+
+#, c-format
+msgid "Gather data by cron '%s'. "
+msgstr "Datenempfang nach dem Plan '%s'. "
+
+#, c-format
+msgid "Spend time %.6g ms. Requests %.6g."
+msgstr "%.6g usek. Zeit genommen. Anfragen %.6g."
+
+msgid "No secure policy found"
+msgstr "Politik der Sicherheit ist nicht gefunden"
+
+msgid ""
+"Schedule is writed in seconds periodic form or in standard Cron form.\n"
+"Seconds form is one real number (1.5, 1e-3).\n"
+"Cron it is standard form '* * * * *'. Where:\n"
+"  - minutes (0-59);\n"
+"  - hours (0-23);\n"
+"  - days (1-31);\n"
+"  - month (1-12);\n"
+"  - week day (0[sunday]-6)."
+msgstr ""
+"Planung wird in der Form der Sekundenperiodizität oder  "
+"des Standardes Cron gespeichert.\n"
+"Sekundenform ist eine reele Zahl (1.5, 1e-3).\n"
+"Form des Standards Cron ist '* * * * *'. Wo:\n"
+"  - Minuten (0-59);\n"
+"  - Stunden (0-23);\n"
+"  - Tage (1-31);\n"
+"  - Monate (1-12);\n"
+"  - Wochentage (0[Sonntag]-6)."
+
+msgid "Server nodes browser"
+msgstr "Übersicht der Knoten des Servers"
+
+msgid "Node"
+msgstr "Knoten"
+
+msgid "Attributes"
+msgstr "Attribute"
+
+msgid "Attribute"
+msgstr "Attribut"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Unknown"
+msgstr "Unbekannt"
+
+msgid "NodeId"
+msgstr "Knoten ID"
+
+msgid "NodeClass"
+msgstr "Klasse des Knotens"
+
+msgid "Object"
+msgstr "Objekt"
+
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Method"
+msgstr "Methode"
+
+msgid "ObjectType"
+msgstr "ObjektTyp"
+
+msgid "VariableType"
+msgstr "Typ der Variable"
+
+msgid "ReferenceType"
+msgstr "Typ der Verweisung"
+
+msgid "DataType"
+msgstr "Datentyp"
+
+msgid "View"
+msgstr "Typ"
+
+msgid "BrowseName"
+msgstr "ÜbersichtsName"
+
+msgid "DisplayName"
+msgstr "AbbildungsName"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "WriteMask"
+msgstr "Maske der Einschreibung"
+
+msgid "UserWriteMask"
+msgstr "Maske der Einschreibung des Nutzers"
+
+msgid "IsAbstract"
+msgstr "Abstrakt"
+
+msgid "Symmetric"
+msgstr "Symmetrisch"
+
+msgid "InverseName"
+msgstr "InversName"
+
+msgid "ContainsNoLoops"
+msgstr "EnthältKeineWindungen"
+
+msgid "EventNotifier"
+msgstr "Benachrichtigung der Ereignisse"
+
+msgid "ValueRank"
+msgstr "WerteRang"
+
+msgid "ArrayDimensions"
+msgstr "DimensionDesMassivs"
+
+msgid "AccessLevel"
+msgstr "ZugangsNiveau"
+
+msgid "Readable, "
+msgstr "Lesen, "
+
+msgid "Writible, "
+msgstr "Einschreiben, "
+
+msgid "History readable, "
+msgstr "LesenDesArchivs, "
+
+msgid "History writible, "
+msgstr "EinschreibungDesArchivs, "
+
+msgid "Semantic change, "
+msgstr "Semantische Veränderungen,"
+
+msgid "UserAccessLevel"
+msgstr "ZugangsNiveauDesNutzers"
+
+msgid "MinimumSamplingInterval"
+msgstr "MinimIntervalBefragung"
+
+msgid "Historizing"
+msgstr "Archivierung"
+
+msgid "Executable"
+msgstr "Ausgeübt"
+
+msgid "UserExecutable"
+msgstr "AusgeübterNutzer"
+
+msgid ""
+"Variables and it containers (Objects) list. All variables will put into the "
+"parameter attributes list.\n"
+"Variables writed by separated lines into format: [ns:id].\n"
+"Where:\n"
+"  ns - names scope, number, zero value can missed;\n"
+"  id - node identifier, number, string, bytes string and GUID.\n"
+"Example:\n"
+"  84 - root folder;\n"
+"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string "
+"view;\n"
+"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and "
+"GUID view."
+msgstr ""
+"Liste von Variablen und Containern (Objekten). Alle Variablen werden "
+"in die Liste von Parameterattributen eingesetzt. "
+"Variablen werden eingeschrieben als einzelne Zeile im Format: [ns:id].\n"
+"Wo:\n"
+"  ns - Namenbereich, mit der Zahl; Nullwert kann ausgelassen sein;\n"
+"  id - Bezeichner des Knotens, mit der Zahl, der Zeile, der Bytezeile oder "
+"dem GUID "
+"Beispiel:\n"
+"  84 - Wurzeldirektory;\n"
+"  3:\"BasicDevices2\" - Knoten der Basenanlagen im Namenbereich 3 und als "
+"eine Zeile;\n"
+"  4:\"61626364\" - Knoten im Namenbereich 4 und als Bytezeile;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - Knoten im Namenbereich 4 und "
+"als "
+"GUID."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter abgeschaltet."
+
+msgid "2:Acquisition is stoped."
+msgstr "2:Befragung ist gestoppt."
+
+#, c-format
+msgid "0x%x: Attribute's errors %s"
+msgstr "0x%x: Fehler der Attribute %s"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "To enable"
+msgstr "Einschalten"
+
+msgid "Serializer type"
+msgstr "Kodierungstyp"
+
+msgid "Binary"
+msgstr "binär"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Security policies"
+msgstr "Sicherheitspolitik"
+
+msgid "Server certificate (PEM)"
+msgstr "Zertifikat des Servers (PEM)"
+
+msgid "Server private key (PEM)"
+msgstr "Privatschlüssel des Servers (PEM)"
+
+msgid "Search and create new server error."
+msgstr "Fehler der Suche und der Schaffung des neuen Servers."
+
+msgid "Respond size is not coincedence."
+msgstr "Nicht übereinstimmender Umfang der Antwort."
+
+msgid "Respond don't acknowledge."
+msgstr "Nichtübereinstimmung der Antwort."
+
+msgid "Client certificate thumbprint error."
+msgstr "Fehler des Stempels des Zertifikats des Kunden."
+
+msgid "Respond's NodeId don't acknowledge"
+msgstr "Nichtübereinstimmumg NodeId der Antwort"
+
+msgid "Signature error"
+msgstr "Fehler der Signatur"
+
+#, c-format
+msgid "Request '%s' isn't supported."
+msgstr "Anfrage '%s' wird nicht unterstüzt."
+
+msgid "Application signature error"
+msgstr "Fehler der Signatur der Beilage"
+
+msgid "Service fault"
+msgstr "Abfall des Servers"
+
+#, c-format
+msgid "OPC_UA protocol '%s' isn't supported."
+msgstr "OPC_UA Protokoll '%s' wird nicht unterstüzt."
+
+msgid "Remote host error"
+msgstr "Fehler des entfernten Hostes"
+
+msgid "Buffer size is less for requested value."
+msgstr "Buffersumfang ist kleiner als der des bezeichneten Wertes."
+
+#, c-format
+msgid "Number size '%d' error."
+msgstr "Fehler im Umfang '%d' de Zahl."
+
+#, c-format
+msgid "Real number size '%d' error."
+msgstr "Fehler im Umfang '%d' der reelen Zahl."
+
+msgid "Buffer size is less for requested string."
+msgstr "Buffersumfang ist kleiner als die gefragte Zeile."
+
+msgid "Buffer size is less for requested NodeId."
+msgstr "Buffersumfang ist kleiner als der gefragte NodeId."
+
+#, c-format
+msgid "NodeId type %d error or don't support."
+msgstr "Fehler oder der NodeId %d Typ wird nicht unterstüzt."
+
+#, c-format
+msgid "Data type '%d' isn't supported."
+msgstr "Datentyp '%d' wird nicht unterstüzt."
+
+msgid "ArrayDimensions field don't supported now."
+msgstr "Feld DimensionMassiv nicht unterestüzt jetzt."
+
+#, c-format
+msgid "randBytes error: %s"
+msgstr "randBytes Fehler: %s"
+
+#, c-format
+msgid "certPEM2DER error: %s"
+msgstr "certPEM2DER Fehler: %s"
+
+#, c-format
+msgid "certDER2PEM error: %s"
+msgstr "certDER2PEM Fehler: %s"
+
+#, c-format
+msgid "certThumbprint: %s"
+msgstr ""
+
+#, c-format
+msgid "asymmetricEncrypt: %s"
+msgstr ""
+
+#, c-format
+msgid "asymmetricDecrypt: %s"
+msgstr ""
+
+#, c-format
+msgid "asymmetricVerify: %s"
+msgstr ""
+
+#, c-format
+msgid "asymmetricSign: %s"
+msgstr ""
+
+#, c-format
+msgid "keyCertPem: %s"
+msgstr ""
+
+msgid "End points"
+msgstr "Endknoten"
+
+msgid "Server certificate thumbprint error."
+msgstr "Fehler des Zertifikatstempels des Knotens."
+
+msgid "Requested OpenSecureChannel NodeId don't acknowledge"
+msgstr "Gefragter Bezeichner des Kanals ist nicht entdeckt"
+
+msgid "Secure channel unknown"
+msgstr "Sicherheitskanal ist unbekannt"
+
+msgid "Secure channel closed"
+msgstr "Sicherheitskanal ist geschlossen"
+
+#, c-format
+msgid "No supported userIdentityToken '%d'."
+msgstr "userIdentityToken '%d' wird nicht unterstüzt."
+
+#, c-format
+msgid "No supported request id '%d'."
+msgstr "Anfrage '%d' wird nicht unterstüzt."
+
+#, c-format
+msgid "Security setting %d error."
+msgstr "Fehler in den Einstellungen der Sicherheit %d."
+
+#, c-format
+msgid "Parent node '%s' no present for node '%s'."
+msgstr "Elternknoten '%s' fehlt für den Knoten '%s'."
+
+#, c-format
+msgid "No session %d present."
+msgstr "Session %d fehlt."
+
+msgid "Disabled. "
+msgstr "Ausgeschaltet. "
+
+msgid "Enabled. "
+msgstr "Eingeschaltet. "
+
+#, c-format
+msgid "Requests %.4g."
+msgstr "Anfragen %.4g."
+
+msgid "End point: "
+msgstr "Endknoten: "
+
+msgid "State"
+msgstr "Zustand"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Enable"
+msgstr "Eingeschaltet"
+
+msgid "DB"
+msgstr "DB"
+
+msgid ""
+"DB address in format [<DB module>.<DB name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+msgid "Config"
+msgstr "Konfiguration"
+
+msgid "Policy"
+msgstr "Politik"
+
+msgid "Message mode"
+msgstr "Regime der Nachricht"
+
+msgid "No present seleted row."
+msgstr "Gewählte Zeile fehlt."
+
+msgid "OPC UA"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid "Allow realisation of OPC UA client service."
+msgstr "Gewährt die Realisierung des Kundenservices OPC UA."
+
+msgid "Allow realisation of OPC UA protocol."
+msgstr "Gewährt die Realisierung OPC UA des Protokolls."
+

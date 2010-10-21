@@ -36,7 +36,7 @@ Func *JavaLikeCalc::p_fnc;
 //* Func: Function                                *
 //*************************************************
 Func::Func( const char *iid, const char *name ) :
-    TConfig(&mod->elFnc()), TFunction(iid), parse_res(mod->parseRes( )),
+    TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID), parse_res(mod->parseRes( )),
     mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
     max_calc_tm(cfg("MAXCALCTM").getId()),prg_src(cfg("FORMULA").getSd())
 {
@@ -2178,7 +2178,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRWR_,"root",SDAQ_ID,2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRW__,"root",SDAQ_ID,2,"tp","str","rows","10");
 	}
 	return;
     }
@@ -2233,8 +2233,8 @@ void Func::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/io/prog")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
     }
     else TFunction::cntrCmdProc(opt);
 }

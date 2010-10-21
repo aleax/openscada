@@ -33,7 +33,7 @@ namespace KernelTest
 class TestDB : public TFunction
 {
     public:
-	TestDB( ) : TFunction("DB")
+	TestDB( ) : TFunction("DB",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("type",_("DB type"),IO::String,IO::Default,"SQLite") );

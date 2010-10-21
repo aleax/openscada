@@ -33,7 +33,7 @@ namespace KernelTest
 class TestValBuf : public TFunction
 {
     public:
-	TestValBuf( ) : TFunction("ValBuf")
+	TestValBuf( ) : TFunction("ValBuf",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	}

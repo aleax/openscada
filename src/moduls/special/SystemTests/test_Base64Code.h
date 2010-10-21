@@ -33,7 +33,7 @@ namespace KernelTest
 class TestBase64Code : public TFunction
 {
     public:
-	TestBase64Code( ) : TFunction("Base64Code")
+	TestBase64Code( ) : TFunction("Base64Code",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	}

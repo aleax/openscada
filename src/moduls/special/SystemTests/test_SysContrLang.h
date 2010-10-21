@@ -33,7 +33,7 @@ namespace KernelTest
 class TestSysContrLang : public TFunction
 {
     public:
-	TestSysContrLang( ) : TFunction("SysContrLang")
+	TestSysContrLang( ) : TFunction("SysContrLang",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("path",_("Path to language element"),IO::String,IO::Default,"/Archive/BaseArh/mess_StatErrors/%2fprm%2fst") );

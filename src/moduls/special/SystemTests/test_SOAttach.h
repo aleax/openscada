@@ -33,7 +33,7 @@ namespace KernelTest
 class TestSOAttach : public TFunction
 {
     public:
-	TestSOAttach( ) : TFunction("SOAttach")
+	TestSOAttach( ) : TFunction("SOAttach",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("name",_("Path to module"),IO::String,IO::Default) );

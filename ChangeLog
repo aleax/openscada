@@ -1,3 +1,9 @@
+2010-10-21 Roman
+- FIX:SYS.TFunction, DAQ.JavaLikeCalc, Special.*: The security group property is added to constructor and the object
+    for control interface properties fix.
+- DAQ.OPC_UA: Translation to German is added by Irina Popkova.
+
+
 2010-10-20 Roman
 - DB.DBF: Disable inset "SQL" for that module's DB.
 - Special.SystemTests: Translation to German is updated by Irina Popkova.

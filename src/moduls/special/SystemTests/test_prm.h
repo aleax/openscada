@@ -33,7 +33,7 @@ namespace KernelTest
 class TestPrm : public TFunction
 {
     public:
-	TestPrm( ) : TFunction("Param")
+	TestPrm( ) : TFunction("Param",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("name",_("DAQ parameter address"),IO::String,IO::Default,"System.AutoDA.CPULoad") );

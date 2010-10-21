@@ -33,7 +33,7 @@ namespace KernelTest
 class TestTrOut : public TFunction
 {
     public:
-	TestTrOut( ) : TFunction("TrOut")
+	TestTrOut( ) : TFunction("TrOut",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default,"TCP:127.0.0.1:10001") );

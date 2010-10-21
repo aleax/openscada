@@ -47,7 +47,7 @@ namespace FLibMath
 class MathAcos : public TFunction
 {
     public:
-	MathAcos( ) : TFunction("acos")
+	MathAcos( ) : TFunction("acos",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -69,7 +69,7 @@ class MathAcos : public TFunction
 class MathAsin : public TFunction
 {
     public:
-	MathAsin( ) : TFunction("asin")
+	MathAsin( ) : TFunction("asin",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -91,7 +91,7 @@ class MathAsin : public TFunction
 class MathAtan : public TFunction
 {
     public:
-	MathAtan( ) : TFunction("atan")
+	MathAtan( ) : TFunction("atan",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -113,7 +113,7 @@ class MathAtan : public TFunction
 class MathCos : public TFunction
 {
     public:
-	MathCos( ) : TFunction("cos")
+	MathCos( ) : TFunction("cos",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
@@ -135,7 +135,7 @@ class MathCos : public TFunction
 class MathCosh : public TFunction
 {
     public:
-	MathCosh( ) : TFunction("cosh")
+	MathCosh( ) : TFunction("cosh",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -157,7 +157,7 @@ class MathCosh : public TFunction
 class MathExp : public TFunction
 {
     public:
-	MathExp( ) : TFunction("exp")
+	MathExp( ) : TFunction("exp",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -179,7 +179,7 @@ class MathExp : public TFunction
 class MathLn : public TFunction
 {
     public:
-	MathLn( ) : TFunction("ln")
+	MathLn( ) : TFunction("ln",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -201,7 +201,7 @@ class MathLn : public TFunction
 class MathLg : public TFunction
 {
     public:
-	MathLg( ) : TFunction("lg")
+	MathLg( ) : TFunction("lg",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -223,7 +223,7 @@ class MathLg : public TFunction
 class MathPow : public TFunction
 {
     public:
-	MathPow( ) : TFunction("pow")
+	MathPow( ) : TFunction("pow",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -246,7 +246,7 @@ class MathPow : public TFunction
 class MathSin : public TFunction
 {
     public:
-	MathSin( ) : TFunction("sin")
+	MathSin( ) : TFunction("sin",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
@@ -268,7 +268,7 @@ class MathSin : public TFunction
 class MathSinh : public TFunction
 {
     public:
-	MathSinh( ) : TFunction("sinh")
+	MathSinh( ) : TFunction("sinh",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -290,7 +290,7 @@ class MathSinh : public TFunction
 class MathSqrt : public TFunction
 {
     public:
-	MathSqrt( ) : TFunction("sqrt")
+	MathSqrt( ) : TFunction("sqrt",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -312,7 +312,7 @@ class MathSqrt : public TFunction
 class MathTan : public TFunction
 {
     public:
-	MathTan( ) : TFunction("tan")
+	MathTan( ) : TFunction("tan",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
@@ -334,7 +334,7 @@ class MathTan : public TFunction
 class MathTanh : public TFunction
 {
     public:
-	MathTanh( ) : TFunction("tanh")
+	MathTanh( ) : TFunction("tanh",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -356,7 +356,7 @@ class MathTanh : public TFunction
 class MathCeil : public TFunction
 {
     public:
-	MathCeil( ) : TFunction("ceil")
+	MathCeil( ) : TFunction("ceil",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -378,7 +378,7 @@ class MathCeil : public TFunction
 class MathAbs : public TFunction
 {
     public:
-	MathAbs( ) : TFunction("abs")
+	MathAbs( ) : TFunction("abs",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -400,7 +400,7 @@ class MathAbs : public TFunction
 class MathFloor : public TFunction
 {
     public:
-	MathFloor( ) : TFunction("floor")
+	MathFloor( ) : TFunction("floor",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
@@ -422,7 +422,7 @@ class MathFloor : public TFunction
 class MathRand : public TFunction
 {
     public:
-	MathRand( ) : TFunction("rand")
+	MathRand( ) : TFunction("rand",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	}
@@ -443,7 +443,7 @@ class MathRand : public TFunction
 class MathIf : public TFunction
 {
     public:
-	MathIf( ) : TFunction("if")
+	MathIf( ) : TFunction("if",SSPC_ID)
 	{
 	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("cond",_("Condition"),IO::Real,IO::Default,"1") );

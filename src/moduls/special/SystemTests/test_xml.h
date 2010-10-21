@@ -33,7 +33,7 @@ namespace KernelTest
 class TestXML : public TFunction
 {
     public:
-	TestXML( ) : TFunction("XML")
+	TestXML( ) : TFunction("XML",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("file",_("XML file"),IO::String,IO::Default) );
