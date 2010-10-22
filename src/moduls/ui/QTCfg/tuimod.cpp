@@ -87,7 +87,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), start_path(string("/")+SYS->id()), 
 
 TUIMod::~TUIMod( )
 {
-    if( run_st ) modStop();
+    if(run_st) modStop();
 }
 
 string TUIMod::modInfo( const string &name )
@@ -208,7 +208,7 @@ void TUIMod::modStop( )
 
     end_run = true;
 
-    for( int i_w = 0; i_w < cfapp.size(); i_w++ )
+    for(int i_w = 0; i_w < cfapp.size(); i_w++)
 	while(cfapp[i_w]) usleep(STD_WAIT_DELAY*1000);
 
     run_st = false;
@@ -217,9 +217,9 @@ void TUIMod::modStop( )
 void TUIMod::regWin( QMainWindow *win )
 {
     int i_w;
-    for( i_w = 0; i_w < cfapp.size(); i_w++ )
-	if( cfapp[i_w] == NULL ) break;
-    if( i_w == cfapp.size() )	cfapp.push_back((QMainWindow*)NULL);
+    for(i_w = 0; i_w < cfapp.size(); i_w++)
+	if(cfapp[i_w] == NULL) break;
+    if(i_w == cfapp.size())	cfapp.push_back((QMainWindow*)NULL);
     cfapp[i_w] = win;
 }
 

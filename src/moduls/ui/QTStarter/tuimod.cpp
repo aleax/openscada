@@ -154,14 +154,16 @@ void TUIMod::postEnable( int flag )
 	{
 	    end_run = false;
 
-	    SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
+	    SYS->taskCreate(nodePath('.',true), 0, Task, this, &run_st);
 	}
     }
 }
 
 void TUIMod::postDisable( int flag )
 {
-    if( run_st ) SYS->taskDestroy( nodePath('.',true), &run_st, &end_run );
+    if(run_st)
+	try { SYS->taskDestroy(nodePath('.',true), &run_st, &end_run); }
+	catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TUIMod::load_( )
@@ -170,7 +172,7 @@ void TUIMod::load_( )
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
     const char *short_opt="h";
     struct option long_opt[] =
@@ -192,7 +194,7 @@ void TUIMod::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config file
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
 }
 
@@ -261,11 +263,11 @@ void *TUIMod::Task( void * )
     QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
 
-    while( !mod->startCom( ) && !mod->endRun( ) )
+    while(!mod->startCom( ) && !mod->endRun())
     {
-	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
+	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
-	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
+	for(int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m--)
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
@@ -278,37 +280,37 @@ void *TUIMod::Task( void * )
 
     int op_wnd = 0;
     mod->owner().modList(list);
-    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
-		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+    for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
 	{
 	    //>> Search module into start list
 	    int i_off = 0;
 	    string s_el;
-	    while( (s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size() )
-		if( s_el == list[i_l] )	break;
-	    if( !s_el.empty() || !i_off )
-		if( winCntr->callQTModule(list[i_l]) ) op_wnd++;
+	    while((s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size())
+		if(s_el == list[i_l])	break;
+	    if(!s_el.empty() || !i_off)
+		if(winCntr->callQTModule(list[i_l])) op_wnd++;
 	}
 
     //> Start call dialog
-    if( QApplication::topLevelWidgets().isEmpty() ) winCntr->startDialog( );
+    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog( );
 
-    QObject::connect( QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()) );
+    QObject::connect(QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()));
 
     QtApp->exec();
     delete winCntr;
 
     //> Stop splash create
-    if( !ico_t.load(TUIS::icoPath("splash_exit").c_str()) )	ico_t.load(":/images/splash.png");
+    if(!ico_t.load(TUIS::icoPath(SYS->id()+"_splash_exit").c_str()))	ico_t.load(":/images/splash.png");
     splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
     st_time = time(NULL);
-    while( !mod->endRun( ) )
+    while(!mod->endRun())
     {
 	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
 	QString mess;
-	for( int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m-- )
+	for(int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m--)
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
@@ -370,8 +372,10 @@ WinControl::WinControl( )
 
 void WinControl::checkForEnd( )
 {
-    if( !mod->endRun() && mod->startCom() ) return;
+    if(!mod->endRun() && mod->startCom()) return;
     tm->stop();
+    QWidgetList wl = qApp->topLevelWidgets();
+    for(int i_w = 0; i_w < wl.size(); i_w++) wl[i_w]->setProperty("forceClose",true);
     qApp->closeAllWindows();
 }
 

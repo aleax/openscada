@@ -166,25 +166,26 @@ Contr::~Contr( )
 
 TCntrNode &Contr::operator=( TCntrNode &node )
 {
-    TController::operator=(node);
-
     Contr *src_n = dynamic_cast<Contr*>(&node);
-    if( !src_n ) return *this;
-
-    //> Blocks copy
-    if( src_n->enableStat( ) )
+    if(src_n)
     {
-	if( !enableStat( ) )    enable();
-
-	//>> Blocks copy
-	vector<string> ls;
-	src_n->blkList(ls);
-	for( int i_l = 0; i_l < ls.size(); i_l++ )
+	//> Blocks copy
+	if(src_n->enableStat())
 	{
-	    if( !blkPresent(ls[i_l]) ) blkAdd(ls[i_l]);
-	    (TCntrNode&)blkAt(ls[i_l]).at() = (TCntrNode&)src_n->blkAt(ls[i_l]).at();
+	    if(!enableStat())	enable();
+
+	    //>> Blocks copy
+	    vector<string> ls;
+	    src_n->blkList(ls);
+	    for(int i_l = 0; i_l < ls.size(); i_l++)
+	    {
+		if(!blkPresent(ls[i_l])) blkAdd(ls[i_l]);
+		(TCntrNode&)blkAt(ls[i_l]).at() = (TCntrNode&)src_n->blkAt(ls[i_l]).at();
+	    }
 	}
     }
+
+    TController::operator=(node);
 
     return *this;
 }

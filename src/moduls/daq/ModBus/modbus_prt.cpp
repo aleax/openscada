@@ -709,6 +709,8 @@ bool Node::cfgChange( TCfg &ce )
 
 void Node::load_( )
 {
+    bool en_prev = enableStat();
+
     if( !SYS->chkSelDB(DB()) ) return;
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
@@ -751,6 +753,8 @@ void Node::load_( )
 	int iid = ioId(u_pos[i_p]);
 	if( iid != i_p ) try{ ioMove(iid,i_p); } catch(...){ }
     }
+
+    if(en_prev && !enableStat()) setEnable(true);
 }
 
 void Node::save_( )

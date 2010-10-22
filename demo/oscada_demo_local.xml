@@ -110,7 +110,7 @@
 	    </tbl>
 	    <tbl id="tmplib_test2">
 		<fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" DB="test2"
-		    PROGRAM="JavaLikeCalc.JavaScript&#010;cnt=5*i"/>
+		    PROGRAM="JavaLikeCalc.JavaScript&#010;cnt=5*i;"/>
 	    </tbl>
 	    <tbl id="tmplib_test2_io">
 		<fld TMPL_ID="test2" ID="i" NAME="I" NAME_ru="I" NAME_uk="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/>
@@ -194,7 +194,7 @@
 		    <fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/>
 		</tbl>
 		<tbl id="Model_prm">
-		    <fld SHIFR="l_kl" NAME="Klap lev" NAME_ru="Полож. клапана" NAME_uk="Полож. клапана" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" BLK="Klap" IO="l_kl1"/>
+		    <fld SHIFR="l_kl" NAME="Klap lev" NAME_ru="Полож. клапана" NAME_uk="Полож. клапана" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" IO="Klap.l_kl1"/>
 		</tbl>
 		-->
 	    </node>
@@ -203,7 +203,7 @@
 		<!--
 		<tbl id="DAQ">
 		    <fld ID="CalcTest" NAME="Calc Test" NAME_ru="Тест вычисл." NAME_uk="Тест обчисл." DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="CalcTest_prm"
-			FUNC="TemplFunc.d_alarm" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/>
+			FUNC="TemplFunc.d_alarm" SCHEDULE="1" PRIOR="0" ITER="1"/>
 		</tbl>
 		<tbl id="CalcTest_val">
 		    <fld ID="in" VAL="0"/>
@@ -261,11 +261,51 @@
 		</tbl>-->
 	    </node>
 
-	    <node id="mod_Transporter">
+	    <node id="mod_DAQGate">
 		<!--
 		<tbl id="DAQ">
 		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
 			 PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/>
+		</tbl>-->
+	    </node>
+
+	    <node id="mod_DCON">
+		<!--<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+			PERIOD="1" PRIOR="0" ADDR="" REQ_TRY="1"/>
+		</tbl>
+		<tbl id="test2prm">
+		    <fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" MOD_TP="0" MOD_ADDR="1" CRC_CTRL="1"/>
+		</tbl>-->
+	    </node>
+
+	    <node id="mod_ICP_DAS">
+		<!--<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+			PERIOD="1" PRIOR="0" BUS="1" BAUD="115200" LP_PRMS="" REQ_TRY="3"/>
+		</tbl>
+		<tbl id="test2prm">
+			<fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" MOD_TP="552985" MOD_ADDR="0" MOD_SLOT="1" MOD_PRMS="0"/>
+		</tbl>-->
+            </node>
+
+	    <node id="mod_OPC_UA">
+		<!--<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
+			SCHEDULE="1" PRIOR="0" SYNCPER="60" ADDR="" EndPoint="opc.tcp://localhost:4841" SecPolicy="None" SecMessMode="1" Cert="" PvKey="" AttrsLimit="100"/>
+		</tbl>
+		<tbl id="test2prm">
+		    <fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" ND_LS=""/>
+		</tbl>-->
+	    </node>
+
+	    <node id="mod_SoundCard">
+		<!--<tbl id="DAQ">
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="
+			CARD="" SMPL_RATE="8000" SMPL_TYPE="1"/>
+		</tbl>
+		<tbl id="test2prm">
+			<fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1
 		</tbl>-->
 	    </node>
 
@@ -378,7 +418,7 @@
 
 	<node id="sub_Special">
 	    <node id="mod_SystemTests">
-		<prm id="PARAM" on="0" per="5" name="LogicLev.experiment.F3"/>
+		<prm id="Param" on="0" per="5" name="LogicLev.experiment.F3"/>
 		<prm id="XML" on="0" per="10" file="/etc/oscada.xml"/>
 		<prm id="Mess" on="0" per="10" categ="" arhtor="DBArch.test3" depth="10"/>
 		<prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" full="1"/>

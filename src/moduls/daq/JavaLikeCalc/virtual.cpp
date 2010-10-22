@@ -187,9 +187,9 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     if( !lbAt("sys_compile").at().present(fnc_cfg.id()) ) lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
 
     AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
-    
+
     bool isStart = func.at().startStat();
-    try 
+    try
     {
 	((TFunction&)func.at()).operator=(fnc_cfg);
 	if( func.at().startStat() && prog_text == func.at().prog() ) return func.at().nodePath();
@@ -488,16 +488,16 @@ void *Contr::Task( void *icntr )
     bool is_start = true;
     bool is_stop  = false;
 
-    while( true )
+    while(true)
     {
-	if( !cntr.redntUse( ) )
+	if(!cntr.redntUse())
 	{
 	    //> Setting special IO
-	    int ioI = cntr.ioId("f_frq");	if( ioI >= 0 ) cntr.setR(ioI,cntr.period()?(float)cntr.iterate()*1e9/(float)cntr.period():0);
-	    ioI = cntr.ioId("f_start");		if( ioI >= 0 ) cntr.setB(ioI,is_start);
-	    ioI = cntr.ioId("f_stop");		if( ioI >= 0 ) cntr.setB(ioI,is_stop);
+	    int ioI = cntr.ioId("f_frq");	if(ioI >= 0) cntr.setR(ioI,cntr.period()?(float)cntr.iterate()*1e9/(float)cntr.period():0);
+	    ioI = cntr.ioId("f_start");		if(ioI >= 0) cntr.setB(ioI,is_start);
+	    ioI = cntr.ioId("f_stop");		if(ioI >= 0) cntr.setB(ioI,is_stop);
 
-	    for( int i_it = 0; i_it < cntr.mIter; i_it++ )
+	    for(int i_it = 0; i_it < cntr.mIter; i_it++)
 		try { cntr.calc(); }
 		catch(TError err)
 		{
@@ -506,9 +506,9 @@ void *Contr::Task( void *icntr )
 		}
 	}
 
-	if( is_stop ) break;
+	if(is_stop) break;
 	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
-	if( cntr.endrun_req ) is_stop = true;
+	if(cntr.endrun_req) is_stop = true;
 	is_start = false;
 	cntr.modif();
     }

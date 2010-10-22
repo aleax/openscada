@@ -372,8 +372,8 @@ void TTrIn::connect( )
 	}
 	//>>> Set stop bits number
  	int stopbt = format[2]-'0';
-	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
-	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
+	if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
+	else if(stopbt == 2) tio.c_cflag |= CSTOPB;
 	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
 
 	//>> Set flow control
@@ -853,8 +853,8 @@ void TTrOut::start( )
 
 	//>>> Set stop bits number
 	int stopbt = format[2]-'0';
-	if( stopbt == 1 ) tio.c_cflag |= CSTOPB;
-	else if( stopbt == 2 ) tio.c_cflag &= ~CSTOPB;
+	if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
+	else if(stopbt == 2) tio.c_cflag |= CSTOPB;
 	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
 
 	//>> Set flow control

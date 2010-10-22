@@ -6,6 +6,13 @@
 - FIX:DAQ.OPC_UA, DAQ.ModBus: Modules order is changed to Protocol -> DAQ.
     Translate function _() for protocol modul is created separately.
 - FIX:UI.WebVision: The resource is added for session access. Use for prevent simultaneously sessions check to close.
+- SYS: Demo config files is fixed and updated for new modules.
+- DAQ: Enable and start status for controller's restore is added to function TController::load_().
+- !!!!:FIX:SYS: Crone shedule function cron() is fixed at hang for empty string shedule plane.
+- DAQ.BlockCalc: Controller's content copy order is changed to "Blocks"->"Parameters".
+- DAQ.ModBus: Enable status for protocol's node restore is added to function Node::load_().
+- !!:FIX:Transport.Serial: CSTOPB flag using for two stop bits set is fixed.
+- UI.QTStarter, UI.QTCfg, UI.Vision: Dialog for saving set is disabled at not user cause and for modules update.
 
 
 2010-10-21 Roman

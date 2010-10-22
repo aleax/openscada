@@ -147,14 +147,19 @@ string TController::getStatus( )
 
 void TController::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
 
     mess_info(nodePath().c_str(),_("Load controller's configs!"));
+
+    bool en_st_prev = en_st, run_st_prev = run_st;
 
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
     //> Load parameters if enabled
-    if( en_st )	LoadParmCfg( );
+    if(en_st)	LoadParmCfg( );
+
+    if(!en_st && en_st_prev) enable();
+    if(!run_st && run_st_prev) start();
 }
 
 void TController::save_( )
@@ -203,7 +208,7 @@ void TController::stop( )
 
 void TController::enable( )
 {
-    if( !en_st )
+    if(!en_st)
     {
 	mess_info(nodePath().c_str(),_("Enable controller!"));
 
@@ -238,9 +243,9 @@ void TController::enable( )
 
 void TController::disable( )
 {
-    if( !en_st ) return;
+    if(!en_st) return;
     //> Stop if runed
-    if( run_st ) stop();
+    if(run_st) stop();
 
     mess_info(nodePath().c_str(),_("Disable controller!"));
 
