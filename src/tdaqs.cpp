@@ -283,7 +283,7 @@ void TDAQS::subStart(  )
     while( reply && try_cnt < 2 );
 
     //> Archive subsystem start
-    if( !SYS->archive().at().subStartStat( ) ) SYS->archive().at().subStart( );
+    if(!SYS->archive().at().subStartStat() || !SYS->stopSignal()) SYS->archive().at().subStart( );
 
     //> Redundant task start
     if( !prcStRd ) SYS->taskCreate( nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this, &prcStRd );

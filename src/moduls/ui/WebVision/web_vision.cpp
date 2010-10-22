@@ -291,8 +291,8 @@ void TWEB::modInfo( vector<string> &list )
 
 void TWEB::vcaSesAdd( const string &name, bool isCreate )
 {
-    if( vcaSesPresent(name) )	return;
-    chldAdd( id_vcases, new VCASess(name,isCreate) );
+    if(vcaSesPresent(name))	return;
+    chldAdd(id_vcases, new VCASess(name,isCreate));
 }
 
 string TWEB::optDescr( )
@@ -373,12 +373,17 @@ void TWEB::TaskSessCheck( union sigval obj )
 
     time_t cur_tm = time(NULL);
 
-    //> Check for opened sessions timeout close
-    vector<string> list;
-    web->vcaSesList( list );
-    for( int i_s = 0; i_s < list.size(); i_s++ )
-	if( cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->sessTime()*60 )
-	    web->vcaSesDel(list[i_s]);
+    try
+    {
+	ResAlloc sesRes(web->nodeRes(),true);
+	//> Check for opened sessions timeout close
+	vector<string> list;
+	web->vcaSesList(list);
+	for(int i_s = 0; i_s < list.size(); i_s++)
+	    if(cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->sessTime()*60)
+		web->vcaSesDel(list[i_s]);
+    }
+    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     web->chck_st = false;
 }
@@ -452,6 +457,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
+		ResAlloc sesRes(nodeRes(),false);
 		for(int i_ch = 0; i_ch < req.childSize(); i_ch++)
 		{
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
@@ -509,8 +515,9 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
+		ResAlloc sesRes(nodeRes(),false);
 		for(int i_ch = 0; i_ch < req.childSize(); i_ch++)
-		    if(req.childGet(i_ch)->attr("user") == user &&
+		    if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
 			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
 		    { sName = req.childGet(i_ch)->text(); break; }
 		if(sName.empty())
@@ -521,6 +528,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		        messPost(ses.page,nodePath(),_("Sorry, openned sessions number reach limit!"),TWEB::Warning);
 		    else
 		    {
+			sesRes.request(true);
 			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
 			if(cntrIfCmd(req,ses.user))
 			    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
@@ -544,14 +552,16 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		if( !ses.prm.size() )
 		{
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if( cntrIfCmd(req,ses.user) || !atoi(req.text().c_str()) )	{ HttpGet( "", page, sender, vars, user ); return; }
+		    if(cntrIfCmd(req,ses.user) || !atoi(req.text().c_str()))	{ HttpGet( "", page, sender, vars, user ); return; }
 		}
 		//>> Call to session
+		ResAlloc sesRes(nodeRes(),false);
 		try{ vcaSesAt(sesnm).at().getReq(ses); }
 		catch(...)
 		{
 		    if( !vcaSesPresent(sesnm) )
 		    {
+			sesRes.request(true);
 			vcaSesAdd(sesnm,false);
 			vcaSesAt(sesnm).at().senderSet(sender);
 			vcaSesAt(sesnm).at().getReq(ses);
@@ -647,6 +657,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	if( sesnm.size() <= 4 || sesnm.substr(0,4) != "ses_" ) page = httpHead("404 Not Found");
 	else
 	{
+	    ResAlloc sesRes(nodeRes(),false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
 	}

@@ -299,22 +299,27 @@ void TModSchedul::libDet( const string &iname )
 	if(SchHD[i_sh].name == iname)
 	{
 	    if(!SchHD[i_sh].hd) return;
-	    while(SchHD[i_sh].use.size())
+	    try
 	    {
-		try
+		//> Stop all modules
+		for(int i_m = 0; i_m < SchHD[i_sh].use.size(); i_m++)
+		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[i_m],0,'.')).at().
+			modAt(TSYS::strSepParse(SchHD[i_sh].use[i_m],1,'.')).at().modStop();
+		//> Delete all modules
+		while(SchHD[i_sh].use.size())
 		{
 		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
-			    modAt(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.')).at().modStop();
-		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
-			    modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
-		}catch(TError err)
-		{
-		    //owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().load();
-		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
-			    modAt(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.')).at().modStart();
-		    throw;
+			modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
+		    SchHD[i_sh].use.erase(SchHD[i_sh].use.begin());
 		}
-		SchHD[i_sh].use.erase(SchHD[i_sh].use.begin());
+	    }catch(TError err)
+	    {
+		//owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().load();
+		//> Start all modules
+		for(int i_m = 0; i_m < SchHD[i_sh].use.size(); i_m++)
+		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[i_m],0,'.')).at().
+			modAt(TSYS::strSepParse(SchHD[i_sh].use[i_m],1,'.')).at().modStart();
+		throw;
 	    }
 	    dlclose(SchHD[i_sh].hd);
 	    SchHD[i_sh].hd = NULL;

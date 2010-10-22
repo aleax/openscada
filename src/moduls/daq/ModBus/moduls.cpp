@@ -26,15 +26,16 @@ extern "C"
 {
     TModule::SAt module( int nMod )
     {
-	if( nMod == 0 )		return TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER);
-	else if( nMod == 1 )	return TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER);
+	if(nMod == 0)		return TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER);
+	else if(nMod == 1)	return TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER);
+
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER) )		return new ModBus::TTpContr( source );
-	else if( AtMod == TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER) )	return new ModBus::TProt( source );
+	if(AtMod == TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER))		return new ModBus::TTpContr( source );
+	else if(AtMod == TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER))	return new ModBus::TProt( source );
 	return NULL;
     }
 }

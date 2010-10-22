@@ -84,8 +84,8 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
         //Attributes
-	string	&m_attrLs;
-	TElem	p_el;		//Work atribute elements
+	string		&m_attrLs;
+	TElem		p_el;		//Work atribute elements
 	ResString	acq_err;
 };
 
@@ -102,7 +102,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	long long period( )	{ return mPer; }
-	string cron( )		{ return mSched; }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }

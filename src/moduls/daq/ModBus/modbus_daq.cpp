@@ -111,7 +111,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 
 TMdContr::~TMdContr()
 {
-    if( run_st ) stop();
+    if(run_st) stop();
 }
 
 string TMdContr::getStatus( )

@@ -52,7 +52,7 @@ bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) :
     mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(0), mMultCPU(false),
+    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(-1), mMultCPU(false),
     mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
 {
     finalKill = false;
@@ -421,6 +421,7 @@ int TSYS::start(  )
     mess_info(nodePath().c_str(),_("Final started!"));
 
     unsigned int i_cnt = 1;
+    mStopSignal = 0;
     while( !mStopSignal )
     {
 	//> CPU frequency calc

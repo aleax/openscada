@@ -414,11 +414,11 @@ void MTable::fieldGet( TConfig &cfg )
     string req_where;
     //>> Add fields list to queue
     bool first_sel = true, next_wr = false, trPresent = false;
-    for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
+    for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	sid = tblStrct[i_fld][0];
 	TCfg *u_cfg = cfg.at(sid,true);
-	if( !cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") )
+	if(!cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#"))
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
 	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
@@ -437,6 +437,7 @@ void MTable::fieldGet( TConfig &cfg )
 	    first_sel = false;
 	}
     }
+    if(first_sel) req += "*";
     req = req + " FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` WHERE " + req_where;
 
     //> Query

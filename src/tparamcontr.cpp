@@ -81,20 +81,19 @@ void TParamContr::postEnable(int flag)
 
 void TParamContr::preDisable(int flag)
 {
-    if( flag )
-    {
-	//> Delete archives
-	vector<string> a_ls;
-	vlList(a_ls);
-	for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-	    if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
-	    {
-		string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
-		SYS->archive().at().valDel(arh_id,true);
-	    }
-    }
+    //> Delete or stop archives
+    vector<string> a_ls;
+    vlList(a_ls);
 
-    if( enableStat() )	disable();
+    for(int i_a = 0; i_a < a_ls.size(); i_a++)
+	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
+	{
+	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
+	    if(flag) SYS->archive().at().valDel(arh_id,true);
+	    else SYS->archive().at().valAt(arh_id).at().stop();
+	}
+
+    if(enableStat())	disable();
 }
 
 void TParamContr::postDisable(int flag)

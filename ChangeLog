@@ -1,3 +1,13 @@
+2010-10-22 Roman
+- DAQ: Start subsystem Archive at DAQ start on modules reload, for archives links restore.
+- ModSched: SO library detach order is changed to stop all modules and for next it delete.
+- DAQ: TParamContr preDisable() procedure is changed for stop linked archives.
+- FIX:DB.MySQL: TTable::fieldGet() procedure is fixed for request fields which have only keys.
+- FIX:DAQ.OPC_UA, DAQ.ModBus: Modules order is changed to Protocol -> DAQ.
+    Translate function _() for protocol modul is created separately.
+- FIX:UI.WebVision: The resource is added for session access. Use for prevent simultaneously sessions check to close.
+
+
 2010-10-21 Roman
 - FIX:SYS.TFunction, DAQ.JavaLikeCalc, Special.*: The security group property is added to constructor and the object
     for control interface properties fix.

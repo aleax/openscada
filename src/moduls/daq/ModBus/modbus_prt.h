@@ -29,6 +29,9 @@
 
 #include <tprotocols.h>
 
+#undef _
+#define _(mess) modPrt->I18N(mess)
+
 using std::string;
 using std::map;
 using namespace OSCADA;
