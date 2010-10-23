@@ -2,7 +2,7 @@
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
 #, fuzzy
@@ -10,15 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:01+0300\n"
-"PO-Revision-Date: 2009-08-21 12:21+0200\n"
-"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
-"Language-Team: de <>\n"
+"POT-Creation-Date: 2010-10-21 18:28+0400\n"
+"PO-Revision-Date: 2010-10-21 19:47+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.0\n"
 
 msgid "Load widget library."
 msgstr "Widgetsbibliothek laden."
@@ -96,7 +94,8 @@ msgid ""
 "You try to create widget with name '%s' of the widget that was the early "
 "inherited and deleted from base container!"
 msgstr ""
-
+"Sie versuchen, das Widget mit dem Namen '%s' des Widgets, das früher "
+"aus dem Basencontainer geerbt und gelöscht war, zu schaffen!"
 
 msgid "Library widget: "
 msgstr "Bibliothekenwidget: "
@@ -354,13 +353,11 @@ msgstr ""
 "Ohne;Gitter;Markierung;Gitter und Markierung;Gitter (log);Markierung (log);"
 "Gitter und Markierung (log)"
 
-#, fuzzy
 msgid "Scale:vertical scale (%)"
-msgstr "Skala:senkrecht"
+msgstr "Skala:senkrechter Maßstab (%)"
 
-#, fuzzy
 msgid "Scale:vertical scale offset (%)"
-msgstr "Skala:senkrecht"
+msgstr "Skala:senkrecht. Maßstab verschieben (%)"
 
 msgid "Scale:Markers:color"
 msgstr "Skala:Markierung:Farbe"
@@ -399,7 +396,7 @@ msgid "Protocol widget of the finite visualisation."
 msgstr "Widget für das Protokoll der Visualisierung."
 
 msgid "Header visible"
-msgstr ""
+msgstr "Titel sichtbar"
 
 msgid "Time, sek"
 msgstr "Zeit, Sek"
@@ -414,12 +411,16 @@ msgid "Level"
 msgstr "Level"
 
 msgid "View order"
-msgstr ""
+msgstr "Ordnung der Widerspiegelung"
 
 msgid ""
 "On time;On level;On category;On messages;On time (reverse);On level "
 "(reverse);On category (reverse);On messages (reverse)"
 msgstr ""
+"Nach der Zeit;nach dem Niveau;nach der Kategorie;nach der Nachricht;nach der "
+"Zeit;nach dem Niveau; "
+"nach der Kategorie (reziprok);nach der Kategorie (reziprok);nach der "
+"Nachricht(reziprok)"
 
 msgid "View columns"
 msgstr "Spalten zeigen"
@@ -581,31 +582,26 @@ msgstr "Originalgrösse;Maximieren;Vollbild"
 msgid "Pages"
 msgstr "Seiten"
 
-#, fuzzy
 msgid "Styles"
-msgstr "Stil"
+msgstr "Stile"
 
-#, fuzzy
 msgid "Style"
 msgstr "Stil"
 
-#, fuzzy
 msgid "Properties"
-msgstr "Eigenschaften des Elements"
+msgstr "Beschaffenheiten"
 
 msgid "Erase"
-msgstr ""
+msgstr "Löschen"
 
-#, fuzzy
 msgid "New style"
-msgstr "Linie:Stil"
+msgstr "Neuer Stil"
 
-#, fuzzy
 msgid "No style"
-msgstr "Rand:Stil"
+msgstr "Kein Stil"
 
 msgid "Create new style"
-msgstr ""
+msgstr "Neuen Stil schaffen"
 
 msgid "Page:open state"
 msgstr "Seite:Zustand beim Öffnen"
@@ -614,7 +610,7 @@ msgid "Page:process no opened"
 msgstr "Seite:Prozess nicht geöffnet"
 
 msgid "For page can use only Box-based widgets!"
-msgstr ""
+msgstr "Für Seiten kann nur das Box-basierte Widget benutzt werden!"
 
 msgid "Page is not container or template!"
 msgstr "Seite ist kein Container oder Vorlage!"
@@ -640,21 +636,17 @@ msgstr "Container und Vorlage"
 msgid "Widget link: "
 msgstr "Widget Link: "
 
-#, fuzzy
 msgid "Enable session."
-msgstr "Projekt einschalten."
+msgstr "Einschalten der Session."
 
-#, fuzzy
 msgid "Disable session."
-msgstr "Projekt abschalten."
+msgstr "Abschalten der Session."
 
-#, fuzzy
 msgid "Start session."
-msgstr "Sitzung"
+msgstr "Start der Session."
 
-#, fuzzy
 msgid "Stop session."
-msgstr "Sitzung"
+msgstr "Session stoppen."
 
 #, c-format
 msgid "Session '%s' calc error."
@@ -706,7 +698,7 @@ msgid "Messages"
 msgstr "Nachrichten"
 
 msgid "Quitance"
-msgstr ""
+msgstr "Quittung"
 
 msgid "Type argument"
 msgstr "Argument des Typs"
@@ -736,7 +728,7 @@ msgid "Function stop flag"
 msgstr "Schalter für das Anhalten der Funktion"
 
 msgid "This widget's object for access to user's API"
-msgstr ""
+msgstr "Dises Objekt des Widgets ist für den Zugang zu dem Nutzers-API"
 
 msgid "Event"
 msgstr "Ereignis"
@@ -807,7 +799,7 @@ msgid "Widget ID"
 msgstr "ID des Widgets"
 
 msgid "Child ID"
-msgstr ""
+msgstr "Tochter-ID"
 
 msgid "Attribute value"
 msgstr "Wert des Attributs"
@@ -830,52 +822,41 @@ msgstr "Erlaubnis"
 msgid "Calc period (ms)"
 msgstr "Rechenzeit (msek)"
 
-#, fuzzy
 msgid "Work style"
-msgstr "Rand:Stil"
+msgstr "Arbeitsstil"
 
 msgid "Flags"
 msgstr "Schalter"
 
-#, fuzzy
 msgid "Value 0"
-msgstr "Wert"
+msgstr "Wert 0"
 
-#, fuzzy
 msgid "Value 1"
-msgstr "Wert"
+msgstr "Wert 1"
 
-#, fuzzy
 msgid "Value 2"
-msgstr "Wert"
+msgstr "Wert 2"
 
-#, fuzzy
 msgid "Value 3"
-msgstr "Wert"
+msgstr "Wert 3"
 
-#, fuzzy
 msgid "Value 4"
-msgstr "Wert"
+msgstr "Wert 4"
 
-#, fuzzy
 msgid "Value 5"
-msgstr "Wert"
+msgstr "Wert 5"
 
-#, fuzzy
 msgid "Value 6"
-msgstr "Wert"
+msgstr "Wert 6"
 
-#, fuzzy
 msgid "Value 7"
-msgstr "Wert"
+msgstr "Wert 7"
 
-#, fuzzy
 msgid "Value 8"
-msgstr "Wert"
+msgstr "Wert 8"
 
-#, fuzzy
 msgid "Value 9"
-msgstr "Wert"
+msgstr "Wert 9"
 
 msgid "Original widget's library"
 msgstr "Original Widgetsbibliothek"
@@ -937,7 +918,7 @@ msgid "Sessions"
 msgstr "Sitzungen"
 
 msgid "Auto create and start"
-msgstr ""
+msgstr "Automatische Schaffen und Start"
 
 msgid "Speech text synthesis"
 msgstr "Sprachsteuerung"
@@ -975,6 +956,7 @@ msgstr "Pfad"
 msgid ""
 "No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
 msgstr ""
+"Kein Zugang;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
 
 msgid "Root"
 msgstr "Ursprung"
@@ -1024,9 +1006,9 @@ msgstr "Bearbeitung der Ereignisse"
 msgid "Empty parent or parent identical self!"
 msgstr "Eltern leer oder Eltern gleich sich selber!"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Widget enable error: %s"
-msgstr "Fehler beim Einschalten des vererbenden Widgets <%s>"
+msgstr "Fehler der Einschaltung des Widgets: %s"
 
 #, c-format
 msgid "Ingeriting widget <%s> disable error"
@@ -1036,13 +1018,13 @@ msgstr "Fehler beim Abschalten des vererbenden Widgets <%s>"
 msgid "Child widget <%s> enable/disable error"
 msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets <%s>"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Attribute <%s> is not present!"
-msgstr "Attributenliste"
+msgstr "Attribut <%s> fehlt!"
 
 #, c-format
 msgid "Attribute attach access error: %d."
-msgstr ""
+msgstr "Fehler des Zuganges des Anschlusses %d ans Attribut."
 
 msgid "Widget: "
 msgstr "Widget: "
@@ -1107,7 +1089,7 @@ msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
 
 #, c-format
 msgid "New attribute's ID '%s' already present."
-msgstr ""
+msgstr "Neuer Bezeichner des Attributs '%s' ist vorhanden."
 
 msgid "Boolean"
 msgstr "Logisch"
@@ -1137,7 +1119,7 @@ msgid "Address"
 msgstr "Adresse"
 
 msgid "Not"
-msgstr "Nicht"
+msgstr "nicht"
 
 msgid "Constant"
 msgstr "Konstante"
@@ -1152,7 +1134,7 @@ msgid "Full link"
 msgstr "Voller Link"
 
 msgid "From style"
-msgstr ""
+msgstr "aus dem Stil"
 
 msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
@@ -1219,3 +1201,4 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+

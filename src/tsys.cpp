@@ -84,7 +84,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) :
     signal(SIGABRT,sighandler);
 }
 
-TSYS::~TSYS(  )
+TSYS::~TSYS( )
 {
     finalKill = true;
 
@@ -116,7 +116,7 @@ string TSYS::workDir( )
 
 void TSYS::setWorkDir( const string &wdir )
 {
-    if( chdir(wdir.c_str()) != 0 )
+    if(chdir(wdir.c_str()) != 0)
 	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
 	    wdir.c_str(),strerror(errno),workDir().c_str());
     modif( );
@@ -125,9 +125,9 @@ void TSYS::setWorkDir( const string &wdir )
 string TSYS::int2str( int val, TSYS::IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == TSYS::Dec )		snprintf(buf,sizeof(buf),"%d",val);
-    else if( view == TSYS::Oct )	snprintf(buf,sizeof(buf),"%o",val);
-    else if( view == TSYS::Hex )	snprintf(buf,sizeof(buf),"%x",val);
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%d",val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
 
     return buf;
 }
@@ -135,9 +135,9 @@ string TSYS::int2str( int val, TSYS::IntView view )
 string TSYS::uint2str( unsigned val, IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == TSYS::Dec )		snprintf(buf,sizeof(buf),"%u",val);
-    else if( view == TSYS::Oct )	snprintf(buf,sizeof(buf),"%o",val);
-    else if( view == TSYS::Hex )	snprintf(buf,sizeof(buf),"%x",val);
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%u",val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
 
     return buf;
 }
@@ -145,9 +145,9 @@ string TSYS::uint2str( unsigned val, IntView view )
 string TSYS::ll2str( long long val, IntView view )
 {
     char buf[STR_BUF_LEN];
-    if( view == TSYS::Dec )		snprintf(buf,sizeof(buf),"%lld",val);
-    else if( view == TSYS::Oct )	snprintf(buf,sizeof(buf),"%llo",val);
-    else if( view == TSYS::Hex )	snprintf(buf,sizeof(buf),"%llx",val);
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",val);
 
     return buf;
 }
@@ -177,10 +177,10 @@ string TSYS::strNoSpace( const string &val )
 {
     int beg = -1, end = -1;
 
-    for( int i_s = 0; i_s < val.size(); i_s++ )
-	if( val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t' )
+    for(int i_s = 0; i_s < val.size(); i_s++)
+	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t')
 	{
-	    if( beg < 0 ) beg = i_s;
+	    if(beg < 0) beg = i_s;
 	    end = i_s;
 	}
 
@@ -238,7 +238,7 @@ string TSYS::optDescr( )
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
-bool TSYS::cfgFileLoad()
+bool TSYS::cfgFileLoad( )
 {
     bool cmd_help = false;
 
@@ -272,7 +272,7 @@ bool TSYS::cfgFileLoad()
 
     //Load config file
     int hd = open(mConfFile.c_str(),O_RDONLY);
-    if( hd < 0 ) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
 	string s_buf;
@@ -292,27 +292,27 @@ bool TSYS::cfgFileLoad()
 	{
 	    ResAlloc res(nodeRes(),true);
 	    rootN.load(s_buf);
-	    if( rootN.name() == "OpenSCADA" )
+	    if(rootN.name() == "OpenSCADA")
 	    {
 		XMLNode *stat_n = NULL;
-		for( int i_st = rootN.childSize()-1; i_st >= 0; i_st-- )
-		    if( rootN.childGet(i_st)->name() == "station" )
+		for(int i_st = rootN.childSize()-1; i_st >= 0; i_st--)
+		    if(rootN.childGet(i_st)->name() == "station")
 		    {
 			stat_n = rootN.childGet(i_st);
-			if( stat_n->attr("id") == mId ) break;
+			if(stat_n->attr("id") == mId) break;
 		    }
-		if( stat_n && stat_n->attr("id") != mId )
+		if(stat_n && stat_n->attr("id") != mId)
 		{
-                    mess_warning(nodePath().c_str(),_("Station <%s> is not present in the config file. Use <%s> station config!"),
-			mId.c_str(), stat_n->attr("id").c_str() );
+		    mess_warning(nodePath().c_str(),_("Station <%s> is not present in the config file. Use <%s> station config!"),
+			mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
-		if( !stat_n )	rootN.clear();
+		if(!stat_n)	rootN.clear();
 	    } else rootN.clear();
-	    if( !rootN.childSize() )
+	    if(!rootN.childSize())
 		mess_err(nodePath().c_str(),_("Config <%s> error!"),mConfFile.c_str());
 	}
-	catch( TError err ) { mess_err(nodePath().c_str(),_("Load config file error: %s"),err.mess.c_str() ); }
+	catch(TError err) { mess_err(nodePath().c_str(),_("Load config file error: %s"),err.mess.c_str() ); }
     }
 
     return cmd_help;
@@ -323,11 +323,11 @@ void TSYS::cfgPrmLoad()
     //System parameters
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",TBDS::OnlyCfg);
-    setWorkDir( TBDS::genDBGet(nodePath()+"Workdir").c_str() );
-    setIcoDir( TBDS::genDBGet(nodePath()+"IcoDir",icoDir()) );
-    setModDir( TBDS::genDBGet(nodePath()+"ModDir",modDir()) );
-    setSaveAtExit( atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()) );
-    setSavePeriod( atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()) );
+    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir").c_str());
+    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir()));
+    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir()));
+    setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
+    setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
 }
 
 void TSYS::load_()
@@ -408,7 +408,7 @@ int TSYS::start(  )
     list(lst);
 
     mess_info(nodePath().c_str(),_("Start!"));
-    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().subStart(); }
 	catch(TError err)
 	{
@@ -422,28 +422,27 @@ int TSYS::start(  )
 
     unsigned int i_cnt = 1;
     mStopSignal = 0;
-    while( !mStopSignal )
+    while(!mStopSignal)
     {
 	//> CPU frequency calc
-	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	clkCalc( );
+	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
 	//> Config file change periodic check
-	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	cfgFileScan( );
+	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
 	//> Periodic shared libraries checking
-	if( modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)) )
+	if(modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)))
 	    modSchedul( ).at().libLoad(modDir(),true);
 	//> Old tables closing
-	if( !(i_cnt%(10*1000/STD_WAIT_DELAY)) )	db().at().closeOldTables();
+	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	db().at().closeOldTables();
 	//> Periodic changes saving to DB
-	if( savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY)) )
-	    save();
+	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
 
 	usleep( STD_WAIT_DELAY*1000 );
 	i_cnt++;
     }
 
     mess_info(nodePath().c_str(),_("Stop!"));
-    if( saveAtExit() || savePeriod() )	save();
-    for( int i_a=lst.size()-1; i_a >= 0; i_a-- )
+    if(saveAtExit() || savePeriod())	save();
+    for(int i_a=lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError err)
 	{
@@ -461,9 +460,9 @@ void TSYS::stop( )
 
 bool TSYS::chkSelDB( const string& wDB )
 {
-    if( selDB().empty() ) return true;
-    if( selDB() == "<cfg>" && (wDB == "<cfg>" || TBDS::realDBName(wDB) == workDB()) ) return true;
-    if( SYS->selDB( ) == TBDS::realDBName(wDB) ) return true;
+    if(selDB().empty()) return true;
+    if(selDB() == "<cfg>" && (wDB == "<cfg>" || TBDS::realDBName(wDB) == workDB())) return true;
+    if(SYS->selDB( ) == TBDS::realDBName(wDB)) return true;
     return false;
 }
 

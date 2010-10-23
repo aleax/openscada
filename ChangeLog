@@ -1,3 +1,17 @@
+2010-10-23 Roman
+- SYS: The main splash image is updated for Long Term Support allow for version 0.7.0.
+- SYS: Debian files is updated for build packages to version 0.7.0.
+- DemoDB: Demo DB is final updated for version 0.7.0 and fix some bugs.
+- SYS: For function TMess::setMessLevel() set border [0;5] to values. For function TSYS::setSavePeriod() set border [0;-] to values.
+- FIX:DAQ.DAQGate: Crash at set sync period to zero is fixed.
+- FIX:DAQ.OPC_UA: Browse items limit is free from 100 items.
+- Transport.SSL: Set borders to function's values: setBufLen() - [1;1024], setMaxFork() - [1;1000],
+    setKeepAliveCon() - [0;-] and setKeepAliveTm() - [0;-];
+- FIX:UI.QTCfg: Tree collapsing is disabled at hosts update.
+- UI.WebVision: Hold cursor at current time is added for primitive "Diagram".
+- SYS: Release 0.7.0 previews and test protocol is added.
+
+
 2010-10-22 Roman
 - DAQ: Start subsystem Archive at DAQ start on modules reload, for archives links restore.
 - ModSched: SO library detach order is changed to stop all modules and for next it delete.
@@ -11,7 +25,7 @@
 - !!!!:FIX:SYS: Crone shedule function cron() is fixed at hang for empty string shedule plane.
 - DAQ.BlockCalc: Controller's content copy order is changed to "Blocks"->"Parameters".
 - DAQ.ModBus: Enable status for protocol's node restore is added to function Node::load_().
-- !!:FIX:Transport.Serial: CSTOPB flag using for two stop bits set is fixed.
+- !!:FIX:Transport.Serial: CSTOPB flag using for stop bits number set is fixed.
 - UI.QTStarter, UI.QTCfg, UI.Vision: Dialog for saving set is disabled at not user cause and for modules update.
 
 

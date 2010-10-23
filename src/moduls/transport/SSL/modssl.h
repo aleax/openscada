@@ -77,10 +77,10 @@ class TSocketIn: public TTransportIn
 	string pKeyPass( )	{ return mKeyPass; }
 	int opConnCnt( );
 
-	void setBufLen( int vl )		{ mBufLen = vl; modif(); }
-	void setMaxFork( int vl )		{ mMaxFork = vl; modif(); }
-	void setKeepAliveCon( int vl )		{ mKeepAliveCon = vl; modif(); }
-	void setKeepAliveTm( int vl )		{ mKeepAliveTm = vl; modif(); }
+	void setBufLen( int vl )		{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
+	void setMaxFork( int vl )		{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
+	void setKeepAliveCon( int vl )		{ mKeepAliveCon = vmax(0,vl); modif(); }
+	void setKeepAliveTm( int vl )		{ mKeepAliveTm = vmax(0,vl); modif(); }
 	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }

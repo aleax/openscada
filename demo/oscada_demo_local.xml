@@ -301,11 +301,11 @@
 
 	    <node id="mod_SoundCard">
 		<!--<tbl id="DAQ">
-		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="
+		    <fld ID="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" ENABLE="1" START="1" PRM_BD="test2prm"
 			CARD="" SMPL_RATE="8000" SMPL_TYPE="1"/>
 		</tbl>
 		<tbl id="test2prm">
-			<fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1
+			<fld SHIFR="test2" NAME="Test 2" NAME_ru="Тест 2" NAME_uk="Тест 2" DESCR="" DESCR_ru="" DESCR_uk="" EN="1" ND_LS=""/>
 		</tbl>-->
 	    </node>
 
@@ -412,8 +412,8 @@
 		</tbl>
 		<tbl id="prj_test2_incl">
 		    <fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/>
-		    </tbl>-->
-		</node>
+		</tbl>-->
+	    </node>
 	</node>
 
 	<node id="sub_Special">

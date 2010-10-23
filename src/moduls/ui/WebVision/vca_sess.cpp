@@ -5272,7 +5272,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 //* VCADiagram                                    *
 //*************************************************
 VCADiagram::VCADiagram( const string &iid ) : 
-    VCAObj(iid), tTimeCurent(false), tTime(0), lstTrc(false), type(0), sclVerScl(100), sclVerSclOff(0)
+    VCAObj(iid), tTimeCurent(false), tTime(0), lstTrc(false), type(0), sclVerScl(100), sclVerSclOff(0), holdCur(false)
 {
 
 }
@@ -5307,14 +5307,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     else if( trcPer && lstTrc < time(NULL) )
     { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
-    if( rld )
+    if(rld)
     {
 	for( int i_p = 0; i_p < trnds.size(); i_p++ ) trnds[i_p].loadData(ses.user);
 	//> Trace cursors value
-	if( active )
+	if(active)
 	{
 	    long long tTimeGrnd = tTime - (long long)(1e6*tSize);
-	    if( curTime >= (tTime-2*(long long)trcPer*1000000) || curTime <= tTimeGrnd )
+	    if(holdCur || curTime >= (tTime-2*(long long)trcPer*1000000) || curTime <= tTimeGrnd)
 		setCursor(tTime,ses.user);
 	}
     }
@@ -6074,9 +6074,13 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		reld_tr_dt = 2;
 		break;
 	    case 30:	//curSek
-		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;	break;
+		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;
+		holdCur = (curTime>=tTime);
+		break;
 	    case 31:	//curUSek
-		curTime = 1000000ll*(curTime/1000000)+atoll(req_el->text().c_str());	break;
+		curTime = 1000000ll*(curTime/1000000)+atoll(req_el->text().c_str());
+		holdCur = (curTime>=tTime);
+		break;
 	    case 32:	//curColor
 		curColor = mod->colorParse(req_el->text());				break;
 	    case 33:	//sclColor
@@ -6155,6 +6159,8 @@ void VCADiagram::setCursor( long long itm, const string& user )
     {
 	long long tTimeGrnd = tTime - (long long)(1e6*tSize);
 	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
+
+	holdCur = (curTime==tTime);
 
 	XMLNode req("set");
 	req.setAttr("path",id()+"/%2fserv%2fattr");

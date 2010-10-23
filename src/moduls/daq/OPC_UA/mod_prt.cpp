@@ -538,7 +538,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oTm(mReq,0);					//timestamp
 		    oNu(mReq,0,4);					//viewVersion
 
-		    oNu(mReq,100,4);					//requestedMax ReferencesPerNode
+		    oNu(mReq,0,4);					//requestedMax ReferencesPerNode
 									//> nodesToBrowse
 		    oNu(mReq,io.childSize(),4);				//Nodes 1
 		    for( int i_n = 0; i_n < io.childSize(); i_n++ )

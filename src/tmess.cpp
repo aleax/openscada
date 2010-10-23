@@ -65,7 +65,7 @@ TMess::~TMess(  )
 
 void TMess::setMessLevel( int level )
 {
-    mMessLevel = level;
+    mMessLevel = vmax(0,vmin(5,level));
     SYS->modif();
 }
 
@@ -256,8 +256,7 @@ void TMess::load()
     } while(next_opt != -1);
 
     //> Load params config file
-    i = atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel())).c_str());
-    if( i >= 0 && i <= 7 ) setMessLevel(i);
+    setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel())).c_str()));
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect())).c_str()));
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase);
 }

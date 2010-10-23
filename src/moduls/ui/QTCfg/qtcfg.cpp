@@ -2224,7 +2224,6 @@ void ConfApp::initHosts( )
 	//? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	nit->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
-	nit->setExpanded(false);
 	//>>>> Check icon
 	QImage img; string simg;
 	XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");

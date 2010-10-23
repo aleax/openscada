@@ -284,7 +284,7 @@ void *TMdContr::Task( void *icntr )
 
 	    if( isAccess )
 	    {
-		unsigned int div = (unsigned int)(cntr.mSync/cntr.period());
+		unsigned int div = vmax(2,(unsigned int)(cntr.mSync/cntr.period()));
 		vector<string> pLS;
 		cntr.list(pLS);
 		AutoHD<TMdPrm> prm;

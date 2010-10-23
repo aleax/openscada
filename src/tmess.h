@@ -112,8 +112,8 @@ class TMess
 
 	//Attributes
 	string	IOCharSet;		//Internal charset
-	int	mMessLevel;		//Work messages level
-	int	mLogDir;		//Log direction
+	unsigned char	mMessLevel;	//Work messages level
+	unsigned char	mLogDir;	//Log direction
 
 	string	mLang2CodeBase, mLang2Code;
 };

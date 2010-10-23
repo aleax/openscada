@@ -412,8 +412,8 @@
 		</tbl>
 		<tbl id="prj_test2_incl">
 		    <fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/>
-		    </tbl>-->
-		</node>
+		</tbl>-->
+	    </node>
 	</node>
 
 	<node id="sub_Special">

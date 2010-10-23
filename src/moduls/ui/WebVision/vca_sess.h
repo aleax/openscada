@@ -280,6 +280,7 @@ class VCADiagram : public VCAObj
 	short		trcPer		:10;	//Tracing period
 	short		sclHor		:4;	//Horisontal scale mode
 	short		sclVer		:4;	//Vertical scale mode
+	short		holdCur		:1;	//Hold cursor
 	long long	tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
 	float		tSize;			//Trend size (s)
 	float		fftBeg, fftEnd;
@@ -294,7 +295,7 @@ class VCADiagram : public VCAObj
 
     private:
 	//Data
-	//- Trend object's class -
+	//> Trend object's class
 	class TrendObj
 	{
 	    public:

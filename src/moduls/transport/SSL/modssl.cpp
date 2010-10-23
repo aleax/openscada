@@ -208,11 +208,11 @@ void TSocketIn::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("MaxClients");	if( !vl.empty() ) mMaxFork = atoi(vl.c_str());
-	vl = prmNd.attr("BufLen");	if( !vl.empty() ) mBufLen = atoi(vl.c_str());
-	vl = prmNd.attr("KeepAliveCnt");if( !vl.empty() ) mKeepAliveCon = atoi(vl.c_str());
-	vl = prmNd.attr("KeepAliveTm");	if( !vl.empty() ) mKeepAliveTm = atoi(vl.c_str());
-	vl = prmNd.attr("TaskPrior");	if( !vl.empty() ) mTaskPrior = atoi(vl.c_str());
+	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(atoi(vl.c_str()));
+	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(atoi(vl.c_str()));
+	vl = prmNd.attr("KeepAliveCnt");if(!vl.empty()) setKeepAliveCon(atoi(vl.c_str()));
+	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(atoi(vl.c_str()));
+	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(atoi(vl.c_str()));
 	if( prmNd.childGet("CertKey",0,true) ) mCertKey = prmNd.childGet("CertKey")->text();
 	mKeyPass = prmNd.attr("PKeyPass");
     } catch(...){ }
@@ -221,11 +221,11 @@ void TSocketIn::load_( )
 void TSocketIn::save_( )
 {
     XMLNode prmNd("prms");
-    prmNd.setAttr("MaxClients",TSYS::int2str(mMaxFork));
-    prmNd.setAttr("BufLen",TSYS::int2str(mBufLen));
-    prmNd.setAttr("KeepAliveCnt",TSYS::int2str(mKeepAliveCon));
-    prmNd.setAttr("KeepAliveTm",TSYS::int2str(mKeepAliveTm));
-    prmNd.setAttr("TaskPrior",TSYS::int2str(mTaskPrior));
+    prmNd.setAttr("MaxClients",TSYS::int2str(maxFork()));
+    prmNd.setAttr("BufLen",TSYS::int2str(bufLen()));
+    prmNd.setAttr("KeepAliveCnt",TSYS::int2str(keepAliveCon()));
+    prmNd.setAttr("KeepAliveTm",TSYS::int2str(keepAliveTm()));
+    prmNd.setAttr("TaskPrior",TSYS::int2str(taskPrior()));
     if( prmNd.childGet("CertKey",0,true) ) prmNd.childGet("CertKey")->setText(mCertKey);
     else prmNd.childAdd("CertKey")->setText(mCertKey);
     prmNd.setAttr("PKeyPass",mKeyPass);

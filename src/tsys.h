@@ -137,7 +137,7 @@ class TSYS : public TCntrNode
 	bool saveAtExit( )	{ return mSaveAtExit; }
 	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }
 	int  savePeriod( )	{ return mSavePeriod; }
-	void setSavePeriod( int vl )		{ mSavePeriod = vl; modif(); }
+	void setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 
 	string optDescr( );	//print comand line options
 
