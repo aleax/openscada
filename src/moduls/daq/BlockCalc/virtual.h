@@ -94,7 +94,7 @@ class Contr: public TController
 	string getStatus( );
 
 	TParamContr *ParamAttach( const string &name, int type );
-	int period( )				{ return vmax(1,m_per); }
+	int period( )				{ return m_per; }
 	int iterate( )				{ return m_iter; }
 
 	//> Scheme's functions

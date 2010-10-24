@@ -91,7 +91,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameters' table"),TFld::String,0,"30") );
     fldAdd( new TFld("CARD",_("Card device"),TFld::String,0,"20","<default>") );
-    fldAdd( new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000") );
+    fldAdd( new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;100000") );
     fldAdd( new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",TSYS::int2str(paFloat32).c_str(),
 	(TSYS::int2str(paFloat32)+";"+TSYS::int2str(paInt32)+";"+TSYS::int2str(paInt16)).c_str(),_("Float 32;Int 32;Int 16")) );
 

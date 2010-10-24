@@ -253,16 +253,16 @@ void TTrIn::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("TMS");	if( !vl.empty() ) setTimings(vl);
-	vl = prmNd.attr("MdmTm");	if( !vl.empty() ) setMdmTm(atoi(vl.c_str()));
-	vl = prmNd.attr("MdmPreInit");	if( !vl.empty() ) setMdmPreInit(atof(vl.c_str()));
-	vl = prmNd.attr("MdmPostInit");	if( !vl.empty() ) setMdmPostInit(atof(vl.c_str()));
-	vl = prmNd.attr("MdmInitStr1");	if( !vl.empty() ) setMdmInitStr1(vl);
-	vl = prmNd.attr("MdmInitStr2");	if( !vl.empty() ) setMdmInitStr2(vl);
-	vl = prmNd.attr("MdmInitResp");	if( !vl.empty() ) setMdmInitResp(vl);
-	vl = prmNd.attr("MdmRingReq");	if( !vl.empty() ) setMdmRingReq(vl);
-	vl = prmNd.attr("MdmRingAnswer");if( !vl.empty() ) setMdmRingAnswer(vl);
-	vl = prmNd.attr("MdmRingAnswerResp");	if( !vl.empty() ) setMdmRingAnswerResp(vl);
+	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(atoi(vl.c_str()));
+	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(atof(vl.c_str()));
+	vl = prmNd.attr("MdmPostInit");	if(!vl.empty()) setMdmPostInit(atof(vl.c_str()));
+	vl = prmNd.attr("MdmInitStr1");	if(!vl.empty()) setMdmInitStr1(vl);
+	vl = prmNd.attr("MdmInitStr2");	if(!vl.empty()) setMdmInitStr2(vl);
+	vl = prmNd.attr("MdmInitResp");	if(!vl.empty()) setMdmInitResp(vl);
+	vl = prmNd.attr("MdmRingReq");	if(!vl.empty()) setMdmRingReq(vl);
+	vl = prmNd.attr("MdmRingAnswer");if(!vl.empty()) setMdmRingAnswer(vl);
+	vl = prmNd.attr("MdmRingAnswerResp");	if(!vl.empty()) setMdmRingAnswerResp(vl);
     } catch(...){ }
 }
 
@@ -288,7 +288,7 @@ string TTrIn::getStatus( )
 {
     string rez = TTransportIn::getStatus( );
 
-    if( startStat() )
+    if(startStat())
 	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."),trIn,trOut,tmMax);
 
     return rez;
@@ -300,9 +300,18 @@ void TTrIn::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( speed )	setTimings(TSYS::real2str(11e4/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
+    if(speed)	setTimings(TSYS::real2str(11e4/(float)speed,2,'f')+":"+TSYS::int2str((512*11*1000)/speed));
 
-    if( startStat() )	stop();
+    if(startStat())	stop();
+}
+
+void TTrIn::setTimings( const string &vl )
+{
+    double wCharTm = vmax(0.01,vmin(1e3,atof(TSYS::strSepParse(vl,0,':').c_str())));
+    int wFrTm = vmax(1,vmin(10000,atoi(TSYS::strSepParse(vl,1,':').c_str())));
+    mTimings = TSYS::strMess("%g:%d",wCharTm,wFrTm);
+
+    modif();
 }
 
 void TTrIn::connect( )
@@ -476,9 +485,7 @@ void *TTrIn::Task( void *tr_in )
     fd_set fdset;
 
     double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
-    wCharTm = vmax(0.01,wCharTm);
-    int wFrTm = atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
-    wFrTm = 1000*vmin(10000,wFrTm);
+    int wFrTm = 1000*atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
     long long stFrTm, tmW = 0, tmTmp1;
 
     fcntl( tr->fd, F_SETFL, 0 );
@@ -613,9 +620,9 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    frm - maximum frame length, in ms."));
 	if(atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,3,"tp","dec","min","1","max","120");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0","max","3");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0.01","max","3");
+	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root",STR_ID,1,"tp","str");
@@ -708,21 +715,21 @@ void TTrOut::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("TMS");	if( !vl.empty() ) setTimings(vl);
-	vl = prmNd.attr("MdmTm");	if( !vl.empty() ) setMdmTm(atoi(vl.c_str()));
-	vl = prmNd.attr("MdmLifeTime");	if( !vl.empty() ) setMdmLifeTime(atoi(vl.c_str()));
-	vl = prmNd.attr("MdmPreInit");	if( !vl.empty() ) setMdmPreInit(atof(vl.c_str()));
-	vl = prmNd.attr("MdmPostInit");	if( !vl.empty() ) setMdmPostInit(atof(vl.c_str()));
-	vl = prmNd.attr("MdmInitStr1");	if( !vl.empty() ) setMdmInitStr1(vl);
-	vl = prmNd.attr("MdmInitStr2");	if( !vl.empty() ) setMdmInitStr2(vl);
-	vl = prmNd.attr("MdmInitResp");	if( !vl.empty() ) setMdmInitResp(vl);
-	vl = prmNd.attr("MdmDialStr");	if( !vl.empty() ) setMdmDialStr(vl);
-	vl = prmNd.attr("MdmCnctResp");	if( !vl.empty() ) setMdmCnctResp(vl);
-	vl = prmNd.attr("MdmBusyResp");	if( !vl.empty() ) setMdmBusyResp(vl);
-	vl = prmNd.attr("MdmNoCarResp");if( !vl.empty() ) setMdmNoCarResp(vl);
-	vl = prmNd.attr("MdmNoDialToneResp");	if( !vl.empty() ) setMdmNoDialToneResp(vl);
-	vl = prmNd.attr("MdmHangUp");	if( !vl.empty() ) setMdmHangUp(vl);
-	vl = prmNd.attr("MdmHangUpResp");if( !vl.empty() ) setMdmHangUpResp(vl);
+	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(atoi(vl.c_str()));
+	vl = prmNd.attr("MdmLifeTime");	if(!vl.empty()) setMdmLifeTime(atoi(vl.c_str()));
+	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(atof(vl.c_str()));
+	vl = prmNd.attr("MdmPostInit");	if(!vl.empty()) setMdmPostInit(atof(vl.c_str()));
+	vl = prmNd.attr("MdmInitStr1");	if(!vl.empty()) setMdmInitStr1(vl);
+	vl = prmNd.attr("MdmInitStr2");	if(!vl.empty()) setMdmInitStr2(vl);
+	vl = prmNd.attr("MdmInitResp");	if(!vl.empty()) setMdmInitResp(vl);
+	vl = prmNd.attr("MdmDialStr");	if(!vl.empty()) setMdmDialStr(vl);
+	vl = prmNd.attr("MdmCnctResp");	if(!vl.empty()) setMdmCnctResp(vl);
+	vl = prmNd.attr("MdmBusyResp");	if(!vl.empty()) setMdmBusyResp(vl);
+	vl = prmNd.attr("MdmNoCarResp");if(!vl.empty()) setMdmNoCarResp(vl);
+	vl = prmNd.attr("MdmNoDialToneResp");	if(!vl.empty()) setMdmNoDialToneResp(vl);
+	vl = prmNd.attr("MdmHangUp");	if(!vl.empty()) setMdmHangUp(vl);
+	vl = prmNd.attr("MdmHangUpResp");if(!vl.empty()) setMdmHangUpResp(vl);
     } catch(...){ }
 }
 
@@ -765,10 +772,19 @@ void TTrOut::setAddr( const string &iaddr )
 
     //> Times adjust
     int speed = atoi(TSYS::strSepParse(iaddr,1,':').c_str());
-    if( TSYS::strSepParse(addr(),4,':').size() ) setTimings("5000:1000");
-    else if( speed ) setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str(11e4/(float)speed,2,'f'));
+    if(TSYS::strSepParse(addr(),4,':').size()) setTimings("5000:1000");
+    else if(speed) setTimings(TSYS::int2str((1024*11*1000)/speed)+":"+TSYS::real2str(11e4/(float)speed,2,'f'));
 
-    if( startStat() )	stop();
+    if(startStat())	stop();
+}
+
+void TTrOut::setTimings( const string &vl )
+{
+    int wReqTm = vmax(1,vmin(10000,atoi(TSYS::strSepParse(vl,0,':').c_str())));
+    double wCharTm = vmax(0.01,vmin(1e3,atof(TSYS::strSepParse(vl,1,':').c_str())));
+    mTimings = TSYS::strMess("%d:%g",wReqTm,wCharTm);
+
+    modif();
 }
 
 void TTrOut::start( )
@@ -977,9 +993,8 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     int wReqTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
-    wReqTm = time ? time : vmin(10000,wReqTm);
+    wReqTm = time ? time : wReqTm;
     double wCharTm = atof(TSYS::strSepParse(timings(),0,':',&off).c_str());
-    wCharTm = vmax(0.01,vmin(1e3,wCharTm));
 
     long long tmW = TSYS::curTime();
 
@@ -1044,10 +1059,10 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,3,"tp","dec","min","1","max","120");
-	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,3,"tp","dec","min","0","max","120");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0","max","3");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,3,"tp","real","min","0.01","max","3");
+	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root",STR_ID,1,"tp","str");

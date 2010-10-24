@@ -79,9 +79,9 @@ class TProt: public TProtocol
 	int comprLev( )			{ return mComprLev; }
 	int comprBrd( )			{ return mComprBrd; }
 
-	void setAuthTime( int vl )	{ m_t_auth = vl; modif(); }
-	void setComprLev( int vl )	{ mComprLev = vl; modif(); }
-	void setComprBrd( int vl )	{ mComprBrd = vl; modif(); }
+	void setAuthTime( int vl )	{ m_t_auth = vmax(1,vl); modif(); }
+	void setComprLev( int vl )	{ mComprLev = vmax(-1,vmin(9,vl)); modif(); }
+	void setComprBrd( int vl )	{ mComprBrd = vmax(10,vl); modif(); }
 
 	int sesOpen( const char *user, const char *pass );
 	void sesClose( int id_ses );

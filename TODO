@@ -1,18 +1,13 @@
 To do tasks of the project OpenSCADA
 
 1. System's testing/optimization
-  * Make optimal operations to value buffer, more for buffer reading into mode soft time grid (slower of writing to 40 times).
-  * Develope new mechanism of testing and it connection (based on present modules Special/SystemTests).
-    Creation configuration and control dialog (by help of control interface of system).
-  * Make checking of system code by help of program and other programs.
+  * Adaptation to work on RISC architectures, АРМ.
 
 2. System
 
 3. Modules
 
 4. Subsystem DB
-  * Make DB module for ODBC support.
-  * Make DB module for DBMS PostgresSQL support.
   * Make DB module for OpenLDAP support.
   * Make DB module for DBMS Oracle support.
 
@@ -32,6 +27,7 @@ To do tasks of the project OpenSCADA
 8.2. Vision
   * Develope and making the “Function” primitive.
   * Develope and making the “Link” primitive.
+  * The implementation mechanism of rollback in tool of user interfaces developing.
 
 8.3. WebVision
   * Develope and making the “Function” primitive.
@@ -46,4 +42,3 @@ To do tasks of the project OpenSCADA
 12. Documentation
 
 13. Project site
-  * Add changes tracker and continued works at project tracker.

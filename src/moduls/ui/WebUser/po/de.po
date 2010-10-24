@@ -1,0 +1,154 @@
+# OpenSCADA.UI.WebUser translate to German.
+# Copyright (C) 2010 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
+#
+# Roman Savochenko <rom_as@fromru.com>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.UI.WebUser 0.6.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-10-09 19:47+0300\n"
+"PO-Revision-Date: 2010-10-09 15:57+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Web interface from user"
+msgstr "Web-Oberfläche vom Benutzer"
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid "Allow creation self-user web-interfaces on any OpenSCADA language."
+msgstr "Lassen Schöpfung selbst Benutzer Web-Interfaces auf jedem OpenSCADA Sprache."
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "To enable"
+msgstr "So aktivieren Sie"
+
+msgid "Program"
+msgstr "Programm"
+
+msgid "Search and create new user page error."
+msgstr "Suchen und neue Benutzer Fehler auf der Seite."
+
+msgid "Welcome to Web-users pages of OpenSCADA system."
+msgstr "Willkommen bei Web-Seiten der Nutzer OpenSCADA System."
+
+msgid "Present web-users pages"
+msgstr "Präsentieren Sie Web-Seiten Anwender"
+
+msgid "Page error"
+msgstr "Fehler auf der Seite"
+
+msgid "User page"
+msgstr "Benutzer-Seite"
+
+msgid "User pages"
+msgstr "User Seiten"
+
+msgid "Default page"
+msgstr "Standardseite"
+
+msgid "Pages"
+msgstr "Seiten"
+
+msgid "<Page index display>"
+msgstr "<Seite Index-Anzeige>"
+
+msgid "Result"
+msgstr "Ergebnis"
+
+msgid "HTTP request"
+msgstr "HTTP-Request"
+
+msgid "URL"
+msgstr ""
+
+msgid "Page"
+msgstr "Seite"
+
+msgid "Sender"
+msgstr "Absender"
+
+msgid "User"
+msgstr ""
+
+msgid "HTTP variables"
+msgstr "HTTP-Variablen"
+
+msgid "URL's parameters"
+msgstr "URL-Parameter"
+
+msgid "Content items"
+msgstr "Inhaltseinträge"
+
+msgid "Disabled. "
+msgstr "Deaktiviert. "
+
+msgid "Enabled. "
+msgstr "Aktiviert. "
+
+#, c-format
+msgid "Requests %.4g."
+msgstr "Anträge %.4g."
+
+msgid "User page: "
+msgstr "Benutzer-Seite: "
+
+msgid "State"
+msgstr "Staat"
+
+msgid "Status"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "DB"
+msgstr ""
+
+msgid ""
+"DB address in format [<DB module>.<DB name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+msgid "Config"
+msgstr ""
+
+msgid "Program language"
+msgstr "Programmsprache"
+
+msgid ""
+"Next attributes has defined for requests processing:\n"
+"   'rez' - processing result (by default - 200 OK);\n"
+"   'HTTPreq' - HTTP request method (GET,POST);\n"
+"   'url' - requested URI;\n"
+"   'page' - Get/Post page content;\n"
+"   'sender' - request sender;\n"
+"   'user' - auth user;\n"
+"   'HTTPvars' - HTTP variables into Object;\n"
+"   'URLprms' - URL's parameters into Object;\n"
+"   'cnts' - content items for POST into Array<XMLNodeObj>."
+msgstr ""
+"Weiter im Internet hat für Anfragen Verarbeitung definiert:\n"
+"   'rez' - Verarbeitung Ergebnis (standardmäßig - 200 OK);\n"
+"   'HTTPreq' - HTTP-Request-Methode (GET, POST);\n"
+"   'url' - angeforderten URI;\n"
+"   'page' - Get/Post Seiteninhalt;\n"
+"   'sender' - Absenders;\n"
+"   'user' - auth Benutzer;\n"
+"   'HTTPvars' - HTTP-Variablen in Objekt;\n"
+"   'URLprms' - URL-Parameter in Object;\n"
+"   'cnts' - Inhaltselemente für die POST in Array<XMLNodeObj>."

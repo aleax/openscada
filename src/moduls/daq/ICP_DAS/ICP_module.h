@@ -120,7 +120,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double period( )	{ return vmax(mPer,0.01); }
+	double period( )	{ return mPer; }
 	int    prior( )		{ return mPrior; }
 	string prmLP( const string &prm );
 

@@ -1,5 +1,7 @@
 #===== Generic Info ======
-Summary: Open SCADA system project
+Summary: Open SCADA system core.
+Summary(ru_RU.UTF8): Ядро открытой SCADA системы.
+Summary(uk_UA.UTF8): Ядро відкритої SCADA системи.
 Name: openscada
 Version: 0.7.0
 Release: 1
@@ -92,6 +94,8 @@ Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwor
 
 %package doc
 Summary: Open SCADA documents.
+Summary(ru_RU.UTF8): Документация открытой SCADA.
+Summary(uk_UA.UTF8): Документація відкритої SCADA.
 Group: Documentation
 %description doc
 The %name-doc package include documents files.
@@ -104,6 +108,8 @@ Das Paket %name-doc enthaelt Dokumentationsdateien.
 
 %package devel
 Summary: Open SCADA development.
+Summary(ru_RU.UTF8): Разработка открытой SCADA.
+Summary(uk_UA.UTF8): Розробка відкритої SCADA.
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
@@ -115,12 +121,14 @@ The %name-devel package includes library archives and include files.
 
 %package demo
 Summary: Open SCADA demo data bases and config.
+Summary(ru_RU.UTF8): Демонстрационная БД и конфигурация открытой SCADA.
+Summary(uk_UA.UTF8): Демонстраційна БД та конфігурація відкритої SCADA.
 Group: Graphics
 Requires: %name = %version-%release %name-DAQ.BlockCalc %name-Archive.FSArch
 Requires: %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System
-Requires: %name-DB.SQLite, %name-Protocol.HTTP %name-Protocol.SelfSystem
-Requires: %name-Special.FLibComplex1, %name-Special.FLibMath, %name-Special.FLibSYS, %name-Transport.Sockets,
-Requires: %name-UI.QTCfg, %name-UI.QTStarter, %name-UI.VCAEngine, %name-UI.Vision, %name-UI.WebCfgD, %name-UI.WebVision
+Requires: %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem
+Requires: %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.Sockets %name-Transport.SSL
+Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision
 %description demo
 The %{name}-demo package includes demo data bases and configs. For start use command <openscada_demo>.
 For access use account "root" and password "openscada" or account "user" and password "user".
@@ -138,7 +146,9 @@ Fuers Starten wird Kommando <openscada_demo> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package plc
-Summary: OpenSCADA PLC.
+Summary: OpenSCADA - PLC virtual package.
+Summary(ru_RU.UTF8): Виртуальный пакет OpenSCADA - ПЛК.
+Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - ПЛК.
 Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch
@@ -155,7 +165,9 @@ The %name-plc package is virtual package for PLC.
 Пакет %name-plc це віртуальний пакет для ПЛК.
 
 %package server
-Summary: OpenSCADA server.
+Summary: OpenSCADA - server virtual package.
+Summary(ru_RU.UTF8): Виртуальный пакет OpenSCADA - сервер.
+Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - сервер.
 Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch
@@ -173,7 +185,9 @@ The %name-server package is virtual package for SCADA-server.
 Пакет %name-server це віртуальний пакет для сервера SCADA.
 
 %package visStation
-Summary: OpenSCADA visual station.
+Summary: OpenSCADA - visual station virtual package.
+Summary(ru_RU.UTF8): Виртуальный пакет OpenSCADA - визуальная станция.
+Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - візуальна станція.
 Group: Graphics
 %if %_vendor == "alt"
 BuildArch: noarch
@@ -193,6 +207,8 @@ The %name-visStation package is virtual package for visual station (SCADA).
 %if_enabled DBF
 %package DB.DBF
 Summary: DB DBF support.
+Summary(ru_RU.UTF8): Поддержка БД DBF.
+Summary(uk_UA.UTF8): Підтримка БД DBF.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.DBF
@@ -208,6 +224,8 @@ Das Paket %{name}-DB.DBF unterstützt die *.dbf Datenbank Version 3.0.
 %if_enabled SQLite
 %package DB.SQLite
 Summary: DB SQLite support.
+Summary(ru_RU.UTF8): Поддержка БД SQLite.
+Summary(uk_UA.UTF8): Підтримка БД SQLite.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.SQLite
@@ -223,6 +241,8 @@ Das Paket %{name}-DB.SQLite unterstützt die SQLite Datenbank.
 %if_enabled MySQL
 %package DB.MySQL
 Summary: DB MySQL support.
+Summary(ru_RU.UTF8): Поддержка БД MySQL.
+Summary(uk_UA.UTF8): Підтримка БД MySQL.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.MySQL
@@ -238,6 +258,8 @@ Das Paket %{name}-DB.MySQL unterstützt die MySQL Datenbank.
 %if_enabled FireBird
 %package DB.FireBird
 Summary: DB FireBird support.
+Summary(ru_RU.UTF8): Поддержка БД FireBird.
+Summary(uk_UA.UTF8): Підтримка БД FireBird.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.FireBird
@@ -253,6 +275,8 @@ Das Paket %{name}-DB.FireBird unterstützt die FireBird Datenbank.
 %if_enabled PostgreSQL
 %package DB.PostgreSQL
 Summary: DB PostgreSQL support.
+Summary(ru_RU.UTF8): Поддержка БД PostgreSQL.
+Summary(uk_UA.UTF8): Підтримка БД PostgreSQL.
 Group: Graphics
 Requires: %name = %version-%release
 %description DB.PostgreSQL
@@ -269,6 +293,8 @@ Das Paket %{name}-DB.PostgreSQL unterstützt die PostgreSQL Datenbank.
 %if_enabled System
 %package DAQ.System
 Summary: System DA.
+Summary(ru_RU.UTF8): Источник данных "Система".
+Summary(uk_UA.UTF8): Джерело даних "Система".
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.System
@@ -288,6 +314,8 @@ Unterstützt werden die ОС Linux Datenquellen: HDDTemp, Sensors, Uptime, Memor
 %if_enabled BlockCalc
 %package DAQ.BlockCalc
 Summary: Block based calculator.
+Summary(ru_RU.UTF8): Блочный вычислитель.
+Summary(uk_UA.UTF8): Блоковий обчислювач.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.BlockCalc
@@ -303,6 +331,8 @@ Das Paket %{name}-DAQ.BlockCalc erlaubt Berechnungen mit dem Blockrechner.
 %if_enabled JavaLikeCalc
 %package DAQ.JavaLikeCalc
 Summary: Java-like based calculator.
+Summary(ru_RU.UTF8): Вычислитель, основанный на Java-подобном языке.
+Summary(uk_UA.UTF8): Обчислювач, який засновано на подібній до Java мові.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.JavaLikeCalc
@@ -322,6 +352,8 @@ Der Benutzer kann Funktionen und Bibliotheken erstellen und modifizieren.
 %if_enabled DiamondBoards
 %package DAQ.DiamondBoards
 Summary: Diamond DA boards.
+Summary(ru_RU.UTF8): Платы сбора данных Diamond.
+Summary(uk_UA.UTF8): Плати збору даних Diamond.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.DiamondBoards
@@ -340,6 +372,8 @@ Das Paket %{name}-DAQ.DiamondBoards Zugriff auf Datenerfassungskarten von Diamon
 %if_enabled LogicLev
 %package DAQ.LogicLev
 Summary: Logic level.
+Summary(ru_RU.UTF8): Логический уровень.
+Summary(uk_UA.UTF8): Логічний рівень.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.LogicLev
@@ -355,6 +389,8 @@ Das Paket %{name}-DAQ.LogicLev ermöglicht Parameter der logischen Stufe.
 %if_enabled SNMP
 %package DAQ.SNMP
 Summary: SNMP client.
+Summary(ru_RU.UTF8): Клиент SNMP.
+Summary(uk_UA.UTF8): Клієнт SNMP.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.SNMP
@@ -370,6 +406,8 @@ Das Paket %{name}-DAQ.SNMP anbindung eines Clients für das SNMP-Protokoll.
 %if_enabled Siemens
 %package DAQ.Siemens
 Summary: Siemens DAQ.
+Summary(ru_RU.UTF8): Источник данных Siemens.
+Summary(uk_UA.UTF8): Джерело даних Siemens.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.Siemens
@@ -404,6 +442,8 @@ Das Paket %{name}-DAQ.ModBus ermöglicht die Realisierung des Klientservices des
 %if_enabled DCON
 %package DAQ.DCON
 Summary: DCON client.
+Summary(ru_RU.UTF8): Клиент DCON.
+Summary(uk_UA.UTF8): Клієнт DCON.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.DCON
@@ -419,6 +459,8 @@ Das Paket %{name}-DAQ.DCON Realisierung des I-7000 DCON Client-Protokolls.
 %if_enabled DAQGate
 %package DAQ.DAQGate
 Summary: Data sources gate.
+Summary(ru_RU.UTF8): Шлюз источников данных.
+Summary(uk_UA.UTF8): Шлюз джерел даних.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.DAQGate
@@ -434,6 +476,8 @@ Das Paket %{name}-DAQ.DAQGate verbindung mit Datenquellen von entfernten OpenSCA
 %if_enabled SoundCard
 %package DAQ.SoundCard
 Summary: Sound card.
+Summary(ru_RU.UTF8): Звуковая карта.
+Summary(uk_UA.UTF8): Звукова карта.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.SoundCard
@@ -449,6 +493,8 @@ Das Paket %{name}-DAQ.SoundCard zugriff auf Soundkartendata.
 %if_enabled ICP_DAS
 %package DAQ.ICP_DAS
 Summary: ICP DAS hardware.
+Summary(ru_RU.UTF8): Оборудование ICP DAS.
+Summary(uk_UA.UTF8): Обладнання ICP DAS.
 Group: Graphics
 Requires: %name = %version-%release
 %description DAQ.ICP_DAS
@@ -476,6 +522,8 @@ The %{name}-DAQ.OPC_UA package allow realisation of OPC UA protocol.
 %if_enabled FSArch
 %package Archive.FSArch
 Summary: File system archivator.
+Summary(ru_RU.UTF8): Архиватор на файловую систему.
+Summary(uk_UA.UTF8): Архіватор на файлову систему.
 Group: Graphics
 Requires: %name = %version-%release
 %description Archive.FSArch
@@ -491,6 +539,8 @@ Das Paket %{name}-Archive.FSArch funktionen zum Archivieren von Nachrichten und 
 %if_enabled DBArch
 %package Archive.DBArch
 Summary: To DB archivator.
+Summary(ru_RU.UTF8): Архиватор на БД.
+Summary(uk_UA.UTF8): Архіватор на БД.
 Group: Graphics
 Requires: %name = %version-%release
 %description Archive.DBArch
@@ -506,7 +556,9 @@ Das Paket %{name}-Archive.DBArch funktionen zum Archivieren von Nachrichten und 
 #===== Transport modules =====
 %if_enabled Sockets
 %package Transport.Sockets
-Summary: Transport sockets.
+Summary: Transport: Sockets.
+Summary(ru_RU.UTF8): Транспорт: Сокеты.
+Summary(uk_UA.UTF8): Транспорт: Сокети.
 Group: Graphics
 Requires: %name = %version-%release
 %description Transport.Sockets
@@ -521,7 +573,9 @@ Das Paket %{name}-Transport.Sockets gewährt den auf Sockets gebauten Transport.
 
 %if_enabled SSL
 %package Transport.SSL
-Summary: Transport SSL.
+Summary: Transport: SSL.
+Summary(ru_RU.UTF8): Транспорт: SSL.
+Summary(uk_UA.UTF8): Транспорт: SSL.
 Group: Graphics
 Requires: %name = %version-%release
 %description Transport.SSL
@@ -536,7 +590,9 @@ Das Paket %{name}-Transport.SSL gewährt den auf der Schicht von sicheren Socket
 
 %if_enabled Serial
 %package Transport.Serial
-Summary: Transport serial interfaces.
+Summary: Transport: Serial interfaces.
+Summary(ru_RU.UTF8): Транспорт: Последовательные интерфейсы.
+Summary(uk_UA.UTF8): Транспорт: Послідовні інтерфейси.
 Group: Graphics
 Requires: %name = %version-%release
 %description Transport.Serial
@@ -552,7 +608,9 @@ Das Paket %{name}-Transport.Serial ermöglicht die Verwendung der Seriellen Schn
 #===== Transport protocol modules =====
 %if_enabled HTTP
 %package Protocol.HTTP
-Summary: Protocol HTTP-realisation.
+Summary: Protocol: HTTP-realisation.
+Summary(ru_RU.UTF8): Протокол: реалізация HTTP.
+Summary(uk_UA.UTF8): Протокол: реалізація HTTP.
 Group: Graphics
 Requires: %name = %version-%release
 %description Protocol.HTTP
@@ -568,6 +626,8 @@ Das Paket %{name}-Protocol.HTTP HTTP-Unterstützung für eine WWW basierte Benut
 %if_enabled SelfSystem
 %package Protocol.SelfSystem
 Summary: Self system OpenSCADA protocol.
+Summary(ru_RU.UTF8): Протокол: собственный системы OpenSCADA.
+Summary(uk_UA.UTF8): Протокол: власний системи OpenSCADA.
 Group: Graphics
 Requires: %name = %version-%release
 %description Protocol.SelfSystem
@@ -583,6 +643,8 @@ Das Paket %{name}-Protocol.SelfSystem - allgemeine Hauptfunktionen für das Syst
 %if_enabled UserProtocol
 %package Protocol.UserProtocol
 Summary: User protocol.
+Summary(ru_RU.UTF8): Протокол пользователя.
+Summary(uk_UA.UTF8): Протокол користувача.
 Group: Graphics
 Requires: %name = %version-%release
 %description Protocol.UserProtocol
@@ -597,6 +659,8 @@ The %{name}-Protocol.UserProtocol package - allow creation self-user protocols o
 %if_enabled VCAEngine
 %package UI.VCAEngine
 Summary: Visual control area engine.
+Summary(ru_RU.UTF8): Движок визуальной среды управления.
+Summary(uk_UA.UTF8): Рущій візуального середовища керування.
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.VCAEngine
@@ -612,6 +676,8 @@ Das Paket %{name}-UI.VCAEngine - allgemeine Visualisierungssteuerung.
 %if_enabled Vision
 %package UI.Vision
 Summary: Operation user interface (QT).
+Summary(ru_RU.UTF8): Рабочий интерфейс пользователя (QT).
+Summary(uk_UA.UTF8): Робочий інтерфейс користувача (QT).
 Group: Graphics
 Requires: %name = %version-%release %name-UI.QTStarter
 %description UI.Vision
@@ -627,6 +693,8 @@ Das Paket %{name}-UI.Vision - benutzerschnittstelle.
 %if_enabled QTStarter
 %package UI.QTStarter
 Summary: QT GUI starter.
+Summary(ru_RU.UTF8): Пускатель графических интерфейсов QT.
+Summary(uk_UA.UTF8): Пускач графічних інтерфейсів QT.
 Group: Graphics
 Requires: %name = %version-%release
 %description UI.QTStarter
@@ -642,6 +710,8 @@ Das Paket %{name}-UI.QTStarter - QT GUI-Starter für die QT GUI Module!
 %if_enabled QTCfg
 %package UI.QTCfg
 Summary: System configurator (QT).
+Summary(ru_RU.UTF8): Системный конфигуратор (QT).
+Summary(uk_UA.UTF8): Системний конфігуратор (QT).
 Group: Graphics
 Requires: %name = %version-%release %name-UI.QTStarter
 %description UI.QTCfg
@@ -657,6 +727,8 @@ Das Paket %{name}-UI.QTCfg ermöglicht die QT-basierte Systemeinstellung von Ope
 %if_enabled WebCfg
 %package UI.WebCfg
 Summary: System configurator (WEB).
+Summary(ru_RU.UTF8): Системный конфигуратор (WEB).
+Summary(uk_UA.UTF8): Системний конфігуратор (WEB).
 Group: Graphics
 Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebCfg
@@ -672,6 +744,8 @@ Das Paket %{name}-UI.WebCfg ermöglicht die WEB-basierten Systemeinstellungen Op
 %if_enabled WebCfgD
 %package UI.WebCfgD
 Summary: Dynamic WEB configurator.
+Summary(ru_RU.UTF8): Динамичный WEB конфигуратор.
+Summary(uk_UA.UTF8): Динамічний WEB конфігуратор.
 Group: Graphics
 Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebCfgD
@@ -687,6 +761,8 @@ Das Paket %{name}-UI.WebCfgD gewährt den dynamischen WEB begründeten Configura
 %if_enabled WebVision
 %package UI.WebVision
 Summary: Operation user interface (WEB).
+Summary(ru_RU.UTF8): Рабочий интерфейс пользователя (WEB).
+Summary(uk_UA.UTF8): Робочий інтерфейс користувача (WEB).
 Group: Graphics
 Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebVision
@@ -702,6 +778,8 @@ Das Paket %{name}-UI.WebVision - web Benutzerschnittstelle für die Steuerung de
 %if_enabled WebUser
 %package UI.WebUser
 Summary: Web interface from user.
+Summary(ru_RU.UTF8): Web интерфейс от пользователя.
+Summary(uk_UA.UTF8): Web інтерфейс від користувача.
 Group: Graphics
 Requires: %name = %version-%release %name-Protocol.HTTP
 %description UI.WebUser
@@ -716,6 +794,8 @@ The %{name}-UI.WebUser package - allow creation self-user web-interfaces on any 
 %if_enabled SystemTests
 %package Special.SystemTests
 Summary: OpenSCADA system's tests.
+Summary(ru_RU.UTF8): Системные тесты OpenSCADA.
+Summary(uk_UA.UTF8): Системні тести OpenSCADA.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.SystemTests
@@ -731,6 +811,8 @@ Das Paket %{name}-Special.SystemTests ermöglicht Gruppentests für das OpenSCAD
 %if_enabled FLibComplex1
 %package Special.FLibComplex1
 Summary: Complex1 function's lib.
+Summary(ru_RU.UTF8): Библиотека функций Complex1.
+Summary(uk_UA.UTF8): Бібліотека функцій Complex1.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.FLibComplex1
@@ -746,6 +828,8 @@ Das Paket %{name}-Special.FLibComplex1 zugriff auf die statische Bibliothek Comp
 %if_enabled FLibMath
 %package Special.FLibMath
 Summary: Math function's lib.
+Summary(ru_RU.UTF8): Библиотека математических функций.
+Summary(uk_UA.UTF8): Бібліотека математичних функцій.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.FLibMath
@@ -761,6 +845,8 @@ Das Paket %{name}-Special.FLibMath - bibliothek mit mathematischen Funktionen.
 %if_enabled FLibSYS
 %package Special.FLibSYS
 Summary: System API functions.
+Summary(ru_RU.UTF8): Функции системного API.
+Summary(uk_UA.UTF8): Функції системного API.
 Group: Graphics
 Requires: %name = %version-%release
 %description Special.FLibSYS
@@ -777,7 +863,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 %setup -q -n %srcname
 
 %build
-%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated" \
+%configure CFLAGS="-O2" CXXFLAGS="-O2" \
     %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} %{subst_enable PostgreSQL} \
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
@@ -1113,6 +1199,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Sun Oct 24 2010 Roman Savochenko <rom_as@oscada.org>
+- Build 0.7.0 production release.
+
+* Fri May 28 2010 Roman Savochenko <rom_as@oscada.org>
+- Build 0.6.4.2 release.
+
 * Mon Jan 25 2010 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.4.1 release.
 

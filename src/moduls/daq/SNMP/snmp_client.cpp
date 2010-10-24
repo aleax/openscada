@@ -105,11 +105,11 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100") );
+    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","1;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost") );
     fldAdd( new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public") );
-    fldAdd( new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100") );
+    fldAdd( new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));

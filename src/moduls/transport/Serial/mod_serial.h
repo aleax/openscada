@@ -50,7 +50,7 @@ class TTrIn: public TTransportIn
 	string timings( )			{ return mTimings; }
 
 	void setAddr( const string &addr );
-	void setTimings( const string &vl )	{ mTimings = vl; modif(); }
+	void setTimings( const string &vl );
 
 	//> Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
@@ -63,9 +63,9 @@ class TTrIn: public TTransportIn
 	string	mdmRingAnswer( )		{ return mMdmRingAnswer; }
 	string	mdmRingAnswerResp( )		{ return mMdmRingAnswerResp; }
 
-	void	setMdmTm( int vl )		{ mMdmTm = vl; modif(); }
-	void	setMdmPreInit( float vl )	{ mMdmPreInit = vl; modif(); }
-	void	setMdmPostInit( float vl )	{ mMdmPostInit = vl; modif(); }
+	void	setMdmTm( int vl )		{ mMdmTm = vmax(1,vmin(120,vl)); modif(); }
+	void	setMdmPreInit( float vl )	{ mMdmPreInit = vmax(0,vmin(3,vl)); modif(); }
+	void	setMdmPostInit( float vl )	{ mMdmPostInit = vmax(0.01,vmin(3,vl)); modif(); }
 	void	setMdmInitStr1( const string &vl )	{ mMdmInitStr1 = vl; modif(); }
 	void	setMdmInitStr2( const string &vl )	{ mMdmInitStr2 = vl; modif(); }
 	void	setMdmInitResp( const string &vl )	{ mMdmInitResp = vl; modif(); }
@@ -120,7 +120,7 @@ class TTrOut: public TTransportOut
 	string timings( )			{ return mTimings; }
 
 	void setAddr( const string &addr );
-	void setTimings( const string &vl )	{ mTimings = vl; modif(); }
+	void setTimings( const string &vl );
 
 	//> Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
@@ -138,10 +138,10 @@ class TTrOut: public TTransportOut
 	string	mdmHangUp( )			{ return mMdmHangUp; }
 	string	mdmHangUpResp( )		{ return mMdmHangUpResp; }
 
-	void	setMdmTm( int vl )		{ mMdmTm = vl; modif(); }
-	void	setMdmLifeTime( int vl )	{ mMdmLifeTime = vl; modif(); }
-	void	setMdmPreInit( float vl )	{ mMdmPreInit = vl; modif(); }
-	void	setMdmPostInit( float vl )	{ mMdmPostInit = vl; modif(); }
+	void	setMdmTm( int vl )		{ mMdmTm = vmax(1,vmin(120,vl)); modif(); }
+	void	setMdmLifeTime( int vl )	{ mMdmLifeTime = vmax(0,vmin(120,vl)); modif(); }
+	void	setMdmPreInit( float vl )	{ mMdmPreInit = vmax(0,vmin(3,vl)); modif(); }
+	void	setMdmPostInit( float vl )	{ mMdmPostInit = vmax(0.01,vmin(3,vl)); modif(); }
 	void	setMdmInitStr1( const string &vl )	{ mMdmInitStr1 = vl; modif(); }
 	void	setMdmInitStr2( const string &vl )	{ mMdmInitStr2 = vl; modif(); }
 	void	setMdmInitResp( const string &vl )	{ mMdmInitResp = vl; modif(); }

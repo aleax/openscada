@@ -96,7 +96,7 @@ void TipContr::postEnable( int flag )
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40") );
     fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
-    fldAdd( new TFld("ITER",_("Iteration number in single calc"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    fldAdd( new TFld("ITER",_("Iteration number in single calc"),TFld::Integer,TFld::NoFlag,"2","1","1;99") );
 
     //> Controller value db structure
     val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );

@@ -92,11 +92,11 @@ class TSocketIn: public TTransportIn
 	int keepAliveTm( )	{ return mKeepAliveTm; }
 	int taskPrior( )	{ return mTaskPrior; }
 
-	void setMaxQueue( int vl )	{ mMaxQueue = vl; modif(); }
-	void setMaxFork( int vl )	{ mMaxFork = vl; modif(); }
-	void setBufLen( int vl )	{ mBufLen = vl; modif(); }
-	void setKeepAliveCon( int vl )	{ mKeepAliveCon = vl; modif(); }
-	void setKeepAliveTm( int vl )	{ mKeepAliveTm = vl; modif(); }
+	void setMaxQueue( int vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
+	void setMaxFork( int vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
+	void setBufLen( int vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
+	void setKeepAliveCon( int vl )	{ mKeepAliveCon = vmax(0,vl); modif(); }
+	void setKeepAliveTm( int vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
 	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 
 	void start( );
@@ -168,10 +168,10 @@ class TSocketOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )		{ return mTimings; }
-	int tmCon( )			{ return vmax(1,vmin(60000,mTmCon)); }
+	int tmCon( )			{ return mTmCon; }
 
 	void setTimings( const string &vl );
-	void setTmCon( int vl )		{ mTmCon = vl; }
+	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 
 	void start( );
 	void stop( );

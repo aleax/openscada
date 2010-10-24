@@ -116,7 +116,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return vmax(mPer,0.1); }
+	double	period( )	{ return mPer; }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }

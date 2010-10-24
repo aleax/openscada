@@ -85,7 +85,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","1","1;2;3",_("None;Sign;Sign&Encrypt")) );
     fldAdd( new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
     fldAdd( new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000") );
-    fldAdd( new TFld("AttrsLimit",_("Parameter attributes number limit"),TFld::Integer,TFld::NoFlag,"3","100") );
+    fldAdd( new TFld("AttrsLimit",_("Parameter attributes number limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000") );
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));

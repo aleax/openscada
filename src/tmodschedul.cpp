@@ -79,6 +79,8 @@ string TModSchedul::optDescr( )
     return(buf);
 }
 
+void TModSchedul::setChkPer( int per )	{ mPer = vmax(0,per); modif(); }
+
 int TModSchedul::loadLibS(  )
 {
     return libLoad(SYS->modDir(),false);

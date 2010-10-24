@@ -1,5 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system project
+Summary(ru_RU.UTF8): Ядро открытой SCADA системы.
+Summary(uk_UA.UTF8): Ядро відкритої SCADA системи.
 Name: openscada
 Version: 0.7.0
 Release: 1
@@ -40,6 +42,8 @@ Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwor
 
 %package doc
 Summary: Open SCADA documents
+Summary(ru_RU.UTF8): Документация открытой SCADA.
+Summary(uk_UA.UTF8): Документація відкритої SCADA.
 Group: Documentation
 %description doc
 The %name-doc package include documents files.
@@ -53,6 +57,8 @@ Das Paket %name-doc enthaelt Dokumentationsdateien.
 
 %package devel
 Summary: Open SCADA development
+Summary(ru_RU.UTF8): Разработка открытой SCADA.
+Summary(uk_UA.UTF8): Розробка відкритої SCADA.
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
@@ -65,6 +71,8 @@ The %name-devel package includes library archives and include files.
 
 %package demo
 Summary: Open SCADA demo data bases and config
+Summary(ru_RU.UTF8): Демонстрационная БД и конфигурация открытой SCADA.
+Summary(uk_UA.UTF8): Демонстраційна БД та конфігурація відкритої SCADA.
 Group: Graphics
 Requires: %name
 %description demo
@@ -81,7 +89,7 @@ Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Start
 %setup -q -n %srcname
 
 %build
-%configure CFLAGS="-O2" CXXFLAGS="-O2 -Wno-deprecated"
+%configure CFLAGS="-O2" CXXFLAGS="-O2"
 %make
 
 %install
@@ -151,6 +159,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/DEMO/*.db
 
 %changelog
+* Sun Oct 24 2010 Roman Savochenko <rom_as@oscada.org>
+- Build 0.7.0 production release.
+
+* Fri May 28 2010 Roman Savochenko <rom_as@oscada.org>
+- Build 0.6.4.2 release.
+
 * Mon Jan 25 2010 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.4.1 release.
 

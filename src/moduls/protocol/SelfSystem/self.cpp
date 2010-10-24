@@ -136,9 +136,9 @@ void TProt::load_( )
     //> Load parameters from command line
 
     //> Load parameters from config file
-    setAuthTime( atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()) );
-    setComprLev( atoi(TBDS::genDBGet(nodePath()+"ComprLev",TSYS::int2str(comprLev())).c_str()) );
-    setComprBrd( atoi(TBDS::genDBGet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd())).c_str()) );
+    setAuthTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()));
+    setComprLev(atoi(TBDS::genDBGet(nodePath()+"ComprLev",TSYS::int2str(comprLev())).c_str()));
+    setComprBrd(atoi(TBDS::genDBGet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd())).c_str()));
 }
 
 void TProt::save_( )
@@ -231,12 +231,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,2,"tp","dec",
 		    "help",_("ZLib compression level:\n"
 			     "  -1  - optimal speed-size;\n"
 			     "  0   - disable;\n"
 			     "  1-9 - direct level."));
-		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","10","max","1000",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),RWRWR_,"root",SPRT_ID,2,"tp","dec",
 		    "help",_("Value in bytes."));
 	    }
 	return;

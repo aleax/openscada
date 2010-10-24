@@ -156,24 +156,24 @@ void TSocketIn::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("MaxQueue");	if( !vl.empty() ) mMaxQueue = atoi(vl.c_str());
-	vl = prmNd.attr("MaxClients");	if( !vl.empty() ) mMaxFork = atoi(vl.c_str());
-	vl = prmNd.attr("BufLen");	if( !vl.empty() ) mBufLen = atoi(vl.c_str());
-	vl = prmNd.attr("KeepAliveCnt");if( !vl.empty() ) mKeepAliveCon = atoi(vl.c_str());
-	vl = prmNd.attr("KeepAliveTm");	if( !vl.empty() ) mKeepAliveTm = atoi(vl.c_str());
-	vl = prmNd.attr("TaskPrior");	if( !vl.empty() ) mTaskPrior = atoi(vl.c_str());
+	vl = prmNd.attr("MaxQueue");	if(!vl.empty()) setMaxQueue(atoi(vl.c_str()));
+	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(atoi(vl.c_str()));
+	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(atoi(vl.c_str()));
+	vl = prmNd.attr("KeepAliveCnt");if(!vl.empty()) setKeepAliveCon(atoi(vl.c_str()));
+	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(atoi(vl.c_str()));
+	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(atoi(vl.c_str()));
     } catch(...){ }
 }
 
 void TSocketIn::save_( )
 {
     XMLNode prmNd("prms");
-    prmNd.setAttr("MaxQueue",TSYS::int2str(mMaxQueue));
-    prmNd.setAttr("MaxClients",TSYS::int2str(mMaxFork));
-    prmNd.setAttr("BufLen",TSYS::int2str(mBufLen));
-    prmNd.setAttr("KeepAliveCnt",TSYS::int2str(mKeepAliveCon));
-    prmNd.setAttr("KeepAliveTm",TSYS::int2str(mKeepAliveTm));
-    prmNd.setAttr("TaskPrior",TSYS::int2str(mTaskPrior));
+    prmNd.setAttr("MaxQueue",TSYS::int2str(maxQueue()));
+    prmNd.setAttr("MaxClients",TSYS::int2str(maxFork()));
+    prmNd.setAttr("BufLen",TSYS::int2str(bufLen()));
+    prmNd.setAttr("KeepAliveCnt",TSYS::int2str(keepAliveCon()));
+    prmNd.setAttr("KeepAliveTm",TSYS::int2str(keepAliveTm()));
+    prmNd.setAttr("TaskPrior",TSYS::int2str(taskPrior()));
     mAPrms = prmNd.save(XMLNode::BrAllPast);
 
     TTransportIn::save_();
@@ -246,7 +246,7 @@ void TSocketIn::start()
 		close( sock_fd );
 		throw TError(nodePath().c_str(),_("TCP socket doesn't bind to <%s>!"),addr().c_str());
 	    }
-	    listen(sock_fd,mMaxQueue);
+	    listen(sock_fd,maxQueue());
 	}
 	else if(type == SOCK_UDP )
 	{
@@ -279,7 +279,7 @@ void TSocketIn::start()
 	    close( sock_fd );
 	    throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to <%s>!"),addr().c_str());
 	}
-	listen(sock_fd,mMaxQueue);
+	listen(sock_fd,maxQueue());
     }
 
     SYS->taskCreate( nodePath('.',true), taskPrior(), Task, this, &run_st );
@@ -624,9 +624,9 @@ TSocketOut::~TSocketOut()
 
 void TSocketOut::setTimings( const string &vl )
 {
-    mTimings = vl;
-    mTmCon = vmin(60000,(int)(atof(TSYS::strParse(timings(),0,":").c_str())*1e3));
-    mTmNext = vmin(60000,(int)(atof(TSYS::strParse(timings(),1,":").c_str())*1e3));
+    mTmCon = vmax(1,vmin(60000,(int)(atof(TSYS::strParse(vl,0,":").c_str())*1e3)));
+    mTmNext = vmax(1,vmin(60000,(int)(atof(TSYS::strParse(vl,1,":").c_str())*1e3)));
+    mTimings = TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
 }
 

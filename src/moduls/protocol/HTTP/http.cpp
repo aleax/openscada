@@ -117,7 +117,7 @@ void TProt::load_( )
     } while(next_opt != -1);
 
     //> Load parameters from config file
-    mTAuth = atoi(TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(mTAuth)).c_str());
+    setAuthTime(atoi(TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(authTime())).c_str()));
     //>> Load auto-login config
     ResAlloc res(nodeRes(),true);
     XMLNode aLogNd("aLog");
@@ -131,7 +131,7 @@ void TProt::load_( )
 
 void TProt::save_( )
 {
-    TBDS::genDBSet(nodePath()+"AuthTime",TSYS::int2str(mTAuth));
+    TBDS::genDBSet(nodePath()+"AuthTime",TSYS::int2str(authTime()));
     //>> Save auto-login config
     ResAlloc res(nodeRes(),false);
     XMLNode aLogNd("aLog");
@@ -170,7 +170,7 @@ string TProt::sesCheck( int sid )
     if( cur_tm > lst_ses_chk+10 )
     {
 	for( authEl = mAuth.begin(); authEl != mAuth.end(); )
-	    if( cur_tm > authEl->second.tAuth+mTAuth*60 )
+	    if( cur_tm > authEl->second.tAuth+authTime()*60 )
 		mAuth.erase(authEl++);
 	    else authEl++;
 	lst_ses_chk = cur_tm;

@@ -5,6 +5,7 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@oscada.org>, 2010.
 #
 #, fuzzy
 msgid ""
@@ -89,14 +90,15 @@ msgstr "Start Benutzer"
 msgid "User password"
 msgstr "Kennwort des Benutzers"
 
-#, fuzzy
 msgid "Cached pages lifetime"
-msgstr "Speicherung des Bildes der Seite"
+msgstr "Gespeicherte Seiten Lebensdauer"
 
 msgid ""
 "The time in hours for close pages from cache by inactive.\n"
 "For zero time pages will not closed."
 msgstr ""
+"Die Zeit in Stunden für eine enge Seiten aus dem Cache von inaktiv.\n"
+"Für den Zeitpunkt Null Seiten werden nicht geschlossen."
 
 msgid "Run projects list"
 msgstr "Liste von aktivierten Projekten"
@@ -686,7 +688,7 @@ msgid "Field for display modifying."
 msgstr "Feld für Anzeige der Änderungen."
 
 msgid "Click to save all modifyings."
-msgstr ""
+msgstr "Klicken, um alle modifyings speichern."
 
 msgid "This label displays current widget's scale."
 msgstr "Dieses Zeichen zeigt den Bereich des aktuellen Widgets an."
@@ -710,16 +712,16 @@ msgid "Ready"
 msgstr "Fertig"
 
 msgid "Icons size"
-msgstr ""
+msgstr "Icons Größe"
 
 msgid "Small (16x16)"
-msgstr ""
+msgstr "Klein (16x16)"
 
 msgid "Medium (22x22)"
-msgstr ""
+msgstr "Mittel (22x22)"
 
 msgid "Big (32x32)"
-msgstr ""
+msgstr "Big (32x32)"
 
 msgid "Huge (48x48)"
 msgstr ""
@@ -761,9 +763,8 @@ msgstr "Wollen Sie wirklich die Elemente '%1' aus der Datenbank laden?"
 msgid "Load visual item's data from DB"
 msgstr "Element aus der Datenbank laden"
 
-#, fuzzy
 msgid "Are you sure of saving all modifings to DB?"
-msgstr "Wollen Sie wirklich die Elemente '%1' in die Datenbank speichern?"
+msgstr "Sind Sie sicher, alle zu retten modifings der DB?"
 
 msgid "Are you sure of saving visual items '%1' to DB?"
 msgstr "Wollen Sie wirklich die Elemente '%1' in die Datenbank speichern?"
@@ -856,7 +857,7 @@ msgid "State"
 msgstr "Zustand"
 
 msgid "Item's icon. Click for download other."
-msgstr ""
+msgstr "Item-Symbol.Klicken Sie zum Download von anderen."
 
 msgid "Enabled:"
 msgstr "Eingeschaltet:"
@@ -912,15 +913,14 @@ msgstr "Daten laden"
 msgid "Unload data"
 msgstr "Daten leeren"
 
-#, fuzzy
 msgid "Styles"
-msgstr "Stil:"
+msgstr ""
 
 msgid "Style:"
 msgstr "Stil:"
 
 msgid "Erase style"
-msgstr ""
+msgstr "Erase Stil"
 
 msgid "Value"
 msgstr "Wert"
@@ -1028,10 +1028,10 @@ msgid "Attribute"
 msgstr "Attribut"
 
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 msgid "Clear changes"
-msgstr ""
+msgstr "Klare Veränderungen"
 
 msgid "Press to clear attribute's changes."
 msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
@@ -1044,7 +1044,7 @@ msgstr "Typ"
 
 #, c-format
 msgid "Widgets' development tree '%s' request time %f ms."
-msgstr ""
+msgstr "Widget Entwicklung Baum '%s' Anfrage Zeitpunkt %f ms."
 
 msgid "Library"
 msgstr "Bibliothek"
@@ -1066,7 +1066,7 @@ msgstr "Widgetscontainer"
 
 #, c-format
 msgid "Widgets' development tree '%s' load time %f ms."
-msgstr ""
+msgstr "Widget Entwicklung Baum '%s' Ladezeit %f ms."
 
 msgid "Refresh libraries"
 msgstr "Bibliotheken aktualisieren"
@@ -1082,7 +1082,7 @@ msgstr "Projekt"
 
 #, c-format
 msgid "Project's development tree '%s' load time %f ms."
-msgstr ""
+msgstr "Projektentwicklung Baum '%s' Ladezeit %f ms."
 
 msgid "Page"
 msgstr "Seite"
@@ -1279,17 +1279,14 @@ msgstr "Schaltfläche für die Quittierung aller Störungen"
 msgid "Press for all alarms quitance."
 msgstr "Betätigen für die Quittierung aller Störungen."
 
-#, fuzzy
 msgid "Blink alarm"
-msgstr "Lichtalarm"
+msgstr ""
 
-#, fuzzy
 msgid "The button for all blink alarms quitance"
-msgstr "Schaltfläche für die Quittierung aller Lichtalarme"
+msgstr "Schaltfläche für Quittierung alle Alarme blinken"
 
-#, fuzzy
 msgid "Press for all blink alarms quitance."
-msgstr "Betätigen für die Quittierung aller Lichtalarme."
+msgstr "Betätigen für die Quittierung alle Alarme blinken."
 
 msgid "Speaker alarm"
 msgstr "Lautsprecheralarm"
@@ -1333,17 +1330,14 @@ msgstr "Dieses Zeichen zeigt die Station der VCA Maschine."
 msgid "Field for display of the used VCA engine station."
 msgstr "Feld für Anzeige der Station der VCA Maschine."
 
-#, fuzzy
 msgid "This label displays used interface style."
-msgstr "Dieses Feld zeigt den aktuellen Benutzer."
+msgstr "Dieses Zeichen zeigt verwendete Schnittstelle Stil."
 
-#, fuzzy
 msgid "Field for display the used interface style."
-msgstr "Feld für Anzeige des aktuellen Benutzers."
+msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 
-#, fuzzy
 msgid "Double click for style change."
-msgstr "Zweimal klicken um den Benutzers zu wechseln."
+msgstr "Zweimal klicken für Stil zu ändern."
 
 msgid "Print page"
 msgstr "Seite drucken"
@@ -1501,17 +1495,17 @@ msgid ""
 "Page: '%1'.\n"
 "View access is not permited."
 msgstr ""
+"Seite: '%1'.\n"
+"View Zugriff ist nicht erlaubt."
 
 msgid "No style"
-msgstr ""
+msgstr "Kein Stil"
 
-#, fuzzy
 msgid "Select your style from list."
-msgstr "Dokument zum Drucken auswählen."
+msgstr "Wählen Sie Ihren Stil aus der Liste."
 
-#, fuzzy
 msgid "Style select"
-msgstr "Schrift auswählen"
+msgstr "Style wählen"
 
 msgid "Make this point dynamic"
 msgstr "Diesen Punkt dynamisch machen"
@@ -1550,11 +1544,10 @@ msgid "Press to make line style dynamic"
 msgstr "Betätigen, um den Linienstil dynamisch zu machen."
 
 msgid "Delete the current fill"
-msgstr ""
+msgstr "Löschen Sie die aktuelle füllen"
 
-#, fuzzy
 msgid "Press to delete the current fill"
-msgstr "Betätigen, um ein neues Projekt zu erstellen."
+msgstr "Betätigen, um Löschen der aktuellen füllen."
 
 msgid "Make fill color dynamic"
 msgstr "Füllfarbe dynamisch machen"
@@ -1600,15 +1593,14 @@ msgstr "%gms"
 
 #, c-format
 msgid "Trend build: %f ms."
-msgstr ""
+msgstr "Trend zu bauen: %f ms."
 
 #, c-format
 msgid "Trend draw: %f ms."
-msgstr ""
+msgstr "Trend zu ziehen: %f ms."
 
-#, fuzzy
 msgid "Date and time"
-msgstr "Datengrösse"
+msgstr "Datum und Uhrzeit"
 
 msgid "mcsec"
 msgstr "msek"
@@ -1626,9 +1618,8 @@ msgstr "Nachricht"
 msgid "Document '%s' parsing is error: %s"
 msgstr "Fehler der Dokumentanalyse '%s': %s"
 
-#, fuzzy
 msgid "Loading page: '%1'."
-msgstr "Seite laden: '%1'."
+msgstr "Lade Seite: '%1'."
 
 msgid "ID:"
 msgstr ""
@@ -1679,29 +1670,28 @@ msgid "Auth wrong!!!"
 msgstr "Authentifizierungsfehler!!!"
 
 msgid "Find"
-msgstr ""
+msgstr "Suche"
 
 msgid "Find next"
-msgstr ""
+msgstr "Weitersuchen"
 
 msgid "Cursor = (%1:%2)"
 msgstr ""
 
 msgid "Enter text string for search:"
-msgstr ""
+msgstr "Geben Sie den Text-String für Suche:"
 
-#, fuzzy
 msgid "String search"
-msgstr "Text"
+msgstr "String-Suche"
 
 msgid "Backward"
-msgstr ""
+msgstr "Rückwärts"
 
 msgid "Case sensitively"
-msgstr ""
+msgstr "Case sensibel"
 
 msgid "Whole words"
-msgstr ""
+msgstr "Ganze Wörter"
 
 #, c-format
 msgid "Request to VCA engine '%s' time %f ms."

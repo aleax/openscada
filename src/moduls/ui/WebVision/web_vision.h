@@ -81,7 +81,7 @@ class TWEB: public TUI
 	int	sessLimit( )				{ return mSessLimit; }
 	string	CSStables( )				{ return mCSStables; }
 
-	void setSessTime( time_t vl )			{ mTSess = vl; modif(); }
+	void setSessTime( time_t vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
 	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 

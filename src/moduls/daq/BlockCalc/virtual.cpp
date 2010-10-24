@@ -105,7 +105,7 @@ void TipContr::postEnable( int flag )
     //Controllers BD structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
-    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
+    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 

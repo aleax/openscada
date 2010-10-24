@@ -288,14 +288,14 @@ void *TSocketIn::Task( void *sock_in )
     SSL_METHOD *meth;
 #endif
     meth = SSLv23_server_method();
-    if( ssl_method == "SSLv2" )		meth = SSLv2_server_method();
-    else if( ssl_method == "SSLv3" )	meth = SSLv3_server_method();
-    else if( ssl_method == "TLSv1" )	meth = TLSv1_server_method();
+    if(ssl_method == "SSLv2")		meth = SSLv2_server_method();
+    else if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
+    else if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
 
     try
     {
 	s.ctx = SSL_CTX_new(meth);
-	if( s.ctx == NULL )
+	if(s.ctx == NULL)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 	    throw TError(s.nodePath().c_str(),"SSL_CTX_new: %s",err);
@@ -304,14 +304,14 @@ void *TSocketIn::Task( void *sock_in )
 	//> Write certificate and private key to temorary file
 	cfile = tmpnam(err);
 	int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	if( icfile < 0 ) throw TError(s.nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
+	if(icfile < 0) throw TError(s.nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	write(icfile,s.certKey().data(),s.certKey().size());
 	close(icfile);
 
 	//>> Set private key password
 	SSL_CTX_set_default_passwd_cb_userdata(s.ctx,(char*)s.pKeyPass().c_str());
 	//>> Load certificate
-	if( SSL_CTX_use_certificate_chain_file(s.ctx,cfile.c_str()) != 1 )
+	if(SSL_CTX_use_certificate_chain_file(s.ctx,cfile.c_str()) != 1)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 	    throw TError(s.nodePath().c_str(),"SSL_CTX_use_certificate_chain_file: %s",err);
@@ -397,10 +397,10 @@ void *TSocketIn::Task( void *sock_in )
     TSYS::eventWait( s.cl_free, true, string(MOD_ID)+": "+s.id()+_(" client tasks is stopping...."));
 
     //> Free context
-    if( abio )	BIO_reset(abio);
-    if( bio )	BIO_free_all(bio);
-    if( s.ctx )	{ SSL_CTX_free(s.ctx); s.ctx = NULL; }
-    if( !cfile.empty() ) remove(cfile.c_str());
+    if(abio)	BIO_reset(abio);
+    if(bio)	BIO_free_all(bio);
+    if(s.ctx)	{ SSL_CTX_free(s.ctx); s.ctx = NULL; }
+    if(!cfile.empty()) remove(cfile.c_str());
 
     pthread_attr_destroy(&pthr_attr);
 
@@ -658,9 +658,9 @@ TSocketOut::~TSocketOut()
 
 void TSocketOut::setTimings( const string &vl )
 {
-    mTimings = vl;
-    mTmCon = vmin(60000,(int)(atof(TSYS::strParse(timings(),0,":").c_str())*1e3));
-    mTmNext = vmin(60000,(int)(atof(TSYS::strParse(timings(),1,":").c_str())*1e3));
+    mTmCon = vmax(1,vmin(60000,(int)(atof(TSYS::strParse(vl,0,":").c_str())*1e3)));
+    mTmNext = vmax(1,vmin(60000,(int)(atof(TSYS::strParse(vl,1,":").c_str())*1e3)));
+    mTimings = TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
 }
 
@@ -791,9 +791,9 @@ void TSocketOut::start()
     }
     catch(TError err)
     {
-	if( conn )	{ BIO_reset(conn); BIO_free(conn); }
-	if( ctx )	SSL_CTX_free(ctx);
-	if( !cfile.empty() )	remove(cfile.c_str());
+	if(conn)	{ BIO_reset(conn); BIO_free(conn); }
+	if(ctx)		SSL_CTX_free(ctx);
+	if(!cfile.empty())	remove(cfile.c_str());
 	throw;
     }
 
@@ -824,24 +824,24 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     char	err[255];
     bool	writeReq = false;
 
-    if( !noRes ) ResAlloc resN( nodeRes(), true );
-    ResAlloc res( wres, true );
+    if(!noRes) ResAlloc resN(nodeRes(), true);
+    ResAlloc res(wres, true);
 
-    if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-    if( reqTry++ >= 3 )	throw TError(nodePath().c_str(),_("Connection error"));
+    if(reqTry++ >= 3)	throw TError(nodePath().c_str(),_("Connection error"));
     //> Write request
-    if( obuf != NULL && len_ob > 0 )
+    if(obuf != NULL && len_ob > 0)
     {
-	do { ret=BIO_write(conn,obuf,len_ob); } while( ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE );
-	if( ret <= 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	do { ret=BIO_write(conn,obuf,len_ob); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
+	if(ret <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 
-	if( !time ) time = mTmCon;
+	if(!time) time = mTmCon;
 	writeReq = true;
     }
     else time = mTmNext;
-    if( !time ) time = 5000;
+    if(!time) time = 5000;
 
     trOut += (float)ret/1024;
 #if OSC_DEBUG >= 4
@@ -849,12 +849,12 @@ repeate:
 #endif
 
     //> Read reply
-    if( ibuf != NULL && len_ib > 0 )
+    if(ibuf != NULL && len_ib > 0)
     {
 	ret = BIO_read(conn,ibuf,len_ib);
-	if( ret > 0 ) trIn += (float)ret/1024;
-	else if( ret == 0 ) { res.release(); stop(); start(); res.request(true); goto repeate; }
-	else if( ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE )
+	if(ret > 0) trIn += (float)ret/1024;
+	else if(ret == 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 	    throw TError(nodePath().c_str(),"BIO_read: %s",err);

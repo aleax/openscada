@@ -27,6 +27,7 @@
 
 #include <telem.h>
 #include <tuis.h>
+#include "tsys.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -66,7 +67,7 @@ class TVision : public TUI
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
-	void setCachePgLife( float vl )		{ mCachePgLife = vl; modif(); }
+	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
 	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
 
 	void modStart( );

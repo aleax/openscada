@@ -92,7 +92,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return vmax(m_per,0.1); }
+	double	period( )	{ return m_per; }
 	int	prior( )	{ return m_prior; }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
 

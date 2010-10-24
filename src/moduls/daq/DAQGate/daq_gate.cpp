@@ -90,11 +90,11 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //> Controler's DB structure
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0;100") );
+    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.1;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000") );
     fldAdd( new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12") );
-    fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000") );
+    fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","1;1000") );
     fldAdd( new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100") );
     fldAdd( new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200") );
 

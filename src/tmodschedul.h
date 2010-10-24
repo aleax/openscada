@@ -62,7 +62,7 @@ class TModSchedul : public TSubSYS
 
 	void setAllowList( const string &vl )	{ mAllow = vl; modif(); }
 	void setDenyList( const string &vl )	{ mDeny = vl; modif(); }
-	void setChkPer( int per )		{ mPer = per; modif(); }
+	void setChkPer( int per );
 
 	int loadLibS( );				// Load/Init/Start all share libs and registry moduls into TSubSYS
 

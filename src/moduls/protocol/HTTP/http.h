@@ -78,7 +78,7 @@ class TProt: public TProtocol
 
 	int authTime( )			{ return mTAuth; }
 
-	void setAuthTime( int vl )	{ mTAuth = vl; modif(); }
+	void setAuthTime( int vl )	{ mTAuth = vmax(1,vl); modif(); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 

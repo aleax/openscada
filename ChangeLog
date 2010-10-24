@@ -1,3 +1,12 @@
+2010-10-24 Roman 0.7.0
+- FIX:DemoDB: Config file is fixed at field value: <prm id="Workdir">../share/openscada</prm>.
+- DOC: FAQ and TODO is updated
+- SYS: RPM build specification files is updated for field "Summary" translation add.
+- TModSchedul, DAQ.AMRDevs, DAQ.BlockCalc, DAQ.DAQGate, DAQ.DCON, DAQ.ModBus, DAQ.OPC_UA, DAQ.SNMP, DAQ.SoundCards,
+    Protoco.HTTP, Protocol.SelfSystem, Transport.SSL, Transport.Serial, Transport.Sockets, UI.Vision, UI.WebVision:
+	Borders set for some integer and real values.
+
+
 2010-10-23 Roman
 - SYS: The main splash image is updated for Long Term Support allow for version 0.7.0.
 - SYS: Debian files is updated for build packages to version 0.7.0.
