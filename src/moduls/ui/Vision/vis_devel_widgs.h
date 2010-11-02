@@ -386,10 +386,10 @@ class LineEditProp : public QWidget
     Q_OBJECT
 
     public:
-	//- Data -
+	//> Data
 	enum DType { Font, Color };
 
-	//- Methods -
+	//> Methods
 	LineEditProp( QWidget *parent, DType tp = Font );
 
 	DType type( )       { return m_tp; }

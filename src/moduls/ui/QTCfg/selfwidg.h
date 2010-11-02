@@ -32,6 +32,7 @@
 #include <QDateTimeEdit>
 #include <QItemDelegate>
 #include <QDialogButtonBox>
+#include <QSyntaxHighlighter>
 
 #include "tuimod.h"
 
@@ -97,6 +98,24 @@ class LineEdit : public QWidget
 };
 
 //*************************************************
+//* SyntxHighl: Syntax highlighter                *
+//*************************************************
+class SyntxHighl : public QSyntaxHighlighter
+{
+    Q_OBJECT
+
+    public:
+	SyntxHighl(QTextDocument *parent = 0);
+
+	void setSnthHgl(XMLNode nd);
+
+    protected:
+	void highlightBlock(const QString &text);
+
+	XMLNode rules;
+};
+
+//*************************************************
 //* TextEdit: Text edit widget                    *
 //*************************************************
 class TextEdit : public QWidget
@@ -105,13 +124,14 @@ class TextEdit : public QWidget
 
     public:
 	//Methods
-	TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
+	TextEdit(QWidget *parent, const char * name = 0, bool prev_dis = false);
 
 	QString text( );
 	bool hasFocus( ) const;
 	bool isChanged( );
 
-	void setText( const QString & );
+	void setText(const QString &);
+	void setSnthHgl(XMLNode nd);
 
 	QTextEdit *edit( )	{ return ed_fld; }
 
@@ -119,7 +139,7 @@ class TextEdit : public QWidget
 	//Signals
 	void apply( );
 	void cancel( );
-	void textChanged( const QString& );
+	void textChanged(const QString&);
 
     protected:
 	bool event( QEvent *e );
@@ -138,6 +158,7 @@ class TextEdit : public QWidget
 	bool		isInit;
 	QAction		*actFind, *actFindNext;
 	QTextEdit	*ed_fld;
+	SyntxHighl	*snt_hgl;
 	QDialogButtonBox *but_box;
 };
 

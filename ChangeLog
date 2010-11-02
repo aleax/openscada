@@ -1,3 +1,8 @@
+2010-11-02 Roman
+- !!!!:SYS, DAQ.JavaLikeCalc, UI.QTCfg, UI.VCAEngine, UI.Vision: The syntax highlight API is added.
+- SYS.XMLNode: Copy constructor is added.
+
+
 2010-10-24 Roman 0.7.0
 - FIX:DemoDB: Config file is fixed at field value: <prm id="Workdir">../share/openscada</prm>.
 - DOC: FAQ and TODO is updated

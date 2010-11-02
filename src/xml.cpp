@@ -28,7 +28,12 @@ using namespace OSCADA;
 //*************************************************
 //* XMLNode                                       *
 //*************************************************
-XMLNode &XMLNode::operator=(XMLNode &prm)
+XMLNode::XMLNode(const XMLNode &nd) : mName("nd"), mText(""), mParent(NULL)
+{
+    this->operator=(nd);
+}
+
+XMLNode &XMLNode::operator=(const XMLNode &prm)
 {
     //> Delete self children and attributes
     mAttr.clear();

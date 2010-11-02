@@ -55,10 +55,11 @@ class XMLNode
 	};
 
 	//Methods
-	XMLNode( const string &name = "" ) : mName(name), mText(""), mParent(NULL)	{  }
+	XMLNode(const string &name = "") : mName(name), mText(""), mParent(NULL)	{  }
+	XMLNode(const XMLNode &nd);
 	~XMLNode( )				{ clear(); }
 
-	XMLNode &operator=( XMLNode &prm );
+	XMLNode &operator=( const XMLNode &prm );
 
 	string	name( ) const			{ return mName; }
 	XMLNode* setName( const string &s )	{ mName = s; return this; }

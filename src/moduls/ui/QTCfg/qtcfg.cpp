@@ -1559,19 +1559,19 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	}
 	//> View edit fields
-	else if( t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size()) )
+	else if(t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size()))
 	{
 	    QLabel *lab;
 	    TextEdit *edit;
 
-	    if( widget )
+	    if(widget)
 	    {
 		lab = new QLabel(t_s.attr("dscr").c_str(),widget);
 		widget->layout()->addWidget(lab);
 
 		edit = new TextEdit(widget,br_path.c_str());
 		edit->setStatusTip((sel_path+"/"+br_path).c_str());
-		if( atoi(t_s.attr("rows").c_str()) < 10 )
+		if(atoi(t_s.attr("rows").c_str()) < 10)
 		{
 		    edit->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
 		    edit->edit()->setFixedHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
@@ -1607,11 +1607,19 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		edit = (TextEdit *)TSYS::str2addr(t_s.attr("addr_edit"));
 	    }
 	    //>> Fill Edit
-	    if( lab )	lab->setText((t_s.attr("dscr")+":").c_str());
-	    if( edit && !edit->isChanged() )
+	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
+	    if(edit && !edit->isChanged())
 	    {
 		edit->setToolTip(t_s.attr("help").c_str());
 		edit->setText(data_req.text().c_str());
+
+		//> Request syntax higlihgt
+		if(atoi(t_s.attr("SnthHgl").c_str()))
+		{
+		    XMLNode hgl_req("SnthHgl");
+		    hgl_req.setAttr("path",sel_path+"/"+br_path);
+		    if(!cntrIfCmd(hgl_req)) edit->setSnthHgl(hgl_req);
+		}
 	    }
 	}
 	//> View Data-Time fields

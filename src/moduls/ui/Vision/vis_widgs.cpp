@@ -654,10 +654,76 @@ bool LineEdit::event( QEvent * e )
 }
 
 //*************************************************
+//* SyntxHighl: Syntax highlighter                *
+//*************************************************
+SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
+{
+
+}
+
+void SyntxHighl::setSnthHgl(XMLNode nd)
+{
+    rules = nd;
+    rehighlight();
+}
+
+void SyntxHighl::highlightBlock(const QString &text)
+{
+    QTextCharFormat kForm, defkForm, ckForm;
+    if(text.length()) defkForm = format(0);
+    for(int i_ch = 0; i_ch < rules.childSize(); i_ch++)
+    {
+	XMLNode *rl = rules.childGet(i_ch);
+	kForm.setForeground(QColor(rl->attr("color").c_str()));
+	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
+	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
+
+	if(rl->name() == "rule")
+	{
+	    QRegExp expr(rl->attr("expr").c_str());
+	    for(int index = 0, length = 0; true; index+=expr.matchedLength())
+	    {
+		index = expr.indexIn(text,index);
+		if(index < 0) break;
+		setFormat(index, expr.matchedLength(), kForm);
+	    }
+	}
+	else if(rl->name() == "blk")
+	{
+	    setCurrentBlockState(previousBlockState());
+	    QRegExp bExpr(rl->attr("beg").c_str());
+	    QRegExp eExpr(rl->attr("end").c_str());
+	    for(int stIndex = 0, endIndex = 0; true; )
+	    {
+		//int st_find = 0;
+		if(currentBlockState() == -1)
+		{
+		    if((stIndex=bExpr.indexIn(text,stIndex)) == -1) break;
+		    if(format(stIndex)!=defkForm) { stIndex += bExpr.matchedLength(); continue; }
+		    setCurrentBlockState(i_ch);
+		    //st_find = 1;
+		}
+		if((endIndex=eExpr.indexIn(text, stIndex)) == -1)
+		{
+		    setFormat(stIndex, (text.length()-stIndex), kForm);
+		    break;
+		}
+		else
+		{
+		    setCurrentBlockState(-1);
+		    setFormat(stIndex, (endIndex-stIndex+eExpr.matchedLength()), kForm);
+		}
+		stIndex = endIndex+eExpr.matchedLength();
+	    }
+	}
+    }
+}
+
+//*************************************************
 //* Text edit widget                              *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
-    QWidget(parent), but_box(NULL), isInit(false)
+    QWidget(parent), but_box(NULL), isInit(false), snt_hgl(NULL)
 {
     QVBoxLayout *box = new QVBoxLayout(this);
     box->setMargin(0);
@@ -722,6 +788,12 @@ void TextEdit::setText(const QString &text)
     isInit=false;
 
     m_text = text;
+}
+
+void TextEdit::setSnthHgl(XMLNode nd)
+{
+    if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
+    snt_hgl->setSnthHgl(nd);
 }
 
 void TextEdit::changed()

@@ -180,6 +180,22 @@ bool TipContr::compileFuncLangs( vector<string> *ls )
     return true;
 }
 
+void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
+{
+    if(lang == "JavaScript")
+    {
+	//shgl.childAdd("rule")->setAttr("expr","(\\=|\\+|\\-|\\>|\\<|\\*|\\;|\\,)")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|in|using|new|var|break|continue|return|Array|Object)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","(\\?|\\:)")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","(\\b0[xX][0-9a-fA-F]*\\b|\\b[+-]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*\\b|\\btrue\\b|\\bfalse\\b)")->setAttr("color","blue");
+	shgl.childAdd("rule")->setAttr("expr","\"[^\"]*\"")->setAttr("color","darkgreen");
+	//shgl.childAdd("rule")->setAttr("expr","\".+?[^\\\\]\"")->setAttr("color","darkgreen");
+	shgl.childAdd("rule")->setAttr("expr","//[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
+	//shgl.childAdd("blk")->setAttr("beg","\"")->setAttr("end","\"")->setAttr("color","darkgreen");
+	shgl.childAdd("blk")->setAttr("beg","/\\*")->setAttr("end","\\*/")->setAttr("color","gray")->setAttr("font_italic","1");
+    }
+}
+
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
     if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
@@ -592,7 +608,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Input;Output;Return"));
 		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),RWRWR_,"root",SDAQ_ID,2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }
@@ -676,13 +692,14 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/fnc/prog" && enableStat())
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(((Func *)func())->prog());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(((Func *)func())->prog());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	{
 	    ((Func *)func())->setProg(opt->text().c_str());
 	    ((Func *)func())->progCompile();
 	    modif();
 	}
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSynthHighl("JavaScript",*opt);
     }
     else TController::cntrCmdProc(opt);
 }

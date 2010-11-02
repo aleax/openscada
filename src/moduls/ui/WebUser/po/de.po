@@ -1,123 +1,127 @@
-# OpenSCADA.UI.WebUser translate to German.
+# OpenSCADA.UI.WebUser translate to Russian.
 # Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
 # Roman Savochenko <rom_as@fromru.com>, 2010.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:47+0300\n"
-"PO-Revision-Date: 2010-10-09 15:57+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
-"Language-Team: <de@li.org>\n"
+"POT-Creation-Date: 2010-10-26 09:19+0300\n"
+"PO-Revision-Date: 2010-10-25 09:57+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Lokalize 1.0\n"
 
 msgid "Web interface from user"
-msgstr "Web-Oberfläche vom Benutzer"
+msgstr "Web-Interface des Nutzers"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid "Allow creation self-user web-interfaces on any OpenSCADA language."
-msgstr "Lassen Schöpfung selbst Benutzer Web-Interfaces auf jedem OpenSCADA Sprache."
+msgstr ""
+"Ermöglicht das Schaffen der eigenen Nuttzersweb-Interfaces auf beliebiger "
+"OpenSCADA - Sprache."
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgid "Description"
 msgstr "Beschreibung"
 
 msgid "To enable"
-msgstr "So aktivieren Sie"
+msgstr "Einschalten"
 
 msgid "Program"
 msgstr "Programm"
 
 msgid "Search and create new user page error."
-msgstr "Suchen und neue Benutzer Fehler auf der Seite."
+msgstr "Fehler der Suche und  das Schaffen einer neuen Nutzersseite."
 
 msgid "Welcome to Web-users pages of OpenSCADA system."
-msgstr "Willkommen bei Web-Seiten der Nutzer OpenSCADA System."
+msgstr "Willkommen zu den Web-Seiten des Nutzerssystems OpenSCADA."
 
 msgid "Present web-users pages"
-msgstr "Präsentieren Sie Web-Seiten Anwender"
+msgstr "Anwesende Web-Seiten von Nutzern"
 
 msgid "Page error"
-msgstr "Fehler auf der Seite"
+msgstr "Fehler der Seite"
 
 msgid "User page"
-msgstr "Benutzer-Seite"
+msgstr "Seite des Nutzers"
 
 msgid "User pages"
-msgstr "User Seiten"
+msgstr "Seiten des Nutzers"
 
 msgid "Default page"
-msgstr "Standardseite"
+msgstr "Defaultseite"
 
 msgid "Pages"
 msgstr "Seiten"
 
 msgid "<Page index display>"
-msgstr "<Seite Index-Anzeige>"
+msgstr "<Seitenindex zeigen>"
 
 msgid "Result"
 msgstr "Ergebnis"
 
 msgid "HTTP request"
-msgstr "HTTP-Request"
+msgstr "HTTP - Anfrage"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Page"
 msgstr "Seite"
 
 msgid "Sender"
-msgstr "Absender"
+msgstr "Sender"
 
 msgid "User"
-msgstr ""
+msgstr "Nutzer"
 
 msgid "HTTP variables"
-msgstr "HTTP-Variablen"
+msgstr "HTTP Variablen"
 
 msgid "URL's parameters"
-msgstr "URL-Parameter"
+msgstr "URL - Parameter"
 
 msgid "Content items"
-msgstr "Inhaltseinträge"
+msgstr "Inhaltselemente"
 
 msgid "Disabled. "
-msgstr "Deaktiviert. "
+msgstr "Ausgeschaltet. "
 
 msgid "Enabled. "
-msgstr "Aktiviert. "
+msgstr "Eingeschaltet. "
 
 #, c-format
 msgid "Requests %.4g."
-msgstr "Anträge %.4g."
+msgstr "Anfragen %.4g."
 
 msgid "User page: "
-msgstr "Benutzer-Seite: "
+msgstr "Seite des Nutzers: "
 
 msgid "State"
-msgstr "Staat"
+msgstr "Zustand"
 
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 msgid "Enable"
-msgstr ""
+msgstr "Eingeschaltet"
 
 msgid "DB"
-msgstr ""
+msgstr "DB"
 
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
@@ -125,7 +129,7 @@ msgid ""
 msgstr ""
 
 msgid "Config"
-msgstr ""
+msgstr "Konfiguration"
 
 msgid "Program language"
 msgstr "Programmsprache"
@@ -142,13 +146,13 @@ msgid ""
 "   'URLprms' - URL's parameters into Object;\n"
 "   'cnts' - content items for POST into Array<XMLNodeObj>."
 msgstr ""
-"Weiter im Internet hat für Anfragen Verarbeitung definiert:\n"
-"   'rez' - Verarbeitung Ergebnis (standardmäßig - 200 OK);\n"
-"   'HTTPreq' - HTTP-Request-Methode (GET, POST);\n"
-"   'url' - angeforderten URI;\n"
-"   'page' - Get/Post Seiteninhalt;\n"
-"   'sender' - Absenders;\n"
-"   'user' - auth Benutzer;\n"
-"   'HTTPvars' - HTTP-Variablen in Objekt;\n"
+"Folgende Attribute sind für die Bearbeitung der Anfragen bestimmt:\n"
+"   'rez' - Ergebnis der Bearbeitung (default - 200 OK);\n"
+"   'HTTPreq' - Methode der HTTP - Anfrage (GET,POST);\n"
+"   'url' - URI der Anfrage;\n"
+"   'page' - Inhalt der Seite Get/Post;\n"
+"   'sender' - Anfragesender;\n"
+"   'user' - autentifizierter Nutzer;\n"
+"   'HTTPvars' - HTTP - Variablen in Object;\n"
 "   'URLprms' - URL-Parameter in Object;\n"
-"   'cnts' - Inhaltselemente für die POST in Array<XMLNodeObj>."
+"   'cnts' - Elemente des Inhalts für POST in Array<XMLNodeObj>."

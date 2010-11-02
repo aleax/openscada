@@ -31,6 +31,7 @@
 #include <QMap>
 #include <QVariant>
 #include <QGridLayout>
+#include <QSyntaxHighlighter>
 
 #include <xml.h>
 
@@ -208,6 +209,24 @@ namespace VISION
 	    QTimer	*bt_tm;
     };
 
+    //*************************************************
+    //* SyntxHighl: Syntax highlighter                *
+    //*************************************************
+    class SyntxHighl : public QSyntaxHighlighter
+    {
+	Q_OBJECT
+
+	public:
+	    SyntxHighl(QTextDocument *parent = 0);
+
+	    void setSnthHgl(XMLNode nd);
+
+	protected:
+	    void highlightBlock(const QString &text);
+
+	    XMLNode rules;
+    };
+
     //*********************************************
     //* Text edit widget                          *
     //*********************************************
@@ -220,6 +239,7 @@ namespace VISION
 
 	    QString text( );
 	    void setText( const QString & );
+	    void setSnthHgl(XMLNode nd);
 
 	    QTextEdit *workWdg( )	{ return ed_fld; }
 
@@ -243,6 +263,7 @@ namespace VISION
 	    bool		isInit;
 	    QString		m_text;
 	    QTextEdit		*ed_fld;
+	    SyntxHighl		*snt_hgl;
 	    QDialogButtonBox	*but_box;
 	    QAction		*actFind, *actFindNext;
     };

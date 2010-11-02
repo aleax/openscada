@@ -797,15 +797,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     setWindowTitle(_("Widget properties"));
     setWindowIcon(owner()->actVisItProp->icon());
 
-    //- Create tabulator -
+    //> Create tabulator
     QVBoxLayout *tab_lay = new QVBoxLayout(this);
     tab_lay->setMargin(5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
-    //- Add tab 'Widget' -
-    //--------------------
+    //> Add tab 'Widget'
     wdg_tabs->addTab(new QWidget,_("Widget"));
     QWidget *tab_w = wdg_tabs->widget(0);
 
@@ -813,7 +812,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
 
-    //-- State parameters --
+    //>> State parameters
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
@@ -844,7 +843,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
     glay->addWidget(obj_parent,1,2,1,4);
 
-    //--- Specific parameter: page type ---
+    //>>> Specific parameter: page type
     lab = new QLabel(_("Page type:"),tab_w);
     glay->addWidget(lab,2,1);
     pg_tp = new QComboBox(tab_w);
@@ -856,7 +855,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
 
-    //-- Config parameters --
+    //>> Config parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
@@ -925,8 +924,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
 
-    //- Add tab 'Attributes' -
-    //------------------------
+    //> Add tab 'Attributes'
     wdg_tabs->addTab(new QWidget,_("Attributes"));
     tab_w = wdg_tabs->widget(1);
 
@@ -934,13 +932,12 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
 
-    //-- Add attributes view widget --
+    //>> Add attributes view widget
     obj_attr = new InspAttr(tab_w,owner());
     connect(obj_attr, SIGNAL(modified(const string&)), this, SIGNAL(apply(const string&)));
     dlg_lay->addWidget(obj_attr,0,0);
 
-    //- Add tab 'Attribute cofiguration' -
-    //------------------------------------
+    //> Add tab 'Attribute cofiguration'
     QSplitter *split = new QSplitter();
     split->setOrientation( Qt::Vertical );
     wdg_tabs->addTab(split,_("Widget process"));
@@ -954,7 +951,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(9);
     glay->setSpacing(6);
 
-    //-- Add attributes configuration widget --
+    //>> Add attributes configuration widget
     obj_attr_cfg = new QTreeWidget(attr_cf_fr);
     obj_attr_cfg->setAlternatingRowColors(true);
     obj_attr_cfg->setObjectName("/proc/attr");
@@ -1003,8 +1000,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(proc_text, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(proc_text,2,0,1,4);
 
-    //- Add tab 'Links' -
-    //------------------------
+    //> Add tab 'Links'
     wdg_tabs->addTab(new QWidget,_("Links"));
     tab_w = wdg_tabs->widget(3);
 
@@ -1012,20 +1008,18 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
 
-    //-- Add attributes view widget --
+    //>> Add attributes view widget
     obj_lnk = new InspLnk(tab_w,owner());
     //connect(obj_attr, SIGNAL(modified(const string&)), this, SIGNAL(apply(const string&)));
     dlg_lay->addWidget(obj_lnk,0,0);
 
-    //- Add button box -
-    //------------------
+    //> Add button box
     butbox = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal, this );
     connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
 
     tab_lay->addWidget(butbox);
 
-    //- End resize -
-    //--------------
+    //> End resize
     resize(500,400);
 }
 
@@ -1048,8 +1042,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
     show_init = true;
 
-    //- Update elements present, visible and values -
-    //-----------------------------------------------
+    //> Update elements present, visible and values
     XMLNode req("get");
 
     XMLNode info_req("info");
@@ -1066,14 +1059,14 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
     setWindowTitle( root->attr("dscr").c_str() );
 
-    //- Generic dialog's page -
+    //> Generic dialog's page
     gnd=TCntrNode::ctrId(root,"/wdg",true);
     wdg_tabs->setTabEnabled(0,gnd);
     if( gnd )
     {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
 
-	//-- Enable stat --
+	//>> Enable stat
 	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
 	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
@@ -1081,12 +1074,12 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_enable->setChecked(atoi(req.text().c_str()));
 	}
-	//-- Parent widget --
+	//>> Parent widget
 	gnd=TCntrNode::ctrId(root,obj_parent->objectName().toAscii().data(),true);
 	obj_parent->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd ) selectParent( );
 
-	//-- User --
+	//>> User
 	gnd=TCntrNode::ctrId(root,obj_user->objectName().toAscii().data(),true);
 	obj_user->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
@@ -1102,7 +1095,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		    if( sval == req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
 		}
 	}
-	//-- Group --
+	//>> Group
 	gnd=TCntrNode::ctrId(root,obj_grp->objectName().toAscii().data(),true);
 	obj_grp->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
@@ -1119,7 +1112,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		}
 	}
 
-	//-- Icon --
+	//>> Icon
 	gnd=TCntrNode::ctrId(root,obj_ico->objectName().toAscii().data(),true);
 	ico_modif = gnd && atoi(gnd->attr("acs").c_str())&SEC_WR;
 	if( gnd )
@@ -1130,7 +1123,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	}
-	//-- Permition --
+	//>> Permition
 	string wstr;
 	gnd=TCntrNode::ctrId(root,obj_accuser->objectName().toAscii().data(),true);
 	obj_accuser->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
@@ -1162,7 +1155,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accother->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )	obj_accother->setCurrentIndex( obj_accother->findData(atoi(req.text().c_str())) );
 	}
-	//-- Id --
+	//>> Id
 	gnd=TCntrNode::ctrId(root,obj_id->objectName().toAscii().data(),true);
 	if( gnd )
 	{
@@ -1170,21 +1163,21 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_id->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_id->setText(req.text().c_str());
 	}
-	//-- Root --
+	//>> Root
 	gnd=TCntrNode::ctrId(root,obj_root->objectName().toAscii().data(),true);
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_root->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_root->setText(req.text().c_str());
 	}
-	//-- Path --
+	//>> Path
 	gnd=TCntrNode::ctrId(root,obj_path->objectName().toAscii().data(),true);
 	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_path->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_path->setText(req.text().c_str());
 	}
-	//-- Name --
+	//> Name
 	gnd=TCntrNode::ctrId(root,obj_name->objectName().toAscii().data(),true);
 	obj_name->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
@@ -1192,7 +1185,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_name->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_name->setValue(req.text().c_str());
 	}
-	//-- Description --
+	//> Description
 	gnd=TCntrNode::ctrId(root,obj_descr->objectName().toAscii().data(),true);
 	obj_descr->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
@@ -1202,8 +1195,8 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) ) obj_descr->setText(req.text().c_str());
 	}
 
-	//-- Special fields --
-	//--- Page type ---
+	//>> Special fields
+	//>>> Page type
 	gnd=TCntrNode::ctrId(root,pg_tp->objectName().toAscii().data(),true);
 	pg_tp->setVisible(gnd); ((QLabel *)TSYS::str2addr(pg_tp->windowIconText().toAscii().data()))->setVisible(gnd);
 	if( gnd )
@@ -1213,7 +1206,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    int sel_val = 0;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(pg_tp->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) sel_val = atoi(req.text().c_str());
-	    //---- Get combo list ----
+	    //>>>> Get combo list
 	    pg_tp->clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
@@ -1223,7 +1216,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}
     }
 
-    //- Attributes dialog's page -
+    //> Attributes dialog's page
     gnd=TCntrNode::ctrId(root,"/attr",true);
     wdg_tabs->setTabEnabled(1,gnd);
     if( gnd )	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
@@ -1232,13 +1225,13 @@ void VisItProp::showDlg( const string &iit, bool reload )
     wdg_tabs->setTabEnabled(3,gnd);
     if( gnd )	wdg_tabs->setTabText(3,gnd->attr("dscr").c_str());
 
-    //- Process dialog's page -
+    //> Process dialog's page
     gnd=TCntrNode::ctrId(root,"/proc",true);
     wdg_tabs->setTabEnabled(2,gnd);
     if( gnd )	wdg_tabs->setTabText(2,gnd->attr("dscr").c_str());
     is_modif = false;
 
-    //- Show dialog -
+    //> Show dialog
     show();
     raise();
     activateWindow();
@@ -1259,7 +1252,7 @@ void VisItProp::tabChanged( int itb )
 
 	    XMLNode req("get");
 
-	    //-- Get node information --
+	    //>> Get node information
 	    XMLNode info_req("info");
 	    info_req.setAttr("path",ed_it);
 	    if( owner()->cntrIfCmd(info_req) )
@@ -1271,15 +1264,15 @@ void VisItProp::tabChanged( int itb )
 	    string sval;
 	    XMLNode *root, *gnd;
 	    root = info_req.childGet(0);
-	    //-- Get widgets list --
+	    //>> Get widgets list
 	    vector<string>	wlst;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
 		for( int i_w = 0; i_w < req.childSize(); i_w++ )
 		    wlst.push_back(req.childGet(i_w)->text());
 		    //wlst.push_back(req.childGet(i_w)->attr("id"));
-	    //--- Fill table ---
-	    //--- Delete no present root items ---
+	    //>>> Fill table
+	    //>>> Delete no present root items
 	    for( int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
 	    {
 		int i_w;
@@ -1287,7 +1280,7 @@ void VisItProp::tabChanged( int itb )
 		    if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;
 		if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r--);
 	    }
-	    //--- Add root items ---
+	    //>>> Add root items
 	    for( int i_w = 0; i_w < wlst.size(); i_w++ )
 	    {
 		QTreeWidgetItem *root_it;
@@ -1305,7 +1298,7 @@ void VisItProp::tabChanged( int itb )
 		root_it->setData(0,Qt::UserRole,0);
 		obj_attr_cfg->addTopLevelItem(root_it);
 
-		//--- Delete no presents widget's items ---
+		//>>> Delete no presents widget's items
 		for( int i_r = 0; i_r < root_it->childCount(); i_r++ )
 		{
 		    int i_l;
@@ -1315,7 +1308,7 @@ void VisItProp::tabChanged( int itb )
 		    if( i_l >= req.childGet(0)->childSize() )	delete root_it->child(i_r--);
 		}
 
-		//--- Add widget's items ---
+		//>>> Add widget's items
 		for( int i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
 		{
 		    QTreeWidgetItem *cur_it;
@@ -1336,7 +1329,7 @@ void VisItProp::tabChanged( int itb )
 		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(i_l)->text().c_str());
 		}
 	    }
-	    //--- Load types and configs ---
+	    //>>> Load types and configs
 	    QStringList	atypes;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/tp_ls",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
@@ -1352,7 +1345,7 @@ void VisItProp::tabChanged( int itb )
 	    if( obj_attr_cfg->topLevelItemCount() )
 		obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
-	    //--- Calc period ---
+	    //>>> Calc period
 	    gnd = TCntrNode::ctrId(root,proc_per->objectName().toAscii().data(),true);
 	    proc_per->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )
@@ -1360,14 +1353,14 @@ void VisItProp::tabChanged( int itb )
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toAscii().data(),TSYS::PathEl));
 		if( !owner()->cntrIfCmd(req) ) proc_per->setValue(req.text().c_str());
 	    }
-	    //--- Calc language ---
+	    //>>> Calc language
 	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toAscii().data(),true);
 	    proc_lang->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )
 	    {
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_lang->objectName().toAscii().data(),TSYS::PathEl));
 		if( !owner()->cntrIfCmd(req) ) sval = req.text().c_str();
-		//---- Get combo list ----
+		//>>>> Get combo list
 		proc_lang->clear();
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 		if( !owner()->cntrIfCmd(req) )
@@ -1377,13 +1370,19 @@ void VisItProp::tabChanged( int itb )
 		if( cur_el < 0 ) proc_lang->addItem(sval.c_str());
 		proc_lang->setCurrentIndex(proc_lang->findText(sval.c_str()));
 	    }
-	    //--- Calc procedure ---
+	    //>>> Calc procedure
 	    gnd=TCntrNode::ctrId(root,proc_text->objectName().toAscii().data(),true);
 	    proc_text->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )
 	    {
-		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_text->objectName().toAscii().data(),TSYS::PathEl));
-		if( !owner()->cntrIfCmd(req) )	proc_text->setText(req.text().c_str());
+		req.clear()->setName("CntrReqs")->setAttr("path",ed_it);
+		req.childAdd("get")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
+		req.childAdd("SnthHgl")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
+		if( !owner()->cntrIfCmd(req) )
+		{
+		    proc_text->setText(req.childGet(0)->text().c_str());
+		    proc_text->setSnthHgl(*req.childGet(1));
+		}
 	    }
 
 	    show_init = false;

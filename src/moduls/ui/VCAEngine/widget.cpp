@@ -1275,7 +1275,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calc period (ms)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root",SUI_ID,2,"tp","str","rows","10");
+		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
 	    }
 	}
 	return true;
@@ -1436,6 +1436,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(calcProg());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+	    try
+	    {
+		SYS->daq().at().at(TSYS::strParse(calcLang(),0,".")).at().
+				compileFuncSynthHighl(TSYS::strParse(calcLang(),1,"."),*opt);
+	    } catch(...){ }
     }
     else if(a_path == "/proc/calc/plangLs" && ctrChkNode(opt))
     {

@@ -259,8 +259,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Constant;Public constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Programm language"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/io/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRWR_,"root",SDAQ_ID,2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Programm language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/io/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }
@@ -340,13 +340,19 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/io/prog_lang")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(progLang());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(progLang());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	setProgLang(opt->text());
     }
     else if(a_path == "/io/prog")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	setProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))
+	    try
+	    {
+		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
+				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+	    } catch(...){ }
     }
     else if(a_path == "/io/plang_ls" && ctrChkNode(opt))
     {
