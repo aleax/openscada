@@ -1,6 +1,8 @@
 2010-11-02 Roman
 - !!!!:SYS, DAQ.JavaLikeCalc, UI.QTCfg, UI.VCAEngine, UI.Vision: The syntax highlight API is added.
 - SYS.XMLNode: Copy constructor is added.
+- FIX:SYS: Start scripts "openscada_start" and "openscada_demo" and "openscada_demo_local" is fixed for direct bash call.
+- FIX:DB.MySQL: Date and time store format is changed to UTC.
 
 
 2010-10-24 Roman 0.7.0

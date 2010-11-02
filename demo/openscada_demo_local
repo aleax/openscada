@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Use for core dump creation on programm crash
 ulimit -c unlimited

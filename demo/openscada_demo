@@ -1,13 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 # Use for core dump creation on programm crash
 ulimit -c unlimited
 
 # User directory prepare
-if [ ! -d ~/.openscada ]; then
-    install -m 755 -d ~/.openscada/ARCHIVES/{MESS,VAL}
-    ln -s /var/spool/openscada/icons ~/.openscada/icons
-fi
+if [ ! -d ~/.openscada ]; then install -m 755 -d ~/.openscada; fi
+if [ ! -d ~/.openscada/ARCHIVES ]; then install -m 755 -d ~/.openscada/ARCHIVES/{MESS,VAL}; fi
+if [ ! -L ~/.openscada/icons ]; then ln -s /var/spool/openscada/icons ~/.openscada/icons; fi
 if [ ! -d ~/.openscada/DEMO ]; then cp -R /var/spool/openscada/DEMO ~/.openscada/; fi
 if [ ! -e ~/.openscada/oscada_demo.xml ]; then install -m 644 /etc/oscada_demo.xml ~/.openscada/; fi
 cd ~/.openscada

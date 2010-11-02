@@ -768,7 +768,8 @@ void MTable::setVal( TCfg &cfg, const string &val )
 string MTable::UTCtoSQL( time_t val )
 {
     struct tm tm_tm;
-    localtime_r(&val,&tm_tm);
+    //localtime_r(&val,&tm_tm);
+    gmtime_r(&val,&tm_tm);
     char buf[255];
     int rez = strftime( buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_tm );
 
@@ -778,7 +779,8 @@ string MTable::UTCtoSQL( time_t val )
 time_t MTable::SQLtoUTC( const string &val )
 {
     struct tm stm;
-    strptime(val.c_str(),"%Y-%m-%d %H:%M:%S",&stm);
+    //strptime(val.c_str(),"%Y-%m-%d %H:%M:%S",&stm);
+    strptime((val+" UTC").c_str(),"%F %T %Z",&stm);
 
     return mktime(&stm);
 }
