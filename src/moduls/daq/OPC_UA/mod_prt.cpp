@@ -196,6 +196,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
     string rez, err;
     char buf[1000];
+    int stIdx = 0;
 
     ResAlloc resN( tro.nodeRes(), true );
 
@@ -205,8 +206,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	{
 	    if( io.attr("id") == "HEL" )
 	    {
+		rez = "HELF";				//> HELLO message type
 		rez.reserve(50);
-		rez.append("HELF");			//> HELLO message type
 		oNu(rez,0,4);				//Message size
 		oNu(rez,OpcUa_ProtocolVersion,4);	//Protocol version
 		oNu(rez,OpcUa_ReciveBufferSize,4);	//Recive buffer size
@@ -253,8 +254,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		else if( secPlc == "Basic256" )		{ symKeySz = 32; asymKeyPad = 42; }
 		else throw TError(OpcUa_BadSecurityPolicyRejected,"","");
 
-		rez.reserve( 200 );
-		rez.append( "OPNF" );			//OpenSecureChannel message type
+		rez = "OPNF";			//OpenSecureChannel message type
+		rez.reserve(200);
 		oNu(rez,0,4);				//Message size
 		oNu(rez,strtoul(io.attr("SecChnId").c_str(),NULL,10),4);	//Secure channel identifier
 							//> Security Header
@@ -286,7 +287,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oN(rez,atoi(io.attr("SecLifeTm").c_str()),4);	//RequestedLifetime
 		oNu(rez,rez.size(),4,4);		//> Real message size
 
-		if( !isSecNone )
+		if(!isSecNone)
 		{
 		    //> Padding place
 		    int kSz = asymmetricKeyLength(io.attr("ClntCert"));
@@ -374,8 +375,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    }
 	    else if( io.attr("id") == "CLO" )
 	    {
-		rez.reserve( 200 );
-		rez.append( "CLOF" );					//OpenSecureChannel close
+		rez = "CLOF";						//OpenSecureChannel close
+		rez.reserve(200);
 		oNu(rez,0,4);						//Message size
 		oNu(rez,strtoul(io.attr("SecChnId").c_str(),NULL,10),4);	//Secure channel identifier
 		oNu(rez,strtoul(io.attr("SecTokenId").c_str(),NULL,10),4);	//TokenId
@@ -431,6 +432,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    }
 	    else
 	    {
+		nextReq:
 		int iTpId = 0;
 		string mReq;
 		if( io.attr("id") == "FindServers" )
@@ -496,19 +498,19 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oS(mReq,"");					//signature
 		    oS(mReq,"");					//algorithm
 		}
-		else if( io.attr("id") == "CloseSession" )
+		else if(io.attr("id") == "CloseSession")
 		{
 		    iTpId = OpcUa_CloseSessionRequest;
 		    oN(mReq,1,1);					//deleteSubscriptions
 		}
-		else if( io.attr("id") == "Read" )
+		else if(io.attr("id") == "Read")
 		{
 		    iTpId = OpcUa_ReadRequest;
 		    oR(mReq,atof(io.attr("maxAge").c_str()),8);		//maxAge 0 ms
 		    oN(mReq,atoi(io.attr("timestampsToReturn").c_str()),4);//timestampsTo Return (SERVER_1)
 									//> nodesToRead []
-		    oNu(mReq,io.childSize(),4);				//nodes
-		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
+		    oNu(mReq,vmin(25,io.childSize()-stIdx),4);				//nodes
+		    for(int i_n = stIdx; i_n < io.childSize() && (i_n-stIdx) < 25; i_n++)
 		    {
 			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
 			oNu(mReq,strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
@@ -553,8 +555,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		else throw TError(OpcUa_BadNotSupported,"OPC UA Bin",_("Request '%s' isn't supported."),io.attr("id").c_str());
 
-		rez.reserve( 200 );
-		rez.append( "MSGF" );					//SecureChannel message
+		rez = "MSGF";						//SecureChannel message
+		rez.reserve(200);
 		oNu(rez,0,4);						//Message size
 		oNu(rez,strtoul(io.attr("SecChnId").c_str(),NULL,10),4);	//Secure channel identifier
 		oNu(rez,strtoul(io.attr("SecTokenId").c_str(),NULL,10),4);	//TokenId
@@ -789,14 +791,15 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			    break;
 			case OpcUa_ReadResponse:
 			{
-			    if( iTpId != OpcUa_ReadRequest )
+			    if(iTpId != OpcUa_ReadRequest)
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Nodes number
-			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
-				iDataValue(rez,off,*io.childGet(i_r));
+			    for(int i_r = 0; i_r < resN && stIdx < io.childSize(); i_r++, stIdx++)
+				iDataValue(rez,off,*io.childGet(stIdx));
 									//>> diagnosticInfos []
 			    iNu(rez,off,4);				//Items number
+			    if(stIdx<io.childSize()) goto nextReq;
 			    break;
 			}
 			case OpcUa_WriteResponse:

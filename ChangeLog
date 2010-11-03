@@ -1,3 +1,7 @@
+2010-11-03 Roman
+- FIX:DAQ.OPC_UA: One request limit for "Read" is set to 25 nodes. Parameter's attributes processing is set on first call at start.
+
+
 2010-11-02 Roman
 - !!!!:SYS, DAQ.JavaLikeCalc, UI.QTCfg, UI.VCAEngine, UI.Vision: The syntax highlight API is added.
 - SYS.XMLNode: Copy constructor is added.

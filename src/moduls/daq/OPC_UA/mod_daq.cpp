@@ -335,36 +335,38 @@ void *TMdContr::Task( void *icntr )
 
     cntr.endrun_req = false;
     cntr.prc_st = true;
+    bool firstCall = true;
 
     XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
 
     try
     {
-	for( unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++ )
+	for(unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++)
 	{
-	    if( cntr.redntUse() )	{ sleep(1); continue; }
-	    if( cntr.tmDelay > 0 )	{ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.redntUse())	{ sleep(1); continue; }
+	    if(cntr.tmDelay > 0){ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    long long t_cnt = TSYS::curTime();
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;
 
 	    ResAlloc res(cntr.en_res,false);
 
-	    if( !req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()) )
+	    if(!req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()))
 	    {
-		if( div && (it_cnt%div) < cntr.p_hd.size() ) cntr.p_hd[it_cnt%div].at().attrPrc();
+		if(div && (it_cnt%div) < cntr.p_hd.size()) cntr.p_hd[it_cnt%div].at().attrPrc();
 
 		//> Prepare nodes list
 		req.childClear();
 		req.childAdd("node")->setAttr("prmId","OPC_UA_Server")->setAttr("prmAttr","ServerStatus_State")->
 		    setAttr("nodeId","2259")->setAttr("attributeId","13");
-		for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
+		for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		{
+		    if(firstCall) cntr.p_hd[i_p].at().attrPrc();
 		    cntr.p_hd[i_p].at().vlList(als);
-		    for( int i_a = 0; i_a < als.size(); i_a++ )
+		    for(int i_a = 0; i_a < als.size(); i_a++)
 		    {
 			nId = cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve();
-			if( nId.empty() ) continue;
+			if(nId.empty()) continue;
 			req.childAdd("node")->setAttr("prmId",cntr.p_hd[i_p].at().id())->setAttr("prmAttr",als[i_a])->setAttr("nodeId",nId)->setAttr("attributeId","13");
 		    }
 		}
@@ -377,14 +379,14 @@ void *TMdContr::Task( void *icntr )
 	    bool isErr = !req.attr("err").empty(), ndSt = 0;
 	    AutoHD<TVal> vl;
 	    res.request(false);
-	    for( int i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++ )
+	    for(int i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++)
 	    {
 		XMLNode *cnX = req.childGet(i_c);
-		if( cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State" )
+		if(cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State")
 		{ cntr.servSt = strtoul(cnX->text().c_str(),NULL,10); continue; }
-		while( cnX->attr("prmId") != cntr.p_hd[i_p].at().id() ) i_p++;
-		if( i_p >= cntr.p_hd.size() ) break;
-		if( cntr.p_hd[i_p].at().vlPresent(cnX->attr("prmAttr")) )
+		while(cnX->attr("prmId") != cntr.p_hd[i_p].at().id()) i_p++;
+		if(i_p >= cntr.p_hd.size()) break;
+		if(cntr.p_hd[i_p].at().vlPresent(cnX->attr("prmAttr")))
 		{
 		    ndSt = strtol(cnX->attr("Status").c_str(),NULL,0);
 		    vl = cntr.p_hd[i_p].at().vlAt(cnX->attr("prmAttr"));
@@ -392,21 +394,22 @@ void *TMdContr::Task( void *icntr )
 		    vl.at().fld().setLen(ndSt);
 		}
 	    }
-	    if( isErr )
+	    if(isErr)
 	    {
 		cntr.acq_err.setVal(req.attr("err"));
 		cntr.tmDelay = cntr.syncPer();
 		continue;
 	    }
-	    else if( cntr.tmDelay == -1 ) cntr.acq_err.setVal("");
+	    else if(cntr.tmDelay == -1) cntr.acq_err.setVal("");
 	    res.release();
 
+	    firstCall = false;
 	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
 	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	}
     }
-    catch( TError err ){ mess_err( err.cat.c_str(), err.mess.c_str() ); }
+    catch( TError err ){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prc_st = false;
 
