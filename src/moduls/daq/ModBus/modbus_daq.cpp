@@ -802,7 +802,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
 		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil).\n"
@@ -820,5 +820,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //> Process command to page
-    TParamContr::cntrCmdProc(opt);
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    {
+	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
+	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*):")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","^(C|R|R_[ibf]\\d*):")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");    
+    }
+    else TParamContr::cntrCmdProc(opt);
 }

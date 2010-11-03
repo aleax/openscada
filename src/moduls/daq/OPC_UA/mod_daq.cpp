@@ -761,7 +761,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",cfg("ND_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",cfg("ND_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
 	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
 		"Variables writed by separated lines into format: [ns:id].\n"
 		"Where:\n"
@@ -775,36 +775,44 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    TParamContr::cntrCmdProc(opt);
+    //> Process command to page
+    if(a_path == "/prm/cfg/ND_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    {
+	opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
+	opt->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
+	opt->childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*)\\b")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+    }
+    else TParamContr::cntrCmdProc(opt);
 }
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if( val.name() != "err" )	return;
+    if(val.name() != "err")	return;
 
-    if( !enableStat() || !owner().startStat() )
+    if(!enableStat() || !owner().startStat())
     {
-	if( !enableStat() )		val.setS(_("1:Parameter is disabled."),0,true);
+	if(!enableStat())		val.setS(_("1:Parameter is disabled."),0,true);
 	else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
 	return;
     }
-    if( owner().redntUse( ) ) return;
+    if(owner().redntUse()) return;
 
-    if( !owner().acq_err.getVal().empty() ) val.setS(owner().acq_err.getVal(),0,true);
+    if(!owner().acq_err.getVal().empty()) val.setS(owner().acq_err.getVal(),0,true);
     else
     {
 	//> Check remote attribuutes for error status
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
 	ResAlloc res( nodeRes(), true );
-	for( int i_a = 0; i_a < p_el.fldSize(); i_a++ )
+	for(int i_a = 0; i_a < p_el.fldSize(); i_a++)
 	{
 	    astls.push_back(p_el.fldAt(i_a).len());
-	    if( p_el.fldAt(i_a).len() && !firstErr ) firstErr = p_el.fldAt(i_a).len();
+	    if(p_el.fldAt(i_a).len() && !firstErr) firstErr = p_el.fldAt(i_a).len();
 	}
 	res.release();
 	string aLs;
-	for( int i_a = 0; i_a < astls.size(); i_a++ ) aLs += TSYS::strMess(":0x%x",astls[i_a]);
+	for(int i_a = 0; i_a < astls.size(); i_a++) aLs += TSYS::strMess(":0x%x",astls[i_a]);
 	val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
     }
 }

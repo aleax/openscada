@@ -683,8 +683,8 @@ void SyntxHighl::highlightBlock(const QString &text)
 	    QRegExp expr(rl->attr("expr").c_str());
 	    for(int index = 0, length = 0; true; index+=expr.matchedLength())
 	    {
-		index = expr.indexIn(text,index);
-		if(index < 0) break;
+		if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
+		if(format(index)!=defkForm) continue;
 		setFormat(index, expr.matchedLength(), kForm);
 	    }
 	}

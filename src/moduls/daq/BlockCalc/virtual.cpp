@@ -717,7 +717,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"rows","8",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  blk - block identifier from block's scheme; for constant value set to:\n"
@@ -732,5 +732,12 @@ void Prm::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //Process command to page
-    TParamContr::cntrCmdProc(opt);
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/cfg/IO" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    {
+	opt->childAdd("rule")->setAttr("expr","^\\*[sirb]\\.[^\\:]*")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr","^.*\\.[^\\:]*")->setAttr("color","darkblue");
+	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+    }
+    else TParamContr::cntrCmdProc(opt);
 }
