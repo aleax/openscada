@@ -646,18 +646,18 @@ void TMdPrm::enable()
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
-    owner().prmEn( id(), false );
+    owner().prmEn(id(), false);
 
     TParamContr::disable();
 
     //> Delete no used fields
-    for( int i_fld = 0; i_fld < p_el.fldSize(); i_fld++ )
+    /*for( int i_fld = 0; i_fld < p_el.fldSize(); i_fld++ )
     {
 	try{ p_el.fldDel(i_fld); i_fld--; }
 	catch( TError err )	{  }
-    }
+    }*/
 
     //> Set EVAL to parameter attributes
     vector<string> ls;

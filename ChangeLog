@@ -3,6 +3,7 @@
 - SYS, UI.QTStarter: Update splash for show work status.
 - DAQ.BlockCalc, DAQ.ModBus, DAQ.OPC_UA: Syntax highlight is added for a parameter configuration.
 - FIX:DAQ.JavaLikeCalc, UI.QTCfg, UI.Vision: JavaScript syntax higlight is fixed for known bugs.
+- FIX:DAQ.OPC_UA: Delete attributes from a parameter is missed on the parameter disable.
 
 
 2010-11-02 Roman
