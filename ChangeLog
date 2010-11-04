@@ -1,3 +1,8 @@
+2010-11-04 Roman
+- FIX:DAQ.OPC_UA: Check for attributes delete is added on a parameter enable.
+- DAQ.JavaLikeCalc, UI.QTCfg, UI.Vision: Multi-level syntax higlight support is added.
+
+
 2010-11-03 Roman
 - FIX:DAQ.OPC_UA: One request limit for "Read" is set to 25 nodes. Parameter's attributes processing is set on first call at start.
 - SYS, UI.QTStarter: Update splash for show work status.

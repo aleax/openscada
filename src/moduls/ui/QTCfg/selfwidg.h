@@ -111,6 +111,7 @@ class SyntxHighl : public QSyntaxHighlighter
 
     protected:
 	void highlightBlock(const QString &text);
+	void rule(XMLNode *rl, const QString &text, QTextCharFormat defForm, int off = 0);
 
 	XMLNode rules;
 };

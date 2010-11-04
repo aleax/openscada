@@ -652,13 +652,6 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
-    //> Delete no used fields
-    /*for( int i_fld = 0; i_fld < p_el.fldSize(); i_fld++ )
-    {
-	try{ p_el.fldDel(i_fld); i_fld--; }
-	catch( TError err )	{  }
-    }*/
-
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);

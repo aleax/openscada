@@ -184,7 +184,8 @@ void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 {
     if(lang == "JavaScript")
     {
-	shgl.childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
+	shgl.childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen")->
+	     childAdd("rule")->setAttr("expr","\\\\.{1}")->setAttr("color","green")->setAttr("font_weight","1");
 	//shgl.childAdd("rule")->setAttr("expr","\".+?[^\\\\]\"")->setAttr("color","darkgreen");
 	//shgl.childAdd("blk")->setAttr("beg","\"")->setAttr("end","\"")->setAttr("color","darkgreen");
 	shgl.childAdd("blk")->setAttr("beg","/\\*")->setAttr("end","\\*/")->setAttr("color","gray")->setAttr("font_italic","1");

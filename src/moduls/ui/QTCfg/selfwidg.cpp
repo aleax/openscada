@@ -347,9 +347,27 @@ void SyntxHighl::setSnthHgl(XMLNode nd)
     rehighlight();
 }
 
+void SyntxHighl::rule(XMLNode *rl, const QString &text, QTextCharFormat defForm, int off)
+{
+    if(text.isEmpty() || rl->name() != "rule") return;
+    QTextCharFormat kForm;
+    kForm.setForeground(QColor(rl->attr("color").c_str()));
+    kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
+    kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
+    QRegExp expr(rl->attr("expr").c_str());
+    for(int index = 0, length = 0; true; index+=expr.matchedLength())
+    {
+	if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
+	if(format(index+off)!=defForm) continue;
+	setFormat(index+off, expr.matchedLength(), kForm);
+	for(int i_ch = 0; i_ch < rl->childSize(); i_ch++)
+	    rule(rl->childGet(i_ch),text.mid(index,expr.matchedLength()),kForm,index+off);
+    }
+}
+
 void SyntxHighl::highlightBlock(const QString &text)
 {
-    QTextCharFormat kForm, defkForm, ckForm;
+    QTextCharFormat kForm, defkForm;
     if(text.length()) defkForm = format(0);
     for(int i_ch = 0; i_ch < rules.childSize(); i_ch++)
     {
@@ -358,41 +376,38 @@ void SyntxHighl::highlightBlock(const QString &text)
 	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
 	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
 
-	if(rl->name() == "rule")
-	{
-	    QRegExp expr(rl->attr("expr").c_str());
-	    for(int index = 0, length = 0; true; index+=expr.matchedLength())
-	    {
-		if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
-		if(format(index)!=defkForm) continue;
-		setFormat(index, expr.matchedLength(), kForm);
-	    }
-	}
+	if(rl->name() == "rule") rule(rl,text,defkForm);
 	else if(rl->name() == "blk")
 	{
 	    setCurrentBlockState(previousBlockState());
 	    QRegExp bExpr(rl->attr("beg").c_str());
 	    QRegExp eExpr(rl->attr("end").c_str());
-	    for(int stIndex = 0, endIndex = 0; true; )
+	    for(int stIndex = 0, endIndex = 0, startBlk = 0, sizeBlk = 0; true; )
 	    {
-		//int st_find = 0;
 		if(currentBlockState() == -1)
 		{
-		    if((stIndex=bExpr.indexIn(text,stIndex)) == -1) break;
+		    if((stIndex=bExpr.indexIn(text,stIndex)) == -1 || bExpr.matchedLength() <= 0) break;
 		    if(format(stIndex)!=defkForm) { stIndex += bExpr.matchedLength(); continue; }
 		    setCurrentBlockState(i_ch);
-		    //st_find = 1;
+		    startBlk = stIndex+bExpr.matchedLength();
 		}
-		if((endIndex=eExpr.indexIn(text, stIndex)) == -1)
+		endIndex = eExpr.indexIn(text, stIndex);
+		if(endIndex == -1 || eExpr.matchedLength() <= 0)
 		{
 		    setFormat(stIndex, (text.length()-stIndex), kForm);
-		    break;
+		    sizeBlk = text.length()-startBlk;
 		}
 		else
 		{
 		    setCurrentBlockState(-1);
 		    setFormat(stIndex, (endIndex-stIndex+eExpr.matchedLength()), kForm);
+		    sizeBlk = endIndex-startBlk;
 		}
+		//> Call include rules
+		for(int i_ch1 = 0; i_ch1 < rl->childSize(); i_ch1++)
+		    rule(rl->childGet(i_ch1),text.mid(startBlk,sizeBlk),kForm,startBlk);
+
+		if(endIndex == -1 || eExpr.matchedLength() <= 0) break;
 		stIndex = endIndex+eExpr.matchedLength();
 	    }
 	}
