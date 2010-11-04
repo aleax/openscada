@@ -673,7 +673,7 @@ void TMdPrm::load_( )
 
 string TMdPrm::attrPrc( )
 {
-    ResAlloc res( nodeRes(), true );
+    ResAlloc res(nodeRes(), true);
 
     bool srchOK = false;
     XMLNode req("opc.tcp");
@@ -681,7 +681,7 @@ string TMdPrm::attrPrc( )
 
     //> Nodes list process and parameter's attributes creation
     string snd;
-    for( int off = 0; (snd=TSYS::strParse(mNdLst,0,"\n",&off)).size(); )
+    for(int off = 0; (snd=TSYS::strParse(mNdLst,0,"\n",&off)).size(); )
     {
 	//>> Request for node class request
 	req.clear()->setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
@@ -691,30 +691,31 @@ string TMdPrm::attrPrc( )
 	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_Value));
 	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_AccessLevel));
 	owner().reqOPC(req);
-	if( !req.attr("err").empty() ) return req.attr("err");
-	if( strtol(req.childGet(0)->attr("Status").c_str(),NULL,0) )	continue;
+	if(!req.attr("err").empty()) return req.attr("err");
+	if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;
 
 	//>> Variable node's attribute creation
-	if( atoi(req.childGet(0)->text().c_str()) == TProt::NC_Variable && atoi(req.childGet(4)->text().c_str())&TProt::ACS_Read )
+	if(atoi(req.childGet(0)->text().c_str()) == TProt::NC_Variable && atoi(req.childGet(4)->text().c_str())&TProt::ACS_Read)
 	{
+	    als.push_back(snd);
 	    srchOK = false;
 	    //>> Find for already presented attribute
-	    for( int i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++ )
-		if( p_el.fldAt(i_a).reserve() == snd ) srchOK = true;
+	    for(int i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
+		if(p_el.fldAt(i_a).reserve() == snd) srchOK = true;
 
 	    //>> Create new attribute
-	    if( !srchOK )
+	    if(!srchOK)
 	    {
 		//>>> Prepare attribute id
 		string aid = TSYS::strEncode(req.childGet(1)->text(),TSYS::oscdID);
-		if( vlPresent(aid) )
-		    for( int i_v = 1; true; i_v++ )
-			if( !vlPresent(aid+TSYS::int2str(i_v)) )
+		if(vlPresent(aid))
+		    for(int i_v = 1; true; i_v++)
+			if(!vlPresent(aid+TSYS::int2str(i_v)))
 			{ aid += TSYS::int2str(i_v); break; }
 
 		//>>> Value type prepare
 		TFld::Type vtp = TFld::String;
-		switch( atoi(req.childGet(3)->attr("EncodingMask").c_str()) & 0x3F )
+		switch(atoi(req.childGet(3)->attr("EncodingMask").c_str()) & 0x3F)
 		{
 		    case OpcUa_Boolean:
 			vtp = TFld::Boolean;	break;
@@ -727,13 +728,13 @@ string TMdPrm::attrPrc( )
 		//>> Browse name
 		string aNm = req.childGet(2)->text();
 		int nmPos = aNm.find(":");
-		if( nmPos!=string::npos ) aNm.erase(0,nmPos+1);
+		if(nmPos!=string::npos) aNm.erase(0,nmPos+1);
 
 		//>>> Flags prepare
 		unsigned vflg = TVal::DirWrite;
-		if( !(atoi(req.childGet(4)->text().c_str())&TProt::ACS_Write) )	vflg |= TFld::NoWrite;
+		if(!(atoi(req.childGet(4)->text().c_str())&TProt::ACS_Write))	vflg |= TFld::NoWrite;
 
-		p_el.fldAdd( new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,req.childGet(3)->attr("EncodingMask").c_str(),"","","",snd.c_str()) );
+		p_el.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,req.childGet(3)->attr("EncodingMask").c_str(),"","","",snd.c_str()));
 	    }
 	}
 
@@ -743,6 +744,17 @@ string TMdPrm::attrPrc( )
 	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 	XMLNode *rn = req.childGet(0);*/
     }
+
+    //> Find for delete attribute
+    for(int i_a = 0; i_a < p_el.fldSize(); i_a++)
+    {
+	int i_p;
+	for(i_p = 0; i_p < als.size(); i_p++)
+	    if(p_el.fldAt(i_a).reserve() == als[i_p])	break;
+	if(i_p >= als.size())
+	    try{ p_el.fldDel(i_a); i_a--; } catch(TError err) { }
+    }
+
     return "";
 }
 
