@@ -422,7 +422,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 {
     setObjectName(name);
     QVBoxLayout *box = new QVBoxLayout(this);
-    box->setMargin(0);
+    box->setContentsMargins(0,0,0,2);
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
@@ -521,20 +521,30 @@ void TextEdit::curPosChange( )
 
 bool TextEdit::event( QEvent *e )
 {
-    if( but_box && e->type() == QEvent::KeyRelease )
+    if(but_box && e->type() == QEvent::KeyRelease)
     {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if( (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier )
+	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier)
 	{
 	    but_box->button(QDialogButtonBox::Apply)->animateClick( );
 	    return true;
 	}
-	else if( keyEvent->key() == Qt::Key_Escape )
+	else if(keyEvent->key() == Qt::Key_Escape)
 	{
 	    but_box->button(QDialogButtonBox::Cancel)->animateClick( );
 	    return true;
 	}
     }
+    else if(e->type() == QEvent::MouseButtonPress)
+	holdPnt = mapFromGlobal(cursor().pos());
+    else if(e->type() == QEvent::MouseMove)
+    {
+	QPoint curp = mapFromGlobal(cursor().pos());
+	int hg = vmax(50,edit()->size().height()+(curp-holdPnt).y());
+	edit()->setMinimumHeight(hg); edit()->setMaximumHeight(hg);
+	holdPnt = curp;
+    }
+
     return QWidget::event(e);
 }
 
@@ -586,6 +596,29 @@ void TextEdit::find( )
 	ed_fld->find(fstr,(QTextDocument::FindFlag)fopt);
 	actFind->setObjectName(QString::number(fopt)+":"+fstr);
     }
+}
+
+//************************************************
+//* CfgTable: Table view widget                  *
+//************************************************
+CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
+{
+
+}
+
+bool CfgTable::event( QEvent *e )
+{
+    if(e->type() == QEvent::MouseButtonPress)
+	holdPnt = mapFromGlobal(cursor().pos());
+    else if(e->type() == QEvent::MouseMove)
+    {
+	QPoint curp = mapFromGlobal(cursor().pos());
+	int hg = vmax(50,size().height()+(curp-holdPnt).y());
+	setMinimumHeight(hg); setMaximumHeight(hg);
+	holdPnt = curp;
+    }
+
+    return QTableWidget::event(e);
 }
 
 //*************************************************

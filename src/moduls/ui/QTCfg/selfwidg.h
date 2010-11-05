@@ -33,6 +33,7 @@
 #include <QItemDelegate>
 #include <QDialogButtonBox>
 #include <QSyntaxHighlighter>
+#include <QTableWidget>
 
 #include "tuimod.h"
 
@@ -161,6 +162,7 @@ class TextEdit : public QWidget
 	QTextEdit	*ed_fld;
 	SyntxHighl	*snt_hgl;
 	QDialogButtonBox *but_box;
+	QPoint		holdPnt;
 };
 
 //************************************************
@@ -186,6 +188,24 @@ class ImgView : public QWidget
 	//Attributes
 	QImage m_img;
 	int   h_sz, v_sz;
+};
+
+//************************************************
+//* CfgTable: Table view widget                  *
+//************************************************
+class CfgTable : public QTableWidget
+{
+    public:
+	//Methods
+	CfgTable( QWidget *parent = 0 );
+
+    protected:
+	//Methods
+	bool event( QEvent *e );
+
+    private:
+	//Private attributes
+	QPoint	holdPnt;
 };
 
 //************************************************

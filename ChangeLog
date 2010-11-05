@@ -1,3 +1,7 @@
+2010-11-05 Roman
+- !!:UI.QTCfg: Manual resizing for hight is added to text and table fields. Resizing is made by hold and move bottom border the fields.
+
+
 2010-11-04 Roman
 - FIX:DAQ.OPC_UA: Check for attributes delete is added on a parameter enable.
 - DAQ.JavaLikeCalc, UI.QTCfg, UI.Vision: Multi-level syntax higlight support is added.

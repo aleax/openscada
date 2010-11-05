@@ -1095,11 +1095,11 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
 
 	    //QLabel *lab;
-	    QTableWidget *tbl;
+	    CfgTable *tbl;
 
-	    if( widget )
+	    if(widget)
 	    {
-		tbl = new QTableWidget(widget);
+		tbl = new CfgTable(widget);
 		tbl->setItemDelegate(new TableDelegate);
 		tbl->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 		tbl->setStatusTip((sel_path+"/"+br_path).c_str());
@@ -1108,10 +1108,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		sp.setVerticalStretch(1);
 		tbl->setSizePolicy( sp );
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
-		connect( tbl, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( tablePopup(const QPoint&) ) );
-		connect( tbl, SIGNAL( cellChanged(int,int) ), this, SLOT( tableSet(int,int) ) );
-		tbl->setMinimumSize( QSize( 100, 100 ) );
-		tbl->setMaximumSize( QSize( 32767, 300 ) );
+		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
+		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
+		tbl->setMinimumSize(QSize(100, 100));
+		tbl->setMaximumSize(QSize(32767, 300));
 
 		widget->layout()->addWidget( new QLabel((t_s.attr("dscr")+":").c_str(),widget) );
 		widget->layout()->addWidget( tbl );
@@ -1122,12 +1122,12 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    else
 	    {
 		//lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
-		tbl = (QTableWidget *)TSYS::str2addr(t_s.attr("addr_tbl"));
+		tbl = (CfgTable *)TSYS::str2addr(t_s.attr("addr_tbl"));
 	    }
 	    //>>> Fill table
 	    tbl->setToolTip(t_s.attr("help").c_str());
 	    XMLNode req("get"); req.setAttr("path",sel_path+"/"+br_path);
-	    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 	    else
 	    {
 		//>>>> Collumns adjusting flag
@@ -1135,13 +1135,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		bool adjRow = false;
 
 		//>>>> Copy values to info tree
-		for( int i_col = 0; i_col < req.childSize(); i_col++ )
+		for(int i_col = 0; i_col < req.childSize(); i_col++)
 		{
 		    XMLNode *t_lsel = req.childGet(i_col);
 		    XMLNode *t_linf = t_s.childGet("id",t_lsel->attr("id"),true);
-		    if( !t_linf ) { t_linf = t_s.childIns(i_col); *t_linf = *t_lsel; adjCol = true; }
+		    if(!t_linf) { t_linf = t_s.childIns(i_col); *t_linf = *t_lsel; adjCol = true; }
 		    t_linf->childClear();
-		    for( int i_rw = 0; i_rw < t_lsel->childSize(); i_rw++ )
+		    for(int i_rw = 0; i_rw < t_lsel->childSize(); i_rw++)
 			*t_linf->childAdd() = *t_lsel->childGet(i_rw);
 		}
 
@@ -1149,8 +1149,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		int n_col = t_s.childSize();
 		int n_row = (n_col)?t_s.childGet(0)->childSize():0;
 
-		if( tbl->columnCount() != n_col )	tbl->setColumnCount(n_col);
-		if( tbl->rowCount() != n_row )		{ tbl->setRowCount(n_row); adjRow = true; }
+		if(tbl->columnCount() != n_col)	tbl->setColumnCount(n_col);
+		if(tbl->rowCount() != n_row)	{ tbl->setRowCount(n_row); adjRow = true; }
 
 		for( unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++ )
 		{
@@ -1246,9 +1246,12 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    for( int i_c = 0; i_c < tbl->columnCount(); i_c++ )
 			tbl->setColumnWidth(i_c,vmin(max_col_sz,tbl->columnWidth(i_c)));
 		}
-		if( adjRow ) tbl->resizeRowsToContents();
-		tbl->setMinimumSize( QSize( 100, vmax(100,vmin(300,30+30*tbl->rowCount())) ) );
-		tbl->setMaximumSize( QSize( 32767, vmax(100,vmin(300,30+30*tbl->rowCount())) ) );
+		if(adjRow)
+		{
+		    tbl->resizeRowsToContents();
+		    tbl->setMinimumSize(QSize(100, vmax(100,vmin(300,30+30*tbl->rowCount()))));
+		    tbl->setMaximumSize(QSize(32767, vmax(100,vmin(300,30+30*tbl->rowCount()))));
+		}
 		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 
 		tbl_init = false;
