@@ -109,9 +109,8 @@ class TCntrNode
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 
 	//> Static functions
+	//>> Controll Field
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );      //get node for it full identifier
-
-	//> Controll Field
 	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
 	    int perm=0777, const char *user="root", const char *grp="root", int n_attr=0, ... );
 	static bool ctrRemoveNode( XMLNode *nd, const char *path );

@@ -150,6 +150,33 @@ void OrigElFigure::postEnable( int flag )
     }
 }
 
+bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help","Help for the field");
+	return true;
+    }
+
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/attr/elLst" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    {
+	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	opt->childAdd("rule")->setAttr("expr","^(arc|line|fill|bezier):")->setAttr("color","darkorange")->setAttr("font_weight","1");
+	opt->childAdd("rule")->setAttr("expr","\\(\\d*\\|\\d*\\)")->setAttr("color","#3D87FF")->
+	     childAdd("rule")->setAttr("expr","[0-9]+")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","\\#([0-9a-fA-F]{6}\\-\\d+|[0-9a-fA-F]{6})")->setAttr("color","blue");
+    }
+    else return Widget::cntrCmdAttributes(opt,src);
+
+    return true;
+}
+
 bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 {
     if( cfg.flgGlob()&Attr::Active && cfg.id() == "elLst" )
@@ -856,6 +883,36 @@ void OrigDocument::calc( Widget *base )
 		base->attrAt("doc").at().setS(mkDk);
 	}
     }
+}
+
+bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
+	return true;
+    }
+
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/attr/tmpl" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    {
+	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
+	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
+	try { SYS->daq().at().at("JavaLikeCalc").at().compileFuncSynthHighl("JavaScript",*tag); } catch(...){ }
+	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
+	tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
+	tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
+	opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
+	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
+    }
+    else return Widget::cntrCmdAttributes(opt,src);
+
+    return true;
 }
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )

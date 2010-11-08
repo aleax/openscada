@@ -1110,8 +1110,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
-		tbl->setMinimumSize(QSize(100, 100));
-		tbl->setMaximumSize(QSize(32767, 300));
+		tbl->setMinimumHeight(100); tbl->setMaximumHeight(300);
 
 		widget->layout()->addWidget( new QLabel((t_s.attr("dscr")+":").c_str(),widget) );
 		widget->layout()->addWidget( tbl );
@@ -1249,8 +1248,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if(adjRow)
 		{
 		    tbl->resizeRowsToContents();
-		    tbl->setMinimumSize(QSize(100, vmax(100,vmin(300,30+30*tbl->rowCount()))));
-		    tbl->setMaximumSize(QSize(32767, vmax(100,vmin(300,30+30*tbl->rowCount()))));
+		    int hgt = vmax(tbl->minimumHeight(),vmin(200,(20+20*tbl->rowCount())));
+		    tbl->setMinimumHeight(hgt); tbl->setMaximumHeight(hgt);
 		}
 		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 

@@ -77,6 +77,7 @@ class OrigElFigure : public PrWidget
 	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, TVariant prev );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 };
 
 //*************************************************
@@ -186,6 +187,7 @@ class OrigDocument : public PrWidget
 	void postEnable( int flag );
 	void calc( Widget *base );
 	bool attrChange( Attr &cfg, TVariant prev );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 
 	string makeDoc( const string &tmpl, Widget *wdg );
 	void nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );

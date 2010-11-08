@@ -826,7 +826,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
 	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*):")->setAttr("color","blue");
 	opt->childAdd("rule")->setAttr("expr","^(C|R|R_[ibf]\\d*):")->setAttr("color","darkorange");
-	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");    
+	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }
     else TParamContr::cntrCmdProc(opt);
 }

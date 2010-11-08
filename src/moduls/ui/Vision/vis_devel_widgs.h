@@ -87,6 +87,7 @@ class ModInspAttr: public QAbstractTableModel
 		QVariant data( );
 		QVariant dataEdit( );
 		string	wdgs( )		{ return wdgsItem; }
+		string	help( )		{ return helpItem; }
 
 		void setName( const string &nit )	{ nameItem = nit; }
 		void setEdited( bool ied )		{ edit_access = ied; }
@@ -95,6 +96,7 @@ class ModInspAttr: public QAbstractTableModel
 		void setDataEdit( const QVariant &idt )	{ dataEditItem = idt; }
 		void setModify( bool vl )		{ mModify = vl; }
 		bool setWdgs( const string &w, bool del = false );
+		void setHelp( const string &vl )	{ helpItem = vl; }
 
 		void clean( );
 
@@ -107,7 +109,7 @@ class ModInspAttr: public QAbstractTableModel
 		Item *parent()		{ return parentItem; }
 
 	    private:
-		string	idItem, nameItem, wdgsItem;
+		string	idItem, nameItem, wdgsItem, helpItem;
 		Type	typeItem;
 		QVariant	dataItem, dataEditItem;
 		bool	edit_access;

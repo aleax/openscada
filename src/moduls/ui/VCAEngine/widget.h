@@ -226,7 +226,7 @@ class Widget : public TCntrNode
 
 	virtual bool cntrCmdServ( XMLNode *opt );
 	virtual bool cntrCmdGeneric( XMLNode *opt );
-	virtual bool cntrCmdAttributes( XMLNode *opt );
+	virtual bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 	virtual bool cntrCmdLinks( XMLNode *opt, bool lnk_ro = false );
 	virtual bool cntrCmdProcess( XMLNode *opt );
 

@@ -280,29 +280,30 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    }
 	    //>> Check attribute item
 	    int ga_id = cur_it->childGet(a_id);
-	    if( grpW && ga_id >= 0 ) { cur_it->child(ga_id)->setWdgs(itId); continue; }
-	    if( ga_id < 0 ) ga_id = cur_it->childInsert( a_id, -1, Item::Attr );
-	    cur_it->child(ga_id)->setName( a_nm );
-	    cur_it->child(ga_id)->setEdited( atoi(gnd->attr("acs").c_str())&SEC_WR );
-	    cur_it->child(ga_id)->setFlag( atoi(gnd->attr("wdgFlg").c_str()) );
-	    cur_it->child(ga_id)->setModify( grpW ? false : atoi(gnd->attr("modif").c_str()) );
-	    if( grpW ) cur_it->child(ga_id)->setWdgs(itId);
+	    if(grpW && ga_id >= 0) { cur_it->child(ga_id)->setWdgs(itId); continue; }
+	    if(ga_id < 0) ga_id = cur_it->childInsert(a_id, -1, Item::Attr);
+	    cur_it->child(ga_id)->setName(a_nm);
+	    cur_it->child(ga_id)->setEdited(atoi(gnd->attr("acs").c_str())&SEC_WR);
+	    cur_it->child(ga_id)->setFlag(atoi(gnd->attr("wdgFlg").c_str()));
+	    cur_it->child(ga_id)->setModify(grpW ? false : atoi(gnd->attr("modif").c_str()));
+	    cur_it->child(ga_id)->setHelp(gnd->attr("help"));
+	    if(grpW) cur_it->child(ga_id)->setWdgs(itId);
 	    //>> Get Value
 	    string sval;
-	    req.clear()->setAttr( "path", itId+"/%2fattr%2f"+a_id );
-	    if( !mainWin()->cntrIfCmd(req) )	sval = req.text();
+	    req.clear()->setAttr("path", itId+"/%2fattr%2f"+a_id);
+	    if(!mainWin()->cntrIfCmd(req))	sval = req.text();
 	    string stp = gnd->attr("tp");
-	    if( stp == "bool" )		cur_it->child(ga_id)->setData((bool)atoi(sval.c_str()));
-	    else if( stp == "dec" || stp == "hex" || stp == "oct" )
+	    if(stp == "bool")		cur_it->child(ga_id)->setData((bool)atoi(sval.c_str()));
+	    else if(stp == "dec" || stp == "hex" || stp == "oct")
 					cur_it->child(ga_id)->setData(atoi(sval.c_str()));
-	    else if( stp == "real" )	cur_it->child(ga_id)->setData(atof(sval.c_str()));
-	    else if( stp == "str"  )	cur_it->child(ga_id)->setData(sval.c_str());
+	    else if(stp == "real")	cur_it->child(ga_id)->setData(atof(sval.c_str()));
+	    else if(stp == "str")	cur_it->child(ga_id)->setData(sval.c_str());
 	    //>>> Get selected list
-	    if( gnd->attr("dest") == "select" )
+	    if(gnd->attr("dest") == "select")
 		cur_it->child(ga_id)->setDataEdit( QString(gnd->attr("sel_list").c_str()).split(";") );
 	}
 
-	if( grp_it.isValid() && !grpW )
+	if(grp_it.isValid() && !grpW)
 	{
 	    curmod = grp_it;
 	    it = static_cast<Item*>(grp_it.internalPointer());
@@ -463,6 +464,9 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			    }
 			}
 		    }
+		    break;
+		case Qt::ToolTipRole:
+		    if(!it->help().empty()) val = it->help().c_str();
 		    break;
 	    }
     }

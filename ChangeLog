@@ -1,3 +1,9 @@
+2010-11-08 Roman
+- !!:UI.VCAEngine: Sepecific properties, like help and syntax highlighting, is added to attributes, specified by primitive.
+    Syntax highlight is added for primitives "ElFigure" and "Document".
+- !!:UI.Vision: Help display for widget's attributes is added.
+
+
 2010-11-05 Roman
 - !!:UI.QTCfg: Manual resizing for hight is added to text and table fields. Resizing is made by hold and move bottom border the fields.
 

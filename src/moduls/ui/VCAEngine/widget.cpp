@@ -587,7 +587,10 @@ AutoHD<Attr> Widget::attrAt(const string &attr)
 
     map<string, Attr* >::iterator p = mAttrs.find(attr);
     if(p == mAttrs.end())
+    {
+	if(!rez) pthread_mutex_unlock(&mtxAttr);
 	throw TError(nodePath().c_str(),_("Attribute <%s> is not present!"), attr.c_str());
+    }
 
     return AutoHD<Attr>(p->second);
 }
@@ -922,8 +925,11 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     return true;
 }
 
-bool Widget::cntrCmdAttributes( XMLNode *opt )
+bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 {
+    if(!src) src = this;
+    if(!parent().freeStat()) return parent().at().cntrCmdAttributes(opt,src);
+
     //> Get page info
     if(opt->name() == "info")
     {
@@ -931,12 +937,13 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
 	{
 	    //>> Properties form create
 	    vector<string> list_a;
-	    attrList(list_a);
+	    src->attrList(list_a);
 	    for(unsigned i_el = 0; i_el < list_a.size(); i_el++)
 	    {
-		XMLNode *el = attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el) el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()))->
-			   setAttr("modif",TSYS::uint2str(attrAt(list_a[i_el]).at().modif()));
+		AutoHD<Attr> attr = src->attrAt(list_a[i_el]);
+		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		if(el) el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attr.at().flgGlob()))->
+			   setAttr("modif",TSYS::uint2str(attr.at().modif()));
 	    }
 	}
 	return true;
@@ -946,7 +953,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/attr/")
     {
-	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
+	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
 	{
 	    if(attr.at().fld().flg()&TFld::Selected)	opt->setText(attr.at().getSEL());

@@ -1833,18 +1833,18 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     return true;
 }
 
-bool SessWdg::cntrCmdAttributes( XMLNode *opt )
+bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
 {
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt);
-	if( ctrMkNode("area",opt,-1,"/attr",_("Attributes")) )
+	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes")))
 	{
 	    //>> Properties form create
 	    vector<string> list_a;
 	    attrList(list_a);
-	    for( unsigned i_el = 0; i_el < list_a.size(); i_el++ )
+	    for(unsigned i_el = 0; i_el < list_a.size(); i_el++)
 	    {
 		XMLNode *el = attrAt(list_a[i_el]).at().fld().cntrCmdMake(opt,"/attr",-1,owner().c_str(),grp().c_str(),permit()|R_R_R_);
 		if(el) el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attrAt(list_a[i_el]).at().flgGlob()));
@@ -1855,21 +1855,22 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path.substr(0,6) == "/attr/" )
+    if(a_path.substr(0,6) == "/attr/")
     {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
-	if( ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD) )
+	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
 	{
 	    if( attr.at().fld().flg()&TFld::Selected )  opt->setText(attr.at().getSEL());
 	    else                                        opt->setText(attr.at().getS());
 	}
-	if( ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR) )
+	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
 	{
 	    if( attr.at().id() == "event" )	eventAdd(opt->text()+"\n");
 	    else if( attr.at().fld().flg()&TFld::Selected )
 						attr.at().setSEL(opt->text());
 	    else				attr.at().setS(opt->text());
 	}
+	else return Widget::cntrCmdAttributes(opt);
     }
     else return Widget::cntrCmdAttributes(opt);
 
