@@ -290,17 +290,27 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    if(grpW) cur_it->child(ga_id)->setWdgs(itId);
 	    //>> Get Value
 	    string sval;
-	    req.clear()->setAttr("path", itId+"/%2fattr%2f"+a_id);
-	    if(!mainWin()->cntrIfCmd(req))	sval = req.text();
+	    req.clear()->setName("CntrReqs")->setAttr("path",itId);
+	    req.childAdd("get")->setAttr("path","/%2fattr%2f"+a_id);
+	    if(atoi(gnd->attr("SnthHgl").c_str()))
+		req.childAdd("SnthHgl")->setAttr("path","/%2fattr%2f"+a_id);
+	    if(!mainWin()->cntrIfCmd(req)) sval = req.childGet(0)->text();
+
+	    /*req.clear()->setAttr("path", itId+"/%2fattr%2f"+a_id);
+	    if(!mainWin()->cntrIfCmd(req))	sval = req.text();*/
 	    string stp = gnd->attr("tp");
 	    if(stp == "bool")		cur_it->child(ga_id)->setData((bool)atoi(sval.c_str()));
 	    else if(stp == "dec" || stp == "hex" || stp == "oct")
 					cur_it->child(ga_id)->setData(atoi(sval.c_str()));
 	    else if(stp == "real")	cur_it->child(ga_id)->setData(atof(sval.c_str()));
-	    else if(stp == "str")	cur_it->child(ga_id)->setData(sval.c_str());
+	    else if(stp == "str")
+	    {
+		cur_it->child(ga_id)->setData(sval.c_str());
+		if(req.childSize() > 1)	cur_it->child(ga_id)->setSnthHgl(req.childGet(1)->save());
+	    }
 	    //>>> Get selected list
 	    if(gnd->attr("dest") == "select")
-		cur_it->child(ga_id)->setDataEdit( QString(gnd->attr("sel_list").c_str()).split(";") );
+		cur_it->child(ga_id)->setDataEdit(QString(gnd->attr("sel_list").c_str()).split(";"));
 	}
 
 	if(grp_it.isValid() && !grpW)
@@ -400,8 +410,9 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime )
 			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
-		case Qt::EditRole:		val = it->dataEdit();	break;
-		case Qt::UserRole:		val = it->flag();	break;
+		case Qt::EditRole:	val = it->dataEdit();	break;
+		case Qt::UserRole:	val = it->flag();	break;
+		case (Qt::UserRole+1):	val = it->snthHgl().c_str();	break;
 		case Qt::DecorationRole:
 		    if( it->flag()&ModInspAttr::Item::Color )
 		    {
@@ -729,6 +740,14 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->resize(50,50);
+	QString sHgl = index.data(Qt::UserRole+1).toString();
+	if(!sHgl.isEmpty())
+	{
+	    XMLNode rules;
+	    rules.load(sHgl.toStdString());
+	    SyntxHighl *snt_hgl = new SyntxHighl(((QTextEdit*)w_del)->document());
+	    snt_hgl->setSnthHgl(rules);
+	}
     }
     else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Font )
 	w_del = new LineEditProp(parent,LineEditProp::Font);

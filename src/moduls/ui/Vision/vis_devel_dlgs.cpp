@@ -1014,7 +1014,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     dlg_lay->addWidget(obj_lnk,0,0);
 
     //> Add button box
-    butbox = new QDialogButtonBox( QDialogButtonBox::Close, Qt::Horizontal, this );
+    butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
     connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
 
     tab_lay->addWidget(butbox);
