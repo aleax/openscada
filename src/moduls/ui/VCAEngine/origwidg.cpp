@@ -158,7 +158,18 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
     {
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help","Help for the field");
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->
+            setAttr( "help",
+                     _("The list of elements can contain:\n"
+                     "  line:p1|(x|y):p2|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
+                     "  arc:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):p5|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
+                     "  bezier:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
+                     "  fill:p1|(x|y),p2|(x|y),...,pn|(x|y):[fill_color|c{n}]:[fill_image|i{n}]\n"
+                     "For example:\n"
+                     "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
+                     "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
+                     "  fill:(25|50):(25|50):c2:i2\n"
+                     "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31\n"));
 	return true;
     }
 

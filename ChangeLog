@@ -1,3 +1,7 @@
+2010-11-09 Maxim
+- :UI.VCAEngine: Tooltip for the elements' list of the primitive ElFigure is added.
+
+
 2010-11-08 Roman
 - !!:UI.VCAEngine: Sepecific properties, like help and syntax highlighting, is added to attributes, specified by primitive.
     Syntax highlight is added for primitives "ElFigure" and "Document".
