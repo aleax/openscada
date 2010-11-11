@@ -1,5 +1,9 @@
+2010-11-11 Roman
+- UI.VCAEngine: Context help and syntax highlighting is added for main attributes of a widget.
+
+
 2010-11-09 Maxim
-- :UI.VCAEngine: Tooltip for the elements' list of the primitive ElFigure is added.
+- UI.VCAEngine: Tooltip for the elements' list of the primitive ElFigure is added.
 
 
 2010-11-08 Roman

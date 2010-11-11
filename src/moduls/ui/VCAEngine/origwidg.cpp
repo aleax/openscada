@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <regex.h>
+
 #include <tsys.h>
 
 #include "origwidg.h"
@@ -159,17 +161,17 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->
-            setAttr( "help",
-                     _("The list of elements can contain:\n"
-                     "  line:p1|(x|y):p2|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
-                     "  arc:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):p5|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
-                     "  bezier:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
-                     "  fill:p1|(x|y),p2|(x|y),...,pn|(x|y):[fill_color|c{n}]:[fill_image|i{n}]\n"
-                     "For example:\n"
-                     "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
-                     "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
-                     "  fill:(25|50):(25|50):c2:i2\n"
-                     "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31\n"));
+	    setAttr( "help",
+		_("The list of elements can contain:\n"
+		  "  line:p1|(x|y):p2|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
+		  "  arc:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):p5|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
+		  "  bezier:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
+		  "  fill:p1|(x|y),p2|(x|y),...,pn|(x|y):[fill_color|c{n}]:[fill_image|i{n}]\n"
+		  "For example:\n"
+		  "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
+		  "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
+		  "  fill:(25|50):(25|50):c2:i2\n"
+		  "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31\n"));
 	return true;
     }
 
@@ -914,7 +916,14 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
     {
 	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
 	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
-	try { SYS->daq().at().at("JavaLikeCalc").at().compileFuncSynthHighl("JavaScript",*tag); } catch(...){ }
+	//>> Get document's language syntax highlight.
+	/*try
+	{
+	    string vl = attrAt("tmpl").at().getS();
+	    int rez = re_match("",vl.data(),vl.size(),0,NULL);
+	    printf("TEST 00: %d\n",rez);
+	    SYS->daq().at().at("JavaLikeCalc").at().compileFuncSynthHighl("JavaScript",*tag);
+	} catch(...){ }*/
 	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
 	tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
 	tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");

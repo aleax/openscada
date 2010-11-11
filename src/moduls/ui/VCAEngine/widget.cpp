@@ -131,34 +131,34 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 
 void Widget::postEnable( int flag )
 {
-    if( flag&TCntrNode::NodeRestore )	setEnable(true);
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeRestore)	setEnable(true);
+    if(flag&TCntrNode::NodeConnect)
     {
 	//> Add main attributes
-	attrAdd( new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
-	attrAdd( new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
-	attrAdd( new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic) );
-	attrAdd( new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic,"","root:UI") );
-	attrAdd( new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
+	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
+	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
+	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
+	attrAdd(new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic,"","root:UI"));
+	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
-	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")) );
-	attrAdd( new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","1") );
-	attrAdd( new TFld("name",_("Name"),TFld::String,Attr::Generic) );
-	attrAdd( new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic) );
-	attrAdd( new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","","5") );
-	attrAdd( new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6") );
-	attrAdd( new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","","7") );
-	attrAdd( new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","","8") );
-	attrAdd( new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","","9") );
-	attrAdd( new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","","10") );
-	attrAdd( new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","13") );
-	attrAdd( new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","14") );
-	attrAdd( new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","","11") );
-	attrAdd( new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","","12") );
-	attrAdd( new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","","15") );
-	attrAdd( new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","","16") );
-	attrAdd( new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","","17") );
-	attrAdd( new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200") );
+	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")));
+	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","1"));
+	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
+	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
+	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","","5"));
+	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6"));
+	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","","7"));
+	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","","8"));
+	attrAdd(new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","","9"));
+	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","","10"));
+	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","13"));
+	attrAdd(new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","14"));
+	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","","11"));
+	attrAdd(new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","","12"));
+	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","","15"));
+	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","","16"));
+	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","","17"));
+	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200"));
     }
 }
 
@@ -942,8 +942,50 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    {
 		AutoHD<Attr> attr = src->attrAt(list_a[i_el]);
 		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el) el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attr.at().flgGlob()))->
-			   setAttr("modif",TSYS::uint2str(attr.at().modif()));
+		if(el)
+		{
+		    el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attr.at().flgGlob()))->
+			setAttr("modif",TSYS::uint2str(attr.at().modif()));
+		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
+		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
+		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"[owner]:[group]\"."));
+		    else if(list_a[i_el] == "perm")
+			el->setAttr("help",_("Permition to the widget in form \"[user][group][other]\".\n"
+					     "Where \"user\", \"group\" and \"other\" is:\n"
+					     "  \"__\" - no any access;\n"
+					     "  \"R_\" - read only;\n"
+					     "  \"RW\" - read and write."));
+		    else if(list_a[i_el] == "evProc")
+			el->setAttr("SnthHgl","1")->
+			    setAttr("help",_("Direct events processing for pages manipulation in form:\n"
+					     "      \"[event]:[evSrc]:[com]:[prm]\". Where:\n"
+					     "  \"event\" - waiting event;\n"
+					     "  \"evSrc\" - event source;\n"
+					     "  \"com\" - command of a session (open, next, prev);\n"
+					     "  \"prm\" - command parameter, where used:\n"
+					     "      pg_so - direct name of the desired page with the prefix;\n"
+					     "      1 - name of a new page in a general way, without a prefix;\n"
+					     "      * - the page is taken from the name of a prevsubstituted;\n"
+					     "      $ - points the place of the opened page relativ.\n"
+					     "Examles:\n"
+					     "  ws_BtPress:/prev:prev:/pg_so/*/*/$\n"
+					     "  ws_BtPress:/next:next:/pg_so/*/*/$\n"
+					     "  ws_BtPress:/go_mn:open:/pg_so/*/mn/*\n"
+					     "  ws_BtPress:/go_graph:open:/pg_so/*/ggraph"));
+		    else switch(atoi(attr.at().fld().reserve().c_str()))
+		    {
+			case 1:		//root
+			    el->setAttr("help",_("Primitive identifier in the widget ground."));
+			    break;
+			case 17:	//contextMenu
+			    el->setAttr("SnthHgl","1")->
+				setAttr("help",_("Context menu in form strings list: \"[ItName]:[Signal]\".\n"
+						 "Where:\n"
+						 "  \"ItName\" - item name;\n"
+						 "  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."));
+			    break;
+		    }
+		}
 	    }
 	}
 	return true;
@@ -959,10 +1001,22 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    if(attr.at().fld().flg()&TFld::Selected)	opt->setText(attr.at().getSEL());
 	    else opt->setText(attr.at().getS());
 	}
-	if(ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_WR))
+	else if(ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    if(attr.at().fld().flg()&TFld::Selected)	{ attr.at().setSEL(opt->text()); opt->setText(attr.at().getSEL()); }
 	    else { attr.at().setS(opt->text()); opt->setText(attr.at().getS()); }
+	}
+	else if(attr.at().id() == "contextMenu" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+	{
+	    opt->childAdd("rule")->setAttr("expr",":.*$")->setAttr("color","darkorange");
+	    opt->childAdd("rule")->setAttr("expr","^.*:")->setAttr("color","darkgreen");
+	}
+	else if(attr.at().id() == "evProc" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+	{
+	    opt->childAdd("rule")->setAttr("expr",":(open|next|prev):")->setAttr("color","darkgreen");
+	    /*opt->childAdd("rule")->setAttr("expr",":([^:]+|\\z)")->setAttr("color","darkblue")->
+		 childAdd("rule")->setAttr("expr","\\w+")->setAttr("color","blue");*/
+	    opt->childAdd("rule")->setAttr("expr","^[^:]*:")->setAttr("color","darkorange");
 	}
     }
     else return false;

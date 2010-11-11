@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-08 15:00+0200\n"
+"POT-Creation-Date: 2010-11-11 16:40+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -976,9 +976,6 @@ msgstr ""
 msgid "Root"
 msgstr "Ursprung"
 
-msgid "Enabled"
-msgstr "Eingeschaltet"
-
 msgid "Active"
 msgstr "Aktiv"
 
@@ -1052,6 +1049,53 @@ msgstr "Zurücksetzen Änderungen"
 
 msgid "Include widgets"
 msgstr "Eingebundene Widgets"
+
+#, fuzzy
+msgid "Path to the widget."
+msgstr "Elternwidget"
+
+#, fuzzy
+msgid "Path to parent widget."
+msgstr "Elternwidget"
+
+msgid "The widget owner and group in form \"[owner]:[group]\"."
+msgstr ""
+
+msgid ""
+"Permition to the widget in form \"[user][group][other]\".\n"
+"Where \"user\", \"group\" and \"other\" is:\n"
+"  \"__\" - no any access;\n"
+"  \"R_\" - read only;\n"
+"  \"RW\" - read and write."
+msgstr ""
+
+msgid ""
+"Direct events processing for pages manipulation in form:\n"
+"      \"[event]:[evSrc]:[com]:[prm]\". Where:\n"
+"  \"event\" - waiting event;\n"
+"  \"evSrc\" - event source;\n"
+"  \"com\" - command of a session (open, next, prev);\n"
+"  \"prm\" - command parameter, where used:\n"
+"      pg_so - direct name of the desired page with the prefix;\n"
+"      1 - name of a new page in a general way, without a prefix;\n"
+"      * - the page is taken from the name of a prevsubstituted;\n"
+"      $ - points the place of the opened page relativ.\n"
+"Examles:\n"
+"  ws_BtPress:/prev:prev:/pg_so/*/*/$\n"
+"  ws_BtPress:/next:next:/pg_so/*/*/$\n"
+"  ws_BtPress:/go_mn:open:/pg_so/*/mn/*\n"
+"  ws_BtPress:/go_graph:open:/pg_so/*/ggraph"
+msgstr ""
+
+msgid "Primitive identifier in the widget ground."
+msgstr ""
+
+msgid ""
+"Context menu in form strings list: \"[ItName]:[Signal]\".\n"
+"Where:\n"
+"  \"ItName\" - item name;\n"
+"  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."
+msgstr ""
 
 msgid "Links"
 msgstr "Links"
@@ -1216,3 +1260,6 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Enabled"
+#~ msgstr "Eingeschaltet"
