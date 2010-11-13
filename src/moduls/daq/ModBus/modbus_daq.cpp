@@ -153,7 +153,7 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    if( prc_st ) return;
+    if(prc_st) return;
 
     //> Establish connection
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
@@ -165,6 +165,25 @@ void TMdContr::start_( )
 
     //> Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
+
+    //> Reenable parameters for data blocks structure update
+    //>> Clear data blocks
+    acqBlks.clear();
+    acqBlksIn.clear();
+    acqBlksCoil.clear();
+    acqBlksCoilIn.clear();
+    //>> Reenable parameters
+    vector<string> pls;
+    list(pls);
+    for(int i_p = 0; i_p < pls.size(); i_p++)
+    {
+	AutoHD<TMdPrm> prm = at(pls[i_p]);
+	if(prm.at().enableStat())
+	{
+	    prm.at().disable();
+	    prm.at().enable();
+	}
+    }
 
     //> Start the gathering data task
     SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );

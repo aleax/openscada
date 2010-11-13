@@ -1,3 +1,7 @@
+2010-11-13 Roman
+- DAQ.ModBus: Parameters reenable at controller start is added for data blocks changings apply. Mostly for removed attributes apply.
+
+
 2010-11-11 Roman
 - UI.VCAEngine: Context help and syntax highlighting is added for main attributes of a widget.
 
