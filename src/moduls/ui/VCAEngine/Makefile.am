@@ -2,11 +2,12 @@
 
 EXTRA_DIST = *.h po/* doc/*
 
-INCLUDES = -I$(top_srcdir)/src
+INCLUDES = -I$(top_srcdir)/src -I$(oldincludedir)/pcre
 
 oscd_modul_LTLIBRARIES = ui_VCAEngine.la
 ui_VCAEngine_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_VCAEngine_la_SOURCES = vcaengine.cpp libwidg.cpp widget.cpp origwidg.cpp project.cpp session.cpp
+ui_VCAEngine_la_LIBADD = -lpcrecpp
 ui_VCAEngine_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install

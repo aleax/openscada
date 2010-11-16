@@ -19,7 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <regex.h>
+#include <pcrecpp.h>
 
 #include <tsys.h>
 
@@ -907,28 +907,40 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
+	el = src->attrAt("doc").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
+	el = src->attrAt("style").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
 	return true;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/attr/tmpl" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    if((a_path == "/attr/tmpl" || a_path == "/attr/doc") && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
     {
 	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
 	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
 	//>> Get document's language syntax highlight.
-	/*try
+	try
 	{
-	    string vl = attrAt("tmpl").at().getS();
-	    int rez = re_match("",vl.data(),vl.size(),0,NULL);
-	    printf("TEST 00: %d\n",rez);
-	    SYS->daq().at().at("JavaLikeCalc").at().compileFuncSynthHighl("JavaScript",*tag);
-	} catch(...){ }*/
+	    string dcLng;
+	    int rez = pcrecpp::RE(".*<body\\s+.*\\s*docProcLang=\"([^\"]+)\".*>.*",pcrecpp::RE_Options().set_dotall(true)).
+		FullMatch(src->attrAt(a_path.substr(6)).at().getS(),&dcLng);
+	    if(rez && dcLng.size())
+		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().
+				compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
+	} catch(...){ }
 	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
 	tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
 	tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
 	opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
 	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
+    }
+    else if(a_path == "/attr/style" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    {
+	opt->childAdd("blk")->setAttr("beg","\\{")->setAttr("end","\\}")->setAttr("color","#666666")->
+	    childAdd("rule")->setAttr("expr",":[^;]+")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","(\\.|#)\\w+\\s")->setAttr("color","darkorange");
     }
     else return Widget::cntrCmdAttributes(opt,src);
 

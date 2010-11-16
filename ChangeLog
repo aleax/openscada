@@ -1,3 +1,9 @@
+2010-11-16 Roman
+- !!:DAQ: BFN module is added.
+- UI.VCAEngine: Syntax highlight is added for attributes "doc" and "style" of primitive "Document".
+    Inner code highlight for attributes "tmpl" and "doc" is made adaptive for value from <body docProcLang="CodeLang"/>, value get by PCRECPP.
+
+
 2010-11-13 Roman
 - DAQ.ModBus: Parameters reenable at controller start is added for data blocks changings apply. Mostly for removed attributes apply.
 
