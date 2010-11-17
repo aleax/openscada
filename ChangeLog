@@ -1,5 +1,12 @@
-2010-11-16 Roman
+2010-11-17 Roman
 - !!:DAQ: BFN module is added.
+- FIX:SYS: Function cron() is fixed to hours processing.
+- FIX:DAQ.DiamondBoards: Limits to channel's number is set.
+- Protocol:HTTP: Text content for POST request is added of output protocols.
+- UI.QTCfg, UI.QTStarter, UI.Vision: The signal QAction::activated() is replaced by QAction::triggered().
+
+
+2010-11-16 Roman
 - UI.VCAEngine: Syntax highlight is added for attributes "doc" and "style" of primitive "Document".
     Inner code highlight for attributes "tmpl" and "doc" is made adaptive for value from <body docProcLang="CodeLang"/>, value get by PCRECPP.
 

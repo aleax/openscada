@@ -1230,7 +1230,7 @@ reload:
 	}
     isReload = (vm!=200 && ttm.tm_mday!=vm);
     if(vm <= 31) ttm.tm_mday = vm;
-    { ttm.tm_mday = vm-31; ttm.tm_mon++; }
+    else { ttm.tm_mday = vm-31; ttm.tm_mon++; }
     mktime(&ttm);
     if(isReload)	{ ttm.tm_min = -1; ttm.tm_hour = 0; goto reload; }
 

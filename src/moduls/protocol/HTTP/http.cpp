@@ -243,9 +243,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		cnt += "\r\n"+io.childGet(cnt_c)->text();
 		isCnt = true;
 	    }
-	    if( isCnt ) cnt += "--"cntBnd"--\r\n";
+	    if( isCnt )
+	    {
+		cnt += "--"cntBnd"--\r\n";
+		io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary="cntBnd);
+	    }
+	    else cnt = io.text();
 	    io.childAdd("prm")->setAttr("id","Content-Length")->setText(TSYS::int2str(cnt.size()));
-	    io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary="cntBnd);
 	}
 	else throw TError(nodePath().c_str(),TSYS::strMess(_("HTTP method '%s' error or don't support."),io.name().c_str()).c_str());
 

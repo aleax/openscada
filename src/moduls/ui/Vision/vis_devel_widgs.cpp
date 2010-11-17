@@ -1637,7 +1637,7 @@ void WdgTree::ctrTreePopup( )
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
     actRefresh->setStatusTip(_("Press to refresh present libraries."));
-    connect(actRefresh, SIGNAL(activated()), this, SLOT(updateTree()));
+    connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
 
     QAction *rez = popup.exec(QCursor::pos());
@@ -1895,7 +1895,7 @@ void ProjTree::ctrTreePopup( )
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh projects"),this);
     actRefresh->setStatusTip(_("Press to refresh present projects."));
-    connect(actRefresh, SIGNAL(activated()), this, SLOT(updateTree()));
+    connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
 
     QAction *rez = popup.exec(QCursor::pos());
@@ -2354,7 +2354,7 @@ void DevelWdgView::wdgPopup( )
 	//>> Exit from widget edition
 	QAction *actExitEdit = new QAction(_("Exit from widget editing"),this);
 	actExitEdit->setStatusTip(_("Press to exit from widget editing."));
-	connect(actExitEdit, SIGNAL(activated()), this, SLOT(editExit()));
+	connect(actExitEdit, SIGNAL(triggered()), this, SLOT(editExit()));
 	popup.addAction(actExitEdit);
     }
     else
@@ -2382,35 +2382,35 @@ void DevelWdgView::wdgPopup( )
 	{
 	    QAction *actEnterEdit = new QAction(_("Enter for widget editing"),this);
 	    actEnterEdit->setStatusTip(_("Press to enter for widget editing."));
-	    connect(actEnterEdit, SIGNAL(activated()), this, SLOT(editEnter()));
+	    connect(actEnterEdit, SIGNAL(triggered()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
 	//>> Make widget icon
 	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
 	actMakeIco->setStatusTip(_("Press to make icon from widget."));
-	connect(actMakeIco, SIGNAL(activated()), this, SLOT(makeIcon()));
+	connect(actMakeIco, SIGNAL(triggered()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
 	//>> Make widget image
 	QAction *actMakeImg = new QAction(_("Make image from widget"),this);
 	actMakeImg->setStatusTip(_("Press to make image from widget."));
-	connect(actMakeImg, SIGNAL(activated()), this, SLOT(makeImage()));
+	connect(actMakeImg, SIGNAL(triggered()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();
 	//>> Unset, increase, decrease the visual scale of thge widget
 	QAction *actIncVisScale = new QAction(_("Zoom in (+10%)"),this);
 	actIncVisScale->setObjectName("inc");
 	actIncVisScale->setStatusTip(_("Press to increase the visual scale of the widget by 10%."));
-	connect(actIncVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+	connect(actIncVisScale, SIGNAL(triggered()), this, SLOT(incDecVisScale()));
 	popup.addAction(actIncVisScale);
 	QAction *actDecVisScale = new QAction(_("Zoom out (-10%)"),this);
 	actDecVisScale->setObjectName("dec");
 	actDecVisScale->setStatusTip(_("Press to decrease the visual scale of the widget by 10%."));
-	connect(actDecVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+	connect(actDecVisScale, SIGNAL(triggered()), this, SLOT(incDecVisScale()));
 	popup.addAction(actDecVisScale);
 	QAction *actUnsetVisScale = new QAction(_("Reset zoom (100%)"),this);
 	actUnsetVisScale->setObjectName("unset");
 	actUnsetVisScale->setStatusTip(_("Press to set the visual scale of the widget to 100%."));
-	connect(actUnsetVisScale, SIGNAL(activated()), this, SLOT(incDecVisScale()));
+	connect(actUnsetVisScale, SIGNAL(triggered()), this, SLOT(incDecVisScale()));
 	popup.addAction(actUnsetVisScale);
 	popup.addSeparator();
 

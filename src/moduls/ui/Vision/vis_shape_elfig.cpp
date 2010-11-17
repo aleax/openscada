@@ -1572,7 +1572,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
             QAction *actDynamicPoint = new QAction( _("Make this point dynamic"), w->mainWin() );
             actDynamicPoint->setObjectName("point");
             actDynamicPoint->setStatusTip(_("Press to make this point dynamic"));
-            connect( actDynamicPoint, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+            connect( actDynamicPoint, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
             menu.addAction(actDynamicPoint);
             menu.addSeparator();
         }
@@ -1585,7 +1585,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 QAction *actDynamicWidth = new QAction( _("Make line width dynamic"), w->mainWin() );
                 actDynamicWidth->setObjectName("width");
                 actDynamicWidth->setStatusTip(_("Press to make line width dynamic"));
-                connect( actDynamicWidth, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                connect( actDynamicWidth, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicWidth);
             }
             if( shapeItems[index].lineColor < 0 )
@@ -1594,7 +1594,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 QAction *actDynamicColor = new QAction( _("Make line color dynamic"), w->mainWin() );
                 actDynamicColor->setObjectName("color");
                 actDynamicColor->setStatusTip(_("Press to make line color dynamic"));
-                connect( actDynamicColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                connect( actDynamicColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicColor);
             }
             if( (*widths)[shapeItems[index].border_width] > 0.01 )
@@ -1605,7 +1605,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     QAction *actDynamicBorderWidth = new QAction( _("Make border width dynamic"), w->mainWin() );
                     actDynamicBorderWidth->setObjectName("border_width");
                     actDynamicBorderWidth->setStatusTip(_("Press to make border width dynamic"));
-                    connect( actDynamicBorderWidth, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                    connect( actDynamicBorderWidth, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                     menu.addAction(actDynamicBorderWidth);
                 }
                 if( shapeItems[index].borderColor < 0 )
@@ -1614,7 +1614,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     QAction *actDynamicBorderColor = new QAction( _("Make border color dynamic"), w->mainWin() );
                     actDynamicBorderColor->setObjectName("border_color");
                     actDynamicBorderColor->setStatusTip(_("Press to make border color dynamic"));
-                    connect( actDynamicBorderColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                    connect( actDynamicBorderColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                     menu.addAction(actDynamicBorderColor);
                 }
             }
@@ -1624,7 +1624,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 QAction *actDynamicStyle = new QAction( _("Make line style dynamic"), w->mainWin() );
                 actDynamicStyle->setObjectName("style");
                 actDynamicStyle->setStatusTip(_("Press to make line style dynamic"));
-                connect( actDynamicStyle, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                connect( actDynamicStyle, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicStyle);
             }
             if( fl ) menu.addSeparator();
@@ -1670,7 +1670,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     QAction *actDeleteFill = new QAction( _("Delete the current fill"), w->mainWin() );
                     actDeleteFill->setObjectName("delete_fill");
                     actDeleteFill->setStatusTip(_("Press to delete the current fill"));
-                    connect( actDeleteFill, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                    connect( actDeleteFill, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                     menu.addAction(actDeleteFill);
 
                     if( inundationItems[i].brush < 0 )
@@ -1679,7 +1679,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                         QAction *actDynamicFillColor = new QAction( _("Make fill color dynamic"), w->mainWin() );
                         actDynamicFillColor->setObjectName("fill_color");
                         actDynamicFillColor->setStatusTip(_("Press to make fill color dynamic"));
-                        connect( actDynamicFillColor, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                        connect( actDynamicFillColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                         menu.addAction(actDynamicFillColor);
                     }
                     if( inundationItems[i].brush_img < 0 )
@@ -1688,7 +1688,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                         QAction *actDynamicFillImage = new QAction( _("Make fill image dynamic"), w->mainWin() );
                         actDynamicFillImage->setObjectName("fill_image");
                         actDynamicFillImage->setStatusTip(_("Press to make fill image dynamic"));
-                        connect( actDynamicFillImage, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                        connect( actDynamicFillImage, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                         menu.addAction(actDynamicFillImage);
                     }
                     menu.addSeparator();
@@ -1699,7 +1699,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 QAction *actStatic = new QAction( _("Make all values of the widget the static ones"), w->mainWin() );
                 actStatic->setObjectName("static");
                 actStatic->setStatusTip(_("Press to make all values of the widget static ones"));
-                connect( actStatic, SIGNAL(activated()), elFD, SLOT(dynamic()) ); 
+                connect( actStatic, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actStatic);
                 menu.addSeparator();
 

@@ -80,24 +80,24 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     menuPrint->menuAction()->setToolTip(_("Print the master page"));
     menuPrint->menuAction()->setWhatsThis(_("The button for printing of the master page by default"));
     menuPrint->menuAction()->setStatusTip(_("Press for printing of the master page by default."));
-    connect(menuPrint->menuAction(), SIGNAL(activated()), this, SLOT(print()));
+    connect(menuPrint->menuAction(), SIGNAL(triggered()), this, SLOT(print()));
     QAction *actPrintPg = new QAction(_("Page"),this);
     actPrintPg->setToolTip(_("Print the selected page"));
     actPrintPg->setWhatsThis(_("The button for printing of the selected page"));
     actPrintPg->setStatusTip(_("Press for printing of the selected page."));
-    connect(actPrintPg, SIGNAL(activated()), this, SLOT(printPg()));
+    connect(actPrintPg, SIGNAL(triggered()), this, SLOT(printPg()));
     menuPrint->addAction(actPrintPg);
     QAction *actPrintDiag = new QAction(_("Diagram"),this);
     actPrintDiag->setToolTip(_("Print the selected diagram"));
     actPrintDiag->setWhatsThis(_("The button for printing of the selected diagram"));
     actPrintDiag->setStatusTip(_("Press for printing of the selected diagram."));
-    connect(actPrintDiag, SIGNAL(activated()), this, SLOT(printDiag()));
+    connect(actPrintDiag, SIGNAL(triggered()), this, SLOT(printDiag()));
     menuPrint->addAction(actPrintDiag);
     QAction *actPrintDoc = new QAction(_("Document"),this);
     actPrintDoc->setToolTip(_("Print the selected document"));
     actPrintDoc->setWhatsThis(_("The button for printing of the selected document"));
     actPrintDoc->setStatusTip(_("Press for printing of the selected document."));
-    connect(actPrintDoc, SIGNAL(activated()), this, SLOT(printDoc()));
+    connect(actPrintDoc, SIGNAL(triggered()), this, SLOT(printDoc()));
     menuPrint->addAction(actPrintDoc);
     //>>> Export
     if(!ico_t.load(TUIS::icoPath("export").c_str())) ico_t.load(":/images/export.png");
@@ -106,24 +106,24 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     menuExport->menuAction()->setToolTip(_("Export the master page"));
     menuExport->menuAction()->setWhatsThis(_("The button for exporting of the master page by default"));
     menuExport->menuAction()->setStatusTip(_("Press for exporting of the master page by default."));
-    connect(menuExport->menuAction(), SIGNAL(activated()), this, SLOT(exportDef()));
+    connect(menuExport->menuAction(), SIGNAL(triggered()), this, SLOT(exportDef()));
     QAction *actExpPg = new QAction(_("Page"),this);
     actExpPg->setToolTip(_("Export the selected page"));
     actExpPg->setWhatsThis(_("The button for exporting of the selected page"));
     actExpPg->setStatusTip(_("Press for exporting of the selected page."));
-    connect(actExpPg, SIGNAL(activated()), this, SLOT(exportPg()));
+    connect(actExpPg, SIGNAL(triggered()), this, SLOT(exportPg()));
     menuExport->addAction(actExpPg);
     QAction *actExpDiag = new QAction(_("Diagram"),this);
     actExpDiag->setToolTip(_("Export the selected diagram"));
     actExpDiag->setWhatsThis(_("The button for exporting of the selected diagram"));
     actExpDiag->setStatusTip(_("Press for exporting of the selected diagram."));
-    connect(actExpDiag, SIGNAL(activated()), this, SLOT(exportDiag()));
+    connect(actExpDiag, SIGNAL(triggered()), this, SLOT(exportDiag()));
     menuExport->addAction(actExpDiag);
     QAction *actExpDoc = new QAction(_("Document"),this);
     actExpDoc->setToolTip(_("Export the selected document"));
     actExpDoc->setWhatsThis(_("The button for exporting of the selected document"));
     actExpDoc->setStatusTip(_("Press for exporting of the selected document."));
-    connect(actExpDoc, SIGNAL(activated()), this, SLOT(exportDoc()));
+    connect(actExpDoc, SIGNAL(triggered()), this, SLOT(exportDoc()));
     menuExport->addAction(actExpDoc);
     //>>> Close
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
@@ -132,7 +132,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     actClose->setToolTip(_("Close Vision window"));
     actClose->setWhatsThis(_("The button for closing Vision runtime window"));
     actClose->setStatusTip(_("Press to close of the current Vision runtime window."));
-    connect(actClose, SIGNAL(activated()), this, SLOT(close()));
+    connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //>>> Quit
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
@@ -140,7 +140,7 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     actQuit->setToolTip(_("Quit from OpenSCADA"));
     actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
     actQuit->setStatusTip(_("Press for full quit from OpenSCADA system."));
-    connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
+    connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     //>> View actions
     //>>> Fullscreen
     actFullScr = new QAction(_("Full screen"),this);
@@ -158,20 +158,20 @@ VisRun::VisRun( const string &prj_it, const string &open_user, const string &use
     actAbout->setToolTip(_("Programm and OpenSCADA information"));
     actAbout->setWhatsThis(_("The button for display the programm and OpenSCADA information"));
     actAbout->setStatusTip(_("Press for display the programm and OpenSCADA information."));
-    connect(actAbout, SIGNAL(activated()), this, SLOT(about()));
+    connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     //>>> About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
     actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
-    connect(actQtAbout, SIGNAL(activated()), this, SLOT(aboutQt()));
+    connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //>>> What is
     //if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
     //QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     //actWhatIs->setToolTip(_("The button for requestion about GUI elements"));
     //actWhatIs->setWhatsThis(_("Get request about user interface elements"));
     //actWhatIs->setStatusTip(_("Press for requesting about user interface elements."));
-    //connect(actWhatIs, SIGNAL(activated()), this, SLOT(enterWhatsThis()));
+    //connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     //>> Alarms actions
     //>>> Alarm level display button and full alarms quitance

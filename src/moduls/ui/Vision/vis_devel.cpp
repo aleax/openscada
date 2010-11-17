@@ -75,7 +75,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actClose->setToolTip(_("Close Vision window"));
     actClose->setWhatsThis(_("The button for closing Vision developing window"));
     actClose->setStatusTip(_("Press to close the current Vision developing window."));
-    connect(actClose, SIGNAL(activated()), this, SLOT(close()));
+    connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //>>> Quit
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
@@ -83,7 +83,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actQuit->setToolTip(_("Quit from OpenSCADA"));
     actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
     actQuit->setStatusTip(_("Press for full quit from OpenSCADA system."));
-    connect(actQuit, SIGNAL(activated()), this, SLOT(quitSt()));
+    connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     //>>> About "System info"
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
@@ -91,20 +91,20 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actAbout->setToolTip(_("Programm and OpenSCADA information"));
     actAbout->setWhatsThis(_("The button for display the programm and OpenSCADA information"));
     actAbout->setStatusTip(_("Press to display the programm and OpenSCADA information."));
-    connect(actAbout, SIGNAL(activated()), this, SLOT(about()));
+    connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     //>>> About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
     actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
-    connect(actQtAbout, SIGNAL(activated()), this, SLOT(aboutQt()));
+    connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //>>> What is
     if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     actWhatIs->setToolTip(_("The button for question about GUI elements"));
     actWhatIs->setWhatsThis(_("Get respond about user interface elements"));
     actWhatIs->setStatusTip(_("Press to respond about user interface elements."));
-    connect(actWhatIs, SIGNAL(activated()), this, SLOT(enterWhatsThis()));
+    connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     //>> Page, project, widget and this library actions
     //>>> Load item from db
@@ -114,7 +114,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actDBLoad->setWhatsThis(_("The button for loading item data from DB"));
     actDBLoad->setStatusTip(_("Press to load item data from DB."));
     actDBLoad->setEnabled(false);
-    connect(actDBLoad, SIGNAL(activated()), this, SLOT(itDBLoad()));
+    connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
     //>>> Save item to db
     if(!ico_t.load(TUIS::icoPath("save").c_str())) ico_t.load(":/images/save.png");
     actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
@@ -123,7 +123,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actDBSave->setStatusTip(_("Press to save item data to DB."));
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
-    connect(actDBSave, SIGNAL(activated()), this, SLOT(itDBSave()));
+    connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
     //>>> Run project execution
     if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
     actPrjRun = new QAction(QPixmap::fromImage(ico_t),_("Run project execution"),this);
@@ -131,21 +131,21 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actPrjRun->setWhatsThis(_("The button for runing project execution for selected item"));
     actPrjRun->setStatusTip(_("Press to run project execution for selected item."));
     actPrjRun->setEnabled(false);
-    connect(actPrjRun, SIGNAL(activated()), this, SLOT(prjRun()));
+    connect(actPrjRun, SIGNAL(triggered()), this, SLOT(prjRun()));
     //>>> Project create
     if(!ico_t.load(TUIS::icoPath("vision_prj_new").c_str())) ico_t.load(":/images/prj_new.png");
     actPrjNew = new QAction(QPixmap::fromImage(ico_t),_("New project"),this);
     actPrjNew->setToolTip(_("New project create"));
     actPrjNew->setWhatsThis(_("The button for creation of the new project"));
     actPrjNew->setStatusTip(_("Press to create the new project."));
-    connect(actPrjNew, SIGNAL(activated()), this, SLOT(prjNew()));
+    connect(actPrjNew, SIGNAL(triggered()), this, SLOT(prjNew()));
     //>>> Widgets library new create
     if(!ico_t.load(TUIS::icoPath("vision_lib_new").c_str())) ico_t.load(":/images/lib_new.png");
     actLibNew = new QAction(QPixmap::fromImage(ico_t),_("New library"),this);
     actLibNew->setToolTip(_("New widgets library creation"));
     actLibNew->setWhatsThis(_("The button for creation of the new widgets library"));
     actLibNew->setStatusTip(_("Press to create the new widgets library."));
-    connect(actLibNew, SIGNAL(activated()), this, SLOT(libNew()));
+    connect(actLibNew, SIGNAL(triggered()), this, SLOT(libNew()));
     //>>> Visual item add (widget or page)
     if(!ico_t.load(TUIS::icoPath("vision_it_add").c_str())) ico_t.load(":/images/it_add.png");
     actVisItAdd = new QAction(QPixmap::fromImage(ico_t),_("Add visual item"),this);
@@ -172,7 +172,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItProp->setStatusTip(_("Press to get the visual item properties."));
     actVisItProp->setShortcut(QKeySequence("Ctrl+P"));
     actVisItProp->setEnabled(false);
-    connect(actVisItProp, SIGNAL(activated()), this, SLOT(visualItProp()));
+    connect(actVisItProp, SIGNAL(triggered()), this, SLOT(visualItProp()));
     //>>> Visual item graphical edit
     if(!ico_t.load(TUIS::icoPath("vision_it_edit").c_str())) ico_t.load(":/images/it_edit.png");
     actVisItEdit = new QAction(QPixmap::fromImage(ico_t),_("Visual item edit"),this);
@@ -181,7 +181,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItEdit->setStatusTip(_("Press to go to visual item edition."));
     actVisItEdit->setShortcut(QKeySequence("Ctrl+E"));
     actVisItEdit->setEnabled(false);
-    connect(actVisItEdit, SIGNAL(activated()), this, SLOT(visualItEdit()));
+    connect(actVisItEdit, SIGNAL(triggered()), this, SLOT(visualItEdit()));
     //>>> Visual item changes clear
     if(!ico_t.load(TUIS::icoPath("vision_it_clear").c_str())) ico_t.load(":/images/it_clear.png");
     actVisItClear = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes clear"),this);
@@ -189,7 +189,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItClear->setWhatsThis(_("The button for going to visual item changes clear"));
     actVisItClear->setStatusTip(_("Press to go to visual item changes clear."));
     actVisItClear->setEnabled(false);
-    connect(actVisItClear, SIGNAL(activated()), this, SLOT(visualItClear()));
+    connect(actVisItClear, SIGNAL(triggered()), this, SLOT(visualItClear()));
     //>>> Cut visual item
     if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
     actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);
@@ -199,7 +199,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItCut->setStatusTip(_("Press to make visual item cut."));
     actVisItCut->setShortcut(QKeySequence("Ctrl+X"));
     actVisItCut->setEnabled(false);
-    connect(actVisItCut, SIGNAL(activated()), this, SLOT(visualItCut()));
+    connect(actVisItCut, SIGNAL(triggered()), this, SLOT(visualItCut()));
     //>>> Copy visual item
     if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
     actVisItCopy = new QAction(QPixmap::fromImage(ico_t),_("Visual item copy"),this);
@@ -209,7 +209,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItCopy->setStatusTip(_("Press to make visual item copy."));
     actVisItCopy->setShortcut(QKeySequence("Ctrl+C"));
     actVisItCopy->setEnabled(false);
-    connect(actVisItCopy, SIGNAL(activated()), this, SLOT(visualItCopy()));
+    connect(actVisItCopy, SIGNAL(triggered()), this, SLOT(visualItCopy()));
     //>>> Paste visual item
     if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
     actVisItPaste = new QAction(QPixmap::fromImage(ico_t),_("Visual item paste"),this);
@@ -219,7 +219,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItPaste->setStatusTip(_("Press to make visual item paste."));
     actVisItPaste->setShortcut(QKeySequence("Ctrl+V"));
     actVisItPaste->setEnabled(false);
-    connect(actVisItPaste, SIGNAL(activated()), this, SLOT(visualItPaste()));
+    connect(actVisItPaste, SIGNAL(triggered()), this, SLOT(visualItPaste()));
 
     //>> Widgets level actions
     //>>> Level up for widget
@@ -683,25 +683,25 @@ QMenu *VisDevelop::createPopupMenu( )
 	mn->insertSeparator(first);
 
 	QAction *act = new QAction(_("Small (16x16)"),iSz);
-	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("16"); 
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Medium (22x22)"),iSz);
-	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("22"); 
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Big (32x32)"),iSz);
-	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("32"); 
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Huge (48x48)"),iSz);
-	connect(act, SIGNAL(activated()), this, SLOT(setToolIconSize()));
+	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("32"); 
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
