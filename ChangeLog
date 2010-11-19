@@ -1,3 +1,8 @@
+2010-11-19 Roman
+- DB.MySQL: Timeouts set support is added.
+- DAQ.BFN: Code symbols support is added.
+
+
 2010-11-17 Roman
 - !!:DAQ: BFN module is added.
 - FIX:SYS: Function cron() is fixed to hours processing.

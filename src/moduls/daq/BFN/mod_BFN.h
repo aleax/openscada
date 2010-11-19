@@ -91,11 +91,13 @@ class TMdContr: public TController
 	long long period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	double	syncPer( )	{ return mSync; }
+	//double	syncPer( )	{ return mSync; }
 
 	AutoHD<TMdPrm> at(const string &nm)	{ return TController::at(nm); }
 
 	void reqBFN( XMLNode &io );
+
+	string passPrefSOAP( const string &ndName );
 
     protected:
 	//Methods
@@ -113,9 +115,9 @@ class TMdContr: public TController
 	static void *Task(void *icntr);
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
+	Res	en_res, req_res;//Resource for enable params
 	int	&mPrior;	// Process task priority
-	double	&mSync;		//Synchronization inter remote station: attributes list update.
+	//double	&mSync;		//Synchronization inter remote station: attributes list update.
 	string	&mSched,	//Calc schedule
 		&mAddr,		//Transport device address
 		//&mHouse,	//BFN house for get
@@ -141,6 +143,11 @@ class TTpContr: public TTipDAQ
 	TTpContr(string name);
 	~TTpContr( );
 
+	string symbDB( );
+	string getSymbolCode(const string &id);
+
+	void setSymbDB(const string &idb);
+
     protected:
 	//Methods
 	void postEnable(int flag);
@@ -150,9 +157,15 @@ class TTpContr: public TTipDAQ
 
 	bool redntAllow( )	{ return true; }
 
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
     private:
 	//Methods
 	TController *ContrAttach(const string &name, const string &daq_db);
+
+	map<unsigned,string>	mSymbCode;
+
+	TElem	symbCode_el;	//> Make Symbols of codes container structure
 };
 
 extern TTpContr *mod;

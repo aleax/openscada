@@ -31,8 +31,6 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
-#LT_PREREQ([2.0])
-
 #Gettext utilites check
 AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
 AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)

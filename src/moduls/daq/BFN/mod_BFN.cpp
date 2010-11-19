@@ -83,16 +83,6 @@ TTpContr::~TTpContr( )
 
 }
 
-void TTpContr::load_( )
-{
-
-}
-
-void TTpContr::save_( )
-{
-
-}
-
 void TTpContr::postEnable(int flag)
 {
     TTipDAQ::postEnable(flag);
@@ -101,15 +91,75 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
+    //fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PASS",_("Password"),TFld::String,TFld::NoFlag,"30",""));
     //fldAdd(new TFld("HOUSE",_("House"),TFld::String,TFld::NoFlag,"50",""));
 
     //> Parameter type bd structure
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    int t_prm = tpParmAdd("std","",_("Standard"));
     //tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+    //>> Set to read only
+    for(int i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++)
+	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);
+
+    //> Make Symbols of codes container structure
+    symbCode_el.fldAdd(new TFld("ID",_("ID"),TFld::Integer,TCfg::Key));
+    symbCode_el.fldAdd(new TFld("TEXT",_("Text"),TFld::String,TCfg::TransltText,"100"));
+}
+
+string TTpContr::symbDB( )
+{
+    return TBDS::genDBGet(nodePath()+"symbDB","*.*");
+}
+
+void TTpContr::setSymbDB( const string &idb )
+{
+    TBDS::genDBSet(nodePath()+"symbDB",idb);
+    modif();
+}
+
+string TTpContr::getSymbolCode(const string &id)
+{
+    ResAlloc res(nodeRes(), false);
+    map<unsigned,string>::iterator is = mSymbCode.find(atoi(id.c_str()));
+    if(is == mSymbCode.end()) return TSYS::strMess(_("Code %s"),id.c_str());
+    return is->second;
+}
+
+void TTpContr::load_( )
+{
+    //> Load Code symbols
+    string wtbl = MOD_ID"_SymbCode";
+    string wdb  = symbDB();
+    TConfig c_el(&symbCode_el);
+    ResAlloc res(nodeRes(), true);
+    mSymbCode.clear();
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+	mSymbCode[c_el.cfg("ID").getI()] = c_el.cfg("TEXT").getS();
+}
+
+void TTpContr::save_( )
+{
+    //> Save Code symbols
+    string wtbl = MOD_ID"_SymbCode";
+    string wdb  = symbDB();
+    TConfig c_el(&symbCode_el);
+    ResAlloc res(nodeRes(), false);
+    for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++)
+    {
+	c_el.cfg("ID").setI(is->first);
+	c_el.cfg("TEXT").setS(is->second);
+	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
+    }
+    //> Clear no present codes
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+    {
+	if(mSymbCode.find(c_el.cfg("ID").getI()) != mSymbCode.end()) continue;
+	SYS->db().at().dataDel(wdb+"."+wtbl,nodePath()+wtbl,c_el,true);
+	fld_cnt--;
+    }
 }
 
 TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
@@ -117,12 +167,74 @@ TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
     return new TMdContr(name,daq_db,this);
 }
 
+void TTpContr::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	TTipDAQ::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols")))
+	{
+	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/db/list",
+		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id"))
+	    {
+		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/symbs/codes/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+	    }
+	}
+	return;
+    }
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/symbs/db")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(symbDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSymbDB(opt->text());
+    }
+    else if(a_path == "/symbs/codes")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	{
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/codes/id","");
+	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/codes/text","");
+
+	    ResAlloc res(nodeRes(), false);
+	    for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++)
+	    {
+		if(n_id)	n_id->childAdd("el")->setText(TSYS::uint2str(is->first));
+		if(n_text)	n_text->childAdd("el")->setText(is->second);
+	    }
+	    return;
+	}
+	ResAlloc res(nodeRes(), true);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	{
+	    if(!mSymbCode.size()) mSymbCode[1] = _("New symbol for code");
+	    else mSymbCode[mSymbCode.rbegin()->first+1] = _("New symbol for code");
+	}
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    mSymbCode.erase(atoi(opt->attr("key_id").c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	{
+	    if(opt->attr("col") == "id")
+	    {
+		mSymbCode[atoi(opt->text().c_str())] = mSymbCode[atoi(opt->attr("key_id").c_str())];
+		mSymbCode.erase(atoi(opt->attr("key_id").c_str()));
+	    }
+	    else if(opt->attr("col") == "text")	mSymbCode[atoi(opt->attr("key_id").c_str())] = opt->text();
+	}
+	modif();
+    }
+    else TTipDAQ::cntrCmdProc(opt);
+}
+
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
+	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), /*mSync(cfg("SYNCPER").getRd()),*/
 	mAddr(cfg("ADDR").getSd()), /*mHouse(cfg("HOUSE").getSd()),*/ mUser(cfg("USER").getSd()), mPassword(cfg("PASS").getSd())
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
@@ -155,33 +267,57 @@ void TMdContr::enable_( )
 	XMLNode *houseArr = reqHouses.childGet("arrHouseProperties");
 	for(int i_h = 0; i_h < houseArr->childSize(); i_h++)
 	{
+	    XMLNode *houseIt = houseArr->childGet(i_h);
 	    //> Get House computers
 	    XMLNode reqHouseComps("GetHouseComputers");
-	    reqHouseComps.childAdd("lHouseId")->setText(houseArr->childGet(i_h)->childGet("lHouseId")->text());
+	    reqHouseComps.childAdd("lHouseId")->setText(houseIt->childGet("lHouseId")->text());
 	    reqBFN(reqHouseComps);
 	    if(reqHouseComps.attr("err").empty())
 	    {
 		XMLNode *compArr = reqHouseComps.childGet("arrHouseComputerProperties");
 		for(int i_hc = 0; i_hc < compArr->childSize(); i_hc++)
 		{
+		    XMLNode *compIt = compArr->childGet(i_hc);
 		    //> Get Code Data
 		    XMLNode reqCodeData("GetCodeData");
-		    reqCodeData.childAdd("lHouseComputerId")->setText(compArr->childGet(i_hc)->childGet("lHouseComputerId")->text());
+		    reqCodeData.childAdd("lHouseComputerId")->setText(compIt->childGet("lHouseComputerId")->text());
 		    reqBFN(reqCodeData);
 		    if(reqCodeData.attr("err").empty())
 		    {
-			string pName = houseArr->childGet(i_h)->childGet("lHouseId")->text()+"_"+compArr->childGet(i_hc)->childGet("lHouseComputerId")->text();
+			string pName = "h"+houseIt->childGet("lHouseId")->text()+"_hc"+compIt->childGet("lHouseComputerId")->text();
 			AutoHD<TMdPrm> prm;
-			if(!present(pName)) add(pName,owner().tpPrmToId("std"));
-			prm = at(pName); prm.at().setToEnable(true);
+			if(!present(pName))
+			{
+			    add(pName,owner().tpPrmToId("std"));
+			    prm = at(pName);
+			    prm.at().setName(houseIt->childGet("szHouseName")->text()+":"+compIt->childGet("szComputerNameShort")->text());
+			    string descr = _("House:\n");
+			    for(int i_hi = 0; i_hi < houseIt->childSize(); i_hi++)
+				descr += "  "+passPrefSOAP(houseIt->childGet(i_hi)->name())+": "+houseIt->childGet(i_hi)->text()+"\n";
+			    descr += _("House computer:\n");
+			    for(int i_hci = 0; i_hci < compIt->childSize(); i_hci++)
+				descr += "  "+passPrefSOAP(compIt->childGet(i_hci)->name())+": "+compIt->childGet(i_hci)->text()+"\n";
+			    prm.at().setDescr(descr);
+			}
+			else prm = at(pName);
 
 			XMLNode *cdArr = reqCodeData.childGet("arrCodeData");
 			for(int i_cd = 0; i_cd < cdArr->childSize(); i_cd++)
 			{
-			    if(!prm.at().vlPresent(cdArr->childGet(i_cd)->childGet("lCodeId")->text()))
-				prm.at().p_el.fldAdd(new TFld(cdArr->childGet(i_cd)->childGet("lCodeId")->text().c_str(),
-							    cdArr->childGet(i_cd)->childGet("lCodeId")->text().c_str(),TFld::String,TFld::NoWrite));
-			    prm.at().vlAt(cdArr->childGet(i_cd)->childGet("lCodeId")->text()).at().setS(cdArr->childGet(i_cd)->childGet("szCodeValue")->text(),0,true);
+			    XMLNode *cdIt = +cdArr->childGet(i_cd);
+			    string cdId = "c"+cdIt->childGet("lCodeId")->text()+"u"+cdIt->childGet("iUnitId")->text();
+			    if(!prm.at().vlPresent(cdId))
+			    {
+				TFld::Type cTp = TFld::String;
+				switch(atoi(cdIt->childGet("iDataType")->text().c_str()))
+				{
+				    case 0: cTp = TFld::Real;	break;
+				    case 2: case 3: case 6: cTp = TFld::Integer;break;
+				}
+				prm.at().p_el.fldAdd(new TFld(cdId.c_str(),cdId.c_str(),cTp,TFld::NoWrite));
+			    }
+			    prm.at().vlAt(cdId).at().fld().setDescr(mod->getSymbolCode(cdIt->childGet("lCodeId")->text()));
+			    prm.at().vlAt(cdId).at().setS(cdIt->childGet("szCodeValue")->text(),0,true);
 			}
 		    }
 		}
@@ -219,7 +355,7 @@ void TMdContr::prmEn(const string &id, bool val)
 
 void TMdContr::reqBFN(XMLNode &io)
 {
-    ResAlloc res(nodeRes(), true);
+    ResAlloc res(req_res, true);
 
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
 
@@ -254,7 +390,6 @@ void TMdContr::reqBFN(XMLNode &io)
     {
 	XMLNode rez;
 	rez.load(req.text());
-	//printf("TEST 00\n%s\n",req.text().c_str());
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(atoi(rCod.c_str())) io.setAttr("err",rCod);
 	else 
@@ -263,6 +398,14 @@ void TMdContr::reqBFN(XMLNode &io)
 	    io.setName(reqName+"Response");
 	}
     }
+}
+
+string TMdContr::passPrefSOAP( const string &ndName )
+{
+    int i_c = 0;
+    while(i_c < ndName.size() && islower(ndName[i_c])) i_c++;
+    if(i_c < ndName.size()) return ndName.substr(i_c);
+    return ndName;
 }
 
 void *TMdContr::Task(void *icntr)
@@ -284,28 +427,26 @@ void *TMdContr::Task(void *icntr)
 	    {
 		//> Get current data
 		XMLNode reqCodeData("GetCodeData");
-		reqCodeData.childAdd("lHouseComputerId")->setText(TSYS::strParse(cntr.p_hd[i_p].at().id(),1,"_"));
+		reqCodeData.childAdd("lHouseComputerId")->setText(TSYS::strParse(cntr.p_hd[i_p].at().id(),1,"_hc"));
 		cntr.reqBFN(reqCodeData);
 		if(reqCodeData.attr("err").empty())
 		{
 		    XMLNode *cdArr = reqCodeData.childGet("arrCodeData");
 		    for(int i_cd = 0; i_cd < cdArr->childSize(); i_cd++)
 		    {
-			aId = cdArr->childGet(i_cd)->childGet("lCodeId")->text();
+			XMLNode *cdIt = cdArr->childGet(i_cd);
+			aId = "c"+cdIt->childGet("lCodeId")->text()+"u"+cdIt->childGet("iUnitId")->text();
 			if(!cntr.p_hd[i_p].at().vlPresent(aId))	continue;
-			cntr.p_hd[i_p].at().vlAt(aId).at().setS(cdArr->childGet(i_cd)->childGet("szCodeValue")->text(),0,true);
+			cntr.p_hd[i_p].at().vlAt(aId).at().setS(cdIt->childGet("szCodeValue")->text(),atoi(cdIt->childGet("lLastUpdate")->text().c_str()),true);
 		    }
 		}
 		//> Get Alarms
 		XMLNode reqAlrms("GetAlarmLogDataFromLogIndex");
-		reqAlrms.childAdd("lHouseComputerId")->setText(TSYS::strParse(cntr.p_hd[i_p].at().id(),1,"_"));
+		reqAlrms.childAdd("lHouseComputerId")->setText(TSYS::strParse(cntr.p_hd[i_p].at().id(),1,"_hc"));
 		reqAlrms.childAdd("lLastLogIndexFetched")->setText(TSYS::int2str(cntr.p_hd[i_p].at().curAlrmsId));
 		cntr.reqBFN(reqAlrms);
 		if(reqCodeData.attr("err").empty())
-		{
 		    cntr.p_hd[i_p].at().curAlrmsId = atoi(reqAlrms.childGet("lLastLogIndexFetched")->text().c_str());
-		    printf("TEST 00: Alarms: %d : %d\n",cntr.p_hd[i_p].at().curAlrmsId,reqAlrms.childGet("arrAlarmLogData")->childSize());
-		}
 	    }
 	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease();
@@ -380,7 +521,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
     TParamContr(name,tp_prm), p_el("w_attr"), curAlrmsId(0)
 {
-
+    setToEnable(true);
 }
 
 TMdPrm::~TMdPrm( )
@@ -422,12 +563,12 @@ void TMdPrm::disable( )
 
 void TMdPrm::load_( )
 {
-    TParamContr::load_();
+    //TParamContr::load_();
 }
 
 void TMdPrm::save_( )
 {
-    TParamContr::save_();
+    //TParamContr::save_();
 }
 
 void TMdPrm::cntrCmdProc(XMLNode *opt)
