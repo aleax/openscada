@@ -140,9 +140,19 @@ void MBD::enable( )
     u_sock = TSYS::strSepParse(addr(),5,';');
     names = TSYS::strSepParse(addr(),6,';');
     cd_pg  = codePage().size()?codePage():Mess->charset();
+    string tms = TSYS::strSepParse(addr(),7,';');
 
     if(!mysql_init(&connect))
 	throw TError(TSYS::DBInit,nodePath().c_str(),_("Error initializing client."));
+    if(!tms.empty())
+    {
+	unsigned int tTm = atoi(TSYS::strParse(tms,0,",").c_str());
+	if(tTm) mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)&tTm);
+	tTm = atoi(TSYS::strParse(tms,1,",").c_str());
+	if(tTm) mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, (const char*)&tTm);
+	tTm = atoi(TSYS::strParse(tms,2,",").c_str());
+	if(tTm) mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, (const char*)&tTm);
+    }
     connect.reconnect = 1;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
 	throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),mysql_error(&connect));
@@ -251,7 +261,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","help",
-	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>].\n"
+	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>;<tms>].\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
 	      "  user - DB user name;\n"
@@ -259,8 +269,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  db - DB name;\n"
 	      "  port - DB server port (default 3306);\n"
 	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
-	      "  names - MySQL SET NAMES charset.\n"
-	      "For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8].\n"
+	      "  names - MySQL SET NAMES charset;\n"
+	      "  tms - MySQL timeouts in form [<connect>,<read>,<write>] and in seconds.\n"
+	      "For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2].\n"
 	      "For remote DB: [server.nm.org;roman;123456;OpenSCADA;3306]."));
 	return;
     }
