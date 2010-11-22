@@ -159,9 +159,11 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode *el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	XMLNode * el = src->attrAt("fillImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
+	el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->
-	    setAttr( "help",
+	    setAttr("help",
 		_("The list of elements can contain:\n"
 		  "  line:p1|(x|y):p2|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
 		  "  arc:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):p5|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
@@ -171,7 +173,8 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		  "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
 		  "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
 		  "  fill:(25|50):(25|50):c2:i2\n"
-		  "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31\n"));
+		  "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
+
 	return true;
     }
 
@@ -426,6 +429,104 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
     return Widget::attrChange(cfg,prev);
 }
 
+bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode * el;
+	switch(src->attrAt("elType").at().getI())
+	{
+	    case 0:	//Line edit
+		el = src->attrAt("cfg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		if(!el)	break;
+		el->setAttr("len","");
+		switch(src->attrAt("view").at().getI())
+		{
+		    case 0:	//Text
+			el->setAttr("help",_("Enter text line by template with the char items:\n"
+			    "  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
+			    "  'a' - ASCII alphabetic character permitted but not required.\n"
+			    "  'N' - ASCII alphanumeric character required. A-Z, a-z, 0-9.\n"
+			    "  'n' - ASCII alphanumeric character permitted but not required.\n"
+			    "  'X' - Any character required.\n"
+			    "  'x' - Any character permitted but not required.\n"
+			    "  '9' - ASCII digit required. 0-9.\n"
+			    "  '0' - ASCII digit permitted but not required.\n"
+			    "  'D' - ASCII digit required. 1-9.\n"
+			    "  'd' - ASCII digit permitted but not required (1-9).\n"
+			    "  '#' - ASCII digit or plus/minus sign permitted but not required.\n"
+			    "  'H' - Hexadecimal character required. A-F, a-f, 0-9.\n"
+			    "  'h' - Hexadecimal character permitted but not required.\n"
+			    "  'B' - Binary character required. 0-1.\n"
+			    "  'b' - Binary character permitted but not required.\n"
+			    "  '>' - All following alphabetic characters are uppercased.\n"
+			    "  '<' - All following alphabetic characters are lowercased.\n"
+			    "  '!' - Switch off case conversion.\n"
+			    "  '\\' - Use to escape the special characters listed above to use them as separators."));
+			break;
+		    case 1:	//Combo
+			el->setAttr("help",_("List of values the editable combobox by lines."));
+			break;
+		    case 2:	//Integer
+			el->setAttr("help",_("Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]\"."));
+			break;
+		    case 3:	//Real
+			el->setAttr("help",_("Real value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]:[SignsAfterDot]\"."));
+			break;
+		    case 4: case 5: case 6:	//Time;Date;Date and time
+			el->setAttr("help",_("Enter date and/or time by template with the items:\n"
+			    "  \"d\" - number of the day (1-31);\n"
+			    "  \"dd\" - number of the day (01-31);\n"
+			    "  \"ddd\" - acronym of the day ('Mon' ... 'Sun');\n"
+			    "  \"dddd\" - the full name of the day ('Monday' ... 'Sunday');\n"
+			    "  \"M\" - number of the month (1-12);\n"
+			    "  \"MM\" - number of the month (01-12);\n"
+			    "  \"MMM\" - acronym of the month ('Jan' ... 'Dec');\n"
+			    "  \"MMMM\" - the full name of the month ('January' ... 'December');\n"
+			    "  \"yy\" - last two digits of the year;\n"
+			    "  \"yyyy\" - full year;\n"
+			    "  \"h\" - hour (0-23);\n"
+			    "  \"hh\" - hour (00-23);\n"
+			    "  \"m\" - minutes (0-59);\n"
+			    "  \"mm\" - minutes (00-59);\n"
+			    "  \"s\" - seconds (0-59);\n"
+			    "  \"ss\" - seconds (00-59);\n"
+			    "  \"AP,ap\" - to display AM/PM or am/pm."));
+			break;
+		}
+	    case 3:	//Button
+		el = src->attrAt("img").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
+		break;
+	    case 4: case 5:	//Combo box and list
+		el = src->attrAt("items").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		if(el) el->setAttr("len","")->setAttr("help",_("List of items-values by lines."));
+		break;
+	    case 6: case 7:	//Slider and scroll bar
+		el = src->attrAt("cfg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		if(el) el->setAttr("len","")->setAttr("help",
+		    _("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep].\n"
+		      "Where:\n"
+		      "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
+		      "  \"Min\" - minimum value;\n"
+		      "  \"Max\" - maximum value;\n"
+		      "  \"SinglStep\" - the size of a single step;\n"
+		      "  \"PageStep\" - the size of the page step."));
+		break;
+	}
+	return true;
+    }
+
+    //> Process command to page
+    //string a_path = opt->attr("path");
+    return Widget::cntrCmdAttributes(opt,src);
+
+    //return true;
+}
+
 //************************************************
 //* OrigText: Text element original widget       *
 //************************************************
@@ -518,6 +619,38 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 	}
     }
     return Widget::attrChange(cfg,prev);
+}
+
+bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
+	for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
+	{
+	    el = src->attrAt("arg"+TSYS::int2str(i_arg)+"cfg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	    if(!el) continue;
+	    el->setAttr("len","");
+	    switch(src->attrAt("arg"+TSYS::int2str(i_arg)+"tp").at().getI())
+	    {
+		case 0: el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
+		case 1:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
+					"Where \"form\" that 'g' or 'f'."));				break;
+		case 2:	el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
+	    }
+	}
+	return true;
+    }
+
+    //> Process command to page
+    //string a_path = opt->attr("path");
+    return Widget::cntrCmdAttributes(opt,src);
+
+    //return true;
 }
 
 //************************************************

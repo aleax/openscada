@@ -653,6 +653,19 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg )
     return chldAt( inclWdg, wdg );
 }
 
+string Widget::helpImg( )
+{
+    return _("Image name in form \"[src:name]\", where:\n"
+	    "  \"src\" - image source:\n"
+	    "    file - direct from local file by path;\n"
+	    "    res - from DB mime resources table.\n"
+	    "  \"name\" - file path or resource mime Id.\n"
+	    "Examples:\n"
+	    "  \"res:backLogo\" - from DB mime resources table for Id \"backLogo\";\n"
+	    "  \"backLogo\" - like previous;\n"
+	    "  \"file:/var/tmp/backLogo.png\" - from local file by path \"/var/tmp/backLogo.png\".");
+}
+
 TVariant Widget::vlGet( Attr &a )
 {
     if( a.id() == "id" )	return TVariant(id());
@@ -1245,7 +1258,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    }
 	    vector<string> ls;
 	    c_off = obj_tp.size();
-	
+
 	    string prm1 = TSYS::pathLev(m_prm,0,true,&c_off);
 	    string prm2 = TSYS::pathLev(m_prm,0,true,&c_off);
 	    string prm3 = TSYS::pathLev(m_prm,0,true,&c_off);
@@ -1293,7 +1306,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
 	if(nattr.size())	srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
-	
+
 	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))
 	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))

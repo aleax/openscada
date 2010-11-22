@@ -96,6 +96,7 @@ class OrigFormEl : public PrWidget
 	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, TVariant prev );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 };
 
 //************************************************
@@ -114,6 +115,7 @@ class OrigText : public PrWidget
 	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, TVariant prev );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 };
 
 //************************************************

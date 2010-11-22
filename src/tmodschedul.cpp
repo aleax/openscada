@@ -210,6 +210,7 @@ void TModSchedul::libUnreg( const string &iname )
 
 void TModSchedul::libAtt( const string &iname, bool full )
 {
+    char *dlErr = NULL;
     ResAlloc res(nodeRes(),true);
     for(int i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if(SchHD[i_sh].name == iname)
@@ -226,20 +227,20 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    //> Connect to module function
 	    TModule::SAt (*module)( int );
 	    module = (TModule::SAt (*)(int)) dlsym(h_lib,"module");
-	    if(dlerror() != NULL)
+	    if((dlErr=dlerror()) != NULL)
 	    {
+		SchHD[i_sh].err = dlErr;
 		dlclose(h_lib);
-		SchHD[i_sh].err = dlerror();
 		throw TError(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),SchHD[i_sh].err.c_str());
 	    }
 
 	    //> Connect to attach function
 	    TModule *(*attach)( const TModule::SAt &, const string & );
 	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,"attach");
-	    if(dlerror() != NULL)
+	    if((dlErr=dlerror()) != NULL)
 	    {
+		SchHD[i_sh].err = dlErr;
 		dlclose(h_lib);
-		SchHD[i_sh].err = dlerror();
 		throw TError(nodePath().c_str(),_("SO <%s> error: %s !"),iname.c_str(),SchHD[i_sh].err.c_str());
 	    }
 

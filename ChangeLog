@@ -1,3 +1,10 @@
+2010-11-23 Roman
+- FIX:DOC: openscada.pdf, DAQ.ModBus::about.pdf, UI.VCAEngine::about.pdf, UI.WebUser::about.pdf:
+    The documents is fixed for some content and translation bugs.
+- SYS.ModSched: Errors into shared libraries processing is fixed.
+- UI.VCAEngine: Context help is added for attributes of primitives: "FormEl" and "Text".
+
+
 2010-11-19 Roman
 - DB.MySQL: Timeouts set support is added.
 - DAQ.BFN: Code symbols support is added.

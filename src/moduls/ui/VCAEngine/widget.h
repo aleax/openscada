@@ -217,6 +217,9 @@ class Widget : public TCntrNode
 	//> Data access
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
+	//> Context helps
+	static string helpImg( );
+
     protected:
 	//Methods
 	const string &nodeName()	{ return mId; }

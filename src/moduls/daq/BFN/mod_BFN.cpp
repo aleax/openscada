@@ -39,7 +39,7 @@
 #define VER_TYPE	SDAQ_VER
 #define VERSION		"0.0.1"
 #define AUTORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BFN modules support for Viper CT/BAS from \"Big Dutchman\".")
+#define DESCRIPTION	_("BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
 //*************************************************
 

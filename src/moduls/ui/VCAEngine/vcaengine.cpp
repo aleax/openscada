@@ -211,7 +211,7 @@ void Engine::postEnable( int flag )
     prjStl_el.fldAdd( new TFld("V_9",_("Value 9"),TFld::String,TFld::NoFlag,"100") );
 
     //> Init original widgets library
-    wlbAdd("originals",_("Original widget's library"));
+    wlbAdd("originals",_("Original widgets"));
     //>> Set default library icon
     if( TUIS::icoPresent("VCA.lwdg_root") )
         wlbAt("originals").at().setIco(TSYS::strEncode(TUIS::icoGet("VCA.lwdg_root"),TSYS::base64));
