@@ -1234,7 +1234,7 @@ bool ShapeMedia::MapArea::containsPoint( const QPoint & point )
 	{
 	    if( pnts.size() < 2 ) return false;
 	    QPoint work = point-pnts[0];
-	    return (pow(pow((float)work.x(),2)+pow((float)work.y(),2),0.5) < pnts[0].x());
+	    return (pow(pow((float)work.x(),2)+pow((float)work.y(),2),0.5) < pnts[1].x());
 	}
     }
     return false;

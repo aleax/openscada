@@ -160,6 +160,15 @@ string TSYS::real2str( double val, int prec, char tp )
     return buf;
 }
 
+string TSYS::time2str( time_t itm, const string &format )
+{
+    struct tm tm_tm;
+    localtime_r(&itm,&tm_tm);
+    char buf[100];
+    int ret = strftime(buf, sizeof(buf), format.c_str(), &tm_tm);
+    return (ret > 0) ? string(buf,ret) : string("");
+}
+
 string TSYS::addr2str( void *addr )
 {
     char buf[sizeof(void*)*2+3];

@@ -194,6 +194,7 @@ class TSYS : public TCntrNode
 	    if( toint ) return floor(rez+0.5);
 	    return rez;
 	}
+	static string time2str( time_t tm, const string &format );
 
 	//> Adress convertors
 	static string addr2str( void *addr );

@@ -709,7 +709,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    //- Delete specific unnecessary attributes of map areas -
 	    for( int i_p = 0; true; i_p++ )
 	    {
-		fidp = fid+TSYS::int2str(i_p); 
+		fidp = fid+TSYS::int2str(i_p);
 		if( !cfg.owner()->attrPresent( fidp+"shp" ) )	break;
 		else if( i_p >= cfg.getI() )
 		{
@@ -734,6 +734,48 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	}
     }
     return Widget::attrChange(cfg,prev);
+}
+
+bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
+	el = src->attrAt("src").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",
+	    _("Media source name in form \"[src:name]\", where:\n"
+            "  \"src\" - source:\n"
+            "    file - direct from local file by path;\n"
+            "    res - from DB mime resources table.\n"
+            "  \"name\" - file path or resource mime Id.\n"
+            "Examples:\n"
+            "  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
+            "  \"workMedia\" - like previous;\n"
+            "  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\"."));
+	for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++)
+	{
+	    el = src->attrAt(TSYS::strMess("area%dcoord",i_a)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	    if(!el) continue;
+	    el->setAttr("len","");
+	    switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
+	    {
+		case 0: el->setAttr("help",_("Rect area in form \"[x1],[y1],[x2],[y2]\"."));	break;
+		case 1:	el->setAttr("help",_("Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."));		break;
+		case 2:	el->setAttr("help",_("Circle area in form \"[x],[y],[r]\"."));		break;
+	    }
+	}
+	return true;
+    }
+
+    //> Process command to page
+    //string a_path = opt->attr("path");
+    return Widget::cntrCmdAttributes(opt,src);
+
+    //return true;
 }
 
 //************************************************

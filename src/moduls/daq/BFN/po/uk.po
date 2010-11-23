@@ -1,0 +1,132 @@
+# OpenSCADA.DAQ.BFN translate to Ukrainian.
+# Copyright (C) 2010 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.BFN module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-23 17:09+0200\n"
+"PO-Revision-Date: 2010-04-30 11:50+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "BFN module"
+msgstr "Модуль BFN"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://"
+"www.bigdutchman.com)."
+msgstr ""
+"Підтримка модулю BFN для Viper CT/BAS та інше від \"Big Dutchman\" (http://www.bigdutchman.com)."
+
+msgid "Parameteres table"
+msgstr "Таблиця параметрів"
+
+msgid "Calc schedule"
+msgstr "Планування обчислення"
+
+msgid "Gather task priority"
+msgstr "Рівень пріорітету задачі збору даних"
+
+msgid "Sync inter remote station period (s)"
+msgstr "Період синхронизації з віддаленою станцією (сек)"
+
+msgid "Transport address"
+msgstr "Адреса транспорту"
+
+msgid "User"
+msgstr "Користувач"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Standard"
+msgstr "Стандарт"
+
+#, c-format
+msgid "Code %s"
+msgstr "Код %s"
+
+msgid "Symbols"
+msgstr "Символи"
+
+msgid "Symbols DB"
+msgstr "БД символів"
+
+msgid ""
+"DB address in format [<DB module>.<DB name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+msgid "Codes"
+msgstr "Коди"
+
+msgid "Id"
+msgstr ""
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "New symbol for code"
+msgstr "Новий символ для коду"
+
+#, c-format
+msgid "Error: '%s'. "
+msgstr "Помилка: '%s'. "
+
+msgid "Call now. "
+msgstr "Виклик зараз. "
+
+msgid "Call by period %g s. "
+msgstr "Виклик за періодом %g с. "
+
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
+
+msgid "Spent time %.6g ms. "
+msgstr "Витрачено часу %.6g мс. "
+
+msgid "House:\n"
+msgstr "Приміщення:\n"
+
+msgid "House computer:\n"
+msgstr "Комп'ютер приміщення:\n"
+
+#, c-format
+msgid "Connect to transport '%s' error."
+msgstr "Помилка підключення до транспорту '%s'."
+
+msgid ""
+"Schedule is writed in seconds periodic form or in standard Cron form.\n"
+"Seconds form is one real number (1.5, 1e-3).\n"
+"Cron it is standard form '* * * * *'. Where:\n"
+"  - minutes (0-59);\n"
+"  - hours (0-23);\n"
+"  - days (1-31);\n"
+"  - month (1-12);\n"
+"  - week day (0[sunday]-6)."
+msgstr ""
+"Планування записується у формі секундної періодичності або у формі стандарту "
+"Cron.\n"
+"Секундна форма це одне реальне число (1.5, 1e-3).\n"
+"Форма стандарту Cron це '* * * * *'. Де:\n"
+"  - хвилини (0-59);\n"
+"  - години (0-23);\n"
+"  - дні (1-31);\n"
+"  - місяця (1-12);\n"
+"  - дні тижня (0[неділя]-6)."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр вимкнено."
+
+msgid "2:Acquisition is stoped."
+msgstr "2:Збір зупинено."

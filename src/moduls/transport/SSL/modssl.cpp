@@ -834,6 +834,9 @@ repeate:
     //> Write request
     if(obuf != NULL && len_ob > 0)
     {
+	//>> Input buffer clear
+	while(BIO_read(conn,err,sizeof(err)) > 0) ;
+	//>> Write request
 	do { ret=BIO_write(conn,obuf,len_ob); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
 	if(ret <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 

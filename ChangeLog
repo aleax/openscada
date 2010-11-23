@@ -1,4 +1,12 @@
 2010-11-23 Roman
+- DAQ.BFN: Translation to Russian and Ukrainian is added. Version 0.5.0 is released.
+- SYS: TSYS::time2str() function based on POSIX strftime() is added.
+- FIX:Transport.Sockets, Transport.SSL: Input buffer clear before send request is added to output transport.
+    Use for prevent data getting from previous broken request on too latent connections.
+- UI.VCAEngine: Context help is added for attributes of primitive "Media".
+
+
+2010-11-22 Roman
 - FIX:DOC: openscada.pdf, DAQ.ModBus::about.pdf, UI.VCAEngine::about.pdf, UI.WebUser::about.pdf:
     The documents is fixed for some content and translation bugs.
 - SYS.ModSched: Errors into shared libraries processing is fixed.

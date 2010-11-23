@@ -1,0 +1,136 @@
+# OpenSCADA.DAQ.BFN translate to German.
+# Copyright (C) 2010 Irina Popkova
+# This file is distributed under the same license as the OpenSCADA.DAQ.BFN package module.
+#
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-23 17:09+0200\n"
+"PO-Revision-Date: 2010-10-21 00:33+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: Russian <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Lokalize 1.0\n"
+
+msgid "BFN module"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid ""
+"BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://"
+"www.bigdutchman.com)."
+msgstr ""
+
+msgid "Parameteres table"
+msgstr "Parametertabelle"
+
+msgid "Calc schedule"
+msgstr "Planung der Berechnung"
+
+msgid "Gather task priority"
+msgstr "Niveau der Priorität der Datenempfangaufgabe"
+
+msgid "Sync inter remote station period (s)"
+msgstr "Periode der Sznchronisierung mit der entfernten Station (sek)"
+
+msgid "Transport address"
+msgstr "Adresse des Transports"
+
+msgid "User"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Standard"
+msgstr "Standard"
+
+#, c-format
+msgid "Code %s"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "Symbols DB"
+msgstr ""
+
+msgid ""
+"DB address in format [<DB module>.<DB name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+#, fuzzy
+msgid "Codes"
+msgstr "Knoten"
+
+msgid "Id"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "New symbol for code"
+msgstr ""
+
+#, c-format
+msgid "Error: '%s'. "
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Call by period %g s. "
+msgstr "Datenemfang mit der Periode %g s. "
+
+#, fuzzy, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Datenempfang nach dem Plan '%s'. "
+
+#, fuzzy, c-format
+msgid "Spent time %.6g ms. "
+msgstr "%.6g usek. Zeit genommen. Anfragen %.6g."
+
+msgid "House:\n"
+msgstr ""
+
+msgid "House computer:\n"
+msgstr ""
+
+#, c-format
+msgid "Connect to transport '%s' error."
+msgstr ""
+
+msgid ""
+"Schedule is writed in seconds periodic form or in standard Cron form.\n"
+"Seconds form is one real number (1.5, 1e-3).\n"
+"Cron it is standard form '* * * * *'. Where:\n"
+"  - minutes (0-59);\n"
+"  - hours (0-23);\n"
+"  - days (1-31);\n"
+"  - month (1-12);\n"
+"  - week day (0[sunday]-6)."
+msgstr ""
+"Planung wird in der Form der Sekundenperiodizität oder  des Standardes Cron "
+"gespeichert.\n"
+"Sekundenform ist eine reele Zahl (1.5, 1e-3).\n"
+"Form des Standards Cron ist '* * * * *'. Wo:\n"
+"  - Minuten (0-59);\n"
+"  - Stunden (0-23);\n"
+"  - Tage (1-31);\n"
+"  - Monate (1-12);\n"
+"  - Wochentage (0[Sonntag]-6)."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter abgeschaltet."
+
+msgid "2:Acquisition is stoped."
+msgstr "2:Befragung ist gestoppt."

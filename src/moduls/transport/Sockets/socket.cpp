@@ -790,6 +790,10 @@ repeate:
     //> Write request
     if( obuf != NULL && len_ob > 0 )
     {
+	//>> Input buffer clear
+	char tbuf[100];
+	while(read(sock_fd,tbuf,sizeof(tbuf)) > 0) ;
+	//>> Write request
 	for( int wOff = 0; wOff != len_ob; wOff += kz )
 	{
 	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);

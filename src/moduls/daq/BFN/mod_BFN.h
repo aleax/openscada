@@ -59,6 +59,8 @@ class TMdPrm : public TParamContr
 
 	TMdContr &owner( );
 
+	void setEval( );
+
     protected:
 	//Methods
 	void load_( );
@@ -69,10 +71,13 @@ class TMdPrm : public TParamContr
 	void postEnable(int flag);
 	void cntrCmdProc(XMLNode *opt);
 	void vlArchMake(TVal &val);
+	void vlGet(TVal &val);
 
 	//Attributes
 	int	curAlrmsId;
 	TElem	p_el;			//Work atribute elements
+
+	ResString       acq_err;
 };
 
 //*************************************************
@@ -91,7 +96,7 @@ class TMdContr: public TController
 	long long period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	//double	syncPer( )	{ return mSync; }
+	double	syncPer( )	{ return mSync; }
 
 	AutoHD<TMdPrm> at(const string &nm)	{ return TController::at(nm); }
 
@@ -117,7 +122,7 @@ class TMdContr: public TController
 	//Attributes
 	Res	en_res, req_res;//Resource for enable params
 	int	&mPrior;	// Process task priority
-	//double	&mSync;		//Synchronization inter remote station: attributes list update.
+	double	&mSync;		//Synchronization inter remote station: attributes list update.
 	string	&mSched,	//Calc schedule
 		&mAddr,		//Transport device address
 		//&mHouse,	//BFN house for get
@@ -126,7 +131,10 @@ class TMdContr: public TController
 	long long mPer;
 
 	bool	prc_st,		// Process task active
+		acq_st,		// Acquisition now
 		endrun_req;	// Request to stop of the Process task
+
+	ResString	acq_err;
 
 	vector< AutoHD<TMdPrm> > p_hd;
 

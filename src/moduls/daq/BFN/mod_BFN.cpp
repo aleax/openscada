@@ -37,7 +37,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.0.1"
+#define VERSION		"0.5.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -91,7 +91,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    //fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
+    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PASS",_("Password"),TFld::String,TFld::NoFlag,"30",""));
@@ -105,8 +105,8 @@ void TTpContr::postEnable(int flag)
 	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);
 
     //> Make Symbols of codes container structure
-    symbCode_el.fldAdd(new TFld("ID",_("ID"),TFld::Integer,TCfg::Key));
-    symbCode_el.fldAdd(new TFld("TEXT",_("Text"),TFld::String,TCfg::TransltText,"100"));
+    symbCode_el.fldAdd(new TFld("ID","ID",TFld::Integer,TCfg::Key));
+    symbCode_el.fldAdd(new TFld("TEXT","Text",TFld::String,TCfg::TransltText,"100"));
 }
 
 string TTpContr::symbDB( )
@@ -233,8 +233,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), /*mSync(cfg("SYNCPER").getRd()),*/
+	::TController(name_c,daq_db,cfgelem), prc_st(false), acq_st(false), endrun_req(false), tm_gath(0),
+	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
 	mAddr(cfg("ADDR").getSd()), /*mHouse(cfg("HOUSE").getSd()),*/ mUser(cfg("USER").getSd()), mPassword(cfg("PASS").getSd())
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
@@ -248,7 +248,23 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
-    if(startStat() && !redntUse()) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+    if(startStat() && !redntUse())
+    {
+	//> Display error
+	if(!acq_err.getVal().empty())
+	{
+	    rez += TSYS::strMess(_("Error: '%s'. "),acq_err.getVal().c_str());
+	    rez.replace(0,1,"10");
+	}
+	//> Display processing
+        if(acq_st) rez += TSYS::strMess(_("Call now. "),tm_gath);
+        //> Display schedule
+	if(period()) rez += TSYS::strMess(_("Call by period %g s. "),(1e-9*period()));
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+    	//> Display spent time
+    	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time %.6g ms. "),tm_gath);
+    }
+
     return rez;
 }
 
@@ -317,7 +333,7 @@ void TMdContr::enable_( )
 				prm.at().p_el.fldAdd(new TFld(cdId.c_str(),cdId.c_str(),cTp,TFld::NoWrite));
 			    }
 			    prm.at().vlAt(cdId).at().fld().setDescr(mod->getSymbolCode(cdIt->childGet("lCodeId")->text()));
-			    prm.at().vlAt(cdId).at().setS(cdIt->childGet("szCodeValue")->text(),0,true);
+			    //prm.at().vlAt(cdId).at().setS(cdIt->childGet("szCodeValue")->text(),0,true);
 			}
 		    }
 		}
@@ -339,6 +355,16 @@ void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+
+    //> Clear errors and set EVal
+    ResAlloc res(en_res,false);
+    for(unsigned i_p=0; i_p < p_hd.size(); i_p++)
+    {
+	p_hd[i_p].at().acq_err.setVal("");
+	p_hd[i_p].at().setEval();
+    }
+    acq_err.setVal("");
+    tm_gath = 0;
 }
 
 void TMdContr::prmEn(const string &id, bool val)
@@ -357,7 +383,9 @@ void TMdContr::reqBFN(XMLNode &io)
 {
     ResAlloc res(req_res, true);
 
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    AutoHD<TTransportOut> tr;
+    try{ tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.')); }
+    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),mAddr.c_str()); }
 
     XMLNode req("POST");
     req.setAttr("URI","/cgi-bin/imwl_ws.cgi");
@@ -410,7 +438,8 @@ string TMdContr::passPrefSOAP( const string &ndName )
 
 void *TMdContr::Task(void *icntr)
 {
-    string aId;
+    string aId, tErr;
+    long long t_cnt = 0, s_cnt = 0;
     TMdContr &cntr = *(TMdContr *)icntr;
 
     cntr.endrun_req = false;
@@ -418,12 +447,56 @@ void *TMdContr::Task(void *icntr)
 
     while(!cntr.endrun_req)
     {
-	long long t_cnt = TSYS::curTime();
+	try
+	{
+	    //> Host's computers list update
+	    tErr = "";
+	    cntr.acq_st = true;
+	    if((1e-6*(TSYS::curTime()-s_cnt)) >= cntr.syncPer())
+	    {
+		XMLNode reqHouses("GetHouses");
+		cntr.reqBFN(reqHouses);
+		if(reqHouses.attr("err").empty())
+		{
+		    XMLNode *houseArr = reqHouses.childGet("arrHouseProperties");
+		    for(int i_h = 0; i_h < houseArr->childSize(); i_h++)
+		    {
+			XMLNode *houseIt = houseArr->childGet(i_h);
+			//> Get House computers
+			XMLNode reqHouseComps("GetHouseComputers");
+			reqHouseComps.childAdd("lHouseId")->setText(houseIt->childGet("lHouseId")->text());
+			cntr.reqBFN(reqHouseComps);
+			if(reqHouseComps.attr("err").empty())
+			{
+			    XMLNode *compArr = reqHouseComps.childGet("arrHouseComputerProperties");
+			    for(int i_hc = 0; i_hc < compArr->childSize(); i_hc++)
+			    {
+				XMLNode *compIt = compArr->childGet(i_hc);
+				string pName = "h"+houseIt->childGet("lHouseId")->text()+"_hc"+compIt->childGet("lHouseComputerId")->text();
+				if(cntr.present(pName)) continue;
+				cntr.add(pName,cntr.owner().tpPrmToId("std"));
+				AutoHD<TMdPrm> prm = cntr.at(pName);
+				prm.at().setName(houseIt->childGet("szHouseName")->text()+":"+compIt->childGet("szComputerNameShort")->text());
+				string descr = _("House:\n");
+				for(int i_hi = 0; i_hi < houseIt->childSize(); i_hi++)
+				    descr += "  "+cntr.passPrefSOAP(houseIt->childGet(i_hi)->name())+": "+houseIt->childGet(i_hi)->text()+"\n";
+				descr += _("House computer:\n");
+				for(int i_hci = 0; i_hci < compIt->childSize(); i_hci++)
+				    descr += "  "+cntr.passPrefSOAP(compIt->childGet(i_hci)->name())+": "+compIt->childGet(i_hci)->text()+"\n";
+				prm.at().setDescr(descr);
+				prm.at().enable();
+			    }
+			}
+		    }
+		    s_cnt = TSYS::curTime();
+		}
+		else tErr = reqHouses.attr("err");
+	    }
+	    t_cnt = TSYS::curTime();
 
-	//> Update controller's data
-	cntr.en_res.resRequestR();
-	for(unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
-	    try
+	    //> Update controller's data
+	    ResAlloc res(cntr.en_res,false);
+	    for(unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse() && !cntr.endrun_req; i_p++)
 	    {
 		//> Get current data
 		XMLNode reqCodeData("GetCodeData");
@@ -436,22 +509,42 @@ void *TMdContr::Task(void *icntr)
 		    {
 			XMLNode *cdIt = cdArr->childGet(i_cd);
 			aId = "c"+cdIt->childGet("lCodeId")->text()+"u"+cdIt->childGet("iUnitId")->text();
-			if(!cntr.p_hd[i_p].at().vlPresent(aId))	continue;
+			if(!cntr.p_hd[i_p].at().vlPresent(aId))
+			{
+			    TFld::Type cTp = TFld::String;
+			    switch(atoi(cdIt->childGet("iDataType")->text().c_str()))
+			    {
+				case 0: cTp = TFld::Real;	break;
+				case 2: case 3: case 6: cTp = TFld::Integer;break;
+			    }
+			    cntr.p_hd[i_p].at().p_el.fldAdd(new TFld(aId.c_str(),mod->getSymbolCode(cdIt->childGet("lCodeId")->text()).c_str(),cTp,TFld::NoWrite));
+			}
 			cntr.p_hd[i_p].at().vlAt(aId).at().setS(cdIt->childGet("szCodeValue")->text(),atoi(cdIt->childGet("lLastUpdate")->text().c_str()),true);
 		    }
+		}
+		else
+		{
+		    if(tErr.empty()) tErr = reqCodeData.attr("err");
+		    //> Set attributes to Eval
+		    if(cntr.p_hd[i_p].at().acq_err.getVal().empty()) cntr.p_hd[i_p].at().setEval();
 		}
 		//> Get Alarms
 		XMLNode reqAlrms("GetAlarmLogDataFromLogIndex");
 		reqAlrms.childAdd("lHouseComputerId")->setText(TSYS::strParse(cntr.p_hd[i_p].at().id(),1,"_hc"));
 		reqAlrms.childAdd("lLastLogIndexFetched")->setText(TSYS::int2str(cntr.p_hd[i_p].at().curAlrmsId));
 		cntr.reqBFN(reqAlrms);
-		if(reqCodeData.attr("err").empty())
+		if(reqAlrms.attr("err").empty())
 		    cntr.p_hd[i_p].at().curAlrmsId = atoi(reqAlrms.childGet("lLastLogIndexFetched")->text().c_str());
+		else if(tErr.empty()) tErr = reqAlrms.attr("err");
+		cntr.p_hd[i_p].at().acq_err.setVal(tErr);
 	    }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resRelease();
-	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	}
+	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; break; }
 
+	cntr.acq_err.setVal(tErr);
+
+	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	cntr.acq_st = false;
 	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
     }
 
@@ -537,6 +630,14 @@ void TMdPrm::postEnable(int flag)
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
+void TMdPrm::setEval( )
+{
+    vector<string> ls;
+    elem().fldList(ls);
+    for(int i_el = 0; i_el < ls.size(); i_el++)
+	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
+}
+
 void TMdPrm::enable( )
 {
     if(enableStat())	return;
@@ -554,11 +655,8 @@ void TMdPrm::disable( )
 
     TParamContr::disable();
 
-    //> Set EVAL to parameter attributes
-    vector<string> ls;
-    elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
+    setEval( );
+    acq_err.setVal("");
 }
 
 void TMdPrm::load_( )
@@ -593,6 +691,23 @@ void TMdPrm::cntrCmdProc(XMLNode *opt)
     }
     else*/
     TParamContr::cntrCmdProc(opt);
+}
+
+void TMdPrm::vlGet( TVal &val )
+{
+    if(val.name() != "err")     return;
+
+    if(!enableStat() || !owner().startStat())
+    {
+        if(!enableStat())               val.setS(_("1:Parameter is disabled."),0,true);
+        else if(!owner().startStat())   val.setS(_("2:Acquisition is stoped."),0,true);
+        return;
+    }
+    if(owner().redntUse()) return;
+
+    if(!acq_err.getVal().empty())		val.setS("11:"+acq_err.getVal(),0,true);
+    else if(!owner().acq_err.getVal().empty())	val.setS("10:"+owner().acq_err.getVal(),0,true);
+    else val.setS("0",0,true);
 }
 
 void TMdPrm::vlArchMake( TVal &val )
