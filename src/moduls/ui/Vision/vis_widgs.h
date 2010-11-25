@@ -267,6 +267,7 @@ namespace VISION
 	    SyntxHighl		*snt_hgl;
 	    QDialogButtonBox	*but_box;
 	    QAction		*actFind, *actFindNext;
+	    QMainWindow		*stWin;
     };
 
     //****************************************

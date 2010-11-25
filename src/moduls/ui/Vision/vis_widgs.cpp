@@ -86,21 +86,22 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     //Id and name fields
     if( with_id )
     {
-	ed_lay->addWidget( new QLabel(_("ID:"),this), 0, 0 );
+	ed_lay->addWidget(new QLabel(_("ID:"),this), 0, 0);
 	m_id = new QLineEdit(this);
-	ed_lay->addWidget( m_id, 0, 1 );
+	ed_lay->addWidget(m_id, 0, 1);
     }
     if( with_nm )
     {
-	ed_lay->addWidget( new QLabel(_("Name:"),this), 1, 0 );
+	ed_lay->addWidget(new QLabel(_("Name:"),this), 1, 0);
 	m_name = new QLineEdit(this);
-	ed_lay->addWidget( m_name, 1, 1 );
+	ed_lay->addWidget(m_name, 1, 1);
     }
+
+    ed_lay->addItem(new QSpacerItem(10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding),100,0,1,-1);
+
     dlg_lay->addItem(ed_lay);
 
     //Qk and Cancel buttons
-    dlg_lay->addItem( new QSpacerItem( 10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-
     QFrame *sep = new QFrame(this);
     sep->setFrameShape( QFrame::HLine );
     sep->setFrameShadow( QFrame::Raised );
@@ -738,7 +739,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 //* Text edit widget                              *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
-    QWidget(parent), but_box(NULL), isInit(false), snt_hgl(NULL)
+    QWidget(parent), but_box(NULL), isInit(false), snt_hgl(NULL), stWin(NULL)
 {
     QVBoxLayout *box = new QVBoxLayout(this);
     box->setMargin(0);
@@ -784,6 +785,11 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 	but_box->setEnabled(false);
 	box->addWidget(but_box);
     }
+
+    //> Check for window with status present
+    QWidget *w = parentWidget();
+    while(w && w->parentWidget() && (!dynamic_cast<QMainWindow *>(w) || !((QMainWindow*)w)->statusBar())) w = w->parentWidget();
+    stWin = dynamic_cast<QMainWindow *>(w);
 }
 
 QString TextEdit::text()
@@ -844,10 +850,8 @@ void TextEdit::cancelSlot( )
 
 void TextEdit::curPosChange( )
 {
-    QMainWindow *w = dynamic_cast<QMainWindow *>(window());
-    if( !w || !w->statusBar() ) w = dynamic_cast<QMainWindow *>(window()->parentWidget());
-    if( !w || !w->statusBar() ) return;
-    w->statusBar()->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
+    if(!stWin) return;
+    stWin->statusBar()->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
 }
 
 bool TextEdit::event( QEvent * e )

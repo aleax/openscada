@@ -660,8 +660,8 @@ bool InspAttr::event( QEvent *event )
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 {
     string nattr, nwdg;
-    QAction *actClr, *actCopy;
-    actClr = actCopy = NULL;
+    QAction *actClr, *actCopy, *actEdit;
+    actClr = actCopy = actEdit = NULL;
     ModInspAttr::Item *it = NULL;
 
     //Attribute
@@ -690,6 +690,12 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
 	actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
 	popup.addAction(actCopy);
+	if(it->flag()&ModInspAttr::Item::FullText)
+	{
+	    if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
+	    actEdit = new QAction(QPixmap::fromImage(ico_t),_("Edit"),this);
+	    popup.addAction(actEdit);
+	}
 
 	//> Changes clear action
 	if( it->modify() )
@@ -706,7 +712,27 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	QAction *rez = popup.exec(QCursor::pos());
 	if( actCopy && rez == actCopy )
 	    QApplication::clipboard()->setText(it->data().toString());
-	if( actClr && rez == actClr )
+	else if( actEdit && rez == actEdit )
+	{
+	    InputDlg dlg(this, actEdit->icon(),it->help().c_str(),
+		QString(_("Text field '%1' edit of widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
+	    TextEdit *tEd = new TextEdit(&dlg,true);
+	    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	    sp.setVerticalStretch(3);
+	    tEd->setSizePolicy(sp);
+	    tEd->setText(it->data().toString());
+	    if(!it->snthHgl().empty())
+	    {
+		XMLNode rules;
+		rules.load(it->snthHgl());
+		tEd->setSnthHgl(rules);
+	    }
+	    dlg.edLay()->addWidget( tEd, 0, 0, 1, 2 );
+	    dlg.resize(600,400);
+	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())
+		model()->setData(selectedIndexes()[0], tEd->text(), Qt::EditRole);
+	}
+	else if( actClr && rez == actClr )
 	{
 	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
 	    modelData.setWdg(modelData.curWdg());

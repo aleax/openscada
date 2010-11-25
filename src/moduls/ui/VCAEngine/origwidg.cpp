@@ -924,6 +924,40 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     return Widget::attrChange(cfg,prev);
 }
 
+bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
+	if(src->attrAt("type").at().getI() == 0 || src->attrAt("type").at().getI() == 1)
+	{
+	    el = src->attrAt("valArch").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	    if(el) el->setAttr("len","")->setAttr("help",_("Value archivator in form \"[ArchMod].[ArchivatorId]\"."));
+	    for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++)
+	    {
+		el = src->attrAt(TSYS::strMess("prm%daddr",i_p)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		if(el) el->setAttr("len","")->setAttr("help",
+		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
+		    "Example:\n"
+		    "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
+		    "	    of controller 'AutoDA' of DAQ module 'System';\n"
+		    "  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
+	    }
+	}
+	return true;
+    }
+
+    //> Process command to page
+    //string a_path = opt->attr("path");
+    return Widget::cntrCmdAttributes(opt,src);
+
+    //return true;
+}
+
 //************************************************
 //* OrigProtocol: Protocol original widget       *
 //************************************************
@@ -1005,6 +1039,51 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
     return Widget::attrChange(cfg,prev);
 }
 
+bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
+	el = src->attrAt("arch").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",_("Messages archivator in form \"[ArchMod].[ArchivatorId]\"."));
+	el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",
+	    _("Category template of messages whith special symbols:\n"
+	    "  '*' - any multiply symbols group;\n"
+	    "  '?' - any one symbol;\n"
+	    "  '\\' - use for shield special simbols."));
+	el = src->attrAt("col").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",
+	    _("Visible and order collumns list separated by symbol ';'. Supported collumns:\n"
+	    "  \"pos\" - row number;\n"
+	    "  \"tm\" - date and time of the message;\n"
+	    "  \"utm\" - microseconds part of time of the message;\n"
+	    "  \"lev\" - level of the message;\n"
+	    "  \"cat\" - category of the message;\n"
+	    "  \"mess\" - the message text."));
+	for(int i_p = 0; i_p < src->attrAt("itProp").at().getI(); i_p++)
+	{
+	    el = src->attrAt(TSYS::strMess("it%dtmpl",i_p)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	    if(el) el->setAttr("len","")->setAttr("help",
+		_("Category template of messages whith special symbols:\n"
+		"  '*' - any multiply symbols group;\n"
+		"  '?' - any one symbol;\n"
+		"  '\\' - use for shield special simbols."));
+	}
+	return true;
+    }
+
+    //> Process command to page
+    //string a_path = opt->attr("path");
+    return Widget::cntrCmdAttributes(opt,src);
+
+    //return true;
+}
+
 //************************************************
 //* OrigDocument: Document original widget       *
 //************************************************
@@ -1073,54 +1152,7 @@ void OrigDocument::calc( Widget *base )
     }
 }
 
-bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
-{
-    if(!src) src = this;
-    //> Get page info
-    if(opt->name() == "info")
-    {
-	Widget::cntrCmdAttributes(opt,src);
-	XMLNode *el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
-	el = src->attrAt("doc").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
-	el = src->attrAt("style").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1");
-	return true;
-    }
 
-    //> Process command to page
-    string a_path = opt->attr("path");
-    if((a_path == "/attr/tmpl" || a_path == "/attr/doc") && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
-    {
-	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
-	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
-	//>> Get document's language syntax highlight.
-	try
-	{
-	    string dcLng;
-	    int rez = pcrecpp::RE(".*<body\\s+.*\\s*docProcLang=\"([^\"]+)\".*>.*",pcrecpp::RE_Options().set_dotall(true)).
-		FullMatch(src->attrAt(a_path.substr(6)).at().getS(),&dcLng);
-	    if(rez && dcLng.size())
-		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().
-				compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
-	} catch(...){ }
-	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
-	tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
-	tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
-	opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
-	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
-    }
-    else if(a_path == "/attr/style" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
-    {
-	opt->childAdd("blk")->setAttr("beg","\\{")->setAttr("end","\\}")->setAttr("color","#666666")->
-	    childAdd("rule")->setAttr("expr",":[^;]+")->setAttr("color","blue");
-	opt->childAdd("rule")->setAttr("expr","(\\.|#)\\w+\\s")->setAttr("color","darkorange");
-    }
-    else return Widget::cntrCmdAttributes(opt,src);
-
-    return true;
-}
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
@@ -1272,6 +1304,61 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     }
 
     return Widget::attrChange(cfg,prev);
+}
+
+bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode * el = src->attrAt("style").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",
+	    _("CSS rules in rows like \"body { background-color:#818181; }\""));
+	el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",
+	    _("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
+	    "<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
+	el = src->attrAt("doc").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
+	el = src->attrAt("time").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",_("Write time for ducument generation from that point."));
+
+	return true;
+    }
+
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if((a_path == "/attr/tmpl" || a_path == "/attr/doc") && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    {
+	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
+	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
+	//>> Get document's language syntax highlight.
+	try
+	{
+	    string dcLng;
+	    int rez = pcrecpp::RE(".*<body\\s+.*\\s*docProcLang=\"([^\"]+)\".*>.*",pcrecpp::RE_Options().set_dotall(true)).
+		FullMatch(src->attrAt(a_path.substr(6)).at().getS(),&dcLng);
+	    if(rez && dcLng.size())
+		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().
+				compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
+	} catch(...){ }
+	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
+	tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
+	tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
+	opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
+	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
+    }
+    else if(a_path == "/attr/style" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    {
+	opt->childAdd("blk")->setAttr("beg","\\{")->setAttr("end","\\}")->setAttr("color","#666666")->
+	    childAdd("rule")->setAttr("expr",":[^;]+")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","(\\.|#)\\w+\\s")->setAttr("color","darkorange");
+    }
+    else return Widget::cntrCmdAttributes(opt,src);
+
+    return true;
 }
 
 string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )

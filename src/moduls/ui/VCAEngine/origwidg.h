@@ -153,6 +153,7 @@ class OrigDiagram : public PrWidget
 	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, TVariant prev );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 };
 
 //************************************************
@@ -171,6 +172,7 @@ class OrigProtocol : public PrWidget
 	//Methods
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, TVariant prev );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 };
 
 //************************************************

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-22 20:46+0200\n"
+"POT-Creation-Date: 2010-11-24 13:04+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -511,6 +511,18 @@ msgstr ":Grenze der Ansicht:Automassstab"
 msgid ":color"
 msgstr ":Farbe"
 
+msgid "Value archivator in form \"[ArchMod].[ArchivatorId]\"."
+msgstr ""
+
+msgid ""
+"Full address to DAQ attribute of a parameter or to an archive.\n"
+"Example:\n"
+"  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of "
+"parameter 'MemInfo'\n"
+"\t    of controller 'AutoDA' of DAQ module 'System';\n"
+"  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."
+msgstr ""
+
 msgid "Protocol"
 msgstr "Protokoll"
 
@@ -561,6 +573,27 @@ msgstr ":Vorlage"
 msgid ":font"
 msgstr ":Schrift"
 
+msgid "Messages archivator in form \"[ArchMod].[ArchivatorId]\"."
+msgstr ""
+
+msgid ""
+"Category template of messages whith special symbols:\n"
+"  '*' - any multiply symbols group;\n"
+"  '?' - any one symbol;\n"
+"  '\\' - use for shield special simbols."
+msgstr ""
+
+msgid ""
+"Visible and order collumns list separated by symbol ';'. Supported "
+"collumns:\n"
+"  \"pos\" - row number;\n"
+"  \"tm\" - date and time of the message;\n"
+"  \"utm\" - microseconds part of time of the message;\n"
+"  \"lev\" - level of the message;\n"
+"  \"cat\" - category of the message;\n"
+"  \"mess\" - the message text."
+msgstr ""
+
 msgid "Document"
 msgstr "Dokument"
 
@@ -587,6 +620,23 @@ msgstr "Cursor:Archiv"
 
 msgid "Document "
 msgstr "Dokument "
+
+msgid "CSS rules in rows like \"body { background-color:#818181; }\""
+msgstr ""
+
+msgid ""
+"Document's template in XHTML. Start from tag \"body\" and include procedures "
+"parts:\n"
+"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n"
+"<h1>Value<?dp return wCod+1.314;?></h1>\n"
+"</body>"
+msgstr ""
+
+msgid "Final document in XHTML. Start from tag \"body\"."
+msgstr ""
+
+msgid "Write time for ducument generation from that point."
+msgstr ""
 
 #, c-format
 msgid "Document's template parsing error: %s."
