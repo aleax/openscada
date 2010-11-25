@@ -715,7 +715,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	else if( actEdit && rez == actEdit )
 	{
 	    InputDlg dlg(this, actEdit->icon(),it->help().c_str(),
-		QString(_("Text field '%1' edit of widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
+		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
 	    TextEdit *tEd = new TextEdit(&dlg,true);
 	    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	    sp.setVerticalStretch(3);

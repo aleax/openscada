@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:29+0300\n"
+"POT-Creation-Date: 2010-11-25 12:56+0200\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -1030,11 +1030,18 @@ msgstr "Attribut"
 msgid "Copy"
 msgstr "Kopieren"
 
+#, fuzzy
+msgid "Edit"
+msgstr "&Bearbeiten"
+
 msgid "Clear changes"
 msgstr "Klare Veränderungen"
 
 msgid "Press to clear attribute's changes."
 msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
+
+msgid "Attribute '%1' edit for widget '%2'."
+msgstr ""
 
 msgid "Widgets"
 msgstr "Widget"

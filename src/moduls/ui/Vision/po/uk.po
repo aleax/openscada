@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:29+0300\n"
+"POT-Creation-Date: 2010-11-25 12:56+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1020,11 +1020,17 @@ msgstr "Атрибут"
 msgid "Copy"
 msgstr "Копіювати"
 
+msgid "Edit"
+msgstr "Редагувати"
+
 msgid "Clear changes"
 msgstr "Очистити зміни"
 
 msgid "Press to clear attribute's changes."
 msgstr "Натиснути для очищення змін атрибуту."
+
+msgid "Attribute '%1' edit for widget '%2'."
+msgstr "Редагування атрибуту '%1' для віджета '%2'."
 
 msgid "Widgets"
 msgstr "Віджети"
