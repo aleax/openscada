@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:30+0300\n"
+"POT-Creation-Date: 2010-11-29 10:20+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -56,8 +56,8 @@ msgid "Standard"
 msgstr "Стандарт"
 
 #, c-format
-msgid "Gather data time %.6g ms. "
-msgstr "Время сбора данных %.6g мс. "
+msgid "Spent time: %s. "
+msgstr "Затрачено времени: %s. "
 
 #, c-format
 msgid "Station '%s' error, restoring in %.6g s."

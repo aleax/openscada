@@ -123,18 +123,18 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) )
+    if(startStat( ) && !redntUse())
     {
-	if( tmDelay > -1 )
+	if(tmDelay > -1)
 	{
 	    rez += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
 	    rez.replace(0,1,"10");
 	}
 	else
 	{
-	    if( period() ) rez += TSYS::strMess(_("Gather data by period %g s. "),(1e-9*period()));
-	    else rez += TSYS::strMess(_("Gather data by cron '%s'. "),cron().c_str());
-	    rez += TSYS::strMess(_("Spend time %.6g ms. Requests %.6g."),tm_gath,-tmDelay);
+	    if( period() ) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."),TSYS::time2str(tm_gath).c_str(),-tmDelay);
 	    if( servSt ) rez.replace(0,1,TSYS::strMess("0x%x",servSt));
 	}
     }
@@ -404,7 +404,7 @@ void *TMdContr::Task( void *icntr )
 	    res.release();
 
 	    firstCall = false;
-	    cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	    cntr.tm_gath = TSYS::curTime()-t_cnt;
 
 	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	}

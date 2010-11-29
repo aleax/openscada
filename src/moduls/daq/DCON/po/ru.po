@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:31+0300\n"
+"POT-Creation-Date: 2010-11-29 10:25+0200\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -59,8 +59,8 @@ msgid "CRC control"
 msgstr "Проверка CRC"
 
 #, c-format
-msgid "Gather data time %.6g ms. "
-msgstr "Время сбора данных %.6g мс. "
+msgid "Spent time: %s. "
+msgstr "Затрачено времени: %s. "
 
 msgid "13:Error respond: Not full."
 msgstr "13:Ошибка ответа: Не полный."
@@ -85,3 +85,6 @@ msgstr "1:Параметр отключен."
 
 msgid "2:Acquisition is stoped."
 msgstr "2:Опрос остановлен."
+
+#~ msgid "Gather data time %.6g ms. "
+#~ msgstr "Время сбора данных %.6g мс. "

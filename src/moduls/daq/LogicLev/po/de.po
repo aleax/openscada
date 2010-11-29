@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:51+0300\n"
+"POT-Creation-Date: 2010-11-29 10:47+0200\n"
 "PO-Revision-Date: 2009-08-17 12:33+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -54,8 +54,8 @@ msgid "Value"
 msgstr "Wert"
 
 #, c-format
-msgid "Calc time %.6g ms. "
-msgstr "Rechenzeit %.6g msek."
+msgid "Spent time: %s. "
+msgstr ""
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
@@ -96,3 +96,6 @@ msgstr "Parameter hat kein Attribut!"
 #, c-format
 msgid "Parameter has not attributes: %s !"
 msgstr "Parameter hat keine Attribute: %s !"
+
+#~ msgid "Calc time %.6g ms. "
+#~ msgstr "Rechenzeit %.6g msek."

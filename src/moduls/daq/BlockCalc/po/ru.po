@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:26+0300\n"
+"POT-Creation-Date: 2010-11-29 10:16+0200\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -178,9 +178,8 @@ msgstr "Связь"
 msgid "Link's value"
 msgstr "Значение связи"
 
-#, c-format
-msgid "Calc time %g us. "
-msgstr "Время обсчёта %g мкс. "
+msgid "Spent time: %s. "
+msgstr "Затрачено времени: %s. "
 
 #, c-format
 msgid "Enable block <%s> error."

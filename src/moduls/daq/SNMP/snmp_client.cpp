@@ -140,7 +140,7 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_gath).c_str());
     return rez;
 }
 
@@ -296,7 +296,7 @@ void *TMdContr::Task( void *icntr )
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
-	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	cntr.tm_gath = TSYS::curTime()-t_cnt;
 
 	TSYS::taskSleep((long long)(1e9*cntr.period()));
     }

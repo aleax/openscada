@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:47+0300\n"
+"POT-Creation-Date: 2010-11-29 10:34+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -259,17 +259,15 @@ msgstr "Бібліотеки функцій"
 msgid "Libraries"
 msgstr "Бібліотеки"
 
-#, c-format
-msgid "Call by period %g s. "
-msgstr "Обчислення за періодом %g с. "
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
+
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
 
 #, c-format
-msgid "Call by cron '%s'. "
-msgstr "Обчислення за кроном '%s'. "
-
-#, c-format
-msgid "Calc time %.6g mks. "
-msgstr "Час обрахунку %.6g мкс. "
+msgid "Spent time: %s."
+msgstr "Витрачено часу: %s."
 
 #, c-format
 msgid ""

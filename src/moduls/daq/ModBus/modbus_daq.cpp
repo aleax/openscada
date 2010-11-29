@@ -127,10 +127,10 @@ string TMdContr::getStatus( )
 	}
 	else
 	{
-	    if( period() ) val += TSYS::strMess(_("Call by period %g s. "),(1e-9*period()));
-	    else val += TSYS::strMess(_("Call by cron '%s'. "),cron().c_str());
-	    val += TSYS::strMess(_("Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
-				    tmGath,numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+	    if( period() ) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	    else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	    val += TSYS::strMess(_("Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
+				    TSYS::time2str(tmGath).c_str(),numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 	}
     }
 
@@ -536,7 +536,7 @@ void *TMdContr::Task( void *icntr )
 	    if( cntr.tmDelay <= 0 ) cntr.tmDelay--;
 
 	    //> Calc acquisition process time
-	    cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
+	    cntr.tmGath = TSYS::curTime()-t_cnt;
 
 	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	}

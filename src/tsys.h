@@ -195,6 +195,7 @@ class TSYS : public TCntrNode
 	    return rez;
 	}
 	static string time2str( time_t tm, const string &format );
+	static string time2str( double utm );
 
 	//> Adress convertors
 	static string addr2str( void *addr );

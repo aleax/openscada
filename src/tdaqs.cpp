@@ -502,7 +502,7 @@ void *TDAQS::RdTask( void *param )
 	    cntr.free();
 	}
 
-	daq.mRdPrcTm = 1e-3*(SYS->curTime()-work_tm);
+	daq.mRdPrcTm = SYS->curTime()-work_tm;
 
 	TSYS::taskSleep((long long)(daq.rdTaskPer()*1e9));
     } catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -602,7 +602,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    tmplLibUnreg(opt->attr("id"),1);
     }
     else if(a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root",SDAQ_ID))
-	opt->setText(TSYS::strMess(_("Process time %.6g ms."),mRdPrcTm));
+	opt->setText(TSYS::strMess(_("Spent time: %s."),TSYS::time2str(mRdPrcTm).c_str()));
     else if(a_path == "/redund/statLev")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(rdStLevel()));

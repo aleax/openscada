@@ -147,12 +147,23 @@ class TMdContr: public TController
 class TTpContr: public TTipDAQ
 {
     public:
+	//Data
+	class AlrmSymb
+	{
+	    public:
+		AlrmSymb( ) : text(""), code(0)						{ }
+		AlrmSymb(const string &itxt, unsigned icod) : text(itxt), code(icod)	{ }
+
+		string	 text;
+		unsigned code;
+	};
 	//Methods
 	TTpContr(string name);
 	~TTpContr( );
 
 	string symbDB( );
 	string getSymbolCode(const string &id);
+	AlrmSymb getSymbolAlarm(const string &id);
 
 	void setSymbDB(const string &idb);
 
@@ -172,8 +183,10 @@ class TTpContr: public TTipDAQ
 	TController *ContrAttach(const string &name, const string &daq_db);
 
 	map<unsigned,string>	mSymbCode;
+	map<unsigned,AlrmSymb>	mSymbAlrm;
 
-	TElem	symbCode_el;	//> Make Symbols of codes container structure
+	TElem	symbCode_el,	//> Make Symbols of codes container structure
+		symbAlrm_el;	//> Make Symbols of alarms container structure
 };
 
 extern TTpContr *mod;

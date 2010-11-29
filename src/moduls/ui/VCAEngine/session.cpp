@@ -389,7 +389,7 @@ void *Session::Task( void *icontr )
 
 	if( (ses.mCalcClk++) == 0 ) ses.mCalcClk = 1;
 
-	ses.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+	ses.tm_calc = TSYS::curTime()-t_cnt;
 	/*ses.rez_calc+=ses.tm_calc;
 	if( !(ses.calcClk()%10) )
 	{
@@ -586,7 +586,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),permit(),owner().c_str(),grp().c_str(),4,"tp","str","idm","1","dest","select","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
-		ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calc session time (ms)"),R_R_R_,"root",SUI_ID,1,"tp","real");
+		ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calc session time"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
 	    {
@@ -639,7 +639,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/st/backgrnd" && ctrChkNode(opt))	opt->setText(TSYS::int2str(backgrnd()));
     else if(a_path == "/obj/st/connect" && ctrChkNode(opt))	opt->setText(TSYS::int2str(connects()));
-    else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))	opt->setText(TSYS::real2str(calcTm(),6));
+    else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))	opt->setText(TSYS::time2str(calcTm()));
     else if(a_path == "/obj/prj_ls" && ctrChkNode(opt))
     {
 	vector<string> lst;

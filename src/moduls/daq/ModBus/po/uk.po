@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 14:45+0300\n"
+"POT-Creation-Date: 2010-11-28 20:32+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -59,20 +59,17 @@ msgstr "Перелік атрибутів"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Помилка з'єднання. Відновлення через %.6g c."
 
-#, c-format
-msgid "Call by period %g s. "
-msgstr "Виклик з періодом %g с. "
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
 
-#, c-format
-msgid "Call by cron '%s'. "
-msgstr "Виклик за кроном '%s'. "
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
 
-#, c-format
 msgid ""
-"Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g "
-"registers, %g coils. Errors of connection %g, of respond %g."
+"Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g "
+"coils. Errors of connection %g, of respond %g."
 msgstr ""
-"Час збору даних %.6g мс. Прочитано %g(%g) регістрів, %g(%g) бітів. Записано %"
+"Витрачено часу: %s. Прочитано %g(%g) регістрів, %g(%g) бітів. Записано %"
 "g регістрів, %g бітів. Помилок з'єднань %g, віповідей %g."
 
 msgid "Fetch coils' and registers' blocks."
@@ -310,12 +307,11 @@ msgstr "Виключено. "
 msgid "Enabled. "
 msgstr "Включено. "
 
-#, c-format
 msgid ""
-"Process time %.2f ms. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
+"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
 "registers %.4g, coils %.4g."
 msgstr ""
-"Час обробки %.2f мс. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів. "
+"Витрачено часу: %s. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів. "
 "Записано %.4g регістрів, %.4g бітів."
 
 #, c-format

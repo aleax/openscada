@@ -511,7 +511,7 @@ void TMdContr::postDisable( int flag )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Acquisition time %.6g ms. "),tm_calc);
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     return rez;
 }
 
@@ -1257,7 +1257,7 @@ void *TMdContr::Task( void *icntr )
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.nodeRes().resRelease( );
-	cntr.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+	cntr.tm_calc = TSYS::curTime()-t_cnt;
 
 	if(is_stop) break;
 

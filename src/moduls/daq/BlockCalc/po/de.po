@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 21:48+0300\n"
+"POT-Creation-Date: 2010-11-29 10:16+0200\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -183,8 +183,8 @@ msgstr "Verbindung"
 msgid "Link's value"
 msgstr "Verbindungswert"
 
-#, c-format
-msgid "Calc time %g us. "
+#, fuzzy, c-format
+msgid "Spent time: %s. "
 msgstr "Rechenzeit %g (usek)"
 
 #, c-format

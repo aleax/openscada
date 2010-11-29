@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 11:06+0300\n"
+"POT-Creation-Date: 2010-11-28 20:12+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -68,17 +68,14 @@ msgstr "Корневая директория (84)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Ошибка подключения. Восстановление через %.6g с."
 
-#, c-format
-msgid "Gather data by period %g s. "
-msgstr "Сбор данных с периодом %g с. "
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
 
-#, c-format
-msgid "Gather data by cron '%s'. "
-msgstr "Сбор данных по расписанию '%s'. "
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
 
-#, c-format
-msgid "Spend time %.6g ms. Requests %.6g."
-msgstr "Затрачено времени %.6g мс. Запросов %.6g."
+msgid "Spent time: %s. Requests %.6g."
+msgstr "Затрачено времени: %s. Запросов %.6g."
 
 msgid "No secure policy found"
 msgstr "Не найдено политики безопасности"

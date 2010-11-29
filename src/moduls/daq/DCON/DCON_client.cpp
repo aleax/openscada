@@ -141,7 +141,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_gath).c_str());
 
     return val;
 }
@@ -553,7 +553,7 @@ void *TMdContr::Task( void *icntr )
 		res.release();
 
 		//> Calc acquisition process time
-		cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+		cntr.tm_gath = TSYS::curTime()-t_cnt;
 	    }
 
 	    //> Calc next work time and sleep

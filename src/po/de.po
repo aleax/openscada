@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-07 13:40+0300\n"
+"POT-Creation-Date: 2010-11-29 11:00+0200\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -424,8 +424,8 @@ msgstr "Aktives Attribut des Parameters"
 msgid "Value archivator: "
 msgstr "Wertearchivar: "
 
-msgid "Archiving time (msek)"
-msgstr "Archivierungszeit (msek)"
+msgid "Archiving time"
+msgstr "Archivierungszeit"
 
 msgid "Archives"
 msgstr "Archive"
@@ -876,8 +876,8 @@ msgid "Template libraries"
 msgstr "Vorlagenbibliotheken"
 
 #, c-format
-msgid "Process time %.6g ms."
-msgstr "Prozesszeit %.6g ms."
+msgid "Spent time: %s."
+msgstr ""
 
 msgid "<newStat>"
 msgstr "<neueStation>"
@@ -982,8 +982,8 @@ msgstr "Ausführen"
 msgid "Number runs"
 msgstr "Startenzahl"
 
-msgid "Time for execute (mks)"
-msgstr "Erfüllungszeit (mks)"
+msgid "Spent time"
+msgstr ""
 
 msgid "Bool"
 msgstr "Logisch"
@@ -1384,6 +1384,26 @@ msgid ""
 msgstr ""
 "Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich ist "
 "die laufende Directory schon korrekt installiert in '%s'."
+
+msgid "day"
+msgstr ""
+
+#, fuzzy
+msgid "hour"
+msgstr "Quelle"
+
+msgid "min"
+msgstr ""
+
+msgid "s"
+msgstr ""
+
+#, fuzzy
+msgid "ms"
+msgstr "%gмс"
+
+msgid "us"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -1942,3 +1962,9 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+#~ msgid "Time for execute (mks)"
+#~ msgstr "Erfüllungszeit (mks)"
+
+#~ msgid "Process time %.6g ms."
+#~ msgstr "Prozesszeit %.6g ms."

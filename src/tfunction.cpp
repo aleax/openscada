@@ -242,7 +242,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		    }
 		//>> Add Calc button and Calc time
 		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number runs"),RWRW__,"root",grp,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/exec/tm",_("Time for execute (mks)"),R_R___,"root",grp,1,"tp","real");
+		ctrMkNode("fld",opt,-1,"/exec/tm",_("Spent time"),R_R___,"root",grp,1,"tp","str");
 		ctrMkNode("comm",opt,-1,"/exec/calc",_("Execute"),RWRW__,"root",grp);
 	    }
 	}
@@ -312,7 +312,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))	opt->setText(TSYS::real2str(mTVal->calcTm(),6));
+    else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))	opt->setText(TSYS::time2str(mTVal->calcTm()));
     else if(a_path.substr(0,8) == "/exec/io" && mTVal)
     {
 	string io_id = TSYS::pathLev(a_path,2);

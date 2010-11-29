@@ -758,7 +758,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name(),RWRWR_,"root",SDB_ID);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
-	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),RWRWR_,"root",SDB_ID,1,"idSz","255");
+	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),RWRW__,"root",SDB_ID,1,"idSz","255");
 	if(ctrMkNode("area",opt,0,"/prm",_("Data base")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
@@ -773,14 +773,14 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SDB_ID,3,"tp","str","cols","100","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),RWRWR_,"root",SDB_ID,2,
 		    "tp","str","help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),RWRWR_,"root",SDB_ID,1,"tp","bool");
 	    }
 	}
-	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),R_R_R_))
-	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),RWRWR_,"root",SDB_ID,5,
+	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),R_R___))
+	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),RWRW__,"root",SDB_ID,5,
 		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
 		"help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
 	if(enableStat( ) && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root",SDB_ID))
@@ -836,8 +836,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/addr")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(addr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setAddr(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))	opt->setText(addr());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))	setAddr(opt->text());
     }
     else if(a_path == "/prm/cfg/codep")
     {
@@ -851,15 +851,15 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/br/tbl_" || a_path == "/tbls/otbl")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))
 	{
 	    vector<string> lst;
 	    list(lst);
 	    for( int i_l=0; i_l < lst.size(); i_l++)
 		opt->childAdd("el")->setText(lst[i_l]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDB_ID,SEC_WR))	open(opt->text(),true);
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDB_ID,SEC_WR))	close(opt->text());
+	if(ctrChkNode(opt,"add",RWRW__,"root",SDB_ID,SEC_WR))	open(opt->text(),true);
+	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR))	close(opt->text());
     }
     else if(a_path == "/sql/req")
     {
@@ -920,13 +920,13 @@ void TTable::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),RWRWR_,"root",SDB_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),RWRW__,"root",SDB_ID);
 	if(ctrMkNode("area",opt,0,"/prm",_("Table")))
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R_R_,"root",SDB_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
 	    XMLNode *tbl;
-	    if(tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRWR_,"root",SDB_ID,1,"s_com","add,del"))
+	    if(tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRW__,"root",SDB_ID,1,"s_com","add,del"))
 	    {
 		TConfig req;
 		try{ fieldStruct(req); } catch(...) { }
@@ -936,7 +936,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 		    TFld::Type etp = req.elem().fldAt(i_f).type();
 		    if( req.elem().fldAt(i_f).flg()&TCfg::Key )
 		        tbl->setAttr("key",tbl->attr("key")+eid+",");
-		    ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),eid.c_str(),0664,"root",SDB_ID,
+		    ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),eid.c_str(),RWRW__,"root",SDB_ID,
 		        1,"tp",(etp==TFld::Boolean)?"bool":(etp==TFld::Integer)?"dec":(etp==TFld::Real)?"real":"str");
 		}
 	    }
@@ -952,7 +952,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	TConfig req;
 	string eid;
 	fieldStruct(req);
-	if( ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD) )
+	if( ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD) )
 	    for( int i_r = 0; fieldSeek(i_r,req); i_r++ )
 	        for( int i_f = 0; i_f < req.elem().fldSize(); i_f++ )
 		{
@@ -961,7 +961,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 			ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);
 		    opt->childGet(i_f)->childAdd("el")->setText(req.cfg(eid).getS());
 		}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDB_ID,SEC_WR))
+	if(ctrChkNode(opt,"add",RWRW__,"root",SDB_ID,SEC_WR))
 	{
 	    for( int i_f = 0; i_f < req.elem().fldSize(); i_f++ )
 	    {
@@ -972,7 +972,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    req.cfgViewAll(false);
 	    fieldSet(req);
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDB_ID,SEC_WR))
+	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR))
 	{
 	    for( int i_f = 0; i_f < req.elem().fldSize(); i_f++ )
 		if( req.elem().fldAt(i_f).flg()&TCfg::Key )
@@ -982,7 +982,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 		}
 	    fieldDel(req);
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))
 	{
 	    //> Get structure
 	    string  col = opt->attr("col");

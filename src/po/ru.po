@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-07 13:40+0300\n"
+"POT-Creation-Date: 2010-11-29 11:00+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -417,8 +417,8 @@ msgstr "Активный атрибут параметра"
 msgid "Value archivator: "
 msgstr "Архиватор значений: "
 
-msgid "Archiving time (msek)"
-msgstr "Время архивирования (мс)"
+msgid "Archiving time"
+msgstr "Время архивирования"
 
 msgid "Archives"
 msgstr "Архивы"
@@ -861,8 +861,8 @@ msgid "Template libraries"
 msgstr "Библиотеки шаблонов"
 
 #, c-format
-msgid "Process time %.6g ms."
-msgstr "Время обработки %.6g мс."
+msgid "Spent time: %s."
+msgstr "Затрачено времени: %s."
 
 msgid "<newStat>"
 msgstr "<новаяСтанц>"
@@ -967,8 +967,8 @@ msgstr "Исполнить"
 msgid "Number runs"
 msgstr "Количество запусков"
 
-msgid "Time for execute (mks)"
-msgstr "Время исполнения (мкс)"
+msgid "Spent time"
+msgstr "Затрачено времени"
 
 msgid "Bool"
 msgstr "Логический"
@@ -1365,6 +1365,24 @@ msgid ""
 msgstr ""
 "Ошибка изменения рабочей директории в '%s': %s. Возможно текущая директория "
 "уже корректно установлена в '%s'."
+
+msgid "day"
+msgstr "день"
+
+msgid "hour"
+msgstr "час"
+
+msgid "min"
+msgstr "мин"
+
+msgid "s"
+msgstr "с"
+
+msgid "ms"
+msgstr "мс"
+
+msgid "us"
+msgstr "мкс"
 
 #, c-format
 msgid ""

@@ -193,7 +193,7 @@ TCntrNode &Contr::operator=( TCntrNode &node )
 string Contr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Calc time %g us. "),tm_calc);
+    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     return rez;
 }
 

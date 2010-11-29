@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-23 17:09+0200\n"
+"POT-Creation-Date: 2010-11-29 14:59+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -26,7 +26,8 @@ msgid ""
 "BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://"
 "www.bigdutchman.com)."
 msgstr ""
-"Підтримка модулю BFN для Viper CT/BAS та інше від \"Big Dutchman\" (http://www.bigdutchman.com)."
+"Підтримка модулю BFN для Viper CT/BAS та інше від \"Big Dutchman\" (http://"
+"www.bigdutchman.com)."
 
 msgid "Parameteres table"
 msgstr "Таблиця параметрів"
@@ -76,8 +77,17 @@ msgstr ""
 msgid "Text"
 msgstr "Текст"
 
+msgid "Alarms"
+msgstr "Порушення"
+
+msgid "Code"
+msgstr "Код"
+
 msgid "New symbol for code"
 msgstr "Новий символ для коду"
+
+msgid "New symbol for alarm"
+msgstr "Новий символ для порушення"
 
 #, c-format
 msgid "Error: '%s'. "
@@ -86,14 +96,17 @@ msgstr "Помилка: '%s'. "
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
-msgid "Call by period %g s. "
-msgstr "Виклик за періодом %g с. "
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
 
+#, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
-msgid "Spent time %.6g ms. "
-msgstr "Витрачено часу %.6g мс. "
+#, c-format
+msgid "Spent time: %s."
+msgstr "Витрачено часу: %s."
 
 msgid "House:\n"
 msgstr "Приміщення:\n"
@@ -104,6 +117,12 @@ msgstr "Комп'ютер приміщення:\n"
 #, c-format
 msgid "Connect to transport '%s' error."
 msgstr "Помилка підключення до транспорту '%s'."
+
+msgid "Alarm: "
+msgstr "Порушення: "
+
+msgid "Norma: "
+msgstr "Норма: "
 
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"

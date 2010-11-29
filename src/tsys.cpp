@@ -169,6 +169,26 @@ string TSYS::time2str( time_t itm, const string &format )
     return (ret > 0) ? string(buf,ret) : string("");
 }
 
+string TSYS::time2str( double utm )
+{
+    if(utm < 1e-6) return "0";
+    int lev = 0;
+    int days = (int)floor(utm/(24*60*60*1e6));
+    int hours = (int)floor(utm/(60*60*1e6))%24;
+    int mins = (int)floor(utm/(60*1e6))%60;
+    int secs = (int)floor(utm/(1e6))%60;
+    int msec = (int)floor(utm/(1e3))%1000;
+    int usec = (int)floor(utm)%1000;
+    string rez;
+    if(days)		{ rez += TSYS::int2str(days)+_("day"); lev = vmax(lev,6); }
+    if(hours)		{ rez += (rez.size()?" ":"")+TSYS::int2str(hours)+_("hour"); lev = vmax(lev,5); }
+    if(mins && lev < 6)	{ rez += (rez.size()?" ":"")+TSYS::int2str(mins)+_("min"); lev = vmax(lev,4); }
+    if(secs && lev < 5)	{ rez += (rez.size()?" ":"")+TSYS::int2str(secs)+_("s"); lev = vmax(lev,3); }
+    if(msec && lev < 4)	{ rez += (rez.size()?" ":"")+TSYS::int2str(msec)+_("ms"); lev = vmax(lev,2); }
+    if(usec && lev < 3)	{ rez += (rez.size()?" ":"")+TSYS::int2str(usec)+_("us"); lev = vmax(lev,1); }
+    return rez;
+}
+
 string TSYS::addr2str( void *addr )
 {
     char buf[sizeof(void*)*2+3];

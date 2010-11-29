@@ -133,7 +133,7 @@ string TMdContr::getStatus( )
 
     if( startStat( ) && !redntUse( ) )
     {
-	val += TSYS::strMess(_("Gather data time %.6g ms. "),tmGath);
+	val += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tmGath).c_str());
 	bool isWork = false;
 	for( int i_st = 0; i_st < mStatWork.size(); i_st++ )
 	    if( mStatWork[i_st].second > -1 ) val += TSYS::strMess(_("Station '%s' error, restoring in %.6g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second);
@@ -403,7 +403,7 @@ void *TMdContr::Task( void *icntr )
 	}catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	//> Calc acquisition process time
-	cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
+	cntr.tmGath = TSYS::curTime()-t_cnt;
 
 	TSYS::taskSleep((long long)(1e9*cntr.period()));
     }

@@ -1801,17 +1801,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	atoi(opt->text().c_str()) ? start() : stop();
     }
     if(a_path == "/prm/st/bEnd" && ctrChkNode(opt))
-    {
-	struct tm ttm;
-	time_t tm_t = end(BUF_ARCH_NM)/1000000; localtime_r(&tm_t,&ttm);
-	opt->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,end(BUF_ARCH_NM)%1000000));
-    }
+	opt->setText(TSYS::time2str(end(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+TSYS::int2str(end(BUF_ARCH_NM)%1000000));
     if(a_path == "/prm/st/bBeg" && ctrChkNode(opt))
-    {
-	struct tm ttm;
-	time_t tm_t = begin(BUF_ARCH_NM)/1000000; localtime_r(&tm_t,&ttm);
-	opt->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,begin(BUF_ARCH_NM)%1000000));
-    }
+	opt->setText(TSYS::time2str(begin(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+TSYS::int2str(begin(BUF_ARCH_NM)%1000000));
     else if(a_path == "/prm/st/db")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
@@ -1931,19 +1923,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    if(a_el)
 		    {
 			if(n_prc)	n_prc->childAdd("el")->setText("1");
-			struct tm ttm;
 			if(n_end)
-			{
-			    time_t tm_t = a_el->end()/1000000; localtime_r(&tm_t,&ttm);
-			    n_end->childAdd("el")->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",
-				    ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,a_el->end()%1000000));
-			}
+			    n_end->childAdd("el")->setText(TSYS::time2str(a_el->end()/1000000,"%d-%m-%Y %H:%M:%S.")+TSYS::int2str(a_el->end()%1000000));
 			if(n_beg)
-			{
-			    time_t tm_t = a_el->begin()/1000000; localtime_r(&tm_t,&ttm);
-			    n_beg->childAdd("el")->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",
-				    ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,a_el->begin()%1000000));
-			}
+			    n_beg->childAdd("el")->setText(TSYS::time2str(a_el->begin()/1000000,"%d-%m-%Y %H:%M:%S.")+TSYS::int2str(a_el->begin()%1000000));
 		    }
 		    else
 		    {
@@ -2040,21 +2023,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
 
-	struct tm ttm;
-	time_t tm_t;
 	long long c_tm = buf.begin();
 	if(buf.end() && buf.begin())
 	    while(c_tm <= buf.end())
 	    {
 	        string val = buf.getS(&c_tm,true);
-		if(n_tm)
-		{
-		    tm_t = c_tm/1000000;
-		    localtime_r(&tm_t,&ttm);
-		    n_tm->childAdd("el")->setText(TSYS::strMess("%d-%02d-%d %d:%02d:%02d.%d",
-			ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900,ttm.tm_hour,ttm.tm_min,ttm.tm_sec,c_tm%1000000));
-		}
-		if( n_val )	n_val->childAdd("el")->setText(val);
+		if(n_tm) n_tm->childAdd("el")->setText(TSYS::time2str(c_tm/1000000,"%d-%m-%Y %H:%M:%S.")+TSYS::int2str(c_tm%1000000));
+		if(n_val)n_val->childAdd("el")->setText(val);
 		c_tm++;
 	    }
     }
@@ -2264,7 +2239,7 @@ void *TVArchivator::Task( void *param )
 		}
 	    res.release();
 
-	    arch.tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+	    arch.tm_calc = TSYS::curTime()-t_cnt;
 
 	    if( isLast ) break;
 
@@ -2286,7 +2261,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+		ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    }
@@ -2318,7 +2293,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	atoi(opt->text().c_str()) ? start() : stop();
     }
-    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))		opt->setText(TSYS::real2str(tm_calc,6));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::time2str(tm_calc));
     else if(a_path == "/prm/st/db")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());

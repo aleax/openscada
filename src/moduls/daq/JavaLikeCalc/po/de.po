@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 22:22+0300\n"
+"POT-Creation-Date: 2010-11-29 10:34+0200\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -263,17 +263,17 @@ msgstr "Funktionsbibliothek"
 msgid "Libraries"
 msgstr "Bibliotheken"
 
-#, c-format
-msgid "Call by period %g s. "
+#, fuzzy, c-format
+msgid "Call by period: %s. "
 msgstr "Aufruf bei Periode %g (sek)."
 
-#, c-format
-msgid "Call by cron '%s'. "
+#, fuzzy, c-format
+msgid "Call next by cron '%s'. "
 msgstr "Aufruf bei Cron '%s'"
 
 #, c-format
-msgid "Calc time %.6g mks. "
-msgstr "Berechnungszeit %.6g usek"
+msgid "Spent time: %s."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -366,3 +366,6 @@ msgstr ""
 "  anm - Name des gebildeten Attributs.\n"
 "  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewähltenIO "
 "der Funktion generiert."
+
+#~ msgid "Calc time %.6g mks. "
+#~ msgstr "Berechnungszeit %.6g usek"

@@ -142,7 +142,8 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Gather data time %.6g ms. Serial requests %g, errors %g. "),tm_gath,numReq,numErr);
+    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "),
+	TSYS::time2str(tm_gath).c_str(),numReq,numErr);
 
     return val;
 }
@@ -277,7 +278,7 @@ void *TMdContr::Task( void *icntr )
 		res.release();
 
 		//> Calc acquisition process time
-		cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+		cntr.tm_gath = TSYS::curTime()-t_cnt;
 	    }
 
 	    //> Watchdog timer process

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-11 09:13+0300\n"
+"POT-Creation-Date: 2010-11-28 20:32+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -64,18 +64,18 @@ msgstr "Liste der Attribute"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
 
-#, c-format
-msgid "Call by period %g s. "
+#, fuzzy, c-format
+msgid "Call by period: %s. "
 msgstr "Herausforderung mit der Periode  %g s."
 
-#, c-format
-msgid "Call by cron '%s'. "
+#, fuzzy, c-format
+msgid "Call next by cron '%s'. "
 msgstr "Herausforderung nach dem Cron '%s'."
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Gather data time %.6g ms. Read %g(%g) registers, %g(%g) coils. Write %g "
-"registers, %g coils. Errors of connection %g, of respond %g."
+"Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g "
+"coils. Errors of connection %g, of respond %g."
 msgstr ""
 "Datenerfassungszeit %.6g msek. Gelesen %g(%g) Register, %g(%g) Bits. "
 "Geschrieben %g Register, %g Bits. Fehler in der Verbindung %g, in der "
@@ -320,9 +320,9 @@ msgstr "Abgeschaltet. "
 msgid "Enabled. "
 msgstr "Eingeschaltet. "
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Process time %.2f ms. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
+"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
 "registers %.4g, coils %.4g."
 msgstr ""
 "Bearbeitungszeit %.2f msek. Anfragen %.4g. Gelesen %.4g Register, %.4g Bits. "

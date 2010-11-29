@@ -250,7 +250,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,"tp","str","help",
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"

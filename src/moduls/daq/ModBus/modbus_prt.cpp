@@ -873,8 +873,8 @@ string Node::getStatus( )
 	switch(mode())
 	{
 	    case 0:
-		rez += TSYS::strMess( _("Process time %.2f ms. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
-		tmProc, cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil );
+		rez += TSYS::strMess( _("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
+		TSYS::time2str(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil );
 		break;
 	    case 1: case 2:
 		rez += TSYS::strMess( _("Requests %.4g."), cntReq );
@@ -1084,7 +1084,7 @@ void *Node::Task( void *ind )
 	    }
 
 	    //> Calc acquisition process time
-	    nd.tmProc = 1e-3*(TSYS::curTime()-t_cnt);
+	    nd.tmProc = TSYS::curTime()-t_cnt;
 	}
 
 	if( isStop ) break;

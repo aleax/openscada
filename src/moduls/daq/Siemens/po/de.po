@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 14:38+0300\n"
+"POT-Creation-Date: 2010-11-29 10:52+0200\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -204,8 +204,8 @@ msgid " : Passive station"
 msgstr " : Passive Station"
 
 #, c-format
-msgid "Acquisition time %.6g ms. "
-msgstr "Erfassungszeit %.6g msek. "
+msgid "Spent time: %s. "
+msgstr ""
 
 msgid "-1:No data"
 msgstr "-1:Keine Daten"
@@ -300,3 +300,6 @@ msgstr "Nur Datenbank Offsets anzeigen"
 
 msgid "Parameters"
 msgstr "Parameter"
+
+#~ msgid "Acquisition time %.6g ms. "
+#~ msgstr "Erfassungszeit %.6g msek. "

@@ -107,6 +107,11 @@ void TTpContr::postEnable(int flag)
     //> Make Symbols of codes container structure
     symbCode_el.fldAdd(new TFld("ID","ID",TFld::Integer,TCfg::Key));
     symbCode_el.fldAdd(new TFld("TEXT","Text",TFld::String,TCfg::TransltText,"100"));
+
+    //> Make Symbols of alarms container structure
+    symbAlrm_el.fldAdd(new TFld("ID","ID",TFld::Integer,TCfg::Key));
+    symbAlrm_el.fldAdd(new TFld("CODE","Code",TFld::Integer,TFld::NoFlag));
+    symbAlrm_el.fldAdd(new TFld("TEXT","Text",TFld::String,TCfg::TransltText,"100"));
 }
 
 string TTpContr::symbDB( )
@@ -128,6 +133,14 @@ string TTpContr::getSymbolCode(const string &id)
     return is->second;
 }
 
+TTpContr::AlrmSymb TTpContr::getSymbolAlarm(const string &id)
+{
+    ResAlloc res(nodeRes(), false);
+    map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.find(atoi(id.c_str()));
+    if(is == mSymbAlrm.end()) return AlrmSymb();
+    return is->second;
+}
+
 void TTpContr::load_( )
 {
     //> Load Code symbols
@@ -138,6 +151,12 @@ void TTpContr::load_( )
     mSymbCode.clear();
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbCode[c_el.cfg("ID").getI()] = c_el.cfg("TEXT").getS();
+    //> Load Alarm symbols
+    wtbl = MOD_ID"_SymbAlarm";
+    c_el.setElem(&symbAlrm_el);
+    mSymbAlrm.clear();
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+	mSymbAlrm[c_el.cfg("ID").getI()] = AlrmSymb(c_el.cfg("TEXT").getS(),c_el.cfg("CODE").getI());
 }
 
 void TTpContr::save_( )
@@ -153,10 +172,27 @@ void TTpContr::save_( )
 	c_el.cfg("TEXT").setS(is->second);
 	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
     }
-    //> Clear no present codes
+    //>> Clear no present codes
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
     {
 	if(mSymbCode.find(c_el.cfg("ID").getI()) != mSymbCode.end()) continue;
+	SYS->db().at().dataDel(wdb+"."+wtbl,nodePath()+wtbl,c_el,true);
+	fld_cnt--;
+    }
+    //> Save Alarm symbols
+    wtbl = MOD_ID"_SymbAlarm";
+    c_el.setElem(&symbAlrm_el);
+    for(map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.begin(); is != mSymbAlrm.end(); is++)
+    {
+	c_el.cfg("ID").setI(is->first);
+	c_el.cfg("CODE").setI(is->second.code);
+	c_el.cfg("TEXT").setS(is->second.text);
+	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
+    }
+    //>> Clear no present codes
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+    {
+	if(mSymbAlrm.find(c_el.cfg("ID").getI()) != mSymbAlrm.end()) continue;
 	SYS->db().at().dataDel(wdb+"."+wtbl,nodePath()+wtbl,c_el,true);
 	fld_cnt--;
     }
@@ -181,6 +217,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/codes/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+	    }
+	    if(ctrMkNode("table",opt,-1,"/symbs/alrms",_("Alarms"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id"))
+	    {
+		ctrMkNode("list",opt,-1,"/symbs/alrms/id",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/symbs/alrms/code",_("Code"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/symbs/alrms/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	}
 	return;
@@ -226,6 +268,43 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	}
 	modif();
     }
+    else if(a_path == "/symbs/alrms")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	{
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/alrms/id","");
+	    XMLNode *n_code	= ctrMkNode("list",opt,-1,"/symbs/alrms/code","");
+	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/alrms/text","");
+
+	    ResAlloc res(nodeRes(), false);
+	    for(map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.begin(); is != mSymbAlrm.end(); is++)
+	    {
+		if(n_id)	n_id->childAdd("el")->setText(TSYS::uint2str(is->first));
+		if(n_code)	n_code->childAdd("el")->setText(TSYS::uint2str(is->second.code));
+		if(n_text)	n_text->childAdd("el")->setText(is->second.text);
+	    }
+	    return;
+	}
+	ResAlloc res(nodeRes(), true);
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	{
+	    if(!mSymbAlrm.size()) mSymbAlrm[0] = AlrmSymb(_("New symbol for alarm"),0);
+	    else mSymbAlrm[mSymbAlrm.rbegin()->first+1] = AlrmSymb(_("New symbol for alarm"),0);
+	}
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    mSymbAlrm.erase(atoi(opt->attr("key_id").c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	{
+	    if(opt->attr("col") == "id")
+	    {
+		mSymbAlrm[atoi(opt->text().c_str())] = mSymbAlrm[atoi(opt->attr("key_id").c_str())];
+		mSymbAlrm.erase(atoi(opt->attr("key_id").c_str()));
+	    }
+	    else if(opt->attr("col") == "code")	mSymbAlrm[atoi(opt->attr("key_id").c_str())].code = atoi(opt->text().c_str());
+	    else if(opt->attr("col") == "text")	mSymbAlrm[atoi(opt->attr("key_id").c_str())].text = opt->text();
+	}
+	modif();
+    }
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -259,10 +338,10 @@ string TMdContr::getStatus( )
 	//> Display processing
         if(acq_st) rez += TSYS::strMess(_("Call now. "),tm_gath);
         //> Display schedule
-	if(period()) rez += TSYS::strMess(_("Call by period %g s. "),(1e-9*period()));
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
     	//> Display spent time
-    	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time %.6g ms. "),tm_gath);
+    	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
     }
 
     return rez;
@@ -534,7 +613,36 @@ void *TMdContr::Task(void *icntr)
 		reqAlrms.childAdd("lLastLogIndexFetched")->setText(TSYS::int2str(cntr.p_hd[i_p].at().curAlrmsId));
 		cntr.reqBFN(reqAlrms);
 		if(reqAlrms.attr("err").empty())
+		{
+		    printf("TEST 00: House computer '%s'\n",cntr.p_hd[i_p].at().id().c_str());
 		    cntr.p_hd[i_p].at().curAlrmsId = atoi(reqAlrms.childGet("lLastLogIndexFetched")->text().c_str());
+		    XMLNode *alrmArr = reqAlrms.childGet("arrAlarmLogData");
+		    for(int i_a = 0; i_a < alrmArr->childSize(); i_a++)
+		    {
+			XMLNode *alrmIt = alrmArr->childGet(i_a);
+			time_t aTm = atoi(alrmIt->childGet("lTimestamp")->text().c_str());
+			string aId = alrmIt->childGet("lAlarmId")->text();
+			int aEv = atoi(alrmIt->childGet("lAlarmEvent")->text().c_str());
+			string aVl = alrmIt->childGet("szValue")->text();
+			TTpContr::AlrmSymb aNd = mod->getSymbolAlarm(aId);
+			if(aNd.text.empty()) printf("TEST 01a: Unknown alarm '%s'\n",aId.c_str());
+			else
+			{
+			    string mcat = TSYS::strMess("alBFN:%s:%s:%d:%s",cntr.id().c_str(),cntr.p_hd[i_p].at().id().c_str(),aNd.code,aId.c_str());
+			    string mval = aNd.text;
+			    if(aNd.code) mval = mod->getSymbolCode(TSYS::int2str(aNd.code))+": "+mval;
+
+			    if(aEv == 0)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Error, _("Alarm: ")+mval);
+			    //else if(aEv == 1)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Warning, _("Confirm: ")+mval);
+			    else if(aEv == 2)	SYS->archive().at().messPut(aTm, 0, mcat, TMess::Info, _("Norma: ")+mval);
+
+			    //> Place alarm flag to attribute
+			    //????
+			    //printf("TEST 01b: Alarm: %s, Code: %d, Event: %d, Date: %s\n",
+			    //	aId.c_str(),aNd.code,aEv,TSYS::time2str(aTm,"%d-%m-%Y %H:%M:%S.").c_str());
+			}
+		    }
+		}
 		else if(tErr.empty()) tErr = reqAlrms.attr("err");
 		cntr.p_hd[i_p].at().acq_err.setVal(tErr);
 	    }
@@ -543,7 +651,7 @@ void *TMdContr::Task(void *icntr)
 
 	cntr.acq_err.setVal(tErr);
 
-	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
+	cntr.tm_gath = TSYS::curTime()-t_cnt;
 	cntr.acq_st = false;
 	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
     }

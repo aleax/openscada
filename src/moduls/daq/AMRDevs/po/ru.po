@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:24+0300\n"
+"POT-Creation-Date: 2010-11-29 10:09+0200\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -143,17 +143,15 @@ msgstr "Адрес устройства"
 msgid "Device addon parameters"
 msgstr "Дополнительные параметры устройства"
 
-#, c-format
-msgid "Call by period %g s. "
-msgstr "Вычисление с периодом %g с. "
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
-msgid "Call by cron '%s'. "
-msgstr "Вычисление по расписанию '%s'. "
-
-#, c-format
-msgid "Gather data time %.6g ms. "
-msgstr "Время сбора данных %.6g мс. "
+msgid "Spent time: %s."
+msgstr "Затрачено времени: %s."
 
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
@@ -201,3 +199,6 @@ msgstr "Эргомера"
 
 msgid "11:Value not gathered."
 msgstr "11:Значение не получено."
+
+#~ msgid "Gather data time %.6g ms. "
+#~ msgstr "Время сбора данных %.6g мс. "

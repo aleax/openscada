@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 10:24+0300\n"
+"POT-Creation-Date: 2010-11-29 10:09+0200\n"
 "PO-Revision-Date: 2010-10-06 21:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -150,17 +150,17 @@ msgstr "Adresse der Anlage"
 msgid "Device addon parameters"
 msgstr "Zusätzliche Parameter der Anlage"
 
-#, c-format
-msgid "Call by period %g s. "
+#, fuzzy, c-format
+msgid "Call by period: %s. "
 msgstr "Berechnung mit der Periode %g s. "
 
-#, c-format
-msgid "Call by cron '%s'. "
+#, fuzzy, c-format
+msgid "Call next by cron '%s'. "
 msgstr "Berechnung nach dem Plan '%s'. "
 
 #, c-format
-msgid "Gather data time %.6g ms. "
-msgstr "Zeit des Datenempfangs %.6g ms. "
+msgid "Spent time: %s."
+msgstr ""
 
 msgid ""
 "Schedule is writed in seconds periodic form or in standard Cron form.\n"
@@ -208,3 +208,6 @@ msgstr "Ergomera"
 
 msgid "11:Value not gathered."
 msgstr "11:Der Wert ist nicht empfangen."
+
+#~ msgid "Gather data time %.6g ms. "
+#~ msgstr "Zeit des Datenempfangs %.6g ms. "
