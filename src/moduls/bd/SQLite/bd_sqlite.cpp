@@ -257,12 +257,12 @@ void MBD::cntrCmdProc( XMLNode *opt )
 		      "               Use empty path for a private, temporary on-disk database create.\n"
 		      "               Use \":memory:\" for a private, temporary in-memory database create."));
 	if(reqCnt)
-	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),RWRW__,"root",SDB_ID);
+	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),RWRWRW,"root",SDB_ID);
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR) && reqCnt)
+    if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt)
 	transCommit();
     else TBD::cntrCmdProc(opt);
 }

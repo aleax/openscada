@@ -946,7 +946,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/nm" && ctrChkNode(opt)) opt->setText(name());
+    if(a_path == "/prm/cfg/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
     else if(a_path == "/prm/tbl")
     {
 	TConfig req;
