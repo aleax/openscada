@@ -1,3 +1,9 @@
+2010-11-30 Roman
+- !!:Transport, Transport.*: The function TTransportS::traf2str() is added for traffic counter convert to string like "12.5KiB".
+    New function is used everywhere.
+- FIX:Transport.Sockets: Close client connections at timeout of life time is fixed for connected but no data receiving connections.
+
+
 2010-11-29 Roman
 - !!:SYS: New function TSYS::time2str() is added for convert time interval to string like "1hour 23min 10sec". The function is used everywhere.
 - FIX:DB, DB.*: Disable access for other to view DB's tables content and DB's address field.

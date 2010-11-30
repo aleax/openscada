@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 11:00+0200\n"
+"POT-Creation-Date: 2010-11-30 12:02+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1770,6 +1770,18 @@ msgstr "Помилка зупинки вхідного транспорту <%s>
 #, c-format
 msgid "Stop output transport <%s> error."
 msgstr "Помилка зупинки вихідного транспорту <%s>."
+
+msgid "GiB"
+msgstr "ГіБ"
+
+msgid "MiB"
+msgstr "МБ"
+
+msgid "KiB"
+msgstr "КіБ"
+
+msgid "B"
+msgstr "Б"
 
 #, c-format
 msgid ""

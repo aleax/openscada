@@ -141,8 +141,8 @@ string TSocketIn::getStatus( )
     string rez = TTransportIn::getStatus( );
 
     if( startStat() )
-	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed connections by limit %d."),
-	connNumb,cl_id.size(),trIn,trOut,clsConnByLim);
+	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
+	connNumb,cl_id.size(),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str(),clsConnByLim);
 
     return rez;
 }
@@ -382,7 +382,7 @@ void *TSocketIn::Task(void *sock_in)
 	    int r_len;
 	    string  req, answ;
 
-	    r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len); sock->trIn += (float)r_len/1024;
+	    r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len); sock->trIn += r_len;
 	    if( r_len <= 0 ) continue;
 	    req.assign(buf,r_len);
 
@@ -397,7 +397,7 @@ void *TSocketIn::Task(void *sock_in)
 	    mess_debug( sock->nodePath().c_str(), _("Socket replied datagram <%d> to <%s>!"), answ.size(), inet_ntoa(name_cl.sin_addr) );
 #endif
 
-	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len); sock->trOut += (float)r_len/1024;
+	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len); sock->trOut += r_len;
 	}
     }
     pthread_attr_destroy(&pthr_attr);
@@ -424,10 +424,10 @@ void *TSocketIn::ClTask( void *s_inf )
     int tm = time(NULL);	//> Last connection time
 
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str() );
+    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str());
 #endif
 
-    s.s->clientReg( pthread_self(), s.cSock );
+    s.s->clientReg(pthread_self(), s.cSock);
 
     //> Client socket process
     struct  timeval tv;
@@ -444,50 +444,48 @@ void *TSocketIn::ClTask( void *s_inf )
 	FD_ZERO(&rd_fd); FD_SET(s.cSock,&rd_fd);
 
 	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
-	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd) ) continue;
+	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd)) continue;
 	r_len = read(s.cSock,buf,s.s->bufLen()*1000);
-	if( r_len <= 0 ) break;
-	s.s->trIn += (float)r_len/1024;
+	if(r_len <= 0) break;
+	s.s->trIn += r_len;
 
 #if OSC_DEBUG >= 5
-	mess_debug(s.s->nodePath().c_str(),_("Socket received message <%d> from <%s>."), r_len, s.sender.c_str() );
+	mess_debug(s.s->nodePath().c_str(),_("Socket received message <%d> from <%s>."), r_len, s.sender.c_str());
 #endif
 	req.assign(buf,r_len);
 
 	s.s->messPut(s.cSock,req,answ,s.sender,prot_in);
-	if( answ.size() )
+	if(answ.size())
 	{
 #if OSC_DEBUG >= 5
-	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message <%d> to <%s>."), answ.size(), s.sender.c_str() );
+	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message <%d> to <%s>."), answ.size(), s.sender.c_str());
 #endif
-	    for( int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL )
+	    for(int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
-		s.s->trOut += (float)wL/1024;
+		s.s->trOut += wL;
 	    }
 	    answ = "";
 	    cnt++;
 	    tm = time(NULL);
 	}
 	sessOk = true;
-    }while( !s.s->endrun_cl && (!sessOk ||
-	    ((s.s->mode || !prot_in.freeStat()) &&
-	     (!s.s->keepAliveCon() || cnt < s.s->keepAliveCon()) &&
-	     (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm())) ) );
+    }while(!s.s->endrun_cl && (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
+	    (!sessOk || ((s.s->mode || !prot_in.freeStat()) && (!s.s->keepAliveCon() || cnt < s.s->keepAliveCon()))));
 
     //> Close protocol on broken connection
-    if( !prot_in.freeStat() )
+    if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
 	prot_in.free();
 	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(s.s->protocol());
-	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
+	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
     }
 
-    s.s->clientUnreg( pthread_self( ) );
+    s.s->clientUnreg(pthread_self());
 
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected by <%s>!"),s.sender.c_str() );
+    mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected by <%s>!"),s.sender.c_str());
 #endif
 
     delete (SSockIn*)s_inf;
@@ -634,7 +632,8 @@ string TSocketOut::getStatus( )
 {
     string rez = TTransportOut::getStatus( );
 
-    if( startStat() )	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb."),trIn,trOut);
+    if(startStat())
+	rez += TSYS::strMess(_("Traffic in %s, out %s."),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str());
 
     return rez;
 }
@@ -740,7 +739,7 @@ void TSocketOut::start()
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;
 	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
-	
+
 	//> Create socket
 	if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1)
 	    throw TError(nodePath().c_str(),_("Error creation UNIX socket: %s!"),strerror(errno));
@@ -812,7 +811,7 @@ repeate:
     else time = mTmNext;
     if( !time ) time = 5000;
 
-    trOut += (float)kz/1024;
+    trOut += kz;
 
     //> Read reply
     int i_b = 0;
@@ -834,7 +833,7 @@ repeate:
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
 	    if(i_b <= 0 && obuf) { res.release(); stop(); start(); res.request(true); goto repeate; }
-	    trIn += (float)vmax(0,i_b)/1024;
+	    trIn += vmax(0,i_b);
 	}
     }
 

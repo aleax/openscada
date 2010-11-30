@@ -283,6 +283,9 @@ class TTransportS : public TSubSYS
 
 	AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
 
+	//> Static functions
+	static string traf2str( double cnt );
+
     protected:
 	void load_( );
 	void save_( );

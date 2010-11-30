@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-10 10:12+0300\n"
+"POT-Creation-Date: 2010-11-30 12:12+0200\n"
 "PO-Revision-Date: 2009-08-20 10:16+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -46,8 +46,8 @@ msgstr "Fehler der Einschreibung der Zeile."
 msgid "Read from serial error."
 msgstr "Fehler des Lesens des seriellen Interfaces"
 
-#, c-format
-msgid "Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."
+#, fuzzy, c-format
+msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
 msgstr ""
 "Datenverkehr eingehend %.4g kb, ausgehend %.4g kb. Maximale Wartezeit für "
 "ein Zeichen %.4g msek."
@@ -163,8 +163,8 @@ msgstr "Ring Antwort"
 msgid "Ring answer response"
 msgstr "Ring Antwort, Ergebnis"
 
-#, c-format
-msgid "Traffic in %.4g kb, out %.4g kb. "
+#, fuzzy, c-format
+msgid "Traffic in %s, out %s. "
 msgstr "Datenverkehr eingehend %.4g kb, ausgehend %.4g kb. "
 
 #, c-format

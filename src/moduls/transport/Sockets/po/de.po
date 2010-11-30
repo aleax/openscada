@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 10:52+0300\n"
+"POT-Creation-Date: 2010-11-30 12:03+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -33,10 +33,10 @@ msgstr ""
 msgid "Addon parameters"
 msgstr "Zusätzliche Parameter"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed "
-"connections by limit %d."
+"Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
+"limit %d."
 msgstr ""
 "Verbindungen %d, eröffnet %d. Eingangstraffik %.4g kb, Ausgangs- %.4g kb. "
 "Verbindungen geschlossen nach dem Limit %d."
@@ -154,8 +154,8 @@ msgstr "Keep alive время ожидания (с)"
 msgid "Priority"
 msgstr "Priorität"
 
-#, c-format
-msgid "Traffic in %.4g kb, out %.4g kb."
+#, fuzzy, c-format
+msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %.4g kb, Ausgangs- %.4g kb."
 
 #, c-format

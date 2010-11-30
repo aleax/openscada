@@ -192,8 +192,8 @@ string TSocketIn::getStatus( )
 	rez += _("Start error: ") + stErr;
     else if( startStat() )
     {
-	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb. Closed connections by limit %d."),
-	    connNumb,opConnCnt(),trIn,trOut,clsConnByLim);
+	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
+	    connNumb,opConnCnt(),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str(),clsConnByLim);
     }
 
     return rez;
@@ -426,13 +426,13 @@ void *TSocketIn::ClTask( void *s_inf )
     mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str() );
 #endif
 
-    if( BIO_do_handshake(s.bio) <= 0 )
+    if(BIO_do_handshake(s.bio) <= 0)
     {
-	if( BIO_should_retry(s.bio) )
-	    while( BIO_should_retry(s.bio) && !s.s->endrun_cl )	{ BIO_do_handshake(s.bio); usleep(STD_WAIT_DELAY*1000); }
+	if(BIO_should_retry(s.bio))
+	    while(BIO_should_retry(s.bio) && !s.s->endrun_cl)	{ BIO_do_handshake(s.bio); usleep(STD_WAIT_DELAY*1000); }
 	else
 	{
-	    if( ERR_peek_last_error() )
+	    if(ERR_peek_last_error())
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 		mess_err(s.s->nodePath().c_str(),"BIO_should_retry: %s",err);
@@ -454,7 +454,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     do
     {
-	if( !SSL_pending(ssl) )
+	if(!SSL_pending(ssl))
 	{
 	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
 	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
@@ -469,24 +469,24 @@ void *TSocketIn::ClTask( void *s_inf )
         mess_debug(s.s->nodePath().c_str(),_("The message is received with the size <%d>."),rez);
 #endif
 	req.assign(buf,rez);
-	s.s->trIn += (float)rez/1024;
+	s.s->trIn += rez;
 
 	s.s->messPut(cSock,req,answ,s.sender,prot_in);
-	if( answ.size() )
+	if(answ.size())
 	{
 #if OSC_DEBUG >= 4
             mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size <%d>."),answ.size());
 #endif
 	    do { rez=BIO_write(s.bio,answ.data(),answ.size()); } while( rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE );
-	    s.s->trOut += (float)answ.size()/1024;
+	    s.s->trOut += answ.size();
 	    answ = "";
 	    cnt++;
 	    tm = time(NULL);
 	}
     }
-    while( !s.s->endrun_cl &&
+    while(!s.s->endrun_cl &&
 		(!s.s->keepAliveCon() || cnt < s.s->keepAliveCon()) &&
-		(!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) );
+		(!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()));
 
     BIO_flush(s.bio);
     close(sock_fd);
@@ -668,7 +668,8 @@ string TSocketOut::getStatus( )
 {
     string rez = TTransportOut::getStatus( );
 
-    if( startStat() )	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb."),trIn,trOut);
+    if(startStat())
+	rez += TSYS::strMess(_("Traffic in %s, out %s."),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str());
 
     return rez;
 }
@@ -846,7 +847,7 @@ repeate:
     else time = mTmNext;
     if(!time) time = 5000;
 
-    trOut += (float)ret/1024;
+    trOut += ret;
 #if OSC_DEBUG >= 4
     if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size <%d>."),ret);
 #endif
@@ -855,7 +856,7 @@ repeate:
     if(ibuf != NULL && len_ib > 0)
     {
 	ret = BIO_read(conn,ibuf,len_ib);
-	if(ret > 0) trIn += (float)ret/1024;
+	if(ret > 0) trIn += ret;
 	else if(ret == 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE)
 	{
@@ -883,7 +884,7 @@ repeate:
 		ret = BIO_read(conn,ibuf,len_ib);
 		if(ret == -1) while((ret=BIO_read(conn,ibuf,len_ib))==-1) pthread_yield();
 		if(ret < 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
-		trIn += (float)ret/1024;
+		trIn += ret;
 	    }
 	}
     }

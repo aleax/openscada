@@ -289,7 +289,8 @@ string TTrIn::getStatus( )
     string rez = TTransportIn::getStatus( );
 
     if(startStat())
-	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. Maximum char timeout %.4g ms."),trIn,trOut,tmMax);
+	rez += TSYS::strMess(_("Traffic in %s, out %s. Maximum char timeout %.4g ms."),
+	    TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str(),tmMax);
 
     return rez;
 }
@@ -532,7 +533,7 @@ void *TTrIn::Task( void *tr_in )
 	    break;
 	}
 
-	tr->trIn += (float)req.size()/1024;
+	tr->trIn += req.size();
 
 #if OSC_DEBUG >= 5
 	mess_debug( nodePath().c_str(), _("Serial received message <%d>."), req.size() );
@@ -580,7 +581,7 @@ void *TTrIn::Task( void *tr_in )
 	    for( int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL )
 	    {
 		wL = write( tr->fd, answ.data()+wOff, answ.size()-wOff );
-		tr->trOut += (float)wL/1024;
+		tr->trOut += wL;
 	    }
 	    answ = "";
 	}
@@ -761,7 +762,7 @@ string TTrOut::getStatus( )
     string rez = TTransportOut::getStatus( );
 
     if( startStat() )
-	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb. "),trIn,trOut);
+	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str());
 
     return rez;
 }
@@ -1008,7 +1009,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    kz = write(fd,obuf+wOff,len_ob-wOff);
 	    if( kz <= 0 ) { mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Writing request error.")); }
 	}
-	trOut += (float)len_ob/1024;
+	trOut += len_ob;
     }
 
     //> Read reply
@@ -1031,7 +1032,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	else if( FD_ISSET(fd, &rd_fd) )
 	{
 	    blen = read(fd,ibuf,len_ib);
-	    trIn += (float)blen/1024;
+	    trIn += blen;
 	}
     }
     mLstReqTm = TSYS::curTime();
