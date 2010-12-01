@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 14:59+0200\n"
+"POT-Creation-Date: 2010-12-01 11:28+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -28,9 +28,6 @@ msgid ""
 msgstr ""
 "Поддержка BFN модулей для Viper CT/BAS и других от \"Big Dutchman\" (http://"
 "www.bigdutchman.com)."
-
-msgid "Parameteres table"
-msgstr "Таблица параметров"
 
 msgid "Calc schedule"
 msgstr "Планирование вычисления"
@@ -117,6 +114,9 @@ msgstr "Компьютер помещения:\n"
 #, c-format
 msgid "Connect to transport '%s' error."
 msgstr "Ошибка подключения к транспорту '%s'."
+
+msgid "Unknown alarm '%s'."
+msgstr "Неизвестное нарушение '%s'."
 
 msgid "Alarm: "
 msgstr "Нарушение: "

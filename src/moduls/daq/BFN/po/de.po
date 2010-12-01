@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 14:59+0200\n"
+"POT-Creation-Date: 2010-12-01 11:28+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -27,9 +27,6 @@ msgid ""
 "BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://"
 "www.bigdutchman.com)."
 msgstr ""
-
-msgid "Parameteres table"
-msgstr "Parametertabelle"
 
 msgid "Calc schedule"
 msgstr "Planung der Berechnung"
@@ -119,6 +116,10 @@ msgstr ""
 msgid "Connect to transport '%s' error."
 msgstr ""
 
+#, c-format
+msgid "Unknown alarm '%s'."
+msgstr ""
+
 msgid "Alarm: "
 msgstr ""
 
@@ -150,3 +151,6 @@ msgstr "1:Parameter abgeschaltet."
 
 msgid "2:Acquisition is stoped."
 msgstr "2:Befragung ist gestoppt."
+
+#~ msgid "Parameteres table"
+#~ msgstr "Parametertabelle"

@@ -88,7 +88,7 @@ void TTpContr::postEnable(int flag)
     TTipDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
+    //fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
@@ -316,7 +316,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
 	mAddr(cfg("ADDR").getSd()), /*mHouse(cfg("HOUSE").getSd()),*/ mUser(cfg("USER").getSd()), mPassword(cfg("PASS").getSd())
 {
-    cfg("PRM_BD").setS("TmplPrm_"+name_c);
+    //cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
@@ -614,7 +614,6 @@ void *TMdContr::Task(void *icntr)
 		cntr.reqBFN(reqAlrms);
 		if(reqAlrms.attr("err").empty())
 		{
-		    printf("TEST 00: House computer '%s'\n",cntr.p_hd[i_p].at().id().c_str());
 		    cntr.p_hd[i_p].at().curAlrmsId = atoi(reqAlrms.childGet("lLastLogIndexFetched")->text().c_str());
 		    XMLNode *alrmArr = reqAlrms.childGet("arrAlarmLogData");
 		    for(int i_a = 0; i_a < alrmArr->childSize(); i_a++)
@@ -625,7 +624,7 @@ void *TMdContr::Task(void *icntr)
 			int aEv = atoi(alrmIt->childGet("lAlarmEvent")->text().c_str());
 			string aVl = alrmIt->childGet("szValue")->text();
 			TTpContr::AlrmSymb aNd = mod->getSymbolAlarm(aId);
-			if(aNd.text.empty()) printf("TEST 01a: Unknown alarm '%s'\n",aId.c_str());
+			if(aNd.text.empty()) mess_warning(cntr.nodePath().c_str(),_("Unknown alarm '%s'."),aId.c_str());
 			else
 			{
 			    string mcat = TSYS::strMess("alBFN:%s:%s:%d:%s",cntr.id().c_str(),cntr.p_hd[i_p].at().id().c_str(),aNd.code,aId.c_str());
