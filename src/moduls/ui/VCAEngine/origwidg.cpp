@@ -497,6 +497,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    "  \"AP,ap\" - to display AM/PM or am/pm."));
 			break;
 		}
+		break;
 	    case 3:	//Button
 		el = src->attrAt("img").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 		if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
