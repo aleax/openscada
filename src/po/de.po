@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-30 12:02+0200\n"
+"POT-Creation-Date: 2010-12-01 13:26+0200\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -650,6 +650,9 @@ msgstr "Element <%s> Warnung! %s"
 
 msgid "Node: "
 msgstr "Knoten: "
+
+msgid "*.*.<TableName>"
+msgstr "*.*.<Tabellenname>"
 
 msgid "<TableName>"
 msgstr "<Tabellenname>"
