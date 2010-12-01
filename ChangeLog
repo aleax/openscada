@@ -1,5 +1,6 @@
 2010-12-01 Roman
 - DAQ.BFN: Some fixes and debug disable.
+- FIX:UI.VCAEngine: Parent widget name set is fixed for included widget's copy of a template page.
 
 
 2010-11-30 Roman

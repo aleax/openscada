@@ -1275,13 +1275,13 @@ PageWdg::~PageWdg( )
 
 TCntrNode &PageWdg::operator=( TCntrNode &node )
 {
+    Widget::operator=( node );
+
     if( ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id()) )
     {
 	setParentNm(ownerPage().parent().at().path()+"/wdg_"+id());
 	setEnable(true);
     }
-
-    Widget::operator=( node );
 }
 
 Page &PageWdg::ownerPage()
