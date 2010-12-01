@@ -988,7 +988,7 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","22") );
 	attrAdd( new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","","23") );
 	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","","24") );
-	attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","","","25") );
+	attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","","25") );
 	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
 	attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","","27") );
 	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","","28") );
@@ -1051,6 +1051,10 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
 	el = src->attrAt("arch").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("help",_("Messages archivator in form \"[ArchMod].[ArchivatorId]\"."));
+	el = src->attrAt("lev").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",_("Set value to < 0 for get current alarms."));
+	el = src->attrAt("tSize").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	if(el) el->setAttr("len","")->setAttr("help",_("Set value to '0' for get all alarms, for 'lev' < 0."));
 	el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("help",
 	    _("Category template of messages whith special symbols:\n"
