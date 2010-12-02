@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-07 15:27+0300\n"
+"POT-Creation-Date: 2010-12-02 09:14+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -57,11 +57,11 @@ msgstr "Помилка створення нового архівного фай
 msgid "Can not create dir <%s>."
 msgstr "Неможу створити директорію <%s>."
 
-msgid "Archivator files size (kB)"
-msgstr "Розмір файлів архіватору (кБ)"
+msgid "Archivator files size"
+msgstr "Розмір файлів архіватору"
 
-msgid "Archiving time (msek)"
-msgstr "Час архівування (мс)"
+msgid "Archiving time"
+msgstr "Час архівування"
 
 msgid "Path to directory for archivator's of messages files."
 msgstr "Шлях до директорії для файлів архіватору повідомлень."
@@ -126,8 +126,8 @@ msgstr "Отримання повідомлень з файлу архіва з 
 msgid "Archive file isn't attached!"
 msgstr "Файл архіву не підєднано!"
 
-msgid "Full archives size (MB)"
-msgstr "Повний розмір архівів (Мб)"
+msgid "Full archives size"
+msgstr "Повний розмір архівів"
 
 msgid "Path to directory for archivator's of values files."
 msgstr "Шлях до директорії для файлів архіватору значень."
@@ -138,8 +138,8 @@ msgstr "Розмір файлу (годин)"
 msgid "Numberic values rounding (%)"
 msgstr "Округлення числових значень (%)"
 
-msgid "Files size (Mb)"
-msgstr "Розмір файлів (Мб)"
+msgid "Files size"
+msgstr "Розмір файлів"
 
 msgid "Export"
 msgstr "Експорт"

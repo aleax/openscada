@@ -1,3 +1,7 @@
+2010-12-02 Roman
+- SYS: TTransportS::traf2str() is renamed and moved to TSYS::cpct2str().
+
+
 2010-12-01 Roman
 - DAQ.BFN: Some fixes and debug disable.
 - FIX:UI.VCAEngine: Parent widget name set is fixed for included widget's copy of a template page.

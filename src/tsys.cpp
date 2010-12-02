@@ -189,6 +189,14 @@ string TSYS::time2str( double utm )
     return rez;
 }
 
+string TSYS::cpct2str( double cnt )
+{
+    if(cnt > 0.2*pow(1024,3))return TSYS::real2str(cnt/pow(1024,3),3,'g')+_("GiB");
+    if(cnt > 0.2*pow(1024,2))return TSYS::real2str(cnt/pow(1024,2),3,'g')+_("MiB");
+    if(cnt > 0.2*1024)  return TSYS::real2str(cnt/1024,3,'g')+_("KiB");
+    return TSYS::real2str(cnt,3,'g')+_("B");
+}
+
 string TSYS::addr2str( void *addr )
 {
     char buf[sizeof(void*)*2+3];

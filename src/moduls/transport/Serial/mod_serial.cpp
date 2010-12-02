@@ -290,7 +290,7 @@ string TTrIn::getStatus( )
 
     if(startStat())
 	rez += TSYS::strMess(_("Traffic in %s, out %s. Maximum char timeout %.4g ms."),
-	    TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str(),tmMax);
+	    TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str(),tmMax);
 
     return rez;
 }

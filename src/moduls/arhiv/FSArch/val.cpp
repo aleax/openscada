@@ -413,7 +413,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TVArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Full archives size (MB)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Full archives size"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,2,
 	    "tp","str","help",_("Path to directory for archivator's of values files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
@@ -426,7 +426,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID);
 	}
-	ctrMkNode("list",opt,-1,"/arch/arch/3",_("Files size (Mb)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("list",opt,-1,"/arch/arch/3",_("Files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	if(ctrMkNode("comm",opt,-1,"/arch/exp",_("Export"),RWRW__,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/arch/exp/arch",_("Archive"),RWRW__,"root",SARH_ID,3,"tp","str","dest","select","select","/arch/lst");
@@ -445,7 +445,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	ResAlloc res(a_res,false);
 	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	    fsz += ((ModVArchEl *)iel->second)->size();
-	opt->setText(TSYS::real2str(fsz/1024.,4,'f'));
+	opt->setText(TSYS::cpct2str(fsz));
     }
     else if(a_path == "/prm/add/tm")
     {
@@ -492,7 +492,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(TSYS::real2str((double)iel->second->archive().period()/1e6,6));
 	    if(n_size)	n_size->childAdd("el")->setText(TSYS::int2str(iel->second->archive().size()));
-	    if(f_size)	f_size->childAdd("el")->setText(TSYS::real2str((double)((ModVArchEl *)iel->second)->size()/1024.,4,'f'));
+	    if(f_size)	f_size->childAdd("el")->setText(TSYS::cpct2str((double)((ModVArchEl *)iel->second)->size()));
 	}
     }
     else if(a_path == "/arch/lst" && ctrChkNode(opt))
@@ -555,7 +555,7 @@ int ModVArchEl::size()
     int rez = 0;
     ResAlloc res(mRes,false);
     for( int i_arh = 0; i_arh < arh_f.size(); i_arh++)
-	rez += arh_f[i_arh]->size()/1024;
+	rez += arh_f[i_arh]->size();
 
     return rez;
 }

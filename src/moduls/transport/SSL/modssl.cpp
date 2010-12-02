@@ -193,7 +193,7 @@ string TSocketIn::getStatus( )
     else if( startStat() )
     {
 	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
-	    connNumb,opConnCnt(),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str(),clsConnByLim);
+	    connNumb,opConnCnt(),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str(),clsConnByLim);
     }
 
     return rez;

@@ -169,7 +169,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	    arh_s[0]->put(mess[i_m]);
 	}
     }
-    tmCalc = 1e-3*(TSYS::curTime()-t_cnt);
+    tmCalc = TSYS::curTime()-t_cnt;
 }
 
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
@@ -312,8 +312,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size (kB)"),R_R_R_,"root",SARH_ID,1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,2,
 	    "tp","str","help",_("Path to directory for archivator's of messages files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
@@ -332,8 +332,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::real2str((double)size()/1024.,6));
-    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::real2str(tmCalc,6));
+    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::cpct2str(size()));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::time2str(tmCalc));
     else if(a_path == "/prm/add/xml")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(useXML() ? "1" : "0");
