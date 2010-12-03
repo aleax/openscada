@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 10:20+0200\n"
+"POT-Creation-Date: 2010-12-03 14:05+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -30,6 +30,9 @@ msgid ""
 "Allow to make gate data sources of remote OpenSCADA station to local "
 "OpenSCADA station."
 msgstr "Verbindung mit Datenquellen von entfernten OpenSCADA-Stationen."
+
+msgid "Parameteres cache table"
+msgstr ""
 
 msgid "Gather data period (s)"
 msgstr "Datenerfassungsperiode (sek)"
@@ -56,6 +59,9 @@ msgstr "Liste von entfernten Kontrollern und Parametern"
 
 msgid "Standard"
 msgstr "Standard"
+
+msgid "Attributes configuration cache"
+msgstr ""
 
 #, c-format
 msgid "Spent time: %s. "

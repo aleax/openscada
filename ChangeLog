@@ -1,3 +1,7 @@
+2010-12-03 Roman
+- DAQ.DAQGate: Parameters cache is added for autonomous work with archives and without remote station.
+
+
 2010-12-02 Roman
 - SYS: TTransportS::traf2str() is renamed and moved to TSYS::cpct2str().
 

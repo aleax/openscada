@@ -76,14 +76,13 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	//void update( );				//Update parameter
-
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( );
 
-	//Attrinutes
+	//Attributes
 	unsigned char isPrcOK	: 1;
 	unsigned char isEVAL	: 1;
+	unsigned char isUpdated	: 1;
 
     protected:
 	//Methods

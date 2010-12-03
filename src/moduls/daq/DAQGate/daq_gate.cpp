@@ -90,18 +90,20 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //> Controler's DB structure
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.1;100") );
-    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
-    fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000") );
-    fldAdd( new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12") );
-    fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","1;1000") );
-    fldAdd( new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100") );
-    fldAdd( new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200") );
+    fldAdd(new TFld("PRM_BD",_("Parameteres cache table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.1;100"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000"));
+    fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
+    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","1;1000"));
+    fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
+    fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
 
     //> Parameter type bd structure
-    int t_prm = tpParmAdd("std","",_("Standard"));
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",_("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
     //> Set to read only
-    for( int i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++ )
+    for(int i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++)
 	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);
 }
 
@@ -119,7 +121,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	mRestTm(cfg("TM_REST").getId()), mRestDtTm(cfg("TM_REST_DT").getRd()),
 	mStations(cfg("STATIONS").getSd()), mContrPrm(cfg("CNTRPRM").getSd())
 {
-
+    cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
@@ -202,6 +204,11 @@ void TMdContr::enable_( )
 		    if( !at(prm_ls[i_p]).at().enableStat() ) at(prm_ls[i_p]).at().enable();
 		    at(prm_ls[i_p]).at().setCntrAdr(cntrpath);
 		    at(prm_ls[i_p]).at().load();
+		    if(at(prm_ls[i_p]).at().isUpdated)
+		    {
+			at(prm_ls[i_p]).at().modif();
+			at(prm_ls[i_p]).at().isUpdated = false;
+		    }
 		    gPrmLs += prm_ls[i_p]+";";
 		}
 	    }catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -213,7 +220,7 @@ void TMdContr::enable_( )
 	list(prm_ls);
 	for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
 	    if( gPrmLs.find(prm_ls[i_p]+";",0) == string::npos )
-		try{ del(prm_ls[i_p]); }
+		try{ del(prm_ls[i_p],true); }
 		catch( TError err )
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -265,6 +272,7 @@ void *TMdContr::Task( void *icntr )
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
+    bool isFirst = true;
 
     for( unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++ )
     {
@@ -291,7 +299,7 @@ void *TMdContr::Task( void *icntr )
 		string scntr;
 
 		//> Parameters list update
-		if( (it_cnt > div && it_cnt%div == 0) || pLS.empty() )
+		if( (it_cnt > div && it_cnt%div == 0) || isFirst )
 		    try { res.release( ); cntr.enable_( ); res.request(false); }
 		    catch(TError err) { }
 
@@ -399,6 +407,7 @@ void *TMdContr::Task( void *icntr )
 		    prm.at().isEVAL = true;
 		}
 	    }
+	    isFirst = false;
 	    //res.release( );
 	}catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
@@ -517,9 +526,26 @@ void TMdPrm::setCntrAdr( const string &vl )
 
 void TMdPrm::load_( )
 {
+    //> Load from cache
+    TParamContr::load_();
+    //> Restore attributes from cache
+    try
+    {
+	XMLNode attrsNd;
+	attrsNd.load(cfg("ATTRS").getS());
+	for(int i_el = 0; i_el < attrsNd.childSize(); i_el++)
+	{
+	    XMLNode *aEl = attrsNd.childGet(i_el);
+    	    if(vlPresent(aEl->attr("id")))	continue;
+	    p_el.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)atoi(aEl->attr("tp").c_str()),
+		atoi(aEl->attr("flg").c_str()),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
+	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
+	}
+    } catch(TError err) { }
+
+    //> Request and update attributes list
     string scntr;
     XMLNode req("CntrReqs");
-    //> Request and update attributes list
     for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	try
 	{
@@ -537,16 +563,10 @@ void TMdPrm::load_( )
 		XMLNode *ael = req.childGet(2)->childGet(i_a);
 		if( vlPresent(ael->attr("id")) )	continue;
 		TFld::Type tp = (TFld::Type)atoi(ael->attr("tp").c_str());
-		string dvl    = EVAL_STR;
-		switch(tp)
-		{
-		    case TFld::Boolean:	dvl = TSYS::int2str(EVAL_BOOL);	break;
-		    case TFld::Integer:	dvl = TSYS::int2str(EVAL_INT);	break;
-		    case TFld::Real:	dvl = TSYS::real2str(EVAL_REAL);break;
-		}
 		p_el.fldAdd( new TFld( ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
 		    atoi(ael->attr("flg").c_str())&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText)|TVal::DirWrite|TVal::DirRead,
-		    "",dvl.c_str(),ael->attr("vals").c_str(),ael->attr("names").c_str()) );
+		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()) );
+		isUpdated = true;
 	    }
 	    //>> Remove attributes
 	    //????
@@ -556,12 +576,25 @@ void TMdPrm::load_( )
 
 void TMdPrm::save_( )
 {
-    //> Save archives
-    vector<string> a_ls;
-    vlList(a_ls);
-    for(int i_a = 0; i_a < a_ls.size(); i_a++)
-	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
-	    vlAt(a_ls[i_a]).at().arch().at().save();
+    //> Prepare attributes cache configuration
+    XMLNode attrsNd("Attrs");
+    vector<string> ls;
+    elem().fldList(ls);
+    for(int i_el = 0; i_el < ls.size(); i_el++)
+    {
+	AutoHD<TVal> vl = vlAt(ls[i_el]);
+	attrsNd.childAdd("a")->setAttr("id",ls[i_el])->
+			       setAttr("nm",vl.at().fld().descr())->
+			       setAttr("tp",TSYS::int2str(vl.at().fld().type()))->
+			       setAttr("flg",TSYS::int2str(vl.at().fld().flg()))->
+			       setAttr("vals",vl.at().fld().values())->
+			       setAttr("names",vl.at().fld().selNames());
+			       //setText(vl.at().getS());
+    }
+    cfg("ATTRS").setS(attrsNd.save(XMLNode::BrAllPast));
+
+    //> Save to cache
+    TParamContr::save_();
 }
 
 void TMdPrm::vlGet( TVal &val )
