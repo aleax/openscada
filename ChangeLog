@@ -1,3 +1,7 @@
+2010-12-07 Roman
+- FIX:DAQ.JavaLikeCalk: Unaligned access for ARM is fixed into JavaScript VM.
+
+
 2010-12-03 Roman
 - DAQ.DAQGate: Parameters cache is added for autonomous work with archives and without remote station.
 
