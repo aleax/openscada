@@ -66,6 +66,11 @@ if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
 AC_SUBST(sys_lib)
 QT4use=false;
 
+ix86=false;
+if test $target_cpu = "i386" || test $target_cpu = "i486" || test $target_cpu = "i586" || test $target_cpu = "i686" ||
+    test $target_cpu = "k6" || test $target_cpu = "athlon" || test $target_cpu = "pentium2" ||
+    test $target_cpu = "pentium3" || test $target_cpu = "pentium4"; then ix86=true; fi
+
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MALLOC
@@ -206,7 +211,7 @@ AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using
 
 if test ${LibGD} = true; then
     LIB_GD=""
-    AC_CHECK_HEADERS([gd.h gdfonts.h gdfontt.h],
+    AC_CHECK_HEADERS([gd.h],
 	[
 	    AC_CHECK_LIB([gd],[gdImageCreate],
 	    [AC_MSG_NOTICE(Pass global library using)
@@ -285,7 +290,7 @@ if test ${ModJavaLikeCalc} = true; then
 	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
     fi
 fi
-if test ${ModDiamondBoards} = true && test $target_cpu != "x86_64"; then
+if test ${ModDiamondBoards} = true && test ${ix86} = true; then
     AC_MSG_RESULT(Build module: DAQ.DiamondBoards)
     AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
@@ -343,7 +348,7 @@ if test ${ModSoundCard} = true; then
     AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE(Pass global library using)],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
 fi
-if test ${ModICP_DAS} = true && test $target_cpu != "x86_64"; then
+if test ${ModICP_DAS} = true && test ${ix86} = true; then
     AC_MSG_RESULT(Build module: DAQ.ICP_DAS)
     AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
     DAQSub_mod="${DAQSub_mod}ICP_DAS "
