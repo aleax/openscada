@@ -38,7 +38,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.8.0"
+#define MOD_VER		"1.8.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries.")
 #define LICENSE		"GPL2"
@@ -73,7 +73,7 @@ TipContr::TipContr( string src ) : TTipDAQ(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

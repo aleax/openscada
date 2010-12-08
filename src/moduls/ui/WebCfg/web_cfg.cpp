@@ -24,7 +24,6 @@
 #include <string.h>
 #include <string>
 
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tsecurity.h>
@@ -38,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"1.5.4"
+#define MOD_VER		"1.5.4"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the WEB based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"
@@ -73,7 +72,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= MOD_VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
@@ -245,7 +244,7 @@ void TWEB::getAbout( SSess &ses )
 {
     ses.page = ses.page+"<center>\n"
 	"<table class='work'>\n"
-	"<tr><th>"+MOD_ID+" v"+MOD_VERSION+"</th></tr>\n"
+	"<tr><th>"+MOD_ID+" v"+MOD_VER+"</th></tr>\n"
 	"<tr><td class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
 	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"

@@ -23,11 +23,13 @@
 #include <fcntl.h>
 #include <getopt.h>
 
-#include <gd.h>
-
 #include "tsys.h"
 #include "tmess.h"
 #include "tuis.h"
+
+#if HAVE_GD_H
+#include <gd.h>
+#endif
 
 using namespace OSCADA;
 
@@ -36,7 +38,9 @@ using namespace OSCADA;
 //*************************************************
 TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User interfaces"),true)
 {
+#if HAVE_GD_H
     gdFTUseFontConfig(1);
+#endif
 }
 
 string TUIS::optDescr( )

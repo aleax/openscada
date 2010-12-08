@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Diamond DA boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.2.1"
+#define MOD_VER		"1.2.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to Diamond systems DA boards. Include support of Athena board.")
 #define LICENSE		"GPL2"
@@ -74,7 +74,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), m_init(false), elem_ai("AI"
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

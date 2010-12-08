@@ -23,7 +23,6 @@
 #include <signal.h>
 #include <string.h>
 
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 
@@ -36,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.9.0"
+#define MOD_VER		"0.9.0"
 #define AUTORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Web operation user interface for visual control area (VCA) projects playing.")
@@ -72,7 +71,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= MOD_VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
@@ -85,6 +84,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
         "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+
+    gdFTUseFontConfig(1);
 
     //> Create check sessions timer
     struct sigevent sigev;
@@ -596,7 +597,7 @@ void TWEB::getAbout( SSess &ses )
 	"</table>\n"
 	"</TD></TR></table><br/>\n"
 	"<table class='page_auth'>\n"
-	"<TR><TD>"MOD_ID" "MOD_VERSION"</TD></TR>\n"
+	"<TR><TD>"MOD_ID" "MOD_VER"</TD></TR>\n"
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
 	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_(MOD_NAME)+"</TD></TR>"

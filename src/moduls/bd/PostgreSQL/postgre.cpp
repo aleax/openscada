@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define VERSION		"0.9.0"
+#define MOD_VER		"0.9.0"
 #define AUTORS		_("Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -69,7 +69,7 @@ BDMod::BDMod(string name) : TTipBD(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= MOD_LICENSE;

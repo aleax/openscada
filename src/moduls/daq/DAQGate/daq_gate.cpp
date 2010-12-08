@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.9.1"
+#define MOD_VER		"0.9.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station.")
 #define LICENSE		"GPL2"
@@ -67,7 +67,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

@@ -22,7 +22,6 @@
 #include <getopt.h>
 #include <string.h>
 
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>
@@ -35,7 +34,7 @@
 #define MOD_NAME	_("HTTP-realisation")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define M_VERSION	"1.5.0"
+#define MOD_VER		"1.5.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow support HTTP for WWW based UIs.")
 #define LICENSE		"GPL2"
@@ -70,7 +69,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), lst_ses_chk(0)
 
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
-    mVers	= M_VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

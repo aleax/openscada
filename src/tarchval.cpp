@@ -27,12 +27,14 @@
 #include <fcntl.h>
 #include <math.h>
 
-#include <gd.h>
-
 #include "tsys.h"
 #include "tvalue.h"
 #include "tarchives.h"
 #include "tarchval.h"
+
+#if HAVE_GD_H
+#include <gd.h>
+#endif
 
 #define HalfDivMinWin	5
 
@@ -1250,11 +1252,13 @@ void TVArchive::archivatorSort()
 
 string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &iarch, int hsz, int vsz, double valmax, double valmin )
 {
+    string rez;
+
+#if HAVE_GD_H
     string lab_tm, lab_dt;
     time_t tm_t;
     struct tm ttm, ttm1;
     long long c_tm;
-    string rez;
     int hv_border,		//Image border size
 	h_w_start, h_w_size,	//Trend window horizontal start and size
 	v_w_start, v_w_size;	//Trend window vertical start and size
@@ -1502,6 +1506,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     rez.assign(img_ptr,img_sz);
     gdFree(img_ptr);
     gdImageDestroy(im);
+#endif
 
     return rez;
 }

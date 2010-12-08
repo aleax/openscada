@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"0.0.1"
+#define MOD_VER		"0.0.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Special subsystem template module.")
 #define LICENSE		"GPL2"
@@ -77,7 +77,7 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     //!!! Loading module's meta-information into root object. No change it.
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

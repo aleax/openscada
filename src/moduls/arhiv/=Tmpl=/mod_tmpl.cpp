@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Transport template")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define VERSION		"0.0.1"
+#define MOD_VER		"0.0.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Archive's subsystem template module.")
 #define LICENSE		"GPL2"
@@ -82,7 +82,7 @@ ModArch::ModArch( const string &name ) : TTipArchivator(MOD_ID)
     //!!! Loading module's meta-information into root object. No change it.
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

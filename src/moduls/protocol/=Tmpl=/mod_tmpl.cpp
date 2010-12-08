@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Protocol template")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define M_VERSION	"0.0.1"
+#define MOD_VER		"0.0.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Protocol's subsystem template module.")
 #define LICENSE		"GPL2"
@@ -82,7 +82,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     //!!! Load module meta-information to root object. Don't change it!
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
-    mVers	= M_VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

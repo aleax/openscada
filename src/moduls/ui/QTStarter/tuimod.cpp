@@ -47,7 +47,7 @@
 #define MOD_NAME	_("QT GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define VERSION		"1.6.0"
+#define MOD_VER		"1.6.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow QT GUI starter. It is single for all QT GUI modules!")
 #define LICENSE		"GPL2"
@@ -82,7 +82,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), end_run(false), demon_mode(false), 
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

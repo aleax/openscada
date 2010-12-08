@@ -32,7 +32,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"1.0.6"
+#define MOD_VER		"1.0.6"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow static function library Complex1 (SCADA Complex1 functions).")
 #define LICENSE		"GPL2"
@@ -68,7 +68,7 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     //> Set modul info
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

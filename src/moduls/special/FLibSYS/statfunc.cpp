@@ -35,7 +35,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define VERSION		"0.9.2"
+#define MOD_VER		"0.9.2"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Allow system API functions library of the user programming area.")
 #define MOD_LICENSE	"GPL2"
@@ -71,7 +71,7 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     //> Set modul info!
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= MOD_AUTOR;
     mDescr	= MOD_DESCR;
     mLicense	= MOD_LICENSE;

@@ -38,7 +38,6 @@
 #include <langinfo.h>
 #include <zlib.h>
 
-#include "../config.h"
 #include "terror.h"
 #include "tmess.h"
 #include "tsys.h"

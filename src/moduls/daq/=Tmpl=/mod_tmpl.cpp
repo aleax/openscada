@@ -43,7 +43,7 @@
 #define MOD_NAME	_("DAQ template")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.0.1"
+#define MOD_VER		"0.0.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DAQ's subsystem template module.")
 #define LICENSE		"GPL2"
@@ -84,7 +84,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     //!!! Load module meta-information to root object. Don't change it!
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

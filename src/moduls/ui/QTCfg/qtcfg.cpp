@@ -23,8 +23,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <config.h>
-
 #include <QApplication>
 #include <QToolTip>
 #include <QTreeWidget>

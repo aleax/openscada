@@ -51,7 +51,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define VERSION		"1.5.0"
+#define MOD_VER		"1.5.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the group tests for OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -86,7 +86,7 @@ TTest::TTest( string name ) : TSpecial(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

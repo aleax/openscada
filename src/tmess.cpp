@@ -33,7 +33,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "../config.h"
 #include "tsys.h"
 #include "resalloc.h"
 #include "tmess.h"

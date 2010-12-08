@@ -45,15 +45,10 @@ AM_SANITY_CHECK
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([time.h signal.h semaphore.h fcntl.h math.h errno.h syslog.h unistd.h dirent.h stdio.h stdarg.h stdlib.h getopt.h dlfcn.h locale.h langinfo.h iconv.h libintl.h sys/types.h sys/stat.h sys/wait.h sys/time.h sys/utsname.h pthread.h],[],
+AC_CHECK_HEADERS([time.h signal.h semaphore.h fcntl.h math.h errno.h syslog.h unistd.h dirent.h stdio.h stdarg.h stdlib.h getopt.h dlfcn.h locale.h langinfo.h iconv.h libintl.h sys/types.h sys/stat.h sys/time.h sys/utsname.h pthread.h],[],
     [AC_MSG_ERROR(Some GLibC headers not found. Install or check GLibC developing package!)])
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
-    [AC_MSG_ERROR(Some standart template libs STL headers not found. Install or check STL-StdC++ developing package!)])
-#- Library headers check -
-AC_CHECK_HEADERS([gd.h gdfonts.h gdfontt.h],[],
-    [AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
-AC_CHECK_HEADERS([expat.h],[],
-    [AC_MSG_ERROR(Expat XML parser library headers not found. Install or check Expat developing package!)])
+    [AC_MSG_ERROR([Some standart template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -70,24 +65,6 @@ sys_lib="/usr/lib"
 if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
 AC_SUBST(sys_lib)
 QT4use=false;
-
-# Check for libraries
-AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(Math library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(Dynamik linking library not found. Install or check GLibC core package!)])
-#AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
-#    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(Expat library not found. Install or check Expat package!)])
-AC_CHECK_LIB([gd],[gdImageCreate],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
-#AC_CHECK_LIB([png],[png_create_info_struct],[AC_MSG_NOTICE(Pass global library using)],
-#    [AC_MSG_ERROR(PNG library not found. Install or check PNG library package!)])
-#AC_CHECK_LIB([z],[compress],[AC_MSG_NOTICE(Pass global library using)],
-#    [AC_MSG_ERROR(ZLib not found. Install or check ZLib package!)])
 
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
@@ -116,6 +93,10 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile
 	src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile
 	src/moduls/ui/Makefile)
+
+#====== Generic functions disable ======
+AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--disable-LibGD], [disable using library LibGD in core]),
+[ if test $enableval = yes; then LibGD=true; else LibGD=false; fi],[ LibGD=true; ])
 
 #====== Check build modules ======
 #> DB modules
@@ -206,6 +187,35 @@ AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable build modul
 AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module Special.FLibSYS]),
 [ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
 
+AC_MSG_RESULT(========== Core libraries check =============)
+# Library headers check.
+AC_CHECK_HEADERS([expat.h],[],
+    [AC_MSG_ERROR(Expat XML parser library headers not found. Install or check Expat developing package!)])
+
+# Check for libraries
+AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE(Pass global library using)],
+    [AC_MSG_ERROR(Math library not found. Install or check GLibC core package!)])
+AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE(Pass global library using)],
+    [AC_MSG_ERROR(Dynamik linking library not found. Install or check GLibC core package!)])
+#AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
+#    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
+AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE(Pass global library using)],
+    [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
+AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using)],
+    [AC_MSG_ERROR(Expat library not found. Install or check Expat package!)])
+
+if test ${LibGD} = true; then
+    LIB_GD=""
+    AC_CHECK_HEADERS([gd.h gdfonts.h gdfontt.h],
+	[
+	    AC_CHECK_LIB([gd],[gdImageCreate],
+	    [AC_MSG_NOTICE(Pass global library using)
+	    LIB_GD="-lgd"],
+	    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
+	],
+	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
+    AC_SUBST(LIB_GD)
+fi
 
 AC_MSG_RESULT(========== Build modules list =============)
 #> DB modules

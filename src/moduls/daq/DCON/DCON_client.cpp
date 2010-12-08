@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.3.3"
+#define MOD_VER		"0.3.3"
 #define AUTORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Allow realisation of DCON client service. Supported I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -74,7 +74,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = ui_WebCfgD.la
 ui_WebCfgD_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebCfgD_la_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
+ui_WebCfgD_la_LIBADD = -lgd
 ui_WebCfgD_la_LIBTOOLFLAGS = --tag=disable-static
 
 VCAjs.cpp: WebCfgDVCA.js

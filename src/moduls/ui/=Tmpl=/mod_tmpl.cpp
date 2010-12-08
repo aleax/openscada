@@ -25,7 +25,6 @@
 #include <string>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 
@@ -40,7 +39,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.0.1"
+#define MOD_VER		"0.0.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("UI subsystem template module.")
 #define LICENSE		"GPL2"
@@ -81,7 +80,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     //!!! Loading module's meta-information into root object. No change it.
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= MOD_VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

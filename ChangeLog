@@ -1,3 +1,7 @@
+2010-12-08 Roman
+- SYS: The configure option --disable-LibGD is added for using library into OpenSCADA core exclude.
+
+
 2010-12-07 Roman
 - FIX:DAQ.JavaLikeCalk: Unaligned access for ARM is fixed into JavaScript VM.
 

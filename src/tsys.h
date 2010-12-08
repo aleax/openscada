@@ -42,6 +42,7 @@
 #include <string>
 #include <vector>
 
+#include "../config.h"
 #include "tbds.h"
 #include "tuis.h"
 #include "tarchives.h"

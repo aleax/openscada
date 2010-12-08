@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"1.4.0"
+#define MOD_VER		"1.4.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow block based calculator.")
 #define LICENSE		"GPL2"
@@ -79,7 +79,7 @@ TipContr::TipContr( string name ) : TTipDAQ(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

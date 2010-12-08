@@ -40,7 +40,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define VERSION		"0.9.5"
+#define MOD_VER		"0.9.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1.")
 #define LICENSE		"GPL2"
@@ -75,7 +75,7 @@ TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;

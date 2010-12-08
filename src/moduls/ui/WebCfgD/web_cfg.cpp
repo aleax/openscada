@@ -25,7 +25,6 @@
 #include <string>
 #include <gd.h>
 
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tsecurity.h>
@@ -39,7 +38,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VERSION	"0.6.5"
+#define MOD_VER		"0.6.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies.")
 #define LICENSE		"GPL2"
@@ -77,7 +76,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= MOD_VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
@@ -88,6 +87,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
     modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+
+    gdFTUseFontConfig(1);
 
     //> Massages not for compile but for indexing by gettext
 #if 0
@@ -374,7 +375,7 @@ void TWEB::getAbout( SSess &ses )
 {
     ses.page = ses.page+"<center>\n"
 	"<table class='work'>\n"
-	"<TR><th>"+MOD_ID+" v"+MOD_VERSION+"</th></TR>\n"
+	"<TR><th>"+MOD_ID+" v"+MOD_VER+"</th></TR>\n"
 	"<TR><TD class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
 	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"

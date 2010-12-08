@@ -43,7 +43,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define VERSION		"0.4.1"
+#define MOD_VER		"0.4.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realising of SNMP client service.")
 #define LICENSE		"GPL2"
@@ -78,7 +78,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
-    mVers	= VERSION;
+    mVers	= MOD_VER;
     mAutor	= AUTORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
