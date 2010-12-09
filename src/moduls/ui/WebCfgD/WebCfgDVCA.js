@@ -39,7 +39,8 @@ copyBuf = '0';		//Copy node address buffer
 var isNN = navigator.appName.indexOf('Netscape') != -1;
 var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
-var isKonq = navigator.appName.indexOf('Konqueror') != -1;
+var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
+var isChrome = navigator.userAgent.indexOf('Chrome') != -1;
 /***************************************************
  * strEncode - String encoding.                    *
  ***************************************************/
@@ -715,12 +716,10 @@ function selectChildRecArea( node, aPath, cBlk )
 	  val.style.cursor = 'pointer';
 	  val.onclick = function( )
 	  {
-	    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Select image file for download to picture field.###','/'+MOD_ID+this.itPath+'?com=img');
+	    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Select image file for download to picture field.###','/'+MOD_ID+this.itPath+'?com=img',true);
 	    dlgWin.document.getElementById('type').style.display = 'none';
 	    dlgWin.document.getElementById('id').style.display = 'none';
-	    var nmFld = dlgWin.document.getElementById('name');
-	    nmFld.style.display = '';
-	    nmFld.childNodes[1].childNodes[0].type = 'file';
+	    dlgWin.document.getElementById('name').style.display = '';
 	    dlgWin.document.getElementById('actOk').type = 'submit';
 	    if( !isKonq ) dlgWin.document.getElementById('formBlk').onsubmit = function( ) { setTimeout('dlgWin.close(); pageRefresh();',200); }
 	    else dlgWin.document.getElementById('actCancel').onclick = function( ) { setTimeout('dlgWin.close(); pageRefresh();',200); }
@@ -2156,13 +2155,16 @@ function itPaste( )
 /**********************************************************
  * ReqIdNameDlg - Get identifier and name request dialog. *
  **********************************************************/
-function ReqIdNameDlg( ico, mess, actPath )
+function ReqIdNameDlg( ico, mess, actPath, nmFile )
 {
-  var dlgWin = window.open('','ReqIdNameDlg','width=400,height=200,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,status=no,alwaysRaised=yes');
+  var dlgWin = window.open('','ReqIdNameDlg','width=400,height='+(isChrome?'300':'200')+',directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,status=no,alwaysRaised=yes');
 
   dlgWin.document.open();
   dlgWin.document.write(
     "<html><head>\n"+
+    " <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n"+
+    " <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"+
+    " <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"+
     " <style type='text/css'>\n"+
     "  table.dlg { width: 98%; border: 3px ridge #FF9253; padding: 5px; text-align: left; vertical-align: top; font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"+
     "  table.dlg select,input { font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"+
@@ -2175,7 +2177,7 @@ function ReqIdNameDlg( ico, mess, actPath )
     "<tr><td id='title' colspan='2'><img src='' style='height: 32px; float: left;'/><span/></td></tr>\n"+
     "<tr id='type'><td>###Element type:###</td><td><select name='type'/></td></tr>\n"+
     "<tr id='id'><td>###ID:###</td><td><input name='id'/></td></tr>\n"+
-    "<tr id='name'><td>###Name:###</td><td><input name='name'/></td></tr>\n"+
+    "<tr id='name'><td>###Name:###</td><td><input name='name' type='"+(nmFile?'file':'text')+"'/></td></tr>\n"+
     "<tr><td colspan='2' style='text-align: right; border-top: 1px solid black; padding-top: 10px;'>\n"+
     "  <input id='actOk' name='actOk' type='button' value='###Ok###'/> <input id='actCancel' name='actCancel' type='button' value='###Close###' onclick='window.close(); return false;'/>\n"+
     "</td></tr>\n"+

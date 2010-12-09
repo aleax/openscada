@@ -782,61 +782,53 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 {
     //> URL parameters parse
     int prmSep = iurl.find("?");
-    if( prmSep != string::npos )
+    if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
-	for( int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
-	{
-	    prmSep = sprm.find("=");
-	    if( prmSep == string::npos ) prm[sprm] = "true";
+	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
+	    if((prmSep= sprm.find("=")) == string::npos) prm[sprm] = "true";
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
-	}
     }
 
     //> Content parse
-    int pos = 0, i_bnd;
     string boundary;
     const char *c_bound = "boundary=";
     const char *c_term = "\r\n";
     const char *c_end = "--";
-    const char *c_fd = "Content-Disposition: form-data;";
+    const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
-    const char *c_file = "filename=\"";
 
-    for( int i_vr = 0; i_vr < vars.size(); i_vr++ )
-	if( vars[i_vr].substr(0,vars[i_vr].find(":",0)) == "Content-Type" )
-	{
-	    int pos = vars[i_vr].find(c_bound,0)+strlen(c_bound);
-	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
-	}
-    if( !boundary.size() ) return;
+    for(int i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
+        if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
+        {
+            pos += strlen(c_bound);
+            boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+        }
+    if(boundary.empty()) return;
 
-    while(true)
+    for(int pos = 0, spos = 0, i_bnd = 0; true; )
     {
-	pos = content.find(boundary,pos);
-	if( pos == string::npos || content.substr(pos+boundary.size(),2) == "--" ) break;
-	pos += boundary.size()+strlen(c_term);
-	string c_head = content.substr(pos, content.find(c_term,pos)-pos);
-	if( c_head.find(c_fd,0) == string::npos ) continue;
+        pos = content.find(boundary,pos);
+        if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
+        pos += boundary.size()+strlen(c_term);
 
-	//>> Get name
-	i_bnd = c_head.find(c_name,0)+strlen(c_name);
-	string c_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-	i_bnd = c_head.find(c_file,0);
-	if( i_bnd == string::npos )
-	{
-	    //>>> Get value
-	    pos += c_head.size()+(2*strlen(c_term));
-	    if(pos >= content.size()) break;
-	    string c_val  = content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos);
-	    cnt[c_name] = c_val;
-	}
-	else
-	{
-	    i_bnd += strlen(c_file);
-	    cnt[c_name] = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-	}
+        //>> Process properties and get name
+        string p_name;
+        while(pos < content.size())
+        {
+            string c_head = content.substr(pos, content.find(c_term,pos)-pos);
+            pos += c_head.size()+strlen(c_term);
+            if(c_head.empty()) break;
+            if((spos=c_head.find(":")) == string::npos) return;
+            if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos)
+            {
+                i_bnd += strlen(c_name);
+                p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
+            }
+        }
+        if(pos >= content.size()) return;
+        if(!p_name.empty()) cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
     }
 }

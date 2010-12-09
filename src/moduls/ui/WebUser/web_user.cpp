@@ -626,57 +626,51 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 {
     //> URL parameters parse
     int prmSep = iurl.find("?");
-    if( prmSep != string::npos )
+    if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
-	for( int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
-	{
-	    prmSep = sprm.find("=");
-	    if( prmSep == string::npos ) prm[sprm] = "true";
+	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
+	    if((prmSep=sprm.find("=")) == string::npos) prm[sprm] = "true";
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
-	}
     }
 
     //> Variables parse
-    for( int i_v = 0; i_v < ivars.size(); i_v++ )
-    {
-	int spos = ivars[i_v].find(":");
-	if( spos == string::npos ) continue;
-	vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
-    }
+    for(int i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
+	if((spos=ivars[i_v].find(":")) != string::npos)
+	    vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
 
     //> Content parse
-    int pos = 0, i_bnd;
+    int pos = 0, spos = 0;
     const char *c_bound = "boundary=";
     const char *c_term = "\r\n";
     const char *c_end = "--";
     string boundary = vars["Content-Type"];
-    if( boundary.empty() || (pos=boundary.find(c_bound,0)+strlen(c_bound)) == string::npos ) return;
+    if(boundary.empty() || (pos=boundary.find(c_bound,0)) == string::npos) return;
+    pos += strlen(c_bound);
     boundary = boundary.substr(pos,boundary.size()-pos);
-    if( boundary.empty() ) return;
+    if(boundary.empty()) return;
 
-    for( pos = 0; true; )
+    for(pos = 0; true; )
     {
 	pos = content.find(boundary,pos);
-	if( pos == string::npos || content.compare(pos+boundary.size(),2,"--") == 0 ) break;
+	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 
 	cnt.push_back(XMLNode("Content"));
 
 	//>> Get properties
-	while( pos < content.size() )
+	while(pos < content.size())
 	{
 	    string c_head = content.substr(pos, content.find(c_term,pos)-pos);
 	    pos += c_head.size()+strlen(c_term);
-	    if( c_head.empty() ) break;
-	    int spos = c_head.find(":");
-	    if( spos == string::npos ) return;
+	    if(c_head.empty()) break;
+	    if((spos=c_head.find(":")) == string::npos) return;
 	    cnt[cnt.size()-1].setAttr(TSYS::strNoSpace(c_head.substr(0,spos)),TSYS::strNoSpace(c_head.substr(spos+1)));
 	}
 
-	if( pos >= content.size() ) return;
-	cnt[cnt.size()-1].setText( content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos) );
+	if(pos >= content.size()) return;
+	cnt[cnt.size()-1].setText(content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
 }

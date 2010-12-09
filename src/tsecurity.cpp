@@ -316,7 +316,7 @@ void TUser::setPass( const string &n_pass )
 
 bool TUser::auth( const string &ipass )
 {
-    return (m_pass == crypt(ipass.c_str(),name().c_str()))?true:false;
+    return m_pass == crypt(ipass.c_str(),name().c_str());
 }
 
 void TUser::postDisable(int flag)

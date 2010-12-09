@@ -1,3 +1,8 @@
+2010-12-09 Roman
+- !!:FIX:Protocol.HTTP, UI.WebCfg, UI.WebCfgD, UI.WebVision, UI.WebUser: POST content's items by boundary parsing is fixed for process all item's variables.
+- FIX:UI.WebCfgD: Images download is fixed for Google Chrome.
+
+
 2010-12-08 Roman
 - SYS: The configure option --disable-LibGD is added for using library into OpenSCADA core exclude.
 
