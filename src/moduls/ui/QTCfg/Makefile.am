@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/
 oscd_modul_LTLIBRARIES = ui_QTCfg.la
 ui_QTCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
+ui_QTCfg_la_DIST = tuimod.cpp qtcfg.cpp selfwidg.cpp qtcfg.qrc
 ui_QTCfg_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui
 ui_QTCfg_la_LIBTOOLFLAGS = --tag=disable-static
 
@@ -16,7 +17,6 @@ moc_qtcfg.cpp: qtcfg.h
 	$(QT4_MOC) qtcfg.h > moc_qtcfg.cpp
 moc_selfwidg.cpp: selfwidg.h
 	$(QT4_MOC) selfwidg.h > moc_selfwidg.cpp
-
 
 #PO files process and doc install
 doc_name = $(oscd_docmodul)UI.QTCfg
@@ -51,3 +51,5 @@ uninstall-local:
 
 clean-local:
 	rm -f qrc_qtcfg.cpp moc_qtcfg.cpp moc_selfwidg.cpp po/$(m_name).pot po/*~
+
+DISTFILES = $(DIST_COMMON) $(ui_QTCfg_la_DIST) $(EXTRA_DIST)

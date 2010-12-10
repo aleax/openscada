@@ -1,4 +1,4 @@
-EXTRA_DIST = *.h
+#EXTRA_DIST = *.h
 
 bin_PROGRAMS = openscada
 

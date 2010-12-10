@@ -1,6 +1,6 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h po/* doc/*
+EXTRA_DIST = *.h po/* doc/* libi8k.a include/*.h
 
 INCLUDES = -I$(top_srcdir)/src -I./include
 

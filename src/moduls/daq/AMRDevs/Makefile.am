@@ -1,4 +1,5 @@
-EXTRA_DIST = *.h po/* doc/*
+EXTRA_DIST = *.h po/*
+# doc/*
 
 INCLUDES = -I$(top_srcdir)/src
 

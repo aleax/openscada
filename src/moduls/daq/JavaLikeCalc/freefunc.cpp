@@ -1537,10 +1537,10 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
     while( !(dt.flg&0x01) )
     {
 	//> Calc time control mechanism
-	if( !((dt.com_cnt++)%1000) )
+	if(!((dt.com_cnt++)%1000))
 	{
-	    if( !dt.start_tm )	dt.start_tm = time(NULL);
-	    else if( time(NULL) > dt.start_tm+max_calc_tm )
+	    if(!dt.start_tm)	dt.start_tm = time(NULL);
+	    else if(time(NULL) > dt.start_tm+max_calc_tm)
 	    {
 		mess_err(nodePath().c_str(),_("Timeouted function calc."));
 		dt.flg|=0x01;
@@ -1562,13 +1562,6 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		reg[ptr->reg] = ptr->val;
 		cprg += sizeof(SCode); break;
-
-		/*
-#if OSC_DEBUG >= 5
-		printf("CODE: Load bool %d to reg %d.\n",*(uint8_t*)(cprg+3),TSYS::getUnalign16(cprg+1));
-#endif
-		reg[TSYS::getUnalign16(cprg+1)] = *(char*)(cprg+3);
-		cprg += 4; break;*/
 	    }
 	    case Reg::MviI:
 	    {
@@ -1579,14 +1572,6 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		reg[ptr->reg] = ptr->val;
 		cprg += sizeof(SCode); break;
-
-		/*struct sint { int x __attribute__((packed)); };
-        	const struct sint *ptr = (const struct sint *)(cprg+3);
-#if OSC_DEBUG >= 5
-		printf("CODE: Load integer %d to reg %d.\n",ptr->x,TSYS::getUnalign16(cprg+1));
-#endif
-		reg[TSYS::getUnalign16(cprg+1)] = ptr->x;
-		cprg += 3+sizeof(int); break;*/
 	    }
 	    case Reg::MviR:
 	    {
@@ -1597,495 +1582,680 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		reg[ptr->reg] = ptr->val;
 		cprg += sizeof(SCode); break;
-
-		/*
-#if OSC_DEBUG >= 5
-		printf("CODE: Load real %f to reg %d.\n",TSYS::getUnalignDbl(cprg+3),TSYS::getUnalign16(cprg+1));
-#endif
-		reg[TSYS::getUnalign16(cprg+1)] = TSYS::getUnalignDbl(cprg+3);
-		cprg += 3+sizeof(double); break;*/
 	    }
 	    case Reg::MviS:
             {
-		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; char val; } __attribute__((packed));
+		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Load string %s(%d) to reg %d.\n",string(&(ptr->val),ptr->len).c_str(),ptr->len,ptr->reg);
+		printf("CODE: Load string %s(%d) to reg %d.\n",string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(),ptr->len,ptr->reg);
 #endif
-		reg[ptr->reg] = string(&(ptr->val),ptr->len);
-		cprg += sizeof(SCode)+ptr->len-1; break;
-
-		/*
-#if OSC_DEBUG >= 5
-		printf("CODE: Load string %s(%d) to reg %d.\n",string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str(),*(uint8_t*)(cprg+3),TSYS::getUnalign16(cprg+1));
-#endif
-		reg[TSYS::getUnalign16(cprg+1)] = string((char*)cprg+4,*(uint8_t*)(cprg+3));
-		cprg += 4+ *(uint8_t*)(cprg+3); break;*/
+		reg[ptr->reg] = string((const char*)(cprg+sizeof(SCode)),ptr->len);
+		cprg += sizeof(SCode)+ptr->len; break;
 	    }
 	    case Reg::MviObject:
+	    {
+		struct SCode { uint8_t cod; uint16_t reg; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Load object to reg %d.\n",TSYS::getUnalign16(cprg+1));
+		printf("CODE: Load object to reg %d.\n",ptr->reg);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = new TVarObj();
-		cprg += 3; break;
+		reg[ptr->reg] = new TVarObj();
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::MviArray:
 	    {
+		struct SCode { uint8_t cod; uint16_t reg; uint8_t numb; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Load array elements %d to reg %d.\n",*(uint8_t*)(cprg+3),TSYS::getUnalign16(cprg+1));
+		printf("CODE: Load array elements %d to reg %d.\n",ptr->numb,ptr->reg);
 #endif
 		TArrayObj *ar = new TArrayObj();
-		int pcnt = *(uint8_t*)(cprg+3);
 		//>>> Fill array by empty elements number
-		if( pcnt == 1 )
-		    for( int i_p = 0; i_p < getValI(val,reg[TSYS::getUnalign16(cprg+4)]); i_p++ )
+		if(ptr->numb == 1)
+		    for(int i_p = 0; i_p < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); i_p++)
 			ar->propSet(TSYS::int2str(i_p),EVAL_REAL);
 		//>>> Fill array by parameters
 		else
-		    for( int i_p = 0; i_p < *(uint8_t*)(cprg+3); i_p++ )
-			switch( reg[TSYS::getUnalign16(cprg+4+i_p*sizeof(uint16_t))].vType(this) )
+		    for(int i_p = 0; i_p < ptr->numb; i_p++)
+			switch(reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].vType(this) )
 			{
-			    case Reg::Bool: ar->propSet(TSYS::int2str(i_p),getValB(val,reg[TSYS::getUnalign16(cprg+4+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[TSYS::getUnalign16(cprg+4+i_p*sizeof(uint16_t))]));		break;
-			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[TSYS::getUnalign16(cprg+4+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[TSYS::getUnalign16(cprg+4+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Obj: ar->propSet( TSYS::int2str(i_p), reg[TSYS::getUnalign16(cprg+4+i_p*sizeof(uint16_t))].val().o_el );	break;
+			    case Reg::Bool: ar->propSet(TSYS::int2str(i_p),getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
+			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));		break;
+			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
+			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
+			    case Reg::Obj: ar->propSet( TSYS::int2str(i_p), reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].val().o_el );	break;
 			}
-		reg[TSYS::getUnalign16(cprg+1)] = ar;
-		cprg += 4 + *(uint8_t*)(cprg+3)*sizeof(uint16_t); break;
+		reg[ptr->reg] = ar;
+		cprg += sizeof(SCode) + ptr->numb*sizeof(uint16_t); break;
 	    }
 	    case Reg::MviSysObject:
 	    {
+		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Load system object %s(%d) to reg %d.\n",string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str(),*(uint8_t*)(cprg+3),TSYS::getUnalign16(cprg+1));
+		printf("CODE: Load system object %s(%d) to reg %d.\n",string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(),ptr->len,ptr->reg);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = new TCntrNodeObj(SYS->nodeAt(string((char*)cprg+4,*(uint8_t*)(cprg+3)),0,'.'),val->user());
-		cprg += 4+ *(uint8_t*)(cprg+3); break;
+		reg[ptr->reg] = new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user());
+		cprg += sizeof(SCode)+ptr->len; break;
 	    }
 	    //>> Assign codes
 	    case Reg::Ass:
 	    {
+		struct SCode { uint8_t cod; uint16_t toR; uint16_t fromR; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Assign from %d to %d.\n",TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+1));
+		printf("CODE: Assign from %d to %d.\n",ptr->fromR,ptr->toR);
 #endif
-		if( !reg[TSYS::getUnalign16(cprg+1)].propSize( ) )
-		    switch( reg[TSYS::getUnalign16(cprg+3)].vType(this) )
+		if(!reg[ptr->toR].propSize())
+		    switch(reg[ptr->fromR].vType(this))
 		    {
-			case Reg::Bool:		setValB(val,reg[TSYS::getUnalign16(cprg+1)],getValB(val,reg[TSYS::getUnalign16(cprg+3)]));	break;
-			case Reg::Int:		setValI(val,reg[TSYS::getUnalign16(cprg+1)],getValI(val,reg[TSYS::getUnalign16(cprg+3)]));	break;
-			case Reg::Real:		setValR(val,reg[TSYS::getUnalign16(cprg+1)],getValR(val,reg[TSYS::getUnalign16(cprg+3)]));	break;
-			case Reg::String:	setValS(val,reg[TSYS::getUnalign16(cprg+1)],getValS(val,reg[TSYS::getUnalign16(cprg+3)]));	break;
-			case Reg::Obj:		setVal(val,reg[TSYS::getUnalign16(cprg+1)],getVal(val,reg[TSYS::getUnalign16(cprg+3)]));	break;
+			case Reg::Bool:		setValB(val,reg[ptr->toR],getValB(val,reg[ptr->fromR]));	break;
+			case Reg::Int:		setValI(val,reg[ptr->toR],getValI(val,reg[ptr->fromR]));	break;
+			case Reg::Real:		setValR(val,reg[ptr->toR],getValR(val,reg[ptr->fromR]));	break;
+			case Reg::String:	setValS(val,reg[ptr->toR],getValS(val,reg[ptr->fromR]));	break;
+			case Reg::Obj:		setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));	break;
 		    }
-		else setVal(val,reg[TSYS::getUnalign16(cprg+1)],getVal(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		else setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));
+		cprg += sizeof(SCode); break;
 	    }
 	    //>> Mov codes
 	    case Reg::Mov:
+	    {
+		struct SCode { uint8_t cod; uint16_t toR; uint16_t fromR; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Move from %d to %d.\n",TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+1));
+		printf("CODE: Move from %d to %d.\n",ptr->fromR,ptr->toR);
 #endif
-		switch( reg[TSYS::getUnalign16(cprg+3)].vType(this) )
+		switch(reg[ptr->fromR].vType(this))
 		{
-		    case Reg::Bool:	reg[TSYS::getUnalign16(cprg+1)] = getValB(val,reg[TSYS::getUnalign16(cprg+3)]);	break;
-		    case Reg::Int:	reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]);	break;
-		    case Reg::Real:	reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]);	break;
-		    case Reg::String:	reg[TSYS::getUnalign16(cprg+1)] = getValS(val,reg[TSYS::getUnalign16(cprg+3)]);	break;
-		    case Reg::Obj:	reg[TSYS::getUnalign16(cprg+1)] = getValO(val,reg[TSYS::getUnalign16(cprg+3)]);	break;
+		    case Reg::Bool:	reg[ptr->toR] = getValB(val,reg[ptr->fromR]);	break;
+		    case Reg::Int:	reg[ptr->toR] = getValI(val,reg[ptr->fromR]);	break;
+		    case Reg::Real:	reg[ptr->toR] = getValR(val,reg[ptr->fromR]);	break;
+		    case Reg::String:	reg[ptr->toR] = getValS(val,reg[ptr->fromR]);	break;
+		    case Reg::Obj:	reg[ptr->toR] = getValO(val,reg[ptr->fromR]);	break;
 		}
-		cprg+=5; break;
+		cprg += sizeof(SCode); break;
+	    }
 	    //>> Load properties for object
 	    case Reg::OPrpSt:
+	    {
+		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Set object's %d properties to string len %d(%s)\n",TSYS::getUnalign16(cprg+1),*(uint8_t*)(cprg+3),string((char*)cprg+4,*(uint8_t*)(cprg+3)).c_str());
+		printf("CODE: Set object's %d properties to string len %d(%s)\n",ptr->reg,ptr->len,string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str());
 #endif
-		reg[TSYS::getUnalign16(cprg+1)].propAdd(string((char*)cprg+4,*(uint8_t*)(cprg+3)));
-		cprg += 4 + *(uint8_t*)(cprg+3); break;
+		reg[ptr->reg].propAdd(string((const char*)(cprg+sizeof(SCode)),ptr->len));
+		cprg += sizeof(SCode) + ptr->len; break;
+	    }
 	    case Reg::OPrpDin:
+	    {
+		struct SCode { uint8_t cod; uint16_t reg; uint16_t val; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Set object's %d properties to register's %d value\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Set object's %d properties to register's %d value\n",ptr->reg,ptr->val);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)].propAdd(getValS(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg += 5;  break;
+		reg[ptr->reg].propAdd(getValS(val,reg[ptr->val]));
+		cprg += sizeof(SCode);  break;
+	    }
 	    //>> Binary operations
 	    case Reg::Add:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d + %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d + %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		if( !reg[TSYS::getUnalign16(cprg+3)].propSize( ) )
-		    switch( reg[TSYS::getUnalign16(cprg+3)].vType(this) )
+		if(!reg[ptr->a1].propSize())
+		    switch(reg[ptr->a1].vType(this))
 		    {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) + getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]);
 			    break;
 			case Reg::String:
-			    reg[TSYS::getUnalign16(cprg+1)] = getValS(val,reg[TSYS::getUnalign16(cprg+3)]) + getValS(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);
 			    break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		else
 		{
-		    TVariant op1 = getVal(val,reg[TSYS::getUnalign16(cprg+3)]);
-		    switch( op1.type() )
+		    TVariant op1 = getVal(val,reg[ptr->a1]);
+		    switch(op1.type())
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[TSYS::getUnalign16(cprg+1)] = op1.getR() + getValR(val,reg[TSYS::getUnalign16(cprg+5)]); break;
+			    reg[ptr->rez] = op1.getR() + getValR(val,reg[ptr->a2]); break;
 			case TVariant::String:
-			    reg[TSYS::getUnalign16(cprg+1)] = op1.getS() + getValS(val,reg[TSYS::getUnalign16(cprg+5)]); break;
+			    reg[ptr->rez] = op1.getS() + getValS(val,reg[ptr->a2]); break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
-		cprg+=7; break;
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::Sub:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d - %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d - %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) - getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) - getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::Mul:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d * %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d * %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) * getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) * getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::Div:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d / %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d / %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) / getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) / getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::RstI:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d % %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d %% %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]) % getValI(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValI(val,reg[ptr->a1]) % getValI(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::BitOr:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d | %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d | %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]) | getValI(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValI(val,reg[ptr->a1]) | getValI(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::BitAnd:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d & %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d & %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]) & getValI(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValI(val,reg[ptr->a1]) & getValI(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::BitXor:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d ^ %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d ^ %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]) ^ getValI(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValI(val,reg[ptr->a1]) ^ getValI(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::BitShLeft:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d << %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d << %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]) << getValI(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValI(val,reg[ptr->a1]) << getValI(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::BitShRight:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d >> %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d >> %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValI(val,reg[TSYS::getUnalign16(cprg+3)]) >> getValI(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValI(val,reg[ptr->a1]) >> getValI(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::LOr:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d || %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d || %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = (getValB(val,reg[TSYS::getUnalign16(cprg+3)])==1) || (getValB(val,reg[TSYS::getUnalign16(cprg+5)])==1);
-		cprg+=7; break;
+		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) || (getValB(val,reg[ptr->a2])==1);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::LAnd:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d && %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d && %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = (getValB(val,reg[TSYS::getUnalign16(cprg+3)])==1) && (getValB(val,reg[TSYS::getUnalign16(cprg+5)])==1);
-		cprg+=7; break;
+		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) && (getValB(val,reg[ptr->a2])==1);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::LT:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d < %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d < %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) < getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) < getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::GT:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d > %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d > %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) > getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) > getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::LEQ:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d <= %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d <= %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) <= getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) <= getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::GEQ:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d >= %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d >= %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) >= getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
-		cprg+=7; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a1]) >= getValR(val,reg[ptr->a2]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::EQU:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d == %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d == %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		if( !reg[TSYS::getUnalign16(cprg+3)].propSize( ) )
-		    switch( reg[TSYS::getUnalign16(cprg+3)].vType(this) )
+		if(!reg[ptr->a1].propSize())
+		    switch(reg[ptr->a1].vType(this))
 		    {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) == getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) == getValR(val,reg[ptr->a2]);
 			    break;
 			case Reg::String:
-			    reg[TSYS::getUnalign16(cprg+1)] = getValS(val,reg[TSYS::getUnalign16(cprg+3)]) == getValS(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) == getValS(val,reg[ptr->a2]);
 			    break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		else
 		{
-		    TVariant op1 = getVal(val,reg[TSYS::getUnalign16(cprg+3)]);
-		    switch( op1.type() )
+		    TVariant op1 = getVal(val,reg[ptr->a1]);
+		    switch(op1.type())
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[TSYS::getUnalign16(cprg+1)] = op1.getR() == getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = op1.getR() == getValR(val,reg[ptr->a2]);
 			    break;
 			case TVariant::String:
-			    reg[TSYS::getUnalign16(cprg+1)] = op1.getS() == getValS(val,reg[TSYS::getUnalign16(cprg+5)]); break;
+			    reg[ptr->rez] = op1.getS() == getValS(val,reg[ptr->a2]); break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		}
-		cprg+=7; break;
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::NEQ:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = %d != %d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: %d = %d != %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		if( !reg[TSYS::getUnalign16(cprg+3)].propSize( ) )
-		    switch( reg[TSYS::getUnalign16(cprg+3)].vType(this) )
+		if(!reg[ptr->a1].propSize())
+		    switch(reg[ptr->a1].vType(this))
 		    {
 			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)]) != getValR(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) != getValR(val,reg[ptr->a2]);
 			    break;
 			case Reg::String:
-			    reg[TSYS::getUnalign16(cprg+1)] = getValS(val,reg[TSYS::getUnalign16(cprg+3)]) != getValS(val,reg[TSYS::getUnalign16(cprg+5)]);
+			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) != getValS(val,reg[ptr->a2]);
 			    break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		else
 		{
-		    TVariant op1 = getVal(val,reg[TSYS::getUnalign16(cprg+3)]);
-		    switch( op1.type() )
+		    TVariant op1 = getVal(val,reg[ptr->a1]);
+		    switch(op1.type())
 		    {
 			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[TSYS::getUnalign16(cprg+1)] = op1.getR() != getValR(val,reg[TSYS::getUnalign16(cprg+5)]); break;
+			    reg[ptr->rez] = op1.getR() != getValR(val,reg[ptr->a2]); break;
 			case TVariant::String:
-			    reg[TSYS::getUnalign16(cprg+1)] = op1.getS() != getValS(val,reg[TSYS::getUnalign16(cprg+5)]); break;
+			    reg[ptr->rez] = op1.getS() != getValS(val,reg[ptr->a2]); break;
 			default:
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
-		cprg+=7; break;
+		cprg += sizeof(SCode); break;
+	    }
 	    //>> Unary operations
 	    case Reg::Not:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = !%d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: %d = !%d.\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = !getValB(val,reg[TSYS::getUnalign16(cprg+3)]);
-		cprg+=5; break;
+		reg[ptr->rez] = !getValB(val,reg[ptr->a]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::BitNot:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = ~%d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: %d = ~%d.\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = ~getValI(val,reg[TSYS::getUnalign16(cprg+3)]);
-		cprg+=5; break;
+		reg[ptr->rez] = ~getValI(val,reg[ptr->a]);
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::Neg:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: %d = -%d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: %d = -%d.\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = -getValR(val,reg[TSYS::getUnalign16(cprg+3)]);
-		cprg+=5; break;
+		reg[ptr->rez] = -getValR(val,reg[ptr->a]);
+		cprg += sizeof(SCode); break;
+	    }
 	    //>> Condition
 	    case Reg::If:
+	    {
+		struct SCode { uint8_t cod; uint16_t cond; uint16_t toFalse; uint16_t end; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Condition %d: %d|%d|%d.\n",TSYS::getUnalign16(cprg+1),7,TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: Condition %d: %d|%d|%d.\n",ptr->cond,sizeof(SCode),ptr->toFalse,ptr->end);
 #endif
-		if( getValB(val,reg[TSYS::getUnalign16(cprg+1)]) )	exec(val,reg,cprg+7,dt);
-		else if( TSYS::getUnalign16(cprg+3) != TSYS::getUnalign16(cprg+5) )	exec(val,reg,cprg + TSYS::getUnalign16(cprg+3),dt);
-		cprg = cprg + TSYS::getUnalign16(cprg+5);
+		if(getValB(val,reg[ptr->cond]))	exec(val,reg,cprg+sizeof(SCode),dt);
+		else if(ptr->toFalse != ptr->end) exec(val,reg,cprg+ptr->toFalse,dt);
+		cprg += ptr->end;
 		continue;
+	    }
 	    case Reg::Cycle:
+	    {
+		struct SCode { uint8_t cod; uint16_t cond; uint16_t body; uint16_t after; uint16_t end; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",TSYS::getUnalign16(cprg+1),9,TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5),TSYS::getUnalign16(cprg+7));
+		printf("CODE: Cycle %d: %d|%d|%d|%d.\n",ptr->cond,sizeof(SCode),ptr->body,ptr->after,ptr->end);
 #endif
-		while( !(dt.flg&0x01) )
+		while(!(dt.flg&0x01))
 		{
-		    exec(val,reg,cprg+9,dt);
-		    if( !getValB(val,reg[TSYS::getUnalign16(cprg+1)]) )	break;
+		    exec(val,reg,cprg+sizeof(SCode),dt);
+		    if(!getValB(val,reg[ptr->cond])) break;
 		    dt.flg &= ~0x06;
-		    exec( val, reg, cprg + TSYS::getUnalign16(cprg+3), dt );
+		    exec(val, reg, cprg+ptr->body, dt);
 		    //Check break and continue operators
-		    if( dt.flg&0x02 )	{ dt.flg=0; break; }
-		    else if( dt.flg&0x04 ) dt.flg=0;
+		    if(dt.flg&0x02)	{ dt.flg=0; break; }
+		    else if(dt.flg&0x04)dt.flg=0;
 
-		    if( TSYS::getUnalign16(cprg+5) ) exec( val, reg, cprg + TSYS::getUnalign16(cprg+5),dt);
+		    if(ptr->after) exec(val, reg, cprg+ptr->after, dt);
 		}
-		cprg = cprg + TSYS::getUnalign16(cprg+7);
+		cprg += ptr->end;
 		continue;
+	    }
 	    case Reg::CycleObj:
 	    {
+		struct SCode { uint8_t cod; uint16_t obj; uint16_t body; uint16_t val; uint16_t end; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: CycleObj %d: %d|%d|%d.\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5),TSYS::getUnalign16(cprg+7));
+		printf("CODE: CycleObj %d: %d|%d|%d.\n",ptr->obj,ptr->body,ptr->val,ptr->end);
 #endif
-		TVariant obj = getVal(val,reg[TSYS::getUnalign16(cprg+1)]);
-		if( obj.type() == TVariant::Object )
+		TVariant obj = getVal(val,reg[ptr->obj]);
+		if(obj.type() == TVariant::Object)
 		{
 		    vector<string> pLs;
 		    obj.getO()->propList(pLs);
-		    for( int i_l = 0; i_l < pLs.size() && !(dt.flg&0x01); i_l++ )
+		    for(int i_l = 0; i_l < pLs.size() && !(dt.flg&0x01); i_l++)
 		    {
-			setValS(val,reg[TSYS::getUnalign16(cprg+5)],pLs[i_l]);
+			setValS(val,reg[ptr->val],pLs[i_l]);
 			dt.flg &= ~0x06;
-			exec( val, reg, cprg + TSYS::getUnalign16(cprg+3), dt );
+			exec(val, reg, cprg + ptr->body, dt);
 			//Check break and continue operators
-			if( dt.flg&0x02 )	{ dt.flg=0; break; }
-			else if( dt.flg&0x04 )	dt.flg=0;
+			if(dt.flg&0x02)		{ dt.flg=0; break; }
+			else if(dt.flg&0x04)	dt.flg=0;
 		    }
 		}
-		cprg = cprg + TSYS::getUnalign16(cprg+7);
+		cprg += ptr->end;
 		continue;
 	    }
 	    case Reg::Break:	dt.flg|=0x03;	break;
 	    case Reg::Continue:	dt.flg|=0x05;	break;
 	    //>> Buildin functions
 	    case Reg::FSin:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sin(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=sin(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = sin(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = sin(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FCos:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=cos(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=cos(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = cos(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = cos(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FTan:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=tan(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=tan(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = tan(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = tan(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FSinh:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sinh(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=sinh(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = sinh(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = sinh(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FCosh:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=cosh(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=cosh(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = cosh(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = cosh(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FTanh:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=tanh(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=tanh(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = tanh(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = tanh(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FAsin:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=asin(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=asin(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = asin(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = asin(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FAcos:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=acos(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=acos(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = acos(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = acos(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FAtan:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=atan(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=atan(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = atan(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = atan(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FRand:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=rand(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=rand(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = getValR(val,reg[TSYS::getUnalign16(cprg+3)])*(double)rand()/(double)RAND_MAX;
-		cprg+=5; break;
+		reg[ptr->rez] = getValR(val,reg[ptr->a])*(double)rand()/(double)RAND_MAX;
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FLg:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=lg(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=lg(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = log10(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = log10(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FLn:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=ln(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=ln(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = log(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = log(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FExp:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=exp(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=exp(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = exp(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = exp(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FPow:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=pow(%d,%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: Function %d=pow(%d,%d).\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = pow(getValR(val,reg[TSYS::getUnalign16(cprg+3)]),getValR(val,reg[TSYS::getUnalign16(cprg+5)]));
-		cprg+=7; break;
+		reg[ptr->rez] = pow(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FMin:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=min(%d,%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: Function %d=min(%d,%d).\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = vmin(getValR(val,reg[TSYS::getUnalign16(cprg+3)]),getValR(val,reg[TSYS::getUnalign16(cprg+5)]));
-		cprg+=7; break;
+		reg[ptr->rez] = vmin(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FMax:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=max(%d,%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3),TSYS::getUnalign16(cprg+5));
+		printf("CODE: Function %d=max(%d,%d).\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = vmax(getValR(val,reg[TSYS::getUnalign16(cprg+3)]),getValR(val,reg[TSYS::getUnalign16(cprg+5)]));
-		cprg+=7; break;
+		reg[ptr->rez] = vmax(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FSqrt:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sqrt(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=sqrt(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = sqrt(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = sqrt(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FAbs:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=abs(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=abs(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = fabs(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = fabs(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FSign:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=sign(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=sign(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = (getValR(val,reg[TSYS::getUnalign16(cprg+3)])>=0)?1:-1;
-		cprg+=5; break;
+		reg[ptr->rez] = (getValR(val,reg[ptr->a])>=0)?1:-1;
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FCeil:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=ceil(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=ceil(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = ceil(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = ceil(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::FFloor:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("CODE: Function %d=floor(%d).\n",TSYS::getUnalign16(cprg+1),TSYS::getUnalign16(cprg+3));
+		printf("CODE: Function %d=floor(%d).\n",ptr->rez,ptr->a);
 #endif
-		reg[TSYS::getUnalign16(cprg+1)] = floor(getValR(val,reg[TSYS::getUnalign16(cprg+3)]));
-		cprg+=5; break;
+		reg[ptr->rez] = floor(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
 	    case Reg::CProc:
 	    case Reg::CFunc:
 	    {

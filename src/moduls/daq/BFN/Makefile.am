@@ -1,6 +1,7 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h po/* doc/*
+EXTRA_DIST = *.h po/*
+# doc/*
 
 INCLUDES = -I$(top_srcdir)/src
 

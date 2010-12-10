@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/
 oscd_modul_LTLIBRARIES = ui_QTStarter.la
 ui_QTStarter_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
+ui_QTStarter_la_DIST = tuimod.cpp qtstarter.qrc
 ui_QTStarter_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui
 ui_QTStarter_la_LIBTOOLFLAGS = --tag=disable-static
 
@@ -48,3 +49,5 @@ uninstall-local:
 
 clean-local:
 	rm -f qrc_qtstarter.cpp moc_tuimod.cpp po/$(m_name).pot po/*~
+
+DISTFILES = $(DIST_COMMON) $(ui_QTStarter_la_DIST) $(EXTRA_DIST)
