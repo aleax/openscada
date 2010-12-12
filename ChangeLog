@@ -1,3 +1,8 @@
+2010-12-12 Roman
+- FIX:DAQ.Siemens: NoDave is fixed for structures pack from all header space. #pragma pack(1) is replaced by #pragma pack(push,1) ... #pragma pack(pop).
+    The problem is detected on ARM.
+
+
 2010-12-10 Roman
 - SYS: The option '--enable-CrossCompile' is added for disable some configure script's tests for cross compiling build.
 - !!:FIX:SYS: The command 'make dist' is fixed and adapted for correct OpenSCADA distribution create.
