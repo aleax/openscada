@@ -126,6 +126,7 @@ class ModMArch: public TMArchivator
 	int  checkTm( )		{ return mChkTm; }
 	int  packTm( )		{ return mPackTm; }
 	bool packInfoFiles( )	{ return mPackInfoFiles; }
+	bool prevDbl( )		{ return mPrevDbl; }
 
 	void setUseXML( bool vl )	{ mUseXml = vl; modif(); }
 	void setMaxSize( int vl )	{ mMaxSize = vl; modif(); }
@@ -134,6 +135,7 @@ class ModMArch: public TMArchivator
 	void setCheckTm( int vl )	{ mChkTm = vl; modif(); }
 	void setPackTm( int vl )	{ mPackTm = vl; modif(); }
 	void setPackInfoFiles( bool vl ){ mPackInfoFiles = vl; modif(); }
+	void setPrevDbl( bool vl )	{ mPrevDbl = vl; modif(); }
 
 	void checkArchivator( bool now = false );
 
@@ -156,6 +158,7 @@ class ModMArch: public TMArchivator
 	int	mChkTm;		// period of check archive files directory;
 	int	mPackTm;	// pack the archive files timeout
 	bool	mPackInfoFiles;	// use info files for packed archives
+	bool	mPrevDbl;	// duple messages prevent
 
 	Res	mRes;		// resource to access;
 	double	tmCalc;		// Archiving time

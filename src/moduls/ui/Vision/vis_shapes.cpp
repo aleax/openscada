@@ -3097,7 +3097,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	//> Process source document
 	//>> Parse document
 	XMLNode xproc;
-	try{ xproc.load(string(XHTML_entity)+shD->doc); }
+	try{ if(!shD->doc.empty()) xproc.load(string(XHTML_entity)+shD->doc); }
 	catch( TError err )
 	{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),w->id().c_str(),err.mess.c_str()); }
 

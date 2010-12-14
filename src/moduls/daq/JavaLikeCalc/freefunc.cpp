@@ -686,7 +686,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::BitXor:	*op1 = op1->val().b_el ^ op2->val().b_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().b_el || op2->val().b_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().b_el && op2->val().b_el;	break;
-		}	
+		}
 	    case Reg::String:
 		switch(cod)
 		{
@@ -1131,7 +1131,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		    if( prms.size() ) n = prms[0].getI();
 		    return TSYS::strMess( (n==16)?"%x":((n==8)?"%o":"%d"),vl.getI() );
 		}
-		throw TError(nodePath().c_str(),_("Integer type have not function '%s' or not enough parameters for it."),prop.c_str());
+		throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if( prop == "isEVal" )	return (vl.getS() == EVAL_STR);
@@ -1265,7 +1265,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		if( prop == "path2sep" )
 		    return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
 
-		throw TError(nodePath().c_str(),_("Integer type have not properties '%s' or not enough parameters for it."),prop.c_str());
+		throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
 	}
 	return false;
 	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());

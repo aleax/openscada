@@ -37,7 +37,7 @@ using namespace FSArch;
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid,idb,cf_el), tmCalc(0.0), mLstCheck(0),
-    mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10), mPackInfoFiles(false),
+    mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mPrevDbl(false),
     mAPrms(cfg("A_PRMS").getSd())
 {
 
@@ -57,13 +57,14 @@ void ModMArch::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("XML"); if( !vl.empty() ) setUseXML(atoi(vl.c_str()));
-	vl = prmNd.attr("MSize"); if( !vl.empty() ) setMaxSize(atoi(vl.c_str()));
-	vl = prmNd.attr("NFiles"); if( !vl.empty() ) setNumbFiles(atoi(vl.c_str()));
-	vl = prmNd.attr("TmSize"); if( !vl.empty() ) setTimeSize(atoi(vl.c_str()));
-	vl = prmNd.attr("PackTm"); if( !vl.empty() ) setPackTm(atoi(vl.c_str()));
-	vl = prmNd.attr("CheckTm"); if( !vl.empty() ) setCheckTm(atoi(vl.c_str()));
-	vl = prmNd.attr("PackInfoFiles"); if( !vl.empty() ) setPackInfoFiles(atoi(vl.c_str()));
+	vl = prmNd.attr("XML"); if(!vl.empty()) setUseXML(atoi(vl.c_str()));
+	vl = prmNd.attr("MSize"); if(!vl.empty()) setMaxSize(atoi(vl.c_str()));
+	vl = prmNd.attr("NFiles"); if(!vl.empty()) setNumbFiles(atoi(vl.c_str()));
+	vl = prmNd.attr("TmSize"); if(!vl.empty()) setTimeSize(atoi(vl.c_str()));
+	vl = prmNd.attr("PackTm"); if(!vl.empty()) setPackTm(atoi(vl.c_str()));
+	vl = prmNd.attr("CheckTm"); if(!vl.empty()) setCheckTm(atoi(vl.c_str()));
+	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(atoi(vl.c_str()));
+	vl = prmNd.attr("PrevDbl"); if(!vl.empty()) setPrevDbl(atoi(vl.c_str()));
     } catch(...){ }
 
 }
@@ -78,6 +79,7 @@ void ModMArch::save_( )
     prmNd.setAttr("PackTm",TSYS::int2str(packTm()));
     prmNd.setAttr("CheckTm",TSYS::int2str(checkTm()));
     prmNd.setAttr("PackInfoFiles",TSYS::int2str(packInfoFiles()));
+    prmNd.setAttr("PrevDbl",TSYS::int2str(prevDbl()));
     mAPrms = prmNd.save(XMLNode::BrAllPast);
 
     TMArchivator::save_();
@@ -127,18 +129,18 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 
     ResAlloc res(mRes,false);
 
-    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
-    for( unsigned i_m = 0; i_m < mess.size(); i_m++)
-    {
-	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
+    for(unsigned i_m = 0; i_m < mess.size(); i_m++)
+    {
+	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 	int i_arh;
-	for( i_arh = 0; i_arh < arh_s.size(); i_arh++)
-	    if( !arh_s[i_arh]->err() && mess[i_m].time >= arh_s[i_arh]->begin() )
+	for(i_arh = 0; i_arh < arh_s.size(); i_arh++)
+	    if(!arh_s[i_arh]->err() && mess[i_m].time >= arh_s[i_arh]->begin())
 	    {
-		if( i_arh == 0 &&
-		    ((mMaxSize && arh_s[i_arh]->size() > mMaxSize*1024) ||
-		     (mess[i_m].time >= arh_s[i_arh]->begin()+mTimeSize*24*60*60)) ) break;
+		if(mess[i_m].time > arh_s[i_arh]->end() &&
+		    ((mMaxSize && i_arh == 0 && arh_s[i_arh]->size() > mMaxSize*1024) ||
+		    (mess[i_m].time >= arh_s[i_arh]->begin()+mTimeSize*24*60*60))) break;
 		try{ arh_s[i_arh]->put(mess[i_m]); }
 		catch(TError err)
 		{ mess_err(err.cat.c_str(),err.mess.c_str()); continue; }
@@ -146,27 +148,31 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 		break;
 	    }
 	//> If going a new data then create new file
-	if( i_arh >= 0 )
+	if(i_arh >= 0)
 	{
-	    res.release();
-
 	    res.request(true);
+	    time_t f_beg = mess[i_m].time;
+	    if(i_arh < arh_s.size() && f_beg > arh_s[i_arh]->end() && (f_beg-arh_s[i_arh]->end()) < (mTimeSize*24*60*60/3))
+		f_beg = arh_s[i_arh]->end()+1;
+	    if(i_arh && arh_s[i_arh-1]->begin() > f_beg && (arh_s[i_arh-1]->begin()-f_beg) < (mTimeSize*24*60*60*2/3))
+		f_beg = arh_s[i_arh-1]->begin()-mTimeSize*24*60*60;
 	    //>> Create new Archive
-	    char c_buf[30];
-	    time_t tm = time(NULL);
-	    struct tm tm_tm;
-	    localtime_r(&tm,&tm_tm);
-	    strftime(c_buf,sizeof(c_buf),"/%F %T.msg",&tm_tm);
-	    try{ arh_s.push_front( new MFileArch( addr()+c_buf, mess[i_m].time, this, Mess->charset(), useXML() ) ); }
+	    string f_name = TSYS::time2str(f_beg,"/%F %T.msg");
+	    try
+	    {
+		MFileArch *f_obj = new MFileArch(addr()+f_name, f_beg, this, Mess->charset(), useXML());
+		if(i_arh == arh_s.size()) arh_s.push_back(f_obj);
+		else if(i_arh < arh_s.size()) arh_s.insert(arh_s.begin()+i_arh,f_obj);
+		else return;
+	    }
 	    catch(TError err)
 	    {
-		mess_crit(nodePath().c_str(),_("Error create new archive file <%s>!"),(addr()+c_buf).c_str() );
+		mess_crit(nodePath().c_str(),_("Error create new archive file <%s>!"),(addr()+f_name).c_str() );
 		return;
 	    }
-	    res.release();
 	    //>> Allow parallel read access
 	    res.request(false);
-	    arh_s[0]->put(mess[i_m]);
+	    arh_s[i_arh]->put(mess[i_m]);
 	}
     }
     tmCalc = TSYS::curTime()-t_cnt;
@@ -325,6 +331,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/add/prev_dbl",_("Prevent duplicates"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID);
 	}
 	return;
@@ -369,7 +376,11 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(packInfoFiles()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPackInfoFiles(atoi(opt->text().c_str()));
     }
-
+    else if(a_path == "/prm/add/prev_dbl")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(prevDbl()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPrevDbl(atoi(opt->text().c_str()));
+    }
     else if(a_path == "/prm/add/chk_nw" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	checkArchivator(true);
     else TMArchivator::cntrCmdProc(opt);
 }
@@ -628,12 +639,18 @@ void MFileArch::put( TMess::SRec mess )
 
     mAcces = time(NULL);
 
-    if( xmlM() )
+    if(xmlM())
     {
 	int i_ch;
-	for( i_ch = 0; i_ch < mNode->childSize(); i_ch++)
-	    if( strtol( mNode->childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16) > mess.time )
-		break;
+	for(i_ch = 0; i_ch < mNode->childSize(); i_ch++)
+	{
+	    XMLNode *xIt = mNode->childGet(i_ch);
+	    long xTm = strtol(xIt->attr("tm").c_str(),(char **)NULL,16);
+	    if(xTm > mess.time)	break;
+	    else if(owner().prevDbl() && xTm == mess.time && atoi(xIt->attr("tmu").c_str()) == mess.utime &&
+		    xIt->attr("cat") == mess.categ && xIt->text() == mess.mess)
+		return;
+	}
 
 	XMLNode *cl_node = mNode->childIns(i_ch,"m");
 	cl_node->setAttr("tm",TSYS::int2str(mess.time,TSYS::Hex));
@@ -641,7 +658,7 @@ void MFileArch::put( TMess::SRec mess )
 	cl_node->setAttr("lv",TSYS::int2str(mess.level));
 	cl_node->setAttr("cat",mess.categ);
 	cl_node->setText(mess.mess);
-	if( mess.time > mEnd )
+	if(mess.time > mEnd)
 	{
 	    mEnd = mess.time;
 	    mNode->setAttr("End",TSYS::int2str(mEnd,TSYS::Hex));
@@ -650,14 +667,40 @@ void MFileArch::put( TMess::SRec mess )
     }
     else
     {
+	unsigned int tTm;
+	long mv_beg = 0;
 	char buf[STR_BUF_LEN];
 	//> Check to empty category and message
-	if( !mess.categ.size() )	mess.categ = " ";
-	if( !mess.mess.size() )		mess.mess = " ";
+	if(!mess.categ.size())	mess.categ = " ";
+	if(!mess.mess.size())	mess.mess = " ";
 	//> Open file
 	FILE *f = fopen(mName.c_str(),"r+");
-	if( f == NULL ) { mErr = true; return; }
-	if( mess.time >= mEnd )
+	if(f == NULL) { mErr = true; return; }
+
+	//> Prepare mess
+	snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
+	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
+	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
+	string s_buf = buf;
+
+	//> Check for duples
+	if(mess.time <= mEnd && owner().prevDbl())
+	{
+	    long c_off = cacheGet(mess.time);
+	    if(c_off) fseek(f,c_off,SEEK_SET);
+	    else fgets(buf,sizeof(buf),f);
+
+	    while(fgets(buf,sizeof(buf),f) != NULL)
+	    {
+		sscanf(buf,"%x %*d",&tTm);
+		if(tTm > mess.time) { mv_beg = ftell(f)-strlen(buf); break; }
+		if(tTm == mess.time && s_buf == buf) { fclose(f); return; }
+	    }
+	    fseek(f,0,SEEK_SET);
+	}
+
+	//> Put message to end
+	if(mess.time >= mEnd)
 	{
 	    //> Update header
 	    if( mess.time != mEnd )
@@ -667,67 +710,57 @@ void MFileArch::put( TMess::SRec mess )
 		    mod->modId().c_str(),mod->modInfo("Version").c_str(),mChars.c_str(),(unsigned int)mBeg,(unsigned int)mEnd);
 		fwrite(buf,strlen(buf),1,f);
 	    }
-	    //> Prepare and put mess to end file
-	    snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
-		Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
-		Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
+	    //> Put mess to end file
 	    fseek(f,0,SEEK_END);
-	    fwrite(buf,strlen(buf),1,f);
+	    fwrite(s_buf.data(),s_buf.size(),1,f);
 	}
+	//> Put message to inwards
 	else
 	{
-	    time_t m_tm = 0;
-	    //> Put into file
-	    //>> Get want position
-	    long c_off = cacheGet(mess.time);
-	    if(c_off) fseek(f,c_off,SEEK_SET);
-	    else fgets(buf,sizeof(buf),f);
-	    //>> Check mess records
-	    int pass_cnt = 0;
-	    time_t last_tm = 0;
-	    while(fgets(buf,sizeof(buf),f) != NULL)
+	    if(!mv_beg)
 	    {
-		unsigned int tTm;
-		sscanf(buf,"%x %*d",&tTm);
-		m_tm = tTm;
-		if( m_tm > mess.time )
+		//>> Get want position
+		long c_off = cacheGet(mess.time);
+		if(c_off) fseek(f,c_off,SEEK_SET);
+		else fgets(buf,sizeof(buf),f);
+
+		//>> Check mess records
+		int pass_cnt = 0;
+		time_t last_tm = 0;
+		while(!mv_beg && fgets(buf,sizeof(buf),f) != NULL)
 		{
-		    int prev_m_len = strlen(buf);
-		    //>>> Prepare message
-		    snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
-			Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
-			Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
-		    string s_buf = buf;
-		    //>>> Move tail at a new message size
-		    int mv_beg = ftell(f)-prev_m_len;
-		    fseek(f,0,SEEK_END);
-		    int mv_end = ftell(f);
-		    int beg_cur;
-		    do
-		    {
-			beg_cur = ((mv_end-mv_beg)>=sizeof(buf))?mv_end-sizeof(buf):mv_beg;
-			fseek(f,beg_cur,SEEK_SET);
-			fread(buf,mv_end-beg_cur,1,f);
-			fseek(f,beg_cur+s_buf.size(),SEEK_SET);
-			fwrite(buf,mv_end-beg_cur,1,f);
-			mv_end-=sizeof(buf);
-		    }
-		    while(beg_cur!=mv_beg);
-		    //>>> Write a new message
-		    fseek(f,mv_beg,SEEK_SET);
-		    fwrite(s_buf.c_str(),s_buf.size(),1,f);
-		    cacheUpdate(mess.time,s_buf.size());
-		    //>>> Put last value to cache
-		    cacheSet(mess.time,mv_beg,true);
-		    break;
-		}
-		else if((pass_cnt++) > CACHE_POS && m_tm != last_tm)
-		{
+		    sscanf(buf,"%x %*d",&tTm);
+		    if(tTm > mess.time) mv_beg = ftell(f)-strlen(buf);
 		    //>>> Add too big position to cache
-		    cacheSet(m_tm,ftell(f)-strlen(buf));
-		    pass_cnt = 0;
+		    else if((pass_cnt++) > CACHE_POS && tTm != last_tm)
+		    {
+			cacheSet(tTm,ftell(f)-strlen(buf));
+			pass_cnt = 0;
+		    }
+		    last_tm = tTm;
 		}
-		last_tm = m_tm;
+	    }
+	    if(mv_beg)
+	    {
+		fseek(f,0,SEEK_END);
+		int mv_end = ftell(f);
+		int beg_cur;
+		do
+		{
+		    beg_cur = ((mv_end-mv_beg)>=sizeof(buf))?mv_end-sizeof(buf):mv_beg;
+		    fseek(f,beg_cur,SEEK_SET);
+		    fread(buf,mv_end-beg_cur,1,f);
+		    fseek(f,beg_cur+s_buf.size(),SEEK_SET);
+		    fwrite(buf,mv_end-beg_cur,1,f);
+		    mv_end-=sizeof(buf);
+		}
+		while(beg_cur!=mv_beg);
+		//>>> Write a new message
+		fseek(f,mv_beg,SEEK_SET);
+		fwrite(s_buf.c_str(),s_buf.size(),1,f);
+		cacheUpdate(mess.time,s_buf.size());
+		//>>> Put last value to cache
+		cacheSet(mess.time,mv_beg,true);
 	    }
 	}
 	fseek(f,0,SEEK_END);

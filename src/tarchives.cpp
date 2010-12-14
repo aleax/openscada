@@ -692,8 +692,8 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     if( iid == "messGet" && prms.size() >= 2 )
     {
 	vector<TMess::SRec> recs;
-	messGet( prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : ""), 
-	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : 0) );
+	messGet( prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
+	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")) );
 	TArrayObj *rez = new TArrayObj();
 	for( int i_m = 0; i_m < recs.size(); i_m++ )
 	{

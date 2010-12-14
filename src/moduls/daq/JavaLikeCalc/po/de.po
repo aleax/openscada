@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 10:34+0200\n"
+"POT-Creation-Date: 2010-12-13 12:45+0200\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -81,13 +81,12 @@ msgstr "Object-Funktion haben mehr 255 Parameter."
 msgid "Boolean type have not function '%s' or not enough parameters for it."
 msgstr "Logischer Typ hat keine Funktion '%s' oder zuwenig Parameter."
 
-#, c-format
-msgid "Integer type have not function '%s' or not enough parameters for it."
-msgstr "Ganzzahl Typ hat keine Funktion '%s' oder zuwenig Parameter."
+msgid ""
+"Integer or real type have not function '%s' or not enough parameters for it."
+msgstr "Ganzzahl oder Reellezahl Typ hat keine Funktion '%s' oder zuwenig Parameter."
 
-#, c-format
-msgid "Integer type have not properties '%s' or not enough parameters for it."
-msgstr "Ganzahl Typ hat keine Eigenschaft '%s' oder zuwenig Parameter."
+msgid "String type have not properties '%s' or not enough parameters for it."
+msgstr "Text Typ hat keine Eigenschaft '%s' oder zuwenig Parameter."
 
 msgid "Get object from no object's register"
 msgstr "Lade Objekt nicht vom Objektregister"

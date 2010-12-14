@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-02 09:14+0200\n"
+"POT-Creation-Date: 2010-12-14 08:03+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -89,6 +89,9 @@ msgstr "Период проверки архивов (мин)"
 
 msgid "Use info files for packed archives"
 msgstr "Использовать инф. файлы для упакованных архивов"
+
+msgid "Prevent duplicates"
+msgstr "Предотвращать дубликаты"
 
 msgid "Check archivator directory now"
 msgstr "Проверить директорию архиватора сейчас"

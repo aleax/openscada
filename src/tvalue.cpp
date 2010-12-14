@@ -721,6 +721,9 @@ void TVal::setB( char value, long long tm, bool sys )
 
 TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // string descr() - get attribute description
+    if( iid == "descr" ) return fld().descr();
+
     // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
     //  tm, utm - time for requested value
     //  sys - system request, direct from object

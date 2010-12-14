@@ -538,7 +538,7 @@ void *TMdContr::Task(void *icntr)
 		if(reqHouses.attr("err").empty())
 		{
 		    XMLNode *houseArr = reqHouses.childGet("arrHouseProperties");
-		    for(int i_h = 0; i_h < houseArr->childSize(); i_h++)
+		    for(int i_h = 0; !cntr.endrun_req && i_h < houseArr->childSize(); i_h++)
 		    {
 			XMLNode *houseIt = houseArr->childGet(i_h);
 			//> Get House computers
@@ -548,7 +548,7 @@ void *TMdContr::Task(void *icntr)
 			if(reqHouseComps.attr("err").empty())
 			{
 			    XMLNode *compArr = reqHouseComps.childGet("arrHouseComputerProperties");
-			    for(int i_hc = 0; i_hc < compArr->childSize(); i_hc++)
+			    for(int i_hc = 0; !cntr.endrun_req && i_hc < compArr->childSize(); i_hc++)
 			    {
 				XMLNode *compIt = compArr->childGet(i_hc);
 				string pName = "h"+houseIt->childGet("lHouseId")->text()+"_hc"+compIt->childGet("lHouseComputerId")->text();
@@ -584,7 +584,7 @@ void *TMdContr::Task(void *icntr)
 		if(reqCodeData.attr("err").empty())
 		{
 		    XMLNode *cdArr = reqCodeData.childGet("arrCodeData");
-		    for(int i_cd = 0; i_cd < cdArr->childSize(); i_cd++)
+		    for(int i_cd = 0; !cntr.endrun_req && i_cd < cdArr->childSize(); i_cd++)
 		    {
 			XMLNode *cdIt = cdArr->childGet(i_cd);
 			aId = "c"+cdIt->childGet("lCodeId")->text()+"u"+cdIt->childGet("iUnitId")->text();
@@ -616,7 +616,7 @@ void *TMdContr::Task(void *icntr)
 		{
 		    cntr.p_hd[i_p].at().curAlrmsId = atoi(reqAlrms.childGet("lLastLogIndexFetched")->text().c_str());
 		    XMLNode *alrmArr = reqAlrms.childGet("arrAlarmLogData");
-		    for(int i_a = 0; i_a < alrmArr->childSize(); i_a++)
+		    for(int i_a = 0; !cntr.endrun_req && i_a < alrmArr->childSize(); i_a++)
 		    {
 			XMLNode *alrmIt = alrmArr->childGet(i_a);
 			time_t aTm = atoi(alrmIt->childGet("lTimestamp")->text().c_str());
@@ -646,7 +646,7 @@ void *TMdContr::Task(void *icntr)
 		cntr.p_hd[i_p].at().acq_err.setVal(tErr);
 	    }
 	}
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; break; }
+	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
 
 	cntr.acq_err.setVal(tErr);
 

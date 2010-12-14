@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-02 09:14+0200\n"
+"POT-Creation-Date: 2010-12-14 08:03+0200\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -95,6 +95,9 @@ msgstr "Zyklus Prüfung der Archive (min)"
 
 msgid "Use info files for packed archives"
 msgstr "Verwenden Sie Info-Dateien für gepackten Archiven"
+
+msgid "Prevent duplicates"
+msgstr ""
 
 msgid "Check archivator directory now"
 msgstr "Archivarverzeichnis prüfen"

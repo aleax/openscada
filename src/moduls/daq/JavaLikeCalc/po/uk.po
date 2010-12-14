@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 10:34+0200\n"
+"POT-Creation-Date: 2010-12-13 12:45+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -76,14 +76,13 @@ msgstr "Функція об’єкту містить більш 255 парам�
 msgid "Boolean type have not function '%s' or not enough parameters for it."
 msgstr "Логічний тип не має функції '%s' або не достатньо параметрів для неї. "
 
-#, c-format
-msgid "Integer type have not function '%s' or not enough parameters for it."
-msgstr "Цілий тип не має функції '%s'. або не достатньо параметрів для неї."
+msgid ""
+"Integer or real type have not function '%s' or not enough parameters for it."
+msgstr "Цілий або реальний тип не має функції '%s'. або не достатньо параметрів для неї."
 
-#, c-format
-msgid "Integer type have not properties '%s' or not enough parameters for it."
+msgid "String type have not properties '%s' or not enough parameters for it."
 msgstr ""
-"Цілий тип не має властивості '%s'. або не достатньо параметрів для неї."
+"Строковий тип не має властивості '%s'. або не достатньо параметрів для неї."
 
 msgid "Get object from no object's register"
 msgstr "Отримання об'єкту з не об'єктного регістру"
@@ -259,9 +258,11 @@ msgstr "Бібліотеки функцій"
 msgid "Libraries"
 msgstr "Бібліотеки"
 
+#, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
+#, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
