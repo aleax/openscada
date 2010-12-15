@@ -103,6 +103,8 @@ class TVarObj
 	TVarObj( );
 	virtual ~TVarObj( );
 
+	virtual string objName( )	{ return "object"; }
+
 	int connect( );
 	int disconnect( );
 
@@ -130,7 +132,9 @@ class TArrayObj : public TVarObj
 	//Methods
 	TArrayObj( )	{ };
 
-	int size( )	{ return mEls.size(); }
+	string objName( )	{ return "array"; }
+
+	int size( )		{ return mEls.size(); }
 
 	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
@@ -156,6 +160,8 @@ class XMLNodeObj : public TVarObj
 	//Methods
 	XMLNodeObj( const string &name = "" );
 	~XMLNodeObj( );
+
+	string objName( )       { return "XMLNode"; }
 
 	string name( )		{ return mName; }
 	string text( )		{ return mText; }
@@ -192,7 +198,9 @@ class TCntrNodeObj: public TVarObj
 	//Methods
 	TCntrNodeObj( AutoHD<TCntrNode> nd, const string &user );
 
-	string user( )	{ return mUser; }
+	string objName( )       { return "TCntrNode"; }
+
+	string user( )		{ return mUser; }
 
 	void setUser( const string &user )	{ mUser = user; }
 

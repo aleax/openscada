@@ -39,6 +39,8 @@ class VArchObj : public TVarObj
 	VArchObj( );
 	~VArchObj( );
 
+	string objName( )       { return "arch"; }
+
 	bool open( const string &inm );
 	bool open( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
 	void close( );

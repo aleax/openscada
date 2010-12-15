@@ -73,7 +73,7 @@ class TFld
 
 	TFld &operator=( TFld &fld );
 
-	//> Base
+	//> Main
 	const string &name( )	{ return m_name; }	//Name
 	const string &descr( )	{ return m_descr; }	//Description
 	int len( )		{ return m_len; }	//Length

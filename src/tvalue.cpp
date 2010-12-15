@@ -721,31 +721,28 @@ void TVal::setB( char value, long long tm, bool sys )
 
 TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string descr() - get attribute description
-    if( iid == "descr" ) return fld().descr();
-
     // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
     //  tm, utm - time for requested value
     //  sys - system request, direct from object
-    if( iid == "get" )
+    if(iid == "get")
     {
 	try
 	{
 	    TVariant rez;
 	    long long tm = 0;
-	    if( prms.size() >= 1 ) tm = (long long)prms[0].getI()*1000000;
-	    if( prms.size() >= 2 ) tm += prms[1].getI();
+	    if(prms.size() >= 1) tm = (long long)prms[0].getI()*1000000;
+	    if(prms.size() >= 2) tm += prms[1].getI();
 	    bool isSys = false;
-	    if( prms.size() >= 3 ) isSys = prms[2].getB();
-	    switch( fld().type() )
+	    if(prms.size() >= 3) isSys = prms[2].getB();
+	    switch(fld().type())
 	    {
 		case TFld::Boolean:	rez = getB(&tm,isSys);	break;
 		case TFld::Integer:	rez = getI(&tm,isSys);	break;
 		case TFld::Real:	rez = getR(&tm,isSys);	break;
 		case TFld::String:	rez = getS(&tm,isSys);	break;
 	    }
-	    if( prms.size() >= 1 )	{ prms[0].setI(tm/1000000); prms[0].setModify(); }
-	    if( prms.size() >= 2 )	{ prms[1].setI(tm%1000000); prms[1].setModify(); }
+	    if(prms.size() >= 1)	{ prms[0].setI(tm/1000000); prms[0].setModify(); }
+	    if(prms.size() >= 2)	{ prms[1].setI(tm%1000000); prms[1].setModify(); }
 
 	    return rez;
 	}catch(...){ }
@@ -755,16 +752,16 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //       access flag <sys>
     //  tm, utm - time for set value
     //  sys - system request, direct to object
-    if( iid == "set" && prms.size() >= 1 )
+    if(iid == "set" && prms.size() >= 1)
     {
 	try
 	{
 	    long long tm = 0;
-	    if( prms.size() >= 2 ) tm = (long long)prms[1].getI()*1000000;
-	    if( prms.size() >= 3 ) tm += prms[2].getI();
+	    if(prms.size() >= 2) tm = (long long)prms[1].getI()*1000000;
+	    if(prms.size() >= 3) tm += prms[2].getI();
 	    bool isSys = false;
-	    if( prms.size() >= 4 ) isSys = prms[3].getB();
-	    switch( fld().type() )
+	    if(prms.size() >= 4) isSys = prms[3].getB();
+	    switch(fld().type())
 	    {
 		case TFld::Boolean:	setB(prms[0].getB(),tm,isSys);	break;
 		case TFld::Integer:	setI(prms[0].getI(),tm,isSys);	break;
@@ -775,6 +772,28 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}catch(...){ }
 	return true;
     }
+    // string descr() - get attribute description
+    if(iid == "descr")	return fld().descr();
+    // int time(int utm) - get last attribute's value time
+    if(iid == "time")
+    {
+	if(prms.size() >= 1)	{ prms[0].setI((int)(time()%1000000)); prms[0].setModify(); }
+	return (int)(time()/1000000);
+    }
+    // int len() - get field length
+    if(iid == "len")	return fld().len();
+    // int dec() - float dec
+    if(iid == "dec")	return fld().dec();
+    // int flg() - field's flags
+    if(iid == "flg")	return (int)fld().flg();
+    // string def() - default value
+    if(iid == "def")	return fld().def();
+    // string values() - allowed values list or range
+    if(iid == "values")	return fld().values();
+    // string selNames() - names of allowed values list
+    if(iid == "selNames")	return fld().selNames();
+    // string reserve() - reserve string property value
+    if(iid == "reserve")return fld().reserve();
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }

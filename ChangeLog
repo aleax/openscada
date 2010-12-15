@@ -1,3 +1,11 @@
+2010-12-15 Roman
+- SYS: Functions TVal::time(), TVal::len(), TVal::dec(), TVal::flg(), TVal::def(), TVal::values(), 
+    TVal::selNames() and TVal::reserve() is added to user's API.
+    Functions TController::name(), TController::descr() and TController::status() is added to user's API.
+- SYS: Result for TVarObj::propGet() for miss properties is return to NULL.
+- !!!:DAQ.JavaLikeCalc: Buildin function typeof() is added for value type detect.
+
+
 2010-12-14 Roman
 - SYS: Function TVal::descr() is added to user's API.
 - FIX:SYS: Result for TVarObj::propGet() for miss properties is set to EVAL_BOOL.
@@ -5,7 +13,7 @@
 - FIX:DAQ.JavaLikeCalc: Some messages is fixed.
 - !!!:FIX:Archive.FSArch: The archive files creation for messages is fixed and rewrited for more old messages place support.
     The option "Prevent duples" is added for prevent storing duples messages.
-- FIX:UI.Vision: Warning generate is fixed for empty dicuments of primitive "Document".
+- FIX:UI.Vision: Warning generate is fixed for empty documents of primitive "Document".
 - FIX:Archive: The user's API function messGet() is fixed for crash.
 
 

@@ -120,6 +120,8 @@ class TController : public TCntrNode, public TConfig
 	void preDisable( int flag );		//Disable if delete
 	void postDisable( int flag );		//Delete all DB if flag 1
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Private methods
 	const string &nodeName( )	{ return mId; }

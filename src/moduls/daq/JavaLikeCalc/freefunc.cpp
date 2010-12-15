@@ -917,9 +917,9 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     uint16_t addr;
     int p1_pos = -1, p2_pos = -1;
 
-    if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
-	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
-	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
+    //if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
+    //	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
+    //	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
     //> Free parameter's registers
     if( prm1 )	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
     if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
@@ -927,7 +927,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     if( prm2 )	prm2->free();
     //> Get rezult register
     rez = regAt(regNew());
-    rez->setType(Reg::Real);
+    rez->setType(Reg::Dynamic/*Reg::Real*/);
     //> Make code
     prg += (uint8_t)f_cod;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
@@ -2254,6 +2254,27 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=floor(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = floor(getValR(val,reg[ptr->a]));
+		cprg += sizeof(SCode); break;
+	    }
+	    case Reg::FTypeOf:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#if OSC_DEBUG >= 5
+		printf("CODE: Function %d=typeof(%d).\n",ptr->rez,ptr->a);
+#endif
+		string rez = "undefined";
+		TVariant vl = getVal(val, reg[ptr->a]);
+		switch(vl.type())
+		{
+		    case TVariant::Null:	rez = "null";	break;
+		    case TVariant::Boolean:	rez = "boolean";break;
+		    case TVariant::Integer:	rez = "int";    break;
+		    case TVariant::Real:	rez = "real";   break;
+		    case TVariant::String:	rez = "string"; break;
+		    case TVariant::Object:	rez = vl.getO()->objName(); break;
+		}
+		reg[ptr->rez] = rez;
 		cprg += sizeof(SCode); break;
 	    }
 	    case Reg::CProc:

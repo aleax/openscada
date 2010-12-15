@@ -146,6 +146,7 @@ class Reg
 	    FSign,	//[CRRrr]: Function sign.
 	    FCeil,	//[CRRrr]: Function ceil.
 	    FFloor,	//[CRRrr]: Function floor.
+	    FTypeOf,	//[CRRrr]: Function for get type of value.
 	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
 	    CFunc,	//[CFnRR____]: Function.
 	    CFuncObj	//[CRRnRR____]: Object's function

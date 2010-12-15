@@ -224,7 +224,7 @@ void TVarObj::propList( vector<string> &ls )
 TVariant TVarObj::propGet( const string &id )
 {
     map<string,TVariant>::iterator vit = mProps.find(id);
-    if( vit == mProps.end() ) return EVAL_BOOL;
+    if( vit == mProps.end() ) return TVariant();
 
     return vit->second;
 }

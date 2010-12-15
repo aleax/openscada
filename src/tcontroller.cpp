@@ -400,6 +400,18 @@ void TController::redntDataUpdate( )
     }
 }
 
+TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // string name() - get controller name.
+    if(iid == "name")	return name();
+    // string descr() - get controller description.
+    if(iid == "descr")	return descr();
+    // string status() - get controller status.
+    if(iid == "status")	return getStatus();
+
+    return TCntrNode::objFuncCall(iid,prms,user);
+}
+
 void TController::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
