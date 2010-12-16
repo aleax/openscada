@@ -2280,107 +2280,110 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    case Reg::CProc:
 	    case Reg::CFunc:
 	    {
-		TValFunc *vfnc = val->ctxGet(*(uint8_t*)(cprg+1));
-		if( !vfnc )
+		struct SCode { uint8_t cod; uint8_t f; uint8_t n; uint16_t rez; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+
+		TValFunc *vfnc = val->ctxGet(ptr->f);
+		if(!vfnc)
 		{
-		    vfnc = new TValFunc("JavaLikeFuncCalc",&funcAt(*(uint8_t*)(cprg+1))->func().at());
-		    val->ctxSet(*(uint8_t*)(cprg+1),vfnc);
+		    vfnc = new TValFunc("JavaLikeFuncCalc",&funcAt(ptr->f)->func().at());
+		    val->ctxSet(ptr->f,vfnc);
 		}
-		/*if( val->vctx.find(*(uint8_t*)(cprg+1)) == val->vctx.end() )
-		    val->vctx[*(uint8_t*)(cprg+1)] = new TValFunc("JavaLikeFuncCalc",&funcAt(*(uint8_t*)(cprg+1))->func().at());
-		TValFunc *vfnc = val->vctx[*(uint8_t*)(cprg+1)];*/
 #if OSC_DEBUG >= 5
-		printf("CODE: Call function/procedure %d = %s(%d).\n",TSYS::getUnalign16(cprg+3),vfnc->func()->id().c_str(),*(uint8_t*)(cprg+2));
+		printf("CODE: Call function/procedure %d = %s(%d).\n",ptr->rez,vfnc->func()->id().c_str(),ptr->n);
 #endif
 		//>>> Get return position
 		int r_pos, i_p, p_p;
-		for( r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++ )
-		    if( vfnc->ioFlg(r_pos)&IO::Return ) break;
+		for(r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++)
+		    if(vfnc->ioFlg(r_pos)&IO::Return) break;
 		//>>> Process parameters
-		for( i_p = p_p = 0; true; i_p++ )
+		for(i_p = p_p = 0; true; i_p++)
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
-		    if( p_p >= vfnc->func()->ioSize() ) break;
+		    if(p_p >= vfnc->func()->ioSize()) break;
 		    //>>>> Set default value
-		    if( i_p >= *(uint8_t*)(cprg+2) )	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
+		    if(i_p >= ptr->n)	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
 		    switch(vfnc->ioType(p_p))
 		    {
-			case IO::String:	vfnc->setS(p_p,getValS(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Integer:	vfnc->setI(p_p,getValI(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Real:		vfnc->setR(p_p,getValR(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Boolean:	vfnc->setB(p_p,getValB(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))])); break;
-			case IO::Object:	vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))])); break;
+			case IO::String:	vfnc->setS(p_p,getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
+			case IO::Integer:	vfnc->setI(p_p,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
+			case IO::Real:		vfnc->setR(p_p,getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
+			case IO::Boolean:	vfnc->setB(p_p,getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
+			case IO::Object:	vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
 		    }
 		}
 		//>>> Make calc
 		vfnc->calc(vfnc->user());
 		//>>> Process outputs
-		for( i_p = 0; i_p < *(uint8_t*)(cprg+2); i_p++ )
+		for(i_p = 0; i_p < ptr->n; i_p++)
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
-		    if( p_p >= vfnc->func()->ioSize() ) break;
-		    if( vfnc->ioFlg(p_p)&IO::Output )
+		    if(p_p >= vfnc->func()->ioSize()) break;
+		    if(vfnc->ioFlg(p_p)&IO::Output)
 			switch(vfnc->ioType(p_p))
 			{
-			    case IO::String:	setValS(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))],vfnc->getS(p_p)); break;
-			    case IO::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))],vfnc->getI(p_p)); break;
-			    case IO::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))],vfnc->getR(p_p)); break;
-			    case IO::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))],vfnc->getB(p_p)); break;
-			    case IO::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+5+i_p*sizeof(uint16_t))],vfnc->getO(p_p)); break;
+			    case IO::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getS(p_p)); break;
+			    case IO::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getI(p_p)); break;
+			    case IO::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getR(p_p)); break;
+			    case IO::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getB(p_p)); break;
+			    case IO::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getO(p_p)); break;
 			}
 		}
 		//>>> Set return
-		if( *cprg == Reg::CFunc )
+		if(ptr->cod == Reg::CFunc)
 		    switch(vfnc->ioType(r_pos))
 		    {
-			case IO::String:	reg[TSYS::getUnalign16(cprg+3)] = vfnc->getS(r_pos); break;
-			case IO::Integer:	reg[TSYS::getUnalign16(cprg+3)] = vfnc->getI(r_pos); break;
-			case IO::Real:		reg[TSYS::getUnalign16(cprg+3)] = vfnc->getR(r_pos); break;
-			case IO::Boolean:	reg[TSYS::getUnalign16(cprg+3)] = vfnc->getB(r_pos); break;
-			case IO::Object:	reg[TSYS::getUnalign16(cprg+3)] = vfnc->getO(r_pos); break;
+			case IO::String:	reg[ptr->rez] = vfnc->getS(r_pos); break;
+			case IO::Integer:	reg[ptr->rez] = vfnc->getI(r_pos); break;
+			case IO::Real:		reg[ptr->rez] = vfnc->getR(r_pos); break;
+			case IO::Boolean:	reg[ptr->rez] = vfnc->getB(r_pos); break;
+			case IO::Object:	reg[ptr->rez] = vfnc->getO(r_pos); break;
 		    }
 
-		cprg += 5 + (*(uint8_t*)(cprg+2))*sizeof(uint16_t); break;
+		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); break;
 	    }
 	    case Reg::CFuncObj:
 	    {
+		struct SCode { uint8_t cod; uint16_t obj; uint8_t n; uint16_t rez; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+
 #if OSC_DEBUG >= 5
-		printf("CODE: Call object's function %d = %d(%d).\n",TSYS::getUnalign16(cprg+4),TSYS::getUnalign16(cprg+1),*(uint8_t*)(cprg+3));
+		printf("CODE: Call object's function %d = %d(%d).\n",ptr->rez,ptr->obj,ptr->n);
 #endif
-		if( reg[TSYS::getUnalign16(cprg+1)].propEmpty() )
+		if(reg[ptr->obj].propEmpty())
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
 
-		TVariant obj = getVal(val,reg[TSYS::getUnalign16(cprg+1)],true);
+		TVariant obj = getVal(val,reg[ptr->obj],true);
 
 		//> Prepare inputs
 		vector<TVariant> prms;
-		for( int i_p = 0; i_p < *(uint8_t*)(cprg+3); i_p++ )
-		    prms.push_back(getVal(val,reg[TSYS::getUnalign16(cprg+6+i_p*sizeof(uint16_t))]));
+		for(int i_p = 0; i_p < ptr->n; i_p++)
+		    prms.push_back(getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));
 
 		//> Call
-		TVariant rez = oFuncCall( obj, reg[TSYS::getUnalign16(cprg+1)].propGet(reg[TSYS::getUnalign16(cprg+1)].propSize()-1), prms );
+		TVariant rez = oFuncCall(obj, reg[ptr->obj].propGet(reg[ptr->obj].propSize()-1), prms);
 		//> Process outputs
-		for( int i_p = 0; i_p < prms.size(); i_p++ )
-		    if( prms[i_p].isModify() )
-			switch( prms[i_p].type() )
+		for(int i_p = 0; i_p < prms.size(); i_p++)
+		    if(prms[i_p].isModify())
+			switch(prms[i_p].type())
 			{
-			    case TVariant::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getB());	break;
-			    case TVariant::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getI());	break;
-			    case TVariant::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getR());	break;
-			    case TVariant::String:	setValS(val,reg[TSYS::getUnalign16(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getS());	break;
-			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+6+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
+			    case TVariant::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getB());	break;
+			    case TVariant::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getI());	break;
+			    case TVariant::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getR());	break;
+			    case TVariant::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getS());	break;
+			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
 			}
 		//> Process return
 		switch( rez.type() )
 		{
-		    case TVariant::Boolean:	reg[TSYS::getUnalign16(cprg+4)] = rez.getB();	break;
-		    case TVariant::Integer:	reg[TSYS::getUnalign16(cprg+4)] = rez.getI();	break;
-		    case TVariant::Real:	reg[TSYS::getUnalign16(cprg+4)] = rez.getR();	break;
-		    case TVariant::String:	reg[TSYS::getUnalign16(cprg+4)] = rez.getS();	break;
-		    case TVariant::Object:	reg[TSYS::getUnalign16(cprg+4)] = rez.getO();	break;
+		    case TVariant::Boolean:	reg[ptr->rez] = rez.getB();	break;
+		    case TVariant::Integer:	reg[ptr->rez] = rez.getI();	break;
+		    case TVariant::Real:	reg[ptr->rez] = rez.getR();	break;
+		    case TVariant::String:	reg[ptr->rez] = rez.getS();	break;
+		    case TVariant::Object:	reg[ptr->rez] = rez.getO();	break;
 		}
 
-		cprg += 6 + (*(uint8_t*)(cprg+3))*sizeof(uint16_t); break;
+		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); break;
 	    }
 	    default:
 		setStart(false);

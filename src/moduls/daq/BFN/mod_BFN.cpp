@@ -385,7 +385,7 @@ void TMdContr::enable_( )
 			{
 			    add(pName,owner().tpPrmToId("std"));
 			    prm = at(pName);
-			    prm.at().setName(houseIt->childGet("szHouseName")->text()+":"+compIt->childGet("szComputerNameShort")->text());
+			    prm.at().setName(houseIt->childGet("szHouseName")->text()+" ("+compIt->childGet("szComputerNameShort")->text()+")");
 			    string descr = _("House:\n");
 			    for(int i_hi = 0; i_hi < houseIt->childSize(); i_hi++)
 				descr += "  "+passPrefSOAP(houseIt->childGet(i_hi)->name())+": "+houseIt->childGet(i_hi)->text()+"\n";
@@ -555,7 +555,7 @@ void *TMdContr::Task(void *icntr)
 				if(cntr.present(pName)) continue;
 				cntr.add(pName,cntr.owner().tpPrmToId("std"));
 				AutoHD<TMdPrm> prm = cntr.at(pName);
-				prm.at().setName(houseIt->childGet("szHouseName")->text()+":"+compIt->childGet("szComputerNameShort")->text());
+				prm.at().setName(houseIt->childGet("szHouseName")->text()+" ("+compIt->childGet("szComputerNameShort")->text()+")");
 				string descr = _("House:\n");
 				for(int i_hi = 0; i_hi < houseIt->childSize(); i_hi++)
 				    descr += "  "+cntr.passPrefSOAP(houseIt->childGet(i_hi)->name())+": "+houseIt->childGet(i_hi)->text()+"\n";
@@ -628,10 +628,11 @@ void *TMdContr::Task(void *icntr)
 			else
 			{
 			    string mcat = TSYS::strMess("alBFN:%s:%s:%d:%s",cntr.id().c_str(),cntr.p_hd[i_p].at().id().c_str(),aNd.code,aId.c_str());
-			    string mval = aNd.text;
-			    if(aNd.code) mval = mod->getSymbolCode(TSYS::int2str(aNd.code))+": "+mval;
-
-			    if(aEv == 0)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Error, _("Alarm: ")+mval);
+			    string mval = cntr.p_hd[i_p].at().name()+" > "+
+				    (aNd.code?mod->getSymbolCode(TSYS::int2str(aNd.code)):string(_("Main")))+": "+
+				    aNd.text;
+			    if(aEv == 0)
+				SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Error, _("Alarm: ")+mval);
 			    //else if(aEv == 1)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Warning, _("Confirm: ")+mval);
 			    else if(aEv == 2)	SYS->archive().at().messPut(aTm, 0, mcat, TMess::Info, _("Norma: ")+mval);
 

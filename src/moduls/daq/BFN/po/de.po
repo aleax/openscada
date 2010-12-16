@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-01 11:28+0200\n"
+"POT-Creation-Date: 2010-12-16 17:16+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -118,6 +118,9 @@ msgstr ""
 
 #, c-format
 msgid "Unknown alarm '%s'."
+msgstr ""
+
+msgid "Main"
 msgstr ""
 
 msgid "Alarm: "

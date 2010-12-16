@@ -1,3 +1,10 @@
+2010-12-16 Roman
+- SYS: Unaligned access function TSYS::getUnalignInt() is added.
+- !!:FIX:SYS.TVariant, DAQ.AMRDevs, DAQ.OPC_UA: Unaligned access is fixed for ARM.
+- DAQ.BFN: Alarms naming is some changed.
+- DAQ.JavaLikeCalc: The VM commands CFunc, CFunc and CFuncObj is rewrited for structured access.
+
+
 2010-12-15 Roman
 - SYS: Functions TVal::time(), TVal::len(), TVal::dec(), TVal::flg(), TVal::def(), TVal::values(), 
     TVal::selNames() and TVal::reserve() is added to user's API.

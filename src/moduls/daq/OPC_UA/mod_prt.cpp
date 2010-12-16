@@ -882,8 +882,8 @@ int32_t TProt::iN( const string &rb, int &off, char vSz )
     switch( vSz )
     {
 	case 1:	return *(int8_t*)(rb.data()+off-vSz);
-	case 2:	return *(int16_t*)(rb.data()+off-vSz);
-	case 4:	return *(int32_t*)(rb.data()+off-vSz);
+	case 2:	return (int16_t)TSYS::getUnalign16(rb.data()+off-vSz);
+	case 4:	return (int32_t)TSYS::getUnalign32(rb.data()+off-vSz);
     }
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Number size '%d' error."),vSz);
 }
@@ -895,16 +895,16 @@ uint32_t TProt::iNu( const string &rb, int &off, char vSz )
     switch( vSz )
     {
 	case 1:	return *(uint8_t*)(rb.data()+off-vSz);
-	case 2:	return *(uint16_t*)(rb.data()+off-vSz);
-	case 4:	return *(uint32_t*)(rb.data()+off-vSz);
+	case 2:	return TSYS::getUnalign16(rb.data()+off-vSz);
+	case 4:	return TSYS::getUnalign32(rb.data()+off-vSz);
     }
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Number size '%d' error."),vSz);
 }
 
 double TProt::iR( const string &rb, int &off, char vSz )
 {
-    if( vSz == 4 ) return *(float *)iVal(rb,off,vSz);
-    else if( vSz == 8 ) return *(double *)iVal(rb,off,vSz);
+    if( vSz == 4 ) return TSYS::getUnalignFloat(iVal(rb,off,vSz));
+    else if( vSz == 8 ) return TSYS::getUnalignDbl(iVal(rb,off,vSz));
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Real number size '%d' error."),vSz);
 }
 
@@ -938,7 +938,7 @@ string TProt::iSqlf( const string &rb, int &off, uint16_t *nsIdx )
 
 long long TProt::iTm( const string &rb, int &off )
 {
-    int64_t tmStamp = *(int64_t*)TProt::iVal(rb,off,8);
+    int64_t tmStamp = (int64_t)TSYS::getUnalign64(TProt::iVal(rb,off,8));
     return (tmStamp/10ll)-11644473600000000ll;
 }
 
@@ -1005,8 +1005,8 @@ void TProt::iDataValue( const string &buf, int &off, XMLNode &nd )
 		case OpcUa_UInt16:	rezVl += TSYS::uint2str(iNu(buf,off,2));break;
 		case OpcUa_Int32:	rezVl += TSYS::int2str(iN(buf,off,4));	break;
 		case OpcUa_UInt32:	rezVl += TSYS::uint2str(iNu(buf,off,4));break;
-		case OpcUa_Int64:	rezVl += TSYS::strMess("%lld",*(int64_t*)iVal(buf,off,8));	break;
-		case OpcUa_UInt64:	rezVl += TSYS::strMess("%llu",*(uint64_t*)iVal(buf,off,8));	break;
+		case OpcUa_Int64:	rezVl += TSYS::strMess("%lld",(int64_t)TSYS::getUnalign64(iVal(buf,off,8)));	break;
+		case OpcUa_UInt64:	rezVl += TSYS::strMess("%llu",TSYS::getUnalign64(iVal(buf,off,8)));	break;
 		case OpcUa_Float:	rezVl += TSYS::real2str(iR(buf,off,4));	break;
 		case OpcUa_Double:	rezVl += TSYS::real2str(iR(buf,off,8));	break;
 		case OpcUa_String:

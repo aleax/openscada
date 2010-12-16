@@ -115,7 +115,7 @@ int TVariant::getI( ) const
     switch( type() )
     {
 	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_INT: atoi(getS().c_str());
-	case TVariant::Integer:	return *(int*)(vl.data()+1);
+	case TVariant::Integer:	return TSYS::getUnalignInt(vl.data()+1);
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
 	case TVariant::Object:	return 1;
@@ -129,7 +129,7 @@ double TVariant::getR( ) const
     {
 	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_REAL : atof(getS().c_str());
 	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_REAL : getI();
-	case TVariant::Real:	return *(double*)(vl.data()+1);
+	case TVariant::Real:	return TSYS::getUnalignDbl(vl.data()+1);
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
 	case TVariant::Object:	return 1;
     }

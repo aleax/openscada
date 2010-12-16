@@ -114,23 +114,23 @@ void FlowTEC::getVals( )
     else if( (uint8_t)rez[3] == 0xff )				mPrm->mErr.setVal(_("11:Request broken."));
     else if( rez.size() < 40 || rez[4] != req[4] ) 		mPrm->mErr.setVal(_("15:Respond thread broken."));
     {
-	mPrm->vlAt("val").at().setR(*(float*)(rez.data()+5),0,true);
-	mPrm->vlAt("p").at().setR(*(float*)(rez.data()+9),0,true);
-	mPrm->vlAt("t").at().setR(*(float*)(rez.data()+13),0,true);
+	mPrm->vlAt("val").at().setR(TSYS::getUnalignFloat(rez.data()+5),0,true);
+	mPrm->vlAt("p").at().setR(TSYS::getUnalignFloat(rez.data()+9),0,true);
+	mPrm->vlAt("t").at().setR(TSYS::getUnalignFloat(rez.data()+13),0,true);
 	if( mVer < 35 )
 	{
-	    mPrm->vlAt("curF").at().setR(*(float*)(rez.data()+17),0,true);
-	    mPrm->vlAt("qntDayStart").at().setR(*(float*)(rez.data()+21),0,true);
-	    mPrm->vlAt("qntDayLast").at().setR(*(float*)(rez.data()+25),0,true);
-	    mPrm->vlAt("qntStart").at().setR(*(float*)(rez.data()+29),0,true);
+	    mPrm->vlAt("curF").at().setR(TSYS::getUnalignFloat(rez.data()+17),0,true);
+	    mPrm->vlAt("qntDayStart").at().setR(TSYS::getUnalignFloat(rez.data()+21),0,true);
+	    mPrm->vlAt("qntDayLast").at().setR(TSYS::getUnalignFloat(rez.data()+25),0,true);
+	    mPrm->vlAt("qntStart").at().setR(TSYS::getUnalignFloat(rez.data()+29),0,true);
 	}
 	else
 	{
-	    mPrm->vlAt("cal").at().setR(*(float*)(rez.data()+17),0,true);
-	    mPrm->vlAt("curF").at().setR(*(float*)(rez.data()+21),0,true);
-	    mPrm->vlAt("qntDayStart").at().setR(*(float*)(rez.data()+25),0,true);
-	    mPrm->vlAt("qntDayLast").at().setR(*(float*)(rez.data()+29),0,true);
-	    mPrm->vlAt("qntStart").at().setR(*(float*)(rez.data()+33),0,true);
+	    mPrm->vlAt("cal").at().setR(TSYS::getUnalignFloat(rez.data()+17),0,true);
+	    mPrm->vlAt("curF").at().setR(TSYS::getUnalignFloat(rez.data()+21),0,true);
+	    mPrm->vlAt("qntDayStart").at().setR(TSYS::getUnalignFloat(rez.data()+25),0,true);
+	    mPrm->vlAt("qntDayLast").at().setR(TSYS::getUnalignFloat(rez.data()+29),0,true);
+	    mPrm->vlAt("qntStart").at().setR(TSYS::getUnalignFloat(rez.data()+33),0,true);
 	}
     }
 }
