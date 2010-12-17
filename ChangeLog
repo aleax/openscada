@@ -1,3 +1,7 @@
+2010-12-17 Roman
+- FIX:UI.Vision: Event ws_BtPress and ws_BtRelease generation is disabled for checkable buttons of primitive "FormEl".
+
+
 2010-12-16 Roman
 - SYS: Unaligned access function TSYS::getUnalignInt() is added.
 - !!:FIX:SYS.TVariant, DAQ.AMRDevs, DAQ.OPC_UA: Unaligned access is fixed for ARM.

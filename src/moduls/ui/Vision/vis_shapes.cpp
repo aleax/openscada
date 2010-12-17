@@ -262,7 +262,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		case 1:	((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
 		case 2:	((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
 		case 3:	((QPushButton*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
-		case 4:	
+		case 4:
 		    if( ((QComboBox*)shD->addrWdg)->findText(val.c_str()) < 0 ) ((QComboBox*)shD->addrWdg)->addItem(val.c_str());
 			((QComboBox*)shD->addrWdg)->setCurrentIndex(((QComboBox*)shD->addrWdg)->findText(val.c_str()));
 		    break;
@@ -608,14 +608,14 @@ void ShapeFormEl::checkChange(int st)
 
 void ShapeFormEl::buttonPressed( )
 {
-    WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
-    view->attrSet("event","ws_BtPress");
+    WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
+    if(!((ShpDt*)w->shpData)->checkable) w->attrSet("event","ws_BtPress");
 }
 
 void ShapeFormEl::buttonReleased( )
 {
-    WdgView *view = (WdgView *)((QPushButton*)sender())->parentWidget();
-    view->attrSet("event","ws_BtRelease");
+    WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
+    if(!((ShpDt*)w->shpData)->checkable) w->attrSet("event","ws_BtRelease");
 }
 
 void ShapeFormEl::buttonToggled( bool val )
