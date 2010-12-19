@@ -621,8 +621,8 @@ void ShapeFormEl::buttonReleased( )
 void ShapeFormEl::buttonToggled( bool val )
 {
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
-    if( ((ShpDt*)w->shpData)->evLock )	return;
-
+    if(((ShpDt*)w->shpData)->evLock)	return;
+    w->attrSet("event",val?"ws_BtPress":"ws_BtRelease");
     w->attrSet("event","ws_BtToggleChange");
     w->attrSet("value",TSYS::int2str(val));
 }

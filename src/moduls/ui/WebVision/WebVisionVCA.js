@@ -1043,20 +1043,31 @@ function makeEl( pgBr, inclPg )
 	  if( this.attrs['colorText'] ) elStyle+='color: '+getColor(this.attrs['colorText'])+'; ';
 	  if( this.attrs['color'] ) elStyle+='background-color: '+getColor(this.attrs['color'])+'; ';
 	  else elStyle+='background-color: snow; ';
-	  if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
+	  if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
 	  {
-	    this.mouseup[this.mouseup.length] = function(e,el)		{ if( !el.checkable ) el.style.borderStyle='outset'; };
-	    this.mousedown[this.mousedown.length] = function(e,el)	{ if( !el.checkable ) el.style.borderStyle="inset"; };
-	    this.place.onmouseout = function() { if( !this.checkable ) this.style.borderStyle='outset'; };
+	    this.mouseup[this.mouseup.length] = function(e,el)
+	    {
+	      if(el.checkable) return;
+	      el.style.borderStyle='outset'; setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
+	    };
+	    this.mousedown[this.mousedown.length] = function(e,el)
+	    {
+	      if(el.checkable) return;
+	      el.style.borderStyle="inset"; setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
+	    };
+	    this.place.onmouseout = function()
+	    {
+	      if(this.checkable || this.style.borderStyle=='outset') return
+	      this.style.borderStyle='outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
+	    };
 	    this.place.onclick = function()
 	    {
-	      if( !this.checkable ) setWAttrs(this.wdgLnk.addr,'event','ws_BtPress');
-	      else {
-	        var attrs = new Object();
-	        if(this.style.borderLeftStyle=='outset') { attrs.value = '1'; this.style.borderStyle='inset'; }
-	        else { attrs.value = '0'; this.style.borderStyle='outset'; }
-	        attrs.event = 'ws_BtToggleChange'; setWAttrs(this.wdgLnk.addr,attrs);
-	      }
+	      if(!this.checkable) return false;
+	      var attrs = new Object();
+	      if(this.style.borderLeftStyle=='outset')
+	      { attrs.value = '1'; this.style.borderStyle='inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
+	      else { attrs.value = '0'; this.style.borderStyle='outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
+	      setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
 	      return false;
 	    };
 	    this.place.wdgLnk = this;
@@ -1082,7 +1093,9 @@ function makeEl( pgBr, inclPg )
 	  formObj.style.font = fontCfg;
 	  formObj.type='button';
 	  formObj.value = this.attrs['name'].replace('\\n','\n');
-	  formObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); return false; }
+	  this.mouseup[this.mouseup.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); };
+	  this.mousedown[this.mousedown.length] = function(e,el){ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
+	  //formObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); return false; }
 	  formObj.wdgLnk = this;
 	  if( this.attrs['color'] ) formObj.style.backgroundColor=getColor(this.attrs['color']);
 	  if( this.attrs['colorText'] ) formObj.style.color=getColor(this.attrs['colorText']);
