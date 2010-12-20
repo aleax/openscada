@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-01 18:16+0200\n"
+"POT-Creation-Date: 2010-12-20 22:48+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -1126,6 +1126,10 @@ msgstr "Kodierung des Textes"
 
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
+
+#, fuzzy
+msgid "Attributes deadlock."
+msgstr "Wert des Attributs"
 
 msgid "Path"
 msgstr "Pfad"
