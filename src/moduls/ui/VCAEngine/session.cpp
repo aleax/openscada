@@ -142,7 +142,7 @@ void Session::setStart( bool val )
 	//> Enable session if it disabled
 	if( !enable() )	setEnable(true);
 
-	mess_info(nodePath().c_str()_("Start session."));
+	mess_info(nodePath().c_str(),_("Start session."));
 
 	//> Load Styles from project
 	mStProp.clear();
