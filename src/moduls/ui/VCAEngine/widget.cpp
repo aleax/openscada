@@ -49,7 +49,7 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
 Widget::~Widget()
 {
     //> Remove attributes
-    pthread_mutex_lock(&mtxAttr);
+    if(pthread_mutex_lock(&mtxAttr)) throw TError(nodePath().c_str(),_("Attributes deadlock."));
     map<string,Attr*>::iterator p;
     while((p = mAttrs.begin()) != mAttrs.end())
     {
@@ -508,56 +508,58 @@ void Widget::wClear( )
 
 void Widget::attrList( vector<string> &list )
 {
-    pthread_mutex_lock(&mtxAttr);
+    int rLock = pthread_mutex_lock(&mtxAttr);
     list.clear();
     list.reserve(mAttrs.size());
-    for( map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p )
+    for(map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p)
     {
-	while( p->second->mOi >= list.size() )	list.push_back("");
+	while(p->second->mOi >= list.size())	list.push_back("");
 	list[p->second->mOi] = p->first;
     }
-    pthread_mutex_unlock(&mtxAttr);
+    if(!rLock) pthread_mutex_unlock(&mtxAttr);
 }
 
 void Widget::attrAdd(TFld *attr, int pos, bool inher)
 {
+    int rLock = -1;
     string anm = attr->name();
 
     if(attrPresent(anm) || TSYS::strNoSpace(anm).empty())
     {
-	if( !inher ) delete attr;
+	if(!inher) delete attr;
 	return;
     }
     try
     {
-	pthread_mutex_lock(&mtxAttr);
+	rLock = pthread_mutex_lock(&mtxAttr);
 	map<string, Attr* >::iterator p;
 	Attr *a = new Attr(attr,inher);
 	a->mOwner = this;
 	pos = (pos < 0 || pos > mAttrs.size()) ? mAttrs.size() : pos;
 	a->mOi = pos;
 	for(p = mAttrs.begin(); p != mAttrs.end(); p++)
-	    if( p->second->mOi >= pos ) p->second->mOi++;
+	    if(p->second->mOi >= pos) p->second->mOi++;
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
     }
     catch(...){ }
-    pthread_mutex_unlock(&mtxAttr);
+    if(!rLock) pthread_mutex_unlock(&mtxAttr);
 }
 
 void Widget::attrDel( const string &attr, bool allInher  )
 {
-    if( !attrPresent(attr) )	return;
+    int rLock = -1;
+    if(!attrPresent(attr)) return;
 
     //> Delete from inheritant wigets
-    if( !(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher )
-	for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	    if( m_herit[i_h].at().enable( ) )
-		m_herit[i_h].at().attrDel( attr );
+    if(!(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher)
+	for(int i_h = 0; i_h < m_herit.size(); i_h++)
+	    if(m_herit[i_h].at().enable())
+		m_herit[i_h].at().attrDel(attr);
 
     //> Self delete
     try
     {
-	pthread_mutex_lock(&mtxAttr);
+	rLock = pthread_mutex_lock(&mtxAttr);
 
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute <%s> is not present!"), attr.c_str());
@@ -568,27 +570,27 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	mAttrs.erase(p);
     }
     catch(...){ }
-    pthread_mutex_unlock(&mtxAttr);
+    if(!rLock) pthread_mutex_unlock(&mtxAttr);
 }
 
 bool Widget::attrPresent(const string &attr)
 {
-    pthread_mutex_lock(&mtxAttr);
+    int rLock = pthread_mutex_lock(&mtxAttr);
     bool rez = (mAttrs.find(attr) != mAttrs.end());
-    pthread_mutex_unlock(&mtxAttr);
+    if(!rLock) pthread_mutex_unlock(&mtxAttr);
     return rez;
 }
 
 AutoHD<Attr> Widget::attrAt(const string &attr)
 {
-    int rez = pthread_mutex_lock(&mtxAttr);
-    if(rez && (rez != EDEADLK || !attrAtLockCnt))
-	throw TError(nodePath().c_str(),_("Attribute attach access error: %d."),rez);
+    int rLock = pthread_mutex_lock(&mtxAttr);
+    if(rLock && (rLock != EDEADLK || !attrAtLockCnt))
+	throw TError(nodePath().c_str(),_("Attribute attach access error: %d."),rLock);
 
     map<string, Attr* >::iterator p = mAttrs.find(attr);
     if(p == mAttrs.end())
     {
-	if(!rez) pthread_mutex_unlock(&mtxAttr);
+	if(!rLock) pthread_mutex_unlock(&mtxAttr);
 	throw TError(nodePath().c_str(),_("Attribute <%s> is not present!"), attr.c_str());
     }
 

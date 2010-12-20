@@ -135,14 +135,14 @@ void Session::setStart( bool val )
 {
     ResAlloc res(mCalcRes, true);
 
-    mess_info(nodePath().c_str(),val ? _("Start session.") : _("Stop session."));
-
     vector<string> pg_ls;
 
     if( val )
     {
 	//> Enable session if it disabled
 	if( !enable() )	setEnable(true);
+
+	mess_info(nodePath().c_str()_("Start session."));
 
 	//> Load Styles from project
 	mStProp.clear();
@@ -163,6 +163,8 @@ void Session::setStart( bool val )
     }
     else
     {
+	mess_info(nodePath().c_str(),_("Stop session."));
+
 	//> Stop process task
 	if( mStart ) SYS->taskDestroy( nodePath('.',true), &mStart, &endrun_req );
 

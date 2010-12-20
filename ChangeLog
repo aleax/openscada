@@ -1,3 +1,7 @@
+2010-12-20 Roman
+- !!:FIX:UI.VCAEngine: A session deadlock is fixed for dynamic-active projects, for attributes access.
+
+
 2010-12-19 Roman
 - FIX:UI.Vision, UI.WebVision: For checkable buttons of primitive "FormEl" event ws_BtPress set for denting and ws_BtRelease set for other.
 
