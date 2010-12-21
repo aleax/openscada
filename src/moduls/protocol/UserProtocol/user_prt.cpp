@@ -460,20 +460,20 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/up/cfg/InPROG");
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/in",_("Input")))
+	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID))
 	    {
-		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
-		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10",
+		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
+		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4,"tp","str","rows","10","SnthHgl","1",
 		    "help",_("Next attributes has defined for input requests processing:\n"
 			    "   'rez' - processing result (false-full request;true-not full request);\n"
 			    "   'request' - request message;\n"
 			    "   'answer' - answer message;\n"
 			    "   'sender' - request sender."));
 	    }
-	    if(ctrMkNode("area",opt,-1,"/out",_("Output")))
+	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID))
 	    {
-		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangOls");
-		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10",
+		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangOls");
+		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4,"tp","str","rows","10","SnthHgl","1",
 		    "help",_("Next attributes has defined for output requests processing:\n"
 			    "   'io' - input/output interface's XMLNode object;\n"
 			    "   'tr' - associated transport."));
@@ -526,23 +526,35 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
     else if(a_path == "/in/PROGLang")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());
     }
     else if(a_path == "/in/PROG")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(inProg());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setInProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProg());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
+            try
+            {
+                SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
+                                compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
+            } catch(...){ }
     }
     else if(a_path == "/out/PROGLang")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setOutProgLang(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setOutProgLang(opt->text());
     }
     else if(a_path == "/out/PROG")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(outProg());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setOutProg(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProg());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setOutProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
+            try
+            {
+                SYS->daq().at().at(TSYS::strParse(outProgLang(),0,".")).at().
+                                compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
+            } catch(...){ }
     }
     else TCntrNode::cntrCmdProc(opt);
 }

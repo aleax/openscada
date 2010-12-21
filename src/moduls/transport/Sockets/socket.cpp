@@ -749,6 +749,7 @@ void TSocketOut::start()
 	    sock_fd = -1;
 	    throw TError(nodePath().c_str(),_("Connect to UNIX error: %s!"),strerror(errno));
 	}
+	fcntl(sock_fd,F_SETFL,fcntl(sock_fd,F_GETFL,0)|O_NONBLOCK);
     }
     run_st = true;
 }
@@ -773,31 +774,34 @@ void TSocketOut::stop()
 
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
+    string err(_("Unknown error"));
     int kz = 0, reqTry = 0;
     bool writeReq = false;
 
-    if( !noRes ) ResAlloc resN( nodeRes(), true );
-    ResAlloc res( wres, true );
+    if(!noRes) ResAlloc resN( nodeRes(), true );
+    ResAlloc res(wres, true);
 
     int prevTmOut = 0;
-    if( time ) { prevTmOut = tmCon(); setTmCon(time); }
+    if(time) { prevTmOut = tmCon(); setTmCon(time); }
 
-    if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-    if( reqTry++ >= 2 ) throw TError(nodePath().c_str(),_("Read reply error: %s"),strerror(errno));
+    if(reqTry++ >= 2) throw TError(nodePath().c_str(),_("Request error: %s"),err.c_str());
     //> Write request
-    if( obuf != NULL && len_ob > 0 )
+    writeReq = false;
+    if(obuf != NULL && len_ob > 0)
     {
 	//>> Input buffer clear
 	char tbuf[100];
 	while(read(sock_fd,tbuf,sizeof(tbuf)) > 0) ;
 	//>> Write request
-	for( int wOff = 0; wOff != len_ob; wOff += kz )
+	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
 	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);
-	    if( kz <= 0 )
+	    if(kz <= 0)
 	    {
+		err = strerror(errno);
 		res.release();
 		stop(); start();
 		res.request(true);
@@ -805,17 +809,17 @@ repeate:
 	    }
 	}
 
-	if( !time ) time = mTmCon;
+	if(!time) time = mTmCon;
 	writeReq = true;
     }
     else time = mTmNext;
-    if( !time ) time = 5000;
+    if(!time) time = 5000;
 
     trOut += kz;
 
     //> Read reply
     int i_b = 0;
-    if( ibuf != NULL && len_ib > 0 )
+    if(ibuf != NULL && len_ib > 0)
     {
 	fd_set rd_fd;
 	struct timeval tv;
@@ -826,13 +830,20 @@ repeate:
 	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
 	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	}
-	while( kz == -1 && errno == EINTR );
-	if( kz == 0 )	{ res.release(); if(writeReq) stop( ); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if( kz < 0){ res.release(); stop( ); throw TError(nodePath().c_str(),_("Socket error!")); }
-	else if( FD_ISSET(sock_fd, &rd_fd) )
+	while(kz == -1 && errno == EINTR);
+	if(kz == 0)	{ res.release(); if(writeReq) stop(); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	else if(kz < 0)	{ res.release(); stop(); throw TError(nodePath().c_str(),_("Socket error!")); }
+	else if(FD_ISSET(sock_fd, &rd_fd))
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
-	    if(i_b <= 0 && obuf) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	    if(i_b <= 0 && obuf)
+	    {
+		err = strerror(errno);
+		res.release();
+		stop(); start();
+		res.request(true);
+		goto repeate;
+	    }
 	    trIn += vmax(0,i_b);
 	}
     }

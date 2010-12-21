@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-30 12:03+0200\n"
+"POT-Creation-Date: 2010-12-21 12:40+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -182,11 +182,14 @@ msgstr "Fehler der Schaffung des UNIX Sockets: %s!"
 msgid "Connect to UNIX error: %s!"
 msgstr "Fehler der Verbindung mit dem UNIX Socket: %s!"
 
+msgid "Unknown error"
+msgstr ""
+
 msgid "Transport is not started!"
 msgstr "Transport ist nicht gestartet!"
 
-#, c-format
-msgid "Read reply error: %s"
+#, fuzzy, c-format
+msgid "Request error: %s"
 msgstr "Fehler des Lesens der Antwort: %s"
 
 msgid "Timeouted!"

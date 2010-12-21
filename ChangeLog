@@ -1,4 +1,8 @@
 2010-12-21 Roman
+- FIX:Transport, Transport.Serial, Transport.SSL: Deprecated and already no released function TTransportS::traf2str() is removed and final 
+    replaced by TSYS::cpct2str().
+- DAQ.UserProtocol: Syntax highlight for protocol's code is added.
+- !:FIX:Transport.Sockets: Unix-socket is set to no block mode by flag O_NONBLOCK. Error message forming is fixed for output transports.
 - UI.Vision: Text scale mode for primitive "Text" is changed to font size scale for text distortion prevent.
 
 

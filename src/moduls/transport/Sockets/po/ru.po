@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-30 12:03+0200\n"
+"POT-Creation-Date: 2010-12-21 12:40+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -32,12 +32,13 @@ msgstr ""
 msgid "Addon parameters"
 msgstr "Дополнительные параметры"
 
+#, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
 "limit %d."
 msgstr ""
-"Соединений %d, открыто %d. Трафик входящий %s, исходящий %s. "
-"Закрыто соединений по лимиту %d."
+"Соединений %d, открыто %d. Трафик входящий %s, исходящий %s. Закрыто "
+"соединений по лимиту %d."
 
 #, c-format
 msgid "Error create %s socket!"
@@ -151,6 +152,7 @@ msgstr "Keep alive время ожидания (с)"
 msgid "Priority"
 msgstr "Приоритет"
 
+#, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафик входящий %s, исходящий %s."
 
@@ -178,12 +180,14 @@ msgstr "Ошибка создания UNIX сокета: %s!"
 msgid "Connect to UNIX error: %s!"
 msgstr "Ошибка подключения к UNIX сокету: %s!"
 
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-#, c-format
-msgid "Read reply error: %s"
-msgstr "Ошибка чтения ответа: %s"
+msgid "Request error: %s"
+msgstr "Ошибка запроса: %s"
 
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"

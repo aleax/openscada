@@ -762,7 +762,7 @@ string TTrOut::getStatus( )
     string rez = TTransportOut::getStatus( );
 
     if( startStat() )
-	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TTransportS::traf2str(trIn).c_str(),TTransportS::traf2str(trOut).c_str());
+	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str());
 
     return rez;
 }
