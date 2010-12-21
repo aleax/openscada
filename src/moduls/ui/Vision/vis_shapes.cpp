@@ -773,7 +773,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str()); up = true; break;
 	case 25:	//font
-	    shD->font = getFont(val); up = true; break;
+	    shD->font = getFont(val,vmin(w->xScale(true),w->yScale(true))); up = true; break;
 	case 26:	//color
 	    shD->color = getColor(val); break;
 	case 27:	//orient
@@ -873,40 +873,45 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    if( !shD->en ) return false;
+    if(!shD->en) return false;
     switch(event->type())
     {
 	case QEvent::Paint:
 	{
-	    QPainter pnt( w );
+	    QPainter pnt(w);
 
 	    //> Prepare draw area
-	    QRect dA(w->rect().x(),w->rect().y(),
+	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
+	    pnt.setWindow(dA);
+	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
+
+	    //> Prepare draw area
+	    /*QRect dA(w->rect().x(),w->rect().y(),
 		(int)TSYS::realRound(w->sizeF().width()/w->xScale(true),2,true)-2*shD->geomMargin,
 		(int)TSYS::realRound(w->sizeF().height()/w->yScale(true),2,true)-2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted((int)TSYS::realRound(w->xScale(true)*shD->geomMargin,2,true),(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,2,true),
-		-(int)TSYS::realRound(w->xScale(true)*shD->geomMargin,2,true),-(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,2,true)));
+		-(int)TSYS::realRound(w->xScale(true)*shD->geomMargin,2,true),-(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,2,true)));*/
 
 	    int scale = 0;
 #if QT_VERSION < 0x040400
-	    if( pnt.window()!=pnt.viewport() )	scale = 1;
+	    if(pnt.window() != pnt.viewport())	scale = 1;
 #endif
 	    QRect dR = dA;
 
 	    //> Draw decoration
-	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dR,shD->backGrnd.color());
-	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dR,shD->backGrnd.textureImage());
+	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dR,shD->backGrnd.color());
+	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dR,shD->backGrnd.textureImage());
 
 	    //> Draw border
-	    if( shD->border.width() )
+	    if(shD->border.width())
 	    {
-		borderDraw( pnt, dR, shD->border, shD->bordStyle );
-		dR.adjust( shD->border.width()+1, shD->border.width()+1, shD->border.width()-1, shD->border.width()-1);
+		borderDraw(pnt, dR, shD->border, shD->bordStyle);
+		dR.adjust(shD->border.width()+1, shD->border.width()+1, shD->border.width()-1, shD->border.width()-1);
 	    }
 
 	    //> Text translation
-	    pnt.translate( dA.width()/2+scale,dA.height()/2+scale );
+	    pnt.translate(dA.width()/2+scale,dA.height()/2+scale);
 	    pnt.rotate(shD->orient);
 
 	    //> Calc whidth and hight draw rect at rotate

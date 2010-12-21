@@ -1,3 +1,7 @@
+2010-12-21 Roman
+- UI.Vision: Text scale mode for primitive "Text" is changed to font size scale for text distortion prevent.
+
+
 2010-12-20 Roman
 - !!:FIX:UI.VCAEngine: A session deadlock is fixed for dynamic-active projects, for attributes access.
 

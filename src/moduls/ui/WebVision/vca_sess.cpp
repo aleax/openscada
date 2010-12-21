@@ -1,9 +1,9 @@
 
 //OpenSCADA system module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko (rom_as@fromru.com)       *
- *                           by Lysenko Maxim (mlisenko@oscada.org.ua)     *
- *                           by Yashina Kseniya (ksu@oscada.org.ua)        *
+ *   Copyright (C) 2007-2010 by Roman Savochenko (rom_as@oscada.org)       *
+ *                           by Lysenko Maxim (mlisenko@oscada.org)        *
+ *                           by Yashina Kseniya (ksu@oscada.org)           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -297,20 +297,6 @@ VCAElFigure::~VCAElFigure( )
 {
     if( im ) gdImageDestroy(im);
 }
-
-//*************************************************
-//* Text                                      *
-//*************************************************
-VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL)
-{
-
-}
-
-VCAText::~VCAText( )
-{
-    if( im ) gdImageDestroy(im);
-}
-
 
 #define SAME_SIGNS(a, b) ((a) * (b) >= 0)
 
@@ -4723,6 +4709,20 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 
     }
 }
+
+//*************************************************
+//* Text                                      *
+//*************************************************
+VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL)
+{
+
+}
+
+VCAText::~VCAText( )
+{
+    if( im ) gdImageDestroy(im);
+}
+
 Point VCAText::rot( const Point pnt, double alpha, const Point center )
 {
     return Point( center.x + ( (pnt.x - center.x)*cos((alpha*M_PI)/180) - (pnt.y - center.y)*sin((alpha*M_PI)/180) ),
