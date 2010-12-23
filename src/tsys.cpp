@@ -178,6 +178,7 @@ string TSYS::time2str( double utm )
     int secs = (int)floor(utm/(1e6))%60;
     int msec = (int)floor(utm/(1e3))%1000;
     int usec = (int)floor(utm)%1000;
+    double nsec = utm-floor(utm);
     string rez;
     if(days)		{ rez += TSYS::int2str(days)+_("day"); lev = vmax(lev,6); }
     if(hours)		{ rez += (rez.size()?" ":"")+TSYS::int2str(hours)+_("hour"); lev = vmax(lev,5); }
@@ -185,6 +186,7 @@ string TSYS::time2str( double utm )
     if(secs && lev < 5)	{ rez += (rez.size()?" ":"")+TSYS::int2str(secs)+_("s"); lev = vmax(lev,3); }
     if(msec && lev < 4)	{ rez += (rez.size()?" ":"")+TSYS::int2str(msec)+_("ms"); lev = vmax(lev,2); }
     if(usec && lev < 3)	{ rez += (rez.size()?" ":"")+TSYS::int2str(usec)+_("us"); lev = vmax(lev,1); }
+    if(nsec > 1e-6 && lev < 2)	rez += (rez.size()?" ":"")+TSYS::real2str(1e3*nsec,4)+_("ns");
     return rez;
 }
 
@@ -1461,7 +1463,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/sys",_("Operation system"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/frq",_("Frequency (MHZ)"),R_R_R_,"root","root",1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Realtime clock resolution (msec)"),R_R_R_,"root","root",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Realtime clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config file"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",1,"tp","str");
@@ -1540,7 +1542,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	struct timespec tmval;
 	clock_getres(CLOCK_REALTIME,&tmval);
-	opt->setText(TSYS::real2str((float)tmval.tv_nsec/1000000.,4));
+	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));//  TSYS::real2str((float)tmval.tv_nsec/1000000.,4));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config" && ctrChkNode(opt))		opt->setText(mConfFile);

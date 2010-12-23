@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-01 13:26+0200\n"
+"POT-Creation-Date: 2010-12-22 11:03+0200\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -1389,11 +1389,10 @@ msgstr ""
 "die laufende Directory schon korrekt installiert in '%s'."
 
 msgid "day"
-msgstr ""
+msgstr "Tag"
 
-#, fuzzy
 msgid "hour"
-msgstr "Quelle"
+msgstr "Zeit"
 
 msgid "min"
 msgstr ""
@@ -1401,11 +1400,25 @@ msgstr ""
 msgid "s"
 msgstr ""
 
-#, fuzzy
 msgid "ms"
-msgstr "%gмс"
+msgstr ""
 
 msgid "us"
+msgstr ""
+
+msgid "ns"
+msgstr ""
+
+msgid "GiB"
+msgstr ""
+
+msgid "MiB"
+msgstr ""
+
+msgid "KiB"
+msgstr ""
+
+msgid "B"
 msgstr ""
 
 #, c-format
@@ -1609,8 +1622,8 @@ msgstr "Betriebssystem"
 msgid "Frequency (MHZ)"
 msgstr "Systemtakt (MHz)"
 
-msgid "Realtime clock resolution (msec)"
-msgstr "Auflösung Echtzeituhr (msek)"
+msgid "Realtime clock resolution"
+msgstr "Auflösung Echtzeituhr"
 
 msgid "Internal charset"
 msgstr "Interne Kodierung"
@@ -1795,19 +1808,6 @@ msgstr "Fehler beim Anhalten der Eingangsübertragung <%s>."
 #, c-format
 msgid "Stop output transport <%s> error."
 msgstr "Fehler beim Anhalten der Ausgangsübertragung <%s>."
-
-msgid "GiB"
-msgstr ""
-
-msgid "MiB"
-msgstr ""
-
-msgid "KiB"
-msgstr ""
-
-#, fuzzy
-msgid "B"
-msgstr "Datenbank"
 
 #, c-format
 msgid ""

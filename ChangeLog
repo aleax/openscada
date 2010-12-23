@@ -1,3 +1,8 @@
+2010-12-23 Roman
+- SYS: Nanoseconds process is added to function TSYS::time2str().
+    For display value of field "Realtime clock resolution" is used function TSYS::time2str().
+
+
 2010-12-21 Roman
 - FIX:Transport, Transport.Serial, Transport.SSL: Deprecated and already no released function TTransportS::traf2str() is removed and final 
     replaced by TSYS::cpct2str().

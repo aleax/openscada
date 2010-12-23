@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-01 13:26+0200\n"
+"POT-Creation-Date: 2010-12-22 11:03+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1387,6 +1387,21 @@ msgstr "мс"
 msgid "us"
 msgstr "мкс"
 
+msgid "ns"
+msgstr "нс"
+
+msgid "GiB"
+msgstr "ГиБ"
+
+msgid "MiB"
+msgstr "МБ"
+
+msgid "KiB"
+msgstr "КиБ"
+
+msgid "B"
+msgstr "Б"
+
 #, c-format
 msgid ""
 "***************************************************************************\n"
@@ -1589,8 +1604,8 @@ msgstr "Операционная система"
 msgid "Frequency (MHZ)"
 msgstr "Частота (МГц)"
 
-msgid "Realtime clock resolution (msec)"
-msgstr "Разрешение часов реального времени (мс)"
+msgid "Realtime clock resolution"
+msgstr "Разрешение часов реального времени"
 
 msgid "Internal charset"
 msgstr "Внутреняя кодировка"
@@ -1775,18 +1790,6 @@ msgstr "Ошибка останова входящего транспорта <%
 #, c-format
 msgid "Stop output transport <%s> error."
 msgstr "Ошибка останова исходящего транспорта <%s>."
-
-msgid "GiB"
-msgstr "ГиБ"
-
-msgid "MiB"
-msgstr "МБ"
-
-msgid "KiB"
-msgstr "КиБ"
-
-msgid "B"
-msgstr "Б"
 
 #, c-format
 msgid ""
