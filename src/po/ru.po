@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-22 11:03+0200\n"
+"POT-Creation-Date: 2010-12-24 15:21+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -214,6 +214,9 @@ msgstr "мкс"
 
 msgid "Category"
 msgstr "Категория"
+
+msgid "Lev."
+msgstr "Ур."
 
 msgid "Message"
 msgstr "Сообщение"
@@ -836,8 +839,8 @@ msgstr "Станции"
 msgid "Live"
 msgstr "Жив"
 
-msgid "Counter"
-msgstr "Счётчик"
+msgid "Cntr."
+msgstr "Счёт."
 
 msgid "Go to remote stations list configuration"
 msgstr "Переход к конфигурации перечня удалённых станций"
@@ -845,19 +848,19 @@ msgstr "Переход к конфигурации перечня удалённ
 msgid "Controllers"
 msgstr "Контроллеры"
 
-msgid "Started"
-msgstr "Запущен"
+msgid "Run."
+msgstr "Исп."
 
-msgid "Redundant"
-msgstr "Резервирование"
+msgid "Redund."
+msgstr "Резерв."
 
 msgid "Off;Asymmetric"
 msgstr "Выключено;Асимметричное"
 
-msgid "Preferable run"
-msgstr "Предпочтение исполнения"
+msgid "Pref. run"
+msgstr "Предп. исп."
 
-msgid "Remoted"
+msgid "Remote"
 msgstr "Удалённый"
 
 msgid "Template libraries"
@@ -1730,6 +1733,12 @@ msgstr "Установлены недопустимые процессоры."
 msgid "CPU set for thread error."
 msgstr "Ошибка установки процессоров для потока."
 
+msgid "Redundant"
+msgstr "Резервирование"
+
+msgid "Preferable run"
+msgstr "Предпочтение исполнения"
+
 #, c-format
 msgid "Start controller <%s> error."
 msgstr "Ошибка запуска контроллера <%s>."
@@ -1959,3 +1968,6 @@ msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport no support!"
 msgstr "Выходных транспорт не поддерживается!"
+
+#~ msgid "Started"
+#~ msgstr "Запущен"

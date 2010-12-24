@@ -370,9 +370,11 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,"tp","str","dest","select","select","/db/list",
 		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),RWRW__,name().c_str(),SSEC_ID,1,"tp","str");
-	    ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp");
-	    ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),R_R_R_,"root",SSEC_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),RWRWR_,"root",SSEC_ID,1,"tp","bool");
+	    if(ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp"))
+	    {
+		ctrMkNode("list",opt,-1,"/prm/grps/grp",_("Group"),R_R_R_,"root",SSEC_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),RWRWR_,"root",SSEC_ID,1,"tp","bool");
+	    }
 	}
 	return;
     }

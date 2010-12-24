@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-22 11:03+0200\n"
+"POT-Creation-Date: 2010-12-24 15:21+0200\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -220,6 +220,9 @@ msgstr ""
 
 msgid "Category"
 msgstr "Kategorie"
+
+msgid "Lev."
+msgstr "St."
 
 msgid "Message"
 msgstr "Nachricht"
@@ -851,8 +854,8 @@ msgstr "Stationen"
 msgid "Live"
 msgstr "Lebendig"
 
-msgid "Counter"
-msgstr "Zähler"
+msgid "Cntr."
+msgstr "Zähl."
 
 msgid "Go to remote stations list configuration"
 msgstr "Konfiguration der entfernten Stationen"
@@ -860,19 +863,19 @@ msgstr "Konfiguration der entfernten Stationen"
 msgid "Controllers"
 msgstr "Kontroller"
 
-msgid "Started"
-msgstr "Gestartet"
+msgid "Run."
+msgstr "Akt."
 
-msgid "Redundant"
-msgstr "Überflüssig"
+msgid "Redund."
+msgstr "Überfl."
 
 msgid "Off;Asymmetric"
 msgstr "Off;Asymmetrisch"
 
-msgid "Preferable run"
-msgstr "Prioritätsstufe"
+msgid "Pref. run"
+msgstr "Prior. Stufe"
 
-msgid "Remoted"
+msgid "Remote"
 msgstr "Gelöscht"
 
 msgid "Template libraries"
@@ -1748,6 +1751,12 @@ msgstr "Unzugängliche Prozesse sind installiert"
 msgid "CPU set for thread error."
 msgstr "Fehler bei der Installation von Prozessoren für den Strom."
 
+msgid "Redundant"
+msgstr "Überflüssig"
+
+msgid "Preferable run"
+msgstr "Prioritätsstufe"
+
 #, c-format
 msgid "Start controller <%s> error."
 msgstr "Fehler beim Starten des Kontrollers <%s>."
@@ -1978,6 +1987,9 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+#~ msgid "Started"
+#~ msgstr "Gestartet"
 
 #~ msgid "Time for execute (mks)"
 #~ msgstr "Erfüllungszeit (mks)"

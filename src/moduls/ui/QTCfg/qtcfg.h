@@ -162,7 +162,7 @@ class ConfApp: public QMainWindow
 			*actItAdd, *actItDel,
 			*actItCut, *actItCopy, *actItPaste;
 
-	XMLNode		pg_info;
+	XMLNode		pg_info, genReqs;
 	XMLNode 	*root;
 	string		sel_path,
 			copy_buf;       //Copy buffer

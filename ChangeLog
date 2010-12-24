@@ -1,3 +1,12 @@
+2010-12-24 Roman
+- SYS: Some titles of big configuration tables is set short.
+- FIX:SYS.TCntrNode: User name copy to childs for group control request "CntrReqs" is set.
+- FIX:UI.QTCfg: Twice page's content request is fixed.
+- !!!!:UI.QTCfg: Group request "CntrReqs" is used for page's content request.
+    A table selectable item's variants list requests for each row is fixed.
+    Used for the performance rise on slow and latent links.
+
+
 2010-12-23 Roman
 - SYS: Nanoseconds process is added to function TSYS::time2str().
     For display value of field "Realtime clock resolution" is used function TSYS::time2str().

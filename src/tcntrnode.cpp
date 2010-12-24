@@ -120,9 +120,14 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    return;
 	}
 	//> Post command to node
-	if( opt->name() == "CntrReqs" )
-	    for( int i_n = 0; i_n < opt->childSize(); i_n++ )
-		cntrCmd(opt->childGet(i_n));
+	if(opt->name() == "CntrReqs")
+	    for(int i_n = 0; i_n < opt->childSize(); i_n++)
+	    {
+		XMLNode *nChld = opt->childGet(i_n);
+		nChld->setAttr("user",opt->attr("user"));
+		cntrCmd(nChld);
+		nChld->attrDel("user");
+	    }
 	else
 	{
 	    opt->setAttr("path",s_br);

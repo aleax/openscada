@@ -563,8 +563,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
 		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root",SDAQ_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Lev."),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Cntr."),R_R_R_,"root",SDAQ_ID,1,"tp","real");
 		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
@@ -572,12 +572,12 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Started"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redundant"),RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
+		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Run."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
 		    "sel_id",(TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)/*+";"+TSYS::int2str(TController::Symmetric)*/).c_str(),
 		    "sel_list",_("Off;Asymmetric"/*;Symmetric"*/));
-		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Preferable run"),RWRWR_,"root",SDAQ_ID,4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
-		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remoted"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
+		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
 	if( ctrMkNode("area",opt,1,"/tpllibs",_("Template libraries")) )

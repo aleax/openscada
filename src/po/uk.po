@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-22 11:03+0200\n"
+"POT-Creation-Date: 2010-12-24 15:21+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -214,6 +214,9 @@ msgstr "мкс"
 
 msgid "Category"
 msgstr "Категорія"
+
+msgid "Lev."
+msgstr "Рів."
 
 msgid "Message"
 msgstr "Повідомлення"
@@ -835,8 +838,8 @@ msgstr "Станції"
 msgid "Live"
 msgstr "Жива"
 
-msgid "Counter"
-msgstr "Лічильник"
+msgid "Cntr."
+msgstr "Ліч."
 
 msgid "Go to remote stations list configuration"
 msgstr "Перехід до конфігурації переліку віддалених станцій"
@@ -844,19 +847,19 @@ msgstr "Перехід до конфігурації переліку відда
 msgid "Controllers"
 msgstr "Контролери"
 
-msgid "Started"
-msgstr "Запущено"
+msgid "Run."
+msgstr "Вик."
 
-msgid "Redundant"
-msgstr "Резервування"
+msgid "Redund."
+msgstr "Резерв."
 
 msgid "Off;Asymmetric"
 msgstr "Виключено;Асиметрично"
 
-msgid "Preferable run"
-msgstr "Уподобання виконання"
+msgid "Pref. run"
+msgstr "Уподоб. вик."
 
-msgid "Remoted"
+msgid "Remote"
 msgstr "Віддалений"
 
 msgid "Template libraries"
@@ -1728,6 +1731,12 @@ msgstr "Встановлено недопустимі процесори."
 msgid "CPU set for thread error."
 msgstr "Помилка встановлення CPU для потоку."
 
+msgid "Redundant"
+msgstr "Резервування"
+
+msgid "Preferable run"
+msgstr "Уподобання виконання"
+
 #, c-format
 msgid "Start controller <%s> error."
 msgstr "Помилка запуску контролера <%s>."
@@ -1957,3 +1966,6 @@ msgstr "Вхідні транспорти не підтримуються!"
 
 msgid "Output transport no support!"
 msgstr "Вихідні транспорти не підтримуються!"
+
+#~ msgid "Started"
+#~ msgstr "Запущено"
