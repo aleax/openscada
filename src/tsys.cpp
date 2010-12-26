@@ -1256,7 +1256,7 @@ reload:
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=6; }
 	    if(vend < 0) vm = vmin(vm, ttm.tm_mday - ttm.tm_wday + vbeg+((ttm.tm_wday>vbeg)?7:0));
-	    else if((vbeg=vmax(1,vbeg)) < (vend=vmin(7,vend)))
+	    else if((vbeg=vmax(0,vbeg)) < (vend=vmin(6,vend)))
 	    {
 		if(ttm.tm_wday < vbeg) vm = vmin(vm, ttm.tm_mday - ttm.tm_wday + vbeg);
 		else if((vstep>1 && ttm.tm_wday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_wday > vend))

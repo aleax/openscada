@@ -1,3 +1,7 @@
+2010-12-26 Roman
+- !!:FIX:SYS: Cron function is fixed for week day Sunday processing by base time.
+
+
 2010-12-24 Roman
 - SYS: Some titles of big configuration tables is set short.
 - FIX:SYS.TCntrNode: User name copy to childs for group control request "CntrReqs" is set.
