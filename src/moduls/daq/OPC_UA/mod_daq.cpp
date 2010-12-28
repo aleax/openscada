@@ -440,16 +440,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed",
-	    "sel_list","1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *",
-	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
-		"Seconds form is one real number (1.5, 1e-3).\n"
-		"Cron it is standard form '* * * * *'. Where:\n"
-		"  - minutes (0-59);\n"
-		"  - hours (0-23);\n"
-		"  - days (1-31);\n"
-		"  - month (1-12);\n"
-		"  - week day (0[sunday]-6)."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/Cert",cfg("Cert").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","cols","90","rows","7");
 	if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser")))
 	{

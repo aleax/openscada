@@ -1,3 +1,11 @@
+2010-12-28 Roman
+- !:SYS.TMess: Generic messages of controll interface is moved to single static functions TMess::lab*. For now moved messages:
+    DB selection help, seconds and CRON value seting help and selection variants.
+    Seconds and CRON value set help is expanded.
+- FIX:SYS.TCntrNode: No signed type "char" using as signed is fixed for ARM.
+- DB.FireBird: Help for DB address is expanded.
+
+
 2010-12-26 Roman
 - !!:FIX:SYS: Cron function is fixed for week day Sunday processing by base time.
 

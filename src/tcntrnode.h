@@ -222,7 +222,7 @@ class TCntrNode
 	struct
 	{
 	    TCntrNode	*node;
-	    char	grp;
+	    int8_t	grp;
 	} prev;
 
 	//Attributes

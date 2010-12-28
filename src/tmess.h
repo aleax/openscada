@@ -106,6 +106,11 @@ class TMess
 	void put( const char *categ, char level, const char *fmt,  ... );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", char level = Debug );
 
+	//> Often used, generic text messages
+	static const char *labDB( );
+	static const char *labSecCRON( );
+	static const char *labSecCRONsel( );
+
     private:
 	//Methods
 	void varTextActivate( );

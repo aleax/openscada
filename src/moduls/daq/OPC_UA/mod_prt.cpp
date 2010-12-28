@@ -3110,8 +3110,8 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Config")))
 	    {

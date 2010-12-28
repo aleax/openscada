@@ -211,8 +211,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	TTipDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols")))
 	{
-	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/db/list",
-		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
+		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id"))
 	    {
 		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
@@ -667,16 +667,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed",
-	    "sel_list","1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *",
-	    "help",_("Schedule is writed in seconds periodic form or in standard Cron form.\n"
-		"Seconds form is one real number (1.5, 1e-3).\n"
-		"Cron it is standard form '* * * * *'. Where:\n"
-		"  - minutes (0-59);\n"
-		"  - hours (0-23);\n"
-		"  - days (1-31);\n"
-		"  - month (1-12);\n"
-		"  - week day (0[sunday]-6)."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	//ctrMkNode("fld",opt,-1,"/cntr/cfg/HOUSE",cfg("HOUSE").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/cfg/houseLst");
 	return;

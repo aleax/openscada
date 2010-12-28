@@ -428,9 +428,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,"tp","str","help",
-	    _("FireBird address to DB must be written as: [<file>;<user>;<pass>].\n"
+	    _("FireBird address to DB must be written as: \"<file>;<user>;<pass>\".\n"
 	      "Where:\n"
-	      "  file - full DB file;\n"
+	      "  file - full path to DB file in form: \"[<host>:]<filePath>\";\n"
 	      "  user - DB user;\n"
 	      "  pass - password of DB user."));
 	return;

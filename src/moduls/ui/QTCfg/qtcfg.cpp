@@ -1925,9 +1925,14 @@ loadGenReqDate:
     //> Stop complex request forming
     if(genReqs.attr("fillMode") == "1")
     {
-	genReqs.attrDel("fillMode");
-	if(cntrIfCmd(genReqs)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
-	goto loadGenReqDate;
+        genReqs.attrDel("fillMode");
+        if(cntrIfCmd(genReqs))
+        {
+    	    mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+	    genReqs.clear();
+    	    return;
+    	}
+        goto loadGenReqDate;
     }
     else genReqs.clear();
 

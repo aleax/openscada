@@ -1093,8 +1093,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),R_R_R_,"root","root",1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),R_R_R_,"root","root",1,"tp","time");
 	    }

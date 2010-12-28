@@ -427,8 +427,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
 	    {

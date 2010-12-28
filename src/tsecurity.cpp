@@ -367,8 +367,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,2,"tp","str","len","50");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,1,"v_sz","100");
-	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,"tp","str","dest","select","select","/db/list",
-		"help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,
+		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),RWRW__,name().c_str(),SSEC_ID,1,"tp","str");
 	    if(ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp"))
 	    {
@@ -518,8 +518,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","len","50");
-	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,"tp","str","dest","select","select","/db/list",
-	    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,
+	    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","s_com","add,del");
 	return;
     }

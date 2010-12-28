@@ -1741,8 +1741,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/bEnd",_("Buffer end"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/bBeg",_("Buffer begin"),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archive DB"),RWRWR_,"root",SARH_ID,4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archive DB"),RWRWR_,"root",SARH_ID,4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -2267,8 +2267,8 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {

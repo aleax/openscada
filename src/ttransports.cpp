@@ -666,8 +666,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
@@ -869,8 +869,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,"tp","str","dest","select","select","/db/list",
-		    "help",_("DB address in format [<DB module>.<DB name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
+		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 	    {
