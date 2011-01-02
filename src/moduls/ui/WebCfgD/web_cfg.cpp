@@ -192,6 +192,65 @@ string TWEB::pgTail( )
     return "</body>\n</html>";
 }
 
+void TWEB::imgConvert(SSess &ses)
+{
+    map<string,string>::iterator prmEl;
+    gdImagePtr sim = NULL;
+    string itp;
+    int newImgH = 0, newImgW = 0;
+
+    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
+
+    if(sim = gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())) itp = "png";
+    else if(sim = gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())) itp = "jpg";
+    else if(sim = gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())) itp = "gif";
+    //if(sim) gdImageAlphaBlending(sim, 0);
+
+    //>> Check for resize icon
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=atoi(prmEl->second.c_str())) > 0 && gdImageSY(sim) > newImgH)
+    {
+	newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
+	gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
+	gdImageAlphaBlending(dim,0);
+	gdImageFilledRectangle(dim,0,0,newImgW-1,newImgH-1,gdImageColorResolveAlpha(dim,0,0,0,127));
+	gdImageCopyResampled(dim,sim,0,0,0,0,newImgW,newImgH,gdImageSX(sim),gdImageSY(sim));
+	gdImageDestroy(sim);
+	sim = dim;
+    }
+    //>> Check for disable icon make
+    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && prmEl->second == "gray")
+    {
+        gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
+	gdImageAlphaBlending(dim,0);
+	for(int i_y = 0; i_y < gdImageSY(sim); i_y++)
+	    for(int i_x = 0; i_x < gdImageSX(sim); i_x++)
+	    {
+		int c = gdImageGetPixel(sim,i_x,i_y);
+		int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
+		c = (int)gdImageColorResolveAlpha(dim,y,y,y,gdImageAlpha(sim,c));
+		gdImageSetPixel(dim,i_x,i_y,c);
+	    }
+	gdImageDestroy(sim);
+	sim = dim;
+    }
+    //>> Save result
+    if(sim)
+    {
+	int img_sz;
+	char *img_ptr = NULL;
+	gdImageSaveAlpha(sim, 1);
+	if(itp == "png")	img_ptr = (char *)gdImagePngPtr(sim,&img_sz);
+	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim,&img_sz,-1);
+	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim,&img_sz);
+	if(img_ptr)
+	{
+	    ses.page.assign(img_ptr,img_sz);
+	    gdFree(img_ptr);
+	}
+	gdImageDestroy(sim);
+    }
+}
+
 void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     map<string,string>::iterator prmEl;
@@ -209,39 +268,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	{
 	    string itp;
 	    ses.page=TUIS::icoGet( zero_lev=="ico"?"UI."MOD_ID:zero_lev.substr(4), &itp );
-	    //>> Check for disable icon make
-	    prmEl = ses.prm.find("filtr");
-	    if( !ses.page.empty() && prmEl!=ses.prm.end() && prmEl->second == "gray" )
-	    {
-		gdImagePtr sim = NULL;
-		if( sim = gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data()) ) itp = "png";
-		else if( sim = gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data()) ) itp = "jpg";
-		else if( sim = gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data()) ) itp = "gif";
-		if( sim )
-		{
-		    gdImagePtr dim = gdImageCreate(gdImageSX(sim),gdImageSY(sim));
-		    for( int i_y = 0; i_y < gdImageSY(sim); i_y++ )
-			for( int i_x = 0; i_x < gdImageSX(sim); i_x++ )
-			{
-			    int c = gdImageGetPixel(sim,i_x,i_y);
-			    int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
-			    c = (int)gdImageColorResolveAlpha(dim,y,y,y,gdImageAlpha(sim,c));
-			    gdImageSetPixel(dim,i_x,i_y,c);
-			}
-		    int img_sz;
-		    char *img_ptr = NULL;
-		    if( itp == "png" ) img_ptr = (char *)gdImagePngPtr(dim,&img_sz);
-		    else if( itp == "jpg" ) img_ptr = (char *)gdImageJpegPtr(dim,&img_sz,-1);
-		    else if( itp == "gif" ) img_ptr = (char *)gdImageGifPtr(dim,&img_sz);
-		    if( img_ptr )
-		    {
-			ses.page.assign(img_ptr,img_sz);
-			gdFree(img_ptr);
-		    }
-		    gdImageDestroy(dim);
-		    gdImageDestroy(sim);
-		}
-	    }
+	    imgConvert(ses);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
@@ -271,6 +298,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		if( !mod->cntrIfCmd(req,ses.user) )
 		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
 		else ses.page = TUIS::icoGet("disconnect",&itp);
+		imgConvert(ses);
 		page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 		return;
 	    }

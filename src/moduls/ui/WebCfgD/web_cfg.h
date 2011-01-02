@@ -97,6 +97,8 @@ class TWEB: public TUI
 	void   modInfo( vector<string> &list );
 	string trMessReplace( const string &tsrc );
 
+	void imgConvert(SSess &ses);
+
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };
 

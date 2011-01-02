@@ -1,3 +1,9 @@
+2010-01-02 Roman
+- DAQ.BFN: XML parse errors is hide.
+- DAQ.OPC_UA: Nodes list field height is increased.
+- !:UI.WebCfgD: Icon resize is add to server side for traffic decrease.
+
+
 2010-12-28 Roman
 - !:SYS.TMess: Generic messages of controll interface is moved to single static functions TMess::lab*. For now moved messages:
     DB selection help, seconds and CRON value seting help and selection variants.

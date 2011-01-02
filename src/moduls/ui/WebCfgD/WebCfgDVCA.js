@@ -296,7 +296,8 @@ function expand( el, val, upTree )
 	  var liCont = isUsable?"<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'>":"";
 	  liCont += "<img src='"+treeIco+"'/></a>";
 	  if( parseInt(hostN.childNodes[i_e].getAttribute('icoSize')) )
-	    liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>";
+ 	    liCont += "<span><img src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico&size=16'/></span>"; 
+	    //liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>";
 	  liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
 	    "onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+strEncode(nodeText(hostN.childNodes[i_e]))+"</a></span>";
 	  //>> Next node for update
@@ -448,7 +449,7 @@ function selectChildRecArea( node, aPath, cBlk )
     //>> Set node icon
     if( nodeTextByTagId(node,'img','ico') != null )
     {
-	document.getElementById('pgIco').src = '/'+MOD_ID+selPath+'?com=ico';
+	document.getElementById('pgIco').src = '/'+MOD_ID+selPath+'?com=ico&size=32';
 	document.getElementById('pgIco').style.visibility = 'visible';
     }
     else document.getElementById('pgIco').style.visibility = 'hidden';
@@ -1826,7 +1827,8 @@ function hostsUpdate( )
       var treeIco = '/'+MOD_ID+'/img_tree'+(liN.isExpand?'Minus':'Plus')+((i!=0)?'Up':'')+((i!=(hostN.childNodes.length-1))?'Down':'');
       var liCont = "<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'><img src='"+treeIco+"'/></a>";
       if( parseInt(hostN.childNodes[i].getAttribute('icoSize')) )
-	liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>";
+	liCont += "<span><img src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico&size=16'/></span>";
+ 	//liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>"; 
       liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
 	"onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+nodeText(hostN.childNodes[i])+"</a></span>";
       liN.innerHTML = liCont;
