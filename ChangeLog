@@ -1,4 +1,9 @@
-2010-01-02 Roman
+2011-01-06 Roman
+- SYS:Some demo-configs is changed.
+- FIX:DAQ.LogicLev: PRM - config field hide is added for "Free" mode. To info control request of a parameter "return" added.
+
+
+2011-01-02 Roman
 - DAQ.BFN: XML parse errors is hide.
 - DAQ.OPC_UA: Nodes list field height is increased.
 - !:UI.WebCfgD: Icon resize is add to server side for traffic decrease.

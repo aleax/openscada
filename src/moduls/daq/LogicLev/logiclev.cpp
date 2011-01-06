@@ -842,7 +842,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MODE",cfg("MODE").fld().descr(),RWRW__,"root",SDAQ_ID,4,"tp","str","dest","select",
 	    "sel_id",(TSYS::int2str(TMdPrm::Free)+";"+TSYS::int2str(TMdPrm::DirRefl)+";"+TSYS::int2str(TMdPrm::Template)).c_str(),
 	    "sel_list",_("Free;Direct reflection;Template"));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
+        if(m_mode == TMdPrm::Free) ctrRemoveNode(opt,"/prm/cfg/PRM");
+        else ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
 	if(mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")))
 	{
 	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -883,6 +884,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    }
 		}
 	}
+	return;
     }
 
     //> Process command to page
