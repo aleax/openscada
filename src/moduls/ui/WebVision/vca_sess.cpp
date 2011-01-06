@@ -3853,14 +3853,21 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                 xMax = (int)TSYS::realRound( xMax, 2, true );
                                 yMax = (int)TSYS::realRound( yMax, 2, true );
 
+                                gdImagePtr im_fill_in = NULL;
                                 string imgDef_temp = owner().resGet(inundationItems[i].imgFill,id(),ses.user);
-                                gdImagePtr im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data());
+                                if( !(im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
+                                    !(im_fill_in = gdImageCreateFromGifPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
+                                    !(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
+                                    mess_debug(nodePath().c_str(),_("Fill image type is not supported."));
                                 gdImagePtr im_fill_out = gdImageCreateTrueColor((int)TSYS::realRound( xMax - xMin ) + 1, (int)TSYS::realRound( yMax - yMin ) + 1 );
                                 gdImageAlphaBlending(im_fill_out, 0);
-                                gdImageAlphaBlending(im_fill_in, 0);
                                 int alpha;
                                 double alpha_pr;
-                                gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
+                                if( im_fill_in )
+                                {
+                                    gdImageAlphaBlending(im_fill_in, 0);
+                                    gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
+                                }
                                 int im_x, im_y, im_x_temp1, im_x_temp2;
                                 Point drw_pnt,drw_pnt1;
                                 int c_new;
