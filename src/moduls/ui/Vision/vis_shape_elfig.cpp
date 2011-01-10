@@ -5861,7 +5861,7 @@ void ShapeElFigure::paintImage( WdgView *view )
 
 
             //-- Scaling image for filling --
-            img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::FastTransformation  );
+            img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
             int im_x, im_y;
             QColor color;
             double alpha, color_r, color_g, color_b;
