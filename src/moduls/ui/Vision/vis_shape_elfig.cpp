@@ -3855,7 +3855,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_down || flag_left || flag_right || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_up = true;
-                    offset = QPointF(0,-1);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
+                    offset = QPointF(0,-5);
+                    else offset = QPointF(0,-1);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
                     view->repaint();
@@ -3864,7 +3866,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_up || flag_left || flag_right || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_down = true;
-                    offset = QPointF(0,1);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
+                    offset = QPointF(0,5);
+                    else offset = QPointF(0,1);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
                     view->repaint();
@@ -3874,7 +3878,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_down || flag_up || flag_right || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_left = true;
-                    offset = QPointF(-1,0);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
+                    offset = QPointF(-5,0);
+                    else offset = QPointF(-1,0);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
                     view->repaint();
@@ -3883,7 +3889,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_down || flag_left || flag_up || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_right = true;
-                    offset = QPointF(1,0);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
+                    offset = QPointF(5,0);
+                    else offset = QPointF(1,0);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
                     view->repaint();

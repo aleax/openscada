@@ -1,3 +1,8 @@
+2011-01-12 Maxim
+- :UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1 
+              with "Shift" pressed for the primitive ElFigure.
+
+
 2011-01-10 Maxim
 - FIX:UI:Vision: The Qt::SmoothTransformation flag is added to the fill image's scaling function for the primitive ElFigure.
 
