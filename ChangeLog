@@ -9,7 +9,7 @@
 - UI.WebUser: Syntax highlight is added for programm of pages.
 
 2011-01-12 Maxim
-- :UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1 
+- UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1 
               with "Shift" pressed for the primitive ElFigure.
 
 2011-01-10 Maxim
@@ -20,7 +20,6 @@
 - FIX:UI:WebVision: The gif and jpg image's types support is added for the fill image of the primitive ElFigure.
 
 
->>>>>>> .r1243
 2011-01-06 Roman
 - SYS:Some demo-configs is changed.
 - FIX:DAQ.LogicLev: PRM - config field hide is added for "Free" mode. To info control request of a parameter "return" added.
