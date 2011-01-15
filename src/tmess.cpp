@@ -42,7 +42,7 @@ using namespace OSCADA;
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2)
+TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2), mConvCode(true)
 {
     setenv("LC_NUMERIC","C",1);
     openlog(PACKAGE,0,LOG_USER);
@@ -55,6 +55,8 @@ TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2)
     mLang2Code = lang();
     if( mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C" ) mLang2Code = "en";
     else mLang2Code = mLang2Code.substr(0,2);
+
+    if(mLang2Code == "en" && IOCharSet.compare(0,10,"ISO-8859-1")==0) mConvCode = false;
 }
 
 TMess::~TMess(  )
@@ -143,7 +145,7 @@ void TMess::setLang( const string &lng )
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess )
 {
-    if( fromCH == toCH ) return mess;
+    if(!mConvCode || fromCH == toCH) return mess;
 
     //> Make convert to blocks 1000 bytes
     string buf;

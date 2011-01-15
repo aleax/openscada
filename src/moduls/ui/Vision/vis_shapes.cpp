@@ -2686,7 +2686,9 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		{
 		    case 0: shD->itProps[itNum].lev = atoi(val.c_str());	break;	//lev
 		    case 1: shD->itProps[itNum].tmpl = val;			break;	//tmpl
-		    case 2: shD->itProps[itNum].font = getFont(val,vmin(w->xScale(true),w->yScale(true)));	break;	//fnt
+		    case 2:								//fnt
+			shD->itProps[itNum].font = val.empty() ? shD->addrWdg->font() : getFont(val,vmin(w->xScale(true),w->yScale(true)));
+			break;
 		    case 3: shD->itProps[itNum].clr = getColor(val);		break;	//color
 		}
 	    }

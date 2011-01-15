@@ -1141,7 +1141,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Programm language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Programm"),RWRWR_,"root",SPRT_ID,2,"tp","str","rows","10");
+	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Programm"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	if(mode() == 0 && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    for(int i_io = 0; i_io < ioSize(); i_io++)
@@ -1246,6 +1246,12 @@ void Node::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(prog());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+            try
+            {
+                SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
+                                compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+            } catch(...){ }
     }
     else if(a_path == "/dt/plang_ls" && ctrChkNode(opt))
     {

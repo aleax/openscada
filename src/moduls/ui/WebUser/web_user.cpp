@@ -547,7 +547,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prgm",_("Program")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prgm/PROGLang",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangLs");
-		ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Program"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10",
+		ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Program"),RWRWR_,"root",SUI_ID,4,"tp","str","SnthHgl","1","rows","10",
 		    "help",_("Next attributes has defined for requests processing:\n"
 			    "   'rez' - processing result (by default - 200 OK);\n"
 			    "   'HTTPreq' - HTTP request method (GET,POST);\n"
@@ -614,6 +614,12 @@ void UserPg::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(prog());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+            try
+            {
+                SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
+                                compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+            } catch(...){ }
     }
     else TCntrNode::cntrCmdProc(opt);
 }

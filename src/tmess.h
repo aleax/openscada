@@ -116,9 +116,10 @@ class TMess
 	void varTextActivate( );
 
 	//Attributes
-	string	IOCharSet;		//Internal charset
-	unsigned char	mMessLevel;	//Work messages level
-	unsigned char	mLogDir;	//Log direction
+	string	IOCharSet;	//Internal charset
+	unsigned mMessLevel:3;	//Work messages level
+	unsigned mLogDir:4;	//Log direction
+	unsigned mConvCode:1;	//Enable text code conversion
 
 	string	mLang2CodeBase, mLang2Code;
 };

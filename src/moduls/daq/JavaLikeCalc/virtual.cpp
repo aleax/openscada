@@ -883,7 +883,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  io - calc function's IO;\n"
@@ -893,5 +893,11 @@ void Prm::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //Process command to page
-    TParamContr::cntrCmdProc(opt);
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/cfg/FLD" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    {
+        opt->childAdd("rule")->setAttr("expr","^[^:]*")->setAttr("color","darkblue");
+        opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+    }
+    else TParamContr::cntrCmdProc(opt);
 }

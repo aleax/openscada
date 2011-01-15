@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-30 12:12+0200\n"
+"POT-Creation-Date: 2011-01-15 09:27+0200\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -41,14 +41,13 @@ msgstr "Ошибка записи строки."
 msgid "Read from serial error."
 msgstr "Ошибка чтения последовательного интерфейса."
 
+#, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
 msgstr ""
-"Трафик входящий %s, исходящий %s. Макс. время ожидания символа "
-"%.4g мс."
+"Трафик входящий %s, исходящий %s. Макс. время ожидания символа %.4g мс."
 
-#, c-format
-msgid "Serial port '%s' open error."
-msgstr "Ошибка открытия последовательного порта '%s'."
+msgid "Serial port '%s' open error: %s."
+msgstr "Ошибка открытия последовательного порта '%s': %s."
 
 #, c-format
 msgid "Speed '%d' error."
@@ -154,6 +153,7 @@ msgstr "Ответ на звонок"
 msgid "Ring answer response"
 msgstr "Ответ на звонок, результат"
 
+#, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Трафик входящий %s, исходящий %s. "
 

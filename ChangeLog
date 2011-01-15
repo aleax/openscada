@@ -1,7 +1,16 @@
+2011-01-15 Roman
+- SYS: Text messages encode disable for default encoding ISO-8859-1 and language "en".
+- DAQ.ModBus: Syntax highlight is added for input protocol's nodes.
+- DAQ.JavaLikeCalc: Syntax highlight is added for controller parameter's attributes list.
+- Transport.Serial: Error message expanded for port file open.
+- UI.VCAEngine: Speech synthesis from text encoding by default is set to "KOI8-R".
+- UI.VCAEngine: Modify counter clear for active attributes of primitive widgets.
+- UI.WebVision, UI.Vision: Use generic font for items without font set of primitive "Protocol".
+- UI.WebUser: Syntax highlight is added for programm of pages.
+
 2011-01-12 Maxim
 - :UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1 
               with "Shift" pressed for the primitive ElFigure.
-
 
 2011-01-10 Maxim
 - FIX:UI:Vision: The Qt::SmoothTransformation flag is added to the fill image's scaling function for the primitive ElFigure.
@@ -11,6 +20,7 @@
 - FIX:UI:WebVision: The gif and jpg image's types support is added for the fill image of the primitive ElFigure.
 
 
+>>>>>>> .r1243
 2011-01-06 Roman
 - SYS:Some demo-configs is changed.
 - FIX:DAQ.LogicLev: PRM - config field hide is added for "Free" mode. To info control request of a parameter "return" added.

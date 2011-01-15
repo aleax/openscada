@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-30 12:12+0200\n"
+"POT-Creation-Date: 2011-01-15 09:27+0200\n"
 "PO-Revision-Date: 2009-08-20 10:16+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -52,9 +52,8 @@ msgstr ""
 "Datenverkehr eingehend %.4g kb, ausgehend %.4g kb. Maximale Wartezeit für "
 "ein Zeichen %.4g msek."
 
-#, c-format
-msgid "Serial port '%s' open error."
-msgstr "Fehler beim Öffnen der Seriellen Schnittstelle '%s'."
+msgid "Serial port '%s' open error: %s."
+msgstr "Fehler beim Öffnen der Seriellen Schnittstelle '%s': %s."
 
 #, c-format
 msgid "Speed '%d' error."

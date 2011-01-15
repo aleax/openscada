@@ -323,7 +323,7 @@ void TTrIn::connect( )
 	//>> Serial port open
 	mDevPort = TSYS::strSepParse(addr(),0,':');
 	fd = open( mDevPort.c_str(), O_RDWR|O_NOCTTY );
-	if( fd < 0 ) throw TError(nodePath().c_str(),_("Serial port '%s' open error."),mDevPort.c_str());
+	if( fd < 0 ) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
 	//>> Set serial port parameters
 	struct termios tio;
 	bzero( &tio, sizeof(tio) );
@@ -805,7 +805,7 @@ void TTrOut::start( )
 
 	//>> Serial port open
 	fd = open( mDevPort.c_str(), O_RDWR|O_NOCTTY );
-	if( fd < 0 ) throw TError(nodePath().c_str(),_("Serial port '%s' open error."),mDevPort.c_str());
+	if( fd < 0 ) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
 
 	//>> Set serial port parameters
 	struct termios tio;

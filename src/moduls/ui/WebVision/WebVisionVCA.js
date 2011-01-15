@@ -1361,7 +1361,8 @@ function makeEl( pgBr, inclPg )
 		var prpLev = parseInt(this.attrs['it'+i_it+'lev']);
 		if( this.messList[elPos][2] >= prpLev && prpLev > lst_lev && chkPattern(this.messList[elPos][3],this.attrs['it'+i_it+'tmpl']) )
 		{
-		    rowFnt = getFont(this.attrs['it'+i_it+'fnt'],Math.min(xSc,ySc));
+		    var tRowFnt = getFont(this.attrs['it'+i_it+'fnt'],Math.min(xSc,ySc));
+		    if(tRowFnt.length) rowFnt = tRowFnt;
 		    rowColor = 'background-color: '+getColor(this.attrs['it'+i_it+'color'])+'; ';
 		    if( this.messList[elPos][2] == parseInt(this.attrs['it'+i_it+'lev']) ) break;
 		    lst_lev = prpLev;

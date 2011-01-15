@@ -55,21 +55,23 @@ string PrWidget::ico( )
 
 void PrWidget::setEnable( bool val )
 {
-    if( enable() == val ) return;
+    if(enable() == val) return;
 
-    LWidget::setEnable( val );
+    LWidget::setEnable(val);
 
     //> Init active attributes
-    if( val )
+    if(val)
     {
 	vector<string> ls;
 	attrList(ls);
 	for(int i_l = 0; i_l < ls.size(); i_l++)
-	    if( attrAt(ls[i_l]).at().flgGlob()&Attr::Active )
-	    {
-		attrAt(ls[i_l]).at().setS(attrAt(ls[i_l]).at().getS(),true);
-		attrList(ls);
-	    }
+	{
+	    AutoHD<Attr> attr = attrAt(ls[i_l]);
+	    if(!(attr.at().flgGlob()&Attr::Active)) continue;
+	    attr.at().setS(attr.at().getS(),true);
+	    attr.at().setModif(0);
+    	    attrList(ls);
+	}
     }
 }
 
