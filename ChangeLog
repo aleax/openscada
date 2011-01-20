@@ -1,3 +1,7 @@
+2011-01-20 Roman
+- !!:Protocol.HTTP: "Transfer-Encoding=chunked" support is added to output request and some fixed.
+
+
 2011-01-15 Roman
 - SYS: Text messages encode disable for default encoding ISO-8859-1 and language "en".
 - DAQ.ModBus: Syntax highlight is added for input protocol's nodes.
@@ -8,9 +12,11 @@
 - UI.WebVision, UI.Vision: Use generic font for items without font set of primitive "Protocol".
 - UI.WebUser: Syntax highlight is added for programm of pages.
 
+
 2011-01-12 Maxim
 - UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1 
               with "Shift" pressed for the primitive ElFigure.
+
 
 2011-01-10 Maxim
 - FIX:UI:Vision: The Qt::SmoothTransformation flag is added to the fill image's scaling function for the primitive ElFigure.
