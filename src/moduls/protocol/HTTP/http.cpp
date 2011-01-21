@@ -302,14 +302,15 @@ next_ch:
 	//>> Get chunk size
 	if(c_lng == -2)
 	{
-	    pos += ch_ln;
+	    if(ch_ln) pos += ch_ln+2;
 	    tw = TSYS::strParse(resp,0,"\r\n",&pos);
 	    ch_ln = strtol(tw.c_str(),NULL,16);
 	}
 	else ch_ln = c_lng;
 
 	//>> Wait tail
-	while(ch_ln >= 0 && ch_ln > (resp.size()-pos))
+	while(ch_ln > 0 && ((resp.size()-pos) < ch_ln ||
+	    (c_lng == -2 && ((resp.size()-pos) < (ch_ln+5) || resp.find("\r\n",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 	    resp.append(buf,resp_len);

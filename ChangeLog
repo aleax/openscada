@@ -1,3 +1,7 @@
+2011-01-21 Roman
+- FIX:Protocol.HTTP: "Transfer-Encoding=chunked" support is fixed.
+
+
 2011-01-20 Roman
 - !!:Protocol.HTTP: "Transfer-Encoding=chunked" support is added to output request and some fixed.
 
