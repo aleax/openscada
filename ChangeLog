@@ -1,3 +1,7 @@
+2011-01-23 Roman
+- FIX:UI.WebVision: The toggled button value changing is fixed.
+
+
 2011-01-21 Roman
 - FIX:Protocol.HTTP: "Transfer-Encoding=chunked" support is fixed.
 

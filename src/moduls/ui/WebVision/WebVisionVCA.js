@@ -1068,6 +1068,7 @@ function makeEl( pgBr, inclPg )
 	      { attrs.value = '1'; this.style.borderStyle='inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
 	      else { attrs.value = '0'; this.style.borderStyle='outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
 	      setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
+	      setWAttrs(this.wdgLnk.addr,'value',attrs.value);
 	      return false;
 	    };
 	    this.place.wdgLnk = this;
