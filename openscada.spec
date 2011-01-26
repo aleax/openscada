@@ -1,10 +1,11 @@
 #===== Generic Info ======
-Summary: Open SCADA system project
-Summary(ru_RU.UTF8): Ядро открытой SCADA системы.
-Summary(uk_UA.UTF8): Ядро відкритої SCADA системи.
+Summary: Open SCADA system.
+Summary(ru_RU.UTF8): Открытая SCADA система.
+Summary(uk_UA.UTF8): Відкрита SCADA система.
+Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.7.0
-Release: 1
+Version: 0.7.1
+Release: 0.1
 Source: openscada-%version.tar.gz
 License: GPLv2
 Group: Applications/Engineering
@@ -44,6 +45,7 @@ Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwor
 Summary: Open SCADA documents
 Summary(ru_RU.UTF8): Документация открытой SCADA.
 Summary(uk_UA.UTF8): Документація відкритої SCADA.
+Summary(de_DE.UTF8): Open SCADA Dokumente.
 Group: Documentation
 %description doc
 The %name-doc package include documents files.
@@ -59,6 +61,7 @@ Das Paket %name-doc enthaelt Dokumentationsdateien.
 Summary: Open SCADA development
 Summary(ru_RU.UTF8): Разработка открытой SCADA.
 Summary(uk_UA.UTF8): Розробка відкритої SCADA.
+Summary(de_DE.UTF8): Open SCADA Entwicklung.
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
@@ -67,12 +70,15 @@ The %name-devel package includes library archives and include files.
 Пакет %name-devel включает архив библиотек и включаемые файлы.
 %description devel -l uk_UA.UTF8
 Пакет %name-devel включає архів бібліотек та включаємі файли.
+%description devel -l de_DE.UTF8
+Das Paket %name-devel enthaelt die Bibliotheken und Archive Include-Dateien.
 
 
 %package demo
 Summary: Open SCADA demo data bases and config
 Summary(ru_RU.UTF8): Демонстрационная БД и конфигурация открытой SCADA.
 Summary(uk_UA.UTF8): Демонстраційна БД та конфігурація відкритої SCADA.
+Summary(de_DE.UTF8): Open SCADA Demo-Datenbanken und Konfigurationsdateien.
 Group: Graphics
 Requires: %name
 %description demo
@@ -89,7 +95,7 @@ Das Paket %{name}-demo enthaelt Demodatenbanken und Konfigurationen. Fuers Start
 %setup -q -n %srcname
 
 %build
-%configure CFLAGS="-O2" CXXFLAGS="-O2"
+%configure
 %make
 
 %install

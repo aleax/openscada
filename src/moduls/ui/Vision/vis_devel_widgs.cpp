@@ -1468,6 +1468,7 @@ void WdgTree::updateTree( const string &vca_it )
 		owner()->lb_toolbar.push_back( new QToolBar(QString(_("Library: %1")).arg(wlbId.c_str()),this) );
 		owner()->lb_toolbar[i_t]->setObjectName(wlbId.c_str());
 		owner()->addToolBar(owner()->lb_toolbar[i_t]);
+		owner()->lb_toolbar[i_t]->setMovable(true);
 		owner()->mn_view->addAction(owner()->lb_toolbar[i_t]->toggleViewAction());
 		is_create = true;
 	    }

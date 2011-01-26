@@ -458,6 +458,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     visItToolBar = new QToolBar(_("Visual items toolbar"),this);
     visItToolBar->setObjectName("visItToolBar");
     addToolBar(visItToolBar);
+    visItToolBar->setMovable(true);
     visItToolBar->addAction(actPrjRun);
     visItToolBar->addSeparator();
     visItToolBar->addAction(actDBLoad);
@@ -479,6 +480,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     wdgToolView = new QToolBar(_("Widgets view functions"),this);
     wdgToolView->setObjectName("wdgToolView");
     addToolBar(wdgToolView);
+    wdgToolView->setMovable(true);
     wdgToolView->addAction(actLevRise);
     wdgToolView->addAction(actLevLower);
     wdgToolView->addAction(actLevUp);
@@ -495,6 +497,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     elFigTool = new QToolBar(_("Elementars figure tools"),this);
     elFigTool->setObjectName("elFigTool");
     addToolBar(elFigTool);
+    elFigTool->setMovable(true);
     elFigTool->addAction(actElFigCursorAct);
     elFigTool->addAction(actElFigLine);
     elFigTool->addAction(actElFigArc);
@@ -571,6 +574,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
+    menuBar()->setVisible(true);
 
     wdgTree->updateTree();
     prjTree->updateTree();

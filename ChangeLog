@@ -1,3 +1,9 @@
+2011-01-26 Roman
+- SYS: RPM packages build spec-files is updated for translation update and expand openscada_mod.spec separated
+    package "openscada-core" build and use main package for typical installation.
+- UI.QTCfg: Force menu set to visible and toolbars movable, for Nokia N800 (ARM) QT's default properties fix.
+
+
 2011-01-23 Roman
 - FIX:UI.WebVision: The toggled button value changing is fixed.
 

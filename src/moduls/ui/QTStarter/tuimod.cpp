@@ -414,7 +414,8 @@ bool WinControl::callQTModule( const string &nm )
     {
 	toolBar = new QToolBar("QTStarter",new_wnd);
 	toolBar->setObjectName("QTStarterTool");
-	new_wnd->addToolBar(toolBar);
+	new_wnd->addToolBar(Qt::TopToolBarArea,toolBar);
+	toolBar->setMovable(true);
     }
     if( !new_wnd->property("QTStarterMenuDis").toBool() && !new_wnd->menuBar()->actions().empty() )
 	menu = new_wnd->menuBar()->addMenu("QTStarter");

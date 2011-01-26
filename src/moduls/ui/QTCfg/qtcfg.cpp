@@ -352,7 +352,9 @@ ConfApp::ConfApp( string open_user ) :
     //> Create tool bars
     //>> Main tool bar
     QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"),this);
-    addToolBar(toolBar);
+    toolBar->setAllowedAreas(Qt::AllToolBarAreas);
+    addToolBar(Qt::TopToolBarArea,toolBar);
+    toolBar->setMovable(true);
     toolBar->addAction(actDBLoad);
     toolBar->addAction(actDBSave);
     toolBar->addSeparator();
@@ -405,6 +407,8 @@ ConfApp::ConfApp( string open_user ) :
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
+
+    menuBar()->setVisible(true);
 
     //>> Display root page and init external pages
     initHosts();
