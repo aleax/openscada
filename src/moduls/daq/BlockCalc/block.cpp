@@ -244,7 +244,7 @@ Block::LnkT Block::link( unsigned iid )
 bool Block::linkActive( unsigned iid )
 {
     ResAlloc res(lnk_res,false);
-    if( iid >= m_lnk.size() )
+    if(iid >= m_lnk.size())
 	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
 
     switch(m_lnk[iid].tp)
@@ -253,6 +253,7 @@ bool Block::linkActive( unsigned iid )
 	    return !m_lnk[iid].iblk->w_bl.freeStat();
 	case I_PRM:
 	    return !m_lnk[iid].aprm->freeStat();
+	default: return false;
     }
     return false;
 }
@@ -260,29 +261,31 @@ bool Block::linkActive( unsigned iid )
 void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 {
     ResAlloc res(lnk_res,true);
-    if( iid >= m_lnk.size() )	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
+    if(iid >= m_lnk.size())	throw TError(nodePath().c_str(),_("Link %d error!"),iid);
 
     //> Change type link
-    if( cmd == SET )
+    if(cmd == SET)
     {
-	if( lnk != m_lnk[iid].tp )
+	if(lnk != m_lnk[iid].tp)
 	{
 	    //>> Free old structures
-	    switch( m_lnk[iid].tp )
+	    switch(m_lnk[iid].tp)
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
 		    delete m_lnk[iid].iblk;	break;
 		case I_PRM: case O_PRM:
 		    delete m_lnk[iid].aprm;	break;
+		default: break;
 	    }
 
 	    //>> Make new structures
-	    switch( lnk )
+	    switch(lnk)
 	    {
 		case I_LOC: case I_GLB:	case O_LOC: case O_GLB:
 		    m_lnk[iid].iblk = new SLIBlk();	break;
 		case I_PRM: case O_PRM:
 		    m_lnk[iid].aprm = new AutoHD<TVal>;	break;
+		default: break;
 	    }
 	    m_lnk[iid].tp = lnk;
 	}
@@ -325,16 +328,18 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		    catch( TError err) { }
 		}
 		break;
+	    default: break;
 	}
     }
     //> Disconnect
-    if( cmd == DEINIT )
+    if(cmd == DEINIT)
 	switch(m_lnk[iid].tp)
 	{
 	    case I_LOC: case I_GLB: case O_LOC: case O_GLB:
 		m_lnk[iid].iblk->w_bl.free();	break;
 	    case I_PRM: case O_PRM:
 		m_lnk[iid].aprm->free();	break;
+	    default: break;
 	}
 }
 
@@ -373,6 +378,7 @@ void Block::calc( bool first, bool last )
 				case IO::Integer:	setI(i_ln,m_lnk[i_ln].iblk->w_bl.at().getI(m_lnk[i_ln].iblk->w_id));	break;
 				case IO::Real:		setR(i_ln,m_lnk[i_ln].iblk->w_bl.at().getR(m_lnk[i_ln].iblk->w_id));	break;
 				case IO::Boolean:	setB(i_ln,m_lnk[i_ln].iblk->w_bl.at().getB(m_lnk[i_ln].iblk->w_id));	break;
+				case IO::Object:	break;
 			    }
 			}
 			//> Check for link disable need
@@ -387,8 +393,10 @@ void Block::calc( bool first, bool last )
 			    case IO::Integer:	setI(i_ln,m_lnk[i_ln].aprm->at().getI());	break;
 			    case IO::Real:	setR(i_ln,m_lnk[i_ln].aprm->at().getR());	break;
 			    case IO::Boolean:	setB(i_ln,m_lnk[i_ln].aprm->at().getB());	break;
+			    case IO::Object:	break;
 			}
 		    break;
+		default: break;
 	    }
     }catch(TError err)
     {
@@ -434,6 +442,7 @@ void Block::calc( bool first, bool last )
 				case IO::Integer:	m_lnk[i_ln].iblk->w_bl.at().setI(m_lnk[i_ln].iblk->w_id,getI(i_ln));	break;
 				case IO::Real:	m_lnk[i_ln].iblk->w_bl.at().setR(m_lnk[i_ln].iblk->w_id,getR(i_ln));	break;
 				case IO::Boolean:	m_lnk[i_ln].iblk->w_bl.at().setB(m_lnk[i_ln].iblk->w_id,getB(i_ln));	break;
+				case IO::Object:	break;
 			    }
 			}
 			//> Check for link disable need
@@ -448,8 +457,10 @@ void Block::calc( bool first, bool last )
 			    case IO::Integer:	m_lnk[i_ln].aprm->at().setI(getI(i_ln));	break;
 			    case IO::Real:	m_lnk[i_ln].aprm->at().setR(getR(i_ln));	break;
 			    case IO::Boolean:	m_lnk[i_ln].aprm->at().setB(getB(i_ln));	break;
+			    case IO::Object:	break;
 			}
 		    break;
+		default: break;
 	    }
     }catch(TError err)
     {
@@ -525,13 +536,14 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    {
 			int id = ioId(list[i_io]);
 			if(ioHide(id) && !atoi(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")).c_str())) continue;
-			const char *tip;
+			const char *tip = "str";
 			switch(ioType(id))
 			{
 			    case IO::String:	tip = "str";	break;
 			    case IO::Integer:	tip = "dec";	break;
 			    case IO::Real:	tip = "real";	break;
 			    case IO::Boolean:	tip = "bool";	break;
+			    case IO::Object:	tip = "str";	break;
 			}
 			ctrMkNode("fld",opt,-1,(string("/lio/io/")+list[i_io]).c_str(),
 				func()->io(id)->name().c_str(),linkActive(id)?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp",tip);
@@ -719,6 +731,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 				break;
 			}
 			break;
+		    default:	break;
 		}
 		for(unsigned i_a=0; i_a < list.size(); i_a++)
 		    opt->childAdd("el")->setText(c_path+list[i_a]);

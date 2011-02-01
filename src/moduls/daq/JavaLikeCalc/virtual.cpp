@@ -739,8 +739,7 @@ void Prm::enable()
 
     //> Init elements
     vector<string> pls;
-    int io;
-    string mio, ionm, aid, anm, def;
+    string mio, ionm, aid, anm;
     for( int io_off = 0; (mio=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
     {
 	ionm   = TSYS::strSepParse(mio,0,':');
@@ -756,15 +755,16 @@ void Prm::enable()
 	TFld::Type	tp  = TFld::String;
 	switch( ((Contr &)owner()).ioType(io_id) )
 	{
-	    case IO::String:	tp = TFld::String; def = EVAL_STR;			break;
-	    case IO::Integer:	tp = TFld::Integer; def = TSYS::int2str(EVAL_INT);	break;
-	    case IO::Real:	tp = TFld::Real; def = TSYS::real2str(EVAL_REAL);	break;
-	    case IO::Boolean:	tp = TFld::Boolean; def = TSYS::int2str(EVAL_BOOL);	break;
+	    case IO::String:	tp = TFld::String;	break;
+	    case IO::Integer:	tp = TFld::Integer;	break;
+	    case IO::Real:	tp = TFld::Real;	break;
+	    case IO::Boolean:	tp = TFld::Boolean;	break;
+	    case IO::Object:	tp = TFld::String;	break;
 	}
 	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
 	{
 	    if( v_el.fldPresent(aid) ) v_el.fldDel(v_el.fldId(aid));
-	    v_el.fldAdd( new TFld(aid.c_str(),"",tp,flg,"",def.c_str()) );
+	    v_el.fldAdd(new TFld(aid.c_str(),"",tp,flg));
 	}
 
 	int el_id = v_el.fldId(aid);
@@ -872,7 +872,7 @@ void Prm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod( owner().period() ? owner().period()/1e3 : 1000000 );
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

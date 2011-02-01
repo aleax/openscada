@@ -138,28 +138,28 @@ class ElFigDt : public QObject
 //* Elementary figures shape widget               *
 //*************************************************
 class ShapeElFigure : public WdgShape 
-{    
+{
     friend class ElFigDt;
     Q_OBJECT
 
     public:
 	//Public methods
 	ShapeElFigure( );
-    
+
         bool isEditable( )		{ return true; }
 
 	void init( WdgView *w );
         void destroy( WdgView *w );
-    
+
         void editEnter( WdgView *w );
         void editExit( WdgView *w );
 	void wdgPopup( WdgView *w, QMenu &menu );
-	
+
 	bool attrSet( WdgView *w, int uiPrmPos, const string &val );
-        bool shapeSave( WdgView *view );
-     
+        void shapeSave( WdgView *view );
+
 	bool event( WdgView *view, QEvent *event );
-    
+
 	//Public attributes
 	QVector<RectItem> rectItems;		//RectItem's container
 	QPainterPath 	newPath,		//Null path
@@ -169,19 +169,19 @@ class ShapeElFigure : public WdgShape
                         inundationPath,
                         dashedRectPath;
         QRect           dashedRect;
-    
+
 	bool status; 				//Check fo any primitive paint key pressed
 	int shapeType; 				//Selected figure type
-    
+
     private slots:
         void toolAct( QAction* );
-    
+
     private:
         //Data
     	//Methods
         int itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems, WdgView *w );			//Check for figure type under cursor
         void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );	//Move figure procedure
-    
+
 	QPointF rotate( const QPointF &pnt, double alpha );                                                     //Rotate the point around the centre of the widget
         QPointF unRotate( const QPointF &pnt, double alpha, double a, double b );                               //Unrotate the point around the centre of the widget
 	QPointF arc( double t, double a, double b);	                                                        //Compute the point of the arc due to the given parameter "t"
@@ -211,18 +211,18 @@ class ShapeElFigure : public WdgShape
         QPointF unScaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate );
         QPainterPath createInundationPath( const QVector<int> &in_fig_num, const QVector<ShapeItem> &shapeItems, PntMap &pnts, WdgView *w );
         QVector<int> inundationSort( const QPainterPath &inundationPath, QVector<int> &inundation_fig_num, const QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );
-      	
+
 	//Attributes
 	QPointF StartLine, EndLine,				//Start and end points for paint created figure
 		previousPosition, previousPosition_all;		//Previous position for drag point by figure moving
 	ShapeItem *itemInMotion;				//Selected (moving) figure
-    
-        bool status_hold;			
-    
+
+        bool status_hold;
+
         QVector<int> index_array;
         QVector<int> rect_array;
         QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
-            
+
 	int count_Shapes, count_moveItemTo,
 	    index, fill_index, index_temp, index_del,
 	    rect_num;
@@ -231,14 +231,14 @@ class ShapeElFigure : public WdgShape
 
         bool flag_rect, flag_arc_rect_3_4, flag_first_move, flag_move, flag_release;
         int count_rects, rect_num_arc, arc_rect;
-        bool flag_hold_move;			
+        bool flag_hold_move;
         bool flag_inund_break;
         bool flag_scale, flag_rotate;
-        double t_start, t_end;			
-	QPointF Mouse_pos, offset, pop_pos;	
-        QPoint stPointDashedRect;	
+        double t_start, t_end;
+	QPointF Mouse_pos, offset, pop_pos;
+        QPoint stPointDashedRect;
         int current_ss, current_se, current_ee, current_es;
-        int count_holds;			
+        int count_holds;
         QVector<int> arc_rect_array, fig_rect_array, vect;
         QVector< QVector<int> > map_matrix;
         QVector< QVector<int> > minroad;

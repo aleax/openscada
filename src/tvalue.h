@@ -84,9 +84,9 @@ class TVal : public TCntrNode
 	bool resB1( )	{ return mResB1; }
 	bool resB2( )	{ return mResB2; }
 
-	bool setReqFlg( bool vl )	{ mReqFlg = vl; }
-	bool setResB1( bool vl )	{ mResB1 = vl; }
-	bool setResB2( bool vl )	{ mResB2 = vl; }
+	void setReqFlg( bool vl )	{ mReqFlg = vl; }
+	void setResB1( bool vl )	{ mResB1 = vl; }
+	void setResB2( bool vl )	{ mResB2 = vl; }
 
 	TValue &owner( );
 	TFld &fld( );

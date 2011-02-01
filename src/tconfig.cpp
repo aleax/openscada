@@ -254,58 +254,63 @@ bool &TCfg::getBd( )
 
 string TCfg::getSEL( char RqFlg )
 {
-    if( !(mFld->flg()&TFld::Selected) )	throw TError("Cfg",_("Element type is not selected!"));
-    switch( mFld->type() )
+    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg",_("Element type is not selected!"));
+    switch(mFld->type())
     {
 	case TFld::String:	return mFld->selVl2Nm(getS(RqFlg));
 	case TFld::Integer:	return mFld->selVl2Nm(getI(RqFlg));
 	case TFld::Real:	return mFld->selVl2Nm(getR(RqFlg));
 	case TFld::Boolean:	return mFld->selVl2Nm(getB(RqFlg));
     }
+    return "";
 }
 
 string TCfg::getS( char RqFlg )
 {
-    switch( mFld->type() )
+    switch(mFld->type())
     {
 	case TFld::Integer:	return TSYS::int2str(getI(RqFlg));
 	case TFld::Real:	return TSYS::real2str(getR(RqFlg));
 	case TFld::Boolean:	return TSYS::int2str(getB(RqFlg));
 	case TFld::String:	return m_val.s_val->getVal();
     }
+    return "";
 }
 
 double TCfg::getR( char RqFlg )
 {
-    switch( mFld->type() )
+    switch(mFld->type())
     {
 	case TFld::String:	return atof(getS(RqFlg).c_str());
 	case TFld::Integer:	return getI(RqFlg);
 	case TFld::Boolean:	return getB(RqFlg);
 	case TFld::Real:	return m_val.r_val;
     }
+    return 0;
 }
 
 int TCfg::getI( char RqFlg )
 {
-    switch( mFld->type() )
+    switch(mFld->type())
     {
 	case TFld::String:	return atoi(getS(RqFlg).c_str());
 	case TFld::Real:	return (int)getR(RqFlg);
 	case TFld::Boolean:	return getB(RqFlg);
 	case TFld::Integer:	return m_val.i_val;
     }
+    return 0;
 }
 
 bool TCfg::getB( char RqFlg )
 {
-    switch( mFld->type() )
+    switch(mFld->type())
     {
 	case TFld::String:	return atoi(getS(RqFlg).c_str());
 	case TFld::Integer:	return getI(RqFlg);
 	case TFld::Real:	return (int)getR(RqFlg);
 	case TFld::Boolean:	return m_val.b_val;
     }
+    return false;
 }
 
 void TCfg::setSEL( const string &val, char RqFlg )

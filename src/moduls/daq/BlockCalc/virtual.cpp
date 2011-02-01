@@ -594,6 +594,7 @@ void Prm::enable()
 		case IO::Integer:	tp = TFld::Integer;	break;
 		case IO::Real:		tp = TFld::Real;	break;
 		case IO::Boolean:	tp = TFld::Boolean;	break;
+		case IO::Object:	tp = TFld::String;	break;
 	    }
 	    flg = TVal::DirWrite|TVal::DirRead;
 	    reserve = ioaddr;

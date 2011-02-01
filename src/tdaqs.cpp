@@ -362,8 +362,8 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
 
     string lcPath = req.attr("path");
     ResAlloc res(nodeRes(),false);
-    for( sit = mSt.begin(); sit != mSt.end(); sit++ )
-	if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || toRun && cit->second) )
+    for(sit = mSt.begin(); sit != mSt.end(); sit++)
+	if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || cit->second))
 	{
 	    if( prevSt.size() && !prevPresent )
 	    {

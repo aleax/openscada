@@ -28,7 +28,7 @@ endif
 
 config.status: configure
 	dh_testdir
-	./configure $(CROSS) --prefix=/usr CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)"
+	./configure $(CROSS) --prefix=/usr
 
 #Architecture
 build: build-arch build-indep

@@ -80,7 +80,7 @@ class XMLNode
 	XMLNode* setPrcInstr( const string &target, const string &val );
 
 	void	load( const string &vl );
-	string	save( unsigned char flgs = 0 );
+	string	save( unsigned flgs = 0 );
 	XMLNode* clear( );
 
 	bool	childEmpty( ) const		{ return mChildren.empty(); }
@@ -100,7 +100,7 @@ class XMLNode
 
     private:
 	//Methods
-	void save( unsigned char flg, string &xml );
+	void save( unsigned flg, string &xml );
 	void encode( const string &s, string &rez, bool text = false ) const;
 
 	static void start_element( void *data, const char *el, const char **attr );

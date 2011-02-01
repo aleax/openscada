@@ -1,3 +1,9 @@
+openscada (0.7.1-1) experimental; urgency=low
+
+  * Version 0.7.1 build Debian packages for OpenSCADA.
+
+ -- Roman Savochenko <rom_as@oscada.org>  Sat, 30 Jan 2011 14:00:00 +0200
+
 openscada (0.7.0-1) experimental; urgency=low
 
   * Version 0.7.0 build Debian packages for OpenSCADA.

@@ -276,7 +276,6 @@ void *TMdContr::AD_DSCTask( void *param )
     cntr.ad_dsc_st = true;
 
     //- DSC strucures init -
-    BYTE result;
     ERRPARAMS errorParams;
     DSCAIOINT dscaioint;
     memset(&dscaioint, 0, sizeof(DSCAIOINT));
@@ -401,7 +400,6 @@ void *TMdContr::AD_DSCTask( void *param )
 	    {
 		if( !vtm ) vtm = SYS->curTime()-1000000;
 		int v_a_step;
-		int p_cnt = p_end-p_beg+1;
 		for( int i_p = 0; i_p < ai_prm.size() && !cntr.redntUse(); i_p++ )
 		{
 		    if( !cntr.present(ai_prm[i_p]) )	continue;
@@ -428,7 +426,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		    }
 		    val.at().setR( 100.*(double)((float)rand()*20000/RAND_MAX)/32768.,vtm+((long long)convRate-1)*1000000/convRate,true);
 		}
-		vtm+=1000000;
+		vtm += 1000000;
 		get_tm.tv_sec = vtm/1000000; get_tm.tv_nsec = 1000*(vtm%1000000);
 		clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
 	    }
@@ -607,7 +605,7 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     {
 	case AO:
 	{
-	    int code;
+	    int code = 0;
 	    switch( atoi(val.fld().reserve().c_str()) )
 	    {
 		case 1:	code = (int)(4095.*val.getR(0,true)/100.);	break;
@@ -663,7 +661,7 @@ void TMdPrm::vlGet( TVal &val )
 	case AI:
 	{
 	    if(owner().ADIIntMode()) return;
-	    short gval;
+	    short gval = 0;
 	    if( enableStat() )
 	    {
 		//- Direct reading -

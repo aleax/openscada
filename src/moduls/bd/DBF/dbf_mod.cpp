@@ -215,7 +215,7 @@ void MTable::postDisable(int flag)
 	//> Set file extend
 	if( !(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf") )
 	    n_tbl=n_tbl+".dbf";
-	
+
 	if(remove((owner().addr()+"/"+n_tbl).c_str()) < 0 )
 	    mess_err(nodePath().c_str(),"%s",strerror(errno));
     }
@@ -237,7 +237,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //> Write data to cfg
-    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
@@ -275,7 +275,7 @@ void MTable::fieldGet( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //> Write data to cfg
-    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
@@ -306,7 +306,7 @@ void MTable::fieldSet( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //> Check and fix structure of table
-    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
@@ -354,7 +354,7 @@ void MTable::fieldSet( TConfig &cfg )
     db_str_rec *fld_rec;
     for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
     {
-	int i_cf;
+	unsigned i_cf;
 	for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	if( i_cf >= cf_el.size() )
@@ -365,7 +365,7 @@ void MTable::fieldSet( TConfig &cfg )
     i_ln = findKeyLine( cfg );
     if( i_ln < 0 ) i_ln = basa->CreateItems(-1);
     //> Write data to bd
-    for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
@@ -412,7 +412,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
     //> Left only keys into list
-    for( int i_cf = 0; i_cf < cf_el.size(); )
+    for( unsigned i_cf = 0; i_cf < cf_el.size(); )
 	if( cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key ) i_cf++;
 	else cf_el.erase(cf_el.begin()+i_cf);
 
@@ -420,7 +420,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
     for( i_ln = 0; i_ln < basa->GetCountItems(  ); i_ln++ )
     {
 	int cnt_key = 0;
-	for( int i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+	for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
 	{
 	    if( useKey && !cfg.cfg(cf_el[i_cf]).keyUse( ) )	{ cnt_key++; continue; }
 	    //string key = cfg.cfg(cf_el[i_cf]).name();

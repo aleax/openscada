@@ -356,7 +356,7 @@ void SyntxHighl::rule(XMLNode *rl, const QString &text, QTextCharFormat defForm,
     kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
     QRegExp expr(rl->attr("expr").c_str());
 
-    for(int index = 0, length = 0; true; index+=expr.matchedLength())
+    for(int index = 0; true; index+=expr.matchedLength())
     {
 	if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
 	if(format(index+off)!=defForm) continue;

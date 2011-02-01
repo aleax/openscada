@@ -181,8 +181,6 @@ void TSocketIn::save_( )
 
 void TSocketIn::start()
 {
-    pthread_attr_t pthr_attr;
-
     if( run_st ) return;
 
     //> Status clear
@@ -302,7 +300,7 @@ void TSocketIn::stop()
 
 void *TSocketIn::Task(void *sock_in)
 {
-    char		*buf;
+    char		*buf = NULL;
     fd_set		rd_fd;
     struct timeval	tv;
     TSocketIn *sock = (TSocketIn *)sock_in;

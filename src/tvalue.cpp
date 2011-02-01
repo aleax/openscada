@@ -328,7 +328,6 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))
 	{
-	    bool create = false;	//Create archive
 	    bool v_get = atoi(opt->text().c_str());
 	    string attr = opt->attr("key_atr");
 	    string col  = opt->attr("col");
@@ -467,19 +466,20 @@ void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
 
 string TVal::getSEL( long long *tm, bool sys )
 {
-    if( !(fld().flg()&TFld::Selected) )	throw TError("Val",_("Not select type!"));
-    switch( fld().type() )
+    if(!(fld().flg()&TFld::Selected))	throw TError("Val",_("Not select type!"));
+    switch(fld().type())
     {
 	case TFld::String:	return fld().selVl2Nm(getS(tm,sys));
 	case TFld::Integer:	return fld().selVl2Nm(getI(tm,sys));
 	case TFld::Real:	return fld().selVl2Nm(getR(tm,sys));
 	case TFld::Boolean:	return fld().selVl2Nm(getB(tm,sys));
     }
+    return EVAL_STR;
 }
 
 string TVal::getS( long long *tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::Integer:
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT)  ? TSYS::int2str(vl) : EVAL_STR; }
@@ -503,11 +503,12 @@ string TVal::getS( long long *tm, bool sys )
 	    if( tm ) *tm = time();
 	    return val.val_s->getVal();
     }
+    return EVAL_STR;
 }
 
 int TVal::getI( long long *tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::String:
 	{ string vl = getS(tm,sys);	return (vl!=EVAL_STR) ? atoi(vl.c_str()) : EVAL_INT; }
@@ -531,11 +532,12 @@ int TVal::getI( long long *tm, bool sys )
 	    if( tm ) *tm = time();
 	    return val.val_i;
     }
+    return EVAL_INT;
 }
 
 double TVal::getR( long long *tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::String:
 	{ string vl = getS(tm,sys);	return (vl!=EVAL_STR) ? atof(vl.c_str()) : EVAL_REAL; }
@@ -559,11 +561,12 @@ double TVal::getR( long long *tm, bool sys )
 	    if( tm ) *tm = time();
 	    return val.val_r;
     }
+    return EVAL_REAL;
 }
 
 char TVal::getB( long long *tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::String:
 	{ string vl = getS(tm,sys);	return (vl!=EVAL_STR) ? (bool)atoi(vl.c_str()) : EVAL_BOOL; }
@@ -587,6 +590,7 @@ char TVal::getB( long long *tm, bool sys )
 	    if( tm ) *tm = time();
 	    return val.val_b;
     }
+    return EVAL_BOOL;
 }
 
 void TVal::setSEL( const string &value, long long tm, bool sys )

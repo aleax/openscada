@@ -544,7 +544,6 @@ void LibProjProp::tabChanged( int itb )
 	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));
 	if( !owner()->cntrIfCmd(req) )
 	{
-	    QTableWidgetItem *w_it;
 	    XMLNode *id_col = req.childGet(0);
 	    mimeDataTable->setRowCount(id_col->childSize());
 	    for( int i_l = 0; i_l < id_col->childSize(); i_l++ )
@@ -1658,7 +1657,6 @@ QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOpti
     QWidget *w_del = NULL;
     if(!index.isValid()) return 0;
 
-    int flg = index.model()->index(index.row(),0,index.parent()).data(Qt::UserRole).toInt();
     QVariant value = index.data(Qt::EditRole);
 
     if( index.parent().isValid() )

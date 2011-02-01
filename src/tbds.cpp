@@ -123,7 +123,6 @@ void TBDS::closeOldTables( int secOld )
 
 AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 {
-    bool bd_op = false;
     AutoHD<TTable> tbl;
 
     try
@@ -328,7 +327,7 @@ bool TBDS::dataDel( const string &bdn, const string &path, TConfig &cfg, bool us
 			cfg.cfg(cels[i_el]).setKeyUse(true);
 		    else { cels.erase(cels.begin()+i_el); i_el--; }
 	    }
-	
+
 	    tbl.at().fieldDel(cfg);
 
 	    //> Restore not using keys selection
@@ -926,7 +925,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
 	    XMLNode *tbl;
-	    if(tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRW__,"root",SDB_ID,1,"s_com","add,del"))
+	    if((tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRW__,"root",SDB_ID,1,"s_com","add,del")))
 	    {
 		TConfig req;
 		try{ fieldStruct(req); } catch(...) { }

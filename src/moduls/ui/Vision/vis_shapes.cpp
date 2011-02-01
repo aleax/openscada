@@ -170,8 +170,8 @@ QFont WdgShape::getFont( const string &val, float fsc, bool pixSize )
     int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
     sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
     rez.setFamily(QString(family).replace(QRegExp("_")," "));
-    if( pixSize ) rez.setPixelSize( fsc*size );
-    else rez.setPointSize( fsc*size );
+    if( pixSize ) rez.setPixelSize((int)(fsc*(float)size));
+    else rez.setPointSize((int)(fsc*(float)size));
     rez.setBold(bold);
     rez.setItalic(italic);
     rez.setUnderline(underline);
@@ -205,7 +205,7 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl")
 
 void ShapeFormEl::init( WdgView *w )
 {
-    QVBoxLayout *lay = new QVBoxLayout(w);
+    new QVBoxLayout(w);
     w->shpData = new ShpDt();
 }
 
@@ -1476,8 +1476,6 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
     //> Get generic parameters
     long long tSize = (long long)(1e6*shD->tSize);			//Time size (us)
-    long long tEnd  = shD->tTime;					//Time end point (us)
-    long long tBeg  = tEnd - tSize;					//Time begin point (us)
     if( shD->prms.empty() || tSize <= 0 ) return;
 
     //> Make decoration and prepare trends area
@@ -1542,7 +1540,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		pnt.setPen(mrkPen);
 		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
 
-		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(labH.c_str()).width();
+		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(labH.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,labH.c_str());
 	    }
@@ -1559,9 +1557,9 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		{
 		    pnt.setPen(mrkPen);
 		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
-		    int wdth = pnt.fontMetrics().boundingRect(labH.c_str()).width();
+		    int wdth = pnt.fontMetrics().width(labH.c_str());
 		    int tpos = vmax(h_pos-wdth/2,0);
-		    if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
+		    if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
 			pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, labH.c_str() );
 		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
 		}
@@ -1611,7 +1609,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     }
 
     //>> Vertical scale and offset apply
-    bool isScale = (abs(shD->sclVerSclOff) > 1 || abs(shD->sclVerScl-100) > 1);
+    bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
     if( isScale )
     {
 	float vsDif = vsMax - vsMin;
@@ -1824,10 +1822,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
-		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_tm.c_str()).width();
+		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_tm.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,lab_tm.c_str());
-		markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().boundingRect(lab_dt.c_str()).width();
+		markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_dt.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt.c_str());
 	    }
@@ -1875,9 +1873,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    pnt.setPen(mrkPen);
 		    if( lab_tm.size() )
 		    {
-			wdth = pnt.fontMetrics().boundingRect(lab_tm.c_str()).width();
+			wdth = pnt.fontMetrics().width(lab_tm.c_str());
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
+			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
 			{
 			    pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str() );
 			    endPosTm = tpos+wdth;
@@ -1885,9 +1883,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    }
 		    if( lab_dt.size() )
 		    {
-			wdth = pnt.fontMetrics().boundingRect(lab_dt.c_str()).width();
+			wdth = pnt.fontMetrics().width(lab_dt.c_str());
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
+			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
 			{
 			    pnt.drawText( tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str() );
 			    endPosDt = tpos+wdth;
@@ -1960,7 +1958,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
 
     //>> Vertical scale and offset apply
-    bool isScale = (abs(shD->sclVerSclOff) > 1 || abs(shD->sclVerScl-100) > 1);
+    bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
     if( isScale )
     {
 	float vsDif = vsMax - vsMin;
@@ -2046,8 +2044,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 	//>>> Draw trend
 	bool end_vl = false;
-	double curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
-	int    curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos;
+	double curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
+	int    curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos = 0;
 	long long curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
@@ -2148,12 +2146,12 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    long long t_cnt = TSYS::curTime();
 #endif
 	    QPainter pnt( w );
-	
+
 	    //> Decoration draw
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
-	
+
 	    //> Draw decoration
 	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
 	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
@@ -2549,7 +2547,6 @@ void ShapeProtocol::init( WdgView *w )
     shD->addrWdg = new QTableWidget(w);
     shD->addrWdg->setSelectionBehavior(QAbstractItemView::SelectRows);
     //shD->addrWdg->setSortingEnabled(true);
-    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     eventFilterSet(w,shD->addrWdg,true);
     w->setFocusProxy( shD->addrWdg );
     if( qobject_cast<DevelWdgView*>(w) ) setFocus(w,shD->addrWdg,false,true);
@@ -2965,7 +2962,8 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseButtonRelease:
 	    case QEvent::MouseButtonDblClick:
 		QApplication::sendEvent(w,event);
-	    return true;
+		return true;
+	    default: break;
 	}
     else
 	switch( event->type() )
@@ -2978,6 +2976,7 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		w->attrSet("focus","0");
 		w->attrSet("event","ws_FocusOut");
 		break;
+	    default: break;
 	}
 
     return false;
@@ -3057,7 +3056,6 @@ void ShapeDocument::destroy( WdgView *w )
 bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
-    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
 
     bool relDoc = false;	//Reload configuration
@@ -3165,6 +3163,7 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::Wheel:
 		QApplication::sendEvent(w,event);
 		return true;
+	    default: break;
 	}
     else
 	switch( event->type() )
@@ -3177,6 +3176,7 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		w->attrSet("focus","0");
 		w->attrSet("event","ws_FocusOut");
 		break;
+	    default: break;
 	}
 
     return false;
@@ -3400,14 +3400,14 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 bool ShapeBox::event( WdgView *w, QEvent *event )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
-    if( !shD->en ) return false;
+    if(!shD->en) return false;
 
     switch(event->type())
     {
 	case QEvent::Paint:
 	{
-	    if( shD->inclWidget ) return false;
-	    QPainter pnt( w );
+	    if(shD->inclWidget) return false;
+	    QPainter pnt(w);
 
 	    //> Apply margin
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
@@ -3415,19 +3415,20 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
 	    //> Draw background
-	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
-	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
+	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dA,shD->backGrnd.color());
+	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
 	    //> Draw border
-	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
+	    borderDraw(pnt, dA, shD->border, shD->bordStyle);
 
 	    //> Draw focused border
-	    //if( w->hasFocus() )	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
+	    //if(w->hasFocus())	qDrawShadeRect(&pnt,dA,w->palette(),false,1);
 
 	    return true;
 	}
 	//case QEvent::User:
-	//    if( shD->inclWidget ) shD->inclWidget->update();
+	//    if(shD->inclWidget) shD->inclWidget->update();
+	default: return false;
     }
     return false;
 }

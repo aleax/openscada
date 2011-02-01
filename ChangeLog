@@ -1,3 +1,33 @@
+2011-02-01 Roman
+- SYS: Build with all warning show is enabled for RPM-packages.
+- SYS: The default start OpenSCADA scripts "openscada_start" "openscada_demo" and "openscada_demo_local" is adapted
+    for use simple shell and don't use tool install, on busybox.
+- FIX:SYS: Code clear for all source code:
+    - remove not used variables;
+    - add returns for all functions with return;
+    - init variables which possible used undefined;
+    - not full enumerated variables processing into switches;
+    - signed and unsigned comparision.
+- FIX:Archive: The prototype of functions TArchiveS::messPut() and TArchiveS::messGet() is changed for fix signed
+    message level on ARM CPUs.
+- FIX:SYS: The prototype of functions TMess::put(), TMess::get(), TCntrNode::grpSize(), TCntrNode::grpId(), TCntrNode::grpAt()
+    is changed for fix unsigned char on ARM CPUs.
+- FIX:DAQ: DAQ-redundant logic some fixed.
+- FIX:Mess: Default language select logic is some fixed.
+- FIX:Transport: All transports loading is fixed for missed some transport modules and DB records for its allow.
+- FIX:Value: The prototype of functions TValue::setReqFlg(), TValue::setResB1() and TValue::setResB2() is fixed for no return.
+- FIX:XML: Expanded variable size for flags of functions XMLNode::save().
+- FIX:Archive.FSArch: Result from fgetc() is writed to integer without char and fix "EOF" detection.
+    File detect is fixed into ModVArchEl::fileAdd().
+- FIX:DB.MySQL: case TFld::String missing is fixed into switch of function MTable::fieldFix().
+- FIX:DAQ.JavaLikeCalc: Rezult value type set is fixed for unary operations.
+    The function string::parsePath() of user API is fixed for offset use.
+    Possible disabling functions for return operations.
+- Protocol.SelfSystem: Enter value limits is set to main configuration parameters of the module.
+- FIX:UI.Vision: For get painted text width used fontMetrics().width() without fontMetrics().boundingRect(lab_tm.c_str()).width() for
+    prevent some fluctuations.
+
+
 2011-01-26 Roman
 - SYS: RPM packages build spec-files is updated for translation update and expand openscada_mod.spec separated
     package "openscada-core" build and use main package for typical installation.

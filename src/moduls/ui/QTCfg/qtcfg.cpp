@@ -910,8 +910,6 @@ void ConfApp::selectPage( const string &path )
 
 void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget )
 {
-    QVBoxLayout *layout;
-
     //> For append no named widgets
     QHBoxLayout *l_hbox = NULL;
     int		i_area = 0;	//Areas counter
@@ -2315,7 +2313,6 @@ void ConfApp::initHosts( )
 //*************************************************
 void ConfApp::checkBoxStChange( int stat )
 {
-    XMLNode *n_el;
     QCheckBox *box = (QCheckBox *)sender();
 
     if( stat==Qt::PartiallyChecked ) return;
@@ -2509,7 +2506,6 @@ void ConfApp::listBoxPopup( )
 
 	if(last_it)
 	{
-	    bool ok;
 	    string p_text, p_id;
 	    string text, id;
 	    bool ind_m = atoi(n_el->attr("idm").c_str());
@@ -2525,7 +2521,7 @@ void ConfApp::listBoxPopup( )
 		    mod->postMess(x_lst.attr("x_lst"),x_lst.text(),TUIMod::Error,this);
 		    return;
 		}
-		
+
 		p_text = item->text().toAscii().data();
 		if( ind_m )
 		    for( int i_el = 0; i_el < x_lst.childSize(); i_el++ )
@@ -2635,14 +2631,14 @@ void ConfApp::tablePopup( const QPoint &pos )
     string el_path = sel_path+"/"+tbl->objectName().toAscii().data();
 
     QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy;
-    last_it=actAdd=actIns=actDel=actMoveUp=actMoveDown=NULL;
+    last_it=actAdd=actIns=actDel=actMoveUp=actMoveDown=actCopy=NULL;
 
     int row = tbl->currentRow();
 
     try
     {
 	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(tbl->objectName().toAscii().data(),TSYS::PathEl) );
-	
+
 	if( (atoi(n_el->attr("acs").c_str())&SEC_WR) && n_el->attr("s_com").size() )
 	{
 	    if( n_el->attr("s_com").find("add") != string::npos )
@@ -2678,7 +2674,6 @@ void ConfApp::tablePopup( const QPoint &pos )
 
 	if( last_it )
 	{
-	    bool ok;
 	    QString text;
 
 	    QAction *rez = popup.exec(QCursor::pos());

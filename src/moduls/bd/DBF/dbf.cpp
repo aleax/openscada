@@ -163,7 +163,7 @@ int TBasaDBF::LoadFields( db_str_rec * fields, int number )
 
 int TBasaDBF::DelField( int pos )
 {
-    int number, rec_len = 1, i, len_fild;
+    int number, rec_len = 1, i, len_fild = 0;
     db_str_rec *field_ptr;
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );
@@ -201,7 +201,7 @@ int TBasaDBF::DelField( int pos )
 
 int TBasaDBF::DelField( char *NameField )
 {
-    int number, rec_len = 1, i, pos, len_fild;
+    int number, rec_len = 1, i, pos = -1, len_fild = 0;
     db_str_rec *field_ptr;
 
     number = ( db_head_ptr->len_head - sizeof( db_head ) - 2 ) / sizeof( db_str_rec );

@@ -1640,6 +1640,7 @@ string Attr::getSEL( bool sys )
 	case TFld::Real:	return fld().selVl2Nm(getR(sys));
 	case TFld::Boolean:	return fld().selVl2Nm(getB(sys));
     }
+    return EVAL_STR;
 }
 
 string Attr::getS( bool sys )
@@ -1654,6 +1655,7 @@ string Attr::getS( bool sys )
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
 	case TFld::String:	return *m_val.s_val;
     }
+    return EVAL_STR;
 }
 
 int Attr::getI( bool sys )
@@ -1667,6 +1669,7 @@ int Attr::getI( bool sys )
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
 	case TFld::Integer:	return m_val.i_val;
     }
+    return EVAL_INT;
 }
 
 double Attr::getR( bool sys )
@@ -1680,6 +1683,7 @@ double Attr::getR( bool sys )
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
 	case TFld::Real:	return m_val.r_val;
     }
+    return EVAL_REAL;
 }
 
 char Attr::getB( bool sys )
@@ -1693,6 +1697,7 @@ char Attr::getB( bool sys )
 	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
 	case TFld::Boolean:	return m_val.b_val;
     }
+    return EVAL_BOOL;
 }
 
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )

@@ -172,8 +172,6 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 
 bool TTpContr::drvCIFOK()
 {
-    int sRet;
-
     if(drv_CIF_OK) return drv_CIF_OK;
     drv_CIF_OK = (DevOpenDriver()==DRV_NO_ERROR);
 
@@ -1070,7 +1068,6 @@ double TMdContr::getValR( SValData ival, ResString &err )
 string TMdContr::getValS( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::String, ival.sz );
-    char buf[iv_sz];
     for(int i_b = 0; i_b < acqBlks.size(); i_b++)
 	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
 	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
@@ -1369,7 +1366,7 @@ void TMdPrm::enable()
 	    if( (func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
 		!vlPresent(func()->io(i_io)->id()) )
 	    {
-		TFld::Type tp;
+		TFld::Type tp = TFld::String;
 		unsigned flg = TVal::DirWrite|TVal::DirRead;
 
 		switch( ioType(i_io) )

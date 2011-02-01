@@ -194,7 +194,7 @@ void ModArch::Task( union sigval obj )
     vector<string> a_list;
     //> Check message archivators
     arh->messList(a_list);
-    for( int i_a = 0; i_a < a_list.size(); i_a++ )
+    for( unsigned i_a = 0; i_a < a_list.size(); i_a++ )
 	if( arh->messAt(a_list[i_a]).at().startStat( ) )
 	    try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
 	    catch(TError err)
@@ -205,7 +205,7 @@ void ModArch::Task( union sigval obj )
 
     //> Check value archivators
     arh->valList(a_list);
-    for( int i_a = 0; i_a < a_list.size(); i_a++ )
+    for( unsigned i_a = 0; i_a < a_list.size(); i_a++ )
 	if( arh->valAt(a_list[i_a]).at().startStat( ) )
 	    try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
 	    catch(TError err)

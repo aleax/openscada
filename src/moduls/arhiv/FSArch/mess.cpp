@@ -36,9 +36,9 @@ using namespace FSArch;
 //* FSArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), tmCalc(0.0), mLstCheck(0),
+    TMArchivator(iid,idb,cf_el), mAPrms(cfg("A_PRMS").getSd()),
     mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mPrevDbl(false),
-    mAPrms(cfg("A_PRMS").getSd())
+    tmCalc(0.0), mLstCheck(0)
 {
 
 }
@@ -108,8 +108,8 @@ void ModMArch::stop()
 time_t ModMArch::begin()
 {
     ResAlloc res( mRes, false );
-    for( int i_arh = arh_s.size()-1; i_arh >= 0; i_arh-- ) 
-	if( !arh_s[i_arh]->err() ) return arh_s[i_arh]->begin();
+    for(int i_arh = arh_s.size()-1; i_arh >= 0; i_arh--)
+	if(!arh_s[i_arh]->err()) return arh_s[i_arh]->begin();
 
     return 0;
 }
@@ -117,7 +117,7 @@ time_t ModMArch::begin()
 time_t ModMArch::end()
 {
     ResAlloc res( mRes, false );
-    for( int i_arh = 0; i_arh < arh_s.size(); i_arh++ )
+    for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++ )
 	if( !arh_s[i_arh]->err() ) return arh_s[i_arh]->end();
 
     return 0;
@@ -135,7 +135,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     {
 	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 	int i_arh;
-	for(i_arh = 0; i_arh < arh_s.size(); i_arh++)
+	for(i_arh = 0; i_arh < (int)arh_s.size(); i_arh++)
 	    if(!arh_s[i_arh]->err() && mess[i_m].time >= arh_s[i_arh]->begin())
 	    {
 		if(mess[i_m].time > arh_s[i_arh]->end() &&
@@ -152,7 +152,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	{
 	    res.request(true);
 	    time_t f_beg = mess[i_m].time;
-	    if(i_arh < arh_s.size() && f_beg > arh_s[i_arh]->end() && (f_beg-arh_s[i_arh]->end()) < (mTimeSize*24*60*60/3))
+	    if(i_arh < (int)arh_s.size() && f_beg > arh_s[i_arh]->end() && (f_beg-arh_s[i_arh]->end()) < (mTimeSize*24*60*60/3))
 		f_beg = arh_s[i_arh]->end()+1;
 	    if(i_arh && arh_s[i_arh-1]->begin() > f_beg && (arh_s[i_arh-1]->begin()-f_beg) < (mTimeSize*24*60*60*2/3))
 		f_beg = arh_s[i_arh-1]->begin()-mTimeSize*24*60*60;
@@ -161,8 +161,8 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	    try
 	    {
 		MFileArch *f_obj = new MFileArch(addr()+f_name, f_beg, this, Mess->charset(), useXML());
-		if(i_arh == arh_s.size()) arh_s.push_back(f_obj);
-		else if(i_arh < arh_s.size()) arh_s.insert(arh_s.begin()+i_arh,f_obj);
+		if(i_arh == (int)arh_s.size()) arh_s.push_back(f_obj);
+		else if(i_arh < (int)arh_s.size()) arh_s.insert(arh_s.begin()+i_arh,f_obj);
 		else return;
 	    }
 	    catch(TError err)
@@ -222,7 +222,7 @@ void ModMArch::checkArchivator( bool now )
 	    //>> Check for info files
 	    if( NameArhFile.compare(NameArhFile.size()-4,4,".msg") != 0 && NameArhFile.compare(NameArhFile.size()-7,7,".msg.gz") != 0 ) continue;
 	    //>> Check all files
-	    int i_arh;
+	    unsigned i_arh;
 	    res.request(false);
 	    for( i_arh = 0; i_arh < arh_s.size(); i_arh++)
 		if( arh_s[i_arh]->name() == NameArhFile )
@@ -245,7 +245,6 @@ void ModMArch::checkArchivator( bool now )
 		if( f_arh->err() )	arh_s.push_back( f_arh );
 		else
 		{
-		    int i_arh;
 		    for( i_arh = 0; i_arh < arh_s.size(); i_arh++)
 			if( arh_s[i_arh]->err() || f_arh->begin() >= arh_s[i_arh]->begin() )
 			{
@@ -275,7 +274,7 @@ void ModMArch::checkArchivator( bool now )
 	if( mNumbFiles )
 	{
 	    int f_cnt = 0;	//Work files number
-	    for( int i_arh = 0; i_arh < arh_s.size(); i_arh++)
+	    for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
 		if( !arh_s[i_arh]->err() ) f_cnt++;
 	    if( f_cnt > mNumbFiles )
 	    {
@@ -298,7 +297,7 @@ void ModMArch::checkArchivator( bool now )
 
     //> Call files checking
     ResAlloc res(mRes,false);
-    for( int i_arh = 0; i_arh < arh_s.size(); i_arh++)
+    for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
         arh_s[i_arh]->check();
 }
 
@@ -389,16 +388,16 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 //* FSArch::MFileArch - Messages archivator file  *
 //*************************************************
 MFileArch::MFileArch( ModMArch *owner ) :
-    mXML(true), mOwner(owner), scan(false), mErr(false), mWrite(false), mLoad(false), mPack(false),
-    mSize(0), mChars("UTF-8"), mBeg(0), mEnd(0), mNode(NULL)
+    scan(false), mXML(true), mSize(0), mChars("UTF-8"), mErr(false), mWrite(false), mLoad(false), mPack(false),
+    mBeg(0), mEnd(0), mNode(NULL), mOwner(owner)
 {
     cach_pr.tm = cach_pr.off = 0;
     mAcces = time(NULL);
 }
 
 MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const string &icharset, bool ixml ) :
-    mXML(ixml), mOwner(iowner), scan(false), mErr(false), mWrite(false), mLoad(false), mPack(false),
-    mSize(0), mName(iname), mChars(icharset), mBeg(ibeg), mEnd(ibeg), mNode(NULL)
+    scan(false), mName(iname), mXML(ixml), mSize(0), mChars(icharset), mErr(false), mWrite(false), mLoad(false), mPack(false),
+    mBeg(ibeg), mEnd(ibeg), mNode(NULL), mOwner(iowner)
 {
     cach_pr.tm = cach_pr.off = 0;
 
@@ -464,7 +463,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    if( hd > 0 )
 	    {
 		int rsz = read(hd,buf,sizeof(buf));
-		if(rsz > 0 && rsz < sizeof(buf))
+		if(rsz > 0 && rsz < (int)sizeof(buf))
 		{
 		    buf[rsz] = 0;
 		    char bChars[21];
@@ -534,7 +533,7 @@ void MFileArch::attach( const string &iname, bool full )
 		string s_buf;
 
 		//>> Read full file to buffer
-		while(r_cnt = fread(buf,1,sizeof(buf),f))
+		while((r_cnt=fread(buf,1,sizeof(buf),f)))
 		    s_buf.append(buf,r_cnt);
 		fclose(f); f = NULL;
 
@@ -559,13 +558,13 @@ void MFileArch::attach( const string &iname, bool full )
 	    else
 	    {
 		//>> Process only archive header
-		char c;
+		int c;
 		string prm, val;
 
 		do
 		{
-		    while( (c = fgetc(f)) != '<' && c != EOF );
-		    if( c == EOF )
+		    while((c=fgetc(f)) != '<' && c != EOF);
+		    if(c == EOF)
 		    {
 			mess_err(owner().nodePath().c_str(),_("Archive <%s> file error."),name().c_str());
 			mErr = true;
@@ -573,25 +572,25 @@ void MFileArch::attach( const string &iname, bool full )
 			return;
 		    }
 		    prm.clear();
-		    while( (c = fgetc(f)) != ' ' && c != '\t' && c != '>' && c != EOF ) prm+=c;
-		    if( c == EOF )
+		    while((c=fgetc(f)) != ' ' && c != '\t' && c != '>' && c != EOF) prm += c;
+		    if(c == EOF)
 		    {
 			mess_err(owner().nodePath().c_str(),_("Archive <%s> file error."),name().c_str());
 			mErr = true;
 			fclose(f);
 			return;
 		    }
-		} while( prm != mod->modId() );
+		} while(prm != mod->modId());
 		//>> Go to
-		while( true )
+		while(true)
 		{
 		    prm.clear();
 		    val.clear();
-		    while( (c = fgetc(f)) == ' ' || c == '\t' );
-		    if( c == '>' || c == EOF ) break;
-		    while( c != '=' && c != '>' && c != EOF )	{ prm+=c; c = fgetc(f); }
-		    while( (c = fgetc(f)) != '"' && c != '>' && c != EOF );
-		    while( (c = fgetc(f)) != '"' && c != '>' && c != EOF )  val+=c;
+		    while((c=fgetc(f)) == ' ' || c == '\t');
+		    if(c == '>' || c == EOF) break;
+		    while(c != '=' && c != '>' && c != EOF)	{ prm += c; c = fgetc(f); }
+		    while((c=fgetc(f)) != '"' && c != '>' && c != EOF);
+		    while((c=fgetc(f)) != '"' && c != '>' && c != EOF)  val += c;
 
 		    if( prm == "Begin" )	mBeg = strtol(val.c_str(),NULL,16);
 		    else if( prm == "End" )	mEnd = strtol(val.c_str(),NULL,16);
@@ -693,8 +692,8 @@ void MFileArch::put( TMess::SRec mess )
 	    while(fgets(buf,sizeof(buf),f) != NULL)
 	    {
 		sscanf(buf,"%x %*d",&tTm);
-		if(tTm > mess.time) { mv_beg = ftell(f)-strlen(buf); break; }
-		if(tTm == mess.time && s_buf == buf) { fclose(f); return; }
+		if((int)tTm > mess.time) { mv_beg = ftell(f)-strlen(buf); break; }
+		if((int)tTm == mess.time && s_buf == buf) { fclose(f); return; }
 	    }
 	    fseek(f,0,SEEK_SET);
 	}
@@ -730,9 +729,9 @@ void MFileArch::put( TMess::SRec mess )
 		while(!mv_beg && fgets(buf,sizeof(buf),f) != NULL)
 		{
 		    sscanf(buf,"%x %*d",&tTm);
-		    if(tTm > mess.time) mv_beg = ftell(f)-strlen(buf);
+		    if((int)tTm > mess.time) mv_beg = ftell(f)-strlen(buf);
 		    //>>> Add too big position to cache
-		    else if((pass_cnt++) > CACHE_POS && tTm != last_tm)
+		    else if((pass_cnt++) > CACHE_POS && (int)tTm != last_tm)
 		    {
 			cacheSet(tTm,ftell(f)-strlen(buf));
 			pass_cnt = 0;
@@ -747,7 +746,7 @@ void MFileArch::put( TMess::SRec mess )
 		int beg_cur;
 		do
 		{
-		    beg_cur = ((mv_end-mv_beg)>=sizeof(buf))?mv_end-sizeof(buf):mv_beg;
+		    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf))?mv_end-sizeof(buf):mv_beg;
 		    fseek(f,beg_cur,SEEK_SET);
 		    fread(buf,mv_end-beg_cur,1,f);
 		    fseek(f,beg_cur+s_buf.size(),SEEK_SET);
@@ -941,7 +940,7 @@ void MFileArch::cacheSet( time_t tm, long off, bool last )
 
     if( !last )
     {
-	for( int i_c = 0; i_c < cache.size(); i_c++ )
+	for( unsigned i_c = 0; i_c < cache.size(); i_c++ )
 	    if( el.tm == cache[i_c].tm )	{ cache[i_c] = el; return; }
 	    else if( el.tm < cache[i_c].tm )	{ cache.insert(cache.begin()+i_c,el); return; }
 	cache.push_back(el);
@@ -951,7 +950,7 @@ void MFileArch::cacheSet( time_t tm, long off, bool last )
 
 void MFileArch::cacheUpdate( time_t tm, long v_add )
 {
-    for( int i_c = 0; i_c < cache.size(); i_c++ )
-	if( cache[i_c].tm > tm ) cache[i_c].off+=v_add;
+    for( unsigned i_c = 0; i_c < cache.size(); i_c++ )
+	if( cache[i_c].tm > tm ) cache[i_c].off += v_add;
     if( cach_pr.tm > tm ) cach_pr.off += v_add;
 }

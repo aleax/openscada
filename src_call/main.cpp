@@ -29,7 +29,7 @@ using namespace OSCADA;
 
 int main(int argc, char *argv[], char *envp[] )
 {
-    int rez = 0, i_krn = 0;
+    int rez = 0;
 
     //Check demon mode start
     int next_opt;

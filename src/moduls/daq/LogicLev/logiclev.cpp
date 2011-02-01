@@ -464,7 +464,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 	    for( int i_l = 0; i_l < list.size(); i_l++ )
 		if( !vlPresent(list[i_l]) )
 		    p_el.fldAdd( new TFld(list[i_l].c_str(),prm_refl->at().vlAt(list[i_l]).at().fld().descr().c_str(),
-			prm_refl->at().vlAt(list[i_l]).at().fld().type(),TVal::DirWrite|TVal::DirRead|(prm_refl->at().vlAt(list[i_l]).at().fld().flg())&TFld::NoWrite) );
+			prm_refl->at().vlAt(list[i_l]).at().fld().type(),TVal::DirWrite|TVal::DirRead|(prm_refl->at().vlAt(list[i_l]).at().fld().flg()&TFld::NoWrite)) );
 	}catch(...)
 	{
 	    m_wmode = Free;
@@ -496,7 +496,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 		if( (tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
 		    !vlPresent(tmpl->val.func()->io(i_io)->id()) )
 		{
-		    TFld::Type tp;
+		    TFld::Type tp = TFld::String;
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
 
 		    switch( tmpl->val.ioType(i_io) )

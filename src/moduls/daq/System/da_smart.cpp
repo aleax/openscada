@@ -109,24 +109,8 @@ void HddSmart::getVal( TMdPrm *prm )
     unsigned long val;
     char buf[256];
     char name[31];
-    char info[51];
 
     string dev = prm->cfg("SUBT").getS();
-
-    //- SMART Hdd info -
-    /*string cmd = "/usr/sbin/smartctl -i /dev/"+dev;
-    FILE *fp = popen(cmd.c_str(),"r");
-    if( fp )
-    {
-	while( fgets(buf,sizeof(buf),fp) != NULL )
-	{
-	    if( sscanf(buf,"%30s : %50s",name,info) != 2 ) continue;
-	    if(!prm->vlPresent(name))
-                fldAdd( new TFld(name,name,TFld::String,Fld::NoWrite) );
-	    prm->vlAt(name).at().setS(info,NULL,true);
-	}
-	fclose(fp);
-    }*/
 
     //> SMART attributes
     string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");

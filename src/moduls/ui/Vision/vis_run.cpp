@@ -1262,7 +1262,6 @@ void VisRun::updatePage( )
     }
 
     //> Old pages from cache for close checking
-    RunWdgView *pg = NULL;
     for( int i_pg = 0; i_pg < cache_pg.size(); i_pg++ )
 	if( mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (int)(mod->cachePgLife()*60*60) )
 	{

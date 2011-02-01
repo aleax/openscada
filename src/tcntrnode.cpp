@@ -334,9 +334,9 @@ unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
     return g_id;
 }
 
-char TCntrNode::grpSize( )	{ return chGrp ? chGrp->size() : 0; }
+int8_t TCntrNode::grpSize( )	{ return chGrp ? chGrp->size() : 0; }
 
-char TCntrNode::grpId( const string &sid )
+int8_t TCntrNode::grpId( const string &sid )
 {
     for( int g_id = 0; chGrp && g_id < chGrp->size(); g_id++ )
 	if( (*chGrp)[g_id].id == sid )	return g_id;
@@ -344,7 +344,7 @@ char TCntrNode::grpId( const string &sid )
     return -1;
 }
 
-TCntrNode::GrpEl &TCntrNode::grpAt( char iid )
+TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
 {
     if( iid < 0 || iid >= grpSize( ) )	throw TError(nodePath().c_str(),_("Branche group '%d' error."),iid);
     return (*chGrp)[iid];
@@ -744,6 +744,8 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
 	obj = obj1;
     }
     obj->parent()->childDel(obj);
+
+    return true;
 }
 
 bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode, const char *warn )

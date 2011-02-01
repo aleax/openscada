@@ -377,9 +377,9 @@ int TModSchedul::libLoad( const string &iname, bool full )
     ScanDir(iname, files);
 
     //> Add and process allowed modules
-    for(int i_f = 0; i_f < files.size(); i_f++)
+    for(unsigned i_f = 0; i_f < files.size(); i_f++)
     {
-	int i_sh;
+	unsigned i_sh;
 	bool st_auto = chkAllowMod(files[i_f]);
 	ResAlloc res(nodeRes(),false);
 	for(i_sh = 0; i_sh < SchHD.size(); i_sh++)

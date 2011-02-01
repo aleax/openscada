@@ -304,7 +304,7 @@ namespace VISION
 	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 	    virtual string resGet( const string &res );
 
-	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ };
+	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ return 1; };
 
             //Attributes
 	    void	*shpData;	//Shape data link

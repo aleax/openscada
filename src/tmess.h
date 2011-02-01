@@ -22,6 +22,7 @@
 #ifndef TMESSAGE_H
 #define TMESSAGE_H
 
+#include <stdint.h>
 #include <stdio.h>
 
 #include <string>
@@ -103,8 +104,8 @@ class TMess
 	void setLogDirect( int dir );
 	void setMessLevel( int level );
 
-	void put( const char *categ, char level, const char *fmt,  ... );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", char level = Debug );
+	void put( const char *categ, int8_t level, const char *fmt,  ... );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	//> Often used, generic text messages
 	static const char *labDB( );

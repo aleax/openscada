@@ -53,7 +53,7 @@ class TProtocolIn : public TCntrNode
 
 	//> Process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
-	{ answer = ""; }
+	{ answer = ""; return false; }
 
 	TProtocol &owner( );
 

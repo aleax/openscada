@@ -50,6 +50,8 @@ TCntrNode &TPrmTempl::operator=( TCntrNode &node )
     m_id = tid;
 
     if( src_n->startStat( ) && !startStat( ) )  setStart( true );
+
+    return *this;
 }
 
 void TPrmTempl::postEnable( int flag )

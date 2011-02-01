@@ -461,7 +461,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		    setAttr("user",ses.user);
 		if( cntrIfCmd(x_lst) ) ses.mess.push_back(x_lst.text().c_str());
 
-		for( unsigned i_el = 0, c_el = 0; i_el < x_lst.childSize(); i_el++ )
+		for( unsigned i_el = 0; i_el < x_lst.childSize(); i_el++ )
 		    if( x_lst.childGet(i_el)->name() == "el")
 		    {
 			bool ind_ok = x_lst.childGet(i_el)->attr("id").size();  //Index present
@@ -676,7 +676,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		    if( t_linf->attr("select").empty() )
 		    {
 			string s_nm;
-			for( int ls_off = 0, id_off = 0, i_ls = 0; !(s_nm=TSYS::strSepParse(t_linf->attr("sel_list"),0,';',&ls_off)).empty(); i_ls++ )
+			for( int ls_off = 0, i_ls = 0; !(s_nm=TSYS::strSepParse(t_linf->attr("sel_list"),0,';',&ls_off)).empty(); i_ls++ )
 			{
 			    if( u_ind ) ses.page = ses.page+"<option value='"+TSYS::strSepParse(t_linf->attr("sel_id"),i_ls,';')+"'";
 			    else ses.page = ses.page+"<option value='"+s_nm+"'";
@@ -701,7 +701,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 			{
 			    if( u_ind ) ses.page = ses.page+"<option value='"+x_lst.childGet(i_ls)->attr("id")+"'";
 			    else ses.page = ses.page+"<option value='"+x_lst.childGet(i_ls)->text()+"'";
-			
+
 			    if( (u_ind && x_lst.childGet(i_ls)->attr("id") == x_el->text()) ||
 				(!u_ind && x_lst.childGet(i_ls)->text() == x_el->text()) )
 			    {
@@ -775,10 +775,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	ses.root = ses.pg_info.childGet(0);
 
 	//>> Parse post category and path to area
-	string prs_cat, prs_path;
-	unsigned i_el;
-
-	string prs_comm;
+	string prs_cat, prs_path, prs_comm;
 	for( cntEl = ses.cnt.begin(); cntEl != ses.cnt.end(); cntEl++ )
 	{
 	    prs_comm = cntEl->first;
@@ -1207,7 +1204,6 @@ void TWEB::messPost( string &page, const string &cat, const string &mess, MessLe
 
 bool TWEB::valPrepare( SSess &ses, XMLNode &node, string prs_path, bool compare )
 {
-    unsigned i_cnt;
     string   val;
     map<string,string>::iterator cntEl;
 

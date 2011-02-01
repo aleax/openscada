@@ -256,6 +256,8 @@ void *TTest::Task( void *CfgM )
 	usleep(STD_WAIT_DELAY*1000);
     }
     tst->run_st = false;
+
+    return NULL;
 }
 
 void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )

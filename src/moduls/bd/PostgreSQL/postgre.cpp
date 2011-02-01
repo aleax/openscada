@@ -471,7 +471,7 @@ void MTable::fieldStruct( TConfig &cfg )
     mLstUse = time(NULL);
     for( int i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
-	int pr1, pr2;
+	int pr1;
 	string sid = tblStrct[i_fld][0];
 	if( cfg.cfgPresent(sid) ) continue;
 	int flg = (tblStrct[i_fld][2]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
@@ -785,7 +785,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    next_key = true;
 	}
 
-	int i_fld, tsz;
+	int i_fld;
 	for( i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
 	    if( cf_el[i_cf] == tblStrct[i_fld][0] ) break;
 

@@ -870,7 +870,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 
 unsigned char TSYS::getBase64Code(unsigned char asymb) 
 {
-    switch( asymb )
+    switch(asymb)
     {
 	case 'A' ... 'Z':	return asymb-(unsigned char)'A';
 	case 'a' ... 'z':	return 26+asymb-(unsigned char)'a';
@@ -878,6 +878,7 @@ unsigned char TSYS::getBase64Code(unsigned char asymb)
 	case '+':		return 62;
 	case '/':		return 63;
     }
+    return 0;
 }
 
 string TSYS::strDecode( const string &in, TSYS::Code tp )
@@ -1171,7 +1172,6 @@ void TSYS::taskSleep( long long per, time_t cron )
 
 time_t TSYS::cron( const string &vl, time_t base )
 {
-    bool isReset = false;
     string cronEl, tEl;
     int vbeg, vend, vstep, vm;
 

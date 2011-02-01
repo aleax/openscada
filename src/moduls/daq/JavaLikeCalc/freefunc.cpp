@@ -93,6 +93,8 @@ TCntrNode &Func::operator=( TCntrNode &node )
     cfg("ID").setS(mId);
 
     if( src_n->startStat( ) && !startStat( ) )	setStart( true );
+
+    return *this;
 }
 
 Func &Func::operator=(Func &func)
@@ -102,6 +104,8 @@ Func &Func::operator=(Func &func)
 
     //> Set to DB
     cfg("ID").setS(mId);
+
+    return *this;
 }
 
 void Func::setName( const string &nm )
@@ -475,6 +479,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg+=(uint8_t)rez->val().s_el->size();
 	    prg+= *rez->val().s_el;
 	    break;
+	default: break;
     }
     return rez;
 }
@@ -543,6 +548,7 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 			case Reg::String:
 			    *rez = (char)((*rez->val().s_el!=EVAL_STR) ? (bool)atoi(rez->val().s_el->c_str()) : EVAL_BOOL);
 			    break;
+			default: break;
 		    }
 		    break;
 		case Reg::Int:
@@ -557,6 +563,7 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 			case Reg::String:
 			    *rez = (*rez->val().s_el!=EVAL_STR) ? atoi(rez->val().s_el->c_str()) : EVAL_INT;
 			    break;
+			default: break;
 		    }
 		    break;
 		case Reg::Real:
@@ -571,6 +578,7 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 			case Reg::String:
 			    *rez = (*rez->val().s_el!=EVAL_STR) ? atof(rez->val().s_el->c_str()) : EVAL_REAL;
 			    break;
+			default: break;
 		    }
 		    break;
 		case Reg::String:
@@ -585,8 +593,10 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 			case Reg::Real:
 			    *rez = (rez->val().r_el!=EVAL_REAL) ? TSYS::real2str(rez->val().r_el) : EVAL_STR;
 			    break;
+			default: break;
 		    }
 		    break;
+		default: break;
 	    }
 	if(!no_code) rez = cdMvi(rez);
     }
@@ -637,6 +647,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		if( op1->vType(this) != Reg::String )
 		    op1 = cdTypeConv( op1, Reg::Real, true );
 		break;
+	    default: break;
 	}
 
 	op2 = cdTypeConv( op2, op1->vType(this), true);
@@ -653,6 +664,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::BitShRight: *op1 = op1->val().i_el >> op2->val().i_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().i_el || op2->val().i_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().i_el && op2->val().i_el;	break;
+		    default: break;
 		}
 		break;
 	    case Reg::Real:
@@ -675,6 +687,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::GEQ:	*op1 = op1->val().r_el >= op2->val().r_el;	break;
 		    case Reg::EQU:	*op1 = op1->val().r_el == op2->val().r_el;	break;
 		    case Reg::NEQ:	*op1 = op1->val().r_el != op2->val().r_el;	break;
+		    default: break;
 		}
 		break;
 	    case Reg::Bool:
@@ -686,6 +699,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::BitXor:	*op1 = op1->val().b_el ^ op2->val().b_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().b_el || op2->val().b_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().b_el && op2->val().b_el;	break;
+		    default: break;
 		}
 	    case Reg::String:
 		switch(cod)
@@ -693,8 +707,10 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::Add:	*op1->val().s_el += *op2->val().s_el;		break;
 		    case Reg::EQU:	*op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;
 		    case Reg::NEQ:	*op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
+		    default: break;
 		}
 		break;
+	    default: break;
 	}
 
 	return op1;
@@ -759,6 +775,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		    case Reg::Not:	*op = !op->val().i_el;	break;
 		    case Reg::BitNot:	*op = ~op->val().i_el;	break;
 		    case Reg::Neg:	*op = -op->val().i_el;	break;
+		    default: break;
 		}
 		break;
 	    case Reg::Obj:
@@ -768,6 +785,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		    case Reg::Not:	*op = !op->val().r_el;	break;
 		    case Reg::BitNot:	*op = ~(int)op->val().r_el;	break;
 		    case Reg::Neg:	*op = -op->val().r_el;	break;
+		    default: break;
 		}
 		break;
 	    case Reg::Bool:
@@ -776,7 +794,9 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 		    case Reg::Not:	*op = !op->val().b_el;	break;
 		    case Reg::BitNot:	*op = ~op->val().b_el;	break;
 		    case Reg::Neg:	*op = -op->val().b_el;	break;
+		    default: break;
 		}
+	    default: break;
 	}
 	return op;
     }
@@ -789,7 +809,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
     op->free();
     //>> Prepare rezult
     Reg *rez = regAt(regNew());
-    rez->setType(op->vType(this));
+    rez->setType(op_tp);
     //>> Add code
     switch(cod)
     {
@@ -1057,7 +1077,7 @@ Reg *Func::cdProp( Reg *obj, const string &sprp, Reg *dprp )
 
 TVariant Func::oPropGet( TVariant vl, const string &prop )
 {
-    switch( vl.type() )
+    switch(vl.type())
     {
 	case TVariant::Object:	return vl.getO()->propGet(prop);
 	case TVariant::Boolean:	return TVariant();
@@ -1074,6 +1094,7 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	case TVariant::String:
 	    if( prop == "length" )	return (int)vl.getS().size();
 	    return vl.getS().substr(vmax(0,vmin(vl.getS().size()-1,atoi(prop.c_str()))),1);
+	default: return TVariant();
     }
     return TVariant();
 }
@@ -1223,7 +1244,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		//  pos - position for start replace
 		//  n - number symbols for replace
 		//  substr - substring for replace
-		if( prop == "replace" && prms.size() >= 3 )
+		if(prop == "replace" && prms.size() >= 3)
 		{
 		    int pos = prms[0].getI();
 		    if( pos < 0 || pos >= vl.getS().size() ) return vl;
@@ -1233,16 +1254,16 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		    return vl.getS().replace( pos, n, prms[2].getS() );
 		}
 		// real toReal() - convert this string to real number
-		if( prop == "toReal" ) return atof(vl.getS().c_str());
+		if(prop == "toReal") return atof(vl.getS().c_str());
 		// int toInt(int base = 0) - convert this string to integer number
 		//  base - radix of subject sequence
-		if( prop == "toInt" ) return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
+		if(prop == "toInt") return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
 		// string parse(int pos, string sep = ".", int off = 0) - get token with numbet <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
 		//  off - start position
-		if( prop == "parse" && prms.size() )
+		if(prop == "parse" && prms.size())
 		{
 		    int off = (prms.size() >= 3) ? prms[2].getI() : 0;
 		    string rez = TSYS::strParse( vl.getS(), prms[0].getI(),
@@ -1253,19 +1274,20 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		// string parsePath(int pos, int off = 0) - get path token with numbet <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
-		if( prop == "parsePath" && prms.size() )
+		if(prop == "parsePath" && prms.size())
 		{
 		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
-		    string rez = TSYS::pathLev( vl.getS(), prms[0].getI(), &off );
-		    if( prms.size() >= 2 ) { prms[1].setI(off); prms[1].setModify(); }
+		    string rez = TSYS::pathLev(vl.getS(), prms[0].getI(), true, &off);
+		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
 		// string path2sep(string sep = ".") - convert path into this string to separated by <sep> string.
 		//  sep - item separator
-		if( prop == "path2sep" )
+		if(prop == "path2sep")
 		    return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
 
 		throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
+	    default:	break;
 	}
 	return false;
 	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
@@ -1529,7 +1551,6 @@ void Func::calc( TValFunc *val )
     try{ exec(val,reg,(const uint8_t*)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     res.release();
-    if( dt.flg&0x07 == 0x01 )	setStart(false);
 }
 
 void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )

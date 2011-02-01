@@ -1076,7 +1076,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 
 //-Saving shapes' attributes to data model-
-bool ShapeElFigure::shapeSave( WdgView *w )
+void ShapeElFigure::shapeSave( WdgView *w )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
@@ -2215,7 +2215,7 @@ void ElFigDt::dynamic( )
     string temp_fi;
     int tmp, real;
     int i,k;
-    int num;
+    int num = 0;
     if(sender()->objectName() == "point") num = 0;
     else if(sender()->objectName() == "width") num = 1;
     else if(sender()->objectName() == "color") num = 2;
@@ -2563,14 +2563,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
     PntMap *pnts = &elFD->shapePnts;
     WidthMap *widths = &elFD->shapeWidths;
-    ColorMap *colors = &elFD->shapeColors;
-    ImageMap *images = &elFD->shapeImages;
-    StyleMap *styles = &elFD->shapeStyles;
     switch( event->type() )
     {
         case QEvent::Paint:
         {
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             QPainter pnt_v( view );
             pnt_v.drawPixmap( QPoint(0,0),elFD->pictObj );
             if( dashedRect.isValid() )
@@ -2585,7 +2581,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( runW && elFD->active && runW->permCntr() )
             {
-		
 		string sev;
 		for( int i=0; i < inundationItems.size(); i++ )
 		    if( inundationItems[i].path.contains(view->mapFromGlobal(view->cursor().pos())) )
@@ -2901,7 +2896,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         {
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( devW )
             {
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
@@ -3273,7 +3267,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 line1 = QLineF( StartLine, EndLine );
                                 if( StartLine.y() <= EndLine.y() )	ang = 360-angle( line1, line2 );
                                 else                                   	ang = angle( line1, line2 );
-                               
+
                                 if( (*widths)[-6] > 0 )
                                 {
                                     circlePath = painterPath( (*widths)[-5], (*widths)[-6],1, ang, StartLine, EndLine );
@@ -3299,7 +3293,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         //-- if bezier --
                         if( shapeType==3 )
                         {
-                            
                             QPointF CtrlPos_1, CtrlPos_2, EndLine_temp;
                             CtrlPos_1 = QPointF( length(EndLine,StartLine)/3, 0 );
                             CtrlPos_2 = QPointF( 2*length(EndLine,StartLine)/3, 0 );
@@ -3326,7 +3319,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
                             CtrlPos_1 = unScaleRotate( CtrlPos_1, view, flag_scale, flag_rotate );
                             CtrlPos_2 = unScaleRotate( CtrlPos_2, view, flag_scale, flag_rotate );
-                            
+
                             shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
                             shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
                             shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
@@ -3339,8 +3332,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         if( shapeType==2 )
                         {
                             QPointF CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4, Temp, StartLine_small, EndLine_small, pnt;
-                            double a, a_small, b, b_small;
-                            double t;
+                            double a, b;
                             CtrlPos_1 = QPointF( StartLine.x()+(EndLine.x()-StartLine.x())/2,
                                                  StartLine.y()+(EndLine.y()-StartLine.y())/2 );
                             a = length(EndLine,StartLine)/2;
@@ -3390,12 +3382,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::MouseMove:
         {
             int fl;
-            int temp;
+            int temp = 0;
             bool flag_break_move, 
 		 flag_arc_inund = false;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( devW )
 	    {
                 Mouse_pos = ev->pos();
@@ -3652,8 +3643,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         {
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
-            bool flag_break_move;
             if( devW )
             {
                 if( flag_m )  break;
@@ -3896,7 +3885,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     paintImage(view);
                     view->repaint();
                 }
-        	return true;		
+        	return true;
             }
 	    break;
         }
@@ -3904,7 +3893,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         {
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( devW )
             {
                 if( ev->key() == Qt::Key_Shift ) flag_key=false;
@@ -3955,13 +3943,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     itemInMotion = 0;
                     flag_first_move = true;
                 }
-        	return true;		
+        	return true;
             }
         }
 	break;
-    } 
+    }
     return false;
-} 
+}
 
 //- rotation of the point -
 QPointF ShapeElFigure::rotate( const QPointF &pnt, double alpha )
@@ -4007,8 +3995,8 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 
     ShapeItem temp_shape;
     double ang_t;
-    double a, a_small, b, b_small;
-    double ang;
+    double a = 0, b = 0;
+    double ang = 0;
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     int MotionNum_1 = itemInMotion->n1;
     int MotionNum_2 = itemInMotion->n2;
@@ -4415,7 +4403,6 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     //- building the arc -
     if( shapeType == 2 )
     {
-        double t;
         CtrlMotionPos_2 = QPointF( CtrlMotionPos_1.x() + rotate( arc( 0.25, a, b ), ang ).x(),
                                 CtrlMotionPos_1.y() - rotate( arc( 0.25, a, b ), ang ).y() );
         CtrlMotionPos_4 = QPointF( t_start, t_end );
@@ -4731,8 +4718,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
 
 int ShapeElFigure::realRectNum( int rect_num_old, const QVector<ShapeItem> &shapeItems )
 {
-    int rect_num_new;
-    bool flag_isArc = false;
+    int rect_num_new = 0;
     //- detecting the correct index of the figure -
     for( int i = 0; i <= shapeItems.size()-1; i++ )
         switch( shapeItems[i].type )
@@ -4913,7 +4899,6 @@ void ShapeElFigure::rectNum3_4( const QVector<ShapeItem> &shapeItems)
 void ShapeElFigure::moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *view )
 {
     num_vector.clear();
-    int rect_num_temp;
     bool flag_break;
     for( int i = 0; i < count_Shapes; i++ )
     {
@@ -5053,7 +5038,6 @@ void ShapeElFigure::checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, 
         }
     }
     bool flag_exist;
-    int cnt;
     int tmp_inund;
     QVector<int> real_rem_inund;
     //-- Removing the fill(inundation) which has one or more figures that are not moving --
@@ -5396,14 +5380,12 @@ bool ShapeElFigure::inundation( const QPointF &point, const QVector<ShapeItem> &
 {
     found = false;
     inundationPath = newPath;
-    bool flag_break = false;
     bool flag_push_back;
     QVector<int> work_sort;
     QVector<int> inundation_fig_num;
     for( int i = 0; i < 2*shapeItems.size()+1; i++ )
         work_sort.push_back(0);
-    int i,j;
-    i = 1;
+    int i = 1;
     do
     {
         found = 0;
@@ -5501,8 +5483,6 @@ QVector<int> ShapeElFigure::inundationSort( const QPainterPath &inundationPath, 
 //- detecting the figures, which count <=2, for filling -
 bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap *pnts, WdgView *view, int number )
 {
-    ElFigDt *elFD = (ElFigDt*)view->shpData;
-    ColorMap *colors = &elFD->shapeColors;
     QPainterPath inundationPath_1_2;
     QVector<int> in_fig_num;
     bool flag_break;
@@ -5636,7 +5616,6 @@ void ShapeElFigure::paintImage( WdgView *view )
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-    RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
     elFD->pictObj = QPixmap(view->width(), view->height());
     elFD->pictObj.fill(Qt::transparent);
     QPainter pnt( &elFD->pictObj );

@@ -1068,7 +1068,7 @@ void TProt::oR( string &buf, double val, char sz )
 
 void TProt::oS( string &buf, const string &val )
 {
-    oN(buf,(val.size()?val.size():-1),4);
+    oN(buf,(val.size()?(int)val.size():-1),4);
     buf.append(val);
 }
 

@@ -41,7 +41,7 @@ using namespace OSCADA;
 //************************************************
 //* TArchiveS                                    *
 //************************************************
-int TArchiveS::max_req_mess = 3000;
+unsigned TArchiveS::max_req_mess = 3000;
 
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,"Archives",true), prcStMess(false), prcStVal(false), endrunReqVal(false), mMessPer(10),
@@ -138,7 +138,7 @@ void TArchiveS::load_( )
     setMessPeriod( atoi(TBDS::genDBGet(nodePath()+"MessPeriod",TSYS::int2str(mMessPer)).c_str()) );
     setValPeriod( atoi(TBDS::genDBGet(nodePath()+"ValPeriod",TSYS::int2str(mValPer)).c_str()) );
     setValPrior( atoi(TBDS::genDBGet(nodePath()+"ValPriority",TSYS::int2str(mValPrior)).c_str()) );
-    max_req_mess = atoi(TBDS::genDBGet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess)).c_str());
+    max_req_mess = vmax(100,atoi(TBDS::genDBGet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess)).c_str()));
 
     //> LidDB
     //>> Message archivators load
@@ -404,7 +404,7 @@ void TArchiveS::subStop( )
     }
 }
 
-void TArchiveS::messPut( time_t tm, int utm, const string &categ, char level, const string &mess )
+void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess )
 {
     //> Put message to buffer
     ResAlloc res(mRes,true);
@@ -451,7 +451,7 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs )
 	messPut(recs[i_r].time,recs[i_r].utime,recs[i_r].categ,recs[i_r].level,recs[i_r].mess);
 }
 
-void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, char level, const string &arch )
+void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, int8_t level, const string &arch )
 {
     recs.clear();
 
@@ -788,7 +788,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if(a_path == "/m_arch/max_am_req")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(max_req_mess));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	{ max_req_mess = atoi(opt->text().c_str()); modif(); }
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	{ max_req_mess = vmax(100,atoi(opt->text().c_str())); modif(); }
     }
     else if(a_path == "/m_arch/per")
     {

@@ -252,7 +252,7 @@ QMainWindow *TVision::openWindow()
     string user_pass = userPass( );
 
     //> Check for start user set OK
-    int err;
+    int err = 0;
     XMLNode req("get");
     req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
     if( !((VCAStation() == "." && SYS->security().at().usrPresent(startUser())) ||

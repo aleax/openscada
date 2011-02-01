@@ -76,7 +76,7 @@ void TMess::setLogDirect( int dir )
     SYS->modif();
 }
 
-void TMess::put( const char *categ, char level, const char *fmt,  ... )
+void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 {
     char mess[STR_BUF_LEN];
     va_list argptr;
@@ -114,7 +114,7 @@ void TMess::put( const char *categ, char level, const char *fmt,  ... )
 	SYS->archive().at().messPut( ctm/1000000, ctm%1000000, categ, level, mess );
 }
 
-void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, char level )
+void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, int8_t level )
 {
     if( mLogDir&8 ) SYS->archive().at().messGet(b_tm,e_tm,recs,category,level);
 }
@@ -193,7 +193,8 @@ const char *TMess::I18N( const char *mess, const char *d_name )
 void TMess::setLang2CodeBase( const string &vl )
 {
     mLang2CodeBase = vl;
-    if( !mLang2CodeBase.empty() && mLang2CodeBase.size() < 2 || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C" ) mLang2CodeBase = "en";
+    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C")
+	mLang2CodeBase = "en";
     else mLang2CodeBase = mLang2CodeBase.substr(0,2);
 
     SYS->modif();

@@ -578,7 +578,7 @@ retry:
 	    return ERR;
 	}
 	//Check IO
-	if( yylval.reg=p_fnc->regAt(p_fnc->ioGet(smb_nm)) )	return VAR;
+	if((yylval.reg=p_fnc->regAt(p_fnc->ioGet(smb_nm))))	return VAR;
 
 	//Keywords
 	if( smb_nm == "in" )		return IN;

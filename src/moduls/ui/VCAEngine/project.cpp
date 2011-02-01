@@ -1282,6 +1282,8 @@ TCntrNode &PageWdg::operator=( TCntrNode &node )
 	setParentNm(ownerPage().parent().at().path()+"/wdg_"+id());
 	setEnable(true);
     }
+
+    return *this;
 }
 
 Page &PageWdg::ownerPage()

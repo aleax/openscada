@@ -203,9 +203,9 @@ class TCntrNode
 	void chldDel( char igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 
 	//> Conteiners
-	char	grpSize( );
-	char	grpId( const string &sid );
-	GrpEl	&grpAt( char id );
+	int8_t	grpSize( );
+	int8_t	grpId( const string &sid );
+	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
 
 	virtual void preEnable( int flag )	{ }

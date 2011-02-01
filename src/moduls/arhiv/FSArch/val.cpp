@@ -37,9 +37,8 @@ using namespace FSArch;
 //* FSArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), mLstCheck(0), chkANow(false),
-    time_size(800), numb_files(100), round_proc(0.01), mPackTm(10), mChkTm(60), mPackInfoFiles(false),
-    mAPrms(cfg("A_PRMS").getSd())
+    TVArchivator(iid,idb,cf_el), chkANow(false), mAPrms(cfg("A_PRMS").getSd()),
+    time_size(800), numb_files(100), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
 {
 
 }
@@ -118,7 +117,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	{
 	    char ibuf[80];
 	    int rsz = read(hd,ibuf,sizeof(ibuf));
-	    if(rsz > 0 && rsz < sizeof(ibuf))
+	    if(rsz > 0 && rsz < (int)sizeof(ibuf))
 	    {
 		ibuf[rsz] = 0;
 		long long tBeg, tEnd, tPer;
@@ -164,7 +163,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     VFileArch::FHead head;
     int r_len = read(hd,&head,sizeof(VFileArch::FHead));
     close(hd);
-    if( r_len < sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55 ) return false;
+    if( r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55 ) return false;
     //>> Check to archive present
     if( archive )	{ strncpy(buf,head.archive,20); *archive = buf; }
     if( abeg )		*abeg = head.beg;
@@ -236,7 +235,6 @@ void ModVArch::checkArchivator( bool now )
 
 	    //>> Check for info files
 	    if( NameArhFile.compare(NameArhFile.size()-4,4,".val") != 0 && NameArhFile.compare(NameArhFile.size()-7,7,".val.gz") != 0 ) continue;
-
 	    if( !filePrmGet(NameArhFile,&ArhNm,&ArhTp,NULL,NULL,NULL) )	continue;
 
 	    //>>> Check to archive present
@@ -276,7 +274,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 {
     long long buf_sz = 100000;
     long long buf_per = (long long)(valPeriod()*1e6);
-    long long c_tm, c_tm1;
+    long long c_tm;
 
     TValBuf buf( TFld::Real, buf_sz, buf_per, true, true );
     beg=vmax(beg,SYS->archive().at().valAt(arch_nm).at().begin(workId())/1000000);
@@ -499,7 +497,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> a_ls;
 	archiveList(a_ls);
-	for( int i_el = 0; i_el < a_ls.size(); i_el++ )
+	for( unsigned i_el = 0; i_el < a_ls.size(); i_el++ )
 	    opt->childAdd("el")->setText(a_ls[i_el]);
     }
     else if(a_path == "/arch/tpflst" && ctrChkNode(opt))
@@ -554,7 +552,7 @@ int ModVArchEl::size()
 {
     int rez = 0;
     ResAlloc res(mRes,false);
-    for( int i_arh = 0; i_arh < arh_f.size(); i_arh++)
+    for(unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++)
 	rez += arh_f[i_arh]->size();
 
     return rez;
@@ -562,7 +560,7 @@ int ModVArchEl::size()
 
 void ModVArchEl::checkArchivator( bool now )
 {
-    if( now && !archivator().chkANow )
+    if(now && !archivator().chkANow)
     {
 	//> Scan directory for find new files and deleted files
 	struct stat file_stat;
@@ -573,18 +571,16 @@ void ModVArchEl::checkArchivator( bool now )
 	if(IdDir == NULL) return;
 
 	//>> Check to allow files
-	while( (scan_dirent = readdir(IdDir)) != NULL )
+	while((scan_dirent=readdir(IdDir)) != NULL)
 	{
-	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name )	continue;
+	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name)	continue;
 
 	    string ArhNm;
 	    string NameArhFile = archivator().addr()+"/"+scan_dirent->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
 	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0)	continue;
-
 	    if( !archivator().filePrmGet(NameArhFile,&ArhNm,NULL,NULL,NULL,NULL) || archive().id() != ArhNm )	continue;
-
 	    fileAdd( NameArhFile );
 	}
 
@@ -593,9 +589,9 @@ void ModVArchEl::checkArchivator( bool now )
 
     ResAlloc res(mRes,true);
     //>> Check file count for delete old files
-    if( now && ((ModVArch &)archivator()).fileNumber() && arh_f.size() > ((ModVArch &)archivator()).fileNumber() )
-	for( int i_arh = 0; i_arh < arh_f.size(); i_arh++ )
-	    if( arh_f.size() <= ((ModVArch &)archivator()).fileNumber() )	break;
+    if( now && ((ModVArch &)archivator()).fileNumber() && (int)arh_f.size() > ((ModVArch &)archivator()).fileNumber() )
+	for( int i_arh = 0; i_arh < (int)arh_f.size(); i_arh++ )
+	    if( (int)arh_f.size() <= ((ModVArch &)archivator()).fileNumber() )	break;
 	    else if( !arh_f[i_arh]->err() )
 	    {
 		string f_nm = arh_f[i_arh]->name();
@@ -608,40 +604,35 @@ void ModVArchEl::checkArchivator( bool now )
 
     //> Check the archive's files for pack
     res.request(false);
-    for( int i_arh = 0; i_arh < arh_f.size(); i_arh++ )
+    for( unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++ )
 	arh_f[i_arh]->check();
 }
 
 void ModVArchEl::fileAdd( const string &file )
 {
     //> Check to present archive files
-    int i_arh;
     ResAlloc res(mRes,false);
-    for( i_arh = 0; i_arh < arh_f.size(); i_arh++)
-	if( arh_f[i_arh]->name() == file )	return;
+    for(int i_arh = 0; i_arh < (int)arh_f.size(); i_arh++)
+	if(arh_f[i_arh]->name() == file) return;
+    res.release();
 
     //> Attach a new archive file
-    if( i_arh >= arh_f.size() )
+    VFileArch *f_arh = new VFileArch(this);
+    f_arh->attach(file);
+
+    //>> Broken archives delete. Oldest arhives to up.
+    if(f_arh->err()) delete f_arh;
+    else
     {
-	res.release();
-
-	VFileArch *f_arh = new VFileArch(this);
-	f_arh->attach( file );
-
-	//>> Broken archives delete. Oldest arhives to up.
-	if( f_arh->err() )	delete f_arh;
-	else
-	{
-	    res.request(true);
-	    int i_arh;
-	    for( i_arh = arh_f.size()-1; i_arh >= 0 ; i_arh--)
-		if( arh_f[i_arh]->err() || f_arh->begin() >= arh_f[i_arh]->begin() )
-		{
-		    arh_f.insert(arh_f.begin()+i_arh+1,f_arh);
-		    break;
-		}
-	    if( i_arh >= arh_f.size() ) arh_f.push_front( f_arh );
-	}
+	res.request(true);
+	int i_arh;
+	for(i_arh = arh_f.size()-1; i_arh >= 0; i_arh--)
+	    if(arh_f[i_arh]->err() || f_arh->begin() >= arh_f[i_arh]->begin())
+	    {
+		arh_f.insert(arh_f.begin()+i_arh+1,f_arh);
+		break;
+	    }
+	if(i_arh < 0) arh_f.push_front(f_arh);
     }
 }
 
@@ -661,7 +652,7 @@ long long ModVArchEl::end()
 long long ModVArchEl::begin()
 {
     ResAlloc res(mRes,false);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
+    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() )
 	    return arh_f[i_a]->begin();
 
@@ -671,11 +662,11 @@ long long ModVArchEl::begin()
 void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
 {
     ResAlloc res(mRes,false);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
+    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( ibeg > iend ) break;
 	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
 	{
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg+=(long long)(archivator().valPeriod()*1e6) )
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (long long)(archivator().valPeriod()*1e6) )
 		buf.setI(EVAL_INT,ibeg);
 	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
 	    ibeg = arh_f[i_a]->end()+1;
@@ -689,7 +680,7 @@ TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
     long long itm = tm ? *tm : SYS->curTime();
     long long per;
     ResAlloc res(mRes,false);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
+    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
 		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
@@ -715,7 +706,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 
     //> Put values to files
     ResAlloc res(mRes,true);
-    for( int i_a = 0; i_a < arh_f.size(); i_a++ )
+    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && beg <= end )
 	{
 	    //>> Create new file for old data
@@ -738,6 +729,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 		arh_f.insert(arh_f.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(),this));
 	    }
 	    //>> Insert values to archive
+
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
 	    {
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
@@ -751,7 +743,6 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
     //> Create new file for new data
     while( end >= beg )
     {
-
 	char c_buf[30];
 	time_t tm = beg/1000000;
 	struct tm tm_tm;
@@ -775,8 +766,8 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 string VFileArch::afl_id = "OpenSCADA Val Arch.";
 
 VFileArch::VFileArch( ModVArchEl *owner ) :
-    mOwner(owner), mErr(true), mSize(0), mBeg(0), mEnd(0), mPer(1000000), mPack(false),
-    mTp(TFld::Real), fixVl(true), vSize(sizeof(double)), mpos(0)
+    mSize(0), mTp(TFld::Real), mBeg(0), mEnd(0), mPer(1000000), mErr(true), mPack(false),
+    fixVl(true), vSize(sizeof(double)), mpos(0), mOwner(owner)
 {
     cach_pr_rd.pos = cach_pr_rd.off = cach_pr_wr.pos = cach_pr_wr.off = 0;
     mAcces = time(NULL);
@@ -784,8 +775,7 @@ VFileArch::VFileArch( ModVArchEl *owner ) :
 
 
 VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long long iper, TFld::Type itp, ModVArchEl *iowner) :
-    mOwner(iowner), mErr(false), mSize(0), mName(iname), mBeg(ibeg), mEnd(iend), mPack(false),
-    mPer(iper), mTp(itp)
+    mName(iname), mSize(0), mTp(itp), mBeg(ibeg), mEnd(iend), mPer(iper), mErr(false), mPack(false), mOwner(iowner)
 {
     char buf[1000];
     cach_pr_rd.pos = cach_pr_rd.off = cach_pr_wr.pos = cach_pr_wr.off = 0;
@@ -973,7 +963,7 @@ void VFileArch::attach( const string &name )
 	res.release();
 
 	//>> Load previous value
-	if( load_prev )
+	if(load_prev)
 	    switch(type())
 	    {
 		case TFld::Integer:
@@ -986,11 +976,12 @@ void VFileArch::attach( const string &name )
 		{
 		    double tval = getVal((cur_tm-begin())/period()).getR();
 		    owner().prev_val.assign((char*)&tval,vSize);
+		    break;
 		}
-		break;
+		default: break;
 	    }
     }
-    catch( TError err )
+    catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(mod->nodePath().c_str(),_("Attach file <%s> error."),name.c_str());
@@ -1247,11 +1238,12 @@ TVariant VFileArch::getVal( int vpos )
 	    return rez;
 	}
     }
+    return EVAL_STR;
 }
 
 void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 {
-    int vpos_beg, vpos_end, vdif;
+    int vpos_beg, vpos_end;
     string val_b, value, value_first, value_end;       //Set value
 
     ResAlloc res(mRes,false);
@@ -1321,7 +1313,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 	    {
 		value = buf.getS(&ibeg,true);
 		if(!value.size()) value = " ";
-		if(value.size() >= 1<<(vSize*8))
+		if((int)value.size() >= (1<<(vSize*8)))
 		    value.erase((1<<(vSize*8))-1);
 		break;
 	    }
@@ -1363,7 +1355,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     if( hd <= 0 ) { mErr = true; return; }
 
     //- Get block geometry from file -
-    int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev, foff_end_len, foff_end, foff_endnext_len, foff_endnext;
+    int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev = 0, foff_end_len, foff_end, foff_endnext_len, foff_endnext = 0;
     if( vpos_beg )
 	foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
     foff_beg = calcVlOff(hd,vpos_beg,&foff_beg_len,true);
@@ -1504,7 +1496,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 
 	if( cach_pos%8 )
 	{
-	    b_sz = vmin((vpos/8)-(cach_pos/8)+1,sizeof(buf));
+	    b_sz = vmin((vpos/8)-(cach_pos/8)+1,(int)sizeof(buf));
 	    read(hd,buf,b_sz);
 	}
 	for( int i_ps = cach_pos; i_ps <= vpos; i_ps++ )
@@ -1514,7 +1506,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	    {
 		if( ++i_bf >= b_sz )
 		{
-		    b_sz = vmin((vpos/8)-(i_ps/8)+1,sizeof(buf));
+		    b_sz = vmin((vpos/8)-(i_ps/8)+1,(int)sizeof(buf));
 		    read(hd,&buf,b_sz);
 		    i_bf = 0;
 		}
@@ -1541,7 +1533,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	    {
 		if( ++i_bf >= b_sz )
 		{
-		    b_sz = vmin(vSize*(vpos-i_ps+1),sizeof(buf));
+		    b_sz = vmin(vSize*(vpos-i_ps+1),(int)sizeof(buf));
 		    read(hd,&buf,b_sz);
 		    i_bf = 0;
 		}
@@ -1582,7 +1574,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	if( mv_end <= mv_beg )	return;
 	do
 	{
-	    beg_cur = ((mv_end-mv_beg)>=sizeof(buf))?mv_end-sizeof(buf):mv_beg;
+	    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
 	    lseek(hd,beg_cur,SEEK_SET);
 	    read(hd,buf,mv_end-beg_cur);
 	    lseek(hd,beg_cur+(new_st-old_st),SEEK_SET);
@@ -1600,7 +1592,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	if( mv_end <= mv_beg )	return;
 	do
 	{
-	    end_cur = ((mv_end-mv_beg)>=sizeof(buf))?mv_beg+sizeof(buf):mv_end;
+	    end_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_beg+sizeof(buf) : mv_end;
 	    lseek(hd,mv_beg,SEEK_SET);
 	    read(hd,buf,end_cur-mv_beg);
 	    lseek(hd,mv_beg-(old_st-new_st),SEEK_SET);
@@ -1710,7 +1702,7 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 
     if( !last )
     {
-	for( int i_p = 0; i_p < cache.size(); i_p++ )
+	for( unsigned i_p = 0; i_p < cache.size(); i_p++ )
 	    if( el.pos == cache[i_p].pos )	{ cache[i_p] = el; return; }
 	    else if( el.pos < cache[i_p].pos )	{ cache.insert(cache.begin()+i_p,el); return; }
 	cache.push_back(el);
@@ -1721,7 +1713,7 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 
 void VFileArch::cacheDrop( int pos )
 {
-    for( int i_p = 0; i_p < cache.size(); i_p++ )
+    for( int i_p = 0; i_p < (int)cache.size(); i_p++ )
 	if( cache[i_p].pos >= pos )
 	{ cache.erase(cache.begin()+i_p); i_p--; }
     if( cach_pr_rd.pos >= pos )

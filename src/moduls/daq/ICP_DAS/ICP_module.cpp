@@ -307,7 +307,7 @@ string TMdContr::serReq( string req, char mSlot )
 
     WORD wT;
     char szReceive[255];
-    bool errTm = false, errResp = false;
+    //bool errTm = false, errResp = false;
 
     numReq++;
 
@@ -417,7 +417,6 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
-    int wRetVal;
     if( enableStat() )	return;
 
     TParamContr::enable();

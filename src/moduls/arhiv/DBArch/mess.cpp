@@ -34,7 +34,7 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), mBeg(0), mEnd(0), tm_calc(0.0), mMaxSize(24),
+    TMArchivator(iid,idb,cf_el), tm_calc(0.0), mBeg(0), mEnd(0), mMaxSize(24),
     mAPrms(cfg("A_PRMS").getSd())
 {
     setAddr("*.*");

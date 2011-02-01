@@ -236,8 +236,6 @@ void TSocketIn::save_( )
 
 void TSocketIn::start()
 {
-    pthread_attr_t pthr_attr;
-
     if( run_st ) return;
 
     //> Status clear

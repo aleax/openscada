@@ -82,14 +82,14 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 	string	s_id;
 	const sensors_chip_name	*name;
 #if SENSORS_API_VERSION >= 0x400
-        while( name = sensors_get_detected_chips(NULL,&nr) )
+        while((name=sensors_get_detected_chips(NULL,&nr)))
 	{
-	    const sensors_subfeature *feature;
+	    const sensors_subfeature *feature = NULL;
 	    const sensors_feature *main_feature;
 	    int nr1 = 0;
-	    while( main_feature = sensors_get_features(name, &nr1) )
+	    while((main_feature=sensors_get_features(name, &nr1)))
 	    {
-		switch( main_feature->type )
+		switch(main_feature->type)
 		{
 		    case SENSORS_FEATURE_IN:
 			feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
@@ -100,17 +100,18 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 		    case SENSORS_FEATURE_TEMP:
 			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_TEMP_INPUT);
 			break;
+		    default: break;
 		}
-		if( !feature ) continue;
+		if(!feature) continue;
 		s_id = string(name->prefix)+"_"+main_feature->name;
-		if( !prm->vlPresent(s_id) )
+		if(!prm->vlPresent(s_id))
 		    fldAdd( new TFld(s_id.c_str(),(string(name->prefix)+" "+main_feature->name).c_str(),TFld::Real,TFld::NoWrite) );
-		if( !onlyCreate && sensors_get_value( name, feature->number, &val) == 0 )
+		if(!onlyCreate && sensors_get_value(name, feature->number, &val) == 0)
 		    prm->vlAt(s_id).at().setR(val,0,true);
 	    }
 	}
 #else
-	while( name = sensors_get_detected_chips(&nr) )
+	while(name = sensors_get_detected_chips(&nr))
 	{
 	    int nr1 = 0, nr2 = 0;
 	    const sensors_feature_data *feature;
@@ -159,18 +160,17 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	//> Use libsensor check
 	if( libsensor_ok )
 	{
-	    int nr = 0, nr1, nr2;
-	    char  id_name[512], sensor_path[512];
+	    int nr = 0;
 	    const sensors_chip_name	*name;
 #if SENSORS_API_VERSION >= 0x400
-	    while( name = sensors_get_detected_chips(NULL,&nr) )
+	    while((name=sensors_get_detected_chips(NULL,&nr)))
 	    {
-		const sensors_subfeature *feature;
+		const sensors_subfeature *feature = NULL;
 		const sensors_feature *main_feature;
 		int nr1 = 0;
-		while( main_feature = sensors_get_features(name, &nr1) )
+		while((main_feature = sensors_get_features(name, &nr1)))
 		{
-		    switch( main_feature->type )
+		    switch(main_feature->type)
 		    {
 			case SENSORS_FEATURE_IN:
 			    feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
@@ -181,15 +181,16 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 			case SENSORS_FEATURE_TEMP:
 			    feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_TEMP_INPUT);
 			    break;
+			default: break;
 		    }
-		    if( feature ) { sens_allow |= true; break; }
+		    if(feature) { sens_allow |= true; break; }
 		}
 	    }
 #else
 	    while( name = sensors_get_detected_chips(&nr) )
 	    {
 		const sensors_feature_data *feature;
-		nr1 = 0, nr2 = 0;
+		int nr1 = 0, nr2 = 0;
 		while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
 		    if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
 		    { sens_allow |= true; break; }

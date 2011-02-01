@@ -106,6 +106,8 @@ TValBuf &TValBuf::operator=( TValBuf &src )
 	    break;
     }
     mEvalCnt = src.mEvalCnt;
+
+    return *this;
 }
 
 void TValBuf::clear()
@@ -1263,7 +1265,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 	h_w_start, h_w_size,	//Trend window horizontal start and size
 	v_w_start, v_w_size;	//Trend window vertical start and size
     string sclMarkFont = "Times";
-    int mrkFontSize = 8, begMarkBrd = -1, endMarkBrd;
+    int mrkFontSize = 8, begMarkBrd = -1, endMarkBrd = 0;
 
     //> Check and get data
     if( ibeg >= iend || valType( ) == TFld::String )	return rez;
@@ -1421,7 +1423,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     }
 
     //> Make vertical grid and symbols
-    double	c_val,
+    double	c_val = EVAL_REAL,
 		v_max = -3e300,
 		v_min = 3e300;
     for( c_tm = buf.begin(); c_tm <= buf.end(); c_tm++ )
@@ -1578,7 +1580,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    bool    isEnd = false;	//Last archive value process
 	    string  text;
 	    text.reserve(100);
-	    int vpos_beg = 0, vpos_end = 0, vpos_cur;
+	    int vpos_end = 0, vpos_cur;
 	    long long ibeg = buf.begin(), iend = buf.end();
 	    period = vmax(period,buf.period());
 	    int mode = atoi(opt->attr("mode").c_str());
@@ -1587,7 +1589,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    {
 		case TFld::Boolean:
 		{
-		    char tval_pr, tval_pr1;
+		    char tval_pr = EVAL_BOOL, tval_pr1 = EVAL_BOOL;
 		    while(ibeg <= iend)
 		    {
 			char tval = buf.getB(&ibeg,true);
@@ -1614,7 +1616,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		case TFld::Integer:
 		{
 		    float round_perc = atof(opt->attr("round_perc").c_str());
-		    int tval_pr = EVAL_INT, tval_pr1;
+		    int tval_pr = EVAL_INT, tval_pr1 = EVAL_INT;
 		    while(ibeg <= iend)
 		    {
 			int tval = buf.getI(&ibeg,true);
@@ -1655,7 +1657,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    float round_perc = atof(opt->attr("round_perc").c_str());
 		    int   real_prec  = atoi(opt->attr("real_prec").c_str());
 		    if( !real_prec ) real_prec = 10;
-		    double tval_pr = EVAL_REAL, tval_pr1;
+		    double tval_pr = EVAL_REAL, tval_pr1 = EVAL_REAL;
 		    while( ibeg <= iend )
 		    {
 			double tval = buf.getR(&ibeg,true);
@@ -2252,6 +2254,8 @@ void *TVArchivator::Task( void *param )
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
     arch.run_st = false;
+
+    return NULL;
 }
 
 void TVArchivator::cntrCmdProc( XMLNode *opt )
@@ -2430,8 +2434,8 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 	if( sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode( ) != TController::Off )
 	{
 	    //> Holes process
-	    long long firstEval = 0, curEval;
-	    long long cbeg = buf.begin(), lastHole = 0;
+	    long long firstEval = 0, curEval = 0;
+	    long long cbeg = buf.begin();
 	    iend = buf.end();
 	    string lstStat;
 	    XMLNode req("get");

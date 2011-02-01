@@ -803,14 +803,13 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
         case 1:
         {
             Point p1, p2, un_p1, un_p2;
-            int kol; 
             double el_ang;
             if( el_p1.y <= el_p2.y ) el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
             else el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
             un_p1 = unrotate( el_p1, el_ang, el_p1.x, el_p1.y );
             un_p2 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
             gdImageSetThickness( im, (int)el_width );
-            double wdt, wdt_1;
+            double wdt = 0, wdt_1 = 0;
             if( style == 1 )
             {
                 if( el_width < 3 )
@@ -870,7 +869,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
             t_end = el_p6.y;
             gdImageSetThickness( im, (int)el_width );
             Point un_p1, un_p2, un_p3, un_p4, un_p5;
-            double wdt, wdt_1;
+            double wdt = 0, wdt_1 = 0;
             double len = length( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
                                         el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ),
                                  Point( el_p3.x + rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).x,
@@ -931,7 +930,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
         {
             double delta = bezierDeltaT( el_p1, el_p3, el_p4, el_p2 );
             Point un_p1, un_p2, un_p3, un_p4, un_p5;
-            double wdt, wdt_1, t;
+            double wdt = 0, wdt_1 = 0, t;
             double len = length( Point(bezier( 0.0, el_p1, el_p3, el_p4, el_p2 ).x,
                                        bezier( 0.0, el_p1, el_p3, el_p4, el_p2 ).y ),
                                  Point(bezier( 0.0+delta, el_p1, el_p3, el_p4, el_p2 ).x,
@@ -979,7 +978,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 {
     int clr_el, clr_el_line;
     double t;
-    double arc_a, arc_b, t_start, t_end,arc_a_small,arc_b_small, ang;
+    double arc_a, arc_b, t_start, t_end, ang;
     double el_width, el_border_width;
     //-- Arc --
     if( item.type == 2 )
@@ -1058,7 +1057,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 //---- Drawing the dashed or dotted arc with borders' width < 4 and flag_brd ----
                 if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )
                 {
-                    double wdt, wdt_1;
+                    double wdt = 0, wdt_1 = 0;
                     if( item.style == 1 )
                     {
                         wdt = 4*(item.width+2)-1; 
@@ -1206,10 +1205,8 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 //---- Drawing the dashed or dotted border of the arc with borders' width >= 4 ----
                 if( item.border_width > 4 && item.style != 0 && flag_style )
                 {
-                    double el_ang;
                     Point p1, p2, un_p1, un_p2;
-                    double wdt, wdt_1, len;
-                    int kol, kol_1;
+                    double wdt = 0, wdt_1 = 0;
                     if( item.style == 1 )
                     {
                         wdt = 4*item.border_width-1; 
@@ -1551,13 +1548,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
         {
             double el_width = item.width;
             double el_border_width = item.border_width;
-            double el_ang, ang;
+            double el_ang;
             Point un_p1, un_p2;
             Point el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
             Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
             Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
             Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
-            double delta = bezierDeltaT( el_p1, el_p3, el_p4, el_p2 );
             if( el_p1.y <= el_p2.y )
                 el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
             else
@@ -1571,7 +1567,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
             }
             if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and with flag_brd ----
             {
-                double wdt, wdt_1;
+                double wdt = 0, wdt_1 = 0;
                 if( item.style == 1 )
                 {
                     wdt = 4*(item.width+2)-1; 
@@ -1715,7 +1711,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 Point p3 = unrotate( el_p3, el_ang,el_p1.x, el_p1.y );
                 Point p4 = unrotate( el_p4, el_ang, el_p1.x, el_p1.y );
                 Point el_pb1, el_pb2, el_pb3, el_pb4;
-                double wdt, wdt_1;
+                double wdt = 0, wdt_1 = 0;
                 if( item.style == 1 )
                 {
                     wdt = 4*item.border_width-1; 
@@ -1990,7 +1986,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                 //---- Drawing the dashed or dotted line with borders' width == 1(for lines with width > 3) ----
                 if( item.border_width < 4 && item.style != 0 && item.flag_brd && flag_style )
                 {
-                    double wdt; 
+                    double wdt = 0;
                     if( item.style == 1 ) wdt = 4*(item.width+2)-1;
                     else if( item.style == 2 ) wdt = item.width+1;
                     gdImageAlphaBlending(im, 0);
@@ -2100,9 +2096,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                         el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
                     else
                         el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
-                    double ang;
                     Point p1, p2, un_p1, un_p2,el_pb1,el_pb2;
-                    int kol; 
                     el_width = el_width - 1;
                     //----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "line" -----
                     gdImageAlphaBlending(im, 0);
@@ -2150,7 +2144,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
                                 el_p1.y - rotate( Point( -2*el_border_width+1, - (el_width/2+el_border_width)), el_ang ).y );
                     p2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).x,
                                 el_p1.y - rotate( Point( length( el_p2, el_p1) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).y );
-                    double wdt;
+                    double wdt = 0;
                     if( item.style == 1 ) wdt = 4*item.border_width-1;
                     else if( item.style == 2 ) wdt = item.border_width-1;
                     dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
@@ -2604,7 +2598,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                         if( shapeItems[fig[0]].type == 1 && shapeItems[fig[1]].type == 1 )
                         {
                             Point P1, P2, P3, P4, P5, P6, P7, P8, dP1, dP2, num_pnt_new;
-                            double a,b,a1,b1;
+                            double a = 0, b = 0, a1, b1;
                             double scale;
                             scale = 0.0;
                             if( xSc<1 && xSc <= ySc ) scale = (1-xSc)/6;
@@ -2902,7 +2896,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                 point_num[0] = tp1;
                             }
                             Point new_pnt, new_pnt_1, new_pnt_2;
-                            double delta_real, delta_t, delta_temp_1, delta_temp_2;
+                            double delta_real, delta_t, delta_temp_1 = 0, delta_temp_2 = 0;
                             double scale;
                             double ang, ang1;
                             int num_bezier;
@@ -3135,7 +3129,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                             Point new_pnt, new_pnt_1, new_pnt_2;
                             double delta_real;
                             double scale;
-                            double ang, ang1, delta_temp_1, delta_temp_2, delta_t;
+                            double ang, ang1, delta_temp_1 = 0, delta_temp_2 = 0, delta_t;
                             double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t_arc, delta_t_bez;
                             int num_bezier;
                             Point P1, P2, P3, P4;
@@ -3392,13 +3386,13 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                         {
                             Point new_pnt;
                             vector <Point> new_pnt_vect;
-                            double delta_real, delta_t_1, delta_t_2, delta_t_bez_1,  delta_t_bez_2;
+                            double delta_real, delta_t_1 = 0, delta_t_2 = 0, delta_t_bez_1,  delta_t_bez_2;
                             double delta_1, delta_2;
                             vector <double> delta_temp_1, delta_temp_2;
                             vector <int> num_bezier_1, num_bezier_2;
                             double scale;
                             double ang, ang1;
-                            int num_bez_1, num_bez_2;
+                            int num_bez_1 = 0, num_bez_2 = 0;
                             Point P1, P2, P3, P4, el_p1, el_p2, el_p3, el_p4;
                             scale = 0.0;
                             if( xSc < 1 && xSc <= ySc ) scale = (1 - xSc)/10;
@@ -3868,9 +3862,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                     gdImageAlphaBlending(im_fill_in, 0);
                                     gdImageCopyResampled(im_fill_out, im_fill_in, 0, 0, 0, 0, im_fill_out->sx, im_fill_out->sy, im_fill_in->sx, im_fill_in->sy);
                                 }
-                                int im_x, im_y, im_x_temp1, im_x_temp2;
+                                int im_x, im_y;
                                 Point drw_pnt,drw_pnt1;
-                                int c_new;
                                 xMin_rot = (int)TSYS::realRound( xMin_rot, 2, true );
                                 yMin_rot = (int)TSYS::realRound( yMin_rot, 2, true );
                                 xMax_rot = (int)TSYS::realRound( xMax_rot, 2, true );
@@ -4076,14 +4069,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 {
     ResAlloc res(mRes,true);
     XMLNode *req_el;
-    Point StartMotionPos;
-    Point EndMotionPos;
-    Point CtrlMotionPos_1;
-    Point CtrlMotionPos_2;
-    Point CtrlMotionPos_3;
-    Point CtrlMotionPos_4;
-    double t_start, t_end, a, b, ang_t, ang;
-    int MotionWidth;
+    Point StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     rel_list = false;
     for( int i_a = 0; i_a < node.childSize(); i_a++ )
     {
@@ -4206,7 +4192,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
         int bord_color;
         string ln_st;
         int style;
-        double t_start, t_end, a, b, ang_t, ang;
+        double t_start, t_end, a, b, ang;
         int MotionWidth;
         Point ip[5];
         shapeItems.clear();
@@ -4217,12 +4203,11 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             string el = TSYS::strSepParse(sel,0,':',&el_off);
             if( el == "line" )
             {
-                bool fl_wdt = false;
                 //-- Reading anf setting attributes for the current line --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
-                else 
+                else
                 {
                     bool fl = false;
                     //-- Detecting if there is a point with same coordinates in the map --
@@ -4270,7 +4255,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) lnwidth  = (widths)[w];
                 else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) lnwidth = w;
                 else lnwidth = lineWdth;
-                
+
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = (colors)[w];
                 else if( mod->colorParse(el_s) != -1 )
@@ -4293,7 +4278,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                     else bord_color = mod->colorParse(el_s);
                 }
                 else bord_color = bordClr;
-                
+
                 el_s = TSYS::strSepParse(sel,0,':',&el_off);
                 if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
                 else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
@@ -4320,7 +4305,6 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             }
             if( el == "arc" )
             {
-                bool fl_wdt = false;
                 //-- Reading anf setting attributes for the current arc --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
@@ -4492,7 +4476,6 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
             }
             if( el == "bezier" )
             {
-                bool fl_wdt = false;
                 //-- Reading anf setting attributes for the current arc --
                 float x_s, y_s;
                 string el_s = TSYS::strSepParse(sel,0,':',&el_off);
@@ -4899,18 +4882,14 @@ void VCAText::getReq( SSess &ses )
         gdImageAlphaBlending(im, 0);
         gdImageFilledRectangle( im, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im,0,0,0,127) );
         gdImageAlphaBlending(im, 1);
-        int clr = gdImageColorResolveAlpha(im,0,0,0,0);
-        int rd = gdImageColorResolveAlpha(im,255,0,0,0);
 
         int brect[8];
-        int x, y;
-        char *err;
         gdFTStringExtra strex;
         strex.flags =  gdFTEX_RESOLUTION;
         strex.vdpi = 72;
         strex.hdpi = 72;
 
-        int rotateWidth, rotateHeight, x_off, y_off, lnSpace = (int)txtFontSize/3;
+        int rotateWidth, rotateHeight, lnSpace = (int)txtFontSize/3;
         if( (VCAElFigure::ABS(orient - 90) < 0.01) || (VCAElFigure::ABS(orient - 270) < 0.01)  ) 
         {
             rotateWidth = scaleHeight;
@@ -5120,10 +5099,9 @@ void VCAText::getReq( SSess &ses )
                                                                    realY + (int)lnSpace/2 - (brect[3] - brect[7])/2,clr_txt);
             }
             y_new += hgt_wrap[k] + lnSpace;
-            int rd = gdImageColorResolveAlpha(im_txt,0,255,0,0);
         }
         gdImageSaveAlpha(im_txt, 1);
-        gdImageCopyRotated(im, im_txt, scaleWidth/2, scaleHeight/2, 0, 0, rotateWidth, rotateHeight, 360-orient);
+        gdImageCopyRotated(im, im_txt, scaleWidth/2, scaleHeight/2, 0, 0, rotateWidth, rotateHeight, (int)(360-orient));
         gdImageDestroy(im_txt);
         gdImageSaveAlpha(im, 1);
         //- Get image and transfer it -
@@ -5328,7 +5306,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     int mrkFontSize = 0;
     int mrkHeight = 0;
-    int clr_grid, clr_mrk;						//Colors
+    int clr_grid = 0, clr_mrk = 0;						//Colors
 
     //> Get generic parameters
     long long tSz  = (long long)(1e6*tSize);				//Trends size (us)
@@ -5478,7 +5456,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
                         gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str(), &strex);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
+			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
 			{
                             gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
 			    endPosTm = tpos+wdth;
@@ -5489,7 +5467,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
                         gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
+			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
 			{
                             gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;
@@ -5562,7 +5540,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //>> Vertical scale and offset apply
-    bool isScale = (abs(sclVerSclOff) > 1 || abs(sclVerScl-100) > 1);
+    bool isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
     if( isScale )
     {
 	float vsDif = vsMax - vsMin;
@@ -5642,8 +5620,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
 	//>> Draw trend
 	bool	end_vl = false;
-	double	curVl, averVl = EVAL_REAL, prevVl = EVAL_REAL;
-	int	curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos;
+	double	curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
+	int	curPos, averPos = 0, prevPos = 0, z_vpos = 0;
 	long long curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
@@ -5725,12 +5703,10 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     int mrkFontSize = 0;
     int mrkHeight = 0;
-    int clr_grid, clr_mrk;						//Colors
+    int clr_grid = 0, clr_mrk;						//Colors
 
     //> Get generic parameters
     long long tSz  = (long long)(1e6*tSize);				//Time size (us)
-    long long tEnd = tTime;						//Time end point (us)
-    long long tBeg = tEnd - tSz;					//Time begin point (us)
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
@@ -5831,7 +5807,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
                     gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str(), &strex);
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
-		    if( (tpos+wdth) < endMarkBrd && tpos > (begMarkBrd+3) )
+		    if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
                         gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str(), &strex);
 		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
 		}
@@ -5881,7 +5857,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     }
 
     //>> Vertical scale and offset apply
-    bool isScale = (abs(sclVerSclOff) > 1 || abs(sclVerScl-100) > 1);
+    bool isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
     if( isScale )
     {
 	float vsDif = vsMax - vsMin;
@@ -6009,9 +5985,6 @@ void VCADiagram::postReq( SSess &ses )
     {
 	prmEl = ses.prm.find("x");
 	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
-	prmEl = ses.prm.find("y");
-	int y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
-
 	if( x_coord >= tArX && x_coord <= tArX+tArW )
 	{
 	    if( type == 0 )

@@ -1373,7 +1373,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     XMLNode xdoc;
     string iLang;				//Process instruction language
     string wProgO;				//Object of work programm
-    time_t lstTime;				//Last time
+    time_t lstTime = 0;				//Last time
     TFunction funcIO(TSYS::path2sepstr(wdg->path(),'_'));
     TValFunc funcV(wdg->id()+"_doc",NULL,false);
     vector<string> als;

@@ -82,7 +82,7 @@ class WdgShape : public QObject
 	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val );
 
 	virtual bool event( WdgView *view, QEvent *event );
-	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ }
+	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ return false; }
 
 	//Static methods
 	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true );

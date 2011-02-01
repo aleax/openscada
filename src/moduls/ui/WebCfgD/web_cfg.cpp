@@ -201,9 +201,9 @@ void TWEB::imgConvert(SSess &ses)
 
     if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
 
-    if(sim = gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())) itp = "png";
-    else if(sim = gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())) itp = "jpg";
-    else if(sim = gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())) itp = "gif";
+    if((sim=gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())))		itp = "png";
+    else if((sim=gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())))	itp = "jpg";
+    else if((sim=gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())))	itp = "gif";
     //if(sim) gdImageAlphaBlending(sim, 0);
 
     //>> Check for resize icon

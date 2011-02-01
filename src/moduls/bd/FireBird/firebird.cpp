@@ -134,9 +134,8 @@ void MBD::postDisable(int flag)
 	isc_modify_dpb(&dpb, &dpb_length, isc_dpb_password, pass.c_str(),pass.size());
 
 	ISC_STATUS_ARRAY status;
-	isc_tr_handle trans = 0;
 	if( isc_attach_database( status, 0, fdb.c_str(), &hdb, dpb_length, dpb) ) return;
-	if( isc_drop_database(status, &hdb) ) 
+	if( isc_drop_database(status, &hdb) )
 	    throw TError(TSYS::DBOpen,nodePath().c_str(),_("Drop DB '%s' error: %s"),fdb.c_str(),getErr(status).c_str());
     }
 }
@@ -807,7 +806,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    next_key = true;
 	}
 
-	int i_fld, tsz;
+	int i_fld;
 	for(i_fld = 1; i_fld < tblStrct.size(); i_fld++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][0]) break;
 

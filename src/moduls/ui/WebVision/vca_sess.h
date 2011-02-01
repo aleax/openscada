@@ -38,7 +38,7 @@
 class Point
 {
     public:
-	Point( ) {};
+	Point( ) : x(0), y(0) 				{ };
 	Point( double ix, double iy) : x(ix), y(iy)	{ };
 	double x;
 	double y;

@@ -455,7 +455,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod( owner().period() ? owner().period()/1e3 : 1000000 );
+    val.arch().at().setPeriod( owner().period() ? owner().period()/1000 : 1000000 );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

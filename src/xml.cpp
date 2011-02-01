@@ -239,7 +239,7 @@ XMLNode* XMLNode::clear()
     return this;
 }
 
-string XMLNode::save( unsigned char flg )
+string XMLNode::save( unsigned flg )
 {
     string xml;
     xml.reserve(10000);
@@ -254,7 +254,7 @@ string XMLNode::save( unsigned char flg )
     return xml;
 }
 
-void XMLNode::save( unsigned char flg, string &xml )
+void XMLNode::save( unsigned flg, string &xml )
 {
     xml.append( (flg&XMLNode::BrOpenPrev) ? "\n<" : "<" );
     if( flg&XMLNode::MissTagEnc ) xml.append( name() ); else encode( name(), xml );

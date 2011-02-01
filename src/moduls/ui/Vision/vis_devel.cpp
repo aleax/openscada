@@ -808,7 +808,6 @@ void VisDevelop::selectItem( const string &item, bool force )
 void VisDevelop::applyWorkWdg( )
 {
     if( winClose )      return;
-    bool isEn = false;
 
     modifyToolUpdate(work_wdg_new);
 

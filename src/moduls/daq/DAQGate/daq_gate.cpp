@@ -158,8 +158,6 @@ void TMdContr::enable_( )
     vector<string> prm_ls;
     XMLNode req("list");
 
-    bool en_err = false;
-
     //> Clear present parameters configuration
     list(prm_ls);
     for( int i_p = 0; i_p < prm_ls.size(); i_p++ ) at(prm_ls[i_p]).at().setCntrAdr("");
@@ -564,7 +562,7 @@ void TMdPrm::load_( )
 		if( vlPresent(ael->attr("id")) )	continue;
 		TFld::Type tp = (TFld::Type)atoi(ael->attr("tp").c_str());
 		p_el.fldAdd( new TFld( ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
-		    atoi(ael->attr("flg").c_str())&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText)|TVal::DirWrite|TVal::DirRead,
+		    (atoi(ael->attr("flg").c_str())&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
 		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()) );
 		isUpdated = true;
 	    }

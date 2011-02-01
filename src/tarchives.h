@@ -204,10 +204,10 @@ class TArchiveS : public TSubSYS
 	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
 
 	//> Message archive function
-	void messPut( time_t tm, int utm, const string &categ, char level, const string &mess );
+	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess );
 	void messPut( const vector<TMess::SRec> &recs );
 	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
-	    char level = TMess::Debug, const string &arch = "" );
+	    int8_t level = TMess::Debug, const string &arch = "" );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
 
@@ -216,7 +216,7 @@ class TArchiveS : public TSubSYS
 	TElem &aValE( )		{ return elAval; }
 
 	//Public attributes
-	static int max_req_mess;
+	static unsigned max_req_mess;
 
     protected:
 	//Protected methods

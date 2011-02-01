@@ -1362,9 +1362,9 @@ void WdgTree::updateTree( const string &vca_it )
     long long t_cnt = TSYS::curTime();
 #endif
 
-    bool is_create, root_allow;
+    bool is_create = false, root_allow = false;
     int i_l, i_w, i_cw, i_top, i_topwl, i_topcwl;
-    int i_t, i_m, i_a;
+    int i_t = 0, i_m = 0, i_a;
     QTreeWidgetItem *nit, *nit_w, *nit_cw;
     vector<string> list_wl;
     string t_el, simg;
@@ -1638,7 +1638,6 @@ void WdgTree::updateTree( const string &vca_it )
 void WdgTree::ctrTreePopup( )
 {
     QMenu popup;
-    QTreeWidget *lview = (QTreeWidget *)sender();
 
     //Add actions
     popup.addAction(owner()->actLibNew);
@@ -1666,9 +1665,7 @@ void WdgTree::ctrTreePopup( )
     actRefresh->setStatusTip(_("Press to refresh present libraries."));
     connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
-
-    QAction *rez = popup.exec(QCursor::pos());
-
+    popup.exec(QCursor::pos());
     popup.clear();
 }
 
@@ -1743,7 +1740,6 @@ void ProjTree::selectItem( bool force )
     QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el)
     {
-	bool cur_it = (cur_el == sel_ls.at(0));
 	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
 	cur_el=cur_el->parent();
     }
@@ -1893,7 +1889,6 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 void ProjTree::ctrTreePopup( )
 {
     QMenu popup;
-    QTreeWidget *lview = (QTreeWidget *)sender();
 
     //Add actions
     popup.addAction(owner()->actPrjRun);
@@ -1924,9 +1919,7 @@ void ProjTree::ctrTreePopup( )
     actRefresh->setStatusTip(_("Press to refresh present projects."));
     connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
-
-    QAction *rez = popup.exec(QCursor::pos());
-
+    popup.exec(QCursor::pos());
     popup.clear();
 }
 
@@ -2362,7 +2355,6 @@ void DevelWdgView::wdgPopup( )
     int sel_cnt;
     vector<DevelWdgView*> sel_wdgs;
     QMenu popup;
-    QTreeWidget *lview = (QTreeWidget *)sender();
 
     //> Cancel new widget inserting
     QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
@@ -2449,9 +2441,8 @@ void DevelWdgView::wdgPopup( )
 	popup.addAction(mainWin()->actDBSave);
     }
 
-    //- Execute of menu -
-    QAction *rez = popup.exec(QCursor::pos());
-
+    //> Execute of menu
+    popup.exec(QCursor::pos());
     popup.clear();
 }
 

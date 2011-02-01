@@ -204,7 +204,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     int irez;
     rep:
-    if( irez = mysql_real_query(&connect,req.c_str(),req.size()) )
+    if((irez = mysql_real_query(&connect,req.c_str(),req.size())))
     {
 	if( irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST )
 	{
@@ -610,7 +610,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    next_key = true;
 	}
 
-	int i_fld, tsz;
+	int i_fld;
 	for( i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
 	    if( cf_el[i_cf] == tblStrct[i_fld][0] ) break;
 	/*{
@@ -625,6 +625,7 @@ void MTable::fieldFix( TConfig &cfg )
 	{
 	    switch(u_cfg.fld().type())
 	    {
+		case TFld::String:
 		    if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
 			f_tp = "varchar("+TSYS::int2str(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?200:255,u_cfg.fld().len())))+")";
 		    else if( u_cfg.fld().len() < 65536 )

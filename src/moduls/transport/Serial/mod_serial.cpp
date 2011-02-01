@@ -480,14 +480,14 @@ void *TTrIn::Task( void *tr_in )
 
     AutoHD<TProtocolIn> prot_in;
     struct timeval tv;
-    int r_len;
+    int r_len = 0;
     string req, answ;
     char buf[1000];
     fd_set fdset;
 
     double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
     int wFrTm = 1000*atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
-    long long stFrTm, tmW = 0, tmTmp1;
+    long long stFrTm = 0, tmW = 0, tmTmp1;
 
     fcntl( tr->fd, F_SETFL, 0 );
 
@@ -1013,7 +1013,6 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     }
 
     //> Read reply
-    int i_b = 0;
     if( ibuf != NULL && len_ib > 0 )
     {
 	fd_set rd_fd;
