@@ -1,3 +1,7 @@
+2011-02-04 Roman
+- Transport.Serial: Port init is made using previous properties and allow for miss any port properties set.
+
+
 2011-02-01 Roman
 - SYS: Build with all warning show is enabled for RPM-packages.
 - SYS: The default start OpenSCADA scripts "openscada_start" "openscada_demo" and "openscada_demo_local" is adapted

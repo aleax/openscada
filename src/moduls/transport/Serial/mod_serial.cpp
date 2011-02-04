@@ -170,13 +170,13 @@ void TTr::devUnLock( const string &dn )
 
 void TTr::Task( union sigval obj )
 {
-    if( mod->prcSt ) return;
+    if(mod->prcSt) return;
     mod->prcSt = true;
 
     //> Check all output transports
     vector<string> ls;
     mod->outList(ls);
-    for( int i_l = 0; i_l < ls.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try{ mod->outAt(ls[i_l]).at().check(); }
 	catch(...){ }
 
@@ -186,8 +186,8 @@ void TTr::Task( union sigval obj )
 void TTr::writeLine( int fd, const string &ln )
 {
     string obuf = ln+"\r\n";
-    for( int wOff = 0, kz = 0; wOff != obuf.size(); wOff += kz )
-	if( (kz=write(fd,obuf.data()+wOff,obuf.size()-wOff)) <= 0 )
+    for(unsigned wOff = 0, kz = 0; wOff != obuf.size(); wOff += kz)
+	if((kz=write(fd,obuf.data()+wOff,obuf.size()-wOff)) <= 0)
 	    throw TError(mod->nodePath().c_str(),_("Write line error."));
 }
 
@@ -230,7 +230,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 //* TTrIn                                        *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), trIn(0), trOut(0), tmMax(0), fd(-1), mAPrms(cfg("A_PRMS").getSd()),
+    TTransportIn(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
     mMdmMode(false), mMdmDataMode(false)
@@ -322,115 +322,121 @@ void TTrIn::connect( )
 	//> Open and setup device
 	//>> Serial port open
 	mDevPort = TSYS::strSepParse(addr(),0,':');
-	fd = open( mDevPort.c_str(), O_RDWR|O_NOCTTY );
-	if( fd < 0 ) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
+	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY);
+	if(fd < 0) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
 	//>> Set serial port parameters
 	struct termios tio;
-	bzero( &tio, sizeof(tio) );
+	tcgetattr(fd, &tio);
 	tio.c_iflag = 0;
 	tio.c_oflag = 0;
-	tio.c_cflag = B9600|CS8|CREAD|CLOCAL;
+	tio.c_cflag |= (CREAD|CLOCAL);
 	tio.c_lflag = 0;
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
-	tio.c_cc[VMIN] = 1;            ///< blocking read until 1 character arrives
+	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives*/
 	//>> Set speed
-	int speed = atoi(TSYS::strSepParse(addr(),1,':').c_str());
-	speed_t tspd = B9600;
-	switch( speed )
+	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
+	if(!speed.empty())
 	{
-	    case 300:	tspd = B300;	break;
-	    case 600:	tspd = B600;	break;
-	    case 1200:	tspd = B1200;	break;
-	    case 2400:	tspd = B2400;	break;
-	    case 4800:	tspd = B4800;	break;
-	    case 9600:	tspd = B9600;	break;
-	    case 19200:	tspd = B19200;	break;
-	    case 38400:	tspd = B38400;	break;
-	    case 57600:	tspd = B57600;	break;
-	    case 115200:tspd = B115200;	break;
-	    case 230400:tspd = B230400;	break;
-	    case 460800:tspd = B460800;	break;
-	    case 500000:tspd = B500000;	break;
-	    case 576000:tspd = B576000;	break;
-	    case 921600:tspd = B921600;	break;
-	    default: throw TError(nodePath().c_str(),_("Speed '%d' error."),speed);
+	    speed_t tspd = B9600;
+	    switch(atoi(speed.c_str()))
+	    {
+		case 300:	tspd = B300;	break;
+		case 600:	tspd = B600;	break;
+		case 1200:	tspd = B1200;	break;
+		case 2400:	tspd = B2400;	break;
+		case 4800:	tspd = B4800;	break;
+		case 9600:	tspd = B9600;	break;
+		case 19200:	tspd = B19200;	break;
+		case 38400:	tspd = B38400;	break;
+		case 57600:	tspd = B57600;	break;
+		case 115200:	tspd = B115200;	break;
+		case 230400:	tspd = B230400;	break;
+		case 460800:	tspd = B460800;	break;
+		case 500000:	tspd = B500000;	break;
+		case 576000:	tspd = B576000;	break;
+		case 921600:	tspd = B921600;	break;
+		default: throw TError(nodePath().c_str(),_("Speed '%s' error."),speed.c_str());
+	    }
+	    cfsetispeed(&tio, tspd);
+	    cfsetospeed(&tio, tspd);
 	}
-	cfsetispeed( &tio, tspd );
-	cfsetospeed( &tio, tspd );
 	//>> Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
-	if( format.size() != 3 ) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
-	//>>> Set byte length
-	int len =  format[0]-'0';
-	if( len < 5 || len > 8 ) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
-	tio.c_cflag &= ~CSIZE;
-	switch(len)
+	string format = TSYS::strNoSpace(TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':')));
+	if(!format.empty())
 	{
-	    case 5:	tio.c_cflag |= CS5;	break;
-	    case 6:	tio.c_cflag |= CS6;	break;
-	    case 7:	tio.c_cflag |= CS7;	break;
-	    case 8:	tio.c_cflag |= CS8;	break;
+	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
+	    //>>> Set byte length
+	    int len =  format[0]-'0';
+	    if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
+	    tio.c_cflag &= ~CSIZE;
+	    switch(len)
+	    {
+		case 5:	tio.c_cflag |= CS5;	break;
+		case 6:	tio.c_cflag |= CS6;	break;
+		case 7:	tio.c_cflag |= CS7;	break;
+		case 8:	tio.c_cflag |= CS8;	break;
+	    }
+	    //>>> Set parity
+	    char parity = tolower(format[1]);
+	    switch(parity)
+	    {
+		case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
+		case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
+		case 'n': tio.c_cflag &= ~PARENB;			break;
+		default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
+	    }
+	    //>>> Set stop bits number
+ 	    int stopbt = format[2]-'0';
+	    if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
+	    else if(stopbt == 2) tio.c_cflag |= CSTOPB;
+	    else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
 	}
-	//>>> Set parity
-	char parity = tolower(format[1]);
-	switch( parity )
-	{
-	    case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;	break;
-	    case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
-	    case 'n': tio.c_cflag &= ~PARENB;	break;
-	    default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
-	}
-	//>>> Set stop bits number
- 	int stopbt = format[2]-'0';
-	if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
-	else if(stopbt == 2) tio.c_cflag |= CSTOPB;
-	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
 
 	//>> Set flow control
-	string fc = TSYS::strSepParse(addr(),3,':');
-	if( !fc.empty() )
-	    switch( tolower(fc[0]) )
+	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	if(!fc.empty())
+	    switch(tolower(fc[0]))
 	    {
 		case 'h': tio.c_cflag |= CRTSCTS;	break;
 		case 's': tio.c_iflag |= (IXON|IXOFF|IXANY);	break;
 	    }
 
 	//>> Set port's data
-	tcflush( fd, TCIOFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
+	tcflush(fd, TCIOFLUSH);
+	tcsetattr(fd, TCSANOW, &tio);
 
 	//> Modem init
 	mMdmMode = atoi(TSYS::strSepParse(addr(),4,':').c_str());
-	if( mMdmMode )
+	if(mMdmMode)
 	{
 	    mMdmDataMode = false;
 	    //>> Send init 1 string
-	    if( !mdmInitStr1().empty() )
+	    if(!mdmInitStr1().empty())
 	    {
-		if( mdmPreInit() > 0 )
+		if(mdmPreInit() > 0)
 		{
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    usleep((int)(mdmPreInit()*0.5e6));
 		    TTr::writeLine(fd,"");
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    usleep((int)(mdmPreInit()*0.5e6));
 		}
 		TTr::writeLine(fd,mdmInitStr1());
-		if( TTr::expect(fd,mdmInitResp(),mdmTm()).empty() )
+		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr1().c_str());
-		usleep( (int)(mdmPostInit()*1e6) );
+		usleep((int)(mdmPostInit()*1e6));
 	    }
 	    //>> Send init 2 string
-	    if( !mdmInitStr2().empty() )
+	    if(!mdmInitStr2().empty())
 	    {
-		if( mdmPreInit() > 0 )
+		if(mdmPreInit() > 0)
 		{
 		    usleep( (int)(mdmPreInit()*0.5e6) );
 		    TTr::writeLine(fd,"");
 		    usleep( (int)(mdmPreInit()*0.5e6) );
 		}
 		TTr::writeLine(fd,mdmInitStr2());
-		if( TTr::expect(fd,mdmInitResp(),mdmTm()).empty() )
+		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr2().c_str());
-		usleep( (int)(mdmPostInit()*1e6) );
+		usleep((int)(mdmPostInit()*1e6));
 	    }
 	}
     }
@@ -576,11 +582,11 @@ void *TTrIn::Task( void *tr_in )
 	if( answ.size() )
 	{
 #if OSC_DEBUG >= 5
-	    mess_debug( nodePath().c_str(), _("Serial replied message <%d>."), answ.size() );
+	    mess_debug(nodePath().c_str(), _("Serial replied message <%d>."), answ.size());
 #endif
-	    for( int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL )
+	    for(unsigned wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
-		wL = write( tr->fd, answ.data()+wOff, answ.size()-wOff );
+		wL = write(tr->fd, answ.data()+wOff, answ.size()-wOff);
 		tr->trOut += wL;
 	    }
 	    answ = "";
@@ -693,7 +699,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), mAPrms(cfg("A_PRMS").getSd()),
+    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), fd(-1), mLstReqTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
     mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false)
@@ -790,7 +796,7 @@ void TTrOut::setTimings( const string &vl )
 
 void TTrOut::start( )
 {
-    if( run_st ) return;
+    if(run_st) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -801,85 +807,91 @@ void TTrOut::start( )
 	//> Open and setup device
 	mDevPort = TSYS::strSepParse(addr(),0,':');
 	//>> Lock device for all serial transports
-	if( !(isLock=mod->devLock(mDevPort)) ) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
+	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
 
 	//>> Serial port open
-	fd = open( mDevPort.c_str(), O_RDWR|O_NOCTTY );
-	if( fd < 0 ) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
+	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY);
+	if(fd < 0) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
 
 	//>> Set serial port parameters
 	struct termios tio;
-	bzero( &tio, sizeof(tio) );
+	tcgetattr(fd, &tio);
 	tio.c_iflag = 0;
 	tio.c_oflag = 0;
-	tio.c_cflag = B9600|CS8|CREAD|CLOCAL;
+	tio.c_cflag |= (CREAD|CLOCAL);
 	tio.c_lflag = 0;
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
-	tio.c_cc[VMIN] = 1;            ///< blocking read until 1 character arrives
+	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives
 
 	//>> Set speed
-	int speed = atoi(TSYS::strSepParse(addr(),1,':').c_str());
-	speed_t tspd = B9600;
-	switch( speed )
+	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
+	if(!speed.empty())
 	{
-	    case 300:	tspd = B300;	break;
-	    case 600:	tspd = B600;	break;
-	    case 1200:	tspd = B1200;	break;
-	    case 2400:	tspd = B2400;	break;
-	    case 4800:	tspd = B4800;	break;
-	    case 9600:	tspd = B9600;	break;
-	    case 19200:	tspd = B19200;	break;
-	    case 38400:	tspd = B38400;	break;
-	    case 57600:	tspd = B57600;	break;
-	    case 115200:tspd = B115200;	break;
-	    case 230400:tspd = B230400;	break;
-	    case 460800:tspd = B460800;	break;
-	    case 500000:tspd = B500000;	break;
-	    case 576000:tspd = B576000;	break;
-	    case 921600:tspd = B921600;	break;
-	    default: throw TError(nodePath().c_str(),_("Speed '%d' error."),speed);
+	    speed_t tspd = B9600;
+	    switch(atoi(speed.c_str()))
+	    {
+		case 300:	tspd = B300;	break;
+		case 600:	tspd = B600;	break;
+		case 1200:	tspd = B1200;	break;
+		case 2400:	tspd = B2400;	break;
+		case 4800:	tspd = B4800;	break;
+		case 9600:	tspd = B9600;	break;
+		case 19200:	tspd = B19200;	break;
+		case 38400:	tspd = B38400;	break;
+		case 57600:	tspd = B57600;	break;
+		case 115200:	tspd = B115200;	break;
+		case 230400:	tspd = B230400;	break;
+		case 460800:	tspd = B460800;	break;
+		case 500000:	tspd = B500000;	break;
+		case 576000:	tspd = B576000;	break;
+		case 921600:	tspd = B921600;	break;
+		default: throw TError(nodePath().c_str(),_("Speed '%s' error."),speed.c_str());
+	    }
+	    cfsetispeed(&tio, tspd);
+	    cfsetospeed(&tio, tspd);
 	}
-	cfsetispeed( &tio, tspd );
-	cfsetospeed( &tio, tspd );
 
 	//>> Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
-	if( format.size() != 3 ) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
-
-	//>>> Set byte length
-	int len =  format[0]-'0';
-	if( len < 5 || len > 8 ) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
-	tio.c_cflag &= ~CSIZE;
-	switch(len)
+	string format = TSYS::strNoSpace(TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':')));
+	if(!format.empty())
 	{
-	    case 5:	tio.c_cflag |= CS5;	break;
-	    case 6:	tio.c_cflag |= CS6;	break;
-	    case 7:	tio.c_cflag |= CS7;	break;
-	    case 8:	tio.c_cflag |= CS8;	break;
-	}
+	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 
-	//>>> Set parity
-	char parity = tolower(format[1]);
-	switch( parity )
-	{
-	    case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;	break;
-	    case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
-	    case 'n': tio.c_cflag &= ~PARENB;	break;
-	    default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
-	}
+	    //>>> Set byte length
+	    int len =  format[0]-'0';
+	    if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
+	    tio.c_cflag &= ~CSIZE;
+	    switch(len)
+	    {
+		case 5:	tio.c_cflag |= CS5;	break;
+		case 6:	tio.c_cflag |= CS6;	break;
+		case 7:	tio.c_cflag |= CS7;	break;
+		case 8:	tio.c_cflag |= CS8;	break;
+	    }
 
-	//>>> Set stop bits number
-	int stopbt = format[2]-'0';
-	if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
-	else if(stopbt == 2) tio.c_cflag |= CSTOPB;
-	else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt); 
+	    //>>> Set parity
+	    char parity = tolower(format[1]);
+	    switch(parity)
+	    {
+		case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
+		case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
+		case 'n': tio.c_cflag &= ~PARENB;			break;
+		default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
+	    }
+
+	    //>>> Set stop bits number
+	    int stopbt = format[2]-'0';
+	    if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
+	    else if(stopbt == 2) tio.c_cflag |= CSTOPB;
+	    else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
+	}
 
 	//>> Set flow control
-	string fc = TSYS::strSepParse(addr(),3,':');
-	if( !fc.empty() )
-	    switch( tolower(fc[0]) )
+	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	if(!fc.empty())
+	    switch(tolower(fc[0]))
 	    {
-		case 'h': tio.c_cflag |= CRTSCTS;	break;
+		case 'h': tio.c_cflag |= CRTSCTS;		break;
 		case 's': tio.c_iflag |= (IXON|IXOFF|IXANY);	break;
 	    }
 
@@ -888,50 +900,50 @@ void TTrOut::start( )
 	tcsetattr( fd, TCSANOW, &tio );
 
 	//> Modem connection establish
-	string telNumb = TSYS::strSepParse(addr(),4,':');
-	if( !telNumb.empty() )
+	string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
+	if(!telNumb.empty())
 	{
 	    //>> Resource to transfer function alloc
-	    ResAlloc res( nodeRes(), true );
+	    ResAlloc res(nodeRes(), true);
 	    run_st = mMdmMode = true;
-	
+
 	    //>> Send init 1 string
-	    if( !mdmInitStr1().empty() )
+	    if(!mdmInitStr1().empty())
 	    {
-		if( mdmPreInit() > 0 )
+		if(mdmPreInit() > 0)
 		{
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    usleep((int)(mdmPreInit()*0.5e6));
 		    TTr::writeLine(fd,"");
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    usleep((int)(mdmPreInit()*0.5e6));
 		}
 		TTr::writeLine(fd,mdmInitStr1());
-		if( TTr::expect(fd,mdmInitResp(),mdmTm()).empty() )
+		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr1().c_str());
-		usleep( (int)(mdmPostInit()*1e6) );
+		usleep((int)(mdmPostInit()*1e6));
 	    }
 	    //>> Send init 2 string
-	    if( !mdmInitStr2().empty() )
+	    if(!mdmInitStr2().empty())
 	    {
-		if( mdmPreInit() > 0 )
+		if(mdmPreInit() > 0)
 		{
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    usleep((int)(mdmPreInit()*0.5e6));
 		    TTr::writeLine(fd,"");
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    usleep((int)(mdmPreInit()*0.5e6));
 		}
 		TTr::writeLine(fd,mdmInitStr2());
-		if( TTr::expect(fd,mdmInitResp(),mdmTm()).empty() )
+		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr2().c_str());
-		usleep( (int)(mdmPostInit()*1e6) );
+		usleep((int)(mdmPostInit()*1e6));
 	    }
 	    //>> Dial number and connection wait
 	    string rez;
 	    telNumb = mdmDialStr()+telNumb;
 	    TTr::writeLine(fd,telNumb);
-	    if( (rez=TTr::expect(fd,mdmCnctResp()+"\n"+mdmBusyResp()+"\n"+mdmNoCarResp()+"\n"+mdmNoDialToneResp(),mdmTm())) != mdmCnctResp() )
+	    if((rez=TTr::expect(fd,mdmCnctResp()+"\n"+mdmBusyResp()+"\n"+mdmNoCarResp()+"\n"+mdmNoDialToneResp(),mdmTm())) != mdmCnctResp())
 	    {
-		if( rez == mdmBusyResp() )		throw TError(nodePath().c_str(),_("Modem busy"));
-		else if( rez == mdmNoCarResp() )	throw TError(nodePath().c_str(),_("Modem no carrier"));
-		else if( rez == mdmNoDialToneResp() )	throw TError(nodePath().c_str(),_("Modem no dial tone"));
+		if(rez == mdmBusyResp())		throw TError(nodePath().c_str(),_("Modem busy"));
+		else if(rez == mdmNoCarResp())		throw TError(nodePath().c_str(),_("Modem no carrier"));
+		else if(rez == mdmNoDialToneResp())	throw TError(nodePath().c_str(),_("Modem no dial tone"));
 		else 					throw TError(nodePath().c_str(),_("Modem no connected"));
 	    }
 	    mLstReqTm = TSYS::curTime();
@@ -941,10 +953,10 @@ void TTrOut::start( )
     catch(TError err)
     {
 	//> HangUp
-	if( mMdmMode ) TTr::writeLine(fd,mdmHangUp());
+	if(mMdmMode) TTr::writeLine(fd,mdmHangUp());
 
-	if( fd >= 0 ) { close(fd); fd = -1; }
-	if( isLock ) mod->devUnLock(mDevPort);
+	if(fd >= 0) { close(fd); fd = -1; }
+	if(isLock) mod->devUnLock(mDevPort);
 	run_st = mMdmMode = false;
 	throw;
     }

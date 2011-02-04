@@ -2698,7 +2698,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 	    TProt::iTm(rb,off);			//timestamp
 	    TProt::iNu(rb,off,4);		//viewVersion
 
-	    uint32_t nMaxRef = TProt::iNu(rb,off,4);	//requestedMax ReferencesPerNode
+	    TProt::iNu(rb,off,4);		//requestedMax ReferencesPerNode
 						//> nodesToBrowse
 	    uint32_t nc = TProt::iNu(rb,off,4);	//Nodes
 
@@ -2712,7 +2712,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 		NodeId nid = TProt::iNodeId(rb,off);	//nodeId
 		uint32_t bd = TProt::iNu(rb,off,4);	//browseDirection
 		NodeId rtId = TProt::iNodeId(rb,off);	//referenceTypeId
-		bool incSubTp = TProt::iNu(rb,off,1);	//includeSubtypes
+		TProt::iNu(rb,off,1);			//includeSubtypes
 		uint32_t nClass = TProt::iNu(rb,off,4);	//nodeClassMask
 		uint32_t resMask = TProt::iNu(rb,off,4);//resultMask
 
