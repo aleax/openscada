@@ -94,7 +94,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 TTpContr::~TTpContr()
 {
     nodeDelAll();
-    for(int i_da = 0; i_da < m_da.size(); i_da++ )	delete m_da[i_da];
+    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)	delete m_da[i_da];
     m_da.clear();
 }
 
@@ -129,11 +129,11 @@ void TTpContr::postEnable( int flag )
     string el_id,el_name,el_def;
     vector<string> list;
     daList(list);
-    for( int i_ls = 0; i_ls < list.size(); i_ls++ )
+    for(unsigned i_ls = 0; i_ls < list.size(); i_ls++)
     {
-	if( i_ls == 0 )	el_def = list[i_ls];
-	el_id+=list[i_ls]+";";
-	el_name=el_name+_(daGet(list[i_ls])->name().c_str())+";";
+	if(i_ls == 0)	el_def = list[i_ls];
+	el_id += list[i_ls]+";";
+	el_name = el_name+_(daGet(list[i_ls])->name().c_str())+";";
     }
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
@@ -148,7 +148,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 void TTpContr::daList( vector<string> &da )
 {
     da.clear();
-    for(int i_da = 0; i_da < m_da.size(); i_da++ )
+    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
 	da.push_back(m_da[i_da]->id());
 }
 
@@ -159,8 +159,8 @@ void TTpContr::daReg( DA *da )
 
 DA *TTpContr::daGet( const string &da )
 {
-    for(int i_da = 0; i_da < m_da.size(); i_da++ )
-	if( m_da[i_da]->id() == da ) return m_da[i_da];
+    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
+	if(m_da[i_da]->id() == da) return m_da[i_da];
 
     return NULL;
 }
@@ -169,8 +169,8 @@ DA *TTpContr::daGet( const string &da )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), tm_calc(0.0)
+	::TController(name_c,daq_db,cfgelem), m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),
+	prc_st(false), endrun_req(false), tm_calc(0.0)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
@@ -194,11 +194,11 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::enable_(  )
 {
-    if( cfg("AUTO_FILL").getB() )
+    if(cfg("AUTO_FILL").getB())
     {
 	vector<string> list;
 	mod->daList(list);
-	for( int i_l = 0; i_l < list.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < list.size(); i_l++)
 	    mod->daGet(list[i_l])->makeActiveDA(this);
     }
 }
@@ -206,32 +206,29 @@ void TMdContr::enable_(  )
 void TMdContr::start_( )
 {
     //> Start the request data task
-    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
 
     //> Set Eval for parameters
     ResAlloc res(en_res,true);
-    for( int i_prm = 0; i_prm < p_hd.size(); i_prm++ )
+    for(unsigned i_prm = 0; i_prm < p_hd.size(); i_prm++)
         p_hd[i_prm].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if( p_hd[i_prm].at().id() == id ) break;
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
 
-    if( val && i_prm >= p_hd.size() )
-	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )
-	p_hd.erase(p_hd.begin()+i_prm);
+    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -272,7 +269,7 @@ void *TMdContr::Task( void *icntr )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), m_da(NULL), m_auto(false)
+    TParamContr(name,tp_prm), m_auto(false), m_da(NULL)
 {
 
 }
@@ -322,8 +319,8 @@ void TMdPrm::save_( )
     //> Save archives
     vector<string> a_ls;
     vlList(a_ls);
-    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
 	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
@@ -344,12 +341,12 @@ void TMdPrm::getVal( )
 
 void TMdPrm::setEval( )
 {
-    if( !m_da )	return;
+    if(!m_da)	return;
 
     vector<string> als;
     m_da->fldList(als);
-    for( int i_a = 0; i_a < als.size(); i_a++ )
-	if( vlPresent(als[i_a]) )
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
+	if(vlPresent(als[i_a]))
 	    vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
 }
 

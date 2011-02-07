@@ -1026,7 +1026,7 @@ void TVArchive::save_( )
 
 void TVArchive::start( )
 {
-    if( run_st ) return;
+    if(run_st) return;
 
     run_st = true;
 
@@ -1036,7 +1036,7 @@ void TVArchive::start( )
 
 	//> Attach to archivators
 	string arch;
-	for( int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size();  )
+	for(int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size(); )
 	    if( !archivatorPresent(arch) )
 		try{ archivatorAttach(arch); }
 		catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }

@@ -50,59 +50,59 @@ HddStat::~HddStat( )
 void HddStat::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
-    
-    //- Create Config -
+
+    //> Create Config
     c_subt.fld().setDescr(_("Disk(part)"));
 
     vector<string> list;
     dList(list,true);
     string dls;
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-	dls=dls+list[i_l]+";";
+    for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	dls = dls+list[i_l]+";";
     c_subt.fld().setValues(dls);
-    c_subt.fld().setSelNames(dls);    
-	
+    c_subt.fld().setSelNames(dls);
+
     try{ c_subt.getSEL(); }
     catch(...)
     {
-	if( list.size() ) c_subt.setS(list[0]);    
+	if(list.size()) c_subt.setS(list[0]);
     }
 }
 
 void HddStat::dList( vector<string> &list, bool part )
-{    
+{
     int major, minor;
     char name[11];
     char buf[256];
-    
+
     FILE *f = fopen("/proc/partitions","r");
     if( f == NULL ) return;
-	
+
     while( fgets(buf,sizeof(buf),f) != NULL )
     {
 	if( sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3 ) continue;
 	if( !part && minor != 0 ) continue;
 	if( !strncmp(name,"md",2) )	continue;
-	list.push_back(name);	
+	list.push_back(name);
     }
     fclose(f);
 }
 
 void HddStat::getVal( TMdPrm *prm )
-{    
+{
     unsigned int rd,rd1,wr,wr1;
     char sc_pat[50], buf[256];
-    
+
     string dev = prm->cfg("SUBT").getS();
     FILE *f = fopen("/proc/diskstats","r");
     if(f)
-    {	
+    {
 	//major minor name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
         //--or for a partition--
 	//major minor name rio rsect wio wsect
 	snprintf(sc_pat,sizeof(sc_pat),"%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu",dev.c_str());
 	while( fgets(buf,sizeof(buf),f) != NULL )
-	{	
+	{
 	    int n = sscanf(buf,sc_pat,&rd,&rd1,&wr,&wr1);
             if( !n ) continue;
 	    if(n == 4)
@@ -120,24 +120,24 @@ void HddStat::getVal( TMdPrm *prm )
     f = fopen("/proc/partitions","r");
     if(f)
     {
-	//major minor #blocks name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq					                                
+	//major minor #blocks name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
 	snprintf(sc_pat,sizeof(sc_pat),"%%*d %%*d %%*d %s %%*d %%*d %%lu %%*d %%*d %%*d %%lu",dev.c_str());
 	while( fgets(buf,sizeof(buf),f) != NULL )
 	    if( sscanf(buf,sc_pat,&rd,&wr) == 2 ) break;
 	prm->vlAt("rd").at().setR((double)rd/2.0,0,true);
-        prm->vlAt("wr").at().setR((double)wr/2.0,0,true);		    	
+        prm->vlAt("wr").at().setR((double)wr/2.0,0,true);
 	fclose(f);
-	return;    
-    }	
+	return;
+    }
 }
 
 void HddStat::makeActiveDA( TMdContr *a_cntr )
 {
     string ap_nm = "Statistic_";
-	
+
     vector<string> list;
     dList(list);
-    for( int i_hd = 0; i_hd < list.size(); i_hd++ )
+    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
         string hddprm = ap_nm+list[i_hd];
         if(!a_cntr->present(hddprm))
@@ -151,4 +151,3 @@ void HddStat::makeActiveDA( TMdContr *a_cntr )
         }
     }
 }
-

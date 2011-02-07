@@ -84,7 +84,7 @@ class XMLNode
 	XMLNode* clear( );
 
 	bool	childEmpty( ) const		{ return mChildren.empty(); }
-	int	childSize( ) const		{ return mChildren.size(); }
+	unsigned childSize( ) const		{ return mChildren.size(); }
 	void	childAdd( XMLNode *nd );
 	XMLNode* childAdd( const string &name = "" );
 	int	childIns( unsigned id, XMLNode *nd );

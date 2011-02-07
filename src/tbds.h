@@ -76,6 +76,7 @@ class TTable : public TCntrNode
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	//Protected attributes
 	time_t	mLstUse;

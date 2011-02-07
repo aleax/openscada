@@ -21,9 +21,12 @@
 
 #include <sys/times.h>
 #include <dirent.h>
-#include <sensors/sensors.h>
 
 #include <tsys.h>
+
+#if HAVE_SENSORS_SENSORS_H
+#include <sensors/sensors.h>
+#endif
 
 #include "os_contr.h"
 #include "da_sensors.h"
@@ -37,23 +40,27 @@ const char *Sensors::mbmon_cmd = "mbmon -r -c 1";	//write one try to stdout
 //*************************************************
 Sensors::Sensors( ) : libsensor_ok(false)
 {
+#if HAVE_SENSORS_SENSORS_H
     //> Libsensor API init
 #if SENSORS_API_VERSION >= 0x400
-    if( sensors_init(NULL) == 0 ) libsensor_ok = true;
+    if(sensors_init(NULL) == 0) libsensor_ok = true;
 #else
     FILE *f = fopen("/etc/sensors.conf", "r");
-    if( f )
+    if(f)
     {
-	if( sensors_init(f) == 0 ) libsensor_ok = true;
+	if(sensors_init(f) == 0) libsensor_ok = true;
 	fclose(f);
     }
+#endif
 #endif
 }
 
 Sensors::~Sensors( )
 {
+#if HAVE_SENSORS_SENSORS_H
     //> Libsensor API cleanup
     if( libsensor_ok ) sensors_cleanup();
+#endif
 }
 
 void Sensors::init( TMdPrm *prm )
@@ -77,6 +84,7 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
     //> Use libsensor
     if( libsensor_ok )
     {
+#if HAVE_SENSORS_SENSORS_H
 	int nr = 0;
 	double val;
 	string	s_id;
@@ -129,6 +137,7 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 		}
 	}
 #endif
+#endif
     }
     //> Use mbmon
     else
@@ -160,6 +169,7 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	//> Use libsensor check
 	if( libsensor_ok )
 	{
+#if HAVE_SENSORS_SENSORS_H
 	    int nr = 0;
 	    const sensors_chip_name	*name;
 #if SENSORS_API_VERSION >= 0x400
@@ -195,6 +205,7 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 		    if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
 		    { sens_allow |= true; break; }
 	    }
+#endif
 #endif
 	}
 	//> Check monitor present

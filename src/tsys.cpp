@@ -929,6 +929,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp )
 	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
 		sout += TSYS::strMess(((i_sz+1)%16)?"%0.2x ":"%0.2x\n",(unsigned char)in[i_sz]);
 	    break;
+	default: sout = in;	break;
     }
 
     return sout;

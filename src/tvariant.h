@@ -169,7 +169,7 @@ class XMLNodeObj : public TVarObj
 	void setName( const string &vl )	{ mName = vl; }
 	void setText( const string &vl )	{ mText = vl; }
 
-	int childSize( )	{ return mChilds.size(); }
+	unsigned childSize( )	{ return mChilds.size(); }
 	XMLNodeObj *childGet( unsigned id );
 	void childAdd( XMLNodeObj *nd );
 	void childIns( unsigned id, XMLNodeObj *nd );

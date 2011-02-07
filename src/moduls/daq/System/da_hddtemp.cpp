@@ -39,8 +39,11 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 
 Hddtemp::~Hddtemp( )
 {
-    if( ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr) )
-	((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
+    try
+    {
+	if(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr))
+	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
+    }catch(TError err) { }
 }
 
 void Hddtemp::init( TMdPrm *prm )
@@ -53,8 +56,8 @@ void Hddtemp::init( TMdPrm *prm )
     vector<string> list;
     dList(list);
     string dls;
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-	dls=dls+list[i_l]+";";
+    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
+	dls = dls+list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
 
@@ -138,7 +141,7 @@ void Hddtemp::makeActiveDA( TMdContr *a_cntr )
     dList(list);
     try
     {
-	for( int i_hd = 0; i_hd < list.size(); i_hd++ )
+	for( unsigned i_hd = 0; i_hd < list.size(); i_hd++ )
 	{
 	    string hddprm = ap_nm+TSYS::int2str(i_hd);
 	    if(!a_cntr->present(hddprm))
@@ -159,7 +162,7 @@ string Hddtemp::parseName( const string &val )
 {
     int beg = -1, end = -1;
 
-    for(int i_s = 0; i_s < val.size(); i_s++)
+    for(unsigned i_s = 0; i_s < val.size(); i_s++)
 	if(val[i_s] != ' ' &&  val[i_s] != '\t' && isalnum(val[i_s]))
 	{
 	    if(beg < 0) beg = i_s;

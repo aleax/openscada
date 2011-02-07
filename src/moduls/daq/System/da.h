@@ -39,7 +39,8 @@ class DA: public ::TElem
 {
     public:
 	//Methods
-	DA( ) : TElem("da_el") { }
+	DA( ) : TElem("da_el")	{ }
+	virtual ~DA( )		{ }
 
 	virtual string id( ) = 0;
 	virtual string name( ) = 0;

@@ -52,7 +52,7 @@ class TValBuf
 	//Public methods
 	TValBuf( );
 	TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd = false, bool ihres = false );
-	~TValBuf( );
+	virtual ~TValBuf( );
 
 	TValBuf &operator=( TValBuf &src );
 

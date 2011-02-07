@@ -57,8 +57,8 @@ void HddSmart::init( TMdPrm *prm )
     vector<string> list;
     dList(list);
     string dls;
-    for( int i_l = 0; i_l < list.size(); i_l++ )
-	dls=dls+list[i_l]+";";
+    for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	dls = dls+list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
 
@@ -134,7 +134,7 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
 
     vector<string> list;
     dList(list);
-    for( int i_hd = 0; i_hd < list.size(); i_hd++ )
+    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
 	string hddprm = ap_nm+list[i_hd];
 	if(!a_cntr->present(hddprm))

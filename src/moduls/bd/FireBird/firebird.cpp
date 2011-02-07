@@ -96,13 +96,13 @@ void BDMod::load_( )
 string BDMod::sqlReqCode( const string &req, char symb )
 {
     string sout = req;
-    for(int i_sz = 0; i_sz < sout.size(); i_sz++)
+    for(unsigned i_sz = 0; i_sz < sout.size(); i_sz++)
 	if(sout[i_sz] == symb) sout.replace(i_sz++,1,2,symb);
 	/*switch(sout[i_sz])
 	{
 	    case '\'': case '"': sout.replace(i_sz++,1,2,sout[i_sz]);	break;
 	}*/
-	
+
     return sout;
 }
 
@@ -193,7 +193,7 @@ void MBD::allowList( vector<string> &list )
     sqlReq("SELECT rdb$relation_name FROM rdb$relations WHERE "
 	"((rdb$system_flag = 0) OR (rdb$system_flag IS NULL)) AND " 
 	"(rdb$view_source IS NULL) ORDER BY rdb$relation_name",&tbl);
-    for( int i_t = 1; i_t < tbl.size(); i_t++ )
+    for( unsigned i_t = 1; i_t < tbl.size(); i_t++ )
         list.push_back(tbl[i_t][0]);
 }
 
@@ -491,12 +491,11 @@ void MTable::getStructDB( vector< vector<string> > &tblStrct )
 	    "WHERE C.RDB$INDEX_NAME = I.RDB$INDEX_NAME AND C.RDB$RELATION_NAME = '"+
 	    mod->sqlReqCode(name())+"'",&keyLst,false);
 	tblStrct[0].push_back("Key");
-	for( int i_f = 1; i_f < tblStrct.size(); i_f++ )
+	for( unsigned i_f = 1, i_k; i_f < tblStrct.size(); i_f++ )
 	{
-	    int i_k;
 	    for( i_k = 1; i_k < keyLst.size(); i_k++ )
 		if( tblStrct[i_f][0] == keyLst[i_k][0] ) break;
-	    tblStrct[i_f].push_back( (i_k<keyLst.size()) ? keyLst[i_k][1] : "" );
+	    tblStrct[i_f].push_back( (i_k < keyLst.size()) ? keyLst[i_k][1] : "" );
 	}
     }
 }
@@ -506,7 +505,7 @@ void MTable::fieldStruct( TConfig &cfg )
     if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
 
-    for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++)
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	string sid = tblStrct[i_fld][0];
 	if(cfg.cfgPresent(sid)) continue;
@@ -536,7 +535,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     string req = "SELECT FIRST 1 SKIP "+TSYS::int2str(row)+" ", req_where = "WHERE ", sid;
     //>> Add use keys to list
     bool first_sel = true, next = false, trPresent = false;
-    for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++)
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	sid = tblStrct[i_fld][0];
 	TCfg *u_cfg = cfg.at(sid,true);
@@ -565,7 +564,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     owner().sqlReq(req, &tbl, false);
     if(tbl.size() < 2) return false;
     //> Processing of query
-    for(int i_fld = 0; i_fld < tbl[0].size(); i_fld++)
+    for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++)
     {
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid,true);
@@ -591,7 +590,7 @@ void MTable::fieldGet( TConfig &cfg )
     string req = "SELECT ", req_where, sid;
     //>> Add fields list to queue
     bool first_sel = true, next_wr = false, trPresent = false;
-    for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++)
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	sid = tblStrct[i_fld][0];
 	TCfg *u_cfg = cfg.at(sid,true);
@@ -621,7 +620,7 @@ void MTable::fieldGet( TConfig &cfg )
     if(tbl.size() < 2) throw TError(TSYS::DBRowNoPresent,nodePath().c_str(),_("Row is not present."));
 
     //> Processing of query
-    for(int i_fld = 0; i_fld < tbl[0].size(); i_fld++)
+    for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++)
     {
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid,true);
@@ -650,7 +649,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //> Check for translation present
     bool trPresent = isVarTextTransl, trDblDef = false;
-    for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++)
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	if((trPresent || cfg.noTransl()) && (!isVarTextTransl || trDblDef)) break;
 	sid = tblStrct[i_fld][0];
@@ -666,7 +665,7 @@ void MTable::fieldSet( TConfig &cfg )
     string req_where = "WHERE ";
     //>> Add key list to queue
     bool next = false;
-    for(int i_el = 0; i_el < cf_el.size(); i_el++)
+    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!(u_cfg.fld().flg()&TCfg::Key)) continue;
@@ -679,7 +678,7 @@ void MTable::fieldSet( TConfig &cfg )
     string reqi = "INSERT INTO \"" + mod->sqlReqCode(name(),'"') + "\" ";
     string ins_name, ins_value;
     next = false;
-    for(int i_el = 0; i_el < cf_el.size(); i_el++)
+    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!(u_cfg.fld().flg()&TCfg::Key) && !u_cfg.view()) continue;
@@ -699,7 +698,7 @@ void MTable::fieldSet( TConfig &cfg )
 	//>> Update present record
 	string requ = "UPDATE \"" + mod->sqlReqCode(name(),'"') + "\" SET ";
 	next = false;
-	for(int i_el = 0; i_el < cf_el.size(); i_el++)
+	for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
 	{
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	    if(u_cfg.fld().flg()&TCfg::Key || !u_cfg.view()) continue;
@@ -734,7 +733,7 @@ void MTable::fieldDel( TConfig &cfg )
     string req = "DELETE FROM \""+mod->sqlReqCode(name(),'"')+"\" WHERE ";
     //>> Add key list to queue
     bool next = false;
-    for(int i_el = 0; i_el < cf_el.size(); i_el++)
+    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse())
@@ -760,9 +759,8 @@ void MTable::fieldFix( TConfig &cfg )
     string req = "ALTER TABLE \""+mod->sqlReqCode(name(),'"')+"\" DROP CONSTRAINT \"pk_"+mod->sqlReqCode(name(),'"')+"\", ";
 
     //> DROP fields
-    for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++)
+    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size(); i_fld++)
     {
-	int i_cf;
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][0] ||
 		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 &&
@@ -796,7 +794,7 @@ void MTable::fieldFix( TConfig &cfg )
 
     string pr_keys;
     //Add fields
-    for(int i_cf = 0; i_cf < cf_el.size(); i_cf++)
+    for(unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 	//>> Check primary key
@@ -806,7 +804,6 @@ void MTable::fieldFix( TConfig &cfg )
 	    next_key = true;
 	}
 
-	int i_fld;
 	for(i_fld = 1; i_fld < tblStrct.size(); i_fld++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][0]) break;
 
@@ -838,7 +835,7 @@ void MTable::fieldFix( TConfig &cfg )
 	//> Check other languages
 	if(u_cfg.fld().flg()&TCfg::TransltText)
 	{
-	    int i_c;
+	    unsigned i_c;
 	    for(i_c = i_fld; i_c < tblStrct.size(); i_c++)
 		if(tblStrct[i_c][0].size() > 3 && tblStrct[i_c][0].substr(2) == ("#"+cf_el[i_cf]) &&
 		    tblStrct[i_c][0].substr(0,2) != Mess->lang2CodeBase() &&

@@ -459,7 +459,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
     //  vl - value for attribute
     if( id == "setAttr" && prms.size() >= 2 )	{ propSet(prms[0].getS(),prms[1].getS()); return this; }
     // int childSize( ) - return childs counter for node
-    if( id == "childSize" )	return childSize();
+    if( id == "childSize" )	return (int)childSize();
     // XMLNodeObj childAdd(ElTp no = XMLNodeObj) - add node <no> as child to the node
     //  no - node object or name for new node
     if( id == "childAdd" )

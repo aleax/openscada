@@ -38,6 +38,7 @@ class DA
     public:
 	//Methods
 	DA( TMdPrm *prm ) : mPrm(prm)	{ }
+	virtual ~DA( )			{ }
 
 	virtual void getVals( )		{ }
 

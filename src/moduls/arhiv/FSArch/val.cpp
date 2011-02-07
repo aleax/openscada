@@ -202,12 +202,12 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 void ModVArch::checkArchivator( bool now )
 {
-    if( !startStat() )	return;
+    if(!startStat())	return;
 
     chkANow = true;
 
     bool isTm = time(NULL) > (mLstCheck+checkTm()*60);
-    if( now || isTm )
+    if(now || isTm)
     {
 	//> Find archive files for no present archives and create it.
 	struct stat file_stat;
@@ -217,29 +217,29 @@ void ModVArch::checkArchivator( bool now )
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL)
 	{
-	    if( mkdir(addr().c_str(),0777) ) throw TError(nodePath().c_str(),_("Can not create dir <%s>."),addr().c_str());
+	    if(mkdir(addr().c_str(),0777)) throw TError(nodePath().c_str(),_("Can not create dir <%s>."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 
 	//>> Scan opened directory
-	while( (scan_dirent = readdir(IdDir)) != NULL )
+	while((scan_dirent=readdir(IdDir)) != NULL)
 	{
-	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
+	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name) continue;
 
 	    string	ArhNm;
 	    TFld::Type	ArhTp;
 	    string NameArhFile = addr()+"/"+scan_dirent->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
-	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0 ) continue;
+	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
 
 	    //>> Check for info files
-	    if( NameArhFile.compare(NameArhFile.size()-4,4,".val") != 0 && NameArhFile.compare(NameArhFile.size()-7,7,".val.gz") != 0 ) continue;
-	    if( !filePrmGet(NameArhFile,&ArhNm,&ArhTp,NULL,NULL,NULL) )	continue;
+	    if(NameArhFile.compare(NameArhFile.size()-4,4,".val") != 0 && NameArhFile.compare(NameArhFile.size()-7,7,".val.gz") != 0) continue;
+	    if(!filePrmGet(NameArhFile,&ArhNm,&ArhTp,NULL,NULL,NULL))	continue;
 
 	    //>>> Check to archive present
 	    AutoHD<TVArchive> varch;
-	    if( owner().owner().valPresent(ArhNm) )	varch = owner().owner().valAt(ArhNm);
+	    if(owner().owner().valPresent(ArhNm)) varch = owner().owner().valAt(ArhNm);
 	    else
 	    {
 		//>>>> Add no present archive
@@ -250,11 +250,11 @@ void ModVArch::checkArchivator( bool now )
 		varch.at().start();
 	    }
 	    //>>> Check for attached
-	    if( !varch.at().archivatorPresent(workId()) )	varch.at().archivatorAttach(workId());
+	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    //>>> Try connect new file
 	    ResAlloc res(a_res,false);
 	    map<string,TVArchEl*>::iterator iel = archEl.find(ArhNm);
-	    if( iel != archEl.end() )	((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
+	    if(iel != archEl.end()) ((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
 	}
 
 	closedir(IdDir);
@@ -263,11 +263,11 @@ void ModVArch::checkArchivator( bool now )
 
     //>> Scan files of attached archives
     ResAlloc res(a_res,false);
-    for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
-	((ModVArchEl *)iel->second)->checkArchivator( now );
+    for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
+	((ModVArchEl *)iel->second)->checkArchivator(now);
 
     chkANow = false;
-    if( isTm )	mLstCheck = time(NULL);
+    if(isTm)	mLstCheck = time(NULL);
 }
 
 void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
@@ -401,7 +401,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 {
     ModVArchEl *v_el = new ModVArchEl(arch,*this);
-    v_el->checkArchivator(true);
+    if(!owner().owner().SubStarting) v_el->checkArchivator(true);
     return v_el;
 }
 
@@ -579,9 +579,9 @@ void ModVArchEl::checkArchivator( bool now )
 	    string NameArhFile = archivator().addr()+"/"+scan_dirent->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
-	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0)	continue;
-	    if( !archivator().filePrmGet(NameArhFile,&ArhNm,NULL,NULL,NULL,NULL) || archive().id() != ArhNm )	continue;
-	    fileAdd( NameArhFile );
+	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0)	continue;
+	    if(!archivator().filePrmGet(NameArhFile,&ArhNm,NULL,NULL,NULL,NULL) || archive().id() != ArhNm)	continue;
+	    fileAdd(NameArhFile);
 	}
 
 	closedir(IdDir);
@@ -589,14 +589,14 @@ void ModVArchEl::checkArchivator( bool now )
 
     ResAlloc res(mRes,true);
     //>> Check file count for delete old files
-    if( now && ((ModVArch &)archivator()).fileNumber() && (int)arh_f.size() > ((ModVArch &)archivator()).fileNumber() )
-	for( int i_arh = 0; i_arh < (int)arh_f.size(); i_arh++ )
-	    if( (int)arh_f.size() <= ((ModVArch &)archivator()).fileNumber() )	break;
-	    else if( !arh_f[i_arh]->err() )
+    if(now && ((ModVArch &)archivator()).fileNumber() && (int)arh_f.size() > ((ModVArch &)archivator()).fileNumber())
+	for(int i_arh = 0; i_arh < (int)arh_f.size(); i_arh++)
+	    if((int)arh_f.size() <= ((ModVArch &)archivator()).fileNumber())	break;
+	    else if(!arh_f[i_arh]->err())
 	    {
 		string f_nm = arh_f[i_arh]->name();
 		delete arh_f[i_arh];
-		arh_f.erase( arh_f.begin() + i_arh );
+		arh_f.erase(arh_f.begin() + i_arh);
 		remove(f_nm.c_str());
 		remove((f_nm+".info").c_str());
 		i_arh--;
@@ -604,7 +604,7 @@ void ModVArchEl::checkArchivator( bool now )
 
     //> Check the archive's files for pack
     res.request(false);
-    for( unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++ )
+    for(unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++)
 	arh_f[i_arh]->check();
 }
 
@@ -728,8 +728,8 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 
 		arh_f.insert(arh_f.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(),this));
 	    }
-	    //>> Insert values to archive
 
+	    //>> Insert values to archive
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
 	    {
 		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
@@ -1205,7 +1205,7 @@ TVariant VFileArch::getVal( int vpos )
 
     mAcces = time(NULL);
     res.request(false);
-    //>Open archive file
+    //> Open archive file
     int hd = open(name().c_str(),O_RDONLY);
     if( hd <= 0 ) { mErr = true; return EVAL_REAL; }
 
@@ -1274,7 +1274,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     vpos_end = -1;
     while( ibeg <= iend )
     {
-	//-- Get value and put it to file --
+	//>> Get value and put it to file
 	switch(type())
 	{
 	    case TFld::Boolean:
@@ -1350,11 +1350,11 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     }
 
     res.request(true);
-    //- Open archive file -
+    //> Open archive file
     int hd = open(name().c_str(),O_RDWR);
     if( hd <= 0 ) { mErr = true; return; }
 
-    //- Get block geometry from file -
+    //> Get block geometry from file
     int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev = 0, foff_end_len, foff_end, foff_endnext_len, foff_endnext = 0;
     if( vpos_beg )
 	foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
@@ -1363,10 +1363,10 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     if( vpos_beg < mpos )
 	foff_endnext = calcVlOff(hd,vpos_end+1,&foff_endnext_len,true);
 
-    //- Checking and adaptation border -
+    //> Checking and adaptation border
     if(fixVl)
     {
-	//-- Check begin border --
+	//>> Check begin border
 	if( vpos_beg )
 	{
 	    if( getValue(hd,foff_begprev,vSize) == value_first )
@@ -1376,7 +1376,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 	    }
 	    else if( !getPkVal(hd,vpos_beg) )	foff_beg+=vSize;
 	}
-	//--Check end border --
+	//>> Check end border
 	if( vpos_end < mpos )
 	{
 	    if( getValue(hd,foff_endnext,vSize) == value_end )
@@ -1394,7 +1394,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 		else setPkVal(hd,vpos_end+1,1);
 	    }
 	}
-	//-- Merge begin and end pack values --
+	//>> Merge begin and end pack values
  	char tmp_pb;
 	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
 	read(hd,&tmp_pb,1);
@@ -1405,7 +1405,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     }
     else
     {
-	//-- Check begin border --
+	//>> Check begin border
 	if( vpos_beg )
 	{
 	    if( getValue(hd,foff_begprev,foff_begprev_len) == value_first )
@@ -1415,7 +1415,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 	    }
 	    else if( !getPkVal(hd,vpos_beg) ) foff_beg+=foff_begprev_len;
 	}
-	//--Check end border --
+	//>> Check end border
 	if( vpos_end < mpos )
 	{
 	    if( getValue(hd,foff_endnext,foff_endnext_len) == value_end )
@@ -1434,7 +1434,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 	    }
 	}
     }
-    //- Write pack id buffer and value buffer -
+    //> Write pack id buffer and value buffer
     int pid_b_sz;
     if( fixVl )
     {
@@ -1451,7 +1451,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
     lseek(hd,foff_beg,SEEK_SET);
     write(hd,val_b.c_str(),val_b.size());
 
-    //- Drop cache -
+    //> Drop cache
     cacheDrop(vpos_beg);
     cacheSet(vpos_end,foff_beg+val_b.size()-value_end.size(),value_end.size(),true,true);
 
@@ -1512,7 +1512,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		}
 	    }
 	    voff += vSize*(bool)((0x01<<rest)&buf[i_bf]);
-	    //- Update cache -
+	    //> Update cache
 	    if( (i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos )
 		cacheSet(i_ps,voff,0,i_ps==vpos,wr);
 	}
@@ -1544,7 +1544,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		if(i_ps) voff += lst_pk_vl;
 		lst_pk_vl = pk_vl;
 	    }
-	    //- Update cache -
+	    //> Update cache
 	    if( (i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos )
 		cacheSet(i_ps,voff,lst_pk_vl,i_ps==vpos,wr);
 	}
@@ -1567,7 +1567,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
     if( old_st == new_st ) return;
     if( new_st > old_st )
     {
-	//- Move down (insert) -
+	//> Move down (insert)
 	int beg_cur;
 	int mv_beg = old_st;
 	int mv_end = lseek(hd,0,SEEK_END);
@@ -1585,7 +1585,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
     }
     else
     {
-	//- Move up (erase) -
+	//> Move up (erase)
 	int end_cur;
 	int mv_beg = old_st;
 	int mv_end = lseek(hd,0,SEEK_END);
@@ -1601,7 +1601,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	}
 	while(end_cur!=mv_end);
 
-	//- Truncate tail -
+	//> Truncate tail
 	ftruncate(hd,mv_end-(old_st-new_st));
     }
 }

@@ -217,6 +217,7 @@ class TArchiveS : public TSubSYS
 
 	//Public attributes
 	static unsigned max_req_mess;
+	bool	SubStarting;
 
     protected:
 	//Protected methods

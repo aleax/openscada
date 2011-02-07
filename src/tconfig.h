@@ -125,7 +125,7 @@ class TConfig: public TValElem
     public:
 	//Methods
 	TConfig( TElem *Elements = NULL );
-	~TConfig( );
+	virtual ~TConfig( );
 
 	TConfig &operator=( TConfig &cfg );
 

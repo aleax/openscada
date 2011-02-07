@@ -272,6 +272,8 @@ void TArchiveS::subStart( )
 {
     mess_info(nodePath().c_str(),_("Start subsystem."));
 
+    SubStarting = true;
+
     vector<string> t_lst, o_lst;
 
     modList(t_lst);
@@ -331,6 +333,8 @@ void TArchiveS::subStart( )
     if( !prcStVal ) SYS->taskCreate( nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this, &prcStVal );
 
     TSubSYS::subStart( );
+
+    SubStarting = false;
 }
 
 void TArchiveS::subStop( )

@@ -1,3 +1,11 @@
+2011-02-07 Roman
+- DAQ.System: The library libsensors disable is added for no allowed the library.
+- FIX:DAQ.System: Crash is fixed on exit for source "Hddtemp" exeptions at it destroy.
+- TArchives, Archive.FSArch: Multiscan for an archive directory is disabled at the program start.
+- !!:DB: User API functions fieldStruct(), fieldSeek(), fieldGet(), fieldSet() and fieldDel() for Table object is added.
+- !!DB.*: All warnings is resolved for "-Wall" compile option.
+
+
 2011-02-04 Roman
 - Transport.Serial: Port init is made using previous properties and allow for miss any port properties set.
 

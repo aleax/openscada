@@ -1015,7 +1015,7 @@ void InspLnk::setWdg( const string &iwdg )
     if( mainWin()->cntrIfCmd(info_req) ) return;
     XMLNode *rootel = info_req.childGet(0);
     //> Create widget's root items
-    for( int i_l = 0; i_l < rootel->childSize(); i_l++ )
+    for( unsigned i_l = 0; i_l < rootel->childSize(); i_l++ )
     {
 	lnid  = rootel->childGet(i_l)->attr("id");
 	lngrp = rootel->childGet(i_l)->attr("elGrp");
@@ -1085,7 +1085,7 @@ void InspLnk::setWdg( const string &iwdg )
 	{
 	    QTreeWidgetItem *wdg_g  = topLevelItem(i_it)->child(i_g);
 	    QTreeWidgetItem *wdg_it = (wdg_g->childCount())?wdg_g->child(i_a):wdg_g;
-	
+
 	    int i_l;
 	    for( i_l = 0; i_l < rootel->childSize(); i_l++ )
 		if( rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
@@ -2629,6 +2629,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		}
 		resizeF(QSizeF(sizeF().width()+dP.x(),sizeF().height()+dP.y()));
 		break;
+	    default:	break;
 	}
 	//-- Set status bar --
 	mainWin()->statusBar()->showMessage(
@@ -3075,6 +3076,7 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		}
 	    }
+	    default:	break;
 	}
 
     //- Self widget view -
@@ -3185,6 +3187,7 @@ bool SizePntWdg::event( QEvent *ev )
 	//case QEvent::MouseButtonPress:
 	//case QEvent::MouseButtonRelease:
 	//    return QApplication::sendEvent(parent(),ev);
+	default:	break;
     }
 
     return QWidget::event(ev);
