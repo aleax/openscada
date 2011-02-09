@@ -79,29 +79,29 @@ Ergomera::~Ergomera( )
 
 void Ergomera::regVal( int reg )
 {
-    if( reg < 0 )	return;
+    if(reg < 0)	return;
 
     //> Register to acquisition block
     vector< SDataRec > &workCnt = acqBlks;
-    int i_b;
-    for( i_b = 0; i_b < workCnt.size(); i_b++ )
+    unsigned i_b;
+    for(i_b = 0; i_b < workCnt.size(); i_b++)
     {
-	if( (reg*2) < workCnt[i_b].off )
+	if((reg*2) < workCnt[i_b].off)
 	{
-	    if( (mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq )
+	    if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq)
 	    {
 		workCnt[i_b].val.insert(0,workCnt[i_b].off-reg*2,0);
 		workCnt[i_b].off = reg*2;
 	    }
 	    else workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
 	}
-	else if( (reg*2+2) > (workCnt[i_b].off+workCnt[i_b].val.size()) )
+	else if((reg*2+2) > (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
-	    if( (mMerge || reg*2 <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq )
+	    if((mMerge || reg*2 <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq)
 	    {
 		workCnt[i_b].val.append((reg*2+2)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		//>> Check for allow mergin to next block
-		if( !mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
+		if(!mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+(int)workCnt[i_b].val.size()) >= workCnt[i_b+1].off)
 		{
 		    workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
 		    workCnt.erase(workCnt.begin()+i_b+1);
@@ -111,7 +111,7 @@ void Ergomera::regVal( int reg )
 	}
 	break;
     }
-    if( i_b >= workCnt.size() )
+    if(i_b >= workCnt.size())
 	workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
 }
 
@@ -119,12 +119,12 @@ int Ergomera::getValR( int addr, ResString &err )
 {
     int rez = EVAL_INT;
     vector< SDataRec >	&workCnt = acqBlks;
-    for( int i_b = 0; i_b < workCnt.size(); i_b++ )
-	if( (addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
+    for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
+	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
 	    err.setVal( workCnt[i_b].err.getVal() );
-	    if( err.getVal().empty() )
-	    rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
+	    if(err.getVal().empty())
+		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
 	    break;
 	}
     return rez;
@@ -179,7 +179,7 @@ void Ergomera::getVals( )
 {
     string pdu;
     //> Request blocks
-    for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
     {
 	//>> Encode request PDU (Protocol Data Units)
 	pdu = (char)0x3;				//Function, read multiple registers
@@ -188,17 +188,17 @@ void Ergomera::getVals( )
 	pdu += (char)((acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
 	pdu += (char)(acqBlks[i_b].val.size()/2);	//Number of registers LSB
 	//>> Request to remote server
-	acqBlks[i_b].err.setVal( modBusReq(pdu) );
-	if( acqBlks[i_b].err.getVal().empty() )
+	acqBlks[i_b].err.setVal(modBusReq(pdu));
+	if(acqBlks[i_b].err.getVal().empty())
 	{
-	    if( acqBlks[i_b].val.size() != (pdu.size()-3) ) acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
+	    if(acqBlks[i_b].val.size() != (pdu.size()-3)) acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
 	    else
 	    {
 		acqBlks[i_b].val.replace(0,acqBlks[i_b].val.size(),pdu.data()+3,acqBlks[i_b].val.size());
 		numReg += acqBlks[i_b].val.size()/2;
 	    }
 	}
-	else if( atoi(acqBlks[i_b].err.getVal().c_str()) == 14 )
+	else if(atoi(acqBlks[i_b].err.getVal().c_str()) == 14)
 	{
 	    //setCntrDelay(cntr.acqBlks[i_b].err.getVal());
 	    break;
@@ -206,28 +206,28 @@ void Ergomera::getVals( )
     }
 
     //> Load values to attributes
-    for( int i_a = 0; i_a < mPrm->p_el.fldSize(); i_a++ )
+    for(unsigned i_a = 0; i_a < mPrm->p_el.fldSize(); i_a++)
     {
 	AutoHD<TVal> val = mPrm->vlAt(mPrm->p_el.fldAt(i_a).name());
 	int off = 0;
 	string tp = TSYS::strSepParse(val.at().fld().reserve(),0,':',&off);
 	int aid = strtol(TSYS::strSepParse(val.at().fld().reserve(),0,':',&off).c_str(),NULL,0);
-	int vl = getValR( aid, mPrm->mErr );
-	if( tp == "F" )
+	int vl = getValR(aid, mPrm->mErr);
+	if(tp == "F")
 	{
-	    int vl2 = getValR( aid+1, mPrm->mErr );
-	    if( vl == EVAL_INT || vl2 == EVAL_INT ) val.at().setR(EVAL_REAL,0,true);
+	    int vl2 = getValR(aid+1, mPrm->mErr);
+	    if(vl == EVAL_INT || vl2 == EVAL_INT) val.at().setR(EVAL_REAL,0,true);
 	    union { uint32_t i; float f; } wl;
 	    wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
 	    val.at().setR(wl.f,0,true);
 	}
-	else if( tp == "LI" )
+	else if(tp == "LI")
 	{
-	    int vl2 = getValR( aid+1, mPrm->mErr );
-	    if( vl == EVAL_INT || vl2 == EVAL_INT ) val.at().setI(EVAL_INT,0,true);
+	    int vl2 = getValR(aid+1, mPrm->mErr);
+	    if(vl == EVAL_INT || vl2 == EVAL_INT) val.at().setI(EVAL_INT,0,true);
 	    val.at().setI((int)(((vl2&0xffff)<<16)|(vl&0xffff)),0,true);
 	}
-	else val.at().setI( (vl==EVAL_INT) ? EVAL_INT : (int16_t)vl, 0, true );
+	else val.at().setI(((vl==EVAL_INT)?EVAL_INT:(int16_t)vl), 0, true);
     }
 }
 

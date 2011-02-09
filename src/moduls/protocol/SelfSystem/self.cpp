@@ -90,9 +90,8 @@ int TProt::sesOpen( const char *user,const char *pass )
 
     //> Check sesion and close old sesion
     ResAlloc res(ses_res,true);
-    int i_s = 0;
-    while( i_s < auth_lst.size() )
-	if( time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) )
+    for(unsigned i_s = 0; i_s < auth_lst.size(); )
+	if(time(NULL) > (auth_lst[i_s].t_auth+10*authTime()))
 	    auth_lst.erase(auth_lst.begin() + i_s);
 	else i_s++;
 
@@ -106,9 +105,8 @@ int TProt::sesOpen( const char *user,const char *pass )
 void TProt::sesClose( int id_ses )
 {
     ResAlloc res( ses_res, true );
-    int i_s = 0;
-    while( i_s < auth_lst.size() )
-	if( time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) || auth_lst[i_s].id_ses == id_ses )
+    for(unsigned i_s = 0; i_s < auth_lst.size(); )
+	if(time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) || auth_lst[i_s].id_ses == id_ses)
 	    auth_lst.erase(auth_lst.begin() + i_s);
 	else i_s++;
 }
@@ -117,11 +115,9 @@ TProt::SAuth TProt::sesGet(int id_ses)
 {
     ResAlloc res(ses_res,true);
     time_t cur_tm = time(NULL);
-    int i_s = 0;
-    while( i_s < auth_lst.size() )
-	if( cur_tm > (auth_lst[i_s].t_auth+10*authTime()) )
-	    auth_lst.erase(auth_lst.begin() + i_s);
-	else if( auth_lst[i_s].id_ses == id_ses )
+    for(unsigned i_s = 0; i_s < auth_lst.size(); )
+	if(cur_tm > (auth_lst[i_s].t_auth+10*authTime())) auth_lst.erase(auth_lst.begin() + i_s);
+	else if(auth_lst[i_s].id_ses == id_ses)
 	{
 	    auth_lst[i_s].t_auth = cur_tm;
 	    return auth_lst[i_s];
@@ -185,7 +181,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    }
 	    //> Request
 	    //>> Compress data
-	    bool reqCompr = comprLev() && data.size() > comprBrd();
+	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
 	    if( reqCompr )	data = TSYS::strCompr(data,comprLev());
 
 	    if(isDir)	req = "REQDIR "+user+" "+pass+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
@@ -200,7 +196,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
 	    if( rez == 1 )	{ tro.setPrm1(-1); if( isDir ) break; else continue; }
 	    if( rez > 0 )	throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
-	    int head_end = resp.find("\n",0);
+	    unsigned head_end = resp.find("\n",0);
 	    if( head_end == string::npos )
 		throw TError(nodePath().c_str(),_("Station <%s> error: Respond is broken!"),tro.id().c_str());
 	    int resp_size = atoi(buf1);
@@ -351,7 +347,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    string resp = req_node.save(XMLNode::MissTagEnc|XMLNode::MissAttrEnc)+"\n";
 
 	    //> Compress respond
-	    bool respCompr = ((TProt&)owner()).comprLev() && resp.size() > ((TProt&)owner()).comprBrd();
+	    bool respCompr = (((TProt&)owner()).comprLev() && (int)resp.size() > ((TProt&)owner()).comprBrd());
 	    if( respCompr ) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
 
 #if OSC_DEBUG >= 3

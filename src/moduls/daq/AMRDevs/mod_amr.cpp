@@ -141,7 +141,7 @@ uint16_t TTpContr::CRC16( const string &mbap )
     uint8_t hi = 0xFF;
     uint8_t lo = 0xFF;
     uint16_t index;
-    for( int i_b = 0; i_b < mbap.size(); i_b++ )
+    for(unsigned i_b = 0; i_b < mbap.size(); i_b++)
     {
 	index = lo^(uint8_t)mbap[i_b];
 	lo = hi^CRCHi[index];
@@ -178,9 +178,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
+	::TController(name_c,daq_db,cfgelem),
 	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()),
-	mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId())
+	mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
+	prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("AMRDevsPrm_"+name_c);
 }
@@ -226,14 +227,14 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if( p_hd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -281,8 +282,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), mDA(NULL), needApply(false),
-    p_el("w_attr"), mAddr(cfg("ADDR").getSd()), devTp(cfg("DEV_TP").getSd()), devAddr(cfg("DEV_ADDR").getSd()), devPrms(cfg("DEV_PRMS").getSd())
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+    TParamContr(name,tp_prm), p_el("w_attr"),
+    mAddr(cfg("ADDR").getSd()), devTp(cfg("DEV_TP").getSd()), devAddr(cfg("DEV_ADDR").getSd()), devPrms(cfg("DEV_PRMS").getSd()),
+    needApply(false), mDA(NULL)
 {
 
 }
@@ -307,10 +310,10 @@ void TMdPrm::enable()
     TParamContr::enable();
 
     //> Delete DAQ parameter's attributes
-    for( int i_f = 0; i_f < p_el.fldSize(); i_f++ )
+    for(unsigned i_f = 0; i_f < p_el.fldSize(); )
     {
-	try { p_el.fldDel(i_f); i_f--; }
-	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	try { p_el.fldDel(i_f); }
+	catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); i_f++; }
     }
 
     //> Connect device's code
@@ -337,7 +340,7 @@ void TMdPrm::disable()
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 
     needApply = false;
@@ -436,7 +439,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	vector<string> sls;
 	if(SYS->transport().at().modPresent("Serial"))
 	    SYS->transport().at().at("Serial").at().outList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TParamContr::cntrCmdProc(opt);

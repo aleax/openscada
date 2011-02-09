@@ -188,14 +188,14 @@ class ModVArch: public TVArchivator
 	void setValPeriod( double iper );
 
 	double	fileTimeSize()	{ return time_size; }
-	int	fileNumber()	{ return numb_files; }
+	unsigned fileNumber()	{ return numb_files; }
 	double	roundProc()	{ return round_proc; }
 	int	checkTm()	{ return mChkTm; }
 	int	packTm()	{ return mPackTm; }
 	bool	packInfoFiles()	{ return mPackInfoFiles; }
 
 	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
-	void setFileNumber( int vl )		{ numb_files = vl; modif(); }
+	void setFileNumber( unsigned vl )	{ numb_files = vl; modif(); }
 	void setRoundProc( double vl )		{ round_proc = vl; modif(); }
 	void setCheckTm( int vl )		{ mChkTm = vl; modif(); }
 	void setPackTm( int vl )		{ mPackTm = vl; modif(); }
@@ -230,7 +230,7 @@ class ModVArch: public TVArchivator
 	string	&mAPrms;			// Addon parameters
 
 	double	time_size;			// number hours into one file
-	int	numb_files;			// number of Archive files
+	unsigned numb_files;			// number of Archive files
 	double	round_proc;			// numberic values rounding procent (0-50)
 	int	mChkTm;				// period of check the archive files directory;
 	int	mPackTm;			// pack the archive files timeout

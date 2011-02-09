@@ -91,10 +91,10 @@ class dbReqSQL : public TFunction
 		vector< vector<string> > rtbl;
 		AutoHD<TBD> db = SYS->db().at().nodeAt(sdb,0,'.');
 		db.at().sqlReq(val->getS(2), &rtbl, val->getB(3));
-		for( int i_r = 0; i_r < rtbl.size(); i_r++ )
+		for(unsigned i_r = 0; i_r < rtbl.size(); i_r++)
 		{
 		    TArrayObj *row = new TArrayObj();
-		    for( int i_c = 0; i_c < rtbl[i_r].size(); i_c++ )
+		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++)
 			row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
 		    rez->propSet(TSYS::int2str(i_r),row);
 		}
@@ -130,7 +130,7 @@ class messGet : public TFunction
 	    vector<TMess::SRec> recs;
 	    SYS->archive().at().messGet( val->getI(1), val->getI(2), recs, val->getS(3), val->getI(4), val->getS(5) );
 	    TArrayObj *rez = new TArrayObj();
-	    for( int i_m = 0; i_m < recs.size(); i_m++ )
+	    for(unsigned i_m = 0; i_m < recs.size(); i_m++)
 	    {
 		TVarObj *am = new TVarObj();
 		am->propSet("tm",(int)recs[i_m].time);
@@ -198,10 +198,10 @@ class strSubstr : public TFunction
     public:
 	strSubstr( ) : TFunction("strSubstr",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("str",_("String"),IO::String,IO::Default) );
-	    ioAdd( new IO("pos",_("Position"),IO::Integer,IO::Default,"0") );
-	    ioAdd( new IO("n"  ,_("Number"),IO::Integer,IO::Default,"-1") );
+	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("str",_("String"),IO::String,IO::Default));
+	    ioAdd(new IO("pos",_("Position"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("n"  ,_("Number"),IO::Integer,IO::Default,"-1"));
 	}
 
 	string name( )	{ return _("String: Get substring"); }
@@ -211,10 +211,10 @@ class strSubstr : public TFunction
 	{
 	    string vl  = val->getS(1);
 	    int    pos = val->getI(2);
-	    if( pos<0 || pos>=vl.size() ) return;
+	    if(pos < 0 || pos >= (int)vl.size()) return;
 	    int	   n   = val->getI(3);
-	    if( n < 0 )	n = vl.size();
-	    n = vmin(vl.size()-pos,n);
+	    if(n < 0)	n = vl.size();
+	    n = vmin((int)vl.size()-pos,n);
 	    val->setS(0,vl.substr(pos,n));
 	}
 };
@@ -239,7 +239,7 @@ class strInsert : public TFunction
 	{
 	    string vl = val->getS(0);
 	    int   pos = val->getI(1);
-	    pos = vmax(0,vmin(vl.size(),pos));
+	    pos = vmax(0,vmin((int)vl.size(),pos));
 	    val->setS(0,vl.insert(pos,val->getS(2)));
 	}
 };
@@ -265,10 +265,10 @@ class strReplace : public TFunction
 	{
 	    string vl  = val->getS(0);
 	    int    pos = val->getI(1);
-	    if( pos<0 || pos>=vl.size() ) return;
+	    if(pos < 0 || pos >= (int)vl.size()) return;
 	    int	   n   = val->getI(2);
-	    if( n < 0 )	n = vl.size();
-	    n = vmin(vl.size()-pos,n);
+	    if(n < 0)	n = vl.size();
+	    n = vmin((int)vl.size()-pos,n);
 	    val->setS(0,vl.replace(pos,n,val->getS(3)));
 	}
 };

@@ -129,7 +129,7 @@ void Lib::postEnable( int flag )
     //> Enable functions
     vector<string> lst;
     list(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(true);
 }
 
@@ -137,7 +137,7 @@ void Lib::modStart( )
 {
     vector<string> lst;
     list(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(true);
     run_st = true;
 }
@@ -146,7 +146,7 @@ void Lib::modStop( )
 {
     vector<string> lst;
     list(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(false);
 
     run_st = false;

@@ -478,7 +478,10 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
+	{
+	    ctrMkNode("fld",opt,-1,"/page/nmb",_("Number"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
+	}
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
 	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
 	    {
@@ -582,6 +585,15 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
+    }
+    else if(a_path == "/page/nmb" && ctrChkNode(opt))
+    {
+	vector<string> c_list;
+        list(c_list);
+        unsigned e_c = 0;
+        for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
+            if(at(c_list[i_p]).at().enable()) e_c++;
+        opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/obj/u_lst" && ctrChkNode(opt))
     {
@@ -1188,7 +1200,10 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	if(prjFlags()&(Page::Template|Page::Container))
 	{
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
+	    {
+		ctrMkNode("fld",opt,-1,"/page/nmb",_("Number"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
+	    }
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 		ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	}
@@ -1228,6 +1243,15 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
+    }
+    else if(a_path == "/page/nmb" && ctrChkNode(opt))
+    {
+        vector<string> c_list;
+        pageList(c_list);
+        unsigned e_c = 0;
+        for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
+            if(pageAt(c_list[i_p]).at().enable()) e_c++;
+        opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else return Widget::cntrCmdGeneric(opt);
 

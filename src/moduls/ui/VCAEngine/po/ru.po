@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-20 22:48+0200\n"
+"POT-Creation-Date: 2011-02-09 08:03+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -859,6 +859,9 @@ msgstr "Оригинальный размер;Максимизировать;Н�
 msgid "Pages"
 msgstr "Страницы"
 
+msgid "Number"
+msgstr "Количество"
+
 msgid "Styles"
 msgstr "Стили"
 
@@ -870,6 +873,10 @@ msgstr "Свойства"
 
 msgid "Erase"
 msgstr "Удалить"
+
+#, c-format
+msgid "All: %d; Enabled: %d"
+msgstr "Всего: %d; Включено: %d"
 
 msgid "New style"
 msgstr "Новый стиль"

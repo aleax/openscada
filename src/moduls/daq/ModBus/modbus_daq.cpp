@@ -816,7 +816,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
-		    "  dt - Modbus data type (R-register,C-coil,RI-input register,CI-input coil).\n"
+		    "  dt - Modbus data type (R-register[3,6],C-coil[1,5],RI-input register[4],CI-input coil[2]).\n"
 		    "       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5;\n"
 		    "  numb - ModBus device's data address (dec, hex or octal);\n"
 		    "  rw - read-write mode (r-read; w-write; rw-readwrite);\n"
@@ -836,7 +836,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
 	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*):")->setAttr("color","blue");
-	opt->childAdd("rule")->setAttr("expr","^(C|R|R_[ibf]\\d*):")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[ibf]\\d*):")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }
     else TParamContr::cntrCmdProc(opt);

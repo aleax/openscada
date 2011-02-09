@@ -786,7 +786,10 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	}
 	if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
+	{
+	    ctrMkNode("fld",opt,-1,"/inclwdg/nmb",_("Number"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
+	}
 	if(isContainer() && (!isLink()) && ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
@@ -934,6 +937,15 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
 	    wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text(),"");
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wdgDel(opt->attr("id").c_str(),true);
+    }
+    else if(a_path == "/inclwdg/nmb" && ctrChkNode(opt))
+    {
+	vector<string> c_list;
+	wdgList(c_list);
+        unsigned e_c = 0;
+        for(unsigned i_w = 0; i_w < c_list.size(); i_w++)
+            if(wdgAt(c_list[i_w]).at().enable()) e_c++;
+        opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else return false;
 

@@ -589,9 +589,10 @@ void ModVArchEl::checkArchivator( bool now )
 
     ResAlloc res(mRes,true);
     //>> Check file count for delete old files
-    if(now && ((ModVArch &)archivator()).fileNumber() && (int)arh_f.size() > ((ModVArch &)archivator()).fileNumber())
-	for(int i_arh = 0; i_arh < (int)arh_f.size(); i_arh++)
-	    if((int)arh_f.size() <= ((ModVArch &)archivator()).fileNumber())	break;
+    if(now && ((ModVArch &)archivator()).fileNumber() && arh_f.size() > ((ModVArch &)archivator()).fileNumber())
+	for(unsigned i_arh = 0; i_arh < arh_f.size(); )
+	{
+	    if(arh_f.size() <= ((ModVArch &)archivator()).fileNumber())	break;
 	    else if(!arh_f[i_arh]->err())
 	    {
 		string f_nm = arh_f[i_arh]->name();
@@ -599,8 +600,10 @@ void ModVArchEl::checkArchivator( bool now )
 		arh_f.erase(arh_f.begin() + i_arh);
 		remove(f_nm.c_str());
 		remove((f_nm+".info").c_str());
-		i_arh--;
+		continue;
 	    }
+	    i_arh++;
+	}
 
     //> Check the archive's files for pack
     res.request(false);
@@ -612,7 +615,7 @@ void ModVArchEl::fileAdd( const string &file )
 {
     //> Check to present archive files
     ResAlloc res(mRes,false);
-    for(int i_arh = 0; i_arh < (int)arh_f.size(); i_arh++)
+    for(unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++)
 	if(arh_f[i_arh]->name() == file) return;
     res.release();
 
@@ -1325,7 +1328,7 @@ void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
 	while(pos_i < pos_cur)
 	{
 	    pos_i++;
-	    string wr_val=(pos_i==pos_cur)?value:eVal;
+	    string wr_val = (pos_i==pos_cur)?value:eVal;
 	    if( vpos_end < vpos_beg || wr_val != value_end )
 	    {
 		if(fixVl)
@@ -1649,14 +1652,14 @@ void VFileArch::setPkVal( int hd, int vpos, int vl )
 void VFileArch::repairFile( int hd, bool fix )
 {
     int v_sz;
-    if( !mPack )
+    if(!mPack)
     {
 	int f_sz = lseek(hd,0,SEEK_END);
 	int f_off = calcVlOff(hd,mpos,&v_sz);
-	if( fixVl )
+	if(fixVl)
 	{
 	    int dt = f_sz-f_off-vSize;
-	    if( !dt )	return;
+	    if(!dt)	return;
 	    mess_err(owner().archivator().nodePath().c_str(),
 		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
 	    //> Fix file
@@ -1670,7 +1673,7 @@ void VFileArch::repairFile( int hd, bool fix )
 		else
 		{
 		    f_sz = f_off-vSize*((f_off-f_sz)/vSize);
-		    while(f_sz<=f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
+		    while(f_sz <= f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
 		}
 	    }
 	}
@@ -1684,12 +1687,10 @@ void VFileArch::repairFile( int hd, bool fix )
 int VFileArch::cacheGet( int &pos, int *vsz )
 {
     CacheEl rez = {0,0,0};
-    for( int i_p = cache.size()-1; i_p >= 0; i_p-- )
-	if( pos >= cache[i_p].pos ) { rez = cache[i_p]; break; }
-    if( pos >= cach_pr_rd.pos && cach_pr_rd.pos > rez.pos )
-	rez = cach_pr_rd;
-    if( pos >= cach_pr_wr.pos && cach_pr_wr.pos > rez.pos )
-	rez = cach_pr_wr;
+    for(int i_p = cache.size()-1; i_p >= 0; i_p--)
+	if(pos >= cache[i_p].pos) { rez = cache[i_p]; break; }
+    if(pos >= cach_pr_rd.pos && cach_pr_rd.pos > rez.pos)	rez = cach_pr_rd;
+    if(pos >= cach_pr_wr.pos && cach_pr_wr.pos > rez.pos)	rez = cach_pr_wr;
 
     pos = rez.pos;
     if(vsz) *vsz = rez.vsz;
@@ -1700,24 +1701,24 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 {
     CacheEl el = { pos, off, vsz };
 
-    if( !last )
+    if(!last)
     {
-	for( unsigned i_p = 0; i_p < cache.size(); i_p++ )
-	    if( el.pos == cache[i_p].pos )	{ cache[i_p] = el; return; }
-	    else if( el.pos < cache[i_p].pos )	{ cache.insert(cache.begin()+i_p,el); return; }
+	for(unsigned i_p = 0; i_p < cache.size(); i_p++)
+	    if(el.pos == cache[i_p].pos)	{ cache[i_p] = el; return; }
+	    else if(el.pos < cache[i_p].pos)	{ cache.insert(cache.begin()+i_p,el); return; }
 	cache.push_back(el);
     }
-    else if( wr ) cach_pr_wr = el;
+    else if(wr) cach_pr_wr = el;
     else cach_pr_rd = el;
 }
 
 void VFileArch::cacheDrop( int pos )
 {
-    for( int i_p = 0; i_p < (int)cache.size(); i_p++ )
-	if( cache[i_p].pos >= pos )
-	{ cache.erase(cache.begin()+i_p); i_p--; }
-    if( cach_pr_rd.pos >= pos )
-	cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
-    if( cach_pr_wr.pos >= pos )
-	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
+    for(unsigned i_p = 0; i_p < cache.size(); )
+    {
+	if(cache[i_p].pos >= pos) { cache.erase(cache.begin()+i_p); continue; }
+	i_p++;
+    }
+    if(cach_pr_rd.pos >= pos)	cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
+    if(cach_pr_wr.pos >= pos)	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
 }

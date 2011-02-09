@@ -115,8 +115,8 @@ void TProt::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPrt","",fld_cnt++,g_cfg); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(unsigned fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPrt","",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
 		if( !uPrtPresent(id) )	uPrtAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
@@ -145,8 +145,8 @@ void TProt::modStart( )
 {
     vector<string> ls;
     uPrtList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
-	if( uPrtAt(ls[i_n]).at().toEnable( ) )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
+	if(uPrtAt(ls[i_n]).at().toEnable())
 	    uPrtAt(ls[i_n]).at().setEnable(true);
 }
 
@@ -154,7 +154,7 @@ void TProt::modStop( )
 {
     vector<string> ls;
     uPrtList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	uPrtAt(ls[i_n]).at().setEnable(false);
 }
 
@@ -276,8 +276,10 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 //* UserPrt                                       *
 //*************************************************
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mDB(idb), mEn(false), cntInReq(0), cntOutReq(0),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
+    TConfig(el), cntInReq(0), cntOutReq(0),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
+    mEn(false), mDB(idb)
+
 {
     mId = iid;
 }
@@ -327,7 +329,7 @@ string UserPrt::inProgLang( )
 string UserPrt::inProg( )
 {
     string mProg = cfg("InPROG").getS();
-    int lngEnd = mProg.find("\n");
+    unsigned lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
@@ -354,7 +356,7 @@ string UserPrt::outProgLang( )
 string UserPrt::outProg( )
 {
     string mProg = cfg("OutPROG").getS();
-    int lngEnd = mProg.find("\n");
+    unsigned lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
@@ -511,16 +513,16 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for(int i_l = 0; i_l < ls.size(); i_l++)
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
-		    { ls.erase(ls.begin()+i_l); i_l--; }
+		for(unsigned i_l = 0; i_l < ls.size(); )
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
+		    else i_l++;
 		break;
 	    case 1:
 		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);

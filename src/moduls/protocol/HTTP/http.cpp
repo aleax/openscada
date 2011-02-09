@@ -123,7 +123,7 @@ void TProt::load_( )
     try
     {
 	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
-	for(int i_n = 0; i_n < aLogNd.childSize(); i_n++)
+	for(unsigned i_n = 0; i_n < aLogNd.childSize(); i_n++)
 	    mALog.push_back(SAutoLogin(aLogNd.childGet(i_n)->attr("addrs"),aLogNd.childGet(i_n)->attr("user")));
     }catch(...){ }
 }
@@ -134,7 +134,7 @@ void TProt::save_( )
     //>> Save auto-login config
     ResAlloc res(nodeRes(),false);
     XMLNode aLogNd("aLog");
-    for(int i_n = 0; i_n < mALog.size(); i_n++)
+    for(unsigned i_n = 0; i_n < mALog.size(); i_n++)
 	aLogNd.childAdd("it")->setAttr("addrs",mALog[i_n].addrs)->setAttr("user",mALog[i_n].user);
     TBDS::genDBSet(nodePath()+"AutoLogin",aLogNd.save());
 }
@@ -190,7 +190,7 @@ string TProt::autoLogGet( const string &sender )
 {
     string addr;
     ResAlloc res(nodeRes(),false);
-    for(int i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
+    for(unsigned i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
 	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )
 	    if(TMess::chkPattern(sender,addr)) return mALog[i_a].user;
     return "";
@@ -229,14 +229,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	{
 	    //> Content process
 	    bool isCnt = false;
-	    for(int cnt_c = 0; cnt_c < io.childSize(); cnt_c++)
+	    for(unsigned cnt_c = 0; cnt_c < io.childSize(); cnt_c++)
 	    {
 		if(io.childGet(cnt_c)->name() != "cnt") continue;
 		cnt += "--"cntBnd"\r\n";
 		cnt += "Content-Disposition: form-data; \""+io.childGet(cnt_c)->attr("name")+
 		       "\"; filename=\""+io.childGet(cnt_c)->attr("filename")+"\"\r\n";
 		//>> Place appended content properties
-		for(int ch_c = 0; ch_c < io.childGet(cnt_c)->childSize(); ch_c++)
+		for(unsigned ch_c = 0; ch_c < io.childGet(cnt_c)->childSize(); ch_c++)
 		    if(io.childGet(cnt_c)->childGet(ch_c)->name() == "prm")
 			cnt += io.childGet(cnt_c)->childGet(ch_c)->attr("id")+": "+
 			   io.childGet(cnt_c)->childGet(ch_c)->text()+"\r\n";
@@ -259,7 +259,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	req += TSYS::strMess("Host: %s\r\n",host.c_str());
 	req += "User-Agent: "PACKAGE_NAME" v"VERSION"\r\n";
 	//>> Place appended HTTP-properties
-	for(int ch_c = 0; ch_c < io.childSize(); ch_c++)
+	for(unsigned ch_c = 0; ch_c < io.childSize(); ch_c++)
 	    if(io.childGet(ch_c)->name() == "prm")
 		req += io.childGet(ch_c)->attr("id")+": "+io.childGet(ch_c)->text()+"\r\n";
 	req += "\r\n"+cnt;
@@ -291,7 +291,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	{
 	    tw = TSYS::strParse(resp,0,"\r\n",&pos);
 	    if(tw.empty()) break;
-	    int sepPos = tw.find(":",0);
+	    unsigned sepPos = tw.find(":",0);
 	    if(sepPos == 0 || sepPos == string::npos) continue;
 	    nd = io.childAdd("prm")->setAttr("id",tw.substr(0,sepPos))->setText(TSYS::strNoSpace(tw.substr(sepPos+1)));
 	    if(c_lng == -1 && strcasecmp(nd->attr("id").c_str(),"content-length") == 0) c_lng = atoi(nd->text().c_str());
@@ -309,8 +309,8 @@ next_ch:
 	else ch_ln = c_lng;
 
 	//>> Wait tail
-	while(ch_ln > 0 && ((resp.size()-pos) < ch_ln ||
-	    (c_lng == -2 && ((resp.size()-pos) < (ch_ln+5) || resp.find("\r\n",pos+ch_ln+2) == string::npos))))
+	while(ch_ln > 0 && ((int)(resp.size()-pos) < ch_ln ||
+	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\r\n",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 	    resp.append(buf,resp_len);
@@ -364,7 +364,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/alog/user","");
 
 	    ResAlloc res(nodeRes(),false);
-	    for(int i_a = 0; i_a < mALog.size(); i_a++)
+	    for(unsigned i_a = 0; i_a < mALog.size(); i_a++)
 	    {
 		if(n_addrs)	n_addrs->childAdd("el")->setText(mALog[i_a].addrs);
 		if(n_user)	n_user->childAdd("el")->setText(mALog[i_a].user);
@@ -374,11 +374,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	ResAlloc res(nodeRes(),true);
 	modif();
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	mALog.push_back(SAutoLogin());
-	else if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	else if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
 	    mALog.insert(mALog.begin()+idrow, SAutoLogin());
-	else if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	else if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
 	    mALog.erase(mALog.begin()+idrow);
-	else if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < mALog.size()))
+	else if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
 	{
 	    if(idcol == "addrs")mALog[idrow].addrs = opt->text();
 	    if(idcol == "user")	mALog[idrow].user = opt->text();
@@ -388,7 +388,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID))
@@ -459,7 +459,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    if( req.empty() ) { m_nofull=true; break; }
 	    if( req == "\r" ) break;
 	    req.resize(req.size()-1);
-	    int sepPos = req.find(":",0);
+	    unsigned sepPos = req.find(":",0);
 	    if( sepPos == 0 || sepPos == string::npos ) break;
 	    string var = req.substr(0,sepPos);
 	    string val = req.substr(sepPos+1);
@@ -474,13 +474,13 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    }
 	    else if( strcasecmp(var.c_str(),"cookie") == 0 )
 	    {
-		int vpos = val.find("oscd_u_id=",0);
+		unsigned vpos = val.find("oscd_u_id=",0);
 		if( vpos != string::npos ) user = mod->sesCheck(atoi(val.substr(vpos+10).c_str()));
 	    }
 	}
 
 	//> Check content length
-	if( (c_lng >= 0 && c_lng > (request.size()-pos)) || (c_lng < 0 && method == "POST") ) m_nofull = true;
+	if( (c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST") ) m_nofull = true;
 	if( m_nofull ) return m_nofull;
 
 	//> Check protocol version
@@ -498,7 +498,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 	int url_pos = 0;
 	string name_mod = TSYS::pathLev(urls,0,false,&url_pos);
-	while( url_pos < urls.size() && urls[url_pos] == '/' ) url_pos++;
+	while( url_pos < (int)urls.size() && urls[url_pos] == '/' ) url_pos++;
 	url = "/"+urls.substr(url_pos);
 
 	//> Process internal commands
@@ -703,7 +703,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
 
-    for(int i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
+    for(unsigned i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
 	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
 	{
 	    pos += strlen(c_bound);
@@ -711,7 +711,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
 	}
     if(boundary.empty()) return;
 
-    for(int pos = 0, spos = 0, i_bnd = 0; true; )
+    for(unsigned pos = 0, spos = 0, i_bnd = 0; true; )
     {
 	pos = content.find(boundary,pos);
         if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;

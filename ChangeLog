@@ -1,3 +1,12 @@
+2011-02-08 Roman
+- !!:FIX:Archive: Using soft grid buffer for high and low resolution time is fixed for archiving.
+- FIX:Config: Copy heterogenous nodes config properties is fixed.
+- !!:Transport.*, Protocol.*, Special.*, DAQ.AMRDevs: All warnings is resolved for "-Wall" compile option.
+- DAQ.ModBus: Syntax highlight rules is some updated. DAQ parameter's attributes list help is supplemented.
+- FIX:Transport.Serial: Set O_NONBLOCK flag to function open() of serial device, for prevent it hang on several USB->RS485 converters.
+- UI.VCAEngine: Included widgets counter and pages into a progect and into other pages is added.
+
+
 2011-02-07 Roman
 - DAQ.System: The library libsensors disable is added for no allowed the library.
 - FIX:DAQ.System: Crash is fixed on exit for source "Hddtemp" exeptions at it destroy.

@@ -56,7 +56,7 @@ class TestPrm : public TFunction
 		vector<string> list_el;
 		prm.at().vlList(list_el);
 		mod->mess(id(),_("Value attrbutes present: %d"),list_el.size());
-		for(int i=0; i< list_el.size(); i++)
+		for(unsigned i = 0; i < list_el.size(); i++)
 		{
 		    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);
 		    if( val.at().fld().flg()&TFld::Selected )
@@ -80,7 +80,7 @@ class TestPrm : public TFunction
 
 		prm.at().cfgList(list_el);
 		mod->mess(id(),_("Config fields: %d"),list_el.size());
-		for(int i=0; i< list_el.size(); i++)
+		for(unsigned i = 0; i < list_el.size(); i++)
 		{
 		    if( prm.at().cfg(list_el[i]).fld().flg()&TFld::Selected )
 			mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getSEL().c_str() );

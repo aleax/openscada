@@ -122,7 +122,7 @@ void TTest::postEnable( int flag )
     //> Enable static tests
     vector<string> lst;
     testList(lst);
-    for( int i_l = 0; i_l < lst.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	testAt(lst[i_l]).at().setStart(true);
 }
 
@@ -167,13 +167,13 @@ string TTest::optDescr( )
 
     vector<string> ls;
     testList(ls);
-    for( int i_t = 0; i_t < ls.size(); i_t++ )
+    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
     {
 	AutoHD<TFunction> fnc = testAt(ls[i_t]);
 	rez += TSYS::strMess("%d) %s\t%s\n",i_t+1,fnc.at().id().c_str(),fnc.at().descr().c_str());
-	for( int i_prm = 0; i_prm < fnc.at().ioSize( ); i_prm++ )
+	for(int i_prm = 0; i_prm < fnc.at().ioSize( ); i_prm++)
 	{
-	    if( fnc.at().io(i_prm)->flg() & (IO::Output|IO::Return) )	continue;
+	    if(fnc.at().io(i_prm)->flg() & (IO::Output|IO::Return))	continue;
 	    rez += TSYS::strMess("  %d:%s\t%s\n",i_prm,fnc.at().io(i_prm)->id().c_str(),fnc.at().io(i_prm)->name().c_str());
 	}
     }
@@ -268,8 +268,8 @@ void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )
     node->attrList(list);
     for(unsigned i_att = 0; i_att < list.size(); i_att++)
 	mess(testNm,_("        Attr <%s> = <%s>."),list[i_att].c_str(),node->attr(list[i_att]).c_str());
-    for(int i_ch = 0; i_ch < node->childSize(); i_ch++)
-	prXMLNode( testNm, node->childGet(i_ch), level+1 ); 
+    for(unsigned i_ch = 0; i_ch < node->childSize(); i_ch++)
+	prXMLNode(testNm, node->childGet(i_ch), level+1);
     mess(testNm,"%s}%d <%s>", string(level,' ').c_str(), level, node->name().c_str());
 }
 
@@ -301,8 +301,8 @@ void TTest::cntrCmdProc( XMLNode *opt )
 	vector<string> lst;
 	testList(lst);
 	int enCnt = 0;
-	for(int i_t = 0; i_t < lst.size(); i_t++)
-	    if(testAt(lst[i_t]).at().startStat( ))	enCnt++;
+	for(unsigned i_t = 0; i_t < lst.size(); i_t++)
+	    if(testAt(lst[i_t]).at().startStat()) enCnt++;
 	opt->setText(TSYS::strMess(_("All: %d; Accessing: %d"),lst.size(),enCnt));
     }
     else TSpecial::cntrCmdProc(opt);

@@ -172,9 +172,8 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), ctx(NULL), cl_free(true),
-    mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0),
-    mAPrms(cfg("A_PRMS").getSd())
+    TTransportIn(name,idb,el), ctx(NULL), mAPrms(cfg("A_PRMS").getSd()),
+    mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0), cl_free(true)
 {
     setAddr("localhost:10042");
 }
@@ -540,8 +539,8 @@ int TSocketIn::opConnCnt( )
 {
     ResAlloc res(sock_res,true);
     int opConn = 0;
-    for( int i_c = 0; i_c < cl_id.size(); i_c++ )
-	if( cl_id[i_c] ) opConn++;
+    for(unsigned i_c = 0; i_c < cl_id.size(); i_c++)
+	if(cl_id[i_c]) opConn++;
 
     return opConn;
 }
@@ -551,9 +550,9 @@ int TSocketIn::clientReg( pthread_t thrid )
     ResAlloc res(sock_res,true);
 
     int i_empt = -1;
-    for( int i_id = 0; i_id < cl_id.size(); i_id++ )
-	if( !cl_id[i_id] && i_empt < 0 ) i_empt = i_id;
-	else if( cl_id[i_id] == thrid ) return i_id;
+    for(int i_id = 0; i_id < (int)cl_id.size(); i_id++)
+	if(!cl_id[i_id] && i_empt < 0) i_empt = i_id;
+	else if(cl_id[i_id] == thrid) return i_id;
 
     if( i_empt >= 0 ) cl_id[i_empt] = thrid;
     else { i_empt = cl_id.size(); cl_id.push_back(thrid); }
@@ -568,10 +567,10 @@ void TSocketIn::clientUnreg( pthread_t thrid )
     ResAlloc res(sock_res,true);
 
     bool noFreePres = false;
-    for( int i_id = 0; i_id < cl_id.size(); i_id++ )
+    for(unsigned i_id = 0; i_id < cl_id.size(); i_id++)
     {
-	if( cl_id[i_id] == thrid ) cl_id[i_id] = 0;
-	if( cl_id[i_id] && !noFreePres ) noFreePres = true;
+	if(cl_id[i_id] == thrid) cl_id[i_id] = 0;
+	if(cl_id[i_id] && !noFreePres) noFreePres = true;
     }
 
     cl_free = !noFreePres;

@@ -124,9 +124,8 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), cl_free(true),
-    mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0),
-    mAPrms(cfg("A_PRMS").getSd())
+    TTransportIn(name,idb,el), mAPrms(cfg("A_PRMS").getSd()),
+    mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0), cl_free(true)
 {
     setAddr("TCP:localhost:10002:0");
 }
@@ -405,7 +404,7 @@ void *TSocketIn::Task(void *sock_in)
     sock->endrun_cl = true;
     ResAlloc res(sock->sock_res,false);
     //> Find already registry
-    for( int i_id = 0; i_id < sock->cl_id.size(); i_id++)
+    for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
         pthread_kill(sock->cl_id[i_id].cl_id,SIGALRM);
     res.release();
     TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
@@ -458,7 +457,7 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 5
 	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message <%d> to <%s>."), answ.size(), s.sender.c_str());
 #endif
-	    for(int wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
+	    for(unsigned wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
 		s.s->trOut += wL;
@@ -606,8 +605,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), sock_fd(-1),
-    mAPrms(cfg("A_PRMS").getSd())
+TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
+    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), sock_fd(-1)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");

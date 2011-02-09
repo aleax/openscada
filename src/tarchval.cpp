@@ -406,6 +406,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     long long tm = (itm)?(*itm):TSYS::curTime();
 
     if( (up_ord && tm > end) || (!up_ord && tm < beg) )	throw TError("ValBuf",_("Value is not present."));
+
     tm = up_ord ? vmax(tm,beg) : vmin(tm,end);
     //> Process hard grid buffer
     if( hrd_grd )
@@ -429,12 +430,13 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	    {
 		int c_cnext = c_end-d_win;
 		if(c_cnext < 0) c_cnext += buf.tm_high->size();
-		if(tm < (*buf.tm_high)[c_cnext].tm) c_end=c_cnext;
+		if(tm/per < (*buf.tm_high)[c_cnext].tm/per) c_end = c_cnext;
 	    }
 	    //>> Proving
 	    do
 	    {
-		int w_pos = (up_ord?end-(*buf.tm_high)[c_end].tm:(*buf.tm_high)[c_end].tm-beg)/per;
+		int w_pos = up_ord ? (end/per-(*buf.tm_high)[c_end].tm/per) :
+				     ((*buf.tm_high)[c_end].tm/per-beg/per);
 		if( up_ord && w_pos >= npos )
 		{
 		    if(itm) *itm = (w_pos==npos)?(*buf.tm_high)[c_end].tm:end-npos*per;
@@ -461,12 +463,13 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	    {
 		int c_cnext = c_end-d_win;
 		if(c_cnext < 0) c_cnext += buf.tm_low->size();
-		if(tm < (long long)(*buf.tm_low)[c_cnext].tm*1000000) c_end=c_cnext;
+		if(tm/per < (long long)(*buf.tm_low)[c_cnext].tm*1000000/per) c_end=c_cnext;
 	    }
 	    //>> Proving
 	    do
 	    {
-		int w_pos = (up_ord?end-(long long)(*buf.tm_low)[c_end].tm*1000000:(long long)(*buf.tm_low)[c_end].tm*1000000-beg)/per;
+		int w_pos = up_ord ? (end/per-(long long)(*buf.tm_low)[c_end].tm*1000000/per) :
+				     ((long long)(*buf.tm_low)[c_end].tm*1000000/per-beg/per);
 		if( up_ord && w_pos >= npos )
 		{
 		    if(itm) *itm = (w_pos==npos)?(long long)(*buf.tm_low)[c_end].tm*1000000:end-npos*per;
@@ -646,7 +649,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		while( c_npos-- )
 		{
 		    //>>> Prepare data
-		    if(c_npos) 	{ b_el.tm = end+(npos-c_npos)*per;  b_el.val = eval; }
+		    if(c_npos) 	{ b_el.tm = end+(npos-c_npos)*per; b_el.val = eval; }
 		    else	{ b_el.tm = tm; b_el.val = value; }
 		    //>>> Check previous value
 		    if( !buf.tm_high->size() ||
@@ -691,7 +694,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		if( npos == 0 )
 		{
 		    b_el.tm = end/1000000; b_el.val = value;
-		    int h_el = (cur) ? cur-1 : buf.tm_low->size()-1;
+		    int h_el = cur ? cur-1 : buf.tm_low->size()-1;
 		    if( ((long long)(*buf.tm_low)[h_el].tm*1000000-end)/per )
 		    {
 			//>>> Write new value
@@ -699,8 +702,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			if( cur >= buf.tm_low->size() )	buf.tm_low->push_back(b_el);
 			else
 			{
-			    if( cur+1 >= buf.tm_low->size() )
-				beg = (long long)(*buf.tm_low)[0].tm * 1000000;
+			    if( cur+1 >= buf.tm_low->size() ) beg = (long long)(*buf.tm_low)[0].tm * 1000000;
 			    else beg = (long long)(*buf.tm_low)[cur+1].tm * 1000000;
 			    beg = per*(beg/per);
 			    if( (*buf.tm_low)[cur].val == eval ) mEvalCnt--;
@@ -763,7 +765,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			}
 		    }
 		    //>>> Update end time
-		    end+=per;
+		    end += per;
 		}
 	    }
 	}

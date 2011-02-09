@@ -640,7 +640,7 @@ void MFileArch::put( TMess::SRec mess )
 
     if(xmlM())
     {
-	int i_ch;
+	unsigned i_ch;
 	for(i_ch = 0; i_ch < mNode->childSize(); i_ch++)
 	{
 	    XMLNode *xIt = mNode->childGet(i_ch);
@@ -791,7 +791,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 
     if( xmlM() )
     {
-	for( int i_ch = 0; i_ch < mNode->childSize() && mess.size() < TArchiveS::max_req_mess; i_ch++)
+	for(unsigned i_ch = 0; i_ch < mNode->childSize() && mess.size() < TArchiveS::max_req_mess; i_ch++)
 	{
 	    //> Find messages
 	    b_rec.time  = strtol( mNode->childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);

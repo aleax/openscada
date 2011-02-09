@@ -52,6 +52,7 @@ TConfig &TConfig::operator=(TConfig &config)
     cfgList( list_el );
     for( int i_el = 0; i_el < list_el.size(); i_el++)
     {
+	if(!config.cfgPresent(list_el[i_el]))	continue;
 	TCfg &s_cfg = config.cfg( list_el[i_el] );
 	TCfg &d_cfg = cfg( list_el[i_el] );
 	switch(d_cfg.fld().type())

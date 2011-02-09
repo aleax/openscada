@@ -322,7 +322,8 @@ void TTrIn::connect( )
 	//> Open and setup device
 	//>> Serial port open
 	mDevPort = TSYS::strSepParse(addr(),0,':');
-	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY);
+	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
+	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
 	if(fd < 0) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
 	//>> Set serial port parameters
 	struct termios tio;
@@ -810,7 +811,8 @@ void TTrOut::start( )
 	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
 
 	//>> Serial port open
-	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY);
+	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
+	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
 	if(fd < 0) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
 
 	//>> Set serial port parameters
