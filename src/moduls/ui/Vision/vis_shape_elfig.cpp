@@ -83,7 +83,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     ColorMap &shapeColors_temp = elFD->shapeColors_temp;
     ImageMap &shapeImages_temp = elFD->shapeImages_temp;
     StyleMap &shapeStyles_temp = elFD->shapeStyles_temp;
-    
+
     PntMap *pnts = &elFD->shapePnts;
     WidthMap *widths = &elFD->shapeWidths;
     ColorMap *colors = &elFD->shapeColors;
@@ -176,7 +176,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         case 28:
             elFD->orient = atof(val.c_str());
             rel_list = true;
-            break;   
+            break;
         case 27:	//elLst
             elFD->elLst = val.c_str();
             rel_list = true;
@@ -4386,7 +4386,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         if( devW && devW->edit() )
         {
             rectPath.addRect( QRectF( QPointF( StartMotionPos.x()-4, StartMotionPos.y()-4 ), QSize(8,8) ) );
-	
+
             rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
             rectPath = newPath;
@@ -4440,7 +4440,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin ) ) );
             rectPath = newPath;
         }
-        
+
         StartMotionPos = unScaleRotate( StartMotionPos, view, flag_scale, flag_rotate );
         EndMotionPos = unScaleRotate( EndMotionPos, view, flag_scale, flag_rotate );
         CtrlMotionPos_1 = unScaleRotate( CtrlMotionPos_1, view, flag_scale, flag_rotate );
@@ -5585,13 +5585,17 @@ QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *view, bool fl
         rpnt = rpnt + center;
     }
     if( flag_scale ) rpnt = QPointF( rpnt.x()*view->xScale(true), rpnt.y()*view->yScale(true) );
-    return rpnt;
+
+    QPointF add((view->posF().x()+0.5)-floor(view->posF().x()+0.5)-0.5,(view->posF().y()+0.5)-floor(view->posF().y()+0.5)-0.5);
+
+    return rpnt+add;
 }
 
 QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *view, bool flag_scale, bool flag_rotate )
 {
     ElFigDt *elFD = (ElFigDt*)view->shpData;
-    QPointF rpnt = point;
+    QPointF add((view->posF().x()+0.5)-floor(view->posF().x()+0.5)-0.5,(view->posF().y()+0.5)-floor(view->posF().y()+0.5)-0.5);
+    QPointF rpnt = point-add;
     QPointF center;
     if( flag_scale ) rpnt = QPointF( rpnt.x()/view->xScale(true), rpnt.y()/view->yScale(true) );
     if( flag_rotate )

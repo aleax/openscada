@@ -941,31 +941,31 @@ WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget
 
 WdgView::~WdgView( )
 {
-    if( shape ) shape->destroy(this);
+    if(shape) shape->destroy(this);
 }
 
 float WdgView::xScale( bool full )
 {
-    if( full && wLevel( ) > 0 )	return x_scale*((WdgView*)parentWidget())->xScale(full);
+    if(full && wLevel( ) > 0)	return x_scale*((WdgView*)parentWidget())->xScale(full);
     return x_scale;
 }
 
 float WdgView::yScale( bool full )
 {
-    if( full && wLevel( ) > 0 )	return y_scale*((WdgView*)parentWidget())->yScale(full);
+    if(full && wLevel( ) > 0)	return y_scale*((WdgView*)parentWidget())->yScale(full);
     return y_scale;
 }
 
 string WdgView::root( )
 {
-    if( shape ) return shape->id();
+    if(shape) return shape->id();
     return "";
 }
 
 void WdgView::moveF( const QPointF &pos )
 {
     mWPos = pos;
-    move( QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())) );
+    move(QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())));
 }
 
 void WdgView::resizeF( const QSizeF &isz )
@@ -1005,45 +1005,51 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    shape = mod->getWdgShape(val);
 	    if( shape ) shape->init(this);
 	    break;
-	case 7:
+	case 7:		//geomX
 	    if( wLevel( ) == 0 )	break;
 	    mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
 	    up = true;
 	    break;
-	case 8:
+	case 8:		//geomY
 	    if( wLevel( ) == 0 )	break;
 	    mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
 	    up = true;
 	    break;
-	case 9:
+	case 9:		//geomW
 	    mWSize = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height());
 	    up = true;
 	    break;
-	case 10:
+	case 10:	//geomH
 	    mWSize = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str()));
 	    up = true;
 	    break;
-	case 11: if(wLevel( )>0) z_coord = atoi(val.c_str());	break;
-	case 13:
+	case 11:	//geomZ
+	    if(wLevel( )>0) z_coord = atoi(val.c_str());
+	    break;
+	case 13:	//geomXsc
 	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
 	    x_scale = atof(val.c_str());
 	    up = true;
 	    break;
-	case 14:
+	case 14:	//geomYsc
 	    mWSize = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
 	    y_scale = atof(val.c_str());
 	    up = true;
 	    break;
-	case 15:	setToolTip(val.c_str());	break;
-	case 16:	setStatusTip(val.c_str());	break;
+	case 15:	//tipTool
+	    setToolTip(val.c_str());
+	    break;
+	case 16:	//tipStatus
+	    setStatusTip(val.c_str());
+	    break;
     }
     if( up && !allAttrLoad( ) )
     {
-	if( wLevel( ) > 0 )	moveF(posF());
+	if(wLevel( ) > 0) moveF(posF());
 	resizeF(sizeF());
     }
 
-    if( shape )	return shape->attrSet(this,uiPrmPos,val);
+    if(shape)	return shape->attrSet(this,uiPrmPos,val);
 
     return true;
 }

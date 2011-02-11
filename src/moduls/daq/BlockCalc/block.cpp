@@ -33,10 +33,11 @@ using namespace Virtual;
 //* Block: Function block                         *
 //*************************************************
 Block::Block( const string &iid, Contr *iown ) :
-    TCntrNode(iown), TConfig( &((TipContr &)iown->owner()).blockE() ), TValFunc(iid+"_block",NULL),
-    m_enable(false), m_process(false), id_freq(-1), id_start(-1), id_stop(-1),
+    TCntrNode(iown), TValFunc(iid+"_block",NULL), TConfig(&((TipContr &)iown->owner()).blockE()),
+    m_enable(false), m_process(false),
     m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
-    m_func(cfg("FUNC").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()), m_prior(cfg("PRIOR").getSd())
+    m_func(cfg("FUNC").getSd()), m_prior(cfg("PRIOR").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()),
+    id_freq(-1), id_start(-1), id_stop(-1)
 {
     m_id = iid;
 }
@@ -135,7 +136,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 
     for( int i_ln = 0; i_ln < ioSize(); i_ln++ )
     {
-	if( i_ln >= m_lnk.size() )
+	if( i_ln >= (int)m_lnk.size() )
 	{
 	    m_lnk.push_back( SLnk() );
 	    m_lnk[i_ln].tp = FREE;
@@ -159,7 +160,7 @@ void Block::saveIO( )
     string bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
     string bd = owner().DB()+"."+bd_tbl;
 
-    for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
+    for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++)
 	try
 	{
 	    cfg.cfg("ID").setS(func()->io(i_ln)->id());
@@ -215,21 +216,19 @@ void Block::setEnable( bool val )
 
 void Block::setProcess( bool val )
 {
-    if( val && !enable() ) setEnable(true);
+    if(val && !enable()) setEnable(true);
 
     //> Connect links
-    if( val && !process() )
+    if(val && !process())
     {
-	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    setLink( i_ln, INIT );
-	owner().blkProc( id(), val );
+	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++) setLink(i_ln, INIT);
+	owner().blkProc(id(), val);
     }
     //> Disconnect links
-    if( !val && process() )
+    if(!val && process())
     {
-	for( int i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    setLink( i_ln, DEINIT );
-	owner().blkProc( id(), val );
+	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++) setLink(i_ln, DEINIT);
+	owner().blkProc(id(), val);
     }
     m_process = val;
 }
@@ -485,7 +484,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(int i_a = 0; i_a < opt->childSize(); i_a++)
+		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
 		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
@@ -532,7 +531,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		{
 		    vector<string> list;
 		    ioList(list);
-		    for(int i_io = 0; i_io < list.size(); i_io++)
+		    for(unsigned i_io = 0; i_io < list.size(); i_io++)
 		    {
 			int id = ioId(list[i_io]);
 			if(ioHide(id) && !atoi(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")).c_str())) continue;
@@ -559,7 +558,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    vector<string> list;
 		    ioList(list);
 		    //>> Put IO links
-		    for(int i_io = 0; i_io < list.size(); i_io++)
+		    for(unsigned i_io = 0; i_io < list.size(); i_io++)
 		    {
 			int id = ioId(list[i_io]);
 
@@ -618,7 +617,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	owner().blkList(list);
 	opt->childAdd("el")->setText("");
-	for(int i_b = 0; i_b < list.size(); i_b++)
+	for(unsigned i_b = 0; i_b < list.size(); i_b++)
 	    if(list[i_b] != id()) opt->childAdd("el")->setText(list[i_b]);
     }
     else if(a_path == "/blck/cfg/func")

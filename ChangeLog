@@ -1,3 +1,8 @@
+2011-02-11 Roman
+- UI.Vision: Widget's position remnant is acquired for internal points coordinates calc of primitive "ElFigure".
+- DAQ.BFN, DAQ.BlockCalc: All warnings is resolved for "-Wall" compile option.
+
+
 2011-02-08 Roman
 - !!:FIX:Archive: Using soft grid buffer for high and low resolution time is fixed for archiving.
 - FIX:Config: Copy heterogenous nodes config properties is fixed.
