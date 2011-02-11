@@ -1230,7 +1230,7 @@ void VisRun::updatePage( )
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //> Alarms update (one seconds update)
-    if( wPrcCnt%(500/period()) == 0 )
+    if(wPrcCnt%(500/vmin(500,period())) == 0)
     {
 	//>> Get alarm status
 	unsigned wAlrmSt = alarmSt( );
@@ -1262,8 +1262,8 @@ void VisRun::updatePage( )
     }
 
     //> Old pages from cache for close checking
-    for( int i_pg = 0; i_pg < cache_pg.size(); i_pg++ )
-	if( mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (int)(mod->cachePgLife()*60*60) )
+    for(int i_pg = 0; i_pg < cache_pg.size(); i_pg++)
+	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (int)(mod->cachePgLife()*60*60))
 	{
 	    delete cache_pg[i_pg];
 	    cache_pg.erase(cache_pg.begin()+i_pg);
@@ -1272,7 +1272,7 @@ void VisRun::updatePage( )
 
 #if OSC_DEBUG >= 3
     upd_tm += 1e-3*(TSYS::curTime()-t_cnt);
-    if( !(1000/period() && wPrcCnt%(1000/period())) )
+    if(!(1000/vmin(1000,period()) && wPrcCnt%(1000/vmin(1000,period()))))
     {
 	mess_debug("VCA DEBUG",_("Session '%s' update time %f ms."),workSess().c_str(),upd_tm);
 	upd_tm = 0;
@@ -1280,7 +1280,7 @@ void VisRun::updatePage( )
 #endif
 
     //> Time update
-    if( mWTime->isVisible() && !(wPrcCnt%vmax(1000/period(),1)) )
+    if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)))
     {
 	QDateTime dtm = QDateTime::currentDateTime();
 	mWTime->setText( locale().toString(dtm,"hh:mm:ss\nddd, d MMM") );
@@ -1288,7 +1288,7 @@ void VisRun::updatePage( )
     }
 
     //> Scale for full screen check
-    if( (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) && !(wPrcCnt%vmax(1000/period(),1)) )
+    if((windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)))
     {
 	float xSc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	float ySc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();

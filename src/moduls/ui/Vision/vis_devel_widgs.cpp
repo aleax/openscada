@@ -520,7 +520,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		it->setModify(true);
 		emit modified(swdg);
 		emit dataChanged(index,index);
-		if( it->flag()&Item::Active ) setWdg(cur_wdg);
+		if(it->flag()&Item::Active) setWdg(cur_wdg);
 	    }
 	}
     }catch(...){ return false; }
@@ -558,8 +558,8 @@ ModInspAttr::Item *ModInspAttr::Item::child(int row) const
 
 int ModInspAttr::Item::childGet( const string &iid ) const
 {
-    for( int i_c = 0; i_c < childCount(); i_c++ )
-        if( child(i_c)->id() == iid )
+    for(int i_c = 0; i_c < childCount(); i_c++)
+        if(child(i_c)->id() == iid)
             return i_c;
 
     return -1;
@@ -572,8 +572,7 @@ int ModInspAttr::Item::childCount() const
 
 int ModInspAttr::Item::childInsert( const string &iid, int row, Type itp )
 {
-    if( row<0 || row>childItems.size() )
-	row=childItems.size();
+    if(row<0 || row>childItems.size())	row = childItems.size();
     childItems.insert(row, new Item(iid,itp,this));
 
     return row;
@@ -581,19 +580,19 @@ int ModInspAttr::Item::childInsert( const string &iid, int row, Type itp )
 
 void ModInspAttr::Item::childDel( int row )
 {
-    if( row<0 || row>=childItems.size() )    return;
+    if(row<0 || row>=childItems.size())    return;
     delete childItems.value(row);
     childItems.removeAt(row);
 }
 
 QVariant ModInspAttr::Item::data( )
 {
-    if( type() == AttrGrp )
+    if(type() == AttrGrp)
     {
 	QString dtv;
-	for( int i_c = 0; i_c < childCount(); i_c++ )
-	    if( i_c == 0 )  dtv=child(i_c)->data().toString();
-	    else dtv=dtv+", "+child(i_c)->data().toString();
+	for(int i_c = 0; i_c < childCount(); i_c++)
+	    if(i_c == 0)  dtv = child(i_c)->data().toString();
+	    else dtv = dtv+", "+child(i_c)->data().toString();
 	return QString("[%1]").arg(dtv);
     }
     else return dataItem;
@@ -607,8 +606,8 @@ QVariant ModInspAttr::Item::dataEdit( )
 bool ModInspAttr::Item::setWdgs( const string &w, bool del )
 {
     int pos = 0;
-    if( !del && wdgsItem.find(w+";") == string::npos ) wdgsItem += w+";";
-    if( del && (pos=wdgsItem.find(w+";")) != string::npos ) wdgsItem.replace(pos,w.size()+1,"");
+    if(!del && wdgsItem.find(w+";") == string::npos) wdgsItem += w+";";
+    if(del && (pos=wdgsItem.find(w+";")) != string::npos) wdgsItem.replace(pos,w.size()+1,"");
 
     return !wdgsItem.empty();
 }
@@ -813,18 +812,20 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if( flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor) )
+    if(flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor))
     {
 	QComboBox *comb = (QComboBox*)editor;
 	comb->addItems(value.toStringList());
 	comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
-    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor) )
+    else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	((QTextEdit*)editor)->setPlainText(value.toString());
-    else if( value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor) )
+    else if(value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
 	((LineEditProp*)editor)->setValue(value.toString());
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor) )
+    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
 	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
+    else if(value.type() == QVariant::Double && dynamic_cast<QDoubleSpinBox*>(editor))
+	((QDoubleSpinBox*)editor)->setDecimals(3);
     else QItemDelegate::setEditorData(editor, index);
 }
 
@@ -833,13 +834,13 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if( flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor) )
+    if(flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor))
 	model->setData(index,((QComboBox*)editor)->currentText(),Qt::EditRole);
-    else if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor) )
+    else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	model->setData(index,((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
-    else if( value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor) )
+    else if(value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
 	model->setData(index,((LineEditProp*)editor)->value());
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor) )
+    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
     {
 	int tm = ((QDateTimeEdit*)editor)->dateTime().toTime_t();
 	model->setData(index,(tm>(time(NULL)+3600))?0:tm,Qt::EditRole);

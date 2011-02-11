@@ -4,6 +4,8 @@
 
 2011-02-11 Roman
 - UI.Vision: Widget's position remnant is acquired for internal points coordinates calc of primitive "ElFigure".
+    Real attributes precision is rise to 3 digits.
+- !:FIX:UI.Vision: Run project crash is fixed for project's calc period more 500 ms.
 - DAQ.BFN, DAQ.BlockCalc: All warnings is resolved for "-Wall" compile option.
 
 
