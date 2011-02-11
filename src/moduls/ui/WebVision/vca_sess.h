@@ -163,7 +163,9 @@ class VCAElFigure : public VCAObj
         int drawElF( SSess &ses, double xSc, double ySc, Point clickPnt );
 	//Attributes
 	double	width,          //Widget geometry
-		height;
+		height,
+                geomX,
+                geomY;
 	int	geomMargin,     //Margin
 		lineClr,        //The color of the line
 		bordWdth,       //The border's width

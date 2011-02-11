@@ -418,14 +418,16 @@ Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,
         rpnt.y = rpnt.y + center.y;
     }
     if( flag_scale ) rpnt = Point( rpnt.x*xScale, rpnt.y*yScale );
+    Point add((geomX+0.5)-floor(geomX+0.5)-0.5,(geomY+0.5)-floor(geomY+0.5)-0.5);
 
-    return rpnt;
+    return Point(rpnt.x+add.x, rpnt.y+add.y);
 }
 
 //- Unscaling and unrotating the point -
 Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate )
 {
-    Point rpnt = Point( point.x, point.y );
+    Point add((geomX+0.5)-floor(geomX+0.5)-0.5,(geomY+0.5)-floor(geomY+0.5)-0.5);
+    Point rpnt = Point( point.x - add.x, point.y - add.y );
     Point center;
     if( flag_scale ) rpnt = Point( rpnt.x/xScale, rpnt.y/yScale );
     if( flag_rotate )
@@ -4012,6 +4014,11 @@ void VCAElFigure::getReq( SSess &ses )
     double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
     prmEl = ses.prm.find("ySc");
     double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    prmEl = ses.prm.find("geomX");
+    geomX = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 0;
+    prmEl = ses.prm.find("geomY");
+    geomY = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 0;
+
     scaleHeight = (int)TSYS::realRound(height*ySc, 2, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, 2, true);
     if( im ) gdImageDestroy(im);
@@ -4866,10 +4873,10 @@ void VCAText::getReq( SSess &ses )
     ResAlloc res(mRes,false);
     //- Prepare picture -
     map< string, string >::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
-
+    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1;
+    
     scaleHeight = (int)TSYS::realRound(height*ySc, 2, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, 2, true);
     int txtFontSize = 0;

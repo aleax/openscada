@@ -495,13 +495,15 @@ function makeEl( pgBr, inclPg )
       figObj.wdgLnk = this;
       this.place.appendChild(figObj);
     }
-    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
+    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
+							   '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
     if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
     {
       figObj.onclick = function(e)
       {
 	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2)+
+	servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
+						  '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3)+
 						  '&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
 						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						  '&key='+evMouseGet(e),'');
@@ -510,7 +512,8 @@ function makeEl( pgBr, inclPg )
       figObj.ondblclick = function(e)
       {
 	if(!e) e = window.event;
-	servSet(this.wdgLnk.addr,'com=obj&sub=point&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2)+
+	servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
+						  '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3)+
 						  '&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
 						  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						  '&key=DblClick','');

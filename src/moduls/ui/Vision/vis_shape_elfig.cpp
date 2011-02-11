@@ -5587,7 +5587,6 @@ QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *view, bool fl
     if( flag_scale ) rpnt = QPointF( rpnt.x()*view->xScale(true), rpnt.y()*view->yScale(true) );
 
     QPointF add((view->posF().x()+0.5)-floor(view->posF().x()+0.5)-0.5,(view->posF().y()+0.5)-floor(view->posF().y()+0.5)-0.5);
-
     return rpnt+add;
 }
 

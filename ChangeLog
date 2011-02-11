@@ -1,3 +1,7 @@
+2011-02-11 Maxim
+- UI.WebVision: Widget's position remnant is acquired for internal points coordinates calc of primitive "ElFigure".
+
+
 2011-02-11 Roman
 - UI.Vision: Widget's position remnant is acquired for internal points coordinates calc of primitive "ElFigure".
 - DAQ.BFN, DAQ.BlockCalc: All warnings is resolved for "-Wall" compile option.
