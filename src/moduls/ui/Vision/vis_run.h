@@ -177,7 +177,8 @@ class VisRun : public QMainWindow
 	//> Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
 	SndPlay		*alrmPlay;		//Alarm play widget
-	bool		alrLevSet;		//Use for no quitance lamp blinking
+	bool		alrLevSet,		//Use for no quitance lamp blinking
+			isConErr;		//Connection error flag
 
 	vector<string>	pgList;			//Pages list
 

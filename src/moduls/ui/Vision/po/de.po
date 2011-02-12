@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-14 12:37+0200\n"
+"POT-Creation-Date: 2011-02-12 21:09+0200\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -1345,6 +1345,9 @@ msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 
 msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
+
+msgid "Connection to visualisation server '%1' error: %2"
+msgstr ""
 
 msgid "Print page"
 msgstr "Seite drucken"

@@ -58,7 +58,8 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce, QWidget *parent ) :
-    QMainWindow(parent), winClose(false), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF)
+    QMainWindow(parent), winClose(false), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF),
+    isConErr(false)
 {
     QImage ico_t;
 
@@ -329,7 +330,40 @@ void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 {
-    return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    QLabel *conErr;
+
+    int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    //> Display error message about connection error
+    if(rez == 10 && master_pg && !isConErr && !master_pg->findChild<QLabel*>("==ConnError=="))
+    {
+	//> Create error message
+	conErr = new QLabel(QString(_("Connection to visualisation server '%1' error: %2")).
+				arg(VCAStation().c_str()).arg(node.text().c_str()),master_pg);
+	conErr->setObjectName("==ConnError==");
+	conErr->setAlignment(Qt::AlignCenter);
+	conErr->setWordWrap(true);
+	//> Prepare message's style
+	conErr->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
+	conErr->setAutoFillBackground(true);
+	QPalette plt(conErr->palette());
+        QBrush brsh = plt.brush(QPalette::Background);
+        brsh.setColor(Qt::red);
+        brsh.setStyle(Qt::SolidPattern);
+        plt.setBrush(QPalette::Background,brsh);
+        conErr->setPalette(plt);
+        //> Calc size and position
+	conErr->resize(300,100);
+	conErr->move((master_pg->size().width()-conErr->size().width())/2,(master_pg->size().height()-conErr->size().height())/2);
+        conErr->show();
+        isConErr = true;
+    }
+    //> Remove error message about connection error
+    else if(rez != 10 && isConErr && (conErr=master_pg->findChild<QLabel*>("==ConnError==")))
+    {
+	conErr->deleteLater();
+	isConErr = false;
+    }
+    return rez;
 }
 
 void VisRun::closeEvent( QCloseEvent* ce )
