@@ -496,7 +496,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
     //> Attribute widget(s)
     string nwdg = it->wdgs( ), swdg;
     if( nwdg.empty() )
-    {    
+    {
 	Item *cit = it;
 	while(cit)
 	    if(cit->type() == Item::Wdg)
@@ -795,6 +795,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	w_del = new QDoubleSpinBox(parent);
 	((QDoubleSpinBox*)w_del)->setMinimum(-1e100);
 	((QDoubleSpinBox*)w_del)->setMaximum(1e100);
+	((QDoubleSpinBox*)w_del)->setDecimals(3);
     }
     else
     {
@@ -824,8 +825,6 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
 	((LineEditProp*)editor)->setValue(value.toString());
     else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
 	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
-    else if(value.type() == QVariant::Double && dynamic_cast<QDoubleSpinBox*>(editor))
-	((QDoubleSpinBox*)editor)->setDecimals(3);
     else QItemDelegate::setEditorData(editor, index);
 }
 
@@ -2078,12 +2077,12 @@ void DevelWdgView::saveGeom( const string& item )
 {
     if( item.empty() || item == id() )
     {
-	attrSet("geomX", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),2)), 7);
-	attrSet("geomY", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),2)), 8);
-	attrSet("geomW", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),2)), 9);
-	attrSet("geomH", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),2)), 10);
-	attrSet("geomXsc", TSYS::real2str(TSYS::realRound(x_scale,2)), 13);
-	attrSet("geomYsc", TSYS::real2str(TSYS::realRound(y_scale,2)), 14);
+	attrSet("geomX", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),3)), 7);
+	attrSet("geomY", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),3)), 8);
+	attrSet("geomW", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),3)), 9);
+	attrSet("geomH", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),3)), 10);
+	attrSet("geomXsc", TSYS::real2str(TSYS::realRound(x_scale,3)), 13);
+	attrSet("geomYsc", TSYS::real2str(TSYS::realRound(y_scale,3)), 14);
 	attrSet("geomZ", TSYS::int2str(parent()->children().indexOf(this)),11);
     }
 

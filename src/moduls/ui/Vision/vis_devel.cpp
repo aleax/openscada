@@ -654,7 +654,7 @@ double VisDevelop::wdgVisScale( )
 
 void VisDevelop::setWdgVisScale(double val )
 {
-    mWVisScale->setText((TSYS::real2str(TSYS::realRound(val*100,2,true))+"%").c_str());
+    mWVisScale->setText((TSYS::real2str(TSYS::realRound(val*100,3,true))+"%").c_str());
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )

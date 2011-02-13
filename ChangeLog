@@ -1,3 +1,7 @@
+2011-02-13 Roman
+- UI.Vision: Real precision for attributes is fixed and allowed 3 digit precision for widet's coordinates everywhere.
+
+
 2011-02-12 Roman
 - UI.Vision: Lost connection to visualisation server message is added for run from visualisation server.
 
