@@ -1,3 +1,8 @@
+2011-02-14 Roman
+- UI.WebVision, UI.Vision: Real precision for attributes is fixed and allowed 3 digit precision for widet's coordinates everywhere.
+    Digits number for precision is set to main defined variable.
+
+
 2011-02-13 Roman
 - UI.Vision: Real precision for attributes is fixed and allowed 3 digit precision for widet's coordinates everywhere.
 

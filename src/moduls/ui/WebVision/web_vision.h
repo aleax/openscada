@@ -35,6 +35,8 @@
 
 #define rgb(r,g,b) (((r)<<16)+((g)<<8)+(b))
 
+#define POS_PREC_DIG	3
+
 using std::string;
 using std::vector;
 using std::map;

@@ -2077,12 +2077,12 @@ void DevelWdgView::saveGeom( const string& item )
 {
     if( item.empty() || item == id() )
     {
-	attrSet("geomX", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),3)), 7);
-	attrSet("geomY", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),3)), 8);
-	attrSet("geomW", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),3)), 9);
-	attrSet("geomH", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),3)), 10);
-	attrSet("geomXsc", TSYS::real2str(TSYS::realRound(x_scale,3)), 13);
-	attrSet("geomYsc", TSYS::real2str(TSYS::realRound(y_scale,3)), 14);
+	attrSet("geomX", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)), 7);
+	attrSet("geomY", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)), 8);
+	attrSet("geomW", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)), 9);
+	attrSet("geomH", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)), 10);
+	attrSet("geomXsc", TSYS::real2str(TSYS::realRound(x_scale,POS_PREC_DIG)), 13);
+	attrSet("geomYsc", TSYS::real2str(TSYS::realRound(y_scale,POS_PREC_DIG)), 14);
 	attrSet("geomZ", TSYS::int2str(parent()->children().indexOf(this)),11);
     }
 

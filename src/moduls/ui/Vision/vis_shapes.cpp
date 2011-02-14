@@ -887,11 +887,11 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 
 	    //> Prepare draw area
 	    /*QRect dA(w->rect().x(),w->rect().y(),
-		(int)TSYS::realRound(w->sizeF().width()/w->xScale(true),3,true)-2*shD->geomMargin,
-		(int)TSYS::realRound(w->sizeF().height()/w->yScale(true),3,true)-2*shD->geomMargin);
+		(int)TSYS::realRound(w->sizeF().width()/w->xScale(true),POS_PREC_DIG,true)-2*shD->geomMargin,
+		(int)TSYS::realRound(w->sizeF().height()/w->yScale(true),POS_PREC_DIG,true)-2*shD->geomMargin);
 	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted((int)TSYS::realRound(w->xScale(true)*shD->geomMargin,3,true),(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,3,true),
-		-(int)TSYS::realRound(w->xScale(true)*shD->geomMargin,3,true),-(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,3,true)));*/
+	    pnt.setViewport(w->rect().adjusted((int)TSYS::realRound(w->xScale(true)*shD->geomMargin,POS_PREC_DIG,true),(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,POS_PREC_DIG,true),
+		-(int)TSYS::realRound(w->xScale(true)*shD->geomMargin,POS_PREC_DIG,true),-(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,POS_PREC_DIG,true)));*/
 
 	    int scale = 0;
 #if QT_VERSION < 0x040400
