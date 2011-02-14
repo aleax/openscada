@@ -356,71 +356,74 @@ TParamContr *TMdContr::ParamAttach(const string &name, int type)
 
 void TMdContr::enable_( )
 {
-    //> Get Houses
-    XMLNode reqHouses("GetHouses");
-    reqBFN(reqHouses);
-    if(reqHouses.attr("err").empty())
+    try
     {
-	XMLNode *houseArr = reqHouses.childGet("arrHouseProperties");
-	for(unsigned i_h = 0; i_h < houseArr->childSize(); i_h++)
+	//> Get Houses
+	XMLNode reqHouses("GetHouses");
+	reqBFN(reqHouses);
+	if(reqHouses.attr("err").empty())
 	{
-	    XMLNode *houseIt = houseArr->childGet(i_h);
-	    //> Get House computers
-	    XMLNode reqHouseComps("GetHouseComputers");
-	    reqHouseComps.childAdd("lHouseId")->setText(houseIt->childGet("lHouseId")->text());
-	    reqBFN(reqHouseComps);
-	    if(reqHouseComps.attr("err").empty())
+	    XMLNode *houseArr = reqHouses.childGet("arrHouseProperties");
+	    for(unsigned i_h = 0; i_h < houseArr->childSize(); i_h++)
 	    {
-		XMLNode *compArr = reqHouseComps.childGet("arrHouseComputerProperties");
-		for(unsigned i_hc = 0; i_hc < compArr->childSize(); i_hc++)
+		XMLNode *houseIt = houseArr->childGet(i_h);
+		//> Get House computers
+		XMLNode reqHouseComps("GetHouseComputers");
+		reqHouseComps.childAdd("lHouseId")->setText(houseIt->childGet("lHouseId")->text());
+		reqBFN(reqHouseComps);
+		if(reqHouseComps.attr("err").empty())
 		{
-		    XMLNode *compIt = compArr->childGet(i_hc);
-		    //> Get Code Data
-		    XMLNode reqCodeData("GetCodeData");
-		    reqCodeData.childAdd("lHouseComputerId")->setText(compIt->childGet("lHouseComputerId")->text());
-		    reqBFN(reqCodeData);
-		    if(reqCodeData.attr("err").empty())
+		    XMLNode *compArr = reqHouseComps.childGet("arrHouseComputerProperties");
+		    for(unsigned i_hc = 0; i_hc < compArr->childSize(); i_hc++)
 		    {
-			string pName = "h"+houseIt->childGet("lHouseId")->text()+"_hc"+compIt->childGet("lHouseComputerId")->text();
-			AutoHD<TMdPrm> prm;
-			if(!present(pName))
+			XMLNode *compIt = compArr->childGet(i_hc);
+			//> Get Code Data
+			XMLNode reqCodeData("GetCodeData");
+			reqCodeData.childAdd("lHouseComputerId")->setText(compIt->childGet("lHouseComputerId")->text());
+			reqBFN(reqCodeData);
+			if(reqCodeData.attr("err").empty())
 			{
-			    add(pName,owner().tpPrmToId("std"));
-			    prm = at(pName);
-			    prm.at().setName(houseIt->childGet("szHouseName")->text()+" ("+compIt->childGet("szComputerNameShort")->text()+")");
-			    string descr = _("House:\n");
-			    for(unsigned i_hi = 0; i_hi < houseIt->childSize(); i_hi++)
-				descr += "  "+passPrefSOAP(houseIt->childGet(i_hi)->name())+": "+houseIt->childGet(i_hi)->text()+"\n";
-			    descr += _("House computer:\n");
-			    for(unsigned i_hci = 0; i_hci < compIt->childSize(); i_hci++)
-				descr += "  "+passPrefSOAP(compIt->childGet(i_hci)->name())+": "+compIt->childGet(i_hci)->text()+"\n";
-			    prm.at().setDescr(descr);
-			}
-			else prm = at(pName);
-
-			XMLNode *cdArr = reqCodeData.childGet("arrCodeData");
-			for(unsigned i_cd = 0; i_cd < cdArr->childSize(); i_cd++)
-			{
-			    XMLNode *cdIt = +cdArr->childGet(i_cd);
-			    string cdId = "c"+cdIt->childGet("lCodeId")->text()+"u"+cdIt->childGet("iUnitId")->text();
-			    if(!prm.at().vlPresent(cdId))
+			    string pName = "h"+houseIt->childGet("lHouseId")->text()+"_hc"+compIt->childGet("lHouseComputerId")->text();
+			    AutoHD<TMdPrm> prm;
+			    if(!present(pName))
 			    {
-				TFld::Type cTp = TFld::String;
-				switch(atoi(cdIt->childGet("iDataType")->text().c_str()))
-				{
-				    case 0: cTp = TFld::Real;	break;
-				    case 2: case 3: case 6: cTp = TFld::Integer;break;
-				}
-				prm.at().p_el.fldAdd(new TFld(cdId.c_str(),cdId.c_str(),cTp,TFld::NoWrite));
+				add(pName,owner().tpPrmToId("std"));
+				prm = at(pName);
+				prm.at().setName(houseIt->childGet("szHouseName")->text()+" ("+compIt->childGet("szComputerNameShort")->text()+")");
+				string descr = _("House:\n");
+				for(unsigned i_hi = 0; i_hi < houseIt->childSize(); i_hi++)
+				    descr += "  "+passPrefSOAP(houseIt->childGet(i_hi)->name())+": "+houseIt->childGet(i_hi)->text()+"\n";
+				descr += _("House computer:\n");
+				for(unsigned i_hci = 0; i_hci < compIt->childSize(); i_hci++)
+				    descr += "  "+passPrefSOAP(compIt->childGet(i_hci)->name())+": "+compIt->childGet(i_hci)->text()+"\n";
+				prm.at().setDescr(descr);
 			    }
-			    prm.at().vlAt(cdId).at().fld().setDescr(mod->getSymbolCode(cdIt->childGet("lCodeId")->text()));
-			    //prm.at().vlAt(cdId).at().setS(cdIt->childGet("szCodeValue")->text(),0,true);
+			    else prm = at(pName);
+
+			    XMLNode *cdArr = reqCodeData.childGet("arrCodeData");
+			    for(unsigned i_cd = 0; i_cd < cdArr->childSize(); i_cd++)
+			    {
+				XMLNode *cdIt = +cdArr->childGet(i_cd);
+				string cdId = "c"+cdIt->childGet("lCodeId")->text()+"u"+cdIt->childGet("iUnitId")->text();
+				if(!prm.at().vlPresent(cdId))
+				{
+				    TFld::Type cTp = TFld::String;
+				    switch(atoi(cdIt->childGet("iDataType")->text().c_str()))
+				    {
+					case 0: cTp = TFld::Real;			break;
+					case 2: case 3: case 6: cTp = TFld::Integer;	break;
+				    }
+				    prm.at().p_el.fldAdd(new TFld(cdId.c_str(),cdId.c_str(),cTp,TFld::NoWrite));
+				}
+				prm.at().vlAt(cdId).at().fld().setDescr(mod->getSymbolCode(cdIt->childGet("lCodeId")->text()));
+				//prm.at().vlAt(cdId).at().setS(cdIt->childGet("szCodeValue")->text(),0,true);
+			    }
 			}
 		    }
 		}
 	    }
 	}
-    }
+    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdContr::start_( )

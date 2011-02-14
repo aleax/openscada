@@ -1,6 +1,8 @@
 2011-02-14 Roman
 - UI.WebVision, UI.Vision: Real precision for attributes is fixed and allowed 3 digit precision for widet's coordinates everywhere.
     Digits number for precision is set to main defined variable.
+- DAQ.BFN: Enable controller for any errors of init requests is made.
+- UI.QTStarter: Splash update period is rise to 1 second, for load decrease at slow CPU.
 
 
 2011-02-13 Roman
