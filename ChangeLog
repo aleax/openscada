@@ -1,3 +1,8 @@
+2011-02-15 Roman
+- FIX:UI.Vision, UI.QTCfg: Some bugs is fixed for processing not full responds from remote connection by "SelfSystem" protocol.
+    Node childs is made clear for that reason.
+
+
 2011-02-14 Roman
 - UI.WebVision, UI.Vision: Real precision for attributes is fixed and allowed 3 digit precision for widet's coordinates everywhere.
     Digits number for precision is set to main defined variable.

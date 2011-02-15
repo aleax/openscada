@@ -491,6 +491,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     }
     catch( TError err )
     {
+	node.childClear();
 	node.setAttr("rez","10");
 	node.setAttr("mcat",err.cat);
 	node.setText(err.mess);
