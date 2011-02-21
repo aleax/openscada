@@ -76,7 +76,7 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), end_run(false), demon_mode(false), start_com(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), demon_mode(false), end_run(false), start_com(false)
 {
     mod		= this;
 
@@ -267,8 +267,8 @@ void *TUIMod::Task( void * )
     {
 	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m--)
-	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
+	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-7); i_m--)
+	    mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
 	sleep(1);
@@ -310,7 +310,7 @@ void *TUIMod::Task( void * )
     {
 	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
 	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > (recs.size()-7); i_m--)
+	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-7); i_m--)
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();

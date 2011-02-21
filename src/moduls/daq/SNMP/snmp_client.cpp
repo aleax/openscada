@@ -125,9 +125,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_addr(cfg("ADDR").getSd()), m_comm(cfg("COMM").getSd()),
-	m_pattr_lim(cfg("PATTR_LIM").getId())
+	::TController(name_c,daq_db,cfgelem), m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),
+	m_pattr_lim(cfg("PATTR_LIM").getId()), m_addr(cfg("ADDR").getSd()), m_comm(cfg("COMM").getSd()),
+	prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
@@ -163,14 +163,14 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if( p_hd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size()) p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size()) p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -214,7 +214,7 @@ void *TMdContr::Task( void *icntr )
 
 		TMdPrm &cprm = cntr.p_hd[i_p].at();
 
-		for( int ioid = 0; ioid < cprm.lsOID().size(); ioid++ )
+		for(unsigned ioid = 0; ioid < cprm.lsOID().size(); ioid++)
 		{
 		    oid_root_len = oid_next_len=cprm.lsOID()[ioid].size()/sizeof(oid);
 		    memmove(oid_root,cprm.lsOID()[ioid].c_str(),oid_root_len*sizeof(oid));
@@ -311,8 +311,8 @@ void *TMdContr::Task( void *icntr )
 string TMdContr::oid2str( oid *ioid, size_t isz )
 {
     string rez;
-    for(int i_el = 0; i_el < isz; i_el++)
-	rez=rez+"_"+TSYS::int2str(ioid[i_el]);
+    for(unsigned i_el = 0; i_el < isz; i_el++)
+	rez = rez+"_"+TSYS::int2str(ioid[i_el]);
     return rez;
 }
 
@@ -320,7 +320,7 @@ string TMdContr::oid2str( oid *ioid, size_t isz )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr"), m_oid(cfg("OID_LS").getSd())
+    TParamContr(name,tp_prm), m_oid(cfg("OID_LS").getSd()), p_el("w_attr")
 {
 
 }
@@ -358,7 +358,7 @@ void TMdPrm::disable( )
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 }
 

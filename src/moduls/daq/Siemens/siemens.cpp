@@ -461,7 +461,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	try
 	{
 	    getLifeListPB(board, lifeLst);
-	    for(int i_st = 0; i_st < lifeLst.size(); i_st++)
+	    for(unsigned i_st = 0; i_st < lifeLst.size(); i_st++)
 		switch((unsigned char)lifeLst[i_st])
 		{
 		    case 0xFF:	opt->childAdd("el")->setText(TSYS::int2str(i_st)+_(" : -------"));	break;
@@ -477,10 +477,11 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TMdContr                                     *
 //************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0), di(NULL), dc(NULL),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_type(cfg("TYPE").getId()), m_assinc_wr(cfg("ASINC_WR").getBd()),
-	m_slot(cfg("SLOT").getId()), m_dev(cfg("CIF_DEV").getId()), m_addr(cfg("ADDR").getSd())
+TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
+	::TController(name_c,daq_db,cfgelem),
+	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_type(cfg("TYPE").getId()),
+	m_slot(cfg("SLOT").getId()), m_dev(cfg("CIF_DEV").getId()), m_addr(cfg("ADDR").getSd()),
+	m_assinc_wr(cfg("ASINC_WR").getBd()), prc_st(false), endrun_req(false), di(NULL), dc(NULL), tm_calc(0)
 {
     cfg("PRM_BD").setS("CIFPrm_"+name_c);
 }
@@ -546,17 +547,17 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    connectRemotePLC( );
+    connectRemotePLC();
 
     //> Former proccess parameters list
     vector<string> list_p;
     list(list_p);
-    for(int i_prm=0; i_prm < list_p.size(); i_prm++)
-	if( at(list_p[i_prm]).at().enableStat() )
-	    prmEn( list_p[i_prm], true );
+    for(unsigned i_prm = 0; i_prm < list_p.size(); i_prm++)
+	if(at(list_p[i_prm]).at().enableStat())
+	    prmEn(list_p[i_prm], true);
 
     //> Start the request data task
-    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
 }
 
 void TMdContr::stop_( )
@@ -585,14 +586,14 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(nodeRes(),true);
-    for( i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if( pHd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= pHd.size() )	pHd.push_back(at(id));
-    if( !val && i_prm < pHd.size() )	pHd.erase(pHd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if(pHd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= pHd.size()) pHd.push_back(at(id));
+    if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
 }
 
 void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
@@ -603,58 +604,58 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 
     ResAlloc res(nodeRes(),true);
 
-    //- Register to acquisition block -
-    int i_b;
+    //> Register to acquisition block
+    unsigned i_b;
     for(i_b = 0; i_b < acqBlks.size(); i_b++)
-	if( acqBlks[i_b].db > ival.db ) break;
+	if(acqBlks[i_b].db > ival.db) break;
 	else if(acqBlks[i_b].db == ival.db)
 	{
-	    if( ival.off < acqBlks[i_b].off )
+	    if(ival.off < acqBlks[i_b].off)
 	    {
-		if( (acqBlks[i_b].val.size()+acqBlks[i_b].off-ival.off) < MaxLenReq )
+		if((acqBlks[i_b].val.size()+acqBlks[i_b].off-ival.off) < MaxLenReq)
 		{
 		    acqBlks[i_b].val.insert(0,acqBlks[i_b].off-ival.off,0);
 		    acqBlks[i_b].off = ival.off;
 		}
 		else acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 	    }
-	    else if( (ival.off+iv_sz) > (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	    else if((ival.off+iv_sz) > (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    {
-		if( (ival.off+iv_sz-acqBlks[i_b].off) < MaxLenReq )
+		if((ival.off+iv_sz-acqBlks[i_b].off) < MaxLenReq)
 		    acqBlks[i_b].val.append((ival.off+iv_sz)-(acqBlks[i_b].off+acqBlks[i_b].val.size()),0);
 		else continue;
 	    }
 	    break;
 	}
-    if( i_b >= acqBlks.size() )
+    if(i_b >= acqBlks.size())
 	acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 
-    //- Register to asynchronous write block -
-    if( wr && assincWrite( ) )
+    //> Register to asynchronous write block
+    if(wr && assincWrite())
     {
-	for( i_b = 0; i_b < writeBlks.size(); i_b++ )
-	    if( writeBlks[i_b].db > ival.db ) break;
+	for(i_b = 0; i_b < writeBlks.size(); i_b++)
+	    if(writeBlks[i_b].db > ival.db) break;
 	    else if(writeBlks[i_b].db == ival.db)
 	    {
-		if( ival.off < writeBlks[i_b].off )
+		if(ival.off < writeBlks[i_b].off)
 		{
-		    if( (ival.off+iv_sz) >= writeBlks[i_b].off && 
-			    (writeBlks[i_b].val.size()+writeBlks[i_b].off-ival.off) < MaxLenReq )
+		    if((ival.off+iv_sz) >= writeBlks[i_b].off &&
+			    (writeBlks[i_b].val.size()+writeBlks[i_b].off-ival.off) < MaxLenReq)
 		    {
 			writeBlks[i_b].val.insert(0,writeBlks[i_b].off-ival.off,0);
 			writeBlks[i_b].off = ival.off;
 		    }
 		    else writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 		}
-		else if( (ival.off+iv_sz) > (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+		else if((ival.off+iv_sz) > (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
 		{
-		    if( ival.off <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) &&
-			    (ival.off+iv_sz-writeBlks[i_b].off) < MaxLenReq )
+		    if(ival.off <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()) &&
+			    (ival.off+iv_sz-writeBlks[i_b].off) < MaxLenReq)
 		    {
 			writeBlks[i_b].val.append((ival.off+iv_sz)-(writeBlks[i_b].off+writeBlks[i_b].val.size()),0);
-			//- Check for allow mergin to next block -
-			if( i_b+1 < writeBlks.size() && writeBlks[i_b+1].db == ival.db &&
-				(writeBlks[i_b].off+writeBlks[i_b].val.size()) >= writeBlks[i_b+1].off )
+			//> Check for allow mergin to next block
+			if(i_b+1 < writeBlks.size() && writeBlks[i_b+1].db == ival.db &&
+				(writeBlks[i_b].off+(int)writeBlks[i_b].val.size()) >= writeBlks[i_b+1].off)
 			{
 			    writeBlks[i_b].val.append(writeBlks[i_b+1].val,writeBlks[i_b].off+writeBlks[i_b].val.size()-writeBlks[i_b+1].off,string::npos);
 			    writeBlks.erase(writeBlks.begin()+i_b+1);
@@ -664,7 +665,7 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 		}
 		break;
 	    }
-	if( i_b >= writeBlks.size() )
+	if(i_b >= writeBlks.size())
 	    writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 	writeBlks[i_b].err = _("-1:No data");
     }
@@ -737,7 +738,7 @@ void TMdContr::connectRemotePLC( )
 			(char)0x00 + (char)0x00;  	//dlen
 	    //-- Parameters --
 	    pdu = pdu + (char)0xF0 + (char)0x00 + (char)0x00 + (char)0x01 + (char)0x00 + (char)0x01 + (char)0x03 + (char)0xC0;
-			
+
 	    mbap = mbap+(char)0x03 + (char)0x00 +
 			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
 			pdu;
@@ -775,7 +776,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 
 	    if( buffer.size() > 240 )			throw TError(nodePath().c_str(),_("14:Request block is too big."));
 	    if( !owner().cif_devs[m_dev].present )	throw TError(nodePath().c_str(),_("15:Board %d is not present."),m_dev);
-	
+
 	    ResAlloc resource(owner().cif_devs[m_dev].res,true);
 
 	    do
@@ -870,7 +871,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		        (char)(n_db>>8) + (char)n_db +				// DB number
 			(char)0x84 +						// DB area
 			(char)((offset*8)>>16) + (char)((offset*8)>>8) + (char)(offset*8);	// start address in bits
-			
+
 	    mbap = mbap+(char)0x03 + (char)0x00 +
 			(char)((pdu.size()+4)>>8) + (char)(pdu.size()+4) +
 			pdu;
@@ -1008,16 +1009,16 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 
 char TMdContr::getValB( SValData ival, ResString &err )
 {
-    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-	    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
+	    (ival.off+1) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	{
-	    if( !acqBlks[i_b].err.size() )
+	    if(!acqBlks[i_b].err.size())
 	        return (bool)(acqBlks[i_b].val[ival.off-acqBlks[i_b].off]&(0x01<<ival.sz));
 	    else err.setVal(acqBlks[i_b].err);
 	    break;
 	}
-    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
+    if(err.getVal().empty()) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_BOOL;
 }
@@ -1025,9 +1026,9 @@ char TMdContr::getValB( SValData ival, ResString &err )
 int TMdContr::getValI( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::Integer, ival.sz );
-    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
+	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	{
 	    if(!acqBlks[i_b].err.size())
 		switch(iv_sz)
@@ -1036,10 +1037,10 @@ int TMdContr::getValI( SValData ival, ResString &err )
 		    case 2:	return *(int16_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		    case 4:	return *(int32_t*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
-	    else err.setVal( acqBlks[i_b].err );
+	    else err.setVal(acqBlks[i_b].err);
 	    break;
 	}
-    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
+    if(err.getVal().empty()) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_INT;
 }
@@ -1047,9 +1048,9 @@ int TMdContr::getValI( SValData ival, ResString &err )
 double TMdContr::getValR( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::Real, ival.sz );
-    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
+	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	{
 	    if(!acqBlks[i_b].err.size())
 		switch(iv_sz)
@@ -1057,10 +1058,10 @@ double TMdContr::getValR( SValData ival, ResString &err )
 		    case 4:	return *(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		    case 8:	return *(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
 		}
-	    else err.setVal( acqBlks[i_b].err );
+	    else err.setVal(acqBlks[i_b].err);
 	    break;
 	}
-    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
+    if(err.getVal().empty()) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_REAL;
 }
@@ -1068,15 +1069,15 @@ double TMdContr::getValR( SValData ival, ResString &err )
 string TMdContr::getValS( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::String, ival.sz );
-    for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-	    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()) )
 	{
-	    if( !acqBlks[i_b].err.size() )	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
-	    else err.setVal( acqBlks[i_b].err );
+	    if(!acqBlks[i_b].err.size())	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
+	    else err.setVal(acqBlks[i_b].err);
 	    break;
 	}
-    if( err.getVal().empty() ) err.setVal( _("11:Value is not gathered.") );
+    if(err.getVal().empty()) err.setVal( _("11:Value is not gathered.") );
 
     return EVAL_STR;
 }
@@ -1084,117 +1085,117 @@ string TMdContr::getValS( SValData ival, ResString &err )
 void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
 {
     int val = getValI(SValData(ival.db,ival.off,1),err);
-    if(val==EVAL_INT || (bool)(val&(0x01<<ival.sz)) == ivl) return;
+    if(val == EVAL_INT || (bool)(val&(0x01<<ival.sz)) == ivl) return;
     //> Write data to controller or write data block
-    val^=(0x01<<ival.sz);
+    val ^= (0x01<<ival.sz);
     try
     {
-	if( !assincWrite( ) )	putDB(ival.db,ival.off,string((char*)&val,1));
+	if(!assincWrite()) putDB(ival.db,ival.off,string((char*)&val,1));
 	else
-	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
-		if( writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+1) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
+		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
+		    (ival.off+1) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
 		{
 		    writeBlks[i_b].val[ival.off-writeBlks[i_b].off] = val;
-		    if( atoi(writeBlks[i_b].err.c_str()) == -1 ) writeBlks[i_b].err = "";
+		    if(atoi(writeBlks[i_b].err.c_str()) == -1) writeBlks[i_b].err = "";
 		    break;
 		}
 	//> Set to DB buffer
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
-		    (ival.off+1) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
+		    (ival.off+1) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val[ival.off-acqBlks[i_b].off] = val; break; }
     }
-    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
+    catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValI( int ivl, SValData ival, ResString &err )
 {
-    int val = getValI(ival,err);
-    if( val==EVAL_INT || val == ivl ) return;
+    int val = getValI(ival, err);
+    if(val == EVAL_INT || val == ivl) return;
     //> Write data to controller or write data block
     val = ivl;
-    int iv_sz = valSize( IO::Integer, ival.sz );
+    int iv_sz = valSize(IO::Integer, ival.sz);
     try
     {
-	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
+	if(!assincWrite()) putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
 	else
- 	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
-		if( writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+ 	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
+		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
+			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
 		{
 		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz)));
-		    if( atoi(writeBlks[i_b].err.c_str()) == -1 ) writeBlks[i_b].err = "";
+		    if(atoi(writeBlks[i_b].err.c_str()) == -1) writeBlks[i_b].err = "";
 		    break;
 		}
 	//> Set to DB buffer
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz))); break; }
     }
-    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
+    catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValR( double ivl, SValData ival, ResString &err )
 {
-    double val = getValR(ival,err);
+    double val = getValR(ival, err);
     float  val_4 = val;
-    if( val==EVAL_REAL || val == ivl ) return;
+    if(val == EVAL_REAL || val == ivl) return;
     //> Write data to controller or write data block
     val = ivl;
-    int iv_sz = valSize( IO::Real, ival.sz );
+    int iv_sz = valSize(IO::Real, ival.sz);
     try
     {
-	if( !assincWrite( ) )	putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
+	if(!assincWrite()) putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
 	else
-	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
+	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
 		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
 		{
 		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
-		    if( atoi(writeBlks[i_b].err.c_str()) == -1 ) writeBlks[i_b].err = "";
+		    if(atoi(writeBlks[i_b].err.c_str()) == -1) writeBlks[i_b].err = "";
 		    break;
 		}
 	//> Set to DB buffer
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    {
 		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz))); 
 		break;
 	    }
     }
-    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
+    catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
 {
     string val = getValS(ival,err);
-    int iv_sz = valSize( IO::String, ival.sz );
+    int iv_sz = valSize(IO::String, ival.sz);
     string vali = ivl;
     vali.resize(iv_sz);
-    if(val==EVAL_STR || val == vali) return;
+    if(val == EVAL_STR || val == vali) return;
     //> Write data to controller or write data block
     try
     {
-	if( !assincWrite( ) )	putDB(ival.db,ival.off,vali);
+	if(!assincWrite())	putDB(ival.db,ival.off,vali);
 	else
-	    for(int i_b = 0; i_b < writeBlks.size(); i_b++)
+	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
 		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
-			(ival.off+iv_sz) <= (writeBlks[i_b].off+writeBlks[i_b].val.size()) )
+			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
 		{
 		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,vali.c_str());
-		    if( atoi(writeBlks[i_b].err.c_str()) == -1 ) writeBlks[i_b].err = "";
+		    if(atoi(writeBlks[i_b].err.c_str()) == -1) writeBlks[i_b].err = "";
 		    break;
 		}
 	//> Set to DB buffer
-	for(int i_b = 0; i_b < acqBlks.size(); i_b++)
+	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
-		    (ival.off+iv_sz) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali.c_str()); break; }
     }
-    catch(TError cerr){ if( err.getVal().empty() ) err.setVal(cerr.mess); }
+    catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 int TMdContr::valSize( IO::Type itp, int iv_sz )
@@ -1205,6 +1206,7 @@ int TMdContr::valSize( IO::Type itp, int iv_sz )
 	case IO::Integer:	return (iv_sz==1||iv_sz==2||iv_sz==4)?iv_sz:2;
 	case IO::Real:		return (iv_sz==4||iv_sz==8)?iv_sz:4;
 	case IO::Boolean:	return 1;
+	default: break;
     }
     throw TError(nodePath().c_str(),_("Value type error."));
 }
@@ -1226,22 +1228,22 @@ void *TMdContr::Task( void *icntr )
 	//> Update controller's data
 	cntr.nodeRes().resRequestR( );
 	//> Process write data blocks
-	if( cntr.assincWrite( ) )
-	    for(int i_b = 0; i_b < cntr.writeBlks.size(); i_b++)
+	if(cntr.assincWrite())
+	    for(unsigned i_b = 0; i_b < cntr.writeBlks.size(); i_b++)
 		try
 		{
-		    if( cntr.redntUse( ) ) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
-		    if( atoi(cntr.writeBlks[i_b].err.c_str()) == -1 ) continue;
-		    //	cntr.writeBlks[i_b].db, cntr.writeBlks[i_b].off, cntr.writeBlks[i_b].val.size() );
-		    cntr.putDB( cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val );
+		    if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
+		    if(atoi(cntr.writeBlks[i_b].err.c_str()) == -1) continue;
+		    //	cntr.writeBlks[i_b].db, cntr.writeBlks[i_b].off, cntr.writeBlks[i_b].val.size());
+		    cntr.putDB(cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val);
 		    cntr.writeBlks[i_b].err="";
 		}
 		catch(TError err) { cntr.writeBlks[i_b].err = err.mess; }
 	//> Process acquisition data blocks
-	for(int i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
+	for(unsigned i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
 	    try
 	    {
-		if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
+		if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
 		//    cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val.size() );
 		cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
 		cntr.acqBlks[i_b].err="";
@@ -1249,11 +1251,11 @@ void *TMdContr::Task( void *icntr )
 	    catch(TError err) { cntr.acqBlks[i_b].err=err.mess; }
 
 	//> Calc parameters
-	for( unsigned i_p=0; i_p < cntr.pHd.size() && !cntr.redntUse( ); i_p++)
+	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
 	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.nodeRes().resRelease( );
+	cntr.nodeRes().resRelease();
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
 
 	if(is_stop) break;
@@ -1271,28 +1273,26 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::redntDataUpdate( )
 {
-    TController::redntDataUpdate( );
+    TController::redntDataUpdate();
 
     vector<string> pls; list(pls);
 
     //> Request for template's attributes values
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < pls.size(); i_p++)
     {
-	if( !at(pls[i_p]).at().enableStat( ) ) continue;
+	if(!at(pls[i_p]).at().enableStat()) continue;
 	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
     }
 
     //> Send request to first active station for this controller
-    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
+    if(owner().owner().rdStRequest(workId(),req).empty()) return;
 
     //> Redirect respond to local parameters
     req.setAttr("path","/");
-    for( int i_prm = 0; i_prm < req.childSize(); i_prm++ )
-    {
-	if( atoi(req.childGet(i_prm)->attr("err").c_str()) ) { req.childDel(i_prm--); continue; }
-	req.childGet(i_prm)->setName("set");
-    }
+    for(unsigned i_prm = 0; i_prm < req.childSize(); )
+	if(atoi(req.childGet(i_prm)->attr("err").c_str())) req.childDel(i_prm);
+	else { req.childGet(i_prm)->setName("set"); i_prm++; }
     cntrCmd(&req);
 }
 
@@ -1306,9 +1306,8 @@ TMdContr::SDataRec::SDataRec( int idb, int ioff, int v_rez ) : db(idb), off(ioff
 //* TMdPrm                                       *
 //************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), TValFunc(name+"CIFprm"), p_el("cif_attr"),
-    id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), acq_err_tm(0),
-    m_tmpl(cfg("TMPL").getSd())
+    TParamContr(name,tp_prm), TValFunc(name+"CIFprm"), m_tmpl(cfg("TMPL").getSd()), p_el("cif_attr"),
+    id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), acq_err_tm(0)
 {
 
 }
@@ -1348,7 +1347,7 @@ void TMdPrm::enable()
     if( enableStat() )	return;
 
     TParamContr::enable();
-    //- Template's function connect -
+    //> Template's function connect
     try
     {
 	bool to_make = false;
@@ -1358,7 +1357,7 @@ void TMdPrm::enable()
 				     at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
 	    to_make = true;
 	}
-	//-- Init attrubutes --
+	//>> Init attrubutes
 	for( int i_io = 0; i_io < func()->ioSize(); i_io++ )
 	{
 	    if( (func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
@@ -1369,12 +1368,13 @@ void TMdPrm::enable()
 		TFld::Type tp = TFld::String;
 		unsigned flg = TVal::DirWrite|TVal::DirRead;
 
-		switch( ioType(i_io) )
+		switch(ioType(i_io))
 		{
 		    case IO::String:	tp = TFld::String;	break;
 		    case IO::Integer:	tp = TFld::Integer;	break;
 		    case IO::Real:	tp = TFld::Real;	break;
 		    case IO::Boolean:	tp = TFld::Boolean;	break;
+		    case IO::Object:	tp = TFld::String;	break;
 		}
 		if( func()->io(i_io)->flg()&TPrmTempl::AttrRead )	flg|=TFld::NoWrite;
 		    p_el.fldAdd( new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg) );
@@ -1401,22 +1401,19 @@ void TMdPrm::enable()
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )  return;
+    if(!enableStat()) return;
 
-    //- Unregister parameter -
-    if(owner().startStat()) owner().prmEn( id(), false );
+    //> Unregister parameter
+    if(owner().startStat()) owner().prmEn(id(), false);
 
-    //- Delete not using attributes -
-    for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
-	if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
-	{
-	    p_el.fldDel(i_f);
-	    i_f--;
-	}
+    //> Delete not using attributes
+    for(unsigned i_f = 0; i_f < p_el.fldSize(); )
+	if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1) p_el.fldDel(i_f);
+	else i_f++;
 
-    //- Template's function disconnect -
+    //> Template's function disconnect
     setFunc(NULL);
-    id_freq=id_start=id_stop=id_err-1;
+    id_freq = id_start = id_stop = id_err-1;
 
     TParamContr::disable();
 }
@@ -1589,34 +1586,31 @@ void TMdPrm::vlArchMake( TVal &val )
 
 int TMdPrm::lnkSize()
 {
-    if( !enableStat() )
-	throw TError(nodePath().c_str(),_("Parameter is disabled."));
+    if(!enableStat()) throw TError(nodePath().c_str(),_("Parameter is disabled."));
     return plnk.size();
 }
 
 int TMdPrm::lnkId( int id )
 {
-    if( !enableStat() )
-	throw TError(nodePath().c_str(),_("Parameter is disabled."));
-    for( int i_l = 0; i_l < plnk.size(); i_l++ )
-	if( lnk(i_l).io_id == id )
+    if(!enableStat()) throw TError(nodePath().c_str(),_("Parameter is disabled."));
+    for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
+	if(lnk(i_l).io_id == id)
 	    return i_l;
     return -1;
 }
 
 int TMdPrm::lnkId( const string &id )
 {
-    if( !enableStat() )
-	throw TError(nodePath().c_str(),_("Parameter is disabled."));
-    for( int i_l = 0; i_l < plnk.size(); i_l++ )
-    if( func()->io(lnk(i_l).io_id)->id() == id )
-	return i_l;
+    if(!enableStat()) throw TError(nodePath().c_str(),_("Parameter is disabled."));
+    for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
+	if(func()->io(lnk(i_l).io_id)->id() == id)
+	    return i_l;
     return -1;
 }
 
 TMdPrm::SLnk &TMdPrm::lnk( int num )
 {
-    if( !enableStat() || num < 0 || num >= plnk.size() )
+    if(!enableStat() || num < 0 || num >= (int)plnk.size())
 	throw TError(nodePath().c_str(),_("Parameter is disabled or id error."));
     return plnk[num];
 }
@@ -1643,21 +1637,21 @@ void TMdPrm::calc( bool first, bool last )
     try
     {
 	//> Proccess error hold
-	if( !acq_err.getVal().empty() )
+	if(!acq_err.getVal().empty())
 	{
 	    time_t tm = time(NULL);
-	    if( !acq_err_tm )	acq_err_tm = tm+5;
-	    if( tm>acq_err_tm )	{ acq_err.setVal(""); acq_err_tm=0; }
+	    if(!acq_err_tm)	acq_err_tm = tm+5;
+	    if(tm>acq_err_tm)	{ acq_err.setVal(""); acq_err_tm=0; }
 	}
 
 	//> Set fixed system attributes
-	if( id_freq>=0 )	setR(id_freq,1000./owner().period());
-	if( id_start>=0 )	setB(id_start,first);
-	if( id_stop>=0 )	setB(id_stop,last);
+	if(id_freq>=0)	setR(id_freq,1000./owner().period());
+	if(id_start>=0)	setB(id_start,first);
+	if(id_stop>=0)	setB(id_stop,last);
 
 	//> Get input links
-	for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	    if( lnk(i_l).val.db >= 0 )
+	for(int i_l = 0; i_l < lnkSize(); i_l++)
+	    if(lnk(i_l).val.db >= 0)
 		switch(ioType(lnk(i_l).io_id))
 		{
 		    case IO::String:
@@ -1672,14 +1666,15 @@ void TMdPrm::calc( bool first, bool last )
 		    case IO::Boolean:
 			setB(lnk(i_l).io_id,owner().getValB(lnk(i_l).val,acq_err));
 			break;
+		    case IO::Object: break;
 		}
-	//- Calc template -
+	//> Calc template
 	TValFunc::calc();
 	modif();
 
-	//- Put output links -
-	for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	    if( lnk(i_l).val.db >= 0 && ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) )
+	//> Put output links
+	for(int i_l = 0; i_l < lnkSize(); i_l++)
+	    if(lnk(i_l).val.db >= 0 && ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return))
 		switch(ioType(lnk(i_l).io_id))
 		{
 		    case IO::String:
@@ -1694,6 +1689,7 @@ void TMdPrm::calc( bool first, bool last )
 		    case IO::Boolean:
 			owner().setValB(getB(lnk(i_l).io_id),lnk(i_l).val,acq_err);
 			break;
+		    case IO::Object: break;
 		}
     }catch(TError err)
     {
@@ -1715,7 +1711,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(int i_a = 0; i_a < opt->childSize(); i_a++)
+		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
 		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
@@ -1748,8 +1744,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			string nprm = TSYS::strSepParse(func()->io(i_io)->def(),0,'|');
 			//>> Check already to present parameters
 			bool f_ok = false;
-			for(int i_l = 0; i_l < list.size(); i_l++)
-			    if(list[i_l] == nprm) { f_ok = true; break; }
+			for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
+			    if(list[i_l] == nprm) f_ok = true;
 			if(!f_ok)
 			{
 			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,1,"tp","str");
@@ -1765,6 +1761,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
+				default:		tip = "str";	break;
 			    }
 			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
 		    }
@@ -1800,7 +1797,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
 	    break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path == "/cfg/only_off" && enableStat())

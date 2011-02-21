@@ -102,7 +102,7 @@ class TMdPrm : public TParamContr, public TValFunc
 
 	void calc( bool first, bool last );	//Calc template's algoritmes
 
-	//- Template link operations -
+	//> Template link operations
 	int lnkSize( );
 	int lnkId( int id );
 	int lnkId( const string &id );

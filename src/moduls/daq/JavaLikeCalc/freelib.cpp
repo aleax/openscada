@@ -34,7 +34,7 @@ using namespace JavaLikeCalc;
 //*************************************************
 Lib::Lib( const char *id, const char *name, const string &lib_db ) :
     TConfig(&mod->elLib()), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
-    mDB(cfg("DB").getSd()), mProgTr(cfg("PROG_TR").getBd()), work_lib_db(lib_db)
+    mDB(cfg("DB").getSd()), work_lib_db(lib_db), mProgTr(cfg("PROG_TR").getBd())
 {
     mId = id;
     mName = name;
@@ -51,23 +51,23 @@ Lib::~Lib( )
 TCntrNode &Lib::operator=( TCntrNode &node )
 {
     Lib *src_n = dynamic_cast<Lib*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
-    //- Configuration copy -
+    //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     mId = tid;
     work_lib_db = src_n->work_lib_db;
 
-    //- Functions copy -
+    //> Functions copy
     vector<string> ls;
     src_n->list(ls);
-    for( int i_p = 0; i_p < ls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < ls.size(); i_p++)
     {
-	if( !present(ls[i_p]) ) add(ls[i_p].c_str());
+	if(!present(ls[i_p])) add(ls[i_p].c_str());
 	(TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
     }
-    if( src_n->startStat() && !startStat() )	setStart(true);
+    if(src_n->startStat() && !startStat()) setStart(true);
 
     return *this;
 }
@@ -133,9 +133,9 @@ void Lib::setStart( bool val )
 {
     vector<string> lst;
     list(lst);
-    for( int i_f = 0; i_f < lst.size(); i_f++ )
+    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	try{ at(lst[i_f]).at().setStart(val); }
-	catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     run_st = val;
 }

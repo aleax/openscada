@@ -34,8 +34,8 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), mEnable(false), mId(cfg("ID").getSd()), m_name(cfg("NAME").getSd()),
-    m_descr(cfg("DESCR").getSd()), m_ico(cfg("ICO").getSd()), m_dbt(cfg("DB_TBL").getSd()), work_lib_db(lib_db)
+    TConfig(&mod->elWdgLib()), mId(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
+    m_dbt(cfg("DB_TBL").getSd()), m_ico(cfg("ICO").getSd()), work_lib_db(lib_db), mEnable(false)
 {
     mId = id;
     m_name = name;
@@ -51,7 +51,7 @@ WidgetLib::~WidgetLib( )
 TCntrNode &WidgetLib::operator=( TCntrNode &node )
 {
     WidgetLib *src_n = dynamic_cast<WidgetLib*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     //> Copy generic configuration
     string tid = mId;
@@ -60,24 +60,24 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     m_dbt = string("wlb_")+tid;
     work_lib_db = src_n->work_lib_db;
 
-    if( !src_n->enable() ) return *this;
-    if( !enable() ) setEnable(true);
+    if(!src_n->enable()) return *this;
+    if(!enable()) setEnable(true);
 
     vector<string> pls;
     //> Mime data copy
     src_n->mimeDataList(pls);
     string mimeType, mimeData;
-    for( int i_m = 0; i_m < pls.size(); i_m++ )
+    for(unsigned i_m = 0; i_m < pls.size(); i_m++)
     {
-	src_n->mimeDataGet( pls[i_m], mimeType, &mimeData );
-	mimeDataSet( pls[i_m], mimeType, mimeData );
+	src_n->mimeDataGet(pls[i_m], mimeType, &mimeData);
+	mimeDataSet(pls[i_m], mimeType, mimeData);
     }
 
     // Copy include pages
     src_n->list(pls);
-    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < pls.size(); i_p++)
     {
-	if( !present(pls[i_p]) ) add(pls[i_p],"");
+	if(!present(pls[i_p])) add(pls[i_p],"");
 	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
     }
 
@@ -159,15 +159,15 @@ void WidgetLib::save_( )
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
     //> Check for need copy mime data to other DB and same copy
-    if( !mOldDB.empty() && mOldDB != TBDS::realDBName(DB()) )
+    if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB()))
     {
 	vector<string> pls;
 	mimeDataList(pls,mOldDB);
 	string mimeType, mimeData;
-	for( int i_m = 0; i_m < pls.size(); i_m++ )
+	for(unsigned i_m = 0; i_m < pls.size(); i_m++)
 	{
-	    mimeDataGet( pls[i_m], mimeType, &mimeData, mOldDB );
-	    mimeDataSet( pls[i_m], mimeType, mimeData, DB() );
+	    mimeDataGet(pls[i_m], mimeType, &mimeData, mOldDB);
+	    mimeDataSet(pls[i_m], mimeType, mimeData, DB());
 	}
     }
 
@@ -176,15 +176,15 @@ void WidgetLib::save_( )
 
 void WidgetLib::setEnable( bool val )
 {
-    if( val == enable() )       return;
+    if(val == enable())	return;
 
     mess_info(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
 
     vector<string> f_lst;
     list(f_lst);
-    for( int i_ls = 0; i_ls < f_lst.size(); i_ls++ )
+    for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++)
 	try { at(f_lst[i_ls]).at().setEnable(val); }
-	catch( TError err )
+	catch(TError err)
 	{ mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
 
     mEnable = val;
@@ -388,12 +388,12 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		vector<string> lst;
 		string mimeType;
 		mimeDataList(lst);
-		for(int i_el = 0; i_el < lst.size(); i_el++)
+		for(unsigned i_el = 0; i_el < lst.size(); i_el++)
 		    if(mimeDataGet("res:"+lst[i_el],mimeType))
 		    {
-			if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
-			if(n_tp)	n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
-			if(n_dt)	n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
+			if(n_id) n_id->childAdd("el")->setText(lst[i_el]);
+			if(n_tp) n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
+			if(n_dt) n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
 		    }
 	    }
 	}
@@ -435,8 +435,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //************************************************
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elWdg()),
-	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), m_proc_per(cfg("PROC_PER").getId()),
-	mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), mParent(cfg("PARENT").getSd()),	m_attrs(cfg("ATTRS").getSd()),
+	m_proc_per(cfg("PROC_PER").getId())
 {
     cfg("ID").setS(id());
 
@@ -518,11 +518,10 @@ string LWidget::calcLang( )
 
 string LWidget::calcProg( )
 {
-    if( !m_proc.size() && !parent().freeStat() )
-	return parent().at().calcProg();
+    if(!m_proc.size() && !parent().freeStat()) return parent().at().calcProg();
 
     string iprg = m_proc;
-    int lng_end = iprg.find("\n");
+    unsigned lng_end = iprg.find("\n");
     if(lng_end == string::npos) lng_end=0;
     else lng_end++;
     return iprg.substr(lng_end);
@@ -562,21 +561,21 @@ void LWidget::setParentNm( const string &isw )
 
 void LWidget::load_( )
 {
-    if( !SYS->chkSelDB(ownerLib().DB()) ) return;
+    if(!SYS->chkSelDB(ownerLib().DB())) return;
 
     //> Load generic widget's data
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
-    SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, *this );
+    SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //> Inherit modify attributes
     vector<string> als;
     attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
-	if( !attrPresent(als[i_a]) ) continue;
+	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos )
+	if(attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos)
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -653,20 +652,20 @@ void LWidget::wClear( )
 
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if( wdgPresent(wid) ) return;
+    if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(wdgPresent(wid)) return;
 
     //> Check for label <deleted>
-    if( !force )
+    if(!force)
     {
 	string db  = ownerLib().DB();
 	string tbl = ownerLib().tbl()+"_incl";
 	TConfig c_el( &mod->elInclWdg() );
 	c_el.cfg("IDW").setS(id());
 	c_el.cfg("ID").setS(wid);
-	if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
+	if(SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, c_el) && c_el.cfg("PARENT").getS() == "<deleted>")
 	{
-	    if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
+	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
 	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
     }
@@ -676,8 +675,8 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
     wdgAt(wid).at().setName(name);
 
     //> Call heritors include widgets update
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	if( m_herit[i_h].at().enable( ) )
+    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
+	if(m_herit[i_h].at().enable())
 	    m_herit[i_h].at().inheritIncl(wid);
 }
 
@@ -778,14 +777,14 @@ void CWidget::setParentNm( const string &isw )
 
 void CWidget::setEnable( bool val )
 {
-    if( enable() == val ) return;
+    if(enable() == val) return;
 
     Widget::setEnable(val);
 
     //> Enable heritors widgets
-    if( val )
-	for( int i_h = 0; i_h < ownerLWdg().herit().size(); i_h++ )
-	    if( !ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable( ) && ownerLWdg().herit()[i_h].at().wdgPresent(id()) )
+    if(val)
+	for(unsigned i_h = 0; i_h < ownerLWdg().herit().size(); i_h++)
+	    if(!ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable() && ownerLWdg().herit()[i_h].at().wdgPresent(id()))
 		try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
 		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
 }
@@ -816,7 +815,7 @@ int CWidget::calcPer( )
 
 void CWidget::load_( )
 {
-    if( !SYS->chkSelDB(ownerLWdg().ownerLib().DB()) ) return;
+    if(!SYS->chkSelDB(ownerLWdg().ownerLib().DB())) return;
 
     //> Load generic widget's data
     string db  = ownerLWdg().ownerLib().DB();
@@ -825,12 +824,12 @@ void CWidget::load_( )
 
     //> Inherit modify attributes
     vector<string> als;
-    attrList( als );
-    for( int i_a = 0; i_a < als.size(); i_a++ )
+    attrList(als);
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
-	if( !attrPresent(als[i_a]) ) continue;
+	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if( attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos )
+	if(attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos)
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -858,30 +857,30 @@ void CWidget::save_( )
     string tbl = ownerLWdg().ownerLib().tbl();
 
     //> Delete from DB
-    if( nodeMode() == TCntrNode::Disable )
+    if(nodeMode() == TCntrNode::Disable)
     {
 	//>> Remove from library table
-	if( delMark )
+	if(delMark)
 	{
 	    mParent = "<deleted>";
-	    SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
+	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 	}
-	else SYS->db().at().dataDel( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true );
+	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
 
 	//>> Remove widget's work and users IO from library IO table
-	if( cfg("DBV").getI() == 1 )
+	if(cfg("DBV").getI() == 1)
 	{
 	    TConfig c_el( &mod->elWdgIO() );
 	    c_el.cfg("IDW").setS( ownerLWdg().id(), true );
-	    for( int i_a = 0; i_a < m_attrs.size(); i_a++ )
+	    for(unsigned i_a = 0; i_a < m_attrs.size(); i_a++)
 	    {
 		c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a],true);
-		SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+		SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
 	    }
 	    c_el.setElem(&mod->elWdgUIO());
-	    c_el.cfg("IDW").setS( ownerLWdg().id(), true );
-	    for( int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
-		if( c_el.cfg("ID").getS().find(id()+"/") == 0 )
+	    c_el.cfg("IDW").setS(ownerLWdg().id(), true);
+	    for(int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
+		if(c_el.cfg("ID").getS().find(id()+"/") == 0)
 		{ SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true ); io_cnt--; }
 	}
 	if( cfg("DBV").getI() == 2 )

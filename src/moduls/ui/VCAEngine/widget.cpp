@@ -34,7 +34,7 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), m_lnk(false), mStlLock(false), mParentNm(isrcwdg), attrAtLockCnt(0)
+    mId(id), mEnable(false), m_lnk(false), mStlLock(false), attrAtLockCnt(0), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
 
@@ -92,19 +92,19 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     vector<string> els;
     src_n->attrList( els );
     AutoHD<Attr> attr, pattr;
-    for( int i_a = 0; i_a < els.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < els.size(); i_a++)
     {
 	pattr = src_n->attrAt(els[i_a]);
-	if( !attrPresent(els[i_a]) )
+	if(!attrPresent(els[i_a]))
 	{
 	    bool isInher = pattr.at().flgSelf()&Attr::IsInher;
-	    attrAdd( isInher ? &src_n->attrAt(els[i_a]).at().fld() : new TFld(src_n->attrAt(els[i_a]).at().fld()), -1, isInher );
+	    attrAdd(isInher ? &src_n->attrAt(els[i_a]).at().fld() : new TFld(src_n->attrAt(els[i_a]).at().fld()), -1, isInher);
 	    attrAt(els[i_a]).at().setModif(1);
 	}
 	attr  = attrAt(els[i_a]);
-	if( attr.at().flgGlob( )&Attr::DirRead ) continue;
+	if(attr.at().flgGlob( )&Attr::DirRead) continue;
 	attr.at().setFlgSelf(pattr.at().flgSelf());
-	switch( attr.at().type() )
+	switch(attr.at().type())
 	{
 	    case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
 	    case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
@@ -116,12 +116,12 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     }
 
     //> Include widgets copy
-    if( !isLink( ) && src_n->isContainer() )
+    if(!isLink() && src_n->isContainer())
     {
 	src_n->wdgList(els);
-	for( int i_w = 0; i_w < els.size(); i_w++ )
+	for(unsigned i_w = 0; i_w < els.size(); i_w++)
 	{
-	    if( !wdgPresent(els[i_w]) )	wdgAdd(els[i_w],"","");
+	    if(!wdgPresent(els[i_w]))	wdgAdd(els[i_w],"","");
 	    (TCntrNode&)wdgAt(els[i_w]).at() = (TCntrNode&)src_n->wdgAt(els[i_w]).at();
 	}
     }
@@ -298,21 +298,21 @@ void Widget::setEnable( bool val )
 	//> Load self values from DB
 	loadIO( );
     }
-    if( !val )
+    if(!val)
     {
 	//> Free no base attributes and restore base
-	vector<string>  ls;
+	vector<string> ls;
 	attrList(ls);
-	for( int i_l = 0; i_l < ls.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	{
-	    if( !(attrAt(ls[i_l]).at().flgGlob()&Attr::Generic) ) attrDel( ls[i_l], true );
+	    if(!(attrAt(ls[i_l]).at().flgGlob()&Attr::Generic)) attrDel(ls[i_l], true);
 	    //else if( attrAt(ls[i_l]).at().flgSelf( )&Attr::IsInher )
 	    //	attrAt(ls[i_l]).at().setFld( new TFld(attrAt(ls[i_l]).at().fld()), false );
 	}
 
 	//> Disable heritors widgets
-	for( int i_h = 0; i_h < herit().size(); i_h++ )
-	    if( herit()[i_h].at().enable( ) )
+	for(unsigned i_h = 0; i_h < herit().size(); i_h++)
+	    if(herit()[i_h].at().enable())
 		try { herit()[i_h].at().setEnable(false); }
 		catch(TError err)
 		{
@@ -320,7 +320,7 @@ void Widget::setEnable( bool val )
 		    mess_err(nodePath().c_str(),_("Ingeriting widget <%s> disable error"),herit()[i_h].at().id().c_str());
 		}
 
-	if( !mParent.freeStat() )
+	if(!mParent.freeStat())
 	{
 	    //> Unregister heritater
 	    parent().at().heritUnreg(this);
@@ -332,10 +332,10 @@ void Widget::setEnable( bool val )
     //> Enable/disable process widgets from container
     vector<string> ls;
     wdgList(ls);
-    for(int i_l = 0; i_l < ls.size(); i_l++ )
-	if( val != wdgAt(ls[i_l]).at().enable() )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	if(val != wdgAt(ls[i_l]).at().enable())
 	    try { wdgAt(ls[i_l]).at().setEnable(val); }
-	    catch( TError err )
+	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Child widget <%s> enable/disable error"),ls[i_l].c_str());
@@ -364,16 +364,16 @@ AutoHD<Widget> Widget::parentNoLink( )
 void Widget::heritReg( Widget *wdg )
 {
     //> Search already herited widget
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	if( &m_herit[i_h].at() == wdg )	return;
+    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
+	if(&m_herit[i_h].at() == wdg)	return;
     m_herit.push_back(AutoHD<Widget>(wdg));
 }
 
 void Widget::heritUnreg( Widget *wdg )
 {
     //> Search herited widget
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	if( &m_herit[i_h].at() == wdg )	
+    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
+	if(&m_herit[i_h].at() == wdg)
 	{
 	    m_herit.erase(m_herit.begin()+i_h);
 	    return;
@@ -399,18 +399,18 @@ void Widget::inheritAttr( const string &iattr )
 
     //> Configuration inherit
     AutoHD<Attr> attr, pattr;
-    for( int i_l = 0; i_l < ls.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
     {
-	if( !attrPresent(ls[i_l]) )
+	if(!attrPresent(ls[i_l]))
 	{
-	    if( loadDef ) continue;
-	    if( parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable )	continue;
-	    attrAdd( &parent().at().attrAt(ls[i_l]).at().fld(), -1, true );
+	    if(loadDef) continue;
+	    if(parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable) continue;
+	    attrAdd(&parent().at().attrAt(ls[i_l]).at().fld(), -1, true);
 	}
 	attr  = attrAt(ls[i_l]);
-	if( loadDef )
+	if(loadDef)
 	{
-	    attr.at().setS( attr.at().fld().def(), attr.at().flgGlob()&Attr::Active );
+	    attr.at().setS(attr.at().fld().def(), attr.at().flgGlob()&Attr::Active);
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)0);
 	    attr.at().setCfgTempl("");
 	    attr.at().setCfgVal("");
@@ -456,8 +456,8 @@ void Widget::inheritIncl( const string &iwdg )
     if( !iwdg.empty() && parw.at().wdgPresent(iwdg) )
 	ls.push_back(iwdg);
     else parw.at().wdgList(ls);
-    for( int i_w = 0; i_w < ls.size(); i_w++ )
-	if( !wdgPresent(ls[i_w]) )
+    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
+	if(!wdgPresent(ls[i_w]))
 	    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path()); }
 	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 }
@@ -469,35 +469,35 @@ void Widget::wClear( )
 
     //> Inherit modify attributes
     vector<string> ls;
-    attrList( ls );
-    for( int i_a = 0; i_a < ls.size(); i_a++ )
+    attrList(ls);
+    for(unsigned i_a = 0; i_a < ls.size(); i_a++)
     {
-	if( !attrPresent(ls[i_a]) ) continue;
+	if(!attrPresent(ls[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(ls[i_a]);
-	if( attr.at().modif() )
+	if(attr.at().modif())
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(ls[i_a]);
 	}
     }
     //> Check for included widgets
-    if( isContainer( ) && !isLink( ) )
+    if(isContainer() && !isLink())
     {
 	AutoHD<Widget> parw = parent();
-	while( !parw.freeStat() && parw.at().isLink() )
+	while(!parw.freeStat() && parw.at().isLink())
 	    parw = parw.at().parent();
 	if( !parw.freeStat() )
 	{
 	    //> Check for widget's deletion
 	    wdgList(ls);
-	    for( int i_w = 0; i_w < ls.size(); i_w++ )
-		if( !parw.at().wdgPresent(ls[i_w]) )
+	    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
+		if(!parw.at().wdgPresent(ls[i_w]))
 		    wdgDel(ls[i_w],true);
 
 	    //> No present widget's add and clear call
 	    parw.at().wdgList(ls);
-	    for( int i_w = 0; i_w < ls.size(); i_w++ )
-		if( !wdgPresent(ls[i_w]) )
+	    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
+		if(!wdgPresent(ls[i_w]))
 		    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true); }
 		    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 		else wdgAt(ls[i_w]).at().wClear();
@@ -535,7 +535,7 @@ void Widget::attrAdd(TFld *attr, int pos, bool inher)
 	map<string, Attr* >::iterator p;
 	Attr *a = new Attr(attr,inher);
 	a->mOwner = this;
-	pos = (pos < 0 || pos > mAttrs.size()) ? mAttrs.size() : pos;
+	pos = (pos < 0 || pos > (int)mAttrs.size()) ? (int)mAttrs.size() : pos;
 	a->mOi = pos;
 	for(p = mAttrs.begin(); p != mAttrs.end(); p++)
 	    if(p->second->mOi >= pos) p->second->mOi++;
@@ -552,7 +552,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
 
     //> Delete from inheritant wigets
     if(!(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher)
-	for(int i_h = 0; i_h < m_herit.size(); i_h++)
+	for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
 	    if(m_herit[i_h].at().enable())
 		m_herit[i_h].at().attrDel(attr);
 
@@ -610,12 +610,12 @@ void Widget::calc( Widget *base )
 bool Widget::attrChange( Attr &cfg, TVariant prev )
 {
     //> Process Active attribute's mode
-    if( cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat() )	parent().at().attrChange(cfg,prev);
-    if( cfg.owner() != this )	return false;
+    if(cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat())	parent().at().attrChange(cfg,prev);
+    if(cfg.owner() != this) return false;
 
     //> Update heritors attributes
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	if( m_herit[i_h].at().enable( ) )
+    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
+	if(m_herit[i_h].at().enable())
 	    m_herit[i_h].at().inheritAttr(cfg.id());
 
     return true;
@@ -633,15 +633,15 @@ bool Widget::wdgPresent( const string &wdg )
 
 void Widget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if( wdgPresent(wid) ) return;
+    if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(wdgPresent(wid)) return;
 
-    chldAdd( inclWdg, new Widget(wid,path) );
+    chldAdd(inclWdg, new Widget(wid,path));
     wdgAt(wid).at().setName(name);
 
     //> Call heritors include widgets update
-    for( int i_h = 0; i_h < m_herit.size(); i_h++ )
-	if( m_herit[i_h].at().enable( ) )
+    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
+	if(m_herit[i_h].at().enable())
 	    m_herit[i_h].at().inheritIncl(wid);
 }
 
@@ -696,7 +696,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	    vector<string> ls;
 	    attrList(ls);
 	    AutoHD<Attr> attr;
-	    for(int i_l = 0; i_l < ls.size(); i_l++)
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    {
 		attr = attrAt(ls[i_l]);
 		if(attr.at().flgGlob()&Attr::IsUser)	continue;
@@ -706,7 +706,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	    }
 	}
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
-	    for(int i_ch = 0; i_ch < opt->childSize(); i_ch++)
+	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
 	        attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD))	//Get attributes all updated elements' of the branch
@@ -715,7 +715,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	vector<string> ls;
 	attrList(ls);
 	AutoHD<Attr> attr;
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	{
 	    attr = attrAt(ls[i_l]);
 	    if(attr.at().flgGlob()&Attr::IsUser)	continue;
@@ -875,14 +875,14 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
     else if(a_path == "/wdg/g_lst" && ctrChkNode(opt))
     {
 	vector<string> ls;
 	SYS->security().at().usrGrpList(owner(), ls );
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
     else if(a_path == "/wdg/w_lst" && ctrChkNode(opt))
@@ -912,7 +912,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 			mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeAt(TSYS::pathLev(lnk,1)).at().nodeList(ls,"wdg_");
 		    break;
 	    }
-	    for(int i_l = 0; i_l < ls.size(); i_l++)
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
 	}catch(TError err) { }
     }
@@ -1071,7 +1071,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    if(i_w < 0) wdg = AutoHD<Widget>(this);
 		    else wdg = wdgAt(incllist[i_w]);
 		    wdg.at().attrList(alist);
-		    for(int i_a = 0; i_a < alist.size(); i_a++)
+		    for(unsigned i_a = 0; i_a < alist.size(); i_a++)
 		    {
 			string grpprm;
 			string idprm = alist[i_a];
@@ -1096,8 +1096,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 			    //>> Check already to present parameters
 			    bool f_ok = false;
-			    for(int i_l = 0; i_l < list.size(); i_l++)
-				if(list[i_l] == nprm) { f_ok = true; break; }
+			    for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
+				if(list[i_l] == nprm) f_ok = true;
 			    if(!f_ok)
 			    {
 				ctrMkNode("fld",opt,-1,(string("/links/lnk/pr_")+idprm).c_str(),nprm,(lnk_ro?R_R_R_:RWRWR_),"root",SUI_ID,
@@ -1144,8 +1144,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)
 	{
 	    srcwdg.at().attrList(a_ls);
-	    for(int i_a = 0; i_a < a_ls.size(); i_a++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
+	    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
+		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
 		{ nattr = a_ls[i_a]; break; }
 	}
 
@@ -1167,15 +1168,16 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    string sel;
 	    srcwdg.at().attrList(a_ls);
 	    rez += ": ";
-	    for( int i_a = 0; i_a < a_ls.size(); i_a++ )
-		if( p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst) )
+	    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
+		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
 		{
 		    sel = srcwdg.at().attrAt(a_ls[i_a]).at().cfgVal();
-		    if( !custom && sel.find(cfg_val) != 0 ) custom = true;
+		    if(!custom && sel.find(cfg_val) != 0) custom = true;
 		    rez += sel+", ";
 		}
-	    if( cfg_val.empty() )	rez = "";
-	    else if( !custom )		rez = cfg_val;
+	    if(cfg_val.empty())	rez = "";
+	    else if(!custom)	rez = cfg_val;
 
 	    opt->setText(rez);
 	}
@@ -1201,8 +1203,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    }
 
 	    srcwdg.at().attrList(a_ls);
-	    for(int i_a = 0; i_a < a_ls.size(); i_a++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
+	    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
+		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
 		{
 		    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val);
 		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),1,'|');
@@ -1239,9 +1242,10 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
-	    int i_a;
+	    unsigned i_a;
 	    for(i_a = 0; i_a < a_ls.size(); i_a++)
-	        if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') && !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
+	        if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
+	    	    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
 	        { nattr = a_ls[i_a]; break; }
 	    if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("Variable is not link"));
 	}
@@ -1309,7 +1313,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			SYS->daq().at().at(prm1).at().at(prm2).at().at(prm3).at().vlList(ls);
 		    break;
 	    }
-	    for(int i_l = 0; i_l < ls.size(); i_l++)
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
 	}
     }
@@ -1410,7 +1414,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    vector<string> lst;
 	    wdg.at().attrList(lst);
-	    for(int i_el = 0; i_el < lst.size(); i_el++)
+	    for(unsigned i_el = 0; i_el < lst.size(); i_el++)
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
 		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
@@ -1548,16 +1552,16 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for(int i_l = 0; i_l < ls.size(); i_l++)
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
-		    { ls.erase(ls.begin()+i_l); i_l--; }
+		for(unsigned i_l = 0; i_l < ls.size(); )
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
+		    else i_l++;
 		break;
 	    case 1:
 		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path == "/proc/tp_ls" && ctrChkNode(opt))
@@ -1838,7 +1842,7 @@ string Attr::cfgTempl( )
 
 string Attr::cfgVal( )
 {
-    int sepp = cfg.find("\n");
+    unsigned sepp = cfg.find("\n");
     return (sepp!=string::npos) ? cfg.substr(sepp+1) : "";
 }
 

@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-07 16:21+0300\n"
+"POT-Creation-Date: 2011-02-21 16:39+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -36,6 +37,9 @@ msgstr "Ошибка открытия файла БД: %s"
 #, c-format
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Ошибка открытия таблицы <%s>. БД отключена."
+
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
 
 #, c-format
 msgid "Getting table error: %s"

@@ -178,42 +178,44 @@ TTable *MBD::openTable( const string &inm, bool create )
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
-    char *zErrMsg;
-    int rc,nrow=0,ncol=0;
-    char **result;
+    char *zErrMsg = NULL;
+    int rc, nrow = 0, ncol = 0;
+    char **result = NULL;
 
-    if( tbl ) tbl->clear();
+    if(tbl) tbl->clear();
     if(!enableStat())	return;
 
     //> Commit set
     string req = ireq;
     ResAlloc res(conn_res,true);
-    if( intoTrans && intoTrans != EVAL_BOOL )	transOpen();
-    else if( !intoTrans && reqCnt )	transCommit();
+    if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
+    else if(!intoTrans && reqCnt) transCommit();
 
     //> Put request
-    rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg );
-    if( rc != SQLITE_OK )
+    rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg);
+    if(rc != SQLITE_OK)
     {
+	string err = _("Unknown error");
+	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
 	//mess_err(nodePath().c_str(),_("Request error: %s"),req.c_str());
-	throw TError(100+rc,nodePath().c_str(),_("Getting table error: %s"),zErrMsg);
+	throw TError(100+rc,nodePath().c_str(),_("Getting table error: %s"),err.c_str());
     }
-    if( tbl && ncol > 0 )
+    if(tbl && ncol > 0)
     {
 	vector<string> row;
 	//>> Add head
-	for( int i=0; i < ncol; i++ ) row.push_back(result[i]?result[i]:"");
+	for(int i = 0; i < ncol; i++) row.push_back(result[i]?result[i]:"");
 	tbl->push_back(row);
 	//>> Add data
-	for(int i=0; i < nrow; i++)
+	for(int i = 0; i < nrow; i++)
 	{
 	    row.clear();
-	    for(int ii=0; ii < ncol; ii++)
+	    for(int ii = 0; ii < ncol; ii++)
 		row.push_back(result[(i+1)*ncol+ii]?Mess->codeConvIn(cd_pg.c_str(),result[(i+1)*ncol+ii]):"");
 	    tbl->push_back(row);
 	}
     }
-    sqlite3_free_table(result);
+    if(result) sqlite3_free_table(result);
 }
 
 void MBD::transOpen( )
@@ -348,7 +350,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
 	if( u_cfg->fld().flg()&TCfg::Key && u_cfg->keyUse() )
 	{
-	    req_where = req_where + (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
+	    req_where = req_where + (next?" AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
 	    next = true;
 	}
 	else if( u_cfg->fld().flg()&TCfg::Key || u_cfg->view() )
@@ -406,7 +408,7 @@ void MTable::fieldGet( TConfig &cfg )
 
 	if( u_cfg->fld().flg()&TCfg::Key )
 	{
-	    req_where = req_where + (next_wr?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "'";
+	    req_where = req_where + (next_wr?" AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "'";
 	    next_wr = true;
 	}
 	else if( u_cfg->view() )
@@ -470,7 +472,7 @@ void MTable::fieldSet( TConfig &cfg )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if( !(u_cfg.fld().flg()&TCfg::Key) ) continue;
-	req_where = req_where + (next?"AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	req_where = req_where + (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
 	next = true;
     }
 
@@ -550,7 +552,7 @@ void MTable::fieldDel( TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
 	{
-	    req = req + (next?"AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	    req = req + (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
 	    next = true;
 	}
     }

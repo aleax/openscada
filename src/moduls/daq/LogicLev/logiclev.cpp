@@ -122,8 +122,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_calc(0),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
+	::TController(name_c,daq_db,cfgelem), m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),
+	prc_st(false), endrun_req(false), tm_calc(0)
 {
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
 }
@@ -166,18 +166,18 @@ void TMdContr::start_( )
     //> Former process parameters list
     vector<string> list_p;
     list(list_p);
-    for(int i_prm=0; i_prm < list_p.size(); i_prm++)
-	if( at(list_p[i_prm]).at().enableStat() )
+    for(unsigned i_prm=0; i_prm < list_p.size(); i_prm++)
+	if(at(list_p[i_prm]).at().enableStat())
 	    prmEn(list_p[i_prm],true);
 
     //> Start the request data task
-    if( !prc_st ) SYS->taskCreate( nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st );
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if( prc_st ) SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
 
     //> Clear process parameters list
     p_hd.clear();
@@ -185,16 +185,14 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if( p_hd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )
-	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )
-	p_hd.erase(p_hd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -235,27 +233,32 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::redntDataUpdate( )
 {
-    TController::redntDataUpdate( );
+    TController::redntDataUpdate();
 
     vector<string> pls; list(pls);
 
     //> Request for template's attributes values
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < pls.size(); i_p++)
     {
-	if( !at(pls[i_p]).at().enableStat( ) ) continue;
+	if(!at(pls[i_p]).at().enableStat()) continue;
 	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
     }
 
     //> Send request to first active station for this controller
-    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
+    if(owner().owner().rdStRequest(workId(),req).empty()) return;
 
     //> Redirect respond to local parameters
     req.setAttr("path","/");
-    for( int i_prm = 0; i_prm < req.childSize(); i_prm++ )
+    for(unsigned i_prm = 0; i_prm < req.childSize(); )
     {
-	if( atoi(req.childGet(i_prm)->attr("err").c_str()) ) { req.childDel(i_prm--); continue; }
+	if(atoi(req.childGet(i_prm)->attr("err").c_str()))
+	{
+	    req.childDel(i_prm);
+	    continue;
+	}
 	req.childGet(i_prm)->setName("set");
+	i_prm++;
     }
     cntrCmd(&req);
 }
@@ -264,8 +267,9 @@ void TMdContr::redntDataUpdate( )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr"), prm_refl(NULL), m_wmode(TMdPrm::Free), chk_lnk_need(false),
-    id_freq(-1), id_start(-1), id_stop(-1), id_sh(-1), id_nm(-1), id_dscr(-1), m_mode(cfg("MODE").getId()), m_prm(cfg("PRM").getSd())
+    TParamContr(name,tp_prm), prm_refl(NULL), m_prm(cfg("PRM").getSd()), m_mode(cfg("MODE").getId()),
+    m_wmode(TMdPrm::Free), p_el("w_attr"), chk_lnk_need(false),
+    id_freq(-1), id_start(-1), id_stop(-1), id_sh(-1), id_nm(-1), id_dscr(-1)
 {
 
 }
@@ -419,41 +423,37 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 {
     vector<string> list;
 
-    if( !enableStat() ) return;
+    if(!enableStat()) return;
 
     ResAlloc res(moderes,true);
 
     //> Free old mode
-    if( md != mode() || prm != m_wprm )
+    if(md != mode() || prm != m_wprm)
     {
-	if( mode() == TMdPrm::DirRefl )
+	if(mode() == TMdPrm::DirRefl)
 	{
-	    for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
-		if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
-		{
+	    for(unsigned i_f = 0; i_f < p_el.fldSize(); )
+		if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1)
 		    p_el.fldDel(i_f);
-		    i_f--;
-		}
+		else i_f++;
 	    delete prm_refl;
 	    prm_refl = NULL;
 	}
-	else if( mode() == TMdPrm::Template )
+	else if(mode() == TMdPrm::Template)
 	{
-	    for(int i_f = 0; i_f < p_el.fldSize(); i_f++ )
-		if( vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1 )
-		{
+	    for(unsigned i_f = 0; i_f < p_el.fldSize(); )
+		if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1)
 		    p_el.fldDel(i_f);
-		    i_f--;
-		}
+		else i_f++;
 	    delete tmpl;
 	    tmpl = NULL;
 	}
     }
 
     //> Init/update new mode
-    if( md == TMdPrm::DirRefl )
+    if(md == TMdPrm::DirRefl)
     {
-	if( !prm_refl ) prm_refl = new AutoHD<TValue>;
+	if(!prm_refl) prm_refl = new AutoHD<TValue>;
 	try
 	{
 	    prm_refl->free();
@@ -461,10 +461,11 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 					at(TSYS::strSepParse(prm,1,'.')).at().
 					at(TSYS::strSepParse(prm,2,'.'));
 	    prm_refl->at().vlList(list);
-	    for( int i_l = 0; i_l < list.size(); i_l++ )
-		if( !vlPresent(list[i_l]) )
-		    p_el.fldAdd( new TFld(list[i_l].c_str(),prm_refl->at().vlAt(list[i_l]).at().fld().descr().c_str(),
-			prm_refl->at().vlAt(list[i_l]).at().fld().type(),TVal::DirWrite|TVal::DirRead|(prm_refl->at().vlAt(list[i_l]).at().fld().flg()&TFld::NoWrite)) );
+	    for(unsigned i_l = 0; i_l < list.size(); i_l++)
+		if(!vlPresent(list[i_l]))
+		    p_el.fldAdd(new TFld(list[i_l].c_str(),prm_refl->at().vlAt(list[i_l]).at().fld().descr().c_str(),
+			prm_refl->at().vlAt(list[i_l]).at().fld().type(),
+			TVal::DirWrite|TVal::DirRead|(prm_refl->at().vlAt(list[i_l]).at().fld().flg()&TFld::NoWrite)));
 	}catch(...)
 	{
 	    m_wmode = Free;
@@ -473,13 +474,13 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 	    throw;
 	}
     }
-    else if( md == TMdPrm::Template )
+    else if(md == TMdPrm::Template)
     {
 	bool to_make = false;
-	if( !tmpl ) tmpl = new STmpl;
+	if(!tmpl) tmpl = new STmpl;
 	try
 	{
-	    if( !tmpl->val.func() )
+	    if(!tmpl->val.func())
 	    {
 		tmpl->val.setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(prm,0,'.')).at().
 					        at(TSYS::strSepParse(prm,1,'.')).at().func().at());
@@ -489,27 +490,28 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 	    //>> Set mode
 	    m_wmode = md;
 	    //>> Init attrubutes
-	    for( int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++ )
+	    for(int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++)
 	    {
-		if( (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
+		if((tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0)
 		    tmpl->lnk.push_back(SLnk(i_io));
-		if( (tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
-		    !vlPresent(tmpl->val.func()->io(i_io)->id()) )
+		if((tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
+		    !vlPresent(tmpl->val.func()->io(i_io)->id()))
 		{
 		    TFld::Type tp = TFld::String;
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
 
-		    switch( tmpl->val.ioType(i_io) )
+		    switch(tmpl->val.ioType(i_io))
 		    {
 			case IO::String:	tp = TFld::String;	break;
 			case IO::Integer:	tp = TFld::Integer;	break;
 			case IO::Real:		tp = TFld::Real;	break;
 			case IO::Boolean:	tp = TFld::Boolean;	break;
+			case IO::Object:	tp = TFld::String;	break;
 		    }
-		    if( tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead )	flg|=TFld::NoWrite;
+		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg|=TFld::NoWrite;
 		    p_el.fldAdd( new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg) );
 		}
-		if( to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) )	tmpl->val.setS(i_io,EVAL_STR);
+		if(to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink))	tmpl->val.setS(i_io,EVAL_STR);
 	    }
 	    //>> Init links
 	    initTmplLnks();
@@ -681,72 +683,72 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    if( val.arch().freeStat() ) return;
+    if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
     val.arch().at().setPeriod(((long long)owner().period())*1000);
-    val.arch().at().setHardGrid( true );
-    val.arch().at().setHighResTm( true );
+    val.arch().at().setHardGrid(true);
+    val.arch().at().setHighResTm(true);
 }
 
 int TMdPrm::lnkSize()
 {
-    if( mode() != TMdPrm::Template )
+    if(mode() != TMdPrm::Template)
         throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     return tmpl->lnk.size();
 }
 
 int TMdPrm::lnkId( int id )
 {
-    if( mode() != TMdPrm::Template )
+    if(mode() != TMdPrm::Template)
         throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
-    for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	if( lnk(i_l).io_id == id )
+    for(int i_l = 0; i_l < lnkSize(); i_l++)
+	if(lnk(i_l).io_id == id)
 	    return i_l;
     return -1;
 }
 
 int TMdPrm::lnkId( const string &id )
 {
-    if( mode() != TMdPrm::Template )
+    if(mode() != TMdPrm::Template)
         throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
-    for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	if( tmpl->val.func()->io(lnk(i_l).io_id)->id() == id )
+    for(int i_l = 0; i_l < lnkSize(); i_l++)
+	if(tmpl->val.func()->io(lnk(i_l).io_id)->id() == id)
 	    return i_l;
     return -1;
 }
 
 TMdPrm::SLnk &TMdPrm::lnk( int num )
 {
-    if( mode() != TMdPrm::Template )
+    if(mode() != TMdPrm::Template)
         throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
-    if( num < 0 || num >= tmpl->lnk.size() )
+    if(num < 0 || num >= (int)tmpl->lnk.size())
 	throw TError(nodePath().c_str(),_("Parameter id error."));
     return tmpl->lnk[num];
 }
 
 void TMdPrm::calc( bool first, bool last )
 {
-    if( mode() != TMdPrm::Template )    return;
+    if(mode() != TMdPrm::Template)    return;
     try
     {
-	ResAlloc res(moderes,false);
-	ResAlloc cres(calcRes,true);
-	if( chk_lnk_need ) initTmplLnks(true);
+	ResAlloc res(moderes, false);
+	ResAlloc cres(calcRes, true);
+	if(chk_lnk_need) initTmplLnks(true);
 
 	tmpl->val.setMdfChk(true);
 
 	//> Set fixed system attributes
-	if( id_freq >= 0 )	tmpl->val.setR(id_freq,1000./owner().period());
-	if( id_start >= 0 )	tmpl->val.setB(id_start,first);
-	if( id_stop >= 0 )	tmpl->val.setB(id_stop,last);
-	if( id_sh >= 0 )	tmpl->val.setS(id_sh,id());
-	if( id_nm >= 0 )	tmpl->val.setS(id_nm,name());
-	if( id_dscr >= 0 )	tmpl->val.setS(id_dscr,descr());
+	if(id_freq >= 0)	tmpl->val.setR(id_freq, 1000./owner().period());
+	if(id_start >= 0)	tmpl->val.setB(id_start, first);
+	if(id_stop >= 0)	tmpl->val.setB(id_stop, last);
+	if(id_sh >= 0)		tmpl->val.setS(id_sh, id());
+	if(id_nm >= 0)		tmpl->val.setS(id_nm, name());
+	if(id_dscr >= 0)	tmpl->val.setS(id_dscr, descr());
 
 	//> Get input links
-	for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	    if( lnk(i_l).aprm.freeStat() )	tmpl->val.setS(lnk(i_l).io_id,EVAL_STR);
-	    else switch( tmpl->val.ioType(lnk(i_l).io_id) )
+	for(int i_l = 0; i_l < lnkSize(); i_l++)
+	    if(lnk(i_l).aprm.freeStat())	tmpl->val.setS(lnk(i_l).io_id, EVAL_STR);
+	    else switch(tmpl->val.ioType(lnk(i_l).io_id))
 	    {
 		case IO::String:
 		    tmpl->val.setS(lnk(i_l).io_id,lnk(i_l).aprm.at().getS());
@@ -760,6 +762,7 @@ void TMdPrm::calc( bool first, bool last )
 		case IO::Boolean:
 		    tmpl->val.setB(lnk(i_l).io_id,lnk(i_l).aprm.at().getB());
 		    break;
+		default: break;
 	    }
 
 	//> Calc template
@@ -767,36 +770,37 @@ void TMdPrm::calc( bool first, bool last )
 	modif();
 
 	//> Put output links
-	for( int i_l = 0; i_l < lnkSize(); i_l++ )
-	    if( !lnk(i_l).aprm.freeStat() && tmpl->val.ioMdf(lnk(i_l).io_id) &&
+	for(int i_l = 0; i_l < lnkSize(); i_l++)
+	    if(!lnk(i_l).aprm.freeStat() && tmpl->val.ioMdf(lnk(i_l).io_id) &&
 		    tmpl->val.ioFlg(lnk(i_l).io_id)&(IO::Output|IO::Return) &&
-		    !(lnk(i_l).aprm.at().fld().flg()&TFld::NoWrite) )
-		switch( tmpl->val.ioType(lnk(i_l).io_id) )
+		    !(lnk(i_l).aprm.at().fld().flg()&TFld::NoWrite))
+		switch(tmpl->val.ioType(lnk(i_l).io_id))
 		{
 		    case IO::String:
 		    {
 			string vl = tmpl->val.getS(lnk(i_l).io_id);
-			if( vl != EVAL_STR )	lnk(i_l).aprm.at().setS(vl);
+			if(vl != EVAL_STR)	lnk(i_l).aprm.at().setS(vl);
 			break;
 		    }
 		    case IO::Integer:
 		    {
 			int vl = tmpl->val.getI(lnk(i_l).io_id);
-			if( vl != EVAL_INT )	lnk(i_l).aprm.at().setI(vl);
+			if(vl != EVAL_INT)	lnk(i_l).aprm.at().setI(vl);
 			break;
 		    }
 		    case IO::Real:
 		    {
 			double vl = tmpl->val.getR(lnk(i_l).io_id);
-			if( vl != EVAL_REAL )	lnk(i_l).aprm.at().setR(vl);
+			if(vl != EVAL_REAL)	lnk(i_l).aprm.at().setR(vl);
 			break;
 		    }
 		    case IO::Boolean:
 		    {
 			char vl = tmpl->val.getB(lnk(i_l).io_id);
-			if( vl != EVAL_BOOL )	lnk(i_l).aprm.at().setB(vl);
+			if(vl != EVAL_BOOL)	lnk(i_l).aprm.at().setB(vl);
 			break;
 		    }
+		    default:	break;
 		}
 
 	//> Put fixed system attributes
@@ -823,7 +827,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		for(int i_a = 0; i_a < tmpl->val.ioSize(); i_a++)
 		    opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(i_a)->id())->setText(tmpl->val.getS(i_a));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(int i_a = 0; i_a < opt->childSize(); i_a++)
+		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
 		    if(opt->childGet(i_a)->name() != "ta" || (io_id=tmpl->val.ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
@@ -860,8 +864,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			string nprm = TSYS::strSepParse(tmpl->val.func()->io(i_io)->def(),0,'|');
 			//>> Check already to present parameters
 			bool f_ok = false;
-			for(int i_l = 0; i_l < list.size(); i_l++)
-			    if(list[i_l] == nprm) { f_ok = true; break; }
+			for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
+			    if(list[i_l] == nprm) f_ok = true;
 			if(!f_ok)
 			{
 			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+TSYS::int2str(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
@@ -878,6 +882,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
+				default:		tip = "str";	break;
 			    }
 			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),tmpl->val.func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,
 			    3,"tp",tip,"dest",is_lnk?"sel_ed":"","select",is_lnk?(string("/cfg/prm/ls_")+TSYS::int2str(i_io)).c_str():"");
@@ -936,7 +941,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path == "/cfg/attr_only" && mode() == TMdPrm::Template)
@@ -1033,7 +1038,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,12) == "/cfg/prm/el_" && mode() == TMdPrm::Template)

@@ -99,12 +99,12 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 //* TMdContr                                           *
 //******************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tmGath(0), tmDelay(0),
-	numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mPrt(cfg("PROT").getSd()),
-	mAddr(cfg("ADDR").getSd()), mNode(cfg("NODE").getId()), mMerge(cfg("FRAG_MERGE").getBd()),
-	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId())
+TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
+	TController(name_c, daq_db, cfgelem),
+	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), mSched(cfg("SCHEDULE").getSd()), mPrt(cfg("PROT").getSd()),
+	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), reqTm(cfg("TM_REQ").getId()),
+	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), prc_st(false), endrun_req(false), tmGath(0),
+	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
 }
@@ -175,7 +175,7 @@ void TMdContr::start_( )
     //>> Reenable parameters
     vector<string> pls;
     list(pls);
-    for(int i_p = 0; i_p < pls.size(); i_p++)
+    for(unsigned i_p = 0; i_p < pls.size(); i_p++)
     {
 	AutoHD<TMdPrm> prm = at(pls[i_p]);
 	if(prm.at().enableStat())
@@ -212,37 +212,37 @@ bool TMdContr::cfgChange( TCfg &icfg )
     return true;
 }
 
-void TMdContr::regVal( int reg, const string &dt )
+void TMdContr::regVal(int reg, const string &dt)
 {
-    if( reg < 0 )	return;
+    if(reg < 0)	return;
 
-    ResAlloc res( req_res, true );
+    ResAlloc res(req_res, true);
 
     //> Register to acquisition block
-    if( dt == "R" || dt == "RI" )
+    if(dt == "R" || dt == "RI")
     {
 	vector< SDataRec > &workCnt = (dt == "RI") ? acqBlksIn : acqBlks;
-	int i_b;
-	for( i_b = 0; i_b < workCnt.size(); i_b++ )
+	unsigned i_b;
+	for(i_b = 0; i_b < workCnt.size(); i_b++)
 	{
-	    if( (reg*2) < workCnt[i_b].off )
+	    if((reg*2) < workCnt[i_b].off)
 	    {
-		if( (mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq )
+		if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq)
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg*2,0);
 		    workCnt[i_b].off = reg*2;
 		}
 		else workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
 	    }
-	    else if( (reg*2+2) > (workCnt[i_b].off+workCnt[i_b].val.size()) )
+	    else if((reg*2+2) > (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	    {
-		if( (mMerge || reg*2 <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq )
+		if((mMerge || reg*2 <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq)
 		{
 		    workCnt[i_b].val.append((reg*2+2)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		    //>> Check for allow mergin to next block
-		    if( !mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
+		    if(!mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+(int)workCnt[i_b].val.size()) >= workCnt[i_b+1].off)
 		    {
-			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
+			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+(int)workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
 			workCnt.erase(workCnt.begin()+i_b+1);
 		    }
 		}
@@ -250,32 +250,31 @@ void TMdContr::regVal( int reg, const string &dt )
 	    }
 	    break;
 	}
-	if( i_b >= workCnt.size() )
-	    workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
+	if(i_b >= workCnt.size()) workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
     }
     //> Coils
-    else if( dt == "C" || dt == "CI" )
+    else if(dt == "C" || dt == "CI")
     {
 	vector< SDataRec > &workCnt = (dt == "CI") ? acqBlksCoilIn : acqBlksCoil;
-	int i_b;
-	for( i_b = 0; i_b < workCnt.size(); i_b++ )
+	unsigned i_b;
+	for(i_b = 0; i_b < workCnt.size(); i_b++)
 	{
-	    if( reg < workCnt[i_b].off )
+	    if(reg < workCnt[i_b].off)
 	    {
-		if( (mMerge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < MaxLenReq*8 )
+		if((mMerge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < MaxLenReq*8)
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg,0);
 		    workCnt[i_b].off = reg;
 		}
 		else workCnt.insert(workCnt.begin()+i_b,SDataRec(reg,1));
 	    }
-	    else if( (reg+1) > (workCnt[i_b].off+workCnt[i_b].val.size()) )
+	    else if((reg+1) > (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	    {
-		if( (mMerge || reg <= (workCnt[i_b].off+workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < MaxLenReq*8 )
+		if((mMerge || reg <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < MaxLenReq*8)
 		{
 		    workCnt[i_b].val.append((reg+1)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		    //>> Check for allow mergin to next block
-		    if( !mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+workCnt[i_b].val.size()) >= workCnt[i_b+1].off )
+		    if(!mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+(int)workCnt[i_b].val.size()) >= workCnt[i_b+1].off)
 		    {
 			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
 			workCnt.erase(workCnt.begin()+i_b+1);
@@ -285,22 +284,22 @@ void TMdContr::regVal( int reg, const string &dt )
 	    }
 	    break;
 	}
-	if( i_b >= workCnt.size() )
-	    workCnt.insert(workCnt.begin()+i_b,SDataRec(reg,1));
+	if(i_b >= workCnt.size()) workCnt.insert(workCnt.begin()+i_b,SDataRec(reg,1));
     }
 }
 
 int TMdContr::getValR( int addr, ResString &err, bool in )
 {
     int rez = EVAL_INT;
-    ResAlloc res( req_res, false );
+    ResAlloc res(req_res, false);
     vector< SDataRec >	&workCnt = in ? acqBlksIn : acqBlks;
-    for( int i_b = 0; i_b < workCnt.size(); i_b++ )
-	if( (addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
+    for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
+	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
-	    err.setVal( workCnt[i_b].err.getVal() );
-	    if( err.getVal().empty() )
-		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8)|(unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
+	    err.setVal(workCnt[i_b].err.getVal());
+	    if(err.getVal().empty())
+		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8) |
+		      (unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
 	    break;
 	}
     return rez;
@@ -309,14 +308,13 @@ int TMdContr::getValR( int addr, ResString &err, bool in )
 char TMdContr::getValC( int addr, ResString &err, bool in )
 {
     char rez = EVAL_BOOL;
-    ResAlloc res( req_res, false );
+    ResAlloc res(req_res, false);
     vector< SDataRec >	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
-    for( int i_b = 0; i_b < workCnt.size(); i_b++ )
-	if( addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+workCnt[i_b].val.size()) )
+    for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
+	if(addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
-	    err.setVal( workCnt[i_b].err.getVal() );
-	    if( err.getVal().empty() )
-		rez = workCnt[i_b].val[addr-workCnt[i_b].off];
+	    err.setVal(workCnt[i_b].err.getVal());
+	    if(err.getVal().empty()) rez = workCnt[i_b].val[addr-workCnt[i_b].off];
 	    break;
 	}
     return rez;
@@ -332,12 +330,12 @@ void TMdContr::setValR( int val, int addr, ResString &err )
     pdu += (char)(val>>8);	//Data MSB
     pdu += (char)val;		//Data LSB
     //> Request to remote server
-    err.setVal( modBusReq(pdu) );
-    if( err.getVal().empty() ) numWReg++;
+    err.setVal(modBusReq(pdu));
+    if(err.getVal().empty()) numWReg++;
     //> Set to acquisition block
-    ResAlloc res( req_res, false );
-    for( int i_b = 0; i_b < acqBlks.size(); i_b++ )
-	if( (addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+acqBlks[i_b].val.size()) )
+    ResAlloc res(req_res, false);
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+	if((addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	{
 	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off]   = (char)(val>>8);
 	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1] = (char)val;
@@ -356,11 +354,11 @@ void TMdContr::setValC( char val, int addr, ResString &err )
     pdu += (char)0x00;		//Data LSB
     //> Request to remote server
     err.setVal( modBusReq(pdu) );
-    if( err.getVal().empty() ) numWCoil++;
+    if(err.getVal().empty()) numWCoil++;
     //> Set to acquisition block
-    ResAlloc res( req_res, false );
-    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )
-	if( addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+acqBlksCoil[i_b].val.size()) )
+    ResAlloc res(req_res, false);
+    for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)
+	if(addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+(int)acqBlksCoil[i_b].val.size()))
 	{
 	    acqBlksCoil[i_b].val[addr-acqBlksCoil[i_b].off] = val;
 	    break;
@@ -401,22 +399,22 @@ void *TMdContr::Task( void *icntr )
 
     try
     {
-	while( !cntr.endrun_req )
+	while(!cntr.endrun_req)
 	{
-	    if( cntr.tmDelay > 0 )	{ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.tmDelay > 0) { sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    long long t_cnt = TSYS::curTime();
 
 #if OSC_DEBUG >= 3
 	    mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
 #endif
-	    ResAlloc res( cntr.req_res, false );
+	    ResAlloc res(cntr.req_res, false);
 
 	    //> Get coils
-	    for( int i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++ )
+	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++)
 	    {
-		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
+		if(cntr.endrun_req) break;
+		if(cntr.redntUse()) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x1;					//Function, read multiple coils
 		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);		//Address MSB
@@ -424,30 +422,30 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoil[i_b].val.size();		//Number of coils LSB
 		//>> Request to remote server
-		cntr.acqBlksCoil[i_b].err.setVal( cntr.modBusReq(pdu) );
-		if( cntr.acqBlksCoil[i_b].err.getVal().empty() )
+		cntr.acqBlksCoil[i_b].err.setVal(cntr.modBusReq(pdu));
+		if(cntr.acqBlksCoil[i_b].err.getVal().empty())
 		{
-		    if( (cntr.acqBlksCoil[i_b].val.size()/8+((cntr.acqBlksCoil[i_b].val.size()%8)?1:0)) != (pdu.size()-2) )
+		    if((cntr.acqBlksCoil[i_b].val.size()/8+((cntr.acqBlksCoil[i_b].val.size()%8)?1:0)) != (pdu.size()-2))
 			cntr.acqBlksCoil[i_b].err.setVal(_("15:Response PDU size error."));
 		    else
 		    {
-			for( int i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++ )
+			for(unsigned i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++)
 			    cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
 			cntr.numRCoil += cntr.acqBlksCoil[i_b].val.size();
 		    }
 		}
-		else if( atoi(cntr.acqBlksCoil[i_b].err.getVal().c_str()) == 14 )
+		else if(atoi(cntr.acqBlksCoil[i_b].err.getVal().c_str()) == 14)
 		{
 		    cntr.setCntrDelay(cntr.acqBlksCoil[i_b].err.getVal());
 		    break;
 		}
 	    }
-	    if( cntr.tmDelay > 0 )	continue;
+	    if(cntr.tmDelay > 0) continue;
 	    //> Get input's coils
-	    for( int i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++ )
+	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++)
 	    {
-		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
+		if(cntr.endrun_req) break;
+		if(cntr.redntUse()) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x2;					//Function, read multiple input's coils
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
@@ -455,30 +453,30 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
 		//>> Request to remote server
-		cntr.acqBlksCoilIn[i_b].err.setVal( cntr.modBusReq(pdu) );
-		if( cntr.acqBlksCoilIn[i_b].err.getVal().empty() )
+		cntr.acqBlksCoilIn[i_b].err.setVal(cntr.modBusReq(pdu));
+		if(cntr.acqBlksCoilIn[i_b].err.getVal().empty())
 		{
-		    if( (cntr.acqBlksCoilIn[i_b].val.size()/8+((cntr.acqBlksCoilIn[i_b].val.size()%8)?1:0)) != (pdu.size()-2) )
+		    if((cntr.acqBlksCoilIn[i_b].val.size()/8+((cntr.acqBlksCoilIn[i_b].val.size()%8)?1:0)) != (pdu.size()-2))
 			cntr.acqBlksCoilIn[i_b].err.setVal(_("15:Response PDU size error."));
 		    else
 		    {
-			for( int i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++ )
+			for(unsigned i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++)
 			    cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
 			cntr.numRCoilIn += cntr.acqBlksCoilIn[i_b].val.size();
 		    }
 		}
-		else if( atoi(cntr.acqBlksCoilIn[i_b].err.getVal().c_str()) == 14 )
+		else if(atoi(cntr.acqBlksCoilIn[i_b].err.getVal().c_str()) == 14)
 		{
 		    cntr.setCntrDelay(cntr.acqBlksCoilIn[i_b].err.getVal());
 		    break;
 		}
 	    }
-	    if( cntr.tmDelay > 0 )	continue;
+	    if(cntr.tmDelay > 0) continue;
 	    //> Get registers
-	    for( int i_b = 0; i_b < cntr.acqBlks.size(); i_b++ )
+	    for(unsigned i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
 	    {
-		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlks[i_b].err.setVal(_("4:Server failure.")); continue; }
+		if(cntr.endrun_req) break;
+		if(cntr.redntUse()) { cntr.acqBlks[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x3;				//Function, read multiple registers
 		pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
@@ -486,28 +484,29 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
 		//>> Request to remote server
-		cntr.acqBlks[i_b].err.setVal( cntr.modBusReq(pdu) );
-		if( cntr.acqBlks[i_b].err.getVal().empty() )
+		cntr.acqBlks[i_b].err.setVal(cntr.modBusReq(pdu));
+		if(cntr.acqBlks[i_b].err.getVal().empty())
 		{
-		    if( cntr.acqBlks[i_b].val.size() != (pdu.size()-2) ) cntr.acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
+		    if(cntr.acqBlks[i_b].val.size() != (pdu.size()-2))
+			cntr.acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
 		    else
 		    {
-			cntr.acqBlks[i_b].val.replace(0,cntr.acqBlks[i_b].val.size(),pdu.data()+2,cntr.acqBlks[i_b].val.size());
+			cntr.acqBlks[i_b].val.replace(0, cntr.acqBlks[i_b].val.size(), pdu.data()+2, cntr.acqBlks[i_b].val.size());
 			cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
 		    }
 		}
-		else if( atoi(cntr.acqBlks[i_b].err.getVal().c_str()) == 14 )
+		else if(atoi(cntr.acqBlks[i_b].err.getVal().c_str()) == 14)
 		{
 		    cntr.setCntrDelay(cntr.acqBlks[i_b].err.getVal());
 		    break;
 		}
 	    }
-	    if( cntr.tmDelay > 0 )	continue;
+	    if(cntr.tmDelay > 0)	continue;
 	    //> Get input registers
-	    for( int i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++ )
+	    for(unsigned i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++)
 	    {
-		if( cntr.endrun_req ) break;
-		if( cntr.redntUse( ) ) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
+		if(cntr.endrun_req) break;
+		if(cntr.redntUse()) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x4;				//Function, read multiple input registers
 		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
@@ -515,17 +514,18 @@ void *TMdContr::Task( void *icntr )
 		pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB
 		//>> Request to remote server
-		cntr.acqBlksIn[i_b].err.setVal( cntr.modBusReq(pdu) );
-		if( cntr.acqBlksIn[i_b].err.getVal().empty() )
+		cntr.acqBlksIn[i_b].err.setVal( cntr.modBusReq(pdu));
+		if(cntr.acqBlksIn[i_b].err.getVal().empty())
 		{
-		    if( cntr.acqBlksIn[i_b].val.size() != (pdu.size()-2) ) cntr.acqBlksIn[i_b].err.setVal(_("15:Response PDU size error."));
+		    if(cntr.acqBlksIn[i_b].val.size() != (pdu.size()-2))
+			cntr.acqBlksIn[i_b].err.setVal(_("15:Response PDU size error."));
 		    else
 		    {
-			cntr.acqBlksIn[i_b].val.replace(0,cntr.acqBlksIn[i_b].val.size(),pdu.data()+2,cntr.acqBlksIn[i_b].val.size());
+			cntr.acqBlksIn[i_b].val.replace(0, cntr.acqBlksIn[i_b].val.size(), pdu.data()+2, cntr.acqBlksIn[i_b].val.size());
 			cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
 		    }
 		}
-		else if( atoi(cntr.acqBlksIn[i_b].err.getVal().c_str()) == 14 )
+		else if(atoi(cntr.acqBlksIn[i_b].err.getVal().c_str()) == 14)
 		{
 		    cntr.setCntrDelay(cntr.acqBlksIn[i_b].err.getVal());
 		    break;
@@ -533,15 +533,15 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    res.release();
 
-	    if( cntr.tmDelay <= 0 ) cntr.tmDelay--;
+	    if(cntr.tmDelay <= 0) cntr.tmDelay--;
 
 	    //> Calc acquisition process time
 	    cntr.tmGath = TSYS::curTime()-t_cnt;
 
-	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 	}
     }
-    catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
+    catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prc_st = false;
 
@@ -552,10 +552,10 @@ void TMdContr::setCntrDelay( const string &err )
 {
     tmDelay = restTm;
     ResAlloc res( req_res, false );
-    for( int i_b = 0; i_b < acqBlksCoil.size(); i_b++ )	acqBlksCoil[i_b].err.setVal( err );
-    for( int i_b = 0; i_b < acqBlksCoilIn.size(); i_b++ )	acqBlksCoilIn[i_b].err.setVal( err );
-    for( int i_b = 0; i_b < acqBlks.size(); i_b++ )	acqBlks[i_b].err.setVal( err );
-    for( int i_b = 0; i_b < acqBlksIn.size(); i_b++ )	acqBlksIn[i_b].err.setVal( err );
+    for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)	acqBlksCoil[i_b].err.setVal(err);
+    for(unsigned i_b = 0; i_b < acqBlksCoilIn.size(); i_b++)	acqBlksCoilIn[i_b].err.setVal(err);
+    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)	acqBlks[i_b].err.setVal(err);
+    for(unsigned i_b = 0; i_b < acqBlksIn.size(); i_b++)	acqBlksIn[i_b].err.setVal(err);
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -575,7 +575,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TController::cntrCmdProc(opt);
@@ -590,8 +590,8 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr( name, tp_prm ), p_el("w_attr"), m_attrLs(cfg("ATTR_LS").getSd())
+TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
+    TParamContr(name, tp_prm ), m_attrLs(cfg("ATTR_LS").getSd()), p_el("w_attr")
 {
 
 }
@@ -611,85 +611,85 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     TParamContr::enable();
 
     //> Parse ModBus attributes and convert to string list
     vector<string> als;
     string ai, sel, atp, atp_m, atp_sub, aid, anm, awr;
-    for( int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
+    for(int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
     {
 	atp = TSYS::strSepParse(sel,0,':');
-	if( atp.empty() ) atp = "R";
+	if(atp.empty()) atp = "R";
 	atp_m = TSYS::strSepParse(atp,0,'_');
 	atp_sub = TSYS::strSepParse(atp,1,'_');
 	ai  = TSYS::strSepParse(sel,1,':');
 	awr = TSYS::strSepParse(sel,2,':');
 	aid = TSYS::strSepParse(sel,3,':');
-	if( aid.empty() ) aid = ai;
+	if(aid.empty()) aid = ai;
 	anm = TSYS::strSepParse(sel,4,':');
-	if( anm.empty() ) anm = ai;
+	if(anm.empty()) anm = ai;
 
-	if( vlPresent(aid) && !p_el.fldPresent(aid) )	continue;
+	if(vlPresent(aid) && !p_el.fldPresent(aid))	continue;
 
 	TFld::Type tp = TFld::Integer;
-	if( atp[0]=='C' || (atp_sub.size() && atp_sub[0] == 'b') ) tp = TFld::Boolean;
+	if(atp[0]=='C' || (atp_sub.size() && atp_sub[0] == 'b')) tp = TFld::Boolean;
 	else if( atp_sub == "f" ) tp = TFld::Real;
 
-	if( !p_el.fldPresent(aid) || p_el.fldAt(p_el.fldId(aid)).type() != tp )
+	if(!p_el.fldPresent(aid) || p_el.fldAt(p_el.fldId(aid)).type() != tp)
 	{
-	    if( p_el.fldPresent(aid)) p_el.fldDel(p_el.fldId(aid));
-	    p_el.fldAdd( new TFld(aid.c_str(),"",tp,TFld::NoFlag) );
+	    if(p_el.fldPresent(aid)) p_el.fldDel(p_el.fldId(aid));
+	    p_el.fldAdd(new TFld(aid.c_str(),"",tp,TFld::NoFlag));
 	}
 	int el_id = p_el.fldId(aid);
 
 	unsigned flg = (awr=="rw") ? TVal::DirWrite|TVal::DirRead :
 				     ((awr=="w") ? TVal::DirWrite : TFld::NoWrite|TVal::DirRead);
-	if( atp.size() >= 2 && atp[1] == 'I' )	flg = (flg & (~TVal::DirWrite)) | TFld::NoWrite;
-	p_el.fldAt(el_id).setFlg( flg );
-	p_el.fldAt(el_id).setDescr( anm );
+	if(atp.size() >= 2 && atp[1] == 'I')	flg = (flg & (~TVal::DirWrite)) | TFld::NoWrite;
+	p_el.fldAt(el_id).setFlg(flg);
+	p_el.fldAt(el_id).setDescr(anm);
 
-	if( flg&TVal::DirRead )
+	if(flg&TVal::DirRead)
 	{
 	    int reg = strtol(ai.c_str(),NULL,0);
 	    owner().regVal(reg,atp_m);
-	    if( atp[0] == 'R' && (atp_sub == "i4" || atp_sub == "f") )
+	    if(atp[0] == 'R' && (atp_sub == "i4" || atp_sub == "f"))
 	    {
 		int reg2 = TSYS::strSepParse(ai,1,',').empty() ? (reg+1) : strtol(TSYS::strSepParse(ai,1,',').c_str(),NULL,0);
-		owner().regVal( reg2, atp_m );
+		owner().regVal(reg2, atp_m);
 		ai = TSYS::int2str(reg)+","+TSYS::int2str(reg2);
 	    }
 	}
-	p_el.fldAt(el_id).setReserve( atp+":"+ai );
+	p_el.fldAt(el_id).setReserve(atp+":"+ai);
 
 	als.push_back(aid);
     }
 
     //> Check for delete DAQ parameter's attributes
-    for( int i_p = 0; i_p < p_el.fldSize(); i_p++ )
+    for(unsigned i_p = 0, i_l; i_p < p_el.fldSize(); )
     {
-	int i_l;
-	for( i_l = 0; i_l < als.size(); i_l++ )
-	    if( p_el.fldAt(i_p).name() == als[i_l] )
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(p_el.fldAt(i_p).name() == als[i_l])
 		break;
-	if( i_l >= als.size() )
-	    try{ p_el.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	if(i_l >= als.size())
+	    try{ p_el.fldDel(i_p); continue; }
+	    catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	i_p++;
     }
 }
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
     TParamContr::disable();
 
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS( EVAL_STR, 0, true );
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
+	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::vlGet( TVal &val )

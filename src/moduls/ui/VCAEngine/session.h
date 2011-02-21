@@ -117,9 +117,10 @@ class Session : public TCntrNode
 	{
 	    public:
 		//Methods
-		Alarm( const string &ipath, uint8_t ilev, uint8_t itp, const string &icat, const string &imess, const string &itpArg = "", unsigned iclc = 0 ) :
-		    path(ipath), lev(ilev), tp(itp), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
-		Alarm( const string &path, const string &alrm, unsigned clc );
+		Alarm(const string &ipath, uint8_t ilev, uint8_t itp, const string &icat, const string &imess,
+			    const string &itpArg = "", unsigned iclc = 0 ) :
+		    lev(ilev), tp(itp), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
+		Alarm(const string &path, const string &alrm, unsigned clc);
 		Alarm( ) : lev(0), tp(0), qtp(0)	{ }
 
 		//Attributes

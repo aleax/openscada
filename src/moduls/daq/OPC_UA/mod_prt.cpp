@@ -63,15 +63,15 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mSecCnlIdLast(1)
     mEndPnt = grpAdd("ep_");
 
     //> Node DB structure
-    mEndPntEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    mEndPntEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    mEndPntEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    mEndPntEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mEndPntEl.fldAdd( new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selected,"1","0","0",_("Binary")) );
-    mEndPntEl.fldAdd( new TFld("URL",_("URL"),TFld::String,0,"50","opc.tcp://localhost:4841") );
-    mEndPntEl.fldAdd( new TFld("SecPolicies",_("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1") );
-    mEndPntEl.fldAdd( new TFld("ServCert",_("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000") );
-    mEndPntEl.fldAdd( new TFld("ServPvKey",_("Server private key (PEM)"),TFld::String,TFld::FullText,"10000") );
+    mEndPntEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    mEndPntEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    mEndPntEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
+    mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selected,"1","0","0",_("Binary")));
+    mEndPntEl.fldAdd(new TFld("URL",_("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
+    mEndPntEl.fldAdd(new TFld("SecPolicies",_("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
+    mEndPntEl.fldAdd(new TFld("ServCert",_("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
+    mEndPntEl.fldAdd(new TFld("ServPvKey",_("Server private key (PEM)"),TFld::String,TFld::FullText,"10000"));
 }
 
 TProt::~TProt()
@@ -81,8 +81,8 @@ TProt::~TProt()
 
 void TProt::epAdd( const string &iid, const string &db )
 {
-    if( chldPresent(mEndPnt,iid) ) return;
-    chldAdd( mEndPnt, new OPCEndPoint(iid,db,&endPntEl()) );
+    if(chldPresent(mEndPnt,iid)) return;
+    chldAdd(mEndPnt, new OPCEndPoint(iid,db,&endPntEl()));
 }
 
 void TProt::discoveryUrls( vector<string> &ls )
@@ -91,10 +91,10 @@ void TProt::discoveryUrls( vector<string> &ls )
     //>> Get allowed enpoints list
     vector<string> epLs;
     epList(epLs);
-    for( int i_ep = 0; i_ep < epLs.size(); i_ep++ )
+    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++)
     {
 	AutoHD<OPCEndPoint> ep = epAt(epLs[i_ep]);
-	if( !ep.at().enableStat() ) continue;
+	if(!ep.at().enableStat()) continue;
 	ls.push_back(ep.at().url());
 	break;
     }
@@ -111,19 +111,19 @@ void TProt::load_( )
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep","",fld_cnt++,g_cfg); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep","",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !epPresent(id) )	epAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!epPresent(id)) epAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !epPresent(id) )	epAdd(id,"*.*");
+		if(!epPresent(id)) epAdd(id,"*.*");
 	    }
     }catch(TError err)
     {
@@ -141,8 +141,8 @@ void TProt::modStart( )
 {
     vector<string> ls;
     epList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
-	if( epAt(ls[i_n]).at().toEnable( ) )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
+	if(epAt(ls[i_n]).at().toEnable())
 	    epAt(ls[i_n]).at().setEnable(true);
 }
 
@@ -150,7 +150,7 @@ void TProt::modStop( )
 {
     vector<string> ls;
     epList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	epAt(ls[i_n]).at().setEnable(false);
 }
 
@@ -510,7 +510,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oN(mReq,atoi(io.attr("timestampsToReturn").c_str()),4);//timestampsTo Return (SERVER_1)
 									//> nodesToRead []
 		    oNu(mReq,vmin(25,io.childSize()-stIdx),4);				//nodes
-		    for(int i_n = stIdx; i_n < io.childSize() && (i_n-stIdx) < 25; i_n++)
+		    for(unsigned i_n = stIdx; i_n < io.childSize() && (i_n-stIdx) < 25; i_n++)
 		    {
 			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
 			oNu(mReq,strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0),4);	//attributeId (Value)
@@ -523,7 +523,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    iTpId = OpcUa_WriteRequest;
 									//> nodesToWrite []
 		    oNu(mReq,io.childSize(),4);				//nodes
-		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
+		    for(unsigned i_n = 0; i_n < io.childSize(); i_n++)
 		    {
 			XMLNode *nd = io.childGet(i_n);
 			oNodeId(mReq,NodeId::fromAddr(nd->attr("nodeId")));			//nodeId
@@ -543,7 +543,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    oNu(mReq,0,4);					//requestedMax ReferencesPerNode
 									//> nodesToBrowse
 		    oNu(mReq,io.childSize(),4);				//Nodes 1
-		    for( int i_n = 0; i_n < io.childSize(); i_n++ )
+		    for(unsigned i_n = 0; i_n < io.childSize(); i_n++)
 		    {
 			oNodeId(mReq,NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId (RootFolder)
 			oNu(mReq,strtoul(io.childGet(i_n)->attr("browseDirection").c_str(),NULL,0),4);	//browseDirection (FORWARD_0)
@@ -795,20 +795,20 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Nodes number
-			    for(int i_r = 0; i_r < resN && stIdx < io.childSize(); i_r++, stIdx++)
+			    for(int i_r = 0; i_r < resN && stIdx < (int)io.childSize(); i_r++, stIdx++)
 				iDataValue(rez,off,*io.childGet(stIdx));
 									//>> diagnosticInfos []
 			    iNu(rez,off,4);				//Items number
-			    if(stIdx<io.childSize()) goto nextReq;
+			    if(stIdx < (int)io.childSize()) goto nextReq;
 			    break;
 			}
 			case OpcUa_WriteResponse:
 			{
-			    if( iTpId != OpcUa_WriteRequest )
+			    if(iTpId != OpcUa_WriteRequest)
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Number
-			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
+			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
 				io.childGet(i_r)->setAttr("Status",TSYS::strMess("0x%x",iNu(rez,off,4)));
 									//>> diagnosticInfos []
 			    iNu(rez,off,4);				//Items number
@@ -820,10 +820,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
-			    for( int i_r = 0; i_r < resN && i_r < io.childSize(); i_r++ )
+			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
 			    {
 				XMLNode *rno = io.childGet(i_r);
-				uint32_t resMask = strtoul(rno->attr("resultMask").c_str(),NULL,0);	//resultMask
+				strtoul(rno->attr("resultMask").c_str(),NULL,0);	//resultMask
 				rno->setAttr("statusCode",TSYS::uint2str(iNu(rez,off,4)));		//statusCode
 				iS(rez,off);				//continuationPoint
 									//>> References []
@@ -871,15 +871,17 @@ string TProt::iErr( const string &buf, int &off )
 const char *TProt::iVal( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    if(off > (int)rb.size())
+	throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
     return rb.data()+off-vSz;
 }
 
 int32_t TProt::iN( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
-    switch( vSz )
+    if(off > (int)rb.size())
+	throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    switch(vSz)
     {
 	case 1:	return *(int8_t*)(rb.data()+off-vSz);
 	case 2:	return (int16_t)TSYS::getUnalign16(rb.data()+off-vSz);
@@ -891,8 +893,9 @@ int32_t TProt::iN( const string &rb, int &off, char vSz )
 uint32_t TProt::iNu( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
-    switch( vSz )
+    if(off > (int)rb.size())
+	throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested value."));
+    switch(vSz)
     {
 	case 1:	return *(uint8_t*)(rb.data()+off-vSz);
 	case 2:	return TSYS::getUnalign16(rb.data()+off-vSz);
@@ -912,7 +915,8 @@ string TProt::iS( const string &rb, int &off )
 {
     int sSz = iN(rb,off,4); sSz = vmax(0,sSz);
     off += sSz;
-    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested string."));
+    if(off > (int)rb.size())
+	throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested string."));
     return rb.substr(off-sSz,sSz);
 }
 
@@ -945,9 +949,10 @@ long long TProt::iTm( const string &rb, int &off )
 NodeId TProt::iNodeId( const string &rb, int &off )
 {
     off += 1;
-    if( off > rb.size() ) throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
+    if(off > (int)rb.size())
+	throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Buffer size is less for requested NodeId."));
     char enc = rb[off-1];
-    switch( enc )
+    switch(enc)
     {
 	case 0x00:	//Two Byte
 	    return NodeId(iNu(rb,off,1));
@@ -1049,14 +1054,14 @@ void TProt::iDataValue( const string &buf, int &off, XMLNode &nd )
 
 void TProt::oN( string &buf, int32_t val, char sz, int off )
 {
-    if( off < 0 || (off+sz) > buf.size() ) buf.append( (char*)&val, sz );
-    else buf.replace( off, sz, (char*)&val, sz );
+    if(off < 0 || (off+sz) > (int)buf.size()) buf.append((char*)&val, sz);
+    else buf.replace(off, sz, (char*)&val, sz);
 }
 
 void TProt::oNu( string &buf, uint32_t val, char sz, int off )
 {
-    if( off < 0 || (off+sz) > buf.size() ) buf.append( (char*)&val, sz );
-    else buf.replace( off, sz, (char*)&val, sz );
+    if(off < 0 || (off+sz) > (int)buf.size()) buf.append((char*)&val, sz);
+    else buf.replace(off, sz, (char*)&val, sz);
 }
 
 void TProt::oR( string &buf, double val, char sz )
@@ -1219,12 +1224,12 @@ string TProt::certPEM2DER( const string &spem )
     X509 *x = NULL;
     string rez = "";
 
-    if( spem.empty() )	return rez;
+    if(spem.empty())	return rez;
     bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,spem.data(),spem.size()) == spem.size() )
+    if(bm && BIO_write(bm,spem.data(),spem.size()) == (int)spem.size())
 	x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
-    if( x ) len = i2d_X509(x,NULL);
-    if( len > 0 )
+    if(x) len = i2d_X509(x,NULL);
+    if(len > 0)
     {
 	char *buf = (char*)malloc(len);
 	unsigned char *p = (unsigned char *)buf;
@@ -1283,17 +1288,17 @@ string TProt::certThumbprint( const string &spem )
     unsigned int n = 0;
     unsigned char md[EVP_MAX_MD_SIZE];
 
-    if( spem.empty() ) return "";
+    if(spem.empty()) return "";
     bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,spem.data(),spem.size()) == spem.size() )
+    if(bm && BIO_write(bm,spem.data(),spem.size()) == (int)spem.size())
 	x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
-    if( x ) X509_digest(x,EVP_sha1(),md,&n);
+    if(x) X509_digest(x,EVP_sha1(),md,&n);
 
     //> Free temporary data
-    if( bm ) BIO_free(bm);
-    if( x ) X509_free(x);
+    if(bm) BIO_free(bm);
+    if(x) X509_free(x);
 
-    if( n <= 0 )
+    if(n <= 0)
     {
 	char err[255];
 	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -1311,34 +1316,34 @@ string TProt::asymmetricEncrypt( const string &mess, const string &certPem, cons
     BIO *bm = NULL;
     EVP_PKEY *pkey = NULL;
     RSA *rsa = NULL;
-    EVP_MD_CTX *ctx;
 
     int paddSize = 11, padd = RSA_PKCS1_PADDING;
-    if( secPolicy.find("Rsa15") == string::npos ) { paddSize = 42; padd = RSA_PKCS1_OAEP_PADDING; }
+    if(secPolicy.find("Rsa15") == string::npos) { paddSize = 42; padd = RSA_PKCS1_OAEP_PADDING; }
 
-    if( !certPem.empty() && !mess.empty() ) bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,certPem.data(),certPem.size()) == certPem.size() );
+    if(!certPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
+    if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size());
 	x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
-    if( x ) pkey = X509_get_pubkey(x);
-    if( pkey ) rsa = EVP_PKEY_get1_RSA(pkey);
-    if( rsa ) keysize = RSA_size(rsa);
-    if( keysize && !(mess.size()%(keysize-paddSize)) )
+    if(x) pkey = X509_get_pubkey(x);
+    if(pkey) rsa = EVP_PKEY_get1_RSA(pkey);
+    if(rsa) keysize = RSA_size(rsa);
+    if(keysize && !(mess.size()%(keysize-paddSize)))
     {
 	unsigned char rsaOut[keysize];
-	for( int i_b = 0; i_b < mess.size()/(keysize-paddSize); i_b++ )
+	for(unsigned i_b = 0; i_b < mess.size()/(keysize-paddSize); i_b++)
 	{
-	    int blen = RSA_public_encrypt( (keysize-paddSize), (const unsigned char *)(mess.data()+i_b*(keysize-paddSize)), rsaOut, rsa, padd );
-	    if( blen <= 0 ) break;
+	    int blen = RSA_public_encrypt((keysize-paddSize), 
+		(const unsigned char *)(mess.data()+i_b*(keysize-paddSize)), rsaOut, rsa, padd);
+	    if(blen <= 0) break;
 	    rez.append((char*)rsaOut,blen);
 	}
     }
     //> Free temporary data
-    if( pkey ) EVP_PKEY_free(pkey);
-    if( bm ) BIO_free(bm);
-    if( rsa ) RSA_free(rsa);
-    if( x ) X509_free(x);
+    if(pkey) EVP_PKEY_free(pkey);
+    if(bm) BIO_free(bm);
+    if(rsa) RSA_free(rsa);
+    if(x) X509_free(x);
 
-    if( rez.empty() )
+    if(rez.empty())
     {
 	char err[255];
 	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -1356,29 +1361,29 @@ string TProt::asymmetricDecrypt( const string &mess, const string &keyPem, const
     EVP_PKEY *pkey = NULL;
     string rez = "";
 
-    if( !keyPem.empty() && !mess.empty() ) bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,keyPem.data(),keyPem.size()) == keyPem.size() );
+    if(!keyPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
+    if(bm && BIO_write(bm,keyPem.data(),keyPem.size()) == (int)keyPem.size());
 	pkey = PEM_read_bio_PrivateKey(bm,NULL,0,(char*)"keypass");
-    if( pkey ) rsa = EVP_PKEY_get1_RSA(pkey);
-    if( rsa ) keysize = RSA_size(rsa);
-    if( keysize && !(mess.size()%keysize) )
+    if(pkey) rsa = EVP_PKEY_get1_RSA(pkey);
+    if(rsa) keysize = RSA_size(rsa);
+    if(keysize && !(mess.size()%keysize))
     {
 	unsigned char rsaOut[keysize];
-	for( int i_b = 0; i_b < mess.size()/keysize; i_b++ )
+	for(unsigned i_b = 0; i_b < mess.size()/keysize; i_b++)
 	{
-	    int blen = RSA_private_decrypt( keysize, (const unsigned char *)(mess.data()+i_b*keysize), rsaOut, rsa,
-		((secPolicy.find("Rsa15") == string::npos) ? RSA_PKCS1_OAEP_PADDING : RSA_PKCS1_PADDING) );
-	    if( blen <= 0 ) break;
+	    int blen = RSA_private_decrypt(keysize, (const unsigned char *)(mess.data()+i_b*keysize), rsaOut, rsa,
+		((secPolicy.find("Rsa15") == string::npos) ? RSA_PKCS1_OAEP_PADDING : RSA_PKCS1_PADDING));
+	    if(blen <= 0) break;
 	    rez.append((char*)rsaOut,blen);
 	}
     }
 
     //> Free temporary data
-    if( pkey ) EVP_PKEY_free(pkey);
-    if( bm ) BIO_free(bm);
-    if( rsa ) RSA_free(rsa);
+    if(pkey) EVP_PKEY_free(pkey);
+    if(bm) BIO_free(bm);
+    if(rsa) RSA_free(rsa);
 
-    if( rez.empty() )
+    if(rez.empty())
     {
 	char err[255];
 	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -1396,28 +1401,28 @@ bool TProt::asymmetricVerify( const string &mess, const string &sign, const stri
     EVP_PKEY *pkey = NULL;
     EVP_MD_CTX *ctx;
 
-    if( !certPem.empty() && !sign.empty() && !mess.empty() ) bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,certPem.data(),certPem.size()) == certPem.size() );
+    if(!certPem.empty() && !sign.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
+    if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size());
 	x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
-    if( x ) pkey = X509_get_pubkey(x);
-    if( pkey && sign.size() == EVP_PKEY_size(pkey) ) mdtmp = BIO_new(BIO_f_md());
-    if( mdtmp )
+    if(x) pkey = X509_get_pubkey(x);
+    if(pkey && (int)sign.size() == EVP_PKEY_size(pkey)) mdtmp = BIO_new(BIO_f_md());
+    if(mdtmp)
     {
 	BIO_set_md(mdtmp, EVP_sha1());
 	mdtmp = BIO_push(mdtmp,bm);
-	if( BIO_write(mdtmp,mess.data(),mess.size()) == mess.size() )
+	if(BIO_write(mdtmp,mess.data(),mess.size()) == (int)mess.size())
 	{
 	    BIO_get_md_ctx(mdtmp, &ctx);
-	    if( ctx ) rez = EVP_VerifyFinal( ctx, (const unsigned char*)sign.data(), sign.size(), pkey );
+	    if(ctx) rez = EVP_VerifyFinal(ctx, (const unsigned char*)sign.data(), sign.size(), pkey);
 	}
     }
     //> Free temporary data
-    if( x ) X509_free(x);
-    if( mdtmp ) BIO_free(mdtmp);
-    if( bm ) BIO_free(bm);
-    if( pkey ) EVP_PKEY_free(pkey);
+    if(x) X509_free(x);
+    if(mdtmp) BIO_free(mdtmp);
+    if(bm) BIO_free(bm);
+    if(pkey) EVP_PKEY_free(pkey);
 
-    if( rez == -1 )
+    if(rez == -1)
     {
 	char err[255];
 	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -1434,26 +1439,26 @@ string TProt::asymmetricSign( const string &mess, const string &pvPem )
     unsigned char buf[STR_BUF_LEN];
     unsigned int blen = 0;
 
-    if( !pvPem.empty() && !mess.empty() ) bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,pvPem.data(),pvPem.size()) == pvPem.size() );
+    if(!pvPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
+    if(bm && BIO_write(bm,pvPem.data(),pvPem.size()) == (int)pvPem.size());
 	pkey = PEM_read_bio_PrivateKey(bm,NULL,0,(char*)"keypass");
-    if( pkey ) mdtmp = BIO_new(BIO_f_md());
-    if( mdtmp )
+    if(pkey) mdtmp = BIO_new(BIO_f_md());
+    if(mdtmp)
     {
 	BIO_set_md(mdtmp, EVP_sha1());
 	mdtmp = BIO_push(mdtmp,bm);
-	if( BIO_write(mdtmp,mess.data(),mess.size()) == mess.size() )
+	if(BIO_write(mdtmp,mess.data(),mess.size()) == (int)mess.size())
 	{
 	    BIO_get_md_ctx(mdtmp, &ctx);
-	    if( ctx ) EVP_SignFinal(ctx, buf, &blen, pkey);
+	    if(ctx) EVP_SignFinal(ctx, buf, &blen, pkey);
 	}
     }
     //> Free temporary data
-    if( mdtmp ) BIO_free(mdtmp);
-    if( bm ) BIO_free(bm);
-    if( pkey ) EVP_PKEY_free(pkey);
+    if(mdtmp) BIO_free(mdtmp);
+    if(bm) BIO_free(bm);
+    if(pkey) EVP_PKEY_free(pkey);
 
-    if( !blen )
+    if(!blen)
     {
 	char err[255];
 	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -1467,22 +1472,21 @@ int TProt::asymmetricKeyLength( const string &keyCertPem )
 {
     int rez = -1;
     X509 *x = NULL;
-    BIO *bm = NULL, *mdtmp = NULL;
+    BIO *bm = NULL;
     EVP_PKEY *pkey = NULL;
-    EVP_MD_CTX *ctx;
 
-    if( !keyCertPem.empty() ) bm = BIO_new(BIO_s_mem());
-    if( bm && BIO_write(bm,keyCertPem.data(),keyCertPem.size()) == keyCertPem.size() );
+    if(!keyCertPem.empty()) bm = BIO_new(BIO_s_mem());
+    if(bm && BIO_write(bm,keyCertPem.data(),keyCertPem.size()) == (int)keyCertPem.size());
 	x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
-    if( x ) pkey = X509_get_pubkey(x);
-    if( pkey ) rez = EVP_PKEY_size(pkey);
+    if(x) pkey = X509_get_pubkey(x);
+    if(pkey) rez = EVP_PKEY_size(pkey);
 
     //> Free temporary data
-    if( x ) X509_free(x);
-    if( bm ) BIO_free(bm);
-    if( pkey ) EVP_PKEY_free(pkey);
+    if(x) X509_free(x);
+    if(bm) BIO_free(bm);
+    if(pkey) EVP_PKEY_free(pkey);
 
-    if( rez == -1 )
+    if(rez == -1)
     {
 	char err[255];
 	ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
@@ -1588,12 +1592,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* NodeId object                                 *
 //*************************************************
-NodeId::NodeId( uint32_t in, uint16_t ins ) : mTp(NodeId::Numeric), mNs(ins)
+NodeId::NodeId( uint32_t in, uint16_t ins ) : mNs(ins), mTp(NodeId::Numeric)
 {
     setNumbVal(in);
 }
 
-NodeId::NodeId( const string &istr, uint16_t ins, NodeId::Type tp ) : mTp(NodeId::Numeric), mNs(ins)
+NodeId::NodeId( const string &istr, uint16_t ins, NodeId::Type tp ) : mNs(ins), mTp(NodeId::Numeric)
 {
     setStrVal(istr,tp);
 }
@@ -1652,62 +1656,62 @@ NodeId NodeId::fromAddr( const string &strAddr )
     string vl, dt, rez;
     char bf[3];
     uint16_t ns = strtoul(TSYS::strParse(strAddr,0,":",&off).c_str(),NULL,0);
-    if( off < strAddr.size() ) vl = strAddr.substr(off);
+    if(off < (int)strAddr.size()) vl = strAddr.substr(off);
     else { vl = strAddr; ns = 0; }
 
     //> Check for Guid
-    if( vl.size() == 38 && vl[0] == '{' && vl[vl.size()-1] == '}' && 
-	vl[9] == '-' && vl[14] == '-' && vl[19] == '-' && vl[24] == '-' )
+    if(vl.size() == 38 && vl[0] == '{' && vl[vl.size()-1] == '}' &&
+	vl[9] == '-' && vl[14] == '-' && vl[19] == '-' && vl[24] == '-')
     {
 	bf[2] = 0;
 	//>> Get Data1
 	dt = vl.substr(1,8);
-	for( int i_s = (dt.size()-2); i_s >= 0; i_s-=2 )
+	for(int i_s = (dt.size()-2); i_s >= 0; i_s-=2)
 	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
 	//>> Get Data2
 	dt = vl.substr(10,4);
-	for( int i_s = (dt.size()-2); i_s >= 0; i_s-=2 )
+	for(int i_s = (dt.size()-2); i_s >= 0; i_s-=2)
 	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
 	//>> Get Data3
 	dt = vl.substr(15,4);
-	for( int i_s = (dt.size()-2); i_s >= 0; i_s-=2 )
+	for(int i_s = (dt.size()-2); i_s >= 0; i_s-=2)
 	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
 	//>> Get Data4a
 	dt = vl.substr(20,4);
-	for( int i_s = 0; i_s < dt.size(); i_s+=2 )
+	for(int i_s = 0; i_s < (int)dt.size(); i_s+=2)
 	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
 	//>> Get Data4b
 	dt = vl.substr(25,12);
-	for( int i_s = 0; i_s < dt.size(); i_s+=2 )
+	for(int i_s = 0; i_s < (int)dt.size(); i_s+=2)
 	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
 	return NodeId(rez,ns,NodeId::Guid);
     }
 
     //> Check for string or opaque
-    if( vl.size() >= 2 && vl[0] == '\"' && vl[vl.size()-1] == '\"' )
+    if(vl.size() >= 2 && vl[0] == '\"' && vl[vl.size()-1] == '\"')
     {
 	bf[2] = 0;
 	char *endptr = 0;
 	rez = "";
-	for( int i_s = 1; !(vl.size()%2) && (!endptr || *endptr == 0) && i_s < (vl.size()-1); i_s+=2 )
+	for(unsigned i_s = 1; !(vl.size()%2) && (!endptr || *endptr == 0) && i_s < (vl.size()-1); i_s += 2)
 	{ bf[0] = vl[i_s]; bf[1] = vl[i_s+1]; rez += (char)strtol(bf,&endptr,16); }
-	if( rez.size() == (vl.size()-2)/2 )	return NodeId(rez,ns,NodeId::Opaque);
+	if(rez.size() == (vl.size()-2)/2)	return NodeId(rez,ns,NodeId::Opaque);
 	return NodeId(vl.substr(1,vl.size()-2),ns);
     }
 
     //> Check for number
     bool isStr = false;
-    for( int i_s = 0; i_s < vl.size() && !isStr; i_s++ )
-	if( !isdigit(vl[i_s]) ) isStr = true;
-    if( isStr ) return NodeId(vl,ns);
+    for(unsigned i_s = 0; i_s < vl.size() && !isStr; i_s++)
+	if(!isdigit(vl[i_s])) isStr = true;
+    if(isStr) return NodeId(vl,ns);
     return NodeId((uint32_t)strtoul(vl.c_str(),NULL,0),ns);
 }
 
 string NodeId::toAddr( ) const
 {
     string vl;
-    if( ns() ) vl = TSYS::uint2str(ns())+":";
-    switch( type() )
+    if(ns()) vl = TSYS::uint2str(ns())+":";
+    switch(type())
     {
 	case NodeId::Numeric:	vl += TSYS::uint2str(numbVal());	break;
 	case NodeId::String:	vl += "\""+strVal()+"\"";		break;
@@ -1716,27 +1720,27 @@ string NodeId::toAddr( ) const
 	    vl += "{";
 	    //>> Get Data1
 	    string svl = strVal().substr(0,4);
-	    for( int i_sz = (svl.size()-1); i_sz >= 0; i_sz-- )
+	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
 		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
 	    //>> Get Data2
 	    vl += "-";
 	    svl = strVal().substr(4,2);
-	    for( int i_sz = (svl.size()-1); i_sz >= 0; i_sz-- )
+	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
 		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
 	    //>> Get Data3
 	    vl += "-";
 	    svl = strVal().substr(6,2);
-	    for( int i_sz = (svl.size()-1); i_sz >= 0; i_sz-- )
+	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
 		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
 	    //>> Get Data4a
 	    vl += "-";
 	    svl = strVal().substr(8,2);
-	    for( int i_sz = 0; i_sz < svl.size(); i_sz++ )
+	    for(int i_sz = 0; i_sz < (int)svl.size(); i_sz++)
 		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
 	    //>> Get Data4b
 	    vl += "-";
 	    svl = strVal().substr(10,6);
-	    for( int i_sz = 0; i_sz < svl.size(); i_sz++ )
+	    for(int i_sz = 0; i_sz < (int)svl.size(); i_sz++)
 		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
 	    vl += "}";
 	    break;
@@ -1745,7 +1749,7 @@ string NodeId::toAddr( ) const
 	{
 	    vl += "\"";
 	    string svl = strVal();
-	    for( int i_sz = 0; i_sz < svl.size(); i_sz++ )
+	    for(unsigned i_sz = 0; i_sz < svl.size(); i_sz++)
 		vl += TSYS::strMess("%0.2x",(unsigned char)svl[i_sz]);
 	    vl += "\"";
 	    break;
@@ -1772,33 +1776,32 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
 {
     uint32_t mSz;
-    bool KeepAlive = false;
     int off = 0;
 
     //> Continue for full request
-    if( mNotFull )	{ mBuf = mBuf+reqst; mNotFull = false; }
+    if(mNotFull)	{ mBuf = mBuf+reqst; mNotFull = false; }
     else mBuf = reqst;  //Save request to bufer
 
     string &rba = mBuf;
 
     answ = "";
-    if( rba.size() <= 0 ) return mNotFull;
+    if(rba.size() <= 0) return mNotFull;
 
 nextReq:
     string rb,out;
     off = 4;
-    if( rba.size() < 8 || rba.size() < (mSz=TProt::iNu(rba,off,4)) ) return (mNotFull=true);
+    if(rba.size() < 8 || rba.size() < (mSz=TProt::iNu(rba,off,4))) return (mNotFull=true);
     rb = rba.substr(0,mSz);
 
     try
     {
 	//> Check for hello message type
-	if( rb.compare(0,4,"HELF") == 0 )
+	if(rb.compare(0,4,"HELF") == 0)
 	{
-	    if( rb.size() > 4096 )	throw TError(OpcUa_BadTcpMessageTooLarge,"","");
+	    if(rb.size() > 4096) throw TError(OpcUa_BadTcpMessageTooLarge,"","");
 
 #if OSC_DEBUG >= 5
-	    printf( "TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+	    printf("TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 #endif
 
 	    off = 8;
@@ -1812,11 +1815,11 @@ nextReq:
 	    //>> Find accessable endpoint
 	    vector<string> epLs;
 	    owner().epList(epLs);
-	    int i_ep;
-	    for( i_ep = 0; i_ep < epLs.size(); i_ep++ )
-		if( owner().epAt(epLs[i_ep]).at().enableStat() )
+	    unsigned i_ep;
+	    for(i_ep = 0; i_ep < epLs.size(); i_ep++)
+		if(owner().epAt(epLs[i_ep]).at().enableStat())
 		    break;
-	    if( i_ep >= epLs.size() )	throw TError(OpcUa_BadTcpEndpointUrlInvalid,"","");
+	    if(i_ep >= epLs.size()) throw TError(OpcUa_BadTcpEndpointUrlInvalid,"","");
 
 	    //> Prepare acknowledge message
 	    out.reserve( 28 );
@@ -1840,7 +1843,7 @@ nextReq:
 #endif
 
 	    off = 8;
-	    uint32_t secChnId = TProt::iNu(rb,off,4);			//Secure channel identifier
+	    TProt::iNu(rb,off,4);					//Secure channel identifier
 									//> Security Header
 	    string secPlcURI = TProt::iS(rb,off);			//Security policy URI
 	    string secPlc = TSYS::strParse(secPlcURI,1,"#");
@@ -1856,34 +1859,34 @@ nextReq:
 	    owner().epList(epLs);
 	    int i_epOk = -1;
 	    AutoHD<OPCEndPoint> wep;
-	    for( int i_ep = 0; i_epOk < 0 && i_ep < epLs.size(); i_ep++ )
+	    for(int i_ep = 0; i_epOk < 0 && i_ep < (int)epLs.size(); i_ep++)
 	    {
 		wep = owner().epAt(epLs[i_ep]);
-		if( !wep.at().enableStat() ) continue;
-		for( int i_s = 0; i_epOk < 0 && i_s < wep.at().secSize(); i_s++ )
-		    if( wep.at().secPolicy(i_s) == secPlc )
+		if(!wep.at().enableStat()) continue;
+		for(int i_s = 0; i_epOk < 0 && i_s < wep.at().secSize(); i_s++)
+		    if(wep.at().secPolicy(i_s) == secPlc)
 			i_epOk = i_ep;
 	    }
-	    if( i_epOk < 0 ) throw TError(OpcUa_BadSecurityPolicyRejected,"","");
+	    if(i_epOk < 0) throw TError(OpcUa_BadSecurityPolicyRejected,"","");
 
 	    string clntCert = TProt::certDER2PEM(TProt::iS(rb,off));	//ClientCertificate
 	    string serverCertThmbp = TProt::iS(rb,off);
-	    if( !isSecNone )
+	    if(!isSecNone)
 	    {
-		if( serverCertThmbp != TProt::certThumbprint(wep.at().cert()) )	//ServerCertificateThumbprint
-		    throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Server certificate thumbprint error.") );
+		if(serverCertThmbp != TProt::certThumbprint(wep.at().cert()))	//ServerCertificateThumbprint
+		    throw TError(OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Server certificate thumbprint error."));
 		//>> Decode message block
 		rb.replace(off,rb.size()-off,TProt::asymmetricDecrypt(rb.substr(off),wep.at().pvKey(),secPlc));
 #if OSC_DEBUG >= 5
-		printf( "TEST 01a: Open SecureChannel decrypted request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
+		printf("TEST 01a: Open SecureChannel decrypted request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
 #endif
 	    }
 									//> Sequence header
 	    uint32_t secNumb = TProt::iNu(rb,off,4);			//Sequence number
 	    uint32_t reqId = TProt::iNu(rb,off,4);			//RequestId
 									//> Extension body object
-	    if( TProt::iNodeId(rb,off).numbVal() != OpcUa_OpenSecureChannelRequest )	//TypeId
-		throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge") );
+	    if(TProt::iNodeId(rb,off).numbVal() != OpcUa_OpenSecureChannelRequest)	//TypeId
+		throw TError(OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Requested OpenSecureChannel NodeId don't acknowledge"));
 									//>> Request Header
 	    TProt::iVal(rb,off,2);					//Session AuthenticationToken
 	    TProt::iTm(rb,off);						//timestamp
@@ -2089,7 +2092,7 @@ nextReq:
 		    vector<string> duLs;
 		    owner().discoveryUrls(duLs);
 		    TProt::oNu(respEp,duLs.size(),4);			//List items
-		    for( int i_du = 0; i_du < duLs.size(); i_du++ )
+		    for(unsigned i_du = 0; i_du < duLs.size(); i_du++)
 			TProt::oS(respEp,duLs[i_du]);			//discoveryUrl
 		    break;
 		}
@@ -2108,13 +2111,13 @@ nextReq:
 		    //>> Get enpoints policies list
 		    vector<string> epLs;
 		    owner().epList(epLs);
-		    int epCnt = 0;
-		    for( int i_ep = 0; i_ep < epLs.size(); i_ep++ )
+		    unsigned epCnt = 0;
+		    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++)
 		    {
 			AutoHD<OPCEndPoint> ep = owner().epAt(epLs[i_ep]);
 			if( !ep.at().enableStat() ) continue;
 									//>>> EndpointDescription
-			for( int i_sec = 0; i_sec < ep.at().secSize( ); i_sec++, epCnt++ )
+			for(int i_sec = 0; i_sec < ep.at().secSize( ); i_sec++, epCnt++)
 			{
 			    TProt::oS(respEp,ep.at().url());		//endpointUrl
 									//>>>> server (ApplicationDescription)
@@ -2129,7 +2132,7 @@ nextReq:
 			    vector<string> duLs;
 			    owner().discoveryUrls(duLs);
 			    TProt::oNu(respEp,duLs.size(),4);		//List items
-			    for( int i_du = 0; i_du < duLs.size(); i_du++ )
+			    for(unsigned i_du = 0; i_du < duLs.size(); i_du++)
 				TProt::oS(respEp,duLs[i_du]);		//discoveryUrl
 
 			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().cert()));	//>>> serverCertificate
@@ -2202,13 +2205,13 @@ nextReq:
 		    //>> Get enpoints policies list
 		    vector<string> epLs;
 		    owner().epList(epLs);
-		    int epCnt = 0;
-		    for( int i_ep = 0; i_ep < epLs.size(); i_ep++ )
+		    unsigned epCnt = 0;
+		    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++)
 		    {
 			AutoHD<OPCEndPoint> ep = owner().epAt(epLs[i_ep]);
-			if( !ep.at().enableStat() ) continue;
+			if(!ep.at().enableStat()) continue;
 									//>>> EndpointDescription
-			for( int i_sec = 0; i_sec < ep.at().secSize( ); i_sec++, epCnt++ )
+			for(int i_sec = 0; i_sec < ep.at().secSize( ); i_sec++, epCnt++)
 			{
 			    TProt::oS(respEp,ep.at().url());		//endpointUrl
 									//>>>> server (ApplicationDescription)
@@ -2223,7 +2226,7 @@ nextReq:
 			    vector<string> duLs;
 			    owner().discoveryUrls(duLs);
 			    TProt::oNu(respEp,duLs.size(),4);		//List items
-			    for( int i_du = 0; i_du < duLs.size(); i_du++ )
+			    for(unsigned i_du = 0; i_du < duLs.size(); i_du++)
 				TProt::oS(respEp,duLs[i_du]);		//discoveryUrl
 
 			    TProt::oS(respEp,TProt::certPEM2DER(ep.at().cert()));	//>>> serverCertificate
@@ -2282,7 +2285,7 @@ nextReq:
 		    TProt::iNu(rb,off,4);				//clientSoftwareCertificates []
 									//> localeIds []
 		    uint32_t ln = TProt::iNu(rb,off,4);			//List number
-		    for( int i_l = 0; i_l < ln; i_l++ )
+		    for(unsigned i_l = 0; i_l < ln; i_l++)
 			TProt::iS(rb,off);				//localeId
 									//> userIdentityToken
 		    uint32_t userIdTk = TProt::iNodeId(rb,off).numbVal();	//TypeId
@@ -2409,9 +2412,9 @@ string TProtIn::mkError( uint32_t errId, const string &err )
 //* OPCEndPoint                                   *
 //*************************************************
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mDB(idb), mEn(false), cntReq(0),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
-    mSerType(cfg("SerialzType").getId()), mURL(cfg("URL").getSd()), objTree("root")
+    TConfig(el), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
+    mURL(cfg("URL").getSd()), mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
+    mEn(false), mDB(idb), cntReq(0), objTree("root")
 {
     mId = iid;
     mURL = "opc.tcp://"+SYS->host()+":4841";
@@ -2459,8 +2462,8 @@ string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
 string OPCEndPoint::secPolicy( int isec )
 {
-    ResAlloc res( nodeRes(), false );
-    if( isec < 0 || isec >= mSec.size() ) throw TError(nodePath().c_str(),_("Security setting %d error."));
+    ResAlloc res(nodeRes(), false);
+    if(isec < 0 || isec >= (int)mSec.size()) throw TError(nodePath().c_str(),_("Security setting %d error."));
     return mSec[isec].policy;
 }
 
@@ -2512,11 +2515,11 @@ XMLNode *OPCEndPoint::nodeReg( const NodeId &parent, const NodeId &ndId, const s
 
 int OPCEndPoint::sessCreate( const string &iName, double iTInact )
 {
-    ResAlloc res( nodeRes(), true );
-    int i_s = 0;
-    for( ; i_s < mSess.size(); i_s++ )
-	if( !mSess[i_s].tAccess ) break;
-    if( i_s < mSess.size() ) mSess[i_s] = OPCSess(iName,iTInact);
+    ResAlloc res(nodeRes(), true);
+    int i_s;
+    for(i_s = 0; i_s < (int)mSess.size(); i_s++)
+	if(!mSess[i_s].tAccess) break;
+    if(i_s < (int)mSess.size()) mSess[i_s] = OPCSess(iName,iTInact);
     else mSess.push_back(OPCSess(iName,iTInact));
 
     return i_s+1;
@@ -2524,43 +2527,44 @@ int OPCEndPoint::sessCreate( const string &iName, double iTInact )
 
 void OPCEndPoint::sessServNonceSet( int sid, const string &servNonce )
 {
-    ResAlloc res( nodeRes(), false );
-    if( sid <= 0 || sid > mSess.size() ) return;
+    ResAlloc res(nodeRes(), false);
+    if(sid <= 0 || sid > (int)mSess.size()) return;
     mSess[sid-1].servNonce = servNonce;
 }
 
 bool OPCEndPoint::sessActivate( int sid, uint32_t secCnl, bool check )
 {
     ResAlloc res( nodeRes(), true );
-    if( sid <= 0 || sid > mSess.size() || !mSess[sid-1].tAccess ) return false;
+    if(sid <= 0 || sid > (int)mSess.size() || !mSess[sid-1].tAccess) return false;
     mSess[sid-1].tAccess = TSYS::curTime();
-    int i_s = 0;
-    for( ; i_s < mSess[sid-1].secCnls.size(); i_s++ )
-	if( mSess[sid-1].secCnls[i_s] == secCnl )
+    int i_s;
+    for(i_s = 0; i_s < (int)mSess[sid-1].secCnls.size(); i_s++)
+	if(mSess[sid-1].secCnls[i_s] == secCnl)
 	    break;
-    if( check && i_s >= mSess[sid-1].secCnls.size() ) return false;
-    if( i_s >= mSess[sid-1].secCnls.size() ) mSess[sid-1].secCnls.push_back(secCnl);
+    if(check && i_s >= (int)mSess[sid-1].secCnls.size()) return false;
+    if(i_s >= (int)mSess[sid-1].secCnls.size()) mSess[sid-1].secCnls.push_back(secCnl);
     return true;
 }
 
 void OPCEndPoint::sessClose( int sid )
 {
-    ResAlloc res( nodeRes(), true );
-    if( sid <= 0 || sid > mSess.size() || !mSess[sid-1].tAccess ) throw TError(nodePath().c_str(),_("No session %d present."),sid-1);
+    ResAlloc res(nodeRes(), true);
+    if(sid <= 0 || sid > (int)mSess.size() || !mSess[sid-1].tAccess)
+	throw TError(nodePath().c_str(),_("No session %d present."),sid-1);
     mSess[sid-1] = OPCSess();
 }
 
 OPCSess OPCEndPoint::sessGet( int sid )
 {
-    ResAlloc res( nodeRes(), false );
-    if( sid <= 0 || sid > mSess.size() ) return OPCSess();
+    ResAlloc res(nodeRes(), false);
+    if(sid <= 0 || sid > (int)mSess.size()) return OPCSess();
     return mSess[sid-1];
 }
 
 OPCEndPoint::MessageSecurityMode OPCEndPoint::secMessageMode( int isec )
 {
-    ResAlloc res( nodeRes(), false );
-    if( isec < 0 || isec >= mSec.size() ) throw TError(nodePath().c_str(),_("Security setting %d error."));
+    ResAlloc res(nodeRes(), false);
+    if(isec < 0 || isec >= (int)mSec.size()) throw TError(nodePath().c_str(),_("Security setting %d error."));
     return mSec[isec].messageMode;
 }
 
@@ -2589,8 +2593,8 @@ void OPCEndPoint::save_( )
 {
     //Security policies store
     string sp;
-    ResAlloc res( nodeRes(), false );
-    for( int i_p = 0; i_p < mSec.size(); i_p++ )
+    ResAlloc res(nodeRes(), false);
+    for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
 	sp += mSec[i_p].policy + ":" + TSYS::int2str(mSec[i_p].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
 
@@ -2734,13 +2738,13 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 		else
 		{
 		    //> typeDefinition reference process
-		    if( rtId.numbVal() == OpcUa_References && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) )
+		    if(rtId.numbVal() == OpcUa_References && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH))
 		    {
 			map<string,XMLNode*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
-			if( ndTpDef != ndMap.end() )
+			if(ndTpDef != ndMap.end())
 			{
-			    int cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-			    if( !nClass || nClass == cnClass )
+			    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
+			    if(!nClass || nClass == cnClass)
 			    {
 				TProt::oRef(respEp,resMask,NodeId::fromAddr(ndTpDef->second->attr("NodeId")),
 				    NodeId::fromAddr(ndTpDef->second->attr("referenceTypeId")),1,
@@ -2751,22 +2755,22 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 			}
 		    }
 		    //> Forward hierarchical references process
-		    for( int i_ch = 0; (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++ )
+		    for(unsigned i_ch = 0; (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++)
 		    {
 			XMLNode *chNd = ndX->second->childGet(i_ch);
-			int cnClass = atoi(chNd->attr("NodeClass").c_str());
-			if( nClass && nClass != cnClass ) continue;
+			unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
+			if(nClass && nClass != cnClass) continue;
 			TProt::oRef(respEp,resMask,NodeId::fromAddr(chNd->attr("NodeId")),
 			    NodeId::fromAddr(chNd->attr("referenceTypeId")),1,chNd->attr("name"),cnClass,
 			    NodeId::fromAddr(chNd->attr("typeDefinition")));
 			refNumb++;
 		    }
 		    //> Inverse hierarchical references process
-		    if( (bd == TProt::BD_INVERSE || bd == TProt::BD_BOTH) && ndX->second->parent() )
+		    if((bd == TProt::BD_INVERSE || bd == TProt::BD_BOTH) && ndX->second->parent())
 		    {
 			XMLNode *chNd = ndX->second->parent();
-			int cnClass = atoi(chNd->attr("NodeClass").c_str());
-			if( !nClass || nClass == cnClass )
+			unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
+			if(!nClass || nClass == cnClass)
 			{
 			    TProt::oRef(respEp,resMask,NodeId::fromAddr(chNd->attr("NodeId")),
 				NodeId::fromAddr(chNd->attr("referenceTypeId")),0,chNd->attr("name"),cnClass,
@@ -2777,7 +2781,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 
 		}
 		//> Check for DAQ subsystem data
-		if( nid.ns() == 1 && TSYS::strParse(nid.strVal(),0,".") == SYS->daq().at().subId() )
+		if(nid.ns() == 1 && TSYS::strParse(nid.strVal(),0,".") == SYS->daq().at().subId())
 		{
 		    vector<string> chLs;
 		    stCode = 0;
@@ -2785,26 +2789,26 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 		    AutoHD<TCntrNode> cNd = SYS->daq();
 		    string sel;
 		    int nLev = 0;
-		    for( int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++ )
+		    for(int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++)
 			try { cNd = cNd.at().nodeAt(sel); }
-			catch( TError err ) { stCode = OpcUa_BadBrowseNameInvalid; break; }
-		    if( !stCode )
+			catch(TError err) { stCode = OpcUa_BadBrowseNameInvalid; break; }
+		    if(!stCode)
 		    {
 			//> typeDefinition reference browse
-			if( nLev && rtId.numbVal() == OpcUa_References && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) )
+			if(nLev && rtId.numbVal() == OpcUa_References && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH))
 			{
 			    map<string,XMLNode*>::iterator ndTpDef;
-			    switch( nLev )
+			    switch(nLev)
 			    {
 				case 1:	ndTpDef = ndMap.find(NodeId("DAQModuleObjectType",1).toAddr());	break;
 				case 2:	ndTpDef = ndMap.find(NodeId("DAQControllerObjectType",1).toAddr());	break;
 				case 3:	ndTpDef = ndMap.find(NodeId("DAQParameterObjectType",1).toAddr());	break;
 				case 4:	ndTpDef = ndMap.find(NodeId(OpcUa_BaseDataVariableType).toAddr());	break;
 			    }
-			    if( ndTpDef != ndMap.end() )
+			    if(ndTpDef != ndMap.end())
 			    {
-				int cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-				if( !nClass || nClass == cnClass )
+				unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
+				if(!nClass || nClass == cnClass)
 				{
 				    TProt::oRef(respEp,resMask,NodeId::fromAddr(ndTpDef->second->attr("NodeId")),
 					NodeId::fromAddr(ndTpDef->second->attr("referenceTypeId")),1,
@@ -2815,31 +2819,31 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 			    }
 			}
 			//>> Forward browse
-			if( (!nClass || nClass == TProt::NC_Object) && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH) )
+			if((!nClass || nClass == TProt::NC_Object) && (bd == TProt::BD_FORWARD || bd == TProt::BD_BOTH))
 			{
-			    switch( nLev )
+			    switch(nLev)
 			    {
 				case 0:		//>>> Subsystem
 				    ((AutoHD<TDAQS>)cNd).at().modList( chLs );
-				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
 					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_Organizes,
 					    true,chLs[i_ch],TProt::NC_Object,NodeId("DAQModuleObjectType",1));
 				    break;
 				case 1:		//>>> Module
 				    ((AutoHD<TTipDAQ>)cNd).at().list( chLs );
-				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
 					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_Organizes,
 					    true,chLs[i_ch],TProt::NC_Object,NodeId("DAQControllerObjectType",1));
 				    break;
 				case 2:		//>>> Controller
 				    ((AutoHD<TController>)cNd).at().list( chLs );
-				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
 					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_Organizes,
 					    true,chLs[i_ch],TProt::NC_Object,NodeId("DAQParameterObjectType",1));
 				    break;
 				case 3:		//>>> Parameter
 				    ((AutoHD<TParamContr>)cNd).at().vlList( chLs );
-				    for( int i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++ )
+				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
 					TProt::oRef(respEp,resMask,NodeId(nid.strVal()+"."+chLs[i_ch],1),OpcUa_HasComponent,
 					    true,chLs[i_ch],TProt::NC_Variable,OpcUa_BaseDataVariableType);
 				    break;
@@ -3059,7 +3063,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 
 	    //>> Respond
 	    TProt::oNu(respEp,nc,4);			//Numbers
-	    for( int i_n = 0; i_n < nc; i_n++ )
+	    for(unsigned i_n = 0; i_n < nc; i_n++)
 	    {
 		uint32_t rezSt = 0;
 		NodeId nid = TProt::iNodeId(rb,off);	//nodeId
@@ -3146,7 +3150,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("*");
 	vector<string> sls;
 	SYS->transport().at().inTrList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if(a_path == "/ep/cfg/secPlc")
@@ -3156,10 +3160,10 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",RWRWR_);
 	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",RWRWR_);
 	    ResAlloc res(nodeRes(), false);
-	    for(int i_p = 0; i_p < mSec.size(); i_p++)
+	    for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
 	    {
-		if(n_pol)	n_pol->childAdd("el")->setText(mSec[i_p].policy);
-		if(n_mm)	n_mm->childAdd("el")->setText(TSYS::int2str(mSec[i_p].messageMode));
+		if(n_pol) n_pol->childAdd("el")->setText(mSec[i_p].policy);
+		if(n_mm)  n_mm->childAdd("el")->setText(TSYS::int2str(mSec[i_p].messageMode));
 	    }
 	    return;
 	}
@@ -3167,7 +3171,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ mSec.push_back(SecuritySetting("None",OPCEndPoint::None)); modif(); return; }
 	int row = atoi(opt->attr("row").c_str());
-	if(row < 0 || row >= mSec.size())
+	if(row < 0 || row >= (int)mSec.size())
 	    throw TError(nodePath().c_str(),_("No present seleted row."));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ mSec.erase(mSec.begin()+row); modif(); return; }

@@ -249,21 +249,21 @@ void TipContr::load_( )
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),"",lib_cnt++,c_el); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 	    }
 
 	//>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
+	if(SYS->chkSelDB("<cfg>"))
 	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));
 	    }
-    }catch( TError err )
+    }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
@@ -276,7 +276,7 @@ void TipContr::modStart( )
 
     //> Start functions
     lbList(lst);
-    for(int i_lb=0; i_lb < lst.size(); i_lb++ )
+    for(unsigned i_lb=0; i_lb < lst.size(); i_lb++)
 	lbAt(lst[i_lb]).at().setStart(true);
 
     TTipDAQ::modStart( );
@@ -287,12 +287,12 @@ void TipContr::modStop( )
     //> Stop and disable all JavaLike-controllers
     vector<string> lst;
     list(lst);
-    for(int i_l=0; i_l<lst.size(); i_l++)
+    for(unsigned i_l=0; i_l<lst.size(); i_l++)
 	at(lst[i_l]).at().disable( );
 
     //> Stop functions
     lbList(lst);
-    for(int i_lb=0; i_lb < lst.size(); i_lb++ )
+    for(unsigned i_lb=0; i_lb < lst.size(); i_lb++ )
 	lbAt(lst[i_lb]).at().setStart(false);
 }
 
@@ -327,25 +327,24 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 
 NConst *TipContr::constGet( const char *nm )
 {
-    for( int i_cst = 0; i_cst < mConst.size(); i_cst++)
-	if( mConst[i_cst].name == nm ) return &mConst[i_cst];
+    for(unsigned i_cst = 0; i_cst < mConst.size(); i_cst++)
+	if(mConst[i_cst].name == nm) return &mConst[i_cst];
 	    return NULL;
 }
 
 BFunc *TipContr::bFuncGet( const char *nm )
 {
-    for( int i_bf = 0; i_bf < mBFunc.size(); i_bf++)
-	if( mBFunc[i_bf].name == nm ) return &mBFunc[i_bf];
+    for(unsigned i_bf = 0; i_bf < mBFunc.size(); i_bf++)
+	if(mBFunc[i_bf].name == nm) return &mBFunc[i_bf];
 	    return NULL;
 }
 
 //*************************************************
 //* Contr: Controller object                      *
 //*************************************************
-Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
+Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), endrun_req(false),
-    mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()),
-    mIter(cfg("ITER").getId()), mFnc(cfg("FUNC").getSd())
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()), mFnc(cfg("FUNC").getSd())
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
     setDimens(true);
@@ -571,7 +570,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(int i_a = 0; i_a < opt->childSize(); i_a++)
+		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    int io_id = -1;
 		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
@@ -721,20 +720,22 @@ void Prm::postEnable( int flag )
 
 void Prm::enable()
 {
-    if( enableStat() )  return;
+    if(enableStat())  return;
 
     //> Check and delete no used fields
-    for(int i_fld = 0; i_fld < v_el.fldSize(); i_fld++)
+    for(unsigned i_fld = 0; i_fld < v_el.fldSize(); )
     {
 	string fel;
-	for( int io_off = 0; (fel=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
-	    if( TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve() ) break;
-	if( fel.empty() )
-	{
-	    try{ v_el.fldDel(i_fld); i_fld--; }
-	    catch(TError err)
-	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	}
+	for(int io_off = 0; (fel=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
+	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve()) break;
+	if(fel.empty())
+	    try
+	    {
+		v_el.fldDel(i_fld);
+		continue;
+	    }
+	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	i_fld++;
     }
 
     //> Init elements
@@ -775,14 +776,18 @@ void Prm::enable()
     }
 
     //> Check and delete no used attrs
-    for( int i_fld = 0; i_fld < v_el.fldSize(); i_fld++ )
+    for(unsigned i_fld = 0, i_p; i_fld < v_el.fldSize(); )
     {
-	int i_p;
-	for( i_p = 0; i_p < pls.size(); i_p++ )
-	    if( pls[i_p] == v_el.fldAt(i_fld).name() )  break;
-	if( i_p < pls.size() )  continue;
-	try{ v_el.fldDel(i_fld); i_fld--; }
-	catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	for(i_p = 0; i_p < pls.size(); i_p++)
+	    if(pls[i_p] == v_el.fldAt(i_fld).name()) break;
+	if(i_p >= pls.size())
+	    try
+	    {
+		v_el.fldDel(i_fld);
+		continue;
+	    }
+	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	i_fld++;
     }
 
     TParamContr::enable();

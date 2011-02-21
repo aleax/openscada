@@ -399,10 +399,12 @@ class SecCnl
 {
     public:
 	//Methods
-	SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode ) :
-	    TokenId(iTokenId), tCreate(TSYS::curTime()), tLife(vmax(600000,iLifeTm)), endPoint(iEp), clCert(iClCert),
-	    secPolicy(iSecPolicy), secMessMode(iSecMessMode)	{ }
-	SecCnl( ) : TokenId(0), tCreate(TSYS::curTime()), tLife(600000), secMessMode(0)	{ }
+	SecCnl(const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert,
+	    const string &iSecPolicy, char iSecMessMode) :
+		endPoint(iEp), secPolicy(iSecPolicy), secMessMode(iSecMessMode), tCreate(TSYS::curTime()),
+		tLife(vmax(600000,iLifeTm)), TokenId(iTokenId), clCert(iClCert)
+	    { }
+	SecCnl( ) : secMessMode(0), tCreate(TSYS::curTime()), tLife(600000), TokenId(0)	{ }
 
 	//Attributes
 	string		endPoint;

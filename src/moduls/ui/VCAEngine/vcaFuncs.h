@@ -90,7 +90,7 @@ class wdgList : public TFunction
 		else if( dynamic_cast<Widget*>(&nd.at()) && !val->getB(2) )	((Widget*)&nd.at())->wdgList(ls);
 	    }
 	    catch(TError err) { }
-	    for( int i_l = 0; i_l < ls.size(); i_l++ ) rez->propSet(TSYS::int2str(i_l),ls[i_l]);
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++) rez->propSet(TSYS::int2str(i_l),ls[i_l]);
 	    val->setO(0,rez);
 	}
 };
@@ -149,12 +149,12 @@ class attrList : public TFunction
 		AutoHD<Widget> nd = nodePrev()->nodeAt(val->getS(1));
 		nd.at().attrList(ls);
 		if( val->getB(2) )
-		for( int i_a = 0; i_a < ls.size(); i_a++ )
-		    if(nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser)
-		    { ls.erase(ls.begin()+i_a); i_a--; }
+		for(unsigned i_a = 0; i_a < ls.size(); )
+		    if(nd.at().attrAt(ls[i_a]).at().flgGlob()&Attr::IsUser) ls.erase(ls.begin()+i_a);
+		    else i_a++;
 	    }
 	    catch(TError err) { }
-	    for( int i_a = 0; i_a < ls.size(); i_a++ ) sls += ls[i_a]+"\n";
+	    for(unsigned i_a = 0; i_a < ls.size(); i_a++) sls += ls[i_a]+"\n";
 	    val->setS(0,sls);
 	}
 };

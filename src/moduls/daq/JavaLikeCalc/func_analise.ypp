@@ -294,37 +294,37 @@ void yyerror( const char *s )
 
 int yylex( )
 {
-    unsigned int c, st_pos;
-    int &pos = p_fnc->la_pos;
+    unsigned c, st_pos;
+    unsigned &pos = p_fnc->la_pos;
     string &prog = p_fnc->prg_src;
 
-    if( pos == 0 ) { yylloc.last_line = yylloc.last_column = 1; }
+    if(pos == 0) { yylloc.last_line = yylloc.last_column = 1; }
 
 retry:
     //> Empty space
-    while( pos < prog.size() &&
+    while(pos < prog.size() &&
 	((c = prog[pos]) == ' ' || c == '\n' || c == '\t' ||
-	c == '\f' || c == '\r' || c == '\v') )
+	c == '\f' || c == '\r' || c == '\v'))
     {
-	if( c == '\n' )	{ yylloc.last_column = 1; yylloc.last_line++; }
+	if(c == '\n')	{ yylloc.last_column = 1; yylloc.last_line++; }
 	else yylloc.last_column++;
 	pos++;
     }
     //> End string
-    if( pos >= prog.size() ) return 0;
+    if(pos >= prog.size()) return 0;
     //> Comentars // and /* ... */
-    if( prog.substr(pos,2) == "//" )
+    if(prog.substr(pos,2) == "//")
     {
 	pos+=2;
-	while( pos < prog.size() && prog[pos] != '\n' ) pos++;
+	while(pos < prog.size() && prog[pos] != '\n') pos++;
 	goto retry;
     }
-    if( prog.substr(pos,2) == "/*" )
+    if(prog.substr(pos,2) == "/*")
     {
 	pos+=2;
-	while( pos < prog.size() && prog.substr(pos-1,2) != "*/" )
+	while(pos < prog.size() && prog.substr(pos-1,2) != "*/")
 	{
-	    if( prog[pos] == '\n' )	{ yylloc.last_column = 1; yylloc.last_line++; }
+	    if(prog[pos] == '\n')	{ yylloc.last_column = 1; yylloc.last_line++; }
 	    else yylloc.last_column++;
 	    pos++;
 	}
@@ -336,57 +336,57 @@ retry:
     yylloc.first_column = yylloc.last_column;
 
     //Number
-    if( isdigit(c) || (c == '.' && (pos+1) < prog.size() && isdigit(prog[pos+1])) )
+    if(isdigit(c) || (c == '.' && (pos+1) < prog.size() && isdigit(prog[pos+1])))
     {
 	st_pos = pos;
 	int tp = 0;	//Type constant (0-detect;1-dec;2-oct;3-hex;4-real)
-	if( c == '.' )	tp = 4;
+	if(c == '.')	tp = 4;
 	else
 	{
-	    while( pos < prog.size() && isdigit(c=prog[pos]) )
+	    while(pos < prog.size() && isdigit(c=prog[pos]))
 	    { pos++; yylloc.last_column++; }
-	    if( pos >= prog.size() )			tp = (prog[st_pos]=='0')?2:1;
-	    else if( c == 'x' || c == 'X' )		tp = 3;
-	    else if( c == '.' || c == 'e' || c == 'E' )	tp = 4;
-	    else tp = (prog[st_pos]=='0')?2:1;
+	    if(pos >= prog.size())			tp = (prog[st_pos]=='0')?2:1;
+	    else if(c == 'x' || c == 'X')		tp = 3;
+	    else if(c == '.' || c == 'e' || c == 'E')	tp = 4;
+	    else tp = (prog[st_pos]=='0') ? 2 : 1;
 	}
-	if( tp == 1 )
+	if(tp == 1)
 	{
 	    yylval.reg = p_fnc->regTmpNew();
 	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,10);
 	    return CONST;
 	}
-	else if( tp == 2 )
+	else if(tp == 2)
 	{
 	    yylloc.last_column-=pos-st_pos;
 	    pos = st_pos;
-	    while( pos < prog.size() && (c=prog[pos]) >= '0' && c <= '7' )
+	    while(pos < prog.size() && (c=prog[pos]) >= '0' && c <= '7')
 	    { pos++; yylloc.last_column++; }
 
 	    yylval.reg = p_fnc->regTmpNew();
 	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,8);
 	    return CONST;
 	}
-	else if( tp == 3 )
+	else if(tp == 3)
 	{
 	    pos++; yylloc.last_column++;
-	    while( pos < prog.size() && (isdigit(c=prog[pos]) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') ) )
+	    while(pos < prog.size() && (isdigit(c=prog[pos]) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
 	    { pos++; yylloc.last_column++; }
 
 	    yylval.reg = p_fnc->regTmpNew();
 	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,16);
 	    return CONST;
 	}
-	else if( tp == 4 )
+	else if(tp == 4)
 	{
 	    bool e_ok = (c=='e'||c=='E')?true:false;
 	    pos++; yylloc.last_column++;
-	    while( pos < prog.size() && (isdigit(c=prog[pos]) || c == 'E' || c == 'e' ||
-		((c == '+' || c == '-') && ((prog[pos-1]) == 'e' || (prog[pos-1]) == 'E'))) )
+	    while(pos < prog.size() && (isdigit(c=prog[pos]) || c == 'E' || c == 'e' ||
+		((c == '+' || c == '-') && ((prog[pos-1]) == 'e' || (prog[pos-1]) == 'E'))))
 	    {
-		if( c=='E' || c=='e' )
+		if(c=='E' || c=='e')
 		{
-		    if( e_ok )	break;
+		    if(e_ok)	break;
 		    else e_ok = true;
 		}
 		pos++; yylloc.last_column++;
@@ -399,16 +399,16 @@ retry:
 	else return 0;
     }
     //String
-    if( c == '"' && (pos+1) < prog.size() )
+    if(c == '"' && (pos+1) < prog.size())
     {
 	st_pos = ++pos;
 	string rez_str;
 	yylloc.last_column++;
-	while( pos < prog.size() && prog[pos] != '"' && prog[pos] != '\n' )
+	while(pos < prog.size() && prog[pos] != '"' && prog[pos] != '\n')
 	{
-	    if( prog[pos] == '\\' && (pos+1) < prog.size() )
+	    if(prog[pos] == '\\' && (pos+1) < prog.size())
 	    {
-		switch( prog[pos+1] )
+		switch(prog[pos+1])
 		{
 		    case 'n':	rez_str += '\n';	break;
 		    case 't':	rez_str += '\t';	break;
@@ -422,12 +422,12 @@ retry:
 	    else rez_str += prog[pos];
 	    pos++; yylloc.last_column++;
 	}
-	if( pos >= prog.size() )
+	if(pos >= prog.size())
 	{
 	    yyerror(_("Unexpected end programm, expect end string symbol '\"', "));
 	    return ERR;
 	}
-	else if( prog[pos] == '\n' )
+	else if(prog[pos] == '\n')
 	{
 	    yyerror(_("The next line symbol failed into string, "));
 	    return ERR;
@@ -441,56 +441,56 @@ retry:
 	return CONST;
     }
     //Symbols
-    if( c == '_' || isalpha(c) || c > 0x7F )
+    if(c == '_' || isalpha(c) || c > 0x7F)
     {
 	bool is_dot = false;
 	st_pos = pos;
-	while( pos < prog.size() && ((c = prog[pos]) == '_' || c == '.' || isalnum(c) || c > 0x7F) )
+	while(pos < prog.size() && ((c = prog[pos]) == '_' || c == '.' || isalnum(c) || c > 0x7F))
 	{
-	    if( c == '.' ) is_dot = true;
+	    if(c == '.') is_dot = true;
 	    pos++;
 	    yylloc.last_column++;
 	}
 	string smb_nm = prog.substr(st_pos,pos-st_pos);
 	//Keywords
-	if( smb_nm == "if" )		return IF;
-	if( smb_nm == "else" )		return ELSE;
-	if( smb_nm == "while" )		return WHILE;
-	if( smb_nm == "for" )		return FOR;
-	if( smb_nm == "break" )		return BREAK;
-	if( smb_nm == "continue" )	return CONTINUE;
-	if( smb_nm == "return" )	return RETURN;
-	if( smb_nm == "new" )		return NEW;
-	if( smb_nm == "Array" )		return ARRAY;
-	if( smb_nm == "Object" )	return OBJECT;
-	if( smb_nm == "using" )
+	if(smb_nm == "if")	return IF;
+	if(smb_nm == "else")	return ELSE;
+	if(smb_nm == "while")	return WHILE;
+	if(smb_nm == "for")	return FOR;
+	if(smb_nm == "break")	return BREAK;
+	if(smb_nm == "continue")return CONTINUE;
+	if(smb_nm == "return")	return RETURN;
+	if(smb_nm == "new")	return NEW;
+	if(smb_nm == "Array")	return ARRAY;
+	if(smb_nm == "Object")	return OBJECT;
+	if(smb_nm == "using")
 	{
 	    char buf[255]; buf[0] = 0;
-	    while( pos < prog.size() && prog[pos] != ';' ) pos++;
-	    if( pos < prog.size() )
+	    while(pos < prog.size() && prog[pos] != ';') pos++;
+	    if(pos < prog.size())
 		sscanf(prog.substr(st_pos,pos-st_pos).c_str(),"using %254s",buf);
-	    if( pos >= prog.size() || buf[0] == 0 )
+	    if(pos >= prog.size() || buf[0] == 0)
 	    {
 		yyerror(_("Using namespace is error or empty, "));
 		return ERR;
 	    }
 	    string fVal;
-	    for( int off = 0; !(fVal=TSYS::strSepParse(p_fnc->mUsings,0,';',&off)).empty(); )
-		if( fVal == buf ) break;
-	    if( fVal.empty() )	p_fnc->mUsings = p_fnc->mUsings+buf+";";
+	    for(int off = 0; !(fVal=TSYS::strSepParse(p_fnc->mUsings,0,';',&off)).empty(); )
+		if(fVal == buf) break;
+	    if(fVal.empty())	p_fnc->mUsings = p_fnc->mUsings+buf+";";
 	    pos++;
 	    goto retry;
 	}
 	//Boolean
-	if( smb_nm == "true" || smb_nm == "false" )
+	if(smb_nm == "true" || smb_nm == "false")
 	{
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = (smb_nm == "true")?true:false;
+	    *yylval.reg = (smb_nm == "true") ? true : false;
 	    return CONST;
 	}
 	//Constants
 	NConst *cnst_v;
-	if( (cnst_v = mod->constGet(smb_nm.c_str())) != NULL )
+	if((cnst_v = mod->constGet(smb_nm.c_str())) != NULL)
 	{
 	    yylval.reg = p_fnc->regTmpNew();
 	    switch(cnst_v->tp)
@@ -504,10 +504,10 @@ retry:
 	}
 
 	//Find buildin function
-	if( c == '(' && mod->bFuncGet( smb_nm.c_str() ) != NULL )
+	if(c == '(' && mod->bFuncGet( smb_nm.c_str() ) != NULL)
 	{
 	    yylval.id = mod->bFuncGet(smb_nm.c_str())->code;
-	    switch( mod->bFuncGet(smb_nm.c_str())->prm )
+	    switch(mod->bFuncGet(smb_nm.c_str())->prm)
 	    {
 		case 0: return B_FUNC;
 		case 1: return B_FUNC1;
@@ -519,10 +519,10 @@ retry:
 	}
 
 	//> Find external or object's functions
-	if( c == '(' )
+	if(c == '(')
 	{
 	    //>> External functions
-	    if( p_fnc->funcGet(smb_nm) >= 0 )
+	    if(p_fnc->funcGet(smb_nm) >= 0)
 	    {
 		yylval.id = p_fnc->funcGet(smb_nm);
 		return FUNC;
@@ -530,7 +530,7 @@ retry:
 
 	    //>> Check for object's functions and system object's function
 	    string sel = TSYS::strSepParse(smb_nm,0,'.');
-	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) )
+	    if((yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))))
 	    {
 		pos -= (smb_nm.size()-sel.size());
 		yylloc.last_column -= (smb_nm.size()-sel.size());
@@ -595,28 +595,28 @@ retry:
     {
 	st_pos = ++pos;
 	yylloc.last_column++;
-	while( pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos>st_pos && isdigit(c)) || c > 0x7F) )
+	while(pos < prog.size() && ((c = prog[pos]) == '_' || isalpha(c) || (pos > st_pos && isdigit(c)) || c > 0x7F))
 	{ pos++; yylloc.last_column++; }
-	if( (pos-st_pos) > 255 ) { yyerror(_("Object's properties too long, ")); return ERR; }
+	if((pos-st_pos) > 255) { yyerror(_("Object's properties too long, ")); return ERR; }
 	strncpy(yylval.op,prog.substr(st_pos,pos-st_pos).data(),255);
 	// p_fnc->o_prpf.push_back(prog.substr(st_pos,pos-st_pos));
 	return O_PRP_F;
     }
     //Multi symbol operations
-    else if( prog.substr(pos,2) == "++" ) { pos+=2; yylloc.last_column+=2; return INCREM; }
-    else if( prog.substr(pos,2) == "--" ) { pos+=2; yylloc.last_column+=2; return DECREM; }
-    else if( prog.substr(pos,2) == "||" ) { pos+=2; yylloc.last_column+=2; return OR; }
-    else if( prog.substr(pos,2) == "&&" ) { pos+=2; yylloc.last_column+=2; return AND; }
-    else if( prog.substr(pos,2) == ">=" ) { pos+=2; yylloc.last_column+=2; return GE; }
-    else if( prog.substr(pos,2) == "<=" ) { pos+=2; yylloc.last_column+=2; return LE; }
-    else if( prog.substr(pos,2) == "==" ) { pos+=2; yylloc.last_column+=2; return EQ; }
-    else if( prog.substr(pos,2) == "!=" ) { pos+=2; yylloc.last_column+=2; return NE; }
-    else if( prog.substr(pos,2) == "<<" ) { pos+=2; yylloc.last_column+=2; return BITSHLEFT; }
-    else if( prog.substr(pos,2) == ">>" ) { pos+=2; yylloc.last_column+=2; return BITSHRIGHT; }
-    else if( prog.substr(pos,2) == "+=" ) { pos+=2; yylloc.last_column+=2; return ADDEQ; }
-    else if( prog.substr(pos,2) == "-=" ) { pos+=2; yylloc.last_column+=2; return SUBEQ; }
-    else if( prog.substr(pos,2) == "*=" ) { pos+=2; yylloc.last_column+=2; return MULEQ; }
-    else if( prog.substr(pos,2) == "/=" ) { pos+=2; yylloc.last_column+=2; return DIVEQ; }
+    else if(prog.substr(pos,2) == "++") { pos+=2; yylloc.last_column+=2; return INCREM; }
+    else if(prog.substr(pos,2) == "--") { pos+=2; yylloc.last_column+=2; return DECREM; }
+    else if(prog.substr(pos,2) == "||") { pos+=2; yylloc.last_column+=2; return OR; }
+    else if(prog.substr(pos,2) == "&&") { pos+=2; yylloc.last_column+=2; return AND; }
+    else if(prog.substr(pos,2) == ">=") { pos+=2; yylloc.last_column+=2; return GE; }
+    else if(prog.substr(pos,2) == "<=") { pos+=2; yylloc.last_column+=2; return LE; }
+    else if(prog.substr(pos,2) == "==") { pos+=2; yylloc.last_column+=2; return EQ; }
+    else if(prog.substr(pos,2) == "!=") { pos+=2; yylloc.last_column+=2; return NE; }
+    else if(prog.substr(pos,2) == "<<") { pos+=2; yylloc.last_column+=2; return BITSHLEFT; }
+    else if(prog.substr(pos,2) == ">>") { pos+=2; yylloc.last_column+=2; return BITSHRIGHT; }
+    else if(prog.substr(pos,2) == "+=") { pos+=2; yylloc.last_column+=2; return ADDEQ; }
+    else if(prog.substr(pos,2) == "-=") { pos+=2; yylloc.last_column+=2; return SUBEQ; }
+    else if(prog.substr(pos,2) == "*=") { pos+=2; yylloc.last_column+=2; return MULEQ; }
+    else if(prog.substr(pos,2) == "/=") { pos+=2; yylloc.last_column+=2; return DIVEQ; }
     else { pos++; yylloc.last_column++; }
 
     return c;

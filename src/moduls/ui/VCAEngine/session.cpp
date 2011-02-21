@@ -33,10 +33,8 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
-    mEnable(false), mStart(false), endrun_req(false), tm_calc(0.0), mStyleIdW(-1),
-    mUser("root"), mPrjnm(iproj), mPer(100), mCalcClk(1),
-    mOwner("root"), mGrp("UI"), mPermit(RWRWR_),
-    mBackgrnd(false), mConnects(0), mAlrmSndPlay(-1)
+    mPrjnm(iproj), mUser("root"), mOwner("root"), mGrp("UI"), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), tm_calc(0.0), mAlrmSndPlay(-1), mStyleIdW(-1)
 {
     mId = iid;
     mPage = grpAdd("pg_");
@@ -97,15 +95,15 @@ void Session::setEnable( bool val )
 
 	    //> Create root pages
 	    parent().at().list(pg_ls);
-	    for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
-		if( !present(pg_ls[i_p]) )
+	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
+		if(!present(pg_ls[i_p]))
 		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
 
 	    //> Pages enable
 	    list(pg_ls);
-	    for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
+	    for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
-		catch( TError err )	{ mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
+		catch(TError err) { mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
 
 	    modifGClr();
 	}
@@ -113,15 +111,15 @@ void Session::setEnable( bool val )
     }
     else
     {
-	if( start() )	setStart(false);
+	if(start()) setStart(false);
 
 	//> Pages disable
 	list(pg_ls);
-	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
+	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setEnable(false);
 
 	//> Delete pages
-	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
+	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    del(pg_ls[i_ls]);
 
 	//> Disconnect from project
@@ -137,29 +135,29 @@ void Session::setStart( bool val )
 
     vector<string> pg_ls;
 
-    if( val )
+    if(val)
     {
 	//> Enable session if it disabled
-	if( !enable() )	setEnable(true);
+	if(!enable())	setEnable(true);
 
 	mess_info(nodePath().c_str(),_("Start session."));
 
 	//> Load Styles from project
 	mStProp.clear();
-	if( stlCurent() >= 0 )
+	if(stlCurent() >= 0)
 	{
 	    parent().at().stlPropList(pg_ls);
-	    for( int i_sp = 0; i_sp < pg_ls.size(); i_sp++ )
-		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet( pg_ls[i_sp], "", stlCurent() );
+	    for(unsigned i_sp = 0; i_sp < pg_ls.size(); i_sp++)
+		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet(pg_ls[i_sp], "", stlCurent());
 	}
 
 	//> Process all pages is on
 	list(pg_ls);
-	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
+	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(true);
 
 	//> Start process task
-	if( !mStart ) SYS->taskCreate( nodePath('.',true), 0, Session::Task, this, &mStart );
+	if(!mStart) SYS->taskCreate( nodePath('.',true), 0, Session::Task, this, &mStart );
     }
     else
     {
@@ -170,7 +168,7 @@ void Session::setStart( bool val )
 
 	//> Process all pages is off
 	list(pg_ls);
-	for( int i_ls = 0; i_ls < pg_ls.size(); i_ls++ )
+	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(false);
     }
 }
@@ -199,16 +197,16 @@ void Session::add( const string &iid, const string &iparent )
 
 void Session::openReg( const string &iid )
 {
-    int i_op;
-    for( i_op = 0; i_op < mOpen.size(); i_op++ )
-	if( iid == mOpen[i_op] ) break;
-    if( i_op >= mOpen.size() )	mOpen.push_back(iid);
+    unsigned i_op;
+    for(i_op = 0; i_op < mOpen.size(); i_op++)
+	if(iid == mOpen[i_op]) break;
+    if(i_op >= mOpen.size())	mOpen.push_back(iid);
 }
 
 void Session::openUnreg( const string &iid )
 {
-    for( int i_op = 0; i_op < mOpen.size(); i_op++ )
-	if( iid == mOpen[i_op] ) mOpen.erase(mOpen.begin()+i_op);
+    for(unsigned i_op = 0; i_op < mOpen.size(); i_op++)
+	if(iid == mOpen[i_op]) mOpen.erase(mOpen.begin()+i_op);
 }
 
 AutoHD<SessPage> Session::at( const string &id )
@@ -222,60 +220,58 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
     string oppg;		//Opened page according of pattern
 
     vector<string> &op_ls = openList();
-    for( int i_op = 0; i_op < op_ls.size(); i_op++ )
+    for(unsigned i_op = 0; i_op < op_ls.size(); i_op++)
     {
 	string cur_pt_el, cur_el;
-	int i_el = 0;
-	while((cur_pt_el=TSYS::pathLev(prm,i_el++)).size())
+	for(int i_el = 0; (cur_pt_el=TSYS::pathLev(prm,i_el++)).size(); )
 	{
 	    cur_el = TSYS::pathLev(op_ls[i_op],i_el);
-	    if( cur_el.empty() || (cur_pt_el.substr(0,3) == "pg_" && cur_pt_el != cur_el) ) break;
+	    if(cur_el.empty() || (cur_pt_el.substr(0,3) == "pg_" && cur_pt_el != cur_el)) break;
 	}
-	if( cur_pt_el.empty() ) { oppg = op_ls[i_op]; break; }
+	if(cur_pt_el.empty()) { oppg = op_ls[i_op]; break; }
     }
     //> Individual commands process
     try
     {
 	//>> Go to destination page
 	string cur_pt_el;
-	int i_el = 0;
 	AutoHD<SessPage> cpg;
-	while( (cur_pt_el=TSYS::pathLev(prm,i_el++)).size() )
+	for(unsigned i_el = 0; (cur_pt_el=TSYS::pathLev(prm,i_el++)).size(); )
 	{
 	    string op_pg;
-	    if( cur_pt_el.substr(0,3) == "pg_" ) op_pg = cur_pt_el.substr(3);
-	    else if( cur_pt_el == "*" || (cur_pt_el == "$" && ( com == "next" || com == "prev")) )
+	    if(cur_pt_el.substr(0,3) == "pg_") op_pg = cur_pt_el.substr(3);
+	    else if(cur_pt_el == "*" || (cur_pt_el == "$" && ( com == "next" || com == "prev")))
 	    {
 		vector<string> pls;
-		if( cpg.freeStat() ) list(pls); else cpg.at().pageList(pls);
-		if( pls.empty() )	return;
+		if(cpg.freeStat()) list(pls); else cpg.at().pageList(pls);
+		if(pls.empty())	return;
 		string cur_el = TSYS::pathLev(oppg,i_el);
-		if( cur_el.empty() )
+		if(cur_el.empty())
 		{
-		    if( cur_pt_el == "$" )	return;
+		    if(cur_pt_el == "$")	return;
 		    op_pg = pls[0];
 		}
 		else
 		{
 		    cur_el = cur_el.substr(3);
 		    int i_l;
-		    for( i_l = 0; i_l < pls.size(); i_l++ )
-			if( cur_el == pls[i_l] ) break;
-		    if( i_l < pls.size() )
+		    for(i_l = 0; i_l < (int)pls.size(); i_l++)
+			if(cur_el == pls[i_l]) break;
+		    if(i_l < (int)pls.size())
 		    {
-			if( cur_pt_el == "$" )
+			if(cur_pt_el == "$")
 			{
-			    if( com == "next" ) i_l++;
-			    if( com == "prev" ) i_l--;
-			    i_l = (i_l < 0) ? pls.size()-1 : (i_l >= pls.size()) ? 0 : i_l;
+			    if(com == "next") i_l++;
+			    if(com == "prev") i_l--;
+			    i_l = (i_l < 0) ? (int)pls.size()-1 : (i_l >= (int)pls.size()) ? 0 : i_l;
 			    op_pg = pls[i_l];
-			    if( op_pg == cur_el ) return;
+			    if(op_pg == cur_el) return;
 			}
 			else op_pg = cur_el;
 		    }
 		    else
 		    {
-			if( cur_pt_el == "$" )  return;
+			if(cur_pt_el == "$") return;
 			op_pg = pls[0];
 		    }
 		}
@@ -286,9 +282,9 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	}
 
 	//> Open found page
-	if( !cpg.freeStat() )
+	if(!cpg.freeStat())
 	{
-	    if( !oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path() )
+	    if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
 		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
 	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path());
 	}
@@ -297,35 +293,35 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 
 void Session::alarmSet( const string &wpath, const string &alrm )
 {
-    if( wpath.empty() ) return;
+    if(wpath.empty()) return;
 
     //> Alarms queue process
-    ResAlloc res( mAlrmRes, true );
+    ResAlloc res(mAlrmRes, true);
 
-    Alarm aobj( wpath, alrm, calcClk( ) );
+    Alarm aobj(wpath, alrm, calcClk());
 
-    int i_q = 0;
-    while( i_q < mAlrm.size() && mAlrm[i_q].path != aobj.path )	i_q++;
-    if( !aobj.lev )
+    unsigned i_q = 0;
+    while(i_q < mAlrm.size() && mAlrm[i_q].path != aobj.path)	i_q++;
+    if(!aobj.lev)
     {
-	if( i_q < mAlrm.size() ) mAlrm.erase( mAlrm.begin()+i_q );
+	if(i_q < mAlrm.size()) mAlrm.erase(mAlrm.begin()+i_q);
 	return;
     }
-    if( i_q < mAlrm.size() && aobj.lev == mAlrm[i_q].lev ) mAlrm[i_q] = aobj;
+    if(i_q < mAlrm.size() && aobj.lev == mAlrm[i_q].lev) mAlrm[i_q] = aobj;
     else
     {
-	if( i_q < mAlrm.size() )
+	if(i_q < mAlrm.size())
 	{
-	    mAlrm.erase( mAlrm.begin()+i_q );
-	    if( i_q == mAlrmSndPlay ) mAlrmSndPlay = -1;
-	    if( i_q < mAlrmSndPlay && mAlrmSndPlay >= 0 ) mAlrmSndPlay--;
+	    mAlrm.erase(mAlrm.begin()+i_q);
+	    if((int)i_q == mAlrmSndPlay) mAlrmSndPlay = -1;
+	    if((int)i_q < mAlrmSndPlay && mAlrmSndPlay >= 0) mAlrmSndPlay--;
 	}
-	int i_q1 = 0;
-	while( i_q1 < mAlrm.size() && aobj.lev >= mAlrm[i_q].lev ) i_q1++;
-	if( i_q1 < mAlrm.size() )
+	unsigned i_q1 = 0;
+	while(i_q1 < mAlrm.size() && aobj.lev >= mAlrm[i_q].lev) i_q1++;
+	if(i_q1 < mAlrm.size())
 	{
 	    mAlrm.insert(mAlrm.begin()+i_q1,aobj);
-	    if( i_q <= mAlrmSndPlay && mAlrmSndPlay >= 0 ) mAlrmSndPlay++;
+	    if((int)i_q <= mAlrmSndPlay && mAlrmSndPlay >= 0) mAlrmSndPlay++;
 	}
 	else mAlrm.push_back(aobj);
     }
@@ -335,8 +331,8 @@ int Session::alarmStat( )
 {
     uint8_t alev = 0, atp = 0, aqtp = 0;
     vector<string> ls;
-    list( ls );
-    for( int i_p = 0; i_p < ls.size(); i_p++ )
+    list(ls);
+    for(unsigned i_p = 0; i_p < ls.size(); i_p++)
     {
 	int ast = at(ls[i_p]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev,ast&0xFF);
@@ -349,20 +345,20 @@ int Session::alarmStat( )
 
 void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl )
 {
-    if( !wpath.empty() ) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance( quit_tmpl, true );
+    if(!wpath.empty()) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance(quit_tmpl, true);
     else
     {
 	vector<string> ls;
-	list( ls );
-	for( int i_p = 0; i_p < ls.size(); i_p++ )
-	    at(ls[i_p]).at().alarmQuittance( quit_tmpl, true );
+	list(ls);
+	for(unsigned i_p = 0; i_p < ls.size(); i_p++)
+	    at(ls[i_p]).at().alarmQuittance(quit_tmpl, true);
     }
 
     //> Queue alarms quittance
-    ResAlloc res( mAlrmRes, false );
+    ResAlloc res(mAlrmRes, false);
 
-    for( int i_q = 0; i_q < mAlrm.size(); i_q++ )
-	if( mAlrm[i_q].path.substr(0,wpath.size()) == wpath )
+    for(unsigned i_q = 0; i_q < mAlrm.size(); i_q++)
+	if(mAlrm[i_q].path.substr(0,wpath.size()) == wpath)
 	    mAlrm[i_q].qtp &= quit_tmpl;
 }
 
@@ -375,21 +371,21 @@ void *Session::Task( void *icontr )
     ses.mStart    = true;
 
     ses.list(pls);
-    while( !ses.endrun_req )
+    while(!ses.endrun_req)
     {
 	//> Check calk time
 	long long t_cnt = TSYS::curTime();
 
 	//> Calc session pages and all other items at recursion
-	for( int i_l = 0; i_l < pls.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
 	    try { ses.at(pls[i_l]).at().calc(false,false); }
-	    catch( TError err )
+	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calc error."),pls[i_l].c_str());
 	    }
 
-	if( (ses.mCalcClk++) == 0 ) ses.mCalcClk = 1;
+	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
 
 	ses.tm_calc = TSYS::curTime()-t_cnt;
 	/*ses.rez_calc+=ses.tm_calc;
@@ -409,28 +405,28 @@ void *Session::Task( void *icontr )
 
 void Session::stlCurentSet( int sid )
 {
-    if( mStyleIdW == sid ) return;
+    if(mStyleIdW == sid) return;
 
     mStyleIdW = sid;
 
-    if( start() )
+    if(start())
     {
-	ResAlloc res( mStRes, true );
+	ResAlloc res(mStRes, true);
 	//> Load Styles from project
 	mStProp.clear();
 
-	if( sid >= 0 && sid < parent().at().stlSize() )
+	if(sid >= 0 && sid < parent().at().stlSize())
 	{
 	    vector<string> pg_ls;
 	    parent().at().stlPropList(pg_ls);
-	    for( int i_sp = 0; i_sp < pg_ls.size(); i_sp++ )
-		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet( pg_ls[i_sp], "", sid );
+	    for(unsigned i_sp = 0; i_sp < pg_ls.size(); i_sp++)
+		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet(pg_ls[i_sp], "", sid);
 	}
 	else mStyleIdW = -1;
     }
 
     //> Write to DB
-    if( enable() )
+    if(enable())
     {
 	TConfig c_el(&mod->elPrjSes());
 	c_el.cfg("IDW").setS("<Style>");
@@ -466,21 +462,21 @@ bool Session::stlPropSet( const string &pid, const string &vl )
 TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const string &cuser )
 {
     // string user( ) - the session user
-    if( iid == "user" )	return user();
+    if(iid == "user")	return user();
     // string alrmSndPlay( ) - the widget's path for that on this time played the alarm message.
-    else if( iid == "alrmSndPlay" )
+    else if(iid == "alrmSndPlay")
     {
-	ResAlloc res( mAlrmRes, false );
-	if( mAlrmSndPlay < 0 || mAlrmSndPlay >= mAlrm.size() ) return string("");
+	ResAlloc res(mAlrmRes, false);
+	if(mAlrmSndPlay < 0 || mAlrmSndPlay >= (int)mAlrm.size()) return string("");
 	return mAlrm[mAlrmSndPlay].path;
     }
     // int alrmQuittance(int quit_tmpl, string wpath = "") - alarm quittance <wpath> with template <quit_tmpl>. If <wpath> is empty
     //        string then make global quittance.
     //  quit_tmpl - quittance template
     //  wpath - path to widget
-    else if( iid == "alrmQuittance" && prms.size() >= 1 )
+    else if(iid == "alrmQuittance" && prms.size() >= 1)
     {
-	alarmQuittance( (prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI() );
+	alarmQuittance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI());
 	return 0;
     }
     return TCntrNode::objFuncCall(iid,prms,cuser);
@@ -496,7 +492,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	{
 	    unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	    vector<string> &lst = openList();
-	    for(int i_f = 0; i_f < lst.size(); i_f++)
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	    {
 		XMLNode *pel = opt->childAdd("pg");
 		pel->setText(lst[i_f]);
@@ -739,41 +735,41 @@ string SessPage::path( )
 
 void SessPage::setEnable( bool val )
 {
-    if( val == enable() ) return;
+    if(val == enable()) return;
 
-    if( !val )
+    if(!val)
     {
 	vector<string> pg_ls;
 	//> Unregister opened page
-	if( !(parent().at().prjFlags( )&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB() )
+	if(!(parent().at().prjFlags( )&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
 	    ownerSess()->openUnreg(path());
 	//> Disable include pages
 	pageList(pg_ls);
-	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageAt(pg_ls[i_l]).at().setEnable(false);
 	//> Delete included widgets
-	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageDel(pg_ls[i_l]);
     }
 
     //> Call parrent enable method
     SessWdg::setEnable(val);
 
-    if( val )
+    if(val)
     {
 	vector<string> pg_ls;
 	//> Register opened page
-	if( !(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB() ) ownerSess()->openReg(path());
+	if(!(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB()) ownerSess()->openReg(path());
 	//> Create included pages
 	parent().at().pageList(pg_ls);
-	for( int i_p = 0; i_p < pg_ls.size(); i_p++ )
-	    if( !pagePresent(pg_ls[i_p]) )
+	for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
+	    if(!pagePresent(pg_ls[i_p]))
 		pageAdd(pg_ls[i_p],parent().at().pageAt(pg_ls[i_p]).at().path());
 	//> Enable included pages
 	pageList(pg_ls);
-	for(int i_l = 0; i_l < pg_ls.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    try{ pageAt(pg_ls[i_l]).at().setEnable(true); }
-	    catch( TError err )	{ mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
+	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
 }
 
@@ -784,21 +780,21 @@ void SessPage::setProcess( bool val )
     //> Change process state for included pages
     vector<string> ls;
     pageList(ls);
-    for(int i_l = 0; i_l < ls.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
         pageAt(ls[i_l]).at().setProcess(val);
 
     //> Change self process state
     bool diff = (val!=process());
-    if( val && !parent().at().parent().freeStat() && ( attrAt("pgOpen").at().getB() || attrAt("pgNoOpenProc").at().getB() ) )
+    if(val && !parent().at().parent().freeStat() && (attrAt("pgOpen").at().getB() || attrAt("pgNoOpenProc").at().getB()))
     {
 	SessWdg::setProcess(true);
 	//>> First calc
 	if( diff ) calc(true,false);
     }
-    else if( !val )
+    else if(!val)
     {
 	//>> Last calc
-	if( diff ) calc(false,true);
+	if(diff) calc(false,true);
 
 	SessWdg::setProcess(false);
     }
@@ -823,39 +819,39 @@ AutoHD<SessPage> SessPage::pageAt( const string &iid )
 void SessPage::calc( bool first, bool last )
 {
     //> Process self data
-    if( process() ) SessWdg::calc(first,last);
+    if(process()) SessWdg::calc(first,last);
 
-    if( mClosePgCom ) { mClosePgCom = false; setProcess(false); return; }
+    if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
     //> Put calculate to include pages
     vector<string> ls;
     pageList(ls);
-    for(int i_l = 0; i_l < ls.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	pageAt(ls[i_l]).at().calc(first,last);
 }
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
 {
     //> Page open process
-    if( enable() && !prev.isNull() )
+    if(enable() && !prev.isNull())
     {
-	if( cfg.id() == "pgOpen" )
+	if(cfg.id() == "pgOpen")
 	{
-	    if( cfg.getB() )
+	    if(cfg.getB())
 	    {
-		if( !process() )	setProcess(true);
+		if(!process())	setProcess(true);
 		ownerSess()->openReg(path());
 	    }
 	    else
 	    {
 		ownerSess()->openUnreg(path());
-		if( process() && !attrAt("pgNoOpenProc").at().getB() )	mClosePgCom = true;
-		if( !attrAt("pgOpenSrc").at().getS().empty() ) attrAt("pgOpenSrc").at().setS("");
+		if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
+		if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
 	    }
 	}
-	else if( cfg.id() == "pgOpenSrc" )
+	else if(cfg.id() == "pgOpenSrc")
 	{
-	    if( !cfg.getS().empty() )
+	    if(!cfg.getS().empty())
 	    {
 		try
 		{
@@ -865,17 +861,17 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		    string atr_id, prm_lnk;
 		    vector<string> cAtrLs;
 		    attrList(cAtrLs);
-		    for( int i_al = 0; i_al < cAtrLs.size(); i_al++ )
+		    for(unsigned i_al = 0; i_al < cAtrLs.size(); i_al++)
 		    {
 			AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
-			if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-			      TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>") ) continue;
+			if(!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+			      TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>")) continue;
 			atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-			if( src.at().attrPresent(atr_id) )
+			if(src.at().attrPresent(atr_id))
 			{
-			    if( src.at().attrAt(atr_id).at().cfgVal().size() > 4 && src.at().attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:" )
+			    if(src.at().attrAt(atr_id).at().cfgVal().size() > 4 && src.at().attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:")
 			    {
-				if( prm_lnk.empty() ) prm_lnk = src.at().attrAt(atr_id).at().cfgVal().substr(4);
+				if(prm_lnk.empty()) prm_lnk = src.at().attrAt(atr_id).at().cfgVal().substr(4);
 				attr.at().setCfgVal(src.at().attrAt(atr_id).at().cfgVal());
 			    }
 			    else attr.at().setCfgVal("wdg:"+cfg.getS()+"/a_"+atr_id);
@@ -888,14 +884,14 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			}
 		    }
 		    //> Find links into source if no link find
-		    if( prm_lnk.empty() )
+		    if(prm_lnk.empty())
 		    {
 			vector<string> sAtrLs;
 			src.at().attrList(sAtrLs);
-			for( int i_al = 0; i_al < sAtrLs.size(); i_al++ )
+			for(unsigned i_al = 0; i_al < sAtrLs.size(); i_al++)
 			{
 			    AutoHD<Attr> attr = src.at().attrAt(sAtrLs[i_al]);
-			    if( attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:" )
+			    if(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) && attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:")
 			    {
 				prm_lnk = attr.at().cfgVal().substr(4);
 				break;
@@ -903,25 +899,25 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			}
 		    }
 		    //> Fill parameter's links for other attributes
-		    if( emptyPresnt && !prm_lnk.empty() )
+		    if(emptyPresnt && !prm_lnk.empty())
 		    {
 			AutoHD<TValue> prml;
 			prm_lnk = "/"+TSYS::pathLev(prm_lnk,0)+"/"+TSYS::pathLev(prm_lnk,1)+"/"+TSYS::pathLev(prm_lnk,2);
 			try{ prml = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
-			for( int i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++ )
+			for(unsigned i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++)
 			{
 			    AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
-			    if( !(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+			    if(!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 				  TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
-				  (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address) ) )	continue;
+				  (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address)))	continue;
 			    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-			    if( prml.at().vlPresent(atr_id) )	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
+			    if(prml.at().vlPresent(atr_id))	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
 			}
 		    }
 		}
 		catch(TError err) { }
 	    }
-	    if( cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty() )
+	    if(cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty())
 		cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty());
 	}
     }
@@ -939,50 +935,50 @@ void SessPage::alarmSet( bool isSet )
 
     vector<string> lst;
     //> Included pages process
-    pageList( lst );
-    for( int i_p = 0; i_p < lst.size(); i_p++ )
+    pageList(lst);
+    for(unsigned i_p = 0; i_p < lst.size(); i_p++)
     {
-	int iacur = pageAt( lst[i_p] ).at().attrAt("alarmSt").at().getI( );
-	alev = vmax( alev, iacur&0xFF );
+	int iacur = pageAt(lst[i_p]).at().attrAt("alarmSt").at().getI();
+	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
     }
 
     //> Included widgets process
     wdgList( lst );
-    for( int i_w = 0; i_w < lst.size(); i_w++ )
+    for(unsigned i_w = 0; i_w < lst.size(); i_w++)
     {
-	int iacur = wdgAt( lst[i_w] ).at().attrAt("alarmSt").at().getI( );
-	alev = vmax( alev, iacur&0xFF );
+	int iacur = wdgAt(lst[i_w]).at().attrAt("alarmSt").at().getI();
+	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
     }
 
-    attrAt("alarmSt").at().setI( (alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0 );
+    attrAt("alarmSt").at().setI((alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0);
 
-    if( ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
-    if( isSet )	ownerSess( )->alarmSet( path(), aCur );
+    if(ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
+    if(isSet) ownerSess()->alarmSet(path(), aCur);
 }
 
 void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
-    if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
+    if(!((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF))) return;
 
     //> Self quittance
-    attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<16|0xFFFF) );
+    attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
 
     vector<string> lst;
     //> Included pages quitance
-    pageList( lst );
-    for( int i_p = 0; i_p < lst.size(); i_p++ )
-	pageAt( lst[i_p] ).at().alarmQuittance(quit_tmpl);
+    pageList(lst);
+    for(unsigned i_p = 0; i_p < lst.size(); i_p++)
+	pageAt(lst[i_p]).at().alarmQuittance(quit_tmpl);
     //> Include widgets quittance
     wdgList( lst );
-    for( int i_w = 0; i_w < lst.size(); i_w++ )
-	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
+    for(unsigned i_w = 0; i_w < lst.size(); i_w++)
+	wdgAt(lst[i_w]).at().alarmQuittance(quit_tmpl);
 
-    if( isSet && ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
+    if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
 
 TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
@@ -1039,8 +1035,8 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //* SessWdg: Session page's widget               *
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
-    Widget(iid,iparent), mProc(false), TValFunc(iid+"_wdg",NULL), mMdfClc(0),
-    mSess(isess), inLnkGet(true), mCalcClk(isess->calcClk())
+    Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), mProc(false), inLnkGet(true), mMdfClc(0),
+    mCalcClk(isess->calcClk()), mSess(isess)
 {
 
 }
@@ -1110,7 +1106,7 @@ void SessWdg::setEnable( bool val )
 	//> Delete included widgets
 	vector<string> ls;
 	wdgList(ls);
-	for( int i_l = 0; i_l < ls.size(); i_l++ )
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    wdgDel(ls[i_l]);
     }
 }
@@ -1134,44 +1130,44 @@ void SessWdg::setProcess( bool val )
 	//>>> Self attributes check
 	attrList(als);
 	AutoHD<Widget> fulw = parentNoLink();
-	for( int i_a = 0; i_a < als.size(); i_a++ )
+	for(unsigned i_a = 0; i_a < als.size(); i_a++)
 	{
 	    AutoHD<Attr> cattr = attrAt(als[i_a]);
-	    if( (fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus" )
+	    if((fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus")
 	    {
 		IO::Type tp = IO::String;
-		switch( cattr.at().type() )
+		switch(cattr.at().type())
 		{
 		    case TFld::Boolean: tp = IO::Boolean;	break;
 		    case TFld::Integer: tp = IO::Integer;	break;
 		    case TFld::Real:    tp = IO::Real;		break;
 		    case TFld::String:  tp = IO::String;	break;
 		}
-		fio.ioAdd( new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()) );
+		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()));
 	    }
 	}
 
 	//>>> Include attributes check
 	wdgList(iwls);
-	for( int i_w = 0; i_w < iwls.size(); i_w++ )
+	for(unsigned i_w = 0; i_w < iwls.size(); i_w++)
 	{
 	    AutoHD<Widget> curw = wdgAt(iwls[i_w]);
 	    curw.at().attrList(als);
-	    for( int i_a = 0; i_a < als.size(); i_a++ )
+	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
 	    {
 		AutoHD<Attr> cattr = curw.at().attrAt(als[i_a]);
-		if( cattr.at().flgSelf()&Attr::ProcAttr || als[i_a] == "focus" )
+		if(cattr.at().flgSelf()&Attr::ProcAttr || als[i_a] == "focus")
 		{
 		    IO::Type tp = IO::String;
-		    switch( cattr.at().type() )
+		    switch(cattr.at().type())
 		    {
 			case TFld::Boolean: tp = IO::Boolean;	break;
 			case TFld::Integer: tp = IO::Integer;	break;
 			case TFld::Real:    tp = IO::Real;	break;
 			case TFld::String:  tp = IO::String;	break;
 		    }
-		    fio.ioAdd( new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,
-					(iwls[i_w]+"/"+als[i_a]).c_str()) );
+		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,
+					(iwls[i_w]+"/"+als[i_a]).c_str()));
 		}
 	    }
 	}
@@ -1181,7 +1177,7 @@ void SessWdg::setProcess( bool val )
 
 	//>> Compile function
 	mWorkProg = "";
-	try 
+	try
 	{
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
@@ -1218,13 +1214,13 @@ void SessWdg::setProcess( bool val )
     //> Change process for included widgets
     vector<string> ls;
     wdgList(ls);
-    for(int i_l = 0; i_l < ls.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	wdgAt(ls[i_l]).at().setProcess(val);
 
     mProc = val;
 
     //>> Make process element's lists
-    if( val ) prcElListUpdate( );
+    if(val) prcElListUpdate();
 }
 
 string SessWdg::ico( )
@@ -1320,35 +1316,35 @@ void SessWdg::alarmSet( bool isSet )
     vector<string> lst;
     //> Included widgets process
     wdgList( lst );
-    for( int i_w = 0; i_w < lst.size(); i_w++ )
+    for(unsigned i_w = 0; i_w < lst.size(); i_w++)
     {
-	int iacur = wdgAt( lst[i_w] ).at().attrAt("alarmSt").at().getI( );
-	alev = vmax( alev, iacur&0xFF );
+	int iacur = wdgAt(lst[i_w]).at().attrAt("alarmSt").at().getI();
+	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
     }
 
-    attrAt("alarmSt").at().setI( (alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0 );
+    attrAt("alarmSt").at().setI((alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0);
 
-    if( ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
-    if( isSet )	ownerSess( )->alarmSet( path(), aCur );
+    if(ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
+    if(isSet) ownerSess()->alarmSet(path(), aCur);
 }
 
 void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
-    if( !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)) ) return;
+    if(!((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF))) return;
 
     //> Self quittance
-    attrAt("alarmSt").at().setI( alarmSt & (quit_tmpl<<16|0xFFFF) );
+    attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
 
     vector<string> lst;
     //> Include widgets quittance
     wdgList( lst );
-    for( int i_w = 0; i_w < lst.size(); i_w++ )
-	wdgAt( lst[i_w] ).at().alarmQuittance(quit_tmpl);
+    for(unsigned i_w = 0; i_w < lst.size(); i_w++)
+	wdgAt(lst[i_w]).at().alarmQuittance(quit_tmpl);
 
-    if( isSet && ownerSessWdg(true) )	ownerSessWdg(true)->alarmSet();
+    if(isSet && ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
 }
 
 void SessWdg::prcElListUpdate( )
@@ -1357,16 +1353,16 @@ void SessWdg::prcElListUpdate( )
 
     wdgList(ls);
     mWdgChldAct.clear();
-    for( int i_l = 0; i_l < ls.size(); i_l++ )
-	if( wdgAt(ls[i_l]).at().process() )
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	if(wdgAt(ls[i_l]).at().process())
 	    mWdgChldAct.push_back(ls[i_l]);
 
     attrList(ls);
     mAttrLnkLs.clear();
-    for( int i_a = 0; i_a < ls.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < ls.size(); i_a++)
     {
 	AutoHD<Attr> attr = attrAt(ls[i_a]);
-	if( attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut) )
+	if(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut))
 	    mAttrLnkLs.push_back(ls[i_a]);
     }
 }
@@ -1374,9 +1370,9 @@ void SessWdg::prcElListUpdate( )
 void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
 {
     string wpath = path+"/"+id();
-    if( modifChk(tm,mMdfClc) ) els.push_back(wpath);
-    for( int i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++ )
-	if( wdgPresent(mWdgChldAct[i_ch]) )
+    if(modifChk(tm,mMdfClc)) els.push_back(wpath);
+    for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
+	if(wdgPresent(mWdgChldAct[i_ch]))
 	    wdgAt(mWdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
 }
 
@@ -1393,17 +1389,17 @@ bool SessWdg::modifChk( unsigned int tm, unsigned int iMdfClc )
 
 void SessWdg::calc( bool first, bool last )
 {
-    if( !process() )	return;
+    if(!process()) return;
 
-    ResAlloc res(mCalcRes,true);
+    ResAlloc res(mCalcRes, true);
 
     string sw_attr, s_attr, obj_tp;
 
 //    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
     //> Calculate include widgets
-    for(int i_l = 0; i_l < mWdgChldAct.size(); i_l++ )
-	if( wdgPresent(mWdgChldAct[i_l]) )
+    for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
+	if(wdgPresent(mWdgChldAct[i_l]))
 	    wdgAt(mWdgChldAct[i_l]).at().calc(first,last);
 
     try
@@ -1411,22 +1407,22 @@ void SessWdg::calc( bool first, bool last )
 	int pgOpenPrc = -1;
 
 	//> Load events to process
-	if( !((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last )
+	if(!((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last)
 	{
 	    string wevent = eventGet(true);
 	    //> Process input links and constants
 	    AutoHD<Attr> attr, attr1;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
-	    for( int i_a = 0; i_a < mAttrLnkLs.size(); i_a++ )
+	    for(unsigned i_a = 0; i_a < mAttrLnkLs.size(); i_a++)
 	    {
 		attr = attrAt(mAttrLnkLs[i_a]);
-		if( attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty() )	attr.at().setS(attr.at().cfgVal());
-		else if( attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty() )
+		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(attr.at().cfgVal());
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty())
 		{
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
-		    if( obj_tp == "val:" )	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
-		    else if( obj_tp == "prm:" )
+		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		    else if(obj_tp == "prm:")
 		    {
 			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
@@ -1445,10 +1441,10 @@ void SessWdg::calc( bool first, bool last )
 		    {
 			try
 			{
-			    int a_pos = attr.at().cfgVal().rfind("/");
+			    unsigned a_pos = attr.at().cfgVal().rfind("/");
 			    if(a_pos == string::npos) throw TError("","");
 			    attr1 = ((AutoHD<Widget>)mod->nodeAt(attr.at().cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(attr.at().cfgVal().substr(a_pos+3));
-			    switch( attr.at().type() )
+			    switch(attr.at().type())
 			    {
 				case TFld::Boolean:	attr.at().setB(attr1.at().getB()); break;
 				case TFld::Integer:	attr.at().setI(attr1.at().getI()); break;
@@ -1459,7 +1455,7 @@ void SessWdg::calc( bool first, bool last )
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 		    }
 		}
-		else if( attr.at().flgSelf()&Attr::CfgLnkIn )	attr.at().setS(EVAL_STR);
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn)	attr.at().setS(EVAL_STR);
 	    }
 	    inLnkGet = false;
 
@@ -1485,44 +1481,46 @@ void SessWdg::calc( bool first, bool last )
 			case IO::Integer:	setI(i_io,attr.at().getI());	break;
 			case IO::Real:		setR(i_io,attr.at().getR());	break;
 			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
+			default:						break;
 		    }
 		}
 
 		//>> Calc
-		setMdfChk( true );
+		setMdfChk(true);
 		TValFunc::calc();
 
 		//>> Load data from calc area
-		for( int i_io = 4; i_io < ioSize( ); i_io++ )
+		for(int i_io = 4; i_io < ioSize( ); i_io++)
 		{
-		    if( func()->io(i_io)->rez().empty() || !ioMdf(i_io) ) continue;
+		    if(func()->io(i_io)->rez().empty() || !ioMdf(i_io)) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
-		    if( s_attr == "pgOpen" && attr.at().getB() != getB(i_io) ) { pgOpenPrc = i_io; continue; }
+		    if(s_attr == "pgOpen" && attr.at().getB() != getB(i_io)) { pgOpenPrc = i_io; continue; }
 		    switch(ioType(i_io))
 		    {
 			case IO::String:	attr.at().setS(getS(i_io));	break;
 			case IO::Integer:	attr.at().setI(getI(i_io));	break;
 			case IO::Real:		attr.at().setR(getR(i_io));	break;
 			case IO::Boolean:	attr.at().setB(getB(i_io));	break;
+			default:						break;
 		    }
 		}
 		//>> Save events from calc procedure
-		if( evId >= 0 ) wevent = getS(evId);
+		if(evId >= 0) wevent = getS(evId);
 	    }
 
 	    res.release();
 
 	    //> Close page process by pgOpen changing
-	    if( pgOpenPrc >= 0 ) attrAt("pgOpen").at().setB(getB(pgOpenPrc));
+	    if(pgOpenPrc >= 0) attrAt("pgOpen").at().setB(getB(pgOpenPrc));
 
 	    //>> Process widget's events
-	    if( !wevent.empty() )
+	    if(!wevent.empty())
 	    {
 		int t_off;
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
-		for( int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
+		for(int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
 		{
 		    //>> Check for process events
 		    t_off = 0;
@@ -1605,7 +1603,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		}
 	    else if( obj_tp == "wdg:" )
 	    {
-		int a_pos = cfg.cfgVal().rfind("/");
+		unsigned a_pos = cfg.cfgVal().rfind("/");
 		if(a_pos == string::npos) throw TError("","");
 		AutoHD<Attr> wattr = ((AutoHD<Widget>)mod->nodeAt(cfg.cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(cfg.cfgVal().substr(a_pos+3));
 		switch( cfg.type() )
@@ -1730,23 +1728,23 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 bool SessWdg::cntrCmdServ( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    if( a_path == "/serv/attr" )		//Attribute's value operations
+    if(a_path == "/serv/attr")		//Attribute's value operations
     {
-	if( ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD) )	//Get values
+	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	//Get values
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
-	    if( !tm )
+	    if(!tm)
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
 		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())) );
-	    if( !tm || modifChk(tm,mMdfClc) )
+	    if(!tm || modifChk(tm,mMdfClc))
 	    {
 		AutoHD<Attr> attr;
 		vector<string> als;
 		attrList(als);
-		for( int i_l = 0; i_l < als.size(); i_l++ )
+		for(unsigned i_l = 0; i_l < als.size(); i_l++)
 		{
 		    attr = attrAt(als[i_l]);
-		    if( !(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()) )
+		    if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()))
 			opt->childAdd("el")->setAttr("id",als[i_l].c_str())->
 					     setAttr("p",attr.at().fld().reserve())->
 					     setText(attr.at().getS());
@@ -1756,10 +1754,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	//Set values
 	{
 	    if( ownerSess()->user() != opt->attr("user") ) ownerSess()->setUser(opt->attr("user"));
-	    for( int i_ch = 0; i_ch < opt->childSize(); i_ch++ )
+	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
 	    {
 	        string aid = opt->childGet(i_ch)->attr("id");
-	        if( aid == "event" ) eventAdd(opt->childGet(i_ch)->text()+"\n");
+	        if(aid == "event") eventAdd(opt->childGet(i_ch)->text()+"\n");
 	        else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
 	    }
 	}
@@ -1777,10 +1775,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    AutoHD<Attr> attr;
 	    vector<string> als;
 	    attrList(als);
-	    for( int i_l = 0; i_l < als.size(); i_l++ )
+	    for(unsigned i_l = 0; i_l < als.size(); i_l++)
 	    {
 		attr = attrAt(als[i_l]);
-		if( !(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()) )
+		if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()))
 		    opt->childAdd("el")->setAttr("id",als[i_l].c_str())->
 				     setAttr("p",attr.at().fld().reserve())->
 				     setText(attr.at().getS());

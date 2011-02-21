@@ -208,7 +208,7 @@ void TUIMod::modStop( )
 
     end_run = true;
 
-    for(int i_w = 0; i_w < cfapp.size(); i_w++)
+    for(unsigned i_w = 0; i_w < cfapp.size(); i_w++)
 	while(cfapp[i_w]) usleep(STD_WAIT_DELAY*1000);
 
     run_st = false;
@@ -216,7 +216,7 @@ void TUIMod::modStop( )
 
 void TUIMod::regWin( QMainWindow *win )
 {
-    int i_w;
+    unsigned i_w;
     for(i_w = 0; i_w < cfapp.size(); i_w++)
 	if(cfapp[i_w] == NULL) break;
     if(i_w == cfapp.size())	cfapp.push_back((QMainWindow*)NULL);
@@ -225,8 +225,8 @@ void TUIMod::regWin( QMainWindow *win )
 
 void TUIMod::unregWin( QMainWindow *win )
 {
-    for( int i_w = 0; i_w < cfapp.size(); i_w++ )
-	if( cfapp[i_w] == win )	cfapp[i_w] = NULL;
+    for(unsigned i_w = 0; i_w < cfapp.size(); i_w++)
+	if(cfapp[i_w] == win) cfapp[i_w] = NULL;
 }
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
@@ -268,7 +268,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
 	opt->childAdd("el")->setText("");
-	for(int i_u = 0; i_u < ls.size(); i_u++)
+	for(unsigned i_u = 0; i_u < ls.size(); i_u++)
 	    opt->childAdd("el")->setText(ls[i_u]);
     }
     else TUI::cntrCmdProc(opt);

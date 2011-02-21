@@ -164,8 +164,8 @@ class Reg
 	};
 
 	//Methods
-	Reg( ) : mTp(Free), mLock(false), mObjEl(false), mPos(-1) {  }
-	Reg( int ipos ) : mTp(Free), mLock(false), mObjEl(false), mPos(ipos) {  }
+	Reg( ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free) {  }
+	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false), mTp(Free) {  }
 	~Reg( );
 
 	Reg &operator=( Reg &irg );
@@ -380,9 +380,9 @@ class Func : public TConfig, public TFunction
 	bool	be_start;		//Change structure check
 	Res	calc_res;
 
-	//- Parser's data -
+	//> Parser's data
 	string		prg;		//Build prog
-	int		la_pos;		//LA position
+	unsigned	la_pos;		//LA position
 	string		p_err;		//Parse error
 	string		mUsings;	//Functions usings namespaces
 	vector<UFunc*>	mFncs;		//Work functions list

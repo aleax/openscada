@@ -100,12 +100,12 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0), tmDelay(0), servSt(0),
-	mBrwsVar(_("Root folder (84)")), mPCfgCh(false),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mAddr(cfg("ADDR").getSd()),
-	mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()), mSecMessMode(cfg("SecMessMode").getId()),
-	mPAttrLim(cfg("AttrsLimit").getId())
+TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
+    ::TController(name_c,daq_db,cfgelem),
+    mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mSched(cfg("SCHEDULE").getSd()),
+    mAddr(cfg("ADDR").getSd()), mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()),
+    mSecMessMode(cfg("SecMessMode").getId()), mPAttrLim(cfg("AttrsLimit").getId()),
+    prc_st(false), endrun_req(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -184,14 +184,14 @@ void TMdContr::reqOPC( XMLNode &io )
 	//>> Send HELLO message
 	req.setAttr("id","HEL")->setAttr("EndPoint",endPoint());
 	tr.at().messProtIO(req,"OPC_UA");
-	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
 
 	//>> Send Open SecureChannel message for no secure policy
 	req.setAttr("id","OPN")->setAttr("SecChnId","0"/*TSYS::uint2str(sess.secChnl)*/)->
 	    setAttr("SecPolicy","None")->setAttr("SecurityMode","1")->setAttr("SecLifeTm","300000")->
 	    setAttr("SeqNumber","51")->setAttr("SeqReqId","1")->setAttr("ReqHandle","0");
 	tr.at().messProtIO(req,"OPC_UA");
-	if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
 	sess.sqNumb = 51;
 	sess.sqReqId = 1;
 	sess.reqHndl = 0;
@@ -199,20 +199,20 @@ void TMdContr::reqOPC( XMLNode &io )
 	sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
 	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
 
-	if( secPolicy() != "None" )
+	if(secPolicy() != "None")
 	{
 	    //>> Send GetEndpoints request for certificate retrieve and for secure policy check
 	    req.setAttr("id","GetEndpoints")->setAttr("EndPoint",endPoint());
 	    tr.at().messProtIO(req,"OPC_UA");
-	    if( !req.attr("err").empty() )	{ io.setAttr("err",req.attr("err")); return; }
+	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
 	    //>>> Find endoint with need secure policy
-	    int i_ep;
-	    for( i_ep = 0; i_ep < req.childSize(); i_ep++ )
-		if( req.childGet(i_ep)->name() == "EndpointDescription" &&
+	    unsigned i_ep;
+	    for(i_ep = 0; i_ep < req.childSize(); i_ep++)
+		if(req.childGet(i_ep)->name() == "EndpointDescription" &&
 			TSYS::strParse(req.childGet(i_ep)->attr("securityPolicyUri"),1,"#") == secPolicy() &&
-			atoi(req.childGet(i_ep)->attr("securityMode").c_str()) == secMessMode() )
+			atoi(req.childGet(i_ep)->attr("securityMode").c_str()) == secMessMode())
 		    break;
-	    if( i_ep >= req.childSize() )
+	    if(i_ep >= req.childSize())
 	    { io.setAttr("err",TSYS::strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,_("No secure policy found"))); return; }
 	    setEndPoint(req.childGet(i_ep)->attr("endpointUrl"));
 	    string servCert = req.childGet(i_ep)->childGet("serverCertificate")->text();
@@ -316,15 +316,15 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(en_res,true);
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if( p_hd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
-    if( startStat() ) mPCfgCh = true;
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size()) p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size()) p_hd.erase(p_hd.begin()+i_prm);
+    if(startStat()) mPCfgCh = true;
 }
 
 void *TMdContr::Task( void *icntr )
@@ -363,7 +363,7 @@ void *TMdContr::Task( void *icntr )
 		{
 		    if(firstCall) cntr.p_hd[i_p].at().attrPrc();
 		    cntr.p_hd[i_p].at().vlList(als);
-		    for(int i_a = 0; i_a < als.size(); i_a++)
+		    for(unsigned i_a = 0; i_a < als.size(); i_a++)
 		    {
 			nId = cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve();
 			if(nId.empty()) continue;
@@ -379,7 +379,7 @@ void *TMdContr::Task( void *icntr )
 	    bool isErr = !req.attr("err").empty(), ndSt = 0;
 	    AutoHD<TVal> vl;
 	    res.request(false);
-	    for(int i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++)
+	    for(unsigned i_c = 0, i_p = 0; i_c < req.childSize() && i_p < cntr.p_hd.size(); i_c++)
 	    {
 		XMLNode *cnX = req.childGet(i_c);
 		if(cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State")
@@ -460,7 +460,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if(enableStat() && a_path == "/ndBrws/nd")
@@ -475,8 +475,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
 	//>> Prepare request for all typical
 	string cNodeId = "84";
-	int stC = mBrwsVar.rfind(")");
-	int stP = mBrwsVar.rfind("(",stC);
+	unsigned stC = mBrwsVar.rfind(")");
+	unsigned stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
 	XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
@@ -486,7 +486,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(!req.attr("err").empty()) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 
 	//>> Get result
-	for(int i_a = 0; i_a < req.childSize(); i_a++)
+	for(unsigned i_a = 0; i_a < req.childSize(); i_a++)
 	{
 	    if(strtol(req.childGet(i_a)->attr("Status").c_str(),NULL,0)) continue;
 	    string nANm = _("Unknown");
@@ -567,8 +567,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	//>> Get current node references by call browse
 	string cNodeId = "84";
-	int stC = mBrwsVar.rfind(")");
-	int stP = mBrwsVar.rfind("(",stC);
+	unsigned stC = mBrwsVar.rfind(")");
+	unsigned stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XMLNode req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
@@ -581,9 +581,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
 	//>> Process inverse references
 	bool invRefPr = false;
-	for(int i_n = 0; i_n < rn->childSize(); i_n++)
+	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
 	{
-	    if(atoi(rn->childGet(i_n)->attr("isForward").c_str()))	continue;
+	    if(atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
 	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
 		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
 	    invRefPr = true;
@@ -593,9 +593,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	//>> Append self address
 	opt->childAdd("el")->setText(mBrwsVar);
 	//>> Process forward references
-	for(int i_n = 0; i_n < rn->childSize(); i_n++)
+	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
 	{
-	    if(!atoi(rn->childGet(i_n)->attr("isForward").c_str()))	continue;
+	    if(!atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
 	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
 		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
@@ -607,7 +607,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), p_el("w_attr"), mNdLst(cfg("ND_LS").getSd())
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+    TParamContr(name,tp_prm), mNdLst(cfg("ND_LS").getSd()), p_el("w_attr")
 {
 
 }
@@ -647,7 +648,7 @@ void TMdPrm::disable()
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 }
 
@@ -685,7 +686,7 @@ string TMdPrm::attrPrc( )
 	    als.push_back(snd);
 	    srchOK = false;
 	    //>> Find for already presented attribute
-	    for(int i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
+	    for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
 		if(p_el.fldAt(i_a).reserve() == snd) srchOK = true;
 
 	    //>> Create new attribute
@@ -712,7 +713,7 @@ string TMdPrm::attrPrc( )
 
 		//>> Browse name
 		string aNm = req.childGet(2)->text();
-		int nmPos = aNm.find(":");
+		unsigned nmPos = aNm.find(":");
 		if(nmPos!=string::npos) aNm.erase(0,nmPos+1);
 
 		//>>> Flags prepare
@@ -731,13 +732,13 @@ string TMdPrm::attrPrc( )
     }
 
     //> Find for delete attribute
-    for(int i_a = 0; i_a < p_el.fldSize(); i_a++)
+    for(unsigned i_a = 0, i_p; i_a < p_el.fldSize(); )
     {
-	int i_p;
 	for(i_p = 0; i_p < als.size(); i_p++)
 	    if(p_el.fldAt(i_a).reserve() == als[i_p])	break;
 	if(i_p >= als.size())
-	    try{ p_el.fldDel(i_a); i_a--; } catch(TError err) { }
+	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
+	i_a++;
     }
 
     return "";
@@ -802,14 +803,14 @@ void TMdPrm::vlGet( TVal &val )
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
 	ResAlloc res( nodeRes(), true );
-	for(int i_a = 0; i_a < p_el.fldSize(); i_a++)
+	for(unsigned i_a = 0; i_a < p_el.fldSize(); i_a++)
 	{
 	    astls.push_back(p_el.fldAt(i_a).len());
 	    if(p_el.fldAt(i_a).len() && !firstErr) firstErr = p_el.fldAt(i_a).len();
 	}
 	res.release();
 	string aLs;
-	for(int i_a = 0; i_a < astls.size(); i_a++) aLs += TSYS::strMess(":0x%x",astls[i_a]);
+	for(unsigned i_a = 0; i_a < astls.size(); i_a++) aLs += TSYS::strMess(":0x%x",astls[i_a]);
 	val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
     }
 }

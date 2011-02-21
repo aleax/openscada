@@ -109,8 +109,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    TController(name_c,daq_db,cfgelem), prcSt(false), endrunReq(false), pEl("w_attr"), stream(NULL), numChan(0), smplSize(0), acqSize(0),
-    mCard(cfg("CARD").getSd()), mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId())
+    TController(name_c,daq_db,cfgelem), pEl("w_attr"),
+    mCard(cfg("CARD").getSd()), mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()),
+    prcSt(false), endrunReq(false), numChan(0), smplSize(0), stream(NULL), acqSize(0)
 {
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 
@@ -167,7 +168,7 @@ void TMdContr::save_( )
 
 void TMdContr::start_( )
 {
-    if( startStat( ) )	return;
+    if(startStat())	return;
 
     endrunReq = false;
     numChan = 0;
@@ -176,10 +177,10 @@ void TMdContr::start_( )
     //> Former proccess parameters list
     vector<string> list_p;
     list(list_p);
-    for( int i_prm = 0; i_prm < list_p.size(); i_prm++ )
-	if( at(list_p[i_prm]).at().enableStat() )
+    for(unsigned i_prm = 0; i_prm < list_p.size(); i_prm++)
+	if(at(list_p[i_prm]).at().enableStat())
 	{
-	    prmEn( list_p[i_prm], true );
+	    prmEn(list_p[i_prm], true);
 	    numChan = vmax(numChan,at(list_p[i_prm]).at().iCnl()+1);
 	}
 
@@ -235,14 +236,14 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res(nodeRes( ),true);
-    for( i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if( pHd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= pHd.size() )	pHd.push_back(at(id));
-    if( !val && i_prm < pHd.size() )	pHd.erase(pHd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if(pHd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= pHd.size()) pHd.push_back(at(id));
+    if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
 }
 
 int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
@@ -252,11 +253,11 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     cntr.prcSt = true;
     const char *bptr = (const char*)iBuf;
 
-    if( cntr.redntUse( ) ) return cntr.endrunReq;
+    if(cntr.redntUse()) return cntr.endrunReq;
 
     //> Check for current time correction
     long long cTm = TSYS::curTime();
-    if( fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6 )
+    if(fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6)
     {
 	cntr.wTm = cTm - framesPerBuffer*cntr.sdTm;
 	mess_warning(cntr.nodePath().c_str(),_("Sound card's counter run from system time is corrected."));
@@ -264,7 +265,7 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 
     //> Input buffer process
     ResAlloc res(cntr.nodeRes(),false);
-    for( int i_p = 0; i_p < cntr.pHd.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
     {
 	const char *rptr = (const char*)iBuf;
 	int  chn = cntr.pHd[i_p].at().iCnl();
@@ -273,20 +274,20 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 	switch(cntr.mSmplType)
 	{
 	    case paFloat32:
-		if( archAllow )
-		    for( int i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize )
+		if(archAllow)
+		    for(unsigned i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize)
 			val.at().arch().at().setR(*(float*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
 		val.at().setR(*(float*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
 		break;
 	    case paInt32:
-		if( archAllow )
-		    for( int i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize )
+		if(archAllow)
+		    for(unsigned i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize)
 			val.at().arch().at().setR(*(int32_t*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
 		val.at().setI(*(int32_t*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
 		break;
 	    case paInt16:
-		if( archAllow )
-		    for( int i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize )
+		if(archAllow)
+		    for(unsigned i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize)
 			val.at().arch().at().setR(*(int16_t*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
 		val.at().setI(*(int16_t*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
 		break;

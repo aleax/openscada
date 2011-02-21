@@ -66,8 +66,8 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name ) : TUI(MOD_ID),
-    mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R"), mFrcClr(false)
+Engine::Engine( string name ) : TUI(MOD_ID), mFrcClr(false),
+    mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R")
 {
     mod		= this;
 
@@ -242,17 +242,17 @@ void Engine::preDisable( int flag )
     vector<string> ls;
     //> Sessions disable
     sesList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setEnable(false);
 
     //> Projects disable
     prjList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	prjAt(ls[l_id]).at().setEnable(false);
 
     //> Libraries disable
     wlbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	wlbAt(ls[l_id]).at().setEnable(false);
 
     TModule::preDisable( flag );
@@ -302,19 +302,19 @@ void Engine::load_( )
 
 	//>>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!wlbPresent(l_id)) wlbAdd(l_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		if( !wlbPresent(l_id) )	wlbAdd(l_id,"","*.*");
+		if(!wlbPresent(l_id))	wlbAdd(l_id,"","*.*");
 	    }
 
 #if OSC_DEBUG >= 3
@@ -323,7 +323,7 @@ void Engine::load_( )
 
 	//>>>> Load present libraries
 	wlbList(db_ls);
-	for( int l_id = 0; l_id < db_ls.size(); l_id++ )
+	for(unsigned l_id = 0; l_id < db_ls.size(); l_id++)
 	{
 	    wlbAt(db_ls[l_id]).at().load();
 #if OSC_DEBUG >= 3
@@ -347,19 +347,19 @@ void Engine::load_( )
 
 	//>>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
-		if( !prjPresent(prj_id) )	prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!prjPresent(prj_id))	prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
-		if( !prjPresent(prj_id) )	prjAdd(prj_id,"","*.*");
+		if(!prjPresent(prj_id))	prjAdd(prj_id,"","*.*");
 	    }
 
 #if OSC_DEBUG >= 3
@@ -368,7 +368,7 @@ void Engine::load_( )
 
 	//>>>> Load present projects
 	prjList(db_ls);
-	for( int el_id = 0; el_id < db_ls.size(); el_id++ )
+	for(unsigned el_id = 0; el_id < db_ls.size(); el_id++)
 	{
 	    prjAt(db_ls[el_id]).at().load();
 #if OSC_DEBUG >= 3
@@ -376,7 +376,7 @@ void Engine::load_( )
 	    w_tm = TSYS::curTime();
 #endif
 	}
-    }catch( TError err )
+    }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load projects error."));
@@ -385,7 +385,7 @@ void Engine::load_( )
     //> Libraries enable
     vector<string> ls;
     wlbList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
     {
 	wlbAt(ls[l_id]).at().setEnable(true);
 #if OSC_DEBUG >= 3
@@ -396,7 +396,7 @@ void Engine::load_( )
 
     //> Projects enable
     prjList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
     {
 	prjAt(ls[l_id]).at().setEnable(true);
 #if OSC_DEBUG >= 3
@@ -411,7 +411,7 @@ void Engine::load_( )
     try
     {
 	aSess.load(TBDS::genDBGet(nodePath()+"AutoSess"));
-	for(int i_n = 0; i_n < aSess.childSize(); i_n++)
+	for(unsigned i_n = 0; i_n < aSess.childSize(); i_n++)
 	{
 	    string sId	= aSess.childGet(i_n)->attr("id");
 	    string sPrj	= aSess.childGet(i_n)->attr("prj");
@@ -460,7 +460,7 @@ void Engine::modStart()
 
     //> Start sessions
     sesList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setStart(true);
 
     run_st = true;
@@ -474,7 +474,7 @@ void Engine::modStop()
 
     //> Stop sessions
     sesList(ls);
-    for( int l_id = 0; l_id < ls.size(); l_id++ )
+    for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setStart(false);
 
     run_st = false;
@@ -650,15 +650,15 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
     if( vDB == 2 ) c_el.cfg("IDC").setS(idc,true);
     TConfig c_elu(&mod->elWdgUIO()); c_elu.cfg("IDW").setS(idw,true);
     if( vDB == 2 ) c_elu.cfg("IDC").setS(idc,true);
-    for( int i_a = 0; i_a < als.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	AutoHD<Attr> attr = w.attrAt(als[i_a]);
-	if( !attr.at().modif() ) continue;
-	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) m_attrs += als[i_a]+";";
-	if( ldGen != (bool)(attr.at().flgGlob()&Attr::Generic) ) continue;
+	if(!attr.at().modif()) continue;
+	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[i_a]+";";
+	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 
 	//> Main attributes store
-	if( attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser) )
+	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser))
 	{
 	    if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
 	    if( vDB == 2 ) c_el.cfg("ID").setS( als[i_a] );
@@ -736,7 +736,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    string prj = opt->attr("prj");
 	    vector<string> ls;
 	    sesList(ls);
-	    for(int i_l = 0; i_l < ls.size(); i_l++)
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 		if(prj.empty() || sesAt(ls[i_l]).at().projNm() == prj)
 		{
 		    AutoHD<Project> prj = sesAt(ls[i_l]).at().parent();
@@ -792,7 +792,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	//>> Widgets libraries
 	vector<string> ls;
 	wlbList(ls);
-	for(int i_wlb = 0; i_wlb < ls.size(); i_wlb++)
+	for(unsigned i_wlb = 0; i_wlb < ls.size(); i_wlb++)
 	{
 	    if(!upd_lb.empty() && upd_lb != ls[i_wlb]) continue;
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
@@ -802,7 +802,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    //>> Widgets
 	    vector<string> wls;
 	    wlb.at().list(wls);
-	    for(int i_w = 0; i_w < wls.size(); i_w++)
+	    for(unsigned i_w = 0; i_w < wls.size(); i_w++)
 	    {
 		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
@@ -813,7 +813,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		vector<string> cwls;
 		w.at().wdgList(cwls);
 		if(cwls.size() < 1000)
-		    for(int i_c = 0; i_c < cwls.size(); i_c++)
+		    for(unsigned i_c = 0; i_c < cwls.size(); i_c++)
 		    {
 			if(!upd_wdgi.empty() && upd_wdgi != cwls[i_c])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
@@ -965,12 +965,12 @@ void Engine::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/ses/usr_ls" && ctrChkNode(opt))
     {
 	vector<string> ls; SYS->security().at().usrList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
     }
     else if(a_path == "/ses/prj_ls" && ctrChkNode(opt))
     {
 	vector<string> ls; prjList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
     }
     else if(a_path == "/br/vca" && ctrChkNode(opt))
     {

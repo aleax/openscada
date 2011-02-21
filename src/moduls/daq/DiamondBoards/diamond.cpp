@@ -150,9 +150,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ad_dsc_st(false),
-	::TController(name_c,daq_db,cfgelem), 
-	data_emul(cfg("DATA_EMUL").getBd()), m_addr(cfg("ADDR").getId()), ad_int_mode(cfg("ADMODE").getBd())
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
+    ::TController(name_c,daq_db,cfgelem), m_addr(cfg("ADDR").getId()), ad_int_mode(cfg("ADMODE").getBd()),
+    data_emul(cfg("DATA_EMUL").getBd()), ad_dsc_st(false)
 {
     cfg("PRM_BD_A").setS("DiamPrmA_"+name_c);
     cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
@@ -281,26 +281,24 @@ void *TMdContr::AD_DSCTask( void *param )
     memset(&dscaioint, 0, sizeof(DSCAIOINT));
     DSCS dscs;
 
-    //- Main DSC code -
+    //> Main DSC code
     try
     {
-	//- Get AI param list and address border -
+	//> Get AI param list and address border
 	cntr.list(ai_prm);
-	for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
+	for(unsigned i_p = 0; i_p < ai_prm.size(); )
 	{
 	    AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
 	    if(prm.at().type() != TMdPrm::AI)
 	    {
 	        ai_prm.erase(ai_prm.begin()+i_p);
-	        i_p--;
+		continue;
 	    }
-	    else
-	    {
-	        p_beg = vmin(p_beg,prm.at().cnl());
-	        p_end = vmax(p_end,prm.at().cnl());
-	    }
+	    p_beg = vmin(p_beg,prm.at().cnl());
+	    p_end = vmax(p_end,prm.at().cnl());
+	    i_p++;
 	}
-	//- Generic data -
+	//> Generic data
 	int convRate = 2*(cntr.cfg("ADCONVRATE").getI()/2);
 
 	if( !cntr.dataEmul() )
@@ -337,31 +335,31 @@ void *TMdContr::AD_DSCTask( void *param )
 		    dscGetLastError(&errorParams);
 		    throw TError(cntr.nodePath().c_str(),_("dscADScanInt error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
 		}
-		//- Init operation data -
+		//> Init operation data
 		dscs.transfers = 0;
 		dscs.overflows = 0;
 		dscs.op_type = OP_TYPE_INT;
 	    }
 
-	    while( !cntr.endrun_req_ad_dsc )
+	    while(!cntr.endrun_req_ad_dsc)
 	    {
 		dscGetStatus(cntr.dscb, &dscs);
-		if( prev_trans < 0 ) prev_trans = dscs.transfers;
-		if( dscs.transfers != prev_trans && !cntr.redntUse() )
+		if(prev_trans < 0) prev_trans = dscs.transfers;
+		if((int)dscs.transfers != prev_trans && !cntr.redntUse())
 		{
 		    //> Init current time and check for current time correction
 		    long long cTm = TSYS::curTime();
-		    if( !vtm || fabs((vtm+1000000)-cTm) > 1e6 )
+		    if(!vtm || fabs((vtm+1000000)-cTm) > 1e6)
 		    {
-			if( vtm ) mess_warning(cntr.nodePath().c_str(),_("DSC card's counter run from system time is corrected."));
+			if(vtm) mess_warning(cntr.nodePath().c_str(),_("DSC card's counter run from system time is corrected."));
 			vtm = cTm-1000000;
 		    }
 
 		    int v_a_step;
 		    int p_cnt = p_end-p_beg+1;
-		    for( int i_p = 0; i_p < ai_prm.size(); i_p++ )
+		    for(unsigned i_p = 0; i_p < ai_prm.size(); i_p++)
 		    {
-			if( !cntr.present(ai_prm[i_p]) )	continue;
+			if(!cntr.present(ai_prm[i_p]))	continue;
 			AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
 			int p_cnl = prm.at().cnl();
 			if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
@@ -396,18 +394,18 @@ void *TMdContr::AD_DSCTask( void *param )
 	    }
 	}
 	else
-	    while( !cntr.endrun_req_ad_dsc )
+	    while(!cntr.endrun_req_ad_dsc)
 	    {
-		if( !vtm ) vtm = SYS->curTime()-1000000;
+		if(!vtm) vtm = SYS->curTime()-1000000;
 		int v_a_step;
-		for( int i_p = 0; i_p < ai_prm.size() && !cntr.redntUse(); i_p++ )
+		for(unsigned i_p = 0; i_p < ai_prm.size() && !cntr.redntUse(); i_p++)
 		{
-		    if( !cntr.present(ai_prm[i_p]) )	continue;
+		    if(!cntr.present(ai_prm[i_p]))	continue;
 		    AutoHD<TMdPrm> prm = cntr.at(ai_prm[i_p]);
 		    int p_cnl = prm.at().cnl();
-		    if( prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat() )
+		    if(prm.at().type() != TMdPrm::AI || p_cnl < p_beg || p_cnl > p_end || !prm.at().enableStat())
 		        continue;
-		    //- Get code -
+		    //> Get code
 		    AutoHD<TVal> val = prm.at().vlAt("code");
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
@@ -525,16 +523,17 @@ void TMdPrm::load_( )
 
 void TMdPrm::setType( TMdPrm::Type vtp )
 {
-    //- Free previos type -
+    //> Free previos type
     switch(m_tp)
     {
-	case AI: vlElemDet( &mod->elemAI() ); break;
-	case AO: vlElemDet( &mod->elemAO() ); break;
-	case DI: vlElemDet( &mod->elemDI() ); break;
-	case DO: vlElemDet( &mod->elemDO() ); break;
+	case AI: vlElemDet(&mod->elemAI()); break;
+	case AO: vlElemDet(&mod->elemAO()); break;
+	case DI: vlElemDet(&mod->elemDI()); break;
+	case DO: vlElemDet(&mod->elemDO()); break;
+	default: break;
     }
 
-    //- Init new type -
+    //> Init new type
     switch(vtp)
     {
 	case AI:
@@ -554,6 +553,7 @@ void TMdPrm::setType( TMdPrm::Type vtp )
 	case DO:
 	    vlElemAtt( &mod->elemDO() );
 	    break;
+	default: break;
     }
     m_tp = vtp;
 }
@@ -581,6 +581,7 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
 	    if( i_cfg.name() == "PORT" )	m_dio_port = (i_cfg.getI()<<4)+cfg("CNL").getI();
 	    else if( i_cfg.name() == "CNL" )	m_dio_port = (cfg("PORT").getI()<<4)+i_cfg.getI();
 	    break;
+	default: break;
     }
 
     return true;
@@ -637,24 +638,25 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	    }
 	    owner().dio_res.resRelease( );
 	}
+	default: break;
     }
 }
 
 void TMdPrm::vlGet( TVal &val )
 {
     int aid = atoi(val.fld().reserve().c_str());
-    if( aid == 0 )
+    if(aid == 0)
     {
-	if( !owner().startStat() )
+	if(!owner().startStat())
 	    val.setS(_("2:Controller is stoped"),0,true);
-	else if( !enableStat() )
+	else if(!enableStat())
 	    val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
     }
-    if( !owner().startStat() || !enableStat() )	{ val.setS(EVAL_STR,0,true); return; }
+    if(!owner().startStat() || !enableStat())	{ val.setS(EVAL_STR,0,true); return; }
 
-    if( owner().redntUse( ) ) return;
+    if(owner().redntUse()) return;
 
     switch(type())
     {
@@ -662,9 +664,9 @@ void TMdPrm::vlGet( TVal &val )
 	{
 	    if(owner().ADIIntMode()) return;
 	    short gval = 0;
-	    if( enableStat() )
+	    if(enableStat())
 	    {
-		//- Direct reading -
+		//> Direct reading
 		if(owner().dataEmul())	gval = rand()*10000/RAND_MAX;
 		else
 		{
@@ -720,6 +722,7 @@ void TMdPrm::vlGet( TVal &val )
 	    val.setB(gval,0,true);
 	    break;
 	}
+	default: break;
     }
 }
 

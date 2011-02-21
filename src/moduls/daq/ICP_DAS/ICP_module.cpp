@@ -124,10 +124,11 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 //* TMdContr                                           *
 //******************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prcSt(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0),
+TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
+	TController(name_c, daq_db, cfgelem),
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId()),
-	mLPprms(cfg("LP_PRMS").getSd()), connTry(cfg("REQ_TRY").getId())
+	connTry(cfg("REQ_TRY").getId()), mLPprms(cfg("LP_PRMS").getSd()),
+	prcSt(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -243,14 +244,14 @@ void TMdContr::setPrmLP( const string &prm, const string &vl )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res( en_res, true );
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++ )
-	if( p_hd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -274,7 +275,7 @@ void *TMdContr::Task( void *icntr )
 
 		//> Update controller's data
 		ResAlloc res( cntr.en_res, false );
-		for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ ) cntr.p_hd[i_p].at().getVals( );
+		for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().getVals();
 		res.release();
 
 		//> Calc acquisition process time
@@ -394,9 +395,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr( name, tp_prm ), p_el("w_attr"), extPrms(NULL), endRunReq(false), prcSt(false), clcCnt(0), wTm(0), dOutRev(0), dInRev(0),
-    modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()), modPrms(cfg("MOD_PRMS").getSd())
+TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
+    TParamContr(name, tp_prm), p_el("w_attr"), modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()),
+    modSlot(cfg("MOD_SLOT").getId()), modPrms(cfg("MOD_PRMS").getSd()),
+    endRunReq(false), prcSt(false), clcCnt(0), extPrms(NULL), wTm(0), dOutRev(0), dInRev(0)
 {
 
 }
@@ -417,16 +419,16 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     TParamContr::enable();
 
-    loadExtPrms( );
+    loadExtPrms();
 
     //> Delete DAQ parameter's attributes
-    for( int i_f = 0; i_f < p_el.fldSize(); i_f++ )
+    for(int i_f = 0; i_f < (int)p_el.fldSize(); i_f++)
     {
-	if( atoi(p_el.fldAt(i_f).reserve().c_str()) == modTp ) continue;
+	if(atoi(p_el.fldAt(i_f).reserve().c_str()) == modTp) continue;
 	try
 	{
 	    p_el.fldDel(i_f);
@@ -436,19 +438,19 @@ void TMdPrm::enable()
     }
 
     //> Make DAQ parameter's attributes
-    switch( modTp )
+    switch(modTp)
     {
 	case 0x8781:
-	    p_el.fldAdd( new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
-	    p_el.fldAdd( new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
-	    p_el.fldAdd( new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+	    p_el.fldAdd(new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()));
+	    p_el.fldAdd(new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()));
+	    p_el.fldAdd(new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()));
 	    break;
 	case 0x8017:
-	    for( int i_i = 0; i_i < 8; i_i++ )
+	    for(int i_i = 0; i_i < 8; i_i++)
 	    {
-		p_el.fldAdd( new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
-		p_el.fldAdd( new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()) );
+		p_el.fldAdd(new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite,"","","","",TSYS::int2str(modTp).c_str()));
+		p_el.fldAdd(new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()));
+		p_el.fldAdd(new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(modTp).c_str()));
 	    }
 	    break;
 	case 0x8042:
@@ -482,23 +484,23 @@ void TMdPrm::enable()
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
-    owner().prmEn( id(), false );
+    owner().prmEn(id(), false);
 
     TParamContr::disable();
 
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS( EVAL_STR, 0, true );
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
+	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 
     //> Stop fast task
-    if( prcSt ) SYS->taskDestroy( nodePath('.',true), &prcSt, &endRunReq );
+    if(prcSt) SYS->taskDestroy(nodePath('.',true), &prcSt, &endRunReq);
 
     //> Free module object
-    switch( modTp )
+    switch(modTp)
     {
 	case 0x8017:	delete ((PrmsI8017*)extPrms); extPrms = NULL; break;
     }
@@ -506,7 +508,7 @@ void TMdPrm::disable()
 
 void TMdPrm::loadExtPrms( )
 {
-    if( !enableStat() )	return;
+    if(!enableStat())	return;
 
     XMLNode prmNd;
     try{ prmNd.load(modPrms); } catch(...){ }
@@ -518,14 +520,14 @@ void TMdPrm::loadExtPrms( )
     vl = prmNd.attr("dOutRev"); if( !vl.empty() ) dOutRev = atoi(vl.c_str());
 
     //> By module
-    switch( modTp )
+    switch(modTp)
     {
 	case 0x8017:
-	    if( !extPrms ) extPrms = new PrmsI8017();
-	    vl = prmNd.attr("cnls"); if( !vl.empty() ) ((PrmsI8017*)extPrms)->prmNum = vmin(8,vmax(0,atoi(vl.c_str())));
-	    vl = prmNd.attr("fastPer"); if( !vl.empty() ) ((PrmsI8017*)extPrms)->fastPer = atof(vl.c_str());
-	    for( int i_n = 0; i_n < prmNd.childSize(); i_n++ )
-		if( prmNd.childGet(i_n)->name() == "cnl" )
+	    if(!extPrms) extPrms = new PrmsI8017();
+	    vl = prmNd.attr("cnls"); if(!vl.empty()) ((PrmsI8017*)extPrms)->prmNum = vmin(8,vmax(0,atoi(vl.c_str())));
+	    vl = prmNd.attr("fastPer"); if(!vl.empty()) ((PrmsI8017*)extPrms)->fastPer = atof(vl.c_str());
+	    for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
+		if(prmNd.childGet(i_n)->name() == "cnl")
 		    ((PrmsI8017*)extPrms)->cnlMode[atoi(prmNd.childGet(i_n)->attr("id").c_str())] = atoi(prmNd.childGet(i_n)->text().c_str());
 	    break;
     }
@@ -842,14 +844,14 @@ void *TMdPrm::fastTask( void *iprm )
     int c_mode;
 
     vector< AutoHD<TVal> > cnls;
-    for( int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++ )
-	cnls.push_back( prm.vlAt(TSYS::strMess("i%d",i_c)) );
-    float vbuf[ cnls.size() ];
+    for(int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++)
+	cnls.push_back(prm.vlAt(TSYS::strMess("i%d",i_c)));
+    float vbuf[cnls.size()];
 
-    while( !prm.endRunReq )
+    while(!prm.endRunReq)
     {
 	prm.owner().pBusRes.resRequestW( );
-	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
+	for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
 	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
@@ -857,8 +859,8 @@ void *TMdPrm::fastTask( void *iprm )
 	}
 	prm.owner().pBusRes.resRelease( );
 
-	for( int i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++ )
-	    cnls[i_c].at().setR( vbuf[i_c], wTm, true );
+	for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
+	    cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
 	//> Calc next work time and sleep
 	wTm += (long long)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);

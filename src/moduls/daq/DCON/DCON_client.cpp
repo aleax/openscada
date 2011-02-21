@@ -124,10 +124,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 //* TMdContr                                           *
 //******************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-	TController( name_c, daq_db, cfgelem ), prc_st(false), endrun_req(false), tm_gath(0),
-	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()),
-	m_addr(cfg("ADDR").getSd()), connTry(cfg("REQ_TRY").getId())
+TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
+	TController(name_c, daq_db, cfgelem),
+	m_per(cfg("PERIOD").getRd()), m_prior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()), m_addr(cfg("ADDR").getSd()),
+	prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
 }
@@ -182,22 +182,22 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
-
     ResAlloc res( en_res, true );
-    for( i_prm = 0; i_prm < p_hd.size(); i_prm++ )
-	if( p_hd[i_prm].at().id() == id ) break;
 
-    if( val && i_prm >= p_hd.size() )	p_hd.push_back(at(id));
-    if( !val && i_prm < p_hd.size() )	p_hd.erase(p_hd.begin()+i_prm);
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+	if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size()) p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size()) p_hd.erase(p_hd.begin()+i_prm);
 }
 
 string TMdContr::DCONCRC( string str )
 {
     const string HexSymbol[16] = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
     unsigned char CRC=0;
-    for (int i=0; i<str.size(); i++) CRC+=*str.substr(i,1).c_str();
-    int iCRC=CRC;
+    for(unsigned i = 0; i < str.size(); i++) CRC += *str.substr(i,1).c_str();
+    int iCRC = CRC;
     return HexSymbol[15 & (iCRC>>4)] + HexSymbol[15 & iCRC];
 }
 
@@ -261,7 +261,7 @@ void *TMdContr::Task( void *icntr )
 
 		//> Update controller's data
 		ResAlloc res( cntr.en_res, false );
-		for( int i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
+		for( unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++ )
 		    {
 			if( cntr.endrun_req ) break;
 			//> Request with I-7000 modules
@@ -281,9 +281,9 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>4))
@@ -327,9 +327,9 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(((int)pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 				break;
 			    }
 			    //> Read-Write DAQ parameter's for I-7063 module
@@ -346,9 +346,9 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(((int)pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>6)) if ((pdu.substr(5,2))!=(cntr.DCONCRC(pdu.substr(0,5)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>4))
@@ -368,17 +368,17 @@ void *TMdContr::Task( void *icntr )
 				//> Request with I-7063 module
 				pdu = "@" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr];
 				pdu+=HexSymbol[4*(1&cntr.p_hd[i_p].at().DO[2])+2*(1&cntr.p_hd[i_p].at().DO[1])+(1&cntr.p_hd[i_p].at().DO[0])];
-				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-				if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
+				if(cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+				if(cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //				cout << pdu.substr(0,pdu.size()) << " writing\n";
 				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 				//Check errors
-				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 				break;
 			    }
 			    //> Read DAQ parameter's for I-7017 module
@@ -395,9 +395,9 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>56))
@@ -433,9 +433,9 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//> Request with I-7024 module
 				str=fcvt(cntr.p_hd[i_p].at().AO[1],ndig,&dec,&sign);
@@ -449,10 +449,10 @@ void *TMdContr::Task( void *icntr )
 //				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 				//Check errors
-				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//> Request with I-7024 module
 				str=fcvt(cntr.p_hd[i_p].at().AO[2],ndig,&dec,&sign);
@@ -466,10 +466,10 @@ void *TMdContr::Task( void *icntr )
 //				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 				//Check errors
-				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//- Request with I-7024 module
 				str=fcvt(cntr.p_hd[i_p].at().AO[3],ndig,&dec,&sign);
@@ -483,10 +483,10 @@ void *TMdContr::Task( void *icntr )
 //				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 				//Check errors
-				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				break;
 			    }
@@ -504,9 +504,9 @@ void *TMdContr::Task( void *icntr )
 				//Check errors
 				cntr.p_hd[i_p].at().acq_err=_("No errors");
 				cntr.p_hd[i_p].at().module_err=false;
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(((int)pdu.size()-1) != acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>58)) if ((pdu.substr(57,2))!=(cntr.DCONCRC(pdu.substr(0,57)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 
 				//Set DAQ attributes
 				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>56))
@@ -523,17 +523,17 @@ void *TMdContr::Task( void *icntr )
 				//> Request with NL-8AI module
 				pdu = "^" + HexSymbol[15 & (cntr.p_hd[i_p].at().mod_addr>>4)] + HexSymbol[15 & cntr.p_hd[i_p].at().mod_addr] + "DO";
 				pdu+=HexSymbol[1&cntr.p_hd[i_p].at().DO[2]] + HexSymbol[1&cntr.p_hd[i_p].at().DO[1]] + HexSymbol [1&cntr.p_hd[i_p].at().DO[0]];
-				if (cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
-				if (cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
+				if(cntr.p_hd[i_p].at().crc_ctrl) pdu+=cntr.DCONCRC(pdu);
+				if(cntr.p_hd[i_p].at().crc_ctrl) acq_len=3; else acq_len=1;
 //				cout << pdu.substr(0,pdu.size()) << " writing\n";
 				cntr.p_hd[i_p].at().acq_err=cntr.DCONReq(pdu);
 //				cout << pdu.substr(0,pdu.size()-1) << " reading\n";
 
 				//Check errors
-				if (cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
-				if ((pdu.size()-1)!=acq_len) {cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
-				if ((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
-				if ((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
+				if(cntr.p_hd[i_p].at().acq_err=="") cntr.p_hd[i_p].at().acq_err=_("No errors");
+				if(((int)pdu.size()-1) != acq_len) { cntr.p_hd[i_p].at().module_err=true; cntr.p_hd[i_p].at().acq_err=_("Module packet length error");}
+				if((!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>0)) if (pdu.substr(0,1)!=">") {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module response");}
+				if((cntr.p_hd[i_p].at().crc_ctrl)&&(!cntr.p_hd[i_p].at().module_err)&&(pdu.size()>2)) if ((pdu.substr(1,2))!=(cntr.DCONCRC(pdu.substr(0,1)))) {cntr.p_hd[i_p].at().module_err=true;cntr.p_hd[i_p].at().acq_err=_("Invalid module CRC");}
 				break;
 			    }
 			    //> Send HostOK for all modules
@@ -588,7 +588,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	vector<string> sls;
 	if(SYS->transport().at().modPresent("Serial"))
 	    SYS->transport().at().at("Serial").at().outList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
             opt->childAdd("el")->setText(sls[i_s]);
     }
     else TController::cntrCmdProc(opt);
@@ -597,9 +597,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : 
-    TParamContr( name, tp_prm ), p_el("w_attr"), mod_tp(cfg("MOD_TP").getId()), crc_ctrl(cfg("CRC_CTRL").getBd()),
-	mod_addr(cfg("MOD_ADDR").getId())
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+    TParamContr(name, tp_prm), p_el("w_attr"), mod_tp(cfg("MOD_TP").getId()), mod_addr(cfg("MOD_ADDR").getId()),
+    crc_ctrl(cfg("CRC_CTRL").getBd())
 {
     // Default input/output data
     for( int i = 0; i < 16; i++ ) {DI[i]=0;DO[i]=0;AI[i]=0;AO[i]=0;}
@@ -625,7 +625,7 @@ void TMdPrm::enable()
     TParamContr::enable();
 
     //> Delete DAQ parameter's attributes
-    for( int i_f = 0; i_f < p_el.fldSize(); i_f++ )
+    for( int i_f = 0; i_f < (int)p_el.fldSize(); i_f++ )
     {
 	if( atoi(p_el.fldAt(i_f).reserve().c_str()) == mod_tp ) continue;
 	try
@@ -721,8 +721,8 @@ void TMdPrm::disable()
     //- Set EVAL to parameter attributes -
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS( EVAL_STR, 0, true );
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
+	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::vlGet( TVal &val )

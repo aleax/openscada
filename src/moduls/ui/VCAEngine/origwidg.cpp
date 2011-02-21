@@ -64,7 +64,7 @@ void PrWidget::setEnable( bool val )
     {
 	vector<string> ls;
 	attrList(ls);
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	{
 	    AutoHD<Attr> attr = attrAt(ls[i_l]);
 	    if(!(attr.at().flgGlob()&Attr::Active)) continue;
@@ -1410,19 +1410,19 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),11);
     //>> Add user io
     wdg->attrList(als);
-    for( int i_a = 0; i_a < als.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	AutoHD<Attr> cattr = wdg->attrAt(als[i_a]);
-	if( !(cattr.at().flgGlob()&Attr::IsUser) )	continue;
+	if(!(cattr.at().flgGlob()&Attr::IsUser)) continue;
 	IO::Type tp = IO::String;
-	switch( cattr.at().type() )
+	switch(cattr.at().type())
 	{
 	    case TFld::Boolean:	tp = IO::Boolean;	break;
 	    case TFld::Integer:	tp = IO::Integer;	break;
 	    case TFld::Real:	tp = IO::Real;		break;
 	    case TFld::String:	tp = IO::String;	break;
 	}
-	funcIO.ioAdd( new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output) );
+	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output));
     }
     try
     {
@@ -1473,25 +1473,25 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    if( docAppend )	xcur->setText(xcur->text()+xproc.text());
 	    else xcur->setText(xproc.text());
 	    //>>> Copy included tags
-	    if( !docAppend )	xcur->childClear();
-	    for( int i_t = 0; i_t < xproc.childSize(); i_t++ )
+	    if(!docAppend) xcur->childClear();
+	    for(unsigned i_t = 0; i_t < xproc.childSize(); i_t++)
 		*(xcur->childIns(0)) = *xproc.childGet(i_t);
-	    if( instrDel )	xcur->prcInstrDel("dp");
+	    if(instrDel)	xcur->prcInstrDel("dp");
 	}
-	catch( TError err )
+	catch(TError err)
 	{
 	    mess_err(wdg->nodePath().c_str(),_("Instruction proc <%s> error: %s"),TSYS::strSepParse(iLang,1,'.').c_str(),err.mess.c_str());
 	    mess_err(wdg->nodePath().c_str(),_("Error code: %s"),xcur->prcInstr("dp").c_str());
 	}
     }
 
-    float dRpt;
+    float dRpt = 1;
     string dAMess;
     //> Go to include nodes
-    for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
+    for(unsigned i_c = 0; i_c < xcur->childSize(); i_c++)
     {
 	//>> Repeat tags
-	if( funcV.getI(2) && (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6 )
+	if(funcV.getI(2) && (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6)
 	{
 	    int rCnt = 0;
 	    XMLNode *reptN = xcur->childGet(i_c);
@@ -1503,11 +1503,11 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    long long lstTime = (long long)funcV.getI(3)*1000000;
 	    long long perRpt = (long long)(1000000*dRpt);
 	    long long rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
-	    if( lstTime && lstTime<bTime ) rTime-=perRpt;
-	    if( ((time-rTime)/perRpt) > 1000 ) continue;
-	    while( rTime < time )
+	    if(lstTime && lstTime<bTime) rTime-=perRpt;
+	    if(((time-rTime)/perRpt) > 1000) continue;
+	    while(rTime < time)
 	    {
-		if( atoi(reptN->attr("docRptEnd").c_str()) )
+		if(atoi(reptN->attr("docRptEnd").c_str()))
 		{
 		    int i_n = docRevers?(i_c+1):i_c;
 		    *(xcur->childIns(i_n)) = *reptN;
@@ -1522,10 +1522,10 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		rTime = rTimeT;
 	    }
 	    funcV.setI(4,0); funcV.setI(5,0); funcV.setR(6,0);
-	    if( docRevers ) i_c += rCnt;
+	    if(docRevers) i_c += rCnt;
 	}
 	//>> Repeat messages
-	else if( !(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty() )
+	else if(!(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty())
 	{
 	    int rCnt = 0;
 	    XMLNode *reptN = xcur->childGet(i_c);
@@ -1538,14 +1538,14 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    vector<TMess::SRec> mess;
 	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess, dATmpl, (TMess::Type)dACat );
 
-	    for( int i_r = 0; i_r < mess.size(); i_r++ )
+	    for(unsigned i_r = 0; i_r < mess.size(); i_r++)
 	    {
-		if( atoi(reptN->attr("docRptEnd").c_str()) )
+		if(atoi(reptN->attr("docRptEnd").c_str()))
 		{
-		    int i_n = docRevers?(i_c+1):i_c;
+		    unsigned i_n = (docRevers ? (i_c+1) : i_c);
 		    *(xcur->childIns(i_n)) = *reptN;
 		    nodeClear(xcur->childGet(i_n));
-		    if( !docRevers ) i_c++;
+		    if(!docRevers) i_c++;
 		    rCnt++;
 		}
 		funcV.setI(7,mess[i_r].time);
@@ -1557,7 +1557,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		reptN->setAttr("docRptEnd","1");
 	    }
 	    funcV.setI(7,0); funcV.setI(8,0); funcV.setI(9,0); funcV.setS(10,""); funcV.setS(11,"");
-	    if( docRevers ) i_c += rCnt;
+	    if(docRevers) i_c += rCnt;
 	}
 	else nodeProcess(wdg,xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
     }
@@ -1571,8 +1571,8 @@ void OrigDocument::nodeClear( XMLNode *xcur )
     xcur->attrDel("docRevers");
     xcur->attrDel("docAMess");
 
-    for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
-	nodeClear( xcur->childGet(i_c) );
+    for(unsigned i_c = 0; i_c < xcur->childSize(); i_c++)
+	nodeClear(xcur->childGet(i_c));
 }
 
 //************************************************

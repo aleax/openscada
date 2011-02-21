@@ -38,7 +38,7 @@ using namespace ModBus;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
+TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
 {
     modPrt	= this;
 
@@ -53,41 +53,41 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNode = grpAdd("n_");
 
     //> Node DB structure
-    mNodeEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    mNodeEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    mNodeEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    mNodeEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mNodeEl.fldAdd( new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247") );
-    mNodeEl.fldAdd( new TFld("InTR",_("Input transport"),TFld::String,0,"20","*") );
-    mNodeEl.fldAdd( new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")) );
-    mNodeEl.fldAdd( new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("Data;Gateway node;Gateway net")) );
+    mNodeEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    mNodeEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    mNodeEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
+    mNodeEl.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247"));
+    mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,"20","*"));
+    mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
+    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("Data;Gateway node;Gateway net")));
     //>> For "Data" mode
-    mNodeEl.fldAdd( new TFld("DT_PER",_("Calc data period (s)"),TFld::Real,0,"5.3","1","0.001;99") );
-    mNodeEl.fldAdd( new TFld("DT_PROG",_("Programm"),TFld::String,TCfg::TransltText,"10000") );
+    mNodeEl.fldAdd(new TFld("DT_PER",_("Calc data period (s)"),TFld::Real,0,"5.3","1","0.001;99"));
+    mNodeEl.fldAdd(new TFld("DT_PROG",_("Programm"),TFld::String,TCfg::TransltText,"10000"));
     //>> For "Gateway" mode
-    mNodeEl.fldAdd( new TFld("TO_TR",_("To transport"),TFld::String,0,"20") );
-    mNodeEl.fldAdd( new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")) );
-    mNodeEl.fldAdd( new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247") );
+    mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,"20"));
+    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")));
+    mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //> Node data IO DB structure
-    mNodeIOEl.fldAdd( new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,"20") );
-    mNodeIOEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    mNodeIOEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    mNodeIOEl.fldAdd( new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1") );
-    mNodeIOEl.fldAdd( new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
-    mNodeIOEl.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"100") );
-    mNodeIOEl.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
+    mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,"20"));
+    mNodeIOEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
+    mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    mNodeIOEl.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    mNodeIOEl.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    mNodeIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"100"));
+    mNodeIOEl.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 }
 
-TProt::~TProt()
+TProt::~TProt( )
 {
     nodeDelAll();
 }
 
-void TProt::nAdd( const string &iid, const string &db )
+void TProt::nAdd(const string &iid, const string &db)
 {
-    if( chldPresent(mNode,iid) ) return;
-    chldAdd( mNode, new Node(iid,db,&nodeEl()) );
+    if(chldPresent(mNode,iid)) return;
+    chldAdd(mNode, new Node(iid,db,&nodeEl()));
 }
 
 void TProt::load_( )
@@ -104,19 +104,19 @@ void TProt::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_node","",fld_cnt++,g_cfg); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_node","",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !nPresent(id) )	nAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!nPresent(id)) nAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	    //>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_node",fld_cnt++,g_cfg); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_node",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !nPresent(id) )	nAdd(id,"*.*");
+		if(!nPresent(id)) nAdd(id,"*.*");
 	    }
     }catch(TError err)
     {
@@ -134,8 +134,8 @@ void TProt::modStart( )
 {
     vector<string> ls;
     nList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
-	if( nAt(ls[i_n]).at().toEnable( ) )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
+	if(nAt(ls[i_n]).at().toEnable())
 	    nAt(ls[i_n]).at().setEnable(true);
 }
 
@@ -143,7 +143,7 @@ void TProt::modStop( )
 {
     vector<string> ls;
     nList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	nAt(ls[i_n]).at().setEnable(false);
 }
 
@@ -197,7 +197,7 @@ uint16_t TProt::CRC16( const string &mbap )
     uint8_t hi = 0xFF;
     uint8_t lo = 0xFF;
     uint16_t index;
-    for( int i_b = 0; i_b < mbap.size(); i_b++ )
+    for(unsigned i_b = 0; i_b < mbap.size(); i_b++)
     {
 	index = lo^(uint8_t)mbap[i_b];
 	lo = hi^CRCHi[index];
@@ -209,7 +209,7 @@ uint16_t TProt::CRC16( const string &mbap )
 uint8_t TProt::LRC( const string &mbap )
 {
     uint8_t ch = 0;
-    for( int i_b = 0; i_b < mbap.size(); i_b++ )
+    for(unsigned i_b = 0; i_b < mbap.size(); i_b++)
 	ch += (uint8_t)mbap[i_b];
 
     return -ch;
@@ -220,12 +220,12 @@ string TProt::DataToASCII( const string &in )
     uint8_t ch;
     string rez;
 
-    for( int i = 0; i < in.size(); i++ )
+    for(unsigned i = 0; i < in.size(); i++)
     {
 	ch = (in[i]&0xF0)>>4;
-	rez += (ch + ( (ch<=9) ? '0' : ('A'-10) ));
+	rez += (ch + ((ch<=9)?'0':('A'-10)));
 	ch = in[i]&0x0F;
-	rez += (ch + ( (ch<=9) ? '0' : ('A'-10) ));
+	rez += (ch + ((ch<=9)?'0':('A'-10)));
     }
 
     return rez;
@@ -236,17 +236,17 @@ string TProt::ASCIIToData( const string &in )
     uint8_t ch1, ch2;
     string rez;
 
-    for( int i=0; i < (in.size()&(~0x01)); i+=2 )
+    for(unsigned i = 0; i < (in.size()&(~0x01)); i += 2)
     {
 	ch2 = 0;
 	ch1 = in[i];
-	if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
-	else if( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A'-10);
+	if(ch1 >= '0' && ch1 <= '9')		ch1 -= '0';
+	else if(ch1 >= 'A' && ch1 <= 'F')	ch1 -= ('A'-10);
 	else					ch1 = 0;
 	ch2 = ch1 << 4;
 	ch1 = in[i+1];
-	if( ch1 >= '0' && ch1 <= '9' )		ch1 -= '0';
-	else if ( ch1 >= 'A' && ch1 <= 'F' )	ch1 -= ('A'-10);
+	if(ch1 >= '0' && ch1 <= '9')		ch1 -= '0';
+	else if(ch1 >= 'A' && ch1 <= 'F')	ch1 -= ('A'-10);
 	else					ch1 = 0;
 	rez += ch2|ch1;
     }
@@ -259,7 +259,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string mbap, err, rez;
     char buf[1000];
 
-    ResAlloc resN( tro.nodeRes(), true );
+    ResAlloc resN(tro.nodeRes(), true);
 
     string prt   = io.name();
     string sid   = io.attr("id");
@@ -270,11 +270,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     try
     {
-	if( !tro.startStat() ) tro.start();
-	if( prt == "TCP" )		// Modbus/TCP protocol process
+	if(!tro.startStat()) tro.start();
+	if(prt == "TCP")		// Modbus/TCP protocol process
 	{
 	    //> Encode MBAP (Modbus Application Protocol)
-	    mbap.reserve( pdu.size()+7 );
+	    mbap.reserve(pdu.size()+7);
 	    mbap += (char)0x15;			//Transaction ID MSB
 	    mbap += (char)0x01;			//Transaction ID LSB
 	    mbap += (char)0x00;			//Protocol ID MSB
@@ -285,25 +285,25 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += pdu;
 
 	    //> Send request
-	    int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
+	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 	    rez.assign(buf,resp_len);
-	    if( rez.size() < 7 )	err = _("13:Error server respond");
+	    if(rez.size() < 7)	err = _("13:Error server respond");
 	    else
 	    {
-		int resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
+		unsigned resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
 
 		//> Wait tail
-		while( rez.size() < (resp_sz+6) )
+		while(rez.size() < (resp_sz+6))
 		{
-		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), reqTm, true );
-		    rez.append( buf, resp_len );
+		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm, true);
+		    rez.append(buf, resp_len);
 		}
 		pdu = rez.substr(7);
 	    }
 	}
-	else if( prt == "RTU" )		// Modbus/RTU protocol process
+	else if(prt == "RTU")		// Modbus/RTU protocol process
 	{
-	    mbap.reserve( pdu.size()+3 );
+	    mbap.reserve(pdu.size()+3);
 	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
 	    uint16_t crc = CRC16( mbap );
@@ -311,49 +311,49 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += crc;
 
 	    //> Send request
-	    for( int i_tr = 0; i_tr < reqTry; i_tr++ )
+	    for(int i_tr = 0; i_tr < reqTry; i_tr++)
 	    {
-		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
-		rez.assign( buf, resp_len );
+		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		rez.assign(buf, resp_len);
 		//> Wait tail
-		while( true )
+		while(true)
 		{
-		    try{ resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
+		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
 		    rez.append( buf, resp_len );
 		}
 
-		if( rez.size() < 2 )	{ err = _("13:Error respond: Too short."); continue; }
-		if( CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
+		if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
+		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
 		{ err = _("13:Error respond: CRC check error."); continue; }
-		pdu = rez.substr( 1, rez.size()-3 );
+		pdu = rez.substr(1, rez.size()-3);
 		err = "";
 		break;
 	    }
 	}
-	else if( prt == "ASCII" )	// Modbus/ASCII protocol process
+	else if(prt == "ASCII")		// Modbus/ASCII protocol process
 	{
-	    mbap.reserve( pdu.size()+2 );
+	    mbap.reserve(pdu.size()+2);
 	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
 	    mbap += LRC(mbap);
 	    mbap = ":"+DataToASCII(mbap)+"\r\n";
 
 	    //> Send request
-	    for( int i_tr = 0; i_tr < reqTry; i_tr++ )
+	    for(int i_tr = 0; i_tr < reqTry; i_tr++)
 	    {
-		int resp_len = tro.messIO( mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true );
-		rez.assign(buf,resp_len);
+		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		rez.assign(buf, resp_len);
 		//> Wait tail
-		while( rez.size() < 3 || rez.substr(rez.size()-2,2) != "\r\n" )
+		while(rez.size() < 3 || rez.substr(rez.size()-2,2) != "\r\n")
 		{
-		    try{ resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
-		    rez.append( buf, resp_len );
+		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+		    rez.append(buf, resp_len);
 		}
 
-		if( rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\r\n" )
+		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\r\n")
 		{ err = _("13:Error respond: Error format."); continue; }
 		string rezEnc = ASCIIToData(rez.substr(1,rez.size()-3));
-		if( LRC(rezEnc.substr(0,rezEnc.size()-1)) != (uint8_t)rezEnc[rezEnc.size()-1] )
+		if(LRC(rezEnc.substr(0,rezEnc.size()-1)) != (uint8_t)rezEnc[rezEnc.size()-1])
 		{ err = _("13:Error respond: LRC check error."); continue; }
 		pdu = rezEnc.substr(1,rezEnc.size()-2);
 		err = "";
@@ -363,11 +363,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	else err = TSYS::strMess(_("Protocol '%s' error."),prt.c_str());
 
 	//> Check respond pdu
-	if( err.empty() )
+	if(err.empty())
 	{
-	    if( pdu.size() < 2 ) err = _("13:Error respond");
-	    if( pdu[0]&0x80 )
-		switch( pdu[1] )
+	    if(pdu.size() < 2) err = _("13:Error respond");
+	    if(pdu[0]&0x80)
+		switch(pdu[1])
 		{
 		    case 0x1: err = TSYS::strMess(_("1:Function %xh is not supported."),pdu[0]&(~0x80));	break;
 		    case 0x2: err = _("2:Requested address not allow or request area too long.");	break;
@@ -380,18 +380,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    default: err = TSYS::strMess(_("12:Unknown error: %xh."),pdu[1]);	break;
 		}
 	}
-    }catch( TError er ) { err = _("14:Device error: ")+er.mess; }
+    }catch(TError er) { err = _("14:Device error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
-    if( !err.empty() ) io.setAttr("err",err);
+    if(!err.empty()) io.setAttr("err",err);
 
     //> Prepare log
-    if( prtLen( ) )
+    if(prtLen())
     {
 	time_t tm_t = time(NULL);
 	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n')+" "+prt+": '"+sid+"' --> "+TSYS::int2str(node)+"("+tro.workId()+")\n"+
 	    _("REQ -> ")+((prt!="ASCII")?TSYS::strDecode(mbap,TSYS::Bin):mbap.substr(0,mbap.size()-2))+"\n";
-	if( !err.empty() ) mess += _("ERR -> ")+err;
+	if(!err.empty()) mess += _("ERR -> ")+err;
 	else mess += _("RESP -> ")+((prt!="ASCII")?TSYS::strDecode(rez,TSYS::Bin):rez.substr(0,rez.size()-2));
 	pushPrtMess(mess+"\n");
     }
@@ -399,22 +399,22 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 void TProt::setPrtLen( int vl )
 {
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(nodeRes(), true);
 
-    while( mPrt.size() > vl )	mPrt.pop_back();
+    while((int)mPrt.size() > vl) mPrt.pop_back();
 
     mPrtLen = vl;
 }
 
 void TProt::pushPrtMess( const string &vl )
 {
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(nodeRes(), true);
 
-    if( !prtLen() )	return;
+    if(!prtLen()) return;
 
     mPrt.push_front(vl);
 
-    while( mPrt.size() > prtLen() )	mPrt.pop_back();
+    while((int)mPrt.size() > prtLen())	mPrt.pop_back();
 }
 
 void TProt::cntrCmdProc( XMLNode *opt )
@@ -462,8 +462,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/rep/rep" && ctrChkNode(opt))
     {
 	ResAlloc res(nodeRes(),true);
-	for(int i_p = 0; i_p < mPrt.size(); i_p++)
-	    opt->setText(opt->text()+mPrt[i_p]+"\n");
+	for(unsigned i_p = 0; i_p < mPrt.size(); i_p++)
+	    opt->setText(opt->text() + mPrt[i_p] + "\n");
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -494,25 +494,25 @@ bool TProtIn::mess( const string &ireqst, string &answer, const string &sender )
 
 retry:
     //>> ASCII check
-    if( reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\r\n" )
+    if(reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\r\n")
     {
 	prt = "ASCII";
 	string req = modPrt->ASCIIToData(reqst.substr(1,reqst.size()-3));
-	if( modPrt->LRC(req.substr(0,req.size()-1)) != (uint8_t)req[req.size()-1] ) return false;
+	if(modPrt->LRC(req.substr(0,req.size()-1)) != (uint8_t)req[req.size()-1]) return false;
 	node = req[0];
-	pdu = req.substr( 1, req.size()-2 );
+	pdu = req.substr(1, req.size()-2);
     }
     //>> RTU check
-    else if( reqst.size() > 3 && reqst.size() <= 256 &&
-	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (uint16_t)((reqst[reqst.size()-2]<<8)+(uint8_t)reqst[reqst.size()-1]) )
+    else if(reqst.size() > 3 && reqst.size() <= 256 &&
+	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (uint16_t)((reqst[reqst.size()-2]<<8)+(uint8_t)reqst[reqst.size()-1]))
     {
 	prt = "RTU";
 	node = reqst[0];
-	pdu = reqst.substr( 1, reqst.size()-3 );
+	pdu = reqst.substr(1, reqst.size()-3);
     }
     //>> TCP check
-    else if( reqst.size() > 7 && reqst.size() <= 260 &&
-	reqst.size() == ((unsigned short)(reqst[4]<<8)|(unsigned char)reqst[5])+6 )
+    else if(reqst.size() > 7 && reqst.size() <= 260 &&
+	reqst.size() == (unsigned)((unsigned short)(reqst[4]<<8)|(unsigned char)reqst[5])+6)
     {
 	prt = "TCP";
 	node = reqst[6];
@@ -520,27 +520,27 @@ retry:
     }
     else
     {
-	if( !isBuf && req_buf.size() )
+	if(!isBuf && req_buf.size())
 	{
 	    reqst = req_buf+reqst;
 	    isBuf = true;
 	    goto retry;
 	}
 	req_buf = reqst;
-	if( req_buf.size() > 2048 ) req_buf = "";
+	if(req_buf.size() > 2048) req_buf = "";
 	return true;
     }
     req_buf = "";
 
     vector<string> nls;
     modPrt->nList(nls);
-    int i_n;
-    for( i_n = 0; i_n < nls.size(); i_n++ )
-	if( modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu) ) break;
-    if( i_n >= nls.size() ) return false;
+    unsigned i_n;
+    for(i_n = 0; i_n < nls.size(); i_n++)
+	if(modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu)) break;
+    if(i_n >= nls.size()) return false;
 
     answer = "";
-    if( prt == "TCP" )
+    if(prt == "TCP")
     {
 	//> Encode MBAP (Modbus Application Protocol)
 	answer.reserve(pdu.size()+7);
@@ -553,7 +553,7 @@ retry:
 	answer += (char)node;			//Unit identifier
 	answer += pdu;
     }
-    else if( prt == "RTU" )
+    else if(prt == "RTU")
     {
 	answer.reserve(pdu.size()+3);
 	answer += (uint8_t)node;		//Unit identifier
@@ -562,7 +562,7 @@ retry:
 	answer += crc>>8;
 	answer += crc;
     }
-    else if( prt == "ASCII" )
+    else if(prt == "ASCII")
     {
 	answer.reserve(pdu.size()+2);
 	answer += (uint8_t)node;		//Unit identifier
@@ -571,7 +571,7 @@ retry:
 	answer = ":"+modPrt->DataToASCII(answer)+"\r\n";
     }
 
-    if( owner().prtLen( ) && prt.size() && answer.size() )
+    if(owner().prtLen( ) && prt.size() && answer.size())
     {
 	time_t tm_t = time(NULL);
 	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n')+" "+prt+": "+srcTr()+"("+sender+") --> "+TSYS::int2str(node)+"\n"+
@@ -587,9 +587,9 @@ retry:
 //* Node: ModBus input protocol node.             *
 //*************************************************
 Node::Node( const string &iid, const string &idb, TElem *el ) :
-    TFunction("ModBusNode_"+iid), TConfig(el), mDB(idb), mEn(false), prcSt(false), endrunRun(false), data(NULL), cntReq(0),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
-    mPer(cfg("DT_PER").getRd())
+    TFunction("ModBusNode_"+iid), TConfig(el), data(NULL),
+    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mPer(cfg("DT_PER").getRd()),
+    mAEn(cfg("EN").getBd()), mEn(false), mDB(idb), prcSt(false), endrunRun(false), cntReq(0)
 {
     mId = iid;
 
@@ -669,8 +669,8 @@ string Node::progLang()
 string Node::prog()
 {
     string mProg = cfg("DT_PROG").getS();
-    int lngEnd = mProg.find("\n");
-    return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
+    unsigned lngEnd = mProg.find("\n");
+    return mProg.substr(((lngEnd==string::npos)?0:lngEnd+1));
 }
 
 void Node::setProgLang( const string &ilng )
@@ -711,7 +711,7 @@ void Node::load_( )
 {
     bool en_prev = enableStat();
 
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
     cfg("MODE").setI(cfg("MODE").getI());
@@ -720,38 +720,39 @@ void Node::load_( )
     vector<string> u_pos;
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
-    for( int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); )
+    for(int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
 
 	//> Position storing
 	int pos = cfg.cfg("POS").getI();
-	while( u_pos.size() <= pos )	u_pos.push_back("");
+	while((int)u_pos.size() <= pos) u_pos.push_back("");
 	u_pos[pos] = sid;
 
 	int iid = ioId(sid);
 
-	if( iid < 0 )
-	    iid = ioIns( new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),"",false),pos );
+	if(iid < 0)
+	    iid = ioIns(new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),"",false), pos);
 	else
 	{
 	    io(iid)->setName(cfg.cfg("NAME").getS());
 	    io(iid)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	    io(iid)->setFlg(cfg.cfg("FLAGS").getI());
 	}
-	if( io(iid)->flg()&Node::IsLink ) io(iid)->setRez(cfg.cfg("VALUE").getS());
+	if(io(iid)->flg()&Node::IsLink) io(iid)->setRez(cfg.cfg("VALUE").getS());
 	else io(iid)->setDef(cfg.cfg("VALUE").getS());
     }
 
     //> Remove holes
-    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
-	if( u_pos[i_p].empty() ) { u_pos.erase(u_pos.begin()+i_p); i_p--; }
+    for(unsigned i_p = 0; i_p < u_pos.size(); )
+	if(u_pos[i_p].empty()) u_pos.erase(u_pos.begin()+i_p);
+	else i_p++;
 
     //> Position fixing
-    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+    for(int i_p = 0; i_p < (int)u_pos.size(); i_p++)
     {
 	int iid = ioId(u_pos[i_p]);
-	if( iid != i_p ) try{ ioMove(iid,i_p); } catch(...){ }
+	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...){ }
     }
 
     if(en_prev && !enableStat()) setEnable(true);
@@ -1024,27 +1025,27 @@ void *Node::Task( void *ind )
     int ioStart = nd.data->val.ioId("f_start");
     int ioStop = nd.data->val.ioId("f_stop");
 
-    for( unsigned int clc = 0; true; clc++ )
+    for(unsigned int clc = 0; true; clc++)
     {
-	if( SYS->daq().at().subStartStat( ) )
+	if(SYS->daq().at().subStartStat())
 	{
 	    long long t_cnt = TSYS::curTime();
 
 	    //> Setting special IO
-	    if( ioFrq >= 0 ) nd.data->val.setR(ioFrq,(float)1/nd.period());
-	    if( ioStart >= 0 ) nd.data->val.setB(ioStart,isStart);
-	    if( ioStop >= 0 ) nd.data->val.setB(ioStop,isStop);
+	    if(ioFrq >= 0) nd.data->val.setR(ioFrq,(float)1/nd.period());
+	    if(ioStart >= 0) nd.data->val.setB(ioStart,isStart);
+	    if(ioStop >= 0) nd.data->val.setB(ioStop,isStop);
 
 	    try
 	    {
 		//> Get input links
 		map< int, AutoHD<TVal> >::iterator li;
-		for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
+		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
 		{
-		    if( li->second.freeStat() )
+		    if(li->second.freeStat())
 		    {
 			nd.data->val.setS(li->first,EVAL_STR);
-			if( !(clc%(int)vmax(1,(float)1/nd.period())) )
+			if(!(clc%(int)vmax(1,(float)1/nd.period())))
 			{
 			    try
 			    {
@@ -1052,29 +1053,31 @@ void *Node::Task( void *ind )
 					       at(TSYS::strSepParse(nd.io(li->first)->rez(),1,'.')).at().
 					       at(TSYS::strSepParse(nd.io(li->first)->rez(),2,'.')).at().
 					       vlAt(TSYS::strSepParse(nd.io(li->first)->rez(),3,'.'));
-			    }catch( TError err ){ continue; }
+			    }catch(TError err){ continue; }
 			}else continue;
 		    }
-		    switch( nd.data->val.ioType(li->first) )
+		    switch(nd.data->val.ioType(li->first))
 		    {
 			case IO::String:	nd.data->val.setS(li->first,li->second.at().getS());	break;
 			case IO::Integer:	nd.data->val.setI(li->first,li->second.at().getI());	break;
 			case IO::Real:	nd.data->val.setR(li->first,li->second.at().getR());	break;
 			case IO::Boolean:	nd.data->val.setB(li->first,li->second.at().getB());	break;
+			default: break;
 		    }
 		}
 
 		nd.data->val.calc();
 
 		//> Put output links
-		for( li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++ )
-		    if( !li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) )
-		    switch( nd.data->val.ioType(li->first) )
+		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
+		    if(!li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite))
+		    switch(nd.data->val.ioType(li->first))
 		    {
 			case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
 			case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
 			case IO::Real:		li->second.at().setR(nd.data->val.getR(li->first));	break;
 			case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
+			default: break;
 		    }
 	    }
 	    catch(TError err)
@@ -1087,9 +1090,9 @@ void *Node::Task( void *ind )
 	    nd.tmProc = TSYS::curTime()-t_cnt;
 	}
 
-	if( isStop ) break;
+	if(isStop) break;
 	TSYS::taskSleep((long long)(1e9*nd.period()));
-	if( nd.endrunRun ) isStop = true;
+	if(nd.endrunRun) isStop = true;
 	isStart = false;
 	nd.modif();
     }
@@ -1168,14 +1171,14 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(mode() != 2) opt->childAdd("el")->setText("*");
 	vector<string> sls;
 	SYS->transport().at().inTrList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if(a_path == "/nd/cfg/ls_otr" && ctrChkNode(opt))
     {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
@@ -1270,16 +1273,16 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for(int i_l = 0; i_l < ls.size(); i_l++)
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
-		    { ls.erase(ls.begin()+i_l); i_l--; }
+		for(unsigned i_l = 0; i_l < ls.size(); )
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
+		    else i_l++;
 		break;
 	    case 1:
 		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt))
@@ -1315,7 +1318,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,8) == "/lnk/el_")
