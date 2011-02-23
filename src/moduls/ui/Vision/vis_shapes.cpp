@@ -79,6 +79,7 @@ bool WdgShape::event( WdgView *view, QEvent *event )
 		view->setToolTip(QString(_("Widget's shape '%1' is not implemented yet!")).arg(id().c_str()));
 	    }
 	    return true;
+	default: break;
     }
     return false;
 }
@@ -561,6 +562,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::ContextMenu:
 		QApplication::sendEvent(w,event);
 		return true;
+	    default:	break;
 	}
     }
     else
@@ -576,6 +578,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		w->attrSet("focus","0");
 		w->attrSet("event","ws_FocusOut");
 		break;
+	    default:	break;
 	}
 
     return false;
@@ -811,8 +814,8 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 40:	//numbArg
 	{
 	    int numbArg = atoi(val.c_str());
-	    while( shD->args.size() < numbArg )	shD->args.push_back(ArgObj());
-	    while( shD->args.size() > numbArg )	shD->args.pop_back();
+	    while((int)shD->args.size() < numbArg) shD->args.push_back(ArgObj());
+	    while((int)shD->args.size() > numbArg) shD->args.pop_back();
 	    reform = true;
 	    break;
 	}
@@ -821,7 +824,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 50 )
 	    {
 		int argN = (uiPrmPos/10)-5;
-		if( argN >= shD->args.size() )	break;
+		if(argN >= (int)shD->args.size())	break;
 		if( (uiPrmPos%10) == 0 || (uiPrmPos%10) == 1 )
 		{
 		    QVariant gval = shD->args[argN].val();
@@ -844,7 +847,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     if( reform && !w->allAttrLoad() )
     {
 	QString text = shD->text_tmpl.c_str();
-	for( int i_a = 0; i_a < shD->args.size(); i_a++ )
+	for(unsigned i_a = 0; i_a < shD->args.size(); i_a++)
 	{
 	    switch( shD->args[i_a].val().type())
 	    {
@@ -931,6 +934,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    event->accept();
 	    return true;
         }
+	default: break;
     }
     return false;
 }
@@ -1048,8 +1052,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 28:	//areas
 	{
 	    int numbMAr = atoi(val.c_str());
-	    while( shD->maps.size() < numbMAr )	shD->maps.push_back(MapArea());
-	    while( shD->maps.size() > numbMAr )	shD->maps.pop_back();
+	    while((int)shD->maps.size() < numbMAr) shD->maps.push_back(MapArea());
+	    while((int)shD->maps.size() > numbMAr) shD->maps.pop_back();
 	    break;
 	}
 	case 29: 	//speed
@@ -1067,7 +1071,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 40 )
 	    {
 		int areaN = (uiPrmPos-40)/3;
-		if( areaN >= shD->maps.size() ) break;
+		if(areaN >= (int)shD->maps.size()) break;
 		switch( (uiPrmPos-40)%3 )
 		{
 		    case 0:	//shape
@@ -1186,11 +1190,11 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    Qt::CursorShape new_shp = Qt::ArrowCursor;
 	    if( !shD->maps.empty() )
 	    {
-		for( int i_a = 0; i_a < shD->maps.size(); i_a++ )
-		    if( shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+		for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
+		    if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
 		    {
 			new_shp = Qt::PointingHandCursor;
-			if( !shD->maps[i_a].title.empty() ) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
+			if(!shD->maps[i_a].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
 			break;
 		    }
 	    }
@@ -1203,22 +1207,24 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	case QEvent::MouseButtonPress:
 	{
 	    string sev;
-	    for( int i_a = 0; i_a < shD->maps.size(); i_a++ )
-	        if( shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())) )
+	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
+	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
 	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }
 	    if( !sev.empty() )
 	    {
 		switch(((QMouseEvent*)event)->button())
 		{
-		    case Qt::LeftButton:	sev+="Left";	break;
-		    case Qt::RightButton:	sev+="Right";	break;
-		    case Qt::MidButton:		sev+="Midle";	break;
+		    case Qt::LeftButton:	sev += "Left";	break;
+		    case Qt::RightButton:	sev += "Right";	break;
+		    case Qt::MidButton:		sev += "Midle";	break;
+		    default: return false;
 		}
 		w->attrSet("event",sev);
 		return true;
 	    }
 	    break;
 	}
+	default: break;
     }
 
     return false;
@@ -1396,8 +1402,8 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 39:	//parNum
 	{
 	    int parNum = atoi(val.c_str());
-	    while( shD->prms.size() < parNum )	shD->prms.push_back(TrendObj(w));
-	    while( shD->prms.size() > parNum )	shD->prms.pop_back();
+	    while((int)shD->prms.size() < parNum) shD->prms.push_back(TrendObj(w));
+	    while((int)shD->prms.size() > parNum) shD->prms.pop_back();
 	    make_pct = true;
 	    break;
 	}
@@ -1416,7 +1422,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
 	    {
 		int trndN = (uiPrmPos/10)-5;
-		if( trndN >= shD->prms.size() ) break;
+		if(trndN >= (int)shD->prms.size()) break;
 		make_pct = true;
 		switch(uiPrmPos%10)
 		{
@@ -1446,7 +1452,7 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
 	shD->prms[i_p].loadData(full);
 }
 
@@ -1569,11 +1575,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
     int prmRealSz = -1;
     //>> Calc real parameters size
-    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
-	if( shD->prms[i_p].fftN && shD->prms[i_p].color().isValid() )
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
+	if(shD->prms[i_p].fftN && shD->prms[i_p].color().isValid())
 	{
-	    if( prmRealSz == -1 ) prmRealSz = i_p;
-	    else if( prmRealSz >= 0 ) prmRealSz = -2;
+	    if(prmRealSz == -1) prmRealSz = i_p;
+	    else if(prmRealSz >= 0) prmRealSz = -2;
 	    else prmRealSz -= 1;
 	}
 
@@ -1651,7 +1657,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     }
 
     //>> Draw trends
-    for( int i_t = 0; i_t < shD->prms.size(); i_t++ )
+    for(unsigned i_t = 0; i_t < shD->prms.size(); i_t++)
     {
 	TrendObj *sTr = &shD->prms[i_t];
 	if( !sTr->fftN || !sTr->color().isValid() ) continue;
@@ -1805,7 +1811,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	if( sclHor&0x3 )
 	{
 	    time_t tm_t;
-	    struct tm ttm, ttm1;
+	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
 	    //>>>> Draw generic grid line
 	    pnt.setPen(grdPen);
@@ -1905,11 +1911,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     int prmRealSz = -1;
     //>> Calc real parameters size
-    for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
-	if( shD->prms[i_p].val().size() && shD->prms[i_p].color().isValid() )
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
+	if(shD->prms[i_p].val().size() && shD->prms[i_p].color().isValid())
 	{
-	    if( prmRealSz == -1 ) prmRealSz = i_p;
-	    else if( prmRealSz >= 0 ) prmRealSz = -2;
+	    if(prmRealSz == -1) prmRealSz = i_p;
+	    else if(prmRealSz >= 0) prmRealSz = -2;
 	    else prmRealSz -= 1;
 	}
 
@@ -1935,9 +1941,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    if( ipos && shD->prms[prmRealSz].val()[ipos].tm > aVbeg ) ipos--;
 	    while( true )
 	    {
-		if( ipos >= shD->prms[prmRealSz].val().size() || end_vl )	break;
-		if( shD->prms[prmRealSz].val()[ipos].tm >= aVend )	end_vl = true;
-		if( shD->prms[prmRealSz].val()[ipos].val != EVAL_REAL )
+		if(ipos >= (int)shD->prms[prmRealSz].val().size() || end_vl)	break;
+		if(shD->prms[prmRealSz].val()[ipos].tm >= aVend) end_vl = true;
+		if(shD->prms[prmRealSz].val()[ipos].val != EVAL_REAL)
 		{
 		    vsMin  = vmin(vsMin,shD->prms[prmRealSz].val()[ipos].val);
 		    vsMax  = vmax(vsMax,shD->prms[prmRealSz].val()[ipos].val);
@@ -2000,7 +2006,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
 
     //>> Draw trends
-    for( int i_t = 0; i_t < shD->prms.size(); i_t++ )
+    for(unsigned i_t = 0; i_t < shD->prms.size(); i_t++)
     {
 	TrendObj *sTr = &shD->prms[i_t];
 
@@ -2028,9 +2034,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    int ipos = aPosBeg;
 	    while( true )
 	    {
-		if( ipos >= sTr->val().size() || end_vl )	break;
-		if( sTr->val()[ipos].tm >= aVend )	end_vl = true;
-		if( sTr->val()[ipos].val != EVAL_REAL )
+		if(ipos >= (int)sTr->val().size() || end_vl)	break;
+		if(sTr->val()[ipos].tm >= aVend) end_vl = true;
+		if(sTr->val()[ipos].val != EVAL_REAL)
 		{
 		    bordL = vmin(bordL,sTr->val()[ipos].val);
 		    bordU = vmax(bordU,sTr->val()[ipos].val);
@@ -2050,7 +2056,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
 	    curTm = vmin(aVend,vmax(aVbeg,sTr->val()[a_pos].tm));
-	    if( a_pos < sTr->val().size() && !end_vl )
+	    if(a_pos < (int)sTr->val().size() && !end_vl)
 	    {
 		curVl = sTr->val()[a_pos].val;
 		if( vsPerc && curVl != EVAL_REAL )
@@ -2233,6 +2239,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    w->update();
 	    break;
 	}
+	default: break;
     }
 
     return false;
@@ -2254,17 +2261,18 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 	w->attrSet("curUSek",TSYS::int2str(curTime%1000000),31);
 
 	//> Update trend's current values
-	for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
 	{
 	    int vpos = shD->prms[i_p].val(curTime);
 	    double val = EVAL_REAL;
-	    if( !(!shD->prms[i_p].val().size() || curTime < shD->prms[i_p].valBeg( ) || (!shD->holdCur && vpos >= shD->prms[i_p].val().size())) )
+	    if(!(!shD->prms[i_p].val().size() || curTime < shD->prms[i_p].valBeg( ) ||
+		(!shD->holdCur && vpos >= (int)shD->prms[i_p].val().size())))
 	    {
-		vpos = vmax(0,vmin(shD->prms[i_p].val().size()-1,vpos));
-		if( vpos && shD->prms[i_p].val()[vpos].tm > curTime )	vpos--;
+		vpos = vmax(0,vmin((int)shD->prms[i_p].val().size()-1,vpos));
+		if(vpos && shD->prms[i_p].val()[vpos].tm > curTime) vpos--;
 		val = shD->prms[i_p].val()[vpos].val;
 	    }
-	    if( val != shD->prms[i_p].curVal() )
+	    if(val != shD->prms[i_p].curVal())
 		w->attrSet(TSYS::strMess("prm%dval",i_p),TSYS::real2str(val,6),54+10*i_p);
 	}
 	w->setAllAttrLoad(false);
@@ -2278,9 +2286,9 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 	w->attrSet("curUSek",TSYS::int2str(((long long)(1e6/curFrq))%1000000),31);
 
 	//> Update trend's current values
-	for( int i_p = 0; i_p < shD->prms.size(); i_p++ )
+	for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
 	{
-	    if( !shD->prms[i_p].fftN )	continue;
+	    if(!shD->prms[i_p].fftN) continue;
 	    float fftDt = (1/shD->tSize)*(float)w->size().width()/shD->prms[i_p].fftN;
 	    int vpos = (int)(curFrq/fftDt);
 	    double val = EVAL_REAL;
@@ -2295,9 +2303,9 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 
 //* Trend object's class                         *
 //************************************************
-ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) : view(iview),
-    m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL),
-    arh_beg(0), arh_end(0), arh_per(0), val_tp(0), fftN(0), fftOut(NULL)
+ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) :
+    fftN(0), fftOut(NULL), m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL),
+    arh_per(0), arh_beg(0), arh_end(0), val_tp(0), view(iview)
 {
     loadData();
 }
@@ -2322,8 +2330,8 @@ int ShapeDiagram::TrendObj::val( long long tm )
     int i_p = 0;
     for( int d_win = vals.size()/2; d_win > 10; d_win/=2 )
 	if( tm < vals[i_p+d_win].tm )	i_p+=d_win;
-    for( int i_p = 0; i_p < vals.size(); i_p++ )
-	if( vals[i_p].tm >= tm ) return i_p;
+    for(unsigned i_p = 0; i_p < vals.size(); i_p++)
+	if(vals[i_p].tm >= tm) return i_p;
     return vals.size();
 }
 
@@ -2505,7 +2513,7 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
 
     int fftFirstPos = -1, fftLstPos = -1;
-    for( int a_pos = val(tTimeGrnd); a_pos < val().size() && val()[a_pos].tm <= tTime; a_pos++ )
+    for(unsigned a_pos = val(tTimeGrnd); a_pos < val().size() && val()[a_pos].tm <= tTime; a_pos++)
     {
 	int fftPos = (val()[a_pos].tm-tTimeGrnd)/workPer;
 	if( fftPos >= fftN ) break;
@@ -2642,7 +2650,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 26:	//trcPer
 	{
-	    unsigned int trcPer = strtoul(val.c_str(),0,10);
+	    unsigned trcPer = strtoul(val.c_str(),0,10);
 	    if( shD->trcPer == trcPer ) break;
 	    shD->trcPer = trcPer;
  	    if( trcPer )	shD->trcTimer->start(trcPer*1000);
@@ -2667,9 +2675,9 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 32:	//itProp
 	{
 	    int itNum = atoi(val.c_str());
-	    if( shD->itProps.size() == itNum ) break;
-	    while( shD->itProps.size() < itNum )	shD->itProps.push_back( ShpDt::ItProp() );
-	    while( shD->itProps.size() > itNum )	shD->itProps.pop_back( );
+	    if((int)shD->itProps.size() == itNum) break;
+	    while((int)shD->itProps.size() < itNum) shD->itProps.push_back(ShpDt::ItProp());
+	    while((int)shD->itProps.size() > itNum) shD->itProps.pop_back();
 	    reld_dt = 1; break;
 	}
 	default:
@@ -2677,7 +2685,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if( uiPrmPos >= 40 )
 	    {
 		int itNum = (uiPrmPos-40)/5;
-		if( itNum >= shD->itProps.size() ) break;
+		if(itNum >= (int)shD->itProps.size()) break;
 		reld_dt = 1;
 		switch( uiPrmPos%5 )
 		{
@@ -2808,21 +2816,21 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 
 
     if( toUp )
-	for( int i_req = 0; i_req < req.childSize(); i_req++ )
+	for(unsigned i_req = 0; i_req < req.childSize(); i_req++)
 	{
 	    XMLNode *rcd = req.childGet(i_req);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10),atoi(rcd->attr("utime").c_str()),rcd->attr("cat"),(TMess::Type)atoi(rcd->attr("lev").c_str()),rcd->text());
 
 	    //>> Check for dublicates
-	    int i_p;
-	    for( i_p = 0; i_p < shD->messList.size(); i_p++ )
+	    unsigned i_p;
+	    for(i_p = 0; i_p < shD->messList.size(); i_p++)
 	    {
-		if( mess.time > shD->messList[0].time && i_p )	continue;
-		if( shD->messList[i_p].utime == mess.utime && shD->messList[i_p].level == mess.level &&
-			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess )
+		if(mess.time > shD->messList[0].time && i_p) continue;
+		if(shD->messList[i_p].utime == mess.utime && shD->messList[i_p].level == mess.level &&
+			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess)
 		    break;
 	    }
-	    if( i_p < shD->messList.size() ) continue;
+	    if(i_p < shD->messList.size()) continue;
 
 	    //>> Insert new row
 	    shD->messList.push_front(mess);
@@ -2838,8 +2846,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    int i_p;
 	    for( i_p = shD->messList.size()-1; i_p >= 0; i_p-- )
 	    {
-		if( mess.time < shD->messList[shD->messList.size()-1].time && i_p < (shD->messList.size()-1) ) continue;
-		if( shD->messList[i_p].utime == mess.utime && shD->messList[i_p].level == mess.level &&
+		if(mess.time < shD->messList[shD->messList.size()-1].time && i_p < ((int)shD->messList.size()-1)) continue;
+		if(shD->messList[i_p].utime == mess.utime && shD->messList[i_p].level == mess.level &&
 			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess )
 		    break;
 	    }
@@ -2850,26 +2858,26 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    isDtChang = true;
 	}
 
-    if( shD->addrWdg->rowCount() == shD->messList.size() && !isDtChang ) return;
+    if(shD->addrWdg->rowCount() == (int)shD->messList.size() && !isDtChang) return;
 
     //> Sort data
     vector< pair<string,int> > sortIts;
     switch( shD->viewOrd&0x3 )
     {
 	case 0:
-	    for( int i_m = 0; i_m < shD->messList.size(); i_m++ )
-		sortIts.push_back( pair<string,int>(TSYS::uint2str(shD->messList[i_m].time)+" "+TSYS::uint2str(shD->messList[i_m].utime),i_m) );
+	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
+		sortIts.push_back(pair<string,int>(TSYS::uint2str(shD->messList[i_m].time)+" "+TSYS::uint2str(shD->messList[i_m].utime),i_m));
 	    break;
 	case 1:
-	    for( int i_m = 0; i_m < shD->messList.size(); i_m++ )
-		sortIts.push_back( pair<string,int>(TSYS::int2str(shD->messList[i_m].level),i_m) );
+	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
+		sortIts.push_back(pair<string,int>(TSYS::int2str(shD->messList[i_m].level),i_m));
 	    break;
 	case 2:
-	    for( int i_m = 0; i_m < shD->messList.size(); i_m++ )
+	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
 		sortIts.push_back( pair<string,int>(shD->messList[i_m].categ,i_m) );
 	    break;
 	case 3:
-	    for( int i_m = 0; i_m < shD->messList.size(); i_m++ )
+	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
 		sortIts.push_back( pair<string,int>(shD->messList[i_m].mess,i_m) );
 	    break;
     }
@@ -2879,12 +2887,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     //> Write to table
     shD->addrWdg->setRowCount(sortIts.size());
     QTableWidgetItem *tit;
-    for( int i_m = 0; i_m < sortIts.size(); i_m++ )
+    for(unsigned i_m = 0; i_m < sortIts.size(); i_m++)
     {
 	QFont fnt;
 	QColor clr, fclr;
 	//>> Check properties
-	for( int i_it = 0, lst_lev = -1; i_it < shD->itProps.size(); i_it++ )
+	for(int i_it = 0, lst_lev = -1; i_it < (int)shD->itProps.size(); i_it++)
 	    if( shD->messList[sortIts[i_m].second].level >= shD->itProps[i_it].lev && shD->itProps[i_it].lev > lst_lev &&
 		TMess::chkPattern(shD->messList[sortIts[i_m].second].categ,shD->itProps[i_it].tmpl) )
 	    {
@@ -3134,13 +3142,12 @@ void ShapeDocument::nodeProcess( XMLNode *xcur, ShapeDocument::ShpDt *shD )
     xcur->prcInstrClear();
 
     //> Go to include nodes
-    for( int i_c = 0; i_c < xcur->childSize(); i_c++ )
+    for(unsigned i_c = 0; i_c < xcur->childSize(); )
     {
 	//>> Check for special tags
-	if( xcur->childGet(i_c)->name().substr(0,3) == "doc" )
-	{ xcur->childDel(i_c); i_c--; continue; }
-
+	if(xcur->childGet(i_c)->name().substr(0,3) == "doc") { xcur->childDel(i_c); continue; }
 	nodeProcess(xcur->childGet(i_c),shD);
+	i_c++;
     }
 }
 

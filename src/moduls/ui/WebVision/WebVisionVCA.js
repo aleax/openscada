@@ -1060,7 +1060,7 @@ function makeEl( pgBr, inclPg )
 	    };
 	    this.place.onmouseout = function()
 	    {
-	      if(this.checkable || this.style.borderStyle=='outset') return
+	      if(this.checkable || this.style.borderStyle=='outset') return false;
 	      this.style.borderStyle='outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
 	    };
 	    this.place.onclick = function()
@@ -1095,11 +1095,10 @@ function makeEl( pgBr, inclPg )
 	  formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	  formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	  formObj.style.font = fontCfg;
-	  formObj.type='button';
+	  formObj.type = 'button';
 	  formObj.value = this.attrs['name'].replace('\\n','\n');
 	  this.mouseup[this.mouseup.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); };
 	  this.mousedown[this.mousedown.length] = function(e,el){ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
-	  //formObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); return false; }
 	  formObj.wdgLnk = this;
 	  if( this.attrs['color'] ) formObj.style.backgroundColor=getColor(this.attrs['color']);
 	  if( this.attrs['colorText'] ) formObj.style.color=getColor(this.attrs['colorText']);

@@ -1,6 +1,10 @@
+2011-02-23 Roman
+- !!:UI.Vision, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.WebVision: All warnings is resolved for "-Wall" compile option.
+
+
 2011-02-21 Roman
 - FIX:DB.SQLite: No memory free from error string is fixed for wrong requests to a table.
-- DAQ.DAQGate, DAQ.DCON, DAQ.DiamondBoards, DAQ.ICP_DAS, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.ModBus, DAQ.OPC_UA, DAQ.Siemens, DAQ.SoundCard
+- !!:DAQ.DAQGate, DAQ.DCON, DAQ.DiamondBoards, DAQ.ICP_DAS, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.ModBus, DAQ.OPC_UA, DAQ.Siemens, DAQ.SoundCard
     UI.QTCfg, UI.QTStarter, UI.VCAEngine: All warnings is resolved for "-Wall" compile option.
 
 

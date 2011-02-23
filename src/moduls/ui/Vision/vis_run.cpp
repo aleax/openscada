@@ -420,8 +420,8 @@ void VisRun::printPg( const string &ipg )
 	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
 	QComboBox *spg = new QComboBox(&sdlg);
 	sdlg.edLay()->addWidget( spg, 2, 1 );
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
-	    if( (rpg=findOpenPage(pgList[i_p])) )
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
 	if( sdlg.exec() != QDialog::Accepted )	return;
 	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
@@ -479,8 +479,8 @@ void VisRun::printDiag( const string &idg )
     {
 	RunPageView *rpg;
 	vector<string> lst;
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
-	    if( (rpg=findOpenPage(pgList[i_p])) )
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Diagram",lst);
 	if( lst.empty() )	{ QMessageBox::warning(this,_("Print diagram"),_("No one diagram is present!")); return; }
 	if( lst.size() == 1 )	dg = lst[0];
@@ -489,12 +489,12 @@ void VisRun::printDiag( const string &idg )
 	    //> Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
-	    InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select diagramm for print."), _("Diagram print."), false, false );
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagramm for print."), _("Diagram print."), false, false);
 	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
-	    for( int i_l = 0; i_l < lst.size(); i_l++ )
-		if( (rwdg=findOpenWidget(lst[i_l])) )
+	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
@@ -537,10 +537,10 @@ void VisRun::printDiag( const string &idg )
 	painter.drawText(QRect(0,0,pagl.width(),fntSize*2),Qt::AlignRight,QString(_("User: \"%1\"\n%2")).arg(user().c_str()).arg(dt.toString("d.MM.yyyy h:mm:ss")));
 
 	//>> Draw trend's elements
-	for( int i_e = 0; i_e < sD->prms.size(); i_e++ )
+	for(unsigned i_e = 0; i_e < sD->prms.size(); i_e++)
 	{
 	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
-	    if( sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid() ) continue;
+	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
 	    painter.drawText(QRect(pnt.x()+fntSize,pnt.y(),pagl.width()/2,fntSize),Qt::AlignLeft,
@@ -562,8 +562,8 @@ void VisRun::printDoc( const string &idoc )
     {
 	RunPageView *rpg;
 	vector<string> lst;
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
-	    if( (rpg=findOpenPage(pgList[i_p])) )
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Document",lst);
 	if( lst.empty() )	{ QMessageBox::warning(this,_("Print document"),_("No one document is present!")); return; }
 	if( lst.size() == 1 )	doc = lst[0];
@@ -576,8 +576,8 @@ void VisRun::printDoc( const string &idoc )
 	    sdlg.edLay()->addWidget( new QLabel(_("Document:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
-	    for( int i_l = 0; i_l < lst.size(); i_l++ )
-		if( (rwdg=findOpenWidget(lst[i_l])) )
+	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
 	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
@@ -616,8 +616,8 @@ void VisRun::exportPg( const string &ipg )
 	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
 	QComboBox *spg = new QComboBox(&sdlg);
 	sdlg.edLay()->addWidget( spg, 2, 1 );
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
-	    if( (rpg=findOpenPage(pgList[i_p])) )
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
 	if( sdlg.exec() != QDialog::Accepted )	return;
 	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
@@ -642,14 +642,14 @@ void VisRun::exportDiag( const string &idg )
     RunWdgView *rwdg;
     string dg = idg;
 
-    if( pgList.empty() )	{ QMessageBox::warning(this,_("Export diagram"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Export diagram"),_("No one page is present!")); return; }
 
-    if( dg.empty() )
+    if(dg.empty())
     {
 	RunPageView *rpg;
 	vector<string> lst;
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
-	    if( (rpg=findOpenPage(pgList[i_p])) )
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Diagram",lst);
 	if( lst.empty() )	{ QMessageBox::warning(this,_("Export diagram"),_("No one diagram is present!")); return; }
 	if( lst.size() == 1 )	dg = lst[0];
@@ -662,8 +662,8 @@ void VisRun::exportDiag( const string &idg )
 	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
-	    for( int i_l = 0; i_l < lst.size(); i_l++ )
-		if( (rwdg=findOpenWidget(lst[i_l])) )
+	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
@@ -686,14 +686,14 @@ void VisRun::exportDoc( const string &idoc )
     RunWdgView *rwdg;
     string doc = idoc;
 
-    if( pgList.empty() )	{ QMessageBox::warning(this,_("Export document"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Export document"),_("No one page is present!")); return; }
 
-    if( doc.empty() )
+    if(doc.empty())
     {
 	RunPageView *rpg;
 	vector<string> lst;
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
-	    if( (rpg=findOpenPage(pgList[i_p])) )
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Document",lst);
 	if( lst.empty() )	{ QMessageBox::warning(this,_("Export document"),_("No one document is present!")); return; }
 	if( lst.size() == 1 )	doc = lst[0];
@@ -706,8 +706,8 @@ void VisRun::exportDoc( const string &idoc )
 	    sdlg.edLay()->addWidget( new QLabel(_("Document:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
-	    for( int i_l = 0; i_l < lst.size(); i_l++ )
-		if( (rwdg=findOpenWidget(lst[i_l])) )
+	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
 	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
@@ -812,7 +812,7 @@ void VisRun::fullScreen( bool vl )
 
 void VisRun::alarmAct( QAction *alrm )
 {
-    if( alarm == NULL ) return;
+    if(alrm == NULL) return;
 
     int quitance = 0;
     string qwdg;
@@ -902,7 +902,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	conreq.resize(400,300);
 
 	//>> Load session list
-	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 	    ls_wdg->addItem(req.childGet(i_ch)->text().c_str());
 	ls_wdg->setCurrentRow(0);
 
@@ -968,8 +968,8 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     //> Get open pages list
     req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
-    if( !cntrIfCmd(req) )
-	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+    if(!cntrIfCmd(req))
+	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 	{
 	    pgList.push_back(req.childGet(i_ch)->text());
 	    callPage(req.childGet(i_ch)->text());
@@ -1002,10 +1002,10 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
 void VisRun::fullUpdatePgs( )
 {
-    for( int i_p = 0; i_p < pgList.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
     {
 	RunPageView *pg = master_pg->findOpenPage(pgList[i_p]);
-	if( pg ) pg->update(true);
+	if(pg) pg->update(true);
     }
 }
 
@@ -1076,7 +1076,7 @@ RunPageView *VisRun::pgCacheGet( const string &id )
 {
     RunPageView *pg = NULL;
 
-    for( int i_pg = 0; i_pg < cache_pg.size(); i_pg++ )
+    for(unsigned i_pg = 0; i_pg < cache_pg.size(); i_pg++)
 	if( cache_pg[i_pg]->id() == id )
 	{
 	    pg = cache_pg[i_pg];
@@ -1097,14 +1097,14 @@ RunPageView *VisRun::findOpenPage( const string &pg )
 RunWdgView *VisRun::findOpenWidget( const string &wdg )
 {
     int woff = 0;
-    for( int off = 0; true; woff = off )
+    for(int off = 0; true; woff = off)
     {
-	string sel=TSYS::pathLev(wdg,0,true,&off);
-	if( sel.empty() || sel.substr(0,4) == "wdg_" )	break;
+	string sel = TSYS::pathLev(wdg,0,true,&off);
+	if(sel.empty() || sel.substr(0,4) == "wdg_")	break;
     }
     RunPageView *rpg = findOpenPage(wdg.substr(0,woff));
-    if( !rpg )	return NULL;
-    if( woff >= wdg.size() )	return rpg;
+    if(!rpg )	return NULL;
+    if(woff >= (int)wdg.size())	return rpg;
 
     return rpg->findOpenWidget(wdg);
 }
@@ -1129,10 +1129,10 @@ void VisRun::alarmSet( unsigned alarm )
 
     //> Check for early this session running equalent project
     bool isMaster = true;
-    for( int i_w = 0; i_w < mod->mn_winds.size(); i_w++ )
-	if( qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject( ) == srcProject( ) )
+    for(unsigned i_w = 0; i_w < mod->mn_winds.size(); i_w++)
+	if(qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject() == srcProject())
 	{
-	    if( ((VisRun*)mod->mn_winds[i_w])->workSess( ) != workSess( ) ) isMaster = false;
+	    if(((VisRun*)mod->mn_winds[i_w])->workSess() != workSess()) isMaster = false;
 	    break;
 	}
 
@@ -1237,25 +1237,24 @@ void VisRun::updatePage( )
     {
 	//>> Check for delete pages
 	RunPageView *pg;
-	for( int i_p = 0; i_p < pgList.size(); i_p++ )
+	for(unsigned i_p = 0, i_ch; i_p < pgList.size(); i_p++)
 	{
-	    int i_ch;
-	    for( i_ch = 0; i_ch < req.childSize(); i_ch++ )
-		if( pgList[i_p] == req.childGet(i_ch)->text() )
+	    for(i_ch = 0; i_ch < req.childSize(); i_ch++)
+		if(pgList[i_p] == req.childGet(i_ch)->text())
 		    break;
-	    if( i_ch < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[i_p]))) ) continue;
-	    if( !pg->property("cntPg").toString().isEmpty() )
+	    if(i_ch < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[i_p])))) continue;
+	    if(!pg->property("cntPg").toString().isEmpty())
 		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toAscii().data()))->setPgOpenSrc("");
 	    else
 	    {
 		pg->deleteLater();
-		if( pg == master_pg )	master_pg = NULL;
+		if(pg == master_pg)	master_pg = NULL;
 	    }
 	}
 
 	//>> Process opened pages
 	pgList.clear();
-	for( int i_ch = 0; i_ch < req.childSize(); i_ch++ )
+	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 	{
 	    pgList.push_back(req.childGet(i_ch)->text());
 	    callPage(req.childGet(i_ch)->text(),atoi(req.childGet(i_ch)->attr("updWdg").c_str()));
@@ -1296,13 +1295,13 @@ void VisRun::updatePage( )
     }
 
     //> Old pages from cache for close checking
-    for(int i_pg = 0; i_pg < cache_pg.size(); i_pg++)
+    for(unsigned i_pg = 0; i_pg < cache_pg.size(); )
 	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (int)(mod->cachePgLife()*60*60))
 	{
 	    delete cache_pg[i_pg];
 	    cache_pg.erase(cache_pg.begin()+i_pg);
-	    i_pg--;
 	}
+	else i_pg++;
 
 #if OSC_DEBUG >= 3
     upd_tm += 1e-3*(TSYS::curTime()-t_cnt);

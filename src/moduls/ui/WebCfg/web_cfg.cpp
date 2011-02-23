@@ -508,9 +508,9 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		    if( !wr )
 		    {
 			char *c_tm = ctime( &tm_t );
-			for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
+			for( unsigned i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
 			    if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
-			ses.page=ses.page+"<b>"+c_tm+"</b>";
+			ses.page = ses.page+"<b>"+c_tm+"</b>";
 		    }
 		    else
 		    {
@@ -627,7 +627,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 
 	//- Draw head -
 	ses.page = ses.page + "<tr bgcolor='#FFA07A' align='center'>";
-	for( int i_cl=0; i_cl < req.childSize(); i_cl++)
+	for(unsigned i_cl = 0; i_cl < req.childSize(); i_cl++)
 	{
 	    XMLNode *t_lsel = req.childGet(i_cl);
 	    XMLNode *t_linf = node.childGet("id",t_lsel->attr("id"),true);
@@ -636,21 +636,21 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 	    ses.page = ses.page + "<td>"+TSYS::strEncode(t_linf->attr("dscr"),TSYS::Html)+"</td>";
 	    //-- Calc column sizes --
 	    clm_sz[i_cl] = t_linf->attr("dscr").size();
-	    for( int i_rw=0; i_rw < t_lsel->childSize(); i_rw++)
+	    for(unsigned i_rw = 0; i_rw < t_lsel->childSize(); i_rw++)
 	    {
 		XMLNode *x_el  = t_lsel->childGet(i_rw);
-		if( x_el->text().size() > clm_sz[i_cl] ) clm_sz[i_cl] = x_el->text().size();
+		if( (int)x_el->text().size() > clm_sz[i_cl] ) clm_sz[i_cl] = x_el->text().size();
 	    }
-	    if( clm_sz[i_cl] < 5 )	clm_sz[i_cl] = 5;
-	    if( clm_sz[i_cl] > 40 )	clm_sz[i_cl] = 40;
+	    if(clm_sz[i_cl] < 5) clm_sz[i_cl] = 5;
+	    if(clm_sz[i_cl] > 40)clm_sz[i_cl] = 40;
 	}
 	if( wr ) ses.page = ses.page + "<td bgcolor='Green'>*</td>";
 	ses.page = ses.page + "</tr>\n";
 
-	for( int i_rw=0; req.childSize() && i_rw < req.childGet(0)->childSize(); i_rw++)
+	for(unsigned i_rw = 0; req.childSize() && i_rw < req.childGet(0)->childSize(); i_rw++)
 	{
 	    ses.page = ses.page + "<tr bgcolor='#cccccc'>";
-	    for( int i_cl=0; i_cl < req.childSize(); i_cl++)
+	    for(unsigned i_cl = 0; i_cl < req.childSize(); i_cl++)
 	    {
 		XMLNode *t_lsel = req.childGet(i_cl);
 		XMLNode *t_linf = node.childGet("id",t_lsel->attr("id"),true);
@@ -662,7 +662,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		{
 		    time_t tm_t = atoi(x_el->text().c_str());
 		    char *c_tm = ctime( &tm_t );
-		    for( int i_ch = 0; i_ch < strlen(c_tm); i_ch++ )
+		    for(unsigned i_ch = 0; i_ch < strlen(c_tm); i_ch++)
 			if( c_tm[i_ch] == '\n' ) c_tm[i_ch] = '\0';
 		    ses.page = ses.page+"<td nowrap='nowrap'>"+c_tm+"</td>";
 		}
@@ -697,7 +697,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 			setAttr("user",ses.user);
 			if(cntrIfCmd(x_lst)) ses.mess.push_back(x_lst.text().c_str());
 
-			for( int i_ls = 0; i_ls < x_lst.childSize(); i_ls++ )
+			for(unsigned i_ls = 0; i_ls < x_lst.childSize(); i_ls++)
 			{
 			    if( u_ind ) ses.page = ses.page+"<option value='"+x_lst.childGet(i_ls)->attr("id")+"'";
 			    else ses.page = ses.page+"<option value='"+x_lst.childGet(i_ls)->text()+"'";
@@ -890,7 +890,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 	    return 0x01|0x02;  //No error. That no draw curent page
 	}
 
-	for( int i_prm = 0; i_prm < node.childSize(); i_prm++ )
+	for(unsigned i_prm = 0; i_prm < node.childSize(); i_prm++)
 	{
 	    XMLNode *t_c = node.childGet(i_prm);
 	    if( t_c->name() == "fld" )
@@ -906,7 +906,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode(prs_path,TSYS::PathEl))->setAttr("user",ses.user);
 
 	//-- Copy command parameters --
-	for( int i_ch = 0; i_ch < node.childSize(); i_ch++ )
+	for(unsigned i_ch = 0; i_ch < node.childSize(); i_ch++)
 	    *req.childAdd() = *node.childGet(i_ch);
 	if(cntrIfCmd(req)) ses.mess.push_back(req.text().c_str());
 	//return 0x01;
@@ -929,7 +929,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
     int c_pos = 1;
     while(true)
     {
-	int t_pos = prs_path.find("/",c_pos);
+	unsigned t_pos = prs_path.find("/",c_pos);
 	if( t_pos == string::npos )
 	{
 	    l_com = prs_path.substr(c_pos,t_pos-c_pos);
@@ -1057,7 +1057,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
     int c_pos = 1;
     while(true)
     {
-	int t_pos = prs_path.find("/",c_pos);
+	unsigned t_pos = prs_path.find("/",c_pos);
 	if( t_pos == string::npos )
 	{
 	    l_com = prs_path.substr(c_pos,t_pos-c_pos);
@@ -1075,13 +1075,13 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 
     if( l_com == "apply" )
     {
-	for( int i_cl=0; i_cl < dt_tbl.childSize(); i_cl++)
+	for(unsigned i_cl = 0; i_cl < dt_tbl.childSize(); i_cl++)
 	{
 	    XMLNode *t_lsel = dt_tbl.childGet(i_cl);
 	    XMLNode *t_linf = node.childGet("id",t_lsel->attr("id"),true);
 	    if(!t_linf) continue;
 	    if(wr && (atoi(t_linf->attr("acs").c_str())&SEC_WR) )
-		for( int i_rw=0; i_rw < t_lsel->childSize(); i_rw++)
+		for(unsigned i_rw = 0; i_rw < t_lsel->childSize(); i_rw++)
 		{
 		    XMLNode *w_el = t_lsel->childGet(i_rw);
 		    string new_val = cntGet(ses,TSYS::int2str(i_rw)+":"+t_linf->attr("id"));
@@ -1102,11 +1102,11 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 			    //-- Get Key columns --
 			    string key;
 			    for( int i_off = 0; (key=TSYS::strSepParse(node.attr("key"),0,',',&i_off)).size(); )
-				for( int i_el = 0; i_el < dt_tbl.childSize(); i_el++ )
+				for(unsigned i_el = 0; i_el < dt_tbl.childSize(); i_el++)
 				    if( dt_tbl.childGet(i_el)->attr("id") == key )
 				    {
 					n_el1.setAttr("key_"+key,dt_tbl.childGet(i_el)->childGet(i_rw)->text());
-					row_addr=row_addr+"key_"+key+"="+dt_tbl.childGet(i_el)->childGet(i_rw)->text()+",";
+					row_addr = row_addr+"key_"+key+"="+dt_tbl.childGet(i_el)->childGet(i_rw)->text()+",";
 					break;
 				    }
 			    //-- Get current column id --
@@ -1129,21 +1129,21 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
     }
     else if( l_com == "ins" && dt_tbl.childSize() > 0 )
     {
-	for( int i_rw=0; i_rw < dt_tbl.childGet(0)->childSize(); i_rw++)
+	for(unsigned i_rw = 0; i_rw < dt_tbl.childGet(0)->childSize(); i_rw++)
 	    if( cntGet(ses,"row:"+TSYS::int2str(i_rw)) != "<empty>" )
 	    {
 		n_el1.setName("ins");
 		n_el1.setAttr("row",TSYS::int2str(i_rw+op_cnt));
 		mess_info(nodePath().c_str(),_("%s| Insert <%s> record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw+op_cnt );
-		
+
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 		op_cnt++;
 	    }
     }
     else if( l_com == "del" && dt_tbl.childSize() > 0 )
     {
-	for( int i_rw=0; i_rw < dt_tbl.childGet(0)->childSize(); i_rw++)
+	for(unsigned i_rw = 0; i_rw < dt_tbl.childGet(0)->childSize(); i_rw++)
 	    if( cntGet(ses,"row:"+TSYS::int2str(i_rw)) != "<empty>" )
 	    {
 		n_el1.setName("del");
@@ -1154,20 +1154,20 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 		     //-- Get Key columns --
 		     string key;
 		     for( int i_off = 0; (key=TSYS::strSepParse(node.attr("key"),0,',',&i_off)).size(); )
-			for( int i_el = 0; i_el < dt_tbl.childSize(); i_el++ )
+			for(unsigned i_el = 0; i_el < dt_tbl.childSize(); i_el++)
 			    if( dt_tbl.childGet(i_el)->attr("id") == key )
 			    { n_el1.setAttr("key_"+key,dt_tbl.childGet(i_el)->childGet(i_rw)->text()); break; }
 		}
 		mess_info(nodePath().c_str(),_("%s| Delete <%s> record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw-op_cnt );
-		
+
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 		op_cnt++;
 	    }
     }
     else if( (l_com == "up" || l_com == "down") && dt_tbl.childSize() > 0 )
     {
-	for( int i_rw=0; i_rw < dt_tbl.childGet(0)->childSize(); i_rw++)
+	for(unsigned i_rw = 0; i_rw < dt_tbl.childGet(0)->childSize(); i_rw++)
 	    if( cntGet(ses,"row:"+TSYS::int2str(i_rw)) != "<empty>" )
 	    {
 		int r_new = i_rw-1;
@@ -1176,7 +1176,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 		n_el1.setAttr("row",TSYS::int2str(i_rw))->setAttr("to",TSYS::int2str(r_new));
 		mess_info(nodePath().c_str(),_("%s| Move <%s> record from %d to %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw, r_new );
-		
+
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 	    }
     }
@@ -1273,7 +1273,7 @@ string TWEB::getCookie( string name, vector<string> &vars )
     for( unsigned i_var = 0; i_var < vars.size(); i_var++)
 	if( vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie" )
 	{
-	    int i_beg = vars[i_var].find(name+"=",0);
+	    unsigned i_beg = vars[i_var].find(name+"=",0);
 	    if( i_beg == string::npos ) return "";
 	    i_beg += name.size()+1;
 	    return vars[i_var].substr(i_beg,vars[i_var].find(";",i_beg)-i_beg);
@@ -1290,7 +1290,7 @@ void TWEB::colontDown( SSess &ses )
     if( ses.mess.size() )
     {
 	ses.page = ses.page+"<SCRIPT LANGUAGE='JavaScript'>\n<!--\n";
-	for( int i_m = 0; i_m < ses.mess.size(); i_m++)
+	for(unsigned i_m = 0; i_m < ses.mess.size(); i_m++)
 	    ses.page = ses.page+"alert('"+TSYS::strEncode(ses.mess[i_m],TSYS::JavaSc)+"');\n";
 	ses.page = ses.page+"//-->\n</SCRIPT>\n";
     }
@@ -1307,10 +1307,10 @@ string TWEB::cntGet( SSess &ses, const string &nm )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), vars(ivars), content(icontent)
+    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
 {
     //> URL parameters parse
-    int prmSep = iurl.find("?");
+    unsigned prmSep = iurl.find("?");
     if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
@@ -1329,7 +1329,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
 
-    for(int i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
+    for(unsigned i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
         if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
         {
             pos += strlen(c_bound);
@@ -1337,7 +1337,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
         }
     if(boundary.empty()) return;
 
-    for(int pos = 0, spos = 0, i_bnd = 0; true; )
+    for(unsigned pos = 0, spos = 0, i_bnd = 0; true; )
     {
         pos = content.find(boundary,pos);
         if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;

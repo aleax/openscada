@@ -49,10 +49,12 @@ class ShapeItem
 {
     public:
 	ShapeItem( )	{ }
-	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3, short num_4, short num_5,
-		    const QPointF &ctrlpos_4, const short &ilineColor, const short &iborderColor, const short &istyle , short iwidth, short bwidth, short itype, double iangle_temp ) : 
-	    ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(ilineColor),
-	    borderColor(iborderColor), style(istyle), width(iwidth), border_width(bwidth), type(itype), path(ipath), pathSimple(path_simple), angle_temp(iangle_temp)
+	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3,
+		short num_4, short num_5, const QPointF &ctrlpos_4, const short &ilineColor, const short &iborderColor,
+		const short &istyle , short iwidth, short bwidth, short itype, double iangle_temp ) :
+	    path(ipath), pathSimple(path_simple), ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5),
+	    lineColor(ilineColor), borderColor(iborderColor), style(istyle), width(iwidth), border_width(bwidth), type(itype),
+	    angle_temp(iangle_temp)
 	{ };
 
 	QPainterPath	path,
@@ -76,13 +78,12 @@ class inundationItem
         //Methods
         inundationItem( )	{ }
         inundationItem( const QPainterPath &ipath, const short &ibrush, const short &ibrush_img,
-                        const QVector<int> &inumber_shape, const QVector<int> &inumber_point ) : 
-                        brush(ibrush), brush_img(ibrush_img), path(ipath), number_shape(inumber_shape),
-                       number_point(inumber_point)
+                        const QVector<int> &inumber_shape, const QVector<int> &inumber_point ) :
+            path(ipath), brush(ibrush), brush_img(ibrush_img), number_shape(inumber_shape), number_point(inumber_point)
         { };
 
         //Attributes
-        QPainterPath   	path; 
+        QPainterPath   	path;
         short         	brush, brush_img;
         QVector<int>  	number_shape;
         QVector<int>    number_point;
@@ -97,7 +98,7 @@ class RectItem
     public:
 	RectItem( )	{ }
         RectItem( const QPainterPath &ipath, int inum, const QBrush &ibrush, const QPen &ipen ) :
-	    num(inum), brush(ibrush), pen(ipen), path(ipath)	{  }
+	    path(ipath), num(inum), brush(ibrush), pen(ipen)	{  }
 
 	QPainterPath 	path;
 	int 		num;
@@ -217,23 +218,37 @@ class ShapeElFigure : public WdgShape
 		previousPosition, previousPosition_all;		//Previous position for drag point by figure moving
 	ShapeItem *itemInMotion;				//Selected (moving) figure
 
-        bool status_hold;
-
         QVector<int> index_array;
         QVector<int> rect_array;
         QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
 
-	int count_Shapes, count_moveItemTo,
-	    index, fill_index, index_temp, index_del,
-	    rect_num;
-	bool flag_cursor, flag_key, flag_up, flag_down, flag_left, flag_right, 
-             flag_ctrl, flag_ctrl_move, flag_m, flag_hold_arc, flag_A, flag_copy, flag_check_pnt_inund;
-
-        bool flag_rect, flag_arc_rect_3_4, flag_first_move, flag_move, flag_release;
+	int count_Shapes, count_moveItemTo, index, fill_index, index_temp, index_del, rect_num;
+        short	status_hold	:1;
+	short	flag_cursor	:1;
+	short	flag_key	:1;
+	short	flag_up		:1;
+	short	flag_down	:1;
+	short	flag_left	:1;
+	short	flag_right	:1;
+	short	flag_ctrl	:1;
+	short	flag_ctrl_move	:1;
+	short	flag_m		:1;
+	short	flag_hold_arc	:1;
+	short	flag_A		:1;
+	short	flag_copy	:1;
+	short	flag_check_pnt_inund	:1;
+	short	flag_rect	:1;
+	short	flag_arc_rect_3_4	:1;
+	short	flag_first_move	:1;
+	short	flag_move	:1;
+	short	flag_release	:1;
+        short	flag_hold_move	:1;
+        short	flag_inund_break	:1;
+        short	flag_scale	:1;
+        short	flag_rotate	:1;
+        short	flag_angle_temp	:1;
+        short	flag_geom	:1;
         int count_rects, rect_num_arc, arc_rect;
-        bool flag_hold_move;
-        bool flag_inund_break;
-        bool flag_scale, flag_rotate;
         double t_start, t_end;
 	QPointF Mouse_pos, offset, pop_pos;
         QPoint stPointDashedRect;
@@ -251,7 +266,7 @@ class ShapeElFigure : public WdgShape
         QPointF Prev_pos_1, Prev_pos_2;
         QVector<int> num_vector;
         double angle_temp;
-        bool flag_angle_temp, flag_geom;
+
         int rect_dyn;
         QPixmap rect_img;
     };

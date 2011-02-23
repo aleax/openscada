@@ -210,7 +210,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     XMLNode req("get");
     req.setAttr("path","/Security/%2fusgr%2fusers");
     if( !mod->cntrIfCmd(req,iuser.toAscii().data(),ipass.toAscii().data(),iVCAstat.toAscii().data(),true) )
-	for( int i_u = 0; i_u < req.childSize(); i_u++ )
+	for(unsigned i_u = 0; i_u < req.childSize(); i_u++)
 	    users->addItem(req.childGet(i_u)->text().c_str());
 
     users->setEditText(iuser);
@@ -397,8 +397,8 @@ bool UserStBar::userSel()
 //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
 //*********************************************************************************************
 LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
-    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), bt_tm(NULL), ed_fld(NULL),
-    mPrev(!prev_dis), applyReserve(resApply)
+    QWidget(parent), m_tp((LineEdit::LType)-1), mPrev(!prev_dis), applyReserve(resApply),
+    ed_fld(NULL), bt_fld(NULL), bt_tm(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin(0);
@@ -681,7 +681,7 @@ void SyntxHighl::rule(XMLNode *rl, const QString &text, QTextCharFormat defForm,
 	if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
 	if(format(index+off)!=defForm) continue;
 	setFormat(index+off, expr.matchedLength(), kForm);
-	for(int i_ch = 0; i_ch < rl->childSize(); i_ch++)
+	for(unsigned i_ch = 0; i_ch < rl->childSize(); i_ch++)
 	    rule(rl->childGet(i_ch),text.mid(index,expr.matchedLength()),kForm,index+off);
     }
 }
@@ -690,7 +690,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 {
     QTextCharFormat kForm, defkForm;
     if(text.length()) defkForm = format(0);
-    for(int i_ch = 0; i_ch < rules.childSize(); i_ch++)
+    for(unsigned i_ch = 0; i_ch < rules.childSize(); i_ch++)
     {
 	XMLNode *rl = rules.childGet(i_ch);
 	kForm.setForeground(QColor(rl->attr("color").c_str()));
@@ -725,7 +725,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 		    sizeBlk = endIndex-startBlk;
 		}
 		//> Call include rules
-		for(int i_ch1 = 0; i_ch1 < rl->childSize(); i_ch1++)
+		for(unsigned i_ch1 = 0; i_ch1 < rl->childSize(); i_ch1++)
 		    rule(rl->childGet(i_ch1),text.mid(startBlk,sizeBlk),kForm,startBlk);
 
 		if(endIndex == -1 || eExpr.matchedLength() <= 0) break;
@@ -739,7 +739,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 //* Text edit widget                              *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
-    QWidget(parent), but_box(NULL), isInit(false), snt_hgl(NULL), stWin(NULL)
+    QWidget(parent), isInit(false), snt_hgl(NULL), but_box(NULL), stWin(NULL)
 {
     QVBoxLayout *box = new QVBoxLayout(this);
     box->setMargin(0);
@@ -933,8 +933,8 @@ void TextEdit::find( )
 //* Shape widget view                    *
 //****************************************
 WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget *parent, Qt::WindowFlags f ) :
-    QWidget(parent,f), idWidget(iwid), shape(NULL), mWLevel(ilevel), main_win(mainWind),
-    x_scale(1.0), y_scale(1.0), z_coord(0), mAllAttrLoad(false), shpData(NULL), isReload(false)
+    QWidget(parent,f), shpData(NULL), isReload(false), mAllAttrLoad(false), mWLevel(ilevel),
+    x_scale(1.0), y_scale(1.0), z_coord(0), idWidget(iwid), shape(NULL), main_win(mainWind)
 {
     //setAttribute(Qt::WA_OpaquePaintEvent,true);
 }
@@ -1091,7 +1091,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 	setAllAttrLoad( true );
 	if( item.empty() || item == id() )
-	    for( int i_el = 0; i_el < aBr->childSize(); i_el++ )
+	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
 		if( aBr->childGet(i_el)->name() == "el" )
 		    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
 	setAllAttrLoad( false );
@@ -1099,17 +1099,18 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	//>> Delete child widgets
 	string b_nm = aBr->attr("lnkPath");
 	if( b_nm.empty() ) b_nm = id();
-	for( int i_c = 0, i_l = 0; i_c < children().size(); i_c++ )
+	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++)
 	{
-	    if( !qobject_cast<WdgView*>(children().at(i_c)) ) continue;
-	    for( i_l = 0; i_l < aBr->childSize(); i_l++ )
-		if( aBr->childGet(i_l)->name() == "w" && qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+	    if(!qobject_cast<WdgView*>(children().at(i_c))) continue;
+	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
+		if(aBr->childGet(i_l)->name() == "w" &&
+			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		    break;
-	    if( i_l >= aBr->childSize() ) children().at(i_c)->deleteLater();
+	    if(i_l >= (int)aBr->childSize()) children().at(i_c)->deleteLater();
 	}
 
 	//>> Create new child widget
-	for( int i_l = 0, i_c = 0; i_l < aBr->childSize(); i_l++ )
+	for( int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++ )
 	{
 	    if( aBr->childGet(i_l)->name() != "w" ) continue;
 	    for( i_c = 0; i_c < children().size(); i_c++ )
@@ -1180,9 +1181,9 @@ void WdgView::orderUpdate( )
     }
     make_heap(arr.begin(),arr.end());
     sort_heap(arr.begin(),arr.end());
-    if( ols.size() == arr.size() )
-	for( int i_c = 0; i_c < ols.size(); i_c++ )
-	    if( i_c < arr.size() ) ols[i_c] = arr[i_c].second;
+    if(ols.size() == (int)arr.size())
+	for(int i_c = 0; i_c < ols.size(); i_c++)
+	    if(i_c < (int)arr.size()) ols[i_c] = arr[i_c].second;
 }
 
 bool WdgView::event( QEvent *event )

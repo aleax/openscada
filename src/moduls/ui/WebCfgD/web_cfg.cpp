@@ -314,7 +314,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		    vector<string> stls;
 		    SYS->transport().at().extHostList(ses.user,stls);
 		    stls.insert(stls.begin(),SYS->id());
-		    for( int i_st = 0; i_st < stls.size(); i_st++ )
+		    for(unsigned i_st = 0; i_st < stls.size(); i_st++)
 		    {
 			XMLNode *chN;
 			if( stls[i_st] == SYS->id() )
@@ -331,7 +331,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			//>>>> Process groups
 			XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
 			mod->cntrIfCmd(brReq,ses.user);
-			for( int i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++ )
+			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++)
 			{
 			    XMLNode *chB = chN->childAdd();
 			    *chB = *brReq.childGet(0)->childGet(i_br);
@@ -456,12 +456,11 @@ string TWEB::trMessReplace( const string &tsrc )
 {
     string trez; trez.reserve(tsrc.size());
 
-    int txtBeg = 0, i_s;
-    for( i_s = 0; i_s < tsrc.size(); i_s++ )
+    unsigned txtBeg = 0, i_s, i_r;
+    for(i_s = 0; i_s < tsrc.size(); i_s++)
 	if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
 	{
-	    int i_r;
-	    for( i_r = i_s+3; i_r < tsrc.size(); i_r++ )
+	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
 		if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
 		    break;
 	    if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
@@ -494,7 +493,7 @@ string TWEB::getCookie( string name, vector<string> &vars )
     for( unsigned i_var = 0; i_var < vars.size(); i_var++)
 	if( vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie" )
 	{
-	    int i_beg = vars[i_var].find(name+"=",0);
+	    unsigned i_beg = vars[i_var].find(name+"=",0);
 	    if( i_beg == string::npos ) return "";
 	    i_beg += name.size()+1;
 	    return vars[i_var].substr(i_beg,vars[i_var].find(";",i_beg)-i_beg);
@@ -533,12 +532,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* SSess                                         *
 //*************************************************
-SSess::SSess( const string &iurl, const string &isender, const string &iuser,
-	vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), vars(ivars), content(icontent)
+SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
+    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
 {
     //> URL parameters parse
-    int prmSep = iurl.find("?");
+    unsigned prmSep = iurl.find("?");
     if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
@@ -558,7 +556,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser,
     const char *c_name = "name=\"";
     const char *c_file = "filename=\"";
 
-    for(int i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
+    for(unsigned i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
         if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
         {
             pos += strlen(c_bound);
@@ -566,7 +564,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser,
         }
     if(boundary.empty()) return;
 
-    for(int pos = 0, spos = 0, i_bnd = 0; true; )
+    for(unsigned pos = 0, spos = 0, i_bnd = 0; true; )
     {
         pos = content.find(boundary,pos);
         if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;

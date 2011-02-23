@@ -142,7 +142,7 @@ class ShapeFormEl : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), evLock(false), addrWdg(NULL), elType(-1), welType(-1) { }
+		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), welType(-1), addrWdg(NULL) { }
 		//Attributes
 		short	en	:1;
 		short	active	:1;
@@ -260,7 +260,7 @@ class ShapeMedia : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), mediaType(-1), geomMargin(0)	{ }
+		ShpDt( ) : en(true), geomMargin(0), mediaType(-1)	{ }
 		//Attributes
 		short	en		:1;
 		short	geomMargin	:8;
@@ -348,19 +348,19 @@ class ShapeDiagram : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), geomMargin(0), tTime(0), tPict(0), curTime(0), 
-		    sclVerScl(100), sclVerSclOff(0), tTimeCurent(false), trcPer(0), holdCur(true)	{ }
+		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0),
+		    tTime(0), tPict(0), curTime(0), sclVerScl(100), sclVerSclOff(0)	{ }
 		//Attributes
-		short	en		:1;
-		short	active		:1;
-		short	type		:3;
-		short	holdCur		:1;
-		short	geomMargin	:8;
-		short	bordStyle	:5;
-		short	tTimeCurent	:1;
-		short	trcPer		:10;
-		short	sclHor		:4;
-		short	sclVer		:4;
+		unsigned en		:1;
+		unsigned active		:1;
+		unsigned type		:3;
+		unsigned holdCur	:1;
+		unsigned geomMargin	:8;
+		unsigned bordStyle	:5;
+		unsigned tTimeCurent	:1;
+		unsigned trcPer		:10;
+		unsigned sclHor		:4;
+		unsigned sclVer		:4;
 		QColor	curColor, sclColor, sclMarkColor;
 		QBrush	backGrnd;
 		QPen		border;
@@ -437,13 +437,13 @@ class ShapeProtocol : public WdgShape
 			QFont font;
 		};
 		//Methods
-		ShpDt( ) : active(true), time(0), tSize(60), timeCurent(false), arhBeg(0), arhEnd(0)	{ }
+		ShpDt( ) : active(true), timeCurent(false), time(0), tSize(60), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
-		short	active		:1;
-		short	timeCurent	:1;
-		short	trcPer		:10;
-		short	lev		:4;
-		short	viewOrd		:4;
+		unsigned active		:1;
+		unsigned timeCurent	:1;
+		unsigned trcPer		:10;
+		unsigned lev		:4;
+		unsigned viewOrd	:4;
 		QTimer 		*trcTimer;
 		QTableWidget	*addrWdg;
 		unsigned int	time, tSize;

@@ -100,14 +100,14 @@ class ShapeItem
 	ShapeItem( )	{ }
 	ShapeItem(const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
 		  const Point &ctrlpos_4, const double iang, const int color, const int bcolor, const int iwidth,
-		  const int bwidth, const int itype, const int istyle, const bool iflag_brd ) : 
-	    ctrlPos4(ctrlpos_4), ang(iang), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), lineColor(color),borderColor(bcolor),
-	    width(iwidth), border_width(bwidth), type(itype), style(istyle), flag_brd(iflag_brd)
+		  const int bwidth, const int itype, const int istyle, const bool iflag_brd ) :
+	    ctrlPos4(ctrlpos_4), ang(iang), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5), style(istyle),
+	    width(iwidth), border_width(bwidth), lineColor(color), borderColor(bcolor), type(itype), flag_brd(iflag_brd)
         { }
 
 	Point		ctrlPos4;
 	double		ang;
-	int 		n1, n2, n3, n4, n5, 
+	int 		n1, n2, n3, n4, n5,
 			style,
 			width,
 			border_width,

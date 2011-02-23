@@ -41,7 +41,7 @@ using namespace VISION;
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
     WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), mPermCntr(false), mPermView(true)
 {
-    int endElSt = iwid.rfind("/");
+    unsigned endElSt = iwid.rfind("/");
     if( endElSt == string::npos ) return;
     string lstEl = iwid.substr(endElSt+1);
     if( lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_" ) setObjectName(lstEl.substr(4).c_str());
@@ -109,8 +109,8 @@ void RunWdgView::update( bool full, XMLNode *aBr )
     }
 
     if( full )	setAllAttrLoad(true);
-    for( int i_el = 0; i_el < aBr->childSize(); i_el++ )
-	if( aBr->childGet(i_el)->name() == "el" )
+    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
+	if(aBr->childGet(i_el)->name() == "el")
 	    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
     if( full )
     {
@@ -119,19 +119,19 @@ void RunWdgView::update( bool full, XMLNode *aBr )
 	attrSet("","load",-1);
 
 	//> Delete child widgets
-	for( int i_c = 0, i_l = 0; i_c < children().size(); i_c++ )
+	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++)
 	{
 	    if( !qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c)) ) continue;
-	    for( i_l = 0; i_l < aBr->childSize(); i_l++ )
+	    for( i_l = 0; i_l < (int)aBr->childSize(); i_l++ )
 		if( aBr->childGet(i_l)->name() == "w" &&
 			((WdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
 		    break;
-	    if( i_l >= aBr->childSize() ) children().at(i_c)->deleteLater();
+	    if( i_l >= (int)aBr->childSize() ) children().at(i_c)->deleteLater();
 	}
     }
 
     //> Create new child widget
-    for( int i_l = 0, i_c = 0; i_l < aBr->childSize(); i_l++ )
+    for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++)
     {
 	if( aBr->childGet(i_l)->name() != "w" ) continue;
 
@@ -266,8 +266,7 @@ bool RunWdgView::event( QEvent *event )
 	    }
 	    return true;
 	case QEvent::MouseButtonPress:
-	    if( ((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && 
-		property("active").toBool() && permCntr() )
+	    if(((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && property("active").toBool() && permCntr())
 	    {
 		QAction *actTmp;
 		QMenu popup;
@@ -287,6 +286,7 @@ bool RunWdgView::event( QEvent *event )
 		}
 	    }
 	    break;
+	default: break;
     }
 
     //> Call to shape for event process
@@ -425,15 +425,17 @@ bool RunWdgView::event( QEvent *event )
 	    if( mod_ev.empty() ) mod_ev = "key_mouseRels";
 	    switch(((QMouseEvent*)event)->button())
 	    {
-		case Qt::LeftButton:	mod_ev+="Left";	break;
-		case Qt::RightButton:	mod_ev+="Right";break;
-		case Qt::MidButton:	mod_ev+="Midle";break;
+		case Qt::LeftButton:	mod_ev += "Left";	break;
+		case Qt::RightButton:	mod_ev += "Right";	break;
+		case Qt::MidButton:	mod_ev += "Midle";	break;
+		default: break;
 	    }
 	    attrSet("event",mod_ev);
 	    return true;
 	case QEvent::MouseButtonDblClick:	attrSet("event","key_mouseDblClick");	return true;
 	case QEvent::FocusIn:	attrSet("focus","1");	attrSet("event","ws_FocusIn");	return true;
 	case QEvent::FocusOut:	attrSet("focus","0");	attrSet("event","ws_FocusOut");	return true;
+	default: break;
     }
 
     //> Try put mouse event to next level widget into same container
@@ -655,8 +657,8 @@ void StylesStBar::setStyle( int istl, const string &nm )
 	XMLNode req("get");
 	req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
 	mainWin()->cntrIfCmd(req);
-	for( int i_s = 0; i_s < req.childSize(); i_s++ )
-	    if( atoi(req.childGet(i_s)->attr("id").c_str()) == istl )
+	for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
+	    if(atoi(req.childGet(i_s)->attr("id").c_str()) == istl)
 		setText(req.childGet(i_s)->text().c_str());
     }
 }
@@ -676,10 +678,10 @@ bool StylesStBar::styleSel( )
     dlg.edLay()->addWidget( lab, 0, 0 );
     QComboBox *stls = new QComboBox(&dlg);
     dlg.edLay()->addWidget( stls, 0, 1 );
-    for( int i_s = 0; i_s < req.childSize(); i_s++ )
+    for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
     {
 	stls->addItem(req.childGet(i_s)->text().c_str(),atoi(req.childGet(i_s)->attr("id").c_str()));
-	if( atoi(req.childGet(i_s)->attr("id").c_str()) == style() )
+	if(atoi(req.childGet(i_s)->attr("id").c_str()) == style())
 	    stls->setCurrentIndex(i_s);
     }
     dlg.resize(300,120);

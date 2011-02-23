@@ -131,7 +131,7 @@ void TWEB::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPg","",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
@@ -163,7 +163,7 @@ void TWEB::modStart()
 {
     vector<string> ls;
     uPgList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	if( uPgAt(ls[i_n]).at().toEnable( ) )
 	    uPgAt(ls[i_n]).at().setEnable(true);
 
@@ -174,7 +174,7 @@ void TWEB::modStop()
 {
     vector<string> ls;
     uPgList(ls);
-    for( int i_n = 0; i_n < ls.size(); i_n++ )
+    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	uPgAt(ls[i_n]).at().setEnable(false);
 
     run_st = false;
@@ -204,7 +204,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	uPgList(upLs);
 	string uPg = TSYS::pathLev(ses.url,0);
 	if( uPg.empty() ) uPg = defPg();
-	for( int i_up = 0; i_up < upLs.size(); i_up++ )
+	for(unsigned i_up = 0; i_up < upLs.size(); i_up++ )
 	{
 	    tup = uPgAt(upLs[i_up]);
 	    if( !tup.at().enableStat() || tup.at().workProg().empty() ) continue;
@@ -265,7 +265,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	for( map<string,string>::iterator ip = ses.prm.begin(); ip != ses.prm.end(); ip++ )
 	    funcV.getO(7)->propSet(ip->first,ip->second);
 	funcV.setO(8,new TArrayObj());
-	for( int ic = 0; ic < ses.cnt.size(); ic++ )
+	for(unsigned ic = 0; ic < ses.cnt.size(); ic++)
 	{
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);
@@ -304,7 +304,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	uPgList(upLs);
 	string uPg = TSYS::pathLev(ses.url,0);
 	if( uPg.empty() ) uPg = defPg();
-	for( int i_up = 0; i_up < upLs.size(); i_up++ )
+	for(unsigned i_up = 0; i_up < upLs.size(); i_up++)
 	{
 	    tup = uPgAt(upLs[i_up]);
 	    if( !tup.at().enableStat() || tup.at().workProg().empty() ) continue;
@@ -326,7 +326,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	for( map<string,string>::iterator ip = ses.prm.begin(); ip != ses.prm.end(); ip++ )
 	    funcV.getO(7)->propSet(ip->first,ip->second);
 	funcV.setO(8,new TArrayObj());
-	for( int ic = 0; ic < ses.cnt.size(); ic++ )
+	for(unsigned ic = 0; ic < ses.cnt.size(); ic++)
 	{
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);
@@ -395,8 +395,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* UserPrt                                       *
 //*************************************************
 UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mDB(idb), mEn(false), cntReq(0),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd())
+    TConfig(el), cntReq(0), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
+    mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
 {
     mId = iid;
 }
@@ -446,7 +446,7 @@ string UserPg::progLang( )
 string UserPg::prog( )
 {
     string mProg = cfg("PROG").getS();
-    int lngEnd = mProg.find("\n");
+    unsigned lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
@@ -592,16 +592,16 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for(int i_l = 0; i_l < ls.size(); i_l++)
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs())
-		    { ls.erase(ls.begin()+i_l); i_l--; }
+		for(unsigned i_l = 0; i_l < ls.size(); )
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
+		    else i_l++;
 		break;
 	    case 1:
 		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
@@ -631,7 +631,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     url(iurl), sender(isender), user(iuser), content(icontent)
 {
     //> URL parameters parse
-    int prmSep = iurl.find("?");
+    unsigned prmSep = iurl.find("?");
     if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
@@ -643,12 +643,12 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 
     //> Variables parse
-    for(int i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
+    for(unsigned i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
 	if((spos=ivars[i_v].find(":")) != string::npos)
 	    vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
 
     //> Content parse
-    int pos = 0, spos = 0;
+    unsigned pos = 0, spos = 0;
     const char *c_bound = "boundary=";
     const char *c_term = "\r\n";
     const char *c_end = "--";

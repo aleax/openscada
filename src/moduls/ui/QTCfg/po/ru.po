@@ -307,7 +307,7 @@ msgid "Changes save"
 msgstr "Сохранение изменений"
 
 msgid "Some changing is made. Save changing to DB on exit?"
-msgstr "Были сделаны некоторые изменения. Сохранить измениния в БД при выходе?"
+msgstr "Были сделаны некоторые изменения. Сохранить изменения в БД при выходе?"
 
 msgid "No one editable container is present."
 msgstr "Нет ни одного редактируемого контейнера."

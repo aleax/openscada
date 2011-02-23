@@ -89,7 +89,7 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : TUI(MOD_ID), end_run(false), vca_station("."), mPlayCom("play -q %f"), mCachePgLife(1)
+TVision::TVision( string name ) : TUI(MOD_ID), end_run(false), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f")
 {
     mod		= this;
 
@@ -109,7 +109,7 @@ TVision::TVision( string name ) : TUI(MOD_ID), end_run(false), vca_station("."),
 TVision::~TVision()
 {
     //> Free widget's shapes
-    for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
+    for(unsigned i_sw = 0; i_sw < shapesWdg.size(); i_sw++)
 	delete shapesWdg[i_sw];
     shapesWdg.clear();
 }
@@ -280,14 +280,14 @@ QMainWindow *TVision::openWindow()
     for( int p_off = 0; (sprj=TSYS::strSepParse(run_prjs,0,';',&p_off)).size(); )
     {
 	screen = 0;
-	int iSep = sprj.find("-");
+	unsigned iSep = sprj.find("-");
 	if( iSep != string::npos ) screen = atoi(sprj.substr(iSep+1).c_str());
 	sprj = sprj.substr(0,iSep);
 
 	//QDesktopWidget().screen(1)
 	//>> Find for already opened run window
-	int i_w = 0;
-	for( ; i_w < mn_winds.size(); i_w++ )
+	unsigned i_w;
+	for(i_w = 0; i_w < mn_winds.size(); i_w++)
 	    if( qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject( ) == sprj &&
 		    QDesktopWidget().screenNumber(mn_winds[i_w]) == screen )
 		break;
@@ -320,7 +320,7 @@ void TVision::modStop()
 #endif
     end_run = true;
 
-    for(int i_w = 0; i_w < mn_winds.size(); i_w++ )
+    for(unsigned i_w = 0; i_w < mn_winds.size(); i_w++)
 	while(mn_winds[i_w]) usleep(STD_WAIT_DELAY*1000);
     usleep(STD_WAIT_DELAY*1000);
 
@@ -329,7 +329,7 @@ void TVision::modStop()
 
 WdgShape *TVision::getWdgShape( const string &iid )
 {
-    for( int i_sw = 0; i_sw < shapesWdg.size(); i_sw++ )
+    for(unsigned i_sw = 0; i_sw < shapesWdg.size(); i_sw++)
 	if( shapesWdg[i_sw]->id() == iid )
 	    return shapesWdg[i_sw];
 
@@ -338,17 +338,17 @@ WdgShape *TVision::getWdgShape( const string &iid )
 
 void TVision::regWin( QMainWindow *mwd )
 {
-    int i_w;
-    for( i_w = 0; i_w < mn_winds.size(); i_w++ )
-	if( mn_winds[i_w] == NULL ) break;
-    if( i_w == mn_winds.size() ) mn_winds.push_back((QMainWindow*)NULL);
+    unsigned i_w;
+    for(i_w = 0; i_w < mn_winds.size(); i_w++)
+	if(mn_winds[i_w] == NULL) break;
+    if(i_w == mn_winds.size()) mn_winds.push_back((QMainWindow*)NULL);
     mn_winds[i_w] = mwd;
 }
 
 void TVision::unregWin( QMainWindow *mwd )
 {
-    for( int i_w = 0; i_w < mn_winds.size(); i_w++ )
-	if( mn_winds[i_w] == mwd ) mn_winds[i_w] = NULL;
+    for(unsigned i_w = 0; i_w < mn_winds.size(); i_w++)
+	if(mn_winds[i_w] == mwd) mn_winds[i_w] = NULL;
 }
 
 void TVision::cntrCmdProc( XMLNode *opt )
@@ -419,7 +419,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
 	opt->childAdd("el")->setText("");
-	for(int i_u = 0; i_u < ls.size(); i_u++)
+	for(unsigned i_u = 0; i_u < ls.size(); i_u++)
 	    opt->childAdd("el")->setText(ls[i_u]);
     }
     else if(a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt))
@@ -427,7 +427,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",".")->setText("Local");
 	vector<string> lst;
 	SYS->transport().at().extHostList("*",lst);
-	for(int i_ls = 0; i_ls < lst.size(); i_ls++)
+	for(unsigned i_ls = 0; i_ls < lst.size(); i_ls++)
 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
 		setText(SYS->transport().at().extHostGet("*",lst[i_ls]).name);
     }

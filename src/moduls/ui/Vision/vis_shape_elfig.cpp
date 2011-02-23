@@ -44,10 +44,11 @@
 using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
-    WdgShape("ElFigure"), itemInMotion(0), flag_down(false), flag_up(false), flag_left(false), flag_right(false), flag_A(false), flag_ctrl(false),
-             status_hold(true), flag_rect(false), flag_hold_move(false), flag_m(false), flag_scale(true), flag_release(false), flag_rotate(true), flag_hold_arc(false), flag_angle_temp(false), flag_geom (false)/*, flag_edit(false)*/,
-                flag_arc_rect_3_4(false), flag_first_move(false), flag_inund_break(false), flag_copy(false), flag_move(false), flag_check_pnt_inund(false), current_ss(-1), current_se(-1), current_es(-1), current_ee(-1),
-                count_Shapes(0), geomW(0), geomH(0), count_holds(0), count_rects(0), rect_num_arc(-1), rect_num(-1), index_del(-1), rect_dyn(-1)
+    WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), index_del(-1), rect_num(-1), status_hold(true),
+    flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
+    flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
+    flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false), flag_geom (false),
+    count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
 }
@@ -116,19 +117,21 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             if( geomW != atoi(val.c_str()) )
             {
                 geomW = atoi(val.c_str());
-                rel_list = flag_geom = true;
+                flag_geom = true;
+
             }
 	    break;
         case 10:	//geomH
             if( geomH != atoi(val.c_str()) )
             {
                 geomH = atoi(val.c_str());
-                rel_list = flag_geom = true;
+                flag_geom = true;
+                rel_list = true;
             }
 	    break;
 	case 12:	//geomMargin
             elFD->geomMargin = atoi(val.c_str());
-	    up=true;
+	    up = true;
 	    break;
 	case 20:	//lineWdth
             (*widths)[-5] = atof(val.c_str());
@@ -1297,65 +1300,67 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	for( int k=0; k < inundationItems[i].number_shape.size()-1; k++ )
 	{
     	    if( inundationItems[i].number_shape.size() > 2 )
-	    if( k==0 )
 	    {
-		if( shapeItems[inundationItems[i].number_shape[k]].n1 == shapeItems[inundationItems[i].number_shape[k+1]].n1 )
-                {
-                    if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
-                        elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
-                    else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
-                        elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|" 
-                                     + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
-                    if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
-                        elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
-                    else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
-                        elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|" 
-                                     + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
-                }
+		if( k==0 )
+		{
+		    if( shapeItems[inundationItems[i].number_shape[k]].n1 == shapeItems[inundationItems[i].number_shape[k+1]].n1 )
+		    {
+			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
+			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+			else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
+			    elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|" 
+					+ TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+			if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
+			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+			else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
+			    elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|" 
+					+ TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+		    }
+		    else
+		    {
+			if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
+			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+			else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
+			    elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|" 
+					+ TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
+			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+			else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
+			    elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|" 
+					+ TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		    }
+		    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n1 );
+		    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
+		}
 		else
-                {
-                    if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
-                        elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
-                    else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
-                        elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|" 
-                                     + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
-                    if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
-                        elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
-                    else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
-                        elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|" 
-                                     + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
-                }
-                temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n1 );
-                temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
-            }
-            else
-	    {
-                for( int p=0; p < temp.size(); p++ )
-                {
-                    if( shapeItems[inundationItems[i].number_shape[k]].n1 == temp[p] )
-                    { flag_n1 = true; flag_n2 = false; break; }
-                    else { flag_n2=true; flag_n1=false; }
-                }
-                if( flag_n1 && temp.size()<inundationItems[i].number_shape.size() )
-                {
-                    if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
-                        elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
-                    else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
-                        elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|" 
-                                     + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		{
+		    for( int p=0; p < temp.size(); p++ )
+		    {
+			if( shapeItems[inundationItems[i].number_shape[k]].n1 == temp[p] )
+			{ flag_n1 = true; flag_n2 = false; break; }
+			else { flag_n2=true; flag_n1=false; }
+		    }
+		    if( flag_n1 && temp.size()<inundationItems[i].number_shape.size() )
+		    {
+			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
+			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+			else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
+			    elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|" 
+					+ TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 
-                    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
-                }
-                if( flag_n2 && temp.size()<inundationItems[i].number_shape.size() )
-                {
-                    if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
-                        elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
-                    else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
-                        elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|" 
-                                     + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
-                    temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
-                }
-            }
+			temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
+		    }
+		    if( flag_n2 && temp.size()<inundationItems[i].number_shape.size() )
+		    {
+			if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
+			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+			else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
+			    elList +="(" + TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|" 
+					+ TSYS::real2str( TSYS::realRound((*pnts)[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+			temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
+		    }
+		}
+	    }
         }
         if( inundationItems[i].number_shape.size() <= 2 )
         {
@@ -1983,9 +1988,9 @@ void ShapeElFigure::toolAct( QAction *act )
                     rise_fill.push_back( j );
             }
             //>>replacing the fills
-            for(int i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
+            for(unsigned i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
             int off = 0;
-            for(int i = 0; i < rise_fill.size(); i++) { inundationItems.remove(rise_fill[i] - off); off++; }
+            for(unsigned i = 0; i < rise_fill.size(); i++, off++) inundationItems.remove(rise_fill[i] - off);
 
             //>sorting the figures
             ShapeItem item_temp;
@@ -2027,9 +2032,9 @@ void ShapeElFigure::toolAct( QAction *act )
                         if( inundationItems[j].number_shape[p] == index_array_copy[i] ) fig_col++;
                 if( fig_col == inundationItems[j].number_shape.size() ) rise_fill.push_back( j );
             }
-            for(int i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
+            for(unsigned i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
             int off = 0;
-            for(int i = 0; i < rise_fill.size(); i++) { inundationItems.remove(rise_fill[i] - off); off++; }
+            for(unsigned i = 0; i < rise_fill.size(); i++, off++) inundationItems.remove(rise_fill[i] - off);
 
             //>sorting the figures
             ShapeItem item_temp;
@@ -2100,7 +2105,7 @@ void ShapeElFigure::toolAct( QAction *act )
                 off++;
             }
             off = 0;
-            for(int i = 0; i < low_fill.size(); i++) { inundationItems.remove(low_fill[i] + low_fill.size() - off); off++; }
+            for(unsigned i = 0; i < low_fill.size(); i++, off++) inundationItems.remove(low_fill[i] + low_fill.size() - off);
 
             //>sorting the figures
             ShapeItem item_temp;
@@ -2149,7 +2154,7 @@ void ShapeElFigure::toolAct( QAction *act )
                 off++;
             }
             off = 0;
-            for(int i = 0; i < low_fill.size(); i++) { inundationItems.remove(low_fill[i] + low_fill.size() - off); off++; }
+            for(unsigned i = 0; i < low_fill.size(); i++, off++) inundationItems.remove(low_fill[i] + low_fill.size() - off);
 
             //>sorting the figures
             ShapeItem item_temp;
@@ -3945,8 +3950,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 }
         	return true;
             }
+            break;
         }
-	break;
+	default: break;
     }
     return false;
 }
@@ -4589,7 +4595,8 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
         if( flag_rect || flag_arc_rect_3_4 || ( rect_num == -1 && count_holds ) )
             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
     }
-    if( ( !flag_ctrl  || (!flag_rect && rect_num != -1 ) ) && !flag_arc_rect_3_4 && !flag_copy )// if there is simple figure or one of its rects
+    if((!flag_ctrl || (!flag_rect && rect_num != -1)) && !flag_arc_rect_3_4 && !flag_copy)// if there is simple figure or one of its rects
+    {
         if(index != -1)
         {
             num_vector.clear();
@@ -4692,6 +4699,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
         }
         else
             itemInMotion = 0;
+    }
     if( inundationItems.size() && !flag_inund_break && ( !status_hold || flag_A ) )
     {
         if( count_Shapes > 1 )
@@ -5453,7 +5461,7 @@ bool ShapeElFigure::inundation( const QPointF &point, const QVector<ShapeItem> &
     {
         inundationPath = createInundationPath( inundation_fig_num, shapeItems, *pnts, view );
         inundation_fig_num = inundationSort( inundationPath, inundation_fig_num, shapeItems, pnts, view );
-        if( flag_scale, flag_rotate )
+        if( flag_scale || flag_rotate )
             inundationPath = createInundationPath( inundation_fig_num, shapeItems, *pnts, view );
         for( int i = 0; i < inundation_fig_num.size(); i++ )
             inundation_vector.push_back(0);
@@ -5649,15 +5657,15 @@ void ShapeElFigure::paintImage( WdgView *view )
         }
         //>>>Drawing the figures and push_bask them into the array of the already drawn figures
         bool flag_dr;
-        for( int k=0; k < draw_before.size(); k++ )
+        for(unsigned k=0; k < draw_before.size(); k++)
         {
             flag_dr = true;
-            for( int j = 0; j < shape_inund_all.size(); j ++ )
-                if( draw_before[k] == shape_inund_all[j] )
-            {
-                flag_dr = false;
-                break;
-            }
+            for(unsigned j = 0; j < shape_inund_all.size(); j ++)
+                if(draw_before[k] == shape_inund_all[j])
+        	{
+            	    flag_dr = false;
+            	    break;
+        	}
             if( flag_dr )//-- If the figure is out of this array, then draw it(it is the figures which are lower than the current fill ) --
             {
                 shape_inund_all.push_back(k);
@@ -5674,12 +5682,12 @@ void ShapeElFigure::paintImage( WdgView *view )
                 {
                     pnt.setBrush(Qt::NoBrush);
                     if( (*widths)[shapeItems[draw_before[k]].width] < 3 )
-                        pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor], 
-                                    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]), 
+                        pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor],
+                                    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]),
                                      (*styles)[shapeItems[draw_before[k]].style], Qt::SquareCap, Qt::RoundJoin ) );
                     else
                         pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor], 
-                                    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]), 
+                                    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]),
                                      (*styles)[shapeItems[draw_before[k]].style], Qt::FlatCap, Qt::RoundJoin ) );
                     pnt.drawPath( shapeItems[draw_before[k]].pathSimple );
                 }
@@ -5937,8 +5945,8 @@ void ShapeElFigure::paintImage( WdgView *view )
     for( int k=0; k < shapeItems.size(); k++ )
     {
         flag_draw = true;
-        for( int j = 0; j < shape_inund_all.size(); j ++ )
-            if( k == shape_inund_all[j] )
+        for(unsigned j = 0; j < shape_inund_all.size(); j ++)
+            if(k == shape_inund_all[j])
             {
                 flag_draw = false;
                 break;
@@ -6297,7 +6305,6 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
-    
                             break;
                     }
                     flag_n2 = false;

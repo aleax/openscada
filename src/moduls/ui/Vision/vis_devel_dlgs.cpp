@@ -328,7 +328,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) )
 	    {
 		string els;
-		for(int i_l = 0; i_l < req.childSize(); i_l++)
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 		    els += req.childGet(i_l)->text() + "\n";
 		obj_db->setCfg(els.c_str());
 	    }
@@ -344,10 +344,10 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/u_lst",TSYS::PathEl));
 	    obj_user->clear();
 	    if( !owner()->cntrIfCmd(req) )
-		for(int i_l = 0; i_l < req.childSize(); i_l++)
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_user->addItem(req.childGet(i_l)->text().c_str());
-		    if( sval == req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
+		    if(sval == req.childGet(i_l)->text()) obj_user->setCurrentIndex(i_l);
 		}
 	}
 	//>> Group
@@ -361,10 +361,10 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/g_lst",TSYS::PathEl));
 	    obj_grp->clear();
 	    if( !owner()->cntrIfCmd(req) )
-		for(int i_l = 0; i_l < req.childSize(); i_l++)
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_grp->addItem(req.childGet(i_l)->text().c_str());
-		    if( sval == req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
+		    if(sval == req.childGet(i_l)->text()) obj_grp->setCurrentIndex(i_l);
 		}
 	}
 	//>> Icon
@@ -480,10 +480,10 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    stl_select->clear();
 	    if( !owner()->cntrIfCmd(req) )
-		for( int i_l = 0; i_l < req.childSize(); i_l++ )
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    stl_select->addItem(req.childGet(i_l)->text().c_str(),req.childGet(i_l)->attr("id").c_str());
-		    if( sval == req.childGet(i_l)->attr("id") )	stl_select->setCurrentIndex(i_l);
+		    if(sval == req.childGet(i_l)->attr("id"))	stl_select->setCurrentIndex(i_l);
 		}
 	}
 
@@ -508,13 +508,13 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(stl_table->objectName().toAscii().data(),TSYS::PathEl));
 	    owner()->cntrIfCmd(req);
-	    for( int i_c = 0; i_c < req.childSize() && i_c < 2; i_c++ )
+	    for(unsigned i_c = 0; i_c < req.childSize() && i_c < 2; i_c++)
 	    {
 		stl_table->setRowCount(req.childGet(i_c)->childSize());
-		for( int i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++ )
+		for(unsigned i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++)
 		{
-		    stl_table->setItem( i_r, i_c, new QTableWidgetItem(req.childGet(i_c)->childGet(i_r)->text().c_str()) );
-		    stl_table->item( i_r, i_c )->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((i_c==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
+		    stl_table->setItem(i_r, i_c, new QTableWidgetItem(req.childGet(i_c)->childGet(i_r)->text().c_str()));
+		    stl_table->item(i_r, i_c)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((i_c==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
 		}
 	    }
 	    stl_table->resizeColumnsToContents();
@@ -546,7 +546,7 @@ void LibProjProp::tabChanged( int itb )
 	{
 	    XMLNode *id_col = req.childGet(0);
 	    mimeDataTable->setRowCount(id_col->childSize());
-	    for( int i_l = 0; i_l < id_col->childSize(); i_l++ )
+	    for(unsigned i_l = 0; i_l < id_col->childSize(); i_l++)
 	    {
 		if( !mimeDataTable->item(i_l,0) )
 		{
@@ -786,8 +786,8 @@ void LibProjProp::stlTableChange( int row, int column )
 //****************************************
 //* Widget properties dialog             *
 //****************************************
-VisItProp::VisItProp( VisDevelop *parent ) : 
-    QDialog((QWidget*)parent), is_modif(false), ico_modif(false), show_init(false)
+VisItProp::VisItProp( VisDevelop *parent ) :
+    QDialog((QWidget*)parent), show_init(false), is_modif(false), ico_modif(false)
 {
     QLabel *lab;
     QGroupBox *grp;
@@ -1088,10 +1088,10 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/u_lst",TSYS::PathEl));
 	    obj_user->clear();
 	    if( !owner()->cntrIfCmd(req) )
-		for(int i_l = 0; i_l < req.childSize(); i_l++)
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_user->addItem(req.childGet(i_l)->text().c_str());
-		    if( sval == req.childGet(i_l)->text() )	obj_user->setCurrentIndex(i_l);
+		    if(sval == req.childGet(i_l)->text()) obj_user->setCurrentIndex(i_l);
 		}
 	}
 	//>> Group
@@ -1104,10 +1104,10 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/g_lst",TSYS::PathEl));
 	    obj_grp->clear();
 	    if( !owner()->cntrIfCmd(req) )
-		for(int i_l = 0; i_l < req.childSize(); i_l++)
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 		{
 		    obj_grp->addItem(req.childGet(i_l)->text().c_str());
-		    if( sval == req.childGet(i_l)->text() )	obj_grp->setCurrentIndex(i_l);
+		    if(sval == req.childGet(i_l)->text()) obj_grp->setCurrentIndex(i_l);
 		}
 	}
 
@@ -1209,7 +1209,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    pg_tp->clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
-		for( int i_el = 0; i_el < req.childSize(); i_el++ )
+		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
 		    pg_tp->addItem(req.childGet(i_el)->text().c_str(),atoi(req.childGet(i_el)->attr("id").c_str()));
 	    pg_tp->setCurrentIndex(pg_tp->findData(sel_val));
 	}
@@ -1267,20 +1267,20 @@ void VisItProp::tabChanged( int itb )
 	    vector<string>	wlst;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
-		for( int i_w = 0; i_w < req.childSize(); i_w++ )
+		for(unsigned i_w = 0; i_w < req.childSize(); i_w++)
 		    wlst.push_back(req.childGet(i_w)->text());
 		    //wlst.push_back(req.childGet(i_w)->attr("id"));
 	    //>>> Fill table
 	    //>>> Delete no present root items
 	    for( int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++ )
 	    {
-		int i_w;
-		for( i_w = 0; i_w < wlst.size(); i_w++ )
-		    if( obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str() ) break;
-		if( i_w >= wlst.size() )	delete obj_attr_cfg->topLevelItem(i_r--);
+		unsigned i_w;
+		for(i_w = 0; i_w < wlst.size(); i_w++)
+		    if(obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str()) break;
+		if(i_w >= wlst.size())	delete obj_attr_cfg->topLevelItem(i_r--);
 	    }
 	    //>>> Add root items
-	    for( int i_w = 0; i_w < wlst.size(); i_w++ )
+	    for(unsigned i_w = 0; i_w < wlst.size(); i_w++)
 	    {
 		QTreeWidgetItem *root_it;
 		int i_r;
@@ -1300,22 +1300,22 @@ void VisItProp::tabChanged( int itb )
 		//>>> Delete no presents widget's items
 		for( int i_r = 0; i_r < root_it->childCount(); i_r++ )
 		{
-		    int i_l;
-		    for( i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
-			if( root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str() )
+		    unsigned i_l;
+		    for(i_l = 0; i_l < req.childGet(0)->childSize(); i_l++)
+			if(root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str())
 			    break;
-		    if( i_l >= req.childGet(0)->childSize() )	delete root_it->child(i_r--);
+		    if(i_l >= req.childGet(0)->childSize())	delete root_it->child(i_r--);
 		}
 
 		//>>> Add widget's items
-		for( int i_l = 0; i_l < req.childGet(0)->childSize(); i_l++ )
+		for(unsigned i_l = 0; i_l < req.childGet(0)->childSize(); i_l++)
 		{
 		    QTreeWidgetItem *cur_it;
 		    int i_r;
-		    for( i_r = 0; i_r < root_it->childCount(); i_r++ )
-			if( root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str() ) 
+		    for(i_r = 0; i_r < root_it->childCount(); i_r++)
+			if(root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str())
 			    break;
-		    if( i_r < root_it->childCount() ) cur_it = root_it->child(i_r);
+		    if(i_r < root_it->childCount()) cur_it = root_it->child(i_r);
 		    else cur_it = new QTreeWidgetItem(root_it);
 		    cur_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
 		    cur_it->setText(0,req.childGet("id","id")->childGet(i_l)->text().c_str());
@@ -1332,15 +1332,15 @@ void VisItProp::tabChanged( int itb )
 	    QStringList	atypes;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/tp_ls",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
-		for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
+		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
+		    atypes.push_back((req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str());
 	    if( obj_attr_cfg->topLevelItemCount() )
 		obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole,atypes);
 	    atypes.clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/lnk_ls",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
-		for( int i_el = 0; i_el < req.childSize(); i_el++ )
-		    atypes.push_back( (req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str() );
+		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
+		    atypes.push_back((req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str());
 	    if( obj_attr_cfg->topLevelItemCount() )
 		obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
@@ -1363,7 +1363,7 @@ void VisItProp::tabChanged( int itb )
 		proc_lang->clear();
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 		if( !owner()->cntrIfCmd(req) )
-		    for( int i_el = 0; i_el < req.childSize(); i_el++ )
+		    for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
 			proc_lang->addItem(req.childGet(i_el)->text().c_str());
 		int cur_el = proc_lang->findText(sval.c_str());
 		if( cur_el < 0 ) proc_lang->addItem(sval.c_str());
@@ -1405,7 +1405,7 @@ void VisItProp::selectParent( )
 
 	//> Load combobox
 	obj_parent->clear();
-	for( int i_l = 0; i_l < req.childSize(); i_l++ )
+	for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
 	    obj_parent->addItem(req.childGet(i_l)->text().c_str());
 	if( obj_parent->findText(cur_val) < 0 ) obj_parent->addItem(cur_val);
 	obj_parent->setCurrentIndex(obj_parent->findText(cur_val));
