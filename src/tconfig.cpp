@@ -50,7 +50,7 @@ TConfig &TConfig::operator=(TConfig &config)
     vector<string> list_el;
 
     cfgList( list_el );
-    for( int i_el = 0; i_el < list_el.size(); i_el++)
+    for(unsigned i_el = 0; i_el < list_el.size(); i_el++)
     {
 	if(!config.cfgPresent(list_el[i_el]))	continue;
 	TCfg &s_cfg = config.cfg( list_el[i_el] );
@@ -198,7 +198,7 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mOwner(owner), mNoTransl(false)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mOwner(owner)
 {
     //> Chek for self field for dinamic elements
     if( fld.flg()&TFld::SelfFld )

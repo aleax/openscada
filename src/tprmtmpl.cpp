@@ -96,7 +96,7 @@ string TPrmTempl::progLang()		{ return m_prog.substr(0,m_prog.find("\n")); }
 
 string TPrmTempl::prog( )
 {
-    int lngEnd = m_prog.find("\n");
+    unsigned lngEnd = m_prog.find("\n");
     return m_prog.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
@@ -153,7 +153,7 @@ void TPrmTempl::load_( )
 
 	//> Position storing
 	int pos = cfg.cfg("POS").getI();
-	while( u_pos.size() <= pos )	u_pos.push_back("");
+	while((int)u_pos.size() <= pos)	u_pos.push_back("");
 	u_pos[pos] = sid;
 
 	int iid = ioId(sid);
@@ -170,14 +170,15 @@ void TPrmTempl::load_( )
     }
 
     //> Remove holes
-    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
-	if( u_pos[i_p].empty() ) { u_pos.erase(u_pos.begin()+i_p); i_p--; }
+    for(unsigned i_p = 0; i_p < u_pos.size(); )
+	if(u_pos[i_p].empty()) u_pos.erase(u_pos.begin()+i_p);
+	else i_p++;
 
     //> Position fixing
-    for( int i_p = 0; i_p < u_pos.size(); i_p++ )
+    for(int i_p = 0; i_p < (int)u_pos.size(); i_p++)
     {
 	int iid = ioId(u_pos[i_p]);
-	if( iid != i_p ) try{ ioMove(iid,i_p); } catch(...){ }
+	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...){ }
     }
 }
 
@@ -373,16 +374,16 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for( int i_l = 0; i_l < ls.size(); i_l++ )
-		    if( !SYS->daq().at().at(ls[i_l]).at().compileFuncLangs() )
-		    { ls.erase(ls.begin()+i_l); i_l--; }
+		for(unsigned i_l = 0; i_l < ls.size(); )
+		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
+		    else i_l++;
 		break;
 	    case 1:
 		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
-	for(int i_l = 0; i_l < ls.size(); i_l++)
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else TCntrNode::cntrCmdProc(opt);
@@ -419,12 +420,12 @@ TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
     //- Templates copy -
     vector<string> ls;
     src_n->list(ls);
-    for( int i_p = 0; i_p < ls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < ls.size(); i_p++)
     {
-	if( !present(ls[i_p]) ) add(ls[i_p].c_str());
+	if(!present(ls[i_p])) add(ls[i_p].c_str());
 	(TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
     }
-    if( src_n->startStat() && !startStat() )    start(true);
+    if(src_n->startStat() && !startStat()) start(true);
 
     return *this;
 }
@@ -493,9 +494,9 @@ void TPrmTmplLib::start( bool val )
     bool isErr = false;
     vector<string> lst;
     list(lst);
-    for( int i_f = 0; i_f < lst.size(); i_f++ )
+    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	try{ at(lst[i_f]).at().setStart(val); }
-	catch( TError err )
+	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Template '%s' start is error."),lst[i_f].c_str());

@@ -103,8 +103,8 @@ void TValue::setVlCfg( TConfig *cfg )
 
 bool TValue::vlElemPresent( TElem *ValEl )
 {
-    for(int i_el = 0; i_el < elem.size(); i_el++)
-	if( elem[i_el] == ValEl ) return true;
+    for(unsigned i_el = 0; i_el < elem.size(); i_el++)
+	if(elem[i_el] == ValEl) return true;
     return false;
 }
 
@@ -149,7 +149,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"list",RWRWRW,"root",SDAQ_ID,SEC_RD))	//Full info attributes list
 	{
 	    AutoHD<TVal> attr;
-	    for(int i_el = 0; i_el < list_c.size(); i_el++)
+	    for(unsigned i_el = 0; i_el < list_c.size(); i_el++)
 	    {
 		attr = vlAt(list_c[i_el]);
 		opt->childAdd("el")->
@@ -172,7 +172,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    bool sepReq = atoi(opt->attr("sepReq").c_str());
 	    bool hostTm = atoi(opt->attr("hostTm").c_str());
 	    if(!sepReq)
-		for(int i_el = 0; i_el < list_c.size(); i_el++)
+		for(unsigned i_el = 0; i_el < list_c.size(); i_el++)
 		{
 		    vl = vlAt(list_c[i_el]);
 		    vtm = 0; svl = vl.at().getS(&vtm);
@@ -181,7 +181,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		}
 
 	    //> Archives requests process
-	    for(int i_a = 0; i_a < opt->childSize(); i_a++)
+	    for(int i_a = 0; i_a < (int)opt->childSize(); i_a++)
 	    {
 		aNd = opt->childGet(i_a);
 		if(!sepReq && aNd->name() != "ael") break;
@@ -211,7 +211,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		{
 		    vector<string> archLs;
 		    arch.at().archivatorList(archLs);
-		    for(int i_a = 0; i_a < archLs.size(); i_a++)
+		    for(unsigned i_a = 0; i_a < archLs.size(); i_a++)
 			if(arch.at().period(archLs[i_a]) == vper)
 			    vbeg = vmax(reqBeg,arch.at().begin(archLs[i_a]));
 		}
@@ -234,7 +234,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWRW,"root",SDAQ_ID,SEC_WR))		//Multi attributes set
-	    for(int i_el = 0; i_el < opt->childSize(); i_el++)
+	    for(unsigned i_el = 0; i_el < opt->childSize(); i_el++)
 		vlAt(opt->childGet(i_el)->attr("id")).at().setS(opt->childGet(i_el)->text());
 	return;
     }
@@ -249,7 +249,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	{
 	    //>>> Add attributes list
 	    vlList(list_c);
-	    for(int i_el = 0; i_el < list_c.size(); i_el++)
+	    for(unsigned i_el = 0; i_el < list_c.size(); i_el++)
 		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1,"root",SDAQ_ID,RWRWR_);
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
@@ -261,10 +261,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Attribute"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		SYS->archive().at().modList(list_c);
-		for(int i_ta = 0; i_ta < list_c.size(); i_ta++)
+		for(unsigned i_ta = 0; i_ta < list_c.size(); i_ta++)
 		{
 		    SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
-		    for(int i_a = 0; i_a < list_c2.size(); i_a++)
+		    for(unsigned i_a = 0; i_a < list_c2.size(); i_a++)
 		    {
 			string a_id = SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId();
 			ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,RWRWR_,"root",SARH_ID,1,"tp","bool");
@@ -280,7 +280,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(a_path.size() > 9 && a_path.substr(0,9) == "/val/sel_" && ctrChkNode(opt))
 	{
 	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
-	    for(int i_a=0; i_a < vl.at().fld().selNm().size(); i_a++)
+	    for(unsigned i_a = 0; i_a < vl.at().fld().selNm().size(); i_a++)
 		opt->childAdd("el")->setText(vl.at().fld().selNm()[i_a]);
 	    return;
 	}
@@ -307,16 +307,16 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",R_R_R_);
 	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",RWRWR_);
 	    SYS->archive().at().modList(list_c);
-	    for(int i_ta = 0; i_ta < list_c.size(); i_ta++)
+	    for(unsigned i_ta = 0; i_ta < list_c.size(); i_ta++)
 	    {
 		SYS->archive().at().at(list_c[i_ta]).at().valList(list_c2);
-		for(int i_a = 0; i_a < list_c2.size(); i_a++)
+		for(unsigned i_a = 0; i_a < list_c2.size(); i_a++)
 		    ctrMkNode("list",opt,-1,("/arch/arch/"+SYS->archive().at().at(list_c[i_ta]).at().valAt(list_c2[i_a]).at().workId()).c_str(),"",RWRWR_);
 	    }
 	    //>>> Fill table
 	    vlList(list_c);
-	    for(int i_v = 0; i_v < list_c.size(); i_v++)
-		for(int i_a = 0; i_a < opt->childSize(); i_a++)
+	    for(unsigned i_v = 0; i_v < list_c.size(); i_v++)
+		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++)
 		{
 		    XMLNode *chld = opt->childGet(i_a);
 		    string c_id = chld->attr("id");
@@ -377,7 +377,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( ) : mCfg(false), mTime(0), mResB1(false), mResB2(false), mReqFlg(false)
+TVal::TVal( ) : mCfg(false), mReqFlg(false), mResB1(false), mResB2(false), mTime(0)
 {
     src.fld = NULL;
 }

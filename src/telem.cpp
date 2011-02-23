@@ -44,26 +44,26 @@ int TElem::fldAdd( TFld *fld, int id )
 {
     ResAlloc res( mResEl, false );
     //> Find dublicates
-    for( int i_f = 0; i_f < elem.size(); i_f++)
-	if( elem[i_f]->name() == fld->name() )
+    for(unsigned i_f = 0; i_f < elem.size(); i_f++)
+	if(elem[i_f]->name() == fld->name())
 	{ delete fld; return i_f; }
-    if( id > elem.size() || id < 0 ) id = elem.size();
+    if(id > (int)elem.size() || id < 0) id = elem.size();
     res.request(true);
     elem.insert(elem.begin()+id,fld);
     //> Add value and set them default
     res.request(false);
-    for( int cfg_i=0; cfg_i < cont.size(); cfg_i++ )
-	cont[cfg_i]->addFld(this,id);
+    for(unsigned cfg_i = 0; cfg_i < cont.size(); cfg_i++)
+	cont[cfg_i]->addFld(this, id);
 
     return id;
 }
 
 void TElem::fldDel( unsigned int id )
 {
-    ResAlloc res( mResEl, false );
-    if( id >= elem.size() ) throw TError("Elem",_("Id error!"));
-    for( int cfg_i=0; cfg_i < cont.size(); cfg_i++ )
-	cont[cfg_i]->delFld(this,id);
+    ResAlloc res(mResEl, false);
+    if(id >= elem.size()) throw TError("Elem",_("Id error!"));
+    for(unsigned cfg_i = 0; cfg_i < cont.size(); cfg_i++)
+	cont[cfg_i]->delFld(this, id);
     res.request(true);
     delete elem[id];
     elem.erase(elem.begin()+id);
@@ -71,40 +71,40 @@ void TElem::fldDel( unsigned int id )
 
 void TElem::valAtt( TValElem *cnt )
 {
-    ResAlloc res( mResEl, true );
-    for( int i=0; i < cont.size(); i++ )
-	if( cont[i] == cnt ) throw TError("Elem",_("The element container is already attached!"));
+    ResAlloc res(mResEl, true);
+    for(unsigned i = 0; i < cont.size(); i++)
+	if(cont[i] == cnt) throw TError("Elem",_("The element container is already attached!"));
     cont.push_back(cnt);
 }
 
 void TElem::valDet( TValElem *cnt )
 {
-    ResAlloc res( mResEl, true );
-    for( int i=0; i < cont.size(); i++ )
-	if( cont[i] == cnt ) { cont.erase(cont.begin()+i); break; }
+    ResAlloc res(mResEl, true);
+    for(unsigned i = 0; i < cont.size(); i++)
+	if(cont[i] == cnt) { cont.erase(cont.begin()+i); break; }
 }
 
 unsigned TElem::fldId( const string &name )
 {
-    ResAlloc res( mResEl, false );
-    for( int i=0; i < elem.size(); i++ )
-	if( elem[i]->name() == name ) return i;
+    ResAlloc res(mResEl, false);
+    for(unsigned i = 0; i < elem.size(); i++)
+	if(elem[i]->name() == name) return i;
     throw TError("Elem",_("Element <%s> is not present!"),name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )
 {
-    ResAlloc res( mResEl, false );
-    for( int i=0; i < elem.size(); i++ )
-	if( elem[i]->name() == name ) return true;
+    ResAlloc res(mResEl, false);
+    for(unsigned i = 0; i < elem.size(); i++)
+	if(elem[i]->name() == name) return true;
     return false;
 }
 
 void TElem::fldList( vector<string> &list )
 {
     list.clear();
-    ResAlloc res( mResEl, false );
-    for( int i = 0; i < elem.size(); i++ )
+    ResAlloc res(mResEl, false);
+    for(unsigned i = 0; i < elem.size(); i++)
 	list.push_back(elem[i]->name());
 }
 
@@ -123,7 +123,7 @@ TFld::TFld( ) : m_type(TFld::Integer), m_flg(0)
     m_val.v_s = NULL;
 }
 
-TFld::TFld( TFld &ifld ) : m_type(TFld::Integer), m_len(0), m_dec(0), m_flg(0)
+TFld::TFld( TFld &ifld ) : m_len(0), m_dec(0), m_type(TFld::Integer), m_flg(0)
 {
     m_sel	= NULL;
     m_val.v_s	= NULL;
@@ -193,20 +193,20 @@ string TFld::values()
     switch(type())
     {
 	case TFld::String:
-	    for(int i_el = 0; i_el < m_val.v_s->size(); i_el++)
-		rez=rez+(*m_val.v_s)[i_el]+";";
+	    for(unsigned i_el = 0; i_el < m_val.v_s->size(); i_el++)
+		rez = rez+(*m_val.v_s)[i_el]+";";
 	    break;
 	case TFld::Integer:
-	    for(int i_el = 0; i_el < m_val.v_i->size(); i_el++)
-		rez=rez+TSYS::int2str((*m_val.v_i)[i_el])+";";
+	    for(unsigned i_el = 0; i_el < m_val.v_i->size(); i_el++)
+		rez = rez+TSYS::int2str((*m_val.v_i)[i_el])+";";
 	    break;
 	case TFld::Real:
-	    for(int i_el = 0; i_el < m_val.v_r->size(); i_el++)
-		rez=rez+TSYS::real2str((*m_val.v_r)[i_el],6)+";";
+	    for(unsigned i_el = 0; i_el < m_val.v_r->size(); i_el++)
+		rez = rez+TSYS::real2str((*m_val.v_r)[i_el],6)+";";
 	    break;
 	case TFld::Boolean:
-	    for(int i_el = 0; i_el < m_val.v_b->size(); i_el++)
-		rez=rez+TSYS::int2str((*m_val.v_b)[i_el])+";";
+	    for(unsigned i_el = 0; i_el < m_val.v_b->size(); i_el++)
+		rez = rez+TSYS::int2str((*m_val.v_b)[i_el])+";";
 	    break;
     }
     return rez.size()?rez.substr(0,rez.size()-1):"";
@@ -217,8 +217,8 @@ string TFld::selNames()
     if( m_sel == NULL )	return "";
 
     string rez;
-    for(int i_el = 0; i_el < m_sel->size(); i_el++)
-	rez=rez+(*m_sel)[i_el]+";";
+    for(unsigned i_el = 0; i_el < m_sel->size(); i_el++)
+	rez = rez+(*m_sel)[i_el]+";";
 
     return rez.size()?rez.substr(0,rez.size()-1):"";
 }
@@ -279,6 +279,7 @@ void TFld::setValues( const string &vls )
 		(*m_val.v_r)[0] = atof(TSYS::strSepParse(vls,0,';').c_str());
 		(*m_val.v_r)[1] = atof(TSYS::strSepParse(vls,1,';').c_str());
 		break;
+	    default: break;
 	}
 }
 
@@ -388,6 +389,7 @@ TFld &TFld::operator=( TFld &fld )
 		m_val.v_r = new vector<double>;
 		*(m_val.v_r) = fld.selValR();
 		break;
+	    default: break;
 	}
     return *this;
 }

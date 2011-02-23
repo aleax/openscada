@@ -49,10 +49,9 @@ TMess	*OSCADA::Mess;
 TSYS	*OSCADA::SYS;
 bool TSYS::finalKill = false;
 
-TSYS::TSYS( int argi, char ** argb, char **env ) :
-    mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mUser("root"),argc(argi), envp((const char **)env), argv((const char **)argb), mStopSignal(-1), mMultCPU(false),
-    mWorkDB(""), mSaveAtExit(false), mSavePeriod(0)
+TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
+    mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
+    mWorkDB(""), mSaveAtExit(false), mSavePeriod(0), mStopSignal(-1), mMultCPU(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -216,7 +215,7 @@ string TSYS::strNoSpace( const string &val )
 {
     int beg = -1, end = -1;
 
-    for(int i_s = 0; i_s < val.size(); i_s++)
+    for(unsigned i_s = 0; i_s < val.size(); i_s++)
 	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t')
 	{
 	    if(beg < 0) beg = i_s;
@@ -598,9 +597,9 @@ string TSYS::strSepParse( const string &path, int level, char sep, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
-    int t_dir;
+    unsigned t_dir;
 
-    if( an_dir >= path.size() ) return "";
+    if(an_dir >= (int)path.size()) return "";
     while(true)
     {
 	t_dir = path.find(sep,an_dir);
@@ -624,9 +623,9 @@ string TSYS::strParse( const string &path, int level, const string &sep, int *of
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
-    int t_dir;
+    unsigned t_dir;
 
-    if( an_dir >= path.size() || sep.empty() ) return "";
+    if(an_dir >= (int)path.size() || sep.empty()) return "";
     while(true)
     {
 	t_dir = path.find(sep,an_dir);
@@ -641,7 +640,7 @@ string TSYS::strParse( const string &path, int level, const string &sep, int *of
 	    return path.substr(an_dir,t_dir-an_dir);
 	}
 	if( mergeSepSymb && sep.size() == 1 )
-	    for( an_dir = t_dir; an_dir < path.size() && path[an_dir] == sep[0]; ) an_dir++;
+	    for(an_dir = t_dir; an_dir < (int)path.size() && path[an_dir] == sep[0]; ) an_dir++;
 	else an_dir = t_dir+sep.size();
 	t_lev++;
     }
@@ -652,11 +651,11 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
-    int t_dir;
+    unsigned t_dir;
 
     //- First separators pass -
-    while( an_dir<path.size() && path[an_dir]=='/' ) an_dir++;
-    if( an_dir >= path.size() ) return "";
+    while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
+    if(an_dir >= (int)path.size()) return "";
     //- Path level process -
     while(true)
     {
@@ -673,7 +672,7 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 	}
 	an_dir = t_dir;
 	t_lev++;
-	while( an_dir<path.size() && path[an_dir]=='/' ) an_dir++;
+	while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
     }
 }
 
@@ -700,7 +699,7 @@ string TSYS::sepstr2path( const string &str, char sep )
 
 string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 {
-    int i_sz;
+    unsigned i_sz;
     string sout;
 
     switch(tp)
@@ -771,16 +770,16 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    sout.reserve(in.size()+10);
 	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
 	    {
-		int i_smb;
-		for( i_smb = 0; i_smb < symb.size(); i_smb++ )
-		    if( in[i_sz] == symb[i_smb] )
+		unsigned i_smb;
+		for(i_smb = 0; i_smb < symb.size(); i_smb++)
+		    if(in[i_sz] == symb[i_smb])
 		    {
 			char buf[4];
 			sprintf(buf,"%%%02X",(unsigned char)in[i_sz]);
 			sout += buf;
 			break;
 		    }
-		if( i_smb >= symb.size() ) sout+=in[i_sz];
+		if(i_smb >= symb.size()) sout += in[i_sz];
 	    }
 	    break;
 	case TSYS::base64:
@@ -883,24 +882,24 @@ unsigned char TSYS::getBase64Code(unsigned char asymb)
 
 string TSYS::strDecode( const string &in, TSYS::Code tp )
 {
-    int i_sz;
+    unsigned i_sz;
     string sout;
 
     switch(tp)
     {
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
 	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
-		switch( in[i_sz] )
+	    for(i_sz = 0; i_sz < in.size(); i_sz++)
+		switch(in[i_sz])
 		{
 		    case '%':
-			if( i_sz+2 < in.size() )
+			if(i_sz+2 < in.size())
 			{
-			    sout+=(char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
-			    i_sz+=2;
-			}else sout+=in[i_sz];
+			    sout += (char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
+			    i_sz += 2;
+			}else sout += in[i_sz];
 			break;
-		    default: sout+=in[i_sz];
+		    default: sout += in[i_sz];
 		}
 	    break;
 	case TSYS::base64:
@@ -1434,7 +1433,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if( iid == "strFromCharCode" )
     {
 	string rez;
-	for( int i_p = 0; i_p < prms.size(); i_p++ )
+	for(unsigned i_p = 0; i_p < prms.size(); i_p++)
 	    rez += (unsigned char)prms[i_p].getI();
 	return rez;
     }

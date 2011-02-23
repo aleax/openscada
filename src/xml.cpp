@@ -38,7 +38,7 @@ XMLNode &XMLNode::operator=(const XMLNode &prm)
     //> Delete self children and attributes
     mAttr.clear();
     mPrcInstr.clear();
-    for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
+    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
 	delete mChildren[i_ch];
     mChildren.clear();
 
@@ -47,14 +47,14 @@ XMLNode &XMLNode::operator=(const XMLNode &prm)
     setText( prm.text() );
     vector<string> ls;
     prm.attrList(ls);
-    for( int i_a = 0; i_a < ls.size(); i_a++)
+    for(unsigned i_a = 0; i_a < ls.size(); i_a++)
 	setAttr(ls[i_a],prm.attr(ls[i_a]));
     prm.prcInstrList(ls);
-    for( int i_p = 0; i_p < ls.size(); i_p++)
+    for(unsigned i_p = 0; i_p < ls.size(); i_p++)
 	setPrcInstr(ls[i_p],prm.prcInstr(ls[i_p]));
 
     //> Recursive copy children
-    for( int i_ch = 0; i_ch < prm.childSize(); i_ch++ )
+    for(unsigned i_ch = 0; i_ch < prm.childSize(); i_ch++)
 	*childAdd() = *prm.childGet(i_ch);
 
     return *this;
@@ -84,8 +84,8 @@ void XMLNode::childDel( const unsigned id )
 
 void XMLNode::childDel( XMLNode *nd )
 {
-    for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
-	if( mChildren[i_ch] == nd )
+    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
+	if(mChildren[i_ch] == nd)
 	{
 	    delete mChildren[i_ch];
 	    mChildren.erase( mChildren.begin()+i_ch );
@@ -95,9 +95,9 @@ void XMLNode::childDel( XMLNode *nd )
 
 void XMLNode::childClear( const string &name )
 {
-    for( int i_ch = 0; i_ch < mChildren.size(); i_ch++ )
-	if( name.empty() || mChildren[i_ch]->name() == name )
-	    childDel(i_ch--);
+    for(unsigned i_ch = 0; i_ch < mChildren.size(); )
+	if(name.empty() || mChildren[i_ch]->name() == name) childDel(i_ch);
+	else i_ch++;
 }
 
 int XMLNode::childIns( unsigned id, XMLNode * n )
@@ -121,14 +121,14 @@ XMLNode* XMLNode::childIns( unsigned id, const string &name )
 
 XMLNode* XMLNode::childGet( const int index, bool noex ) const
 {
-    if( index >= 0 && index < childSize() )	return mChildren[index];
-    if( noex )	return NULL;
+    if(index >= 0 && index < (int)childSize()) return mChildren[index];
+    if(noex)	return NULL;
     throw TError("XMLNode",_("Child %d is not present."),index);
 }
 
 XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) const
 {
-    for( int i_ch = 0, i_n = 0; i_ch < childSize(); i_ch++ )
+    for(int i_ch = 0, i_n = 0; i_ch < (int)childSize(); i_ch++)
 	if( childGet(i_ch)->name() == name && i_n++ == numb )
 	    return childGet(i_ch);
 
@@ -279,10 +279,10 @@ void XMLNode::save( unsigned flg, string &xml )
 	    xml.append( flg&XMLNode::BrTextPast ? "\n" : "" );
 	}
 	//> Save process instructions
-	for( int i_p = 0; i_p < mPrcInstr.size(); i_p++ )
-	    xml.append( "<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>") );
+	for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
+	    xml.append("<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>"));
 	//> Save included childs
-	for( int i_c = 0; i_c < childSize(); i_c++ ) childGet(i_c)->save(flg,xml);
+	for(unsigned i_c = 0; i_c < childSize(); i_c++) childGet(i_c)->save(flg,xml);
 	//> Close tag
 	xml.append("</");
 	if( flg&XMLNode::MissTagEnc ) xml.append(name() );
@@ -294,7 +294,7 @@ void XMLNode::save( unsigned flg, string &xml )
 void XMLNode::encode( const string &s, string &rez, bool text ) const
 {
     const char *replStr = NULL;
-    for( int i_sz = 0, f_pos = 0; true; )
+    for(unsigned i_sz = 0, f_pos = 0; true; )
     {
 	switch( s[i_sz] )
 	{

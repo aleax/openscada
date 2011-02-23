@@ -39,7 +39,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules sheduler"),false), mPer(10), mAllow("*")
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules sheduler"),false), mAllow("*"), mPer(10)
 {
 
 }
@@ -172,10 +172,12 @@ bool TModSchedul::CheckFile( const string &iname )
     else dlclose(h_lib);*/
 
     ResAlloc res(nodeRes(),false);
-    for(int i_sh=0; i_sh < SchHD.size(); i_sh++)
+    for(unsigned i_sh=0; i_sh < SchHD.size(); i_sh++)
 	if(SchHD[i_sh].name == iname)
+	{
 	    if(file_stat.st_mtime > SchHD[i_sh].tm) return true;
 	    else return false;
+	}
 
     return true;
 }
@@ -212,7 +214,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 {
     char *dlErr = NULL;
     ResAlloc res(nodeRes(),true);
-    for(int i_sh = 0; i_sh < SchHD.size(); i_sh++)
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if(SchHD[i_sh].name == iname)
 	{
 	    if(SchHD[i_sh].hd) throw TError(nodePath().c_str(),_("SO <%s> is already attached!"),iname.c_str());
@@ -298,14 +300,14 @@ void TModSchedul::libAtt( const string &iname, bool full )
 void TModSchedul::libDet( const string &iname )
 {
     ResAlloc res(nodeRes(),true);
-    for(int i_sh = 0; i_sh < SchHD.size(); i_sh++)
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if(SchHD[i_sh].name == iname)
 	{
 	    if(!SchHD[i_sh].hd) return;
 	    try
 	    {
 		//> Stop all modules
-		for(int i_m = 0; i_m < SchHD[i_sh].use.size(); i_m++)
+		for(unsigned i_m = 0; i_m < SchHD[i_sh].use.size(); i_m++)
 		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[i_m],0,'.')).at().
 			modAt(TSYS::strSepParse(SchHD[i_sh].use[i_m],1,'.')).at().modStop();
 		//> Delete all modules
@@ -319,7 +321,7 @@ void TModSchedul::libDet( const string &iname )
 	    {
 		//owner().at(SchHD[i_sh]->use[0].mod_sub).at().modAt(SchHD[i_sh]->use[0].n_mod).at().load();
 		//> Start all modules
-		for(int i_m = 0; i_m < SchHD[i_sh].use.size(); i_m++)
+		for(unsigned i_m = 0; i_m < SchHD[i_sh].use.size(); i_m++)
 		    owner().at(TSYS::strSepParse(SchHD[i_sh].use[i_m],0,'.')).at().
 			modAt(TSYS::strSepParse(SchHD[i_sh].use[i_m],1,'.')).at().modStart();
 		throw;
@@ -458,7 +460,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_mods	= ctrMkNode("list",opt,-1,"/ms/libs/mods","");
 	    XMLNode *n_en	= ctrMkNode("list",opt,-1,"/ms/libs/en","");
 	    ResAlloc res(nodeRes(),false);
-	    for(int i_sl = 0; i_sl < SchHD.size(); i_sl++)
+	    for(unsigned i_sl = 0; i_sl < SchHD.size(); i_sl++)
 	    {
 		if(n_nm)	n_nm->childAdd("el")->setText(SchHD[i_sl].name);
 		if(n_tm)	n_tm->childAdd("el")->setText(TSYS::TSYS::int2str(SchHD[i_sl].tm));
@@ -467,7 +469,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 		    string useLs;
 		    if( !SchHD[i_sl].hd && !SchHD[i_sl].err.empty() ) useLs = SchHD[i_sl].err;
 		    else
-			for( int i_el = 0; i_el < SchHD[i_sl].use.size(); i_el++ )
+			for(unsigned i_el = 0; i_el < SchHD[i_sl].use.size(); i_el++)
 			    useLs += SchHD[i_sl].use[i_el]+"; ";
 		    n_mods->childAdd("el")->setText(useLs);
 		}
@@ -477,8 +479,10 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SMSH_ID,SEC_WR))
 	{
 	    if(opt->attr("col") == "en")
+	    {
 		if(atoi(opt->text().c_str())) libAtt(opt->attr("key_path"),true);
 		else libDet(opt->attr("key_path"));
+	    }
 	}
     }
     else TSubSYS::cntrCmdProc(opt);

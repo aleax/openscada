@@ -77,14 +77,14 @@ void TTipDAQ::modStart( )
     vector<string> lst;
     //> Start all controllers
     list(lst);
-    for(int i_l=0; i_l < lst.size(); i_l++)
-	if( at(lst[i_l]).at().toStart() )
-	try{ at(lst[i_l]).at().start( ); }
-	catch(TError err)
-	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Start controller <%s> error."),(modId()+"."+lst[i_l]).c_str());
-	}
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+	if(at(lst[i_l]).at().toStart())
+	    try{ at(lst[i_l]).at().start(); }
+	    catch(TError err)
+	    {
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(nodePath().c_str(),_("Start controller <%s> error."),(modId()+"."+lst[i_l]).c_str());
+	    }
 }
 
 void TTipDAQ::modStop( )
@@ -92,7 +92,7 @@ void TTipDAQ::modStop( )
     vector<string> lst;
     //> Stop all controllers
     list(lst);
-    for(int i_l=0; i_l < lst.size(); i_l++)
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
         at(lst[i_l]).at().stop( );
 }
 

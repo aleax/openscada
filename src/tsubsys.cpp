@@ -31,7 +31,7 @@ using namespace OSCADA;
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
-TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : m_id(id), m_name(name), m_mod_sys(modi), m_mod(-1), mStart(false)
+TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : mStart(false), m_mod_sys(modi), m_mod(-1), m_id(id), m_name(name)
 {
     if(subModule()) m_mod = grpAdd("mod_");
 }

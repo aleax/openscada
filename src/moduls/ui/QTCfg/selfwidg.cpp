@@ -105,7 +105,7 @@ void ImgView::paintEvent( QPaintEvent * )
 //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
 //*********************************************************************************************
 LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
-    QWidget( parent ), m_tp((LineEdit::LType)-1), bt_fld(NULL), ed_fld(NULL), mPrev(!prev_dis)
+    QWidget(parent), m_tp((LineEdit::LType)-1), mPrev(!prev_dis), ed_fld(NULL), bt_fld(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin( 0 );
@@ -361,7 +361,7 @@ void SyntxHighl::rule(XMLNode *rl, const QString &text, QTextCharFormat defForm,
 	if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
 	if(format(index+off)!=defForm) continue;
 	setFormat(index+off, expr.matchedLength(), kForm);
-	for(int i_ch = 0; i_ch < rl->childSize(); i_ch++)
+	for(unsigned i_ch = 0; i_ch < rl->childSize(); i_ch++)
 	    rule(rl->childGet(i_ch),text.mid(index,expr.matchedLength()),kForm,index+off);
     }
 }
@@ -370,7 +370,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 {
     QTextCharFormat kForm, defkForm;
     if(text.length()) defkForm = format(0);
-    for(int i_ch = 0; i_ch < rules.childSize(); i_ch++)
+    for(unsigned i_ch = 0; i_ch < rules.childSize(); i_ch++)
     {
 	XMLNode *rl = rules.childGet(i_ch);
 	kForm.setForeground(QColor(rl->attr("color").c_str()));
@@ -405,7 +405,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 		    sizeBlk = endIndex-startBlk;
 		}
 		//> Call include rules
-		for(int i_ch1 = 0; i_ch1 < rl->childSize(); i_ch1++)
+		for(unsigned i_ch1 = 0; i_ch1 < rl->childSize(); i_ch1++)
 		    rule(rl->childGet(i_ch1),text.mid(startBlk,sizeBlk),kForm,startBlk);
 
 		if(endIndex == -1 || eExpr.matchedLength() <= 0) break;
@@ -419,7 +419,7 @@ void SyntxHighl::highlightBlock(const QString &text)
 //* TextEdit: Text edit widget.                   *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
-    QWidget(parent), but_box(NULL), isInit(false), snt_hgl(NULL)
+    QWidget(parent), isInit(false), snt_hgl(NULL), but_box(NULL)
 {
     setObjectName(name);
     QVBoxLayout *box = new QVBoxLayout(this);
@@ -762,12 +762,12 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
 {
     itTp->clear();
     int defPos = 0;
-    for( int i_t = 0; i_t < tgs.size(); i_t++ )
+    for(unsigned i_t = 0; i_t < tgs.size(); i_t++)
     {
-	itTp->addItem( TSYS::strSepParse(tgs[i_t],3,'\n').c_str(), tgs[i_t].c_str() );
-	if( atoi(TSYS::strSepParse(tgs[i_t],4,'\n').c_str()) ) defPos = itTp->count()-1;
+	itTp->addItem(TSYS::strSepParse(tgs[i_t],3,'\n').c_str(), tgs[i_t].c_str());
+	if(atoi(TSYS::strSepParse(tgs[i_t],4,'\n').c_str())) defPos = itTp->count()-1;
     }
-    if( tgs.size() ) itTp->setCurrentIndex(defPos);
+    if(tgs.size()) itTp->setCurrentIndex(defPos);
     bool tpView = !(itTp->count()==1 && itTp->itemText(0).isEmpty());
     itTpLab->setVisible(tpView); itTp->setVisible(tpView);
 }
@@ -830,11 +830,11 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
     //- Fill users list -
     vector<string> u_list;
     SYS->security().at().usrList(u_list);
-    for(int i_l = 0; i_l < u_list.size(); i_l++ )
+    for(unsigned i_l = 0; i_l < u_list.size(); i_l++)
     {
 	string simg = TSYS::strDecode(SYS->security().at().usrAt(u_list[i_l]).at().picture(),TSYS::base64);
 	QImage img;
-	if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+	if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 	    users->addItem(QPixmap::fromImage(img),u_list[i_l].c_str());
 	else users->addItem(u_list[i_l].c_str());
     }

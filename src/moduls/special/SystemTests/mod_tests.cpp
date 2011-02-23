@@ -236,7 +236,7 @@ void *TTest::Task( void *CfgM )
 
 	    //Get All fields
 	    ResAlloc res(SYS->nodeRes(),false);
-	    XMLNode *mn, *t_n;
+	    XMLNode *mn, *t_n = NULL;
 	    mn = TCntrNode::ctrId(&SYS->cfgRoot(),tst->nodePath(),true);
 	    for( int nd_cnt = 0; mn && (t_n=mn->childGet("prm",nd_cnt++,true)); )
 		if( tst->testPresent(t_n->attr("id")) && t_n->attr("on") == "1" &&

@@ -30,14 +30,14 @@ using namespace OSCADA;
 //*************************************************
 //* Function abstract object                      *
 //*************************************************
-TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), mTVal(NULL), run_st(false), grp(igrp)
+TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), run_st(false), mTVal(NULL), grp(igrp)
 {
 
 }
 
 TFunction::~TFunction( )
 {
-    for( int i_io = 0; i_io < mIO.size(); i_io++ )
+    for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
 	delete mIO[i_io];
 }
 
@@ -70,8 +70,8 @@ void TFunction::preDisable( int flag )
     if( used.size() )
     {
 	string mess;
-	for( int i=0; i < used.size(); i++ )
-	    mess+=used[i]->vfName()+", ";
+	for(unsigned i = 0; i < used.size(); i++)
+	    mess += used[i]->vfName()+", ";
 	throw TError(nodePath().c_str(),_("Function is used by: %s"),mess.c_str());
     }
 }
@@ -88,21 +88,21 @@ int TFunction::ioSize( )
 
 IO *TFunction::io( int iid )
 {
-    if( iid >= mIO.size() ) throw TError(nodePath().c_str(),_("Index %d is broken!"),iid);
+    if(iid >= (int)mIO.size()) throw TError(nodePath().c_str(),_("Index %d is broken!"),iid);
     return mIO[iid];
 }
 
 int TFunction::ioId( const string &id )
 {
-    for( int i_io = 0; i_io < mIO.size(); i_io++ )
-	if( mIO[i_io]->id() == id ) return i_io;
+    for(int i_io = 0; i_io < (int)mIO.size(); i_io++)
+	if(mIO[i_io]->id() == id) return i_io;
     return -1;
 }
 
 void TFunction::ioList( vector<string> &list )
 {
-    for( int i_io = 0; i_io < mIO.size(); i_io++ )
-	list.push_back( mIO[i_io]->id() );
+    for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
+	list.push_back(mIO[i_io]->id());
 }
 
 void TFunction::ioAdd( IO *io )
@@ -115,7 +115,7 @@ void TFunction::ioAdd( IO *io )
 
 int TFunction::ioIns( IO *io, int pos )
 {
-    if( pos < 0 || pos > mIO.size() ) pos = mIO.size();
+    if(pos < 0 || pos > (int)mIO.size()) pos = mIO.size();
 
     preIOCfgChange();
     mIO.insert(mIO.begin()+pos,io);
@@ -127,7 +127,7 @@ int TFunction::ioIns( IO *io, int pos )
 
 void TFunction::ioDel( int pos )
 {
-    if( pos < 0 || pos >= mIO.size() )
+    if(pos < 0 || pos >= (int)mIO.size())
         throw TError(nodePath().c_str(),_("Delete IO <%d> error."),pos);
 
     preIOCfgChange();
@@ -137,7 +137,7 @@ void TFunction::ioDel( int pos )
 
 void TFunction::ioMove( int pos, int to )
 {
-    if( pos < 0 || pos >= mIO.size() || to < 0 || to >= mIO.size() )
+    if(pos < 0 || pos >= (int)mIO.size() || to < 0 || to >= (int)mIO.size())
 	throw TError(nodePath().c_str(),_("Move IO from %d to %d error."),pos,to);
 
     preIOCfgChange();
@@ -316,7 +316,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     else if(a_path.substr(0,8) == "/exec/io" && mTVal)
     {
 	string io_id = TSYS::pathLev(a_path,2);
-	for(int i_io = 0; i_io < mIO.size(); i_io++)
+	for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
 	    if(io_id == io(i_io)->id())
 	    {
 		if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))
@@ -423,7 +423,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    mName(iname), mFunc(NULL), mDimens(false), tm_calc(0.0), mBlk(iblk), mUser(iuser)
+    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), tm_calc(0.0), mFunc(NULL)
 {
     setFunc(ifunc);
 }
@@ -468,7 +468,7 @@ void TValFunc::funcDisConnect( bool det )
 
     if(mFunc)
     {
-	for(int i_vl = 0; i_vl < mVal.size(); i_vl++)
+	for(unsigned i_vl = 0; i_vl < mVal.size(); i_vl++)
 	    switch( mVal[i_vl].tp )
 	    {
 		case IO::String:	delete mVal[i_vl].val.s;	break;
@@ -636,8 +636,8 @@ void TValFunc::setO( unsigned id, TVarObj *val )
 void TValFunc::setMdfChk( bool set )
 {
     mMdfChk = set;
-    if( set )
-	for( int i_v = 0; i_v < mVal.size(); i_v++ )
+    if(set)
+	for(unsigned i_v = 0; i_v < mVal.size(); i_v++)
 	    mVal[i_v].mdf = false;
 }
 

@@ -55,7 +55,7 @@ TModule::TModule( const string &id ) : mId(id)
 TModule::~TModule(  )
 {
     //> Clean export function list
-    for(int i=0; i < m_efunc.size(); i++)
+    for(unsigned i = 0; i < m_efunc.size(); i++)
         delete m_efunc[i];
 }
 
@@ -76,22 +76,22 @@ TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
 void TModule::modFuncList( vector<string> &list )
 {
     list.clear();
-    for(int i=0; i < m_efunc.size(); i++)
+    for(unsigned i = 0; i < m_efunc.size(); i++)
 	list.push_back(m_efunc[i]->prot);
 }
 
 bool TModule::modFuncPresent( const string &prot )
 {
-    for(int i=0; i < m_efunc.size(); i++)
-	if( m_efunc[i]->prot == prot )
+    for(unsigned i = 0; i < m_efunc.size(); i++)
+	if(m_efunc[i]->prot == prot)
 	    return true;
     return false;
 }
 
 TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
-    for(int i=0; i < m_efunc.size(); i++)
-	if( m_efunc[i]->prot == prot ) return *m_efunc[i];
+    for(unsigned i = 0; i < m_efunc.size(); i++)
+	if(m_efunc[i]->prot == prot) return *m_efunc[i];
     throw TError(nodePath().c_str(),_("Function <%s> is not present in the module!"),prot.c_str());
 }
 
@@ -102,8 +102,8 @@ void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
 
 void TModule::modInfo( vector<string> &list )
 {
-    for( int i_opt = 0; i_opt < sizeof(l_info)/sizeof(char *); i_opt++ )
-	list.push_back( l_info[i_opt] );
+    for(unsigned i_opt = 0; i_opt < sizeof(l_info)/sizeof(char *); i_opt++)
+	list.push_back(l_info[i_opt]);
 }
 
 string TModule::modInfo( const string &name )
@@ -136,7 +136,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	    {
 		vector<string> list;
 		modInfo(list);
-		for(int i_l = 0; i_l < list.size(); i_l++)
+		for(unsigned i_l = 0; i_l < list.size(); i_l++)
 		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),_(list[i_l].c_str()),R_R_R_,"root","root",1,"tp","str");
 	    }
 	return;

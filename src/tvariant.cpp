@@ -79,6 +79,7 @@ void TVariant::setType( Type tp )
 	case TVariant::Object:
 	    vl.assign(1,(char)TVariant::Object);
 	    break;
+	default: break;
     }
 }
 
@@ -99,13 +100,14 @@ TVariant &TVariant::operator=( const TVariant &vr )
 
 char TVariant::getB( ) const
 {
-    switch( type() )
+    switch(type())
     {
 	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_BOOL : (bool)atoi(getS().c_str());
 	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_BOOL : (bool)getI();
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_BOOL : (bool)getR();
 	case TVariant::Boolean:	return vl[1];
 	case TVariant::Object:	return true;
+	default: break;
     }
     return EVAL_BOOL;
 }
@@ -119,6 +121,7 @@ int TVariant::getI( ) const
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
 	case TVariant::Object:	return 1;
+	default: break;
     }
     return EVAL_INT;
 }
@@ -132,6 +135,7 @@ double TVariant::getR( ) const
 	case TVariant::Real:	return TSYS::getUnalignDbl(vl.data()+1);
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
 	case TVariant::Object:	return 1;
+	default: break;
     }
     return EVAL_REAL;
 }
@@ -145,6 +149,7 @@ string TVariant::getS( ) const
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(getR());
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(getB());
 	case TVariant::Object:	return getO()->getStrXML();
+	default: break;
     }
     return EVAL_STR;
 }
@@ -244,6 +249,7 @@ string TVarObj::getStrXML( const string &oid )
 	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+ip->second.getS()+"</real>\n"; break;
 	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+ip->second.getS()+"</bool>\n"; break;
 	    case TVariant::Object:	nd += ip->second.getO()->getStrXML(ip->first); break;
+	    default: break;
 	}
     nd += "</TVarObj>\n";
 
@@ -261,18 +267,18 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 //***********************************************************
 TVariant TArrayObj::propGet( const string &id )
 {
-    if( id == "length" ) return (int)mEls.size();
+    if(id == "length") return (int)mEls.size();
 
     int vid = atoi(id.c_str());
-    if( vid < 0 || vid >= mEls.size() ) throw TError("ArrayObj",_("Array element '%d' is not allow."),vid);
+    if(vid < 0 || vid >= (int)mEls.size()) throw TError("ArrayObj",_("Array element '%d' is not allow."),vid);
     return mEls[vid];
 }
 
 void TArrayObj::propSet( const string &id, TVariant val )
 {
     int vid = atoi(id.c_str());
-    if( vid < 0 ) throw TError("ArrayObj",_("Negative id is not allow for array."));
-    while( vid >= mEls.size() ) mEls.push_back(TVariant());
+    if(vid < 0) throw TError("ArrayObj",_("Negative id is not allow for array."));
+    while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
     mEls[vid] = val;
 }
 
@@ -281,14 +287,15 @@ string TArrayObj::getStrXML( const string &oid )
     string nd("<TArrayObj");
     if( !oid.empty() ) nd = nd + " p='" + oid + "'";
     nd = nd + ">\n";
-    for( int ip = 0; ip < mEls.size(); ip++ )
-	switch( mEls[ip].type() )
+    for(unsigned ip = 0; ip < mEls.size(); ip++)
+	switch(mEls[ip].type())
 	{
 	    case TVariant::String:	nd += "<str>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</str>\n"; break;
 	    case TVariant::Integer:	nd += "<int>"+mEls[ip].getS()+"</int>\n"; break;
 	    case TVariant::Real:	nd += "<real>"+mEls[ip].getS()+"</real>\n"; break;
 	    case TVariant::Boolean:	nd += "<bool>"+mEls[ip].getS()+"</bool>\n"; break;
 	    case TVariant::Object:	nd += mEls[ip].getO()->getStrXML(); break;
+	    default: break;
 	}
     nd += "</TArrayObj>\n";
 
@@ -302,7 +309,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "join" || id == "toString" || id == "valueOf" )
     {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
-	for( int i_e = 0; i_e < mEls.size(); i_e++ )
+	for(unsigned i_e = 0; i_e < mEls.size(); i_e++)
 	    rez += (i_e?sep:"")+mEls[i_e].getS();
 	return rez;
     }
@@ -318,7 +325,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  var - variable
     if( id == "push" && prms.size() )
     {
-	for( int i_p = 0; i_p < prms.size(); i_p++ ) mEls.push_back(prms[i_p]);
+	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.push_back(prms[i_p]);
 	return (int)mEls.size();
     }
     // ElTp pop( ) - pop variable from array
@@ -343,7 +350,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  var - variable
     if( id == "unshift" && prms.size() )
     {
-	for( int i_p = 0; i_p < prms.size(); i_p++ ) mEls.insert(mEls.begin()+i_p,prms[i_p]);
+	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.insert(mEls.begin()+i_p,prms[i_p]);
 	return (int)mEls.size();
     }
     // Array slice(int beg, int end) - get array part from positon <beg> to <end>
@@ -372,13 +379,13 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
 	//> Delete elements
 	TArrayObj *rez = new TArrayObj();
-	for( int i_c = 0; i_c < cnt && beg < mEls.size(); i_c++ )
+	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++)
 	{
 	    rez->propSet( TSYS::int2str(i_c), mEls[beg] );
 	    mEls.erase(mEls.begin()+beg);
 	}
 	//> Insert elements
-	for( int i_c = 2; i_c < prms.size(); i_c++ )
+	for(unsigned i_c = 2; i_c < prms.size(); i_c++)
 	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
 	return rez;
     }
@@ -556,7 +563,7 @@ void XMLNodeObj::toXMLNode( XMLNode &nd )
     nd.setName(name())->setText(text());
     for( map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++ )
 	nd.setAttr(ip->first,ip->second.getS());
-    for( int i_ch = 0; i_ch < mChilds.size(); i_ch++ )
+    for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
 	mChilds[i_ch]->toXMLNode(*nd.childAdd());
 }
 
@@ -569,10 +576,10 @@ void XMLNodeObj::fromXMLNode( XMLNode &nd )
 
     vector<string> alst;
     nd.attrList( alst );
-    for( int i_a = 0; i_a < alst.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < alst.size(); i_a++)
 	propSet(alst[i_a],nd.attr(alst[i_a]));
 
-    for( int i_ch = 0; i_ch < nd.childSize(); i_ch++ )
+    for(unsigned i_ch = 0; i_ch < nd.childSize(); i_ch++)
     {
 	XMLNodeObj *xn = new XMLNodeObj();
 	childAdd(xn);

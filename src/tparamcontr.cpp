@@ -34,7 +34,7 @@ using namespace OSCADA;
 //* TParamContr                                   *
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
-    TConfig(tpprm), tipparm(tpprm), m_en(false), m_id(cfg("SHIFR").getSd()), m_aen(cfg("EN").getBd())
+    TConfig(tpprm), m_id(cfg("SHIFR").getSd()), m_aen(cfg("EN").getBd()), m_en(false), tipparm(tpprm)
 {
     m_id = name;
     setName(name);
@@ -85,7 +85,7 @@ void TParamContr::preDisable(int flag)
     vector<string> a_ls;
     vlList(a_ls);
 
-    for(int i_a = 0; i_a < a_ls.size(); i_a++)
+    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
 	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
 	{
 	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
@@ -125,8 +125,8 @@ void TParamContr::save_( )
     //> Save archives
     vector<string> a_ls;
     vlList(a_ls);
-    for(int i_a = 0; i_a < a_ls.size(); i_a++)
-	if( !vlAt(a_ls[i_a]).at().arch().freeStat() )
+    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
 	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 

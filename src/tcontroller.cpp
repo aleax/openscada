@@ -30,8 +30,8 @@ using namespace OSCADA;
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    mDB(daq_db), TConfig(cfgelem), run_st(false), en_st(false), mRedntUse(false),
-    mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd())
+    TConfig(cfgelem), en_st(false), run_st(false), mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
+    mDB(daq_db), mRedntUse(false)
 {
     mId = id_c;
     mPrm = grpAdd("prm_");
@@ -49,8 +49,8 @@ TCntrNode &TController::operator=( TCntrNode &node )
 
     //> Individual DB names store
     vector<string> dbNms;
-    for( int i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++ )
-	dbNms.push_back( cfg(owner().tpPrmAt(i_tp).db).getS() );
+    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
+	dbNms.push_back(cfg(owner().tpPrmAt(i_tp).db).getS());
 
     //> Configuration copy
     string tid = id();
@@ -59,7 +59,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
     setDB(src_n->mDB);
 
     //> Individual DB names restore
-    for( int i_tp = 0; i_tp < owner().tpPrmSize() && i_tp < dbNms.size(); i_tp++ )
+    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize() && i_tp < dbNms.size(); i_tp++)
 	cfg(owner().tpPrmAt(i_tp).db).setS(dbNms[i_tp]);
 
     //> Parameters copy
@@ -68,7 +68,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
 	if( !enableStat( ) )	enable();
 	vector<string> prm_ls;
 	src_n->list(prm_ls);
-	for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
+	for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
 	{
 	    if( !owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name) ) continue;
 	    if( !present(prm_ls[i_p]) )	add( prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name) );
@@ -225,8 +225,8 @@ void TController::enable( )
     //> Enable parameters
     vector<string> prm_list;
     list(prm_list);
-    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-	if( at(prm_list[i_prm]).at().toEnable() )
+    for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
+	if(at(prm_list[i_prm]).at().toEnable())
 	    try{ at(prm_list[i_prm]).at().enable(); }
 	    catch(TError err)
 	    {
@@ -238,7 +238,7 @@ void TController::enable( )
     //> Set enable stat flag
     en_st = true;
 
-    if( enErr ) throw TError(nodePath().c_str(),_("Some parameters enable error."));
+    if(enErr) throw TError(nodePath().c_str(),_("Some parameters enable error."));
 }
 
 void TController::disable( )
@@ -252,14 +252,14 @@ void TController::disable( )
     //> Disable parameters
     vector<string> prm_list;
     list(prm_list);
-    for( int i_prm = 0; i_prm < prm_list.size(); i_prm++ )
-	if( at(prm_list[i_prm]).at().enableStat() )
-	try{ at(prm_list[i_prm]).at().disable(); }
-	catch(TError err)
-	{
-	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_warning(nodePath().c_str(),_("Disable parameter <%s> error."),prm_list[i_prm].c_str());
-	}
+    for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
+	if(at(prm_list[i_prm]).at().enableStat())
+	    try{ at(prm_list[i_prm]).at().disable(); }
+	    catch(TError err)
+	    {
+		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_warning(nodePath().c_str(),_("Disable parameter <%s> error."),prm_list[i_prm].c_str());
+	    }
 
     //> Disable for children
     disable_();
@@ -271,15 +271,15 @@ void TController::disable( )
 void TController::LoadParmCfg(  )
 {
     //> Search and create new parameters
-    for( int i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++ )
+    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
     {
-	if( owner().tpPrmAt(i_tp).db.empty() ) continue;
+	if(owner().tpPrmAt(i_tp).db.empty()) continue;
 	try
 	{
 	    TConfig c_el(&owner().tpPrmAt(i_tp));
 	    c_el.cfgViewAll(false);
 
-	    for( int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
 					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el); )
 	    {
 		try
@@ -302,7 +302,7 @@ void TController::LoadParmCfg(  )
     //- Force load present parameters -
     vector<string> prm_ls;
     list(prm_ls);
-    for( int i_p = 0; i_p < prm_ls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
     {
 	at(prm_ls[i_p]).at().modifG();
 	at(prm_ls[i_p]).at().load( );
@@ -343,10 +343,10 @@ void TController::redntDataUpdate( )
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
     req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
-    for(int i_p = 0; i_p < pls.size(); i_p++)
+    for(int i_p = 0; i_p < (int)pls.size(); i_p++)
     {
 	prm = at(pls[i_p]);
-	if( !prm.at().enableStat( ) ) { pls.erase(pls.begin()+i_p); i_p--; continue; }
+	if(!prm.at().enableStat()) { pls.erase(pls.begin()+i_p); i_p--; continue; }
 
 	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr");
 
@@ -356,13 +356,14 @@ void TController::redntDataUpdate( )
 	//>> Check attributes last present data time into archives
 	vector<string> listV;
 	prm.at().vlList(listV);
-	int rC = 0;
-	for(int iV = 0; iV < listV.size(); iV++)
+	unsigned rC = 0;
+	for(unsigned iV = 0; iV < listV.size(); iV++)
 	{
 	    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-	    if( !vl.at().arch().freeStat() || vl.at().reqFlg() ) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
-	    if( !vl.at().arch().freeStat() )
-		prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
+	    if(!vl.at().arch().freeStat() || vl.at().reqFlg()) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
+	    if(!vl.at().arch().freeStat())
+		prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),
+						    TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
 	}
 	if(rC > listV.size()/2)
 	{
@@ -376,10 +377,10 @@ void TController::redntDataUpdate( )
 
     //> Write data to parameters
     if( req.childSize() ) mRedntSt.setVal(req.childGet(0)->text());
-    for( int i_p = 0; i_p < pls.size(); i_p++ )
+    for(unsigned i_p = 0; i_p < pls.size(); i_p++)
     {
 	prm = at(pls[i_p]);
-	for( int i_a = 0; i_a < req.childGet(i_p+1)->childSize(); i_a++ )
+	for(unsigned i_a = 0; i_a < req.childGet(i_p+1)->childSize(); i_a++)
 	{
 	    XMLNode *aNd = req.childGet(i_p+1)->childGet(i_a);
 	    if( !prm.at().vlPresent(aNd->attr("id")) ) continue;
@@ -392,7 +393,7 @@ void TController::redntDataUpdate( )
 		long long btm = atoll(aNd->attr("tm").c_str());
 		long long per = atoll(aNd->attr("per").c_str());
 		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-		for( int i_v = 0; i_v < aNd->childSize(); i_v++ )
+		for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
 		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
 		vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 	    }
@@ -459,9 +460,9 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/nmb" && ctrChkNode(opt))
     {
 	list(c_list);
-	int e_c = 0;
-	for(int i_a = 0; i_a < c_list.size(); i_a++)
-	    if(at(c_list[i_a]).at().enableStat( ))	e_c++;
+	unsigned e_c = 0;
+	for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
+	    if(at(c_list[i_a]).at().enableStat()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize())
@@ -511,7 +512,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     {
 	TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
 	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
-	    for(int i_t = 0; i_t < owner().tpPrmSize( ); i_t++)
+	    for(unsigned i_t = 0; i_t < owner().tpPrmSize( ); i_t++)
 		if(owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2))
 		     modifG( );
     }
@@ -522,7 +523,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
 	vector<string> sls;
 	owner().owner().rdStList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
     else TCntrNode::cntrCmdProc(opt);

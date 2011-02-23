@@ -208,11 +208,11 @@ bool TMess::chkPattern( const string &val, const string &patt )
 
     while(true)
     {
-	if( p_cnt >= patt.size() )	return true;
+	if( p_cnt >= (int)patt.size() )	return true;
 	if( patt[p_cnt] == '?' )	{ v_cnt++; p_cnt++; mult_s = false; continue; }
 	if( patt[p_cnt] == '*' )	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
 	if( patt[p_cnt] == '\\' )	p_cnt++;
-	if( v_cnt >= val.size() )	break;
+	if( v_cnt >= (int)val.size() )	break;
 	if( patt[p_cnt] == val[v_cnt] )
 	{
 	    if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }

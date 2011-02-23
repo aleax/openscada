@@ -101,7 +101,7 @@ class TValBuf
 	    public:
 		//Public methods
 		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres,
-		    long long& iend, long long& ibeg, unsigned int &iEvalCnt );
+		    long long &iend, long long &ibeg, unsigned int &iEvalCnt );
 		~TBuf( );
 
 		void clear( );

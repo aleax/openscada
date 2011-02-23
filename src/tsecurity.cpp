@@ -88,8 +88,8 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
     vector<string> gls;
     list.clear();
     grpList(gls);
-    for(int i_g = 0; i_g < gls.size(); i_g++)
-	if( grpAt(gls[i_g]).at().user(name) )
+    for(unsigned i_g = 0; i_g < gls.size(); i_g++)
+	if(grpAt(gls[i_g]).at().user(name))
 	    list.push_back(gls[i_g]);
 }
 
@@ -172,11 +172,11 @@ void TSecurity::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user","",fld_cnt++,g_cfg); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user","",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
-		if( !usrPresent(name) )	usrAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!usrPresent(name))	usrAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>>> Search into config file
@@ -201,11 +201,11 @@ void TSecurity::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp","",fld_cnt++,g_cfg); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp","",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
-		if( !grpPresent(name) )	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!grpPresent(name))	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 	    }
 
 	//>>> Search into config file
@@ -284,8 +284,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 //* TUser                                         *
 //*************************************************
 TUser::TUser( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()),
-    m_name(cfg("NAME").getSd()), m_pict(cfg("PICTURE").getSd()), m_sysIt(false)
+    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()),
+    m_pict(cfg("PICTURE").getSd()), m_db(idb), m_sysIt(false)
 {
     m_name = nm;
 }
@@ -328,7 +328,7 @@ void TUser::postDisable(int flag)
 	//> Remove user from groups
 	vector<string> gls;
 	owner().usrGrpList(name(),gls);
-	for(int i_g = 0; i_g < gls.size(); i_g++)
+	for(unsigned i_g = 0; i_g < gls.size(); i_g++)
 	    owner().grpAt(gls[i_g]).at().userDel(name());
     }catch(TError err)
     { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -350,7 +350,7 @@ void TUser::save_( )
     //> Save used groups
     vector<string> ls;
     owner().grpList(ls);
-    for(int i_g = 0; i_g < ls.size(); i_g++)
+    for(unsigned i_g = 0; i_g < ls.size(); i_g++)
 	owner().grpAt(ls[i_g]).at().save();
 }
 
@@ -412,7 +412,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    XMLNode *vl  = ctrMkNode("list",opt,-1,"/prm/grps/vl","",RWRWR_);
 	    vector<string> ls;
 	    owner().grpList(ls);
-	    for(int i_g = 0; i_g < ls.size(); i_g++)
+	    for(unsigned i_g = 0; i_g < ls.size(); i_g++)
 	    {
 		if(grp)	grp->childAdd("el")->setText(ls[i_g]);
 		if(vl)	vl->childAdd("el")->setText(TSYS::int2str(owner().grpAt(ls[i_g]).at().user(name())));
@@ -432,8 +432,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 //* TGroup					  *
 //*************************************************
 TGroup::TGroup( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_db(idb), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()), 
-    m_name(cfg("NAME").getSd()), m_sysIt(false)
+    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()),
+    m_db(idb), m_sysIt(false)
 {
     m_name = nm;
 }
@@ -500,7 +500,7 @@ void TGroup::userAdd( const string &name )
 
 void TGroup::userDel( const string &name )
 {
-    int pos = m_usrs.find(name+";",0);
+    unsigned pos = m_usrs.find(name+";",0);
     if(pos != string::npos)
     {
 	m_usrs.erase(pos,name.size()+1);

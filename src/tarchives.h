@@ -234,8 +234,8 @@ class TArchiveS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	int messBufLen( )	{ return mBuf.size(); }
-	void setMessBufLen( int len );
+	unsigned messBufLen( )	{ return mBuf.size(); }
+	void setMessBufLen( unsigned len );
 
 	//Private attributes
 	TElem	elMess,			//Message archivator's DB elements

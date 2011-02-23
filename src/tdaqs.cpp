@@ -35,7 +35,7 @@ using namespace OSCADA;
 //* TDAQS                                         *
 //*************************************************
 TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
-    mRdStLevel(0), mRdTaskPer(1), mRdRestConnTm(30), mRdRestDtTm(1), prcStRd(false), endrunRd(false), mRdPrcTm(0)
+    mRdStLevel(0), mRdRestConnTm(30), mRdTaskPer(1), mRdRestDtTm(1), mRdPrcTm(0), prcStRd(false), endrunRd(false)
 {
     mTmplib = grpAdd("tmplb_");
 
@@ -93,14 +93,14 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
     ls.clear();
     vector<string> mls, cls;
     modList(mls);
-    for( int i_m = 0; i_m < mls.size(); i_m++ )
+    for(unsigned i_m = 0; i_m < mls.size(); i_m++)
     {
-	if( !at(mls[i_m]).at().redntAllow() ) continue;
+	if(!at(mls[i_m]).at().redntAllow()) continue;
 	at(mls[i_m]).at().list(cls);
-	for( int i_c = 0; i_c < cls.size(); i_c++ )
+	for(unsigned i_c = 0; i_c < cls.size(); i_c++)
 	{
 	    cntr = at(mls[i_m]).at().at(cls[i_c]);
-	    if( cntr.at().startStat( ) && (!isRun || (isRun && !cntr.at().redntUse( ))) )
+	    if(cntr.at().startStat() && (!isRun || (isRun && !cntr.at().redntUse())))
 		ls.push_back(cntr.at().workId());
 	}
     }
@@ -138,8 +138,8 @@ void TDAQS::load_( )
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
@@ -165,7 +165,7 @@ void TDAQS::load_( )
 	vector<string> mod_ls, db_ls;
 
 	modList(mod_ls);
-	for( int i_md = 0; i_md < mod_ls.size(); i_md++ )
+	for(unsigned i_md = 0; i_md < mod_ls.size(); i_md++)
 	{
 	    wmod = at(mod_ls[i_md]);
 	    TConfig g_cfg(&wmod.at());
@@ -173,8 +173,8 @@ void TDAQS::load_( )
 
 	    //>> Search into DB and create new controllers
 	    SYS->db().at().dbList(db_ls,true);
-	    for( int i_db = 0; i_db < db_ls.size(); i_db++ )
-		for( int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg); )
+	    for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+		for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg); )
 		{
 		    string m_id = g_cfg.cfg("ID").getS();
 		    try
@@ -244,11 +244,11 @@ void TDAQS::subStart(  )
     {
 	//> Start template's libraries
 	tmplLibList(tmpl_lst);
-	for( int i_lb = 0; i_lb < tmpl_lst.size(); i_lb++ )
+	for(unsigned i_lb = 0; i_lb < tmpl_lst.size(); i_lb++)
 	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
 	    catch(TError err)
 	    {
-		if( try_cnt )
+		if(try_cnt)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Start template library <%s> error."),tmpl_lst[i_lb].c_str());
@@ -340,7 +340,7 @@ void TDAQS::subStop( )
 
     //> Stop template's libraries
     tmplLibList(m_l);
-    for(int i_lb=0; i_lb < m_l.size(); i_lb++ )
+    for(unsigned i_lb=0; i_lb < m_l.size(); i_lb++)
 	tmplLibAt(m_l[i_lb]).at().start(false);
 
     TSubSYS::subStop( );
@@ -424,8 +424,8 @@ void *TDAQS::RdTask( void *param )
 		    if( SYS->transport().at().cntrIfCmd(req,"DAQRedundant") ) continue;
 		    sit->second.lev = atoi(req.attr("StLevel").c_str());
 		    sit->second.actCntr.clear();
-		    for( int i_c = 0; i_c < req.childSize(); i_c++ )
-			if( req.childGet(i_c)->name() == "cntr" )
+		    for(unsigned i_c = 0; i_c < req.childSize(); i_c++)
+			if(req.childGet(i_c)->name() == "cntr")
 			    sit->second.actCntr[req.childGet(i_c)->attr("id")] = atoi(req.childGet(i_c)->attr("run").c_str());
 		    sit->second.isLive = true;
 		}
@@ -445,7 +445,7 @@ void *TDAQS::RdTask( void *param )
 
 	//> Planing controllers' run and process requests to remote run controllers
 	daq.rdActCntrList(cls);
-	for( int i_c = 0; i_c < cls.size(); i_c++ )
+	for(unsigned i_c = 0; i_c < cls.size(); i_c++)
 	{
 	    cntr = daq.at(TSYS::strSepParse(cls[i_c],0,'.')).at().at(TSYS::strSepParse(cls[i_c],1,'.'));
 	    //>> Check contoller run plane
@@ -537,10 +537,10 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    map<string,bool> cntrLs;
 	    vector<string> cls;
 	    rdActCntrList(cls);
-	    for( int i_l = 0; i_l < cls.size(); i_l++ ) cntrLs[cls[i_l]] = false;
+	    for(unsigned i_l = 0; i_l < cls.size(); i_l++) cntrLs[cls[i_l]] = false;
 	    rdActCntrList(cls,true);
-	    for( int i_l = 0; i_l < cls.size(); i_l++ ) cntrLs[cls[i_l]] = true;
-	    for( map<string,bool>::iterator cit = cntrLs.begin(); cit != cntrLs.end(); cit++ )
+	    for(unsigned i_l = 0; i_l < cls.size(); i_l++) cntrLs[cls[i_l]] = true;
+	    for(map<string,bool>::iterator cit = cntrLs.begin(); cit != cntrLs.end(); cit++)
 		opt->childAdd("cntr")->setAttr("id",cit->first)->setAttr("run",cit->second?"1":"0");
 	    return;
 	}
@@ -664,7 +664,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> hls;
 	SYS->transport().at().extHostList("*",hls);
-	for(int i_h = 0; i_h < hls.size(); i_h++)
+	for(unsigned i_h = 0; i_h < hls.size(); i_h++)
 	    opt->childAdd("el")->setText(hls[i_h]);
     }
     else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD))
@@ -686,11 +686,11 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    vector<string> mls, cls;
 	    modList(mls);
 	    AutoHD<TController> cntr;
-	    for(int i_m = 0; i_m < mls.size(); i_m++)
+	    for(unsigned i_m = 0; i_m < mls.size(); i_m++)
 	    {
 		if(!at(mls[i_m]).at().redntAllow()) continue;
 		at(mls[i_m]).at().list(cls);
-		for(int i_c = 0; i_c < cls.size(); i_c++)
+		for(unsigned i_c = 0; i_c < cls.size(); i_c++)
 		{
 		    cntr = at(mls[i_m]).at().at(cls[i_c]);
 		    if(n_id)		n_id->childAdd("el")->setText(mls[i_m]+"."+cls[i_c]);
@@ -719,7 +719,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
 	vector<string> sls;
 	rdStList(sls);
-	for(int i_s = 0; i_s < sls.size(); i_s++)
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID))	opt->setText(optDescr());

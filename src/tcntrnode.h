@@ -196,11 +196,11 @@ class TCntrNode
 	void setNodeMode( char mode )		{ m_flg = (m_flg&(~0x03))|(mode&0x03); }
 
 	//> Childs
-	virtual AutoHD<TCntrNode> chldAt( char igr, const string &name, const string &user = "" );
-	void chldList( char igr, vector<string> &list );
-	bool chldPresent( char igr, const string &name );
-	void chldAdd( char igr, TCntrNode *node, int pos = -1 );
-	void chldDel( char igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
+	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
+	void chldList( int8_t igr, vector<string> &list );
+	bool chldPresent( int8_t igr, const string &name );
+	void chldAdd( int8_t igr, TCntrNode *node, int pos = -1 );
+	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 
 	//> Conteiners
 	int8_t	grpSize( );
