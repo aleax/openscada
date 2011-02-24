@@ -72,10 +72,10 @@ void TTransportS::inTrList( vector<string> &ls )
 
     vector<string> t_ls, m_ls;
     modList(t_ls);
-    for( int i_tp = 0; i_tp < t_ls.size(); i_tp++ )
+    for(unsigned i_tp = 0; i_tp < t_ls.size(); i_tp++)
     {
 	at(t_ls[i_tp]).at().inList(m_ls);
-	for( int i_t = 0; i_t < m_ls.size(); i_t++ )
+	for(unsigned i_t = 0; i_t < m_ls.size(); i_t++)
 	    ls.push_back(t_ls[i_tp]+"."+m_ls[i_t]);
     }
 }
@@ -86,10 +86,10 @@ void TTransportS::outTrList( vector<string> &ls )
 
     vector<string> t_ls, m_ls;
     modList(t_ls);
-    for( int i_tp = 0; i_tp < t_ls.size(); i_tp++ )
+    for(unsigned i_tp = 0; i_tp < t_ls.size(); i_tp++)
     {
 	at(t_ls[i_tp]).at().outList(m_ls);
-	for( int i_t = 0; i_t < m_ls.size(); i_t++ )
+	for(unsigned i_t = 0; i_t < m_ls.size(); i_t++)
 	    ls.push_back(t_ls[i_tp]+"."+m_ls[i_t]);
     }
 }
@@ -134,8 +134,8 @@ void TTransportS::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for(int i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in","",fld_cnt++,c_el); )
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in","",fld_cnt++,c_el); )
 	    {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
@@ -167,7 +167,7 @@ void TTransportS::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	for(int i_db = 0; i_db < db_ls.size(); i_db++)
+	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out","",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
@@ -217,7 +217,7 @@ void TTransportS::save_( )
     //> Save external transports
     ResAlloc res(extHostRes,false);
     TConfig c_el(&el_ext);
-    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
+    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
     {
 	c_el.cfg("OP_USER").setS(extHostLs[i_h].user_open);
 	c_el.cfg("ID").setS(extHostLs[i_h].id);
@@ -230,8 +230,8 @@ void TTransportS::save_( )
     }
     //> Clear external transports
     c_el.cfgViewAll(false);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
-	if( !extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size() )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
+	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size())
 	{
 	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp/",c_el,true);
 	    fld_cnt--;
@@ -244,18 +244,17 @@ void TTransportS::subStart( )
 
     vector<string> t_lst, o_lst;
     modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
+    for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
     {
 	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
 	o_lst.clear();
 	mod.at().inList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	    try
 	    {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
-		if( !in.at().startStat() && in.at().toStart() ) 
-		    in.at().start();
-	    }catch( TError err )
+		if(!in.at().startStat() && in.at().toStart()) in.at().start();
+	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Start input transport <%s> error."),o_lst[i_o].c_str());
@@ -263,13 +262,12 @@ void TTransportS::subStart( )
 
 	o_lst.clear();
 	mod.at().outList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	    try
 	    {
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
-		if( !out.at().startStat() && out.at().toStart() )
-		    out.at().start();
-	    }catch( TError err )
+		if(!out.at().startStat() && out.at().toStart()) out.at().start();
+	    }catch(TError err)
 	    {
 	        mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Start output transport <%s> error."),o_lst[i_o].c_str());
@@ -286,29 +284,29 @@ void TTransportS::subStop( )
 
     vector<string> t_lst, o_lst;
     modList(t_lst);
-    for( int i_t = 0; i_t < t_lst.size(); i_t++ )
+    for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
     {
 	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
 	o_lst.clear();
 	mod.at().inList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	    try
 	    {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
-		if( in.at().startStat() ) in.at().stop();
-	    }catch( TError err )
+		if(in.at().startStat()) in.at().stop();
+	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Stop input transport <%s> error."),o_lst[i_o].c_str());
 	    }
 	o_lst.clear();
 	mod.at().outList(o_lst);
-	for( int i_o = 0; i_o < o_lst.size(); i_o++ )
+	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	    try
 	    {
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
-		if( out.at().startStat() ) out.at().stop();
-	    }catch( TError err )
+		if(out.at().startStat()) out.at().stop();
+	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Stop output transport <%s> error."),o_lst[i_o].c_str());
@@ -332,16 +330,16 @@ void TTransportS::extHostList( const string &user, vector<string> &list )
 {
     list.clear();
     ResAlloc res(extHostRes,false);
-    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
-	if( !user.size() || user == extHostLs[i_h].user_open )
+    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
+	if(!user.size() || user == extHostLs[i_h].user_open)
 	    list.push_back(extHostLs[i_h].id);
 }
 
 bool TTransportS::extHostPresent( const string &user, const string &iid )
 {
     ResAlloc res(extHostRes,false);
-    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
-	if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == iid )
+    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
+	if((!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == iid)
 	    return true;
     return false;
 }
@@ -349,8 +347,8 @@ bool TTransportS::extHostPresent( const string &user, const string &iid )
 void TTransportS::extHostSet( const ExtHost &host )
 {
     ResAlloc res(extHostRes,true);
-    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
-	if( host.user_open == extHostLs[i_h].user_open && extHostLs[i_h].id == host.id )
+    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
+	if(host.user_open == extHostLs[i_h].user_open && extHostLs[i_h].id == host.id)
 	{ extHostLs[i_h] = host; modif(); return; }
     extHostLs.push_back(host);
     modif();
@@ -359,8 +357,8 @@ void TTransportS::extHostSet( const ExtHost &host )
 void TTransportS::extHostDel( const string &user, const string &id )
 {
     ResAlloc res(extHostRes,true);
-    for( int i_h = 0; i_h < extHostLs.size(); )
-	if( (!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
+    for(unsigned i_h = 0; i_h < extHostLs.size(); )
+	if((!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id)
 	    extHostLs.erase(extHostLs.begin()+i_h);
 	else i_h++;
     modif();
@@ -369,8 +367,8 @@ void TTransportS::extHostDel( const string &user, const string &id )
 TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &id )
 {
     ResAlloc res(extHostRes,false);
-    for( int i_h = 0; i_h < extHostLs.size(); i_h++ )
-	if( (user.empty() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id )
+    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
+	if((user.empty() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id)
 	    return extHostLs[i_h];
     return ExtHost(user,"","","","","","");
 }
@@ -453,7 +451,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     {
 	vector<string>  list;
 	modList(list);
-	for(int i_a = 0; i_a < list.size(); i_a++)
+	for(unsigned i_a = 0; i_a < list.size(); i_a++)
 	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
     }
     else if(a_path == "/sub/ehost")
@@ -470,7 +468,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 
 	    vector<string> list;
 	    extHostList(sHstsUser,list);
-	    for(int i_h = 0; i_h < list.size(); i_h++)
+	    for(unsigned i_h = 0; i_h < list.size(); i_h++)
 	    {
 		ExtHost host = extHostGet(sHstsUser,list[i_h]);
 		if(n_id)	n_id->childAdd("el")->setText(host.id);
@@ -588,9 +586,9 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mDB(idb), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
+    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
     mDscr(cfg("DESCRIPT").getSd()), mAddr(cfg("ADDR").getSd()), mProt(cfg("PROT").getSd()),
-    mStart(cfg("START").getBd())
+    mStart(cfg("START").getBd()), mDB(idb)
 {
     mId = iid;
 }
@@ -749,9 +747,9 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mDB(idb), run_st(false), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
+    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
     mDscr(cfg("DESCRIPT").getSd()), mAddr(cfg("ADDR").getSd()), mStart(cfg("START").getBd()),
-    mPrm1(0), mPrm2(0)
+    mDB(idb), mPrm1(0), mPrm2(0)
 {
     mId = iid;
 }

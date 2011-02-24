@@ -27,10 +27,10 @@
 using std::string;
 
 //Error values
-#define EVAL_BOOL 2
-#define EVAL_INT  -2147483647
-#define EVAL_REAL -3.3E308
-#define EVAL_STR  "<EVAL>"
+#define EVAL_BOOL	2
+#define EVAL_INT	-2147483647
+#define EVAL_REAL	-3.3E308
+#define EVAL_STR	"<EVAL>"
 
 namespace OSCADA
 {

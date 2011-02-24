@@ -363,7 +363,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	int end = prms.size()-1;
 	if( prms.size()>=2 ) end = prms[1].getI();
 	if( end < 0 ) end = mEls.size()-1+end;
-	end = vmin(end,mEls.size()-1);
+	end = vmin(end,(int)mEls.size()-1);
 	TArrayObj *rez = new TArrayObj();
 	for( int i_p = beg; i_p <= end; i_p++ )
 	    rez->propSet( TSYS::int2str(i_p-beg), prms[i_p] );

@@ -456,9 +456,9 @@ string TFld::selVl2Nm( bool val )
 
 string TFld::selNm2VlS( const string &name )
 {
-    if( flg()&TFld::Selected && type()==TFld::String )
-	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
-	    if( name == (*m_sel)[i_val] )
+    if(flg()&TFld::Selected && type()==TFld::String)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
+	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_s)[i_val];
     return name;
     //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
@@ -466,9 +466,9 @@ string TFld::selNm2VlS( const string &name )
 
 int TFld::selNm2VlI( const string &name )
 {
-    if( flg()&TFld::Selected && type()==TFld::Integer )
-	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
-	    if( name == (*m_sel)[i_val] )
+    if(flg()&TFld::Selected && type()==TFld::Integer)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
+	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_i)[i_val];
     return atoi(name.c_str());
     //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
@@ -476,9 +476,9 @@ int TFld::selNm2VlI( const string &name )
 
 double TFld::selNm2VlR( const string &name )
 {
-    if( flg()&TFld::Selected && type()==TFld::Real )
-	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
-	    if( name == (*m_sel)[i_val] )
+    if(flg()&TFld::Selected && type()==TFld::Real)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
+	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_r)[i_val];
     return atof(name.c_str());
     //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
@@ -486,9 +486,9 @@ double TFld::selNm2VlR( const string &name )
 
 bool TFld::selNm2VlB( const string &name )
 {
-    if( flg()&TFld::Selected && type()==TFld::Boolean )
-	for(int i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
-	    if( name == (*m_sel)[i_val] )
+    if(flg()&TFld::Selected && type()==TFld::Boolean)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
+	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_b)[i_val];
     return atoi(name.c_str());
     //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());

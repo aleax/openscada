@@ -607,7 +607,7 @@ void SndPlay::run( )
 {
     if( mPlayData.empty() )	return;
 
-    int comPos = 0;
+    unsigned comPos = 0;
     string com = mod->playCom( );
     string srcFile = "/var/tmp/oscadaPlayTmp_"+mainWin()->workSess( );
 

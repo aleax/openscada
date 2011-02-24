@@ -520,7 +520,7 @@ AutoHD<TFunction> Engine::fAt( const string &id )
 
 string Engine::callSynth( const string &itxt )
 {
-    int		comPos = 0;
+    unsigned	comPos = 0;
     char	buf[STR_BUF_LEN];
     string	rez;
     const char	*synthRez = "/var/tmp/oscadaSynthTmp";

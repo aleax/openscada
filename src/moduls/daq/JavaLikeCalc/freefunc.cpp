@@ -1096,7 +1096,7 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	    return TVariant();
 	case TVariant::String:
 	    if( prop == "length" )	return (int)vl.getS().size();
-	    return vl.getS().substr(vmax(0,vmin(vl.getS().size()-1,atoi(prop.c_str()))),1);
+	    return vl.getS().substr(vmax(0,vmin(vl.getS().size()-1,(unsigned)atoi(prop.c_str()))),1);
 	default: return TVariant();
     }
     return TVariant();
@@ -1191,7 +1191,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		if( prop == "indexOf" && prms.size() )
 		{
 		    unsigned sp = 0;
-		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
+		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
 		    sp = vl.getS().find(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
@@ -1202,7 +1202,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		if( prop == "lastIndexOf" && prms.size() )
 		{
 		    unsigned sp = string::npos;
-		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,prms[1].getI()));
+		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
 		    sp = vl.getS().rfind(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
@@ -1217,7 +1217,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		    int end = vl.getS().size();
 		    if( prms.size()>=2 ) end = prms[1].getI();
 		    if( end < 0 ) end = vl.getS().size()+end;
-		    end = vmin(end,vl.getS().size());
+		    end = vmin(end,(int)vl.getS().size());
 		    if( beg >= end ) return string("");
 		    return vl.getS().substr(beg,end-beg);
 		}
@@ -1242,7 +1242,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		//  pos - position for insert
 		//  substr - substring for insert
 		if( prop == "insert" && prms.size() >= 2 )
-		    return vl.getS().insert( vmax(0,vmin(vl.getS().size(),prms[0].getI())), prms[1].getS() );
+		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
 		// string replace(int pos, int n, string substr) - replace substring into position <pos> and length <n> to string <substr>
 		//  pos - position for start replace
 		//  n - number symbols for replace
@@ -1253,7 +1253,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		    if(pos < 0 || pos >= (int)vl.getS().size()) return vl;
 		    int n = prms[1].getI();
 		    if(n < 0) n = vl.getS().size();
-		    n = vmin(vl.getS().size()-pos,n);
+		    n = vmin((int)vl.getS().size()-pos,n);
 		    return vl.getS().replace(pos, n, prms[2].getS());
 		}
 		// real toReal() - convert this string to real number

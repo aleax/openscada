@@ -1296,7 +1296,7 @@ void VisRun::updatePage( )
 
     //> Old pages from cache for close checking
     for(unsigned i_pg = 0; i_pg < cache_pg.size(); )
-	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (int)(mod->cachePgLife()*60*60))
+	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60))
 	{
 	    delete cache_pg[i_pg];
 	    cache_pg.erase(cache_pg.begin()+i_pg);
