@@ -118,7 +118,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             {
                 geomW = atoi(val.c_str());
                 flag_geom = true;
-
+                rel_list = true;
             }
 	    break;
         case 10:	//geomH
@@ -133,6 +133,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
             elFD->geomMargin = atoi(val.c_str());
 	    up = true;
 	    break;
+        case 13:	//geomXsc
+            rel_list = true;
+            break;
+        case 14:	//geomXsc
+            rel_list = true;
+            break;
 	case 20:	//lineWdth
             (*widths)[-5] = atof(val.c_str());
             rel_list = true;

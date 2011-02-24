@@ -490,11 +490,11 @@ function makeEl( pgBr, inclPg )
     if( !figObj )
     {
       figObj = this.place.ownerDocument.createElement('img');
-      figObj.width = geomW; figObj.height = geomH;
       figObj.border = 0;
       figObj.wdgLnk = this;
       this.place.appendChild(figObj);
     }
+    figObj.width = geomW; figObj.height = geomH;
     figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 							   '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
     if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )

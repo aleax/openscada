@@ -1,3 +1,9 @@
+2011-02-24 Maxim
+- FIX:UI.WebVision, UI.Vision: Updating the image when the scale is changed is fixed for primitive "ElFigure".
+- FIX:UI.WebVision: Checking of the points' position for the presence of it in the drawing area of the widget is removed, the only such check
+                    for the fills still remains for the primitive ElFigure.
+
+
 2011-02-23 Roman
 - !!:SYS: All warnings is resolved for "-Wall" compile option.
 - !!:UI.Vision, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.WebVision: All warnings is resolved for "-Wall" compile option.
