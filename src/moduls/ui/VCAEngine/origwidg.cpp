@@ -150,7 +150,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","","25") );
 	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","","26") );
 	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","","28") );
-	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::FullText|Attr::Active,"","","","","27") );
+	attrAdd( new TFld("elLst",_("Element's list"),TFld::String,TFld::NoStrTransl|TFld::FullText|Attr::Active,"","","","","27") );
     }
 }
 
