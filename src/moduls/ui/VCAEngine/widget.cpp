@@ -1842,7 +1842,7 @@ string Attr::cfgTempl( )
 
 string Attr::cfgVal( )
 {
-    unsigned sepp = cfg.find("\n");
+    size_t sepp = cfg.find("\n");
     return (sepp!=string::npos) ? cfg.substr(sepp+1) : "";
 }
 

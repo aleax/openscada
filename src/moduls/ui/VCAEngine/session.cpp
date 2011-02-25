@@ -1441,7 +1441,7 @@ void SessWdg::calc( bool first, bool last )
 		    {
 			try
 			{
-			    unsigned a_pos = attr.at().cfgVal().rfind("/");
+			    size_t a_pos = attr.at().cfgVal().rfind("/");
 			    if(a_pos == string::npos) throw TError("","");
 			    attr1 = ((AutoHD<Widget>)mod->nodeAt(attr.at().cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(attr.at().cfgVal().substr(a_pos+3));
 			    switch(attr.at().type())
@@ -1603,7 +1603,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		}
 	    else if( obj_tp == "wdg:" )
 	    {
-		unsigned a_pos = cfg.cfgVal().rfind("/");
+		size_t a_pos = cfg.cfgVal().rfind("/");
 		if(a_pos == string::npos) throw TError("","");
 		AutoHD<Attr> wattr = ((AutoHD<Widget>)mod->nodeAt(cfg.cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(cfg.cfgVal().substr(a_pos+3));
 		switch( cfg.type() )

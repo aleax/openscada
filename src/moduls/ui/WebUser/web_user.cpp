@@ -446,7 +446,7 @@ string UserPg::progLang( )
 string UserPg::prog( )
 {
     string mProg = cfg("PROG").getS();
-    unsigned lngEnd = mProg.find("\n");
+    size_t lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
@@ -631,7 +631,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     url(iurl), sender(isender), user(iuser), content(icontent)
 {
     //> URL parameters parse
-    unsigned prmSep = iurl.find("?");
+    size_t prmSep = iurl.find("?");
     if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
@@ -643,12 +643,12 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 
     //> Variables parse
-    for(unsigned i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
+    for(size_t i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
 	if((spos=ivars[i_v].find(":")) != string::npos)
 	    vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
 
     //> Content parse
-    unsigned pos = 0, spos = 0;
+    size_t pos = 0, spos = 0;
     const char *c_bound = "boundary=";
     const char *c_term = "\r\n";
     const char *c_end = "--";

@@ -521,7 +521,7 @@ string LWidget::calcProg( )
     if(!m_proc.size() && !parent().freeStat()) return parent().at().calcProg();
 
     string iprg = m_proc;
-    unsigned lng_end = iprg.find("\n");
+    size_t lng_end = iprg.find("\n");
     if(lng_end == string::npos) lng_end=0;
     else lng_end++;
     return iprg.substr(lng_end);

@@ -929,7 +929,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
     int c_pos = 1;
     while(true)
     {
-	unsigned t_pos = prs_path.find("/",c_pos);
+	size_t t_pos = prs_path.find("/",c_pos);
 	if( t_pos == string::npos )
 	{
 	    l_com = prs_path.substr(c_pos,t_pos-c_pos);
@@ -1057,7 +1057,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
     int c_pos = 1;
     while(true)
     {
-	unsigned t_pos = prs_path.find("/",c_pos);
+	size_t t_pos = prs_path.find("/",c_pos);
 	if( t_pos == string::npos )
 	{
 	    l_com = prs_path.substr(c_pos,t_pos-c_pos);
@@ -1273,7 +1273,7 @@ string TWEB::getCookie( string name, vector<string> &vars )
     for( unsigned i_var = 0; i_var < vars.size(); i_var++)
 	if( vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie" )
 	{
-	    unsigned i_beg = vars[i_var].find(name+"=",0);
+	    size_t i_beg = vars[i_var].find(name+"=",0);
 	    if( i_beg == string::npos ) return "";
 	    i_beg += name.size()+1;
 	    return vars[i_var].substr(i_beg,vars[i_var].find(";",i_beg)-i_beg);
@@ -1310,7 +1310,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
 {
     //> URL parameters parse
-    unsigned prmSep = iurl.find("?");
+    size_t prmSep = iurl.find("?");
     if(prmSep != string::npos)
     {
 	url = iurl.substr(0,prmSep);
@@ -1329,7 +1329,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
 
-    for(unsigned i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
+    for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
         if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
         {
             pos += strlen(c_bound);
@@ -1337,7 +1337,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
         }
     if(boundary.empty()) return;
 
-    for(unsigned pos = 0, spos = 0, i_bnd = 0; true; )
+    for(size_t pos = 0, spos = 0, i_bnd = 0; true; )
     {
         pos = content.find(boundary,pos);
         if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;

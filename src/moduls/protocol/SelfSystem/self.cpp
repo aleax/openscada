@@ -196,7 +196,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
 	    if( rez == 1 )	{ tro.setPrm1(-1); if( isDir ) break; else continue; }
 	    if( rez > 0 )	throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
-	    unsigned head_end = resp.find("\n",0);
+	    size_t head_end = resp.find("\n",0);
 	    if( head_end == string::npos )
 		throw TError(nodePath().c_str(),_("Station <%s> error: Respond is broken!"),tro.id().c_str());
 	    int resp_size = atoi(buf1);

@@ -96,7 +96,7 @@ string TPrmTempl::progLang()		{ return m_prog.substr(0,m_prog.find("\n")); }
 
 string TPrmTempl::prog( )
 {
-    unsigned lngEnd = m_prog.find("\n");
+    size_t lngEnd = m_prog.find("\n");
     return m_prog.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 

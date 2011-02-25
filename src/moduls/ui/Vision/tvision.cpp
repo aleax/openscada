@@ -280,7 +280,7 @@ QMainWindow *TVision::openWindow()
     for( int p_off = 0; (sprj=TSYS::strSepParse(run_prjs,0,';',&p_off)).size(); )
     {
 	screen = 0;
-	unsigned iSep = sprj.find("-");
+	size_t iSep = sprj.find("-");
 	if( iSep != string::npos ) screen = atoi(sprj.substr(iSep+1).c_str());
 	sprj = sprj.substr(0,iSep);
 

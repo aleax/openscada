@@ -291,7 +291,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	{
 	    tw = TSYS::strParse(resp,0,"\r\n",&pos);
 	    if(tw.empty()) break;
-	    unsigned sepPos = tw.find(":",0);
+	    size_t sepPos = tw.find(":",0);
 	    if(sepPos == 0 || sepPos == string::npos) continue;
 	    nd = io.childAdd("prm")->setAttr("id",tw.substr(0,sepPos))->setText(TSYS::strNoSpace(tw.substr(sepPos+1)));
 	    if(c_lng == -1 && strcasecmp(nd->attr("id").c_str(),"content-length") == 0) c_lng = atoi(nd->text().c_str());
@@ -459,7 +459,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    if( req.empty() ) { m_nofull=true; break; }
 	    if( req == "\r" ) break;
 	    req.resize(req.size()-1);
-	    unsigned sepPos = req.find(":",0);
+	    size_t sepPos = req.find(":",0);
 	    if( sepPos == 0 || sepPos == string::npos ) break;
 	    string var = req.substr(0,sepPos);
 	    string val = req.substr(sepPos+1);
@@ -474,7 +474,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    }
 	    else if( strcasecmp(var.c_str(),"cookie") == 0 )
 	    {
-		unsigned vpos = val.find("oscd_u_id=",0);
+		size_t vpos = val.find("oscd_u_id=",0);
 		if( vpos != string::npos ) user = mod->sesCheck(atoi(val.substr(vpos+10).c_str()));
 	    }
 	}
@@ -711,7 +711,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
 	}
     if(boundary.empty()) return;
 
-    for(unsigned pos = 0, spos = 0, i_bnd = 0; true; )
+    for(size_t pos = 0, spos = 0, i_bnd = 0; true; )
     {
 	pos = content.find(boundary,pos);
         if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;

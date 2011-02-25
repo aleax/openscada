@@ -605,7 +605,7 @@ void *TMdContr::Task(void *icntr)
 			    }
 			    cntr.p_hd[i_p].at().p_el.fldAdd(new TFld(aId.c_str(),mod->getSymbolCode(cdIt->childGet("lCodeId")->text()).c_str(),cTp,TFld::NoWrite));
 			}
-			cntr.p_hd[i_p].at().vlAt(aId).at().setS(cdIt->childGet("szCodeValue")->text(),atoi(cdIt->childGet("lLastUpdate")->text().c_str()),true);
+			cntr.p_hd[i_p].at().vlAt(aId).at().setS(cdIt->childGet("szCodeValue")->text(),0/*atoi(cdIt->childGet("lLastUpdate")->text().c_str())*/,true);
 		    }
 		}
 		else
@@ -642,11 +642,6 @@ void *TMdContr::Task(void *icntr)
 				SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Error, _("Alarm: ")+mval);
 			    //else if(aEv == 1)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Warning, _("Confirm: ")+mval);
 			    else if(aEv == 2)	SYS->archive().at().messPut(aTm, 0, mcat, TMess::Info, _("Norma: ")+mval);
-
-			    //> Place alarm flag to attribute
-			    //????
-			    //printf("TEST 01b: Alarm: %s, Code: %d, Event: %d, Date: %s\n",
-			    //	aId.c_str(),aNd.code,aEv,TSYS::time2str(aTm,"%d-%m-%Y %H:%M:%S.").c_str());
 			}
 		    }
 		}
@@ -821,7 +816,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((long long)(owner().period()*1000000));
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+    val.arch().at().setHighResTm(false);
 }

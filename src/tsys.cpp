@@ -597,7 +597,7 @@ string TSYS::strSepParse( const string &path, int level, char sep, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
-    unsigned t_dir;
+    size_t t_dir;
 
     if(an_dir >= (int)path.size()) return "";
     while(true)
@@ -623,7 +623,7 @@ string TSYS::strParse( const string &path, int level, const string &sep, int *of
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
-    unsigned t_dir;
+    size_t t_dir;
 
     if(an_dir >= (int)path.size() || sep.empty()) return "";
     while(true)
@@ -651,7 +651,7 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
-    unsigned t_dir;
+    size_t t_dir;
 
     //- First separators pass -
     while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;

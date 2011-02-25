@@ -500,7 +500,7 @@ void TGroup::userAdd( const string &name )
 
 void TGroup::userDel( const string &name )
 {
-    unsigned pos = m_usrs.find(name+";",0);
+    size_t pos = m_usrs.find(name+";",0);
     if(pos != string::npos)
     {
 	m_usrs.erase(pos,name.size()+1);

@@ -329,7 +329,7 @@ string UserPrt::inProgLang( )
 string UserPrt::inProg( )
 {
     string mProg = cfg("InPROG").getS();
-    unsigned lngEnd = mProg.find("\n");
+    size_t lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 
@@ -356,7 +356,7 @@ string UserPrt::outProgLang( )
 string UserPrt::outProg( )
 {
     string mProg = cfg("OutPROG").getS();
-    unsigned lngEnd = mProg.find("\n");
+    size_t lngEnd = mProg.find("\n");
     return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
 }
 

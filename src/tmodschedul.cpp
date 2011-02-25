@@ -129,19 +129,19 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
     files.clear();
 
     //> Check and append present files
-    int ido, id=-1;
+    int ido, id = -1;
     do
     {
-	ido=id+1; id = Paths.find(",",ido);
+	ido = id+1; id = Paths.find(",",ido);
 
 	dirent *scan_dirent;
-	Path=Paths.substr(ido,id-ido);
+	Path = Paths.substr(ido,id-ido);
 	if(Path.size() <= 0) continue;
 
 	DIR *IdDir = opendir(Path.c_str());
 	if(IdDir == NULL) continue;
 
-	while((scan_dirent = readdir(IdDir)) != NULL)
+	while((scan_dirent=readdir(IdDir)) != NULL)
 	{
 	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name) continue;
 	    NameMod = Path+"/"+scan_dirent->d_name;

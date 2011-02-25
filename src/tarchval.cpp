@@ -2472,7 +2472,7 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 			    string svl = TSYS::strSepParse(req.text(),0,'\n',&v_off);
 			    if( svl.size() )
 			    {
-				unsigned sepPos = svl.find(" ");
+				size_t sepPos = svl.find(" ");
 				if(sepPos == string::npos) break;
 				curPos = atoi(svl.substr(0,sepPos).c_str());
 				curVal = svl.substr(sepPos+1);
