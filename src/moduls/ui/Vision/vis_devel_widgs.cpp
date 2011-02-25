@@ -605,7 +605,7 @@ QVariant ModInspAttr::Item::dataEdit( )
 
 bool ModInspAttr::Item::setWdgs( const string &w, bool del )
 {
-    unsigned pos = 0;
+    size_t pos = 0;
     if(!del && wdgsItem.find(w+";") == string::npos) wdgsItem += w+";";
     if(del && (pos=wdgsItem.find(w+";")) != string::npos) wdgsItem.replace(pos,w.size()+1,"");
 

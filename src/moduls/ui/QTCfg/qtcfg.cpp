@@ -518,7 +518,7 @@ void ConfApp::treeSearch( )
 
 void ConfApp::pageUp()
 {
-    unsigned i_l = string::npos;
+    size_t i_l = string::npos;
     while(true)
     {
 	i_l = sel_path.rfind("/",i_l);

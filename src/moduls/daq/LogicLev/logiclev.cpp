@@ -956,8 +956,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
 	    for( int c_off = 0; TSYS::strSepParse(lnk_val,0,'.',&c_off).size(); c_lvl++ );
-	    if( c_lvl==4 ) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
-	    else opt->setText(lnk_val);	
+	    if(c_lvl == 4) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
+	    else opt->setText(lnk_val);
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{

@@ -669,7 +669,7 @@ string Node::progLang()
 string Node::prog()
 {
     string mProg = cfg("DT_PROG").getS();
-    unsigned lngEnd = mProg.find("\n");
+    size_t lngEnd = mProg.find("\n");
     return mProg.substr(((lngEnd==string::npos)?0:lngEnd+1));
 }
 

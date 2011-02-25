@@ -1190,7 +1190,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		//  start - start position for search
 		if( prop == "indexOf" && prms.size() )
 		{
-		    unsigned sp = 0;
+		    size_t sp = 0;
 		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
 		    sp = vl.getS().find(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
@@ -1201,7 +1201,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		//  start - start position for search from end
 		if( prop == "lastIndexOf" && prms.size() )
 		{
-		    unsigned sp = string::npos;
+		    size_t sp = string::npos;
 		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
 		    sp = vl.getS().rfind(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
@@ -1227,7 +1227,7 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		if( prop == "split" && prms.size() )
 		{
 		    TArrayObj *rez = new TArrayObj();
-		    for(unsigned posB = 0, posC, i_p = 0; true; i_p++)
+		    for(size_t posB = 0, posC, i_p = 0; true; i_p++)
 		    {
 			if(prms.size() > 1 && rez->size() >= prms[1].getI()) break;
 			posC = vl.getS().find(prms[0].getS(),posB);

@@ -41,7 +41,7 @@ using namespace VISION;
 RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
     WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), mPermCntr(false), mPermView(true)
 {
-    unsigned endElSt = iwid.rfind("/");
+    size_t endElSt = iwid.rfind("/");
     if( endElSt == string::npos ) return;
     string lstEl = iwid.substr(endElSt+1);
     if( lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_" ) setObjectName(lstEl.substr(4).c_str());
@@ -607,7 +607,7 @@ void SndPlay::run( )
 {
     if( mPlayData.empty() )	return;
 
-    unsigned comPos = 0;
+    size_t comPos = 0;
     string com = mod->playCom( );
     string srcFile = "/var/tmp/oscadaPlayTmp_"+mainWin()->workSess( );
 

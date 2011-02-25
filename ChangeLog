@@ -1,3 +1,9 @@
+2011-02-25 Roman
+- FIX: Type 'unsigned' is replaced to correct 'size_t' for result store from function string::find().
+- SYS: The function TModSchedul::ScanDir() is rewrited for some problems possibility.
+- FIX:BFN: New values set time is change to local. An archive period parameter set is fixed.
+
+
 2011-02-24 Maxim
 - FIX:UI.WebVision, UI.Vision: Updating the image when the scale is changed is fixed for primitive "ElFigure".
 - FIX:UI.WebVision: Checking of the points' position for the presence of it in the drawing area of the widget is removed, the only such check

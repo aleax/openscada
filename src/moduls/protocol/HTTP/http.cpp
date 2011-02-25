@@ -703,7 +703,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
 
-    for(unsigned i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
+    for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
 	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
 	{
 	    pos += strlen(c_bound);

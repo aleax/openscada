@@ -475,8 +475,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
 	//>> Prepare request for all typical
 	string cNodeId = "84";
-	unsigned stC = mBrwsVar.rfind(")");
-	unsigned stP = mBrwsVar.rfind("(",stC);
+	size_t stC = mBrwsVar.rfind(")");
+	size_t stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
 	XMLNode req("opc.tcp"); req.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));
@@ -567,8 +567,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	//>> Get current node references by call browse
 	string cNodeId = "84";
-	unsigned stC = mBrwsVar.rfind(")");
-	unsigned stP = mBrwsVar.rfind("(",stC);
+	size_t stC = mBrwsVar.rfind(")");
+	size_t stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XMLNode req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
@@ -713,7 +713,7 @@ string TMdPrm::attrPrc( )
 
 		//>> Browse name
 		string aNm = req.childGet(2)->text();
-		unsigned nmPos = aNm.find(":");
+		size_t nmPos = aNm.find(":");
 		if(nmPos!=string::npos) aNm.erase(0,nmPos+1);
 
 		//>>> Flags prepare
