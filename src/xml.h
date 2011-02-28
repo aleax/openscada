@@ -114,7 +114,7 @@ class XMLNode
 	vector< XMLNode* >		mChildren;
 	vector< pair<string,string> >	mAttr;
 	vector< pair<string,string> >	mPrcInstr;
-	XMLNode* mParent;
+	XMLNode *mParent;
 
 	//> Parse/load XML attributes
 	vector<XMLNode*> node_stack;

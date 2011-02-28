@@ -1,3 +1,8 @@
+2011-02-28 Roman
+- UI.QTStarter: Splash update period is rise to 1 second, for load decrease at slow CPU.
+- FIX:UI.VCAEngine: Check widget's attributes for no translation at load is added, for multi-languages DBs.
+
+
 2011-02-25 Roman
 - FIX: Type 'unsigned' is replaced to correct 'size_t' for result store from function string::find().
 - SYS: The function TModSchedul::ScanDir() is rewrited for some problems possibility.

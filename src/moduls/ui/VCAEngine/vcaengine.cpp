@@ -591,8 +591,11 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
 
 	if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? tstr : idc+"/"+tstr );
 	else if( vDB == 2 ) c_el.cfg("ID").setS(tstr);
+        c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
 
 	if( !SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el) ) continue;
+
 	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
