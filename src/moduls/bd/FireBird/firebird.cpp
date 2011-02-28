@@ -852,7 +852,7 @@ void MTable::fieldFix( TConfig &cfg )
 
     if(next)
     {
-	owner().sqlReq(req, false);
+	owner().sqlReq(req, NULL, false);
 	getStructDB(tblStrct);
     }
 }

@@ -1,4 +1,7 @@
 2011-02-28 Roman
+- !!!!:DAQ.DCON: Significant improvements from Almaz Karimov is placed to the source tree. The module version is rise to 0.5.0.
+- FIX:DB.FireBird: One wrong sqlReq() call is fixed.
+- !!:DemoDB: Full updated from local MySQL Work-DemoDB.
 - UI.QTStarter: Splash update period is rise to 1 second, for load decrease at slow CPU.
 - FIX:UI.VCAEngine: Check widget's attributes for no translation at load is added, for multi-languages DBs.
 

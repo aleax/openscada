@@ -7,12 +7,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DCON 0.3.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 10:25+0200\n"
+"POT-Creation-Date: 2011-02-28 18:08+0200\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -28,7 +29,7 @@ msgstr ""
 "Надає реалізацію клієнтського сервісу DCON. Підтримується I-7000 DCON "
 "протокол."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
 msgid "Gather data period (s)"
@@ -46,17 +47,83 @@ msgstr "Спроб запиту"
 msgid "Standard"
 msgstr "Стандарт"
 
-msgid "I-7000 module type"
-msgstr "Тип модуля I-7000"
-
-msgid "I-7051;I-7045;I-7063;I-7017;I-7024;NL-8AI;HostOK"
-msgstr ""
-
-msgid "I-7000 module address"
-msgstr "Адреса модуля I-7000"
+msgid "Module address"
+msgstr "Адреса модуля"
 
 msgid "CRC control"
 msgstr "Контроль CRC"
+
+msgid "Host signal"
+msgstr "Сигнал головного"
+
+msgid "No signal;HostOK"
+msgstr "Немає сигналу;Головний у нормі"
+
+msgid "AI method"
+msgstr "Метод AI"
+
+msgid ""
+"No AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI "
+"(#AA);20AI (#AA);16AI (#AA^AA)"
+msgstr ""
+"Немає AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI "
+"(#AA);20AI (#AA);16AI (#AA^AA)"
+
+msgid "AI range"
+msgstr "Діапазон AI"
+
+msgid "Engeneer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)"
+msgstr "Інженерний або відсотковий;Шістнадцятковий (0000 FFFF);Шістнадцятковий (8000 7FFF)"
+
+msgid "AO method"
+msgstr "Метод AO"
+
+msgid "No AO;1AO (#AA);2AO (#AA);4AO (#AA)"
+msgstr "Немає AO;1AO (#AA);2AO (#AA);4AO (#AA)"
+
+msgid "AO range"
+msgstr "Діапазон AO"
+
+msgid ""
+"Engeneer (00.000 20.000);Engeneer (04.000 20.000);Engeneer (00.000 10.000);"
+"Engeneer (+00.000 +20.000);Engeneer (+04.000 +20.000);Engeneer (+00.000 "
+"+10.000);Engeneer (-10.000 +10.000);Engeneer (+00.000 +05.000);Engeneer "
+"(-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)"
+msgstr ""
+"Інженерний (00.000 20.000);Інженерний (04.000 20.000);Інженерний (00.000 10.000);"
+"Інженерний (+00.000 +20.000);Інженерний (+04.000 +20.000);Інженерний (+00.000 "
+"+10.000);Інженерний (-10.000 +10.000);Інженерний (+00.000 +05.000);Інженерний "
+"(-05.000 +05.000);Відсотковий (+000.00 +100.00);Шістнадцятковий (000 FFF)"
+
+msgid "DI method"
+msgstr "Метод DI"
+
+msgid ""
+"No DI;3DI (@AA);4DI (@AA);7DI (@AA);8DI (@AA);14DI (@AA);16DI (@AA);1DI "
+"(@AADI);8DI (@AA,FF00)"
+msgstr ""
+"Немає DI;3DI (@AA);4DI (@AA);7DI (@AA);8DI (@AA);14DI (@AA);16DI (@AA);1DI "
+"(@AADI);8DI (@AA,FF00)"
+
+msgid "DO method"
+msgstr "Метод DO"
+
+msgid ""
+"No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO "
+"(@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO "
+"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)"
+"AADO0D);4DO (@AA,0F00);8DO (@AA,FF00)"
+msgstr ""
+"Немає DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO "
+"(@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO "
+"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)"
+"AADO0D);4DO (@AA,0F00);8DO (@AA,FF00)"
+
+msgid "CI method"
+msgstr "Метод CI"
+
+msgid "No CI;2CI (#AA);3CI (#AA)"
+msgstr "Немає CI;2CI (#AA);3CI (#AA)"
 
 #, c-format
 msgid "Spent time: %s. "
@@ -74,17 +141,23 @@ msgstr "Без помилок"
 msgid "Module packet length error"
 msgstr "Помилка довжини пакету модуля"
 
+msgid "Invalid module CRC"
+msgstr "Помилка контрольної суми"
+
 msgid "Invalid module response"
 msgstr "Помилка відповіді модуля"
 
-msgid "Invalid module CRC"
-msgstr "Помилка контрольної суми"
+msgid "Undefined range"
+msgstr "Невизначений діапазон"
+
+msgid "Module out of range"
+msgstr "Вихід за межі діапазону у модулі"
+
+msgid "Command ignored (host watchdog)"
+msgstr "Команду ігнаровано (сторожовий таймер)"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
 msgid "2:Acquisition is stoped."
 msgstr "2:Збір зупинено."
-
-#~ msgid "Gather data time %.6g ms. "
-#~ msgstr "Час збору даних %.6g мс. "

@@ -49,7 +49,7 @@ class TMdContr;
 
 class TMdPrm : public TParamContr
 {
-    public:
+	public:
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
@@ -62,19 +62,49 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements
-	int	&mod_tp;	//I-7000 module type
-	int	&mod_addr;	//I-7000 module address
+
+	int	&mod_addr;	//Module address
 	bool	&crc_ctrl;	//DCON CRC control mode
+	int	&host_signal;
+
+	int	&ai_method;
+	int	&ai_range;
+	int	&ao_method;
+	int	&ao_range;
+	int	&di_method;
+	int	&do_method;
+	int	&ci_method;
+
 	string	acq_err;
 
 	//Values
-	bool	DI[16];
-	bool	DO[16];
-	double	AI[16];
-	double	AO[16];
-	bool	module_err;
+	bool	ai_err;
+	bool	ao_err;
+	bool	di_err;
+	bool	do_err;
+	bool	ci_err;
+	bool	ai_err_get;
+	bool	ao_err_get;
+	bool	di_err_get;
+	bool	do_err_get;
+	bool	ci_err_get;
+	string	ai_txterr;
+	string	ao_txterr;
+	string	di_txterr;
+	string	do_txterr;
+	string	ci_txterr;
+	string	ai_txterr_get;
+	string	ao_txterr_get;
+	string	di_txterr_get;
+	string	do_txterr_get;
+	string	ci_txterr_get;
+	double	AI[32];
+	double	AO[32];
+	bool	DI[32];
+	bool	DO[32];
+	double	CI[32];
 
-    private:
+	private:
 	//Methods
 	void postEnable( int flag );
 	void vlGet( TVal &val );
@@ -87,7 +117,7 @@ class TMdPrm : public TParamContr
 //******************************************************
 class TMdContr: public TController
 {
-    public:
+	public:
 	//Methods
 	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
@@ -103,7 +133,7 @@ class TMdContr: public TController
 	string DCONCRC( string str );
 	string DCONReq( string &pdu );
 
-    protected:
+	protected:
 	//Methods
 	void disable_( );
 	void start_( );
@@ -111,7 +141,7 @@ class TMdContr: public TController
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
 
-    private:
+	private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
@@ -135,19 +165,19 @@ class TMdContr: public TController
 //*************************************************
 class TTpContr: public TTipDAQ
 {
-    public:
+	public:
 	//Methods
 	TTpContr( string name );
 	~TTpContr( );
 
-    protected:
+	protected:
 	//Methods
 	void load_( );
 	void save_( );
 
 	bool redntAllow( )	{ return true; }
 
-    private:
+	private:
 	//Methods
 	void postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
