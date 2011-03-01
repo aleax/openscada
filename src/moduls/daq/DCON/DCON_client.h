@@ -49,7 +49,7 @@ class TMdContr;
 
 class TMdPrm : public TParamContr
 {
-	public:
+    public:
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
@@ -104,7 +104,10 @@ class TMdPrm : public TParamContr
 	bool	DO[32];
 	double	CI[32];
 
-	private:
+    protected:
+        void	cntrCmdProc( XMLNode *opt );    //Control interface command process
+
+    private:
 	//Methods
 	void postEnable( int flag );
 	void vlGet( TVal &val );
@@ -117,7 +120,7 @@ class TMdPrm : public TParamContr
 //******************************************************
 class TMdContr: public TController
 {
-	public:
+    public:
 	//Methods
 	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
@@ -133,7 +136,7 @@ class TMdContr: public TController
 	string DCONCRC( string str );
 	string DCONReq( string &pdu );
 
-	protected:
+    protected:
 	//Methods
 	void disable_( );
 	void start_( );
@@ -141,7 +144,7 @@ class TMdContr: public TController
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	bool cfgChange( TCfg &cfg );
 
-	private:
+    private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
@@ -165,19 +168,19 @@ class TMdContr: public TController
 //*************************************************
 class TTpContr: public TTipDAQ
 {
-	public:
+    public:
 	//Methods
 	TTpContr( string name );
 	~TTpContr( );
 
-	protected:
+    protected:
 	//Methods
 	void load_( );
 	void save_( );
 
 	bool redntAllow( )	{ return true; }
 
-	private:
+    private:
 	//Methods
 	void postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );

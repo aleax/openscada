@@ -44,6 +44,7 @@
 #include <QToolTip>
 #include <QScrollBar>
 #include <QHeaderView>
+#include <QPlastiqueStyle>
 
 #include <QApplication>
 
@@ -402,6 +403,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		{
 		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
 		    shD->addrWdg = new QPushButton("test",w);
+		    shD->addrWdg->setStyle(new QPlastiqueStyle());
 		    shD->addrWdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
 		    if( runW )
 		    {

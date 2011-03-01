@@ -4,7 +4,6 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2008-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"

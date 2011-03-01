@@ -1,3 +1,8 @@
+2011-03-01 Roman
+- DAQ.DCON: Adaptive display for Range config fields is added. German translation by Irina Popkova is added.
+- UI.Vision: The Plastique style force set for an interface buttons.
+
+
 2011-02-28 Roman
 - !!!!:DAQ.DCON: Significant improvements from Almaz Karimov is placed to the source tree. The module version is rise to 0.5.0.
 - FIX:DB.FireBird: One wrong sqlReq() call is fixed.

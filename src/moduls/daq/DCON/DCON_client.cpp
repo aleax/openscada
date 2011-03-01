@@ -103,9 +103,9 @@ void TTpContr::postEnable( int flag )
 	tpPrmAt(t_prm).fldAdd( new TFld("CRC_CTRL",_("CRC control"),TFld::Boolean,TFld::NoFlag|TCfg::NoVal,"1","1") );
 	tpPrmAt(t_prm).fldAdd( new TFld("HOST_SIGNAL",_("Host signal"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1",_("No signal;HostOK")) );
 	tpPrmAt(t_prm).fldAdd( new TFld("AI_METHOD",_("AI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2;3;4;6;8;10;20;116",_("No AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI (#AA);20AI (#AA);16AI (#AA^AA)")) );
-	tpPrmAt(t_prm).fldAdd( new TFld("AI_RANGE",_("AI range"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2",_("Engeneer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)")) );
+	tpPrmAt(t_prm).fldAdd( new TFld("AI_RANGE",""/*_("AI range")*/,TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2",_("Engeneer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)")) );
 	tpPrmAt(t_prm).fldAdd( new TFld("AO_METHOD",_("AO method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2;4",_("No AO;1AO (#AA);2AO (#AA);4AO (#AA)")) );
-	tpPrmAt(t_prm).fldAdd( new TFld("AO_RANGE",_("AO range"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2;3;4;5;6;7;8;9;10",_("Engeneer (00.000 20.000);Engeneer (04.000 20.000);Engeneer (00.000 10.000);Engeneer (+00.000 +20.000);Engeneer (+04.000 +20.000);Engeneer (+00.000 +10.000);Engeneer (-10.000 +10.000);Engeneer (+00.000 +05.000);Engeneer (-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)")) );
+	tpPrmAt(t_prm).fldAdd( new TFld("AO_RANGE",""/*_("AO range")*/,TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1;2;3;4;5;6;7;8;9;10",_("Engeneer (00.000 20.000);Engeneer (04.000 20.000);Engeneer (00.000 10.000);Engeneer (+00.000 +20.000);Engeneer (+04.000 +20.000);Engeneer (+00.000 +10.000);Engeneer (-10.000 +10.000);Engeneer (+00.000 +05.000);Engeneer (-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)")) );
 	tpPrmAt(t_prm).fldAdd( new TFld("DI_METHOD",_("DI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;3;4;7;8;14;16;101;201",_("No DI;3DI (@AA);4DI (@AA);7DI (@AA);8DI (@AA);14DI (@AA);16DI (@AA);1DI (@AADI);8DI (@AA,FF00)")) );
 	tpPrmAt(t_prm).fldAdd( new TFld("DO_METHOD",_("DO method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;2;3;4;5;7;8;12;13;16;102;103;202;204;306;402;504;604;608)",_("No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO (@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO (^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00)")) );
 	tpPrmAt(t_prm).fldAdd( new TFld("CI_METHOD",_("CI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;2;3",_("No CI;2CI (#AA);3CI (#AA)")) );
@@ -2535,4 +2535,18 @@ void TMdPrm::vlArchMake( TVal &val )
 	val.arch().at().setPeriod( (long long)(owner().period()*1000000) );
 	val.arch().at().setHardGrid( true );
 	val.arch().at().setHighResTm( true );
+}
+
+void TMdPrm::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if(opt->name() == "info")
+    {
+        TParamContr::cntrCmdProc(opt);
+        if(ai_method == 0) ctrRemoveNode(opt,"/prm/cfg/AI_RANGE");
+        if(ao_method == 0) ctrRemoveNode(opt,"/prm/cfg/AO_RANGE");
+        return;
+    }
+    //> Process command to page
+    TParamContr::cntrCmdProc(opt);
 }
