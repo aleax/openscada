@@ -27,7 +27,9 @@
 #include <deque>
 #include <vector>
 
+#if HAVE_FFTW3_H
 #include <fftw3.h>
+#endif
 
 #include <QObject>
 #include <QMap>
@@ -323,9 +325,11 @@ class ShapeDiagram : public WdgShape
 		void loadSpectrumData( bool full = false );
 
 		//Attributes
+#if HAVE_FFTW3_H
 		//> FFT
 		int		fftN;		//Spectrum samples number
 		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
+#endif
 
 	    private:
 		//Attributes

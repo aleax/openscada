@@ -25,7 +25,9 @@
 
 #include <gd.h>
 
+#if HAVE_FFTW3_H
 #include <fftw3.h>
+#endif
 
 #include <string>
 #include <vector>
@@ -341,9 +343,11 @@ class VCADiagram : public VCAObj
 		VCADiagram &owner( );
 
 		//Attributes
+#if HAVE_FFTW3_H
 		//> FFT
 		int	fftN;			//Spectrum samples number
 		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
+#endif
 
 	    private:
 		//Attributes

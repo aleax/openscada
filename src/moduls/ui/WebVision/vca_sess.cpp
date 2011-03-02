@@ -5812,6 +5812,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     }
 
     int prmRealSz = -1;
+
+#if HAVE_FFTW3_H
     //>> Calc real parameters size
     for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
 	if( trnds[i_p].fftN && !((trnds[i_p].color()>>31)&0x01) )
@@ -5957,6 +5959,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    }
 	}
     }
+#endif
 
     //> Draw cursor
     if( active && tSz )
@@ -6168,6 +6171,7 @@ void VCADiagram::setCursor( long long itm, const string& user )
 	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((long long)(1e6/curFrq))/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((long long)(1e6/curFrq))%1000000));
 
+#if HAVE_FFTW3_H
 	//> Update trend's current values
 	for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
 	{
@@ -6180,6 +6184,7 @@ void VCADiagram::setCursor( long long itm, const string& user )
 		    pow(pow(trnds[i_p].fftOut[vpos][0],2)+pow(trnds[i_p].fftOut[vpos][1],2),0.5)/(trnds[i_p].fftN/2+1);
 	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(TSYS::real2str(val,6));
 	}
+#endif
 	mod->cntrIfCmd(req,user);
     }
 }
@@ -6187,14 +6192,19 @@ void VCADiagram::setCursor( long long itm, const string& user )
 //* Trend object's class                         *
 //************************************************
 VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) :
-    fftN(0), fftOut(NULL), m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL), arh_per(0), arh_beg(0), arh_end(0), val_tp(0), m_owner(iowner)
+#if HAVE_FFTW3_H
+    fftN(0), fftOut(NULL),
+#endif
+    m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL), arh_per(0), arh_beg(0), arh_end(0), val_tp(0), m_owner(iowner)
 {
     loadData("root");
 }
 
 VCADiagram::TrendObj::~TrendObj( )
 {
+#if HAVE_FFTW3_H
     if( fftOut ) { delete fftOut; fftN = 0; }
+#endif
 }
 
 VCADiagram &VCADiagram::TrendObj::owner( )
@@ -6377,6 +6387,7 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
 
     if( !valBeg( ) || !valEnd( ) ) return;
 
+#if HAVE_FFTW3_H
     if( fftOut ) { delete fftOut; fftN = 0; }
 
     long long tSize	= (long long)(1e6*owner().tSize);
@@ -6413,4 +6424,5 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
     fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
     fftw_execute(p);
     fftw_destroy_plan(p);
+#endif
 }

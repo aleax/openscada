@@ -1,3 +1,7 @@
+2011-03-02 Roman
+- SYS:LibFFTW3 using is made optional. Using FFTW3 will disabled for no LibFFTW3 present.
+
+
 2011-03-01 Roman
 - DAQ.DCON: Adaptive display for Range config fields is added. German translation by Irina Popkova is added.
 - UI.Vision: The Plastique style force set for an interface buttons.

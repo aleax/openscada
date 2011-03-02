@@ -65,6 +65,7 @@ sys_lib="/usr/lib"
 if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
 AC_SUBST(sys_lib)
 QT4use=false;
+FFTWuse=false;
 
 ix86=false;
 if test $target_cpu = "i386" || test $target_cpu = "i486" || test $target_cpu = "i586" || test $target_cpu = "i686" ||
@@ -210,7 +211,6 @@ AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE(Pass global library using)],
 AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using)],
     [AC_MSG_ERROR(Expat library not found. Install or check Expat package!)])
 if test ${LibGD} = true; then
-    LIB_GD=""
     AC_CHECK_HEADERS([gd.h],
 	[
 	    AC_CHECK_LIB([gd],[gdImageCreate],
@@ -449,10 +449,7 @@ if test ${ModVision} = true; then
     UISub_mod="${UISub_mod}Vision "
     #>> Modules checkings
     QT4use=true;
-    AC_CHECK_HEADERS([fftw3.h],[],
-	[AC_MSG_ERROR(UI.Vision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
-    AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
+    FFTWuse=true;
 fi
 if test ${ModQTStarter} = true; then
     AC_MSG_RESULT(Build module: UI.QTStarter)
@@ -481,10 +478,7 @@ if test ${ModWebVision} = true; then
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
     #>> Modules checkings
-    AC_CHECK_HEADERS([fftw3.h],[],
-	[AC_MSG_ERROR(UI.WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
-    AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
+    FFTWuse=true;
 fi
 if test ${ModWebUser} = true; then
     AC_MSG_RESULT(Build module: UI.WebUser)
@@ -513,10 +507,7 @@ if test ${ModFLibSYS} = true; then
     AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibSYS "
     #>> Modules checkings
-    AC_CHECK_HEADERS([fftw3.h],[],
-	[AC_MSG_ERROR(UI.WebVision: Some FFTW3 headers not found. Install or check FFTW3 developing package!)])
-    AC_CHECK_LIB([fftw3],[fftw_execute],[AC_MSG_NOTICE(Pass global library using)],
-	[AC_MSG_ERROR(FFTW3 library not found. Install or check FFTW3 library package!)])
+    FFTWuse=true;
 fi
 AC_MSG_RESULT(===========================================)
 
@@ -544,6 +535,16 @@ if test ${QT4use} = true; then
 #	[AC_MSG_ERROR(UI.QTCfg: Some QT4 library headers not found. Install or check of QT4 developing package!)])
 #    AC_CHECK_LIB([QtGui],[QApplication::QApplication],[AC_MSG_NOTICE(Pass global library using)],
 #	[AC_MSG_ERROR(UI.QTCfg: QT4 library not found. Install or check QT4 library package!)])
+fi
+
+if test ${FFTWuse} = true; then
+    AC_CHECK_HEADERS([fftw3.h],
+	[
+	    AC_CHECK_LIB([fftw3],[fftw_execute],
+		[AC_MSG_NOTICE(Pass global library using)
+		LIB_FFTW="-lfftw3"],[AC_MSG_NOTICE(FFTW3 library not found. Using is disabled!)])
+	],[AC_MSG_NOTICE(Some FFTW3 headers not found. Using is disabled!)])
+    AC_SUBST(LIB_FFTW)
 fi
 
 AC_OUTPUT

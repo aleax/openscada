@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = spec_FLibSYS.la
 spec_FLibSYS_la_LDFLAGS = -module -avoid-version -no-undefined
 spec_FLibSYS_la_SOURCES = statfunc.cpp xmlfnc.cpp varchfnc.cpp
-spec_FLibSYS_la_LIBADD = -lfftw3
+spec_FLibSYS_la_LIBADD = $(LIB_FFTW)
 spec_FLibSYS_la_LIBTOOLFLAGS = --tag=disable-static
 
 #PO files process and doc install

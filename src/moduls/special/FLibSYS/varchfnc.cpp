@@ -19,9 +19,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fftw3.h>
-
 #include "varchfnc.h"
+
+#if HAVE_FFTW3_H
+#include <fftw3.h>
+#endif
 
 using namespace FLibSYS;
 
@@ -221,6 +223,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	}
 	return true;
     }
+#if HAVE_FFTW3_H
     if( id == "FFT" && prms.size() >= 2 )
     {
 	long long etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
@@ -265,5 +268,6 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 
 	return ao;
     }
+#endif
     throw TError("VArchObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
