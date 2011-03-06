@@ -99,9 +99,23 @@ class XMLNode
 	XMLNode* parent( )			{ return mParent; }
 
     private:
+	//Data
+	/*class LoadCtx
+	{
+	    public:
+		LoadCtx( ) : enc("UTF-8")
+		{
+		    nm.reserve(100);
+		    value.reserve(100);
+		}
+		string enc, nm, value;
+	};*/
 	//Methods
-	void save( unsigned flg, string &xml );
+	//unsigned loadNode( const string &vl, LoadCtx &ctx, unsigned pos = 0 );
+	void saveNode( unsigned flg, string &xml );
 	void encode( const string &s, string &rez, bool text = false ) const;
+	//bool parseAttr( const string &vl, unsigned &pos, string &nm, string &value );
+	//void parseEntity( string &vl, unsigned rpos );
 
 	static void start_element( void *data, const char *el, const char **attr );
 	static void end_element( void *data, const char *el );

@@ -1,3 +1,10 @@
+2011-03-06 Roman
+- FIX:SYS: Module separated build RPM-spec file is fixed for ALTLinux build requires.
+- !:SYS: Experimental XML parser is realised. Commented for now, do not suport "<!DOCTYPE ..." declaration and slower from expat about to 20%.
+- Special.SystemTests: XML parsing time measuring is added to test "XML".
+- FIX:UI.QTCfg: Sleep is added after all windows close at module disable. Fix crash on ARM CPU.
+
+
 2011-03-02 Roman
 - SYS:LibFFTW3 using is made optional. Using FFTW3 will disabled for no LibFFTW3 present.
 

@@ -66,14 +66,13 @@ void Session::setEnable( bool val )
 {
     ResAlloc res(mCalcRes, true);
 
-    if( val == enable() )	return;
-
-    mess_info(nodePath().c_str(),val ? _("Enable session.") : _("Disable session."));
+    if(val == enable())	return;
 
     vector<string> pg_ls;
 
-    if( val )
+    if(val)
     {
+	mess_info(nodePath().c_str(),_("Enable session."));
 	try
 	{
 	    //> Connect to project
@@ -112,6 +111,8 @@ void Session::setEnable( bool val )
     else
     {
 	if(start()) setStart(false);
+
+	mess_info(nodePath().c_str(),_("Disable session."));
 
 	//> Pages disable
 	list(pg_ls);

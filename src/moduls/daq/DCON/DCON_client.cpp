@@ -583,7 +583,7 @@ void *TMdContr::Task( void *icntr )
 							}
 						else
 							{
-								if (pdu.size()==(acq_len+2))
+								if ((int)pdu.size()==(acq_len+2))
 									if (pdu.substr(0,1)=="?")
 										{
 											cntr.p_hd[i_p].at().ao_err=true;
@@ -1224,14 +1224,14 @@ void *TMdContr::Task( void *icntr )
 						}
 					else
 						{
-							if ((int)pdu.size() != acq_len && pdu.size()!= (acq_len+2))
+							if ((int)pdu.size() != acq_len && (int)pdu.size()!= (acq_len+2))
 								{
 									cntr.p_hd[i_p].at().do_err=true;
 									cntr.p_hd[i_p].at().do_txterr=_("Module packet length error");
 								}
 							else
 								{
-									if ((cntr.p_hd[i_p].at().crc_ctrl)&&(pdu.size()==(acq_len+2))) if ((pdu.substr(3,2))!=(cntr.DCONCRC(pdu.substr(0,3))))
+									if ((cntr.p_hd[i_p].at().crc_ctrl)&&((int)pdu.size()==(acq_len+2))) if ((pdu.substr(3,2))!=(cntr.DCONCRC(pdu.substr(0,3))))
 										{
 											cntr.p_hd[i_p].at().do_err=true;
 											cntr.p_hd[i_p].at().do_txterr=_("Invalid module CRC");
@@ -1276,14 +1276,14 @@ void *TMdContr::Task( void *icntr )
 						}
 					else
 						{
-							if (((int)pdu.size()!=acq_len)&&(pdu.size()!=(acq_len+2)))
+							if (((int)pdu.size()!=acq_len)&&((int)pdu.size()!=(acq_len+2)))
 								{
 									cntr.p_hd[i_p].at().do_err=true;
 									cntr.p_hd[i_p].at().do_txterr=_("Module packet length error");
 								}
 							else
 								{
-									if ((cntr.p_hd[i_p].at().crc_ctrl)&&(pdu.size()==(acq_len+2))) if ((pdu.substr(3,2))!=(cntr.DCONCRC(pdu.substr(0,3))))
+									if ((cntr.p_hd[i_p].at().crc_ctrl)&&((int)pdu.size()==(acq_len+2))) if ((pdu.substr(3,2))!=(cntr.DCONCRC(pdu.substr(0,3))))
 										{
 											cntr.p_hd[i_p].at().do_err=true;
 											cntr.p_hd[i_p].at().do_txterr=_("Invalid module CRC");

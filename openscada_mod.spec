@@ -12,6 +12,20 @@ Group: Applications/Engineering
 Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
 URL: http://oscada.org
 
+%define srcname openscada-%version
+
+#= Individual distributives seting =
+%if %_vendor == "alt"
+%set_verify_elf_method no
+BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors3-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql8.3-devel libportaudio2-devel libfftw3-devel
+%else
+%define _initdir /etc/init.d
+%define _desktopdir %_datadir/applications
+%define _iconsdir /usr/share/icons
+BuildRoot: %_tmppath/%name-%version-root
+%endif
+
 Requires: %name-Archive.DBArch %name-Archive.FSArch
 Requires: %name-DAQ.BlockCalc %name-DAQ.DAQGate %name-DAQ.DCON %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus
 Requires: %name-DAQ.OPC_UA %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.SoundCard %name-DAQ.System
@@ -29,20 +43,6 @@ Open SCADA system. Typical installation.
 Відкрита SCADA система. Типове встановлення.
 %description -l de_DE.UTF8
 Das offene SCADA System. Typische Installation.
-
-%define srcname openscada-%version
-
-#= Individual distributives seting =
-%if %_vendor == "alt"
-%set_verify_elf_method no
-BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors3-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql8.3-devel libportaudio2-devel libfftw3-devel
-%else
-%define _initdir /etc/init.d
-%define _desktopdir %_datadir/applications
-%define _iconsdir /usr/share/icons
-BuildRoot: %_tmppath/%name-%version-root
-%endif
 
 #===== DB subsystem modules ======
 %def_enable DBF

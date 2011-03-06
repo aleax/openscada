@@ -210,6 +210,7 @@ void TUIMod::modStop( )
 
     for(unsigned i_w = 0; i_w < cfapp.size(); i_w++)
 	while(cfapp[i_w]) usleep(STD_WAIT_DELAY*1000);
+    usleep(STD_WAIT_DELAY*1000);
 
     run_st = false;
 }
