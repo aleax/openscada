@@ -9,24 +9,58 @@ Homepage: <http://oscada.org>
 Package: openscada
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Open SCADA system project
+Description: OpenSCADA system project
  Open SCADA system. For access use account "root" and password "openscada".
 
-Package: openscada-doc
+Package: openscada-doc.en
 Architecture: all
-Description: Open SCADA documents
- The openscada-doc package include documents files.
+Description: OpenSCADA documents (EN).
+ The openscada-doc.en package include documents files (English).
+
+Package: openscada-doc.ru
+Architecture: all
+Description: OpenSCADA documents (RU).
+ The openscada-doc.ru package include documents files (Russian).
+
+Package: openscada-doc.uk
+Architecture: all
+Description: OpenSCADA documents (UK).
+ The openscada-doc.uk package include documents files (Ukraine).
 
 Package: openscada-dev
 Architecture: any
 Depends: openscada
-Description: Open SCADA development
+Description: OpenSCADA development
  The openscada-dev package includes library archives and include files.
 
-Package: openscada-demo
+Package: openscada-libdb.main
 Architecture: all
 Depends: openscada
-Description: Open SCADA demo data bases and config
- The openscada-demo package includes demo data bases and configs.
- For start use command <openscada_demo>. For access use account "root" and password "openscada"
- or account "user" without password.
+Description: Main OpenSCADA libraries for DAQ and other into SQLite DB.
+ The openscada-libdb.main package includes main OpenSCADA libraries into SQLite DB.
+ For use connect SQLite DB file LibsDB/OscadaLibs.db.
+
+Package: openscada-libdb.vca
+Architecture: all
+Depends: openscada
+Description: Visual components libraries into SQLite DB.
+ The openscada-libdb.vca package includes visual components libraries into SQLite DB.
+ For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
+
+Package: openscada-model.aglks
+Architecture: all
+Depends: openscada
+Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
+ The openscada-model.aglks package includes model "AGLKS" data bases and config.
+ The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
+ For start use command <openscada_demo> or <openscada_AGLKS>.
+ For access use account "root" and password "openscada" or account "user" and password "user".
+
+Package: openscada-model.boiler
+Architecture: all
+Depends: openscada
+Description: Model "Boiler" data bases and config (only Russian).
+ The openscada-model.boiler package model "Boiler" data bases and config.
+ The Model is allowed only for Russian language.
+ For start use command <openscada_Boiler>.
+ For access use account "root" and password "openscada" or account "user" and password "user".

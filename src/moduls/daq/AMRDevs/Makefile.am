@@ -1,5 +1,4 @@
 EXTRA_DIST = *.h po/*
-# doc/*
 
 INCLUDES = -I$(top_srcdir)/src
 
@@ -9,8 +8,7 @@ daq_AMRDevs_la_SOURCES = mod_amr.cpp da_FlowTEC.cpp da_Ergomera.cpp
 #daq_AMRdevs_la_LIBADD  = -lnetsnmp -lcrypto
 daq_AMRDevs_la_LIBTOOLFLAGS = --tag=disable-static
 
-#PO files process and doc install
-doc_name = $(oscd_docmodul)DAQ.AMRDevs
+#PO files process
 m_name = $(oscd_modulpref)AMRDevs
 
 messages:
@@ -30,8 +28,6 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-#	install -m 755 -d $(doc_name)
-#	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DCON file: DCON_client.h
 /***************************************************************************
- *   Copyright (C) 2008 by Almaz Karimov                                   *
+ *   Copyright (C) 2008-2011 by Almaz Karimov                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -75,37 +75,16 @@ class TMdPrm : public TParamContr
 	int	&do_method;
 	int	&ci_method;
 
-	string	acq_err;
+	ResString ai_err, ao_err, di_err, do_err, ci_err;
 
 	//Values
-	bool	ai_err;
-	bool	ao_err;
-	bool	di_err;
-	bool	do_err;
-	bool	ci_err;
-	bool	ai_err_get;
-	bool	ao_err_get;
-	bool	di_err_get;
-	bool	do_err_get;
-	bool	ci_err_get;
-	string	ai_txterr;
-	string	ao_txterr;
-	string	di_txterr;
-	string	do_txterr;
-	string	ci_txterr;
-	string	ai_txterr_get;
-	string	ao_txterr_get;
-	string	di_txterr_get;
-	string	do_txterr_get;
-	string	ci_txterr_get;
-	double	AI[32];
-	double	AO[32];
-	bool	DI[32];
-	bool	DO[32];
-	double	CI[32];
+	double	AI[32], AO[32], CI[32];
+	bool	DI[32], DO[32];
 
     protected:
-        void	cntrCmdProc( XMLNode *opt );    //Control interface command process
+	//Methods
+	bool cfgChange( TCfg &cfg );
+        void cntrCmdProc( XMLNode *opt );    //Control interface command process
 
     private:
 	//Methods
@@ -134,7 +113,7 @@ class TMdContr: public TController
 
 	void prmEn( const string &id, bool val );
 	string DCONCRC( string str );
-	string DCONReq( string &pdu );
+	string DCONReq( string &pdu, bool CRC = false, unsigned acqLen = 0 );
 
     protected:
 	//Methods

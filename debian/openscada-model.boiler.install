@@ -1,0 +1,5 @@
+data/ModelsDB/Boiler/oscada_Boiler.xml /etc/
+data/ModelsDB/Boiler/openscada_Boiler /usr/bin/
+data/ModelsDB/Boiler/*.db /var/spool/openscada/Boiler
+data/ModelsDB/Boiler/openscada_Boiler.png /usr/share/pixmaps/
+data/ModelsDB/Boiler/openscada_Boiler.desktop /usr/share/applications/

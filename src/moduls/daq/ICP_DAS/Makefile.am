@@ -1,6 +1,6 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h po/* doc/* libi8k.a include/*.h
+EXTRA_DIST = *.h po/* libi8k.a include/*.h
 
 INCLUDES = -I$(top_srcdir)/src -I./include
 
@@ -10,8 +10,7 @@ daq_ICP_DAS_la_SOURCES = ICP_module.cpp
 daq_ICP_DAS_la_LIBADD  = -L./ -li8k
 daq_ICP_DAS_la_LIBTOOLFLAGS = --tag=disable-static
 
-#PO files process and doc install
-doc_name = $(oscd_docmodul)DAQ.ICP_DAS
+#PO files process
 m_name = $(oscd_modulpref)ICP_DAS
 
 messages:
@@ -31,8 +30,6 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(doc_name)
-	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

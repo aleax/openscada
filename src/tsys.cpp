@@ -699,14 +699,14 @@ string TSYS::sepstr2path( const string &str, char sep )
 
 string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 {
-    unsigned i_sz;
+    int i_sz;
     string sout;
 
     switch(tp)
     {
 	case TSYS::PathEl:
 	    sout = in;
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)sout.size(); i_sz++ )
 		switch( sout[i_sz] )
 		{
 		    case '/': sout.replace(i_sz,1,"%2f"); i_sz+=2; break;
@@ -715,7 +715,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	case TSYS::HttpURL:
 	    sout = in;
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)sout.size(); i_sz++ )
 		switch( sout[i_sz] )
 		{
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
@@ -734,7 +734,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	case TSYS::Html:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
 		switch( in[i_sz] )
 		{
 		    case '>':	sout+="&gt;";	break;
@@ -747,7 +747,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	case TSYS::JavaSc:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
 		switch( in[i_sz] )
 		{
 		    case '\n':	sout+="\\n";	break;
@@ -756,7 +756,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	case TSYS::SQL:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
 		switch( in[i_sz] )
 		{
 		    case '\'':	sout+="\\'";	break;
@@ -768,7 +768,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	case TSYS::Custom:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
 	    {
 		unsigned i_smb;
 		for(i_smb = 0; i_smb < symb.size(); i_smb++)
@@ -786,7 +786,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	{
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	    for( i_sz = 0; i_sz < in.size(); i_sz+=3 )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz+=3 )
 	    {
 		if(i_sz && !(i_sz%57))	sout.push_back('\n');
 		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
@@ -814,12 +814,12 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	}
 	case TSYS::FormatPrint:
 	    sout = in;
-	    for( i_sz = 0; i_sz < sout.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)sout.size(); i_sz++ )
 		if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
 	    break;
 	case TSYS::oscdID:
 	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
 		switch( in[i_sz] )
 		{
 		    case ' ': case '/': case '\\': case '&': case '(':
@@ -846,7 +846,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    break;
 	case TSYS::ShieldSimb:
 	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
+	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
 		if( in[i_sz] == '\\' && i_sz < (in.size()-1) )
 		{
 		    switch( in[i_sz+1] )

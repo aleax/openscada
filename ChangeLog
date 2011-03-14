@@ -1,3 +1,15 @@
+2011-03-14 Roman
+- !!!!:SYS: New source packages implementation is released. All resources moved to separated tarball.
+    For create source and resource tarball use "$ make dist-lzma" and "$ make dist-reslzma".
+    Documentation is made static, for modules, and separated by languages. For each language create different package.
+    Libraries DB packages is added for *-LibDB.Main and *-LibDB.VCA. Placed into data/LibsDB.
+    Instead DemoDB package added Model's packages for "AGLKS" and "Boiler". Placed into data/ModelsDB.
+    Config-files is updated for build RPM and DEB packages.
+- FIX:SYS: TSYS::strEncode() is fixed for crash on Reverse algorithm.
+- !!!!:DAQ.DCON: The module is full rewrited for fix bad format and code writing style.
+- FIX:DAQ.ModBus: Errors forming into server part of the protocol is fixed. Error messages some changed.
+
+
 2011-03-06 Roman
 - FIX:SYS: Module separated build RPM-spec file is fixed for ALTLinux build requires.
 - !:SYS: Experimental XML parser is realised. Commented for now, do not suport "<!DOCTYPE ..." declaration and slower from expat about to 20%.

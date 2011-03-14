@@ -1,6 +1,6 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h qtstarter.qrc images/* po/* doc/*
+EXTRA_DIST = *.h qtstarter.qrc images/* po/*
 
 INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
 
@@ -16,8 +16,7 @@ qrc_qtstarter.cpp: qtstarter.qrc
 moc_tuimod.cpp: tuimod.h
 	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
 
-#PO files process and doc install
-doc_name = $(oscd_docmodul)UI.QTStarter
+#PO files process
 m_name = $(oscd_modulpref)QTStarter
 
 messages:
@@ -37,8 +36,6 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(doc_name)
-	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

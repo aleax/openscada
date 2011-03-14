@@ -10,6 +10,7 @@ if [ ! -d ~/.openscada/ARCHIVES ]; then
     mkdir -pm 700 ~/.openscada/ARCHIVES/VAL;
 fi
 if [ ! -L ~/.openscada/icons ]; then ln -s /var/spool/openscada/icons ~/.openscada/icons; fi
+if [ ! -d ~/.openscada/LibsDB ]; then cp -R /var/spool/openscada/LibsDB ~/.openscada/; fi
 if [ ! -d ~/.openscada/DATA ]; then mkdir -m 700 ~/.openscada/DATA; fi
 if [ ! -e ~/.openscada/oscada.xml ]; then cp /etc/oscada_start.xml ~/.openscada/oscada.xml; fi
 cd ~/.openscada

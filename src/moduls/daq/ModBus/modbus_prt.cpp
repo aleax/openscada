@@ -369,7 +369,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(pdu[0]&0x80)
 		switch(pdu[1])
 		{
-		    case 0x1: err = TSYS::strMess(_("1:Function %xh is not supported."),pdu[0]&(~0x80));	break;
+		    case 0x1: err = TSYS::strMess(_("1:%02X:Function is not supported."),(unsigned char)(pdu[0]&(~0x80)));	break;
 		    case 0x2: err = _("2:Requested address not allow or request area too long.");	break;
 		    case 0x3: err = _("3:Illegal data value into request.");		break;
 		    case 0x4: err = _("4:Server failure.");				break;
@@ -377,7 +377,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    case 0x6: err = _("6:Server is busy.");				break;
 		    case 0x7: err = _("7:Programm function is error. By request functions 13 or 14.");	break;
 		    case 0xA: case 0xB: err = _("10:Gateway problem.");			break;
-		    default: err = TSYS::strMess(_("12:Unknown error: %xh."),pdu[1]);	break;
+		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
 	}
     }catch(TError er) { err = _("14:Device error: ") + er.mess; }
@@ -906,9 +906,9 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    {
 		int c_sz = 0;
 		if( pdu.size() == 5 ) c_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if( c_sz < 1 || c_sz > 2000 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		if( c_sz < 1 || c_sz > 2000 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
-		pdu = pdu[0];
+		pdu.assign(1,pdu[0]);
 		pdu += (char)(c_sz/8+((c_sz%8)?1:0));
 		pdu += string(pdu[1],(char)0);
 
@@ -917,7 +917,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		for( int i_c = c_addr; i_c < (c_addr+c_sz); i_c++ )
 		    if( (itc=data->coil.find(i_c)) != data->coil.end() && data->val.getB(itc->second) )
 		    { pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8)); isData = true; }
-		if( !isData )	{ pdu = pdu[0]|0x80; pdu += 0x2; return true; }
+		if( !isData )	{ pdu.assign(1,pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rCoil += c_sz;
 
@@ -927,9 +927,9 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    {
 		int r_sz = 0;
 		if( pdu.size() == 5 ) r_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if( r_sz < 1 || r_sz > 125 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		if( r_sz < 1 || r_sz > 125 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
-		pdu = pdu[0];
+		pdu.assign(1,pdu[0]);
 		pdu += (char)(r_sz*2);
 
 		bool isData = false;
@@ -940,7 +940,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		    if( (itr=data->reg.find(i_r)) != data->reg.end() ) { val = data->val.getI(itr->second); isData = true; }
 		    pdu += TSYS::strEncode(string((char*)&val,2),TSYS::Reverse);
 		}
-		if( !isData )	{ pdu = pdu[0]|0x80; pdu += 0x2; return true; }
+		if( !isData )	{ pdu.assign(1,pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rReg += r_sz;
 
@@ -948,11 +948,11 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x05:	//Preset single coil
 	    {
-		if( pdu.size() != 5 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		if( pdu.size() != 5 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 
 		map<int,int>::iterator ic = data->coil.find(-c_addr);
-		if( ic == data->coil.end() ) { pdu = pdu[0]|0x80; pdu += 0x2; }
+		if( ic == data->coil.end() ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
 		    data->val.setB(ic->second,(bool)pdu[3]);
@@ -966,11 +966,11 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x06:	//Preset single register
 	    {
-		if( pdu.size() != 5 ) { pdu = pdu[0]|0x80; pdu += 0x1; return true; }
+		if( pdu.size() != 5 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 
 		map<int,int>::iterator ir = data->reg.find(-r_addr);
-		if( ir == data->reg.end() ) { pdu = pdu[0]|0x80; pdu += 0x2; }
+		if( ir == data->reg.end() ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
 		    data->val.setI(ir->second,(unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
@@ -984,7 +984,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		return true;
 	    }
 	    default:
-		pdu = pdu[0]|0x80;
+		pdu.assign(1,pdu[0]|0x80);
 		pdu += 0x1;
 		return true;
 	}
@@ -1001,9 +1001,9 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    req.setAttr("id",id())->setAttr("node",(mode()==2)?TSYS::int2str(inode):cfg("TO_ADDR").getS())->setAttr("reqTry","3")->setText(pdu);
 	    tr.at().messProtIO(req,"ModBus");
 
-	    if( !req.attr("err").empty() ) { pdu = pdu[0]|0x80; pdu += 0xA; }
+	    if( !req.attr("err").empty() ) { pdu.assign(1,pdu[0]|0x80); pdu += 0xA; }
 	    pdu = req.text();
-	}catch(TError err) { pdu = pdu[0]|0x80; pdu += 0xA; }
+	}catch(TError err) { pdu.assign(1,pdu[0]|0x80); pdu += 0xA; }
 
 	return true;
     }

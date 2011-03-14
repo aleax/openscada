@@ -1,6 +1,6 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h po/* doc/*
+EXTRA_DIST = *.h po/*
 
 INCLUDES = -I$(top_srcdir)/src
 
@@ -10,8 +10,7 @@ prot_UserProtocol_la_SOURCES = user_prt.cpp
 #prot_Tmpl_la_LIBADD  = -lnetsnmp -lcrypto
 prot_UserProtocol_la_LIBTOOLFLAGS = --tag=disable-static
 
-#PO files process and doc install
-doc_name = $(oscd_docmodul)Protocol.UserProtocol
+#PO files process
 m_name = $(oscd_modulpref)UserProtocol
 
 messages:
@@ -31,8 +30,6 @@ install-data-local:
 	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	rm $$name ; \
 	done
-	install -m 755 -d $(doc_name)
-	install -m 644 doc/*.pdf $(doc_name)
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \

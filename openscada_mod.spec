@@ -6,7 +6,8 @@ Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
 Version: 0.7.1
 Release: 0.1
-Source: openscada-%version.tar.gz
+Source: openscada-%version.tar.lzma
+Source1: openscada-res-%version.tar.lzma
 License: GPLv2
 Group: Applications/Engineering
 Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
@@ -18,7 +19,7 @@ URL: http://oscada.org
 %if %_vendor == "alt"
 %set_verify_elf_method no
 BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors3-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql8.3-devel libportaudio2-devel libfftw3-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel libpq5.1-devel libportaudio2-devel libfftw3-devel libpcrecpp-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -116,20 +117,59 @@ Open SCADA system core. For access use account "root" and password "openscada".
 %description core -l de_DE.UTF8
 Das offene SCADA System Core. Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
-%package doc
-Summary: Open SCADA documents.
-Summary(ru_RU.UTF8): Документация открытой SCADA.
-Summary(uk_UA.UTF8): Документація відкритої SCADA.
-Summary(de_DE.UTF8): Open SCADA Dokumente.
+%package docEN
+Summary: Open SCADA documents (EN).
+Summary(ru_RU.UTF8): Документация открытой SCADA (EN).
+Summary(uk_UA.UTF8): Документація відкритої SCADA (EN).
+Summary(de_DE.UTF8): Open SCADA Dokumente (EN).
 Group: Documentation
-%description doc
-The %name-doc package - include documents files.
-%description doc -l ru_RU.UTF8
-Пакет %name-doc - включает файлы документации.
-%description doc -l uk_UA.UTF8
-Пакет %name-doc - включає файли документації.
-%description doc -l de_DE.UTF8
-Das Paket %name-doc - enthaelt Dokumentationsdateien.
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
+%description docEN
+The %name-docEN package include documents files (English).
+%description docEN -l ru_RU.UTF8
+Пакет %name-docEN включает файлы документации (Английский).
+%description docEN -l uk_UA.UTF8
+Пакет %name-docEN включає файли документації (Англійська).
+%description docEN -l de_DE.UTF8
+Das Paket %name-docEN enthaelt Dokumentationsdateien (Englisch).
+
+%package docRU
+Summary: Open SCADA documents (RU).
+Summary(ru_RU.UTF8): Документация открытой SCADA (RU).
+Summary(uk_UA.UTF8): Документація відкритої SCADA (RU).
+Summary(de_DE.UTF8): Open SCADA Dokumente (RU).
+Group: Documentation
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
+%description docRU
+The %name-docRU package include documents files (Russian).
+%description docRU -l ru_RU.UTF8
+Пакет %name-docRU включает файлы документации (Русский).
+%description docRU -l uk_UA.UTF8
+Пакет %name-docRU включає файли документації (Російська).
+%description docRU -l de_DE.UTF8
+Das Paket %name-docRU enthaelt Dokumentationsdateien (Russisch).
+
+%package docUK
+Summary: Open SCADA documents (UK).
+Summary(ru_RU.UTF8): Документация открытой SCADA (UK).
+Summary(uk_UA.UTF8): Документація відкритої SCADA (UK).
+Summary(de_DE.UTF8): Open SCADA Dokumente (UK).
+Group: Documentation
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
+%description docUK
+The %name-docUK package include documents files (Ukraine).
+%description docUK -l ru_RU.UTF8
+Пакет %name-docUK включает файлы документации (Украинский).
+%description docUK -l uk_UA.UTF8
+Пакет %name-docUK включає файли документації (Українська).
+%description docUK -l de_DE.UTF8
+Das Paket %name-docUK enthaelt Dokumentationsdateien (Ukrainisch).
 
 %package devel
 Summary: Open SCADA development.
@@ -147,31 +187,116 @@ The %name-devel package - includes library archives and include files.
 %description devel -l de_DE.UTF8
 Das Paket %name-devel enthaelt die Bibliotheken und Archive Include-Dateien.
 
-%package demo
-Summary: Open SCADA demo data bases and config.
-Summary(ru_RU.UTF8): Демонстрационная БД и конфигурация открытой SCADA.
-Summary(uk_UA.UTF8): Демонстраційна БД та конфігурація відкритої SCADA.
-Summary(de_DE.UTF8): Open SCADA Demo-Datenbanken und Konfigurationsdateien.
+%package LibDB.Main
+Summary: Main OpenSCADA libraries for DAQ and other into SQLite DB.
+Summary(ru_RU.UTF8): Основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite.
+Summary(uk_UA.UTF8): Основні бібліотеки OpenSCADA для збору даних та іншого у БД SQLite.
+Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die anderen in der Datenbank SQLite.
 Group: Graphics
+Requires: %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibSYS
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
+Requires: %name
+%description LibDB.Main
+The %{name}-LibDB.Main package includes main OpenSCADA libraries into SQLite DB.
+For use connect SQLite DB file LibsDB/OscadaLibs.db.
+%description LibDB.Main -l ru_RU.UTF8
+Пакет %{name}-LibDB.Main включает основные библиотеки OpenSCADA в БД SQLite.
+Для использования подключите файл БД SQLite LibsDB/OscadaLibs.db.
+%description LibDB.Main -l uk_UA.UTF8
+Пакет %{name}-LibDB.Main включає основні бібліотеки OpenSCADA у БД SQLite.
+Для використання підключіть файл БД SQLite LibsDB/OscadaLibs.db.
+%description LibDB.Main -l de_DE.UTF8
+Das Paket %{name}-LibDB.Main enthaelt die Hauptbibliothek OpenSCADA die Datenbank SQLite.
+So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/OscadaLibs.db.
+
+%package LibDB.VCA
+Summary: Visual components libraries into SQLite DB.
+Summary(ru_RU.UTF8): Библиотеки визуальных компонетов в БД SQLite.
+Summary(uk_UA.UTF8): Бібліотеки візуальних компонентів у БД SQLite.
+Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite.
+Group: Graphics
+Requires: %name-DAQ.JavaLikeCalc %name-DB.SQLite %name-Special.FLibSYS %name-UI.VCAEngine 
+%if %_vendor == "alt"
+BuildArch: noarch
+%endif
+Requires: %name
+%description LibDB.VCA
+The %{name}-LibDB.VCA package includes visual components libraries into SQLite DB.
+For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
+%description LibDB.VCA -l ru_RU.UTF8
+Пакет %{name}-LibDB.VCA включает библиотеки визуальных компонетов в БД SQLite.
+Для использования подключите файл БД SQLite LibsDB/vcaBase.db и LibsDB/vcaTest.db.
+%description LibDB.VCA -l uk_UA.UTF8
+Пакет %{name}-LibDB.VCA включає бібліотеки візуальних компонентів у БД SQLite.
+Для використання підключіть файл БД SQLite LibsDB/vcaBase.db та LibsDB/vcaTest.db.
+%description LibDB.VCA -l de_DE.UTF8
+Das Paket %{name}-LibDB.VCA enthaelt Visuelle Komponente in einer Bibliothek Datenbank SQLite.
+So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/vcaBase.db und LibsDB/vcaTest.db.
+
+%package Model.AGLKS
+Summary: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
+Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,RU,UK).
+Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,RU,UK).
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,RU,UK).
+Group: Graphics
+Requires: %name-LibDB.Main %name-LibDB.VCA
 Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System
 Requires: %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem
 Requires: %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.Sockets %name-Transport.SSL
-Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision
-%description demo
-The %{name}-demo package - includes demo data bases and configs. For start use command <openscada_demo>.
+Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision 
+%description Model.AGLKS
+The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
+The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
+For start use command <openscada_demo> or <openscada_AGLKS>.
 For access use account "root" and password "openscada" or account "user" and password "user".
-%description demo -l ru_RU.UTF8
-Пакет %{name}-demo - включает демонстрационные базы данных и конфигурации.
-Для старта используйте команду <openscada_demo>.
+%description Model.AGLKS -l ru_RU.UTF8
+Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
+Модель используется для демонстрации OpenSCADA и доступна на Английском, Русском и Украинском языках.
+Для старта используйте команду <openscada_demo> мли <openscada_AGLKS>.
 Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
-%description demo -l uk_UA.UTF8
-Пакет %{name}-demo - включає демонстраційні бази даних та конфігурації.
-Для старту використовуйте команду <openscada_demo>.
+%description Model.AGLKS -l uk_UA.UTF8
+Пакет %{name}-Model.AGLKS включає БД та конфігурацію моделі "АГЛКС".
+Модель використано для демонстрації OpenSCADA та доступно на Англійській, Російській та Українській мовах.
+Для старту використовуйте команду <openscada_demo> та <openscada_AGLKS>.
 Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
-%description demo -l de_DE.UTF8
-Das Paket %{name}-demo - enthaelt Demodatenbanken und Konfigurationen.
-Fuers Starten wird Kommando <openscada_demo> benutzt.
+%description Model.AGLKS -l de_DE.UTF8
+Das Paket %{name}-Model.AGLKS enthaelt Datenbanken und Konfigurationsdateien Modell "AGLKS".
+Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Russisch und Ukrainisch.
+Fuers Starten wird Kommando <openscada_demo> oder <openscada_AGLKS> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
+
+%package Model.Boiler
+Summary: Model "Boiler" data bases and config (only Russian).
+Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (только Русский).
+Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (тільки Російська).
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (nur russisch).
+Group: Graphics
+Requires: %name-LibDB.Main %name-LibDB.VCA
+Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.System
+Requires: %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS
+Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision 
+%description Model.Boiler
+The %{name}-Model.Boiler package model "Boiler" data bases and config.
+The Model is allowed only for Russian language.
+For start use command <openscada_Boiler>.
+For access use account "root" and password "openscada" or account "user" and password "user".
+%description Model.Boiler -l ru_RU.UTF8
+Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
+Модель доступна только на Русском языке.
+Для старта используйте команду <openscada_Boiler>.
+Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
+%description Model.Boiler -l uk_UA.UTF8
+Пакет %{name}-Model.Boiler включає БД та конфігурацію моделі "Котел".
+Модель доступно тільки на Російській мові.
+Для старту використовуйте команду <openscada_Boiler>.
+Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
+%description Model.Boiler -l de_DE.UTF8
+Das Paket %{name}-Model.Boiler enthaelt Datenbanken und Konfigurationsdateien Modell "Kessel".
+Das Modell ist nur in Russisch verfügbar.
+Fuers Starten wird Kommando <openscada_Boiler> benutzt.
+Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen. 
 
 %package plc
 Summary: OpenSCADA - PLC virtual package.
@@ -948,6 +1073,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 
 %prep
 %setup -q -n %srcname
+%setup -T -D -a 1
 
 %build
 %configure %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} %{subst_enable PostgreSQL} \
@@ -965,7 +1091,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 %install
 %makeinstall
 install -m 755 -d %buildroot/%_includedir/openscada/
-install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,DEMO}
+install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/{MESS,VAL}
 install -m 644 *.h %buildroot/%_includedir/openscada
 install -m 644 src/*.h %buildroot/%_includedir/openscada
@@ -979,11 +1105,24 @@ echo "OpenSCADA data dir" > %buildroot/var/spool/openscada/DATA/.info
 install -m 644 data/icons/* %buildroot/var/spool/openscada/icons
 echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
 echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VAL/.info
-install -m 644 -pD demo/oscada_demo.xml %buildroot/%_sysconfdir/oscada_demo.xml
-install -m 755 -pD demo/openscada_demo %buildroot/%_bindir/openscada_demo
-install -m 644 -pD demo/openscada_demo.desktop %buildroot/%_desktopdir/openscada_demo.desktop
-install -m 644 -pD demo/openscada_demo.png %buildroot/%_iconsdir/openscada_demo.png
-install -m 644 demo/*.db %buildroot/var/spool/openscada/DEMO
+
+install -m 644 data/LibsDB/*.db %buildroot/var/spool/openscada/LibsDB
+
+install -m 644 data/ModelsDB/AGLKS/*.db %buildroot/var/spool/openscada/AGLKS
+install -m 644 -pD data/ModelsDB/AGLKS/oscada_AGLKS.xml %buildroot/%_sysconfdir/oscada_AGLKS.xml
+install -m 755 -pD data/ModelsDB/AGLKS/openscada_AGLKS %buildroot/%_bindir/openscada_AGLKS
+install -m 755 -pD data/ModelsDB/AGLKS/openscada_demo %buildroot/%_bindir/openscada_demo
+install -m 644 -pD data/ModelsDB/AGLKS/openscada_AGLKS.desktop %buildroot/%_desktopdir/openscada_AGLKS.desktop
+install -m 644 -pD data/ModelsDB/AGLKS/openscada_AGLKS.png %buildroot/%_iconsdir/openscada_AGLKS.png
+install -m 644 -pD data/ModelsDB/AGLKS/openscada_AGLKS.png %buildroot/var/spool/openscada/icons/AGLKS.png
+
+install -m 644 data/ModelsDB/Boiler/*.db %buildroot/var/spool/openscada/Boiler
+install -m 644 -pD data/ModelsDB/Boiler/oscada_Boiler.xml %buildroot/%_sysconfdir/oscada_Boiler.xml
+install -m 755 -pD data/ModelsDB/Boiler/openscada_Boiler %buildroot/%_bindir/openscada_Boiler
+install -m 644 -pD data/ModelsDB/Boiler/openscada_Boiler.desktop %buildroot/%_desktopdir/openscada_Boiler.desktop
+install -m 644 -pD data/ModelsDB/Boiler/openscada_Boiler.png %buildroot/%_iconsdir/openscada_Boiler.png
+install -m 644 -pD data/ModelsDB/Boiler/openscada_Boiler.png %buildroot/var/spool/openscada/icons/Boiler.png 
+
 sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 %files
@@ -1023,10 +1162,17 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/ARCHIVES/MESS/.info
 /var/spool/openscada/ARCHIVES/VAL/.info
 
-%files doc
+%files docEN
 %defattr(-,root,root)
-%doc doc/*.pdf doc/Modules
-#_datadir/doc/*
+%doc doc/en/*
+
+%files docRU
+%defattr(-,root,root)
+%doc doc/ru/*
+
+%files docUK
+%defattr(-,root,root)
+%doc doc/uk/* 
 
 %files devel
 %defattr(-,root,root)
@@ -1034,13 +1180,32 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_libdir/*.*a
 %_includedir/openscada/*
 
-%files demo
+%files LibDB.Main
 %defattr(-,root,root)
-%config(noreplace) %_sysconfdir/oscada_demo.xml
+/var/spool/openscada/LibsDB/OscadaLibs.db
+
+%files LibDB.VCA
+%defattr(-,root,root)
+/var/spool/openscada/LibsDB/vca*.db
+
+%files Model.AGLKS
+%defattr(-,root,root)
+%config(noreplace) %_sysconfdir/oscada_AGLKS.xml
+%_bindir/openscada_AGLKS
 %_bindir/openscada_demo
-%_desktopdir/openscada_demo.desktop
-%_iconsdir/openscada_demo.png
-/var/spool/openscada/DEMO/*.db
+%_desktopdir/openscada_AGLKS.desktop
+%_iconsdir/openscada_AGLKS.png
+/var/spool/openscada/icons/AGLKS.png
+/var/spool/openscada/AGLKS/*.db
+
+%files Model.Boiler
+%defattr(-,root,root)
+%config(noreplace) %_sysconfdir/oscada_Boiler.xml
+%_bindir/openscada_Boiler
+%_desktopdir/openscada_Boiler.desktop
+%_iconsdir/openscada_Boiler.png
+/var/spool/openscada/icons/Boiler.png
+/var/spool/openscada/Boiler/*.db 
 
 %files plc
 
@@ -1287,6 +1452,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Mon Mar 14 2011 Roman Savochenko <rom_as@oscada.org>
+- New source packages implementation is released.
+- Documentation separated by languages.
+- Libraries DB packages is added for *-LibDB.Main and *-LibDB.VCA.
+- Instead DemoDB package added Model's packages for "AGLKS" and "Boiler".
+
 * Wed Jan 26 2011 Roman Savochenko <rom_as@oscada.org>
 - "openscada-core" package is created for core library and core content. Main package "openscada" is used for typical installation.
 - German messages is supplemented.
