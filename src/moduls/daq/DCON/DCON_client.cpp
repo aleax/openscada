@@ -252,9 +252,9 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen )
 	    if(CRC && pdu.substr(pdu.size()-2) != DCONCRC(pdu.substr(0,pdu.size()-2))) { err = _("21:Invalid module CRC"); continue; }
 	    if(acqLen)
 	    {
-		if(pdu[0] == '?')	err = _("24:Module out of range");
-		else if(pdu[0] == '!')	err = _("25:Command ignored (host watchdog)");
-		else if(pdu[0] != '>')	err = _("22:Invalid module response");
+		//if(pdu[0] == '?')	err = _("24:Module out of range");
+		//else if(pdu[0] == '!')	err = _("25:Command ignored (host watchdog)");
+		if(pdu[0] != '>')	err = _("22:Invalid module response");
 		else if(((!CRC && acqLen != pdu.size()) || (CRC && (acqLen+2) != pdu.size()))) err = _("20:respond length error");
 		break;
 	    }
@@ -342,13 +342,13 @@ void *TMdContr::Task( void *icntr )
 				switch(cntr.p_hd[i_p].at().ao_range)
 				{
 				    case 0://Engeneer (00.000 20.000)
-					str = TSYS::strMess("%+07.3f",vmax(0,vmin(20,cntr.p_hd[i_p].at().AO[i])));
+					str = TSYS::strMess("%07.3f",vmax(0,vmin(20,cntr.p_hd[i_p].at().AO[i])));
 					break;
 				    case 1://Engeneer (04.000 20.000)
-					str = TSYS::strMess("%+07.3f",vmax(4,vmin(20,cntr.p_hd[i_p].at().AO[i])));
+					str = TSYS::strMess("%07.3f",vmax(4,vmin(20,cntr.p_hd[i_p].at().AO[i])));
 					break;
 				    case 2://Engeneer (00.000 10.000)
-					str = TSYS::strMess("%+07.3f",vmax(0,vmin(10,cntr.p_hd[i_p].at().AO[i])));
+					str = TSYS::strMess("%07.3f",vmax(0,vmin(10,cntr.p_hd[i_p].at().AO[i])));
 					break;
 				    case 3://Engeneer (+00.000 +20.000)
 					str = TSYS::strMess("%+07.3f",vmax(0,vmin(20,cntr.p_hd[i_p].at().AO[i])));
@@ -384,31 +384,26 @@ void *TMdContr::Task( void *icntr )
 
 		    //DI
 		    unsigned int DI;
+    		    n = 0;
 		    switch(cntr.p_hd[i_p].at().di_method)
 		    {
-			case 3: case 4: case 7: case 8: case 14: case 16: case 201:
+			case 3: if(!n) n = 3;	//3DI (@AA)
+			case 4: if(!n) n = 4;	//4DI (@AA)
+			case 7: if(!n) n = 7;	//7DI (@AA)
+			case 8: if(!n) n = 8;	//8DI (@AA)
+			case 14:if(!n) n = 14;	//14DI (@AA)
+			case 16:if(!n) n = 16;	//16DI (@AA)
+			case 201:if(!n) n = 8;	//8DI (@AA,FF00)
 			    //> Request with module
 			    pdu = TSYS::strMess("@%02X",cntr.p_hd[i_p].at().mod_addr);
 			    if((di_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,5)) == "0")
 			    {
-    				n = 0;
-				switch(cntr.p_hd[i_p].at().di_method)
-				{
-    				    case 3: if(!n) n = 3;	//3DI (@AA)
-    				    case 4: if(!n) n = 4;	//4DI (@AA)
-    				    case 7: if(!n) n = 7;	//7DI (@AA)
-    				    case 8: if(!n) n = 8;	//8DI (@AA)
-    				    case 14:if(!n) n = 14;	//14DI (@AA)
-    				    case 16:if(!n) n = 16;	//16DI (@AA)
-    				    case 201:if(!n) n = 8;	//8DI (@AA,FF00)
-				        DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);	//???? substring length 4 for any request?
-				        for(int i_n = 0; i_n < n; i_n++)
-					    cntr.p_hd[i_p].at().DI[i_n] = (DI>>i_n)&0x01;
-					break;
-				}
+			        DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);	//???? substring length 4 for any request?
+			        for(int i_n = 0; i_n < n; i_n++)
+				    cntr.p_hd[i_p].at().DI[i_n] = (DI>>i_n)&0x01;
 			    }
 			    break;
-			case 101:
+			case 101:		//1DI (@AADI)
 			    //> Request with module
 			    pdu = TSYS::strMess("@%02XDI",cntr.p_hd[i_p].at().mod_addr);
 			    acq_len = cntr.p_hd[i_p].at().crc_ctrl ? 9 : 7;
