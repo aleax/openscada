@@ -109,34 +109,34 @@ void MBD::postDisable(int flag)
 {
     TBD::postDisable(flag);
 
-    if( flag && owner().fullDeleteDB() )
+    if(flag && owner().fullDeleteDB())
     {
 	ResAlloc resource(conn_res,true);
 	PGconn * connection = NULL;
 	PGresult *res;
         try
 	{
-            if(( connection = PQconnectdb( (conninfo+"dbname=template1").c_str() )) == NULL )
+            if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	    if( PQstatus( connection ) != CONNECTION_OK )
-		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+	    if(PQstatus(connection) != CONNECTION_OK)
+		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
 	    string req = "DROP DATABASE \""+db+"\"";
-	    if( (res = PQexec(connection,req.c_str())) == NULL )
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
-	    if( ( PQresultStatus( res ) != PGRES_COMMAND_OK ) && ( PQresultStatus( res ) != PGRES_TUPLES_OK ) )
+	    if((res=PQexec(connection,req.c_str())) == NULL)
+		throw TError(TSYS::DBRequest,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
+	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK)
 	    {
 		string err, err1;
-		err = PQresStatus( PQresultStatus( res ));
-		err1 = PQresultErrorMessage( res );
-		PQclear( res );
+		err = PQresStatus(PQresultStatus(res));
+		err1 = PQresultErrorMessage(res);
+		PQclear(res);
 		throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
 	    }
-	    else PQclear( res );
-	    PQfinish( connection );
+	    else PQclear(res);
+	    PQfinish(connection);
 	}
 	catch(...)
 	{
-	    if( connection ) PQfinish( connection );
+	    if(connection) PQfinish(connection);
 	    throw;
 	}
     }
@@ -162,42 +162,44 @@ void MBD::enable( )
     if(port.size()) conninfo += "port="+port+" ";
     if(pass.size()) conninfo += "password="+pass+" ";
     if(connect_timeout.size()) conninfo += "connect_timeout="+connect_timeout+" ";
-    if(user.size())conninfo += "user="+user+" ";
+    if(user.size()) conninfo += "user="+user+" ";
     cd_pg  = codePage().size()?codePage():Mess->charset();
     try
     {
 	if((connection = PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 	    throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	if( PQstatus( connection ) != CONNECTION_OK )
-	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
-	TBD::enable( );
+	if(PQstatus( connection ) != CONNECTION_OK)
+	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
+	TBD::enable();
 
 	vector< vector<string> > tbl;
 	string req = "SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '" + db + "'";
 	sqlReq(req,&tbl);
-	if( tbl.size() == 2 && tbl[1][0] == "0" )
+	if(tbl.size() == 2 && tbl[1][0] == "0")
 	{
 	    sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
-	    PQfinish( connection );
+	    PQfinish(connection);
 	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	    if( PQstatus( connection ) != CONNECTION_OK )
-		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+	    if(PQstatus(connection) != CONNECTION_OK)
+		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
 	    else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
 	}
 	else
 	{
-	    PQfinish( connection );
-	    if(( connection = PQconnectdb((conninfo+"dbname="+db).c_str() )) == NULL )
+	    PQfinish(connection);
+	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	    if( PQstatus( connection ) != CONNECTION_OK )
-		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
+	    if(PQstatus(connection) != CONNECTION_OK)
+		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
 	    else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
 	}
+
     }
     catch(...)
     {
-	if( connection ) PQfinish( connection );
+	if(connection) PQfinish(connection);
+	TBD::disable();
 	throw;
     }
 }
