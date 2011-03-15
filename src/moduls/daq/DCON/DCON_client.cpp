@@ -248,14 +248,14 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen )
 	    }
 	    if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
     	    pdu = rez.substr(0,rez.size()-1);
-	    if(CRC && pdu.substr(pdu.size()-2) != DCONCRC(pdu.substr(0,pdu.size()-2)))
-	    { err = _("21:Invalid module CRC"); continue; }
-	    else if(!pdu.size() || (acqLen && !CRC && acqLen != pdu.size()) || (acqLen && CRC && (acqLen+2) != pdu.size()))
+	    if(!pdu.size() || (CRC && pdu.size() < 3)) { err = _("20:respond length error"); break; }
+	    if(CRC && pdu.substr(pdu.size()-2) != DCONCRC(pdu.substr(0,pdu.size()-2))) { err = _("21:Invalid module CRC"); continue; }
+	    if(acqLen)
 	    {
-		if(pdu.size() && pdu[0] == '?')		err = _("24:Module out of range");
-		else if(pdu.size() && pdu[0] == '!')	err = _("25:Command ignored (host watchdog)");
-		else if(pdu.size() && pdu[0] != '>')	err = _("22:Invalid module response");
-		else err = _("20:Waited respond length error");
+		if(pdu[0] == '?')	err = _("24:Module out of range");
+		else if(pdu[0] == '!')	err = _("25:Command ignored (host watchdog)");
+		else if(pdu[0] != '>')	err = _("22:Invalid module response");
+		else if(((!CRC && acqLen != pdu.size()) || (CRC && (acqLen+2) != pdu.size()))) err = _("20:respond length error");
 		break;
 	    }
 	    err = "0";
@@ -272,8 +272,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen )
 void *TMdContr::Task( void *icntr )
 {
     string str, pdu, ai_txterr, ao_txterr, di_txterr, do_txterr, ci_txterr;
-    int acq_len;
-    int n, m, i;
+    int n, m, i, acq_len;
     TMdContr &cntr = *(TMdContr *)icntr;
 
     cntr.endrun_req = false;
@@ -387,13 +386,10 @@ void *TMdContr::Task( void *icntr )
 		    unsigned int DI;
 		    switch(cntr.p_hd[i_p].at().di_method)
 		    {
-			case 3: case 4: case 7: case 8: case 14: case 16: case 101: case 201:
-    			{
+			case 3: case 4: case 7: case 8: case 14: case 16: case 201:
 			    //> Request with module
 			    pdu = TSYS::strMess("@%02X",cntr.p_hd[i_p].at().mod_addr);
-			    acq_len = 5;
-		    	    if(cntr.p_hd[i_p].at().di_method == 101) { pdu += "DI"; acq_len = 7; }
-			    if((di_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,acq_len)) == "0")
+			    if((di_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,5)) == "0")
 			    {
     				n = 0;
 				switch(cntr.p_hd[i_p].at().di_method)
@@ -404,16 +400,25 @@ void *TMdContr::Task( void *icntr )
     				    case 8: if(!n) n = 8;	//8DI (@AA)
     				    case 14:if(!n) n = 14;	//14DI (@AA)
     				    case 16:if(!n) n = 16;	//16DI (@AA)
-    				    case 101:if(!n) n = 1;	//1DI (@AADI)
     				    case 201:if(!n) n = 8;	//8DI (@AA,FF00)
-				        DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);	//???? substring length 4 for a request?
+				        DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);	//???? substring length 4 for any request?
 				        for(int i_n = 0; i_n < n; i_n++)
 					    cntr.p_hd[i_p].at().DI[i_n] = (DI>>i_n)&0x01;
 					break;
 				}
 			    }
 			    break;
-			}
+			case 101:
+			    //> Request with module
+			    pdu = TSYS::strMess("@%02XDI",cntr.p_hd[i_p].at().mod_addr);
+			    acq_len = cntr.p_hd[i_p].at().crc_ctrl ? 9 : 7;
+			    if((di_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl)) == "0")
+			    {
+				if((int)pdu.size() != acq_len) di_txterr = _("20:respond length error");
+				else if(pdu[0] != '!') di_txterr = _("22:Invalid module response");
+				else cntr.p_hd[i_p].at().DI[0] = (pdu.substr(6,2)!="00");
+			    }
+			    break;
 		    }
 
 		    //DO
@@ -502,29 +507,53 @@ void *TMdContr::Task( void *icntr )
 				//> Request with module
 				for(unsigned i_n = 0; i_n < 2; i_n++) if(cntr.p_hd[i_p].at().DO[i_r*2+i_n]) code += (1<<i_n);
 				pdu = TSYS::strMess("@%02XDO%01X%01X",cntr.p_hd[i_p].at().mod_addr,i_r,code);
-				do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3);
+				acq_len = cntr.p_hd[i_p].at().crc_ctrl ? 5 : 3;
+				if((do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl)) == "0")
+				{
+				    if((int)pdu.size() != acq_len) di_txterr = _("20:respond length error");
+				    else if(pdu[0] != '!') di_txterr = _("22:Invalid module response");
+				}
 	    		    }
 			    break;
 			case 306://6DO (@AADODD)
 			    //> Request with module
 			    for(unsigned i_n = 0; i_n < 6; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3);
+			    acq_len = cntr.p_hd[i_p].at().crc_ctrl ? 5 : 3;
+			    if((do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl)) == "0")
+			    {
+				if((int)pdu.size() != acq_len) di_txterr = _("20:respond length error");
+				else if(pdu[0] != '!') di_txterr = _("22:Invalid module response");
+			    }
 			    break;
 			case 402://2DO (@AADO0D)
 			    for(unsigned i_n = 0; i_n < 2; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
-	    		    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3);
+			    acq_len = cntr.p_hd[i_p].at().crc_ctrl ? 5 : 3;
+			    if((do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl)) == "0")
+			    {
+				if((int)pdu.size() != acq_len) di_txterr = _("20:respond length error");
+				else if(pdu[0] != '!') di_txterr = _("22:Invalid module response");
+			    }
 			    break;
 			case 504://4DO (@(^)AADO0D)
 			    //> Request with module
+			    acq_len = cntr.p_hd[i_p].at().crc_ctrl ? 5 : 3;
 			    code = (cntr.p_hd[i_p].at().DO[1]?2:0)+(cntr.p_hd[i_p].at().DO[0]?1:0);
 			    pdu = TSYS::strMess("@%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3);
+			    if((do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl)) == "0")
+			    {
+				if((int)pdu.size() != acq_len) di_txterr = _("20:respond length error");
+				else if(pdu[0] != '!') di_txterr = _("22:Invalid module response");
+			    }
 			    //> Request with module
 			    code = (cntr.p_hd[i_p].at().DO[3]?2:0)+(cntr.p_hd[i_p].at().DO[2]?1:0);
 			    pdu = TSYS::strMess("^%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3);
+			    if((do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl)) == "0")
+			    {
+				if((int)pdu.size() != acq_len) di_txterr = _("20:respond length error");
+				else if(pdu[0] != '!') di_txterr = _("22:Invalid module response");
+			    }
 			    break;
 		    }
 
@@ -541,8 +570,17 @@ void *TMdContr::Task( void *icntr )
 			    {
 				//> Request with module
 				pdu = TSYS::strMess("#%02X%d",cntr.p_hd[i_p].at().mod_addr,i_n);
-				if((ci_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,9)) == "0")
+				if(cntr.p_hd[i_p].at().crc_ctrl) pdu += cntr.DCONCRC(pdu);
+				if((ci_txterr=cntr.DCONReq(pdu,false,cntr.p_hd[i_p].at().crc_ctrl?11:9)) == "0")
+				{
+				    if(cntr.p_hd[i_p].at().crc_ctrl)
+				    {
+					pdu = pdu.substr(0,1) + pdu.substr(3,8) + pdu.substr(1,2);
+                                	if((pdu.substr(9,2)) != (cntr.DCONCRC(pdu.substr(0,9))))
+                                	{ ci_txterr=_("Invalid module CRC"); continue; }
+				    }
 			            cntr.p_hd[i_p].at().CI[i_n] = strtol(pdu.substr(1,8).c_str(),NULL,16);
+			        }
 			    }
 			    break;
 		    }

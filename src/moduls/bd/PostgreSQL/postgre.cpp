@@ -91,7 +91,7 @@ TBD *BDMod::openBD( const string &name )
 //************************************************
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0)
 {
-
+    setAddr(";127.0.0.1;postgres;123456;NewDB");
 }
 
 MBD::~MBD( )
@@ -147,24 +147,29 @@ void MBD::postDisable(int flag)
 
 void MBD::enable( )
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
-    host = (TSYS::strSepParse(addr(),0,';') == "") ? "localhost" : TSYS::strSepParse(addr(),0,';');
-    hostaddr = (TSYS::strSepParse(addr(),1,';') == "") ? "127.0.0.1" : TSYS::strSepParse(addr(),1,';');
-    user = TSYS::strSepParse(addr(),2,';');
-    pass = TSYS::strSepParse(addr(),3,';');
-    db   = TSYS::strSepParse(addr(),4,';');
-    port = (TSYS::strSepParse(addr(),5,';') == "") ? "5432" : TSYS::strSepParse(addr(),5,';');
-    connect_timeout = (TSYS::strSepParse(addr(),6,';') == "") ? "10" : TSYS::strSepParse(addr(),6,';');
-    string conninfo, conninfoReal;
-    conninfo = "host = " + host + " hostaddr = " + hostaddr + " port = " + port + " dbname = template1" + " user = " + user + 
-	      " password = " + pass + " connect_timeout = " + connect_timeout;
-    conninfoReal = "host = " + host + " hostaddr = " + hostaddr + " port = " + port + " dbname = " + db + " user = " + user + 
-		  " password = " + pass + " connect_timeout = " + connect_timeout;
+    int off = 0;
+    host = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    hostaddr = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    user = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    pass = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    db   = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    port = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    connect_timeout = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+
+    string conninfo;
+    if(host.empty() && hostaddr.empty()) host = "localhost";
+    if(host.size()) conninfo += "host="+host+" ";
+    if(hostaddr.size()) conninfo += "hostaddr="+hostaddr+" ";
+    if(port.size()) conninfo += "port="+port+" ";
+    if(pass.size()) conninfo += "password="+pass+" ";
+    if(connect_timeout.size()) conninfo += "connect_timeout="+connect_timeout+" ";
+    conninfo += "user="+user+" ";
     cd_pg  = codePage().size()?codePage():Mess->charset();
     try
     {
-	if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
+	if((connection = PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 	    throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	if( PQstatus( connection ) != CONNECTION_OK )
 	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
@@ -177,7 +182,7 @@ void MBD::enable( )
 	{
 	    sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
 	    PQfinish( connection );
-	    if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	    if( PQstatus( connection ) != CONNECTION_OK )
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
@@ -186,7 +191,7 @@ void MBD::enable( )
 	else
 	{
 	    PQfinish( connection );
-	    if(( connection = PQconnectdb( conninfoReal.c_str() )) == NULL )
+	    if(( connection = PQconnectdb((conninfo+"dbname="+db).c_str() )) == NULL )
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	    if( PQstatus( connection ) != CONNECTION_OK )
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));

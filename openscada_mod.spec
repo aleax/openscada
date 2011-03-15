@@ -5,7 +5,7 @@ Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
 Version: 0.7.1
-Release: 0.1
+Release: 0.10
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
 License: GPLv2
@@ -64,6 +64,7 @@ Das offene SCADA System. Typische Installation.
 %def_enable DAQGate
 %def_enable SoundCard
 %def_enable OPC_UA
+%def_enable BFN
 %ifnarch %ix86
 %force_disable DiamondBoards
 %force_disable ICP_DAS
@@ -706,6 +707,21 @@ The %{name}-DAQ.OPC_UA package - allow realisation of OPC UA protocol.
 Das Paket %{name}-DAQ.OPC_UA - erlauben Realisierung von OPC UA-Protokoll.
 %endif
 
+%if_enabled BFN
+%package DAQ.BFN
+Summary: BFN
+Group: Graphics
+Requires: %name-core = %version-%release
+%description DAQ.BFN
+The %{name}-DAQ.BFN package - allow realisation of BFN.
+%description DAQ.BFN -l ru_RU.UTF8
+Пакет %{name}-DAQ.BFN - предоставляет реализацию BFN.
+%description DAQ.BFN -l uk_UA.UTF8
+Пакет %{name}-DAQ.BFN - надає реалізацію BFN.
+%description DAQ.BFN -l de_DE.UTF8
+Das Paket %{name}-DAQ.BFN - erlauben Realisierung von BFN.
+%endif
+
 #=====  Archive modules =====
 %if_enabled FSArch
 %package Archive.FSArch
@@ -1079,7 +1095,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 %configure %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} %{subst_enable PostgreSQL} \
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
-    %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} \
+    %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} %{subst_enable BFN} \
     %{subst_enable FSArch} %{subst_enable DBArch} \
     %{subst_enable Sockets} %{subst_enable SSL} %{subst_enable Serial} \
     %{subst_enable HTTP} %{subst_enable SelfSystem} %{subst_enable UserProtocol} \
@@ -1321,6 +1337,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %files DAQ.OPC_UA
 %_libdir/openscada/daq_OPC_UA.so
 %_datadir/locale/*/LC_MESSAGES/oscd_OPC_UA.mo
+%endif
+
+%if_enabled BFN
+%files DAQ.BFN
+%_libdir/openscada/daq_BFN.so
+%_datadir/locale/*/LC_MESSAGES/oscd_BFN.mo
 %endif
 
 #=====  Archive modules =====
