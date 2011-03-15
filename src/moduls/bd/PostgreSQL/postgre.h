@@ -106,7 +106,7 @@ class MBD : public TBD
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg;
+        string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
 	PGconn	*connection;
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;

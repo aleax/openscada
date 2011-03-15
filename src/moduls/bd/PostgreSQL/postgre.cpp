@@ -114,12 +114,9 @@ void MBD::postDisable(int flag)
 	ResAlloc resource(conn_res,true);
 	PGconn * connection = NULL;
 	PGresult *res;
-	string conninfo;
-	try
+        try
 	{
-	    conninfo = "host = " + host + " hostaddr = " + hostaddr + " port = " + port + " dbname = template1" + " user = " + user + 
-		      " password = " + pass + " connect_timeout = " + connect_timeout;
-	    if(( connection = PQconnectdb( conninfo.c_str() )) == NULL )
+            if(( connection = PQconnectdb( (conninfo+"dbname=template1").c_str() )) == NULL )
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	    if( PQstatus( connection ) != CONNECTION_OK )
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
@@ -158,14 +155,14 @@ void MBD::enable( )
     port = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
     connect_timeout = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
 
-    string conninfo;
+    conninfo.clear();
     if(host.empty() && hostaddr.empty()) host = "localhost";
     if(host.size()) conninfo += "host="+host+" ";
     if(hostaddr.size()) conninfo += "hostaddr="+hostaddr+" ";
     if(port.size()) conninfo += "port="+port+" ";
     if(pass.size()) conninfo += "password="+pass+" ";
     if(connect_timeout.size()) conninfo += "connect_timeout="+connect_timeout+" ";
-    conninfo += "user="+user+" ";
+    if(user.size())conninfo += "user="+user+" ";
     cd_pg  = codePage().size()?codePage():Mess->charset();
     try
     {

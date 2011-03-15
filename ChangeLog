@@ -1,3 +1,7 @@
+2011-03-15 Maxim
+- FIX:DB.PostgreSQL: 'conninfo' is placed into MDB class to make it common for the both functions: 'postDisable', and 'enable'.
+
+
 2011-03-15 Roman
 - FIX:DAQ.ModBus: The module parameter's attributes set values changed to active mode and errors generation to a parameter is improved.
 - SYS: DAQ.BFN build RPM package is added to mudulary specification file.
