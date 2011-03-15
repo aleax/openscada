@@ -1,3 +1,7 @@
+2011-03-15 Roman
+- FIX:DAQ.ModBus: The module parameter's attributes set values changed to active mode and errors generation to a parameter is improved.
+
+
 2011-03-14 Roman
 - !!!!:SYS: New source packages implementation is released. All resources moved to separated tarball.
     For create source and resource tarball use "$ make dist-lzma" and "$ make dist-reslzma".

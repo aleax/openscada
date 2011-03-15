@@ -196,6 +196,9 @@ void TMdContr::stop_( )
 
     //> Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
+
+    //> Clear process parameters list
+    p_hd.clear();
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -210,6 +213,18 @@ bool TMdContr::cfgChange( TCfg &icfg )
     else if( icfg.fld().name() == "FRAG_MERGE" && enableStat( ) ) disable( );
 
     return true;
+}
+
+void TMdContr::prmEn( const string &id, bool val )
+{
+    ResAlloc res(en_res,true);
+
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+        if(p_hd[i_prm].at().id() == id) break;
+
+    if(val && i_prm >= p_hd.size())     p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size())     p_hd.erase(p_hd.begin()+i_prm);
 }
 
 void TMdContr::regVal(int reg, const string &dt)
@@ -296,10 +311,11 @@ int TMdContr::getValR( int addr, ResString &err, bool in )
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
-	    err.setVal(workCnt[i_b].err.getVal());
-	    if(err.getVal().empty())
+	    string terr = workCnt[i_b].err.getVal();
+	    if(terr.empty())
 		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8) |
-		      (unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
+                      (unsigned char)workCnt[i_b].val[addr*2-workCnt[i_b].off+1];
+            else if(err.getVal().empty()) err.setVal(terr);
 	    break;
 	}
     return rez;
@@ -313,8 +329,9 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if(addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
-	    err.setVal(workCnt[i_b].err.getVal());
-	    if(err.getVal().empty()) rez = workCnt[i_b].val[addr-workCnt[i_b].off];
+	    string terr = workCnt[i_b].err.getVal();
+	    if(terr.empty()) rez = workCnt[i_b].val[addr-workCnt[i_b].off];
+	    else if(err.getVal().empty()) err.setVal(terr);
 	    break;
 	}
     return rez;
@@ -330,8 +347,12 @@ void TMdContr::setValR( int val, int addr, ResString &err )
     pdu += (char)(val>>8);	//Data MSB
     pdu += (char)val;		//Data LSB
     //> Request to remote server
-    err.setVal(modBusReq(pdu));
-    if(err.getVal().empty()) numWReg++;
+    string terr = modBusReq(pdu);
+    if(!terr.empty())
+    {
+	numWReg++;
+	if(err.getVal().empty()) err.setVal(terr);
+    }
     //> Set to acquisition block
     ResAlloc res(req_res, false);
     for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
@@ -353,8 +374,12 @@ void TMdContr::setValC( char val, int addr, ResString &err )
     pdu += (char)val?0xFF:0x00;	//Data MSB
     pdu += (char)0x00;		//Data LSB
     //> Request to remote server
-    err.setVal( modBusReq(pdu) );
-    if(err.getVal().empty()) numWCoil++;
+    string terr = modBusReq(pdu);
+    if(!terr.empty())
+    {
+	numWCoil++;
+	if(err.getVal().empty()) err.setVal(terr);
+    }
     //> Set to acquisition block
     ResAlloc res(req_res, false);
     for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)
@@ -533,6 +558,12 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    res.release();
 
+	    //> Get data from blocks to parameters
+	    cntr.en_res.resRequestR();
+            for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
+                cntr.p_hd[i_p].at().getVal();
+            cntr.en_res.resRelease();
+
 	    if(cntr.tmDelay <= 0) cntr.tmDelay--;
 
 	    //> Calc acquisition process time
@@ -593,7 +624,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
 TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
     TParamContr(name, tp_prm ), m_attrLs(cfg("ATTR_LS").getSd()), p_el("w_attr")
 {
-
+    acq_err.setVal("");
 }
 
 TMdPrm::~TMdPrm( )
@@ -677,11 +708,14 @@ void TMdPrm::enable()
 	    catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	i_p++;
     }
+
+    owner().prmEn(id(), true);   //Put to process
 }
 
 void TMdPrm::disable()
 {
     if(!enableStat())  return;
+    owner().prmEn(id(), false);  //Remove from process
 
     TParamContr::disable();
 
@@ -692,55 +726,70 @@ void TMdPrm::disable()
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 
+void TMdPrm::getVal( )
+{
+    int aid;
+    string tp, atp_sub, aids;
+    ResString w_err;
+
+    vector<string> ls;
+    elem().fldList(ls);
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
+    {
+	AutoHD<TVal> val = vlAt(ls[i_el]);
+	int off = 0;
+	tp = TSYS::strSepParse(val.at().fld().reserve(),0,':',&off);
+	string atp_sub = TSYS::strSepParse(tp,1,'_');
+	bool isInputs = (tp.size()>=2 && tp[1]=='I');
+	aids = TSYS::strSepParse(val.at().fld().reserve(),0,':',&off);
+	aid = strtol(aids.c_str(),NULL,0);
+	if(!tp.empty())
+	{
+	    if(tp[0] == 'C') val.at().setB(owner().getValC(aid,w_err,isInputs),0,true);
+	    if(tp[0] == 'R')
+	    {
+		int vl = owner().getValR(aid,w_err,isInputs);
+		if(!atp_sub.empty() && atp_sub[0] == 'b') val.at().setB((vl>>atoi(atp_sub.c_str()+1))&1,0,true);
+		else if(!atp_sub.empty() && atp_sub == "f")
+		{
+		    int vl2 = owner().getValR(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), w_err, isInputs);
+		    if(vl == EVAL_INT || vl2 == EVAL_INT) val.at().setR(EVAL_REAL,0,true);
+		    union { uint32_t i; float f; } wl;
+		    wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
+		    val.at().setR(wl.f,0,true);
+		}
+		else if(!atp_sub.empty() && atp_sub == "i2") val.at().setI((int16_t)vl,0,true);
+		else if(!atp_sub.empty() && atp_sub == "i4")
+		{
+		    int vl2 = owner().getValR(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), w_err, isInputs);
+		    if(vl == EVAL_INT || vl2 == EVAL_INT) val.at().setI(EVAL_INT,0,true);
+		    val.at().setI((int)(((vl2&0xffff)<<16)|(vl&0xffff)),0,true);
+		}
+		else val.at().setI(vl,0,true);
+	    }
+	}
+    }
+    acq_err.setVal(w_err.getVal());
+}
+
 void TMdPrm::vlGet( TVal &val )
 {
-    if( !enableStat() || !owner().startStat() )
+    if(!enableStat() || !owner().startStat())
     {
-	if( val.name() == "err" )
+	if(val.name() == "err")
 	{
-	    if( !enableStat() )			val.setS(_("1:Parameter is disabled."),0,true);
+	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;
     }
 
-    if( owner().redntUse( ) ) return;
+    if(owner().redntUse()) return;
 
-    int off = 0;
-    string tp = TSYS::strSepParse(val.fld().reserve(),0,':',&off);
-    string atp_sub = TSYS::strSepParse(tp,1,'_');
-    bool isInputs = (tp.size()>=2 && tp[1]=='I');
-    string aids = TSYS::strSepParse(val.fld().reserve(),0,':',&off);
-    int aid = strtol(aids.c_str(),NULL,0);
-    if( !tp.empty() )
+    if(val.name() == "err")
     {
-	if( tp[0] == 'C' ) val.setB(owner().getValC(aid,acq_err,isInputs),0,true);
-	if( tp[0] == 'R' )
-	{
-	    int vl = owner().getValR(aid,acq_err,isInputs);
-	    if( !atp_sub.empty() && atp_sub[0] == 'b' ) val.setB((vl>>atoi(atp_sub.c_str()+1))&1,0,true);
-	    else if( !atp_sub.empty() && atp_sub == "f" )
-	    {
-		int vl2 = owner().getValR( strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err, isInputs );
-		if( vl == EVAL_INT || vl2 == EVAL_INT ) val.setR(EVAL_REAL,0,true);
-		union { uint32_t i; float f; } wl;
-		wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
-		val.setR(wl.f,0,true);
-	    }
-	    else if( !atp_sub.empty() && atp_sub == "i2" )	val.setI((int16_t)vl,0,true);
-	    else if( !atp_sub.empty() && atp_sub == "i4" )
-	    {
-		int vl2 = owner().getValR( strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err, isInputs );
-		if( vl == EVAL_INT || vl2 == EVAL_INT ) val.setI(EVAL_INT,0,true);
-		val.setI((int)(((vl2&0xffff)<<16)|(vl&0xffff)),0,true);
-	    }
-	    else val.setI(vl,0,true);
-	}
-    }
-    else if( val.name() == "err" )
-    {
-	if( acq_err.getVal().empty() )	val.setS("0",0,true);
+	if(acq_err.getVal().empty())	val.setS("0",0,true);
 	else				val.setS(acq_err.getVal(),0,true);
     }
 }
@@ -800,11 +849,11 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    if( val.arch().freeStat() ) return;
-    val.arch().at().setSrcMode( TVArchive::ActiveAttr, val.arch().at().srcData() );
-    val.arch().at().setPeriod( owner().period() ? owner().period()/1000 : 1000000 );
-    val.arch().at().setHardGrid( true );
-    val.arch().at().setHighResTm( true );
+    if(val.arch().freeStat()) return;
+    val.arch().at().setSrcMode(TVArchive::PassiveAttr, val.arch().at().srcData());
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setHardGrid(true);
+    val.arch().at().setHighResTm(true);
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )

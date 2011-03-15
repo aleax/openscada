@@ -70,6 +70,8 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
+	void getVal( );
+
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( );
 
@@ -94,6 +96,7 @@ class TMdPrm : public TParamContr
 //******************************************************
 class TMdContr: public TController
 {
+    friend class TMdPrm;
     public:
 	//Methods
 	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
@@ -121,6 +124,7 @@ class TMdContr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &cfg );
+	void prmEn( const string &id, bool val );
 
     private:
 	//Data
@@ -141,7 +145,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	Res     req_res;
+	Res     req_res, en_res;
 	int	&mPrior,			//Process task priority
 		&mNode;				//Node
 	string	&mSched,			// Calc schedule
@@ -162,6 +166,8 @@ class TMdContr: public TController
 
 	double	tmGath;				//Gathering time
 	float	tmDelay;			//Delay time for next try connect
+
+	vector< AutoHD<TMdPrm> >  p_hd;
 
 	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
 };
