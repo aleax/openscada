@@ -378,7 +378,9 @@ void *TMdContr::Task( void *icntr )
 				}
 				//> Request with module
 				pdu = TSYS::strMess("#%02X%d%s",cntr.p_hd[i_p].at().mod_addr,i,str.c_str());
-    				ao_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+    				if((ao_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+    				else if(pdu.size() && pdu[0] == '?') ao_txterr = _("24:Module out of range");
+    				else if(pdu.size() && pdu[0] == '!') ao_txterr = _("25:Command ignored (host watchdog)");
 			    }
 		    }
 
@@ -426,57 +428,68 @@ void *TMdContr::Task( void *icntr )
 			    //> Request with module
 			    code = (cntr.p_hd[i_p].at().DO[1]?2:0)+(cntr.p_hd[i_p].at().DO[0]?1:0);
 			    pdu = TSYS::strMess("@%02X%02X00",cntr.p_hd[i_p].at().mod_addr,code);
-		    	    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+		    	    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 		    	    break;
 			case 604://4DO (@AA,0F00)
 			    for(unsigned i_n = 0; i_n < 4; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02X%02X00",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 			    break;
 			case 608://8DO (@AA,FF00)
 			    for(unsigned i_n = 0; i_n < 8; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02X%02X00",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 			    break;
 			case 3://3DO (@AA,7)
 			    for(unsigned i_n = 0; i_n < 3; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02X%01X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 			    break;
 			case 4://4DO (@AA,F)
 			    for(unsigned i_n = 0; i_n < 4; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02X%01X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 			    break;
 			case 5://5DO (@AA,1F)
 			    for(unsigned i_n = 0; i_n < 5; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02X%02X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 			    break;
 			case 7://7DO (@AA,7F)
 			    for(unsigned i_n = 0; i_n < 7; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 			    pdu = TSYS::strMess("@%02X%02X",cntr.p_hd[i_p].at().mod_addr,code);
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 			    break;
        			case 8://8DO (@AA,FF)
 			    for(unsigned i_n = 0; i_n < 8; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
 		    	    pdu = TSYS::strMess("@%02X%02X",cntr.p_hd[i_p].at().mod_addr,code);
-		    	    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+		    	    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 		    	    break;
        			case 12://12DO (@AA,0FFF)
       			    for(unsigned i_n = 0; i_n < 12; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
        			    pdu = TSYS::strMess("@%02X%04X",cntr.p_hd[i_p].at().mod_addr,code);
-       			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+       			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
        			    break;
        			case 13://13DO (@AA,1FFF)
        			    for(unsigned i_n = 0; i_n < 13; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
        			    pdu = TSYS::strMess("@%02X%04X",cntr.p_hd[i_p].at().mod_addr,code);
-       			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+       			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
        			    break;
        			case 16://16DO (@AA,FFFF)
        			    for(unsigned i_n = 0; i_n < 16; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
        			    pdu = TSYS::strMess("@%02X%04X",cntr.p_hd[i_p].at().mod_addr,code);
-		    	    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+		    	    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 	    		    break;
        			case 102://2DO (^AADOVVV)
 			    //> Request with module
@@ -484,14 +497,16 @@ void *TMdContr::Task( void *icntr )
 		    	    pdu += cntr.p_hd[i_p].at().DO[0] ? "1" : "0";
 		    	    pdu += cntr.p_hd[i_p].at().DO[1] ? "1" : "0";
 		    	    pdu += "0";
-		    	    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+		    	    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 		    	    break;
 			case 103://3DO (^AADOVVV)
 			    pdu = TSYS::strMess("^%02XDO",cntr.p_hd[i_p].at().mod_addr);
 		    	    pdu += cntr.p_hd[i_p].at().DO[0] ? "1" : "0";
 		    	    pdu += cntr.p_hd[i_p].at().DO[1] ? "1" : "0";
 		    	    pdu += cntr.p_hd[i_p].at().DO[2] ? "1" : "0";
-			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
+			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
+                            else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog)");
 	    		    break;
 			case 202://2DO (@AADO)
 			    n = 2;
