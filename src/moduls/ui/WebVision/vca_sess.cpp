@@ -3998,9 +3998,9 @@ void VCAElFigure::getReq( SSess &ses )
     ResAlloc res(mRes,true);
     //- Prepare picture -
     map< string, string >::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     prmEl = ses.prm.find("geomX");
     geomX = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 0;
     prmEl = ses.prm.find("geomY");
@@ -4034,9 +4034,9 @@ void VCAElFigure::postReq( SSess &ses )
     if( prmEl != ses.prm.end() && prmEl->second == "point");
     {
         prmEl = ses.prm.find("xSc");
-        double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+        double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
         prmEl = ses.prm.find("ySc");
-        double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+        double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
 	prmEl = ses.prm.find("x");
 	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
 	prmEl = ses.prm.find("y");
@@ -4862,10 +4862,9 @@ void VCAText::getReq( SSess &ses )
     ResAlloc res(mRes,false);
     //- Prepare picture -
     map< string, string >::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1;
+    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1;
-    
+    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1;
     scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
     int txtFontSize = 0;
@@ -5312,9 +5311,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
-    float xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    float xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     prmEl = ses.prm.find("ySc");
-    float ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    float ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     int imW = (int)TSYS::realRound((float)width*xSc,POS_PREC_DIG,true);
     int imH = (int)TSYS::realRound((float)height*ySc,POS_PREC_DIG,true);
 
@@ -5706,9 +5705,9 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 1.0;
+    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     int imW = (int)TSYS::realRound((double)width*xSc,POS_PREC_DIG,true);
     int imH = (int)TSYS::realRound((double)height*ySc,POS_PREC_DIG,true);
 
