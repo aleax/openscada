@@ -79,7 +79,7 @@ class TMdPrm : public TParamContr
 
 	//Values
 	double	AI[32], AO[32], CI[32];
-	bool	DI[32], DO[32];
+	char	DI[32], DO[32];
 
     protected:
 	//Methods

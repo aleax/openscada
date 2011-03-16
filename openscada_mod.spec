@@ -19,7 +19,7 @@ URL: http://oscada.org
 %if %_vendor == "alt"
 %set_verify_elf_method no
 BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors3-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel libpq5.1-devel libportaudio2-devel libfftw3-devel libpcrecpp-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel libportaudio2-devel libfftw3-devel libpcrecpp-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications

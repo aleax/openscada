@@ -1,5 +1,6 @@
 2011-03-16 Roman
 - FIX:UI.WebVision: Crash a session on manual attribute "xSc" or "ySc" set from Web-browser for "Diagram" or "ElFigure" is prevented.
+- FIX:DAQ.DCON: Fixed main algoritms and tested on command "#AA" for 8AI.
 
 
 2011-03-15 Maxim

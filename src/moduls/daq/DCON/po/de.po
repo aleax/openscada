@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 22:36+0200\n"
+"POT-Creation-Date: 2011-03-16 16:33+0200\n"
 "PO-Revision-Date: 2011-03-01 10:11+0300\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -129,17 +129,17 @@ msgstr "Gebrauchte Zeit: %s."
 msgid "13:Error respond: Not full."
 msgstr "13:Fehler reagieren: Nicht voll."
 
-msgid "21:Invalid module CRC"
-msgstr "21:Ungültige Modul CRC"
+msgid "20:Respond length error."
+msgstr "20:Modul Paketlänge Fehler."
+
+msgid "21:Invalid module CRC."
+msgstr "21:Ungültige Modul CRC."
+
+msgid "22:Invalid module response."
+msgstr "22:Ungültige Modul Antwort."
 
 msgid "10:Transport error: "
 msgstr "10:Transport-Fehler: "
-
-msgid "22:Invalid module response"
-msgstr "22:Ungültige Modul Antwort"
-
-msgid "20:Module packet length error"
-msgstr "20:Modul Paketlänge Fehler"
 
 msgid "23:Undefined range"
 msgstr "23:Unbestimmter Bereich"
@@ -147,8 +147,8 @@ msgstr "23:Unbestimmter Bereich"
 msgid "24:Module out of range"
 msgstr "24:Module außerhalb der Reichweite"
 
-msgid "25:Command ignored (host watchdog)"
-msgstr "25:Kommando ist ignoriert (host watchdog)"
+msgid "25:Command ignored (host watchdog)."
+msgstr "25:Kommando ist ignoriert (host watchdog)."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."

@@ -112,7 +112,7 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), hdb(0), htrans(0), reqCnt(0), reqCntTm(0), trOpenTm(0)
 {
-
+    setAddr("localhost:/var/tmp/test.fbd");
 }
 
 MBD::~MBD( )

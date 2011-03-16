@@ -99,7 +99,7 @@ void BDMod::load_( )
 //************************************************
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 {
-
+    setAddr("localhost;root;123456;test;;;utf8");
 }
 
 MBD::~MBD( )

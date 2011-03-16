@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 22:36+0200\n"
+"POT-Creation-Date: 2011-03-16 16:33+0200\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -128,17 +128,17 @@ msgstr "Витрачено часу: %s. "
 msgid "13:Error respond: Not full."
 msgstr "13:Помилка відповіді: Не повна."
 
-msgid "21:Invalid module CRC"
-msgstr "21:Помилка контрольної суми"
+msgid "20:Respond length error."
+msgstr "20:Помилка довжини пакету модуля."
+
+msgid "21:Invalid module CRC."
+msgstr "21:Помилка контрольної суми."
+
+msgid "22:Invalid module response."
+msgstr "22:Помилка відповіді модуля."
 
 msgid "10:Transport error: "
 msgstr "10:Помилка транспорту: "
-
-msgid "22:Invalid module response"
-msgstr "22:Помилка відповіді модуля"
-
-msgid "20:Module packet length error"
-msgstr "20:Помилка довжини пакету модуля"
 
 msgid "23:Undefined range"
 msgstr "23:Невизначений діапазон"
@@ -146,8 +146,8 @@ msgstr "23:Невизначений діапазон"
 msgid "24:Module out of range"
 msgstr "24:Вихід за межі діапазону у модулі"
 
-msgid "25:Command ignored (host watchdog)"
-msgstr "25:Команду ігнаровано (сторожовий таймер)"
+msgid "25:Command ignored (host watchdog)."
+msgstr "25:Команду ігнаровано (сторожовий таймер)."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
