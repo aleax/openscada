@@ -5319,6 +5319,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
+    if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
     gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
@@ -5713,6 +5714,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //> Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
+    if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
     gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
     int brect[8];
