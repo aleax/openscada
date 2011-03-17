@@ -113,7 +113,7 @@ class TMdContr: public TController
 
 	void prmEn( const string &id, bool val );
 	string DCONCRC( string str );
-	string DCONReq( string &pdu, bool CRC = false, unsigned acqLen = 0 );
+	string DCONReq( string &pdu, bool CRC = false, unsigned acqLen = 0, char resOK = '>' );
 
     protected:
 	//Methods
