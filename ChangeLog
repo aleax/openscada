@@ -1,3 +1,8 @@
+2011-03-17 Roman
+- FIX:DB: Auto open closed tables from allow tables list is fixed.
+- SYS:ModelDB.Boiler: Mnemo is some updated from gradiented pipes display.
+
+
 2011-03-16 Roman
 - FIX:UI.WebVision: Crash a session on manual attribute "xSc" or "ySc" set from Web-browser for "Diagram" or "ElFigure" is prevented.
 - FIX:DAQ.DCON: Fixed main algoritms and tested on command "#AA" for 8AI.

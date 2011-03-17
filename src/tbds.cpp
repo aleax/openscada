@@ -160,7 +160,7 @@ void TBDS::close( const string &bdn, bool del )
 		at(bd_t).at().at(bd_n).at().openStat(bd_tbl) &&
 		at(bd_t).at().at(bd_n).at().at(bd_tbl).at().nodeUse() == 1 )
 	    at(bd_t).at().at(bd_n).at().close(bd_tbl,del);
-    }catch(TError err) 
+    }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Close DB <%s> error!"),bdn.c_str());
@@ -696,7 +696,7 @@ void TBD::disable( )
 
 void TBD::open( const string &table, bool create )
 {
-    if( chldPresent(mTbl,table) ) return;
+    if(chldPresent(mTbl,table)) return;
     chldAdd(mTbl,openTable(table, create));
 }
 
@@ -736,12 +736,12 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 
-AutoHD<TCntrNode> TBD::chldAt( char igr, const string &name, const string &user )
+AutoHD<TCntrNode> TBD::chldAt( int8_t igr, const string &name, const string &user )
 {
-    try{ return TCntrNode::chldAt(igr, name, user); }
+    try { return TCntrNode::chldAt(igr, name, user); }
     catch(...)
     {
-	if( igr == mTbl && !openStat(name) )
+	if(igr == mTbl && !openStat(name))
 	{
 	    open(name,false);
 	    return TCntrNode::chldAt(igr, name, user);
