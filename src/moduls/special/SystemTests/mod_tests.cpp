@@ -263,14 +263,17 @@ void *TTest::Task( void *CfgM )
 void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )
 {
     vector<string> list;
-    mess(testNm,_("%s{%d <%s>, text <%s>, childs - %d."),
+    mess(testNm,_("%s{%d \"%s\", text \"%s\", childs - %d."),
 	string(level,' ').c_str(), level, node->name().c_str(),node->text().c_str(),node->childSize());
     node->attrList(list);
     for(unsigned i_att = 0; i_att < list.size(); i_att++)
-	mess(testNm,_("        Attr <%s> = <%s>."),list[i_att].c_str(),node->attr(list[i_att]).c_str());
+	mess(testNm,_("        Attr \"%s\" = \"%s\"."),list[i_att].c_str(),node->attr(list[i_att]).c_str());
+    node->prcInstrList(list);
+    for(unsigned i_p = 0; i_p < list.size(); i_p++)
+	mess(testNm,_("        Proc \"%s\" = \"%s\"."),list[i_p].c_str(),node->prcInstr(list[i_p]).c_str());
     for(unsigned i_ch = 0; i_ch < node->childSize(); i_ch++)
 	prXMLNode(testNm, node->childGet(i_ch), level+1);
-    mess(testNm,"%s}%d <%s>", string(level,' ').c_str(), level, node->name().c_str());
+    mess(testNm,"%s}%d \"%s\"", string(level,' ').c_str(), level, node->name().c_str());
 }
 
 void TTest::cntrCmdProc( XMLNode *opt )

@@ -22,13 +22,20 @@
 #ifndef XML_H
 #define XML_H
 
+#include <stdlib.h>
 #include <string>
 #include <vector>
+#include <map>
 
+#include "../config.h"
+
+#if HAVE_EXPAT_H
 #include <expat.h>
+#endif
 
 using std::string;
 using std::vector;
+using std::map;
 using std::pair;
 
 namespace OSCADA
@@ -99,28 +106,9 @@ class XMLNode
 	XMLNode* parent( )			{ return mParent; }
 
     private:
-	//Data
-	/*class LoadCtx
-	{
-	    public:
-		LoadCtx( ) : enc("UTF-8")
-		{
-		    nm.reserve(100);
-		    value.reserve(100);
-		}
-		string enc, nm, value;
-	};*/
 	//Methods
-	//unsigned loadNode( const string &vl, LoadCtx &ctx, unsigned pos = 0 );
 	void saveNode( unsigned flg, string &xml );
 	void encode( const string &s, string &rez, bool text = false ) const;
-	//bool parseAttr( const string &vl, unsigned &pos, string &nm, string &value );
-	//void parseEntity( string &vl, unsigned rpos );
-
-	static void start_element( void *data, const char *el, const char **attr );
-	static void end_element( void *data, const char *el );
-	static void characters( void *userData, const XML_Char *s, int len );
-	static void instrHandler( void *userData, const XML_Char *target, const XML_Char *data );
 
 	//Attributes
 	string mName;
@@ -130,8 +118,36 @@ class XMLNode
 	vector< pair<string,string> >	mPrcInstr;
 	XMLNode *mParent;
 
+#if HAVE_EXPAT_H
+	//Methods
+	static void start_element( void *data, const char *el, const char **attr );
+	static void end_element( void *data, const char *el );
+	static void characters( void *userData, const XML_Char *s, int len );
+	static void instrHandler( void *userData, const XML_Char *target, const XML_Char *data );
+
 	//> Parse/load XML attributes
 	vector<XMLNode*> node_stack;
+#else
+	//Data
+	class LoadCtx
+	{
+	    public:
+		//Methods
+		LoadCtx( const string &ivl );
+		~LoadCtx( );
+
+		//Attributes
+		string	vl, enc, aNm, aVl;
+		unsigned bufSz;
+	        char	*buf;
+	        map<string,char> ent;
+	};
+
+	//Methods
+	unsigned loadNode( LoadCtx &ctx, unsigned pos = 0 );
+	inline bool parseAttr( LoadCtx &ctx, unsigned &pos, char sep = '=' );
+	char parseEntity( LoadCtx &ctx, unsigned &rpos );
+#endif
 };
 
 }

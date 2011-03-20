@@ -1,6 +1,11 @@
+2011-03-20 Roman
+- !!:SYS: Self project's XML parser realisation is finished. New XML-parser is used on Expat miss at build.
+- Special.SystemTests: XML print function is improved for code blocks show.
+
+
 2011-03-17 Roman
 - FIX:DB: Auto open closed tables from allow tables list is fixed.
-- SYS:ModelDB.Boiler: Mnemo is some updated from gradiented pipes display.
+- SYS:ModelDB.Boiler: Mnemo is some updated for gradiented pipes display.
 
 
 2011-03-16 Roman

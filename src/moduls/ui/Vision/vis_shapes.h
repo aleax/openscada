@@ -27,6 +27,8 @@
 #include <deque>
 #include <vector>
 
+#include <config.h>
+
 #if HAVE_FFTW3_H
 #include <fftw3.h>
 #endif

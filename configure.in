@@ -191,30 +191,37 @@ AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module 
 [ if test $enableval = yes; then ModFLibSYS=true; else ModFLibSYS=false; fi],[ ModFLibSYS=true; ])
 
 AC_MSG_RESULT(========== Core libraries check =============)
-# Library headers check.
-AC_CHECK_HEADERS([expat.h],[],
-    [AC_MSG_ERROR(Expat XML parser library headers not found. Install or check Expat developing package!)])
-
 # Check for libraries
 if test ${CrossCompile} = false; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
 fi
-AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE(Pass global library using)],
+AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE([LibM: Pass global library using])],
     [AC_MSG_ERROR(Math library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE(Pass global library using)],
+AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE([LibDl: Pass global library using])],
     [AC_MSG_ERROR(Dynamik linking library not found. Install or check GLibC core package!)])
 #AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
 #    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE(Pass global library using)],
+AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE([LibCrypt: Pass global library using])],
     [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([expat],[XML_ParserCreate],[AC_MSG_NOTICE(Pass global library using)],
-    [AC_MSG_ERROR(Expat library not found. Install or check Expat package!)])
+
+#> Check for Expat XML-parser allow and use internal OpenSCADA XML parser for it miss.
+AC_CHECK_HEADERS([expat.h],
+    [
+	AC_CHECK_LIB([expat],[XML_ParserCreate],
+	[AC_MSG_NOTICE([LibExpat: Pass global library using])
+	LIB_EXPAT="-lexpat"],
+	[AC_MSG_NOTICE(Expat library not found. Using is disabled!)])
+    ],
+    [AC_MSG_NOTICE(Expat XML parser library headers not found. Using is disabled!)])
+AC_SUBST(LIB_EXPAT)
+
+#> Check for GD library use in OpenSCADA core
 if test ${LibGD} = true; then
     AC_CHECK_HEADERS([gd.h],
 	[
 	    AC_CHECK_LIB([gd],[gdImageCreate],
-	    [AC_MSG_NOTICE(Pass global library using)
+	    [AC_MSG_NOTICE([LibGD: Pass global library using])
 	    LIB_GD="-lgd"],
 	    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
 	],
@@ -272,7 +279,7 @@ if test ${ModSystem} = true; then
     AC_CHECK_HEADERS([sensors/sensors.h],
 	[
 	    AC_CHECK_LIB([sensors],[sensors_init],
-		[AC_MSG_NOTICE(Pass global library using)
+		[AC_MSG_NOTICE([LibSensors: Pass global library using])
 		LIB_SENSORS="-lsensors"],[AC_MSG_NOTICE(Libsensors library not found. Using is disabled!)])
 	],[AC_MSG_NOTICE(DAQ.System: Libsensors headers not found. Using is disabled!)])
     AC_SUBST(LIB_SENSORS)
@@ -348,7 +355,7 @@ if test ${ModSoundCard} = true; then
     #>> Modules checkings
     AC_CHECK_HEADERS([portaudio.h],[],
 	[AC_MSG_ERROR(DAQ.SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
-    AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE(Pass global library using)],
+    AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE([LibPortaudio: Pass global library using])],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
 fi
 if test ${ModICP_DAS} = true && test ${ix86} = true; then
@@ -363,7 +370,7 @@ if test ${ModOPC_UA} = true; then
     #>> Modules checkings
     AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
 	[AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
-    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
+    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
 	[AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
 if test ${ModAMRDevs} = true; then
@@ -405,7 +412,7 @@ if test ${ModSSL} = true; then
     #>> Modules checkings
     AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
 	[AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
-    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE(Pass global library using)],
+    AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
 	[AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
 if test ${ModSerial} = true; then
@@ -541,7 +548,7 @@ if test ${FFTWuse} = true; then
     AC_CHECK_HEADERS([fftw3.h],
 	[
 	    AC_CHECK_LIB([fftw3],[fftw_execute],
-		[AC_MSG_NOTICE(Pass global library using)
+		[AC_MSG_NOTICE([LibFFTW3: Pass global library using])
 		LIB_FFTW="-lfftw3"],[AC_MSG_NOTICE(FFTW3 library not found. Using is disabled!)])
 	],[AC_MSG_NOTICE(Some FFTW3 headers not found. Using is disabled!)])
     AC_SUBST(LIB_FFTW)
