@@ -229,7 +229,7 @@ void TVarObj::propList( vector<string> &ls )
 TVariant TVarObj::propGet( const string &id )
 {
     map<string,TVariant>::iterator vit = mProps.find(id);
-    if( vit == mProps.end() ) return TVariant();
+    if(vit == mProps.end()) return TVariant();
 
     return vit->second;
 }
@@ -239,7 +239,7 @@ void TVarObj::propSet( const string &id, TVariant val )		{ mProps[id] = val; }
 string TVarObj::getStrXML( const string &oid )
 {
     string nd("<TVarObj");
-    if( !oid.empty() ) nd += " p='" + oid + "'";
+    if(!oid.empty()) nd += " p='" + oid + "'";
     nd += ">\n";
     for( map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++ )
 	switch( ip->second.type() )
@@ -268,18 +268,25 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 TVariant TArrayObj::propGet( const string &id )
 {
     if(id == "length") return (int)mEls.size();
-
-    int vid = atoi(id.c_str());
-    if(vid < 0 || vid >= (int)mEls.size()) throw TError("ArrayObj",_("Array element '%d' is not allow."),vid);
-    return mEls[vid];
+    if(id.size() && isdigit(id[0]))
+    {
+	int vid = atoi(id.c_str());
+	if(vid < 0 || vid >= (int)mEls.size()) throw TError("ArrayObj",_("Array element '%d' is not allow."),vid);
+	return mEls[vid];
+    }
+    return TVarObj::propGet(id);
 }
 
 void TArrayObj::propSet( const string &id, TVariant val )
 {
-    int vid = atoi(id.c_str());
-    if(vid < 0) throw TError("ArrayObj",_("Negative id is not allow for array."));
-    while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
-    mEls[vid] = val;
+    if(id.size() && isdigit(id[0]))
+    {
+	int vid = atoi(id.c_str());
+	if(vid < 0) throw TError("ArrayObj",_("Negative id is not allow for array."));
+	while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
+	mEls[vid] = val;
+    }
+    else TVarObj::propSet(id,val);
 }
 
 string TArrayObj::getStrXML( const string &oid )
@@ -287,6 +294,7 @@ string TArrayObj::getStrXML( const string &oid )
     string nd("<TArrayObj");
     if( !oid.empty() ) nd = nd + " p='" + oid + "'";
     nd = nd + ">\n";
+    //> Array items process
     for(unsigned ip = 0; ip < mEls.size(); ip++)
 	switch(mEls[ip].type())
 	{
@@ -297,6 +305,18 @@ string TArrayObj::getStrXML( const string &oid )
 	    case TVariant::Object:	nd += mEls[ip].getO()->getStrXML(); break;
 	    default: break;
 	}
+    //> Object's properties process
+    for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
+	switch(ip->second.type())
+	{
+	    case TVariant::String:	nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n"; break;
+	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+ip->second.getS()+"</int>\n"; break;
+	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+ip->second.getS()+"</real>\n"; break;
+	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+ip->second.getS()+"</bool>\n"; break;
+	    case TVariant::Object:	nd += ip->second.getO()->getStrXML(ip->first); break;
+	    default: break;
+	}
+
     nd += "</TArrayObj>\n";
 
     return nd;
@@ -402,6 +422,154 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
 {
     return v1.getS() < v2.getS();
+}
+
+//***********************************************************
+//* TRegExp                                                 *
+//*   Regular expression object                             *
+//***********************************************************
+TRegExp::TRegExp( const string &rule, const string &flg ) : lastIndex(0), pattern(rule), regex(NULL), vSz(90), capv(NULL)
+{
+    global = (flg.find('g')!=string::npos);
+    ignoreCase = (flg.find('i')!=string::npos);
+    multiline = (flg.find('m')!=string::npos);
+
+    const char *terr;
+    int erroff;
+    regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
+    if(!regex) err = terr;
+    else capv = new int[90];
+}
+
+TRegExp::~TRegExp( )
+{
+    if(capv)	delete [] capv;
+    if(regex)	pcre_free(regex);
+}
+
+TArrayObj *TRegExp::match( const string &vl, bool all )
+{
+    TArrayObj *rez = new TArrayObj();
+    if(!regex) return rez;
+
+    if(all && global)
+	for(int curPos = 0, i_n = 0; pcre_exec(regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
+	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[0],capv[1]-capv[0]));
+    else
+    {
+	int n = pcre_exec(regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
+	for(int i_n = 0; i_n < n; i_n++)
+    	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
+	if(global) lastIndex = (n>0) ? capv[1] : 0;
+	if(n > 0) { rez->propSet("index",capv[0]); rez->propSet("input",vl); }
+    }
+    return rez;
+}
+
+string TRegExp::replace( const string &vl, const string &str )
+{
+    string rez = vl, repl;
+    if(!regex) return rez;
+    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec(regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0; curPos = capv[0]+repl.size())
+    {
+	repl = substExprRepl(str,vl,capv,n);
+	rez.replace(capv[0],(capv[1]-capv[0]),repl);
+    }
+    return rez;
+}
+
+TArrayObj *TRegExp::split( const string &vl, int limit )
+{
+    TArrayObj *rez = new TArrayObj();
+    if(!regex) return rez;
+    int curPos = 0, i_n = 0;
+    for(int se = 0; (se=pcre_exec(regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && (!limit || i_n < limit); curPos = capv[1])
+    {
+	rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,capv[0]-curPos));
+	for(int i_se = 1; i_se < se && (!limit || i_n < limit); i_se++)
+    	    rez->propSet(TSYS::int2str(i_n++), string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
+    }
+    if(curPos <= vl.size() && (!limit || i_n < limit)) rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,vl.size()-curPos));
+    return rez;
+}
+
+bool TRegExp::test( const string &vl )
+{
+    if(!regex) return false;
+    int n = pcre_exec(regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
+    if(global) lastIndex = (n>0) ? capv[1] : 0;
+    return (n>0);
+}
+
+int TRegExp::search( const string &vl )
+{
+    if(!regex) return -1;
+    int n = pcre_exec(regex, NULL, vl.data(), vl.size(), 0, 0, capv, vSz);
+    return (n>0) ? capv[0] : -1;
+}
+
+string TRegExp::substExprRepl( const string &str, const string &val, int *capv, int n )
+{
+    string rez = str;
+    for(size_t cpos = 0; n > 0 && (cpos=rez.find("$",cpos)) != string::npos && cpos < (rez.size()-1); )
+	switch(rez[cpos+1])
+	{
+	    case '$':	rez.replace(cpos,2,"$"); cpos++; break;
+	    case '`':	rez.replace(cpos,2,val,0,capv[0]); cpos += capv[0]; break;
+	    case '\'':	rez.replace(cpos,2,val,capv[1],val.size()-capv[1]);cpos += (val.size()-capv[1]); break;
+	    case '&':	rez.replace(cpos,2,val,capv[0],(capv[1]-capv[0])); cpos += capv[1]; break;
+	    default:
+	    {
+		int nd = isdigit(rez[cpos+1]) ? 1 : 0;
+		if(nd && cpos < (rez.size()-2) && isdigit(rez[cpos+2])) nd++;
+		int subexp = atoi(string(rez.data()+cpos+1,nd).c_str());
+		string replVl;
+		if(subexp > 0 && subexp < n) replVl.assign(val,capv[subexp*2],capv[subexp*2+1]-capv[subexp*2]);
+		rez.replace(cpos,nd+1,replVl);
+		cpos += replVl.size();
+	    }
+	}
+    return rez;
+}
+
+TVariant TRegExp::propGet( const string &id )
+{
+    if(id == "source")		return pattern;
+    if(id == "global")		return (bool)global;
+    if(id == "ignoreCase")	return (bool)ignoreCase;
+    if(id == "multiline")	return (bool)multiline;
+    if(id == "lastIndex")	return lastIndex;
+    return TVariant();
+}
+
+void TRegExp::propSet( const string &id, TVariant val )
+{
+    if(id == "lastIndex")	lastIndex = val.getI();
+}
+
+TVariant TRegExp::funcCall( const string &id, vector<TVariant> &prms )
+{
+    // Array exec(string val) - call match for string 'val'. Return matched substring (0) and subexpressions (>0) array.
+    //    Set property "index" to matched substring position.
+    //    Set property "input" to source match string.
+    //  val - matched string
+    if(id == "exec" && prms.size() && prms[0].type() == TVariant::String) return match(prms[0].getS());
+    // bool test(string val) - call match for string 'val'. Return "true" for match OK.
+    //  val - matched string
+    if(id == "test" && prms.size() && prms[0].type() == TVariant::String) return test(prms[0].getS());
+    throw TError("RegExp",_("Function '%s' error or not enough parameters."),id.c_str());
+}
+
+string TRegExp::getStrXML( const string &oid )
+{
+    string nd("<TRegExp");
+    if(!oid.empty()) nd += " p='"+oid+"'";
+    nd += ">\n";
+    nd += "<rule>"+TSYS::strEncode(pattern,TSYS::Html)+"</rule>\n";
+    nd = nd+"<flg>"+(global?"g":"")+(ignoreCase?"i":"")+(multiline?"m":"")+"</flg>\n";
+    nd += "</TRegExp>\n";
+
+    return nd;
 }
 
 //*************************************************

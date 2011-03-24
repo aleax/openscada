@@ -66,6 +66,7 @@ if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
 AC_SUBST(sys_lib)
 QT4use=false;
 FFTWuse=false;
+GDuse=false;
 
 ix86=false;
 if test $target_cpu = "i386" || test $target_cpu = "i486" || test $target_cpu = "i586" || test $target_cpu = "i686" ||
@@ -228,6 +229,13 @@ if test ${LibGD} = true; then
 	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
     AC_SUBST(LIB_GD)
 fi
+
+#> Check for PCRE library use in OpenSCADA core
+#CXXFLAGS="$CXXFLAGS -I$oldincludedir/pcre"
+AC_CHECK_HEADERS([pcre/pcre.h],[],
+    [AC_MSG_ERROR(UI.VCAEngine: PCRE header not found. Install or check PCRE developing package!)])
+AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
+    [AC_MSG_ERROR(PCRE library not found. Install or check PCRE package!)])
 
 AC_MSG_RESULT(========== Build modules list =============)
 #> DB modules
@@ -443,12 +451,6 @@ if test ${ModVCAEngine} = true; then
     AC_MSG_RESULT(Build module: UI.VCAEngine)
     AC_CONFIG_FILES(src/moduls/ui/VCAEngine/Makefile)
     UISub_mod="${UISub_mod}VCAEngine "
-
-    SAVED_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -I$oldincludedir/pcre"
-    AC_CHECK_HEADERS([pcrecpp.h],[],
-	[AC_MSG_ERROR(UI.VCAEngine: PCREcpp header not found. Install or check PCREcpp developing package!)])
-    CXXFLAGS=$SAVED_CXXFLAGS
 fi
 if test ${ModVision} = true; then
     AC_MSG_RESULT(Build module: UI.Vision)
@@ -479,6 +481,7 @@ if test ${ModWebCfgD} = true; then
     AC_MSG_RESULT(Build module: UI.WebCfgD)
     AC_CONFIG_FILES(src/moduls/ui/WebCfgD/Makefile)
     UISub_mod="${UISub_mod}WebCfgD "
+    GDuse=true;
 fi
 if test ${ModWebVision} = true; then
     AC_MSG_RESULT(Build module: UI.WebVision)
@@ -486,6 +489,7 @@ if test ${ModWebVision} = true; then
     UISub_mod="${UISub_mod}WebVision "
     #>> Modules checkings
     FFTWuse=true;
+    GDuse=true;
 fi
 if test ${ModWebUser} = true; then
     AC_MSG_RESULT(Build module: UI.WebUser)
@@ -552,6 +556,13 @@ if test ${FFTWuse} = true; then
 		LIB_FFTW="-lfftw3"],[AC_MSG_NOTICE(FFTW3 library not found. Using is disabled!)])
 	],[AC_MSG_NOTICE(Some FFTW3 headers not found. Using is disabled!)])
     AC_SUBST(LIB_FFTW)
+fi
+
+if test ${GDuse} = true; then
+    AC_CHECK_HEADERS([gd.h],[],
+	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
+    AC_CHECK_LIB([gd],[gdImageCreate],[AC_MSG_NOTICE([LibGD: Pass global library using])],
+	[AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
 fi
 
 AC_OUTPUT

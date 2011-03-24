@@ -38,6 +38,6 @@ uninstall-local:
 	done
 
 clean-local:
-	rm -f func_analise.cpp \
+	rm -f *func_analise.cpp \
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;

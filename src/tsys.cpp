@@ -790,7 +790,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    {
 		if(i_sz && !(i_sz%57))	sout.push_back('\n');
 		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
-		if((i_sz+1) >= in.size())
+		if((i_sz+1) >= (int)in.size())
 		{
 		    sout.push_back(base64alph[((unsigned char)in[i_sz]&0x03)<<4]);
 		    sout+="==";
@@ -798,7 +798,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		else
 		{
 		    sout.push_back(base64alph[(((unsigned char)in[i_sz]&0x03)<<4)|((unsigned char)in[i_sz+1]>>4)]);
-		    if((i_sz+2) >= in.size())
+		    if((i_sz+2) >= (int)in.size())
 		    {
 			sout.push_back(base64alph[((unsigned char)in[i_sz+1]&0x0F)<<2]);
 			sout.push_back('=');
@@ -847,7 +847,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	case TSYS::ShieldSimb:
 	    sout.reserve(in.size());
 	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-		if( in[i_sz] == '\\' && i_sz < (in.size()-1) )
+		if( in[i_sz] == '\\' && i_sz < ((int)in.size()-1) )
 		{
 		    switch( in[i_sz+1] )
 		    {

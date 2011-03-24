@@ -1,3 +1,15 @@
+2011-03-24 Roman
+- !!!!:SYS, DAQ.JavaLikeCalc: The User's system API regular expression object TRegExp, based on PCRE, support is added.
+    Realised functions RegExp.exec() and RegExp.test() standard JavaScript interface.
+    To DAQ.JavaLikeCalc is realised "new RegExp()" for TRegExp object create.
+    To DAQ.JavaLikeCalc addon string functions with using RegExp is realised:
+	int search(); Array match(); Array split(RegExp pat, int limit); string replace(string substr, string str);
+	string replace(RegExp pat, string str); 
+- !!:SYS: PCRECPP dependence is replaced by PCRE.
+- SYS: GD library checking for allow is moved to once.
+- SYS: The User's system API, TArrayObj is expanded for object's properties, not numbers, support.
+
+
 2011-03-20 Roman
 - !!:SYS: Self project's XML parser realisation is finished. New XML-parser is used on Expat miss at build.
 - Special.SystemTests: XML print function is improved for code blocks show.

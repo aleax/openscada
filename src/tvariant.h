@@ -24,6 +24,8 @@
 
 #include <string>
 
+#include <pcre/pcre.h>
+
 using std::string;
 
 //Error values
@@ -149,6 +151,50 @@ class TArrayObj : public TVarObj
 
 	//Methods
 	static bool compareLess( const TVariant &v1, const TVariant &v2 );
+};
+
+//***********************************************************
+//* TRegExp                                                 *
+//*   Regular expression object				    *
+//***********************************************************
+class TRegExp : public TVarObj
+{
+    public:
+	//Methods
+	TRegExp( const string &rule, const string &flg );
+	~TRegExp( );
+
+	string objName( )	{ return "RegExp"; }
+
+	TArrayObj *match( const string &vl, bool all = false );
+	bool test( const string &vl );
+	int search( const string &vl );
+	string replace( const string &vl, const string &str );
+	TArrayObj *split( const string &vl, int limit = 0 );
+
+	TVariant propGet( const string &id );
+	void propSet( const string &id, TVariant val );
+
+	string getStrXML( const string &oid = "" );
+
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
+
+	//Attribute
+	string	err;
+	int	lastIndex;	//lastIndex
+
+    private:
+	//Methods
+	string substExprRepl( const string &str, const string &val, int *capv, int n );
+
+	//Attributes
+	string	pattern;
+	unsigned global		: 1;
+	unsigned ignoreCase	: 1;
+	unsigned multiline	: 1;
+
+	pcre 	*regex;
+	int 	vSz, *capv;
 };
 
 //*************************************************

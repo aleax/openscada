@@ -503,16 +503,16 @@ Reg *Func::cdMviObject( )
 
 Reg *Func::cdMviArray( int p_cnt )
 {
-    if( p_cnt > 255 ) throw TError(nodePath().c_str(),_("Array have more 255 items."));
+    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array have more 255 items."));
     deque<int> p_pos;
 
     //> Mvi all parameters
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
-	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++)
+	f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
     //> Get parameters.
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++)
     {
-	p_pos.push_front( f_prmst.front()->pos() );
+	p_pos.push_front(f_prmst.front()->pos());
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }
@@ -527,6 +527,44 @@ Reg *Func::cdMviArray( int p_cnt )
     prg += (uint8_t)p_cnt;
     for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
     { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+
+    return rez;
+}
+
+Reg *Func::cdMviRegExp( int p_cnt )
+{
+    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp require one or two parameters."));
+
+    Reg *rg_expr = NULL;
+    Reg *rg_arg  = NULL;
+    if(p_cnt == 2)
+    {
+	rg_expr = cdMvi(f_prmst[1]);
+	rg_arg = cdMvi(f_prmst[0]);
+    }
+    else
+    {
+	rg_expr = cdMvi(f_prmst[0]);
+        rg_arg = regAt(regNew());
+        rg_arg->setType(Reg::String);
+        rg_arg = cdMvi(rg_arg);
+    }
+    int p_expr = rg_expr->pos();
+    int p_arg  = rg_arg->pos();
+    rg_expr->free();
+    rg_arg->free();
+    f_prmst.clear();
+
+    //> Make result
+    Reg *rez = regAt(regNew());
+    rez->setType(Reg::Obj);
+
+    //> Make code
+    uint16_t addr;
+    prg += (uint8_t)Reg::MviRegExp;
+    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = p_expr; prg.append((char*)&addr,sizeof(uint16_t));
+    addr = p_arg; prg.append((char*)&addr,sizeof(uint16_t));
 
     return rez;
 }
@@ -1102,7 +1140,7 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
     return TVariant();
 }
 
-TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prms )
+TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &prms )
 {
     try
     {
@@ -1206,6 +1244,42 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		    sp = vl.getS().rfind(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
+		// int search( string pat, string flg = "" ); - search into the string by pattern 'pat' and flags 'flg'.
+		//       Return found substring position or -1 for else.
+		// int search( RegExp pat ); - search into the string by RegExp 'pat'.
+		//       Return found substring position or -1 for else.
+		//  pat - regular expression pattern;
+		//  flg - regular expression flags.
+		if(prop == "search" && prms.size())
+		{
+		    TRegExp *re = NULL;
+		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(),(prms.size()>=2)?prms[1].getS():string());
+		    else if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
+			re = (TRegExp*)prms[0].getO();
+		    else return -1;
+		    int n = re->search(vl.getS());
+		    if(prms[0].type() == TVariant::String) delete re;
+		    return n;
+		}
+		// Array match( string pat, string flg = "" ); - call match for the string by pattern 'pat' and flags 'flg'.
+		//       Return matched substring (0) and subexpressions (>0) array.
+		//       Set 'index' attribute of the array to substring position. Set 'input' attribute to source string.
+		// Array match( TRegExp pat ); - call match for the string and RegExp pattern 'pat'.
+		//       Return matched substring (0) and subexpressions (>0) array.
+		//       Set 'index' attribute of the array to substring position. Set 'input' attribute to source string.
+		//  pat - regular expression pattern;
+		//  flg - regular expression flags.
+		if(prop == "match" && prms.size())
+		{
+		    TRegExp *re = NULL;
+		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(),(prms.size()>=2)?prms[1].getS():string());
+		    else if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
+			re = (TRegExp*)prms[0].getO();
+		    else return -1;
+		    TArrayObj *arr = re->match(vl.getS(),true);
+		    if(prms[0].type() == TVariant::String) delete re;
+		    return arr;
+		}
 		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
 		//       and ending be the <end>
 		//  beg - begin position
@@ -1221,11 +1295,18 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		    if( beg >= end ) return string("");
 		    return vl.getS().substr(beg,end-beg);
 		}
-		// Array split(string sep, int limit) - return the array of strings separated by <sep> with the limit of the number of elements <limit>
+		// Array split(string sep, int limit) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
 		//  sep - items separator
 		//  limit - items limit
+		// Array split(RegExp pat, int limit) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
+		//  pat - regular expression pattern.
 		if( prop == "split" && prms.size() )
 		{
+		    //> Use RegExp for split
+		    if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
+			return ((TRegExp*)prms[0].getO())->split(vl.getS(),(prms.size()>=2)?prms[1].getI():0);
+
+		    //> Use simple string separator
 		    TArrayObj *rez = new TArrayObj();
 		    for(size_t posB = 0, posC, i_p = 0; true; i_p++)
 		    {
@@ -1243,18 +1324,37 @@ TVariant Func::oFuncCall( TVariant vl, const string &prop, vector<TVariant> &prm
 		//  substr - substring for insert
 		if( prop == "insert" && prms.size() >= 2 )
 		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
-		// string replace(int pos, int n, string substr) - replace substring into position <pos> and length <n> to string <substr>
+		// string replace(int pos, int n, string str) - replace substring into position <pos> and length <n> to string <str>.
 		//  pos - position for start replace
 		//  n - number symbols for replace
-		//  substr - substring for replace
-		if(prop == "replace" && prms.size() >= 3)
+		//  str - string for replace
+		// string replace(string substr, string str) - replace all substrings <substr> to string <str>.
+		//  substr - substring into all string
+		// string replace(RegExp pat, string str) - replace substrings by pattern <pat> to string <str>.
+		//  pat - regular expression pattern
+		if(prop == "replace" && prms.size() >= 2)
 		{
-		    int pos = prms[0].getI();
-		    if(pos < 0 || pos >= (int)vl.getS().size()) return vl;
-		    int n = prms[1].getI();
-		    if(n < 0) n = vl.getS().size();
-		    n = vmin((int)vl.getS().size()-pos,n);
-		    return vl.getS().replace(pos, n, prms[2].getS());
+		    string cstr = vl.getS();
+		    //> Replace simple substrings by other string
+		    if(prms[0].type() == TVariant::String && prms[1].type() == TVariant::String)
+			for(size_t cpos = 0; (cpos=cstr.find(prms[0].getS(),cpos)) != string::npos; cpos += prms[1].getS().size())
+			    cstr.replace(cpos,prms[0].getS().size(),prms[1].getS());
+		    //> Replace substrings by RegExp patern by other string
+		    else if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
+			cstr = ((TRegExp*)prms[0].getO())->replace(cstr,prms[1].getS());
+		    //> Simple - direct replace
+		    if(prms.size() >= 3 && prms[2].type() == TVariant::String)
+		    {
+			int pos = prms[0].getI();
+			if(pos < 0 || pos >= (int)cstr.size()) return vl;
+			int n = prms[1].getI();
+			if(n < 0) n = cstr.size();
+			n = vmin((int)cstr.size()-pos,n);
+			cstr.replace(pos, n, prms[2].getS());
+		    }
+		    //vl.setS(cstr);
+		    //vl.setModify();
+		    return cstr;
 		}
 		// real toReal() - convert this string to real number
 		if(prop == "toReal") return atof(vl.getS().c_str());
@@ -1662,6 +1762,16 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			}
 		reg[ptr->reg] = ar;
 		cprg += sizeof(SCode) + ptr->numb*sizeof(uint16_t); break;
+	    }
+	    case Reg::MviRegExp:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t expr; uint16_t arg; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#if OSC_DEBUG >= 5
+		printf("CODE: Load RegExpr to reg %d = (%d,%d).\n",ptr->rez,ptr->expr,ptr->arg);
+#endif
+		reg[ptr->rez] = new TRegExp(getValS(val,reg[ptr->expr]), getValS(val,reg[ptr->arg]));
+		cprg += sizeof(SCode); break;
 	    }
 	    case Reg::MviSysObject:
 	    {
@@ -2398,6 +2508,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 
 		//> Call
 		TVariant rez = oFuncCall(obj, reg[ptr->obj].propGet(reg[ptr->obj].propSize()-1), prms);
+		//if(obj.isModify()) setVal(val,reg[ptr->obj],obj,true);
 		//> Process outputs
 		for(unsigned i_p = 0; i_p < prms.size(); i_p++)
 		    if(prms[i_p].isModify())

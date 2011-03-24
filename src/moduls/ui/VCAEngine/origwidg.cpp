@@ -19,8 +19,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <pcrecpp.h>
-
 #include <tsys.h>
 
 #include "origwidg.h"
@@ -1345,11 +1343,11 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	try
 	{
 	    string dcLng;
-	    int rez = pcrecpp::RE(".*<body\\s+.*\\s*docProcLang=\"([^\"]+)\".*>.*",pcrecpp::RE_Options().set_dotall(true)).
-		FullMatch(src->attrAt(a_path.substr(6)).at().getS(),&dcLng);
-	    if(rez && dcLng.size())
-		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().
-				compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
+	    TArrayObj *reRez = TRegExp(".*<body\\s+.*\\s*docProcLang=\"([^\"]+)\".*>.*","").match(src->attrAt(a_path.substr(6)).at().getS());
+	    if(reRez->propGet("length").getI() >= 2) dcLng = reRez->propGet("1").getS();
+	    delete reRez;
+	    if(dcLng.size())
+		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
 	} catch(...){ }
 	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
 	tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");

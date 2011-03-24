@@ -94,6 +94,7 @@ class Reg
 	    MviS,	//[CRRn_____]: Load string len <n> to register <R>.
 	    MviObject,	//[CRR]: Load object.
 	    MviArray,	//[CRRnrr....]: Load array from registers list.
+	    MviRegExp,	//[CRRrrRR]: Load Regular expression object.
 	    MviSysObject,//[CRRn_____]: Load system object
 	    Ass,	//[CRRrr]: Assign from register to register.
 	    Mov,	//[CRRrr]: Move from register to register.
@@ -305,6 +306,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdMvi( Reg *op, bool no_code = false );
 	Reg *cdMviObject( );
 	Reg *cdMviArray( int p_cnt );
+	Reg *cdMviRegExp( int p_cnt );
 	void cdAssign( Reg *rez, Reg *op );
 	Reg *cdMove( Reg *rez, Reg *op, bool force = true );
 	Reg *cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 );
@@ -319,7 +321,7 @@ class Func : public TConfig, public TFunction
 
 	//> Properties and functions for base object's process
 	TVariant oPropGet( TVariant vl, const string &prop );
-	TVariant oFuncCall( TVariant vl, const string &prop, vector<TVariant> &parms );
+	TVariant oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &parms );
 
 	//> Variable access
 	TVariant getVal( TValFunc *io, RegW &rg, bool fObj = false );
