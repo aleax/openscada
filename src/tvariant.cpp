@@ -550,8 +550,8 @@ void TRegExp::propSet( const string &id, TVariant val )
 TVariant TRegExp::funcCall( const string &id, vector<TVariant> &prms )
 {
     // Array exec(string val) - call match for string 'val'. Return matched substring (0) and subexpressions (>0) array.
-    //    Set property "index" to matched substring position.
-    //    Set property "input" to source match string.
+    //    Set array property "index" to matched substring position.
+    //    Set array property "input" to source match string.
     //  val - matched string
     if(id == "exec" && prms.size() && prms[0].type() == TVariant::String) return match(prms[0].getS());
     // bool test(string val) - call match for string 'val'. Return "true" for match OK.
