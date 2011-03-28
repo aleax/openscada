@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-13 12:45+0200\n"
+"POT-Creation-Date: 2011-03-28 16:37+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -25,43 +25,18 @@ msgstr ""
 msgid "Variable '%s' is used but undefined"
 msgstr "Die Variable '%s' wird verwendet, ist aber nicht definiert"
 
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, Position: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end programm, expect end string symbol '\"', "
-msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
-
-msgid "The next line symbol failed into string, "
-msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Namensbereich ist fehlerhaft oder leer, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Installierte Funktion hat zu viel Parameter, "
-
-msgid "Function error, "
-msgstr "Funktionsfehler, "
-
-msgid "Symbol error, "
-msgstr "Symbolfehler, "
-
-msgid "Object's properties too long, "
-msgstr "Eigenschaften des Objekts zu lang,"
-
 msgid "String constant size is more 255 symbols."
 msgstr "String konstante Größe ist 255 Symbolen."
 
 msgid "Array have more 255 items."
 msgstr "Array haben mehr 255 Artikel."
 
+msgid "RegExp require one or two parameters."
+msgstr ""
+
 #, c-format
 msgid "Don't support operation code %d."
 msgstr "Operation %d wird nicht unterstützt."
-
-msgid "Buildin functions don't support string type"
-msgstr "Installierte Funktionen unterstützen den Typ Text nicht."
 
 #, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
@@ -81,10 +56,13 @@ msgstr "Object-Funktion haben mehr 255 Parameter."
 msgid "Boolean type have not function '%s' or not enough parameters for it."
 msgstr "Logischer Typ hat keine Funktion '%s' oder zuwenig Parameter."
 
+#, c-format
 msgid ""
 "Integer or real type have not function '%s' or not enough parameters for it."
-msgstr "Ganzzahl oder Reellezahl Typ hat keine Funktion '%s' oder zuwenig Parameter."
+msgstr ""
+"Ganzzahl oder Reellezahl Typ hat keine Funktion '%s' oder zuwenig Parameter."
 
+#, c-format
 msgid "String type have not properties '%s' or not enough parameters for it."
 msgstr "Text Typ hat keine Eigenschaft '%s' oder zuwenig Parameter."
 
@@ -297,31 +275,14 @@ msgstr "Schalter für das Starten der Funktion"
 msgid "Function stop flag"
 msgstr "Schalter für das Anhalten der Funktion"
 
+msgid "This controller object link"
+msgstr ""
+
 msgid "Calc controller's function error."
 msgstr "Kontroller Berechnungsfehler in der Funktion."
 
 msgid "No started or no present function."
 msgstr "Nicht gestartet oder Funktion ist nicht vorhanden."
-
-msgid ""
-"Schedule is writed in seconds periodic form or in standard Cron form.\n"
-"Seconds form is one real number (1.5, 1e-3).\n"
-"Cron it is standard form '* * * * *'. Where:\n"
-"  - minutes (0-59);\n"
-"  - hours (0-23);\n"
-"  - days (1-31);\n"
-"  - month (1-12);\n"
-"  - week day (0[sunday]-6)."
-msgstr ""
-"Die Zeitsteuerung wird in zyklischen Sekunden oder im Cron Format "
-"angegeben.\n"
-"Sekundenformat ist eine reele Zahl (1.5, 1e-3).\n"
-"Cron Format ist '* * * * *'. Wobei:\n"
-"  - Minuten (0-59);\n"
-"  - Stunden (0-23);\n"
-"  - Tage (1-31);\n"
-"  - Monate (1-12);\n"
-"  - Wochentag (0[Sonntag]-6)."
 
 msgid "Calcing"
 msgstr "Berechnungen"
@@ -329,8 +290,8 @@ msgstr "Berechnungen"
 msgid "Data"
 msgstr "Daten"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Reellezahl;Ganzzahl;Logisch;Text"
+msgid "String;Integer;Real;Boolean;Object"
+msgstr "Text;Ganzzahl;Reellezahl;Logisch;Objekt"
 
 msgid "Value"
 msgstr "Wert"
@@ -366,5 +327,27 @@ msgstr ""
 "  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewähltenIO "
 "der Funktion generiert."
 
-#~ msgid "Calc time %.6g mks. "
-#~ msgstr "Berechnungszeit %.6g usek"
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, Position: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end programm, expect end string symbol '\"', "
+msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
+
+msgid "The next line symbol failed into string, "
+msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Namensbereich ist fehlerhaft oder leer, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Installierte Funktion hat zu viel Parameter, "
+
+msgid "Function error, "
+msgstr "Funktionsfehler, "
+
+msgid "Symbol error, "
+msgstr "Symbolfehler, "
+
+msgid "Object's properties too long, "
+msgstr "Eigenschaften des Objekts zu lang,"

@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-13 12:45+0200\n"
+"POT-Creation-Date: 2011-03-28 16:37+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -20,44 +21,18 @@ msgstr ""
 msgid "Variable '%s' is used but undefined"
 msgstr "Переменная '%s' не определена но использована"
 
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиция: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end programm, expect end string symbol '\"', "
-msgstr ""
-"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ перевода линии недопустим в строке, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Ошибка использования области имён или она пуста, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Встроенная функция имеет слишком много параметров, "
-
-msgid "Function error, "
-msgstr "Ошибка функции, "
-
-msgid "Symbol error, "
-msgstr "Ошибка символа, "
-
-msgid "Object's properties too long, "
-msgstr "Свойства объекта очень длинные, "
-
 msgid "String constant size is more 255 symbols."
 msgstr "Размер строковой постоянной более 255 символов."
 
 msgid "Array have more 255 items."
 msgstr "Массив имеет более 255 элементов."
 
+msgid "RegExp require one or two parameters."
+msgstr "RegExp требует одного или двух параметров."
+
 #, c-format
 msgid "Don't support operation code %d."
 msgstr "Не поддерживаемый код операции %d."
-
-msgid "Buildin functions don't support string type"
-msgstr "Встроенные функции не поддерживают строковый тип."
 
 #, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
@@ -78,15 +53,17 @@ msgid "Boolean type have not function '%s' or not enough parameters for it."
 msgstr ""
 "Логический тип не имеет функции '%s' или не достаточно параметров для неё."
 
+#, c-format
 msgid ""
 "Integer or real type have not function '%s' or not enough parameters for it."
 msgstr ""
-"Целочисленный или вещественный тип не имеет функции '%s' или не достаточно параметров для неё."
+"Целочисленный или вещественный тип не имеет функции '%s' или не достаточно "
+"параметров для неё."
 
+#, c-format
 msgid "String type have not properties '%s' or not enough parameters for it."
 msgstr ""
-"Строковый тип не имеет свойства '%s' или не достаточно параметров для "
-"неё."
+"Строковый тип не имеет свойства '%s' или не достаточно параметров для неё."
 
 msgid "Get object from no object's register"
 msgstr "Получение объекта из не объектного регистра"
@@ -297,31 +274,14 @@ msgstr "Флаг запуска функции"
 msgid "Function stop flag"
 msgstr "Флаг останова функции"
 
+msgid "This controller object link"
+msgstr "Связь на объект этого контроллера"
+
 msgid "Calc controller's function error."
 msgstr "Ошибка вычисления функции контроллера"
 
 msgid "No started or no present function."
 msgstr "Функция отсутствует или не запущена."
-
-msgid ""
-"Schedule is writed in seconds periodic form or in standard Cron form.\n"
-"Seconds form is one real number (1.5, 1e-3).\n"
-"Cron it is standard form '* * * * *'. Where:\n"
-"  - minutes (0-59);\n"
-"  - hours (0-23);\n"
-"  - days (1-31);\n"
-"  - month (1-12);\n"
-"  - week day (0[sunday]-6)."
-msgstr ""
-"Планирование записывается в форме секундной периодичности или в форме "
-"стандарта Cron.\n"
-"Секундная форма это одно вещественное число (1.5, 1e-3).\n"
-"Форма стандарта Cron это '* * * * *'. Где:\n"
-"  - минуты (0-59);\n"
-"  - часы (0-23);\n"
-"  - дни (1-31);\n"
-"  - месяца (1-12);\n"
-"  - дни недели (0[воскресенье]-6)."
 
 msgid "Calcing"
 msgstr "Вычисления"
@@ -329,8 +289,8 @@ msgstr "Вычисления"
 msgid "Data"
 msgstr "Данные"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Веществ.;Целый;Логич.;Строка"
+msgid "String;Integer;Real;Boolean;Object"
+msgstr "Строка;Целый;Веществ.;Логич.;Объект"
 
 msgid "Value"
 msgstr "Значение"
@@ -365,3 +325,29 @@ msgstr ""
 "  anm - имя создаваемого атрибута.\n"
 "Если 'aid' или 'anm' не установлены то они будут сгенерированы из выбранного "
 "IO функции."
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиция: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end programm, expect end string symbol '\"', "
+msgstr ""
+"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ перевода линии недопустим в строке, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Ошибка использования области имён или она пуста, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Встроенная функция имеет слишком много параметров, "
+
+msgid "Function error, "
+msgstr "Ошибка функции, "
+
+msgid "Symbol error, "
+msgstr "Ошибка символа, "
+
+msgid "Object's properties too long, "
+msgstr "Свойства объекта очень длинные, "

@@ -688,3 +688,64 @@ void TValFunc::ctxClear( )
 	delete ivcx->second;
     vctx.clear();
 }
+
+//***********************************************************
+//* TFuncArgObj                                             *
+//*   The function arguments access object.                 *
+//***********************************************************
+TVariant TFuncArgsObj::propGet( const string &id )
+{
+    int apos = -1;
+
+    if(!vf.func()) return EVAL_REAL;
+    if(id == "length")	return vf.ioSize();
+    if(id.size() && isdigit(id[0])) apos = atoi(id.c_str());
+    if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
+    if(apos != -1)
+        switch(vf.ioType(apos))
+	{
+	    case IO::String:	return vf.getS(apos);
+	    case IO::Integer:	return vf.getI(apos);
+	    case IO::Real:	return vf.getR(apos);
+	    case IO::Boolean:	return vf.getB(apos);
+	    case IO::Object:	return vf.getO(apos);
+	}
+    return EVAL_REAL;
+}
+
+void TFuncArgsObj::propSet( const string &id, TVariant val )
+{
+    int apos = -1;
+
+    if(!vf.func()) return;
+    if(id.size() && isdigit(id[0])) apos = atoi(id.c_str());
+    if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
+    if(apos != -1/* && (vf.ioFlg(apos)&(IO::Output|IO::Return))*/)
+        switch(vf.ioType(apos))
+	{
+	    case IO::String:	return vf.setS(apos,val.getS());
+	    case IO::Integer:	return vf.setI(apos,val.getI());
+	    case IO::Real:	return vf.setR(apos,val.getR());
+	    case IO::Boolean:	return vf.setB(apos,val.getB());
+	    case IO::Object:	return vf.setO(apos,val.getO());
+	}
+}
+
+string TFuncArgsObj::getStrXML( const string &oid )
+{
+    string nd("<TFuncArgsObj");
+    if(!oid.empty()) nd = nd + " p='" + oid + "'";
+    nd = nd + ">\n";
+    for(int i_io = 0; vf.func() && i_io < vf.ioSize(); i_io++)
+	switch(vf.ioType(i_io))
+	{
+	    case IO::String:	nd += "<str id='"+vf.func()->io(i_io)->id()+"'>"+TSYS::strEncode(vf.getS(i_io),TSYS::Html)+"</str>\n"; break;
+            case IO::Integer:	nd += "<int id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</int>\n"; break;
+            case IO::Real:	nd += "<real id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</real>\n"; break;
+            case IO::Boolean:	nd += "<bool id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</bool>\n"; break;
+            case IO::Object:	nd += vf.getO(i_io)->getStrXML(vf.func()->io(i_io)->id()); break;
+	}
+    nd += "</TFuncArgsObj>\n";
+
+    return nd;
+}

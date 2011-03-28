@@ -394,7 +394,7 @@ int Func::ioGet( const string &nm )
 {
     int rez = -1;
 
-    if( nm == "SYS" )
+    if(nm == "SYS")
     {
 	rez = regNew();
 	Reg *rg = regAt(rez);
@@ -405,6 +405,17 @@ int Func::ioGet( const string &nm )
 	prg += (uint8_t)Reg::MviSysObject;
 	addr = rg->pos(); prg.append((char*)&addr,sizeof(uint16_t));
 	prg += (char)0;
+    }
+    else if(nm == "arguments")
+    {
+	rez = regNew();
+	Reg *rg = regAt(rez);
+	rg->setType(Reg::Obj);
+
+	//> Make code
+	uint16_t addr;
+	prg += (uint8_t)Reg::MviFuncArg;
+	addr = rg->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     }
     //> Check IO
     else
@@ -1782,6 +1793,16 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		reg[ptr->reg] = new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user());
 		cprg += sizeof(SCode)+ptr->len; break;
+	    }
+	    case Reg::MviFuncArg:
+	    {
+		struct SCode { uint8_t cod; uint16_t reg; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#if OSC_DEBUG >= 5
+		printf("CODE: Load the function arguments object to reg %d.\n",ptr->reg);
+#endif
+		reg[ptr->reg] = new TFuncArgsObj(*val);
+		cprg += sizeof(SCode); break;
 	    }
 	    //>> Assign codes
 	    case Reg::Ass:

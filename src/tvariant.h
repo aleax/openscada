@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include <pcre/pcre.h>
+#include <pcre.h>
 
 using std::string;
 
@@ -125,7 +125,7 @@ class TVarObj
 };
 
 //***********************************************************
-//* TArrayOb                                                *
+//* TArrayObj                                               *
 //*   Array object included indexed properties              *
 //***********************************************************
 class TArrayObj : public TVarObj
@@ -232,6 +232,7 @@ class XMLNodeObj : public TVarObj
 	//Attributes
 	string			mName, mText;
 	vector<XMLNodeObj*>	mChilds;
+	XMLNodeObj		*parent;
 };
 
 //***********************************************************
@@ -252,6 +253,8 @@ class TCntrNodeObj: public TVarObj
 
 	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
+
+	string getStrXML( const string &oid = "" );
 
 	TVariant funcCall( const string &id, vector<TVariant> &prms );
 

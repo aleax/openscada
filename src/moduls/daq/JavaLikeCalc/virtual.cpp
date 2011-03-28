@@ -344,7 +344,8 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), endrun_req(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()), mFnc(cfg("FUNC").getSd())
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()), mFnc(cfg("FUNC").getSd()),
+    id_freq(-1), id_start(-1), id_stop(-1)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
     setDimens(true);
@@ -423,9 +424,10 @@ void Contr::loadFunc( bool onlyVl )
 	if( !onlyVl ) ((Func *)func())->load();
 
 	//> Creating special IO
-	if( func()->ioId("f_frq") < 0 ) func()->ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
-	if( func()->ioId("f_start") < 0 ) func()->ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,Func::SysAttr,"0",false),1);
-	if( func()->ioId("f_stop") < 0 ) func()->ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,Func::SysAttr,"0",false),2);
+	if(func()->ioId("f_frq") < 0) func()->ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
+	if(func()->ioId("f_start") < 0) func()->ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,Func::SysAttr,"0",false),1);
+	if(func()->ioId("f_stop") < 0) func()->ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,Func::SysAttr,"0",false),2);
+	if(func()->ioId("this") < 0) func()->ioIns( new IO("this",_("This controller object link"),IO::Object,Func::SysAttr,"0",false),3);
 
 	//> Load values
 	TConfig cfg(&mod->elVal());
@@ -481,7 +483,14 @@ void Contr::save_( )
 
 void Contr::start_( )
 {
-    ((Func *)func())->setStart( true );
+    ((Func *)func())->setStart(true);
+
+    //> Link to special atributes
+    id_freq	= ioId("f_frq");
+    id_start	= ioId("f_start");
+    id_stop     = ioId("f_stop");
+    int id_this = ioId("this");
+    if(id_this >= 0) setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
     //> Schedule process
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
@@ -511,9 +520,9 @@ void *Contr::Task( void *icntr )
 	if(!cntr.redntUse())
 	{
 	    //> Setting special IO
-	    int ioI = cntr.ioId("f_frq");	if(ioI >= 0) cntr.setR(ioI,cntr.period()?(float)cntr.iterate()*1e9/(float)cntr.period():0);
-	    ioI = cntr.ioId("f_start");		if(ioI >= 0) cntr.setB(ioI,is_start);
-	    ioI = cntr.ioId("f_stop");		if(ioI >= 0) cntr.setB(ioI,is_stop);
+	    if(cntr.id_freq >= 0) cntr.setR(cntr.id_freq, cntr.period()?(float)cntr.iterate()*1e9/(float)cntr.period():0);
+	    if(cntr.id_start >= 0) cntr.setB(cntr.id_start, is_start);
+	    if(cntr.id_stop >= 0) cntr.setB(cntr.id_stop, is_stop);
 
 	    for(int i_it = 0; i_it < cntr.mIter; i_it++)
 		try { cntr.calc(); }
@@ -595,10 +604,10 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::String,IO::Integer,IO::Real,IO::Boolean,IO::Object).c_str(),
+		    "sel_list",_("String;Integer;Real;Boolean;Object"));
 		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)+";"+TSYS::int2str(IO::Return)).c_str(),
+		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
 		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }

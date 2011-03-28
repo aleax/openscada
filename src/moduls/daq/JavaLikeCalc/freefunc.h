@@ -96,6 +96,7 @@ class Reg
 	    MviArray,	//[CRRnrr....]: Load array from registers list.
 	    MviRegExp,	//[CRRrrRR]: Load Regular expression object.
 	    MviSysObject,//[CRRn_____]: Load system object
+	    MviFuncArg,	//[CRR]: Load the function arguments object.
 	    Ass,	//[CRRrr]: Assign from register to register.
 	    Mov,	//[CRRrr]: Move from register to register.
 	    OPrpSt,	//[CRRn_____]: Load string of object's properties len <n>  to register <R>.

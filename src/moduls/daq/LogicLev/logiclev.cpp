@@ -324,7 +324,7 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     TParamContr::enable();
 
@@ -333,24 +333,26 @@ void TMdPrm::enable()
 	mode((TMdPrm::Mode)m_mode,m_prm);
 	loadIO();
 	//> Init system attributes identifiers
-	if( mode() == TMdPrm::Template )
+	if(mode() == TMdPrm::Template)
 	{
-	    id_freq	= tmpl->val.func()->ioId("f_frq");
-	    id_start	= tmpl->val.func()->ioId("f_start");
-	    id_stop	= tmpl->val.func()->ioId("f_stop");
-	    id_err	= tmpl->val.func()->ioId("f_err");
-	    id_sh	= tmpl->val.func()->ioId("SHIFR");
-	    id_nm	= tmpl->val.func()->ioId("NAME");
-	    id_dscr	= tmpl->val.func()->ioId("DESCR");
+	    id_freq	= tmpl->val.ioId("f_frq");
+	    id_start	= tmpl->val.ioId("f_start");
+	    id_stop	= tmpl->val.ioId("f_stop");
+	    id_err	= tmpl->val.ioId("f_err");
+	    id_sh	= tmpl->val.ioId("SHIFR");
+	    id_nm	= tmpl->val.ioId("NAME");
+	    id_dscr	= tmpl->val.ioId("DESCR");
+	    int id_this	= tmpl->val.ioId("this");
+	    if(id_this >= 0) tmpl->val.setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	}
-	if( owner().startStat() ) owner().prmEn(id(),true);
+	if(owner().startStat()) owner().prmEn(id(),true);
     }
     catch(...){ disable(); throw; }
 }
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
     if(owner().startStat())	owner().prmEn( id(), false );
 

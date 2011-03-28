@@ -844,9 +844,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    if( val.arch().freeStat() ) return;
+    if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((long long)(owner().period()*1000000));
-    val.arch().at().setHardGrid( true );
-    val.arch().at().setHighResTm( true );
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setHardGrid(true);
+    val.arch().at().setHighResTm(true);
 }

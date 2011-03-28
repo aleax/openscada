@@ -489,7 +489,7 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
 	for(int i_se = 1; i_se < se && (!limit || i_n < limit); i_se++)
     	    rez->propSet(TSYS::int2str(i_n++), string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
     }
-    if(curPos <= vl.size() && (!limit || i_n < limit)) rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,vl.size()-curPos));
+    if(curPos <= (int)vl.size() && (!limit || i_n < limit)) rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,vl.size()-curPos));
     return rez;
 }
 
@@ -575,99 +575,105 @@ string TRegExp::getStrXML( const string &oid )
 //*************************************************
 //* XMLNodeObj - XML node object                  *
 //*************************************************
-XMLNodeObj::XMLNodeObj( const string &name ) : mName(name)
+XMLNodeObj::XMLNodeObj(const string &name) : mName(name), parent(NULL)
 {
 
 }
 
 XMLNodeObj::~XMLNodeObj( )
 {
-    while( childSize() ) childDel(0);
+    while(childSize()) childDel(0);
 }
 
-void XMLNodeObj::childAdd( XMLNodeObj *nd )
+void XMLNodeObj::childAdd(XMLNodeObj *nd)
 {
     mChilds.push_back(nd);
+    nd->parent = this;
     nd->connect();
 }
 
-void XMLNodeObj::childIns( unsigned id, XMLNodeObj *nd )
+void XMLNodeObj::childIns(unsigned id, XMLNodeObj *nd)
 {
-    if( id < 0 ) id = mChilds.size();
+    if(id < 0) id = mChilds.size();
     id = vmin(id,mChilds.size());
     mChilds.insert(mChilds.begin()+id,nd);
+    nd->parent = this;
     nd->connect();
 }
 
 void XMLNodeObj::childDel( unsigned id )
 {
-    if( id < 0 || id >= mChilds.size() ) throw TError("XMLNodeObj",_("Deletion child '%d' error."),id);
-    if( !mChilds[id]->disconnect() ) delete mChilds[id];
+    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Deletion child '%d' error."),id);
+    if(!mChilds[id]->disconnect()) delete mChilds[id];
     mChilds.erase(mChilds.begin()+id);
 }
 
-XMLNodeObj *XMLNodeObj::childGet( unsigned id )
+XMLNodeObj *XMLNodeObj::childGet(unsigned id)
 {
-    if( id < 0 || id >= mChilds.size() ) throw TError("XMLNodeObj",_("Child '%d' is not allow."),id);
+    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Child '%d' is not allow."),id);
     return mChilds[id];
 }
 
-string XMLNodeObj::getStrXML( const string &oid )	{ return ""; }
+string XMLNodeObj::getStrXML(const string &oid)	{ return ""; }
 
-TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
+TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 {
     // string name( ) - node name
-    if( id == "name" )	return name();
+    if(id == "name")	return name();
     // string text( ) - node text
-    if( id == "text" )	return text();
+    if(id == "text")	return text();
     // string attr(string id) - get node attribute
     //  id - attribute identifier
-    if( id == "attr" && prms.size() )		return propGet(prms[0].getS()).getS();
+    if(id == "attr" && prms.size())	return propGet(prms[0].getS()).getS();
     // XMLNodeObj setName(string vl) - set node name
     //  vl - value for node name
-    if( id == "setName" && prms.size() )	{ setName(prms[0].getS()); return this; }
+    if(id == "setName" && prms.size())	{ setName(prms[0].getS()); return this; }
     // XMLNodeObj setText(string vl) - set node text
     //  vl - value for node text
-    if( id == "setText" && prms.size() )	{ setText(prms[0].getS()); return this; }
+    if(id == "setText" && prms.size())	{ setText(prms[0].getS()); return this; }
     // XMLNodeObj setAttr(string id, string vl) - set attribute to value
     //  id - attribute identifier
     //  vl - value for attribute
-    if( id == "setAttr" && prms.size() >= 2 )	{ propSet(prms[0].getS(),prms[1].getS()); return this; }
+    if(id == "setAttr" && prms.size() >= 2)	{ propSet(prms[0].getS(),prms[1].getS()); return this; }
     // int childSize( ) - return childs counter for node
-    if( id == "childSize" )	return (int)childSize();
+    if(id == "childSize")	return (int)childSize();
     // XMLNodeObj childAdd(ElTp no = XMLNodeObj) - add node <no> as child to the node
     //  no - node object or name for new node
-    if( id == "childAdd" )
+    if(id == "childAdd")
     {
 	XMLNodeObj *no = NULL;
-	if( prms.size() && prms[0].type() == TVariant::Object && dynamic_cast<XMLNodeObj*>(prms[0].getO()) ) no = (XMLNodeObj*)prms[0].getO();
-	else if( prms.size() ) no = new XMLNodeObj(prms[0].getS());
+	if(prms.size() && prms[0].type() == TVariant::Object && dynamic_cast<XMLNodeObj*>(prms[0].getO()))
+	    no = (XMLNodeObj*)prms[0].getO();
+	else if(prms.size()) no = new XMLNodeObj(prms[0].getS());
 	else no = new XMLNodeObj();
-	childAdd( no );
+	childAdd(no);
 	return no;
     }
     // XMLNodeObj childIns(int id, ElTp no = XMLNodeObj) - insert node <no> as child to the node
     //  id - insert position
     //  no - node object or name for new node
-    if( id == "childIns" && prms.size() )
+    if(id == "childIns" && prms.size())
     {
 	XMLNodeObj *no = NULL;
-	if( prms.size() > 1 && prms[1].type() == TVariant::Object && dynamic_cast<XMLNodeObj*>(prms[1].getO()) ) no = (XMLNodeObj*)prms[1].getO();
-	else if( prms.size() > 1 ) no = new XMLNodeObj(prms[1].getS());
+	if(prms.size() > 1 && prms[1].type() == TVariant::Object && dynamic_cast<XMLNodeObj*>(prms[1].getO()))
+	    no = (XMLNodeObj*)prms[1].getO();
+	else if(prms.size() > 1) no = new XMLNodeObj(prms[1].getS());
 	else no = new XMLNodeObj();
-	childIns( prms[0].getI(), no );
+	childIns(prms[0].getI(), no);
 	return no;
     }
     // XMLNodeObj childDel(int id) - remove child node from position <id>
     //  id - child node position
-    if( id == "childDel" && prms.size() )	{ childDel(prms[0].getI()); return this; }
+    if(id == "childDel" && prms.size())	{ childDel(prms[0].getI()); return this; }
     // XMLNodeObj childGet(int id) - get node from position <id>
     //  id - child node position
-    if( id == "childGet" && prms.size() )	return childGet(prms[0].getI());
+    if(id == "childGet" && prms.size())	return childGet(prms[0].getI());
+    // XMLNodeObj parent() - get parent node
+    if(id == "parent")	return parent ? TVariant(parent) : TVariant(false);
     // string load(string str, bool file = false) - load XML tree from XML-stream from string or file
     //  str - source stream string or file name, for <file> = true
     //  file - load XML-tree from file (true) or stram (false)
-    if( id == "load" && prms.size() )
+    if(id == "load" && prms.size())
     {
 	XMLNode nd;
 	//> Load from file
@@ -725,25 +731,25 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
     throw TError("XMLNodeObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
 
-void XMLNodeObj::toXMLNode( XMLNode &nd )
+void XMLNodeObj::toXMLNode(XMLNode &nd)
 {
     nd.clear();
     nd.setName(name())->setText(text());
-    for( map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++ )
+    for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	nd.setAttr(ip->first,ip->second.getS());
     for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
 	mChilds[i_ch]->toXMLNode(*nd.childAdd());
 }
 
-void XMLNodeObj::fromXMLNode( XMLNode &nd )
+void XMLNodeObj::fromXMLNode(XMLNode &nd)
 {
-    while( childSize() ) childDel(0);
+    while(childSize()) childDel(0);
 
     setName(nd.name());
     setText(nd.text());
 
     vector<string> alst;
-    nd.attrList( alst );
+    nd.attrList(alst);
     for(unsigned i_a = 0; i_a < alst.size(); i_a++)
 	propSet(alst[i_a],nd.attr(alst[i_a]));
 
@@ -766,7 +772,7 @@ TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind, const string &iuser ) : mUser
 
 TVariant TCntrNodeObj::propGet( const string &id )
 {
-    if( cnd.freeStat() ) return TVariant();
+    if(cnd.freeStat()) return TVariant();
     try
     {
 	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
@@ -774,19 +780,24 @@ TVariant TCntrNodeObj::propGet( const string &id )
     }
     catch(...) { }
 
-    TVariant rez = cnd.at().objPropGet( id );
-    if( rez.isNull() ) return TVariant();
+    TVariant rez = cnd.at().objPropGet(id);
+    if(rez.isNull()) return TVariant();
     return rez;
 }
 
 void TCntrNodeObj::propSet( const string &id, TVariant val )
 {
-    if( cnd.freeStat() ) return;
+    if(cnd.freeStat()) return;
     cnd.at().objPropSet(id,val);
+}
+
+string TCntrNodeObj::getStrXML(const string &oid)
+{
+    return "<TCntrNodeObj path=\""+cnd.at().nodePath()+"\"/>";
 }
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    if( cnd.freeStat() ) throw TError("TCntrNodeObj",_("The object don't attached to node of OpenSCADA tree."));
+    if(cnd.freeStat()) throw TError("TCntrNodeObj",_("The object don't attached to node of OpenSCADA tree."));
     return cnd.at().objFuncCall(id, prms, user());
 }

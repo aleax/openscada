@@ -1201,7 +1201,7 @@ void SessWdg::setProcess( bool val )
 	{
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
 	    TValFunc::setUser(ownerSess()->user());
-	    setO( 3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()) );
+	    setO(3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()));
 	}
     }
     if( !val )

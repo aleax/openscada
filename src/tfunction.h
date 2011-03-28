@@ -27,7 +27,7 @@
 
 #include "tmess.h"
 #include "tcntrnode.h"
-#include <tvariant.h>
+#include "tvariant.h"
 
 using std::string;
 using std::vector;
@@ -264,6 +264,28 @@ class TValFunc
 
 	TFunction	*mFunc;
 	map<int,TValFunc* >	vctx;
+};
+
+//***********************************************************
+//* TFuncArgObj                                             *
+//*   The function arguments access object.                 *
+//***********************************************************
+class TFuncArgsObj : public TVarObj
+{
+    public:
+        //Methods
+        TFuncArgsObj( TValFunc &ivf ) : vf(ivf)    { }
+
+        string objName( )       { return "FuncArgs"; }
+
+	TVariant propGet( const string &id );
+	void propSet( const string &id, TVariant val );
+
+	string getStrXML( const string &oid = "" );
+
+    private:
+        //Attributes
+	TValFunc &vf;
 };
 
 }

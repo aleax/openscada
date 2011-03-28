@@ -1,10 +1,22 @@
+2011-03-28 Roman
+- SYS: Using "pkg-config" for global include flag detect for libpcre is added.
+- SYS: To user's API object TCntrNode is added function nodePrev() for access parent node access.
+- SYS: To user's API object XMLNodeObj is added function parent() for access parent node access.
+- !!!:TFunction, DAQ.JavaLikeCalc: User's API object TFuncArgObj is added for get a function arguments.
+- DAQ.JavaLikeCalc: The special attribute "this" is added for user access the object of the controller allow.
+- DAQ.LogicLev: The special attribute "this" is added for user access the object of the controller's parameter allow.
+- FIX:DAQ.OPC_UA: Archive's value period set is fixed on an attribute to archive enabling.
+- !!:DAQ.SNMP: All value types support is added. Write values support is added. Errors processing is improved.
+    Addon SNMP connect parameters is added.
+
+
 2011-03-24 Roman
 - !!!!:SYS, DAQ.JavaLikeCalc: The User's system API regular expression object TRegExp, based on PCRE, support is added.
     Realised functions RegExp.exec() and RegExp.test() standard JavaScript interface.
     To DAQ.JavaLikeCalc is realised "new RegExp()" for TRegExp object create.
     To DAQ.JavaLikeCalc addon string functions with using RegExp is realised:
 	int search(); Array match(); Array split(RegExp pat, int limit); string replace(string substr, string str);
-	string replace(RegExp pat, string str); 
+	string replace(RegExp pat, string str);
 - !!:SYS: PCRECPP dependence is replaced by PCRE.
 - SYS: GD library checking for allow is moved to once.
 - SYS: The User's system API, TArrayObj is expanded for object's properties, not numbers, support.

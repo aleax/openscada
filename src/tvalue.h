@@ -126,8 +126,6 @@ class TVal : public TCntrNode
 //*************************************************
 //* TValue                                        *
 //*************************************************
-class TConfig;
-
 class TValue: public TCntrNode, public TValElem
 {
     friend class TVal;

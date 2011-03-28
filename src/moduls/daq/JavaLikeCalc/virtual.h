@@ -153,6 +153,8 @@ class Contr: public TController, public TValFunc
 	string	&mSched,	// Calc schedule
 		&mFnc;		// Work function
 
+	int	id_freq, id_start, id_stop;
+
 	long long mPer;
 };
 

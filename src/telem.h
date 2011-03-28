@@ -180,7 +180,8 @@ class TValElem
 
     public:
 	//Methods
-	TValElem( )	{ };
+	TValElem( )		{ };
+	virtual ~TValElem( )	{ };
 
     protected:
 	//Methods

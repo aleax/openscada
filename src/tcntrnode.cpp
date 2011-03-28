@@ -666,6 +666,13 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	catch(TError)	{ }
 	return false;
     }
+    // TCntrNodeObj nodePrev() - get previous node
+    if(iid == "nodePrev")
+    {
+	TCntrNode *prev = nodePrev(true);
+	if(prev) return new TCntrNodeObj(AutoHD<TCntrNode>(prev), user);
+	return false;
+    }
 
     throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }

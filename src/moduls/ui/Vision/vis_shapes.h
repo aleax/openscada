@@ -445,11 +445,11 @@ class ShapeProtocol : public WdgShape
 		//Methods
 		ShpDt( ) : active(true), timeCurent(false), time(0), tSize(60), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
-		unsigned active		:1;
-		unsigned timeCurent	:1;
-		unsigned trcPer		:10;
-		unsigned lev		:4;
-		unsigned viewOrd	:4;
+		short active	:1;
+		short timeCurent:1;
+		short trcPer	:10;
+		short lev	:4;
+		short viewOrd	:4;
 		QTimer 		*trcTimer;
 		QTableWidget	*addrWdg;
 		unsigned int	time, tSize;

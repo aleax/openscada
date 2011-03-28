@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-13 12:45+0200\n"
+"POT-Creation-Date: 2011-03-28 16:37+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -20,43 +21,18 @@ msgstr ""
 msgid "Variable '%s' is used but undefined"
 msgstr "Змінна '%s' не визначена але використана"
 
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиція: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end programm, expect end string symbol '\"', "
-msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ переведення лінії не дозволено у срічці, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Помилка площини найменувань або вона порожня, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Вбудована функція має дуже багато параметрів, "
-
-msgid "Function error, "
-msgstr "Помилка функції, "
-
-msgid "Symbol error, "
-msgstr "Помилка символу, "
-
-msgid "Object's properties too long, "
-msgstr "Властивості об'єкту дуже довгі, "
-
 msgid "String constant size is more 255 symbols."
 msgstr "Розмір строкової змінної більш 255 символів."
 
 msgid "Array have more 255 items."
 msgstr "Масив має більш 255 елементів."
 
+msgid "RegExp require one or two parameters."
+msgstr "RegExp вимагає одного або двох параметрів."
+
 #, c-format
 msgid "Don't support operation code %d."
 msgstr "Код виконання %d не підтримується."
-
-msgid "Buildin functions don't support string type"
-msgstr "Вбудовані функції не підтримують строкового типу"
 
 #, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
@@ -76,10 +52,14 @@ msgstr "Функція об’єкту містить більш 255 парам�
 msgid "Boolean type have not function '%s' or not enough parameters for it."
 msgstr "Логічний тип не має функції '%s' або не достатньо параметрів для неї. "
 
+#, c-format
 msgid ""
 "Integer or real type have not function '%s' or not enough parameters for it."
-msgstr "Цілий або реальний тип не має функції '%s'. або не достатньо параметрів для неї."
+msgstr ""
+"Цілий або реальний тип не має функції '%s'. або не достатньо параметрів для "
+"неї."
 
+#, c-format
 msgid "String type have not properties '%s' or not enough parameters for it."
 msgstr ""
 "Строковий тип не має властивості '%s'. або не достатньо параметрів для неї."
@@ -292,31 +272,14 @@ msgstr "Прапорець запуску функції"
 msgid "Function stop flag"
 msgstr "Прапорець зупинки функції"
 
+msgid "This controller object link"
+msgstr "Зв'язок на об'єкт цього контролера."
+
 msgid "Calc controller's function error."
 msgstr "Помилка обчислення функції контроллера."
 
 msgid "No started or no present function."
 msgstr "Функція відсутня або не запущена."
-
-msgid ""
-"Schedule is writed in seconds periodic form or in standard Cron form.\n"
-"Seconds form is one real number (1.5, 1e-3).\n"
-"Cron it is standard form '* * * * *'. Where:\n"
-"  - minutes (0-59);\n"
-"  - hours (0-23);\n"
-"  - days (1-31);\n"
-"  - month (1-12);\n"
-"  - week day (0[sunday]-6)."
-msgstr ""
-"Планування записується у формі секундної періодичності або у формі стандарту "
-"Cron.\n"
-"Секундна форма це одне реальне число (1.5, 1e-3).\n"
-"Форма стандарту Cron це '* * * * *'. Де:\n"
-"  - хвилини (0-59);\n"
-"  - години (0-23);\n"
-"  - дні (1-31);\n"
-"  - місяця (1-12);\n"
-"  - дні тижня (0[неділя]-6)."
 
 msgid "Calcing"
 msgstr "Обчислення"
@@ -324,8 +287,8 @@ msgstr "Обчислення"
 msgid "Data"
 msgstr "Дані"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Реальний;Цілий;Логічний;Строка"
+msgid "String;Integer;Real;Boolean;Object"
+msgstr "Строка;Цілий;Реальний;Логічний;Об`єкт"
 
 msgid "Value"
 msgstr "Значення"
@@ -360,3 +323,28 @@ msgstr ""
 "  anm - ім’я створюваного атрибута.\n"
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з вибраного "
 "IO функції."
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиція: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end programm, expect end string symbol '\"', "
+msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ переведення лінії не дозволено у срічці, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Помилка площини найменувань або вона порожня, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Вбудована функція має дуже багато параметрів, "
+
+msgid "Function error, "
+msgstr "Помилка функції, "
+
+msgid "Symbol error, "
+msgstr "Помилка символу, "
+
+msgid "Object's properties too long, "
+msgstr "Властивості об'єкту дуже довгі, "

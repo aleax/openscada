@@ -68,6 +68,7 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	void parseOIDList( const string &ioid );
@@ -92,7 +93,8 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return m_per; }
+	long long period( )     { return mPer; }
+        string  cron( )         { return mSched; }
 	int	prior( )	{ return m_prior; }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
 
@@ -104,26 +106,34 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 
 	string oid2str( oid *ioid, size_t isz );
+	void str2oid( const string &str, oid *ioid, size_t &isz );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
-	int	&m_per,		// s
-		&m_prior,	// Process task priority
-		&m_pattr_lim;	// Parameter's attributes limit
-	string	&m_addr,	// Host address
+	Res	en_res;		// Resource for enable params
+	int	&m_prior,	// Process task priority
+		&m_pattr_lim,	// Parameter's attributes limit
+		&m_retr,	// Request retries
+		&m_tm;		// Request timeout
+	string	&mSched,        // Calc schedule
+		&m_addr,	// Host address
+		&m_ver,		// SNMP version
 		&m_comm;	// Server community
+	long long mPer;
 
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
 
 	double	tm_gath;	// Gathering time
+	ResString acq_err;
 };
 
 //*************************************************

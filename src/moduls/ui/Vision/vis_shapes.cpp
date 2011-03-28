@@ -2664,11 +2664,11 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 26:	//trcPer
 	{
-	    unsigned trcPer = strtoul(val.c_str(),0,10);
-	    if( shD->trcPer == trcPer ) break;
+	    int trcPer = vmax(0,atoi(val.c_str()));
+	    if(shD->trcPer == trcPer) break;
 	    shD->trcPer = trcPer;
- 	    if( trcPer )	shD->trcTimer->start(trcPer*1000);
-	    else		shD->trcTimer->stop();
+ 	    if(trcPer)	shD->trcTimer->start(trcPer*1000);
+	    else	shD->trcTimer->stop();
 	    break;
 	}
 	case 27:	//arch

@@ -231,8 +231,8 @@ if test ${LibGD} = true; then
 fi
 
 #> Check for PCRE library use in OpenSCADA core
-#CXXFLAGS="$CXXFLAGS -I$oldincludedir/pcre"
-AC_CHECK_HEADERS([pcre/pcre.h],[],
+CXXFLAGS="$CXXFLAGS $(pkg-config --cflags libpcre)"
+AC_CHECK_HEADERS([pcre.h],[],
     [AC_MSG_ERROR(UI.VCAEngine: PCRE header not found. Install or check PCRE developing package!)])
 AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
     [AC_MSG_ERROR(PCRE library not found. Install or check PCRE package!)])
