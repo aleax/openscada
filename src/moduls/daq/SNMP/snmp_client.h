@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
- *   Copyright (C) 2006-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2011 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

@@ -3,10 +3,10 @@
 - FIX:Protocol.HTTP: Some fixes to the English language is made.
 
 
-
 2011-03-29 Roman
 - FIX:Function: Set Object to no object's function parameter is fixed for prevent memory leak by no object destroy.
 - FIX:UI.Vision: Bit flags processing is some fixed.
+- DAQ.SNMP: Some messages update and translate. Version 0.6.0 is released.
 
 
 2011-03-28 Roman

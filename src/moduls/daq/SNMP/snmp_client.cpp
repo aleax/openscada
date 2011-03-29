@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2011 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.4.1"
+#define MOD_VER		"0.6.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realising of SNMP client service.")
 #define LICENSE		"GPL2"
@@ -110,7 +110,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("RETR",_("Retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
     fldAdd(new TFld("TM",_("Timeout (sec)"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
     fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selected,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
-    fldAdd(new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public"));
+    fldAdd(new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public:private"));
     fldAdd(new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
     //> Parameter type bd structure
@@ -407,15 +407,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "help",_("SNMP agent host in IP address or domain host name.\nAlso you can set port like \"localhost:161\""));
         ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        /*if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser")))
-        {
-            ctrMkNode("fld",opt,-1,"/ndBrws/nd",_("Node"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/ndBrws/ndLst");
-            if(ctrMkNode("table",opt,-1,"/ndBrws/attrs",_("Attributes"),R_R_R_,"root",SDAQ_ID))
-            {
-                ctrMkNode("list",opt,-1,"/ndBrws/attrs/0",_("Attribute"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-                ctrMkNode("list",opt,-1,"/ndBrws/attrs/1",_("Value"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-            }
-        }*/
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+    	    "help",_("Community groups: \"{read}:{write}\"."));
         return;
     }
 
@@ -506,11 +499,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"rows","8",
-            "help",_("SNMP OID list, include directories for walk all subitems. OID can write in the methods:\n"
-		"  \".1.3.6.1.2.1.1\" - direct code adressing for root alias \"System\";\n"
-		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code adressing for root alias \"System\";\n"
-		"  \"system.sysDescr\" - simple adressing from MIB base;\n"
-		"  \"SNMPv2-MIB::sysDescr\" - adressing from MIB base to \"system.sysDescr\"."));
+            "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
+		"  \".1.3.6.1.2.1.1\" - direct code adressing for object \"System\";\n"
+		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code adressing for object \"System\";\n"
+		"  \"system.sysDescr\" - simple, not full path, adressing from MIB base;\n"
+		"  \"SNMPv2-MIB::sysDescr\" - adressing from MIB base by module name for \"system.sysDescr\"."));
 	return;
     }
 
