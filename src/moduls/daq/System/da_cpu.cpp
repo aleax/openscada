@@ -113,8 +113,8 @@ void CPU::getVal( TMdPrm *prm )
 	return;
     }*/
 
-    //- File /proc/stat scan -
-    int n_el;	//CPU number
+    //> File /proc/stat scan
+    int n_el = 0;	//CPU number
     int n = 0;
     char buf[256];
     FILE *f = fopen("/proc/stat","r");

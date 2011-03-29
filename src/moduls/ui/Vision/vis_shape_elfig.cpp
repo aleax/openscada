@@ -2815,7 +2815,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         StartLine = ev->pos();
                     }
                     // - repainting figures by mouse click -
-                    if( (ev->button() == Qt::LeftButton) && (itemInMotion || rect_num != -1) && !status && flag_ctrl != 1 && count_holds == 0 )
+                    if( (ev->button() == Qt::LeftButton) && (itemInMotion || rect_num != -1) && !status && !flag_ctrl && count_holds == 0 )
                     {
                         count_Shapes = 1;
                         count_moveItemTo = 1;

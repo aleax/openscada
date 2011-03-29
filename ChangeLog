@@ -1,3 +1,8 @@
+2011-03-29 Roman
+- FIX:Function: Set Object to no object's function parameter is fixed for prevent memory leak by no object destroy.
+- FIX:UI.Vision: Bit flags processing is some fixed.
+
+
 2011-03-28 Roman
 - SYS: Using "pkg-config" for global include flag detect for libpcre is added.
 - SYS: To user's API object TCntrNode is added function nodePrev() for access parent node access.

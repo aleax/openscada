@@ -295,7 +295,7 @@ void yyerror( const char *s )
 
 int yylex( )
 {
-    unsigned c, st_pos;
+    unsigned c = 0, st_pos;
     unsigned &pos = p_fnc->la_pos;
     string &prog = p_fnc->prg_src;
 
