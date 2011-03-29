@@ -200,7 +200,6 @@ void MBD::enable( )
     {
 	if(connection) PQfinish(connection);
 	TBD::disable();
-        TBD::disable( );
 	throw;
     }
 }
