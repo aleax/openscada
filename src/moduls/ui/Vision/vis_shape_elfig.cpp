@@ -906,7 +906,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         QVector<inundationItem> in_build;
         QVector<int> fill_number;
         //- Detecting if there is a necessity to rebuild inundationItem -
-        if( (shapeItems.size() != shapeItems_temp.size()) || (flag_geom && fabs( elFD->orient - 0 ) >= 0.01) ){ fill_build = true;}
+        if( (shapeItems.size() != shapeItems_temp.size()) || (flag_geom && fabs( elFD->orient - 0 ) >= 0.01) ) fill_build = true;
         else
             for( int i = 0; i < shapeItems.size(); i++ )
             {
@@ -1404,6 +1404,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
         else if( inundationItems[i].brush_img > 0  ) elList = elList + "i" +  TSYS::int2str(inundationItems[i].brush_img)+"\n";
     }
     w->attrSet( "elLst", elList );
+    elFD->elLst = elList;
 
     //- Write shapes points to data model -
     for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
@@ -1958,15 +1959,14 @@ void ShapeElFigure::toolAct( QAction *act )
             for( map< int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++ )
                 inundationItems.push_back(inundationItem(createInundationPath( pi->second, shapeItems, *pnts,w ),
                                           inundationItems[pi->first].brush,inundationItems[pi->first].brush_img, pi->second, pi->second));
-            flag_A = true;
-            flag_copy = true;
+            flag_copy = flag_A = true;
             if( rect_array.size() )
             {
                 flag_rect = false;
                 rect_array.clear();
             }
             rect_num = -1;
-            flag_ctrl_move = 1;
+            flag_ctrl_move = true;
             count_Shapes = index_array.size();
             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, w );
             paintImage(w);
@@ -2648,7 +2648,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         index_array[count_Shapes] = index;
                                         count_Shapes += 1;
                                         itemInMotion = &shapeItems[index];
-                                        flag_ctrl_move = 1;
+                                        flag_ctrl_move = true;
                                         offset = QPointF(0,0);
                                         moveItemTo( previousPosition, shapeItems, pnts, view );
                                     }
@@ -2690,8 +2690,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         for( int i=0; i < count_holds; i++ )
                                         {
                                             count_moveItemTo += 1;
-                                            flag_ctrl_move = 0;
-                                            flag_ctrl = 1;
+                                            flag_ctrl_move = false;
+                                            flag_ctrl = true;
                                             itemInMotion = &shapeItems[index_array[i]];
                                             index = index_array[i];
                                             moveItemTo( ev->pos(), shapeItems, pnts, view );
@@ -2927,10 +2927,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         dashedRect.setBottom(0);
                         if( index_array.size() )
                         {
-                            flag_A = true;
-                            flag_copy = true;
+                            flag_copy = flag_A = true;
                             index_array_copy.clear();
-                            flag_ctrl_move = 1;
+                            flag_ctrl_move = true;
                             count_Shapes = index_array.size();
                             offset = QPointF(0,0);
                             moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, view );
@@ -2986,8 +2985,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         dropPoint( itemInMotion->n1, index, shapeItems, pnts );
                                         itemInMotion->n1 = shapeItems[current_ss].n1;
                                         count_moveItemTo = 1;
-                                        flag_ctrl_move = 0;
-                                        flag_ctrl = 1;
+                                        flag_ctrl_move = false;
+                                        flag_ctrl = true;
                                         count_Shapes = 1;
                                         offset = QPointF(0,0);
                                         moveItemTo( ev->pos(), shapeItems, pnts, view );
@@ -3030,8 +3029,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         dropPoint( itemInMotion->n2, index, shapeItems, pnts );
                                         itemInMotion->n2 = shapeItems[current_se].n1;
                                         count_moveItemTo = 1;
-                                        flag_ctrl_move = 0;
-                                        flag_ctrl = 1;
+                                        flag_ctrl_move = false;
+                                        flag_ctrl = true;
                                         count_Shapes = 1;
                                         offset = QPointF(0,0);
                                         moveItemTo( ev->pos(), shapeItems, pnts, view );
@@ -3076,8 +3075,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         dropPoint( itemInMotion->n1, index, shapeItems, pnts );
                                         itemInMotion->n1 = shapeItems[current_es].n2;
                                         count_moveItemTo = 1;
-                                        flag_ctrl_move = 0;
-                                        flag_ctrl = 1;
+                                        flag_ctrl_move = false;
+                                        flag_ctrl = true;
                                         count_Shapes = 1;
                                         offset = QPointF(0,0);
                                         moveItemTo( ev->pos(), shapeItems, pnts, view );
@@ -3121,8 +3120,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         dropPoint( itemInMotion->n2, index, shapeItems, pnts );
                                         itemInMotion->n2 = shapeItems[current_ee].n2;
                                         count_moveItemTo = 1;
-                                        flag_ctrl_move = 0;
-                                        flag_ctrl = 1;
+                                        flag_ctrl_move = false;
+                                        flag_ctrl = true;
                                         count_Shapes = 1;
                                         offset = QPointF(0,0);
                                         moveItemTo( ev->pos(), shapeItems, pnts, view );
@@ -3166,8 +3165,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         if( status_hold && !flag_A )
                         {
                             count_moveItemTo = 0;
-                            flag_hold_move = false;
-                            flag_ctrl = false;
+                            flag_ctrl = flag_hold_move = false;
                             count_Shapes = 0;
                             count_holds = 0;
                             if( index_array.size() )
@@ -3195,8 +3193,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         if( status_hold && !flag_A )
                         {
                             count_moveItemTo = 0;
-                            flag_hold_move = false;
-                            flag_ctrl = false;
+                            flag_ctrl = flag_hold_move = false;
                             count_Shapes = 0;
                             count_holds = 0;
                             if( index_array.size() )
@@ -3408,8 +3405,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                     if( count_holds )
                     {
                         count_Shapes = count_holds+1; 
-                        flag_ctrl = true;
-                        flag_hold_move = true;
+                        flag_hold_move = flag_ctrl = true;
                     }
                     //- calling moveItemTo for all connected figures -
                     if( flag_ctrl && count_Shapes && ((rect_num==-1 && rect_num_arc==-1) || flag_rect || flag_arc_rect_3_4) )
@@ -3628,9 +3624,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             count_holds  = 0;
                             count_rects  = 0;
                             rect_num_arc = -1;
-                            flag_ctrl    = false;
-                            flag_rect    = false;
-                            flag_arc_rect_3_4 = false;
+                            flag_arc_rect_3_4 = flag_rect = flag_ctrl = false;
                             index_array.clear();
                         }
                         flag_first_move = false;  
@@ -3657,7 +3651,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             if( devW )
             {
                 if( flag_m )  break;
-                if( ev->key() == Qt::Key_Shift ) flag_key=true;
+                if( ev->key() == Qt::Key_Shift ) flag_key = true;
                 if( ev->key() == Qt::Key_Control )
                 {
                     if( flag_A ) index_array_copy_flag_A = index_array;
@@ -3689,9 +3683,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             shapeItems.clear();
                             rectItems.clear();
                             shapeSave(view);
-                            flag_ctrl = false;
-                            flag_A = false;
-                            flag_copy = false;
+                            flag_copy = flag_A = flag_ctrl = false;
                             index_array.clear();
                             itemInMotion = 0;
                             count_Shapes = 0;
@@ -3835,7 +3827,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) )	break;
                     flag_A = true;
-                    flag_ctrl_move = 1;
+                    flag_ctrl_move = true;
                     if( index_array.size() )	index_array.clear();
                     for( int i = 0; i < shapeItems.size(); i++ )
                         index_array.push_back(i);
@@ -3906,7 +3898,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             if( devW )
             {
-                if( ev->key() == Qt::Key_Shift ) flag_key=false;
+                if( ev->key() == Qt::Key_Shift ) flag_key = false;
                 if( ev->key() == Qt::Key_Control )
                 {
                     if( status_hold || flag_A ) break;
@@ -4588,7 +4580,7 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
                     rect_num_temp = rect_num;
                     rect_num = realRectNum ( rect_num, shapeItems );// detecting the number of the rect for moveItemTo
                     if( ( rect_num == 2 || rect_num == 3 ) && shapeItems[index].type == 3 )// if there is rect of unconnected point of bexier curve
-                        flag_rect=false;
+                        flag_rect = false;
                     if( rect_num == 0 || rect_num == 1 )// if there is the rect of start or end point of the figure
                         rectNum0_1( shapeItems, rect_num_temp, pnts, view );
                     if( (rect_num == 3 || rect_num == 4) && shapeItems[index].type == 2 )

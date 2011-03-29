@@ -642,24 +642,24 @@ string TProtIn::getIndex(const string &user, const string &sender)
     string answer = pgHead()+"<center><table class='work' width='50%'>\n"
 	"<tr><th>"+_("Login")+"</th></tr>"
 	"<tr><td class='content'>"
-	"<p>"+_("Welcome to Web-interfaces of OpenSCADA system.")+"</p>";
+	"<p>"+_("Welcome to the Web-interfaces of OpenSCADA system.")+"</p>";
     if( !user.empty() )
 	answer = answer +
-	    "<p style='color: green;'>"+TSYS::strMess(_("You are login as \"<b>%s</b>\"."),user.c_str())+"</p>"
-	    "<p>"+_("Select need Web-module from list below or press <a href='/logout'>here</a> for logout or <a href='/login'>here</a> for login as other user.")+"</p>";
+	    "<p style='color: green;'>"+TSYS::strMess(_("You are logged in as \"<b>%s</b>\"."),user.c_str())+"</p>"
+	    "<p>"+_("Select the necessary Web-module from the list below, press <a href='/logout'>here</a> to logout or <a href='/login'>here</a> to login as another user.")+"</p>";
     else
     {
 	answer = answer +
-	    "<p style='color: #CF8122;'>"+_("You are not login now!")+"</p>"
-	    "<p>"+_("For use some modules you must be login. For login now click <a href='/login'>here</a>.")+"</p>";
+	    "<p style='color: #CF8122;'>"+_("You are not logged in the system!")+"</p>"
+	    "<p>"+_("To use some modules you must be logged in. To login now click <a href='/login'>here</a>.")+"</p>";
 	string a_log = mod->autoLogGet(sender);
 	if(!a_log.empty())
-	    answer += "<p>"+TSYS::strMess(_("You can auto-login from user \"<b>%s</b>\" simple select module."),a_log.c_str())+"</p>";
+	    answer += "<p>"+TSYS::strMess(_("You can auto-login from user \"<b>%s</b>\" by simple selecting the module."),a_log.c_str())+"</p>";
     }
     answer += "</td></tr>";
 
     answer = answer +
-	"<tr><th>"+_("Present web modules")+"</th></tr>\n"
+	"<tr><th>"+_("Accessible web modules")+"</th></tr>\n"
 	"<tr><td class='content'><ul>\n";
     vector<string> list;
     owner().owner().owner().ui().at().modList(list);

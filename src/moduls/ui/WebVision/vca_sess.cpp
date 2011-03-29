@@ -3843,6 +3843,12 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                 !(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
                                 mess_debug(nodePath().c_str(),_("Fill image type is not supported."));
                             gdImagePtr im_fill_out = gdImageCreateTrueColor((int)TSYS::realRound( xMax - xMin ) + 1, (int)TSYS::realRound( yMax - yMin ) + 1 );
+                            printf("Test00\n");
+                            if( !im_fill_out )
+                            {
+                                printf("!im_fill_out\n");
+                                im_fill_out = gdImageCreateTrueColor(1, 1);
+                            }
                             gdImageAlphaBlending(im_fill_out, 0);
                             int alpha;
                             double alpha_pr;

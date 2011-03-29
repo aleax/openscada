@@ -225,7 +225,6 @@ class ShapeElFigure : public WdgShape
 	int count_Shapes, count_moveItemTo, index, fill_index, index_temp, index_del, rect_num;
 
         unsigned status_hold	:1;
-	unsigned flag_cursor	:1;
 	unsigned flag_key	:1;
 	unsigned flag_up	:1;
 	unsigned flag_down	:1;
