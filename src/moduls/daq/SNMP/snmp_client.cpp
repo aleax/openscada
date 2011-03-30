@@ -500,10 +500,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"rows","8",
             "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
-		"  \".1.3.6.1.2.1.1\" - direct code adressing for object \"System\";\n"
-		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code adressing for object \"System\";\n"
-		"  \"system.sysDescr\" - simple, not full path, adressing from MIB base;\n"
-		"  \"SNMPv2-MIB::sysDescr\" - adressing from MIB base by module name for \"system.sysDescr\"."));
+		"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
+		"  \"1.3.0\" - short code addressing, from root alias (object \"System.sysDescr\");\n"
+		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code addressing for object \"System\";\n"
+		"  \"system.sysDescr\" - simple, not full path, addressing from root alias (object \"System\");\n"
+		"  \"SNMPv2-MIB::sysDescr\" - addressing from MIB base by module name for \"system.sysDescr\"."));
 	return;
     }
 
