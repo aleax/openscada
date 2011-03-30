@@ -727,7 +727,10 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 	    {
 		TArrayObj *row = new TArrayObj();
 		for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++)
+		{
 		    row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
+		    if(i_r) row->TVarObj::propSet(rtbl[0][i_c], rtbl[i_r][i_c]);
+		}
 		rez->propSet(TSYS::int2str(i_r),row);
 	    }
 	}catch(...){ }

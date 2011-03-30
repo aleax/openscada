@@ -1,3 +1,9 @@
+2011-03-30 Roman
+- DB: Into user API function "SQLreq()" is added set cell value to object property by collumn name, to row Array > 0.
+- SYS: To user API object TArray is set return null value for wrong indexes.
+- DAQ.JavaLikeCalc: Special symbols write by octal "\041" and hex "\x21" digits write is added.
+
+
 2011-03-29 Maxim
 - FIX:UI.Vision: shapeSave function is fixed to store elements in the own container for the primitive ElFigure.
 - FIX:Protocol.HTTP: Some fixes to the English language is made.

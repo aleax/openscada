@@ -407,6 +407,7 @@ retry:
 	yylloc.last_column++;
 	while(pos < prog.size() && prog[pos] != '"' && prog[pos] != '\n')
 	{
+	    int elSzPass = 1;
 	    if(prog[pos] == '\\' && (pos+1) < prog.size())
 	    {
 		switch(prog[pos+1])
@@ -416,12 +417,21 @@ retry:
 		    case 'b':	rez_str += '\b';	break;
 		    case 'f':	rez_str += '\f';	break;
 		    case 'r':	rez_str += '\r';	break;
-		    default:	rez_str += prog[pos+1];
+		    case 'x': case 'X':
+			if((pos+3) < prog.size() && isxdigit(prog[pos+2]) && isxdigit(prog[pos+3]))
+			{ rez_str += (char)strtol(prog.substr(pos+2,2).c_str(),NULL,16); elSzPass += 2; }
+			break;
+		    default:
+			if((pos+3) < prog.size() && prog[pos+1] >= '0' && prog[pos+1] <= '7' &&
+						    prog[pos+2] >= '0' && prog[pos+2] <= '7' &&
+						    prog[pos+3] >= '0' && prog[pos+3] <= '7')
+			{ rez_str += (char)strtol(prog.substr(pos+1,3).c_str(),NULL,8); elSzPass += 2; }
+			else rez_str += prog[pos+1];
 		}
-		pos++;
+		elSzPass++;
 	    }
 	    else rez_str += prog[pos];
-	    pos++; yylloc.last_column++;
+	    pos += elSzPass; yylloc.last_column += elSzPass;
 	}
 	if(pos >= prog.size())
 	{

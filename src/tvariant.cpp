@@ -271,8 +271,7 @@ TVariant TArrayObj::propGet( const string &id )
     if(id.size() && isdigit(id[0]))
     {
 	int vid = atoi(id.c_str());
-	if(vid < 0 || vid >= (int)mEls.size()) throw TError("ArrayObj",_("Array element '%d' is not allow."),vid);
-	return mEls[vid];
+	if(vid >= 0 && vid < (int)mEls.size()) return mEls[vid];
     }
     return TVarObj::propGet(id);
 }
