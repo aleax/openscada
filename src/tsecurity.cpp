@@ -232,6 +232,21 @@ string TSecurity::optDescr( )
     return buf;
 }
 
+TVariant TSecurity::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // int access(string user, int mode, string owner, string group, int access)
+    //      - Check for <user> access to resource what owned by <owner> and <group> and <access> for <mode>.
+    //  user - user for access check;
+    //  mode - access mode (4-R, 2-W, 1-X);
+    //  owner - resource owner;
+    //  group - resource group;
+    //  access - resource access mode (RWXRWXRWX - 0777).
+    if(iid == "access" && prms.size() >= 5)
+	return (int)access(prms[0].getS(), prms[1].getI(), prms[2].getS(), prms[3].getS(), prms[4].getI());
+
+    return TCntrNode::objFuncCall(iid,prms,user);
+}
+
 void TSecurity::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info

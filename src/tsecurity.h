@@ -173,6 +173,8 @@ class TSecurity : public TSubSYS
 	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	void postEnable( int flag );
 
 	//Attributes
