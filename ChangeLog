@@ -1,11 +1,11 @@
 2011-03-31 Roman
-- SYS: To user API is added function SYS.Security.access() for control access to some resources by OpenSCADA users.
+- !!:SYS: To user API is added function SYS.Security.access() for control access to some resources by OpenSCADA users.
 
 
 2011-03-30 Roman
 - DB: Into user API function "SQLreq()" is added set cell value to object property by collumn name, to row Array > 0.
 - SYS: To user API object TArray is set return null value for wrong indexes.
-- DAQ.JavaLikeCalc: Special symbols write by octal "\041" and hex "\x21" digits write is added.
+- !!:DAQ.JavaLikeCalc: Special symbols write by octal "\041" and hex "\x21" digits is added.
 
 
 2011-03-29 Maxim
@@ -16,7 +16,7 @@
 2011-03-29 Roman
 - FIX:Function: Set Object to no object's function parameter is fixed for prevent memory leak by no object destroy.
 - FIX:UI.Vision: Bit flags processing is some fixed.
-- DAQ.SNMP: Some messages update and translate. Version 0.6.0 is released.
+- !!:DAQ.SNMP: Some messages update and translate. Version 0.6.0 is released.
 
 
 2011-03-28 Roman
@@ -28,19 +28,19 @@
 - DAQ.LogicLev: The special attribute "this" is added for user access the object of the controller's parameter allow.
 - FIX:DAQ.OPC_UA: Archive's value period set is fixed on an attribute to archive enabling.
 - !!:DAQ.SNMP: All value types support is added. Write values support is added. Errors processing is improved.
-    Addon SNMP connect parameters is added.
+    Addon SNMP connection configuration parameters is added.
 
 
 2011-03-24 Roman
 - !!!!:SYS, DAQ.JavaLikeCalc: The User's system API regular expression object TRegExp, based on PCRE, support is added.
-    Realised functions RegExp.exec() and RegExp.test() standard JavaScript interface.
+    Realised functions RegExp.exec() and RegExp.test() for standard JavaScript interface.
     To DAQ.JavaLikeCalc is realised "new RegExp()" for TRegExp object create.
     To DAQ.JavaLikeCalc addon string functions with using RegExp is realised:
 	int search(); Array match(); Array split(RegExp pat, int limit); string replace(string substr, string str);
 	string replace(RegExp pat, string str);
 - !!:SYS: PCRECPP dependence is replaced by PCRE.
 - SYS: GD library checking for allow is moved to once.
-- SYS: The User's system API, TArrayObj is expanded for object's properties, not numbers, support.
+- !!:SYS: The User's system API, TArrayObj is expanded for object's properties, not numbers, support.
 
 
 2011-03-20 Roman
@@ -113,7 +113,7 @@
 
 2011-02-24 Maxim
 - FIX:UI.WebVision, UI.Vision: Updating the image when the scale is changed is fixed for primitive "ElFigure".
-- FIX:UI.WebVision: Checking of the points' position for the presence of it in the drawing area of the widget is removed, the only such check
+- !!:FIX:UI.WebVision: Checking of the points' position for the presence of it in the drawing area of the widget is removed, the only such check
                     for the fills still remains for the primitive ElFigure.
 
 
@@ -124,7 +124,7 @@
 
 2011-02-21 Roman
 - FIX:DB.SQLite: No memory free from error string is fixed for wrong requests to a table.
-- !!:DAQ.DAQGate, DAQ.DCON, DAQ.DiamondBoards, DAQ.ICP_DAS, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.ModBus, DAQ.OPC_UA, DAQ.Siemens, DAQ.SoundCard
+- !!:DAQ.DAQGate, DAQ.DCON, DAQ.DiamondBoards, DAQ.ICP_DAS, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.ModBus, DAQ.OPC_UA, DAQ.Siemens, DAQ.SoundCard,
     UI.QTCfg, UI.QTStarter, UI.VCAEngine: All warnings is resolved for "-Wall" compile option.
 
 
@@ -145,7 +145,7 @@
 
 
 2011-02-12 Roman
-- UI.Vision: Lost connection to visualisation server message is added for run from visualisation server.
+- !!:UI.Vision: Lost connection to visualisation server message is added for run from visualisation server.
 
 
 2011-02-11 Maxim
@@ -155,8 +155,8 @@
 2011-02-11 Roman
 - UI.Vision: Widget's position remnant is acquired for internal points coordinates calc of primitive "ElFigure".
     Real attributes precision is rise to 3 digits.
-- !:FIX:UI.Vision: Run project crash is fixed for project's calc period more 500 ms.
-- DAQ.BFN, DAQ.BlockCalc: All warnings is resolved for "-Wall" compile option.
+- !!:FIX:UI.Vision: Run session crash is fixed for project's calc period more 500 ms.
+- !!:DAQ.BFN, DAQ.BlockCalc: All warnings is resolved for "-Wall" compile option.
 
 
 2011-02-08 Roman
@@ -164,7 +164,7 @@
 - FIX:Config: Copy heterogenous nodes config properties is fixed.
 - !!:Transport.*, Protocol.*, Special.*, DAQ.AMRDevs: All warnings is resolved for "-Wall" compile option.
 - DAQ.ModBus: Syntax highlight rules is some updated. DAQ parameter's attributes list help is supplemented.
-- FIX:Transport.Serial: Set O_NONBLOCK flag to function open() of serial device, for prevent it hang on several USB->RS485 converters.
+- !!:FIX:Transport.Serial: Set O_NONBLOCK flag to function open() of serial device, for prevent it hang on several USB->RS485 converters.
 - UI.VCAEngine: Included widgets counter and pages into a progect and into other pages is added.
 
 
@@ -173,33 +173,33 @@
 - FIX:DAQ.System: Crash is fixed on exit for source "Hddtemp" exeptions at it destroy.
 - TArchives, Archive.FSArch: Multiscan for an archive directory is disabled at the program start.
 - !!:DB: User API functions fieldStruct(), fieldSeek(), fieldGet(), fieldSet() and fieldDel() for Table object is added.
-- !!DB.*: All warnings is resolved for "-Wall" compile option.
+- !!:DB.*: All warnings is resolved for "-Wall" compile option.
 
 
 2011-02-04 Roman
-- Transport.Serial: Port init is made using previous properties and allow for miss any port properties set.
+- !!:Transport.Serial: Port init is made using previous properties and allow for miss any port properties set.
 
 
 2011-02-01 Roman
 - SYS: Build with all warning show is enabled for RPM-packages.
 - SYS: The default start OpenSCADA scripts "openscada_start" "openscada_demo" and "openscada_demo_local" is adapted
     for use simple shell and don't use tool install, on busybox.
-- FIX:SYS: Code clear for all source code:
+- !!:FIX:SYS: Code clear for all source code:
     - remove not used variables;
     - add returns for all functions with return;
     - init variables which possible used undefined;
     - not full enumerated variables processing into switches;
     - signed and unsigned comparision.
-- FIX:Archive: The prototype of functions TArchiveS::messPut() and TArchiveS::messGet() is changed for fix signed
+- !!:FIX:Archive: The prototype of functions TArchiveS::messPut() and TArchiveS::messGet() is changed for fix signed
     message level on ARM CPUs.
-- FIX:SYS: The prototype of functions TMess::put(), TMess::get(), TCntrNode::grpSize(), TCntrNode::grpId(), TCntrNode::grpAt()
+- !!:FIX:SYS: The prototype of functions TMess::put(), TMess::get(), TCntrNode::grpSize(), TCntrNode::grpId(), TCntrNode::grpAt()
     is changed for fix unsigned char on ARM CPUs.
 - FIX:DAQ: DAQ-redundant logic some fixed.
 - FIX:Mess: Default language select logic is some fixed.
-- FIX:Transport: All transports loading is fixed for missed some transport modules and DB records for its allow.
+- !!:FIX:Transport: All transports loading is fixed for missed some transport modules and DB records for its allow.
 - FIX:Value: The prototype of functions TValue::setReqFlg(), TValue::setResB1() and TValue::setResB2() is fixed for no return.
 - FIX:XML: Expanded variable size for flags of functions XMLNode::save().
-- FIX:Archive.FSArch: Result from fgetc() is writed to integer without char and fix "EOF" detection.
+- !!:FIX:Archive.FSArch: Result from fgetc() is writed to integer without char and fix "EOF" detection.
     File detect is fixed into ModVArchEl::fileAdd().
 - FIX:DB.MySQL: case TFld::String missing is fixed into switch of function MTable::fieldFix().
 - FIX:DAQ.JavaLikeCalc: Rezult value type set is fixed for unary operations.
@@ -276,11 +276,11 @@
 
 
 2010-12-24 Roman
-- SYS: Some titles of big configuration tables is set short.
+- SYS: Some titles for big configuration tables is set short.
 - FIX:SYS.TCntrNode: User name copy to childs for group control request "CntrReqs" is set.
 - FIX:UI.QTCfg: Twice page's content request is fixed.
 - !!!!:UI.QTCfg: Group request "CntrReqs" is used for page's content request.
-    A table selectable item's variants list requests for each row is fixed.
+    A table selectable item's variants list requests for each rowis fixed.
     Used for the performance rise on slow and latent links.
 
 
@@ -293,7 +293,7 @@
 - FIX:Transport, Transport.Serial, Transport.SSL: Deprecated and already no released function TTransportS::traf2str() is removed and final 
     replaced by TSYS::cpct2str().
 - DAQ.UserProtocol: Syntax highlight for protocol's code is added.
-- !:FIX:Transport.Sockets: Unix-socket is set to no block mode by flag O_NONBLOCK. Error message forming is fixed for output transports.
+- !:FIX:Transport.Sockets: Unix-socket is set to no block mode by flag O_NONBLOCK. Error messages forming is fixed for output transports.
 - UI.Vision: Text scale mode for primitive "Text" is changed to font size scale for text distortion prevent.
 
 
@@ -342,7 +342,7 @@
 
 2010-12-10 Roman
 - SYS: The option '--enable-CrossCompile' is added for disable some configure script's tests for cross compiling build.
-- !!:FIX:SYS: The command 'make dist' is fixed and adapted for correct OpenSCADA distribution create.
+- !!:FIX:SYS: The command "$ make dist" is fixed and adapted for correct OpenSCADA distribution create.
 - !!!!:DAQ.JavaLikeCalc: VM full rewrited for direct command's structure using.
 
 
@@ -364,7 +364,7 @@
 
 
 2010-12-02 Roman
-- SYS: TTransportS::traf2str() is renamed and moved to TSYS::cpct2str().
+- !!:SYS: TTransportS::traf2str() is renamed and moved to TSYS::cpct2str().
 
 
 2010-12-01 Roman
@@ -415,8 +415,8 @@
 - !!:DAQ: BFN module is added.
 - FIX:SYS: Function cron() is fixed to hours processing.
 - FIX:DAQ.DiamondBoards: Limits to channel's number is set.
-- Protocol:HTTP: Text content for POST request is added of output protocols.
-- UI.QTCfg, UI.QTStarter, UI.Vision: The signal QAction::activated() is replaced by QAction::triggered().
+- Protocol:HTTP: Text content for POST request is added to output protocol.
+- UI.QTCfg, UI.QTStarter, UI.Vision: The signal QAction::activated(), from QT3, is replaced by QAction::triggered().
 
 
 2010-11-16 Roman
@@ -467,9 +467,9 @@
 - FIX:DB.MySQL: Date and time store format is changed to UTC.
 
 
-2010-10-24 Roman 0.7.0
+2010-10-24 Roman 0.7.0 LTS
 - FIX:DemoDB: Config file is fixed at field value: <prm id="Workdir">../share/openscada</prm>.
-- DOC: FAQ and TODO is updated
+- DOC: FAQ and TODO is updated.
 - SYS: RPM build specification files is updated for field "Summary" translation add.
 - TModSchedul, DAQ.AMRDevs, DAQ.BlockCalc, DAQ.DAQGate, DAQ.DCON, DAQ.ModBus, DAQ.OPC_UA, DAQ.SNMP, DAQ.SoundCards,
     Protoco.HTTP, Protocol.SelfSystem, Transport.SSL, Transport.Serial, Transport.Sockets, UI.Vision, UI.WebVision:
