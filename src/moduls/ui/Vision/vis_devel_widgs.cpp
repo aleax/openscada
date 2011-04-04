@@ -1975,10 +1975,10 @@ void LineEditProp::callDlg( )
             clr.setAlpha( atoi(value().toStdString().substr(found+1).c_str()) );
         }
         else clr = QColor(value());
-        QColorDialog clr_dlg( clr, this );
+        QColorDialog clr_dlg(clr, this);
         clr_dlg.setOption(QColorDialog::ShowAlphaChannel);
-        if( clr_dlg.exec() && clr_dlg.selectedColor().isValid() )
-            setValue( clr_dlg.selectedColor().name() + "-" + QString(TSYS::int2str( clr_dlg.selectedColor().alpha() ).c_str()) );
+        if(clr_dlg.exec() && clr_dlg.selectedColor().isValid())
+            setValue(clr_dlg.selectedColor().name() + "-" + QString::number(clr_dlg.selectedColor().alpha()));
         setFocus();
     }
     QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));

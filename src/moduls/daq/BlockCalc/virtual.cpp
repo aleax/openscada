@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.4.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow block based calculator.")
 #define LICENSE		"GPL2"

@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.9.0"
+#define MOD_VER		"0.9.1"
 #define AUTORS		_("Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -376,7 +376,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  port - DB server port (default 5432);\n"
 	      "  connect_timeout - connection timeout\n"
 	      "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
-	      "For remote DB: [server.nm.org;192.168.2.1;roman;123456;OpenSCADA;5432;10]."));
+	      "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."));
 	return;
     }
     TBD::cntrCmdProc(opt);

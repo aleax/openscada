@@ -4,20 +4,21 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@oscada.org>, 2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 10:16+0200\n"
+"POT-Creation-Date: 2011-04-04 17:53+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
-"Language-Team: Russian <de@li.org>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -183,9 +184,8 @@ msgstr "Verbindung"
 msgid "Link's value"
 msgstr "Verbindungswert"
 
-#, fuzzy, c-format
 msgid "Spent time: %s. "
-msgstr "Rechenzeit %g (usek)"
+msgstr "Verbrauchte Zeit: %s. "
 
 #, c-format
 msgid "Enable block <%s> error."
@@ -212,9 +212,8 @@ msgstr "Zahl"
 msgid "Blocks"
 msgstr "Blöcke"
 
-#, c-format
-msgid "All: %d; Enabled: %d; Process: %d"
-msgstr "Alle: %d; Eingeschaltet: %d; Bearbeitung: %d"
+msgid "All: %u; Enabled: %u; Process: %u"
+msgstr "Alle: %u; Eingeschaltet: %u; Bearbeitung: %u"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."

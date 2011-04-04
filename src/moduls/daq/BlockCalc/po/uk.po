@@ -1,18 +1,19 @@
 # OpenSCADA.DAQ.BlockCalc translate to Ukrainian.
-# Copyright (C) 2005-2010 Roman Savochenko
+# Copyright (C) 2005-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.BlockCalc module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-29 10:16+0200\n"
+"POT-Creation-Date: 2011-04-04 17:53+0300\n"
 "PO-Revision-Date: 2007-10-28 08:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -178,6 +179,7 @@ msgstr "Зв'язок"
 msgid "Link's value"
 msgstr "Значення зв'язку"
 
+#, c-format
 msgid "Spent time: %s. "
 msgstr "Витрачено часу: %s. "
 
@@ -206,9 +208,8 @@ msgstr "Кількість"
 msgid "Blocks"
 msgstr "Блоки"
 
-#, c-format
-msgid "All: %d; Enabled: %d; Process: %d"
-msgstr "Всього: %d; Включено: %d; Обробляється: %d"
+msgid "All: %u; Enabled: %u; Process: %u"
+msgstr "Всього: %u; Включено: %u; Обробляється: %u"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."

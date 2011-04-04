@@ -49,7 +49,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.2"
+#define MOD_VER		"1.7.3"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other.")
 #define LICENSE		"GPL2"

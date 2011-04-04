@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Diamond DA boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.1"
+#define MOD_VER		"1.2.2"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to Diamond systems DA boards. Include support of Athena board.")
 #define LICENSE		"GPL2"

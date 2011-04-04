@@ -7,7 +7,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.2\n"
+"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-21 16:39+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"

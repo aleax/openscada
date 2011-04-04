@@ -4,6 +4,14 @@
 
 2011-04-04 Roman
 - !!:DAQ.SNMP: SNMP v3 support is added.
+- !!:Archive.FSArch: Documents and translations is updated and released version 1.4.5.
+- !!:DB.FireBird: Documents and translations is updated and released version 0.9.6.
+- !!:DB.MySQL: Documents and translations is updated and released version 1.7.0.
+- !!:DB.PostgreSQL: Documents and translations is updated and released version 0.9.1.
+- !!:DB.SQLite: Documents and translations is updated and released version 1.6.3.
+- !!:DAQ.BlockCalc: Documents and translations is updated and released version 1.4.1.
+- !!:DAQ.DiamondBoards: Documents and translations is updated and released version 1.2.2.
+- !!:DAQ.System: Documents and translations is updated and released version 1.7.3.
 
 
 2011-03-31 Roman
@@ -179,7 +187,7 @@
 2011-02-07 Roman
 - DAQ.System: The library libsensors disable is added for no allowed the library.
 - FIX:DAQ.System: Crash is fixed on exit for source "Hddtemp" exeptions at it destroy.
-- TArchives, Archive.FSArch: Multiscan for an archive directory is disabled at the program start.
+- FIX:TArchives, Archive.FSArch: Multiscan for an archive directory is disabled at the program start.
 - !!:DB: User API functions fieldStruct(), fieldSeek(), fieldGet(), fieldSet() and fieldDel() for Table object is added.
 - !!:DB.*: All warnings is resolved for "-Wall" compile option.
 
@@ -415,7 +423,7 @@
 
 
 2010-11-19 Roman
-- DB.MySQL: Timeouts set support is added.
+- !!:DB.MySQL: Timeouts set support is added.
 - DAQ.BFN: Code symbols support is added.
 
 
