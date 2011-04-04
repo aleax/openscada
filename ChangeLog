@@ -1,3 +1,7 @@
+2011-04-04 Roman
+- !!:DAQ.SNMP: SNMP v3 support is added.
+
+
 2011-03-31 Roman
 - !!:SYS: To user API is added function SYS.Security.access() for control access to some resources by OpenSCADA users.
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 16:36+0300\n"
+"POT-Creation-Date: 2011-04-03 19:32+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -42,13 +42,16 @@ msgid "Retries"
 msgstr "Спроб"
 
 msgid "Timeout (sec)"
-msgstr "Час очыкування (сек)"
+msgstr "Час очікування (сек)"
 
 msgid "SNMP version"
 msgstr "SNMP версія"
 
-msgid "Server community"
-msgstr "Група серверу"
+msgid "Server community/user"
+msgstr "Співтовариство/користувач серверу"
+
+msgid "V3 parameters"
+msgstr "V3 параметри"
 
 msgid "Param's attributes limit"
 msgstr "Обмеження на кількість атрибутів"
@@ -71,6 +74,12 @@ msgstr "Наступний виклик за cron '%s'. "
 msgid "Spent time: %s."
 msgstr "Витрачено часу: %s."
 
+msgid "Error generating Ku from authentication pass phrase."
+msgstr "Помилка генерації Ku з паролю автонтифікації."
+
+msgid "Error generating Ku from private pass phrase."
+msgstr "Помилка генерації Ku з паролю приватності."
+
 msgid "Error SNMP session open."
 msgstr "Помилка відкриття SNMP сесії."
 
@@ -89,8 +98,20 @@ msgstr ""
 "SNMP хост агенту у IP адресі або доменній назві хоста.\n"
 "Також ви можете встановити порт, наприклад \"localhost:161\""
 
-msgid "Community groups: \"{read}:{write}\"."
-msgstr "Групи спільнот: \"{читати}:{писати}\"."
+msgid "Community group or user."
+msgstr "Група спільноти або користувач."
+
+msgid "Security level"
+msgstr "Рівень безпеки"
+
+msgid "No auth/No privacy;Auth/No privacy;Auth/Privacy"
+msgstr "Немає автонт/Немає приватн;Автонт/Немає приватн;Автонт/Приватн"
+
+msgid "Auth"
+msgstr "Автонтифікація"
+
+msgid "Privacy"
+msgstr "Приватність"
 
 msgid ""
 "SNMP OID list, include directories for get all subitems. OID can write in "

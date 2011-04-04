@@ -98,6 +98,18 @@ class TMdContr: public TController
 	int	prior( )	{ return m_prior; }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
 
+	string	secLev( );
+	string	secAuthProto( );
+	string	secAuthPass( );
+	string	secPrivProto( );
+	string  secPrivPass( );
+
+	void	setSecLev(const string &vl);
+	void    setSecAuthProto(const string &vl);
+	void    setSecAuthPass(const string &vl);
+	void    setSecPrivProto(const string &vl);
+	void    setSecPrivPass(const string &vl);
+
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
@@ -123,9 +135,10 @@ class TMdContr: public TController
 		&m_retr,	// Request retries
 		&m_tm;		// Request timeout
 	string	&mSched,        // Calc schedule
-		&m_addr,	// Host address
+		&m_addr, w_addr,// Host address
 		&m_ver,		// SNMP version
-		&m_comm;	// Server community
+		&m_comm, w_comm,// Server community
+		&m_V3;		// V3 parameters
 	long long mPer;
 
 	bool	prc_st,		// Process task active
@@ -134,6 +147,8 @@ class TMdContr: public TController
 
 	double	tm_gath;	// Gathering time
 	ResString acq_err;
+
+	struct snmp_session session;
 };
 
 //*************************************************

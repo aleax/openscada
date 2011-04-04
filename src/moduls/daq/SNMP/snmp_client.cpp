@@ -110,7 +110,8 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("RETR",_("Retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
     fldAdd(new TFld("TM",_("Timeout (sec)"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
     fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selected,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
-    fldAdd(new TFld("COMM",_("Server community"),TFld::String,TFld::NoFlag,"20","public:private"));
+    fldAdd(new TFld("COMM",_("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
+    fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
     fldAdd(new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
     //> Parameter type bd structure
@@ -130,7 +131,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
     m_prior(cfg("PRIOR").getId()), m_pattr_lim(cfg("PATTR_LIM").getId()), m_retr(cfg("RETR").getId()), m_tm(cfg("TM").getId()),
     mSched(cfg("SCHEDULE").getSd()), m_addr(cfg("ADDR").getSd()), m_ver(cfg("VER").getSd()), m_comm(cfg("COMM").getSd()),
-    prc_st(false), endrun_req(false), tm_gath(0)
+    m_V3(cfg("V3").getSd()), prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
@@ -156,6 +157,61 @@ string TMdContr::getStatus( )
     return rez;
 }
 
+string TMdContr::secLev( )
+{
+    return TSYS::strParse(m_V3, 0, ":");
+}
+
+void TMdContr::setSecLev(const string &vl)
+{
+    m_V3 = vl+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass();
+    modif();
+}
+
+string TMdContr::secAuthProto( )
+{
+    return TSYS::strParse(m_V3, 1, ":");
+}
+
+void TMdContr::setSecAuthProto(const string &vl)
+{
+    m_V3 = secLev()+":"+vl+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass();
+    modif();
+}
+
+string TMdContr::secAuthPass( )
+{
+    return TSYS::strParse(m_V3, 2, ":");
+}
+
+void TMdContr::setSecAuthPass(const string &vl)
+{
+    m_V3 = secLev()+":"+secAuthProto()+":"+vl+":"+secPrivProto()+":"+secPrivPass();
+    modif();
+}
+
+string TMdContr::secPrivProto( )
+{
+    return TSYS::strParse(m_V3, 3, ":");
+}
+
+void TMdContr::setSecPrivProto(const string &vl)
+{
+    m_V3 = secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+vl+":"+secPrivPass();
+    modif();
+}
+
+string TMdContr::secPrivPass( )
+{
+    return TSYS::strParse(m_V3, 4, ":");
+}
+
+void TMdContr::setSecPrivPass(const string &vl)
+{
+    m_V3 = secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+vl;
+    modif();
+}
+
 TParamContr *TMdContr::ParamAttach(const string &name, int type)
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -165,6 +221,74 @@ void TMdContr::start_( )
 {
     //> Schedule process
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+
+    //> Session init
+    snmp_sess_init(&session);
+    session.version = SNMP_VERSION_1;
+    if(m_ver == "1")		session.version = SNMP_VERSION_1;
+    else if(m_ver == "2c")	session.version = SNMP_VERSION_2c;
+    else if(m_ver == "2u")	session.version = SNMP_VERSION_2u;
+    else if(m_ver == "3")	session.version = SNMP_VERSION_3;
+    w_addr = TSYS::strParse(m_addr, 0, ":");
+    session.peername = (char *)w_addr.c_str();
+    session.retries = m_retr;
+    session.timeout = m_tm*1000000;
+    if(session.version != SNMP_VERSION_3)
+    {
+	w_comm = m_comm;
+	session.community = (u_char*)w_comm.c_str();
+	session.community_len = w_comm.size();
+    }
+    else
+    {
+	w_comm = m_comm;
+	session.securityName = (char*)w_comm.c_str();
+	session.securityNameLen = strlen(session.securityName);
+
+	session.securityLevel = SNMP_SEC_LEVEL_NOAUTH;
+	if(secLev() == "authNoPriv")	session.securityLevel = SNMP_SEC_LEVEL_AUTHNOPRIV;
+	else if(secLev() == "authPriv")	session.securityLevel = SNMP_SEC_LEVEL_AUTHPRIV;
+
+	if(session.securityLevel != SNMP_SEC_LEVEL_NOAUTH)
+	{
+	    if(secAuthProto() == "SHA")
+	    {
+		session.securityAuthProto = usmHMACSHA1AuthProtocol;
+		session.securityAuthProtoLen = sizeof(usmHMACSHA1AuthProtocol)/sizeof(oid);
+	    }
+	    else
+	    {
+		session.securityAuthProto = usmHMACMD5AuthProtocol;
+		session.securityAuthProtoLen = sizeof(usmHMACMD5AuthProtocol)/sizeof(oid);
+	    }
+	    session.securityAuthKeyLen = USM_AUTH_KU_LEN;
+
+	    string w_sauth = secAuthPass();
+	    if(generate_Ku(session.securityAuthProto, session.securityAuthProtoLen, (u_char*)w_sauth.data(), w_sauth.size(),
+		    session.securityAuthKey, &session.securityAuthKeyLen) != SNMPERR_SUCCESS)
+		throw TError(nodePath().c_str(),_("Error generating Ku from authentication pass phrase."));
+	}
+
+	if(session.securityLevel == SNMP_SEC_LEVEL_AUTHPRIV)
+	{
+	    if(secPrivProto() == "AES")
+	    {
+		session.securityPrivProto = usmAESPrivProtocol;
+		session.securityPrivProtoLen = sizeof(usmAESPrivProtocol)/sizeof(oid);
+	    }
+	    else
+	    {
+		session.securityPrivProto = usmDESPrivProtocol;
+		session.securityPrivProtoLen = sizeof(usmDESPrivProtocol)/sizeof(oid);
+	    }
+	    session.securityPrivKeyLen = USM_PRIV_KU_LEN;
+
+	    string w_spriv = secPrivPass();
+	    if(generate_Ku(session.securityPrivProto, session.securityPrivProtoLen, (u_char*)w_spriv.data(), w_spriv.size(),
+		    session.securityPrivKey, &session.securityPrivKeyLen) != SNMPERR_SUCCESS)
+		throw TError(nodePath().c_str(),_("Error generating Ku from private pass phrase."));
+	}
+    }
 
     //> Start the gathering data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
@@ -201,22 +325,7 @@ void *TMdContr::Task(void *icntr)
     size_t oid_root_len = MAX_OID_LEN, oid_next_len = MAX_OID_LEN;
 
     //> Start SNMP-net session
-    //> Session init
-    struct snmp_session session;
-    snmp_sess_init(&session);
-    session.version = SNMP_VERSION_1;
-    if(cntr.m_ver == "1") session.version = SNMP_VERSION_1;
-    else if(cntr.m_ver == "2c") session.version = SNMP_VERSION_2c;
-    else if(cntr.m_ver == "2u") session.version = SNMP_VERSION_2u;
-    else if(cntr.m_ver == "3")  session.version = SNMP_VERSION_3;
-    string w_comm = TSYS::strParse(cntr.m_comm, 0, ":");
-    session.community = (u_char*)w_comm.c_str();
-    session.community_len = w_comm.size();
-    string w_addr = TSYS::strParse(cntr.m_addr, 0, ":");
-    session.peername = (char *)w_addr.c_str();
-    session.retries = cntr.m_retr;
-    session.timeout = cntr.m_tm*1000000;
-    void *ss =  snmp_sess_open(&session);
+    void *ss =  snmp_sess_open(&cntr.session);
     if(!ss) { mess_err(mod->nodePath().c_str(), "%s", _("Error SNMP session open.")); return NULL; }
 
     cntr.endrun_req = false;
@@ -358,7 +467,7 @@ void *TMdContr::Task(void *icntr)
 				}
 			    }
 			else if(status == STAT_TIMEOUT)
-			    throw TError(cntr.nodePath().c_str(),TSYS::strMess(_("10:Timeout: No Response from %s."),session.peername).c_str());
+			    throw TError(cntr.nodePath().c_str(),TSYS::strMess(_("10:Timeout: No Response from %s."),cntr.session.peername).c_str());
 			else running = 0;
 			if(response) snmp_free_pdu(response);
 		    }
@@ -408,12 +517,54 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
         ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
-    	    "help",_("Community groups: \"{read}:{write}\"."));
+    	    "help",_("Community group or user."));
+	ctrRemoveNode(opt,"/cntr/cfg/V3");
+	if(m_ver == "3")
+	{
+    	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
+        	"sel_id","noAurhNoPriv;authNoPriv;authPriv","sel_list",_("No auth/No privacy;Auth/No privacy;Auth/Privacy"));
+	    if(secLev() != "noAurhNoPriv")
+	    {
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthProto",_("Auth"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list","MD5;SHA");
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass","",RWRWR_,"root",SDAQ_ID,1,"tp","str");
+	    }
+	    if(secLev() == "authPriv")
+	    {
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivProto",_("Privacy"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list","DES;AES");
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivPass","",RWRWR_,"root",SDAQ_ID,1,"tp","str");
+	    }
+	}
         return;
     }
 
     //> Process command to page
-    TController::cntrCmdProc(opt);
+    string a_path = opt->attr("path");
+    if(a_path == "/cntr/cfg/SecLev")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(secLev());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecLev(opt->text());
+    }
+    else if(a_path == "/cntr/cfg/AuthProto")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(secAuthProto());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecAuthProto(opt->text());
+    }
+    else if(a_path == "/cntr/cfg/AuthPass")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(secAuthPass().size(),'*'));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecAuthPass(opt->text());
+    }
+    else if(a_path == "/cntr/cfg/PrivProto")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(secPrivProto());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecPrivProto(opt->text());
+    }
+    else if(a_path == "/cntr/cfg/PrivPass")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(secPrivPass().size(),'*'));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecPrivPass(opt->text());
+    }
+    else TController::cntrCmdProc(opt);
 }
 
 
@@ -563,26 +714,12 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     }
     if(vtp)
     {
-	struct snmp_session session;
-	snmp_sess_init(&session);
-	session.version = SNMP_VERSION_1;
-	if(owner().m_ver == "1") session.version = SNMP_VERSION_1;
-	else if(owner().m_ver == "2c") session.version = SNMP_VERSION_2c;
-	else if(owner().m_ver == "2u") session.version = SNMP_VERSION_2u;
-	else if(owner().m_ver == "3")  session.version = SNMP_VERSION_3;
-	string w_comm = TSYS::strParse(owner().m_comm, 1, ":");
-	session.community = (u_char*)w_comm.c_str();
-	session.community_len = w_comm.size();
-	string w_addr = TSYS::strParse(owner().m_addr, 0, ":");
-	session.peername = (char *)w_addr.c_str();
-	session.retries = owner().m_retr;
-	session.timeout = owner().m_tm*1000000;
-	if(!(ss=snmp_sess_open(&session))) return;
+	if(!(ss=snmp_sess_open(&owner().session))) return;
 
 	snmp_add_var(pdu, oidn, oidn_len, vtp, valo.getS().c_str());
 	int status = snmp_sess_synch_response(ss, pdu, &response);
 	if(status == STAT_TIMEOUT)
-	    owner().acq_err.setVal(TSYS::strMess(_("10:Timeout: No Response from %s."),session.peername).c_str());
+	    owner().acq_err.setVal(TSYS::strMess(_("10:Timeout: No Response from %s."),owner().session.peername).c_str());
 	else if(response && response->errstat == SNMP_ERR_NOSUCHNAME)
 	    owner().acq_err.setVal(TSYS::strMess(_("11:No authorized name.")));
 	if(response) snmp_free_pdu(response);

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 16:36+0300\n"
+"POT-Creation-Date: 2011-04-03 19:32+0300\n"
 "PO-Revision-Date: 2009-08-18 09:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -52,8 +52,13 @@ msgstr ""
 msgid "SNMP version"
 msgstr "SNMP Client"
 
-msgid "Server community"
+#, fuzzy
+msgid "Server community/user"
 msgstr "Gruppe des Servers"
+
+#, fuzzy
+msgid "V3 parameters"
+msgstr "Tabelle der Parameter"
 
 msgid "Param's attributes limit"
 msgstr "Grenze Parameter Attribute"
@@ -76,6 +81,12 @@ msgstr ""
 msgid "Spent time: %s."
 msgstr ""
 
+msgid "Error generating Ku from authentication pass phrase."
+msgstr ""
+
+msgid "Error generating Ku from private pass phrase."
+msgstr ""
+
 msgid "Error SNMP session open."
 msgstr "Fehler beim Öffnen der SNMP-Sitzung."
 
@@ -92,7 +103,19 @@ msgid ""
 "Also you can set port like \"localhost:161\""
 msgstr ""
 
-msgid "Community groups: \"{read}:{write}\"."
+msgid "Community group or user."
+msgstr ""
+
+msgid "Security level"
+msgstr ""
+
+msgid "No auth/No privacy;Auth/No privacy;Auth/Privacy"
+msgstr ""
+
+msgid "Auth"
+msgstr ""
+
+msgid "Privacy"
 msgstr ""
 
 msgid ""
