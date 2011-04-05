@@ -7,12 +7,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Serial 0.7.1\n"
+"Project-Id-Version: OpenSCADA.Transport.Serial 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-15 09:27+0200\n"
+"POT-Creation-Date: 2011-04-05 17:20+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -46,12 +47,12 @@ msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
 msgstr ""
 "Трафик входящий %s, исходящий %s. Макс. время ожидания символа %.4g мс."
 
+#, c-format
 msgid "Serial port '%s' open error: %s."
 msgstr "Ошибка открытия последовательного порта '%s': %s."
 
-#, c-format
-msgid "Speed '%d' error."
-msgstr "Ошибка скорости '%d'."
+msgid "Speed '%s' error."
+msgstr "Ошибка скорости '%s'."
 
 #, c-format
 msgid "Asynchronous data format '%s' error."
@@ -186,8 +187,8 @@ msgid "Serial error!"
 msgstr "Ошибка последовательного интерфейса!"
 
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]"
-"\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:"
+"[modTel]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"

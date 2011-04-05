@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.ModBus 1.1.1\n"
+"Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-14 16:07+0200\n"
+"POT-Creation-Date: 2011-04-05 11:56+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -219,6 +219,7 @@ msgstr "Помилка протоколу '%s'."
 msgid "13:Error respond"
 msgstr "13:Помилка відповіді"
 
+#, c-format
 msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Функція не підтримується."
 
@@ -240,6 +241,7 @@ msgstr "7:Помилка програмної функції. Запитано �
 msgid "10:Gateway problem."
 msgstr "10:Помилка у шлюзі."
 
+#, c-format
 msgid "12:%02X:Unknown error."
 msgstr "12:%02X:Невідома помилка."
 

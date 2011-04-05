@@ -7,12 +7,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.5\n"
+"Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-21 12:40+0200\n"
+"POT-Creation-Date: 2011-04-05 16:43+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -185,6 +186,7 @@ msgstr "Невідома помилка"
 msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
+#, c-format
 msgid "Request error: %s"
 msgstr "Помилка запиту: %s"
 

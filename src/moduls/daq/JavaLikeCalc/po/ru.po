@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Russian.
-# Copyright (C) 2005-2010 Roman Savochenko
+# Copyright (C) 2005-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.8.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-28 16:37+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"

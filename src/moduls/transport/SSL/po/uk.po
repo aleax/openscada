@@ -7,12 +7,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.SSL 0.9.5\n"
+"Project-Id-Version: OpenSCADA.Transport.SSL 0.9.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-30 12:08+0200\n"
+"POT-Creation-Date: 2011-04-05 16:57+0300\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -35,12 +36,13 @@ msgstr "Додаткові параметри"
 msgid "Start error: "
 msgstr "Помилка запуску: "
 
+#, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
 "limit %d."
 msgstr ""
-"Підключень %d, відкрито %d. Трафік вхідний %s, вихідний %s. "
-"Закрито з'єднань із-за ліміту %d."
+"Підключень %d, відкрито %d. Трафік вхідний %s, вихідний %s. Закрито з'єднань "
+"із-за ліміту %d."
 
 #, c-format
 msgid "Open temporaty file '%s' error: '%s'"
@@ -110,6 +112,7 @@ msgstr "Keep alive час очікування (с)"
 msgid "Priority"
 msgstr "Пріорітет"
 
+#, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафік вхідний %s, вихідний %s."
 

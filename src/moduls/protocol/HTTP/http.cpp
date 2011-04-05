@@ -34,7 +34,7 @@
 #define MOD_NAME	_("HTTP-realisation")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow support HTTP for WWW based UIs.")
 #define LICENSE		"GPL2"

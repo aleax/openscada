@@ -3,16 +3,18 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-28 20:12+0200\n"
+"POT-Creation-Date: 2011-04-05 15:47+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
-"Language-Team: Russian <de@li.org>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "X-Generator: Lokalize 1.0\n"
@@ -69,40 +71,17 @@ msgstr "Wurzeldirektorie (84)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-#, fuzzy, c-format
 msgid "Call by period: %s. "
-msgstr "Datenemfang mit der Periode %g s. "
+msgstr "Call by Zeit: %s. "
 
-#, fuzzy, c-format
 msgid "Call next by cron '%s'. "
-msgstr "Datenempfang nach dem Plan '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
 
-#, fuzzy, c-format
 msgid "Spent time: %s. Requests %.6g."
-msgstr "%.6g usek. Zeit genommen. Anfragen %.6g."
+msgstr "Verbrauchte Zeit: %s. Anfragen %.6g."
 
 msgid "No secure policy found"
 msgstr "Politik der Sicherheit ist nicht gefunden"
-
-msgid ""
-"Schedule is writed in seconds periodic form or in standard Cron form.\n"
-"Seconds form is one real number (1.5, 1e-3).\n"
-"Cron it is standard form '* * * * *'. Where:\n"
-"  - minutes (0-59);\n"
-"  - hours (0-23);\n"
-"  - days (1-31);\n"
-"  - month (1-12);\n"
-"  - week day (0[sunday]-6)."
-msgstr ""
-"Planung wird in der Form der Sekundenperiodizität oder  des Standardes Cron "
-"gespeichert.\n"
-"Sekundenform ist eine reele Zahl (1.5, 1e-3).\n"
-"Form des Standards Cron ist '* * * * *'. Wo:\n"
-"  - Minuten (0-59);\n"
-"  - Stunden (0-23);\n"
-"  - Tage (1-31);\n"
-"  - Monate (1-12);\n"
-"  - Wochentage (0[Sonntag]-6)."
 
 msgid "Server nodes browser"
 msgstr "Übersicht der Knoten des Servers"
@@ -445,11 +424,6 @@ msgstr "Eingeschaltet"
 
 msgid "DB"
 msgstr "DB"
-
-msgid ""
-"DB address in format [<DB module>.<DB name>].\n"
-"For use main work DB set '*.*'."
-msgstr ""
 
 msgid "Config"
 msgstr "Konfiguration"

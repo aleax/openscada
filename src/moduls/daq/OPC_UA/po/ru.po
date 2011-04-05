@@ -7,12 +7,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-28 20:12+0200\n"
+"POT-Creation-Date: 2011-04-05 15:47+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -68,37 +69,20 @@ msgstr "Корневая директория (84)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Ошибка подключения. Восстановление через %.6g с."
 
+#, c-format
 msgid "Call by period: %s. "
 msgstr "Вызовы с периодом: %s. "
 
+#, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Затрачено времени: %s. Запросов %.6g."
 
 msgid "No secure policy found"
 msgstr "Не найдено политики безопасности"
-
-msgid ""
-"Schedule is writed in seconds periodic form or in standard Cron form.\n"
-"Seconds form is one real number (1.5, 1e-3).\n"
-"Cron it is standard form '* * * * *'. Where:\n"
-"  - minutes (0-59);\n"
-"  - hours (0-23);\n"
-"  - days (1-31);\n"
-"  - month (1-12);\n"
-"  - week day (0[sunday]-6)."
-msgstr ""
-"Планирование записывается в форме секундной периодичности или в форме "
-"стандарта Cron.\n"
-"Секундная форма это одно вещественное число (1.5, 1e-3).\n"
-"Форма стандарта Cron это '* * * * *'. Где:\n"
-"  - минуты (0-59);\n"
-"  - часы (0-23);\n"
-"  - дни (1-31);\n"
-"  - месяца (1-12);\n"
-"  - дни недели (0[воскресенье]-6)."
 
 msgid "Server nodes browser"
 msgstr "Обзор узлов сервера"
@@ -441,11 +425,6 @@ msgstr "Включен"
 
 msgid "DB"
 msgstr "БД"
-
-msgid ""
-"DB address in format [<DB module>.<DB name>].\n"
-"For use main work DB set '*.*'."
-msgstr ""
 
 msgid "Config"
 msgstr "Конфигурация"

@@ -3,30 +3,32 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.BFN package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-02 12:58+0200\n"
+"POT-Creation-Date: 2011-04-05 16:12+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
-"Language-Team: Russian <de@li.org>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "X-Generator: Lokalize 1.0\n"
 
 msgid "BFN module"
-msgstr ""
+msgstr "BFN Modul"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://"
-"www.bigdutchman.com)."
+"BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com)."
 msgstr ""
+"BFN Module für Viper CT/BAS und andere aus \"Big Dutchman \" (http://www.bigdutchman.com)."
 
 msgid "Calc schedule"
 msgstr "Planung der Berechnung"
@@ -44,7 +46,7 @@ msgid "User"
 msgstr ""
 
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
 msgid "Standard"
 msgstr "Standard"
@@ -54,14 +56,13 @@ msgid "Code %s"
 msgstr ""
 
 msgid "Symbols"
-msgstr ""
+msgstr "Symbole"
 
 msgid "Symbols DB"
-msgstr ""
+msgstr "Symbole DB"
 
-#, fuzzy
 msgid "Codes"
-msgstr "Knoten"
+msgstr ""
 
 msgid "Id"
 msgstr ""
@@ -70,53 +71,49 @@ msgid "Text"
 msgstr ""
 
 msgid "Alarms"
-msgstr ""
+msgstr "Alarme"
 
-#, fuzzy
 msgid "Code"
-msgstr "Knoten"
+msgstr ""
 
 msgid "New symbol for code"
-msgstr ""
+msgstr "Neues Symbol für die Code"
 
 msgid "New symbol for alarm"
-msgstr ""
+msgstr "Neues Symbol für Alarm"
 
 #, c-format
 msgid "Error: '%s'. "
-msgstr ""
+msgstr "Fehler: '%s'. "
 
 msgid "Call now. "
-msgstr ""
+msgstr "Rufen Sie jetzt an. "
 
-#, fuzzy, c-format
 msgid "Call by period: %s. "
-msgstr "Datenemfang mit der Periode %g s. "
+msgstr "Call by Zeit: %s. "
 
-#, fuzzy, c-format
 msgid "Call next by cron '%s'. "
-msgstr "Datenempfang nach dem Plan '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
 
-#, fuzzy, c-format
 msgid "Spent time: %s."
-msgstr "%.6g usek. Zeit genommen. Anfragen %.6g."
+msgstr "Verbrauchte Zeit: %s."
 
 msgid "House:\n"
-msgstr ""
+msgstr "Haus:\n"
 
 msgid "House computer:\n"
-msgstr ""
+msgstr "Haus-Computer:\n"
 
 #, c-format
 msgid "Connect to transport '%s' error."
-msgstr ""
+msgstr "Verbinden Sie den Transport '%s' Fehler."
 
 msgid "Respond parsing error. Possible respond incomplite."
-msgstr ""
+msgstr "Reagieren Parsing-Fehler. Mögliche reagieren incomplite."
 
 #, c-format
 msgid "Unknown alarm '%s'."
-msgstr ""
+msgstr "Unbekannte Alarm '%s'."
 
 msgid "Main"
 msgstr ""

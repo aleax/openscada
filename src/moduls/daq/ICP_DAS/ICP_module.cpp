@@ -36,7 +36,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.2"
+#define MOD_VER		"0.7.3"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"

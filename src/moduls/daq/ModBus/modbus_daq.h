@@ -46,7 +46,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.1.1"
+#define DAQ_MVER	"1.1.2"
 #define DAQ_AUTORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"

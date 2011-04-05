@@ -34,7 +34,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.9.3"
+#define MOD_VER		"0.9.4"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Self OpenSCADA protocol, support generic functions.")
 #define LICENSE		"GPL2"

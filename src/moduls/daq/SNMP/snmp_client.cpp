@@ -286,7 +286,7 @@ void TMdContr::start_( )
 	    string w_spriv = secPrivPass();
 	    if(generate_Ku(session.securityPrivProto, session.securityPrivProtoLen, (u_char*)w_spriv.data(), w_spriv.size(),
 		    session.securityPrivKey, &session.securityPrivKeyLen) != SNMPERR_SUCCESS)
-		throw TError(nodePath().c_str(),_("Error generating Ku from private pass phrase."));
+		throw TError(nodePath().c_str(),_("Error generating Ku from privacy pass phrase."));
 	}
     }
 
