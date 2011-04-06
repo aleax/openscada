@@ -51,7 +51,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the group tests for OpenSCADA system.")
 #define LICENSE		"GPL2"

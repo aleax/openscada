@@ -2,14 +2,14 @@
 # Copyright (C) 2003 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.7.0\n"
+"Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 15:54+0200\n"
+"POT-Creation-Date: 2011-04-06 10:04+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -112,7 +112,7 @@ msgstr ""
 "\n"
 
 msgid "Start subsystem."
-msgstr "Запуск підсистеми"
+msgstr "Запуск підсистеми."
 
 #, c-format
 msgid "Message archivator <%s> start error."
@@ -127,7 +127,7 @@ msgid "Value archive <%s> start error."
 msgstr "Помилка запуску архіву значень <%s>."
 
 msgid "Stop subsystem."
-msgstr "Зупинка підсистеми"
+msgstr "Зупинка підсистеми."
 
 msgid "Archive messages thread is not stopped!"
 msgstr "Поток архівування повідомлень не зупинено!"
@@ -1035,7 +1035,7 @@ msgid ""
 "    - \"*/2\" - range divider for allowed values.\n"
 "Examples:\n"
 "  \"1e-3\" - periodic call by one millisecond;\n"
-"  \"* * * * *\" - any minutes;\n"
+"  \"* * * * *\" - each minute;\n"
 "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
 "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
 "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include)."
@@ -1056,7 +1056,7 @@ msgstr ""
 "    - \"*/2\" - дільник діапазону дозволених значень.\n"
 "Приклади:\n"
 "  \"1e-3\" - періодичний виклик з однією мілісекундою;\n"
-"  \"* * * * *\" - будь яка хвилина;\n"
+"  \"* * * * *\" - кожна хвилина;\n"
 "  \"10 23 * * *\" - тільки 23я година та 10а хвилина будь якого дня та "
 "місяця;\n"
 "  \"*/2 * * * *\" - для хвилин: 0,2,4,...,56,58;\n"
@@ -1938,10 +1938,6 @@ msgstr "Змінна не є об'єкт!"
 msgid "Zero object using try!"
 msgstr "Спроба використання порожнього об'єкту!"
 
-#, c-format
-msgid "Array element '%d' is not allow."
-msgstr "Елемент масиву '%d' не доступний."
-
 msgid "Negative id is not allow for array."
 msgstr "Негативний індекс не дозволений для масиву."
 
@@ -1982,6 +1978,46 @@ msgstr "Неможу виділити пам'ять для парсеру."
 msgid "Parse error at line %d --- %s. Source string: '%s'"
 msgstr "Помилка парсеру у лінії %d --- %s. Джерело: '%s'"
 
+#, c-format
+msgid "Unexpected end. Pos: %d"
+msgstr "Неочікуваний кінець. Поз: %d"
+
+#, c-format
+msgid "No comment block end. Pos: %d"
+msgstr "Немає завершення блоку коментарю. Поз: %d"
+
+#, c-format
+msgid "Unfinished '!DOCTYPE' block. Pos: %d"
+msgstr "Незавершений блок '!DOCTYPE'. Поз: %d"
+
+#, c-format
+msgid "Unfinished '!DOCTYPE [ ]' container. Pos: %d"
+msgstr "Незавершений контейнер '!DOCTYPE [ ]'. Поз: %d"
+
+#, c-format
+msgid "Unexpected or error end tag. Pos: %d"
+msgstr "Неочікуване або помилкове завершення тегу. Поз: %d"
+
+#, c-format
+msgid "Unfinished start comment or unknown block. Pos: %d"
+msgstr "Незавершений початок коментарю або невідомий блок. Поз: %d"
+
+#, c-format
+msgid "Start tag error. Pos: %d"
+msgstr "Помилка початку тегу. Поз: %d"
+
+#, c-format
+msgid "Unfinished attribute. Pos: %d"
+msgstr "Незавершений атрибут. Поз: %d"
+
+#, c-format
+msgid "Entity error. Pos: %d"
+msgstr "Помилка сутності. Поз: %d"
+
+#, c-format
+msgid "Unknown entity. Pos: %d"
+msgstr "Невідома сутність. Поз: %d"
+
 msgid "Message arhiv no support!"
 msgstr "Архів повідомлень не підтримується!"
 
@@ -2011,6 +2047,3 @@ msgstr "Вхідні транспорти не підтримуються!"
 
 msgid "Output transport no support!"
 msgstr "Вихідні транспорти не підтримуються!"
-
-#~ msgid "Started"
-#~ msgstr "Запущено"

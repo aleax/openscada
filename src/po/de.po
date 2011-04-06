@@ -4,17 +4,17 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.7.0\n"
+"Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 15:54+0200\n"
+"POT-Creation-Date: 2011-04-06 10:04+0300\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
-"Language-Team: Russian <de@li.org>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: German <de@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -877,7 +877,7 @@ msgstr "Vorlagenbibliotheken"
 
 #, c-format
 msgid "Spent time: %s."
-msgstr ""
+msgstr "Verbrauchte Zeit: %s."
 
 msgid "<newStat>"
 msgstr "<neueStation>"
@@ -983,7 +983,7 @@ msgid "Number runs"
 msgstr "Startenzahl"
 
 msgid "Spent time"
-msgstr ""
+msgstr "Verbrauchte Zeit"
 
 msgid "Bool"
 msgstr "Logisch"
@@ -1051,11 +1051,32 @@ msgid ""
 "    - \"*/2\" - range divider for allowed values.\n"
 "Examples:\n"
 "  \"1e-3\" - periodic call by one millisecond;\n"
-"  \"* * * * *\" - any minutes;\n"
+"  \"* * * * *\" - each minute;\n"
 "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
 "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
 "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include)."
 msgstr ""
+"Wird in Sekunden periodische Form oder in Standard-cron-Form Write.\n"
+"Spielplan.\n"
+"Sekunden Form ist eine Realzahl (1.5, 1e-3).\n"
+"Cron ist es Standardform \"* * * * *\".\n"
+"  Wo Artikel bestellen:\n"
+"    - Minuten (0-59);\n"
+"    - Stunden (0-23);\n"
+"    - Tage (1-31);\n"
+"    - Monat (1-12);\n"
+"    - Wochentag (0 [Sonntag] -6).\n"
+"  Wo ein Posten Varianten:\n"
+"    - \"*\" - einen Wert;\n"
+"    - \"1,2,3\" - zulässigen Werte;\n"
+"    - \"1-5\" - Roh Bereich der zulässigen Werte;\n"
+"    - \"*/2\" - Bereich Teiler für die zulässigen Werte.\n"
+"Beispiele:\n"
+"  \"1e-3\" - periodischen rufen von einer Millisekunde;\n"
+"  \"* * * * *\" - jede Minute;\n"
+"  \"10 23 * * *\" - nur 23 Stunden und 10 Minuten für jeden Tag und Monat;\n"
+"  \"*/2 * * * *\" - für Minuten: 0,2,4,..., 56,58;\n"
+"  \"* 2-4 * * *\" - für alle Minuten in Stunden von 2 bis 4 (einschließlich)."
 
 msgid "Modules sheduler"
 msgstr "Modulsteuerung"
@@ -1938,10 +1959,6 @@ msgstr "Variable ist kein Objekt"
 msgid "Zero object using try!"
 msgstr "Versuch der Benutzung des leeren Objekts"
 
-#, c-format
-msgid "Array element '%d' is not allow."
-msgstr "Massivelement '%d' ist unzugänglich"
-
 msgid "Negative id is not allow for array."
 msgstr "Negativer Index ist verboten für das Massiv-"
 
@@ -1982,6 +1999,46 @@ msgstr "Kein Speicher für den Parser."
 msgid "Parse error at line %d --- %s. Source string: '%s'"
 msgstr "Parsefehler in der Zeile %d --- %s. Quelltext: '%s'"
 
+#, c-format
+msgid "Unexpected end. Pos: %d"
+msgstr "Unerwartetes Ende. Pos: %d"
+
+#, c-format
+msgid "No comment block end. Pos: %d"
+msgstr "Kein Kommentar Blockende. Pos: %d"
+
+#, c-format
+msgid "Unfinished '!DOCTYPE' block. Pos: %d"
+msgstr "Unvollendete '! DOCTYPE' zu blockieren. Pos: %d"
+
+#, c-format
+msgid "Unfinished '!DOCTYPE [ ]' container. Pos: %d"
+msgstr "Unvollendete '! DOCTYPE []' Container. Pos: %d"
+
+#, c-format
+msgid "Unexpected or error end tag. Pos: %d"
+msgstr "Unerwarteter oder Fehler End-Tag. Pos: %d"
+
+#, c-format
+msgid "Unfinished start comment or unknown block. Pos: %d"
+msgstr "Unfinished starten Kommentar oder unbekannte blockieren. Pos: %d"
+
+#, c-format
+msgid "Start tag error. Pos: %d"
+msgstr "Start-Tag-Fehler. Pos: %d"
+
+#, c-format
+msgid "Unfinished attribute. Pos: %d"
+msgstr "Unfinished Attribut. Pos: %d"
+
+#, c-format
+msgid "Entity error. Pos: %d"
+msgstr "Entity Fehler. Pos: %d"
+
+#, c-format
+msgid "Unknown entity. Pos: %d"
+msgstr "Unbekannte Entität. Pos: %d"
+
 msgid "Message arhiv no support!"
 msgstr "Nachrichtarchiv wird nicht unterstützt!"
 
@@ -2011,12 +2068,3 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
-
-#~ msgid "Started"
-#~ msgstr "Gestartet"
-
-#~ msgid "Time for execute (mks)"
-#~ msgstr "Erfüllungszeit (mks)"
-
-#~ msgid "Process time %.6g ms."
-#~ msgstr "Prozesszeit %.6g ms."

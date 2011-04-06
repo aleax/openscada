@@ -1,3 +1,14 @@
+2011-04-06 Roman
+- FIX:DAQ.JavaLikeCalc: Index check is added for access to string's symbol by index. Used for out of range prevent.
+- DAQ.JavaLikeCalc: String object's functions toFixed() and toString() is improved for base 2-36 and fill length and strong sign support.
+- SYS: Translations for core is updated to Russian, Ukrainian and German.
+- !!:Protocol.UserProtocol: Documents and translations is updated and released version 0.6.1.
+- !!:Special.FLibComplex1: Documents and translations is updated.
+- !!:Special.FLibMath: Documents and translations is updated.
+- !!:Special.FLibSYS: Documents and translations is updated.
+- !!:Special.SystemTests: Documents and translations is updated and released version 1.5.1.
+
+
 2011-04-05 Roman
 - !!:DAQ.BFN: Documents is added and translations is updated.
 - !!:DAQ.DAQGate: Documents and translations is updated and released version 0.9.2.

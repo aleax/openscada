@@ -2,14 +2,14 @@
 # Copyright (C) 2003 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.7.0\n"
+"Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 15:54+0200\n"
+"POT-Creation-Date: 2011-04-06 10:04+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1036,7 +1036,7 @@ msgid ""
 "    - \"*/2\" - range divider for allowed values.\n"
 "Examples:\n"
 "  \"1e-3\" - periodic call by one millisecond;\n"
-"  \"* * * * *\" - any minutes;\n"
+"  \"* * * * *\" - each minute;\n"
 "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
 "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
 "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include)."
@@ -1058,7 +1058,7 @@ msgstr ""
 "    - \"*/2\" - делитель диапазона разрешённых значений.\n"
 "Примеры:\n"
 "  \"1e-3\" - периодический вызов с одной миллисекундой;\n"
-"  \"* * * * *\" - любая минута;\n"
+"  \"* * * * *\" - каждая минута;\n"
 "  \"10 23 * * *\" - только 23ий час и 10ая минута любого дня и месяца;\n"
 "  \"*/2 * * * *\" - для минут: 0,2,4,...,56,58;\n"
 "  \"* 2-4 * * *\" - для любой минуты в часе от 2 до 4(включительно)."
@@ -1940,10 +1940,6 @@ msgstr "Переменная не объект!"
 msgid "Zero object using try!"
 msgstr "Попытка использования пустого объекта!"
 
-#, c-format
-msgid "Array element '%d' is not allow."
-msgstr "Елемент массива '%d' не доступен."
-
 msgid "Negative id is not allow for array."
 msgstr "Отрицательные индексы не допустимы для массива."
 
@@ -1984,6 +1980,46 @@ msgstr "Невозможно выделить память для парсера
 msgid "Parse error at line %d --- %s. Source string: '%s'"
 msgstr "Ошибка парсера в линии %d --- %s. Исходная строка: '%s'"
 
+#, c-format
+msgid "Unexpected end. Pos: %d"
+msgstr "Неожиданный конец. Поз: %d"
+
+#, c-format
+msgid "No comment block end. Pos: %d"
+msgstr "Нет окончания блока комментария. Поз: %d"
+
+#, c-format
+msgid "Unfinished '!DOCTYPE' block. Pos: %d"
+msgstr "Незавершённый блок '!DOCTYPE'. Поз: %d"
+
+#, c-format
+msgid "Unfinished '!DOCTYPE [ ]' container. Pos: %d"
+msgstr "Незавершённый контейнер '!DOCTYPE [ ]'. Поз: %d"
+
+#, c-format
+msgid "Unexpected or error end tag. Pos: %d"
+msgstr "Неожиданный или ошибочный тег завершения. Поз: %d"
+
+#, c-format
+msgid "Unfinished start comment or unknown block. Pos: %d"
+msgstr "Незавершённое начало комментария или неизвестный блок. Поз: %d"
+
+#, c-format
+msgid "Start tag error. Pos: %d"
+msgstr "Ошибка начала тега. Поз: %d"
+
+#, c-format
+msgid "Unfinished attribute. Pos: %d"
+msgstr "Незавершённый атрибут. Поз: %d"
+
+#, c-format
+msgid "Entity error. Pos: %d"
+msgstr "Ошибка сущности. Поз: %d"
+
+#, c-format
+msgid "Unknown entity. Pos: %d"
+msgstr "Неизвестная сущность. Поз: %d"
+
 msgid "Message arhiv no support!"
 msgstr "Архив сообщений не поддерживается!"
 
@@ -2013,6 +2049,3 @@ msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport no support!"
 msgstr "Выходных транспорт не поддерживается!"
-
-#~ msgid "Started"
-#~ msgstr "Запущен"

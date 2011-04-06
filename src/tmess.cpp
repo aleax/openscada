@@ -294,7 +294,7 @@ const char *TMess::labSecCRON( )
              "    - \"*/2\" - range divider for allowed values.\n"
              "Examples:\n"
              "  \"1e-3\" - periodic call by one millisecond;\n"
-             "  \"* * * * *\" - any minutes;\n"
+             "  \"* * * * *\" - each minute;\n"
              "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
              "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
              "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include).");

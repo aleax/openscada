@@ -1134,18 +1134,22 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	case TVariant::Object:	return vl.getO()->propGet(prop);
 	case TVariant::Boolean:	return TVariant();
 	case TVariant::Integer:
-	    if( prop == "MAX_VALUE" )	return INT_MAX;
-	    if( prop == "MIN_VALUE" )	return INT_MIN;
-	    if( prop == "NaN" )		return EVAL_INT;
+	    if(prop == "MAX_VALUE")	return INT_MAX;
+	    if(prop == "MIN_VALUE")	return INT_MIN;
+	    if(prop == "NaN")		return EVAL_INT;
 	    return TVariant();
 	case TVariant::Real:
-	    if( prop == "MAX_VALUE" )	return 3.4e300;
-	    if( prop == "MIN_VALUE" )	return -3.4e300;
-	    if( prop == "NaN" )		return EVAL_REAL;
+	    if(prop == "MAX_VALUE")	return 3.4e300;
+	    if(prop == "MIN_VALUE")	return -3.4e300;
+	    if(prop == "NaN")		return EVAL_REAL;
 	    return TVariant();
 	case TVariant::String:
-	    if( prop == "length" )	return (int)vl.getS().size();
-	    return vl.getS().substr(vmax(0,vmin(vl.getS().size()-1,(unsigned)atoi(prop.c_str()))),1);
+	{
+	    if(prop == "length")	return (int)vl.getS().size();
+	    int sid = atoi(prop.c_str());
+	    if(sid < 0 || sid >= (int)vl.getS().size()) return "";
+	    return vl.getS().substr(sid,1);
+	}
 	default: return TVariant();
     }
     return TVariant();
@@ -1179,30 +1183,45 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if( n < 0 )	return TSYS::strMess("%e",vl.getR());
 		    return TSYS::strMess("%.*e",n,vl.getR());
 		}
-		// string toFixed(int numbs) - return the string of the number, formatted in the notation of fixed-point,
+		// string toFixed(int numbs, int len, bool sign) - return the string of the number, formatted in the notation of fixed-point,
 		//      and with the number of significant digits after the decimal point <numbs>
 		//  numbs - the number of significant digits after the decimal point, if <numbs> is missing the number
 		//          of digits after the decimal point is equal to zero
-		if( prop == "toFixed" )
+		//  len - minimum string number length (fill by 0);
+		//  sign - strong sign present flag.
+		if(prop == "toFixed")
 		{
+		    double val = vl.getR();
+		    bool sign = (val < 0 || (prms.size() >= 3 && prms[2].getB()));
 		    int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : 0;
-		    return TSYS::strMess("%.*f",n,vl.getR());
+		    int w = (prms.size() >= 2) ? vmin(100,prms[1].getI()) - (int)sign : 0;
+		    return TSYS::strMess((sign?"%+0*.*f":"%0*.*f"),w,n,val);
 		}
 		// string toPrecision(int prec) - return the string of the formatted number with the number of significant digits <prec>
 		//  prec - number of significant digits
-		if( prop == "toPrecision" )
+		if(prop == "toPrecision")
 		{
 		    int n = prms.size() ? vmax(1,vmin(21,prms[0].getI())) : -1;
-		    if( n < 0 )	return TSYS::strMess("%g",vl.getR());
+		    if(n < 0)	return TSYS::strMess("%g",vl.getR());
 		    return TSYS::strMess("%.*g",n,vl.getR());
 		}
-		// string toString(int base) - return the string of the formatted number of integer type
-		//  base - representation base: octal , decimal, hex
-		if( prop == "toString" )
+		// string toString(int base, int len, bool sign) - return the string of the formatted number of integer type for
+		//	minimum length <len> and strong sign present <sign>.
+		//  base - representation base (2-36);
+		//  len - minimum string number length (fill by 0);
+		//  sign - strong sign present flag.
+		if(prop == "toString")
 		{
-		    int n = 10;
-		    if( prms.size() ) n = prms[0].getI();
-		    return TSYS::strMess( (n==16)?"%x":((n==8)?"%o":"%d"),vl.getI() );
+		    const char *dsymb = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		    int n = 10, w = -1, val = vl.getI();
+		    bool sign = (val < 0 || (prms.size() >= 3 && prms[2].getB()));
+		    if(prms.size()) n = vmax(2,vmin(36,prms[0].getI()));
+		    if(prms.size() >= 2) w = vmin(100,prms[1].getI()) - (int)sign;
+		    string rez;
+		    for(unsigned c_vl = abs(val); c_vl || (w > 0 && (int)rez.size() < w); c_vl = c_vl/n)
+			rez += dsymb[c_vl%n];
+		    if(val < 0 || sign) rez += (val >= 0) ? "+" : "-";
+		    return TSYS::strEncode(rez,TSYS::Reverse);
 		}
 		throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::String:
@@ -1298,12 +1317,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if( (prop == "slice" || prop == "substring") && prms.size() )
 		{
 		    int beg = prms[0].getI();
-		    if( beg < 0 ) beg = vl.getS().size()+beg;
+		    if(beg < 0) beg = vl.getS().size()+beg;
 		    int end = vl.getS().size();
-		    if( prms.size()>=2 ) end = prms[1].getI();
-		    if( end < 0 ) end = vl.getS().size()+end;
+		    if(prms.size() >= 2) end = prms[1].getI();
+		    if(end < 0) end = vl.getS().size()+end;
 		    end = vmin(end,(int)vl.getS().size());
-		    if( beg >= end ) return string("");
+		    if(beg >= end) return string("");
 		    return vl.getS().substr(beg,end-beg);
 		}
 		// Array split(string sep, int limit) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
