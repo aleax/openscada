@@ -1328,7 +1328,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	el = src->attrAt("doc").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
 	el = src->attrAt("time").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",_("Write time for ducument generation from that point."));
+	if(el) el->setAttr("len","")->setAttr("help",_("Write time for document generation from that point."));
 
 	return true;
     }

@@ -7,12 +7,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebUser 0.6.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebUser 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:47+0300\n"
+"POT-Creation-Date: 2011-04-07 18:03+0300\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
@@ -120,11 +121,6 @@ msgstr "Включен"
 
 msgid "DB"
 msgstr "БД"
-
-msgid ""
-"DB address in format [<DB module>.<DB name>].\n"
-"For use main work DB set '*.*'."
-msgstr ""
 
 msgid "Config"
 msgstr "Конфигурация"

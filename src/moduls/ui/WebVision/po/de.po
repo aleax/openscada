@@ -4,17 +4,18 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebVision 0.9.0\n"
+"Project-Id-Version: OpenSCADA.UI.WebVision 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-09 19:52+0300\n"
+"POT-Creation-Date: 2011-04-07 17:51+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
-"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,26 +26,8 @@ msgstr ""
 msgid "Unknown command: %s."
 msgstr "Unbekanntes Kommando: %s."
 
-msgid ""
-"At least one of the points of the 'arc' is out of the drawing area. The "
-"'arc' is not drawn."
-msgstr ""
-"Mindestens ein Punkt 'des Bogens' ist ausserhalb der Grenzen des Feldes. "
-"'Der Bogen' wird nicht gezeichnet."
-
-msgid ""
-"At least one of the points of the 'bezier curve' is out of the drawing area. "
-"The 'bezier curve' is not drawn."
-msgstr ""
-"Mindestens ein Punkt 'der Bezier- Kurve' ist ausserhalb der Grenzen des "
-"Feldes. 'Die Bezier-Kurve' wird nicht gezeichnet."
-
-msgid ""
-"At least one of the points of the 'line' is out of the drawing area. The "
-"'line' is not drawn."
-msgstr ""
-"Mindestens ein Punkt 'der Linie' ist ausserhalb der Grenzen des Feldes . "
-"'Die Linie' wird nicht gezeichnet."
+msgid "Fill image type is not supported."
+msgstr "Füllen Bildtyp wird nicht unterstützt."
 
 msgid ""
 "At least one of the elementary figures from each the 'fill' consists of is "

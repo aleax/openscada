@@ -5,17 +5,18 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.Vision 1.0.0\n"
+"Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-12 21:09+0200\n"
+"POT-Creation-Date: 2011-04-07 17:25+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
-"Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1022,7 +1023,7 @@ msgid "Valid attribute is not selected"
 msgstr "Kein gültiges Attribut ist ausgewählt"
 
 msgid "<Group>"
-msgstr ""
+msgstr "<Gruppe>"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -1030,9 +1031,8 @@ msgstr "Attribut"
 msgid "Copy"
 msgstr "Kopieren"
 
-#, fuzzy
 msgid "Edit"
-msgstr "&Bearbeiten"
+msgstr "Bearbeiten"
 
 msgid "Clear changes"
 msgstr "Klare Veränderungen"
@@ -1041,7 +1041,7 @@ msgid "Press to clear attribute's changes."
 msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
 
 msgid "Attribute '%1' edit for widget '%2'."
-msgstr ""
+msgstr "Attribut '%1' für die eigene WebSite '%2' zu editieren."
 
 msgid "Widgets"
 msgstr "Widget"
@@ -1347,7 +1347,7 @@ msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
 
 msgid "Connection to visualisation server '%1' error: %2"
-msgstr ""
+msgstr "Der Anschluss an Visualisierungs-Server '%1' Fehler: %2"
 
 msgid "Print page"
 msgstr "Seite drucken"

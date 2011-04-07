@@ -38,7 +38,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.5"
+#define MOD_VER		"0.6.6"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies.")
 #define LICENSE		"GPL2"

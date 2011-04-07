@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.0"
+#define MOD_VER		"0.6.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow creation self-user web-interfaces on any OpenSCADA language.")
 #define LICENSE		"GPL2"
