@@ -399,7 +399,8 @@ void *TMdContr::Task( void *icntr )
 			    //> Request with module
 			    pdu = TSYS::strMess("@%02X",cntr.p_hd[i_p].at().mod_addr);
 			    di_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,5);
-			    if(di_txterr == "0") DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);	//???? substring length 4 for any request?
+			    if(di_txterr == "0") DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);
+			    if(cntr.p_hd[i_p].at().di_method == 201) DI = DI>>8;
 			    for(int i_n = 0; i_n < n; i_n++)
 				cntr.p_hd[i_p].at().DI[i_n] = (di_txterr == "0") ? ((DI>>i_n)&0x01) : EVAL_BOOL;
 			    break;

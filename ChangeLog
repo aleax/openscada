@@ -1,3 +1,9 @@
+2011-04-11 Roman
+- FIX:DAQ.DCON: DI command 8DI (@AA,FF00) processing is fixed.
+- !!:DOC: New documents is added for libraries: Lib.TechApp, WLib.Main and WLib.MnEls. Generic document "openscada.pdf" for Russian is created.
+    Some Russian documents is fixed.
+
+
 2011-04-11 Maxim
 - !UI.Vision: Elementary figure's properties dialog is added.
 
