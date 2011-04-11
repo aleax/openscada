@@ -1927,7 +1927,7 @@ void ProjTree::ctrTreePopup( )
 //**********************************************************************************************
 //* Text edit line widget with detail dialog edit button. Support: Font and Color edit dialogs.*
 //**********************************************************************************************
-LineEditProp::LineEditProp( QWidget *parent, DType tp ) : QWidget( parent ), m_tp(tp)
+LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidget( parent ), m_tp(tp), toClose(m_toClose)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin(0);
@@ -1981,7 +1981,7 @@ void LineEditProp::callDlg( )
             setValue(clr_dlg.selectedColor().name() + "-" + QString::number(clr_dlg.selectedColor().alpha()));
         setFocus();
     }
-    QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
+    if( toClose ) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }
 
 //*********************************************

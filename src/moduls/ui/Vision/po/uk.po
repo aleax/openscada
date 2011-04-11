@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 17:25+0300\n"
+"POT-Creation-Date: 2011-04-11 12:31+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
 
 msgid "Operation user interface (QT)"
 msgstr "Робочий інтерфейс користувача (QT)"
@@ -1543,6 +1543,18 @@ msgstr "Зробити стиль лінії динамічним"
 msgid "Press to make line style dynamic"
 msgstr "Натисніть, щоб зробити стиль лінії динамічним."
 
+msgid "Show the figure's properties"
+msgstr "Показати властивості елементарної фігури"
+
+msgid "Press to show the properties dialog"
+msgstr "Натиснути для отримання властивостей елементарної фігури."
+
+msgid "Show the fill's properties"
+msgstr "Показати властивості заповнення"
+
+msgid "Press to show the fill's properties dialog"
+msgstr "Натиснути для отримання властивостей заповнення."
+
 msgid "Delete the current fill"
 msgstr "Видалити заповнення"
 
@@ -1566,6 +1578,75 @@ msgstr "Зробити усі величини віджета статичним
 
 msgid "Press to make all values of the widget static ones"
 msgstr "Натисніть, щоб зробити усі величини віджета статичними."
+
+msgid "Properties for the '%1' element: '%2'."
+msgstr "Властивості для '%1' елементу: '%2'."
+
+msgid "Elementary figure properties."
+msgstr "Властивості елементарних фігур"
+
+msgid "Line:"
+msgstr "Лінія"
+
+msgid "Border:"
+msgstr "Границя"
+
+msgid "Points:"
+msgstr "Точки:"
+
+msgid "x"
+msgstr "x"
+
+msgid "y"
+msgstr "x"
+
+msgid "Point 3:"
+msgstr "Точка 3:"
+
+msgid "Point 4:"
+msgstr "Точка 4:"
+
+msgid "Point 5:"
+msgstr "Точка 5:"
+
+msgid "Fill Color"
+msgstr "Колір заповнення"
+
+msgid "Fill Image"
+msgstr "Зображення заповнення"
+
+msgid "Line width"
+msgstr "Ширина лінії"
+
+msgid "Line Color"
+msgstr "Колір лінії"
+
+msgid "Line style"
+msgstr "Стиль лінії"
+
+msgid "Border width"
+msgstr "Ширина границі"
+
+msgid "Border Color"
+msgstr "Колір границі"
+
+msgid "Point 1:"
+msgstr "Точка 1:"
+
+msgid "Point 2:"
+msgstr "Точка 2:"
+
+msgid "(default)"
+msgstr "(за замовчуванням)"
+
+msgid "Solid"
+msgstr "Суцільна"
+
+msgid "Dashed"
+msgstr "Пунктир"
+
+msgid "Dotted"
+msgstr "Крапкова"
 
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Координати(x,y): (%1, %2)"

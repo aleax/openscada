@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 17:25+0300\n"
+"POT-Creation-Date: 2011-04-11 12:31+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -1553,6 +1553,21 @@ msgstr "Linienstil dynamisch machen"
 msgid "Press to make line style dynamic"
 msgstr "Betätigen, um den Linienstil dynamisch zu machen."
 
+#, fuzzy
+msgid "Show the figure's properties"
+msgstr "Laden der Eigenschaften des Elements"
+
+#, fuzzy
+msgid "Press to show the properties dialog"
+msgstr "Betätigen für die Eigenschaften des Elements."
+
+msgid "Show the fill's properties"
+msgstr ""
+
+#, fuzzy
+msgid "Press to show the fill's properties dialog"
+msgstr "Betätigen für die Eigenschaften des Elements."
+
 msgid "Delete the current fill"
 msgstr "Löschen Sie die aktuelle füllen"
 
@@ -1576,6 +1591,87 @@ msgstr "Alle Widgetsgrössen statisch machen"
 
 msgid "Press to make all values of the widget static ones"
 msgstr "Betätigen, um alle Widgetsgrössen statisch zu machen."
+
+msgid "Properties for the '%1' element: '%2'."
+msgstr ""
+
+#, fuzzy
+msgid "Elementary figure properties."
+msgstr "Panel der elementaren Figuren"
+
+#, fuzzy
+msgid "Line:"
+msgstr "Links"
+
+msgid "Border:"
+msgstr ""
+
+#, fuzzy
+msgid "Points:"
+msgstr "Schrift:"
+
+msgid "x"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
+#, fuzzy
+msgid "Point 3:"
+msgstr "Schrift:"
+
+#, fuzzy
+msgid "Point 4:"
+msgstr "Schrift:"
+
+#, fuzzy
+msgid "Point 5:"
+msgstr "Schrift:"
+
+msgid "Fill Color"
+msgstr ""
+
+msgid "Fill Image"
+msgstr ""
+
+#, fuzzy
+msgid "Line width"
+msgstr "Widget nach oben"
+
+msgid "Line Color"
+msgstr ""
+
+#, fuzzy
+msgid "Line style"
+msgstr "Erase Stil"
+
+#, fuzzy
+msgid "Border width"
+msgstr "Widget nach unten"
+
+msgid "Border Color"
+msgstr ""
+
+#, fuzzy
+msgid "Point 1:"
+msgstr "Schrift:"
+
+#, fuzzy
+msgid "Point 2:"
+msgstr "Schrift:"
+
+msgid "(default)"
+msgstr ""
+
+#, fuzzy
+msgid "Solid"
+msgstr "Fett"
+
+msgid "Dashed"
+msgstr ""
+
+msgid "Dotted"
+msgstr ""
 
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Koordinaten(x,y): (%1, %2)"

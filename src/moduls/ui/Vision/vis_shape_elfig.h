@@ -132,8 +132,8 @@ class ElFigDt : public QObject
         QPixmap pictObj;
     private slots:
         void dynamic();
+        void properties();
 };
-
 
 //*************************************************
 //* Elementary figures shape widget               *
@@ -196,6 +196,8 @@ class ShapeElFigure : public WdgShape
         void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
         void checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems );
         void paintImage( WdgView *view );                                                                       //Building the image to be drawn in the Paint event
+        void initShapeItems( WdgView *w, QVector<int> &items_array );                                           //Creating the paths for the figures 
+        QPointF getArcStartEnd( QPointF StartMotionPos, QPointF EndMotionPos, QPointF CtrlMotionPos_1, QPointF CtrlMotionPos_2, QPointF CtrlMotionPos_3 );//Calculate the t_start and t_end for the arc
         QPainterPath painterPath( float el_width, float el_border_width, int el_type, double el_ang,
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0), 
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
