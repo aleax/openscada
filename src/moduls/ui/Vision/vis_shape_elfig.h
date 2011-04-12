@@ -111,6 +111,7 @@ class RectItem
 //*************************************************
 class ElFigDt : public QObject
 {
+    //friend class ShapeElFigure;
     Q_OBJECT
     public:
         //Methods
@@ -250,6 +251,7 @@ class ShapeElFigure : public WdgShape
         unsigned flag_rotate	:1;
         unsigned flag_angle_temp	:1;
         unsigned flag_geom	:1;
+        unsigned flag_rect_items	:1;
 
         int count_rects, rect_num_arc, arc_rect;
         double t_start, t_end;

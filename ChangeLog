@@ -1,3 +1,7 @@
+2011-04-12 Maxim
+- !UI.Vision: Support of sevelar figures is added to the properties dialog of the ElFigure.
+
+
 2011-04-11 Roman
 - FIX:DAQ.DCON: DI command 8DI (@AA,FF00) processing is fixed.
 - !!:DOC: New documents is added for libraries: Lib.TechApp, WLib.Main and WLib.MnEls. Generic document "openscada.pdf" for Russian is created.

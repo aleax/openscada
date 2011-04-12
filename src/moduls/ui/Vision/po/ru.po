@@ -1584,7 +1584,7 @@ msgid "Properties for the '%1' element: '%2'."
 msgstr "Свойства для '%1' элемента: '%2'."
 
 msgid "Elementary figure properties."
-msgstr "Свойства эдементарной фигруы"
+msgstr "Свойства элементарной фигруы"
 
 msgid "Line:"
 msgstr "Линия:"

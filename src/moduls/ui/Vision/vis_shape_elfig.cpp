@@ -54,8 +54,9 @@ ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), index_del(-1), rect_num(-1), status_hold(true),
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
-    flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false), flag_geom (false),
-    count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1), fill_index(-1)
+    flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false), 
+    flag_geom (false), flag_rect_items (false), count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1),
+    count_holds(0), geomH(0), geomW(0), rect_dyn(-1), fill_index(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
 }
@@ -1667,7 +1668,8 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
             actShowProperties->setStatusTip(_("Press to show the properties dialog"));
             connect( actShowProperties, SIGNAL(triggered()), elFD, SLOT(properties()) ); 
             menu.addAction(actShowProperties);
-
+            if( rectItems.size() ) flag_rect_items = true;
+            else flag_rect_items = false;
             menu.addSeparator();
         }
         else if( index == -1 && (int)pop_pos.x() != -1 && (int)pop_pos.y() != -1 )
@@ -2603,6 +2605,16 @@ void ElFigDt::dynamic( )
 void ElFigDt::properties()
 {
     ShapeElFigure *elF = (ShapeElFigure*) mod->getWdgShape("ElFigure");
+    bool flag_hld = true;
+    QVector<int> items_array_holds;
+    if(elF->flag_rect_items)
+    {
+        for( int i=0; i < elF->index_array.size(); i++ )
+            if( elF->index_array[i] != -1 )
+                items_array_holds.push_back(elF->index_array[i]);
+    }
+    else items_array_holds.push_back(elF->index);
+
     PntMap *pnts = &shapePnts;
     WidthMap *widths = &shapeWidths;
     ColorMap *colors = &shapeColors;
@@ -2624,7 +2636,6 @@ void ElFigDt::properties()
     if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
     InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), QString(_("Properties for the '%1' element: '%2'.")).arg((elF->fill_index == -1) ? elF->index : elF->fill_index ).arg(sender()->objectName()),
                      _("Elementary figure properties."),false,false);
-
     l_lb = new QLabel(_("Line:"),&propDlg);
     l_width = new QSpinBox(&propDlg);
     l_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
@@ -2685,61 +2696,119 @@ void ElFigDt::properties()
         propDlg.edLay()->addWidget( lb_width, 7, 1 );
         propDlg.edLay()->addWidget( new QLabel(_("Border Color"),&propDlg), 8, 0 );
         propDlg.edLay()->addWidget( lb_color, 8, 1 );
-        p_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( p_lb, 2, 2 );
-        x_lb->setFont( lb_fnt ); x_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( x_lb, 2, 3 );
-        y_lb->setFont( lb_fnt ); y_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( y_lb, 2, 4 );
-        propDlg.edLay()->addWidget( new QLabel(_("Point 1:"),&propDlg), 3, 2 );
-        p1_x->setRange( 0.0, 10000.0 ); p1_x->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p1_x, 3, 3 );
-        p1_y->setRange( 0.0, 10000.0 ); p1_y->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p1_y, 3, 4 );
-        propDlg.edLay()->addWidget( new QLabel(_("Point 2:"),&propDlg), 4, 2 );
-        p2_x->setRange( 0.0, 10000.0 ); p2_x->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p2_x, 4, 3 );
-        p2_y->setRange( 0.0, 10000.0 ); p2_y->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p2_y, 4, 4 );
-        propDlg.edLay()->addWidget( p3_lb, 5, 2 );
-        p3_x->setRange( 0.0, 10000.0 ); p3_x->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p3_x, 5, 3 );
-        p3_y->setRange( 0.0, 10000.0 ); p3_y->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p3_y, 5, 4 );
-        propDlg.edLay()->addWidget( p4_lb, 6, 2 );
-        p4_x->setRange( 0.0, 10000.0 ); p4_x->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p4_x, 6, 3 );
-        p4_y->setRange( 0.0, 10000.0 ); p4_y->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p4_y, 6, 4 );
-        propDlg.edLay()->addWidget( p5_lb, 7, 2 );
-        p5_x->setRange( 0.0, 10000.0 ); p5_x->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p5_x, 7, 3 );
-        p5_y->setRange( 0.0, 10000.0 ); p5_y->setDecimals( 3 );
-        propDlg.edLay()->addWidget( p5_y, 7, 4 );
-
-        if( sender()->objectName() == "Line" )
+        //if( flag_A || ( index_array_copy.size() && index_array_copy[0] != -1 ) || ( index_array.size() && index_array[0] != -1 ) )
+        if( !items_array_holds.size() || ((items_array_holds.size() == 1) && (items_array_holds[0] == elF->index)) )
         {
-            p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
-            p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
-            p3_lb->setVisible(false);p3_x->setVisible(false);p3_y->setVisible(false);
-            p4_lb->setVisible(false);p4_x->setVisible(false);p4_y->setVisible(false);
-            p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false);
-        }
-        else if( sender()->objectName() == "Bezier curve" )
-        {
-            p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
-            p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
-            p3_x->setValue((*pnts)[shapeItems[elF->index].n3].x()); p3_y->setValue((*pnts)[shapeItems[elF->index].n3].y());
-            p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
-            p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false);
+            flag_hld = false;
+            p_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( p_lb, 2, 2 );
+            x_lb->setFont( lb_fnt ); x_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( x_lb, 2, 3 );
+            y_lb->setFont( lb_fnt ); y_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( y_lb, 2, 4 );
+            propDlg.edLay()->addWidget( new QLabel(_("Point 1:"),&propDlg), 3, 2 );
+            p1_x->setRange( 0.0, 10000.0 ); p1_x->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p1_x, 3, 3 );
+            p1_y->setRange( 0.0, 10000.0 ); p1_y->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p1_y, 3, 4 );
+            propDlg.edLay()->addWidget( new QLabel(_("Point 2:"),&propDlg), 4, 2 );
+            p2_x->setRange( 0.0, 10000.0 ); p2_x->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p2_x, 4, 3 );
+            p2_y->setRange( 0.0, 10000.0 ); p2_y->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p2_y, 4, 4 );
+            propDlg.edLay()->addWidget( p3_lb, 5, 2 );
+            p3_x->setRange( 0.0, 10000.0 ); p3_x->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p3_x, 5, 3 );
+            p3_y->setRange( 0.0, 10000.0 ); p3_y->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p3_y, 5, 4 );
+            propDlg.edLay()->addWidget( p4_lb, 6, 2 );
+            p4_x->setRange( 0.0, 10000.0 ); p4_x->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p4_x, 6, 3 );
+            p4_y->setRange( 0.0, 10000.0 ); p4_y->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p4_y, 6, 4 );
+            propDlg.edLay()->addWidget( p5_lb, 7, 2 );
+            p5_x->setRange( 0.0, 10000.0 ); p5_x->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p5_x, 7, 3 );
+            p5_y->setRange( 0.0, 10000.0 ); p5_y->setDecimals( 3 );
+            propDlg.edLay()->addWidget( p5_y, 7, 4 );
+    
+            if( sender()->objectName() == "Line" )
+            {
+                p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
+                p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
+                p3_lb->setVisible(false);p3_x->setVisible(false);p3_y->setVisible(false);
+                p4_lb->setVisible(false);p4_x->setVisible(false);p4_y->setVisible(false);
+                p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false);
+            }
+            else if( sender()->objectName() == "Bezier curve" )
+            {
+                p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
+                p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
+                p3_x->setValue((*pnts)[shapeItems[elF->index].n3].x()); p3_y->setValue((*pnts)[shapeItems[elF->index].n3].y());
+                p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
+                p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false);
+            }
+            else
+            {
+                p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
+                p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
+                p3_x->setValue((*pnts)[shapeItems[elF->index].n3].x()); p3_y->setValue((*pnts)[shapeItems[elF->index].n3].y());
+                p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
+                p5_x->setValue((*pnts)[shapeItems[elF->index].n5].x()); p5_y->setValue((*pnts)[shapeItems[elF->index].n5].y());
+            }
+            items_array.push_back(elF->index);
+            //-- Detecting the figures that connected to the current one and adding them to the updating array; --
+            //-- if the current figure is connected with the arcs, then it's n1 and n2 points must be blocked for editing --
+            for(int i = 0; i < shapeItems.size(); i++)
+            {
+                fl_n1 = fl_n2 = false;
+                if( i != elF->index  && (shapeItems[i].n1 == shapeItems[elF->index].n1 || shapeItems[i].n2 == shapeItems[elF->index].n1) )
+                {
+                    if( !elF->status_hold ) fl_appN1 = true;
+                    else fl_n1 = true;
+                }
+                if( i != elF->index  && (shapeItems[i].n1 == shapeItems[elF->index].n2 || shapeItems[i].n2 == shapeItems[elF->index].n2) )
+                {
+                    if( !elF->status_hold ) fl_appN2 = true;
+                    else fl_n2 = true;
+                }
+                if( fl_n1 || fl_n2 )
+                {
+                    items_array.push_back(i);// array of the figures to be updated
+                    if( shapeItems[elF->index].type != 2 && shapeItems[i].type == 2 )
+                    {
+                        if( fl_n1 ) fl_n1Block = true;//blocking the n1 point for editing
+                        if( fl_n2 ) fl_n2Block = true;//blocking the n2 point for editing
+                    }
+                }
+            }
+            //-- Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array --
+            for( int i = 0; i < inundationItems.size(); i++ )
+                for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
+            {
+                for( int z = 0; z < items_array.size(); z++ )
+                    if( inundationItems[i].number_shape[p] == items_array[z] )
+                    {
+                        bool fl_push = true;
+                        for(int j = 0; j< inund_Rebuild.size(); j++)
+                            if( i == inund_Rebuild[j] ) fl_push = false;
+                        if( fl_push )inund_Rebuild.push_back(i);
+                    }
+            }
+            p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
+            p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
+            propDlg.resize( 475, 275 );
         }
         else
         {
-            p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
-            p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
-            p3_x->setValue((*pnts)[shapeItems[elF->index].n3].x()); p3_y->setValue((*pnts)[shapeItems[elF->index].n3].y());
-            p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
-            p5_x->setValue((*pnts)[shapeItems[elF->index].n5].x()); p5_y->setValue((*pnts)[shapeItems[elF->index].n5].y());
+            p_lb->hide(); x_lb->hide(); y_lb->hide();
+            p3_lb->hide(); p4_lb->hide(); p5_lb->hide();
+            p1_x->hide(); p1_y->hide();
+            p2_x->hide(); p2_y->hide();
+            p3_x->hide(); p3_y->hide();
+            p4_x->hide(); p4_y->hide();
+            p5_x->hide(); p5_y->hide();
+            propDlg.resize( 280, 275 );
         }
         l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
-        if( shapeItems[elF->index].width == -5 ) l_width->setSuffix(_("(default)"));
+        //if( shapeItems[elF->index].width == -5 ) l_width->setSuffix(_("(default)"));
         l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" + 
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
         QStringList line_styles;
@@ -2747,51 +2816,9 @@ void ElFigDt::properties()
         l_style->addItems(line_styles);
         l_style->setCurrentIndex((*styles)[shapeItems[elF->index].style]-1);
         lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
-        if( shapeItems[elF->index].border_width == -6 ) lb_width->setSuffix(_("(default)"));
+        //if( shapeItems[elF->index].border_width == -6 ) lb_width->setSuffix(_("(default)"));
         lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" + 
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
-        items_array.push_back(elF->index);
-        //-- Detecting the figures that connected to the current one and adding them to the updating array; --
-        //-- if the current figure is connected with the arcs, then it's n1 and n2 points must be blocked for editing --
-        for(int i = 0; i < shapeItems.size(); i++)
-        {
-            fl_n1 = fl_n2 = false;
-            if( i != elF->index  && (shapeItems[i].n1 == shapeItems[elF->index].n1 || shapeItems[i].n2 == shapeItems[elF->index].n1) )
-            {
-                if( !elF->status_hold ) fl_appN1 = true;
-                else fl_n1 = true;
-            }
-            if( i != elF->index  && (shapeItems[i].n1 == shapeItems[elF->index].n2 || shapeItems[i].n2 == shapeItems[elF->index].n2) )
-            {
-                if( !elF->status_hold ) fl_appN2 = true;
-                else fl_n2 = true;
-            }
-            if( fl_n1 || fl_n2 )
-            {
-                items_array.push_back(i);// array of the figures to be updated
-                if( shapeItems[elF->index].type != 2 && shapeItems[i].type == 2 )
-                {
-                    if( fl_n1 ) fl_n1Block = true;//blocking the n1 point for editing
-                    if( fl_n2 ) fl_n2Block = true;//blocking the n2 point for editing
-                }
-            }
-        }
-        //-- Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array --
-        for( int i = 0; i < inundationItems.size(); i++ )
-            for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
-            {
-                for( int z = 0; z < items_array.size(); z++ )
-                    if( inundationItems[i].number_shape[p] == items_array[z] )
-                {
-                    bool fl_push = true;
-                    for(int j = 0; j< inund_Rebuild.size(); j++)
-                        if( i == inund_Rebuild[j] ) fl_push = false;
-                    if( fl_push )inund_Rebuild.push_back(i);
-                }
-            }
-        p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
-        p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
-        propDlg.resize( 515, 275 );
     }
     if( propDlg.exec() == QDialog::Accepted )
     {
@@ -2823,10 +2850,6 @@ void ElFigDt::properties()
         }
         else//-- Applying the changes for the figures --
         {
-            QLineF line1, line2;
-            double ang;
-            QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
-            double t_start, t_end, a, b;
             for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
                 if( fabs( pi->second - 0 ) >= 0.01 )
                 {
@@ -2862,83 +2885,95 @@ void ElFigDt::properties()
                 case 2:
                     ln_style = Qt::DotLine; break;
             }
-            if( shapeItems[elF->index].width == -5 )
+            if( !flag_hld )
             {
-                k = -10;
-                while( (*widths).find(k) != (*widths).end() ) k--;
-                (*widths).insert( std::pair<int, float> (k, (float)(l_width->value()*scale)) );
-                shapeItems[elF->index].width = k;
+                if( items_array_holds.size() )
+                    items_array_holds.clear();
+                items_array_holds.push_back(elF->index);
             }
-            else (*widths)[shapeItems[elF->index].width] = l_width->value()*scale;
-            if( shapeItems[elF->index].lineColor == -5 )
+            for( int i = 0; i < items_array_holds.size(); i++ )
             {
-                k = -10;
-                while( (*colors).find(k) != (*colors).end() ) k--;
-                (*colors).insert( std::pair<int, QColor> ( k, res_lClr ) );
-                shapeItems[elF->index].lineColor = k;
-            }
-            else (*colors)[shapeItems[elF->index].lineColor] = res_lClr;
-            if( shapeItems[elF->index].style == -5 )
-            {
-                k = -10;
-                while( (*styles).find(k) != (*styles).end() ) k--;
-                (*styles).insert( std::pair<int, Qt::PenStyle> (k, ln_style) );
-                shapeItems[elF->index].style = k;
-            }
-            else (*styles)[shapeItems[elF->index].style] = ln_style;
-            if( shapeItems[elF->index].border_width == -6 )
-            {
-                k = -10;
-                while( (*widths).find(k) != (*widths).end() ) k--;
-                (*widths).insert( std::pair<int, float> (k, lb_width->value()*scale) );
-                shapeItems[elF->index].border_width = k;
-            }
-            else (*widths)[shapeItems[elF->index].border_width] = lb_width->value()*scale;
-            if( shapeItems[elF->index].borderColor == -6 )
-            {
-                k = -10;
-                while( (*colors).find(k) != (*colors).end() ) k--;
-                (*colors).insert( std::pair<int, QColor> ( k, res_lbClr ) );
-                shapeItems[elF->index].borderColor = k;
-            }
-            else (*colors)[shapeItems[elF->index].borderColor] = res_lbClr;
-            if( sender()->objectName() == "Line" )
-            {
-                if( !fl_n1Block )
+                if( shapeItems[items_array_holds[i]].width == -5 )
                 {
-                    (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value());
-                    (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
+                    k = -10;
+                    while( (*widths).find(k) != (*widths).end() ) k--;
+                    (*widths).insert( std::pair<int, float> (k, (float)(l_width->value()*scale)) );
+                    shapeItems[items_array_holds[i]].width = k;
                 }
-                if( !fl_n2Block )
+                else (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
+                if( shapeItems[items_array_holds[i]].lineColor == -5 )
                 {
-                    (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value());
-                    (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
+                    k = -10;
+                    while( (*colors).find(k) != (*colors).end() ) k--;
+                    (*colors).insert( std::pair<int, QColor> ( k, res_lClr ) );
+                    shapeItems[items_array_holds[i]].lineColor = k;
                 }
+                else (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
+                if( shapeItems[items_array_holds[i]].style == -5 )
+                {
+                    k = -10;
+                    while( (*styles).find(k) != (*styles).end() ) k--;
+                    (*styles).insert( std::pair<int, Qt::PenStyle> (k, ln_style) );
+                    shapeItems[items_array_holds[i]].style = k;
+                }
+                else (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
+                if( shapeItems[items_array_holds[i]].border_width == -6 )
+                {
+                    k = -10;
+                    while( (*widths).find(k) != (*widths).end() ) k--;
+                    (*widths).insert( std::pair<int, float> (k, lb_width->value()*scale) );
+                    shapeItems[items_array_holds[i]].border_width = k;
+                }
+                else (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
+                if( shapeItems[items_array_holds[i]].borderColor == -6 )
+                {
+                    k = -10;
+                    while( (*colors).find(k) != (*colors).end() ) k--;
+                    (*colors).insert( std::pair<int, QColor> ( k, res_lbClr ) );
+                    shapeItems[items_array_holds[i]].borderColor = k;
+                }
+                else (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
             }
-            else if( sender()->objectName() == "Bezier curve" )
+            if( !flag_hld )
             {
-                if( !fl_n1Block )
+                if( sender()->objectName() == "Line" )
                 {
-                    (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value());
-                    (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
+                    if( !fl_n1Block )
+                    {
+                        (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value());
+                        (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
+                    }
+                    if( !fl_n2Block )
+                    {
+                        (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value());
+                        (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
+                    }
                 }
-                if( !fl_n2Block )
+                else if( sender()->objectName() == "Bezier curve" )
                 {
-                    (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value());
-                    (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
+                    if( !fl_n1Block )
+                    {
+                        (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value());
+                        (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
+                    }
+                    if( !fl_n2Block )
+                    {
+                        (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value());
+                        (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
+                    }
+                    (*pnts)[shapeItems[elF->index].n3].setX(p3_x->value()); (*pnts)[shapeItems[elF->index].n3].setY(p3_y->value());
+                    (*pnts)[shapeItems[elF->index].n4].setX(p4_x->value()); (*pnts)[shapeItems[elF->index].n4].setY(p4_y->value());
                 }
-                (*pnts)[shapeItems[elF->index].n3].setX(p3_x->value()); (*pnts)[shapeItems[elF->index].n3].setY(p3_y->value());
-                (*pnts)[shapeItems[elF->index].n4].setX(p4_x->value()); (*pnts)[shapeItems[elF->index].n4].setY(p4_y->value());
-            }
-            else if( sender()->objectName() == "Arc" )
-            {
-                (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value()); (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
-                (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value()); (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
-                (*pnts)[shapeItems[elF->index].n3].setX(p3_x->value()); (*pnts)[shapeItems[elF->index].n3].setY(p3_y->value());
-                (*pnts)[shapeItems[elF->index].n4].setX(p4_x->value()); (*pnts)[shapeItems[elF->index].n4].setY(p4_y->value());
-                (*pnts)[shapeItems[elF->index].n5].setX(p5_x->value()); (*pnts)[shapeItems[elF->index].n5].setY(p5_y->value());
-                //-- Calcylating t_start and t_end for the arc, using the start and end points(n1,n2) --
-                shapeItems[elF->index].ctrlPos4 = elF->getArcStartEnd( (*pnts)[shapeItems[elF->index].n1], (*pnts)[shapeItems[elF->index].n2], (*pnts)[shapeItems[elF->index].n3], (*pnts)[shapeItems[elF->index].n4], (*pnts)[shapeItems[elF->index].n5] );
+                else if( sender()->objectName() == "Arc" )
+                {
+                    (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value()); (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
+                    (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value()); (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
+                    (*pnts)[shapeItems[elF->index].n3].setX(p3_x->value()); (*pnts)[shapeItems[elF->index].n3].setY(p3_y->value());
+                    (*pnts)[shapeItems[elF->index].n4].setX(p4_x->value()); (*pnts)[shapeItems[elF->index].n4].setY(p4_y->value());
+                    (*pnts)[shapeItems[elF->index].n5].setX(p5_x->value()); (*pnts)[shapeItems[elF->index].n5].setY(p5_y->value());
+                    //-- Calcylating t_start and t_end for the arc, using the start and end points(n1,n2) --
+                    shapeItems[elF->index].ctrlPos4 = elF->getArcStartEnd( (*pnts)[shapeItems[elF->index].n1], (*pnts)[shapeItems[elF->index].n2], (*pnts)[shapeItems[elF->index].n3], (*pnts)[shapeItems[elF->index].n4], (*pnts)[shapeItems[elF->index].n5] );
+                }
             }
             //-- Rebuilding the figures, which are connected with the current one --
             elF->initShapeItems( w, items_array );
