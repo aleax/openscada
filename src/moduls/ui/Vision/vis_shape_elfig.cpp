@@ -99,10 +99,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     ColorMap *colors = &elFD->shapeColors;
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
-    QLineF line1, line2;
+    /*QLineF line1, line2;
     double ang;
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
-    double t_start, t_end, a, b;
+    double t_start, t_end, a, b;*/
+    QPointF CtrlMotionPos_4;
     string backimg;
     QImage img;
     rect_num = -1;
@@ -1710,7 +1711,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 }
 
             fill_index = -1;
-            for( int i=0; i < inundationItems.size(); i++ )
+            for( int i = inundationItems.size()-1; i >= 0; i-- )
                 if( inundationItems[i].path.contains(pop_pos) )
                 {
                     QAction *actDeleteFill = new QAction( _("Delete the current fill"), w->mainWin() );

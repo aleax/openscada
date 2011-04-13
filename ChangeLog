@@ -1,14 +1,10 @@
 2011-04-13 Maxim
-- UI.Vision:  The default values detection is added to the properties dialog at its creation for the primitive ElFigure.
-
-2011-04-13 Maxim
-- FIX:UI.Vision: Detecting the figures to be repainted is fixed for the properties dialog for the primitive ElFigure.
-
-
-2011-04-13 Maxim
 - UI.Vision: Checkboxes for the default values set are added to the properties dialog of the ElFigure.
 - FIX:UI.Vision: Selecting elements by the rectangle is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Focus loosing when properties dialog is called is fixed for the the primitive ElFigure.
+- FIX:UI.Vision: Detecting the figures to be repainted is fixed for the properties dialog for the primitive ElFigure.
+- UI.Vision:  The default values detection is added to the properties dialog at its creation for the primitive ElFigure.
+- UI.Vision:  The fills select for the popup menu options is changed to be from the end of the container for the primitive ElFigure.
 
 
 2011-04-12 Roman
