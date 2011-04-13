@@ -2704,7 +2704,9 @@ void ElFigDt::properties()
         connect( fi_check, SIGNAL(toggled(bool)), f_image, SLOT(setDisabled(bool)) ); 
         f_color->setValue( (*colors)[inundationItems[elF->fill_index].brush].name() + "-" + 
                             QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()) );
+        if( inundationItems[elF->fill_index].brush == -7 ) fc_check->setChecked(true);
         f_image->setText(QString( (*images)[inundationItems[elF->fill_index].brush_img].c_str()));
+        if( inundationItems[elF->fill_index].brush_img == -5 ) fi_check->setChecked(true);
         propDlg.resize( 300, 150 );
     }
     else//- Creating the items' properties dialog -
@@ -2855,15 +2857,20 @@ void ElFigDt::properties()
             propDlg.resize( 280, 275 );
         }
         l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
+        if( shapeItems[elF->index].width == -5 ) lw_check->setChecked(true);
         l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" + 
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
+        if( shapeItems[elF->index].lineColor == -5 ) lc_check->setChecked(true);
         QStringList line_styles;
         line_styles << _("Solid") << _("Dashed") << _("Dotted");
         l_style->addItems(line_styles);
         l_style->setCurrentIndex((*styles)[shapeItems[elF->index].style]-1);
+        if( shapeItems[elF->index].style == -5 ) ls_check->setChecked(true);
         lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
+        if( shapeItems[elF->index].border_width == -6 ) lbw_check->setChecked(true);
         lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" + 
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
+        if( shapeItems[elF->index].borderColor == -6 ) lbc_check->setChecked(true);
     }
     if( propDlg.exec() == QDialog::Accepted )
     {
