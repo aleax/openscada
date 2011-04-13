@@ -1,3 +1,9 @@
+2011-04-13 Maxim
+- UI.Vision: Checkboxes for the default values set are added to the properties dialog of the ElFigure.
+- FIX:UI.Vision: Selecting elements by the rectangle is fixed for the primitive ElFigure.
+- FIX:UI.Vision: Focus loosing when properties dialog is called is fixed for the the primitive ElFigure.
+
+
 2011-04-12 Roman
 - !!:DOC: Generic document "openscada.pdf" for English is created. Some English documents is fixed.
 

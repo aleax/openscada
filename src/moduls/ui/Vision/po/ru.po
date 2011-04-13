@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-11 12:31+0300\n"
+"POT-Creation-Date: 2011-04-13 13:07+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1550,12 +1550,6 @@ msgstr "Показать свойства элементарной фигуры"
 msgid "Press to show the properties dialog"
 msgstr "Нажать для получения свойств элементарной фигруы."
 
-msgid "Show the fill's properties"
-msgstr "Показать свойства заливки"
-
-msgid "Press to show the fill's properties dialog"
-msgstr "Нажать для получения свойств заливки."
-
 msgid "Delete the current fill"
 msgstr "Удалить заливку"
 
@@ -1574,17 +1568,29 @@ msgstr "Сделать изображение заливки динамичес�
 msgid "Press to make fill image dynamic"
 msgstr "Нажмите для того, чтобы сделать изображение заливки динамическим."
 
+msgid "Show the fill's properties"
+msgstr "Показать свойства заливки"
+
+msgid "Press to show the fill's properties dialog"
+msgstr "Нажать для получения свойств заливки."
+
 msgid "Make all values of the widget the static ones"
 msgstr "Сделать все величины виджета статическими"
 
 msgid "Press to make all values of the widget static ones"
 msgstr "Нажмите для того, чтобы сделать все величины виджета статическими."
 
-msgid "Properties for the '%1' element: '%2'."
-msgstr "Свойства для '%1' элемента: '%2'."
+msgid "Properties for the '"
+msgstr "Свойства для '"
+
+msgid "' figures."
+msgstr "' фигур."
+
+msgid "Properties for the '%1' figure: '%2'."
+msgstr "Свойства для '%1' фигуры: '%2'."
 
 msgid "Elementary figure properties."
-msgstr "Свойства элементарной фигруы"
+msgstr "Свойства элементарной фигруы."
 
 msgid "Line:"
 msgstr "Линия:"
@@ -1599,7 +1605,7 @@ msgid "x"
 msgstr "x"
 
 msgid "y"
-msgstr "x"
+msgstr "y"
 
 msgid "Point 3:"
 msgstr "Точка 3:"
@@ -1613,32 +1619,50 @@ msgstr "Точка 5:"
 msgid "Fill Color"
 msgstr "Цвет заливки"
 
+msgid "Set the default fill color."
+msgstr "Установить цвет заливки по умолчанию."
+
 msgid "Fill Image"
 msgstr "Изображение заливки"
 
-msgid "Line width"
-msgstr "Толщина линии"
+msgid "Set the default fill image."
+msgstr "Установить изображение заливки по умолчанию."
 
-msgid "Line Color"
+msgid "Line width"
+msgstr "Ширина линии"
+
+msgid "Set the default line width."
+msgstr "Установить ширину линии по умолчанию. "
+
+msgid "Line color"
 msgstr "Цвет линии"
+
+msgid "Set the default line color."
+msgstr "Установить цвет линии по умолчанию."
 
 msgid "Line style"
 msgstr "Стиль линии"
 
-msgid "Border width"
-msgstr "Толщина границы"
+msgid "Set the default line style."
+msgstr "Установить стиль линии по умолчанию."
 
-msgid "Border Color"
+msgid "Border width"
+msgstr "Ширина границы"
+
+msgid "Set the default line's border width."
+msgstr "Установить ширину границы по умолчанию."
+
+msgid "Border color"
 msgstr "Цвет границы"
+
+msgid "Set the default line's border color."
+msgstr "Установить цвет границы по умолчанию."
 
 msgid "Point 1:"
 msgstr "Точка 1:"
 
 msgid "Point 2:"
 msgstr "Точка 2:"
-
-msgid "(default)"
-msgstr "(по умолчанию)"
 
 msgid "Solid"
 msgstr "Сплошная"
@@ -1789,3 +1813,6 @@ msgstr "Время инициализации '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision диалог"
+
+#~ msgid "(default)"
+#~ msgstr "(по умолчанию)"

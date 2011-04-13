@@ -507,6 +507,7 @@ class DevelWdgView: public WdgView
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 	void setVisScale( float val );
+        void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
 
 	WdgView *newWdgItem( const string &iwid );
 
@@ -552,6 +553,7 @@ class DevelWdgView: public WdgView
 	short int	fMoveHoldMove	:1;	//Mouse move on hold
 	short int	fHideChilds	:1;	//Hide childs on move
 	short int	fSelChange	:1;	//Changed select map
+        short int	fPrevEdExitFoc  :1;	//Prevention exit from widget edition by focus loosing
 
 	float		mVisScale;		//Visual scale value of root widget.
 

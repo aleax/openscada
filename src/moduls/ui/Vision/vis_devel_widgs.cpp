@@ -2022,7 +2022,7 @@ void WMdfStBar::mousePressEvent( QMouseEvent * event )
 DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
     WdgView(iwid,ilevel,mainWind,parent), fMakeScale(false), fWdgEdit(false), fWdgSelect(false), fMoveHold(false),
     fHoldChild(false), fLeftTop(false), fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false),
-    fSelChange(false), mVisScale(1), pntView(NULL), editWdg(NULL)
+    fSelChange(false), fPrevEdExitFoc(false), mVisScale(1), pntView(NULL), editWdg(NULL)
 {
     setMouseTracking(true);
     if( wLevel() == 0 )
@@ -2975,7 +2975,8 @@ bool DevelWdgView::event( QEvent *event )
 		return true;
 	    case QEvent::FocusOut:
 		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
-		if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() )
+                if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
+                    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) )
 		{
 		    if( editWdg )	editWdg->setSelect(false,PrcChilds);
 		    //emit selected("");

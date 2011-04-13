@@ -37,6 +37,7 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QFont>
+#include <QCheckBox>
 
 #include <tsys.h>
 
@@ -1559,6 +1560,8 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
     {
         bool actDyn = false;
         ElFigDt *elFD = (ElFigDt*)w->shpData;
+        QImage ico_propDlg;
+        if(!ico_propDlg.load(TUIS::icoPath("edit").c_str())) ico_propDlg.load(":/images/edit.png");
 
         PntMap *pnts = &elFD->shapePnts;
         WidthMap *widths = &elFD->shapeWidths;
@@ -1655,7 +1658,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 menu.addAction(actDynamicStyle);
             }
 
-            QAction *actShowProperties = new QAction( _("Show the figure's properties"), w->mainWin() );
+            QAction *actShowProperties = new QAction( QPixmap::fromImage(ico_propDlg), _("Show the figure's properties"), w->mainWin() );
             switch( shapeItems[index].type )
             {
                 case 1:
@@ -1733,7 +1736,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                         menu.addAction(actDynamicFillImage);
                     }
                     fill_index = i;
-                    QAction *actShowFillProperties = new QAction( _("Show the fill's properties"), w->mainWin() );
+                    QAction *actShowFillProperties = new QAction( QPixmap::fromImage(ico_propDlg), _("Show the fill's properties"), w->mainWin() );
                     actShowFillProperties->setObjectName("Fill");
                     actShowFillProperties->setStatusTip(_("Press to show the fill's properties dialog"));
                     connect( actShowFillProperties, SIGNAL(triggered()), elFD, SLOT(properties()) ); 
@@ -2605,6 +2608,8 @@ void ElFigDt::dynamic( )
 void ElFigDt::properties()
 {
     ShapeElFigure *elF = (ShapeElFigure*) mod->getWdgShape("ElFigure");
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
+    if(devW) devW->setPrevEdExitFoc(true);
     bool flag_hld = true;
     QVector<int> items_array_holds;
     if(elF->flag_rect_items)
@@ -2612,6 +2617,7 @@ void ElFigDt::properties()
         for( int i=0; i < elF->index_array.size(); i++ )
             if( elF->index_array[i] != -1 )
                 items_array_holds.push_back(elF->index_array[i]);
+        std::sort(items_array_holds.begin(), items_array_holds.end());
     }
     else items_array_holds.push_back(elF->index);
 
@@ -2628,21 +2634,37 @@ void ElFigDt::properties()
     LineEditProp *l_color, *lb_color, *f_color;
     QLineEdit *f_image;
     QComboBox *l_style;
+    QCheckBox *lw_check, *lc_check, *ls_check, *lbw_check, *lbc_check, *fc_check, *fi_check;
     QDoubleSpinBox *p1_x, *p1_y, *p2_x, *p2_y, *p3_x, *p3_y, *p4_x, *p4_y, *p5_x, *p5_y;
     QVector<int> items_array;
     QVector<int> inund_Rebuild;
     QImage ico_t;
     bool fl_n1 = false, fl_n2 = false, fl_n1Block = false, fl_n2Block = false, fl_appN1 = false, fl_appN2 = false;
+    QString str_mess;
+    str_mess =_("Properties for the '");
+    if( items_array_holds.size() > 1 && sender()->objectName() != "Fill" )
+    {
+        for( int i= 0; i < items_array_holds.size()-1; i++ )
+            str_mess = str_mess + QString(TSYS::int2str(items_array_holds[i]).c_str()) + "', '";
+        str_mess += QString(TSYS::int2str(items_array_holds[items_array_holds.size()-1]).c_str());
+        str_mess += _("' figures.");
+    }
+    else str_mess = QString(_("Properties for the '%1' figure: '%2'.")).arg((elF->fill_index == -1) ? elF->index : elF->fill_index ).arg(sender()->objectName());
     if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
-    InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), QString(_("Properties for the '%1' element: '%2'.")).arg((elF->fill_index == -1) ? elF->index : elF->fill_index ).arg(sender()->objectName()),
+    InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), str_mess,
                      _("Elementary figure properties."),false,false);
     l_lb = new QLabel(_("Line:"),&propDlg);
     l_width = new QSpinBox(&propDlg);
+    lw_check = new QCheckBox(&propDlg);
     l_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
+    lc_check = new QCheckBox(&propDlg);
     l_style = new QComboBox(&propDlg);
+    ls_check = new QCheckBox(&propDlg);
     lb_lb = new QLabel(_("Border:"),&propDlg);
     lb_width = new QSpinBox(&propDlg);
+    lbw_check = new QCheckBox(&propDlg);
     lb_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
+    lbc_check = new QCheckBox(&propDlg);
     p_lb = new QLabel(_("Points:"),&propDlg);
     x_lb = new QLabel(_("x"),&propDlg);
     y_lb = new QLabel(_("y"),&propDlg);
@@ -2655,12 +2677,16 @@ void ElFigDt::properties()
     p5_lb = new QLabel(_("Point 5:"),&propDlg);
     p5_x = new QDoubleSpinBox(&propDlg);p5_y = new QDoubleSpinBox(&propDlg);
     f_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
+    fc_check = new QCheckBox(&propDlg);
     f_image = new QLineEdit(&propDlg);
+    fi_check = new QCheckBox(&propDlg);
     //- Creating the fills' properties dialog -
     if( sender()->objectName() == "Fill" )
     {
         l_lb->hide(); l_width->hide(); l_color->hide(); l_style->hide();
         lb_lb->hide(); lb_width->hide(); lb_color->hide();
+        lw_check->hide(); lc_check->hide(); ls_check->hide();
+        lbw_check->hide(); lbc_check->hide();
         p_lb->hide(); x_lb->hide(); y_lb->hide();
         p1_x->hide();p1_y->hide();
         p2_x->hide();p2_y->hide();
@@ -2669,8 +2695,14 @@ void ElFigDt::properties()
         p5_lb->hide(); p5_x->hide();p5_y->hide();
         propDlg.edLay()->addWidget( new QLabel(_("Fill Color"),&propDlg), 2, 0 );
         propDlg.edLay()->addWidget( f_color, 2, 1 );
+        fc_check->setToolTip(_("Set the default fill color."));
+        propDlg.edLay()->addWidget( fc_check, 2, 2 );
+        connect( fc_check, SIGNAL(toggled(bool)), f_color, SLOT(setDisabled(bool)) ); 
         propDlg.edLay()->addWidget( new QLabel(_("Fill Image"),&propDlg), 3, 0 );
         propDlg.edLay()->addWidget( f_image, 3, 1 );
+        fi_check->setToolTip(_("Set the default fill image."));
+        propDlg.edLay()->addWidget( fi_check, 3, 2 );
+        connect( fi_check, SIGNAL(toggled(bool)), f_image, SLOT(setDisabled(bool)) ); 
         f_color->setValue( (*colors)[inundationItems[elF->fill_index].brush].name() + "-" + 
                             QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()) );
         f_image->setText(QString( (*images)[inundationItems[elF->fill_index].brush_img].c_str()));
@@ -2679,55 +2711,70 @@ void ElFigDt::properties()
     else//- Creating the items' properties dialog -
     {
         f_color->hide(); f_image->hide();
+        fc_check->hide(); fi_check->hide();
         QFont lb_fnt;
         lb_fnt.setStyle( QFont::StyleItalic );
         lb_fnt.setBold(true);
         l_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( l_lb, 2, 0 );
         propDlg.edLay()->addWidget( new QLabel(_("Line width"),&propDlg), 3, 0 );
-        l_width->setRange( 0, 99 );
+        l_width->setRange( 1, 99 );
         propDlg.edLay()->addWidget( l_width, 3, 1 );
-        propDlg.edLay()->addWidget( new QLabel(_("Line Color"),&propDlg), 4, 0 );
+        lw_check->setToolTip(_("Set the default line width."));
+        propDlg.edLay()->addWidget( lw_check, 3, 2 );
+        connect( lw_check, SIGNAL(toggled(bool)), l_width, SLOT(setDisabled(bool)) );
+        propDlg.edLay()->addWidget( new QLabel(_("Line color"),&propDlg), 4, 0 );
         propDlg.edLay()->addWidget( l_color, 4, 1 );
+        lc_check->setToolTip(_("Set the default line color."));
+        propDlg.edLay()->addWidget( lc_check, 4, 2 );
+        connect( lc_check, SIGNAL(toggled(bool)), l_color, SLOT(setDisabled(bool)) );
         propDlg.edLay()->addWidget( new QLabel(_("Line style"),&propDlg), 5, 0 );
         propDlg.edLay()->addWidget( l_style, 5, 1 );
+        ls_check->setToolTip(_("Set the default line style."));
+        propDlg.edLay()->addWidget( ls_check, 5, 2 );
+        connect( ls_check, SIGNAL(toggled(bool)), l_style, SLOT(setDisabled(bool)) );
         lb_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( lb_lb, 6, 0 );
         propDlg.edLay()->addWidget( new QLabel(_("Border width"),&propDlg), 7, 0 );
         lb_width->setRange( 0, 99 );
         propDlg.edLay()->addWidget( lb_width, 7, 1 );
-        propDlg.edLay()->addWidget( new QLabel(_("Border Color"),&propDlg), 8, 0 );
+        lbw_check->setToolTip(_("Set the default line's border width."));
+        propDlg.edLay()->addWidget( lbw_check, 7, 2 );
+        connect( lbw_check, SIGNAL(toggled(bool)), lb_width, SLOT(setDisabled(bool)) );
+        propDlg.edLay()->addWidget( new QLabel(_("Border color"),&propDlg), 8, 0 );
         propDlg.edLay()->addWidget( lb_color, 8, 1 );
-        //if( flag_A || ( index_array_copy.size() && index_array_copy[0] != -1 ) || ( index_array.size() && index_array[0] != -1 ) )
+        lbc_check->setToolTip(_("Set the default line's border color."));
+        propDlg.edLay()->addWidget( lbc_check, 8, 2 );
+        connect( lbc_check, SIGNAL(toggled(bool)), lb_color, SLOT(setDisabled(bool)) );
         if( !items_array_holds.size() || ((items_array_holds.size() == 1) && (items_array_holds[0] == elF->index)) )
         {
             flag_hld = false;
-            p_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( p_lb, 2, 2 );
-            x_lb->setFont( lb_fnt ); x_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( x_lb, 2, 3 );
-            y_lb->setFont( lb_fnt ); y_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( y_lb, 2, 4 );
-            propDlg.edLay()->addWidget( new QLabel(_("Point 1:"),&propDlg), 3, 2 );
+            p_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( p_lb, 2, 3 );
+            x_lb->setFont( lb_fnt ); x_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( x_lb, 2, 4 );
+            y_lb->setFont( lb_fnt ); y_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( y_lb, 2, 5 );
+            propDlg.edLay()->addWidget( new QLabel(_("Point 1:"),&propDlg), 3, 3 );
             p1_x->setRange( 0.0, 10000.0 ); p1_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p1_x, 3, 3 );
+            propDlg.edLay()->addWidget( p1_x, 3, 4 );
             p1_y->setRange( 0.0, 10000.0 ); p1_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p1_y, 3, 4 );
-            propDlg.edLay()->addWidget( new QLabel(_("Point 2:"),&propDlg), 4, 2 );
+            propDlg.edLay()->addWidget( p1_y, 3, 5 );
+            propDlg.edLay()->addWidget( new QLabel(_("Point 2:"),&propDlg), 4, 3 );
             p2_x->setRange( 0.0, 10000.0 ); p2_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p2_x, 4, 3 );
+            propDlg.edLay()->addWidget( p2_x, 4, 4 );
             p2_y->setRange( 0.0, 10000.0 ); p2_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p2_y, 4, 4 );
-            propDlg.edLay()->addWidget( p3_lb, 5, 2 );
+            propDlg.edLay()->addWidget( p2_y, 4, 5 );
+            propDlg.edLay()->addWidget( p3_lb, 5, 3 );
             p3_x->setRange( 0.0, 10000.0 ); p3_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p3_x, 5, 3 );
+            propDlg.edLay()->addWidget( p3_x, 5, 4 );
             p3_y->setRange( 0.0, 10000.0 ); p3_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p3_y, 5, 4 );
-            propDlg.edLay()->addWidget( p4_lb, 6, 2 );
+            propDlg.edLay()->addWidget( p3_y, 5, 5 );
+            propDlg.edLay()->addWidget( p4_lb, 6, 3 );
             p4_x->setRange( 0.0, 10000.0 ); p4_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p4_x, 6, 3 );
+            propDlg.edLay()->addWidget( p4_x, 6, 4 );
             p4_y->setRange( 0.0, 10000.0 ); p4_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p4_y, 6, 4 );
-            propDlg.edLay()->addWidget( p5_lb, 7, 2 );
+            propDlg.edLay()->addWidget( p4_y, 6, 5 );
+            propDlg.edLay()->addWidget( p5_lb, 7, 3 );
             p5_x->setRange( 0.0, 10000.0 ); p5_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p5_x, 7, 3 );
+            propDlg.edLay()->addWidget( p5_x, 7, 4 );
             p5_y->setRange( 0.0, 10000.0 ); p5_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p5_y, 7, 4 );
+            propDlg.edLay()->addWidget( p5_y, 7, 5 );
     
             if( sender()->objectName() == "Line" )
             {
@@ -2794,7 +2841,7 @@ void ElFigDt::properties()
             }
             p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
             p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
-            propDlg.resize( 475, 275 );
+            propDlg.resize( 500, 275 );
         }
         else
         {
@@ -2808,7 +2855,6 @@ void ElFigDt::properties()
             propDlg.resize( 280, 275 );
         }
         l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
-        //if( shapeItems[elF->index].width == -5 ) l_width->setSuffix(_("(default)"));
         l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" + 
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
         QStringList line_styles;
@@ -2816,7 +2862,6 @@ void ElFigDt::properties()
         l_style->addItems(line_styles);
         l_style->setCurrentIndex((*styles)[shapeItems[elF->index].style]-1);
         lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
-        //if( shapeItems[elF->index].border_width == -6 ) lb_width->setSuffix(_("(default)"));
         lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" + 
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
     }
@@ -2828,35 +2873,52 @@ void ElFigDt::properties()
         {
             string res_fColor = f_color->value().toStdString();
             QColor res_fClr = WdgShape::getColor(  res_fColor );
-            if( inundationItems[elF->fill_index].brush == -7 )
+            if( f_color->isEnabled() )
             {
-                k = -10;
-                while( (*colors).find(k) != (*colors).end() ) k--;
-                (*colors).insert( std::pair<int, QColor> ( k, res_fClr ) );
-                inundationItems[elF->fill_index].brush = k;
-            }
-            else (*colors)[inundationItems[elF->fill_index].brush] = res_fClr;
-            if( !f_image->text().isEmpty() )
-            {
-                if( inundationItems[elF->fill_index].brush_img == -5 )
+                if( inundationItems[elF->fill_index].brush == -7 )
                 {
                     k = -10;
-                    while( (*images).find(k) != (*images).end() ) k--;
-                    (*images).insert( std::pair<int, string> ( k, f_image->text().toStdString() ) );
-                    inundationItems[elF->fill_index].brush_img = k;
+                    while( (*colors).find(k) != (*colors).end() ) k--;
+                    (*colors).insert( std::pair<int, QColor> ( k, res_fClr ) );
+                    inundationItems[elF->fill_index].brush = k;
                 }
-                else (*images)[inundationItems[elF->fill_index].brush_img] = f_image->text().toStdString();
+                else (*colors)[inundationItems[elF->fill_index].brush] = res_fClr;
             }
+            else if( inundationItems[elF->fill_index].brush != -7 )
+            {
+                (*colors).erase( inundationItems[elF->fill_index].brush );
+                inundationItems[elF->fill_index].brush = -7;
+            }
+            if( f_image->isEnabled() )
+            {
+                if( !f_image->text().isEmpty() )
+                {
+                    if( inundationItems[elF->fill_index].brush_img == -5 )
+                    {
+                        k = -10;
+                        while( (*images).find(k) != (*images).end() ) k--;
+                        (*images).insert( std::pair<int, string> ( k, f_image->text().toStdString() ) );
+                        inundationItems[elF->fill_index].brush_img = k;
+                    }
+                    else (*images)[inundationItems[elF->fill_index].brush_img] = f_image->text().toStdString();
+                }
+            }
+            else if( inundationItems[elF->fill_index].brush_img != -5 )
+            {
+                (*images).erase( inundationItems[elF->fill_index].brush_img );
+                inundationItems[elF->fill_index].brush_img = -5;
+            }
+
         }
         else//-- Applying the changes for the figures --
         {
-            for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
+            /*for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
                 if( fabs( pi->second - 0 ) >= 0.01 )
                 {
                     pi->second = vmin(1000,vmax(1,pi->second*scale));
                     ++pi;
                 }
-            else ++pi;
+            else ++pi;*/
             if( fl_appN1 )
             {
                 if( shapeItems[elF->index].n1 > 0 )
@@ -2893,46 +2955,90 @@ void ElFigDt::properties()
             }
             for( int i = 0; i < items_array_holds.size(); i++ )
             {
-                if( shapeItems[items_array_holds[i]].width == -5 )
+                if( l_width->isEnabled() )
                 {
-                    k = -10;
-                    while( (*widths).find(k) != (*widths).end() ) k--;
-                    (*widths).insert( std::pair<int, float> (k, (float)(l_width->value()*scale)) );
-                    shapeItems[items_array_holds[i]].width = k;
+                    if( shapeItems[items_array_holds[i]].width == -5 )
+                    {
+                        k = -10;
+                        while( (*widths).find(k) != (*widths).end() ) k--;
+                        (*widths).insert( std::pair<int, float> (k, (float)(l_width->value()*scale)) );
+                        shapeItems[items_array_holds[i]].width = k;
+                    }
+                    else (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
                 }
-                else (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
-                if( shapeItems[items_array_holds[i]].lineColor == -5 )
+                else if( shapeItems[items_array_holds[i]].width != -5 )
                 {
-                    k = -10;
-                    while( (*colors).find(k) != (*colors).end() ) k--;
-                    (*colors).insert( std::pair<int, QColor> ( k, res_lClr ) );
-                    shapeItems[items_array_holds[i]].lineColor = k;
+                    (*widths).erase( shapeItems[items_array_holds[i]].width );
+                    shapeItems[items_array_holds[i]].width = -5;
                 }
-                else (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
-                if( shapeItems[items_array_holds[i]].style == -5 )
+
+                if( l_color->isEnabled() )
                 {
-                    k = -10;
-                    while( (*styles).find(k) != (*styles).end() ) k--;
-                    (*styles).insert( std::pair<int, Qt::PenStyle> (k, ln_style) );
-                    shapeItems[items_array_holds[i]].style = k;
+                    if( shapeItems[items_array_holds[i]].lineColor == -5 )
+                    {
+                        k = -10;
+                        while( (*colors).find(k) != (*colors).end() ) k--;
+                        (*colors).insert( std::pair<int, QColor> ( k, res_lClr ) );
+                        shapeItems[items_array_holds[i]].lineColor = k;
+                    }
+                    else (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
                 }
-                else (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
-                if( shapeItems[items_array_holds[i]].border_width == -6 )
+                else if( shapeItems[items_array_holds[i]].lineColor != -5 )
                 {
-                    k = -10;
-                    while( (*widths).find(k) != (*widths).end() ) k--;
-                    (*widths).insert( std::pair<int, float> (k, lb_width->value()*scale) );
-                    shapeItems[items_array_holds[i]].border_width = k;
+                    (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                    shapeItems[items_array_holds[i]].lineColor = -5;
                 }
-                else (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
-                if( shapeItems[items_array_holds[i]].borderColor == -6 )
+
+                if( l_style->isEnabled() )
                 {
-                    k = -10;
-                    while( (*colors).find(k) != (*colors).end() ) k--;
-                    (*colors).insert( std::pair<int, QColor> ( k, res_lbClr ) );
-                    shapeItems[items_array_holds[i]].borderColor = k;
+                    if( shapeItems[items_array_holds[i]].style == -5 )
+                    {
+                        k = -10;
+                        while( (*styles).find(k) != (*styles).end() ) k--;
+                        (*styles).insert( std::pair<int, Qt::PenStyle> (k, ln_style) );
+                        shapeItems[items_array_holds[i]].style = k;
+                    }
+                    else (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
                 }
-                else (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
+                else if( shapeItems[items_array_holds[i]].style != -5 )
+                {
+                    (*styles).erase( shapeItems[items_array_holds[i]].style );
+                    shapeItems[items_array_holds[i]].style = -5;
+                }
+
+                if( lb_width->isEnabled() )
+                {
+                    if( shapeItems[items_array_holds[i]].border_width == -6 )
+                    {
+                        k = -10;
+                        while( (*widths).find(k) != (*widths).end() ) k--;
+                        (*widths).insert( std::pair<int, float> (k, lb_width->value()*scale) );
+                        shapeItems[items_array_holds[i]].border_width = k;
+                    }
+                    else (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
+                }
+                else if( shapeItems[items_array_holds[i]].border_width != -6 )
+                {
+                    (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                    shapeItems[items_array_holds[i]].border_width = -6;
+                }
+
+                if( lb_color->isEnabled() )
+                {
+                    if( shapeItems[items_array_holds[i]].borderColor == -6 )
+                    {
+                        k = -10;
+                        while( (*colors).find(k) != (*colors).end() ) k--;
+                        (*colors).insert( std::pair<int, QColor> ( k, res_lbClr ) );
+                        shapeItems[items_array_holds[i]].borderColor = k;
+                    }
+                    else (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
+                }
+                else if( shapeItems[items_array_holds[i]].borderColor != -6 )
+                {
+                    (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
+                    shapeItems[items_array_holds[i]].borderColor = -6;
+                }
             }
             if( !flag_hld )
             {
@@ -2976,7 +3082,7 @@ void ElFigDt::properties()
                 }
             }
             //-- Rebuilding the figures, which are connected with the current one --
-            elF->initShapeItems( w, items_array );
+            elF->initShapeItems( w, items_array_holds );
             //-- Rebuilding the fills' paths if the current figure is included to it --
             for( int i = 0; i < inund_Rebuild.size(); i++ )
                 if( elF->status_hold )
@@ -2989,22 +3095,24 @@ void ElFigDt::properties()
                             inund_Rebuild[j]--;
                 }
         }
+        elF->rectItems.clear();
         elF->paintImage(w);
-        elF->shapeSave( w );
+        elF->shapeSave(w);
         elF->status = false;
         elF->flag_ctrl = elF->flag_A = elF->flag_copy = elF->flag_up = elF->flag_down = elF->flag_left = elF->flag_right =  false;
         elF->itemInMotion = 0;
         elF->count_Shapes = 0;
         elF->index = -1;
         elF->index_array.clear();
-        for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
+        /*for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
             if( fabs( pi->second - 0 ) >= 0.01 )
             {
                 pi->second = vmin(1000,vmax(1,pi->second/scale));
                 ++pi;
             }
-        else ++pi;
+        else ++pi;*/
         w->update();
+        if(devW) devW->setPrevEdExitFoc(false);
     }
 }
 
@@ -3013,6 +3121,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
     PntMap *pnts = &elFD->shapePnts;
     WidthMap *widths = &elFD->shapeWidths;
     switch( event->type() )
@@ -3021,7 +3131,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         {
             QPainter pnt_v( view );
             pnt_v.drawPixmap( QPoint(0,0),elFD->pictObj );
-            if( dashedRect.isValid() )
+            if( dashedRect.isValid() && devW && devW->edit() )
                 pnt_v.drawPixmap( QPoint(0,0), rect_img );
             pnt_v.end();
             return true;
@@ -3029,8 +3139,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::MouseButtonPress:
         {
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
             if( runW && elFD->active && runW->permCntr() )
             {
 		string sev;
@@ -3275,8 +3383,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         {
             bool fl_brk;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-            RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
 
             if( runW && elFD->active && runW->permCntr() )
 	    {
@@ -3347,7 +3453,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::MouseButtonRelease:
         {
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             if( devW )
             {
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
@@ -3835,7 +3940,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             bool flag_break_move, 
 		 flag_arc_inund = false;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             if( devW )
 	    {
                 Mouse_pos = ev->pos();
@@ -4088,7 +4192,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::KeyPress:
         {
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             if( devW )
             {
                 if( flag_m )  break;
@@ -4336,7 +4439,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::KeyRelease:
         {
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
-            DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
             if( devW )
             {
                 if( ev->key() == Qt::Key_Shift ) flag_key = false;
@@ -4821,10 +4923,8 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         if( StartMotionPos.y() <= EndMotionPos.y() ) ang = 360 - angle( line1, line2 );
         else ang = angle( line1, line2 );
         if( (*widths)[MotionWidth] == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
-        {
             shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth] + 1,(*widths)[MotionBorderWidth], 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
-        }
         else
             shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth], (*widths)[MotionBorderWidth], 1, ang, StartMotionPos, EndMotionPos ), painterPathSimple( 1, ang, StartMotionPos,EndMotionPos ),
                                MotionNum_1, MotionNum_2, -1, -1, -1, QPointF(0,0), MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 1,angle_temp ) );
