@@ -2636,7 +2636,6 @@ void ElFigDt::properties()
     QComboBox *l_style;
     QCheckBox *lw_check, *lc_check, *ls_check, *lbw_check, *lbc_check, *fc_check, *fi_check;
     QDoubleSpinBox *p1_x, *p1_y, *p2_x, *p2_y, *p3_x, *p3_y, *p4_x, *p4_y, *p5_x, *p5_y;
-    QVector<int> items_array;
     QVector<int> inund_Rebuild;
     QImage ico_t;
     bool fl_n1 = false, fl_n2 = false, fl_n1Block = false, fl_n2Block = false, fl_appN1 = false, fl_appN2 = false;
@@ -2706,7 +2705,7 @@ void ElFigDt::properties()
         f_color->setValue( (*colors)[inundationItems[elF->fill_index].brush].name() + "-" + 
                             QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()) );
         f_image->setText(QString( (*images)[inundationItems[elF->fill_index].brush_img].c_str()));
-        propDlg.resize( 280, 150 );
+        propDlg.resize( 300, 150 );
     }
     else//- Creating the items' properties dialog -
     {
@@ -2800,7 +2799,8 @@ void ElFigDt::properties()
                 p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
                 p5_x->setValue((*pnts)[shapeItems[elF->index].n5].x()); p5_y->setValue((*pnts)[shapeItems[elF->index].n5].y());
             }
-            items_array.push_back(elF->index);
+            if( !items_array_holds.size() )
+                items_array_holds.push_back(elF->index);
             //-- Detecting the figures that connected to the current one and adding them to the updating array; --
             //-- if the current figure is connected with the arcs, then it's n1 and n2 points must be blocked for editing --
             for(int i = 0; i < shapeItems.size(); i++)
@@ -2818,7 +2818,7 @@ void ElFigDt::properties()
                 }
                 if( fl_n1 || fl_n2 )
                 {
-                    items_array.push_back(i);// array of the figures to be updated
+                    items_array_holds.push_back(i);// array of the figures to be updated
                     if( shapeItems[elF->index].type != 2 && shapeItems[i].type == 2 )
                     {
                         if( fl_n1 ) fl_n1Block = true;//blocking the n1 point for editing
@@ -2829,16 +2829,16 @@ void ElFigDt::properties()
             //-- Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array --
             for( int i = 0; i < inundationItems.size(); i++ )
                 for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
-            {
-                for( int z = 0; z < items_array.size(); z++ )
-                    if( inundationItems[i].number_shape[p] == items_array[z] )
-                    {
-                        bool fl_push = true;
-                        for(int j = 0; j< inund_Rebuild.size(); j++)
-                            if( i == inund_Rebuild[j] ) fl_push = false;
-                        if( fl_push )inund_Rebuild.push_back(i);
-                    }
-            }
+                {
+                    for( int z = 0; z < items_array_holds.size(); z++ )
+                        if( inundationItems[i].number_shape[p] == items_array_holds[z] )
+                        {
+                            bool fl_push = true;
+                            for(int j = 0; j< inund_Rebuild.size(); j++)
+                                if( i == inund_Rebuild[j] ) fl_push = false;
+                            if( fl_push )inund_Rebuild.push_back(i);
+                        }
+                }
             p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
             p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
             propDlg.resize( 500, 275 );
@@ -2947,12 +2947,12 @@ void ElFigDt::properties()
                 case 2:
                     ln_style = Qt::DotLine; break;
             }
-            if( !flag_hld )
+            /*if( !flag_hld )
             {
                 if( items_array_holds.size() )
                     items_array_holds.clear();
                 items_array_holds.push_back(elF->index);
-            }
+            }*/
             for( int i = 0; i < items_array_holds.size(); i++ )
             {
                 if( l_width->isEnabled() )

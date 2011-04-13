@@ -1,4 +1,8 @@
 2011-04-13 Maxim
+- FIX:UI.Vision: Detecting the figures to be repainted is fixed for the properties dialog if the primitive ElFigure.
+
+
+2011-04-13 Maxim
 - UI.Vision: Checkboxes for the default values set are added to the properties dialog of the ElFigure.
 - FIX:UI.Vision: Selecting elements by the rectangle is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Focus loosing when properties dialog is called is fixed for the the primitive ElFigure.
