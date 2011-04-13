@@ -19,7 +19,7 @@ This mode not have one DB configuration, but data into the configuration file en
 Default cofiguration can used for demon mode run. For starting the system into demon(server) mode you should write shell command
 <# service oscadad start>.
 
-For first experience geting you can use OpenSCADA demo package. This package contain DB with the system and subsystems
+For first experience geting you can use OpenSCADA demo package (ModelsDB.AGLKS). This package contain DB with the system and subsystems
 configuration examples. For starting into demo configurations you should write shell command <# openscada_demo>.
 
 To create your own independent configuration SCADA-system user has a run OpenSCADAs putting data in user's home directory (~/.openscada).

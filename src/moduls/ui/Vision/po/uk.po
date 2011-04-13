@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-13 13:07+0300\n"
+"POT-Creation-Date: 2011-04-13 16:06+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Operation user interface (QT)"
 msgstr "Робочий інтерфейс користувача (QT)"
@@ -1579,11 +1579,8 @@ msgstr "Зробити усі величини віджета статичним
 msgid "Press to make all values of the widget static ones"
 msgstr "Натисніть, щоб зробити усі величини віджета статичними."
 
-msgid "Properties for the '"
-msgstr "Властивості для '"
-
-msgid "' figures."
-msgstr "' фігур."
+msgid "Properties for the %1 figures."
+msgstr "Властивості для фігур: %1."
 
 msgid "Properties for the '%1' figure: '%2'."
 msgstr "Властивості для '%1' фігури: '%2'."
@@ -1812,6 +1809,3 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
-
-#~ msgid "(default)"
-#~ msgstr "(за замовчуванням)"

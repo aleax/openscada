@@ -52,12 +52,12 @@
 using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
-    WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), index_del(-1), rect_num(-1), status_hold(true),
+    WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), status_hold(true),
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
-    flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false), 
+    flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
     flag_geom (false), flag_rect_items (false), count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1),
-    count_holds(0), geomH(0), geomW(0), rect_dyn(-1), fill_index(-1)
+    count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
 }
@@ -99,10 +99,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     ColorMap *colors = &elFD->shapeColors;
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
-    /*QLineF line1, line2;
-    double ang;
-    QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
-    double t_start, t_end, a, b;*/
     QPointF CtrlMotionPos_4;
     string backimg;
     QImage img;
@@ -1662,18 +1658,14 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
             QAction *actShowProperties = new QAction( QPixmap::fromImage(ico_propDlg), _("Show the figure's properties"), w->mainWin() );
             switch( shapeItems[index].type )
             {
-                case 1:
-                    actShowProperties->setObjectName("Line"); break;
-                case 2:
-                    actShowProperties->setObjectName("Arc"); break;
-                case 3:
-                    actShowProperties->setObjectName("Bezier curve"); break;
+                case 1:	actShowProperties->setObjectName("Line"); break;
+                case 2:	actShowProperties->setObjectName("Arc"); break;
+                case 3: actShowProperties->setObjectName("Bezier curve"); break;
             }
             actShowProperties->setStatusTip(_("Press to show the properties dialog"));
-            connect( actShowProperties, SIGNAL(triggered()), elFD, SLOT(properties()) ); 
+            connect(actShowProperties, SIGNAL(triggered()), elFD, SLOT(properties()));
             menu.addAction(actShowProperties);
-            if( rectItems.size() ) flag_rect_items = true;
-            else flag_rect_items = false;
+            flag_rect_items = (bool)rectItems.size();
             menu.addSeparator();
         }
         else if( index == -1 && (int)pop_pos.x() != -1 && (int)pop_pos.y() != -1 )
@@ -1740,7 +1732,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     QAction *actShowFillProperties = new QAction( QPixmap::fromImage(ico_propDlg), _("Show the fill's properties"), w->mainWin() );
                     actShowFillProperties->setObjectName("Fill");
                     actShowFillProperties->setStatusTip(_("Press to show the fill's properties dialog"));
-                    connect( actShowFillProperties, SIGNAL(triggered()), elFD, SLOT(properties()) ); 
+                    connect( actShowFillProperties, SIGNAL(triggered()), elFD, SLOT(properties()) );
                     menu.addAction(actShowFillProperties);
 
                     menu.addSeparator();
@@ -2615,8 +2607,8 @@ void ElFigDt::properties()
     QVector<int> items_array_holds;
     if(elF->flag_rect_items)
     {
-        for( int i=0; i < elF->index_array.size(); i++ )
-            if( elF->index_array[i] != -1 )
+        for(int i = 0; i < elF->index_array.size(); i++)
+            if(elF->index_array[i] != -1)
                 items_array_holds.push_back(elF->index_array[i]);
         std::sort(items_array_holds.begin(), items_array_holds.end());
     }
@@ -2641,18 +2633,14 @@ void ElFigDt::properties()
     QImage ico_t;
     bool fl_n1 = false, fl_n2 = false, fl_n1Block = false, fl_n2Block = false, fl_appN1 = false, fl_appN2 = false;
     QString str_mess;
-    str_mess =_("Properties for the '");
-    if( items_array_holds.size() > 1 && sender()->objectName() != "Fill" )
+    if(items_array_holds.size() > 1 && sender()->objectName() != "Fill")
     {
-        for( int i= 0; i < items_array_holds.size()-1; i++ )
-            str_mess = str_mess + QString(TSYS::int2str(items_array_holds[i]).c_str()) + "', '";
-        str_mess += QString(TSYS::int2str(items_array_holds[items_array_holds.size()-1]).c_str());
-        str_mess += _("' figures.");
+        for(int i = 0; i < items_array_holds.size(); i++) str_mess += QString("'%1', ").arg(items_array_holds[i]);
+        str_mess = QString(_("Properties for the %1 figures.")).arg(str_mess);
     }
-    else str_mess = QString(_("Properties for the '%1' figure: '%2'.")).arg((elF->fill_index == -1) ? elF->index : elF->fill_index ).arg(sender()->objectName());
+    else str_mess = QString(_("Properties for the '%1' figure: '%2'.")).arg((elF->fill_index==-1)?elF->index:elF->fill_index).arg(sender()->objectName());
     if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
-    InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), str_mess,
-                     _("Elementary figure properties."),false,false);
+    InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), str_mess,_("Elementary figure properties."),false,false);
     l_lb = new QLabel(_("Line:"),&propDlg);
     l_width = new QSpinBox(&propDlg);
     lw_check = new QCheckBox(&propDlg);
@@ -2680,16 +2668,16 @@ void ElFigDt::properties()
     fc_check = new QCheckBox(&propDlg);
     f_image = new QLineEdit(&propDlg);
     fi_check = new QCheckBox(&propDlg);
-    //- Creating the fills' properties dialog -
-    if( sender()->objectName() == "Fill" )
+    //> Creating the fills' properties dialog
+    if(sender()->objectName() == "Fill")
     {
         l_lb->hide(); l_width->hide(); l_color->hide(); l_style->hide();
         lb_lb->hide(); lb_width->hide(); lb_color->hide();
         lw_check->hide(); lc_check->hide(); ls_check->hide();
         lbw_check->hide(); lbc_check->hide();
         p_lb->hide(); x_lb->hide(); y_lb->hide();
-        p1_x->hide();p1_y->hide();
-        p2_x->hide();p2_y->hide();
+        p1_x->hide(); p1_y->hide();
+        p2_x->hide(); p2_y->hide();
         p3_lb->hide(); p3_x->hide();p3_y->hide();
         p4_lb->hide(); p4_x->hide();p4_y->hide();
         p5_lb->hide(); p5_x->hide();p5_y->hide();
@@ -2702,82 +2690,86 @@ void ElFigDt::properties()
         propDlg.edLay()->addWidget( f_image, 3, 1 );
         fi_check->setToolTip(_("Set the default fill image."));
         propDlg.edLay()->addWidget( fi_check, 3, 2 );
-        connect( fi_check, SIGNAL(toggled(bool)), f_image, SLOT(setDisabled(bool)) ); 
-        f_color->setValue( (*colors)[inundationItems[elF->fill_index].brush].name() + "-" + 
-                            QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()) );
-        if( inundationItems[elF->fill_index].brush == -7 ) fc_check->setChecked(true);
+        connect(fi_check, SIGNAL(toggled(bool)), f_image, SLOT(setDisabled(bool)));
+        f_color->setValue((*colors)[inundationItems[elF->fill_index].brush].name() + "-" +
+                            QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()));
+        if(inundationItems[elF->fill_index].brush == -7) fc_check->setChecked(true);
         f_image->setText(QString( (*images)[inundationItems[elF->fill_index].brush_img].c_str()));
-        if( inundationItems[elF->fill_index].brush_img == -5 ) fi_check->setChecked(true);
-        propDlg.resize( 300, 150 );
+        if(inundationItems[elF->fill_index].brush_img == -5) fi_check->setChecked(true);
+        propDlg.resize(300, 150);
     }
-    else//- Creating the items' properties dialog -
+    //> Creating the items' properties dialog
+    else
     {
         f_color->hide(); f_image->hide();
         fc_check->hide(); fi_check->hide();
         QFont lb_fnt;
-        lb_fnt.setStyle( QFont::StyleItalic );
+        lb_fnt.setStyle(QFont::StyleItalic);
         lb_fnt.setBold(true);
-        l_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( l_lb, 2, 0 );
-        propDlg.edLay()->addWidget( new QLabel(_("Line width"),&propDlg), 3, 0 );
-        l_width->setRange( 1, 99 );
-        propDlg.edLay()->addWidget( l_width, 3, 1 );
+        l_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(l_lb, 2, 0);
+        propDlg.edLay()->addWidget(new QLabel(_("Line width"),&propDlg), 3, 0);
+        l_width->setRange(1, 99);
+        propDlg.edLay()->addWidget(l_width, 3, 1);
         lw_check->setToolTip(_("Set the default line width."));
-        propDlg.edLay()->addWidget( lw_check, 3, 2 );
-        connect( lw_check, SIGNAL(toggled(bool)), l_width, SLOT(setDisabled(bool)) );
+        propDlg.edLay()->addWidget(lw_check, 3, 2);
+        connect(lw_check, SIGNAL(toggled(bool)), l_width, SLOT(setDisabled(bool)) );
         propDlg.edLay()->addWidget( new QLabel(_("Line color"),&propDlg), 4, 0 );
         propDlg.edLay()->addWidget( l_color, 4, 1 );
         lc_check->setToolTip(_("Set the default line color."));
         propDlg.edLay()->addWidget( lc_check, 4, 2 );
-        connect( lc_check, SIGNAL(toggled(bool)), l_color, SLOT(setDisabled(bool)) );
+        connect(lc_check, SIGNAL(toggled(bool)), l_color, SLOT(setDisabled(bool)) );
         propDlg.edLay()->addWidget( new QLabel(_("Line style"),&propDlg), 5, 0 );
         propDlg.edLay()->addWidget( l_style, 5, 1 );
         ls_check->setToolTip(_("Set the default line style."));
         propDlg.edLay()->addWidget( ls_check, 5, 2 );
-        connect( ls_check, SIGNAL(toggled(bool)), l_style, SLOT(setDisabled(bool)) );
+        connect(ls_check, SIGNAL(toggled(bool)), l_style, SLOT(setDisabled(bool)) );
         lb_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( lb_lb, 6, 0 );
         propDlg.edLay()->addWidget( new QLabel(_("Border width"),&propDlg), 7, 0 );
         lb_width->setRange( 0, 99 );
         propDlg.edLay()->addWidget( lb_width, 7, 1 );
         lbw_check->setToolTip(_("Set the default line's border width."));
         propDlg.edLay()->addWidget( lbw_check, 7, 2 );
-        connect( lbw_check, SIGNAL(toggled(bool)), lb_width, SLOT(setDisabled(bool)) );
+        connect(lbw_check, SIGNAL(toggled(bool)), lb_width, SLOT(setDisabled(bool)) );
         propDlg.edLay()->addWidget( new QLabel(_("Border color"),&propDlg), 8, 0 );
         propDlg.edLay()->addWidget( lb_color, 8, 1 );
         lbc_check->setToolTip(_("Set the default line's border color."));
         propDlg.edLay()->addWidget( lbc_check, 8, 2 );
-        connect( lbc_check, SIGNAL(toggled(bool)), lb_color, SLOT(setDisabled(bool)) );
+        connect(lbc_check, SIGNAL(toggled(bool)), lb_color, SLOT(setDisabled(bool)) );
         if( !items_array_holds.size() || ((items_array_holds.size() == 1) && (items_array_holds[0] == elF->index)) )
         {
+	    QFrame *sep = new QFrame(&propDlg);
+	    sep->setFrameShape(QFrame::VLine);
+	    propDlg.edLay()->addWidget(sep, 2, 3, 7, 1);
             flag_hld = false;
-            p_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( p_lb, 2, 3 );
-            x_lb->setFont( lb_fnt ); x_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( x_lb, 2, 4 );
-            y_lb->setFont( lb_fnt ); y_lb->setAlignment( Qt::AlignHCenter ); propDlg.edLay()->addWidget( y_lb, 2, 5 );
-            propDlg.edLay()->addWidget( new QLabel(_("Point 1:"),&propDlg), 3, 3 );
-            p1_x->setRange( 0.0, 10000.0 ); p1_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p1_x, 3, 4 );
-            p1_y->setRange( 0.0, 10000.0 ); p1_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p1_y, 3, 5 );
-            propDlg.edLay()->addWidget( new QLabel(_("Point 2:"),&propDlg), 4, 3 );
-            p2_x->setRange( 0.0, 10000.0 ); p2_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p2_x, 4, 4 );
-            p2_y->setRange( 0.0, 10000.0 ); p2_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p2_y, 4, 5 );
-            propDlg.edLay()->addWidget( p3_lb, 5, 3 );
-            p3_x->setRange( 0.0, 10000.0 ); p3_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p3_x, 5, 4 );
-            p3_y->setRange( 0.0, 10000.0 ); p3_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p3_y, 5, 5 );
-            propDlg.edLay()->addWidget( p4_lb, 6, 3 );
-            p4_x->setRange( 0.0, 10000.0 ); p4_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p4_x, 6, 4 );
-            p4_y->setRange( 0.0, 10000.0 ); p4_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p4_y, 6, 5 );
-            propDlg.edLay()->addWidget( p5_lb, 7, 3 );
-            p5_x->setRange( 0.0, 10000.0 ); p5_x->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p5_x, 7, 4 );
-            p5_y->setRange( 0.0, 10000.0 ); p5_y->setDecimals( 3 );
-            propDlg.edLay()->addWidget( p5_y, 7, 5 );
-    
+            p_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(p_lb, 2, 4);
+            x_lb->setFont(lb_fnt); x_lb->setAlignment(Qt::AlignHCenter); propDlg.edLay()->addWidget(x_lb, 2, 5);
+            y_lb->setFont(lb_fnt); y_lb->setAlignment(Qt::AlignHCenter); propDlg.edLay()->addWidget(y_lb, 2, 6);
+            propDlg.edLay()->addWidget(new QLabel(_("Point 1:"),&propDlg), 3, 4);
+            p1_x->setRange(0, 10000); p1_x->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p1_x, 3, 5);
+            p1_y->setRange(0, 10000); p1_y->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p1_y, 3, 6);
+            propDlg.edLay()->addWidget(new QLabel(_("Point 2:"),&propDlg), 4, 4);
+            p2_x->setRange(0, 10000); p2_x->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p2_x, 4, 5);
+            p2_y->setRange(0, 10000); p2_y->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p2_y, 4, 6);
+            propDlg.edLay()->addWidget(p3_lb, 5, 4);
+            p3_x->setRange(0, 10000); p3_x->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p3_x, 5, 5);
+            p3_y->setRange(0, 10000); p3_y->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p3_y, 5, 6);
+            propDlg.edLay()->addWidget(p4_lb, 6, 4);
+            p4_x->setRange(0, 10000); p4_x->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p4_x, 6, 5);
+            p4_y->setRange(0, 10000); p4_y->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p4_y, 6, 6);
+            propDlg.edLay()->addWidget(p5_lb, 7, 4);
+            p5_x->setRange(0, 10000); p5_x->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p5_x, 7, 5);
+            p5_y->setRange(0, 10000); p5_y->setDecimals(POS_PREC_DIG);
+            propDlg.edLay()->addWidget(p5_y, 7, 6);
+
             if( sender()->objectName() == "Line" )
             {
                 p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
@@ -2804,8 +2796,8 @@ void ElFigDt::properties()
             }
             if( !items_array_holds.size() )
                 items_array_holds.push_back(elF->index);
-            //-- Detecting the figures that connected to the current one and adding them to the updating array; --
-            //-- if the current figure is connected with the arcs, then it's n1 and n2 points must be blocked for editing --
+            //>> Detecting the figures that connected to the current one and adding them to the updating array;
+            //>> if the current figure is connected with the arcs, then it's n1 and n2 points must be blocked for editing
             for(int i = 0; i < shapeItems.size(); i++)
             {
                 fl_n1 = fl_n2 = false;
@@ -2821,15 +2813,15 @@ void ElFigDt::properties()
                 }
                 if( fl_n1 || fl_n2 )
                 {
-                    items_array_holds.push_back(i);// array of the figures to be updated
+                    items_array_holds.push_back(i);	// array of the figures to be updated
                     if( shapeItems[elF->index].type != 2 && shapeItems[i].type == 2 )
                     {
-                        if( fl_n1 ) fl_n1Block = true;//blocking the n1 point for editing
-                        if( fl_n2 ) fl_n2Block = true;//blocking the n2 point for editing
+                        if( fl_n1 ) fl_n1Block = true;	//blocking the n1 point for editing
+                        if( fl_n2 ) fl_n2Block = true;	//blocking the n2 point for editing
                     }
                 }
             }
-            //-- Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array --
+            //>> Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array
             for( int i = 0; i < inundationItems.size(); i++ )
                 for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
                 {
@@ -2859,7 +2851,7 @@ void ElFigDt::properties()
         }
         l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
         if( shapeItems[elF->index].width == -5 ) lw_check->setChecked(true);
-        l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" + 
+        l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" +
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
         if( shapeItems[elF->index].lineColor == -5 ) lc_check->setChecked(true);
         QStringList line_styles;
@@ -2869,14 +2861,14 @@ void ElFigDt::properties()
         if( shapeItems[elF->index].style == -5 ) ls_check->setChecked(true);
         lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
         if( shapeItems[elF->index].border_width == -6 ) lbw_check->setChecked(true);
-        lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" + 
+        lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" +
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
         if( shapeItems[elF->index].borderColor == -6 ) lbc_check->setChecked(true);
     }
     if( propDlg.exec() == QDialog::Accepted )
     {
         int k;
-        //-- Applying the changes for the fills --
+        //>> Applying the changes for the fills
         if( sender()->objectName() == "Fill" )
         {
             string res_fColor = f_color->value().toStdString();
@@ -2918,7 +2910,8 @@ void ElFigDt::properties()
             }
 
         }
-        else//-- Applying the changes for the figures --
+	//>> Applying the changes for the figures
+        else
         {
             /*for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
                 if( fabs( pi->second - 0 ) >= 0.01 )
@@ -2943,17 +2936,14 @@ void ElFigDt::properties()
             }
             string res_lColor = l_color->value().toStdString();
             string res_lbColor = lb_color->value().toStdString();
-            QColor res_lClr = WdgShape::getColor(  res_lColor );
-            QColor res_lbClr = WdgShape::getColor(  res_lbColor );
-            Qt::PenStyle ln_style;
+            QColor res_lClr = WdgShape::getColor(res_lColor);
+            QColor res_lbClr = WdgShape::getColor(res_lbColor);
+            Qt::PenStyle ln_style = Qt::SolidLine;
             switch(l_style->currentIndex())
             {
-                case 0:
-                    ln_style = Qt::SolidLine; break;
-                case 1:
-                    ln_style = Qt::DashLine; break;
-                case 2:
-                    ln_style = Qt::DotLine; break;
+                case 0:	ln_style = Qt::SolidLine; break;
+                case 1:	ln_style = Qt::DashLine; break;
+                case 2: ln_style = Qt::DotLine; break;
             }
             /*if( !flag_hld )
             {

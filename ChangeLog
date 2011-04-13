@@ -1,10 +1,19 @@
+2011-04-13 Roman 0.7.1
+- DOC: Release notes for version 0.7.1 is added. Index files is updated.
+- DOC: README and TODO is updated.
+- ModelDB: Model AGLKS DB files is updated.
+- UI.QTStarter: Splash is updated for 0.7.1 release.
+- FIX:UI.VCAEngine: Syntax higlight is fixed for elements list of primitive ElFigure.
+- FIX:UI.Vision: Properties dialog for elements of primitive ElFigure is some fixed and improved. Translation for German is updated.
+
+
 2011-04-13 Maxim
+- UI.Vision: The default values detection is added to the properties dialog at its creation for the primitive ElFigure.
+- FIX:UI.Vision: Detecting the figures to be repainted is fixed for the properties dialog for the primitive ElFigure.
 - UI.Vision: Checkboxes for the default values set are added to the properties dialog of the ElFigure.
 - FIX:UI.Vision: Selecting elements by the rectangle is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Focus loosing when properties dialog is called is fixed for the the primitive ElFigure.
-- FIX:UI.Vision: Detecting the figures to be repainted is fixed for the properties dialog for the primitive ElFigure.
-- UI.Vision:  The default values detection is added to the properties dialog at its creation for the primitive ElFigure.
-- UI.Vision:  The fills select for the popup menu options is changed to be from the end of the container for the primitive ElFigure.
+- UI.Vision: The fills select for the popup menu options is changed to be from the end of the container for the primitive ElFigure.
 
 
 2011-04-12 Roman
@@ -203,7 +212,7 @@
 
 
 2011-02-24 Maxim
-- FIX:UI.WebVision, UI.Vision: Updating the image when the scale is changed is fixed for primitive "ElFigure".
+- !:FIX:UI.WebVision, UI.Vision: Updating the image when the scale is changed is fixed for primitive "ElFigure".
 - !!:FIX:UI.WebVision: Checking of the points' position for the presence of it in the drawing area of the widget is removed, the only such check
                     for the fills still remains for the primitive ElFigure.
 
@@ -290,7 +299,7 @@
 - !!:FIX:Transport: All transports loading is fixed for missed some transport modules and DB records for its allow.
 - FIX:Value: The prototype of functions TValue::setReqFlg(), TValue::setResB1() and TValue::setResB2() is fixed for no return.
 - FIX:XML: Expanded variable size for flags of functions XMLNode::save().
-- !!:FIX:Archive.FSArch: Result from fgetc() is writed to integer without char and fix "EOF" detection.
+- !!:FIX:Archive.FSArch: Result from fgetc() is writed to integer instead char and fix "EOF" detection.
     File detect is fixed into ModVArchEl::fileAdd().
 - FIX:DB.MySQL: case TFld::String missing is fixed into switch of function MTable::fieldFix().
 - FIX:DAQ.JavaLikeCalc: Rezult value type set is fixed for unary operations.
@@ -331,16 +340,16 @@
 
 
 2011-01-12 Maxim
-- UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1 
+- UI:Vision: The offset for keyboard moving of the figures or their points is set to 5 without "Shift" pressed and to 1
               with "Shift" pressed for the primitive ElFigure.
 
 
 2011-01-10 Maxim
-- FIX:UI:Vision: The Qt::SmoothTransformation flag is added to the fill image's scaling function for the primitive ElFigure.
+- :FIX:UI:Vision: The Qt::SmoothTransformation flag is added to the fill image's scaling function for the primitive ElFigure.
 
 
 2011-01-06 Maxim
-- FIX:UI:WebVision: The gif and jpg image's types support is added for the fill image of the primitive ElFigure.
+- !:FIX:UI:WebVision: The gif and jpg image's types support is added for the fill image of the primitive ElFigure.
 
 
 2011-01-06 Roman
@@ -408,7 +417,7 @@
 
 
 2010-12-15 Roman
-- SYS: Functions TVal::time(), TVal::len(), TVal::dec(), TVal::flg(), TVal::def(), TVal::values(), 
+- SYS: Functions TVal::time(), TVal::len(), TVal::dec(), TVal::flg(), TVal::def(), TVal::values(),
     TVal::selNames() and TVal::reserve() is added to user's API.
     Functions TController::name(), TController::descr() and TController::status() is added to user's API.
 - SYS: Result for TVarObj::propGet() for miss properties is return to NULL.
@@ -467,7 +476,7 @@
 2010-11-30 Roman
 - !!:Transport, Transport.*: The function TTransportS::traf2str() is added for traffic counter convert to string like "12.5KiB".
     New function is used everywhere.
-- FIX:Transport.Sockets: Close client connections at timeout of life time is fixed for connected but no data receiving connections.
+- !!:FIX:Transport.Sockets: Close client connections at timeout of life time is fixed for connected but no data receiving connections.
 - FIX:DB, DB.*: Disable access for other to view DB's tables content and DB's address field update.
 
 
@@ -485,7 +494,7 @@
 2010-11-23 Roman
 - DAQ.BFN: Translation to Russian and Ukrainian is added. Version 0.5.0 is released.
 - SYS: TSYS::time2str() function based on POSIX strftime() is added.
-- FIX:Transport.Sockets, Transport.SSL: Input buffer clear before send request is added to output transport.
+- !!:FIX:Transport.Sockets, Transport.SSL: Input buffer clear before send request is added to output transport.
     Use for prevent data getting from previous broken request on too latent connections.
 - UI.VCAEngine: Context help is added for attributes of primitive "Media".
 

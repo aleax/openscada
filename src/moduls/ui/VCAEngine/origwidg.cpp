@@ -184,8 +184,8 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
     {
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	opt->childAdd("rule")->setAttr("expr","^(arc|line|fill|bezier):")->setAttr("color","darkorange")->setAttr("font_weight","1");
-	opt->childAdd("rule")->setAttr("expr","\\(\\d*\\|\\d*\\)")->setAttr("color","#3D87FF")->
-	     childAdd("rule")->setAttr("expr","[0-9]+")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","\\(\\d*\\.?\\d+\\|\\d*\\.?\\d+\\)")->setAttr("color","#3D87FF")->
+	     childAdd("rule")->setAttr("expr","\\d*\\.?\\d+")->setAttr("color","blue");
 	opt->childAdd("rule")->setAttr("expr","\\#([0-9a-fA-F]{6}\\-\\d+|[0-9a-fA-F]{6})")->setAttr("color","blue");
     }
     else return Widget::cntrCmdAttributes(opt,src);

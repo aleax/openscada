@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-13 13:07+0300\n"
+"POT-Creation-Date: 2011-04-13 16:06+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -1553,13 +1553,11 @@ msgstr "Linienstil dynamisch machen"
 msgid "Press to make line style dynamic"
 msgstr "Betätigen, um den Linienstil dynamisch zu machen."
 
-#, fuzzy
 msgid "Show the figure's properties"
-msgstr "Laden der Eigenschaften des Elements"
+msgstr "Zeigen die Abbildung der Eigenschaften"
 
-#, fuzzy
 msgid "Press to show the properties dialog"
-msgstr "Betätigen für die Eigenschaften des Elements."
+msgstr "Drücken, um den Eigenschaften-Dialog"
 
 msgid "Delete the current fill"
 msgstr "Löschen Sie die aktuelle füllen"
@@ -1580,11 +1578,10 @@ msgid "Press to make fill image dynamic"
 msgstr "Betätigen, um Einfüllbild dynamisch zu machen."
 
 msgid "Show the fill's properties"
-msgstr ""
+msgstr "Zeigen die füllen die Eigenschaften"
 
-#, fuzzy
 msgid "Press to show the fill's properties dialog"
-msgstr "Betätigen für die Eigenschaften des Elements."
+msgstr "Drücken, um die Füllung der Eigenschaften-Dialog"
 
 msgid "Make all values of the widget the static ones"
 msgstr "Alle Widgetsgrössen statisch machen"
@@ -1592,29 +1589,23 @@ msgstr "Alle Widgetsgrössen statisch machen"
 msgid "Press to make all values of the widget static ones"
 msgstr "Betätigen, um alle Widgetsgrössen statisch zu machen."
 
-msgid "Properties for the '"
-msgstr ""
-
-msgid "' figures."
-msgstr ""
+msgid "Properties for the %1 figures."
+msgstr "Eigenschaften für Figuren: %1."
 
 msgid "Properties for the '%1' figure: '%2'."
-msgstr ""
+msgstr "Eigenschaften für '%1' Figuren: '%2'."
 
-#, fuzzy
 msgid "Elementary figure properties."
-msgstr "Panel der elementaren Figuren"
+msgstr "Elementare Eigenschaften Figur."
 
-#, fuzzy
 msgid "Line:"
-msgstr "Links"
+msgstr "Line:"
 
 msgid "Border:"
-msgstr ""
+msgstr "Rand:"
 
-#, fuzzy
 msgid "Points:"
-msgstr "Schrift:"
+msgstr "Punkte:"
 
 msgid "x"
 msgstr ""
@@ -1622,81 +1613,71 @@ msgstr ""
 msgid "y"
 msgstr ""
 
-#, fuzzy
 msgid "Point 3:"
-msgstr "Schrift:"
+msgstr "Punkt 3:"
 
-#, fuzzy
 msgid "Point 4:"
-msgstr "Schrift:"
+msgstr "Punkt 4:"
 
-#, fuzzy
 msgid "Point 5:"
-msgstr "Schrift:"
+msgstr "Punkt 5:"
 
 msgid "Fill Color"
-msgstr ""
+msgstr "Füllfarbe"
 
 msgid "Set the default fill color."
-msgstr ""
+msgstr "Festlegen der Standard-Farbe füllen."
 
 msgid "Fill Image"
-msgstr ""
+msgstr "Füllen Image"
 
 msgid "Set the default fill image."
-msgstr ""
+msgstr "Stellen Sie die Standard füllen Bild."
 
-#, fuzzy
 msgid "Line width"
-msgstr "Widget nach oben"
+msgstr "Linienbreite"
 
 msgid "Set the default line width."
-msgstr ""
+msgstr "Festlegen der Standard-Linienbreite."
 
-#, fuzzy
 msgid "Line color"
 msgstr "Erase Stil"
 
 msgid "Set the default line color."
-msgstr ""
+msgstr "Stellen Sie die Standard Linienfarbe."
 
-#, fuzzy
 msgid "Line style"
-msgstr "Erase Stil"
+msgstr "Linienstil"
 
 msgid "Set the default line style."
-msgstr ""
+msgstr "Festlegen der Standard-Linie Stil."
 
-#, fuzzy
 msgid "Border width"
-msgstr "Widget nach unten"
+msgstr "Randbreite"
 
 msgid "Set the default line's border width."
-msgstr ""
+msgstr "Festlegen der Standard-Linie den Rand Weite."
 
 msgid "Border color"
-msgstr ""
+msgstr "Randfarbe"
 
 msgid "Set the default line's border color."
-msgstr ""
+msgstr "Festlegen der Standard-Linie den Rand Farbe."
 
-#, fuzzy
 msgid "Point 1:"
-msgstr "Schrift:"
+msgstr "Punkt 1:"
 
-#, fuzzy
 msgid "Point 2:"
-msgstr "Schrift:"
+msgstr "Punkt 2:"
 
-#, fuzzy
 msgid "Solid"
-msgstr "Fett"
+msgstr "Solid"
 
 msgid "Dashed"
-msgstr ""
+msgstr "Gestrichelte"
 
 msgid "Dotted"
-msgstr ""
+msgstr "Gepunktet"
 
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Koordinaten(x,y): (%1, %2)"

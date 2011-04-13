@@ -392,7 +392,6 @@ class LineEditProp : public QWidget
     public:
 	//> Data
 	enum DType { Font, Color };
-        bool toClose;
 
 	//> Methods
 	LineEditProp( QWidget *parent, DType tp = Font, bool m_toClose = true );
@@ -407,8 +406,10 @@ class LineEditProp : public QWidget
 	void callDlg( );
 
     private:
+	//> Attributes
 	DType		m_tp;
 	QLineEdit	*ed_fld;
+        bool		toClose;
 };
 
 //*********************************************
