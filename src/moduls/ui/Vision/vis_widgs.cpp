@@ -690,7 +690,9 @@ void SyntxHighl::highlightBlock(const QString &text)
 {
     QTextCharFormat kForm, defkForm;
     if(text.length()) defkForm = format(0);
-    for(unsigned i_ch = 0; i_ch < rules.childSize(); i_ch++)
+    setCurrentBlockState(previousBlockState());
+
+    for(int i_ch = 0; i_ch < (int)rules.childSize(); i_ch++)
     {
 	XMLNode *rl = rules.childGet(i_ch);
 	kForm.setForeground(QColor(rl->attr("color").c_str()));
@@ -698,9 +700,8 @@ void SyntxHighl::highlightBlock(const QString &text)
 	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
 
 	if(rl->name() == "rule") rule(rl,text,defkForm);
-	else if(rl->name() == "blk")
+	else if(rl->name() == "blk" && (currentBlockState() == -1 || currentBlockState() == i_ch))
 	{
-	    setCurrentBlockState(previousBlockState());
 	    QRegExp bExpr(rl->attr("beg").c_str());
 	    QRegExp eExpr(rl->attr("end").c_str());
 	    for(int stIndex = 0, endIndex = 0, startBlk = 0, sizeBlk = 0; true; )

@@ -10,6 +10,7 @@
 - FIX:DAQ.ModBus: _b0, _i4 prefixes is fixed for EVAL processing.
 - UI.Vision: Edit mode is made more usable by hide all parent widget content.
 - FIX:DOC: Release notes and properties documents is some fixed.
+- FIX:UI.QTCfg, UI.Vision: Syntax higlight engine is fixed for multiblock rules.
 
 
 2011-04-13 Roman 0.7.1
