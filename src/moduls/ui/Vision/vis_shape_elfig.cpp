@@ -1662,6 +1662,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 case 2:	actShowProperties->setObjectName("Arc"); break;
                 case 3: actShowProperties->setObjectName("Bezier curve"); break;
             }
+            fill_index = -1;
             actShowProperties->setStatusTip(_("Press to show the properties dialog"));
             connect(actShowProperties, SIGNAL(triggered()), elFD, SLOT(properties()));
             menu.addAction(actShowProperties);
@@ -2604,7 +2605,7 @@ void ElFigDt::properties()
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     if(devW) devW->setPrevEdExitFoc(true);
     bool flag_hld = true;
-    QVector<int> items_array_holds;
+    QVector<int> items_array_holds, items_array_up;
     if(elF->flag_rect_items)
     {
         for(int i = 0; i < elF->index_array.size(); i++)
@@ -2708,7 +2709,7 @@ void ElFigDt::properties()
         lb_fnt.setBold(true);
         l_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(l_lb, 2, 0);
         propDlg.edLay()->addWidget(new QLabel(_("Line width"),&propDlg), 3, 0);
-        l_width->setRange(1, 99);
+        l_width->setRange(0, 99);
         propDlg.edLay()->addWidget(l_width, 3, 1);
         lw_check->setToolTip(_("Set the default line width."));
         propDlg.edLay()->addWidget(lw_check, 3, 2);
@@ -2796,6 +2797,7 @@ void ElFigDt::properties()
             }
             if( !items_array_holds.size() )
                 items_array_holds.push_back(elF->index);
+            items_array_up.push_back(elF->index);
             //>> Detecting the figures that connected to the current one and adding them to the updating array;
             //>> if the current figure is connected with the arcs, then it's n1 and n2 points must be blocked for editing
             for(int i = 0; i < shapeItems.size(); i++)
@@ -2813,7 +2815,7 @@ void ElFigDt::properties()
                 }
                 if( fl_n1 || fl_n2 )
                 {
-                    items_array_holds.push_back(i);	// array of the figures to be updated
+                    items_array_up.push_back(i);	// array of the figures to be updated
                     if( shapeItems[elF->index].type != 2 && shapeItems[i].type == 2 )
                     {
                         if( fl_n1 ) fl_n1Block = true;	//blocking the n1 point for editing
@@ -2825,8 +2827,8 @@ void ElFigDt::properties()
             for( int i = 0; i < inundationItems.size(); i++ )
                 for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
                 {
-                    for( int z = 0; z < items_array_holds.size(); z++ )
-                        if( inundationItems[i].number_shape[p] == items_array_holds[z] )
+                    for( int z = 0; z < items_array_up.size(); z++ )
+                        if( inundationItems[i].number_shape[p] == items_array_up[z] )
                         {
                             bool fl_push = true;
                             for(int j = 0; j< inund_Rebuild.size(); j++)
@@ -2849,7 +2851,9 @@ void ElFigDt::properties()
             p5_x->hide(); p5_y->hide();
             propDlg.resize( 280, 275 );
         }
-        l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
+        if( (*widths)[shapeItems[elF->index].width] <= 1 && scale < 1 )
+            l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width],POS_PREC_DIG));
+        else l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
         if( shapeItems[elF->index].width == -5 ) lw_check->setChecked(true);
         l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" +
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
@@ -2859,7 +2863,9 @@ void ElFigDt::properties()
         l_style->addItems(line_styles);
         l_style->setCurrentIndex((*styles)[shapeItems[elF->index].style]-1);
         if( shapeItems[elF->index].style == -5 ) ls_check->setChecked(true);
-        lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
+        if( (*widths)[shapeItems[elF->index].border_width] <= 1 && scale < 1 )
+            lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width],POS_PREC_DIG));
+        else lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
         if( shapeItems[elF->index].border_width == -6 ) lbw_check->setChecked(true);
         lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" +
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
@@ -3079,8 +3085,13 @@ void ElFigDt::properties()
                     shapeItems[elF->index].ctrlPos4 = elF->getArcStartEnd( (*pnts)[shapeItems[elF->index].n1], (*pnts)[shapeItems[elF->index].n2], (*pnts)[shapeItems[elF->index].n3], (*pnts)[shapeItems[elF->index].n4], (*pnts)[shapeItems[elF->index].n5] );
                 }
             }
+            //-- Adding the figures to be updated to the ones in the items_array_holds array --
+            if( items_array_up.size() > 1 )
+                for( int z = 1; z < items_array_up.size(); z++ )
+                    items_array_holds.push_back(items_array_up[z]);
             //-- Rebuilding the figures, which are connected with the current one --
             elF->initShapeItems( w, items_array_holds );
+
             //-- Rebuilding the fills' paths if the current figure is included to it --
             for( int i = 0; i < inund_Rebuild.size(); i++ )
                 if( elF->status_hold )
@@ -3234,15 +3245,16 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         count_moveItemTo = 0;
                                         num_vector.clear();
                                         offset = QPointF(0,0);
-                                        for( int i=0; i < count_holds; i++ )
-                                        {
-                                            count_moveItemTo += 1;
-                                            flag_ctrl_move = false;
-                                            flag_ctrl = true;
-                                            itemInMotion = &shapeItems[index_array[i]];
-                                            index = index_array[i];
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                        }
+                                        for( int i=0; i <= count_holds; i++ )
+                                            if( index_array[i] != -1 )
+                                            {
+                                                count_moveItemTo += 1;
+                                                flag_ctrl_move = false;
+                                                flag_ctrl = true;
+                                                itemInMotion = &shapeItems[index_array[i]];
+                                                index = index_array[i];
+                                                moveItemTo( ev->pos(), shapeItems, pnts, view );
+                                            }
                                         paintImage(view);
                                         view->repaint();
                                     }

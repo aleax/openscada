@@ -1,3 +1,10 @@
+2011-04-14 Maxim
+- FIX:UI.Vision: The "index_fill" variable processing is fixed for the primitive ElFigure.
+- FIX:UI.Vision: Addition figures to be repainted to the selected ones is fixed for the properties dialog for the primitive ElFigure.
+- FIX:UI.Vision: Drawing the rects when selecting connected figures is fixed for the primitive ElFigure.
+- FIX:UI.Vision: Calculating the line's width and line's border width for the scale < 1 is corrected for the properties dialog of the ElFigure
+
+
 2011-04-14 Roman
 - SYS: Packages build specification files is updated for 0.7.1.
 - FIX:DAQ.ModBus: _b0, _i4 prefixes is fixed for EVAL processing.
