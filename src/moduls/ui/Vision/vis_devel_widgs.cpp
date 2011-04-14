@@ -3128,9 +3128,8 @@ void SizePntWdg::apply( )
 				   irect.y()+(i_p/3)*((irect.height()-7)/2),7,7));
 		break;
 	    case EditBorder:
-		wrect = QRectF(mWPos,mWSize).adjusted(-7,-7,7,7).toRect();
-		irect = QRect(0,0,wrect.width(),wrect.height());
-		reg = QRegion(irect).subtracted(QRegion(irect.adjusted(7,7,-7,-7)));
+		wrect = parentWidget()->rect();
+		reg = QRegion(wrect).subtracted(QRegion(QRectF(mWPos,mWSize).toRect()));
 		break;
 	    case SelectBorder:
 		wrect = QRectF(mWPos,mWSize).adjusted(-1,-1,1,1).toRect();
@@ -3173,9 +3172,10 @@ bool SizePntWdg::event( QEvent *ev )
 			}
 			break;
 		    case EditBorder:
-			pnt.fillRect(rect(),QBrush(Qt::black,Qt::Dense4Pattern));
+			pnt.fillRect(rect(),QColor(127,127,127,190));
+			pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
 			pnt.setPen(QColor("black"));
-			pnt.drawRect(rect().adjusted(6,6,-7,-7));
+			pnt.drawRect(QRectF(mWPos,mWSize).adjusted(-1,-1,0,0));
 			break;
 		    case SelectBorder:
 		    {

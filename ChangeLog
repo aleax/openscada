@@ -1,3 +1,10 @@
+2011-04-14 Roman
+- SYS: Packages build specification files is updated for 0.7.1.
+- FIX:DAQ.ModBus: _b0, _i4 prefixes is fixed for EVAL processing.
+- UI.Vision: Edit mode is made more usable by hide all parent widget content.
+- FIX:DOC: Release notes and properties documents is some fixed.
+
+
 2011-04-13 Roman 0.7.1
 - DOC: Release notes for version 0.7.1 is added. Index files is updated.
 - DOC: README and TODO is updated.

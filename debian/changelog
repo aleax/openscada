@@ -1,4 +1,4 @@
-openscada (0.7.1-0.10) experimental; urgency=low
+openscada (0.7.1-1) experimental; urgency=low
 
   * New source packages implementation is released.
   * Documentation separated by languages.

@@ -749,7 +749,7 @@ void TMdPrm::getVal( )
 	    if(tp[0] == 'R')
 	    {
 		int vl = owner().getValR(aid,w_err,isInputs);
-		if(!atp_sub.empty() && atp_sub[0] == 'b') val.at().setB((vl>>atoi(atp_sub.c_str()+1))&1,0,true);
+		if(!atp_sub.empty() && atp_sub[0] == 'b') val.at().setB((vl==EVAL_INT)?EVAL_BOOL:((vl>>atoi(atp_sub.c_str()+1))&1),0,true);
 		else if(!atp_sub.empty() && atp_sub == "f")
 		{
 		    int vl2 = owner().getValR(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), w_err, isInputs);
@@ -758,7 +758,7 @@ void TMdPrm::getVal( )
 		    wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
 		    val.at().setR(wl.f,0,true);
 		}
-		else if(!atp_sub.empty() && atp_sub == "i2") val.at().setI((int16_t)vl,0,true);
+		else if(!atp_sub.empty() && atp_sub == "i2") val.at().setI((vl==EVAL_INT)?EVAL_INT:(int16_t)vl,0,true);
 		else if(!atp_sub.empty() && atp_sub == "i4")
 		{
 		    int vl2 = owner().getValR(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), w_err, isInputs);
