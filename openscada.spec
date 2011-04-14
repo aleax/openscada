@@ -18,8 +18,8 @@ URL: http://oscada.org
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libexpat-devel libMySQL-devel libsqlite3-devel libsensors3-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel libportaudio2-devel libfftw3-devel libpcrecpp-devel
+BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libMySQL-devel libsqlite3-devel libsensors3-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel libportaudio2-devel libfftw3-devel libpcre-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -280,6 +280,8 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_datadir/locale/*/LC_MESSAGES/*
 /var/spool/openscada/DATA/.info
 /var/spool/openscada/icons/*
+%exclude /var/spool/openscada/icons/AGLKS.png
+%exclude /var/spool/openscada/icons/Boiler.png
 /var/spool/openscada/ARCHIVES/MESS/.info
 /var/spool/openscada/ARCHIVES/VAL/.info
 
