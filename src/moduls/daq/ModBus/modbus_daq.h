@@ -151,7 +151,8 @@ class TMdContr: public TController
 	string	&mSched,			// Calc schedule
 		&mPrt,				//Protocol
 		&mAddr;				//Transport device address
-	bool	&mMerge;			//Fragments of register merge
+	bool	&mMerge,			//Fragments of register merge
+		&mMltWr;			//Use multi-write functions(15,16)
 	int	&reqTm,				//Request timeout in ms
 		&restTm,			//Restore timeout in s
 		&connTry;			//Connections try

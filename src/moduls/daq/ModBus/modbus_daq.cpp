@@ -71,6 +71,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255") );
     fldAdd( new TFld("FRAG_MERGE",_("Data fragments merge"),TFld::Boolean,TFld::NoFlag,"1","0") );
+    fldAdd( new TFld("WR_MULTI",_("Use multi-items write functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );
     fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;3600") );
     fldAdd( new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10") );
@@ -102,7 +103,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), mSched(cfg("SCHEDULE").getSd()), mPrt(cfg("PROT").getSd()),
-	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), reqTm(cfg("TM_REQ").getId()),
+	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
 	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), prc_st(false), endrun_req(false), tmGath(0),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
@@ -341,11 +342,25 @@ void TMdContr::setValR( int val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
     string pdu;
-    pdu = (char)0x6;		//Function, preset single register
-    pdu += (char)(addr>>8);	//Address MSB
-    pdu += (char)addr;		//Address LSB
-    pdu += (char)(val>>8);	//Data MSB
-    pdu += (char)val;		//Data LSB
+    if(!mMltWr)
+    {
+	pdu = (char)0x6;		//Function, preset single register
+	pdu += (char)(addr>>8);		//Address MSB
+	pdu += (char)addr;		//Address LSB
+	pdu += (char)(val>>8);		//Data MSB
+	pdu += (char)val;		//Data LSB
+    }
+    else
+    {
+	pdu = (char)0x10;		//Function, preset multiple registers
+	pdu += (char)(addr>>8);		//Address MSB
+	pdu += (char)addr;		//Address LSB
+	pdu += (char)0x00;		//Quantity MSB
+	pdu += (char)0x01;		//Quantity LSB
+	pdu += (char)0x02;		//Byte Count
+	pdu += (char)(val>>8);		//Data MSB
+	pdu += (char)val;		//Data LSB
+    }
     //> Request to remote server
     string terr = modBusReq(pdu);
     if(!terr.empty())
@@ -368,11 +383,24 @@ void TMdContr::setValC( char val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
     string pdu;
-    pdu = (char)0x5;		//Function, preset single coil
-    pdu += (char)(addr>>8);	//Address MSB
-    pdu += (char)addr;		//Address LSB
-    pdu += (char)val?0xFF:0x00;	//Data MSB
-    pdu += (char)0x00;		//Data LSB
+    if(!mMltWr)
+    {
+	pdu = (char)0x5;		//Function, preset single coil
+	pdu += (char)(addr>>8);		//Address MSB
+	pdu += (char)addr;		//Address LSB
+	pdu += (char)(val?0xFF:0x00);	//Data MSB
+	pdu += (char)0x00;		//Data LSB
+    }
+    else
+    {
+	pdu = (char)0xF;		//Function, preset multiple coils
+	pdu += (char)(addr>>8);		//Address MSB
+	pdu += (char)addr;		//Address LSB
+	pdu += (char)0x00;		//Quantity MSB
+	pdu += (char)0x01;		//Quantity LSB
+	pdu += (char)0x01;		//Byte Count
+	pdu += (char)(val?0x01:0x00);	//Data MSB
+    }
     //> Request to remote server
     string terr = modBusReq(pdu);
     if(!terr.empty())
@@ -865,7 +893,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",cfg("ATTR_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
-		    "  dt - Modbus data type (R-register[3,6],C-coil[1,5],RI-input register[4],CI-input coil[2]).\n"
+		    "  dt - Modbus data type (R-register[3,6(16)],C-coil[1,5(15)],RI-input register[4],CI-input coil[2]).\n"
 		    "       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5;\n"
 		    "  numb - ModBus device's data address (dec, hex or octal);\n"
 		    "  rw - read-write mode (r-read; w-write; rw-readwrite);\n"

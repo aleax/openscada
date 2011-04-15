@@ -946,40 +946,91 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 
 		return true;
 	    }
-	    case 0x05:	//Preset single coil
+	    case 0x05:	//Write single coil
 	    {
-		if( pdu.size() != 5 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 
 		map<int,int>::iterator ic = data->coil.find(-c_addr);
-		if( ic == data->coil.end() ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		if(ic == data->coil.end()) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
 		    data->val.setB(ic->second,(bool)pdu[3]);
 		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second);
-		    if( il != data->lnk.end() && !il->second.freeStat() ) il->second.at().setB((bool)pdu[3]);
+		    if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setB((bool)pdu[3]);
 		}
 
 		data->wCoil++;
 
 		return true;
 	    }
-	    case 0x06:	//Preset single register
+	    case 0x06:	//Write single register
 	    {
-		if( pdu.size() != 5 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 
 		map<int,int>::iterator ir = data->reg.find(-r_addr);
-		if( ir == data->reg.end() ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		if(ir == data->reg.end()) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
 		    data->val.setI(ir->second,(unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
 		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ir->second);
-		    if( il != data->lnk.end() && !il->second.freeStat() )
+		    if(il != data->lnk.end() && !il->second.freeStat())
 			il->second.at().setI((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
 		}
 
 		data->wReg++;
+
+		return true;
+	    }
+	    case 0x0F:	//Write multiple coils
+	    {
+		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		int c_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+		int c_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		int bCnt = (unsigned char)pdu[5];
+		if(pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		bool noWrReg = false;
+		for(int i_c = 0; i_c < c_aCnt; i_c++)
+		{
+		    map<int,int>::iterator ic = data->coil.find(-(c_aSt+i_c));
+		    if(ic == data->coil.end()) noWrReg = true;
+		    else
+		    {
+			data->val.setB(ic->second,(bool)(1&(pdu[6+i_c/8]>>(i_c%8))));
+			map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second);
+			if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setB(data->val.getB(ic->second));
+			data->wCoil++;
+		    }
+		}
+		if(noWrReg) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		else pdu.resize(5);
+
+		return true;
+	    }
+	    case 0x10:	//Write multiple register
+	    {
+		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		int r_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+		int r_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		int bCnt = (unsigned char)pdu[5];
+		if(pdu.size() != (6+bCnt) || bCnt < (r_aCnt*2)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		bool noWrReg = false;
+		for(int i_r = 0; i_r < r_aCnt; i_r++)
+		{
+		    map<int,int>::iterator ir = data->reg.find(-(r_aSt+i_r));
+		    if(ir == data->reg.end()) noWrReg = true;
+		    else
+		    {
+			data->val.setI(ir->second,(unsigned short)(pdu[6+i_r*2]<<8)|(unsigned char)pdu[6+i_r*2+1]);
+			map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ir->second);
+			if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setI(data->val.getI(ir->second));
+		    }
+		    data->wReg++;
+		}
+
+		if(noWrReg) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		else pdu.resize(5);
 
 		return true;
 	    }

@@ -1,3 +1,7 @@
+2011-04-15 Roman
+- DAQ.ModBus: Multi-items write functions 15 and 16 support is added.
+
+
 2011-04-14 Maxim
 - FIX:UI.Vision: The "index_fill" variable processing is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Addition figures to be repainted to the selected ones is fixed for the properties dialog for the primitive ElFigure.
