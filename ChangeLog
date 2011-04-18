@@ -1,5 +1,7 @@
 2011-04-18 Roman
 - SYS: RPM-build spec files is updated for: noarch packages enable to all distribution, SuSE and Mandriva adaptation by default.
+- FIX:SYS: Model's RPM-packages dependency to main package is fixed for modules spec-file.
+- FIX:DB: Model's AGLKS DB is fixed for start message about QTCfg wrong start page.
 - UI.QTCfg, UI.Vision: Size adjustement is added for all dialogs, after its show.
 
 

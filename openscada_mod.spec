@@ -190,7 +190,6 @@ Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die an
 Group: Graphics
 Requires: %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibSYS
 BuildArch: noarch
-Requires: %name
 %description LibDB.Main
 The %{name}-LibDB.Main package includes main OpenSCADA libraries into SQLite DB.
 For use connect SQLite DB file LibsDB/OscadaLibs.db.
@@ -212,7 +211,6 @@ Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite.
 Group: Graphics
 Requires: %name-DAQ.JavaLikeCalc %name-DB.SQLite %name-Special.FLibSYS %name-UI.VCAEngine 
 BuildArch: noarch
-Requires: %name
 %description LibDB.VCA
 The %{name}-LibDB.VCA package includes visual components libraries into SQLite DB.
 For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
