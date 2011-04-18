@@ -738,6 +738,11 @@ void InputDlg::setMess( const QString &val )
     inpLab->setText( val );
 }
 
+void InputDlg::showEvent( QShowEvent * event )
+{
+    adjustSize();
+}
+
 //*****************************************************
 //* ReqIdNameDlg: Request node identifier and/or name *
 //*****************************************************
@@ -862,6 +867,11 @@ void DlgUser::finish( int result )
 	else setResult(SelErr);
     }
     else setResult(SelCancel);
+}
+
+void DlgUser::showEvent( QShowEvent * event )
+{
+    adjustSize();
 }
 
 //*********************************************

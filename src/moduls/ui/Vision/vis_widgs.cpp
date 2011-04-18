@@ -160,6 +160,11 @@ void InputDlg::setIdLen( int len )
     if( m_id )	m_id->setMaxLength(len);
 }
 
+void InputDlg::showEvent( QShowEvent * event )
+{
+    adjustSize();
+}
+
 //*************************************************
 //* User select dialog                            *
 //*************************************************
@@ -238,6 +243,11 @@ void DlgUser::finish( int result )
 	else setResult(SelErr);
     }
     else setResult(SelCancel);
+}
+
+void DlgUser::showEvent( QShowEvent * event )
+{
+    adjustSize();
 }
 
 //*********************************************
@@ -348,6 +358,11 @@ void FontDlg::cfgChange()
     fnt.setUnderline(chUnder->checkState());
     fnt.setStrikeOut(chStrike->checkState());
     sampleText->setFont(fnt);
+}
+
+void FontDlg::showEvent( QShowEvent * event )
+{
+    adjustSize();
 }
 
 //*********************************************

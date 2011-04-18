@@ -72,6 +72,9 @@ namespace VISION
 
 	    QGridLayout *edLay( )	{ return ed_lay; }
 
+	protected:
+	    void showEvent( QShowEvent * event );
+
 	private:
 	    QGridLayout *ed_lay;
 	    QLabel	*inp_lab;
@@ -95,6 +98,9 @@ namespace VISION
 	    QString user();
 	    QString password();
 
+	protected:
+	    void showEvent( QShowEvent * event );
+
 	private slots:
 	    void finish( int result );
 
@@ -117,6 +123,9 @@ namespace VISION
 	    QString font( );
 
 	    void setFont( const QString &fnt );
+
+	protected:
+	    void showEvent( QShowEvent * event );
 
 	private slots:
 	    void cfgChange();

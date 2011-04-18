@@ -231,6 +231,9 @@ class InputDlg : public QDialog
 	QGridLayout	*ed_lay;
 
     protected:
+        void showEvent( QShowEvent * event );
+
+    protected:
 	//Attributes
 	QLabel		*inpLab, *mIdLab, *mNameLab;
 	QLineEdit	*mId, *mName;
@@ -277,6 +280,9 @@ class DlgUser : public QDialog
 
 	QString user( );
 	QString password( );
+
+    protected:
+        void showEvent( QShowEvent * event );
 
     private slots:
 	//Private slots

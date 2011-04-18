@@ -989,7 +989,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		int c_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		int c_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
 		int bCnt = (unsigned char)pdu[5];
-		if(pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if((int)pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		bool noWrReg = false;
 		for(int i_c = 0; i_c < c_aCnt; i_c++)
 		{
@@ -1014,7 +1014,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		int r_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		int r_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
 		int bCnt = (unsigned char)pdu[5];
-		if(pdu.size() != (6+bCnt) || bCnt < (r_aCnt*2)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if((int)pdu.size() != (6+bCnt) || bCnt < (r_aCnt*2)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
 		bool noWrReg = false;
 		for(int i_r = 0; i_r < r_aCnt; i_r++)
 		{

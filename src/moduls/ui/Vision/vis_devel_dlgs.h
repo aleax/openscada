@@ -68,6 +68,7 @@ class LibProjProp: public QDialog
     protected:
 	//Protected methods
 	void closeEvent( QCloseEvent* );
+	void showEvent( QShowEvent * event );
 
     signals:
 	void apply(const string &);
@@ -145,6 +146,7 @@ class VisItProp : public QDialog
     protected:
 	//Protected methods
 	void closeEvent( QCloseEvent* );
+	void showEvent( QShowEvent * event );
 
     private slots:
 	//Private slots

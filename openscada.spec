@@ -19,7 +19,7 @@ URL: http://oscada.org
 %if %_vendor == "alt"
 %set_verify_elf_method no
 BuildRequires: glibc-devel gcc4.4-c++ libgd2-devel libMySQL-devel libsqlite3-devel libsensors3-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel libportaudio2-devel libfftw3-devel libpcre-devel
+BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql8.3-devel libportaudio2-devel libfftw3-devel libpcre-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -48,9 +48,7 @@ Summary(ru_RU.UTF8): Документация открытой SCADA (EN).
 Summary(uk_UA.UTF8): Документація відкритої SCADA (EN).
 Summary(de_DE.UTF8): Open SCADA Dokumente (EN).
 Group: Documentation
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 %description docEN
 The %name-docEN package include documents files (English).
 %description docEN -l ru_RU.UTF8
@@ -66,9 +64,7 @@ Summary(ru_RU.UTF8): Документация открытой SCADA (RU).
 Summary(uk_UA.UTF8): Документація відкритої SCADA (RU).
 Summary(de_DE.UTF8): Open SCADA Dokumente (RU).
 Group: Documentation
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 %description docRU
 The %name-docRU package include documents files (Russian).
 %description docRU -l ru_RU.UTF8
@@ -84,9 +80,7 @@ Summary(ru_RU.UTF8): Документация открытой SCADA (UK).
 Summary(uk_UA.UTF8): Документація відкритої SCADA (UK).
 Summary(de_DE.UTF8): Open SCADA Dokumente (UK).
 Group: Documentation
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 %description docUK
 The %name-docUK package include documents files (Ukraine).
 %description docUK -l ru_RU.UTF8
@@ -118,9 +112,7 @@ Summary(ru_RU.UTF8): Основные библиотеки OpenSCADA для сб
 Summary(uk_UA.UTF8): Основні бібліотеки OpenSCADA для збору даних та іншого у БД SQLite.
 Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die anderen in der Datenbank SQLite.
 Group: Graphics
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name
 %description LibDB.Main
 The %{name}-LibDB.Main package includes main OpenSCADA libraries into SQLite DB.
@@ -141,9 +133,7 @@ Summary(ru_RU.UTF8): Библиотеки визуальных компонет�
 Summary(uk_UA.UTF8): Бібліотеки візуальних компонентів у БД SQLite.
 Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite.
 Group: Graphics
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name
 %description LibDB.VCA
 The %{name}-LibDB.VCA package includes visual components libraries into SQLite DB.
@@ -220,8 +210,17 @@ Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 %setup -T -D -a 1
 
 %build
+%if %_vendor == "Mandriva"
+autoreconf -ivf
+%endif
+
 %configure
+
+%if %_vendor == "suse"
+%__make
+%else
 %make
+%endif
 
 %install
 %makeinstall

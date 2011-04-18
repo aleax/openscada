@@ -662,6 +662,11 @@ void LibProjProp::closeEvent( QCloseEvent *ce )
     ce->accept();
 }
 
+void LibProjProp::showEvent( QShowEvent * event )
+{
+    adjustSize();
+}
+
 void LibProjProp::addMimeData( )
 {
     XMLNode req("add");
@@ -1510,6 +1515,11 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     ed_it = "";
 
     ce->accept();
+}
+
+void VisItProp::showEvent( QShowEvent * event )
+{
+    adjustSize();
 }
 
 void VisItProp::addAttr( )

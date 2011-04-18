@@ -1,3 +1,8 @@
+2011-04-18 Roman
+- SYS: RPM-build spec files is updated for: noarch packages enable to all distribution, SuSE and Mandriva adaptation by default.
+- UI.QTCfg, UI.Vision: Size adjustement is added for all dialogs, after its show.
+
+
 2011-04-15 Roman
 - DAQ.ModBus: Multi-items write functions 15 and 16 support is added.
 

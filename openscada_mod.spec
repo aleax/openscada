@@ -124,9 +124,7 @@ Summary(ru_RU.UTF8): Документация открытой SCADA (EN).
 Summary(uk_UA.UTF8): Документація відкритої SCADA (EN).
 Summary(de_DE.UTF8): Open SCADA Dokumente (EN).
 Group: Documentation
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 %description docEN
 The %name-docEN package include documents files (English).
 %description docEN -l ru_RU.UTF8
@@ -142,9 +140,7 @@ Summary(ru_RU.UTF8): Документация открытой SCADA (RU).
 Summary(uk_UA.UTF8): Документація відкритої SCADA (RU).
 Summary(de_DE.UTF8): Open SCADA Dokumente (RU).
 Group: Documentation
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 %description docRU
 The %name-docRU package include documents files (Russian).
 %description docRU -l ru_RU.UTF8
@@ -160,9 +156,7 @@ Summary(ru_RU.UTF8): Документация открытой SCADA (UK).
 Summary(uk_UA.UTF8): Документація відкритої SCADA (UK).
 Summary(de_DE.UTF8): Open SCADA Dokumente (UK).
 Group: Documentation
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 %description docUK
 The %name-docUK package include documents files (Ukraine).
 %description docUK -l ru_RU.UTF8
@@ -195,9 +189,7 @@ Summary(uk_UA.UTF8): Основні бібліотеки OpenSCADA для збо
 Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die anderen in der Datenbank SQLite.
 Group: Graphics
 Requires: %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibSYS
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name
 %description LibDB.Main
 The %{name}-LibDB.Main package includes main OpenSCADA libraries into SQLite DB.
@@ -219,9 +211,7 @@ Summary(uk_UA.UTF8): Бібліотеки візуальних компонен�
 Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite.
 Group: Graphics
 Requires: %name-DAQ.JavaLikeCalc %name-DB.SQLite %name-Special.FLibSYS %name-UI.VCAEngine 
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name
 %description LibDB.VCA
 The %{name}-LibDB.VCA package includes visual components libraries into SQLite DB.
@@ -305,9 +295,7 @@ Summary(ru_RU.UTF8): Виртуальный пакет OpenSCADA - ПЛК.
 Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - ПЛК.
 Summary(de_DE.UTF8): OpenSCADA - SPS virtuelles Paket.
 Group: Graphics
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name-Archive.FSArch %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
 Requires: %name-DAQ.ModBus %name-DAQ.System %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Special.FLibComplex1
 Requires: %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.SSL %name-Transport.Serial %name-Transport.Sockets %name-UI.VCAEngine
@@ -327,9 +315,7 @@ Summary(ru_RU.UTF8): Виртуальный пакет OpenSCADA - сервер.
 Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - сервер.
 Summary(de_DE.UTF8): OpenSCADA - Server virtuelles Paket.
 Group: Graphics
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name-DB.SQLite %name-DB.MySQL %name-DB.FireBird %name-DB.PostgreSQL %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc
 Requires: %name-DAQ.LogicLev %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard
 Requires: %name-Archive.FSArch %name-Archive.DBArch %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.HTTP
@@ -350,9 +336,7 @@ Summary(ru_RU.UTF8): Виртуальный пакет OpenSCADA - визуал�
 Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - візуальна станція.
 Summary(de_DE.UTF8): OpenSCADA - visuelle Station virtuelles Paket.
 Group: Graphics
-%if %_vendor == "alt"
 BuildArch: noarch
-%endif
 Requires: %name-DB.SQLite %name-DB.MySQL %name-DAQ.System %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
 Requires: %name-DAQ.SNMP %name-DAQ.Siemens %name-DAQ.ModBus %name-DAQ.DCON %name-DAQ.DAQGate %name-DAQ.SoundCard %name-Archive.FSArch %name-Archive.DBArch
 Requires: %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.SelfSystem %name-UI.VCAEngine %name-UI.Vision %name-UI.QTStarter
