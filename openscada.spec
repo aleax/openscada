@@ -330,6 +330,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/Boiler/*.db
 
 %changelog
+* Mon Apr 18 2011 Roman Savochenko <rom_as@oscada.org>
+- Updated for: noarch packages enable to all distribution, SuSE and Mandriva adaptation by default.
+
 * Mon Mar 14 2011 Roman Savochenko <rom_as@oscada.org>
 - New source packages implementation is released.
 - Documentation separated by languages.
