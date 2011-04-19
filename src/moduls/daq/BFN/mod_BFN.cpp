@@ -505,7 +505,7 @@ void TMdContr::reqBFN(XMLNode &io)
 	catch(TError err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplite.")); }
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(atoi(rCod.c_str())) io.setAttr("err",rCod);
-	else 
+	else
 	{
 	    io = *rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response");
 	    io.setName(reqName+"Response");

@@ -1,3 +1,9 @@
+2011-04-19 Roman
+- !!:SYS: To user API is added functions SYS.fileRead() and SYS.fileWrite() for work with files on filesystem.
+- FIX:DAQ.JavaLikeCalc: Special object's symbols "SYS" and "arguments" code generation is fixed for prevent set code to previous conditions block.
+- FIX:UI.WebUser: Send include pages to default page is fixed.
+
+
 2011-04-18 Roman
 - SYS: RPM-build spec files is updated for: noarch packages enable to all distribution, SuSE and Mandriva adaptation by default.
 - FIX:SYS: Model's RPM-packages dependency to main package is fixed for modules spec-file.

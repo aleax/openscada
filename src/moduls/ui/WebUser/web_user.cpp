@@ -203,16 +203,16 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	vector<string> upLs;
 	uPgList(upLs);
 	string uPg = TSYS::pathLev(ses.url,0);
-	if( uPg.empty() ) uPg = defPg();
+	if(uPg.empty()) uPg = defPg();
 	for(unsigned i_up = 0; i_up < upLs.size(); i_up++ )
 	{
 	    tup = uPgAt(upLs[i_up]);
-	    if( !tup.at().enableStat() || tup.at().workProg().empty() ) continue;
-	    if( uPg == upLs[i_up] ) { up = tup; break; }
+	    if(!tup.at().enableStat() || tup.at().workProg().empty()) continue;
+	    if(uPg == upLs[i_up]) { up = tup; break; }
 	}
-	if( up.freeStat() )
+	if(up.freeStat())
 	{
-	    if( uPg == "*" )
+	    if(uPg == "*")
 	    {
 		page =	"<?xml version='1.0' ?>\n"
 			"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
@@ -240,15 +240,16 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			"<p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p>"
 			"<tr><th>"+_("Present web-users pages")+"</th></tr>\n"
 			"<tr><td class='content'><ul>\n";
-		for( unsigned i_p = 0; i_p < upLs.size(); i_p++ )
-		    if( uPgAt(upLs[i_p]).at().enableStat() )
+		for(unsigned i_p = 0; i_p < upLs.size(); i_p++)
+		    if(uPgAt(upLs[i_p]).at().enableStat())
 			page += "<li><a href='"+upLs[i_p]+"/'>"+uPgAt(upLs[i_p]).at().name()+"</a></li>\n";
 		page += "</ul></td></tr></table></center>\n<hr/>\n</body>\n</html>\n";
 
 		page = httpHead("200 OK",page.size())+page;
 		return;
 	    }
-	    throw TError(nodePath().c_str(),_("Page error"));
+	    else if(!(uPg=defPg()).empty()) up = uPgAt(uPg);
+	    else throw TError(nodePath().c_str(),_("Page error"));
 	}
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg(),1)).at());
 
@@ -279,7 +280,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	page = funcV.getS(3);
     }catch(TError err)
     {
-	page = "Page '"+urli+"' error: "+err.mess;
+	page = TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str());
 	page = httpHead("404 Not Found",page.size())+page;
 	return;
     }
@@ -303,14 +304,18 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	vector<string> upLs;
 	uPgList(upLs);
 	string uPg = TSYS::pathLev(ses.url,0);
-	if( uPg.empty() ) uPg = defPg();
+	if(uPg.empty()) uPg = defPg();
 	for(unsigned i_up = 0; i_up < upLs.size(); i_up++)
 	{
 	    tup = uPgAt(upLs[i_up]);
-	    if( !tup.at().enableStat() || tup.at().workProg().empty() ) continue;
-	    if( uPg == upLs[i_up] ) { up = tup; break; }
+	    if(!tup.at().enableStat() || tup.at().workProg().empty()) continue;
+	    if(uPg == upLs[i_up]) { up = tup; break; }
 	}
-	if( up.freeStat() ) throw TError(nodePath().c_str(),_("Page error"));
+	if(up.freeStat())
+	{
+	    if(!(uPg=defPg()).empty()) up = uPgAt(uPg);
+	    else throw TError(nodePath().c_str(),_("Page error"));
+	}
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg(),1)).at());
 
 	//> Load inputs

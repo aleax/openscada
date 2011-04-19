@@ -394,41 +394,16 @@ int Func::ioGet( const string &nm )
 {
     int rez = -1;
 
-    if(nm == "SYS")
-    {
-	rez = regNew();
-	Reg *rg = regAt(rez);
-	rg->setType(Reg::Obj);
-
-	//> Make code
-	uint16_t addr;
-	prg += (uint8_t)Reg::MviSysObject;
-	addr = rg->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-	prg += (char)0;
-    }
-    else if(nm == "arguments")
-    {
-	rez = regNew();
-	Reg *rg = regAt(rez);
-	rg->setType(Reg::Obj);
-
-	//> Make code
-	uint16_t addr;
-	prg += (uint8_t)Reg::MviFuncArg;
-	addr = rg->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    }
-    //> Check IO
-    else
-	for( int i_io = 0; i_io < ioSize(); i_io++ )
-	    if( io(i_io)->id() == nm )
-	    {
-		rez = regNew(true);
-		Reg *rg = regAt(rez);
-		rg->setName(nm);
-		rg->setVar(i_io);
-		rg->setLock(true);
-		break;
-	    }
+    for(int i_io = 0; i_io < ioSize(); i_io++)
+	if(io(i_io)->id() == nm)
+	{
+	    rez = regNew(true);
+	    Reg *rg = regAt(rez);
+	    rg->setName(nm);
+	    rg->setVar(i_io);
+	    rg->setLock(true);
+	    break;
+	}
     return rez;
 }
 
@@ -492,6 +467,19 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg+=(uint8_t)rez->val().s_el->size();
 	    prg+= *rez->val().s_el;
+	    break;
+	case Reg::Obj:
+	    if(rez->name() == "SYS")
+	    {
+		prg += (uint8_t)Reg::MviSysObject;
+		prg.append((char*)&addr,sizeof(uint16_t));
+		prg += (char)0;
+	    }
+	    else if(rez->name() == "arguments")
+	    {
+		prg += (uint8_t)Reg::MviFuncArg;
+		prg.append((char*)&addr,sizeof(uint16_t));
+	    }
 	    break;
 	default: break;
     }
@@ -1105,7 +1093,7 @@ Reg *Func::cdProp( Reg *obj, const string &sprp, Reg *dprp )
 {
     uint16_t addr;
     Reg *ro = obj;
-    if( !ro->objEl() ) { ro = cdMove( NULL, cdMvi(ro), false ); ro->setObjEl(); }
+    if(!ro->objEl()) { ro = cdMove(NULL, cdMvi(ro), false); ro->setObjEl(); }
 
     if( !dprp )
     {

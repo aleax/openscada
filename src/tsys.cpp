@@ -1335,6 +1335,34 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	pclose(fp);
 	return rez;
     }
+    // string fileRead( string file ) - Return <file> content by string.
+    if( iid == "fileRead" && prms.size() >= 1 )
+    {
+	char buf[STR_BUF_LEN];
+	string rez;
+        int hd = open(prms[0].getS().c_str(),O_RDONLY);
+	if(hd != -1)
+	{
+    	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
+    	    close(hd);
+	}
+	return rez;
+    }
+    // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
+    //	  Return wrote bytes count.
+    if( iid == "fileWrite" && prms.size() >= 2 )
+    {
+	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
+	string val = prms[1].getS();
+	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
+        int hd = open(prms[0].getS().c_str(), wflags, 0664);
+	if(hd != -1)
+	{
+    	    wcnt = write(hd,val.data(),val.size());
+    	    close(hd);
+	}
+	return wcnt;
+    }
     // XMLNodeObj XMLNode(string name = "") - creation of the XML node object with the name <name>
     //  name - XML node name
     if( iid == "XMLNode" ) return new XMLNodeObj( (prms.size()>=1) ? prms[0].getS() : "" );

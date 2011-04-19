@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 18:03+0300\n"
+"POT-Creation-Date: 2011-04-18 18:00+0300\n"
 "PO-Revision-Date: 2010-10-25 09:57+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -56,6 +56,9 @@ msgstr "Anwesende Web-Seiten von Nutzern"
 
 msgid "Page error"
 msgstr "Fehler der Seite"
+
+msgid "Page '%s' error: %s"
+msgstr "Seite '%s' Fehler: %s"
 
 msgid "User page"
 msgstr "Seite des Nutzers"

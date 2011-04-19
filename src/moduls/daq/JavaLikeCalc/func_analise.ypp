@@ -514,6 +514,17 @@ retry:
 	    }
 	    return CONST;
 	}
+	//Constant objects
+	string sel = TSYS::strSepParse(smb_nm,0,'.');
+	if(sel == "SYS" || sel == "arguments")
+	{
+	    yylval.reg = p_fnc->regTmpNew();
+	    yylval.reg->setType(Reg::Obj);
+    	    yylval.reg->setName(sel);
+	    pos -= (smb_nm.size()-sel.size());
+	    yylloc.last_column -= (smb_nm.size()-sel.size());
+    	    return VAR;
+	}
 
 	//Find buildin function
 	if(c == '(' && mod->bFuncGet( smb_nm.c_str() ) != NULL)
@@ -541,7 +552,7 @@ retry:
 	    }
 
 	    //>> Check for object's functions and system object's function
-	    string sel = TSYS::strSepParse(smb_nm,0,'.');
+	    //string sel = TSYS::strSepParse(smb_nm,0,'.');
 	    if((yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))))
 	    {
 		pos -= (smb_nm.size()-sel.size());
@@ -578,7 +589,7 @@ retry:
 	    }catch(...){ }
 
 	    //>> Check for object's parameters
-	    string sel = TSYS::strSepParse(smb_nm,0,'.');
+	    //string sel = TSYS::strSepParse(smb_nm,0,'.');
 	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) )
 	    {
 		pos -= (smb_nm.size()-sel.size());
