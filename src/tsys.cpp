@@ -647,6 +647,34 @@ string TSYS::strParse( const string &path, int level, const string &sep, int *of
     return "";
 }
 
+string TSYS::strLine( const string &str, int level, int *off )
+{
+    int an_dir = off ? *off : 0;
+    int t_lev = 0, edLnSmbSz = 1;
+    size_t t_dir;
+
+    if(an_dir >= (int)str.size()) return "";
+    while(true)
+    {
+	for(t_dir = an_dir; t_dir < str.size(); t_dir++)
+	    if(str[t_dir] == '\x0D' || str[t_dir] == '\x0A')
+	    { edLnSmbSz = (str[t_dir] == '\x0D' && ((t_dir+1) < str.size()) && str[t_dir+1] == '\x0A') ? 2 : 1; break; }
+	if(t_dir >= str.size())
+	{
+	    if(off) *off = str.size();
+	    return (t_lev==level) ? str.substr(an_dir) : "";
+	}
+	else if(t_lev == level)
+	{
+	    if(off) *off = t_dir+edLnSmbSz;
+	    return str.substr(an_dir,t_dir-an_dir);
+	}
+	an_dir = t_dir+edLnSmbSz;
+	t_lev++;
+    }
+    return "";
+}
+
 string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 {
     int an_dir = off ? *off : 0;

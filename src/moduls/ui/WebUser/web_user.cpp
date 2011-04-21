@@ -182,18 +182,21 @@ void TWEB::modStop()
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\r\n"
-	    "Server: "+PACKAGE_STRING+"\r\n"
-	    "Accept-Ranges: bytes\r\n"
-	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+    return  "HTTP/1.0 "+rcode+"\x0D\x0A"
+	    "Date: "+TSYS::time2str(time(NULL),"%a, %d %b %Y %T %Z")+"\x0D\x0A"
+	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
+	    "Accept-Ranges: bytes\x0D\x0A"
+	    "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"+
+	    (cnt_tp.empty()?string(""):("Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\x0D\x0A"))+
+	    addattr+"\x0D\x0A";
 }
 
 void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars, const string &user )
 {
-    string rez;
+    string rez, httpIt, tstr;
     AutoHD<UserPg> up, tup;
     map<string,string>::iterator prmEl;
+    vector<string> sls;
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
 
     try
@@ -254,18 +257,18 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg(),1)).at());
 
 	//> Load inputs
-	funcV.setS(1,"GET");
-	funcV.setS(2,ses.url);
-	funcV.setS(3,page);
-	funcV.setS(4,sender);
-	funcV.setS(5,user);
-	funcV.setO(6,new TVarObj());
-	for( map<string,string>::iterator iv = ses.vars.begin(); iv != ses.vars.end(); iv++ )
-	    funcV.getO(6)->propSet(iv->first,iv->second);
-	funcV.setO(7,new TVarObj());
-	for( map<string,string>::iterator ip = ses.prm.begin(); ip != ses.prm.end(); ip++ )
-	    funcV.getO(7)->propSet(ip->first,ip->second);
-	funcV.setO(8,new TArrayObj());
+	funcV.setS(1, "GET");
+	funcV.setS(2, ses.url);
+	funcV.setS(3, page);
+	funcV.setS(4, sender);
+	funcV.setS(5, user);
+	funcV.setO(6, new TVarObj());
+	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
+	    funcV.getO(6)->propSet(prmEl->first, prmEl->second);
+	funcV.setO(7, new TVarObj());
+	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
+	    funcV.getO(7)->propSet(prmEl->first, prmEl->second);
+	funcV.setO(8, new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++)
 	{
 	    XMLNodeObj *xo = new XMLNodeObj();
@@ -278,6 +281,23 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	//> Get outputs
 	rez = funcV.getS(0);
 	page = funcV.getS(3);
+
+	//> HTTP properties prepare
+	funcV.getO(6)->propList(sls);
+	bool cTp = false;
+	for(unsigned i_l = 0; i_l < sls.size(); i_l++)
+	{
+	    tstr = funcV.getO(6)->propGet(sls[i_l]).getS();
+	    if(sls[i_l] == "Date" || sls[i_l] == "Server" || sls[i_l] == "Accept-Ranges" || sls[i_l] == "Content-Length" ||
+		((prmEl=ses.vars.find(sls[i_l])) != ses.vars.end() && prmEl->second == tstr)) continue;
+	    if(sls[i_l] == "Content-Type") cTp = true;
+	    httpIt += prmEl->first+": "+tstr+"\x0D\x0A";
+	}
+
+	page = httpHead(rez,page.size(),(cTp?"":"text/html"),httpIt)+page;
+
+	up.at().cntReq++;
+	return;
     }catch(TError err)
     {
 	page = TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str());
@@ -286,15 +306,14 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
     }
 
     page = httpHead(rez,page.size())+page;
-
-    up.at().cntReq++;
 }
 
 void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
-    string rez;
+    string rez, httpIt, tstr;
     AutoHD<UserPg> up, tup;
-    map< string, string >::iterator cntEl;
+    map<string,string>::iterator prmEl;
+    vector<string> sls;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
 
     try
@@ -325,11 +344,11 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	funcV.setS(4,sender);
 	funcV.setS(5,user);
 	funcV.setO(6,new TVarObj());
-	for( map<string,string>::iterator iv = ses.vars.begin(); iv != ses.vars.end(); iv++ )
-	    funcV.getO(6)->propSet(iv->first,iv->second);
+	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
+	    funcV.getO(6)->propSet(prmEl->first, prmEl->second);
 	funcV.setO(7,new TVarObj());
-	for( map<string,string>::iterator ip = ses.prm.begin(); ip != ses.prm.end(); ip++ )
-	    funcV.getO(7)->propSet(ip->first,ip->second);
+	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
+	    funcV.getO(7)->propSet(prmEl->first,prmEl->second);
 	funcV.setO(8,new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++)
 	{
@@ -343,6 +362,24 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	//> Get outputs
 	rez = funcV.getS(0);
 	page = funcV.getS(3);
+
+	//> HTTP properties prepare
+	funcV.getO(6)->propList(sls);
+	bool cTp = false;
+	for(unsigned i_l = 0; i_l < sls.size(); i_l++)
+	{
+	    tstr = funcV.getO(6)->propGet(sls[i_l]).getS();
+	    if(sls[i_l] == "Date" || sls[i_l] == "Server" || sls[i_l] == "Accept-Ranges" || sls[i_l] == "Content-Length" ||
+		((prmEl=ses.vars.find(sls[i_l])) != ses.vars.end() && prmEl->second == tstr)) continue;
+	    if(sls[i_l] == "Content-Type") cTp = true;
+	    httpIt += prmEl->first+": "+tstr+"\x0D\x0A";
+	}
+
+	page = httpHead(rez,page.size(),(cTp?"":"text/html"),httpIt)+page;
+
+	up.at().cntReq++;
+	return;
+
     }catch(TError err)
     {
 	page = "Page '"+url+"' error: "+err.mess;
@@ -655,7 +692,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     //> Content parse
     size_t pos = 0, spos = 0;
     const char *c_bound = "boundary=";
-    const char *c_term = "\r\n";
+    const char *c_term = "\x0D\x0A";
     const char *c_end = "--";
     string boundary = vars["Content-Type"];
     if(boundary.empty() || (pos=boundary.find(c_bound,0)) == string::npos) return;

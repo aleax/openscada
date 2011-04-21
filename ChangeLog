@@ -1,3 +1,15 @@
+2011-04-21 Roman
+- FIX:SYS.XML: Symbol code "&#160;" encode to "&nbsp;" is added to XML-tree save function.
+- Transport: Types of the requests form of output transport is exanded for line end variants support: LF, CR, CR/LF.
+- !!!!:FIX:Transport, DAQ.AMRDevs, DAQ.DCON, DAQ.ICP_DAS, DAQ.ModBus, DAQ.OPC_UA, Protocol.HTTP, :
+    Using function TTransportOut::messIO() for tail requests and zero result is fixed everywhere.
+- !:FIX:DAQ.ModBus, Transport.Serial, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.WebVision:
+    Wrong using symbol '\n' for multi program platform UNIX, MAC, DOS/Windows is fixed by replace to "\x0A".
+- !!:Protocol.HTTP: HTTP-header parse, for requests, to different line end variants (LF, CR, CR/LF) support is added.
+- UI.WebCfgD: Adapted for full screen.
+- UI.WebUser: HTTP properties get from script object and place it to answer is added.
+
+
 2011-04-19 Roman
 - !!:SYS: To user API is added functions SYS.fileRead() and SYS.fileWrite() for work with files on filesystem.
 - FIX:DAQ.JavaLikeCalc: Special object's symbols "SYS" and "arguments" code generation is fixed for prevent set code to previous conditions block.

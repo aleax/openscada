@@ -208,6 +208,7 @@ class TSYS : public TCntrNode
 	static string strNoSpace( const string &val );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
+	static string strLine( const string &str, int level, int *off = NULL );
 	static string pathLev( const string &path, int level, bool encode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );

@@ -140,11 +140,11 @@ void TWEB::modStop()
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\r\n"
-	    "Server: "+PACKAGE_STRING+"\r\n"
-	    "Accept-Ranges: bytes\r\n"
-	    "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	    "Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+    return  "HTTP/1.0 "+rcode+"\x0D\x0A"
+	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
+	    "Accept-Ranges: bytes\x0D\x0A"
+	    "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
+	    "Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\x0D\x0A"+addattr+"\x0D\x0A";
 }
 
 string TWEB::pgHead( string head_els )
@@ -1324,7 +1324,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     //> Content parse
     string boundary;
     const char *c_bound = "boundary=";
-    const char *c_term = "\r\n";
+    const char *c_term = "\x0D\x0A";
     const char *c_end = "--";
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";

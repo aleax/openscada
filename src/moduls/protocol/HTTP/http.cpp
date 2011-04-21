@@ -232,20 +232,20 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    for(unsigned cnt_c = 0; cnt_c < io.childSize(); cnt_c++)
 	    {
 		if(io.childGet(cnt_c)->name() != "cnt") continue;
-		cnt += "--"cntBnd"\r\n";
+		cnt += "--"cntBnd"\x0D\x0A";
 		cnt += "Content-Disposition: form-data; \""+io.childGet(cnt_c)->attr("name")+
-		       "\"; filename=\""+io.childGet(cnt_c)->attr("filename")+"\"\r\n";
+		       "\"; filename=\""+io.childGet(cnt_c)->attr("filename")+"\"\x0D\x0A";
 		//>> Place appended content properties
 		for(unsigned ch_c = 0; ch_c < io.childGet(cnt_c)->childSize(); ch_c++)
 		    if(io.childGet(cnt_c)->childGet(ch_c)->name() == "prm")
 			cnt += io.childGet(cnt_c)->childGet(ch_c)->attr("id")+": "+
-			   io.childGet(cnt_c)->childGet(ch_c)->text()+"\r\n";
-		cnt += "\r\n"+io.childGet(cnt_c)->text();
+			   io.childGet(cnt_c)->childGet(ch_c)->text()+"\x0D\x0A";
+		cnt += "\x0D\x0A"+io.childGet(cnt_c)->text();
 		isCnt = true;
 	    }
 	    if(isCnt)
 	    {
-		cnt += "--"cntBnd"--\r\n";
+		cnt += "--"cntBnd"--\x0D\x0A";
 		io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary="cntBnd);
 	    }
 	    else cnt = io.text();
@@ -254,15 +254,15 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	else throw TError(nodePath().c_str(),TSYS::strMess(_("HTTP method '%s' error or don't support."),io.name().c_str()).c_str());
 
 	//> Place HTTP head
-	req = TSYS::strMess("%s %s HTTP/1.1\r\n",io.name().c_str(),uri.c_str());
+	req = TSYS::strMess("%s %s HTTP/1.1\x0D\x0A",io.name().c_str(),uri.c_str());
 	//>> Place main HTTP properties
-	req += TSYS::strMess("Host: %s\r\n",host.c_str());
-	req += "User-Agent: "PACKAGE_NAME" v"VERSION"\r\n";
+	req += TSYS::strMess("Host: %s\x0D\x0A",host.c_str());
+	req += "User-Agent: "PACKAGE_NAME" v"VERSION"\x0D\x0A";
 	//>> Place appended HTTP-properties
 	for(unsigned ch_c = 0; ch_c < io.childSize(); ch_c++)
 	    if(io.childGet(ch_c)->name() == "prm")
-		req += io.childGet(ch_c)->attr("id")+": "+io.childGet(ch_c)->text()+"\r\n";
-	req += "\r\n"+cnt;
+		req += io.childGet(ch_c)->attr("id")+": "+io.childGet(ch_c)->text()+"\x0D\x0A";
+	req += "\x0D\x0A"+cnt;
 
 	io.childClear();
 
@@ -277,7 +277,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	io.setText("");
 	//>> Parse first record
 	int pos = 0;
-	tw = TSYS::strParse(resp,0,"\r\n",&pos);
+	tw = TSYS::strLine(resp,0,&pos);
 	string protocol	= TSYS::strParse(tw,0," ");
 	string rcod	= TSYS::strParse(tw,1," ");
 	string rstr	= TSYS::strParse(tw,2," ");
@@ -289,7 +289,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	int c_lng = -1, ch_ln = 0;
 	while(true)
 	{
-	    tw = TSYS::strParse(resp,0,"\r\n",&pos);
+	    tw = TSYS::strLine(resp,0,&pos);
 	    if(tw.empty()) break;
 	    size_t sepPos = tw.find(":",0);
 	    if(sepPos == 0 || sepPos == string::npos) continue;
@@ -303,16 +303,17 @@ next_ch:
 	if(c_lng == -2)
 	{
 	    if(ch_ln) pos += ch_ln+2;
-	    tw = TSYS::strParse(resp,0,"\r\n",&pos);
+	    tw = TSYS::strLine(resp,0,&pos);
 	    ch_ln = strtol(tw.c_str(),NULL,16);
 	}
 	else ch_ln = c_lng;
 
 	//>> Wait tail
 	while(ch_ln > 0 && ((int)(resp.size()-pos) < ch_ln ||
-	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\r\n",pos+ch_ln+2) == string::npos))))
+	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
+	    if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
 	    resp.append(buf,resp_len);
 	}
 
@@ -412,11 +413,11 @@ TProtIn::~TProtIn()
 
 string TProtIn::httpHead( const string &rcode, int cln, const string &addattr )
 {
-    return "HTTP/1.0 "+rcode+"\r\n"
-	   "Server: "+PACKAGE_STRING+"\r\n"
-	   "Accept-Ranges: bytes\r\n"
-	   "Content-Length: "+TSYS::int2str(cln)+"\r\n"
-	   "Content-Type: text/html;charset="+Mess->charset()+"\r\n"+addattr+"\r\n";
+    return "HTTP/1.0 "+rcode+"\x0D\x0A"
+	   "Server: "+PACKAGE_STRING+"\x0D\x0A"
+	   "Accept-Ranges: bytes\x0D\x0A"
+	   "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
+	   "Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"+addattr+"\x0D\x0A";
 }
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
@@ -444,8 +445,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 #endif
 
 	//> Parse first record
-	req = TSYS::strSepParse(request,0,'\n',&pos);
-	if( !req.empty() ) req.resize(req.size()-1);
+	req = TSYS::strLine(request,0,&pos);
 	string method   = TSYS::strSepParse(req,0,' ');
 	string urls     = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
@@ -455,36 +455,34 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	int c_lng=-1;
 	while( true )
 	{
-	    req = TSYS::strSepParse(request,0,'\n',&pos);
-	    if( req.empty() ) { m_nofull=true; break; }
-	    if( req == "\r" ) break;
-	    req.resize(req.size()-1);
+	    req = TSYS::strLine(request,0,&pos);
+	    if(req.empty()) break;
 	    size_t sepPos = req.find(":",0);
-	    if( sepPos == 0 || sepPos == string::npos ) break;
+	    if(sepPos == 0 || sepPos == string::npos) break;
 	    string var = req.substr(0,sepPos);
 	    string val = req.substr(sepPos+1);
 	    vars.push_back(req);
 
-	    if( strcasecmp(var.c_str(),"content-length") == 0 )	c_lng = atoi(val.c_str());
-	    else if( strcasecmp(var.c_str(),"connection") == 0 )
+	    if(strcasecmp(var.c_str(),"content-length") == 0)	c_lng = atoi(val.c_str());
+	    else if(strcasecmp(var.c_str(),"connection") == 0)
 	    {
-		for( int off = 0; (sel=TSYS::strSepParse(val,0,',',&off)).size(); )
-		    if( strcasecmp(TSYS::strNoSpace(sel).c_str(),"keep-alive") == 0 )
+		for(int off = 0; (sel=TSYS::strSepParse(val,0,',',&off)).size(); )
+		    if(strcasecmp(TSYS::strNoSpace(sel).c_str(),"keep-alive") == 0)
 		    { KeepAlive = true; break; }
 	    }
-	    else if( strcasecmp(var.c_str(),"cookie") == 0 )
+	    else if(strcasecmp(var.c_str(),"cookie") == 0)
 	    {
 		size_t vpos = val.find("oscd_u_id=",0);
-		if( vpos != string::npos ) user = mod->sesCheck(atoi(val.substr(vpos+10).c_str()));
+		if(vpos != string::npos) user = mod->sesCheck(atoi(val.substr(vpos+10).c_str()));
 	    }
 	}
 
 	//> Check content length
-	if( (c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST") ) m_nofull = true;
-	if( m_nofull ) return m_nofull;
+	if((c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST")) m_nofull = true;
+	if(m_nofull) return m_nofull;
 
 	//> Check protocol version
-	if( protocol != "HTTP/1.0" && protocol != "HTTP/1.1" )
+	if(protocol != "HTTP/1.0" && protocol != "HTTP/1.1")
 	{
 	    answer = "<html>\n"
 		     " <body>\n"
@@ -498,19 +496,19 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 	int url_pos = 0;
 	string name_mod = TSYS::pathLev(urls,0,false,&url_pos);
-	while( url_pos < (int)urls.size() && urls[url_pos] == '/' ) url_pos++;
+	while(url_pos < (int)urls.size() && urls[url_pos] == '/') url_pos++;
 	url = "/"+urls.substr(url_pos);
 
 	//> Process internal commands
-	if( name_mod == "login" )
+	if(name_mod == "login")
 	{
-	    if( method == "GET" )	{ answer = getAuth(url); return m_nofull||KeepAlive; }
-	    else if( method == "POST" )
+	    if(method == "GET")	{ answer = getAuth(url); return m_nofull||KeepAlive; }
+	    else if(method == "POST")
 	    {
 		map<string,string>	cnt;
 		map<string,string>::iterator cntEl;
 		getCnt(vars,request.substr(pos),cnt);
-		if( cnt.find("auth_enter") != cnt.end() )
+		if(cnt.find("auth_enter") != cnt.end())
 		{
 		    string pass;
 		    if((cntEl=cnt.find("user")) != cnt.end())	user = cntEl->second;
@@ -520,7 +518,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    {
 			answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>")+
 			    "<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
-			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\r\n")+answer;
+			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
 			return m_nofull||KeepAlive;
 		    }
 		}
@@ -533,7 +531,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	{
 	    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>")+
 		"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n"+pgTail();
-	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\r\n")+answer;
+	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
 	    return m_nofull||KeepAlive;
 	}
 
@@ -550,7 +548,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		{
 		    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>")+
 			"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
-		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\r\n")+answer;
+		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
 		}
 		else
 		{
@@ -698,7 +696,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
     //> Content parse
     string boundary;
     const char *c_bound = "boundary=";
-    const char *c_term = "\r\n";
+    const char *c_term = "\x0D\x0A";
     const char *c_end = "--";
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";

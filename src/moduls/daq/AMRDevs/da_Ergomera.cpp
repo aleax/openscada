@@ -154,13 +154,13 @@ string Ergomera::modBusReq( string &pdu )
 	//> Send request
 	for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
 	{
-	    int resp_len = tr.at().messIO( mbap.data(), mbap.size(), buf, sizeof(buf), 0, true );
+	    int resp_len = tr.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
 	    rez.assign( buf, resp_len );
 	    //> Wait tail
-	    while( true )
+	    while(resp_len)
 	    {
-		try{ resp_len = tr.at().messIO( NULL, 0, buf, sizeof(buf), 0, true ); } catch(TError err){ break; }
-		rez.append( buf, resp_len );
+		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+		rez.append(buf, resp_len);
 	    }
 
 	    if( rez.size() < 3 )	{ err = _("13:Error respond: Too short."); continue; }

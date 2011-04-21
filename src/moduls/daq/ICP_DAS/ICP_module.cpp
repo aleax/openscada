@@ -328,7 +328,7 @@ string TMdContr::serReq( string req, char mSlot )
 	    string rez( szReceive, resp_len );
 
 	    //> Wait tail
-	    while( rez.size() < 2 || rez[rez.size()-1] != '\r' )
+	    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r'))
 	    {
 		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError er){ break; }
 		rez.append( szReceive, resp_len );

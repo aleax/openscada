@@ -302,11 +302,12 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
     {
 	switch(s[i_sz])
 	{
-	    case '>': replStr = "&gt;"; break;
-	    case '<': replStr = "&lt;"; break;
-	    case '"': replStr = "&quot;"; break;
-	    case '&': replStr = "&amp;"; break;
-	    case '\'': replStr = "&#039;"; break;
+	    case '>':	replStr = "&gt;";	break;
+	    case '<':	replStr = "&lt;";	break;
+	    case '"':	replStr = "&quot;";	break;
+	    case '&':	replStr = "&amp;";	break;
+	    case '\'':	replStr = "&#039;";	break;
+	    case 160:	replStr = "&nbsp;";	break;
 	    case '\n': if( !text ) replStr = "&#010;"; break;
 	}
 	i_sz++;

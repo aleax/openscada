@@ -202,13 +202,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    int resp_size = atoi(buf1);
 
 	    //>> Wait tail
-	    while( resp.size() < abs(resp_size)+head_end+sizeof('\n') )
+	    while(resp.size() < abs(resp_size)+head_end+sizeof('\n'))
 	    {
 		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
+		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf,resp_len);
 	    }
 
-	    if( resp_size < 0 )	io.load(TSYS::strUncompr(resp.substr(head_end+sizeof('\n'))));
+	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end+sizeof('\n'))));
 	    else io.load(resp.substr(head_end+sizeof('\n')));
 
 	    return;

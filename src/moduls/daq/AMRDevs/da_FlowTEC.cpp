@@ -96,10 +96,10 @@ void FlowTEC::getVals( )
 	    rez.assign( szReceive, resp_len );
 
 	    //> Wait tail
-	    while( rez.size() < 4 || rez.size() < (uint8_t)rez[2] )
+	    while(resp_len && (rez.size() < 4 || rez.size() < (uint8_t)rez[2]))
 	    {
 		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError er){ break; }
-		rez.append( szReceive, resp_len );
+		rez.append(szReceive, resp_len);
 	    }
 	    if( rez.size() < 4 || rez.size() < (uint8_t)rez[2] ) continue;
 	    errPresent = false;

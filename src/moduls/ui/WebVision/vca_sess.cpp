@@ -4197,7 +4197,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
         Point ip[5];
         shapeItems.clear();
         inundationItems.clear();
-        for( int off = 0; (sel=TSYS::strSepParse(elLst,0,'\n',&off)).size(); )
+        for( int off = 0; (sel=TSYS::strLine(elLst,0,&off)).size(); )
         {
             int el_off = 0;
             string el = TSYS::strSepParse(sel,0,':',&el_off);
@@ -6354,7 +6354,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     buf.clear();
     for( int v_off = 0; true; )
     {
-	svl = TSYS::strSepParse(req.text(),0,'\n',&v_off);
+	svl = TSYS::strLine(req.text(),0,&v_off);
 	if( svl.size() )
 	{
 	    sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);

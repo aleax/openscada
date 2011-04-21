@@ -296,6 +296,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		while(rez.size() < (resp_sz+6))
 		{
 		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm, true);
+		    if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond"));
 		    rez.append(buf, resp_len);
 		}
 		pdu = rez.substr(7);
@@ -316,10 +317,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 		rez.assign(buf, resp_len);
 		//> Wait tail
-		while(true)
+		while(resp_len)
 		{
 		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-		    rez.append( buf, resp_len );
+		    rez.append(buf, resp_len);
 		}
 
 		if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
@@ -336,7 +337,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += (uint8_t)node;		//Unit identifier
 	    mbap += pdu;
 	    mbap += LRC(mbap);
-	    mbap = ":"+DataToASCII(mbap)+"\r\n";
+	    mbap = ":"+DataToASCII(mbap)+"\x0D\x0A";
 
 	    //> Send request
 	    for(int i_tr = 0; i_tr < reqTry; i_tr++)
@@ -344,13 +345,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 		rez.assign(buf, resp_len);
 		//> Wait tail
-		while(rez.size() < 3 || rez.substr(rez.size()-2,2) != "\r\n")
+		while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A"))
 		{
 		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
 		    rez.append(buf, resp_len);
 		}
 
-		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\r\n")
+		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
 		{ err = _("13:Error respond: Error format."); continue; }
 		string rezEnc = ASCIIToData(rez.substr(1,rez.size()-3));
 		if(LRC(rezEnc.substr(0,rezEnc.size()-1)) != (uint8_t)rezEnc[rezEnc.size()-1])
@@ -494,7 +495,7 @@ bool TProtIn::mess( const string &ireqst, string &answer, const string &sender )
 
 retry:
     //>> ASCII check
-    if(reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\r\n")
+    if(reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\x0D\x0A")
     {
 	prt = "ASCII";
 	string req = modPrt->ASCIIToData(reqst.substr(1,reqst.size()-3));
@@ -568,7 +569,7 @@ retry:
 	answer += (uint8_t)node;		//Unit identifier
 	answer += pdu;
 	answer += modPrt->LRC(answer);
-	answer = ":"+modPrt->DataToASCII(answer)+"\r\n";
+	answer = ":"+modPrt->DataToASCII(answer)+"\x0D\x0A";
     }
 
     if(owner().prtLen( ) && prt.size() && answer.size())

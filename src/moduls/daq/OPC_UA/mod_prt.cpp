@@ -312,7 +312,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		int off = 4;
 		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4 )
 		{
-		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true );
+		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true);
+		    if(!resp_len) throw TError(OpcUa_BadCommunicationError, "OPC UA Bin", _("Not full respond."));
 		    rez.append( buf, resp_len );
 		}
 
@@ -615,6 +616,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4 )
 		{
 		    resp_len = tro.messIO( NULL, 0, buf, sizeof(buf), 0, true );
+		    if(!resp_len) throw TError(OpcUa_BadCommunicationError, "OPC UA Bin", _("Not full respond."));
 		    rez.append( buf, resp_len );
 		}
 

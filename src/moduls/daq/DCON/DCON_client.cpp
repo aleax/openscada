@@ -241,7 +241,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	    rez.assign(buf,resp_len);
 
 	    //> Wait tail
-	    while(rez.size() < 2 || rez[rez.size()-1] != '\r')
+	    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r'))
 	    {
 		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
 		rez.append(buf, resp_len);

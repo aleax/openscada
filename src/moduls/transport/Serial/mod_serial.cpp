@@ -185,7 +185,7 @@ void TTr::Task( union sigval obj )
 
 void TTr::writeLine( int fd, const string &ln )
 {
-    string obuf = ln+"\r\n";
+    string obuf = ln+"\x0D\x0A";
     for(unsigned wOff = 0, kz = 0; wOff != obuf.size(); wOff += kz)
 	if((kz=write(fd,obuf.data()+wOff,obuf.size()-wOff)) <= 0)
 	    throw TError(mod->nodePath().c_str(),_("Write line error."));
