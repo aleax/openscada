@@ -95,7 +95,6 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
 
 void TSecurity::usrAdd( const string &name, const string &idb )
 {
-    if( chldPresent(m_usr,name) )	return;
     chldAdd(m_usr,new TUser(name,idb,&user_el));
     if(grpPresent("users")) grpAt("users").at().userAdd(name);
 }
@@ -108,7 +107,6 @@ void TSecurity::usrDel( const string &name, bool complete )
 
 void TSecurity::grpAdd( const string &name, const string &idb )
 {
-    if( chldPresent(m_grp,name) )	return;
     chldAdd(m_grp,new TGroup(name,idb,&grp_el));
 }
 

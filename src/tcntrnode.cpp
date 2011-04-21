@@ -393,35 +393,35 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name )
     return false;
 }
 
-void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos )
+void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
     ResAlloc res(hd_res,false);
-    if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
-    if(nodeMode() != Enable)	throw TError(nodePath().c_str(),_("Node is not enabled!"));
+    if(!chGrp || igr >= (int)chGrp->size())
+    { delete node; throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr); }
+    if(nodeMode() != Enable)
+    { delete node; throw TError(nodePath().c_str(),_("Node is not enabled!")); }
 
     TMap::iterator p;
-    if( TSYS::strNoSpace(node->nodeName()).empty() )
-    {
-	delete node;
-	throw TError(nodePath().c_str(),_("Add child id is empty!"));
-    }
+    if(TSYS::strNoSpace(node->nodeName()).empty())
+    { delete node; throw TError(nodePath().c_str(),_("Add child id is empty!")); }
 
-    if( (p = (*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end() )
+    if((p=(*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end())
     {
 	delete node;
-	if( p->second->nodeMode() == Disable )	p->second->nodeEn( TCntrNode::NodeRestore );
+	if(p->second->nodeMode() == Disable)	p->second->nodeEn(TCntrNode::NodeRestore);
+	if(!noExp) throw TError(nodePath().c_str(),_("Node '%s' is already present."),p->first.c_str());
 	return;
     }
 
     res.request(true);
     node->prev.node = this;
     node->prev.grp = igr;
-    if( (*chGrp)[igr].ordered )
+    if((*chGrp)[igr].ordered)
     {
 	pos = (pos < 0 || pos > (int)(*chGrp)[igr].elem.size()) ? (int)(*chGrp)[igr].elem.size() : pos;
 	node->mOi = pos;
-	for( p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); p++ )
-	    if( p->second->mOi >= pos ) p->second->mOi++;
+	for(p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); p++)
+	    if(p->second->mOi >= pos) p->second->mOi++;
     }
     (*chGrp)[igr].elem.insert(std::pair<string,TCntrNode*>(node->nodeName(),node));
     res.release();

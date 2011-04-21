@@ -98,8 +98,7 @@ void TTipDAQ::modStop( )
 
 void TTipDAQ::add( const string &name, const string &daq_db )
 {
-    if( chldPresent(m_cntr,name) ) return;
-    chldAdd(m_cntr,ContrAttach( name, daq_db ));
+    chldAdd(m_cntr, ContrAttach(name,daq_db));
 }
 
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )

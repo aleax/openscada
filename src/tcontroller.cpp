@@ -311,8 +311,7 @@ void TController::LoadParmCfg(  )
 
 void TController::add( const string &name, unsigned type )
 {
-    if( chldPresent(mPrm,name) ) return;
-    chldAdd(mPrm,ParamAttach( name, type ));
+    chldAdd(mPrm, ParamAttach(name, type));
 }
 
 TParamContr *TController::ParamAttach( const string &name, int type)

@@ -522,14 +522,12 @@ TTransportS &TTipTransport::owner( )	{ return (TTransportS&)TModule::owner(); }
 
 void TTipTransport::inAdd( const string &name, const string &idb )
 {
-    if( chldPresent(mIn,name) ) return;
-    chldAdd(mIn,In(name,idb));
+    chldAdd(mIn, In(name,idb));
 }
 
 void TTipTransport::outAdd( const string &name, const string &idb )
 {
-    if( chldPresent(mOut,name) ) return;
-    chldAdd(mOut,Out(name,idb));
+    chldAdd(mOut, Out(name,idb));
 }
 
 void TTipTransport::cntrCmdProc( XMLNode *opt )
@@ -887,7 +885,11 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time (ms)"),R_R___,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2;3","sel_list",_("Binary;Text(LF);Text(CR);Text(CR/LF)"));
-	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root",STR_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root",STR_ID,2,"tp","bool","help",
+		_("Sign for expect by timeout when a response is received.\n"
+		  "Many systems in response to various protocols (HTTP) are send the response data in several pieces.\n"
+		  "Without this flag will be received and displayed only the first piece.\n"
+		  "When this flag will be set all the pieces awaiting an answer, until the lack of data during the timeout the transport elapsed ."));
 	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__,"root",STR_ID);
 	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root",STR_ID,3,"tp","str","cols","90","rows","5");
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),RWRW__,"root",STR_ID,3,"tp","str","cols","90","rows","5");

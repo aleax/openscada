@@ -99,8 +99,7 @@ void TProt::itemListIn( vector<string> &ls, const string &curIt )
 
 void TProt::uPrtAdd( const string &iid, const string &db )
 {
-    if( chldPresent(mPrtU,iid) ) return;
-    chldAdd( mPrtU, new UserPrt(iid,db,&uPrtEl()) );
+    chldAdd(mPrtU, new UserPrt(iid,db,&uPrtEl()));
 }
 
 void TProt::load_( )

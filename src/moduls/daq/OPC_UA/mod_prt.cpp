@@ -81,7 +81,6 @@ TProt::~TProt()
 
 void TProt::epAdd( const string &iid, const string &db )
 {
-    if(chldPresent(mEndPnt,iid)) return;
     chldAdd(mEndPnt, new OPCEndPoint(iid,db,&endPntEl()));
 }
 

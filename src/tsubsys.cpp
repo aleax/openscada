@@ -54,7 +54,7 @@ void TSubSYS::modList( vector<string> &list )
 bool TSubSYS::modPresent( const string &name )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!")); 
-    return chldPresent(m_mod,name); 
+    return chldPresent(m_mod,name);
 }
 
 void TSubSYS::modAdd( TModule *modul )

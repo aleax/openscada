@@ -86,7 +86,6 @@ TProt::~TProt( )
 
 void TProt::nAdd(const string &iid, const string &db)
 {
-    if(chldPresent(mNode,iid)) return;
     chldAdd(mNode, new Node(iid,db,&nodeEl()));
 }
 

@@ -115,8 +115,7 @@ void TWEB::modInfo( vector<string> &list )
 
 void TWEB::uPgAdd( const string &iid, const string &db )
 {
-    if( chldPresent(mPgU,iid) ) return;
-    chldAdd( mPgU, new UserPg(iid,db,&uPgEl()) );
+    chldAdd(mPgU, new UserPg(iid,db,&uPgEl()));
 }
 
 void TWEB::load_( )

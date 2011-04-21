@@ -103,7 +103,6 @@ TProtocol::~TProtocol()
 
 void TProtocol::open( const string &name, const string &tr )
 {
-    if( chldPresent(m_pr,name) ) return;
     chldAdd(m_pr,in_open(name));
     at(name).at().setSrcTr(tr);
 }

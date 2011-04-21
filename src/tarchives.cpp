@@ -931,14 +931,12 @@ TArchiveS &TTipArchivator::owner()
 
 void TTipArchivator::messAdd(const string &name, const string &idb )
 {
-    if( chldPresent(mMess,name) ) return;
-    chldAdd(mMess,AMess(name,idb));
+    chldAdd(mMess, AMess(name,idb));
 }
 
 void TTipArchivator::valAdd( const string &iid, const string &idb )
 {
-    if( chldPresent(mVal,iid) ) return;
-    chldAdd(mVal,AVal(iid,idb));
+    chldAdd(mVal, AVal(iid,idb));
 }
 
 void TTipArchivator::cntrCmdProc( XMLNode *opt )

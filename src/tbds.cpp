@@ -696,7 +696,6 @@ void TBD::disable( )
 
 void TBD::open( const string &table, bool create )
 {
-    if(chldPresent(mTbl,table)) return;
     chldAdd(mTbl,openTable(table, create));
 }
 

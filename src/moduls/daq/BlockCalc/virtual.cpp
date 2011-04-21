@@ -414,8 +414,7 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
 
 void Contr::blkAdd( const string &iid )
 {
-    if( chldPresent(m_bl,iid) ) return;
-    chldAdd(m_bl,new Block( iid, this ));
+    chldAdd(m_bl, new Block(iid, this));
 }
 
 void Contr::blkProc( const string &id, bool val )

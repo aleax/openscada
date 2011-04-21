@@ -307,7 +307,6 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    case '"':	replStr = "&quot;";	break;
 	    case '&':	replStr = "&amp;";	break;
 	    case '\'':	replStr = "&#039;";	break;
-	    case 160:	replStr = "&nbsp;";	break;
 	    case '\n': if( !text ) replStr = "&#010;"; break;
 	}
 	i_sz++;

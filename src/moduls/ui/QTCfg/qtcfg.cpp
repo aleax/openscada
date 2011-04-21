@@ -113,7 +113,7 @@ ConfApp::ConfApp( string open_user ) :
     //CtrTree->header()->hide();
     //CtrTree->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 2, 0, CtrTree->sizePolicy().hasHeightForWidth() ) );
     CtrTree->setMinimumSize( QSize( 150, 0 ) );
-    CtrTree->setMaximumSize( QSize( 400, 32767 ) );
+    //CtrTree->setMaximumSize( QSize( 400, 32767 ) );
     CtrTree->setWhatsThis(_("The main navigation tree of the configurator."));
     //connect( CtrTree, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( selectItem(QTreeWidgetItem*) ) );
     connect( CtrTree, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );

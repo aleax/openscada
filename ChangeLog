@@ -1,5 +1,8 @@
 2011-04-21 Roman
-- FIX:SYS.XML: Symbol code "&#160;" encode to "&nbsp;" is added to XML-tree save function.
+- SYS, Archives, DB, DAQ, Protocols, Security, Transports, DAQ.BlockCalc, Protocol.ModBus, Protocol.OPC_UA, Protocol.UserProtocol, UI.WebUser:
+    Error double node creation message is added for create from configurator list element.
+- Transport.Out: Help to wait timeout property of free request form is added.
+- UI.QTCfg: Navigation tree widget's width limit is removed.
 - Transport: Types of the requests form of output transport is exanded for line end variants support: LF, CR, CR/LF.
 - !!!!:FIX:Transport, DAQ.AMRDevs, DAQ.DCON, DAQ.ICP_DAS, DAQ.ModBus, DAQ.OPC_UA, Protocol.HTTP, :
     Using function TTransportOut::messIO() for tail requests and zero result is fixed everywhere.
