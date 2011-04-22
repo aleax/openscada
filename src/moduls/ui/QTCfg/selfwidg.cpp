@@ -675,11 +675,12 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
 	    ed_lay->addWidget( mName, 4, 1 );
 	}
     }
+
+    ed_lay->addItem(new QSpacerItem(10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding),100,0,1,-1);
+
     dlg_lay->addItem(ed_lay);
 
     //- Qk and Cancel buttons -
-    dlg_lay->addItem( new QSpacerItem( 10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-
     QFrame *sep = new QFrame(this);
     sep->setFrameShape( QFrame::HLine );
     sep->setFrameShadow( QFrame::Raised );

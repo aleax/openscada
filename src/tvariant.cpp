@@ -613,7 +613,18 @@ XMLNodeObj *XMLNodeObj::childGet(unsigned id)
     return mChilds[id];
 }
 
-string XMLNodeObj::getStrXML(const string &oid)	{ return ""; }
+string XMLNodeObj::getStrXML(const string &oid)
+{
+    string nd("<XMLNodeObj:"+name());
+    for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
+	nd += " "+ip->first+"=\""+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"\"";
+    nd += ">"+TSYS::strEncode(text(),TSYS::Html)+"\n";
+    for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
+	nd += mChilds[i_ch]->getStrXML();
+    nd += "</XMLNodeObj:"+name()+">\n";
+
+    return nd;
+}
 
 TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 {
@@ -726,6 +737,15 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	}
 	return s_buf;
     }
+    // XMLNodeObj getElementBy( string val, string attr = "id" ) - get element from the tree by attribute <attr> value <val>.
+    //  val - attribute value for find;
+    //  attr - attribute name for find it value.
+    if( id == "getElementBy" && prms.size())
+    {
+	XMLNodeObj *rez = getElementBy(((prms.size() >= 2) ? prms[1].getS() : "id"), prms[0].getS());
+	if(!rez) return TVariant();
+	return rez;
+    }
 
     throw TError("XMLNodeObj",_("Function '%s' error or not enough parameters."),id.c_str());
 }
@@ -758,6 +778,17 @@ void XMLNodeObj::fromXMLNode(XMLNode &nd)
 	childAdd(xn);
 	xn->fromXMLNode(*nd.childGet(i_ch));
     }
+}
+
+XMLNodeObj *XMLNodeObj::getElementBy( const string &attr, const string &val )
+{
+    if(propGet(attr).getS() == val)	return this;
+
+    XMLNodeObj *rez = NULL;
+    for(int i_ch = 0; !rez && i_ch < childSize(); i_ch++)
+	rez = childGet(i_ch)->getElementBy(attr,val);
+
+    return rez;
 }
 
 //***********************************************************

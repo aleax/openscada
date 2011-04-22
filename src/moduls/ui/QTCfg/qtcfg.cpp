@@ -840,6 +840,10 @@ void ConfApp::stHistCall( )
 {
     InputDlg dlg(this,QIcon(),QString(_("Status bar messages list:")),_("Status messages"),0,0,QDialogButtonBox::Ok);
     QTextBrowser *tb = new QTextBrowser(&dlg);
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sizePolicy.setVerticalStretch(10);
+    tb->setSizePolicy(sizePolicy);
+    tb->setMinimumSize(600,300);
     dlg.ed_lay->addWidget(tb, 0, 0);
     string textv;
     for(int i_e = stMess.size()-1; i_e >=0; i_e--)

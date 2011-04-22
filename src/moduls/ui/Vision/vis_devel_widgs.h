@@ -532,6 +532,7 @@ class DevelWdgView: public WdgView
 	void editEnter( );
 	void editExit( );
 	void incDecVisScale( );
+	void nextUnderlWdgWait( );
 
     protected:
 	//Protected methods

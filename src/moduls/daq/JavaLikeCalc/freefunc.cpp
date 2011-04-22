@@ -1149,6 +1149,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
     {
 	switch(vl.type())
 	{
+	    case TVariant::Null:
+		if(prop == "isEVal")	return true;
+		throw TError(nodePath().c_str(),_("Null type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
 	    case TVariant::Boolean:
 		// bool isEVal( ) - check value to "EVAL"
@@ -2567,6 +2570,66 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function '%s' is stoped."),*cprg,*cprg,id().c_str());
 	}
     }
+}
+
+TVariant Func::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    if(iid == "call")
+    {
+        TValFunc vfnc("JavaLikeObjFuncCalc",this);
+
+        //>>> Get return position
+        int r_pos, i_p, p_p;
+        for(r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++)
+            if(vfnc.ioFlg(r_pos)&IO::Return) break;
+        //>>> Process parameters
+        for(i_p = p_p = 0; true; i_p++)
+        {
+            p_p = (i_p>=r_pos) ? i_p+1 : i_p;
+            if(p_p >= vfnc.func()->ioSize()) break;
+            //>>>> Set default value
+            if(i_p >= (int)prms.size()) { vfnc.setS(p_p,vfnc.func()->io(p_p)->def()); continue; }
+            switch(vfnc.ioType(p_p))
+            {
+		case IO::String:        vfnc.setS(p_p,prms[i_p].getS());        break;
+                case IO::Integer:       vfnc.setI(p_p,prms[i_p].getI());        break;
+                case IO::Real:          vfnc.setR(p_p,prms[i_p].getR());        break;
+                case IO::Boolean:       vfnc.setB(p_p,prms[i_p].getB());        break;
+                case IO::Object:        vfnc.setO(p_p,prms[i_p].getO());        break;
+            }
+        }
+        //>>> Make calc
+        vfnc.calc(user);
+        //>>> Process outputs
+        for(i_p = 0; i_p < (int)prms.size(); i_p++)
+        {
+            p_p = (i_p>=r_pos) ? i_p+1 : i_p;
+            if(p_p >= vfnc.func()->ioSize()) break;
+            if(!(vfnc.ioFlg(p_p)&IO::Output))   continue;
+            switch(vfnc.ioType(p_p))
+            {
+                case IO::String:    prms[i_p].setS(vfnc.getS(p_p));     break;
+                case IO::Integer:   prms[i_p].setI(vfnc.getI(p_p));     break;
+                case IO::Real:      prms[i_p].setR(vfnc.getR(p_p));     break;
+                case IO::Boolean:   prms[i_p].setB(vfnc.getB(p_p));     break;
+                case IO::Object:    prms[i_p].setO(vfnc.getO(p_p));     break;
+            }
+            prms[i_p].setModify();
+        }
+        //>>> Set return
+        if(r_pos < vfnc.func()->ioSize())
+            switch(vfnc.ioType(r_pos))
+            {
+                case IO::String:        return vfnc.getS(r_pos);
+                case IO::Integer:       return vfnc.getI(r_pos);
+                case IO::Real:          return vfnc.getR(r_pos);
+                case IO::Boolean:       return vfnc.getB(r_pos);
+                case IO::Object:        return vfnc.getO(r_pos);
+            }
+        return TVariant();
+    }
+
+    throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }
 
 void Func::cntrCmdProc( XMLNode *opt )

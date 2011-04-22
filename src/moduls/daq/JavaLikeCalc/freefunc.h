@@ -347,6 +347,8 @@ class Func : public TConfig, public TFunction
 
 	Lib &owner( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     protected:
 	//Data
 	struct ExecData

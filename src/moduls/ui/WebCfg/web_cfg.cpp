@@ -411,7 +411,7 @@ void TWEB::getCmd( SSess &ses, XMLNode &node, string a_path )
     }
     if(f_cfg > 0) ses.page = ses.page+")<br/>\n";
 
-    ses.page = ses.page+"</form>\n"; 
+    ses.page = ses.page+"</form>\n";
 }
 
 bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )

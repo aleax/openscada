@@ -228,6 +228,8 @@ class XMLNodeObj : public TVarObj
 	void toXMLNode( XMLNode &nd );
 	void fromXMLNode( XMLNode &nd );
 
+	XMLNodeObj *getElementBy( const string &attr, const string &val );
+
     private:
 	//Attributes
 	string			mName, mText;

@@ -2872,7 +2872,7 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::MouseButtonRelease:
 	    {
-		if( edit() ) break;
+		if(edit() || editWdg) break;
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
@@ -2891,21 +2891,7 @@ bool DevelWdgView::event( QEvent *event )
 
 		//> Check for select next underly widget
 		if( fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove )
-		{
-		    DevelWdgView *fsel = NULL, *nsel = NULL;
-		    int i_c;
-		    for( i_c = children().size()-1; i_c >= 0; i_c-- )
-		    {
-			DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
-			if( !curw ) continue;
-			if( !fsel && curw->select() ) fsel = curw;
-			else if( fsel && curw->geometryF().contains(curp) ) { nsel = curw; break; }
-		    }
-		    if( fsel ) fsel->setSelect(false,PrcChilds|OnlyFlag);
-		    if( nsel ) nsel->setSelect(true,PrcChilds|OnlyFlag);
-		    else setCursor(Qt::ArrowCursor);
-		    setSelect(true,PrcChilds);
-		}
+		    QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(nextUnderlWdgWait()));
 
 		if( fSelChange )
 		{
@@ -3089,6 +3075,27 @@ bool DevelWdgView::event( QEvent *event )
 
     if( WdgView::event(event) )	return true;
     return QWidget::event(event);
+}
+
+void DevelWdgView::nextUnderlWdgWait( )
+{
+    if(edit() || editWdg) return;
+
+    QPoint curp = mapFromGlobal(cursor().pos());
+
+    DevelWdgView *fsel = NULL, *nsel = NULL;
+    int i_c;
+    for(i_c = children().size()-1; i_c >= 0; i_c--)
+    {
+	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+	if(!curw) continue;
+	if(!fsel && curw->select()) fsel = curw;
+	else if(fsel && curw->geometryF().contains(curp)) { nsel = curw; break; }
+    }
+    if(fsel) fsel->setSelect(false, PrcChilds|OnlyFlag);
+    if(nsel) nsel->setSelect(true, PrcChilds|OnlyFlag);
+    else setCursor(Qt::ArrowCursor);
+    setSelect(true, PrcChilds);
 }
 
 //************************************************

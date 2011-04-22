@@ -1,3 +1,12 @@
+2011-04-22 Roman
+- SYS: Function XMLNodeObj::getStrXML() is implemented for convert to string.
+- !!:SYS: To user API of object XMLNodeObj is added functions getElementBy() for search included nodes by attribute value.
+- !!:DAQ.JavaLikeCalc: isEVal() function for "null" type is added.
+    To user object API of a library function is added call() for dynamic call.
+- UI.QTCfg: Unified dialog "InputDlg" is some improved for resize.
+- FIX:UI.Vision: Lost selection in attribute inspector at the widget enter to edit by double mouse click.
+
+
 2011-04-21 Roman
 - SYS, Archives, DB, DAQ, Protocols, Security, Transports, DAQ.BlockCalc, Protocol.ModBus, Protocol.OPC_UA, Protocol.UserProtocol, UI.WebUser:
     Error double node creation message is added for create from configurator list element.
