@@ -1,3 +1,7 @@
+2011-04-24 Roman
+- !!:FIX:DAQ.JavaLikeCalc: The object RegExp function replace() is fixed from crash.
+
+
 2011-04-22 Roman
 - SYS: Function XMLNodeObj::getStrXML() is implemented for convert to string.
 - !!:SYS: To user API of object XMLNodeObj is added functions getElementBy() for search included nodes by attribute value.
