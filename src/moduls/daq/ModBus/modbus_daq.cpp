@@ -912,8 +912,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
     {
 	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
-	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*):")->setAttr("color","blue");
-	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[ibf]\\d*):")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[ibf]\\d*)")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }
     else TParamContr::cntrCmdProc(opt);

@@ -347,73 +347,93 @@ void SyntxHighl::setSnthHgl(XMLNode nd)
     rehighlight();
 }
 
-void SyntxHighl::rule(XMLNode *rl, const QString &text, QTextCharFormat defForm, int off)
+void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 {
-    if(text.isEmpty() || rl->name() != "rule") return;
+    XMLNode *rl;
+    vector<int> rul_pos(irl->childSize(),-1);
+    int minPos = -1, minRule, endIndex, startBlk, sizeBlk;
     QTextCharFormat kForm;
-    kForm.setForeground(QColor(rl->attr("color").c_str()));
-    kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
-    kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
-    QRegExp expr(rl->attr("expr").c_str());
+    QRegExp expr;
 
-    for(int index = 0; true; index+=expr.matchedLength())
+    if(lev > 3) return;
+
+    //> Init previous block continue
+    int curBlk = (currentBlockState()>>(lev*8))&0xFF;
+
+    //> Stream process by rules
+    for(int i_t = 0; i_t < text.length(); )
     {
-	if((index=expr.indexIn(text,index)) < 0 || expr.matchedLength() <= 0) break;
-	if(format(index+off)!=defForm) continue;
-	setFormat(index+off, expr.matchedLength(), kForm);
-	for(unsigned i_ch = 0; i_ch < rl->childSize(); i_ch++)
-	    rule(rl->childGet(i_ch),text.mid(index,expr.matchedLength()),kForm,index+off);
+	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
+	else minRule = -1;
+
+	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++)
+	{
+	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
+	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos )	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
+	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }
+
+	    //> Call rule
+	    rl = irl->childGet(i_ch);
+	    if(rl->name() == "rule")	expr.setPattern(rl->attr("expr").c_str());
+	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
+	    else continue;
+	    rul_pos[i_ch] = expr.indexIn(text,i_t);
+	    if(expr.matchedLength() <= 0) continue;
+	    if(rul_pos[i_ch] < 0) rul_pos[i_ch] = text.length();
+	    if(minPos < i_t || rul_pos[i_ch] < minPos) { minPos = rul_pos[i_ch]; minRule = i_ch; }
+	}
+	if(minRule < 0)	break;
+
+	//> Process minimal rule
+	rl = irl->childGet(minRule);
+        kForm.setForeground(QColor(rl->attr("color").c_str()));
+        kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
+        kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
+
+	if(rl->name() == "rule")
+	{
+	    expr.setPattern(rl->attr("expr").c_str());
+	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
+	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
+            //> Call include rules
+    	    rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
+	    i_t = rul_pos[minRule]+expr.matchedLength();
+	}
+	else if(rl->name() == "blk")
+	{
+	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
+	    else
+	    {
+		expr.setPattern(rl->attr("beg").c_str());
+		if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
+		startBlk = rul_pos[minRule]+expr.matchedLength();
+	    }
+	    QRegExp eExpr(rl->attr("end").c_str());
+	    endIndex = eExpr.indexIn(text, rul_pos[minRule]);
+            if(endIndex == -1 || eExpr.matchedLength() <= 0)
+            {
+        	setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
+		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
+                sizeBlk = text.length()-startBlk;
+                i_t = text.length();
+            }
+            else
+            {
+		setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
+                setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
+                sizeBlk = endIndex-startBlk;
+                i_t = endIndex + eExpr.matchedLength();
+            }
+            //> Call include rules
+    	    rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
+	}
     }
 }
 
 void SyntxHighl::highlightBlock(const QString &text)
 {
-    QTextCharFormat kForm, defkForm;
-    if(text.length()) defkForm = format(0);
-    setCurrentBlockState(previousBlockState());
-
-    for(int i_ch = 0; i_ch < (int)rules.childSize(); i_ch++)
-    {
-	XMLNode *rl = rules.childGet(i_ch);
-	kForm.setForeground(QColor(rl->attr("color").c_str()));
-	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
-	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
-
-	if(rl->name() == "rule") rule(rl,text,defkForm);
-	else if(rl->name() == "blk" && (currentBlockState() == -1 || currentBlockState() == i_ch))
-	{
-	    QRegExp bExpr(rl->attr("beg").c_str());
-	    QRegExp eExpr(rl->attr("end").c_str());
-	    for(int stIndex = 0, endIndex = 0, startBlk = 0, sizeBlk = 0; true; )
-	    {
-		if(currentBlockState() == -1)
-		{
-		    if((stIndex=bExpr.indexIn(text,stIndex)) == -1 || bExpr.matchedLength() <= 0) break;
-		    if(format(stIndex)!=defkForm) { stIndex += bExpr.matchedLength(); continue; }
-		    setCurrentBlockState(i_ch);
-		    startBlk = stIndex+bExpr.matchedLength();
-		}
-		endIndex = eExpr.indexIn(text, stIndex);
-		if(endIndex == -1 || eExpr.matchedLength() <= 0)
-		{
-		    setFormat(stIndex, (text.length()-stIndex), kForm);
-		    sizeBlk = text.length()-startBlk;
-		}
-		else
-		{
-		    setCurrentBlockState(-1);
-		    setFormat(stIndex, (endIndex-stIndex+eExpr.matchedLength()), kForm);
-		    sizeBlk = endIndex-startBlk;
-		}
-		//> Call include rules
-		for(unsigned i_ch1 = 0; i_ch1 < rl->childSize(); i_ch1++)
-		    rule(rl->childGet(i_ch1),text.mid(startBlk,sizeBlk),kForm,startBlk);
-
-		if(endIndex == -1 || eExpr.matchedLength() <= 0) break;
-		stIndex = endIndex+eExpr.matchedLength();
-	    }
-	}
-    }
+    setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
+    rule(&rules,text);
 }
 
 //*************************************************
