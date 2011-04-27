@@ -38,6 +38,7 @@
 #include <QSpinBox>
 #include <QFont>
 #include <QCheckBox>
+#include <QPushButton>
 
 #include <tsys.h>
 
@@ -52,11 +53,11 @@
 using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
-    WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), status_hold(true),
+        WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
     flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
-    flag_geom (false), flag_rect_items (false), count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1),
+    flag_geom (false), flag_rect_items (false), flag_def_stat(false), count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1),
     count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
@@ -1555,10 +1556,11 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 {
     if( qobject_cast<DevelWdgView*>(w) )
     {
-        bool actDyn = false;
+        int actDyn = 0;
         ElFigDt *elFD = (ElFigDt*)w->shpData;
         QImage ico_propDlg;
         if(!ico_propDlg.load(TUIS::icoPath("edit").c_str())) ico_propDlg.load(":/images/edit.png");
+        dyn_num = 0;
 
         PntMap *pnts = &elFD->shapePnts;
         WidthMap *widths = &elFD->shapeWidths;
@@ -1580,81 +1582,129 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
         switch( rect_num )
         {
             case 0:
-                if( shapeItems[index].n1 <= -10 )
-                    actDyn = true;
+                if( shapeItems[index].n1 <= -10 ) actDyn = 1;
+                else if( shapeItems[index].n1 > 0 ) actDyn = 2;
                 break;
             case 1:
-                if( shapeItems[index].n2 <= -10 )
-                    actDyn = true;
+                if( shapeItems[index].n2 <= -10 ) actDyn = 1;
+                else if( shapeItems[index].n2 > 0 ) actDyn = 2;
                 break;
             case 2:
-                if( shapeItems[index].n3 <= -10 )
-                    actDyn = true;
+                if( shapeItems[index].n3 <= -10 ) actDyn = 1;
+                else if( shapeItems[index].n3 > 0 ) actDyn = 2;
                 break;
             case 3:
-                if( shapeItems[index].n4 <= -10 )
-                    actDyn = true;
+                if( shapeItems[index].n4 <= -10 ) actDyn = 1;
+                else if( shapeItems[index].n4 > 0 ) actDyn = 2;
                 break;
             case 4:
-                if( shapeItems[index].n5 <= -10 )
-                    actDyn = true;
+                if( shapeItems[index].n5 <= -10 ) actDyn = 1;
+                else if( shapeItems[index].n5 > 0 ) actDyn = 2; 
                 break;
         }
-        if( actDyn )
+        if( actDyn == 1 )
         {
             QAction *actDynamicPoint = new QAction( _("Make this point dynamic"), w->mainWin() );
-            actDynamicPoint->setObjectName("point");
+            actDynamicPoint->setObjectName("d_point");
             actDynamicPoint->setStatusTip(_("Press to make this point dynamic"));
             connect( actDynamicPoint, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
             menu.addAction(actDynamicPoint);
             menu.addSeparator();
         }
-        else if( index != -1 && !actDyn && rect_num == -1 )
+        else if( actDyn == 2 )
         {
-            if( shapeItems[index].width < 0 )
+            QAction *actDynamicPoint = new QAction( _("Make this point static"), w->mainWin() );
+            actDynamicPoint->setObjectName("s_point");
+            actDynamicPoint->setStatusTip(_("Press to make this point static"));
+            connect( actDynamicPoint, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+            menu.addAction(actDynamicPoint);
+            menu.addSeparator();
+        }
+        else if( index != -1 && actDyn == 0 && rect_num == -1 )
+        {
+            if( shapeItems[index].width <= -5 )
             {
                 QAction *actDynamicWidth = new QAction( _("Make line width dynamic"), w->mainWin() );
-                actDynamicWidth->setObjectName("width");
+                actDynamicWidth->setObjectName("d_width");
                 actDynamicWidth->setStatusTip(_("Press to make line width dynamic"));
                 connect( actDynamicWidth, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicWidth);
             }
-            if( shapeItems[index].lineColor < 0 )
+            else if( shapeItems[index].width > 0 )
+            {
+                QAction *actDynamicWidth = new QAction( _("Make line width static"), w->mainWin() );
+                actDynamicWidth->setObjectName("s_width");
+                actDynamicWidth->setStatusTip(_("Press to make line width static"));
+                connect( actDynamicWidth, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                menu.addAction(actDynamicWidth);
+            }
+            if( shapeItems[index].lineColor <= -5 )
             {
                 QAction *actDynamicColor = new QAction( _("Make line color dynamic"), w->mainWin() );
-                actDynamicColor->setObjectName("color");
+                actDynamicColor->setObjectName("d_color");
                 actDynamicColor->setStatusTip(_("Press to make line color dynamic"));
+                connect( actDynamicColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                menu.addAction(actDynamicColor);
+            }
+            else if( shapeItems[index].lineColor > 0 )
+            {
+                QAction *actDynamicColor = new QAction( _("Make line color static"), w->mainWin() );
+                actDynamicColor->setObjectName("s_color");
+                actDynamicColor->setStatusTip(_("Press to make line color static"));
                 connect( actDynamicColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicColor);
             }
             if( (*widths)[shapeItems[index].border_width] > 0.01 )
             {
-                if( shapeItems[index].border_width < 0 )
+                if( shapeItems[index].border_width <= -6 )
                 {
                     QAction *actDynamicBorderWidth = new QAction( _("Make border width dynamic"), w->mainWin() );
-                    actDynamicBorderWidth->setObjectName("border_width");
+                    actDynamicBorderWidth->setObjectName("d_border_width");
                     actDynamicBorderWidth->setStatusTip(_("Press to make border width dynamic"));
                     connect( actDynamicBorderWidth, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                     menu.addAction(actDynamicBorderWidth);
                 }
-                if( shapeItems[index].borderColor < 0 )
+                else if( shapeItems[index].border_width > 0 )
+                {
+                    QAction *actDynamicBorderWidth = new QAction( _("Make border width static"), w->mainWin() );
+                    actDynamicBorderWidth->setObjectName("s_border_width");
+                    actDynamicBorderWidth->setStatusTip(_("Press to make border width static"));
+                    connect( actDynamicBorderWidth, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                    menu.addAction(actDynamicBorderWidth);
+                }
+                if( shapeItems[index].borderColor <= -6 )
                 {
                     QAction *actDynamicBorderColor = new QAction( _("Make border color dynamic"), w->mainWin() );
-                    actDynamicBorderColor->setObjectName("border_color");
+                    actDynamicBorderColor->setObjectName("d_border_color");
                     actDynamicBorderColor->setStatusTip(_("Press to make border color dynamic"));
                     connect( actDynamicBorderColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                     menu.addAction(actDynamicBorderColor);
                 }
+                else if( shapeItems[index].borderColor > 0 )
+                {
+                    QAction *actDynamicBorderColor = new QAction( _("Make border color static"), w->mainWin() );
+                    actDynamicBorderColor->setObjectName("s_border_color");
+                    actDynamicBorderColor->setStatusTip(_("Press to make border color static"));
+                    connect( actDynamicBorderColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                    menu.addAction(actDynamicBorderColor);
+                }
             }
-            if( shapeItems[index].style < 0 )
+            if( shapeItems[index].style <= -5 )
             {
                 QAction *actDynamicStyle = new QAction( _("Make line style dynamic"), w->mainWin() );
-                actDynamicStyle->setObjectName("style");
+                actDynamicStyle->setObjectName("d_style");
                 actDynamicStyle->setStatusTip(_("Press to make line style dynamic"));
                 connect( actDynamicStyle, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                 menu.addAction(actDynamicStyle);
             }
-
+            else if( shapeItems[index].style > 0 )
+            {
+                QAction *actDynamicStyle = new QAction( _("Make line style static"), w->mainWin() );
+                actDynamicStyle->setObjectName("s_style");
+                actDynamicStyle->setStatusTip(_("Press to make line style static"));
+                connect( actDynamicStyle, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                menu.addAction(actDynamicStyle);
+            }
             QAction *actShowProperties = new QAction( QPixmap::fromImage(ico_propDlg), _("Show the figure's properties"), w->mainWin() );
             switch( shapeItems[index].type )
             {
@@ -1713,22 +1763,39 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     connect( actDeleteFill, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                     menu.addAction(actDeleteFill);
 
-                    if( inundationItems[i].brush < 0 )
+                    if( inundationItems[i].brush <= -7 )
                     {
                         QAction *actDynamicFillColor = new QAction( _("Make fill color dynamic"), w->mainWin() );
-                        actDynamicFillColor->setObjectName("fill_color");
+                        actDynamicFillColor->setObjectName("d_fill_color");
                         actDynamicFillColor->setStatusTip(_("Press to make fill color dynamic"));
                         connect( actDynamicFillColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                         menu.addAction(actDynamicFillColor);
                     }
-                    if( inundationItems[i].brush_img < 0 )
+                    else if( inundationItems[i].brush > 0 )
+                    {
+                        QAction *actDynamicFillColor = new QAction( _("Make fill color static"), w->mainWin() );
+                        actDynamicFillColor->setObjectName("s_fill_color");
+                        actDynamicFillColor->setStatusTip(_("Press to make fill color static"));
+                        connect( actDynamicFillColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                        menu.addAction(actDynamicFillColor);
+                    }
+                    if( inundationItems[i].brush_img <= -5 )
                     {
                         QAction *actDynamicFillImage = new QAction( _("Make fill image dynamic"), w->mainWin() );
-                        actDynamicFillImage->setObjectName("fill_image");
+                        actDynamicFillImage->setObjectName("d_fill_image");
                         actDynamicFillImage->setStatusTip(_("Press to make fill image dynamic"));
                         connect( actDynamicFillImage, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                         menu.addAction(actDynamicFillImage);
                     }
+                    if( inundationItems[i].brush_img > 0 )
+                    {
+                        QAction *actDynamicFillImage = new QAction( _("Make fill image static"), w->mainWin() );
+                        actDynamicFillImage->setObjectName("s_fill_image");
+                        actDynamicFillImage->setStatusTip(_("Press to make fill image static"));
+                        connect( actDynamicFillImage, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
+                        menu.addAction(actDynamicFillImage);
+                    }
+
                     fill_index = i;
                     QAction *actShowFillProperties = new QAction( QPixmap::fromImage(ico_propDlg), _("Show the fill's properties"), w->mainWin() );
                     actShowFillProperties->setObjectName("Fill");
@@ -2242,7 +2309,7 @@ void ShapeElFigure::toolAct( QAction *act )
         w->repaint();
     }
 }
-//- Making a static  value the dynamic one -
+//- Making a static value the dynamic one and vise versa -
 void ElFigDt::dynamic( )
 {
     ShapeElFigure *elF = (ShapeElFigure*) mod->getWdgShape("ElFigure");
@@ -2258,20 +2325,20 @@ void ElFigDt::dynamic( )
     Qt::PenStyle temp_s;
     string temp_fi;
     int tmp, real;
-    int i,k;
-    int num = 0;
-    if(sender()->objectName() == "point") num = 0;
-    else if(sender()->objectName() == "width") num = 1;
-    else if(sender()->objectName() == "color") num = 2;
-    else if(sender()->objectName() == "border_width") num = 3;
-    else if(sender()->objectName() == "border_color") num = 4;
-    else if(sender()->objectName() == "style") num = 5;
+    int num = elF->dyn_num;
+    if(sender()->objectName() == "d_point" || sender()->objectName() == "s_point") num = 0;
+    else if(sender()->objectName() == "d_width" || sender()->objectName() == "s_width") num = 1;
+    else if(sender()->objectName() == "d_color" || sender()->objectName() == "s_color") num = 2;
+    else if(sender()->objectName() == "d_border_width" || sender()->objectName() == "s_border_width") num = 3;
+    else if(sender()->objectName() == "d_border_color" || sender()->objectName() == "s_border_color") num = 4;
+    else if(sender()->objectName() == "d_style" || sender()->objectName() == "s_style") num = 5;
     else if(sender()->objectName() == "delete_fill") num = 6;
-    else if(sender()->objectName() == "fill_color") num = 7;
-    else if(sender()->objectName() == "fill_image") num = 8;
+    else if(sender()->objectName() == "d_fill_color" || sender()->objectName() == "s_fill_color") num = 7;
+    else if(sender()->objectName() == "d_fill_image" || sender()->objectName() == "s_fill_image") num = 8;
     else if(sender()->objectName() == "static") num = 9;
-    tmp = -5;
-    real = -5;
+
+    tmp = -4;
+    real = -4;
     switch( num )
     {
         case 0:
@@ -2279,100 +2346,130 @@ void ElFigDt::dynamic( )
                 switch( elF->rect_dyn )
                 {
                     case 0:
+                        Temp = (*pnts)[shapeItems[elF->index].n1];
+                        tmp = shapeItems[elF->index].n1;
                         if( shapeItems[elF->index].n1 <= -10 )
-                        {
-                            Temp = (*pnts)[shapeItems[elF->index].n1];
-                            tmp = shapeItems[elF->index].n1;
-                            real = elF->appendPoint( Temp, shapeItems, pnts, 0 );
-                        }
+                            real = elF->appendPoint( Temp, shapeItems, pnts, false );
+                        else if( shapeItems[elF->index].n1 > 0 )
+                            real = elF->appendPoint( Temp, shapeItems, pnts, true );
                         break;
                     case 1:
+                        Temp = (*pnts)[shapeItems[elF->index].n2];
+                        tmp = shapeItems[elF->index].n2;
                         if( shapeItems[elF->index].n2 <= -10 )
-                        {
-                            Temp = (*pnts)[shapeItems[elF->index].n2];
-                            tmp = shapeItems[elF->index].n2;
-                            real = elF->appendPoint( Temp, shapeItems, pnts, 0 );
-                        }
+                            real = elF->appendPoint( Temp, shapeItems, pnts, false );
+                        else if( shapeItems[elF->index].n2 > 0 )
+                            real = elF->appendPoint( Temp, shapeItems, pnts, true );
                         break;
                     case 2:
+                        Temp = (*pnts)[shapeItems[elF->index].n3];
+                        tmp = shapeItems[elF->index].n3;
                         if( shapeItems[elF->index].n3 <= -10 )
-                        {
-                            Temp = (*pnts)[shapeItems[elF->index].n3];
-                            tmp = shapeItems[elF->index].n3;
-                            real = elF->appendPoint( Temp, shapeItems, pnts, 0 );
-                        }
+                            real = elF->appendPoint( Temp, shapeItems, pnts, false );
+                        if( shapeItems[elF->index].n3 > 0 )
+                            real = elF->appendPoint( Temp, shapeItems, pnts, true );
                         break;
                     case 3:
+                        Temp = (*pnts)[shapeItems[elF->index].n4];
+                        tmp = shapeItems[elF->index].n4;
                         if( shapeItems[elF->index].n4 <= -10 )
-                        {
-                            Temp = (*pnts)[shapeItems[elF->index].n4];
-                            tmp = shapeItems[elF->index].n4;
-                            real = elF->appendPoint( Temp, shapeItems, pnts, 0 );
-                        }
+                            real = elF->appendPoint( Temp, shapeItems, pnts, false );
+                        if( shapeItems[elF->index].n4 > 0 )
+                            real = elF->appendPoint( Temp, shapeItems, pnts, true );
                         break;
                     case 4:
+                        Temp = (*pnts)[shapeItems[elF->index].n5];
+                        tmp = shapeItems[elF->index].n5;
                         if( shapeItems[elF->index].n5 <= -10 )
-                        {
-                            Temp = (*pnts)[shapeItems[elF->index].n5];
-                            tmp = shapeItems[elF->index].n5;
-                            real = elF->appendPoint( Temp, shapeItems, pnts, 0 );
-                        }
+                            real = elF->appendPoint( Temp, shapeItems, pnts, false );
+                        if( shapeItems[elF->index].n5 > 0 )
+                            real = elF->appendPoint( Temp, shapeItems, pnts, true );
                         break;
                 }
             break;
         case 1:
             if( elF->index != -1 )
             {
-                temp_w = (*widths)[shapeItems[elF->index].width];
-                tmp = shapeItems[elF->index].width;
-                i = 1;
-                while( (*widths).find(i) != (*widths).end() ) i++;
-                (*widths).insert( std::pair<int, float> (i, temp_w) );
-                real = i;
+                if( (shapeItems[elF->index].width == -5 || shapeItems[elF->index].width <= -10) && !elF->flag_def_stat )
+                {
+                    temp_w = (*widths)[shapeItems[elF->index].width];
+                    tmp = shapeItems[elF->index].width;
+                    real = elF->appendWidth( temp_w, widths, false );
+                }
+                else if( shapeItems[elF->index].width > 0 || (shapeItems[elF->index].width == -5 && elF->flag_def_stat) )
+                {
+                    temp_w = (*widths)[shapeItems[elF->index].width];
+                    tmp = shapeItems[elF->index].width;
+                    real = elF->appendWidth( temp_w, widths, true );
+                }
             }
             break;
         case 2:
             if( elF->index != -1 )
             {
-                temp_c = (*colors)[shapeItems[elF->index].lineColor];
-                tmp = shapeItems[elF->index].lineColor;
-                i = 1;
-                while( (*colors).find(i) != (*colors).end() ) i++;
-                (*colors).insert( std::pair<int, QColor> (i, temp_c) );
-                real = i;
+                if( (shapeItems[elF->index].lineColor == -5 || shapeItems[elF->index].lineColor <= -10) && !elF->flag_def_stat )
+                {
+                    temp_c = (*colors)[shapeItems[elF->index].lineColor];
+                    tmp = shapeItems[elF->index].lineColor;
+                    real = elF->appendColor( temp_c, colors, false );
+                }
+                else if( shapeItems[elF->index].lineColor > 0 || (shapeItems[elF->index].lineColor == -5 && elF->flag_def_stat) )
+                {
+                    temp_c = (*colors)[shapeItems[elF->index].lineColor];
+                    tmp = shapeItems[elF->index].lineColor;
+                    real = elF->appendColor( temp_c, colors, true );
+                }
             }
             break;
         case 3:
             if( elF->index != -1 )
             {
-                temp_bw = (*widths)[shapeItems[elF->index].border_width];
-                tmp = shapeItems[elF->index].border_width;
-                i = 1;
-                while( (*widths).find(i) != (*widths).end() ) i++;
-                (*widths).insert( std::pair<int, float> (i, temp_bw) );
-                real = i;
+                if( (shapeItems[elF->index].border_width == -6 || shapeItems[elF->index].border_width <= -10) && !elF->flag_def_stat )
+                {
+                    temp_bw = (*widths)[shapeItems[elF->index].border_width];
+                    tmp = shapeItems[elF->index].border_width;
+                    real = elF->appendWidth( temp_bw, widths, false );
+                }
+                else if( shapeItems[elF->index].border_width > 0 || (shapeItems[elF->index].border_width == -6 && elF->flag_def_stat) )
+                {
+                    temp_bw = (*widths)[shapeItems[elF->index].border_width];
+                    tmp = shapeItems[elF->index].border_width;
+                    real = elF->appendWidth( temp_bw, widths, true );
+                }
             }
             break;
         case 4:
             if( elF->index != -1 )
             {
-                temp_bc = (*colors)[shapeItems[elF->index].borderColor];
-                tmp = shapeItems[elF->index].borderColor;
-                i = 1;
-                while( (*colors).find(i) != (*colors).end() ) i++;
-                (*colors).insert( std::pair<int, QColor> (i, temp_bc) );
-                real = i;
+                if( (shapeItems[elF->index].borderColor == -6 || shapeItems[elF->index].borderColor <= -10) && !elF->flag_def_stat )
+                {
+                    temp_bc = (*colors)[shapeItems[elF->index].borderColor];
+                    tmp = shapeItems[elF->index].borderColor;
+                    real = elF->appendColor( temp_bc, colors, false );
+                }
+                else if( shapeItems[elF->index].borderColor > 0 || (shapeItems[elF->index].borderColor == -6 && elF->flag_def_stat) )
+                {
+                    temp_bc = (*colors)[shapeItems[elF->index].borderColor];
+                    tmp = shapeItems[elF->index].borderColor;
+                    real = elF->appendColor( temp_bc, colors, true );
+                }
             }
             break;
         case 5:
             if( elF->index != -1 )
             {
-                temp_s = (*styles)[shapeItems[elF->index].style];
-                tmp = shapeItems[elF->index].style;
-                i = 1;
-                while( (*styles).find(i) != (*styles).end() ) i++;
-                (*styles).insert( std::pair<int, Qt::PenStyle> (i, temp_s) );
-                real = i;
+                if( (shapeItems[elF->index].style == -5 || shapeItems[elF->index].style <= -10) && !elF->flag_def_stat )
+                {
+                    temp_s = (*styles)[shapeItems[elF->index].style];
+                    tmp = shapeItems[elF->index].style;
+                    real = elF->appendStyle( temp_s, styles, false );
+                }
+                else if( shapeItems[elF->index].style > 0 || (shapeItems[elF->index].style == -5 && elF->flag_def_stat ) )
+                {
+                    temp_s = (*styles)[shapeItems[elF->index].style];
+                    tmp = shapeItems[elF->index].style;
+                    real = elF->appendStyle( temp_s, styles, true );
+                }
             }
             break;
         case 6:
@@ -2387,23 +2484,35 @@ void ElFigDt::dynamic( )
         case 7:
             if( elF->index == -1 && elF->fill_index != -1 )
             {
-                temp_fc = (*colors)[inundationItems[elF->fill_index].brush];
-                tmp = inundationItems[elF->fill_index].brush;
-                i = 1;
-                while( (*colors).find(i) != (*colors).end() ) i++;
-                (*colors).insert( std::pair<int, QColor> (i, temp_fc) );
-                real = i;
+                if( inundationItems[elF->fill_index].brush == -7 || inundationItems[elF->fill_index].brush <= -10 )
+                {
+                    temp_fc = (*colors)[inundationItems[elF->fill_index].brush];
+                    tmp = inundationItems[elF->fill_index].brush;
+                    real = elF->appendColor( temp_fc, colors, false );
+                }
+                else if( inundationItems[elF->fill_index].brush > 0 )
+                {
+                    temp_fc = (*colors)[inundationItems[elF->fill_index].brush];
+                    tmp = inundationItems[elF->fill_index].brush;
+                    real = elF->appendColor( temp_fc, colors, true );
+                }
             }
             break;
         case 8:
             if( elF->index == -1 && elF->fill_index != -1 )
             {
-                temp_fi = (*images)[inundationItems[elF->fill_index].brush_img];
-                tmp = inundationItems[elF->fill_index].brush_img;
-                i = 1;
-                while( (*images).find(i) != (*images).end() ) i++;
-                (*images).insert( std::pair<int, string> (i, temp_fi) );
-                real = i;
+                if( inundationItems[elF->fill_index].brush_img == -5 || inundationItems[elF->fill_index].brush_img <= -10 )
+                {
+                    temp_fi = (*images)[inundationItems[elF->fill_index].brush_img];
+                    tmp = inundationItems[elF->fill_index].brush_img;
+                    real = elF->appendImage( temp_fi, images, false );
+                }
+                else if( inundationItems[elF->fill_index].brush_img > 0 )
+                {
+                    temp_fi = (*images)[inundationItems[elF->fill_index].brush_img];
+                    tmp = inundationItems[elF->fill_index].brush_img;
+                    real = elF->appendImage( temp_fi, images, true );
+                }
             }
             break;
         case 9:
@@ -2449,58 +2558,22 @@ void ElFigDt::dynamic( )
                         shapeItems[i].n5 = elF->appendPoint( Temp, shapeItems, pnts, 1 );
                     }
                     if( shapeItems[i].width > 0 )
-                    {
-                        k = -10;
-                        while( (*widths).find(k) != (*widths).end() ) k--;
-                        (*widths).insert( std::pair<int, float> (k, (*widths)[shapeItems[i].width]) );
-                        shapeItems[i].width = k;
-                    }
+                        shapeItems[i].width = elF->appendWidth( (*widths)[shapeItems[i].width], widths, true );
                     if( shapeItems[i].border_width > 0 )
-                    {
-                        k = -10;
-                        while( (*widths).find(k) != (*widths).end() ) k--;
-                        (*widths).insert( std::pair<int, float> (k, (*widths)[shapeItems[i].border_width]) );
-                        shapeItems[i].border_width = k;
-                    }
+                        shapeItems[i].border_width = elF->appendWidth( (*widths)[shapeItems[i].border_width], widths, true );
                     if( shapeItems[i].lineColor > 0 )
-                    {
-                        k = -10;
-                        while( (*colors).find(k) != (*colors).end() ) k--;
-                        (*colors).insert( std::pair<int, QColor> (k, (*colors)[shapeItems[i].lineColor]) );
-                        shapeItems[i].lineColor = k;
-                    }
+                        shapeItems[i].lineColor = elF->appendColor( (*colors)[shapeItems[i].lineColor], colors, true );
                     if( shapeItems[i].borderColor > 0 )
-                    {
-                        k = -10;
-                        while( (*colors).find(k) != (*colors).end() ) k--;
-                        (*colors).insert( std::pair<int, QColor> (k, (*colors)[shapeItems[i].borderColor]) );
-                        shapeItems[i].borderColor = k;
-                    }
+                        shapeItems[i].borderColor = elF->appendColor( (*colors)[shapeItems[i].borderColor], colors, true );
                     if( shapeItems[i].style > 0 )
-                    {
-                        k = -10;
-                        while( (*styles).find(k) != (*styles).end() ) k--;
-                        (*styles).insert( std::pair<int, Qt::PenStyle> (k, (*styles)[shapeItems[i].style]) );
-                        shapeItems[i].style = k;
-                    }
+                        shapeItems[i].style = elF->appendStyle( (*styles)[shapeItems[i].style], styles, true );
             }
             for( int i = 0; i < inundationItems.size(); i++ )
             {
                 if( inundationItems[i].brush > 0 )
-                {
-                    k = -10;
-                    while( (*colors).find(k) != (*colors).end() ) k--;
-                    (*colors).insert( std::pair<int, QColor> (k, (*colors)[inundationItems[i].brush]) );
-                    inundationItems[i].brush = k;
-                }
+                    inundationItems[i].brush = elF->appendColor( (*colors)[inundationItems[i].brush], colors, true );
                 if( inundationItems[i].brush_img > 0 )
-                {
-                    k = -10;
-                    while( (*images).find(k) != (*images).end() ) k--;
-                    (*images).insert( std::pair<int, string> (k, (*images)[inundationItems[i].brush_img]) );
-                    inundationItems[i].brush_img = k;
-                }
-
+                    inundationItems[i].brush_img = elF->appendImage( (*images)[inundationItems[i].brush_img], images, true );
             }
             for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); )
             {
@@ -2536,7 +2609,8 @@ void ElFigDt::dynamic( )
             }
             break;
     }
-    if( (tmp <= -10 || tmp == -5 || tmp == -6 || tmp == -7) && real > 0  )
+    if( ( (tmp <= -10 || tmp == -5 || tmp == -6 || tmp == -7) && real > 0 ) ||
+          ( tmp > 0 && real <= -10 ) || ( (tmp == -5 || tmp == -6 || tmp == -7) && real <= -10 )  )
     {
         bool upd = false;
         switch( num )
@@ -2553,30 +2627,60 @@ void ElFigDt::dynamic( )
                 elF->dropPoint( tmp, elF->index, shapeItems, pnts );
                 break;
             case 1:
+            {
                 shapeItems[elF->index].width = real;
-                if( tmp != -5 )
-                    (*widths).erase(tmp);
+                bool fl_keep = false;
+                if( tmp > 0 )
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if( p != elF->index && tmp == shapeItems[p].width )
+                        { fl_keep = true; break; }
+                if( tmp != -5 && !fl_keep ) (*widths).erase(tmp);
                 break;
+            }
             case 2:
+            {
                 shapeItems[elF->index].lineColor = real;
-                if( tmp != -5 )
-                    (*colors).erase(tmp);
+                bool fl_keep = false;
+                if( tmp > 0 )
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if( p != elF->index && tmp == shapeItems[p].lineColor )
+                        { fl_keep = true; break; }
+                if( tmp != -5 && !fl_keep ) (*colors).erase(tmp);
                 break;
+            }
             case 3:
+            {
                 shapeItems[elF->index].border_width = real;
-                if( tmp != -6 )
-                    (*widths).erase(tmp);
+                bool fl_keep = false;
+                if( tmp > 0 )
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if( p != elF->index && tmp == shapeItems[p].border_width )
+                        { fl_keep = true; break; }
+                if( tmp != -6 && !fl_keep ) (*widths).erase(tmp);
                 break;
+            }
             case 4:
+            {
                 shapeItems[elF->index].borderColor = real;
-                if( tmp != -6 )
-                    (*colors).erase(tmp);
+                bool fl_keep = false;
+                if( tmp > 0 )
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if( p != elF->index && tmp == shapeItems[p].borderColor )
+                        { fl_keep = true; break; }
+                if( tmp != -6 && !fl_keep ) (*colors).erase(tmp);
                 break;
+            }
             case 5:
+            {
                 shapeItems[elF->index].style = real;
-                if( tmp != -5 )
-                    (*styles).erase(tmp);
+                bool fl_keep = false;
+                if( tmp > 0 )
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if( p != elF->index && tmp == shapeItems[p].style )
+                        { fl_keep = true; break; }
+                if( tmp != -5 && !fl_keep ) (*styles).erase(tmp);
                 break;
+            }
             case 7:
                 inundationItems[elF->fill_index].brush = real;
                 if( tmp != -7 )
@@ -2597,6 +2701,10 @@ void ElFigDt::dynamic( )
             w->update();
         }
     }
+    elF->index_array.clear();
+    elF->rect_array.clear();
+    elF->flag_arc_rect_3_4 = elF->flag_rect = false;
+    elF->rect_num = -1;
 }
 
 void ElFigDt::properties()
@@ -2629,6 +2737,8 @@ void ElFigDt::properties()
     QLineEdit *f_image;
     QComboBox *l_style;
     QCheckBox *lw_check, *lc_check, *ls_check, *lbw_check, *lbc_check, *fc_check, *fi_check;
+    QCheckBox *lw_en, *lc_en, *ls_en, *lbw_en, *lbc_en, *fc_en, *fi_en;
+    QPushButton *p1_c, *p2_c, *p3_c, *p4_c, *p5_c, *fc_c, *fi_c, *lw_c, *lc_c, *ls_c, *lbw_c, *lbc_c;
     QDoubleSpinBox *p1_x, *p1_y, *p2_x, *p2_y, *p3_x, *p3_y, *p4_x, *p4_y, *p5_x, *p5_y;
     QVector<int> inund_Rebuild;
     QImage ico_t;
@@ -2644,31 +2754,31 @@ void ElFigDt::properties()
     InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), str_mess,_("Elementary figure properties."),false,false);
     l_lb = new QLabel(_("Line:"),&propDlg);
     l_width = new QSpinBox(&propDlg);
-    lw_check = new QCheckBox(&propDlg);
+    lw_en = new QCheckBox(&propDlg); lw_check = new QCheckBox(&propDlg); lw_c = new QPushButton(&propDlg);
     l_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
-    lc_check = new QCheckBox(&propDlg);
+    lc_en = new QCheckBox(&propDlg); lc_check = new QCheckBox(&propDlg); lc_c = new QPushButton(&propDlg);
     l_style = new QComboBox(&propDlg);
-    ls_check = new QCheckBox(&propDlg);
+    ls_en = new QCheckBox(&propDlg); ls_check = new QCheckBox(&propDlg); ls_c = new QPushButton(&propDlg);
     lb_lb = new QLabel(_("Border:"),&propDlg);
-    lb_width = new QSpinBox(&propDlg);
+    lbw_en = new QCheckBox(&propDlg); lb_width = new QSpinBox(&propDlg); lbw_c = new QPushButton(&propDlg);
     lbw_check = new QCheckBox(&propDlg);
     lb_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
-    lbc_check = new QCheckBox(&propDlg);
+    lbc_en = new QCheckBox(&propDlg); lbc_check = new QCheckBox(&propDlg); lbc_c = new QPushButton(&propDlg);
     p_lb = new QLabel(_("Points:"),&propDlg);
     x_lb = new QLabel(_("x"),&propDlg);
     y_lb = new QLabel(_("y"),&propDlg);
-    p1_x = new QDoubleSpinBox(&propDlg);p1_y = new QDoubleSpinBox(&propDlg);
-    p2_x = new QDoubleSpinBox(&propDlg);p2_y = new QDoubleSpinBox(&propDlg);
+    p1_x = new QDoubleSpinBox(&propDlg); p1_y = new QDoubleSpinBox(&propDlg); p1_c = new QPushButton(&propDlg);
+    p2_x = new QDoubleSpinBox(&propDlg); p2_y = new QDoubleSpinBox(&propDlg); p2_c = new QPushButton(&propDlg);
     p3_lb = new QLabel(_("Point 3:"),&propDlg);
-    p3_x = new QDoubleSpinBox(&propDlg);p3_y = new QDoubleSpinBox(&propDlg);
+    p3_x = new QDoubleSpinBox(&propDlg); p3_y = new QDoubleSpinBox(&propDlg); p3_c = new QPushButton(&propDlg);
     p4_lb = new QLabel(_("Point 4:"),&propDlg);
-    p4_x = new QDoubleSpinBox(&propDlg);p4_y = new QDoubleSpinBox(&propDlg);
+    p4_x = new QDoubleSpinBox(&propDlg); p4_y = new QDoubleSpinBox(&propDlg); p4_c = new QPushButton(&propDlg);
     p5_lb = new QLabel(_("Point 5:"),&propDlg);
-    p5_x = new QDoubleSpinBox(&propDlg);p5_y = new QDoubleSpinBox(&propDlg);
+    p5_x = new QDoubleSpinBox(&propDlg); p5_y = new QDoubleSpinBox(&propDlg); p5_c = new QPushButton(&propDlg);
     f_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
-    fc_check = new QCheckBox(&propDlg);
+    fc_en = new QCheckBox(&propDlg); fc_check = new QCheckBox(&propDlg); fc_c = new QPushButton(&propDlg);
     f_image = new QLineEdit(&propDlg);
-    fi_check = new QCheckBox(&propDlg);
+    fi_en = new QCheckBox(&propDlg); fi_check = new QCheckBox(&propDlg); fi_c = new QPushButton(&propDlg);
     //> Creating the fills' properties dialog
     if(sender()->objectName() == "Fill")
     {
@@ -2676,124 +2786,240 @@ void ElFigDt::properties()
         lb_lb->hide(); lb_width->hide(); lb_color->hide();
         lw_check->hide(); lc_check->hide(); ls_check->hide();
         lbw_check->hide(); lbc_check->hide();
+        lw_c->hide(); lc_c->hide(); ls_c->hide();
+        lbw_c->hide(); lbc_c->hide();
+        lw_en->hide(); lc_en->hide(); ls_en->hide();
+        lbw_en->hide(); lbc_en->hide();
         p_lb->hide(); x_lb->hide(); y_lb->hide();
-        p1_x->hide(); p1_y->hide();
-        p2_x->hide(); p2_y->hide();
-        p3_lb->hide(); p3_x->hide();p3_y->hide();
-        p4_lb->hide(); p4_x->hide();p4_y->hide();
-        p5_lb->hide(); p5_x->hide();p5_y->hide();
-        propDlg.edLay()->addWidget( new QLabel(_("Fill Color"),&propDlg), 2, 0 );
-        propDlg.edLay()->addWidget( f_color, 2, 1 );
+        p1_x->hide(); p1_y->hide(); p1_c->hide();
+        p2_x->hide(); p2_y->hide(); p2_c->hide();
+        p3_lb->hide(); p3_x->hide();p3_y->hide(); p3_c->hide();
+        p4_lb->hide(); p4_x->hide();p4_y->hide(); p4_c->hide();
+        p5_lb->hide(); p5_x->hide();p5_y->hide(); p5_c->hide();
+        propDlg.edLay()->addWidget( fc_en, 2, 0 ); fc_en->setChecked(true);
+        fc_en->setToolTip(_("Include(checked)/Exclude(unchecked) the fill color from the properties list."));
+        QLabel *fc_lb = new QLabel(_("Fill Color"),&propDlg);
+        propDlg.edLay()->addWidget( fc_lb, 2, 1 );
+        propDlg.edLay()->addWidget( f_color, 2, 2 );
         fc_check->setToolTip(_("Set the default fill color."));
-        propDlg.edLay()->addWidget( fc_check, 2, 2 );
-        connect( fc_check, SIGNAL(toggled(bool)), f_color, SLOT(setDisabled(bool)) ); 
-        propDlg.edLay()->addWidget( new QLabel(_("Fill Image"),&propDlg), 3, 0 );
-        propDlg.edLay()->addWidget( f_image, 3, 1 );
+        propDlg.edLay()->addWidget( fc_check, 2, 3 );
+        connect( fc_en, SIGNAL(toggled(bool)), fc_lb, SLOT(setEnabled(bool)) );
+        connect( fc_en, SIGNAL(toggled(bool)), f_color, SLOT(setVisible(bool)) );
+        connect( fc_en, SIGNAL(toggled(bool)), fc_c, SLOT(setVisible(bool)) );
+        connect( fc_en, SIGNAL(toggled(bool)), fc_check, SLOT(setVisible(bool)) );
+        connect( fc_check, SIGNAL(toggled(bool)), f_color, SLOT(setDisabled(bool)) );
+        connect( fc_check, SIGNAL(toggled(bool)), fc_c, SLOT(setDisabled(bool)) );
+        propDlg.edLay()->addWidget( fi_en, 3, 0 ); fi_en->setChecked(true);
+        fi_en->setToolTip(_("Include(checked)/Exclude(unchecked) the fill image from the properties list."));
+        QLabel *fi_lb = new QLabel(_("Fill Image"),&propDlg);
+        propDlg.edLay()->addWidget( fi_lb, 3, 1 );
+        propDlg.edLay()->addWidget( f_image, 3, 2 );
         fi_check->setToolTip(_("Set the default fill image."));
-        propDlg.edLay()->addWidget( fi_check, 3, 2 );
+        propDlg.edLay()->addWidget( fi_check, 3, 3 );
+        fc_c->setToolTip(_("Make the fill color Dynamic(checked)/Static(unchecked).")); fc_c->setCheckable( true );
+        fc_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(fc_c, 2, 4);
+        fi_c->setToolTip(_("Make the fill image Dynamic(checked)/Static(unchecked).")); fi_c->setCheckable( true );
+        fi_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(fi_c, 3, 4);
+        connect( fi_en, SIGNAL(toggled(bool)), fi_lb, SLOT(setEnabled(bool)) );
+        connect( fi_en, SIGNAL(toggled(bool)), f_image, SLOT(setVisible(bool)) );
+        connect( fi_en, SIGNAL(toggled(bool)), fi_c, SLOT(setVisible(bool)) );
+        connect( fi_en, SIGNAL(toggled(bool)), fi_check, SLOT(setVisible(bool)) );
         connect(fi_check, SIGNAL(toggled(bool)), f_image, SLOT(setDisabled(bool)));
+        connect(fi_check, SIGNAL(toggled(bool)), fi_c, SLOT(setDisabled(bool)));
+
         f_color->setValue((*colors)[inundationItems[elF->fill_index].brush].name() + "-" +
                             QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()));
         if(inundationItems[elF->fill_index].brush == -7) fc_check->setChecked(true);
         f_image->setText(QString( (*images)[inundationItems[elF->fill_index].brush_img].c_str()));
         if(inundationItems[elF->fill_index].brush_img == -5) fi_check->setChecked(true);
-        propDlg.resize(300, 150);
+        if( inundationItems[elF->fill_index].brush > 0 ) fc_c->setChecked(true);
+        else fc_c->setChecked(false);
+        if( inundationItems[elF->fill_index].brush_img > 0 ) fi_c->setChecked(true);
+        else fi_c->setChecked(false);
+        propDlg.edLay()->setColumnMinimumWidth ( 2, 100 );
+        propDlg.edLay()->setColumnStretch ( 2, 1 );
     }
-    //> Creating the items' properties dialog
+    //> Creating the items' of properties dialog
     else
     {
         f_color->hide(); f_image->hide();
         fc_check->hide(); fi_check->hide();
+        fc_c->hide(); fi_c->hide();
+        fc_en->hide(); fi_en->hide();
         QFont lb_fnt;
         lb_fnt.setStyle(QFont::StyleItalic);
         lb_fnt.setBold(true);
         l_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(l_lb, 2, 0);
-        propDlg.edLay()->addWidget(new QLabel(_("Line width"),&propDlg), 3, 0);
+        lw_en->setToolTip(_("Include(checked)/Exclude(unchecked) the line width from the properties list."));
+        propDlg.edLay()->addWidget( lw_en, 3, 0 ); lw_en->setChecked(true);
+        propDlg.edLay()->setAlignment ( lw_en, Qt::AlignRight );
+        QLabel *lw_lb = new QLabel(_("Line width"),&propDlg);
+        propDlg.edLay()->addWidget( lw_lb, 3, 1);
         l_width->setRange(0, 99);
-        propDlg.edLay()->addWidget(l_width, 3, 1);
+        propDlg.edLay()->addWidget(l_width, 3, 2);
         lw_check->setToolTip(_("Set the default line width."));
-        propDlg.edLay()->addWidget(lw_check, 3, 2);
+        propDlg.edLay()->addWidget(lw_check, 3, 3);
+        lw_c->setToolTip(_("Make the line width Dynamic(checked)/Static(unchecked).")); lw_c->setCheckable( true );
+        lw_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(lw_c, 3, 4);
+        connect( lw_en, SIGNAL(toggled(bool)), lw_lb, SLOT(setEnabled(bool)) );
+        connect( lw_en, SIGNAL(toggled(bool)), l_width, SLOT(setVisible(bool)) );
+        connect( lw_en, SIGNAL(toggled(bool)), lw_c, SLOT(setVisible(bool)) );
+        connect( lw_en, SIGNAL(toggled(bool)), lw_check, SLOT(setVisible(bool)) );
         connect(lw_check, SIGNAL(toggled(bool)), l_width, SLOT(setDisabled(bool)) );
-        propDlg.edLay()->addWidget( new QLabel(_("Line color"),&propDlg), 4, 0 );
-        propDlg.edLay()->addWidget( l_color, 4, 1 );
+        connect(lw_check, SIGNAL(toggled(bool)), lw_c, SLOT(setDisabled(bool)) );
+        lc_en->setToolTip(_("Include(checked)/Exclude(unchecked) the line color from the properties list."));
+        propDlg.edLay()->addWidget( lc_en, 4, 0 ); lc_en->setChecked(true);
+        propDlg.edLay()->setAlignment ( lc_en, Qt::AlignRight );
+        QLabel *lc_lb = new QLabel(_("Line color"),&propDlg);
+        propDlg.edLay()->addWidget( lc_lb, 4, 1 );
+        propDlg.edLay()->addWidget( l_color, 4, 2 );
         lc_check->setToolTip(_("Set the default line color."));
-        propDlg.edLay()->addWidget( lc_check, 4, 2 );
+        propDlg.edLay()->addWidget( lc_check, 4, 3 );
+        lc_c->setToolTip(_("Make the line color Dynamic(checked)/Static(unchecked).")); lc_c->setCheckable( true );
+        lc_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(lc_c, 4, 4);
+        connect( lc_en, SIGNAL(toggled(bool)), lc_lb, SLOT(setEnabled(bool)) );
+        connect( lc_en, SIGNAL(toggled(bool)), l_color, SLOT(setVisible(bool)) );
+        connect( lc_en, SIGNAL(toggled(bool)), lc_c, SLOT(setVisible(bool)) );
+        connect( lc_en, SIGNAL(toggled(bool)), lc_check, SLOT(setVisible(bool)) );
         connect(lc_check, SIGNAL(toggled(bool)), l_color, SLOT(setDisabled(bool)) );
-        propDlg.edLay()->addWidget( new QLabel(_("Line style"),&propDlg), 5, 0 );
-        propDlg.edLay()->addWidget( l_style, 5, 1 );
+        connect(lc_check, SIGNAL(toggled(bool)), lc_c, SLOT(setDisabled(bool)) );
+        ls_en->setToolTip(_("Include(checked)/Exclude(unchecked) the line style from the properties list."));
+        propDlg.edLay()->addWidget( ls_en, 5, 0 ); ls_en->setChecked(true);
+        propDlg.edLay()->setAlignment ( ls_en, Qt::AlignRight );
+        QLabel *ls_lb = new QLabel(_("Line style"),&propDlg);
+        propDlg.edLay()->addWidget( ls_lb, 5, 1 );
+        propDlg.edLay()->addWidget( l_style, 5, 2 );
         ls_check->setToolTip(_("Set the default line style."));
-        propDlg.edLay()->addWidget( ls_check, 5, 2 );
+        propDlg.edLay()->addWidget( ls_check, 5, 3 );
+        ls_c->setToolTip(_("Make the line style Dynamic(checked)/Static(unchecked).")); ls_c->setCheckable( true );
+        ls_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(ls_c, 5, 4);
+        connect( ls_en, SIGNAL(toggled(bool)), ls_lb, SLOT(setEnabled(bool)) );
+        connect( ls_en, SIGNAL(toggled(bool)), l_style, SLOT(setVisible(bool)) );
+        connect( ls_en, SIGNAL(toggled(bool)), ls_c, SLOT(setVisible(bool)) );
+        connect( ls_en, SIGNAL(toggled(bool)), ls_check, SLOT(setVisible(bool)) );
         connect(ls_check, SIGNAL(toggled(bool)), l_style, SLOT(setDisabled(bool)) );
+        connect(ls_check, SIGNAL(toggled(bool)), ls_c, SLOT(setDisabled(bool)) );
         lb_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( lb_lb, 6, 0 );
-        propDlg.edLay()->addWidget( new QLabel(_("Border width"),&propDlg), 7, 0 );
+        lbw_en->setToolTip(_("Include(checked)/Exclude(unchecked) the border width from the properties list."));
+        propDlg.edLay()->addWidget( lbw_en, 7, 0 ); lbw_en->setChecked(true);
+        propDlg.edLay()->setAlignment ( lbw_en, Qt::AlignRight );
+        QLabel *lbw_lb= new QLabel(_("Border width"),&propDlg);
+        propDlg.edLay()->addWidget( lbw_lb, 7, 1 );
         lb_width->setRange( 0, 99 );
-        propDlg.edLay()->addWidget( lb_width, 7, 1 );
+        propDlg.edLay()->addWidget( lb_width, 7, 2 );
         lbw_check->setToolTip(_("Set the default line's border width."));
-        propDlg.edLay()->addWidget( lbw_check, 7, 2 );
+        propDlg.edLay()->addWidget( lbw_check, 7, 3 );
+        lbw_c->setToolTip(_("Make the border width Dynamic(checked)/Static(unchecked).")); lbw_c->setCheckable( true );
+        lbw_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(lbw_c, 7, 4);
+        connect( lbw_en, SIGNAL(toggled(bool)), lbw_lb, SLOT(setEnabled(bool)) );
+        connect( lbw_en, SIGNAL(toggled(bool)), lb_width, SLOT(setVisible(bool)) );
+        connect( lbw_en, SIGNAL(toggled(bool)), lbw_c, SLOT(setVisible(bool)) );
+        connect( lbw_en, SIGNAL(toggled(bool)), lbw_check, SLOT(setVisible(bool)) );
         connect(lbw_check, SIGNAL(toggled(bool)), lb_width, SLOT(setDisabled(bool)) );
-        propDlg.edLay()->addWidget( new QLabel(_("Border color"),&propDlg), 8, 0 );
-        propDlg.edLay()->addWidget( lb_color, 8, 1 );
+        connect(lbw_check, SIGNAL(toggled(bool)), lbw_c, SLOT(setDisabled(bool)) );\
+        lbc_en->setToolTip(_("Include(checked)/Exclude(unchecked) the border color from the properties list."));
+        propDlg.edLay()->addWidget( lbc_en, 8, 0 ); lbc_en->setChecked(true);
+        propDlg.edLay()->setAlignment ( lbc_en, Qt::AlignRight );
+        QLabel *lbc_lb = new QLabel(_("Border color"),&propDlg);
+        propDlg.edLay()->addWidget( lbc_lb, 8, 1 );
+        propDlg.edLay()->addWidget( lb_color, 8, 2 );
         lbc_check->setToolTip(_("Set the default line's border color."));
-        propDlg.edLay()->addWidget( lbc_check, 8, 2 );
+        propDlg.edLay()->addWidget( lbc_check, 8, 3 );
+        lbc_c->setToolTip(_("Make the border color Dynamic(checked)/Static(unchecked).")); lbc_c->setCheckable( true );
+        lbc_c->setText( _("Dyn/Stat") );
+        propDlg.edLay()->addWidget(lbc_c, 8, 4);
+        connect( lbc_en, SIGNAL(toggled(bool)), lbc_lb, SLOT(setEnabled(bool)) );
+        connect( lbc_en, SIGNAL(toggled(bool)), lb_color, SLOT(setVisible(bool)) );
+        connect( lbc_en, SIGNAL(toggled(bool)), lbc_c, SLOT(setVisible(bool)) );
+        connect( lbc_en, SIGNAL(toggled(bool)), lbc_check, SLOT(setVisible(bool)) );
         connect(lbc_check, SIGNAL(toggled(bool)), lb_color, SLOT(setDisabled(bool)) );
+        connect(lbc_check, SIGNAL(toggled(bool)), lbc_c, SLOT(setDisabled(bool)) );
         if( !items_array_holds.size() || ((items_array_holds.size() == 1) && (items_array_holds[0] == elF->index)) )
         {
 	    QFrame *sep = new QFrame(&propDlg);
 	    sep->setFrameShape(QFrame::VLine);
-	    propDlg.edLay()->addWidget(sep, 2, 3, 7, 1);
+	    propDlg.edLay()->addWidget(sep, 2, 5, 7, 1);
             flag_hld = false;
-            p_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(p_lb, 2, 4);
-            x_lb->setFont(lb_fnt); x_lb->setAlignment(Qt::AlignHCenter); propDlg.edLay()->addWidget(x_lb, 2, 5);
-            y_lb->setFont(lb_fnt); y_lb->setAlignment(Qt::AlignHCenter); propDlg.edLay()->addWidget(y_lb, 2, 6);
-            propDlg.edLay()->addWidget(new QLabel(_("Point 1:"),&propDlg), 3, 4);
+            p_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(p_lb, 2, 6);
+            x_lb->setFont(lb_fnt); x_lb->setAlignment(Qt::AlignHCenter); propDlg.edLay()->addWidget(x_lb, 2, 7);
+            y_lb->setFont(lb_fnt); y_lb->setAlignment(Qt::AlignHCenter); propDlg.edLay()->addWidget(y_lb, 2, 8);
+            propDlg.edLay()->addWidget(new QLabel(_("Point 1:"),&propDlg), 3, 6);
             p1_x->setRange(0, 10000); p1_x->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p1_x, 3, 5);
+            propDlg.edLay()->addWidget(p1_x, 3, 7);
             p1_y->setRange(0, 10000); p1_y->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p1_y, 3, 6);
-            propDlg.edLay()->addWidget(new QLabel(_("Point 2:"),&propDlg), 4, 4);
+            propDlg.edLay()->addWidget(p1_y, 3, 8);
+            p1_c->setToolTip(_("Make the 1 point Dynamic(checked)/Static(unchecked).")); p1_c->setCheckable( true ); p1_c->setText( _("Dyn/Stat") );
+            propDlg.edLay()->addWidget(p1_c, 3, 9);
+            propDlg.edLay()->addWidget(new QLabel(_("Point 2:"),&propDlg), 4, 6);
             p2_x->setRange(0, 10000); p2_x->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p2_x, 4, 5);
+            propDlg.edLay()->addWidget(p2_x, 4, 7);
             p2_y->setRange(0, 10000); p2_y->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p2_y, 4, 6);
-            propDlg.edLay()->addWidget(p3_lb, 5, 4);
+            propDlg.edLay()->addWidget(p2_y, 4, 8);
+            p2_c->setToolTip(_("Make the 2 point Dynamic(checked)/Static(unchecked).")); p2_c->setCheckable( true ); p2_c->setText( _("Dyn/Stat") );
+            propDlg.edLay()->addWidget(p2_c, 4, 9);
+            propDlg.edLay()->addWidget(p3_lb, 5, 6);
             p3_x->setRange(0, 10000); p3_x->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p3_x, 5, 5);
+            propDlg.edLay()->addWidget(p3_x, 5, 7);
             p3_y->setRange(0, 10000); p3_y->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p3_y, 5, 6);
-            propDlg.edLay()->addWidget(p4_lb, 6, 4);
+            propDlg.edLay()->addWidget(p3_y, 5, 8);
+            p3_c->setToolTip(_("Make the 3 point Dynamic(checked)/Static(unchecked).")); p3_c->setCheckable( true ); p3_c->setText( _("Dyn/Stat") );
+            propDlg.edLay()->addWidget(p3_c, 5, 9);
+            propDlg.edLay()->addWidget(p4_lb, 6, 6);
             p4_x->setRange(0, 10000); p4_x->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p4_x, 6, 5);
+            propDlg.edLay()->addWidget(p4_x, 6, 7);
             p4_y->setRange(0, 10000); p4_y->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p4_y, 6, 6);
-            propDlg.edLay()->addWidget(p5_lb, 7, 4);
+            propDlg.edLay()->addWidget(p4_y, 6, 8);
+            p4_c->setToolTip(_("Make the 4 point Dynamic(checked)/Static(unchecked).")); p4_c->setCheckable( true ); p4_c->setText( _("Dyn/Stat") );
+            propDlg.edLay()->addWidget(p4_c, 6, 9);
+            propDlg.edLay()->addWidget(p5_lb, 7, 6);
             p5_x->setRange(0, 10000); p5_x->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p5_x, 7, 5);
+            propDlg.edLay()->addWidget(p5_x, 7, 7);
             p5_y->setRange(0, 10000); p5_y->setDecimals(POS_PREC_DIG);
-            propDlg.edLay()->addWidget(p5_y, 7, 6);
+            propDlg.edLay()->addWidget(p5_y, 7, 8);
+            p5_c->setToolTip(_("Make the 5 point Dynamic(checked)/Static(unchecked).")); p5_c->setCheckable( true ); p5_c->setText( _("Dyn/Stat") );
+            propDlg.edLay()->addWidget(p5_c, 7, 9);
 
             if( sender()->objectName() == "Line" )
             {
                 p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
+                if( shapeItems[elF->index].n1 > 0 ){ p1_c->setChecked(true); /*p1_c->setText("Static");*/ }
+                else{ p1_c->setChecked(false); /*p1_c->setText("Dynamic");*/ }
                 p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
-                p3_lb->setVisible(false);p3_x->setVisible(false);p3_y->setVisible(false);
-                p4_lb->setVisible(false);p4_x->setVisible(false);p4_y->setVisible(false);
-                p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false);
+                if( shapeItems[elF->index].n2 > 0 ) p2_c->setChecked(true); else p2_c->setChecked(false);
+                p3_lb->setVisible(false);p3_x->setVisible(false);p3_y->setVisible(false); p3_c->setVisible(false);
+                p4_lb->setVisible(false);p4_x->setVisible(false);p4_y->setVisible(false); p4_c->setVisible(false);
+                p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false); p5_c->setVisible(false);
             }
             else if( sender()->objectName() == "Bezier curve" )
             {
                 p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
+                if( shapeItems[elF->index].n1 > 0 ) p1_c->setChecked(true); else p1_c->setChecked(false);
                 p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
+                if( shapeItems[elF->index].n2 > 0 ) p2_c->setChecked(true); else p2_c->setChecked(false);
                 p3_x->setValue((*pnts)[shapeItems[elF->index].n3].x()); p3_y->setValue((*pnts)[shapeItems[elF->index].n3].y());
+                if( shapeItems[elF->index].n3 > 0 ) p3_c->setChecked(true); else p3_c->setChecked(false);
                 p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
-                p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false);
+                if( shapeItems[elF->index].n4 > 0 ) p4_c->setChecked(true); else p4_c->setChecked(false);
+                p5_lb->setVisible(false);p5_x->setVisible(false);p5_y->setVisible(false); p5_c->setVisible(false);
             }
             else
             {
                 p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
+                if( shapeItems[elF->index].n1 > 0 ) p1_c->setChecked(true); else p1_c->setChecked(false);
                 p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
+                if( shapeItems[elF->index].n2 > 0 ) p2_c->setChecked(true); else p2_c->setChecked(false);
                 p3_x->setValue((*pnts)[shapeItems[elF->index].n3].x()); p3_y->setValue((*pnts)[shapeItems[elF->index].n3].y());
+                if( shapeItems[elF->index].n3 > 0 ) p3_c->setChecked(true); else p3_c->setChecked(false);
                 p4_x->setValue((*pnts)[shapeItems[elF->index].n4].x()); p4_y->setValue((*pnts)[shapeItems[elF->index].n4].y());
+                if( shapeItems[elF->index].n4 > 0 ) p4_c->setChecked(true); else p4_c->setChecked(false);
                 p5_x->setValue((*pnts)[shapeItems[elF->index].n5].x()); p5_y->setValue((*pnts)[shapeItems[elF->index].n5].y());
+                if( shapeItems[elF->index].n5 > 0 ) p5_c->setChecked(true); else p5_c->setChecked(false);
             }
             if( !items_array_holds.size() )
                 items_array_holds.push_back(elF->index);
@@ -2838,38 +3064,45 @@ void ElFigDt::properties()
                 }
             p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
             p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
-            propDlg.resize( 500, 275 );
+            //propDlg.resize(752,295);
+
         }
         else
         {
             p_lb->hide(); x_lb->hide(); y_lb->hide();
             p3_lb->hide(); p4_lb->hide(); p5_lb->hide();
-            p1_x->hide(); p1_y->hide();
-            p2_x->hide(); p2_y->hide();
-            p3_x->hide(); p3_y->hide();
-            p4_x->hide(); p4_y->hide();
-            p5_x->hide(); p5_y->hide();
-            propDlg.resize( 280, 275 );
+            p1_x->hide(); p1_y->hide(); p1_c->hide();
+            p2_x->hide(); p2_y->hide(); p2_c->hide();
+            p3_x->hide(); p3_y->hide(); p3_c->hide();
+            p4_x->hide(); p4_y->hide(); p4_c->hide();
+            p5_x->hide(); p5_y->hide(); p5_c->hide();
         }
         if( (*widths)[shapeItems[elF->index].width] <= 1 && scale < 1 )
             l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width],POS_PREC_DIG));
         else l_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].width]/scale,POS_PREC_DIG));
         if( shapeItems[elF->index].width == -5 ) lw_check->setChecked(true);
+        if( shapeItems[elF->index].width > 0 ) lw_c->setChecked(true);
         l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" +
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
         if( shapeItems[elF->index].lineColor == -5 ) lc_check->setChecked(true);
+        if( shapeItems[elF->index].lineColor > 0 ) lc_c->setChecked(true);
         QStringList line_styles;
         line_styles << _("Solid") << _("Dashed") << _("Dotted");
         l_style->addItems(line_styles);
         l_style->setCurrentIndex((*styles)[shapeItems[elF->index].style]-1);
         if( shapeItems[elF->index].style == -5 ) ls_check->setChecked(true);
+        if( shapeItems[elF->index].style > 0 ) ls_c->setChecked(true);
         if( (*widths)[shapeItems[elF->index].border_width] <= 1 && scale < 1 )
             lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width],POS_PREC_DIG));
         else lb_width->setValue((int)TSYS::realRound((*widths)[shapeItems[elF->index].border_width]/scale,POS_PREC_DIG));
         if( shapeItems[elF->index].border_width == -6 ) lbw_check->setChecked(true);
+        if( shapeItems[elF->index].border_width > 0 ) lbw_c->setChecked(true);
         lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" +
                 QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
         if( shapeItems[elF->index].borderColor == -6 ) lbc_check->setChecked(true);
+        if( shapeItems[elF->index].borderColor > 0 ) lbc_c->setChecked(true);
+        propDlg.edLay()->setColumnMinimumWidth ( 2, 100 );
+        propDlg.edLay()->setColumnStretch ( 2, 1 );
     }
     if( propDlg.exec() == QDialog::Accepted )
     {
@@ -2879,7 +3112,7 @@ void ElFigDt::properties()
         {
             string res_fColor = f_color->value().toStdString();
             QColor res_fClr = WdgShape::getColor(  res_fColor );
-            if( f_color->isEnabled() )
+            if( fc_en->isChecked() && f_color->isEnabled() )
             {
                 if( inundationItems[elF->fill_index].brush == -7 )
                 {
@@ -2890,12 +3123,12 @@ void ElFigDt::properties()
                 }
                 else (*colors)[inundationItems[elF->fill_index].brush] = res_fClr;
             }
-            else if( inundationItems[elF->fill_index].brush != -7 )
+            else if( fc_en->isChecked() && fc_check->isChecked() && inundationItems[elF->fill_index].brush != -7 )
             {
                 (*colors).erase( inundationItems[elF->fill_index].brush );
                 inundationItems[elF->fill_index].brush = -7;
             }
-            if( f_image->isEnabled() )
+            if( fi_en->isChecked() && f_image->isEnabled() )
             {
                 if( !f_image->text().isEmpty() )
                 {
@@ -2909,12 +3142,25 @@ void ElFigDt::properties()
                     else (*images)[inundationItems[elF->fill_index].brush_img] = f_image->text().toStdString();
                 }
             }
-            else if( inundationItems[elF->fill_index].brush_img != -5 )
+            else if( fi_en->isChecked() && fi_check->isChecked() && inundationItems[elF->fill_index].brush_img != -5 )
             {
                 (*images).erase( inundationItems[elF->fill_index].brush_img );
                 inundationItems[elF->fill_index].brush_img = -5;
             }
-
+            if( fc_en->isChecked() &&  fc_c->isEnabled() && ( (fc_c->isChecked() && 
+                (inundationItems[elF->fill_index].brush <= -10 || inundationItems[elF->fill_index].brush == -7)) ||
+                (!fc_c->isChecked() && inundationItems[elF->fill_index].brush > 0) ) )
+            {
+                elF->rect_dyn = -1; elF->dyn_num = 7;
+                dynamic();
+            }
+            if( fi_en->isChecked() && fi_c->isEnabled() && ( (fi_c->isChecked() && 
+                (inundationItems[elF->fill_index].brush_img <= -10 || inundationItems[elF->fill_index].brush_img == -5)) ||
+                (!fi_c->isChecked() && inundationItems[elF->fill_index].brush_img > 0) ) )
+            {
+                elF->rect_dyn = -1; elF->dyn_num = 8;
+                dynamic();
+            }
         }
 	//>> Applying the changes for the figures
         else
@@ -2951,97 +3197,555 @@ void ElFigDt::properties()
                 case 1:	ln_style = Qt::DashLine; break;
                 case 2: ln_style = Qt::DotLine; break;
             }
-            /*if( !flag_hld )
+            QVector<int> tmp_shapes;
+            elF->flag_def_stat = false;//flag to use in the 'dynamic' function for msking the default value the static one
+            //>>> Creating the tmp_shapes vector of figures which are not included to the vector of the selected ones (items_array_holds)
+            bool fl_eq = false;
+            for( int p = 0; p < shapeItems.size(); p++ )
             {
-                if( items_array_holds.size() )
-                    items_array_holds.clear();
-                items_array_holds.push_back(elF->index);
-            }*/
+                fl_eq = false;
+                for( int h = 0; h < items_array_holds.size(); h++ )
+                    if( p == items_array_holds[h] ){ fl_eq = true; break;}
+                if( !fl_eq )tmp_shapes.push_back(p);
+            }
+            //>>> If the Dyn/Stat button is enabled for the line width
+            if( lw_en->isChecked() && lw_c->isEnabled() )
+            {
+                if( items_array_holds.size() > 1 ) 
+                {
+                    if( (lw_c->isChecked() && 
+                        (shapeItems[elF->index].width <= -10 || shapeItems[elF->index].width == -5)) ||
+                        (!lw_c->isChecked() && (shapeItems[elF->index].width > 0 || shapeItems[elF->index].width == -5)) )
+                    {
+                        if( !lw_c->isChecked() && shapeItems[elF->index].width == -5 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 1;
+                        dynamic();
+                    }
+                    else if( shapeItems[elF->index].width > 0 )
+                    {
+                        bool fl_insert = false;
+                        //>>>> Detecting if there is any figure, from the figures which are not included to the selected ones,
+                        //>>>> with the same width's index. If it is so append the new width to the width map
+                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                        {
+                            for( int h = 0; h < items_array_holds.size(); h++ )
+                                if( (shapeItems[items_array_holds[h]].width > 0) && (shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[h]].width) )
+                                { fl_insert = true; break; }
+                            if( fl_insert ) break;
+                        }
+                        if( fl_insert )
+                            shapeItems[elF->index].width = elF->appendWidth( (*widths)[shapeItems[elF->index].width], widths, false );
+                    }
+                }
+                else if( items_array_holds.size() == 1 )
+                {
+                    //>>>> Detecting if there is any figure in the shapeItems container with the same width's index.
+                    bool fl_insert = false;
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if(  elF->index != p && shapeItems[elF->index].width > 0 && shapeItems[p].width == shapeItems[elF->index].width )
+                        { fl_insert = true; break; }
+                    if( (lw_c->isChecked() && 
+                        (shapeItems[elF->index].width <= -10 || shapeItems[elF->index].width == -5)) ||
+                        (!lw_c->isChecked() && (shapeItems[elF->index].width > 0 || shapeItems[elF->index].width == -5)) )
+                    {
+                        if( !lw_c->isChecked() && shapeItems[elF->index].width == -5 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 1;
+                        dynamic();
+                    }
+                    else if( fl_insert )//>>>> If there is a figure with the same index, append the new width to the width map
+                        shapeItems[elF->index].width = elF->appendWidth( (*widths)[shapeItems[elF->index].width], widths, false );
+                }
+            }
+            elF->flag_def_stat = false;
+            //>>> If the Dyn/Stat button is enabled for the line color
+            if( lc_en->isChecked() && lc_c->isEnabled() )
+            {
+                if( items_array_holds.size() > 1 ) 
+                {
+                    if( (lc_c->isChecked() && 
+                        (shapeItems[elF->index].lineColor <= -10 || shapeItems[elF->index].lineColor == -5)) ||
+                        (!lc_c->isChecked() && (shapeItems[elF->index].lineColor > 0 || shapeItems[elF->index].lineColor == -5)) )
+                    {
+                        if( !lc_c->isChecked() && shapeItems[elF->index].lineColor == -5 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 2;
+                        dynamic();
+                    }
+                    else if( shapeItems[elF->index].lineColor > 0 )
+                    {
+                        bool fl_insert = false;
+                        //>>>> Detecting if there is any figure, from the figures which are not included to the selected ones,
+                        //>>>> with the same color's index. If it is so append the new color to the color's map
+                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                        {
+                            for( int h = 0; h < items_array_holds.size(); h++ )
+                                if( (shapeItems[items_array_holds[h]].lineColor > 0) && (shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[h]].lineColor) )
+                            { fl_insert = true; break; }
+                            if( fl_insert ) break;
+                        }
+                        if( fl_insert )
+                            shapeItems[elF->index].lineColor = elF->appendColor( (*colors)[shapeItems[elF->index].lineColor], colors, false );
+                    }
+                }
+                else if( items_array_holds.size() == 1 )
+                {
+                    //>>>> Detecting if there is any figure in the shapeItems container with the same color's index.
+                    bool fl_insert = false;
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if(  elF->index != p && shapeItems[elF->index].lineColor > 0 && shapeItems[p].lineColor == shapeItems[elF->index].lineColor )
+                        { fl_insert = true; break; }
+                    if( (lc_c->isChecked() && 
+                        (shapeItems[elF->index].lineColor <= -10 || shapeItems[elF->index].lineColor == -5)) ||
+                        (!lc_c->isChecked() && (shapeItems[elF->index].lineColor > 0 || shapeItems[elF->index].lineColor == -5)) )
+                    {
+                        if( !lc_c->isChecked() && shapeItems[elF->index].lineColor == -5 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 2;
+                        dynamic();
+                    }
+                    else if( fl_insert )//>>>> If there is a figure with the same index, append the new color to the color's map
+                        shapeItems[elF->index].lineColor = elF->appendColor( (*colors)[shapeItems[elF->index].lineColor], colors, false );
+                }
+            }
+            elF->flag_def_stat = false;
+            //>>> If the Dyn/Stat button is enabled for the line style
+            if( ls_en->isChecked() && ls_c->isEnabled() )
+            {
+                if( items_array_holds.size() > 1 ) 
+                {
+                    if( (ls_c->isChecked() && 
+                        (shapeItems[elF->index].style <= -10 || shapeItems[elF->index].style == -5)) ||
+                        (!ls_c->isChecked() && (shapeItems[elF->index].style > 0 || shapeItems[elF->index].style == -5)) )
+                    {
+                        if( !ls_c->isChecked() && shapeItems[elF->index].style == -5 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 5;
+                        dynamic();
+                    }
+                    else if( shapeItems[elF->index].style > 0 )
+                    {
+                        bool fl_insert = false;
+                        //>>>> Detecting if there is any figure, from the figures which are not included to the selected ones,
+                        //>>>> with the same style's index. If it is so append the new style to the style's map
+                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                        {
+                            for( int h = 0; h < items_array_holds.size(); h++ )
+                                if( (shapeItems[items_array_holds[h]].style > 0) && (shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[h]].style) )
+                            { fl_insert = true; break; }
+                            if( fl_insert ) break;
+                        }
+                        if( fl_insert )
+                            shapeItems[elF->index].style = elF->appendStyle( (*styles)[shapeItems[elF->index].style], styles, false );
+                    }
+                }
+                else if( items_array_holds.size() == 1 )
+                {
+                    //>>>> Detecting if there is any figure in the shapeItems container with the same style's index.
+                    bool fl_insert = false;
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if(  elF->index != p && shapeItems[elF->index].style > 0 && shapeItems[p].style == shapeItems[elF->index].style )
+                        { fl_insert = true; break; }
+
+                    if( (ls_c->isChecked() && 
+                         (shapeItems[elF->index].style <= -10 || shapeItems[elF->index].style == -5)) ||
+                         (!ls_c->isChecked() && (shapeItems[elF->index].style > 0 || shapeItems[elF->index].style == -5)) )
+                        {
+                            if( !ls_c->isChecked() && shapeItems[elF->index].style == -5 ) elF->flag_def_stat = true;
+                            elF->rect_dyn = -1; elF->dyn_num = 5;
+                            dynamic();
+                        }
+                    else if( fl_insert )//>>> If there is a figure with the same index, append the new style to the style's map
+                        shapeItems[elF->index].style = elF->appendStyle( (*styles)[shapeItems[elF->index].style], styles, false );
+                }
+            }
+            elF->flag_def_stat = false;
+            //>>> If the Dyn/Stat button is enabled for the border width
+            if( lbw_en->isChecked() && lbw_c->isEnabled() )
+            {
+                if( items_array_holds.size() > 1 ) 
+                {
+                    if( (lbw_c->isChecked() && 
+                        (shapeItems[elF->index].border_width <= -10 || shapeItems[elF->index].border_width == -6)) ||
+                        (!lbw_c->isChecked() && (shapeItems[elF->index].border_width > 0 || shapeItems[elF->index].border_width == -6)) )
+                    {
+                        if( !lbw_c->isChecked() && shapeItems[elF->index].border_width == -6 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 3;
+                        dynamic();
+                    }
+                    else if( shapeItems[elF->index].border_width > 0 )
+                    {
+                        bool fl_insert = false;
+                        //>>>> Detecting if there is any figure, from the figures which are not included to the selected ones,
+                        //>>>> with the same border width's index. If it is so append the new border width to the border width map
+                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                        {
+                            for( int h = 0; h < items_array_holds.size(); h++ )
+                                if( (shapeItems[items_array_holds[h]].border_width > 0) && (shapeItems[tmp_shapes[p]].border_width == shapeItems[items_array_holds[h]].border_width) )
+                                { fl_insert = true; break; }
+                            if( fl_insert ) break;
+                        }
+                        if( fl_insert )
+                            shapeItems[elF->index].border_width = elF->appendWidth( (*widths)[shapeItems[elF->index].border_width], widths, false );
+                    }
+                }
+                else if( items_array_holds.size() == 1 )
+                {
+                    //>>>> Detecting if there is any figure in the shapeItems container with the same border width's index.
+                    bool fl_insert = false;
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if(  elF->index != p && shapeItems[elF->index].border_width > 0 && shapeItems[p].border_width == shapeItems[elF->index].border_width )
+                        { fl_insert = true; break; }
+                    if( (lbw_c->isChecked() && 
+                        (shapeItems[elF->index].border_width <= -10 || shapeItems[elF->index].border_width == -6)) ||
+                        (!lbw_c->isChecked() && (shapeItems[elF->index].border_width > 0 || shapeItems[elF->index].border_width == -6)) )
+                        {
+                            if( !lbw_c->isChecked() && shapeItems[elF->index].border_width == -6 ) elF->flag_def_stat = true;
+                            elF->rect_dyn = -1; elF->dyn_num = 3;
+                            dynamic();
+                        }
+                    else if( fl_insert )//>>>> If there is a figure with the same index, append the new border width to the border width map
+                        shapeItems[elF->index].border_width = elF->appendWidth( (*widths)[shapeItems[elF->index].border_width], widths, false );
+                }
+            }
+            elF->flag_def_stat = false;
+            //>>> If the Dyn/Stat button is enabled for the border color
+            if( lbc_en->isChecked() && lbc_c->isEnabled() )
+            {
+                if( items_array_holds.size() > 1 ) 
+                {
+                    if( (lbc_c->isChecked() && 
+                        (shapeItems[elF->index].borderColor <= -10 || shapeItems[elF->index].borderColor == -6)) ||
+                        (!lbc_c->isChecked() && (shapeItems[elF->index].borderColor > 0 || shapeItems[elF->index].borderColor == -6)) )
+                        {
+                            if( !lbc_c->isChecked() && shapeItems[elF->index].borderColor == -6 ) elF->flag_def_stat = true;
+                            elF->rect_dyn = -1; elF->dyn_num = 4;
+                            dynamic();
+                        }
+                    else if( shapeItems[elF->index].borderColor > 0 )
+                    {
+                        bool fl_insert = false;
+                        //>>>> Detecting if there is any figure, from the figures which are not included to the selected ones,
+                        //>>>> with the same border color's index. If it is so append the new border color to the color's map
+                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                        {
+                            for( int h = 0; h < items_array_holds.size(); h++ )
+                                if( (shapeItems[items_array_holds[h]].borderColor > 0) && (shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[h]].borderColor) )
+                                { fl_insert = true; break; }
+                            if( fl_insert ) break;
+                        }
+                        if( fl_insert )
+                            shapeItems[elF->index].borderColor = elF->appendColor( (*colors)[shapeItems[elF->index].borderColor], colors, false );
+                    }
+                }
+                else if( items_array_holds.size() == 1 )
+                {
+                    //>>>> Detecting if there is any figure in the shapeItems container with the same border color's index.
+                    bool fl_insert = false;
+                    for( int p = 0; p < shapeItems.size(); p++ )
+                        if(  elF->index != p && shapeItems[elF->index].borderColor > 0 && shapeItems[p].borderColor == shapeItems[elF->index].borderColor )
+                        { fl_insert = true; break; }
+                    if( (lbc_c->isChecked() && 
+                        (shapeItems[elF->index].borderColor <= -10 || shapeItems[elF->index].borderColor == -6)) ||
+                        (!lbc_c->isChecked() && (shapeItems[elF->index].borderColor > 0 || shapeItems[elF->index].borderColor == -6)) )
+                    {
+                        if( !lbc_c->isChecked() && shapeItems[elF->index].borderColor == -6 ) elF->flag_def_stat = true;
+                        elF->rect_dyn = -1; elF->dyn_num = 4;
+                        dynamic();
+                    }
+                    else if( fl_insert )//>>>> If there is a figure with the same index, append the new border color to the color's map
+                        shapeItems[elF->index].borderColor = elF->appendColor( (*colors)[shapeItems[elF->index].borderColor], colors, false );
+                }
+            }
+            //>>>Applying the changes of the fugures properties for all figures in the items_array_holds array except th elF->index figure
             for( int i = 0; i < items_array_holds.size(); i++ )
             {
-                if( l_width->isEnabled() )
+                //>>>>Applying changes for the line width
+                if( lw_en->isChecked() )
                 {
-                    if( shapeItems[items_array_holds[i]].width == -5 )
+                    if( l_width->isEnabled() )
                     {
-                        k = -10;
-                        while( (*widths).find(k) != (*widths).end() ) k--;
-                        (*widths).insert( std::pair<int, float> (k, (float)(l_width->value()*scale)) );
-                        shapeItems[items_array_holds[i]].width = k;
+                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        {
+                            if( shapeItems[elF->index].width > 0 )
+                            {
+                                //>>>Detecting if there is the necessity to erase the width from the map andchanging the width's index to those of the elF->index figure
+                                bool flag_save = false;
+                                for( int p = 0; p < tmp_shapes.size(); p++ )
+                                    if( (shapeItems[items_array_holds[i]].width > 0) && (shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[i]].width) )
+                                    { flag_save = true; break; }
+                                if( (shapeItems[items_array_holds[i]].width != -5) && (shapeItems[items_array_holds[i]].width != shapeItems[elF->index].width) && !flag_save )
+                                    (*widths).erase( shapeItems[items_array_holds[i]].width );
+                                shapeItems[items_array_holds[i]].width = shapeItems[elF->index].width;
+                            }
+                            else if( shapeItems[elF->index].width <= -10 )
+                            {
+                                if( (shapeItems[items_array_holds[i]].width == -5) || (shapeItems[items_array_holds[i]].width > 0) )
+                                {
+                                    //>>>Detecting if there is the necessity to erase the width from the map and appendint the new statc width to the map
+                                    if( shapeItems[items_array_holds[i]].width > 0 )
+                                    {
+                                        bool fl_keep = false;
+                                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                                            if( shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[i]].width )
+                                            { fl_keep = true; break; }
+                                        if( !fl_keep ) (*widths).erase( shapeItems[items_array_holds[i]].width );
+                                    }
+                                    shapeItems[items_array_holds[i]].width = elF->appendWidth( (float)(l_width->value()*scale), widths, true );
+                                }
+                                //>>> If the figures width is already static just changing its value to the actual one.
+                                else if( shapeItems[items_array_holds[i]].width <= -10 )
+                                    (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
+                            }
+                        }
+                        //>>> Appending the static point for the figure with the default width
+                        else if( shapeItems[items_array_holds[i]].width == -5 )
+                            shapeItems[items_array_holds[i]].width = elF->appendWidth( (float)(l_width->value()*scale), widths, true );
+                        else//Changing the width of the figure with the actual value without changing its index in the map
+                            (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
                     }
-                    else (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
-                }
-                else if( shapeItems[items_array_holds[i]].width != -5 )
-                {
-                    (*widths).erase( shapeItems[items_array_holds[i]].width );
-                    shapeItems[items_array_holds[i]].width = -5;
-                }
-
-                if( l_color->isEnabled() )
-                {
-                    if( shapeItems[items_array_holds[i]].lineColor == -5 )
+                    //>>> Making the figures width the default one 
+                    //>>> and detecting if there is the necessity to save the previous figure's width index.
+                    else if( shapeItems[items_array_holds[i]].width != -5 )
                     {
-                        k = -10;
-                        while( (*colors).find(k) != (*colors).end() ) k--;
-                        (*colors).insert( std::pair<int, QColor> ( k, res_lClr ) );
-                        shapeItems[items_array_holds[i]].lineColor = k;
+                        bool fl_keep = false;
+                        if( shapeItems[items_array_holds[i]].width > 0 ) 
+                            for( int p = 0; p < tmp_shapes.size(); p++ )
+                                if( shapeItems[items_array_holds[i]].width == shapeItems[tmp_shapes[p]].width )
+                                { fl_keep = true; break; }
+                        if( !fl_keep )
+                            (*widths).erase( shapeItems[items_array_holds[i]].width );
+                        shapeItems[items_array_holds[i]].width = -5;
                     }
-                    else (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
                 }
-                else if( shapeItems[items_array_holds[i]].lineColor != -5 )
+                //>>>>Applying changes for the line color
+                if( lc_en->isChecked() )
                 {
-                    (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
-                    shapeItems[items_array_holds[i]].lineColor = -5;
-                }
-
-                if( l_style->isEnabled() )
-                {
-                    if( shapeItems[items_array_holds[i]].style == -5 )
+                    if( l_color->isEnabled() )
                     {
-                        k = -10;
-                        while( (*styles).find(k) != (*styles).end() ) k--;
-                        (*styles).insert( std::pair<int, Qt::PenStyle> (k, ln_style) );
-                        shapeItems[items_array_holds[i]].style = k;
+                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        {
+                            if( shapeItems[elF->index].lineColor > 0 )
+                            {
+                                //>>>Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
+                                bool flag_save = false;
+                                for( int p = 0; p < tmp_shapes.size(); p++ )
+                                    if( (shapeItems[items_array_holds[i]].lineColor > 0) && (shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[i]].lineColor) )
+                                    { flag_save = true; break; }
+                                if( (shapeItems[items_array_holds[i]].lineColor != -5) && (shapeItems[items_array_holds[i]].lineColor != shapeItems[elF->index].lineColor) && !flag_save )
+                                    (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                                shapeItems[items_array_holds[i]].lineColor = shapeItems[elF->index].lineColor;
+                            }
+                            else if( shapeItems[elF->index].lineColor <= -10 )
+                            {
+                                if( (shapeItems[items_array_holds[i]].lineColor == -5) || (shapeItems[items_array_holds[i]].lineColor > 0) )
+                                {
+                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new statc color to the map
+                                    if( shapeItems[items_array_holds[i]].lineColor > 0 )
+                                    {
+                                        bool fl_keep = false;
+                                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                                            if( shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[i]].lineColor )
+                                            { fl_keep = true; break; }
+                                        if( !fl_keep ) (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                                    }
+                                    shapeItems[items_array_holds[i]].lineColor = elF->appendColor( res_lClr, colors, true );
+                                }
+                                //>>> If the figure's color is already static just changing its value to the actual one.
+                                else if( shapeItems[items_array_holds[i]].lineColor <= -10 )
+                                    (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
+                            }
+                        }
+                        //>>> Appending the static point for the figure with the default color
+                        else if( shapeItems[items_array_holds[i]].lineColor == -5 )
+                            shapeItems[items_array_holds[i]].lineColor = elF->appendColor( res_lClr, colors, true );
+                        else//Changing the color of the figure with the actual value without changing its index in the map
+                            (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
                     }
-                    else (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
-                }
-                else if( shapeItems[items_array_holds[i]].style != -5 )
-                {
-                    (*styles).erase( shapeItems[items_array_holds[i]].style );
-                    shapeItems[items_array_holds[i]].style = -5;
-                }
-
-                if( lb_width->isEnabled() )
-                {
-                    if( shapeItems[items_array_holds[i]].border_width == -6 )
+                    //>>> Making the figures color the default one 
+                    //>>> and detecting if there is the necessity to save the previous figure's color index.
+                    else if( shapeItems[items_array_holds[i]].lineColor != -5 )
                     {
-                        k = -10;
-                        while( (*widths).find(k) != (*widths).end() ) k--;
-                        (*widths).insert( std::pair<int, float> (k, lb_width->value()*scale) );
-                        shapeItems[items_array_holds[i]].border_width = k;
+                        bool fl_keep = false;
+                        if( shapeItems[items_array_holds[i]].lineColor > 0 ) 
+                            for( int p = 0; p < tmp_shapes.size(); p++ )
+                                if( shapeItems[items_array_holds[i]].lineColor == shapeItems[tmp_shapes[p]].lineColor )
+                                { fl_keep = true; break; }
+                        if( !fl_keep )
+                            (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                        shapeItems[items_array_holds[i]].lineColor = -5;
                     }
-                    else (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
                 }
-                else if( shapeItems[items_array_holds[i]].border_width != -6 )
+                //>>>>Applying changes for the line style
+                if( ls_en->isChecked() )
                 {
-                    (*widths).erase( shapeItems[items_array_holds[i]].border_width );
-                    shapeItems[items_array_holds[i]].border_width = -6;
-                }
-
-                if( lb_color->isEnabled() )
-                {
-                    if( shapeItems[items_array_holds[i]].borderColor == -6 )
+                    if( l_style->isEnabled() )
                     {
-                        k = -10;
-                        while( (*colors).find(k) != (*colors).end() ) k--;
-                        (*colors).insert( std::pair<int, QColor> ( k, res_lbClr ) );
-                        shapeItems[items_array_holds[i]].borderColor = k;
+                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        {
+                            if( shapeItems[elF->index].style > 0 )
+                            {
+                                //>>>Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
+                                bool flag_save = false;
+                                for( int p = 0; p < tmp_shapes.size(); p++ )
+                                    if( (shapeItems[items_array_holds[i]].style > 0) && (shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[i]].style) )
+                                    {
+                                        flag_save = true;
+                                        break;
+                                    }
+                                if( (shapeItems[items_array_holds[i]].style != -5) && (shapeItems[items_array_holds[i]].style != shapeItems[elF->index].style) && !flag_save )
+                                    (*styles).erase( shapeItems[items_array_holds[i]].style );
+                                shapeItems[items_array_holds[i]].style = shapeItems[elF->index].style;
+                            }
+                            else if( shapeItems[elF->index].style <= -10 )
+                            {
+                                if( (shapeItems[items_array_holds[i]].style == -5) || (shapeItems[items_array_holds[i]].style > 0) )
+                                {
+                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new statc color to the map
+                                    if( shapeItems[items_array_holds[i]].style > 0 )
+                                    {
+                                        bool fl_keep = false;
+                                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                                            if( shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[i]].style )
+                                            { fl_keep = true; break; }
+                                        if( !fl_keep ) (*styles).erase( shapeItems[items_array_holds[i]].style );
+                                    }
+                                    shapeItems[items_array_holds[i]].style = elF->appendStyle( ln_style, styles, true );
+                                }
+                                //>>> If the figure's color is already static just changing its value to the actual one.
+                                else if( shapeItems[items_array_holds[i]].style <= -10 )
+                                    (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
+                            }
+                        }
+                        //>>> Appending the static point for the figure with the default color
+                        else if( shapeItems[items_array_holds[i]].style == -5 )
+                            shapeItems[items_array_holds[i]].style = elF->appendStyle( ln_style, styles, true );
+                        else//Changing the color of the figure with the actual value without changing its index in the map
+                            (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
                     }
-                    else (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
+                    //>>> Making the figures color the default one 
+                    //>>> and detecting if there is the necessity to save the previous figure's color index.
+                    else if( shapeItems[items_array_holds[i]].style != -5 )
+                    {
+                        bool fl_keep = false;
+                        if( shapeItems[items_array_holds[i]].style > 0 ) 
+                            for( int p = 0; p < tmp_shapes.size(); p++ )
+                                if( shapeItems[items_array_holds[i]].style == shapeItems[tmp_shapes[p]].style )
+                                { fl_keep = true; break; }
+                        if( !fl_keep ) (*styles).erase( shapeItems[items_array_holds[i]].style );
+                        shapeItems[items_array_holds[i]].style = -5;
+                    }
                 }
-                else if( shapeItems[items_array_holds[i]].borderColor != -6 )
+                //>>>>Applying changes for the border width
+                if( lbw_en->isChecked() )
                 {
-                    (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
-                    shapeItems[items_array_holds[i]].borderColor = -6;
+                    if( lb_width->isEnabled() )
+                    {
+                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        {
+                            if( shapeItems[elF->index].border_width > 0 )
+                            {
+                                //>>>Detecting if there is the necessity to erase the border width from the map andchanging the border width's index to those of the elF->index figure
+                                bool flag_save = false;
+                                for( int p = 0; p < tmp_shapes.size(); p++ )
+                                    if( (shapeItems[items_array_holds[i]].border_width > 0) && (shapeItems[tmp_shapes[p]].border_width == shapeItems[items_array_holds[i]].border_width) )
+                                    { flag_save = true; break; }
+                                if( (shapeItems[items_array_holds[i]].border_width != -6) && (shapeItems[items_array_holds[i]].border_width != shapeItems[elF->index].border_width) && !flag_save )
+                                    (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                                shapeItems[items_array_holds[i]].border_width = shapeItems[elF->index].border_width;
+                            }
+                            else if( shapeItems[elF->index].border_width <= -10 )
+                            {
+                                if( (shapeItems[items_array_holds[i]].border_width == -6) || (shapeItems[items_array_holds[i]].border_width > 0) )
+                                {
+                                    //>>>Detecting if there is the necessity to erase the border width from the map and appending the new statc border width to the map
+                                    if( shapeItems[items_array_holds[i]].border_width > 0 )
+                                    {
+                                        bool fl_keep = false;
+                                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                                            if( shapeItems[tmp_shapes[p]].border_width == shapeItems[items_array_holds[i]].border_width )
+                                            { fl_keep = true; break; }
+                                        if( !fl_keep ) (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                                    }
+                                    shapeItems[items_array_holds[i]].border_width = elF->appendWidth( (float)(lb_width->value()*scale), widths, true );
+                                }
+                                //>>> If the figures border width is already static just changing its value to the actual one.
+                                else if( shapeItems[items_array_holds[i]].border_width <= -10 )
+                                    (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
+                            }
+                        }
+                        //>>> Appending the static point for the figure with the default border_width
+                        else if( shapeItems[items_array_holds[i]].border_width == -6 )
+                            shapeItems[items_array_holds[i]].border_width = elF->appendWidth( (float)(lb_width->value()*scale), widths, true );
+                        else//Changing the border width of the figure with the actual value without changing its index in the map
+                            (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
+                    }
+                    //>>> Making the figures border width the default one 
+                    //>>> and detecting if there is the necessity to save the previous figure's border width index.
+                    else if( shapeItems[items_array_holds[i]].border_width != -6 )
+                    {
+                        bool fl_keep = false;
+                        if( shapeItems[items_array_holds[i]].border_width > 0 ) 
+                            for( int p = 0; p < tmp_shapes.size(); p++ )
+                                if( shapeItems[items_array_holds[i]].border_width == shapeItems[tmp_shapes[p]].border_width )
+                                { fl_keep = true; break; }
+                        if( !fl_keep ) (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                        shapeItems[items_array_holds[i]].border_width = -6;
+                    }
+                }
+                //>>>>Applying changes for the border color
+                if( lbc_en->isChecked() )
+                {
+                    if( lb_color->isEnabled() )
+                    {
+                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        {
+                            if( shapeItems[elF->index].borderColor > 0 )
+                            {
+                                //>>>Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
+                                bool flag_save = false;
+                                for( int p = 0; p < tmp_shapes.size(); p++ )
+                                    if( (shapeItems[items_array_holds[i]].borderColor > 0) && (shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[i]].borderColor) )
+                                    { flag_save = true; break; }
+                                if( (shapeItems[items_array_holds[i]].borderColor != -6) && (shapeItems[items_array_holds[i]].borderColor != shapeItems[elF->index].borderColor) && !flag_save )
+                                    (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
+                                shapeItems[items_array_holds[i]].borderColor = shapeItems[elF->index].borderColor;
+                            }
+                            else if( shapeItems[elF->index].borderColor <= -10 )
+                            {
+                                if( (shapeItems[items_array_holds[i]].borderColor == -6) || (shapeItems[items_array_holds[i]].borderColor > 0) )
+                                {
+                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new statc color to the map
+                                    if( shapeItems[items_array_holds[i]].borderColor > 0 )
+                                    {
+                                        bool fl_keep = false;
+                                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                                            if( shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[i]].borderColor )
+                                            { fl_keep = true; break; }
+                                        if( !fl_keep ) (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
+                                    }
+                                    shapeItems[items_array_holds[i]].borderColor = elF->appendColor( res_lbClr, colors, true );
+                                }
+                                //>>> If the figure's color is already static just changing its value to the actual one.
+                                else if( shapeItems[items_array_holds[i]].borderColor <= -10 )
+                                    (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
+                            }
+                        }
+                        //>>> Appending the static point for the figure with the default color
+                        else if( shapeItems[items_array_holds[i]].borderColor == -6 )
+                            shapeItems[items_array_holds[i]].borderColor = elF->appendColor( res_lbClr, colors, true );
+                        else//Changing the color of the figure with the actual value without changing its index in the map
+                            (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
+                    }
+                    //>>> Making the figures color the default one 
+                    //>>> and detecting if there is the necessity to save the previous figure's color index.
+                    else if( shapeItems[items_array_holds[i]].borderColor != -6 )
+                    {
+                        bool fl_keep = false;
+                        if( shapeItems[items_array_holds[i]].borderColor > 0 ) 
+                            for( int p = 0; p < tmp_shapes.size(); p++ )
+                                if( shapeItems[items_array_holds[i]].borderColor == shapeItems[tmp_shapes[p]].borderColor )
+                                { fl_keep = true; break; }
+                        if( !fl_keep )
+                            (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
+                        shapeItems[items_array_holds[i]].borderColor = -6;
+                    }
                 }
             }
             if( !flag_hld )
@@ -3083,6 +3787,36 @@ void ElFigDt::properties()
                     (*pnts)[shapeItems[elF->index].n5].setX(p5_x->value()); (*pnts)[shapeItems[elF->index].n5].setY(p5_y->value());
                     //-- Calcylating t_start and t_end for the arc, using the start and end points(n1,n2) --
                     shapeItems[elF->index].ctrlPos4 = elF->getArcStartEnd( (*pnts)[shapeItems[elF->index].n1], (*pnts)[shapeItems[elF->index].n2], (*pnts)[shapeItems[elF->index].n3], (*pnts)[shapeItems[elF->index].n4], (*pnts)[shapeItems[elF->index].n5] );
+                }
+                if( p1_c->isEnabled() && ( (p1_c->isChecked() && shapeItems[elF->index].n1 <= -10) ||
+                                           (!p1_c->isChecked() && shapeItems[elF->index].n1 > 0) ) )
+                {
+                    elF->rect_dyn = 0; elF->dyn_num = 0;
+                    dynamic();
+                }
+                if( p2_c->isEnabled() &&( (p2_c->isChecked() && shapeItems[elF->index].n2 <= -10) ||
+                                          (!p2_c->isChecked() && shapeItems[elF->index].n2 > 0) ) )
+                {
+                    elF->rect_dyn = 1; elF->dyn_num = 0;
+                    dynamic();
+                }
+                if( p3_c->isEnabled() && ( (p3_c->isChecked() && shapeItems[elF->index].n3 <= -10) ||
+                                           (!p3_c->isChecked() && shapeItems[elF->index].n3 > 0) ) )
+                {
+                    elF->rect_dyn = 2; elF->dyn_num = 0;
+                    dynamic();
+                }
+                if( p4_c->isEnabled() && ( (p4_c->isChecked() && shapeItems[elF->index].n4 <= -10) ||
+                                           (!p4_c->isChecked() && shapeItems[elF->index].n4 > 0) ) )
+                {
+                    elF->rect_dyn = 3; elF->dyn_num = 0;
+                    dynamic();
+                }
+                if( p5_c->isEnabled() && ( (p5_c->isChecked() && shapeItems[elF->index].n5 <= -10) ||
+                                           (!p5_c->isChecked() && shapeItems[elF->index].n5 > -10) ) )
+                {
+                    elF->rect_dyn = 4; elF->dyn_num = 0;
+                    dynamic();
                 }
             }
             //-- Adding the figures to be updated to the ones in the items_array_holds array --
@@ -5849,6 +6583,85 @@ void ShapeElFigure::dropPoint( int num, int num_shape, const QVector<ShapeItem> 
         }
     if( !equal ) (*pnts).erase(num);
 }
+
+//- adding the width to the widths map -
+int ShapeElFigure::appendWidth( const float &width, WidthMap *widths, bool flag_down )
+{
+    if( !flag_down )
+    {
+        int i = 1;
+        while( (*widths).find(i) != (*widths).end() ) i++;
+        (*widths).insert( std::pair<int, float> (i, width) );
+        return i;
+    }
+    else
+    {
+        int i = -10;
+        while( (*widths).find(i) != (*widths).end() ) i--;
+        (*widths).insert( std::pair<int, float> (i, width) );
+        return i;
+    }
+}
+
+//- adding the color to the color map -
+int ShapeElFigure::appendColor( const QColor &color, ColorMap *colors, bool flag_down )
+{
+    if( !flag_down )
+    {
+        int i = 1;
+        while( (*colors).find(i) != (*colors).end() ) i++;
+        (*colors).insert( std::pair<int, QColor> (i, color) );
+        return i;
+    }
+    else
+    {
+        int i = -10;
+        while( (*colors).find(i) != (*colors).end() ) i--;
+        (*colors).insert( std::pair<int, QColor> (i, color) );
+        return i;
+    }
+}
+
+//- adding the style to the style map -
+int ShapeElFigure::appendStyle( const Qt::PenStyle &style, StyleMap *styles, bool flag_down )
+{
+    if( !flag_down )
+    {
+        int i = 1;
+        while( (*styles).find(i) != (*styles).end() ) i++;
+        (*styles).insert( std::pair<int, Qt::PenStyle> (i, style) );
+        return i;
+    }
+    else
+    {
+        int i = -10;
+        while( (*styles).find(i) != (*styles).end() ) i--;
+        (*styles).insert( std::pair<int, Qt::PenStyle> (i, style) );
+        return i;
+    }
+}
+
+//- adding the image to the image map -
+int ShapeElFigure::appendImage( const string &image, ImageMap *images, bool flag_down )
+{
+    if( !flag_down )
+    {
+        int i = 1;
+        while( (*images).find(i) != (*images).end() ) i++;
+        (*images).insert( std::pair<int, string> (i, image) );
+        return i;
+    }
+    else
+    {
+        int i = -10;
+        while( (*images).find(i) != (*images).end() ) i--;
+        (*images).insert( std::pair<int, string> (i, image) );
+        return i;
+    }
+}
+
+
+
 //- Building the contiguity matrix using start and end points of all figures -
 int ShapeElFigure::buildMatrix( const QVector<ShapeItem> &shapeItems )
 {

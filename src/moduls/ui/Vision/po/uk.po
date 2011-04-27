@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-13 16:06+0300\n"
+"POT-Creation-Date: 2011-04-27 18:00+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
 
 msgid "Operation user interface (QT)"
 msgstr "Робочий інтерфейс користувача (QT)"
@@ -1513,11 +1513,23 @@ msgstr "Зробити цю точку динамічною"
 msgid "Press to make this point dynamic"
 msgstr "Натисніть, щоб зробити цю точку динамічною."
 
+msgid "Make this point static"
+msgstr "Зробити цю точку статичною"
+
+msgid "Press to make this point static"
+msgstr "Натисніть, щоб зробити цю точку статичною."
+
 msgid "Make line width dynamic"
-msgstr "Зробити товщину лінії динамічною"
+msgstr "Зробити ширину лінії динамічною"
 
 msgid "Press to make line width dynamic"
-msgstr "Натисніть, щоб зробити товщину лінії динамічною."
+msgstr "Натисніть, щоб зробити ширину лінії динамічною."
+
+msgid "Make line width static"
+msgstr "Зробити ширину лінії статичною"
+
+msgid "Press to make line width static"
+msgstr "Натисніть, щоб зробити ширину лінії динамічною."
 
 msgid "Make line color dynamic"
 msgstr "Зробити колір лінії динамічним"
@@ -1525,23 +1537,47 @@ msgstr "Зробити колір лінії динамічним"
 msgid "Press to make line color dynamic"
 msgstr "Натисніть, щоб зробити колір лінії динамічним."
 
+msgid "Make line color static"
+msgstr "Зробити колір лінії статичним"
+
+msgid "Press to make line color static"
+msgstr "Натисніть, щоб зробити колір лінії статичним."
+
 msgid "Make border width dynamic"
-msgstr "Зробити товщину бордюра динамічним"
+msgstr "Зробити ширину границі динамічною"
 
 msgid "Press to make border width dynamic"
-msgstr "Натисніть, щоб зробити товщину бордюра динамічним."
+msgstr "Натисніть, щоб зробити ширину границі динамічною."
+
+msgid "Make border width static"
+msgstr "Зробити ширину границі статичною"
+
+msgid "Press to make border width static"
+msgstr "Натисніть, щоб зробити ширину границі статичною."
 
 msgid "Make border color dynamic"
-msgstr "Зробити колір бордюра динамічним"
+msgstr "Зробити колір границі динамічним"
 
 msgid "Press to make border color dynamic"
-msgstr "Натисніть, щоб зробити колір бордюра динамічним."
+msgstr "Натисніть, щоб зробити колір границі динамічним."
+
+msgid "Make border color static"
+msgstr "Зробити колір границі статичним"
+
+msgid "Press to make border color static"
+msgstr "Натисніть, щоб зробити колір границі статичним."
 
 msgid "Make line style dynamic"
 msgstr "Зробити стиль лінії динамічним"
 
 msgid "Press to make line style dynamic"
 msgstr "Натисніть, щоб зробити стиль лінії динамічним."
+
+msgid "Make line style static"
+msgstr "Зробити стиль лінії статичним"
+
+msgid "Press to make line style static"
+msgstr "Натисніть, щоб зробити стиль лінії статичним."
 
 msgid "Show the figure's properties"
 msgstr "Показати властивості елементарної фігури"
@@ -1561,11 +1597,23 @@ msgstr "Зробити колір заповнення динамічним"
 msgid "Press to make fill color dynamic"
 msgstr "Натисніть, щоб зробити колір заповнення динамічним."
 
+msgid "Make fill color static"
+msgstr "Зробити колір заповнення статичним"
+
+msgid "Press to make fill color static"
+msgstr "Натисніть, щоб зробити колір заповнення статичним."
+
 msgid "Make fill image dynamic"
 msgstr "Зробити зображення заповнення динамічним"
 
 msgid "Press to make fill image dynamic"
 msgstr "Натисніть, щоб зробити зображення заповнення динамічним."
+
+msgid "Make fill image static"
+msgstr "Зробити зображення заповнення статичним"
+
+msgid "Press to make fill image static"
+msgstr "Натисніть, щоб зробити зображення заповнення статичним."
 
 msgid "Show the fill's properties"
 msgstr "Показати властивості заповнення"
@@ -1612,11 +1660,17 @@ msgstr "Точка 4:"
 msgid "Point 5:"
 msgstr "Точка 5:"
 
+msgid "Include(checked)/Exclude(unchecked) the fill color from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) колір заповнення зі списку властивостей."
+
 msgid "Fill Color"
 msgstr "Колір заповнення"
 
 msgid "Set the default fill color."
 msgstr "Встановити колір заповнення за замовчуванням."
+
+msgid "Include(checked)/Exclude(unchecked) the fill image from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) зображення заповнення зі списку властивостей."
 
 msgid "Fill Image"
 msgstr "Зображення заповнення"
@@ -1624,11 +1678,30 @@ msgstr "Зображення заповнення"
 msgid "Set the default fill image."
 msgstr "Встановити зображення заповнення за замовчуванням."
 
+msgid "Make the fill color Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити колір заповнення Динамічним(вибрана)/Статичним(невибрана)."
+
+msgid "Dyn/Stat"
+msgstr "Дін/Стат"
+
+msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
+msgstr ""
+"Зробити зображення заповнення Динамічним(вибрана)/Статичним(невибрана)."
+
+msgid "Include(checked)/Exclude(unchecked) the line width from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) ширину лінії зі списку властивостей."
+
 msgid "Line width"
 msgstr "Ширина лінії"
 
 msgid "Set the default line width."
 msgstr "Встановити ширину лінії за замовчуванням."
+
+msgid "Make the line width Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити ширину лінії Динамічною(вибрана)/Статичною(невибрана)."
+
+msgid "Include(checked)/Exclude(unchecked) the line color from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) колір лінії зі списку властивостей."
 
 msgid "Line color"
 msgstr "Колір лінії"
@@ -1636,11 +1709,23 @@ msgstr "Колір лінії"
 msgid "Set the default line color."
 msgstr "Встановити колір лінії за замовчуванням."
 
+msgid "Make the line color Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити клір лінії Динамічним(вибрана)/Статичним(невибрана)."
+
+msgid "Include(checked)/Exclude(unchecked) the line style from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) стиль лінії зі списку властивостей."
+
 msgid "Line style"
 msgstr "Стиль лінії"
 
 msgid "Set the default line style."
 msgstr "Встановити стиль лінії за замовчуванням."
+
+msgid "Make the line style Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити стиль лінії Динамічним(вибрана)/Статичним(невибрана)."
+
+msgid "Include(checked)/Exclude(unchecked) the border width from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) ширину границі зі списку властивостей."
 
 msgid "Border width"
 msgstr "Ширина границі"
@@ -1648,17 +1733,41 @@ msgstr "Ширина границі"
 msgid "Set the default line's border width."
 msgstr "Встановити ширину границі за замовчуванням."
 
+msgid "Make the border width Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити ширину границі Динамічною(вибрана)/Статичною(невибрана)."
+
+msgid "Include(checked)/Exclude(unchecked) the border color from the properties list."
+msgstr "Включити(вибраний)/Виключити(невибраний) колір границі зі списку властивостей."
+
 msgid "Border color"
 msgstr "Колір границі"
 
 msgid "Set the default line's border color."
 msgstr "Встановити колір границі за замовчуванням."
 
+msgid "Make the border color Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити колір границі Динамічним(вибрана)/Статичним(невибрана)."
+
 msgid "Point 1:"
 msgstr "Точка 1:"
 
+msgid "Make the 1 point Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити 1 точку Динамічною(вибрана)/Статичною(невибрана)."
+
 msgid "Point 2:"
 msgstr "Точка 2:"
+
+msgid "Make the 2 point Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити 2 точку Динамічною(вибрана)/Статичною(невибрана)."
+
+msgid "Make the 3 point Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити 3 точку Динамічною(вибрана)/Статичною(невибрана)."
+
+msgid "Make the 4 point Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити 4 точку Динамічною(вибрана)/Статичною(невибрана)."
+
+msgid "Make the 5 point Dynamic(checked)/Static(unchecked)."
+msgstr "Зробити 5 точку Динамічною(вибрана)/Статичною(невибрана)."
 
 msgid "Solid"
 msgstr "Суцільна"

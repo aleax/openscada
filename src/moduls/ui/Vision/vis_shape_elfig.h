@@ -111,7 +111,6 @@ class RectItem
 //*************************************************
 class ElFigDt : public QObject
 {
-    //friend class ShapeElFigure;
     Q_OBJECT
     public:
         //Methods
@@ -207,6 +206,10 @@ class ShapeElFigure : public WdgShape
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
         int appendPoint( const QPointF &pos, const QVector<ShapeItem> &shapeItems, PntMap *pnts, bool flag_down );
         void dropPoint( int num, int num_shape, const QVector<ShapeItem> &shapeItems, PntMap *pnts );
+        int appendWidth( const float &width, WidthMap *widths, bool flag_down );
+        int appendColor( const QColor &color, ColorMap *colors, bool flag_down );
+        int appendStyle( const Qt::PenStyle &style, StyleMap *styles, bool flag_down );
+        int appendImage( const string &image, ImageMap *images, bool flag_down );
         void step( int s, int f, int p, const QVector<int> &vect, int N );
         bool inundation( const QPointF &point, const QVector<ShapeItem> &shapeItems, PntMap *pnts, const QVector<int> &vect, int N, WdgView *w );
         bool inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap *pnts, WdgView *w, int number );
@@ -225,7 +228,7 @@ class ShapeElFigure : public WdgShape
         QVector<int> rect_array;
         QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
 
-	int count_Shapes, count_moveItemTo, index, fill_index, index_temp, index_del, rect_num;
+	int count_Shapes, count_moveItemTo, index, fill_index, index_temp, index_del, rect_num, dyn_num;
 
         unsigned status_hold	:1;
 	unsigned flag_key	:1;
@@ -252,6 +255,7 @@ class ShapeElFigure : public WdgShape
         unsigned flag_angle_temp	:1;
         unsigned flag_geom	:1;
         unsigned flag_rect_items	:1;
+        unsigned flag_def_stat	:1;
 
         int count_rects, rect_num_arc, arc_rect;
         double t_start, t_end;

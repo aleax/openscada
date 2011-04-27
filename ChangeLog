@@ -1,3 +1,11 @@
+2011-04-27 Maxim
+- !UI.Vision: The 'dynamic' function is modified to be able to make tha static values as well for the primitive ElFigure.
+- !UI.Vision: The properties dialog is modified to be able to make the values dynamic/static, and also to ignore the selected attributes
+               when accepted for the primitive ElFigure.
+- !UI.Vision: The popup menu is added by the fields to make the value the 'static' one for the primitive ElFigure.
+- FIX:UI.Vision: 'dynamic' function is fixed by the correct flags' and vectors' processung at its end for the primitive ElFigure.
+
+
 2011-04-26 Roman
 - DAQ.JavaLikeCalc: Syntax highlight rules for "JavaScript" is updated.
 - DAQ.ModBus: Syntax highlight rules for attributes of a parameter list.
