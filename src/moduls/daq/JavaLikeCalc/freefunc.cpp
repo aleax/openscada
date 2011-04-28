@@ -1151,8 +1151,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	{
 	    case TVariant::Null:
 		if(prop == "isEVal")	return true;
-		return EVAL_BOOL;
-		//throw TError(nodePath().c_str(),_("Null type have not function '%s' or not enough parameters for it."),prop.c_str());
+		return false;
 	    case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
 	    case TVariant::Boolean:
 		// bool isEVal( ) - check value to "EVAL"

@@ -100,8 +100,6 @@ class TWEB: public TUI
 	//> Web process methods
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 	void getAbout( SSess &ses );
-	void getAuth( SSess &ses );
-	string getCookie( string name, vector<string> &vars );
 
 	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 

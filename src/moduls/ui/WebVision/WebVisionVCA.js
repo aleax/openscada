@@ -93,9 +93,12 @@ function posGetX(obj,noWScrl)
 {
   var posX = 0;
   for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )
+  {
     posX += (obj.style.left?parseInt(obj.style.left):0)+
 	(obj.parentNode.style.borderLeftWidth?parseInt(obj.parentNode.style.borderLeftWidth):0)+
 	(obj.parentNode.style.marginLeft?parseInt(obj.parentNode.style.marginLeft):0);
+    if(obj.style.position == 'relative') posX += obj.offsetLeft;
+  }
   return posX+(!noWScrl?-window.pageXOffset:0);
 }
 /***************************************************
@@ -105,9 +108,12 @@ function posGetY(obj,noWScrl)
 {
   var posY = 0;
   for( ; obj && obj.nodeName != 'BODY' ; obj=obj.parentNode )
+  {
     posY += (obj.style.top?parseInt(obj.style.top):0)+
 	(obj.parentNode.style.borderTopWidth?parseInt(obj.parentNode.style.borderTopWidth):0)+
 	(obj.parentNode.style.marginTop?parseInt(obj.parentNode.style.marginTop):0);
+    if(obj.style.position == 'relative') posY += obj.offsetTop;
+  }
   return posY+(!noWScrl?-window.pageYOffset:0);
 }
 /***************************************************
@@ -352,7 +358,9 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     this.addr  = pgId;
     this.place = document.createElement('div');
     this.makeEl(servGet(pgId,'com=attrsBr'));
-    document.body.appendChild(this.place);
+    var centerTag = document.createElement('center');
+    centerTag.appendChild(this.place);
+    document.body.appendChild(centerTag);
     //> Set project's icon and RunTime page title
     document.getElementsByTagName('link')[0].setAttribute('href',location.pathname+'?com=ico');
     return true;
@@ -380,7 +388,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     iPg.window = window.open('',pgId,'width=600,height=400,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');
     if( !iPg.window ) return true;
     iPg.window.document.open( );
-    iPg.window.document.write("<html><body style='background-color: #E6E6E6;'><div id='main'/></body></html>\n");
+    iPg.window.document.write("<html><body style='background-color: #E6E6E6;'><center><div id='main'/></center></body></html>\n");
     iPg.window.document.close( );
     var mainDiv = iPg.window.document.getElementById('main');
     iPg.place = mainDiv;
@@ -443,7 +451,7 @@ function makeEl( pgBr, inclPg )
     geomX -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
     geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
   }
-  elStyle+='position: absolute; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
+  elStyle+='position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
   var geomW = parseFloat(this.attrs['geomW'])-2*(elMargin+elBorder);
   var geomH = parseFloat(this.attrs['geomH'])-2*(elMargin+elBorder);
 
@@ -467,7 +475,7 @@ function makeEl( pgBr, inclPg )
   if( this.pg && this.window )
   {
     var pgWin = this.window;
-    pgWin.document.body.style.backgroundColor = getColor(this.attrs['backColor']);
+    //pgWin.document.body.style.backgroundColor = getColor(this.attrs['backColor']);
     pgWin.resizeTo(geomW+20,geomH+40);
   }
 
@@ -477,7 +485,7 @@ function makeEl( pgBr, inclPg )
   {
     if( this.pg )
     {
-      elStyle+='background-color: #818181; border: 1px solid black; color: red; overflow: auto; ';
+      elStyle+='background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
       this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permited.</div>";
     }
   }
@@ -711,7 +719,7 @@ function makeEl( pgBr, inclPg )
 	this.place.appendChild(formObj);
 	var geomWint = geomW-4;
 	formObj.wdgLnk = this;
-	formObj.style.cssText = 'position: absolute; top: '+((geomH-20)/2)+'px; width: '+geomWint+'px; height: '+Math.min(geomH,16)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px;';
+	formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-20)/2)+'px; width: '+geomWint+'px; height: '+Math.min(geomH,16)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px;';
 	this.place.view = parseInt(this.attrs['view']);
 	this.place.cfg = this.attrs['cfg'];
 	if( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR )
@@ -1110,7 +1118,7 @@ function makeEl( pgBr, inclPg )
 	var formObj = this.place.ownerDocument.createElement('select');
 	formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-	formObj.style.cssText = 'position: absolute; top: '+((elTp==4)?(geomH-20)/2:0)+'px; height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: '+(geomW-4)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px; ';
+	formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-20)/2:0)+'px; height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: '+(geomW-4)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px; ';
 	formObj.wdgLnk = this;
 //	if( elTp == 5 ) formObj.setAttribute('size',100);
 	if( elTp == 4 )
@@ -1519,7 +1527,7 @@ function perUpdtEn( en )
 }
 function perUpdt( )
 {
-  if( this.attrs['root'] == 'FormEl' && this.place.childNodes[0].clearTm && (--this.place.childNodes[0].clearTm) <= 0 )
+  if( this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].clearTm && (--this.place.childNodes[0].clearTm) <= 0 )
     this.place.childNodes[0].chEscape();
   else if( this.attrs['root'] == 'Diagram' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 )
   {

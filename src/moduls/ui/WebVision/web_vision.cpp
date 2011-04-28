@@ -248,7 +248,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
     //> Default CSS init
     mCSStables =
 	"hr { width: 95%; }\n"
-	"body { background-color: #818181; margin: 0px; }\n"
+	"body { background-color: #B0B0B0; margin: 0px; }\n"
 	"h1.head { text-align:center; color:#ffff00; }\n"
 	"h2.title { text-align:center; font-style: italic; margin: 0px; padding: 0px; border-width:0; }\n"
 	"table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
@@ -606,34 +606,6 @@ void TWEB::getAbout( SSess &ses )
 	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>"+_(AUTORS)+"</TD></TR>"
 	"</table>\n"
 	"</TD></TR>\n</table><br/></center>\n";
-}
-
-void TWEB::getAuth( SSess &ses )
-{
-    ses.page = ses.page+"<center><table class='page_auth'>"
-	"<tr><td><b>"+_("Enter to module")+"</b></td></tr>\n"
-	"<tr class='content'> <td align='center'>\n"
-	"<form method='post' action='/"MOD_ID+ses.url+"' enctype='multipart/form-data'>\n"
-	"<table cellpadding='3px'>\n"
-	"<tr><td><b>"+_("User name")+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
-	"<tr><td><b>"+_("Password")+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
-	"<tr><td colspan='2' align='center'><input type='submit' name='auth_enter' value='"+_("Enter")+"'/>\n"
-	"<input type='reset' name='clean' value='"+_("Clean")+"'/>\n"
-	"</td></tr></table>\n</form>\n"
-	"</td></tr></table></center>\n";
-}
-
-string TWEB::getCookie( string name, vector<string> &vars )
-{
-    for( unsigned i_var = 0; i_var < vars.size(); i_var++)
-	if( vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie" )
-	{
-	    size_t i_beg = vars[i_var].find(name+"=",0);
-	    if( i_beg == string::npos ) return "";
-	    i_beg += name.size()+1;
-	    return vars[i_var].substr(i_beg,vars[i_var].find(";",i_beg)-i_beg);
-	}
-    return "";
 }
 
 void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )

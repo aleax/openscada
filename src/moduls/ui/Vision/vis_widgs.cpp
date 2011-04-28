@@ -58,7 +58,6 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
 	QDialog(parent), m_id(NULL), m_name(NULL)
 {
     setWindowTitle(ndlg);
-    setMinimumSize( QSize( 120, 150 ) );
     setWindowIcon(icon);
     setSizeGripEnabled(true);
 

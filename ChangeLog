@@ -1,4 +1,7 @@
 2011-04-28 Roman
+- FIX:UI.QTCfg, UI.Vision: Input dialog wrong resize by minimum border set is fixed.
+- UI.WebVision: Central align is added to interface. Background color is set fixed to #B0B0B0.
+- FIX:UI.WebVision: View type switch is fixed for demo form.
 - DAQ: To user API of system object TDAQS is added function funcCall() for call function's texts by OpenSCADA internal languages.
 - DAQ.JavaLikeCalc, DAQ.PrmTmpl, Protocol.ModBus, Protocol.UserProtocol, UI.VCAEngine, UI.WebUser:
     Return result of compile procedures function is changed to the node path from DAQ subsystem.
