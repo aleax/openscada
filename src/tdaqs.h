@@ -87,6 +87,8 @@ class TDAQS : public TSubSYS
 	void load_( );
 	void save_( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Private data
 	class SStat

@@ -812,7 +812,7 @@ void Node::setEnable( bool vl )
 	    else
 	    {
 		string mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
-		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
+		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    }
 	}catch( TError err )
 	{ mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str()); throw; }

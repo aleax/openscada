@@ -1427,7 +1427,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	//>> Compile empty function for binding to object
 	wProgO = SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).at().compileFunc(TSYS::strSepParse(iLang,1,'.'),funcIO,"");
 	//>> Connect to compiled function
-	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wProgO,1)).at());
+	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wProgO)).at());
 	//>> Load values of generic IO
 	funcV.setI(1,wdg->attrAt("time").at().getI());
 	funcV.setI(2,wdg->attrAt("bTime").at().getI());

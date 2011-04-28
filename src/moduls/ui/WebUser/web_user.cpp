@@ -253,7 +253,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    else if(!(uPg=defPg()).empty()) up = uPgAt(uPg);
 	    else throw TError(nodePath().c_str(),_("Page error"));
 	}
-	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg(),1)).at());
+	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
 
 	//> Load inputs
 	funcV.setS(1, "GET");
@@ -334,7 +334,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    if(!(uPg=defPg()).empty()) up = uPgAt(uPg);
 	    else throw TError(nodePath().c_str(),_("Page error"));
 	}
-	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg(),1)).at());
+	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
 
 	//> Load inputs
 	funcV.setS(1,"POST");

@@ -187,8 +187,6 @@ void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
     {
 	shgl.childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen")->
 	     childAdd("rule")->setAttr("expr","\\\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})")->setAttr("color","green")->setAttr("font_weight","1");
-	//shgl.childAdd("rule")->setAttr("expr","\".+?[^\\\\]\"")->setAttr("color","darkgreen");
-	//shgl.childAdd("blk")->setAttr("beg","\"")->setAttr("end","\"")->setAttr("color","darkgreen");
 	shgl.childAdd("blk")->setAttr("beg","/\\*")->setAttr("end","\\*/")->setAttr("color","gray")->setAttr("font_italic","1");
 	shgl.childAdd("rule")->setAttr("expr","//[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|in|using|new|var|break|continue|return|Array|Object|RegExp)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
@@ -201,17 +199,23 @@ void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
 {
-    if( lang != "JavaScript" )	throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
-    if( !lbPresent("sys_compile") ) lbReg( new Lib("sys_compile","","") );
-    if( !lbAt("sys_compile").at().present(fnc_cfg.id()) ) lbAt("sys_compile").at().add(fnc_cfg.id().c_str(),"");
+    if(lang != "JavaScript") throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
+    if(!lbPresent("sys_compile")) lbReg( new Lib("sys_compile","","") );
 
-    AutoHD<Func> func = lbAt("sys_compile").at().at(fnc_cfg.id());
+    //> Function id generation
+    string funcId = fnc_cfg.id();
+    if(funcId == "<auto>")
+	for(int aId = 1; lbAt("sys_compile").at().present(funcId); aId++)
+	    funcId = TSYS::strMess("Auto_%d",aId); 
+
+    if(!lbAt("sys_compile").at().present(fnc_cfg.id())) lbAt("sys_compile").at().add(funcId.c_str(),"");
+    AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
 
     bool isStart = func.at().startStat();
     try
     {
 	((TFunction&)func.at()).operator=(fnc_cfg);
-	if( func.at().startStat() && prog_text == func.at().prog() ) return func.at().nodePath();
+	if( func.at().startStat() && prog_text == func.at().prog() ) return func.at().nodePath(0,true);
     }
     catch(TError err) { if( isStart ) func.at().setStart(true); throw; }
     func.at().setProg(prog_text.c_str());
@@ -226,11 +230,11 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 	if( !func.at().use() )
 	{
 	    func.free();
-	    lbAt("sys_compile").at().del(fnc_cfg.id().c_str());
+	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
 	throw TError(nodePath().c_str(),_("Compile error: %s\n"),err.mess.c_str());
     }
-    return func.at().nodePath();
+    return func.at().nodePath(0,true);
 }
 
 void TipContr::load_( )

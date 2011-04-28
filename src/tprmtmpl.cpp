@@ -118,7 +118,7 @@ void TPrmTempl::setProg( const string &iprg )
 
 void TPrmTempl::setStart( bool vl )
 {
-    if( startStat() == vl ) return;
+    if(startStat() == vl) return;
     if(vl)
     {
 	//> Compile new function
@@ -133,7 +133,7 @@ AutoHD<TFunction> TPrmTempl::func()
 {
     if(!startStat())	throw TError(nodePath().c_str(),_("Tempate is disabled."));
     if(!prog().size())	return AutoHD<TFunction>(this);
-    return SYS->nodeAt(work_prog,1);
+    return SYS->nodeAt(work_prog);
 }
 
 void TPrmTempl::load_( )

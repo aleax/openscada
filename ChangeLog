@@ -1,9 +1,17 @@
+2011-04-28 Roman
+- DAQ: To user API of system object TDAQS is added function funcCall() for call function's texts by OpenSCADA internal languages.
+- DAQ.JavaLikeCalc, DAQ.PrmTmpl, Protocol.ModBus, Protocol.UserProtocol, UI.VCAEngine, UI.WebUser:
+    Return result of compile procedures function is changed to the node path from DAQ subsystem.
+- FIX:DAQ.JavaLikeCalc: Move virtual machine command for object's, with properies, is fixed.
+- DAQ.JavaLikeCalc: Compile function name generation is added for source function id "<auto>".
+
+
 2011-04-27 Maxim
-- !UI.Vision: The 'dynamic' function is modified to be able to make tha static values as well for the primitive ElFigure.
-- !UI.Vision: The properties dialog is modified to be able to make the values dynamic/static, and also to ignore the selected attributes
+- !:UI.Vision: The 'dynamic' function is modified to be able to make tha static values as well for the primitive ElFigure.
+- !:UI.Vision: The properties dialog is modified to be able to make the values dynamic/static, and also to ignore the selected attributes
                when accepted for the primitive ElFigure.
-- !UI.Vision: The popup menu is added by the fields to make the value the 'static' one for the primitive ElFigure.
-- FIX:UI.Vision: 'dynamic' function is fixed by the correct flags' and vectors' processung at its end for the primitive ElFigure.
+- !:UI.Vision: The popup menu is appended by the fields to make the value the 'static' one for the primitive ElFigure.
+- FIX:UI.Vision: 'dynamic' function is fixed by the correct flags' and vectors' processing at its end for the primitive ElFigure.
 
 
 2011-04-26 Roman

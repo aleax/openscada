@@ -229,6 +229,88 @@ void TDAQS::save_( )
     res.release();
 }
 
+TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // bool funcCall(string progLang, TVarObj args, string prog) - call function text <prog> whith arguments <args> for programm language <progLang>.
+    //		Return "true" on well call.
+    //  progLang - program procedure language;
+    //  args - function arguments;
+    //  prog - function text.
+    if(iid == "funcCall" && prms.size() >= 3 && prms[1].type() == TVariant::Object)
+    {
+	string langMod = TSYS::strParse(prms[0].getS(),0,".");
+	if(!modPresent(langMod)) return false;
+	TVariant aVal;
+	TVarObj *args = prms[1].getO();
+
+	try
+	{
+	    //> Prepare arguments structure
+	    TFunction argStr("<auto>");
+	    vector<string> als;
+	    args->propList(als);
+	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
+	    {
+		aVal = args->propGet(als[i_a]);
+		IO::Type tp = IO::String;
+		switch(aVal.type())
+		{
+        	    case TVariant::Boolean:	tp = IO::Boolean;	break;
+        	    case TVariant::Integer:	tp = IO::Integer;	break;
+		    case TVariant::Real:	tp = IO::Real;		break;
+        	    case TVariant::String:	tp = IO::String;	break;
+        	    case TVariant::Object:	tp = IO::Object;	break;
+		    default:	break;
+		}
+		argStr.ioAdd(new IO(als[i_a].c_str(),als[i_a].c_str(),tp,(i_a?IO::Default:IO::Return)));
+	    }
+
+	    //> Get function id and compile.
+	    string faddr = at(langMod).at().compileFunc(TSYS::strParse(prms[0].getS(),1,"."), argStr, prms[2].getS());
+	    AutoHD<TFunction> wFnc = SYS->nodeAt(faddr);
+	    TValFunc wCtx("UserFunc", &wFnc.at(), true, user);
+
+	    //> Load values
+	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
+		switch((aVal=args->propGet(als[i_a])).type())
+		{
+        	    case TVariant::Boolean:	wCtx.setB(i_a, aVal.getB());	break;
+        	    case TVariant::Integer:	wCtx.setI(i_a, aVal.getI());	break;
+		    case TVariant::Real:	wCtx.setR(i_a, aVal.getR());	break;
+        	    case TVariant::String:	wCtx.setS(i_a, aVal.getS());	break;
+        	    case TVariant::Object:	wCtx.setO(i_a, aVal.getO());	break;
+		    default:	break;
+		}
+
+	    //> Call function
+	    wCtx.calc();
+
+	    //> Place call result and remove function object.
+	    for(int i_a = 0; i_a < wCtx.ioSize(); i_a++)
+		switch(wCtx.ioType(i_a))
+		{
+        	    case IO::Boolean:	args->propSet(als[i_a], wCtx.getB(i_a));	break;
+        	    case IO::Integer:	args->propSet(als[i_a], wCtx.getI(i_a));	break;
+		    case IO::Real:	args->propSet(als[i_a], wCtx.getR(i_a));	break;
+        	    case IO::String:	args->propSet(als[i_a], wCtx.getS(i_a));	break;
+        	    case IO::Object:	args->propSet(als[i_a], wCtx.getO(i_a));	break;
+		    default:	break;
+		}
+
+	    //> Remove compiled function object
+	    wCtx.setFunc(NULL);
+	    wFnc.free();
+	    SYS->nodeDel(faddr);
+
+	    return true;
+	}catch(...) { }
+
+	return false;
+    }
+
+    return TCntrNode::objFuncCall(iid,prms,user);
+}
+
 void TDAQS::subStart(  )
 {
 #if OSC_DEBUG >= 1

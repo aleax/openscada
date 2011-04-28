@@ -685,7 +685,7 @@ void *TArchiveS::ArhValTask( void *param )
 
 TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // Area messGet(int btm, int etm, string cat = "", int lev = 0, string arch = ""); - request of the system messages for the time from <btm>
+    // Array messGet(int btm, int etm, string cat = "", int lev = 0, string arch = ""); - request of the system messages for the time from <btm>
     //       to <etm> for the category <cat>, level <lev> and archiver <arch>
     //  btm - begin time
     //  etm - end time

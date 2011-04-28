@@ -219,6 +219,7 @@ class RegW
 	void operator=( double ivar )		{ setType(Reg::Real);	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
 	void operator=( TVarObj *ivar );
+	void operator=( const TVariant &ivar );
 
 	Reg::Type type( ) const			{ return mTp; }
 	Reg::Type vType( Func *fnc );

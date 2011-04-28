@@ -1,3 +1,9 @@
+openscada (0.7.1-2) experimental; urgency=low
+
+  * Model's AGLKS DB is fixed for start message about QTCfg wrong start page.
+
+ -- Roman Savochenko <rom_as@oscada.org>  Mon, 15 Apr 2011 15:00:00 +0200
+
 openscada (0.7.1-1) experimental; urgency=low
 
   * New source packages implementation is released.

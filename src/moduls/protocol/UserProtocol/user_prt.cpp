@@ -170,7 +170,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string pIt = io.attr("ProtIt");
     if( !uPrtPresent(pIt) ) return;
     AutoHD<UserPrt> up = uPrtAt(pIt);
-    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workOutProg(),1)).at());
+    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workOutProg())).at());
 
     ResAlloc res( tro.nodeRes(), true );
 
@@ -247,7 +247,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    if( !owner().uPrtPresent(selNode) ) return false;
 	    up = owner().uPrtAt(selNode);
 	    if( !up.at().enableStat() || up.at().workInProg().empty() ) return false;
-	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg(),1)).at());
+	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg())).at());
 	}
 
 	//> Load inputs

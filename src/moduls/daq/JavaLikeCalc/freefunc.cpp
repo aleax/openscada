@@ -1151,7 +1151,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	{
 	    case TVariant::Null:
 		if(prop == "isEVal")	return true;
-		throw TError(nodePath().c_str(),_("Null type have not function '%s' or not enough parameters for it."),prop.c_str());
+		return EVAL_BOOL;
+		//throw TError(nodePath().c_str(),_("Null type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
 	    case TVariant::Boolean:
 		// bool isEVal( ) - check value to "EVAL"
@@ -1849,7 +1850,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    case Reg::Int:	reg[ptr->toR] = getValI(val,reg[ptr->fromR]);	break;
 		    case Reg::Real:	reg[ptr->toR] = getValR(val,reg[ptr->fromR]);	break;
 		    case Reg::String:	reg[ptr->toR] = getValS(val,reg[ptr->fromR]);	break;
-		    case Reg::Obj:	reg[ptr->toR] = getValO(val,reg[ptr->fromR]);	break;
+		    case Reg::Obj:	reg[ptr->toR] = getVal(val,reg[ptr->fromR]);	break;
 		    default:	break;
 		}
 		cprg += sizeof(SCode); break;
@@ -2823,6 +2824,19 @@ void RegW::operator=( TVarObj *ivar )
     setType(Reg::Obj);
     el.o_el = ivar;
     el.o_el->connect();
+}
+
+void RegW::operator=( const TVariant &ivar )
+{
+    switch(ivar.type())
+    {
+	case TVariant::Null:	*this = string(EVAL_STR);break;
+	case TVariant::Boolean:	*this = ivar.getB();	break;
+	case TVariant::Integer:	*this = ivar.getI();	break;
+	case TVariant::Real:	*this = ivar.getR();	break;
+	case TVariant::String:	*this = ivar.getS();	break;
+	case TVariant::Object:	*this = ivar.getO();	break;
+    }
 }
 
 void RegW::setType( Reg::Type tp )

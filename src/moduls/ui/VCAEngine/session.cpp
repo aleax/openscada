@@ -1199,7 +1199,7 @@ void SessWdg::setProcess( bool val )
 	//>> Connect to compiled function
 	if( mWorkProg.size() )
 	{
-	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg,1)).at());
+	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    TValFunc::setUser(ownerSess()->user());
 	    setO(3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()));
 	}
