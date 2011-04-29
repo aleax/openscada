@@ -341,7 +341,7 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
 void TMdContr::setValR( int val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
-    string pdu;
+    string pdu, terr;
     if(!mMltWr)
     {
 	pdu = (char)0x6;		//Function, preset single register
@@ -362,10 +362,8 @@ void TMdContr::setValR( int val, int addr, ResString &err )
 	pdu += (char)val;		//Data LSB
     }
     //> Request to remote server
-    string terr = modBusReq(pdu);
-    if(!terr.empty())
+    if((terr=modBusReq(pdu)).empty())	numWReg++;
     {
-	numWReg++;
 	if(err.getVal().empty()) err.setVal(terr);
     }
     //> Set to acquisition block
@@ -379,10 +377,70 @@ void TMdContr::setValR( int val, int addr, ResString &err )
 	}
 }
 
+void TMdContr::setValRs( const map<int,int> &regs, ResString &err )
+{
+    int start = 0, prev = 0;
+    string pdu, terr;
+
+    //> Write by single register
+    if(!mMltWr)
+    {
+	for(map<int,int>::const_iterator i_r = regs.begin(); i_r != regs.end(); i_r++)
+	    setValR(i_r->second, i_r->first, err);
+	return;
+    }
+
+    //> Write by multiply registers
+    for(map<int,int>::const_iterator i_r = regs.begin(); true; i_r++)
+    {
+	if(i_r == regs.end() || (pdu.length() && (((i_r->first-prev) > 1) || (prev-start) > 122)))
+	{
+	    if(pdu.empty()) break;
+	    //> Finish and send request
+	    pdu[3] = (char)0x00;		//Quantity MSB
+	    pdu[4] = (char)(prev-start+1);	//Quantity LSB
+	    pdu[5] = (char)((prev-start+1)*2);	//Byte Count
+	    //> Request to remote server
+	    if((terr=modBusReq(pdu)).empty())	numWReg += (prev-start+1);
+	    {
+		if(err.getVal().empty()) err.setVal(terr);
+	    }
+
+	    pdu = "";
+	    if(i_r == regs.end()) break;
+	}
+
+	//> Start request prepare
+	if(pdu.empty())
+	{
+	    pdu = (char)0x10;			//Function, preset multiple registers
+	    pdu += (char)(i_r->first>>8);	//Address MSB
+	    pdu += (char)i_r->first;		//Address LSB
+	    pdu += (char)0x00;			//Quantity MSB
+	    pdu += (char)0x01;			//Quantity LSB
+	    pdu += (char)0x02;			//Byte Count
+	    start = i_r->first;
+	}
+	pdu += (char)(i_r->second>>8);		//Data MSB
+	pdu += (char)i_r->second;		//Data LSB
+	prev = i_r->first;
+
+	//> Set to acquisition block
+        ResAlloc res(req_res, false);
+	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+	    if((i_r->first*2) >= acqBlks[i_b].off && (i_r->first*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
+	    {
+		acqBlks[i_b].val[i_r->first*2-acqBlks[i_b].off]   = (char)(i_r->second>>8);
+		acqBlks[i_b].val[i_r->first*2-acqBlks[i_b].off+1] = (char)i_r->second;
+		break;
+	    }
+    }
+}
+
 void TMdContr::setValC( char val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
-    string pdu;
+    string pdu, terr;
     if(!mMltWr)
     {
 	pdu = (char)0x5;		//Function, preset single coil
@@ -402,10 +460,8 @@ void TMdContr::setValC( char val, int addr, ResString &err )
 	pdu += (char)(val?0x01:0x00);	//Data MSB
     }
     //> Request to remote server
-    string terr = modBusReq(pdu);
-    if(!terr.empty())
+    if((terr=modBusReq(pdu)).empty())	numWCoil++;
     {
-	numWCoil++;
 	if(err.getVal().empty()) err.setVal(terr);
     }
     //> Set to acquisition block
@@ -861,14 +917,22 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    {
 		union { uint32_t i; float f; } wl;
 		wl.f = valo.getR(NULL,true);
-		owner().setValR( wl.i&0xFFFF, aid, acq_err );
-		owner().setValR( (wl.i>>16)&0xFFFF, strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err );
+		map<int,int> regs;
+		regs[aid] = wl.i&0xFFFF;
+		regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = (wl.i>>16)&0xFFFF;
+		owner().setValRs(regs,acq_err);
+		//owner().setValR( wl.i&0xFFFF, aid, acq_err );
+		//owner().setValR( (wl.i>>16)&0xFFFF, strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err );
 	    }
 	    else if( !atp_sub.empty() && atp_sub == "i4" )
 	    {
 		int vl = valo.getI(NULL,true);
-		owner().setValR( vl&0xFFFF, aid, acq_err );
-		owner().setValR( (vl>>16)&0xFFFF, strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err );
+		map<int,int> regs;
+		regs[aid] = vl&0xFFFF;
+		regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = (vl>>16)&0xFFFF;
+		owner().setValRs(regs,acq_err);
+		//owner().setValR( vl&0xFFFF, aid, acq_err );
+		//owner().setValR( (vl>>16)&0xFFFF, strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0), acq_err );
 	    }
 	    else owner().setValR(valo.getI(NULL,true),aid,acq_err);
 	}

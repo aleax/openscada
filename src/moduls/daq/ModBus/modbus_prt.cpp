@@ -906,7 +906,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    {
 		int c_sz = 0;
 		if( pdu.size() == 5 ) c_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if( c_sz < 1 || c_sz > 2000 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if( c_sz < 1 || c_sz > 2000 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		pdu.assign(1,pdu[0]);
 		pdu += (char)(c_sz/8+((c_sz%8)?1:0));
@@ -927,7 +927,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    {
 		int r_sz = 0;
 		if( pdu.size() == 5 ) r_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if( r_sz < 1 || r_sz > 125 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if( r_sz < 1 || r_sz > 125 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		pdu.assign(1,pdu[0]);
 		pdu += (char)(r_sz*2);
@@ -948,7 +948,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x05:	//Write single coil
 	    {
-		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 
 		map<int,int>::iterator ic = data->coil.find(-c_addr);
@@ -966,7 +966,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x06:	//Write single register
 	    {
-		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 
 		map<int,int>::iterator ir = data->reg.find(-r_addr);
@@ -985,11 +985,11 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x0F:	//Write multiple coils
 	    {
-		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int c_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		int c_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
 		int bCnt = (unsigned char)pdu[5];
-		if((int)pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if((int)pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		bool noWrReg = false;
 		for(int i_c = 0; i_c < c_aCnt; i_c++)
 		{
@@ -1010,11 +1010,13 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x10:	//Write multiple register
 	    {
-		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int r_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		int r_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
 		int bCnt = (unsigned char)pdu[5];
-		if((int)pdu.size() != (6+bCnt) || bCnt < (r_aCnt*2)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x1; return true; }
+		if((int)pdu.size() != (6+bCnt) || bCnt < (r_aCnt*2) || r_aCnt > 123)
+		{ pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
+		ResAlloc res(data->val.func()->fRes(), true);
 		bool noWrReg = false;
 		for(int i_r = 0; i_r < r_aCnt; i_r++)
 		{

@@ -384,7 +384,6 @@ class Func : public TConfig, public TFunction
 	string	&prg_src;
 
 	bool	be_start;		//Change structure check
-	Res	calc_res;
 
 	//> Parser's data
 	string		prg;		//Build prog

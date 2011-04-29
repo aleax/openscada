@@ -1,5 +1,13 @@
+2011-04-29 Roman
+- SYS, DAQ.ModBus, DAQ.JavaLikeCalc: TFunction resource is made public by function fRes() and used as calc resource into DAQ.JavaLikeCalc
+    and for prevent calc in DAQ.ModBus protocol node, for exclude processing partial writed complex registers by function 0x10.
+- !:DAQ.ModBus: Group registers write, for optional use by multiple write flag, function setValRs() is added. The function is used for
+    write complex registers (float, int32) into single request.
+
+
 2011-04-29 Maxim
 - UI.Vision: The checkboxes for the including/excluding the fields of the ElFigure's properties dialog are changed to the buttons with the icon.
+
 
 2011-04-28 Roman
 - FIX:UI.QTCfg, UI.Vision: Input dialog wrong resize by minimum border set is fixed.

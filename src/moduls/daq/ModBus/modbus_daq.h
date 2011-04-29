@@ -76,7 +76,7 @@ class TMdPrm : public TParamContr
 	TMdContr &owner( );
 
     protected:
-	void	cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -99,7 +99,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr( string name_c, const string &daq_db, TElem *cfgelem);
+	TMdContr(string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
 	string getStatus( );
@@ -113,7 +113,8 @@ class TMdContr: public TController
 	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
 	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
 	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
-	void setValR( int val, int addr, ResString &err );			//Set register value
+	void setValR( int val, int addr, ResString &err );		//Set register value
+	void setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
 	void setValC( char val, int addr, ResString &err );		//Set coins value
 	string modBusReq( string &pdu );
 

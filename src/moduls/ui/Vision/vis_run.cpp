@@ -1222,7 +1222,9 @@ void VisRun::cacheResSet( const string &res, const string &val )
 
 void VisRun::updatePage( )
 {
-    if( winClose ) return;
+    if(winClose) return;
+
+    int rez;
 
 #if OSC_DEBUG >= 3
     long long t_cnt = TSYS::curTime();
@@ -1233,7 +1235,7 @@ void VisRun::updatePage( )
     req.setAttr("tm",TSYS::uint2str(reqtm))->
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 
-    if( !cntrIfCmd(req) )
+    if(!(rez=cntrIfCmd(req)))
     {
 	//>> Check for delete pages
 	RunPageView *pg;
@@ -1260,6 +1262,12 @@ void VisRun::updatePage( )
 	    callPage(req.childGet(i_ch)->text(),atoi(req.childGet(i_ch)->attr("updWdg").c_str()));
 	}
     }
+    else
+    {
+	//>> Check for closed session by server and restore connection try
+	printf("TEST 00: %d '%s': %s\n",rez,req.attr("err").c_str(),req.text().c_str());
+    }
+
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //> Alarms update (one seconds update)

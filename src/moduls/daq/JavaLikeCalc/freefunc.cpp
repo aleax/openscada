@@ -272,7 +272,7 @@ void Func::setStart( bool val )
     //> Stop calc
     else
     {
-	ResAlloc res(calc_res,true);
+	ResAlloc res(fRes(), true);
 	prg = "";
 	regClear();
 	regTmpClean( );
@@ -307,8 +307,8 @@ void Func::ioMove( int pos, int to )
 
 void Func::progCompile( )
 {
-    ResAlloc res(parse_res,true);
-    ResAlloc res1(calc_res,true);
+    ResAlloc res(parse_res, true);
+    ResAlloc res1(fRes(), true);
 
     //> Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
@@ -1665,8 +1665,8 @@ void Func::setValO( TValFunc *io, RegW &rg, TVarObj *val )
 
 void Func::calc( TValFunc *val )
 {
-    ResAlloc res(calc_res,false);
-    if(!startStat())	return;
+    ResAlloc res(fRes(), false);
+    if(!startStat()) return;
 
     //> Init list of registers
     RegW reg[mRegs.size()];
