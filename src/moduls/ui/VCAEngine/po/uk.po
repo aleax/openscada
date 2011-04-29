@@ -185,7 +185,7 @@ msgid "Point "
 msgstr "Точка "
 
 msgid "Width "
-msgstr "Ширина"
+msgstr "Ширина "
 
 msgid "Color "
 msgstr "Колір "

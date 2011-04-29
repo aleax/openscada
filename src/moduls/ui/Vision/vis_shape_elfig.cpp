@@ -1803,7 +1803,6 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                     connect( actShowFillProperties, SIGNAL(triggered()), elFD, SLOT(properties()) );
                     menu.addAction(actShowFillProperties);
 
-                    menu.addSeparator();
                     break;
                 }
             if( flg )
@@ -2737,7 +2736,7 @@ void ElFigDt::properties()
     QLineEdit *f_image;
     QComboBox *l_style;
     QCheckBox *lw_check, *lc_check, *ls_check, *lbw_check, *lbc_check, *fc_check, *fi_check;
-    QCheckBox *lw_en, *lc_en, *ls_en, *lbw_en, *lbc_en, *fc_en, *fi_en;
+    QPushButton *lw_en, *lc_en, *ls_en, *lbw_en, *lbc_en, *fc_en, *fi_en;
     QPushButton *p1_c, *p2_c, *p3_c, *p4_c, *p5_c, *fc_c, *fi_c, *lw_c, *lc_c, *ls_c, *lbw_c, *lbc_c;
     QDoubleSpinBox *p1_x, *p1_y, *p2_x, *p2_y, *p3_x, *p3_y, *p4_x, *p4_y, *p5_x, *p5_y;
     QVector<int> inund_Rebuild;
@@ -2752,18 +2751,19 @@ void ElFigDt::properties()
     else str_mess = QString(_("Properties for the '%1' figure: '%2'.")).arg((elF->fill_index==-1)?elF->index:elF->fill_index).arg(sender()->objectName());
     if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
     InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), str_mess,_("Elementary figure properties."),false,false);
+    if(!ico_t.load(TUIS::icoPath("shutdown").c_str())) ico_t.load(":/images/shutdown.png");
     l_lb = new QLabel(_("Line:"),&propDlg);
     l_width = new QSpinBox(&propDlg);
-    lw_en = new QCheckBox(&propDlg); lw_check = new QCheckBox(&propDlg); lw_c = new QPushButton(&propDlg);
+    lw_en = new QPushButton(&propDlg); lw_check = new QCheckBox(&propDlg); lw_c = new QPushButton(&propDlg);
     l_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
-    lc_en = new QCheckBox(&propDlg); lc_check = new QCheckBox(&propDlg); lc_c = new QPushButton(&propDlg);
+    lc_en = new QPushButton(&propDlg); lc_check = new QCheckBox(&propDlg); lc_c = new QPushButton(&propDlg);
     l_style = new QComboBox(&propDlg);
-    ls_en = new QCheckBox(&propDlg); ls_check = new QCheckBox(&propDlg); ls_c = new QPushButton(&propDlg);
+    ls_en = new QPushButton(&propDlg); ls_check = new QCheckBox(&propDlg); ls_c = new QPushButton(&propDlg);
     lb_lb = new QLabel(_("Border:"),&propDlg);
-    lbw_en = new QCheckBox(&propDlg); lb_width = new QSpinBox(&propDlg); lbw_c = new QPushButton(&propDlg);
+    lbw_en = new QPushButton(&propDlg); lb_width = new QSpinBox(&propDlg); lbw_c = new QPushButton(&propDlg);
     lbw_check = new QCheckBox(&propDlg);
     lb_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
-    lbc_en = new QCheckBox(&propDlg); lbc_check = new QCheckBox(&propDlg); lbc_c = new QPushButton(&propDlg);
+    lbc_en = new QPushButton(&propDlg); lbc_check = new QCheckBox(&propDlg); lbc_c = new QPushButton(&propDlg);
     p_lb = new QLabel(_("Points:"),&propDlg);
     x_lb = new QLabel(_("x"),&propDlg);
     y_lb = new QLabel(_("y"),&propDlg);
@@ -2776,9 +2776,9 @@ void ElFigDt::properties()
     p5_lb = new QLabel(_("Point 5:"),&propDlg);
     p5_x = new QDoubleSpinBox(&propDlg); p5_y = new QDoubleSpinBox(&propDlg); p5_c = new QPushButton(&propDlg);
     f_color = new LineEditProp(&propDlg, LineEditProp::Color, false);
-    fc_en = new QCheckBox(&propDlg); fc_check = new QCheckBox(&propDlg); fc_c = new QPushButton(&propDlg);
+    fc_en = new QPushButton(&propDlg); fc_check = new QCheckBox(&propDlg); fc_c = new QPushButton(&propDlg);
     f_image = new QLineEdit(&propDlg);
-    fi_en = new QCheckBox(&propDlg); fi_check = new QCheckBox(&propDlg); fi_c = new QPushButton(&propDlg);
+    fi_en = new QPushButton(&propDlg); fi_check = new QCheckBox(&propDlg); fi_c = new QPushButton(&propDlg);
     //> Creating the fills' properties dialog
     if(sender()->objectName() == "Fill")
     {
@@ -2796,8 +2796,10 @@ void ElFigDt::properties()
         p3_lb->hide(); p3_x->hide();p3_y->hide(); p3_c->hide();
         p4_lb->hide(); p4_x->hide();p4_y->hide(); p4_c->hide();
         p5_lb->hide(); p5_x->hide();p5_y->hide(); p5_c->hide();
-        propDlg.edLay()->addWidget( fc_en, 2, 0 ); fc_en->setChecked(true);
+        propDlg.edLay()->addWidget( fc_en, 2, 0 );
+        fc_en->setIcon(QPixmap::fromImage(ico_t));
         fc_en->setToolTip(_("Include(checked)/Exclude(unchecked) the fill color from the properties list."));
+        fc_en->setCheckable( true ); fc_en->setChecked(true);
         QLabel *fc_lb = new QLabel(_("Fill Color"),&propDlg);
         propDlg.edLay()->addWidget( fc_lb, 2, 1 );
         propDlg.edLay()->addWidget( f_color, 2, 2 );
@@ -2809,8 +2811,10 @@ void ElFigDt::properties()
         connect( fc_en, SIGNAL(toggled(bool)), fc_check, SLOT(setVisible(bool)) );
         connect( fc_check, SIGNAL(toggled(bool)), f_color, SLOT(setDisabled(bool)) );
         connect( fc_check, SIGNAL(toggled(bool)), fc_c, SLOT(setDisabled(bool)) );
-        propDlg.edLay()->addWidget( fi_en, 3, 0 ); fi_en->setChecked(true);
+        propDlg.edLay()->addWidget( fi_en, 3, 0 );
+        fi_en->setIcon(QPixmap::fromImage(ico_t));
         fi_en->setToolTip(_("Include(checked)/Exclude(unchecked) the fill image from the properties list."));
+        fi_en->setCheckable( true ); fi_en->setChecked(true);
         QLabel *fi_lb = new QLabel(_("Fill Image"),&propDlg);
         propDlg.edLay()->addWidget( fi_lb, 3, 1 );
         propDlg.edLay()->addWidget( f_image, 3, 2 );
@@ -2852,7 +2856,9 @@ void ElFigDt::properties()
         lb_fnt.setStyle(QFont::StyleItalic);
         lb_fnt.setBold(true);
         l_lb->setFont(lb_fnt); propDlg.edLay()->addWidget(l_lb, 2, 0);
+        lw_en->setIcon(QPixmap::fromImage(ico_t));
         lw_en->setToolTip(_("Include(checked)/Exclude(unchecked) the line width from the properties list."));
+        lw_en->setCheckable( true );
         propDlg.edLay()->addWidget( lw_en, 3, 0 ); lw_en->setChecked(true);
         propDlg.edLay()->setAlignment ( lw_en, Qt::AlignRight );
         QLabel *lw_lb = new QLabel(_("Line width"),&propDlg);
@@ -2870,7 +2876,9 @@ void ElFigDt::properties()
         connect( lw_en, SIGNAL(toggled(bool)), lw_check, SLOT(setVisible(bool)) );
         connect(lw_check, SIGNAL(toggled(bool)), l_width, SLOT(setDisabled(bool)) );
         connect(lw_check, SIGNAL(toggled(bool)), lw_c, SLOT(setDisabled(bool)) );
+        lc_en->setIcon(QPixmap::fromImage(ico_t));
         lc_en->setToolTip(_("Include(checked)/Exclude(unchecked) the line color from the properties list."));
+        lc_en->setCheckable( true );
         propDlg.edLay()->addWidget( lc_en, 4, 0 ); lc_en->setChecked(true);
         propDlg.edLay()->setAlignment ( lc_en, Qt::AlignRight );
         QLabel *lc_lb = new QLabel(_("Line color"),&propDlg);
@@ -2887,7 +2895,9 @@ void ElFigDt::properties()
         connect( lc_en, SIGNAL(toggled(bool)), lc_check, SLOT(setVisible(bool)) );
         connect(lc_check, SIGNAL(toggled(bool)), l_color, SLOT(setDisabled(bool)) );
         connect(lc_check, SIGNAL(toggled(bool)), lc_c, SLOT(setDisabled(bool)) );
+        ls_en->setIcon(QPixmap::fromImage(ico_t));
         ls_en->setToolTip(_("Include(checked)/Exclude(unchecked) the line style from the properties list."));
+        ls_en->setCheckable( true );
         propDlg.edLay()->addWidget( ls_en, 5, 0 ); ls_en->setChecked(true);
         propDlg.edLay()->setAlignment ( ls_en, Qt::AlignRight );
         QLabel *ls_lb = new QLabel(_("Line style"),&propDlg);
@@ -2905,7 +2915,9 @@ void ElFigDt::properties()
         connect(ls_check, SIGNAL(toggled(bool)), l_style, SLOT(setDisabled(bool)) );
         connect(ls_check, SIGNAL(toggled(bool)), ls_c, SLOT(setDisabled(bool)) );
         lb_lb->setFont( lb_fnt ); propDlg.edLay()->addWidget( lb_lb, 6, 0 );
+        lbw_en->setIcon(QPixmap::fromImage(ico_t));
         lbw_en->setToolTip(_("Include(checked)/Exclude(unchecked) the border width from the properties list."));
+        lbw_en->setCheckable( true );
         propDlg.edLay()->addWidget( lbw_en, 7, 0 ); lbw_en->setChecked(true);
         propDlg.edLay()->setAlignment ( lbw_en, Qt::AlignRight );
         QLabel *lbw_lb= new QLabel(_("Border width"),&propDlg);
@@ -2922,8 +2934,10 @@ void ElFigDt::properties()
         connect( lbw_en, SIGNAL(toggled(bool)), lbw_c, SLOT(setVisible(bool)) );
         connect( lbw_en, SIGNAL(toggled(bool)), lbw_check, SLOT(setVisible(bool)) );
         connect(lbw_check, SIGNAL(toggled(bool)), lb_width, SLOT(setDisabled(bool)) );
-        connect(lbw_check, SIGNAL(toggled(bool)), lbw_c, SLOT(setDisabled(bool)) );\
+        connect(lbw_check, SIGNAL(toggled(bool)), lbw_c, SLOT(setDisabled(bool)) );
+        lbc_en->setIcon(QPixmap::fromImage(ico_t));
         lbc_en->setToolTip(_("Include(checked)/Exclude(unchecked) the border color from the properties list."));
+        lbc_en->setCheckable( true );
         propDlg.edLay()->addWidget( lbc_en, 8, 0 ); lbc_en->setChecked(true);
         propDlg.edLay()->setAlignment ( lbc_en, Qt::AlignRight );
         QLabel *lbc_lb = new QLabel(_("Border color"),&propDlg);

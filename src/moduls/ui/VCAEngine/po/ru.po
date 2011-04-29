@@ -185,16 +185,16 @@ msgid "Point "
 msgstr "Точка "
 
 msgid "Width "
-msgstr "Толщина "
+msgstr "Ширина "
 
 msgid "Color "
-msgstr "Цвет"
+msgstr "Цвет "
 
 msgid "Image "
-msgstr "Изображение"
+msgstr "Изображение "
 
 msgid "Style "
-msgstr "Стиль"
+msgstr "Стиль "
 
 msgid "Form's elements"
 msgstr "Элементы формы"

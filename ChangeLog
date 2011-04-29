@@ -1,3 +1,6 @@
+2011-04-29 Maxim
+- UI.Vision: The checkboxes for the including/excluding the fields of the ElFigure's properties dialog are changed to the buttons with the icon.
+
 2011-04-28 Roman
 - FIX:UI.QTCfg, UI.Vision: Input dialog wrong resize by minimum border set is fixed.
 - UI.WebVision: Central align is added to interface. Background color is set fixed to #B0B0B0.
