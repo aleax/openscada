@@ -2751,7 +2751,7 @@ void ElFigDt::properties()
     else str_mess = QString(_("Properties for the '%1' figure: '%2'.")).arg((elF->fill_index==-1)?elF->index:elF->fill_index).arg(sender()->objectName());
     if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
     InputDlg propDlg(w->mainWin(), QPixmap::fromImage(ico_t), str_mess,_("Elementary figure properties."),false,false);
-    if(!ico_t.load(TUIS::icoPath("shutdown").c_str())) ico_t.load(":/images/shutdown.png");
+    if(!ico_t.load(TUIS::icoPath("disable").c_str())) ico_t.load(":/images/disable.png");
     l_lb = new QLabel(_("Line:"),&propDlg);
     l_width = new QSpinBox(&propDlg);
     lw_en = new QPushButton(&propDlg); lw_check = new QCheckBox(&propDlg); lw_c = new QPushButton(&propDlg);

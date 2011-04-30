@@ -46,6 +46,6 @@
     <file>images/alarmAlarm.png</file>
     <file>images/alarmSound.png</file>
     <file>images/find.png</file>
-    <file>images/shutdown.png</file>
+    <file>images/disable.png</file>
 </qresource>
 </RCC>

@@ -1,3 +1,7 @@
+2011-04-30 Roman
+- FIX:UI.Vision: "Disable" button is included to repository.
+
+
 2011-04-29 Roman
 - SYS, DAQ.ModBus, DAQ.JavaLikeCalc: TFunction resource is made public by function fRes() and used as calc resource into DAQ.JavaLikeCalc
     and for prevent calc in DAQ.ModBus protocol node, for exclude processing partial writed complex registers by function 0x10.
