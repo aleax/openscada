@@ -49,6 +49,7 @@ class TUser : public TCntrNode, public TConfig
 
 	const string	&name( )	{ return m_name; }
 	const string	&lName( )	{ return m_lname; }
+	const string	&descr( )	{ return m_descr; }
 	const string	&picture( )	{ return m_pict; }
 	bool sysItem( )			{ return m_sysIt; }
 
@@ -59,6 +60,7 @@ class TUser : public TCntrNode, public TConfig
 	string fullDB( )		{ return DB()+'.'+tbl(); }
 
 	void setLName( const string &nm )	{ m_lname = nm; modif(); }
+	void setDescr( const string &vl )	{ m_descr = vl; modif(); }
 	void setPicture( const string &pct )	{ m_pict = pct; modif(); }
 	void setPass( const string &n_pass );
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
@@ -81,6 +83,7 @@ class TUser : public TCntrNode, public TConfig
 	//Attributes
 	string	&m_name;
 	string	&m_lname;
+	string  &m_descr;
 	string	&m_pass;
 	string	&m_pict;
 	string	m_db;
@@ -101,6 +104,7 @@ class TGroup : public TCntrNode, public TConfig
 
 	const string &name( )	{ return m_name; }
 	const string &lName( )	{ return m_lname; }
+	const string &descr( )	{ return m_descr; }
 	bool sysItem( )		{ return m_sysIt; }
 
 	string DB( )		{ return m_db; }
@@ -108,6 +112,7 @@ class TGroup : public TCntrNode, public TConfig
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setLName( const string &nm )	{ m_lname = nm; modif(); }
+	void setDescr( const string &vl )	{ m_descr = vl; modif(); }
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
 
 	void setDB( const string &vl )		{ m_db = vl; modifG(); }
@@ -132,6 +137,7 @@ class TGroup : public TCntrNode, public TConfig
 	//Attributes
 	string	&m_name;
 	string	&m_lname;
+	string  &m_descr;
 	string	&m_usrs;
 	string	m_db;
 	bool	m_sysIt;

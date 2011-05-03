@@ -433,12 +433,12 @@ void Func::regTmpClean( )
 
 Reg *Func::cdMvi( Reg *op, bool no_code )
 {
-    if( op->pos() >= 0 ) return op;	//Already load
-    int r_id = p_fnc->regNew( );
+    if(op->pos() >= 0) return op;	//Already load
+    int r_id = p_fnc->regNew();
     Reg *rez = regAt(r_id);
     *rez = *op;
     op->free();
-    if( no_code ) return rez;
+    if(no_code) return rez;
     uint16_t addr = rez->pos();
 
     switch(rez->type())
@@ -536,14 +536,15 @@ Reg *Func::cdMviRegExp( int p_cnt )
 
     Reg *rg_expr = NULL;
     Reg *rg_arg  = NULL;
+
     if(p_cnt == 2)
     {
-	rg_expr = cdMvi(f_prmst[1]);
-	rg_arg = cdMvi(f_prmst[0]);
+	rg_arg = cdMvi(f_prmst.front());	f_prmst.pop_front();
+	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
     }
     else
     {
-	rg_expr = cdMvi(f_prmst[0]);
+	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
         rg_arg = regAt(regNew());
         rg_arg->setType(Reg::String);
         rg_arg = cdMvi(rg_arg);
@@ -552,7 +553,6 @@ Reg *Func::cdMviRegExp( int p_cnt )
     int p_arg  = rg_arg->pos();
     rg_expr->free();
     rg_arg->free();
-    f_prmst.clear();
 
     //> Make result
     Reg *rez = regAt(regNew());
@@ -2809,9 +2809,10 @@ Reg::Type Reg::vType( Func *fnc )
 
 void Reg::free()
 {
-    if( lock() ) return;
+    if(lock()) return;
 
     setType(Free);
+    mNm.clear();
     mObjEl = mLock = false;
 }
 

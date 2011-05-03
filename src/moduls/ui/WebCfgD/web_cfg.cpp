@@ -287,6 +287,11 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    else if( wp_com.empty() )
 	    {
 		ses.page = trMessReplace(WebCfgDVCA_html);
+		//>> User replace
+		size_t userPos = ses.page.find("##USER##");
+		if(userPos != string::npos)
+		ses.page.replace(userPos,8,TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
+
 		page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 		return;
 	    }

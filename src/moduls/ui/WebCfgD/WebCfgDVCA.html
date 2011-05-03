@@ -22,7 +22,8 @@
     table.main td.title { color : blue; font-family : Arial; font-size : 30px; font-style : italic; text-align : center; }
     table.main td.tool { text-align: left; border-top: 2px solid black; }
     table.main td.tool img { height: 22px; border: 0; vertical-align: middle; }
-    table.main td.status { text-align: left; }
+    table.main #status { text-align: left; }
+    table.main #st_user { width: 50px; white-space: nowrap; text-align: right; }
     table.main tr.body { background-color : lightgrey; overflow : auto; }
     table.main td.tree { background-color : #F7FFF6; text-align: left; vertical-align : top; border: 3px ridge #F7FFF6; white-space: nowrap; color: black; }
     table.main td.tree li.select { background-color : #BDEBED; }
@@ -103,7 +104,9 @@
    </table>
   </td>
  </tr>
- <tr><td id='status' class='status' colspan='2'/></tr>
+ <tr><td colspan='2'>
+  <table width='100%'><tr><td id='status'/><td id='st_user'>| <a href="/login/WebCfgD/">##USER##</a></td></tr></table>
+ </td></tr>
 </table>
 <script src='/WebCfgD/script.js' type='text/javascript'></script>
 </body>

@@ -39,11 +39,13 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"),false)
     //> User BD structure
     user_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
     user_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,"50") );
+    user_el.fldAdd( new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000") );
     user_el.fldAdd( new TFld("PASS",_("Password"),TFld::String,0,"20") );
     user_el.fldAdd( new TFld("PICTURE",_("User picture"),TFld::String,0,"100000") );
     //> Group BD structure
     grp_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::Key,"20") );
     grp_el.fldAdd( new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,"50") );
+    grp_el.fldAdd( new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000") );
     grp_el.fldAdd( new TFld("USERS",_("Users"),TFld::String,0,"200") );
 }
 
@@ -297,7 +299,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 //* TUser                                         *
 //*************************************************
 TUser::TUser( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_pass(cfg("PASS").getSd()),
+    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_descr(cfg("LONGDESCR").getSd()), m_pass(cfg("PASS").getSd()),
     m_pict(cfg("PICTURE").getSd()), m_db(idb), m_sysIt(false)
 {
     m_name = nm;
@@ -380,6 +382,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,2,"tp","str","len","50");
 	    ctrMkNode("img",opt,-1,"/prm/pct",cfg("PICTURE").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,1,"v_sz","100");
+	    ctrMkNode("fld",opt,-1,"/prm/ldscr",cfg("LONGDESCR").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,3,"tp","str","cols","100","rows","5");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    ctrMkNode("fld",opt,-1,"/prm/pass",cfg("PASS").fld().descr(),RWRW__,name().c_str(),SSEC_ID,1,"tp","str");
@@ -410,6 +413,11 @@ void TUser::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,name().c_str(),SSEC_ID,SEC_RD))	opt->setText(lName());
 	if(ctrChkNode(opt,"set",RWRWR_,name().c_str(),SSEC_ID,SEC_WR))	setLName(opt->text());
+    }
+    else if(a_path == "/prm/ldscr")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,name().c_str(),SSEC_ID,SEC_RD))	opt->setText(descr());
+	if(ctrChkNode(opt,"set",RWRWR_,name().c_str(),SSEC_ID,SEC_WR))	setDescr(opt->text());
     }
     else if(a_path == "/prm/pass")
     {
@@ -445,7 +453,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 //* TGroup					  *
 //*************************************************
 TGroup::TGroup( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_usrs(cfg("USERS").getSd()),
+    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_descr(cfg("LONGDESCR").getSd()), m_usrs(cfg("USERS").getSd()),
     m_db(idb), m_sysIt(false)
 {
     m_name = nm;
@@ -531,6 +539,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","len","50");
+	ctrMkNode("fld",opt,-1,"/prm/ldscr",cfg("LONGDESCR").fld().descr(),RWRWR_,name().c_str(),SSEC_ID,3,"tp","str","cols","100","rows","5");
 	ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,
 	    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("list",opt,-1,"/prm/users",cfg("USERS").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","s_com","add,del");
@@ -550,6 +559,11 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(lName());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setLName(opt->text());
+    }
+    else if(a_path == "/prm/ldscr")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(descr());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setDescr(opt->text());
     }
     else if(a_path == "/prm/users")
     {
