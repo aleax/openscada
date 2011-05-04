@@ -220,15 +220,15 @@ TParamContr *TMdContr::ParamAttach(const string &name, int type)
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched, 1, ' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Session init
     snmp_sess_init(&session);
     session.version = SNMP_VERSION_1;
-    if(m_ver == "1")		session.version = SNMP_VERSION_1;
-    else if(m_ver == "2c")	session.version = SNMP_VERSION_2c;
-    else if(m_ver == "2u")	session.version = SNMP_VERSION_2u;
-    else if(m_ver == "3")	session.version = SNMP_VERSION_3;
+    if(m_ver.getVal() == "1")		session.version = SNMP_VERSION_1;
+    else if(m_ver.getVal() == "2c")	session.version = SNMP_VERSION_2c;
+    else if(m_ver.getVal() == "2u")	session.version = SNMP_VERSION_2u;
+    else if(m_ver.getVal() == "3")	session.version = SNMP_VERSION_3;
     w_addr = TSYS::strParse(m_addr, 0, ":");
     session.peername = (char *)w_addr.c_str();
     session.retries = m_retr;
@@ -519,7 +519,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
     	    "help",_("Community group or user."));
 	ctrRemoveNode(opt,"/cntr/cfg/V3");
-	if(m_ver == "3")
+	if(m_ver.getVal() == "3")
 	{
     	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
         	"sel_id","noAurhNoPriv;authNoPriv;authPriv","sel_list",_("No auth/No privacy;Auth/No privacy;Auth/Privacy"));

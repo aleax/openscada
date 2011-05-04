@@ -322,7 +322,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string name( );
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
@@ -368,7 +368,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -379,7 +379,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	    int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
 
 	//Attributes
-	string	&mId, &mName, &mDscr, &mURL;
+	ResString &mId, &mName, &mDscr, &mURL;
 	int	&mSerType;
 	bool	&mAEn, mEn;
 	string	mDB;

@@ -47,11 +47,11 @@ class TUser : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string	&name( )	{ return m_name; }
-	const string	&lName( )	{ return m_lname; }
-	const string	&descr( )	{ return m_descr; }
-	const string	&picture( )	{ return m_pict; }
-	bool sysItem( )			{ return m_sysIt; }
+	const string &name( )	{ return m_name.getValRef(); }
+	string	lName( )	{ return m_lname; }
+	string	descr( )	{ return m_descr; }
+	string	picture( )	{ return m_pict; }
+	bool sysItem( )		{ return m_sysIt; }
 
 	bool auth( const string &pass );
 
@@ -76,16 +76,16 @@ class TUser : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_name; }
+	const string &nodeName( )	{ return m_name.getValRef(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	string	&m_name;
-	string	&m_lname;
-	string  &m_descr;
-	string	&m_pass;
-	string	&m_pict;
+	ResString &m_name,
+		&m_lname,
+		&m_descr,
+		&m_pass,
+		&m_pict;
 	string	m_db;
 	bool	m_sysIt;
 };
@@ -102,9 +102,9 @@ class TGroup : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )	{ return m_name; }
-	const string &lName( )	{ return m_lname; }
-	const string &descr( )	{ return m_descr; }
+	const string &name( )	{ return m_name.getValRef(); }
+	string lName( )		{ return m_lname; }
+	string descr( )		{ return m_descr; }
 	bool sysItem( )		{ return m_sysIt; }
 
 	string DB( )		{ return m_db; }
@@ -130,15 +130,15 @@ class TGroup : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_name; }
+	const string &nodeName( )	{ return m_name.getValRef(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	string	&m_name;
-	string	&m_lname;
-	string  &m_descr;
-	string	&m_usrs;
+	ResString &m_name,
+		&m_lname,
+		&m_descr,
+		&m_usrs;
 	string	m_db;
 	bool	m_sysIt;
 };

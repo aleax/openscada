@@ -331,7 +331,7 @@ void TUser::setPass( const string &n_pass )
 
 bool TUser::auth( const string &ipass )
 {
-    return m_pass == crypt(ipass.c_str(),name().c_str());
+    return (m_pass.getVal() == crypt(ipass.c_str(),name().c_str()));
 }
 
 void TUser::postDisable(int flag)
@@ -515,16 +515,17 @@ bool TGroup::user( const string &inm )
 
 void TGroup::userAdd( const string &name )
 {
-    if(!user(name)) m_usrs+=name+";";
+    if(!user(name)) m_usrs = m_usrs.getVal()+name+";";
     modif();
 }
 
 void TGroup::userDel( const string &name )
 {
-    size_t pos = m_usrs.find(name+";",0);
+    string tUsrs = m_usrs.getVal();
+    size_t pos = tUsrs.find(name+";", 0);
     if(pos != string::npos)
     {
-	m_usrs.erase(pos,name.size()+1);
+	m_usrs = tUsrs.erase(pos, name.size()+1);
 	modif();
     }
 }

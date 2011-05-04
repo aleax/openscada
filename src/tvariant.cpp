@@ -785,7 +785,7 @@ XMLNodeObj *XMLNodeObj::getElementBy( const string &attr, const string &val )
     if(propGet(attr).getS() == val)	return this;
 
     XMLNodeObj *rez = NULL;
-    for(int i_ch = 0; !rez && i_ch < childSize(); i_ch++)
+    for(unsigned i_ch = 0; !rez && i_ch < childSize(); i_ch++)
 	rez = childGet(i_ch)->getElementBy(attr,val);
 
     return rez;

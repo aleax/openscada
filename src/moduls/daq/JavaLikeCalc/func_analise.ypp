@@ -297,7 +297,7 @@ int yylex( )
 {
     unsigned c = 0, st_pos;
     unsigned &pos = p_fnc->la_pos;
-    string &prog = p_fnc->prg_src;
+    string &prog = p_fnc->sprg;
 
     if(pos == 0) { yylloc.last_line = yylloc.last_column = 1; }
 

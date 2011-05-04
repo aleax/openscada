@@ -138,11 +138,11 @@ string TMdContr::getStatus( )
 int TMdContr::channelAllow( )
 {
     int chann = 0;
-    if( mCard == "<default>" && Pa_GetDefaultInputDevice() >= 0 )
+    if( mCard.getVal() == "<default>" && Pa_GetDefaultInputDevice() >= 0 )
 	chann = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice())->maxInputChannels;
     else
 	for( int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++ )
-	    if( mCard == Pa_GetDeviceInfo(i_d)->name )
+	    if( mCard.getVal() == Pa_GetDeviceInfo(i_d)->name )
 	    {
 		chann = Pa_GetDeviceInfo(i_d)->maxInputChannels;
 		break;
@@ -198,12 +198,12 @@ void TMdContr::start_( )
     PaStreamParameters iParam;
     iParam.device = -1;
 
-    if( mCard == "<default>" )	iParam.device = Pa_GetDefaultInputDevice();
+    if( mCard.getVal() == "<default>" )	iParam.device = Pa_GetDefaultInputDevice();
     else
 	for( int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++ )
-	    if( Pa_GetDeviceInfo(i_d)->maxInputChannels && mCard == Pa_GetDeviceInfo(i_d)->name )
+	    if( Pa_GetDeviceInfo(i_d)->maxInputChannels && mCard.getVal() == Pa_GetDeviceInfo(i_d)->name )
 	    { iParam.device = i_d; break; }
-    if( iParam.device < 0 ) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),mCard.c_str());
+    if( iParam.device < 0 ) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),mCard.getVal().c_str());
     if( !numChan ) throw TError(nodePath().c_str(),_("No one channel is configured for acquisition."));
     if( !smplSize ) throw TError(nodePath().c_str(),_("Sample type set is error."));
 

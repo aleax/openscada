@@ -86,7 +86,7 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
         //Attributes
-	string		&m_attrLs;
+	ResString	&m_attrLs;
 	TElem		p_el;		//Work atribute elements
 	ResString	acq_err;
 };
@@ -149,7 +149,7 @@ class TMdContr: public TController
 	Res     req_res, en_res;
 	int	&mPrior,			//Process task priority
 		&mNode;				//Node
-	string	&mSched,			// Calc schedule
+	ResString &mSched,			// Calc schedule
 		&mPrt,				//Protocol
 		&mAddr;				//Transport device address
 	bool	&mMerge,			//Fragments of register merge

@@ -174,7 +174,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	//> Base functions
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string name( );
 	string dscr( )		{ return mDscr; }
 	SrcMode srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
@@ -244,14 +244,14 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	//Private attributes
 	Res	a_res;
 	bool	run_st;
 	string	mDB;
 	//> Base params
-	string  &mId,		//ID
+	ResString &mId,		//ID
 		&mName,		//Name
 		&mDscr,		//Description
 		&mDSourc,	//Data source (parameter atribute)
@@ -288,7 +288,7 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string workId( );
 	string name( );
 	string dscr( )		{ return mDscr; }
@@ -345,11 +345,11 @@ class TVArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
-	string	&mId,		//Var arch id
+	ResString &mId,		//Var arch id
 		&mName,		//Var arch name
 		&mDscr,		//Var arch description
 		&mAddr;		//Mess arch phisical address

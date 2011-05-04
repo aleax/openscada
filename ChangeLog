@@ -1,3 +1,10 @@
+2011-05-04 Roman
+- SYS: The ResString object is significant improved for free conver to/from std::string and some typical functions of std::string wrap.
+- !!!!:SYS.TConfig, Archives, DAQ, Security, Transports, Archive.*, DAQ.*, Protocol.UserProtocol, Transport.*, UI.VCAEngine, UI.WebUser:
+    For direct link to string configuration properties is used resourced object ResString everywhere.
+- UI.QTCfg: No warning dialog set for start path open error. Simple open local root page.
+
+
 2011-05-03 Roman
 - Security: The long description text field is added to the user and the group objects.
 - FIX:DAQ.JavaLikeCalc: Wrong arguments processing from "new RegExp()" on compile is fixed.

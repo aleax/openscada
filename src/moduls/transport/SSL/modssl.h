@@ -112,7 +112,7 @@ class TSocketIn: public TTransportIn
 	bool		endrun;			// Command for stop task
 	bool		endrun_cl;		// Command for stop client tasks
 
-	string		&mAPrms;		// Addon parameters
+	ResString	&mAPrms;		// Addon parameters
 
 	int		mMaxFork,		// maximum forking (opened SSL)
 			mBufLen,		// input buffer length
@@ -165,7 +165,7 @@ class TSocketOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string		&mAPrms;		// Addon parameters
+	ResString	&mAPrms;		// Addon parameters
 
 	string		mCertKey,		// SSL certificate
 			mKeyPass;		// SSL private key password

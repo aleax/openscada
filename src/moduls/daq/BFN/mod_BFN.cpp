@@ -429,7 +429,7 @@ void TMdContr::enable_( )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the gathering data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
@@ -469,7 +469,7 @@ void TMdContr::reqBFN(XMLNode &io)
 
     AutoHD<TTransportOut> tr;
     try{ tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.')); }
-    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),mAddr.c_str()); }
+    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),mAddr.getVal().c_str()); }
 
     XMLNode req("POST");
     req.setAttr("URI","/cgi-bin/imwl_ws.cgi");
@@ -677,7 +677,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/PASS" && ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(mPassword.size(),'*'));
+    if(a_path == "/cntr/cfg/PASS" && ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(mPassword.getVal().size(),'*'));
     else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
     {
 	vector<string> sls;

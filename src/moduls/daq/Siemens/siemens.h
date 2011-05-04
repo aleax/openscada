@@ -131,7 +131,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	void initLnks( );
 
 	//Attributes
-	string	&m_tmpl;
+	ResString &m_tmpl;
 
 	TElem	p_el;				//Work atribute elements
 
@@ -232,7 +232,7 @@ class TMdContr: public TController
 		&m_type,		// Connection type
 		&m_slot,
 		&m_dev;			// CIF device number
-	string	&m_addr;		// Remote host address
+	ResString &m_addr;		// Remote host address
 	bool	&m_assinc_wr;		// Asynchronous write mode
 
 	bool	prc_st,			// Process task active

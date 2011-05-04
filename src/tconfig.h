@@ -61,10 +61,10 @@ class TCfg
 	TCfg( TFld &fld, TConfig &owner );
 	~TCfg( );
 
-	const string &name( );
+	const	string &name( );
 
-	bool operator==( TCfg &cfg );
-	TCfg &operator=( TCfg &cfg );
+	bool	operator==( TCfg &cfg );
+	TCfg	&operator=( TCfg &cfg );
 
 	bool	view( )			{ return mView; }
 	bool	keyUse( )		{ return mKeyUse; }
@@ -73,7 +73,7 @@ class TCfg
 	void	setKeyUse( bool vl )	{ if( fld().flg()&Key ) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 
-	TFld &fld( )			{ return *mFld; }
+	TFld	&fld( )			{ return *mFld; }
 
 	//> Universal access
 	string	getSEL( char RqFlg = 0 );
@@ -82,16 +82,16 @@ class TCfg
 	int	getI( char RqFlg = 0 );
 	bool	getB( char RqFlg = 0 );
 	//> Direct access
-	string	&getSd( );
+	ResString &getSd( );
 	double	&getRd( );
 	int	&getId( );
 	bool	&getBd( );
 
-	void setSEL( const string &val, char RqFlg = 0 );
-	void setS( const string &val, char RqFlg = 0 );
-	void setR( double val, char RqFlg = 0 );
-	void setI( int val, char RqFlg = 0 );
-	void setB( bool val, char RqFlg = 0 );
+	void	setSEL( const string &val, char RqFlg = 0 );
+	void	setS( const string &val, char RqFlg = 0 );
+	void	setR( double val, char RqFlg = 0 );
+	void	setI( int val, char RqFlg = 0 );
+	void	setB( bool val, char RqFlg = 0 );
 
     private:
 	//Data

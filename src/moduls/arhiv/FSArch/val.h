@@ -227,7 +227,7 @@ class ModVArch: public TVArchivator
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string	&mAPrms;			// Addon parameters
+	ResString &mAPrms;			// Addon parameters
 
 	double	time_size;			// number hours into one file
 	unsigned numb_files;			// number of Archive files

@@ -44,7 +44,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }			//Identifier
+	const string &id( )	{ return mId.getValRef(); }	//Identifier
 	string name( );						//Name
 	string descr( ) 	{ return m_descr; }		//Description
 	string ico( )		{ return m_ico; }		//Icon
@@ -81,7 +81,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const string &nodeName( )		{ return mId; }
+	const string &nodeName( )		{ return mId.getValRef(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -96,7 +96,8 @@ class WidgetLib : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	string  &mId, &m_name, &m_descr, &m_dbt, &m_ico, work_lib_db, mOldDB;
+	ResString &mId, &m_name, &m_descr, &m_dbt, &m_ico;
+	string work_lib_db, mOldDB;
 	bool	mEnable;
 };
 
@@ -156,7 +157,7 @@ class LWidget : public Widget, public TConfig
 
     private:
 	//Attributes
-	string	&m_ico,		//Widget icon
+	ResString &m_ico,	//Widget icon
 		&m_proc,	//Widget procedure
 		&mParent,	//Widget parent
 		&m_attrs;	//Changed attributes list
@@ -213,7 +214,7 @@ class CWidget : public Widget, public TConfig
 
 	//Attributes
 	bool	delMark;
-	string	&mParent, &m_attrs;
+	ResString &mParent, &m_attrs;
 };
 
 }

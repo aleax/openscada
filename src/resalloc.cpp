@@ -141,17 +141,27 @@ ResString::ResString( const string &vl )
 
 ResString::~ResString( )
 {
-    ResAlloc wres( mRes, true );
+    ResAlloc wres(mRes, true);
 }
+
+size_t ResString::size( )	{ return getVal().size(); }
+
+bool   ResString::empty( )	{ return getVal().empty(); }
 
 void ResString::setVal( const string &vl )
 {
-    ResAlloc wres( mRes, true );
+    ResAlloc wres(mRes, true);
     str = vl;
 }
 
 string ResString::getVal( )
 {
-    ResAlloc wres( mRes, false );
+    ResAlloc wres(mRes, false);
     return str;
+}
+
+ResString &ResString::operator=( const string &val )
+{
+    setVal(val);
+    return *this;
 }

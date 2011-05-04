@@ -683,7 +683,7 @@ void TMdContr::connectRemotePLC( )
 	{
 	    //- Full Libnodave API -
 	    _daveOSserialType fds;
-	    fds.wfd = fds.rfd = openSocket(102,m_addr.c_str());
+	    fds.wfd = fds.rfd = openSocket(102, m_addr.getVal().c_str());
 	    if( fds.rfd <= 0 ) throw TError(nodePath().c_str(),_("Open socket of remote PLC error."));
 	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
 	    daveSetTimeout(di,5000000);
@@ -794,7 +794,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		tMsg.f  = 0;
 		tMsg.b  = MPI_Read_Write_DB;
 		tMsg.e  = 0;
-		tMsg.d[0] = vmax(0,vmin(126,atoi(m_addr.c_str())));
+		tMsg.d[0] = vmax(0,vmin(126,atoi(m_addr.getVal().c_str())));
 		tMsg.d[1] = (unsigned char)(offset>>8);
 		tMsg.d[2] = (unsigned char)n_db;
 		tMsg.d[3] = (unsigned char)(n_db>>8);
@@ -930,7 +930,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		tMsg.f  = 0;
 		tMsg.b  = MPI_Read_Write_DB;
 		tMsg.e  = 0;
-		tMsg.d[0] = vmax(0,vmin(126,atoi(m_addr.c_str())));
+		tMsg.d[0] = vmax(0,vmin(126,atoi(m_addr.getVal().c_str())));
 		tMsg.d[1] = (unsigned char)(offset>>8);
 		tMsg.d[2] = (unsigned char)n_db;
 		tMsg.d[3] = (unsigned char)(n_db>>8);
@@ -1787,7 +1787,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
-	string prm0 = TSYS::strSepParse(m_tmpl,0,'.');
+	string prm0 = TSYS::strSepParse(m_tmpl, 0, '.');
 	vector<string>  ls;
 	switch(c_lv)
 	{

@@ -315,7 +315,11 @@ void UserPrt::postDisable( int flag )
 
 TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }
 
-string UserPrt::name( )		{ return mName.size() ? mName : id(); }
+string UserPrt::name( )
+{
+    string tNm = mName;
+    return tNm.size() ? tNm : id();
+}
 
 string UserPrt::tbl( )		{ return owner().modId()+"_uPrt"; }
 

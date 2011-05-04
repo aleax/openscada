@@ -93,7 +93,8 @@ void ModMArch::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(atof(vl.c_str()));
+	vl = prmNd.attr("Size");
+	if(!vl.empty()) setMaxSize(atof(vl.c_str()));
     } catch(...){ }
 }
 

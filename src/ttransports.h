@@ -48,7 +48,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string workId( );
 	string name( );
 	string dscr( )		{ return mDscr; }
@@ -92,14 +92,14 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	//Attributes
-	string	&mId;
-	string	&mName;
-	string	&mDscr;
-	string	&mAddr;
-	string	&mProt;
+	ResString &mId,
+		&mName,
+		&mDscr,
+		&mAddr,
+		&mProt;
 	bool	&mStart;
 	string	mDB;
 };
@@ -116,7 +116,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return mDscr; }
@@ -150,7 +150,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TTipTransport &owner( );
 
-	Res &nodeRes( )					{ return nRes; }
+	Res &nodeRes( )			{ return nRes; }
 
     protected:
 	//Methods
@@ -169,13 +169,13 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	//Attributes
-	string	&mId;
-	string	&mName;
-	string	&mDscr;
-	string	&mAddr;
+	ResString &mId,
+		&mName,
+		&mDscr,
+		&mAddr;
 	bool	&mStart;
 	string	mDB;
 

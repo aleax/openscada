@@ -91,7 +91,7 @@ class Node : public TFunction, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string name( );
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
@@ -143,7 +143,7 @@ class Node : public TFunction, public TConfig
 	};
 
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -156,7 +156,7 @@ class Node : public TFunction, public TConfig
 	//Attributes
 	Res	nRes;
 	SData	*data;
-	string	&mId, &mName, &mDscr;
+	ResString &mId, &mName, &mDscr;
 	double	&mPer;
 	bool	&mAEn, mEn;
 	string	mDB;

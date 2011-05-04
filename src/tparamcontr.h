@@ -47,7 +47,7 @@ class TParamContr : public TConfig, public TValue
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return m_id.getValRef(); }
 	string name( );
 	string descr( );
 	bool toEnable( )	{ return m_aen; }
@@ -85,10 +85,10 @@ class TParamContr : public TConfig, public TValue
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id.getValRef(); }
 
 	//Attributes
-	string	&m_id;
+	ResString &m_id;
 	bool	&m_aen, m_en;
 	TElem	el_err;		//Error atributes
 

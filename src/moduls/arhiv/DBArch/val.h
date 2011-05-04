@@ -96,7 +96,7 @@ class ModVArch: public TVArchivator
 	//Attributes
 	double	mMaxSize;			//Maximum archive size (hours)
 
-	string	&mAPrms;			// Addon parameters
+	ResString &mAPrms;			// Addon parameters
 };
 
 }

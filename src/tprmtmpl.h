@@ -59,7 +59,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return m_id.getValRef(); }
 	string name( );
 	string descr( );
 	string progLang( );
@@ -87,10 +87,10 @@ class TPrmTempl: public TFunction, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id.getValRef(); }
 
 	//Attributes
-	string	&m_id, &m_prog, work_prog;
+	ResString &m_id, &m_prog, work_prog;
 };
 
 //*************************************************
@@ -106,7 +106,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return m_id.getValRef(); }
 	string name( );
 	string descr( );
 
@@ -141,12 +141,12 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id.getValRef(); }
 
 	//Attributes
 	bool	run_st;
 	int	m_ptmpl;
-	string	&m_id, &m_db, work_lib_db;
+	ResString &m_id, &m_db, work_lib_db;
 };
 
 }

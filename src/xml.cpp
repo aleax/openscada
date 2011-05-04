@@ -254,8 +254,6 @@ string XMLNode::save( unsigned flg )
     return xml;
 }
 
-
-
 void XMLNode::saveNode( unsigned flg, string &xml )
 {
     xml.append((flg&XMLNode::BrOpenPrev) ? "\n<" : "<");
@@ -272,7 +270,7 @@ void XMLNode::saveNode( unsigned flg, string &xml )
 	xml.append("\"");
     }
 
-    if(childEmpty() && text().empty() && mPrcInstr.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? "/>\n" : "/>");
+    if(childEmpty() && text().empty() && mPrcInstr.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
     else
     {
 	xml.append((flg&XMLNode::BrOpenPast) ? ">\n" : ">");

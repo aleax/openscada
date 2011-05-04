@@ -89,7 +89,7 @@ class TTrIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string	&mAPrms;			// Addon parameters
+	ResString &mAPrms;			// Addon parameters
 
 	string	mTimings, mDevPort;
 	int	fd;
@@ -170,7 +170,7 @@ class TTrOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string	&mAPrms;			// Addon parameters
+	ResString &mAPrms;			// Addon parameters
 
 	string	mDevPort, mTimings;
 	int	fd;

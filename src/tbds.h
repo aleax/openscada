@@ -103,11 +103,11 @@ class TBD : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string	&id( )		{ return mId; }
+	const string	&id( )		{ return mId.getValRef(); }
 	string		name( );
-	const string	&dscr( )	{ return mDscr; }
-	const string	&addr( )	{ return mAddr; }
-	const string	&codePage( )	{ return mCodepage; }
+	string		dscr( )		{ return mDscr; }
+	string		addr( )		{ return mAddr; }
+	string		codePage( )	{ return mCodepage; }
 
 	bool enableStat( )		{ return mEn; }
 	bool toEnable( )		{ return mToEn; }
@@ -157,11 +157,11 @@ class TBD : public TCntrNode, public TConfig
     private:
 	//Private methods
 	void postEnable( int flag );
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	//Private attributes
 	//> Base options
-	string	&mId,		//ID
+	ResString &mId,		//ID
 		&mName,		//Name
 		&mDscr,		//Description
 		&mAddr,		//Individual address
@@ -205,8 +205,7 @@ class TTipBD : public TModule
 	//Private methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	virtual TBD *openBD( const string &id )
-	{throw TError(nodePath().c_str(),_("Function <%s> no support!"),"openBD"); }
+	virtual TBD *openBD( const string &id )	{ throw TError(nodePath().c_str(),_("Function <%s> no support!"),"openBD"); }
 
 	//Private attributes
 	bool	full_db_del;

@@ -95,7 +95,8 @@ void Lib::postDisable( int flag )
 
 string Lib::name( )
 {
-    return (mName.size())?mName:mId;
+    string tNm = mName;
+    return tNm.size() ? tNm : mId;
 }
 
 void Lib::setFullDB( const string &idb )

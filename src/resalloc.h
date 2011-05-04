@@ -80,9 +80,17 @@ class ResString
 	explicit ResString( const string &vl = "" );
 	~ResString( );
 
+	ResString &operator=( const string &val );
+	operator string( )		{ return getVal(); }
+
+	size_t size( );
+	bool   empty( );
+
 	void setVal( const string &vl );
 	string getVal( );
+	const string &getValRef( )	{ return str; }
 
+    private:
 	//Attributes
 	Res	mRes;
 	string	str;

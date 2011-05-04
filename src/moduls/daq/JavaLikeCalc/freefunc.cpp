@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string.h>
 #include <limits.h>
 #include <math.h>
 
@@ -37,12 +38,11 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 Func::Func( const char *iid, const char *name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
-    mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()), max_calc_tm(cfg("MAXCALCTM").getId()),
-    prg_src(cfg("FORMULA").getSd()), parse_res(mod->parseRes())
+    mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()), prg_src(cfg("FORMULA").getSd()),
+    max_calc_tm(cfg("MAXCALCTM").getId()), parse_res(mod->parseRes())
 {
     cfg("ID").setS(id());
-    mName = name;
-    if(!mName.size()) mName = id();
+    mName = strlen(name) ? string(name) : id();
 }
 
 Func::~Func( )
@@ -78,7 +78,8 @@ Lib &Func::owner( )
 
 string Func::name( )
 {
-    return mName.size()?mName:id();
+    string tNm = mName;
+    return tNm.size() ? tNm : id();
 }
 
 TCntrNode &Func::operator=( TCntrNode &node )
@@ -316,20 +317,23 @@ void Func::progCompile( )
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
     la_pos = 0;		//LA position
-    prg    = "";	//Clear programm
+    sprg = prg_src;
+    prg.clear();	//Clear programm
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list
     funcClear();	//Clear functions list
 
-    if( yyparse( ) )
+    if(yyparse())
     {
-	prg = "";
+	prg.clear();
+	sprg.clear();
 	regClear();
 	regTmpClean( );
 	funcClear();
 	run_st = false;
 	throw TError(nodePath().c_str(),"%s",p_err.c_str());
     }
+    sprg.clear();
     regTmpClean( );
 }
 

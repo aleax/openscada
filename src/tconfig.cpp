@@ -229,27 +229,27 @@ TCfg::~TCfg(  )
 
 const string &TCfg::name()	{ return mFld->name(); }
 
-string &TCfg::getSd( )
+ResString &TCfg::getSd( )
 {
-    if( mFld->type()!=TFld::String )	throw TError("Cfg",_("Element type is not string!"));
-    return m_val.s_val->str;
+    if(mFld->type() != TFld::String)	throw TError("Cfg",_("Element type is not string!"));
+    return *m_val.s_val;
 }
 
 double &TCfg::getRd( )
 {
-    if( mFld->type()!=TFld::Real )	throw TError("Cfg",_("Element type is not real!"));
+    if(mFld->type() != TFld::Real)	throw TError("Cfg",_("Element type is not real!"));
     return m_val.r_val;
 }
 
 int &TCfg::getId( )
 {
-    if( mFld->type()!=TFld::Integer )	throw TError("Cfg",_("Element type is not int!"));
+    if(mFld->type() != TFld::Integer)	throw TError("Cfg",_("Element type is not int!"));
     return m_val.i_val;
 }
 
 bool &TCfg::getBd( )
 {
-    if( mFld->type()!=TFld::Boolean )	throw TError("Cfg",_("Element type is not boolean!"));
+    if(mFld->type() != TFld::Boolean)	throw TError("Cfg",_("Element type is not boolean!"));
     return m_val.b_val;
 }
 

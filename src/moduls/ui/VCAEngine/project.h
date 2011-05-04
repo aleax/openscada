@@ -50,7 +50,7 @@ class Project : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }			//Identifier
+	const string &id( )	{ return mId.getValRef(); }	//Identifier
 	string	name( );					//Name
 	string	descr( )	{ return mDescr; }		//Description
 	string	ico( )		{ return mIco; }		//Icon
@@ -108,7 +108,7 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -123,7 +123,7 @@ class Project : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	string  &mId,		//Identifier
+	ResString &mId,		//Identifier
 		&mName,		//Name
 		&mDescr,	//Description
 		&mDBt,		//DB table
@@ -229,7 +229,7 @@ class Page : public Widget, public TConfig
     private:
 	//Attributes
 	int	mPage;		//Page container identifier
-	string	&mIco,		//Widget icon
+	ResString &mIco,	//Widget icon
 		&mProc,		//Widget procedure
 		&mParent,	//Widget parent
 		&mAttrs;	//Changed attributes list
@@ -289,7 +289,7 @@ class PageWdg : public Widget, public TConfig
 
 	//Attributes
 	bool	delMark;
-	string	&mParent, &mAttrs;
+	ResString &mParent, &mAttrs;
 };
 
 }

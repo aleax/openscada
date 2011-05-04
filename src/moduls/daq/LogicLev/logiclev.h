@@ -116,7 +116,8 @@ class TMdPrm : public TParamContr
 	void initTmplLnks( bool checkNoLink = false );
 
 	//Attributes
-	string	&m_prm, m_wprm;
+	ResString &m_prm;
+	string	m_wprm;
 	int	&m_mode;			//Config parameter mode
 	Mode	m_wmode;			//Work parameter mode
 

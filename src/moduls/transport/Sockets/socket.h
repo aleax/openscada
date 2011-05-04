@@ -126,7 +126,7 @@ class TSocketIn: public TTransportIn
 	bool		endrun;			// Command for stop task
 	bool		endrun_cl;		// Command for stop client tasks
 
-	string		&mAPrms;		// Addon parameters
+	ResString 	&mAPrms;		// Addon parameters
 
 	int		type;			// socket's types
 	string		path;			// path to file socket for UNIX socket
@@ -188,7 +188,7 @@ class TSocketOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string		&mAPrms;		// Addon parameters
+	ResString	&mAPrms;		// Addon parameters
 	string		mTimings;
 	unsigned short	mTmCon;
 	unsigned short	mTmNext;

@@ -51,7 +51,7 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	string &OIDList( )	{ return m_oid; }
+	string OIDList( )	{ return m_oid; }
 	vector<string> &lsOID( ){ return ls_oid; }
 	TElem &elem( )		{ return p_el; }
 
@@ -74,7 +74,7 @@ class TMdPrm : public TParamContr
 	void parseOIDList( const string &ioid );
 
 	//Attributes
-	string	&m_oid;			//Gaher OID list. Single text
+	ResString &m_oid;		//Gaher OID list. Single text
 	vector<string>	ls_oid;		//Parsed IOD list.
 
 	TElem	p_el;			//Work atribute elements
@@ -134,11 +134,12 @@ class TMdContr: public TController
 		&m_pattr_lim,	// Parameter's attributes limit
 		&m_retr,	// Request retries
 		&m_tm;		// Request timeout
-	string	&mSched,        // Calc schedule
-		&m_addr, w_addr,// Host address
+	ResString &mSched,	// Calc schedule
+		&m_addr,	// Host address
 		&m_ver,		// SNMP version
-		&m_comm, w_comm,// Server community
+		&m_comm,	// Server community
 		&m_V3;		// V3 parameters
+	string	w_addr, w_comm;
 	long long mPer;
 
 	bool	prc_st,		// Process task active

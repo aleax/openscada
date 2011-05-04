@@ -213,7 +213,7 @@ void TMdContr::start_( )
     if( prc_st ) return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the gathering data task
     SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
@@ -317,8 +317,8 @@ void TMdPrm::enable()
     }
 
     //> Connect device's code
-    if( devTp == "FLowTC_UGTAA55" )	mDA = new FlowTEC(this);
-    else if( devTp == "Ergomera" )	mDA = new Ergomera(this);
+    if(devTp.getVal() == "FLowTC_UGTAA55")	mDA = new FlowTEC(this);
+    else if(devTp.getVal() == "Ergomera")	mDA = new Ergomera(this);
     else throw TError(nodePath().c_str(),_("No one device selected."));
 
     owner().prmEn( id(), true );

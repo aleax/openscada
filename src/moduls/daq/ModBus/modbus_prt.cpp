@@ -648,7 +648,11 @@ void Node::postDisable( int flag )
 
 TProt &Node::owner( )		{ return *(TProt*)nodePrev(); }
 
-string Node::name( )		{ return mName.size() ? mName : id(); }
+string Node::name( )
+{
+    string tNm = mName;
+    return tNm.size() ? tNm : id();
+}
 
 string Node::tbl( )		{ return owner().modId()+"_node"; }
 

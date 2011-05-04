@@ -412,8 +412,7 @@ ConfApp::ConfApp( string open_user ) :
 
     //>> Display root page and init external pages
     initHosts();
-    try{ pageDisplay(mod->startPath()); }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    try{ pageDisplay(mod->startPath()); } catch(TError err) { pageDisplay("/"); }
 }
 
 ConfApp::~ConfApp()

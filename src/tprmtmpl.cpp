@@ -92,12 +92,17 @@ string TPrmTempl::descr( )		{ return cfg("DESCR").getS(); }
 
 void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); modif(); }
 
-string TPrmTempl::progLang()		{ return m_prog.substr(0,m_prog.find("\n")); }
+string TPrmTempl::progLang()
+{
+    string tPrg = m_prog.getVal();
+    return tPrg.substr(0,tPrg.find("\n"));
+}
 
 string TPrmTempl::prog( )
 {
-    size_t lngEnd = m_prog.find("\n");
-    return m_prog.substr( (lngEnd==string::npos)?0:lngEnd+1 );
+    string tPrg = m_prog.getVal();
+    size_t lngEnd = tPrg.find("\n");
+    return tPrg.substr((lngEnd==string::npos)?0:lngEnd+1);
 }
 
 void TPrmTempl::setProgLang( const string &ilng )
@@ -440,7 +445,7 @@ void TPrmTmplLib::postDisable(int flag)
     if( flag )
     {
 	//> Delete libraries record
-	SYS->db().at().dataDel(work_lib_db+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
+	SYS->db().at().dataDel(work_lib_db.getVal()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
 
 	//> Delete temlate librarie's DBs
 	SYS->db().at().open(fullDB());

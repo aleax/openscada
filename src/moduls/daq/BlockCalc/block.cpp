@@ -94,7 +94,11 @@ void Block::postDisable( int flag )
 
 Contr &Block::owner( )	{ return *(Contr *)nodePrev(); }
 
-string Block::name( )	{ return m_name.size() ? m_name : id(); }
+string Block::name( )
+{
+    string rez = m_name;
+    return rez.size() ? rez : id();
+}
 
 void Block::load_( )
 {

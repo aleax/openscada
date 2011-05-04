@@ -55,7 +55,7 @@ class TController : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string workId( );
 	string name( );
 	string descr( );
@@ -124,12 +124,12 @@ class TController : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	void LoadParmCfg(  );
 
 	//Private attributes
-	string	&mId;
+	ResString &mId;
 	bool	&mAEn;
 	bool	&mAStart;
 

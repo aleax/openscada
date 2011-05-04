@@ -330,7 +330,7 @@ void TMdPrm::enable()
 
     try
     {
-	mode((TMdPrm::Mode)m_mode,m_prm);
+	mode((TMdPrm::Mode)m_mode, m_prm);
 	loadIO();
 	//> Init system attributes identifiers
 	if(mode() == TMdPrm::Template)
@@ -367,7 +367,7 @@ void TMdPrm::load_( )
     TParamContr::load_();
     try
     {
-	mode(mode(),m_prm);
+	mode(mode(), m_prm);
 	loadIO();
     }catch(...){ }
 }
@@ -793,7 +793,7 @@ void TMdPrm::calc( bool first, bool last )
 		    case IO::Real:
 		    {
 			double vl = tmpl->val.getR(lnk(i_l).io_id);
-			if(vl != EVAL_REAL)	lnk(i_l).aprm.at().setR(vl);
+			if(vl != EVAL_REAL) lnk(i_l).aprm.at().setR(vl);
 			break;
 		    }
 		    case IO::Boolean:
@@ -900,14 +900,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	{
 	    if(enableStat()) disable();
 	    m_mode = atoi(opt->text().c_str());
-	    mode((TMdPrm::Mode)m_mode, m_prm = "");
+	    mode((TMdPrm::Mode)m_mode, m_prm="");
 	} catch(...) { disable(); throw; }
     else if(a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	try
 	{
 	    if(enableStat()) disable();
 	    m_prm = opt->text();
-	    if(m_mode == TMdPrm::DirRefl && m_prm == owner().owner().modId()+"."+owner().id()+"."+id())
+	    if(m_mode == TMdPrm::DirRefl && m_prm.getVal() == owner().owner().modId()+"."+owner().id()+"."+id())
 		m_prm = owner().owner().modId()+"."+owner().id();
 	    mode((TMdPrm::Mode)m_mode, m_prm);
 	} catch(...){ disable(); throw; }
@@ -922,8 +922,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
-	string prm0 = TSYS::strSepParse(m_prm,0,'.');
-	string prm1 = TSYS::strSepParse(m_prm,1,'.');
+	string prm0 = TSYS::strSepParse(m_prm, 0, '.');
+	string prm1 = TSYS::strSepParse(m_prm, 1, '.');
 	vector<string>  ls;
 	switch(c_lv)
 	{

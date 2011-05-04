@@ -2453,7 +2453,11 @@ void OPCEndPoint::postDisable( int flag )
 
 TProt &OPCEndPoint::owner( )	{ return *(TProt*)nodePrev(); }
 
-string OPCEndPoint::name( )	{ return mName.size() ? mName : id(); }
+string OPCEndPoint::name( )
+{
+    string tNm = mName;
+    return tNm.size() ? tNm : id();
+}
 
 string OPCEndPoint::tbl( )	{ return owner().modId()+"_ep"; }
 

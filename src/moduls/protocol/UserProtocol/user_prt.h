@@ -71,7 +71,7 @@ class UserPrt : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string name( );
 	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
@@ -114,14 +114,14 @@ class UserPrt : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	string	&mId, &mName, &mDscr;
+	ResString &mId, &mName, &mDscr;
 	bool	&mAEn, mEn;
 	string	mDB, mWorkInProg, mWorkOutProg;
 };

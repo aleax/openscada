@@ -56,7 +56,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id; }
+	const string &id( )	{ return m_id.getValRef(); }
 	string workId( );
 	string name( );
 	string dscr( )		{ return m_dscr; }
@@ -106,10 +106,10 @@ class TMArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return m_id; }
+	const string &nodeName( )	{ return m_id.getValRef(); }
 
 	//Private attributes
-	string	&m_id,		//Mess arch id
+	ResString &m_id,		//Mess arch id
 		&m_name,	//Mess arch name
 		&m_dscr,	//Mess arch description
 		&m_addr,	//Mess arch address

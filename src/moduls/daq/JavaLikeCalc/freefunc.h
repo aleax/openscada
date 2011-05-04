@@ -267,7 +267,7 @@ class Func : public TConfig, public TFunction
 	string name( );
 	string descr( )			{ return mDescr; }
 	int maxCalcTm( )		{ return max_calc_tm; }
-	const string &prog( )		{ return prg_src; }
+	string prog( )			{ return prg_src; }
 	const string &usings( )		{ return mUsings; }
 
 	void setName( const string &nm );
@@ -378,15 +378,13 @@ class Func : public TConfig, public TFunction
 
     private:
 	//Attributes
-	string	&mName;
-	string	&mDescr;
+	ResString &mName, &mDescr, &prg_src;
 	int	&max_calc_tm;
-	string	&prg_src;
 
 	bool	be_start;		//Change structure check
 
 	//> Parser's data
-	string		prg;		//Build prog
+	string		sprg, prg;	//Build prog
 	unsigned	la_pos;		//LA position
 	string		p_err;		//Parse error
 	string		mUsings;	//Functions usings namespaces

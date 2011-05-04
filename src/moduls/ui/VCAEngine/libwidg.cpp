@@ -122,7 +122,8 @@ void WidgetLib::postDisable( int flag )
 
 string WidgetLib::name( )
 {
-    return (m_name.size())?m_name:mId;
+    string tNm = m_name;
+    return tNm.size() ? tNm : mId;
 }
 
 void WidgetLib::setFullDB( const string &it )
@@ -487,8 +488,8 @@ string LWidget::path( )
 
 string LWidget::ico( )
 {
-    if( m_ico.size() )          return m_ico;
-    if( !parent().freeStat() )  return parent().at().ico();
+    if(m_ico.size() )          return m_ico;
+    if(!parent().freeStat() )  return parent().at().ico();
     return "";
 }
 
@@ -554,7 +555,7 @@ void LWidget::setCalcPer( int vl )
 
 void LWidget::setParentNm( const string &isw )
 {
-    if( enable() && mParent != isw ) setEnable(false);
+    if(enable() && mParent.getVal() != isw) setEnable(false);
     mParent = isw;
     modif();
 }
@@ -570,12 +571,13 @@ void LWidget::load_( )
 
     //> Inherit modify attributes
     vector<string> als;
-    attrList( als );
+    attrList(als);
+    string tAttrs = m_attrs;
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos)
+	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos)
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -583,7 +585,7 @@ void LWidget::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", m_attrs, true );
+    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", tAttrs, true );
 
     //> Load all other attributes
     loadIO();
@@ -770,7 +772,7 @@ string CWidget::ico( )
 
 void CWidget::setParentNm( const string &isw )
 {
-    if( enable() && mParent != isw ) setEnable(false);
+    if(enable() && mParent.getVal() != isw) setEnable(false);
     mParent = isw;
     modif();
 }
@@ -825,11 +827,12 @@ void CWidget::load_( )
     //> Inherit modify attributes
     vector<string> als;
     attrList(als);
+    string tAttrs = m_attrs;
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && m_attrs.find(als[i_a]+";") == string::npos)
+	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos)
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -837,7 +840,7 @@ void CWidget::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), m_attrs, true );
+    mod->attrsLoad( *this, db+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), tAttrs, true );
 
     //> Load all other attributes
     loadIO();
@@ -868,13 +871,14 @@ void CWidget::save_( )
 	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
 
 	//>> Remove widget's work and users IO from library IO table
+	string tAttrs = m_attrs;
 	if(cfg("DBV").getI() == 1)
 	{
 	    TConfig c_el( &mod->elWdgIO() );
 	    c_el.cfg("IDW").setS( ownerLWdg().id(), true );
-	    for(unsigned i_a = 0; i_a < m_attrs.size(); i_a++)
+	    for(unsigned i_a = 0; i_a < tAttrs.size(); i_a++)
 	    {
-		c_el.cfg("ID").setS(id()+"/"+m_attrs[i_a],true);
+		c_el.cfg("ID").setS(id()+"/"+tAttrs[i_a],true);
 		SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
 	    }
 	    c_el.setElem(&mod->elWdgUIO());

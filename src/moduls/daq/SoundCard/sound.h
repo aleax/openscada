@@ -116,7 +116,7 @@ class TMdContr: public TController
     private:
 	//Attributes
 	TElem	pEl;					//Work atribute elements
-	string	&mCard;
+	ResString &mCard;
 	int	&mSmplRate, &mSmplType;
 	bool	prcSt, endrunReq;
 	int	numChan, smplSize;

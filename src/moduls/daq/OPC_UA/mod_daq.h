@@ -86,7 +86,7 @@ class TMdPrm : public TParamContr
 	void vlGet( TVal &val );
 	void vlSet( TVal &val, const TVariant &pvl );
 
-	string	&mNdLst;		//Nodes list
+	ResString &mNdLst;		//Nodes list
 
 	//Attributes
 	TElem	p_el;			//Work atribute elements
@@ -118,7 +118,7 @@ class TMdContr: public TController
 	string	pvKey( );
 	int	pAttrLim( )	{ return mPAttrLim; }
 
-	void	setEndPoint( const string &iep ){ if( mEndPoint != iep ) { mEndPoint = iep; modif(); } }
+	void	setEndPoint( const string &iep ){ if( mEndPoint.getVal() != iep ) { mEndPoint = iep; modif(); } }
 	void	setSecPolicy( const string &isp )	{ mSecPolicy = isp; modif(); }
 	void	setSecMessMode( int smm )	{ mSecMessMode = smm; modif(); }
 
@@ -182,7 +182,7 @@ class TMdContr: public TController
 	Res	en_res;		//Resource for enable params
 	int	&mPrior;	//Process task priority
 	double	&mSync;		//Synchronization inter remote station: attributes list update.
-	string	&mSched,	//Calc schedule
+	ResString &mSched,	//Calc schedule
 		&mAddr,		//Transport device address
 		&mEndPoint,	//Endpoint URL
 		&mSecPolicy;	//Security policy

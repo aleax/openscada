@@ -48,7 +48,7 @@ class Lib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	const string &id( )	{ return mId.getValRef(); }
 	string name( );
 	string descr( )		{ return mDescr; }
 	bool startStat( )	{ return run_st; }
@@ -73,7 +73,7 @@ class Lib : public TCntrNode, public TConfig
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
     protected:
-	const string &nodeName( )	{ return mId; }
+	const string &nodeName( )	{ return mId.getValRef(); }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
@@ -85,7 +85,8 @@ class Lib : public TCntrNode, public TConfig
     private:
 	bool	run_st;
 	int	mFnc;
-	string	&mId, &mName, &mDescr, &mDB, work_lib_db;
+	ResString &mId, &mName, &mDescr, &mDB;
+	string	work_lib_db;
 	bool	&mProgTr;
 };
 

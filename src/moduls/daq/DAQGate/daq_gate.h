@@ -146,7 +146,7 @@ class TMdContr: public TController
 		&mRestDtTm;			//Restore data maximum length time (hour)
 	int	&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
-	string	&mStations,			//Remote stations list
+	ResString &mStations,			//Remote stations list
 		&mContrPrm;			//Transported remote cotrollers and parameters list
 
 	bool	prcSt,				//Process task active

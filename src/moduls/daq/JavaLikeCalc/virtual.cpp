@@ -393,14 +393,14 @@ string Contr::getStatus( )
 
 void Contr::enable_( )
 {
-    if( !mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')) )
+    if(!mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')))
 	throw TError(nodePath().c_str(),_("Functions library '%s' is not present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
-    if( !mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().present(TSYS::strSepParse(mFnc,1,'.')) )
+    if(!mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().present(TSYS::strSepParse(mFnc,1,'.')))
     {
-	mess_info(nodePath().c_str(),_("Create new function '%s'."),mFnc.c_str());
+	mess_info(nodePath().c_str(),_("Create new function '%s'."),mFnc.getVal().c_str());
 	mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().add(TSYS::strSepParse(mFnc,1,'.').c_str());
     }
-    setFunc( &mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().at(TSYS::strSepParse(mFnc,1,'.')).at() );
+    setFunc(&mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().at(TSYS::strSepParse(mFnc,1,'.')).at());
     try{ loadFunc( ); }
     catch(TError err)
     {
@@ -497,10 +497,10 @@ void Contr::start_( )
     if(id_this >= 0) setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the request data task
-    if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, Contr::Task, this, &prc_st );
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this, &prc_st);
 }
 
 void Contr::stop_( )

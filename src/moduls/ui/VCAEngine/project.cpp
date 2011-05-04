@@ -134,12 +134,12 @@ string Project::name( )
 
 string Project::owner( )
 {
-    return SYS->security().at().usrPresent(mOwner) ? mOwner : "root";
+    return SYS->security().at().usrPresent(mOwner) ? mOwner : string("root");
 }
 
 string Project::grp( )
 {
-    return SYS->security().at().grpPresent(mGrp) ? mGrp : "UI";
+    return SYS->security().at().grpPresent(mGrp) ? mGrp : string("UI");
 }
 
 void Project::setOwner( const string &it )
@@ -207,7 +207,7 @@ void Project::save_( )
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
     //> Check for need copy mime data and sessions data to other DB and same copy
-    if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB()))
+    if(!mOldDB.empty() && mOldDB.getVal() != TBDS::realDBName(DB()))
     {
 	//>> Mime data copy
 	vector<string> pls;
@@ -221,7 +221,7 @@ void Project::save_( )
 	//>> Session's data copy
 	string wtbl = tbl()+"_ses";
 	TConfig c_el(&mod->elPrjSes());
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fld_cnt,c_el); fld_cnt++)
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(mOldDB.getVal()+"."+wtbl,"",fld_cnt,c_el); fld_cnt++)
 	    SYS->db().at().dataSet(DB()+"."+wtbl,"",c_el);
     }
 
@@ -874,7 +874,7 @@ string Page::ico( )
 
 void Page::setParentNm( const string &isw )
 {
-    if( enable() && mParent != isw ) setEnable(false);
+    if( enable() && mParent.getVal() != isw ) setEnable(false);
     mParent = isw;
     if( ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container) )
 	mParent = "..";
@@ -974,11 +974,12 @@ void Page::load_( )
     //> Inherit modify attributes
     vector<string> als;
     attrList(als);
+    string tAttrs = mAttrs;
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && mAttrs.find(als[i_a]+";") == string::npos)
+	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos)
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -986,7 +987,7 @@ void Page::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), path(), "", mAttrs, true );
+    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), path(), "", tAttrs, true );
 
     //> Create new pages
     TConfig c_el(&mod->elPage());
@@ -1340,7 +1341,7 @@ string PageWdg::ico( )
 
 void PageWdg::setParentNm( const string &isw )
 {
-    if( enable() && mParent != isw ) setEnable(false);
+    if( enable() && mParent.getVal() != isw ) setEnable(false);
     mParent = isw;
     modif();
 }
@@ -1396,12 +1397,13 @@ void PageWdg::load_( )
 
     //> Inherit modify attributes
     vector<string> als;
-    attrList( als );
+    attrList(als);
+    string tAttrs = mAttrs;
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && mAttrs.find(als[i_a]+";") == string::npos)
+	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos)
 	{
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
@@ -1409,7 +1411,7 @@ void PageWdg::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+ownerPage().ownerProj()->tbl(), cfg("DBV").getI(), ownerPage().path(), id(), mAttrs, true );
+    mod->attrsLoad( *this, db+"."+ownerPage().ownerProj()->tbl(), cfg("DBV").getI(), ownerPage().path(), id(), tAttrs, true );
 
     //> Load all other attributes
     loadIO();
@@ -1442,13 +1444,14 @@ void PageWdg::save_( )
 	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
 
 	//>> Remove widget's work and users IO from library IO table
+	string tAttrs = mAttrs;
 	if(cfg("DBV").getI() == 1)
 	{
 	    TConfig c_el(&mod->elWdgIO());
 	    c_el.cfg("IDW").setS(ownerPage().path(), true);
-	    for(unsigned i_a = 0; i_a < mAttrs.size(); i_a++)
+	    for(unsigned i_a = 0; i_a < tAttrs.size(); i_a++)
 	    {
-		c_el.cfg("ID").setS(id()+"/"+mAttrs[i_a],true);
+		c_el.cfg("ID").setS(id()+"/"+tAttrs[i_a],true);
 		SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
 	    }
 	    c_el.setElem(&mod->elWdgUIO());

@@ -70,7 +70,7 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements
-	string	&mAddr,		//Transport device address
+	ResString &mAddr,		//Transport device address
 		&devTp,		//Device type
 		&devAddr,	//Device address on a bus
 		&devPrms;	//Individual device extended parameters
@@ -130,7 +130,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	string	&mSched;	//Calc schedule
+	ResString &mSched;	//Calc schedule
 	int	&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
 		&mConnTry;	//Connections try

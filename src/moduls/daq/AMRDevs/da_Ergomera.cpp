@@ -33,7 +33,7 @@ using namespace AMRDevs;
 //*************************************************
 Ergomera::Ergomera( TMdPrm *prm ) : DA(prm), numReg(0)
 {
-    devAddr = vmin(65535,vmax(1,atoi(mPrm->devAddr.c_str())));
+    devAddr = vmin(65535,vmax(1,atoi(mPrm->devAddr.getVal().c_str())));
     mAttrs = mPrm->extPrmGet("Attrs",true);
     mMerge = atoi(mPrm->extPrmGet("FragMerge").c_str());
 
