@@ -256,6 +256,7 @@ string XMLNode::save( unsigned flg )
 
 void XMLNode::saveNode( unsigned flg, string &xml )
 {
+    if(name() == "<*>")	{ encode(Mess->codeConvOut("UTF-8",text()), xml, true); return; }
     xml.append((flg&XMLNode::BrOpenPrev) ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
     else encode(name(), xml);
@@ -323,98 +324,14 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
     }
 }
 
-void XMLNode::load( const string &s )
+void XMLNode::load( const string &s, bool sepTextNodes )
 {
     clear();
 
-#if HAVE_EXPAT_H
-    XML_Parser p = XML_ParserCreate("UTF-8");
-    if(!p) throw TError("XMLNode",_("Couldn't allocate memory for parser."));
-
-    XML_SetElementHandler(p, start_element, end_element);
-    XML_SetCharacterDataHandler(p, characters);
-    XML_SetProcessingInstructionHandler(p, instrHandler);
-    XML_SetUserData(p, this);
-
-    XMLNode *lstParent = mParent;
-    mParent = NULL;
-
-    if(!XML_Parse(p, s.data(), s.size(), true))
-    {
-	int cL = XML_GetCurrentLineNumber(p);
-	string xmlErr = XML_ErrorString(XML_GetErrorCode(p));
-	XML_ParserFree(p);
-	mParent = lstParent;
-	throw TError("XMLNode",_("Parse error at line %d --- %s. Source string: '%s'"), cL, xmlErr.c_str(), ((s.size()>1024)?s.substr(0,1024)+"...":s).c_str());
-    }
-    XML_ParserFree(p);
-    mParent = lstParent;
-
-#else
-    LoadCtx ctx(s);
+    LoadCtx ctx(s, sepTextNodes);
     loadNode(ctx);
-
-#endif
 }
 
-#if HAVE_EXPAT_H
-//> Parse/load XML attributes
-void XMLNode::start_element( void *data, const char *el, const char **attr )
-{
-    const char *a_n, *a_v;
-    XMLNode *p = (XMLNode*)data;
-    XMLNode *n = p;
-
-    if(p->mParent) n = p->mParent->childAdd();
-
-    n->setName(el);
-    while(*attr)
-    {
-	a_n = *attr++; a_v = *attr++;
-	n->mAttr.push_back(pair<string,string>(a_n,Mess->codeConvIn("UTF-8",a_v)));
-    }
-
-    p->node_stack.push_back(n);
-    p->mParent = n;
-}
-
-void XMLNode::end_element( void *data, const char *el )
-{
-    XMLNode *p = (XMLNode*)data;
-
-    //> Remove spaces from end of text
-    int i_ch;
-    for(i_ch = p->mParent->mText.size()-1; i_ch >= 0; i_ch--)
-	if(!isspace(p->mParent->mText[i_ch]))
-	    break;
-    //> Encode text
-    p->mParent->setText(Mess->codeConvIn("UTF-8",p->mParent->mText.substr(0,i_ch+1)));
-
-    if(!p->node_stack.empty()) p->node_stack.pop_back();
-    if(p->node_stack.empty()) p->mParent = NULL;
-    else p->mParent = p->node_stack[p->node_stack.size()-1];
-}
-
-void XMLNode::characters( void *userData, const XML_Char *s, int len )
-{
-    XMLNode *p = ((XMLNode*)userData)->mParent;
-    //if( !len )	return;
-    if(p->mText.size()) p->mText.append(s,len);
-    else
-	for(int i_ch = 0; i_ch < len; i_ch++)
-	{
-	    if(isspace(s[i_ch])) continue;
-	    p->mText.assign(s+i_ch,len-i_ch);
-	    break;
-	}
-}
-
-void XMLNode::instrHandler( void *userData, const XML_Char *target, const XML_Char *data )
-{
-    ((XMLNode*)userData)->mParent->mPrcInstr.push_back(pair<string,string>(target,Mess->codeConvIn("UTF-8",data)));
-}
-
-#else
 unsigned XMLNode::loadNode( LoadCtx &ctx, unsigned pos )
 {
     bool initTag = true;
@@ -425,7 +342,7 @@ nextTag:
     for( ; pos < ctx.vl.size() && ctx.vl[pos] != '<'; pos++)
     {
 	if(initTag) continue;
-	if(bufp || !isspace(ctx.vl[pos]) || mText.size())
+	if(ctx.sepTextNodes || bufp || !isspace(ctx.vl[pos]) || mText.size())
 	{
 	    ctx.buf[bufp++] = (ctx.vl[pos] != '&') ? ctx.vl[pos] : parseEntity(ctx,pos);
 	    if(bufp == ctx.bufSz) { mText.append(ctx.buf,bufp); bufp = 0; }
@@ -498,6 +415,7 @@ nextTag:
 		if(ctx.vl[cpos] == '>')
 		{
 		    if(bufp) mText.append(ctx.buf,bufp);
+		    if(mText.size() && ctx.sepTextNodes) { childAdd("<*>")->setText(Mess->codeConvIn(ctx.enc,mText)); mText.clear(); }
 		    if(mText.size())
 		    {
 			//> Remove spaces from end of text
@@ -534,6 +452,7 @@ nextTag:
     else
     {
 	if(bufp) { mText.append(ctx.buf,bufp); bufp = 0; }
+	if(mText.size() && ctx.sepTextNodes) { childAdd("<*>")->setText(Mess->codeConvIn(ctx.enc,mText)); mText.clear(); }
 	pos = childAdd()->loadNode(ctx,pos-1);
 	goto nextTag;
     }
@@ -626,7 +545,7 @@ char XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos )
 //*************************************************
 //* XMLNode::LoadCtx                              *
 //*************************************************
-XMLNode::LoadCtx::LoadCtx( const string &ivl ) : enc("UTF-8"), bufSz(1000)
+XMLNode::LoadCtx::LoadCtx( const string &ivl, bool isepTextNodes ) : sepTextNodes(isepTextNodes), enc("UTF-8"), bufSz(1000)
 {
     buf = (char*)malloc(bufSz);
     vl = ivl+char(0);
@@ -636,4 +555,3 @@ XMLNode::LoadCtx::~LoadCtx( )
 {
     free(buf);
 }
-#endif

@@ -206,17 +206,6 @@ AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE([LibDl: Pass global library using])],
 AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE([LibCrypt: Pass global library using])],
     [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
 
-#> Check for Expat XML-parser allow and use internal OpenSCADA XML parser for it miss.
-AC_CHECK_HEADERS([expat.h],
-    [
-	AC_CHECK_LIB([expat],[XML_ParserCreate],
-	[AC_MSG_NOTICE([LibExpat: Pass global library using])
-	LIB_EXPAT="-lexpat"],
-	[AC_MSG_NOTICE(Expat library not found. Using is disabled!)])
-    ],
-    [AC_MSG_NOTICE(Expat XML parser library headers not found. Using is disabled!)])
-AC_SUBST(LIB_EXPAT)
-
 #> Check for GD library use in OpenSCADA core
 if test ${LibGD} = true; then
     AC_CHECK_HEADERS([gd.h],

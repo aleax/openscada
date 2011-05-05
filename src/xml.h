@@ -29,10 +29,6 @@
 
 #include "../config.h"
 
-#if HAVE_EXPAT_H
-#include <expat.h>
-#endif
-
 using std::string;
 using std::vector;
 using std::map;
@@ -86,7 +82,7 @@ class XMLNode
 	string	prcInstr( const string &target ) const;
 	XMLNode* setPrcInstr( const string &target, const string &val );
 
-	void	load( const string &vl );
+	void	load( const string &vl, bool sepTextNodes = false );
 	string	save( unsigned flgs = 0 );
 	XMLNode* clear( );
 
@@ -118,25 +114,16 @@ class XMLNode
 	vector< pair<string,string> >	mPrcInstr;
 	XMLNode *mParent;
 
-#if HAVE_EXPAT_H
-	//Methods
-	static void start_element( void *data, const char *el, const char **attr );
-	static void end_element( void *data, const char *el );
-	static void characters( void *userData, const XML_Char *s, int len );
-	static void instrHandler( void *userData, const XML_Char *target, const XML_Char *data );
-
-	//> Parse/load XML attributes
-	vector<XMLNode*> node_stack;
-#else
 	//Data
 	class LoadCtx
 	{
 	    public:
 		//Methods
-		LoadCtx( const string &ivl );
+		LoadCtx( const string &ivl, bool sepTextNodes );
 		~LoadCtx( );
 
 		//Attributes
+		bool sepTextNodes;
 		string	vl, enc, aNm, aVl;
 		unsigned bufSz;
 	        char	*buf;
@@ -147,7 +134,6 @@ class XMLNode
 	unsigned loadNode( LoadCtx &ctx, unsigned pos = 0 );
 	inline bool parseAttr( LoadCtx &ctx, unsigned &pos, char sep = '=' );
 	char parseEntity( LoadCtx &ctx, unsigned &rpos );
-#endif
 };
 
 }

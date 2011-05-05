@@ -680,18 +680,19 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     if(id == "childGet" && prms.size())	return childGet(prms[0].getI());
     // XMLNodeObj parent() - get parent node
     if(id == "parent")	return parent ? TVariant(parent) : TVariant(false);
-    // string load(string str, bool file = false) - load XML tree from XML-stream from string or file
+    // string load(string str, bool file = false, bool sepTextNodes = false) - load XML tree from XML-stream from string or file
     //  str - source stream string or file name, for <file> = true
     //  file - load XML-tree from file (true) or stram (false)
+    //  sepTextNodes - nodes text load into separated nodes "<*>"
     if(id == "load" && prms.size())
     {
 	XMLNode nd;
 	//> Load from file
-	if( prms.size() >= 2 && prms[1].getB() )
+	if(prms.size() >= 2 && prms[1].getB())
 	{
 	    string s_buf;
 	    int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	    if( hd < 0 ) return TSYS::strMess(_("2:Open file <%s> error: %s"),prms[0].getS().c_str(),strerror(errno));
+	    if(hd < 0) return TSYS::strMess(_("2:Open file <%s> error: %s"),prms[0].getS().c_str(),strerror(errno));
 	    int cf_sz = lseek(hd,0,SEEK_END);
 	    if(cf_sz > 0)
 	    {
@@ -704,13 +705,13 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	    }
 	    close(hd);
 
-	    try{ nd.load(s_buf); }
-	    catch( TError err ) { return "1:"+err.mess; }
+	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false)); }
+	    catch(TError err) { return "1:"+err.mess; }
 	}
 	//> Load from string
 	else
-	    try{ nd.load(prms[0].getS()); }
-	    catch( TError err ) { return "1:"+err.mess; }
+	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getB():false)); }
+	    catch(TError err) { return "1:"+err.mess; }
 	fromXMLNode(nd);
 	return string("0");
     }

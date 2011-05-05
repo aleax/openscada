@@ -598,6 +598,11 @@ void TMdPrm::enable( )
 
     owner().prmEn(id(), true);
 
+    //> Remove all OID's attributes
+    for(unsigned i_p = 0; i_p < p_el.fldSize(); )
+	try{ p_el.fldDel(i_p); }
+        catch(TError err) { i_p++; }
+
     parseOIDList(m_oid);
 }
 
@@ -660,12 +665,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-    {
-	if(enableStat()) throw TError(nodePath().c_str(),_("Parameter is enabled."));
-	parseOIDList(opt->text());
-    }
-    else TParamContr::cntrCmdProc(opt);
+    TParamContr::cntrCmdProc(opt);
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
