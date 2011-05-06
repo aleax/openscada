@@ -98,6 +98,7 @@ class TMess
 	string &charset( )	{ return IOCharSet; }
 	int logDirect( )	{ return mLogDir; }
 	int messLevel( )	{ return mMessLevel; }
+	bool isUTF8( )		{ return mIsUTF8; }
 
 	void setLang( const string &lang );
 	void setLang2CodeBase( const string &vl );
@@ -117,10 +118,11 @@ class TMess
 	void varTextActivate( );
 
 	//Attributes
-	string	IOCharSet;	//Internal charset
-	unsigned mMessLevel:3;	//Work messages level
-	unsigned mLogDir:4;	//Log direction
-	unsigned mConvCode:1;	//Enable text code conversion
+	string	IOCharSet;		//Internal charset
+	unsigned mMessLevel	:3;	//Work messages level
+	unsigned mLogDir	:4;	//Log direction
+	unsigned mConvCode	:1;	//Enable text code conversion
+	unsigned mIsUTF8	:1;
 
 	string	mLang2CodeBase, mLang2Code;
 };

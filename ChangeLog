@@ -1,3 +1,8 @@
+2011-05-06 Roman
+- FIX:SYS.XMLNode: UTF entities parse to UTF-8 is fixed.
+- FIX:DAQ.JavaLikeCalc: Second argument downloading for RegExp() object is fixed. Return false for wrong type of compare functions.
+
+
 2011-05-05 Roman
 - !!:SYS.XMLNode: Load text of the tags to separated nodes suport is added. Used for full text configuration of tags store.
 - !!:SYS.XMLNode: Expat XML-parser using is full removed.

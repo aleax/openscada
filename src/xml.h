@@ -120,20 +120,17 @@ class XMLNode
 	    public:
 		//Methods
 		LoadCtx( const string &ivl, bool sepTextNodes );
-		~LoadCtx( );
 
 		//Attributes
 		bool sepTextNodes;
 		string	vl, enc, aNm, aVl;
-		unsigned bufSz;
-	        char	*buf;
-	        map<string,char> ent;
+	        map<string,string> ent;
 	};
 
 	//Methods
 	unsigned loadNode( LoadCtx &ctx, unsigned pos = 0 );
 	inline bool parseAttr( LoadCtx &ctx, unsigned &pos, char sep = '=' );
-	char parseEntity( LoadCtx &ctx, unsigned &rpos );
+	void parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez );
 };
 
 }

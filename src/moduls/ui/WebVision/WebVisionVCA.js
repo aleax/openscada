@@ -33,9 +33,9 @@ function pathLev( path, level, scan )
   var an_dir = scan ? pathLev.off : 0;
   var t_lev = 0;
   var t_dir;
-  while( an_dir<path.length && path.charAt(an_dir)=='/' ) an_dir++;
-  if( an_dir >= path.length ) return '';
-  while( true )
+  while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
+  if(an_dir >= path.length) return '';
+  while(true)
   {
     t_dir = path.indexOf('/',an_dir);
     if( t_dir < 0 ) { pathLev.off=path.length; return (t_lev==level)?path.substr(an_dir):''; }

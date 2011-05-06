@@ -549,8 +549,8 @@ Reg *Func::cdMviRegExp( int p_cnt )
     else
     {
 	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
-        rg_arg = regAt(regNew());
-        rg_arg->setType(Reg::String);
+	rg_arg = regTmpNew();
+	rg_arg->setType(Reg::String);
         rg_arg = cdMvi(rg_arg);
     }
     int p_expr = rg_expr->pos();
@@ -2081,7 +2081,9 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) == getValS(val,reg[ptr->a2]);
 			    break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
+			    reg[ptr->rez] = false;
+			    break;
+			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		else
 		{
@@ -2094,7 +2096,9 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[ptr->rez] = op1.getS() == getValS(val,reg[ptr->a2]); break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
+			    reg[ptr->rez] = false;
+			    break;
+			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		}
 		cprg += sizeof(SCode); break;
@@ -2116,7 +2120,9 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) != getValS(val,reg[ptr->a2]);
 			    break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
+			    reg[ptr->rez] = false;
+			    break;
+			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		else
 		{
@@ -2128,7 +2134,9 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[ptr->rez] = op1.getS() != getValS(val,reg[ptr->a2]); break;
 			default:
-			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
+			    reg[ptr->rez] = false;
+			    break;
+			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
 		cprg += sizeof(SCode); break;

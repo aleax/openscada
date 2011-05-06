@@ -60,7 +60,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
     Mess = new TMess();
 
-    if( getenv("USER") ) mUser = getenv("USER");
+    if(getenv("USER")) mUser = getenv("USER");
 
     //> Init system clock
     clkCalc();
