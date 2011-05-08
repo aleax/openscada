@@ -43,8 +43,8 @@ XMLNode &XMLNode::operator=(const XMLNode &prm)
     mChildren.clear();
 
     //> Copy params (name,text, attributes and instructions)
-    setName( prm.name() );
-    setText( prm.text() );
+    mName = prm.mName;
+    mText = prm.mText;
     vector<string> ls;
     prm.attrList(ls);
     for(unsigned i_a = 0; i_a < ls.size(); i_a++)
@@ -145,6 +145,34 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
     throw TError("XMLNode",_("Child with attribut %s=%s is not present."),attr.c_str(),val.c_str());
 }
 
+string	XMLNode::text( bool childs ) const
+{
+    if(!childs || mName == "<*>") return mText;
+
+    string rez;
+    for(unsigned i_f = 0; i_f < childSize(); i_f++)
+	if(childGet(i_f)->name() == "<*>") rez += childGet(i_f)->text();
+
+    return rez;
+}
+
+XMLNode* XMLNode::setText( const string &s, bool childs )
+{
+    if(!childs || mName == "<*>") { mText = s; return this; }
+
+    int i_ch = -1;
+    for(int i_f = 0; i_f < childSize(); i_f++)
+        if(childGet(i_f)->name() == "<*>")
+	{
+	    if(i_ch < 0) childGet(i_f)->mText = s;
+	    else childDel(i_f--);
+	    i_ch = i_f;
+	}
+    if(i_ch < 0) childAdd("<*>")->mText = s;
+
+    return this;
+}
+
 void XMLNode::attrList( vector<string> & list ) const
 {
     list.clear();
@@ -232,7 +260,7 @@ XMLNode* XMLNode::setPrcInstr( const string &target, const string &val )
 XMLNode* XMLNode::clear()
 {
     attrClear();
-    setText("");
+    mText.clear();
     prcInstrClear();
     childClear();
 
@@ -244,11 +272,7 @@ string XMLNode::save( unsigned flg )
     string xml;
     xml.reserve(10000);
 
-    if(flg&XMLHeader)
-    {
-	xml += "<?xml version='1.0' encoding='UTF-8' ?>";
-	if(flg&XMLNode::BrClosePast) xml += "\n";
-    }
+    if(flg&XMLHeader) xml += "<?xml version='1.0' encoding='UTF-8' ?>\n";
 
     saveNode(flg,xml);
     return xml;
@@ -256,7 +280,11 @@ string XMLNode::save( unsigned flg )
 
 void XMLNode::saveNode( unsigned flg, string &xml )
 {
-    if(name() == "<*>")	{ encode(Mess->codeConvOut("UTF-8",text()), xml, true); return; }
+    //> Text block
+    if(name() == "<*>")	{ encode(Mess->codeConvOut("UTF-8",mText), xml, true); return; }
+    //> Commentary block
+    if(name() == "<!>") { xml += "<!--"+Mess->codeConvOut("UTF-8",mText)+"-->"; return; }
+
     xml.append((flg&XMLNode::BrOpenPrev) ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
     else encode(name(), xml);
@@ -271,14 +299,14 @@ void XMLNode::saveNode( unsigned flg, string &xml )
 	xml.append("\"");
     }
 
-    if(childEmpty() && text().empty() && mPrcInstr.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
+    if(childEmpty() && mText.empty() && mPrcInstr.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
     else
     {
 	xml.append((flg&XMLNode::BrOpenPast) ? ">\n" : ">");
 	//> Save text
-	if(!text().empty())
+	if(!mText.empty())
 	{
-	    encode(Mess->codeConvOut("UTF-8",text()), xml, true);
+	    encode(Mess->codeConvOut("UTF-8",mText), xml, true);
 	    xml.append(flg&XMLNode::BrTextPast ? "\n" : "");
 	}
 	//> Save process instructions
@@ -324,11 +352,11 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
     }
 }
 
-void XMLNode::load( const string &s, bool sepTextNodes )
+void XMLNode::load( const string &s, bool full )
 {
     clear();
 
-    LoadCtx ctx(s, sepTextNodes);
+    LoadCtx ctx(s, full);
     loadNode(ctx);
 }
 
@@ -342,7 +370,7 @@ nextTag:
     for( ; pos < ctx.vl.size() && ctx.vl[pos] != '<'; pos++)
     {
 	if(initTag) continue;
-	if(ctx.sepTextNodes || mText.size() || !isspace(ctx.vl[pos]))
+	if(ctx.full || mText.size() || !isspace(ctx.vl[pos]))
 	{
 	    if(!mText.size())	mText.reserve(100);
 	    if(ctx.vl[pos] != '&') mText += ctx.vl[pos]; else parseEntity(ctx, pos, mText);
@@ -357,9 +385,14 @@ nextTag:
 	    //> Comment block
 	    if(ctx.vl.compare(pos,4,"<!--") == 0)
 	    {
-		for(cpos += 4; ctx.vl.compare(cpos,3,"-->") != 0; cpos++)
-		    if(cpos >= ctx.vl.size()) throw TError("XMLNode",_("No comment block end. Pos: %d"),pos);
-		pos = cpos+3;
+		size_t comBlkEnd = ctx.vl.find("-->",cpos+4);
+		if(comBlkEnd == string::npos) throw TError("XMLNode",_("No comment block end. Pos: %d"),pos);
+		if(ctx.full)
+		{
+		    if(mText.size()) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
+		    childAdd("<!>")->mText = Mess->codeConvIn(ctx.enc,ctx.vl.substr(cpos+4,comBlkEnd-(cpos+4)));
+		}
+		pos = comBlkEnd+3;
 	    }
 	    //> Special "DOCTYPE" block
 	    else if(ctx.vl.compare(pos,10,"<!DOCTYPE ") == 0)
@@ -414,7 +447,7 @@ nextTag:
 		while(isspace(ctx.vl[cpos])) cpos++;
 		if(ctx.vl[cpos] == '>')
 		{
-		    if(mText.size() && ctx.sepTextNodes) { childAdd("<*>")->setText(Mess->codeConvIn(ctx.enc,mText)); mText.clear(); }
+		    if(mText.size() && ctx.full) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
 		    if(mText.size())
 		    {
 			//> Remove spaces from end of text
@@ -450,7 +483,7 @@ nextTag:
     //>> New XML node create
     else
     {
-	if(mText.size() && ctx.sepTextNodes) { childAdd("<*>")->setText(Mess->codeConvIn(ctx.enc,mText)); mText.clear(); }
+	if(mText.size() && ctx.full) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
 	pos = childAdd()->loadNode(ctx,pos-1);
 	goto nextTag;
     }
@@ -551,7 +584,7 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 //*************************************************
 //* XMLNode::LoadCtx                              *
 //*************************************************
-XMLNode::LoadCtx::LoadCtx( const string &ivl, bool isepTextNodes ) : sepTextNodes(isepTextNodes), enc("UTF-8")
+XMLNode::LoadCtx::LoadCtx( const string &ivl, bool ifull ) : full(ifull), enc("UTF-8")
 {
     vl = ivl+char(0);
 }

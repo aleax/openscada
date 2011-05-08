@@ -1162,7 +1162,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if( prop == "isEVal" )	return (vl.getB() == EVAL_BOOL);
 		// string toString( ) - performs the value as the string “true” or “false”
 		if( prop == "toString" )return string(vl.getB() ? "true" : "false");
-		throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
+		return false;
+		//throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
 		// bool isEVal( ) - check value to "EVAL"
 		if( prop == "isEVal" )	return (vl.getI() == EVAL_INT);
@@ -1218,7 +1219,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(val < 0 || sign) rez += (val >= 0) ? "+" : "-";
 		    return TSYS::strEncode(rez,TSYS::Reverse);
 		}
-		throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
+		return false;
+		//throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
@@ -1414,7 +1416,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
 
-		throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
+		return false;
+		//throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
 	    default:	break;
 	}
 	return false;

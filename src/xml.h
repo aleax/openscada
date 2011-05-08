@@ -67,8 +67,8 @@ class XMLNode
 	string	name( ) const			{ return mName; }
 	XMLNode* setName( const string &s )	{ mName = s; return this; }
 
-	string	text( ) const			{ return mText; }
-	XMLNode* setText( const string &s )	{ mText = s; return this; }
+	string	text( bool childs = false ) const;
+	XMLNode* setText( const string &s, bool childs = false );
 
 	void	attrList( vector<string> &list ) const;
 	XMLNode* attrDel( const string &name );
@@ -82,7 +82,7 @@ class XMLNode
 	string	prcInstr( const string &target ) const;
 	XMLNode* setPrcInstr( const string &target, const string &val );
 
-	void	load( const string &vl, bool sepTextNodes = false );
+	void	load( const string &vl, bool full = false );
 	string	save( unsigned flgs = 0 );
 	XMLNode* clear( );
 
@@ -119,10 +119,10 @@ class XMLNode
 	{
 	    public:
 		//Methods
-		LoadCtx( const string &ivl, bool sepTextNodes );
+		LoadCtx( const string &ivl, bool full );
 
 		//Attributes
-		bool sepTextNodes;
+		bool full;
 		string	vl, enc, aNm, aVl;
 	        map<string,string> ent;
 	};

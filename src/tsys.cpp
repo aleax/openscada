@@ -51,7 +51,7 @@ bool TSYS::finalKill = false;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mWorkDB(""), mSaveAtExit(false), mSavePeriod(0), mStopSignal(-1), mMultCPU(false)
+    mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), mStopSignal(-1), mMultCPU(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -119,6 +119,45 @@ void TSYS::setWorkDir( const string &wdir )
 	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
 	    wdir.c_str(),strerror(errno),workDir().c_str());
     modif( );
+}
+
+XMLNode *TSYS::cfgNode( const string &path, bool create )
+{
+    string s_el, ndNm;
+
+    XMLNode *t_node = &rootN;
+    if(t_node->name() != "OpenSCADA")
+    {
+	if(!create) return NULL;
+	t_node->setName("OpenSCADA");
+    }
+
+    for(int l_off = 0, nLev = 0; true; nLev++)
+    {
+        s_el = TSYS::pathLev(path,0,true,&l_off);
+        if(s_el.empty()) return t_node;
+        bool ok = false;
+        for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
+            if(t_node->childGet(i_f)->attr("id") == s_el)
+            {
+                t_node = t_node->childGet(i_f);
+                ok = true;
+            }
+        if(!ok)
+        {
+	    if(!create)	return NULL;
+	    ndNm = "prm";
+	    switch(nLev)
+	    {
+		case 0: ndNm = "station";	break;
+		case 1: if(s_el.compare(0,4,"sub_") == 0) ndNm = "node";	break;
+		case 2: if(s_el.compare(0,4,"mod_") == 0) ndNm = "node";	break;
+	    }
+	    if(ndNm == "prm") t_node = t_node->childIns(0,ndNm)->setAttr("id",s_el);
+	    else t_node = t_node->childAdd(ndNm)->setAttr("id",s_el);
+        }
+    }
+    return t_node;
 }
 
 string TSYS::int2str( int val, TSYS::IntView view )
@@ -329,7 +368,7 @@ bool TSYS::cfgFileLoad( )
 	try
 	{
 	    ResAlloc res(nodeRes(),true);
-	    rootN.load(s_buf);
+	    rootN.load(s_buf,true);
 	    if(rootN.name() == "OpenSCADA")
 	    {
 		XMLNode *stat_n = NULL;
@@ -347,8 +386,8 @@ bool TSYS::cfgFileLoad( )
 		}
 		if(!stat_n)	rootN.clear();
 	    } else rootN.clear();
-	    if(!rootN.childSize())
-		mess_err(nodePath().c_str(),_("Config <%s> error!"),mConfFile.c_str());
+	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Config <%s> error!"),mConfFile.c_str());
+	    rootModifCnt = 0;
 	}
 	catch(TError err) { mess_err(nodePath().c_str(),_("Load config file error: %s"),err.mess.c_str() ); }
     }
@@ -356,11 +395,25 @@ bool TSYS::cfgFileLoad( )
     return cmd_help;
 }
 
-void TSYS::cfgPrmLoad()
+void TSYS::cfgFileSave( )
+{
+    ResAlloc res(nodeRes(),true);
+    if(!rootModifCnt) return;
+    int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
+    if(hd < 0) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
+
+    string rezFile = rootN.save(XMLNode::XMLHeader);
+    int rez = write(hd, rezFile.data(), rezFile.size());
+    if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Config '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
+    rootModifCnt = 0;
+    rootFlTm = time(NULL);
+}
+
+void TSYS::cfgPrmLoad( )
 {
     //System parameters
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
-    mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB","*.*","root",TBDS::OnlyCfg);
+    mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir").c_str());
     setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir()));
     setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir()));
@@ -464,22 +517,30 @@ int TSYS::start(  )
     {
 	//> CPU frequency calc
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
+
 	//> Config file change periodic check
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
+
 	//> Periodic shared libraries checking
 	if(modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)))
 	    modSchedul( ).at().libLoad(modDir(),true);
+
 	//> Old tables closing
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	db().at().closeOldTables();
+
 	//> Periodic changes saving to DB
 	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
 
-	usleep( STD_WAIT_DELAY*1000 );
+	//> Config file save need check
+	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileSave();
+
+	usleep(STD_WAIT_DELAY*1000);
 	i_cnt++;
     }
 
     mess_info(nodePath().c_str(),_("Stop!"));
     if(saveAtExit() || savePeriod())	save();
+    cfgFileSave();
     for(int i_a=lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError err)
@@ -546,13 +607,13 @@ void TSYS::cfgFileScan( bool first )
 {
     struct stat f_stat;
 
-    if( stat(cfgFile().c_str(),&f_stat) != 0 ) return;
+    if(stat(cfgFile().c_str(),&f_stat) != 0) return;
     bool up = false;
-    if( rootCfgFl != cfgFile() || rootFlTm != f_stat.st_mtime ) up = true;
+    if(rootCfgFl != cfgFile() || rootFlTm != f_stat.st_mtime) up = true;
     rootCfgFl = cfgFile();
     rootFlTm = f_stat.st_mtime;
 
-    if( up && !first )
+    if(up && !first)
     {
 	modifG();
 	setSelDB("<cfg>");
@@ -561,7 +622,7 @@ void TSYS::cfgFileScan( bool first )
     }
 }
 
-long long TSYS::curTime()
+long long TSYS::curTime( )
 {
     timeval cur_tm;
     gettimeofday(&cur_tm,NULL);
@@ -681,10 +742,10 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
     int t_lev = 0;
     size_t t_dir;
 
-    //- First separators pass -
+    //> First separators pass
     while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
     if(an_dir >= (int)path.size()) return "";
-    //- Path level process -
+    //> Path level process
     while(true)
     {
 	t_dir = path.find("/",an_dir);

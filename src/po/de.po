@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-21 16:31+0300\n"
+"POT-Creation-Date: 2011-05-07 21:06+0300\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -606,6 +606,7 @@ msgstr "Knoten ist nicht eingeschaltet!"
 msgid "Add child id is empty!"
 msgstr "Der hinzugefügte Kindbezeichner ist leer!"
 
+#, c-format
 msgid "Node '%s' is already present."
 msgstr "Der Knoten '%s' ist schon vorhanden."
 
@@ -651,11 +652,14 @@ msgstr "Element <%s> Warnung! %s"
 msgid "Node: "
 msgstr "Knoten: "
 
-msgid "*.*.<TableName>"
-msgstr "*.*.<Tabellenname>"
+msgid "*.*.[TableName]"
+msgstr "*.*.[Tabellenname]"
 
-msgid "<TableName>"
-msgstr "<Tabellenname>"
+msgid "<cfg>.[TableName]"
+msgstr "<cfg>.[Tabellenname]"
+
+msgid "[TableName]"
+msgstr "[Tabellenname]"
 
 #, c-format
 msgid "Attribute '%s' is not present!"
@@ -2003,13 +2007,6 @@ msgstr "Kind %s:%d wurde nicht gefunden!"
 #, c-format
 msgid "Child with attribut %s=%s is not present."
 msgstr "Kind mit dem Attribut %s=%s ist nicht vorhanden."
-
-msgid "Couldn't allocate memory for parser."
-msgstr "Kein Speicher für den Parser."
-
-#, c-format
-msgid "Parse error at line %d --- %s. Source string: '%s'"
-msgstr "Parsefehler in der Zeile %d --- %s. Quelltext: '%s'"
 
 #, c-format
 msgid "Unexpected end. Pos: %d"

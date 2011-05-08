@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-21 16:30+0300\n"
+"POT-Creation-Date: 2011-05-07 21:06+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -594,6 +594,7 @@ msgstr "Вузол не увімкнено!"
 msgid "Add child id is empty!"
 msgstr "Id нащадку, який додається, порожне!"
 
+#, c-format
 msgid "Node '%s' is already present."
 msgstr "Вузол '%s' вже присутній."
 
@@ -639,11 +640,14 @@ msgstr "Попередження елементу <%s>! %s"
 msgid "Node: "
 msgstr "Вузол: "
 
-msgid "*.*.<TableName>"
-msgstr "*.*.<Ім'яТаблиці>"
+msgid "*.*.[TableName]"
+msgstr "*.*.[Ім'яТаблиці]"
 
-msgid "<TableName>"
-msgstr "<Ім'яТаблиці>"
+msgid "<cfg>.[TableName]"
+msgstr "<cfg>.[Ім'яТаблиці]"
+
+msgid "[TableName]"
+msgstr "[Ім'яТаблиці]"
 
 #, c-format
 msgid "Attribute '%s' is not present!"
@@ -1988,13 +1992,6 @@ msgstr "Нащадок %s:%d не знайдений!"
 #, c-format
 msgid "Child with attribut %s=%s is not present."
 msgstr "Нащадок з атрибутом %s=%s відсутнії."
-
-msgid "Couldn't allocate memory for parser."
-msgstr "Неможу виділити пам'ять для парсеру."
-
-#, c-format
-msgid "Parse error at line %d --- %s. Source string: '%s'"
-msgstr "Помилка парсеру у лінії %d --- %s. Джерело: '%s'"
 
 #, c-format
 msgid "Unexpected end. Pos: %d"

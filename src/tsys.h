@@ -130,6 +130,8 @@ class TSYS : public TCntrNode
 	//> Config file functions
 	string cfgFile( )	{ return mConfFile; }
 	XMLNode &cfgRoot( )	{ return rootN; }
+	XMLNode *cfgNode( const string &path, bool create = false );
+	void modifCfg( )	{ rootModifCnt++; }
 
 	string workDB( )	{ return mWorkDB; }
 	string selDB( )		{ return mSelDB; }
@@ -297,6 +299,7 @@ class TSYS : public TCntrNode
 	//Private methods
 	const string &nodeName( )	{ return id(); }
 	bool cfgFileLoad( );
+	void cfgFileSave( );
 	void cfgPrmLoad( );
 	void cfgFileScan( bool first = false );
 	void cntrCmdProc( XMLNode *opt );	// Control interface command process
@@ -322,6 +325,7 @@ class TSYS : public TCntrNode
 	XMLNode rootN;		// Root of the config file tree
 	string	rootCfgFl;	// Root node's config file name
 	time_t	rootFlTm;	// Root node's config file's modify time
+	unsigned rootModifCnt;	// Root tree modify counter, used for save tree to file detect
 
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id

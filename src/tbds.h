@@ -91,7 +91,7 @@ class TTable : public TCntrNode
 
 //************************************************
 //* TBD                                          *
-//************************************************ 
+//************************************************
 class TTipBD;
 
 class TBD : public TCntrNode, public TConfig
@@ -272,7 +272,6 @@ class TBDS : public TSubSYS, public TElem
 
 	//Private attributes
 	TElem	el_db;
-	deque<TConfig*> genDBCache;
 	bool	mSYSStPref;
 
 	Res	nRes;

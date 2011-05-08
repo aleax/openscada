@@ -680,10 +680,10 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     if(id == "childGet" && prms.size())	return childGet(prms[0].getI());
     // XMLNodeObj parent() - get parent node
     if(id == "parent")	return parent ? TVariant(parent) : TVariant(false);
-    // string load(string str, bool file = false, bool sepTextNodes = false) - load XML tree from XML-stream from string or file
-    //  str - source stream string or file name, for <file> = true
-    //  file - load XML-tree from file (true) or stram (false)
-    //  sepTextNodes - nodes text load into separated nodes "<*>"
+    // string load(string str, bool file = false, bool full = false) - load XML tree from XML-stream from string or file
+    //  str - source stream string or file name, for <file> = true;
+    //  file - load XML-tree from file (true) or stram (false);
+    //  full - node's text and comments load into separated nodes "<*>" and "<!>".
     if(id == "load" && prms.size())
     {
 	XMLNode nd;

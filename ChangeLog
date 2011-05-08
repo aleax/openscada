@@ -1,3 +1,8 @@
+2011-05-08 Roman
+- !!!!:SYS: Save to config file support is added.
+- !:XMLNode: Load and save comment blocks is added for full mode.
+
+
 2011-05-06 Roman
 - FIX:SYS.XMLNode: UTF entities parse to UTF-8 is fixed.
 - FIX:DAQ.JavaLikeCalc: Second argument downloading for RegExp() object is fixed. Return false for wrong type of compare functions.

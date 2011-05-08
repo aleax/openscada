@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-21 16:31+0300\n"
+"POT-Creation-Date: 2011-05-07 21:06+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -639,11 +639,14 @@ msgstr "Предупреждение по элементу <%s>! %s"
 msgid "Node: "
 msgstr "Узел: "
 
-msgid "*.*.<TableName>"
-msgstr "*.*.<ИмяТаблицы>"
+msgid "*.*.[TableName]"
+msgstr "*.*.[ИмяТаблицы]"
 
-msgid "<TableName>"
-msgstr "<ИмяТаблицы>"
+msgid "<cfg>.[TableName]"
+msgstr "<cfg>.[ИмяТаблицы]"
+
+msgid "[TableName]"
+msgstr "[ИмяТаблицы]"
 
 #, c-format
 msgid "Attribute '%s' is not present!"
@@ -1991,13 +1994,6 @@ msgstr "Потомок %s:%d не обнаружен!"
 #, c-format
 msgid "Child with attribut %s=%s is not present."
 msgstr "Потомок с атрибутом %s=%s отсутствует."
-
-msgid "Couldn't allocate memory for parser."
-msgstr "Невозможно выделить память для парсера."
-
-#, c-format
-msgid "Parse error at line %d --- %s. Source string: '%s'"
-msgstr "Ошибка парсера в линии %d --- %s. Исходная строка: '%s'"
 
 #, c-format
 msgid "Unexpected end. Pos: %d"
