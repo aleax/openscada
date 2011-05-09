@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-27 18:00+0300\n"
+"POT-Creation-Date: 2011-05-09 17:25+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Operation user interface (QT)"
 msgstr "Робочий інтерфейс користувача (QT)"
@@ -1488,6 +1488,10 @@ msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"
 
 #, c-format
+msgid "Session creation restore for '%s'."
+msgstr "Відновлення створення сеансу для '%s'."
+
+#, c-format
 msgid "Session '%s' update time %f ms."
 msgstr "Час оновлення сеансу '%s' %f мс."
 
@@ -1660,8 +1664,11 @@ msgstr "Точка 4:"
 msgid "Point 5:"
 msgstr "Точка 5:"
 
-msgid "Include(checked)/Exclude(unchecked) the fill color from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) колір заповнення зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the fill color from the properties list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) колір заповнення зі списку "
+"властивостей."
 
 msgid "Fill Color"
 msgstr "Колір заповнення"
@@ -1669,8 +1676,11 @@ msgstr "Колір заповнення"
 msgid "Set the default fill color."
 msgstr "Встановити колір заповнення за замовчуванням."
 
-msgid "Include(checked)/Exclude(unchecked) the fill image from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) зображення заповнення зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the fill image from the properties list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) зображення заповнення зі списку "
+"властивостей."
 
 msgid "Fill Image"
 msgstr "Зображення заповнення"
@@ -1688,8 +1698,10 @@ msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
 msgstr ""
 "Зробити зображення заповнення Динамічним(вибрана)/Статичним(невибрана)."
 
-msgid "Include(checked)/Exclude(unchecked) the line width from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) ширину лінії зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the line width from the properties list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) ширину лінії зі списку властивостей."
 
 msgid "Line width"
 msgstr "Ширина лінії"
@@ -1700,8 +1712,10 @@ msgstr "Встановити ширину лінії за замовчуванн
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити ширину лінії Динамічною(вибрана)/Статичною(невибрана)."
 
-msgid "Include(checked)/Exclude(unchecked) the line color from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) колір лінії зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the line color from the properties list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) колір лінії зі списку властивостей."
 
 msgid "Line color"
 msgstr "Колір лінії"
@@ -1712,8 +1726,10 @@ msgstr "Встановити колір лінії за замовчування
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити клір лінії Динамічним(вибрана)/Статичним(невибрана)."
 
-msgid "Include(checked)/Exclude(unchecked) the line style from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) стиль лінії зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the line style from the properties list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) стиль лінії зі списку властивостей."
 
 msgid "Line style"
 msgstr "Стиль лінії"
@@ -1724,8 +1740,12 @@ msgstr "Встановити стиль лінії за замовчування
 msgid "Make the line style Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити стиль лінії Динамічним(вибрана)/Статичним(невибрана)."
 
-msgid "Include(checked)/Exclude(unchecked) the border width from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) ширину границі зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the border width from the properties "
+"list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) ширину границі зі списку "
+"властивостей."
 
 msgid "Border width"
 msgstr "Ширина границі"
@@ -1736,8 +1756,12 @@ msgstr "Встановити ширину границі за замовчува
 msgid "Make the border width Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити ширину границі Динамічною(вибрана)/Статичною(невибрана)."
 
-msgid "Include(checked)/Exclude(unchecked) the border color from the properties list."
-msgstr "Включити(вибраний)/Виключити(невибраний) колір границі зі списку властивостей."
+msgid ""
+"Include(checked)/Exclude(unchecked) the border color from the properties "
+"list."
+msgstr ""
+"Включити(вибраний)/Виключити(невибраний) колір границі зі списку "
+"властивостей."
 
 msgid "Border color"
 msgstr "Колір границі"

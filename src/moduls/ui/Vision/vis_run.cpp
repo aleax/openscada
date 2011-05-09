@@ -57,9 +57,10 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &prj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool crSessForce, QWidget *parent ) :
-    QMainWindow(parent), winClose(false), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF),
-    isConErr(false)
+VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat,
+	    bool icrSessForce, QWidget *parent ) :
+    QMainWindow(parent), winClose(false), crSessForce(icrSessForce), prj_it(iprj_it), master_pg(NULL), mPeriod(1000),
+    wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF), isConErr(false)
 {
     QImage ico_t;
 
@@ -1262,10 +1263,13 @@ void VisRun::updatePage( )
 	    callPage(req.childGet(i_ch)->text(),atoi(req.childGet(i_ch)->attr("updWdg").c_str()));
 	}
     }
-    else
+    //>> Restore closed session of used project.
+    else if(rez == 2)
     {
-	//>> Check for closed session by server and restore connection try
-	printf("TEST 00: %d '%s': %s\n",rez,req.attr("err").c_str(),req.text().c_str());
+	mess_warning(mod->nodePath().c_str(),_("Session creation restore for '%s'."),prj_it.c_str());
+	updateTimer->stop();
+	initSess(prj_it,crSessForce);
+	return;
     }
 
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);

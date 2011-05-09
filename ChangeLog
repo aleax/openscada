@@ -1,3 +1,7 @@
+2011-05-09 Roman
+- UI.Vision: Project's session recreation is added on runtime and after session closed on server side.
+
+
 2011-05-08 Roman
 - !!!!:SYS: Save to config file support is added.
 - !:XMLNode: Load and save comment blocks is added for full mode.

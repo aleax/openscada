@@ -165,7 +165,8 @@ class VisRun : public QMainWindow
 	StylesStBar	*mStlBar;		//Style status widget
 	QLabel		*mWStat;		//VCA engine station
 	QLabel		*mWTime;		//Runtime time display for fullscreen
-	string 		work_sess, src_prj;	//Work session and source project
+	bool		crSessForce;		//Force session creation flag
+	string 		prj_it, work_sess, src_prj;//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
 	unsigned	wPrcCnt;		//Process counter

@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-27 18:00+0300\n"
+"POT-Creation-Date: 2011-05-09 17:25+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Operation user interface (QT)"
 msgstr "Рабочий пользовательский интерфейс (QT)"
@@ -1489,6 +1489,10 @@ msgid "Alarm level: %1"
 msgstr "Уровень нарушения: %1"
 
 #, c-format
+msgid "Session creation restore for '%s'."
+msgstr "Восстановление создания сеанса для '%s'."
+
+#, c-format
 msgid "Session '%s' update time %f ms."
 msgstr "Время обновления сеанса '%s' %f мс."
 
@@ -1661,7 +1665,8 @@ msgstr "Точка 4:"
 msgid "Point 5:"
 msgstr "Точка 5:"
 
-msgid "Include(checked)/Exclude(unchecked) the fill color from the properties list."
+msgid ""
+"Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) цвет заливки из списка свойств."
 
 msgid "Fill Color"
@@ -1670,8 +1675,10 @@ msgstr "Цвет заливки"
 msgid "Set the default fill color."
 msgstr "Установить цвет заливки по умолчанию."
 
-msgid "Include(checked)/Exclude(unchecked) the fill image from the properties list."
-msgstr "Включить(включен)/Исключить(выключен) изображение заливки из списка свойств."
+msgid ""
+"Include(checked)/Exclude(unchecked) the fill image from the properties list."
+msgstr ""
+"Включить(включен)/Исключить(выключен) изображение заливки из списка свойств."
 
 msgid "Fill Image"
 msgstr "Изображение заливки"
@@ -1689,7 +1696,8 @@ msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
 msgstr ""
 "Сделать изображение заливки Динамическим(включена)/Статическим(выключена)."
 
-msgid "Include(checked)/Exclude(unchecked) the line width from the properties list."
+msgid ""
+"Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) ширину линии из списка свойств."
 
 msgid "Line width"
@@ -1701,7 +1709,8 @@ msgstr "Установить ширину линии по умолчанию. "
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать ширину линии Динамической(включена)/Статической(выключена)."
 
-msgid "Include(checked)/Exclude(unchecked) the line color from the properties list."
+msgid ""
+"Include(checked)/Exclude(unchecked) the line color from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) цвет линии из списка свойств."
 
 msgid "Line color"
@@ -1713,7 +1722,8 @@ msgstr "Установить цвет линии по умолчанию."
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать цвет линии Динамическим(включена)/Статическим(выключена)."
 
-msgid "Include(checked)/Exclude(unchecked) the line style from the properties list."
+msgid ""
+"Include(checked)/Exclude(unchecked) the line style from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) стиль линии из списка свойств."
 
 msgid "Line style"
@@ -1725,8 +1735,11 @@ msgstr "Установить стиль линии по умолчанию."
 msgid "Make the line style Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать стиль линии Динамическим(включена)/Статическим(выключена)."
 
-msgid "Include(checked)/Exclude(unchecked) the border width from the properties list."
-msgstr "Включить(включен)/Исключить(выключен) ширину границы из списка свойств."
+msgid ""
+"Include(checked)/Exclude(unchecked) the border width from the properties "
+"list."
+msgstr ""
+"Включить(включен)/Исключить(выключен) ширину границы из списка свойств."
 
 msgid "Border width"
 msgstr "Ширина границы"
@@ -1737,7 +1750,9 @@ msgstr "Установить ширину границы по умолчанию
 msgid "Make the border width Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать ширину границы Динамической(включена)/Статической(выключена)."
 
-msgid "Include(checked)/Exclude(unchecked) the border color from the properties list."
+msgid ""
+"Include(checked)/Exclude(unchecked) the border color from the properties "
+"list."
 msgstr "Включить(включен)/Исключить(выключен) цвет границы из списка свойств."
 
 msgid "Border color"

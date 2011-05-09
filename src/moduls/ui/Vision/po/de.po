@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-27 18:00+0300\n"
+"POT-Creation-Date: 2011-05-09 17:25+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -1496,6 +1496,10 @@ msgstr "Fehler beim Öffnen: %s"
 
 msgid "Alarm level: %1"
 msgstr "Stufe der Störung: %1"
+
+#, c-format
+msgid "Session creation restore for '%s'."
+msgstr ""
 
 #, c-format
 msgid "Session '%s' update time %f ms."
