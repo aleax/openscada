@@ -1,3 +1,8 @@
+2011-05-11 Roman
+- FIX:DAQ.ModBus: Error generaton on connection lost or no reply on timeout is fixed.
+- UI.WebCfgD: JavaScript code is updated for: string encoding rewrite and first realisation full request function servReq().
+
+
 2011-05-11 Maxim
 - FIX:UI.Vision: The fills' saving is fixed in the shapeSave function for the primitive ElFigure.
 - FIX:UI.Vision: Connecting of the figures in the MouseButtonRelease event is fixed and optimized for the primitive ElFigure.

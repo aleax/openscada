@@ -46,8 +46,20 @@ var isChrome = navigator.userAgent.indexOf('Chrome') != -1;
  ***************************************************/
 function strEncode( vl, tp )
 {
-  if( !tp || tp == "html" ) return vl.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-  return vl;
+  //if( !tp || tp == "html" ) return vl.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  //return vl;
+  var encRez = '';
+  if(!tp || tp == "html")
+    for(var i_enc = 0; i_enc < vl.length; i_enc++)
+      switch(vl.charAt(i_enc))
+      {
+        case '&': encRez += '&amp;'; break;
+        case '>': encRez += '&gt;'; break;
+        case '<': encRez += '&lt;'; break;
+        case '"': encRez += '&quot;'; break;
+        default:  encRez += vl.charAt(i_enc);
+      }
+  return encRez;
 }
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -179,6 +191,21 @@ function servSet( adr, prm, body, waitRez )
   } catch( e ) { window.location='/'; }
   return null;
 }
+/***************************************************
+ * servReq - XML generic request to server         *
+ *  body - XML document body                       *
+ ***************************************************/
+function servReq( body )
+{
+  var req = getXmlHttp();
+  req.open('POST',encodeURI('/'+MOD_ID+'?com=req'),false);
+  try {
+    req.send(body.innerHTML);
+    if(req.status == 200) { body = req.responseXML; return parseInt(body.getAttribute("rez")); }
+  } catch(e) { window.location='/'; }
+  return 10;
+}
+
 /***************************************************
  * setStatus - Setup status message.               *
  ***************************************************/

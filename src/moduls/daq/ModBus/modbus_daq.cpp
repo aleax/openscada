@@ -159,7 +159,7 @@ void TMdContr::start_( )
     //> Establish connection
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
     try { tr.at().start(); }
-    catch( TError err ){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //> Schedule process
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
@@ -858,12 +858,13 @@ void TMdPrm::getVal( )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if(!enableStat() || !owner().startStat())
+    if(!enableStat() || !owner().startStat() || owner().tmDelay > -1)
     {
 	if(val.name() == "err")
 	{
 	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
+	    else if(owner().tmDelay > -1)	val.setS(_("10:Connection error or no response."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;
