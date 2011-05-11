@@ -848,7 +848,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         QVector<int> items_array;
         for( int i=0; i < shapeItems.size(); i++ )
             items_array.push_back(i);
-        initShapeItems( w, items_array );
+        initShapeItems( QPointF(0,0), w, items_array );
         bool fill_build = false;
         bool flag_all = false;
         QVector<inundationItem> in_build;
@@ -1257,7 +1257,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    {
 		if( k==0 )
 		{
-		    if( shapeItems[inundationItems[i].number_shape[k]].n1 == shapeItems[inundationItems[i].number_shape[k+1]].n1 )
+		    if( (shapeItems[inundationItems[i].number_shape[k]].n1 == shapeItems[inundationItems[i].number_shape[k+1]].n1) ||
+                        (shapeItems[inundationItems[i].number_shape[k]].n1 == shapeItems[inundationItems[i].number_shape[k+1]].n2) )
 		    {
 			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
 			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
@@ -1383,7 +1384,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
             w->attrSet( "s"+TSYS::int2str(pi->first), TSYS::int2str( pi->second - 1) );
     devW->setSelect(true,false);
 }
-void ShapeElFigure::initShapeItems( WdgView *w, QVector<int> &items_array )
+void ShapeElFigure::initShapeItems( const QPointF &pos, WdgView *w, QVector<int> &items_array )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
@@ -1406,7 +1407,7 @@ void ShapeElFigure::initShapeItems( WdgView *w, QVector<int> &items_array )
             offset = QPointF( 0, 0 );
             index            = items_array[i];
             itemInMotion = &shapeItems[index];
-            moveItemTo( QPointF(0,0), shapeItems, pnts, w );
+            moveItemTo( pos, shapeItems, pnts, w );
         }
     for( int i=0; i < items_array.size(); i++ )
         if( shapeItems[items_array[i]].type != 2 )
@@ -1418,7 +1419,7 @@ void ShapeElFigure::initShapeItems( WdgView *w, QVector<int> &items_array )
             offset = QPointF(0,0);
             index            = items_array[i];
             itemInMotion = &shapeItems[index];
-            moveItemTo( QPointF(0,0), shapeItems, pnts, w );
+            moveItemTo( pos, shapeItems, pnts, w );
         }
 }
 
@@ -3002,8 +3003,8 @@ void ElFigDt::properties()
             if( sender()->objectName() == "Line" )
             {
                 p1_x->setValue((*pnts)[shapeItems[elF->index].n1].x()); p1_y->setValue((*pnts)[shapeItems[elF->index].n1].y());
-                if( shapeItems[elF->index].n1 > 0 ){ p1_c->setChecked(true); /*p1_c->setText("Static");*/ }
-                else{ p1_c->setChecked(false); /*p1_c->setText("Dynamic");*/ }
+                if( shapeItems[elF->index].n1 > 0 ){ p1_c->setChecked(true); }
+                else{ p1_c->setChecked(false); }
                 p2_x->setValue((*pnts)[shapeItems[elF->index].n2].x()); p2_y->setValue((*pnts)[shapeItems[elF->index].n2].y());
                 if( shapeItems[elF->index].n2 > 0 ) p2_c->setChecked(true); else p2_c->setChecked(false);
                 p3_lb->setVisible(false);p3_x->setVisible(false);p3_y->setVisible(false); p3_c->setVisible(false);
@@ -3066,16 +3067,9 @@ void ElFigDt::properties()
             //>> Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array
             for( int i = 0; i < inundationItems.size(); i++ )
                 for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
-                {
                     for( int z = 0; z < items_array_up.size(); z++ )
-                        if( inundationItems[i].number_shape[p] == items_array_up[z] )
-                        {
-                            bool fl_push = true;
-                            for(int j = 0; j< inund_Rebuild.size(); j++)
-                                if( i == inund_Rebuild[j] ) fl_push = false;
-                            if( fl_push )inund_Rebuild.push_back(i);
-                        }
-                }
+                        if( (inundationItems[i].number_shape[p] == items_array_up[z]) && !inund_Rebuild.contains(i) )
+                            inund_Rebuild.push_back(i);
             p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
             p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
             //propDlg.resize(752,295);
@@ -3838,7 +3832,7 @@ void ElFigDt::properties()
                 for( int z = 1; z < items_array_up.size(); z++ )
                     items_array_holds.push_back(items_array_up[z]);
             //-- Rebuilding the figures, which are connected with the current one --
-            elF->initShapeItems( w, items_array_holds );
+            elF->initShapeItems( QPointF(0,0),w, items_array_holds );
 
             //-- Rebuilding the fills' paths if the current figure is included to it --
             for( int i = 0; i < inund_Rebuild.size(); i++ )
@@ -4076,14 +4070,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 itemInMotion = 0;
 				count_Shapes = 0;
                             }
-                            if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) )
+                            if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) && rectItems.size() )
                             {
-                                if( rectItems.size() )
-                                {
                                     rectItems.clear();
                                     paintImage(view);
                                     view->repaint();
-                                }
                             }
                         }
                     }
@@ -4250,7 +4241,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_inund_break = false;
                         itemInMotion = &shapeItems[index];
                         index_temp = index;
-                        // - connecting the figures -
+                        QVector<int> init_array;
+                        //> connecting the figures
                         if( status_hold )
                         {
                             if( current_ss != -1 )
@@ -4262,38 +4254,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( shapeItems[current_ss].n1==shapeItems[i].n1 && i!=index )
                                         {
                                             shapeItems[i].n1 = shapeItems[index].n1;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         } 
                                         if( shapeItems[current_ss].n1==shapeItems[i].n2 && i!=index )
                                         {
                                             shapeItems[i].n2 = shapeItems[index].n1;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         }
                                     }
                                 }
-                                else
-                                    if( !(itemInMotion->type==3 && shapeItems[current_ss].n1==itemInMotion->n2) )
+                                else if( !(itemInMotion->type==3 && shapeItems[current_ss].n1==itemInMotion->n2) )
                                     {
                                         dropPoint( itemInMotion->n1, index, shapeItems, pnts );
                                         itemInMotion->n1 = shapeItems[current_ss].n1;
-                                        count_moveItemTo = 1;
-                                        flag_ctrl_move = false;
-                                        flag_ctrl = true;
-                                        count_Shapes = 1;
-                                        offset = QPointF(0,0);
-                                        moveItemTo( ev->pos(), shapeItems, pnts, view );
+                                        if( !init_array.contains(index) ) init_array.push_back(index);
                                     }
                             }
                             if( current_se != -1 )
@@ -4305,41 +4279,21 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( shapeItems[current_se].n1==shapeItems[i].n1 && i!=index )
                                         {
                                             shapeItems[i].n1 = shapeItems[index].n2;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         } 
                                         if( shapeItems[current_se].n1==shapeItems[i].n2 && i!=index )
                                         {
                                             shapeItems[i].n2 = shapeItems[index].n2;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         }
                                     }
                                 }
-                                else
-                                {
-                                    if( !(itemInMotion->type==3 && shapeItems[current_se].n1==itemInMotion->n1) )
+                                else if( !(itemInMotion->type==3 && shapeItems[current_se].n1==itemInMotion->n1) )
                                     {
                                         dropPoint( itemInMotion->n2, index, shapeItems, pnts );
                                         itemInMotion->n2 = shapeItems[current_se].n1;
-                                        count_moveItemTo = 1;
-                                        flag_ctrl_move = false;
-                                        flag_ctrl = true;
-                                        count_Shapes = 1;
-                                        offset = QPointF(0,0);
-                                        moveItemTo( ev->pos(), shapeItems, pnts, view );
+                                        if( !init_array.contains(index) ) init_array.push_back(index);
                                     }
-                                }
                             }
                             if( current_es != -1 )
                             {
@@ -4350,40 +4304,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( shapeItems[current_es].n2==shapeItems[i].n1 && i!=index )
                                         {
                                             shapeItems[i].n1 = shapeItems[index].n1;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = 1;
-                                            count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         }
                                         if( shapeItems[current_es].n2==shapeItems[i].n2 && i!=index )
                                         {
                                             shapeItems[i].n2 = shapeItems[index].n1;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = 1;
-                                            count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         }
                                     }
                                 }
-                                else
-                                    if( !(itemInMotion->type==3 && shapeItems[current_es].n2==itemInMotion->n2) )
+                                else if( !(itemInMotion->type==3 && shapeItems[current_es].n2==itemInMotion->n2) )
                                     {
                                         dropPoint( itemInMotion->n1, index, shapeItems, pnts );
                                         itemInMotion->n1 = shapeItems[current_es].n2;
-                                        count_moveItemTo = 1;
-                                        flag_ctrl_move = false;
-                                        flag_ctrl = true;
-                                        count_Shapes = 1;
-                                        offset = QPointF(0,0);
-                                        moveItemTo( ev->pos(), shapeItems, pnts, view );
+                                        if( !init_array.contains(index) ) init_array.push_back(index);
                                     }
                             }
                             if( current_ee != -1 )
@@ -4395,41 +4329,36 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         if( shapeItems[current_ee].n2==shapeItems[i].n1 && i!=index )
                                         {
                                             shapeItems[i].n1 = shapeItems[index].n2;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = 1;
-                                            count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         } 
                                         if( shapeItems[current_ee].n2==shapeItems[i].n2 && i!=index )
                                         {
                                             shapeItems[i].n2 = shapeItems[index].n2;
-                                            index = i;
-                                            itemInMotion = &shapeItems[index];
-                                            count_moveItemTo = 1;
-                                            count_Shapes = 1;
-                                            offset = QPointF(0,0);
-                                            moveItemTo( ev->pos(), shapeItems, pnts, view );
-                                            index = index_temp;
-                                            itemInMotion = &shapeItems[index];
+                                            if( !init_array.contains(i) ) init_array.push_back(i);
                                         }
                                     }
                                 }
-                                else
-                                    if( !(itemInMotion->type==3 && shapeItems[current_ee].n2==itemInMotion->n1) )
+                                else if( !(itemInMotion->type==3 && shapeItems[current_ee].n2==itemInMotion->n1) )
                                     {
                                         dropPoint( itemInMotion->n2, index, shapeItems, pnts );
                                         itemInMotion->n2 = shapeItems[current_ee].n2;
-                                        count_moveItemTo = 1;
-                                        flag_ctrl_move = false;
-                                        flag_ctrl = true;
-                                        count_Shapes = 1;
-                                        offset = QPointF(0,0);
-                                        moveItemTo( ev->pos(), shapeItems, pnts, view );
+                                        if( !init_array.contains(index) ) init_array.push_back(index);
                                     }
+                            }
+                            if( current_ss != -1 || current_se != -1 || current_es != -1 || current_ee != -1 )
+                            {
+                                QVector<int> inund_Rebuild;
+                                //>> Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array
+                                for( int i = 0; i < inundationItems.size(); i++ )
+                                    for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
+                                        for( int z = 0; z < init_array.size(); z++ )
+                                            if( (inundationItems[i].number_shape[p] == init_array[z]) && !inund_Rebuild.contains(i) )
+                                                inund_Rebuild.push_back(i);
+                                initShapeItems( ev->pos(), view, init_array );
+                                for( int i = 0; i < inund_Rebuild.size(); i++ )
+                                    inundationItems[inund_Rebuild[i]].path = createInundationPath( inundationItems[inund_Rebuild[i]].number_shape, shapeItems, *pnts, view );
+                                index = index_temp; itemInMotion = &shapeItems[index];
+                                rectItems.clear(); init_array.clear();
                             }
                         }
                         if( itemInMotion->type != 2 && (!flag_ctrl && status_hold)  )// - if simple figure and status_hold -
@@ -4694,7 +4623,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::MouseMove:
         {
             int fl;
-            int temp = 0;
+            int temp = -1;
             bool flag_break_move, 
 		 flag_arc_inund = false;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
