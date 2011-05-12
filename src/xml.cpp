@@ -291,6 +291,7 @@ void XMLNode::saveNode( unsigned flg, string &xml )
 
     for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
     {
+	if(mAttr[i_a].second.empty()) continue;
 	xml.append(" ");
 	if(flg&XMLNode::MissAttrEnc) xml.append(mAttr[i_a].first);
 	else encode(mAttr[i_a].first, xml);

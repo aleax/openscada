@@ -155,6 +155,23 @@ function getXmlHttp( )
   return null;
 }
 /***************************************************
+ * crDoc - Create new XML document object for      *
+ *  various browsers.                              *
+ ***************************************************/
+function crDoc()
+{
+    var doc;
+    if(document.implementation && document.implementation.createDocument)
+        doc = document.implementation.createDocument("", "", null);
+    else if(window.ActiveXObject)
+    {
+        for(var i = 0; i < MSXML.length; i++)
+            try { doc = new ActiveXObject(MSXML[i]); } catch (e) { }
+        if(!doc) { alert("Cannot create XMLDocument object"); return false; }
+    }
+    return doc;
+}
+/***************************************************
  * realRound - Real numbers round                  *
  ***************************************************/
 function realRound( val, dig, toInt )
@@ -198,10 +215,15 @@ function servSet( adr, prm, body, waitRez )
 function servReq( body )
 {
   var req = getXmlHttp();
-  req.open('POST',encodeURI('/'+MOD_ID+'?com=req'),false);
+  req.open('POST',encodeURI('/'+MOD_ID+'/?com=req'),false);
+  //req.setRequestHeader("Content-Type", "application/xml;charset=UTF-8");
   try {
-    req.send(body.innerHTML);
-    if(req.status == 200) { body = req.responseXML; return parseInt(body.getAttribute("rez")); }
+    req.send(body);
+    if(req.status == 200)
+    {
+	body = req.responseXML.childNodes[0];
+	return parseInt(body.getAttribute("rez"));
+    }
   } catch(e) { window.location='/'; }
   return 10;
 }
@@ -406,6 +428,13 @@ function pageDisplay( path )
     if( parseInt(pgInfo.getAttribute('rez'))!=0 ) { alert(nodeText(pgInfo)); return; }
     pgInfo.setAttribute('path',selPath);
     root = pgInfo.childNodes[0];
+
+    //> New full request test
+    /*var req = crDoc();
+    var reqCh = req.createElement('info'); reqCh.setAttribute("path",selPath);
+    req.appendChild(reqCh);
+    servReq(req);*/
+    //---------------------
   }
   else
   {

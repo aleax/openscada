@@ -1,3 +1,9 @@
+2011-05-12 Roman
+- SYS.XML: No empty attributes save is added.
+- Protocol.HTTP: Messages generation for auth process is added.
+- UI.WebCfgD: JavaScript code is updated for finish realisation full request function servReq().
+
+
 2011-05-11 Roman
 - FIX:DAQ.ModBus: Error generaton on connection lost or no reply on timeout is fixed.
 - UI.WebCfgD: JavaScript code is updated for: string encoding rewrite and first realisation full request function servReq().

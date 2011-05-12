@@ -46,14 +46,14 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod==0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new PrHTTP::TProt( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+	    return new PrHTTP::TProt(source);
 	return NULL;
     }
 }
@@ -144,19 +144,30 @@ TProtocolIn *TProt::in_open( const string &name )
     return new TProtIn(name);
 }
 
-int TProt::sesOpen( string name )
+int TProt::sesOpen( const string &name )
 {
     int sess_id;
     ResAlloc res(nodeRes(),true);
 
     //> Get free identifier
     do{ sess_id = rand(); }
-    while( sess_id == 0 || mAuth.find(sess_id) != mAuth.end() );
+    while(sess_id == 0 || mAuth.find(sess_id) != mAuth.end());
 
     //> Add new session authentification
     mAuth[sess_id] = SAuth(name,time(NULL));
 
     return sess_id;
+}
+
+void TProt::sesClose( int sid )
+{
+    ResAlloc res(nodeRes(),true);
+    map<int,SAuth>::iterator authEl = mAuth.find(sid);
+    if(authEl != mAuth.end())
+    {
+	mess_info(nodePath().c_str(),_("Auth exit from user '%s'."),authEl->second.name.c_str());
+	mAuth.erase(authEl);
+    }
 }
 
 string TProt::sesCheck( int sid )
@@ -166,11 +177,14 @@ string TProt::sesCheck( int sid )
 
     //> Check for close old sessions
     ResAlloc res(nodeRes(),true);
-    if( cur_tm > lst_ses_chk+10 )
+    if(cur_tm > lst_ses_chk+10)
     {
-	for( authEl = mAuth.begin(); authEl != mAuth.end(); )
-	    if( cur_tm > authEl->second.tAuth+authTime()*60 )
+	for(authEl = mAuth.begin(); authEl != mAuth.end(); )
+	    if(cur_tm > authEl->second.tAuth+authTime()*60)
+	    {
+		mess_info(nodePath().c_str(),_("Auth session for user '%s' expired."),authEl->second.name.c_str());
 		mAuth.erase(authEl++);
+	    }
 	    else authEl++;
 	lst_ses_chk = cur_tm;
     }
@@ -423,7 +437,8 @@ string TProtIn::httpHead( const string &rcode, int cln, const string &addattr )
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
     bool KeepAlive = false;
-    string req, sel;
+    string req, sel, userAgent;
+    int sesId = 0;
     vector<string> vars;
 
     //> Continue for full reqst
@@ -464,6 +479,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    vars.push_back(req);
 
 	    if(strcasecmp(var.c_str(),"content-length") == 0)	c_lng = atoi(val.c_str());
+	    else if(strcasecmp(var.c_str(),"user-agent") == 0)	userAgent = TSYS::strNoSpace(val);
 	    else if(strcasecmp(var.c_str(),"connection") == 0)
 	    {
 		for(int off = 0; (sel=TSYS::strSepParse(val,0,',',&off)).size(); )
@@ -473,7 +489,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    else if(strcasecmp(var.c_str(),"cookie") == 0)
 	    {
 		size_t vpos = val.find("oscd_u_id=",0);
-		if(vpos != string::npos) user = mod->sesCheck(atoi(val.substr(vpos+10).c_str()));
+		if(vpos != string::npos) user = mod->sesCheck((sesId=atoi(val.substr(vpos+10).c_str())));
 	    }
 	}
 
@@ -502,7 +518,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	//> Process internal commands
 	if(name_mod == "login")
 	{
-	    if(method == "GET")	{ answer = getAuth(url); return m_nofull||KeepAlive; }
+	    if(method == "GET")
+	    {
+		if(sesId) mod->sesClose(sesId);
+		answer = getAuth(url);
+		return m_nofull||KeepAlive;
+	    }
 	    else if(method == "POST")
 	    {
 		map<string,string>	cnt;
@@ -516,6 +537,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 		    if(mod->autoLogGet(sender) == user || (SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
+			mess_info(owner().nodePath().c_str(),_("Auth OK from user '%s'. Host: %s. User agent: %s."),user.c_str(),sender.c_str(),userAgent.c_str());
 			answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>")+
 			    "<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
 			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
@@ -523,12 +545,14 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    }
 		}
 
+		mess_warning(owner().nodePath().c_str(),_("Auth wrong from user '%s'. Host: %s. User agent: %s."),user.c_str(),sender.c_str(),userAgent.c_str());
 		answer = getAuth(url,_("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
 		return m_nofull||KeepAlive;
 	    }
 	}
-	else if( name_mod == "logout" && method == "GET" )
+	else if(name_mod == "logout" && method == "GET")
 	{
+	    if(sesId) mod->sesClose(sesId);
 	    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>")+
 		"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n"+pgTail();
 	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
@@ -546,6 +570,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		user = mod->autoLogGet(sender);
 		if(!user.empty())
 		{
+		    mess_info(owner().nodePath().c_str(),_("Auto auth from user '%s'. Host: %s. User agent: %s."),user.c_str(),sender.c_str(),userAgent.c_str());
 		    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>")+
 			"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
 		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;

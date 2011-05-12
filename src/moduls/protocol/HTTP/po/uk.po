@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 17:37+0300\n"
+"POT-Creation-Date: 2011-05-12 14:59+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -39,12 +39,22 @@ msgstr ""
 "AuthTime <хвил>     Час життя аутентифікації, хвилин (по замовченню 10).\n"
 "\n"
 
+msgid "Auth exit from user '%s'."
+msgstr "Вихід автентифікації для користувача '%s'."
+
+#, c-format
+msgid "Auth session for user '%s' expired."
+msgstr "Сеанс автентифікації для користувача '%s' застарів."
+
 #, c-format
 msgid "HTTP method '%s' error or don't support."
 msgstr "Помилка або не підтримується метод '%s'."
 
 msgid "HTTP respond error"
 msgstr "Помилка HTTP-відповіді"
+
+msgid "Not full respond."
+msgstr "Неповна відповідь."
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -79,9 +89,19 @@ msgstr ""
 "Вміст: %d:\n"
 "%s"
 
+msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
+msgstr ""
+"Вдала автентифікація користувача '%s'. Вузол: %s. Агент "
+"користувача: %s."
+
 #, c-format
 msgid "Going to page: <b>%s</b>"
 msgstr "Перехід до сторінки: <b>%s</b>"
+
+msgid "Auth wrong from user '%s'. Host: %s. User agent: %s."
+msgstr ""
+"Помилка автентифікації користувача '%s'. Вузол: %s. Агент "
+"користувача: %s."
 
 msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
 msgstr ""
@@ -89,6 +109,11 @@ msgstr ""
 
 msgid "Find no one WWW subtype module!"
 msgstr "Не знайдено жодного модуля WWW підтипу!"
+
+msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
+msgstr ""
+"Автоматична автентифікація користувача '%s'. Вузол: %s. Агент "
+"користувача: %s."
 
 msgid "Login"
 msgstr "Вхід"

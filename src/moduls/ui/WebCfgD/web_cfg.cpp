@@ -446,6 +446,15 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	ses.page = req.save();
 	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
+    //> Full request to control interface
+    else if( wp_com == "req" )
+    {
+	printf("TEST 00:\n%s\n",ses.content.c_str());
+	XMLNode req(""); req.load(ses.content);
+	mod->cntrIfCmd(req,ses.user);
+	ses.page = req.save();
+	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+    }
     else if( wp_com == "img" )
     {
 	if( (cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty() )

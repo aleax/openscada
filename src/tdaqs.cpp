@@ -262,7 +262,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
         	    case TVariant::Object:	tp = IO::Object;	break;
 		    default:	break;
 		}
-		argStr.ioAdd(new IO(als[i_a].c_str(),als[i_a].c_str(),tp,(i_a?IO::Default:IO::Return)));
+		argStr.ioAdd(new IO(als[i_a].c_str(),als[i_a].c_str(),tp,IO::Default));
 	    }
 
 	    //> Get function id and compile.

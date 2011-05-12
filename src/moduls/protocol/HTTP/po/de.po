@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 17:37+0300\n"
+"POT-Creation-Date: 2011-05-12 14:59+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -45,12 +45,22 @@ msgstr ""
 "10).\n"
 "\n"
 
+msgid "Auth exit from user '%s'."
+msgstr "Auth Ausfahrt vom Benutzer '%s'."
+
+#, c-format
+msgid "Auth session for user '%s' expired."
+msgstr "AuthSession für den Benutzer '%s' abgelaufen ist."
+
 #, c-format
 msgid "HTTP method '%s' error or don't support."
 msgstr "Fehler oder die HTTP-Methode wird nicht unterstützt '%s'."
 
 msgid "HTTP respond error"
 msgstr "Fehle der HTTP-Antwort "
+
+msgid "Not full respond."
+msgstr "Nicht voll zu reagieren."
 
 msgid "Protocol"
 msgstr "Protokoll"
@@ -85,9 +95,15 @@ msgstr ""
 "Inhalt: %d:\n"
 "%s"
 
+msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
+msgstr "Auth OK vom Benutzer '%s'. Host: %s. User-Agent: %s."
+
 #, c-format
 msgid "Going to page: <b>%s</b>"
 msgstr "Gehen zur Seite: <b>%s</b>"
+
+msgid "Auth wrong from user '%s'. Host: %s. User agent: %s."
+msgstr "Auth falsch von Benutzer '%s'. Host: %s. User-Agent: %s."
 
 msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
 msgstr ""
@@ -96,6 +112,9 @@ msgstr ""
 
 msgid "Find no one WWW subtype module!"
 msgstr "Keine Modul mit dem Subtyp WWW gefunden!"
+
+msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
+msgstr "Auto auth von Benutzer '%s'. Host: %s. User-Agent: %s."
 
 msgid "Login"
 msgstr "Einloggen"

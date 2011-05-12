@@ -83,7 +83,8 @@ class TProt: public TProtocol
 	void outMess( XMLNode &io, TTransportOut &tro );
 
 	//> Auth session manipulation functions
-	int sesOpen( string name );
+	int sesOpen( const string &name );
+	void sesClose( int sid );
 	string sesCheck( int sid );
 
 	//> Auto-login
