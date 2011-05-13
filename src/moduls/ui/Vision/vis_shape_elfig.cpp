@@ -57,8 +57,8 @@ ShapeElFigure::ShapeElFigure( ) :
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
     flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
-    flag_geom (false), flag_rect_items (false), flag_def_stat(false), count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1),
-    count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
+    flag_geom (false), flag_rect_items (false), flag_def_stat(false), count_rects(0),
+    rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
 }
@@ -982,7 +982,17 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         }
                     QPainterPath temp_path = createInundationPath( inundation_fig_num, shapeItems, *pnts,w );
                     inundation_fig_num = inundationSort( temp_path, inundation_fig_num, shapeItems, pnts, w );
-                    inundationItems[i].path = createInundationPath( inundation_fig_num, shapeItems, *pnts, w );
+                    bool fl_buildPath = true;
+                    if( !(*images)[inundationItems[i].brush_img].empty() ) 
+                    {
+                        QImage img;
+                        string backimg = w->resGet((*images)[inundationItems[i].brush_img]);
+                        img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
+                        if( !img.isNull() ) fl_buildPath = false;
+                    }
+                    if( fl_buildPath )
+                        inundationItems[i].path = createInundationPath( inundation_fig_num, shapeItems, *pnts, w );
+
                     inundationItems[i].number_shape = inundation_fig_num;
                     if( inundation_fig_num.size() > inundationItems[inundationItems.size()-1].number_shape.size() ) 
                         inundationItems[inundationItems.size()-1].path = newPath;
@@ -5228,9 +5238,9 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     WidthMap *widths = &elFD->shapeWidths;
 
     ShapeItem temp_shape;
-    double ang_t;
     double a = 0, b = 0;
-    double ang = 0;
+    double ang = 0, ang_t = 0;
+    itemInMotion->ang_t = 0;
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     int MotionNum_1 = itemInMotion->n1;
     int MotionNum_2 = itemInMotion->n2;
@@ -5643,11 +5653,11 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
         if( (*widths)[MotionWidth] == 1 && (( (*widths)[MotionBorderWidth] >= 0) && (fabs((*widths)[MotionBorderWidth] - 0) < 0.01)) )
             shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth] + 1, (*widths)[MotionBorderWidth], 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                painterPathSimple( 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
-                                       MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp ) );
+                                       MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp, ang_t ) );
         else
             shapeItems.append( ShapeItem( painterPath( (*widths)[MotionWidth], (*widths)[MotionBorderWidth], 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
                                painterPathSimple( 2, ang, StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4 ),
-                                       MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp ) );
+                                       MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp, ang_t ) );
         if( devW && devW->edit() )
         {
             rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4 ),QSize(8,8) ) );
@@ -6132,6 +6142,8 @@ void ShapeElFigure::rectNum3_4( const QVector<ShapeItem> &shapeItems)
 //- moving all connected figures -
 void ShapeElFigure::moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *view )
 {
+    ElFigDt *elFD = (ElFigDt*)view->shpData;
+    ImageMap *images = &elFD->shapeImages;
     num_vector.clear();
     bool flag_break;
     for( int i = 0; i < count_Shapes; i++ )
@@ -6175,8 +6187,19 @@ void ShapeElFigure::moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems,
                 for(int k = 0; k < index_array.size(); k++ )
                     if( inundationItems[i].number_shape[j] == index_array[k] )
                     {
-                        inundationPath = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view);
-                        inundationItems[i].path = inundationPath;
+                        bool fl_buildPath = true;
+                        if( !(*images)[inundationItems[i].brush_img].empty() )
+                        {
+                            QImage img;
+                            string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
+                            img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
+                            if( !img.isNull() ) fl_buildPath = false;
+                        }
+                        if( fl_buildPath )
+                        {
+                            inundationPath = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view);
+                            inundationItems[i].path = inundationPath;
+                        }
                         flag_break = true;
                         break;
                     }
@@ -6944,7 +6967,6 @@ void ShapeElFigure::paintImage( WdgView *view )
     //- Drawing all fills(inundations) -
     for( int i=0; i < inundationItems.size(); i++ )
     {
-        if( inundationItems[i].path == newPath ) continue;
         //-- Sorting the figures in each fill(inundation) --
         QVector<int> number_shape;
         number_shape = inundationItems[i].number_shape;
@@ -7139,7 +7161,6 @@ void ShapeElFigure::paintImage( WdgView *view )
             yMin = (int)TSYS::realRound( yMin, POS_PREC_DIG, true );
             xMax = (int)TSYS::realRound( xMax, POS_PREC_DIG, true );
             yMax = (int)TSYS::realRound( yMax, POS_PREC_DIG, true );
-
             in_path_rot = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view );
             double xMax_rot = in_path_rot.pointAtPercent ( 0 ).x();
             double xMin_rot = in_path_rot.pointAtPercent ( 0 ).x();
@@ -7328,6 +7349,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                 TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
                     break;
                 case 2:
+                {
                     if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
                         || ( !flag_scale && !flag_rotate) )
                     {
@@ -7344,7 +7366,8 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                         else ang = 360 - angle( line1, line2 );
                     }
                     else ang = shapeItems[in_fig_num[0]].angle_temp;
-    
+                    ang += shapeItems[in_fig_num[0]].ang_t;
+
                     if( !flag_scale && !flag_rotate )
                     {
                         arc_a = length( pnts[shapeItems[in_fig_num[0]].n3], pnts[shapeItems[in_fig_num[0]].n5] );
@@ -7368,6 +7391,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                         path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
                                     TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) );
                     break;
+                }
                 case 3:
                     path.cubicTo( TSYS::realRound( scaleRotate(pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
                                 TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
@@ -7391,6 +7415,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                 TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
                     break;
                 case 2:
+                {
                     if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
                         || ( !flag_scale && !flag_rotate) )
                     {
@@ -7407,6 +7432,8 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                         else ang = 360 - angle( line1, line2 );
                     }
                     else ang = shapeItems[in_fig_num[0]].angle_temp;
+                    ang += shapeItems[in_fig_num[0]].ang_t;
+
                     if( !flag_scale && !flag_rotate )
                     {
                         arc_a = length( pnts[shapeItems[in_fig_num[0]].n3], pnts[shapeItems[in_fig_num[0]].n5] );
@@ -7431,6 +7458,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                         path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
                                     TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) );
                     break;
+                }
                 case 3:
                     path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
                                 TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
@@ -7502,6 +7530,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
                             break;
                         case 2:
+                        {
                             if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
                                 || ( !flag_scale && !flag_rotate) )
                             {
@@ -7518,6 +7547,8 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                 else ang = 360 - angle( line1, line2 );
                             }
                             else ang = shapeItems[in_index].angle_temp;
+                            ang += shapeItems[in_index].ang_t;
+
                             if( !flag_scale && !flag_rotate )
                             {
                                 arc_a = length( pnts[shapeItems[in_index].n3], pnts[shapeItems[in_index].n5] );
@@ -7535,14 +7566,14 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                                 QPointF( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(),
                                                         scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y() ) );
                             }
-    
+
                             t_start = shapeItems[in_index].ctrlPos4.x();
                             t_end = shapeItems[in_index].ctrlPos4.y();
                             for( t = t_start; t < t_end+0.00277777777778; t += 0.00277777777778 ) 
                                 path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
                                             TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) ); 
                             break;
-    
+                        }
                         case 3:
                             path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
@@ -7563,6 +7594,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
                             break;
                         case 2:
+                        {
                             if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
                                 || ( !flag_scale && !flag_rotate) )
                             {
@@ -7579,6 +7611,8 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                 else ang = 360 - angle( line1, line2 );
                             }
                             else ang = shapeItems[in_index].angle_temp;
+                            ang += shapeItems[in_index].ang_t;
+
                             if( !flag_scale && !flag_rotate )
                             {
                                 arc_a = length( pnts[shapeItems[in_index].n3], pnts[shapeItems[in_index].n5] );
@@ -7596,13 +7630,14 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
                                                 QPointF( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(),
                                                         scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y() ) );
                             }
-    
+
                             t_start = shapeItems[in_index].ctrlPos4.x();
                             t_end = shapeItems[in_index].ctrlPos4.y();
                             for( t = t_end; t > t_start-0.00277777777778; t -= 0.00277777777778 ) 
                                 path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
                                             TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) ); 
                             break;
+                        }
                         case 3:
                             path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
                                         TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),

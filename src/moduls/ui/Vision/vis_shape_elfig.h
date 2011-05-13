@@ -51,10 +51,10 @@ class ShapeItem
 	ShapeItem( )	{ }
 	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3,
 		short num_4, short num_5, const QPointF &ctrlpos_4, const short &ilineColor, const short &iborderColor,
-		const short &istyle , short iwidth, short bwidth, short itype, double iangle_temp ) :
+		const short &istyle , short iwidth, short bwidth, short itype, double iangle_temp, double iang_t = 0 ) :
 	    path(ipath), pathSimple(path_simple), ctrlPos4(ctrlpos_4), n1(num_1), n2(num_2), n3(num_3), n4(num_4), n5(num_5),
 	    lineColor(ilineColor), borderColor(iborderColor), style(istyle), width(iwidth), border_width(bwidth), type(itype),
-	    angle_temp(iangle_temp)
+	    angle_temp(iangle_temp), ang_t(iang_t)
 	{ };
 
 	QPainterPath	path,
@@ -66,7 +66,7 @@ class ShapeItem
 	short		width;
         short           border_width;
 	short		type :3;
-        double		angle_temp;
+        double		angle_temp, ang_t;
 };
 
 //************************************************
@@ -275,7 +275,6 @@ class ShapeElFigure : public WdgShape
         QPointF Prev_pos_1, Prev_pos_2;
         QVector<int> num_vector;
         double angle_temp;
-
         int rect_dyn;
         QPixmap rect_img;
     };
