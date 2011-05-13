@@ -2514,11 +2514,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
             count_min_y = 0;
             count_max_x = 0;
             count_max_y = 0;
-            
-            for(int p = 0; p < inundationItems[i].number_point.size(); p++)
-                printf("inundationItems[%i].number_point[%i] = %i\n", i,p,inundationItems[i].number_point[p]);
-            
-            
             min_x = inundationItems[i].number_point[0];
             min_y = inundationItems[i].number_point[0];
             max_x = inundationItems[i].number_point[0];
@@ -2549,9 +2544,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
             else if( count_max_x < 3 ) num_pnt = max_x;
             else if( count_min_y < 3 ) num_pnt = min_y;
             else if( count_max_y < 3 ) num_pnt = max_y;
-
-            printf("num_pnt = %i\n", num_pnt);
-            
             //- Detecting two figures and their "free" points for computing the real "filling" point
             for(unsigned j = 0; j < shape_temp.size(); j++)
             {
@@ -2572,13 +2564,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                             break;
                         }
             }
-            for(int p = 0; p < fig.size(); p++)
-                printf("fig[%i] = %i\n", p, fig[p]);
-
-            for(int p = 0; p < point_num.size(); p++)
-                printf("point_num[%i] = %i\n", p, point_num[p]);
-
-            
             //- Detecting the real "filling" point for all possible combinations of types of two connected figures -
             if( (point_num.size() > 1 &&
                 length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[0]], xSc, ySc, true, true ) ) > 1 &&
