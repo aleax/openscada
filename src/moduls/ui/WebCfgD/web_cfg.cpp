@@ -353,25 +353,9 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
-	    else if( wp_com == "info" )
+	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify")
 	    {
-		XMLNode req("info"); req.setAttr("path",ses.url);
-		mod->cntrIfCmd(req,ses.user);
-		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		return;
-	    }
-	    else if( wp_com == "modify" )
-	    {
-		XMLNode req("modify"); req.setAttr("path",ses.url+"/%2fobj");
-		mod->cntrIfCmd(req,ses.user);
-		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-		return;
-	    }
-	    else if( wp_com == "get" )
-	    {
-		XMLNode req("get"); req.setAttr("path",ses.url);
+		XMLNode req(wp_com); req.setAttr("path",ses.url);
 		mod->cntrIfCmd(req,ses.user);
 		ses.page = req.save();
 		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
@@ -449,10 +433,9 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     //> Full request to control interface
     else if( wp_com == "req" )
     {
-	printf("TEST 00:\n%s\n",ses.content.c_str());
 	XMLNode req(""); req.load(ses.content);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
+	ses.page = req.save(XMLNode::XMLHeader);
 	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     else if( wp_com == "img" )

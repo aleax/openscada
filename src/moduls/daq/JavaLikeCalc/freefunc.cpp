@@ -1170,7 +1170,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	    case TVariant::Real:
 		// bool isEVal( ) - check value to "EVAL"
 		if( prop == "isEVal" )	return (vl.getR() == EVAL_REAL);
-		// string toExponential(int numbs) - return the string of the number, formatted in exponential notation, 
+		// string toExponential(int numbs = -1) - return the string of the number, formatted in exponential notation, 
 		//      and with the number of significant digits <numbs>
 		//  numbs - number of significant digits, if is missing the number of digits will have as much as needed
 		if( prop == "toExponential" )
@@ -1179,7 +1179,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if( n < 0 )	return TSYS::strMess("%e",vl.getR());
 		    return TSYS::strMess("%.*e",n,vl.getR());
 		}
-		// string toFixed(int numbs, int len, bool sign) - return the string of the number, formatted in the notation of fixed-point,
+		// string toFixed(int numbs = 0, int len = 0, bool sign = false) - return the string of the number, formatted in the notation of fixed-point,
 		//      and with the number of significant digits after the decimal point <numbs>
 		//  numbs - the number of significant digits after the decimal point, if <numbs> is missing the number
 		//          of digits after the decimal point is equal to zero
@@ -1193,7 +1193,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    int w = (prms.size() >= 2) ? vmin(100,prms[1].getI()) - (int)sign : 0;
 		    return TSYS::strMess((sign?"%+0*.*f":"%0*.*f"),w,n,val);
 		}
-		// string toPrecision(int prec) - return the string of the formatted number with the number of significant digits <prec>
+		// string toPrecision(int prec = -1) - return the string of the formatted number with the number of significant digits <prec>
 		//  prec - number of significant digits
 		if(prop == "toPrecision")
 		{
@@ -1201,7 +1201,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(n < 0)	return TSYS::strMess("%g",vl.getR());
 		    return TSYS::strMess("%.*g",n,vl.getR());
 		}
-		// string toString(int base, int len, bool sign) - return the string of the formatted number of integer type for
+		// string toString(int base = 10, int len = -1, bool sign = false) - return the string of the formatted number of integer type for
 		//	minimum length <len> and strong sign present <sign>.
 		//  base - representation base (2-36);
 		//  len - minimum string number length (fill by 0);

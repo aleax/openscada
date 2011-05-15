@@ -1,3 +1,9 @@
+2011-05-15 Roman
+- SYS: To TSYS::ShieldSimb encode mode is added support direct symbols like '\xFF' and '\777'.
+- SYS: User API function SYS.strCodeConv() is added for string texts encode from and to code pages.
+- DAQ.WebCfgD: Group request for pages content support is added, for significant performance rise on slow highlatence connections.
+
+
 2011-05-13 Maxim
 - FIX:UI.Vision: The fills' drawing when moving the 'p4' of the 'arc' is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Call of the 'createInundationPath' function for the fills with the images is optimized for the primitive ElFigure.

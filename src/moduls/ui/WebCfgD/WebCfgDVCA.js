@@ -35,6 +35,7 @@ SEC_XT = 0x01;		//Extended
 SEC_WR = 0x02;		//Write access
 SEC_RD = 0x04;		//Read access
 copyBuf = '0';		//Copy node address buffer
+genReqs = null;		//Generic request object
 //> Browser type detect
 var isNN = navigator.appName.indexOf('Netscape') != -1;
 var isIE = navigator.appName.indexOf('Microsoft') != -1;
@@ -185,6 +186,42 @@ function realRound( val, dig, toInt )
  ***************************************************/
 function servGet( adr, prm )
 {
+  if(genReqs)
+  {
+    var rCom = prm.slice(4);
+    if(genReqs.childNodes[0].getAttribute('fillMode') == '1')
+    {
+	var tEl = genReqs.createElement(rCom);
+	tEl.setAttribute('path',adr);
+	genReqs.childNodes[0].appendChild(tEl);
+	return null;
+    }
+    else
+    {
+	var sNd = null;
+        var c_pos = genReqs.childNodes[0].getAttribute("curPos");
+        if(!c_pos) c_pos = 0;
+        for( ; c_pos < genReqs.childNodes[0].childNodes.length && !sNd; c_pos++)
+        {
+            var wNd = genReqs.childNodes[0].childNodes[c_pos];
+            if(wNd.getAttribute('path') == adr && wNd.tagName == rCom) sNd = wNd;
+        }
+        if(!sNd && c_pos)
+            for(c_pos = 0; c_pos < genReqs.childNodes[0].childNodes.length && !sNd; c_pos++)
+            {
+        	var wNd = genReqs.childNodes[0].childNodes[c_pos];
+                if(wNd.getAttribute('path') == adr && wNd.tagName == rCom) sNd = wNd;
+            }
+
+        if(sNd)
+        {
+    	    genReqs.childNodes[0].setAttribute('curPos',c_pos+1);
+	    return sNd;
+        }
+        adr = genReqs.childNodes[0].getAttribute('path')+'/'+adr;
+    }
+  }
+
   var req = getXmlHttp();
   req.open('GET',encodeURI('/'+MOD_ID+adr+'?'+prm),false);
 //  req.setRequestHeader('Content-Type','text/xml; charset=utf-8');
@@ -193,6 +230,7 @@ function servGet( adr, prm )
     if( req.status == 200 && req.responseXML.childNodes.length )
       return req.responseXML.childNodes[0];
   } catch( e ) { window.location='/'; }
+  return null;
 }
 /***************************************************
  * servSet - XML set request to server             *
@@ -216,16 +254,12 @@ function servReq( body )
 {
   var req = getXmlHttp();
   req.open('POST',encodeURI('/'+MOD_ID+'/?com=req'),false);
-  //req.setRequestHeader("Content-Type", "application/xml;charset=UTF-8");
+  req.setRequestHeader("Content-Type", "application/xml;charset=UTF-8");
   try {
     req.send(body);
-    if(req.status == 200)
-    {
-	body = req.responseXML.childNodes[0];
-	return parseInt(body.getAttribute("rez"));
-    }
+    if(req.status == 200) return req.responseXML;
   } catch(e) { window.location='/'; }
-  return 10;
+  return null;
 }
 
 /***************************************************
@@ -428,13 +462,6 @@ function pageDisplay( path )
     if( parseInt(pgInfo.getAttribute('rez'))!=0 ) { alert(nodeText(pgInfo)); return; }
     pgInfo.setAttribute('path',selPath);
     root = pgInfo.childNodes[0];
-
-    //> New full request test
-    /*var req = crDoc();
-    var reqCh = req.createElement('info'); reqCh.setAttribute("path",selPath);
-    req.appendChild(reqCh);
-    servReq(req);*/
-    //---------------------
   }
   else
   {
@@ -445,7 +472,28 @@ function pageDisplay( path )
     { pgInfo = iTree; pgInfo.setAttribute('path',selPath); root = pgInfo.childNodes[0]; }
   }
 
-  selectChildRecArea(root,'/',null);
+  //> Complex request form and it result use
+  genReqs = crDoc();
+  genReqs.appendChild(genReqs.createElement('CntrReqs'));
+  genReqs.childNodes[0].setAttribute('path',selPath);
+  genReqs.childNodes[0].setAttribute('fillMode','1');
+  for(var genReqPrc = 0; genReqPrc < 2; genReqPrc++)
+  {
+    selectChildRecArea(root,'/',null);
+
+    //> Load and Save allow check
+    var reqModif = servGet('/%2fobj','com=modify');
+    actEnable('actLoad',parseInt(nodeText(reqModif)));
+    actEnable('actSave',parseInt(nodeText(reqModif)));
+
+    //> Send prepared generic request
+    if(genReqPrc == 0)
+    {
+	genReqs.childNodes[0].setAttribute('fillMode','0');
+	genReqs = servReq(genReqs);
+    }
+  }
+  genReqs = null;
 
   //> The add and the delete access allow check
   actEnable('actAddIt',false);
@@ -458,11 +506,6 @@ function pageDisplay( path )
       break;
     }
   actEnable('actDelIt',parseInt(root.getAttribute('acs'))&SEC_WR)
-
-  //> Load and Save allow check
-  var reqModif = servGet(selPath,'com=modify');
-  actEnable('actLoad',parseInt(nodeText(reqModif)));
-  actEnable('actSave',parseInt(nodeText(reqModif)));
 
   //> Edit tools update
   editToolUpdate( );
@@ -736,19 +779,19 @@ function selectChildRecArea( node, aPath, cBlk )
       setNodeText(lab,t_s.getAttribute('dscr')+': ');
       val.title = t_s.getAttribute('help');
 
-      var dataReq = servGet(selPath+'/'+brPath,'com=get');
-      if( !dataReq || parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); continue; }
-
-      while( val.childNodes.length ) val.removeChild(val.childNodes[0]);
-      for( var i_el = 0; i_el < dataReq.childNodes.length; i_el++ )
-	if( dataReq.childNodes[i_el].nodeName.toLowerCase() == 'el' )
+      while(val.childNodes.length) val.removeChild(val.childNodes[0]);
+      var dataReq = servGet(brPath,'com=get');
+      if(!dataReq) continue;
+      if(parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); continue; }
+      for(var i_el = 0; i_el < dataReq.childNodes.length; i_el++)
+	if(dataReq.childNodes[i_el].nodeName.toLowerCase() == 'el')
 	{
 	  var opt = document.createElement('option');
 	  opt.lsId = dataReq.childNodes[i_el].getAttribute('id');
 	  setNodeText(opt,nodeText(dataReq.childNodes[i_el]));
 	  val.appendChild(opt);
 	}
-      while( val.childNodes.length < 4 ) { var opt = document.createElement('option'); opt.disabled = true; val.appendChild(opt); }
+      while(val.childNodes.length < 4) { var opt = document.createElement('option'); opt.disabled = true; val.appendChild(opt); }
       val.size = Math.min(10,Math.max(4,val.childNodes.length));
     }
     //>> View images
@@ -844,12 +887,11 @@ function selectChildRecArea( node, aPath, cBlk )
       {
 	table.title = t_s.getAttribute('help');
 
-	var dataReq = servGet(selPath+'/'+brPath,'com=get');
-	if( !dataReq ) continue;
-	else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); continue; }
+	var dataReq = servGet(brPath,'com=get');
+	if(dataReq && parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); continue; }
 
 	//>>>> Copy values to info tree
-	for( var i_cl = 0; i_cl < dataReq.childNodes.length; i_cl++ )
+	for( var i_cl = 0; dataReq && i_cl < dataReq.childNodes.length; i_cl++ )
 	{
 	  var i_cli;
 	  for( i_cli = 0; i_cli < t_s.childNodes.length; i_cli++ )
@@ -1143,12 +1185,12 @@ function selectChildRecArea( node, aPath, cBlk )
 	    }
 	    else
 	    {
-	      var x_lst = servGet(selPath+'/'+(prcCol.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f')),'com=get');
-	      if( x_lst )
-	        for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
+	      var x_lst = servGet(prcCol.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
+	      if(x_lst)
+	        for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++)
 	        {
-	          if( x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el' ) continue;
-	          if( x_lst.childNodes[i_el].getAttribute('id') ) prcCol.ind_ls.push(x_lst.childNodes[i_el].getAttribute('id'));
+	          if(x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el') continue;
+	          if(x_lst.childNodes[i_el].getAttribute('id')) prcCol.ind_ls.push(x_lst.childNodes[i_el].getAttribute('id'));
 	          prcCol.val_ls.push(nodeText(x_lst.childNodes[i_el]));
 	        }
 	    }
@@ -1214,8 +1256,8 @@ function selectChildRecArea( node, aPath, cBlk )
 	  //> Check link
 	  if( this.srcNode.getAttribute('tp') == 'lnk' )
 	  {
-	    var dataReq = servGet(selPath+'/'+this.brPath,'com=get');
-	    if( !dataReq ) return false;
+	    var dataReq = servGet(this.brPath,'com=get');
+	    if(!dataReq) return false;
 	    else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); return false; }
 	    selectPage('/'+pathLev(selPath,0)+nodeText(dataReq));
 	  }
@@ -1257,11 +1299,11 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
   var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
 
   var dataReq = document.createElement('get');
-  if( !comm )
+  if(!comm)
   {
-    dataReq = servGet(selPath+'/'+brPath,'com=get');
-    if( !dataReq ) dataReq = document.createElement('get');
-    else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
+    dataReq = servGet(brPath,'com=get');
+    if(!dataReq) dataReq = document.createElement('get');
+    else if(parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
   }
 
   //> View select fields
@@ -1339,10 +1381,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       }
       else
       {
-	var x_lst = servGet(selPath+'/'+(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f')),'com=get');
-	if( x_lst )
+	var x_lst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
+	if(x_lst)
 	{
-	  for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
+	  for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++)
 	  {
 	    if( x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el' ) continue;
 	    var curElId = x_lst.childNodes[i_el].getAttribute('id');
@@ -1757,10 +1799,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  else
 	  {
 	    val_w.sel_list = new Array();
-	    var x_lst = servGet(selPath+'/'+(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f')),'com=get');
-	    if( x_lst )
-	      for( var i_el = 0; i_el < x_lst.childNodes.length; i_el++ )
-		if( x_lst.childNodes[i_el].nodeName.toLowerCase() == 'el' )
+	    var x_lst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
+	    if(x_lst)
+	      for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++)
+		if(x_lst.childNodes[i_el].nodeName.toLowerCase() == 'el')
 		  val_w.sel_list.push(nodeText(x_lst.childNodes[i_el]));
 	  }
 	}

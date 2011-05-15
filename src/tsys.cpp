@@ -925,20 +925,20 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	{
 	    string svl, evl;
 	    sout.reserve(in.size());
-	    for( int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
-		for( int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
+	    for(int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
+		for(int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
 		    sout+=(char)strtol(evl.c_str(),NULL,16);
 	    break;
 	}
 	case TSYS::Reverse:
-	    for( i_sz = in.size()-1; i_sz >= 0; i_sz-- ) sout += in[i_sz];
+	    for(i_sz = in.size()-1; i_sz >= 0; i_sz--) sout += in[i_sz];
 	    break;
 	case TSYS::ShieldSimb:
 	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-		if( in[i_sz] == '\\' && i_sz < ((int)in.size()-1) )
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
+		if(in[i_sz] == '\\' && i_sz < ((int)in.size()-1))
 		{
-		    switch( in[i_sz+1] )
+		    switch(in[i_sz+1])
 		    {
 			case 'a':	sout += '\a';	break;
 			case 'b':	sout += '\b';	break;
@@ -947,7 +947,17 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 			case 'r':	sout += '\r';	break;
 			case 't':	sout += '\t';	break;
 			case 'v':	sout += '\v';	break;
-			default:	sout += in[i_sz+1];
+			case 'x': case 'X':
+			    if((i_sz+3) < in.size() && isxdigit(in[i_sz+2]) && isxdigit(in[i_sz+3]))
+			    { sout += (char)strtol(in.substr(i_sz+2,2).c_str(),NULL,16); i_sz += 2; }
+			    else sout += in[i_sz+1];
+                    	    break;
+                	default:
+                    	    if((i_sz+3) < in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
+                                                    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
+                                                    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
+                    	    { sout += (char)strtol(in.substr(i_sz+1,3).c_str(),NULL,8); i_sz += 2; }
+                    	    else sout += in[i_sz+1];
 		    }
 		    i_sz++;
 		}else sout += in[i_sz];
@@ -1536,7 +1546,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     {
 	struct tm stm;
 	stm.tm_isdst = -1;
-	strptime( prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm );
+	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
 	return (int)mktime(&stm);
     }
     // int cron(string cronreq, int base = 0) - returns the time, planned in the format of the standard Cron <cronreq>,
@@ -1544,7 +1554,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  cronreq - shedule in standard Cron format
     //  base - base time
     if( iid == "cron" && !prms.empty() )
-	return (int)cron( prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0 );
+	return (int)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
     if( iid == "strFromCharCode" )
@@ -1554,6 +1564,13 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    rez += (unsigned char)prms[i_p].getI();
 	return rez;
     }
+    // string strCodeConv( string src, string fromCP, string toCP ) - String text encode from codepage <fromCP> to codepage <toCP>.
+    //  src - source text;
+    //  fromCP - from codepage, empty for use internal codepage;
+    //  toCP - to codepage, empty for use internal codepage.
+    if( iid == "strCodeConv" && prms.size() >= 3 )
+	return Mess->codeConv((prms[1].getS().size() ? prms[1].getS() : Mess->charset()),
+			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }
