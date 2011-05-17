@@ -1,3 +1,8 @@
+2011-05-17 Maxim
+- FIX:UI.Vision: The popup menu show is fixed for the fills with the images for the primitive ElFigure.
+- FIX:UI.Vision: The fill image field processing during the accepting the properties dialog is fixed for the primitive ElFigure.
+
+
 2011-05-15 Roman
 - SYS: To TSYS::ShieldSimb encode mode is added support direct symbols like '\xFF' and '\777'.
 - SYS: User API function SYS.strCodeConv() is added for string texts encode from and to code pages.

@@ -1765,8 +1765,12 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 }
 
             fill_index = -1;
+            QPainterPath in_path = newPath;
             for( int i = inundationItems.size()-1; i >= 0; i-- )
-                if( inundationItems[i].path.contains(pop_pos) )
+            {
+                if( inundationItems[i].path == newPath )
+                    in_path = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, w );
+                if( inundationItems[i].path.contains(pop_pos) || in_path.contains(pop_pos) )
                 {
                     QAction *actDeleteFill = new QAction( _("Delete the current fill"), w->mainWin() );
                     actDeleteFill->setObjectName("delete_fill");
@@ -1798,7 +1802,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                         connect( actDynamicFillImage, SIGNAL(triggered()), elFD, SLOT(dynamic()) ); 
                         menu.addAction(actDynamicFillImage);
                     }
-                    if( inundationItems[i].brush_img > 0 )
+                    else if( inundationItems[i].brush_img > 0 )
                     {
                         QAction *actDynamicFillImage = new QAction( _("Make fill image static"), w->mainWin() );
                         actDynamicFillImage->setObjectName("s_fill_image");
@@ -1816,6 +1820,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
                     break;
                 }
+            }
             if( flg )
             {
                 QAction *actStatic = new QAction( _("Make all values of the widget the static ones"), w->mainWin() );
@@ -3158,6 +3163,12 @@ void ElFigDt::properties()
                         inundationItems[elF->fill_index].brush_img = k;
                     }
                     else (*images)[inundationItems[elF->fill_index].brush_img] = f_image->text().toStdString();
+                }
+                else if( f_image->text().isEmpty() && !(*images)[inundationItems[elF->fill_index].brush_img].empty() )
+                {
+                    (*images).erase( inundationItems[elF->fill_index].brush_img );
+                    inundationItems[elF->fill_index].brush_img = -5;
+                    inundationItems[elF->fill_index].path = elF->createInundationPath( inundationItems[elF->fill_index].number_shape, shapeItems, *pnts, w );
                 }
             }
             else if( fi_en->isChecked() && fi_check->isChecked() && inundationItems[elF->fill_index].brush_img != -5 )
