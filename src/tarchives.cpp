@@ -41,8 +41,6 @@ using namespace OSCADA;
 //************************************************
 //* TArchiveS                                    *
 //************************************************
-unsigned TArchiveS::max_req_mess = 3000;
-
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false),
     headBuf(0), headLstread(0), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false)
@@ -138,7 +136,6 @@ void TArchiveS::load_( )
     setMessPeriod( atoi(TBDS::genDBGet(nodePath()+"MessPeriod",TSYS::int2str(mMessPer)).c_str()) );
     setValPeriod( atoi(TBDS::genDBGet(nodePath()+"ValPeriod",TSYS::int2str(mValPer)).c_str()) );
     setValPrior( atoi(TBDS::genDBGet(nodePath()+"ValPriority",TSYS::int2str(mValPrior)).c_str()) );
-    max_req_mess = vmax(100,atoi(TBDS::genDBGet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess)).c_str()));
 
     //> LidDB
     //>> Message archivators load
@@ -242,7 +239,6 @@ void TArchiveS::save_( )
     TBDS::genDBSet(nodePath()+"MessPeriod",TSYS::int2str(messPeriod()));
     TBDS::genDBSet(nodePath()+"ValPeriod",TSYS::int2str(valPeriod()));
     TBDS::genDBSet(nodePath()+"ValPriority",TSYS::int2str(valPrior()));
-    TBDS::genDBSet(nodePath()+"MaxReqMess",TSYS::int2str(max_req_mess));
 }
 
 void TArchiveS::valAdd( const string &iid, const string &idb )
@@ -455,18 +451,20 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs )
 	messPut(recs[i_r].time,recs[i_r].utime,recs[i_r].categ,recs[i_r].level,recs[i_r].mess);
 }
 
-void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, int8_t level, const string &arch )
+void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, int8_t level, const string &arch, time_t upTo )
 {
     recs.clear();
 
     ResAlloc res(mRes,false);
+    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
+    TRegExp re(category, "p");
 
     //> Get records from buffer
     unsigned i_buf = headBuf;
-    while(level >= 0 && (!arch.size() || arch==BUF_ARCH_NM))
+    while(level >= 0 && (!arch.size() || arch==BUF_ARCH_NM) && time(NULL) < upTo)
     {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
-		mBuf[i_buf].level >= level && TMess::chkPattern(mBuf[i_buf].categ, category))
+		mBuf[i_buf].level >= level && re.test(mBuf[i_buf].categ))
 	    recs.push_back(mBuf[i_buf]);
 	if(++i_buf >= mBuf.size()) i_buf = 0;
 	if(i_buf == headBuf) break;
@@ -478,7 +476,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     for(unsigned i_t = 0; level >= 0 && i_t < t_lst.size(); i_t++)
     {
 	at(t_lst[i_t]).at().messList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+	for(unsigned i_o = 0; i_o < o_lst.size() && time(NULL) < upTo; i_o++)
 	{
 	    AutoHD<TMArchivator> archtor = at(t_lst[i_t]).at().messAt(o_lst[i_o]);
 	    if(archtor.at().startStat() && (!arch.size() || arch==archtor.at().workId()))
@@ -490,9 +488,9 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     if(level < 0)
     {
 	vector< pair<long long,TMess::SRec* > > mb;
-	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end(); p++)
+	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() && time(NULL) < upTo; p++)
 	    if((p->second.time >= b_tm || b_tm == e_tm) && p->second.time <= e_tm &&
-		    p->second.level >= abs(level) && Mess->chkPattern(p->second.categ,category))
+		    p->second.level >= abs(level) && re.test(p->second.categ))
 		mb.push_back(pair<long long,TMess::SRec* >(FTM(p->second),&p->second));
 	sort(mb.begin(),mb.end());
 	for(unsigned i_b = 0; i_b < mb.size(); i_b++) recs.push_back(*mb[i_b].second);
@@ -753,7 +751,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm","1","idSz","20");
 	if(ctrMkNode("area",opt,1,"/m_arch",_("Messages archive"),R_R_R_,"root",SARH_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/m_arch/max_am_req",_("Maximum requested messages"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/m_arch/size",_("Messages buffer size"),RWRWR_,"root",SARH_ID,2,"tp","dec","min",TSYS::int2str(BUF_SIZE_DEF).c_str());
 	    ctrMkNode("fld",opt,-1,"/m_arch/per",_("Archiving period (s)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View messages"),R_R___,"root",SARH_ID))
@@ -788,12 +785,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    if(a_path == "/m_arch/max_am_req")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(max_req_mess));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	{ max_req_mess = vmax(100,atoi(opt->text().c_str())); modif(); }
-    }
-    else if(a_path == "/m_arch/per")
+    if(a_path == "/m_arch/per")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(messPeriod()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMessPeriod(atoi(opt->text().c_str()));
@@ -1075,9 +1067,9 @@ bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )
 
     categ(cat_ls);
 
-    if( ilvl >= level() )
-	for( unsigned i_cat = 0; i_cat < cat_ls.size(); i_cat++ )
-	    if( TMess::chkPattern(icateg,cat_ls[i_cat]) )
+    if(ilvl >= level())
+	for(unsigned i_cat = 0; i_cat < cat_ls.size(); i_cat++)
+	    if(TRegExp(cat_ls[i_cat], "p").test(icateg))
 		return true;
    return false;
 }

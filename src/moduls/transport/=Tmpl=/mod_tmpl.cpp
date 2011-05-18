@@ -147,7 +147,7 @@ TTransportOut *TTr::Out( const string &name, const string &idb )
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart configurators of OpenSCADA to individual module's parameters.
+//!!! For example, process access from standard configurators of OpenSCADA to individual module's parameters.
 //!!! Modify for self needs
 void TTr::cntrCmdProc( XMLNode *opt )
 {
@@ -238,7 +238,7 @@ void *TTrIn::Task( void *tr_in )
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart confifurators of OpenSCADA to individual module's parameters.
+//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
 //!!! Modify for self needs
 void TTrIn::cntrCmdProc( XMLNode *opt )
 {
@@ -344,7 +344,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart confifurators of OpenSCADA to individual module's parameters.
+//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
 //!!! Modify for self needs
 void TTrOut::cntrCmdProc( XMLNode *opt )
 {

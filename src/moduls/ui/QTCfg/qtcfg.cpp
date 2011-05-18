@@ -1301,7 +1301,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
 	    else if(rez == 0) img->setImage(TSYS::strDecode(req.text(),TSYS::base64));
 	}
-	//>> View standart fields
+	//>> View standard fields
 	else if( t_s.name() == "fld" ) basicFields( t_s, a_path, widget, wr, &l_hbox, l_pos );
 	//>> View commands
 	else if( t_s.name() == "comm" )

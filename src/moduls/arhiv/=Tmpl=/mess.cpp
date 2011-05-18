@@ -141,7 +141,7 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart configurators of OpenSCADA to individual module's parameters.
+//!!! For example, process access from standard configurators of OpenSCADA to individual module's parameters.
 //!!! Modify for self needs.
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {

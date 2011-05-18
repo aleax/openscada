@@ -52,7 +52,7 @@ class ModMArch: public TMArchivator
 
 	//!!! Get and put data virtual functions for access to archive.
 	void put( vector<TMess::SRec> &mess );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
 
 	//!!! Inherited (virtual) start and stop archivator functions
 	void start( );

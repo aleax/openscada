@@ -182,23 +182,25 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 }
 
-void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
+void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
-    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
 
     b_tm = vmax(b_tm,begin());
     e_tm = vmin(e_tm,end());
-    if( e_tm <= b_tm ) return;
+    if(e_tm <= b_tm) return;
 
     TConfig cfg(&mod->messEl());
+    TRegExp re(category, "p");
     //> Get values from DB
-    for( time_t t_c = b_tm; t_c <= e_tm; t_c++ )
+    for(time_t t_c = b_tm; t_c <= e_tm; t_c++)
     {
 	cfg.cfg("TM").setI(t_c,true);
-	for( int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg); )
+	for(int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg); )
 	{
 	    TMess::SRec rc(t_c,cfg.cfg("TMU").getI(),cfg.cfg("CATEG").getS(),(TMess::Type)cfg.cfg("LEV").getI(),cfg.cfg("MESS").getS());
-	    if( rc.level >= level && TMess::chkPattern(rc.categ,category) )
+	    if(rc.level >= level && re.test(rc.categ))
 	    {
 		bool equal = false;
 		int i_p = mess.size();
@@ -212,7 +214,7 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 		if( !equal )
 		{
 		    mess.insert(mess.begin()+i_p,rc);
-		    if( mess.size() >= TArchiveS::max_req_mess ) return;
+		    if(time(NULL) >= upTo) return;
 		}
 	    }
 	}

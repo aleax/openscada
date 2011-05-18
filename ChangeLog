@@ -1,3 +1,11 @@
+2011-05-18 Roman
+- !!!!:TArchives, Archive.DBArch, Archive.FSArch: Up time border is added to archives request messages for prevent hang on too wide requests.
+- !!!!:TArchives: Regular expression use allow is added for category match by "/match/".
+- !:TRegExp: The function for test expressions by pattern is moved to object TRegExp.
+- FIX:UI.WebVision: Protocol primitive is fixed for the table left align. JavaScript no define object is fixed for mouse events process.
+- FIX:DAQ.Siemens: Not resourced access to nodave session from different task is fixed.
+
+
 2011-05-17 Maxim
 - FIX:UI.Vision: The popup menu show is fixed for the fills with the images for the primitive ElFigure.
 - FIX:UI.Vision: The fill image field processing during the accepting the properties dialog is fixed for the primitive ElFigure.
@@ -5032,7 +5040,7 @@ archive access (UI trend access).
 
 2006-04-29 Roman
 - !!!!:/Archive: Add a full support the value archives. Add files src/tarchval.h and src/tarchval.cpp
-- /Archive: Make the standart identification messages archives at "id", "name" and "description"
+- /Archive: Make the standard identification messages archives at "id", "name" and "description"
 - /Archive: Move messages buffer from TMess() to TArchiveS() and call it how message archive buffer.
 - !!!!:/Archive: Use archiving mechanism: the archive and the archivator. Where the archivator is the module implemented storage mechanism.
 - !!!!:/Archive/BaseArh: Add full support of the value archives file storage.
@@ -5062,7 +5070,7 @@ archive access (UI trend access).
 - !!:/DB: Replace structure TBDS::SName at simple string DB name like MySQL.GenDB.MyTbl.
 - FIX:/ContrLang: Fix UTF8 error border for no ANSI symbls. Check string fields border disable.
 - /ContrLang: Add support of the several path separators into function TCntrNode::nodePath()
-- /DAQ: Make the standart identification controllers archives at "id", "name" and "description"
+- /DAQ: Make the standard identification controllers archives at "id", "name" and "description"
 - !!:/DAQ: Delete the generic controller table. Without use individual DAQs type tables whith fix names.
 - !!:/DAQ: Controllers loaded from all register DB and all controllers have self DB name source.
 - /DAQ: Change DAQ parameter error messaging mechanism. Now, error set to the one string attribut "err". 
@@ -5092,7 +5100,7 @@ archive access (UI trend access).
 - /ModSchedul: Add button for "Check modules now".
 - /ParamLogical: Make direct linking to destination attributes.
 - /SubSys: Move init the subsystem's users groups to function subStart();
-- /Transports: Make the standart identification transports at "id", "name" and "description"
+- /Transports: Make the standard identification transports at "id", "name" and "description"
 - /Special/SystemTests: Update DB test.
 - /Special/SystemTests: Update parameter's test.
 - /Special/SystemTests: Add Archive's tests.
@@ -5120,7 +5128,7 @@ archive access (UI trend access).
 - !!!!:/System: Change the interval timer events to the direct thread creating (timer_create()).
 - !!!!:/Security: Add the user groups for all subsystems and update security access for it.
 - /System: Rename function TSYS::TZ() to TSYS::HZ().
-- /System: Change time structure from STime to standart timeval.
+- /System: Change time structure from STime to standard timeval.
 - /System: Clean TValue from buffers objects.
 - FIX:/DB/SQLite: Fix recoding option.
 - !!!!:/DAQ/BlockCalc: Make links description with path.
@@ -5692,7 +5700,7 @@ modFreeFunc() to modFunc().
 - Fix Controll chains for all;
 - TMessage: change prototip functions: Sconv(), SConvIn(), SConvOut();
 - XML: add clean_childs() function and fix destructor!
-- Protocol::http: Go to XHTML1.0 standart!
+- Protocol::http: Go to XHTML1.0 standard!
 - Controller::virtual_v1: Experemental add TFrm;
 - !!!!: Add UI::QTCfg modul!
 - !!!!: Del UI::QTGUI modul!
@@ -5772,7 +5780,7 @@ modFreeFunc() to modFunc().
 - I18N: Make for: ALL!  
 - TArchives: make firs start Archives and second Get message counter.
 - TArchives: add quit attribute for do make last get message cycle before quit.
-- HELP: Go to standart structure describe of options descriptions.
+- HELP: Go to standard structure describe of options descriptions.
 - TContr: Add access symbol ',' for real type.
 - TContr: Add interim function ctr_cmd_go.
 - TContr: Add function for TConfig support: ctr_cfg_parse, ctr_cfg_get, ctr_cfg_set
@@ -5802,7 +5810,7 @@ modFreeFunc() to modFunc().
   - Transport::socket
   - UI::QT_GUI
   - UI::web_cfg
-- Change misc params names into config file to standart name "prm".
+- Change misc params names into config file to standard name "prm".
 - !!!!:TArchiveS: Change BD work metod.
 - TArchiveS: Add start and stop commands to Message Archives.
 - TArchiveS: Fix time check and add level sort into MessArhTask.
@@ -5941,7 +5949,7 @@ modFreeFunc() to modFunc().
 - TContr: change brance name store from Node->text to Node->attr("id");
 - TContr: delete inf from ctr_opt_apply();
 - TContr: add apply flag into functions: ctr_opt_get*();
-- integrate to standart control (TContr) for:
+- integrate to standard control (TContr) for:
   - tgrpmodule.cpp(h)
   - tkernel.cpp(h)
   - tmodschedul.cpp(h)
@@ -5969,7 +5977,7 @@ modFreeFunc() to modFunc().
 - THD: change access to static resource;
 - THD: add string description for attached user into hd;
 - TParams: add string description option into att;
-- start integrating to standart control (TContr) for:
+- start integrating to standard control (TContr) for:
   - tsys.cpp(h)
 - Special::test_kernel: add The base controll test;
 - Controller::virtual_v1: add Free to destructor;
@@ -6014,11 +6022,11 @@ modFreeFunc() to modFunc().
 
 2003-12-23  OpenScada 0.1.8
 - Threads: add function pthread_join for wait of pthread clean.
-- TConfig: fix no ANSIC++ standart call function vector::insert();
-- TMessage: fix no ANSIC++ standart call function vector::insert();
-- TValueElem: fix no ANSIC++ standart call function vector::insert();
-- Controller::virtual_v1: fix no ANSIC++ standart call function vector::insert();
-- Controller::virtual_v2: fix no ANSIC++ standart call function vector::insert();
+- TConfig: fix no ANSIC++ standard call function vector::insert();
+- TMessage: fix no ANSIC++ standard call function vector::insert();
+- TValueElem: fix no ANSIC++ standard call function vector::insert();
+- Controller::virtual_v1: fix no ANSIC++ standard call function vector::insert();
+- Controller::virtual_v2: fix no ANSIC++ standard call function vector::insert();
 - TController: use object SBDS for store bd address;
 - TController: add call function Stop() and Free() into destructor;
 - TTipController: use SBDS into ContrAttach();
@@ -6054,7 +6062,7 @@ modFreeFunc() to modFunc().
 - Update doc;
 
 2003-12-09  OpenScada 0.1.5 (bd_direct_dbf.so 0.1.2)
-- add standart access header description !!!!! ( add files: thd.cpp, thd.h )
+- add standard access header description !!!!! ( add files: thd.cpp, thd.h )
 - integrate access header to:
   - tArchives.cpp(h)
   - tbds.cpp(h)

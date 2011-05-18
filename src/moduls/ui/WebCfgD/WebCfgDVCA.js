@@ -1233,7 +1233,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	table.parentNode.style.height = Math.min(300,Math.max(100,table.clientHeight))+'px';
       }
     }
-    //>> View standart fields
+    //>> View standard fields
     else if( t_s.nodeName.toLowerCase() == 'fld' ) basicFields(t_s,aPath,cBlk,wr);
     else if( t_s.nodeName.toLowerCase() == 'comm' )
     {

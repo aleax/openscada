@@ -427,17 +427,28 @@ bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
 //* TRegExp                                                 *
 //*   Regular expression object                             *
 //***********************************************************
-TRegExp::TRegExp( const string &rule, const string &flg ) : lastIndex(0), pattern(rule), regex(NULL), vSz(90), capv(NULL)
+TRegExp::TRegExp( const string &rule, const string &flg ) : lastIndex(0), pattern(rule), isSimplePat(false), regex(NULL), vSz(90), capv(NULL)
 {
-    global = (flg.find('g')!=string::npos);
-    ignoreCase = (flg.find('i')!=string::npos);
-    multiline = (flg.find('m')!=string::npos);
+    if(flg.size())
+    {
+	global = (flg.find('g')!=string::npos);
+	ignoreCase = (flg.find('i')!=string::npos);
+	multiline = (flg.find('m')!=string::npos);
+	if(flg.find('p') != string::npos)
+	{
+	    isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
+	    if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
+	}
+    }
 
-    const char *terr;
-    int erroff;
-    regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
-    if(!regex) err = terr;
-    else capv = new int[90];
+    if(!isSimplePat && pattern.size())
+    {
+	const char *terr;
+	int erroff;
+	regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
+	if(!regex) err = terr;
+	else capv = new int[90];
+    }
 }
 
 TRegExp::~TRegExp( )
@@ -494,6 +505,38 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
 
 bool TRegExp::test( const string &vl )
 {
+    //> Check by simple pattern
+    if(isSimplePat)
+    {
+	bool mult_s = false;
+	int v_cnt = 0, p_cnt = 0;
+	int v_bck = -1, p_bck = -1;
+
+	while(true)
+        {
+            if(p_cnt >= (int)pattern.size() ) return true;
+            if(pattern[p_cnt] == '?')	{ v_cnt++; p_cnt++; mult_s = false; continue; }
+            if(pattern[p_cnt] == '*')	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
+            if(pattern[p_cnt] == '\\')	p_cnt++;
+            if(v_cnt >= (int)vl.size())  break;
+            if(pattern[p_cnt] == vl[v_cnt])
+            {
+                if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
+                v_cnt++; p_cnt++;
+            }
+            else
+            {
+                if(mult_s)
+        	{
+                    if(v_bck >= 0) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
+                    else v_cnt++;
+                }
+                else break;
+            }
+        }
+        return false;
+    }
+    //> Check by regular expression
     if(!regex) return false;
     int n = pcre_exec(regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
     if(global) lastIndex = (n>0) ? capv[1] : 0;

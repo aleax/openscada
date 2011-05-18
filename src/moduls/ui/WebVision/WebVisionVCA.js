@@ -297,6 +297,11 @@ function getColor( cStr )
  *****************************************************/
 function chkPattern( val, patt )
 {
+  //> Check by regular expression
+  if(patt.length > 2 && patt.charAt(0) == '/' && patt.charAt(patt.length-1) == '/')
+    return (new RegExp(patt.slice(1,patt.length-1),'')).test(val);
+
+  //> Check by simple pattern
   var mult_s = false;
   var v_cnt = 0, p_cnt = 0;
   var v_bck = -1, p_bck = -1;
@@ -1191,7 +1196,7 @@ function makeEl( pgBr, inclPg )
     if( this.attrs['backColor'] ) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
     else elStyle+='background-color: white; ';
     if( this.attrs['backImg'] )   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; ';
+    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
     geomW -= 4; geomH -= 4;
 
     this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc));
@@ -1482,14 +1487,14 @@ function makeEl( pgBr, inclPg )
   else this.place.oncontextmenu = null;
 
   //> Common mouse events process
-  if( this.mousedown.length )
+  if(this.mousedown && this.mousedown.length )
     this.place.onmousedown = function(e)
     {
       for( var i_on = 0; i_on < this.wdgLnk.mousedown.length; i_on++ )
 	this.wdgLnk.mousedown[i_on](e,this);
       return true;
     }
-  if( this.mouseup.length )
+  if(this.mouseup && this.mouseup.length)
     this.place.onmouseup = function(e)
     {
       for( var i_on = 0; i_on < this.wdgLnk.mouseup.length; i_on++ )

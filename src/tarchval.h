@@ -301,7 +301,7 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	string DB( )		{ return mDB; }
 	string tbl( );
-	string fullDB( )		{ return DB()+'.'+tbl(); }
+	string fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &inm )	{ mName = inm; modif(); }
 	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }

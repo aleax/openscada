@@ -147,7 +147,7 @@ TProtocolIn *TProt::in_open( const string &name )
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart confifurators of OpenSCADA to individual module's parameters.
+//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
 //!!! Modify for self needs
 void TProt::cntrCmdProc( XMLNode *opt )
 {

@@ -49,7 +49,7 @@ class ModMArch: public TMArchivator
 	time_t end( );
 
 	void put( vector<TMess::SRec> &mess );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
 
 	void start( );
 	void stop( );

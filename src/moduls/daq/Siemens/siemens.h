@@ -244,7 +244,7 @@ class TMdContr: public TController
 	daveInterface	*di;
 	daveConnection	*dc;
 
-	Res	nRes;
+	Res	nRes, reqRes;
 
 	double	tm_calc;		// Template functions calc time
 };

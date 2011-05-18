@@ -2907,8 +2907,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	QColor clr, fclr;
 	//>> Check properties
 	for(int i_it = 0, lst_lev = -1; i_it < (int)shD->itProps.size(); i_it++)
-	    if( shD->messList[sortIts[i_m].second].level >= shD->itProps[i_it].lev && shD->itProps[i_it].lev > lst_lev &&
-		TMess::chkPattern(shD->messList[sortIts[i_m].second].categ,shD->itProps[i_it].tmpl) )
+	    if(shD->messList[sortIts[i_m].second].level >= shD->itProps[i_it].lev && shD->itProps[i_it].lev > lst_lev &&
+		TRegExp(shD->itProps[i_it].tmpl, "p").test(shD->messList[sortIts[i_m].second].categ))
 	    {
 		fnt = shD->itProps[i_it].font;
 		clr = shD->itProps[i_it].clr;

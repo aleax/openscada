@@ -206,7 +206,7 @@ string TProt::autoLogGet( const string &sender )
     ResAlloc res(nodeRes(),false);
     for(unsigned i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
 	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )
-	    if(TMess::chkPattern(sender,addr)) return mALog[i_a].user;
+	    if(TRegExp(addr, "p").test(sender)) return mALog[i_a].user;
     return "";
 }
 

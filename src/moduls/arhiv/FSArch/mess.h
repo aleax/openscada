@@ -48,7 +48,7 @@ class MFileArch
 
 	void attach( const string &name, bool full = true );
 	void put( TMess::SRec mess );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo = 0 );
 	//> Write changes to Archive file
 	//  free - surely free used memory
 	void check( bool free = false );
@@ -113,7 +113,7 @@ class ModMArch: public TMArchivator
 	time_t begin();
 	time_t end();
 	void put( vector<TMess::SRec> &mess );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 );
+	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
 	void start();
 	void stop();
 

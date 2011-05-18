@@ -161,10 +161,11 @@ class TRegExp : public TVarObj
 {
     public:
 	//Methods
-	TRegExp( const string &rule, const string &flg );
+	TRegExp( const string &rule = "", const string &flg = "" );
 	~TRegExp( );
 
 	string objName( )	{ return "RegExp"; }
+	bool isNull( )		{ return !regex; }
 
 	TArrayObj *match( const string &vl, bool all = false );
 	bool test( const string &vl );
@@ -192,6 +193,7 @@ class TRegExp : public TVarObj
 	unsigned global		: 1;
 	unsigned ignoreCase	: 1;
 	unsigned multiline	: 1;
+	unsigned isSimplePat	: 1;
 
 	pcre 	*regex;
 	int 	vSz, *capv;

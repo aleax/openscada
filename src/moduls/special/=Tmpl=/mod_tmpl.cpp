@@ -144,8 +144,8 @@ void Lib::modStop( )
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart configurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs 
+//!!! For example, process access from standard configurators of OpenSCADA to individual module's parameters.
+//!!! Modify for self needs
 void Lib::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info

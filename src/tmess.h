@@ -90,8 +90,6 @@ class TMess
 	static string I18Ns( const string &mess, const char *d_name = NULL )
 	{ return I18N((char *)mess.c_str(), d_name); }
 
-	static bool chkPattern( const string &val, const string &patern );
-
 	string lang( );
 	string lang2Code( )	{ return mLang2Code; }
 	string lang2CodeBase( )	{ return mLang2CodeBase; }

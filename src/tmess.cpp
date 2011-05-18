@@ -202,37 +202,6 @@ void TMess::setLang2CodeBase( const string &vl )
     SYS->modif();
 }
 
-bool TMess::chkPattern( const string &val, const string &patt )
-{
-    bool mult_s = false;
-    int v_cnt = 0, p_cnt = 0;
-    int v_bck = -1, p_bck = -1;
-
-    while(true)
-    {
-	if( p_cnt >= (int)patt.size() )	return true;
-	if( patt[p_cnt] == '?' )	{ v_cnt++; p_cnt++; mult_s = false; continue; }
-	if( patt[p_cnt] == '*' )	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
-	if( patt[p_cnt] == '\\' )	p_cnt++;
-	if( v_cnt >= (int)val.size() )	break;
-	if( patt[p_cnt] == val[v_cnt] )
-	{
-	    if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
-	    v_cnt++; p_cnt++;
-	}
-	else
-	{
-	    if( mult_s )
-	    {
-		if( v_bck >= 0 ) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
-		else v_cnt++;
-	    }
-	    else break;
-	}
-    }
-    return false;
-}
-
 void TMess::load()
 {
     //- Load params from command line -

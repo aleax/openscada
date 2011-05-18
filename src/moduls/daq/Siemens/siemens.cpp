@@ -843,10 +843,11 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	case ISO_TCP:
 	{
 	    //- Full libnodave API -
-	    int res;
-	    if( (res = daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL)) )
+	    int rez;
+	    ResAlloc res(reqRes, true);
+	    if( (rez = daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL)) )
 	    {
-		mess_debug(nodePath().c_str(),_("Read block '%d' error: %d"),n_db,res);
+		mess_debug(nodePath().c_str(),_("Read block '%d' error: %d"),n_db,rez);
 		throw TError(nodePath().c_str(),_("Read DB from controller error."));
 	    }
 	    buffer.assign((char*)dc->resultPointer,buffer.size());
@@ -962,10 +963,11 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	}
 	case ISO_TCP:
 	    //- Full Libnodave API -
-	    int res;
-	    if( (res = daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str())) )
+	    int rez;
+	    ResAlloc res(reqRes, true);
+	    if( (rez = daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str())) )
 	    {
-		mess_debug(nodePath().c_str(),_("Write block '%d' error: %d"),n_db,res);
+		mess_debug(nodePath().c_str(),_("Write block '%d' error: %d"),n_db,rez);
 		throw TError(nodePath().c_str(),_("Write DB to controller error."));
 	    }
 

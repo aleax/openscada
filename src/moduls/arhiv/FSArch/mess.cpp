@@ -178,18 +178,19 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     tmCalc = TSYS::curTime()-t_cnt;
 }
 
-void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
+void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
-    if( e_tm <= b_tm ) return;
-    if( !run_st ) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(e_tm <= b_tm) return;
+    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
 
     ResAlloc res(mRes,false);
-    for( int i_arh = arh_s.size()-1; i_arh >= 0 && mess.size() < TArchiveS::max_req_mess; i_arh-- )
+    for(int i_arh = arh_s.size()-1; i_arh >= 0 && time(NULL) < upTo; i_arh--)
     {
-	if( !arh_s[i_arh]->err() &&
-		!( (b_tm < arh_s[i_arh]->begin() && e_tm < arh_s[i_arh]->begin() ) ||
-		   (b_tm > arh_s[i_arh]->end() && e_tm > arh_s[i_arh]->end() ) ) )
-	    arh_s[i_arh]->get(b_tm, e_tm, mess, category, level);
+	if(!arh_s[i_arh]->err() &&
+		!((b_tm < arh_s[i_arh]->begin() && e_tm < arh_s[i_arh]->begin()) ||
+		   (b_tm > arh_s[i_arh]->end() && e_tm > arh_s[i_arh]->end())))
+	    arh_s[i_arh]->get(b_tm, e_tm, mess, category, level, upTo);
     }
 }
 
@@ -768,30 +769,32 @@ void MFileArch::put( TMess::SRec mess )
     }
 }
 
-void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
+void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
     TMess::SRec b_rec;
 
-    if( mErr ) throw TError(owner().nodePath().c_str(),_("Getting messages from an error Archive file!"));
+    if(mErr) throw TError(owner().nodePath().c_str(),_("Getting messages from an error Archive file!"));
 
     ResAlloc res(mRes,false);
+    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
 
-    if( mPack )
+    if(mPack)
     {
 	try{ mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
 	mPack = false;
     }
-    if( !mLoad )
+    if(!mLoad)
     {
 	res.release(); attach( mName ); res.request(false);
 	if( mErr || !mLoad )	throw TError(owner().nodePath().c_str(),_("Archive file isn't attached!"));
     }
 
     mAcces = time(NULL);
+    TRegExp re(category, "p");
 
-    if( xmlM() )
+    if(xmlM())
     {
-	for(unsigned i_ch = 0; i_ch < mNode->childSize() && mess.size() < TArchiveS::max_req_mess; i_ch++)
+	for(unsigned i_ch = 0; i_ch < mNode->childSize() && time(NULL) < upTo; i_ch++)
 	{
 	    //> Find messages
 	    b_rec.time  = strtol( mNode->childGet(i_ch)->attr("tm").c_str(),(char **)NULL,16);
@@ -799,18 +802,18 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	    b_rec.categ = mNode->childGet(i_ch)->attr("cat");
 	    b_rec.level = (TMess::Type)atoi( mNode->childGet(i_ch)->attr("lv").c_str() );
 	    b_rec.mess  = mNode->childGet(i_ch)->text();
-	    if( b_rec.time >= b_tm && b_rec.time <= e_tm && b_rec.level >= level && TMess::chkPattern(b_rec.categ,category) )
+	    if(b_rec.time >= b_tm && b_rec.time <= e_tm && b_rec.level >= level && re.test(b_rec.categ))
 	    {
 		bool equal = false;
 		int i_p = mess.size();
-		for( int i_m = mess.size()-1; i_m >= 0; i_m-- )
+		for(int i_m = mess.size()-1; i_m >= 0; i_m--)
 		{
-		    if( FTM(mess[i_m]) > FTM(b_rec) ) i_p = i_m;
-		    else if( FTM(mess[i_m]) == FTM(b_rec) && b_rec.level == mess[i_m].level && b_rec.mess == mess[i_m].mess )
+		    if(FTM(mess[i_m]) > FTM(b_rec)) i_p = i_m;
+		    else if(FTM(mess[i_m]) == FTM(b_rec) && b_rec.level == mess[i_m].level && b_rec.mess == mess[i_m].mess)
 		    { equal = true; break; }
-		    else if( FTM(mess[i_m]) < FTM(b_rec) ) break;
+		    else if(FTM(mess[i_m]) < FTM(b_rec)) break;
 		}
-		if( !equal ) mess.insert(mess.begin()+i_p,b_rec);
+		if(!equal) mess.insert(mess.begin()+i_p,b_rec);
 	    }
 	}
     }
@@ -828,7 +831,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	//> Check mess records
 	int pass_cnt = 0;
 	time_t last_tm = 0;
-	while( fgets(buf,sizeof(buf),f) != NULL && mess.size() < TArchiveS::max_req_mess )
+	while( fgets(buf,sizeof(buf),f) != NULL && time(NULL) < upTo )
 	{
 	    char stm[51]; int off = 0, bLev;
 	    sscanf(buf,"%50s %d",stm,&bLev);
@@ -843,7 +846,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 		sscanf(buf,"%*x:%*d %*d %1000s %1000s",m_cat,m_mess);
 		b_rec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat),TSYS::HttpURL);
 		b_rec.mess  = TSYS::strDecode(Mess->codeConvIn(mChars,m_mess),TSYS::HttpURL);
-		if( !TMess::chkPattern(b_rec.categ,category) ) continue;
+		if(!re.test(b_rec.categ)) continue;
 		//>> Check to equal messages and inserting
 		bool equal = false;
 		int i_p = mess.size();

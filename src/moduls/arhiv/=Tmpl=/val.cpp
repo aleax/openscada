@@ -108,7 +108,7 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standart configurators of OpenSCADA to individual module's parameters.
+//!!! For example, process access from standard configurators of OpenSCADA to individual module's parameters.
 //!!! Modify for self needs.
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {

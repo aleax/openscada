@@ -84,7 +84,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual time_t begin( )	{ return 0; }
 	virtual time_t end( )	{ return 0; }
 	virtual void put( vector<TMess::SRec> &mess ){ };
-	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0 ) { };
+	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 ) { };
 
 	TTipArchivator &owner( );
 
@@ -207,7 +207,7 @@ class TArchiveS : public TSubSYS
 	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess );
 	void messPut( const vector<TMess::SRec> &recs );
 	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
-	    int8_t level = TMess::Debug, const string &arch = "" );
+	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
 
@@ -216,7 +216,6 @@ class TArchiveS : public TSubSYS
 	TElem &aValE( )		{ return elAval; }
 
 	//Public attributes
-	static unsigned max_req_mess;
 	bool	SubStarting;
 
     protected:
