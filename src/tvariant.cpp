@@ -427,18 +427,16 @@ bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
 //* TRegExp                                                 *
 //*   Regular expression object                             *
 //***********************************************************
-TRegExp::TRegExp( const string &rule, const string &flg ) : lastIndex(0), pattern(rule), isSimplePat(false), regex(NULL), vSz(90), capv(NULL)
+TRegExp::TRegExp( const string &rule, const string &flg ) :
+    lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), isSimplePat(false), regex(NULL), vSz(90), capv(NULL)
 {
-    if(flg.size())
+    global = (flg.find('g')!=string::npos);
+    ignoreCase = (flg.find('i')!=string::npos);
+    multiline = (flg.find('m')!=string::npos);
+    if(flg.find('p') != string::npos)
     {
-	global = (flg.find('g')!=string::npos);
-	ignoreCase = (flg.find('i')!=string::npos);
-	multiline = (flg.find('m')!=string::npos);
-	if(flg.find('p') != string::npos)
-	{
-	    isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
-	    if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
-	}
+	isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
+	if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
     }
 
     if(!isSimplePat && pattern.size())

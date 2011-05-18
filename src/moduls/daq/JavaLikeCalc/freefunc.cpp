@@ -450,28 +450,37 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	case Reg::Free: case Reg::Dynamic:
 	    throw TError(nodePath().c_str(),_("Variable '%s' is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
-	    prg+=(uint8_t)Reg::MviB;
+	    prg += (uint8_t)Reg::MviB;
 	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg+=(uint8_t)rez->val().b_el;
+	    prg += (uint8_t)rez->val().b_el;
 	    break;
 	case Reg::Int:
-	    prg+=(uint8_t)Reg::MviI;
+	    prg += (uint8_t)Reg::MviI;
 	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg.append((char *)&rez->val().i_el,sizeof(int));
 	    break;
 	case Reg::Real:
-	    prg+=(uint8_t)Reg::MviR;
+	    prg += (uint8_t)Reg::MviR;
 	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg.append((char *)&rez->val().r_el,sizeof(double));
 	    break;
 	case Reg::String:
-	    if( rez->val().s_el->size() > 255 )
-		throw TError(nodePath().c_str(),_("String constant size is more 255 symbols."));
-	    prg+=(uint8_t)Reg::MviS;
+	{
+	    string sval = *rez->val().s_el;
+	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String constant size is more 255 symbols."));
+	    prg += (uint8_t)Reg::MviS;
 	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg+=(uint8_t)rez->val().s_el->size();
-	    prg+= *rez->val().s_el;
+	    prg += (uint8_t)vmin(255,sval.size());
+	    prg += sval.substr(0,vmin(255,sval.size()));
+	    //> Load and append next parts for big string (>255)
+	    for(int i_chunk = 1; i_chunk < (sval.size()/255+((sval.size()%255)?1:0)); i_chunk++)
+	    {
+		Reg *treg = regTmpNew();
+		*treg = sval.substr(i_chunk*255,vmin(255,(sval.size()-i_chunk*255)));
+		rez = cdBinaryOp(Reg::Add,rez,treg);
+	    }
 	    break;
+	}
 	case Reg::Obj:
 	    if(rez->name() == "SYS")
 	    {

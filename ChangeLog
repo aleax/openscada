@@ -8,6 +8,8 @@
 - !:TRegExp: The function for test expressions by pattern is moved to object TRegExp.
 - FIX:UI.WebVision: Protocol primitive is fixed for the table left align. JavaScript no define object is fixed for mouse events process.
 - FIX:DAQ.Siemens: Not resourced access to nodave session from different task is fixed.
+- FIX:TRegExp: default flags init is fixed.
+- DAQ.JavaLikeCalc: Long string constants (>255) loading is made allow by automatic split to pices.
 
 
 2011-05-17 Maxim
