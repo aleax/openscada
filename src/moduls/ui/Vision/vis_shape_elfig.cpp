@@ -285,16 +285,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         index_array.clear();
         count_Shapes = 0;
         itemInMotion = 0;
-        if( shapeItems.size() )
-        {
-            shapeItems_temp = shapeItems;
-            shapeItems.clear();
-        }
-        if( inundationItems.size() )
-        {
-            inundationItems_temp = inundationItems;
-            inundationItems.clear();
-        }
+        if( shapeItems.size() ) shapeItems.clear();
+        if( inundationItems.size() ) inundationItems.clear();
 	//- Parse last attributes list and make point list -
         string sel;
         int p[5];
@@ -982,17 +974,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
                         }
                     QPainterPath temp_path = createInundationPath( inundation_fig_num, shapeItems, *pnts,w );
                     inundation_fig_num = inundationSort( temp_path, inundation_fig_num, shapeItems, pnts, w );
-                    bool fl_buildPath = true;
-                    if( !(*images)[inundationItems[i].brush_img].empty() ) 
-                    {
-                        QImage img;
-                        string backimg = w->resGet((*images)[inundationItems[i].brush_img]);
-                        img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
-                        if( !img.isNull() ) fl_buildPath = false;
-                    }
-                    if( fl_buildPath )
-                        inundationItems[i].path = createInundationPath( inundation_fig_num, shapeItems, *pnts, w );
-
+                    inundationItems[i].path = createInundationPath( inundation_fig_num, shapeItems, *pnts, w );
                     inundationItems[i].number_shape = inundation_fig_num;
                     if( inundation_fig_num.size() > inundationItems[inundationItems.size()-1].number_shape.size() ) 
                         inundationItems[inundationItems.size()-1].path = newPath;
@@ -1034,6 +1016,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
         shapeColors_temp = elFD->shapeColors;
         shapeImages_temp = elFD->shapeImages;
         shapeStyles_temp = elFD->shapeStyles;
+        shapeItems_temp = elFD->shapeItems;
+        inundationItems_temp = elFD->inundationItems;
     }
     //- UnScaling the widths -
     if( rel_list && !w->allAttrLoad( ) && ( runW || (devW && !devW->edit()) ) )
@@ -1765,12 +1749,8 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
                 }
 
             fill_index = -1;
-            QPainterPath in_path = newPath;
             for( int i = inundationItems.size()-1; i >= 0; i-- )
-            {
-                if( inundationItems[i].path == newPath )
-                    in_path = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, w );
-                if( inundationItems[i].path.contains(pop_pos) || in_path.contains(pop_pos) )
+                if( inundationItems[i].path.contains(pop_pos) )
                 {
                     QAction *actDeleteFill = new QAction( _("Delete the current fill"), w->mainWin() );
                     actDeleteFill->setObjectName("delete_fill");
@@ -1820,7 +1800,6 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
                     break;
                 }
-            }
             if( flg )
             {
                 QAction *actStatic = new QAction( _("Make all values of the widget the static ones"), w->mainWin() );

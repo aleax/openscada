@@ -1,3 +1,7 @@
+2011-05-18 Maxim
+- FIX:UI.Vision: The repainting of the figures in the attrSet function is fixed for the primitive ElFigure.
+
+
 2011-05-18 Roman
 - !!!!:TArchives, Archive.DBArch, Archive.FSArch: Up time border is added to archives request messages for prevent hang on too wide requests.
 - !!!!:TArchives: Regular expression use allow is added for category match by "/match/".
