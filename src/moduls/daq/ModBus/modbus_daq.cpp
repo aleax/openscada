@@ -682,6 +682,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FRAG_MERGE",cfg("FRAG_MERGE").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Merge not adjacent fragments of registers to single block for request.\n"
+		    "Attention! Some devices don't support accompany request wrong registers into single block."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REQ",cfg("TM_REQ").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Individual connection timeout for device requested by the task.\n"
+		    "For zero value used generic connection timeout from used output transport."));
 	return;
     }
     //> Process command to page
@@ -881,7 +887,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if( !enableStat() )	valo.setS( EVAL_STR, 0, true );
+    if(!enableStat() || !owner().startStat())	valo.setS(EVAL_STR, 0, true);
 
     //> Send to active reserve station
     if( owner().redntUse( ) )

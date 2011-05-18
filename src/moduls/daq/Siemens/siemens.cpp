@@ -681,6 +681,7 @@ void TMdContr::connectRemotePLC( )
 	    break;
 	case ISO_TCP:
 	{
+	    ResAlloc res(reqRes, true);
 	    //- Full Libnodave API -
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102, m_addr.getVal().c_str());
@@ -757,6 +758,7 @@ void TMdContr::disconnectRemotePLC( )
     switch( m_type )
     {
         case ISO_TCP:
+	    ResAlloc res(reqRes, true);
 	    daveDisconnectPLC(dc);
 	    close(di->fd.rfd);
 	    delete dc;
@@ -1524,6 +1526,8 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
+    if(!enableStat() || !owner().startStat())	val.setS(EVAL_STR, 0, true);
+
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {

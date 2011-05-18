@@ -10,6 +10,7 @@
 - FIX:DAQ.Siemens: Not resourced access to nodave session from different task is fixed.
 - FIX:TRegExp: default flags init is fixed.
 - DAQ.JavaLikeCalc: Long string constants (>255) loading is made allow by automatic split to pices.
+- DAQ.ModBus: Some tooltip helps is added for controller object.
 
 
 2011-05-17 Maxim
