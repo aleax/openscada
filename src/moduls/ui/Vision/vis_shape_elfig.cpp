@@ -6957,6 +6957,10 @@ void ShapeElFigure::paintImage( WdgView *view )
     //- Drawing all fills(inundations) -
     for( int i=0; i < inundationItems.size(); i++ )
     {
+        QImage img;
+        string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
+        img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
+        if( shapeItems.size() == 0 || ( (inundationItems[i].path == newPath) && img.isNull() ) ) continue;
         //-- Sorting the figures in each fill(inundation) --
         QVector<int> number_shape;
         number_shape = inundationItems[i].number_shape;
@@ -7010,9 +7014,6 @@ void ShapeElFigure::paintImage( WdgView *view )
                 }
             }
         }
-        QImage img;
-        string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
-        img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
         if( !img.isNull() )
         {
             QPainterPath in_path, in_path_rot;

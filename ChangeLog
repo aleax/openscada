@@ -1,3 +1,7 @@
+2011-05-20 Maxim
+- FIX:UI.Vision: The falling of the system when draw the fill without any present figures is fixed for the primitive ElFigure.
+
+
 2011-05-18 Maxim
 - FIX:UI.Vision: The repainting of the figures in the attrSet function is fixed for the primitive ElFigure.
 
