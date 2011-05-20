@@ -887,7 +887,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	valo.setS(EVAL_STR, 0, true);
+    if(!enableStat())	valo.setS(EVAL_STR, 0, true);
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
