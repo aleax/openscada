@@ -59,7 +59,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
 {
     setWindowTitle(ndlg);
     setWindowIcon(icon);
-    setSizeGripEnabled(true);
+    //setSizeGripEnabled(true);
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);

@@ -757,8 +757,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/size",_("Size (s)"),RWRW__,"root",SARH_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str",
-		    "help",_("Messages category. Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
+		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",
+		    _("Messages category template or regular expression.\n"
+            	      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+                      "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","-7","max","7",
 		    "help",_("Get messages for level more and equaly it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/m_arch/lstAMess",
@@ -1100,8 +1102,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","dec",
 		    "help",_("Get messages for level more and equaly it."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str",
-		    "help",_("Messages categories to processing by archivator, separated by symbol ';'.\n"
-			   "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
+		    "help",_("Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
+			   "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+			   "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    }
 	}
@@ -1109,8 +1112,10 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str",
-		"help",_("Messages category. Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol."));
+	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",
+		_("Messages category template or regular expression.\n"
+            	  "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+                  "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","0","max","7",
 		"help",_("Get messages for level more and equaly it."));
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID))

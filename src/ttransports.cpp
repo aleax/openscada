@@ -820,9 +820,9 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string messIO(string mess, real timeOut = 1000) - sending the message <mess> through the transport with the waiting timeout <timeOut>
+    // string messIO(string mess, real timeOut = 0) - sending the message <mess> through the transport with the waiting timeout <timeOut>
     //  mess - message text for send
-    //  timeOut - connection timeout
+    //  timeOut - connection timeout, in seconds
     if( iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object )
     {
 	string rez;

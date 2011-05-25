@@ -898,8 +898,8 @@ void TTrOut::start( )
 	    }
 
 	//>> Set port's data
-	tcflush( fd, TCIOFLUSH );
-	tcsetattr( fd, TCSANOW, &tio );
+	tcflush(fd, TCIOFLUSH);
+	tcsetattr(fd, TCSANOW, &tio);
 
 	//> Modem connection establish
 	string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));

@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <strings.h>
+
 #include "terror.h"
 #include "tmess.h"
 #include "xml.h"
@@ -129,7 +131,7 @@ XMLNode* XMLNode::childGet( const int index, bool noex ) const
 XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) const
 {
     for(int i_ch = 0, i_n = 0; i_ch < (int)childSize(); i_ch++)
-	if(childGet(i_ch)->name() == name && i_n++ == numb)
+	if(strcasecmp(childGet(i_ch)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
 	    return childGet(i_ch);
 
     if(noex) return NULL;
@@ -267,23 +269,26 @@ XMLNode* XMLNode::clear()
     return this;
 }
 
-string XMLNode::save( unsigned flg )
+string XMLNode::save( unsigned flg, const string &cp )
 {
     string xml;
     xml.reserve(10000);
 
-    if(flg&XMLHeader) xml += "<?xml version='1.0' encoding='UTF-8' ?>\n";
+    if(flg&XMLHeader) xml += "<?xml version='1.0' encoding='"+cp+"' ?>\n";
+    if(flg&XHTMLHeader)
+	xml += "<?xml version='1.0' encoding='"+cp+"' ?>\n"
+	       "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n";
 
-    saveNode(flg,xml);
+    saveNode(flg,xml,cp);
     return xml;
 }
 
-void XMLNode::saveNode( unsigned flg, string &xml )
+void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
 {
     //> Text block
-    if(name() == "<*>")	{ encode(Mess->codeConvOut("UTF-8",mText), xml, true); return; }
+    if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true); return; }
     //> Commentary block
-    if(name() == "<!>") { xml += "<!--"+Mess->codeConvOut("UTF-8",mText)+"-->"; return; }
+    if(name() == "<!>") { xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
 
     xml.append((flg&XMLNode::BrOpenPrev) ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
@@ -296,7 +301,7 @@ void XMLNode::saveNode( unsigned flg, string &xml )
 	if(flg&XMLNode::MissAttrEnc) xml.append(mAttr[i_a].first);
 	else encode(mAttr[i_a].first, xml);
 	xml.append("=\"");
-	encode(Mess->codeConvOut("UTF-8",mAttr[i_a].second), xml);
+	encode(Mess->codeConvOut(cp,mAttr[i_a].second), xml);
 	xml.append("\"");
     }
 
@@ -307,14 +312,14 @@ void XMLNode::saveNode( unsigned flg, string &xml )
 	//> Save text
 	if(!mText.empty())
 	{
-	    encode(Mess->codeConvOut("UTF-8",mText), xml, true);
+	    encode(Mess->codeConvOut(cp,mText), xml, true);
 	    xml.append(flg&XMLNode::BrTextPast ? "\n" : "");
 	}
 	//> Save process instructions
 	for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
-	    xml.append("<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut("UTF-8",mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>"));
+	    xml.append("<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut(cp,mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>"));
 	//> Save included childs
-	for(unsigned i_c = 0; i_c < childSize(); i_c++) childGet(i_c)->saveNode(flg,xml);
+	for(unsigned i_c = 0; i_c < childSize(); i_c++) childGet(i_c)->saveNode(flg,xml,cp);
 	//> Close tag
 	xml.append("</");
 	if(flg&XMLNode::MissTagEnc) xml.append(name() );
@@ -353,11 +358,12 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
     }
 }
 
-void XMLNode::load( const string &s, bool full )
+void XMLNode::load( const string &s, bool full, const string &cp )
 {
     clear();
 
     LoadCtx ctx(s, full);
+    ctx.enc = cp;
     loadNode(ctx);
 }
 

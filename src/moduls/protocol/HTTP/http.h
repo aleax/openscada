@@ -57,9 +57,10 @@ class TProtIn: public TProtocolIn
 	string getAuth(const string& url = "/", const string &mess = "");
 	void getCnt(const vector<string> &vars, const string &content, map<string,string> &cnt);
 
-	string httpHead(const string &rcode, int cln, const string &addattr = "");
-	string pgHead(string head_els = "");
+	string httpHead(const string &rcode, int cln, const string &addattr = "", bool defCtx = true);
+	string pgHead(const string &head_els = "");
 	string pgTail( );
+	string pgTmpl(const string &cnt, const string &head_els = "");
 
 	//Attributes
 	bool m_nofull;
@@ -77,8 +78,10 @@ class TProt: public TProtocol
 	~TProt( );
 
 	int authTime( )			{ return mTAuth; }
+	string tmpl( )			{ return mTmpl; }
 
 	void setAuthTime( int vl )	{ mTAuth = vmax(1,vl); modif(); }
+	void setTmpl( const string &vl ){ mTmpl = vl; modif(); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -137,6 +140,7 @@ class TProt: public TProtocol
 	//Attributes
 	map<int,SAuth>	mAuth;
 	int		mTAuth;
+	ResString	mTmpl;
 	time_t		lst_ses_chk;
 
 	vector<SAutoLogin>	mALog;

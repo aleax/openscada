@@ -52,7 +52,8 @@ class XMLNode
 	    BrTextPast		= 0x08,		//Break after text
 	    BrPrcInstrPast	= 0x10,		//Break after process instruction
 	    BrAllPast		= 0x1E,		//Break after all
-	    XMLHeader		= 0x20,		//Include XML header
+	    XMLHeader		= 0x20,		//Include standard XML header
+	    XHTMLHeader		= 0x40,		//Incluse standard XHTML header
 	    MissTagEnc		= 0x100,	//Miss tag name encode
 	    MissAttrEnc		= 0x200		//Miss attribute name encode
 	};
@@ -82,8 +83,8 @@ class XMLNode
 	string	prcInstr( const string &target ) const;
 	XMLNode* setPrcInstr( const string &target, const string &val );
 
-	void	load( const string &vl, bool full = false );
-	string	save( unsigned flgs = 0 );
+	void	load( const string &vl, bool full = false, const string &cp = "UTF-8" );
+	string	save( unsigned flgs = 0, const string &cp = "UTF-8" );
 	XMLNode* clear( );
 
 	bool	childEmpty( ) const		{ return mChildren.empty(); }
@@ -103,7 +104,7 @@ class XMLNode
 
     private:
 	//Methods
-	void saveNode( unsigned flg, string &xml );
+	void saveNode( unsigned flg, string &xml, const string &cp );
 	void encode( const string &s, string &rez, bool text = false ) const;
 
 	//Attributes

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-12 14:59+0300\n"
+"POT-Creation-Date: 2011-05-23 21:12+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -39,6 +39,7 @@ msgstr ""
 "AuthTime <мин>     Время жизни аутентификации, минут (по умолчанию 10).\n"
 "\n"
 
+#, c-format
 msgid "Auth exit from user '%s'."
 msgstr "Выход аутентификации пользователя '%s'."
 
@@ -61,6 +62,9 @@ msgstr "Протокол"
 
 msgid "Life time of the authentication (min)"
 msgstr "Время жизни аутентификации (мин)"
+
+msgid "HTML-template"
+msgstr "HTML-шаблон"
 
 msgid "Auto login"
 msgstr "Автоматический вход"
@@ -89,19 +93,19 @@ msgstr ""
 "Содержимое: %d:\n"
 "%s"
 
+#, c-format
 msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
 msgstr ""
-"Успешная аутентификация пользователя '%s'. Узел: %s. Агент "
-"пользователя: %s."
+"Успешная аутентификация пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
 #, c-format
 msgid "Going to page: <b>%s</b>"
 msgstr "Переход к странице: <b>%s</b>"
 
+#, c-format
 msgid "Auth wrong from user '%s'. Host: %s. User agent: %s."
 msgstr ""
-"Ошибка аутентификации пользователя '%s'. Узел: %s. Агент "
-"пользователя: %s."
+"Ошибка аутентификации пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
 msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
 msgstr ""
@@ -110,10 +114,15 @@ msgstr ""
 msgid "Find no one WWW subtype module!"
 msgstr "Не найдено модулей с подтипом WWW!"
 
+#, c-format
 msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
 msgstr ""
 "Автоматическая аутентификация для пользователя '%s'. Узел: %s. Агент "
 "пользователя: %s."
+
+#, c-format
+msgid "HTML-template '%s' load error: %s"
+msgstr "Ошибка загрузки HTML-шаблона '%s': %s"
 
 msgid "Login"
 msgstr "Вход"

@@ -1,3 +1,11 @@
+2011-05-25 Roman
+- Archive: Regular expression using alow is discribed in context tooltips of messages get by the category template.
+- XMLNode: New save flag XMLNode::XHTMLHeader is added for standard XHTML header place at save.
+    Target codepage set is added to save function.
+    Caseinsensible search node by tag name is added.
+- !!:Protocol.HTTP: HTML-template to custom interface for internal content support is aded.
+
+
 2011-05-20 Maxim
 - FIX:UI.Vision: The falling of the system when draw the fill without any present figures is fixed for the primitive ElFigure.
 

@@ -721,10 +721,11 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     if(id == "childGet" && prms.size())	return childGet(prms[0].getI());
     // XMLNodeObj parent() - get parent node
     if(id == "parent")	return parent ? TVariant(parent) : TVariant(false);
-    // string load(string str, bool file = false, bool full = false) - load XML tree from XML-stream from string or file
+    // string load(string str, bool file = false, bool full = false, string cp = "UTF-8") - load XML tree from XML-stream from string or file
     //  str - source stream string or file name, for <file> = true;
     //  file - load XML-tree from file (true) or stram (false);
-    //  full - node's text and comments load into separated nodes "<*>" and "<!>".
+    //  full - node's text and comments load into separated nodes "<*>" and "<!>";
+    //  cp - source codepage.
     if(id == "load" && prms.size())
     {
 	XMLNode nd;
@@ -746,7 +747,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	    }
 	    close(hd);
 
-	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false)); }
+	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false), ((prms.size()>=4)?prms[3].getS():string("UTF-8"))); }
 	    catch(TError err) { return "1:"+err.mess; }
 	}
 	//> Load from string
@@ -756,7 +757,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	fromXMLNode(nd);
 	return string("0");
     }
-    // string save(int opt = 0, string path = "") - save XML-tree to string or file stream
+    // string save(int opt = 0, string path = "", string cp = "UTF-8") - save XML-tree to string or file stream
     //  opt - save options:
     //   0x01 - interrupt the string before the opening tag;
     //   0x02 - interrupt the string after the opening tag;
@@ -765,11 +766,12 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //   0x10 - interrupt the string after the instruction;
     //   0x1E - interrupt the string after all.
     //  path - file path for save to file
+    //  cp - target codepage
     if( id == "save" )
     {
 	XMLNode nd;
 	toXMLNode(nd);
-	string s_buf = nd.save( (prms.size()>=1)?prms[0].getI():0 );
+	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():string("UTF-8"));
 	//> Save to file
 	if( prms.size() >= 2 )
 	{

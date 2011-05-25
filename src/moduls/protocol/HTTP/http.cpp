@@ -19,6 +19,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <getopt.h>
 #include <string.h>
 
@@ -117,6 +120,7 @@ void TProt::load_( )
 
     //> Load parameters from config file
     setAuthTime(atoi(TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(authTime())).c_str()));
+    setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     //>> Load auto-login config
     ResAlloc res(nodeRes(),true);
     XMLNode aLogNd("aLog");
@@ -131,6 +135,7 @@ void TProt::load_( )
 void TProt::save_( )
 {
     TBDS::genDBSet(nodePath()+"AuthTime",TSYS::int2str(authTime()));
+    TBDS::genDBSet(nodePath()+"Tmpl",tmpl());
     //>> Save auto-login config
     ResAlloc res(nodeRes(),false);
     XMLNode aLogNd("aLog");
@@ -351,6 +356,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/prm",_("Protocol")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		"help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 	    {
@@ -399,6 +405,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    if(idcol == "user")	mALog[idrow].user = opt->text();
 	}
     }
+    if(a_path == "/prm/tmpl")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(tmpl());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmpl(opt->text());
+    }
     else if(a_path == "/prm/usr_ls" && ctrChkNode(opt))
     {
 	vector<string> ls;
@@ -425,13 +436,13 @@ TProtIn::~TProtIn()
 
 }
 
-string TProtIn::httpHead( const string &rcode, int cln, const string &addattr )
+string TProtIn::httpHead( const string &rcode, int cln, const string &addattr, bool defCtx )
 {
     return "HTTP/1.0 "+rcode+"\x0D\x0A"
 	   "Server: "+PACKAGE_STRING+"\x0D\x0A"
 	   "Accept-Ranges: bytes\x0D\x0A"
-	   "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
-	   "Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"+addattr+"\x0D\x0A";
+	   "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"+
+	   (defCtx?("Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"):string(""))+addattr+"\x0D\x0A";
 }
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
@@ -538,8 +549,8 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    if(mod->autoLogGet(sender) == user || (SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
 			mess_info(owner().nodePath().c_str(),_("Auth OK from user '%s'. Host: %s. User agent: %s."),user.c_str(),sender.c_str(),userAgent.c_str());
-			answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>")+
-			    "<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
+			answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n",
+			    "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>");
 			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
 			return m_nofull||KeepAlive;
 		    }
@@ -553,8 +564,8 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	else if(name_mod == "logout" && method == "GET")
 	{
 	    if(sesId) mod->sesClose(sesId);
-	    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>")+
-		"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n"+pgTail();
+	    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n",
+		"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
 	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
 	    return m_nofull||KeepAlive;
 	}
@@ -571,14 +582,14 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		if(!user.empty())
 		{
 		    mess_info(owner().nodePath().c_str(),_("Auto auth from user '%s'. Host: %s. User agent: %s."),user.c_str(),sender.c_str(),userAgent.c_str());
-		    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>")+
-			"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n"+pgTail();
+		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n",
+			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>");
 		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+TSYS::int2str(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
 		}
 		else
 		{
-		    answer = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>")+
-			"<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n"+pgTail();
+		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n",
+			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>");
 		    answer = httpHead("200 OK",answer.size())+answer;
 		}
 		return m_nofull||KeepAlive;
@@ -619,18 +630,42 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		answer = httpHead("501 Method Not Implemented",answer.size())+answer;
 	    }
 	}
-	catch(TError err){ answer = getIndex(user,sender); }
+	catch(TError err)
+	{
+	    //> Check to direct file request for template
+	    if(method == "GET" && mod->tmpl().size() && urls != "/")
+	    {
+		int hd = -1;
+		//> Open file
+		size_t tmplDirPos = mod->tmpl().rfind("/");
+		if(tmplDirPos != string::npos && (hd=open((mod->tmpl().substr(0,tmplDirPos)+urls).c_str(),O_RDONLY)) != -1)
+		{
+		    answer.clear();
+    		    char buf[STR_BUF_LEN];
+    		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
+    		    close(hd);
+		    //> Extension process
+		    size_t ext_pos = urls.rfind(".");
+		    string fext = (ext_pos != string::npos) ? urls.substr(ext_pos+1) : "";
+		    if(fext == "png" || fext == "jpg" || fext == "ico")	answer = httpHead("200 OK",answer.size(),"Content-Type: image/"+fext+"\x0D\x0A",false)+answer;
+		    else if(fext == "css" || fext == "html" || fext == "xml") answer = httpHead("200 OK",answer.size(),"Content-Type: text/"+fext+"\x0D\x0A",false)+answer;
+		    else if(fext == "js") answer = httpHead("200 OK",answer.size(),"Content-Type: text/javascript\x0D\x0A",false)+answer;
+		    else answer = httpHead("200 OK",answer.size())+answer;
+		    return m_nofull||KeepAlive;
+		}
+	    }
+	    answer = getIndex(user,sender);
+	}
     }
 
     return m_nofull||KeepAlive;
 }
 
-string TProtIn::pgHead( string head_els )
+string TProtIn::pgHead( const string &head_els )
 {
     return
 	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	"'DTD/xhtml1-transitional.dtd'>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
 	"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"+
 	head_els+
@@ -660,9 +695,48 @@ string TProtIn::pgTail()
 	"</html>\n";
 }
 
+string TProtIn::pgTmpl(const string &cnt, const string &head_els)
+{
+    string answer;
+    int hd = open(mod->tmpl().c_str(),O_RDONLY);
+    if(hd != -1)
+    {
+        char buf[STR_BUF_LEN];
+        for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
+        close(hd);
+	if(answer.find("#####CONTEXT#####") == string::npos)	answer.clear();
+	else
+	{
+	    try
+	    {
+		XMLNode tree("");
+		tree.load(answer, true);
+		if(head_els.size())
+		{
+		    XMLNode *headEl = tree.childGet("head");
+		    if(headEl)
+		    {
+			headEl->childAdd("META")->load(head_els);
+			answer = tree.save(XMLNode::XHTMLHeader);
+		    }
+		    else answer.clear();
+		}
+	    }catch(TError err)
+	    {
+		mess_err(nodePath().c_str(),_("HTML-template '%s' load error: %s"),mod->tmpl().c_str(),err.mess.c_str());
+		answer.clear();
+	    }
+	}
+    }
+    if(answer.empty())	answer = pgHead(head_els)+"<center>\n#####CONTEXT#####\n</center>\n"+pgTail();
+    size_t tmplPos = answer.find("#####CONTEXT#####");
+
+    return answer.replace(tmplPos,strlen("#####CONTEXT#####"),cnt);
+}
+
 string TProtIn::getIndex(const string &user, const string &sender)
 {
-    string answer = pgHead()+"<center><table class='work' width='50%'>\n"
+    string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
 	"<tr><td class='content'>"
 	"<p>"+_("Welcome to the Web-interfaces of OpenSCADA system.")+"</p>";
@@ -690,16 +764,16 @@ string TProtIn::getIndex(const string &user, const string &sender)
     {
 	AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(list[i_l]);
 	if( mod.at().modInfo("SubType") == "WWW" )
-	    answer = answer+"<li><a href='"+list[i_l]+"/'>"+mod.at().modInfo("Name")+"</a></li>\n";
+	    answer = answer+"<li><a href='/"+list[i_l]+"/'>"+mod.at().modInfo("Name")+"</a></li>\n";
     }
-    answer = answer+"</ul></td></tr></table></center>\n"+pgTail();
+    answer = pgTmpl(answer+"</ul></td></tr></table>\n");
 
     return httpHead("200 OK",answer.size())+answer;
 }
 
 string TProtIn::getAuth( const string& url, const string &mess )
 {
-    string answer = pgHead()+"<center><table class='work'>"
+    string answer = pgTmpl(string("<table class='work'>")+
 	"<tr><th>"+_("Login to system")+"</th></tr>\n"
 	"<tr><td>\n"
 	"<form method='post' action='/login"+url+"' enctype='multipart/form-data'>\n"
@@ -711,7 +785,7 @@ string TProtIn::getAuth( const string& url, const string &mess )
 	"</table>\n</form>\n"
 	"</td></tr>"
 	"<tr><td>"+mess+"</td></tr>"
-	"</table></center>\n"+pgTail();
+	"</table>\n");
 
     return httpHead("200 OK",answer.size())+answer;
 }
