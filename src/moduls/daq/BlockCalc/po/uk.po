@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 17:53+0300\n"
+"POT-Creation-Date: 2011-05-26 09:36+0300\n"
 "PO-Revision-Date: 2007-10-28 08:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -149,6 +149,9 @@ msgstr "Таблиця блоків"
 msgid "Calc period (ms)"
 msgstr "Період обрахувань (мс)"
 
+msgid "Calc schedule"
+msgstr "Політика планування"
+
 msgid "Calc task priority"
 msgstr "Пріорітет задачі обчислення"
 
@@ -180,6 +183,14 @@ msgid "Link's value"
 msgstr "Значення зв'язку"
 
 #, c-format
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
+
+#, c-format
 msgid "Spent time: %s. "
 msgstr "Витрачено часу: %s. "
 
@@ -208,6 +219,7 @@ msgstr "Кількість"
 msgid "Blocks"
 msgstr "Блоки"
 
+#, c-format
 msgid "All: %u; Enabled: %u; Process: %u"
 msgstr "Всього: %u; Включено: %u; Обробляється: %u"
 

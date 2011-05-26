@@ -1,5 +1,9 @@
+2011-05-26 Roman
+- DAQ.BlockCalc: Block schemes calculate by schedule, include periodic and cron, is added.
+
+
 2011-05-25 Roman
-- Archive: Regular expression using alow is discribed in context tooltips of messages get by the category template.
+- Archive: Regular expression using alow is described in context tooltips of messages get by the category template.
 - XMLNode: New save flag XMLNode::XHTMLHeader is added for standard XHTML header place at save.
     Target codepage set is added to save function.
     Caseinsensible search node by tag name is added.

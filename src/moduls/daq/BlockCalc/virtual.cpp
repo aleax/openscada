@@ -105,7 +105,8 @@ void TipContr::postEnable( int flag )
     //Controllers BD structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
-    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );
+    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
@@ -120,7 +121,7 @@ void TipContr::postEnable( int flag )
     blk_el.fldAdd( new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75") );
     blk_el.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
     blk_el.fldAdd( new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200") );    
+    blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200") );
 
     //IO blok's db structure
     blkio_el.fldAdd( new TFld("BLK_ID",_("Blok's ID"),TFld::String,TCfg::Key,"20") );
@@ -149,14 +150,16 @@ TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 
 //************************************************
 //* Contr - Blocks and parameters container      *
-//************************************************ 
+//************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), sync_st(false),
-    m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()), m_iter(cfg("ITER").getId()), tm_calc(0.0)
+    mPer(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()),
+    tm_calc(0)
 {
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
-    m_bl = grpAdd("blk_");
+    mBl = grpAdd("blk_");
+    mSched = "1";
 }
 
 Contr::~Contr( )
@@ -193,7 +196,12 @@ TCntrNode &Contr::operator=( TCntrNode &node )
 string Contr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+    if(startStat() && !redntUse())
+    {
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+    }
     return rez;
 }
 
@@ -223,9 +231,12 @@ TipContr &Contr::owner( )	{ return (TipContr&)TController::owner( ); }
 
 void Contr::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
 
     TController::load_( );
+
+    //> Check for get old period method value
+    if(mSched.getVal().empty())	mSched = TSYS::real2str(mPer/1e3);
 
     //> Load block's configuration
     TConfig c_el(&mod->blockE());
@@ -235,7 +246,7 @@ void Contr::load_( )
     for( int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); )
     {
 	string id = c_el.cfg("ID").getS();
-	if( !chldPresent(m_bl,id) )
+	if( !chldPresent(mBl,id) )
 	{
 	    blkAdd(id);
 	    ((TConfig &)blkAt(id).at()) = c_el;
@@ -276,6 +287,9 @@ void Contr::disable_( )
 
 void Contr::start_( )
 {
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+
     //> Make process all bloks
     vector<string> lst;
     blkList(lst);
@@ -311,7 +325,7 @@ void Contr::start_( )
     res.release();
 
     //> Start the request and calc data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, Contr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this, &prc_st);
 }
 
 void Contr::stop_( )
@@ -344,7 +358,7 @@ void *Contr::Task( void *icontr )
 
 	cntr.hd_res.resRequestR( );
 	ResAlloc sres(cntr.calcRes,true);
-	for(unsigned i_it = 0; (int)i_it < cntr.m_iter && !cntr.redntUse(); i_it++)
+	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
 	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
 	    {
 		try{ cntr.clc_blks[i_blk].at().calc(is_start,is_stop); }
@@ -367,10 +381,10 @@ void *Contr::Task( void *icontr )
 
 	if(is_stop) break;
 
-	TSYS::taskSleep((long long)cntr.period()*1000000);
+	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
-	if( cntr.endrun_req ) is_stop = true;
-	if( !cntr.redntUse() ) is_start = false;
+	if(cntr.endrun_req)	is_stop = true;
+	if(!cntr.redntUse())	is_start = false;
     }
 
     cntr.prc_st = false;
@@ -414,7 +428,7 @@ TParamContr *Contr::ParamAttach( const string &name, int type )
 
 void Contr::blkAdd( const string &iid )
 {
-    chldAdd(m_bl, new Block(iid, this));
+    chldAdd(mBl, new Block(iid, this));
 }
 
 void Contr::blkProc( const string &id, bool val )
@@ -436,6 +450,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
     {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
+        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -459,7 +476,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_bl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
     else if(a_path == "/scheme/sch")
     {
@@ -484,7 +501,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_bl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
     else if(a_path == "/scheme/nmb" && ctrChkNode(opt))
     {

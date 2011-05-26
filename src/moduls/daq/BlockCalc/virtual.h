@@ -94,17 +94,16 @@ class Contr: public TController
 	string getStatus( );
 
 	TParamContr *ParamAttach( const string &name, int type );
-	int period( )				{ return m_per; }
-	int iterate( )				{ return m_iter; }
+	int period( )				{ return mPer; }
+	string cron( )				{ return mSched; }
+	int iterate( )				{ return mIter; }
 
 	//> Scheme's functions
-	void blkList( vector<string> &ls )	{ chldList(m_bl,ls); }
-	bool blkPresent( const string &id )	{ return chldPresent(m_bl,id); }
+	void blkList( vector<string> &ls )	{ chldList(mBl,ls); }
+	bool blkPresent( const string &id )	{ return chldPresent(mBl,id); }
 	void blkAdd( const string &id );
-	void blkDel( const string &id )		{ chldDel(m_bl,id); }
-	AutoHD<Block> blkAt( const string &id )	{ return chldAt(m_bl,id); }
-
-	//Res &res( )				{ return hd_res; }
+	void blkDel( const string &id )		{ chldDel(mBl,id); }
+	AutoHD<Block> blkAt( const string &id )	{ return chldAt(mBl,id); }
 
 	TipContr &owner( );
 
@@ -132,11 +131,12 @@ class Contr: public TController
 	bool	prc_st,		// Calc status
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
-	int	&m_per,		// Clock period (ms)
-		&m_prior,	// Process data task priority
-		&m_iter;	// Iteration into clock
+	int	&mPer,		// Clock period (ms)
+		&mPrior,	// Process data task priority
+		&mIter;		// Iteration into clock
+	ResString &mSched;	// Calc schedule
 
-	int	m_bl;
+	int	mBl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
 	double	tm_calc;			// Scheme's calc time
 
