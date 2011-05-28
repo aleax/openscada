@@ -400,6 +400,11 @@ void TController::redntDataUpdate( )
     }
 }
 
+void TController::alarmSet( const string &mess, int lev, const string &prm )
+{
+    message(("al"+owner().modId()+":"+id()+(prm.size()?("."+prm):"")).c_str(), lev, mess.c_str());
+}
+
 TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // string name() - get controller name.

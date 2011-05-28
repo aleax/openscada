@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-18 15:57+0300\n"
+"POT-Creation-Date: 2011-05-27 20:58+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -79,6 +79,13 @@ msgstr ""
 "Витрачено часу: %s. Прочитано %g(%g) регістрів, %g(%g) бітів. Записано %g "
 "регістрів, %g бітів. Помилок з'єднань %g, віповідей %g."
 
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: підключення до джерела даних: %s."
+
+msgid "STOP"
+msgstr "ЗУПИНЕНО"
+
 msgid "Fetch coils' and registers' blocks."
 msgstr "Отримання блоків бітів та регістрів."
 
@@ -87,6 +94,9 @@ msgstr "4:Збій серверу"
 
 msgid "15:Response PDU size error."
 msgstr "15:Помилка розміру PDU відповіді."
+
+msgid "OK"
+msgstr "НОРМА"
 
 msgid ""
 "Merge not adjacent fragments of registers to single block for request.\n"
@@ -102,7 +112,8 @@ msgid ""
 "For zero value used generic connection timeout from used output transport."
 msgstr ""
 "Індивідуальний час очікування для пристрою, опитуваного цим завданням.\n"
-"Для нульового значення використовується загальний час очікування підключення із використаного вихідного транспорту."
+"Для нульового значення використовується загальний час очікування підключення "
+"із використаного вихідного транспорту."
 
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримано."

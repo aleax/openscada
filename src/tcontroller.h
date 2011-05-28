@@ -95,6 +95,8 @@ class TController : public TCntrNode, public TConfig
 	void setRedntRun( const string &vl );
 	virtual void redntDataUpdate( );
 
+	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "" );
+
 	TTipDAQ &owner( );
 
     protected:

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 16:12+0300\n"
+"POT-Creation-Date: 2011-05-27 20:56+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -26,9 +26,11 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com)."
+"BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://"
+"www.bigdutchman.com)."
 msgstr ""
-"BFN Module für Viper CT/BAS und andere aus \"Big Dutchman \" (http://www.bigdutchman.com)."
+"BFN Module für Viper CT/BAS und andere aus \"Big Dutchman \" (http://www."
+"bigdutchman.com)."
 
 msgid "Calc schedule"
 msgstr "Planung der Berechnung"
@@ -89,12 +91,15 @@ msgstr "Fehler: '%s'. "
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
+#, c-format
 msgid "Call by period: %s. "
 msgstr "Call by Zeit: %s. "
 
+#, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s."
 msgstr "Verbrauchte Zeit: %s."
 
@@ -103,6 +108,13 @@ msgstr "Haus:\n"
 
 msgid "House computer:\n"
 msgstr "Haus-Computer:\n"
+
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr ""
+
+msgid "STOP"
+msgstr ""
 
 #, c-format
 msgid "Connect to transport '%s' error."
@@ -122,6 +134,9 @@ msgid "Alarm: "
 msgstr ""
 
 msgid "Norma: "
+msgstr ""
+
+msgid "OK"
 msgstr ""
 
 msgid "1:Parameter is disabled."

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-18 15:57+0300\n"
+"POT-Creation-Date: 2011-05-27 20:58+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -84,6 +84,13 @@ msgstr ""
 "Verbrauchte Zeit: %s. Gelesen %g(%g) Register, %g(%g) Bits. Geschrieben %g "
 "Register, %g Bits. Fehler in der Verbindung %g, in der Antwort %g."
 
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr ""
+
+msgid "STOP"
+msgstr ""
+
 msgid "Fetch coils' and registers' blocks."
 msgstr "Ermittlung von Bitblocks und Register."
 
@@ -92,6 +99,9 @@ msgstr "4:Serverfehler."
 
 msgid "15:Response PDU size error."
 msgstr "Fehler des Umfangs der PDU - Antwort."
+
+msgid "OK"
+msgstr ""
 
 msgid ""
 "Merge not adjacent fragments of registers to single block for request.\n"
@@ -108,7 +118,8 @@ msgid ""
 "For zero value used generic connection timeout from used output transport."
 msgstr ""
 "Individuelle Verbindungs-Timeout für das Gerät von der Aufgabe gebeten.\n"
-"Für den Nullpunkt verwendet generische Verbindungszeit aus gebrauchten Transport-Ausgang."
+"Für den Nullpunkt verwendet generische Verbindungszeit aus gebrauchten "
+"Transport-Ausgang."
 
 msgid "11:Value not gathered."
 msgstr "11:Werte sind nicht erfasst."

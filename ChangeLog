@@ -1,3 +1,7 @@
+2011-05-28 Roman
+- DAQ, DAQ.BFN, DAQ.ModBus: Specific function for alarms creation for data sources' objects TController::alarmSet() is added and used.
+
+
 2011-05-26 Roman
 - DAQ.BlockCalc: Block schemes calculate by schedule, include periodic and cron, is added.
 

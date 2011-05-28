@@ -105,7 +105,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), mSched(cfg("SCHEDULE").getSd()), mPrt(cfg("PROT").getSd()),
 	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
 	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), prc_st(false), endrun_req(false), tmGath(0),
-	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
+	tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
 }
@@ -165,7 +165,8 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Clear statistic
-    numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = tmDelay = 0;
+    numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
+    tmDelay = -1;
 
     //> Reenable parameters for data blocks structure update
     //>> Clear data blocks
@@ -194,6 +195,8 @@ void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
     SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+
+    if(tmDelay >= 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
 
     //> Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
@@ -648,7 +651,12 @@ void *TMdContr::Task( void *icntr )
                 cntr.p_hd[i_p].at().getVal();
             cntr.en_res.resRelease();
 
-	    if(cntr.tmDelay <= 0) cntr.tmDelay--;
+	    if(cntr.tmDelay <= 0)
+	    {
+		if(cntr.tmDelay == 0)
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		cntr.tmDelay--;
+	    }
 
 	    //> Calc acquisition process time
 	    cntr.tmGath = TSYS::curTime()-t_cnt;
@@ -665,12 +673,8 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::setCntrDelay( const string &err )
 {
+    if(tmDelay < 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),err.c_str()));
     tmDelay = restTm;
-    ResAlloc res( req_res, false );
-    for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)	acqBlksCoil[i_b].err.setVal(err);
-    for(unsigned i_b = 0; i_b < acqBlksCoilIn.size(); i_b++)	acqBlksCoilIn[i_b].err.setVal(err);
-    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)	acqBlks[i_b].err.setVal(err);
-    for(unsigned i_b = 0; i_b < acqBlksIn.size(); i_b++)	acqBlksIn[i_b].err.setVal(err);
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )

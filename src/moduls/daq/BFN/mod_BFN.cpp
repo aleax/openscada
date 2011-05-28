@@ -440,6 +440,8 @@ void TMdContr::stop_( )
     //> Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
 
+    if(acq_err.getVal().size()) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+
     //> Clear errors and set EVal
     ResAlloc res(en_res,false);
     for(unsigned i_p=0; i_p < p_hd.size(); i_p++)
@@ -638,8 +640,7 @@ void *TMdContr::Task(void *icntr)
 			    string mval = cntr.p_hd[i_p].at().name()+" > "+
 				    (aNd.code?mod->getSymbolCode(TSYS::int2str(aNd.code)):string(_("Main")))+": "+
 				    aNd.text;
-			    if(aEv == 0)
-				SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Error, _("Alarm: ")+mval);
+			    if(aEv == 0)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Error, _("Alarm: ")+mval);
 			    //else if(aEv == 1)	SYS->archive().at().messPut(aTm, 0, mcat, -TMess::Warning, _("Confirm: ")+mval);
 			    else if(aEv == 2)	SYS->archive().at().messPut(aTm, 0, mcat, TMess::Info, _("Norma: ")+mval);
 			}
@@ -651,6 +652,11 @@ void *TMdContr::Task(void *icntr)
 	}
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
 
+	//> Generic alarm generate
+	if(tErr.size() && !cntr.acq_err.getVal().size())
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),tErr.c_str()));
+	else if(!tErr.size() && cntr.acq_err.getVal().size())
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
 	cntr.acq_err.setVal(tErr);
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;

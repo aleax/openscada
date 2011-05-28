@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-18 15:57+0300\n"
+"POT-Creation-Date: 2011-05-27 20:58+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -79,6 +79,13 @@ msgstr ""
 "Затрачено времени: %s. Прочитано %g(%g) регистров, %g(%g) битов. Записано %g "
 "регистров, %g битов. Ошибок соединения %g, запроса %g."
 
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: подключение к источнику данных: %s."
+
+msgid "STOP"
+msgstr "ОСТАНОВЛЕН"
+
 msgid "Fetch coils' and registers' blocks."
 msgstr "Получение блоков битов и регистров."
 
@@ -87,6 +94,9 @@ msgstr "4:Ошибка сервера."
 
 msgid "15:Response PDU size error."
 msgstr "15:Ошибка размера PDU ответа."
+
+msgid "OK"
+msgstr "НОРМА"
 
 msgid ""
 "Merge not adjacent fragments of registers to single block for request.\n"
@@ -102,7 +112,8 @@ msgid ""
 "For zero value used generic connection timeout from used output transport."
 msgstr ""
 "Индивидуальное время ожидания для устройства, опрашиваемого этой задачей.\n"
-"Для нулевого значения используется общее время ожидания подключения из использованного выходного транспорта."
+"Для нулевого значения используется общее время ожидания подключения из "
+"использованного выходного транспорта."
 
 msgid "11:Value not gathered."
 msgstr "11:Значения не опрошены."

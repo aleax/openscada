@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 16:12+0300\n"
+"POT-Creation-Date: 2011-05-27 20:56+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -108,6 +108,13 @@ msgid "House computer:\n"
 msgstr "Комп'ютер приміщення:\n"
 
 #, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: підключення до джерела даних: %s."
+
+msgid "STOP"
+msgstr "ЗУПИНЕНО"
+
+#, c-format
 msgid "Connect to transport '%s' error."
 msgstr "Помилка підключення до транспорту '%s'."
 
@@ -126,6 +133,9 @@ msgstr "Порушення: "
 
 msgid "Norma: "
 msgstr "Норма: "
+
+msgid "OK"
+msgstr "НОРМА"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
