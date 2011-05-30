@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 12:30+0300\n"
+"POT-Creation-Date: 2011-05-30 21:02+0300\n"
 "PO-Revision-Date: 2011-02-28 16:29+0300\n"
 "Last-Translator: Almaz Karimov\n"
 "Language-Team:  <ru@li.org>\n"
@@ -36,6 +36,9 @@ msgstr "Таблица параметров"
 
 msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
+
+msgid "Calc schedule"
+msgstr "Планирование вычислений"
 
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
@@ -123,6 +126,14 @@ msgstr "CI метод"
 
 msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr "Нет CI;2CI (#AA);3CI (#AA)"
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. "

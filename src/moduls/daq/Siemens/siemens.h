@@ -160,8 +160,9 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	int period( )		{ return m_per; }
-	bool assincWrite( )	{ return m_assinc_wr; }
+	int period( )		{ return mPer; }
+	string cron( )		{ return mSched; }
+	bool assincWrite( )	{ return mAssincWR; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -202,6 +203,8 @@ class TMdContr: public TController
 	//> Service
 	void postDisable( int flag );				//Delete all DB if flag 1
 
+	void cntrCmdProc( XMLNode *opt );			//Control interface command process
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
@@ -227,13 +230,14 @@ class TMdContr: public TController
 	};
 
 	//Attributes
-	int	&m_per,			// ms
-		&m_prior,		// Process task priority
-		&m_type,		// Connection type
-		&m_slot,
-		&m_dev;			// CIF device number
-	ResString &m_addr;		// Remote host address
-	bool	&m_assinc_wr;		// Asynchronous write mode
+	int	&mPer,			// ms
+		&mPrior,		// Process task priority
+		&mType,			// Connection type
+		&mSlot,
+		&mDev;			// CIF device number
+	ResString &mSched,      	// Calc schedule
+		&mAddr;		// Remote host address
+	bool	&mAssincWR;		// Asynchronous write mode
 
 	bool	prc_st,			// Process task active
 		endrun_req;		// Request to stop of the Process task

@@ -369,7 +369,7 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++)
 	{
 	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
-	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos )	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
+	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos)	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
 	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }
 
 	    //> Call rule
@@ -396,7 +396,7 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
             //> Call include rules
-    	    rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
+            if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
 	    i_t = rul_pos[minRule]+expr.matchedLength();
 	}
 	else if(rl->name() == "blk")
@@ -409,23 +409,24 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 		startBlk = rul_pos[minRule]+expr.matchedLength();
 	    }
 	    QRegExp eExpr(rl->attr("end").c_str());
-	    endIndex = eExpr.indexIn(text, rul_pos[minRule]);
+	    endIndex = eExpr.indexIn(text, startBlk);
             if(endIndex == -1 || eExpr.matchedLength() <= 0)
             {
         	setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
-		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
                 sizeBlk = text.length()-startBlk;
                 i_t = text.length();
             }
             else
             {
-		setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
                 setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
                 sizeBlk = endIndex-startBlk;
                 i_t = endIndex + eExpr.matchedLength();
             }
             //> Call include rules
-    	    rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
+            if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
+            if(endIndex == -1 || eExpr.matchedLength() <= 0)
+		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
+	    else setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
 	}
     }
 }

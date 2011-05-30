@@ -636,7 +636,7 @@ void *TMdContr::Task(void *icntr)
 			if(aNd.text.empty()) mess_warning(cntr.nodePath().c_str(),_("Unknown alarm '%s'."),aId.c_str());
 			else
 			{
-			    string mcat = TSYS::strMess("alBFN:%s:%s:%d:%s",cntr.id().c_str(),cntr.p_hd[i_p].at().id().c_str(),aNd.code,aId.c_str());
+			    string mcat = TSYS::strMess("alBFN:%s.%s.%d:%s",cntr.id().c_str(),cntr.p_hd[i_p].at().id().c_str(),aNd.code,aId.c_str());
 			    string mval = cntr.p_hd[i_p].at().name()+" > "+
 				    (aNd.code?mod->getSymbolCode(TSYS::int2str(aNd.code)):string(_("Main")))+": "+
 				    aNd.text;

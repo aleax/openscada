@@ -99,16 +99,19 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	int period( )	{ return m_per; }
-	int prior( )	{ return m_prior; }
+	int period( )	{ return mPer; }
+	string cron( )	{ return mSched; }
+	int prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
 	//Methods
+	void load_( );
 	void enable_( );
 	void start_( );
 	void stop_( );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
 
     private:
@@ -118,8 +121,9 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	int	&m_per,		// ms
-		&m_prior;	// Process task priority
+	int	&mPer,		// ms
+		&mPrior;	// Process task priority
+	ResString &mSched;      // Calc schedule
 
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task

@@ -379,11 +379,11 @@ void Contr::postDisable(int flag)
 
 string Contr::getStatus( )
 {
-    string val = TController::getStatus( );
+    string val = TController::getStatus();
 
-    if( startStat( ) && !redntUse( ) )
+    if(startStat() && !redntUse())
     {
-	if( period() ) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(calcTm()).c_str());
     }
@@ -672,7 +672,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    if(func()->io(row)->flg()&Func::SysAttr)
 		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
-	    ((Func *)func())->ioDel(row); 
+	    ((Func *)func())->ioDel(row);
 	    modif();
 	}
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))

@@ -99,7 +99,8 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //> Parameter type bd structure
@@ -121,16 +122,17 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),
-	prc_st(false), endrun_req(false), tm_calc(0)
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
+    mPer(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE").getSd()),
+    prc_st(false), endrun_req(false), tm_calc(0)
 {
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
+    mSched = "1";
 }
 
 TMdContr::~TMdContr()
 {
-    if( run_st ) stop();
+    if(run_st) stop();
 }
 
 void TMdContr::postDisable(int flag)
@@ -152,7 +154,12 @@ void TMdContr::postDisable(int flag)
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+    if(startStat() && !redntUse())
+    {
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+    }
     return rez;
 }
 
@@ -161,8 +168,21 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
+void TMdContr::load_( )
+{
+    if(!SYS->chkSelDB(DB())) return;
+
+    TController::load_( );
+
+    //> Check for get old period method value
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer/1e3);
+}
+
 void TMdContr::start_( )
 {
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+
     //> Former process parameters list
     vector<string> list_p;
     list(list_p);
@@ -171,7 +191,7 @@ void TMdContr::start_( )
 	    prmEn(list_p[i_prm],true);
 
     //> Start the request data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
 }
 
 void TMdContr::stop_( )
@@ -205,25 +225,25 @@ void *TMdContr::Task( void *icntr )
     bool is_start = true;
     bool is_stop  = false;
 
-    while( true )
+    while(true)
     {
 	//> Update controller's data
-	if( !cntr.redntUse( ) )
+	if(!cntr.redntUse())
 	{
 	    long long t_cnt = TSYS::curTime();
-	    cntr.en_res.resRequestR( );
-	    for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
+	    cntr.en_res.resRequestR();
+	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		try { cntr.p_hd[i_p].at().calc(is_start,is_stop); }
 		catch(TError err)
 		{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	    cntr.en_res.resRelease( );
+	    cntr.en_res.resRelease();
 	    cntr.tm_calc = TSYS::curTime()-t_cnt;
 	}
 
-	if( is_stop ) break;
-	TSYS::taskSleep( (long long)cntr.period()*1000000 );
-	if( cntr.endrun_req ) is_stop = true;
-	if( !cntr.redntUse() ) is_start = false;
+	if(is_stop) break;
+	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	if(cntr.endrun_req) is_stop = true;
+	if(!cntr.redntUse()) is_start = false;
     }
 
     cntr.prc_st = false;
@@ -261,6 +281,20 @@ void TMdContr::redntDataUpdate( )
 	i_prm++;
     }
     cntrCmd(&req);
+}
+
+void TMdContr::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if(opt->name() == "info")
+    {
+        TController::cntrCmdProc(opt);
+        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        return;
+    }
+    TController::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -687,7 +721,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod(((long long)owner().period())*1000);
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }
@@ -740,7 +774,7 @@ void TMdPrm::calc( bool first, bool last )
 	tmpl->val.setMdfChk(true);
 
 	//> Set fixed system attributes
-	if(id_freq >= 0)	tmpl->val.setR(id_freq, 1000./owner().period());
+	if(id_freq >= 0)	tmpl->val.setR(id_freq, owner().period()?1e9/(float)owner().period():0);
 	if(id_start >= 0)	tmpl->val.setB(id_start, first);
 	if(id_stop >= 0)	tmpl->val.setB(id_stop, last);
 	if(id_sh >= 0)		tmpl->val.setS(id_sh, id());

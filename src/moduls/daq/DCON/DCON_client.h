@@ -106,8 +106,9 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double period( )	{ return vmax(m_per,0.01); }
-	int    prior( )		{ return m_prior; }
+	double period( )	{ return mPer; }
+	string cron( )		{ return mSched; }
+	int    prior( )		{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -117,6 +118,7 @@ class TMdContr: public TController
 
     protected:
 	//Methods
+	void load_( );
 	void disable_( );
 	void start_( );
 	void stop_( );
@@ -130,10 +132,11 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res, req_res;		//Resource for enable params and request values
-	double	&m_per;				//Acquisition task (seconds)
-	int	&m_prior,			//Process task priority
+	double	&mPer;				//Acquisition task (seconds)
+	int	&mPrior,			//Process task priority
 		&connTry;			//Connections try
-	ResString &m_addr;			//Transport device address
+	ResString &mSched,                      // Calc schedule
+		&mAddr;			//Transport device address
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task

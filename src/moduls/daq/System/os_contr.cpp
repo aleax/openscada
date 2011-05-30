@@ -121,7 +121,8 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //> Parameter type bd structure
@@ -168,11 +169,12 @@ DA *TTpContr::daGet( const string &da )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId()),
-	prc_st(false), endrun_req(false), tm_calc(0.0)
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
+    mPer(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),  mSched(cfg("SCHEDULE").getSd()),
+    prc_st(false), endrun_req(false), tm_calc(0.0)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
+    mSched = "1";
 }
 
 TMdContr::~TMdContr( )
@@ -183,13 +185,28 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if( startStat() && !redntUse( ) ) rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+    if(startStat() && !redntUse())
+    {
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+    }
     return rez;
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
+}
+
+void TMdContr::load_( )
+{
+    if(!SYS->chkSelDB(DB())) return;
+
+    TController::load_( );
+
+    //> Check for get old period method value
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer/1e3);
 }
 
 void TMdContr::enable_(  )
@@ -205,8 +222,11 @@ void TMdContr::enable_(  )
 
 void TMdContr::start_( )
 {
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+
     //> Start the request data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
 }
 
 void TMdContr::stop_( )
@@ -257,12 +277,26 @@ void *TMdContr::Task( void *icntr )
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 	}
 
-	TSYS::taskSleep((long long)cntr.period()*1000000);
+	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
     }
 
     cntr.prc_st = false;
 
     return NULL;
+}
+
+void TMdContr::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if(opt->name() == "info")
+    {
+        TController::cntrCmdProc(opt);
+        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        return;
+    }
+    TController::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -354,7 +388,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod(((long long)owner().period())*1000);
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 17:37+0300\n"
+"POT-Creation-Date: 2011-05-30 20:03+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -162,6 +162,9 @@ msgstr "Таблица ситемных параметров"
 msgid "Request data period (ms)"
 msgstr "Период опроса данных (мс)"
 
+msgid "Calc schedule"
+msgstr "Планирование вычислений"
+
 msgid "Request task priority"
 msgstr "Приоритет задачи опроса"
 
@@ -170,6 +173,14 @@ msgstr "Стандартный"
 
 msgid "System part"
 msgstr "Часть системы"
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. "

@@ -1,3 +1,10 @@
+2011-05-30 Roman
+- DAQ.BFN: BFN alarms category is made unified.
+- FIX:DAQ.BlockCalc: An archive period for periodic taks set is fixed.
+- DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System: Block schemes calculate by schedule, include periodic and cron, is added.
+- !:FIX:UI.QTCfg, UI.Vision: Syntax highlight is fixed for multilevel rules and end regular expression check, for blocks.
+
+
 2011-05-28 Roman
 - DAQ, DAQ.BFN, DAQ.ModBus: Specific function for alarms creation for data sources' objects TController::alarmSet() is added and used.
 
