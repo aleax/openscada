@@ -231,7 +231,6 @@ class ShapeElFigure : public WdgShape
 	int count_Shapes, count_moveItemTo, index, fill_index, index_temp, index_del, rect_num, dyn_num;
 
         unsigned status_hold	:1;
-	unsigned flag_key	:1;
 	unsigned flag_up	:1;
 	unsigned flag_down	:1;
 	unsigned flag_left	:1;
@@ -256,6 +255,7 @@ class ShapeElFigure : public WdgShape
         unsigned flag_geom	:1;
         unsigned flag_rect_items	:1;
         unsigned flag_def_stat	:1;
+        unsigned fl_status_move	:1;//Flag for the calling moveItemTo during the creation of the figure
 
         int count_rects, rect_num_arc, arc_rect;
         double t_start, t_end;

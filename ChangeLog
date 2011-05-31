@@ -1,3 +1,7 @@
+2011-05-31 Maxim
+- !:UI.Vision: The drawing figures during creation with the help of mouse is added for the primitive ElFigure.
+
+
 2011-05-30 Roman
 - DAQ.BFN: BFN alarms category is made unified.
 - FIX:DAQ.BlockCalc: An archive period for periodic taks set is fixed.

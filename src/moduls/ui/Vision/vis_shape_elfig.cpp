@@ -57,7 +57,7 @@ ShapeElFigure::ShapeElFigure( ) :
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
     flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
-    flag_geom (false), flag_rect_items (false), flag_def_stat(false), count_rects(0),
+    flag_geom (false), flag_rect_items (false), flag_def_stat(false), fl_status_move(false), count_rects(0),
     rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
@@ -1830,71 +1830,21 @@ void ShapeElFigure::toolAct( QAction *act )
         for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
             if( ((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a)->objectName() != "hold" )
                 ((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a)->setChecked(false);
+    bool fl_figure = false;
     if( act->objectName() == "line" )
     {
-        act->setChecked(true);
         shapeType = 1;
-        if( flag_A )
-        {
-            flag_ctrl = flag_A = flag_copy = false;
-            flag_check_pnt_inund = false;
-            index_array.clear();
-            rectItems.clear();
-            itemInMotion = 0;
-            count_Shapes = 0;
-        }
-        else
-        {
-            rectItems.clear();
-            itemInMotion = 0;
-        }
-        status = true;
-        paintImage(w);
-        w->repaint();
+        fl_figure = true;
     }
     else if( act->objectName() == "arc" )
     {
-        act->setChecked(true);
         shapeType = 2;
-        if( flag_A )
-        {
-            flag_ctrl = flag_A = flag_copy = false;
-            flag_check_pnt_inund = false;
-            index_array.clear();
-            rectItems.clear();
-            itemInMotion = 0;
-            count_Shapes = 0;
-        }
-        else
-        {
-            rectItems.clear();
-            itemInMotion = 0;
-        }
-        status = true;
-        paintImage(w);
-        w->repaint();
+        fl_figure = true;
     }
     else if( act->objectName() == "besier" )
     {
-        act->setChecked(true);
         shapeType = 3;
-        if( flag_A )
-        {
-            flag_ctrl = flag_A = flag_copy = false;
-            flag_check_pnt_inund = false;
-            index_array.clear();
-            rectItems.clear();
-            itemInMotion = 0;
-            count_Shapes = 0;
-        }
-        else
-        {
-            rectItems.clear();
-            itemInMotion = 0;
-        }
-        status = true;
-        paintImage(w);
-        w->repaint();
+        fl_figure = true;
     }
     else if( act->objectName() == "hold" )
     {
@@ -2299,6 +2249,27 @@ void ShapeElFigure::toolAct( QAction *act )
         flag_ctrl = flag_A = flag_copy = false;
         ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
         ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        paintImage(w);
+        w->repaint();
+    }
+    if( fl_figure )
+    {
+        act->setChecked(true);
+        if( flag_A )
+        {
+            flag_ctrl = flag_A = flag_copy = false;
+            flag_check_pnt_inund = false;
+            index_array.clear();
+            rectItems.clear();
+            itemInMotion = 0;
+            count_Shapes = 0;
+        }
+        else
+        {
+            rectItems.clear();
+            itemInMotion = 0;
+        }
+        status = true;
         paintImage(w);
         w->repaint();
     }
@@ -3912,9 +3883,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( ev->button()==Qt::LeftButton && !status )
                     {
-                        //- initialization for holds - 
+                        //> initialization for holds
                         current_ss = current_se = current_es = current_ee = -1;
-                        // - getting the index of the figure -
+                        //> getting the index of the figure
                         index = itemAt( ev->pos(), shapeItems, view );
                         if( index == -1 )
                         {
@@ -3928,7 +3899,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         previousPosition_all = ev->pos();
                         previousPosition = ev->pos();
                         count_holds = 0;
-                        // - getting figures or rect number for moveItemTo -
+                        //> getting figures or rect number for moveItemTo
                         if( index != -1 )
                         {
                             ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
@@ -4002,7 +3973,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     }
                                 }
                             }
-                            //- Appending points for the figure if they were conected to the other figure -
+                            //> Appending points for the figure if they were conected to the other figure
                             if( count_holds == 0 && !flag_ctrl )
                             {
                                 for( int i = 0; i < shapeItems.size(); i++ )
@@ -4068,7 +4039,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 flag_check_pnt_inund = false;
                                 index_array.clear();
                                 itemInMotion = 0;
-				count_Shapes = 0;
+                                count_Shapes = 0;
                             }
                             if( !(QApplication::keyboardModifiers()&Qt::ControlModifier) && rectItems.size() )
                             {
@@ -4106,13 +4077,141 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         }
                         rect_dyn = rect_num;
                     }
-                    // - getting start point for drawing-
+                    //> getting start point for drawing and draw the figure
                     if( (ev->button() == Qt::LeftButton) && status )
                     {
+                        double scale, ang;
+                        QLineF line1, line2;
+                        QPainterPath circlePath, bigPath;
+
                         flag_release = false;
-                        StartLine = ev->pos();
+                        switch( shapeType )
+                        {
+                            case 1:
+                            {
+                                if( view->xScale(true) < view->yScale(true) ) scale = view->xScale(true);
+                                else scale = view->yScale(true);
+                                StartLine = EndLine = ev->pos();
+                                line2 = QLineF( StartLine, QPointF(StartLine.x()+10,StartLine.y()) );
+                                line1 = QLineF( StartLine, EndLine );
+                                ang = 360-angle( line1, line2 );
+                                if( (*widths)[-6] > 0 )
+                                {
+                                    circlePath = painterPath( (*widths)[-5], (*widths)[-6],1, ang, StartLine, EndLine );
+                                    shapeItems.push_back( ShapeItem( circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
+                                            -6, -5, -5, -6, 1, angle_temp ) );
+                                }
+                                else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
+                                {
+                                    circlePath = painterPathSimple( 1, ang, StartLine, EndLine );
+                                    QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 1, ang, StartLine, EndLine );
+                                    shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
+                                            -6, -5, -5, -6, 1, angle_temp ) );
+                                }
+                                StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
+                                EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
+                                shapeSave( view );
+                                rect_num = 1;
+                                index = shapeItems.size()-1;
+                                itemInMotion = &shapeItems[index];
+                                fl_status_move = true;
+                                previousPosition_all = ev->pos();
+                                break;
+                            }
+                            case 2:
+                            {
+                                QPointF CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4;
+                                double a, b;
+                                StartLine = EndLine = ev->pos();
+                                CtrlPos_1 = QPointF( StartLine.x()+(EndLine.x()-StartLine.x())/2,
+                                        StartLine.y()+(EndLine.y()-StartLine.y())/2 );
+                                a = length(EndLine,StartLine)/2;
+                                b = a+50;
+                                line2 = QLineF( CtrlPos_1,QPointF(CtrlPos_1.x()+10, CtrlPos_1.y()) );
+                                line1 = QLineF( CtrlPos_1, StartLine );
+                                ang = angle(line1,line2);
+                                CtrlPos_2 = QPointF( CtrlPos_1.x()+rotate(arc(0.25,a,b),ang).x(),
+                                        CtrlPos_1.y()-rotate(arc(0.25,a,b),ang).y() );
+                                CtrlPos_3 = StartLine;
+                                CtrlPos_4 = QPointF(0,0.5);
+
+                                if( (*widths)[-6] > 0 )
+                                {
+                                    circlePath = painterPath( (*widths)[-5], (*widths)[-6],2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2,  CtrlPos_3, CtrlPos_4 );
+                                    shapeItems.push_back( ShapeItem( circlePath, newPath, -1,-1,-1,-1, -1, CtrlPos_4, -5,
+                                            -6, -5, -5, -6, 2, ang ) );
+                                }
+                                else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
+                                {
+                                    QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
+                                    circlePath = painterPathSimple( 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
+                                    shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4, -5,
+                                            -6, -5, -5, -6, 2, ang ) );
+                                }
+                                StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
+                                EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
+                                CtrlPos_1 = unScaleRotate( CtrlPos_1, view, flag_scale, flag_rotate );
+                                CtrlPos_2 = unScaleRotate( CtrlPos_2, view, flag_scale, flag_rotate );
+                                CtrlPos_3 = unScaleRotate( CtrlPos_3, view, flag_scale, flag_rotate );
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n5 = appendPoint( CtrlPos_3, shapeItems, pnts, 1 );
+                                shapeSave( view );
+                                rect_num = 4;
+                                index = shapeItems.size()-1;
+                                itemInMotion = &shapeItems[index];
+                                fl_status_move = true;
+                                previousPosition_all = ev->pos();
+                                break;
+                            }
+                            case 3:
+                            {
+                                QPointF CtrlPos_1, CtrlPos_2, EndLine_temp;
+                                StartLine = EndLine = ev->pos();
+                                CtrlPos_1 = QPointF( 10, 0 );
+                                CtrlPos_2 = QPointF( 20, 0 );
+                                line2 = QLineF( StartLine, QPointF(StartLine.x()+10,StartLine.y()) );
+                                line1 = QLineF( StartLine, EndLine );
+                                ang = angle(line1,line2);
+                                CtrlPos_1 = QPointF( StartLine.x()+rotate(CtrlPos_1,ang).x(), StartLine.y()-rotate(CtrlPos_1,ang).y() );
+                                CtrlPos_2 = QPointF( StartLine.x()+rotate(CtrlPos_2,ang).x(), StartLine.y()-rotate(CtrlPos_2,ang).y() );
+                                if( (*widths)[-6] > 0 )
+                                {
+                                    circlePath = painterPath( (*widths)[-5], (*widths)[-6], 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
+                                    shapeItems.push_back( ShapeItem( circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
+                                            -6, -5, -5,-6, 3, angle_temp ) );
+                                }
+                                else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
+                                {
+                                    bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6],3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
+                                    circlePath = painterPathSimple( 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
+                                    shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
+                                            -6, -5, -5, -6, 3, angle_temp ) );
+                                }
+                                StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
+                                EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
+                                CtrlPos_1 = unScaleRotate( CtrlPos_1, view, flag_scale, flag_rotate );
+                                CtrlPos_2 = unScaleRotate( CtrlPos_2, view, flag_scale, flag_rotate );
+
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
+                                shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
+                                shapeSave( view );
+                                rect_num = 1;
+                                index = shapeItems.size()-1;
+                                itemInMotion = &shapeItems[index];
+                                fl_status_move = true;
+                                previousPosition_all = ev->pos();
+                                break;
+                            }
+                        }
                     }
-                    // - repainting figures by mouse click -
+                    //> repainting figures by mouse click
                     if( (ev->button() == Qt::LeftButton) && (itemInMotion || rect_num != -1) && !status && !flag_ctrl && count_holds == 0 )
                     {
                         count_Shapes = 1;
@@ -4152,7 +4251,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
                     index = itemAt( ev->pos(), shapeItems, view );
-                    // - getting fill by double click -
+                    //> getting fill by double click
                     if( ev->button() == Qt::LeftButton && shapeItems.size() && index == -1 )
                     {
                         flag_angle_temp = true;
@@ -4236,7 +4335,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
                         view->repaint();
                     }
-                    if( ev->button() == Qt::LeftButton && itemInMotion && (status==false) )
+                    if( ev->button() == Qt::LeftButton && itemInMotion && !status )
                     {
                         flag_inund_break = false;
                         itemInMotion = &shapeItems[index];
@@ -4361,7 +4460,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 rectItems.clear(); init_array.clear();
                             }
                         }
-                        if( itemInMotion->type != 2 && (!flag_ctrl && status_hold)  )// - if simple figure and status_hold -
+                        if( itemInMotion->type != 2 && (!flag_ctrl && status_hold)  )//> if simple figure and status_hold
                         {
                             count_Shapes = 1;
                             count_moveItemTo = 1;
@@ -4369,7 +4468,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             moveItemTo( ev->pos(), shapeItems, pnts, view );
                             //view->repaint();
                         }
-                        bool ell_present = false; // - check for an allipse presence -
+                        bool ell_present = false; //> check for an allipse presence -
                         if( ellipse_draw_startPath != newPath )
                         {
                             ellipse_draw_startPath = newPath;
@@ -4382,7 +4481,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 
                         }
                         if( ell_present ) { paintImage(view); view->repaint(); }
-                        // - calling moveItemTo for figures, connected with the arc, if there was moving 3 or 4 rects of the arc -
+                        //> calling moveItemTo for figures, connected with the arc, if there was moving 3 or 4 rects of the arc -
                         if( count_holds && (flag_arc_rect_3_4 || (flag_rect && shapeItems[index_array[0]].type==2)))
                         {
                             count_moveItemTo = 0;
@@ -4447,174 +4546,42 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_arc_rect_3_4 = false;
                         }
                     }
-                    double ang;
-                    // - getting the end point of the figure and building it -
+                    //> Finish of the drawing the figure
                     if( ev->button() == Qt::LeftButton && status )
-                    { 
-                        double scale;
+                    {
                         QLineF line1, line2;
                         EndLine = ev->pos();
-                        if( EndLine == StartLine || flag_release )
+                        //>> Remove the figure if its Start point is equal to its End point
+                        if( (EndLine == StartLine || flag_release) && shapeItems.size() > 0 && itemInMotion )
                         {
-                            flag_release = true;
-                            break;
+                            switch( shapeType )
+                            {
+                                case 1:
+                                    dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
+                                    break;
+                                case 2:
+                                    dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n3, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n4, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n5, shapeItems.size()-1, shapeItems, pnts );
+                                    break;
+                                case 3:
+                                    dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n3, shapeItems.size()-1, shapeItems, pnts );
+                                    dropPoint( shapeItems[shapeItems.size()-1].n4, shapeItems.size()-1, shapeItems, pnts );
+                                    break;
+                            }
+                            shapeItems.remove(shapeItems.size()-1);
                         }
-                        QPainterPath circlePath, bigPath;
-                        if( view->xScale(true) < view->yScale(true) ) scale = view->xScale(true);
-                        else scale = view->yScale(true);
-                        //-- if line --
-                        if( shapeType == 1 )
-                        {
-                            //--- if orto ---
-                            if( flag_key )
-                            {
-                                if( (EndLine.y()-StartLine.y()) > 20 || (StartLine.y()-EndLine.y()) > 20 )
-                                {
-                                    if( StartLine.y() <= EndLine.y() )	ang = 270;
-                                    else ang = 90;
-                                    EndLine = QPointF( StartLine.x(), EndLine.y() );
-                                }
-                                else
-                                {
-                                    if( StartLine.x() <= EndLine.x() )	ang=0;
-                                    else ang = 180;
-                                    EndLine = QPointF( EndLine.x(), StartLine.y() );
-                                }
-                                if( (*widths)[-6] > 0 )
-                                {
-                                    circlePath = painterPath( (*widths)[-5], (*widths)[-6], 1, ang, StartLine,EndLine );
-                                    shapeItems.push_back( ShapeItem( circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                     -6, -5, -5, -6, 1, angle_temp ) );
-                                }
-                                else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
-                                {
-                                    circlePath = painterPathSimple( 1, ang, StartLine, EndLine );
-                                    QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 1, ang, StartLine, EndLine);
-                                    shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                     -6, -5, -5, -6, 1, angle_temp ) );
-                                }
-                                StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
-                                EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
-                                shapeSave( view );
-                                paintImage(view);
-                                view->repaint();
-                            }
-                            //--- if !orto ---
-                            else
-                            {
-                                line2 = QLineF( StartLine, QPointF(StartLine.x()+10,StartLine.y()) );
-                                line1 = QLineF( StartLine, EndLine );
-                                if( StartLine.y() <= EndLine.y() )	ang = 360-angle( line1, line2 );
-                                else                                   	ang = angle( line1, line2 );
-
-                                if( (*widths)[-6] > 0 )
-                                {
-                                    circlePath = painterPath( (*widths)[-5], (*widths)[-6],1, ang, StartLine, EndLine );
-                                    shapeItems.push_back( ShapeItem( circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                     -6, -5, -5, -6, 1, angle_temp ) );
-                                }
-                                else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
-                                {
-                                    circlePath = painterPathSimple( 1, ang, StartLine, EndLine );
-                                    QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 1, ang, StartLine, EndLine );
-                                    shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                     -6, -5, -5, -6, 1, angle_temp ) );
-                                }
-                                StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
-                                EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
-                                shapeSave( view );
-                                paintImage(view);
-                                view->repaint();
-                            }
-                        }
-                        //-- if bezier --
-                        if( shapeType==3 )
-                        {
-                            QPointF CtrlPos_1, CtrlPos_2, EndLine_temp;
-                            CtrlPos_1 = QPointF( length(EndLine,StartLine)/3, 0 );
-                            CtrlPos_2 = QPointF( 2*length(EndLine,StartLine)/3, 0 );
-                            line2 = QLineF( StartLine, QPointF(StartLine.x()+10,StartLine.y()) );
-                            line1 = QLineF( StartLine, EndLine );
-                            if( StartLine.y() <= EndLine.y() )	ang = 360-angle(line1,line2);
-                            else                                ang = angle(line1,line2);
-                            CtrlPos_1 = QPointF( StartLine.x()+rotate(CtrlPos_1,ang).x(), StartLine.y()-rotate(CtrlPos_1,ang).y() );
-                            CtrlPos_2 = QPointF( StartLine.x()+rotate(CtrlPos_2,ang).x(), StartLine.y()-rotate(CtrlPos_2,ang).y() );
-                            if( (*widths)[-6] > 0 )
-                            {
-                                circlePath = painterPath( (*widths)[-5], (*widths)[-6], 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
-                                shapeItems.push_back( ShapeItem( circlePath, newPath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                 -6, -5, -5,-6, 3, angle_temp ) );
-                            }
-                            else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
-                            {
-                                bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6],3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
-                                circlePath = painterPathSimple( 3, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2 );
-                                shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(0,0), -5,
-                                                                 -6, -5, -5, -6, 3, angle_temp ) );
-                            }
-                            StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
-                            EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
-                            CtrlPos_1 = unScaleRotate( CtrlPos_1, view, flag_scale, flag_rotate );
-                            CtrlPos_2 = unScaleRotate( CtrlPos_2, view, flag_scale, flag_rotate );
-
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
-                            shapeSave( view );
-                            paintImage(view);
-                            view->repaint();
-                        }
-                        //-- if arc --
-                        if( shapeType==2 )
-                        {
-                            QPointF CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4, Temp, StartLine_small, EndLine_small, pnt;
-                            double a, b;
-                            CtrlPos_1 = QPointF( StartLine.x()+(EndLine.x()-StartLine.x())/2,
-                                                 StartLine.y()+(EndLine.y()-StartLine.y())/2 );
-                            a = length(EndLine,StartLine)/2;
-                            b = a+50;
-                            line2 = QLineF( CtrlPos_1,QPointF(CtrlPos_1.x()+10, CtrlPos_1.y()) );
-                            line1 = QLineF( CtrlPos_1, StartLine );
-                            if( StartLine.y() <= EndLine.y() )	ang = angle(line1,line2);
-                            else 				ang = 360-angle(line1,line2);
-			    CtrlPos_2 = QPointF( CtrlPos_1.x()+rotate(arc(0.25,a,b),ang).x(),
-                                                 CtrlPos_1.y()-rotate(arc(0.25,a,b),ang).y() );
-                            CtrlPos_3 = StartLine;
-                            CtrlPos_4 = QPointF(0,0.5);
-
-                            if( (*widths)[-6] > 0 )
-                            {
-                                circlePath = painterPath( (*widths)[-5], (*widths)[-6],2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2,  CtrlPos_3, CtrlPos_4 );
-                                shapeItems.push_back( ShapeItem( circlePath, newPath, -1,-1,-1,-1, -1, CtrlPos_4, -5,
-                                                                 -6, -5, -5, -6, 2, ang ) );
-                            }
-                            else if( fabs( (*widths)[-6] - 0 ) < 0.01 )
-                            {
-                                QPainterPath bigPath = painterPath( vmax(1,(*widths)[-5])+1, (*widths)[-6], 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
-                                circlePath = painterPathSimple( 2, ang, StartLine, EndLine, CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4 );
-                                shapeItems.push_back( ShapeItem( bigPath,circlePath,-1,-1,-1,-1, -1,CtrlPos_4, -5,
-                                                                 -6, -5, -5, -6, 2, ang ) );
-                            }
-                            StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
-                            EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
-                            CtrlPos_1 = unScaleRotate( CtrlPos_1, view, flag_scale, flag_rotate );
-                            CtrlPos_2 = unScaleRotate( CtrlPos_2, view, flag_scale, flag_rotate );
-                            CtrlPos_3 = unScaleRotate( CtrlPos_3, view, flag_scale, flag_rotate );
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
-                            shapeItems[shapeItems.size()-1].n5 = appendPoint( CtrlPos_3, shapeItems, pnts, 1 );
-                            shapeSave( view );
-                            paintImage(view);
-                            view->repaint();
-                        }
-                        flag_key = false;
+                        shapeSave(view);
+                        fl_status_move = false; flag_m = false;
+                        rectItems.clear();
+                        itemInMotion = 0; index = -1;
+                        paintImage(view);
+                        view->repaint();
                     }
                 } 
             }
@@ -4631,7 +4598,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 	    {
                 Mouse_pos = ev->pos();
 
-                if( ev->buttons()&Qt::LeftButton && itemInMotion && !status )
+                if( ev->buttons()&Qt::LeftButton && itemInMotion && (!status || fl_status_move) )
                 {
                     flag_m = true;
                     if( count_holds )
@@ -4738,7 +4705,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			}
                         if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
                         //- if the figure or it's rect is not connected to other one -
-                        if( status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)) )
+                        if( !fl_status_move && status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)) )
                         {
                             current_se = current_ss = current_ee = current_es = -1;
                             ellipse_draw_startPath = newPath;
@@ -4882,7 +4849,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             if( devW )
             {
                 if( flag_m )  break;
-                if( ev->key() == Qt::Key_Shift ) flag_key = true;
                 if( ev->key() == Qt::Key_Control )
                 {
                     if( flag_A ) index_array_copy_flag_A = index_array;
@@ -5078,8 +5044,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_down || flag_left || flag_right || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_up = true;
-                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
-                    offset = QPointF(0,-5);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) ) offset = QPointF(0,-5);
                     else offset = QPointF(0,-1);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
@@ -5089,8 +5054,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_up || flag_left || flag_right || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_down = true;
-                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
-                    offset = QPointF(0,5);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) ) offset = QPointF(0,5);
                     else offset = QPointF(0,1);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
@@ -5101,8 +5065,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_down || flag_up || flag_right || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_left = true;
-                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
-                    offset = QPointF(-5,0);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) ) offset = QPointF(-5,0);
                     else offset = QPointF(-1,0);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
@@ -5112,8 +5075,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                 {
                     if( (flag_down || flag_left || flag_up || index<0 || index>shapeItems.size()-1) && !flag_A ) break;
                     flag_right = true;
-                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) )
-                    offset = QPointF(5,0);
+                    if( !(QApplication::keyboardModifiers()&Qt::ShiftModifier) ) offset = QPointF(5,0);
                     else offset = QPointF(1,0);
                     moveUpDown( shapeItems, pnts, inundationItems, view );
                     paintImage(view);
@@ -5128,7 +5090,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
             if( devW )
             {
-                if( ev->key() == Qt::Key_Shift ) flag_key = false;
                 if( ev->key() == Qt::Key_Control )
                 {
                     if( status_hold || flag_A ) break;
