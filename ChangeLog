@@ -1,3 +1,8 @@
+2011-05-31 Roman
+- DAQ.AMRDevs, DAQ.BFN, DAQ.DCON, DAQ.OPC_UA, DAQ.SNMP, DAQ.Siemens, DAQ.System:
+    The "Calc schedule" is replaced by "Acquisition schedule".
+
+
 2011-05-31 Maxim
 - !:UI.Vision: The drawing figures during creation with the help of mouse is added for the primitive ElFigure.
 

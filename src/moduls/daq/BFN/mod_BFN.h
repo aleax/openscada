@@ -123,7 +123,7 @@ class TMdContr: public TController
 	Res	en_res, req_res;//Resource for enable params
 	int	&mPrior;	// Process task priority
 	double	&mSync;		//Synchronization inter remote station: attributes list update.
-	ResString &mSched,	//Calc schedule
+	ResString &mSched,	//Acquisition schedule
 		&mAddr,		//Transport device address
 		//&mHouse,	//BFN house for get
 		&mUser,		//Auth user name

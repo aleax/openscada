@@ -130,7 +130,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	ResString &mSched;	//Calc schedule
+	ResString &mSched;	//Acquisition schedule
 	int	&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
 		&mConnTry;	//Connections try

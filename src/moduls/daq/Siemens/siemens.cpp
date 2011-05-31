@@ -100,7 +100,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
+    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
 	(TSYS::int2str(TMdContr::CIF_PB)+";"+TSYS::int2str(TMdContr::ISO_TCP)).c_str(),"CIF_PB;ISO_TCP") );

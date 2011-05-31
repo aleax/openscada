@@ -135,8 +135,8 @@ class TMdContr: public TController
 	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
 		&connTry;			//Connections try
-	ResString &mSched,                      // Calc schedule
-		&mAddr;			//Transport device address
+	ResString &mSched,                      //Acquisition schedule
+		&mAddr;				//Transport device address
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 15:47+0300\n"
+"POT-Creation-Date: 2011-05-31 12:12+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -22,8 +22,8 @@ msgstr ""
 msgid "Parameteres table"
 msgstr "Parametertabelle"
 
-msgid "Calc schedule"
-msgstr "Planung der Berechnung"
+msgid "Acquisition schedule"
+msgstr "Planung der Befragung"
 
 msgid "Gather task priority"
 msgstr "Niveau der Priorität der Datenempfangaufgabe"
@@ -71,12 +71,15 @@ msgstr "Wurzeldirektorie (84)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
+#, c-format
 msgid "Call by period: %s. "
 msgstr "Call by Zeit: %s. "
 
+#, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Verbrauchte Zeit: %s. Anfragen %.6g."
 
@@ -274,6 +277,9 @@ msgstr "Nicht übereinstimmender Umfang der Antwort."
 
 msgid "Respond don't acknowledge."
 msgstr "Nichtübereinstimmung der Antwort."
+
+msgid "Not full respond."
+msgstr ""
 
 msgid "Client certificate thumbprint error."
 msgstr "Fehler des Stempels des Zertifikats des Kunden."

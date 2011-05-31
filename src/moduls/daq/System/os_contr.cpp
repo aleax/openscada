@@ -122,7 +122,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
+    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //> Parameter type bd structure

@@ -134,7 +134,7 @@ class TMdContr: public TController
 		&m_pattr_lim,	// Parameter's attributes limit
 		&m_retr,	// Request retries
 		&m_tm;		// Request timeout
-	ResString &mSched,	// Calc schedule
+	ResString &mSched,	// Acquisition schedule
 		&m_addr,	// Host address
 		&m_ver,		// SNMP version
 		&m_comm,	// Server community

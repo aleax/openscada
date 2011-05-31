@@ -235,8 +235,8 @@ class TMdContr: public TController
 		&mType,			// Connection type
 		&mSlot,
 		&mDev;			// CIF device number
-	ResString &mSched,      	// Calc schedule
-		&mAddr;		// Remote host address
+	ResString &mSched,      	// Acquisition schedule
+		&mAddr;			// Remote host address
 	bool	&mAssincWR;		// Asynchronous write mode
 
 	bool	prc_st,			// Process task active

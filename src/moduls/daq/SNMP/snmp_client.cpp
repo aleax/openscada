@@ -104,7 +104,7 @@ void TTpContr::postEnable(int flag)
 
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
     fldAdd(new TFld("RETR",_("Retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));

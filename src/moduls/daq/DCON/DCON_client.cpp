@@ -93,7 +93,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100"));	//!!!! Remove at further
-    fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("ADDR",_("Serial transport"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
