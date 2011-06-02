@@ -256,6 +256,7 @@ class ShapeElFigure : public WdgShape
         unsigned flag_rect_items	:1;
         unsigned flag_def_stat	:1;
         unsigned fl_status_move	:1;//Flag for the calling moveItemTo during the creation of the figure
+        unsigned fl_orto_move	:1;//Flag for using during the orthogonal line or bezier curve drawing
 
         int count_rects, rect_num_arc, arc_rect;
         double t_start, t_end;

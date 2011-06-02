@@ -1,3 +1,8 @@
+2011-06-02 Maxim
+- FIX:UI.Vision: The orthogonal drawing mechanism of the line and bezier curve is changed and optimized for the primitive ElFigure.
+- FIX:UI.Vision: The bazier curve initial drawing is fixed for the primitive ElFigure.
+
+
 2011-05-31 Roman
 - DAQ.AMRDevs, DAQ.BFN, DAQ.DCON, DAQ.OPC_UA, DAQ.SNMP, DAQ.Siemens, DAQ.System:
     The "Calc schedule" is replaced by "Acquisition schedule".
