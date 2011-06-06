@@ -1126,10 +1126,10 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 #endif
 	}
 
-	setAllAttrLoad( true );
-	if( item.empty() || item == id() )
+	setAllAttrLoad(true);
+	if(item.empty() || item == id())
 	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
-		if( aBr->childGet(i_el)->name() == "el" )
+		if(aBr->childGet(i_el)->name() == "el")
 		    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
 	setAllAttrLoad( false );
 

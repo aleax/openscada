@@ -480,13 +480,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem),
-	mPer(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
+	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), mSched(cfg("SCHEDULE").getSd()),
 	mAddr(cfg("ADDR").getSd()), mAssincWR(cfg("ASINC_WR").getBd()),
 	prc_st(false), endrun_req(false), di(NULL), dc(NULL), tm_calc(0)
 {
     cfg("PRM_BD").setS("CIFPrm_"+name_c);
-    mSched = "1";
 }
 
 TMdContr::~TMdContr( )

@@ -1,3 +1,13 @@
+2011-06-06 Roman
+- !!:FIX:DAQ.BlockCalc: Frequence calc from periodic schedule for special attribute "f_freq" of any block is fixed.
+    Compatibility config property "PERIOD" using is fixed for start.
+    Compatibility config property "PERIOD" integer limit is fixed for long periods in ns.
+- FIX:DAQ.DCON: Compatibility config property "PERIOD" using is fixed for start.
+- FIX:DAQ.LogicLev, DAQ.Siemens, DAQ.System: Compatibility config property "PERIOD" using is fixed for start.
+    Compatibility config property "PERIOD" integer limit is fixed for long periods in ns.
+- UI.VCAEngine, UI.Vision, UI.WebVision: Any page "name" attribute group request and using for window's names is used.
+
+
 2011-06-02 Maxim
 - FIX:UI.Vision: The orthogonal drawing mechanism of the line and bezier curve is changed and optimized for the primitive ElFigure.
 - FIX:UI.Vision: The bazier curve initial drawing is fixed for the primitive ElFigure.

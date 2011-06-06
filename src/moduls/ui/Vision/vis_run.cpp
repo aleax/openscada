@@ -391,17 +391,17 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 
 void VisRun::endRunChk( )
 {
-    if( mod->endRun() ) close();
+    if(mod->endRun()) close();
 }
 
-void VisRun::quitSt()
+void VisRun::quitSt( )
 {
     SYS->stop();
 }
 
 void VisRun::print( )
 {
-    if( master_pg ) printPg( master_pg->id() );
+    if(master_pg) printPg(master_pg->id());
 }
 
 void VisRun::printPg( const string &ipg )
@@ -409,10 +409,10 @@ void VisRun::printPg( const string &ipg )
     RunPageView *rpg;
     string pg = ipg;
 
-    if( pgList.empty() )	{ QMessageBox::warning(this,_("Print page"),_("No one page for print is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Print page"),_("No one page for print is present!")); return; }
 
-    if( pg.empty() && pgList.size() == 1 )	pg = pgList[0];
-    if( pg.empty() && pgList.size() > 1 )
+    if(pg.empty() && pgList.size() == 1)	pg = pgList[0];
+    if(pg.empty() && pgList.size() > 1)
     {
 	//> Make select page dialog
 	QImage ico_t;

@@ -349,9 +349,9 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 void Block::calc( bool first, bool last )
 {
     //> Set fixed system attributes
-    if( id_freq>=0 )	setR(id_freq,(1000.*(double)owner().iterate())/(double)owner().period());
-    if( id_start>=0 )	setB(id_start,first);
-    if( id_stop>=0 )	setB(id_stop,last);
+    if(id_freq >= 0)	setR(id_freq,owner().period()?(1e9*(double)owner().iterate())/(double)owner().period():0);
+    if(id_start >= 0)	setB(id_start,first);
+    if(id_stop >= 0)	setB(id_stop,last);
 
     //> Get values from input links
     lnk_res.resRequestR( );

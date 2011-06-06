@@ -42,10 +42,10 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     WdgView(iwid,ilevel,(QMainWindow*)mainWind,parent,f), mPermCntr(false), mPermView(true)
 {
     size_t endElSt = iwid.rfind("/");
-    if( endElSt == string::npos ) return;
+    if(endElSt == string::npos) return;
     string lstEl = iwid.substr(endElSt+1);
-    if( lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_" ) setObjectName(lstEl.substr(4).c_str());
-    if( lstEl.size() > 3 && lstEl.substr(0,3) == "pg_" )  setObjectName(lstEl.substr(3).c_str());
+    if(lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_") setObjectName(lstEl.substr(4).c_str());
+    if(lstEl.size() > 3 && lstEl.substr(0,3) == "pg_")  setObjectName(lstEl.substr(3).c_str());
 }
 
 RunWdgView::~RunWdgView( )
@@ -55,10 +55,8 @@ RunWdgView::~RunWdgView( )
 
 string RunWdgView::name( )
 {
-    XMLNode req("get");
-    req.setAttr("path",id()+"/%2fattr%2fname");
-    if( !cntrIfCmd(req) )	return req.text();
-    return "";
+    if(!windowTitle().isEmpty()) return windowTitle().toStdString();
+    return mainWin()->wAttrGet(id(),"name");
 }
 
 string RunWdgView::user( )
@@ -209,6 +207,9 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    setPermCntr( atoi(val.c_str())&SEC_WR );
 	    setPermView( atoi(val.c_str())&SEC_RD );
 	    return true;
+	case -4:        //page name
+            setWindowTitle(val.c_str());
+            break;
 	case 4:		//pgGrp
 	    setProperty("pgGrp",val.c_str());
 	    return true;
@@ -562,13 +563,14 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 			  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
 	pg->setMinimumSize(pg->frameGeometry().size());
 	pg->setMaximumSize(pg->frameGeometry().size());
-	pg->setWindowState( pg->windowState() | Qt::WindowActive );
+	pg->setWindowState(pg->windowState() | Qt::WindowActive);
 
 	//>> Get page name
-	XMLNode req("get");
+	/*XMLNode req("get");
 	req.setAttr("path",pg->id()+"/%2fwdg%2fcfg%2fname");
 	if( !mainWin()->cntrIfCmd(req) ) pg->setWindowTitle(req.text().c_str());
-	else pg->setWindowTitle(mainWin()->windowTitle());
+	else pg->setWindowTitle(mainWin()->windowTitle());*/
+	if(pg->windowTitle().isEmpty()) pg->setWindowTitle(mainWin()->windowTitle());
 
 	return true;
     }

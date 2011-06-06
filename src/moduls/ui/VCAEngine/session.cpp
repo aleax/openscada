@@ -1735,8 +1735,11 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	{
 	    unsigned  tm = strtoul(opt->attr("tm").c_str(),0,10);
 	    if(!tm)
+	    {
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
-		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())) );
+		    setText(TSYS::int2str(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())));
+		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p","-4")->setText(name());
+	    }
 	    if(!tm || modifChk(tm,mMdfClc))
 	    {
 		AutoHD<Attr> attr;
@@ -1769,10 +1772,13 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
 
 	//>> Self attributes put
-	if( !tm || modifChk(tm,mMdfClc) )
+	if(!tm || modifChk(tm,mMdfClc))
 	{
-	    if( !tm )
+	    if(!tm)
+	    {
+		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p","-4")->setText(name());
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(TSYS::int2str(perm));
+	    }
 	    AutoHD<Attr> attr;
 	    vector<string> als;
 	    attrList(als);

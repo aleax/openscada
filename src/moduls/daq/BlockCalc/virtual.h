@@ -94,7 +94,7 @@ class Contr: public TController
 	string getStatus( );
 
 	TParamContr *ParamAttach( const string &name, int type );
-	int period( )				{ return mPer; }
+	double period( )			{ return mPer; }
 	string cron( )				{ return mSched; }
 	int iterate( )				{ return mIter; }
 
@@ -131,8 +131,8 @@ class Contr: public TController
 	bool	prc_st,		// Calc status
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
-	int	&mPer,		// Clock period (ms)
-		&mPrior,	// Process data task priority
+	double	&mPer;		// Clock period (ms)
+	int	&mPrior,	// Process data task priority
 		&mIter;		// Iteration into clock
 	ResString &mSched;	// Calc schedule
 

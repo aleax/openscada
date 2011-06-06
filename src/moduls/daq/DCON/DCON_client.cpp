@@ -153,7 +153,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
-    mSched = "1";
 }
 
 TMdContr::~TMdContr()

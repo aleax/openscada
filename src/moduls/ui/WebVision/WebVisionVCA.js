@@ -347,18 +347,18 @@ function setFocus( wdg, onlyClr )
  ***************************************************/
 function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 {
-  if( !pgId ) return true;
+  if(!pgId) return true;
   //> Check and update present page
-  if( this == masterPage )
+  if(this == masterPage)
   {
     var opPg = this.findOpenPage(pgId);
-    if( opPg && updWdg ) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
-    if( opPg ) return true;
+    if(opPg && updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
+    if(opPg) return true;
   }
   //> Create or replace main page
-  if( !pgGrp ) pgGrp = getWAttr(pgId,'pgGrp');
-  if( !pgOpenSrc ) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
-  if( !this.addr.length || (this == masterPage && pgGrp == 'main') || pgGrp == this.attrs['pgGrp'] )
+  if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
+  if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
+  if(!this.addr.length || (this == masterPage && pgGrp == 'main') || pgGrp == this.attrs['pgGrp'])
   {
     this.addr  = pgId;
     this.place = document.createElement('div');
@@ -371,39 +371,61 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     return true;
   }
   //> Find for include page creation
-  for( var i in this.wdgs )
-    if( this.wdgs[i].attrs['root'] == 'Box' )
+  for(var i in this.wdgs)
+    if(this.wdgs[i].attrs['root'] == 'Box')
     {
-      if( pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'] )
+      if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'])
       {
 	this.wdgs[i].attrs['pgOpenSrc'] = pgId;
 	this.wdgs[i].makeEl(null,true);
 	setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
 	return true;
       }
-      if( this.wdgs[i].inclOpen && this.wdgs[i].pages[this.wdgs[i].inclOpen].callPage(pgId,updWdg,pgGrp,pgOpenSrc) ) return true;
+      if(this.wdgs[i].inclOpen && this.wdgs[i].pages[this.wdgs[i].inclOpen].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
     }
   //> Put checking to child pages
-  for( var i in this.pages )
-    if( this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc) ) return true;
+  for(var i in this.pages)
+    if(this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
   //> Check for open child page or for unknown and empty source pages open as master page child windows
-  if( (!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage )
+  if((!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage)
   {
     var iPg = new pwDescr(pgId,true,this);
-    iPg.window = window.open('',pgId,'width=600,height=400,directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');
+    var attrBrVal = servGet(pgId,'com=attrsBr');
+
+    var winName = null;
+    var winWidth = 600;
+    var winHeight = 400;
+    for(var i_ch = 0; i_ch < attrBrVal.childNodes.length; i_ch++)
+      if(attrBrVal.childNodes[i_ch].nodeName != 'el' ) continue;
+      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = nodeText(attrBrVal.childNodes[i_ch]);
+      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = nodeText(attrBrVal.childNodes[i_ch]);
+      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = nodeText(attrBrVal.childNodes[i_ch]);
+
+    //alert(winName);
+
+    //> New external <div> window create
+    //iPg.window = document.createElement('cener');
+    //iPg.window.place.innerHTML = "<table><tr><th>Page name</th>"
+
+    //> New external window create
+    iPg.window = window.open('about:blank',pgId,'width='+(parseInt(winWidth)+20)+',height='+(parseInt(winHeight)+60)+',directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');
     if( !iPg.window ) return true;
     iPg.window.document.open( );
     iPg.window.document.write("<html><body style='background-color: #E6E6E6;'><center><div id='main'/></center></body></html>\n");
     iPg.window.document.close( );
+    iPg.window.document.title = winName;
     var mainDiv = iPg.window.document.getElementById('main');
     iPg.place = mainDiv;
+
     this.pages[pgId] = iPg;
-    iPg.makeEl( servGet(pgId,'com=attrsBr') );
+    iPg.makeEl(attrBrVal);
+
     return true;
   }
 
   return false;
 }
+
 function findOpenPage( pgId )
 {
   var opPg;
@@ -427,6 +449,7 @@ function findOpenPage( pgId )
   }
   return null;
 }
+
 function makeEl( pgBr, inclPg )
 {
   var margBrdUpd = false; var newAttr = false;
@@ -477,11 +500,11 @@ function makeEl( pgBr, inclPg )
 
   //> Set included window geometry to widget size
 //  if( this == masterPage ) resizeTo(geomW,geomH);
-  if( this.pg && this.window )
+  if(this.pg && this.window)
   {
-    var pgWin = this.window;
-    //pgWin.document.body.style.backgroundColor = getColor(this.attrs['backColor']);
-    pgWin.resizeTo(geomW+20,geomH+40);
+    if(this.window.innerHeight)
+      this.window.resizeTo(geomW+(this.window.outerWidth-this.window.innerWidth)+20,geomH+(this.window.outerHeight-this.window.innerHeight)+20);
+    else this.window.resizeTo(geomW+20,geomH+40);
   }
 
   if( parseInt(this.attrs['focus']) ) setFocus(this.addr,true);

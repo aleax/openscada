@@ -140,7 +140,7 @@ class TMdContr: public TController
 	~TMdContr( );
 
 	string getStatus( );
-	int period( )				{ return mPer; }
+	double period( )			{ return mPer; }
         string cron( )				{ return mSched; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -164,8 +164,8 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;				//Resource for enable params
-	int	&mPer,				// ms
-		&mPrior;			// Process task priority
+	double	&mPer;				// ms
+	int	&mPrior;			// Process task priority
 	ResString &mSched;      		// Calc schedule
 
 	bool	prc_st,				// Process task active

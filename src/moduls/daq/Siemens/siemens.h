@@ -160,7 +160,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	int period( )		{ return mPer; }
+	double period( )	{ return mPer; }
 	string cron( )		{ return mSched; }
 	bool assincWrite( )	{ return mAssincWR; }
 
@@ -230,8 +230,8 @@ class TMdContr: public TController
 	};
 
 	//Attributes
-	int	&mPer,			// ms
-		&mPrior,		// Process task priority
+	double	&mPer;			// ms
+	int	&mPrior,		// Process task priority
 		&mType,			// Connection type
 		&mSlot,
 		&mDev;			// CIF device number
