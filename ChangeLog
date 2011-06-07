@@ -1,3 +1,7 @@
+2011-06-07 Roman
+- !!:UI.WebVision: Small external pages open in DIV-window is added.
+
+
 2011-06-06 Roman
 - !!:FIX:DAQ.BlockCalc: Frequence calc from periodic schedule for special attribute "f_freq" of any block is fixed.
     Compatibility config property "PERIOD" using is fixed for start.

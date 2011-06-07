@@ -362,6 +362,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
   {
     this.addr  = pgId;
     this.place = document.createElement('div');
+    this.place.setAttribute('id','mainCntr');
     this.makeEl(servGet(pgId,'com=attrsBr'));
     var centerTag = document.createElement('center');
     centerTag.appendChild(this.place);
@@ -398,24 +399,43 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     for(var i_ch = 0; i_ch < attrBrVal.childNodes.length; i_ch++)
       if(attrBrVal.childNodes[i_ch].nodeName != 'el' ) continue;
       else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = nodeText(attrBrVal.childNodes[i_ch]);
-      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = nodeText(attrBrVal.childNodes[i_ch]);
-      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = nodeText(attrBrVal.childNodes[i_ch]);
-
-    //alert(winName);
+      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
+      else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
 
     //> New external <div> window create
-    //iPg.window = document.createElement('cener');
-    //iPg.window.place.innerHTML = "<table><tr><th>Page name</th>"
-
+    if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH']))
+    {
+	iPg.window = document.createElement('div');
+	iPg.window.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: blue; border: 1px solid darkblue; '+
+	    'left: '+((parseInt(masterPage.attrs['geomW'])-winWidth-5)/2)+'px; '+
+	    'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; width: '+(winWidth+5)+'px; height: '+(winHeight+18)+'px; ');
+	var titleBlk = document.createElement('span');
+	iPg.window.appendChild(titleBlk);
+	titleBlk.appendChild(document.createTextNode(winName));
+	var closeWin = document.createElement('span');
+	iPg.window.appendChild(closeWin);
+	closeWin.appendChild(document.createTextNode('X'));
+	closeWin.setAttribute('style','color : red; cursor : pointer; float : right;');
+	closeWin.onclick = function()
+	{ servSet(this.iPg.addr,'com=pgClose',''); document.getElementById('mainCntr').removeChild(this.iPg.window); delete this.iPg.parent.pages[this.iPg.addr]; }
+	closeWin.iPg = iPg;
+	iPg.place = document.createElement('div');
+	iPg.window.appendChild(iPg.place);
+	document.getElementById('mainCntr').appendChild(iPg.window);
+    }
     //> New external window create
-    iPg.window = window.open('about:blank',pgId,'width='+(parseInt(winWidth)+20)+',height='+(parseInt(winHeight)+60)+',directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');
-    if( !iPg.window ) return true;
-    iPg.window.document.open( );
-    iPg.window.document.write("<html><body style='background-color: #E6E6E6;'><center><div id='main'/></center></body></html>\n");
-    iPg.window.document.close( );
-    iPg.window.document.title = winName;
-    var mainDiv = iPg.window.document.getElementById('main');
-    iPg.place = mainDiv;
+    else
+    {
+	iPg.window = window.open('about:blank',pgId,'width='+(winWidth+20)+',height='+(winHeight+60)+',directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');
+	if(!iPg.window) return true;
+	iPg.window.document.open( );
+	iPg.window.document.write("<html><body style='background-color: #E6E6E6;'><center><div id='main'/></center></body></html>\n");
+	iPg.window.document.close( );
+	iPg.window.document.title = winName;
+	var mainDiv = iPg.window.document.getElementById('main');
+	iPg.place = mainDiv;
+	iPg.windowExt = true;
+    }
 
     this.pages[pgId] = iPg;
     iPg.makeEl(attrBrVal);
@@ -500,7 +520,7 @@ function makeEl( pgBr, inclPg )
 
   //> Set included window geometry to widget size
 //  if( this == masterPage ) resizeTo(geomW,geomH);
-  if(this.pg && this.window)
+  if(this.pg && this.window && this.windowExt)
   {
     if(this.window.innerHeight)
       this.window.resizeTo(geomW+(this.window.outerWidth-this.window.innerWidth)+20,geomH+(this.window.outerHeight-this.window.innerHeight)+20);
@@ -1549,7 +1569,7 @@ function perUpdtEn( en )
      if( en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']) ) perUpdtWdgs[this.addr] = this;
      if( !en && perUpdtWdgs[this.addr] ) delete perUpdtWdgs[this.addr];
   }
-  else if( this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl' )
+  else if(this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl')
   { if(en) perUpdtWdgs[this.addr] = this; else delete perUpdtWdgs[this.addr]; }
   for( var i in this.wdgs ) this.wdgs[i].perUpdtEn(en);
 }
@@ -1629,6 +1649,7 @@ function pwDescr( pgAddr, pg, parent )
   this.pg = pg;
   this.parent = parent;
   this.window = null;
+  this.windowExt = false;
   this.place = null;
   this.callPage = callPage;
   this.findOpenPage = findOpenPage;
@@ -1647,18 +1668,23 @@ function makeUI()
 {
   //> Get open pages list
   var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
-  if( pgNode )
+  if(pgNode)
   {
     //>> Check for delete pages
-    for( var i_p = 0; i_p < pgList.length; i_p++ )
+    for(var i_p = 0; i_p < pgList.length; i_p++)
     {
       var opPg; var i_ch;
-      for( i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++ )
-	if( pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p] )
+      for(i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++)
+	if(pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p])
 	  break;
-      if( i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p])) ) continue;
-      if( opPg.window ) { opPg.window.close(); delete opPg.parent.pages[pgList[i_p]]; }
-      else if( opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p] )
+      if(i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p]))) continue;
+      if(opPg.window)
+      {
+        if(opPg.windowExt) opPg.window.close();
+        else document.getElementById('mainCntr').removeChild(opPg.window);
+        delete opPg.parent.pages[pgList[i_p]];
+      }
+      else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p])
       { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null,true); }
     }
     //>> Process opened pages
@@ -1669,7 +1695,7 @@ function makeUI()
 	var prPath = nodeText(pgNode.childNodes[i]);
 	//>>> Check for closed window
 	var opPg = masterPage.findOpenPage(prPath);
-	if( opPg && opPg.window && opPg.window.closed )
+	if(opPg && opPg.window && opPg.windowExt && opPg.window.closed)
 	{ servSet(prPath,'com=pgClose',''); delete opPg.parent.pages[prPath]; continue; }
 	//>>> Call page
 	pgList.push(prPath);
