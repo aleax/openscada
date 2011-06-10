@@ -3852,9 +3852,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::Paint:
         {
             QPainter pnt_v( view );
-            pnt_v.drawPixmap( QPoint(0,0),elFD->pictObj );
             if( dashedRect.isValid() && devW && devW->edit() )
                 pnt_v.drawPixmap( QPoint(0,0), rect_img );
+            else pnt_v.drawPixmap( QPoint(0,0),elFD->pictObj );
             pnt_v.end();
             return true;
         }
@@ -4774,9 +4774,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         flag_move = true;
                     }
                     else dashedRect = QRect( stPointDashedRect, ev->pos() ).normalized();
-                    //rect_img = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied );
-                    rect_img = QPixmap(view->width(), view->height());
-                    rect_img.fill(Qt::transparent);
+                    rect_img = QPixmap(elFD->pictObj);
                     QPainter pnt_rect( &rect_img );
                     int margin = elFD->geomMargin;
                     QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);

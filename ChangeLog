@@ -1,3 +1,7 @@
+2011-06-10 Maxim
+- FIX:UI.Vision: The selection figures by the square is optimized for the primitive ElFigure.
+
+
 2011-06-07 Roman
 - !!:UI.WebVision: Small external pages open in DIV-window is added.
 
