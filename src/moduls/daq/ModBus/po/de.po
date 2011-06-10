@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-27 20:58+0300\n"
+"POT-Creation-Date: 2011-06-10 15:30+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -24,6 +24,9 @@ msgstr ""
 
 msgid "Parameteres table"
 msgstr "Tabelle der Parameter"
+
+msgid "Logical parameteres table"
+msgstr "Logical Tabelle der Parameter"
 
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
@@ -64,6 +67,21 @@ msgstr "Standard"
 msgid "Attributes list"
 msgstr "Liste der Attribute"
 
+msgid "Logical"
+msgstr "Logical"
+
+msgid "Parameter template"
+msgstr "Template der Parameter"
+
+msgid "Parameter ID"
+msgstr "ID der Parameter"
+
+msgid "ID"
+msgstr ""
+
+msgid "Value"
+msgstr "Wert"
+
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
@@ -86,10 +104,10 @@ msgstr ""
 
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
-msgstr ""
+msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
 
 msgid "STOP"
-msgstr ""
+msgstr "STOP"
 
 msgid "Fetch coils' and registers' blocks."
 msgstr "Ermittlung von Bitblocks und Register."
@@ -101,7 +119,7 @@ msgid "15:Response PDU size error."
 msgstr "Fehler des Umfangs der PDU - Antwort."
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid ""
 "Merge not adjacent fragments of registers to single block for request.\n"
@@ -123,6 +141,9 @@ msgstr ""
 
 msgid "11:Value not gathered."
 msgstr "11:Werte sind nicht erfasst."
+
+msgid "Error calc template."
+msgstr "Fehler calc Vorlage."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
@@ -173,8 +194,14 @@ msgstr ""
 "400;\n"
 "  'R_b10:25:r:rBit:Reg bit' - Bit 10 aus dem Register 25 bekommen."
 
-msgid "ID"
-msgstr ""
+msgid "Template config"
+msgstr "Template config"
+
+msgid "Parameters"
+msgstr "Parameter"
+
+msgid "Parameter id error."
+msgstr "Parameter-ID Fehler."
 
 msgid "Name"
 msgstr "Name"
@@ -230,9 +257,6 @@ msgstr "Typ des Wertes"
 msgid "Flags"
 msgstr "Schalter"
 
-msgid "Value"
-msgstr "Wert"
-
 msgid "Real position"
 msgstr "Reale Position"
 
@@ -243,7 +267,7 @@ msgid "13:Error server respond"
 msgstr "13:Fehler in der Antwort des Server"
 
 msgid "Not full respond"
-msgstr ""
+msgstr "Nicht voll antworten"
 
 msgid "13:Error respond: Too short."
 msgstr "13:Fehlerin der Anwort: Zu kurz."

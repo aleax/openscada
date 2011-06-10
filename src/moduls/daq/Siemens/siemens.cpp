@@ -96,9 +96,9 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //- Controler's DB structure -
+    //> Controler's DB structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Real,TFld::NoFlag,"5","1000","1;10000") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );	//!!!! Remove at further
     fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
@@ -107,20 +107,20 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"40","10") );
     fldAdd( new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30") );
     fldAdd( new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3") );
-    //-- Parameter type DB structure --
+    //>> Parameter type DB structure
     int t_prm = tpParmAdd("logic","PRM_BD",_("Logical"));
     tpPrmAt(t_prm).fldAdd( new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50","") );
-    //-- Parameter template IO DB structure --
+    //>> Parameter template IO DB structure
     el_prm_io.fldAdd( new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_prm_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200") );
 
-    //- CIF devices DB structure -
+    //> CIF devices DB structure
     el_cif_dev.fldAdd( new TFld("ID",_("ID"),TFld::Integer,TCfg::Key,"1") );
     el_cif_dev.fldAdd( new TFld("ADDR",_("Address"),TFld::Integer,TFld::NoFlag,"3","5") );
     el_cif_dev.fldAdd( new TFld("SPEED",_("Speed"),TFld::Integer,TFld::NoFlag,"1","7") );
 
-    //- Clear CIF devices info -
+    //> Clear CIF devices info
     for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
     {
 	cif_devs[i_b].present = false;
@@ -490,7 +490,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 
 TMdContr::~TMdContr( )
 {
-    if( run_st ) stop( );
+    if(run_st) stop();
 }
 
 void TMdContr::postDisable( int flag )
@@ -498,7 +498,7 @@ void TMdContr::postDisable( int flag )
     TController::postDisable(flag);
     try
     {
-	if( flag )
+	if(flag)
 	{
 	    //> Delete parameter's io table
 	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
@@ -1272,6 +1272,7 @@ void *TMdContr::Task( void *icntr )
 	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop); }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
 	cntr.nodeRes().resRelease();
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
 
@@ -1337,7 +1338,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                       *
 //************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), TValFunc(name+"CIFprm"), m_tmpl(cfg("TMPL").getSd()), p_el("cif_attr"),
+    TParamContr(name,tp_prm), TValFunc(name+"SiemensPrm"), m_tmpl(cfg("TMPL").getSd()), p_el("cif_attr"),
     id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), acq_err_tm(0)
 {
 
@@ -1360,15 +1361,14 @@ void TMdPrm::postDisable(int flag)
 
     try
     {
-	if( flag )
+	if(flag)
 	{
 	    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 	    TConfig cfg(&mod->prmIOE());
 	    cfg.cfg("PRM_ID").setS(id(),true);
 	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
 	}
-    }catch(TError err)
-    { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -1412,19 +1412,19 @@ void TMdPrm::enable()
 	    }
 	    if( to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink) ) setS(i_io,"0");
 	}
-	//-- Init links --
+	//>> Init links
 	initLnks();
 
-	//-- Set to process --
+	//>> Set to process
 	if(owner().startStat())	owner().prmEn( id(), true );
 
-	//-- Init system attributes identifiers --
+	//>> Init system attributes identifiers
 	id_freq  = func()->ioId("f_frq");
 	id_start = func()->ioId("f_start");
 	id_stop  = func()->ioId("f_stop");
 	id_err   = func()->ioId("f_err");
 
-	//-- Load IO at enabling --
+	//>> Load IO at enabling
 	if(to_make)	loadIO();
 
     }catch(TError err) { disable(); throw; }
@@ -1444,7 +1444,7 @@ void TMdPrm::disable()
 
     //> Template's function disconnect
     setFunc(NULL);
-    id_freq = id_start = id_stop = id_err-1;
+    id_freq = id_start = id_stop = id_err = -1;
 
     TParamContr::disable();
 }
@@ -1503,51 +1503,47 @@ void TMdPrm::saveIO()
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if( !enableStat() || !owner().startStat() )
+    if(!enableStat() || !owner().startStat())
     {
-	if( val.name() == "err" )
+	if(val.name() == "err")
 	{
-	    if(!enableStat())
-		val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())
-		val.setS(_("2:Controller is stoped."),0,true);
+	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
+	    else if(!owner().startStat())	val.setS(_("2:Controller is stoped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;
     }
-    if( owner().redntUse( ) ) return;
-    try
-    {
-	int id_lnk = lnkId(val.name());
-	if( id_lnk >= 0 && lnk(id_lnk).val.db < 0 )
-	    id_lnk=-1;
-	switch(val.fld().type())
+    if(owner().redntUse()) return;
+    if(val.name() != "err")
+	try
 	{
-	    case TFld::String:
-		if( id_lnk < 0 ) val.setS(getS(ioId(val.name())),0,true);
-		else val.setS(owner().getValS(lnk(id_lnk).val,acq_err),0,true);
-		break;
-	    case TFld::Integer:
-		if( id_lnk < 0 ) val.setI(getI(ioId(val.name())),0,true);
-		else val.setI(owner().getValI(lnk(id_lnk).val,acq_err),0,true);
-		break;
-	    case TFld::Real:
-		if( id_lnk < 0 ) val.setR(getR(ioId(val.name())),0,true);
-		else val.setR(owner().getValR(lnk(id_lnk).val,acq_err),0,true);
-		break;
-	    case TFld::Boolean:
-		if( id_lnk < 0 ) val.setB(getB(ioId(val.name())),0,true);
-		else val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);
-		break;
-	}
-    }catch(TError err)
+	    int id_lnk = lnkId(val.name());
+	    if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
+	    switch(val.fld().type())
+	    {
+		case TFld::String:
+		    if(id_lnk < 0) val.setS(getS(ioId(val.name())),0,true);
+		    else val.setS(owner().getValS(lnk(id_lnk).val,acq_err),0,true);
+		    break;
+		case TFld::Integer:
+		    if(id_lnk < 0) val.setI(getI(ioId(val.name())),0,true);
+		    else val.setI(owner().getValI(lnk(id_lnk).val,acq_err),0,true);
+		    break;
+		case TFld::Real:
+		    if(id_lnk < 0) val.setR(getR(ioId(val.name())),0,true);
+		    else val.setR(owner().getValR(lnk(id_lnk).val,acq_err),0,true);
+		    break;
+		case TFld::Boolean:
+		    if(id_lnk < 0) val.setB(getB(ioId(val.name())),0,true);
+		    else val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);
+		    break;
+	    }
+	}catch(TError err) { }
+    else
     {
-	if( val.name() == "err" )
-	{
-	    if( acq_err.getVal().size()) val.setS(acq_err.getVal(),0,true);
-	    else if(id_err>=0)	val.setS(getS(id_err),0,true);
-	    else val.setS("0",0,true);
-	}
+	if(acq_err.getVal().size()) val.setS(acq_err.getVal(),0,true);
+	else if(id_err >= 0) val.setS(getS(id_err),0,true);
+	else val.setS("0",0,true);
     }
 }
 
@@ -1674,13 +1670,13 @@ void TMdPrm::calc( bool first, bool last )
 	{
 	    time_t tm = time(NULL);
 	    if(!acq_err_tm)	acq_err_tm = tm+5;
-	    if(tm>acq_err_tm)	{ acq_err.setVal(""); acq_err_tm=0; }
+	    if(tm > acq_err_tm)	{ acq_err.setVal(""); acq_err_tm = 0; }
 	}
 
 	//> Set fixed system attributes
-	if(id_freq>=0)	setR(id_freq,1000./owner().period());
-	if(id_start>=0)	setB(id_start,first);
-	if(id_stop>=0)	setB(id_stop,last);
+	if(id_freq >= 0)	setR(id_freq, owner().period()?1e9/(float)owner().period():0);
+	if(id_start >= 0)	setB(id_start, first);
+	if(id_stop >= 0)	setB(id_stop, last);
 
 	//> Get input links
 	for(int i_l = 0; i_l < lnkSize(); i_l++)
@@ -1760,8 +1756,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cfg/prmp_lst");
-	if(enableStat() && ctrMkNode("area",opt,1,"/cfg",_("Template config")) )
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
+	if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template config")) )
 	{
 	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
@@ -1808,30 +1804,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	m_tmpl = opt->text();
 	disable();
 	modif();
-    }
-    else if(a_path == "/cfg/prmp_lst" && ctrChkNode(opt))
-    {
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(m_tmpl,0,'.',&c_off)).size(); c_lv++)
-	{
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path+=".";
-	string prm0 = TSYS::strSepParse(m_tmpl, 0, '.');
-	vector<string>  ls;
-	switch(c_lv)
-	{
-	    case 0:	SYS->daq().at().tmplLibList(ls);	break;
-	    case 1:
-		if(SYS->daq().at().tmplLibPresent(prm0))
-		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
-	    break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path == "/cfg/only_off" && enableStat())
     {

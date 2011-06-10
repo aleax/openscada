@@ -200,6 +200,7 @@ class TValFunc
 	}
 
 	//> get IO value
+	TVariant get( unsigned id );
 	string	getS( unsigned id );
 	int	getI( unsigned id );
 	double	getR( unsigned id );
@@ -207,6 +208,7 @@ class TValFunc
 	TVarObj	*getO( unsigned id );
 
 	//> set IO value
+	void set( unsigned id, const TVariant &val );
 	void setS( unsigned id, const string &val );
 	void setI( unsigned id, int val );
 	void setR( unsigned id, double val );

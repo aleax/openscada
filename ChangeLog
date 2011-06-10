@@ -1,3 +1,15 @@
+2011-06-10 Roman
+- SYS.TVariant: New functions operator!=() and isEVal() is added.
+- SYS.TValue, SYS.TValFunc: Generic functions TVal::get() and TVal::set() is added for abstract value container TValue.
+- SYS.DAQ, DAQ.LogicLev, DAQ.Siemens, DAQ.ModBus: Templates list for control interface is moved to TParamContr object
+    for variable "/prm/tmplList" and used everywhere.
+- DAQ.LogicLev: Experimental linked status is added for direct link to mirrored parameter.
+- !!!!:DAQ.ModBus: Logical type parameter is realized for allow creation ModBus parameters by template.
+- FIX:DAQ.Siemens: Period config property type is fixed to Real. id_* template parameters clear on the parameter disable is fixed.
+    Get value request of atributes a parameter is fixed for "err" attribute try check ibto links is fixed.
+    Special parameter of a template "f_freq" set to call frequence is fixed.
+
+
 2011-06-10 Maxim
 - FIX:UI.Vision: The selection figures by the square is optimized for the primitive ElFigure.
 

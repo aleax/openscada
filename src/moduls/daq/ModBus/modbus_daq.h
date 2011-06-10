@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2011 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -67,28 +67,74 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	bool isStd( );
+	bool isLogic( );
+
 	void enable( );
 	void disable( );
 
-	void getVal( );
+	void upVal( );
 
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( );
 
     protected:
+	//Methods
+	void load_( );
+        void save_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
 	void postEnable( int flag );
+	void postDisable( int flag );
 	void vlGet( TVal &val );
 	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
         //Attributes
-	ResString	&m_attrLs;
 	TElem		p_el;		//Work atribute elements
 	ResString	acq_err;
+
+	//> Logical type by template
+        //Data
+        //***************************************************
+        //* Logical type parameter's context                *
+	class TLogCtx : public TValFunc
+	{
+	    public:
+    	    //Data
+    	    //>> Link structure
+    	    class SLnk
+    	    {
+    		public:
+    		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
+
+            	int     io_id;		//Template function io index
+            	string  addr;		//Full item address: R:23
+    	    };
+
+	    //Methods
+	    TLogCtx( const string &name );
+
+	    //>> Link operations
+    	    int lnkSize( )		{ return plnk.size(); }
+    	    int lnkId( int id );
+    	    int lnkId( const string &id );
+    	    SLnk &lnk( int num );
+
+	    //Attributes
+    	    int	id_freq, id_start, id_stop, id_err;     //Fixed system attributes identifiers
+    	    vector<SLnk>    plnk;  		//Parameter's links
+	};
+
+	//Methods
+	void loadIO( );
+	void saveIO( );
+	void initLnks( );
+
+	//Attributes
+        TLogCtx	*lCtx;
 };
 
 //******************************************************
@@ -111,8 +157,10 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
+	TVariant getVal( const string &addr, ResString &err );		//Unified value request from string address
 	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
 	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
+	void setVal( const TVariant &val, const string &addr, ResString &err );	//Unified value set by string address
 	void setValR( int val, int addr, ResString &err );		//Set register value
 	void setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
 	void setValC( char val, int addr, ResString &err );		//Set coins value
@@ -120,6 +168,7 @@ class TMdContr: public TController
 
     protected:
 	//Methods
+	void postDisable( int flag );		//Delete all DB if flag 1
 	void disable_( );
 	void start_( );
 	void stop_( );
@@ -184,6 +233,8 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
+	TElem	&prmIOE( )	{ return el_prm_io; }
+
     protected:
 	//Methods
 	void	load_( );
@@ -195,6 +246,9 @@ class TTpContr: public TTipDAQ
 	//Methods
 	void	postEnable( int flag );
 	TController *ContrAttach( const string &name, const string &daq_db );
+
+	//Attributes
+	TElem	el_prm_io;
 };
 
 extern TTpContr *mod;

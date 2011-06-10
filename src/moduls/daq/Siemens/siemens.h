@@ -85,8 +85,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	class SLnk
 	{
 	    public:
-		SLnk( int iid, const string &db_addr = "" ) :
-		    io_id(iid), db_addr(db_addr), val(-1,-1,0) { }
+		SLnk(int iid, const string &idb_addr = "") : io_id(iid), db_addr(idb_addr), val(-1,-1,0) { }
 
 		int	io_id;		//Template function io index
 		string	db_addr;	//DB full address: DB1.20.1
@@ -213,8 +212,7 @@ class TMdContr: public TController
 	string revers( const string &ibuf )
 	{
 	    string obuf;
-	    for(int i=ibuf.size()-1; i >= 0; i--)
-		obuf+=ibuf[i];
+	    for(int i=ibuf.size()-1; i >= 0; i--) obuf += ibuf[i];
 	    return obuf;
 	}
 	//Data

@@ -68,10 +68,12 @@ class TVariant
 
 	~TVariant( );
 
-	bool operator==( TVariant &vr );
+	bool operator==( const TVariant &vr );
+	bool operator!=( const TVariant &vr );
 	TVariant &operator=( const TVariant &vr );
 
 	bool isNull( ) const	{ return (type()==TVariant::Null); }
+	bool isEVal( ) const;
 	Type type( ) const	{ return (Type)(vl[0]&0x0F); }
 	void setType( Type tp );
 	bool isModify( )	{ return vl[0]&0x80; }

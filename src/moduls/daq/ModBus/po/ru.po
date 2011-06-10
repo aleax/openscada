@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-27 20:58+0300\n"
+"POT-Creation-Date: 2011-06-10 15:30+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "Parameteres table"
 msgstr "Таблица параметров"
+
+msgid "Logical parameteres table"
+msgstr "Таблица логических параметров"
 
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
@@ -58,6 +61,21 @@ msgstr "Стандарт"
 
 msgid "Attributes list"
 msgstr "Перечень атрибутов"
+
+msgid "Logical"
+msgstr "Логический"
+
+msgid "Parameter template"
+msgstr "Шаблон параметра"
+
+msgid "Parameter ID"
+msgstr "ID параметра"
+
+msgid "ID"
+msgstr ""
+
+msgid "Value"
+msgstr "Значение"
 
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
@@ -118,6 +136,9 @@ msgstr ""
 msgid "11:Value not gathered."
 msgstr "11:Значения не опрошены."
 
+msgid "Error calc template."
+msgstr "Ошибка вычисления шаблона."
+
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
@@ -164,8 +185,14 @@ msgstr ""
 "  'R_i4:300,400:r:int32:Int32' - получить int32 из регистров 300 и 400;\n"
 "  'R_b10:25:r:rBit:Reg bit' - получить бит 10 из регистра 25."
 
-msgid "ID"
-msgstr ""
+msgid "Template config"
+msgstr "Конфигурация шаблона"
+
+msgid "Parameters"
+msgstr "Параметры"
+
+msgid "Parameter id error."
+msgstr "Ошибка id параметра."
 
 msgid "Name"
 msgstr "Имя"
@@ -221,9 +248,6 @@ msgstr "Тип значений"
 msgid "Flags"
 msgstr "Флаги"
 
-msgid "Value"
-msgstr "Значение"
-
 msgid "Real position"
 msgstr "Реальное положение"
 
@@ -234,7 +258,7 @@ msgid "13:Error server respond"
 msgstr "13:Ошибка в ответе сервера"
 
 msgid "Not full respond"
-msgstr ""
+msgstr "Неполный ответ"
 
 msgid "13:Error respond: Too short."
 msgstr "13:Ошибка ответа: Очень короткий."

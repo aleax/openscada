@@ -184,7 +184,7 @@ void TDAQS::load_( )
 		    }catch(TError err)
 		    {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
+			mess_err(wmod.at().nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
 		    }
 		}
 	    //>> Search into config file and create new controllers
@@ -196,7 +196,7 @@ void TDAQS::load_( )
 		    catch(TError err)
 		    {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			mess_err(nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
+			mess_err(wmod.at().nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
 		    }
 		}
 	}

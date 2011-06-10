@@ -65,6 +65,7 @@ class TVal : public TCntrNode
 
 	//> Read curent value (direct)
 	string	getSEL( long long *tm = NULL, bool sys = false );
+	TVariant get( long long *tm = NULL, bool sys = false );
 	string	getS( long long *tm = NULL, bool sys = false );
 	double	getR( long long *tm = NULL, bool sys = false );
 	int	getI( long long *tm = NULL, bool sys = false );
@@ -72,6 +73,7 @@ class TVal : public TCntrNode
 
 	//> Set curent value
 	void setSEL( const string &value, long long tm = 0, bool sys = false );
+	void set( const TVariant &value, long long tm = 0, bool sys = false );
 	void setS( const string &value, long long tm = 0, bool sys = false );
 	void setR( double value, long long tm = 0, bool sys = false );
 	void setI( int value, long long tm = 0, bool sys = false );

@@ -43,7 +43,7 @@ class TTipParam : public TElem
 	//Methods
 	TTipParam( const char *iid, const char *iname, const char *idb ) :
 	    name(iid), descr(iname), db(idb)	{ };
-	
+
 	//Attributes
 	string name;
 	string descr;

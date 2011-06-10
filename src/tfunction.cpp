@@ -504,6 +504,20 @@ int TValFunc::ioSize( )
     return mFunc->ioSize();
 }
 
+TVariant TValFunc::get( unsigned id )
+{
+    if(id >= mVal.size())	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getS()",id);
+    switch(mVal[id].tp)
+    {
+	case IO::Integer:	return getI(id);
+	case IO::Real:		return getR(id);
+	case IO::Boolean:	return getB(id);
+	case IO::String:	return getS(id);
+	case IO::Object:	return getO(id);
+    }
+    return EVAL_STR;
+}
+
 string TValFunc::getS( unsigned id )
 {
     if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getS()",id);
@@ -559,9 +573,22 @@ char TValFunc::getB( unsigned id )
 
 TVarObj *TValFunc::getO( unsigned id )
 {
-    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getO()",id);
-    if( mVal[id].tp != IO::Object )	throw TError("ValFnc",_("Get object from not object's IO %d error!"),id);
+    if(id >= mVal.size())	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getO()",id);
+    if(mVal[id].tp != IO::Object) throw TError("ValFnc",_("Get object from not object's IO %d error!"),id);
     return mVal[id].val.o;
+}
+
+void TValFunc::set( unsigned id, const TVariant &val )
+{
+    if(id >= mVal.size())	throw TError("ValFnc",_("%s: Id or IO %d error!"),"setS()",id);
+    switch(mVal[id].tp)
+    {
+	case IO::Integer:	setI(id, val.getI());	break;
+	case IO::Real:		setR(id, val.getR());	break;
+	case IO::Boolean:	setB(id, val.getB());	break;
+	case IO::String:	setS(id, val.getS());	break;
+	case IO::Object:	setO(id, val.getO());	break;
+    }
 }
 
 void TValFunc::setS( unsigned id, const string &val )

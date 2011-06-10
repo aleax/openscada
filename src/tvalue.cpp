@@ -477,6 +477,18 @@ string TVal::getSEL( long long *tm, bool sys )
     return EVAL_STR;
 }
 
+TVariant TVal::get( long long *tm, bool sys )
+{
+    switch(fld().type())
+    {
+	case TFld::Integer:	return getI(tm,sys);
+	case TFld::Real:	return getR(tm,sys);
+	case TFld::Boolean:	return getB(tm,sys);
+	case TFld::String:	return getS(tm,sys);
+    }
+    return EVAL_STR;
+}
+
 string TVal::getS( long long *tm, bool sys )
 {
     switch(fld().type())
@@ -602,6 +614,17 @@ void TVal::setSEL( const string &value, long long tm, bool sys )
 	case TFld::Integer:	setI(fld().selNm2VlI(value),tm,sys);	break;
 	case TFld::Real:	setR(fld().selNm2VlR(value),tm,sys);	break;
 	case TFld::Boolean:	setB(fld().selNm2VlB(value),tm,sys);	break;
+    }
+}
+
+void TVal::set( const TVariant &value, long long tm, bool sys )
+{
+    switch(fld().type())
+    {
+	case TFld::Integer:	setI(value.getI(), tm, sys);	break;
+	case TFld::Real:	setR(value.getR(), tm, sys);	break;
+	case TFld::Boolean:	setB(value.getB(), tm, sys);	break;
+	case TFld::String:	setS(value.getS(), tm, sys);	break;
     }
 }
 

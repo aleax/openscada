@@ -196,5 +196,16 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
+    else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
+    {
+        vector<string> lls, ls;
+	SYS->daq().at().tmplLibList(lls);
+	for(unsigned i_l = 0; i_l < lls.size(); i_l++)
+	{
+	    SYS->daq().at().tmplLibAt(lls[i_l]).at().list(ls);
+	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
+		opt->childAdd("el")->setText(lls[i_l]+"."+ls[i_t]);
+	}
+    }
     else TValue::cntrCmdProc(opt);
 }

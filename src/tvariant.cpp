@@ -88,7 +88,9 @@ void TVariant::setModify( bool iv )
     vl[0] = iv ? vl[0]|0x80 : vl[0]&(~0x80);
 }
 
-bool TVariant::operator==( TVariant &vr )	{ return vr.vl == vl; }
+bool TVariant::operator==( const TVariant &vr )	{ return vr.vl == vl; }
+
+bool TVariant::operator!=( const TVariant &vr )	{ return vr.vl != vl; }
 
 TVariant &TVariant::operator=( const TVariant &vr )
 {
@@ -96,6 +98,20 @@ TVariant &TVariant::operator=( const TVariant &vr )
     vl = vr.vl;
     if( type() == TVariant::Object ) getO()->connect();
     return *this;
+}
+
+bool TVariant::isEVal( ) const
+{
+    switch(type())
+    {
+	case TVariant::String:	return (getS()==EVAL_STR);
+	case TVariant::Integer:	return (getI()==EVAL_INT);
+	case TVariant::Real:	return (getR()==EVAL_REAL);
+	case TVariant::Boolean:	return (getB()==EVAL_BOOL);;
+	case TVariant::Object:	return !getO();
+	default: break;
+    }
+    return true;
 }
 
 char TVariant::getB( ) const

@@ -216,7 +216,7 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().open(wbd);
 	    SYS->db().at().close(wbd,true);
 
-	    wbd=wbd+"_io";
+	    wbd = wbd+"_io";
 	    SYS->db().at().open(wbd);
 	    SYS->db().at().close(wbd,true);
 	}

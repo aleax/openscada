@@ -390,7 +390,7 @@ void TMdPrm::disable()
     if(owner().startStat())	owner().prmEn( id(), false );
 
     mode(TMdPrm::Free);
-    id_freq=id_start=id_stop=id_err=-1;
+    id_freq = id_start = id_stop = id_err = -1;
 
     TParamContr::disable();
 }
@@ -881,8 +881,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MODE",cfg("MODE").fld().descr(),RWRW__,"root",SDAQ_ID,4,"tp","str","dest","select",
 	    "sel_id",(TSYS::int2str(TMdPrm::Free)+";"+TSYS::int2str(TMdPrm::DirRefl)+";"+TSYS::int2str(TMdPrm::Template)).c_str(),
 	    "sel_list",_("Free;Direct reflection;Template"));
-        if(m_mode == TMdPrm::Free) ctrRemoveNode(opt,"/prm/cfg/PRM");
-        else ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
+        if(m_mode == TMdPrm::DirRefl) ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
+        else if(m_mode == TMdPrm::Template) ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
+        else ctrRemoveNode(opt,"/prm/cfg/PRM");
 	if(mode() == TMdPrm::Template && ctrMkNode("area",opt,-1,"/cfg",_("Template config")))
 	{
 	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -935,15 +936,32 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    m_mode = atoi(opt->text().c_str());
 	    mode((TMdPrm::Mode)m_mode, m_prm="");
 	} catch(...) { disable(); throw; }
-    else if(a_path == "/prm/cfg/PRM" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-	try
+    else if(a_path == "/prm/cfg/PRM")
+    {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	{
-	    if(enableStat()) disable();
-	    m_prm = opt->text();
-	    if(m_mode == TMdPrm::DirRefl && m_prm.getVal() == owner().owner().modId()+"."+owner().id()+"."+id())
-		m_prm = owner().owner().modId()+"."+owner().id();
-	    mode((TMdPrm::Mode)m_mode, m_prm);
-	} catch(...){ disable(); throw; }
+	    string prmVal = m_prm;
+	    if(m_mode == TMdPrm::DirRefl)
+	    {
+		string idMod = TSYS::strSepParse(m_prm, 0, '.');
+		string idCntr = TSYS::strSepParse(m_prm, 1, '.');
+		string idPrm = TSYS::strSepParse(m_prm, 2, '.');
+		if(SYS->daq().at().modPresent(idMod) && SYS->daq().at().at(idMod).at().present(idCntr) && SYS->daq().at().at(idMod).at().at(idCntr).at().present(idPrm))
+		    prmVal += " (+)";
+	    }
+	    opt->setText(prmVal);
+	}
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	    try
+	    {
+		if(enableStat()) disable();
+		m_prm = TSYS::strParse(opt->text(), 0, " ");
+		//> Link to self exclude
+		if(m_mode == TMdPrm::DirRefl && m_prm.getVal() == owner().owner().modId()+"."+owner().id()+"."+id())
+		    m_prm = owner().owner().modId()+"."+owner().id();
+		mode((TMdPrm::Mode)m_mode, m_prm);
+	    } catch(...){ disable(); throw; }
+    }
     else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt))
     {
 	int c_lv = 0;
@@ -954,25 +972,21 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
-	if(c_lv) c_path+=".";
+	if(c_lv) c_path += ".";
 	string prm0 = TSYS::strSepParse(m_prm, 0, '.');
 	string prm1 = TSYS::strSepParse(m_prm, 1, '.');
 	vector<string>  ls;
 	switch(c_lv)
 	{
 	    case 0:
-		if(m_mode == DirRefl)	SYS->daq().at().modList(ls);
-		if(m_mode == Template)	SYS->daq().at().tmplLibList(ls);
+		SYS->daq().at().modList(ls);
 		break;
 	    case 1:
-		if(m_mode == DirRefl && SYS->daq().at().modPresent(prm0))
+		if(SYS->daq().at().modPresent(prm0))
 		    SYS->daq().at().at(prm0).at().list(ls);
-		if(m_mode == Template && SYS->daq().at().tmplLibPresent(prm0))
-		    SYS->daq().at().tmplLibAt(prm0).at().list(ls);
 		break;
 	    case 2:
-		if(m_mode == DirRefl && SYS->daq().at().modPresent(prm0) &&
-			SYS->daq().at().at(prm0).at().present(prm1))
+		if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
 		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
 		break;
 	}
@@ -990,7 +1004,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	{
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
-	    for( int c_off = 0; TSYS::strSepParse(lnk_val,0,'.',&c_off).size(); c_lvl++ );
+	    for(int c_off = 0; TSYS::strSepParse(lnk_val,0,'.',&c_off).size(); c_lvl++);
 	    if(c_lvl == 4) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
 	    else opt->setText(lnk_val);
 	}
