@@ -1034,12 +1034,12 @@ void VFileArch::check( )
 
 long long VFileArch::endData( )
 {
-    if( getVal(mpos).getS() != EVAL_STR ) return end();
+    if(getVal(mpos).getS() != EVAL_STR) return end();
 
     ResAlloc res(mRes,false);
-    if( mErr ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
+    if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
-    if( mPack )
+    if(mPack)
     {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
@@ -1049,14 +1049,14 @@ long long VFileArch::endData( )
 
     //> Open archive file
     int hd = open(name().c_str(),O_RDONLY);
-    if( hd <= 0 ) { mErr = true; return end(); }
+    if(hd <= 0) { mErr = true; return end(); }
 
     //> Find last value offset
     int last_off = calcVlOff(hd,mpos);
     int curPos = mpos;
-    for( int d_win = curPos/2; d_win > 3; d_win/=2 )
-	if( calcVlOff(hd,curPos-d_win) == last_off ) curPos-=d_win;
-    while( curPos > 0 && calcVlOff(hd,curPos) == last_off ) curPos--;
+    for(int d_win = curPos/2; d_win > 3; d_win /= 2)
+	if(calcVlOff(hd,curPos-d_win) == last_off) curPos -= d_win;
+    while(curPos > 0 && calcVlOff(hd,curPos) == last_off) curPos--;
 
     //> Free file resource and close file
     close(hd);
@@ -1484,72 +1484,82 @@ string VFileArch::getValue( int hd, int voff, int vsz )
 
 int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 {
-    int b_sz = 0, i_bf = 0;
-    char buf[STR_BUF_LEN];
+    int b_sz = 0, i_bf = 0, rest = 0;
+    char buf[4096];
     int voff;
 
-    if( fixVl )
+    if(fixVl)
     {
 	int cach_pos = vpos;
-	int cach_off = cacheGet( cach_pos );
-	cach_pos++;
-	if( cach_off ) voff = cach_off;
+	int cach_off = cacheGet(cach_pos);
+	if(cach_off) voff = cach_off;
 	else voff = sizeof(FHead)+mpos/8+(bool)(mpos%8);
-	lseek(hd,sizeof(FHead)+cach_pos/8,SEEK_SET);
+	if(cach_pos == vpos) return voff;
 
-	if( cach_pos%8 )
+	cach_pos++;
+	int i_ps = cach_pos;
+	lseek(hd, sizeof(FHead)+cach_pos/8, SEEK_SET);
+
+	for(int n_pos = 0; i_ps <= vpos; i_ps = n_pos)
 	{
-	    b_sz = vmin((vpos/8)-(cach_pos/8)+1,(int)sizeof(buf));
-	    read(hd,buf,b_sz);
-	}
-	for( int i_ps = cach_pos; i_ps <= vpos; i_ps++ )
-	{
-	    int rest = i_ps%8;
-	    if( !rest )
+	    //> Buffer check for refresh
+	    if(i_bf >= b_sz)
 	    {
-		if( ++i_bf >= b_sz )
-		{
-		    b_sz = vmin((vpos/8)-(i_ps/8)+1,(int)sizeof(buf));
-		    read(hd,&buf,b_sz);
-		    i_bf = 0;
-		}
+		b_sz = vmin((vpos/8)-(i_ps/8)+1, (int)sizeof(buf));
+		read(hd, &buf, b_sz);
+		i_bf = 0;
 	    }
-	    voff += vSize*(bool)((0x01<<rest)&buf[i_bf]);
+	    //> Fast algorithm for big blocks
+	    if(!((i_ps%8) || (i_ps/8)%4) && (i_ps/32) < (vpos/32))
+	    {
+		uint32_t vw = *(uint32_t*)(buf+i_bf);
+    	        vw -= ((vw>>1)&0x55555555);
+    		vw = (vw&0x33333333) + ((vw>>2)&0x33333333);
+    		voff += vSize * (((vw+(vw>>4)&0xF0F0F0F)*0x1010101)>>24);
+    		n_pos = i_ps + 32; i_bf += 4;
+    	    }
+    	    //> Simple algorithm
+    	    else
+	    {
+		voff += vSize * (0x01&(buf[i_bf]>>(i_ps%8)));
+		n_pos = i_ps+1;
+		if((n_pos%8) == 0) i_bf++;
+	    }
 	    //> Update cache
-	    if( (i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos )
-		cacheSet(i_ps,voff,0,i_ps==vpos,wr);
+	    if((i_ps && (i_ps%VAL_CACHE_POS) == 0) || i_ps == vpos)
+		cacheSet(i_ps, voff, 0, i_ps==vpos, wr);
 	}
     }
     else
     {
 	int cach_pos = vpos;
 	int lst_pk_vl;
-	int cach_off = cacheGet( cach_pos, &lst_pk_vl );
-	if( cach_off )	{ voff = cach_off; cach_pos++; }
+	int cach_off = cacheGet(cach_pos, &lst_pk_vl);
+	if(cach_off)	{ voff = cach_off; cach_pos++; }
 	else voff = sizeof(FHead)+mpos*vSize;
-	lseek(hd,sizeof(FHead)+cach_pos*vSize,SEEK_SET);
+	lseek(hd, sizeof(FHead)+cach_pos*vSize, SEEK_SET);
 
-	for( int i_ps = cach_pos; i_ps <= vpos; i_ps++ )
+	for(int i_ps = cach_pos; i_ps <= vpos; i_ps++)
 	{
 	    int pk_vl = 0;
-	    for( int i_e = 0; i_e < vSize; i_e++ )
+	    for(int i_e = 0; i_e < vSize; ++i_e)
 	    {
-		if( ++i_bf >= b_sz )
+		if(++i_bf >= b_sz)
 		{
-		    b_sz = vmin(vSize*(vpos-i_ps+1),(int)sizeof(buf));
-		    read(hd,&buf,b_sz);
+		    b_sz = vmin(vSize*(vpos-i_ps+1), (int)sizeof(buf));
+		    read(hd, &buf, b_sz);
 		    i_bf = 0;
 		}
-		pk_vl+=buf[i_bf]<<(8*i_e);
+		pk_vl += buf[i_bf]<<(8*i_e);
 	    }
-	    if( pk_vl )
+	    if(pk_vl)
 	    {
 		if(i_ps) voff += lst_pk_vl;
 		lst_pk_vl = pk_vl;
 	    }
 	    //> Update cache
-	    if( (i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos )
-		cacheSet(i_ps,voff,lst_pk_vl,i_ps==vpos,wr);
+	    if((i_ps-cach_pos && !((i_ps-cach_pos)%VAL_CACHE_POS)) || i_ps == vpos)
+		cacheSet(i_ps, voff, lst_pk_vl, i_ps==vpos, wr);
 	}
 	if(vsz) *vsz = lst_pk_vl;
     }

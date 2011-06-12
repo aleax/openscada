@@ -1,3 +1,7 @@
+2011-06-12 Roman
+- !!!:Archive.FSArch: Archive's index table processing is made more faster by use speed-optimal algorithm of dword's set bits count.
+
+
 2011-06-10 Roman
 - SYS.TVariant: New functions operator!=() and isEVal() is added.
 - SYS.TValue, SYS.TValFunc: Generic functions TVal::get() and TVal::set() is added for abstract value container TValue.
