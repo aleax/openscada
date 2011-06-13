@@ -256,7 +256,7 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     if(cntr.redntUse()) return cntr.endrunReq;
 
     //> Check for current time correction
-    long long cTm = TSYS::curTime();
+    int64_t cTm = TSYS::curTime();
     if(fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6)
     {
 	cntr.wTm = cTm - framesPerBuffer*cntr.sdTm;

@@ -163,7 +163,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"get",RWRWRW,"root",SDAQ_ID,SEC_RD))		//All attributes values
 	{
-	    long long vtm;
+	    int64_t vtm;
 	    string svl;
 	    AutoHD<TVal> vl;
 	    XMLNode *aNd;
@@ -201,10 +201,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(vl.at().arch().freeStat()) { opt->childDel(aNd); i_a--; continue; }
 
 		AutoHD<TVArchive> arch = vl.at().arch();
-		long long vper = arch.at().period(BUF_ARCH_NM);
-		long long reqBeg = (atoll(aNd->attr("tm").c_str())/vper+1)*vper;
-		long long vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
-		long long vend = arch.at().end(BUF_ARCH_NM);
+		int64_t vper = arch.at().period(BUF_ARCH_NM);
+		int64_t reqBeg = (atoll(aNd->attr("tm").c_str())/vper+1)*vper;
+		int64_t vbeg = vmax(reqBeg,arch.at().begin(BUF_ARCH_NM));
+		int64_t vend = arch.at().end(BUF_ARCH_NM);
 
 		//>>> Longing to equivalent archivators
 		if(vbeg == arch.at().begin(BUF_ARCH_NM))
@@ -464,7 +464,7 @@ AutoHD<TVArchive> TVal::arch()	{ return mArch; }
 
 void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
 
-string TVal::getSEL( long long *tm, bool sys )
+string TVal::getSEL( int64_t *tm, bool sys )
 {
     if(!(fld().flg()&TFld::Selected))	throw TError("Val",_("Not select type!"));
     switch(fld().type())
@@ -477,7 +477,7 @@ string TVal::getSEL( long long *tm, bool sys )
     return EVAL_STR;
 }
 
-TVariant TVal::get( long long *tm, bool sys )
+TVariant TVal::get( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
@@ -489,7 +489,7 @@ TVariant TVal::get( long long *tm, bool sys )
     return EVAL_STR;
 }
 
-string TVal::getS( long long *tm, bool sys )
+string TVal::getS( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
@@ -518,7 +518,7 @@ string TVal::getS( long long *tm, bool sys )
     return EVAL_STR;
 }
 
-int TVal::getI( long long *tm, bool sys )
+int TVal::getI( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
@@ -547,7 +547,7 @@ int TVal::getI( long long *tm, bool sys )
     return EVAL_INT;
 }
 
-double TVal::getR( long long *tm, bool sys )
+double TVal::getR( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
@@ -576,7 +576,7 @@ double TVal::getR( long long *tm, bool sys )
     return EVAL_REAL;
 }
 
-char TVal::getB( long long *tm, bool sys )
+char TVal::getB( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
@@ -605,7 +605,7 @@ char TVal::getB( long long *tm, bool sys )
     return EVAL_BOOL;
 }
 
-void TVal::setSEL( const string &value, long long tm, bool sys )
+void TVal::setSEL( const string &value, int64_t tm, bool sys )
 {
     if( !(fld().flg()&TFld::Selected) )	throw TError("Val",_("Not select type!"));
     switch( fld().type() )
@@ -617,7 +617,7 @@ void TVal::setSEL( const string &value, long long tm, bool sys )
     }
 }
 
-void TVal::set( const TVariant &value, long long tm, bool sys )
+void TVal::set( const TVariant &value, int64_t tm, bool sys )
 {
     switch(fld().type())
     {
@@ -628,7 +628,7 @@ void TVal::set( const TVariant &value, long long tm, bool sys )
     }
 }
 
-void TVal::setS( const string &value, long long tm, bool sys )
+void TVal::setS( const string &value, int64_t tm, bool sys )
 {
     switch( fld().type() )
     {
@@ -655,7 +655,7 @@ void TVal::setS( const string &value, long long tm, bool sys )
     }
 }
 
-void TVal::setI( int value, long long tm, bool sys )
+void TVal::setI( int value, int64_t tm, bool sys )
 {
     switch( fld().type() )
     {
@@ -686,7 +686,7 @@ void TVal::setI( int value, long long tm, bool sys )
     }
 }
 
-void TVal::setR( double value, long long tm, bool sys )
+void TVal::setR( double value, int64_t tm, bool sys )
 {
     switch( fld().type() )
     {
@@ -717,7 +717,7 @@ void TVal::setR( double value, long long tm, bool sys )
     }
 }
 
-void TVal::setB( char value, long long tm, bool sys )
+void TVal::setB( char value, int64_t tm, bool sys )
 {
     switch( fld().type() )
     {
@@ -756,8 +756,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	try
 	{
 	    TVariant rez;
-	    long long tm = 0;
-	    if(prms.size() >= 1) tm = (long long)prms[0].getI()*1000000;
+	    int64_t tm = 0;
+	    if(prms.size() >= 1) tm = (int64_t)prms[0].getI()*1000000;
 	    if(prms.size() >= 2) tm += prms[1].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
@@ -783,8 +783,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     {
 	try
 	{
-	    long long tm = 0;
-	    if(prms.size() >= 2) tm = (long long)prms[1].getI()*1000000;
+	    int64_t tm = 0;
+	    if(prms.size() >= 2) tm = (int64_t)prms[1].getI()*1000000;
 	    if(prms.size() >= 3) tm += prms[2].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
@@ -844,7 +844,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 	{
 	    if(!atoll(opt->attr("tm_grnd").c_str()) && opt->attr("arch").empty())
 	    {
-		long long tm = atoll(opt->attr("tm").c_str());
+		int64_t tm = atoll(opt->attr("tm").c_str());
 		opt->setText(getS(&tm));
 		opt->setAttr("tm",TSYS::ll2str(tm));
 	    }

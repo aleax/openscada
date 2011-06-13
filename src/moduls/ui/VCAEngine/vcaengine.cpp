@@ -289,7 +289,7 @@ void Engine::load_( )
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
 
 #if OSC_DEBUG >= 3
-    long long w_tm = TSYS::curTime();
+    int64_t w_tm = TSYS::curTime();
 #endif
 
     //>> Load widget's libraries

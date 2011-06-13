@@ -93,7 +93,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	long long period( )	{ return mPer; }
+	int64_t period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
@@ -128,7 +128,7 @@ class TMdContr: public TController
 		//&mHouse,	//BFN house for get
 		&mUser,		//Auth user name
 		&mPassword;	//Auth pasword
-	long long mPer;
+	int64_t	mPer;
 
 	bool	prc_st,		// Process task active
 		acq_st,		// Acquisition now

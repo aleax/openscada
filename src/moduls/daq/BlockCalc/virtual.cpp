@@ -287,7 +287,7 @@ void Contr::disable_( )
 void Contr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Make process all bloks
     vector<string> lst;
@@ -353,7 +353,7 @@ void *Contr::Task( void *icontr )
     while(true)
     {
 	//Check calk time
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	cntr.hd_res.resRequestR( );
 	ResAlloc sres(cntr.calcRes,true);

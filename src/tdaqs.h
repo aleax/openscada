@@ -54,6 +54,8 @@ class TDAQS : public TSubSYS
 	void subStop( );
 
 	AutoHD<TTipDAQ> at( const string &name )		{ return modAt(name); }
+	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false );
+	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false );
 
 	//> Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }

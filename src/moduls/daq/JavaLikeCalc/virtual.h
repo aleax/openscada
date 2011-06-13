@@ -118,7 +118,7 @@ class Contr: public TController, public TValFunc
 
 	string getStatus( );
 
-	long long period( )	{ return mPer; }
+	int64_t period( )	{ return mPer; }
 	string cron( )		{ return mSched; }
 	int iterate( )		{ return mIter; }
 
@@ -155,7 +155,7 @@ class Contr: public TController, public TValFunc
 
 	int	id_freq, id_start, id_stop;
 
-	long long mPer;
+	int64_t	mPer;
 };
 
 //*************************************************

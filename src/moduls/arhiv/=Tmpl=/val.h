@@ -52,9 +52,9 @@ class ModVArchEl: public TVArchEl
 	~ModVArchEl( );
 
 	//!!! Archive element's properties: begin, end and period of processed data
-	long long begin( )	{ return mBeg; }
-	long long end( )	{ return mEnd; }
-	long long period( )	{ return mPer; }
+	int64_t begin( )	{ return mBeg; }
+	int64_t end( )		{ return mEnd; }
+	int64_t period( )	{ return mPer; }
 
 	//!!! Direct link function to value archivator object
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
@@ -62,14 +62,14 @@ class ModVArchEl: public TVArchEl
     protected:
 	//Methods
 	//!!! Get and set data virtual functions for access to archive.
-	TVariant getValProc( long long *tm, bool up_ord );
-	void getValsProc( TValBuf &buf, long long beg, long long end );
-	void setValsProc( TValBuf &buf, long long beg, long long end );
+	TVariant getValProc( int64_t *tm, bool up_ord );
+	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	void setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
     private:
 	//Attributes
 	//!!! Archive element's properties: begin, end and period of processed data
-	long long mBeg, mEnd, mPer;
+	int64_t mBeg, mEnd, mPer;
 };
 
 //************************************************

@@ -51,7 +51,7 @@ class TValBuf
     public:
 	//Public methods
 	TValBuf( );
-	TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd = false, bool ihres = false );
+	TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd = false, bool ihres = false );
 	virtual ~TValBuf( );
 
 	TValBuf &operator=( TValBuf &src );
@@ -65,33 +65,33 @@ class TValBuf
 	int realSize( );
 	unsigned int evalCnt( )	{ return mEvalCnt; }
 
-	long long begin( )	{ return mBeg; }
-	long long end( )	{ return mEnd; }
-	long long period( )	{ return mPer; }
+	int64_t begin( )	{ return mBeg; }
+	int64_t end( )		{ return mEnd; }
+	int64_t period( )	{ return mPer; }
 
-	bool vOK( long long ibeg, long long iend );
+	bool vOK( int64_t ibeg, int64_t iend );
 
 	void setValType( TFld::Type vl );
 	void setHardGrid( bool vl );
 	void setHighResTm( bool vl );
 	void setSize( int vl );
-	void setPeriod( long long vl );
+	void setPeriod( int64_t vl );
 
 	//> Get value
-	virtual void getVals( TValBuf &buf, long long beg = 0, long long end = 0 );
-	virtual string getS( long long *tm = NULL, bool up_ord = false );
-	virtual double getR( long long *tm = NULL, bool up_ord = false );
-	virtual int    getI( long long *tm = NULL, bool up_ord = false );
-	virtual char   getB( long long *tm = NULL, bool up_ord = false );
+	virtual void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
+	virtual string getS( int64_t *tm = NULL, bool up_ord = false );
+	virtual double getR( int64_t *tm = NULL, bool up_ord = false );
+	virtual int    getI( int64_t *tm = NULL, bool up_ord = false );
+	virtual char   getB( int64_t *tm = NULL, bool up_ord = false );
 
 	//> Set value
-	virtual void setVals( TValBuf &buf, long long beg = 0, long long end = 0 );
-	virtual void setS( const string &value, long long tm = 0 );
-	virtual void setR( double value, long long tm = 0 );
-	virtual void setI( int value, long long tm = 0 );
-	virtual void setB( char value, long long tm = 0 );
+	virtual void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
+	virtual void setS( const string &value, int64_t tm = 0 );
+	virtual void setR( double value, int64_t tm = 0 );
+	virtual void setI( int value, int64_t tm = 0 );
+	virtual void setB( char value, int64_t tm = 0 );
 
-	void makeBuf( TFld::Type v_tp, int isz, long long ipr, bool hd_grd, bool hg_res );	//Create new or change buffer mode (all data into buffer will lost)
+	void makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool hg_res );	//Create new or change buffer mode (all data into buffer will lost)
 
     private:
 	//Private data and attributes
@@ -100,25 +100,25 @@ class TValBuf
 	    friend class TValBuf;
 	    public:
 		//Public methods
-		TBuf( TpVal eval, int &isz, long long &ipr, bool &ihgrd, bool &ihres,
-		    long long &iend, long long &ibeg, unsigned int &iEvalCnt );
+		TBuf( TpVal eval, int &isz, int64_t &ipr, bool &ihgrd, bool &ihres,
+		    int64_t &iend, int64_t &ibeg, unsigned int &iEvalCnt );
 		~TBuf( );
 
 		void clear( );
 
 		int realSize( );
 
-		TpVal get( long long *tm = NULL, bool up_ord = false );
-		void  set( TpVal value, long long tm = 0 );
+		TpVal get( int64_t *tm = NULL, bool up_ord = false );
+		void  set( TpVal value, int64_t tm = 0 );
 
 		//> Create new or change buffer mode (all data into buffer will lost)
-		void makeBuf( int isz, long long ipr, bool hd_grd, bool hg_res );
+		void makeBuf( int isz, int64_t ipr, bool hd_grd, bool hg_res );
 
 	    private:
 		//Private attributes
 		bool	&hg_res_tm,
 			&hrd_grd;
-		long long &end, &beg,
+		int64_t	&end, &beg,
 			&per;
 		int	&size,
 			cur;		//Curent position.
@@ -126,7 +126,7 @@ class TValBuf
 		unsigned int &mEvalCnt;
 
 		struct SLw  { time_t tm; TpVal val; };
-		struct SHg  { long long tm; TpVal val; };
+		struct SHg  { int64_t tm; TpVal val; };
 		union
 		{
 		    vector<TpVal>	*grid;
@@ -147,7 +147,7 @@ class TValBuf
 
 	bool	mHgResTm,		//High resolution time use (microseconds)
 		mHrdGrd;		//Set hard griding. It mode no support the zero periodic.
-	long long mEnd, mBeg,		//Time of buffer begin and end (64 bit usec)
+	int64_t	mEnd, mBeg,		//Time of buffer begin and end (64 bit usec)
 		mPer;			//Periodic grid value (usec). If value = 0 then it no periodic buffer, error for time griding mode!
 	int	mSize;			//Buffer size limit.
 	unsigned int mEvalCnt;
@@ -186,9 +186,9 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	long long end( const string &arch = BUF_ARCH_NM );
-	long long begin( const string &arch = BUF_ARCH_NM );
-	long long period( const string &arch = BUF_ARCH_NM );
+	int64_t end( const string &arch = BUF_ARCH_NM );
+	int64_t begin( const string &arch = BUF_ARCH_NM );
+	int64_t period( const string &arch = BUF_ARCH_NM );
 	TFld::Type valType( )	{ return TValBuf::valType(); }
 	bool hardGrid( )	{ return TValBuf::hardGrid(); }
 	bool highResTm( )	{ return TValBuf::highResTm(); }
@@ -205,17 +205,17 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setHardGrid( bool vl );
 	void setHighResTm( bool vl );
 	void setSize( int vl );
-	void setPeriod( long long vl );
+	void setPeriod( int64_t vl );
 
 	//> Service
 	void start( );
 	void stop( bool full_del = false );
 
 	//> Get value
-	TVariant getVal( long long *tm = NULL, bool up_ord = false, const string &arch = "", bool onlyLocal = false );
-	void getVals( TValBuf &buf, long long beg = 0, long long end = 0,
+	TVariant getVal( int64_t *tm = NULL, bool up_ord = false, const string &arch = "", bool onlyLocal = false );
+	void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0,
 		const string &arch = "", int limit = 100000, bool onlyLocal = false );
-	void setVals( TValBuf &buf, long long beg, long long end, const string &arch );
+	void setVals( TValBuf &buf, int64_t beg, int64_t end, const string &arch );
 
 	//> Active get data from atribute
 	void getActiveData( );
@@ -227,7 +227,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void archivatorDetach( const string &arch, bool full = false );
 	void archivatorSort( );
 
-	string makeTrendImg( long long beg, long long end, const string &arch, int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0 );
+	string makeTrendImg( int64_t beg, int64_t end, const string &arch, int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0 );
 
 	TArchiveS &owner( );
 
@@ -374,33 +374,33 @@ class TVArchEl
 	virtual ~TVArchEl( );
 	virtual void fullErase( )	{ }
 
-	virtual long long end( )	{ return 0; }		//Archive end
-	virtual long long begin( )	{ return 0; }		//Archive begin
-	long long lastGet( )		{ return mLastGet; }	//Last getted value time
+	virtual int64_t end( )		{ return 0; }		//Archive end
+	virtual int64_t begin( )	{ return 0; }		//Archive begin
+	int64_t lastGet( )		{ return mLastGet; }	//Last getted value time
 
-	TVariant getVal( long long *tm, bool up_ord, bool onlyLocal = false );
-	void getVals( TValBuf &buf, long long beg = 0, long long end = 0, bool onlyLocal = false );
-	void setVals( TValBuf &buf, long long beg = 0, long long end = 0 );
+	TVariant getVal( int64_t *tm, bool up_ord, bool onlyLocal = false );
+	void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0, bool onlyLocal = false );
+	void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
 
 	TVArchive &archive( );
 	TVArchivator &archivator( );
 
     protected:
 	//Protected methods
-	virtual TVariant getValProc( long long *tm, bool up_ord );
-	virtual void getValsProc( TValBuf &buf, long long beg, long long end )	{ }
-	virtual void setValsProc( TValBuf &buf, long long beg, long long end )	{ }
+	virtual TVariant getValProc( int64_t *tm, bool up_ord );
+	virtual void getValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ }
+	virtual void setValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ }
 
 	//> Previous averaging value
-	long long prev_tm;
-	string prev_val;
+	int64_t	prev_tm;
+	string	prev_val;
 
     private:
 	//Private attributes
 	TVArchive	&mArchive;
 	TVArchivator	&mArchivator;
 
-	long long mLastGet;
+	int64_t	mLastGet;
 };
 
 }

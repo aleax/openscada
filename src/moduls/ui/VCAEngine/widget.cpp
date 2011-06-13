@@ -1113,7 +1113,13 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			    else
 				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
 				    nprm,(lnk_ro?R_R_R_:RWRWR_),"root",SUI_ID,4,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
-			    if(nel && atoi(opt->attr("inclValue").c_str())) nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
+			    if(nel && atoi(opt->attr("inclValue").c_str()))
+			    {
+				nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
+				if(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+					nel->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(nel->text().substr(4),0,true).freeStat())
+				    nel->setText(nel->text() + " (+)");
+			    }
 			}
 		    }
 		}
@@ -1158,11 +1164,10 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	    int c_lvl = 0;
 	    bool custom = false;
-	    if( obj_tp == "prm:" || obj_tp == "wdg:" )
+	    if(obj_tp == "prm:" || obj_tp == "wdg:")
 	    {
-		for( int c_off = obj_tp.size(); TSYS::pathLev(cfg_val,0,true,&c_off).size(); c_lvl++ );
-		if( (obj_tp == "prm:" && c_lvl==4) || (obj_tp == "wdg:" && c_lvl==2) )
-		    cfg_val.resize(cfg_val.rfind("/"));
+		for(int c_off = obj_tp.size(); TSYS::pathLev(cfg_val,0,true,&c_off).size(); c_lvl++);
+		if((obj_tp == "prm:" && c_lvl==4) || (obj_tp == "wdg:" && c_lvl==2)) cfg_val.resize(cfg_val.rfind("/"));
 	    }else custom = true;
 
 	    string sel;
@@ -1177,7 +1182,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    rez += sel+", ";
 		}
 	    if(cfg_val.empty())	rez = "";
-	    else if(!custom)	rez = cfg_val;
+	    else if(!custom)
+	    {
+		rez = cfg_val;
+		if(obj_tp == "prm:" && !SYS->daq().at().prmAt(rez.substr(4),0,true).freeStat()) rez += " (+)";
+	    }
 
 	    opt->setText(rez);
 	}
@@ -1185,7 +1194,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	{
 	    bool noonly_no_set = true;
 	    string no_set;
-	    string cfg_val = opt->text();
+	    string cfg_val = TSYS::strParse(opt->text(), 0, " ");
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
 	    string cfg_addr = (obj_tp.size()<cfg_val.size()) ? cfg_val.substr(obj_tp.size()) : "";
 
@@ -1326,12 +1335,18 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	else nattr = nwdg;
 
 	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))
+	{
 	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
+	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
+		    opt->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(opt->text().substr(4),0,true).freeStat())
+		opt->setText(opt->text() + " (+)");
+	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))
 	{
 	    srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
-	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)
-		srcwdg.at().attrAt(nattr).at().setS(opt->text());
+	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)	srcwdg.at().attrAt(nattr).at().setS(opt->text());
+	    else if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))
+		srcwdg.at().attrAt(nattr).at().setCfgVal(TSYS::strParse(opt->text(),0," "));
 	}
     }
     else return false;

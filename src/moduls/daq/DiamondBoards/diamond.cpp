@@ -262,7 +262,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 void *TMdContr::AD_DSCTask( void *param )
 {
-    long long vtm = 0;
+    int64_t vtm = 0;
     struct timespec get_tm;
     get_tm.tv_sec = 0; get_tm.tv_nsec = 200000000;
     int prev_trans = -1;
@@ -348,7 +348,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		if((int)dscs.transfers != prev_trans && !cntr.redntUse())
 		{
 		    //> Init current time and check for current time correction
-		    long long cTm = TSYS::curTime();
+		    int64_t cTm = TSYS::curTime();
 		    if(!vtm || fabs((vtm+1000000)-cTm) > 1e6)
 		    {
 			if(vtm) mess_warning(cntr.nodePath().c_str(),_("DSC card's counter run from system time is corrected."));
@@ -371,18 +371,18 @@ void *TMdContr::AD_DSCTask( void *param )
 			{
 			    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
 			    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
-				val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+(long long)i_smpl*1000000/(int)dscaioint.conversion_rate);
+				val.at().arch().at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt],vtm+(int64_t)i_smpl*1000000/(int)dscaioint.conversion_rate);
 			}
-			val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((long long)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+			val.at().setI(dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt],vtm+((int64_t)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
 			//- Get procent -
 			val = prm.at().vlAt("value");
 			if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 			{
 			    v_a_step = vmax(1,val.at().arch().at().period()*(int)dscaioint.conversion_rate/1000000);
 			    for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl+=v_a_step )
-				val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+(long long)i_smpl*1000000/(int)dscaioint.conversion_rate);
+				val.at().arch().at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+i_smpl*p_cnt]/32768.,vtm+(int64_t)i_smpl*1000000/(int)dscaioint.conversion_rate);
 			}
-			val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((long long)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
+			val.at().setR( 100.*(double)dscaioint.sample_values[voff+p_cnl-p_beg+((int)dscaioint.conversion_rate-1)*p_cnt]/32768.,vtm+((int64_t)dscaioint.conversion_rate-1)*1000000/(int)dscaioint.conversion_rate,true);
 			//- Get voltage -
 			//for( int i_smpl = 0; i_smpl < dscaioint.conversion_rate; i_smpl++ )
 			//	printf("Canal %d(%d): %xh\n",prm.at().cnl(),voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1),dscaioint.sample_values[voff+prm.at().cnl()-p_beg+i_smpl*(p_end-p_beg+1)]);
@@ -411,18 +411,18 @@ void *TMdContr::AD_DSCTask( void *param )
 		    {
 			v_a_step = vmax(1,val.at().arch().at().period()*convRate/1000000);
 			for( int i_smpl = 0; i_smpl < convRate; i_smpl+=v_a_step )
-			    val.at().arch().at().setI((int)((float)rand()*20000/RAND_MAX),vtm+(long long)i_smpl*1000000/convRate);
+			    val.at().arch().at().setI((int)((float)rand()*20000/RAND_MAX),vtm+(int64_t)i_smpl*1000000/convRate);
 		    }
-		    val.at().setI((int)((float)rand()*20000/RAND_MAX),vtm+((long long)convRate-1)*1000000/convRate,true);
+		    val.at().setI((int)((float)rand()*20000/RAND_MAX),vtm+((int64_t)convRate-1)*1000000/convRate,true);
 		    //- Get procent -
 		    val = prm.at().vlAt("value");
 		    if(!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr)
 		    {
 		        v_a_step = vmax(1,val.at().arch().at().period()*convRate/1000000);
 			for( int i_smpl = 0; i_smpl < convRate; i_smpl+=v_a_step )
-			    val.at().arch().at().setR( 100.*((float)rand()*20000/RAND_MAX)/32768.,vtm+(long long)i_smpl*1000000/convRate);
+			    val.at().arch().at().setR( 100.*((float)rand()*20000/RAND_MAX)/32768.,vtm+(int64_t)i_smpl*1000000/convRate);
 		    }
-		    val.at().setR( 100.*(double)((float)rand()*20000/RAND_MAX)/32768.,vtm+((long long)convRate-1)*1000000/convRate,true);
+		    val.at().setR( 100.*(double)((float)rand()*20000/RAND_MAX)/32768.,vtm+((int64_t)convRate-1)*1000000/convRate,true);
 		}
 		vtm += 1000000;
 		get_tm.tv_sec = vtm/1000000; get_tm.tv_nsec = 1000*(vtm%1000000);

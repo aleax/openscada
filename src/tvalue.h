@@ -61,23 +61,23 @@ class TVal : public TCntrNode
 	void setCfg( TCfg &cfg );
 
 	const string &name( );
-	long long time( )	{ return mTime; }
+	int64_t time( )	{ return mTime; }
 
 	//> Read curent value (direct)
-	string	getSEL( long long *tm = NULL, bool sys = false );
-	TVariant get( long long *tm = NULL, bool sys = false );
-	string	getS( long long *tm = NULL, bool sys = false );
-	double	getR( long long *tm = NULL, bool sys = false );
-	int	getI( long long *tm = NULL, bool sys = false );
-	char	getB( long long *tm = NULL, bool sys = false );
+	string	getSEL( int64_t *tm = NULL, bool sys = false );
+	TVariant get( int64_t *tm = NULL, bool sys = false );
+	string	getS( int64_t *tm = NULL, bool sys = false );
+	double	getR( int64_t *tm = NULL, bool sys = false );
+	int	getI( int64_t *tm = NULL, bool sys = false );
+	char	getB( int64_t *tm = NULL, bool sys = false );
 
 	//> Set curent value
-	void setSEL( const string &value, long long tm = 0, bool sys = false );
-	void set( const TVariant &value, long long tm = 0, bool sys = false );
-	void setS( const string &value, long long tm = 0, bool sys = false );
-	void setR( double value, long long tm = 0, bool sys = false );
-	void setI( int value, long long tm = 0, bool sys = false );
-	void setB( char value, long long tm = 0, bool sys = false );
+	void setSEL( const string &value, int64_t tm = 0, bool sys = false );
+	void set( const TVariant &value, int64_t tm = 0, bool sys = false );
+	void setS( const string &value, int64_t tm = 0, bool sys = false );
+	void setR( double value, int64_t tm = 0, bool sys = false );
+	void setI( int value, int64_t tm = 0, bool sys = false );
+	void setB( char value, int64_t tm = 0, bool sys = false );
 
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
@@ -121,7 +121,7 @@ class TVal : public TCntrNode
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;
-	long long mTime;		//Last value's time (usec)
+	int64_t mTime;		//Last value's time (usec)
 	AutoHD<TVArchive>	mArch;
 };
 

@@ -123,7 +123,7 @@ class TMdContr: public TController
 	vector< AutoHD<TMdPrm> > pHd;			// Parameter's process list
 
 	PaStream *stream;
-	long long wTm, sdTm;
+	int64_t	wTm, sdTm;
 	float	acqSize;
 
 	Res	nRes;

@@ -45,7 +45,7 @@ class VFileArch
     public:
 	//Methods
 	VFileArch( ModVArchEl *owner );
-	VFileArch( const string &iname, long long ibeg, long long iend, long long iper, TFld::Type itp, ModVArchEl *owner);
+	VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t iper, TFld::Type itp, ModVArchEl *owner);
 	~VFileArch();
 	void delFile();
 
@@ -53,16 +53,16 @@ class VFileArch
 
 	string	&name( )	{ return mName; }
 	int	size( )		{ return mSize; }
-	long long begin( )	{ return mBeg; }
-	long long end( )	{ return mEnd; }
-	long long period( )	{ return mPer; }
-	long long endData( );
+	int64_t	begin( )	{ return mBeg; }
+	int64_t	end( )		{ return mEnd; }
+	int64_t	period( )	{ return mPer; }
+	int64_t	endData( );
 	TFld::Type type( )	{ return mTp; }
 	bool	err( )		{ return mErr; }
 	bool	isPack( )	{ return mPack; }
 
-	void	setVals( TValBuf &buf, long long beg, long long end );
-	void	getVals( TValBuf &buf, long long beg, long long end );
+	void	setVals( TValBuf &buf, int64_t beg, int64_t end );
+	void	getVals( TValBuf &buf, int64_t beg, int64_t end );
 	TVariant getVal( int pos );
 
 	ModVArchEl &owner()	{ return *mOwner; }
@@ -77,9 +77,9 @@ class VFileArch
 	{
 	    char		f_tp[20];	//Archive system name ("OpenSCADA Val Arch.")
 	    char		archive[20];	//Value archive name
-	    long long		beg;		//Time archive begin
-	    long long		end;		//Time archive end
-	    long long		period;		//Time value period
+	    int64_t		beg;		//Time archive begin
+	    int64_t		end;		//Time archive end
+	    int64_t		period;		//Time value period
 	    unsigned char	vtp   :3;	//Value type (bool, int, real, string)
 	    unsigned char	hgrid :1;	//Hard griding flag (reserved)
 	    unsigned char	hres  :1;	//High resolution value time (reserved)
@@ -107,9 +107,9 @@ class VFileArch
 	string	mName;		// Name Archive file
 	int	mSize;		// Arhive size
 	TFld::Type mTp;		// Value typ
-	long long mBeg;		// Begin of archive file
-	long long mEnd;		// End of archive file
-	long long mPer;		// Values period
+	int64_t	mBeg;		// Begin of archive file
+	int64_t	mEnd;		// End of archive file
+	int64_t	mPer;		// Values period
 
 	//> State parameters
 	bool	mErr;		// Archive err
@@ -154,8 +154,8 @@ class ModVArchEl: public TVArchEl
 
 	int size( );
 
-	long long begin( );
-	long long end( );
+	int64_t	begin( );
+	int64_t	end( );
 
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
@@ -164,15 +164,15 @@ class ModVArchEl: public TVArchEl
 
     protected:
 	//Methods
-	TVariant getValProc( long long *tm, bool up_ord );
-	void getValsProc( TValBuf &buf, long long beg, long long end );
-	void setValsProc( TValBuf &buf, long long beg, long long end );
+	TVariant getValProc( int64_t *tm, bool up_ord );
+	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	void setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
     private:
 	//Attributes
 	Res	mRes;		// resource to access;
 	deque<VFileArch *>	arh_f;
-	long long realEnd;
+	int64_t	realEnd;
 };
 
 //************************************************
@@ -207,7 +207,7 @@ class ModVArch: public TVArchivator
 	void checkArchivator( bool now = false );
 
 	//> Packing archives
-	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, long long *abeg, long long *aend, long long *aper );
+	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper );
 
 	//> Export archive data
 	void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);

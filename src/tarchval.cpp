@@ -54,7 +54,7 @@ TValBuf::TValBuf( ) : mValTp(TFld::Integer), mHgResTm(false), mHrdGrd(false), mE
     makeBuf( mValTp, mSize, mPer, mHrdGrd, mHgResTm );
 }
 
-TValBuf::TValBuf( TFld::Type vtp, int isz, long long ipr, bool ihgrd, bool ihres ) :
+TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres ) :
     mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mEnd(0), mBeg(0), mPer(ipr), mSize(isz)
 {
     buf.bl = NULL;
@@ -133,7 +133,7 @@ int TValBuf::realSize()
     return 0;
 }
 
-bool TValBuf::vOK( long long ibeg, long long iend )
+bool TValBuf::vOK( int64_t ibeg, int64_t iend )
 {
     if( !begin() || !end() || iend < begin() || ibeg > end() || ibeg > iend )
 	return false;
@@ -148,9 +148,9 @@ void TValBuf::setHighResTm( bool vl )		{ makeBuf( mValTp, mSize, mPer, mHrdGrd, 
 
 void TValBuf::setSize( int vl )			{ makeBuf( mValTp, vl, mPer, mHrdGrd, mHgResTm ); }
 
-void TValBuf::setPeriod( long long vl )		{ makeBuf( mValTp, mSize, vl, mHrdGrd, mHgResTm ); }
+void TValBuf::setPeriod( int64_t vl )		{ makeBuf( mValTp, mSize, vl, mHrdGrd, mHgResTm ); }
 
-void TValBuf::makeBuf( TFld::Type v_tp, int isz, long long ipr, bool hd_grd, bool hg_res )
+void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool hg_res )
 {
     ResAlloc res(bRes,true);
 
@@ -189,7 +189,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, long long ipr, bool hd_grd, boo
 	}
 }
 
-string TValBuf::getS( long long *itm, bool up_ord )
+string TValBuf::getS( int64_t *itm, bool up_ord )
 {
     switch(valType())
     {
@@ -201,7 +201,7 @@ string TValBuf::getS( long long *itm, bool up_ord )
     return EVAL_STR;
 }
 
-double TValBuf::getR( long long *itm, bool up_ord )
+double TValBuf::getR( int64_t *itm, bool up_ord )
 {
     switch(valType())
     {
@@ -213,7 +213,7 @@ double TValBuf::getR( long long *itm, bool up_ord )
     return EVAL_REAL;
 }
 
-int TValBuf::getI( long long *itm, bool up_ord )
+int TValBuf::getI( int64_t *itm, bool up_ord )
 {
     switch(valType())
     {
@@ -225,7 +225,7 @@ int TValBuf::getI( long long *itm, bool up_ord )
     return EVAL_INT;
 }
 
-char TValBuf::getB( long long *itm, bool up_ord )
+char TValBuf::getB( int64_t *itm, bool up_ord )
 {
     switch(valType())
     {
@@ -237,7 +237,7 @@ char TValBuf::getB( long long *itm, bool up_ord )
     return EVAL_BOOL;
 }
 
-void TValBuf::setS( const string &value, long long tm )
+void TValBuf::setS( const string &value, int64_t tm )
 {
     switch(valType())
     {
@@ -252,7 +252,7 @@ void TValBuf::setS( const string &value, long long tm )
     }
 }
 
-void TValBuf::setR( double value, long long tm )
+void TValBuf::setR( double value, int64_t tm )
 {
     switch(valType())
     {
@@ -267,7 +267,7 @@ void TValBuf::setR( double value, long long tm )
     }
 }
 
-void TValBuf::setI( int value, long long tm )
+void TValBuf::setI( int value, int64_t tm )
 {
     switch(valType())
     {
@@ -282,7 +282,7 @@ void TValBuf::setI( int value, long long tm )
     }
 }
 
-void TValBuf::setB( char value, long long tm )
+void TValBuf::setB( char value, int64_t tm )
 {
     switch(valType())
     {
@@ -297,7 +297,7 @@ void TValBuf::setB( char value, long long tm )
     }
 }
 
-void TValBuf::getVals( TValBuf &buf, long long ibeg, long long iend )
+void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     if(!vOK(ibeg,iend))	return;
     ibeg = vmax(ibeg,begin());
@@ -316,7 +316,7 @@ void TValBuf::getVals( TValBuf &buf, long long ibeg, long long iend )
     }
 }
 
-void TValBuf::setVals( TValBuf &buf, long long ibeg, long long iend )
+void TValBuf::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     buf.getVals( *this, ibeg, iend );
 }
@@ -324,8 +324,8 @@ void TValBuf::setVals( TValBuf &buf, long long ibeg, long long iend )
 //*************************************************
 //* TValBuf::TBuf                                 *
 //*************************************************
-template <class TpVal> TValBuf::TBuf<TpVal>::TBuf( TpVal ieval, int &isz, long long &ipr,
-	bool &ihgrd, bool &ihres, long long &iend, long long &ibeg, unsigned int &iEvalCnt ) :
+template <class TpVal> TValBuf::TBuf<TpVal>::TBuf( TpVal ieval, int &isz, int64_t &ipr,
+	bool &ihgrd, bool &ihres, int64_t &iend, int64_t &ibeg, unsigned int &iEvalCnt ) :
     hg_res_tm(ihres), hrd_grd(ihgrd), end(iend), beg(ibeg), per(ipr), size(isz), cur(0), eval(ieval), mEvalCnt(iEvalCnt)
 {
     buf.grid = NULL;
@@ -358,7 +358,7 @@ template <class TpVal> int TValBuf::TBuf<TpVal>::realSize()
     else		return buf.tm_low->size();
 }
 
-template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, long long ipr, bool ihd_grd, bool ihg_res )
+template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, int64_t ipr, bool ihd_grd, bool ihg_res )
 {
     bool recr_buf = false;
     if( !buf.grid )		recr_buf = true;
@@ -400,9 +400,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, long long ip
     }
 }
 
-template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_ord )
+template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_ord )
 {
-    long long tm = (itm)?(*itm):TSYS::curTime();
+    int64_t tm = (itm)?(*itm):TSYS::curTime();
 
     if( (up_ord && tm > end) || (!up_ord && tm < beg) )	throw TError("ValBuf",_("Value is not present."));
 
@@ -410,7 +410,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     //> Process hard grid buffer
     if( hrd_grd )
     {
-	int npos = up_ord?(end-tm)/per:(long long)buf.grid->size()-1-(tm-beg)/per;
+	int npos = up_ord?(end-tm)/per:(int64_t)buf.grid->size()-1-(tm-beg)/per;
 	if(npos < 0 || npos >= (int)buf.grid->size()) { if(itm) *itm = 0; return eval; }
 	if(itm)	*itm = end-npos*per;
 	return (*buf.grid)[((cur-npos-1)>=0)?(cur-npos-1):(buf.grid->size()+(cur-npos-1))];
@@ -462,21 +462,21 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	    {
 		int c_cnext = c_end-d_win;
 		if(c_cnext < 0) c_cnext += buf.tm_low->size();
-		if(tm/per < (long long)(*buf.tm_low)[c_cnext].tm*1000000/per) c_end=c_cnext;
+		if(tm/per < (int64_t)(*buf.tm_low)[c_cnext].tm*1000000/per) c_end=c_cnext;
 	    }
 	    //>> Proving
 	    do
 	    {
-		int w_pos = up_ord ? (end/per-(long long)(*buf.tm_low)[c_end].tm*1000000/per) :
-				     ((long long)(*buf.tm_low)[c_end].tm*1000000/per-beg/per);
+		int w_pos = up_ord ? (end/per-(int64_t)(*buf.tm_low)[c_end].tm*1000000/per) :
+				     ((int64_t)(*buf.tm_low)[c_end].tm*1000000/per-beg/per);
 		if( up_ord && w_pos >= npos )
 		{
-		    if(itm) *itm = (w_pos==npos)?(long long)(*buf.tm_low)[c_end].tm*1000000:end-npos*per;
+		    if(itm) *itm = (w_pos==npos)?(int64_t)(*buf.tm_low)[c_end].tm*1000000:end-npos*per;
 		    return (*buf.tm_low)[c_end].val;
 		}
 		if( !up_ord && w_pos <= npos )
 		{
-		    if(itm) *itm = (w_pos==npos)?(long long)(*buf.tm_low)[c_end].tm*1000000:beg+npos*per;
+		    if(itm) *itm = (w_pos==npos)?(int64_t)(*buf.tm_low)[c_end].tm*1000000:beg+npos*per;
 		    return (*buf.tm_low)[c_end].val;
 		}
 		if( --c_end < 0 ) c_end = buf.tm_low->size()-1;
@@ -521,19 +521,19 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
 	    //>> Half divider
 	    for( int d_win = c_end/2; d_win > HalfDivMinWin; d_win/=2 )
 		if( !((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end-d_win].tm) ||
-			(up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-(c_end-d_win)-1].tm*1000000)) )
+			(up_ord && tm <= (int64_t)(*buf.tm_low)[buf.tm_low->size()-(c_end-d_win)-1].tm*1000000)) )
 		    c_end-=d_win;
 	    //>> Scan last window
 	    while(c_end >= 0)
 	    {
 		if( !up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm )
 		{
-		    if(itm) *itm = (long long)(*buf.tm_low)[c_end].tm*1000000;
+		    if(itm) *itm = (int64_t)(*buf.tm_low)[c_end].tm*1000000;
 		    return (*buf.tm_low)[c_end].val;
 		}
-		else if( up_ord && tm <= (long long)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000 )
+		else if( up_ord && tm <= (int64_t)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000 )
 		{
-		    if(itm) *itm = (long long)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000;
+		    if(itm) *itm = (int64_t)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000;
 		    return (*buf.tm_low)[buf.tm_low->size()-c_end-1].val;
 		}
 		c_end--;
@@ -544,7 +544,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( long long *itm, bool up_
     }
 }
 
-template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm )
+template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 {
     if( !tm )	tm = TSYS::curTime();
     if( !end )	end = (per) ? per*(tm/per-1) : tm;
@@ -693,15 +693,15 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 		{
 		    b_el.tm = end/1000000; b_el.val = value;
 		    int h_el = cur ? cur-1 : buf.tm_low->size()-1;
-		    if( ((long long)(*buf.tm_low)[h_el].tm*1000000-end)/per )
+		    if( ((int64_t)(*buf.tm_low)[h_el].tm*1000000-end)/per )
 		    {
 			//>>> Write new value
 			if( b_el.val == eval ) mEvalCnt++;
 			if(cur >= (int)buf.tm_low->size()) buf.tm_low->push_back(b_el);
 			else
 			{
-			    if(cur+1 >= (int)buf.tm_low->size()) beg = (long long)(*buf.tm_low)[0].tm * 1000000;
-			    else beg = (long long)(*buf.tm_low)[cur+1].tm * 1000000;
+			    if(cur+1 >= (int)buf.tm_low->size()) beg = (int64_t)(*buf.tm_low)[0].tm * 1000000;
+			    else beg = (int64_t)(*buf.tm_low)[cur+1].tm * 1000000;
 			    beg = per*(beg/per);
 			    if( (*buf.tm_low)[cur].val == eval ) mEvalCnt--;
 			    (*buf.tm_low)[cur] = b_el;
@@ -742,8 +742,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			else
 			{
 			    if(cur+1 >= (int)buf.tm_low->size())
-				beg = (long long)(*buf.tm_low)[0].tm * 1000000;
-			    else beg = (long long)(*buf.tm_low)[cur+1].tm * 1000000;
+				beg = (int64_t)(*buf.tm_low)[0].tm * 1000000;
+			    else beg = (int64_t)(*buf.tm_low)[cur+1].tm * 1000000;
 			    beg = per*(beg/per);
 			    if( (*buf.tm_low)[cur].val == eval ) mEvalCnt--;
 			    (*buf.tm_low)[cur] = b_el;
@@ -837,8 +837,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, long long tm
 			if( buf.tm_low->begin()->val == eval ) mEvalCnt--;
 			buf.tm_low->erase(buf.tm_low->begin());
 		    }
-		    beg = (long long)(*buf.tm_low)[0].tm*1000000;
-		    end = (long long)(*buf.tm_low)[buf.tm_low->size()-1].tm*1000000;
+		    beg = (int64_t)(*buf.tm_low)[0].tm*1000000;
+		    end = (int64_t)(*buf.tm_low)[buf.tm_low->size()-1].tm*1000000;
 		    return;
 		}
 		else if( tm/1000000 == (*buf.tm_low)[c_pos].tm )
@@ -911,9 +911,9 @@ TArchiveS &TVArchive::owner( )	{ return *(TArchiveS *)nodePrev(); }
 
 string TVArchive::tbl( )	{ return owner().subId()+"_val"; }
 
-long long TVArchive::end( const string &arch )
+int64_t TVArchive::end( const string &arch )
 {
-    long long rez = 0;
+    int64_t rez = 0;
     if( arch.empty() || arch == BUF_ARCH_NM )
     {
 	rez = TValBuf::end();
@@ -930,9 +930,9 @@ long long TVArchive::end( const string &arch )
     return rez;
 }
 
-long long TVArchive::begin( const string &arch )
+int64_t TVArchive::begin( const string &arch )
 {
-    long long rez = TSYS::curTime();
+    int64_t rez = TSYS::curTime();
     if( arch.empty() || arch == BUF_ARCH_NM )
     {
 	rez = TValBuf::begin();
@@ -949,13 +949,13 @@ long long TVArchive::begin( const string &arch )
     return rez;
 }
 
-long long TVArchive::period( const string &arch )
+int64_t TVArchive::period( const string &arch )
 {
     if(arch.empty() || arch == BUF_ARCH_NM) return TValBuf::period();
     ResAlloc res(a_res,false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 	if(arch == arch_el[i_a]->archivator().workId())
-	    return (long long)(1e6*arch_el[i_a]->archivator().valPeriod());
+	    return (int64_t)(1e6*arch_el[i_a]->archivator().valPeriod());
     return 0;
 }
 
@@ -987,7 +987,7 @@ void TVArchive::setSize( int vl )
     modif( );
 }
 
-void TVArchive::setPeriod( long long vl )
+void TVArchive::setPeriod( int64_t vl )
 {
     if( !vl )	vl = 1000000;
     mBPer = (double)vl/1000000.;
@@ -998,7 +998,7 @@ void TVArchive::setPeriod( long long vl )
 
 void TVArchive::setUpBuf( )
 {
-    makeBuf( (TFld::Type)mVType, mBSize, (long long)(mBPer*1000000.), mBHGrd, mBHRes );
+    makeBuf( (TFld::Type)mVType, mBSize, (int64_t)(mBPer*1000000.), mBHGrd, mBHRes );
 }
 
 void TVArchive::load_( )
@@ -1091,7 +1091,7 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     mDSourc = isrc;
 }
 
-TVariant TVArchive::getVal( long long *tm, bool up_ord, const string &arch, bool onlyLocal )
+TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
 {
     //> Get from buffer
     if( (arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())) )
@@ -1109,15 +1109,15 @@ TVariant TVArchive::getVal( long long *tm, bool up_ord, const string &arch, bool
 	for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 	    if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
 		    (!tm ||
-			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(long long)(1000000.*arch_el[i_a]->archivator().valPeriod())) ||
-			(!up_ord && *tm < arch_el[i_a]->end()+(long long)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin())))
+			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod())) ||
+			(!up_ord && *tm < arch_el[i_a]->end()+(int64_t)(1000000.*arch_el[i_a]->archivator( ).valPeriod()) && *tm >= arch_el[i_a]->begin())))
 		return arch_el[i_a]->getVal(tm,up_ord,onlyLocal);
 
     }
     return EVAL_REAL;
 }
 
-void TVArchive::getVals( TValBuf &buf, long long ibeg, long long iend, const string &arch, int limit, bool onlyLocal )
+void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch, int limit, bool onlyLocal )
 {
     //> Get from buffer
     if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend) )
@@ -1136,13 +1136,13 @@ void TVArchive::getVals( TValBuf &buf, long long ibeg, long long iend, const str
 	{
 	    //> Local request to data
 	    if( !buf.size() )
-		ibeg = vmax(ibeg,iend-(long long)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
+		ibeg = vmax(ibeg,iend-(int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
 	    arch_el[i_a]->getVals(buf,ibeg,iend,onlyLocal);
 	    iend = buf.begin()-1;
 	}
 }
 
-void TVArchive::setVals( TValBuf &buf, long long ibeg, long long iend, const string &arch )
+void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch )
 {
     //> Check for put to buffer
     if( (arch.empty() || arch == BUF_ARCH_NM) && iend > TValBuf::begin() )
@@ -1160,7 +1160,7 @@ void TVArchive::getActiveData()
 {
     if( pattr_src.freeStat() )	return;
 
-    long long tm = TSYS::curTime();
+    int64_t tm = TSYS::curTime();
     switch( valType() )
     {
 	case TFld::Boolean:	{ char vl = pattr_src.at().getB(&tm); setB(vl,tm); break; }
@@ -1251,7 +1251,7 @@ void TVArchive::archivatorSort()
     while(rep_try);
 }
 
-string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &iarch, int hsz, int vsz, double valmax, double valmin )
+string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch, int hsz, int vsz, double valmax, double valmin )
 {
     string rez;
 
@@ -1259,7 +1259,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     string lab_tm, lab_dt;
     time_t tm_t;
     struct tm ttm, ttm1 = ttm;
-    long long c_tm;
+    int64_t c_tm;
     int hv_border,		//Image border size
 	h_w_start, h_w_size,	//Trend window horizontal start and size
 	v_w_start, v_w_size;	//Trend window vertical start and size
@@ -1297,14 +1297,14 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     gdImageRectangle(im,h_w_start,v_w_start,h_w_start+h_w_size,v_w_start+v_w_size,clr_grid);
 
     //> Make horisontal grid and symbols
-    long long h_div = 1;
-    long long h_min = ibeg;
-    long long h_max = iend;
+    int64_t h_div = 1;
+    int64_t h_min = ibeg;
+    int64_t h_max = iend;
     int hmax_ln = vsz/(mrkHeight?mrkHeight:10);
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
-	long long hLen = iend - ibeg;
+	int64_t hLen = iend - ibeg;
 	if( hLen/86400000000ll >= 2 )		{ hvLev = 5; h_div = 86400000000ll; }	//Days
 	else if( hLen/3600000000ll >= 2 )	{ hvLev = 4; h_div =  3600000000ll; }	//Hours
 	else if( hLen/60000000 >= 2 )		{ hvLev = 3; h_div =    60000000; }	//Minutes
@@ -1353,7 +1353,7 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
 
 	//>> Draw grid and/or markers
 	bool first_m = true;
-	for( long long i_h = h_min; true; )
+	for( int64_t i_h = h_min; true; )
 	{
 	    //>>> Draw grid
 	    int h_pos = h_w_start+h_w_size*(i_h-h_min)/(h_max-h_min);
@@ -1460,8 +1460,8 @@ string TVArchive::makeTrendImg( long long ibeg, long long iend, const string &ia
     //> Draw trend
     double aver_vl = EVAL_REAL;
     int    aver_pos= 0;
-    long long aver_tm = 0;
-    long long aver_lsttm = 0;
+    int64_t aver_tm = 0;
+    int64_t aver_lsttm = 0;
     double prev_vl = EVAL_REAL;
     int    prev_pos = 0;
     for( c_tm = buf.begin(); true; c_tm++ )
@@ -1530,13 +1530,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ResAlloc res(a_res,false);
 		for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 		    if(arch == arch_el[i_a]->archivator().workId())
-		    { opt->setAttr("per",TSYS::ll2str((long long)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break; }
+		    { opt->setAttr("per",TSYS::ll2str((int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break; }
 	    }
 	}
 	else if(ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD))	//Value's data request
 	{
-	    long long	tm	= atoll(opt->attr("tm").c_str());
-	    long long	tm_grnd	= atoll(opt->attr("tm_grnd").c_str());
+	    int64_t	tm	= atoll(opt->attr("tm").c_str());
+	    int64_t	tm_grnd	= atoll(opt->attr("tm_grnd").c_str());
 	    string	arch	= opt->attr("arch");
 	    bool	local	= atoi(opt->attr("local").c_str());
 
@@ -1550,7 +1550,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(tm < tm_grnd)	throw TError(nodePath().c_str(),_("Range error"));
 
-	    long long period = atoll(opt->attr("per").c_str());
+	    int64_t period = atoll(opt->attr("per").c_str());
 
 	    //>> Process of archive block request
 	    TValBuf buf(TValBuf::valType(), 100000, TValBuf::period(), true, true);
@@ -1568,7 +1568,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    if(((arch.empty() && (!i_a || arch_el[i_a]->archivator().valPeriod() <= (period/1e6))) || arch == arch_el[i_a]->archivator().workId()) &&
 			(tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin()))
 		    {
-			buf.setPeriod( (long long)(1000000.*arch_el[i_a]->archivator().valPeriod()) );
+			buf.setPeriod( (int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod()) );
 			arch_el[i_a]->getVals( buf, tm_grnd, tm, local );
 			opt->setAttr("arch",arch_el[i_a]->archivator().workId());
 			break;
@@ -1580,7 +1580,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    string  text;
 	    text.reserve(100);
 	    int vpos_end = 0, vpos_cur;
-	    long long ibeg = buf.begin(), iend = buf.end();
+	    int64_t ibeg = buf.begin(), iend = buf.end();
 	    period = vmax(period,buf.period());
 	    int mode = atoi(opt->attr("mode").c_str());
 	    if(mode < 0 || mode > 2) throw TError(nodePath().c_str(),_("No support data mode '%d'"),mode);
@@ -1627,7 +1627,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			    {
 				int s_k = ibeg-period*(ibeg/period);
 				int n_k = buf.period();
-				tval = ((long long)tval_pr*s_k+(long long)tval*n_k)/(s_k+n_k);
+				tval = ((int64_t)tval_pr*s_k+(int64_t)tval*n_k)/(s_k+n_k);
 			    }
 			}
 			else int1: switch(mode)
@@ -1849,7 +1849,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/b_per")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(mBPer,6));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPeriod((long long)(1000000.*atof(opt->text().c_str())));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPeriod((int64_t)(1000000.*atof(opt->text().c_str())));
     }
     else if(a_path == "/prm/cfg/b_size")
     {
@@ -2017,10 +2017,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD))
     {
-	long long end = (long long)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000;
-	if( !(end/1000000) ) end = (long long)time(NULL) * 1000000;
+	int64_t end = (int64_t)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000;
+	if( !(end/1000000) ) end = (int64_t)time(NULL) * 1000000;
 	end += atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
-	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
+	int64_t beg = end - (int64_t)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 
 	TValBuf buf(TFld::String, 0, 0, false, true);
 	getVals(buf, beg, end, TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")), 2000);
@@ -2028,7 +2028,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
 
-	long long c_tm = buf.begin();
+	int64_t c_tm = buf.begin();
 	if(buf.end() && buf.begin())
 	    while(c_tm <= buf.end())
 	    {
@@ -2044,10 +2044,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	int vPctH = vmin(800,vmax(50,atoi(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")).c_str())));
 	double vMax = atof(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")).c_str());
 	double vMin = atof(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")).c_str());
-	long long end = (long long) atoi(TBDS::genDBGet(owner().nodePath()+"vaTm",TSYS::int2str(time(NULL)),opt->attr("user")).c_str())*1000000+
-				    atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
-	if( !(end/1000000) )	end = (long long)time(NULL) * 1000000;
-	long long beg = end - (long long)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
+	int64_t end = (int64_t) atoi(TBDS::genDBGet(owner().nodePath()+"vaTm",TSYS::int2str(time(NULL)),opt->attr("user")).c_str())*1000000+
+				atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
+	if( !(end/1000000) )	end = (int64_t)time(NULL) * 1000000;
+	int64_t beg = end - (int64_t)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 
 	opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH,vMax,vMin),TSYS::base64));
 	opt->setAttr("tp","png");
@@ -2228,10 +2228,10 @@ void *TVArchivator::Task( void *param )
 	{
 	    if( arch.endrunReq ) isLast = true;
 
-	    long long t_cnt = TSYS::curTime();
+	    int64_t t_cnt = TSYS::curTime();
 
 	    ResAlloc res(arch.a_res,false);
-	    long long beg, end;
+	    int64_t beg, end;
 	    for( map<string,TVArchEl*>::iterator iel = arch.archEl.begin(); iel != arch.archEl.end(); ++iel )
 		if( iel->second->archive().startStat() )
 		{
@@ -2247,7 +2247,7 @@ void *TVArchivator::Task( void *param )
 
 	    if( isLast ) break;
 
-	    TSYS::taskSleep( (long long)(1e9*arch.archPeriod()) );
+	    TSYS::taskSleep( (int64_t)(1e9*arch.archPeriod()) );
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
     arch.run_st = false;
@@ -2371,14 +2371,14 @@ TVArchive &TVArchEl::archive( )		{ return mArchive; }
 
 TVArchivator &TVArchEl::archivator( )	{ return mArchivator; }
 
-TVariant TVArchEl::getVal( long long *tm, bool up_ord, bool onlyLocal )
+TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 {
     TVariant vl = getValProc(tm,up_ord);
 
     if( !onlyLocal && tm && archive().startStat() && vl.getS() == EVAL_STR && SYS->daq().at().rdActive() &&
 	(archive().srcMode( ) == TVArchive::ActiveAttr || archive().srcMode( ) == TVArchive::PassiveAttr) )
     {
-	long long remTm = 0;
+	int64_t remTm = 0;
 	string lstStat;
 	AutoHD<TVal> paVl = SYS->nodeAt(archive().srcData(),0,'.');
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));
@@ -2408,13 +2408,13 @@ TVariant TVArchEl::getVal( long long *tm, bool up_ord, bool onlyLocal )
     return vl;
 }
 
-TVariant TVArchEl::getValProc( long long *tm, bool up_ord )
+TVariant TVArchEl::getValProc( int64_t *tm, bool up_ord )
 {
     if(tm) *tm = 0;
     return TVariant();
 }
 
-void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyLocal )
+void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal )
 {
     //> Get local archive data
     unsigned int ecnt = buf.evalCnt( );
@@ -2430,8 +2430,8 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 	if( sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode( ) != TController::Off )
 	{
 	    //> Holes process
-	    long long firstEval = 0, curEval = 0;
-	    long long cbeg = buf.begin();
+	    int64_t firstEval = 0, curEval = 0;
+	    int64_t cbeg = buf.begin();
 	    iend = buf.end();
 	    string lstStat;
 	    XMLNode req("get");
@@ -2460,9 +2460,9 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
 		    if( !lstStat.empty() && !atoi(req.attr("rez").c_str()) && atoll(req.attr("tm_grnd").c_str()) && atoll(req.attr("tm").c_str()) )
 		    {
 			//> Get values and put to buffer
-			long long bbeg = atoll(req.attr("tm_grnd").c_str());
-			long long bend = atoll(req.attr("tm").c_str());
-			long long bper = atoll(req.attr("per").c_str());
+			int64_t bbeg = atoll(req.attr("tm_grnd").c_str());
+			int64_t bend = atoll(req.attr("tm").c_str());
+			int64_t bper = atoll(req.attr("per").c_str());
 			int val_tp = atoi(req.attr("vtp").c_str());
 			int prevPos = 0, curPos;
 			string prevVal = EVAL_STR, curVal;
@@ -2524,9 +2524,9 @@ void TVArchEl::getVals( TValBuf &buf, long long ibeg, long long iend, bool onlyL
     }
 }
 
-void TVArchEl::setVals( TValBuf &ibuf, long long beg, long long end )
+void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 {
-    long long a_per = (long long)(1000000.*archivator().valPeriod());
+    int64_t a_per = (int64_t)(1000000.*archivator().valPeriod());
 
     if( !beg || !end ) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax(beg,ibuf.begin()); end = vmin(end,ibuf.end());
@@ -2537,7 +2537,7 @@ void TVArchEl::setVals( TValBuf &ibuf, long long beg, long long end )
     if( &archive() != &ibuf && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size() )
     { archive().TValBuf::setVals(ibuf,vmax(archive().end(),beg),end); return; }
     //>> Put direct to archive
-    long long wPrevTm = 0;
+    int64_t wPrevTm = 0;
     string wPrevVal;
 
     if( &archive() == &ibuf || end > archive().end() ) { wPrevTm = prev_tm; wPrevVal = prev_val; }
@@ -2546,7 +2546,7 @@ void TVArchEl::setVals( TValBuf &ibuf, long long beg, long long end )
     if( a_per > ibuf.period() )
     {
 	TValBuf obuf(ibuf.valType(),0,a_per,true,true);
-	for( long long c_tm = beg; c_tm <= end;)
+	for( int64_t c_tm = beg; c_tm <= end;)
 	{
 	    switch(ibuf.valType())
 	    {
@@ -2574,9 +2574,9 @@ void TVArchEl::setVals( TValBuf &ibuf, long long beg, long long end )
 			if( c_val == EVAL_INT ) c_val = v_o;
 			if( c_val != EVAL_INT && v_o != EVAL_INT )
 			{
-			    long long s_k = c_tm-a_per*(c_tm/a_per);
-			    long long n_k = ibuf.period();
-			    c_val = ((long long)v_o*s_k+(long long)c_val*n_k)/(s_k+n_k);
+			    int64_t s_k = c_tm-a_per*(c_tm/a_per);
+			    int64_t n_k = ibuf.period();
+			    c_val = ((int64_t)v_o*s_k+(int64_t)c_val*n_k)/(s_k+n_k);
 			}
 			wPrevVal.assign((char*)&c_val,sizeof(int));
 			wPrevTm = c_tm;
@@ -2600,8 +2600,8 @@ void TVArchEl::setVals( TValBuf &ibuf, long long beg, long long end )
 			if( c_val == EVAL_REAL ) c_val = v_o;
 			if( c_val != EVAL_REAL && v_o != EVAL_REAL )
 			{
-			    long long s_k = c_tm-a_per*(c_tm/a_per);
-			    long long n_k = ibuf.period();
+			    int64_t s_k = c_tm-a_per*(c_tm/a_per);
+			    int64_t n_k = ibuf.period();
 			    c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
 			}
 			wPrevVal.assign((char*)&c_val,sizeof(double));

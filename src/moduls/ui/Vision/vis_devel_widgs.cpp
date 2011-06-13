@@ -1360,7 +1360,7 @@ void WdgTree::selectItem( bool force )
 void WdgTree::updateTree( const string &vca_it )
 {
 #if OSC_DEBUG >= 3
-    long long t_cnt = TSYS::curTime();
+    int64_t t_cnt = TSYS::curTime();
 #endif
 
     bool is_create = false, root_allow = false;
@@ -1760,7 +1760,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     if( !it )
     {
 #if OSC_DEBUG >= 3
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 #endif
 
 	//- Get elements number into VCA item -

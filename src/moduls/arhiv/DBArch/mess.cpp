@@ -140,7 +140,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     if( tbl.freeStat() ) return;
 
     TConfig cfg(&mod->messEl());
-    long long t_cnt = TSYS::curTime();
+    int64_t t_cnt = TSYS::curTime();
     for( unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
 	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;

@@ -282,7 +282,7 @@ void *TMdContr::Task( void *icntr )
     {
 	if(cntr.redntUse()) { usleep(STD_WAIT_DELAY*1000); continue; }
 
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	try
 	{
@@ -345,7 +345,7 @@ void *TMdContr::Task( void *icntr )
 				AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
 				if(sepReq && (!vl.at().arch().freeStat() || vl.at().reqFlg())) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 				if(!vl.at().arch().freeStat())
-				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))));
+				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
 			    }
 			    if(sepReq && rC > listV.size()/2)
 			    {
@@ -381,8 +381,8 @@ void *TMdContr::Task( void *icntr )
 			    { vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true); vl.at().setReqFlg(false); }
 			    else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize())
 			    {
-				long long btm = atoll(aNd->attr("tm").c_str());
-				long long per = atoll(aNd->attr("per").c_str());
+				int64_t btm = atoll(aNd->attr("tm").c_str());
+				int64_t per = atoll(aNd->attr("per").c_str());
 				TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 				for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
 				    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
@@ -405,7 +405,7 @@ void *TMdContr::Task( void *icntr )
 			AutoHD<TVal> vl = prm.at().vlAt(vLs[i_v]);
 			if(vl.at().getS() == EVAL_STR) continue;
 			vl.at().setS(EVAL_STR, vl.at().arch().freeStat() ? 0 :
-			    vmin(TSYS::curTime(),vmax(vl.at().arch().at().end(""),TSYS::curTime()-(long long)(3.6e9*cntr.restDtTm()))), true);
+			    vmin(TSYS::curTime(),vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))), true);
 		    }
 		    prm.at().vlAt("err").at().setS(_("10:Data not allow."),0,true);
 		    prm.at().isEVAL = true;
@@ -418,7 +418,7 @@ void *TMdContr::Task( void *icntr )
 	//> Calc acquisition process time
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 
-	TSYS::taskSleep((long long)(1e9*cntr.period()));
+	TSYS::taskSleep((int64_t)(1e9*cntr.period()));
     }
 
 
@@ -635,7 +635,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((long long)(1e6*owner().period()));
+    val.arch().at().setPeriod((int64_t)(1e6*owner().period()));
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

@@ -5282,7 +5282,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Check for trend's data reload
     bool rld = true;
-    if( tTimeCurent )	tTime = (long long)time(NULL)*1000000;
+    if( tTimeCurent )	tTime = (int64_t)time(NULL)*1000000;
     else if( trcPer && lstTrc < time(NULL) )
     { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
@@ -5292,21 +5292,21 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	//> Trace cursors value
 	if(active)
 	{
-	    long long tTimeGrnd = tTime - (long long)(1e6*tSize);
-	    if(holdCur || curTime >= (tTime-2*(long long)trcPer*1000000) || curTime <= tTimeGrnd)
+	    int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
+	    if(holdCur || curTime >= (tTime-2*(int64_t)trcPer*1000000) || curTime <= tTimeGrnd)
 		setCursor(tTime,ses.user);
 	}
     }
 
     int mrkFontSize = 0;
     int mrkHeight = 0;
-    int clr_grid = 0, clr_mrk = 0;						//Colors
+    int clr_grid = 0, clr_mrk = 0;					//Colors
 
     //> Get generic parameters
-    long long tSz  = (long long)(1e6*tSize);				//Trends size (us)
-    long long tEnd = tTime;						//Trends end point (us)
+    int64_t tSz  = (int64_t)(1e6*tSize);				//Trends size (us)
+    int64_t tEnd = tTime;						//Trends end point (us)
     tPict = tEnd;
-    long long tBeg = tEnd - tSz;					//Trends begin point (us)
+    int64_t tBeg = tEnd - tSz;					//Trends begin point (us)
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
@@ -5359,12 +5359,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	}
     }
     //> Calc horizontal scale
-    long long hDiv = 1;					//Horisontal scale divisor
+    int64_t hDiv = 1;					//Horisontal scale divisor
     int hmax_ln = tArW / (int)((sclHor&0x2 && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
-	long long hLen = tEnd - tBeg;
+	int64_t hLen = tEnd - tBeg;
 	if( hLen/86400000000ll >= 2 )    { hvLev = 5; hDiv = 86400000000ll; }	//Days
 	else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDiv =  3600000000ll; }	//Hours
 	else if( hLen/60000000 >= 2 )    { hvLev = 3; hDiv =    60000000; }	//Minutes
@@ -5409,7 +5409,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
 	    //>>> Draw grid and/or markers
 	    bool first_m = true;
-	    for( long long i_h = tBeg; true; )
+	    for( int64_t i_h = tBeg; true; )
 	    {
 		//>>>> Draw grid
 		int h_pos = tArX+tArW*(i_h-tBeg)/(tPict-tBeg);
@@ -5491,8 +5491,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	}
 
     //> Calc vertical scale
-    long long aVend;					//Corrected for allow data the trend end point
-    long long aVbeg;					//Corrected for allow data the trend begin point
+    int64_t aVend;			//Corrected for allow data the trend end point
+    int64_t aVbeg;			//Corrected for allow data the trend begin point
     double vsMax = 100, vsMin = 0;      //Trend's vertical scale border
     bool   vsPerc = true;               //Vertical scale percent mode
     if( prmRealSz >= 0 )
@@ -5617,7 +5617,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	bool	end_vl = false;
 	double	curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int	curPos, averPos = 0, prevPos = 0, z_vpos = 0;
-	long long curTm, averTm = 0, averLstTm = 0;
+	int64_t	curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
 	    curTm = vmin(aVend,vmax(aVbeg,trnds[i_t].val()[a_pos].tm));
@@ -5690,7 +5690,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //> Check for trend's data reload
     bool rld = true;
-    if( tTimeCurent )	tTime = (long long)time(NULL)*1000000;
+    if( tTimeCurent )	tTime = (int64_t)time(NULL)*1000000;
     else if( trcPer && lstTrc < time(NULL) )
     { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
@@ -5701,7 +5701,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     int clr_grid = 0, clr_mrk;						//Colors
 
     //> Get generic parameters
-    long long tSz  = (long long)(1e6*tSize);				//Time size (us)
+    int64_t tSz  = (int64_t)(1e6*tSize);				//Time size (us)
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
@@ -5988,11 +5988,11 @@ void VCADiagram::postReq( SSess &ses )
 	{
 	    if( type == 0 )
 	    {
-		long long tTimeGrnd = tPict - (long long)(1e6*tSize);
+		int64_t tTimeGrnd = tPict - (int64_t)(1e6*tSize);
 		setCursor( tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user );
 	    }
 	    else if( type == 1 )
-		setCursor( (long long)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user );
+		setCursor( (int64_t)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user );
 	}
     }
 }
@@ -6037,7 +6037,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		tTimeCurent = false;
 		if( atoll(req_el->text().c_str()) == 0 )
 		{
-		    tTime = (long long)time(NULL)*1000000;
+		    tTime = (int64_t)time(NULL)*1000000;
 		    tTimeCurent = true;
 		} else tTime = atoll(req_el->text().c_str())*1000000 + tTime%1000000;
 		lstTrc = time(NULL);
@@ -6132,11 +6132,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	    trnds[i_p].loadData(user, reld_tr_dt==2);
 }
 
-void VCADiagram::setCursor( long long itm, const string& user )
+void VCADiagram::setCursor( int64_t itm, const string& user )
 {
     if( type == 0 )
     {
-	long long tTimeGrnd = tTime - (long long)(1e6*tSize);
+	int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
 	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
 
 	holdCur = (curTime==tTime);
@@ -6168,8 +6168,8 @@ void VCADiagram::setCursor( long long itm, const string& user )
 
 	XMLNode req("set");
 	req.setAttr("path",id()+"/%2fserv%2fattr");
-	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((long long)(1e6/curFrq))/1000000));
-	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((long long)(1e6/curFrq))%1000000));
+	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))/1000000));
+	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))%1000000));
 
 #if HAVE_FFTW3_H
 	//> Update trend's current values
@@ -6212,17 +6212,17 @@ VCADiagram &VCADiagram::TrendObj::owner( )
     return *m_owner;
 }
 
-long long VCADiagram::TrendObj::valBeg()
+int64_t VCADiagram::TrendObj::valBeg()
 {
     return vals.empty() ? 0 : vals[0].tm;
 }
 
-long long VCADiagram::TrendObj::valEnd()
+int64_t VCADiagram::TrendObj::valEnd()
 {
     return vals.empty() ? 0 : vals[vals.size()-1].tm;
 }
 
-int VCADiagram::TrendObj::val( long long tm )
+int VCADiagram::TrendObj::val( int64_t tm )
 {
     int i_p = 0;
     for( int d_win = vals.size()/2; d_win > 10; d_win/=2 )
@@ -6250,10 +6250,10 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 
 void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 {
-    long long tSize     = (long long)(1e6*owner().tSize);
-    long long tTime     = owner().tTime;
-    long long tTimeGrnd = tTime - tSize;
-    long long wantPer   = tSize/(int)(owner().width+0.5);
+    int64_t tSize     = (int64_t)(1e6*owner().tSize);
+    int64_t tTime     = owner().tTime;
+    int64_t tTimeGrnd = tTime - tSize;
+    int64_t wantPer   = tSize/(int)(owner().width+0.5);
     string arch = owner().valArch;
 
     //> Clear trend for empty address and the full reload data
@@ -6290,7 +6290,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    setAttr("tm_grnd","0");
 	if( mod->cntrIfCmd(req,user,false) ) return;
 
-	long long lst_tm = atoll(req.attr("tm").c_str());
+	int64_t lst_tm = atoll(req.attr("tm").c_str());
 	if( lst_tm > valEnd() )
 	{
 	    double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
@@ -6323,7 +6323,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     if( valEnd() && tTime > valEnd() )          tTimeGrnd = valEnd()+1;
     else if( valBeg() && tTimeGrnd < valBeg() ) tTime = valBeg()-1;
     //> Get values data
-    long long bbeg, bend, bper;
+    int64_t	bbeg, bend, bper;
     int         curPos, prevPos;
     double      curVal, prevVal;
     string      svl;
@@ -6390,10 +6390,10 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
 #if HAVE_FFTW3_H
     if( fftOut ) { delete fftOut; fftN = 0; }
 
-    long long tSize	= (long long)(1e6*owner().tSize);
-    long long tTime	= owner().tTime;
-    long long tTimeGrnd	= tTime - tSize;
-    long long workPer	= tSize/(int)(owner().width+0.5);
+    int64_t tSize	= (int64_t)(1e6*owner().tSize);
+    int64_t tTime	= owner().tTime;
+    int64_t tTimeGrnd	= tTime - tSize;
+    int64_t workPer	= tSize/(int)(owner().width+0.5);
 
     tTimeGrnd = vmax(tTimeGrnd,valBeg());
     tTime = vmin(tTime,valEnd());

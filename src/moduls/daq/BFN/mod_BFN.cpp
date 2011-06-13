@@ -429,7 +429,7 @@ void TMdContr::enable_( )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the gathering data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
@@ -527,7 +527,7 @@ string TMdContr::passPrefSOAP( const string &ndName )
 void *TMdContr::Task(void *icntr)
 {
     string aId, tErr;
-    long long t_cnt = 0, s_cnt = 0;
+    int64_t t_cnt = 0, s_cnt = 0;
     TMdContr &cntr = *(TMdContr *)icntr;
 
     cntr.endrun_req = false;

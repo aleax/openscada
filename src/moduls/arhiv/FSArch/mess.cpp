@@ -125,7 +125,7 @@ time_t ModMArch::end()
 
 void ModMArch::put( vector<TMess::SRec> &mess )
 {
-    long long t_cnt = TSYS::curTime();
+    int64_t t_cnt = TSYS::curTime();
 
     ResAlloc res(mRes,false);
 

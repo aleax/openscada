@@ -362,7 +362,7 @@ void TController::redntDataUpdate( )
 	    if(!vl.at().arch().freeStat() || vl.at().reqFlg()) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 	    if(!vl.at().arch().freeStat())
 		prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),
-						    TSYS::curTime()-(long long)(3.6e9*owner().owner().rdRestDtTm()))));
+						    TSYS::curTime()-(int64_t)(3.6e9*owner().owner().rdRestDtTm()))));
 	}
 	if(rC > listV.size()/2)
 	{
@@ -389,8 +389,8 @@ void TController::redntDataUpdate( )
 	    { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
 	    else if( aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize() )
 	    {
-		long long btm = atoll(aNd->attr("tm").c_str());
-		long long per = atoll(aNd->attr("per").c_str());
+		int64_t btm = atoll(aNd->attr("tm").c_str());
+		int64_t per = atoll(aNd->attr("per").c_str());
 		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 		for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
 		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);

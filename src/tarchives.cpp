@@ -487,11 +487,11 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     //> Alarms request processing
     if(level < 0)
     {
-	vector< pair<long long,TMess::SRec* > > mb;
+	vector< pair<int64_t,TMess::SRec* > > mb;
 	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() && time(NULL) < upTo; p++)
 	    if((p->second.time >= b_tm || b_tm == e_tm) && p->second.time <= e_tm &&
 		    p->second.level >= abs(level) && re.test(p->second.categ))
-		mb.push_back(pair<long long,TMess::SRec* >(FTM(p->second),&p->second));
+		mb.push_back(pair<int64_t,TMess::SRec* >(FTM(p->second),&p->second));
 	sort(mb.begin(),mb.end());
 	for(unsigned i_b = 0; i_b < mb.size(); i_b++) recs.push_back(*mb[i_b].second);
     }
@@ -660,7 +660,7 @@ void *TArchiveS::ArhValTask( void *param )
 
     while( !arh.endrunReqVal )
     {
-	long long work_tm = SYS->curTime();
+	int64_t work_tm = SYS->curTime();
 
 	arh.vRes.resRequestR( );
 	for(unsigned i_arh = 0; i_arh < arh.actUpSrc.size(); i_arh++)
@@ -673,7 +673,7 @@ void *TArchiveS::ArhValTask( void *param )
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	arh.vRes.resRelease( );
 
-	TSYS::taskSleep((long long)arh.valPeriod()*1000000);
+	TSYS::taskSleep((int64_t)arh.valPeriod()*1000000);
     }
 
     arh.prcStVal = false;

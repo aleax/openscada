@@ -58,9 +58,9 @@ class TestXML : public TFunction
 		string s_buf(buf,cf_sz);
 		free(buf);
 		XMLNode node;
-		long long st_cnt = TSYS::curTime();
+		int64_t st_cnt = TSYS::curTime();
 		node.load(s_buf);
-		long long end_cnt = TSYS::curTime();
+		int64_t end_cnt = TSYS::curTime();
 		mod->prXMLNode(id(), &node);
 		mod->mess(id(),_("Test: Passed: %f ms."),1e-3*(end_cnt-st_cnt));
 		val->setS(0,_("Passed"));

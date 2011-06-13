@@ -32,7 +32,7 @@
 #include "tconfig.h"
 
 #define _(mess) Mess->I18N(mess)
-#define FTM(rec) ((long long)rec.time*1000000 + rec.utime)
+#define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 #define message(cat,lev,fmt,args...) Mess->put(cat,lev,fmt,##args)
 #define mess_debug(cat,fmt,args...) Mess->put(cat,TMess::Debug,fmt,##args)
 #define mess_info(cat,fmt,args...) Mess->put(cat,TMess::Info,fmt,##args)

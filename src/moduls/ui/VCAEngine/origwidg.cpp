@@ -1496,11 +1496,11 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    bool docRevers = atoi(xcur->childGet(i_c)->attr("docRevers").c_str());
 	    funcV.setR(6,dRpt);
 
-	    long long time = (long long)funcV.getI(1)*1000000;
-	    long long bTime = (long long)funcV.getI(2)*1000000;
-	    long long lstTime = (long long)funcV.getI(3)*1000000;
-	    long long perRpt = (long long)(1000000*dRpt);
-	    long long rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
+	    int64_t time = (int64_t)funcV.getI(1)*1000000;
+	    int64_t bTime = (int64_t)funcV.getI(2)*1000000;
+	    int64_t lstTime = (int64_t)funcV.getI(3)*1000000;
+	    int64_t perRpt = (int64_t)(1000000*dRpt);
+	    int64_t rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
 	    if(lstTime && lstTime<bTime) rTime-=perRpt;
 	    if(((time-rTime)/perRpt) > 1000) continue;
 	    while(rTime < time)
@@ -1513,7 +1513,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		    if( !docRevers ) i_c++;
 		    rCnt++;
 		}
-		long long rTimeT = vmin(rTime+perRpt,time);
+		int64_t rTimeT = vmin(rTime+perRpt,time);
 		funcV.setI(4,rTimeT/1000000); funcV.setI(5,rTimeT%1000000); funcV.setR(6,(rTimeT-rTime)/1000000.0);
 		nodeProcess(wdg,reptN,funcV,funcIO,iLang);
 		reptN->setAttr("docRptEnd",((rTimeT-rTime)==perRpt)?"1":"0");

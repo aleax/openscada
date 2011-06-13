@@ -180,7 +180,7 @@ string TSYS::uint2str( unsigned val, IntView view )
     return buf;
 }
 
-string TSYS::ll2str( long long val, IntView view )
+string TSYS::ll2str( int64_t val, IntView view )
 {
     char buf[STR_BUF_LEN];
     if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",val);
@@ -622,11 +622,11 @@ void TSYS::cfgFileScan( bool first )
     }
 }
 
-long long TSYS::curTime( )
+int64_t TSYS::curTime( )
 {
     timeval cur_tm;
     gettimeofday(&cur_tm,NULL);
-    return (long long)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
+    return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
 }
 
 bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t tm )
@@ -1246,7 +1246,7 @@ void *TSYS::taskWrap( void *stas )
     }
 }
 
-void TSYS::taskSleep( long long per, time_t cron )
+void TSYS::taskSleep( int64_t per, time_t cron )
 {
     struct timespec sp_tm;
 
@@ -1254,13 +1254,13 @@ void TSYS::taskSleep( long long per, time_t cron )
     {
 	if( !per ) per = 1000000000;
 	clock_gettime(CLOCK_REALTIME,&sp_tm);
-	long long pnt_tm = ( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
+	int64_t pnt_tm = ( ((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
 	do
 	{
 	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
 	    if( clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL) )	return;
 	    clock_gettime(CLOCK_REALTIME,&sp_tm);
-	}while( ((long long)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm );
+	}while( ((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm );
     }
     else
     {
@@ -1493,7 +1493,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if( iid == "time" )
     {
 	if( prms.empty() ) return (int)time(NULL);
-	long long tm = curTime();
+	int64_t tm = curTime();
 	prms[0].setI(tm%1000000); prms[0].setModify();
 	return (int)(tm/1000000);
     }

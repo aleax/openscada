@@ -1105,7 +1105,7 @@ string WdgView::resGet( const string &res )
 void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 {
 #if OSC_DEBUG >= 3
-    long long t_cnt;
+    int64_t t_cnt;
     if( wLevel() == 0 ) t_cnt = TSYS::curTime();
 #endif
 

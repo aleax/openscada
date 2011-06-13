@@ -677,7 +677,7 @@ void TValFunc::calc( const string &user )
     if( !mDimens ) mFunc->calc(this);
     else
     {
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 	mFunc->calc(this);
 	tm_calc = TSYS::curTime()-t_cnt;
     }

@@ -213,7 +213,7 @@ void TMdContr::start_( )
     if( prc_st ) return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the gathering data task
     SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
@@ -246,7 +246,7 @@ void *TMdContr::Task( void *icntr )
 
     while( !cntr.endrun_req )
     {
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	//> Update controller's data
 	cntr.en_res.resRequestR( );

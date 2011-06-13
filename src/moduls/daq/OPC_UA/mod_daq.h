@@ -107,7 +107,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	long long period( )	{ return mPer; }
+	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
@@ -166,7 +166,7 @@ class TMdContr: public TController
 		int		secLifeTime;
 		uint32_t	sesId;
 		uint32_t	authTkId;
-		long long	sesAccess;
+		int64_t		sesAccess;
 		double		sesLifeTime;
 		string		servCert;
 		string		secPolicy;
@@ -188,7 +188,7 @@ class TMdContr: public TController
 		&mSecPolicy;	//Security policy
 	int	&mSecMessMode,	//Security policy mode
 		&mPAttrLim;	//Parameter attributes number limit
-	long long mPer;
+	int64_t	mPer;
 
 	bool	prc_st,		//Process task active
 		endrun_req,	//Request to stop of the Process task

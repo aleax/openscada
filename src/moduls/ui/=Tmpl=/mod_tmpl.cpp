@@ -288,9 +288,9 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 
 	if( !arch.freeStat() )
 	{
-	    long long v_beg = ((trnd_tm+trnd_len)>time(NULL))?time(NULL)-trnd_len:trnd_tm;
-	    long long v_end = v_beg+trnd_len;
-	
+	    int64_t v_beg = ((trnd_tm+trnd_len)>time(NULL))?time(NULL)-trnd_len:trnd_tm;
+	    int64_t v_end = v_beg+trnd_len;
+
 	    page = arch.at().makeTrendImg(v_beg*1000000,v_end*1000000,"",h_sz, v_sz );
 	}
 	page = http_head("200 OK",page.size(),string("image/png"))+page;

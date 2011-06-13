@@ -89,7 +89,7 @@ class TestDB : public TFunction
 
 		//Test for create records
 		mod->mess(id(),_("Create records."));
-		long long ctime = TSYS::curTime();
+		int64_t ctime = TSYS::curTime();
 		for(int i_fld = 0; i_fld < experem; i_fld++)
 		{
 		    bd_cfg.cfg("name").setS("Sh"+SYS->int2str(i_fld));

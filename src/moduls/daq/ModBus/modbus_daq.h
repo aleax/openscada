@@ -150,7 +150,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	long long period( )	{ return mPer; }
+	int64_t period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 
@@ -206,7 +206,7 @@ class TMdContr: public TController
 	int	&reqTm,				//Request timeout in ms
 		&restTm,			//Restore timeout in s
 		&connTry;			//Connections try
-	long long mPer;
+	int64_t	mPer;
 
 	bool	prc_st,				//Process task active
 		endrun_req;			//Request to stop of the Process task

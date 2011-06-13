@@ -89,7 +89,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     level = vmin(Emerg,vmax(-Emerg,level));
     if( abs(level) < messLevel() ) return;
 
-    long long ctm = TSYS::curTime();
+    int64_t ctm = TSYS::curTime();
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
 
     if( mLogDir&1 )

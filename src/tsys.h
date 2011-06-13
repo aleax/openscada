@@ -148,20 +148,20 @@ class TSYS : public TCntrNode
 	static void sighandler( int signal );
 
 	//> Short time dimensions
-	bool multCPU( )			{ return mMultCPU; }
-	unsigned long long sysClk( )	{ return mSysclc; }
+	bool multCPU( )		{ return mMultCPU; }
+	uint64_t sysClk( )	{ return mSysclc; }
 	void clkCalc( )
 	{
-	    unsigned long long st_pnt = shrtCnt( );
+	    uint64_t st_pnt = shrtCnt( );
 	    usleep(100000);
 	    mSysclc = 10*(shrtCnt( )-st_pnt);
 	}
-	unsigned long long shrtCnt( )
+	uint64_t shrtCnt( )
 	{
 #if defined (__i386__) || defined (__x86_64__)
 	    unsigned int cntl, cnth;
 	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
-	    return ((unsigned long long)cnth<<32)+cntl;
+	    return ((uint64_t)cnth<<32)+cntl;
 #else
 	    return 0;
 #endif
@@ -174,14 +174,14 @@ class TSYS : public TCntrNode
 
 	//Public system static methods
 	//> Current system time (usec)
-	static long long curTime( );
+	static int64_t curTime( );
 
 	//> Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL, int wtm = 5, pthread_attr_t *pAttr = NULL );
 	void taskDestroy( const string &path, bool *startCntr = NULL, bool *endrunCntr = NULL, int wtm = 5 );
 
 	//> Sleep task for period grid <per> on ns or to cron time.
-	static void taskSleep( long long per, time_t cron = 0 );
+	static void taskSleep( int64_t per, time_t cron = 0 );
 	static time_t cron( const string &vl, time_t base = 0 );
 
 	//> Wait event with timeout support
@@ -190,7 +190,7 @@ class TSYS : public TCntrNode
 	//> Convert value to string
 	static string int2str( int val, IntView view = Dec );
 	static string uint2str( unsigned val, IntView view = Dec );
-	static string ll2str( long long val, IntView view = Dec );
+	static string ll2str( int64_t val, IntView view = Dec );
 	static string real2str( double val, int prec = 15, char tp = 'g' );
 	static double realRound( double val, int dig = 0, bool toint = false )
 	{
@@ -335,7 +335,7 @@ class TSYS : public TCntrNode
 	Res	nRes, taskRes;
 
 	bool	mMultCPU;
-	unsigned long long mSysclc;
+	uint64_t mSysclc;
 
 	map<string,double>	mCntrs;
 };

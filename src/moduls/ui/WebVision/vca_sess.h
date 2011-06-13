@@ -288,7 +288,7 @@ class VCADiagram : public VCAObj
 	short		sclHor		:4;	//Horisontal scale mode
 	short		sclVer		:4;	//Vertical scale mode
 	short		holdCur		:1;	//Hold cursor
-	long long	tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
+	int64_t		tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
 	float		tSize;			//Trend size (s)
 	float		fftBeg, fftEnd;
 	float		sclVerScl, sclVerSclOff;
@@ -310,24 +310,24 @@ class VCADiagram : public VCAObj
 		class SHg
 		{
 		    public:
-			SHg( long long itm, double ival ) : tm(itm), val(ival) { }
-			long long tm;
-			double val;
+			SHg( int64_t itm, double ival ) : tm(itm), val(ival) { }
+			int64_t	tm;
+			double	val;
 		};
 
 		//Methods
 		TrendObj( VCADiagram *owner );
 		~TrendObj( );
 
-		string addr( )		{ return m_addr; }
-		double bordL( )		{ return m_bord_low; }
-		double bordU( )		{ return m_bord_up; }
-		int    color( )		{ return m_color; }
-		double curVal( )	{ return m_curvl; }
-		int    valTp( )		{ return val_tp; }
-		long long valBeg( );
-		long long valEnd( );
-		int val( long long tm );
+		string	addr( )		{ return m_addr; }
+		double	bordL( )	{ return m_bord_low; }
+		double	bordU( )	{ return m_bord_up; }
+		int	color( )	{ return m_color; }
+		double	curVal( )	{ return m_curvl; }
+		int	valTp( )	{ return val_tp; }
+		int64_t	valBeg( );
+		int64_t	valEnd( );
+		int val( int64_t tm );
 		deque<SHg> &val( )	{ return vals; }
 
 		void setAddr( const string &vl );
@@ -357,8 +357,8 @@ class VCADiagram : public VCAObj
 		int		m_color;	//Values line color
 		//- Archive -
 		int		arh_per;	//Archive period
-		long long	arh_beg;	//Archive begin time
-		long long	arh_end;	//Archive end time
+		int64_t		arh_beg;	//Archive begin time
+		int64_t		arh_end;	//Archive end time
 		//- Values -
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
@@ -367,7 +367,7 @@ class VCADiagram : public VCAObj
 	};
 
 	//Methods
-	void setCursor( long long tTime, const string& user );
+	void setCursor( int64_t tTime, const string& user );
 
 	//Attributes
 	vector<TrendObj> trnds;			//Trends container

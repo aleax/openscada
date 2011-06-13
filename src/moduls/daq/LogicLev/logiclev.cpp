@@ -180,7 +180,7 @@ void TMdContr::load_( )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Former process parameters list
     vector<string> list_p;
@@ -229,7 +229,7 @@ void *TMdContr::Task( void *icntr )
 	//> Update controller's data
 	if(!cntr.redntUse())
 	{
-	    long long t_cnt = TSYS::curTime();
+	    int64_t t_cnt = TSYS::curTime();
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		try { cntr.p_hd[i_p].at().calc(is_start,is_stop); }
@@ -492,9 +492,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 	try
 	{
 	    prm_refl->free();
-	    *prm_refl = SYS->daq().at().at(TSYS::strSepParse(prm,0,'.')).at().
-					at(TSYS::strSepParse(prm,1,'.')).at().
-					at(TSYS::strSepParse(prm,2,'.'));
+	    *prm_refl = SYS->daq().at().prmAt(prm,'.');
 	    prm_refl->at().vlList(list);
 	    for(unsigned i_l = 0; i_l < list.size(); i_l++)
 		if(!vlPresent(list[i_l]))
@@ -506,7 +504,7 @@ void TMdPrm::mode( TMdPrm::Mode md, const string &prm )
 	    m_wmode = Free;
 	    delete prm_refl;
 	    prm_refl = NULL;
-	    throw;
+	    throw TError(nodePath().c_str(),_("Link to parameter '%s' error."),prm.c_str());
 	}
     }
     else if(md == TMdPrm::Template)
@@ -941,14 +939,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	{
 	    string prmVal = m_prm;
-	    if(m_mode == TMdPrm::DirRefl)
-	    {
-		string idMod = TSYS::strSepParse(m_prm, 0, '.');
-		string idCntr = TSYS::strSepParse(m_prm, 1, '.');
-		string idPrm = TSYS::strSepParse(m_prm, 2, '.');
-		if(SYS->daq().at().modPresent(idMod) && SYS->daq().at().at(idMod).at().present(idCntr) && SYS->daq().at().at(idMod).at().at(idCntr).at().present(idPrm))
-		    prmVal += " (+)";
-	    }
+	    if(m_mode == TMdPrm::DirRefl && !SYS->daq().at().prmAt(m_prm,'.',true).freeStat()) prmVal += " (+)";
 	    opt->setText(prmVal);
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
@@ -1005,7 +996,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
 	    int c_lvl = 0;
 	    for(int c_off = 0; TSYS::strSepParse(lnk_val,0,'.',&c_off).size(); c_lvl++);
-	    if(c_lvl == 4) opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
+	    if(c_lvl == 4)
+	    {
+		opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
+		if(!SYS->daq().at().prmAt(opt->text(),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+	    }
 	    else opt->setText(lnk_val);
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
@@ -1013,7 +1008,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    bool noonly_no_set = true;
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
-	    string p_vl = opt->text();
+	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
 	    int c_lvl = 0;
 	    for(int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++);
 	    AutoHD<TValue> prm;
@@ -1096,24 +1091,27 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
+	    {
 		opt->setText(lnk(lnkId(i_io)).prm_attr);
+		if(!SYS->daq().at().attrAt(opt->text(),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+	    }
 	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)
 		opt->setText(tmpl->val.getS(i_io));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
+	    string a_vl = TSYS::strParse(opt->text(), 0, " ");
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    {
-		if(TSYS::strSepParse(opt->text(),0,'.') == owner().owner().modId() &&
-			TSYS::strSepParse(opt->text(),1,'.') == owner().id() &&
-			TSYS::strSepParse(opt->text(),2,'.') == id())
+		if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
+			TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
+			TSYS::strSepParse(a_vl,2,'.') == id())
 		    throw TError(nodePath().c_str(),_("Self to self linking error."));
-		lnk(lnkId(i_io)).prm_attr = opt->text();
+		lnk(lnkId(i_io)).prm_attr = a_vl;
 		mode((TMdPrm::Mode)m_mode, m_prm);
 	    }
-	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)
-		tmpl->val.setS(i_io,opt->text());
+	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) tmpl->val.setS(i_io,a_vl);
 	    modif();
 	}
     }

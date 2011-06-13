@@ -103,7 +103,7 @@ void ModVArch::stop( )
     TVArchivator::stop();
 }
 
-bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, long long *abeg, long long *aend, long long *aper )
+bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper )
 {
     char buf[21]; buf[20] = 0;
     bool unpck = false;
@@ -120,7 +120,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    if(rsz > 0 && rsz < (int)sizeof(ibuf))
 	    {
 		ibuf[rsz] = 0;
-		long long tBeg, tEnd, tPer;
+		int64_t tBeg, tEnd, tPer;
 		int tVTp;
 		if( sscanf(ibuf,"%llx %llx %20s %llx %d",&tBeg,&tEnd,buf,&tPer,&tVTp) == 5 )
 		{
@@ -272,9 +272,9 @@ void ModVArch::checkArchivator( bool now )
 
 void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
 {
-    long long buf_sz = 100000;
-    long long buf_per = (long long)(valPeriod()*1e6);
-    long long c_tm;
+    int64_t buf_sz = 100000;
+    int64_t buf_per = (int64_t)(valPeriod()*1e6);
+    int64_t c_tm;
 
     TValBuf buf( TFld::Real, buf_sz, buf_per, true, true );
     beg=vmax(beg,SYS->archive().at().valAt(arch_nm).at().begin(workId())/1000000);
@@ -329,11 +329,11 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	//> Calc overage and scale of value
 	float c_val, v_over=0, v_max=-1e30, v_min=1e30;
 
-	c_tm = (long long)beg*1000000;
-	while( c_tm < (long long)end*1000000 )
+	c_tm = (int64_t)beg*1000000;
+	while( c_tm < (int64_t)end*1000000 )
 	{
-	    long long end_tm = c_tm+buf_sz*buf_per;
-	    end_tm = vmin(end_tm,(long long)end*1000000);
+	    int64_t end_tm = c_tm+buf_sz*buf_per;
+	    end_tm = vmin(end_tm,(int64_t)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 
 	    //>> Check scale
@@ -350,11 +350,11 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 
 	//> Transver value
 	int val_cnt = 0;
-	c_tm = (long long)beg*1000000;
-	while( c_tm && c_tm < (long long)end*1000000 )
+	c_tm = (int64_t)beg*1000000;
+	while( c_tm && c_tm < (int64_t)end*1000000 )
 	{
-	    long long end_tm = c_tm+buf_sz*buf_per-buf_per;
-	    end_tm = vmin(end_tm,(long long)end*1000000);
+	    int64_t end_tm = c_tm+buf_sz*buf_per-buf_per;
+	    end_tm = vmin(end_tm,(int64_t)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 
 	    for( ; c_tm <= buf.end(); c_tm+=buf_per, val_cnt++ )
@@ -380,11 +380,11 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	int hd=open((file_nm+"."+file_tp).c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
 	if( hd == -1 ) return;
 
-	c_tm = (long long)beg*1000000;
-	while( c_tm && c_tm < (long long)end*1000000 )
+	c_tm = (int64_t)beg*1000000;
+	while( c_tm && c_tm < (int64_t)end*1000000 )
 	{
-	    long long end_tm = c_tm+buf_sz*buf_per-buf_per;
-	    end_tm = vmin(end_tm,(long long)end*1000000);
+	    int64_t end_tm = c_tm+buf_sz*buf_per-buf_per;
+	    end_tm = vmin(end_tm,(int64_t)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf,c_tm,end_tm,workId());
 
 	    for(; c_tm <= buf.end(); c_tm+=buf_per )
@@ -639,7 +639,7 @@ void ModVArchEl::fileAdd( const string &file )
     }
 }
 
-long long ModVArchEl::end()
+int64_t ModVArchEl::end()
 {
     ResAlloc res(mRes,false);
     for( int i_a = arh_f.size()-1; i_a >= 0; i_a-- )
@@ -652,7 +652,7 @@ long long ModVArchEl::end()
     return 0;
 }
 
-long long ModVArchEl::begin()
+int64_t ModVArchEl::begin()
 {
     ResAlloc res(mRes,false);
     for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
@@ -662,26 +662,26 @@ long long ModVArchEl::begin()
     return 0;
 }
 
-void ModVArchEl::getValsProc( TValBuf &buf, long long ibeg, long long iend )
+void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     ResAlloc res(mRes,false);
     for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( ibeg > iend ) break;
 	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
 	{
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (long long)(archivator().valPeriod()*1e6) )
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (int64_t)(archivator().valPeriod()*1e6) )
 		buf.setI(EVAL_INT,ibeg);
 	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
 	    ibeg = arh_f[i_a]->end()+1;
 	}
-    for( ; ibeg <= iend; ibeg+=(long long)(archivator().valPeriod()*1e6) )
+    for( ; ibeg <= iend; ibeg+=(int64_t)(archivator().valPeriod()*1e6) )
 	buf.setI(EVAL_INT,ibeg);
 }
 
-TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
+TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 {
-    long long itm = tm ? *tm : SYS->curTime();
-    long long per;
+    int64_t itm = tm ? *tm : SYS->curTime();
+    int64_t per;
     ResAlloc res(mRes,false);
     for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && (
@@ -691,19 +691,19 @@ TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
 	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getVal(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
 	}
-    if(tm) { per = (long long)(archivator().valPeriod()*1e6); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
+    if(tm) { per = (int64_t)(archivator().valPeriod()*1e6); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_REAL;
 }
 
-void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
     //> Check border
     if( !buf.vOK(beg,end) )	return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
-    long long b_prev = 0;
-    long long f_sz = (long long)(((ModVArch&)archivator()).fileTimeSize()*3600e6);
-    long long v_per = (long long)(archivator().valPeriod()*1e6);
+    int64_t b_prev = 0;
+    int64_t f_sz = (int64_t)(((ModVArch&)archivator()).fileTimeSize()*3600e6);
+    int64_t v_per = (int64_t)(archivator().valPeriod()*1e6);
 
     realEnd = vmax(realEnd,buf.end());
 
@@ -716,7 +716,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	    if( beg < arh_f[i_a]->begin() )
 	    {
 		//>>> Calc file limits
-		long long n_end, n_beg;	//New file end position
+		int64_t n_end, n_beg;	//New file end position
 		if( (arh_f[i_a]->begin()-beg) > f_sz ) n_end = beg+f_sz;
 		else n_end = arh_f[i_a]->begin()-v_per;
 		n_beg = vmax(b_prev,n_end-f_sz);
@@ -735,7 +735,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	    //>> Insert values to archive
 	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
 	    {
-		long long n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
+		int64_t n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
 		res.release();
 		arh_f[i_a]->setVals(buf,beg,n_end);
 		beg = n_end+v_per;
@@ -753,7 +753,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
 	strftime(c_buf,sizeof(c_buf)," %F %T.val",&tm_tm);
 	string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
-	long long n_end = beg+f_sz;
+	int64_t n_end = beg+f_sz;
 	arh_f.push_back( new VFileArch(AName,beg,n_end,v_per,archive().valType(),this) );
 	n_end = (end > n_end)?n_end:end;
 
@@ -777,7 +777,7 @@ VFileArch::VFileArch( ModVArchEl *owner ) :
 }
 
 
-VFileArch::VFileArch( const string &iname, long long ibeg, long long iend, long long iper, TFld::Type itp, ModVArchEl *iowner) :
+VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t iper, TFld::Type itp, ModVArchEl *iowner) :
     mName(iname), mSize(0), mTp(itp), mBeg(ibeg), mEnd(iend), mPer(iper), mErr(false), mPack(false), mOwner(iowner)
 {
     char buf[1000];
@@ -951,7 +951,7 @@ void VFileArch::attach( const string &name )
 
 	//> Load previous val check
 	bool load_prev = false;
-	long long cur_tm = TSYS::curTime();
+	int64_t cur_tm = TSYS::curTime();
 	if( cur_tm >= begin() && cur_tm <= end() && period() > 10000000 )
 	{ owner().prev_tm = cur_tm; load_prev = true; }
 
@@ -1032,7 +1032,7 @@ void VFileArch::check( )
     }
 }
 
-long long VFileArch::endData( )
+int64_t VFileArch::endData( )
 {
     if(getVal(mpos).getS() != EVAL_STR) return end();
 
@@ -1063,10 +1063,10 @@ long long VFileArch::endData( )
     mAcces = time(NULL);
     res.release();
 
-    return begin() + (long long)curPos*period();
+    return begin() + (int64_t)curPos*period();
 }
 
-void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
+void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 {
     int vpos_beg, vpos_end, voff_beg, vlen_beg, voff_end, vlen_end;
     char *pid_b, *val_b;
@@ -1162,16 +1162,16 @@ void VFileArch::getVals( TValBuf &buf, long long beg, long long end )
 	switch(type())
 	{
 	    case TFld::Boolean:
-		buf.setB((char)*(val_b+voff_beg),begin()+(long long)vpos_beg*period());
+		buf.setB((char)*(val_b+voff_beg),begin()+(int64_t)vpos_beg*period());
 		break;
 	    case TFld::Integer:
-		buf.setI(*(int*)(val_b+voff_beg),begin()+(long long)vpos_beg*period());
+		buf.setI(*(int*)(val_b+voff_beg),begin()+(int64_t)vpos_beg*period());
 		break;
 	    case TFld::Real:
-		buf.setR(*(double*)(val_b+voff_beg),begin()+(long long)vpos_beg*period());
+		buf.setR(*(double*)(val_b+voff_beg),begin()+(int64_t)vpos_beg*period());
 		break;
 	    case TFld::String:
-		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+(long long)vpos_beg*period());
+		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+(int64_t)vpos_beg*period());
 		break;
 	}
 	vpos_beg++;
@@ -1244,7 +1244,7 @@ TVariant VFileArch::getVal( int vpos )
     return EVAL_STR;
 }
 
-void VFileArch::setVals( TValBuf &buf, long long ibeg, long long iend )
+void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     int vpos_beg, vpos_end;
     string val_b, value, value_first, value_end;       //Set value
@@ -1484,7 +1484,7 @@ string VFileArch::getValue( int hd, int voff, int vsz )
 
 int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 {
-    int b_sz = 0, i_bf = 0, rest = 0;
+    int b_sz = 0, i_bf = 0;
     char buf[4096];
     int voff;
 
@@ -1515,7 +1515,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		uint32_t vw = *(uint32_t*)(buf+i_bf);
     	        vw -= ((vw>>1)&0x55555555);
     		vw = (vw&0x33333333) + ((vw>>2)&0x33333333);
-    		voff += vSize * (((vw+(vw>>4)&0xF0F0F0F)*0x1010101)>>24);
+    		voff += vSize * ((((vw+(vw>>4))&0xF0F0F0F)*0x1010101)>>24);
     		n_pos = i_ps + 32; i_bf += 4;
     	    }
     	    //> Simple algorithm

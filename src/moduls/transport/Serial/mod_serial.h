@@ -174,7 +174,7 @@ class TTrOut: public TTransportOut
 
 	string	mDevPort, mTimings;
 	int	fd;
-	long long mLstReqTm;
+	int64_t	mLstReqTm;
 
 	float	trIn, trOut;			// Traffic in and out counter and maximum respond timeout
 

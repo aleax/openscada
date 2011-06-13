@@ -64,10 +64,10 @@ class TestVal : public TFunction
 		mod->mess(id(),_("Last value = %s"), aval.at().getS(NULL).c_str() );
 		if( a_len && a_per )
 		{
-		    long long cur = TSYS::curTime()-a_per;
+		    int64_t cur = TSYS::curTime()-a_per;
 		    for( int i_v = 1; i_v <= a_len; i_v++, cur-=a_per )
 		    {
-			long long rvtm = cur;
+			int64_t rvtm = cur;
 			mod->mess(id(),_("Value %d = %s."),i_v, aval.at().getS(&rvtm).c_str() );  
 		    }
 		}

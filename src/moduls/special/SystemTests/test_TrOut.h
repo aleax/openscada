@@ -58,7 +58,7 @@ class TestTrOut : public TFunction
 
 		char buf[200];
 
-		long long stTm = TSYS::curTime();
+		int64_t stTm = TSYS::curTime();
 
 		AutoHD<TTipTransport> tr = SYS->transport().at().modAt(type);
 		if( !tr.at().outPresent(addr) )

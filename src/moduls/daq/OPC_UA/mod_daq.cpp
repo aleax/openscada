@@ -300,7 +300,7 @@ void TMdContr::start_( )
     catch( TError err ){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     tmDelay = 0;
 
@@ -346,7 +346,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.redntUse())	{ sleep(1); continue; }
 	    if(cntr.tmDelay > 0){ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
-	    long long t_cnt = TSYS::curTime();
+	    int64_t t_cnt = TSYS::curTime();
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;
 
 	    ResAlloc res(cntr.en_res,false);

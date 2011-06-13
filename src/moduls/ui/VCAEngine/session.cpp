@@ -375,7 +375,7 @@ void *Session::Task( void *icontr )
     while(!ses.endrun_req)
     {
 	//> Check calk time
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	//> Calc session pages and all other items at recursion
 	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
@@ -396,7 +396,7 @@ void *Session::Task( void *icontr )
 	    ses.rez_calc=0;
 	}*/
 
-	TSYS::taskSleep((long long)ses.period()*1000000);
+	TSYS::taskSleep((int64_t)ses.period()*1000000);
     }
 
     ses.mStart = false;

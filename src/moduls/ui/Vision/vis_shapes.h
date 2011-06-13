@@ -297,9 +297,9 @@ class ShapeDiagram : public WdgShape
 		class SHg
 		{
 		    public:
-			SHg( long long itm, double ival ) : tm(itm), val(ival) { }
-			long long tm;
-			double val;
+			SHg( int64_t itm, double ival ) : tm(itm), val(ival) { }
+			int64_t tm;
+			double	val;
 		};
 		//Methods
 		TrendObj( WdgView *view );
@@ -311,9 +311,9 @@ class ShapeDiagram : public WdgShape
 		QColor	color( )	{ return m_color; }
 		double	curVal( )	{ return m_curvl; }
 		int	valTp( )	{ return val_tp; }
-		long long valBeg( );
-		long long valEnd( );
-		int	val( long long tm );
+		int64_t	valBeg( );
+		int64_t	valEnd( );
+		int	val( int64_t tm );
 		deque<SHg> &val( )	{ return vals; }
 
 		void setAddr( const string &vl );
@@ -341,8 +341,8 @@ class ShapeDiagram : public WdgShape
 		QColor		m_color;	//Values line color
 		//> Archive
 		int		arh_per;	//Archive period
-		long long	arh_beg;	//Archive begin time
-		long long	arh_end;	//Archive end time
+		int64_t		arh_beg;	//Archive begin time
+		int64_t		arh_end;	//Archive end time
 		//> Values
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
@@ -375,7 +375,7 @@ class ShapeDiagram : public WdgShape
 		QFont		sclMarkFont;
 		QTimer 		*trcTimer;
 		vector<TrendObj>	prms;
-		long long	tTime, tPict, curTime;
+		int64_t		tTime, tPict, curTime;
 		float		tSize;
 		float		fftBeg, fftEnd;
 		float		sclVerScl, sclVerSclOff;
@@ -401,7 +401,7 @@ class ShapeDiagram : public WdgShape
 	void makeSpectrumPicture( WdgView *view );
 
 	void loadData( WdgView *view, bool full = false );
-	void setCursor( WdgView *view, long long itm );
+	void setCursor( WdgView *view, int64_t itm );
 };
 
 //************************************************

@@ -48,21 +48,21 @@ class ModVArchEl: public TVArchEl
 
 	void fullErase( );
 
-	long long begin( )	{ return mBeg; }
-	long long end( )	{ return mEnd; }
-	long long period( )	{ return mPer; }
+	int64_t begin( )	{ return mBeg; }
+	int64_t end( )		{ return mEnd; }
+	int64_t period( )	{ return mPer; }
 
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
     protected:
 	//Methods
-	TVariant getValProc( long long *tm, bool up_ord );
-	void getValsProc( TValBuf &buf, long long beg, long long end );
-	void setValsProc( TValBuf &buf, long long beg, long long end );
+	TVariant getValProc( int64_t *tm, bool up_ord );
+	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	void setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
     private:
 	//Attributes
-	long long mBeg, mEnd, mPer;
+	int64_t mBeg, mEnd, mPer;
 };
 
 //************************************************

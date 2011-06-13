@@ -1086,7 +1086,7 @@ void *Node::Task( void *ind )
     {
 	if(SYS->daq().at().subStartStat())
 	{
-	    long long t_cnt = TSYS::curTime();
+	    int64_t t_cnt = TSYS::curTime();
 
 	    //> Setting special IO
 	    if(ioFrq >= 0) nd.data->val.setR(ioFrq,(float)1/nd.period());
@@ -1148,7 +1148,7 @@ void *Node::Task( void *ind )
 	}
 
 	if(isStop) break;
-	TSYS::taskSleep((long long)(1e9*nd.period()));
+	TSYS::taskSleep((int64_t)(1e9*nd.period()));
 	if(nd.endrunRun) isStop = true;
 	isStart = false;
 	nd.modif();

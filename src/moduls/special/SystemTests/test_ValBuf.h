@@ -43,8 +43,8 @@ class TestValBuf : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    long long rtm, wtm;
-	    unsigned long long st_cnt;
+	    int64_t rtm, wtm;
+	    uint64_t st_cnt;
 	    TValBuf *buf = NULL;
 	    string test;
 
@@ -94,7 +94,7 @@ class TestValBuf : public TFunction
 		    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getS(&rtm) != "Test: "+TSYS::int2str((i-wtm)/buf->period()))
@@ -114,7 +114,7 @@ class TestValBuf : public TFunction
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+5))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) ||
@@ -138,7 +138,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{ rtm = i; buf->getS(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -155,7 +155,7 @@ class TestValBuf : public TFunction
 		    buf->setI(i,wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if(buf->getI(&rtm) != (i-wtm)/buf->period())
@@ -175,7 +175,7 @@ class TestValBuf : public TFunction
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+5))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getI(&rtm) == EVAL_INT) ||
@@ -199,7 +199,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{ rtm = i; buf->getI(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -216,7 +216,7 @@ class TestValBuf : public TFunction
 		    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getS(&rtm) != "Test: "+TSYS::int2str((i-wtm)/buf->period()))
@@ -237,7 +237,7 @@ class TestValBuf : public TFunction
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) ||
@@ -262,7 +262,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{ rtm = i; buf->getS(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -279,7 +279,7 @@ class TestValBuf : public TFunction
 		    buf->setI(i,wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getI(&rtm) != (i-wtm)/buf->period())
@@ -300,7 +300,7 @@ class TestValBuf : public TFunction
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getI(&rtm) == EVAL_INT) ||
@@ -325,7 +325,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{ rtm = i; buf->getI(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -342,7 +342,7 @@ class TestValBuf : public TFunction
 		    buf->setS("Test: "+TSYS::int2str(i),wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getS(&rtm) != "Test: "+TSYS::int2str((i-wtm)/buf->period()))
@@ -363,7 +363,7 @@ class TestValBuf : public TFunction
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) ||
@@ -387,7 +387,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{ rtm = i; buf->getS(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -404,7 +404,7 @@ class TestValBuf : public TFunction
 		    buf->setI(i,wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period() )
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getI(&rtm) != (i-wtm)/buf->period()) throw TError(nodePath().c_str(),_("Write a half buffer values error."));
@@ -424,7 +424,7 @@ class TestValBuf : public TFunction
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getI(&rtm) == EVAL_INT) ||
@@ -448,7 +448,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->begin(); i <= buf->end(); i+=buf->period())
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{ rtm = i; buf->getI(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -467,7 +467,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
 		int icnt = buf->size()/2 - 1;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
 		    if(buf->getS(&i) != "Test: "+TSYS::int2str(icnt))
 			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
 		mod->mess(id(),_("Write a half buffer ok."));
@@ -486,7 +486,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+3*wper) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
 		icnt = buf->size()+4;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    //string val =  buf->getS(&rtm);
 		    //printf("Value %lld: %s\n",rtm,val.c_str());
@@ -508,7 +508,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+		for(int64_t i = buf->end(); i > buf->begin(); i=rtm-1)
 		{ rtm = i; buf->getS(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -527,7 +527,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
 		icnt = buf->size()/2 - 1;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
 		    if(buf->getI(&i) != icnt) throw TError(nodePath().c_str(),_("Write a half buffer values error."));
 		mod->mess(id(),_("Write a half buffer ok."));
 		//Roll buff
@@ -545,7 +545,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+3*wper) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
 		icnt = buf->size()+4;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    if(icnt == 12 || icnt == 7)	icnt--;
 		    if( buf->getI(&i) != icnt ) throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
@@ -564,7 +564,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+		for(int64_t i = buf->end(); i > buf->begin(); i=rtm-1)
 		{ rtm = i; buf->getI(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -583,7 +583,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
 		icnt = buf->size()/2 - 1;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
 		    if(buf->getS(&i) != "Test: "+TSYS::int2str(icnt))
 			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
 		mod->mess(id(),_("Write a half buffer ok."));
@@ -602,7 +602,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+2*wper) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
 		icnt = buf->size()+4;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    if(icnt == 12 || icnt == 10 || icnt == 7)	icnt--;
 		    if( buf->getS(&i) != "Test: "+TSYS::int2str(icnt) )
@@ -622,7 +622,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+		for(int64_t i = buf->end(); i > buf->begin(); i=rtm-1)
 		{ rtm = i; buf->getS(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
@@ -641,7 +641,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
 		icnt = buf->size()/2 - 1;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt-- )
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
 		    if(buf->getI(&i) != icnt) throw TError(nodePath().c_str(),_("Write a half buffer values error."));
 		mod->mess(id(),_("Write a half buffer ok."));
 		//Roll buff
@@ -659,7 +659,7 @@ class TestValBuf : public TFunction
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+2*wper) )
 		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
 		icnt = buf->size()+4;
-		for(long long i = buf->end(); i >= buf->begin(); i--, icnt--)
+		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    if(icnt == 12 || icnt == 10 || icnt == 7)	icnt--;
 		    if( buf->getI(&i) != icnt ) throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
@@ -678,7 +678,7 @@ class TestValBuf : public TFunction
 		mod->mess(id(),_("Wrote 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 
 		st_cnt = TSYS::curTime();
-		for(long long i = buf->end(); i > buf->begin(); i=rtm-1)
+		for(int64_t i = buf->end(); i > buf->begin(); i=rtm-1)
 		{ rtm = i; buf->getI(&rtm); }
 		mod->mess(id(),_("Read 1000 values for time %f ms."),1e-3*(TSYS::curTime()-st_cnt));
 

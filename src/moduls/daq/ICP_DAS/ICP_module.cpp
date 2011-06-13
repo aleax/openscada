@@ -271,7 +271,7 @@ void *TMdContr::Task( void *icntr )
 	{
 	    if( !cntr.redntUse( ) )
 	    {
-		long long t_cnt = TSYS::curTime();
+		int64_t t_cnt = TSYS::curTime();
 
 		//> Update controller's data
 		ResAlloc res( cntr.en_res, false );
@@ -288,7 +288,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.prcSt = true;
 
 	    //> Calc next work time and sleep
-	    TSYS::taskSleep((long long)(1e9*cntr.period()));
+	    TSYS::taskSleep((int64_t)(1e9*cntr.period()));
 	}
     }
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
@@ -827,7 +827,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode( TVArchive::ActiveAttr, val.arch().at().srcData() );
-    val.arch().at().setPeriod( (long long)(owner().period()*1000000) );
+    val.arch().at().setPeriod( (int64_t)(owner().period()*1000000) );
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }
@@ -840,7 +840,7 @@ void *TMdPrm::fastTask( void *iprm )
     prm.prcSt = true;
 
     struct timespec sp_tm;
-    long long wTm = TSYS::curTime();
+    int64_t wTm = TSYS::curTime();
     int c_mode;
 
     vector< AutoHD<TVal> > cnls;
@@ -863,11 +863,11 @@ void *TMdPrm::fastTask( void *iprm )
 	    cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
 	//> Calc next work time and sleep
-	wTm += (long long)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);
+	wTm += (int64_t)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);
 	sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
 	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
 
-	//TSYS::taskSleep((long long)(1e9*100e-6));
+	//TSYS::taskSleep((int64_t)(1e9*100e-6));
     }
 
     prm.prcSt = false;

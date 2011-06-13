@@ -1,3 +1,8 @@
+2011-06-13 Roman
+- !!:SYS: Type "long long" is replaced to "int64_t" everywhere.
+- UI.VCAEngine: Linked status is added for widgets links.
+
+
 2011-06-12 Roman
 - !!!:Archive.FSArch: Archive's index table processing is made more faster by use speed-optimal algorithm of dword's set bits count.
 

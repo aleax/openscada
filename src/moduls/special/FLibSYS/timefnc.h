@@ -118,7 +118,7 @@ class tmTime : public TFunction
 	    if( val->getI(1) < 0 ) val->setI(0,time(NULL));
 	    else
 	    {
-		long long tm = TSYS::curTime();
+		int64_t tm = TSYS::curTime();
 		val->setI(0,tm/1000000);
 		val->setI(1,tm%1000000);
 	    }

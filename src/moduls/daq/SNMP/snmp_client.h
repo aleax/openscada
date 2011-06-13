@@ -93,7 +93,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	long long period( )     { return mPer; }
+	int64_t	period( )	{ return mPer; }
         string  cron( )         { return mSched; }
 	int	prior( )	{ return m_prior; }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
@@ -140,7 +140,7 @@ class TMdContr: public TController
 		&m_comm,	// Server community
 		&m_V3;		// V3 parameters
 	string	w_addr, w_comm;
-	long long mPer;
+	int64_t	mPer;
 
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task

@@ -560,7 +560,7 @@ void TMdContr::start_( )
     connectRemotePLC();
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Former proccess parameters list
     vector<string> list_p;
@@ -1240,7 +1240,7 @@ void *TMdContr::Task( void *icntr )
 
     while(true)
     {
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	//> Update controller's data
 	cntr.nodeRes().resRequestR( );

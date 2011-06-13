@@ -105,7 +105,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "isNull" ) return (char)(!isArch() && !buf());
     if( id == "begin" )
     {
-	long long vtm;
+	int64_t vtm;
 	if( isArch() )	vtm = arch().at().begin( (prms.size()>=2) ? prms[1].getS() : "" );
 	else
 	{
@@ -117,7 +117,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "end" )
     {
-	long long vtm;
+	int64_t vtm;
 	if( isArch() )	vtm = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
 	else
 	{
@@ -129,7 +129,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "period" )
     {
-	long long vper;
+	int64_t vper;
 	if( isArch() )	vper = arch().at().period( (prms.size()>=2) ? prms[1].getS() : "" );
 	else
 	{
@@ -142,7 +142,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "get" && prms.size() >= 2 )
     {
 	TVariant vl;
-	long long vtm = (long long)prms[0].getI()*1000000 + prms[1].getI();
+	int64_t vtm = (int64_t)prms[0].getI()*1000000 + prms[1].getI();
 	if( isArch() ) vl = arch().at().getVal( &vtm, (prms.size()>=3)?prms[2].getB():false, (prms.size()>=4)?prms[3].getS():"" );
 	else
 	{
@@ -164,20 +164,20 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	if( isArch() )
 	    switch( arch().at().valType() )
 	    {
-		case TFld::Boolean:	arch().at().setB(prms[0].getB(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Integer:	arch().at().setI(prms[0].getI(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Real:	arch().at().setR(prms[0].getR(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::String:	arch().at().setS(prms[0].getS(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Boolean:	arch().at().setB(prms[0].getB(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Integer:	arch().at().setI(prms[0].getI(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Real:	arch().at().setR(prms[0].getR(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::String:	arch().at().setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 	    }
 	else
 	{
 	    if( !buf() ) return false;
 	    switch( buf()->valType() )
 	    {
-		case TFld::Boolean:	buf()->setB(prms[0].getB(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Integer:	buf()->setI(prms[0].getI(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Real:	buf()->setR(prms[0].getR(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::String:	buf()->setS(prms[0].getS(),(long long)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Boolean:	buf()->setB(prms[0].getB(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Integer:	buf()->setI(prms[0].getI(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Real:	buf()->setR(prms[0].getR(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::String:	buf()->setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 	    }
 	}
 	return true;
@@ -198,8 +198,8 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    }
 	    else vb = buf();
 	    if( !vb )     return false;
-	    src->arch().at().getVals( *vb, (long long)prms[1].getI()*1000000+prms[2].getI(),
-					   (long long)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
+	    src->arch().at().getVals( *vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
+					   (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
 	}
 	else if( isArch() )
 	{
@@ -211,23 +211,23 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    }
 	    else vb = src->buf();
 	    if(!vb)     return false;
-	    arch().at().setVals( *vb, (long long)prms[1].getI()*1000000+prms[2].getI(),
-				      (long long)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
+	    arch().at().setVals( *vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
+				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
 	}
 	else
 	{
 	    TValBuf* svb = src->buf();
 	    TValBuf* dvb = buf();
 	    if( !svb || !dvb ) return false;
-	    svb->getVals( *dvb, (long long)prms[1].getI()*1000000+prms[2].getI(), (long long)prms[3].getI()*1000000+prms[4].getI() );
+	    svb->getVals( *dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI() );
 	}
 	return true;
     }
 #if HAVE_FFTW3_H
     if( id == "FFT" && prms.size() >= 2 )
     {
-	long long etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
-	long long btm = etm - (long long)(1e6*prms[1].getR());
+	int64_t etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
+	int64_t btm = etm - (int64_t)(1e6*prms[1].getR());
 	int fftN = 0, iN = 0;
 	double *fftIn = NULL;
 

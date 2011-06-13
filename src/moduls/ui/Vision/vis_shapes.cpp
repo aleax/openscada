@@ -1359,7 +1359,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->tTimeCurent = false;
 	    if( atoll(val.c_str()) == 0 )
 	    {
-		shD->tTime = (long long)time(NULL)*1000000;
+		shD->tTime = (int64_t)time(NULL)*1000000;
 		shD->tTimeCurent = true;
 	    } else shD->tTime = atoll(val.c_str())*1000000 + shD->tTime%1000000;
 	    reld_tr_dt = 1;
@@ -1483,7 +1483,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     QPainter pnt( &shD->pictObj );
 
     //> Get generic parameters
-    long long tSize = (long long)(1e6*shD->tSize);			//Time size (us)
+    int64_t tSize = (int64_t)(1e6*shD->tSize);			//Time size (us)
     if( shD->prms.empty() || tSize <= 0 ) return;
 
     //> Make decoration and prepare trends area
@@ -1743,7 +1743,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     ShpDt *shD = (ShpDt*)w->shpData;
 
 #if OSC_DEBUG >= 3
-    long long t_cnt = TSYS::curTime();
+    int64_t t_cnt = TSYS::curTime();
 #endif
 
     //> Prepare picture
@@ -1753,10 +1753,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     QPainter pnt( &shD->pictObj );
 
     //> Get generic parameters
-    long long tSize = (long long)(1e6*shD->tSize);			//Trends size (us)
-    long long tEnd  = shD->tTime;					//Trends end point (us)
-    long long tPict = tEnd;
-    long long tBeg  = tEnd - tSize;					//Trends begin point (us)
+    int64_t tSize = (int64_t)(1e6*shD->tSize);				//Trends size (us)
+    int64_t tEnd  = shD->tTime;						//Trends end point (us)
+    int64_t tPict = tEnd;
+    int64_t tBeg  = tEnd - tSize;					//Trends begin point (us)
     if( shD->prms.empty() || tSize <= 0 ) return;
 
     //> Make decoration and prepare trends area
@@ -1791,13 +1791,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
 
     //> Calc horizontal scale
-    long long hDiv = 1;	//Horisontal scale divisor
+    int64_t hDiv = 1;	//Horisontal scale divisor
 
     int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0*vmin(w->xScale(true),w->yScale(true)));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
-	long long hLen = tEnd - tBeg;
+	int64_t hLen = tEnd - tBeg;
 	if( hLen/86400000000ll >= 2 )		{ hvLev = 5; hDiv = 86400000000ll; }	//Days
 	else if( hLen/3600000000ll >= 2 )	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
 	else if( hLen/60000000 >= 2 )		{ hvLev = 3; hDiv =    60000000; }	//Minutes
@@ -1842,7 +1842,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	    //>>>> Draw grid and/or markers
 	    bool first_m = true;
-	    for( long long i_h = tBeg; true; )
+	    for( int64_t i_h = tBeg; true; )
 	    {
 		//>>>> Draw grid
 		pnt.setPen(grdPen);
@@ -1925,8 +1925,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
 
     //>> Calc vertical scale
-    long long aVend;			//Corrected for allow data the trend end point
-    long long aVbeg;			//Corrected for allow data the trend begin point
+    int64_t aVend;			//Corrected for allow data the trend end point
+    int64_t aVbeg;			//Corrected for allow data the trend begin point
     double vsMax = 100, vsMin = 0;	//Trend's vertical scale border
     bool   vsPerc = true;		//Vertical scale percent mode
     if( prmRealSz >= 0 )
@@ -2057,7 +2057,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	bool end_vl = false;
 	double curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int    curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos = 0;
-	long long curTm, averTm = 0, averLstTm = 0;
+	int64_t curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
 	    curTm = vmin(aVend,vmax(aVbeg,sTr->val()[a_pos].tm));
@@ -2130,14 +2130,14 @@ void ShapeDiagram::tracing( )
 
     if( !w->isEnabled() ) return;
 
-    long long trcPer = (long long)shD->trcPer*1000000;
-    if( shD->tTimeCurent )	shD->tTime = (long long)time(NULL)*1000000;
+    int64_t trcPer = (int64_t)shD->trcPer*1000000;
+    if( shD->tTimeCurent )	shD->tTime = (int64_t)time(NULL)*1000000;
     else if( shD->tTime )	shD->tTime += trcPer;
     loadData(w);
     makePicture(w);
 
     //> Trace cursors value
-    if( shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(long long)(1e6*shD->tSize))) )
+    if( shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(int64_t)(1e6*shD->tSize))) )
 	setCursor( w, shD->tTime );
     w->update();
 }
@@ -2154,7 +2154,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	case QEvent::Paint:
 	{
 #if OSC_DEBUG >= 3
-	    long long t_cnt = TSYS::curTime();
+	    int64_t t_cnt = TSYS::curTime();
 #endif
 	    QPainter pnt( w );
 
@@ -2180,8 +2180,8 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    int curPos = -1;
 	    if( shD->type == 0 && shD->active )
 	    {
-		long long tTimeGrnd = shD->tPict - (long long)(1e6*shD->tSize);
-		long long curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
+		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
+		int64_t curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 		if( curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
 		    curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
 	    }
@@ -2214,15 +2214,15 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		    if( !shD->active ) break;
 		    if( shD->type == 0 )
 		    {
-			long long tTimeGrnd = shD->tPict - (long long)(1e6*shD->tSize);
-			long long curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
+			int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
+			int64_t curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
 			setCursor( w, curTime+((key->key()==Qt::Key_Left)?-1:1)*(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
 		    }
 		    else if( shD->type == 1 )
 		    {
 			if( !shD->tSize ) break;
 			float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
-			setCursor( w, (long long)(1e6/(curFrq+((key->key()==Qt::Key_Left)?-1:1)*(shD->fftEnd-shD->fftBeg)/shD->pictRect.width())) );
+			setCursor( w, (int64_t)(1e6/(curFrq+((key->key()==Qt::Key_Left)?-1:1)*(shD->fftEnd-shD->fftBeg)/shD->pictRect.width())) );
 		    }
 		    w->update();
 		    return true;
@@ -2236,11 +2236,11 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if( curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width()) ) break;
 	    if( shD->type == 0 )
 	    {
-		long long tTimeGrnd = shD->tPict - (long long)(1e6*shD->tSize);
+		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
 		setCursor( w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width() );
 	    }
 	    else if( shD->type == 1 )
-		setCursor( w, (long long)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())) );
+		setCursor( w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())) );
 	    w->update();
 	    break;
 	}
@@ -2250,14 +2250,14 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     return false;
 }
 
-void ShapeDiagram::setCursor( WdgView *w, long long itm )
+void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if( shD->type == 0 )
     {
-	long long tTimeGrnd = shD->tTime - (long long)(1e6*shD->tSize);
-	long long curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
+	int64_t tTimeGrnd = shD->tTime - (int64_t)(1e6*shD->tSize);
+	int64_t curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
 
 	shD->holdCur = (curTime==shD->tTime);
 
@@ -2287,8 +2287,8 @@ void ShapeDiagram::setCursor( WdgView *w, long long itm )
 	float curFrq = vmax(vmin(1e6/(float)itm,shD->fftEnd),shD->fftBeg);
 
 	w->setAllAttrLoad(true);
-	w->attrSet("curSek",TSYS::int2str(((long long)(1e6/curFrq))/1000000),30);
-	w->attrSet("curUSek",TSYS::int2str(((long long)(1e6/curFrq))%1000000),31);
+	w->attrSet("curSek",TSYS::int2str(((int64_t)(1e6/curFrq))/1000000),30);
+	w->attrSet("curUSek",TSYS::int2str(((int64_t)(1e6/curFrq))%1000000),31);
 
 #if HAVE_FFTW3_H
 	//> Update trend's current values
@@ -2327,17 +2327,17 @@ ShapeDiagram::TrendObj::~TrendObj( )
 #endif
 }
 
-long long ShapeDiagram::TrendObj::valBeg()
+int64_t ShapeDiagram::TrendObj::valBeg()
 {
     return vals.empty() ? 0 : vals[0].tm;
 }
 
-long long ShapeDiagram::TrendObj::valEnd()
+int64_t ShapeDiagram::TrendObj::valEnd()
 {
     return vals.empty() ? 0 : vals[vals.size()-1].tm;
 }
 
-int ShapeDiagram::TrendObj::val( long long tm )
+int ShapeDiagram::TrendObj::val( int64_t tm )
 {
     int i_p = 0;
     for( int d_win = vals.size()/2; d_win > 10; d_win/=2 )
@@ -2368,10 +2368,10 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 {
     ShpDt *shD = (ShpDt*)view->shpData;
 
-    long long tSize     = (long long)(1e6*shD->tSize);
-    long long tTime     = shD->tTime;
-    long long tTimeGrnd = tTime - tSize;
-    long long wantPer = tSize/view->size().width();
+    int64_t tSize     = (int64_t)(1e6*shD->tSize);
+    int64_t tTime     = shD->tTime;
+    int64_t tTimeGrnd = tTime - tSize;
+    int64_t wantPer = tSize/view->size().width();
 
     //> Clear trend for empty address and for full reload data
     if( full || addr().empty() )
@@ -2407,7 +2407,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("tm_grnd","0");
 	if( view->cntrIfCmd(req,true) )	return;
 
-	long long lst_tm = atoll(req.attr("tm").c_str());
+	int64_t lst_tm = atoll(req.attr("tm").c_str());
 	if( lst_tm > valEnd() )
 	{
 	    double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
@@ -2442,7 +2442,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     else if( valBeg() && tTimeGrnd < valBeg() )	tTime = valBeg()-1;
 
     //> Get values data
-    long long bbeg, bend, bper;
+    int64_t	bbeg, bend, bper;
     int		curPos, prevPos;
     double	curVal, prevVal;
     string	svl;
@@ -2513,10 +2513,10 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
 #if HAVE_FFTW3_H
     if( fftOut ) { delete fftOut; fftN = 0; }
 
-    long long tSize	= (long long)(1e6*shD->tSize);
-    long long tTime	= shD->tTime;
-    long long tTimeGrnd	= tTime - tSize;
-    long long workPer	= tSize/view->size().width();
+    int64_t tSize	= (int64_t)(1e6*shD->tSize);
+    int64_t tTime	= shD->tTime;
+    int64_t tTimeGrnd	= tTime - tSize;
+    int64_t workPer	= tSize/view->size().width();
 
     tTimeGrnd = vmax(tTimeGrnd,valBeg());
     tTime = vmin(tTime,valEnd());

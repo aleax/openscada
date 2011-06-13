@@ -494,7 +494,7 @@ void *TTrIn::Task( void *tr_in )
 
     double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
     int wFrTm = 1000*atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
-    long long stFrTm = 0, tmW = 0, tmTmp1;
+    int64_t stFrTm = 0, tmW = 0, tmTmp1;
 
     fcntl( tr->fd, F_SETFL, 0 );
 
@@ -1011,7 +1011,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     wReqTm = time ? time : wReqTm;
     double wCharTm = atof(TSYS::strSepParse(timings(),0,':',&off).c_str());
 
-    long long tmW = TSYS::curTime();
+    int64_t tmW = TSYS::curTime();
 
     //> Write request
     if( obuf && len_ob > 0 )

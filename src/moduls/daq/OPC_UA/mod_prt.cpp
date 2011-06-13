@@ -941,7 +941,7 @@ string TProt::iSqlf( const string &rb, int &off, uint16_t *nsIdx )
     return iS(rb,off);
 }
 
-long long TProt::iTm( const string &rb, int &off )
+int64_t TProt::iTm( const string &rb, int &off )
 {
     int64_t tmStamp = (int64_t)TSYS::getUnalign64(TProt::iVal(rb,off,8));
     return (tmStamp/10ll)-11644473600000000ll;
@@ -1132,7 +1132,7 @@ void TProt::oNodeId( string &buf, const NodeId &val )
     }
 }
 
-void TProt::oTm( string &buf, long long val )
+void TProt::oTm( string &buf, int64_t val )
 {
     int64_t tmStamp = 10ll*(val+11644473600000000ll);
     buf.append( (char*)&tmStamp, sizeof(tmStamp) );
@@ -1150,7 +1150,7 @@ void TProt::oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const Nod
     if( resMask&RdRm_TypeDef ) oNodeId(buf,typeDef);		else oNodeId(buf,0);
 }
 
-void TProt::oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk, long long srcTmStmp )
+void TProt::oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk, int64_t srcTmStmp )
 {
     eMsk = eMsk & (~0x30);	//Exclude picoseconds parts
     if( eMsk & 0x02 )	eMsk = eMsk & (~0x01);

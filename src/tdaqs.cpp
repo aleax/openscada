@@ -66,7 +66,7 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
 
 TDAQS::~TDAQS( )
 {
-    if( prcStRd ) subStop();
+    if(prcStRd) subStop();
 
     nodeDelAll();
 }
@@ -380,7 +380,7 @@ void TDAQS::subStop( )
     mess_debug(nodePath().c_str(),_("Stop subsystem."));
 #endif
 
-    if( prcStRd ) SYS->taskDestroy( nodePath('.',true)+".redundant", &prcStRd, &endrunRd );
+    if(prcStRd) SYS->taskDestroy(nodePath('.',true)+".redundant", &prcStRd, &endrunRd);
 
     vector<string> m_l;
 
@@ -426,6 +426,24 @@ void TDAQS::subStop( )
 	tmplLibAt(m_l[i_lb]).at().start(false);
 
     TSubSYS::subStop( );
+}
+
+AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
+{
+    AutoHD<TValue> rez;
+    try { rez = nodeAt(path, 0, sep); }
+    catch(TError err) { if(!noex) throw; }
+
+    return rez;
+}
+
+AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
+{
+    AutoHD<TVal> rez;
+    try { rez = nodeAt(path, 0, sep); }
+    catch(TError err) { if(!noex) throw; }
+
+    return rez;
 }
 
 bool TDAQS::rdActive( )
@@ -490,7 +508,7 @@ void *TDAQS::RdTask( void *param )
     while( !daq.endrunRd )
     try
     {
-	long long work_tm = SYS->curTime();
+	int64_t work_tm = SYS->curTime();
 
 	//> Update wait time for dead stations and process connections to stations
 	ResAlloc res(daq.nodeRes(),false);
@@ -586,7 +604,7 @@ void *TDAQS::RdTask( void *param )
 
 	daq.mRdPrcTm = SYS->curTime()-work_tm;
 
-	TSYS::taskSleep((long long)(daq.rdTaskPer()*1e9));
+	TSYS::taskSleep((int64_t)(daq.rdTaskPer()*1e9));
     } catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     daq.prcStRd = false;

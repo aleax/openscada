@@ -149,7 +149,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c, daq_db, cfgelem), mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()),
-    connTry(cfg("REQ_TRY").getId()), mAddr(cfg("ADDR").getSd()), mSched(cfg("SCHEDULE").getSd()),
+    connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE").getSd()), mAddr(cfg("ADDR").getSd()),
     prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
@@ -200,7 +200,7 @@ void TMdContr::start_( )
     if(prc_st)	return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     SYS->transport().at().at("Serial").at().outAt(mAddr).at().start();
 
@@ -301,7 +301,7 @@ void *TMdContr::Task( void *icntr )
 	{
 	    if(!cntr.redntUse())
 	    {
-		long long t_cnt = TSYS::curTime();
+		int64_t t_cnt = TSYS::curTime();
 
 		//> Update controller's data
 		ResAlloc res(cntr.en_res, false);

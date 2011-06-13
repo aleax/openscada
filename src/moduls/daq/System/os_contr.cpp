@@ -222,7 +222,7 @@ void TMdContr::enable_(  )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the request data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
@@ -264,7 +264,7 @@ void *TMdContr::Task( void *icntr )
 	    //> Update controller's data
 	    try
 	    {
-		long long t_cnt = TSYS::curTime();
+		int64_t t_cnt = TSYS::curTime();
 
 		cntr.en_res.resRequestR();
 		for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )

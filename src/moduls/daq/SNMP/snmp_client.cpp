@@ -220,7 +220,7 @@ TParamContr *TMdContr::ParamAttach(const string &name, int type)
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched, 1, ' ').empty() ? vmax(0,(long long)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched, 1, ' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Session init
     snmp_sess_init(&session);
@@ -333,7 +333,7 @@ void *TMdContr::Task(void *icntr)
 
     while(!cntr.endrun_req)
     {
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	//>> Update controller's data
 	daqerr.clear();

@@ -148,7 +148,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
 	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
     }
-    if( !mPer ) mPer = (long long)(archivator().valPeriod()*1000000.);
+    if( !mPer ) mPer = (int64_t)(archivator().valPeriod()*1000000.);
 }
 
 //!!! Destructor for the object.
@@ -158,19 +158,19 @@ ModVArchEl::~ModVArchEl( )
 }
 
 //!!! Get values block virtual functions for access to archive.
-void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
+void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 {
     //!!! Code for request values block from archive.
 }
 
 //!!! Get value virtual functions for access to archive.
-TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
+TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 {
     //!!! Code for request value from archive.
 }
 
 //!!! Set values block virtual functions for place data to archive.
-void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
     //!!! Code for set values block to archive.
 }

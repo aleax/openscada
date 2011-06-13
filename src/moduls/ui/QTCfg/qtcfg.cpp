@@ -2079,7 +2079,7 @@ void ConfApp::tabSelect( QWidget *wdg )
 void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 {
 #if OSC_DEBUG >= 3
-    long long t_cnt = TSYS::curTime();
+    int64_t t_cnt = TSYS::curTime();
 #endif
 
     QStringList grps = i->data(2,Qt::UserRole).toStringList();

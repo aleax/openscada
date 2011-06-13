@@ -992,7 +992,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	if(!req.empty())
 	{
-	    long long stm = TSYS::curTime( );
+	    int64_t stm = TSYS::curTime( );
 	    char buf[STR_BUF_LEN];
 	    ResAlloc resN( nodeRes(), true );
 	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);

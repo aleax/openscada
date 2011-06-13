@@ -1228,7 +1228,7 @@ void VisRun::updatePage( )
     int rez;
 
 #if OSC_DEBUG >= 3
-    long long t_cnt = TSYS::curTime();
+    int64_t t_cnt = TSYS::curTime();
 #endif
 
     //> Pages update

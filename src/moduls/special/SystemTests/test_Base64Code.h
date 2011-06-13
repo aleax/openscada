@@ -51,7 +51,7 @@ class TestBase64Code : public TFunction
 		for(int i_s = 0; i_s < 256; i_s++) inbuf.push_back((unsigned char)i_s);
 
 		mod->mess(id(),_("Test1: Encoding."));
-		long long st_cnt = TSYS::curTime();
+		int64_t st_cnt = TSYS::curTime();
 		outbuf = TSYS::strEncode(inbuf,TSYS::base64);
 		mod->mess(id(),_("Encoded text by length %d for time %f ms."),inbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
 		mod->mess(id(),TSYS::strMess(_("Encoded text: %s"),outbuf.c_str()).c_str());

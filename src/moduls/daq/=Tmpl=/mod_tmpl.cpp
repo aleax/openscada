@@ -229,7 +229,7 @@ void *TMdContr::Task( void *icntr )
 
     while( !cntr.endrun_req )
     {
-	long long t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime();
 
 	//> Update controller's data
 	//!!! Your code for gather data
@@ -245,7 +245,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
 
 	//!!! Wait for next iteration
-	TSYS::taskSleep((long long)(1e9*cntr.period()));
+	TSYS::taskSleep((int64_t)(1e9*cntr.period()));
     }
 
     cntr.prc_st = false;
@@ -347,7 +347,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((long long)(owner().period()*1000000));
+    val.arch().at().setPeriod((int64_t)(owner().period()*1000000));
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

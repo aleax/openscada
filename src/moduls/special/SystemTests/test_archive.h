@@ -50,14 +50,14 @@ class TestArchive : public TFunction
 	    {
 		mod->mess(id(),_("Test: Start"));
 
-		string arch   = val->getS(1);
-		long long per = val->getI(2);
+		string arch = val->getS(1);
+		int64_t per = val->getI(2);
 
 		AutoHD<TVArchive> o_arch = SYS->archive().at().valAt(arch);
 
 		int buf_sz = 5;
-		long long wtm = per*(TSYS::curTime()/per);
-		long long ttm;
+		int64_t wtm = per*(TSYS::curTime()/per);
+		int64_t ttm;
 
 		TValBuf buf(TFld::Integer, buf_sz, per, true, false );
 		//--------------------------- Test 1 ----------------------------------

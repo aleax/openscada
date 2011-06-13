@@ -136,14 +136,14 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
 	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
 	//>> Check for delete archivator table
-	if( mEnd <= (TSYS::curTime()-(long long)(archivator().maxSize()*3600000000.)) )
+	if( mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*3600000000.)) )
 	{
 	    SYS->db().at().open(archivator().addr()+"."+archTbl());
 	    SYS->db().at().close(archivator().addr()+"."+archTbl(),true);
 	    mBeg = mEnd = mPer = 0;
 	}
     }
-    if( !mPer ) mPer = (long long)(archivator().valPeriod()*1000000.);
+    if( !mPer ) mPer = (int64_t)(archivator().valPeriod()*1000000.);
 }
 
 ModVArchEl::~ModVArchEl( )
@@ -168,26 +168,26 @@ void ModVArchEl::fullErase()
     SYS->db().at().close( archivator().addr()+"."+archTbl(), true );
 }
 
-void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
+void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 {
     //> Going border to period time
     ibegIn = (ibegIn/period())*period();
     iendIn = (iendIn/period())*period();
 
     //> Prepare border
-    long long ibeg = vmax( ibegIn, begin() );
-    long long iend = vmin( iendIn, end() );
+    int64_t ibeg = vmax( ibegIn, begin() );
+    int64_t iend = vmin( iendIn, end() );
 
     if( iend < ibeg )	return;
 
     //> Get values
-    for( long long c_tm = ibegIn; c_tm < ibeg; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
+    for( int64_t c_tm = ibegIn; c_tm < ibeg; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
     switch(archive().valType())
     {
 	case TFld::Boolean: case TFld::Integer:
 	{
 	    TConfig cfg(&mod->vlIntEl());
-	    for( long long c_tm = ibeg; c_tm <= iend; c_tm+=period() )
+	    for( int64_t c_tm = ibeg; c_tm <= iend; c_tm+=period() )
 	    {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
@@ -203,7 +203,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
 	case TFld::Real:
 	{
 	    TConfig cfg(&mod->vlRealEl());
-	    for( long long c_tm = ibeg; c_tm <= iend; c_tm+=period() )
+	    for( int64_t c_tm = ibeg; c_tm <= iend; c_tm+=period() )
 	    {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
@@ -216,7 +216,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
 	case TFld::String:
 	{
 	    TConfig cfg(&mod->vlStrEl());
-	    for( long long c_tm = ibeg; c_tm <= iend; c_tm+=period() )
+	    for( int64_t c_tm = ibeg; c_tm <= iend; c_tm+=period() )
 	    {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
@@ -227,12 +227,12 @@ void ModVArchEl::getValsProc( TValBuf &buf, long long ibegIn, long long iendIn )
 	    break;
 	}
     }
-    for( long long c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
+    for( int64_t c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
 }
 
-TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
+TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 {
-    long long itm = tm ? *tm : SYS->curTime();
+    int64_t itm = tm ? *tm : SYS->curTime();
     itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
 
     TConfig cf(NULL);
@@ -260,7 +260,7 @@ TVariant ModVArchEl::getValProc( long long *tm, bool up_ord )
     return EVAL_REAL;
 }
 
-void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
+void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
     //> Check border
     if( !buf.vOK(beg,end) )	return;
@@ -274,7 +274,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
     AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(),true);
     if( tbl.freeStat() ) return;
     //> Write data to table
-    for( long long ctm; beg <= end; beg++ )
+    for( int64_t ctm; beg <= end; beg++ )
     {
 	switch( archive().valType() )
 	{
@@ -293,10 +293,10 @@ void ModVArchEl::setValsProc( TValBuf &buf, long long beg, long long end )
     }
 
     //> Archive size limit process
-    if( (mEnd-mBeg) > (long long)(archivator().maxSize()*3600000000.) )
+    if( (mEnd-mBeg) > (int64_t)(archivator().maxSize()*3600000000.) )
     {
-	long long n_end = ((mEnd-(long long)(archivator().maxSize()*3600000000.))/period())*period();
-	for( long long t_c = vmax(mBeg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
+	int64_t n_end = ((mEnd-(int64_t)(archivator().maxSize()*3600000000.))/period())*period();
+	for( int64_t t_c = vmax(mBeg,n_end-3600ll*period()); t_c < n_end; t_c+=period() )
 	{
 	    cfg.cfg("TM").setI(t_c/1000000,true);
 	    cfg.cfg("TMU").setI(t_c%1000000,true);

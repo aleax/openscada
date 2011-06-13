@@ -292,7 +292,7 @@ class OPCSess
 	string		name;
 	vector<uint32_t> secCnls;
 	double		tInact;
-	long long	tAccess;
+	int64_t		tAccess;
 	string		servNonce;
 };
 
@@ -410,7 +410,7 @@ class SecCnl
 	string		endPoint;
 	string		secPolicy;
 	char		secMessMode;
-	long long	tCreate;
+	int64_t		tCreate;
 	int32_t		tLife;
 	uint32_t	TokenId;
 	string		clCert;
@@ -475,7 +475,7 @@ class TProt: public TProtocol
 	static string iS( const string &buf, int &off );
 	static string iSl( const string &buf, int &off, string *locale = NULL );
 	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
-	static long long iTm( const string &buf, int &off );
+	static int64_t iTm( const string &buf, int &off );
 	static NodeId iNodeId( const string &buf, int &off );
 	static void iDataValue( const string &buf, int &off, XMLNode &nVal );
 
@@ -485,11 +485,11 @@ class TProt: public TProtocol
 	static void oS( string &buf, const string &val );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
 	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
-	static void oTm( string &buf, long long val );
+	static void oTm( string &buf, int64_t val );
 	static void oNodeId( string &buf, const NodeId &val );
 	static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
 	    bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
-	static void oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk = 0, long long srcTmStmp = 0 );
+	static void oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
 
 	static string randBytes( int num );
 	static string certPEM2DER( const string &certPem );

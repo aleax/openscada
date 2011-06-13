@@ -304,7 +304,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     else if( req.substr(0,3) == "REQ" )
     {
 #if OSC_DEBUG >= 3
-	long long w_tm = TSYS::curTime();
+	int64_t w_tm = TSYS::curTime();
 	mess_debug(nodePath().c_str(),_("Get request: '%s': %d"),req.c_str(),req_buf.size());
 #endif
 
