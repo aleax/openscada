@@ -92,7 +92,7 @@ binary-common:
 #	dh_installpam
 #	dh_installmime
 #	dh_python
-#	dh_installinit
+	dh_installinit -popenscada --restart-after-upgrade -- start 90 2 3 4 5 .
 #	dh_installcron
 #	dh_installinfo
 #	dh_installman

@@ -1,6 +1,8 @@
 2011-06-13 Roman
 - !!:SYS: Type "long long" is replaced to "int64_t" everywhere.
 - UI.VCAEngine: Linked status is added for widgets links.
+- SYS: Init-files added for RedHat- and Debian-based distributives.
+- DAQ.DAQGate: Call by schedule, include periodic and cron, is added.
 
 
 2011-06-12 Roman
@@ -54,7 +56,7 @@
 2011-05-30 Roman
 - DAQ.BFN: BFN alarms category is made unified.
 - FIX:DAQ.BlockCalc: An archive period for periodic taks set is fixed.
-- DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System: Block schemes calculate by schedule, include periodic and cron, is added.
+- DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System: Call by schedule, include periodic and cron, is added.
 - !:FIX:UI.QTCfg, UI.Vision: Syntax highlight is fixed for multilevel rules and end regular expression check, for blocks.
 
 

@@ -1,0 +1,94 @@
+#!/bin/sh
+#
+# Init file for OpenSCADA system demon.
+#
+# chkconfig: - 99 05
+# description: Open SCADA System server daemon
+#
+# processname: openscada
+# config: /etc/oscada.xml
+
+WITHOUT_RC_COMPAT=1
+
+# Source function library.
+. /etc/init.d/functions
+
+bindir=/usr/bin
+lockfile=/var/lock/subsys/openscadad
+OPENSCADA_BIN=/usr/bin/openscada
+ARGS="--demon &> /dev/null"
+RETVAL=0
+
+# Sanity checks.
+[ -x $OPENSCADA_BIN ] || exit 1
+
+# so we can rearrange this easily
+servicename=openscada
+pidfile=/var/run/openscada.pid
+
+RETVAL=0
+
+start()
+{
+	echo $"Starting OpenSCADA daemon: "
+	daemon $servicename $ARGS --pid-file=$pidfile
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ]; then
+	pidproc=$(ps -C $servicename -o pid=|sed 's/ //g')
+	if [ $pidproc ]; then
+	echo "$pidproc" > $pidfile
+	touch $lockfile
+        fi
+    fi
+}
+
+stop()
+{
+	echo -n $"Stopping OpenSCADA daemon: "
+	killproc -p $pidfile $servicename
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ]; then
+		rm -f $lockfile
+		rm -f $pidfile
+	fi
+}
+
+restart()
+{
+	stop
+	start
+}
+
+# See how we were called.
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart|reload)
+		restart
+		;;
+	condstop)
+		if [ -e "$LOCKFILE" ]; then
+			stop
+		fi
+		;;
+	condrestart)
+		if [ -f $lockfile ]; then
+			stop
+			start
+		fi
+		;;
+	status)
+		status $servicename
+		RETVAL=$?
+		;;
+		*)
+		echo $"Usage: $0 {start|stop|restart|condstop|condrestart|status}"
+		RETVAL=2
+esac
+
+exit $RETVAL

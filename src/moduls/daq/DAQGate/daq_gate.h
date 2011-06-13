@@ -116,6 +116,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	double	period( )	{ return mPer; }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
@@ -127,6 +128,7 @@ class TMdContr: public TController
 
     protected:
 	//Methods
+        void load_( );
 	void enable_( );
 	void disable_( );
 	void start_( );
@@ -146,7 +148,8 @@ class TMdContr: public TController
 		&mRestDtTm;			//Restore data maximum length time (hour)
 	int	&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
-	ResString &mStations,			//Remote stations list
+	ResString &mSched,              	// Acquisition schedule
+		&mStations,			//Remote stations list
 		&mContrPrm;			//Transported remote cotrollers and parameters list
 
 	bool	prcSt,				//Process task active

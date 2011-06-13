@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 13:02+0300\n"
+"POT-Creation-Date: 2011-06-13 18:33+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -39,6 +39,9 @@ msgstr "Einflussgrößen Cache-Tabelle"
 msgid "Gather data period (s)"
 msgstr "Datenerfassungsperiode (sek)"
 
+msgid "Acquisition schedule"
+msgstr "Planung der Befragung"
+
 msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
 
@@ -64,6 +67,14 @@ msgstr "Standard"
 
 msgid "Attributes configuration cache"
 msgstr "Attribute-Cache-Konfiguration"
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Call by Zeit: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. "

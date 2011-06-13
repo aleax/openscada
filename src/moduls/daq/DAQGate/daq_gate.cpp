@@ -91,7 +91,8 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's DB structure
     fldAdd(new TFld("PRM_BD",_("Parameteres cache table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.1;100"));
+    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.1;100"));	//!!!! Remove at further
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
@@ -118,8 +119,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
     mPer(cfg("PERIOD").getRd()), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()),
-    mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()), mStations(cfg("STATIONS").getSd()),
-    mContrPrm(cfg("CNTRPRM").getSd()),
+    mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
+    mSched(cfg("SCHEDULE").getSd()), mStations(cfg("STATIONS").getSd()), mContrPrm(cfg("CNTRPRM").getSd()),
     prcSt(false), endrunReq(false), tmGath(0)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
@@ -136,6 +137,8 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse())
     {
+	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+        else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tmGath).c_str());
 	bool isWork = false;
 	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
@@ -155,6 +158,14 @@ string TMdContr::getStatus( )
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
+}
+
+void TMdContr::load_( )
+{
+    TController::load_( );
+
+    //> Check for get old period method value
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer);
 }
 
 void TMdContr::enable_( )
@@ -254,6 +265,9 @@ void TMdContr::start_( )
 {
     if(prcSt) return;
 
+    //> Schedule process
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+
     //> Clear stations request counter
     for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second = 0;
 
@@ -263,7 +277,7 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    if( !prcSt ) return;
+    if(!prcSt) return;
 
     //> Stop the request and calc data task
     SYS->taskDestroy( nodePath('.',true), &prcSt, &endrunReq );
@@ -273,6 +287,8 @@ void *TMdContr::Task( void *icntr )
 {
     map<string,float>::iterator sti;
     TMdContr &cntr = *(TMdContr *)icntr;
+    int64_t t_cnt, t_prev = TSYS::curTime();
+    double syncCnt = 0;
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
@@ -282,7 +298,7 @@ void *TMdContr::Task( void *icntr )
     {
 	if(cntr.redntUse()) { usleep(STD_WAIT_DELAY*1000); continue; }
 
-	int64_t t_cnt = TSYS::curTime();
+	t_cnt = TSYS::curTime();
 
 	try
 	{
@@ -291,26 +307,29 @@ void *TMdContr::Task( void *icntr )
 	    //> Allow stations presenting
 	    bool isAccess = false;
 	    for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++)
-		if(cntr.mStatWork[i_st].second > 0) cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-cntr.period());
-		else isAccess = true;
-
-	    if(isAccess)
 	    {
-		unsigned int div = vmax(2,(unsigned int)(cntr.mSync/cntr.period()));
+		if(cntr.mStatWork[i_st].second > 0) cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-1e-6*(t_cnt-t_prev));
+		if(cntr.mStatWork[i_st].second <= 0) isAccess = true;
+	    }
+	    if(!isAccess) { t_prev = t_cnt; sleep(1); continue; }
+	    else
+	    {
+		if(syncCnt <= 0) syncCnt = cntr.mSync;
+		syncCnt = vmax(0, syncCnt-1e-6*(t_cnt-t_prev));
 		vector<string> pLS;
 		cntr.list(pLS);
 		AutoHD<TMdPrm> prm;
 		string scntr;
 
 		//> Parameters list update
-		if((it_cnt > div && it_cnt%div == 0) || isFirst)
+		if(syncCnt <= 0 || isFirst)
 		    try { res.release(); cntr.enable_(); res.request(false); }
 		    catch(TError err) { }
 
 		//> Mark no process
 		for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
 		{
-		    if(it_cnt > div && (it_cnt+i_p)%div == 0) cntr.at(pLS[i_p]).at().load_();
+		    if(syncCnt <= 0) cntr.at(pLS[i_p]).at().load_();
 		    cntr.at(pLS[i_p]).at().isPrcOK = false;
 		}
 
@@ -333,7 +352,7 @@ void *TMdContr::Task( void *icntr )
 			    prmNd->setAttr( "hostTm", !cntr.restDtTm() ? "1" : "0" );
 
 			    //>> Prepare individual attributes list
-			    bool sepReq = !prm.at().isEVAL && ((it_cnt+i_p)%div);
+			    bool sepReq = !prm.at().isEVAL && syncCnt > 0;
 			    prmNd->setAttr( "sepReq", sepReq ? "1" : "0" );
 			    if(!cntr.restDtTm() && !sepReq) continue;
 
@@ -416,9 +435,10 @@ void *TMdContr::Task( void *icntr )
 	}catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	//> Calc acquisition process time
+	t_prev = t_cnt;
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 
-	TSYS::taskSleep((int64_t)(1e9*cntr.period()));
+	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
     }
 
 
@@ -456,6 +476,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/STATIONS",cfg("STATIONS").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/CNTRPRM",cfg("CNTRPRM").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
@@ -635,7 +658,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod((int64_t)(1e6*owner().period()));
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

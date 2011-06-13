@@ -1,8 +1,14 @@
 #!/bin/sh -e
 
-if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+action="$1"
+oldversion="$2"
+
+if [ "$action" != configure ] then
+  exit 0
+fi
+
+if [ -x "`which update-menus 2>/dev/null`" ]; then
 	update-menus
 fi
-if [ "$1" = "configure" ]; then
-	ldconfig
-fi
+
+ldconfig

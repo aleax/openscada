@@ -234,7 +234,7 @@ install -m 644 -pD data/oscada_start.xml %buildroot/%_sysconfdir/oscada_start.xm
 install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
 install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
 install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
-install -m 755 -pD data/oscada.init %buildroot/%_initdir/oscadad
+install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 echo "OpenSCADA data dir" > %buildroot/var/spool/openscada/DATA/.info
 install -m 644 data/icons/* %buildroot/var/spool/openscada/icons
 echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
