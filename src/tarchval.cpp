@@ -2220,7 +2220,7 @@ void *TVArchivator::Task( void *param )
     arch.run_st = true;
     bool isLast = false;
 
-    sleep( arch.archPeriod() );
+    usleep(arch.archPeriod()*1000000);
 
     //> Archiving
     while( true )

@@ -532,7 +532,7 @@ void *TTrIn::Task( void *tr_in )
 		{
 		    //>> Reconnect try after hung up by remote agent
 		    mod->devUnLock(tr->mDevPort);
-		    sleep(10);
+		    usleep(10000000);
 		    try{ tr->connect(); } catch(TError err) { break; }
 		    continue;
 		}

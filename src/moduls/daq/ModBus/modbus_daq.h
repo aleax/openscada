@@ -73,7 +73,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void upVal( );
+	void upVal( bool first, bool last, double frq );
 
 	TElem &elem( )		{ return p_el; }
 	TMdContr &owner( );

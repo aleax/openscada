@@ -63,7 +63,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void calc( bool first, bool last );	//Calc template's algoritmes
+	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
 
     protected:
 	//Methods

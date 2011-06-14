@@ -384,7 +384,7 @@ string Contr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(calcTm()).c_str());
     }
 

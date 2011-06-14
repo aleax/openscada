@@ -1250,23 +1250,19 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 {
     struct timespec sp_tm;
 
-    if( !cron )
+    if(!cron)
     {
-	if( !per ) per = 1000000000;
+	if(!per) per = 1000000000;
 	clock_gettime(CLOCK_REALTIME,&sp_tm);
-	int64_t pnt_tm = ( ((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
+	int64_t pnt_tm = (((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
 	do
 	{
 	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
-	    if( clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL) )	return;
+	    if(clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL))	return;
 	    clock_gettime(CLOCK_REALTIME,&sp_tm);
-	}while( ((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm );
+	}while(((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm);
     }
-    else
-    {
-	sp_tm.tv_sec = cron; sp_tm.tv_nsec = 0;
-	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
-    }
+    else while(time(NULL) < cron && usleep(1000000) == 0) ;
 }
 
 time_t TSYS::cron( const string &vl, time_t base )

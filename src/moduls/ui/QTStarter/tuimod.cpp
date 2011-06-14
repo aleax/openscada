@@ -271,7 +271,7 @@ void *TUIMod::Task( void * )
 	    mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
-	sleep(1);
+	usleep(1000000);
     }
     delete splash;
 
@@ -314,7 +314,7 @@ void *TUIMod::Task( void * )
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
-	sleep(1);
+	usleep(1000000);
     }
     delete splash;
 

@@ -156,7 +156,7 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
     return rez;
@@ -223,19 +223,21 @@ void *TMdContr::Task( void *icntr )
 
     bool is_start = true;
     bool is_stop  = false;
+    int64_t t_cnt, t_prev = TSYS::curTime();
 
     while(true)
     {
 	//> Update controller's data
 	if(!cntr.redntUse())
 	{
-	    int64_t t_cnt = TSYS::curTime();
+	    t_cnt = TSYS::curTime();
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
-		try { cntr.p_hd[i_p].at().calc(is_start,is_stop); }
+		try { cntr.p_hd[i_p].at().calc(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err)
 		{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    cntr.en_res.resRelease();
+	    t_prev = t_cnt;
 	    cntr.tm_calc = TSYS::curTime()-t_cnt;
 	}
 
@@ -378,7 +380,11 @@ void TMdPrm::enable()
 	    int id_this	= tmpl->val.ioId("this");
 	    if(id_this >= 0) tmpl->val.setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	}
-	if(owner().startStat()) owner().prmEn(id(),true);
+	if(owner().startStat())
+	{
+	    calc(true, false, 0);
+	    owner().prmEn(id(),true);
+	}
     }
     catch(...){ disable(); throw; }
 }
@@ -387,7 +393,11 @@ void TMdPrm::disable()
 {
     if(!enableStat())  return;
 
-    if(owner().startStat())	owner().prmEn( id(), false );
+    if(owner().startStat())
+    {
+	owner().prmEn(id(), false);
+	calc(false, true, 0);
+    }
 
     mode(TMdPrm::Free);
     id_freq = id_start = id_stop = id_err = -1;
@@ -759,7 +769,7 @@ TMdPrm::SLnk &TMdPrm::lnk( int num )
     return tmpl->lnk[num];
 }
 
-void TMdPrm::calc( bool first, bool last )
+void TMdPrm::calc( bool first, bool last, double frq )
 {
     if(mode() != TMdPrm::Template)    return;
     try
@@ -771,7 +781,7 @@ void TMdPrm::calc( bool first, bool last )
 	tmpl->val.setMdfChk(true);
 
 	//> Set fixed system attributes
-	if(id_freq >= 0)	tmpl->val.setR(id_freq, owner().period()?1e9/(float)owner().period():0);
+	if(id_freq >= 0)	tmpl->val.setR(id_freq, frq);
 	if(id_start >= 0)	tmpl->val.setB(id_start, first);
 	if(id_stop >= 0)	tmpl->val.setB(id_stop, last);
 	if(id_sh >= 0)		tmpl->val.setS(id_sh, id());

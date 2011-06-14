@@ -322,8 +322,8 @@ void TTpContr::initCIF( int dev )
     //-- Wait for operation start with new parameters of PLC task --
     do
     {
-	DevGetTaskState(dev,2,sizeof( tTaskState ),&tTaskState); 
-	sleep(0);
+	DevGetTaskState(dev, 2, sizeof(tTaskState), &tTaskState);
+	usleep(1000);
     }
     while(tTaskState.bDPM_state!=OPERATE);
 }
@@ -485,7 +485,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	mAddr(cfg("ADDR").getSd()), mAssincWR(cfg("ASINC_WR").getBd()),
 	prc_st(false), endrun_req(false), di(NULL), dc(NULL), tm_calc(0)
 {
-    cfg("PRM_BD").setS("CIFPrm_"+name_c);
+    cfg("PRM_BD").setS("SiemensPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
@@ -515,7 +515,7 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
     return rez;
@@ -798,7 +798,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    {
 		e_try--;
 		//- Clear all previous data -
-		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	sleep(0);
+		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	usleep(1000);
 
 		//- Prepare put request -
 		tMsg.rx = 3;
@@ -935,7 +935,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		e_try--;
 
 		//- Clear all previous data -
-		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	sleep(0);
+		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	usleep(1000);
 
 		//- Prepare put request -
 		tMsg.rx = 3;
@@ -1237,10 +1237,11 @@ void *TMdContr::Task( void *icntr )
 
     bool is_start = true;
     bool is_stop  = false;
+    int64_t t_cnt, t_prev = TSYS::curTime();
 
     while(true)
     {
-	int64_t t_cnt = TSYS::curTime();
+	t_cnt = TSYS::curTime();
 
 	//> Update controller's data
 	cntr.nodeRes().resRequestR( );
@@ -1269,11 +1270,12 @@ void *TMdContr::Task( void *icntr )
 
 	//> Calc parameters
 	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
-	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop); }
+	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop,cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	cntr.nodeRes().resRelease();
+	t_prev = t_cnt;
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
 
 	if(is_stop) break;
@@ -1415,9 +1417,6 @@ void TMdPrm::enable()
 	//>> Init links
 	initLnks();
 
-	//>> Set to process
-	if(owner().startStat())	owner().prmEn( id(), true );
-
 	//>> Init system attributes identifiers
 	id_freq  = func()->ioId("f_frq");
 	id_start = func()->ioId("f_start");
@@ -1427,6 +1426,12 @@ void TMdPrm::enable()
 	//>> Load IO at enabling
 	if(to_make)	loadIO();
 
+	//>> Set to process
+	if(owner().startStat())
+	{
+	    calc(true,false,0);
+	    owner().prmEn(id(), true);
+	}
     }catch(TError err) { disable(); throw; }
 }
 
@@ -1435,7 +1440,11 @@ void TMdPrm::disable()
     if(!enableStat()) return;
 
     //> Unregister parameter
-    if(owner().startStat()) owner().prmEn(id(), false);
+    if(owner().startStat())
+    {
+	owner().prmEn(id(), false);
+	calc(false,true,0);
+    }
 
     //> Delete not using attributes
     for(unsigned i_f = 0; i_f < p_el.fldSize(); )
@@ -1661,7 +1670,7 @@ void TMdPrm::initLnks()
     }
 }
 
-void TMdPrm::calc( bool first, bool last )
+void TMdPrm::calc( bool first, bool last, double frq )
 {
     try
     {
@@ -1674,7 +1683,7 @@ void TMdPrm::calc( bool first, bool last )
 	}
 
 	//> Set fixed system attributes
-	if(id_freq >= 0)	setR(id_freq, owner().period()?1e9/(float)owner().period():0);
+	if(id_freq >= 0)	setR(id_freq, frq);
 	if(id_start >= 0)	setB(id_start, first);
 	if(id_stop >= 0)	setB(id_stop, last);
 

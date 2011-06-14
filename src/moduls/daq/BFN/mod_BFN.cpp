@@ -341,7 +341,7 @@ string TMdContr::getStatus( )
         if(acq_st) rez += TSYS::strMess(_("Call now. "),tm_gath);
         //> Display schedule
 	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
     	//> Display spent time
     	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
     }

@@ -99,7 +99,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	void enable( );
 	void disable( );
 
-	void calc( bool first, bool last );	//Calc template's algoritmes
+	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
 
 	//> Template link operations
 	int lnkSize( );

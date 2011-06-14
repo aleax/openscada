@@ -133,7 +133,7 @@ string TMdContr::getStatus( )
 	else
 	{
 	    if( period() ) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."),TSYS::time2str(tm_gath).c_str(),-tmDelay);
 	    if( servSt ) rez.replace(0,1,TSYS::strMess("0x%x",servSt));
 	}
@@ -343,8 +343,8 @@ void *TMdContr::Task( void *icntr )
     {
 	for(unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++)
 	{
-	    if(cntr.redntUse())	{ sleep(1); continue; }
-	    if(cntr.tmDelay > 0){ sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.redntUse())	{ usleep(1000000); continue; }
+	    if(cntr.tmDelay > 0){ usleep(1000000); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    int64_t t_cnt = TSYS::curTime();
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;

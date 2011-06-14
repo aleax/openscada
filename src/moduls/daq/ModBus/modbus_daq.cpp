@@ -155,7 +155,7 @@ string TMdContr::getStatus( )
 	else
 	{
 	    if( period() ) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-	    else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron(),time(NULL)),"%d-%m-%Y %R").c_str());
+	    else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    val += TSYS::strMess(_("Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
 				    TSYS::time2str(tmGath).c_str(),numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 	}
@@ -607,13 +607,17 @@ void *TMdContr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
+    bool is_start = true;
+    bool is_stop  = false;
+    int64_t t_cnt, t_prev = TSYS::curTime();
+
     try
     {
-	while(!cntr.endrun_req)
+	while(cntr.tmDelay <= 0 || (!cntr.endrun_req && cntr.tmDelay > 0))
 	{
-	    if(cntr.tmDelay > 0) { sleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.tmDelay > 0) { usleep(1000000); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
-	    int64_t t_cnt = TSYS::curTime();
+	    t_cnt = TSYS::curTime();
 
 #if OSC_DEBUG >= 3
 	    mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
@@ -745,7 +749,8 @@ void *TMdContr::Task( void *icntr )
 
 	    //> Get data from blocks to parameters or calc for logical type parameters
 	    cntr.en_res.resRequestR();
-            for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().upVal();
+            for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
+        	cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
             cntr.en_res.resRelease();
 
 	    //> Generic acquisition alarm generate
@@ -757,9 +762,15 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //> Calc acquisition process time
+	    t_prev = t_cnt;
 	    cntr.tmGath = TSYS::curTime()-t_cnt;
 
+	    if(is_stop) break;
+
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+
+	    if(cntr.endrun_req) is_stop = true;
+    	    is_start = false;
 	}
     }
     catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
@@ -924,6 +935,7 @@ void TMdPrm::enable()
 		catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	    i_p++;
 	}
+
     }
     //> Template's function connect for logical type parameter
     else if(isLogic() && lCtx)
@@ -963,9 +975,6 @@ void TMdPrm::enable()
 	    //>> Init links
     	    initLnks();
 
-    	    //>> Set to process
-    	    if(owner().startStat()) owner().prmEn(id(), true);
-
     	    //>> Init system attributes identifiers
     	    lCtx->id_freq  = lCtx->func()->ioId("f_frq");
     	    lCtx->id_start = lCtx->func()->ioId("f_start");
@@ -974,6 +983,10 @@ void TMdPrm::enable()
 
     	    //>> Load IO at enabling
     	    if(to_make) loadIO();
+
+    	    //>> First call
+    	    if(owner().startStat()) upVal(true, false, 0);
+
 	}catch(TError err) { disable(); throw; }
 
     owner().prmEn(id(), true);   //Put to process
@@ -983,6 +996,7 @@ void TMdPrm::disable()
 {
     if(!enableStat())  return;
     owner().prmEn(id(), false);  //Remove from process
+    if(lCtx && owner().startStat()) upVal(false, true, 0);
 
     TParamContr::disable();
 
@@ -1048,7 +1062,7 @@ void TMdPrm::saveIO()
     }
 }
 
-void TMdPrm::initLnks()
+void TMdPrm::initLnks( )
 {
     if(!enableStat() || !isLogic()) return;
 
@@ -1073,7 +1087,7 @@ void TMdPrm::initLnks()
     }
 }
 
-void TMdPrm::upVal( )
+void TMdPrm::upVal( bool first, bool last, double frq )
 {
     ResString w_err;
     AutoHD<TVal> pVal;
@@ -1092,9 +1106,9 @@ void TMdPrm::upVal( )
 	try
 	{
 	    //> Set fixed system attributes
-    	    if(lCtx->id_freq >= 0) lCtx->setR(lCtx->id_freq, owner().period()?1e9/(float)owner().period():0);
-    	    //if(id_start >= 0)	setB(id_start, first);
-    	    //if(id_stop >= 0)	setB(id_stop, last);
+    	    if(lCtx->id_freq >= 0)	lCtx->setR(lCtx->id_freq, frq);
+    	    if(lCtx->id_start >= 0)	lCtx->setB(lCtx->id_start, first);
+    	    if(lCtx->id_stop >= 0)	lCtx->setB(lCtx->id_stop, last);
 
 	    //> Get input links
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)

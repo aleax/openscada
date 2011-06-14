@@ -1,3 +1,10 @@
+2011-06-14 Roman
+- !!:FIX:SYS: A time call schedule by cron is fixed to not-in-sync functions time() and clock_gettime(CLOCK_REALTIME,&sp_tm).
+- FIX:SYS: Not-in-terminate function sleep() is replaced by usleep() everywhere.
+- !!:DAQ.LogicLev, DAQ.Siemens, DAQ.ModBus: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
+    Start and stop calc is added for enable/disable parameter of the run controller.
+
+
 2011-06-13 Roman
 - !!:SYS: Type "long long" is replaced to "int64_t" everywhere.
 - UI.VCAEngine: Linked status is added for widgets links.
