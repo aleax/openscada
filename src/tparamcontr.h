@@ -47,15 +47,15 @@ class TParamContr : public TConfig, public TValue
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id.getValRef(); }
+	const string &id( )	{ return cfg("SHIFR").getSd().getValRef(); }
 	string name( );
 	string descr( );
-	bool toEnable( )	{ return m_aen; }
+	bool toEnable( )	{ return cfg("EN").getB(); }
 	bool enableStat( )	{ return m_en; }
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
-	void setToEnable( bool vl )		{ m_aen = vl; modif(); }
+	void setToEnable( bool vl )		{ cfg("EN").setB(vl); modif(); }
 
 	TTipParam &type( )	{ return *tipparm; }
 
@@ -83,13 +83,15 @@ class TParamContr : public TConfig, public TValue
 
 	void vlGet( TVal &val );
 
+	virtual void setType( const string &tpId );
+
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id.getValRef(); }
+	void setId( const string &vl );
+	const string &nodeName( )	{ return id(); }
 
 	//Attributes
-	ResString &m_id;
-	bool	&m_aen, m_en;
+	bool	m_en;
 	TElem	el_err;		//Error atributes
 
 	TTipParam	*tipparm;

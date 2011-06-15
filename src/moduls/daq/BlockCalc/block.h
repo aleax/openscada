@@ -89,7 +89,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void setLink( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 
 	//> Calc block
-	void calc( bool first, bool last );
+	void calc( bool first, bool last, double frq );
 
 	Contr &owner( );
 

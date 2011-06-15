@@ -1675,10 +1675,10 @@ void VFileArch::repairFile( int hd, bool fix )
 	    //> Fix file
 	    if(fix)
 	    {
-		if(dt>0)
+		if(dt > 0)
 		{
-		    ftruncate(hd,f_off);
-		    setValue(hd,f_off,eVal);
+		    ftruncate(hd, f_off);
+		    setValue(hd, f_off, eVal);
 		}
 		else
 		{

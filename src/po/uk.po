@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-25 09:19+0300\n"
+"POT-Creation-Date: 2011-06-15 09:15+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1209,6 +1209,9 @@ msgstr "2:Контролер зупинено."
 
 msgid "Parameter: "
 msgstr "Параметр: "
+
+msgid "Change type lead to data lost for specific configs."
+msgstr "Зміна типу потягне за собою втрату даних специфічної конфігурації."
 
 msgid "Controller is not started!"
 msgstr "Контролер не запущено!"

@@ -73,11 +73,11 @@ void TValue::setVlCfg( TConfig *cfg )
 {
     vector<string> list;
     //> Detach old configs
-    if( mCfg )
+    if(mCfg)
     {
-	mCfg->cfgList( list );
-	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
-	    if( !(mCfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && vlPresent(list[i_cf]) )
+	mCfg->cfgList(list);
+	for(unsigned i_cf = 0; i_cf < list.size(); i_cf++)
+	    if(!(mCfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && vlPresent(list[i_cf]))
 	    {
 		chldDel(m_vl,list[i_cf]);
 		l_cfg--;
@@ -88,8 +88,8 @@ void TValue::setVlCfg( TConfig *cfg )
     if( cfg )
     {
 	cfg->cfgList( list );
-	for( unsigned i_cf = 0; i_cf < list.size(); i_cf++ )
-	    if( !(cfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && !vlPresent(list[i_cf]) )
+	for(unsigned i_cf = 0; i_cf < list.size(); i_cf++)
+	    if(!(cfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && !vlPresent(list[i_cf]))
 		//chldAdd(m_vl, new TVal(cfg->cfg(list[i_cf]),this),l_cfg++);
 	    {
 		TVal *vl = vlNew();

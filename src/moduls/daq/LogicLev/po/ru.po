@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-30 19:22+0300\n"
+"POT-Creation-Date: 2011-06-15 14:17+0300\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,8 +26,11 @@ msgstr "Роман Савоченко"
 msgid "Allow logic level parameters."
 msgstr "Предоставляет логический уровень параметров."
 
-msgid "Parameteres table"
-msgstr "Таблица параметров"
+msgid "Parameters table by template"
+msgstr "Таблица параметров по шаблону"
+
+msgid "Parameters table for reflection"
+msgstr "Таблица параметров для отражения"
 
 msgid "Request data period (ms)"
 msgstr "Период получения данных (мс)"
@@ -41,8 +44,8 @@ msgstr "Уровень приоритета задачи получения да
 msgid "Logical"
 msgstr "Логический"
 
-msgid "Mode"
-msgstr "Режим"
+msgid "Parameter template"
+msgstr "Шаблон параметра"
 
 msgid "Parameter ID"
 msgstr "Идентификатор параметра"
@@ -52,6 +55,12 @@ msgstr ""
 
 msgid "Value"
 msgstr "Значение"
+
+msgid "Parameter reflection"
+msgstr "Отражение параметра"
+
+msgid "Source parameter"
+msgstr "Исходный параметр"
 
 #, c-format
 msgid "Call by period: %s. "
@@ -82,9 +91,6 @@ msgstr "Ошибка вычисления шаблона."
 
 msgid "No template parameter or error."
 msgstr "Ошибка или не шаблонный параметр."
-
-msgid "Free;Direct reflection;Template"
-msgstr "Свободна;Прямое отражение;Шаблон"
 
 msgid "Template config"
 msgstr "Конфигурация шаблона"

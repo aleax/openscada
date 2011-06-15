@@ -103,7 +103,7 @@ void TTipDAQ::add( const string &name, const string &daq_db )
 
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )
 {
-    if(id >= paramt.size() || id < 0) 
+    if(id >= paramt.size() || id < 0)
 	throw TError(nodePath().c_str(),_("Id of parameter type error!"));
     return *paramt[id];
 }

@@ -155,7 +155,7 @@ class TCntrNode
 	TCntrNode *nodePrev( bool noex = false );
 	char	 nodeFlg( )		{ return m_flg; }
 	char	 nodeMode( )		{ return m_flg&0x3; }
-	unsigned nodeUse( );
+	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 
 	//> Modify process methods
@@ -193,7 +193,7 @@ class TCntrNode
 	void nodeDelAll( );	//For hard link objects
 
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
-	void setNodeMode( char mode )		{ m_flg = (m_flg&(~0x03))|(mode&0x03); }
+	void setNodeMode( char mode );
 
 	//> Childs
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );

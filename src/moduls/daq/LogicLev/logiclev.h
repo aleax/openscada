@@ -48,17 +48,14 @@ class TMdContr;
 class TMdPrm : public TParamContr
 {
     public:
-	//Data
-	enum Mode { Free, DirRefl, Template };
-
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	Mode mode( )	{ return m_wmode; }
-	void mode( Mode md, const string &prm = "" );
+	bool isStd( );
+        bool isPRefl( );
 
 	void enable( );
 	void disable( );
@@ -67,8 +64,16 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
+	void postEnable( int flag );
+	void postDisable( int flag );
 	void load_( );
 	void save_( );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void setType( const string &tpId );
+
+	void vlGet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
+	void vlArchMake( TVal &val );
 
 	TMdContr &owner( );
 
@@ -96,15 +101,6 @@ class TMdPrm : public TParamContr
 	};
 
 	//Methods
-	void postEnable( int flag );
-	void postDisable( int flag );
-
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	void vlGet( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
-	void vlArchMake( TVal &val );
-
 	//> Template link operations
 	int lnkSize( );
 	int lnkId( int id );
@@ -116,15 +112,10 @@ class TMdPrm : public TParamContr
 	void initTmplLnks( bool checkNoLink = false );
 
 	//Attributes
-	ResString &m_prm;
-	string	m_wprm;
-	int	&m_mode;			//Config parameter mode
-	Mode	m_wmode;			//Work parameter mode
-
 	TElem	p_el;				//Work atribute elements
 
 	bool	chk_lnk_need;			//Check lnk need flag
-	Res	moderes, calcRes;		//Resource
+	Res	calcRes;			//Resource
 	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
 };
 

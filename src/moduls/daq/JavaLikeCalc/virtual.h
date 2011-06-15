@@ -156,6 +156,7 @@ class Contr: public TController, public TValFunc
 	int	id_freq, id_start, id_stop;
 
 	int64_t	mPer;
+	double  tm_calc;
 };
 
 //*************************************************

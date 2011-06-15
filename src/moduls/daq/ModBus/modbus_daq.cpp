@@ -133,7 +133,7 @@ void TMdContr::postDisable( int flag )
         if(flag)
         {
             //> Delete logical parameter's io table
-            string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
+            string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
             SYS->db().at().open(tbl);
             SYS->db().at().close(tbl,true);
         }
@@ -856,6 +856,15 @@ void TMdPrm::postDisable(int flag)
             SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
         }
     }catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+void TMdPrm::setType( const string &tpId )
+{
+    if(lCtx) { delete lCtx; lCtx = NULL; }
+
+    TParamContr::setType(tpId);
+
+    if(isLogic()) lCtx = new TLogCtx(name()+"ModBusPrm");
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }

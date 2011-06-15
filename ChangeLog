@@ -1,3 +1,15 @@
+2011-06-15 Roman
+- !!!!:DAQ, DAQ.DiamondBoards, DAQ.ModBus, DAQ.LogicLev:
+    Parameter type changing support is added for disabled parameters of multitype DAQ modules.
+    All multitype modules is adapted for that.
+- SYS: Default locale for init-scripts is changed to en_US.UTF-8. Debian-package's postinst script is fixed.
+- DAQ.BlockCalc: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
+    Start and stop calc is added for enable/disable block of the run controller.
+    Linked status is added for function and block's atributes links.
+- DAQ.JavaLikeCalc: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
+- !!!:DAQ.LogicLev: Moved to use system multitype parameters mechanism.
+
+
 2011-06-14 Roman
 - !!:FIX:SYS: A time call schedule by cron is fixed to not-in-sync functions time() and clock_gettime(CLOCK_REALTIME,&sp_tm).
 - FIX:SYS: Not-in-terminate function sleep() is replaced by usleep() everywhere.

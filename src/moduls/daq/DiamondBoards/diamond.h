@@ -58,7 +58,7 @@ class TMdPrm : public TParamContr
 	~TMdPrm( );
 
 	Type	type( )		{ return m_tp; }
-	int	cnl( )		{ return m_cnl; }
+	int	cnl( )		{ return cfg("CNL").getI(); }
 	void	setType( Type val );
 
 	TMdContr &owner( );
@@ -73,9 +73,10 @@ class TMdPrm : public TParamContr
 
 	void postEnable( int flag );
 
+	void setType( const string &tpId );
+
     private:
 	//Attributes
-	int	&m_cnl;
 	Type	m_tp;
 	union
 	{

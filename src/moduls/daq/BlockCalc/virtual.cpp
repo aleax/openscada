@@ -331,6 +331,7 @@ void Contr::stop_( )
 {
     //> Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+    run_st = false;
 
     //> Make deprocess all blocks
     vector<string> lst;
@@ -349,18 +350,19 @@ void *Contr::Task( void *icontr )
 
     bool is_start = true;
     bool is_stop  = false;
+    int64_t t_cnt, t_prev = TSYS::curTime();
 
     while(true)
     {
 	//Check calk time
-	int64_t t_cnt = TSYS::curTime();
+	t_cnt = TSYS::curTime();
 
 	cntr.hd_res.resRequestR( );
 	ResAlloc sres(cntr.calcRes,true);
 	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
 	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
 	    {
-		try{ cntr.clc_blks[i_blk].at().calc(is_start,is_stop); }
+		try{ cntr.clc_blks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/(double)cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -376,6 +378,7 @@ void *Contr::Task( void *icontr )
 	sres.release();
 	cntr.hd_res.resRelease( );
 
+	t_prev = t_cnt;
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
 
 	if(is_stop) break;

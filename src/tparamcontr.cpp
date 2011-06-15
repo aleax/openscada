@@ -33,10 +33,9 @@ using namespace OSCADA;
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
-TParamContr::TParamContr( const string &name, TTipParam *tpprm ) :
-    TConfig(tpprm), m_id(cfg("SHIFR").getSd()), m_aen(cfg("EN").getBd()), m_en(false), tipparm(tpprm)
+TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), m_en(false), tipparm(tpprm)
 {
-    m_id = name;
+    setId(name);
     setName(name);
 }
 
@@ -53,7 +52,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id = tid;
+    setId(tid);
 
     if( src_n->enableStat() && toEnable( ) && !enableStat() )	enable();
 
@@ -98,7 +97,7 @@ void TParamContr::preDisable(int flag)
 
 void TParamContr::postDisable(int flag)
 {
-    if( flag )
+    if(flag)
     {
 	//> Delete parameter from DB
 	try
@@ -111,7 +110,7 @@ void TParamContr::postDisable(int flag)
 
 void TParamContr::load_( )
 {
-    if( !SYS->chkSelDB(owner().DB()) ) return;
+    if(!SYS->chkSelDB(owner().DB())) return;
 
     SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
 			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
@@ -159,6 +158,43 @@ void TParamContr::vlGet( TVal &val )
     }
 }
 
+void TParamContr::setId( const string &vl )
+{
+    cfg("SHIFR").setS(vl);
+}
+
+void TParamContr::setType( const string &tpId )
+{
+    if(enableStat() || tpId == type().name || !owner().owner().tpPrmPresent(tpId))	return;
+
+    setNodeMode(TCntrNode::Disable);
+
+    try
+    {
+	//> Wait for disconnect other
+	while(nodeUse(true) > 1) usleep(1000);
+	//> Remove from DB
+	postDisable(true);
+
+	//> Create temporary structure
+	TConfig tCfg(&type());
+	tCfg = *(TConfig*)this;
+
+	//> Set new config structure
+	tipparm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
+	setElem(tipparm);
+
+	//> Restore configs
+	*(TConfig*)this = tCfg;
+    }catch(...) { }
+
+    setNodeMode(TCntrNode::Enable);
+
+    setVlCfg(this);
+
+    modif();
+}
+
 void TParamContr::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
@@ -175,7 +211,10 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		if(!enableStat() && owner().owner().tpPrmSize() > 1)
+		    ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/prm/tpLst",
+			"help",_("Change type lead to data lost for specific configs."));
+		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		if(owner().enableStat())
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
@@ -185,7 +224,11 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
         return;
     }
     //> Process command to page
-    if(a_path == "/prm/st/type" && ctrChkNode(opt))	opt->setText(type().name);
+    if(a_path == "/prm/st/type")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(type().name);
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setType(opt->text());
+    }
     else if(a_path == "/prm/st/en")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
@@ -207,5 +250,8 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setText(lls[i_l]+"."+ls[i_t]);
 	}
     }
+    else if(a_path == "/prm/tpLst" && ctrChkNode(opt))
+	for(int i_tp = 0; i_tp < owner().owner().tpPrmSize(); i_tp++)
+	    opt->childAdd("el")->setAttr("id",owner().owner().tpPrmAt(i_tp).name)->setText(owner().owner().tpPrmAt(i_tp).descr);
     else TValue::cntrCmdProc(opt);
 }

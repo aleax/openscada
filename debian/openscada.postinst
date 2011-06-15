@@ -3,7 +3,7 @@
 action="$1"
 oldversion="$2"
 
-if [ "$action" != configure ] then
+if [ "$action" != configure ]; then
   exit 0
 fi
 

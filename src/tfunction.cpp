@@ -423,7 +423,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), tm_calc(0.0), mFunc(NULL)
+    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), tm_calc(0), mFunc(NULL)
 {
     setFunc(ifunc);
 }

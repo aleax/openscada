@@ -494,7 +494,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), m_cnl(cfg("CNL").getId()), m_tp(NONE)
+    TParamContr(name,tp_prm), m_tp(NONE)
 {
 
 }
@@ -506,10 +506,18 @@ TMdPrm::~TMdPrm( )
 
 void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( flag );
+    TParamContr::postEnable(flag);
 
-    if( TParamContr::type().name == "a_prm" )		setType(AI);
-    else if( TParamContr::type().name == "d_prm" )	setType(DI);
+    if(TParamContr::type().name == "a_prm")		setType(AI);
+    else if(TParamContr::type().name == "d_prm")	setType(DI);
+}
+
+void TMdPrm::setType( const string &tpId )
+{
+    TParamContr::setType(tpId);
+
+    if(TParamContr::type().name == "a_prm")		setType(AI);
+    else if(TParamContr::type().name == "d_prm")	setType(DI);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -616,7 +624,7 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	    //- Direct writing -
 	    if( owner().dataEmul() )	break;
 	    owner().ao_res.resRequestW( );
-	    if( dscDAConvert(owner().dscb,m_cnl,code) != DE_NONE )
+	    if( dscDAConvert(owner().dscb,cnl(),code) != DE_NONE )
 	    {
 		ERRPARAMS errorParams;
 		dscGetLastError(&errorParams);
@@ -672,7 +680,7 @@ void TMdPrm::vlGet( TVal &val )
 		{
 		    owner().ai_res.resRequestW( );
 		    owner().dscadsettings.gain = m_gain;
-		    owner().dscadsettings.current_channel = m_cnl;
+		    owner().dscadsettings.current_channel = cnl();
 		    if( dscADSetSettings(owner().dscb,&owner().dscadsettings) != DE_NONE )
 		    {
 			ERRPARAMS errorParams;

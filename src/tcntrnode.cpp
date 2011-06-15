@@ -75,6 +75,13 @@ void TCntrNode::nodeDelAll( )
 	}
 }
 
+void TCntrNode::setNodeMode( char mode )
+{
+    hd_res.resRequestW();
+    m_flg = (m_flg&(~0x03))|(mode&0x03);
+    hd_res.resRelease();
+}
+
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
 {
     int l_off = 0;
@@ -151,77 +158,68 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 //* Resource section                              *
 void TCntrNode::nodeEn( int flag )
 {
-    if( nodeMode() == Enable )	return;		//throw TError(nodePath().c_str(),"Node already enabled!");
-    if( nodeMode() != Disable )	throw TError(nodePath().c_str(),_("Node already in process!"));
+    if(nodeMode() == Enable)	return;		//throw TError(nodePath().c_str(),"Node already enabled!");
+    if(nodeMode() != Disable)	throw TError(nodePath().c_str(),_("Node already in process!"));
 
-    ResAlloc res( hd_res, true );
-    setNodeMode( MkEnable );
-    res.release( );
+    setNodeMode(MkEnable);
 
-    preEnable( flag );
+    preEnable(flag);
 
     TMap::iterator p;
-    for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-	for( p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-	    if( p->second->nodeMode( ) == Disable )
+    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+	    if(p->second->nodeMode( ) == Disable)
 		p->second->nodeEn( flag );
 
-    res.request( true );
-    setNodeMode( Enable );
-    res.release( );
+    setNodeMode(Enable);
 
-    try{ postEnable( flag ); }
-    catch( TError err )	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    try{ postEnable(flag); }
+    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 };
 
 void TCntrNode::nodeDis( long tm, int flag )
 {
-    if( nodeMode() == Disable )	return;		//throw TError(nodePath().c_str(),"Node already disabled!");
-    if( nodeMode() != Enable )	throw TError(nodePath().c_str(),_("Node already in process!"));
+    if(nodeMode() == Disable)	return;		//throw TError(nodePath().c_str(),"Node already disabled!");
+    if(nodeMode() != Enable)	throw TError(nodePath().c_str(),_("Node already in process!"));
 
-    preDisable( flag );
+    preDisable(flag);
 
-    ResAlloc res( hd_res, true );
-    setNodeMode( MkDisable );
-    res.release( );
+    setNodeMode(MkDisable);
 
     try
     {
 	TMap::iterator p;
-	for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-	    for( p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-		if( p->second->nodeMode() == Enable )
-		    p->second->nodeDis( tm, flag );
+	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	    for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+		if(p->second->nodeMode() == Enable)
+		    p->second->nodeDis(tm, flag);
 
 	//- Wait of free node -
 	time_t t_cur = time(NULL);
 	while(1)
 	{
-	    if( !mUse )	break;
+	    if(!mUse)	break;
 #if OSC_DEBUG >= 1
             mess_debug(nodePath().c_str(),_("Waiting for freeing by %d users!"),mUse);
 #endif
 	    //Check timeout
-	    if( tm && time(NULL) > t_cur+tm)
+	    if(tm && time(NULL) > t_cur+tm)
 	    {
-		if( !TSYS::finalKill )
+		if(!TSYS::finalKill)
 		    throw TError(nodePath().c_str(),_("Timeouted of wait. Object is used by %d users. Free object first!"),mUse);
 		mess_err(nodePath().c_str(),_("Blocking node error. Inform developpers please!"));
 		break;
 	    }
-	    usleep( STD_WAIT_DELAY*1000 );
+	    usleep(STD_WAIT_DELAY*1000);
 	}
-	res.request( true );
-	setNodeMode( Disable );
-	modif( );
-	res.release( );
+
+	setNodeMode(Disable);
+	modif();
     }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),_("Node disable error. Restore node enabling."));
-	res.request( true );
-	setNodeMode( Disable );
-	res.release( );
-	nodeEn( NodeRestore|(flag<<8) );
+	setNodeMode(Disable);
+	nodeEn(NodeRestore|(flag<<8));
 	throw;
     }
     try{ postDisable(flag); }
@@ -460,17 +458,17 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     }
 }
 
-unsigned TCntrNode::nodeUse(  )
+unsigned TCntrNode::nodeUse( bool selfOnly )
 {
     ResAlloc res(hd_res,false);
-    if( nodeMode() == Disable )	throw TError(nodePath().c_str(),"Node is disabled!");
+    //if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
     unsigned i_use = mUse;
     TMap::iterator p;
-    for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-     for( p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-	if( p->second->nodeMode() != Disable )
-	    i_use+=p->second->nodeUse();
+    for(unsigned i_g = 0; !selfOnly && chGrp && i_g < chGrp->size(); i_g++)
+	for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+	    if(p->second->nodeMode() != Disable)
+		i_use += p->second->nodeUse();
 
     return i_use;
 }

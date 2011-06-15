@@ -83,6 +83,7 @@ class TMdPrm : public TParamContr
 	void load_( );
         void save_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void setType( const string &tpId );
 
     private:
 	//Methods

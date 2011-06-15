@@ -349,10 +349,9 @@ BFunc *TipContr::bFuncGet( const char *nm )
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), endrun_req(false),
     mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()), mFnc(cfg("FUNC").getSd()),
-    id_freq(-1), id_start(-1), id_stop(-1)
+    id_freq(-1), id_start(-1), id_stop(-1), tm_calc(0)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
-    setDimens(true);
 }
 
 Contr::~Contr()
@@ -385,7 +384,7 @@ string Contr::getStatus( )
     {
 	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(calcTm()).c_str());
+	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_calc).c_str());
     }
 
     return val;
@@ -476,10 +475,10 @@ void Contr::save_( )
 
 	//> Clear VAL
 	cfg.cfgViewAll(false);
-	for( int fld_cnt=0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
-	    if( ioId(cfg.cfg("ID").getS()) < 0 )
+	for(int fld_cnt=0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
+	    if(ioId(cfg.cfg("ID").getS()) < 0)
 	    {
-		SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true);
+		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true);
 		fld_cnt--;
 	    }
     }
@@ -518,13 +517,15 @@ void *Contr::Task( void *icntr )
 
     bool is_start = true;
     bool is_stop  = false;
+    int64_t t_cnt, t_prev = TSYS::curTime();
 
     while(true)
     {
 	if(!cntr.redntUse())
 	{
+	    t_cnt = TSYS::curTime();
 	    //> Setting special IO
-	    if(cntr.id_freq >= 0) cntr.setR(cntr.id_freq, cntr.period()?(float)cntr.iterate()*1e9/(float)cntr.period():0);
+	    if(cntr.id_freq >= 0) cntr.setR(cntr.id_freq, cntr.period()?((float)cntr.iterate()*1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    if(cntr.id_start >= 0) cntr.setB(cntr.id_start, is_start);
 	    if(cntr.id_stop >= 0) cntr.setB(cntr.id_stop, is_stop);
 
@@ -532,9 +533,11 @@ void *Contr::Task( void *icntr )
 		try { cntr.calc(); }
 		catch(TError err)
 		{
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); 
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
 		    mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
 		}
+	    t_prev = t_cnt;
+            cntr.tm_calc = TSYS::curTime()-t_cnt;
 	}
 
 	if(is_stop) break;

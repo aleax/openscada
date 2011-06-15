@@ -44,7 +44,7 @@ Block::Block( const string &iid, Contr *iown ) :
 
 Block::~Block( )
 {
-    if( enable() ) setEnable(false);
+    if(enable()) setEnable(false);
 }
 
 TCntrNode &Block::operator=( TCntrNode &node )
@@ -226,13 +226,15 @@ void Block::setProcess( bool val )
     if(val && !process())
     {
 	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++) setLink(i_ln, INIT);
+	if(owner().startStat()) calc(true, false, 0);
 	owner().blkProc(id(), val);
     }
     //> Disconnect links
     if(!val && process())
     {
-	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++) setLink(i_ln, DEINIT);
 	owner().blkProc(id(), val);
+	if(owner().startStat()) calc(false, true, 0);
+	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++) setLink(i_ln, DEINIT);
     }
     m_process = val;
 }
@@ -346,12 +348,12 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	}
 }
 
-void Block::calc( bool first, bool last )
+void Block::calc( bool first, bool last, double frq )
 {
     //> Set fixed system attributes
-    if(id_freq >= 0)	setR(id_freq,owner().period()?(1e9*(double)owner().iterate())/(double)owner().period():0);
-    if(id_start >= 0)	setB(id_start,first);
-    if(id_stop >= 0)	setB(id_stop,last);
+    if(id_freq >= 0)	setR(id_freq, frq);
+    if(id_start >= 0)	setB(id_start, first);
+    if(id_stop >= 0)	setB(id_stop, last);
 
     //> Get values from input links
     lnk_res.resRequestR( );
@@ -506,7 +508,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Block: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("area",opt,-1,"/blck",_("Block")))
 	{
-	    if(ctrMkNode("area",opt,-1,"/blck/st",_("State")))
+	    if(owner().enableStat() && ctrMkNode("area",opt,-1,"/blck/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/blck/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(owner().startStat())
@@ -626,8 +628,13 @@ void Block::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/blck/cfg/func")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText( wFunc() );
-	if(!func() && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setWFunc( opt->text() );
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	{
+	    opt->setText(wFunc());
+	    try{ if(dynamic_cast<TFunction*>(&SYS->nodeAt(wFunc(),0,'.').at())) opt->setText(opt->text()+" (+)"); }
+	    catch(TError) { }
+	}
+	if(!func() && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) setWFunc(TSYS::strParse(opt->text(),0," "));
     }
     else if(a_path == "/blck/cfg/func_lnk" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID,SEC_RD))
 	opt->setText(TSYS::sepstr2path(wFunc(),'.'));
@@ -670,7 +677,27 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    string lnk = m_lnk[id].lnk;
 
 	    if(lev == '1')	opt->setText(TSYS::int2str(m_lnk[id].tp));
-	    else if(lev == '2')	opt->setText(lnk);
+	    else if(lev == '2')
+	    {
+		opt->setText(lnk);
+		try
+		{
+		    switch(m_lnk[id].tp)
+		    {
+			case I_LOC: case O_LOC:
+			    if(owner().blkAt(TSYS::strParse(lnk,0,".")).at().ioId(TSYS::strParse(lnk,1,".")) >= 0)
+				opt->setText(opt->text()+" (+)");
+			    break;
+			case I_GLB: case O_GLB:
+			    if(((Contr&)owner().owner().at(TSYS::strParse(lnk,0,".")).at()).blkAt(TSYS::strParse(lnk,1,".")).at().ioId(TSYS::strParse(lnk,2,".")) >= 0)
+				opt->setText(opt->text()+" (+)");
+			case I_PRM: case O_PRM:
+			    if(!SYS->daq().at().attrAt(lnk,'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+			    break;
+		    }
+		}
+		catch(TError) { }
+	    }
 	    else if(lev == '3')
 	    {
 		int c_lv = 0;
@@ -745,7 +772,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    char lev = TSYS::pathLev(a_path,2)[0];
 	    int id = ioId(TSYS::pathLev(a_path,2).substr(2));
 	    if(lev == '1')	setLink(id, SET, (Block::LnkT)atoi(opt->text().c_str()));
-	    else if(lev == '2')	setLink(id, SET, m_lnk[id].tp,opt->text());
+	    else if(lev == '2')	setLink(id, SET, m_lnk[id].tp, TSYS::strParse(opt->text(),0," "));
 	    modif();
 	}
     }
