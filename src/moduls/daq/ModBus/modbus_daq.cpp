@@ -985,10 +985,15 @@ void TMdPrm::enable()
     	    initLnks();
 
     	    //>> Init system attributes identifiers
-    	    lCtx->id_freq  = lCtx->func()->ioId("f_frq");
-    	    lCtx->id_start = lCtx->func()->ioId("f_start");
-    	    lCtx->id_stop  = lCtx->func()->ioId("f_stop");
-    	    lCtx->id_err   = lCtx->func()->ioId("f_err");
+    	    lCtx->id_freq  = lCtx->ioId("f_frq");
+    	    lCtx->id_start = lCtx->ioId("f_start");
+    	    lCtx->id_stop  = lCtx->ioId("f_stop");
+    	    lCtx->id_err   = lCtx->ioId("f_err");
+    	    lCtx->id_sh	   = lCtx->ioId("SHIFR");
+            lCtx->id_nm    = lCtx->ioId("NAME");
+            lCtx->id_dscr  = lCtx->ioId("DESCR");
+            int id_this    = lCtx->ioId("this");
+            if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
     	    //>> Load IO at enabling
     	    if(to_make) loadIO();
@@ -1019,7 +1024,7 @@ void TMdPrm::disable()
     if(lCtx)
     {
 	lCtx->setFunc(NULL);
-	lCtx->id_freq = lCtx->id_start = lCtx->id_stop = lCtx->id_err = -1;
+	lCtx->id_freq = lCtx->id_start = lCtx->id_stop = lCtx->id_err = lCtx->id_sh = lCtx->id_nm = lCtx->id_dscr -1;
     }
 }
 
@@ -1118,6 +1123,9 @@ void TMdPrm::upVal( bool first, bool last, double frq )
     	    if(lCtx->id_freq >= 0)	lCtx->setR(lCtx->id_freq, frq);
     	    if(lCtx->id_start >= 0)	lCtx->setB(lCtx->id_start, first);
     	    if(lCtx->id_stop >= 0)	lCtx->setB(lCtx->id_stop, last);
+	    if(lCtx->id_sh >= 0)	lCtx->setS(lCtx->id_sh, id());
+	    if(lCtx->id_nm >= 0)	lCtx->setS(lCtx->id_nm, name());
+	    if(lCtx->id_dscr >= 0)	lCtx->setS(lCtx->id_dscr, descr());
 
 	    //> Get input links
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
@@ -1132,6 +1140,10 @@ void TMdPrm::upVal( bool first, bool last, double frq )
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
 		if(lCtx->ioMdf(lCtx->lnk(i_l).io_id))
 		    owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).addr, w_err);
+
+	    //> Put fixed system attributes
+	    if(lCtx->id_nm >= 0)  setName(lCtx->getS(lCtx->id_nm));
+	    if(lCtx->id_dscr >= 0)setDescr(lCtx->getS(lCtx->id_dscr));
 
 	    //> Attribute's values update
 	    elem().fldList(ls);
@@ -1308,7 +1320,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
 //***************************************************
 //* Logical type parameter's context                *
-TMdPrm::TLogCtx::TLogCtx( const string &name ) : TValFunc(name), id_freq(-1), id_start(-1), id_stop(-1), id_err(-1)
+TMdPrm::TLogCtx::TLogCtx( const string &name ) : TValFunc(name),
+    id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), id_sh(-1), id_nm(-1), id_dscr(-1)
 {
 
 }

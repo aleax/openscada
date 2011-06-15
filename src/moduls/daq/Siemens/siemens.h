@@ -134,7 +134,7 @@ class TMdPrm : public TParamContr, public TValFunc
 
 	TElem	p_el;				//Work atribute elements
 
-	int	id_freq, id_start, id_stop, id_err;	//Fixed system attributes identifiers
+	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
 	vector<SLnk>	plnk;			//Parameter's links
 
 	ResString	acq_err;

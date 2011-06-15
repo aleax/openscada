@@ -8,6 +8,7 @@
     Linked status is added for function and block's atributes links.
 - DAQ.JavaLikeCalc: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
 - !!!:DAQ.LogicLev: Moved to use system multitype parameters mechanism.
+- DAQ.ModBus, DAQ.Siemens: Special template attributes bind is added for "SHIFR", "NAME", "DESCR" and "this".
 
 
 2011-06-14 Roman

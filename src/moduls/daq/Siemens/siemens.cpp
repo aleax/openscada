@@ -1341,7 +1341,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), TValFunc(name+"SiemensPrm"), m_tmpl(cfg("TMPL").getSd()), p_el("cif_attr"),
-    id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), acq_err_tm(0)
+    id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), id_sh(-1), id_nm(-1), id_dscr(-1), acq_err_tm(0)
 {
 
 }
@@ -1418,10 +1418,15 @@ void TMdPrm::enable()
 	initLnks();
 
 	//>> Init system attributes identifiers
-	id_freq  = func()->ioId("f_frq");
-	id_start = func()->ioId("f_start");
-	id_stop  = func()->ioId("f_stop");
-	id_err   = func()->ioId("f_err");
+	id_freq  = ioId("f_frq");
+	id_start = ioId("f_start");
+	id_stop  = ioId("f_stop");
+	id_err   = ioId("f_err");
+        id_sh    = ioId("SHIFR");
+        id_nm    = ioId("NAME");
+        id_dscr  = ioId("DESCR");
+        int id_this = ioId("this");
+        if(id_this >= 0) setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	//>> Load IO at enabling
 	if(to_make)	loadIO();
@@ -1453,7 +1458,7 @@ void TMdPrm::disable()
 
     //> Template's function disconnect
     setFunc(NULL);
-    id_freq = id_start = id_stop = id_err = -1;
+    id_freq = id_start = id_stop = id_err = id_sh = id_nm = id_dscr = -1;
 
     TParamContr::disable();
 }
@@ -1686,6 +1691,9 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(id_freq >= 0)	setR(id_freq, frq);
 	if(id_start >= 0)	setB(id_start, first);
 	if(id_stop >= 0)	setB(id_stop, last);
+	if(id_sh >= 0)        	setS(id_sh, id());
+        if(id_nm >= 0)        	setS(id_nm, name());
+        if(id_dscr >= 0)      	setS(id_dscr, descr());
 
 	//> Get input links
 	for(int i_l = 0; i_l < lnkSize(); i_l++)
@@ -1729,6 +1737,11 @@ void TMdPrm::calc( bool first, bool last, double frq )
 			break;
 		    case IO::Object: break;
 		}
+
+	//> Put fixed system attributes
+        if(id_nm >= 0)  setName(getS(id_nm));
+        if(id_dscr >= 0)setDescr(getS(id_dscr));
+
     }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
