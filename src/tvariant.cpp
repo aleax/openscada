@@ -132,7 +132,7 @@ int TVariant::getI( ) const
 {
     switch( type() )
     {
-	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_INT: atoi(getS().c_str());
+	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_INT : atoi(getS().c_str());
 	case TVariant::Integer:	return TSYS::getUnalignInt(vl.data()+1);
 	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
 	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();

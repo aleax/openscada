@@ -438,9 +438,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
 	    {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
-		//>> Append configuration properties
-		XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/REDNT_RUN",true);
-		if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/redRunLst");
+		ctrRemoveNode(opt,"/cntr/cfg/REDNT");
+		ctrRemoveNode(opt,"/cntr/cfg/REDNT_RUN");
 	    }
 	}
 	if(owner().tpPrmSize())
@@ -519,16 +518,6 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_t = 0; i_t < owner().tpPrmSize( ); i_t++)
 		if(owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2))
 		     modifG( );
-    }
-    else if(a_path == "/cntr/redRunLst" && ctrChkNode(opt))
-    {
-	opt->childAdd("el")->setAttr("id","<high>")->setText(_("<High level>"));
-	opt->childAdd("el")->setAttr("id","<low>")->setText(_("<Low level>"));
-	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
-	vector<string> sls;
-	owner().owner().rdStList(sls);
-	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
-	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
     else TCntrNode::cntrCmdProc(opt);
 }

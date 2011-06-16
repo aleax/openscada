@@ -231,7 +231,7 @@ msgid "To transport"
 msgstr "До транспорту"
 
 msgid "To protocol"
-msgstr "З протоколом"
+msgstr "У протокол"
 
 msgid "RTU;ASCII;TCP/IP"
 msgstr ""

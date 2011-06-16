@@ -1,3 +1,7 @@
+2011-06-16 Roman
+- DAQ: Redundancy configuration of any controller object is removed. Use special DAQ-redundancy configuration interface for it.
+
+
 2011-06-15 Roman
 - !!!!:DAQ, DAQ.DiamondBoards, DAQ.ModBus, DAQ.LogicLev:
     Parameter type changing support is added for disabled parameters of multitype DAQ modules.
