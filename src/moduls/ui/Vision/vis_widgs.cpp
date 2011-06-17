@@ -1037,18 +1037,18 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    break;
 	case 0:	return false;
 	case 1:		//root
-	    if( shape && shape->id() == val )	break;
-	    if( shape ) shape->destroy(this);
+	    if(shape && shape->id() == val)	break;
+	    if(shape) shape->destroy(this);
 	    shape = mod->getWdgShape(val);
-	    if( shape ) shape->init(this);
+	    if(shape) shape->init(this);
 	    break;
 	case 7:		//geomX
-	    if( wLevel( ) == 0 )	break;
+	    if(wLevel() == 0)	break;
 	    mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
 	    up = true;
 	    break;
 	case 8:		//geomY
-	    if( wLevel( ) == 0 )	break;
+	    if(wLevel() == 0)	break;
 	    mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
 	    up = true;
 	    break;
@@ -1061,7 +1061,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    up = true;
 	    break;
 	case 11:	//geomZ
-	    if(wLevel( )>0) z_coord = atoi(val.c_str());
+	    if(wLevel() > 0) z_coord = atoi(val.c_str());
 	    break;
 	case 13:	//geomXsc
 	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
@@ -1082,7 +1082,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     }
     if( up && !allAttrLoad( ) )
     {
-	if(wLevel( ) > 0) moveF(posF());
+	if(wLevel() > 0) moveF(posF());
 	resizeF(sizeF());
     }
 

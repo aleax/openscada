@@ -474,6 +474,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    "help",_("Project's session calc period on milliseconds."));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/runWin",_("Run window"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;1;2","sel_list",_("Original size;Maximize;Full screen"));
+		ctrMkNode("fld",opt,-1,"/obj/cfg/keepAspRatio",_("Keep aspect ratio on scale"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
@@ -563,11 +564,17 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(period()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPeriod(atoi(opt->text().c_str()));
     }
+    else if(a_path == "/obj/cfg/flgs" && ctrChkNode(opt))	opt->setText(TSYS::int2str(prjFlags()));
     else if(a_path == "/obj/cfg/runWin")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(prjFlags()&(Maximize|FullScreen)));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    setPrjFlags( (prjFlags()&(~(Maximize|FullScreen)))|atoi(opt->text().c_str()) );
+	    setPrjFlags((prjFlags()&(~(Maximize|FullScreen)))|atoi(opt->text().c_str()));
+    }
+    else if(a_path == "/obj/cfg/keepAspRatio")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText((prjFlags()&KeepAspectRatio)?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPrjFlags(atoi(opt->text().c_str()) ? prjFlags()|KeepAspectRatio : prjFlags()&(~KeepAspectRatio));
     }
     else if(a_path == "/br/pg_" || a_path == "/page/page")
     {

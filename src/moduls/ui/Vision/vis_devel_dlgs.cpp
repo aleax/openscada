@@ -177,6 +177,13 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     prj_runw->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(prj_runw, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(prj_runw,7,1,1,3);
+    lab = new QLabel(_("Keep aspect ratio on scale:"),tab_w);
+    glay->addWidget(lab,8,0);
+    prj_keepAspRt = new QCheckBox(tab_w);
+    prj_keepAspRt->setObjectName("/obj/cfg/keepAspRatio");
+    prj_keepAspRt->setWindowIconText(TSYS::addr2str(lab).c_str());
+    connect(prj_keepAspRt, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
+    glay->addWidget(prj_keepAspRt,8,1,1,3);
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
@@ -455,6 +462,14 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(prj_runw->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) prj_runw->setCurrentIndex( prj_runw->findData(atoi(req.text().c_str())) );
 	}
+	//>>> Run window mode
+	gnd = TCntrNode::ctrId(root,prj_keepAspRt->objectName().toAscii().data(),true);
+	prj_keepAspRt->setVisible(gnd); ((QLabel *)TSYS::str2addr(prj_keepAspRt->windowIconText().toAscii().data()))->setVisible(gnd);
+	if(gnd)
+	{
+	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(prj_keepAspRt->objectName().toAscii().data(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) prj_keepAspRt->setChecked(atoi(req.text().c_str()));
+	}
     }
 
     //> Mime data page
@@ -616,38 +631,38 @@ void LibProjProp::isModify( )
     XMLNode req("set");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toAscii().data(),TSYS::PathEl));
 
-    if( oname == obj_enable->objectName() )
+    if(oname == obj_enable->objectName() || oname == prj_keepAspRt->objectName())
     {
-	req.setText(TSYS::int2str(obj_enable->isChecked()));
+	req.setText(TSYS::int2str(((QCheckBox*)sender())->isChecked()));
 	update = true;
     }
-    else if( oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName() )
+    else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName())
 	req.setText(((LineEdit*)sender())->value().toAscii().data());
-    else if( oname == stl_name->objectName() )
+    else if(oname == stl_name->objectName())
     { req.setText(((LineEdit*)sender())->value().toAscii().data()); update = true; }
-    else if( oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName() )
+    else if(oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName())
     {
 	int cPos = ((QComboBox*)sender())->currentIndex();
 	req.setText( ((QComboBox*)sender())->itemData(cPos).isNull() ? ((QComboBox*)sender())->itemText(cPos).toAscii().data() : 
 								       ((QComboBox*)sender())->itemData(cPos).toString().toAscii().data() );
 	update = true;
     }
-    else if( oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() ||
-	oname == prj_runw->objectName() )
+    else if(oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() ||
+	oname == prj_runw->objectName())
     {
 	req.setText(((QComboBox*)sender())->itemData(((QComboBox*)sender())->currentIndex()).toString().toAscii().data());
 	update = true;
     }
-    else if( oname == obj_descr->objectName() ) req.setText(obj_descr->text().toAscii().data());
-    else if( oname == buttStlDel->objectName() ) update = true;
+    else if(oname == obj_descr->objectName()) req.setText(obj_descr->text().toAscii().data());
+    else if(oname == buttStlDel->objectName()) update = true;
     else return;
 
-    if( owner()->cntrIfCmd(req) )
+    if(owner()->cntrIfCmd(req))
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	showDlg(ed_it,true);
     }
-    else if( update )	showDlg(ed_it,true);
+    else if(update)	showDlg(ed_it,true);
 
     is_modif = true;
 }

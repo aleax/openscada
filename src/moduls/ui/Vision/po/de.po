@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-09 17:25+0300\n"
+"POT-Creation-Date: 2011-06-17 11:10+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -889,6 +889,9 @@ msgstr "Rechenzeit (ms):"
 
 msgid "Run window mode:"
 msgstr "Ausführungsfenster Modus:"
+
+msgid "Keep aspect ratio on scale:"
+msgstr ""Seitenverhältnis beibehalten auf der Skala"
 
 msgid "Mime data"
 msgstr "Mime Angaben"

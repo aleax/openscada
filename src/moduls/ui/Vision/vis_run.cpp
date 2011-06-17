@@ -59,7 +59,7 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat,
 	    bool icrSessForce, QWidget *parent ) :
-    QMainWindow(parent), winClose(false), crSessForce(icrSessForce), prj_it(iprj_it), master_pg(NULL), mPeriod(1000),
+    QMainWindow(parent), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false), prj_it(iprj_it), master_pg(NULL), mPeriod(1000),
     wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF), isConErr(false)
 {
     QImage ico_t;
@@ -268,8 +268,9 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
 
     //> Init scroller
     QScrollArea *scrl = new QScrollArea;
-    scrl->setFocusPolicy( Qt::NoFocus );
-    setCentralWidget( scrl );
+    scrl->setFocusPolicy(Qt::NoFocus);
+    scrl->setAlignment(Qt::AlignCenter);
+    setCentralWidget(scrl);
 
     //> Create timers
     //>> End run timer
@@ -286,13 +287,13 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
 
     menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
-    resize( 600, 400 );
+    resize(600, 400);
 
     //> Init session
     initSess(prj_it,crSessForce);
 
     //mWStat->setText(host.st_nm.c_str());
-    statusBar()->showMessage(_("Ready"), 2000 );
+    statusBar()->showMessage(_("Ready"), 2000);
 
     alarmSet(0);
 }
@@ -375,16 +376,18 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if( ev && ev->oldSize().isValid() && master_pg )
+    if(ev && ev->oldSize().isValid() && master_pg)
     {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
-	if( windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen )
+	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
+	    //> Proportional scale
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
 	}else x_scale = y_scale = 1.0;
-	if( x_scale_old != x_scale || y_scale_old != y_scale )	fullUpdatePgs();
+	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
 }
@@ -777,6 +780,8 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
+	    //> Proportional scale
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
 	}
 	fullUpdatePgs();
     }
@@ -802,7 +807,7 @@ void VisRun::aboutQt()
 
 void VisRun::fullScreen( bool vl )
 {
-    if( vl ) setWindowState(Qt::WindowFullScreen);
+    if(vl) setWindowState(Qt::WindowFullScreen);
     else setWindowState(Qt::WindowNoState);
 }
 
@@ -914,9 +919,9 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     }
 
     req.clear()->setName("connect")->setAttr("path","/%2fserv%2fsess");
-    if( work_sess.empty() ) req.setAttr("prj",src_prj);
+    if(work_sess.empty()) req.setAttr("prj",src_prj);
     else req.setAttr("sess",work_sess);
-    if( cntrIfCmd(req) )
+    if(cntrIfCmd(req))
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	close();
@@ -960,11 +965,12 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     }
 
     //> Get project's flags
-    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2frunWin");
-    if( !cntrIfCmd(req) )
+    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
+    if(!cntrIfCmd(req))
     {
-	if( atoi(req.text().c_str())&0x01 )	setWindowState( Qt::WindowMaximized );
-	else if( atoi(req.text().c_str())&0x02 )actFullScr->setChecked( true );
+	if(atoi(req.text().c_str())&0x01)	setWindowState(Qt::WindowMaximized);
+	else if(atoi(req.text().c_str())&0x02)	actFullScr->setChecked(true);
+	keepAspectRatio = atoi(req.text().c_str())&0x04;
     }
 
     //> Get open pages list
@@ -1040,12 +1046,12 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	//>> Create widget view
 	master_pg = new RunPageView(pg_it,this,centralWidget());
 	master_pg->load("");
-	master_pg->setFocusPolicy( Qt::StrongFocus );
+	master_pg->setFocusPolicy(Qt::StrongFocus);
 	((QScrollArea *)centralWidget())->setWidget( master_pg );
-	if( !(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized)) )
+	if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized)))
 	{
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
-	    resize( vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10) );
+	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
 	else x_scale = y_scale = 1.0;
     }
@@ -1337,10 +1343,13 @@ void VisRun::updatePage( )
     {
 	float xSc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	float ySc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
-	if( xSc < 1 || ySc < 1 )
+	if(xSc < 1 || ySc < 1)
 	{
 	    x_scale *= xSc;
 	    y_scale *= ySc;
+	    //> Proportional scale
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
+
 	    fullUpdatePgs();
 	}
     }

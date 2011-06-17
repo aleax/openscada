@@ -1,3 +1,8 @@
+2011-06-17 Roman
+- UI.VCAEngine: The primitive "Document" is switched to full XML parse mode.
+- UI.VCAEngine, UI.Vision: Keep aspect ratio option of master page is added.
+
+
 2011-06-16 Roman
 - DAQ: Redundancy configuration of any controller object is removed. Use special DAQ-redundancy configuration interface for it.
 

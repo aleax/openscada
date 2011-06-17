@@ -93,7 +93,8 @@ class LibProjProp: public QDialog
 	//Private attributes
 	QTabWidget	*wdg_tabs;	//Tabs
 	QPushButton	*obj_ico;	//Icon
-	QCheckBox	*obj_enable;	//Enabled stat
+	QCheckBox	*obj_enable,	//Enabled stat
+			*prj_keepAspRt;	//Keep master page aspect ratio
 	LineEdit	*obj_db;	//DB
 	QComboBox	*obj_user,	//User
 			*obj_grp,	//Group

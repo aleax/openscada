@@ -1377,7 +1377,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     vector<string> als;
 
     //> Parse template
-    try{ xdoc.load(XHTML_entity+tmpl); }
+    try{ xdoc.load(XHTML_entity+tmpl,true); }
     catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Document's template parsing error: %s."),err.mess.c_str());
@@ -1446,7 +1446,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 
     xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
-    return xdoc.save(XMLNode::BrAllPast);
+    return xdoc.save();
 }
 
 void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel )
@@ -1464,17 +1464,14 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    funcV.calc( );
 	    //>>> Load result to XML tree
 	    XMLNode xproc;
-	    xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>");
+	    xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true);
 	    //>>> Set result
 	    bool docAppend = atoi(xcur->attr("docAppend").c_str());
-	    //>>> Copy text
-	    if( docAppend )	xcur->setText(xcur->text()+xproc.text());
-	    else xcur->setText(xproc.text());
-	    //>>> Copy included tags
+	    //>>> Copy nodes
 	    if(!docAppend) xcur->childClear();
 	    for(unsigned i_t = 0; i_t < xproc.childSize(); i_t++)
 		*(xcur->childIns(0)) = *xproc.childGet(i_t);
-	    if(instrDel)	xcur->prcInstrDel("dp");
+	    if(instrDel) xcur->prcInstrDel("dp");
 	}
 	catch(TError err)
 	{

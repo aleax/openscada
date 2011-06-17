@@ -166,6 +166,7 @@ class VisRun : public QMainWindow
 	QLabel		*mWStat;		//VCA engine station
 	QLabel		*mWTime;		//Runtime time display for fullscreen
 	bool		crSessForce;		//Force session creation flag
+	bool		keepAspectRatio;	//Keep aspect ratio on scale
 	string 		prj_it, work_sess, src_prj;//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period

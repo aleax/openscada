@@ -41,8 +41,9 @@ class Project : public TCntrNode, public TConfig
 	//Data
 	enum Flag
 	{
-	    Maximize	= 0x01,	//Maximize master window and resize content
-	    FullScreen	= 0x02,	//Full screen project run
+	    Maximize		= 0x01,	//Maximize master window and resize content
+	    FullScreen		= 0x02,	//Full screen project run
+	    KeepAspectRatio	= 0x04,	//Keep master page aspect ratio on scale
 	};
 	//Methods
 	Project( const string &id, const string &name, const string &lib_db = "*.*" );
