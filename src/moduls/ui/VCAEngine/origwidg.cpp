@@ -1470,7 +1470,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    //>>> Copy nodes
 	    if(!docAppend) xcur->childClear();
 	    for(unsigned i_t = 0; i_t < xproc.childSize(); i_t++)
-		*(xcur->childIns(0)) = *xproc.childGet(i_t);
+		*(xcur->childAdd()) = *xproc.childGet(i_t);
 	    if(instrDel) xcur->prcInstrDel("dp");
 	}
 	catch(TError err)
