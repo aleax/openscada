@@ -6938,6 +6938,7 @@ void ShapeElFigure::paintImage( WdgView *view )
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
+    //elFD->pictObj = QPixmap(view/*elFD->pictObj*/);
     elFD->pictObj = QPixmap(view->width(), view->height());
     elFD->pictObj.fill(Qt::transparent);
     QPainter pnt( &elFD->pictObj );
@@ -7170,6 +7171,18 @@ void ShapeElFigure::paintImage( WdgView *view )
 
             //-- Scaling image for filling --
             img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
+            //>>Creating the composition of the fill color and fill image
+            /*QPainter img_pnt(&img);
+            img_pnt.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+            QPixmap clr_img(img.size());
+            clr_img.fill((*colors)[inundationItems[i].brush]);
+            img_pnt.drawPixmap(0, 0, clr_img);*/
+            QImage clr_img(elFD->pictObj.size(), QImage::Format_Mono);
+            clr_img.fill(0);
+            QPainter img_pnt(&clr_img);
+            img_pnt.setBrush( QBrush( Qt::white, Qt::SolidPattern ) );
+            img_pnt.setPen( Qt::NoPen );
+            img_pnt.drawPath(in_path_rot);
             int im_x, im_y;
             QColor color;
             double alpha, color_r, color_g, color_b;
@@ -7177,15 +7190,15 @@ void ShapeElFigure::paintImage( WdgView *view )
             QRgb rgb;
             QPointF drw_pnt,drw_pnt1;
             QPen im_pen;
-
             im_y = (int)yMin_rot;
-            //-- Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path --
+            //>> Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path
             do
             {
                 im_x = (int)xMin_rot;
                 do
                 {
-                    if( in_path_rot.contains( QPoint( im_x, im_y) ) )
+                    if( im_x >= 0 && im_x < clr_img.width() && im_y >= 0 && im_y < clr_img.height() &&
+                        clr_img.pixel(QPoint( im_x, im_y)) == qRgb( 255, 255, 255 ) )
                     {
                         drw_pnt = unScaleRotate( QPoint( im_x, im_y ), view, false, true );
                         if( img.valid ( (int)TSYS::realRound( drw_pnt.x() - xMin, POS_PREC_DIG, true ), (int)TSYS::realRound( drw_pnt.y() - yMin, POS_PREC_DIG, true ) ) )
@@ -7195,11 +7208,9 @@ void ShapeElFigure::paintImage( WdgView *view )
                             color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
                             color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
                             color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();
-
                             im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (*colors)[inundationItems[i].brush].alpha()) );
                             pnt.setPen( im_pen );
                             drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
-
                             pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), POS_PREC_DIG, true),
                                                     (int)TSYS::realRound( drw_pnt1.y(), POS_PREC_DIG, true) ) );
                         }

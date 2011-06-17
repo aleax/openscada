@@ -1,3 +1,7 @@
+2011-06-17 Maxim
+- FIX:UI.Vision: The drawing performance of the fills with the fill images is optimized for the primitive ElFigure by changing the "contains"
+                 more quick mechanism especially for the complex objects.
+
 2011-06-17 Roman
 - UI.VCAEngine: The primitive "Document" is switched to full XML parse mode.
 - UI.VCAEngine, UI.Vision: Keep aspect ratio option of master page is added.
