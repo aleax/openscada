@@ -903,13 +903,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	}
 	case TSYS::FormatPrint:
 	    sout = in;
-	    for( i_sz = 0; i_sz < (int)sout.size(); i_sz++ )
-		if( sout[i_sz] == '%' ) { sout.replace(i_sz,1,"%%"); i_sz++; }
+	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
+		if(sout[i_sz] == '%') { sout.replace(i_sz,1,"%%"); i_sz++; }
 	    break;
 	case TSYS::oscdID:
 	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-		switch( in[i_sz] )
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
+		switch(in[i_sz])
 		{
 		    case ' ': case '/': case '\\': case '&': case '(':
 		    case ')': case '[': case ']': case '!': case '~':
@@ -948,14 +948,14 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 			case 't':	sout += '\t';	break;
 			case 'v':	sout += '\v';	break;
 			case 'x': case 'X':
-			    if((i_sz+3) < in.size() && isxdigit(in[i_sz+2]) && isxdigit(in[i_sz+3]))
+			    if((i_sz+3) < (int)in.size() && isxdigit(in[i_sz+2]) && isxdigit(in[i_sz+3]))
 			    { sout += (char)strtol(in.substr(i_sz+2,2).c_str(),NULL,16); i_sz += 2; }
 			    else sout += in[i_sz+1];
                     	    break;
                 	default:
-                    	    if((i_sz+3) < in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
-                                                    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
-                                                    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
+                    	    if((i_sz+3) < (int)in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
+                                                	    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
+                                                	    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
                     	    { sout += (char)strtol(in.substr(i_sz+1,3).c_str(),NULL,8); i_sz += 2; }
                     	    else sout += in[i_sz+1];
 		    }

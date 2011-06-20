@@ -251,7 +251,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/prm/tpLst" && ctrChkNode(opt))
-	for(int i_tp = 0; i_tp < owner().owner().tpPrmSize(); i_tp++)
+	for(unsigned i_tp = 0; i_tp < owner().owner().tpPrmSize(); i_tp++)
 	    opt->childAdd("el")->setAttr("id",owner().owner().tpPrmAt(i_tp).name)->setText(owner().owner().tpPrmAt(i_tp).descr);
     else TValue::cntrCmdProc(opt);
 }

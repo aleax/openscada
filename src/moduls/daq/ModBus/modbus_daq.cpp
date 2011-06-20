@@ -1262,11 +1262,24 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         	if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
                 for(int i_io = 0; i_io < lCtx->ioSize(); i_io++)
                 {
-            	    if(!(lCtx->func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)))	continue;
+            	    if(!(lCtx->func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst))) continue;
                     //>> Check select param
-                    bool is_lnk = lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink;
-                    const char *tip = "str";
-                    if(!is_lnk)
+                    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+			    "help",_("ModBus address in format: [dt:numb]\n"
+				"Where:\n"
+				"  dt - Modbus data type (R-register[3,6(16)],C-coil[1,5(15)],RI-input register[4],CI-input coil[2]).\n"
+				"       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5;\n"
+				"  numb - ModBus device's data address (dec, hex or octal);\n"
+				"Example:\n"
+				"  'R:0x300' - register access;\n"
+				"  'C:100' - coin access;\n"
+				"  'R_f:200' - get float from registers 200 and 201;\n"
+				"  'R_i4:300,400' - get int32 from registers 300 and 400;\n"
+				"  'R_b10:25' - get bit 10 from register 25."));
+                    else
+                    {
+                	const char *tip = "str";
                         switch(lCtx->ioType(i_io))
                         {
                             case IO::Integer:       tip = "dec";    break;
@@ -1274,7 +1287,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
                             case IO::Boolean:       tip = "bool";   break;
                             default:                tip = "str";    break;
                         }
-                        ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+                	ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+		    }
                 }
             }
 	}

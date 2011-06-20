@@ -1,6 +1,13 @@
+2011-06-20 Roman
+- SYS.XML: Special blocks is moved to special child tag whith name "<?nm".
+- FIX:DAQ.BlockCalc: Global link status check is fixed.
+- DAQ.ModBus: Tip help is added to links of "Template configuration" page.
+
+
 2011-06-17 Maxim
 - FIX:UI.Vision: The drawing performance of the fills with the fill images is optimized for the primitive ElFigure by changing the "contains"
                  more quick mechanism especially for the complex objects.
+
 
 2011-06-17 Roman
 - UI.VCAEngine: The primitive "Document" is switched to full XML parse mode.

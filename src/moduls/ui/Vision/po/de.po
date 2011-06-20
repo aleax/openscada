@@ -891,7 +891,7 @@ msgid "Run window mode:"
 msgstr "Ausführungsfenster Modus:"
 
 msgid "Keep aspect ratio on scale:"
-msgstr ""Seitenverhältnis beibehalten auf der Skala"
+msgstr "Seitenverhältnis beibehalten auf der Skala"
 
 msgid "Mime data"
 msgstr "Mime Angaben"

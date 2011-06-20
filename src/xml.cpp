@@ -39,7 +39,6 @@ XMLNode &XMLNode::operator=(const XMLNode &prm)
 {
     //> Delete self children and attributes
     mAttr.clear();
-    mPrcInstr.clear();
     for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
 	delete mChildren[i_ch];
     mChildren.clear();
@@ -51,9 +50,6 @@ XMLNode &XMLNode::operator=(const XMLNode &prm)
     prm.attrList(ls);
     for(unsigned i_a = 0; i_a < ls.size(); i_a++)
 	setAttr(ls[i_a],prm.attr(ls[i_a]));
-    prm.prcInstrList(ls);
-    for(unsigned i_p = 0; i_p < ls.size(); i_p++)
-	setPrcInstr(ls[i_p],prm.prcInstr(ls[i_p]));
 
     //> Recursive copy children
     for(unsigned i_ch = 0; i_ch < prm.childSize(); i_ch++)
@@ -163,7 +159,7 @@ XMLNode* XMLNode::setText( const string &s, bool childs )
     if(!childs || mName == "<*>") { mText = s; return this; }
 
     int i_ch = -1;
-    for(int i_f = 0; i_f < childSize(); i_f++)
+    for(int i_f = 0; i_f < (int)childSize(); i_f++)
         if(childGet(i_f)->name() == "<*>")
 	{
 	    if(i_ch < 0) childGet(i_f)->mText = s;
@@ -218,52 +214,10 @@ XMLNode* XMLNode::setAttr( const string &name, const string &val )
     return this;
 }
 
-void XMLNode::prcInstrList( vector<string> & list ) const
-{
-    list.clear();
-    for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
-	list.push_back(mPrcInstr[i_p].first);
-}
-
-void XMLNode::prcInstrDel( const string &target )
-{
-    for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
-	if(mPrcInstr[i_p].first == target)
-	{ mPrcInstr.erase(mPrcInstr.begin()+i_p); return; }
-}
-
-void XMLNode::prcInstrClear( )
-{
-    mPrcInstr.clear();
-}
-
-string XMLNode::prcInstr( const string &target ) const
-{
-    for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
-	if(mPrcInstr[i_p].first == target) return mPrcInstr[i_p].second;
-
-    return "";
-}
-
-XMLNode* XMLNode::setPrcInstr( const string &target, const string &val )
-{
-    for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
-	if(mPrcInstr[i_p].first == target)
-	{
-	    mPrcInstr[i_p].second = val;
-	    return this;
-	}
-
-    mPrcInstr.push_back(pair<string,string>(target,val));
-
-    return this;
-}
-
 XMLNode* XMLNode::clear()
 {
     attrClear();
     mText.clear();
-    prcInstrClear();
     childClear();
 
     return this;
@@ -289,6 +243,9 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
     if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true); return; }
     //> Commentary block
     if(name() == "<!>") { xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
+    //> Process special block <? ... ?>
+    if(name().compare(0,2,"<?") == 0)
+    { xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
 
     xml.append((flg&XMLNode::BrOpenPrev) ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
@@ -305,7 +262,7 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
 	xml.append("\"");
     }
 
-    if(childEmpty() && mText.empty() && mPrcInstr.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
+    if(childEmpty() && mText.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
     else
     {
 	xml.append((flg&XMLNode::BrOpenPast) ? ">\n" : ">");
@@ -315,9 +272,6 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
 	    encode(Mess->codeConvOut(cp,mText), xml, true);
 	    xml.append(flg&XMLNode::BrTextPast ? "\n" : "");
 	}
-	//> Save process instructions
-	for(unsigned i_p = 0; i_p < mPrcInstr.size(); i_p++)
-	    xml.append("<?"+mPrcInstr[i_p].first+" "+Mess->codeConvOut(cp,mPrcInstr[i_p].second)+(flg&XMLNode::BrPrcInstrPast?"?>\n":"?>"));
 	//> Save included childs
 	for(unsigned i_c = 0; i_c < childSize(); i_c++) childGet(i_c)->saveNode(flg,xml,cp);
 	//> Close tag
@@ -340,7 +294,7 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    case '"':	replStr = "&quot;";	break;
 	    case '&':	replStr = "&amp;";	break;
 	    case '\'':	replStr = "&#039;";	break;
-	    case '\n': if(!text) replStr = "&#010;"; break;
+	    case '\n':	if(!text) replStr = "&#010;"; break;
 	}
 	i_sz++;
 	if(replStr)
@@ -439,7 +393,7 @@ nextTag:
 		//>> Pass spaces
 		while(isspace(ctx.vl[cpos])) cpos++;
 		//> Place program block
-		if(!initTag) mPrcInstr.push_back(pair<string,string>(nm,ctx.vl.substr(cpos,tpos-cpos)));
+		if(!initTag) childAdd("<?"+nm)->mText = ctx.vl.substr(cpos,tpos-cpos);
 		//> Process specific block <?xml ?>
 		if(nm == "xml")
 		    while(parseAttr(ctx,cpos))

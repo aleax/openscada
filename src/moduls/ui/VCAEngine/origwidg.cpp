@@ -1452,31 +1452,38 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel )
 {
     //> Process instructions
-    if( !xcur->prcInstr("dp").empty() )
+    if(xcur->childGet("<?dp",0,true))
     {
-	try
+	if(!atoi(xcur->attr("docAppend").c_str()))
+	    for(unsigned i_t = 0; i_t < xcur->childSize(); )
+		if(xcur->childGet(i_t)->name().compare(0,4,"<?dp") != 0) xcur->childDel(i_t);
+		else i_t++;
+	//> Call procedures
+	for(int i_t = 0; i_t < (int)xcur->childSize(); i_t++)
 	{
-	    //>>> Compile for new instruction
-	    SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).
-		       at().compileFunc(TSYS::strSepParse(iLang,1,'.'),funcIO,xcur->prcInstr("dp"));
-	    //>>> Call
-	    funcV.setS(0,"");
-	    funcV.calc( );
-	    //>>> Load result to XML tree
-	    XMLNode xproc;
-	    xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true);
-	    //>>> Set result
-	    bool docAppend = atoi(xcur->attr("docAppend").c_str());
-	    //>>> Copy nodes
-	    if(!docAppend) xcur->childClear();
-	    for(unsigned i_t = 0; i_t < xproc.childSize(); i_t++)
-		*(xcur->childAdd()) = *xproc.childGet(i_t);
-	    if(instrDel) xcur->prcInstrDel("dp");
-	}
-	catch(TError err)
-	{
-	    mess_err(wdg->nodePath().c_str(),_("Instruction proc <%s> error: %s"),TSYS::strSepParse(iLang,1,'.').c_str(),err.mess.c_str());
-	    mess_err(wdg->nodePath().c_str(),_("Error code: %s"),xcur->prcInstr("dp").c_str());
+	    XMLNode *curPrc = xcur->childGet(i_t);
+	    if(curPrc->name().compare(0,4,"<?dp") != 0) continue;
+	    try
+	    {
+		//>>> Compile for new instruction
+		SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).
+		       at().compileFunc(TSYS::strSepParse(iLang,1,'.'), funcIO, curPrc->text());
+		//>>> Call
+		funcV.setS(0,"");
+		funcV.calc( );
+		//>>> Load result to XML tree
+		XMLNode xproc;
+		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true);
+		//>>> Set result
+		for(unsigned i_tr = 0; i_tr < xproc.childSize(); i_tr++)
+		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
+		if(instrDel) { xcur->childDel(i_t--); }
+	    }
+	    catch(TError err)
+	    {
+		mess_err(wdg->nodePath().c_str(),_("Instruction proc <%s> error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
+		mess_err(wdg->nodePath().c_str(),_("Error code: %s"), curPrc->text().c_str());
+	    }
 	}
     }
 
@@ -1485,14 +1492,15 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
     //> Go to include nodes
     for(unsigned i_c = 0; i_c < xcur->childSize(); i_c++)
     {
+	XMLNode *reptN = xcur->childGet(i_c);
+	if(reptN->name().size() && reptN->name()[0] == '<') continue;
 	//>> Repeat tags
-	if(funcV.getI(2) && (dRpt=atof(xcur->childGet(i_c)->attr("docRept").c_str())) > 1e-6)
+	if(funcV.getI(2) && (dRpt=atof(reptN->attr("docRept").c_str())) > 1e-6)
 	{
 	    int rCnt = 0;
-	    XMLNode *reptN = xcur->childGet(i_c);
-	    bool docRevers = atoi(xcur->childGet(i_c)->attr("docRevers").c_str());
-	    funcV.setR(6,dRpt);
 
+	    bool docRevers = atoi(reptN->attr("docRevers").c_str());
+	    funcV.setR(6,dRpt);
 	    int64_t time = (int64_t)funcV.getI(1)*1000000;
 	    int64_t bTime = (int64_t)funcV.getI(2)*1000000;
 	    int64_t lstTime = (int64_t)funcV.getI(3)*1000000;
@@ -1507,7 +1515,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		    int i_n = docRevers?(i_c+1):i_c;
 		    *(xcur->childIns(i_n)) = *reptN;
 		    nodeClear(xcur->childGet(i_n));
-		    if( !docRevers ) i_c++;
+		    if(!docRevers) i_c++;
 		    rCnt++;
 		}
 		int64_t rTimeT = vmin(rTime+perRpt,time);
@@ -1560,14 +1568,14 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 
 void OrigDocument::nodeClear( XMLNode *xcur )
 {
-    xcur->prcInstrClear();
     xcur->attrDel("docRept");
     xcur->attrDel("docRptEnd");
     xcur->attrDel("docRevers");
     xcur->attrDel("docAMess");
 
-    for(unsigned i_c = 0; i_c < xcur->childSize(); i_c++)
-	nodeClear(xcur->childGet(i_c));
+    for(unsigned i_c = 0; i_c < xcur->childSize(); )
+	if(xcur->childGet(i_c)->name().compare(0,4,"<?dp") == 0) xcur->childDel(i_c);
+	else nodeClear(xcur->childGet(i_c++));
 }
 
 //************************************************

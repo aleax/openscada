@@ -473,7 +473,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg += (uint8_t)vmin(255,sval.size());
 	    prg += sval.substr(0,vmin(255,sval.size()));
 	    //> Load and append next parts for big string (>255)
-	    for(int i_chunk = 1; i_chunk < (sval.size()/255+((sval.size()%255)?1:0)); i_chunk++)
+	    for(unsigned i_chunk = 1; i_chunk < (sval.size()/255+((sval.size()%255)?1:0)); i_chunk++)
 	    {
 		Reg *treg = regTmpNew();
 		*treg = sval.substr(i_chunk*255,vmin(255,(sval.size()-i_chunk*255)));

@@ -691,9 +691,11 @@ void Block::cntrCmdProc( XMLNode *opt )
 			case I_GLB: case O_GLB:
 			    if(((Contr&)owner().owner().at(TSYS::strParse(lnk,0,".")).at()).blkAt(TSYS::strParse(lnk,1,".")).at().ioId(TSYS::strParse(lnk,2,".")) >= 0)
 				opt->setText(opt->text()+" (+)");
+			    break;
 			case I_PRM: case O_PRM:
 			    if(!SYS->daq().at().attrAt(lnk,'.',true).freeStat()) opt->setText(opt->text()+" (+)");
 			    break;
+			default: break;
 		    }
 		}
 		catch(TError) { }

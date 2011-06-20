@@ -3153,7 +3153,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 void ShapeDocument::nodeProcess( XMLNode *xcur, ShapeDocument::ShpDt *shD )
 {
     //> Delete process instructions
-    xcur->prcInstrClear();
+    //xcur->prcInstrClear();
 
     //> Go to include nodes
     for(unsigned i_c = 0; i_c < xcur->childSize(); )

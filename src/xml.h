@@ -50,7 +50,7 @@ class XMLNode
 	    BrOpenPast		= 0x02,		//Break after open tag
 	    BrClosePast		= 0x04,		//Break after close tag
 	    BrTextPast		= 0x08,		//Break after text
-	    BrPrcInstrPast	= 0x10,		//Break after process instruction
+	    BrSpecBlkPast	= 0x10,		//Break after special block
 	    BrAllPast		= 0x1E,		//Break after all
 	    XMLHeader		= 0x20,		//Include standard XML header
 	    XHTMLHeader		= 0x40,		//Incluse standard XHTML header
@@ -76,12 +76,6 @@ class XMLNode
 	void	attrClear( );
 	string	attr( const string &name ) const;
 	XMLNode* setAttr( const string &name, const string &val );
-
-	void	prcInstrList( vector<string> & list ) const;
-	void	prcInstrDel( const string &target );
-	void	prcInstrClear( );
-	string	prcInstr( const string &target ) const;
-	XMLNode* setPrcInstr( const string &target, const string &val );
 
 	void	load( const string &vl, bool full = false, const string &cp = "UTF-8" );
 	string	save( unsigned flgs = 0, const string &cp = "UTF-8" );
@@ -112,7 +106,6 @@ class XMLNode
 	string mText;
 	vector< XMLNode* >		mChildren;
 	vector< pair<string,string> >	mAttr;
-	vector< pair<string,string> >	mPrcInstr;
 	XMLNode *mParent;
 
 	//Data
