@@ -1,7 +1,9 @@
 2011-06-20 Roman
-- SYS.XML: Special blocks is moved to special child tag whith name "<?nm".
+- SYS.XML, UI.VCAEngine: Special blocks is moved to special child tag whith name "<?nm".
 - FIX:DAQ.BlockCalc: Global link status check is fixed.
 - DAQ.ModBus: Tip help is added to links of "Template configuration" page.
+- FIX:Archive.FSArch: Remove order to greater integer begin time for getVals() and used order to smaller.
+    Value archive file truncation is fixed for often boolean warnings.
 
 
 2011-06-17 Maxim

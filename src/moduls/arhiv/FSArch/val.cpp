@@ -665,11 +665,11 @@ int64_t ModVArchEl::begin()
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     ResAlloc res(mRes,false);
-    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( ibeg > iend ) break;
-	else if( !arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin() )
+    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
+	if(ibeg > iend) break;
+	else if(!arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin())
 	{
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (int64_t)(archivator().valPeriod()*1e6) )
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (int64_t)(archivator().valPeriod()*1e6))
 		buf.setI(EVAL_INT,ibeg);
 	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
 	    ibeg = arh_f[i_a]->end()+1;
@@ -1072,10 +1072,9 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     char *pid_b, *val_b;
 
     ResAlloc res(mRes,false);
-    if( mErr ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
+    if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
-    //> Get values block characteristic
-    beg = (beg/period()+(bool)(beg%period()))*period();
+    //> Get values block character
     vpos_beg = vmax(0,(beg-begin())/period());
     if( vpos_beg > mpos )	return;
     vpos_end = vmin(mpos,(end-begin())/period());
@@ -1250,7 +1249,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     string val_b, value, value_first, value_end;       //Set value
 
     ResAlloc res(mRes,false);
-    if( mErr ) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
+    if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
     ibeg = vmax(ibeg,begin());
     iend = vmin(iend,end());
@@ -1267,7 +1266,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //Init pack index buffer
     vpos_beg = (ibeg-begin())/period();
     vpos_end = (iend-begin())/period();
-    string pid_b( fixVl ? (vpos_end/8)-(vpos_beg/8)+1 : vSize*(vpos_end-vpos_beg+1), '\0' );
+    string pid_b(fixVl ? (vpos_end/8)-(vpos_beg/8)+1 : vSize*(vpos_end-vpos_beg+1), '\0');
 
     //Reserve memory for values buffer
     val_b.reserve(fixVl ? vSize*(vpos_end-vpos_beg+1)/2 : 10*(vpos_end-vpos_beg+1));
@@ -1355,91 +1354,89 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     res.request(true);
     //> Open archive file
     int hd = open(name().c_str(),O_RDWR);
-    if( hd <= 0 ) { mErr = true; return; }
+    if(hd <= 0) { mErr = true; return; }
 
     //> Get block geometry from file
     int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev = 0, foff_end_len, foff_end, foff_endnext_len, foff_endnext = 0;
-    if( vpos_beg )
-	foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
+    if(vpos_beg) foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
     foff_beg = calcVlOff(hd,vpos_beg,&foff_beg_len,true);
     foff_end = calcVlOff(hd,vpos_end,&foff_end_len,true);
-    if( vpos_beg < mpos )
-	foff_endnext = calcVlOff(hd,vpos_end+1,&foff_endnext_len,true);
+    if(vpos_beg < mpos) foff_endnext = calcVlOff(hd,vpos_end+1,&foff_endnext_len,true);
 
     //> Checking and adaptation border
     if(fixVl)
     {
 	//>> Check begin border
-	if( vpos_beg )
+	if(vpos_beg)
 	{
-	    if( getValue(hd,foff_begprev,vSize) == value_first )
+	    if(getValue(hd,foff_begprev,vSize) == value_first)
 	    {
 		pid_b[0] &= ~(0x01<<(vpos_beg%8));
-		if( getPkVal(hd,vpos_beg) )	foff_beg-=vSize;
+		if(getPkVal(hd,vpos_beg))	foff_beg -= vSize;
 	    }
-	    else if( !getPkVal(hd,vpos_beg) )	foff_beg+=vSize;
+	    else if(!getPkVal(hd,vpos_beg))	foff_beg += vSize;
 	}
 	//>> Check end border
-	if( vpos_end < mpos )
+	if(vpos_end < mpos)
 	{
-	    if( getValue(hd,foff_endnext,vSize) == value_end )
+	    if(getValue(hd,foff_endnext,vSize) == value_end)
 	    {
-		if( getPkVal(hd,vpos_end+1) )
+		if(getPkVal(hd,vpos_end+1))
 		{
-		    foff_end+=2*vSize;
-		    setPkVal(hd,vpos_end+1,0);
+		    foff_end += 2*vSize;
+		    setPkVal(hd, vpos_end+1, 0);
 		}
-		else foff_end+=vSize;
+		else foff_end += vSize;
 	    }
 	    else
 	    {
-		if( getPkVal(hd,vpos_end+1) ) foff_end+=vSize;
-		else setPkVal(hd,vpos_end+1,1);
+		if(getPkVal(hd,vpos_end+1)) foff_end += vSize;
+		else setPkVal(hd,vpos_end+1, 1);
 	    }
 	}
 	//>> Merge begin and end pack values
  	char tmp_pb;
-	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
-	read(hd,&tmp_pb,1);
+	lseek(hd, sizeof(FHead)+vpos_beg/8, SEEK_SET);
+	read(hd, &tmp_pb, 1);
 	pid_b[0] |= (~(0xFF<<(vpos_beg%8)))&tmp_pb;
-	lseek(hd,sizeof(FHead)+vpos_end/8,SEEK_SET);
-	read(hd,&tmp_pb,1);
+	lseek(hd, sizeof(FHead)+vpos_end/8, SEEK_SET);
+	read(hd, &tmp_pb, 1);
 	pid_b[vpos_end/8-vpos_beg/8] |= (0xFE<<(vpos_end%8))&tmp_pb;
     }
     else
     {
 	//>> Check begin border
-	if( vpos_beg )
+	if(vpos_beg)
 	{
-	    if( getValue(hd,foff_begprev,foff_begprev_len) == value_first )
+	    if(getValue(hd,foff_begprev,foff_begprev_len) == value_first)
 	    {
-		for( int i_sz = 0; i_sz < vSize; i_sz++ ) pid_b[i_sz] = 0;
-		if( getPkVal(hd,vpos_beg) )	foff_beg-=foff_begprev_len;
+		for(int i_sz = 0; i_sz < vSize; i_sz++) pid_b[i_sz] = 0;
+		if(getPkVal(hd,vpos_beg))	foff_beg -= foff_begprev_len;
 	    }
-	    else if( !getPkVal(hd,vpos_beg) ) foff_beg+=foff_begprev_len;
+	    else if(!getPkVal(hd,vpos_beg)) foff_beg += foff_begprev_len;
 	}
 	//>> Check end border
-	if( vpos_end < mpos )
+	if(vpos_end < mpos)
 	{
-	    if( getValue(hd,foff_endnext,foff_endnext_len) == value_end )
+	    if(getValue(hd,foff_endnext,foff_endnext_len) == value_end)
 	    {
-		if( getPkVal(hd,vpos_end+1) )
+		if(getPkVal(hd,vpos_end+1))
 		{
-		    foff_end+=foff_end_len+foff_endnext_len;
+		    foff_end += foff_end_len+foff_endnext_len;
 		    setPkVal(hd,vpos_end+1,0);
 		}
-		else foff_end+=foff_end_len;
+		else foff_end += foff_end_len;
 	    }
 	    else
 	    {
-		if( getPkVal(hd,vpos_end+1) ) foff_end+=foff_end_len;
+		if(getPkVal(hd,vpos_end+1)) foff_end += foff_end_len;
 		else setPkVal(hd,vpos_end+1,foff_endnext_len);
 	    }
 	}
     }
     //> Write pack id buffer and value buffer
     int pid_b_sz;
-    if( fixVl )
+    if(fixVl)
     {
 	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
 	pid_b_sz = vpos_end/8 - vpos_beg/8 + 1;
@@ -1577,14 +1574,14 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 {
     char buf[STR_BUF_LEN];
 
-    if( old_st == new_st ) return;
-    if( new_st > old_st )
+    if(old_st == new_st) return;
+    if(new_st > old_st)
     {
 	//> Move down (insert)
 	int beg_cur;
 	int mv_beg = old_st;
 	int mv_end = lseek(hd,0,SEEK_END);
-	if( mv_end <= mv_beg )	return;
+	if(mv_end <= mv_beg)	return;
 	do
 	{
 	    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
@@ -1594,7 +1591,7 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	    write(hd,buf,mv_end-beg_cur);
 	    mv_end-=sizeof(buf);
 	}
-	while(beg_cur!=mv_beg);
+	while(beg_cur != mv_beg);
     }
     else
     {
@@ -1602,17 +1599,19 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	int end_cur;
 	int mv_beg = old_st;
 	int mv_end = lseek(hd,0,SEEK_END);
-	if( mv_end <= mv_beg )	return;
-	do
+	if(mv_end > mv_beg)
 	{
-	    end_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_beg+sizeof(buf) : mv_end;
-	    lseek(hd,mv_beg,SEEK_SET);
-	    read(hd,buf,end_cur-mv_beg);
-	    lseek(hd,mv_beg-(old_st-new_st),SEEK_SET);
-	    write(hd,buf,end_cur-mv_beg);
-	    mv_beg+=sizeof(buf);
+	    do
+	    {
+		end_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_beg+sizeof(buf) : mv_end;
+		lseek(hd,mv_beg,SEEK_SET);
+		read(hd,buf,end_cur-mv_beg);
+		lseek(hd,mv_beg-(old_st-new_st),SEEK_SET);
+		write(hd,buf,end_cur-mv_beg);
+		mv_beg += sizeof(buf);
+	    }
+	    while(end_cur != mv_end);
 	}
-	while(end_cur!=mv_end);
 
 	//> Truncate tail
 	ftruncate(hd,mv_end-(old_st-new_st));
@@ -1664,12 +1663,12 @@ void VFileArch::repairFile( int hd, bool fix )
     int v_sz;
     if(!mPack)
     {
-	int f_sz = lseek(hd,0,SEEK_END);
-	int f_off = calcVlOff(hd,mpos,&v_sz);
+	int f_sz = lseek(hd, 0, SEEK_END);
+	int f_off = calcVlOff(hd, mpos, &v_sz);
 	if(fixVl)
 	{
 	    int dt = f_sz-f_off-vSize;
-	    if(!dt)	return;
+	    if(!dt) return;
 	    mess_err(owner().archivator().nodePath().c_str(),
 		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
 	    //> Fix file

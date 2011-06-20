@@ -1120,12 +1120,12 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
 void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch, int limit, bool onlyLocal )
 {
     //> Get from buffer
-    if( (arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend) )
+    if((arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend))
     {
 	ibeg = vmax(ibeg,iend-TValBuf::period()*limit);
 	TValBuf::getVals(buf,ibeg,iend);
 	iend = buf.begin()-1;
-	if( arch == BUF_ARCH_NM ) return;
+	if(arch == BUF_ARCH_NM) return;
     }
 
     //> Get from archivators
@@ -1135,8 +1135,8 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend)
 	{
 	    //> Local request to data
-	    if( !buf.size() )
-		ibeg = vmax(ibeg,iend-(int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
+	    if(!buf.size())
+		ibeg = vmax(ibeg,iend-(int64_t)(1e6*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
 	    arch_el[i_a]->getVals(buf,ibeg,iend,onlyLocal);
 	    iend = buf.begin()-1;
 	}
@@ -2018,7 +2018,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD))
     {
 	int64_t end = (int64_t)atoi(TBDS::genDBGet(owner().nodePath()+"vaTm","0",opt->attr("user")).c_str())*1000000;
-	if( !(end/1000000) ) end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000)) end = (int64_t)time(NULL) * 1000000;
 	end += atoi(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")).c_str());
 	int64_t beg = end - (int64_t)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 
