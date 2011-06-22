@@ -1,3 +1,7 @@
+2011-06-22 Roman
+- SYS: The function SYS.system() is added to user API. Repeated send signal SIGALRM is added in function taskDestroy().
+
+
 2011-06-20 Roman
 - SYS.XML, UI.VCAEngine: Special blocks is moved to special child tag whith name "<?nm".
 - FIX:DAQ.BlockCalc: Global link status check is fixed.

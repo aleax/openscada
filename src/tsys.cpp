@@ -1184,22 +1184,42 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, int wtm )
 {
-    ResAlloc res(taskRes,false);
+    ResAlloc res(taskRes, false);
     map<string,STask>::iterator it = mTasks.find(path);
-    if( it == mTasks.end() )	return;//throw TError(nodePath().c_str(),_("Task '%s' is not present!"),path.c_str());
+    if(it == mTasks.end()) return;
     pthread_t thr = it->second.thr;
     res.release();
 
-    if( endrunCntr ) *endrunCntr = true;
-    pthread_kill( thr, SIGALRM );
+    if(endrunCntr) *endrunCntr = true;
+    pthread_kill(thr, SIGALRM);
 
-    if( startCntr && TSYS::eventWait( *startCntr, false, nodePath()+": "+path+": stop", wtm ) )
-	throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
+    //> Wait for task stop and SIGALRM send repeat
+    time_t t_tm, s_tm;
+    t_tm = s_tm = time(NULL);
+    while(*startCntr)
+    {
+        pthread_kill(thr, SIGALRM);
+	time_t c_tm = time(NULL);
+        //Check timeout
+        if(wtm && (c_tm > (s_tm+wtm)))
+        {
+            mess_crit((nodePath()+": "+path+": stop").c_str(),_("Timeouted !!!"));
+	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
+        }
+	//Make messages
+        if(c_tm > t_tm+1)  //1sec
+        {
+            t_tm = c_tm;
+            mess_info((nodePath()+": "+path+": stop").c_str(),_("Wait event..."));
 
-    pthread_join( thr, NULL );
+        }
+        usleep(STD_WAIT_DELAY*1000);
+    }
+
+    pthread_join(thr, NULL);
 
     res.request(true);
-    mTasks.erase( it );
+    mTasks.erase(it);
 }
 
 void *TSYS::taskWrap( void *stas )
@@ -1401,24 +1421,24 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  cat - message category
     //  level - message level
     //  mess - message text
-    if( iid == "message" && prms.size() >= 3 )	{ message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() ); return 0; }
+    if(iid == "message" && prms.size() >= 3)	{ message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() ); return 0; }
     // int messDebug(string cat, string mess) - formation of the system message <mess> with the category <cat> and the appropriate level
     //  cat - message category
     //  mess - message text
-    if( iid == "messDebug" && prms.size() >= 2 ){ mess_debug( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messInfo" && prms.size() >= 2 )	{ mess_info( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messNote" && prms.size() >= 2 )	{ mess_note( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messWarning" && prms.size() >= 2 )	{ mess_warning( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messErr" && prms.size() >= 2 )	{ mess_err( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messCrit" && prms.size() >= 2 )	{ mess_crit( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messAlert" && prms.size() >= 2 ){ mess_alert( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if( iid == "messEmerg" && prms.size() >= 2 ){ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messInfo" && prms.size() >= 2)	{ mess_info( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messNote" && prms.size() >= 2)	{ mess_note( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messWarning" && prms.size() >= 2){ mess_warning( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messErr" && prms.size() >= 2)	{ mess_err( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
     // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
-    if( iid == "system" && prms.size() >= 1 )
+    if(iid == "system" && prms.size() >= 1)
     {
-	if( prms.size() >= 2 && prms[1].getB() ) return system( prms[0].getS().c_str() );
+	if(prms.size() >= 2 && prms[1].getB()) return system(prms[0].getS().c_str());
 	FILE *fp = popen(prms[0].getS().c_str(),"r");
 	if( !fp ) return string("");
 
@@ -1428,6 +1448,17 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    rez.append(buf,r_cnt);
 
 	pclose(fp);
+	return rez;
+    }
+    // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
+    //  tm - wait time in seconds
+    //  ntm - wait time part in nanoseconds
+    if(iid == "sleep" && prms.size() >= 1)
+    {
+	struct timespec sp_tm;
+	sp_tm.tv_sec = prms[0].getI();
+	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
+	int rez = clock_nanosleep(CLOCK_REALTIME,0,&sp_tm,NULL);
 	return rez;
     }
     // string fileRead( string file ) - Return <file> content by string.
