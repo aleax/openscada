@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-15 09:15+0300\n"
+"POT-Creation-Date: 2011-06-22 13:17+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -746,15 +746,6 @@ msgstr "Параметры"
 msgid "To add parameters"
 msgstr "Добавлять параметры"
 
-msgid "<High level>"
-msgstr "<Высокий уровень>"
-
-msgid "<Low level>"
-msgstr "<Низкий уровень>"
-
-msgid "<Optimal>"
-msgstr "<Оптимально>"
-
 msgid "Data acquisition"
 msgstr "Сбор данных"
 
@@ -880,6 +871,15 @@ msgstr "Затрачено времени: %s."
 
 msgid "<newStat>"
 msgstr "<новаяСтанц>"
+
+msgid "<High level>"
+msgstr "<Высокий уровень>"
+
+msgid "<Low level>"
+msgstr "<Низкий уровень>"
+
+msgid "<Optimal>"
+msgstr "<Оптимально>"
 
 msgid "Id error!"
 msgstr "Ошибка идентификатора!"
@@ -1240,8 +1240,8 @@ msgstr "Шаблон параметра: "
 msgid "Template"
 msgstr "Шаблон"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Вещественный;Целый;Логический;Строка"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Вещественный;Целый;Логический;Строка;Объект"
 
 msgid "Input;Output"
 msgstr "Вход;Выход"

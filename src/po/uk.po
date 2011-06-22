@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-15 09:15+0300\n"
+"POT-Creation-Date: 2011-06-22 13:17+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -745,15 +745,6 @@ msgstr "Параметри"
 msgid "To add parameters"
 msgstr "Додавати параметри"
 
-msgid "<High level>"
-msgstr "<Високий рівень>"
-
-msgid "<Low level>"
-msgstr "<Низький рівень>"
-
-msgid "<Optimal>"
-msgstr "<Оптимально>"
-
 msgid "Data acquisition"
 msgstr "Збір даних"
 
@@ -877,6 +868,15 @@ msgstr "Витрачено часу: %s."
 
 msgid "<newStat>"
 msgstr "<новСтанц>"
+
+msgid "<High level>"
+msgstr "<Високий рівень>"
+
+msgid "<Low level>"
+msgstr "<Низький рівень>"
+
+msgid "<Optimal>"
+msgstr "<Оптимально>"
 
 msgid "Id error!"
 msgstr "Помилка ідентифікатору!"
@@ -1237,8 +1237,8 @@ msgstr "Шаблон параметра: "
 msgid "Template"
 msgstr "Шаблон"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Реальний;Цілий;Логічний;Строка"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Реальний;Цілий;Логічний;Строка;Об'єкт"
 
 msgid "Input;Output"
 msgstr "Вхід;Вихід"

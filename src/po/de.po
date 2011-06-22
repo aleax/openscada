@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-15 09:15+0300\n"
+"POT-Creation-Date: 2011-06-22 13:17+0300\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -756,15 +756,6 @@ msgstr "Parameter"
 msgid "To add parameters"
 msgstr "Parameter hinzufügen"
 
-msgid "<High level>"
-msgstr "<Hohes Niveau>"
-
-msgid "<Low level>"
-msgstr "<Niedriges Niveau>"
-
-msgid "<Optimal>"
-msgstr "<Optimal>"
-
 msgid "Data acquisition"
 msgstr "Datenerfassung"
 
@@ -892,6 +883,15 @@ msgstr "Verbrauchte Zeit: %s."
 
 msgid "<newStat>"
 msgstr "<neueStation>"
+
+msgid "<High level>"
+msgstr "<Hohes Niveau>"
+
+msgid "<Low level>"
+msgstr "<Niedriges Niveau>"
+
+msgid "<Optimal>"
+msgstr "<Optimal>"
 
 msgid "Id error!"
 msgstr "Fehler des Bezeichners!"
@@ -1254,8 +1254,8 @@ msgstr "Parametervorlage: "
 msgid "Template"
 msgstr "Vorlage"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Reele Zahl;Ganzzahl;Logisch;Text"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Reele Zahl;Ganzzahl;Logisch;Text;Objekt"
 
 msgid "Input;Output"
 msgstr "Eingang;Ausgang"
