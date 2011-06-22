@@ -1450,17 +1450,6 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	pclose(fp);
 	return rez;
     }
-    // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
-    //  tm - wait time in seconds
-    //  ntm - wait time part in nanoseconds
-    if(iid == "sleep" && prms.size() >= 1)
-    {
-	struct timespec sp_tm;
-	sp_tm.tv_sec = prms[0].getI();
-	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
-	int rez = clock_nanosleep(CLOCK_REALTIME,0,&sp_tm,NULL);
-	return rez;
-    }
     // string fileRead( string file ) - Return <file> content by string.
     if( iid == "fileRead" && prms.size() >= 1 )
     {
@@ -1514,6 +1503,17 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
 	return string("0");
+    }
+    // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
+    //  tm - wait time in seconds
+    //  ntm - wait time part in nanoseconds
+    if(iid == "sleep" && prms.size() >= 1)
+    {
+	struct timespec sp_tm;
+	sp_tm.tv_sec = prms[0].getI();
+	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
+	int rez = clock_nanosleep(CLOCK_REALTIME,0,&sp_tm,NULL);
+	return rez;
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time

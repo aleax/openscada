@@ -1,5 +1,5 @@
 2011-06-22 Roman
-- SYS: The function SYS.system() is added to user API. Repeated send signal SIGALRM is added in function taskDestroy().
+- SYS: The function SYS.sleep() is added to user API. Repeated send signal SIGALRM is added in function taskDestroy().
 - DAQ: Object type selection is added to templates.
 
 
