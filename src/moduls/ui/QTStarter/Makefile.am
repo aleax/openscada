@@ -2,13 +2,13 @@
 
 EXTRA_DIST = *.h qtstarter.qrc images/* po/*
 
-INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
+INCLUDES = -I$(top_srcdir)/src $(QT4_INCL)
 
 oscd_modul_LTLIBRARIES = ui_QTStarter.la
 ui_QTStarter_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_la_DIST = tuimod.cpp qtstarter.qrc
-ui_QTStarter_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui
+ui_QTStarter_la_LIBADD = $(QT4_LIB)
 ui_QTStarter_la_LIBTOOLFLAGS = --tag=disable-static
 
 qrc_qtstarter.cpp: qtstarter.qrc

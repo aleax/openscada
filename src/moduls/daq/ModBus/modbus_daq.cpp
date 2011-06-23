@@ -214,7 +214,7 @@ void TMdContr::start_( )
     }
 
     //> Start the gathering data task
-    SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
+    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
 }
 
 void TMdContr::stop_( )
@@ -1009,6 +1009,7 @@ void TMdPrm::enable()
 void TMdPrm::disable()
 {
     if(!enableStat())  return;
+
     owner().prmEn(id(), false);  //Remove from process
     if(lCtx && owner().startStat()) upVal(false, true, 0);
 

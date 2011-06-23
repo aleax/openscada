@@ -523,18 +523,10 @@ if test ${QT4use} = true; then
 	   QT4_RCC="${QT4_DIR}/bin/rcc";
          else AC_MSG_ERROR([QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package.]); fi;
     fi;
-    if test -d "${oldincludedir}/qt4/QtCore"; then QT4_INCL="${oldincludedir}/qt4";
-    elif test -d "${oldincludedir}/QtCore"; then QT4_INCL="${oldincludedir}";
-    elif test -d "${QT4_DIR}/include/QtCore"; then QT4_INCL="${QT4_DIR}/include"; fi
-    if test -z ${QT4_INCL}; then AC_MSG_ERROR([QT4 development, include files no present (into directory ${QT4_DIR})! Install QT4 library development package.]); fi
-    if test $target_cpu == "x86_64"; then QT4_LIB="${QT4_DIR}/lib64"; else QT4_LIB="${QT4_DIR}/lib"; fi
+    QT4_INCL="$(pkg-config --cflags QtGui)"
+    QT4_LIB="$(pkg-config --libs QtGui)"
     AC_SUBST(QT4_INCL)
     AC_SUBST(QT4_LIB)
-#--- Modules checkings ---
-#    AC_CHECK_HEADERS([qt4/QtCore/Qt],[],
-#	[AC_MSG_ERROR(UI.QTCfg: Some QT4 library headers not found. Install or check of QT4 developing package!)])
-#    AC_CHECK_LIB([QtGui],[QApplication::QApplication],[AC_MSG_NOTICE(Pass global library using)],
-#	[AC_MSG_ERROR(UI.QTCfg: QT4 library not found. Install or check QT4 library package!)])
 fi
 
 if test ${FFTWuse} = true; then

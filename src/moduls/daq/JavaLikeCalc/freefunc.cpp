@@ -1696,7 +1696,7 @@ void Func::calc( TValFunc *val )
     }
 
     //> Exec calc
-    ExecData dt = { 1, 0, 0 };
+    ExecData dt = { 1, time(NULL), 0 };
     try{ exec(val,reg,(const uint8_t*)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     res.release();
@@ -1704,16 +1704,15 @@ void Func::calc( TValFunc *val )
 
 void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 {
-    while( !(dt.flg&0x01) )
+    while(!(dt.flg&0x01))
     {
 	//> Calc time control mechanism
-	if(!((dt.com_cnt++)%1000))
+	if(!((dt.com_cnt++)%10))
 	{
-	    if(!dt.start_tm)	dt.start_tm = time(NULL);
-	    else if(time(NULL) > dt.start_tm+max_calc_tm)
+	    if(time(NULL) > (dt.start_tm+max_calc_tm))
 	    {
 		mess_err(nodePath().c_str(),_("Timeouted function calc."));
-		dt.flg|=0x01;
+		dt.flg |= 0x01;
 		return;
 	    }
 	}

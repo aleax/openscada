@@ -2,13 +2,13 @@
 
 EXTRA_DIST = *.h qtcfg.qrc images/* po/*
 
-INCLUDES = -I$(top_srcdir)/src -I$(QT4_INCL) -I$(QT4_INCL)/QtCore -I$(QT4_INCL)/QtGui -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
+INCLUDES = -I$(top_srcdir)/src $(QT4_INCL)
 
 oscd_modul_LTLIBRARIES = ui_QTCfg.la
 ui_QTCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
 ui_QTCfg_la_DIST = tuimod.cpp qtcfg.cpp selfwidg.cpp qtcfg.qrc
-ui_QTCfg_la_LIBADD = -L$(QT4_LIB) -lQtCore -lQtGui
+ui_QTCfg_la_LIBADD = $(QT4_LIB)
 ui_QTCfg_la_LIBTOOLFLAGS = --tag=disable-static
 
 qrc_qtcfg.cpp: qtcfg.qrc
