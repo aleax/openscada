@@ -105,7 +105,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mSched(cfg("SCHEDULE").getSd()),
     mAddr(cfg("ADDR").getSd()), mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()),
     mSecMessMode(cfg("SecMessMode").getId()), mPAttrLim(cfg("AttrsLimit").getId()),
-    prc_st(false), endrun_req(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
+    prc_st(false), call_st(false), endrun_req(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -123,7 +123,7 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
 
-    if(startStat( ) && !redntUse())
+    if(startStat() && !redntUse())
     {
 	if(tmDelay > -1)
 	{
@@ -132,10 +132,11 @@ string TMdContr::getStatus( )
 	}
 	else
 	{
-	    if( period() ) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."),TSYS::time2str(tm_gath).c_str(),-tmDelay);
-	    if( servSt ) rez.replace(0,1,TSYS::strMess("0x%x",servSt));
+	    if(servSt) rez.replace(0,1,TSYS::strMess("0x%x",servSt));
 	}
     }
     return rez;
@@ -347,6 +348,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0){ usleep(1000000); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    int64_t t_cnt = TSYS::curTime();
+	    cntr.call_st = true;
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.mSync/(1e-9*cntr.period())) : 0;
 
 	    ResAlloc res(cntr.en_res,false);
@@ -405,6 +407,7 @@ void *TMdContr::Task( void *icntr )
 
 	    firstCall = false;
 	    cntr.tm_gath = TSYS::curTime()-t_cnt;
+	    cntr.call_st = false;
 
 	    TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
 	}

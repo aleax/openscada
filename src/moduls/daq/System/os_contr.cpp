@@ -171,7 +171,7 @@ DA *TTpContr::daGet( const string &da )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
     mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()),  mSched(cfg("SCHEDULE").getSd()),
-    prc_st(false), endrun_req(false), tm_calc(0.0)
+    prc_st(false), call_st(false), endrun_req(false), tm_calc(0.0)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
@@ -186,7 +186,8 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse())
     {
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
@@ -257,10 +258,11 @@ void *TMdContr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while( !cntr.endrun_req )
+    while(!cntr.endrun_req)
     {
-	if( !cntr.redntUse( ) )
+	if(!cntr.redntUse())
 	{
+	    cntr.call_st = true;
 	    //> Update controller's data
 	    try
 	    {
@@ -274,6 +276,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.tm_calc = TSYS::curTime()-t_cnt;
 	    } catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+	    cntr.call_st = false;
 	}
 
 	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));

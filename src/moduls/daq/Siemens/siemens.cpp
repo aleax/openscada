@@ -483,7 +483,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), mSched(cfg("SCHEDULE").getSd()),
 	mAddr(cfg("ADDR").getSd()), mAssincWR(cfg("ASINC_WR").getBd()),
-	prc_st(false), endrun_req(false), di(NULL), dc(NULL), tm_calc(0)
+	prc_st(false), call_st(false), endrun_req(false), di(NULL), dc(NULL), tm_calc(0)
 {
     cfg("PRM_BD").setS("SiemensPrm_"+name_c);
 }
@@ -514,7 +514,8 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse())
     {
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
@@ -1241,6 +1242,7 @@ void *TMdContr::Task( void *icntr )
 
     while(true)
     {
+	cntr.call_st = true;
 	t_cnt = TSYS::curTime();
 
 	//> Update controller's data
@@ -1277,6 +1279,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.nodeRes().resRelease();
 	t_prev = t_cnt;
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
+	cntr.call_st = false;
 
 	if(is_stop) break;
 

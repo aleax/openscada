@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-31 16:56+0300\n"
+"POT-Creation-Date: 2011-06-24 10:20+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -178,6 +178,9 @@ msgstr "Standard"
 
 msgid "System part"
 msgstr "Systemteil"
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "

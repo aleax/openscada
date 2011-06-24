@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 12:47+0300\n"
+"POT-Creation-Date: 2011-06-24 10:08+0300\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -71,6 +71,10 @@ msgstr "Slot des Moduls"
 msgid "Module addon parameters"
 msgstr "Zusätzliche Parameter des Moduls"
 
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
+
+#, c-format
 msgid "Spent time: %s. Serial requests %g, errors %g. "
 msgstr "Verbrauchte Zeit: %s. Konsequente Anfragen %g, Fehler %g. "
 

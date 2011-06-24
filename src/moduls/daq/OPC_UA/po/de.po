@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-31 12:12+0300\n"
+"POT-Creation-Date: 2011-06-24 10:13+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -70,6 +70,9 @@ msgstr "Wurzeldirektorie (84)"
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "

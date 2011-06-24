@@ -1,3 +1,7 @@
+2011-06-24 Roman
+- DAQ.*: Call now status is added to all DAQ-modules.
+
+
 2011-06-23 Roman
 - SYS, UI.QTStarter, UI.QTCfg, UI.Vision: Use pkg-config for QT4 build configuration determine.
 - SYS.Function: Split resources of execute and manage connection to function.

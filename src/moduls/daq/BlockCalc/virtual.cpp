@@ -152,7 +152,7 @@ TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 //* Contr - Blocks and parameters container      *
 //************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), sync_st(false),
+    ::TController(name_c, daq_db, cfgelem), prc_st(false), call_st(false), endrun_req(false), sync_st(false),
     mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()),
     tm_calc(0)
 {
@@ -197,7 +197,8 @@ string Contr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse())
     {
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
@@ -355,6 +356,7 @@ void *Contr::Task( void *icontr )
     while(true)
     {
 	//Check calk time
+	cntr.call_st = true;
 	t_cnt = TSYS::curTime();
 
 	cntr.hd_res.resRequestR( );
@@ -380,6 +382,7 @@ void *Contr::Task( void *icontr )
 
 	t_prev = t_cnt;
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
+	cntr.call_st = false;
 
 	if(is_stop) break;
 

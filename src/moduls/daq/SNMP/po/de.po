@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-31 12:20+0300\n"
+"POT-Creation-Date: 2011-06-24 10:16+0300\n"
 "PO-Revision-Date: 2009-08-18 09:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -66,6 +66,9 @@ msgstr "Standard"
 
 msgid "OID list (next line separated)"
 msgstr "OID-Liste (Trennung in neuer Zeile)"
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "

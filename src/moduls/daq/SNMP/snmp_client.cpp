@@ -131,7 +131,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
     m_prior(cfg("PRIOR").getId()), m_pattr_lim(cfg("PATTR_LIM").getId()), m_retr(cfg("RETR").getId()), m_tm(cfg("TM").getId()),
     mSched(cfg("SCHEDULE").getSd()), m_addr(cfg("ADDR").getSd()), m_ver(cfg("VER").getSd()), m_comm(cfg("COMM").getSd()),
-    m_V3(cfg("V3").getSd()), prc_st(false), endrun_req(false), tm_gath(0)
+    m_V3(cfg("V3").getSd()), prc_st(false), call_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
@@ -149,7 +149,8 @@ string TMdContr::getStatus( )
 	if(!acq_err.getVal().empty())	rez = acq_err.getVal();
 	else
 	{
-	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
             else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
             rez += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
         }
@@ -333,6 +334,7 @@ void *TMdContr::Task(void *icntr)
 
     while(!cntr.endrun_req)
     {
+	cntr.call_st = true;
 	int64_t t_cnt = TSYS::curTime();
 
 	//>> Update controller's data
@@ -476,6 +478,7 @@ void *TMdContr::Task(void *icntr)
 	    catch(TError err) { daqerr = err.mess; }
 	cntr.en_res.resRelease();
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
+	cntr.call_st = false;
 
 	cntr.acq_err.setVal(daqerr);
 

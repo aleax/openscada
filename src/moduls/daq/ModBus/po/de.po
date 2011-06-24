@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-18 19:04+0300\n"
+"POT-Creation-Date: 2011-06-24 09:45+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -85,6 +85,9 @@ msgstr "Wert"
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "

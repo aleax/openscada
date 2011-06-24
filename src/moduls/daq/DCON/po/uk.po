@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-31 11:25+0300\n"
+"POT-Creation-Date: 2011-06-24 10:02+0300\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -123,6 +123,9 @@ msgstr "Метод CI"
 
 msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr "Немає CI;2CI (#AA);3CI (#AA)"
+
+msgid "Call now. "
+msgstr "Виклик зараз. "
 
 #, c-format
 msgid "Call by period: %s. "

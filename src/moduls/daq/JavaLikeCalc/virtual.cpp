@@ -347,7 +347,7 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //* Contr: Controller object                      *
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), endrun_req(false),
+    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), call_st(false), endrun_req(false),
     mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()), mFnc(cfg("FUNC").getSd()),
     id_freq(-1), id_start(-1), id_stop(-1), tm_calc(0)
 {
@@ -382,7 +382,8 @@ string Contr::getStatus( )
 
     if(startStat() && !redntUse())
     {
-	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+        if(call_st)	val += TSYS::strMess(_("Call now. "));
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_calc).c_str());
     }
@@ -523,6 +524,7 @@ void *Contr::Task( void *icntr )
     {
 	if(!cntr.redntUse())
 	{
+	    cntr.call_st = true;
 	    t_cnt = TSYS::curTime();
 	    //> Setting special IO
 	    if(cntr.id_freq >= 0) cntr.setR(cntr.id_freq, cntr.period()?((float)cntr.iterate()*1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
@@ -538,6 +540,7 @@ void *Contr::Task( void *icntr )
 		}
 	    t_prev = t_cnt;
             cntr.tm_calc = TSYS::curTime()-t_cnt;
+            cntr.call_st = false;
 	}
 
 	if(is_stop) break;

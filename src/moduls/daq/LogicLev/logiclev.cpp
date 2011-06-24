@@ -128,7 +128,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
     mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE").getSd()),
-    prc_st(false), endrun_req(false), tm_calc(0)
+    prc_st(false), call_st(false), endrun_req(false), tm_calc(0)
 {
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
     cfg("PRM_BD_REFL").setS("LogLevPrmRefl_"+name_c);
@@ -160,7 +160,8 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse())
     {
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
@@ -235,6 +236,7 @@ void *TMdContr::Task( void *icntr )
 	//> Update controller's data
 	if(!cntr.redntUse())
 	{
+	    cntr.call_st = true;
 	    t_cnt = TSYS::curTime();
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
@@ -244,6 +246,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.en_res.resRelease();
 	    t_prev = t_cnt;
 	    cntr.tm_calc = TSYS::curTime()-t_cnt;
+	    cntr.call_st = false;
 	}
 
 	if(is_stop) break;

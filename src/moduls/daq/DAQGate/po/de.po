@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-13 18:33+0300\n"
+"POT-Creation-Date: 2011-06-24 09:58+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -67,6 +67,9 @@ msgstr "Standard"
 
 msgid "Attributes configuration cache"
 msgstr "Attribute-Cache-Konfiguration"
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-26 09:36+0300\n"
+"POT-Creation-Date: 2011-06-24 09:54+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -186,6 +186,9 @@ msgstr "Verbindung"
 
 msgid "Link's value"
 msgstr "Verbindungswert"
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "

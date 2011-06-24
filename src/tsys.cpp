@@ -1440,11 +1440,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     {
 	if(prms.size() >= 2 && prms[1].getB()) return system(prms[0].getS().c_str());
 	FILE *fp = popen(prms[0].getS().c_str(),"r");
-	if( !fp ) return string("");
+	if(!fp) return string("");
 
 	char buf[STR_BUF_LEN];
 	string rez;
-	for( int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)); )
+	for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)); )
 	    rez.append(buf,r_cnt);
 
 	pclose(fp);

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-31 16:47+0300\n"
+"POT-Creation-Date: 2011-06-24 09:50+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -36,11 +36,11 @@ msgstr "Таблица параметров"
 msgid "Request data period (ms)"
 msgstr "Период получения данных (мс)"
 
-msgid "Request task priority"
-msgstr "Уровень приоритета задачи получения данных"
-
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
+
+msgid "Request task priority"
+msgstr "Уровень приоритета задачи получения данных"
 
 msgid "Asynchronous write mode"
 msgstr "Асинхронный режим записи"
@@ -202,6 +202,9 @@ msgstr " : Активная станция"
 
 msgid " : Passive station"
 msgstr " : Пассивная станция"
+
+msgid "Call now. "
+msgstr "Вызов сейчас. "
 
 #, c-format
 msgid "Call by period: %s. "

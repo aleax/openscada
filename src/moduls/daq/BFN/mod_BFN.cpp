@@ -338,7 +338,7 @@ string TMdContr::getStatus( )
 	    rez.replace(0,1,"10");
 	}
 	//> Display processing
-        if(acq_st) rez += TSYS::strMess(_("Call now. "),tm_gath);
+        if(acq_st) rez += TSYS::strMess(_("Call now. "));
         //> Display schedule
 	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());

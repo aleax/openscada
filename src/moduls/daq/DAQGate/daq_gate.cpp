@@ -121,7 +121,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mPer(cfg("PERIOD").getRd()), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     mSched(cfg("SCHEDULE").getSd()), mStations(cfg("STATIONS").getSd()), mContrPrm(cfg("CNTRPRM").getSd()),
-    prcSt(false), endrunReq(false), tmGath(0)
+    prcSt(false), call_st(false), endrunReq(false), tmGath(0)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -137,7 +137,8 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse())
     {
-	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(call_st)	val += TSYS::strMess(_("Call now. "));
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tmGath).c_str());
 	bool isWork = false;
@@ -298,6 +299,7 @@ void *TMdContr::Task( void *icntr )
     {
 	if(cntr.redntUse()) { usleep(STD_WAIT_DELAY*1000); continue; }
 
+	cntr.call_st = true;
 	t_cnt = TSYS::curTime();
 
 	try
@@ -437,6 +439,7 @@ void *TMdContr::Task( void *icntr )
 	//> Calc acquisition process time
 	t_prev = t_cnt;
 	cntr.tmGath = TSYS::curTime()-t_cnt;
+	cntr.call_st = false;
 
 	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
     }

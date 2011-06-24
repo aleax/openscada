@@ -153,6 +153,7 @@ class TMdContr: public TController
 		&mContrPrm;			//Transported remote cotrollers and parameters list
 
 	bool	prcSt,				//Process task active
+		call_st,        		//Calc now stat
 		endrunReq;			//Request to stop of the Process task
 	vector< pair<string,float> > mStatWork;	//Work stations and it status
 

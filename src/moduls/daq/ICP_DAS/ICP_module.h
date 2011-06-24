@@ -154,6 +154,7 @@ class TMdContr: public TController
 	ResString &mLPprms;			//LinPAC parameters
 
 	bool	prcSt,				//Process task active
+		call_st,        		//Calc now stat
 		endRunReq;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
 

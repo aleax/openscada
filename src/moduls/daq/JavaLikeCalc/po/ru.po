@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-28 16:37+0300\n"
+"POT-Creation-Date: 2011-06-24 09:26+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -20,9 +20,6 @@ msgstr ""
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Переменная '%s' не определена но использована"
-
-msgid "String constant size is more 255 symbols."
-msgstr "Размер строковой постоянной более 255 символов."
 
 msgid "Array have more 255 items."
 msgstr "Массив имеет более 255 элементов."
@@ -48,23 +45,6 @@ msgstr "Нет объектной переменной для функции"
 msgid "Object's function have more 255 parameters."
 msgstr "Функция объекта имеет более 255 параметров."
 
-#, c-format
-msgid "Boolean type have not function '%s' or not enough parameters for it."
-msgstr ""
-"Логический тип не имеет функции '%s' или не достаточно параметров для неё."
-
-#, c-format
-msgid ""
-"Integer or real type have not function '%s' or not enough parameters for it."
-msgstr ""
-"Целочисленный или вещественный тип не имеет функции '%s' или не достаточно "
-"параметров для неё."
-
-#, c-format
-msgid "String type have not properties '%s' or not enough parameters for it."
-msgstr ""
-"Строковый тип не имеет свойства '%s' или не достаточно параметров для неё."
-
 msgid "Get object from no object's register"
 msgstr "Получение объекта из не объектного регистра"
 
@@ -74,15 +54,15 @@ msgstr "Исчерпано предельное время вычисления 
 msgid "Not supported type for operation 'Add'."
 msgstr "Не поддерживаемый тип для операции 'Add'."
 
-msgid "Not supported type for operation 'EQU'."
-msgstr "Не поддерживаемый тип для операции 'EQU'."
-
 msgid "Call object's function for no object or function name is empty."
 msgstr "Вызов функции объекта для не объекта или имя функции пусто."
 
 #, c-format
 msgid "Operation %c(%xh) error. Function '%s' is stoped."
 msgstr "Ошибка операции %c(%xh). Функция '%s' остановлена."
+
+msgid "Function '%s' error or not enough parameters."
+msgstr "Ошибка функции '%s' или не достаточно параметров для неё."
 
 msgid "Function: "
 msgstr "Функция: "
@@ -239,6 +219,9 @@ msgstr "Библиотеки функций"
 
 msgid "Libraries"
 msgstr "Библиотеки"
+
+msgid "Call now. "
+msgstr "Вызов сейчас. "
 
 #, c-format
 msgid "Call by period: %s. "

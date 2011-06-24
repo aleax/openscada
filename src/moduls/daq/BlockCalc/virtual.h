@@ -129,6 +129,7 @@ class Contr: public TController
 
 	//Private attributes
 	bool	prc_st,		// Calc status
+		call_st,        // Calc now stat
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
 	double	&mPer;		// Clock period (ms)

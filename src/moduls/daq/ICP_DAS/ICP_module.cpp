@@ -128,7 +128,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId()),
 	connTry(cfg("REQ_TRY").getId()), mLPprms(cfg("LP_PRMS").getSd()),
-	prcSt(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
+	prcSt(false), call_st(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -143,8 +143,11 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if( startStat( ) && !redntUse( ) ) val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "),
-	TSYS::time2str(tm_gath).c_str(),numReq,numErr);
+    if(startStat() && !redntUse())
+    {
+	if(call_st)	val += TSYS::strMess(_("Call now. "));
+	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), TSYS::time2str(tm_gath).c_str(), numReq, numErr);
+    }
 
     return val;
 }
@@ -267,10 +270,11 @@ void *TMdContr::Task( void *icntr )
 
     try
     {
-	while( !cntr.endRunReq )
+	while(!cntr.endRunReq)
 	{
-	    if( !cntr.redntUse( ) )
+	    if(!cntr.redntUse())
 	    {
+		cntr.call_st = true;
 		int64_t t_cnt = TSYS::curTime();
 
 		//> Update controller's data
@@ -280,10 +284,11 @@ void *TMdContr::Task( void *icntr )
 
 		//> Calc acquisition process time
 		cntr.tm_gath = TSYS::curTime()-t_cnt;
+		cntr.call_st = false;
 	    }
 
 	    //> Watchdog timer process
-	    if( cntr.mBus == 0 && wTm > 0 ) { ResAlloc res( cntr.reqRes, true ); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
+	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res( cntr.reqRes, true ); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
 
 	    cntr.prcSt = true;
 

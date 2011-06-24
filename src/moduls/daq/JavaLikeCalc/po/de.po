@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-28 16:37+0300\n"
+"POT-Creation-Date: 2011-06-24 09:26+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -25,9 +25,6 @@ msgstr ""
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Die Variable '%s' wird verwendet, ist aber nicht definiert"
-
-msgid "String constant size is more 255 symbols."
-msgstr "String konstante Größe ist 255 Symbolen."
 
 msgid "Array have more 255 items."
 msgstr "Array haben mehr 255 Artikel."
@@ -53,20 +50,6 @@ msgstr "Keine Variable für die Funktion"
 msgid "Object's function have more 255 parameters."
 msgstr "Object-Funktion haben mehr 255 Parameter."
 
-#, c-format
-msgid "Boolean type have not function '%s' or not enough parameters for it."
-msgstr "Logischer Typ hat keine Funktion '%s' oder zuwenig Parameter."
-
-#, c-format
-msgid ""
-"Integer or real type have not function '%s' or not enough parameters for it."
-msgstr ""
-"Ganzzahl oder Reellezahl Typ hat keine Funktion '%s' oder zuwenig Parameter."
-
-#, c-format
-msgid "String type have not properties '%s' or not enough parameters for it."
-msgstr "Text Typ hat keine Eigenschaft '%s' oder zuwenig Parameter."
-
 msgid "Get object from no object's register"
 msgstr "Lade Objekt nicht vom Objektregister"
 
@@ -76,15 +59,15 @@ msgstr "Zeitüberschreitung Berechnung der Funktion."
 msgid "Not supported type for operation 'Add'."
 msgstr "Typ wird nicht unterstützt für Operation 'Add' (Hinzufügen)."
 
-msgid "Not supported type for operation 'EQU'."
-msgstr "Typ wird nicht unterstützt für Operation 'EQU' (Hinzufügen)."
-
 msgid "Call object's function for no object or function name is empty."
 msgstr "Funktion ruft kein Objekt auf oder Funktionsname ist leer."
 
 #, c-format
 msgid "Operation %c(%xh) error. Function '%s' is stoped."
 msgstr "Fehler bei der Operation %c(%xh). Funktion '%s' ist angehalten."
+
+msgid "Function '%s' error or not enough parameters."
+msgstr "Funktion '%s' Fehler oder nicht genügend Parameter."
 
 msgid "Function: "
 msgstr "Funktion: "
@@ -241,9 +224,14 @@ msgstr "Funktionsbibliothek"
 msgid "Libraries"
 msgstr "Bibliotheken"
 
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
+
+#, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf bei Periode: %s. "
 
+#, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 

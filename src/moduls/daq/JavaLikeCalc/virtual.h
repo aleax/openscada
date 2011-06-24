@@ -147,6 +147,7 @@ class Contr: public TController, public TValFunc
 
 	//Attributes
 	bool	prc_st,		// Process task active
+		call_st,	// Calc now stat
 		endrun_req;	// Request to stop of the Process task
 	int	&mPrior,	// Calc task priority
 		&mIter;		// iteration number
