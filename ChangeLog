@@ -1,5 +1,7 @@
 2011-06-24 Roman
 - DAQ.*: Call now status is added to all DAQ-modules.
+- DAQ, DAQ.JavaLikeCalc: Calc time limit for compile function set is added to TTipDAQ::compileFunc().
+    Calc limit property is added to DAQ parameter's template object.
 
 
 2011-06-23 Roman

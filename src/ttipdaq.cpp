@@ -143,7 +143,7 @@ TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
     throw TError(nodePath().c_str(),_("Error attach new controller %s."),name.c_str());
 }
 
-string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
+string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
     throw TError(nodePath().c_str(),_("Module doesn't support the function for compilation programming languages."));
 }

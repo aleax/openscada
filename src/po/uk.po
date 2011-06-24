@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-22 13:17+0300\n"
+"POT-Creation-Date: 2011-06-24 21:12+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -748,6 +748,9 @@ msgstr "Додавати параметри"
 msgid "Data acquisition"
 msgstr "Збір даних"
 
+msgid "Maximum calc time (s)"
+msgstr ""
+
 msgid "Template programm"
 msgstr "Програма шаблону"
 
@@ -1236,6 +1239,9 @@ msgstr "Шаблон параметра: "
 
 msgid "Template"
 msgstr "Шаблон"
+
+msgid "Maximum calc time (sec)"
+msgstr "Максимальний час обрахунку (сек)"
 
 msgid "Real;Integer;Boolean;String;Object"
 msgstr "Реальний;Цілий;Логічний;Строка;Об'єкт"

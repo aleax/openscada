@@ -196,7 +196,7 @@ class TipContr : public TTipDAQ
 
 	bool compileFuncLangs( vector<string> *ls = NULL );
 	void compileFuncSynthHighl( const string &lang, XMLNode &shgl );
-	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "" );
+	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "", int maxCalcTm = 10 );
 
     protected:
 	//Methods

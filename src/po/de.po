@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-22 13:17+0300\n"
+"POT-Creation-Date: 2011-06-24 21:12+0300\n"
 "PO-Revision-Date: 2010-08-09 22:43+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -759,6 +759,9 @@ msgstr "Parameter hinzufügen"
 msgid "Data acquisition"
 msgstr "Datenerfassung"
 
+msgid "Maximum calc time (s)"
+msgstr ""
+
 msgid "Template programm"
 msgstr "Vorlagenprogramm"
 
@@ -1253,6 +1256,9 @@ msgstr "Parametervorlage: "
 
 msgid "Template"
 msgstr "Vorlage"
+
+msgid "Maximum calc time (sec)"
+msgstr "Maximale Zeit der Berechnung (sek)"
 
 msgid "Real;Integer;Boolean;String;Object"
 msgstr "Reele Zahl;Ganzzahl;Logisch;Text;Objekt"

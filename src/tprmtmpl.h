@@ -62,11 +62,13 @@ class TPrmTempl: public TFunction, public TConfig
 	const string &id( )	{ return m_id.getValRef(); }
 	string name( );
 	string descr( );
+	int maxCalcTm( );
 	string progLang( );
 	string prog( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
+	void setMaxCalcTm( int vl );
 	void setProgLang( const string &ilng );
 	void setProg( const string &iprg );
 	void setStart( bool val );

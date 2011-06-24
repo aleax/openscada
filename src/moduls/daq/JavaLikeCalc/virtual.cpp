@@ -117,7 +117,7 @@ void TipContr::postEnable( int flag )
     fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
-    fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time"),TFld::Integer,TFld::NoFlag,"3","10","0;999") );
+    fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
     fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"10000") );
 
     //> Function's IO structure
@@ -197,7 +197,7 @@ void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
     }
 }
 
-string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings )
+string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
     if(lang != "JavaScript") throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
     if(!lbPresent("sys_compile")) lbReg( new Lib("sys_compile","","") );
@@ -206,10 +206,11 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     string funcId = fnc_cfg.id();
     if(funcId == "<auto>")
 	for(int aId = 1; lbAt("sys_compile").at().present(funcId); aId++)
-	    funcId = TSYS::strMess("Auto_%d",aId); 
+	    funcId = TSYS::strMess("Auto_%d",aId);
 
     if(!lbAt("sys_compile").at().present(fnc_cfg.id())) lbAt("sys_compile").at().add(funcId.c_str(),"");
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
+    func.at().setMaxCalcTm(maxCalcTm);
 
     bool isStart = func.at().startStat();
     try

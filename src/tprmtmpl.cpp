@@ -92,6 +92,10 @@ string TPrmTempl::descr( )		{ return cfg("DESCR").getS(); }
 
 void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); modif(); }
 
+int TPrmTempl::maxCalcTm( )		{ return cfg("MAXCALCTM").getI(); }
+
+void TPrmTempl::setMaxCalcTm( int vl )	{ cfg("MAXCALCTM").setI(vl); modif(); }
+
 string TPrmTempl::progLang()
 {
     string tPrg = m_prog.getVal();
@@ -129,7 +133,7 @@ void TPrmTempl::setStart( bool vl )
 	//> Compile new function
 	if(prog().size())
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
-					compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
+					compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog(),"",maxCalcTm());
     }
     TFunction::setStart(vl);
 }
@@ -246,6 +250,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","4");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/m_calc_tm",_("Maximum calc time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
@@ -292,6 +297,11 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    }
+    else if(a_path == "/tmpl/cfg/m_calc_tm")
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(TSYS::int2str(maxCalcTm()));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))  setMaxCalcTm(atoi(opt->text().c_str()));
     }
     else if(a_path == "/io/io")
     {

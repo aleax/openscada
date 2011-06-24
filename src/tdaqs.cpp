@@ -49,6 +49,7 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     el_tmpl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200") );
+    el_tmpl.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time (s)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
     el_tmpl.fldAdd( new TFld("PROGRAM",_("Template programm"),TFld::String,TCfg::TransltText,"10000") );
 
     //> Parameter template IO DB structure
