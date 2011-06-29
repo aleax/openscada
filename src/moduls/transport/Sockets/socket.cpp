@@ -279,7 +279,7 @@ void TSocketIn::start()
 	listen(sock_fd,maxQueue());
     }
 
-    SYS->taskCreate( nodePath('.',true), taskPrior(), Task, this, &run_st );
+    SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 }
 
 void TSocketIn::stop()
@@ -290,11 +290,11 @@ void TSocketIn::stop()
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
-    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
+    SYS->taskDestroy(nodePath('.',true), &endrun);
 
     shutdown(sock_fd,SHUT_RDWR);
     close(sock_fd);
-    if( type == SOCK_UNIX ) remove( path.c_str() );
+    if(type == SOCK_UNIX) remove(path.c_str());
 }
 
 void *TSocketIn::Task(void *sock_in)
@@ -340,7 +340,7 @@ void *TSocketIn::Task(void *sock_in)
 		SSockIn *sin = new SSockIn(sock,sock_fd_CL,inet_ntoa(name_cl.sin_addr));
 		try
 		{
-		    SYS->taskCreate( sock->nodePath('.',true)+"."+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
 		}catch(TError err)
 		{
@@ -364,7 +364,7 @@ void *TSocketIn::Task(void *sock_in)
 		SSockIn *sin = new SSockIn(sock,sock_fd_CL,"");
 		try
 		{
-		    SYS->taskCreate( sock->nodePath('.',true)+"."+TSYS::int2str(sock->cl_id.size()), sock->taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
 		}catch(TError err)
 		{
@@ -487,7 +487,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     delete (SSockIn*)s_inf;
 
-    pthread_exit(NULL);
+    return NULL;
 }
 
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
@@ -520,8 +520,8 @@ void TSocketIn::clientReg( pthread_t thrid, int i_sock )
 {
     ResAlloc res(sock_res,true);
     //> Find already registry
-    for( unsigned i_id = 0; i_id < cl_id.size(); i_id++)
-	if( cl_id[i_id].cl_id == thrid ) return;
+    for(unsigned i_id = 0; i_id < cl_id.size(); i_id++)
+	if(cl_id[i_id].cl_id == thrid) return;
     SSockCl scl = { thrid, i_sock };
     cl_id.push_back(scl);
     cl_free = false;
@@ -530,13 +530,13 @@ void TSocketIn::clientReg( pthread_t thrid, int i_sock )
 void TSocketIn::clientUnreg( pthread_t thrid )
 {
     ResAlloc res(sock_res,true);
-    for( unsigned i_id = 0; i_id < cl_id.size(); i_id++ )
-	if( cl_id[i_id].cl_id == thrid )
+    for(unsigned i_id = 0; i_id < cl_id.size(); i_id++)
+	if(cl_id[i_id].cl_id == thrid)
 	{
 	    shutdown(cl_id[i_id].cl_sock,SHUT_RDWR);
 	    close(cl_id[i_id].cl_sock);
 	    cl_id.erase(cl_id.begin() + i_id);
-	    if( !cl_id.size() ) cl_free = true;
+	    if(!cl_id.size()) cl_free = true;
 	    break;
 	}
 }

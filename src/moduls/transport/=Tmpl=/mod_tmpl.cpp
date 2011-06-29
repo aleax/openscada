@@ -202,7 +202,7 @@ void TTrIn::start()
 
     //!!! Your code
 
-    SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
+    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 }
 
 void TTrIn::stop()
@@ -213,7 +213,7 @@ void TTrIn::stop()
     trIn = trOut = 0;
     connNumb = 0;
 
-    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
+    SYS->taskDestroy(nodePath('.',true), &endrun);
 
     //!!! Your code
 }

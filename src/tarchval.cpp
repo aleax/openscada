@@ -2133,15 +2133,15 @@ void TVArchivator::start()
     if( run_st ) return;
 
     //> Start archivator thread
-    SYS->taskCreate( nodePath('.',true), 0, TVArchivator::Task, this, &run_st );
+    SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this);
 }
 
 void TVArchivator::stop( bool full_del )
 {
-    if( !run_st ) return;
+    if(!run_st) return;
 
     //> Values acquisition task stop
-    SYS->taskDestroy( nodePath('.',true), &run_st, &endrunReq );
+    SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
     //> Detach from all archives
     ResAlloc res(a_res,false);

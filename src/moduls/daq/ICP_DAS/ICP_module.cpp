@@ -193,7 +193,7 @@ void TMdContr::start_( )
 	    numReq = numErr = numErrResp = 0;
 
 	    //> Start the gathering data task
-	    SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt, 10 );
+	    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
 	}
 	catch(TError err)
 	{
@@ -206,7 +206,7 @@ void TMdContr::start_( )
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    SYS->taskDestroy( nodePath('.',true), &prcSt, &endRunReq );
+    SYS->taskDestroy(nodePath('.',true), &endRunReq);
 
     //tr.free();
     Close_Com( (mBus?mBus:1) );
@@ -502,7 +502,7 @@ void TMdPrm::disable()
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 
     //> Stop fast task
-    if(prcSt) SYS->taskDestroy(nodePath('.',true), &prcSt, &endRunReq);
+    if(prcSt) SYS->taskDestroy(nodePath('.',true), &endRunReq);
 
     //> Free module object
     switch(modTp)
@@ -600,7 +600,7 @@ void TMdPrm::getVals( )
 	    if( !((PrmsI8017*)extPrms)->init )
 	    { owner().pBusRes.resRequestW(); I8017_Init(modSlot); ((PrmsI8017*)extPrms)->init = true; owner().pBusRes.resRelease(); }
 	    //> Check for I8017 fast task start
-	    if( ((PrmsI8017*)extPrms)->fastPer && !prcSt ) SYS->taskCreate( nodePath('.',true), 32, fastTask, this, &prcSt );
+	    if(((PrmsI8017*)extPrms)->fastPer && !prcSt) SYS->taskCreate(nodePath('.',true), 32, fastTask, this);
 	    //> Get values direct
 	    for( int i_v = 0; i_v < 8; i_v++ )
 		if( i_v >= ((PrmsI8017*)extPrms)->prmNum ) vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);

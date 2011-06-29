@@ -177,8 +177,8 @@ class TSYS : public TCntrNode
 	static int64_t curTime( );
 
 	//> Tasks control
-	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr = NULL, int wtm = 5, pthread_attr_t *pAttr = NULL );
-	void taskDestroy( const string &path, bool *startCntr = NULL, bool *endrunCntr = NULL, int wtm = 5 );
+	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL );
+	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5 );
 
 	//> Sleep task for period grid <per> on ns or to cron time.
 	static void taskSleep( int64_t per, time_t cron = 0 );
@@ -278,12 +278,12 @@ class TSYS : public TCntrNode
 	{
 	    public:
 		//Data
-		enum Flgs	{ Detached = 0x01 };
+		enum Flgs	{ Detached = 0x01, FinishTask = 0x02 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0), flgs(0)		{ }
-		STask( pthread_t ithr, char ipolicy, char iprior ) : 
-		    thr(ithr), policy(ipolicy), prior(iprior), flgs(0)	{ };
+		STask( ) : thr(0), policy(0), prior(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0)	{ }
+		STask( pthread_t ithr, char ipolicy, char iprior ) :
+		    thr(ithr), policy(ipolicy), prior(iprior), flgs(0), tm_beg(0), tm_end(0), tm_per(0)	{ }
 
 		//Attributes
 		string		path;
@@ -294,6 +294,7 @@ class TSYS : public TCntrNode
 		void *(*task) (void *);
 		void		*taskArg;
 		unsigned	flgs;
+		int64_t		tm_beg, tm_end, tm_per;
 	};
 
 	//Private methods
@@ -331,6 +332,7 @@ class TSYS : public TCntrNode
 		mSubst;		// Subsystem tree id
 
 	map<string,STask>	mTasks;
+	static pthread_key_t	sTaskKey;
 
 	Res	nRes, taskRes;
 

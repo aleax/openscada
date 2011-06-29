@@ -99,7 +99,7 @@ TArchiveS::~TArchiveS(  )
     timer_delete(tmIdMess);
 
     //> Stop values archiving task
-    if( prcStVal ) SYS->taskDestroy( nodePath('.',true)+".vals", &prcStVal, &endrunReqVal );
+    if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
 
     //> Free other resources
     nodeDelAll();
@@ -326,7 +326,7 @@ void TArchiveS::subStart( )
     timer_settime(tmIdMess, 0, &itval, NULL);
 
     //> Start values acquisition task
-    if( !prcStVal ) SYS->taskCreate( nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this, &prcStVal );
+    if(!prcStVal) SYS->taskCreate(nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this);
 
     TSubSYS::subStart( );
 
@@ -346,11 +346,11 @@ void TArchiveS::subStop( )
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmIdMess, 0, &itval, NULL);
-    if( TSYS::eventWait( prcStMess, false, nodePath()+"mess_stop",10) )
+    if(TSYS::eventWait( prcStMess, false, nodePath()+"mess_stop",10))
 	throw TError(nodePath().c_str(),_("Archive messages thread is not stopped!"));
 
     //> Values acquisition task stop
-    if( prcStVal ) SYS->taskDestroy( nodePath('.',true)+".vals", &prcStVal, &endrunReqVal );
+    if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
 
     //> Last messages archivation call
     sigval obj; obj.sival_ptr = this;

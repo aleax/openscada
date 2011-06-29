@@ -243,7 +243,7 @@ void TSocketIn::start()
     connNumb = clsConnByLim = 0;
 
     //> Wait connection main task start
-    SYS->taskCreate( nodePath('.',true), taskPrior(), Task, this, &run_st );
+    SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 }
 
 void TSocketIn::stop()
@@ -256,7 +256,7 @@ void TSocketIn::stop()
     connNumb = clsConnByLim = 0;
 
     //> Wait connection main task stop
-    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
+    SYS->taskDestroy(nodePath('.',true), &endrun);
 }
 
 void *TSocketIn::Task( void *sock_in )
@@ -370,14 +370,14 @@ void *TSocketIn::Task( void *sock_in )
 
 	    BIO *cbio = BIO_pop(abio);
 
-	    if( s.maxFork() <= s.opConnCnt() )	{ s.clsConnByLim++; /*BIO_reset(cbio);*/ close(BIO_get_fd(cbio,NULL)); BIO_free(cbio); }
+	    if(s.maxFork() <= s.opConnCnt())	{ s.clsConnByLim++; /*BIO_reset(cbio);*/ close(BIO_get_fd(cbio,NULL)); BIO_free(cbio); }
 	    //> Make client's socket thread
 	    else
 	    {
 		SSockIn *sin = new SSockIn(&s,cbio);
 		try
 		{
-		    SYS->taskCreate( s.nodePath('.',true)+"."+TSYS::int2str(s.opConnCnt()), s.taskPrior(), ClTask, sin, NULL, 0, &pthr_attr );
+		    SYS->taskCreate(s.nodePath('.',true)+"."+TSYS::int2str(BIO_get_fd(cbio,NULL)), s.taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    s.connNumb++;
 		}catch(TError err)
 		{
@@ -417,7 +417,7 @@ void *TSocketIn::ClTask( void *s_inf )
     AutoHD<TProtocolIn> prot_in;
     SSL		*ssl;
 
-    int cSock = s.s->clientReg( pthread_self() );
+    int cSock = s.s->clientReg(pthread_self());
 
 #if OSC_DEBUG >= 3
     mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str() );
@@ -436,7 +436,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    }
 	    BIO_flush(s.bio);
 	    delete (SSockIn*)s_inf;
-	    pthread_exit(NULL);
+	    return NULL;
 	}
     }
 
@@ -507,7 +507,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     delete (SSockIn*)s_inf;
 
-    pthread_exit(NULL);
+    return NULL;
 }
 
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )

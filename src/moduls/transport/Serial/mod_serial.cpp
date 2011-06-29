@@ -458,7 +458,7 @@ void TTrIn::start()
     connect( );
 
     //> Start listen task
-    SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
+    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 }
 
 void TTrIn::stop()
@@ -472,9 +472,9 @@ void TTrIn::stop()
     //> Status clear
     trIn = trOut = tmMax = 0;
 
-    SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
+    SYS->taskDestroy(nodePath('.',true), &endrun);
 
-    if( fd >= 0 ) close(fd);
+    if(fd >= 0) close(fd);
     fd = -1;
 }
 

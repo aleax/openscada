@@ -1,3 +1,11 @@
+2011-06-29 Roman
+- !!!!:SYS: OpenSCADA thread's object is made hard linked to thread. Task create and destroy detect method is made to task wrapper.
+    No more need self starting detect method for each task.
+    A thread load and call statistic is added to task manager.
+    The function TSYS::time2str is some improved for times less for seconds.
+- FIX:Transport.SSL, Transport.Sockets: Child task naming and processing is some fixed.
+
+
 2011-06-24 Roman
 - DAQ.*: Call now status is added to all DAQ-modules.
 - DAQ, DAQ.JavaLikeCalc: Calc time limit for compile function set is added to TTipDAQ::compileFunc().

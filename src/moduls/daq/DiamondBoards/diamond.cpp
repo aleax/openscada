@@ -224,15 +224,15 @@ void TMdContr::start_( )
     }
 
     //> Create interrupt AD DSC task
-    if( ad_int_mode ) SYS->taskCreate( nodePath('.',true)+".int", 0, AD_DSCTask, this, &ad_dsc_st );
+    if(ad_int_mode) SYS->taskCreate(nodePath('.',true)+".int", 0, AD_DSCTask, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Close AI DAQ task
-    if( ad_dsc_st ) SYS->taskDestroy( nodePath('.',true)+".int", &ad_dsc_st, &endrun_req_ad_dsc );
+    if(ad_dsc_st) SYS->taskDestroy(nodePath('.',true)+".int", &endrun_req_ad_dsc);
 
-    if( !dataEmul() )	dscFreeBoard(dscb);
+    if(!dataEmul()) dscFreeBoard(dscb);
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )

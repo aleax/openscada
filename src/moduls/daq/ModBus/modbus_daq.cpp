@@ -215,13 +215,13 @@ void TMdContr::start_( )
     }
 
     //> Start the gathering data task
-    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
+    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+    SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
     if(tmDelay >= 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
 

@@ -854,16 +854,16 @@ void Node::setEnable( bool vl )
 	}
 
 	//>> Start task
-	SYS->taskCreate( nodePath('.',true), 0, Task, this, &prcSt );
+	SYS->taskCreate(nodePath('.',true), 0, Task, this);
     }
     //> Disable node
-    if( !vl )
+    if(!vl)
     {
 	//> Stop the calc data task
-	if( prcSt ) SYS->taskDestroy( nodePath('.',true), &prcSt, &endrunRun );
+	if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunRun);
 
 	//> Data structure delete
-	if( data ) { delete data; data = NULL; }
+	if(data) { delete data; data = NULL; }
     }
 
     mEn = vl;

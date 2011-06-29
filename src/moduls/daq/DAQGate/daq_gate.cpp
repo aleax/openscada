@@ -273,7 +273,7 @@ void TMdContr::start_( )
     for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second = 0;
 
     //> Start the gathering data task
-    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prcSt);
+    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
@@ -281,7 +281,7 @@ void TMdContr::stop_( )
     if(!prcSt) return;
 
     //> Stop the request and calc data task
-    SYS->taskDestroy( nodePath('.',true), &prcSt, &endrunReq );
+    SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
 
 void *TMdContr::Task( void *icntr )

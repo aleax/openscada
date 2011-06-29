@@ -48,6 +48,7 @@ using namespace OSCADA;
 TMess	*OSCADA::Mess;
 TSYS	*OSCADA::SYS;
 bool TSYS::finalKill = false;
+pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
@@ -57,6 +58,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     SYS = this;		//Init global access value
     mSubst = grpAdd("sub_",true);
     nodeEn();
+    pthread_key_create(&sTaskKey, NULL);
 
     Mess = new TMess();
 
@@ -98,6 +100,7 @@ TSYS::~TSYS( )
     del("BD");
 
     delete Mess;
+    pthread_key_delete(sTaskKey);
 }
 
 string TSYS::host( )
@@ -214,18 +217,16 @@ string TSYS::time2str( double utm )
     int days = (int)floor(utm/(24*60*60*1e6));
     int hours = (int)floor(utm/(60*60*1e6))%24;
     int mins = (int)floor(utm/(60*1e6))%60;
-    int secs = (int)floor(utm/(1e6))%60;
-    int msec = (int)floor(utm/(1e3))%1000;
-    int usec = (int)floor(utm)%1000;
-    double nsec = utm-floor(utm);
+    double usec = utm - 1e6*(days*24*60*60 + hours*60*60 + mins*60);
+
     string rez;
     if(days)		{ rez += TSYS::int2str(days)+_("day"); lev = vmax(lev,6); }
     if(hours)		{ rez += (rez.size()?" ":"")+TSYS::int2str(hours)+_("hour"); lev = vmax(lev,5); }
     if(mins && lev < 6)	{ rez += (rez.size()?" ":"")+TSYS::int2str(mins)+_("min"); lev = vmax(lev,4); }
-    if(secs && lev < 5)	{ rez += (rez.size()?" ":"")+TSYS::int2str(secs)+_("s"); lev = vmax(lev,3); }
-    if(msec && lev < 4)	{ rez += (rez.size()?" ":"")+TSYS::int2str(msec)+_("ms"); lev = vmax(lev,2); }
-    if(usec && lev < 3)	{ rez += (rez.size()?" ":"")+TSYS::int2str(usec)+_("us"); lev = vmax(lev,1); }
-    if(nsec > 1e-6 && lev < 2)	rez += (rez.size()?" ":"")+TSYS::real2str(1e3*nsec,4)+_("ns");
+    if((1e-6*usec) > 0.5 && lev < 5)	{ rez += (rez.size()?" ":"")+TSYS::real2str(1e-6*usec,3)+_("s"); lev = vmax(lev,3); }
+    else if((1e-3*usec) > 0.5 && !lev)	{ rez += (rez.size()?" ":"")+TSYS::real2str(1e-3*usec,4)+_("ms"); lev = vmax(lev,2); }
+    else if(usec > 0.5 && !lev)		{ rez += (rez.size()?" ":"")+TSYS::real2str(usec,4)+_("us"); lev = vmax(lev,1); }
+    else if(!lev)	rez += (rez.size()?" ":"")+TSYS::real2str(1e3*usec,4)+_("ns");
     return rez;
 }
 
@@ -1125,15 +1126,21 @@ void TSYS::cntrSet( const string &id, double vl )
     mCntrs[id] = vl;
 }
 
-void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, bool *startCntr, int wtm, pthread_attr_t *pAttr )
+void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm, pthread_attr_t *pAttr )
 {
     int detachStat = 0;
     pthread_t procPthr;
     pthread_attr_t locPAttr, *pthr_attr;
+    map<string,STask>::iterator ti;
 
     ResAlloc res(taskRes, false);
-    if(mTasks.find(path) != mTasks.end() && startCntr && *startCntr)
-	throw TError(nodePath().c_str(),_("Task '%s' is already created!"),path.c_str());
+    if((ti=mTasks.find(path)) != mTasks.end() && !(ti->second.flgs&STask::FinishTask))
+    {
+	//Wait for finish previous task
+	for(time_t c_tm = time(NULL); !(ti->second.flgs&STask::FinishTask) && time(NULL) < (c_tm+wtm); ) usleep(1000);
+	if(!(ti->second.flgs&STask::FinishTask))
+	    throw TError(nodePath().c_str(),_("Task '%s' is already created and unfinished!"),path.c_str());
+    }
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1153,36 +1160,47 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
 
-    STask htsk;
-    htsk.path = path;
-    htsk.task = start_routine;
-    htsk.taskArg = arg;
-    pthread_attr_getdetachstate(pthr_attr,&detachStat);
-    if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
-    int rez = pthread_create( &procPthr, pthr_attr, taskWrap, &htsk );
-    if(rez == EPERM)
+    try
     {
-	mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
-	policy = SCHED_OTHER;
-	pthread_attr_setschedpolicy( pthr_attr, policy );
-	prior.sched_priority = 0;
-	pthread_attr_setschedparam(pthr_attr,&prior);
-	rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
+	res.request(true);
+	STask &htsk = mTasks[path];
+	res.release();
+	htsk.path = path;
+	htsk.task = start_routine;
+	htsk.taskArg = arg;
+	htsk.flgs = 0;
+	pthread_attr_getdetachstate(pthr_attr,&detachStat);
+	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
+	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
+	if(rez == EPERM)
+	{
+	    mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
+	    policy = SCHED_OTHER;
+	    pthread_attr_setschedpolicy(pthr_attr, policy);
+	    prior.sched_priority = 0;
+	    pthread_attr_setschedparam(pthr_attr,&prior);
+	    rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
+	}
+	if(!pAttr) pthread_attr_destroy(pthr_attr);
+
+	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
+
+	/*if(startCntr && TSYS::eventWait(*startCntr, true, nodePath()+": "+path+": start", wtm))
+	    throw TError(nodePath().c_str(), _("Task '%s' is not started!"), path.c_str());*/
+
+	//> Wait for thread structure initialization finish
+	while(!htsk.thr) pthread_yield();
     }
-    if(!pAttr) pthread_attr_destroy( pthr_attr );
-
-    if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
-
-    if(startCntr && TSYS::eventWait(*startCntr, true, nodePath()+": "+path+": start", wtm))
-	throw TError(nodePath().c_str(), _("Task '%s' is not started!"), path.c_str());
-
-    //> Wait for thread structure initialization finish
-    while(!htsk.thr) pthread_yield();
-
-    res.request(true); mTasks[path] = htsk; res.release();
+    catch(TError)
+    {
+	res.request(true);
+	mTasks.erase(path);
+	res.release();
+	throw;
+    }
 }
 
-void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, int wtm )
+void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm )
 {
     ResAlloc res(taskRes, false);
     map<string,STask>::iterator it = mTasks.find(path);
@@ -1196,7 +1214,7 @@ void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, i
     //> Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
     t_tm = s_tm = time(NULL);
-    while(*startCntr)
+    while(!(it->second.flgs&STask::FinishTask))
     {
         pthread_kill(thr, SIGALRM);
 	time_t c_tm = time(NULL);
@@ -1216,7 +1234,7 @@ void TSYS::taskDestroy( const string &path, bool *startCntr, bool *endrunCntr, i
         usleep(STD_WAIT_DELAY*1000);
     }
 
-    pthread_join(thr, NULL);
+    if(!(it->second.flgs&STask::Detached)) pthread_join(thr, NULL);
 
     res.request(true);
     mTasks.erase(it);
@@ -1226,6 +1244,7 @@ void *TSYS::taskWrap( void *stas )
 {
     //> Get temporary task structure
     STask *tsk = (STask *)stas;
+    pthread_setspecific(TSYS::sTaskKey, tsk);
 
     //> Store call parameters
     void *(*wTask) (void *) = tsk->task;
@@ -1257,32 +1276,61 @@ void *TSYS::taskWrap( void *stas )
     tsk->thr = pthread_self();
 
     //> Call work task
-    try{ return wTask(wTaskArg); }
+    void *rez = NULL;
+    try { rez = wTask(wTaskArg); }
     catch(TError err)
     {
 	mess_err(err.cat.c_str(),err.mess.c_str());
 	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exeption."),tsk->thr);
-	return NULL;
     }
+    //???? The code cause: FATAL: exception not rethrown
+    //catch(...)	{ mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by unknown exeption."),tsk->thr); }
+
+    //> Mark for task finish
+    tsk->flgs |= STask::FinishTask;
+
+    //> Remove task object for detached
+    if(tsk->flgs & STask::Detached)	SYS->taskDestroy(tsk->path, NULL);
+
+    return rez;
 }
 
 void TSYS::taskSleep( int64_t per, time_t cron )
 {
     struct timespec sp_tm;
+    STask *stsk = (STask*)pthread_getspecific(sTaskKey);
 
     if(!cron)
     {
 	if(!per) per = 1000000000;
 	clock_gettime(CLOCK_REALTIME,&sp_tm);
-	int64_t pnt_tm = (((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec)/per + 1)*per;
+	int64_t end_tm = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
+	int64_t pnt_tm = (end_tm/per + 1)*per;
 	do
 	{
 	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
 	    if(clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL))	return;
 	    clock_gettime(CLOCK_REALTIME,&sp_tm);
 	}while(((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm);
+
+	if(stsk)
+	{
+	    stsk->tm_beg = stsk->tm_per;
+	    stsk->tm_end = end_tm;
+	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
+	}
     }
-    else while(time(NULL) < cron && usleep(1000000) == 0) ;
+    else
+    {
+	time_t end_tm = time(NULL);
+	while(time(NULL) < cron && usleep(1000000) == 0) ;
+	if(stsk)
+	{
+	    stsk->tm_beg = stsk->tm_per;
+	    stsk->tm_end = 1000000000ll*end_tm;
+	    stsk->tm_per = 1000000000ll*time(NULL);
+	}
+    }
 }
 
 time_t TSYS::cron( const string &vl, time_t base )
@@ -1660,6 +1708,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/tid",_("TID"),R_R___,"root","root",1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/stat",_("Status"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
 		if( multCPU( ) )
@@ -1794,6 +1843,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_path	= ctrMkNode("list",opt,-1,"/tasks/tasks/path","",R_R___,"root","root");
 	    XMLNode *n_thr	= ctrMkNode("list",opt,-1,"/tasks/tasks/thrd","",R_R___,"root","root");
 	    XMLNode *n_tid	= ctrMkNode("list",opt,-1,"/tasks/tasks/tid","",R_R___,"root","root");
+	    XMLNode *n_stat	= ctrMkNode("list",opt,-1,"/tasks/tasks/stat","",R_R___,"root","root");
 	    XMLNode *n_plc	= ctrMkNode("list",opt,-1,"/tasks/tasks/plc","",R_R___,"root","root");
 	    XMLNode *n_prior	= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
 	    XMLNode *n_cpuSet	= (multCPU() ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL);
@@ -1804,6 +1854,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_path)	n_path->childAdd("el")->setText(it->first);
 		if(n_thr)	n_thr->childAdd("el")->setText(TSYS::uint2str(it->second.thr));
 		if(n_tid)	n_tid->childAdd("el")->setText(TSYS::int2str(it->second.tid));
+		if(n_stat)
+		{
+		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0;
+		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
+		    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; }
+		    XMLNode *cn = n_stat->childAdd("el");
+		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
+		    if(tm_beg && tm_beg < tm_per)
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f% (%s from %s)"),
+			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
+			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str()));
+		}
 		if(n_plc)	n_plc->childAdd("el")->setText((it->second.policy==SCHED_RR)?_("Round-robin"):((it->second.policy==SCHED_BATCH)?_("Style \"batch\""):_("Standard")));
 		if(n_prior)	n_prior->childAdd("el")->setText(TSYS::int2str(it->second.prior));
 		if(n_cpuSet)	n_cpuSet->childAdd("el")->setText(it->second.cpuSet);

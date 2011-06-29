@@ -325,13 +325,13 @@ void Contr::start_( )
     res.release();
 
     //> Start the request and calc data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
 }
 
 void Contr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
     run_st = false;
 
     //> Make deprocess all blocks

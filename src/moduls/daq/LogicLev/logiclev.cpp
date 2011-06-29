@@ -196,13 +196,13 @@ void TMdContr::start_( )
 	    prmEn(list_p[i_prm],true);
 
     //> Start the request data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
     //> Clear process parameters list
     p_hd.clear();

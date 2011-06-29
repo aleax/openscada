@@ -158,14 +158,14 @@ void Session::setStart( bool val )
 	    at(pg_ls[i_ls]).at().setProcess(true);
 
 	//> Start process task
-	if(!mStart) SYS->taskCreate( nodePath('.',true), 0, Session::Task, this, &mStart );
+	if(!mStart) SYS->taskCreate(nodePath('.',true), 0, Session::Task, this);
     }
     else
     {
 	mess_info(nodePath().c_str(),_("Stop session."));
 
 	//> Stop process task
-	if( mStart ) SYS->taskDestroy( nodePath('.',true), &mStart, &endrun_req );
+	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
 	//> Process all pages is off
 	list(pg_ls);

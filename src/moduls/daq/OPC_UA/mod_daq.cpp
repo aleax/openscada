@@ -306,13 +306,13 @@ void TMdContr::start_( )
     tmDelay = 0;
 
     //> Start the gathering data task
-    if( !prc_st ) SYS->taskCreate( nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st );
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    SYS->taskDestroy( nodePath('.',true), &prc_st, &endrun_req );
+    SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
 void TMdContr::prmEn( const string &id, bool val )

@@ -206,13 +206,13 @@ void TMdContr::start_( )
     SYS->transport().at().at("Serial").at().outAt(mAddr).at().start();
 
     //> Start the gathering data task
-    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
+    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )

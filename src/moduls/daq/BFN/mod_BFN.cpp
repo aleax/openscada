@@ -432,13 +432,13 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
 
     //> Start the gathering data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
     if(acq_err.getVal().size()) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
 

@@ -154,7 +154,7 @@ void TUIMod::postEnable( int flag )
 	{
 	    end_run = false;
 
-	    SYS->taskCreate(nodePath('.',true), 0, Task, this, &run_st);
+	    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 	}
     }
 }
@@ -162,7 +162,7 @@ void TUIMod::postEnable( int flag )
 void TUIMod::postDisable( int flag )
 {
     if(run_st)
-	try { SYS->taskDestroy(nodePath('.',true), &run_st, &end_run); }
+	try { SYS->taskDestroy(nodePath('.',true), &end_run); }
 	catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 

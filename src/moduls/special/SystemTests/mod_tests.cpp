@@ -209,12 +209,12 @@ void TTest::load_( )
 
 void TTest::modStart(  )
 {
-    if( !run_st ) SYS->taskCreate( nodePath('.',true), 0, Task, this, &run_st );
+    if(!run_st) SYS->taskCreate(nodePath('.',true), 0, Task, this);
 }
 
 void TTest::modStop(  )
 {
-    if( run_st ) SYS->taskDestroy( nodePath('.',true), &run_st, &endrun );
+    if(run_st) SYS->taskDestroy(nodePath('.',true), &endrun);
 }
 
 void *TTest::Task( void *CfgM )

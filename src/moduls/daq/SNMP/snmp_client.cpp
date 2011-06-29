@@ -292,13 +292,13 @@ void TMdContr::start_( )
     }
 
     //> Start the gathering data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this, &prc_st);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &prc_st, &endrun_req);
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
 void TMdContr::prmEn(const string &id, bool val)

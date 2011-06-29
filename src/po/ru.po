@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 21:12+0300\n"
+"POT-Creation-Date: 2011-06-25 17:36+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -749,8 +749,8 @@ msgstr "Добавлять параметры"
 msgid "Data acquisition"
 msgstr "Сбор данных"
 
-msgid "Maximum calc time (s)"
-msgstr ""
+msgid "Maximum calc time (sec)"
+msgstr "Максимальное время вычисления (сек)"
 
 msgid "Template programm"
 msgstr "Программа шаблона"
@@ -1242,9 +1242,6 @@ msgstr "Шаблон параметра: "
 
 msgid "Template"
 msgstr "Шаблон"
-
-msgid "Maximum calc time (sec)"
-msgstr "Максимальное время вычисления (сек)"
 
 msgid "Real;Integer;Boolean;String;Object"
 msgstr "Вещественный;Целый;Логический;Строка;Объект"
@@ -1785,6 +1782,12 @@ msgstr "Уст. CPU"
 
 msgid "Counters"
 msgstr "Счётчики"
+
+msgid "No data"
+msgstr "Нет данных"
+
+msgid "Last: %s. Load: %3.1f% (%s from %s)"
+msgstr "Последний: %s. Нагрузка %3.1f% (%s из %s)"
 
 msgid "Round-robin"
 msgstr ""
