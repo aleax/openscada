@@ -67,6 +67,8 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	TCntrNode &operator=( TCntrNode &node );
+
 	bool isStd( );
 	bool isLogic( );
 

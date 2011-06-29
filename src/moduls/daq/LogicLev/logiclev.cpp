@@ -326,8 +326,7 @@ TCntrNode &TMdPrm::operator=( TCntrNode &node )
     TParamContr::operator=( node );
 
     TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
-    if(!src_n || !src_n->enableStat() || !enableStat() || !src_n->isStd() || !isStd())
-	return *this;
+    if(!src_n || !src_n->enableStat() || !enableStat() || !isStd()) return *this;
 
     //> IO values copy
     for(int i_io = 0; i_io < src_n->tmpl->val.func()->ioSize(); i_io++)

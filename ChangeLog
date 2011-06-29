@@ -4,6 +4,8 @@
     A thread load and call statistic is added to task manager.
     The function TSYS::time2str is some improved for times less for seconds.
 - FIX:Transport.SSL, Transport.Sockets: Child task naming and processing is some fixed.
+- DAQ: Copy source parameter type is added on copy.
+- DAQ.ModBus: Logical type of parameters copy support is added. Default try for serial devices is set to 1.
 
 
 2011-06-24 Roman

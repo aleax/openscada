@@ -47,14 +47,22 @@ TParamContr::~TParamContr( )
 TCntrNode &TParamContr::operator=( TCntrNode &node )
 {
     TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
+
+    //> Check for parameter type and change it if different and alow
+    if(type().name != src_n->type().name && owner().owner().tpPrmToId(src_n->type().name) >= 0)
+    {
+	if(enableStat()) disable();
+	setType(src_n->type().name);
+    }
 
     //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     setId(tid);
 
-    if( src_n->enableStat() && toEnable( ) && !enableStat() )	enable();
+    //> Enable new parameter
+    if(src_n->enableStat() && toEnable( ) && !enableStat())	enable();
 
     return *this;
 }

@@ -75,7 +75,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("WR_MULTI",_("Use multi-items write functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;3600"));
-    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
+    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
     //> Parameter type bd structure
     //>> Standard parameter type by symple attributes list
@@ -859,6 +859,22 @@ void TMdPrm::postDisable(int flag)
             SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
         }
     }catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+TCntrNode &TMdPrm::operator=( TCntrNode &node )
+{
+    TParamContr::operator=(node);
+
+    TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
+    if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
+
+    //> IO values copy
+    for(int i_io = 0; i_io < src_n->lCtx->ioSize(); i_io++)
+        if(src_n->lCtx->ioFlg(i_io)&TPrmTempl::CfgLink)
+            lCtx->lnk(lCtx->lnkId(i_io)).addr = src_n->lCtx->lnk(src_n->lCtx->lnkId(i_io)).addr;
+    else lCtx->setS(i_io,src_n->lCtx->getS(i_io));
+
+    return *this;
 }
 
 void TMdPrm::setType( const string &tpId )
