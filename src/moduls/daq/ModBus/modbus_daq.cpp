@@ -790,7 +790,7 @@ void TMdContr::setCntrDelay( const string &err )
 
 TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // int messIO(string pdu) - sending the PDU <pdu> through the controller transpot by ModBus protocol.
+    // string messIO(string pdu) - sending the PDU <pdu> through the controller transpot by ModBus protocol.
     //  pdu - PDU request/respond
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() == TVariant::String)
     {
@@ -843,7 +843,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
 TMdPrm::TMdPrm(string name, TTipParam *tp_prm) : TParamContr(name, tp_prm), p_el("w_attr"), lCtx(NULL)
 {
     acq_err.setVal("");
-    if(isLogic()) lCtx = new TLogCtx(name+"ModBusPrm");
+    if(isLogic()) lCtx = new TLogCtx(name+"_ModBusPrm");
 }
 
 TMdPrm::~TMdPrm( )
@@ -896,7 +896,7 @@ void TMdPrm::setType( const string &tpId )
 
     TParamContr::setType(tpId);
 
-    if(isLogic()) lCtx = new TLogCtx(name()+"ModBusPrm");
+    if(isLogic()) lCtx = new TLogCtx(name()+"_ModBusPrm");
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }

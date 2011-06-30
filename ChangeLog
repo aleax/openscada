@@ -1,6 +1,10 @@
 2011-06-30 Roman
 - DAQ.ModBus: User API function TController::messIO() is added for allow custom ModBus associated requests from the controller
     logical parameter's templates.
+- DAQ: User API function TController::alarmSet() is added for unified alarm set to DAQ-object.
+- FIX:DAQ.JavaLikeCalc: Wrong warning for not used template first try compile on change properties configuration and text programm is fixed.
+    Function object's name generation for template's functions is set to nodePath(), for prevent coincidence of equal templates
+    from different template libraries.
 
 
 2011-06-29 Roman

@@ -85,7 +85,7 @@ string Func::name( )
 TCntrNode &Func::operator=( TCntrNode &node )
 {
     Func *src_n = dynamic_cast<Func*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     *(TConfig *)this = *(TConfig*)src_n;
     *(TFunction *)this = *(TFunction*)src_n;
@@ -93,7 +93,7 @@ TCntrNode &Func::operator=( TCntrNode &node )
     //> Set to DB
     cfg("ID").setS(mId);
 
-    if( src_n->startStat( ) && !startStat( ) )	setStart( true );
+    if(src_n->startStat() && !startStat()) setStart(true);
 
     return *this;
 }
@@ -248,17 +248,17 @@ void Func::delIO( )
 void Func::preIOCfgChange()
 {
     be_start = startStat();
-    if( be_start )
+    if(be_start)
     {
 	setStart(false);
-	if( mTVal ) { delete mTVal; mTVal = NULL; }
+	if(mTVal) { delete mTVal; mTVal = NULL; }
     }
     TFunction::preIOCfgChange();
 }
 
 void Func::postIOCfgChange()
 {
-    if( be_start ) setStart(true);
+    if(be_start) setStart(true);
     TFunction::postIOCfgChange();
 }
 
@@ -2597,6 +2597,8 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 
 TVariant Func::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // ElTp call(ElTp prm1, ...) - the function call
+    //  prm{N} - {N} parameter to the function.
     if(iid == "call")
     {
         TValFunc vfnc("JavaLikeObjFuncCalc",this);

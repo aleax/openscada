@@ -413,6 +413,12 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
     if(iid == "descr")	return descr();
     // string status() - get controller status.
     if(iid == "status")	return getStatus();
+    // bool alarmSet(string mess, int lev = -5, string prm = "") - set alarm to message <mess> and level <lev> for parameter <prm>.
+    if(iid == "alarmSet" && prms.size() >= 1)
+    {
+	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, (prms.size() >= 3) ? prms[2].getS() : "");
+	return true;
+    }
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }

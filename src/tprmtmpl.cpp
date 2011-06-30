@@ -111,7 +111,7 @@ string TPrmTempl::prog( )
 
 void TPrmTempl::setProgLang( const string &ilng )
 {
-    if( startStat() ) setStart(false);
+    if(startStat()) setStart(false);
 
     m_prog = ilng+"\n"+prog();
     modif();
@@ -119,7 +119,7 @@ void TPrmTempl::setProgLang( const string &ilng )
 
 void TPrmTempl::setProg( const string &iprg )
 {
-    if( startStat() ) setStart(false);
+    if(startStat()) setStart(false);
 
     m_prog = progLang()+"\n"+iprg;
     modif();

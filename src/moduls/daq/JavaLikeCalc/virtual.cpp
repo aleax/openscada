@@ -200,41 +200,51 @@ void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
     if(lang != "JavaScript") throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
-    if(!lbPresent("sys_compile")) lbReg( new Lib("sys_compile","","") );
+    if(!lbPresent("sys_compile")) lbReg(new Lib("sys_compile","",""));
 
-    //> Function id generation
+    //> Function id generation for "<auto>" or call nodePath() for it
     string funcId = fnc_cfg.id();
     if(funcId == "<auto>")
 	for(int aId = 1; lbAt("sys_compile").at().present(funcId); aId++)
 	    funcId = TSYS::strMess("Auto_%d",aId);
+    else funcId = fnc_cfg.nodePath('_',true);
 
-    if(!lbAt("sys_compile").at().present(fnc_cfg.id())) lbAt("sys_compile").at().add(funcId.c_str(),"");
+    //> Connect or use allowed compiled function object
+    if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId.c_str(),"");
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
     func.at().setMaxCalcTm(maxCalcTm);
 
-    bool isStart = func.at().startStat();
+    //> Try hot config fields change for work function
+    if(func.at().use() && func.at().startStat())
+	try
+	{
+    	    ((TFunction&)func.at()).operator=(fnc_cfg);
+	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
+	}
+	catch(TError err)
+	{
+	    func.at().setStart(true);
+	    throw;
+	}
+    //> Standard compile
     try
     {
-	((TFunction&)func.at()).operator=(fnc_cfg);
-	if( func.at().startStat() && prog_text == func.at().prog() ) return func.at().nodePath(0,true);
-    }
-    catch(TError err) { if( isStart ) func.at().setStart(true); throw; }
-    func.at().setProg(prog_text.c_str());
-    try
-    {
-	if( func.at().startStat() ) func.at().setStart(false);
+	if(func.at().startStat()) func.at().setStart(false);
+	func.at().setProg(prog_text.c_str());
 	func.at().setUsings(usings);
+	((TFunction&)func.at()).operator=(fnc_cfg);
 	func.at().setStart(true);
     }
     catch(TError err)
     {
-	if( !func.at().use() )
+	if(!func.at().use())
 	{
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
 	throw TError(nodePath().c_str(),_("Compile error: %s\n"),err.mess.c_str());
     }
+
     return func.at().nodePath(0,true);
 }
 
