@@ -179,6 +179,8 @@ class TMdContr: public TController
 	bool cfgChange( TCfg &cfg );
 	void prmEn( const string &id, bool val );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Data
 	class SDataRec

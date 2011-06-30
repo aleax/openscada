@@ -1,3 +1,8 @@
+2011-06-30 Roman
+- DAQ.ModBus: User API function TController::messIO() is added for allow custom ModBus associated requests from the controller
+    logical parameter's templates.
+
+
 2011-06-29 Roman
 - !!!!:SYS: OpenSCADA thread's object is made hard linked to thread. Task create and destroy detect method is made to task wrapper.
     No more need self starting detect method for each task.

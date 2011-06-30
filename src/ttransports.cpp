@@ -823,14 +823,14 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     // string messIO(string mess, real timeOut = 0) - sending the message <mess> through the transport with the waiting timeout <timeOut>
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds
-    if( iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object )
+    if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object)
     {
 	string rez;
 	char buf[STR_BUF_LEN];
 	try
 	{
-	    if( !startStat() ) start();
-	    int resp_len = messIO( prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0 );
+	    if(!startStat()) start();
+	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
 	    rez.assign(buf,resp_len);
 	}catch(TError) { return ""; }
 
@@ -840,17 +840,17 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name
-    else if( iid == "messIO" && prms.size() >= 2 && dynamic_cast<XMLNodeObj*>(prms[0].getO()) )
+    else if(iid == "messIO" && prms.size() >= 2 && dynamic_cast<XMLNodeObj*>(prms[0].getO()))
     {
 	try
 	{
 	    XMLNode req;
-	    if( !startStat() ) start();
+	    if(!startStat()) start();
 	    ((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
 	    messProtIO(req,prms[1].getS());
 	    ((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
-	    return 0;
 	}catch(TError err) { return err.mess; }
+	return 0;
     }
     return TCntrNode::objFuncCall(iid,prms,user);
 }

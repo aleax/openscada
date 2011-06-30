@@ -579,7 +579,6 @@ void TMdContr::setValC( char val, int addr, ResString &err )
 string TMdContr::modBusReq( string &pdu )
 {
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
-    //if( !tr.at().startStat() ) tr.at().start();
 
     XMLNode req(mPrt);
     req.setAttr("id",id())->
@@ -590,9 +589,9 @@ string TMdContr::modBusReq( string &pdu )
 
     tr.at().messProtIO(req,"ModBus");
 
-    if( !req.attr("err").empty() )
+    if(!req.attr("err").empty())
     {
-	if( atoi(req.attr("err").c_str()) == 14 ) numErrCon++;
+	if(atoi(req.attr("err").c_str()) == 14) numErrCon++;
 	else numErrResp++;
 	return req.attr("err");
     }
@@ -787,6 +786,20 @@ void TMdContr::setCntrDelay( const string &err )
 {
     if(tmDelay < 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),err.c_str()));
     tmDelay = restTm;
+}
+
+TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // int messIO(string pdu) - sending the PDU <pdu> through the controller transpot by ModBus protocol.
+    //  pdu - PDU request/respond
+    if(iid == "messIO" && prms.size() >= 1 && prms[0].type() == TVariant::String)
+    {
+	string req = prms[0].getS();
+	string rez = modBusReq(req);
+	prms[0].setS(req); prms[0].setModify();
+	return rez;
+    }
+    return TController::objFuncCall(iid,prms,user);
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )

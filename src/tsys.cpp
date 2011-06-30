@@ -1499,7 +1499,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return rez;
     }
     // string fileRead( string file ) - Return <file> content by string.
-    if( iid == "fileRead" && prms.size() >= 1 )
+    if(iid == "fileRead" && prms.size() >= 1)
     {
 	char buf[STR_BUF_LEN];
 	string rez;
@@ -1513,7 +1513,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
     //	  Return wrote bytes count.
-    if( iid == "fileWrite" && prms.size() >= 2 )
+    if(iid == "fileWrite" && prms.size() >= 2)
     {
 	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
 	string val = prms[1].getS();
@@ -1528,17 +1528,17 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // XMLNodeObj XMLNode(string name = "") - creation of the XML node object with the name <name>
     //  name - XML node name
-    if( iid == "XMLNode" ) return new XMLNodeObj( (prms.size()>=1) ? prms[0].getS() : "" );
+    if(iid == "XMLNode") return new XMLNodeObj((prms.size()>=1) ? prms[0].getS() : "");
     // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the system via XML
     //  req - request's XML node
     //  stat - remote OpenSCADA-station for request
-    if( iid == "cntrReq" && prms.size() >= 1 )
+    if(iid == "cntrReq" && prms.size() >= 1)
     {
 	XMLNode req;
-	if( !dynamic_cast<XMLNodeObj*>(prms[0].getO()) ) return string(_("1:Request is not object!"));
+	if(!dynamic_cast<XMLNodeObj*>(prms[0].getO())) return string(_("1:Request is not object!"));
 	((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
 	string path = req.attr("path");
-	if( prms.size() < 2 || prms[1].getS().empty() )
+	if(prms.size() < 2 || prms[1].getS().empty())
 	{
 	    req.setAttr("user",user);
 	    cntrCmd(&req);
@@ -1565,9 +1565,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
-    if( iid == "time" )
+    if(iid == "time")
     {
-	if( prms.empty() ) return (int)time(NULL);
+	if(prms.empty()) return (int)time(NULL);
 	int64_t tm = curTime();
 	prms[0].setI(tm%1000000); prms[0].setModify();
 	return (int)(tm/1000000);
@@ -1584,40 +1584,40 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if( iid == "localtime" && prms.size() >= 2 )
+    if(iid == "localtime" && prms.size() >= 2)
     {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
 	localtime_r(&tm_t,&tm_tm);
 
 	prms[1].setI(tm_tm.tm_sec); prms[1].setModify();
-	if( prms.size() >= 3 ) { prms[2].setI(tm_tm.tm_min); prms[2].setModify(); }
-	if( prms.size() >= 4 ) { prms[3].setI(tm_tm.tm_hour); prms[3].setModify(); }
-	if( prms.size() >= 5 ) { prms[4].setI(tm_tm.tm_mday); prms[4].setModify(); }
-	if( prms.size() >= 6 ) { prms[5].setI(tm_tm.tm_mon); prms[5].setModify(); }
-	if( prms.size() >= 7 ) { prms[6].setI(1900+tm_tm.tm_year); prms[6].setModify(); }
-	if( prms.size() >= 8 ) { prms[7].setI(tm_tm.tm_wday); prms[7].setModify(); }
-	if( prms.size() >= 9 ) { prms[8].setI(tm_tm.tm_yday); prms[8].setModify(); }
-	if( prms.size() >= 10 ) { prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
+	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_min); prms[2].setModify(); }
+	if(prms.size() >= 4) 	{ prms[3].setI(tm_tm.tm_hour); prms[3].setModify(); }
+	if(prms.size() >= 5) 	{ prms[4].setI(tm_tm.tm_mday); prms[4].setModify(); }
+	if(prms.size() >= 6) 	{ prms[5].setI(tm_tm.tm_mon); prms[5].setModify(); }
+	if(prms.size() >= 7) 	{ prms[6].setI(1900+tm_tm.tm_year); prms[6].setModify(); }
+	if(prms.size() >= 8) 	{ prms[7].setI(tm_tm.tm_wday); prms[7].setModify(); }
+	if(prms.size() >= 9) 	{ prms[8].setI(tm_tm.tm_yday); prms[8].setModify(); }
+	if(prms.size() >= 10) 	{ prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
 	return 0;
     }
     // string strftime(int sec, string form = "%Y-%m-%d %H:%M:%S") - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
     //  form - result string format
-    if( iid == "strftime" && !prms.empty() )
+    if(iid == "strftime" && !prms.empty())
     {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
 	localtime_r(&tm_t,&tm_tm);
 	char buf[1000];
-	int rez = strftime( buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm );
+	int rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
 	return (rez>0) ? string(buf,rez) : "";
     }
     // int strptime(int str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>
     //  str - source time in string
     //  form - string's time template in format POSIX-function "strptime"
-    if( iid == "strptime" && !prms.empty() )
+    if(iid == "strptime" && !prms.empty())
     {
 	struct tm stm;
 	stm.tm_isdst = -1;
@@ -1628,11 +1628,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //      beginning from basic time <base> or from the current, if the basic is not specified
     //  cronreq - shedule in standard Cron format
     //  base - base time
-    if( iid == "cron" && !prms.empty() )
+    if(iid == "cron" && !prms.empty())
 	return (int)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
-    if( iid == "strFromCharCode" )
+    if(iid == "strFromCharCode")
     {
 	string rez;
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++)
@@ -1643,7 +1643,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  src - source text;
     //  fromCP - from codepage, empty for use internal codepage;
     //  toCP - to codepage, empty for use internal codepage.
-    if( iid == "strCodeConv" && prms.size() >= 3 )
+    if(iid == "strCodeConv" && prms.size() >= 3)
 	return Mess->codeConv((prms[1].getS().size() ? prms[1].getS() : Mess->charset()),
 			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
 
