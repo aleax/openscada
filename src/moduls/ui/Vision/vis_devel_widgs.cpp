@@ -999,7 +999,7 @@ void InspLnk::setWdg( const string &iwdg )
     string lnid, lngrp, lnwdg, lnatr, grpcd;
     map<string,bool> ugrps;
 
-    if( it_wdg != TSYS::strSepParse(iwdg,0,';') )
+    if(it_wdg != TSYS::strSepParse(iwdg,0,';'))
     {
 	clear();
 	it_wdg = TSYS::strSepParse(iwdg,0,';');
@@ -1012,66 +1012,69 @@ void InspLnk::setWdg( const string &iwdg )
     //> Get links info
     XMLNode info_req("info");
     info_req.setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1")->setAttr("inclValue","1");
-    if( mainWin()->cntrIfCmd(info_req) ) return;
+    if(mainWin()->cntrIfCmd(info_req)) return;
     XMLNode *rootel = info_req.childGet(0);
     //> Create widget's root items
-    for( unsigned i_l = 0; i_l < rootel->childSize(); i_l++ )
+    for(unsigned i_l = 0; i_l < rootel->childSize(); i_l++)
     {
 	lnid  = rootel->childGet(i_l)->attr("id");
 	lngrp = rootel->childGet(i_l)->attr("elGrp");
 	lnwdg = TSYS::strSepParse(lnid.substr(3),0,'.');
 	lnatr = TSYS::strSepParse(lnid.substr(3),1,'.');
-	if( lnatr.empty() )	{ lnatr = lnwdg; lnwdg = "."; }
+	if(lnatr.empty()) { lnatr = lnwdg; lnwdg = "."; }
 
 	//> Search widget item
 	QTreeWidgetItem *wdg_it;
 	int i_it;
-	for( i_it = 0; i_it < topLevelItemCount(); i_it++ )
-	    if( lnwdg == topLevelItem(i_it)->text(0).toAscii().data() )
+	for(i_it = 0; i_it < topLevelItemCount(); i_it++)
+	    if(lnwdg == topLevelItem(i_it)->text(0).toAscii().data())
 		break;
-	if( i_it < topLevelItemCount() ) wdg_it = topLevelItem(i_it);
+	if(i_it < topLevelItemCount()) wdg_it = topLevelItem(i_it);
 	else
 	{
 	    wdg_it = new QTreeWidgetItem(this);
 	    wdg_it->setText(0,lnwdg.c_str());
 	}
 
-	if( !lngrp.empty() )
+	if(!lngrp.empty())
 	{
 	    //>> Search group
-	    for( i_it = 0; i_it < wdg_it->childCount(); i_it++ )
-		if( lngrp == wdg_it->child(i_it)->text(0).toAscii().data() )
+	    for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
+		if(lngrp == wdg_it->child(i_it)->text(0).toAscii().data())
 		    break;
-	    if( i_it < wdg_it->childCount() ) wdg_it = wdg_it->child(i_it);
+	    if(i_it < wdg_it->childCount()) wdg_it = wdg_it->child(i_it);
 	    else
 	    {
 		wdg_it = new QTreeWidgetItem(wdg_it);
 		wdg_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-		wdg_it->setText(0,lngrp.c_str());
-		wdg_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	    }
+
 	    //>>> Get group value
 	    grpcd = TSYS::addr2str(wdg_it)+lngrp;
-	    if( ugrps.find(grpcd) == ugrps.end() )
+	    if(ugrps.find(grpcd) == ugrps.end())
 	    {
+		wdg_it->setText(0,lngrp.c_str());
+		wdg_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
+
 		req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2fpr_"+lnid.substr(3));
-		if( !mainWin()->cntrIfCmd(req) ) wdg_it->setText(1,req.text().c_str());
+		if(!mainWin()->cntrIfCmd(req)) wdg_it->setText(1,req.text().c_str());
 		ugrps.insert(std::pair<string,bool>(grpcd,true));
 	    }
 	}
 	//>> Search parameter
 	QTreeWidgetItem *prm_it;
-	for( i_it = 0; i_it < wdg_it->childCount(); i_it++ )
-	    if( lnatr == wdg_it->child(i_it)->text(0).toAscii().data() )
+	for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
+	    if(lnatr == wdg_it->child(i_it)->text(0).toAscii().data())
 		break;
-	if( i_it < wdg_it->childCount() ) prm_it = wdg_it->child(i_it);
+	if(i_it < wdg_it->childCount()) prm_it = wdg_it->child(i_it);
 	else
 	{
 	    prm_it = new QTreeWidgetItem(wdg_it);
 	    prm_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-	    prm_it->setText(0,lnatr.c_str());
-	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
+    	    prm_it->setText(0,lnatr.c_str());
+    	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	}
+
 	//>>> Get parameter's value
 	prm_it->setText(1,rootel->childGet(i_l)->text().c_str());
 	//req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
@@ -1080,8 +1083,8 @@ void InspLnk::setWdg( const string &iwdg )
     }
 
     //> Check for deleted links
-    for( int i_it = 0; i_it < topLevelItemCount(); i_it++ )
-	for( int i_g = 0, i_a = 0; i_g < topLevelItem(i_it)->childCount(); )
+    for(int i_it = 0; i_it < topLevelItemCount(); i_it++)
+	for(int i_g = 0, i_a = 0; i_g < topLevelItem(i_it)->childCount(); )
 	{
 	    QTreeWidgetItem *wdg_g  = topLevelItem(i_it)->child(i_g);
 	    QTreeWidgetItem *wdg_it = (wdg_g->childCount())?wdg_g->child(i_a):wdg_g;
@@ -1089,21 +1092,21 @@ void InspLnk::setWdg( const string &iwdg )
 	    unsigned i_l;
 	    for(i_l = 0; i_l < rootel->childSize(); i_l++)
 		if(rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
-			((wdg_g==wdg_it && rootel->childGet(i_l)->attr("elGrp").empty()) || 
+			((wdg_g==wdg_it && rootel->childGet(i_l)->attr("elGrp").empty()) ||
 			(wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toAscii().data())))
 			//((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
 		    break;
-	    if( i_l >= rootel->childSize() )
+	    if(i_l >= rootel->childSize())
 	    {
 		delete wdg_it;
-		if( wdg_g != wdg_it && !wdg_g->childCount() )
+		if(wdg_g != wdg_it && !wdg_g->childCount())
 		{
 		    delete wdg_g; i_a = 0;
-		    if( topLevelItem(i_it)->childCount() )	continue;
+		    if(topLevelItem(i_it)->childCount())	continue;
 		    delete topLevelItem(i_it); i_it--;
 		    break;
 		}
-		if( wdg_g == wdg_it && !topLevelItem(i_it)->childCount() )
+		if(wdg_g == wdg_it && !topLevelItem(i_it)->childCount())
 		{
 		    delete topLevelItem(i_it); i_it--;
 		    break;
@@ -1111,14 +1114,14 @@ void InspLnk::setWdg( const string &iwdg )
 	    }
 	    else
 	    {
-		if( wdg_g == wdg_it ) i_g++;
+		if(wdg_g == wdg_it) i_g++;
 		else i_a++;
 	    }
-	    if( wdg_g != wdg_it && i_a >= wdg_g->childCount() )	{ i_a = 0; i_g++; }
+	    if(wdg_g != wdg_it && i_a >= wdg_g->childCount())	{ i_a = 0; i_g++; }
 	}
 
     //> Set widget's path
-    if( topLevelItemCount() )	topLevelItem(0)->setData(0,Qt::UserRole,QString(it_wdg.c_str()));
+    if(topLevelItemCount())	topLevelItem(0)->setData(0,Qt::UserRole,QString(it_wdg.c_str()));
 
     show_init = false;
 }
@@ -1162,7 +1165,7 @@ QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     //> Get combobox values
     XMLNode req("get");
     req.setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(id_it.child(0,0).isValid()?"pl_":"ls_")+attr_id);
-    if( !owner()->mainWin()->cntrIfCmd(req) )
+    if(!owner()->mainWin()->cntrIfCmd(req))
     {
 	w_del = new QComboBox(parent);
 

@@ -1,3 +1,8 @@
+2011-07-02 Roman
+- FIX:UI.VCAEngine: Link status is fixed for "val:Value var" form.
+- FIX:UI.Vision: Group link set error, after presentative attribute rename, is fixed.
+
+
 2011-06-30 Roman
 - DAQ.ModBus: User API function TController::messIO() is added for allow custom ModBus associated requests from the controller
     logical parameter's templates.

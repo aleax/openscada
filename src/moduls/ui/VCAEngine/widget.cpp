@@ -1346,7 +1346,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
 	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)	srcwdg.at().attrAt(nattr).at().setS(opt->text());
 	    else if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))
-		srcwdg.at().attrAt(nattr).at().setCfgVal(TSYS::strParse(opt->text(),0," "));
+		srcwdg.at().attrAt(nattr).at().setCfgVal((opt->text().compare(0,4,"val:")==0)?opt->text():TSYS::strParse(opt->text(),0," "));
 	}
     }
     else return false;
