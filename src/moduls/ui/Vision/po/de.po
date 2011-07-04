@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-17 11:10+0300\n"
+"POT-Creation-Date: 2011-07-04 11:18+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -78,6 +78,9 @@ msgstr "Modul starten."
 
 msgid "Stop module."
 msgstr "Modul anhalten."
+
+msgid "Display number"
+msgstr "Anzeige der Anzahl"
 
 msgid "Module options"
 msgstr "Optionen des Moduls"

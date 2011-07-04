@@ -180,7 +180,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	SrcMode srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
 	string  srcData( )	{ return mDSourc; }
 	bool toStart( )  	{ return mStart; }
-	bool startStat( )	{ return run_st; }
+	bool startStat( )	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -247,8 +247,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	const string &nodeName( )	{ return mId.getValRef(); }
 
 	//Private attributes
-	Res	a_res;
-	bool	run_st;
+	Res	aRes;
+	bool	runSt;
 	string	mDB;
 	//> Base params
 	ResString &mId,		//ID
@@ -297,7 +297,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	int    archPeriod( )	{ return mAPer; }
 
 	bool toStart( )		{ return mStart; }
-	bool startStat( )	{ return run_st; }
+	bool startStat( )	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -338,8 +338,8 @@ class TVArchivator : public TCntrNode, public TConfig
 	void save_( );
 
 	//Protected attributes
-	Res	a_res;
-	bool	run_st, endrunReq;
+	Res	archRes;
+	bool	runSt, endrunReq;
 	//> Phisical elements storing
 	map<string,TVArchEl*> archEl;
 

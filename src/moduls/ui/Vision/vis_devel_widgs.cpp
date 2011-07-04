@@ -1077,9 +1077,6 @@ void InspLnk::setWdg( const string &iwdg )
 
 	//>>> Get parameter's value
 	prm_it->setText(1,rootel->childGet(i_l)->text().c_str());
-	//req.clear()->setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+lnid);
-	//if( !mainWin()->cntrIfCmd(req) )
-	//    prm_it->setText(1,req.text().c_str());
     }
 
     //> Check for deleted links

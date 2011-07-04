@@ -252,7 +252,7 @@ void ModVArch::checkArchivator( bool now )
 	    //>>> Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    //>>> Try connect new file
-	    ResAlloc res(a_res,false);
+	    ResAlloc res(archRes, false);
 	    map<string,TVArchEl*>::iterator iel = archEl.find(ArhNm);
 	    if(iel != archEl.end()) ((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
 	}
@@ -262,7 +262,7 @@ void ModVArch::checkArchivator( bool now )
     }
 
     //>> Scan files of attached archives
-    ResAlloc res(a_res,false);
+    ResAlloc res(archRes, false);
     for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
 	((ModVArchEl *)iel->second)->checkArchivator(now);
 
@@ -440,7 +440,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/fsz" && ctrChkNode(opt))
     {
 	double fsz = 0;
-	ResAlloc res(a_res,false);
+	ResAlloc res(archRes,false);
 	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
 	    fsz += ((ModVArchEl *)iel->second)->size();
 	opt->setText(TSYS::cpct2str(fsz));
@@ -484,7 +484,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
 	XMLNode *f_size = ctrMkNode("list",opt,-1,"/arch/arch/3","");
 
-	ResAlloc res(a_res,false);
+	ResAlloc res(archRes,false);
 	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
 	{
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
