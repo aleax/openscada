@@ -1522,11 +1522,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;					//Horisontal scale divisor
     int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0*vmin(w->xScale(true),w->yScale(true)));
-    if( hmax_ln >= 2 )
+    if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
-	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
-	while( hLen/hDiv < hmax_ln/10)	hDiv /= 10;
+	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
+	while(hLen/hDiv < hmax_ln/10)	hDiv /= 10;
 	fftBeg = floor(10*fftBeg/hDiv)*hDiv/10;
 	fftEnd = ceil(10*fftEnd/hDiv)*hDiv/10;
 	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv/=2;
@@ -1536,7 +1536,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	{
 	    string labH;
 	    double labDiv = 1;
-	    if( fftEnd>1000 ) labDiv = 1000;
+	    if(fftEnd > 1000) labDiv = 1000;
 	    //>>> Draw generic grid line
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
@@ -2323,7 +2323,7 @@ ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) :
 ShapeDiagram::TrendObj::~TrendObj( )
 {
 #if HAVE_FFTW3_H
-    if( fftOut ) { delete fftOut; fftN = 0; }
+    if(fftOut) { delete fftOut; fftN = 0; }
 #endif
 }
 
@@ -2340,8 +2340,8 @@ int64_t ShapeDiagram::TrendObj::valEnd()
 int ShapeDiagram::TrendObj::val( int64_t tm )
 {
     int i_p = 0;
-    for( int d_win = vals.size()/2; d_win > 10; d_win/=2 )
-	if( tm < vals[i_p+d_win].tm )	i_p+=d_win;
+    for(int d_win = vals.size()/2; d_win > 10; d_win/=2)
+	if(tm < vals[i_p+d_win].tm)	i_p+=d_win;
     for(unsigned i_p = 0; i_p < vals.size(); i_p++)
 	if(vals[i_p].tm >= tm) return i_p;
     return vals.size();

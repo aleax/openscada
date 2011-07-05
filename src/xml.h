@@ -68,13 +68,13 @@ class XMLNode
 	string	name( ) const			{ return mName; }
 	XMLNode* setName( const string &s )	{ mName = s; return this; }
 
-	string	text( bool childs = false ) const;
+	string	text( bool childs = false, bool recursive = false ) const;
 	XMLNode* setText( const string &s, bool childs = false );
 
 	void	attrList( vector<string> &list ) const;
 	XMLNode* attrDel( const string &name );
 	void	attrClear( );
-	string	attr( const string &name ) const;
+	string	attr( const string &name, bool caseSens = true ) const;
 	XMLNode* setAttr( const string &name, const string &val );
 
 	void	load( const string &vl, bool full = false, const string &cp = "UTF-8" );

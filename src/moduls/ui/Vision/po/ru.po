@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-04 11:18+0300\n"
+"POT-Creation-Date: 2011-07-05 16:33+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1447,8 +1447,20 @@ msgstr "Выбор диаграммы для экспорта."
 msgid "Diagram export."
 msgstr "Экспорт диаграммы."
 
-msgid "Save diagram's image"
-msgstr "Сохранение изображения диаграммы"
+msgid "Save diagram"
+msgstr "Сохранить диаграмму"
+
+msgid "Trend %1.png"
+msgstr "Тренд %1.png"
+
+msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
+msgstr "Изображения (*.png *.xpm *.jpg);;CSV файл (*.csv)"
+
+msgid "\"Date and time\";\"us\""
+msgstr "\"Дата и время\";\"мкс\""
+
+msgid "\"Frequency (Hz)\""
+msgstr "\"Частота (Гц)\""
 
 msgid "Export document"
 msgstr "Экспорт документа"
@@ -1462,8 +1474,14 @@ msgstr "Экспорт документа."
 msgid "Save document"
 msgstr "Сохранение документа"
 
-msgid "HTML (*.html)"
-msgstr ""
+msgid "Document %1.html"
+msgstr "Документ %1.html"
+
+msgid "XHTML (*.html);;CSV file (*.csv)"
+msgstr "XHTML (*.html);;CSV файл (*.csv)"
+
+msgid "No data for export."
+msgstr "Нет данных для экспорта."
 
 msgid "Select session for connection"
 msgstr "Выбор сеанса для подключения"

@@ -173,6 +173,7 @@ class VisRun : public QMainWindow
 	unsigned	wPrcCnt;		//Process counter
 	float		upd_tm;
 	unsigned	reqtm;			//Requested time
+	unsigned	expDiagCnt, expDocCnt;
 
 	float		x_scale, y_scale;	//RunTime scaling
 

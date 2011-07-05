@@ -1,3 +1,9 @@
+2011-07-05 Roman
+- !!!!:UI.Vision: Export to CSV is added to primitives: "Diagram" and "Document".
+- SYS.XMLNode: Recursive request all text for node is added to function text().
+    Case sensitivity selection is added to attribute's value request function.
+
+
 2011-07-04 Roman
 - SYS.Archive: Some prophylactic code clean.
 - UI.Vision: Display number information is added.

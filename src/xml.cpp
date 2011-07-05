@@ -143,13 +143,14 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
     throw TError("XMLNode",_("Child with attribut %s=%s is not present."),attr.c_str(),val.c_str());
 }
 
-string	XMLNode::text( bool childs ) const
+string	XMLNode::text( bool childs, bool recursive ) const
 {
     if(!childs || mName == "<*>") return mText;
 
     string rez;
     for(unsigned i_f = 0; i_f < childSize(); i_f++)
 	if(childGet(i_f)->name() == "<*>") rez += childGet(i_f)->text();
+	else if(recursive) rez += childGet(i_f)->text(childs, recursive);
 
     return rez;
 }
@@ -192,10 +193,15 @@ void XMLNode::attrClear( )
     mAttr.clear();
 }
 
-string XMLNode::attr( const string &name ) const
+string XMLNode::attr( const string &name, bool caseSens ) const
 {
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name) return mAttr[i_a].second;
+    if(caseSens)
+    {
+	for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
+	    if(mAttr[i_a].first == name) return mAttr[i_a].second;
+    }
+    else for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
+	if(strcasecmp(mAttr[i_a].first.c_str(),name.c_str()) == 0) return mAttr[i_a].second;
 
     return "";
 }

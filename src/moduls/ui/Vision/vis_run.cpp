@@ -26,6 +26,7 @@
 #include <linux/input.h>
 
 #include <QApplication>
+#include <QLocale>
 #include <QDesktopWidget>
 #include <QMenu>
 #include <QTimer>
@@ -57,10 +58,9 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat,
-	    bool icrSessForce, QWidget *parent ) :
+VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, QWidget *parent ) :
     QMainWindow(parent), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false), prj_it(iprj_it), master_pg(NULL), mPeriod(1000),
-    wPrcCnt(0), reqtm(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF), isConErr(false)
+    wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF), isConErr(false)
 {
     QImage ico_t;
 
@@ -600,7 +600,7 @@ void VisRun::printDoc( const string &idoc )
 
 void VisRun::exportDef( )
 {
-    if( master_pg ) exportPg( master_pg->id() );
+    if(master_pg) exportPg(master_pg->id());
 }
 
 void VisRun::exportPg( const string &ipg )
@@ -608,10 +608,10 @@ void VisRun::exportPg( const string &ipg )
     RunPageView *rpg;
     string pg = ipg;
 
-    if( pgList.empty() )	{ QMessageBox::warning(this,_("Export page"),_("No one page for export is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Export page"),_("No one page for export is present!")); return; }
 
-    if( pg.empty() && pgList.size() == 1 )	pg = pgList[0];
-    if( pg.empty() && pgList.size() > 1 )
+    if(pg.empty() && pgList.size() == 1)	pg = pgList[0];
+    if(pg.empty() && pgList.size() > 1)
     {
 	//> Make select page dialog
 	QImage ico_t;
@@ -623,21 +623,20 @@ void VisRun::exportPg( const string &ipg )
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
-	if( sdlg.exec() != QDialog::Accepted )	return;
+	if(sdlg.exec() != QDialog::Accepted)	return;
 	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
     }
 
     //> Find need page
     rpg = master_pg;
-    if( rpg->id() != pg )	rpg = findOpenPage(pg);
-    if( !rpg ) return;
+    if(rpg->id() != pg)	rpg = findOpenPage(pg);
+    if(!rpg) return;
 
     QPixmap img = QPixmap::grabWidget(rpg);
 
     //> Call save file dialog -
-    QString fileName = QFileDialog::getSaveFileName(this,_("Save page's image"),
-	(TSYS::path2sepstr(rpg->name())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
-    if( !fileName.isEmpty() && !img.save(fileName) )
+    QString fileName = QFileDialog::getSaveFileName(this,_("Save page's image"),(rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
+    if(!fileName.isEmpty() && !img.save(fileName))
 	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }
 
@@ -655,34 +654,119 @@ void VisRun::exportDiag( const string &idg )
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Diagram",lst);
-	if( lst.empty() )	{ QMessageBox::warning(this,_("Export diagram"),_("No one diagram is present!")); return; }
-	if( lst.size() == 1 )	dg = lst[0];
+	if(lst.empty())	{ QMessageBox::warning(this,_("Export diagram"),_("No one diagram is present!")); return; }
+	if(lst.size() == 1) dg = lst[0];
 	else
 	{
 	    //> Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/export.png");
-	    InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select diagramm for export."), _("Diagram export."), false, false );
-	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagramm for export."), _("Diagram export."), false, false);
+	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
-	    if( sdlg.exec() != QDialog::Accepted )	return;
+	    if(sdlg.exec() != QDialog::Accepted) return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
 	}
     }
 
-    if( !(rwdg=findOpenWidget(dg)) )	return;
+    if(!(rwdg=findOpenWidget(dg))) return;
 
     QPixmap img = QPixmap::grabWidget(rwdg);
 
     //> Call save file dialog
-    QString fileName = QFileDialog::getSaveFileName(this,_("Save diagram's image"),
-	(TSYS::path2sepstr(rwdg->name())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
-    if( !fileName.isEmpty() && !img.save(fileName) )
-	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+    QString fileName = QFileDialog::getSaveFileName(this, _("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
+	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"));
+    if(!fileName.isEmpty())
+    {
+	//>> Export to CSV
+	if(fileName.indexOf(QRegExp("\\.csv$")) != -1)
+	{
+	    //>>> Open destination file
+	    int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	    if(fd < 0)
+	    {
+		mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+		return;
+	    }
+
+	    ShapeDiagram::ShpDt *dgDt = (ShapeDiagram::ShpDt*)rwdg->shpData;
+	    string CSVr;
+	    //>>> Trend type process
+	    if(dgDt->type == 0)
+	    {
+		int firstPrm = -1, vPos = 0;
+		//>>> Prepare header
+		CSVr += _("\"Date and time\";\"us\"");
+		for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
+    		    if(dgDt->prms[i_p].val().size() && dgDt->prms[i_p].color().isValid())
+    		    {
+			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].addr())+"\"";
+			if(firstPrm < 0) firstPrm = i_p;
+		    }
+		CSVr += "\x0D\x0A";
+		if(firstPrm < 0) return;
+		//>>> Place data
+		deque<ShapeDiagram::TrendObj::SHg> &baseVls = dgDt->prms[firstPrm].val();
+		for(unsigned i_v = 0; i_v < baseVls.size(); i_v++)
+		{
+		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+TSYS::int2str(baseVls[i_v].tm%1000000);
+		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
+		    {
+			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
+    			if(cPrm.val().size() && cPrm.color().isValid())
+    			{
+			    vPos = cPrm.val(baseVls[i_v].tm);
+			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toAscii().data():"");
+			}
+		    }
+		    CSVr += "\x0D\x0A";
+		}
+	    }
+	    //>>> Frequency spectrum type
+	    else if(dgDt->type == 1)
+	    {
+#if HAVE_FFTW3_H
+		//>>> Prepare header
+		CSVr += _("\"Frequency (Hz)\"");
+		for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
+    		    if(dgDt->prms[i_p].fftN && dgDt->prms[i_p].color().isValid())
+			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].addr())+"\"";
+		CSVr += "\x0D\x0A";
+		//>>> Place data
+		int fftN = rwdg->size().width();		//Samples number
+		double fftBeg = 1/dgDt->tSize;			//Minimum frequency or maximum period time (s)
+		double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
+		for(double i_frq = fftBeg; i_frq <= fftEnd; i_frq += fftBeg)
+		{
+		    CSVr += QLocale().toString(i_frq).toStdString();
+		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
+		    {
+			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
+    			if(cPrm.fftN && cPrm.color().isValid())
+    			{
+        		    int vpos = (int)((i_frq*cPrm.fftN)/(fftBeg*fftN));
+        		    double val = EVAL_REAL;
+        		    if(vpos >= 1 && vpos < (cPrm.fftN/2+1))
+				val = cPrm.fftOut[0][0]/cPrm.fftN + pow(pow(cPrm.fftOut[vpos][0],2)+pow(cPrm.fftOut[vpos][1],2),0.5)/(cPrm.fftN/2+1);
+			    CSVr += ";"+QLocale().toString(val).toStdString();
+			}
+		    }
+		    CSVr += "\x0D\x0A";
+		}
+#endif
+	    }
+	    //>>> Save to file
+	    ::write(fd,CSVr.data(),CSVr.size());
+	    ::close(fd);
+	}
+	//>> Export to image
+	else if(!img.save(fileName))
+	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+    }
 }
 
 void VisRun::exportDoc( const string &idoc )
@@ -699,48 +783,109 @@ void VisRun::exportDoc( const string &idoc )
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Document",lst);
-	if( lst.empty() )	{ QMessageBox::warning(this,_("Export document"),_("No one document is present!")); return; }
-	if( lst.size() == 1 )	doc = lst[0];
+	if(lst.empty())	{ QMessageBox::warning(this,_("Export document"),_("No one document is present!")); return; }
+	if(lst.size() == 1) doc = lst[0];
 	else
 	{
 	    //> Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/export.png");
-	    InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select document for export."), _("Document export."), false, false );
-	    sdlg.edLay()->addWidget( new QLabel(_("Document:"),&sdlg), 2, 0 );
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select document for export."), _("Document export."), false, false);
+	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
-	    if( sdlg.exec() != QDialog::Accepted )	return;
+	    if(sdlg.exec() != QDialog::Accepted) return;
 	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
 	}
     }
 
-    if( !(rwdg=findOpenWidget(doc)) )	return;
+    if(!(rwdg=findOpenWidget(doc))) return;
 
     //> Call save file dialog -
-    QString fileName = QFileDialog::getSaveFileName(this,_("Save document"),(TSYS::path2sepstr(rwdg->name())+".html").c_str(), _("HTML (*.html)"));
-    if( !fileName.isEmpty() )
+    QString fileName = QFileDialog::getSaveFileName(this, _("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
+	_("XHTML (*.html);;CSV file (*.csv)"));
+    if(!fileName.isEmpty())
     {
-	int fd = ::open( fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644 );
-	if( fd < 0 )
+	int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	if(fd < 0)
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 	    return;
 	}
-	string rez = "<?xml version='1.0' ?>\n"
-	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	    "'DTD/xhtml1-transitional.dtd'>\n"
-	    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-	    "<head>\n"
-	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	    "  <style type='text/css'>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->style+"</style>\n"
-	    "</head>\n"+
-	    ((ShapeDocument::ShpDt*)rwdg->shpData)->doc+
-	    "</html>";
-	::write(fd,rez.data(),rez.size());
+	string rez;
+	//>> Export to CSV
+	if(fileName.indexOf(QRegExp("\\.csv$")) != -1)
+	{
+	    //>>> Parse document
+	    XMLNode docTree;
+	    docTree.load(((ShapeDocument::ShpDt*)rwdg->shpData)->doc, true);
+	    XMLNode *curNode = &docTree;
+	    vector<unsigned> treeStk;
+	    treeStk.push_back(0);
+	    while(!(!curNode->parent() && treeStk.back() >= curNode->childSize()))
+	    {
+		if(treeStk.back() < curNode->childSize())
+		{
+		    curNode = curNode->childGet(treeStk.back());
+		    treeStk.push_back(0);
+		    //>>> Check for marked table and process it
+		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && atoi(curNode->attr("CSVexp").c_str()))
+		    {
+			XMLNode *tblN = NULL, *tblRow;
+			string val;
+			for(int i_st = 0; i_st < 4; i_st++)
+			{
+			    switch(i_st)
+			    {
+				case 0:	tblN = curNode->childGet("thead", 0, true);	break;
+				case 1: tblN = curNode->childGet("tbody", 0, true);	break;
+				case 2: tblN = curNode->childGet("tfoot", 0, true);	break;
+				case 3: tblN = curNode;					break;
+				default: tblN = NULL;
+			    }
+			    if(!tblN)	continue;
+			    //>>> Rows process
+			    for(unsigned i_n = 0; i_n < tblN->childSize(); i_n++)
+			    {
+				if(strcasecmp(tblN->childGet(i_n)->name().c_str(),"tr") != 0)	continue;
+				tblRow = tblN->childGet(i_n);
+				for(unsigned i_c = 0; i_c < tblRow->childSize(); i_c++)
+				    if(strcasecmp(tblRow->childGet(i_c)->name().c_str(),"th") == 0 || strcasecmp(tblRow->childGet(i_c)->name().c_str(),"td") == 0)
+				    {
+					val = tblRow->childGet(i_c)->text(true,true);
+					for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
+					rez += "\""+val+"\";";
+					//>>>> Colspan process
+					int colSpan = atoi(tblRow->childGet(i_c)->attr("colspan",false).c_str());
+					for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";
+				    }
+				rez += "\x0D\x0A";
+			    }
+			}
+			rez += "\x0D\x0A";
+		    }
+		    else continue;
+		}
+		curNode = curNode->parent();
+		treeStk.pop_back();
+		treeStk.back()++;
+	    }
+	}
+	//>> Export to XHTML
+	else rez = "<?xml version='1.0' ?>\n"
+		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+		"'DTD/xhtml1-transitional.dtd'>\n"
+		"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+		"<head>\n"
+		"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+		"  <style type='text/css'>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->style+"</style>\n"
+		"</head>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->doc+"</html>";
+
+	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
+	else ::write(fd,rez.data(),rez.size());
 	::close(fd);
     }
 }

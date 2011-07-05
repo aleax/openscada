@@ -883,7 +883,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		if((i_sz+1) >= (int)in.size())
 		{
 		    sout.push_back(base64alph[((unsigned char)in[i_sz]&0x03)<<4]);
-		    sout+="==";
+		    sout += "==";
 		}
 		else
 		{

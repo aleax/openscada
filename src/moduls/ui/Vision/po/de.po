@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-04 11:18+0300\n"
+"POT-Creation-Date: 2011-07-05 16:33+0300\n"
 "PO-Revision-Date: 2009-08-21 12:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -1456,8 +1456,21 @@ msgstr "Diagramm für den Export auswählen."
 msgid "Diagram export."
 msgstr "Export des Diagrammes."
 
-msgid "Save diagram's image"
-msgstr "Speicherung des Bildes des Diagrammes"
+msgid "Save diagram"
+msgstr "Diagramm speichern"
+
+#, c-format
+msgid "Trend %1.png"
+msgstr ""
+
+msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
+msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
+
+msgid "\"Date and time\";\"us\""
+msgstr "\"Datum und Uhrzeit\";\"us\""
+
+msgid "\"Frequency (Hz)\""
+msgstr ""
 
 msgid "Export document"
 msgstr "Export des Dokuments"
@@ -1471,8 +1484,17 @@ msgstr "Export des Dokumentes."
 msgid "Save document"
 msgstr "Speicherung des Dokumentes"
 
-msgid "HTML (*.html)"
-msgstr ""
+#, fuzzy, c-format
+msgid "Document %1.html"
+msgstr "Dokument"
+
+#, fuzzy
+msgid "XHTML (*.html);;CSV file (*.csv)"
+msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
+
+#, fuzzy
+msgid "No data for export."
+msgstr "Diagramm für den Export auswählen."
 
 msgid "Select session for connection"
 msgstr "Sitzung für die Verbindung auswählen"
@@ -1963,3 +1985,10 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
+
+#, fuzzy
+#~ msgid "Document.html"
+#~ msgstr "Dokument"
+
+#~ msgid "Save diagram's image"
+#~ msgstr "Speicherung des Bildes des Diagrammes"
