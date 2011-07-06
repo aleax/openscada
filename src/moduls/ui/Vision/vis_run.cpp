@@ -832,7 +832,7 @@ void VisRun::exportDoc( const string &idoc )
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
 		    //>>> Check for marked table and process it
-		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && atoi(curNode->attr("CSVexp").c_str()))
+		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && atoi(curNode->attr("export").c_str()))
 		    {
 			XMLNode *tblN = NULL, *tblRow;
 			string val;
