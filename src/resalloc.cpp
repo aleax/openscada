@@ -31,7 +31,7 @@ using namespace OSCADA;
 //********************************************
 Res::Res( )
 {
-    if( pthread_rwlock_init(&rwc,NULL) )
+    if(pthread_rwlock_init(&rwc,NULL))
 	throw TError("ResAlloc",_("Error open semaphor!"));
 }
 
@@ -44,7 +44,7 @@ Res::~Res( )
 void Res::resRequestW( unsigned short tm )
 {
     int rez = 0;
-    if( !tm ) rez = pthread_rwlock_wrlock(&rwc);
+    if(!tm) rez = pthread_rwlock_wrlock(&rwc);
     else
     {
 	timespec wtm;
@@ -53,22 +53,22 @@ void Res::resRequestW( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc,&wtm);
     }
-    if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
-    else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
+    if(rez == EDEADLK) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
+    else if(tm && rez == ETIMEDOUT) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
 bool Res::resTryW( )
 {
     int rez = pthread_rwlock_trywrlock(&rwc);
-    if( rez == EBUSY ) return false;
-    else if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
+    if(rez == EBUSY) return false;
+    else if(rez == EDEADLK) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     return true;
 }
 
 void Res::resRequestR( unsigned short tm )
 {
     int rez = 0;
-    if( !tm ) rez = pthread_rwlock_rdlock(&rwc);
+    if(!tm) rez = pthread_rwlock_rdlock(&rwc);
     else
     {
 	timespec wtm;
@@ -77,15 +77,15 @@ void Res::resRequestR( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
-    if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
-    else if( tm && rez == ETIMEDOUT ) throw TError("ResAlloc",_("Resource is timeouted!"));
+    if(rez == EDEADLK) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
+    else if(tm && rez == ETIMEDOUT) throw TError("ResAlloc",_("Resource is timeouted!"));
 }
 
 bool Res::resTryR( )
 {
     int rez = pthread_rwlock_tryrdlock(&rwc);
-    if( rez == EBUSY ) return false;
-    else if( rez == EDEADLK ) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
+    if(rez == EBUSY) return false;
+    else if(rez == EDEADLK) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     return true;
 }
 
@@ -104,21 +104,21 @@ ResAlloc::ResAlloc( Res &rid ) : mId(rid), mAlloc(false)
 
 ResAlloc::ResAlloc( Res &rid, bool write, unsigned short tm ) : mId(rid), mAlloc(false)
 {
-    request( write, tm );
+    request(write, tm);
 }
 
 ResAlloc::~ResAlloc( )
 {
-    if( mAlloc ) release();
+    if(mAlloc) release();
 }
 
 void ResAlloc::request( bool write, unsigned short tm )
 {
-    if( mAlloc ) release();
+    if(mAlloc) release();
     mAlloc = false;
     try
     {
-	if( write ) mId.resRequestW(tm);
+	if(write) mId.resRequestW(tm);
 	else mId.resRequestR(tm);
 	mAlloc = true;
     }catch(TError err) { if(err.cod!=10) throw; }
@@ -126,7 +126,7 @@ void ResAlloc::request( bool write, unsigned short tm )
 
 void ResAlloc::release()
 {
-    if( !mAlloc ) return;
+    if(!mAlloc) return;
     mId.resRelease( );
     mAlloc = false;
 }
@@ -136,12 +136,14 @@ void ResAlloc::release()
 //********************************************
 ResString::ResString( const string &vl )
 {
+    pthread_mutex_init(&mRes, NULL);
     setVal(vl);
 }
 
 ResString::~ResString( )
 {
-    ResAlloc wres(mRes, true);
+    pthread_mutex_lock(&mRes);
+    pthread_mutex_destroy(&mRes);
 }
 
 size_t ResString::size( )	{ return getVal().size(); }
@@ -150,14 +152,18 @@ bool   ResString::empty( )	{ return getVal().empty(); }
 
 void ResString::setVal( const string &vl )
 {
-    ResAlloc wres(mRes, true);
+    pthread_mutex_lock(&mRes);
     str = vl;
+    pthread_mutex_unlock(&mRes);
 }
 
 string ResString::getVal( )
 {
-    ResAlloc wres(mRes, false);
-    return str;
+    string rez;
+    pthread_mutex_lock(&mRes);
+    rez = str;
+    pthread_mutex_unlock(&mRes);
+    return rez;
 }
 
 ResString &ResString::operator=( const string &val )

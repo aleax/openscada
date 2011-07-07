@@ -40,9 +40,9 @@ class Res
 	Res( );
 	~Res( );
 
-	void resRequestW(unsigned short tm = 0);	// Write request, tm in milliseconds
+	void resRequestW( unsigned short tm = 0 );	// Write request, tm in milliseconds
 	bool resTryW( );
-	void resRequestR(unsigned short tm = 0);	// Read request, tm in milliseconds
+	void resRequestR( unsigned short tm = 0 );	// Read request, tm in milliseconds
 	bool resTryR( );
 	void resRelease( );				// Release
 
@@ -92,7 +92,7 @@ class ResString
 
     private:
 	//Attributes
-	Res	mRes;
+	pthread_mutex_t	mRes;
 	string	str;
 };
 

@@ -1,3 +1,8 @@
+2011-07-07 Roman
+- !!:SYS: ResString is replaced for resource alloc mechanism from RW-lock to mutex for some performance increase
+    and memory consumption decrease.
+
+
 2011-07-05 Roman
 - !!!!:UI.Vision: Export to CSV is added to primitives: "Diagram" and "Document".
 - SYS.XMLNode: Recursive request all text for node is added to function text().
