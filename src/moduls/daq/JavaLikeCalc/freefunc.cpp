@@ -815,6 +815,32 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     return rez;
 }
 
+Reg *Func::cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end )
+{
+    //> Make operation cod
+    p_end -= p_cmd;
+    //>> Prepare operands
+    op1 = cdMvi(op1);
+    Reg::Type op1_tp = op1->vType(this);
+    Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
+    int op1_pos = op1->pos();
+    int op2_pos = op2->pos();
+    op1->free();
+    op2->free();
+    //>> Prepare rezult
+    Reg *rez = regAt(regNew());
+    rez->setType(rez_tp);
+
+    //> [CRRrrRRnn]
+    int a_sz = sizeof(uint16_t);
+    uint16_t addr = rez->pos();	prg.replace(p_cmd+1, sizeof(uint16_t), (char*)&addr, sizeof(uint16_t));
+    prg.replace(p_cmd+3, sizeof(uint16_t), (char*)&op1_pos, sizeof(uint16_t));
+    prg.replace(p_cmd+5, sizeof(uint16_t), (char*)&op2_pos, sizeof(uint16_t));
+    prg.replace(p_cmd+5+a_sz, a_sz, ((char *)&p_end), a_sz);
+
+    return rez;
+}
+
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
     //> Check allow the buildin calc and calc
@@ -894,21 +920,21 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     prg += cd_tmp;
     uint16_t p_cond = cond->pos(); cond->free();
 
-    if( thn != NULL && els != NULL )
+    if(thn != NULL && els != NULL)
     {
 	//> Add Move command to "then" end (insert to programm)
 	cd_tmp = prg.substr(p_else-1);	//-1 pass end command
 	prg.erase(p_else-1);
-	thn = cdMvi( thn );
-	rez = cdMove(NULL,thn);
+	thn = cdMvi(thn);
+	rez = cdMove(NULL, thn);
 	p_end += prg.size()-p_else+1;
 	p_else = prg.size()+1;
-	prg+=cd_tmp;
+	prg += cd_tmp;
 	//> Add Move command to "else" end (insert to programm)
 	cd_tmp = prg.substr(p_end-1);   //-1 pass end command
 	prg.erase(p_end-1);
-	els = cdMvi( els );
-	cdMove(rez,els);
+	els = cdMvi(els);
+	cdMove(rez, els);
 	p_end = prg.size()+1;
 	prg += cd_tmp;
     }
@@ -918,9 +944,9 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     p_end  -= p_cmd;
 
     //> [CRR00nn]
-    prg.replace(p_cmd+1,sizeof(uint16_t),(char*)&p_cond,sizeof(uint16_t));
-    prg.replace(p_cmd+3,a_sz,((char *)&p_else),a_sz);
-    prg.replace(p_cmd+3+a_sz,a_sz,((char *)&p_end),a_sz);
+    prg.replace(p_cmd+1, sizeof(uint16_t), (char*)&p_cond, sizeof(uint16_t));
+    prg.replace(p_cmd+3, a_sz, ((char *)&p_else), a_sz);
+    prg.replace(p_cmd+3+a_sz, a_sz, ((char *)&p_end), a_sz);
 
     return rez;
 }
@@ -2025,6 +2051,21 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) || (getValB(val,reg[ptr->a2])==1);
 		cprg += sizeof(SCode); break;
 	    }
+	    case Reg::LCOr:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; uint16_t end; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#if OSC_DEBUG >= 5
+		printf("CODE: %d = %d c|| %d.\n",ptr->rez,ptr->a1,ptr->a2);
+#endif
+		if(getValB(val,reg[ptr->a1]) != true)
+		{
+		    exec(val,reg,cprg+sizeof(SCode),dt);
+		    reg[ptr->rez] = (getValB(val,reg[ptr->a2])==true);
+		}
+		else reg[ptr->rez] = true;
+		cprg += ptr->end; break;
+	    }
 	    case Reg::LAnd:
 	    {
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
@@ -2034,6 +2075,21 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) && (getValB(val,reg[ptr->a2])==1);
 		cprg += sizeof(SCode); break;
+	    }
+	    case Reg::LCAnd:
+	    {
+		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; uint16_t end; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#if OSC_DEBUG >= 5
+		printf("CODE: %d = %d c&& %d.\n",ptr->rez,ptr->a1,ptr->a2);
+#endif
+		if(getValB(val,reg[ptr->a1]) == true)
+		{
+		    exec(val,reg,cprg+sizeof(SCode),dt);
+		    reg[ptr->rez] = (getValB(val,reg[ptr->a2])==true);
+		}
+		else reg[ptr->rez] = false;
+		cprg += ptr->end; break;
 	    }
 	    case Reg::LT:
 	    {

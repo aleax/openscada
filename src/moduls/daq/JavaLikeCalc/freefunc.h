@@ -112,7 +112,9 @@ class Reg
 	    BitShLeft,	//[CRRrrRR]: Integer bit shift left.
 	    BitShRight,	//[CRRrrRR]: Integer bit shift right.
 	    LOr,	//[CRRrrRR]: Boolean OR.
+	    LCOr,	//[CRRrrRRnn]: Conditional boolean OR.
 	    LAnd,	//[CRRrrRR]: Boolean AND.
+	    LCAnd,	//[CRRrrRRnn]: Conditional boolean AND.
 	    LT,		//[CRRrrRR]: Real least.
 	    GT,		//[CRRrrRR]: Real great.
 	    LEQ,	//[CRRrrRR]: Real least equal.
@@ -122,7 +124,7 @@ class Reg
 	    Not,	//[CRRrr]: Boolean not.
 	    BitNot,	//[CRRrr]: Integer bit not.
 	    Neg,	//[CRRrr]: Negate real.
-	    If,		//[CRR00nn]: Construction [if(R)  else <00>; <nn>]
+	    If,		//[CRR00nn]: Construction [if(R) else <00>; <nn>]
 	    Cycle,	//[CRRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
 	    CycleObj,	//[COObbRRnn]: Object cycles construction [for( RR in OO )<bb>;<nn>]
 	    Break,	//[C]: Break for cycles
@@ -312,6 +314,7 @@ class Func : public TConfig, public TFunction
 	void cdAssign( Reg *rez, Reg *op );
 	Reg *cdMove( Reg *rez, Reg *op, bool force = true );
 	Reg *cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 );
+	Reg *cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end );
 	Reg *cdUnaryOp( Reg::Code cod, Reg *op );
 	Reg *cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn = NULL, Reg *els = NULL);
 	void cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter );

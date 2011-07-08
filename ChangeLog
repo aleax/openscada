@@ -1,3 +1,7 @@
+2011-07-08 Roman
+- !!!!:DAQ.JavaLikeCalk: Conditional execution for second argument expression of logical operations ||(OR) and &&(AND) is added.
+
+
 2011-07-07 Roman
 - !!:SYS: ResString is replaced for resource alloc mechanism from RW-lock to mutex for some performance increase
     and memory consumption decrease.
