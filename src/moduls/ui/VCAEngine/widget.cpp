@@ -670,10 +670,10 @@ string Widget::helpImg( )
 
 TVariant Widget::vlGet( Attr &a )
 {
-    if( a.id() == "id" )	return TVariant(id());
-    else if( a.id() == "path" )	return TVariant(path());
-    else if( a.id() == "root" )	return TVariant(rootId());
-    else if( a.id() == "parent" )	return TVariant(parentNm());
+    if(a.id() == "id")		return TVariant(id());
+    else if(a.id() == "path")	return TVariant(path());
+    else if(a.id() == "root")	return TVariant(rootId());
+    else if(a.id() == "parent")	return TVariant(parentNm());
 
     return TVariant();
 }

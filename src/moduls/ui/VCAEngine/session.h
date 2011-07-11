@@ -194,6 +194,7 @@ class SessWdg : public Widget, public TValFunc
 	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on inherit
 	AutoHD<SessWdg> wdgAt( const string &wdg );
+	void pgClose( );
 
 	//> Events process
 	void eventAdd( const string &ev );

@@ -1,3 +1,8 @@
+- !!:FIX:SYS: Tasks creation is fixed for check and wait present task for allow. Detected by crash on UI.WebVision.
+- FIX:UI.VCAEngine: Close included to Box-widget pages on page close on VCA-engine side is added.
+- FIX:UI.Vision, UI.WebVision: Use only enabled and visible Box-widgets for page including.
+
+
 2011-07-08 Roman
 - !!!!:DAQ.JavaLikeCalk: Conditional execution for second argument expression of logical operations ||(OR) and &&(AND) is added.
 

@@ -373,7 +373,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
   }
   //> Find for include page creation
   for(var i in this.wdgs)
-    if(this.wdgs[i].attrs['root'] == 'Box')
+    if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible)
     {
       if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'])
       {
@@ -449,23 +449,23 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 function findOpenPage( pgId )
 {
   var opPg;
-  if( pgId == this.addr ) return this;
+  if(pgId == this.addr) return this;
   //> Check from included widgets
-  for( var i in this.wdgs )
-    if( this.wdgs[i].attrs['root'] == 'Box' )
+  for(var i in this.wdgs)
+    if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible)
     {
-      if( pgId == this.wdgs[i].attrs['pgOpenSrc'] ) return this.wdgs[i].pages[pgId];
-      if( this.wdgs[i].inclOpen )
+      if(pgId == this.wdgs[i].attrs['pgOpenSrc']) return this.wdgs[i].pages[pgId];
+      if(this.wdgs[i].inclOpen)
       {
 	opPg = this.wdgs[i].pages[this.wdgs[i].inclOpen].findOpenPage(pgId);
-	if( opPg ) return opPg;
+	if(opPg) return opPg;
       }
     }
   //> Put checking to child pages
-  for( var i in this.pages )
+  for(var i in this.pages)
   {
     opPg = this.pages[i].findOpenPage(pgId);
-    if( opPg ) return opPg;
+    if(opPg) return opPg;
   }
   return null;
 }
@@ -489,7 +489,9 @@ function makeEl( pgBr, inclPg )
   var elBorder = 0;
   if( this.attrs['bordWidth'] ) elBorder=parseInt(this.attrs['bordWidth']);
   var elStyle = '';
-  if( !(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEC_RD)) ) elStyle+='visibility : hidden; ';
+  this.isVisible = true;
+  if(!(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEC_RD)))
+  { elStyle += 'visibility : hidden; '; this.isVisible = false; }
   var geomX = parseFloat(this.attrs['geomX']);
   var geomY = parseFloat(this.attrs['geomY']);
   if( this.pg ) geomX = geomY = 0;

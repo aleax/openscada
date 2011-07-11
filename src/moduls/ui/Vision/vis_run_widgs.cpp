@@ -184,38 +184,41 @@ void RunWdgView::orderUpdate( )
 
     //> Update tab order
     RunWdgView *prev_aw = NULL;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
+    for(int i_c = 0; i_c < children().size(); i_c++)
     {
 	RunWdgView *cw = qobject_cast<RunWdgView*>(children().at(i_c));
-	if( !cw || !(mod->getFocusedWdg(cw)->focusPolicy()&Qt::TabFocus) ) continue;
-	if( prev_aw )	QWidget::setTabOrder( mod->getFocusedWdg(prev_aw), mod->getFocusedWdg(cw) );
+	if(!cw || !(mod->getFocusedWdg(cw)->focusPolicy()&Qt::TabFocus)) continue;
+	if(prev_aw) QWidget::setTabOrder(mod->getFocusedWdg(prev_aw), mod->getFocusedWdg(cw));
 	prev_aw = cw;
     }
 }
 
 bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
-    bool rez = WdgView::attrSet( attr, val, uiPrmPos );
+    bool rez = WdgView::attrSet(attr, val, uiPrmPos);
 
     switch(uiPrmPos)
     {
 	case -2:	//focus
-	    if( (bool)atoi(val.c_str()) == hasFocus() )      break;
-	    if( (bool)atoi(val.c_str()) ) setFocus(Qt::OtherFocusReason);
+	    if((bool)atoi(val.c_str()) == hasFocus())	break;
+	    if((bool)atoi(val.c_str())) setFocus(Qt::OtherFocusReason);
 	    return true;
 	case -3:	//perm
-	    setPermCntr( atoi(val.c_str())&SEC_WR );
-	    setPermView( atoi(val.c_str())&SEC_RD );
+	    setPermCntr(atoi(val.c_str())&SEC_WR);
+	    setPermView(atoi(val.c_str())&SEC_RD);
 	    return true;
 	case -4:        //page name
             setWindowTitle(val.c_str());
             break;
-	case 4:		//pgGrp
-	    setProperty("pgGrp",val.c_str());
-	    return true;
 	case 3:		//pgOpenSrc
 	    setProperty("pgOpenSrc",val.c_str());
 	    return true;
+	case 4:		//pgGrp
+	    setProperty("pgGrp",val.c_str());
+	    return true;
+	case 5:         //en
+            setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));
+            return true;
 	case 6:		//active
 	    setProperty("active",(bool)atoi(val.c_str()));
 	    return true;
@@ -229,10 +232,10 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
 string RunWdgView::resGet( const string &res )
 {
-    if( res.empty() )	return "";
+    if(res.empty())	return "";
     string ret = mainWin( )->cacheResGet(res);
-    if( ret.empty() && !(ret=WdgView::resGet(res)).empty() )
-	mainWin( )->cacheResSet(res,ret);
+    if(ret.empty() && !(ret=WdgView::resGet(res)).empty())
+	mainWin()->cacheResSet(res,ret);
 
     return ret;
 }
@@ -240,12 +243,12 @@ string RunWdgView::resGet( const string &res )
 bool RunWdgView::event( QEvent *event )
 {
     //> Force event's process
-    switch( event->type() )
+    switch(event->type())
     {
 	case QEvent::Paint:
-	    if( permView() )	break;
+	    if(permView())	break;
 	    //> Paint message about access denied
-	    if( dynamic_cast<RunPageView*>(this) )
+	    if(dynamic_cast<RunPageView*>(this))
 	    {
 		QPainter pnt(this);
 		//>> Fill page and draw border
@@ -493,27 +496,27 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
     RunPageView *pg;
 
     //> Self check
-    if( id() == ipg ) return this;
+    if(id() == ipg) return this;
 
     //> Check to included widgets
-    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
+    for(int i_ch = 0; i_ch < children().size(); i_ch++)
     {
-	if( qobject_cast<RunPageView*>(children().at(i_ch)) )
+	if(qobject_cast<RunPageView*>(children().at(i_ch)))
 	{
 	    pg = ((RunPageView*)children().at(i_ch))->findOpenPage(ipg);
-	    if( pg ) return pg;
+	    if(pg) return pg;
 	    continue;
 	}
-	if( !qobject_cast<RunWdgView*>(children().at(i_ch)) )	continue;
+	if(!qobject_cast<RunWdgView*>(children().at(i_ch)))	continue;
 	RunWdgView *rwdg = (RunWdgView*)children().at(i_ch);
-	if( rwdg->root() == "Box" )
+	if(rwdg->property("isVisible").toBool() && rwdg->root() == "Box")
 	{
-	    if( rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty() )
+	    if(rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty())
 		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toAscii().data());
-	    if( ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget )
+	    if(((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget)
 	    {
 		pg = ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget->findOpenPage(ipg);
-		if( pg ) return pg;
+		if(pg) return pg;
 	    }
 	}
     }
@@ -524,16 +527,16 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
 bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const string &pgSrc )
 {
     //> Check for set include page
-    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
-	if( !pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunWdgView*)children().at(i_ch))->root() == "Box" )
+    for(int i_ch = 0; i_ch < children().size(); i_ch++)
+	if(!pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
+		((RunWdgView*)children().at(i_ch))->property("isVisible").toBool() && ((RunWdgView*)children().at(i_ch))->root() == "Box")
 	{
-	    if( ((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp )
+	    if(((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp)
 	    {
 		string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();
-		if( pg_it != pg_it_prev )
+		if(pg_it != pg_it_prev)
 		{
-		    if( !pg_it_prev.empty() )
+		    if(!pg_it_prev.empty())
 		    {
 			XMLNode req("close");
 			req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
@@ -543,19 +546,19 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 		}
 		return true;
 	    }
-	    if( ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget &&
-		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget->callPage(pg_it,pgGrp,pgSrc) )
+	    if(((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget &&
+		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget->callPage(pg_it,pgGrp,pgSrc))
 		return true;
         }
     //> Put checking to self include pages
-    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
-	if( qobject_cast<RunPageView*>(children().at(i_ch)) &&
+    for(int i_ch = 0; i_ch < children().size(); i_ch++)
+	if(qobject_cast<RunPageView*>(children().at(i_ch)) &&
 		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc))
 	    return true;
     //> Check for open child page or for unknown and empty source pages open as master page child windows
-    if( (pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg )
+    if((pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg)
     {
-	RunPageView *pg = new RunPageView(pg_it,mainWin(),this);
+	RunPageView *pg = new RunPageView(pg_it, mainWin(), this);
 	pg->setAttribute( Qt::WA_DeleteOnClose );
 	pg->setWindowFlags( Qt::Tool );
 	pg->load("");
@@ -586,13 +589,13 @@ void RunPageView::closeEvent( QCloseEvent *event )
     mainWin()->cntrIfCmd(req);
 
     //> Close included pages
-    for( int i_ch = 0; i_ch < children().size(); i_ch++ )
-	if( !qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView *)children().at(i_ch))->root() == "Box" &&
-		!((RunWdgView*)children().at(i_ch))->pgOpenSrc().empty() )
+    /*for(int i_ch = 0; i_ch < children().size(); i_ch++)
+	if(!qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView *)children().at(i_ch))->root() == "Box" &&
+		!((RunWdgView*)children().at(i_ch))->pgOpenSrc().empty())
 	{
 	    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",((RunWdgView*)children().at(i_ch))->pgOpenSrc());
 	    mainWin()->cntrIfCmd(req);
-	}
+	}*/
 }
 
 //*********************************************

@@ -760,7 +760,7 @@ void SessPage::setEnable( bool val )
     {
 	vector<string> pg_ls;
 	//> Register opened page
-	if(!(parent().at().prjFlags( )&Page::Empty) && attrAt("pgOpen").at().getB()) ownerSess()->openReg(path());
+	if(!(parent().at().prjFlags()&Page::Empty) && attrAt("pgOpen").at().getB()) ownerSess()->openReg(path());
 	//> Create included pages
 	parent().at().pageList(pg_ls);
 	for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
@@ -776,7 +776,7 @@ void SessPage::setEnable( bool val )
 
 void SessPage::setProcess( bool val )
 {
-    if( !enable() ) return;
+    if(!enable()) return;
 
     //> Change process state for included pages
     vector<string> ls;
@@ -790,7 +790,7 @@ void SessPage::setProcess( bool val )
     {
 	SessWdg::setProcess(true);
 	//>> First calc
-	if( diff ) calc(true,false);
+	if(diff) calc(true,false);
     }
     else if(!val)
     {
@@ -848,6 +848,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		ownerSess()->openUnreg(path());
 		if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
 		if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
+		pgClose();
 	    }
 	}
 	else if(cfg.id() == "pgOpenSrc")
@@ -1068,9 +1069,9 @@ void SessWdg::postEnable( int flag )
 
 SessWdg *SessWdg::ownerSessWdg( bool base )
 {
-    if( nodePrev(true) )
+    if(nodePrev(true))
     {
-	if( !base && dynamic_cast<SessPage*>(nodePrev()) )   return NULL;
+	if(!base && dynamic_cast<SessPage*>(nodePrev()))   return NULL;
 	return dynamic_cast<SessWdg*>(nodePrev());
     }
     return NULL;
@@ -1114,18 +1115,18 @@ void SessWdg::setEnable( bool val )
 
 void SessWdg::setProcess( bool val )
 {
-    if( val && !enable() ) setEnable(true);
+    if(val && !enable()) setEnable(true);
 
     //> Prepare process function value level
-    if( val && !TSYS::strNoSpace(calcProg()).empty() )
+    if(val && !TSYS::strNoSpace(calcProg()).empty())
     {
 	//>> Prepare function io structure
 	TFunction fio(parent().at().calcId());
 	//>>> Add generic io
-	fio.ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,IO::Default,"1000",false),0);
-	fio.ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,IO::Default,"0",false),1);
-	fio.ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,IO::Default,"0",false),2);
-	fio.ioIns( new IO("this",_("This widget's object for access to user's API"),IO::Object,IO::Default),3);
+	fio.ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,IO::Default,"1000",false),0);
+	fio.ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,IO::Default,"0",false),1);
+	fio.ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,IO::Default,"0",false),2);
+	fio.ioIns(new IO("this",_("This widget's object for access to user's API"),IO::Object,IO::Default),3);
 	//>>> Add calc widget's attributes
 	vector<string> iwls, als;
 	//>>> Self attributes check
@@ -1172,9 +1173,9 @@ void SessWdg::setProcess( bool val )
 		}
 	    }
 	}
-	fio.ioAdd( new IO("event",_("Event"),IO::String,IO::Output) );
-	fio.ioAdd( new IO("alarmSt",_("Alarm status"),IO::Integer,IO::Output,"",false,"./alarmSt") );
-	fio.ioAdd( new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm") );
+	fio.ioAdd(new IO("event",_("Event"),IO::String,IO::Output));
+	fio.ioAdd(new IO("alarmSt",_("Alarm status"),IO::Integer,IO::Output,"",false,"./alarmSt"));
+	fio.ioAdd(new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm"));
 
 	//>> Compile function
 	mWorkProg = "";
@@ -1183,7 +1184,7 @@ void SessWdg::setProcess( bool val )
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
 	}
-	catch( TError err )
+	catch(TError err)
 	{
 	    //>> Second compile try
 	    try
@@ -1192,23 +1193,23 @@ void SessWdg::setProcess( bool val )
 		mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
 	    }
-	    catch( TError err )
+	    catch(TError err)
 	    { mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),fio.id().c_str(),calcLang().c_str(),err.mess.c_str()); }
 	}
 
 	//>> Connect to compiled function
-	if( mWorkProg.size() )
+	if(mWorkProg.size())
 	{
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    TValFunc::setUser(ownerSess()->user());
 	    setO(3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()));
 	}
     }
-    if( !val )
+    if(!val)
     {
 	//>> Free function link
 	mProc = false;
-	ResAlloc res(mCalcRes,true);
+	ResAlloc res(mCalcRes, true);
 	TValFunc::setFunc(NULL);
     }
 
@@ -1226,25 +1227,25 @@ void SessWdg::setProcess( bool val )
 
 string SessWdg::ico( )
 {
-    if( !parent().freeStat() )  return parent().at().ico();
+    if(!parent().freeStat())	return parent().at().ico();
     return "";
 }
 
 string SessWdg::calcLang( )
 {
-    if( !parent().freeStat() )    return parent().at().calcLang();
+    if(!parent().freeStat())	return parent().at().calcLang();
     return "";
 }
 
 string SessWdg::calcProg( )
 {
-    if( !parent().freeStat() )    return parent().at().calcProg();
+    if(!parent().freeStat())	return parent().at().calcProg();
     return "";
 }
 
 int SessWdg::calcPer( )
 {
-    if( !parent().freeStat() )    return parent().at().calcPer( );
+    if(!parent().freeStat())	return parent().at().calcPer();
     return 0;
 }
 
@@ -1253,15 +1254,15 @@ string SessWdg::resourceGet( const string &id, string *mime )
     string mimeType, mimeData;
 
     mimeData = parent().at().resourceGet( id, &mimeType );
-    if( mime )	*mime = mimeType;
+    if(mime)	*mime = mimeType;
 
     return mimeData;
 }
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if( wdgPresent(iid) ) return;
+    if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(wdgPresent(iid))	return;
 
     chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
 }
@@ -1271,10 +1272,10 @@ void SessWdg::inheritAttr( const string &aid )
     ResAlloc res(mCalcRes,true);
     Widget::inheritAttr(aid);
 
-    if( !aid.empty() && ownerSess( )->start( ) && attrPresent(aid) )
+    if(!aid.empty() && ownerSess()->start() && attrPresent(aid))
     {
 	AutoHD<Attr> attr = attrAt(aid);
-	if( !(attr.at().flgGlob()&Attr::IsUser) )
+	if(!(attr.at().flgGlob()&Attr::IsUser))
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()|Attr::SessAttrInh));
     }
 }
@@ -1284,24 +1285,38 @@ AutoHD<SessWdg> SessWdg::wdgAt( const string &wdg )
     return Widget::wdgAt(wdg);
 }
 
+void SessWdg::pgClose( )
+{
+    try
+    {
+	if(!dynamic_cast<SessPage*>(this) && rootId() == "Box" && attrAt("pgGrp").at().getS() != "" && attrAt("pgOpenSrc").at().getS() != "")
+	    ((AutoHD<SessWdg>)mod->nodeAt(attrAt("pgOpenSrc").at().getS())).at().attrAt("pgOpen").at().setB(false);
+    }catch(TError) { }
+
+    vector<string> list;
+    wdgList(list);
+    for(unsigned i_w = 0; i_w < list.size(); i_w++)
+	wdgAt(list[i_w]).at().pgClose();
+}
+
 void SessWdg::eventAdd( const string &ev )
 {
-    if( !attrPresent("event") )	return;
+    if(!attrPresent("event"))	return;
     Res &res = ownerSess()->eventRes();
-    res.resRequestW( );
+    res.resRequestW();
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
-    res.resRelease( );
+    res.resRelease();
 }
 
 string SessWdg::eventGet( bool clear )
 {
-    if( !attrPresent("event") )	return "";
+    if(!attrPresent("event"))	return "";
     Res &res = ownerSess()->eventRes();
 
-    res.resRequestW( );
+    res.resRequestW();
     string rez = attrAt("event").at().getS();
-    if( clear )	attrAt("event").at().setS("");
-    res.resRelease( );
+    if(clear)	attrAt("event").at().setS("");
+    res.resRelease();
 
     return rez;
 }

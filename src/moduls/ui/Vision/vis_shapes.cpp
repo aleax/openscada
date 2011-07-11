@@ -3286,7 +3286,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
         case 5:         //en
 	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible( shD->en && (((RunWdgView*)w)->permView() || dynamic_cast<RunPageView*>(w)) );
+	    w->setVisible(shD->en && (((RunWdgView*)w)->permView() || dynamic_cast<RunPageView*>(w)));
 	    break;
 	case 6:		//active
 	    if( !qobject_cast<RunWdgView*>(w) ) { up = false; break; }

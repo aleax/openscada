@@ -967,10 +967,10 @@ void VisRun::alarmAct( QAction *alrm )
 
     int quitance = 0;
     string qwdg;
-    if( alrm->objectName() == "alarmLev" )		quitance = 0xFF;
-    else if( alrm->objectName() == "alarmLight" )	quitance = 0x01;
-    else if( alrm->objectName() == "alarmAlarm" )	quitance = 0x02;
-    else if( alrm->objectName() == "alarmSound" )
+    if(alrm->objectName() == "alarmLev")	quitance = 0xFF;
+    else if(alrm->objectName() == "alarmLight")	quitance = 0x01;
+    else if(alrm->objectName() == "alarmAlarm")	quitance = 0x02;
+    else if(alrm->objectName() == "alarmSound")
     {
 	quitance = 0x04;
 	qwdg = alrmPlay->widget( );

@@ -1133,14 +1133,19 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     pthread_attr_t locPAttr, *pthr_attr;
     map<string,STask>::iterator ti;
 
-    ResAlloc res(taskRes, false);
-    if((ti=mTasks.find(path)) != mTasks.end() && !(ti->second.flgs&STask::FinishTask))
+    ResAlloc res(taskRes, true);
+    for(time_t c_tm = time(NULL); mTasks.find(path) != mTasks.end(); )
     {
-	//Wait for finish previous task
-	for(time_t c_tm = time(NULL); !(ti->second.flgs&STask::FinishTask) && time(NULL) < (c_tm+wtm); ) usleep(1000);
-	if(!(ti->second.flgs&STask::FinishTask))
-	    throw TError(nodePath().c_str(),_("Task '%s' is already created and unfinished!"),path.c_str());
+	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
+	res.release();
+	usleep(1000);
+	res.request(true);
     }
+    STask &htsk = mTasks[path];
+    htsk.path = path;
+    htsk.task = start_routine;
+    htsk.taskArg = arg;
+    htsk.flgs = 0;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1162,13 +1167,6 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
     try
     {
-	res.request(true);
-	STask &htsk = mTasks[path];
-	res.release();
-	htsk.path = path;
-	htsk.task = start_routine;
-	htsk.taskArg = arg;
-	htsk.flgs = 0;
 	pthread_attr_getdetachstate(pthr_attr,&detachStat);
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
@@ -1184,9 +1182,6 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
 
 	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
-
-	/*if(startCntr && TSYS::eventWait(*startCntr, true, nodePath()+": "+path+": start", wtm))
-	    throw TError(nodePath().c_str(), _("Task '%s' is not started!"), path.c_str());*/
 
 	//> Wait for thread structure initialization finish
 	while(!htsk.thr) pthread_yield();

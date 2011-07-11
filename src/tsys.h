@@ -290,7 +290,7 @@ class TSYS : public TCntrNode
 		pthread_t	thr;
 		char		policy, prior;
 		pid_t		tid;
-		string		cpuSet;
+		ResString	cpuSet;
 		void *(*task) (void *);
 		void		*taskArg;
 		unsigned	flgs;
