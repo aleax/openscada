@@ -1,4 +1,5 @@
 2011-07-14 Roman
+- FIX:UI.WebCfgD: Date and time field's parts size is limited to 30px for 2 symbols.
 - SYS: configure.in is improved for disctributive build configuratin, all modules enable on x86_64, ARM and other not x86 architectures,
     by option --enable-ForDist.
 - !!:FIX:UI.WebVision: Master page open and replace is fixed. Multiply child's windows open is fixed.

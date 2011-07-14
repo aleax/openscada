@@ -1559,7 +1559,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  val_w.itPath = selPath+'/'+brPath;
 	  val_w.srcNode = t_s;
 	  val_w.itComm = comm;
-	  val_w.innerHTML = "<input size='2'/><input size='2'/><input size='4'/>&nbsp;<input size='2'/><input size='2'/><input size='2'/>";
+	  val_w.innerHTML = "<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='4' style='width: 60px;'/>"+
+			    "&nbsp;<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/>";
 	  val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
 		val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
 	  {
