@@ -358,8 +358,13 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
   //> Create or replace main page
   if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
   if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
-  if(!this.addr.length || (this == masterPage && pgGrp == 'main') || pgGrp == this.attrs['pgGrp'])
+  if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp']))
   {
+    if(this.addr.length)
+    {
+	servSet(this.addr,'com=pgClose','');
+	document.body.removeChild(this.window);
+    }
     this.addr  = pgId;
     this.place = document.createElement('div');
     this.place.setAttribute('id','mainCntr');
@@ -367,6 +372,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     var centerTag = document.createElement('center');
     centerTag.appendChild(this.place);
     document.body.appendChild(centerTag);
+    this.window = centerTag;
     //> Set project's icon and RunTime page title
     document.getElementsByTagName('link')[0].setAttribute('href',location.pathname+'?com=ico');
     return true;
@@ -405,22 +411,60 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     //> New external <div> window create
     if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH']))
     {
-	iPg.window = document.createElement('div');
-	iPg.window.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: blue; border: 1px solid darkblue; '+
+	iPg.window = document.createElement('table');
+	iPg.window.setAttribute('cellpadding','2');
+	iPg.window.setAttribute('cellspacing','0');
+	iPg.window.setAttribute('border','0');
+	iPg.window.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; '+
 	    'left: '+((parseInt(masterPage.attrs['geomW'])-winWidth-5)/2)+'px; '+
-	    'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; width: '+(winWidth+5)+'px; height: '+(winHeight+18)+'px; ');
-	var titleBlk = document.createElement('span');
-	iPg.window.appendChild(titleBlk);
+	    'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; ');
+	var wRow = document.createElement('tr');
+	iPg.window.appendChild(wRow);
+	wRow.setAttribute('style','cursor: move;');
+	wRow.win = iPg.window;
+        wRow.onmousedown = function(e)
+        {
+	    if(!e) e = window.event;
+	    this.clX = e.clientX; this.clY = e.clientY;
+	    return false;
+	}
+        wRow.onmouseup = function(e)
+        {
+	    if(!e) e = window.event;
+	    this.clX = this.clY = null;
+	    return false;
+	}
+	wRow.onmouseout = wRow.onmouseup;
+	wRow.onmousemove = function(e)
+	{
+	    if(!e) e = window.event;
+	    if(this.clX != null)
+	    {
+		this.win.style.left = (parseInt(this.win.style.left)+e.clientX-this.clX)+"px";
+		this.win.style.top  = (parseInt(this.win.style.top)+e.clientY-this.clY)+"px";
+		this.clX = e.clientX; this.clY = e.clientY;
+	    }
+	}
+	var titleBlk = document.createElement('td');
+	wRow.appendChild(titleBlk);
+	titleBlk.setAttribute('style','max-width: '+(winWidth-7)+'px; width: '+(winWidth-7)+'px; overflow: hidden; white-space: nowrap;');
+	titleBlk.setAttribute('title',winName);
 	titleBlk.appendChild(document.createTextNode(winName));
-	var closeWin = document.createElement('span');
-	iPg.window.appendChild(closeWin);
+	var closeWin = document.createElement('td');
+	wRow.appendChild(closeWin);
 	closeWin.appendChild(document.createTextNode('X'));
-	closeWin.setAttribute('style','color : red; cursor : pointer; float : right;');
+	closeWin.setAttribute('style','color: red; cursor: pointer;');
 	closeWin.onclick = function()
 	{ servSet(this.iPg.addr,'com=pgClose',''); document.getElementById('mainCntr').removeChild(this.iPg.window); delete this.iPg.parent.pages[this.iPg.addr]; }
 	closeWin.iPg = iPg;
+	wRow = document.createElement('tr');
+	iPg.window.appendChild(wRow);
+	var wCntCell = document.createElement('td');
+	wRow.appendChild(wCntCell);
+	wCntCell.setAttribute('colspan','2');
+	wCntCell.setAttribute('align','center');
 	iPg.place = document.createElement('div');
-	iPg.window.appendChild(iPg.place);
+	wCntCell.appendChild(iPg.place);
 	document.getElementById('mainCntr').appendChild(iPg.window);
     }
     //> New external window create
@@ -437,7 +481,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	iPg.windowExt = true;
     }
 
-    this.pages[pgId] = iPg;
+    this.pages[iPg.addr] = iPg;
     iPg.makeEl(attrBrVal);
 
     return true;

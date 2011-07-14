@@ -107,7 +107,12 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 	_("You sure for delete node '%1'?"),
 	_("Copy is imposible."), _("Selected"), _("Move node '%1' to '%2'."), _("Copy node '%1' to '%2'."), _("Node '%1' already present. Continue?"),
 	_("Element type:", "ID:"), _("Name:"), _("Ok"), _("Close"),
-	_("Page loaded.")
+	_("Page loaded."),
+	_("Node id and/or name select"),
+	_("Item name set"),
+	_("Image set"),
+	_("Add node"),
+	_("Move or copy node"),
     };
 #endif
 }

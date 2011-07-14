@@ -438,7 +438,7 @@ msgid "Down"
 msgstr "Донизу"
 
 msgid "Item name set"
-msgstr "Встановлення імені елементу"
+msgstr "Встановлення назви елементу"
 
 msgid "Add new element."
 msgstr "Додання нового елементу."

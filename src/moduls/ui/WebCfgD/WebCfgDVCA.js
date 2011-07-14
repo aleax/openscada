@@ -687,12 +687,13 @@ function selectChildRecArea( node, aPath, cBlk )
 	      else if( posId == 'add' || posId == 'ins' || posId == 'edit' )
 	      {
 		dlgWin = ReqIdNameDlg('/'+MOD_ID+'/ico');
-		var fIdVal = dlgWin.document.getElementById('id').childNodes[1].childNodes[0];
+		setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Item name set###');
+		var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
 		fIdVal.maxLength = this.parentNode.srcNode.getAttribute('idSz');
 		if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
-		dlgWin.document.getElementById('type').style.display = 'none';
-		dlgWin.document.getElementById('name').style.display = idm?'':'none';
-		var actOkFld = dlgWin.document.getElementById('actOk');
+		dlgWin.document.getElementById('wDlgType').style.display = 'none';
+		dlgWin.document.getElementById('wDlgName').style.display = idm?'':'none';
+		var actOkFld = dlgWin.document.getElementById('wDlgActOk');
 		actOkFld.itPath = this.parentNode.itPath;
 		actOkFld.srcNode = this.parentNode.srcNode;
 		actOkFld.selectedIndex = this.selectedIndex;
@@ -700,51 +701,54 @@ function selectChildRecArea( node, aPath, cBlk )
 		actOkFld.lsText = this.parentNode.lsText;
 		if( posId == 'add' )
 		{
-		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'###Add new element.###');
+		  setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Add new element.###');
 		  actOkFld.onclick = function()
 		  {
-		    var idm = dlgWin.document.getElementById('name').style.display!='none';
-		    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
-		    var inpName = idm ? dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value : inpId;
+		    var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
+		    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
+		    var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 		    var rez = servSet(this.itPath,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
 		    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 		    if( this.srcNode.getAttribute('tp') == 'br' ) treeUpdate();
-		    pageRefresh(); dlgWin.close();
+		    pageRefresh();
+		    document.body.dlgWin.close();
 		    return false;
 		  }
 		}
 		else if( posId == 'ins' )
 		{
-		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'###Insert new element.###');
+		  setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Insert new element.###');
 		  actOkFld.onclick = function()
 		  {
-		    var idm = dlgWin.document.getElementById('name').style.display!='none';
-		    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
-		    var inpName = idm ? dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value : inpId;
+		    var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
+		    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
+		    var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 		    var com = "<ins "+(idm?("id='"+inpId+"' "):"")+" pos='"+this.selectedIndex+"' p_id='"+this.lsId+"'>"+inpName+"</ins>";
 		    var rez = servSet(this.itPath,'com=com',com,true);
 		    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 		    if( this.srcNode.getAttribute('tp') == 'br' ) treeUpdate();
 		    pageRefresh();
-		    dlgWin.close(); return false;
+		    document.body.dlgWin.close();
+		    return false;
 		  }
 		}
 		else if( posId == 'edit' )
 		{
-		  setNodeText(dlgWin.document.getElementById('title').childNodes[1],'###Rename element.###');
-		  dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
-		  if( idm ) dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value = this.parentNode.lsText;
+		  setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Rename element.###');
+		  dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
+		  if( idm ) dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value = this.parentNode.lsText;
 		  actOkFld.onclick = function()
 		  {
-		    var idm = dlgWin.document.getElementById('name').style.display!='none';
-		    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
-		    var inpName = idm ? dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value : inpId;
+		    var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
+		    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
+		    var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 		    var com = "<edit "+(idm?("id='"+inpId+"' "):"")+" pos='"+this.selectedIndex+"' p_id='"+this.lsId+"'>"+inpName+"</edit>";
 		    var rez = servSet(this.itPath,'com=com',com,true);
 		    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
 		    if( this.srcNode.getAttribute('tp') == 'br' ) treeUpdate();
 		    pageRefresh();
-		    dlgWin.close(); return false;
+		    document.body.dlgWin.close();
+		    return false;
 		  }
 		}
 	      }
@@ -817,12 +821,13 @@ function selectChildRecArea( node, aPath, cBlk )
 	  val.onclick = function( )
 	  {
 	    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Select image file for download to picture field.###','/'+MOD_ID+this.itPath+'?com=img',true);
-	    dlgWin.document.getElementById('type').style.display = 'none';
-	    dlgWin.document.getElementById('id').style.display = 'none';
-	    dlgWin.document.getElementById('name').style.display = '';
-	    dlgWin.document.getElementById('actOk').type = 'submit';
-	    if( !isKonq ) dlgWin.document.getElementById('formBlk').onsubmit = function( ) { setTimeout('dlgWin.close(); pageRefresh();',200); }
-	    else dlgWin.document.getElementById('actCancel').onclick = function( ) { setTimeout('dlgWin.close(); pageRefresh();',200); }
+	    setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Image set###');
+	    dlgWin.document.getElementById('wDlgType').style.display = 'none';
+	    dlgWin.document.getElementById('wDlgId').style.display = 'none';
+	    dlgWin.document.getElementById('wDlgName').style.display = '';
+	    dlgWin.document.getElementById('wDlgActOk').type = 'submit';
+	    if( !isKonq ) dlgWin.document.getElementById('wDlgFormBlk').onsubmit = function( ) { setTimeout('document.body.dlgWin.close(); pageRefresh();',200); }
+	    else dlgWin.document.getElementById('wDlgActCancel').onclick = function( ) { setTimeout('document.body.dlgWin.close(); pageRefresh();',200); }
 	    return false;
 	  }
 	}
@@ -2074,38 +2079,39 @@ function itAdd( )
   if( !typeCfg.length ) { alert('###No one editable container present.###'); return; }
 
   dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Add item to node '%1'.###").replace('%1',selPath));
-  dlgWin.document.getElementById('type').style.display = '';
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].innerHTML = typeCfg;
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange = function( )
+  setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Add node###');
+  dlgWin.document.getElementById('wDlgType').style.display = '';
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
   {
     if( this.selectedIndex < 0 ) return;
-    var fIdVal = dlgWin.document.getElementById('id').childNodes[1].childNodes[0];
+    var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
     fIdVal.maxLength = this.options[this.selectedIndex].getAttribute('idSz');
     if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
-    dlgWin.document.getElementById('name').style.display = parseInt(this.options[this.selectedIndex].getAttribute('idm'))?'':'none';
+    dlgWin.document.getElementById('wDlgName').style.display = parseInt(this.options[this.selectedIndex].getAttribute('idm'))?'':'none';
   }
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange();
-  dlgWin.document.getElementById('actOk').onclick = function()
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
+  dlgWin.document.getElementById('wDlgActOk').onclick = function()
   {
-    var tpSel = dlgWin.document.getElementById('type').childNodes[1].childNodes[0];
-    if( !tpSel || tpSel.selectedIndex < 0 ) { dlgWin.close(); return false; }
+    var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
+    if( !tpSel || tpSel.selectedIndex < 0 ) { document.body.dlgWin.close(); return false; }
     var idm = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idm'));
     var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
-    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
-    var inpName = idm ? dlgWin.document.getElementById('name').childNodes[1].childNodes[0].value : inpId;
+    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
+    var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 
     //> Check for already present node
     var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
-    if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); dlgWin.close(); return false; }
+    if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); document.body.dlgWin.close(); return false; }
     for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
       if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
 	(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
-      { alert(("###Item '%1' already present.###").replace('%1',inpId)); dlgWin.close( ); return; }
+      { alert(("###Item '%1' already present.###").replace('%1',inpId)); document.body.dlgWin.close(); return; }
 
     //> Send command
     var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
-    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); dlgWin.close(); return false; }
-    dlgWin.close();
+    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.body.dlgWin.close(); return false; }
+    document.body.dlgWin.close();
     treeUpdate(); pageRefresh();
     return false;
   }
@@ -2195,34 +2201,35 @@ function itPaste( )
 
   //> Make request dialog
   dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
+  setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Move or copy node###');
   if( copyBuf.charAt(0) == '1' )
-    setNodeText(dlgWin.document.getElementById('title').childNodes[1],("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
-  else setNodeText(dlgWin.document.getElementById('title').childNodes[1],("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
-  if( b_grp.length ) dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value = s_el.substr(b_grp.length);
-  dlgWin.document.getElementById('name').style.display = 'none';
-  dlgWin.document.getElementById('type').style.display = '';
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].innerHTML = typeCfg;
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange = function( )
+    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
+  else setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
+  if( b_grp.length ) dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = s_el.substr(b_grp.length);
+  dlgWin.document.getElementById('wDlgName').style.display = 'none';
+  dlgWin.document.getElementById('wDlgType').style.display = '';
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
   {
     if( this.selectedIndex < 0 ) return;
     var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
-    if( idSz < 0 ) dlgWin.document.getElementById('id').style.display = 'none';
+    if( idSz < 0 ) dlgWin.document.getElementById('wDlgId').style.display = 'none';
     else
     {
-      dlgWin.document.getElementById('id').style.display = '';
-      var fIdVal = dlgWin.document.getElementById('id').childNodes[1].childNodes[0];
+      dlgWin.document.getElementById('wDlgId').style.display = '';
+      var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
       fIdVal.maxLength = idSz; if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
     }
   }
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].selectedIndex = defIt;
-  dlgWin.document.getElementById('type').childNodes[1].childNodes[0].onchange();
-  dlgWin.document.getElementById('actOk').onclick = function()
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].selectedIndex = defIt;
+  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
+  dlgWin.document.getElementById('wDlgActOk').onclick = function()
   {
-    var tpSel = dlgWin.document.getElementById('type').childNodes[1].childNodes[0];
-    if( !tpSel || tpSel.selectedIndex < 0 ) { dlgWin.close(); return false; }
+    var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
+    if( !tpSel || tpSel.selectedIndex < 0 ) { document.body.dlgWin.close(); return false; }
     var idSz = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idSz'));
     var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
-    var inpId = dlgWin.document.getElementById('id').childNodes[1].childNodes[0].value;
+    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 
     var statNm, srcNm;
     pathLev.off = 1; statNm = pathLev(copyBuf,0,true); srcNm = copyBuf.substr(pathLev.off);
@@ -2233,23 +2240,23 @@ function itPaste( )
       dstNm+='/'+gbrId+inpId;
       //> Check for already present node
       var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
-      if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); dlgWin.close(); return false; }
+      if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); document.body.dlgWin.close(); return false; }
       for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
 	if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
 	    (!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
 	{
 	  if( confirm(("###Node '%1' already present. Continue?###").replace('%1',dstNm)) ) break;
-	  dlgWin.close( ); return;
+	  document.body.dlgWin.close(); return;
 	}
     }
     //> Copy visual item
     var rez = servSet('/'+statNm+'/%2fobj','com=com',"<copy src='"+srcNm+"' dst='"+dstNm+"'/>",true);
-    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); dlgWin.close(); return false; }
+    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.dlgWin.close(); return false; }
 
     //> Remove source widget
     if( copyBuf.charAt(0) == '1' ) { itDel(copyBuf.substr(1)); copyBuf = '0'; }
     treeUpdate( ); pageRefresh( );
-    dlgWin.close( ); return false;
+    document.body.dlgWin.close(); return false;
   }
 }
 /**********************************************************
@@ -2257,44 +2264,53 @@ function itPaste( )
  **********************************************************/
 function ReqIdNameDlg( ico, mess, actPath, nmFile )
 {
-  var dlgWin = window.open('','ReqIdNameDlg','width=400,height='+(isChrome?'300':'200')+',directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,status=no,alwaysRaised=yes');
+    var dlgWin = document.body.dlgWin;
+    if(!dlgWin)
+    {
+	dlgWin = document.createElement('table');
+	document.body.dlgWin = dlgWin;
+	dlgWin.close = function( ) { document.body.removeChild(this); this.isLoad = null; }
+	dlgWin.setAttribute('cellpadding','2');
+	dlgWin.setAttribute('cellspacing','0');
+	dlgWin.setAttribute('border','0');
+	dlgWin.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; '+
+	    'left: '+((window.innerWidth-400-5)/2)+'px; top: '+((this.window.innerHeight-200-18)/2)+'px; ');
+    }
+    if(dlgWin.isLoad) document.body.removeChild(this);
 
-  dlgWin.document.open();
-  dlgWin.document.write(
-    "<html><head>\n"+
-    " <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n"+
-    " <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"+
-    " <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"+
-    " <style type='text/css'>\n"+
-    "  table.dlg { width: 98%; border: 3px ridge #FF9253; padding: 5px; text-align: left; vertical-align: top; font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"+
-    "  table.dlg select,input { font-family: Verdana,Arial,Helvetica,sans-serif; font-size:12px; }\n"+
-    " </style>\n"+
-    "</head>\n"+
-    "<body style='background-color: #E6E6E6;'>\n"+
-    "<center>\n"+
-    "<form id='formBlk' action='"+actPath+"' method='post' enctype='multipart/form-data'>\n"+
-    "<table border='0' cellspacing='3px' class='dlg'>\n"+
-    "<tr><td id='title' colspan='2'><img src='' style='height: 32px; float: left;'/><span/></td></tr>\n"+
-    "<tr id='type'><td>###Element type:###</td><td><select name='type'/></td></tr>\n"+
-    "<tr id='id'><td>###ID:###</td><td><input name='id'/></td></tr>\n"+
-    "<tr id='name'><td>###Name:###</td><td><input name='name' type='"+(nmFile?'file':'text')+"'/></td></tr>\n"+
-    "<tr><td colspan='2' style='text-align: right; border-top: 1px solid black; padding-top: 10px;'>\n"+
-    "  <input id='actOk' name='actOk' type='button' value='###Ok###'/> <input id='actCancel' name='actCancel' type='button' value='###Close###' onclick='window.close(); return false;'/>\n"+
-    "</td></tr>\n"+
-    "</table>\n"+
-    "</form>\n"+
-    "</center></body></html>");
-  dlgWin.document.close();
+    dlgWin.innerHTML =
+	"<tr style='cursor: move;' onmousedown='this.clX = event.clientX; this.clY = event.clientY; return false;' \n"+
+	"   onmouseup='this.clX = this.clY = null; return false;' \n"+
+	"   onmouseout='this.clX = this.clY = null; return false;' \n"+
+	"   onmousemove='if(this.clX != null) { "+
+	"     document.body.dlgWin.style.left = (parseInt(document.body.dlgWin.style.left)+event.clientX-this.clX)+\"px\"; "+
+	"     document.body.dlgWin.style.top  = (parseInt(document.body.dlgWin.style.top)+event.clientY-this.clY)+\"px\"; "+
+	"     this.clX = event.clientX; this.clY = event.clientY; }'>"+
+	" <td id='wDlgHeader' style='padding-left: 5px; max-width: "+(400-10)+"px; width: "+(400-10)+"px; overflow: hidden; white-space: nowrap;'>###Node id and/or name select###</td>\n"+
+	" <td style='color: red; cursor: pointer; text-align: right;' onclick='document.body.dlgWin.close();'>X</td>\n"+
+	"</tr>\n"+
+	"<tr><td style='max-width: 400px;' colspan='2' align='center'>\n"+
+	" <center>\n"+
+	"  <form id='wDlgFormBlk' action='"+actPath+"' method='post' enctype='multipart/form-data'>\n"+
+	"   <table border='0' cellspacing='3px' class='dlg'>\n"+
+	"    <tr><td id='wDlgTitle' colspan='2'><img src='' style='height: 32px; float: left;'/><span/></td></tr>\n"+
+	"    <tr id='wDlgType'><td>###Element type:###</td><td><select name='type'/></td></tr>\n"+
+	"    <tr id='wDlgId'><td>###ID:###</td><td><input name='id'/></td></tr>\n"+
+	"    <tr id='wDlgName'><td>###Name:###</td><td><input name='name' type='"+(nmFile?'file':'text')+"'/></td></tr>\n"+
+	"    <tr><td colspan='2' style='text-align: right; border-top: 1px solid black; padding-top: 10px;'>\n"+
+	"      <input id='wDlgActOk' name='actOk' type='button' value='###Ok###'/> <input id='wDlgActCancel' name='actCancel' type='button' value='###Close###' onclick='document.body.dlgWin.close(); return false;'/>\n"+
+	"    </td></tr>\n"+
+	"   </table>\n"+
+	"  </form>\n"+
+	" </center>\n"+
+	"</td></tr>";
+    document.body.appendChild(dlgWin);
+    dlgWin.isLoad = true;
 
-  if( ico ) dlgWin.document.getElementById('title').childNodes[0].src = ico;
-  if( mess ) setNodeText(dlgWin.document.getElementById('title').childNodes[1],mess);
+    if(ico) document.getElementById('wDlgTitle').childNodes[0].src = ico;
+    if(mess) setNodeText(document.getElementById('wDlgTitle').childNodes[1],mess);
 
-  var wWidth, wHeight;
-  if( window.innerWidth ) { wWidth = dlgWin.outerWidth; wHeight = dlgWin.outerHeight; }
-  else { wWidth = dlgWin.document.body.clientWidth; wHeight = dlgWin.document.body.clientHeight; }
-  dlgWin.moveTo(Math.round((screen.availWidth-wWidth)/2),Math.round((screen.availHeight-wHeight)/2));
-
-  return dlgWin;
+    return window;
 }
 
 //> First start data init

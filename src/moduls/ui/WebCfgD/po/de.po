@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 11:43+0300\n"
+"POT-Creation-Date: 2011-07-14 14:53+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de @li.org>\n"
@@ -167,6 +167,21 @@ msgstr "Schliessen"
 
 msgid "Page loaded."
 msgstr "Die Seite ist geladet."
+
+msgid "Node id and/or name select"
+msgstr "Auswahl des Bezeichners und/oder des Namens"
+
+msgid "Item name set"
+msgstr "Installieren des Elementsnamen"
+
+msgid "Image set"
+msgstr "Bild gesetzt"
+
+msgid "Add node"
+msgstr "Knoten hinzufügen"
+
+msgid "Move or copy node"
+msgstr "Verschieben oder Kopieren des Knotens"
 
 #, c-format
 msgid "Unknown command: %s."

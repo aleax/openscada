@@ -1,3 +1,11 @@
+2011-07-14 Roman
+- SYS: configure.in is improved for disctributive build configuratin, all modules enable on x86_64, ARM and other not x86 architectures,
+    by option --enable-ForDist.
+- !!:FIX:UI.WebVision: Master page open and replace is fixed. Multiply child's windows open is fixed.
+    Child window's header is adapted for long title place.
+- UI.WebVision: Web-dialogs is realised by flow block on all content.
+
+
 2011-07-11 Roman
 - !!:FIX:SYS: Tasks creation is fixed for check and wait present task for allow. Detected by crash on UI.WebVision.
 - FIX:UI.VCAEngine: Close included to Box-widget pages on page close on VCA-engine side is added.

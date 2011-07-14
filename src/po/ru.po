@@ -2077,7 +2077,7 @@ msgid "%s: Id or IO %d error for function '%s'!"
 msgstr "%s: Ошибка идентификатора или IO %d для функции '%s'!"
 
 msgid "Open Supervisory Control And Data Acquisition"
-msgstr "Открытая система диспетчеркского контроля и сбора данных"
+msgstr "Открытая система диспетчерского контроля и сбора данных"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
