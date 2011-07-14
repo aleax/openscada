@@ -3,7 +3,7 @@
     by option --enable-ForDist.
 - !!:FIX:UI.WebVision: Master page open and replace is fixed. Multiply child's windows open is fixed.
     Child window's header is adapted for long title place.
-- UI.WebVision: Web-dialogs is realised by flow block on all content.
+- UI.WebCfgD: Web-dialogs is realised by flow block on all content.
 
 
 2011-07-11 Roman
