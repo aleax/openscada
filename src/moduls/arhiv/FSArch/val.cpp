@@ -497,7 +497,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> a_ls;
 	archiveList(a_ls);
-	for( unsigned i_el = 0; i_el < a_ls.size(); i_el++ )
+	for(unsigned i_el = 0; i_el < a_ls.size(); i_el++)
 	    opt->childAdd("el")->setText(a_ls[i_el]);
     }
     else if(a_path == "/arch/tpflst" && ctrChkNode(opt))
@@ -629,7 +629,7 @@ void ModVArchEl::fileAdd( const string &file )
     {
 	res.request(true);
 	int i_arh;
-	for(i_arh = arh_f.size()-1; i_arh >= 0; i_arh--)
+	for(i_arh = (int)arh_f.size()-1; i_arh >= 0; i_arh--)
 	    if(arh_f[i_arh]->err() || f_arh->begin() >= arh_f[i_arh]->begin())
 	    {
 		arh_f.insert(arh_f.begin()+i_arh+1,f_arh);
@@ -642,10 +642,10 @@ void ModVArchEl::fileAdd( const string &file )
 int64_t ModVArchEl::end()
 {
     ResAlloc res(mRes,false);
-    for( int i_a = arh_f.size()-1; i_a >= 0; i_a-- )
-	if( !arh_f[i_a]->err() )
+    for(int i_a = (int)arh_f.size()-1; i_a >= 0; i_a--)
+	if(!arh_f[i_a]->err())
 	{
-	    if( !realEnd ) realEnd = arh_f[i_a]->endData();
+	    if(!realEnd) realEnd = arh_f[i_a]->endData();
 	    return vmin(arh_f[i_a]->end(),realEnd);
 	}
 
@@ -1696,7 +1696,7 @@ void VFileArch::repairFile( int hd, bool fix )
 int VFileArch::cacheGet( int &pos, int *vsz )
 {
     CacheEl rez = {0,0,0};
-    for(int i_p = cache.size()-1; i_p >= 0; i_p--)
+    for(int i_p = (int)cache.size()-1; i_p >= 0; i_p--)
 	if(pos >= cache[i_p].pos) { rez = cache[i_p]; break; }
     if(pos >= cach_pr_rd.pos && cach_pr_rd.pos > rez.pos)	rez = cach_pr_rd;
     if(pos >= cach_pr_wr.pos && cach_pr_wr.pos > rez.pos)	rez = cach_pr_wr;

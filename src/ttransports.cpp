@@ -652,6 +652,15 @@ void TTransportIn::preEnable(int flag)
     try{ load(); }catch(...){ }
 }
 
+TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
+}
+
 void TTransportIn::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -852,6 +861,11 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	}catch(TError err) { return err.mess; }
 	return 0;
     }
+
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 

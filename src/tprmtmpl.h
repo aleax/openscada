@@ -87,6 +87,8 @@ class TPrmTempl: public TFunction, public TConfig
 	void postDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	const string &nodeName( )	{ return m_id.getValRef(); }
@@ -140,6 +142,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	void load_( );
 	void save_( );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Methods

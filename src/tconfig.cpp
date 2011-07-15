@@ -195,6 +195,30 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     }
 }
 
+TVariant TConfig::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // ElTp cfg(string nm) - config variable 'nm' get.
+    //  nm - config variable name.
+    if(iid == "cfg" && prms.size() >= 1)
+    {
+	TCfg *cf = at(prms[0].getS(), true);
+	if(!cf) return EVAL_REAL;
+	return cf->get();
+    }
+    // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
+    //  nm - config variable name;
+    //  val - variable value.
+    if(iid == "cfgSet" && prms.size() >= 2)
+    {
+	TCfg *cf = at(prms[0].getS(), true);
+	if(!cf || (cf->fld().flg()&TFld::NoWrite)) return false;
+	cf->set(prms[1]);
+	return true;
+    }
+
+    return TVariant();
+}
+
 //*************************************************
 //* TCfg                                          *
 //*************************************************
@@ -266,6 +290,17 @@ string TCfg::getSEL( char RqFlg )
     return "";
 }
 
+TVariant TCfg::get( char RqFlg )
+{
+    switch(mFld->type())
+    {
+	case TFld::String:	return getS(RqFlg);
+	case TFld::Integer:	return getI(RqFlg);
+	case TFld::Real:	return getR(RqFlg);
+	case TFld::Boolean:	return getB(RqFlg);
+    }
+}
+
 string TCfg::getS( char RqFlg )
 {
     switch(mFld->type())
@@ -323,6 +358,17 @@ void TCfg::setSEL( const string &val, char RqFlg )
 	case TFld::Integer:	setI( mFld->selNm2VlI(val), RqFlg );	break;
 	case TFld::Real:	setR( mFld->selNm2VlR(val), RqFlg );	break;
 	case TFld::Boolean:	setB( mFld->selNm2VlB(val), RqFlg );	break;
+    }
+}
+
+void TCfg::set( const TVariant &val, char RqFlg )
+{
+    switch(mFld->type())
+    {
+	case TFld::String:	return setS(val.getS(), RqFlg);
+	case TFld::Integer:	return setI(val.getI(), RqFlg);
+	case TFld::Real:	return setR(val.getR(), RqFlg);
+	case TFld::Boolean:	return setB(val.getB(), RqFlg);
     }
 }
 
@@ -433,3 +479,5 @@ TCfg &TCfg::operator=(TCfg & cfg)
     }
     return *this;
 }
+
+

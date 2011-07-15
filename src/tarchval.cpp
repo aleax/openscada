@@ -1134,6 +1134,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
 		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend)
 	{
+
 	    //> Local request to data
 	    if(!buf.size())
 		ibeg = vmax(ibeg,iend-(int64_t)(1e6*arch_el[i_a]->archivator().valPeriod())*(limit-buf.realSize()));
@@ -1267,8 +1268,8 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     int mrkFontSize = 8, begMarkBrd = -1, endMarkBrd = 0;
 
     //> Check and get data
-    if( ibeg >= iend || valType( ) == TFld::String )	return rez;
-    TValBuf buf( TFld::Real, 0, 0, false, true );
+    if(ibeg >= iend || valType() == TFld::String) return rez;
+    TValBuf buf(TFld::Real, 0, 0, false, true);
 
     //> Calc base image parameters
     hv_border = 5;
@@ -1510,6 +1511,15 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 #endif
 
     return rez;
+}
+
+TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TVArchive::cntrCmdProc( XMLNode *opt )
@@ -2253,6 +2263,15 @@ void *TVArchivator::Task( void *param )
     arch.runSt = false;
 
     return NULL;
+}
+
+TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TVArchivator::cntrCmdProc( XMLNode *opt )

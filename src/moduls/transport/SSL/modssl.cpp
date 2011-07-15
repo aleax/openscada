@@ -353,13 +353,18 @@ void *TSocketIn::Task( void *sock_in )
 	//> Select mode
 	struct  timeval tv;
 	fd_set  rd_fd;
-	while( !s.endrun )
+	while(!s.endrun)
         {
 	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
 	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(abio,NULL),&rd_fd);
 
 	    int kz = select(BIO_get_fd(abio,NULL)+1,&rd_fd,NULL,NULL,&tv);
-	    if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(BIO_get_fd(abio,NULL),&rd_fd) ) continue;
+	    if(kz < 0 && errno != EINTR)
+    	    {
+        	mess_err(s.nodePath().c_str(),_("Close input transport by error: %s"),strerror(errno));
+        	break;
+    	    }
+	    if(kz <= 0 || !FD_ISSET(BIO_get_fd(abio,NULL),&rd_fd)) continue;
 
 	    if( BIO_do_accept(abio) <= 0 )
 	    {

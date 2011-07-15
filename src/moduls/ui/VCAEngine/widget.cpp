@@ -1434,7 +1434,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
 		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
 		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().fld().type()+
-				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
+				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
 		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[i_el]).at().fld().values()+"|"+
 							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
 		if(n_proc)	n_proc->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
@@ -1494,7 +1494,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		else if(idcol == "type")
 		{
 		    ttp = (TFld::Type)(atoi(opt->text().c_str())&0x0f);
-		    tflg = tflg^((tflg^((atoi(opt->text().c_str())>>4)|Attr::IsUser))&(TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
+		    tflg = tflg^((tflg^((atoi(opt->text().c_str())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		else if(idcol == "wa")
 		{
@@ -1588,6 +1588,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(TFld::Selected<<4)))->setText(_("Select integer"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real+(TFld::Selected<<4)))->setText(_("Select real"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(TFld::Selected<<4)))->setText(_("Select string"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(TFld::FullText<<4)))->setText(_("Text"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Font<<4)))->setText(_("Font"));

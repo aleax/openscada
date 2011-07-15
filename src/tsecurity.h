@@ -74,6 +74,8 @@ class TUser : public TCntrNode, public TConfig
 
 	TSecurity &owner( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	const string &nodeName( )	{ return m_name.getValRef(); }
@@ -127,6 +129,8 @@ class TGroup : public TCntrNode, public TConfig
 	void save_( );
 
 	TSecurity &owner( );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Methods

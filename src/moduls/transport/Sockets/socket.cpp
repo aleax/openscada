@@ -313,16 +313,20 @@ void *TSocketIn::Task(void *sock_in)
     sock->endrun_cl = false;
     sock->endrun    = false;
 
-    if( sock->type == SOCK_UDP )
-	buf = new char[sock->bufLen()*1024 + 1];
+    if(sock->type == SOCK_UDP) buf = new char[sock->bufLen()*1024 + 1];
 
-    while( !sock->endrun )
+    while(!sock->endrun)
     {
 	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
 	FD_ZERO(&rd_fd); FD_SET(sock->sock_fd,&rd_fd);
 
 	int kz = select(sock->sock_fd+1,&rd_fd,NULL,NULL,&tv);
-	if( kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(sock->sock_fd, &rd_fd) ) continue;
+	if(kz < 0 && errno != EINTR)
+	{
+	    mess_err(sock->nodePath().c_str(),_("Close input transport by error: %s"),strerror(errno));
+	    break;
+	}
+	if(kz <= 0 || !FD_ISSET(sock->sock_fd, &rd_fd)) continue;
 
 	struct sockaddr_in name_cl;
 	socklen_t          name_cl_len = sizeof(name_cl);

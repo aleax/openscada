@@ -203,6 +203,15 @@ void TParamContr::setType( const string &tpId )
     modif();
 }
 
+TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TValue::objFuncCall(iid, prms, user);
+}
+
 void TParamContr::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");

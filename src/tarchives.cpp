@@ -1076,6 +1076,15 @@ bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )
    return false;
 }
 
+TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
+}
+
 void TMArchivator::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info

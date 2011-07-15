@@ -26,6 +26,7 @@
 #include <vector>
 #include <map>
 
+#include "tvariant.h"
 #include "telem.h"
 
 using std::string;
@@ -77,6 +78,7 @@ class TCfg
 
 	//> Universal access
 	string	getSEL( char RqFlg = 0 );
+	TVariant get( char RqFlg = 0 );
 	string	getS( char RqFlg = 0 );
 	double	getR( char RqFlg = 0 );
 	int	getI( char RqFlg = 0 );
@@ -88,6 +90,7 @@ class TCfg
 	bool	&getBd( );
 
 	void	setSEL( const string &val, char RqFlg = 0 );
+	void	set( const TVariant &val, char RqFlg = 0 );
 	void	setS( const string &val, char RqFlg = 0 );
 	void	setR( double val, char RqFlg = 0 );
 	void	setI( int val, char RqFlg = 0 );
@@ -146,6 +149,8 @@ class TConfig: public TValElem
 
 	bool noTransl( )	{ return mNoTransl; }
 	void setNoTransl( bool vl )		{ mNoTransl = vl; }
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
 	//Methods

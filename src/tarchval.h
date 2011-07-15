@@ -241,6 +241,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void load_( );
 	void save_( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Private methods
 	void setUpBuf( );
@@ -314,6 +316,8 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	virtual void start( );
 	virtual void stop( bool full_del = false );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	//> Place archive functions
 	void archiveList( vector<string> &ls );

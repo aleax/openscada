@@ -231,6 +231,15 @@ void TPrmTempl::preIOCfgChange()
     if(startStat()) setStart(false);
 }
 
+TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
+}
+
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -526,6 +535,15 @@ void TPrmTmplLib::start( bool val )
 void TPrmTmplLib::add( const char *id, const char *name )
 {
     chldAdd(m_ptmpl,new TPrmTempl(id,name));
+}
+
+TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TPrmTmplLib::cntrCmdProc( XMLNode *opt )

@@ -369,6 +369,15 @@ void TUser::save_( )
 	owner().grpAt(ls[i_g]).at().save();
 }
 
+TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
+}
+
 void TUser::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
@@ -528,6 +537,15 @@ void TGroup::userDel( const string &name )
 	m_usrs = tUsrs.erase(pos, name.size()+1);
 	modif();
     }
+}
+
+TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TGroup::cntrCmdProc( XMLNode *opt )

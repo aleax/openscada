@@ -23,10 +23,18 @@
 #define TVARIANT_H
 
 #include <string>
+#include <vector>
+#include <map>
 
 #include <pcre.h>
 
+#include "autohd.h"
+#include "xml.h"
+#include "tcntrnode.h"
+
 using std::string;
+using std::vector;
+using std::map;
 
 //Error values
 #define EVAL_BOOL	2

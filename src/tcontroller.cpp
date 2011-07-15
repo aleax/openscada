@@ -419,6 +419,9 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
 	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, (prms.size() >= 3) ? prms[2].getS() : "");
 	return true;
     }
+    //> Config functions call
+    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }

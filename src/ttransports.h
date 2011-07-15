@@ -87,6 +87,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	void load_( );
 	void save_( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	//Attributes
 	bool	run_st;
 

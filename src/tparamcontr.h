@@ -85,6 +85,8 @@ class TParamContr : public TConfig, public TValue
 
 	virtual void setType( const string &tpId );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	void setId( const string &vl );
