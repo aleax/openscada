@@ -1,3 +1,8 @@
+2011-07-16 Roman
+- UI.Vision: Screens counter display only on any UI.Vision window open.
+    Made for crash prevent on UI.QTStarter miss or not init.
+
+
 2011-07-15 Roman
 - !!:TConfig, TBD, TTransportIn, TTransportOut, TUser, TGroup, TPrmTmplLib, TPrmTempl, TParamContr, TController, TVArchive, TVArchivator, TMArchivator:
     User API functions for config access cfg() and cfgSet() is added.
