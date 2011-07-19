@@ -104,16 +104,12 @@ void TUIMod::modInfo( vector<string> &list )
 
 string TUIMod::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section <%s> in config file ----------\n"
 	"StartPath  <path>    Configurator start path.\n"
 	"StartUser  <user>    No password requested start user.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 void TUIMod::load_( )
@@ -122,9 +118,9 @@ void TUIMod::load_( )
     mess_debug(nodePath().c_str(),_("Load module."));
 #endif
 
-    //- Load parameters from command line -
+    //> Load parameters from command line
     int next_opt;
-    const char *short_opt="h";
+    const char *short_opt = "h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},

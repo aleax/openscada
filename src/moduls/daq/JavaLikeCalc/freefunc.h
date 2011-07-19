@@ -51,7 +51,7 @@ class UFunc
 	//Methods
 	UFunc( const string &path ) : mPath(path)
 	{
-	    if( dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at()) ) mFunc = SYS->nodeAt(path,0,'.');
+	    if(dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at())) mFunc = SYS->nodeAt(path,0,'.');
 	}
 	const string &path( )		{ return mPath; }
 	AutoHD<TFunction> &func( )	{ return mFunc; }

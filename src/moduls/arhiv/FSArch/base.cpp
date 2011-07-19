@@ -23,6 +23,7 @@
 #include <signal.h>
 #include <string.h>
 #include <string>
+#include <getopt.h>
 
 #include <tsys.h>
 #include <resalloc.h>
@@ -65,7 +66,7 @@ using namespace FSArch;
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), prcSt(false)
+ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(false), copyErrValFiles(false), prcSt(false)
 {
     mod		= this;
 
@@ -89,21 +90,21 @@ ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), prcSt(false)
 
 void ModArch::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TModule::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
 	//> Add self DB-fields for archives
-	owner().messE().fldAdd( new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000") );
-	owner().valE().fldAdd( new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000") );
+	owner().messE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
+	owner().valE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
 
 	//> Pack files DB structure
-	elPackfl.fldAdd( new TFld("FILE","File",TFld::String,TCfg::Key,"100") );
-	elPackfl.fldAdd( new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("END","End",TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20") );
-	elPackfl.fldAdd( new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20") );
+	elPackfl.fldAdd(new TFld("FILE","File",TFld::String,TCfg::Key,"100"));
+	elPackfl.fldAdd(new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20"));
+	elPackfl.fldAdd(new TFld("END","End",TFld::String,TFld::NoFlag,"20"));
+	elPackfl.fldAdd(new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20"));
+	elPackfl.fldAdd(new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20"));
+	elPackfl.fldAdd(new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20"));
     }
 }
 
@@ -121,7 +122,7 @@ string ModArch::filesDB()
 
 bool ModArch::filePack( const string &anm )
 {
-    if( anm.size() > 3 && anm.substr(anm.size()-3,3) == ".gz" ) return true;
+    if(anm.size() > 3 && anm.substr(anm.size()-3,3) == ".gz") return true;
     return false;
 }
 
@@ -132,12 +133,12 @@ string ModArch::packArch( const string &anm, bool replace )
     //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
     int sysres = system((string("gzip -c \"")+anm+"\" > \""+rez_nm+"\"").c_str());
     //signal(SIGCHLD,prevs);
-    if( sysres )
+    if(sysres)
     {
 	remove(rez_nm.c_str());
 	throw TError(nodePath().c_str(),_("Compress error!"));
     }
-    if( replace ) remove(anm.c_str());
+    if(replace) remove(anm.c_str());
 
     return rez_nm;
 }
@@ -149,20 +150,50 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
     int sysres = system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str());
     //signal(SIGCHLD,prevs);
-    if( sysres )
+    if(sysres)
     {
 	remove(rez_nm.c_str());
 	throw TError(nodePath().c_str(),_("Decompress error: '%s'!"),anm.c_str());
     }
-    if( replace ) remove(anm.c_str());
+    if(replace) remove(anm.c_str());
 
     return rez_nm;
+}
+
+string ModArch::optDescr( )
+{
+    return TSYS::strMess(_(
+	"======================= The module <%s:%s> options =======================\n"
+	"    --noArchLimit        Disable archives limit to file number. Use for see archives mode, not work.\n"
+	"    --copyErrValFiles    Copy sourced error value archive's files before it restore.\n"
+	"                         Used for debug value archive's errors and correct restore.\n"
+        "\n"),MOD_TYPE,MOD_ID);
 }
 
 void ModArch::load_( )
 {
     //> Load parameters from command line
+    int next_opt;
+    const char *short_opt = "h";
+    struct option long_opt[] =
+    {
+        {"help",	0,	NULL,	'h'},
+        {"noArchLimit",	0,	NULL,	'l'},
+        {"copyErrValFiles",0,	NULL,	'c'},
+        {NULL,		0,	NULL,	0  }
+    };
 
+    optind = opterr = 0;
+    do
+    {
+        next_opt = getopt_long(SYS->argc, (char * const *)SYS->argv, short_opt, long_opt, NULL);
+        switch(next_opt)
+        {
+            case 'h': fprintf(stdout, "%s", optDescr().c_str()); break;
+            case 'l': noArchLimit = true;	break;
+            case 'c': copyErrValFiles = true;	break;
+        }
+    } while(next_opt != -1);
 }
 
 void ModArch::modStart( )
@@ -181,21 +212,21 @@ void ModArch::modStop( )
     itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
 	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
     timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prcSt, false, nodePath()+"stop",5) )
+    if(TSYS::eventWait(prcSt, false, nodePath()+"stop",5))
 	throw TError(nodePath().c_str(),_("Check archives thread is not stopped!"));
 }
 
 void ModArch::Task( union sigval obj )
 {
     ModArch *arh = (ModArch *)obj.sival_ptr;
-    if( arh->prcSt )  return;
+    if(arh->prcSt)  return;
     arh->prcSt = true;
 
     vector<string> a_list;
     //> Check message archivators
     arh->messList(a_list);
-    for( unsigned i_a = 0; i_a < a_list.size(); i_a++ )
-	if( arh->messAt(a_list[i_a]).at().startStat( ) )
+    for(unsigned i_a = 0; i_a < a_list.size(); i_a++)
+	if(arh->messAt(a_list[i_a]).at().startStat())
 	    try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
 	    catch(TError err)
 	    {
@@ -205,8 +236,8 @@ void ModArch::Task( union sigval obj )
 
     //> Check value archivators
     arh->valList(a_list);
-    for( unsigned i_a = 0; i_a < a_list.size(); i_a++ )
-	if( arh->valAt(a_list[i_a]).at().startStat( ) )
+    for(unsigned i_a = 0; i_a < a_list.size(); i_a++)
+	if(arh->valAt(a_list[i_a]).at().startStat())
 	    try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
 	    catch(TError err)
 	    {
@@ -218,10 +249,10 @@ void ModArch::Task( union sigval obj )
     struct stat file_stat;
     TConfig c_el(&mod->packFE());
     c_el.cfgViewAll(false);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el); )
-	if( stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG )
+    for(int fld_cnt=0; SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el); )
+	if(stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG)
 	{
-	    if( !SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el,true) )	break;
+	    if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el,true))	break;
 	    fld_cnt--;
 	}
 

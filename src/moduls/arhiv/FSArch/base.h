@@ -62,6 +62,10 @@ class ModArch: public TTipArchivator
 	string filesDB( );
 	TElem &packFE( )	{ return elPackfl; }
 
+	//> Attributes
+	bool	noArchLimit;
+	bool	copyErrValFiles;
+
     protected:
 	//Methods
 	void load_( );
@@ -72,7 +76,9 @@ class ModArch: public TTipArchivator
 
     private:
 	//Methods
-	static void Task(union sigval obj);		//Checking archives task
+	static void Task( union sigval obj );		//Checking archives task
+
+	string optDescr( );
 
 	//Attributes
 	bool	prcSt;

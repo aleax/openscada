@@ -262,31 +262,31 @@ void ModMArch::checkArchivator( bool now )
 
 	//> Check deleting Archives
 	res.request(true);
-	for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++ )
-	    if( !arh_s[i_arh]->scan )
+	for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
+	    if(!arh_s[i_arh]->scan)
 	    {
 		delete arh_s[i_arh];
-		arh_s.erase( arh_s.begin() + i_arh );
+		arh_s.erase(arh_s.begin() + i_arh);
 		i_arh--;
 	    }
 	res.release();
 
 	//> Check file count and delete odd files
-	if( mNumbFiles )
+	if(mNumbFiles && !mod->noArchLimit)
 	{
 	    int f_cnt = 0;	//Work files number
-	    for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
-		if( !arh_s[i_arh]->err() ) f_cnt++;
-	    if( f_cnt > mNumbFiles )
+	    for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
+		if(!arh_s[i_arh]->err()) f_cnt++;
+	    if(f_cnt > mNumbFiles)
 	    {
 		//>> Delete oldest files
-		for( int i_arh = arh_s.size()-1; i_arh >= 0; i_arh-- )
-		    if( f_cnt <= mNumbFiles )	break;
-		    else if( !arh_s[i_arh]->err() )
+		for(int i_arh = arh_s.size()-1; i_arh >= 0; i_arh--)
+		    if(f_cnt <= mNumbFiles)	break;
+		    else if(!arh_s[i_arh]->err())
 		    {
 			string f_nm = arh_s[i_arh]->name();	//Deleted file name
 			delete arh_s[i_arh];
-			arh_s.erase( arh_s.begin() + i_arh );
+			arh_s.erase(arh_s.begin() + i_arh);
 			remove(f_nm.c_str());
 			remove((f_nm+".info").c_str());
 			f_cnt--;

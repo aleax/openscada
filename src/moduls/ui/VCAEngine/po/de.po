@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-17 10:17+0300\n"
+"POT-Creation-Date: 2011-07-18 16:58+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -569,6 +569,9 @@ msgstr "Skala:Markierung:Schrift"
 msgid "Value archivator"
 msgstr "Wertearchivar"
 
+msgid "Values for pixel"
+msgstr "Werte pro Pixel"
+
 msgid "Parameters number"
 msgstr "Anzahl der Parameter"
 
@@ -592,6 +595,12 @@ msgstr ":Farbe"
 
 msgid "Value archivator in form \"[ArchMod].[ArchivatorId]\"."
 msgstr "Wert archivator in Form \"[ArchMod].[ArchivatorId]\"."
+
+msgid ""
+"The number of values per pixel. Increase to enhance the accuracy of export "
+"at large time intervals."
+msgstr ""
+"Die Anzahl der Werte pro Pixel. Zoom, um die Genauigkeit der Ausfuhren in die großen Zeitabständen zu erhöhen."
 
 msgid ""
 "Full address to DAQ attribute of a parameter or to an archive.\n"

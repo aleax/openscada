@@ -336,6 +336,12 @@ void TMdContr::regVal(int reg, const string &dt)
 
 TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 {
+    if(tmDelay > 0)
+    {
+	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
+	return EVAL_REAL;
+    }
+
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
     string atp_sub = TSYS::strParse(tp, 1, "_");
@@ -404,6 +410,12 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
 
 void TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err )
 {
+    if(tmDelay > 0)
+    {
+	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
+	return;
+    }
+
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
     string atp_sub = TSYS::strParse(tp, 1, "_");
@@ -615,7 +627,18 @@ void *TMdContr::Task( void *icntr )
     {
 	while(cntr.tmDelay <= 0 || (!cntr.endrun_req && cntr.tmDelay > 0))
 	{
-	    if(cntr.tmDelay > 0) { usleep(1000000); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.tmDelay > 0)
+	    {
+		//> Get data from blocks to parameters or calc for logical type parameters
+		cntr.en_res.resRequestR();
+        	for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
+        	    cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
+        	cntr.en_res.resRelease();
+
+		usleep(1000000);
+		cntr.tmDelay = vmax(0,cntr.tmDelay-1);
+		continue;
+	    }
 
 	    cntr.call_st = true;
 	    t_cnt = TSYS::curTime();
@@ -1200,13 +1223,12 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if(!enableStat() || !owner().startStat() || owner().tmDelay > -1)
+    if(!enableStat() || !owner().startStat())
     {
 	if(val.name() == "err")
 	{
 	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
-	    else if(owner().tmDelay > -1)	val.setS(_("10:Connection error or no response."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;

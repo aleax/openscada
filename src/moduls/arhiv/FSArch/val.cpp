@@ -38,7 +38,7 @@ using namespace FSArch;
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), chkANow(false), mAPrms(cfg("A_PRMS").getSd()),
-    time_size(800), numb_files(100), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
+    time_size(800), mNumbFiles(100), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
 {
 
 }
@@ -65,7 +65,7 @@ void ModVArch::load_( )
 	string  vl;
 	prmNd.load(mAPrms);
 	vl = prmNd.attr("TmSize"); if( !vl.empty() ) setFileTimeSize(atof(vl.c_str()));
-	vl = prmNd.attr("NFiles"); if( !vl.empty() ) setFileNumber(atoi(vl.c_str()));
+	vl = prmNd.attr("NFiles"); if( !vl.empty() ) setNumbFiles(atoi(vl.c_str()));
 	vl = prmNd.attr("Round"); if( !vl.empty() ) setRoundProc(atof(vl.c_str()));
 	vl = prmNd.attr("PackTm"); if( !vl.empty() ) setPackTm(atoi(vl.c_str()));
 	vl = prmNd.attr("CheckTm"); if( !vl.empty() ) setCheckTm(atoi(vl.c_str()));
@@ -78,7 +78,7 @@ void ModVArch::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("TmSize",TSYS::real2str(fileTimeSize()));
-    prmNd.setAttr("NFiles",TSYS::int2str(fileNumber()));
+    prmNd.setAttr("NFiles",TSYS::int2str(numbFiles()));
     prmNd.setAttr("Round",TSYS::real2str(roundProc()));
     prmNd.setAttr("PackTm",TSYS::int2str(packTm()));
     prmNd.setAttr("CheckTm",TSYS::int2str(checkTm()));
@@ -108,12 +108,12 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     char buf[21]; buf[20] = 0;
     bool unpck = false;
     string a_fnm = anm;
-    if( mod->filePack(anm) )
+    if(mod->filePack(anm))
     {
 	bool infoOK = false;
 	//>> Get archive info from info file
 	int hd = open((anm+".info").c_str(),O_RDONLY);
-	if( hd > 0 )
+	if(hd >= 0)
 	{
 	    char ibuf[80];
 	    int rsz = read(hd,ibuf,sizeof(ibuf));
@@ -122,13 +122,13 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 		ibuf[rsz] = 0;
 		int64_t tBeg, tEnd, tPer;
 		int tVTp;
-		if( sscanf(ibuf,"%llx %llx %20s %llx %d",&tBeg,&tEnd,buf,&tPer,&tVTp) == 5 )
+		if(sscanf(ibuf,"%llx %llx %20s %llx %d",&tBeg,&tEnd,buf,&tPer,&tVTp) == 5)
 		{
-		    if( abeg )	*abeg = tBeg;
-		    if( aend )	*aend = tEnd;
-		    if( archive )*archive = buf;
-		    if( aper )	*aper = tPer;
-		    if( vtp )	*vtp = (TFld::Type)tVTp;
+		    if(abeg)	*abeg = tBeg;
+		    if(aend)	*aend = tEnd;
+		    if(archive)	*archive = buf;
+		    if(aper)	*aper = tPer;
+		    if(vtp)	*vtp = (TFld::Type)tVTp;
 		    infoOK = true;
 		}
 	    }
@@ -136,46 +136,50 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	}
 
 	//> Get file info from DB
-	if( !infoOK )
+	if(!infoOK)
 	{
 	    TConfig c_el(&mod->packFE());
 	    c_el.cfg("FILE").setS(anm);
-	    if( SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el) )
+	    if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el))
 	    {
-		if( abeg )	*abeg = strtoll(c_el.cfg("BEGIN").getS().c_str(),NULL,16);
-		if( aend )	*aend = strtoll(c_el.cfg("END").getS().c_str(),NULL,16);
-		if( archive )	*archive = c_el.cfg("PRM1").getS();
-		if( aper )	*aper = strtoll(c_el.cfg("PRM2").getS().c_str(),NULL,16);
-		if( vtp )	*vtp  = (TFld::Type)atoi(c_el.cfg("PRM3").getS().c_str());
+		if(abeg)	*abeg = strtoll(c_el.cfg("BEGIN").getS().c_str(),NULL,16);
+		if(aend)	*aend = strtoll(c_el.cfg("END").getS().c_str(),NULL,16);
+		if(archive)	*archive = c_el.cfg("PRM1").getS();
+		if(aper)	*aper = strtoll(c_el.cfg("PRM2").getS().c_str(),NULL,16);
+		if(vtp)		*vtp  = (TFld::Type)atoi(c_el.cfg("PRM3").getS().c_str());
 		infoOK = true;
 	    }
 	}
 
-	if( infoOK ) return true;
+	if(infoOK) return true;
 
-	try{ a_fnm = mod->unPackArch(anm,false); } catch(TError){ return false; }
+	try
+	{
+	    mess_info(nodePath().c_str(), _("Unpack value archive file '%s' for information get."),anm.c_str());
+	    a_fnm = mod->unPackArch(anm,false);
+	} catch(TError){ return false; }
 	unpck = true;
     }
     //> Get params from file
     int hd = open(a_fnm.c_str(),O_RDONLY);
-    if( hd <= 0 )   return false;
+    if(hd <= 0)	return false;
     //>> Read Header
     VFileArch::FHead head;
-    int r_len = read(hd,&head,sizeof(VFileArch::FHead));
+    int r_len = read(hd, &head, sizeof(VFileArch::FHead));
     close(hd);
-    if( r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55 ) return false;
+    if(r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55) return false;
     //>> Check to archive present
-    if( archive )	{ strncpy(buf,head.archive,20); *archive = buf; }
-    if( abeg )		*abeg = head.beg;
-    if( aend )		*aend = head.end;
-    if( aper )		*aper = head.period;
-    if( vtp )		*vtp  = (TFld::Type)head.vtp;
+    if(archive)	{ strncpy(buf,head.archive,20); *archive = buf; }
+    if(abeg)	*abeg = head.beg;
+    if(aend)	*aend = head.end;
+    if(aper)	*aper = head.period;
+    if(vtp)	*vtp  = (TFld::Type)head.vtp;
 
-    if( unpck )
+    if(unpck)
     {
 	remove(a_fnm.c_str());
 
-	if( !packInfoFiles() )
+	if(!packInfoFiles())
 	{
 	    //>> Write info to DB
 	    TConfig c_el(&mod->packFE());
@@ -188,7 +192,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    c_el.cfg("PRM3").setS(TSYS::int2str(head.vtp));
 	    SYS->db().at().dataSet(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
 	}
-	else if( (hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0 )
+	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0)
 	{
 	    //>> Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d",head.beg,head.end,buf,head.period,head.vtp);
@@ -452,8 +456,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/add/fn")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(fileNumber()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setFileNumber(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(numbFiles()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setNumbFiles(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/add/round")
     {
@@ -589,10 +593,10 @@ void ModVArchEl::checkArchivator( bool now )
 
     ResAlloc res(mRes,true);
     //>> Check file count for delete old files
-    if(now && ((ModVArch &)archivator()).fileNumber() && arh_f.size() > ((ModVArch &)archivator()).fileNumber())
+    if(now && !mod->noArchLimit && ((ModVArch &)archivator()).numbFiles() && arh_f.size() > ((ModVArch &)archivator()).numbFiles())
 	for(unsigned i_arh = 0; i_arh < arh_f.size(); )
 	{
-	    if(arh_f.size() <= ((ModVArch &)archivator()).fileNumber())	break;
+	    if(arh_f.size() <= ((ModVArch &)archivator()).numbFiles())	break;
 	    else if(!arh_f[i_arh]->err())
 	    {
 		string f_nm = arh_f[i_arh]->name();
@@ -961,7 +965,7 @@ void VFileArch::attach( const string &name )
 	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file <%s> no openned!"),name.c_str());
 	mSize = lseek(hd,0,SEEK_END);
 	mpos = (end()-begin())/period();
-	if( !mPack && cur_tm >= begin() && cur_tm <= end() ) repairFile(hd);
+	if(!mPack && cur_tm >= begin() && cur_tm <= end()) repairFile(hd);
 	close(hd);
 	res.release();
 
@@ -1455,7 +1459,6 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     cacheDrop(vpos_beg);
     cacheSet(vpos_end,foff_beg+val_b.size()-value_end.size(),value_end.size(),true,true);
 
-    //repairFile(hd,false);
     mAcces = time(NULL);
 
     mSize = lseek(hd,0,SEEK_END);
@@ -1658,7 +1661,7 @@ void VFileArch::setPkVal( int hd, int vpos, int vl )
     }
 }
 
-void VFileArch::repairFile( int hd, bool fix )
+void VFileArch::repairFile( int hd )
 {
     int v_sz;
     if(!mPack)
@@ -1671,19 +1674,29 @@ void VFileArch::repairFile( int hd, bool fix )
 	    if(!dt) return;
 	    mess_err(owner().archivator().nodePath().c_str(),
 		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
-	    //> Fix file
-	    if(fix)
+	    //> Copy error file
+	    if(mod->copyErrValFiles)
 	    {
-		if(dt > 0)
-		{
-		    ftruncate(hd, f_off);
-		    setValue(hd, f_off, eVal);
-		}
+		char cpBuf[4096];
+		int ehd = open((name()+".err").c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0666);
+		if(ehd < 0) mess_err(owner().archivator().nodePath().c_str(), _("Error open new archive file for copy."));
 		else
 		{
-		    f_sz = f_off-vSize*((f_off-f_sz)/vSize);
-		    while(f_sz <= f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
+		    for(int rs = 0; (rs=read(hd, cpBuf, sizeof(cpBuf))); )
+			write(ehd, cpBuf, rs);
+		    close(ehd);
 		}
+	    }
+	    //> Fix file
+	    if(dt > 0)
+	    {
+		ftruncate(hd, f_off);
+		setValue(hd, f_off, eVal);
+	    }
+	    else
+	    {
+		f_sz = f_off-vSize*((f_off-f_sz)/vSize);
+		while(f_sz <= f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
 	    }
 	}
 	else

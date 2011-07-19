@@ -1410,14 +1410,19 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case 40:	//sclVerScl
-	    if( shD->sclVerScl == atof(val.c_str()) )	break;
+	    if(shD->sclVerScl == atof(val.c_str()))	break;
 	    shD->sclVerScl = atof(val.c_str());
 	    make_pct = true;
 	    break;
 	case 41:	//sclVerSclOff
-	    if( shD->sclVerSclOff == atof(val.c_str()) ) break;
+	    if(shD->sclVerSclOff == atof(val.c_str()))	break;
 	    shD->sclVerSclOff = atof(val.c_str());
 	    make_pct = true;
+	    break;
+	case 42:	//valsForPix
+	    if(shD->valsForPix == vmin(10,vmax(0,atoi(val.c_str()))))	break;
+	    shD->valsForPix = vmin(10,vmax(0,atoi(val.c_str())));
+	    reld_tr_dt = 2;
 	    break;
 	default:
 	    //> Individual trend's attributes process
@@ -1461,7 +1466,7 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
 void ShapeDiagram::makePicture( WdgView *w )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
-    if( !shD->en )	return;
+    if(!shD->en) return;
     switch(shD->type)
     {
 	case 0:	makeTrendsPicture(w);	break;
@@ -2357,7 +2362,7 @@ void ShapeDiagram::TrendObj::setAddr( const string &vl )
 void ShapeDiagram::TrendObj::loadData( bool full )
 {
     ShpDt *shD = (ShpDt*)view->shpData;
-    switch( shD->type )
+    switch(shD->type)
     {
 	case 0: loadTrendsData(full);	break;
 	case 1: loadSpectrumData(full);	break;
@@ -2368,13 +2373,13 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 {
     ShpDt *shD = (ShpDt*)view->shpData;
 
-    int64_t tSize     = (int64_t)(1e6*shD->tSize);
-    int64_t tTime     = shD->tTime;
-    int64_t tTimeGrnd = tTime - tSize;
-    int64_t wantPer = tSize/view->size().width();
+    int64_t tSize	= (int64_t)(1e6*shD->tSize);
+    int64_t tTime	= shD->tTime;
+    int64_t tTimeGrnd	= tTime - tSize;
+    int64_t wantPer	= tSize/(view->size().width()*shD->valsForPix);
 
     //> Clear trend for empty address and for full reload data
-    if( full || addr().empty() )
+    if(full || addr().empty())
     {
 	arh_per = arh_beg = arh_end = 0;
 	val_tp = 0;
@@ -2508,10 +2513,10 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
 
     loadTrendsData(true);
 
-    if( !valBeg( ) || !valEnd( ) ) return;
+    if(!valBeg() || !valEnd()) return;
 
 #if HAVE_FFTW3_H
-    if( fftOut ) { delete fftOut; fftN = 0; }
+    if(fftOut) { delete fftOut; fftN = 0; }
 
     int64_t tSize	= (int64_t)(1e6*shD->tSize);
     int64_t tTime	= shD->tTime;

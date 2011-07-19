@@ -852,6 +852,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrDel("sclMarkColor");
 		cfg.owner()->attrDel("sclMarkFont");
 		cfg.owner()->attrDel("valArch");
+		cfg.owner()->attrDel("valsForPix");
 		cfg.owner()->attrDel("parNum");
 		break;
 	}
@@ -879,6 +880,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
 		cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","37") );
 		cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","38") );
+		cfg.owner()->attrAdd( new TFld("valsForPix",_("Values for pixel"),TFld::Integer,Attr::Mutable,"1","1;100","","","42") );
 		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;10","","39") );
 		break;
 	}
@@ -938,6 +940,8 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	{
 	    el = src->attrAt("valArch").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	    if(el) el->setAttr("len","")->setAttr("help",_("Value archivator in form \"[ArchMod].[ArchivatorId]\"."));
+	    el = src->attrAt("valsForPix").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+	    if(el) el->setAttr("len","")->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
 	    for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++)
 	    {
 		el = src->attrAt(TSYS::strMess("prm%daddr",i_p)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);

@@ -1,3 +1,12 @@
+2011-07-19 Roman
+- Archive.FSArch: The module options --noArchLimit and --copyErrValFiles is added.
+    The option --noArchLimit used for disable archive's files removing by limit on view archives run mode.
+    The option --copyErrValFiles used for enable copy error archive's files to debug correction algorithm.
+- DAQ.JavaLikeCalc: String constants direct concatenation is added.
+- DAQ.ModBus: Templates calc on start mode and no connection with remote PLC is added.
+- UI.VCAEngine, UI.Vision: The attribute "valsForPix" is added to primitive "Diagram" for precision control for export to CSV at large time intervals.
+
+
 2011-07-16 Roman
 - UI.Vision: Screens counter display only on any UI.Vision window open.
     Made for crash prevent on UI.QTStarter miss or not init.
