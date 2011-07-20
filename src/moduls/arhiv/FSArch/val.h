@@ -27,7 +27,7 @@
 
 #include <tarchives.h>
 
-#define VAL_CACHE_POS 320000
+#define VAL_CACHE_POS 160000
 
 using std::string;
 using std::deque;

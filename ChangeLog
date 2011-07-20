@@ -1,4 +1,7 @@
 2011-07-20 Roman
+- !!!!:FIX:Archive.FSArch: Read data from archive's file buffer and buffer limit exceeding into the fast bits calc algorithm is fixed.
+    Place offsets to cache from the fast bits calc algorithm is fixed.
+- DAQ.DAQGate: Return of the distributed synchronization mechanism for periodic acquisition.
 - FIX:SYS.Archive: Transparently request to archive's data for all archivators is fixed for get less quality archivators with data.
 - Special.FLibSYS, DAQ.SoundCard, DAQ.AMRDevs, DAQ.BFN, Transport.Serial, UI.Vision, UI.QTStarter:
     German translation is updated by Irina Popkova.

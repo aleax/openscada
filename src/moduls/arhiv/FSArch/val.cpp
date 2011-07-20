@@ -1270,6 +1270,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //Init pack index buffer
     vpos_beg = (ibeg-begin())/period();
     vpos_end = (iend-begin())/period();
+
     string pid_b(fixVl ? (vpos_end/8)-(vpos_beg/8)+1 : vSize*(vpos_end-vpos_beg+1), '\0');
 
     //Reserve memory for values buffer
@@ -1450,10 +1451,10 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	lseek(hd,sizeof(FHead)+vSize*vpos_beg,SEEK_SET);
 	pid_b_sz = vSize*(vpos_end-vpos_beg+1);
     }
-    write(hd,pid_b.c_str(),pid_b_sz);
+    write(hd,pid_b.data(),pid_b_sz);
     moveTail(hd,foff_end,foff_end+(val_b.size()-(foff_end-foff_beg)));
     lseek(hd,foff_beg,SEEK_SET);
-    write(hd,val_b.c_str(),val_b.size());
+    write(hd,val_b.data(),val_b.size());
 
     //> Drop cache
     cacheDrop(vpos_beg);
@@ -1498,36 +1499,47 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 
 	cach_pos++;
 	int i_ps = cach_pos;
-	lseek(hd, sizeof(FHead)+cach_pos/8, SEEK_SET);
 
 	for(int n_pos = 0; i_ps <= vpos; i_ps = n_pos)
 	{
-	    //> Buffer check for refresh
-	    if(i_bf >= b_sz)
-	    {
-		b_sz = vmin((vpos/8)-(i_ps/8)+1, (int)sizeof(buf));
-		read(hd, &buf, b_sz);
-		i_bf = 0;
-	    }
 	    //> Fast algorithm for big blocks
 	    if(!((i_ps%8) || (i_ps/8)%4) && (i_ps/32) < (vpos/32))
 	    {
+		//> Buffer check for refresh
+		if((i_bf+4) > b_sz)
+		{
+		    lseek(hd, sizeof(FHead)+i_ps/8, SEEK_SET);
+		    b_sz = vmin((vpos/8)-(i_ps/8)+1, (int)sizeof(buf));
+		    read(hd, &buf, b_sz);
+		    i_bf = 0;
+		}
+		//> Count
 		uint32_t vw = *(uint32_t*)(buf+i_bf);
     	        vw -= ((vw>>1)&0x55555555);
     		vw = (vw&0x33333333) + ((vw>>2)&0x33333333);
     		voff += vSize * ((((vw+(vw>>4))&0xF0F0F0F)*0x1010101)>>24);
     		n_pos = i_ps + 32; i_bf += 4;
+		//> Update cache
+		if(i_ps && (i_ps%VAL_CACHE_POS) == 0) cacheSet(i_ps+31, voff, 0, false, wr);
     	    }
     	    //> Simple algorithm
     	    else
 	    {
+		//> Buffer check for refresh
+		if(i_bf >= b_sz)
+		{
+		    lseek(hd, sizeof(FHead)+i_ps/8, SEEK_SET);
+		    b_sz = vmin((vpos/8)-(i_ps/8)+1, (int)sizeof(buf));
+		    read(hd, &buf, b_sz);
+		    i_bf = 0;
+		}
+		//> Count
 		voff += vSize * (0x01&(buf[i_bf]>>(i_ps%8)));
 		n_pos = i_ps+1;
 		if((n_pos%8) == 0) i_bf++;
+		//> Update cache
+		if(i_ps == vpos) cacheSet(i_ps, voff, 0, i_ps==vpos, wr);
 	    }
-	    //> Update cache
-	    if((i_ps && (i_ps%VAL_CACHE_POS) == 0) || i_ps == vpos)
-		cacheSet(i_ps, voff, 0, i_ps==vpos, wr);
 	}
     }
     else
@@ -1712,6 +1724,7 @@ int VFileArch::cacheGet( int &pos, int *vsz )
     CacheEl rez = {0,0,0};
     for(int i_p = (int)cache.size()-1; i_p >= 0; i_p--)
 	if(pos >= cache[i_p].pos) { rez = cache[i_p]; break; }
+
     if(pos >= cach_pr_rd.pos && cach_pr_rd.pos > rez.pos)	rez = cach_pr_rd;
     if(pos >= cach_pr_wr.pos && cach_pr_wr.pos > rez.pos)	rez = cach_pr_wr;
 

@@ -316,6 +316,7 @@ void *TMdContr::Task( void *icntr )
 	    if(!isAccess) { t_prev = t_cnt; usleep(1000000); continue; }
 	    else
 	    {
+		unsigned int div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
 		if(syncCnt <= 0) syncCnt = cntr.mSync;
 		syncCnt = vmax(0, syncCnt-1e-6*(t_cnt-t_prev));
 		vector<string> pLS;
@@ -324,14 +325,15 @@ void *TMdContr::Task( void *icntr )
 		string scntr;
 
 		//> Parameters list update
-		if(syncCnt <= 0 || isFirst)
+		if(isFirst || (!div && syncCnt <= 0) || (div && it_cnt > div && (it_cnt%div) == 0))
 		    try { res.release(); cntr.enable_(); res.request(false); }
 		    catch(TError err) { }
 
 		//> Mark no process
 		for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
 		{
-		    if(syncCnt <= 0) cntr.at(pLS[i_p]).at().load_();
+		    if((!div && syncCnt <= 0) || (div && it_cnt > div && (((it_cnt+i_p)%div) == 0)))
+			cntr.at(pLS[i_p]).at().load_();
 		    cntr.at(pLS[i_p]).at().isPrcOK = false;
 		}
 
@@ -354,8 +356,8 @@ void *TMdContr::Task( void *icntr )
 			    prmNd->setAttr( "hostTm", !cntr.restDtTm() ? "1" : "0" );
 
 			    //>> Prepare individual attributes list
-			    bool sepReq = !prm.at().isEVAL && syncCnt > 0;
-			    prmNd->setAttr( "sepReq", sepReq ? "1" : "0" );
+			    bool sepReq = !prm.at().isEVAL && ((!div && syncCnt > 0) || (div && ((it_cnt+i_p)%div)));
+			    prmNd->setAttr("sepReq", sepReq ? "1" : "0");
 			    if(!cntr.restDtTm() && !sepReq) continue;
 
 			    vector<string> listV;
