@@ -1,4 +1,5 @@
 2011-07-20 Roman
+- FIX:SYS.Archive: Transparently request to archive's data for all archivators is fixed for get less quality archivators with data.
 - Special.FLibSYS, DAQ.SoundCard, DAQ.AMRDevs, DAQ.BFN, Transport.Serial, UI.Vision, UI.QTStarter:
     German translation is updated by Irina Popkova.
 

@@ -2465,7 +2465,8 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)view->size().height()));
-    if( view->cntrIfCmd(req,true) ) return;
+
+    if(view->cntrIfCmd(req,true)) return;
 
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());

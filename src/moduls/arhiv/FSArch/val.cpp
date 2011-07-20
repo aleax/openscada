@@ -155,7 +155,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 	try
 	{
-	    mess_info(nodePath().c_str(), _("Unpack value archive file '%s' for information get."),anm.c_str());
+	    mess_info(nodePath().c_str(), _("Unpack '%s' for information get."),anm.c_str());
 	    a_fnm = mod->unPackArch(anm,false);
 	} catch(TError){ return false; }
 	unpck = true;
@@ -1682,7 +1682,8 @@ void VFileArch::repairFile( int hd )
 		if(ehd < 0) mess_err(owner().archivator().nodePath().c_str(), _("Error open new archive file for copy."));
 		else
 		{
-		    for(int rs = 0; (rs=read(hd, cpBuf, sizeof(cpBuf))); )
+		    lseek(hd, 0, SEEK_SET);
+		    for(int rs = 0; (rs=read(hd, cpBuf, sizeof(cpBuf))) > 0; )
 			write(ehd, cpBuf, rs);
 		    close(ehd);
 		}

@@ -1540,7 +1540,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ResAlloc res(aRes,false);
 		for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 		    if(arch == arch_el[i_a]->archivator().workId())
-		    { opt->setAttr("per",TSYS::ll2str((int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod()))); break; }
+		    { opt->setAttr("per",TSYS::ll2str((int64_t)(1e6*arch_el[i_a]->archivator().valPeriod()))); break; }
 	    }
 	}
 	else if(ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD))	//Value's data request
@@ -1574,15 +1574,21 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    else
 	    {
 		ResAlloc res(aRes, false);
-		for(int i_a = (arch_el.size()-1); i_a >= 0; i_a--)
-		    if(((arch.empty() && (!i_a || arch_el[i_a]->archivator().valPeriod() <= (period/1e6))) || arch == arch_el[i_a]->archivator().workId()) &&
-			(tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin()))
+		//>>> Find more usable archivator
+		int i_asel = -1;
+		for(int i_a = ((int)arch_el.size()-1); i_a >= 0; i_a--)
+		    if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin())
 		    {
-			buf.setPeriod( (int64_t)(1000000.*arch_el[i_a]->archivator().valPeriod()) );
-			arch_el[i_a]->getVals( buf, tm_grnd, tm, local );
-			opt->setAttr("arch",arch_el[i_a]->archivator().workId());
-			break;
+			i_asel = i_a;
+			if(!arch.empty()) break;
+			if(arch_el[i_a]->archivator().valPeriod() <= (period/1e6)) break;
 		    }
+		if(i_asel >= 0)
+		{
+		    buf.setPeriod((int64_t)(1000000.*arch_el[i_asel]->archivator().valPeriod()));
+		    arch_el[i_asel]->getVals(buf, tm_grnd, tm, local);
+		    opt->setAttr("arch",arch_el[i_asel]->archivator().workId());
+		}
 		res.release();
 	    }
 	    //>>> Prepare buffer's data for transfer
