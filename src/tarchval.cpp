@@ -2545,7 +2545,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 
 void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 {
-    int64_t a_per = (int64_t)(1000000.*archivator().valPeriod());
+    int64_t a_per = (int64_t)(1e6*archivator().valPeriod());
 
     if( !beg || !end ) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax(beg,ibuf.begin()); end = vmin(end,ibuf.end());

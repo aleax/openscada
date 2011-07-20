@@ -1,3 +1,8 @@
+2011-07-20 Roman
+- Special.FLibSYS, DAQ.SoundCard, DAQ.AMRDevs, DAQ.BFN, Transport.Serial, UI.Vision, UI.QTStarter:
+    German translation is updated by Irina Popkova.
+
+
 2011-07-19 Roman
 - Archive.FSArch: The module options --noArchLimit and --copyErrValFiles is added.
     The option --noArchLimit used for disable archive's files removing by limit on view archives run mode.

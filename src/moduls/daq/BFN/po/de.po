@@ -2,22 +2,23 @@
 # Copyright (C) 2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.BFN package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2010, 2011.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.5.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-31 11:44+0300\n"
-"PO-Revision-Date: 2010-10-21 00:33+0400\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"POT-Creation-Date: 2011-07-20 07:42+0300\n"
+"PO-Revision-Date: 2011-07-19 20:40+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"X-Generator: Lokalize 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 msgid "BFN module"
 msgstr "BFN Modul"
@@ -45,7 +46,7 @@ msgid "Transport address"
 msgstr "Adresse des Transports"
 
 msgid "User"
-msgstr ""
+msgstr "Nutzer"
 
 msgid "Password"
 msgstr "Passwort"
@@ -55,7 +56,7 @@ msgstr "Standard"
 
 #, c-format
 msgid "Code %s"
-msgstr ""
+msgstr "Kode %s"
 
 msgid "Symbols"
 msgstr "Symbole"
@@ -64,19 +65,19 @@ msgid "Symbols DB"
 msgstr "Symbole DB"
 
 msgid "Codes"
-msgstr ""
+msgstr "Koden"
 
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 msgid "Alarms"
 msgstr "Alarme"
 
 msgid "Code"
-msgstr ""
+msgstr "Kode"
 
 msgid "New symbol for code"
 msgstr "Neues Symbol für die Code"
@@ -111,10 +112,10 @@ msgstr "Haus-Computer:\n"
 
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
-msgstr ""
+msgstr "DAQ.%s: Anschluss an die Datenquelle: %s."
 
 msgid "STOP"
-msgstr ""
+msgstr "STOP"
 
 #, c-format
 msgid "Connect to transport '%s' error."
@@ -128,16 +129,16 @@ msgid "Unknown alarm '%s'."
 msgstr "Unbekannte Alarm '%s'."
 
 msgid "Main"
-msgstr ""
+msgstr "Generell"
 
 msgid "Alarm: "
-msgstr ""
+msgstr "Alarme: "
 
 msgid "Norma: "
-msgstr ""
+msgstr "Norm: "
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter abgeschaltet."

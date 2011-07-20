@@ -1,26 +1,22 @@
 # OpenSCADA.Transport.Serial translate to German.
-# Copyright (C) 2009-2010 Irina Popkova
+# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 17:20+0300\n"
-"PO-Revision-Date: 2009-08-20 10:16+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
-"Language-Team: <de@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2011-07-20 07:50+0300\n"
+"PO-Revision-Date: 2011-07-19 20:53+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
 
 msgid "Serial interfaces"
 msgstr "Serielle Schnittstellen"
@@ -47,15 +43,17 @@ msgstr "Fehler der Einschreibung der Zeile."
 msgid "Read from serial error."
 msgstr "Fehler des Lesens des seriellen Interfaces"
 
+#, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
 msgstr ""
-"Datenverkehr eingehend %s, ausgehend %s. Maximale Wartezeit für "
-"ein Zeichen %.4g msek."
+"Datenverkehr eingehend %s, ausgehend %s. Maximale Wartezeit für ein Zeichen "
+"%.4g msek."
 
 #, c-format
 msgid "Serial port '%s' open error: %s."
 msgstr "Fehler beim Öffnen der Seriellen Schnittstelle '%s': %s."
 
+#, c-format
 msgid "Speed '%s' error."
 msgstr "Speed '%s' Fehler."
 
@@ -133,7 +131,7 @@ msgstr ""
 "    frm - maximale Rahmenlänge, in msek."
 
 msgid "Modem"
-msgstr ""
+msgstr "Modem"
 
 msgid "Timeout (sec)"
 msgstr "Wartezeit (sec)"
@@ -162,6 +160,7 @@ msgstr "Ring Antwort"
 msgid "Ring answer response"
 msgstr "Ring Antwort, Ergebnis"
 
+#, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Datenverkehr eingehend %s, ausgehend %s. "
 
@@ -194,8 +193,8 @@ msgid "Serial error!"
 msgstr "Serielle Fehler"
 
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:"
-"[modTel]\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]"
+"\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
@@ -207,8 +206,8 @@ msgid ""
 "    modTel - modem telephone, the field presence do switch transport to work "
 "with modem mode."
 msgstr ""
-"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:"
-"[format]\". Wo:\n"
+"Serielle Übertragung hat die Parameter im Format: \"[dev]:[speed]:[format]"
+"\". Wo:\n"
 "    dev - Schnittstelle des Seriellen Anschlusses (/dev/ttyS0);\n"
 "    speed - Geschwindigkeit der Seriellen Schnittstelle (300, 600, 1200, "
 "2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"

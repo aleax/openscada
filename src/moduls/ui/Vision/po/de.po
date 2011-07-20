@@ -2,26 +2,22 @@
 # Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-05 16:33+0300\n"
-"PO-Revision-Date: 2009-08-21 12:59+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
-"Language-Team: de <>\n"
-"Language: \n"
+"POT-Creation-Date: 2011-07-20 07:54+0300\n"
+"PO-Revision-Date: 2011-07-19 21:48+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
 
 msgid "Operation user interface (QT)"
 msgstr "Benutzerschnittstelle (QT)"
@@ -728,7 +724,7 @@ msgid "Big (32x32)"
 msgstr "Big (32x32)"
 
 msgid "Huge (48x48)"
-msgstr ""
+msgstr "Zu groß (48x48)"
 
 msgid "Visual items save"
 msgstr "Speicherung der Elemente"
@@ -921,7 +917,7 @@ msgid "Unload data"
 msgstr "Daten leeren"
 
 msgid "Styles"
-msgstr ""
+msgstr "Styl"
 
 msgid "Style:"
 msgstr "Stil:"
@@ -1293,7 +1289,7 @@ msgid "Press for all alarms quitance."
 msgstr "Betätigen für die Quittierung aller Störungen."
 
 msgid "Blink alarm"
-msgstr ""
+msgstr "Blinzalarme"
 
 msgid "The button for all blink alarms quitance"
 msgstr "Schaltfläche für Quittierung alle Alarme blinken"
@@ -1461,7 +1457,7 @@ msgstr "Diagramm speichern"
 
 #, c-format
 msgid "Trend %1.png"
-msgstr ""
+msgstr "Trend %1.png"
 
 msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
 msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
@@ -1470,7 +1466,7 @@ msgid "\"Date and time\";\"us\""
 msgstr "\"Datum und Uhrzeit\";\"us\""
 
 msgid "\"Frequency (Hz)\""
-msgstr ""
+msgstr "\"Frequenz (Hz)\""
 
 msgid "Export document"
 msgstr "Export des Dokuments"
@@ -1484,17 +1480,15 @@ msgstr "Export des Dokumentes."
 msgid "Save document"
 msgstr "Speicherung des Dokumentes"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Document %1.html"
-msgstr "Dokument"
+msgstr "Document %1.html"
 
-#, fuzzy
 msgid "XHTML (*.html);;CSV file (*.csv)"
-msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
+msgstr "XHTML (*.html);;CSV File (*.csv)"
 
-#, fuzzy
 msgid "No data for export."
-msgstr "Diagramm für den Export auswählen."
+msgstr "Keine Daten für Export."
 
 msgid "Select session for connection"
 msgstr "Sitzung für die Verbindung auswählen"
@@ -1527,7 +1521,7 @@ msgstr "Stufe der Störung: %1"
 
 #, c-format
 msgid "Session creation restore for '%s'."
-msgstr ""
+msgstr "Wiederaufbau der Schaffung der Session für '%s'."
 
 #, c-format
 msgid "Session '%s' update time %f ms."
@@ -1555,13 +1549,11 @@ msgstr "Diesen Punkt dynamisch machen"
 msgid "Press to make this point dynamic"
 msgstr "Betätigen Sie, um diesen Punkt dynamisch zu machen."
 
-#, fuzzy
 msgid "Make this point static"
-msgstr "Diesen Punkt dynamisch machen"
+msgstr "Diesen Punkt statisch machen"
 
-#, fuzzy
 msgid "Press to make this point static"
-msgstr "Betätigen Sie, um diesen Punkt dynamisch zu machen."
+msgstr "Betätigen Sie, um diesen Punkt statisch zu machen."
 
 msgid "Make line width dynamic"
 msgstr "Die Linienstärke dynamisch machen"
@@ -1569,13 +1561,11 @@ msgstr "Die Linienstärke dynamisch machen"
 msgid "Press to make line width dynamic"
 msgstr "Betätigen, um die Linienstärke dynamisch zu machen."
 
-#, fuzzy
 msgid "Make line width static"
-msgstr "Die Linienstärke dynamisch machen"
+msgstr "Die Linienstärke statisch machen"
 
-#, fuzzy
 msgid "Press to make line width static"
-msgstr "Betätigen, um die Linienstärke dynamisch zu machen."
+msgstr "Betätigen, um die Linienstärke statisch zu machen."
 
 msgid "Make line color dynamic"
 msgstr "Linienfarbe dynamisch machen"
@@ -1583,13 +1573,11 @@ msgstr "Linienfarbe dynamisch machen"
 msgid "Press to make line color dynamic"
 msgstr "Betätigen, um Linienfarbe dynamisch zu machen."
 
-#, fuzzy
 msgid "Make line color static"
-msgstr "Linienfarbe dynamisch machen"
+msgstr "Linienfarbe statisch machen"
 
-#, fuzzy
 msgid "Press to make line color static"
-msgstr "Betätigen, um Linienfarbe dynamisch zu machen."
+msgstr "Betätigen, um Linienfarbe statisch zu machen."
 
 msgid "Make border width dynamic"
 msgstr "Randbreite dynamisch machen"
@@ -1597,13 +1585,11 @@ msgstr "Randbreite dynamisch machen"
 msgid "Press to make border width dynamic"
 msgstr "Betätigen, um die Randbreite dynamisch zu machen."
 
-#, fuzzy
 msgid "Make border width static"
-msgstr "Randbreite dynamisch machen"
+msgstr "Randbreite statisch machen"
 
-#, fuzzy
 msgid "Press to make border width static"
-msgstr "Betätigen, um die Randbreite dynamisch zu machen."
+msgstr "Betätigen, um die Randbreite statisch zu machen."
 
 msgid "Make border color dynamic"
 msgstr "Randfarbe dynamisch machen"
@@ -1611,13 +1597,11 @@ msgstr "Randfarbe dynamisch machen"
 msgid "Press to make border color dynamic"
 msgstr "Betätigen, um die Randfarbe dynamisch zu machen."
 
-#, fuzzy
 msgid "Make border color static"
-msgstr "Randfarbe dynamisch machen"
+msgstr "Randfarbe statisch machen"
 
-#, fuzzy
 msgid "Press to make border color static"
-msgstr "Betätigen, um die Randfarbe dynamisch zu machen."
+msgstr "Betätigen, um die Randfarbe statisch zu machen."
 
 msgid "Make line style dynamic"
 msgstr "Linienstil dynamisch machen"
@@ -1625,13 +1609,11 @@ msgstr "Linienstil dynamisch machen"
 msgid "Press to make line style dynamic"
 msgstr "Betätigen, um den Linienstil dynamisch zu machen."
 
-#, fuzzy
 msgid "Make line style static"
-msgstr "Linienstil dynamisch machen"
+msgstr "Linienstil statisch machen"
 
-#, fuzzy
 msgid "Press to make line style static"
-msgstr "Betätigen, um den Linienstil dynamisch zu machen."
+msgstr "Betätigen, um den Linienstil statisch zu machen."
 
 msgid "Show the figure's properties"
 msgstr "Zeigen die Abbildung der Eigenschaften"
@@ -1651,13 +1633,11 @@ msgstr "Füllfarbe dynamisch machen"
 msgid "Press to make fill color dynamic"
 msgstr "Betätigen, um die Füllfarbe dynamisch zu machen."
 
-#, fuzzy
 msgid "Make fill color static"
-msgstr "Füllfarbe dynamisch machen"
+msgstr "Füllfarbe statisch machen"
 
-#, fuzzy
 msgid "Press to make fill color static"
-msgstr "Betätigen, um die Füllfarbe dynamisch zu machen."
+msgstr "Betätigen, um die Füllfarbe statisch zu machen."
 
 msgid "Make fill image dynamic"
 msgstr "Einfüllbild dynamisch machen"
@@ -1665,13 +1645,11 @@ msgstr "Einfüllbild dynamisch machen"
 msgid "Press to make fill image dynamic"
 msgstr "Betätigen, um Einfüllbild dynamisch zu machen."
 
-#, fuzzy
 msgid "Make fill image static"
-msgstr "Einfüllbild dynamisch machen"
+msgstr "Einfüllbild statisch machen"
 
-#, fuzzy
 msgid "Press to make fill image static"
-msgstr "Betätigen, um Einfüllbild dynamisch zu machen."
+msgstr "Betätigen, um Einfüllbild statisch zu machen."
 
 msgid "Show the fill's properties"
 msgstr "Zeigen die füllen die Eigenschaften"
@@ -1721,6 +1699,8 @@ msgstr "Punkt 5:"
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr ""
+"Einschlißen(eingeschlossen)/Ausschließen(ausgeschlossen) Einbettungsfarbe "
+"aus der Attributenliste."
 
 msgid "Fill Color"
 msgstr "Füllfarbe"
@@ -1731,6 +1711,8 @@ msgstr "Festlegen der Standard-Farbe füllen."
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill image from the properties list."
 msgstr ""
+"Einschließen(eingeschlossen)/Ausschließen(ausgeschlossen) Einbettungsbild "
+"aus der Attributenliste."
 
 msgid "Fill Image"
 msgstr "Füllen Image"
@@ -1740,17 +1722,19 @@ msgstr "Stellen Sie die Standard füllen Bild."
 
 msgid "Make the fill color Dynamic(checked)/Static(unchecked)."
 msgstr ""
+"Einbettungsfarbe Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
-#, fuzzy
 msgid "Dyn/Stat"
-msgstr "Zustand"
+msgstr "Dyn/Stat"
 
 msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Einbettungsbild Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr ""
+"Eischließen(eingeschlossen)/Ausschließen(ausgeschlossen) die Linienbreite "
+"aus der Attributenliste."
 
 msgid "Line width"
 msgstr "Linienbreite"
@@ -1759,11 +1743,13 @@ msgid "Set the default line width."
 msgstr "Festlegen der Standard-Linienbreite."
 
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Linienbreite Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line color from the properties list."
 msgstr ""
+"Eischließen(eingeschlossen)/Ausschließen(ausgeschlossen) Linienfarbe aus der "
+"Attributenliste."
 
 msgid "Line color"
 msgstr "Erase Stil"
@@ -1772,11 +1758,13 @@ msgid "Set the default line color."
 msgstr "Stellen Sie die Standard Linienfarbe."
 
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Linienfarbe Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line style from the properties list."
 msgstr ""
+"Eischließen(eingeschlossen)/Ausschließen(ausgeschlossen) Linienstil aus der "
+"Attributenliste."
 
 msgid "Line style"
 msgstr "Linienstil"
@@ -1785,12 +1773,14 @@ msgid "Set the default line style."
 msgstr "Festlegen der Standard-Linie Stil."
 
 msgid "Make the line style Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Linienstil Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the border width from the properties "
 "list."
 msgstr ""
+"Eischließen(eingeschlossen)/Ausschließen(ausgeschlossen) Randbreite aus der "
+"Attributenliste."
 
 msgid "Border width"
 msgstr "Randbreite"
@@ -1799,12 +1789,14 @@ msgid "Set the default line's border width."
 msgstr "Festlegen der Standard-Linie den Rand Weite."
 
 msgid "Make the border width Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Randbreite Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the border color from the properties "
 "list."
 msgstr ""
+"Eischließen(eingeschlossen)/Ausschließen(ausgeschlossen) Randfarbe aus der "
+"Attributenliste."
 
 msgid "Border color"
 msgstr "Randfarbe"
@@ -1813,28 +1805,28 @@ msgid "Set the default line's border color."
 msgstr "Festlegen der Standard-Linie den Rand Farbe."
 
 msgid "Make the border color Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Randfarbe Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid "Point 1:"
 msgstr "Punkt 1:"
 
 msgid "Make the 1 point Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Punkt 1 Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid "Point 2:"
 msgstr "Punkt 2:"
 
 msgid "Make the 2 point Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Punkt 2 Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid "Make the 3 point Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Punkt 3 Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid "Make the 4 point Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Punkt 4 Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid "Make the 5 point Dynamic(checked)/Static(unchecked)."
-msgstr ""
+msgstr "Punkt 5 Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 
 msgid "Solid"
 msgstr "Solid"
@@ -1900,7 +1892,7 @@ msgid "Loading page: '%1'."
 msgstr "Lade Seite: '%1'."
 
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 msgid "Ok"
 msgstr "Annehmen"
@@ -1942,7 +1934,7 @@ msgid "Sample:"
 msgstr "Muster:"
 
 msgid "AaBbCcDdEeFf"
-msgstr ""
+msgstr "AaBbCcDdEeFf"
 
 msgid "Auth wrong!!!"
 msgstr "Authentifizierungsfehler!!!"
@@ -1954,7 +1946,7 @@ msgid "Find next"
 msgstr "Weitersuchen"
 
 msgid "Cursor = (%1:%2)"
-msgstr ""
+msgstr "Cursor = (%1:%2)"
 
 msgid "Enter text string for search:"
 msgstr "Geben Sie den Text-String für Suche:"
@@ -1985,10 +1977,3 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
-
-#, fuzzy
-#~ msgid "Document.html"
-#~ msgstr "Dokument"
-
-#~ msgid "Save diagram's image"
-#~ msgstr "Speicherung des Bildes des Diagrammes"
