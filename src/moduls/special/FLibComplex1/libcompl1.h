@@ -66,7 +66,7 @@ class DigitBlock : public TFunction
 	void calc( TValFunc *val )
 	{
 	    bool set = false;
-	
+
 	    if(val->getB(0) && val->getI(8)!=1)	{ val->setI(8,1); set = true; }
 	    if(val->getB(1) && val->getI(8)!=2)	{ val->setI(8,2); set = true; }
 	    if(val->getB(2) && val->getI(8)!=3)	{ val->setI(8,3); set = true; }
@@ -532,7 +532,7 @@ class Divider : public TFunction
 //*********************************************************************
 //* PID                                                               *
 //* Inputs:                                                           *
-//*   0:val   - Value                                                 *
+//*   0:var   - Variable                                              *
 //*   1:sp    - Setpoint                                              *
 //*   2:max   - Maximum scale                                         *
 //*   3:min   - Minimum scale                                         *
@@ -642,10 +642,10 @@ class PID : public TFunction
 	    if( max <= min )	return;
 
 	    //> Prepare values
-	    sp = vmin(100,vmax(0,100.*(sp-min)/(max-min)));
-	    val = 100.*(val-min)/(max-min);
+	    sp = vmin(100,vmax(0,100*(sp-min)/(max-min)));
+	    val = 100*(val-min)/(max-min);
 	    val += k1*in1 + k2*in2;
-	    val = vmin(100.,vmax(-100.,val));
+	    val = vmin(100,vmax(-100,val));
 
 	    //> Error
 	    double err = sp - val;
@@ -655,7 +655,7 @@ class PID : public TFunction
 
 	    //> Gain
 	    err *= kp;
-	    err = vmin(100.,vmax(-100.,err));
+	    err = vmin(100,vmax(-100,err));
 
 	    integ += Kint*err;		//Integral
 	    difer -= Kdif*(difer-val);	//Differecial wait

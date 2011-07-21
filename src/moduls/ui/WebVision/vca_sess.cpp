@@ -5737,7 +5737,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	//>> Set grid color
 	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
-	if( (sclHor&0x2 || sclVer&0x2) && mrkHeight )
+	if( sclHor&0x2 || sclVer&0x2 )
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));

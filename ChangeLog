@@ -1,3 +1,8 @@
+2011-07-21 Roman
+- FIX:UI.WebVision: The primitive's "Diagram" mode "Spectrum" display is fixed for labels display.
+    Style "input[type=\"checkbox\"]" is added for CheckBox of "FormEl" display fix.
+
+
 2011-07-20 Roman
 - !!!!:FIX:Archive.FSArch: Read data from archive's file buffer and buffer limit exceeding into the fast bits calc algorithm is fixed.
     Place offsets to cache from the fast bits calc algorithm is fixed.

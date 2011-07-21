@@ -262,7 +262,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
 	"table.prot td { border: 1px solid black; white-space: nowrap; }\n"
 	"table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n"
 	"#popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }\n"
-	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n";
+	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n"
+	"input[type=\"checkbox\"] { margin: 0 4px 0 0; float: left; }\n";
 
 #if 0
     char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready") };
