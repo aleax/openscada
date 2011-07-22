@@ -1446,7 +1446,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	{
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
-	    wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
+	    //wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
 	    wdg.at().attrAt("newAttr").at().setModif(1);
 	    wdg.at().modif();
 	}

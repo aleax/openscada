@@ -1,5 +1,8 @@
 2011-07-22 Roman
 - FIX:DAQ.JavaLikeCalc: Return zero-length string for value 0 to user API function toString().
+- FIX:DAQ.ModBus: Zero register request for no inited links of template's parameters is removed.
+    Multi-register variables (float, int32) using in template's parameters is fixed.
+- UI.VCAEngine: Init new user widget's attributes to EVAL is disabled.
 
 
 2011-07-21 Roman

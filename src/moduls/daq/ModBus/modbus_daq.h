@@ -114,7 +114,7 @@ class TMdPrm : public TParamContr
     		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
 
             	int     io_id;		//Template function io index
-            	string  addr;		//Full item address: R:23
+            	string  addr, real;	//Full item address: R:23
     	    };
 
 	    //Methods
