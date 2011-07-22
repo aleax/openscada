@@ -1249,7 +1249,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size()) n = vmax(2,vmin(36,prms[0].getI()));
 		    if(prms.size() >= 2) w = vmin(100,prms[1].getI()) - (int)sign;
 		    string rez;
-		    for(unsigned c_vl = abs(val); c_vl || (w > 0 && (int)rez.size() < w); c_vl = c_vl/n)
+		    for(unsigned c_vl = abs(val); c_vl || rez.empty() || (w > 0 && (int)rez.size() < w); c_vl = c_vl/n)
 			rez += dsymb[c_vl%n];
 		    if(val < 0 || sign) rez += (val >= 0) ? "+" : "-";
 		    return TSYS::strEncode(rez,TSYS::Reverse);

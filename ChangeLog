@@ -1,3 +1,7 @@
+2011-07-22 Roman
+- FIX:DAQ.JavaLikeCalc: Return zero-length string for value 0 to user API function toString().
+
+
 2011-07-21 Roman
 - FIX:UI.WebVision: The primitive's "Diagram" mode "Spectrum" display is fixed for labels display.
     Style "input[type=\"checkbox\"]" is added for CheckBox of "FormEl" display fix.
