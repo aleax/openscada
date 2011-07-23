@@ -1,3 +1,7 @@
+2011-07-23 Roman
+- DAQ.ModBus: Reload registers and coils blocks is improved. Removed attributes clear is improved.
+
+
 2011-07-22 Roman
 - FIX:DAQ.JavaLikeCalc: Return zero-length string for value 0 to user API function toString().
 - FIX:DAQ.ModBus: Zero register request for no inited links of template's parameters is removed.

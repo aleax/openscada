@@ -113,7 +113,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), mSched(cfg("SCHEDULE").getSd()), mPrt(cfg("PROT").getSd()),
 	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
-	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), prc_st(false), call_st(false), endrun_req(false),
+	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), prc_st(false), call_st(false), endrun_req(false), isReload(false),
 	tmGath(0), tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
@@ -201,18 +201,18 @@ void TMdContr::start_( )
     acqBlksIn.clear();
     acqBlksCoil.clear();
     acqBlksCoilIn.clear();
+
     //>> Reenable parameters
-    vector<string> pls;
-    list(pls);
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++)
+    try
     {
-	AutoHD<TMdPrm> prm = at(pls[i_p]);
-	if(prm.at().enableStat())
-	{
-	    prm.at().disable();
-	    prm.at().enable();
-	}
-    }
+	vector<string> pls;
+	list(pls);
+
+	isReload = true;
+	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
+	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
+	isReload = false;
+    } catch(TError) { isReload = false; throw; }
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -657,7 +657,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
-		pdu = (char)0x1;					//Function, read multiple coils
+		pdu = (char)0x01;					//Function, read multiple coils
 		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);		//Address MSB
 		pdu += (char)cntr.acqBlksCoil[i_b].off;			//Address LSB
 		pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
@@ -688,7 +688,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
-		pdu = (char)0x2;					//Function, read multiple input's coils
+		pdu = (char)0x02;					//Function, read multiple input's coils
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].off;		//Address LSB
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
@@ -719,7 +719,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlks[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
-		pdu = (char)0x3;				//Function, read multiple registers
+		pdu = (char)0x03;				//Function, read multiple registers
 		pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
 		pdu += (char)(cntr.acqBlks[i_b].off/2);		//Address LSB
 		pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
@@ -749,7 +749,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
-		pdu = (char)0x4;				//Function, read multiple input registers
+		pdu = (char)0x04;				//Function, read multiple input registers
 		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].off/2);		//Address LSB
 		pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
@@ -933,14 +933,20 @@ bool TMdPrm::isLogic( )		{ return type().name == "logic"; }
 
 void TMdPrm::enable()
 {
-    if(enableStat())	return;
+    if(enableStat() && !owner().isReload) return;
 
     TParamContr::enable();
+
+    //> Remove not used parameters
+    for(unsigned i_f = 0; !owner().isReload && i_f < p_el.fldSize(); )
+        if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1)
+            try{ p_el.fldDel(i_f); }
+    	    catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+        else i_f++;
 
     //> Parse ModBus attributes and convert to string list for standard type parameter
     if(isStd())
     {
-	vector<string> als;
 	string ai, sel, atp, atp_m, atp_sub, aid, anm, awr;
 	string m_attrLs = cfg("ATTR_LS").getS();
 	for(int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
@@ -987,22 +993,7 @@ void TMdPrm::enable()
 		}
 	    }
 	    p_el.fldAt(el_id).setReserve(atp+":"+ai);
-
-	    als.push_back(aid);
 	}
-
-	//> Check for delete DAQ parameter's attributes
-	for(unsigned i_p = 0, i_l; i_p < p_el.fldSize(); )
-	{
-	    for(i_l = 0; i_l < als.size(); i_l++)
-		if(p_el.fldAt(i_p).name() == als[i_l])
-		    break;
-	    if(i_l >= als.size())
-		try{ p_el.fldDel(i_p); continue; }
-		catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
-	    i_p++;
-	}
-
     }
     //> Template's function connect for logical type parameter
     else if(isLogic() && lCtx)

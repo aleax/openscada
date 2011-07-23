@@ -215,7 +215,8 @@ class TMdContr: public TController
 
 	bool	prc_st,				//Process task active
 		call_st,        		//Calc now stat
-		endrun_req;			//Request to stop of the Process task
+		endrun_req,			//Request to stop of the Process task
+		isReload;
 	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
 	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers
 	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils
