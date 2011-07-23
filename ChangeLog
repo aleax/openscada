@@ -1,4 +1,5 @@
 2011-07-23 Roman
+- SYS: No compiler C and C++ installation present error is added to configure script.
 - DAQ.ModBus: Reload registers and coils blocks is improved. Removed attributes clear is improved.
 
 

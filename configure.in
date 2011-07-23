@@ -31,6 +31,10 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
+if test -z "$ac_ct_CC" -o -z "$ac_ct_CXX"; then
+    AC_MSG_ERROR([No C or C++ compiler present. Install GCC and G++.]);
+fi
+
 #Gettext utilites check
 AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
 AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
