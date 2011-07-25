@@ -2,23 +2,24 @@
 # Copyright (C) 2008-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
+# Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-25 17:36+0300\n"
-"PO-Revision-Date: 2010-08-09 22:43+0400\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"POT-Creation-Date: 2011-07-25 09:04+0300\n"
+"PO-Revision-Date: 2011-07-24 22:47+0400\n"
+"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"X-Generator: Lokalize 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 msgid "Error open semaphor!"
 msgstr "Fehler beim Öffnen des Semaphors!"
@@ -218,7 +219,7 @@ msgid "Messages"
 msgstr "Nachrichten"
 
 msgid "mcsec"
-msgstr ""
+msgstr "mks"
 
 msgid "Category"
 msgstr "Kategorie"
@@ -1638,8 +1639,7 @@ msgstr "Zeitüberschreitung !!!"
 msgid "Wait event..."
 msgstr "Warte auf Ereignis..."
 
-#, c-format
-msgid "Task '%s' is already created!"
+msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
 msgid "No permition for create realtime policy. Default thread is created!"
@@ -1650,10 +1650,6 @@ msgstr ""
 #, c-format
 msgid "Task creation error %d."
 msgstr "Fehler des Schaffens der Aufgabe %d!"
-
-#, c-format
-msgid "Task '%s' is not started!"
-msgstr "Aufgabe '%s' ist nicht gestartet!"
 
 #, c-format
 msgid "Task '%s' is not stopped!"
@@ -1798,8 +1794,9 @@ msgstr "CPU Installation"
 msgid "Counters"
 msgstr "Zähler"
 
-msgid "No data"
-msgstr "Keine Daten"
+#, fuzzy
+msgid "Finished. "
+msgstr "Abgeschaltet"
 
 msgid "Last: %s. Load: %3.1f% (%s from %s)"
 msgstr "Last: %s. Load: %3.1f% (%s von %s)"
@@ -1952,6 +1949,12 @@ msgid ""
 "When this flag will be set all the pieces awaiting an answer, until the lack "
 "of data during the timeout the transport elapsed ."
 msgstr ""
+"Signal für das Timeout-Warten beim Erhalten der Antwort.\n"
+"Mehrere Systeme (HTTP) können bei der Antwort an verschiedenen Protokollen "
+"Daten der Antwort in einigen Stückchen senden.\n"
+"Ohne dieser Flagge wird nur das erste Stück erhalten und gezeigt.\n"
+"Bei der Installation dieser Flaggewird das Erwarten aller Antwortstückchen, "
+"bis zum Datenfehlen während Transport-Timeout erfüllt."
 
 msgid "Answer"
 msgstr "Antwort"

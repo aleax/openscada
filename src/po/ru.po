@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-25 17:36+0300\n"
+"POT-Creation-Date: 2011-07-25 09:04+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1623,9 +1623,8 @@ msgstr "Превышение времени ожидания !!!"
 msgid "Wait event..."
 msgstr "Ожидание события..."
 
-#, c-format
-msgid "Task '%s' is already created!"
-msgstr "Задача '%s' уже создана!"
+msgid "Task '%s' is already present!"
+msgstr "Задача '%s' уже присутствует!"
 
 msgid "No permition for create realtime policy. Default thread is created!"
 msgstr ""
@@ -1635,10 +1634,6 @@ msgstr ""
 #, c-format
 msgid "Task creation error %d."
 msgstr "Ошибка создания задачи %d."
-
-#, c-format
-msgid "Task '%s' is not started!"
-msgstr "Задача '%s' не запущена!"
 
 #, c-format
 msgid "Task '%s' is not stopped!"
@@ -1783,8 +1778,8 @@ msgstr "Уст. CPU"
 msgid "Counters"
 msgstr "Счётчики"
 
-msgid "No data"
-msgstr "Нет данных"
+msgid "Finished. "
+msgstr "Закончен. "
 
 msgid "Last: %s. Load: %3.1f% (%s from %s)"
 msgstr "Последний: %s. Нагрузка %3.1f% (%s из %s)"

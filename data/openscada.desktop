@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Categories=Application;Development;Graphics;
+Categories=Graphics;Development
 Type=Application
 Exec=openscada_start
 Icon=openscada
