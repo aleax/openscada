@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Categories=Graphics;Development
+Categories=Graphics;Development;
 Type=Application
 Exec=openscada_Boiler
 Icon=openscada_Boiler
