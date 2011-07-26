@@ -429,10 +429,10 @@ void MTable::fieldGet( TConfig &cfg )
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid,true);
 	if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
-	else if( trPresent && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") && tbl[1][i_fld].size() )
+	else if( trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size() )
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
+	    if( u_cfg && u_cfg->fld().flg()&TCfg::TransltText && !u_cfg->noTransl() ) setVal(*u_cfg,tbl[1][i_fld]);
 	}
     }
 }
@@ -459,7 +459,7 @@ void MTable::fieldSet( TConfig &cfg )
 	if( sid.size() > 3 )
 	{
 	    if( !trPresent && sid.substr(0,3) == (Mess->lang2Code()+"#") ) trPresent = true;
-	    if( isVarTextTransl && !trDblDef && sid.substr(0,3) == (Mess->lang2CodeBase()+"#") ) trDblDef = true;
+	    if( Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0 ) trDblDef = true;
 	}
     }
     if( trDblDef ) fieldFix(cfg);

@@ -593,6 +593,9 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
 	else if( vDB == 2 ) c_el.cfg("ID").setS(tstr);
         c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
+	c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
 
 	if( !SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el) ) continue;
 
@@ -672,7 +675,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		    (attr.at().flgSelf()&Attr::CfgConst || (attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().substr(0,4) == "val:"))) );
+		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
 	}
@@ -692,7 +695,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	    c_elu.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_elu.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		    (attr.at().flgSelf()&Attr::CfgConst || (attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().substr(0,4) == "val:"))) );
+		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
 	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu);
 	}

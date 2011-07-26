@@ -747,7 +747,7 @@ void TBD::disable( )
 
 void TBD::open( const string &table, bool create )
 {
-    chldAdd(mTbl,openTable(table, create));
+    if(!chldPresent(mTbl,table)) chldAdd(mTbl,openTable(table, create));
 }
 
 void TBD::load_( )
