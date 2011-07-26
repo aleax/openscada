@@ -1240,6 +1240,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
     //--for fills--
     for( int i=0; i < inundationItems.size(); i++ )
     {
+        if( !inundationItems[i].number_shape.size() ) continue;
         bool flag_n1 = false;
         bool flag_n2 = false;
         QVector<int> temp;

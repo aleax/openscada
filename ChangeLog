@@ -1,6 +1,11 @@
-2011-07-25 Roman
-- SYS: No compiler C and C++ installation present test is fixed. *.desktop files is fixed for Categories.
-- SYS: German translation is updated by Irina Popkova.
+2011-07-26 Maxim
+- FIX:UI.Vision: shapeSave function is fixed by the deleting of the fills with no figures in their paths from the items' list.
+
+
+2011-07-26 Roman
+- FIX:DB: Copy DB is fixed, by open present table warning prevent.
+- FIX:DB.SQLite: Check to individual element's text translation condition is added to fieldGet().
+- FIX:UI.VCAEngine: Text translation is improved for IO config DB field "CFG_VAL".
 
 
 2011-07-23 Roman
