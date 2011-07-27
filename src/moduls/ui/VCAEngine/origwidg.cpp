@@ -1161,8 +1161,6 @@ void OrigDocument::calc( Widget *base )
     }
 }
 
-
-
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
     int off = 0;

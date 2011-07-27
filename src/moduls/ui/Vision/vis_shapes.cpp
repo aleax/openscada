@@ -1513,10 +1513,10 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 	    if( sclHor&0x2 )
 	    {
-		if( tAr.height() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
+		if( tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
 		else tAr.adjust(0,0,0,-mrkHeight);
 	    }
-	    if( sclVer&0x2 && tAr.width() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) )
+	    if( sclVer&0x2 && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true))) )
 		sclVer &= ~(0x02);
 	}
     }
@@ -1787,10 +1787,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 	    if( sclHor&0x2 )
 	    {
-		if( tAr.height() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
+		if( tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
 		else tAr.adjust(0,0,0,-2*mrkHeight);
 	    }
-	    if( sclVer&0x2 && tAr.width() < (int)(100.0*vmin(w->xScale(true),w->yScale(true))) )
+	    if( sclVer&0x2 && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true))) )
 		sclVer &= ~(0x02);
 	}
     }
@@ -1932,8 +1932,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     //>> Calc vertical scale
     int64_t aVend;			//Corrected for allow data the trend end point
     int64_t aVbeg;			//Corrected for allow data the trend begin point
-    double vsMax = 100, vsMin = 0;	//Trend's vertical scale border
-    bool   vsPerc = true;		//Vertical scale percent mode
+    bool    vsPerc = true;		//Vertical scale percent mode
+    bool    isLog = sclVer&0x4;		//Logarithmic scale
+    double  curVl, vsMax = 100, vsMin = isLog?pow(10,vmin(0,2-(tAr.height()/150))):0;	//Trend's vertical scale border
     if( prmRealSz >= 0 )
     {
 	vsPerc = false;
@@ -1955,8 +1956,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if(shD->prms[prmRealSz].val()[ipos].tm >= aVend) end_vl = true;
 		if(shD->prms[prmRealSz].val()[ipos].val != EVAL_REAL)
 		{
-		    vsMin  = vmin(vsMin,shD->prms[prmRealSz].val()[ipos].val);
-		    vsMax  = vmax(vsMax,shD->prms[prmRealSz].val()[ipos].val);
+		    curVl = shD->prms[prmRealSz].val()[ipos].val;
+		    vsMin = vmin(vsMin,curVl); vsMax = vmax(vsMax,curVl);
 		}
 		ipos++;
 	    }
@@ -1972,6 +1973,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() && shD->prms[prmRealSz].valTp() == 0 )	{ vsMax = 1.5; vsMin = -0.5; }
 	else { vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
     }
+    if(isLog)
+    {
+	vsMax = log10(vmax(1e-100,vsMax));
+	vsMin = log10(vmax(1e-100,vsMin));
+    }
 
     //>> Vertical scale and offset apply
     bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
@@ -1982,15 +1988,15 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
     }
 
-    float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
+    float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
     {
-	double vDiv = 1.;
+	double vDiv = 1;
 	double v_len = vsMax - vsMin;
 	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
 	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
 	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
+	while( !isLog && ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
 	//>>> Draw vertical grid and markers
 	if( sclVer&0x3 )
@@ -2009,7 +2015,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
 		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
+		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),
+			((isLog?TSYS::real2str(pow(10,i_v),4,'g'):TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"")).c_str());
 		}
 	    }
 	}
@@ -2070,10 +2077,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    {
 		curVl = sTr->val()[a_pos].val;
 		if( vsPerc && curVl != EVAL_REAL )
-		{
-		    curVl = 100.*(curVl-bordL)/(bordU-bordL);
-		    curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
-		}
+		    curVl = vmin(100,vmax(0,100*(curVl-bordL)/(bordU-bordL)));
 		if( isnan(curVl) ) curVl = EVAL_REAL;
 		curPos = tAr.x()+tAr.width()*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
@@ -2096,7 +2100,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    {
 		if( sTr->valTp() == 0 )
 		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin)/(vsMax-vsMin))));
-		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
+		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
 		if( prevVl == EVAL_REAL )
 		{
 		    if( sTr->valTp() != 0 ) pnt.drawPoint(averPos,c_vpos);
@@ -2104,7 +2108,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		}
 		else
 		{
-		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
+		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
 		    if( sTr->valTp() != 0 ) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
 		    else
 			for( int sps = prevPos+1; sps <= averPos; sps++ )
@@ -2464,7 +2468,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("per",TSYS::ll2str(wantPer))->
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
-	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)view->size().height()));
+	    setAttr("round_perc","0");//TSYS::real2str(100/(float)view->size().height()));
 
     if(view->cntrIfCmd(req,true)) return;
 

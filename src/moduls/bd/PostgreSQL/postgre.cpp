@@ -625,7 +625,7 @@ void MTable::fieldSet( TConfig &cfg )
 	if( sid.size() > 3 )
 	{
 	    if( !trPresent && sid.substr(0,3) == (Mess->lang2Code()+"#") ) trPresent = true;
-	    if( isVarTextTransl && !trDblDef && sid.substr(0,3) == (Mess->lang2CodeBase()+"#") ) trDblDef = true;
+	    if( Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0 ) trDblDef = true;
 	}
     }
     if( trDblDef ) fieldFix(cfg);

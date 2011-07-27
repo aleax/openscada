@@ -810,7 +810,7 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::setCntrDelay( const string &err )
 {
-    if(tmDelay < 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),err.c_str()));
+    if(tmDelay < 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),TRegExp(":","g").replace(err,"=").c_str()));
     tmDelay = restTm;
 }
 

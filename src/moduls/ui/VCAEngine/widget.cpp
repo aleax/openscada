@@ -1264,11 +1264,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	//>> Link interface process
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:"))
+	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:"/* || obj_tp == "wdg:"*/))
 	{
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
-	    opt->childAdd("el")->setText("wdg:");
+	    //opt->childAdd("el")->setText("wdg:");
 	}
 	//>> Link elements process
 	else

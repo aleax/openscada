@@ -1,11 +1,23 @@
-2011-07-26 Maxim
-- FIX:UI.Vision: shapeSave function is fixed by the deleting of the fills with no figures in their paths from the items' list.
+2011-07-27 Roman
+- FIX:DB.FireBird, DB.MySQL, DB.PostgreSQL: Check to individual element's text translation condition is added to fieldGet().
+- FIX:DAQ.ModBus, DAQ.BFN: Full controller alarm generation is fixed to encode connection error for replace symbol ':' to '='.
+- UI.VCAEngine: Select link type "wdg:" is disabled by no realized yet for direct set reason.
+- !!:UI.Vision, UI.WebVision: Logarithmic vertical scale is realized for primitive "Diagram" standard view.
 
 
 2011-07-26 Roman
 - FIX:DB: Copy DB is fixed, by open present table warning prevent.
 - FIX:DB.SQLite: Check to individual element's text translation condition is added to fieldGet().
 - FIX:UI.VCAEngine: Text translation is improved for IO config DB field "CFG_VAL".
+
+
+2011-07-26 Maxim
+- FIX:UI.Vision: shapeSave function is fixed by the deleting of the fills with no figures in their paths from the items' list.
+
+
+2011-07-25 Roman
+- FIX:SYS: No compiler C and C++ installation present test is fixed. *.desktop files is fixed for Categories.
+- SYS: German translation is updated by Irina Popkova.
 
 
 2011-07-23 Roman

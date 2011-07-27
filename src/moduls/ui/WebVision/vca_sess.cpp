@@ -5352,10 +5352,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
-	        if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
+	        if( tArH < (int)(100*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
 	        else tArH -= 2*(mrkHeight+2);
 	    }
-	    if( sclVer&0x2 && tArW < (int)(100.0*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
+	    if( sclVer&0x2 && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
 	}
     }
     //> Calc horizontal scale
@@ -5493,8 +5493,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     //> Calc vertical scale
     int64_t aVend;			//Corrected for allow data the trend end point
     int64_t aVbeg;			//Corrected for allow data the trend begin point
-    double vsMax = 100, vsMin = 0;      //Trend's vertical scale border
-    bool   vsPerc = true;               //Vertical scale percent mode
+    bool    vsPerc = true;              //Vertical scale percent mode
+    bool    isLog = sclVer&0x4;		//Logarithmic scale
+    double  curVl, vsMax = 100, vsMin = isLog?pow(10,vmin(0,2-(tArH/150))):0;  //Trend's vertical scale border
     if( prmRealSz >= 0 )
     {
 	vsPerc = false;
@@ -5516,8 +5517,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if( trnds[prmRealSz].val()[ipos].tm >= aVend )	end_vl = true;
 		if( trnds[prmRealSz].val()[ipos].val != EVAL_REAL )
 		{
-		    vsMin  = vmin(vsMin,trnds[prmRealSz].val()[ipos].val);
-		    vsMax  = vmax(vsMax,trnds[prmRealSz].val()[ipos].val);
+		    curVl = trnds[prmRealSz].val()[ipos].val;
+                    vsMin = vmin(vsMin,curVl); vsMax = vmax(vsMax,curVl);
 		}
 		ipos++;
 	    }
@@ -5533,6 +5534,11 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	else if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() && trnds[prmRealSz].valTp() == 0 ) { vsMax = 1.5; vsMin = -0.5; }
 	else { vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
     }
+    if(isLog)
+    {
+	vsMax = log10(vmax(1e-100,vsMax));
+	vsMin = log10(vmax(1e-100,vsMin));
+    }
 
     //>> Vertical scale and offset apply
     bool isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
@@ -5543,7 +5549,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
     }
 
-    float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
+    float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)) );
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1;
@@ -5551,7 +5557,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
 	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
 	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
+	while( !isLog && ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
 
 	//>> Draw vertical grid and markers
 	if( sclVer&0x3 )
@@ -5569,7 +5575,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-mrkHeight) < tArY;
 		    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-                                      (char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str(), &strex);
+			    (char*)((isLog?TSYS::real2str(pow(10,i_v),4,'g'):TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"")).c_str(), &strex);
 		}
 	    }
 	}
@@ -5625,10 +5631,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    {
 		curVl = trnds[i_t].val()[a_pos].val;
 		if( vsPerc && curVl != EVAL_REAL )
-		{
-		    curVl = 100.*(curVl-bordL)/(bordU-bordL);
-		    curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
-		}
+		    curVl = vmin(100,vmax(0,100*(curVl-bordL)/(bordU-bordL)));
 		if( isnan(curVl) ) curVl = EVAL_REAL;
 		curPos = tArX+tArW*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
@@ -5649,12 +5652,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    {
 		if( trnds[i_t].valTp() == 0 )
 		    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin))));
-		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(averVl-vsMin)/(vsMax-vsMin))));
+		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
 		if( trnds[i_t].valTp() != 0 ) gdImageSetPixel(im,averPos,c_vpos,clr_t);
 		else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
 		if( prevVl != EVAL_REAL )
 		{
-		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
+		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
 		    if( trnds[i_t].valTp() != 0 ) gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
 		    else
 			for( int sps = prevPos+1; sps <= averPos; sps++ )
@@ -5748,10 +5751,10 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    else mrkHeight = brect[3]-brect[7];
 	    if( sclHor&0x2 )
 	    {
-		if( tArH < (int)(100.0*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
+		if( tArH < (int)(100*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
 		else tArH -= mrkHeight+4;
 	    }
-	    if( sclVer&0x2 && tArW < (int)(100.0*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
+	    if( sclVer&0x2 && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
 	}
     }
 
@@ -6339,7 +6342,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    setAttr("per",TSYS::ll2str(wantPer))->
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
-	    setAttr("round_perc","0");//TSYS::real2str(100.0/(float)owner().height));
+	    setAttr("round_perc","0");//TSYS::real2str(100/(float)owner().height));
     if( mod->cntrIfCmd(req,user,false) )     return;
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());

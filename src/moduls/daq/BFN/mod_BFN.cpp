@@ -654,7 +654,7 @@ void *TMdContr::Task(void *icntr)
 
 	//> Generic alarm generate
 	if(tErr.size() && !cntr.acq_err.getVal().size())
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),tErr.c_str()));
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),TRegExp(":","g").replace(tErr,"=").c_str()));
 	else if(!tErr.size() && cntr.acq_err.getVal().size())
 	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
 	cntr.acq_err.setVal(tErr);
