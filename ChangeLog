@@ -1,4 +1,7 @@
 2011-07-27 Roman
+- SYS, Archives, Archive.FSArch, Archive.DBArch: Interface timeout STD_INTERF_TM is added and used.
+- FIX:Archive.FSArch: Try block is added to archives check task. Time limit is added to archives check task.
+- FIX:UI.QTCfg: Big group items slow removing is fixed.
 - FIX:DB.FireBird, DB.MySQL, DB.PostgreSQL: Check to individual element's text translation condition is added to fieldGet().
 - FIX:DAQ.ModBus, DAQ.BFN: Full controller alarm generation is fixed to encode connection error for replace symbol ':' to '='.
 - UI.VCAEngine: Select link type "wdg:" is disabled by no realized yet for direct set reason.

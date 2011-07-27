@@ -780,7 +780,6 @@ VFileArch::VFileArch( ModVArchEl *owner ) :
     mAcces = time(NULL);
 }
 
-
 VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t iper, TFld::Type itp, ModVArchEl *iowner) :
     mName(iname), mSize(0), mTp(itp), mBeg(ibeg), mEnd(iend), mPer(iper), mErr(false), mPack(false), mOwner(iowner)
 {

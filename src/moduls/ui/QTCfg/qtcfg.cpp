@@ -401,9 +401,9 @@ ConfApp::ConfApp( string open_user ) :
     //> Other resources init
     //>> Create auto update timer
     autoUpdTimer = new QTimer( this );
-    connect( autoUpdTimer, SIGNAL(timeout()), SLOT(pageRefresh()) );
+    connect(autoUpdTimer, SIGNAL(timeout()), SLOT(pageRefresh()));
     //>> Create end run timer
-    endRunTimer   = new QTimer( this );
+    endRunTimer  = new QTimer( this );
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
@@ -622,6 +622,7 @@ void ConfApp::itDel( const string &iit )
 	if(dlg.exec() != QDialog::Accepted)   return;
     }
 
+    bool toTreeUpdate = false;
     for(int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); )
     {
 	string t_el, sel_own, sel_el;
@@ -645,12 +646,14 @@ void ConfApp::itDel( const string &iit )
 		    if(idm) req.setAttr("id",sel_el.substr(b_id.size()));
 		    else req.setText(sel_el.substr(b_id.size()));
 		    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
-		    else treeUpdate();
+		    else toTreeUpdate = true;
 		    break;
 		}
 	    }
 	}
     }
+
+    if(toTreeUpdate) treeUpdate();
 }
 
 void ConfApp::itCut( )
@@ -2110,7 +2113,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    fnt.setItalic(true);
 	    it->setFont(0,fnt);
 	    //>> Next node for update
-	    if( upTree && it->isExpanded() )	viewChildRecArea(it,upTree);
+	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
 	}
 	//> Delete no present
 	if( upTree )
@@ -2174,10 +2177,12 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || atoi(TSYS::strSepParse(it_grp[0].toAscii().data(),0,'\n').c_str()));
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
 	    //>> Next node for update
-	    if(upTree && it->isExpanded())	viewChildRecArea(it,upTree);
+	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
 	}
 	//> Delete no present
 	if(upTree)
+	{
+	    CtrTree->blockSignals(true);
 	    for(unsigned i_it = 0, i_e; i_it < (unsigned)i->childCount(); )
 	    {
 		for(i_e = 0; i_e < req.childSize(); i_e++)
@@ -2192,6 +2197,8 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		if(i_e >= req.childSize()) { delete i->takeChild(i_it); continue; }
 		i_it++;
 	    }
+	    CtrTree->blockSignals(false);
+	}
 
 	if(!i->parent() && i->data(0,Qt::UserRole).toInt() == 10) initHosts();
     }

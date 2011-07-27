@@ -32,7 +32,8 @@
 #define TO_FREE		NULL	// Object free
 #define STR_BUF_LEN	3000	// Len of string buffers (no string class)
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
-#define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long 
+#define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
+#define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
 
 #include <stdint.h>

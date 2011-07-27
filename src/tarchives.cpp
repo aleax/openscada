@@ -286,7 +286,7 @@ void TArchiveS::subStart( )
 		try{ mess.at().start(); }
 		catch(TError err)
 		{
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Message archivator <%s> start error."),o_lst[i_o].c_str());
 		}
 	}
@@ -456,7 +456,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     recs.clear();
 
     ResAlloc res(mRes,false);
-    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
+    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
     TRegExp re(category, "p");
 
     //> Get records from buffer

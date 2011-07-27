@@ -185,7 +185,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
     if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
-    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
+    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
 
     b_tm = vmax(b_tm,begin());
     e_tm = vmin(e_tm,end());

@@ -182,7 +182,7 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 {
     if(e_tm <= b_tm) return;
     if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
-    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
+    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
 
     ResAlloc res(mRes,false);
     for(int i_arh = arh_s.size()-1; i_arh >= 0 && time(NULL) < upTo; i_arh--)
@@ -776,7 +776,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
     if(mErr) throw TError(owner().nodePath().c_str(),_("Getting messages from an error Archive file!"));
 
     ResAlloc res(mRes,false);
-    if(!upTo) upTo = time(NULL)+STD_WAIT_TM;
+    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
 
     if(mPack)
     {
