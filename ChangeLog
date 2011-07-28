@@ -1,3 +1,7 @@
+2011-07-28 Roman
+- FIX:Archive.FSArch: Remove values *.info files with archive file remove is fixed, for unpacked archive files.
+
+
 2011-07-27 Roman
 - SYS, Archives, Archive.FSArch, Archive.DBArch: Interface timeout STD_INTERF_TM is added and used.
 - FIX:Archive.FSArch: Try block is added to archives check task. Time limit is added to archives check task.

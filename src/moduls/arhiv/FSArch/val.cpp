@@ -900,7 +900,7 @@ void VFileArch::delFile()
 {
     ResAlloc res(mRes,true);
     remove(name().c_str());
-    remove((name()+".info").c_str());
+    remove((name()+(isPack()?".info":".gz.info")).c_str());
     mErr = true;
 }
 
