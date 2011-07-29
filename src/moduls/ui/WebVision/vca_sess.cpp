@@ -4632,7 +4632,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
                 else fl_color = fillClr;
 
                 if( sscanf(fl_img.c_str(), "i%d", &wn) == 1 ) img  = (images)[wn];
-                else if( fl_img.size() ) img = fl_img;
+                else if( fl_img.size() ) img = TSYS::strDecode(fl_img);
                 else img = imgDef;
 
 		string imgDef_temp = owner().resGet(img,id(),user);
@@ -5214,18 +5214,13 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
             switch( args[i_a].type())
             {
                 case 0: case 2:
-                {
                     argVal = args[i_a].val();
                     break;
-                }
                 case 1:
                 {
-                    double vl = atof(args[i_a].val().c_str());
-                    if( TSYS::strSepParse(args[i_a].cfg(),1,';') == "f" )
-                        argVal = TSYS::real2str(vl,atoi(TSYS::strSepParse(args[i_a].cfg(),2,';').c_str()),'f');
-                    else if( TSYS::strSepParse(args[i_a].cfg(),1,';') == "g" )
-                        argVal = TSYS::real2str(vl,atoi(TSYS::strSepParse(args[i_a].cfg(),2,';').c_str()),'g'); 
-                    else argVal = TSYS::real2str(vl); 
+		    string atp = TSYS::strSepParse(args[i_a].cfg(),1,';');
+		    argVal = TSYS::real2str(atof(args[i_a].val().c_str()),
+			    atoi(TSYS::strSepParse(args[i_a].cfg(),2,';').c_str()), (atp.size()?atp[0]:'f'));
                     break;
                 }
             }

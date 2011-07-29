@@ -718,6 +718,7 @@ function makeEl( pgBr, inclPg )
 	  case 1:
 	    argCfg=this.attrs['arg'+i+'cfg'].split(';');
 	    if( argCfg[1] == 'g' )      argVal=parseFloat(this.attrs['arg'+i+'val']).toPrecision(argCfg[2]);
+	    else if( argCfg[1] == 'e' ) argVal=parseFloat(this.attrs['arg'+i+'val']).toExponential(argCfg[2]);
 	    else if( argCfg[1] == 'f' ) argVal=parseFloat(this.attrs['arg'+i+'val']).toFixed(argCfg[2]);
 	    else argVal=this.attrs['arg'+i+'val'];
 	    break;

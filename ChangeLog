@@ -1,3 +1,12 @@
+2011-07-29 Roman
+- SYS: Exponential 'e' float numbers write form is added to TSYS::real2str().
+- UI.WebVision: Exponential 'e' mode is added to float point arguments of primitive 'Text'.
+- UI.QTCfg, UI.Vision: Dialog window size adjust is improved for expand from minimum base.
+- UI.VCAEngine: The primitive's 'ElFigure' attribute 'elLst' context help is fixed and appended.
+- UI.Vision: Context help field of fulltext edit dialog is improved for display big helps.
+- UI.Vision, UI.WebVision: Full resource's format is made to figure's "fill" field background image of primitive "ElFigure".
+
+
 2011-07-28 Roman
 - FIX:Archive.FSArch: Remove values *.info files with archive file remove is fixed, for unpacked archive files.
 

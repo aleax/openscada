@@ -196,7 +196,9 @@ string TSYS::ll2str( int64_t val, IntView view )
 string TSYS::real2str( double val, int prec, char tp )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),(tp=='g')?"%.*g":"%.*f",prec,val);
+    if(tp == 'g') snprintf(buf,sizeof(buf),"%.*g",prec,val);
+    else if(tp == 'e') snprintf(buf,sizeof(buf),"%.*e",prec,val);
+    else snprintf(buf,sizeof(buf),"%.*f",prec,val);
 
     return buf;
 }

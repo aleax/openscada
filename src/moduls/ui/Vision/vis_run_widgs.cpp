@@ -233,7 +233,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 string RunWdgView::resGet( const string &res )
 {
     if(res.empty())	return "";
-    string ret = mainWin( )->cacheResGet(res);
+    string ret = mainWin()->cacheResGet(res);
     if(ret.empty() && !(ret=WdgView::resGet(res)).empty())
 	mainWin()->cacheResSet(res,ret);
 

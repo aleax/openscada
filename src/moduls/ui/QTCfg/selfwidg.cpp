@@ -761,7 +761,9 @@ void InputDlg::setMess( const QString &val )
 
 void InputDlg::showEvent( QShowEvent * event )
 {
+    QSize src = size();
     adjustSize();
+    resize(size().expandedTo(src));
 }
 
 //*****************************************************
@@ -892,7 +894,9 @@ void DlgUser::finish( int result )
 
 void DlgUser::showEvent( QShowEvent * event )
 {
+    QSize src = size();
     adjustSize();
+    resize(size().expandedTo(src));
 }
 
 //*********************************************

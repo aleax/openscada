@@ -713,8 +713,22 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    QApplication::clipboard()->setText(it->data().toString());
 	else if( actEdit && rez == actEdit )
 	{
-	    InputDlg dlg(this, actEdit->icon(),it->help().c_str(),
+	    InputDlg dlg(this, actEdit->icon(),_("Full text of the attribute edit."),
 		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
+
+	    if(it->help().size())
+	    {
+		QTextEdit *helpView = new QTextEdit(&dlg);
+		helpView->setReadOnly(true);
+		helpView->setMaximumHeight(100);
+		helpView->setPlainText(it->help().c_str());
+		helpView->setToolTip(_("Short help for text syntax description."));
+		QPalette plt(helpView->palette());
+		plt.setColor(QPalette::Base, plt.color(QPalette::Window));
+		helpView->setPalette(plt);
+		dlg.edLay()->addWidget(helpView, 0, 0, 1, 2);
+	    }
+
 	    TextEdit *tEd = new TextEdit(&dlg,true);
 	    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	    sp.setVerticalStretch(3);
@@ -726,8 +740,8 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 		rules.load(it->snthHgl());
 		tEd->setSnthHgl(rules);
 	    }
-	    dlg.edLay()->addWidget( tEd, 0, 0, 1, 2 );
-	    dlg.resize(600,400);
+	    dlg.edLay()->addWidget(tEd, 1, 0, 1, 2);
+	    dlg.resize(700,400);
 	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())
 		model()->setData(selectedIndexes()[0], tEd->text(), Qt::EditRole);
 	}
@@ -2651,9 +2665,9 @@ DevelWdgView *DevelWdgView::levelWidget( int lev )
 
 string DevelWdgView::resGet( const string &res )
 {
-    if( res.empty() )	return "";
+    if(res.empty()) return "";
     string ret = levelWidget(0)->cacheResGet(res);
-    if( ret.empty() && !(ret=WdgView::resGet(res)).empty() )
+    if(ret.empty() && !(ret=WdgView::resGet(res)).empty())
 	levelWidget(0)->cacheResSet(res,ret);
 
     return ret;

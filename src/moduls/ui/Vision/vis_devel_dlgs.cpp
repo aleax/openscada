@@ -679,7 +679,9 @@ void LibProjProp::closeEvent( QCloseEvent *ce )
 
 void LibProjProp::showEvent( QShowEvent * event )
 {
+    QSize src = size();
     adjustSize();
+    resize(size().expandedTo(src));
 }
 
 void LibProjProp::addMimeData( )
@@ -1534,7 +1536,9 @@ void VisItProp::closeEvent( QCloseEvent *ce )
 
 void VisItProp::showEvent( QShowEvent * event )
 {
+    QSize src = size();
     adjustSize();
+    resize(size().expandedTo(src));
 }
 
 void VisItProp::addAttr( )

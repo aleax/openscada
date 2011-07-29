@@ -162,18 +162,32 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode * el = src->attrAt("fillImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
 	el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->
-	    setAttr("help",
-		_("The list of elements can contain:\n"
-		  "  line:p1|(x|y):p2|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
-		  "  arc:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):p5|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
-		  "  bezier:p1|(x|y):p2|(x|y):p3|(x|y):p4|(x|y):[width|w{n}]:[color|c{n}]:[border_width|w{n}]:[border_color|c{n}]:[line_style|s{n}]\n"
-		  "  fill:p1|(x|y),p2|(x|y),...,pn|(x|y):[fill_color|c{n}]:[fill_image|i{n}]\n"
-		  "For example:\n"
-		  "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
-		  "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
-		  "  fill:(25|50):(25|50):c2:i2\n"
-		  "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
+	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",
+	    _("The list of elements can contain:\n"
+	      "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	      "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	      "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	      "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
+	      "Where:\n"
+	      "  (x|y)           - direct point (x,y) coordinate in float point pixels;\n"
+	      "  {1}...{n}       - dynamic point 1...n;\n"
+	      "  width, bord_w   - direct line and border width in float point pixels;\n"
+	      "  w{n}            - dynamic width 'n';\n"
+	      "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}-AAA, #RRGGBB-AAA;\n"
+	      "  c{n}            - dynamic color 'n';\n"
+	      "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
+	      "  s{n}            - dynamic style 'n';\n"
+	      "  fill_img        - direct fill image in form \"[src%3Aname]\", where:\n"
+	      "      \"src\" - image source:\n"
+	      "         file - direct from local file by path;\n"
+	      "         res  - from DB mime resources table.\n"
+              "      \"name\" - file path or resource mime Id.\n"
+	      "  i{n}            - dynamic fill image 'n'.\n"
+	      "For example:\n"
+	      "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
+	      "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
+	      "  fill:(25|50):(25|50):c2:i2\n"
+	      "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
 
 	return true;
     }
@@ -195,13 +209,13 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
 bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 {
-    if( cfg.flgGlob()&Attr::Active && cfg.id() == "elLst" )
+    if(cfg.flgGlob()&Attr::Active && cfg.id() == "elLst")
     {
 	string sel, sel1;
 	string ls_prev = prev.getS();
 	map<int,char> pntls, pntls_prev, wls, wls_prev, clrls, clrls_prev, imgls, imgls_prev, lstls, lstls_prev;
 	//> Parse last attributes list and make point list
-	for( int i_p = 0; i_p < 2; i_p++ )
+	for(int i_p = 0; i_p < 2; i_p++)
 	{
 	    string ls_w = (i_p==0)?ls_prev:cfg.getS();
 	    map<int,char> &pntls_w = (i_p==0)?pntls_prev:pntls;
@@ -209,26 +223,26 @@ bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 	    map<int,char> &clrls_w = (i_p==0)?clrls_prev:clrls;
 	    map<int,char> &imgls_w = (i_p==0)?imgls_prev:imgls;
 	    map<int,char> &lstls_w = (i_p==0)?lstls_prev:lstls;
-	    for( int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); )
+	    for(int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); )
 	    {
 		int offe = 0;
 		string fTp = TSYS::strSepParse(sel,0,':',&offe);
-		if( fTp == "line" || fTp == "arc" || fTp == "bezier" )
+		if(fTp == "line" || fTp == "arc" || fTp == "bezier")
 		{
 		    int np = (fTp=="arc") ? 5 : ((fTp=="bezier") ? 4 : 2);
-		    for( int i = 0; i < np; i++ ) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w' ) wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c' ) clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if( (sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 's' ) lstls_w[atoi(sel1.substr(1).c_str())] = true;
+		    for(int i = 0; i < np; i++) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w') wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c') clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w') wls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c') clrls_w[atoi(sel1.substr(1).c_str())] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 's') lstls_w[atoi(sel1.substr(1).c_str())] = true;
 		}
-		else if( fTp == "fill" )
-		    for( int zPnt = 0; !(sel1=TSYS::strSepParse(sel,0,':',&offe)).empty() || zPnt < 2; )
+		else if(fTp == "fill")
+		    for(int zPnt = 0; !(sel1=TSYS::strSepParse(sel,0,':',&offe)).empty() || zPnt < 2; )
 		    {
-			if( sel1.empty() )	zPnt++;
-			if( sel1[0] == 'c' )	clrls_w[atoi(sel1.substr(1).c_str())] = true;
-			else if( sel1[0] == 'i' )	imgls_w[atoi(sel1.substr(1).c_str())] = true;
+			if(sel1.empty())	zPnt++;
+			if(sel1[0] == 'c')	clrls_w[atoi(sel1.substr(1).c_str())] = true;
+			else if(sel1[0] == 'i')	imgls_w[atoi(sel1.substr(1).c_str())] = true;
 		    }
 	    }
 	}
@@ -640,7 +654,7 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    {
 		case 0: el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
 		case 1:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
-					"Where \"form\" that 'g' or 'f'."));				break;
+					"Where \"form\" that 'g', 'e' or 'f'."));			break;
 		case 2:	el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
 	    }
 	}

@@ -754,10 +754,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
                 //- Check fill image -
                 if( sscanf(fl_img.c_str(), "i%d", &wn) == 1 ) img  = wn;
-                else if( !w->resGet(fl_img).empty() )
+                else if( !w->resGet(TSYS::strDecode(fl_img)).empty() )
                 {
                     img = i_index;
-                    (*images)[i_index] = fl_img;
+                    (*images)[i_index] = TSYS::strDecode(fl_img);
                     i_index -= 1;
                 }
                 else img = -5;
