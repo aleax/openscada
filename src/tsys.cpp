@@ -1145,7 +1145,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     {
 	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
 	res.release();
-	usleep(1000);
+	usleep(10000);
 	res.request(true);
     }
     STask &htsk = mTasks[path];
@@ -1223,14 +1223,14 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm )
         //Check timeout
         if(wtm && (c_tm > (s_tm+wtm)))
         {
-            mess_crit((nodePath()+": "+path+": stop").c_str(),_("Timeouted !!!"));
+            mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
 	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
         }
 	//Make messages
         if(c_tm > t_tm+1)  //1sec
         {
             t_tm = c_tm;
-            mess_info((nodePath()+": "+path+": stop").c_str(),_("Wait event..."));
+            mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
 
         }
         usleep(STD_WAIT_DELAY*1000);
