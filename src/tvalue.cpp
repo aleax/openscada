@@ -799,6 +799,13 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}catch(...){ }
 	return true;
     }
+    // TCntrNodeObj arch() - get current archive object for value
+    if(iid == "arch")
+    {
+	AutoHD<TVArchive> aobj = arch();
+	if(aobj.freeStat()) return false;
+	return new TCntrNodeObj(aobj, user);
+    }
     // string descr() - get attribute description
     if(iid == "descr")	return fld().descr();
     // int time(int utm) - get last attribute's value time

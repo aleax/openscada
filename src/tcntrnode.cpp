@@ -671,6 +671,11 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	if(prev) return new TCntrNodeObj(AutoHD<TCntrNode>(prev), user);
 	return false;
     }
+    // string nodePath(string sep = "", bool from_root = true) - get the node path into OpenSCADA objects tree
+    //  sep - Separator symbol for separated path
+    //  from_root - path forming from root tree and do not include station ID.
+    if(iid == "nodePath")
+	return nodePath(((prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : 0), ((prms.size() >= 2) ? prms[1].getB() : true));
 
     throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }

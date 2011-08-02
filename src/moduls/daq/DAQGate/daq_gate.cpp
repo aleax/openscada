@@ -144,7 +144,7 @@ string TMdContr::getStatus( )
 	bool isWork = false;
 	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
 	    if(mStatWork[i_st].second > -1)
-		val += TSYS::strMess(_("Station '%s' error, restoring in %.6g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second);
+		val += TSYS::strMess(_("Station '%s' error, restoring in %.3g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second);
 	    else
 	    {
 		val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[i_st].first.c_str(),-mStatWork[i_st].second);

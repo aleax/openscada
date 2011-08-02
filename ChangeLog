@@ -1,3 +1,7 @@
+2011-08-02 Roman
+- SYS, DAQ: User API functions is appended by Obj.nodePath() and SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"].arch().
+
+
 2011-07-29 Roman
 - SYS: Exponential 'e' float numbers write form is added to TSYS::real2str().
 - UI.WebVision: Exponential 'e' mode is added to float point arguments of primitive 'Text'.
