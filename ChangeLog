@@ -1,5 +1,7 @@
 2011-08-02 Roman
 - SYS, DAQ: User API functions is appended by Obj.nodePath() and SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"].arch().
+- SYS: TiB, PiB, EiB, ZiB and YiB is added to TSYS::cpct2str() function.
+- Transport.Serial, Transport.Sockets and Transport.SSL: Traffic absolute counter type is changed from float to uint64_t.
 
 
 2011-07-29 Roman

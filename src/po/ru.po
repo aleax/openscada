@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-25 09:04+0300\n"
+"POT-Creation-Date: 2011-08-02 12:23+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1458,11 +1458,26 @@ msgstr "мкс"
 msgid "ns"
 msgstr "нс"
 
+msgid "YiB"
+msgstr "ЙиБ"
+
+msgid "ZiB"
+msgstr "ЗиБ"
+
+msgid "EiB"
+msgstr "ЭиБ"
+
+msgid "PiB"
+msgstr "ПиБ"
+
+msgid "TiB"
+msgstr "ТиБ"
+
 msgid "GiB"
 msgstr "ГиБ"
 
 msgid "MiB"
-msgstr "МБ"
+msgstr "МиБ"
 
 msgid "KiB"
 msgstr "КиБ"
@@ -1623,6 +1638,7 @@ msgstr "Превышение времени ожидания !!!"
 msgid "Wait event..."
 msgstr "Ожидание события..."
 
+#, c-format
 msgid "Task '%s' is already present!"
 msgstr "Задача '%s' уже присутствует!"
 

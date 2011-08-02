@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-25 09:04+0300\n"
+"POT-Creation-Date: 2011-08-02 12:23+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1475,6 +1475,21 @@ msgstr ""
 msgid "ns"
 msgstr ""
 
+msgid "YiB"
+msgstr ""
+
+msgid "ZiB"
+msgstr ""
+
+msgid "EiB"
+msgstr ""
+
+msgid "PiB"
+msgstr ""
+
+msgid "TiB"
+msgstr ""
+
 msgid "GiB"
 msgstr ""
 
@@ -1639,6 +1654,7 @@ msgstr "Zeitüberschreitung !!!"
 msgid "Wait event..."
 msgstr "Warte auf Ereignis..."
 
+#, c-format
 msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 

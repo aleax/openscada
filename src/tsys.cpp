@@ -234,9 +234,14 @@ string TSYS::time2str( double utm )
 
 string TSYS::cpct2str( double cnt )
 {
-    if(cnt > 0.2*pow(1024,3))return TSYS::real2str(cnt/pow(1024,3),3,'g')+_("GiB");
-    if(cnt > 0.2*pow(1024,2))return TSYS::real2str(cnt/pow(1024,2),3,'g')+_("MiB");
-    if(cnt > 0.2*1024)  return TSYS::real2str(cnt/1024,3,'g')+_("KiB");
+    if(cnt > 0.2*pow(2,80))	return TSYS::real2str(cnt/pow(2,80),3,'g')+_("YiB");
+    if(cnt > 0.2*pow(2,70))	return TSYS::real2str(cnt/pow(2,70),3,'g')+_("ZiB");
+    if(cnt > 0.2*pow(2,60))	return TSYS::real2str(cnt/pow(2,60),3,'g')+_("EiB");
+    if(cnt > 0.2*pow(2,50))	return TSYS::real2str(cnt/pow(2,50),3,'g')+_("PiB");
+    if(cnt > 0.2*pow(2,40))	return TSYS::real2str(cnt/pow(2,40),3,'g')+_("TiB");
+    if(cnt > 0.2*pow(2,30))	return TSYS::real2str(cnt/pow(2,30),3,'g')+_("GiB");
+    if(cnt > 0.2*pow(2,20))	return TSYS::real2str(cnt/pow(2,20),3,'g')+_("MiB");
+    if(cnt > 0.2*pow(2,10))	return TSYS::real2str(cnt/pow(2,10),3,'g')+_("KiB");
     return TSYS::real2str(cnt,3,'g')+_("B");
 }
 

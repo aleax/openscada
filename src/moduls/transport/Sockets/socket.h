@@ -145,7 +145,7 @@ class TSocketIn: public TTransportIn
 	vector<SSockCl>	cl_id;			// Client's pids
 
 	//> Status atributes
-	float		trIn, trOut;		// Traffic in and out counter
+	uint64_t	trIn, trOut;		// Traffic in and out counter
 	int		connNumb, clsConnByLim;	// Connections number
 };
 
@@ -200,8 +200,8 @@ class TSocketOut: public TTransportOut
 	struct sockaddr_un	name_un;
 
 	//> Status atributes
-	float	trIn, trOut;			// Traffic in and out counter
-	Res	wres;
+	uint64_t	trIn, trOut;			// Traffic in and out counter
+	Res		wres;
 };
 
 //************************************************

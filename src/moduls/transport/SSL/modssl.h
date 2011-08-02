@@ -127,7 +127,7 @@ class TSocketIn: public TTransportIn
 
 	//> Status atributes
 	string		stErr;			// Last error messages
-	float		trIn, trOut;		// Traffic in and out counter
+	uint64_t	trIn, trOut;		// Traffic in and out counter
 	int		connNumb, clsConnByLim;	// Close connections by limit
 };
 
@@ -178,7 +178,7 @@ class TSocketOut: public TTransportOut
 	SSL		*ssl;
 
 	//> Status atributes
-	float		trIn, trOut;		// Traffic in and out counter
+	uint64_t	trIn, trOut;		// Traffic in and out counter
 	Res		wres;
 };
 

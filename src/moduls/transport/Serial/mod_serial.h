@@ -96,7 +96,8 @@ class TTrIn: public TTransportIn
 
 	bool	endrun;				// Command for stop task
 
-	float	trIn, trOut, tmMax;		// Traffic in and out counter
+	uint64_t trIn, trOut;			// Traffic in and out counter
+	float	tmMax;
 
 	//> Modem properties
 	int	mMdmTm;
@@ -176,7 +177,7 @@ class TTrOut: public TTransportOut
 	int	fd;
 	int64_t	mLstReqTm;
 
-	float	trIn, trOut;			// Traffic in and out counter and maximum respond timeout
+	uint64_t trIn, trOut;			// Traffic in and out counter and maximum respond timeout
 
 	//> Modem properties
 	int	mMdmTm, mMdmLifeTime;
