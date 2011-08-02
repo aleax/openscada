@@ -344,7 +344,7 @@ void *TSocketIn::Task(void *sock_in)
 		SSockIn *sin = new SSockIn(sock,sock_fd_CL,inet_ntoa(name_cl.sin_addr));
 		try
 		{
-		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
+		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock->connNumb), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
 		}catch(TError err)
 		{
@@ -368,7 +368,7 @@ void *TSocketIn::Task(void *sock_in)
 		SSockIn *sin = new SSockIn(sock,sock_fd_CL,"");
 		try
 		{
-		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
+		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock->connNumb), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
 		}catch(TError err)
 		{
