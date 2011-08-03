@@ -1168,7 +1168,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     int policy = SCHED_OTHER;
     if(priority < 0)	policy = SCHED_BATCH;
     else if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
-    pthread_attr_setschedpolicy( pthr_attr, policy );
+    pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
 

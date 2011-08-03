@@ -1,3 +1,7 @@
+2011-08-03 Roman
+- FIX:Protocol.SelfSystem: Input protocol is some fixed for correct error get and some other errors process.
+
+
 2011-08-02 Roman
 - SYS, DAQ: User API functions is appended by Obj.nodePath() and SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"].arch().
 - SYS: TiB, PiB, EiB, ZiB and YiB is added to TSYS::cpct2str() function.

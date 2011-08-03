@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 17:51+0300\n"
+"POT-Creation-Date: 2011-08-03 10:30+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -31,25 +31,17 @@ msgstr "Roman Savotschenko"
 msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA."
 
-#, c-format
-msgid "Station <%s> auth error: %s!"
-msgstr "Station <%s> Fehler in der Authentifizierung: %s!"
+msgid "Station '%s' error: %s!"
+msgstr "Station '%s' Fehler: %s!"
 
-#, c-format
-msgid "Station <%s> error: %s!"
-msgstr "Station <%s> Fehler: %s!"
+msgid "Station '%s' error: Respond format error!"
+msgstr "Station '%s' Fehler: Antwort ist falsch!"
 
-#, c-format
-msgid "Station respond <%s> error!"
-msgstr "Station antwortet mit <%s> Fehler!"
+msgid "Station respond '%s' error!"
+msgstr "Station antwortet mit '%s' Fehler!"
 
-#, c-format
-msgid "Station <%s> error: %d:%s!"
-msgstr "Station <%s> Fehler: %d:%s!"
-
-#, c-format
-msgid "Station <%s> error: Respond is broken!"
-msgstr "Station <%s> Fehler: Antwort ist falsch!"
+msgid "Not full respond."
+msgstr "Partielles Ansprechen."
 
 msgid "Parameters"
 msgstr "Parameter"

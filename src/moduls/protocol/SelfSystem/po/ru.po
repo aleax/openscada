@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 17:51+0300\n"
+"POT-Creation-Date: 2011-08-03 10:30+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,25 +26,17 @@ msgstr "Роман Савоченко"
 msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Собственный протокол OpenSCADA, поддерживает основные функции."
 
-#, c-format
-msgid "Station <%s> auth error: %s!"
-msgstr "Станция <%s> ошибка аутентификации: %s!"
+msgid "Station '%s' error: %s!"
+msgstr "Станция '%s' ошибка: %s!"
 
-#, c-format
-msgid "Station <%s> error: %s!"
-msgstr "Станция <%s> ошибка: %s!"
+msgid "Station '%s' error: Respond format error!"
+msgstr "Ошибка станции '%s': Ответ не корректен!"
 
-#, c-format
-msgid "Station respond <%s> error!"
-msgstr "Ошибка ответа станции <%s>!"
+msgid "Station respond '%s' error!"
+msgstr "Ошибка ответа станции '%s'!"
 
-#, c-format
-msgid "Station <%s> error: %d:%s!"
-msgstr "Ошибка станции <%s>: %d:%s!"
-
-#, c-format
-msgid "Station <%s> error: Respond is broken!"
-msgstr "Ошибка станции <%s>: Ответ не корректен!"
+msgid "Not full respond."
+msgstr "Неполный ответ."
 
 msgid "Parameters"
 msgstr "Параметры"

@@ -151,11 +151,11 @@ TProtocolIn *TProt::in_open( const string &name )
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    char buf[1000], buf1[256];
-    string req, resp;
-    int rez, resp_len;
+    char buf[1000];
+    string req, resp, header;
+    int rez, resp_len, off, head_end;
 
-    ResAlloc res( tro.nodeRes(), true );
+    ResAlloc res(tro.nodeRes(), true);
 
     bool   isDir = atoi(io.attr("rqDir").c_str()); io.attrDel("rqDir");
     string user = io.attr("rqUser"); io.attrDel("rqUser");
@@ -168,17 +168,22 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	while(true)
 	{
 	    //> Session open
-	    if( !isDir && tro.prm1() < 0 )
-	    {
-		req = "SES_OPEN "+user+" "+pass+"\n";
-		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,0,true);
-		buf[resp_len] = 0;
-		buf1[0] = 0;
-		sscanf(buf,"REZ %d %255s\n",&rez,buf1);
-		if(rez == 1)	throw TError(nodePath().c_str(),_("Station <%s> auth error: %s!"),tro.id().c_str(),buf1);
-		else if(rez > 0)throw TError(nodePath().c_str(),_("Station <%s> error: %s!"),tro.id().c_str(),buf1);
-		tro.setPrm1(atoi(buf1));
-	    }
+            if(!isDir && tro.prm1() < 0)
+            {
+                req = "SES_OPEN "+user+" "+pass+"\n";
+                resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,0,true);
+                buf[resp_len] = 0;
+                head_end = off = 0;
+                header = TSYS::strLine(buf,0,&head_end);
+                if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
+                {
+                    rez = atoi(TSYS::strParse(header,0," ",&off).c_str());
+                    if(rez > 0 || off >= header.size())
+                	throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
+                    tro.setPrm1(atoi(header.substr(off).c_str()));
+                } else throw TError(nodePath().c_str(),_("Station '%s' error: Respond format error!"),tro.id().c_str());
+            }
+
 	    //> Request
 	    //>> Compress data
 	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
@@ -191,26 +196,26 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    resp.assign(buf,resp_len);
 
 	    //>> Get head
-	    buf1[0] = 0;
-	    if( sscanf(resp.c_str(),"REZ %d %255s\n",&rez,buf1) <= 0 )
-		throw TError(nodePath().c_str(),_("Station respond <%s> error!"),tro.id().c_str());
-	    if( rez == 1 )	{ tro.setPrm1(-1); if( isDir ) break; else continue; }
-	    if( rez > 0 )	throw TError(nodePath().c_str(),_("Station <%s> error: %d:%s!"),tro.id().c_str(),rez,buf1);
-	    size_t head_end = resp.find("\n",0);
-	    if( head_end == string::npos )
-		throw TError(nodePath().c_str(),_("Station <%s> error: Respond is broken!"),tro.id().c_str());
-	    int resp_size = atoi(buf1);
+            head_end = off = 0;
+            header = TSYS::strLine(resp,0,&head_end);
+            if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
+                throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
+            rez = atoi(TSYS::strParse(header,0," ",&off).c_str());
+            if(rez == 1) { tro.setPrm1(-1); if(isDir) break; else continue; }
+            if(rez > 0 || off >= (int)header.size())
+                throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),buf+off);
+            int resp_size = atoi(header.substr(off).c_str());
 
 	    //>> Wait tail
-	    while(resp.size() < abs(resp_size)+head_end+sizeof('\n'))
+	    while(resp.size() < abs(resp_size)+head_end)
 	    {
 		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf,resp_len);
 	    }
 
-	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end+sizeof('\n'))));
-	    else io.load(resp.substr(head_end+sizeof('\n')));
+	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)));
+	    else io.load(resp.substr(head_end));
 
 	    return;
 	}
