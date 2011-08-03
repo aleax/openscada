@@ -1200,7 +1200,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
             //> Put output links
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
 		if(lCtx->ioMdf(lCtx->lnk(i_l).io_id))
-		    owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).addr, w_err);
+		    owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).real, w_err);
 
 	    //> Put fixed system attributes
 	    if(lCtx->id_nm >= 0)  setName(lCtx->getS(lCtx->id_nm));
@@ -1212,7 +1212,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    {
 		pVal = vlAt(ls[i_el]);
     		int id_lnk = lCtx->lnkId(pVal.at().name());
-    		if(id_lnk >= 0 && lCtx->lnk(id_lnk).addr.empty()) id_lnk = -1;
+    		if(id_lnk >= 0 && lCtx->lnk(id_lnk).real.empty()) id_lnk = -1;
     		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(pVal.at().name())),0,true);
     		else pVal.at().set(owner().getVal(lCtx->lnk(id_lnk).real,acq_err),0,true);
 	    }
@@ -1273,7 +1273,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     else if(isLogic())
     {
 	int id_lnk = lCtx->lnkId(valo.name());
-        if(id_lnk >= 0 && lCtx->lnk(id_lnk).addr.empty()) id_lnk = -1;
+        if(id_lnk >= 0 && lCtx->lnk(id_lnk).real.empty()) id_lnk = -1;
         TVariant vl = valo.get(0,true);
         if(!vl.isEVal() && vl != pvl)
         {

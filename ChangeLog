@@ -1,5 +1,6 @@
 2011-08-03 Roman
 - FIX:DAQ.ModBus: Start and stop flags process for logical parameters type in wait connection restore is fixed.
+    Write from logical type parameters is fixed.
 - FIX:Protocol.SelfSystem: Input protocol is some fixed for correct error get and some other errors process.
 - FIX:Transport.Serial, Transport.Sockets: Set limits to traffic counters for prevent calc error results.
 

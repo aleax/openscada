@@ -188,8 +188,8 @@ class TMdContr: public TController
 	    public:
 		SDataRec( int ioff, int v_rez );
 
-		int	off;			//Data block start offset
-		string	val;			//Data block values kadr
+		int		off;		//Data block start offset
+		string		val;		//Data block values kadr
 		ResString	err;		//Acquisition error text
 	};
 
