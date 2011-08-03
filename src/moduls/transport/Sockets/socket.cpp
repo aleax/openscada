@@ -139,9 +139,9 @@ string TSocketIn::getStatus( )
 {
     string rez = TTransportIn::getStatus( );
 
-    if( startStat() )
+    if(startStat())
 	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
-	connNumb,cl_id.size(),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str(),clsConnByLim);
+				connNumb,cl_id.size(),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str(),clsConnByLim);
 
     return rez;
 }
@@ -383,8 +383,9 @@ void *TSocketIn::Task(void *sock_in)
 	    int r_len;
 	    string  req, answ;
 
-	    r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len); sock->trIn += r_len;
-	    if( r_len <= 0 ) continue;
+	    r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
+	    if(r_len <= 0) continue;
+	    sock->trIn += r_len;
 	    req.assign(buf,r_len);
 
 #if OSC_DEBUG >= 5
@@ -398,7 +399,7 @@ void *TSocketIn::Task(void *sock_in)
 	    mess_debug( sock->nodePath().c_str(), _("Socket replied datagram <%d> to <%s>!"), answ.size(), inet_ntoa(name_cl.sin_addr) );
 #endif
 
-	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len); sock->trOut += r_len;
+	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len); sock->trOut += vmax(0,r_len);
 	}
     }
     pthread_attr_destroy(&pthr_attr);
@@ -464,7 +465,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    for(unsigned wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
-		s.s->trOut += wL;
+		s.s->trOut += vmax(0,wL);
 	    }
 	    answ = "";
 	    cnt++;
