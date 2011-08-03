@@ -1190,8 +1190,8 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
 
-	//> Wait for thread structure initialization finish
-	while(!htsk.thr) pthread_yield();
+	//> Wait for thread structure initialization finish for not detachable tasks
+	while(!(htsk.flgs&STask::Detached) && !htsk.thr) pthread_yield();
     }
     catch(TError)
     {

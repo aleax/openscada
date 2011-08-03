@@ -1,4 +1,5 @@
 2011-08-03 Roman
+- !!!!:FIX:SYS: Wait for init detachable tasks is disabled for prevent hang on wait fast closed task.
 - FIX:DAQ.ModBus: Start and stop flags process for logical parameters type in wait connection restore is fixed.
     Write from logical type parameters is fixed.
 - FIX:Protocol.SelfSystem: Input protocol is some fixed for correct error get and some other errors process.
