@@ -588,7 +588,7 @@ void *TTrIn::Task( void *tr_in )
 	    for(unsigned wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(tr->fd, answ.data()+wOff, answ.size()-wOff);
-		tr->trOut += wL;
+		tr->trOut += vmax(0,wL);
 	    }
 	    answ = "";
 	}
@@ -1045,7 +1045,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	else if( FD_ISSET(fd, &rd_fd) )
 	{
 	    blen = read(fd,ibuf,len_ib);
-	    trIn += blen;
+	    trIn += vmax(0,blen);
 	}
     }
     mLstReqTm = TSYS::curTime();
