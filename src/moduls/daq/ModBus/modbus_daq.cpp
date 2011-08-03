@@ -628,7 +628,7 @@ void *TMdContr::Task( void *icntr )
 
     try
     {
-	while(cntr.tmDelay <= 0 || (!cntr.endrun_req && cntr.tmDelay > 0))
+	while(true)
 	{
 	    if(cntr.tmDelay > 0)
 	    {
@@ -638,8 +638,14 @@ void *TMdContr::Task( void *icntr )
         	    cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
         	cntr.en_res.resRelease();
 
-		usleep(1000000);
 		cntr.tmDelay = vmax(0,cntr.tmDelay-1);
+
+		if(is_stop) break;
+
+		usleep(1000000);
+
+		if(cntr.endrun_req) is_stop = true;
+		is_start = false;
 		continue;
 	    }
 
