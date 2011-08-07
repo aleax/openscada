@@ -487,7 +487,7 @@ void *TTrIn::Task( void *tr_in )
 
     AutoHD<TProtocolIn> prot_in;
     struct timeval tv;
-    int r_len = 0;
+    ssize_t r_len;
     string req, answ;
     char buf[1000];
     fd_set fdset;
@@ -496,39 +496,39 @@ void *TTrIn::Task( void *tr_in )
     int wFrTm = 1000*atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
     int64_t stFrTm = 0, tmW = 0, tmTmp1;
 
-    fcntl( tr->fd, F_SETFL, 0 );
+    fcntl(tr->fd, F_SETFL, 0);
 
-    while( !tr->endrun )
+    while(!tr->endrun)
     {
 	//>> Char timeout
 	while(true)
 	{
 	    tv.tv_sec = 0; tv.tv_usec = (int)(1.5e3*wCharTm);
-	    FD_ZERO( &fdset ); FD_SET( tr->fd, &fdset );
+	    FD_ZERO(&fdset); FD_SET(tr->fd, &fdset);
 
-	    if( select( tr->fd+1, &fdset, NULL, NULL, &tv ) <= 0 )
+	    if(select(tr->fd+1, &fdset, NULL, NULL, &tv) <= 0)
 	    {
-		if( tr->endrun || !req.empty() )	break;
+		if(tr->endrun || !req.empty())	break;
 		continue;
 	    }
-	    r_len = read( tr->fd, buf, sizeof(buf));
-	    if( r_len <= 0 ) break;
+	    r_len = read(tr->fd, buf, sizeof(buf));
+	    if(r_len <= 0) break;
 
 	    //>> Requests statistic
 	    tmTmp1 = TSYS::curTime();
-	    if( req.empty() ) stFrTm = tmW = tmTmp1;
-	    if( tmW ) tr->tmMax = vmax(tr->tmMax,1e-3*(tmTmp1-tmW));
+	    if(req.empty()) stFrTm = tmW = tmTmp1;
+	    if(tmW) tr->tmMax = vmax(tr->tmMax,1e-3*(tmTmp1-tmW));
 	    tmW = tmTmp1;
 
-	    req += string(buf,r_len);
-	    if( (TSYS::curTime()-stFrTm) > wFrTm )	break;
+	    req += string(buf, r_len);
+	    if((TSYS::curTime()-stFrTm) > wFrTm) break;
 	}
-	if( tr->endrun || req.empty() )
+	if(tr->endrun || req.empty())
 	{
-	    if( r_len == 0 )
+	    if(r_len == 0)
 	    {
 		close(tr->fd); tr->fd = -1;
-		if( tr->mMdmMode && tr->mMdmDataMode )
+		if(tr->mMdmMode && tr->mMdmDataMode)
 		{
 		    //>> Reconnect try after hung up by remote agent
 		    mod->devUnLock(tr->mDevPort);
@@ -543,19 +543,19 @@ void *TTrIn::Task( void *tr_in )
 	tr->trIn += req.size();
 
 #if OSC_DEBUG >= 5
-	mess_debug( nodePath().c_str(), _("Serial received message <%d>."), req.size() );
+	mess_debug(nodePath().c_str(), _("Serial received message <%d>."), req.size());
 #endif
 
 	//> Check for device lock and RING request from modem
-	if( tr->mMdmMode && !tr->mMdmDataMode )
+	if(tr->mMdmMode && !tr->mMdmDataMode)
 	{
-	    if( mod->devLock(tr->mDevPort,true) ) continue;
-	    if( req.find(tr->mdmRingReq()) != string::npos )
+	    if(mod->devLock(tr->mDevPort,true)) continue;
+	    if(req.find(tr->mdmRingReq()) != string::npos)
 	    {
-		if( !mod->devLock(tr->mDevPort) ) continue;
+		if(!mod->devLock(tr->mDevPort)) continue;
 		//>> Send ring answer
 		TTr::writeLine(tr->fd,tr->mdmRingAnswer());
-		if( TTr::expect(tr->fd,tr->mdmRingAnswerResp(),tr->mdmTm()).empty() ) continue;
+		if(TTr::expect(tr->fd,tr->mdmRingAnswerResp(),tr->mdmTm()).empty()) continue;
 		tr->mMdmDataMode = true;
 
 		req = "";
@@ -565,14 +565,14 @@ void *TTrIn::Task( void *tr_in )
 	//> Send message to protocol
 	try
 	{
-	    if( prot_in.freeStat() )
+	    if(prot_in.freeStat())
 	    {
 		AutoHD<TProtocol> proto = SYS->protocol().at().modAt(tr->protocol());
 		string n_pr = tr->id()+TSYS::int2str(tr->fd);
-		if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr, tr->workId() );
-		prot_in = proto.at().at( n_pr );
+		if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr->workId());
+		prot_in = proto.at().at(n_pr);
 	    }
-	    prot_in.at().mess(req,answ,"");
+	    prot_in.at().mess(req, answ, "");
 	}catch(TError err)
 	{
 	    mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
@@ -580,12 +580,13 @@ void *TTrIn::Task( void *tr_in )
 	}
 
 	//> Send respond
-	if( answ.size() )
+	if(answ.size())
 	{
 #if OSC_DEBUG >= 5
 	    mess_debug(nodePath().c_str(), _("Serial replied message <%d>."), answ.size());
 #endif
-	    for(unsigned wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
+	    ssize_t wL = 1;
+	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(tr->fd, answ.data()+wOff, answ.size()-wOff);
 		tr->trOut += vmax(0,wL);
@@ -1001,11 +1002,12 @@ void TTrOut::check( )
 
 int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
-    int blen = 0, off = 0, kz;
+    ssize_t blen = 0;
+    int off = 0, kz;
 
-    if( !noRes ) ResAlloc res( nodeRes(), true );
+    if(!noRes) ResAlloc res(nodeRes(), true);
 
-    if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    if(!run_st) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     int wReqTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
     wReqTm = time ? time : wReqTm;
@@ -1014,38 +1016,38 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     int64_t tmW = TSYS::curTime();
 
     //> Write request
-    if( obuf && len_ob > 0 )
+    if(obuf && len_ob > 0)
     {
-	tcflush( fd, TCIOFLUSH );
-	if( (tmW-mLstReqTm) < (4000*wCharTm) ) kz = usleep( (int)((4000*wCharTm)-(tmW-mLstReqTm)) );
-	for( int wOff = 0, kz = 0; wOff != len_ob; wOff += kz )
+	tcflush(fd, TCIOFLUSH);
+	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = usleep((int)((4000*wCharTm)-(tmW-mLstReqTm)));
+	for(int wOff = 0, kz = 0; wOff != len_ob; wOff += kz)
 	{
 	    kz = write(fd,obuf+wOff,len_ob-wOff);
-	    if( kz <= 0 ) { mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Writing request error.")); }
+	    if(kz <= 0) { mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Writing request error.")); }
+	    else trOut += kz;
 	}
-	trOut += len_ob;
     }
 
     //> Read reply
-    if( ibuf != NULL && len_ib > 0 )
+    if(ibuf != NULL && len_ib > 0)
     {
 	fd_set rd_fd;
 	struct timeval tv;
 
 	do
 	{
-	    if( obuf && len_ob > 0 ) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
+	    if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
 	    else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
 	    FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
 	    kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	}
-	while( kz == -1 && errno == EINTR );
-	if( kz == 0 )	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if( kz < 0){ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Serial error!")); }
-	else if( FD_ISSET(fd, &rd_fd) )
+	while(kz == -1 && errno == EINTR);
+	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Serial error!")); }
+	else if(FD_ISSET(fd, &rd_fd))
 	{
-	    blen = read(fd,ibuf,len_ib);
-	    trIn += vmax(0,blen);
+	    blen = read(fd, ibuf, len_ib);
+	    trIn += vmax(0, blen);
 	}
     }
     mLstReqTm = TSYS::curTime();

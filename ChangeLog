@@ -1,3 +1,7 @@
+2011-08-07 Roman
+- !:FIX:Transport.*: Unsigned type use for read and write return is fixed. Resource is added for input/output counters of client tasks.
+
+
 2011-08-03 Roman
 - !!!!:FIX:SYS: Wait for init detachable tasks is disabled for prevent hang on wait fast closed task.
 - FIX:DAQ.ModBus: Start and stop flags process for logical parameters type in wait connection restore is fixed.

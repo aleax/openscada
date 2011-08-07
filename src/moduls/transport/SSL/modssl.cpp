@@ -466,12 +466,14 @@ void *TSocketIn::ClTask( void *s_inf )
 	}
 
 	rez = BIO_read(s.bio,buf,sizeof(buf));
-	if( rez == 0 )	break;		//Connection closed by client
+	if(rez <= 0)	break;		//Connection closed by client
 #if OSC_DEBUG >= 4
         mess_debug(s.s->nodePath().c_str(),_("The message is received with the size <%d>."),rez);
 #endif
 	req.assign(buf,rez);
+	s.s->sock_res.resRequestW();
 	s.s->trIn += rez;
+	s.s->sock_res.resRelease();
 
 	s.s->messPut(cSock,req,answ,s.sender,prot_in);
 	if(answ.size())
@@ -479,8 +481,11 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 4
             mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size <%d>."),answ.size());
 #endif
-	    do { rez=BIO_write(s.bio,answ.data(),answ.size()); } while( rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE );
-	    s.s->trOut += answ.size();
+	    do { rez = BIO_write(s.bio,answ.data(),answ.size()); }
+	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+	    s.s->sock_res.resRequestW();
+	    s.s->trOut += vmax(0, rez);
+	    s.s->sock_res.resRelease();
 	    answ = "";
 	    cnt++;
 	    tm = time(NULL);
@@ -840,7 +845,7 @@ repeate:
 	//>> Input buffer clear
 	while(BIO_read(conn,err,sizeof(err)) > 0) ;
 	//>> Write request
-	do { ret=BIO_write(conn,obuf,len_ob); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
+	do { ret = BIO_write(conn,obuf,len_ob); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
 	if(ret <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 
 	if(!time) time = mTmCon;

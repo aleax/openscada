@@ -380,10 +380,9 @@ void *TSocketIn::Task(void *sock_in)
 	}
 	else if( sock->type == SOCK_UDP )
 	{
-	    int r_len;
-	    string  req, answ;
+	    string req, answ;
 
-	    r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
+	    ssize_t r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
 	    if(r_len <= 0) continue;
 	    sock->trIn += r_len;
 	    req.assign(buf,r_len);
@@ -399,7 +398,8 @@ void *TSocketIn::Task(void *sock_in)
 	    mess_debug( sock->nodePath().c_str(), _("Socket replied datagram <%d> to <%s>!"), answ.size(), inet_ntoa(name_cl.sin_addr) );
 #endif
 
-	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len); sock->trOut += vmax(0,r_len);
+	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
+	    sock->trOut += vmax(0,r_len);
 	}
     }
     pthread_attr_destroy(&pthr_attr);
@@ -434,7 +434,6 @@ void *TSocketIn::ClTask( void *s_inf )
     //> Client socket process
     struct  timeval tv;
     fd_set  rd_fd;
-    int     r_len;
     string  req, answ;
     char    buf[s.s->bufLen()*1000 + 1];
     AutoHD<TProtocolIn> prot_in;
@@ -447,9 +446,11 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
 	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd)) continue;
-	r_len = read(s.cSock,buf,s.s->bufLen()*1000);
+	ssize_t r_len = read(s.cSock,buf,s.s->bufLen()*1000);
 	if(r_len <= 0) break;
+	s.s->sock_res.resRequestW();
 	s.s->trIn += r_len;
+	s.s->sock_res.resRelease();
 
 #if OSC_DEBUG >= 5
 	mess_debug(s.s->nodePath().c_str(),_("Socket received message <%d> from <%s>."), r_len, s.sender.c_str());
@@ -462,10 +463,13 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 5
 	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message <%d> to <%s>."), answ.size(), s.sender.c_str());
 #endif
-	    for(unsigned wOff = 0, wL = 1; wOff != answ.size() && wL > 0; wOff += wL)
+	    ssize_t wL = 1;
+	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
+		s.s->sock_res.resRequestW();
 		s.s->trOut += vmax(0,wL);
+		s.s->sock_res.resRelease();
 	    }
 	    answ = "";
 	    cnt++;
@@ -777,10 +781,11 @@ void TSocketOut::stop()
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     string err(_("Unknown error"));
-    int kz = 0, reqTry = 0;
+    ssize_t kz = 0;
+    int reqTry = 0;
     bool writeReq = false;
 
-    if(!noRes) ResAlloc resN( nodeRes(), true );
+    if(!noRes) ResAlloc resN(nodeRes(), true);
     ResAlloc res(wres, true);
 
     int prevTmOut = 0;
