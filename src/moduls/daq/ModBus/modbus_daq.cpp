@@ -943,12 +943,7 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
-    //> Remove not used parameters
-    for(unsigned i_f = 0; !owner().isReload && i_f < p_el.fldSize(); )
-        if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1)
-            try{ p_el.fldDel(i_f); }
-    	    catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
-        else i_f++;
+    vector<string> als;
 
     //> Parse ModBus attributes and convert to string list for standard type parameter
     if(isStd())
@@ -999,6 +994,8 @@ void TMdPrm::enable()
 		}
 	    }
 	    p_el.fldAt(el_id).setReserve(atp+":"+ai);
+
+	    als.push_back(aid);
 	}
     }
     //> Template's function connect for logical type parameter
@@ -1017,21 +1014,25 @@ void TMdPrm::enable()
     	    for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++)
     	    {
         	if((lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(i_io) < 0) lCtx->plnk.push_back(TLogCtx::SLnk(i_io));
-        	if((lCtx->func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) && !vlPresent(lCtx->func()->io(i_io)->id()))
+        	if((lCtx->func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
         	{
-            	    TFld::Type tp = TFld::String;
-            	    unsigned flg = TVal::DirWrite|TVal::DirRead;
+        	    if(!vlPresent(lCtx->func()->io(i_io)->id()))
+        	    {
+            		TFld::Type tp = TFld::String;
+            		unsigned flg = TVal::DirWrite|TVal::DirRead;
 
-            	    switch(lCtx->ioType(i_io))
-            	    {
-                	case IO::String:    tp = TFld::String;      break;
-                	case IO::Integer:   tp = TFld::Integer;     break;
-                	case IO::Real:      tp = TFld::Real;        break;
-                	case IO::Boolean:   tp = TFld::Boolean;     break;
-                	case IO::Object:    tp = TFld::String;      break;
-            	    }
-            	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg|=TFld::NoWrite;
-                	p_el.fldAdd(new TFld(lCtx->func()->io(i_io)->id().c_str(),lCtx->func()->io(i_io)->name().c_str(),tp,flg));
+            		switch(lCtx->ioType(i_io))
+            		{
+                	    case IO::String:    tp = TFld::String;      break;
+                	    case IO::Integer:   tp = TFld::Integer;     break;
+                	    case IO::Real:      tp = TFld::Real;        break;
+                	    case IO::Boolean:   tp = TFld::Boolean;     break;
+                	    case IO::Object:    tp = TFld::String;      break;
+            		}
+            		if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
+            		p_el.fldAdd(new TFld(lCtx->func()->io(i_io)->id().c_str(),lCtx->func()->io(i_io)->name().c_str(),tp,flg));
+        	    }
+		    als.push_back(lCtx->func()->io(i_io)->id());
         	}
         	if(to_make && (lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)) lCtx->setS(i_io,"0");
     	    }
@@ -1057,6 +1058,18 @@ void TMdPrm::enable()
     	    if(owner().startStat()) upVal(true, false, 0);
 
 	}catch(TError err) { disable(); throw; }
+
+    //> Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < p_el.fldSize(); i_p++)
+    {
+        int i_l;
+        for(i_l = 0; i_l < als.size(); i_l++)
+            if(p_el.fldAt(i_p).name() == als[i_l])
+                break;
+        if(i_l >= als.size())
+            try{ p_el.fldDel(i_p); i_p--; }
+            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+    }
 
     owner().prmEn(id(), true);   //Put to process
 }

@@ -1380,42 +1380,45 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     TParamContr::enable();
     //> Template's function connect
     try
     {
+	vector<string> als;
 	bool to_make = false;
-	if( !func() )
+	if(!func())
 	{
 	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
 				     at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
 	    to_make = true;
 	}
 	//>> Init attrubutes
-	for( int i_io = 0; i_io < func()->ioSize(); i_io++ )
+	for(int i_io = 0; i_io < func()->ioSize(); i_io++)
 	{
-	    if( (func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0 )
-		plnk.push_back(SLnk(i_io));
-	    if( (func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
-		!vlPresent(func()->io(i_io)->id()) )
+	    if((func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0)	plnk.push_back(SLnk(i_io));
+	    if((func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 	    {
-		TFld::Type tp = TFld::String;
-		unsigned flg = TVal::DirWrite|TVal::DirRead;
-
-		switch(ioType(i_io))
+		if(!vlPresent(func()->io(i_io)->id()))
 		{
-		    case IO::String:	tp = TFld::String;	break;
-		    case IO::Integer:	tp = TFld::Integer;	break;
-		    case IO::Real:	tp = TFld::Real;	break;
-		    case IO::Boolean:	tp = TFld::Boolean;	break;
-		    case IO::Object:	tp = TFld::String;	break;
+		    TFld::Type tp = TFld::String;
+		    unsigned flg = TVal::DirWrite|TVal::DirRead;
+
+		    switch(ioType(i_io))
+		    {
+			case IO::String:	tp = TFld::String;	break;
+			case IO::Integer:	tp = TFld::Integer;	break;
+			case IO::Real:		tp = TFld::Real;	break;
+			case IO::Boolean:	tp = TFld::Boolean;	break;
+			case IO::Object:	tp = TFld::String;	break;
+		    }
+		    if(func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
+		    p_el.fldAdd(new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg));
 		}
-		if( func()->io(i_io)->flg()&TPrmTempl::AttrRead )	flg|=TFld::NoWrite;
-		    p_el.fldAdd( new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg) );
+		als.push_back(func()->io(i_io)->id());
 	    }
-	    if( to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink) ) setS(i_io,"0");
+	    if(to_make && (func()->io(i_io)->flg()&TPrmTempl::CfgLink)) setS(i_io,"0");
 	}
 	//>> Init links
 	initLnks();
@@ -1433,6 +1436,18 @@ void TMdPrm::enable()
 
 	//>> Load IO at enabling
 	if(to_make)	loadIO();
+
+	//> Check for delete DAQ parameter's attributes
+	for(int i_p = 0; i_p < p_el.fldSize(); i_p++)
+	{
+	    int i_l;
+	    for(i_l = 0; i_l < als.size(); i_l++)
+		if(p_el.fldAt(i_p).name() == als[i_l])
+		    break;
+	    if(i_l >= als.size())
+        	try{ p_el.fldDel(i_p); i_p--; }
+        	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	}
 
 	//>> Set to process
 	if(owner().startStat())
@@ -1453,11 +1468,6 @@ void TMdPrm::disable()
 	owner().prmEn(id(), false);
 	calc(false,true,0);
     }
-
-    //> Delete not using attributes
-    for(unsigned i_f = 0; i_f < p_el.fldSize(); )
-	if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1) p_el.fldDel(i_f);
-	else i_f++;
 
     //> Template's function disconnect
     setFunc(NULL);

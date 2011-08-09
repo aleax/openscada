@@ -1,3 +1,7 @@
+2011-08-09 Roman
+- FIX:DAQ.ModBus, DAQ.LogicLev, DAQ.Siemens: Remove only not present already attributes on parameter enable is made.
+
+
 2011-08-07 Roman
 - !:FIX:Transport.*: Unsigned type use for read and write return is fixed. Resource is added for input/output counters of client tasks.
 

@@ -385,24 +385,23 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
+    vector<string> als;
+
     try
     {
-	//> Remove not used parameters
-	for(unsigned i_f = 0; i_f < p_el.fldSize(); )
-	    if(vlAt(p_el.fldAt(i_f).name()).at().nodeUse() == 1)
-		p_el.fldDel(i_f);
-	    else i_f++;
-
 	if(isPRefl())
 	{
 	    vector<string> list;
 	    *prm_refl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.');
 	    prm_refl->at().vlList(list);
 	    for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	    {
 		if(!vlPresent(list[i_l]))
 		    p_el.fldAdd(new TFld(list[i_l].c_str(),prm_refl->at().vlAt(list[i_l]).at().fld().descr().c_str(),
 			prm_refl->at().vlAt(list[i_l]).at().fld().type(),
 			TVal::DirWrite|TVal::DirRead|(prm_refl->at().vlAt(list[i_l]).at().fld().flg()&TFld::NoWrite)));
+		als.push_back(list[i_l]);
+	    }
 	}
 	else if(isStd())
 	{
@@ -420,22 +419,25 @@ void TMdPrm::enable()
 	    {
 		if((tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lnkId(i_io) < 0)
 		    tmpl->lnk.push_back(SLnk(i_io));
-		if((tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)) &&
-		    !vlPresent(tmpl->val.func()->io(i_io)->id()))
+		if((tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 		{
-		    TFld::Type tp = TFld::String;
-		    unsigned flg = TVal::DirWrite|TVal::DirRead;
-
-		    switch(tmpl->val.ioType(i_io))
+		    if(!vlPresent(tmpl->val.func()->io(i_io)->id()))
 		    {
-			case IO::String:	tp = TFld::String;	break;
-			case IO::Integer:	tp = TFld::Integer;	break;
-			case IO::Real:		tp = TFld::Real;	break;
-			case IO::Boolean:	tp = TFld::Boolean;	break;
-			case IO::Object:	tp = TFld::String;	break;
+			TFld::Type tp = TFld::String;
+			unsigned flg = TVal::DirWrite|TVal::DirRead;
+
+			switch(tmpl->val.ioType(i_io))
+			{
+			    case IO::String:	tp = TFld::String;	break;
+			    case IO::Integer:	tp = TFld::Integer;	break;
+			    case IO::Real:	tp = TFld::Real;	break;
+			    case IO::Boolean:	tp = TFld::Boolean;	break;
+			    case IO::Object:	tp = TFld::String;	break;
+			}
+			if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg|=TFld::NoWrite;
+			p_el.fldAdd(new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg));
 		    }
-		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg|=TFld::NoWrite;
-		    p_el.fldAdd( new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg) );
+		    als.push_back(tmpl->val.func()->io(i_io)->id());
 		}
 		if(to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink))	tmpl->val.setS(i_io,EVAL_STR);
 	    }
@@ -458,6 +460,18 @@ void TMdPrm::enable()
 	}
     }
     catch(...){ disable(); throw; }
+
+    //> Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < p_el.fldSize(); i_p++)
+    {
+        int i_l;
+        for(i_l = 0; i_l < als.size(); i_l++)
+            if(p_el.fldAt(i_p).name() == als[i_l])
+                break;
+        if(i_l >= als.size())
+            try{ p_el.fldDel(i_p); i_p--; }
+            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+    }
 
     if(owner().startStat())
     {
