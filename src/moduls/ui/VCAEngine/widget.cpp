@@ -264,25 +264,25 @@ bool Widget::enable( )
 
 void Widget::setEnable( bool val )
 {
-    if( enable() == val ) return;
+    if(enable() == val) return;
 
-    if( val )
+    if(val)
     {
-	if( parentNm() != "root" )
+	if(parentNm() != "root")
 	{
 	    try
 	    {
-		if( TSYS::strNoSpace(parentNm()).empty() || parentNm() == path() )
+		if(TSYS::strNoSpace(parentNm()).empty() || parentNm() == path())
 		    throw TError(nodePath().c_str(),"%s",_("Empty parent or parent identical self!"));
-		if( parentNm() == ".." ) mParent = AutoHD<TCntrNode>(nodePrev());
+		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
 
 		//> Check for enable parent widget and enable if not
-		if( !parent().at().enable() )	parent().at().setEnable(true);
+		if(!parent().at().enable()) parent().at().setEnable(true);
 
 		//> Inherit
-		inheritAttr( );
-		inheritIncl( );
+		inheritAttr();
+		inheritIncl();
 
 		//> Register of heritater
 		parent().at().heritReg(this);
@@ -304,21 +304,19 @@ void Widget::setEnable( bool val )
 	vector<string> ls;
 	attrList(ls);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	{
 	    if(!(attrAt(ls[i_l]).at().flgGlob()&Attr::Generic)) attrDel(ls[i_l], true);
-	    //else if( attrAt(ls[i_l]).at().flgSelf( )&Attr::IsInher )
-	    //	attrAt(ls[i_l]).at().setFld( new TFld(attrAt(ls[i_l]).at().fld()), false );
-	}
 
 	//> Disable heritors widgets
-	for(unsigned i_h = 0; i_h < herit().size(); i_h++)
+	for(unsigned i_h = 0; i_h < herit().size(); )
 	    if(herit()[i_h].at().enable())
 		try { herit()[i_h].at().setEnable(false); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Ingeriting widget <%s> disable error"),herit()[i_h].at().id().c_str());
+		    i_h++;
 		}
+	    else i_h++;
 
 	if(!mParent.freeStat())
 	{
@@ -955,6 +953,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 {
     if(!src) src = this;
+
     if(!parent().freeStat()) return parent().at().cntrCmdAttributes(opt,src);
 
     //> Get page info

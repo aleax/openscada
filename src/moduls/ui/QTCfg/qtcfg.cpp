@@ -2325,7 +2325,7 @@ void ConfApp::checkBoxStChange( int stat )
 {
     QCheckBox *box = (QCheckBox *)sender();
 
-    if( stat==Qt::PartiallyChecked ) return;
+    if(stat == Qt::PartiallyChecked) return;
     try
     {
 	string path = box->objectName().toAscii().data();

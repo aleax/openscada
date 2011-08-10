@@ -159,35 +159,37 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode * el = src->attrAt("fillImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
-	el = src->attrAt("elLst").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",
-	    _("The list of elements can contain:\n"
-	      "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-	      "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-	      "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-	      "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
-	      "Where:\n"
-	      "  (x|y)           - direct point (x,y) coordinate in float point pixels;\n"
-	      "  {1}...{n}       - dynamic point 1...n;\n"
-	      "  width, bord_w   - direct line and border width in float point pixels;\n"
-	      "  w{n}            - dynamic width 'n';\n"
-	      "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}-AAA, #RRGGBB-AAA;\n"
-	      "  c{n}            - dynamic color 'n';\n"
-	      "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
-	      "  s{n}            - dynamic style 'n';\n"
-	      "  fill_img        - direct fill image in form \"[src%3Aname]\", where:\n"
-	      "      \"src\" - image source:\n"
-	      "         file - direct from local file by path;\n"
-	      "         res  - from DB mime resources table.\n"
-              "      \"name\" - file path or resource mime Id.\n"
-	      "  i{n}            - dynamic fill image 'n'.\n"
-	      "For example:\n"
-	      "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
-	      "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
-	      "  fill:(25|50):(25|50):c2:i2\n"
-	      "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
+	{
+	    if((el=ctrId(root,"/fillImg",true))) el->setAttr("help",Widget::helpImg());
+	    if((el=ctrId(root,"/elLst",true))) el->setAttr("SnthHgl","1")->setAttr("help",
+		_("The list of elements can contain:\n"
+	         "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	         "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	         "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	         "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
+	         "Where:\n"
+	         "  (x|y)           - direct point (x,y) coordinate in float point pixels;\n"
+	         "  {1}...{n}       - dynamic point 1...n;\n"
+	         "  width, bord_w   - direct line and border width in float point pixels;\n"
+	         "  w{n}            - dynamic width 'n';\n"
+	         "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}-AAA, #RRGGBB-AAA;\n"
+	         "  c{n}            - dynamic color 'n';\n"
+	         "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
+	         "  s{n}            - dynamic style 'n';\n"
+	         "  fill_img        - direct fill image in form \"[src%3Aname]\", where:\n"
+	         "      \"src\" - image source:\n"
+	         "         file - direct from local file by path;\n"
+	         "         res  - from DB mime resources table.\n"
+                 "      \"name\" - file path or resource mime Id.\n"
+	         "  i{n}            - dynamic fill image 'n'.\n"
+	         "For example:\n"
+	         "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
+	         "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
+	         "  fill:(25|50):(25|50):c2:i2\n"
+	         "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
+	}
 
 	return true;
     }
@@ -450,96 +452,90 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode * el;
-	switch(src->attrAt("elType").at().getI())
-	{
-	    case 0:	//Line edit
-		el = src->attrAt("cfg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(!el)	break;
-		el->setAttr("len","");
-		switch(src->attrAt("view").at().getI())
-		{
-		    case 0:	//Text
-			el->setAttr("help",_("Enter text line by template with the char items:\n"
-			    "  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
-			    "  'a' - ASCII alphabetic character permitted but not required.\n"
-			    "  'N' - ASCII alphanumeric character required. A-Z, a-z, 0-9.\n"
-			    "  'n' - ASCII alphanumeric character permitted but not required.\n"
-			    "  'X' - Any character required.\n"
-			    "  'x' - Any character permitted but not required.\n"
-			    "  '9' - ASCII digit required. 0-9.\n"
-			    "  '0' - ASCII digit permitted but not required.\n"
-			    "  'D' - ASCII digit required. 1-9.\n"
-			    "  'd' - ASCII digit permitted but not required (1-9).\n"
-			    "  '#' - ASCII digit or plus/minus sign permitted but not required.\n"
-			    "  'H' - Hexadecimal character required. A-F, a-f, 0-9.\n"
-			    "  'h' - Hexadecimal character permitted but not required.\n"
-			    "  'B' - Binary character required. 0-1.\n"
-			    "  'b' - Binary character permitted but not required.\n"
-			    "  '>' - All following alphabetic characters are uppercased.\n"
-			    "  '<' - All following alphabetic characters are lowercased.\n"
-			    "  '!' - Switch off case conversion.\n"
-			    "  '\\' - Use to escape the special characters listed above to use them as separators."));
-			break;
-		    case 1:	//Combo
-			el->setAttr("help",_("List of values the editable combobox by lines."));
-			break;
-		    case 2:	//Integer
-			el->setAttr("help",_("Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]\"."));
-			break;
-		    case 3:	//Real
-			el->setAttr("help",_("Real value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]:[SignsAfterDot]\"."));
-			break;
-		    case 4: case 5: case 6:	//Time;Date;Date and time
-			el->setAttr("help",_("Enter date and/or time by template with the items:\n"
-			    "  \"d\" - number of the day (1-31);\n"
-			    "  \"dd\" - number of the day (01-31);\n"
-			    "  \"ddd\" - acronym of the day ('Mon' ... 'Sun');\n"
-			    "  \"dddd\" - the full name of the day ('Monday' ... 'Sunday');\n"
-			    "  \"M\" - number of the month (1-12);\n"
-			    "  \"MM\" - number of the month (01-12);\n"
-			    "  \"MMM\" - acronym of the month ('Jan' ... 'Dec');\n"
-			    "  \"MMMM\" - the full name of the month ('January' ... 'December');\n"
-			    "  \"yy\" - last two digits of the year;\n"
-			    "  \"yyyy\" - full year;\n"
-			    "  \"h\" - hour (0-23);\n"
-			    "  \"hh\" - hour (00-23);\n"
-			    "  \"m\" - minutes (0-59);\n"
-			    "  \"mm\" - minutes (00-59);\n"
-			    "  \"s\" - seconds (0-59);\n"
-			    "  \"ss\" - seconds (00-59);\n"
-			    "  \"AP,ap\" - to display AM/PM or am/pm."));
-			break;
-		}
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
+	    switch(src->attrAt("elType").at().getI())
+	    {
+		case 0:	//Line edit
+		    el = ctrId(root,"/cfg",true);
+		    if(!el) break;
+		    switch(src->attrAt("view").at().getI())
+		    {
+			case 0:	//Text
+			    el->setAttr("help",_("Enter text line by template with the char items:\n"
+				"  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
+				"  'a' - ASCII alphabetic character permitted but not required.\n"
+				"  'N' - ASCII alphanumeric character required. A-Z, a-z, 0-9.\n"
+				"  'n' - ASCII alphanumeric character permitted but not required.\n"
+				"  'X' - Any character required.\n"
+				"  'x' - Any character permitted but not required.\n"
+				"  '9' - ASCII digit required. 0-9.\n"
+				"  '0' - ASCII digit permitted but not required.\n"
+				"  'D' - ASCII digit required. 1-9.\n"
+				"  'd' - ASCII digit permitted but not required (1-9).\n"
+				"  '#' - ASCII digit or plus/minus sign permitted but not required.\n"
+				"  'H' - Hexadecimal character required. A-F, a-f, 0-9.\n"
+				"  'h' - Hexadecimal character permitted but not required.\n"
+				"  'B' - Binary character required. 0-1.\n"
+				"  'b' - Binary character permitted but not required.\n"
+				"  '>' - All following alphabetic characters are uppercased.\n"
+				"  '<' - All following alphabetic characters are lowercased.\n"
+				"  '!' - Switch off case conversion.\n"
+				"  '\\' - Use to escape the special characters listed above to use them as separators."));
+			    break;
+			case 1:	//Combo
+			    el->setAttr("help",_("List of values the editable combobox by lines."));
+			    break;
+			case 2:	//Integer
+			    el->setAttr("help",_("Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]\"."));
+			    break;
+			case 3:	//Real
+			    el->setAttr("help",_("Real value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]:[SignsAfterDot]\"."));
+			    break;
+			case 4: case 5: case 6:	//Time;Date;Date and time
+			    el->setAttr("help",_("Enter date and/or time by template with the items:\n"
+				"  \"d\" - number of the day (1-31);\n"
+				"  \"dd\" - number of the day (01-31);\n"
+				"  \"ddd\" - acronym of the day ('Mon' ... 'Sun');\n"
+				"  \"dddd\" - the full name of the day ('Monday' ... 'Sunday');\n"
+				"  \"M\" - number of the month (1-12);\n"
+				"  \"MM\" - number of the month (01-12);\n"
+				"  \"MMM\" - acronym of the month ('Jan' ... 'Dec');\n"
+				"  \"MMMM\" - the full name of the month ('January' ... 'December');\n"
+				"  \"yy\" - last two digits of the year;\n"
+				"  \"yyyy\" - full year;\n"
+				"  \"h\" - hour (0-23);\n"
+				"  \"hh\" - hour (00-23);\n"
+				"  \"m\" - minutes (0-59);\n"
+				"  \"mm\" - minutes (00-59);\n"
+				"  \"s\" - seconds (0-59);\n"
+				"  \"ss\" - seconds (00-59);\n"
+				"  \"AP,ap\" - to display AM/PM or am/pm."));
+			    break;
+		    }
+		    break;
+		case 3:	//Button
+		    if((el=ctrId(root,"/img",true))) el->setAttr("help",Widget::helpImg());
+		    break;
+		case 4: case 5:	//Combo box and list
+		    if((el=ctrId(root,"/items",true))) el->setAttr("help",_("List of items-values by lines."));
+		    break;
+		case 6: case 7:	//Slider and scroll bar
+		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
+			_("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep].\n"
+		          "Where:\n"
+		          "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
+		          "  \"Min\" - minimum value;\n"
+		          "  \"Max\" - maximum value;\n"
+		          "  \"SinglStep\" - the size of a single step;\n"
+		          "  \"PageStep\" - the size of the page step."));
 		break;
-	    case 3:	//Button
-		el = src->attrAt("img").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
-		break;
-	    case 4: case 5:	//Combo box and list
-		el = src->attrAt("items").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el) el->setAttr("len","")->setAttr("help",_("List of items-values by lines."));
-		break;
-	    case 6: case 7:	//Slider and scroll bar
-		el = src->attrAt("cfg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el) el->setAttr("len","")->setAttr("help",
-		    _("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep].\n"
-		      "Where:\n"
-		      "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
-		      "  \"Min\" - minimum value;\n"
-		      "  \"Max\" - maximum value;\n"
-		      "  \"SinglStep\" - the size of a single step;\n"
-		      "  \"PageStep\" - the size of the page step."));
-		break;
-	}
+	    }
 	return true;
     }
 
     //> Process command to page
-    //string a_path = opt->attr("path");
     return Widget::cntrCmdAttributes(opt,src);
-
-    //return true;
 }
 
 //************************************************
@@ -643,29 +639,28 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
-	for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    el = src->attrAt("arg"+TSYS::int2str(i_arg)+"cfg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	    if(!el) continue;
-	    el->setAttr("len","");
-	    switch(src->attrAt("arg"+TSYS::int2str(i_arg)+"tp").at().getI())
+	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
+	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
 	    {
-		case 0: el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
-		case 1:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
-					"Where \"form\" that 'g', 'e' or 'f'."));			break;
-		case 2:	el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
+		el = ctrId(root,"/arg"+TSYS::int2str(i_arg)+"cfg",true);
+		if(!el) continue;
+		switch(src->attrAt("arg"+TSYS::int2str(i_arg)+"tp").at().getI())
+		{
+		    case 0: el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
+		    case 1: el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
+						 "Where \"form\" that 'g', 'e' or 'f'."));		break;
+		    case 2: el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
+		}
 	    }
 	}
 	return true;
     }
 
     //> Process command to page
-    //string a_path = opt->attr("path");
     return Widget::cntrCmdAttributes(opt,src);
-
-    //return true;
 }
 
 //************************************************
@@ -711,17 +706,17 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
     {
 	if( cfg.id() == "type" )
 	{
-	    //- Delete specific attributes -
+	    //> Delete specific attributes
 	    if( prev.getI() == 1 ) cfg.owner()->attrDel("speed");
 
-	    //- Create specific attributes -
+	    //> Create specific attributes
 	    if(cfg.getI() == 1 )
 		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","","29") );
 	}
 	else if( cfg.id() == "areas" )
 	{
 	    string fid("area"), fnm(_("Area ")), fidp, fnmp;
-	    //- Delete specific unnecessary attributes of map areas -
+	    //> Delete specific unnecessary attributes of map areas
 	    for( int i_p = 0; true; i_p++ )
 	    {
 		fidp = fid+TSYS::int2str(i_p);
@@ -733,7 +728,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel(fidp+"title");
 		}
 	    }
-	    //- Create ullage attributes of map areas -
+	    //> Create ullage attributes of map areas
 	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
 	    {
 		fidp = fid+TSYS::int2str(i_p);
@@ -758,39 +753,37 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
-	el = src->attrAt("src").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",
-	    _("Media source name in form \"[src:name]\", where:\n"
-            "  \"src\" - source:\n"
-            "    file - direct from local file by path;\n"
-            "    res - from DB mime resources table.\n"
-            "  \"name\" - file path or resource mime Id.\n"
-            "Examples:\n"
-            "  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
-            "  \"workMedia\" - like previous;\n"
-            "  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\"."));
-	for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++)
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    el = src->attrAt(TSYS::strMess("area%dcoord",i_a)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	    if(!el) continue;
-	    el->setAttr("len","");
-	    switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
+	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
+	    if((el=ctrId(root,"/src",true))) el->setAttr("help",
+		_("Media source name in form \"[src:name]\", where:\n"
+        	  "  \"src\" - source:\n"
+        	  "    file - direct from local file by path;\n"
+        	  "    res - from DB mime resources table.\n"
+        	  "  \"name\" - file path or resource mime Id.\n"
+        	  "Examples:\n"
+        	  "  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
+        	  "  \"workMedia\" - like previous;\n"
+        	  "  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\"."));
+	    for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++)
 	    {
-		case 0: el->setAttr("help",_("Rect area in form \"[x1],[y1],[x2],[y2]\"."));	break;
-		case 1:	el->setAttr("help",_("Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."));		break;
-		case 2:	el->setAttr("help",_("Circle area in form \"[x],[y],[r]\"."));		break;
+		el = ctrId(root,TSYS::strMess("/area%dcoord",i_a),true);
+		if(!el) continue;
+		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
+		{
+		    case 0: el->setAttr("help",_("Rect area in form \"[x1],[y1],[x2],[y2]\"."));		break;
+		    case 1: el->setAttr("help",_("Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."));	break;
+		    case 2: el->setAttr("help",_("Circle area in form \"[x],[y],[r]\"."));			break;
+		}
 	    }
 	}
 	return true;
     }
 
     //> Process command to page
-    //string a_path = opt->attr("path");
     return Widget::cntrCmdAttributes(opt,src);
-
-    //return true;
 }
 
 //************************************************
@@ -948,33 +941,28 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
-	if(src->attrAt("type").at().getI() == 0 || src->attrAt("type").at().getI() == 1)
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    el = src->attrAt("valArch").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	    if(el) el->setAttr("len","")->setAttr("help",_("Value archivator in form \"[ArchMod].[ArchivatorId]\"."));
-	    el = src->attrAt("valsForPix").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	    if(el) el->setAttr("len","")->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
-	    for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++)
+	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
+	    if(src->attrAt("type").at().getI() == 0 || src->attrAt("type").at().getI() == 1)
 	    {
-		el = src->attrAt(TSYS::strMess("prm%daddr",i_p)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el) el->setAttr("len","")->setAttr("help",
-		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
-		    "Example:\n"
-		    "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
-		    "	    of controller 'AutoDA' of DAQ module 'System';\n"
-		    "  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
+		if((el=ctrId(root,"/valArch",true))) el->setAttr("help",_("Value archivator in form \"[ArchMod].[ArchivatorId]\"."));
+		if((el=ctrId(root,"/valsForPix",true))) el->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
+		for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++)
+		    if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
+			_("Full address to DAQ attribute of a parameter or to an archive.\n"
+			"Example:\n"
+			"  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
+			"	    of controller 'AutoDA' of DAQ module 'System';\n"
+			"  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
 	    }
 	}
 	return true;
     }
 
     //> Process command to page
-    //string a_path = opt->attr("path");
     return Widget::cntrCmdAttributes(opt,src);
-
-    //return true;
 }
 
 //************************************************
@@ -1065,46 +1053,38 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode *el = src->attrAt("backImg").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",Widget::helpImg());
-	el = src->attrAt("arch").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",_("Messages archivator in form \"[ArchMod].[ArchivatorId]\"."));
-	el = src->attrAt("lev").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",_("Set value to < 0 for get current alarms."));
-	el = src->attrAt("tSize").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",_("Set value to '0' for get all alarms, for 'lev' < 0."));
-	el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",
-	    _("Category template of messages whith special symbols:\n"
-	    "  '*' - any multiply symbols group;\n"
-	    "  '?' - any one symbol;\n"
-	    "  '\\' - use for shield special simbols."));
-	el = src->attrAt("col").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",
-	    _("Visible and order collumns list separated by symbol ';'. Supported collumns:\n"
-	    "  \"pos\" - row number;\n"
-	    "  \"tm\" - date and time of the message;\n"
-	    "  \"utm\" - microseconds part of time of the message;\n"
-	    "  \"lev\" - level of the message;\n"
-	    "  \"cat\" - category of the message;\n"
-	    "  \"mess\" - the message text."));
-	for(int i_p = 0; i_p < src->attrAt("itProp").at().getI(); i_p++)
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    el = src->attrAt(TSYS::strMess("it%dtmpl",i_p)).at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	    if(el) el->setAttr("len","")->setAttr("help",
-		_("Category template of messages whith special symbols:\n"
+	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
+	    if((el=ctrId(root,"/arch",true))) el->setAttr("help",_("Messages archivator in form \"[ArchMod].[ArchivatorId]\"."));
+	    if((el=ctrId(root,"/lev",true))) el->setAttr("help",_("Set value to < 0 for get current alarms."));
+	    if((el=ctrId(root,"/tSize",true))) el->setAttr("help",_("Set value to '0' for get all alarms, for 'lev' < 0."));
+	    if((el=ctrId(root,"/tmpl",true))) el->setAttr("help",
+		_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 		"  '*' - any multiply symbols group;\n"
 		"  '?' - any one symbol;\n"
 		"  '\\' - use for shield special simbols."));
+	    if((el=ctrId(root,"/col",true))) el->setAttr("help",
+		_("Visible and order collumns list separated by symbol ';'. Supported collumns:\n"
+		"  \"pos\" - row number;\n"
+		"  \"tm\" - date and time of the message;\n"
+		"  \"utm\" - microseconds part of time of the message;\n"
+		"  \"lev\" - level of the message;\n"
+		"  \"cat\" - category of the message;\n"
+		"  \"mess\" - the message text."));
+	    for(int i_p = 0; i_p < src->attrAt("itProp").at().getI(); i_p++)
+		if((el=ctrId(root,TSYS::strMess("/it%dtmpl",i_p),true))) el->setAttr("help",
+		    _("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
+		    "  '*' - any multiply symbols group;\n"
+		    "  '?' - any one symbol;\n"
+		    "  '\\' - use for shield special simbols."));
 	}
 	return true;
     }
 
     //> Process command to page
-    //string a_path = opt->attr("path");
     return Widget::cntrCmdAttributes(opt,src);
-
-    //return true;
 }
 
 //************************************************
@@ -1334,18 +1314,17 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(opt->name() == "info")
     {
 	Widget::cntrCmdAttributes(opt,src);
-	XMLNode * el = src->attrAt("style").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",
-	    _("CSS rules in rows like \"body { background-color:#818181; }\""));
-	el = src->attrAt("tmpl").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",
-	    _("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
-	    "<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
-	el = src->attrAt("doc").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
-	el = src->attrAt("time").at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-	if(el) el->setAttr("len","")->setAttr("help",_("Write time for document generation from that point."));
-
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
+	{
+	    if((el=ctrId(root,"/style",true))) el->setAttr("SnthHgl","1")->setAttr("help",
+		_("CSS rules in rows like \"body { background-color:#818181; }\""));
+	    if((el=ctrId(root,"/tmpl",true))) el->setAttr("SnthHgl","1")->setAttr("help",
+		_("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
+		"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
+	    if((el=ctrId(root,"/doc",true))) el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
+	    if((el=ctrId(root,"/time",true))) el->setAttr("help",_("Write time for document generation from that point."));
+	}
 	return true;
     }
 

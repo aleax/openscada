@@ -1265,7 +1265,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 
 void Page::cntrCmdProc( XMLNode *opt )
 {
-    if( cntrCmdServ(opt) ) return;
+    if(cntrCmdServ(opt)) return;
 
     //> Get page info
     if(opt->name() == "info")
@@ -1529,6 +1529,7 @@ string PageWdg::resourceGet( const string &id, string *mime )
 void PageWdg::cntrCmdProc( XMLNode *opt )
 {
     if(cntrCmdServ(opt)) return;
+
     //> Get page info
     if(opt->name() == "info")
     {

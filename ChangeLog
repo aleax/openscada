@@ -1,3 +1,8 @@
+2011-08-10 Roman
+- FIX:UI.VCAEngine: No primitive's attribute present warning is fixed for disabled widgets.
+    Not full disable heritors widgets on the widget disable is fixed.
+
+
 2011-08-09 Roman
 - FIX:DAQ.ModBus, DAQ.LogicLev, DAQ.Siemens: Remove only not present already attributes on parameter enable is made.
 
