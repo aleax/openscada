@@ -2905,7 +2905,27 @@ bool DevelWdgView::event( QEvent *event )
 
 		//> Check for select next underly widget
 		if( fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove )
-		    QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(nextUnderlWdgWait()));
+		{
+		    DevelWdgView *fsel = NULL, *nsel = NULL;
+		    int i_c;
+		    for(i_c = children().size()-1; i_c >= 0; i_c--)
+		    {
+			DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+			if(!curw) continue;
+			if(!fsel && curw->select()) fsel = curw;
+			else if(fsel && curw->geometryF().contains(curp)) { nsel = curw; break; }
+		    }
+		    //> Check for wait need to double click timeout for editable widgets
+		    if(fsel && fsel->shape && fsel->shape->isEditable())
+			QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(nextUnderlWdgWait()));
+		    else
+		    {
+			if(fsel) fsel->setSelect(false, PrcChilds|OnlyFlag);
+			if(nsel) nsel->setSelect(true, PrcChilds|OnlyFlag);
+			else setCursor(Qt::ArrowCursor);
+			setSelect(true, PrcChilds);
+		    }
+		}
 
 		if( fSelChange )
 		{
@@ -2972,11 +2992,12 @@ bool DevelWdgView::event( QEvent *event )
 		//if(select())
 		setSelect(true,PrcChilds);
 		mainWin()->setWdgScale(false);
+		mainWin()->setWdgVisScale(mVisScale);
 		return true;
 	    case QEvent::FocusOut:
 		if( cursor().shape() != Qt::ArrowCursor )	setCursor(Qt::ArrowCursor);
                 if( QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
-                    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) )
+                    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus() )
 		{
 		    if( editWdg )	editWdg->setSelect(false,PrcChilds);
 		    //emit selected("");
@@ -3089,6 +3110,28 @@ bool DevelWdgView::event( QEvent *event )
 
     if( WdgView::event(event) )	return true;
     return QWidget::event(event);
+}
+
+bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
+{
+    QScrollArea *bEv = dynamic_cast<QScrollArea*>(object);
+
+    if(bEv)
+	switch(event->type())
+	{
+	    case QEvent::FocusIn:
+		setSelect(true);
+		break;
+	    case QEvent::FocusOut:
+        	if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !bEv->widget()->hasFocus())
+		    setSelect(false);
+		break;
+	    case QEvent::MouseButtonRelease:
+		setSelect(false,PrcChilds);
+		setSelect(true);
+		break;
+	}
+    return WdgView::eventFilter(object, event);
 }
 
 void DevelWdgView::nextUnderlWdgWait( )

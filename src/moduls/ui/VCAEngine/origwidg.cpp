@@ -643,6 +643,7 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
 	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
+	    if((el=ctrId(root,"/text",true))) el->setAttr("help",_("Text value. Use '%{n}' for argument {n} (from 1) value insert."));
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
 	    {
 		el = ctrId(root,"/arg"+TSYS::int2str(i_arg)+"cfg",true);

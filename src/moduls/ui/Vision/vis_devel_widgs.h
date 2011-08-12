@@ -537,6 +537,7 @@ class DevelWdgView: public WdgView
     protected:
 	//Protected methods
 	bool event( QEvent * event );
+	bool eventFilter( QObject *object, QEvent *event );
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
     private:

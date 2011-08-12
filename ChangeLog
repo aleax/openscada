@@ -1,3 +1,11 @@
+2011-08-12 Roman
+- FIX:UI.QTCfg: Start periodic update icon is fixed.
+- UI.VCAEngine: For attribute "text" of primitive "Text" context help is added.
+- UI.Vision: The background for developed widget window is set to QT::Dense7Pattern.
+    Processing events filter from scrolled area of developed widget window is added.
+    Wait for double click, into development, is set only for editable widgets.
+
+
 2011-08-10 Roman
 - FIX:UI.VCAEngine: No primitive's attribute present warning is fixed for disabled widgets.
     Not full disable heritors widgets on the widget disable is fixed.

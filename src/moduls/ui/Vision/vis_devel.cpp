@@ -1236,13 +1236,13 @@ void VisDevelop::visualItEdit( )
 #if QT_VERSION >= 0x040400
 	scrl->setAlignment(Qt::AlignCenter);
 #endif
-	//QPalette plt = scrl->palette();
-        //plt.setBrush(QPalette::Window,QBrush("grey",Qt::CrossPattern));
-	//scrl->setPalette(plt);
-	scrl->setBackgroundRole(QPalette::Dark);
+	QPalette plt = scrl->palette();
+        plt.setBrush(QPalette::Window,QBrush("grey",Qt::Dense7Pattern));
+	scrl->setPalette(plt);
+	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
-	//- Set window icon -
+	//> Set window icon
 	XMLNode req("get");
 	req.setAttr("path",ed_wdg+"/%2fico");
 	if( !cntrIfCmd(req) )
@@ -1252,14 +1252,16 @@ void VisDevelop::visualItEdit( )
 	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		scrl->setWindowIcon(QPixmap::fromImage(ico_t));
 	}
-	//- Make and place view widget -
+	//> Make and place view widget
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
 	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
 
-	scrl->setWidget( vw );
+	scrl->installEventFilter(vw);
+
+	scrl->setWidget(vw);
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addWindow(scrl);
 	scrl->show();
