@@ -1,3 +1,8 @@
+2011-08-13 Roman
+- UI.QTCfg: Full text edit is added into table cells edit.
+- FIX:UI.Vision: Deranged widgets level operations is fixed.
+
+
 2011-08-12 Roman
 - FIX:UI.QTCfg: Start periodic update icon is fixed.
 - UI.VCAEngine: For attribute "text" of primitive "Text" context help is added.

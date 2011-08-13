@@ -2329,7 +2329,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
 		    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-		    else if( is_up && !is_move && cwdg && !ewdg->select() &&
+		    else if( is_rise && !is_move && cwdg && !ewdg->select() &&
 			    ewdg->geometryF().intersects(cwdg->geometryF()) )
 		    {
 			cwdg->stackUnder(ewdg);
@@ -2337,12 +2337,13 @@ void DevelWdgView::wdgViewTool( QAction *act )
 			is_move = true;
 		    }
 		}
-		if(is_rise && cwdg && ewdg && cwdg!=ewdg )
+		if(is_up && cwdg && ewdg && cwdg!=ewdg)
 		{
 		    cwdg->stackUnder(ewdg);
 		    ewdg->stackUnder(cwdg);
 		}
 	    }
+
 	if( is_lower || is_down )
 	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
 	    {
@@ -2354,14 +2355,14 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
 		    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-		    else if( is_down && !is_move && cwdg && !ewdg->select() &&
+		    else if( is_lower && !is_move && cwdg && !ewdg->select() &&
 			    ewdg->geometryF().intersects(cwdg->geometryF()) )
 		    {
 			cwdg->stackUnder(ewdg);
 			is_move = true;
 		    }
 		}
-		if(is_lower && cwdg && ewdg && cwdg!=ewdg )	cwdg->stackUnder(ewdg);
+		if(is_down && cwdg && ewdg && cwdg != ewdg) cwdg->stackUnder(ewdg);
 	    }
 	saveGeom("");
     }

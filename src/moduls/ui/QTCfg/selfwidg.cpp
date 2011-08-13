@@ -979,6 +979,15 @@ QWidget *TableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
     QVariant val_user = index.data(Qt::UserRole);
 
     if(val_user.isValid()) w_del = new QComboBox(parent);
+    else if(value.type() == QVariant::String)
+    {
+        w_del = new QTextEdit(parent);
+        ((QTextEdit*)w_del)->setTabStopWidth(40);
+        ((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
+        ((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        ((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //((QTextEdit*)w_del)->resize(50,50);
+    }
     else
     {
 	QItemEditorFactory factory;
@@ -993,23 +1002,19 @@ void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) c
     QVariant value = index.data(Qt::DisplayRole);
     QVariant val_user = index.data(Qt::UserRole);
 
-    if( dynamic_cast<QComboBox*>(editor) )
+    if(dynamic_cast<QComboBox*>(editor))
     {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
-	if(value.type() == QVariant::Bool)	comb->setCurrentIndex(value.toBool());
+	if(value.type() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
 	else if(val_user.isValid())
 	{
 	    comb->addItems(val_user.toStringList());
 	    comb->setCurrentIndex(comb->findText(value.toString()));
 	}
-	return;
     }
-    if( dynamic_cast<QLineEdit*>(editor) )
-    {
-	QLineEdit *led = dynamic_cast<QLineEdit*>(editor);
-	led->setText(value.toString());
-	return;
-    }
+    else if(dynamic_cast<QTextEdit*>(editor))	((QTextEdit*)editor)->setPlainText(value.toString());
+    else if(dynamic_cast<QLineEdit*>(editor))	((QLineEdit*)editor)->setText(value.toString());
+    else QItemDelegate::setEditorData(editor, index);
 }
 
 void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
@@ -1021,14 +1026,10 @@ void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, co
 	if(!val_user.isValid())
 	    model->setData(index,(bool)comb->currentIndex(),Qt::EditRole);
 	else model->setData(index,comb->currentText(),Qt::EditRole);
-	return;
     }
-    if(dynamic_cast<QLineEdit*>(editor))
-    {
-	QLineEdit *led = dynamic_cast<QLineEdit*>(editor);
-	model->setData(index,led->text(),Qt::EditRole);
-	return;
-    }
+    else if(dynamic_cast<QTextEdit*>(editor))	model->setData(index, ((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
+    else if(dynamic_cast<QLineEdit*>(editor))	model->setData(index, ((QLineEdit*)editor)->text(),Qt::EditRole);
+    else QItemDelegate::setModelData(editor, model, index);
 }
 
 void TableDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
@@ -1055,6 +1056,26 @@ bool TableDelegate::eventFilter( QObject *object, QEvent *event )
 		default:
 		    return false;
 	    }
+    }
+    else if(dynamic_cast<QTextEdit*>(object))
+    {
+        QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
+        if(event->type() == QEvent::KeyPress)
+            switch(static_cast<QKeyEvent *>(event)->key())
+            {
+                case Qt::Key_Enter:
+                case Qt::Key_Return:
+                    if( QApplication::keyboardModifiers()&Qt::ControlModifier )
+                    {
+                        emit commitData(ted);
+                        emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
+                        return true;
+                    }
+                    else return false;
+                case Qt::Key_Escape:
+                    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
+                    return true;
+            }
     }
 
     return QItemDelegate::eventFilter(object,event);
