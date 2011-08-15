@@ -705,6 +705,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     // int childSize( ) - return childs counter for node
     if(id == "childSize")	return (int)childSize();
     // XMLNodeObj childAdd(ElTp no = XMLNodeObj) - add node <no> as child to the node
+    // XMLNodeObj childAdd(string nd) - add node with name <nd>
     //  no - node object or name for new node
     if(id == "childAdd")
     {
@@ -717,6 +718,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	return no;
     }
     // XMLNodeObj childIns(int id, ElTp no = XMLNodeObj) - insert node <no> as child to the node
+    // XMLNodeObj childIns(int id, string nd) - insert node with name <nd>
     //  id - insert position
     //  no - node object or name for new node
     if(id == "childIns" && prms.size())
