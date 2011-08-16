@@ -1,5 +1,8 @@
 2011-08-16 Roman
 - SYS: User's API object XMLNodeObj is fixed for prevent self node include by childAdd() or childIns().
+    Return empty string is made for XMLNodeObj::attr().
+- UI.Vision: Create runtime context menu for widgets is set to event QEvent::MouseButtonRelease for prevent incidentally one click
+    menu items call.
 
 
 2011-08-13 Roman

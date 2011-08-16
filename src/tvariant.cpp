@@ -694,7 +694,12 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     if(id == "text")	return text();
     // string attr(string id) - get node attribute
     //  id - attribute identifier
-    if(id == "attr" && prms.size())	return propGet(prms[0].getS()).getS();
+    if(id == "attr" && prms.size())
+    {
+	TVariant avl = propGet(prms[0].getS());
+	if(avl.isEVal() || avl.isNull()) return "";
+	return avl;
+    }
     // XMLNodeObj setName(string vl) - set node name
     //  vl - value for node name
     if(id == "setName" && prms.size())	{ setName(prms[0].getS()); return this; }

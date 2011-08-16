@@ -269,7 +269,7 @@ bool RunWdgView::event( QEvent *event )
 		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permited.")).arg(id().c_str()),to);
 	    }
 	    return true;
-	case QEvent::MouseButtonPress:
+	case QEvent::MouseButtonRelease:
 	    if(((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && property("active").toBool() && permCntr())
 	    {
 		QAction *actTmp;
