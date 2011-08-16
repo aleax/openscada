@@ -1,3 +1,7 @@
+2011-08-16 Roman
+- SYS: User's API object XMLNodeObj is fixed for prevent self node include by childAdd() or childIns().
+
+
 2011-08-13 Roman
 - UI.QTCfg: Full text edit is added into table cells edit.
 - FIX:UI.Vision: Deranged widgets level operations is fixed.

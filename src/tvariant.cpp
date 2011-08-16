@@ -643,6 +643,7 @@ XMLNodeObj::~XMLNodeObj( )
 
 void XMLNodeObj::childAdd(XMLNodeObj *nd)
 {
+    if(nd == this) return;
     mChilds.push_back(nd);
     nd->parent = this;
     nd->connect();
@@ -650,6 +651,7 @@ void XMLNodeObj::childAdd(XMLNodeObj *nd)
 
 void XMLNodeObj::childIns(unsigned id, XMLNodeObj *nd)
 {
+    if(nd == this) return;
     if(id < 0) id = mChilds.size();
     id = vmin(id,mChilds.size());
     mChilds.insert(mChilds.begin()+id,nd);
@@ -661,6 +663,7 @@ void XMLNodeObj::childDel( unsigned id )
 {
     if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Deletion child '%d' error."),id);
     if(!mChilds[id]->disconnect()) delete mChilds[id];
+    else if(mChilds[id]->parent == this) mChilds[id]->parent = NULL;
     mChilds.erase(mChilds.begin()+id);
 }
 
