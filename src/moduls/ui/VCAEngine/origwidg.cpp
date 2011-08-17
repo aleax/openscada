@@ -347,11 +347,13 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("view");
 		    cfg.owner()->attrDel("cfg");
+		    cfg.owner()->attrDel("confirm");
 		    cfg.owner()->attrDel("font");
 		    break;
 		case 1:	//Text edit
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("wordWrap");
+		    cfg.owner()->attrDel("confirm");
 		    cfg.owner()->attrDel("font");
 		    break;
 		case 2:	//Check box
@@ -387,11 +389,13 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,
 		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Date;Date and time"),"22") );
 		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23") );
+		cfg.owner()->attrAdd( new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24") );
 		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
 		break;
 	    case 1:	//Text edit
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","21") );
 		cfg.owner()->attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","","22") );
+		cfg.owner()->attrAdd( new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24") );
 		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
 		break;
 	    case 2:	//Check box

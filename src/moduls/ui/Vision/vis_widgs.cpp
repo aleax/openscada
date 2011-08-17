@@ -424,6 +424,9 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
     box->setMargin(0);
     box->setSpacing(0);
 
+    bt_tm = new QTimer(this);
+    connect(bt_tm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
+
     setType(tp);
 }
 
@@ -440,13 +443,10 @@ void LineEdit::viewApplyBt( bool view )
 	bt_fld->setMaximumWidth( 15 );
 	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
 	layout()->addWidget( bt_fld );
-
-	bt_tm = new QTimer(this);
-	connect( bt_tm, SIGNAL( timeout() ), this, SLOT( cancelSlot() ) );
     }
     if( !view && bt_fld )
     {
-	bt_tm->stop(); bt_tm->deleteLater(); bt_tm = NULL;
+	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
     }
 }
@@ -520,8 +520,8 @@ void LineEdit::setType( LType tp )
 void LineEdit::changed( )
 {
     //> Enable apply
-    if( mPrev && !bt_fld )	viewApplyBt(true);
-    if( bt_tm ) bt_tm->start(5000);
+    if(mPrev && !bt_fld) viewApplyBt(true);
+    bt_tm->start(mPrev ? 5000 : 500);
 
     emit valChanged(value());
 }
@@ -532,8 +532,11 @@ void LineEdit::setValue( const QString &txt )
     switch(type())
     {
 	case Text:
-	    ((QLineEdit*)ed_fld)->setText(txt);
-	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
+	    if(txt != value())
+	    {
+		((QLineEdit*)ed_fld)->setText(txt);
+		((QLineEdit*)ed_fld)->setCursorPosition(0);
+	    }
 	    break;
 	case Integer:
 	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
@@ -650,8 +653,12 @@ void LineEdit::applySlot( )
 
 void LineEdit::cancelSlot( )
 {
-    setValue(m_val);
-    emit cancel();
+    if(mPrev)
+    {
+	setValue(m_val);
+	emit cancel();
+    }
+    else applySlot();
 }
 
 bool LineEdit::event( QEvent * e )
@@ -833,6 +840,9 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     QWidget *w = parentWidget();
     while(w && w->parentWidget() && (!dynamic_cast<QMainWindow *>(w) || !((QMainWindow*)w)->statusBar())) w = w->parentWidget();
     stWin = dynamic_cast<QMainWindow *>(w);
+
+    bt_tm = new QTimer(this);
+    connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
 
 QString TextEdit::text()
@@ -840,18 +850,18 @@ QString TextEdit::text()
     return ed_fld->toPlainText();
 }
 
-void TextEdit::setText(const QString &text)
+void TextEdit::setText(const QString &itext)
 {
-    isInit=true;
-    ed_fld->setPlainText(text);
-    if( but_box && but_box->isEnabled() )
+    isInit = true;
+    if(itext != text()) ed_fld->setPlainText(itext);
+    if(but_box && but_box->isEnabled())
     {
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
     }
-    isInit=false;
+    isInit = false;
 
-    m_text = text;
+    m_text = itext;
 }
 
 void TextEdit::setSnthHgl(XMLNode nd)
@@ -868,6 +878,9 @@ void TextEdit::changed()
 	but_box->setVisible(true);
 	but_box->setEnabled(true);
     }
+
+    if(!but_box) bt_tm->start(500);
+
     emit textChanged(text());
 }
 

@@ -341,7 +341,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( !shD->addrWdg || !qobject_cast<LineEdit*>(shD->addrWdg) )
 		{
 		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new LineEdit(w);
+		    shD->addrWdg = new LineEdit(w,LineEdit::Text,!shD->checkable);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(lineAccept()) );
 		    mk_new = true;
 		}
@@ -371,7 +371,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if( !shD->addrWdg || !qobject_cast<TextEdit*>(shD->addrWdg) )
 		{
 		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new TextEdit(w);
+		    shD->addrWdg = new TextEdit(w,!shD->checkable);
 		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(textAccept()) );
 		    mk_new = true;
 		}
@@ -663,8 +663,8 @@ void ShapeFormEl::sliderMoved( int val )
 
 void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
-    if( en )	wdg->installEventFilter(view);
-    else	wdg->removeEventFilter(view);
+    if(en) wdg->installEventFilter(view);
+    else   wdg->removeEventFilter(view);
     //- Process childs -
     for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
 	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )

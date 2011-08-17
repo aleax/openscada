@@ -253,7 +253,7 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
     if(name().compare(0,2,"<?") == 0)
     { xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
 
-    xml.append((flg&XMLNode::BrOpenPrev) ? "\n<" : "<");
+    xml.append((flg&XMLNode::BrOpenPrev && xml.size() && xml[xml.size()-1] != '\n') ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
     else encode(name(), xml);
 

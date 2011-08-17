@@ -248,6 +248,7 @@ namespace VISION
 	    TextEdit( QWidget *parent, bool prev_dis = false );
 
 	    QString text( );
+
 	    void setText( const QString & );
 	    void setSnthHgl(XMLNode nd);
 
@@ -277,6 +278,7 @@ namespace VISION
 	    QDialogButtonBox	*but_box;
 	    QAction		*actFind, *actFindNext;
 	    QMainWindow		*stWin;
+	    QTimer		*bt_tm;
     };
 
     //****************************************

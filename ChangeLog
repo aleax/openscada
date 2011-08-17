@@ -1,3 +1,9 @@
+2011-08-17 Roman
+- XMLNode: Prevent new line dubled on save node by XMLNode::BrOpenPrev.
+- UI.VCAEngine, UI.Vision: To primitive "ElFigure" for modes "Line and Text edit" new attribute "confirm" is added for
+    confirm on edit disabling allow.
+
+
 2011-08-16 Roman
 - SYS: User's API object XMLNodeObj is fixed for prevent self node include by childAdd() or childIns().
     Return empty string is made for XMLNodeObj::attr().
