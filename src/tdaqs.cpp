@@ -304,7 +304,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	    SYS->nodeDel(faddr);
 
 	    return true;
-	}catch(...) { }
+	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	return false;
     }

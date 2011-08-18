@@ -1,4 +1,5 @@
 2011-08-18 Roman
+- FIX:SYS.DAQ: Messages creation is added for compile errors for user API function funcCall();
 - FIX:UI.VCAEngine: No project's page attributes "pgOpen" and "pgNoOpenProc" restore after reenable is fixed.
     Only project's pages and Widgets of libraries include to list for a parent widget select.
 - FIX:UI.Vision, UI.WebVision: Minimum for "Diagram" primitive's time size is set to 1ms.
