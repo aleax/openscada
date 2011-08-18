@@ -4582,9 +4582,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         paintImage(view);
                         view->repaint();
                     }
-                } 
+                }
+                return true;
             }
-            return true;
+            break;
         }
         case QEvent::MouseMove:
         {
