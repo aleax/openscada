@@ -5246,7 +5246,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 //* VCADiagram                                    *
 //*************************************************
 VCADiagram::VCADiagram( const string &iid ) :
-    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
+    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
 {
 
 }
@@ -6047,7 +6047,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		reld_tr_dt = 1;
 		break;
 	    case 29:	//tSize
-		tSize = atof(req_el->text().c_str());
+		tSize = vmax(1e-3,atof(req_el->text().c_str()));
 		reld_tr_dt = 2;
 		break;
 	    case 30:	//curSek

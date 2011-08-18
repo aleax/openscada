@@ -1093,6 +1093,12 @@ void Page::setEnable( bool val )
 	throw TError(nodePath().c_str(),_("For page can use only Box-based widgets!"));
     }
 
+    if(val)
+    {
+	attrAdd( new TFld("pgOpen",_("Page:open state"),TFld::Boolean,TFld::NoFlag) );
+	attrAdd( new TFld("pgNoOpenProc",_("Page:process no opened"),TFld::Boolean,TFld::NoFlag) );
+    }
+
     //> Enable/disable included pages
     vector<string> ls;
     pageList(ls);

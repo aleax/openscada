@@ -1369,7 +1369,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    reld_tr_dt = 1;
 	    break;
 	case 29:	//tSize
-	    shD->tSize = atof(val.c_str());
+	    shD->tSize = vmax(1e-3,atof(val.c_str()));
 	    reld_tr_dt = 2;
 	    break;
 	case 30:	//curSek
@@ -2194,7 +2194,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		if( curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
 		    curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
 	    }
-	    else if( shD->type == 1 && shD->active && shD->tSize )
+	    else if( shD->type == 1 && shD->active )
 	    {
 		float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
 		curPos = shD->pictRect.x()+(int)(shD->pictRect.width()*(curFrq-shD->fftBeg)/(shD->fftEnd-shD->fftBeg));
@@ -2229,7 +2229,6 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		    }
 		    else if( shD->type == 1 )
 		    {
-			if( !shD->tSize ) break;
 			float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
 			setCursor( w, (int64_t)(1e6/(curFrq+((key->key()==Qt::Key_Left)?-1:1)*(shD->fftEnd-shD->fftBeg)/shD->pictRect.width())) );
 		    }

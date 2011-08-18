@@ -895,12 +895,19 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    c_path += "/"+c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
-	vector<string>  ls;
+	vector<string>	ls, tls;
 	try
 	{
 	    switch(c_lv)
 	    {
-		case 0: mod->nodeList(ls);   break;
+		case 0:
+		    ls.clear();
+		    mod->nodeList(tls,"wlb_");
+		    for(int i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
+		    mod->nodeList(tls,"prj_");
+		    for(int i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
+		    //mod->nodeList(ls);
+		    break;
 		case 1:
 		    if(TSYS::pathLev(lnk,0) != "..")
 			mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeList(ls);

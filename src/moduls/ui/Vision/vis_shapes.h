@@ -355,7 +355,7 @@ class ShapeDiagram : public WdgShape
 	    public:
 		//Methods
 		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1),
-		    tTime(0), tPict(0), curTime(0), sclVerScl(100), sclVerSclOff(0)	{ }
+		    tTime(0), tPict(0), curTime(0), tSize(1), sclVerScl(100), sclVerSclOff(0)	{ }
 		//Attributes
 		unsigned en		:1;
 		unsigned active		:1;

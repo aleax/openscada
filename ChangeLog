@@ -1,3 +1,9 @@
+2011-08-18 Roman
+- FIX:UI.VCAEngine: No project's page attributes "pgOpen" and "pgNoOpenProc" restore after reenable is fixed.
+    Only project's pages and Widgets of libraries include to list for a parent widget select.
+- FIX:UI.Vision, UI.WebVision: Minimum for "Diagram" primitive's time size is set to 1ms.
+
+
 2011-08-17 Roman
 - XMLNode: Prevent new line doubled on save node by XMLNode::BrOpenPrev.
 - UI.VCAEngine, UI.Vision: To primitive "ElFigure" for modes "Line and Text edit" new attribute "confirm" is added for
