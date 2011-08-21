@@ -1,3 +1,8 @@
+2011-08-21 Roman
+- FIX:DAQ.Template: Remove template function's doubled IO, on the template enable, is added.
+- FIX:DAQ: Check archives to attribute's address for prevent doubled for values archives is added.
+
+
 2011-08-18 Roman
 - FIX:UI.Vision: Mouse release event pass on run for primitive "ElFigure" is fixed.
 - FIX:SYS.DAQ: Messages creation is added for compile errors for user API function funcCall();

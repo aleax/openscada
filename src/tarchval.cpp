@@ -1085,7 +1085,7 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     if(runSt && vl == PassiveAttr && dynamic_cast<TVal*>(&SYS->nodeAt(isrc,0,'.').at()))
 	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch( AutoHD<TVArchive>(this) );
 
-    if( mSrcMode != vl || mDSourc.getVal() != isrc )	modif();
+    if(mSrcMode != vl || mDSourc.getVal() != isrc) modif();
 
     mSrcMode = vl;
     mDSourc = isrc;

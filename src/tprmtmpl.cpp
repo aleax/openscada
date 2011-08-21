@@ -130,6 +130,12 @@ void TPrmTempl::setStart( bool vl )
     if(startStat() == vl) return;
     if(vl)
     {
+	//> Check for doubled attributes clear
+	std::map<string,bool> ioIds;
+	for(int id = 0; id < ioSize(); )
+	    if(ioIds.find(io(id)->id()) != ioIds.end()) { ioDel(id); modif(); }
+	    else { ioIds[io(id)->id()] = true; id++; }
+
 	//> Compile new function
 	if(prog().size())
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().

@@ -45,21 +45,21 @@ TFunction &TFunction::operator=( TFunction &func )
 {
     //> Copy IO
     //>> Clear no present IO
-    for( int i_io = 0; i_io < ioSize(); )
-	if( func.ioId(io(i_io)->id()) < 0 )	ioDel(i_io);
+    for(int i_io = 0; i_io < ioSize(); )
+	if(func.ioId(io(i_io)->id()) < 0) ioDel(i_io);
 	else i_io++;
     //>> Update present and create new IO
-    for( int i_io = 0; i_io < func.ioSize(); i_io++ )
+    for(int i_io = 0; i_io < func.ioSize(); i_io++)
     {
 	int dst_io = ioId(func.io(i_io)->id());
-	if( dst_io < 0 )
+	if(dst_io < 0)
 	    dst_io = ioIns( new IO( func.io(i_io)->id().c_str(), func.io(i_io)->name().c_str(), func.io(i_io)->type(), func.io(i_io)->flg(),
 		func.io(i_io)->def().c_str(), func.io(i_io)->hide(), func.io(i_io)->rez().c_str() ), i_io );
 	else *io(dst_io) = *func.io(i_io);
-	if( dst_io != i_io && !use() ) ioMove(dst_io,i_io);
+	if(dst_io != i_io && !use()) ioMove(dst_io,i_io);
     }
 
-    if( mId.empty() )	mId = func.id();
+    if(mId.empty()) mId = func.id();
 
     return *this;
 }

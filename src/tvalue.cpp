@@ -341,14 +341,14 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		string rez_nm = a_nm;
 		for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
 		{
+		    if(SYS->archive().at().valAt(rez_nm).at().srcData() == vlAt(attr).at().nodePath('.',true)) break;
 		    rez_nm = a_nm+TSYS::int2str(p_cnt);
 		    if(rez_nm.size() > 20) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
 		}
 		//>>>> Create new archive
-		SYS->archive().at().valAdd(rez_nm);
+		if(!SYS->archive().at().valPresent(rez_nm)) SYS->archive().at().valAdd(rez_nm);
 		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
-		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,
-		    vlAt(attr).at().nodePath('.').substr(SYS->id().size()+1));
+		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,vlAt(attr).at().nodePath('.',true));
 		SYS->archive().at().valAt(rez_nm).at().setToStart(true);
 		SYS->archive().at().valAt(rez_nm).at().start();
 		vlArchMake(vlAt(attr).at());
