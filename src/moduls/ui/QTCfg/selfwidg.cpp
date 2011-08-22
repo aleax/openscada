@@ -443,12 +443,15 @@ void SyntxHighl::highlightBlock(const QString &text)
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     QWidget(parent), isInit(false), snt_hgl(NULL), but_box(NULL)
 {
+
+
     setObjectName(name);
     QVBoxLayout *box = new QVBoxLayout(this);
     box->setContentsMargins(0,0,0,2);
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
+    ed_fld->setFrameShape(QFrame::StyledPanel);		//> Force frame set for resize allow everywhere
     ed_fld->setContextMenuPolicy(Qt::CustomContextMenu);
     ed_fld->setTabStopWidth(20);
     ed_fld->setAcceptRichText(false);
@@ -626,7 +629,7 @@ void TextEdit::find( )
 //************************************************
 CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 {
-
+    setFrameShape(QFrame::StyledPanel);		//> Force frame set for resize allow everywhere
 }
 
 bool CfgTable::event( QEvent *e )

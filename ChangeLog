@@ -1,3 +1,7 @@
+2011-08-22 Roman
+- UI.QTCfg: Force "StyledPanel" border enable for Text and Table widgets for user's resize allow.
+
+
 2011-08-21 Roman
 - FIX:DAQ.Template: Remove template function's doubled IO, on the template enable, is added.
 - FIX:DAQ: Check archives to attribute's address for prevent doubled for values archives is added.
