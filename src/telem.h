@@ -48,7 +48,8 @@ class TFld
 	    Boolean	= 0,
 	    Integer	= 1,
 	    Real	= 4,
-	    String	= 5
+	    String	= 5,
+	    Object	= 6
 	};
 	enum AttrFlg	//Base field's flags
 	{

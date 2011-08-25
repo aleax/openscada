@@ -1144,6 +1144,7 @@ void SessWdg::setProcess( bool val )
 		    case TFld::Integer: tp = IO::Integer;	break;
 		    case TFld::Real:    tp = IO::Real;		break;
 		    case TFld::String:  tp = IO::String;	break;
+		    case TFld::Object:	tp = IO::Object;	break;
 		}
 		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()));
 	    }
@@ -1167,6 +1168,7 @@ void SessWdg::setProcess( bool val )
 			case TFld::Integer: tp = IO::Integer;	break;
 			case TFld::Real:    tp = IO::Real;	break;
 			case TFld::String:  tp = IO::String;	break;
+			case TFld::Object:  tp = IO::Object;	break;
 		    }
 		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,
 					(iwls[i_w]+"/"+als[i_a]).c_str()));
@@ -1443,9 +1445,9 @@ void SessWdg::calc( bool first, bool last )
 			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 
-			if( attr.at().flgGlob()&Attr::Address )	
+			if(attr.at().flgGlob()&Attr::Address)
 			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
-			else switch( attr.at().type() )
+			else switch(attr.at().type())
 			{
 			    case TFld::Boolean:	attr.at().setB(vl.at().getB());	break;
 			    case TFld::Integer:	attr.at().setI(vl.at().getI());	break;
@@ -1453,25 +1455,19 @@ void SessWdg::calc( bool first, bool last )
 			    case TFld::String:	attr.at().setS(vl.at().getS());	break;
 			}
 		    }
-		    else if( obj_tp == "wdg:" )
+		    else if(obj_tp == "wdg:")
 		    {
 			try
 			{
 			    size_t a_pos = attr.at().cfgVal().rfind("/");
 			    if(a_pos == string::npos) throw TError("","");
 			    attr1 = ((AutoHD<Widget>)mod->nodeAt(attr.at().cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(attr.at().cfgVal().substr(a_pos+3));
-			    switch(attr.at().type())
-			    {
-				case TFld::Boolean:	attr.at().setB(attr1.at().getB()); break;
-				case TFld::Integer:	attr.at().setI(attr1.at().getI()); break;
-				case TFld::Real:	attr.at().setR(attr1.at().getR()); break;
-				case TFld::String:	attr.at().setS(attr1.at().getS()); break;
-			    }
+			    attr.at().set(attr1.at().get());
 			}
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 		    }
 		}
-		else if(attr.at().flgSelf()&Attr::CfgLnkIn)	attr.at().setS(EVAL_STR);
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
 	    }
 	    inLnkGet = false;
 
@@ -1485,20 +1481,13 @@ void SessWdg::calc( bool first, bool last )
 		setR(0,1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(1,first);
 		setB(2,last);
-		for( int i_io = 4; i_io < ioSize( ); i_io++ )
+		for(int i_io = 4; i_io < ioSize( ); i_io++)
 		{
-		    if( func()->io(i_io)->rez().empty() ) continue;
+		    if(func()->io(i_io)->rez().empty()) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
-		    switch(ioType(i_io))
-		    {
-			case IO::String:	setS(i_io,attr.at().getS());	break;
-			case IO::Integer:	setI(i_io,attr.at().getI());	break;
-			case IO::Real:		setR(i_io,attr.at().getR());	break;
-			case IO::Boolean:	setB(i_io,attr.at().getB());	break;
-			default:						break;
-		    }
+		    set(i_io,attr.at().get());
 		}
 
 		//>> Calc
@@ -1513,14 +1502,7 @@ void SessWdg::calc( bool first, bool last )
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
 		    if(s_attr == "pgOpen" && attr.at().getB() != getB(i_io)) { pgOpenPrc = i_io; continue; }
-		    switch(ioType(i_io))
-		    {
-			case IO::String:	attr.at().setS(getS(i_io));	break;
-			case IO::Integer:	attr.at().setI(getI(i_io));	break;
-			case IO::Real:		attr.at().setR(getR(i_io));	break;
-			case IO::Boolean:	attr.at().setB(getB(i_io));	break;
-			default:						break;
-		    }
+		    attr.at().set(get(i_io));
 		}
 		//>> Save events from calc procedure
 		if(evId >= 0) wevent = getS(evId);
@@ -1689,29 +1671,14 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - readed attribute
     if( iid == "attr" && prms.size() )
     {
-	if( !attrPresent( prms[0].getS() ) ) return string("");
-	AutoHD<Attr> attr = attrAt(prms[0].getS());
-	switch( attr.at().type() )
-	{
-	    case TFld::String:	return attr.at().getS();
-	    case TFld::Integer:	return attr.at().getI();
-	    case TFld::Real:	return attr.at().getR();
-	    case TFld::Boolean:	return attr.at().getB();
-	}
-	return string("");
+	if(!attrPresent( prms[0].getS())) return string("");
+	return attrAt(prms[0].getS()).at().get();
     }
     // TCntrNodeObj attrSet(string attr, ElTp vl)
     if( iid == "attrSet" && prms.size() >= 2 )
     {
-	if( !attrPresent( prms[0].getS() ) ) return -1;
-	AutoHD<Attr> attr = attrAt(prms[0].getS());
-	switch( attr.at().type() )
-	{
-	    case TFld::String:	attr.at().setS(prms[1].getS());	break;
-	    case TFld::Integer:	attr.at().setI(prms[1].getI());	break;
-	    case TFld::Real:	attr.at().setR(prms[1].getR());	break;
-	    case TFld::Boolean:	attr.at().setB(prms[1].getB());	break;
-	}
+	if(!attrPresent(prms[0].getS())) return -1;
+	attrAt(prms[0].getS()).at().set(prms[1]);
 	return new TCntrNodeObj(this,user);
     }
     // string link(string attr, bool prm = false) - get link for attribute or attribute block (prm)

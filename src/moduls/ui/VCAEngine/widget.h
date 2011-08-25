@@ -94,17 +94,21 @@ class Attr
 
 	//> Get value
 	string getSEL( bool sys = false );
+	TVariant get( bool sys = false );
 	string getS( bool sys = false );
 	double getR( bool sys = false );
 	int    getI( bool sys = false );
 	char   getB( bool sys = false );
+	TVarObj *getO( bool sys = false );
 
 	//> Set value
 	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
+	void set( const TVariant &val, bool strongPrev = false, bool sys = false );
 	void setS( const string &val, bool strongPrev = false, bool sys = false );
 	void setR( double val, bool strongPrev = false, bool sys = false );
 	void setI( int val, bool strongPrev = false, bool sys = false );
 	void setB( char val, bool strongPrev = false, bool sys = false );
+	void setO( TVarObj *val, bool strongPrev = false, bool sys = false );
 
 	TFld &fld( )			{ return *mFld; }
 	void setFld(TFld *fld, bool inher);
@@ -123,6 +127,7 @@ class Attr
 	    double	r_val;		//Real
 	    int		i_val;		//Integer
 	    char	b_val;		//Boolean
+	    TVarObj	*o_val;		//Object
 	}m_val;
 	//> Attributes
 	TFld		*mFld;		//Base field

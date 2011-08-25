@@ -1,3 +1,8 @@
+2011-08-25 Roman
+- !!!!:UI.VCAEngine: Object type to widget's attributes suport is added. Mostly object attributes pointed for use
+    into a widget script for data store and interaction on a session time.
+
+
 2011-08-22 Roman
 - UI.QTCfg: Force "StyledPanel" border enable for Text and Table widgets for user's resize allow.
 

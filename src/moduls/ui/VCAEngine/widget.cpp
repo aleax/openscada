@@ -1591,6 +1591,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer))->setText(_("Integer"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real))->setText(_("Real"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String))->setText(_("String"));
+	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Object))->setText(_("Object"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(TFld::Selected<<4)))->setText(_("Select integer"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real+(TFld::Selected<<4)))->setText(_("Select real"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(TFld::Selected<<4)))->setText(_("Select string"));
@@ -1620,43 +1621,64 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mOwner(NULL)
 {
-    setFld( ifld, inher );
+    setFld(ifld, inher);
 }
 
 Attr::~Attr(  )
 {
-    setFld( NULL, false );
+    setFld(NULL, false);
 }
 
 void Attr::setFld( TFld *fld, bool inher )
 {
-    if( mFld && (!fld || fld->type() != TFld::String) && mFld->type() == TFld::String && m_val.s_val ) delete m_val.s_val;
-
-    if( fld && (!mFld || fld->type() != mFld->type()) )
-	switch( fld->type() )
+    //> Free for previous type
+    if(mFld && (!fld || fld->type() != mFld->type()))
+	switch(mFld->type())
 	{
 	    case TFld::String:
+		if(m_val.s_val) delete m_val.s_val;
+		break;
+	    case TFld::Object:
+                if(m_val.o_val && !m_val.o_val->disconnect()) delete m_val.o_val;
+                break;
+	}
+
+    //> Alloc for new type
+    if(fld && (!mFld || fld->type() != mFld->type()))
+	switch(fld->type())
+	{
+	    case TFld::String:
+	    {
 		m_val.s_val = NULL;
-		if( fld->flg()&Attr::DirRead ) break;
-		m_val.s_val    = new string();
+		if(fld->flg()&Attr::DirRead) break;
+		m_val.s_val = new string();
 		*m_val.s_val = fld->def();
 		break;
+	    }
 	    case TFld::Integer:
 		m_val.i_val = strtol(fld->def().c_str(),NULL,(fld->flg()&TFld::HexDec)?16:((fld->flg()&TFld::OctDec)?8:10));
 		break;
 	    case TFld::Real:	m_val.r_val = atof(fld->def().c_str());	break;
 	    case TFld::Boolean:	m_val.b_val = atoi(fld->def().c_str());	break;
+	    case TFld::Object:
+	    {
+		m_val.o_val = NULL;
+		if(fld->flg()&Attr::DirRead) break;
+		m_val.o_val = new TVarObj();
+		m_val.o_val->connect();
+		break;
+	    }
 	}
 
-    if( mFld )
+    if(mFld)
     {
 	mFld->setLen(mFld->len()-1);
-	if( !mFld->len() ) delete mFld;
+	if(!mFld->len()) delete mFld;
 	mFld = NULL;
     }
     mFld = fld;
-    if( mFld && !inher )	mFld->setLen(1);
-    else if( mFld && inher )	mFld->setLen(mFld->len()+1);
+    if(mFld && !inher)	mFld->setLen(1);
+    else if(mFld && inher)	mFld->setLen(mFld->len()+1);
     self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
 }
 
@@ -1681,26 +1703,40 @@ string Attr::getSEL( bool sys )
     return EVAL_STR;
 }
 
+TVariant Attr::get( bool sys )
+{
+    switch(fld().type())
+    {
+	case TFld::Integer:	return getI(sys);
+	case TFld::Real:	return getR(sys);
+	case TFld::Boolean:	return getB(sys);
+	case TFld::String:	return getS(sys);
+	case TFld::Object:	return getO(sys);
+    }
+    return EVAL_STR;
+}
+
 string Attr::getS( bool sys )
 {
-    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getS();
-    if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getS(true),false).getS();
+    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getS();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getS(true),false).getS();
 
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
 	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
 	case TFld::String:	return *m_val.s_val;
+	case TFld::Object:	return m_val.o_val->getStrXML();
     }
     return EVAL_STR;
 }
 
 int Attr::getI( bool sys )
 {
-    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getI();
-    if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getI(true),false).getI();
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getI();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getI(true),false).getI();
+    switch(fld().type())
     {
 	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? atoi(m_val.s_val->c_str()) : EVAL_INT;
 	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
@@ -1712,9 +1748,9 @@ int Attr::getI( bool sys )
 
 double Attr::getR( bool sys )
 {
-    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getR();
-    if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getR(true),false).getR();
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getR();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getR(true),false).getR();
+    switch(fld().type())
     {
 	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? atof(m_val.s_val->c_str()) : EVAL_REAL;
 	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? m_val.i_val : EVAL_REAL;
@@ -1726,9 +1762,9 @@ double Attr::getR( bool sys )
 
 char Attr::getB( bool sys )
 {
-    if( flgGlob()&Attr::DirRead )	return owner()->vlGet(*this).getB();
-    if( flgSelf()&Attr::FromStyle && !sys )	return owner()->stlReq(*this,getB(true),false).getB();
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getB();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getB(true),false).getB();
+    switch(fld().type())
     {
 	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? (bool)atoi(m_val.s_val->c_str()) : EVAL_BOOL;
 	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
@@ -1738,35 +1774,55 @@ char Attr::getB( bool sys )
     return EVAL_BOOL;
 }
 
+TVarObj *Attr::getO( bool sys )
+{
+    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getO();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
+    if(fld().type() != TFld::Object) throw TError(owner()->nodePath().c_str(),_("Get object from not object's attribute '%s' error!"),id().c_str());
+    return m_val.o_val;
+}
+
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 {
-    if( flgGlob( )&Attr::DirRead ) return;
-    if( !(fld().flg()&TFld::Selected) )
-	throw TError("Cfg",_("Element type is not selected!"));
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead) return;
+    if(!(fld().flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selected!"));
+    switch(fld().type())
     {
-	case TFld::String:	setS( fld().selNm2VlS(val), strongPrev, sys );	break;
-	case TFld::Integer:	setI( fld().selNm2VlI(val), strongPrev, sys );	break;
-	case TFld::Real:	setR( fld().selNm2VlR(val), strongPrev, sys );	break;
-	case TFld::Boolean:	setB( fld().selNm2VlB(val), strongPrev, sys );	break;
+	case TFld::String:	setS(fld().selNm2VlS(val), strongPrev, sys);	break;
+	case TFld::Integer:	setI(fld().selNm2VlI(val), strongPrev, sys);	break;
+	case TFld::Real:	setR(fld().selNm2VlR(val), strongPrev, sys);	break;
+	case TFld::Boolean:	setB(fld().selNm2VlB(val), strongPrev, sys);	break;
+    }
+}
+
+void Attr::set( const TVariant &val, bool strongPrev, bool sys )
+{
+    if(flgGlob()&Attr::DirRead) return;
+    switch(fld().type())
+    {
+	case TFld::Integer:	return setI(val.getI(), strongPrev, sys);
+	case TFld::Real:	return setR(val.getR(), strongPrev, sys);
+	case TFld::Boolean:	return setB(val.getB(), strongPrev, sys);
+	case TFld::String:	return setS(val.getS(), strongPrev, sys);
+	case TFld::Object:	return setO(val.getO(), strongPrev, sys);
     }
 }
 
 void Attr::setS( const string &val, bool strongPrev, bool sys )
 {
-    if( flgGlob( )&Attr::DirRead ) return;
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead) return;
+    switch(fld().type())
     {
-	case TFld::Integer:	setI( (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys );	break;
-	case TFld::Real:	setR( (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev, sys );	break;
-	case TFld::Boolean:	setB( (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys );	break;
+	case TFld::Integer:	setI((val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys);	break;
+	case TFld::Real:	setR((val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev, sys);	break;
+	case TFld::Boolean:	setB((val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys);	break;
 	case TFld::String:
 	{
-	    if( (!strongPrev && *m_val.s_val == val) ||
-		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
+	    if((!strongPrev && *m_val.s_val == val) ||
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
 	    string t_str = *m_val.s_val;
 	    *m_val.s_val = val;
-	    if( !sys && !owner()->attrChange(*this,TVariant(t_str)) )	*m_val.s_val = t_str;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_str))) *m_val.s_val = t_str;
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1779,21 +1835,21 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 
 void Attr::setI( int val, bool strongPrev, bool sys )
 {
-    if( flgGlob( )&Attr::DirRead ) return;
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead) return;
+    switch(fld().type())
     {
-	case TFld::String:	setS( (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev, sys );	break;
-	case TFld::Real:	setR( (val!=EVAL_INT) ? val : EVAL_REAL, strongPrev, sys );			break;
-	case TFld::Boolean:	setB( (val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys );		break;
+	case TFld::String:	setS((val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::Real:	setR((val!=EVAL_INT) ? val : EVAL_REAL, strongPrev, sys);		break;
+	case TFld::Boolean:	setB((val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
 	case TFld::Integer:
 	{
-	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1] )
+	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1])
 		val = vmin(fld().selValI()[1],vmax(fld().selValI()[0],val));
-	    if( (!strongPrev && m_val.i_val == val) ||
-		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
+	    if((!strongPrev && m_val.i_val == val) ||
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
 	    int t_val = m_val.i_val;
 	    m_val.i_val = val;
-	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )	m_val.i_val = t_val;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	m_val.i_val = t_val;
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1806,21 +1862,21 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 
 void Attr::setR( double val, bool strongPrev, bool sys )
 {
-    if( flgGlob( )&Attr::DirRead ) return;
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead) return;
+    switch(fld().type())
     {
-	case TFld::String:	setS( (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev, sys );	break;
-	case TFld::Integer:	setI( (val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys );		break;
-	case TFld::Boolean:	setB( (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys );		break;
+	case TFld::String:	setS((val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys);			break;
+	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
 	case TFld::Real:
 	{
-	    if( !(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1] )
+	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1])
 		val = vmin(fld().selValR()[1],vmax(fld().selValR()[0],val));
-	    if( (!strongPrev && m_val.r_val == val) ||
-		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
+	    if((!strongPrev && m_val.r_val == val) ||
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;
 	    double t_val = m_val.r_val;
 	    m_val.r_val = val;
-	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )	m_val.r_val = t_val;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	m_val.r_val = t_val;
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1833,19 +1889,19 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 
 void Attr::setB( char val, bool strongPrev, bool sys )
 {
-    if( flgGlob( )&Attr::DirRead ) return;
-    switch( fld().type() )
+    if(flgGlob()&Attr::DirRead) return;
+    switch(fld().type())
     {
-	case TFld::String:	setS( (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev, sys );	break;
-	case TFld::Integer:	setI( (val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys );			break;
-	case TFld::Real:	setR( (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev, sys );			break;
+	case TFld::String:	setS((val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::Integer:	setI((val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys);			break;
+	case TFld::Real:	setR((val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev, sys);		break;
 	case TFld::Boolean:
 	{
-	    if( (!strongPrev && m_val.b_val == val) ||
-		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()) )	break;
+	    if((!strongPrev && m_val.b_val == val) ||
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
-	    if( !sys && !owner()->attrChange(*this,TVariant(t_val)) )
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))
 		m_val.b_val = t_val;
 	    else
 	    {
@@ -1855,6 +1911,34 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 	    break;
 	}
     }
+}
+
+void Attr::setO( TVarObj *val, bool strongPrev, bool sys )
+{
+    val->connect();
+    if(!flgGlob()&Attr::DirRead)
+        switch(fld().type())
+        {
+            case TFld::String:	setS(val->getStrXML(), strongPrev, sys);break;
+            case TFld::Integer: case TFld::Real: case TFld::Boolean:
+    				setB(true, strongPrev, sys);		break;
+            case TFld::Object:
+		if((!strongPrev && m_val.o_val == val) ||
+		    (flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
+		TVarObj *t_obj = m_val.o_val;
+		m_val.o_val = val;
+		if(!sys && !owner()->attrChange(*this,TVariant(t_obj))) m_val.o_val = t_obj;
+		else
+		{
+		    unsigned imdf = owner()->modifVal(*this);
+            	    m_modif = imdf ? imdf : m_modif+1;
+
+            	    if(t_obj && !t_obj->disconnect()) delete t_obj;
+		    return;
+                }
+                break;
+        }
+    if(!val->disconnect()) delete val;
 }
 
 string Attr::cfgTempl( )
