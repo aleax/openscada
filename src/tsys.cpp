@@ -67,11 +67,13 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //> Init system clock
     clkCalc();
 
+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
     //> Multi CPU allow check
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     CPU_SET(1,&cpuset);
     mMultCPU = !pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+#endif
 
     //> Set signal handlers
     signal(SIGINT,sighandler);
@@ -1166,8 +1168,10 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     prior.sched_priority = 0;
 
     int policy = SCHED_OTHER;
+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
     if(priority < 0)	policy = SCHED_BATCH;
-    else if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
+#endif
+    if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
     pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
@@ -1259,6 +1263,7 @@ void *TSYS::taskWrap( void *stas )
     tsk->policy = policy;
     tsk->prior = param.sched_priority;
 
+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
     //> Load and init CPU set
     if(SYS->multCPU() && !(tsk->flgs & STask::Detached))
     {
@@ -1272,6 +1277,7 @@ void *TSYS::taskWrap( void *stas )
 	if(cpuSetOK) pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
     }
     else if(SYS->multCPU() && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
+#endif
 
     //> Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
@@ -1713,8 +1719,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/stat",_("Status"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
 		if( multCPU( ) )
 		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
+#endif
 	    }
 	if( !cntrEmpty() && ctrMkNode("area",opt,-1,"/cntr",_("Counters")) )
 	    if( ctrMkNode("table",opt,-1,"/cntr/cntr",_("Counters"),R_R___,"root","root") )
@@ -1868,11 +1876,20 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
 			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str()));
 		}
-		if(n_plc)	n_plc->childAdd("el")->setText((it->second.policy==SCHED_RR)?_("Round-robin"):((it->second.policy==SCHED_BATCH)?_("Style \"batch\""):_("Standard")));
+		if(n_plc)
+		{
+		    string plcVl = _("Standard");
+		    if(it->second.policy == SCHED_RR) plcVl = _("Round-robin");
+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
+		    if(it->second.policy == SCHED_BATCH) plcVl = _("Style \"batch\"");
+#endif
+		    n_plc->childAdd("el")->setText(plcVl);
+		}
 		if(n_prior)	n_prior->childAdd("el")->setText(TSYS::int2str(it->second.prior));
 		if(n_cpuSet)	n_cpuSet->childAdd("el")->setText(it->second.cpuSet);
 	    }
 	}
+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
 	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet")
 	{
 	    ResAlloc res(taskRes,true);
@@ -1893,6 +1910,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(rez == EINVAL && opt->text().size()) throw TError(nodePath().c_str(),_("Set no allowed processors."));
 	    if(rez && opt->text().size()) throw TError(nodePath().c_str(),_("CPU set for thread error."));
 	}
+#endif
     }
     if(!cntrEmpty() && a_path == "/cntr/cntr" && ctrChkNode(opt,"get",R_R___,"root","root"))
     {

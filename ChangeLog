@@ -1,3 +1,7 @@
+2011-08-26 Roman
+- SYS: ZLib check is added and SQLite check is changed into configure build system script.
+- SYS: Disable pthread_setaffinity() and policy SCHED_BATCH is added for GLibC version < 2.5
+
 2011-08-25 Roman
 - !!!!:UI.VCAEngine: Object type to widget's attributes suport is added. Mostly object attributes pointed for use
     into a widget script for data store and interaction on a session time.

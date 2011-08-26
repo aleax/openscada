@@ -36,6 +36,7 @@
 #define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
 
+#include <unistd.h>
 #include <stdint.h>
 #include <math.h>
 #include <stdio.h>
