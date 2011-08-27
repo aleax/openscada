@@ -1800,11 +1800,11 @@ void Attr::set( const TVariant &val, bool strongPrev, bool sys )
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())
     {
-	case TFld::Integer:	return setI(val.getI(), strongPrev, sys);
-	case TFld::Real:	return setR(val.getR(), strongPrev, sys);
-	case TFld::Boolean:	return setB(val.getB(), strongPrev, sys);
-	case TFld::String:	return setS(val.getS(), strongPrev, sys);
-	case TFld::Object:	return setO(val.getO(), strongPrev, sys);
+	case TFld::Integer:	setI(val.getI(), strongPrev, sys);	break;
+	case TFld::Real:	setR(val.getR(), strongPrev, sys);	break;
+	case TFld::Boolean:	setB(val.getB(), strongPrev, sys);	break;
+	case TFld::String:	setS(val.getS(), strongPrev, sys);	break;
+	case TFld::Object:	setO(val.getO(), strongPrev, sys);	break;
     }
 }
 
@@ -1916,7 +1916,7 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 void Attr::setO( TVarObj *val, bool strongPrev, bool sys )
 {
     val->connect();
-    if(!flgGlob()&Attr::DirRead)
+    if(!(flgGlob()&Attr::DirRead))
         switch(fld().type())
         {
             case TFld::String:	setS(val->getStrXML(), strongPrev, sys);break;

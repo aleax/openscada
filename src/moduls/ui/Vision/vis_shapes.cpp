@@ -271,7 +271,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		case 5:
 		{
 		    QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(val.c_str(),Qt::MatchExactly);
-		    if( its.size() ) ((QListWidget*)shD->addrWdg)->setCurrentItem(its[0]);
+		    ((QListWidget*)shD->addrWdg)->setCurrentItem(its.size()?its[0]:NULL);
 		    break;
 		}
 		case 6: case 7:	((QAbstractSlider*)shD->addrWdg)->setValue(atoi(val.c_str()));	break;

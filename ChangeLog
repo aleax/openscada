@@ -1,6 +1,16 @@
+2011-08-27 Roman
+- FIX:TCntrNode: User API object function nodeAt() is fixed for separated address process.
+- FIX:TFunction: Modify flag set for "Object" type is fixed.
+- FIX:UI.VCAEngine: Object type attributes process is fixed.
+- FIX:UI.Vision: Selection clear on set no present value into items is fixed for "List" view of primitive "FormEl".
+- DAQ: Object type DAQ value display is added to OpenSCADA control interface, for now usable only for
+    UI.VCAEngine attributes.
+
+
 2011-08-26 Roman
 - SYS: ZLib check is added and SQLite check is changed into configure build system script.
 - SYS: Disable pthread_setaffinity() and policy SCHED_BATCH is added for GLibC version < 2.5
+
 
 2011-08-25 Roman
 - !!!!:UI.VCAEngine: Object type to widget's attributes suport is added. Mostly object attributes pointed for use

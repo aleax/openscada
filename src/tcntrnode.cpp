@@ -658,7 +658,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     {
 	try
 	{
-	    AutoHD<TCntrNode> nd = nodeAt(prms[0].getS());
+	    AutoHD<TCntrNode> nd = nodeAt(prms[0].getS(),0,(prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0);
 	    return new TCntrNodeObj(nd,user);
 	}
 	catch(TError)	{ }

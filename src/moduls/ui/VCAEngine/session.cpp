@@ -1494,13 +1494,14 @@ void SessWdg::calc( bool first, bool last )
 		setMdfChk(true);
 		TValFunc::calc();
 
-		//>> Load data from calc area
+		//>> Save data from calc area
 		for(int i_io = 4; i_io < ioSize( ); i_io++)
 		{
 		    if(func()->io(i_io)->rez().empty() || !ioMdf(i_io)) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(),0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(),1);
 		    attr = (sw_attr==".")?attrAt(s_attr):wdgAt(sw_attr).at().attrAt(s_attr);
+
 		    if(s_attr == "pgOpen" && attr.at().getB() != getB(i_io)) { pgOpenPrc = i_io; continue; }
 		    attr.at().set(get(i_io));
 		}
