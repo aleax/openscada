@@ -1618,7 +1618,7 @@ msgstr "Starten!"
 msgid "Error start subsystem <%s>."
 msgstr "Fehler beim Starten des Subsystems <%s>."
 
-msgid "Final started!"
+msgid "Final starting!"
 msgstr "Starten ist beendet"
 
 msgid "Stop!"

@@ -519,7 +519,7 @@ int TSYS::start(  )
 
     cfgFileScan( true );
 
-    mess_info(nodePath().c_str(),_("Final started!"));
+    mess_info(nodePath().c_str(),_("Final starting!"));
 
     unsigned int i_cnt = 1;
     mStopSignal = 0;

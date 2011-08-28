@@ -1599,7 +1599,7 @@ msgstr "Запуск!"
 msgid "Error start subsystem <%s>."
 msgstr "Помилка старту підсистеми <%s>."
 
-msgid "Final started!"
+msgid "Final starting!"
 msgstr "Запуск завершено!"
 
 msgid "Stop!"
