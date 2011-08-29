@@ -668,9 +668,9 @@ void TSocketOut::save_( )
 
 void TSocketOut::start()
 {
-    ResAlloc res( wres, true );
+    ResAlloc res(wres, true);
 
-    if( run_st ) return;
+    if(run_st) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -678,19 +678,19 @@ void TSocketOut::start()
     //> Connect to remote host
     string s_type = TSYS::strSepParse(addr(),0,':');
 
-    if( s_type == S_NM_TCP )		type = SOCK_TCP;
-    else if( s_type == S_NM_UDP ) 	type = SOCK_UDP;
-    else if( s_type == S_NM_UNIX )	type = SOCK_UNIX;
+    if(s_type == S_NM_TCP)	 type = SOCK_TCP;
+    else if(s_type == S_NM_UDP)  type = SOCK_UDP;
+    else if(s_type == S_NM_UNIX) type = SOCK_UNIX;
     else throw TError(nodePath().c_str(),_("Type socket <%s> error!"),s_type.c_str());
 
-    if( type == SOCK_TCP || type == SOCK_UDP )
+    if(type == SOCK_TCP || type == SOCK_UDP)
     {
 	memset(&name_in,0,sizeof(name_in));
 	name_in.sin_family = AF_INET;
 
 	string host = TSYS::strSepParse(addr(),1,':');
 	string port = TSYS::strSepParse(addr(),2,':');
-	if( host.size() )
+	if(host.size())
 	{
 	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
@@ -705,51 +705,52 @@ void TSocketOut::start()
 	else name_in.sin_port = 10001;
 
 	//> Create socket
-	if( type == SOCK_TCP )
+	if(type == SOCK_TCP)
 	{
-	    if( (sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1 )
+	    if((sock_fd = socket(PF_INET,SOCK_STREAM,0) )== -1)
 		throw TError(nodePath().c_str(),_("Error creation TCP socket: %s!"),strerror(errno));
 	    int vl = 1;
 	    setsockopt(sock_fd,SOL_SOCKET,SO_REUSEADDR,&vl,sizeof(int));
 	}
-	else if( type == SOCK_UDP )
+	else if(type == SOCK_UDP)
 	{
-	    if( (sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1 )
+	    if((sock_fd = socket(PF_INET,SOCK_DGRAM,0) )== -1)
 		throw TError(nodePath().c_str(),_("Error creation UDP socket: %s!"),strerror(errno));
 	}
 	//> Connect to socket
 	int flags = fcntl(sock_fd,F_GETFL,0);
 	fcntl(sock_fd,F_SETFL,flags|O_NONBLOCK);
 	int res = ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in));
-	if( res == -1 && errno == EINPROGRESS )
+	int res1;
+	if(res == -1 && errno == EINPROGRESS)
 	{
 	    struct timeval tv;
-	    socklen_t slen;
+	    socklen_t slen = sizeof(res);
 	    fd_set fdset;
 	    tv.tv_sec = tmCon()/1000; tv.tv_usec = 1000*(tmCon()%1000);
-	    FD_ZERO( &fdset ); FD_SET( sock_fd, &fdset );
-	    if( (res=select( sock_fd+1, NULL, &fdset, NULL, &tv )) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res ) res = 0;
+	    FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
+	    if((res=select(sock_fd+1, NULL, &fdset, NULL, &tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
 	    else res = -1;
 	}
-	if( res )
+	if(res)
 	{
 	    close(sock_fd);
 	    sock_fd = -1;
 	    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
 	}
     }
-    else if( type == SOCK_UNIX )
+    else if(type == SOCK_UNIX)
     {
 	string path = TSYS::strSepParse(addr(),1,':');
-	if( !path.size() ) path = "/tmp/oscada";
+	if(!path.size()) path = "/tmp/oscada";
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;
-	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
+	strncpy(name_un.sun_path,path.c_str(),sizeof(name_un.sun_path));
 
 	//> Create socket
-	if( (sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1)
+	if((sock_fd = socket(PF_UNIX,SOCK_STREAM,0) )== -1)
 	    throw TError(nodePath().c_str(),_("Error creation UNIX socket: %s!"),strerror(errno));
-	if( ::connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1 )
+	if(::connect(sock_fd, (sockaddr *)&name_un, sizeof(name_un)) == -1)
 	{
 	    close(sock_fd);
 	    sock_fd = -1;

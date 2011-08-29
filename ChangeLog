@@ -1,3 +1,8 @@
+2011-08-29 Roman
+- FIX:DB.MySQL: Key limit to 1000 (300 UTF8) symbols hack is added for alow DB copy from SQLite to MySQL.
+- !!!!:FIX:Transport.Sockets: No init length for return value of getsockopt() is fixed.
+
+
 2011-08-27 Roman
 - FIX:TCntrNode: User API object function nodeAt() is fixed for separated address process.
 - FIX:TFunction: Modify flag set for "Object" type is fixed.

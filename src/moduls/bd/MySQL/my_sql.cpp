@@ -600,6 +600,7 @@ void MTable::fieldFix( TConfig &cfg )
     string req = "ALTER TABLE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` DROP PRIMARY KEY, ";
 
     string pr_keys;
+    int keyCnt = 0;
     for( unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++ )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
@@ -608,6 +609,7 @@ void MTable::fieldFix( TConfig &cfg )
 	{
 	    pr_keys = pr_keys + (next_key?",`":"`") + TSYS::strEncode(u_cfg.name(),TSYS::SQL) + "`";
 	    next_key = true;
+	    keyCnt++;
 	}
 
 	for( i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
@@ -626,7 +628,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    {
 		case TFld::String:
 		    if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
-			f_tp = "varchar("+TSYS::int2str(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?200:255,u_cfg.fld().len())))+")";
+			f_tp = "varchar("+TSYS::int2str(vmax(1,vmin((u_cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,u_cfg.fld().len())))+")";
 		    else if( u_cfg.fld().len() < 65536 )
 			f_tp = "text";
 		    else f_tp = "mediumtext";
@@ -648,7 +650,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    {
 		req = req + (next?",CHANGE `":"CHANGE `") + TSYS::strEncode(cf_el[i_cf],TSYS::SQL) + "` `" + TSYS::strEncode(cf_el[i_cf],TSYS::SQL) + "` ";
 		next = true;
-		fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req);
+		fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req,keyCnt);
 	    }
 	}
 	//>> Add field
@@ -656,7 +658,7 @@ void MTable::fieldFix( TConfig &cfg )
 	{
 	    req = req + (next?",ADD `":"ADD `") + TSYS::strEncode(cf_el[i_cf],TSYS::SQL) + "` ";
 	    next = true;
-	    fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req);
+	    fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req,keyCnt);
 	}
 	//> Check other languages
 	if( u_cfg.fld().flg()&TCfg::TransltText )
@@ -669,7 +671,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    {
 			req = req + (next?",CHANGE `":"CHANGE `") + TSYS::strEncode(tblStrct[i_c][0],TSYS::SQL) + "` `" + TSYS::strEncode(tblStrct[i_c][0],TSYS::SQL) + "` ";
 			next = true;
-			fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req);
+			fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req,keyCnt);
 		    }
 		    if( tblStrct[i_c][0].substr(0,2) == Mess->lang2Code() ) col_cur = true;
 		}
@@ -677,7 +679,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    {
 		req = req + (next?",ADD `":"ADD `") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_cf],TSYS::SQL) + "` ";
 		next = true;
-		fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req);
+		fieldPrmSet(u_cfg,(i_cf>0)?cf_el[i_cf-1]:"",req,keyCnt);
 	    }
 	}
     }
@@ -695,7 +697,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    next = true;
 	}
     }
-    req = req + ",ADD PRIMARY KEY (" + pr_keys + ") ";
+    req += ",ADD PRIMARY KEY (" + pr_keys + ") ";
 
     if( next )
     {
@@ -706,14 +708,14 @@ void MTable::fieldFix( TConfig &cfg )
     }
 }
 
-void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req )
+void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt )
 {
     //> Type param
     switch(cfg.fld().type())
     {
 	case TFld::String:
 	    if( cfg.fld().len() < 256 || cfg.fld().flg()&TCfg::Key )
-		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?200:255,cfg.fld().len())))+") "+
+		req=req+"varchar("+SYS->int2str(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len())))+") "+
 			((cfg.fld().flg()&TCfg::Key)?"BINARY":"")+" NOT NULL DEFAULT '"+cfg.fld().def()+"' ";
 	    else if( cfg.fld().len() < 65536 )
 		req=req+"text NOT NULL ";// DEFAULT '"+cfg.fld().def()+"' ";

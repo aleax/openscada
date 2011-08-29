@@ -150,8 +150,8 @@ void Engine::postEnable( int flag )
 
     //> Make widget's IO DB structure
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
-    wdgio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
+    wdgio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
     wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
     wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30") );
@@ -159,8 +159,8 @@ void Engine::postEnable( int flag )
 
     //> Make widget's user IO DB structure
     wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
-    wdguio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
+    wdguio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
     wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"100") );
     wdguio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
     wdguio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
