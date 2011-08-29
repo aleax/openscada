@@ -1,4 +1,5 @@
 2011-08-29 Roman
+- FIX:SYS: Save to config file first table's item is fixed.
 - FIX:DB.MySQL: Key limit to 1000 (300 UTF8) symbols hack is added for alow DB copy from SQLite to MySQL.
 - !!!!:FIX:Transport.Sockets: No init length for return value of getsockopt() is fixed.
 

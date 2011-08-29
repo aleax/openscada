@@ -316,6 +316,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
 	vector<string> cf_el;
 	if(nd)
 	{
+	    cfg.cfgList(cf_el);
 	    if(nd->name() != "tbl")	nd->setName("tbl");
 	    //>> Search present field
 	    for(unsigned i_fld = 0, i_el; i_fld < nd->childSize(); i_fld++)
@@ -323,7 +324,6 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
 		XMLNode *el = nd->childGet(i_fld);
 		if(el->name() != "fld")	continue;
 		//Check keywords
-		cfg.cfgList(cf_el);
 		for(i_el = 0; i_el < cf_el.size(); i_el++)
 		    if(cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el])) break;
 		if(i_el == cf_el.size()) { wel = el; break; }
