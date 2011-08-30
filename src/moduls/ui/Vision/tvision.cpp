@@ -357,7 +357,9 @@ void TVision::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TUI::cntrCmdProc(opt);
+#if QT_VERSION >= 0x040600
 	if(mn_winds.size()) ctrMkNode("fld",opt,-1,"/prm/st/disp_n",_("Display number"),R_R_R_,"root",SUI_ID,1,"tp","dec");
+#endif
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
@@ -384,9 +386,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
+#if QT_VERSION >= 0x040600
     if(mn_winds.size() && a_path == "/prm/st/disp_n" && ctrChkNode(opt))
 	opt->setText(TSYS::int2str(QDesktopWidget().screenCount()));
-    else if(a_path == "/prm/cfg/start_user")
+    else
+#endif
+    if(a_path == "/prm/cfg/start_user")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
