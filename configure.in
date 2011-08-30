@@ -555,4 +555,7 @@ if test $GDuse = true; then
 	[AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
 fi
 
+# Clear libs list after PKG_CHECK_MODULES
+LIBS=""
+
 AC_OUTPUT
