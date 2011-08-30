@@ -173,6 +173,7 @@ class Reg
 	~Reg( );
 
 	Reg &operator=( Reg &irg );
+	void operator=( bool ivar )		{ setType(Bool);	el.b_el = ivar; }
 	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
 	void operator=( int ivar )		{ setType(Int);		el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Real);	el.r_el = ivar; }

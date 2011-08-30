@@ -226,37 +226,37 @@ class TSYS : public TCntrNode
 	//> Unaligned read from memory for some ARM and other
 	static inline uint16_t getUnalign16(const void *p)
 	{
-	    struct su16 { uint16_t x __attribute__((packed)); };
+	    struct su16 { uint16_t x; } __attribute__((packed));
 	    const struct su16 *ptr = (const struct su16 *)p;
 	    return ptr->x;
 	}
 	static inline uint32_t getUnalign32(const void *p)
 	{
-	    struct su32 { uint32_t x __attribute__((packed)); };
+	    struct su32 { uint32_t x; } __attribute__((packed));
 	    const struct su32 *ptr = (const struct su32 *)p;
 	    return ptr->x;
 	}
 	static inline uint64_t getUnalign64(const void *p)
 	{
-	    struct su64 { uint64_t x __attribute__((packed)); };
+	    struct su64 { uint64_t x; } __attribute__((packed));
 	    const struct su64 *ptr = (const struct su64 *)p;
 	    return ptr->x;
 	}
 	static inline int getUnalignInt(const void *p)
 	{
-	    struct suInt { int x __attribute__((packed)); };
+	    struct suInt { int x; } __attribute__((packed));
 	    const struct suInt *ptr = (const struct suInt *)p;
 	    return ptr->x;
 	}
 	static inline float getUnalignFloat(const void *p)
 	{
-	    struct sFloat64 { float x __attribute__((packed)); };
+	    struct sFloat64 { float x; } __attribute__((packed));
 	    const struct sFloat64 *ptr = (const struct sFloat64 *)p;
 	    return ptr->x;
 	}
 	static inline double getUnalignDbl(const void *p)
 	{
-	    struct sDbl { double x __attribute__((packed)); };
+	    struct sDbl { double x; } __attribute__((packed));
 	    const struct sDbl *ptr = (const struct sDbl *)p;
 	    return ptr->x;
 	}

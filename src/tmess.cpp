@@ -53,11 +53,12 @@ TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2), mConvCode(tr
     textdomain(PACKAGE);
 
     mLang2Code = lang();
-    if( mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C" ) mLang2Code = "en";
+    if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
     else mLang2Code = mLang2Code.substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    if(mLang2Code == "en" && IOCharSet.compare(0,10,"ISO-8859-1")==0) mConvCode = false;
+    if(mLang2Code == "en" && (IOCharSet.compare(0,10,"ISO-8859-1")==0 || IOCharSet.compare(0,14,"ANSI_X3.4-1968")==0))
+	mConvCode = false;
 }
 
 TMess::~TMess(  )

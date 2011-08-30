@@ -1,4 +1,8 @@
 2011-08-30 Roman
+- !:DB: Save and load big table's fields fro text of included tag with field name is added.
+- SYS: No translated system charset "ANSI_X3.4-1968" is added.
+- !!!!:FIX: The functions getUnalign*() for unaligned access on ARM and like is fixed. Detected on PXA270.
+- FIX:DAQ.JavaLikeCal: The user's object function real::toFixed() is fixed to all width process for signed values.
 - UI.Vision: New demands for QT 4.6 and more is wrapped.
 
 

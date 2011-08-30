@@ -1225,7 +1225,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    double val = vl.getR();
 		    bool sign = (val < 0 || (prms.size() >= 3 && prms[2].getB()));
 		    int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : 0;
-		    int w = (prms.size() >= 2) ? vmin(100,prms[1].getI()) - (int)sign : 0;
+		    int w = (prms.size() >= 2) ? vmin(100,prms[1].getI()) : 0;
 		    return TSYS::strMess((sign?"%+0*.*f":"%0*.*f"),w,n,val);
 		}
 		// string toPrecision(int prec = -1) - return the string of the formatted number with the number of significant digits <prec>

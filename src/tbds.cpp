@@ -183,14 +183,16 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     if(path.size())
     {
 	ResAlloc res(SYS->nodeRes(),false);
-	XMLNode *nd = SYS->cfgNode(path);
+	XMLNode *nd, *fnd, *el;
+	string vl, vl_tr;
+	vector<string> cf_el;
+
+	nd = SYS->cfgNode(path);
 	for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++)
 	{
-	    XMLNode *el = nd->childGet(i_fld);
+	    el = nd->childGet(i_fld);
 	    if(el->name() == "fld")
 	    {
-		//> Check keywords
-		vector<string> cf_el;
 		cfg.cfgList(cf_el);
 
 		//> Check keywords
@@ -203,13 +205,19 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 		    for(i_el = 0; i_el < cf_el.size(); i_el++)
 		    {
 			TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-			u_cfg.setS(el->attr(cf_el[i_el]));
+			vl = el->attr(cf_el[i_el]);
+			//>> Check for field's tag, for store big values
+			if(vl.empty() && (fnd=el->childGet(cf_el[i_el],0,true))) vl = fnd->text(true);
+			//>> Check for translation
 			if(!cfg.noTransl() && u_cfg.fld().flg()&TCfg::TransltText &&
 			    (Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()))
 			{
-			    string vl = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
-			    if(!vl.empty()) u_cfg.setS(vl);
+			    vl_tr = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
+			    //>> Check for field's tag, for store big values
+			    if(vl_tr.empty() && (fnd=el->childGet(cf_el[i_el]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
+			    if(!vl_tr.empty()) vl = vl_tr;
 			}
+			u_cfg.setS(vl);
 		    }
 		    return true;
 		}
@@ -254,18 +262,21 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 
     //> Load from Config file if tbl no present
     ResAlloc res(SYS->nodeRes(),false);
-    XMLNode *nd = SYS->cfgNode(path);
+    XMLNode *nd, *fnd, *el;
+    string vl, vl_tr;
+    vector<string> cf_el;
+
+    nd = SYS->cfgNode(path);
 
     //>> Scan fields and fill Config
     for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++)
     {
-	XMLNode *el = nd->childGet(i_fld);
+	el = nd->childGet(i_fld);
 	if(el->name() == "fld")
 	{
-	    //Check keywords
-	    vector<string> cf_el;
 	    cfg.cfgList(cf_el);
 
+	    //Check keywords
 	    for(i_el = 0; i_el < cf_el.size(); i_el++)
 		if(cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key &&
 		    cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el])) break;
@@ -274,13 +285,19 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 		for(i_el = 0; i_el < cf_el.size(); i_el++)
 		{
 		    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-		    u_cfg.setS(el->attr(cf_el[i_el]));
+		    vl = el->attr(cf_el[i_el]);
+		    //>> Check for field's tag, for store big values
+		    if(vl.empty() && (fnd=el->childGet(cf_el[i_el],0,true))) vl = fnd->text(true);
+		    //>> Check for translation
 		    if(!cfg.noTransl() && u_cfg.fld().flg()&TCfg::TransltText &&
 			(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()))
 		    {
-			string vl = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
-			if(!vl.empty()) u_cfg.setS(vl);
+			vl_tr = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
+			//>> Check for field's tag, for store big values
+			if(vl_tr.empty() && (fnd=el->childGet(cf_el[i_el]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
+			if(!vl_tr.empty()) vl = vl_tr;
 		    }
+		    u_cfg.setS(vl);
 		}
 		return true;
 	    }
@@ -311,9 +328,12 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
     if(TSYS::strParse(bdn,0,".") == "<cfg>")
     {
 	ResAlloc res(SYS->nodeRes(),false);
-	XMLNode *nd = SYS->cfgNode(path,true);
-	XMLNode *wel = NULL;
+	XMLNode *nd, *wel = NULL, *fnd;
 	vector<string> cf_el;
+	string vnm;
+
+	nd = SYS->cfgNode(path,true);
+
 	if(nd)
 	{
 	    cfg.cfgList(cf_el);
@@ -332,11 +352,39 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
 	    if(!wel) wel = nd->childAdd("fld");
 	    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
 	    {
-		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+		vnm = cf_el[i_el];
+		TCfg &u_cfg = cfg.cfg(vnm);
 		bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && !u_cfg.noTransl() &&
 				Mess->lang2CodeBase().size() && Mess->lang2Code() != Mess->lang2CodeBase());
-		if(isCreate || !isTransl) wel->setAttr(cf_el[i_el], u_cfg.getS());
-		if(isTransl) wel->setAttr(cf_el[i_el]+"_"+Mess->lang2Code(), u_cfg.getS());
+		if(isCreate || !isTransl)
+		{
+		    if(u_cfg.getS().size() < 100)
+		    {
+			wel->setAttr(vnm, u_cfg.getS());
+			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
+		    }
+		    else
+		    {
+			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
+			fnd->setText(u_cfg.getS(),true);
+			wel->setAttr(vnm,"");
+		    }
+		}
+		if(isTransl)
+		{
+		    vnm = cf_el[i_el]+"_"+Mess->lang2Code();
+		    if(u_cfg.getS().size() < 100)
+		    {
+			wel->setAttr(vnm, u_cfg.getS());
+			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
+		    }
+		    else
+		    {
+			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
+			fnd->setText(u_cfg.getS(),true);
+			wel->setAttr(vnm,"");
+		    }
+		}
 	    }
 	    SYS->modifCfg();
 	    return true;
