@@ -110,7 +110,7 @@ class ConfApp: public QMainWindow
 	void treeSearch( );
 
 	//> QTabWidget
-	void tabSelect( QWidget *wdg );			//Change curent widget
+	void tabSelect( int idx );			//Change curent tab
 
 	//> Self widget's slots
 	void checkBoxStChange( int stat );		//QCheckBox

@@ -1,4 +1,6 @@
 2011-09-01 Roman
+- FIX:UI.QTCfg: The QWidgetTab signal currentChanged(QWidget*), from QT3 compatibility, is replaced to native currentChanged(int) signal.
+    Detected on Nokia N950.
 - SYS: EDEADLK processing hack is added for pthread_rwlock_wrlock() for fix GLibC 2.3.2 (< 2.5).
 - DB.FireBird, DB.PostgreSQL, DB.SQLite: EDEADLK and TError call for resources is prevented for transactions processing.
 

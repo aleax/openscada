@@ -154,7 +154,7 @@ ConfApp::ConfApp( string open_user ) :
     //> Create the tabulator
     tabs = new QTabWidget( gFrame );
     tabs->setWhatsThis(_("Tabulated configuration pages."));
-    connect( tabs, SIGNAL( currentChanged(QWidget*) ), this, SLOT( tabSelect(QWidget*) ) );
+    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabSelect(int)));
     gFrameLayout->addWidget( tabs, 1, 0, 1, 2 );
 
     QList<int> splSz;
@@ -2069,7 +2069,7 @@ void ConfApp::ctrTreePopup( )
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::tabSelect( QWidget *wdg )
+void ConfApp::tabSelect( int idx )
 {
     try
     {
