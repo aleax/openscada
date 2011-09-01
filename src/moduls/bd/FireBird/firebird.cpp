@@ -258,9 +258,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(tbl) tbl->clear();
     if(!enableStat()) return;
 
-    ResAlloc res(conn_res,true);
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && htrans)		transCommit();
+
+    ResAlloc res(conn_res,true);
 
     XSQLDA  *out_sqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
     out_sqlda->version = SQLDA_VERSION1;

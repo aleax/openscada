@@ -48,6 +48,9 @@ class Res
 
     private:
 	pthread_rwlock_t	rwc;
+#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+	pthread_t		wThr;
+#endif
 };
 
 //********************************************

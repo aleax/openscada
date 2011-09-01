@@ -31,6 +31,9 @@ using namespace OSCADA;
 //********************************************
 Res::Res( )
 {
+#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+    wThr = 0;
+#endif
     if(pthread_rwlock_init(&rwc,NULL))
 	throw TError("ResAlloc",_("Error open semaphor!"));
 }
@@ -44,6 +47,11 @@ Res::~Res( )
 void Res::resRequestW( unsigned short tm )
 {
     int rez = 0;
+#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+    //EDEADLK imitation
+    if(wThr && wThr == pthread_self()) rez == EDEADLK;
+    else
+#endif
     if(!tm) rez = pthread_rwlock_wrlock(&rwc);
     else
     {
@@ -55,6 +63,9 @@ void Res::resRequestW( unsigned short tm )
     }
     if(rez == EDEADLK) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResAlloc",_("Resource is timeouted!"));
+#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+    wThr = pthread_self();
+#endif
 }
 
 bool Res::resTryW( )
@@ -92,6 +103,9 @@ bool Res::resTryR( )
 void Res::resRelease( )
 {
     pthread_rwlock_unlock(&rwc);
+#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+    if(wThr == pthread_self()) wThr = 0;
+#endif
 }
 
 //********************************************

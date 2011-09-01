@@ -213,7 +213,7 @@ void MBD::disable( )
     if(reqCnt) transCommit();
 
     ResAlloc resource(conn_res,true);
-    PQfinish( connection );
+    PQfinish(connection);
 }
 
 void MBD::allowList( vector<string> &list )
@@ -300,9 +300,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
 
+    if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
+    else if(!intoTrans && reqCnt)		transCommit();
+
     ResAlloc resource(conn_res,true);
-    if( intoTrans && intoTrans != EVAL_BOOL )	transOpen();
-    else if( !intoTrans && reqCnt )	transCommit();
 
     if( PQstatus( connection ) != CONNECTION_OK  )
     {

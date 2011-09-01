@@ -146,15 +146,15 @@ void MBD::enable( )
 
 void MBD::disable( )
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
     //> Last commit
-    if( reqCnt ) transCommit();
+    if(reqCnt) transCommit();
 
     TBD::disable( );
 
     //> Close DB
-    ResAlloc res(conn_res,true);
+    ResAlloc res(conn_res, true);
     sqlite3_close(m_db);
 }
 
@@ -187,9 +187,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     //> Commit set
     string req = ireq;
-    ResAlloc res(conn_res,true);
+
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
+
+    ResAlloc res(conn_res,true);
 
     //> Put request
     rc = sqlite3_get_table(m_db,Mess->codeConvOut(cd_pg.c_str(),req).c_str(),&result, &nrow, &ncol, &zErrMsg);
@@ -221,28 +223,31 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 void MBD::transOpen( )
 {
     //> Check for limit into one trinsaction
-    if( reqCnt > 1000 ) transCommit( );
+    if(reqCnt > 1000) transCommit();
 
-    ResAlloc resource(conn_res,true);
-    if( !reqCnt )
-    {
-	sqlReq("BEGIN;");
-	trOpenTm = time(NULL);
-    }
+    conn_res.resRequestW();
+    bool begin = !reqCnt;
+    if(begin) trOpenTm = time(NULL);
     reqCnt++;
     reqCntTm = time(NULL);
+    conn_res.resRelease();
+
+    if(begin) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
-    ResAlloc resource(conn_res,true);
-    if( reqCnt ) sqlReq("COMMIT;");
+    conn_res.resRequestW();
+    bool commit = reqCnt;
     reqCnt = reqCntTm = 0;
+    conn_res.resRelease();
+
+    if(commit) sqlReq("COMMIT;");
 }
 
 void MBD::transCloseCheck( )
 {
-    if( enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60) )
+    if(enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60))
 	transCommit();
 }
 

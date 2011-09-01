@@ -1,5 +1,10 @@
+2011-09-01 Roman
+- SYS: EDEADLK processing hack is added for pthread_rwlock_wrlock() for fix GLibC 2.3.2 (< 2.5).
+- DB.FireBird, DB.PostgreSQL, DB.SQLite: EDEADLK and TError call for resources is prevented for transactions processing.
+
+
 2011-08-30 Roman
-- !:DB: Save and load big table's fields fro text of included tag with field name is added.
+- !:DB: Save and load big table's fields for text by included tag with field name is added.
 - SYS: No translated system charset "ANSI_X3.4-1968" is added.
 - !!!!:FIX: The functions getUnalign*() for unaligned access on ARM and like is fixed. Detected on PXA270.
 - FIX:DAQ.JavaLikeCal: The user's object function real::toFixed() is fixed to all width process for signed values.
