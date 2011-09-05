@@ -732,6 +732,8 @@ void TMdContr::connectRemotePLC( )
 		close(fds.wfd);
 		delete dc;
 		delete di;
+		dc = NULL;
+		di = NULL;
 		throw TError(nodePath().c_str(),_("Connection to PLC error."));
 	    }
 
