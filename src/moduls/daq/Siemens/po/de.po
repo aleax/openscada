@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:50+0300\n"
+"POT-Creation-Date: 2011-09-05 11:57+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -208,6 +208,9 @@ msgstr " : Aktive Station"
 msgid " : Passive station"
 msgstr " : Passive Station"
 
+msgid "Connection error."
+msgstr "Fehler beim Anschluss."
+
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
@@ -261,9 +264,8 @@ msgstr "18:Master ist nicht Teil des logischen Rings."
 msgid "20:Specified offset address or DB error."
 msgstr "20:Fehler im vorgegebenen Offset oder in der Datenbank."
 
-#, c-format
-msgid "Read block '%d' error: %d"
-msgstr "Fehler beim Lesen des Blocks '%d': %d"
+msgid "Read block '%d' error: %s"
+msgstr "Fehler beim Lesen des Blocks '%d': %s"
 
 msgid "Read DB from controller error."
 msgstr "Fehler beim Lesen der Datenbank aus dem Kontroller."
@@ -274,9 +276,8 @@ msgstr "16:Übermittelter Block ist zu gross."
 msgid "13:Getting request is timeouted."
 msgstr "13:Zeitüberschreitung beim Empfang der Anfrage."
 
-#, c-format
-msgid "Write block '%d' error: %d"
-msgstr "Fehler beim Schreibens des Blocks '%d': %d"
+msgid "Write block '%d' error: %s"
+msgstr "Fehler beim Schreibens des Blocks '%d': %s"
 
 msgid "Write DB to controller error."
 msgstr "Fehler beim Schreiben der Datenbank in den Kontroller"

@@ -224,7 +224,7 @@ class TMdContr: public TController
 		int db;			//Data block
 		int off;		//Data block start offset
 		string val;		//Data block values kadr
-		string err;		//Acquisition error text
+		ResString err;		//Acquisition error text
 	};
 
 	//Attributes
@@ -239,7 +239,9 @@ class TMdContr: public TController
 
 	bool	prc_st,			// Process task active
 		call_st,        	// Calc now stat
-		endrun_req;		// Request to stop of the Process task
+		endrun_req,		// Request to stop of the Process task
+		toReconect,
+		isReload;
 	vector< AutoHD<TMdPrm> > pHd;	// Parameter's process list
 	vector< SDataRec > acqBlks;	// Acquisition data blocks
 	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode

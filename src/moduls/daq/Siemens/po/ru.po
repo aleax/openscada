@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:50+0300\n"
+"POT-Creation-Date: 2011-09-05 11:57+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -203,6 +203,9 @@ msgstr " : Активная станция"
 msgid " : Passive station"
 msgstr " : Пассивная станция"
 
+msgid "Connection error."
+msgstr "Ошибка подключения."
+
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
@@ -256,9 +259,8 @@ msgstr "18:Мастер не внутри логического кольца."
 msgid "20:Specified offset address or DB error."
 msgstr "20:Ошибка в указанном смещении или БД."
 
-#, c-format
-msgid "Read block '%d' error: %d"
-msgstr "Ошибка чтения блока '%d': %d"
+msgid "Read block '%d' error: %s"
+msgstr "Ошибка чтения блока '%d': %s"
 
 msgid "Read DB from controller error."
 msgstr "Ошибка чтения БД из контроллера."
@@ -269,9 +271,8 @@ msgstr "16:Передаваемый блок очень большой."
 msgid "13:Getting request is timeouted."
 msgstr "13:Истекло время ожидания получения сообщения."
 
-#, c-format
-msgid "Write block '%d' error: %d"
-msgstr "Ошибка записи блока '%d': %d"
+msgid "Write block '%d' error: %s"
+msgstr "Ошибка записи блока '%d': %s"
 
 msgid "Write DB to controller error."
 msgstr "Ошибка записи БД в контроллер"

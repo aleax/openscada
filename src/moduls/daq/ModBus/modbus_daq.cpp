@@ -937,7 +937,7 @@ bool TMdPrm::isStd( )		{ return type().name == "std"; }
 
 bool TMdPrm::isLogic( )		{ return type().name == "logic"; }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if(enableStat() && !owner().isReload) return;
 

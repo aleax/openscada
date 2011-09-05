@@ -1,3 +1,7 @@
+2011-09-05 Roman
+- !!:FIX:DAQ.Siemens: Reconnect support is added for "Industrial Ethernet" connections. Template's link update is fixed for clear.
+
+
 2011-09-01 Roman
 - FIX:UI.QTCfg: The QWidgetTab signal currentChanged(QWidget*), from QT3 compatibility, is replaced to native currentChanged(int) signal.
     Detected on Nokia N950.
