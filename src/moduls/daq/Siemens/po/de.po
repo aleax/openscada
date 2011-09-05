@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-05 11:57+0300\n"
+"POT-Creation-Date: 2011-09-05 13:49+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -264,11 +264,12 @@ msgstr "18:Master ist nicht Teil des logischen Rings."
 msgid "20:Specified offset address or DB error."
 msgstr "20:Fehler im vorgegebenen Offset oder in der Datenbank."
 
+#, c-format
 msgid "Read block '%d' error: %s"
 msgstr "Fehler beim Lesen des Blocks '%d': %s"
 
-msgid "Read DB from controller error."
-msgstr "Fehler beim Lesen der Datenbank aus dem Kontroller."
+msgid "12:Read DB '%d' from controller error: %s"
+msgstr "12:Fehler beim Lesen der Datenbank '%d' aus dem Kontroller: %s"
 
 msgid "16:Transmitted block is too big."
 msgstr "16:Übermittelter Block ist zu gross."
@@ -276,11 +277,12 @@ msgstr "16:Übermittelter Block ist zu gross."
 msgid "13:Getting request is timeouted."
 msgstr "13:Zeitüberschreitung beim Empfang der Anfrage."
 
+#, c-format
 msgid "Write block '%d' error: %s"
 msgstr "Fehler beim Schreibens des Blocks '%d': %s"
 
-msgid "Write DB to controller error."
-msgstr "Fehler beim Schreiben der Datenbank in den Kontroller"
+msgid "12:Write DB '%d' to controller error: %s"
+msgstr "12:Fehler beim Schreiben der Datenbank '%d' in den Kontroller: %s"
 
 msgid "11:Value is not gathered."
 msgstr "11:Wert wurde nicht erfasst."

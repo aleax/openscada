@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-05 11:57+0300\n"
+"POT-Creation-Date: 2011-09-05 13:49+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -259,11 +259,12 @@ msgstr "18:Майстер не в середині логічного кола."
 msgid "20:Specified offset address or DB error."
 msgstr "20:Помилка у вказанному DB або у адресі."
 
+#, c-format
 msgid "Read block '%d' error: %s"
 msgstr "Помилка читання блока '%d': %s"
 
-msgid "Read DB from controller error."
-msgstr "Помилка запиту до БД контролера."
+msgid "12:Read DB '%d' from controller error: %s"
+msgstr "12:Помилка запиту до БД '%d' контролера: %s"
 
 msgid "16:Transmitted block is too big."
 msgstr "16:Передаваємий блок дуже великий."
@@ -271,11 +272,12 @@ msgstr "16:Передаваємий блок дуже великий."
 msgid "13:Getting request is timeouted."
 msgstr "13:Вийшов час очікування отримання запиту."
 
+#, c-format
 msgid "Write block '%d' error: %s"
 msgstr "Помилка запису блока '%d': %s"
 
-msgid "Write DB to controller error."
-msgstr "Помилка запису до БД контролера."
+msgid "12:Write DB '%d' to controller error: %s"
+msgstr "12:Помилка запису до БД '%d' контролера: %s"
 
 msgid "11:Value is not gathered."
 msgstr "11:Значення не отримані."

@@ -884,7 +884,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	case ISO_TCP:
 	{
 	    //> Reconnect for lost connection
-	    if(toReconect) { connectRemotePLC(); toReconect = false; }
+	    if(!dc || toReconect) { connectRemotePLC(); toReconect = false; }
 	    //> Full libnodave API
 	    int rez;
 	    ResAlloc res(reqRes, true);
@@ -892,7 +892,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    {
 		if(rez == daveResTimeout) toReconect = true;
 		mess_debug(nodePath().c_str(),_("Read block '%d' error: %s"),n_db,daveStrerror(rez));
-		throw TError(nodePath().c_str(),_("Read DB from controller error."));
+		throw TError(nodePath().c_str(),_("12:Read DB '%d' from controller error: %s"),n_db,daveStrerror(rez));
 	    }
 	    buffer.assign((char*)dc->resultPointer,buffer.size());
 
@@ -1005,7 +1005,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	}
 	case ISO_TCP:
 	    //> Reconnect for lost connection
-	    if(toReconect) { connectRemotePLC(); toReconect = false; }
+	    if(!dc || toReconect) { connectRemotePLC(); toReconect = false; }
 
 	    //> Full Libnodave API
 	    int rez;
@@ -1014,7 +1014,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    {
 		if(rez == daveResTimeout) toReconect = true;
 		mess_debug(nodePath().c_str(),_("Write block '%d' error: %s"),n_db,daveStrerror(rez));
-		throw TError(nodePath().c_str(),_("Write DB to controller error."));
+		throw TError(nodePath().c_str(),_("12:Write DB '%d' to controller error: %s"),n_db,daveStrerror(rez));
 	    }
 
 	    //> Self OpenSCADA API
