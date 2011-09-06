@@ -7,15 +7,22 @@
  * This is included by slot.c.
  */
 //for 8k/5k/2k by cindy 20080910
-extern void SetLED(unsigned int bFlag);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern void SetLED(unsigned int addr,unsigned int value);
+//extern void SetLED(unsigned int bFlag);
 extern int GetBackPlaneID(); //getport 9 0 
 extern int GetSlotCount();   //getport 9 35
 extern int GetDIPswitch();   //getport 9 1 
 extern int GetRotaryID(int slot);
 extern float GetSDKversion(void);
 
-extern unsigned char inb(unsigned int slot,unsigned int offset);
-extern void outb(unsigned int slot,unsigned int offset, unsigned char data);
+extern unsigned int inb(unsigned int slot,unsigned int offset);
+//extern unsigned char inb(unsigned int slot,unsigned int offset);
+extern void outb(unsigned int slot,unsigned int offset, unsigned int data);
+//extern void outb(unsigned int slot,unsigned int offset, unsigned char data);
 extern int setSignal(int slot,int signal,pid_t pid);
 extern int GetModuleType(int slot);
 extern void ChangeToSlot(int slot);
@@ -81,13 +88,11 @@ extern void I8017_SetLed(int slot,unsigned led);
 extern int I8017_Init(int slot);
 extern void I8017_SetChannelGainMode(int slot,int ch,int gain,int mode);
 extern int I8017_GetCurAdChannel_Hex(int slot);
-extern int I8017HW_GetCurAdChannel_Hex(int slot);
 extern int I8017_Hex_Cal(int data);
 extern int I8017_Hex_Cal_Slot_Gain(int slot,int gain,int data);
 extern int I8017_GetCurAdChannel_Hex_Cal(int slot);
 extern float I8017_GetCurAdChannel_Float_Cal(int slot);
 extern int I8017_AD_POLLING(int slot,int ch,int gain,unsigned int datacount,int *DataPtr);
-extern int I8017HW_AD_POLLING(int slot,int ch,int gain,unsigned int datacount,int *DataPtr);
 extern int I8017_AD_POLLING_Cal(int slot,int ch,int gain,unsigned int datacount,int *DataPtr);
 extern void I8024_EE_WriteDisable(int slot,int offset);
 extern unsigned I8024_EE_Read(int slot,int Addr);
@@ -164,3 +169,6 @@ extern long GetTimeTicks_ms(void);
 #define	SLOT9	9
 #define	SLOT10	10
 
+#ifdef __cplusplus
+}
+#endif

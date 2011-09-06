@@ -860,7 +860,7 @@ void *TMdPrm::fastTask( void *iprm )
 	{
 	    c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
 	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
-	    vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017HW_GetCurAdChannel_Hex(prm.modSlot)/8000;
+	    vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017_GetCurAdChannel_Hex(prm.modSlot)/8000;
 	}
 	prm.owner().pBusRes.resRelease( );
 

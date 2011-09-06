@@ -905,7 +905,7 @@ void ConfApp::selectPage( const string &path )
 	next.clear();
 
 	//> Display page
-	pageDisplay( path );
+	pageDisplay(path);
     }
     catch(TError err)
     {
@@ -1936,7 +1936,7 @@ loadGenReqDate:
         genReqs.attrDel("fillMode");
         if(cntrIfCmd(genReqs))
         {
-    	    mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+    	    mod->postMess(genReqs.attr("mcat"),genReqs.text(),TUIMod::Error,this);
 	    genReqs.clear();
     	    return;
     	}
@@ -2240,7 +2240,8 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     //> Direct request
     if(TSYS::pathLev(node.attr("path"),0).empty()) sel_path = SYS->id();
     try { return SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString()); }
-    catch( TError err ) { node.childClear(); node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
+    catch(TError err)
+    { node.childClear(); node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
     return atoi(node.attr("rez").c_str());
 }

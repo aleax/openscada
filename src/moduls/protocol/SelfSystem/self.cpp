@@ -220,7 +220,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    return;
 	}
     }
-    catch( TError err )	{ tro.stop(); throw; }
+    catch(TError err) { tro.stop(); throw; }
 }
 
 void TProt::cntrCmdProc( XMLNode *opt )

@@ -24,6 +24,9 @@
  *    create
  *
  **********************************************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef _TIMER_H
 #define _TIMER_H
@@ -47,3 +50,7 @@ extern int _time_out(struct timeval *deadline);
 // extern int _set_timeout(long usec, __sighandler_t h_sigalrm);
 
 #endif							/* _TIMER_H */
+
+#ifdef __cplusplus
+}
+#endif

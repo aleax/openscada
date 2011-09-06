@@ -364,10 +364,14 @@ if test $ForDist = true -o $ModSoundCard = true; then
     AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE([LibPortaudio: Pass global library using])],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
 fi
-if test $ForDist = true || test $ModICP_DAS = true -a $ix86 = true; then
+if test $ForDist = true || test $ModICP_DAS = true -a $ix86 = true || test $ModICP_DAS = true -a $target_cpu = "arm"; then
     AC_MSG_RESULT(Build module: DAQ.ICP_DAS)
     AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
     DAQSub_mod="${DAQSub_mod}ICP_DAS "
+    #>> Modules checkings
+    ICP_DAS_LIBS="-L./ -li8k"
+    if test $target_cpu = "arm"; then ICP_DAS_LIBS="-L./ -li8k_arm"; fi
+    AC_SUBST(ICP_DAS_LIBS)
 fi
 if test $ForDist = true -o $ModOPC_UA = true; then
     AC_MSG_RESULT(Build module: DAQ.OPC_UA)

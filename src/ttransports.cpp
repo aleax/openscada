@@ -395,10 +395,10 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     int path_off = 0;
     string path = node.attr("path");
     string station = TSYS::pathLev(path,0,false,&path_off);
-    if( station.empty() ) station = SYS->id();
+    if(station.empty()) station = SYS->id();
     else node.setAttr("path",path.substr(path_off));
 
-    if( station == SYS->id() )
+    if(station == SYS->id())
     {
 	node.setAttr("user",(user.empty()?"root":user));
 	SYS->cntrCmd(&node);
@@ -409,7 +409,7 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     //> Connect to transport
     TTransportS::ExtHost host = extHostGet((user.empty()?"*":user),station);
     AutoHD<TTransportOut> tr = extHost(host,senderPref);
-    if( !tr.at().startStat() ) tr.at().start();
+    if(!tr.at().startStat()) tr.at().start();
 
     node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
     tr.at().messProtIO(node,"SelfSystem");
@@ -822,9 +822,9 @@ void TTransportOut::preEnable(int flag)
 
 void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 {
-    if( !SYS->protocol().at().modPresent(prot) )
+    if(!SYS->protocol().at().modPresent(prot))
 	throw TError(nodePath().c_str(),_("Transport protocol '%s' no present"),prot.c_str());
-    SYS->protocol().at().at(prot).at().outMess( io, *this );
+    SYS->protocol().at().at(prot).at().outMess(io, *this);
 }
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

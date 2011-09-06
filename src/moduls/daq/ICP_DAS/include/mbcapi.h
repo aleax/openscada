@@ -1,3 +1,9 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+ 
+
+
 /* ----------------------- Standard C Libs includes --------------------------*/
 #include <stdio.h>
 #include <string.h>
@@ -226,5 +232,7 @@ extern int mbTCP_W_RangeCode(int s,char sID,int iStartAddr,char rangeCode,
 				unsigned char *iRecBuf, int iBufLen ) ;
 				
 								
-				
+#ifdef __cplusplus
+}
+#endif				
 				

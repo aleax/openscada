@@ -1,8 +1,17 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //#define SLOT_MAX 8
 #define SLOT_MAX 9   //modify for linpac by cindy 20080912
 
 extern int slot_fd[SLOT_MAX];
+
+//#define _XW_	// 20090925 Cindy 
+
+#define _XW107_	107 
+//#define _XW305B_	305  
+#define _XW110_	110 
 
 //#define _X200_	200 
 #define _X201_	201 
@@ -17,6 +26,7 @@ extern int slot_fd[SLOT_MAX];
 #define _X303_	303 
 #define _X304_	304 
 #define _X305_	305 
+
 #define _X306_	306 
 //#define _X307_	307 
 #define _X308_	308 
@@ -52,3 +62,7 @@ int XEE_ReadNext(int Block);
 int XEE_MultiRead(int StartBlock,int StartAddr,int no,char *databuf);
 int XEE_RandomWrite(int Block,int Addr,int Data);
 int XEE_MultiWrite(int Block,int Addr,int no,char *Data);
+
+#ifdef __cplusplus
+}
+#endif

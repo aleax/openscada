@@ -12,6 +12,10 @@
 	0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF
 };*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 unsigned short UDIO_WriteConfig_16(int slot,unsigned short config); 
 /*
   Write 8050 Config
@@ -42,3 +46,6 @@ unsigned short UDIO_DI16(int slot);//1:ON , 0:OFF
   Slot: 0~7, the slot number where the I/O module is plugged into.
 */
 
+#ifdef __cplusplus
+	extern "C" {
+#endif

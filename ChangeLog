@@ -1,3 +1,8 @@
+2011-09-06 Roman
+- SYS, DAQ.ICP_DAS: ARM library libi8k_arm.a and build for ARM is added. libi8k.a for x86 is updated. Include files for i8k is updated.
+- FIX:UI.QTCfg: Message generate error on group request is fixed.
+
+
 2011-09-05 Roman
 - !!:FIX:DAQ.Siemens: Reconnect support is added for "Industrial Ethernet" connections. Template's link update is fixed for clear.
 

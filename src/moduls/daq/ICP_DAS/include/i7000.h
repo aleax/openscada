@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef _WIN32_WCE //Provided for WinCon
 	#define Exp7K I7000CE_API
 //	#define CALLBACK ""
@@ -1232,11 +1236,10 @@ Exp7K WORD CALLBACK SetConfiguration_7080(WORD dwBuf[], float fBuf[],
 
 
 
-
-
-
-
-
 //#ifdef _WIN32_WCE
 //	#endif  //__I7000_H__
 //#endif
+
+#ifdef __cplusplus
+}
+#endif

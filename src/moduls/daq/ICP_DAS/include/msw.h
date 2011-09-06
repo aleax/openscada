@@ -7,6 +7,10 @@
  *  Since 1999.10.27 by Reed Lai
  *
  **********************************************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
+ 
 /* *INDENT-OFF* */
 #ifndef _MSW_H
 #define _MSW_H
@@ -137,3 +141,7 @@ extern EXPORTS BOOL CALLBACK Close_Com(char port);
 #include "i8000.h"
 #include "i87000.h"
 #endif							/* _MSW_H */
+
+#ifdef __cplusplus
+}
+#endif
