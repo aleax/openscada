@@ -1,3 +1,9 @@
+2011-09-07 Roman
+- SYS, UI.VCAEngine: EDEADLK processing hack is added for pthread_rdlock_wrlock() for fix GLibC 2.3.2 (< 2.5).
+- !:SYS: Set DB to "<cvf>" for load only from config file for all OpenSCADA stored nodes.
+- !!:DAQ.Siemens. Libnodave library is updated to version 0.8.4.6.
+
+
 2011-09-06 Roman
 - SYS, DAQ.ICP_DAS: ARM library libi8k_arm.a and build for ARM is added. libi8k.a for x86 is updated. Include files for i8k is updated.
 - FIX:UI.QTCfg: Message generate error on group request is fixed.

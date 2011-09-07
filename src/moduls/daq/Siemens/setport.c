@@ -37,11 +37,12 @@ int setPort(char * name, char* baud,char parity)
 {
     int fd,res;
     struct termios oldtio, newtio;
-    fd = open(name,  O_RDWR | O_NOCTTY | O_NONBLOCK);
+//    fd = open(name,  O_RDWR | O_NOCTTY | O_NONBLOCK);
+    fd = open(name,  O_RDWR | O_NOCTTY);
 #if debug >3
     printf(ThisModule "%s = %d\n", name, fd);
 #endif
-    res=fcntl(fd, F_SETFL, 0x2000 /* FASYNC */ );
+//    res=fcntl(fd, F_SETFL, 0x2000 /* FASYNC */ );
 #if debug >3
     printf(ThisModule "fcntl: %s\n", strerror(errno));
 #endif
@@ -123,4 +124,8 @@ int closePort(int port){
     02/12/2002 change output statements to printf, this gives less code size.
     06/21/2002 	* got rid of some warnings
     10/04/2003	fixed an error with parity even
+Version 0.8.4.5
+    07/12/09  	Changed flags in setport.c. Older version does not work with recent Linux 
+		kernels.
+    
 */

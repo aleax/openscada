@@ -138,11 +138,11 @@ void TWEB::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_uPg",fld_cnt++,g_cfg); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+modId()+"_uPg",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !uPgPresent(id) )	uPgAdd(id,"*.*");
+		if(!uPgPresent(id))	uPgAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch(TError err)
     {

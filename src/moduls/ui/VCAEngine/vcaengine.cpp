@@ -314,7 +314,7 @@ void Engine::load_( )
 	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		if(!wlbPresent(l_id))	wlbAdd(l_id,"","*.*");
+		if(!wlbPresent(l_id))	wlbAdd(l_id,"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
 
 #if OSC_DEBUG >= 3
@@ -359,7 +359,7 @@ void Engine::load_( )
 	    for(int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
-		if(!prjPresent(prj_id))	prjAdd(prj_id,"","*.*");
+		if(!prjPresent(prj_id))	prjAdd(prj_id,"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
 
 #if OSC_DEBUG >= 3
@@ -430,6 +430,7 @@ void Engine::load_( )
 	    }catch(...){ }
 	}
     }catch(...){ }
+    res.release();
 
     modifGClr( );
 }

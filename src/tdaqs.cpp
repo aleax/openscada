@@ -147,11 +147,11 @@ void TDAQS::load_( )
 	    }
 
 	//>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"","*.*"));
+		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>"));
 	    }
     }catch( TError err )
     {
@@ -189,11 +189,11 @@ void TDAQS::load_( )
 		    }
 		}
 	    //>> Search into config file and create new controllers
-	    if( SYS->chkSelDB("<cfg>") )
-		for( int fld_cnt=0; SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
+	    if(SYS->chkSelDB("<cfg>"))
+		for(int fld_cnt = 0; SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
 		{
 		    string m_id = g_cfg.cfg("ID").getS();
-		    try { if( !wmod.at().present(m_id) ) wmod.at().add(m_id,"*.*"); }
+		    try { if(!wmod.at().present(m_id)) wmod.at().add(m_id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>"); }
 		    catch(TError err)
 		    {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());

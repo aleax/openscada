@@ -62,6 +62,7 @@ int openSocket(const int port, const char * peer) {
 //	(((port) & 0xff) << 8) | (((port) & 0xff00) >> 8);
 #ifndef DONT_USE_GETHOSTBYNAME
     he = gethostbyname(peer);
+    if (!he) return 0;  // bug reported by Nick Hibma
     memcpy(&addr.sin_addr, he->h_addr_list[0], sizeof(addr.sin_addr));
 #else
     inet_aton(peer, &addr.sin_addr);
@@ -105,6 +106,11 @@ int openSocket(const int port, const char * peer) {
     return fd;
 }
 
+int closeSocket(int h) {
+    return close(h);
+}
+
+
 #endif
 /*
     Changes: 
@@ -112,4 +118,7 @@ int openSocket(const int port, const char * peer) {
     04/07/2004  ported C++ version to C
     07/19/2004  removed unused vars.
     03/06/2005  added Hugo Meiland's includes for FreeBSD.
+Version 0.8.4.5    
+    07/10/09  	Added closeSocket()
+    
 */

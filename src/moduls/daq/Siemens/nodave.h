@@ -807,6 +807,10 @@ EXPORTSPEC int DECL2 endUpload(daveConnection*dc, int uploadID);
 */
 EXPORTSPEC int DECL2 daveStop(daveConnection*dc);
 EXPORTSPEC int DECL2 daveStart(daveConnection*dc);
+/*
+    PLC special commands
+*/    
+EXPORTSPEC int DECL2 daveCopyRAMtoROM(daveConnection*dc);
 
 EXPORTSPEC int DECL2 daveForce200(daveConnection * dc, int area, int start, int val);
 /*
@@ -1044,7 +1048,7 @@ EXPORTSPEC int DECL2 _daveSendMessageMPI3(daveConnection * dc, PDU * p);
     using S7 dlls for transporrt:
 */
 
-#pragma pack(push,1)
+#pragma pack(1)
 
 #ifndef BCCWIN  //We can use this under windows only, but avoid error messages
 #define HANDLE int    
@@ -1132,7 +1136,6 @@ EXPORTSPEC int DECL2 _daveDisconnectPLCNLpro(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveDisconnectAdapterNLpro(daveInterface * di);
 EXPORTSPEC int DECL2 _daveListReachablePartnersNLpro(daveInterface * di, char * buf);
 
-#pragma pack(pop)
 
 #endif /* _nodave */
 

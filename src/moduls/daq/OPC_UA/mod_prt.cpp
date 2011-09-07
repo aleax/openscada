@@ -122,7 +122,7 @@ void TProt::load_( )
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if(!epPresent(id)) epAdd(id,"*.*");
+		if(!epPresent(id)) epAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch(TError err)
     {

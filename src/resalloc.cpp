@@ -79,6 +79,11 @@ bool Res::resTryW( )
 void Res::resRequestR( unsigned short tm )
 {
     int rez = 0;
+#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+    //EDEADLK imitation
+    if(wThr && wThr == pthread_self()) rez == EDEADLK;
+    else
+#endif
     if(!tm) rez = pthread_rwlock_rdlock(&rwc);
     else
     {

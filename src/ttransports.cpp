@@ -146,11 +146,12 @@ void TTransportS::load_( )
 
 	//>>> Search into config file
 	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_in",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_in",fld_cnt++,c_el); )
 	    {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().inPresent(id)) at(type).at().inAdd(id,"*.*");
+		if(modPresent(type) && !at(type).at().inPresent(id))
+		    at(type).at().inAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
 
     }catch( TError err )
@@ -178,11 +179,12 @@ void TTransportS::load_( )
 	    }
 	//>>> Search into config file
 	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_out",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_out",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().outPresent(id)) at(type).at().outAdd(id,"*.*");
+		if(modPresent(type) && !at(type).at().outPresent(id))
+		    at(type).at().outAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch( TError err )
     {

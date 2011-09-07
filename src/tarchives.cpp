@@ -158,11 +158,12 @@ void TArchiveS::load_( )
 	    }
 	//>> Search into config file and create new archivators
 	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
-		if(modPresent(type) && !at(type).at().messPresent(id)) at(type).at().messAdd(id,"*.*");
+		if(modPresent(type) && !at(type).at().messPresent(id))
+		    at(type).at().messAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch( TError err )
     {
@@ -189,11 +190,12 @@ void TArchiveS::load_( )
 	    }
 	//>> Search into config file and create new archivators
 	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
-		if(modPresent(type) && !at(type).at().valPresent(id)) at(type).at().valAdd(id,"*.*");
+		if(modPresent(type) && !at(type).at().valPresent(id))
+		    at(type).at().valAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch( TError err )
     {
@@ -218,10 +220,10 @@ void TArchiveS::load_( )
 	    }
 	//>> Search into config file and create new archives
 	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
-		if(!valPresent(id)) valAdd(id,"*.*");
+		if(!valPresent(id)) valAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch(TError err)
     {

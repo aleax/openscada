@@ -273,10 +273,10 @@ void TipContr::load_( )
 
 	//>> Search into config file
 	if(SYS->chkSelDB("<cfg>"))
-	    for( int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el); )
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
-		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"","*.*"));
+		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>"));
 	    }
     }catch(TError err)
     {

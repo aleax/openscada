@@ -180,11 +180,11 @@ void TSecurity::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
-		if( !usrPresent(name) )	usrAdd(name,"*.*");
+		if(!usrPresent(name))	usrAdd(name,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch(TError err)
     {
@@ -209,11 +209,11 @@ void TSecurity::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
-		if( !grpPresent(name) )	grpAdd(name,"*.*");
+		if(!grpPresent(name))	grpAdd(name,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch(TError err)
     {

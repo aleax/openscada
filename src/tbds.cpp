@@ -71,9 +71,9 @@ void TBDS::dbList( vector<string> &ls, bool checkSel )
 {
     ls.clear();
 
-    if( checkSel && !SYS->selDB().empty() )
+    if(checkSel && !SYS->selDB().empty())
     {
-	if( SYS->selDB() != "<cfg>" ) ls.push_back(SYS->selDB());
+	if(SYS->selDB() != "<cfg>") ls.push_back(SYS->selDB());
 	return;
     }
 

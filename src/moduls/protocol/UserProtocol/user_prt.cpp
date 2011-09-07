@@ -122,11 +122,11 @@ void TProt::load_( )
 	    }
 
 	//>>> Search into config file
-	if( SYS->chkSelDB("<cfg>") )
-	    for( int fld_cnt=0; SYS->db().at().dataSeek("",nodePath()+modId()+"_uPrt",fld_cnt++,g_cfg); )
+	if(SYS->chkSelDB("<cfg>"))
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+modId()+"_uPrt",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !uPrtPresent(id) )	uPrtAdd(id,"*.*");
+		if(!uPrtPresent(id))	uPrtAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
 	    }
     }catch(TError err)
     {
