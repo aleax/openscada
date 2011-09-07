@@ -907,8 +907,8 @@ uint32_t TProt::iNu( const string &rb, int &off, char vSz )
 
 double TProt::iR( const string &rb, int &off, char vSz )
 {
-    if( vSz == 4 ) return TSYS::getUnalignFloat(iVal(rb,off,vSz));
-    else if( vSz == 8 ) return TSYS::getUnalignDbl(iVal(rb,off,vSz));
+    if(vSz == 4) return TSYS::floatLErev(TSYS::getUnalignFloat(iVal(rb,off,vSz)));
+    else if(vSz == 8) return TSYS::doubleLErev(TSYS::getUnalignDbl(iVal(rb,off,vSz)));
     throw TError(OpcUa_BadDecodingError,modPrt->nodePath().c_str(),_("Real number size '%d' error."),vSz);
 }
 
@@ -1067,8 +1067,8 @@ void TProt::oNu( string &buf, uint32_t val, char sz, int off )
 
 void TProt::oR( string &buf, double val, char sz )
 {
-    if( sz == 4 ) { float vl = val; buf.append( (char*)&vl, sz ); }
-    else if( sz == 8 ) buf.append( (char*)&val, sz );
+    if(sz == 4)		{ float vl = TSYS::floatLE(val); buf.append((char*)&vl, sz); }
+    else if(sz == 8)	{ val = TSYS::doubleLE(val); buf.append((char*)&val, sz); }
     else throw TError(OpcUa_BadEncodingError,modPrt->nodePath().c_str(),_("Real number size '%d' error."),sz);
 }
 

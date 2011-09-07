@@ -1048,7 +1048,7 @@ EXPORTSPEC int DECL2 _daveSendMessageMPI3(daveConnection * dc, PDU * p);
     using S7 dlls for transporrt:
 */
 
-#pragma pack(1)
+#pragma pack(push,1)
 
 #ifndef BCCWIN  //We can use this under windows only, but avoid error messages
 #define HANDLE int    
@@ -1136,6 +1136,7 @@ EXPORTSPEC int DECL2 _daveDisconnectPLCNLpro(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveDisconnectAdapterNLpro(daveInterface * di);
 EXPORTSPEC int DECL2 _daveListReachablePartnersNLpro(daveInterface * di, char * buf);
 
+#pragma pack(pop)
 
 #endif /* _nodave */
 

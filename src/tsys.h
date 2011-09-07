@@ -261,6 +261,12 @@ class TSYS : public TCntrNode
 	    return ptr->x;
 	}
 
+	//> Endian convert
+	static float floatLE(float in);
+	static float floatLErev(float in);
+	static double doubleLE(double in);
+	static double doubleLErev(double in);
+
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
 	const int argc;		//Comand line seting counter.

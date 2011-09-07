@@ -31,7 +31,7 @@ using namespace OSCADA;
 //********************************************
 Res::Res( )
 {
-#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+#if !__GLIBC_PREREQ(2,4)
     wThr = 0;
 #endif
     if(pthread_rwlock_init(&rwc,NULL))
@@ -47,7 +47,7 @@ Res::~Res( )
 void Res::resRequestW( unsigned short tm )
 {
     int rez = 0;
-#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+#if !__GLIBC_PREREQ(2,4)
     //EDEADLK imitation
     if(wThr && wThr == pthread_self()) rez == EDEADLK;
     else
@@ -63,7 +63,7 @@ void Res::resRequestW( unsigned short tm )
     }
     if(rez == EDEADLK) throw TError(10,"ResAlloc",_("Resource is try deadlock a thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResAlloc",_("Resource is timeouted!"));
-#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+#if !__GLIBC_PREREQ(2,4)
     wThr = pthread_self();
 #endif
 }
@@ -79,7 +79,7 @@ bool Res::resTryW( )
 void Res::resRequestR( unsigned short tm )
 {
     int rez = 0;
-#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+#if !__GLIBC_PREREQ(2,4)
     //EDEADLK imitation
     if(wThr && wThr == pthread_self()) rez == EDEADLK;
     else
@@ -108,7 +108,7 @@ bool Res::resTryR( )
 void Res::resRelease( )
 {
     pthread_rwlock_unlock(&rwc);
-#if defined(__GLIBC_PREREQ) && !__GLIBC_PREREQ(2,5)
+#if !__GLIBC_PREREQ(2,4)
     if(wThr == pthread_self()) wThr = 0;
 #endif
 }

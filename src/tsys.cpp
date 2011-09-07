@@ -19,7 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
+#include <features.h>
+#include <ieee754.h>
 #include <syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -67,7 +68,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //> Init system clock
     clkCalc();
 
-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
+#if __GLIBC_PREREQ(2,4)
     //> Multi CPU allow check
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
@@ -1168,7 +1169,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     prior.sched_priority = 0;
 
     int policy = SCHED_OTHER;
-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
+#if __GLIBC_PREREQ(2,4)
     if(priority < 0)	policy = SCHED_BATCH;
 #endif
     if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
@@ -1263,7 +1264,7 @@ void *TSYS::taskWrap( void *stas )
     tsk->policy = policy;
     tsk->prior = param.sched_priority;
 
-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
+#if __GLIBC_PREREQ(2,4)
     //> Load and init CPU set
     if(SYS->multCPU() && !(tsk->flgs & STask::Detached))
     {
@@ -1719,8 +1720,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/stat",_("Status"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
-		if( multCPU( ) )
+#if __GLIBC_PREREQ(2,4)
+		if(multCPU())
 		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
 #endif
 	    }
@@ -1880,7 +1881,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		{
 		    string plcVl = _("Standard");
 		    if(it->second.policy == SCHED_RR) plcVl = _("Round-robin");
-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
+#if __GLIBC_PREREQ(2,4)
 		    if(it->second.policy == SCHED_BATCH) plcVl = _("Style \"batch\"");
 #endif
 		    n_plc->childAdd("el")->setText(plcVl);
@@ -1889,7 +1890,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_cpuSet)	n_cpuSet->childAdd("el")->setText(it->second.cpuSet);
 	    }
 	}
-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2,5)
+#if __GLIBC_PREREQ(2,4)
 	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet")
 	{
 	    ResAlloc res(taskRes,true);
