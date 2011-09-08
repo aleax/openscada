@@ -1111,6 +1111,114 @@ string TSYS::strUncompr( const string &in )
     return rez;
 }
 
+float TSYS::floatLE(float in)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    ieee754_double ieee754_be;
+    union ieee754_le
+    {
+	float f;
+	struct
+        {
+	    unsigned int mantissa:23;
+    	    unsigned int exponent:8;
+    	    unsigned int negative:1;
+	} ieee;
+    } ieee754_le;
+
+    ieee754_be.f = in;
+    ieee754_le.ieee.mantissa	= ieee754_be.ieee.mantissa;
+    ieee754_le.ieee.exponent	= ieee754_be.ieee.exponent;
+    ieee754_le.ieee.negative	= ieee754_be.ieee.negative;
+
+    return ieee754_le.f;
+#endif
+
+    return in;
+}
+
+float TSYS::floatLErev(float in)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    ieee754_double ieee754_be;
+    union ieee754_le
+    {
+	float f;
+	struct
+        {
+	    unsigned int mantissa:23;
+    	    unsigned int exponent:8;
+    	    unsigned int negative:1;
+	} ieee;
+    } ieee754_le;
+
+    ieee754_le.f = in;
+    ieee754_be.ieee.mantissa	= ieee754_le.ieee.mantissa;
+    ieee754_be.ieee.exponent	= ieee754_le.ieee.exponent;
+    ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
+
+    return ieee754_be.f;
+#endif
+
+    return in;
+}
+
+double TSYS::doubleLE(double in)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN || __FLOAT_WORD_ORDER == __BIG_ENDIAN
+    ieee754_double ieee754_be;
+    union ieee754_le
+    {
+	double d;
+	struct
+        {
+    	    unsigned int mantissa1:32;
+	    unsigned int mantissa0:20;
+    	    unsigned int exponent:11;
+    	    unsigned int negative:1;
+	} ieee;
+    } ieee754_le;
+
+    ieee754_be.d = in;
+    ieee754_le.ieee.mantissa0	= ieee754_be.ieee.mantissa0;
+    ieee754_le.ieee.mantissa1	= ieee754_be.ieee.mantissa1;
+    ieee754_le.ieee.exponent	= ieee754_be.ieee.exponent;
+    ieee754_le.ieee.negative	= ieee754_be.ieee.negative;
+
+    return ieee754_le.d;
+#endif
+
+    return in;
+}
+
+double TSYS::doubleLErev(double in)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN || __FLOAT_WORD_ORDER == __BIG_ENDIAN
+    ieee754_double ieee754_be;
+    union ieee754_le
+    {
+	double d;
+	struct
+        {
+    	    unsigned int mantissa1:32;
+	    unsigned int mantissa0:20;
+    	    unsigned int exponent:11;
+    	    unsigned int negative:1;
+	} ieee;
+    } ieee754_le;
+
+    ieee754_le.d = in;
+    ieee754_be.ieee.mantissa0	= ieee754_le.ieee.mantissa0;
+    ieee754_be.ieee.mantissa1	= ieee754_le.ieee.mantissa1;
+    ieee754_be.ieee.exponent	= ieee754_le.ieee.exponent;
+    ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
+
+    return ieee754_be.d;
+#endif
+
+    return in;
+}
+
 long TSYS::HZ()
 {
     return sysconf(_SC_CLK_TCK);
