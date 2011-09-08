@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef _WIN32_WCE //Provided for WinCon
 	#define Exp87K I7000CE_API
 //	#define CALLBACK NULL
@@ -583,6 +587,8 @@ Exp87K WORD CALLBACK  ReadCounterStatus(DWORD dwBuf[], float fBuf[],
 //	#endif  //__I87000_H__
 //#endif
 
-
+#ifdef __cplusplus
+}
+#endif
 
     

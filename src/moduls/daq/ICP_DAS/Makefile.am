@@ -1,8 +1,8 @@
 ## process this file with automake to generate Makefile.in
 
-EXTRA_DIST = *.h po/* libi8k.a libi8k_arm.a include/*.h
+EXTRA_DIST = *.h po/* libi8k.a libi8k_arm.a include/*.h include_arm/*.h
 
-INCLUDES = -I$(top_srcdir)/src -I./include
+INCLUDES = -I$(top_srcdir)/src $(ICP_DAS_CFLAGS)
 
 oscd_modul_LTLIBRARIES = daq_ICP_DAS.la
 daq_ICP_DAS_la_LDFLAGS = -module -avoid-version -no-undefined

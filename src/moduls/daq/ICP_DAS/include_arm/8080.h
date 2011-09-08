@@ -109,6 +109,11 @@ Ver 2.0.0 [2004,Dec,20] by Kevin
         i8080_SetLowPassFilter_Status
        
 */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //for LinPAC-270 slot0~slot8
 static int SlotAddr[9] ={0x1,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8};
 extern unsigned char i8080_ChannelMode[9][8];	// slot*9, channel*8
@@ -443,3 +448,6 @@ int  i8080_EepReadWord(int Slot, int Addr, int *Value);
     return  0 --> OK
            -1 --> Address error
 	*/
+#ifdef __cplusplus
+}
+#endif

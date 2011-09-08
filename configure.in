@@ -369,8 +369,10 @@ if test $ForDist = true || test $ModICP_DAS = true -a $ix86 = true || test $ModI
     AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
     DAQSub_mod="${DAQSub_mod}ICP_DAS "
     #>> Modules checkings
+    ICP_DAS_CFLAGS="-I./include"
     ICP_DAS_LIBS="-L./ -li8k"
-    if test $target_cpu = "arm"; then ICP_DAS_LIBS="-L./ -li8k_arm"; fi
+    if test $target_cpu = "arm"; then ICP_DAS_LIBS="-L./ -li8k_arm"; ICP_DAS_CFLAGS="-I./include_arm"; fi
+    AC_SUBST(ICP_DAS_CFLAGS)
     AC_SUBST(ICP_DAS_LIBS)
 fi
 if test $ForDist = true -o $ModOPC_UA = true; then

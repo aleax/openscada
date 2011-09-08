@@ -9,7 +9,10 @@
  *
  *              0.00    create
  */
-
+#ifdef __cplusplus
+extern "C" {
+#endif
+ 
 #ifndef _SIO_H
 #define _SIO_H
 
@@ -23,7 +26,6 @@
 #include "codes.h"
 #include "common.h"
 #include "debug.h"
-#include "define.h"
 
 /* Error Codes */
 #define OK_PORT_CLOSE   0
@@ -31,13 +33,7 @@
 #define ERR_PORT_OPEN   0		/* DO NOT CHANGE THIS!! */
 
 /* sio devices */
-/* sio devices */
-#ifdef LX800
-#define SIO_DEV0     "/dev/ttySA0"
-#else
 #define SIO_DEV0     "/dev/ttySA2"
-#endif
-
 #define SIO_DEV1     "/dev/ttyS0"
 #define SIO_DEV2     "/dev/ttyS1"
 #define SIO_DEV3     "/dev/ttyS2"
@@ -127,3 +123,7 @@ extern int sio_open(const char *port, speed_t baud, tcflag_t data,
 extern int sio_close(int fd);
 
 #endif							/* _SIO_H */
+
+#ifdef __cplusplus
+}
+#endif

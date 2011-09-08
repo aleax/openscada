@@ -15,6 +15,11 @@
  *      create, Linux kernel 2.2.6, Slackware 4
  *
  **********************************************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #ifndef _COMMON_H
 #define _COMMON_H
 
@@ -77,3 +82,7 @@ typedef qword_t __tod_t;
 #endif
 
 #endif							/* _COMMON_H */
+
+#ifdef __cplusplus
+}
+#endif

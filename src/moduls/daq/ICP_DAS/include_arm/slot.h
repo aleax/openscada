@@ -6,8 +6,13 @@
  * static memory bus. 
  * This is included by slot.c.
  */
+ 
+#ifdef __cplusplus
+extern "C" {
+#endif
+ 
 #include <linux/types.h>
-#include "define.h"
+
 typedef unsigned int slot_flags_t;
 #define slot_lib_version 15
 #define CARD_NAME_LENGTH 32
@@ -84,9 +89,6 @@ typedef struct slot_reg {
 	unsigned int addr_first;
 	unsigned int addr_second;
 	unsigned int offset;			/* register's offset */
-#ifdef LX800
-        unsigned int addr;
-#endif
 } slot_reg_t;
 
 
@@ -127,11 +129,11 @@ enum {
 	SLOT_IOCTL_ID_ENABLE_TIMER,
 	SLOT_IOCTL_ID_DISABLE_TIMER,
 	SLOT_IOCTL_ID_READBACK_REG,
-	SLOT_IOCTL_ID_GPIO_READ,   // add GPIO-read/write/dirinput/diroutput,cindy 20080715
-        SLOT_IOCTL_ID_GPIO_WRITE,  // for xboard lib  
-        SLOT_IOCTL_ID_GPIO_DIRINPUT,
-        SLOT_IOCTL_ID_GPIO_DIROUTPUT,
-        SLOT_IOCTL_ID_GPIO_ALTFUNC,
+	SLOT_IOCTL_ID_GPIO_READ,   // add GPIO-read/write/dirinput/diroutput by cindy 20080715
+  SLOT_IOCTL_ID_GPIO_WRITE,  // for xboard lib  
+  SLOT_IOCTL_ID_GPIO_DIRINPUT,
+  SLOT_IOCTL_ID_GPIO_DIROUTPUT,
+  SLOT_IOCTL_ID_GPIO_ALTFUNC, // Cindy 20090408
 	SLOT_IOCTL_ID_LAST
 };
 
@@ -304,19 +306,22 @@ system_type sys;
 #define ENABLE_EEP      _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_ENABLE_EEP, slot_reg_t *)
 #define DISABLE_EEP     _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_DISABLE_EEP, slot_reg_t *)
 #define READ_SN         _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_SN, slot_reg_t *)
-#define READ_MAC        _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_MAC, slot_reg_t *)
-#define WRITE_MAC       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_WRITE_MAC, slot_reg_t *)
-#define READ_SRAM       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_SRAM, slot_reg_t *)
-#define WRITE_SRAM      _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_WRITE_SRAM, slot_reg_t *)
-#define ENABLE_WDT      _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_ENABLE_WATCHDOG, slot_reg_t *)
-#define DISABLE_WDT     _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_DISABLE_WATCHDOG, slot_reg_t *)
-#define READ_SWEVENT    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_SWEVENT, slot_reg_t *)
-#define WRITE_SWEVENT   _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_WRITE_SWEVENT, slot_reg_t *)
-#define ENABLE_TIMER    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_ENABLE_TIMER, slot_reg_t *)
-#define DISABLE_TIMER   _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_DISABLE_TIMER, slot_reg_t *)
-#define GPIO_READ       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_READ, slot_reg_t *)
-#define GPIO_WRITE      _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_WRITE, slot_reg_t *)
-#define GPIO_DIRINPUT   _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIRINPUT, slot_reg_t *)
-#define GPIO_DIROUTPUT  _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIROUTPUT ,slot_reg_t *)
-#define GPIO_ALTFUNC    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_ALTFUNC ,slot_reg_t *)
+#define READ_MAC         _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_MAC, slot_reg_t *)
+#define WRITE_MAC        _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_WRITE_MAC, slot_reg_t *)
+#define READ_SRAM        _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_SRAM, slot_reg_t *)
+#define WRITE_SRAM       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_WRITE_SRAM, slot_reg_t *)
+#define ENABLE_WDT       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_ENABLE_WATCHDOG, slot_reg_t *)
+#define DISABLE_WDT      _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_DISABLE_WATCHDOG, slot_reg_t *)
+#define READ_SWEVENT     _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_SWEVENT, slot_reg_t *)
+#define WRITE_SWEVENT    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_WRITE_SWEVENT, slot_reg_t *)
+#define ENABLE_TIMER     _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_ENABLE_TIMER, slot_reg_t *)
+#define DISABLE_TIMER    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_DISABLE_TIMER, slot_reg_t *)
+#define GPIO_READ        _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_READ, slot_reg_t *)
+#define GPIO_WRITE       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_WRITE, slot_reg_t *)
+#define GPIO_DIRINPUT    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIRINPUT, slot_reg_t *)
+#define GPIO_DIROUTPUT   _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIROUTPUT ,slot_reg_t *)
+#define GPIO_ALTFUNC     _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_ALTFUNC ,slot_reg_t *)
 
+#ifdef __cplusplus
+}
+#endif

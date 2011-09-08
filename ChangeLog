@@ -1,3 +1,7 @@
+2011-09-08 Roman
+- DAQ.ICP_DAS: Separated include directory for ARM controllers is added "include_arm".
+
+
 2011-09-07 Roman
 - SYS, DAQ.OPC_UA: To and from standard little-endian FloatPoint variant convertion functions is added:
     floatLE(), floatLErev(), doubleLE(), doubleLErev().
