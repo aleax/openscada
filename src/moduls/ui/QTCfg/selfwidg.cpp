@@ -653,6 +653,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
 	const QString &ndlg, int with_id, int with_nm, QDialogButtonBox::StandardButtons buttons ) :
 		QDialog(parent), mId(NULL), mName(NULL)
 {
+    setMaximumSize(800,600);
     setWindowTitle(ndlg);
     setWindowIcon(icon);
     setSizeGripEnabled(true);

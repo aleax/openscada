@@ -57,6 +57,7 @@ using namespace VISION;
 InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm ) :
 	QDialog(parent), m_id(NULL), m_name(NULL)
 {
+    setMaximumSize(800,600);
     setWindowTitle(ndlg);
     setWindowIcon(icon);
     //setSizeGripEnabled(true);
@@ -120,6 +121,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     dlg_lay->addWidget( but_box );
 
     resize(400,120+(40*with_nm)+(40*with_id));
+    setMaximumSize(800,600);
 }
 
 QString InputDlg::id()

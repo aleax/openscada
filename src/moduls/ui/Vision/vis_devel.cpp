@@ -911,7 +911,7 @@ void VisDevelop::itDBLoad( )
 
     //> Request to confirm
     InputDlg dlg(this,actDBLoad->icon(),
-	    QString(_("Are you sure of loading visual items '%1' from DB?")).arg(own_wdg.c_str()),
+	    QString(_("Are you sure of loading visual items '%1' from DB?")).arg(QString(own_wdg.c_str()).replace(";","; ")),
 	    _("Load visual item's data from DB"),false,false);
     if( dlg.exec() == QDialog::Accepted )
     {
@@ -942,7 +942,7 @@ void VisDevelop::itDBSave( )
 	//> Request to confirm
 	InputDlg dlg(this,actDBSave->icon(),
 		(own_wdg == "/" ? QString(_("Are you sure of saving all modifings to DB?")) :
-		QString(_("Are you sure of saving visual items '%1' to DB?")).arg(own_wdg.c_str())),
+		QString(_("Are you sure of saving visual items '%1' to DB?")).arg(QString(own_wdg.c_str()).replace(";","; "))),
 		_("Save visual item's data to DB"),false,false);
 	if( dlg.exec() == QDialog::Accepted )
 	{
@@ -1128,7 +1128,7 @@ void VisDevelop::visualItDel( const string &itms )
     if( itms.empty() )
     {
 	InputDlg dlg(this,actVisItDel->icon(),
-		QString(_("Are you sure of deleting visual items: '%1'?")).arg(work_wdg_loc.c_str()),
+		QString(_("Are you sure of deleting visual items: '%1'?")).arg(QString(work_wdg_loc.c_str()).replace(";","; ")),
 		_("Delete visual items"),false,false);
 	if( dlg.exec() != QDialog::Accepted )	return;
     }
@@ -1278,8 +1278,8 @@ void VisDevelop::visualItClear( const string &el_wa )
 	work_wdg_loc = work_wdg;
 
 	InputDlg dlg(this,actVisItClear->icon(),
-		QString(_("Are you sure of clear all changes for visual items: '%1'? "
-			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(work_wdg_loc.c_str()),
+		QString(_("Are you sure of clear all changes for visual items: '%1'?\n"
+			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(QString(work_wdg_loc.c_str()).replace(";","; ")),
 		_("Visual items' changes clear"),false,false);
 	if( dlg.exec() != QDialog::Accepted )	return;
     }
