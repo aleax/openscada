@@ -121,7 +121,6 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     dlg_lay->addWidget( but_box );
 
     resize(400,120+(40*with_nm)+(40*with_id));
-    setMaximumSize(800,600);
 }
 
 QString InputDlg::id()
