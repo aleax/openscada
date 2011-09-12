@@ -1,4 +1,6 @@
 2011-09-12 Roman
+- UI.Vision: ScrollArea is added to project's and item's main tab of properties for work on N800.
+    Default size to project's and item's properties window is set 800x600.
 - Archive: Send time label is made for archive's values table for display local time on remote station.
 - !!:FIX:Archive.FSArch: Store "double" value into LE format on ARM is fixed.
     Use function TSYS::getUnalign32() for get dwords to fast calc value offset algorithm to prevent errors on ARM.

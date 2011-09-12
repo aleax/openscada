@@ -34,6 +34,7 @@
 #include <QTableWidget>
 #include <QPainter>
 #include <QSplitter>
+#include <QScrollArea>
 
 #include <tsys.h>
 
@@ -67,8 +68,12 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     //> Add tab 'Widget'
     //------------------
-    wdg_tabs->addTab(new QWidget,_("Widgets library"));
-    QWidget *tab_w = wdg_tabs->widget(0);
+    QScrollArea *scrl = new QScrollArea();
+    wdg_tabs->addTab(scrl,_("Widgets library"));
+    QWidget *tab_w = new QWidget(scrl);
+    scrl->setWidget(tab_w);
+    scrl->setWidgetResizable(true);
+    //QWidget *tab_w = wdg_tabs->widget(0);
 
     dlg_lay = new QGridLayout(tab_w);
     dlg_lay->setMargin(9);
@@ -270,7 +275,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     //> End resize
     //------------
-    resize(500,400);
+    resize(800,600);
 }
 
 LibProjProp::~LibProjProp( )
@@ -826,8 +831,12 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
     //> Add tab 'Widget'
-    wdg_tabs->addTab(new QWidget,_("Widget"));
-    QWidget *tab_w = wdg_tabs->widget(0);
+    QScrollArea *scrl = new QScrollArea();
+    wdg_tabs->addTab(scrl,_("Widget"));
+    QWidget *tab_w = new QWidget(scrl);
+    scrl->setWidget(tab_w);
+    scrl->setWidgetResizable(true);
+    //QWidget *tab_w = wdg_tabs->widget(0);
 
     dlg_lay = new QGridLayout(tab_w);
     dlg_lay->setMargin(9);
@@ -1041,7 +1050,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_lay->addWidget(butbox);
 
     //> End resize
-    resize(500,400);
+    resize(800,600);
 }
 
 VisItProp::~VisItProp( )
