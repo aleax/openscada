@@ -2,6 +2,7 @@
 - Archive: Send time label is made for archive's values table for display local time on remote station.
 - !!:FIX:Archive.FSArch: Store "double" value into LE format on ARM is fixed.
     Use function TSYS::getUnalign32() for get dwords to fast calc value offset algorithm to prevent errors on ARM.
+    Codepage width into Plain messages archive is expanded to 99 symbols, from 9.
 - FIX:DAQ.OPC_UA: Input request counter is fixed for OPC UA protocol.
 - FIX:Transport.SSL, Transport.Serial: Return negative result is prevented for output transport messIO() function.
     Take place on multiply connections to serial devices.

@@ -424,7 +424,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     {
 	//> Prepare plain text file
 	char s_buf[STR_BUF_LEN];
-	snprintf(s_buf,sizeof(s_buf),"%s %s %8s %8x %8x\n",
+	snprintf(s_buf,sizeof(s_buf),"%s %s %s %8x %8x\n",
 	    mod->modId().c_str(),mod->modInfo("Version").c_str(),mChars.c_str(),(unsigned int)mBeg,(unsigned int)mEnd);
 	if( write(hd,s_buf,strlen(s_buf)) < 0 )
 	    throw TError(owner().nodePath().c_str(),_("Write to file error: %s"),strerror(errno));
@@ -467,8 +467,8 @@ void MFileArch::attach( const string &iname, bool full )
 		if(rsz > 0 && rsz < (int)sizeof(buf))
 		{
 		    buf[rsz] = 0;
-		    char bChars[21];
-		    if( sscanf(buf,"%lx %lx %20s %hhd",&mBeg,&mEnd,bChars,&mXML) == 4 ) { mChars = bChars; infoOK = true; }
+		    char bChars[100];
+		    if( sscanf(buf,"%lx %lx %99s %hhd",&mBeg,&mEnd,bChars,&mXML) == 4 ) { mChars = bChars; infoOK = true; }
 		}
 		close(hd);
 	    }
@@ -503,11 +503,11 @@ void MFileArch::attach( const string &iname, bool full )
 	f = fopen(name().c_str(),"r");
 	if( f == NULL ) { mErr = true; return; }
 
-	char s_char[9];
+	char s_char[100];
 	//> Check to plain text archive
 	if( fgets(buf,sizeof(buf),f) == NULL )
 	    throw TError(owner().nodePath().c_str(),_("File %s header error!"),name().c_str());
-	string s_tmpl = mod->modId()+"%*s %8s %x %x";
+	string s_tmpl = mod->modId()+"%*s %99s %x %x";
 	if( sscanf(buf,s_tmpl.c_str(),s_char,&mBeg,&mEnd) == 3 )
 	{
 	    //>> Attach plain text archive file
@@ -706,7 +706,7 @@ void MFileArch::put( TMess::SRec mess )
 	    if( mess.time != mEnd )
 	    {
 		mEnd = mess.time;
-		snprintf(buf,sizeof(buf),"%s %s %8s %8x %8x\n",
+		snprintf(buf,sizeof(buf),"%s %s %s %8x %8x\n",
 		    mod->modId().c_str(),mod->modInfo("Version").c_str(),mChars.c_str(),(unsigned int)mBeg,(unsigned int)mEnd);
 		fwrite(buf,strlen(buf),1,f);
 	    }
