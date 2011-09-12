@@ -1,3 +1,12 @@
+2011-09-12 Roman
+- Archive: Send time label is made for archive's values table for display local time on remote station.
+- !!:FIX:Archive.FSArch: Store "double" value into LE format on ARM is fixed.
+    Use function TSYS::getUnalign32() for get dwords to fast calc value offset algorithm to prevent errors on ARM.
+- FIX:DAQ.OPC_UA: Input request counter is fixed for OPC UA protocol.
+- FIX:Transport.SSL, Transport.Serial: Return negative result is prevented for output transport messIO() function.
+    Take place on multiply connections to serial devices.
+
+
 2011-09-09 Roman
 - FIX:DAQ.ModBus: Regular expression is fixed for sintax higlight to register address pair.
 - UI.QTCfg, UI.Vision: Input dialog's size is set to limit 800x600.

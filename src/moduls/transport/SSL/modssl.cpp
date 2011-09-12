@@ -898,10 +898,10 @@ repeate:
     }
 
 #if OSC_DEBUG >= 4
-    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is received with the size <%d>."),ret);
+    if(ret > 0) mess_debug(nodePath().c_str(),_("The message is received with the size <%d>."),ret);
 #endif
 
-    return ret;
+    return vmax(0,ret);
 }
 
 void TSocketOut::cntrCmdProc( XMLNode *opt )

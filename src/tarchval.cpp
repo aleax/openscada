@@ -1801,7 +1801,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    {
 		if(ctrMkNode("table",opt,-1,"/val/val",_("Values table"),R_R___,"root",SARH_ID))
 		{
-		    ctrMkNode("list",opt,-1,"/val/val/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/val/val/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
+		    ctrMkNode("list",opt,-1,"/val/val/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");
 		    ctrMkNode("list",opt,-1,"/val/val/1",_("Value"),R_R___,"root",SARH_ID,1,"tp","str");
 		}
 	    }
@@ -2042,6 +2043,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	getVals(buf, beg, end, TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")), 2000);
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
+	XMLNode *n_utm	= ctrMkNode("list",opt,-1,"/val/val/0a","",0440);
 	XMLNode *n_val  = ctrMkNode("list",opt,-1,"/val/val/1","",0440);
 
 	int64_t c_tm = buf.begin();
@@ -2049,7 +2051,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    while(c_tm <= buf.end())
 	    {
 	        string val = buf.getS(&c_tm,true);
-		if(n_tm) n_tm->childAdd("el")->setText(TSYS::time2str(c_tm/1000000,"%d-%m-%Y %H:%M:%S.")+TSYS::int2str(c_tm%1000000));
+		if(n_tm) n_tm->childAdd("el")->setText(TSYS::int2str(c_tm/1000000));
+		if(n_tm) n_utm->childAdd("el")->setText(TSYS::int2str(c_tm%1000000));
 		if(n_val)n_val->childAdd("el")->setText(val);
 		c_tm++;
 	    }

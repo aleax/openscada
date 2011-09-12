@@ -853,7 +853,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	{
 	    fixVl = true;
 	    vSize = sizeof(double);
-	    double s_val = EVAL_REAL;
+	    double s_val = TSYS::doubleLE(EVAL_REAL);
 	    eVal.assign((char*)&s_val,vSize);
 
 	    int i_buf = 0;
@@ -938,7 +938,7 @@ void VFileArch::attach( const string &name )
 	    {
 		fixVl = true;
 		vSize = sizeof(double);
-		double s_val = EVAL_REAL;
+		double s_val = TSYS::doubleLE(EVAL_REAL);
 		eVal.assign((char*)&s_val,vSize);
 		break;
 	    }
@@ -1170,7 +1170,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 		buf.setI(*(int*)(val_b+voff_beg),begin()+(int64_t)vpos_beg*period());
 		break;
 	    case TFld::Real:
-		buf.setR(*(double*)(val_b+voff_beg),begin()+(int64_t)vpos_beg*period());
+		buf.setR(TSYS::doubleLErev(*(double*)(val_b+voff_beg)),begin()+(int64_t)vpos_beg*period());
 		break;
 	    case TFld::String:
 		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+(int64_t)vpos_beg*period());
@@ -1230,7 +1230,7 @@ TVariant VFileArch::getVal( int vpos )
 	}
 	case TFld::Real:
 	{
-	    double rez = *(double*)getValue(hd,calcVlOff(hd,vpos),sizeof(double)).c_str();
+	    double rez = TSYS::doubleLErev(*(double*)getValue(hd,calcVlOff(hd,vpos),sizeof(double)).c_str());
 	    close(hd);
 	    return rez;
 	}
@@ -1312,6 +1312,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
 			tval = vprev;
 		}
+		tval = TSYS::doubleLE(tval);
 		value.assign((char*)&tval,vSize);
 		break;
 	    }
@@ -1513,7 +1514,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		    i_bf = 0;
 		}
 		//> Count
-		uint32_t vw = *(uint32_t*)(buf+i_bf);
+		uint32_t vw = TSYS::getUnalign32(buf+i_bf);
     	        vw -= ((vw>>1)&0x55555555);
     		vw = (vw&0x33333333) + ((vw>>2)&0x33333333);
     		voff += vSize * ((((vw+(vw>>4))&0xF0F0F0F)*0x1010101)>>24);

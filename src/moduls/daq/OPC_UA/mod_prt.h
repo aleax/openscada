@@ -384,7 +384,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	bool	&mAEn, mEn;
 	string	mDB;
 
-	float	cntReq;
+	uint64_t		cntReq;
 	vector<SecuritySetting>	mSec;
 	vector<OPCSess>		mSess;
 

@@ -1052,7 +1052,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     }
     mLstReqTm = TSYS::curTime();
 
-    return blen;
+    return vmax(0,blen);
 }
 
 void TTrOut::cntrCmdProc( XMLNode *opt )

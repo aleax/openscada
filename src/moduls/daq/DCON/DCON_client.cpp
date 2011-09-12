@@ -276,6 +276,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 		if(pdu[0] != resOK) { err = _("22:Invalid module response."); continue; }
 		else if(((!CRC && acqLen != pdu.size()) || (CRC && (acqLen+2) != pdu.size()))) { err = _("20:Respond length error."); break; }
 	    }
+
 	    err = "0";
 	    break;
 	}

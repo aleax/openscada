@@ -2697,7 +2697,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 {
     string respEp;
     int off = 0;
-    switch( reqTp )
+    switch(reqTp)
     {
 	case OpcUa_BrowseRequest:
 	{
@@ -3103,6 +3103,9 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 	    break;
 	}
     }
+
+    cntReq++;
+
     return respEp;
 }
 
