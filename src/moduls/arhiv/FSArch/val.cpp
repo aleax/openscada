@@ -1503,7 +1503,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	for(int n_pos = 0; i_ps <= vpos; i_ps = n_pos)
 	{
 	    //> Fast algorithm for big blocks
-	    if(!((i_ps%8) || (i_ps/8)%4) && (i_ps/32) < (vpos/32))
+	    if(!((i_ps%8) || (i_bf%4)) && (i_ps/32) < (vpos/32))
 	    {
 		//> Buffer check for refresh
 		if((i_bf+4) > b_sz)
@@ -1514,7 +1514,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		    i_bf = 0;
 		}
 		//> Count
-		uint32_t vw = TSYS::getUnalign32(buf+i_bf);
+		uint32_t vw = *(uint32_t*)(buf+i_bf);	//TSYS::getUnalign32(buf+i_bf);
     	        vw -= ((vw>>1)&0x55555555);
     		vw = (vw&0x33333333) + ((vw>>2)&0x33333333);
     		voff += vSize * ((((vw+(vw>>4))&0xF0F0F0F)*0x1010101)>>24);

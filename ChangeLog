@@ -1,3 +1,7 @@
+2011-09-13 Roman
+- FIX:Archive.FSArch: Fast set bits calc algoritm using for align to dwords (32 bits) memory buffer's blocks is fixed.
+
+
 2011-09-12 Roman
 - UI.Vision: ScrollArea is added to project's and item's main tab of properties for work on N800.
     Default size to project's and item's properties window is set 800x600.
