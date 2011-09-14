@@ -272,12 +272,14 @@ void TMdContr::start_( )
 
 	if(session.securityLevel == SNMP_SEC_LEVEL_AUTHPRIV)
 	{
+#ifdef USM_PRIV_PROTO_AES_LEN
 	    if(secPrivProto() == "AES")
 	    {
 		session.securityPrivProto = usmAESPrivProtocol;
 		session.securityPrivProtoLen = sizeof(usmAESPrivProtocol)/sizeof(oid);
 	    }
 	    else
+#endif
 	    {
 		session.securityPrivProto = usmDESPrivProtocol;
 		session.securityPrivProtoLen = sizeof(usmDESPrivProtocol)/sizeof(oid);
@@ -533,7 +535,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(secLev() == "authPriv")
 	    {
-		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivProto",_("Privacy"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list","DES;AES");
+#ifdef USM_PRIV_PROTO_AES_LEN
+		char *prtLs = "DES;AES";
+#else
+		char *prtLs = "DES";
+#endif
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivProto",_("Privacy"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list",prtLs);
 		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivPass","",RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	}

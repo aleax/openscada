@@ -1749,7 +1749,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
     }
-    else if( a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD) )	//Get attributes all updated elements' of the branch
+    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	//Get attributes all updated elements' of the branch
     {
 	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
@@ -1776,18 +1776,18 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	}
 
 	//>> Child widgets process
-	if( enable() && perm&SEC_RD )
+	if(enable() && (perm&SEC_RD))
 	{
 	    vector<string>	lst;
 	    wdgList(lst);
 
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	    {
 		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
 		XMLNode *wn = new XMLNode("get");
 		wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",opt->attr("tm"));
 		iwdg.at().cntrCmdServ(wn);
-		if( wn->childSize() )
+		if(wn->childSize())
 		{
 		    wn->setName("w")->attrDel("path")->attrDel("user")->attrDel("rez")->attrDel("tm")->setAttr("id",lst[i_f]);
 		    opt->childAdd(wn);

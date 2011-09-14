@@ -1,3 +1,7 @@
+2011-09-14 Roman
+- DAQ.SNMP: Check for USM_PRIV_PROTO_AES allow is added for build with NetSNMP version 5.1 and early.
+
+
 2011-09-13 Roman
 - FIX:Archive.FSArch: Fast set bits calc algoritm using for align to dwords (32 bits) memory buffer's blocks is fixed.
 
