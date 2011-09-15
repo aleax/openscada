@@ -139,7 +139,8 @@ class Session : public TCntrNode
 
 	//Attributes
 	int	mPage;
-	string	mId, mPrjnm, mUser, mOwner, mGrp;
+	string	mId, mPrjnm, mOwner, mGrp;
+	ResString mUser;
 	int	mPer, mPermit;
 	bool	mEnable, mStart, endrun_req;	//Enabled, Started and endrun stats
 	bool	mBackgrnd;			//Backgrounded execution of a session

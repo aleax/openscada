@@ -59,7 +59,7 @@ void Session::preDisable( int flag )
 void Session::setUser( const string &it )
 {
     mUser = it;
-    if( !enable() ) mOwner = it;
+    if(!enable()) mOwner = it;
 }
 
 void Session::setEnable( bool val )
@@ -1738,9 +1738,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		}
 	    }
 	}
-	else if( ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR) )	//Set values
+	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	//Set values
 	{
-	    if( ownerSess()->user() != opt->attr("user") ) ownerSess()->setUser(opt->attr("user"));
+	    if(ownerSess()->user() != opt->attr("user")) ownerSess()->setUser(opt->attr("user"));
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
 	    {
 	        string aid = opt->childGet(i_ch)->attr("id");
@@ -1749,7 +1749,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
     }
-    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	//Get attributes all updated elements' of the branch
+    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))//Get attributes all updated elements' of the branch
     {
 	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
