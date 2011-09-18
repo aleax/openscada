@@ -72,6 +72,8 @@ class Lib : public TCntrNode, public TConfig
 
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     protected:
 	const string &nodeName( )	{ return mId.getValRef(); }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

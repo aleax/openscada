@@ -1516,7 +1516,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -2277,7 +2277,7 @@ void *TVArchivator::Task( void *param )
 TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);

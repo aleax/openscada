@@ -240,7 +240,7 @@ void TPrmTempl::preIOCfgChange()
 TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -546,7 +546,7 @@ void TPrmTmplLib::add( const char *id, const char *name )
 TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);

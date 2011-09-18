@@ -150,7 +150,7 @@ class TConfig: public TValElem
 	bool noTransl( )	{ return mNoTransl; }
 	void setNoTransl( bool vl )		{ mNoTransl = vl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
 	//Methods

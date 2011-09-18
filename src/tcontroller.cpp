@@ -420,7 +420,7 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
 	return true;
     }
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid,prms,user);

@@ -131,6 +131,8 @@ class TFunction : public TCntrNode
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

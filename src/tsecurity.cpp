@@ -372,7 +372,7 @@ void TUser::save_( )
 TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -542,7 +542,7 @@ void TGroup::userDel( const string &name )
 TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);

@@ -836,7 +836,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
     }
 
     //> Config functions call
-    TVariant cfRez = TConfig::objFuncCall(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid,prms,user);

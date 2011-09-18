@@ -195,7 +195,7 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     }
 }
 
-TVariant TConfig::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // ElTp cfg(string nm) - config variable 'nm' get.
     //  nm - config variable name.
