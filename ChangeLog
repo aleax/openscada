@@ -1,4 +1,5 @@
 2011-09-20 Roman
+- FIX:UI.QTCfg: Crash on page items change after error connect to disconnected remote station.
 - FIX:UI.Vision: Select group widgets by mouse window on development is fixed.
 
 

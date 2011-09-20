@@ -112,14 +112,14 @@ ConfApp::ConfApp( string open_user ) :
     //CtrTree->header()->setSectionHidden(2,true);
     //CtrTree->header()->hide();
     //CtrTree->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 2, 0, CtrTree->sizePolicy().hasHeightForWidth() ) );
-    CtrTree->setMinimumSize( QSize( 150, 0 ) );
+    CtrTree->setMinimumSize(QSize(150,0));
     //CtrTree->setMaximumSize( QSize( 400, 32767 ) );
     CtrTree->setWhatsThis(_("The main navigation tree of the configurator."));
     //connect( CtrTree, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ), this, SLOT( selectItem(QTreeWidgetItem*) ) );
-    connect( CtrTree, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
-    connect( CtrTree, SIGNAL( itemExpanded(QTreeWidgetItem*) ), this, SLOT( viewChild(QTreeWidgetItem*) ) );
+    connect(CtrTree, SIGNAL(itemSelectionChanged()), this, SLOT(selectItem()));
+    connect(CtrTree, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(viewChild(QTreeWidgetItem*)));
     //connect( CtrTree, SIGNAL( itemEntered(QTreeWidgetItem*,int) ), this, SLOT( onItem(QTreeWidgetItem*) ) );
-    connect( CtrTree, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
+    connect(CtrTree, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
 
     //> Create search field
     QLineEdit *trSrchW = new QLineEdit;
@@ -891,8 +891,8 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 void ConfApp::selectItem( )
 {
     QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
-    if( sel_ls.size() == 1 && sel_path != sel_ls.at(0)->text(2).toAscii().data() )
-	selectPage( sel_ls.at(0)->text(2).toAscii().data() );
+    if(sel_ls.size() == 1 && sel_path != sel_ls.at(0)->text(2).toAscii().data())
+	selectPage(sel_ls.at(0)->text(2).toAscii().data());
 }
 
 void ConfApp::selectPage( const string &path )
@@ -910,7 +910,7 @@ void ConfApp::selectPage( const string &path )
     catch(TError err)
     {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
-	if(err.cod == 10) initHosts( );
+	if(err.cod == 10) initHosts();
     }
 }
 
@@ -1888,10 +1888,11 @@ void ConfApp::pageDisplay( const string &path )
 	//>> Stop refresh
 	pageCyclRefrStop();
 
+	XMLNode n_node("info");
+	n_node.setAttr("path",path);
+	if(cntrIfCmd(n_node)) { throw TError(atoi(n_node.attr("rez").c_str()),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str()); }
 	sel_path = path;
-
-	pg_info.clear()->setAttr("path",sel_path);
-	if(cntrIfCmd(pg_info)) { throw TError(atoi(pg_info.attr("rez").c_str()),pg_info.attr("mcat").c_str(),"%s",pg_info.text().c_str()); }
+	pg_info = n_node;
 	root = pg_info.childGet(0);
     }
     else
@@ -2856,7 +2857,7 @@ void ConfApp::tableSet( int row, int col )
 	QTableWidget *tbl = (QTableWidget *)sender();
 	string el_path = sel_path+"/"+tbl->objectName().toAscii().data();
 
-	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(tbl->objectName().toAscii().data(),TSYS::PathEl) );
+	XMLNode *n_el = SYS->ctrId(root,TSYS::strDecode(tbl->objectName().toAscii().data(),TSYS::PathEl));
 
 	QVariant val = tbl->item(row,col)->data(Qt::EditRole);
 	if( n_el->childGet(col)->attr("tp") == "bool" ) value = val.toBool()?"1":"0";
