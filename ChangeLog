@@ -1,3 +1,7 @@
+2011-09-20 Roman
+- FIX:UI.Vision: Select group widgets by mouse window on development is fixed.
+
+
 2011-09-18 Roman
 - !:DAQ.JavaLikeCalc, Special.FLibComplex1, Special.FLibMath, Special.FLibSYS:
     Direct librarie's functions dynamic call is added, by: SYS.DAQ.JavaLikeCalc["lib_{Lib}"].funcId(prms, ...).

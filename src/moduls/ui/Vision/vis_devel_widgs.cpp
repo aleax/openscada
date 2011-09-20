@@ -2891,17 +2891,18 @@ bool DevelWdgView::event( QEvent *event )
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
-		if( fHoldSelRect )
+		if(fHoldSelRect)
 		{
-		    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+		    for(int i_c = children().size()-1; i_c >= 0; i_c--)
 		    {
 			DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-			if( !cwdg || !QRect(holdPnt,curp).contains(cwdg->geometryF().toRect()) ) continue;
+			if(!cwdg || !QRect(holdPnt,curp).contains(cwdg->geometryF().toRect())) continue;
 			cwdg->setSelect(true,PrcChilds|OnlyFlag);
 		    }
-		    setSelect(true,PrcChilds);
+		    setSelect(true, PrcChilds);
 		    fHoldSelRect = false;
 		    //pntView->setSelArea(QRectF());
+		    return true;
 		}
 
 		//> Check for select next underly widget
