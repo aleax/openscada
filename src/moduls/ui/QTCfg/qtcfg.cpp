@@ -412,7 +412,7 @@ ConfApp::ConfApp( string open_user ) :
 
     //>> Display root page and init external pages
     initHosts();
-    try{ pageDisplay(mod->startPath()); } catch(TError err) { pageDisplay("/"); }
+    try{ pageDisplay(mod->startPath()); } catch(TError err) { pageDisplay("/"+SYS->id()); }
 }
 
 ConfApp::~ConfApp()
@@ -2239,7 +2239,6 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     }
 
     //> Direct request
-    if(TSYS::pathLev(node.attr("path"),0).empty()) sel_path = SYS->id();
     try { return SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString()); }
     catch(TError err)
     { node.childClear(); node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
