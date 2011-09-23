@@ -1,3 +1,7 @@
+2011-09-23 Roman
+- FIX:DAQ: Get value by time from all archives by function get{S|R|B|I}() is fixed for archives process not only buffer.
+
+
 2011-09-20 Roman
 - FIX:UI.QTCfg: Crash on page items change after error connect to disconnected remote station.
 - FIX:UI.Vision: Select group widgets by mouse window on development is fixed.

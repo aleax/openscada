@@ -502,17 +502,17 @@ string TVal::getS( int64_t *tm, bool sys )
 	case TFld::String:
 	    setReqFlg(true);
 	    //> Get from archive
-	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
-		return mArch.at().getS(tm);
+	    if(tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period())
+		return mArch.at().getVal(tm).getS();
 	    //> Get value from config
-	    if( mCfg )
+	    if(mCfg)
 	    {
 		if(tm) *tm = TSYS::curTime();
-		return src.cfg->getS( );
+		return src.cfg->getS();
 	    }
 	    //> Get current value
-	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
-	    if( tm ) *tm = time();
+	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
+	    if(tm) *tm = time();
 	    return val.val_s->getVal();
     }
     return EVAL_STR;
@@ -531,17 +531,17 @@ int TVal::getI( int64_t *tm, bool sys )
 	case TFld::Integer:
 	    setReqFlg(true);
 	    //> Get from archive
-	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() ) 
-		return mArch.at().getI(tm);
+	    if(tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period())
+		return mArch.at().getVal(tm).getI();
 	    //> Get value from config
-	    if( mCfg )
+	    if(mCfg)
 	    {
 		if(tm) *tm = TSYS::curTime();
-		return src.cfg->getI( );
+		return src.cfg->getI();
 	    }
 	    //> Get current value
-	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
-	    if( tm ) *tm = time();
+	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
+	    if(tm) *tm = time();
 	    return val.val_i;
     }
     return EVAL_INT;
@@ -560,17 +560,17 @@ double TVal::getR( int64_t *tm, bool sys )
 	case TFld::Real:
 	    setReqFlg(true);
 	    //> Get from archive
-	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
-		return mArch.at().getR(tm);
+	    if(tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period())
+		return mArch.at().getVal(tm).getR();
 	    //> Get value from config
-	    if( mCfg )
+	    if(mCfg)
 	    {
 		if(tm) *tm = TSYS::curTime();
-		return src.cfg->getR( );
+		return src.cfg->getR();
 	    }
 	    //> Get current value
-	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
-	    if( tm ) *tm = time();
+	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
+	    if(tm) *tm = time();
 	    return val.val_r;
     }
     return EVAL_REAL;
@@ -589,17 +589,17 @@ char TVal::getB( int64_t *tm, bool sys )
 	case TFld::Boolean:
 	    setReqFlg(true);
 	    //> Get from archive
-	    if( tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period() )
-		return mArch.at().getB(tm);
+	    if(tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period())
+		return mArch.at().getVal(tm).getB();
 	    //> Get value from config
-	    if( mCfg )
+	    if(mCfg)
 	    {
 		if(tm) *tm = TSYS::curTime();
-		return src.cfg->getB( );
+		return src.cfg->getB();
 	    }
 	    //> Get current value
-	    if( fld().flg()&TVal::DirRead && !sys )	owner().vlGet( *this );
-	    if( tm ) *tm = time();
+	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
+	    if(tm) *tm = time();
 	    return val.val_b;
     }
     return EVAL_BOOL;
