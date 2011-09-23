@@ -410,12 +410,12 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
     return rez;
 }
 
-void TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err )
+bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err )
 {
     if(tmDelay > 0)
     {
 	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
-	return;
+	return false;
     }
 
     int off = 0;
@@ -425,14 +425,15 @@ void TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
     int aid = strtol(aids.c_str(), NULL, 0);
     string mode = TSYS::strParse(addr, 0, ":", &off);
 
-    if(tp.empty() || (tp.size() >= 2 && tp[1] == 'I') || !(mode.empty() || mode == "w" || mode == "rw")) return;
-    if(tp[0] == 'C') setValC(val.getB(), aid, w_err);
+    bool wrRez = false;
+    if(tp.empty() || (tp.size() >= 2 && tp[1] == 'I') || !(mode.empty() || mode == "w" || mode == "rw")) return false;
+    if(tp[0] == 'C')	wrRez = setValC(val.getB(), aid, w_err);
     if(tp[0] == 'R')
     {
 	if(!atp_sub.empty() && atp_sub[0] == 'b')
 	{
 	    int vl = getValR(aid, w_err);
-	    if(vl != EVAL_INT) setValR(val.getB() ? (vl|(1<<atoi(atp_sub.c_str()+1))) : (vl & ~(1<<atoi(atp_sub.c_str()+1))), aid, w_err);
+	    if(vl != EVAL_INT) wrRez = setValR(val.getB() ? (vl|(1<<atoi(atp_sub.c_str()+1))) : (vl & ~(1<<atoi(atp_sub.c_str()+1))), aid, w_err);
 	}
 	else if(!atp_sub.empty() && atp_sub == "f")
 	{
@@ -441,7 +442,7 @@ void TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	    map<int,int> regs;
 	    regs[aid] = wl.i&0xFFFF;
 	    regs[strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0)] = (wl.i>>16)&0xFFFF;
-	    setValRs(regs, w_err);
+	    wrRez = setValRs(regs, w_err);
 	}
 	else if(!atp_sub.empty() && atp_sub == "i4")
 	{
@@ -449,13 +450,15 @@ void TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	    map<int,int> regs;
 	    regs[aid] = vl&0xFFFF;
 	    regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = (vl>>16)&0xFFFF;
-	    setValRs(regs, w_err);
+	    wrRez = setValRs(regs, w_err);
 	}
-	else setValR(val.getI(), aid, w_err);
+	else wrRez = setValR(val.getI(), aid, w_err);
     }
+
+    return wrRez;
 }
 
-void TMdContr::setValR( int val, int addr, ResString &err )
+bool TMdContr::setValR( int val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
     string pdu, terr;
@@ -480,8 +483,10 @@ void TMdContr::setValR( int val, int addr, ResString &err )
     }
     //> Request to remote server
     if((terr=modBusReq(pdu)).empty())	numWReg++;
+    else
     {
 	if(err.getVal().empty()) err.setVal(terr);
+	return false;
     }
     //> Set to acquisition block
     ResAlloc res(req_res, false);
@@ -492,9 +497,10 @@ void TMdContr::setValR( int val, int addr, ResString &err )
 	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1] = (char)val;
 	    break;
 	}
+    return true;
 }
 
-void TMdContr::setValRs( const map<int,int> &regs, ResString &err )
+bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 {
     int start = 0, prev = 0;
     string pdu, terr;
@@ -503,8 +509,8 @@ void TMdContr::setValRs( const map<int,int> &regs, ResString &err )
     if(!mMltWr)
     {
 	for(map<int,int>::const_iterator i_r = regs.begin(); i_r != regs.end(); i_r++)
-	    setValR(i_r->second, i_r->first, err);
-	return;
+	    if(!setValR(i_r->second, i_r->first, err)) return false;
+	return true;
     }
 
     //> Write by multiply registers
@@ -519,8 +525,10 @@ void TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 	    pdu[5] = (char)((prev-start+1)*2);	//Byte Count
 	    //> Request to remote server
 	    if((terr=modBusReq(pdu)).empty())	numWReg += (prev-start+1);
+	    else
 	    {
 		if(err.getVal().empty()) err.setVal(terr);
+		return false;
 	    }
 
 	    pdu = "";
@@ -552,9 +560,10 @@ void TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 		break;
 	    }
     }
+    return true;
 }
 
-void TMdContr::setValC( char val, int addr, ResString &err )
+bool TMdContr::setValC( char val, int addr, ResString &err )
 {
     //> Encode request PDU (Protocol Data Units)
     string pdu, terr;
@@ -578,8 +587,10 @@ void TMdContr::setValC( char val, int addr, ResString &err )
     }
     //> Request to remote server
     if((terr=modBusReq(pdu)).empty())	numWCoil++;
+    else
     {
 	if(err.getVal().empty()) err.setVal(terr);
+	return false;
     }
     //> Set to acquisition block
     ResAlloc res(req_res, false);
@@ -589,6 +600,8 @@ void TMdContr::setValC( char val, int addr, ResString &err )
 	    acqBlksCoil[i_b].val[addr-acqBlksCoil[i_b].off] = val;
 	    break;
 	}
+
+    return true;
 }
 
 string TMdContr::modBusReq( string &pdu )
@@ -1213,7 +1226,8 @@ void TMdPrm::upVal( bool first, bool last, double frq )
             //> Put output links
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
 		if(lCtx->ioMdf(lCtx->lnk(i_l).io_id))
-		    owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).real, w_err);
+		    if(!owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).real, w_err))
+			lCtx->setS(i_l,EVAL_STR);
 
 	    //> Put fixed system attributes
 	    if(lCtx->id_nm >= 0)  setName(lCtx->getS(lCtx->id_nm));
@@ -1280,8 +1294,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     if( vl == EVAL_STR || vl == pvl.getS() ) return;
 
     //> Direct write
+    bool wrRez = false;
     //>> Standard type request
-    if(isStd())	owner().setVal(valo.get(NULL,true),valo.fld().reserve(),acq_err);
+    if(isStd())	wrRez = owner().setVal(valo.get(NULL,true),valo.fld().reserve(),acq_err);
     //>> Logical type request
     else if(isLogic())
     {
@@ -1291,9 +1306,10 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
         if(!vl.isEVal() && vl != pvl)
         {
     	    if(id_lnk < 0) lCtx->set(lCtx->ioId(valo.name()), vl);
-            else owner().setVal(vl, lCtx->lnk(id_lnk).real, acq_err);
+            else wrRez = owner().setVal(vl, lCtx->lnk(id_lnk).real, acq_err);
         }
     }
+    if(!wrRez) valo.setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

@@ -163,10 +163,10 @@ class TMdContr: public TController
 	TVariant getVal( const string &addr, ResString &err );		//Unified value request from string address
 	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
 	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
-	void setVal( const TVariant &val, const string &addr, ResString &err );	//Unified value set by string address
-	void setValR( int val, int addr, ResString &err );		//Set register value
-	void setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
-	void setValC( char val, int addr, ResString &err );		//Set coins value
+	bool setVal( const TVariant &val, const string &addr, ResString &err );	//Unified value set by string address
+	bool setValR( int val, int addr, ResString &err );		//Set register value
+	bool setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
+	bool setValC( char val, int addr, ResString &err );		//Set coins value
 	string modBusReq( string &pdu );
 
     protected:
