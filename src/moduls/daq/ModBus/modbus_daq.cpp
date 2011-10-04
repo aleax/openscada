@@ -1106,7 +1106,8 @@ void TMdPrm::disable()
     if(lCtx)
     {
 	lCtx->setFunc(NULL);
-	lCtx->id_freq = lCtx->id_start = lCtx->id_stop = lCtx->id_err = lCtx->id_sh = lCtx->id_nm = lCtx->id_dscr -1;
+	lCtx->id_freq = lCtx->id_start = lCtx->id_stop = lCtx->id_err = lCtx->id_sh = lCtx->id_nm = lCtx->id_dscr = -1;
+	lCtx->plnk.clear();
     }
 }
 

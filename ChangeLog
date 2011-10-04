@@ -1,3 +1,10 @@
+2011-10-04 Roman
+- !!:FIX:DAQ.Siemens: Float and Double values get and set is fixed. Reconnect set is fixed on error connection.
+    Integer's, Real's and String's size property using is fixed. Links clear on parameter disable is made.
+- FIX:DAQ.ModBus: Links clear on parameter disable is made. Links to special attributes clear on disable is fixed.
+- FIX:UI.Vision: Edition status is fixed for LineEdit on no confirmed mode.
+
+
 2011-09-23 Roman
 - FIX:DAQ.ModBus: Write EVAL to writible attribute on time error writing to remote device.
 - FIX:DAQ: Get value by time from all archives by function get{S|R|B|I}() is fixed for archives process not only buffer.

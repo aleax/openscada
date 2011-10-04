@@ -408,7 +408,7 @@ ConfApp::ConfApp( string open_user ) :
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
 
-    //menuBar()->setVisible(true);
+    menuBar()->setVisible(true);
 
     //>> Display root page and init external pages
     initHosts();

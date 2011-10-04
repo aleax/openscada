@@ -725,10 +725,11 @@ void TMdContr::connectRemotePLC( )
 	    fds.wfd = fds.rfd = openSocket(102, mAddr.getVal().c_str());
 	    if(fds.rfd <= 0) throw TError(nodePath().c_str(),_("Open socket of remote PLC error."));
 	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
-	    daveSetTimeout(di,5000000);
 	    dc = daveNewConnection(di,2,0,mSlot);
+	    daveSetTimeout(di,1500000);
 	    if(daveConnectPLC(dc))
 	    {
+		toReconect = true;
 		close(fds.wfd);
 		delete dc;
 		delete di;
@@ -1105,8 +1106,8 @@ double TMdContr::getValR( SValData ival, ResString &err )
 	    if(!acqBlks[i_b].err.size())
 		switch(iv_sz)
 		{
-		    case 4:	return *(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
-		    case 8:	return *(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str();
+		    case 4:	return TSYS::floatLErev(*(float*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str());
+		    case 8:	return TSYS::doubleLErev(*(double*)revers(acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz)).c_str());
 		}
 	    else err.setVal(acqBlks[i_b].err);
 	    break;
@@ -1190,14 +1191,14 @@ void TMdContr::setValI( int ivl, SValData ival, ResString &err )
 void TMdContr::setValR( double ivl, SValData ival, ResString &err )
 {
     double val = getValR(ival, err);
-    float  val_4 = val;
     if(val == EVAL_REAL || val == ivl) return;
     //> Write data to controller or write data block
-    val = ivl;
+    val = TSYS::doubleLE(ivl);
+    float val_4 = TSYS::floatLE(ivl);
     int iv_sz = valSize(IO::Real, ival.sz);
     try
     {
-	if(!assincWrite()) putDB(ival.db,ival.off,revers(string((char *)&val,iv_sz)));
+	if(!assincWrite()) putDB(ival.db,ival.off,revers(string((iv_sz==4)?(char*)&val_4:(char *)&val,iv_sz)));
 	else
 	    for(unsigned i_b = 0; i_b < writeBlks.size(); i_b++)
 		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
@@ -1212,7 +1213,7 @@ void TMdContr::setValR( double ivl, SValData ival, ResString &err )
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    {
-		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz))); 
+		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
 		break;
 	    }
     }
@@ -1501,6 +1502,7 @@ void TMdPrm::disable()
     //> Template's function disconnect
     setFunc(NULL);
     id_freq = id_start = id_stop = id_err = id_sh = id_nm = id_dscr = -1;
+    plnk.clear();
 
     TParamContr::disable();
 }
@@ -1709,12 +1711,14 @@ void TMdPrm::initLnks()
 	if(ioType(lnk(i_l).io_id) == IO::Boolean)
 	{
 	    if(sscanf(lnk(i_l).db_addr.c_str(),"DB%d.%d.%d",&lnk(i_l).val.db,&lnk(i_l).val.off,&lnk(i_l).val.sz) == 3)
-		lnk(i_l).val.sz = (lnk(i_l).val.sz>7)?7:(lnk(i_l).val.sz<0)?0:lnk(i_l).val.sz;
+		lnk(i_l).val.sz = vmax(0,vmin(7,lnk(i_l).val.sz));
 	    else lnk(i_l).val.db = -1;
 	}
 	else
 	{
-	    if(sscanf(lnk(i_l).db_addr.c_str(),"DB%d.%d",&lnk(i_l).val.db,&lnk(i_l).val.off) != 2) lnk(i_l).val.db = -1;
+	    if(sscanf(lnk(i_l).db_addr.c_str(),"DB%d.%d",&lnk(i_l).val.db,&lnk(i_l).val.off) == 2)
+		lnk(i_l).val.sz = atoi(TSYS::strParse(func()->io(lnk(i_l).io_id)->def(),2,"|").c_str());
+	    else lnk(i_l).val.db = -1;
 	}
 	//>> Process data
 	if(lnk(i_l).val.db < 0 || lnk(i_l).val.off < 0) lnk(i_l).val.db = lnk(i_l).val.off = -1;
@@ -1895,7 +1899,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    string p_nm, cp_nm;
-	    int off, coff, cbit, csz;
+	    int off, coff, cbit;
 	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
 	    string sdb = TSYS::strSepParse(opt->text(),0,'.');
 	    off = atoi(TSYS::strSepParse(opt->text(),1,'.').c_str());
@@ -1905,13 +1909,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    {
 		cp_nm = TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),0,'|');
 		sscanf(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),1,'|').c_str(),"%d.%d",&coff,&cbit);
-		csz   = atoi(TSYS::strSepParse(func()->io(lnk(i_l).io_id)->def(),2,'|').c_str());
 		if(p_nm == cp_nm)
 		{
 		    lnk(i_l).db_addr = sdb+"."+TSYS::int2str(off+coff);
 		    if(ioType(lnk(i_l).io_id)==IO::Boolean)
 			lnk(i_l).db_addr = lnk(i_l).db_addr+"."+TSYS::int2str(cbit);
-		    lnk(i_l).val.sz = csz;
 		    modif();
 		}
 	    }

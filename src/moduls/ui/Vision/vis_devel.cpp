@@ -574,7 +574,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
-    //menuBar()->setVisible(true);
+    menuBar()->setVisible(true);
 
     wdgTree->updateTree();
     prjTree->updateTree();

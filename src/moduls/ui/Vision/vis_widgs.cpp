@@ -418,7 +418,7 @@ bool UserStBar::userSel()
 //* QTimeEdit, QDateEdit and QDateTimeEdit.                                                   *
 //*********************************************************************************************
 LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
-    QWidget(parent), m_tp((LineEdit::LType)-1), mPrev(!prev_dis), applyReserve(resApply),
+    QWidget(parent), m_tp((LineEdit::LType)-1), mPrev(!prev_dis), applyReserve(resApply), mIsEdited(false),
     ed_fld(NULL), bt_fld(NULL), bt_tm(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
@@ -442,17 +442,18 @@ void LineEdit::viewApplyBt( bool view )
 	bt_fld->setIconSize( QSize(12,12) );
 	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
 	bt_fld->setMaximumWidth( 15 );
-	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
+	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
 	layout()->addWidget( bt_fld );
     }
     if( !view && bt_fld )
     {
 	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
+	mIsEdited = false;
     }
 }
 
-bool LineEdit::isEdited( )	{ return bt_fld; }
+bool LineEdit::isEdited( )	{ return mIsEdited; }
 
 void LineEdit::setType( LType tp )
 {
@@ -523,13 +524,14 @@ void LineEdit::changed( )
     //> Enable apply
     if(mPrev && !bt_fld) viewApplyBt(true);
     bt_tm->start(mPrev ? 5000 : 500);
+    mIsEdited = true;
 
     emit valChanged(value());
 }
 
 void LineEdit::setValue( const QString &txt )
 {
-    if( ed_fld ) ed_fld->blockSignals(true);
+    if(ed_fld) ed_fld->blockSignals(true);
     switch(type())
     {
 	case Text:
@@ -557,11 +559,11 @@ void LineEdit::setValue( const QString &txt )
 	    ((QComboBox*)ed_fld)->setEditText(txt);
 	    break;
     }
-    if( ed_fld ) ed_fld->blockSignals(false);
+    if(ed_fld) ed_fld->blockSignals(false);
 
     m_val = txt;
 
-    if( bt_fld ) viewApplyBt(false);
+    if(bt_fld) viewApplyBt(false);
 }
 
 void LineEdit::setCfg(const QString &cfg)
@@ -654,6 +656,7 @@ void LineEdit::applySlot( )
 
 void LineEdit::cancelSlot( )
 {
+    mIsEdited = false;
     if(mPrev)
     {
 	setValue(m_val);
