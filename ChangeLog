@@ -1,3 +1,7 @@
+2011-10-05 Roman
+- SYS: Debian init script is updated by "almaz".
+
+
 2011-10-04 Roman
 - !!:FIX:DAQ.Siemens: Float and Double values get and set is fixed. Reconnect set is fixed on error connection.
     Integer's, Real's and String's size property using is fixed. Links clear on parameter disable is made.
