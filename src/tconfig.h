@@ -136,7 +136,7 @@ class TConfig: public TValElem
 	bool cfgPresent( const string &n_val );
 	TCfg &cfg( const string &n_val );
 	TCfg *at( const string &n_val, bool noExpt = false );
-	void cfgViewAll( bool val = true );	//Hide all no key elements
+	void cfgViewAll( bool val = true );	// Show/Hide all no key elements
 	void cfgKeyUseAll( bool val );
 
 	TElem &elem( );

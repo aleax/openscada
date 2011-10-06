@@ -118,6 +118,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
     cfg("PRM_BD_L").setS("ModBusPrmL_"+name_c);
+    cfg("PROT").setS("TCP");
 }
 
 TMdContr::~TMdContr()

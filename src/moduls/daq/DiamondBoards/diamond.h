@@ -65,7 +65,6 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( );
 	bool cfgChange( TCfg &cfg );
 	void vlSet( TVal &val, const TVariant &pvl );
 	void vlGet( TVal &val );
@@ -107,7 +106,6 @@ class TMdContr: public TController
 
     protected:
 	//Methods
-	void load_( );
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process

@@ -120,6 +120,7 @@ void TParamContr::load_( )
 {
     if(!SYS->chkSelDB(owner().DB())) return;
 
+    cfgViewAll(true);
     SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
 			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
 }

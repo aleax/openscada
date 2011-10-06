@@ -178,13 +178,6 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
-void TMdContr::load_( )
-{
-    cfgViewAll(true);
-    TController::load_( );
-    cfg("ADMODE").setB(cfg("ADMODE").getB());	//For hiden attributes visible status update
-}
-
 void TMdContr::start_( )
 {
     //> Main DSC code
@@ -521,13 +514,6 @@ void TMdPrm::setType( const string &tpId )
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
-
-void TMdPrm::load_( )
-{
-    cfgViewAll(true);
-    TParamContr::load_();
-    setType(type());		//For hiden attributes visible status update
-}
 
 void TMdPrm::setType( TMdPrm::Type vtp )
 {

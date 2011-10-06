@@ -153,6 +153,7 @@ void TController::load_( )
 
     bool en_st_prev = en_st, run_st_prev = run_st;
 
+    cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
     //> Load parameters if enabled

@@ -540,9 +540,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::load_( )
 {
-    cfgViewAll(true);
     TController::load_( );
-    cfg("TYPE").setI(mType);
 
     //> Check for get old period method value
     if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer/1e3);

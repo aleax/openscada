@@ -1,3 +1,9 @@
+2011-10-06 Roman
+- DAQ: Force loading for all fields of controller's and parameter's object is added.
+- DAQ.ModBus: Force protocol set on creation to "TCP", for some specific fields visible update.
+- DAQ.Siemens, DAQ.DiamondBoards: Full controller's and parameter's object load mechanism update.
+
+
 2011-10-05 Roman
 - SYS: Debian init script is updated by "almaz".
 
