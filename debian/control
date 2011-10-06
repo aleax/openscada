@@ -49,7 +49,7 @@ Description: Visual components libraries into SQLite DB.
 
 Package: openscada-model.aglks
 Architecture: all
-Depends: openscada
+Depends: openscada, openscada-libdb.main, openscada-libdb.vca
 Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
  The openscada-model.aglks package includes model "AGLKS" data bases and config.
  The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
@@ -58,7 +58,7 @@ Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
 
 Package: openscada-model.boiler
 Architecture: all
-Depends: openscada
+Depends: openscada, openscada-libdb.main, openscada-libdb.vca
 Description: Model "Boiler" data bases and config (only Russian).
  The openscada-model.boiler package model "Boiler" data bases and config.
  The Model is allowed only for Russian language.
