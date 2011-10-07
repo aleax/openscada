@@ -1449,8 +1449,9 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     return xdoc.save();
 }
 
-void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel )
+void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel, time_t upTo )
 {
+    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
     //> Process instructions
     if(xcur->childGet("<?dp",0,true))
     {
@@ -1507,8 +1508,8 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    int64_t perRpt = (int64_t)(1000000*dRpt);
 	    int64_t rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
 	    if(lstTime && lstTime<bTime) rTime-=perRpt;
-	    if(((time-rTime)/perRpt) > 1000) continue;
-	    while(rTime < time)
+	    //if(((time-rTime)/perRpt) > 1000) continue;
+	    while(rTime < time && ::time(NULL) < upTo)
 	    {
 		if(atoi(reptN->attr("docRptEnd").c_str()))
 		{

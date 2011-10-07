@@ -195,7 +195,7 @@ class OrigDocument : public PrWidget
 	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 
 	string makeDoc( const string &tmpl, Widget *wdg );
-	void nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false );
+	void nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false, time_t upTo = 0 );
 	void nodeClear( XMLNode *xcur );
 
 	//Attributes
