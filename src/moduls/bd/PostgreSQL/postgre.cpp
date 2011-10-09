@@ -757,7 +757,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    case TFld::Integer:
 			if( u_cfg.fld().flg()&TFld::DateTimeDec && (tblStrct[i_fld][1] == "timestamp with time zone") )
 			    isEqual = true;
-			else if( (tblStrct[i_fld][1] == "integer") || 
+			else if( (tblStrct[i_fld][1] == "integer") ||
 				 (tblStrct[i_fld][1] == "bigint") )
 			    isEqual = true;
 			break;
@@ -796,19 +796,19 @@ void MTable::fieldFix( TConfig &cfg )
 	{
 	    case TFld::String:
 		if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
-		    f_tp="CHARACTER VARYING("+SYS->int2str(vmax(10,vmin(255,u_cfg.fld().len())))+") DEFAULT '"+u_cfg.fld().def()+"' ";
-		else  f_tp="TEXT DEFAULT '"+u_cfg.fld().def()+"' ";
+		    f_tp = "CHARACTER VARYING("+SYS->int2str(vmax(10,vmin(255,u_cfg.fld().len())))+") DEFAULT '"+u_cfg.fld().def()+"' ";
+		else  f_tp = "TEXT DEFAULT '"+u_cfg.fld().def()+"' ";
 		break;
 	    case TFld::Integer:
 		if( u_cfg.fld().flg()&TFld::DateTimeDec )
-		    f_tp = req+"TIMESTAMP WITH TIME ZONE DEFAULT '"+UTCtoSQL(atoi(u_cfg.fld().def().c_str()))+"' "; 
-		else f_tp="INTEGER DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
+		    f_tp = "TIMESTAMP WITH TIME ZONE DEFAULT '"+UTCtoSQL(atoi(u_cfg.fld().def().c_str()))+"' ";
+		else f_tp = "INTEGER DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
 		break;
 	    case TFld::Real:
-		f_tp="DOUBLE PRECISION DEFAULT '"+TSYS::real2str(atof(u_cfg.fld().def().c_str()))+"' ";
+		f_tp = "DOUBLE PRECISION DEFAULT '"+TSYS::real2str(atof(u_cfg.fld().def().c_str()))+"' ";
 		break;
 	    case TFld::Boolean:
-		f_tp="SMALLINT DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
+		f_tp = "SMALLINT DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
 		break;
 	}
 
