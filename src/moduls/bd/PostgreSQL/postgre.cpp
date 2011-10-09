@@ -797,7 +797,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    case TFld::String:
 		if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
 		    f_tp = "CHARACTER VARYING("+SYS->int2str(vmax(10,vmin(255,u_cfg.fld().len())))+") DEFAULT '"+u_cfg.fld().def()+"' ";
-		else  f_tp = "TEXT DEFAULT '"+u_cfg.fld().def()+"' ";
+		else f_tp = "TEXT DEFAULT '"+u_cfg.fld().def()+"' ";
 		break;
 	    case TFld::Integer:
 		if( u_cfg.fld().flg()&TFld::DateTimeDec )

@@ -1,5 +1,5 @@
 2011-10-09 Roman
-- DB.PostgreSQL: TIMESTAMP place for DateTimeDec integer type is fixed.
+- FIX:DB.PostgreSQL: TIMESTAMP place for DateTimeDec integer type is fixed.
 
 
 2011-10-07 Roman
