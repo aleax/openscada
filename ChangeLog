@@ -1,4 +1,6 @@
 2011-10-09 Roman
+- UI.Vision, UI.WebVision: Value, not use percent, scale store for multiply parameters into primitive "Diagram"
+    for the parameters like scale, over 20%, is added.
 - FIX:DB.PostgreSQL: TIMESTAMP place for DateTimeDec integer type is fixed.
 
 

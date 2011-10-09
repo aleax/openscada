@@ -1265,7 +1265,7 @@ void ShapeDiagram::init( WdgView *w )
 {
     w->shpData = new ShpDt();
 
-    //- Init tracing timer -
+    //> Init tracing timer
     ((ShpDt*)w->shpData)->trcTimer = new QTimer(w);
     connect( ((ShpDt*)w->shpData)->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()) );
 }
@@ -1580,48 +1580,42 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	}
     }
 
-    int prmRealSz = -1;
-
 #if HAVE_FFTW3_H
-    //>> Calc real parameters size
-    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
-	if(shD->prms[i_p].fftN && shD->prms[i_p].color().isValid())
-	{
-	    if(prmRealSz == -1) prmRealSz = i_p;
-	    else if(prmRealSz >= 0) prmRealSz = -2;
-	    else prmRealSz -= 1;
-	}
-
     //>> Calc vertical scale
-    double vsMax = 100, vsMin = 0, curVl;	//Trend's vertical scale border
+    double curVl, vsMax = -3e300, vsMin = 3e300;//Trend's vertical scale border
     bool   vsPerc = true;			//Vertical scale percent mode
-    if( prmRealSz >= 0 )
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
     {
-	if( !shD->prms[prmRealSz].fftN ) return;
+	if(!shD->prms[i_p].fftN || !shD->prms[i_p].color().isValid())	continue;
 
-	vsPerc = false;
-	if( shD->prms[prmRealSz].bordU() > shD->prms[prmRealSz].bordL() )
-	{ vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
-	else
+	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
+	if(shD->prms[i_p].bordU() <= shD->prms[i_p].bordL())
 	{
 	    //>>> Calc value borders
-	    vsMax = -3e300, vsMin = 3e300;
-	    double vlOff = shD->prms[prmRealSz].fftOut[0][0]/shD->prms[prmRealSz].fftN;
-	    for( int i_v = 1; i_v < (shD->prms[prmRealSz].fftN/2+1); i_v++ )
+	    double vlOff = shD->prms[i_p].fftOut[0][0]/shD->prms[i_p].fftN;
+	    for(int i_v = 1; i_v < (shD->prms[i_p].fftN/2+1); i_v++)
 	    {
-		curVl = vlOff+pow(pow(shD->prms[prmRealSz].fftOut[i_v][0],2)+pow(shD->prms[prmRealSz].fftOut[i_v][1],2),0.5)/(shD->prms[prmRealSz].fftN/2+1);
-		vsMin = vmin(vsMin,curVl);
-		vsMax = vmax(vsMax,curVl);
+		curVl = vlOff+pow(pow(shD->prms[i_p].fftOut[i_v][0],2)+pow(shD->prms[i_p].fftOut[i_v][1],2),0.5)/(shD->prms[i_p].fftN/2+1);
+		vsMinAdj = vmin(vsMinAdj,curVl);
+		vsMaxAdj = vmax(vsMaxAdj,curVl);
 	    }
-	    if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
-	    else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+	    if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
+	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
 	    {
-		double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
-		vsMin -= wnt_dp/2;
-		vsMax += wnt_dp/2;
+		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
+		vsMinAdj -= wnt_dp/2;
+		vsMaxAdj += wnt_dp/2;
 	    }
 	}
+	else { vsMaxAdj = shD->prms[i_p].bordU(); vsMinAdj = shD->prms[i_p].bordL(); }
+
+	//>>> Check for value border allow
+        if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
+        { vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
+        else { vsMax = -3e300; vsMin = 3e300; break; }
     }
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = 0; }
+    else vsPerc = false;
 
     //>> Vertical scale and offset apply
     bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
@@ -1919,60 +1913,61 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
     }
 
-    int prmRealSz = -1;
-    //>> Calc real parameters size
-    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
-	if(shD->prms[i_p].val().size() && shD->prms[i_p].color().isValid())
-	{
-	    if(prmRealSz == -1) prmRealSz = i_p;
-	    else if(prmRealSz >= 0) prmRealSz = -2;
-	    else prmRealSz -= 1;
-	}
-
     //>> Calc vertical scale
     int64_t aVend;			//Corrected for allow data the trend end point
     int64_t aVbeg;			//Corrected for allow data the trend begin point
     bool    vsPerc = true;		//Vertical scale percent mode
     bool    isLog = sclVer&0x4;		//Logarithmic scale
-    double  curVl, vsMax = 100, vsMin = isLog?pow(10,vmin(0,2-(tAr.height()/150))):0;	//Trend's vertical scale border
-    if( prmRealSz >= 0 )
+    double  curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
+
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
     {
-	vsPerc = false;
-	if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() && shD->prms[prmRealSz].valTp() != 0 )
+	if(!shD->prms[i_p].val().size() || !shD->prms[i_p].color().isValid())	continue;
+
+	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
+	if(shD->prms[i_p].bordU() <= shD->prms[i_p].bordL() && shD->prms[i_p].valTp() != 0)
 	{
 	    //>>> Check trend for valid data
-	    aVbeg = vmax(tBeg,shD->prms[prmRealSz].valBeg());
-	    aVend = vmin(tEnd,shD->prms[prmRealSz].valEnd());
+	    aVbeg = vmax(tBeg,shD->prms[i_p].valBeg());
+	    aVend = vmin(tEnd,shD->prms[i_p].valEnd());
 
-	    if( aVbeg >= aVend ) return;
+	    if(aVbeg >= aVend) return;
 	    //>>> Calc value borders
-	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
-	    int ipos = shD->prms[prmRealSz].val(aVbeg);
-	    if( ipos && shD->prms[prmRealSz].val()[ipos].tm > aVbeg ) ipos--;
+	    int ipos = shD->prms[i_p].val(aVbeg);
+	    if(ipos && shD->prms[i_p].val()[ipos].tm > aVbeg) ipos--;
 	    while( true )
 	    {
-		if(ipos >= (int)shD->prms[prmRealSz].val().size() || end_vl)	break;
-		if(shD->prms[prmRealSz].val()[ipos].tm >= aVend) end_vl = true;
-		if(shD->prms[prmRealSz].val()[ipos].val != EVAL_REAL)
+		if(ipos >= (int)shD->prms[i_p].val().size() || end_vl)	break;
+		if(shD->prms[i_p].val()[ipos].tm >= aVend) end_vl = true;
+		if(shD->prms[i_p].val()[ipos].val != EVAL_REAL)
 		{
-		    curVl = shD->prms[prmRealSz].val()[ipos].val;
-		    vsMin = vmin(vsMin,curVl); vsMax = vmax(vsMax,curVl);
+		    curVl = shD->prms[i_p].val()[ipos].val;
+		    vsMinAdj = vmin(vsMinAdj,curVl); vsMaxAdj = vmax(vsMaxAdj,curVl);
 		}
 		ipos++;
 	    }
-	    if( vsMax == -3e300 )	{ vsMax = 1.0; vsMin = 0.0; }
-	    else if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
-	    else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+	    if(vsMaxAdj == -3e300)		{ vsMaxAdj = 1.0; vsMinAdj = 0.0; }
+	    else if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
+	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
 	    {
-		double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
-		vsMin -= wnt_dp/2;
-		vsMax += wnt_dp/2;
+		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
+		vsMinAdj -= wnt_dp/2;
+		vsMaxAdj += wnt_dp/2;
 	    }
 	}
-	else if( shD->prms[prmRealSz].bordU() <= shD->prms[prmRealSz].bordL() && shD->prms[prmRealSz].valTp() == 0 )	{ vsMax = 1.5; vsMin = -0.5; }
-	else { vsMax = shD->prms[prmRealSz].bordU(); vsMin = shD->prms[prmRealSz].bordL(); }
+	else if(shD->prms[i_p].bordU() <= shD->prms[i_p].bordL() && shD->prms[i_p].valTp() == 0)
+	{ vsMaxAdj = 1.5; vsMinAdj = -0.5; }
+	else { vsMaxAdj = shD->prms[i_p].bordU(); vsMinAdj = shD->prms[i_p].bordL(); }
+
+	//>>> Check for value border allow
+	if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
+	{ vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
+	else { vsMax = -3e300; vsMin = 3e300; break; }
     }
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog?pow(10,vmin(0,2-(tAr.height()/150))):0; }
+    else vsPerc = false;
+
     if(isLog)
     {
 	vsMax = log10(vmax(1e-100,vsMax));

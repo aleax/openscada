@@ -5475,60 +5475,61 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	}
     }
 
-    int prmRealSz = -1;
-    //>> Calc real parameters size
-    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
-	if( trnds[i_p].val().size() && !((trnds[i_p].color()>>31)&0x01) )
-	{
-	    if( prmRealSz == -1 ) prmRealSz = i_p;
-	    else if( prmRealSz >= 0 ) prmRealSz = -2;
-	    else prmRealSz -= 1;
-	}
-
     //> Calc vertical scale
     int64_t aVend;			//Corrected for allow data the trend end point
     int64_t aVbeg;			//Corrected for allow data the trend begin point
     bool    vsPerc = true;              //Vertical scale percent mode
     bool    isLog = sclVer&0x4;		//Logarithmic scale
-    double  curVl, vsMax = 100, vsMin = isLog?pow(10,vmin(0,2-(tArH/150))):0;  //Trend's vertical scale border
-    if( prmRealSz >= 0 )
+    double  curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
+
+    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
     {
-	vsPerc = false;
-	if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() && trnds[prmRealSz].valTp() != 0 )
+	if(!trnds[i_p].val().size() || ((trnds[i_p].color()>>31)&0x01))	continue;
+
+	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
+	if(trnds[i_p].bordU() <= trnds[i_p].bordL() && trnds[i_p].valTp() != 0)
 	{
 	    //>> Check trend for valid data
-	    aVbeg = vmax(tBeg,trnds[prmRealSz].valBeg());
-	    aVend = vmin(tEnd,trnds[prmRealSz].valEnd());
+	    aVbeg = vmax(tBeg,trnds[i_p].valBeg());
+	    aVend = vmin(tEnd,trnds[i_p].valEnd());
 
-	    if( aVbeg >= aVend )	{ makeImgPng(ses,im); return; }
+	    if(aVbeg >= aVend)	{ makeImgPng(ses,im); return; }
 	    //>> Calc value borders
-	    vsMax = -3e300, vsMin = 3e300;
 	    bool end_vl = false;
-	    int ipos = trnds[prmRealSz].val(aVbeg);
-	    if( ipos && trnds[prmRealSz].val()[ipos].tm > aVbeg ) ipos--;
-	    while( true )
+	    int ipos = trnds[i_p].val(aVbeg);
+	    if( ipos && trnds[i_p].val()[ipos].tm > aVbeg ) ipos--;
+	    while(true)
 	    {
-		if( ipos >= (int)trnds[prmRealSz].val().size() || end_vl )	break;
-		if( trnds[prmRealSz].val()[ipos].tm >= aVend )	end_vl = true;
-		if( trnds[prmRealSz].val()[ipos].val != EVAL_REAL )
+		if(ipos >= (int)trnds[i_p].val().size() || end_vl)	break;
+		if(trnds[i_p].val()[ipos].tm >= aVend)	end_vl = true;
+		if(trnds[i_p].val()[ipos].val != EVAL_REAL)
 		{
-		    curVl = trnds[prmRealSz].val()[ipos].val;
-                    vsMin = vmin(vsMin,curVl); vsMax = vmax(vsMax,curVl);
+		    curVl = trnds[i_p].val()[ipos].val;
+                    vsMinAdj = vmin(vsMinAdj,curVl); vsMaxAdj = vmax(vsMaxAdj,curVl);
 		}
 		ipos++;
 	    }
-	    if( vsMax == -3e300 )	{ vsMax = 1.0; vsMin = 0.0; }
-	    else if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
-	    else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+	    if(vsMaxAdj == -3e300)		{ vsMaxAdj = 1.0; vsMinAdj = 0.0; }
+	    else if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
+	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
 	    {
-		double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
-		vsMin -= wnt_dp/2;
-		vsMax += wnt_dp/2;
+		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
+		vsMinAdj -= wnt_dp/2;
+		vsMaxAdj += wnt_dp/2;
 	    }
 	}
-	else if( trnds[prmRealSz].bordU() <= trnds[prmRealSz].bordL() && trnds[prmRealSz].valTp() == 0 ) { vsMax = 1.5; vsMin = -0.5; }
-	else { vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
+	else if(trnds[i_p].bordU() <= trnds[i_p].bordL() && trnds[i_p].valTp() == 0)
+	{ vsMaxAdj = 1.5; vsMinAdj = -0.5; }
+	else { vsMaxAdj = trnds[i_p].bordU(); vsMinAdj = trnds[i_p].bordL(); }
+
+	//>>> Check for value border allow
+        if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
+        { vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
+        else { vsMax = -3e300; vsMin = 3e300; break; }
     }
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMax = 100, vsMin = isLog?pow(10,vmin(0,2-(tArH/150))):0; }
+    else vsPerc = false;
+
     if(isLog)
     {
 	vsMax = log10(vmax(1e-100,vsMax));
@@ -5809,48 +5810,42 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	}
     }
 
-    int prmRealSz = -1;
-
 #if HAVE_FFTW3_H
-    //>> Calc real parameters size
-    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
-	if( trnds[i_p].fftN && !((trnds[i_p].color()>>31)&0x01) )
-	{
-	    if( prmRealSz == -1 ) prmRealSz = i_p;
-	    else if( prmRealSz >= 0 ) prmRealSz = -2;
-	    else prmRealSz -= 1;
-	}
-
     //>> Calc vertical scale
-    double vsMax = 100, vsMin = 0, curVl;	//Trend's vertical scale border
+    double curVl, vsMax = -3e300, vsMin = 3e300;//Trend's vertical scale border
     bool   vsPerc = true;			//Vertical scale percent mode
-    if( prmRealSz >= 0 )
+    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
     {
-	if( !trnds[prmRealSz].fftN ) { makeImgPng(ses,im); return; }
+	if(!trnds[i_p].fftN || ((trnds[i_p].color()>>31)&0x01))	continue;
 
-	vsPerc = false;
-	if( trnds[prmRealSz].bordU() > trnds[prmRealSz].bordL() )
-	{ vsMax = trnds[prmRealSz].bordU(); vsMin = trnds[prmRealSz].bordL(); }
-	else
+	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
+	if(trnds[i_p].bordU() <= trnds[i_p].bordL())
 	{
 	    //>>> Calc value borders
-	    vsMax = -3e300, vsMin = 3e300;
-	    double vlOff = trnds[prmRealSz].fftOut[0][0]/trnds[prmRealSz].fftN;
-	    for( int i_v = 1; i_v < (trnds[prmRealSz].fftN/2+1); i_v++ )
+	    double vlOff = trnds[i_p].fftOut[0][0]/trnds[i_p].fftN;
+	    for(int i_v = 1; i_v < (trnds[i_p].fftN/2+1); i_v++)
 	    {
-		curVl = vlOff+pow(pow(trnds[prmRealSz].fftOut[i_v][0],2)+pow(trnds[prmRealSz].fftOut[i_v][1],2),0.5)/(trnds[prmRealSz].fftN/2+1);
-		vsMin = vmin(vsMin,curVl);
-		vsMax = vmax(vsMax,curVl);
+		curVl = vlOff+pow(pow(trnds[i_p].fftOut[i_v][0],2)+pow(trnds[i_p].fftOut[i_v][1],2),0.5)/(trnds[i_p].fftN/2+1);
+		vsMinAdj = vmin(vsMinAdj,curVl);
+		vsMaxAdj = vmax(vsMaxAdj,curVl);
 	    }
-	    if( vsMax == vsMin )	{ vsMax += 1.0; vsMin -= 1.0; }
-	    else if( (vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.001 )
+	    if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
+	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
 	    {
-		double wnt_dp = 0.001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
-		vsMin -= wnt_dp/2;
-		vsMax += wnt_dp/2;
+		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
+		vsMinAdj -= wnt_dp/2;
+		vsMaxAdj += wnt_dp/2;
 	    }
 	}
+	else { vsMaxAdj = trnds[i_p].bordU(); vsMinAdj = trnds[i_p].bordL(); }
+
+	//>>> Check for value border allow
+        if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
+        { vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
+        else { vsMax = -3e300; vsMin = 3e300; break; }
     }
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = 0; }
+    else vsPerc = false;
 
     //>> Vertical scale and offset apply
     bool isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
