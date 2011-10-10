@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-02 12:23+0300\n"
+"POT-Creation-Date: 2011-10-10 20:06+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -369,6 +369,9 @@ msgstr "Період (с)"
 msgid "Values"
 msgstr "Значення"
 
+msgid "Microseconds"
+msgstr "Мікросекунди"
+
 msgid ""
 "Values archivator.\n"
 "No set archivator for process by buffer and all archivators.\n"
@@ -390,8 +393,20 @@ msgstr "Значення"
 msgid "Picture size"
 msgstr "Розмір зображення"
 
+msgid "Picture width in pixels."
+msgstr "Ширина зображення у пікселах."
+
+msgid "Picture height in pixels."
+msgstr "Висота зображення у пікселах."
+
 msgid "Value scale"
 msgstr "Шкала значення"
+
+msgid "Picture minimum value."
+msgstr "Мінімальне значення зображення."
+
+msgid "Picture maximum value."
+msgstr "Максимальне значення зображення."
 
 msgid "Values trend"
 msgstr "Графік значень"
@@ -1796,14 +1811,14 @@ msgstr "Закінчено. "
 msgid "Last: %s. Load: %3.1f% (%s from %s)"
 msgstr "Останній: %s. Навантаження: %3.1f% (%s із %s)"
 
+msgid "Standard"
+msgstr "Стандарт"
+
 msgid "Round-robin"
 msgstr ""
 
 msgid "Style \"batch\""
 msgstr "Стиль \"batch\""
-
-msgid "Standard"
-msgstr "Стандарт"
 
 #, c-format
 msgid "No present task '%s'."

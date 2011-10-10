@@ -1423,9 +1423,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     }
 
     //> Make vertical grid and symbols
-    double	c_val = EVAL_REAL,
-		v_max = -3e300,
-		v_min = 3e300;
+    double	c_val = EVAL_REAL, v_max = -3e300, v_min = 3e300;
     for( c_tm = buf.begin(); c_tm <= buf.end(); c_tm++ )
     {
 	c_val = buf.getR(&c_tm,true);
@@ -1433,20 +1431,21 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	v_min = vmin(v_min,c_val);
 	v_max = vmax(v_max,c_val);
     }
-    if( valmax!=valmin )
+    if(v_max == -3e300 || valmin > valmax)	{ gdImageDestroy(im); return rez; }
+    if(valmax != valmin)
     {
 	v_max = vmax(v_max,valmax);
 	v_min = vmin(v_min,valmin);
     }
-    if( v_max==-3e300 )	{ gdImageDestroy(im); return rez; }
-    if( TSYS::realRound(v_max,3) == TSYS::realRound(v_min,3) )	{ v_max+=1.0; v_min-=1.0; }
+
+    if(TSYS::realRound(v_max,3) == TSYS::realRound(v_min,3))	{ v_max+=1.0; v_min-=1.0; }
     double v_div = 1;
     double v_len = v_max - v_min;
-    while( v_len > 10 )	{ v_div *= 10; v_len /= 10; }
-    while( v_len < 1 ) 	{ v_div /= 10; v_len *= 10; }
+    while(v_len > 10)	{ v_div *= 10; v_len /= 10; }
+    while(v_len < 1) 	{ v_div /= 10; v_len *= 10; }
     v_min = floor(v_min/v_div)*v_div;
     v_max = ceil(v_max/v_div)*v_div;
-    while( ((v_max-v_min)/v_div) < 5 ) v_div /= 2;
+    while(((v_max-v_min)/v_div) < 5) v_div /= 2;
     //>> Draw vertical grid and symbols
     for( double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div )
     {
@@ -1792,7 +1791,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(runSt && ctrMkNode("area",opt,-1,"/val",_("Values"),R_R___,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,4,"tp","dec","len","6","min","0","max","999999");
+	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,5,"tp","dec","len","6","min","0","max","999999","help",_("Microseconds"));
 	    ctrMkNode("fld",opt,-1,"/val/size",_("Size (s)"),RWRW__,"root",SARH_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/val/lstAVal",
 		"help",_("Values archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
@@ -1808,10 +1807,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    else
 	    {
-		ctrMkNode("fld",opt,-1,"/val/pct_w",_("Picture size"),RWRW__,"root",SARH_ID,3,"tp","dec","min","100","max","1024");
-		ctrMkNode("fld",opt,-1,"/val/pct_h","",RWRW__,"root",SARH_ID,3,"tp","dec","min","50","max","800");
-		ctrMkNode("fld",opt,-1,"/val/max",_("Value scale"),RWRW__,"root",SARH_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/val/min","",RWRW__,"root",SARH_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/val/pct_w",_("Picture size"),RWRW__,"root",SARH_ID,4,"tp","dec","min","100","max","1024","help",_("Picture width in pixels."));
+		ctrMkNode("fld",opt,-1,"/val/pct_h","",RWRW__,"root",SARH_ID,4,"tp","dec","min","50","max","800","help",_("Picture height in pixels."));
+		ctrMkNode("fld",opt,-1,"/val/min",_("Value scale"),RWRW__,"root",SARH_ID,2,"tp","dec","help",_("Picture minimum value."));
+		ctrMkNode("fld",opt,-1,"/val/max","",RWRW__,"root",SARH_ID,2,"tp","dec","help",_("Picture maximum value."));
 		ctrMkNode("img",opt,-1,"/val/trend",_("Values trend"),R_R___,"root",SARH_ID);
 	    }
 	}

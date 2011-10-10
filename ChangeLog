@@ -1,3 +1,11 @@
+2011-10-10 Roman
+- Archive: Trends build hang for maximum border leser minimum. Tip helps added for trends build dialog.
+- FIX:DAQ.JavaLikeCalc: EVAL_BOOL return fix to TVariant by convert to char.
+    Set value from NULL TVariant to RegW is fixed. Registers context init on call is change to use switch.
+    Set Object in function RegW::setType() is fixed by create empty object.
+    Constant's strings concatenate is fixed for multiply constants.
+
+
 2011-10-09 Roman
 - UI.Vision, UI.WebVision: Value, not use percent, scale store for multiply parameters into primitive "Diagram"
     for the parameters like scale, over 20%, is added.

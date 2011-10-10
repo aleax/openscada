@@ -78,6 +78,7 @@ void TVariant::setType( Type tp )
 	    break;
 	case TVariant::Object:
 	    vl.assign(1,(char)TVariant::Object);
+	    vl.reserve(1+sizeof(void*));
 	    break;
 	default: break;
     }
