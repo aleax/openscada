@@ -1431,8 +1431,8 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	v_min = vmin(v_min,c_val);
 	v_max = vmax(v_max,c_val);
     }
-    if(v_max == -3e300 || valmin > valmax)	{ gdImageDestroy(im); return rez; }
-    if(valmax != valmin)
+    if(v_max == -3e300)	{ gdImageDestroy(im); return rez; }
+    if(valmax > valmin)
     {
 	v_max = vmax(v_max,valmax);
 	v_min = vmin(v_min,valmin);
