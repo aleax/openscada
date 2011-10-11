@@ -153,8 +153,6 @@ void Lib::del( const char *id )
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // ElTp {funcID}(ElTp prm1, ...) - the function {funcID} call
-    //  prm{N} - {N} parameter to the function.
     if(present(iid))	return at(iid).at().objFuncCall("call", prms, user);
 
     return TCntrNode::objFuncCall(iid, prms, user);

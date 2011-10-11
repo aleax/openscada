@@ -1,3 +1,7 @@
+2011-10-11 Roman
+- DAQ.JavaLikeCalc: Set types for all registers on calc and Registers content prepare is pass.
+
+
 2011-10-10 Roman
 - Archive: Trends build hang for maximum border leser minimum. Tip helps added for trends build dialog.
 - FIX:DAQ.JavaLikeCalc: EVAL_BOOL return fix to TVariant by convert to char.

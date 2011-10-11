@@ -1723,7 +1723,7 @@ void Func::calc( TValFunc *val )
 		reg[i_rg].setType(Reg::PrmAttr);
 		*reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
 		break;
-	    default: reg[i_rg].setType(mRegs[i_rg]->type());	break;
+	    //default: reg[i_rg].setType(mRegs[i_rg]->type());	break;
 	}
 
     //> Exec calc
