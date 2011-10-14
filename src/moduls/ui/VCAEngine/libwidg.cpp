@@ -128,8 +128,9 @@ string WidgetLib::name( )
 
 void WidgetLib::setFullDB( const string &it )
 {
-    work_lib_db = TSYS::strSepParse(it,0,'.')+"."+TSYS::strSepParse(it,1,'.');
-    m_dbt = TSYS::strSepParse(it,2,'.');
+    size_t dpos = it.rfind(".");
+    work_lib_db = (dpos!=string::npos) ? it.substr(0,dpos) : "";
+    m_dbt = (dpos!=string::npos) ? it.substr(dpos+1) : "";
     modifG();
 }
 

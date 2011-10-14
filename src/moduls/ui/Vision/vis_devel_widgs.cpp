@@ -2081,8 +2081,15 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
 {
     DevelWdgView *wdg = new DevelWdgView(iwid,wLevel()+1,mainWin(),this);
     connect(wdg, SIGNAL(selected(const string&)), this, SIGNAL(selected(const string& )));
-    if( wLevel() == 0 )  pntView->raise();
+    if(wLevel() == 0)	pntView->raise();
     return wdg;
+}
+
+void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr )
+{
+    WdgView::load(item, load, init, aBr);
+    if(editWdg)	editWdg->raise();
+    if(pntView)	pntView->raise();
 }
 
 int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )
@@ -2769,7 +2776,7 @@ bool DevelWdgView::event( QEvent *event )
 		    if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
 			    ((DevelWdgView*)children().at(i_c))->select( ) )
 			rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-	    pntView->setSelArea( rsel, fMoveHoldMove ?  SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
+	    pntView->setSelArea( rsel, fMoveHoldMove ? SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
 	}
 	pnt.end();
 	if( WdgView::event(event) )	return true;
@@ -3168,7 +3175,7 @@ SizePntWdg::SizePntWdg( QWidget* parent ) : QWidget(parent), view(SizeDots)
 
 void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 {
-    if( view == iview && mWPos == geom.topLeft() && mWSize == geom.size() ) return;
+    if(view == iview && mWPos == geom.topLeft() && mWSize == geom.size()) return;
 
     view   = iview;
     mWPos  = geom.topLeft();
@@ -3178,7 +3185,7 @@ void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 
 void SizePntWdg::apply( )
 {
-    if( mWSize.width() > 2 && mWSize.height() > 2 )
+    if(mWSize.width() > 2 && mWSize.height() > 2)
     {
 	QRegion reg;
 	QRect   wrect, irect;
@@ -3187,10 +3194,10 @@ void SizePntWdg::apply( )
 	    case SizeDots:
 		wrect = QRectF(mWPos,mWSize).adjusted(-3,-3,3,3).toRect();
 		irect = QRect(0,0,wrect.width(),wrect.height());
-		//- Make widget's mask -
+		//> Make widget's mask
 		for(int i_p = 0; i_p < 9; i_p++)
 		    if( i_p != 4 )
-			reg+=QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-7)/2),
+			reg += QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-7)/2),
 				   irect.y()+(i_p/3)*((irect.height()-7)/2),7,7));
 		break;
 	    case EditBorder:
@@ -3204,12 +3211,9 @@ void SizePntWdg::apply( )
 		break;
 	    default: break;
 	}
-	if( geometry() != wrect )
-	{
-	    setGeometry(wrect);
-	    setMask(reg);
-	}
-	if( !isVisible() ) show();
+	if(geometry() != wrect)	setGeometry(wrect);
+	setMask(reg);
+	if(!isVisible()) show();
     }
     else hide();
 }

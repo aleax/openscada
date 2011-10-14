@@ -101,8 +101,9 @@ string Lib::name( )
 
 void Lib::setFullDB( const string &idb )
 {
-    work_lib_db = TSYS::strSepParse(idb,0,'.')+"."+TSYS::strSepParse(idb,1,'.');
-    mDB = TSYS::strSepParse(idb,2,'.');
+    size_t dpos = idb.rfind(".");
+    work_lib_db = (dpos!=string::npos) ? idb.substr(0,dpos) : "";
+    mDB = (dpos!=string::npos) ? idb.substr(dpos+1) : "";
     modifG( );
 }
 

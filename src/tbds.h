@@ -87,6 +87,8 @@ class TTable : public TCntrNode
 
 	//Private attributes
 	const string	mName;
+	bool		notFullShow;
+	int		tblOff;
 };
 
 //************************************************

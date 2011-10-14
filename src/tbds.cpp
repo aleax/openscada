@@ -993,7 +993,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTable                                       *
 //************************************************
-TTable::TTable( const string &name ) :  mName(name)
+TTable::TTable( const string &name ) :  mName(name), notFullShow(false), tblOff(0)
 {
     modifClr();
     mLstUse = time(NULL);
@@ -1115,6 +1115,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
 	    XMLNode *tbl;
 	    if((tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRW__,"root",SDB_ID,1,"s_com","add,del")))
 	    {
@@ -1137,20 +1138,29 @@ void TTable::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
+    else if(a_path == "/prm/tblOff")
+    {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(TSYS::int2str(tblOff));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = atoi(opt->text().c_str());
+    }
     else if(a_path == "/prm/tbl")
     {
 	TConfig req;
 	string eid;
 	fieldStruct(req);
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))
-	    for(unsigned i_r = 0; fieldSeek(i_r,req); i_r++)
+	{
+	    time_t upTo = time(NULL)+STD_INTERF_TM;
+	    bool firstRow = true;
+	    for(unsigned i_r = vmax(0,tblOff); time(NULL) < upTo && fieldSeek(i_r,req); i_r++, firstRow = false)
 	        for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++)
 		{
 		    eid = req.elem().fldAt(i_f).name();
-		    if( i_r == 0 )	//Prepare columns
-			ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);
+		    if(firstRow) ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);
 		    opt->childGet(i_f)->childAdd("el")->setText(req.cfg(eid).getS());
 		}
+	    notFullShow = (time(NULL) >= upTo);
+	}
 	if(ctrChkNode(opt,"add",RWRW__,"root",SDB_ID,SEC_WR))
 	{
 	    for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++)

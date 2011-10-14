@@ -493,8 +493,9 @@ void TPrmTmplLib::setDescr( const string &vl )	{ cfg("DESCR").setS(vl); modif();
 
 void TPrmTmplLib::setFullDB( const string &vl )
 {
-    work_lib_db = TSYS::strSepParse(vl,0,'.')+"."+TSYS::strSepParse(vl,1,'.');
-    m_db = TSYS::strSepParse(vl,2,'.');
+    size_t dpos = vl.rfind(".");
+    work_lib_db = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
+    m_db = (dpos!=string::npos) ? vl.substr(dpos+1) : "";
     modifG();
 }
 

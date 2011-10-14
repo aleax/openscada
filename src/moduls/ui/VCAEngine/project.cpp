@@ -159,8 +159,9 @@ void Project::setOwner( const string &it )
 
 void Project::setFullDB( const string &it )
 {
-    workPrjDB = TSYS::strSepParse(it,0,'.')+"."+TSYS::strSepParse(it,1,'.');
-    mDBt = TSYS::strSepParse(it,2,'.');
+    size_t dpos = it.rfind(".");
+    workPrjDB = (dpos!=string::npos) ? it.substr(0,dpos) : "";
+    mDBt = (dpos!=string::npos) ? it.substr(dpos+1) : "";
     modifG();
 }
 

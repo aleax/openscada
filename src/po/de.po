@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-10 20:06+0300\n"
+"POT-Creation-Date: 2011-10-14 12:10+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -562,6 +562,9 @@ msgstr "Tabelle: "
 
 msgid "Table"
 msgstr "Tabelle"
+
+msgid "Table offset"
+msgstr "Offset-Tabelle"
 
 msgid "Data"
 msgstr "Daten"

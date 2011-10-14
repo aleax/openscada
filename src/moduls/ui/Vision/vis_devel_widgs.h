@@ -511,6 +511,7 @@ class DevelWdgView: public WdgView
         void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
 
 	WdgView *newWdgItem( const string &iwid );
+	void load( const string& item, bool load = true, bool init = true, XMLNode *aBr = NULL );
 
 	DevelWdgView *levelWidget( int lev );
 
