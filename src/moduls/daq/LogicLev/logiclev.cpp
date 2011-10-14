@@ -100,7 +100,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Real,TFld::NoFlag,"5","1000","0;10000"));	//!!!! Remove at further
+    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
@@ -127,8 +127,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
-    mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE").getSd()),
-    prc_st(false), call_st(false), endrun_req(false), tm_calc(0)
+    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE").getSd()),
+    prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_calc(0)
 {
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
     cfg("PRM_BD_REFL").setS("LogLevPrmRefl_"+name_c);
@@ -180,7 +180,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer/1e3);
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld/1e3);
 }
 
 void TMdContr::start_( )

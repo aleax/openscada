@@ -137,7 +137,7 @@ class TSYS : public TCntrNode
 
 	string workDB( )	{ return mWorkDB; }
 	string selDB( )		{ return mSelDB; }
-	bool chkSelDB( const string& wDB );
+	bool chkSelDB( const string& wDB, bool isStrong = false );
 	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool saveAtExit( )	{ return mSaveAtExit; }

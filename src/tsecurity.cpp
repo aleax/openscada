@@ -162,6 +162,7 @@ void TSecurity::load_( )
 
     //> Load DB
     string	name;
+    map<string, bool>	itReg;
 
     //>> Search and create new users
     try
@@ -177,6 +178,7 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name))	usrAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[name] = true;
 	    }
 
 	//>>> Search into config file
@@ -185,7 +187,17 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name))	usrAdd(name,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
+		itReg[name] = true;
 	    }
+
+	//>>> Check for remove users removed from DB
+	if(!SYS->selDB().empty())
+	{
+	    usrList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(usrAt(db_ls[i_it]).at().DB()))
+		    usrDel(db_ls[i_it]);
+	}
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -198,6 +210,7 @@ void TSecurity::load_( )
 	TConfig g_cfg(&grp_el);
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
+	itReg.clear();
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
@@ -206,6 +219,7 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name))	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[name] = true;
 	    }
 
 	//>>> Search into config file
@@ -214,7 +228,17 @@ void TSecurity::load_( )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name))	grpAdd(name,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
+		itReg[name] = true;
 	    }
+
+	//>>> Check for remove groups removed from DB
+	if(!SYS->selDB().empty())
+	{
+	    grpList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(grpAt(db_ls[i_it]).at().DB()))
+		    grpDel(db_ls[i_it]);
+	}
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -355,7 +379,7 @@ string TUser::tbl( )		{ return owner().subId()+"_user"; }
 
 void TUser::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 

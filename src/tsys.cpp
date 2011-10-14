@@ -568,11 +568,10 @@ void TSYS::stop( )
     mStopSignal = SIGUSR1;
 }
 
-bool TSYS::chkSelDB( const string& wDB )
+bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
 {
-    if(selDB().empty()) return true;
-    if(selDB() == "<cfg>" && (wDB == "<cfg>" || TBDS::realDBName(wDB) == workDB())) return true;
-    if(SYS->selDB( ) == TBDS::realDBName(wDB)) return true;
+    if(selDB().empty() && !isStrong) return true;
+    if(SYS->selDB() == TBDS::realDBName(wDB)) return true;
     return false;
 }
 

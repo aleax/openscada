@@ -121,8 +121,8 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	double	&mPer;		// ms
-	int	&mPrior;	// Process task priority
+	int	&mPerOld,	// ms
+		&mPrior;	// Process task priority
 	ResString &mSched;      // Calc schedule
 
 	bool	prc_st,		// Process task active
@@ -130,7 +130,7 @@ class TMdContr: public TController
 		endrun_req;	// Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tm_calc;	// Scheme's calc time
+	double	mPer, tm_calc;	// Scheme's calc time
 };
 
 //*************************************************

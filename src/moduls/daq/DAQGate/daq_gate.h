@@ -142,11 +142,11 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	enRes;				//Resource for enable params and request to remote OpenSCADA station
-	double	&mPer,				//Acquisition task (seconds)
-		&mSync,				//Synchronization inter remote OpenSCADA station:
+	double	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestDtTm;			//Restore data maximum length time (hour)
-	int	&mRestTm,			//Restore timeout in s
+	int	&mPerOld,			//Acquisition task (seconds)
+		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
 	ResString &mSched,              	// Acquisition schedule
 		&mStations,			//Remote stations list
@@ -157,7 +157,7 @@ class TMdContr: public TController
 		endrunReq;			//Request to stop of the Process task
 	vector< pair<string,float> > mStatWork;	//Work stations and it status
 
-	double	tmGath;				//Gathering time
+	double	mPer, tmGath;			//Gathering time
 };
 
 //******************************************************

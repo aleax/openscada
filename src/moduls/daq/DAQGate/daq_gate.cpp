@@ -91,7 +91,7 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's DB structure
     fldAdd(new TFld("PRM_BD",_("Parameteres cache table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.1;100"));	//!!!! Remove at further
+    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6.2","1","0.1;100"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000"));
@@ -118,10 +118,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
-    mPer(cfg("PERIOD").getRd()), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()),
+    mPerOld(cfg("PERIOD").getId()), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     mSched(cfg("SCHEDULE").getSd()), mStations(cfg("STATIONS").getSd()), mContrPrm(cfg("CNTRPRM").getSd()),
-    prcSt(false), call_st(false), endrunReq(false), tmGath(0)
+    prcSt(false), call_st(false), endrunReq(false), mPer(1e9), tmGath(0)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -166,7 +166,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer);
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld);
 }
 
 void TMdContr::enable_( )

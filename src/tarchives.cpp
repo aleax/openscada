@@ -140,6 +140,7 @@ void TArchiveS::load_( )
     //> LidDB
     //>> Message archivators load
     string id,type;
+    map<string, bool>	itReg;
     try
     {
 	TConfig c_el(&elMess);

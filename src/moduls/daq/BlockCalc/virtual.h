@@ -132,14 +132,14 @@ class Contr: public TController
 		call_st,        // Calc now stat
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
-	double	&mPer;		// Clock period (ms)
-	int	&mPrior,	// Process data task priority
+	int	&mPerOld,	// Clock period (ms)
+		&mPrior,	// Process data task priority
 		&mIter;		// Iteration into clock
 	ResString &mSched;	// Calc schedule
 
 	int	mBl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
-	double	tm_calc;			// Scheme's calc time
+	double	mPer, tm_calc;			// Scheme's calc time
 
 	Res	hd_res, calcRes;		// Resource for process block
 };

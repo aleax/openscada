@@ -228,8 +228,8 @@ class TMdContr: public TController
 	};
 
 	//Attributes
-	double	&mPer;			// ms
-	int	&mPrior,		// Process task priority
+	int	&mPerOld,		// ms
+		&mPrior,		// Process task priority
 		&mType,			// Connection type
 		&mSlot,
 		&mDev;			// CIF device number
@@ -251,7 +251,7 @@ class TMdContr: public TController
 
 	Res	nRes, reqRes;
 
-	double	tm_calc;		// Template functions calc time
+	double	mPer, tm_calc;		// Template functions calc time
 };
 
 //************************************************

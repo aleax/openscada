@@ -98,7 +98,7 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's DB structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Real,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
     fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
@@ -481,10 +481,11 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem),
-	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
+	mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), mSched(cfg("SCHEDULE").getSd()),
 	mAddr(cfg("ADDR").getSd()), mAssincWR(cfg("ASINC_WR").getBd()),
-	prc_st(false), call_st(false), endrun_req(false), toReconect(false), isReload(false), di(NULL), dc(NULL), tm_calc(0)
+	prc_st(false), call_st(false), endrun_req(false), toReconect(false), isReload(false), di(NULL), dc(NULL),
+	mPer(1e9), tm_calc(0)
 {
     cfg("PRM_BD").setS("SiemensPrm_"+name_c);
 }
@@ -543,7 +544,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer/1e3);
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld/1e3);
 }
 
 void TMdContr::save_( )

@@ -132,8 +132,8 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res, req_res;		//Resource for enable params and request values
-	double	&mPer;				//Acquisition task (seconds)
-	int	&mPrior,			//Process task priority
+	int	&mPerOld,			//Acquisition task (seconds)
+		&mPrior,			//Process task priority
 		&connTry;			//Connections try
 	ResString &mSched,                      //Acquisition schedule
 		&mAddr;				//Transport device address
@@ -143,7 +143,7 @@ class TMdContr: public TController
 		endrun_req;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tm_gath;			//Gathering time
+	double	mPer, tm_gath;			//Gathering time
 };
 
 //*************************************************

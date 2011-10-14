@@ -121,7 +121,7 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Real,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
     fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
@@ -170,8 +170,8 @@ DA *TTpContr::daGet( const string &da )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
-    mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()),  mSched(cfg("SCHEDULE").getSd()),
-    prc_st(false), call_st(false), endrun_req(false), tm_calc(0.0)
+    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),  mSched(cfg("SCHEDULE").getSd()),
+    prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_calc(0)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
@@ -206,7 +206,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPer/1e3);
+    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld/1e3);
 }
 
 void TMdContr::enable_(  )
