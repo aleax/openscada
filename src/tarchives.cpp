@@ -149,23 +149,30 @@ void TArchiveS::load_( )
 
 	//>> Search int DB and create new archivators
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc","",fld_cnt++,c_el); )
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
 		if(modPresent(type) && !at(type).at().messPresent(id))
 		    at(type).at().messAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[type+"."+id] = true;
 	    }
-	//>> Search into config file and create new archivators
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
-	    {
-		id = c_el.cfg("ID").getS();
-		type = c_el.cfg("MODUL").getS();
-		if(modPresent(type) && !at(type).at().messPresent(id))
-		    at(type).at().messAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            vector<string> m_ls;
+            modList(m_ls);
+            for(unsigned i_m = 0; i_m < m_ls.size(); i_m++)
+            {
+                at(m_ls[i_m]).at().messList(db_ls);
+                for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().messAt(db_ls[i_it]).at().DB()))
+                        at(m_ls[i_m]).at().messDel(db_ls[i_it]);
+            }
+        }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -178,26 +185,34 @@ void TArchiveS::load_( )
 	TConfig c_el(&elVal);
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
+	itReg.clear();
 
 	//>> Search into DB and create new archivators
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc","",fld_cnt++,c_el); )
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODUL").getS();
 		if(modPresent(type) && !at(type).at().valPresent(id))
 		    at(type).at().valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[type+"."+id] = true;
 	    }
-	//>> Search into config file and create new archivators
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
-	    {
-		id = c_el.cfg("ID").getS();
-		type = c_el.cfg("MODUL").getS();
-		if(modPresent(type) && !at(type).at().valPresent(id))
-		    at(type).at().valAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            vector<string> m_ls;
+            modList(m_ls);
+            for(unsigned i_m = 0; i_m < m_ls.size(); i_m++)
+            {
+                at(m_ls[i_m]).at().valList(db_ls);
+                for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().valAt(db_ls[i_it]).at().DB()))
+                        at(m_ls[i_m]).at().valDel(db_ls[i_it]);
+            }
+        }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str()); 
@@ -210,22 +225,27 @@ void TArchiveS::load_( )
 	TConfig c_el(&elAval);
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
+	itReg.clear();
 
 	//>> Search into DB and create new archives
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val","",fld_cnt++,c_el); )
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val",nodePath()+subId()+"_val",fld_cnt++,c_el); )
 	    {
 	        id = c_el.cfg("ID").getS();
 	        if(!valPresent(id)) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	        itReg[id] = true;
 	    }
-	//>> Search into config file and create new archives
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_val",fld_cnt++,c_el); )
-	    {
-		id = c_el.cfg("ID").getS();
-		if(!valPresent(id)) valAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            valList(db_ls);
+            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(valAt(db_ls[i_it]).at().DB()))
+                    valDel(db_ls[i_it]);
+        }
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -255,7 +275,7 @@ string TArchiveS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================== Subsystem \"Archives\" options ===================\n"
-	"------------ Parameters of section <%s> in config file -----------\n"
+	"------------ Parameters of section '%s' in config file -----------\n"
 	"MessBufSize   <items>       Messages buffer size.\n"
 	"MessPeriod    <sec>         Message arhiving period.\n"
 	"ValPeriod     <msec>        Values arhiving period.\n"
@@ -290,7 +310,7 @@ void TArchiveS::subStart( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Message archivator <%s> start error."),o_lst[i_o].c_str());
+		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),o_lst[i_o].c_str());
 		}
 	}
 	//> Value archivators start
@@ -303,7 +323,7 @@ void TArchiveS::subStart( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Value archivator <%s> start error."),val.at().workId().c_str());
+		    mess_err(nodePath().c_str(),_("Value archivator '%s' start error."),val.at().workId().c_str());
 		}
 	}
     }
@@ -318,7 +338,7 @@ void TArchiveS::subStart( )
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Value archive <%s> start error."),o_lst[i_o].c_str());
+		mess_err(nodePath().c_str(),_("Value archive '%s' start error."),o_lst[i_o].c_str());
 	    }
     }
 
@@ -374,7 +394,7 @@ void TArchiveS::subStop( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Value archivator <%s> stop error."),o_lst[i_o].c_str());
+		    mess_err(nodePath().c_str(),_("Value archivator '%s' stop error."),o_lst[i_o].c_str());
 		}
 	}
 	// Message archivators stop
@@ -387,7 +407,7 @@ void TArchiveS::subStop( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Message archivator <%s> stop error."),o_lst[i_o].c_str());
+		    mess_err(nodePath().c_str(),_("Message archivator '%s' stop error."),o_lst[i_o].c_str());
 		}
 	}
     }
@@ -402,7 +422,7 @@ void TArchiveS::subStop( )
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Value archive <%s> stop error."),o_lst[i_o].c_str());
+		mess_err(nodePath().c_str(),_("Value archive '%s' stop error."),o_lst[i_o].c_str());
 	    }
     }
 }

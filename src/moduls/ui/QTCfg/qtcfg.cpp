@@ -997,7 +997,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		    selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg);
 		    scrl->setWidget(wdg);
-		    wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+                    //wdg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 		    scrl->setWidgetResizable(true);
 		    if( scrl->verticalScrollBar() ) scrl->verticalScrollBar()->setValue(v_scrl);
 
@@ -1060,14 +1060,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    connect( lstbox, SIGNAL( itemDoubleClicked(QListWidgetItem*) ), this, SLOT( listBoxGo(QListWidgetItem*) ) );
 
 		lstbox->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
+		lstbox->setMaximumWidth(300);
 
 		QVBoxLayout *vbox = new QVBoxLayout;
+		vbox->setAlignment(Qt::AlignLeft);
 		lab = new QLabel(widget);
 		vbox->addWidget(lab);
-		QHBoxLayout *hbox = new QHBoxLayout;
-		hbox->addWidget( lstbox );
-		hbox->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
-		vbox->addLayout(hbox);
+                vbox->addWidget(lstbox);
 		widget->layout()->addItem(vbox);
 
 		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
@@ -1111,7 +1110,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
-		tbl->setMinimumHeight(150); tbl->setMaximumHeight(500);
+                tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 
 		widget->layout()->addWidget( new QLabel((t_s.attr("dscr")+":").c_str(),widget) );
 		widget->layout()->addWidget( tbl );
@@ -1248,7 +1247,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		{
 		    tbl->resizeRowsToContents();
 		    int hgt = vmax(tbl->minimumHeight(),vmin(300,(20+20*tbl->rowCount())));
-		    tbl->setMinimumHeight(hgt); tbl->setMaximumHeight(hgt);
+                    tbl->setMinimumHeight(hgt); //tbl->setMaximumHeight(hgt);
 		}
 		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 

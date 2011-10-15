@@ -232,7 +232,7 @@ void TController::enable( )
 	    catch(TError err)
 	    {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Enable parameter <%s> error."),prm_list[i_prm].c_str());
+		mess_warning(nodePath().c_str(),_("Enable parameter '%s' error."),prm_list[i_prm].c_str());
 		enErr = true;
 	    }
 
@@ -259,7 +259,7 @@ void TController::disable( )
 	    catch(TError err)
 	    {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Disable parameter <%s> error."),prm_list[i_prm].c_str());
+		mess_warning(nodePath().c_str(),_("Disable parameter '%s' error."),prm_list[i_prm].c_str());
 	    }
 
     //> Disable for children
@@ -271,6 +271,8 @@ void TController::disable( )
 
 void TController::LoadParmCfg(  )
 {
+    map<string, bool>   itReg;
+
     //> Search and create new parameters
     for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
     {
@@ -280,17 +282,20 @@ void TController::LoadParmCfg(  )
 	    TConfig c_el(&owner().tpPrmAt(i_tp));
 	    c_el.cfgViewAll(false);
 
+	    //>>> Search new into DB and Config file
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
 					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el); )
 	    {
 		try
 		{
-		    if( !present(c_el.cfg("SHIFR").getS()) ) add( c_el.cfg("SHIFR").getS(), i_tp );
+		    string shfr = c_el.cfg("SHIFR").getS();
+		    if(!present(shfr))	add(shfr, i_tp);
+		    itReg[shfr] = true;
 		}
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Add parameter <%s> error."),c_el.cfg("SHIFR").getS().c_str());
+		    mess_err(nodePath().c_str(),_("Add parameter '%s' error."),c_el.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	}catch(TError err)
@@ -300,7 +305,17 @@ void TController::LoadParmCfg(  )
 	}
     }
 
-    //- Force load present parameters -
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+	vector<string> it_ls;
+    	list(it_ls);
+    	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+    	    if(itReg.find(it_ls[i_it]) == itReg.end())
+            	del(it_ls[i_it]);
+    }
+
+    //> Force load present parameters
     vector<string> prm_ls;
     list(prm_ls);
     for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)

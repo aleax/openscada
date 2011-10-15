@@ -92,7 +92,7 @@ msgstr "Помилка завантаження архівів значень."
 #, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
-"------------ Parameters of section <%s> in config file -----------\n"
+"------------ Parameters of section '%s' in config file -----------\n"
 "MessBufSize   <items>       Messages buffer size.\n"
 "MessPeriod    <sec>         Message arhiving period.\n"
 "ValPeriod     <msec>        Values arhiving period.\n"
@@ -102,7 +102,7 @@ msgid ""
 "\n"
 msgstr ""
 "====================== Опції підсистеми \"Архіви\" ========================\n"
-"------------ Параметри секції <%s> у конфігураційному файлі -----------\n"
+"------------ Параметри секції '%s' у конфігураційному файлі -----------\n"
 "MessBufSize   <од.>        Розмір буферу повідомлень.\n"
 "MessPeriod    <сек>        Період архівації повідомлень.\n"
 "ValPeriod     <мсек>       Період архівації значень.\n"
@@ -115,16 +115,16 @@ msgid "Start subsystem."
 msgstr "Запуск підсистеми."
 
 #, c-format
-msgid "Message archivator <%s> start error."
-msgstr "Помилка запуску архіватору повідомлень <%s>."
+msgid "Message archivator '%s' start error."
+msgstr "Помилка запуску архіватору повідомлень '%s'."
 
 #, c-format
-msgid "Value archivator <%s> start error."
-msgstr "Помилка запуску архіватору значень <%s>."
+msgid "Value archivator '%s' start error."
+msgstr "Помилка запуску архіватору значень '%s'."
 
 #, c-format
-msgid "Value archive <%s> start error."
-msgstr "Помилка запуску архіву значень <%s>."
+msgid "Value archive '%s' start error."
+msgstr "Помилка запуску архіву значень '%s'."
 
 msgid "Stop subsystem."
 msgstr "Зупинка підсистеми."
@@ -133,16 +133,16 @@ msgid "Archive messages thread is not stopped!"
 msgstr "Поток архівування повідомлень не зупинено!"
 
 #, c-format
-msgid "Value archivator <%s> stop error."
-msgstr "Помилка зупинки архіватору значень <%s>."
+msgid "Value archivator '%s' stop error."
+msgstr "Помилка зупинки архіватору значень '%s'."
 
 #, c-format
-msgid "Message archivator <%s> stop error."
-msgstr "Помилка зупинки архіватору повідомлень <%s>."
+msgid "Message archivator '%s' stop error."
+msgstr "Помилка зупинки архіватору повідомлень '%s'."
 
 #, c-format
-msgid "Value archive <%s> stop error."
-msgstr "Помилка зупинки архіву значень <%s>."
+msgid "Value archive '%s' stop error."
+msgstr "Помилка зупинки архіву значень '%s'."
 
 msgid "Buffer full. Messages lost!"
 msgstr "Буфер повний. Повідомлення втрачені!"
@@ -313,8 +313,8 @@ msgid "Set too old value to buffer."
 msgstr "Вставка дуже старого значення до буфера."
 
 #, c-format
-msgid "Archivator <%s> error or it is not started."
-msgstr "Помилка архіватору <%s> або його не запущено."
+msgid "Archivator '%s' error or it is not started."
+msgstr "Помилка архіватору '%s' або його не запущено."
 
 #, c-format
 msgid "gdImageStringFT for font '%s' error: %s."
@@ -460,18 +460,18 @@ msgid "To enable"
 msgstr "Вмикати"
 
 #, c-format
-msgid "Close DB <%s> error!"
-msgstr "Помилка закриття БД <%s>!"
+msgid "Close DB '%s' error!"
+msgstr "Помилка закриття БД '%s'!"
 
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
-"----------- The config file station <%s> parameters -----------\n"
+"----------- The config file station '%s' parameters -----------\n"
 "SYSStPref    <1>   Use station id prefix into generic (SYS) table.\n"
 "\n"
 msgstr ""
 "========================= Опції підсистеми \"БД\" =========================\n"
-"------ Параметри станції <%s> у конфігураційному файлі --------\n"
+"------ Параметри станції '%s' у конфігураційному файлі --------\n"
 "SYSStPref    <1>   Використовувати ідентифікатор станції у загальній (SYS) "
 "таблиці.\n"
 "\n"
@@ -564,8 +564,8 @@ msgid "Field id = %s(%s) no present!"
 msgstr "Поле id = %s(%s) відсутне!"
 
 #, c-format
-msgid "%s:%s:> Control element <%s> error!"
-msgstr "%s:%s:> Помилка елементу керування <%s>."
+msgid "%s:%s:> Control element '%s' error!"
+msgstr "%s:%s:> Помилка елементу керування '%s'."
 
 msgid "Node already in process!"
 msgstr "Вузол вже обробляється!"
@@ -625,15 +625,15 @@ msgid "Node is beign processed now!"
 msgstr "Вузол оброблюється зараз!"
 
 #, c-format
-msgid "Child <%s> is not present!"
-msgstr "Нащадок <%s> відсутній!"
+msgid "Child '%s' is not present!"
+msgstr "Нащадок '%s' відсутній!"
 
 msgid "Node is the root or is not connected!"
 msgstr "Вузол кореневий або не підключений!"
 
 #, c-format
-msgid "Element <%s> is not present or disabled!"
-msgstr "Елемент <%s> відсутній або вимкнений!"
+msgid "Element '%s' is not present or disabled!"
+msgstr "Елемент '%s' відсутній або вимкнений!"
 
 msgid "Loading node error."
 msgstr "Помилка завантаження вузла."
@@ -649,16 +649,16 @@ msgid "Function '%s' error or not enough parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів для неї."
 
 #, c-format
-msgid "Some tags on path <%s> are missed!"
-msgstr "Деякі теги у шляху <%s> помилкові!"
+msgid "Some tags on path '%s' are missed!"
+msgstr "Деякі теги у шляху '%s' помилкові!"
 
 #, c-format
-msgid "Error access to element <%s>!"
-msgstr "Помилка доступу до елементу <%s>!"
+msgid "Error access to element '%s'!"
+msgstr "Помилка доступу до елементу '%s'!"
 
 #, c-format
-msgid "Element <%s> warning! %s"
-msgstr "Попередження елементу <%s>! %s"
+msgid "Element '%s' warning! %s"
+msgstr "Попередження елементу '%s'! %s"
 
 msgid "Node: "
 msgstr "Вузол: "
@@ -719,8 +719,8 @@ msgid "Enable controller!"
 msgstr "Ввімкнення контролера!"
 
 #, c-format
-msgid "Enable parameter <%s> error."
-msgstr "Помилка ввімкнення параметру <%s>."
+msgid "Enable parameter '%s' error."
+msgstr "Помилка ввімкнення параметру '%s'."
 
 msgid "Some parameters enable error."
 msgstr "Помилка включення деяких параметрів."
@@ -729,12 +729,12 @@ msgid "Disable controller!"
 msgstr "Вимкнення контроллера!"
 
 #, c-format
-msgid "Disable parameter <%s> error."
-msgstr "Помилка вимкнення параметру <%s>."
+msgid "Disable parameter '%s' error."
+msgstr "Помилка вимкнення параметру '%s'."
 
 #, c-format
-msgid "Add parameter <%s> error."
-msgstr "Помилка додання параметру <%s>."
+msgid "Add parameter '%s' error."
+msgstr "Помилка додання параметру '%s'."
 
 msgid "Search and create new parameters error."
 msgstr "Помилка пошуку та створення нових параметрів."
@@ -788,29 +788,29 @@ msgid "Load template's libraries error."
 msgstr "Помилка завантаження бібліотек шаблонів."
 
 #, c-format
-msgid "Add controller <%s> error."
-msgstr "Помилка додання контроллера <%s>."
+msgid "Add controller '%s' error."
+msgstr "Помилка додання контроллера '%s'."
 
 #, c-format
-msgid "Start template library <%s> error."
-msgstr "Помилка запуску бібліотеки шаблону <%s>."
+msgid "Start template library '%s' error."
+msgstr "Помилка запуску бібліотеки шаблону '%s'."
 
 #, c-format
-msgid "Enable controller <%s> error."
-msgstr "Помилка ввімкнення контролера <%s>."
+msgid "Enable controller '%s' error."
+msgstr "Помилка ввімкнення контролера '%s'."
 
 #, c-format
-msgid "Stop controller <%s> error."
-msgstr "Помилка зупинки контролера <%s>."
+msgid "Stop controller '%s' error."
+msgstr "Помилка зупинки контролера '%s'."
 
 #, c-format
-msgid "Disable controller <%s> error."
-msgstr "Помилка вимкнення контроллера <%s>."
+msgid "Disable controller '%s' error."
+msgstr "Помилка вимкнення контроллера '%s'."
 
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
-"------------ Parameters of section <%s> in config file -----------\n"
+"------------ Parameters of section '%s' in config file -----------\n"
 "RdStLevel    <lev>  The curent station redundant level.\n"
 "RdTaskPer    <s>    The redundant task call period.\n"
 "RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
@@ -821,7 +821,7 @@ msgid ""
 "\n"
 msgstr ""
 "==================== Опції підсистеми \"Збір даних\" ======================\n"
-"------- Параметри секції <%s> у конфігураціїному файлі -----------\n"
+"------- Параметри секції '%s' у конфігураціїному файлі -----------\n"
 "RdStLevel    <рів>   Рівень резервування поточної станції.\n"
 "RdTaskPer    <с>     Період виклику задачі обслуговування резервування.\n"
 "RdRestConnTm <с>     Час відновлення з'єднання з \"мертвою\" резервною "
@@ -906,8 +906,8 @@ msgid "The element container is already attached!"
 msgstr "Елемент контейнеру вже під'єднано!"
 
 #, c-format
-msgid "Element <%s> is not present!"
-msgstr "Елемент <%s> відсутній!"
+msgid "Element '%s' is not present!"
+msgstr "Елемент '%s' відсутній!"
 
 msgid "Field is not string."
 msgstr "Поле не строка."
@@ -928,16 +928,16 @@ msgid "Empty"
 msgstr "Порожньо"
 
 #, c-format
-msgid "Select error! Val: <%s>."
-msgstr "Помилка вибору! Значення: <%s>."
+msgid "Select error! Val: '%s'."
+msgstr "Помилка вибору! Значення: '%s'."
 
 #, c-format
-msgid "Select error! Val: <%d>."
-msgstr "Помилка вибору! Значення: <%d>."
+msgid "Select error! Val: '%d'."
+msgstr "Помилка вибору! Значення: '%d'."
 
 #, c-format
-msgid "Select error! Val: <%f>."
-msgstr "Помилка вибору! Значення: <%f>."
+msgid "Select error! Val: '%f'."
+msgstr "Помилка вибору! Значення: '%f'."
 
 #, c-format
 msgid "Function is used by: %s"
@@ -960,8 +960,8 @@ msgid "Change is not permited while function is used: %s"
 msgstr "Зміни неможливі тому що функція використана: %s"
 
 #, c-format
-msgid "Value <%s> is already attached!"
-msgstr "Значення <%s> вже підключено!"
+msgid "Value '%s' is already attached!"
+msgstr "Значення '%s' вже підключено!"
 
 msgid "Function: "
 msgstr "Функція: "
@@ -1018,8 +1018,8 @@ msgid "Input"
 msgstr "Вхід"
 
 #, c-format
-msgid "IO <%s> is not present!"
-msgstr "IO <%s> відсутній!"
+msgid "IO '%s' is not present!"
+msgstr "IO '%s' відсутній!"
 
 msgid "Function is not attached!"
 msgstr "Функція не підключена!"
@@ -1102,7 +1102,7 @@ msgstr "Керування модулями"
 msgid ""
 "=================== Subsystem \"Module sheduler\" options =================\n"
 "    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
-"------------ Parameters of section <%s> in config file -----------\n"
+"------------ Parameters of section '%s' in config file -----------\n"
 "ModPath  <path>        Path to shared libraries(modules).\n"
 "ModAllow <list>        List of shared libraries allowed for automatic "
 "loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
@@ -1114,7 +1114,7 @@ msgid ""
 msgstr ""
 "================ Опції підсистеми \"Керування модулями\" ==================\n"
 "    --ModPath=<шлях>  Шлях до модулів (/var/os/modules/).\n"
-"------- Параметри секції <%s> у конфігураціїному файлі -----------\n"
+"------- Параметри секції '%s' у конфігураціїному файлі -----------\n"
 "ModPath  <шлях>       Шлях до поділяємих бібліотек (модулів).\n"
 "ModAllow <перелік>    Перелік поділяємих бібліотек дозволених для "
 "автоматичного завантаження, підключення та виконання (bd_DBF.so;"
@@ -1128,32 +1128,32 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "SO <%s> is not present!"
-msgstr "SO <%s> відсутне!"
+msgid "SO '%s' is not present!"
+msgstr "SO '%s' відсутне!"
 
 #, c-format
-msgid "SO <%s> is already attached!"
-msgstr "SO <%s> вже підключене!"
+msgid "SO '%s' is already attached!"
+msgstr "SO '%s' вже підключене!"
 
 #, c-format
-msgid "SO <%s> error: %s !"
-msgstr "SO <%s> помилка: %s !"
+msgid "SO '%s' error: %s !"
+msgstr "SO '%s' помилка: %s !"
 
 #, c-format
-msgid "%s for type <%s> doesn't support module version: %d!"
-msgstr "%s для типу <%s> не підтримує версію модуля: %d!"
+msgid "%s for type '%s' doesn't support module version: %d!"
+msgstr "%s для типу '%s' не підтримує версію модуля: %d!"
 
 #, c-format
-msgid "Module <%s> is already present!"
-msgstr "Модуль <%s> вже присутній"
+msgid "Module '%s' is already present!"
+msgstr "Модуль '%s' вже присутній"
 
 #, c-format
-msgid "Attach module <%s> error!"
-msgstr "Помилка підключення модуля <%s>!"
+msgid "Attach module '%s' error!"
+msgstr "Помилка підключення модуля '%s'!"
 
 #, c-format
-msgid "Can't detach library <%s>."
-msgstr "Неможливо відключити бібліотеку <%s>."
+msgid "Can't detach library '%s'."
+msgstr "Неможливо відключити бібліотеку '%s'."
 
 msgid "Subsystem"
 msgstr "Підсистема"
@@ -1210,8 +1210,8 @@ msgid "Connect module!"
 msgstr "Під'єднання модуля!"
 
 #, c-format
-msgid "Function <%s> is not present in the module!"
-msgstr "Функція <%s> відсутня в модулі!"
+msgid "Function '%s' is not present in the module!"
+msgstr "Функція '%s' відсутня в модулі!"
 
 msgid "Module: "
 msgstr "Модуль: "
@@ -1424,8 +1424,8 @@ msgid "The subsystem is not modular!"
 msgstr "Підсистема не модульна!"
 
 #, c-format
-msgid "Disconnect module <%s>!"
-msgstr "Від'єднання модуля <%s>!"
+msgid "Disconnect module '%s'!"
+msgstr "Від'єднання модуля '%s'!"
 
 #, c-format
 msgid "Start module '%s' error."
@@ -1519,7 +1519,7 @@ msgid ""
 "                         <direct> & 2 - stdout;\n"
 "                         <direct> & 4 - stderr;\n"
 "                         <direct> & 8 - archive.\n"
-"----------- The config file station <%s> parameters -----------\n"
+"----------- The config file station '%s' parameters -----------\n"
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "Workdir    <path>\tWork directory.\n"
@@ -1555,7 +1555,7 @@ msgstr ""
 "                         <напрямок> & 4 - стандартний вихід помилок "
 "(stderr);\n"
 "                         <напрямок> & 8 - архів повідомлень.\n"
-"------ Параметри станції <%s> у конфігураційному файлі --------\n"
+"------ Параметри станції '%s' у конфігураційному файлі --------\n"
 "StName     <ім'я>\tІм'я станції.\n"
 "WorkDB     <Тип.Ім'я>  Робоча БД (ім'я та тип).\n"
 "Workdir    <шлях>      Робоча директорія.\n"
@@ -1575,19 +1575,19 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Config file <%s> error: %s"
-msgstr "Помилка конфігураційного файлу <%s>: %s"
+msgid "Config file '%s' error: %s"
+msgstr "Помилка конфігураційного файлу '%s': %s"
 
 #, c-format
 msgid ""
-"Station <%s> is not present in the config file. Use <%s> station config!"
+"Station '%s' is not present in the config file. Use '%s' station config!"
 msgstr ""
-"Станція <%s> відсутня у конфігураційному файлі. Використано конфігурацію "
-"станції <%s>!"
+"Станція '%s' відсутня у конфігураційному файлі. Використано конфігурацію "
+"станції '%s'!"
 
 #, c-format
-msgid "Config <%s> error!"
-msgstr "Помилка конфігурації <%s>!"
+msgid "Config '%s' error!"
+msgstr "Помилка конфігурації '%s'!"
 
 #, c-format
 msgid "Load config file error: %s"
@@ -1604,8 +1604,8 @@ msgid "No one module is loaded. Your configuration broken!"
 msgstr "Жодного модуля не завантажено. Вашу конфігурацію зламано!"
 
 #, c-format
-msgid "Error load subsystem <%s>."
-msgstr "Помилка завантаження підсистеми <%s>."
+msgid "Error load subsystem '%s'."
+msgstr "Помилка завантаження підсистеми '%s'."
 
 msgid "Save!"
 msgstr "Збереження"
@@ -1614,8 +1614,8 @@ msgid "Start!"
 msgstr "Запуск!"
 
 #, c-format
-msgid "Error start subsystem <%s>."
-msgstr "Помилка старту підсистеми <%s>."
+msgid "Error start subsystem '%s'."
+msgstr "Помилка старту підсистеми '%s'."
 
 msgid "Final starting!"
 msgstr "Запуск завершено!"
@@ -1624,8 +1624,8 @@ msgid "Stop!"
 msgstr "Зупинка!"
 
 #, c-format
-msgid "Error stop subsystem <%s>."
-msgstr "Помилка зупинення підсистеми <%s>."
+msgid "Error stop subsystem '%s'."
+msgstr "Помилка зупинення підсистеми '%s'."
 
 msgid "The Terminate signal is received.. Server is being stoped!"
 msgstr "Отримано сигнал припинення. Сервер буде зупинено!"
@@ -1840,8 +1840,8 @@ msgid "Preferable run"
 msgstr "Уподобання виконання"
 
 #, c-format
-msgid "Start controller <%s> error."
-msgstr "Помилка запуску контролера <%s>."
+msgid "Start controller '%s' error."
+msgstr "Помилка запуску контролера '%s'."
 
 msgid "Id of parameter type error!"
 msgstr "Id параметру помилкове!"
@@ -1851,7 +1851,7 @@ msgstr "Тип параметру відсутнії."
 
 #, c-format
 msgid "Error attach new controller %s."
-msgstr "Помилка підключення нового контролера <%s>."
+msgstr "Помилка підключення нового контролера %s."
 
 msgid ""
 "Module doesn't support the function for compilation programming languages."
@@ -1885,20 +1885,20 @@ msgid "Search and load external hosts DB error."
 msgstr "Помилка пошуку та завантаження БД зовнішніх хостів."
 
 #, c-format
-msgid "Start input transport <%s> error."
-msgstr "Помилка запуску вхідного транспорту <%s>."
+msgid "Start input transport '%s' error."
+msgstr "Помилка запуску вхідного транспорту '%s'."
 
 #, c-format
-msgid "Start output transport <%s> error."
-msgstr "Помилка запуску вихідного транспорту <%s>."
+msgid "Start output transport '%s' error."
+msgstr "Помилка запуску вихідного транспорту '%s'."
 
 #, c-format
-msgid "Stop input transport <%s> error."
-msgstr "Помилка зупинки вхідного транспорту <%s>."
+msgid "Stop input transport '%s' error."
+msgstr "Помилка зупинки вхідного транспорту '%s'."
 
 #, c-format
-msgid "Stop output transport <%s> error."
-msgstr "Помилка зупинки вихідного транспорту <%s>."
+msgid "Stop output transport '%s' error."
+msgstr "Помилка зупинки вихідного транспорту '%s'."
 
 #, c-format
 msgid ""
@@ -2025,8 +2025,8 @@ msgid "Child '%d' is not allow."
 msgstr "Нащадок '%d' не доступний."
 
 #, c-format
-msgid "2:Open file <%s> error: %s"
-msgstr "2:Помилка відкриття файлу <%s>: %s"
+msgid "2:Open file '%s' error: %s"
+msgstr "2:Помилка відкриття файлу '%s': %s"
 
 msgid "The object don't attached to node of OpenSCADA tree."
 msgstr "Об'єкт не підключено до вузла дерева OpenSCADA."
@@ -2090,8 +2090,8 @@ msgid "Value arhiv no support!"
 msgstr "Архів значень не підтримується!"
 
 #, c-format
-msgid "Function <%s> no support!"
-msgstr "Функція <%s> не підтримується!"
+msgid "Function '%s' no support!"
+msgstr "Функція '%s' не підтримується!"
 
 #, c-format
 msgid "%s: No function set!"

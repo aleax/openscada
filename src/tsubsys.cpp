@@ -73,7 +73,7 @@ void TSubSYS::modAdd( TModule *modul )
 void TSubSYS::modDel( const string &name )
 {
     if( !subModule() ) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
-    mess_info(nodePath().c_str(),_("Disconnect module <%s>!"),name.c_str());
+    mess_info(nodePath().c_str(),_("Disconnect module '%s'!"),name.c_str());
     chldDel(m_mod,name);
 }
 

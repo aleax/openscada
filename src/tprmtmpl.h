@@ -54,7 +54,7 @@ class TPrmTempl: public TFunction, public TConfig
 	};
 
 	//Methods
-	TPrmTempl( const char *id, const char *name = "" );
+	TPrmTempl( const string &id, const string &name = "" );
 	~TPrmTempl( );
 
 	TCntrNode &operator=( TCntrNode &node );
@@ -105,7 +105,7 @@ class TDAQS;
 class TPrmTmplLib : public TCntrNode, public TConfig
 {
     public:
-	TPrmTmplLib( const char *id, const char *name, const string &lib_db );
+	TPrmTmplLib( const string &id, const string &name, const string &lib_db );
 	~TPrmTmplLib( );
 
 	TCntrNode &operator=( TCntrNode &node );
@@ -128,8 +128,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	void list( vector<string> &ls )		{ chldList(m_ptmpl,ls); }
 	bool present( const string &id )	{ return chldPresent(m_ptmpl,id); }
 	AutoHD<TPrmTempl> at( const string &id ){ return chldAt(m_ptmpl,id); }
-	void add( const char *id, const char *name = "" );
-	void del( const char *id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
+	void add( const string &id, const string &name = "" );
+	void del( const string &id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
 
 	TDAQS &owner( );
 

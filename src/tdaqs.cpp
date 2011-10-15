@@ -129,6 +129,7 @@ void TDAQS::load_( )
 	}
     } while(next_opt != -1);
 
+    map<string, bool>   itReg;
     //> Load templates libraries of parameter
     try
     {
@@ -139,20 +140,23 @@ void TDAQS::load_( )
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),"",lib_cnt++,c_el); )
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),nodePath()+"tmplib",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
+		itReg[l_id] = true;
 	    }
 
-	//>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"tmplib",lib_cnt++,c_el); )
-	    {
-		string l_id = c_el.cfg("ID").getS();
-		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>"));
-	    }
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            tmplLibList(db_ls);
+            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(db_ls[i_it]).at().DB()))
+                    tmplLibUnreg(db_ls[i_it]);
+        }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -171,35 +175,31 @@ void TDAQS::load_( )
 	    wmod = at(mod_ls[i_md]);
 	    TConfig g_cfg(&wmod.at());
 	    g_cfg.cfgViewAll(false);
+	    itReg.clear();
 
 	    //>> Search into DB and create new controllers
 	    SYS->db().at().dbList(db_ls,true);
+	    db_ls.push_back("<cfg>");
 	    for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-		for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),"",fld_cnt++,g_cfg); )
+		for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
 		{
 		    string m_id = g_cfg.cfg("ID").getS();
 		    try
 		    {
-			if( !wmod.at().present(m_id) )
-			    wmod.at().add(m_id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+			if(!wmod.at().present(m_id)) wmod.at().add(m_id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+			itReg[m_id] = true;
 		    }catch(TError err)
 		    {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			mess_err(wmod.at().nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
+			mess_err(wmod.at().nodePath().c_str(),_("Add controller '%s' error."),m_id.c_str());
 		    }
 		}
-	    //>> Search into config file and create new controllers
-	    if(SYS->chkSelDB("<cfg>"))
-		for(int fld_cnt = 0; SYS->db().at().dataSeek("",wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
-		{
-		    string m_id = g_cfg.cfg("ID").getS();
-		    try { if(!wmod.at().present(m_id)) wmod.at().add(m_id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>"); }
-		    catch(TError err)
-		    {
-			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			mess_err(wmod.at().nodePath().c_str(),_("Add controller <%s> error."),m_id.c_str());
-		    }
-		}
+
+	    //>>> Check for remove items removed from DB
+	    wmod.at().list(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(db_ls[i_it]).at().DB()))
+                    wmod.at().del(db_ls[i_it]);
 	}
     }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
@@ -334,7 +334,7 @@ void TDAQS::subStart(  )
 		if(try_cnt)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Start template library <%s> error."),tmpl_lst[i_lb].c_str());
+		    mess_err(nodePath().c_str(),_("Start template library '%s' error."),tmpl_lst[i_lb].c_str());
 		}
 		reply = true;
 	    }
@@ -355,7 +355,7 @@ void TDAQS::subStart(  )
 			if( try_cnt )
 			{
 			    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			    mess_err(nodePath().c_str(),_("Enable controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_err(nodePath().c_str(),_("Enable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 			}
 			reply = true;
 		    }
@@ -399,7 +399,7 @@ void TDAQS::subStop( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Stop controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_err(nodePath().c_str(),_("Stop controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -416,7 +416,7 @@ void TDAQS::subStop( )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Disable controller <%s> error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_err(nodePath().c_str(),_("Disable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -617,7 +617,7 @@ string TDAQS::optDescr( )
 {
     return TSYS::strMess(_(
 	"=================== Subsystem \"Data acquisition\" options ================\n"
-	"------------ Parameters of section <%s> in config file -----------\n"
+	"------------ Parameters of section '%s' in config file -----------\n"
 	"RdStLevel    <lev>  The curent station redundant level.\n"
 	"RdTaskPer    <s>    The redundant task call period.\n"
 	"RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"

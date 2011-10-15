@@ -127,7 +127,7 @@ void TValue::vlElemDet( TElem *ValEl )
 	    elem.erase(elem.begin()+i_e);
 	    return;
 	}
-    //throw TError(nodePath().c_str(),"Element <%s> no present!",ValEl->elName().c_str());
+    //throw TError(nodePath().c_str(),"Element '%s' no present!",ValEl->elName().c_str());
 }
 
 TElem &TValue::vlElem( const string &name )
@@ -135,7 +135,7 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++)
 	if( elem[i_e]->elName() == name )
 	    return *elem[i_e];
-    throw TError(nodePath().c_str(),"Element <%s> is not present!",name.c_str());
+    throw TError(nodePath().c_str(),"Element '%s' is not present!",name.c_str());
 }
 
 void TValue::cntrCmdProc( XMLNode *opt )

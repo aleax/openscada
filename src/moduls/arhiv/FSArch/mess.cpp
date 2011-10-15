@@ -167,7 +167,7 @@ void ModMArch::put( vector<TMess::SRec> &mess )
 	    }
 	    catch(TError err)
 	    {
-		mess_crit(nodePath().c_str(),_("Error create new archive file <%s>!"),(addr()+f_name).c_str() );
+		mess_crit(nodePath().c_str(),_("Error create new archive file '%s'!"),(addr()+f_name).c_str() );
 		return;
 	    }
 	    //>> Allow parallel read access
@@ -205,7 +205,7 @@ void ModMArch::checkArchivator( bool now )
 	if(IdDir == NULL)
 	{
 	    if( mkdir(addr().c_str(),0777) )
-		throw TError(nodePath().c_str(),_("Can not create dir <%s>."),addr().c_str());
+		throw TError(nodePath().c_str(),_("Can not create dir '%s'."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 	//> Clean scan flag
@@ -403,7 +403,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     cach_pr.tm = cach_pr.off = 0;
 
     int hd = open( name().c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666 );
-    if(hd <= 0) throw TError(owner().nodePath().c_str(),_("Can not create file: <%s>!"),name().c_str());
+    if(hd <= 0) throw TError(owner().nodePath().c_str(),_("Can not create file: '%s'!"),name().c_str());
 
     if( xmlM() )
     {
@@ -542,7 +542,7 @@ void MFileArch::attach( const string &iname, bool full )
 		mNode->load(s_buf);
 		if( mNode->name() != mod->modId() )
 		{
-		    mess_err(owner().nodePath().c_str(),_("Archive file: <%s> is not mine."),name().c_str());
+		    mess_err(owner().nodePath().c_str(),_("Archive file: '%s' is not mine."),name().c_str());
 		    mNode->clear();
 		    mErr = true;
 		    return;
@@ -567,7 +567,7 @@ void MFileArch::attach( const string &iname, bool full )
 		    while((c=fgetc(f)) != '<' && c != EOF);
 		    if(c == EOF)
 		    {
-			mess_err(owner().nodePath().c_str(),_("Archive <%s> file error."),name().c_str());
+			mess_err(owner().nodePath().c_str(),_("Archive '%s' file error."),name().c_str());
 			mErr = true;
 			fclose(f);
 			return;
@@ -576,7 +576,7 @@ void MFileArch::attach( const string &iname, bool full )
 		    while((c=fgetc(f)) != ' ' && c != '\t' && c != '>' && c != EOF) prm += c;
 		    if(c == EOF)
 		    {
-			mess_err(owner().nodePath().c_str(),_("Archive <%s> file error."),name().c_str());
+			mess_err(owner().nodePath().c_str(),_("Archive '%s' file error."),name().c_str());
 			mErr = true;
 			fclose(f);
 			return;

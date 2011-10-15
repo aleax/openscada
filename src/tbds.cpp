@@ -161,7 +161,7 @@ void TBDS::close( const string &bdn, bool del )
     }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Close DB <%s> error!"),bdn.c_str());
+	mess_warning(nodePath().c_str(),_("Close DB '%s' error!"),bdn.c_str());
     }
 }
 
@@ -175,12 +175,12 @@ string TBDS::fullDB()
     return SYS->workDB()+".DB";
 }
 
-bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg )
+bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, bool forceCfg )
 {
     int c_lev = 0;
     string bdn = realDBName(ibdn);
 
-    if(path.size())
+    if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == "<cfg>"))
     {
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *nd, *fnd, *el;
@@ -303,7 +303,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 	    }
 	}
     }
-    //throw TError(nodePath().c_str(),"Field <%s> no present.",path.c_str());
+    //throw TError(nodePath().c_str(),"Field '%s' no present.",path.c_str());
     return false;
 }
 
@@ -394,17 +394,18 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
     return false;
 }
 
-bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool useKeyAll )
+bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool useKeyAll, bool forceCfg )
 {
     vector<string> cels;
     string bdn = realDBName(ibdn);
+    bool db_true = false;
 
     if(bdn.size() && TSYS::strParse(bdn,0,".") != "<cfg>")
     {
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat())
 	{
-	    bool db_true = true;
+
 	    try
 	    {
 		//> Select for using all keys
@@ -427,14 +428,14 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 		    for(unsigned i_el = 0; i_el < cels.size(); i_el++)
 			cfg.cfg(cels[i_el]).setKeyUse(false);
 	    }
-	    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); db_true = false; }
+	    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    //tbl.free(); close(bdn);
-	    return db_true;
+	    db_true = true;
 	}
     }
 
     //> Delete from config
-    if(TSYS::strParse(bdn,0,".") == "<cfg>")
+    if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == "<cfg>"))
     {
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *nd = SYS->cfgNode(path,true);
@@ -457,7 +458,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	}
     }
 
-    return false;
+    return db_true;
 }
 
 void TBDS::genDBSet(const string &path, const string &val, const string &user, char rFlg )
@@ -555,7 +556,7 @@ string TBDS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"========================= Subsystem \"DB\" options ========================\n"
-	"----------- The config file station <%s> parameters -----------\n"
+	"----------- The config file station '%s' parameters -----------\n"
 	"SYSStPref    <1>   Use station id prefix into generic (SYS) table.\n\n"
 	),nodePath().c_str());
 
@@ -602,15 +603,15 @@ void TBDS::load_( )
     try
     {
 	string id,type;
-	if( SYS->chkSelDB(fullDB()) )
+	if(SYS->chkSelDB(fullDB()))
 	{
 	    TConfig c_el(&el_db);
 	    c_el.cfgViewAll(false);
-	    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el,true); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
-		if( (type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id) )
+		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
 		    at(type).at().open(id);
 	    }
 	}

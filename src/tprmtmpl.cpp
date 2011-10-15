@@ -27,8 +27,8 @@ using namespace OSCADA;
 //*************************************************
 //* TPrmTempl                                     *
 //*************************************************
-TPrmTempl::TPrmTempl( const char *iid, const char *iname ) :
-    TFunction(string("tmpl_")+iid), TConfig(&SYS->daq().at().tplE()), m_id(cfg("ID").getSd()), m_prog(cfg("PROGRAM").getSd())
+TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
+    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), m_id(cfg("ID").getSd()), m_prog(cfg("PROGRAM").getSd())
 {
     m_id = iid;
     setName(iname);
@@ -162,7 +162,7 @@ void TPrmTempl::load_( )
     vector<string> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id(),true);
-    for( int io_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg); )
+    for(int io_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
 
@@ -221,10 +221,10 @@ void TPrmTempl::save_( )
     }
     //> Clear IO
     cfg.cfgViewAll(false);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); )
     {
 	string sio = cfg.cfg("ID").getS( );
-	if( ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr )
+	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr)
 	{
 	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true);
 	    fld_cnt--;
@@ -422,7 +422,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TPrmTmplLib                                   *
 //*************************************************
-TPrmTmplLib::TPrmTmplLib( const char *id, const char *name, const string &lib_db ) :
+TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &lib_db ) :
     TConfig(&SYS->daq().at().elLib()), run_st(false), m_id(cfg("ID").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
 {
     m_id = id;
@@ -501,17 +501,28 @@ void TPrmTmplLib::setFullDB( const string &vl )
 
 void TPrmTmplLib::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
 
     SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 
     //> Load templates
+    map<string, bool>	itReg;
     TConfig c_el(&owner().tplE());
     c_el.cfgViewAll(false);
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	if( !present(f_id) )	add(f_id.c_str());
+	if(!present(f_id)) add(f_id.c_str());
+	itReg[f_id] = true;
+    }
+
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+	vector<string> it_ls;
+        list(it_ls);
+        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+            if(itReg.find(it_ls[i_it]) == itReg.end())	del(it_ls[i_it]);
     }
 }
 
@@ -539,9 +550,9 @@ void TPrmTmplLib::start( bool val )
     if( isErr )	throw TError(nodePath().c_str(),_("Some templates start error."));
 }
 
-void TPrmTmplLib::add( const char *id, const char *name )
+void TPrmTmplLib::add( const string &id, const string &name )
 {
-    chldAdd(m_ptmpl,new TPrmTempl(id,name));
+    chldAdd(m_ptmpl, new TPrmTempl(id,name));
 }
 
 TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

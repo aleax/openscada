@@ -89,12 +89,12 @@ class TProtocol: public TModule
 
 	//> Output protocol
 	virtual void outMess( XMLNode &io, TTransportOut &tro )
-	{ throw TError(nodePath().c_str(),"Function <%s> no support!","outMess"); }
+	{ throw TError(nodePath().c_str(),"Function '%s' no support!","outMess"); }
 
     private:
 	//Methods
 	virtual TProtocolIn *in_open( const string &name )
-	{ throw TError(nodePath().c_str(),"Function <%s> no support!","in_open"); }
+	{ throw TError(nodePath().c_str(),"Function '%s' no support!","in_open"); }
 
 	//Attributes
 	int	m_pr;

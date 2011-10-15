@@ -89,7 +89,7 @@ unsigned TElem::fldId( const string &name )
     ResAlloc res(mResEl, false);
     for(unsigned i = 0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return i;
-    throw TError("Elem",_("Element <%s> is not present!"),name.c_str());
+    throw TError("Elem",_("Element '%s' is not present!"),name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )
@@ -406,7 +406,7 @@ string TFld::selVl2Nm( const string &val )
 	if( i_val >= sz ) return val;
 	return (*m_sel)[i_val];
     }
-    throw TError("Field",_("Select error! Val: <%s>."),val.c_str());
+    throw TError("Field",_("Select error! Val: '%s'."),val.c_str());
 }
 
 string TFld::selVl2Nm( int val )
@@ -421,7 +421,7 @@ string TFld::selVl2Nm( int val )
 	if( i_val >= sz ) return TSYS::int2str(val);
 	return (*m_sel)[i_val];
     }
-    throw TError("Field",_("Select error! Val: <%d>."),val);
+    throw TError("Field",_("Select error! Val: '%d'."),val);
 }
 
 string TFld::selVl2Nm( double val )
@@ -436,7 +436,7 @@ string TFld::selVl2Nm( double val )
 	if( i_val >= sz ) return TSYS::real2str(val);
 	return (*m_sel)[i_val];
     }
-    throw TError("Field",_("Select error! Val: <%f>."),val);
+    throw TError("Field",_("Select error! Val: '%f'."),val);
 }
 
 string TFld::selVl2Nm( bool val )
@@ -451,7 +451,7 @@ string TFld::selVl2Nm( bool val )
 	if( i_val >= sz ) return TSYS::int2str(val);
 	return (*m_sel)[i_val];
     }
-    throw TError("Field",_("Select error! Val: <%d>."),val);
+    throw TError("Field",_("Select error! Val: '%d'."),val);
 }
 
 string TFld::selNm2VlS( const string &name )
@@ -461,7 +461,7 @@ string TFld::selNm2VlS( const string &name )
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_s)[i_val];
     return name;
-    //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
+    //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
 int TFld::selNm2VlI( const string &name )
@@ -471,7 +471,7 @@ int TFld::selNm2VlI( const string &name )
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_i)[i_val];
     return atoi(name.c_str());
-    //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
+    //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
 double TFld::selNm2VlR( const string &name )
@@ -481,7 +481,7 @@ double TFld::selNm2VlR( const string &name )
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_r)[i_val];
     return atof(name.c_str());
-    //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
+    //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
 bool TFld::selNm2VlB( const string &name )
@@ -491,7 +491,7 @@ bool TFld::selNm2VlB( const string &name )
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_b)[i_val];
     return atoi(name.c_str());
-    //throw TError("Field",_("Select error! Name: <%s>."),name.c_str());
+    //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
 XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )

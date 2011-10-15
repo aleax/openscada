@@ -292,6 +292,8 @@ void Engine::load_( )
     int64_t w_tm = TSYS::curTime();
 #endif
 
+    map<string, bool>	itReg;
+
     //>> Load widget's libraries
     try
     {
@@ -302,20 +304,23 @@ void Engine::load_( )
 
 	//>>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),"",lib_cnt++,c_el); )
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+wlbTable(),nodePath()+"LIB",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!wlbPresent(l_id)) wlbAdd(l_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[l_id] = true;
 	    }
 
-	//>>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LIB/",lib_cnt++,c_el); )
-	    {
-		string l_id = c_el.cfg("ID").getS();
-		if(!wlbPresent(l_id))	wlbAdd(l_id,"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            wlbList(db_ls);
+            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wlbAt(db_ls[i_it]).at().DB()))
+                    wlbDel(db_ls[i_it]);
+        }
 
 #if OSC_DEBUG >= 3
 	w_tm = TSYS::curTime();
@@ -344,23 +349,27 @@ void Engine::load_( )
 	TConfig c_el(&elProject());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
+	itReg.clear();
 
 	//>>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),"",lib_cnt++,c_el); )
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
 		if(!prjPresent(prj_id))	prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[prj_id] = true;
 	    }
 
-	//>>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int el_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"PRJ/",el_cnt++,c_el); )
-	    {
-		string prj_id = c_el.cfg("ID").getS();
-		if(!prjPresent(prj_id))	prjAdd(prj_id,"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            prjList(db_ls);
+            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(prjAt(db_ls[i_it]).at().DB()))
+                    prjDel(db_ls[i_it]);
+        }
 
 #if OSC_DEBUG >= 3
 	w_tm = TSYS::curTime();
@@ -615,24 +624,24 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
     c_el.cfg("IDW").setS(idw,true);
     if( vDB == 2 ) c_el.cfg("IDC").setS(idc,true);
 
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
 
-	if( vDB == 1 )
+	if(vDB == 1)
 	{
-	    if( idc.empty() && !TSYS::pathLev(sid,1).empty() ) continue;
-	    if( !idc.empty() )
+	    if(idc.empty() && !TSYS::pathLev(sid,1).empty()) continue;
+	    if(!idc.empty())
 	    {
-		if( TSYS::pathLev(sid,0) == idc && !TSYS::pathLev(sid,1).empty() ) sid = TSYS::pathLev(sid,1);
+		if(TSYS::pathLev(sid,0) == idc && !TSYS::pathLev(sid,1).empty()) sid = TSYS::pathLev(sid,1);
 		else continue;
 	    }
 	}
-	else if( vDB == 2 && !TSYS::pathLev(sid,1).empty() ) continue;
+	else if(vDB == 2 && !TSYS::pathLev(sid,1).empty()) continue;
 
-	if( !w.attrPresent(sid) )
-	    w.attrAdd( new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4) );
+	if(!w.attrPresent(sid))
+	    w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4));
 	AutoHD<Attr> attr = w.attrAt(sid);
 	if( !(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser) ) continue;
 	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
@@ -706,10 +715,10 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
     {
 	//> Clear no present IO for main io table
 	c_el.cfgViewAll(false);
-	for( int fld_cnt=0; vDB == 2 && SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
+	for(int fld_cnt = 0; vDB == 2 && SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
 	{
 	    string sid = c_el.cfg("ID").getS();
-	    if( w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear()) ) continue;
+	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",c_el,true);
 	    fld_cnt--;
@@ -717,12 +726,12 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 
 	//> Clear no present IO for user io table
 	c_elu.cfgViewAll(false);
-	for( int fld_cnt=0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fld_cnt++,c_elu); )
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fld_cnt++,c_elu); )
 	{
 	    string sid = c_elu.cfg("ID").getS();
-	    if( vDB == 1 && idc.empty() && (!TSYS::pathLev(sid,1).empty() || w.attrPresent(sid)) ) continue;
-	    if( vDB == 1 && !idc.empty() && (TSYS::pathLev(sid,0) != idc || w.attrPresent(TSYS::pathLev(sid,1))) ) continue;
-	    if( vDB == 2 && (w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) ) continue;
+	    if(vDB == 1 && idc.empty() && (!TSYS::pathLev(sid,1).empty() || w.attrPresent(sid))) continue;
+	    if(vDB == 1 && !idc.empty() && (TSYS::pathLev(sid,0) != idc || w.attrPresent(TSYS::pathLev(sid,1)))) continue;
+	    if(vDB == 2 && (w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear()))) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
 	    fld_cnt--;

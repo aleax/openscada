@@ -125,7 +125,8 @@ void TTransportS::load_( )
     //> Load parameters from config file
 
     //> Load DB
-    string id,type;
+    string id, type;
+    map<string, bool>	itReg;
     //>> Search and create new input transports
     try
     {
@@ -133,27 +134,32 @@ void TTransportS::load_( )
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>>> Search into DB
+	//>>> Search new into DB and Config file
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in","",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el); )
 	    {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(modPresent(type) && !at(type).at().inPresent(id))
 		    at(type).at().inAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[type+"."+id] = true;
 	    }
 
-	//>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_in",fld_cnt++,c_el); )
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+	    vector<string> m_ls;
+	    modList(m_ls);
+	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++)
 	    {
-		id   = c_el.cfg("ID").getS();
-		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().inPresent(id))
-		    at(type).at().inAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
-
+		at(m_ls[i_m]).at().inList(db_ls);
+        	for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+            	    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().inAt(db_ls[i_it]).at().DB()))
+                	at(m_ls[i_m]).at().inDel(db_ls[i_it]);
+            }
+        }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -166,26 +172,34 @@ void TTransportS::load_( )
 	TConfig c_el(&el_out);
 	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
+	itReg.clear();
 
-	//>>> Search into DB
+	//>>> Search new into DB and Config file
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out","",fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(modPresent(type) && !at(type).at().outPresent(id))
 		    at(type).at().outAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[type+"."+id] = true;
 	    }
-	//>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_out",fld_cnt++,c_el); )
+
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+	    vector<string> m_ls;
+	    modList(m_ls);
+	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++)
 	    {
-		id = c_el.cfg("ID").getS();
-		type = c_el.cfg("MODULE").getS();
-		if(modPresent(type) && !at(type).at().outPresent(id))
-		    at(type).at().outAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+		at(m_ls[i_m]).at().outList(db_ls);
+        	for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+            	    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().outAt(db_ls[i_it]).at().DB()))
+                	at(m_ls[i_m]).at().outDel(db_ls[i_it]);
+            }
+        }
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -196,7 +210,7 @@ void TTransportS::load_( )
     try
     {
 	TConfig c_el(&el_ext);
-	for( int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
 	{
 	    ExtHost host("","","","","","","");
 	    host.user_open	= c_el.cfg("OP_USER").getS();
@@ -229,14 +243,14 @@ void TTransportS::save_( )
 	c_el.cfg("ADDR").setS(extHostLs[i_h].addr);
 	c_el.cfg("USER").setS(extHostLs[i_h].user);
 	c_el.cfg("PASS").setS(extHostLs[i_h].pass);
-	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp/",c_el);
+	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp",c_el);
     }
     //> Clear external transports
     c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp/",fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
 	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size())
 	{
-	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp/",c_el,true);
+	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp",c_el,true,true);
 	    fld_cnt--;
 	}
 }
@@ -260,7 +274,7 @@ void TTransportS::subStart( )
 	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Start input transport <%s> error."),o_lst[i_o].c_str());
+		mess_err(nodePath().c_str(),_("Start input transport '%s' error."),o_lst[i_o].c_str());
 	    }
 
 	o_lst.clear();
@@ -273,7 +287,7 @@ void TTransportS::subStart( )
 	    }catch(TError err)
 	    {
 	        mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Start output transport <%s> error."),o_lst[i_o].c_str());
+		mess_err(nodePath().c_str(),_("Start output transport '%s' error."),o_lst[i_o].c_str());
 	    }
     }
 
@@ -300,7 +314,7 @@ void TTransportS::subStop( )
 	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Stop input transport <%s> error."),o_lst[i_o].c_str());
+		mess_err(nodePath().c_str(),_("Stop input transport '%s' error."),o_lst[i_o].c_str());
 	    }
 	o_lst.clear();
 	mod.at().outList(o_lst);
@@ -312,7 +326,7 @@ void TTransportS::subStop( )
 	    }catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Stop output transport <%s> error."),o_lst[i_o].c_str());
+		mess_err(nodePath().c_str(),_("Stop output transport '%s' error."),o_lst[i_o].c_str());
 	    }
     }
 

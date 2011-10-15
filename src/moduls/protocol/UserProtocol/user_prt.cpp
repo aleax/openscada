@@ -111,23 +111,27 @@ void TProt::load_( )
 	TConfig g_cfg(&uPrtEl());
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
+	map<string, bool> itReg;
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(unsigned fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPrt","",fld_cnt++,g_cfg); )
+	    for(unsigned fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if( !uPrtPresent(id) )	uPrtAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!uPrtPresent(id)) uPrtAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		itReg[id] = true;
 	    }
 
-	//>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+modId()+"_uPrt",fld_cnt++,g_cfg); )
-	    {
-		string id = g_cfg.cfg("ID").getS();
-		if(!uPrtPresent(id))	uPrtAdd(id,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-	    }
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            uPrtList(db_ls);
+            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(db_ls[i_it]).at().DB()))
+                    uPrtDel(db_ls[i_it]);
+        }
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

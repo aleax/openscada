@@ -36,13 +36,13 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 //* Func: Function                                *
 //*************************************************
-Func::Func( const char *iid, const char *name ) :
+Func::Func( const string &iid, const string &name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
     mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()), prg_src(cfg("FORMULA").getSd()),
     max_calc_tm(cfg("MAXCALCTM").getId()), parse_res(mod->parseRes())
 {
     cfg("ID").setS(id());
-    mName = strlen(name) ? string(name) : id();
+    mName = name.empty() ? id() : name;
 }
 
 Func::~Func( )
@@ -220,8 +220,8 @@ void Func::saveIO( )
 
     //> Clear IO
     cfg.cfgViewAll(false);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg ); )
-	if( ioId(cfg.cfg("ID").getS()) < 0 )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg); )
+	if(ioId(cfg.cfg("ID").getS()) < 0)
 	{
 	    SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true);
 	    fld_cnt--;

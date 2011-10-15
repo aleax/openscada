@@ -261,23 +261,27 @@ void TipContr::load_( )
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
+	map<string, bool> itReg;
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),"",lib_cnt++,c_el); )
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),nodePath()+"lib",lib_cnt++,c_el); )
 	    {
 		string l_id = c_el.cfg("ID").getS();
 		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
+		itReg[l_id] = true;
 	    }
 
-	//>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"lib/",lib_cnt++,c_el); )
-	    {
-		string l_id = c_el.cfg("ID").getS();
-		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(SYS->workDB()=="<cfg>")?"*.*":"<cfg>"));
-	    }
+	//>>> Check for remove items removed from DB
+        if(!SYS->selDB().empty())
+        {
+            lbList(db_ls);
+            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
+                    lbUnreg(db_ls[i_it]);
+        }
     }catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -434,9 +438,9 @@ void Contr::load_( )
 
 void Contr::loadFunc( bool onlyVl )
 {
-    if( func() != NULL )
+    if(func() != NULL)
     {
-	if( !onlyVl ) ((Func *)func())->load();
+	if(!onlyVl) ((Func *)func())->load();
 
 	//> Creating special IO
 	if(func()->ioId("f_frq") < 0) func()->ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
@@ -449,10 +453,10 @@ void Contr::loadFunc( bool onlyVl )
 	string bd_tbl = TController::id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
-	for( int fld_cnt=0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
 	{
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
-	    if( ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr ) continue;
+	    if(ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr) continue;
 	    setS(ioId,cfg.cfg("VAL").getS());
 	}
     }
@@ -487,7 +491,7 @@ void Contr::save_( )
 
 	//> Clear VAL
 	cfg.cfgViewAll(false);
-	for(int fld_cnt=0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0)
 	    {
 		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true);

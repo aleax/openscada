@@ -83,7 +83,7 @@ void TTipDAQ::modStart( )
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Start controller <%s> error."),(modId()+"."+lst[i_l]).c_str());
+		mess_err(nodePath().c_str(),_("Start controller '%s' error."),(modId()+"."+lst[i_l]).c_str());
 	    }
 }
 

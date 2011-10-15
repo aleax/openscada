@@ -140,7 +140,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->setAttr("path",s_br);
 	    cntrCmdProc(opt);
 	    if( opt->attr("rez") != "0" )
-		throw TError("ContrItfc",_("%s:%s:> Control element <%s> error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
+		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
 	}
     }
     catch(TError err)
@@ -437,7 +437,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name);
     if(p == (*chGrp)[igr].elem.end())
-	throw TError(nodePath().c_str(),_("Child <%s> is not present!"), name.c_str());
+	throw TError(nodePath().c_str(),_("Child '%s' is not present!"), name.c_str());
 
     if( p->second->nodeMode() == Enable )
 	p->second->nodeDis( tm, (flag<<8)|(shDel?NodeShiftDel:0) );
@@ -511,7 +511,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name);
     if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disable)
-	throw TError(nodePath().c_str(),_("Element <%s> is not present or disabled!"), name.c_str());
+	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
 
     return AutoHD<TCntrNode>(p->second,user);
 }
@@ -717,7 +717,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	if( obj1 ) { obj = obj1; continue; }
 	//int wofft = woff;
 	if( TSYS::pathLev(path,0,true,&woff).size() )
-	    throw TError("ContrItfc",_("Some tags on path <%s> are missed!"),req.c_str());
+	    throw TError("ContrItfc",_("Some tags on path '%s' are missed!"),req.c_str());
 	obj = obj->childIns(pos);
     }
     obj->setName(n_nd)->setAttr("id",reqt1)->setAttr("dscr",dscr)->setAttr("acs",TSYS::int2str(n_acs));
@@ -763,9 +763,9 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 {
     if( nd->name() != cmd ) return false;
     if( ((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode )
-	throw TError("ContrItfc",_("Error access to element <%s>!"),nd->attr("path").c_str());
+	throw TError("ContrItfc",_("Error access to element '%s'!"),nd->attr("path").c_str());
     if( warn && !atoi(nd->attr("force").c_str()) )
-	throw TError("warning",_("Element <%s> warning! %s"),nd->attr("path").c_str(),warn);
+	throw TError("warning",_("Element '%s' warning! %s"),nd->attr("path").c_str(),warn);
     nd->setAttr("rez","0");
     return true;
 }

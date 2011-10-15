@@ -68,23 +68,23 @@ msgid "Check archives thread is not stopped!"
 msgstr "Der Thread für die Archivprüfung ist nicht angehalten"
 
 #, c-format
-msgid "Check message archivator <%s> error."
-msgstr "Fehler beim Prüfen des Nachrichtnarchivars <%s> "
+msgid "Check message archivator '%s' error."
+msgstr "Fehler beim Prüfen des Nachrichtnarchivars '%s'."
 
 #, c-format
-msgid "Check value archivator <%s> error."
-msgstr "Fehler beim Prüfen des Wertearchivars <%s> "
+msgid "Check value archivator '%s' error."
+msgstr "Fehler beim Prüfen des Wertearchivars '%s'."
 
 msgid "Archive is not started!"
 msgstr "Archiv ist nicht gestartet!"
 
 #, c-format
-msgid "Error create new archive file <%s>!"
-msgstr "Fehler beim Erstellen der Archivdatei <%s>!"
+msgid "Error create new archive file '%s'!"
+msgstr "Fehler beim Erstellen der Archivdatei '%s'!"
 
 #, c-format
-msgid "Can not create dir <%s>."
-msgstr "Kann das Verzeichnis <%s> nicht erstellen !"
+msgid "Can not create dir '%s'."
+msgstr "Kann das Verzeichnis '%s' nicht erstellen !"
 
 msgid "Archivator files size"
 msgstr "Grösse der Archivardateien"
@@ -126,8 +126,8 @@ msgid "Check archivator directory now"
 msgstr "Archivarverzeichnis prüfen"
 
 #, c-format
-msgid "Can not create file: <%s>!"
-msgstr "Kann die Datei: <%s> nicht erstellen!"
+msgid "Can not create file: '%s'!"
+msgstr "Kann die Datei: '%s' nicht erstellen!"
 
 #, c-format
 msgid "Write to file error: %s"
@@ -135,15 +135,15 @@ msgstr "Fehler: %s beim Schreiben in die Datei"
 
 #, c-format
 msgid "File %s header error!"
-msgstr "Datei <%s> Dateikopf Fehler!"
+msgstr "Datei %s Dateikopf Fehler!"
 
 #, c-format
-msgid "Archive file: <%s> is not mine."
-msgstr "Nicht meine Archivdatei <%s>."
+msgid "Archive file: '%s' is not mine."
+msgstr "Nicht meine Archivdatei '%s'."
 
 #, c-format
-msgid "Archive <%s> file error."
-msgstr "Archiv <%s> Dateifehler."
+msgid "Archive '%s' file error."
+msgstr "Archiv '%s' Dateifehler."
 
 msgid "Inserting message to an error Archive file!"
 msgstr "Hinzufügen einer Nachricht in das Fehler-Archivdatei"
@@ -196,20 +196,20 @@ msgid "To file"
 msgstr "Zur Datei"
 
 #, c-format
-msgid "Archive file <%s> no openned!"
-msgstr "Archivdatei <%s> ist nicht geöffnet!"
+msgid "Archive file '%s' no openned!"
+msgstr "Archivdatei '%s' ist nicht geöffnet!"
 
 #, c-format
-msgid "Attach file <%s> error."
-msgstr "Fehler beim Verbinden der Datei <%s>."
+msgid "Attach file '%s' error."
+msgstr "Fehler beim Verbinden der Datei '%s'."
 
 msgid "Archive file error!"
 msgstr "Fehler in der Archivdatei!"
 
 #, c-format
-msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
 msgstr ""
-"Fehler in der Dateistruktur: <%s>. Differenz = %d byte. Reparaturversuch!"
+"Fehler in der Dateistruktur: '%s'. Differenz = %d byte. Reparaturversuch!"
 
 msgid "Error open new archive file for copy."
 msgstr ""

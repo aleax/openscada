@@ -221,7 +221,7 @@ void ModVArch::checkArchivator( bool now )
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL)
 	{
-	    if(mkdir(addr().c_str(),0777)) throw TError(nodePath().c_str(),_("Can not create dir <%s>."),addr().c_str());
+	    if(mkdir(addr().c_str(),0777)) throw TError(nodePath().c_str(),_("Can not create dir '%s'."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 
@@ -792,7 +792,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 
     //> Open/create new archive file
     int hd = open( name().c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666 );
-    if(hd <= 0) throw TError(owner().archivator().nodePath().c_str(),_("Can not create file: <%s>!"),name().c_str());
+    if(hd <= 0) throw TError(owner().archivator().nodePath().c_str(),_("Can not create file: '%s'!"),name().c_str());
 
     //> Prepare and write the file archive header
     FHead head;
@@ -961,7 +961,7 @@ void VFileArch::attach( const string &name )
 	//> Check and prepare last archive files
 	//>> Get file size
 	int hd = open(mName.c_str(),O_RDWR);
-	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file <%s> no openned!"),name.c_str());
+	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file '%s' no openned!"),name.c_str());
 	mSize = lseek(hd,0,SEEK_END);
 	mpos = (end()-begin())/period();
 	if(!mPack && cur_tm >= begin() && cur_tm <= end()) repairFile(hd);
@@ -990,7 +990,7 @@ void VFileArch::attach( const string &name )
     catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(mod->nodePath().c_str(),_("Attach file <%s> error."),name.c_str());
+	mess_err(mod->nodePath().c_str(),_("Attach file '%s' error."),name.c_str());
 	mErr = true;
     }
 }
@@ -1685,7 +1685,7 @@ void VFileArch::repairFile( int hd )
 	    int dt = f_sz-f_off-vSize;
 	    if(!dt) return;
 	    mess_err(owner().archivator().nodePath().c_str(),
-		_("Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
+		_("Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"),name().c_str(),dt);
 	    //> Copy error file
 	    if(mod->copyErrValFiles)
 	    {

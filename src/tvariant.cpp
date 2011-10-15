@@ -761,7 +761,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	{
 	    string s_buf;
 	    int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	    if(hd < 0) return TSYS::strMess(_("2:Open file <%s> error: %s"),prms[0].getS().c_str(),strerror(errno));
+	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"),prms[0].getS().c_str(),strerror(errno));
 	    int cf_sz = lseek(hd,0,SEEK_END);
 	    if(cf_sz > 0)
 	    {

@@ -236,7 +236,7 @@ void ModArch::Task( union sigval obj )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(arh->nodePath().c_str(),_("Check message archivator <%s> error."),a_list[i_a].c_str());
+		    mess_err(arh->nodePath().c_str(),_("Check message archivator '%s' error."),a_list[i_a].c_str());
 		}
 
 	//> Check value archivators
@@ -247,17 +247,17 @@ void ModArch::Task( union sigval obj )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(arh->nodePath().c_str(),_("Check value archivator <%s> error."),a_list[i_a].c_str());
+		    mess_err(arh->nodePath().c_str(),_("Check value archivator '%s' error."),a_list[i_a].c_str());
 		}
 
 	//> Check to nopresent archive files
 	struct stat file_stat;
 	TConfig c_el(&mod->packFE());
 	c_el.cfgViewAll(false);
-	for(int fld_cnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack/",fld_cnt++,c_el); )
+	for(int fld_cnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fld_cnt++,c_el); )
 	    if(stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG)
 	    {
-		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack/",c_el,true))	break;
+		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",c_el,true))	break;
 		fld_cnt--;
 	    }
     }

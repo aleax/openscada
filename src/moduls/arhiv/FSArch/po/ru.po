@@ -62,23 +62,23 @@ msgid "Check archives thread is not stopped!"
 msgstr "Поток проверки архивов не остановлен!"
 
 #, c-format
-msgid "Check message archivator <%s> error."
-msgstr "Ошибка проверки архиватора сообщений <%s>."
+msgid "Check message archivator '%s' error."
+msgstr "Ошибка проверки архиватора сообщений '%s'."
 
 #, c-format
-msgid "Check value archivator <%s> error."
-msgstr "Ошибка проверки архиватора значений <%s>."
+msgid "Check value archivator '%s' error."
+msgstr "Ошибка проверки архиватора значений '%s'."
 
 msgid "Archive is not started!"
 msgstr "Архив не запущен!"
 
 #, c-format
-msgid "Error create new archive file <%s>!"
-msgstr "Не мой архивный файл <%s>"
+msgid "Error create new archive file '%s'!"
+msgstr "Не мой архивный файл '%s'"
 
 #, c-format
-msgid "Can not create dir <%s>."
-msgstr "Немогу создать директорию <%s>."
+msgid "Can not create dir '%s'."
+msgstr "Немогу создать директорию '%s'."
 
 msgid "Archivator files size"
 msgstr "Размер файлов архиватора"
@@ -120,8 +120,8 @@ msgid "Check archivator directory now"
 msgstr "Проверить директорию архиватора сейчас"
 
 #, c-format
-msgid "Can not create file: <%s>!"
-msgstr "Немогу создать файл: <%s>!"
+msgid "Can not create file: '%s'!"
+msgstr "Немогу создать файл: '%s'!"
 
 #, c-format
 msgid "Write to file error: %s"
@@ -132,12 +132,12 @@ msgid "File %s header error!"
 msgstr "Ошибка в заголовке файла <%s>!"
 
 #, c-format
-msgid "Archive file: <%s> is not mine."
-msgstr "Не мой архивный файл <%s>."
+msgid "Archive file: '%s' is not mine."
+msgstr "Не мой архивный файл '%s'."
 
 #, c-format
-msgid "Archive <%s> file error."
-msgstr "Ошибка в файле архива <%s>."
+msgid "Archive '%s' file error."
+msgstr "Ошибка в файле архива '%s'."
 
 msgid "Inserting message to an error Archive file!"
 msgstr "Вставка сообщения в архивный файл с ошибкой!"
@@ -190,20 +190,20 @@ msgid "To file"
 msgstr "В файл"
 
 #, c-format
-msgid "Archive file <%s> no openned!"
-msgstr "Файл архива <%s> не открыт!"
+msgid "Archive file '%s' no openned!"
+msgstr "Файл архива '%s' не открыт!"
 
 #, c-format
-msgid "Attach file <%s> error."
-msgstr "Ошибка подключения файла <%s>."
+msgid "Attach file '%s' error."
+msgstr "Ошибка подключения файла '%s'."
 
 msgid "Archive file error!"
 msgstr "Ошибка в файле архива!"
 
 #, c-format
-msgid "Error archive file structure: <%s>. Margin = %d byte. Will try fix it!"
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
 msgstr ""
-"Ошибка в структуре файла: <%s>. Разница = %d байт. Попробую исправить это!"
+"Ошибка в структуре файла: '%s'. Разница = %d байт. Попробую исправить это!"
 
 msgid "Error open new archive file for copy."
 msgstr "Ошибка открытия нового файла архива для копирования."

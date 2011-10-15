@@ -1,3 +1,10 @@
+2011-10-15 Roman
+- !!!!:SYS: Loaded objects check to removed from DB for remove object is added.
+    Checking for remove performed only at direct selected DB loading.
+- !!!!:DB: The function TDBS::dataSeek() and TDBS::dataDel() is updated for strong config file process allow.
+- UI:QTCfg: List and Table processing is some updated for full space occupy by Vandrizm initiative.
+
+
 2011-10-14 Roman
 - Security: Users and groups check to removed from DB for remove object is added.
     Checking for remove performed only at direct selected DB loading.

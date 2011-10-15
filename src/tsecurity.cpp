@@ -171,26 +171,18 @@ void TSecurity::load_( )
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>>> Search into DB
+	//>>> Search new into DB and Config file
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user","",fld_cnt++,g_cfg); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name))	usrAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 		itReg[name] = true;
 	    }
 
-	//>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_user",fld_cnt++,g_cfg); )
-	    {
-		name = g_cfg.cfg("NAME").getS();
-		if(!usrPresent(name))	usrAdd(name,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-		itReg[name] = true;
-	    }
-
-	//>>> Check for remove users removed from DB
+	//>>> Check for remove items removed from DB
 	if(!SYS->selDB().empty())
 	{
 	    usrList(db_ls);
@@ -212,26 +204,18 @@ void TSecurity::load_( )
 	vector<string> db_ls;
 	itReg.clear();
 
-	//>>> Search into DB
+	//>>> Search new into DB and Config file
 	SYS->db().at().dbList(db_ls,true);
+	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp","",fld_cnt++,g_cfg); )
+	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg); )
 	    {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name))	grpAdd(name,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 		itReg[name] = true;
 	    }
 
-	//>>> Search into config file
-	if(SYS->chkSelDB("<cfg>"))
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+subId()+"_grp",fld_cnt++,g_cfg); )
-	    {
-		name = g_cfg.cfg("NAME").getS();
-		if(!grpPresent(name))	grpAdd(name,(SYS->workDB()=="<cfg>")?"*.*":"<cfg>");
-		itReg[name] = true;
-	    }
-
-	//>>> Check for remove groups removed from DB
+	//>>> Check for remove items removed from DB
 	if(!SYS->selDB().empty())
 	{
 	    grpList(db_ls);

@@ -242,16 +242,28 @@ void Contr::load_( )
     TConfig c_el(&mod->blockE());
     c_el.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
+    map<string, bool>	itReg;
 
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); )
     {
 	string id = c_el.cfg("ID").getS();
-	if( !chldPresent(mBl,id) )
+	if(!chldPresent(mBl,id))
 	{
 	    blkAdd(id);
 	    ((TConfig &)blkAt(id).at()) = c_el;
 	}
 	blkAt(id).at().load();
+	itReg[id] = true;
+    }
+
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+	vector<string> it_ls;
+        blkList(it_ls);
+        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+            if(itReg.find(it_ls[i_it]) == itReg.end())
+        	blkDel(it_ls[i_it]);
     }
 }
 

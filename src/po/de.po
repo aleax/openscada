@@ -96,7 +96,7 @@ msgstr "Fehler beim Laden des Wertearchivs."
 #, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
-"------------ Parameters of section <%s> in config file -----------\n"
+"------------ Parameters of section '%s' in config file -----------\n"
 "MessBufSize   <items>       Messages buffer size.\n"
 "MessPeriod    <sec>         Message arhiving period.\n"
 "ValPeriod     <msec>        Values arhiving period.\n"
@@ -107,7 +107,7 @@ msgid ""
 msgstr ""
 "==================== Optionen des Subsystems \"Archive\" "
 "======================\n"
-"---------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
+"---------- Parameter des Abschnitts '%s' in der Konfigurationsdatei "
 "--------\n"
 "MessBufSize   <items>       Grösse des Nachrichtenspeichers.\n"
 "MessPeriod    <sec>         Zeitperiode für Archivierung der Nachrichten.\n"
@@ -121,16 +121,16 @@ msgid "Start subsystem."
 msgstr "Subsystems starten."
 
 #, c-format
-msgid "Message archivator <%s> start error."
-msgstr "Fehler beim Starten des Nachrichtarchivars <%s>."
+msgid "Message archivator '%s' start error."
+msgstr "Fehler beim Starten des Nachrichtarchivars '%s'."
 
 #, c-format
-msgid "Value archivator <%s> start error."
-msgstr "Fehler beim Starten des Wertearchivars <%s>."
+msgid "Value archivator '%s' start error."
+msgstr "Fehler beim Starten des Wertearchivars '%s'."
 
 #, c-format
-msgid "Value archive <%s> start error."
-msgstr "Fehler beim Starten des Wertearchivs <%s>."
+msgid "Value archive '%s' start error."
+msgstr "Fehler beim Starten des Wertearchivs '%s'."
 
 msgid "Stop subsystem."
 msgstr "Subsystem anhalten."
@@ -139,16 +139,16 @@ msgid "Archive messages thread is not stopped!"
 msgstr "Nachrichtarchiv-Thread ist nicht angehalten!"
 
 #, c-format
-msgid "Value archivator <%s> stop error."
-msgstr "Fehler beim Anhalten des Wertearchivars <%s>."
+msgid "Value archivator '%s' stop error."
+msgstr "Fehler beim Anhalten des Wertearchivars '%s'."
 
 #, c-format
-msgid "Message archivator <%s> stop error."
-msgstr "Fehler beim Anhalten des Nachrichtarchivars <%s>."
+msgid "Message archivator '%s' stop error."
+msgstr "Fehler beim Anhalten des Nachrichtarchivars '%s'."
 
 #, c-format
-msgid "Value archive <%s> stop error."
-msgstr "Fehler beim Anhalten des Wertearchivs <%s>."
+msgid "Value archive '%s' stop error."
+msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 
 msgid "Buffer full. Messages lost!"
 msgstr "Der Speicher ist voll, Datenverlust!"
@@ -318,8 +318,8 @@ msgid "Set too old value to buffer."
 msgstr "Einfügen von sehr alten Werten in den Speicher."
 
 #, c-format
-msgid "Archivator <%s> error or it is not started."
-msgstr "Archivar <%s> Fehler oder Archivar ist nicht gestartet."
+msgid "Archivator '%s' error or it is not started."
+msgstr "Archivar '%s' Fehler oder Archivar ist nicht gestartet."
 
 #, c-format
 msgid "gdImageStringFT for font '%s' error: %s."
@@ -466,19 +466,19 @@ msgid "To enable"
 msgstr "Aktivieren"
 
 #, c-format
-msgid "Close DB <%s> error!"
-msgstr "Fehler beim Schliessen der Datenbank <%s>!"
+msgid "Close DB '%s' error!"
+msgstr "Fehler beim Schliessen der Datenbank '%s'!"
 
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
-"----------- The config file station <%s> parameters -----------\n"
+"----------- The config file station '%s' parameters -----------\n"
 "SYSStPref    <1>   Use station id prefix into generic (SYS) table.\n"
 "\n"
 msgstr ""
 "========================= Optionen des Subsystems\"DB\" "
 "=========================\n"
-"-------------- Parameter der Station <%s> in der Konfigurationsdatei "
+"-------------- Parameter der Station '%s' in der Konfigurationsdatei "
 "------------\n"
 "SYSStPref    <1>   Den bezeichner der Station in der gemeinsamen (SYS)"
 "Tabelle benutzen.\n"
@@ -574,8 +574,8 @@ msgid "Field id = %s(%s) no present!"
 msgstr "Feld id = %s(%s) ist nicht vorhanden!"
 
 #, c-format
-msgid "%s:%s:> Control element <%s> error!"
-msgstr "%s:%s:> Fehler des Kontrollelements <%s>!"
+msgid "%s:%s:> Control element '%s' error!"
+msgstr "%s:%s:> Fehler des Kontrollelements '%s'!"
 
 msgid "Node already in process!"
 msgstr "Knoten wird bearbeitet!"
@@ -637,15 +637,15 @@ msgid "Node is beign processed now!"
 msgstr "Knoten wird jetzt bearbeitet!"
 
 #, c-format
-msgid "Child <%s> is not present!"
-msgstr "Kindknoten <%s> fehlt!"
+msgid "Child '%s' is not present!"
+msgstr "Kindknoten '%s' fehlt!"
 
 msgid "Node is the root or is not connected!"
 msgstr "Knoten ist 'root' oder nicht verbunden!"
 
 #, c-format
-msgid "Element <%s> is not present or disabled!"
-msgstr "Element <%s> ist nicht vorhanden oder abgeschaltet!"
+msgid "Element '%s' is not present or disabled!"
+msgstr "Element '%s' ist nicht vorhanden oder abgeschaltet!"
 
 msgid "Loading node error."
 msgstr "Fehler beim Laden des Knotens."
@@ -661,16 +661,16 @@ msgid "Function '%s' error or not enough parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
 #, c-format
-msgid "Some tags on path <%s> are missed!"
-msgstr "Einige Namen im Pfad <%s> sind falsch!"
+msgid "Some tags on path '%s' are missed!"
+msgstr "Einige Namen im Pfad '%s' sind falsch!"
 
 #, c-format
-msgid "Error access to element <%s>!"
-msgstr "Fehler beim Zugriff auf das Element <%s>!"
+msgid "Error access to element '%s'!"
+msgstr "Fehler beim Zugriff auf das Element '%s'!"
 
 #, c-format
-msgid "Element <%s> warning! %s"
-msgstr "Element <%s> Warnung! %s"
+msgid "Element '%s' warning! %s"
+msgstr "Element '%s' Warnung! %s"
 
 msgid "Node: "
 msgstr "Knoten: "
@@ -731,8 +731,8 @@ msgid "Enable controller!"
 msgstr "Kontroller einschalten!"
 
 #, c-format
-msgid "Enable parameter <%s> error."
-msgstr "Fehler beim Einschalten des Parameters <%s>."
+msgid "Enable parameter '%s' error."
+msgstr "Fehler beim Einschalten des Parameters '%s'."
 
 msgid "Some parameters enable error."
 msgstr "Fehler beim Starten einiger Parameter."
@@ -741,12 +741,12 @@ msgid "Disable controller!"
 msgstr "Kontroller abschalten!"
 
 #, c-format
-msgid "Disable parameter <%s> error."
-msgstr "Fehler beim Abschalten des Parameters <%s>."
+msgid "Disable parameter '%s' error."
+msgstr "Fehler beim Abschalten des Parameters '%s'."
 
 #, c-format
-msgid "Add parameter <%s> error."
-msgstr "Fehler beim Hinzufügen des Parameters <%s>."
+msgid "Add parameter '%s' error."
+msgstr "Fehler beim Hinzufügen des Parameters '%s'."
 
 msgid "Search and create new parameters error."
 msgstr "Fehler bei der Suche und Erstellung neuer Parameter."
@@ -800,29 +800,29 @@ msgid "Load template's libraries error."
 msgstr "Fehler beim Laden der Vorlagenbibliotheken."
 
 #, c-format
-msgid "Add controller <%s> error."
-msgstr "Fehler beim Hinzufügen eines Kontrollers <%s>."
+msgid "Add controller '%s' error."
+msgstr "Fehler beim Hinzufügen eines Kontrollers '%s'."
 
 #, c-format
-msgid "Start template library <%s> error."
-msgstr "Fehler beim Starten der Vorlagenbibliothek <%s>."
+msgid "Start template library '%s' error."
+msgstr "Fehler beim Starten der Vorlagenbibliothek '%s'."
 
 #, c-format
-msgid "Enable controller <%s> error."
-msgstr "Fehler beim Einschalten des Kontrollers <%s>."
+msgid "Enable controller '%s' error."
+msgstr "Fehler beim Einschalten des Kontrollers '%s'."
 
 #, c-format
-msgid "Stop controller <%s> error."
-msgstr "Fehler beim Anhalten des Kontrollers <%s>."
+msgid "Stop controller '%s' error."
+msgstr "Fehler beim Anhalten des Kontrollers '%s'."
 
 #, c-format
-msgid "Disable controller <%s> error."
-msgstr "Fehler beim Abschalten des Kontrollers <%s>."
+msgid "Disable controller '%s' error."
+msgstr "Fehler beim Abschalten des Kontrollers '%s'."
 
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
-"------------ Parameters of section <%s> in config file -----------\n"
+"------------ Parameters of section '%s' in config file -----------\n"
 "RdStLevel    <lev>  The curent station redundant level.\n"
 "RdTaskPer    <s>    The redundant task call period.\n"
 "RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
@@ -834,7 +834,7 @@ msgid ""
 msgstr ""
 "=================== Optionen des Subsystems \"Datenempfang\" "
 "======================\n"
-"--------------- Parameter der Sektion <%s> in der Konfigurationsdatei "
+"--------------- Parameter der Sektion '%s' in der Konfigurationsdatei "
 "--------------\n"
 "RdStLevel    <уров>   Das Niveau der laufenden Station im "
 "Bereitstellungschema.\n"
@@ -922,8 +922,8 @@ msgid "The element container is already attached!"
 msgstr "Elementencontainer ist schon eingeschaltet!"
 
 #, c-format
-msgid "Element <%s> is not present!"
-msgstr "Element <%s> ist nicht vorhanden!"
+msgid "Element '%s' is not present!"
+msgstr "Element '%s' ist nicht vorhanden!"
 
 msgid "Field is not string."
 msgstr "Feld ist kein Text."
@@ -944,16 +944,16 @@ msgid "Empty"
 msgstr "Leer"
 
 #, c-format
-msgid "Select error! Val: <%s>."
-msgstr "Auswahlfehler! Wert: <%s>."
+msgid "Select error! Val: '%s'."
+msgstr "Auswahlfehler! Wert: '%s'."
 
 #, c-format
-msgid "Select error! Val: <%d>."
-msgstr "Auswahlfehler! Wert: <%d>."
+msgid "Select error! Val: '%d'."
+msgstr "Auswahlfehler! Wert: '%d'."
 
 #, c-format
-msgid "Select error! Val: <%f>."
-msgstr "Auswahlfehler! Wert: <%f>."
+msgid "Select error! Val: '%f'."
+msgstr "Auswahlfehler! Wert: '%f'."
 
 #, c-format
 msgid "Function is used by: %s"
@@ -976,8 +976,8 @@ msgid "Change is not permited while function is used: %s"
 msgstr "Änderung nicht möglich solange die Funktion verwendet wird: %s"
 
 #, c-format
-msgid "Value <%s> is already attached!"
-msgstr "Wert <%s> ist schon eingeschaltet!"
+msgid "Value '%s' is already attached!"
+msgstr "Wert '%s' ist schon eingeschaltet!"
 
 msgid "Function: "
 msgstr "Funktion: "
@@ -1034,8 +1034,8 @@ msgid "Input"
 msgstr "Eingang"
 
 #, c-format
-msgid "IO <%s> is not present!"
-msgstr "IO <%s> ist nicht vorhanden!"
+msgid "IO '%s' is not present!"
+msgstr "IO '%s' ist nicht vorhanden!"
 
 msgid "Function is not attached!"
 msgstr "Funktion ist nicht aktiviert!"
@@ -1118,7 +1118,7 @@ msgstr "Modulsteuerung"
 msgid ""
 "=================== Subsystem \"Module sheduler\" options =================\n"
 "    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
-"------------ Parameters of section <%s> in config file -----------\n"
+"------------ Parameters of section '%s' in config file -----------\n"
 "ModPath  <path>        Path to shared libraries(modules).\n"
 "ModAllow <list>        List of shared libraries allowed for automatic "
 "loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
@@ -1130,7 +1130,7 @@ msgid ""
 msgstr ""
 "=================== Subsystem \"Modulsteuerung\" ====================\n"
 "    --ModPath=<path>  Pfad zu den Modulen (/var/os/modules/).\n"
-"--------- Parameter des Abschnitts <%s> in der Konfigurationsdatei "
+"--------- Parameter des Abschnitts '%s' in der Konfigurationsdatei "
 "---------\n"
 "ModPath  <path>       Pfad zu den gemeinsamen Bibliotheken (Module).\n"
 "ModAllow <list>       Liste von erlaubten gemeinsamen Bibliotheken (werden\n"
@@ -1145,32 +1145,32 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "SO <%s> is not present!"
-msgstr "SO <%s> ist nicht vorhanden!"
+msgid "SO '%s' is not present!"
+msgstr "SO '%s' ist nicht vorhanden!"
 
 #, c-format
-msgid "SO <%s> is already attached!"
-msgstr "SO <%s> ist eingeschaltet!"
+msgid "SO '%s' is already attached!"
+msgstr "SO '%s' ist eingeschaltet!"
 
 #, c-format
-msgid "SO <%s> error: %s !"
-msgstr "SO <%s> Fehler: %s !"
+msgid "SO '%s' error: %s !"
+msgstr "SO '%s' Fehler: %s !"
 
 #, c-format
-msgid "%s for type <%s> doesn't support module version: %d!"
-msgstr "%s für Typ <%s> unterstützt die Version %d des Moduls nicht!"
+msgid "%s for type '%s' doesn't support module version: %d!"
+msgstr "%s für Typ '%s' unterstützt die Version %d des Moduls nicht!"
 
 #, c-format
-msgid "Module <%s> is already present!"
-msgstr "Modul <%s> ist schon vorhanden!"
+msgid "Module '%s' is already present!"
+msgstr "Modul '%s' ist schon vorhanden!"
 
 #, c-format
-msgid "Attach module <%s> error!"
-msgstr "Fehler beim Einschaltung des Moduls <%s>!"
+msgid "Attach module '%s' error!"
+msgstr "Fehler beim Einschaltung des Moduls '%s'!"
 
 #, c-format
-msgid "Can't detach library <%s>."
-msgstr "Bibliothek <%s> ausschalten ist nicht möglich."
+msgid "Can't detach library '%s'."
+msgstr "Bibliothek '%s' ausschalten ist nicht möglich."
 
 msgid "Subsystem"
 msgstr "Subsystem"
@@ -1228,8 +1228,8 @@ msgid "Connect module!"
 msgstr "Modul verbinden!"
 
 #, c-format
-msgid "Function <%s> is not present in the module!"
-msgstr "Funktion <%s> ist nicht vorhanden im Modul!"
+msgid "Function '%s' is not present in the module!"
+msgstr "Funktion '%s' ist nicht vorhanden im Modul!"
 
 msgid "Module: "
 msgstr "Modul: "
@@ -1444,8 +1444,8 @@ msgid "The subsystem is not modular!"
 msgstr "Das Subsystem ist nicht modular!"
 
 #, c-format
-msgid "Disconnect module <%s>!"
-msgstr "Verbindung trennen für das Modul <%s>!"
+msgid "Disconnect module '%s'!"
+msgstr "Verbindung trennen für das Modul '%s'!"
 
 #, c-format
 msgid "Start module '%s' error."
@@ -1539,7 +1539,7 @@ msgid ""
 "                         <direct> & 2 - stdout;\n"
 "                         <direct> & 4 - stderr;\n"
 "                         <direct> & 8 - archive.\n"
-"----------- The config file station <%s> parameters -----------\n"
+"----------- The config file station '%s' parameters -----------\n"
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "Workdir    <path>\tWork directory.\n"
@@ -1575,7 +1575,7 @@ msgstr ""
 "                         <direct> & 2 - Standardausgang (stdout);\n"
 "                         <direct> & 4 - Standardfehlerausgang (stderr);\n"
 "                         <direct> & 8 - Archiv.\n"
-"-------------- Parameter der Station <%s> in der Konfigurationsdatei "
+"-------------- Parameter der Station '%s' in der Konfigurationsdatei "
 "------------\n"
 "StName     <nm>        Stationsname.\n"
 "WorkDB     <Type.Name> Arbeitsdatenbank (Typ und Name).\n"
@@ -1594,19 +1594,18 @@ msgstr ""
 "SavePeriod <sec>       Zeitintervall für Systemspeicherung.\n"
 
 #, c-format
-msgid "Config file <%s> error: %s"
-msgstr "Konfigurationsdatei <%s> Fehler: %s"
+msgid "Config file '%s' error: %s"
+msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
 #, c-format
 msgid ""
-"Station <%s> is not present in the config file. Use <%s> station config!"
+"Station '%s' is not present in the config file. Use '%s' station config!"
 msgstr ""
-"Station <%s> fehlt in der Konfigurationsdatei. Konfiguration der Station <"
-"%s> wird verwendet!"
+"Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station '%s' wird verwendet!"
 
 #, c-format
-msgid "Config <%s> error!"
-msgstr "Konfigurationsfehler <%s>!"
+msgid "Config '%s' error!"
+msgstr "Konfigurationsfehler '%s'!"
 
 #, c-format
 msgid "Load config file error: %s"
@@ -1623,8 +1622,8 @@ msgid "No one module is loaded. Your configuration broken!"
 msgstr "Kein Modul ist geladen. Ihre Konfiguration ist kaput"
 
 #, c-format
-msgid "Error load subsystem <%s>."
-msgstr "Fehler beim Laden des Subsysems  <%s>."
+msgid "Error load subsystem '%s'."
+msgstr "Fehler beim Laden des Subsysems '%s'."
 
 msgid "Save!"
 msgstr "Speicherung!"
@@ -1633,8 +1632,8 @@ msgid "Start!"
 msgstr "Starten!"
 
 #, c-format
-msgid "Error start subsystem <%s>."
-msgstr "Fehler beim Starten des Subsystems <%s>."
+msgid "Error start subsystem '%s'."
+msgstr "Fehler beim Starten des Subsystems '%s'."
 
 msgid "Final starting!"
 msgstr "Starten ist beendet"
@@ -1643,8 +1642,8 @@ msgid "Stop!"
 msgstr "Anhalten!"
 
 #, c-format
-msgid "Error stop subsystem <%s>."
-msgstr "Fehler beim Anhalten des Subsystems <%s>."
+msgid "Error stop subsystem '%s'."
+msgstr "Fehler beim Anhalten des Subsystems '%s'."
 
 msgid "The Terminate signal is received.. Server is being stoped!"
 msgstr "Signal zum Beenden wird empfangen. Server wird angehalten!"
@@ -1861,8 +1860,8 @@ msgid "Preferable run"
 msgstr "Prioritätsstufe"
 
 #, c-format
-msgid "Start controller <%s> error."
-msgstr "Fehler beim Starten des Kontrollers <%s>."
+msgid "Start controller '%s' error."
+msgstr "Fehler beim Starten des Kontrollers '%s'."
 
 msgid "Id of parameter type error!"
 msgstr "Fehler Typ des Parameterbezeichners!"
@@ -1906,20 +1905,20 @@ msgid "Search and load external hosts DB error."
 msgstr "Fehler bei der Suche und Laden der externen Datenbank."
 
 #, c-format
-msgid "Start input transport <%s> error."
-msgstr "Fehler beim Starten der Eingangsübertragung <%s>."
+msgid "Start input transport '%s' error."
+msgstr "Fehler beim Starten der Eingangsübertragung '%s'."
 
 #, c-format
-msgid "Start output transport <%s> error."
-msgstr "Fehler beim Starten der Ausgangsübertragung <%s>."
+msgid "Start output transport '%s' error."
+msgstr "Fehler beim Starten der Ausgangsübertragung '%s'."
 
 #, c-format
-msgid "Stop input transport <%s> error."
-msgstr "Fehler beim Anhalten der Eingangsübertragung <%s>."
+msgid "Stop input transport '%s' error."
+msgstr "Fehler beim Anhalten der Eingangsübertragung '%s'."
 
 #, c-format
-msgid "Stop output transport <%s> error."
-msgstr "Fehler beim Anhalten der Ausgangsübertragung <%s>."
+msgid "Stop output transport '%s' error."
+msgstr "Fehler beim Anhalten der Ausgangsübertragung '%s'."
 
 #, c-format
 msgid ""
@@ -2047,8 +2046,8 @@ msgid "Child '%d' is not allow."
 msgstr "Nachkommen %d ist verboten."
 
 #, c-format
-msgid "2:Open file <%s> error: %s"
-msgstr "Fehler der Öffnung der Datei <%s> : %s"
+msgid "2:Open file '%s' error: %s"
+msgstr "Fehler der Öffnung der Datei '%s' : %s"
 
 msgid "The object don't attached to node of OpenSCADA tree."
 msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."
@@ -2112,8 +2111,8 @@ msgid "Value arhiv no support!"
 msgstr "Wertearchiv wird nicht unterstützt!"
 
 #, c-format
-msgid "Function <%s> no support!"
-msgstr "Funktion <%s> wird nicht unterstützt!"
+msgid "Function '%s' no support!"
+msgstr "Funktion '%s' wird nicht unterstützt!"
 
 #, c-format
 msgid "%s: No function set!"

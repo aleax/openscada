@@ -170,7 +170,7 @@ void TFunction::valAtt( TValFunc *vfnc )
     ResAlloc res(nodeRes(), true);
     for( unsigned i=0; i < used.size(); i++ )
 	if( used[i] == vfnc )
-	    throw TError(nodePath().c_str(),_("Value <%s> is already attached!"),vfnc->vfName().c_str());
+	    throw TError(nodePath().c_str(),_("Value '%s' is already attached!"),vfnc->vfName().c_str());
     used.push_back(vfnc);
 }
 
@@ -551,7 +551,7 @@ void TValFunc::funcDisConnect( bool det )
 
 int TValFunc::ioId( const string &iid )
 {
-    if( !mFunc )	throw TError("ValFnc",_("IO <%s> is not present!"),iid.c_str());
+    if( !mFunc )	throw TError("ValFnc",_("IO '%s' is not present!"),iid.c_str());
     return mFunc->ioId(iid);
 }
 

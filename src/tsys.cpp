@@ -308,7 +308,7 @@ string TSYS::optDescr( )
 	"                         <direct> & 2 - stdout;\n"
 	"                         <direct> & 4 - stderr;\n"
 	"                         <direct> & 8 - archive.\n"
-	"----------- The config file station <%s> parameters -----------\n"
+	"----------- The config file station '%s' parameters -----------\n"
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"Workdir    <path>	Work directory.\n"
@@ -360,7 +360,7 @@ bool TSYS::cfgFileLoad( )
 
     //Load config file
     int hd = open(mConfFile.c_str(),O_RDONLY);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("Config file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
 	string s_buf;
@@ -391,13 +391,13 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId)
 		{
-		    mess_warning(nodePath().c_str(),_("Station <%s> is not present in the config file. Use <%s> station config!"),
+		    mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config file. Use '%s' station config!"),
 			mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
 	    } else rootN.clear();
-	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Config <%s> error!"),mConfFile.c_str());
+	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Config '%s' error!"),mConfFile.c_str());
 	    rootModifCnt = 0;
 	}
 	catch(TError err) { mess_err(nodePath().c_str(),_("Load config file error: %s"),err.mess.c_str() ); }
@@ -411,7 +411,7 @@ void TSYS::cfgFileSave( )
     ResAlloc res(nodeRes(),true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config file <%s> error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("Config file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
 
     string rezFile = rootN.save(XMLNode::XMLHeader);
     int rez = write(hd, rezFile.data(), rezFile.size());
@@ -479,7 +479,7 @@ void TSYS::load_()
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error load subsystem <%s>."),lst[i_a].c_str());
+	    mess_err(nodePath().c_str(),_("Error load subsystem '%s'."),lst[i_a].c_str());
 	}
 
     if( cmd_help ) stop();
@@ -515,7 +515,7 @@ int TSYS::start(  )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error start subsystem <%s>."),lst[i_a].c_str());
+	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
 	}
 
     cfgFileScan( true );
@@ -557,7 +557,7 @@ int TSYS::start(  )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error stop subsystem <%s>."),lst[i_a].c_str());
+	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
 	}
 
     return mStopSignal;

@@ -32,7 +32,7 @@ using namespace JavaLikeCalc;
 //*************************************************
 //* Lib: Functions library                        *
 //*************************************************
-Lib::Lib( const char *id, const char *name, const string &lib_db ) :
+Lib::Lib( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elLib()), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
     mDB(cfg("DB").getSd()), work_lib_db(lib_db), mProgTr(cfg("PROG_TR").getBd())
 {
@@ -40,7 +40,7 @@ Lib::Lib( const char *id, const char *name, const string &lib_db ) :
     mName = name;
     mDB = string("flb_")+id;
     mFnc = grpAdd("fnc_");
-    if( DB().empty() )	modifClr();
+    if(DB().empty()) modifClr();
 }
 
 Lib::~Lib( )
@@ -109,18 +109,30 @@ void Lib::setFullDB( const string &idb )
 
 void Lib::load_( )
 {
-    if( DB().empty() || (!SYS->chkSelDB(DB())) )	return;
+    if(DB().empty() || (!SYS->chkSelDB(DB())))	return;
 
     SYS->db().at().dataGet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
     //> Load functions
+    map<string, bool>   itReg;
     TConfig c_el(&mod->elFnc());
     c_el.cfgViewAll(false);
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(), fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	if( !present(f_id) )	add(f_id.c_str());
+	if(!present(f_id)) add(f_id.c_str());
 	at(f_id).at().load();
+	itReg[f_id] = true;
+    }
+
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+	vector<string> it_ls;
+        list(it_ls);
+        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+            if(itReg.find(it_ls[i_it]) == itReg.end())
+        	del(it_ls[i_it]);
     }
 }
 
@@ -142,12 +154,12 @@ void Lib::setStart( bool val )
     run_st = val;
 }
 
-void Lib::add( const char *id, const char *name )
+void Lib::add( const string &id, const string &name )
 {
     chldAdd(mFnc,new Func(id,name));
 }
 
-void Lib::del( const char *id )
+void Lib::del( const string &id )
 {
     chldDel(mFnc,id);
 }

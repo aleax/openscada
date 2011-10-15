@@ -1200,7 +1200,7 @@ void TVArchive::archivatorAttach( const string &arch )
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().valAt(TSYS::strSepParse(arch,1,'.'));
 
     if(!archivat.at().startStat())
-	throw TError(nodePath().c_str(),_("Archivator <%s> error or it is not started."),arch.c_str());
+	throw TError(nodePath().c_str(),_("Archivator '%s' error or it is not started."),arch.c_str());
 
     //> Find already present archivator
     for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)

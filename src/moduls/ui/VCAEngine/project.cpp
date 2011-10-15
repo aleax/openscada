@@ -167,36 +167,48 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
 
     mess_info(nodePath().c_str(),_("Load project."));
 
     SYS->db().at().dataGet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
     //> Create new pages
+    map<string, bool>   itReg;
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
     c_el.cfg("OWNER").setS("/"+id(),true);
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/", fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	if( !present(f_id) )	add(f_id,"","");
+	if(!present(f_id)) add(f_id,"","");
+	itReg[f_id] = true;
+    }
+
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+	vector<string> it_ls;
+        list(it_ls);
+        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+            if(itReg.find(it_ls[i_it]) == itReg.end())
+                del(it_ls[i_it]);
     }
 
     mOldDB = TBDS::realDBName(DB());
 
     //> Load styles
-    ResAlloc res( mStRes, true );
-    TConfig c_stl( &mod->elPrjStl() );
+    ResAlloc res(mStRes, true);
+    TConfig c_stl(&mod->elPrjStl());
     string svl;
     vector<string> vlst;
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fld_cnt++,c_stl); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fld_cnt++,c_stl); )
     {
 	vlst.clear();
-	for( int i_s = 0; i_s < 10; i_s++ )
+	for(int i_s = 0; i_s < 10; i_s++)
 	{
 	    svl = c_stl.cfg(TSYS::strMess("V_%d",i_s)).getS();
-	    if( svl.empty() ) break;
+	    if(svl.empty()) break;
 	    vlst.push_back(svl);
 	}
 	mStProp[c_stl.cfg("ID").getS()] = vlst;
@@ -291,7 +303,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb )
     c_el.cfgViewAll(false);
 
     list.clear();
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++ )
         list.push_back(c_el.cfg("ID").getS());
 }
 
@@ -998,16 +1010,29 @@ void Page::load_( )
     mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), path(), "", tAttrs, true );
 
     //> Create new pages
+    map<string, bool>   itReg;
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
     c_el.cfg("OWNER").setS(ownerFullId()+"/"+id(),true);
-    for( int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	if( !pagePresent(f_id) )
-	    try{ pageAdd(f_id,"",""); }
+	if(!pagePresent(f_id))
+	    try { pageAdd(f_id,"",""); }
 	    catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
+	itReg[f_id] = true;
     }
+
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+	vector<string> it_ls;
+        pageList(it_ls);
+        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+            if(itReg.find(it_ls[i_it]) == itReg.end())
+                pageDel(it_ls[i_it]);
+    }
+
     //> Load present pages
     vector<string> f_lst;
     pageList(f_lst);
@@ -1022,30 +1047,42 @@ void Page::load_( )
 
 void Page::loadIO( )
 {
-    if( !enable() ) return;
+    if(!enable()) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad( *this, ownerProj()->DB()+"."+ownerProj()->tbl(), cfg("DBV").getI(), path(), "", mAttrs );
+    mod->attrsLoad(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), cfg("DBV").getI(), path(), "", mAttrs);
 
     //> Load cotainer widgets
-    if( !isContainer() ) return;
+    if(!isContainer()) return;
+    map<string, bool>   itReg;
     TConfig c_el(&mod->elInclWdg());
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
     c_el.cfg("IDW").setS(path(),true);
-    for( int fld_cnt=0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid  = c_el.cfg("ID").getS();
-	if( c_el.cfg("PARENT").getS() == "<deleted>" )
+	if(c_el.cfg("PARENT").getS() == "<deleted>")
 	{
-	    if( wdgPresent(sid) )	wdgDel(sid);
+	    if(wdgPresent(sid))	wdgDel(sid);
 	    continue;
 	}
-	if( !wdgPresent(sid) )
+	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid,"",""); }
 	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load();
+	itReg[sid] = true;
+    }
+
+    //>>> Check for remove items removed from DB
+    if(!SYS->selDB().empty())
+    {
+        vector<string> it_ls;
+        wdgList(it_ls);
+        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+            if(itReg.find(it_ls[i_it]) == itReg.end())
+                wdgDel(it_ls[i_it]);
     }
 }
 
@@ -1470,7 +1507,7 @@ void PageWdg::save_( )
 	    }
 	    c_el.setElem(&mod->elWdgUIO());
 	    c_el.cfg("IDW").setS(ownerPage().path(), true);
-	    for(int io_cnt = 0; SYS->db().at().dataSeek( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", io_cnt++, c_el ); )
+	    for(int io_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl+"_uio",mod->nodePath()+tbl+"_uio",io_cnt++,c_el); )
 		if(c_el.cfg("ID").getS().find(id()+"/") == 0)
 		{ SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true); io_cnt--; }
 	}

@@ -43,7 +43,7 @@ class TipContr;
 class Lib : public TCntrNode, public TConfig
 {
     public:
-	Lib( const char *id, const char *name, const string &lib_db );
+	Lib( const string &id, const string &name, const string &lib_db );
 	~Lib( );
 
 	TCntrNode &operator=( TCntrNode &node );
@@ -67,8 +67,8 @@ class Lib : public TCntrNode, public TConfig
 	void list( vector<string> &ls )		{ chldList(mFnc,ls); }
 	bool present( const string &id )	{ return chldPresent(mFnc,id); }
 	AutoHD<Func> at( const string &id )	{ return chldAt(mFnc,id); }
-	void add( const char *id, const char *name = "" );
-	void del( const char *id );
+	void add( const string &id, const string &name = "" );
+	void del( const string &id );
 
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 

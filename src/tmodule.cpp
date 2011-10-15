@@ -92,7 +92,7 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(unsigned i = 0; i < m_efunc.size(); i++)
 	if(m_efunc[i]->prot == prot) return *m_efunc[i];
-    throw TError(nodePath().c_str(),_("Function <%s> is not present in the module!"),prot.c_str());
+    throw TError(nodePath().c_str(),_("Function '%s' is not present in the module!"),prot.c_str());
 }
 
 void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
