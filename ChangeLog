@@ -1,3 +1,7 @@
+2011-10-18 Roman
+- UI.Vision: Set global runtime window status bar value on set attribute "tipStatus" is added.
+
+
 2011-10-15 Roman
 - !!!!:SYS: Loaded objects check to removed from DB for remove object is added.
     Checking for remove performed only at direct selected DB loading.

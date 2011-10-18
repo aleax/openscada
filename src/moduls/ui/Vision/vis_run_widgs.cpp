@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QComboBox>
+#include <QStatusBar>
 
 #include <tsys.h>
 
@@ -221,6 +222,10 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
             return true;
 	case 6:		//active
 	    setProperty("active",(bool)atoi(val.c_str()));
+	    return true;
+	case 16:	//tipStatus
+	    if(val.size() && mainWin()->masterPg() == this)
+		mainWin()->statusBar()->showMessage(val.c_str(), 10000);
 	    return true;
 	case 17:	//contextMenu
 	    setProperty("contextMenu",val.c_str());
