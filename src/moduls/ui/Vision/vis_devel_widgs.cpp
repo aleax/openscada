@@ -2913,7 +2913,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 
 		//> Check for select next underly widget
-		if( fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove )
+		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove)
 		{
 		    DevelWdgView *fsel = NULL, *nsel = NULL;
 		    int i_c;
@@ -2936,24 +2936,24 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		}
 
-		if( fSelChange )
+		if(fSelChange)
 		{
 		    setSelect(true,PrcChilds|NoUpdate);	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
 		    fSelChange = false;
 		}
 
-		if( fMoveHold )
+		if(fMoveHold || cursor().shape() != Qt::ArrowCursor)
 		{
-		    if( cursor().shape() != Qt::ArrowCursor )
+		    if(cursor().shape() != Qt::ArrowCursor)
 		    {
 			vector<DevelWdgView*> lswdgs;
 			selectChilds(NULL,&lswdgs);
-			if( fMoveHoldMove )
+			if(fMoveHoldMove)
 			{
-			    if( !lswdgs.size() )
+			    if(!lswdgs.size())
 			    {
 				saveGeom(id().c_str());
-				if( fMakeScale ) load("");
+				if(fMakeScale) load("");
 			    }
 			    else for(unsigned i_w = 0; i_w < lswdgs.size(); i_w++)
 			    {
