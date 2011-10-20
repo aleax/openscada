@@ -1,8 +1,13 @@
+2011-10-20 Roman
+- UI.WebVision: Set global runtime window status bar value on set attribute "tipStatus" is added.
+
+
 2011-10-20 Maxim
 - FIX:UI.Vision: Cursor's change efter editing the element's list is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Moving the several shapes of the connected ones with keyboard keys is fixed for the primitive ElFigure.
 - FIX:UI.Vision: Orto drawing of the shapes is fixed for the primitive ElFigure.
 - UI.Vision: Connection of the shapes, while  one of them is being drawn, is added for the primitive ElFigure.
+
 
 2011-10-18 Roman
 - FIX:UI.Vision: In development mode selection widget into dots place is fixed.

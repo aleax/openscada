@@ -625,12 +625,13 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Box' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
-    if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-     if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
-     switch( parseInt(this.attrs['bordStyle']) )
-     {
+    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
+    if(this.attrs['backColor']) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+    if(this.attrs['backImg'])   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+      elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
+    switch(parseInt(this.attrs['bordStyle']))
+    {
 	case 1: elStyle+='border-style: dotted; '; break;
 	case 2: elStyle+='border-style: dashed; '; break;
 	case 3: elStyle+='border-style: solid; ';  break;
@@ -640,9 +641,9 @@ function makeEl( pgBr, inclPg )
 	case 7: elStyle+='border-style: inset; ';  break;
 	case 8: elStyle+='border-style: outset; '; break;
     }
-    if( !this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)) )
+    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
     {
-      if( this.inclOpen )
+      if(this.inclOpen)
       {
 	servSet(this.inclOpen,'com=pgClose','');
 	pgCache[this.inclOpen] = this.pages[this.inclOpen];
