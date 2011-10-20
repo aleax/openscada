@@ -246,7 +246,6 @@ class ShapeElFigure : public WdgShape
 	unsigned flag_arc_rect_3_4	:1;
 	unsigned flag_first_move	:1;
 	unsigned flag_move	:1;
-	unsigned flag_release	:1;
         unsigned flag_hold_move	:1;
         unsigned flag_inund_break	:1;
         unsigned flag_scale	:1;

@@ -56,7 +56,7 @@ ShapeElFigure::ShapeElFigure( ) :
         WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
-    flag_release(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
+    flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
     flag_geom (false), flag_rect_items (false), flag_def_stat(false), fl_status_move(false), fl_orto_move(false), count_rects(0),
     rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
@@ -82,7 +82,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
     bool rel_list	= false;				//change signal
     bool up		= false;
-    status		= false;
     bool paint          = false;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<ShapeItem> &shapeItems_temp = elFD->shapeItems_temp;
@@ -1453,7 +1452,7 @@ QPointF ShapeElFigure::getArcStartEnd( QPointF StartMotionPos, QPointF EndMotion
 
 void ShapeElFigure::editEnter( WdgView *view )
 {
-    index = -1;
+    index = -1; status = false;
     //- Scaling the widths if the scale is more than 1 -
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     double scale;
@@ -4084,7 +4083,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         double scale, ang;
                         QLineF line1, line2;
                         QPainterPath circlePath, bigPath;
-                        flag_release = false;
                         switch( shapeType )
                         {
                             case 1:
@@ -4334,8 +4332,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
                         view->repaint();
                     }
-                    if( ev->button() == Qt::LeftButton && itemInMotion && !status )
+                    if( ev->button() == Qt::LeftButton && itemInMotion )
                     {
+                        bool paint_im = false;
                         flag_inund_break = false;
                         itemInMotion = &shapeItems[index];
                         index_temp = index;
@@ -4490,9 +4489,45 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             offset = QPointF(0,0);
                             moveAll( ev->pos(), shapeItems, pnts, inundationItems, view );
                         }
+                        //> Finish of the drawing the figure
+                        if( status )
+                        {
+                            QLineF line1, line2;
+                            EndLine = ev->pos();
+                            //>> Remove the figure if its Start point is equal to its End point
+                            if( (EndLine == StartLine) && shapeItems.size() > 0 && itemInMotion )
+                            {
+                                switch( shapeType )
+                                {
+                                    case 1:
+                                        dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
+                                        break;
+                                    case 2:
+                                        dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n3, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n4, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n5, shapeItems.size()-1, shapeItems, pnts );
+                                        break;
+                                    case 3:
+                                        dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n3, shapeItems.size()-1, shapeItems, pnts );
+                                        dropPoint( shapeItems[shapeItems.size()-1].n4, shapeItems.size()-1, shapeItems, pnts );
+                                        break;
+                                }
+                                shapeItems.remove(shapeItems.size()-1);
+                            }
+                            fl_status_move = false;
+                            rectItems.clear();
+                            paint_im = true;
+                            index = -1;
+                        }
                         shapeSave( view );
                         itemInMotion = 0;
-                        flag_check_pnt_inund = false;
+                        flag_m = false;
+                        if( paint_im ){ paintImage(view); view->repaint(); }
                         if( status_hold && !flag_A )
                         {
                             count_moveItemTo = 0;
@@ -4516,8 +4551,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             rect_num_arc = -1;
                             flag_arc_rect_3_4 = false;
                         }
-                        itemInMotion = 0;
-		     	flag_m = false;
                     }
                     if( ev->button()==Qt::RightButton && !status )
                     {
@@ -4544,43 +4577,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             rect_num_arc = -1;
                             flag_arc_rect_3_4 = false;
                         }
-                    }
-                    //> Finish of the drawing the figure
-                    if( ev->button() == Qt::LeftButton && status )
-                    {
-                        QLineF line1, line2;
-                        EndLine = ev->pos();
-                        //>> Remove the figure if its Start point is equal to its End point
-                        if( (EndLine == StartLine || flag_release) && shapeItems.size() > 0 && itemInMotion )
-                        {
-                            switch( shapeType )
-                            {
-                                case 1:
-                                    dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
-                                    break;
-                                case 2:
-                                    dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n3, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n4, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n5, shapeItems.size()-1, shapeItems, pnts );
-                                    break;
-                                case 3:
-                                    dropPoint( shapeItems[shapeItems.size()-1].n1, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n2, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n3, shapeItems.size()-1, shapeItems, pnts );
-                                    dropPoint( shapeItems[shapeItems.size()-1].n4, shapeItems.size()-1, shapeItems, pnts );
-                                    break;
-                            }
-                            shapeItems.remove(shapeItems.size()-1);
-                        }
-                        shapeSave(view);
-                        fl_status_move = false; flag_m = false;
-                        rectItems.clear();
-                        itemInMotion = 0; index = -1;
-                        paintImage(view);
-                        view->repaint();
                     }
                 }
                 return true;
@@ -4705,7 +4701,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			}
                         if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
                         //- if the figure or it's rect is not connected to other one -
-                        if( !fl_status_move && status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)) )
+                        if( status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)) )
                         {
                             current_se = current_ss = current_ee = current_es = -1;
                             ellipse_draw_startPath = newPath;
@@ -4846,8 +4842,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QKeyEvent *ev = static_cast<QKeyEvent*>(event);
             if( devW )
             {
-                if( flag_m )  break;
                 if( ev->key() == Qt::Key_Shift ) fl_orto_move = true;
+                if( flag_m )  break;
                 if( ev->key() == Qt::Key_Control )
                 {
                     if( flag_A ) index_array_copy_flag_A = index_array;
@@ -5923,24 +5919,19 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QV
     }
     if( inundationItems.size() && !flag_inund_break && ( !status_hold || flag_A ) )
     {
-        if( count_Shapes > 1 )
-            checkPoint_checkInundation( shapeItems, pnts, inundationItems );
-        else
-        {
-            for( int i = 0; i < inundationItems.size(); i++ )
-                for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
+        for( int i = 0; i < inundationItems.size(); i++ )
+            for( int j = 0; j < inundationItems[i].number_shape.size(); j++ )
+            {
+                flag_break_move = false;
+                if( inundationItems[i].number_shape[j] == index )
                 {
-                    flag_break_move = false;
-                    if( inundationItems[i].number_shape[j] == index )
-                    {
-                        inundationItems.remove(i);
-                        shapeSave( view );
-                        flag_break_move = true;
-                        break;
-                    }
-                    if( flag_break_move ) break;
+                    inundationItems.remove(i);
+                    shapeSave( view );
+                    flag_break_move = true;
+                    break;
                 }
-        }
+                if( flag_break_move ) break;
+            }
     }
     flag_inund_break = true;
 }
@@ -6250,34 +6241,34 @@ void ShapeElFigure::checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, 
         //-- Detecting the all inundations(fills) in which the mooving figures are present --
         for( int j = 0; j < inundationItems.size(); j++ )
             for( int k = 0; k < inundationItems[j].number_shape.size(); k++ )
-        {
-            fl_in_brk = false;
-            if( index_array[i] == inundationItems[j].number_shape[k] )
             {
-                if( rem_inund.size() )
+                fl_in_brk = false;
+                if( index_array[i] == inundationItems[j].number_shape[k] )
                 {
-                    flag_ravno = false;
-                    for( int p = 0; p < rem_inund.size(); p++ )
-                        if( j == rem_inund[p] )
+                    if( rem_inund.size() )
+                    {
+                        flag_ravno = false;
+                        for( int p = 0; p < rem_inund.size(); p++ )
+                            if( j == rem_inund[p] )
+                            {
+                                flag_ravno = true;
+                                break;
+                            }
+                        if( !flag_ravno )
                         {
-                            flag_ravno = true;
+                            rem_inund.push_back(j);
+                            fl_in_brk = true;
                             break;
                         }
-                    if( !flag_ravno )
+                    }
+                    else 
                     {
                         rem_inund.push_back(j);
-                        fl_in_brk = true;
                         break;
                     }
                 }
-                else 
-                {
-                    rem_inund.push_back(j);
-                    break;
-                }
+                if( fl_in_brk ) break;
             }
-            if( fl_in_brk ) break;
-        }
     }
     bool flag_exist;
     int tmp_inund;
