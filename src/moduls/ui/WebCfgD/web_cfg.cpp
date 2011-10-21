@@ -223,15 +223,17 @@ void TWEB::imgConvert(SSess &ses)
 	sim = dim;
     }
     //>> Check for disable icon make
-    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && prmEl->second == "gray")
+    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
     {
         gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
 	gdImageAlphaBlending(dim,0);
+	bool isUnAct = (prmEl->second == "unact");
 	for(int i_y = 0; i_y < gdImageSY(sim); i_y++)
 	    for(int i_x = 0; i_x < gdImageSX(sim); i_x++)
 	    {
 		int c = gdImageGetPixel(sim,i_x,i_y);
 		int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
+		if(isUnAct) y = 255-(255-y)/2;
 		c = (int)gdImageColorResolveAlpha(dim,y,y,y,gdImageAlpha(sim,c));
 		gdImageSetPixel(dim,i_x,i_y,c);
 	    }
@@ -272,7 +274,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	else if( zero_lev == "ico" || zero_lev.substr(0,4) == "img_" )
 	{
 	    string itp;
-	    ses.page=TUIS::icoGet( zero_lev=="ico"?"UI."MOD_ID:zero_lev.substr(4), &itp );
+	    ses.page = TUIS::icoGet(((zero_lev == "ico")?"UI."MOD_ID:zero_lev.substr(4)), &itp);
 	    imgConvert(ses);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;

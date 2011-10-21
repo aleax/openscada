@@ -1652,6 +1652,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    AutoHD<SessWdg> nw = wdgAt(prms[0].getS());
 	    nw.at().setEnable(true);
 	    nw.at().setProcess(true);
+	    prcElListUpdate();
 
 	    return new TCntrNodeObj(&nw.at(),user);
 	}

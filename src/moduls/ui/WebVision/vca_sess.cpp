@@ -160,6 +160,7 @@ void VCASess::getReq( SSess &ses )
 	{
 	    string mime;
 	    ses.page = resGet(prmEl->second,ses.url,ses.user,&mime);
+	    mod->imgConvert(ses);
 	    ses.page = mod->httpHead("200 OK",ses.page.size(),mime)+ses.page;
 	} else ses.page = mod->httpHead("404 Not Found");
     }

@@ -1824,8 +1824,8 @@ function actEnable( act, vl )
   var actEl = document.getElementById(act);
   if( !actEl ) return;
   actEl.className = vl?'active':'inactive';
-  actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=gray','filtr=none') :
-				 actEl.childNodes[0].src.replace('filtr=none','filtr=gray');
+  actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=unact','filtr=none') :
+				 actEl.childNodes[0].src.replace('filtr=none','filtr=unact');
 }
 /***************************************************
  * chkStruct - Info page tree check structure.     *

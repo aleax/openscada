@@ -692,6 +692,69 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
+void TWEB::imgConvert(SSess &ses)
+{
+    map<string,string>::iterator prmEl;
+    gdImagePtr sim = NULL;
+    string itp;
+    int newImgH = 0, newImgW = 0;
+
+    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))   return;
+
+    if((sim=gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())))		itp = "png";
+    else if((sim=gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())))	itp = "jpg";
+    else if((sim=gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())))	itp = "gif";
+    //if(sim) gdImageAlphaBlending(sim, 0);
+
+    //>> Check for resize icon
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=atoi(prmEl->second.c_str())) > 0 && gdImageSY(sim) > newImgH)
+    {
+        newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
+        gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
+        gdImageAlphaBlending(dim,0);
+        gdImageFilledRectangle(dim,0,0,newImgW-1,newImgH-1,gdImageColorResolveAlpha(dim,0,0,0,127));
+        gdImageCopyResampled(dim,sim,0,0,0,0,newImgW,newImgH,gdImageSX(sim),gdImageSY(sim));
+        gdImageDestroy(sim);
+        sim = dim;
+    }
+
+    //>> Check for disable icon make
+    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
+    {
+        gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
+        gdImageAlphaBlending(dim,0);
+        bool isUnAct = (prmEl->second == "unact");
+        for(int i_y = 0; i_y < gdImageSY(sim); i_y++)
+            for(int i_x = 0; i_x < gdImageSX(sim); i_x++)
+            {
+                int c = gdImageGetPixel(sim,i_x,i_y);
+                int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
+                if(isUnAct) y = 255-(255-y)/2;
+                c = (int)gdImageColorResolveAlpha(dim,y,y,y,gdImageAlpha(sim,c));
+                gdImageSetPixel(dim,i_x,i_y,c);
+            }
+        gdImageDestroy(sim);
+        sim = dim;
+    }
+
+    //>> Save result
+    if(sim)
+    {
+        int img_sz;
+        char *img_ptr = NULL;
+        gdImageSaveAlpha(sim, 1);
+        if(itp == "png")        img_ptr = (char *)gdImagePngPtr(sim,&img_sz);
+        else if(itp == "jpg")   img_ptr = (char *)gdImageJpegPtr(sim,&img_sz,-1);
+        else if(itp == "gif")   img_ptr = (char *)gdImageGifPtr(sim,&img_sz);
+        if(img_ptr)
+        {
+            ses.page.assign(img_ptr,img_sz);
+            gdFree(img_ptr);
+        }
+        gdImageDestroy(sim);
+    }
+}
+
 int TWEB::colorParse( const string &tclr )
 {
     string clr = tclr;

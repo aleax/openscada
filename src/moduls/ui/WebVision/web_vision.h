@@ -113,6 +113,7 @@ class TWEB: public TUI
 
 	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
 
+	void imgConvert(SSess &ses);
 	int colorParse( const string &clr );
 	string trMessReplace( const string &tsrc );
 

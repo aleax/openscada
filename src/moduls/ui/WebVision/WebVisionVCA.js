@@ -24,6 +24,26 @@ var isNN = navigator.appName.indexOf('Netscape') != -1;
 var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
+
+/***************************************************
+ * strEncode - String encoding.                    *
+ ***************************************************/
+function strEncode( vl, tp )
+{
+  var encRez = '';
+  if(!tp || tp == "html")
+    for(var i_enc = 0; i_enc < vl.length; i_enc++)
+      switch(vl.charAt(i_enc))
+      {
+        case '&': encRez += '&amp;'; break;
+        case '>': encRez += '&gt;'; break;
+        case '<': encRez += '&lt;'; break;
+        case '"': encRez += '&quot;'; break;
+        default:  encRez += vl.charAt(i_enc);
+      }
+  return encRez;
+}
+
 /***************************************************
  * pathLev - Path parsing function.                *
  ***************************************************/
@@ -747,17 +767,21 @@ function makeEl( pgBr, inclPg )
   }
   else if( this.attrs['root'] == 'Media' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
-    if( this.attrs['backImg'] )
-      elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-    elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-    if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
+    if(this.attrs['backColor']) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+    if(this.attrs['backImg'])
+      elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
     while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
     var medObj = this.place.ownerDocument.createElement('img');
     medObj.wdgLnk = this;
     medObj.src = this.attrs['src'].length ? ('/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src']) : '';
     medObj.border = 0;
-    if( this.attrs['fit'] == 1 ) { medObj.width = geomW; medObj.height = geomH; }
+    if(this.attrs['fit'] == 1)
+    {
+	medObj.width = geomW; medObj.height = geomH;
+	if(this.attrs['src'].length) medObj.src += "&size="+geomH;
+    }
     else medObj.onload = function()
     {
 	var cWdth = this.width; var cHeight = this.height;
@@ -1146,10 +1170,11 @@ function makeEl( pgBr, inclPg )
 	  formObj = this.place.ownerDocument.createElement('div');
 	  formObj.className = 'vertalign';
 	  formObj.style.font = fontCfg;
-	  elStyle+='border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset':'outset')+'; cursor: pointer; border-width: 2px; ';
-	  if( this.attrs['colorText'] ) elStyle+='color: '+getColor(this.attrs['colorText'])+'; ';
-	  if( this.attrs['color'] ) elStyle+='background-color: '+getColor(this.attrs['color'])+'; ';
-	  else elStyle+='background-color: snow; ';
+	  elStyle += 'border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset; ':'outset; ')+
+				      (parseInt(this.attrs['active'])?'cursor: pointer; ':'')+'border-width: 2px; ';
+	  if(this.attrs['colorText']) elStyle += 'color: '+(parseInt(this.attrs['active']) ? getColor(this.attrs['colorText']) : 'silver')+'; ';
+	  if(parseInt(this.attrs['active']) && this.attrs['color']) elStyle += 'background-color: '+getColor(this.attrs['color'])+'; ';
+	  else elStyle += 'background-color: snow; ';
 	  if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
 	  {
 	    this.mouseup[this.mouseup.length] = function(e,el)
@@ -1181,17 +1206,29 @@ function makeEl( pgBr, inclPg )
 	    this.place.wdgLnk = this;
 	  }
 	  var txtVal1 = '';
-	  if( iconImg )
-	    txtVal1 += "<IMG src='/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"' "+
-			"width='"+Math.min(geomW-8,geomH-8)+"' height='"+Math.min(geomW-8,geomH-8)+"' float='left'/>";
-	  if( this.attrs['name'].length )
+	  if(iconImg)
+	    txtVal1 += "<IMG src='/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW-6,geomH-6)+
+				  (!parseInt(this.attrs['active'])?"&filtr=unact":"")+"' "+
+			"width='"+Math.min(geomW-6,geomH-6)+"' height='"+Math.min(geomW-6,geomH-6)+"' float='left' "+
+			(this.attrs['name'].length?"style='margin-right: 2px'":"")+"/>";
+	  if(this.attrs['name'].length)
 	  {
-	    for( var j = 0; j < this.attrs['name'].length; j++ )
-		if( this.attrs['name'].substr(j,2) == '\\n' ) { txtVal1+='<br />'; j++; }
-		else txtVal1+=this.attrs['name'][j];
+	    var begBlk = true;
+	    for(var j = 0; j < this.attrs['name'].length; j++)
+		if(this.attrs['name'].substr(j,2) == '\\n')
+		{
+		    if(!begBlk) { txtVal1 += "</span>"; begBlk = true; }
+		    txtVal1 += '<br />';
+		}
+		else
+		{
+		    if(begBlk) { txtVal1 += "<span>"; begBlk = false; }
+		    txtVal1 += strEncode(this.attrs['name'][j]);
+		}
 	  }
+	  if(!begBlk) txtVal1 += "</span>";
 	  formObj.innerHTML = txtVal1;
-	  geomW-=6; geomH-=6;
+	  geomW -= 4; geomH -= 4;
 	}
 	else
 	{

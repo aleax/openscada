@@ -1,3 +1,14 @@
+2011-10-21 Roman
+- FIX:UI.VCAEngine: User API function SessWdg::wdgAdd() is fixed for process elements list update.
+- UI.VCAEngine: User's attributes modify to change "name" and "wa" is set to hot change, without full
+    attribute remove.
+- UI.WebCfgD: Filters for unactive images changed from "gray" to "unact".
+    "unact" filter is added for light-dark unactive images.
+- UI.WebVision: HTML sting encode is added to JS-code. Image convert backend function is added.
+    Images resize code is moved to server side for smooth.
+    Inactive button display is added. Button display borders is changed to compact.
+
+
 2011-10-20 Roman
 - UI.WebVision: Set global runtime window status bar value on set attribute "tipStatus" is added.
 

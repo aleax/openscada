@@ -1474,7 +1474,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    string idcol  = opt->attr("col");
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 
-	    if(idcol == "id" || idcol == "name" || idcol == "type" || idcol == "wa")
+	    if(idcol == "id" || idcol == "type")
 	    {
 		string		tid	= idattr;
 		string		tnm	= wdg.at().attrAt(idattr).at().name();
@@ -1496,19 +1496,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    tid = opt->text();
 		    if(wdg.at().attrPresent(tid)) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present."),tid.c_str());
 		}
-		else if(idcol == "name")	tnm = opt->text();
 		else if(idcol == "type")
 		{
 		    ttp = (TFld::Type)(atoi(opt->text().c_str())&0x0f);
 		    tflg = tflg^((tflg^((atoi(opt->text().c_str())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
-		else if(idcol == "wa")
-		{
-		    tvals = TSYS::strSepParse(opt->text(),0,'|');
-		    tsels = TSYS::strSepParse(opt->text(),1,'|');
-		}
 		wdg.at().attrDel(idattr);
-		wdg.at().attrAdd( new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()) );
+		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()));
 		wdg.at().attrAt(tid).at().setS(tvl);
 		wdg.at().attrAt(tid).at().setFlgSelf(sflgs);
 		wdg.at().attrAt(tid).at().setCfgVal(cfgval);
@@ -1517,7 +1511,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    }
 	    else
 	    {
-		if(idcol == "proc")
+		if(idcol == "name")	wdg.at().attrAt(idattr).at().fld().setDescr(opt->text());
+		else if(idcol == "wa")
+		{
+		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
+		    wdg.at().attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text(),1,'|'));
+		}
+		else if(idcol == "proc")
 		{
 		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
 		    Attr::SelfAttrFlgs stflg = atoi(opt->text().c_str())?Attr::ProcAttr:(Attr::SelfAttrFlgs)0;
