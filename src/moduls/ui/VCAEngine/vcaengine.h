@@ -95,8 +95,8 @@ class Engine : public TUI
 	AutoHD<TFunction> fAt( const string &id );
 
 	//> Attributes process functions
-	void attrsLoad( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, const string &attrs, bool ldGen = false );
-	string attrsSave( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, bool ldGen = false );
+	void attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen = false );
+	string attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen = false );
 
 	//> DB structures
 	TElem &elWdgLib( )	{ return lbwdg_el; }

@@ -49,14 +49,14 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new VCA::Engine( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+	    return new VCA::Engine(source);
 	return NULL;
     }
 }
@@ -116,9 +116,9 @@ string Engine::optDescr( )
 
 void Engine::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TModule::postEnable(flag);
 
-    if( !(flag&TCntrNode::NodeConnect) ) return;
+    if(!(flag&TCntrNode::NodeConnect)) return;
 
     //> Make lib's DB structure
     lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
@@ -139,14 +139,12 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
     wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calc period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
-    wdg_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
     //> Make include widgets' DB structure
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
     inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
-    inclwdg_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
     //> Make widget's IO DB structure
     wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
@@ -190,7 +188,6 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("PROC_PER",_("Procedure calc period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
-    page_el.fldAdd( new TFld("DBV",_("DB version"),TFld::Integer,TFld::NoFlag,"1","1") );
 
     //> Make sessions' IO values of projects DB structure
     prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );
@@ -578,16 +575,14 @@ string Engine::callSynth( const string &itxt )
     return TSYS::strEncode( rez, TSYS::base64 );
 }
 
-void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
+void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
 {
     string wdb = fullDB+"_io";
     string tbl = TSYS::strSepParse(wdb,2,';');
 
-    if( vDB < 1 || vDB > 2 ) return;
-
     TConfig c_el(&elWdgIO());
     c_el.cfg("IDW").setS(idw);
-    if( vDB == 2 ) c_el.cfg("IDC").setS(idc);
+    c_el.cfg("IDC").setS(idc);
     string tstr;
 
     for( int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); )
@@ -599,8 +594,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
 		(!ldGen && (attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser))) )
 	    continue;
 
-	if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? tstr : idc+"/"+tstr );
-	else if( vDB == 2 ) c_el.cfg("ID").setS(tstr);
+	c_el.cfg("ID").setS(tstr);
         c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
 	c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
@@ -622,23 +616,14 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
     tbl = TSYS::strSepParse(wdb,2,';');
     c_el.setElem(&elWdgUIO());
     c_el.cfg("IDW").setS(idw,true);
-    if( vDB == 2 ) c_el.cfg("IDC").setS(idc,true);
+    c_el.cfg("IDC").setS(idc,true);
 
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); )
     {
 	string sid = c_el.cfg("ID").getS();
 	unsigned flg = c_el.cfg("IO_TYPE").getI();
 
-	if(vDB == 1)
-	{
-	    if(idc.empty() && !TSYS::pathLev(sid,1).empty()) continue;
-	    if(!idc.empty())
-	    {
-		if(TSYS::pathLev(sid,0) == idc && !TSYS::pathLev(sid,1).empty()) sid = TSYS::pathLev(sid,1);
-		else continue;
-	    }
-	}
-	else if(vDB == 2 && !TSYS::pathLev(sid,1).empty()) continue;
+	if(!TSYS::pathLev(sid,1).empty()) continue;
 
 	if(!w.attrPresent(sid))
 	    w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4));
@@ -653,19 +638,17 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, int vDB, const string &
     }
 }
 
-string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string &idw, const string &idc, bool ldGen )
+string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen )
 {
     string tbl = TSYS::strSepParse(fullDB,2,';');
     string m_attrs = "";
     vector<string> als;
 
-    if( vDB < 1 || vDB > 2 ) return m_attrs;
-
     w.attrList( als );
     TConfig c_el(&mod->elWdgIO()); c_el.cfg("IDW").setS(idw,true);
-    if( vDB == 2 ) c_el.cfg("IDC").setS(idc,true);
+    c_el.cfg("IDC").setS(idc,true);
     TConfig c_elu(&mod->elWdgUIO()); c_elu.cfg("IDW").setS(idw,true);
-    if( vDB == 2 ) c_elu.cfg("IDC").setS(idc,true);
+    c_elu.cfg("IDC").setS(idc,true);
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	AutoHD<Attr> attr = w.attrAt(als[i_a]);
@@ -676,8 +659,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	//> Main attributes store
 	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser))
 	{
-	    if( vDB == 1 ) c_el.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
-	    if( vDB == 2 ) c_el.cfg("ID").setS( als[i_a] );
+	    c_el.cfg("ID").setS( als[i_a] );
 	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
@@ -692,8 +674,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	//> User attributes store
 	else if( !ldGen )
 	{
-	    if( vDB == 1 ) c_elu.cfg("ID").setS( idc.empty() ? als[i_a] : idc+"/"+als[i_a] );
-	    if( vDB == 2 ) c_elu.cfg("ID").setS( als[i_a] );
+	    c_elu.cfg("ID").setS( als[i_a] );
 	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
 	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+
@@ -715,7 +696,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
     {
 	//> Clear no present IO for main io table
 	c_el.cfgViewAll(false);
-	for(int fld_cnt = 0; vDB == 2 && SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
 	{
 	    string sid = c_el.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) continue;
@@ -729,9 +710,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, int vDB, const string
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fld_cnt++,c_elu); )
 	{
 	    string sid = c_elu.cfg("ID").getS();
-	    if(vDB == 1 && idc.empty() && (!TSYS::pathLev(sid,1).empty() || w.attrPresent(sid))) continue;
-	    if(vDB == 1 && !idc.empty() && (TSYS::pathLev(sid,0) != idc || w.attrPresent(TSYS::pathLev(sid,1)))) continue;
-	    if(vDB == 2 && (w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear()))) continue;
+	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
 	    fld_cnt--;

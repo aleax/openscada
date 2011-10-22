@@ -48,12 +48,12 @@ Session::~Session( )
 
 void Session::postEnable( int flag )
 {
-    if( flag&TCntrNode::NodeRestore )	setEnable(true);
+    if(flag&TCntrNode::NodeRestore) setEnable(true);
 }
 
 void Session::preDisable( int flag )
 {
-    if( enable() )  setEnable(false);
+    if(enable()) setEnable(false);
 }
 
 void Session::setUser( const string &it )
@@ -75,6 +75,10 @@ void Session::setEnable( bool val )
 	mess_info(nodePath().c_str(),_("Enable session."));
 	try
 	{
+#if OSC_DEBUG >= 3
+	    int64_t w_tm = TSYS::curTime();
+#endif
+
 	    //> Connect to project
 	    mParent = mod->prjAt(mPrjnm);
 
@@ -92,17 +96,31 @@ void Session::setEnable( bool val )
 		stlCurentSet(c_el.cfg("IO_VAL").getI());
 	    else stlCurentSet( parent().at().stlCurent( ) );
 
+#if OSC_DEBUG >= 3
+            mess_debug(nodePath().c_str(),_("Load previous style time: %f ms."),1e-3*(TSYS::curTime()-w_tm));
+            w_tm = TSYS::curTime();
+#endif
+
 	    //> Create root pages
 	    parent().at().list(pg_ls);
 	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
 		if(!present(pg_ls[i_p]))
 		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
 
+#if OSC_DEBUG >= 3
+            mess_debug(nodePath().c_str(),_("Create root pages time: %f ms."),1e-3*(TSYS::curTime()-w_tm));
+            w_tm = TSYS::curTime();
+#endif
+
 	    //> Pages enable
 	    list(pg_ls);
 	    for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
 		catch(TError err) { mess_err( err.cat.c_str(), "%s", err.mess.c_str() ); }
+
+#if OSC_DEBUG >= 3
+            mess_debug(nodePath().c_str(),_("Enable root pages time: %f ms."),1e-3*(TSYS::curTime()-w_tm));
+#endif
 
 	    modifGClr();
 	}
@@ -141,6 +159,10 @@ void Session::setStart( bool val )
 	//> Enable session if it disabled
 	if(!enable())	setEnable(true);
 
+#if OSC_DEBUG >= 3
+	int64_t w_tm = TSYS::curTime();
+#endif
+
 	mess_info(nodePath().c_str(),_("Start session."));
 
 	//> Load Styles from project
@@ -152,13 +174,27 @@ void Session::setStart( bool val )
 		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet(pg_ls[i_sp], "", stlCurent());
 	}
 
+#if OSC_DEBUG >= 3
+        mess_debug(nodePath().c_str(),_("Load styles from project time: %f ms."),1e-3*(TSYS::curTime()-w_tm));
+        w_tm = TSYS::curTime();
+#endif
+
 	//> Process all pages is on
 	list(pg_ls);
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(true);
 
+#if OSC_DEBUG >= 3
+        mess_debug(nodePath().c_str(),_("Process on for all root pages time: %f ms."),1e-3*(TSYS::curTime()-w_tm));
+        w_tm = TSYS::curTime();
+#endif
+
 	//> Start process task
 	if(!mStart) SYS->taskCreate(nodePath('.',true), 0, Session::Task, this);
+
+#if OSC_DEBUG >= 3
+        mess_debug(nodePath().c_str(),_("Start process task time: %f ms."),1e-3*(TSYS::curTime()-w_tm));
+#endif
     }
     else
     {

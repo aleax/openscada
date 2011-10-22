@@ -598,7 +598,7 @@ void LWidget::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", tAttrs, true );
+    mod->attrsLoad( *this, db+"."+tbl, id(), "", tAttrs, true );
 
     //> Load all other attributes
     loadIO();
@@ -609,7 +609,7 @@ void LWidget::loadIO( )
     if(!enable()) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), cfg("DBV").getI(), id(), "", m_attrs);
+    mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", m_attrs);
 
     //> Load cotainer widgets
     if(!isContainer()) return;
@@ -653,7 +653,7 @@ void LWidget::save_( )
     cfg("DBV").setI(2);
 
     //> Save generic attributes
-    m_attrs = mod->attrsSave( *this, db+"."+tbl, cfg("DBV").getI(), id(), "", true );
+    m_attrs = mod->attrsSave( *this, db+"."+tbl, id(), "", true );
 
     //> Save generic widget's data
     SYS->db().at().dataSet( db+"."+tbl, mod->nodePath()+tbl, *this );
@@ -667,7 +667,7 @@ void LWidget::saveIO( )
     if( !enable() ) return;
 
     //> Save widget's attributes
-    mod->attrsSave( *this, ownerLib().DB()+"."+ownerLib().tbl(), cfg("DBV").getI(), id(), "" );
+    mod->attrsSave( *this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "" );
 }
 
 void LWidget::wClear( )
@@ -865,7 +865,7 @@ void CWidget::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), tAttrs, true );
+    mod->attrsLoad( *this, db+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), tAttrs, true );
 
     //> Load all other attributes
     loadIO();
@@ -876,7 +876,7 @@ void CWidget::loadIO( )
     if( !enable() ) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id(), m_attrs );
+    mod->attrsLoad( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), m_attrs );
 }
 
 void CWidget::save_( )
@@ -927,7 +927,7 @@ void CWidget::save_( )
     {
 	cfg("DBV").setI(2);
 	//> Save generic attributes
-	m_attrs = mod->attrsSave( *this, db+"."+tbl, cfg("DBV").getI(), ownerLWdg().id(), id(), true );
+	m_attrs = mod->attrsSave( *this, db+"."+tbl, ownerLWdg().id(), id(), true );
 
 	//> Save generic widget's data
 	SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
@@ -941,7 +941,7 @@ void CWidget::saveIO( )
 {
     if( !enable() ) return;
 
-    mod->attrsSave( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), cfg("DBV").getI(), ownerLWdg().id(), id() );
+    mod->attrsSave( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id() );
 }
 
 void CWidget::wClear( )

@@ -1007,7 +1007,7 @@ void Page::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+tbl, cfg("DBV").getI(), path(), "", tAttrs, true );
+    mod->attrsLoad( *this, db+"."+tbl, path(), "", tAttrs, true );
 
     //> Create new pages
     map<string, bool>   itReg;
@@ -1050,7 +1050,7 @@ void Page::loadIO( )
     if(!enable()) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), cfg("DBV").getI(), path(), "", mAttrs);
+    mod->attrsLoad(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), path(), "", mAttrs);
 
     //> Load cotainer widgets
     if(!isContainer()) return;
@@ -1094,7 +1094,7 @@ void Page::save_( )
     cfg("DBV").setI(2);
 
     //> Save generic attributes
-    mAttrs = mod->attrsSave( *this, db+"."+tbl, cfg("DBV").getI(), path(), "", true );
+    mAttrs = mod->attrsSave( *this, db+"."+tbl, path(), "", true );
 
     //> Save generic widget's data
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
@@ -1108,7 +1108,7 @@ void Page::saveIO( )
     if( !enable() ) return;
 
     //> Save widget's attributes
-    mod->attrsSave( *this, ownerProj()->DB()+"."+ownerProj()->tbl(), cfg("DBV").getI(), path(), "" );
+    mod->attrsSave( *this, ownerProj()->DB()+"."+ownerProj()->tbl(), path(), "" );
 }
 
 void Page::wClear( )
@@ -1462,7 +1462,7 @@ void PageWdg::load_( )
     }
 
     //> Load generic attributes
-    mod->attrsLoad( *this, db+"."+ownerPage().ownerProj()->tbl(), cfg("DBV").getI(), ownerPage().path(), id(), tAttrs, true );
+    mod->attrsLoad( *this, db+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id(), tAttrs, true );
 
     //> Load all other attributes
     loadIO();
@@ -1475,7 +1475,7 @@ void PageWdg::loadIO( )
     if( !enable() ) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad( *this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), cfg("DBV").getI(), ownerPage().path(), id(), mAttrs );
+    mod->attrsLoad( *this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id(), mAttrs );
 }
 
 void PageWdg::save_( )
@@ -1527,7 +1527,7 @@ void PageWdg::save_( )
 	cfg("DBV").setI(2);
 
 	//>> Save generic attributes
-	mAttrs = mod->attrsSave( *this, db+"."+tbl, cfg("DBV").getI(), ownerPage().path(), id(), true );
+	mAttrs = mod->attrsSave( *this, db+"."+tbl, ownerPage().path(), id(), true );
 
 	//>> Save generic widget's data
 	SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
@@ -1542,7 +1542,7 @@ void PageWdg::saveIO( )
     if( !enable() ) return;
 
     //> Save widget's attributes
-    mod->attrsSave( *this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), cfg("DBV").getI(), ownerPage().path(), id() );
+    mod->attrsSave( *this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id() );
 }
 
 void PageWdg::wClear( )
