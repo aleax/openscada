@@ -249,11 +249,13 @@ class Widget : public TCntrNode
 	//> Generic data
 	string		mId;			//Widget identifier
 
+	unsigned char	attrAtLockCnt	:8;	//attr at lock cnt
+	unsigned char	inclWdg		:3;
 	unsigned char	mEnable		:1;	//Enable status
 	unsigned char	m_lnk		:1;	//Widget as link
-	unsigned char	inclWdg		:3;
 	unsigned char	mStlLock	:1;	//Style lock
-	unsigned char	attrAtLockCnt	:8;	//attr at lock cnt
+	unsigned char   BACrtHoldOvr    :1;     //Base attrs creation hold over to enable and inherit stage
+
 	string	mParentNm;			//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators

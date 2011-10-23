@@ -34,7 +34,7 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), m_lnk(false), mStlLock(false), attrAtLockCnt(0), mParentNm(isrcwdg)
+    mId(id), mEnable(false), m_lnk(false), attrAtLockCnt(0), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
 
@@ -132,7 +132,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 void Widget::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore)	setEnable(true);
-    if(flag&TCntrNode::NodeConnect)
+    if(flag&TCntrNode::NodeConnect && !BACrtHoldOvr)
     {
 	//> Add main attributes
 	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
@@ -290,10 +290,12 @@ void Widget::setEnable( bool val )
 	    {
 		mess_err(nodePath().c_str(),_("Widget enable error: %s"),err.mess.c_str());
 		mParent.free();
+		if(BACrtHoldOvr) { BACrtHoldOvr = false; postEnable(TCntrNode::NodeConnect); }
 		throw;
 	    }
 	}
 	mEnable = true;
+	BACrtHoldOvr = false;
 
 	//> Load self values from DB
 	loadIO( );
@@ -384,28 +386,30 @@ void Widget::inheritAttr( const string &iattr )
 
     //> Create no present attributes
     vector<string>  ls;
-    if( iattr.empty() )	(loadDef ? attrList(ls) : parent().at().attrList(ls));
+    if(iattr.empty())	(loadDef ? attrList(ls) : parent().at().attrList(ls));
     else
     {
-	if( !loadDef && parent().at().attrPresent(iattr) )	ls.push_back(iattr);
-	else if( attrPresent(iattr) )	{ loadDef = true; ls.push_back(iattr); }
+	if(!loadDef && parent().at().attrPresent(iattr)) ls.push_back(iattr);
+	else if(attrPresent(iattr))	{ loadDef = true; ls.push_back(iattr); }
 	else return;
     }
 
     setStlLock(true);
-    if( !loadDef ) parent().at().setStlLock(true);
+    if(!loadDef) parent().at().setStlLock(true);
 
     //> Configuration inherit
     AutoHD<Attr> attr, pattr;
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
     {
+	pattr.free();
 	if(!attrPresent(ls[i_l]))
 	{
 	    if(loadDef) continue;
-	    if(parent().at().attrAt(ls[i_l]).at().flgGlob()&Attr::Mutable) continue;
-	    attrAdd(&parent().at().attrAt(ls[i_l]).at().fld(), -1, true);
+	    pattr = parent().at().attrAt(ls[i_l]);
+	    if(pattr.at().flgGlob()&Attr::Mutable) continue;
+	    attrAdd(&pattr.at().fld(), -1, true);
 	}
-	attr  = attrAt(ls[i_l]);
+	attr = attrAt(ls[i_l]);
 	if(loadDef)
 	{
 	    attr.at().setS(attr.at().fld().def(), attr.at().flgGlob()&Attr::Active);
@@ -415,23 +419,20 @@ void Widget::inheritAttr( const string &iattr )
 	    attr.at().setModif(0);
 	    continue;
 	}
-	pattr = parent().at().attrAt(ls[i_l]);
-	if( !(attr.at().flgSelf()&Attr::IsInher) /*&& !(attr.at().flgGlob()&Attr::Mutable)*/ ) attr.at().setFld(&pattr.at().fld(),true);
-	if( attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) )	continue;
-	attr.at().setFlgSelf( (Attr::SelfAttrFlgs)pattr.at().flgSelf() );
-	if( !(attr.at().flgGlob( )&Attr::DirRead) )
-	{
-	    bool active = attr.at().flgGlob()&Attr::Active;
-	    switch( attr.at().type() )
+	if(pattr.freeStat()) pattr = parent().at().attrAt(ls[i_l]);
+	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(),true);
+	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) continue;
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
+	if(!(attr.at().flgGlob()&Attr::DirRead))
+	    switch(attr.at().type())
 	    {
-		case TFld::Boolean:	attr.at().setB( pattr.at().getB(), active );	break;
-		case TFld::Integer:	attr.at().setI( pattr.at().getI(), active );	break;
-		case TFld::Real:	attr.at().setR( pattr.at().getR(), active );	break;
-		case TFld::String:	attr.at().setS( pattr.at().getS(), active );	break;
+		case TFld::Boolean:	attr.at().setB(pattr.at().getB(), attr.at().flgGlob()&Attr::Active);	break;
+		case TFld::Integer:	attr.at().setI(pattr.at().getI(), attr.at().flgGlob()&Attr::Active);	break;
+		case TFld::Real:	attr.at().setR(pattr.at().getR(), attr.at().flgGlob()&Attr::Active);	break;
+		case TFld::String:	attr.at().setS(pattr.at().getS(), attr.at().flgGlob()&Attr::Active);	break;
 	    }
-	}
 	//>> No inherit calc flag for links
-	if( isLink() && !parent().at().isLink() )
+	if(isLink() && !parent().at().isLink())
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
 	attr.at().setCfgTempl(pattr.at().cfgTempl());
 	attr.at().setCfgVal(pattr.at().cfgVal());
@@ -439,7 +440,7 @@ void Widget::inheritAttr( const string &iattr )
     }
 
     setStlLock(false);
-    if( !loadDef ) parent().at().setStlLock(false);
+    if(!loadDef) parent().at().setStlLock(false);
 }
 
 void Widget::inheritIncl( const string &iwdg )

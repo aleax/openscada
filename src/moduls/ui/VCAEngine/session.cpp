@@ -754,7 +754,7 @@ Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) 
 //************************************************
 //* SessPage: Page of Project's session          *
 //************************************************
-SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) : 
+SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) :
     SessWdg(iid,ipage,sess), mClosePgCom(false)
 {
     mPage = grpAdd("pg_");
@@ -778,13 +778,13 @@ void SessPage::setEnable( bool val )
     {
 	vector<string> pg_ls;
 	//> Unregister opened page
-	if(!(parent().at().prjFlags( )&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
+	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
 	    ownerSess()->openUnreg(path());
 	//> Disable include pages
 	pageList(pg_ls);
 	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageAt(pg_ls[i_l]).at().setEnable(false);
-	//> Delete included widgets
+	//> Delete included pages
 	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageDel(pg_ls[i_l]);
     }
@@ -1076,7 +1076,7 @@ SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), mProc(false), inLnkGet(true), mMdfClc(0),
     mCalcClk(isess->calcClk()), mSess(isess)
 {
-
+    BACrtHoldOvr = true;
 }
 
 SessWdg::~SessWdg( )
@@ -1086,7 +1086,7 @@ SessWdg::~SessWdg( )
 
 void SessWdg::preDisable( int flag )
 {
-    if( process() ) setProcess( false );
+    if(process()) setProcess(false);
 
     Widget::preDisable( flag );
 }
@@ -1095,11 +1095,11 @@ void SessWdg::postEnable( int flag )
 {
     Widget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd( new TFld("event",_("Events"),TFld::String,TFld::FullText) );
-	attrAdd( new TFld("alarmSt",_("Alarm status"),TFld::Integer,TFld::HexDec,"5","0") );
-	attrAdd( new TFld("alarm",_("Alarm"),TFld::String,TFld::NoFlag,"200") );
+	attrAdd(new TFld("event","Events",TFld::String,TFld::FullText));
+	attrAdd(new TFld("alarmSt","Alarm status",TFld::Integer,TFld::HexDec,"5","0"));
+	attrAdd(new TFld("alarm","Alarm",TFld::String,TFld::NoFlag,"200"));
     }
 }
 
@@ -1139,7 +1139,7 @@ void SessWdg::setEnable( bool val )
 {
     Widget::setEnable(val);
 
-    if( !val )
+    if(!val)
     {
 	//> Delete included widgets
 	vector<string> ls;
@@ -1159,10 +1159,10 @@ void SessWdg::setProcess( bool val )
 	//>> Prepare function io structure
 	TFunction fio(parent().at().calcId());
 	//>>> Add generic io
-	fio.ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,IO::Default,"1000",false),0);
-	fio.ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,IO::Default,"0",false),1);
-	fio.ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,IO::Default,"0",false),2);
-	fio.ioIns(new IO("this",_("This widget's object for access to user's API"),IO::Object,IO::Default),3);
+	fio.ioIns(new IO("f_frq","Function calculate frequency (Hz)",IO::Real,IO::Default,"1000",false),0);
+	fio.ioIns(new IO("f_start","Function start flag",IO::Boolean,IO::Default,"0",false),1);
+	fio.ioIns(new IO("f_stop","Function stop flag",IO::Boolean,IO::Default,"0",false),2);
+	fio.ioIns(new IO("this","This widget's object for access to user's API",IO::Object,IO::Default),3);
 	//>>> Add calc widget's attributes
 	vector<string> iwls, als;
 	//>>> Self attributes check
@@ -1211,9 +1211,9 @@ void SessWdg::setProcess( bool val )
 		}
 	    }
 	}
-	fio.ioAdd(new IO("event",_("Event"),IO::String,IO::Output));
-	fio.ioAdd(new IO("alarmSt",_("Alarm status"),IO::Integer,IO::Output,"",false,"./alarmSt"));
-	fio.ioAdd(new IO("alarm",_("Alarm"),IO::String,IO::Output,"",false,"./alarm"));
+	fio.ioAdd(new IO("event","Event",IO::String,IO::Output));
+	fio.ioAdd(new IO("alarmSt","Alarm status",IO::Integer,IO::Output,"",false,"./alarmSt"));
+	fio.ioAdd(new IO("alarm","Alarm",IO::String,IO::Output,"",false,"./alarm"));
 
 	//>> Compile function
 	mWorkProg = "";
@@ -1601,8 +1601,8 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 
     //> Special session attributes process
     //>> Focus attribute process for active active
-    if( cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus") )
-	cfg.owner()->attrAdd( new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","","-2") );
+    if(cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus"))
+	cfg.owner()->attrAdd(new TFld("focus","Focus",TFld::Boolean,TFld::NoFlag,"1","false","","","-2"));
     //> Alarm event for widget process
     else if( cfg.id() == "alarm" && enable() && !prev.isNull() ) alarmSet( true );
     //> Alarm status process

@@ -1091,8 +1091,6 @@ void Page::save_( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl();
 
-    cfg("DBV").setI(2);
-
     //> Save generic attributes
     mAttrs = mod->attrsSave( *this, db+"."+tbl, path(), "", true );
 
@@ -1496,36 +1494,17 @@ void PageWdg::save_( )
 
 	//>> Remove widget's work and users IO from library IO table
 	string tAttrs = mAttrs;
-	if(cfg("DBV").getI() == 1)
-	{
-	    TConfig c_el(&mod->elWdgIO());
-	    c_el.cfg("IDW").setS(ownerPage().path(), true);
-	    for(unsigned i_a = 0; i_a < tAttrs.size(); i_a++)
-	    {
-		c_el.cfg("ID").setS(id()+"/"+tAttrs[i_a],true);
-		SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
-	    }
-	    c_el.setElem(&mod->elWdgUIO());
-	    c_el.cfg("IDW").setS(ownerPage().path(), true);
-	    for(int io_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl+"_uio",mod->nodePath()+tbl+"_uio",io_cnt++,c_el); )
-		if(c_el.cfg("ID").getS().find(id()+"/") == 0)
-		{ SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true); io_cnt--; }
-	}
-	else if(cfg("DBV").getI() == 2)
-	{
-	    TConfig c_el(&mod->elWdgIO());
-	    c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
-	    SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
-	    c_el.setElem(&mod->elWdgUIO());
-	    c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
-	    SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
-	}
+
+        TConfig c_el(&mod->elWdgIO());
+	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
+	c_el.setElem(&mod->elWdgUIO());
+	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
     }
     //> Save widget's data
     else
     {
-	cfg("DBV").setI(2);
-
 	//>> Save generic attributes
 	mAttrs = mod->attrsSave( *this, db+"."+tbl, ownerPage().path(), id(), true );
 

@@ -424,7 +424,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
     (*chGrp)[igr].elem.insert(std::pair<string,TCntrNode*>(node->nodeName(),node));
     res.release();
 
-    if( node->nodeMode() == Disable )	node->nodeEn( TCntrNode::NodeConnect );
+    if(node->nodeMode() == Disable)	node->nodeEn(TCntrNode::NodeConnect);
 }
 
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool shDel )

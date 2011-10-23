@@ -650,8 +650,6 @@ void LWidget::save_( )
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
 
-    cfg("DBV").setI(2);
-
     //> Save generic attributes
     m_attrs = mod->attrsSave( *this, db+"."+tbl, id(), "", true );
 
@@ -897,35 +895,17 @@ void CWidget::save_( )
 
 	//>> Remove widget's work and users IO from library IO table
 	string tAttrs = m_attrs;
-	if(cfg("DBV").getI() == 1)
-	{
-	    TConfig c_el( &mod->elWdgIO() );
-	    c_el.cfg("IDW").setS( ownerLWdg().id(), true );
-	    for(unsigned i_a = 0; i_a < tAttrs.size(); i_a++)
-	    {
-		c_el.cfg("ID").setS(id()+"/"+tAttrs[i_a],true);
-		SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
-	    }
-	    c_el.setElem(&mod->elWdgUIO());
-	    c_el.cfg("IDW").setS(ownerLWdg().id(), true);
-	    for(int io_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl+"_uio",mod->nodePath()+tbl+"_uio",io_cnt++,c_el); )
-		if(c_el.cfg("ID").getS().find(id()+"/") == 0)
-		{ SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el, true ); io_cnt--; }
-	}
-	if( cfg("DBV").getI() == 2 )
-	{
-	    TConfig c_el( &mod->elWdgIO() );
-	    c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
-	    SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
-	    c_el.setElem(&mod->elWdgUIO());
-	    c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
-	    SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
-	}
+
+	TConfig c_el( &mod->elWdgIO() );
+	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
+	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	c_el.setElem(&mod->elWdgUIO());
+	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
+	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
     }
     //> Save widget's data
     else
     {
-	cfg("DBV").setI(2);
 	//> Save generic attributes
 	m_attrs = mod->attrsSave( *this, db+"."+tbl, ownerLWdg().id(), id(), true );
 

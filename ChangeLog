@@ -1,3 +1,11 @@
+2011-10-23 Roman
+- UI.VCAEngine: Attributes at lock counter and other bit methods of widget is reordered.
+    Init base attributes of session's widget is pass to the widget enable by inherit.
+    Remove some messages translation on session call time.
+    The allow to significant decrease overall enable session time.
+- UI.VCAEngine: Final remove DB version 1 support.
+
+
 2011-10-22 Roman
 - UI.VCAEngine: Remove DB version 1 support.
 
