@@ -3,6 +3,7 @@
 
 
 2011-10-24 Roman
+- FIX:UI.VCAEngine: Load document's session attribute's values from session table is fixed.
 - FIX:DAQ.Siemens: Multi-blocks fragments register is fixed.
 - !!!:UI.VCAEngine: Selected pages, only opened and processing, enable on progect's session start for start speed increase.
     Other pages will enable at need that is use.

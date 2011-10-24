@@ -1337,7 +1337,7 @@ void SessWdg::inheritAttr( const string &aid )
     ResAlloc res(mCalcRes,true);
     Widget::inheritAttr(aid);
 
-    if(!aid.empty() && ownerSess()->start() && attrPresent(aid))
+    if(enable() && !aid.empty() && ownerSess()->start() && attrPresent(aid))
     {
 	AutoHD<Attr> attr = attrAt(aid);
 	if(!(attr.at().flgGlob()&Attr::IsUser))
