@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-17 13:05+0300\n"
+"POT-Creation-Date: 2011-10-24 08:16+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Load widget library."
 msgstr "Завантаження бібліотеки віджетів."
@@ -985,11 +985,30 @@ msgstr "Віджет посилання: "
 msgid "Enable session."
 msgstr "Включення сеансу."
 
+msgid "Load previous style time: %f ms."
+msgstr "Час завантаження попереднього стилю: %f мс."
+
+msgid "Create root pages time: %f ms."
+msgstr "Час створення кореневих сторінок: %f мс."
+
+msgid "Enable root pages time: %f ms."
+msgstr "Час включення кореневих сторінок: %f мс."
+
 msgid "Disable session."
 msgstr "Вимкнення сеансу."
 
 msgid "Start session."
 msgstr "Виконання сеансу."
+
+msgid "Load styles from project time: %f ms."
+msgstr "Час завантаження стилів з проекту: %f мс."
+
+#, c-format
+msgid "Process on for all root pages time: %f ms."
+msgstr "Час включення у обробку всіх кореневих сторінок: %f мс."
+
+msgid "Start process task time: %f ms."
+msgstr "Час запуску задачі обробки: %f мс."
 
 msgid "Stop session."
 msgstr "Зупинка сеансу."
@@ -1055,39 +1074,12 @@ msgstr "Сторінки сеансу: "
 msgid "Open"
 msgstr "Відкрито"
 
-msgid "Events"
-msgstr "Явища"
-
-msgid "Alarm status"
-msgstr "Статус порушення"
-
-msgid "Alarm"
-msgstr "Порушення"
-
-msgid "Function calculate frequency (Hz)"
-msgstr "Частота обчислення функції (Гц)"
-
-msgid "Function start flag"
-msgstr "Прапорець запуску функції"
-
-msgid "Function stop flag"
-msgstr "Прапорець зупинки функції"
-
-msgid "This widget's object for access to user's API"
-msgstr "Цей об'єкт віджету для доступу до API користувача"
-
-msgid "Event"
-msgstr "Явище"
-
 #, c-format
 msgid "Compile function '%s' by language '%s' for widget error: %s"
 msgstr "Помилка компіляції функції '%s' мови '%s' для віджета: %s"
 
 msgid "Widget calculation error. Process is disabled."
 msgstr "Помилка обчислення віджета. Обробку вимкнено."
-
-msgid "Focus"
-msgstr "Фокус"
 
 msgid "Process"
 msgstr "Обробка"
@@ -1128,9 +1120,6 @@ msgstr "Періодичність обчислення процедури"
 
 msgid "Changed attributes"
 msgstr "Змінені атрибути"
-
-msgid "DB version"
-msgstr "Версія БД"
 
 msgid "IDW"
 msgstr ""
@@ -1535,6 +1524,9 @@ msgstr "Реальний"
 msgid "String"
 msgstr "Строка"
 
+msgid "Object"
+msgstr "Об'єкт"
+
 msgid "Select integer"
 msgstr "Вибір цілих"
 
@@ -1570,6 +1562,10 @@ msgstr "Зі стиля"
 
 msgid "Element type is not selected!"
 msgstr "Елемент не вибіркового типу!"
+
+#, c-format
+msgid "Get object from not object's attribute '%s' error!"
+msgstr "Помилка запиту об'єкту з не об'єктного атрибуту '%s'!"
 
 msgid "Root primitive"
 msgstr "Кореневий примітив"
@@ -1632,3 +1628,33 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
+
+#~ msgid "Events"
+#~ msgstr "Явища"
+
+#~ msgid "Alarm status"
+#~ msgstr "Статус порушення"
+
+#~ msgid "Alarm"
+#~ msgstr "Порушення"
+
+#~ msgid "Function calculate frequency (Hz)"
+#~ msgstr "Частота обчислення функції (Гц)"
+
+#~ msgid "Function start flag"
+#~ msgstr "Прапорець запуску функції"
+
+#~ msgid "Function stop flag"
+#~ msgstr "Прапорець зупинки функції"
+
+#~ msgid "This widget's object for access to user's API"
+#~ msgstr "Цей об'єкт віджету для доступу до API користувача"
+
+#~ msgid "Event"
+#~ msgstr "Явище"
+
+#~ msgid "Focus"
+#~ msgstr "Фокус"
+
+#~ msgid "DB version"
+#~ msgstr "Версія БД"

@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-17 13:05+0300\n"
+"POT-Creation-Date: 2011-10-24 08:16+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Load widget library."
 msgstr "Загрузка библиотеки виджетов."
@@ -207,8 +207,8 @@ msgstr ""
 "  line_stl        - прямой стиль линии: 0-Сплошная, 1-Пунктирная, 2-"
 "Точечная;\n"
 "  s{n}            - динамический стиль 'n';\n"
-"  fill_img        - прямое изображение заполнения в формате \"[src%3Aname]"
-"\", где:\n"
+"  fill_img        - прямое изображение заполнения в формате \"[src"
+"%3Aname]\", где:\n"
 "      \"src\" - источник изображения:\n"
 "         file - непосредственно из локального файла по пути;\n"
 "         res  - из таблицы mime-ресурсов БД.\n"
@@ -473,8 +473,8 @@ msgid ""
 "Real value configuration in form: \"[width];[form];[prec]\".\n"
 "Where \"form\" that 'g', 'e' or 'f'."
 msgstr ""
-"Конфигурация вещественного значения в форме: \"[ширина];[форма];[точность]"
-"\".\n"
+"Конфигурация вещественного значения в форме: \"[ширина];[форма];"
+"[точность]\".\n"
 "Где \"форма\" это 'g', 'e' или 'f'."
 
 msgid "String value configuration in form \"[strLen]\"."
@@ -986,11 +986,30 @@ msgstr "Виджет ссылка: "
 msgid "Enable session."
 msgstr "Включение сеанса."
 
+msgid "Load previous style time: %f ms."
+msgstr "Время загрузки предыдущего стиля: %f мс."
+
+msgid "Create root pages time: %f ms."
+msgstr "Время создания корневых страниц: %f мс."
+
+msgid "Enable root pages time: %f ms."
+msgstr "Время включения корневых страниц: %f мс."
+
 msgid "Disable session."
 msgstr "Отключение сеанса."
 
 msgid "Start session."
 msgstr "Запуск сеанса."
+
+msgid "Load styles from project time: %f ms."
+msgstr "Время загрузки стилей из проекта: %f мс."
+
+#, c-format
+msgid "Process on for all root pages time: %f ms."
+msgstr "Время включения в обработку для всех корневых страниц: %f мс."
+
+msgid "Start process task time: %f ms."
+msgstr "Время запуска задачи обработки: %f мс."
 
 msgid "Stop session."
 msgstr "Останов сеанса."
@@ -1056,39 +1075,12 @@ msgstr "Страница сеанса: "
 msgid "Open"
 msgstr "Открыт"
 
-msgid "Events"
-msgstr "События"
-
-msgid "Alarm status"
-msgstr "Статус нарушения"
-
-msgid "Alarm"
-msgstr "Нарушение"
-
-msgid "Function calculate frequency (Hz)"
-msgstr "Частота обсчёта функции (Гц)"
-
-msgid "Function start flag"
-msgstr "Флаг запуска функции"
-
-msgid "Function stop flag"
-msgstr "Флаг останова функции"
-
-msgid "This widget's object for access to user's API"
-msgstr "Этот объект виджета для доступа к пользовательскому API"
-
-msgid "Event"
-msgstr "Событие"
-
 #, c-format
 msgid "Compile function '%s' by language '%s' for widget error: %s"
 msgstr "Ошибка компиляции функции '%s' на языке '%s' для виджета: %s"
 
 msgid "Widget calculation error. Process is disabled."
 msgstr "Ошибка вычисления виджета. Обработка отключена."
-
-msgid "Focus"
-msgstr "Фокус"
 
 msgid "Process"
 msgstr "Обработка"
@@ -1130,9 +1122,6 @@ msgstr "Периодичность вычисления процедуры"
 
 msgid "Changed attributes"
 msgstr "Изменённые атрибуты"
-
-msgid "DB version"
-msgstr "Версия БД"
 
 msgid "IDW"
 msgstr ""
@@ -1537,6 +1526,9 @@ msgstr "Вещественный"
 msgid "String"
 msgstr "Строка"
 
+msgid "Object"
+msgstr "Объект"
+
 msgid "Select integer"
 msgstr "Выбор целых"
 
@@ -1572,6 +1564,10 @@ msgstr "Из стиля"
 
 msgid "Element type is not selected!"
 msgstr "Элемент не выборного типа!"
+
+#, c-format
+msgid "Get object from not object's attribute '%s' error!"
+msgstr "Ошибка получения объекта из необъектного атрибута '%s'!"
 
 msgid "Root primitive"
 msgstr "Корневой примитив"
@@ -1635,3 +1631,33 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "Events"
+#~ msgstr "События"
+
+#~ msgid "Alarm status"
+#~ msgstr "Статус нарушения"
+
+#~ msgid "Alarm"
+#~ msgstr "Нарушение"
+
+#~ msgid "Function calculate frequency (Hz)"
+#~ msgstr "Частота обсчёта функции (Гц)"
+
+#~ msgid "Function start flag"
+#~ msgstr "Флаг запуска функции"
+
+#~ msgid "Function stop flag"
+#~ msgstr "Флаг останова функции"
+
+#~ msgid "This widget's object for access to user's API"
+#~ msgstr "Этот объект виджета для доступа к пользовательскому API"
+
+#~ msgid "Event"
+#~ msgstr "Событие"
+
+#~ msgid "Focus"
+#~ msgstr "Фокус"
+
+#~ msgid "DB version"
+#~ msgstr "Версия БД"
