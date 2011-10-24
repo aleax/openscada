@@ -56,8 +56,8 @@ ShapeElFigure::ShapeElFigure( ) :
         WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false), flag_move(false),
-    flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),
-    flag_geom (false), flag_rect_items (false), flag_def_stat(false), fl_status_move(false), fl_orto_move(false), count_rects(0),
+    flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),flag_geom (false), 
+    flag_rect_items (false), flag_def_stat(false), fl_status_move(false), fl_orto_move(false), fl_orto_disable(false), count_rects(0),
     rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
@@ -4451,7 +4451,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         for( int z = 0; z < init_array.size(); z++ )
                                             if( (inundationItems[i].number_shape[p] == init_array[z]) && !inund_Rebuild.contains(i) )
                                                 inund_Rebuild.push_back(i);
+                                fl_orto_disable = true;
                                 initShapeItems( ev->pos(), view, init_array );
+                                fl_orto_disable = false;
                                 for( int i = 0; i < inund_Rebuild.size(); i++ )
                                     inundationItems[inund_Rebuild[i]].path = createInundationPath( inundationItems[inund_Rebuild[i]].number_shape, shapeItems, *pnts, view );
                                 index = index_temp; itemInMotion = &shapeItems[index];
@@ -4478,7 +4480,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             ell_present = true;
 
                         }
-                        if( ell_present ) { paintImage(view); view->repaint(); }
                         //> calling moveItemTo for figures, connected with the arc, if there was moving 3 or 4 rects of the arc -
                         if( count_holds && (flag_arc_rect_3_4 || (flag_rect && shapeItems[index_array[0]].type==2)))
                         {
@@ -4490,7 +4491,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             moveAll( ev->pos(), shapeItems, pnts, inundationItems, view );
                         }
                         //> Finish of the drawing the figure
-                        if( status )
+                        if( status && !ell_present )
                         {
                             QLineF line1, line2;
                             EndLine = ev->pos();
@@ -4527,7 +4528,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         shapeSave( view );
                         itemInMotion = 0;
                         flag_m = false;
-                        if( paint_im ){ paintImage(view); view->repaint(); }
+                        if( paint_im || ell_present ){ paintImage(view); view->repaint(); }
                         if( status_hold && !flag_A )
                         {
                             count_moveItemTo = 0;
@@ -5438,7 +5439,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                 {
                     EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
                     EndMotionPos += offset;
-                    if( (QApplication::keyboardModifiers()&Qt::ShiftModifier) && status )
+                    if( (QApplication::keyboardModifiers()&Qt::ShiftModifier) && status && !fl_orto_disable )
                     {
                         fl_orto = true;
                         if( fl_orto_move ) { CtrlMotionPos_4 = EndMotionPos; fl_orto_move = false; }

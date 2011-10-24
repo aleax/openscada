@@ -1,3 +1,7 @@
+2011-10-24 Maxim
+- FIX:UI.Vision: Connecting the shapes while orthogonal drawing is fixed for the primitive ElFigure.
+
+
 2011-10-24 Roman
 - FIX:DAQ.Siemens: Multi-blocks fragments register is fixed.
 - !!!:UI.VCAEngine: Selected pages, only opened and processing, enable on progect's session start for start speed increase.
