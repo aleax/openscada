@@ -164,7 +164,7 @@ void MBD::allowList( vector<string> &list )
     list.clear();
     vector< vector<string> > tbl;
     sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';",&tbl);
-    for( unsigned i_t = 1; i_t < tbl.size(); i_t++ )
+    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
 	list.push_back(tbl[i_t][0]);
 }
 
