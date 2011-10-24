@@ -640,8 +640,9 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 
     //> Register to acquisition block
     unsigned i_b;
+    bool plcOK = false;
     for(i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db > ival.db) break;
+	if(ival.db < acqBlks[i_b].db) break;
 	else if(acqBlks[i_b].db == ival.db)
 	{
 	    if(ival.off < acqBlks[i_b].off)
@@ -659,10 +660,10 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 		    acqBlks[i_b].val.append((ival.off+iv_sz)-(acqBlks[i_b].off+acqBlks[i_b].val.size()),0);
 		else continue;
 	    }
+	    plcOK = true;
 	    break;
 	}
-    if(i_b >= acqBlks.size())
-	acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
+    if(!plcOK)	acqBlks.insert(acqBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 
     //> Register to asynchronous write block
     if(wr && assincWrite())
