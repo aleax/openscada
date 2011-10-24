@@ -103,8 +103,8 @@ msgid "Library widget: "
 msgstr "Bibliothekenwidget: "
 
 #, c-format
-msgid "Inheriting widget <%s> enable error"
-msgstr "Fehler beim Einschalten des vererbenden Widgets <%s>"
+msgid "Inheriting widget '%s' enable error."
+msgstr "Fehler beim Einschalten des vererbenden Widgets '%s'."
 
 msgid "Link to widget: "
 msgstr "Link zu Widget: "
@@ -818,8 +818,8 @@ msgid "Compile function for document is error: %s"
 msgstr "Fehler in der Funktionskompilation für das Dokument: %s"
 
 #, c-format
-msgid "Instruction proc <%s> error: %s"
-msgstr "Fehler in der Befehlsausführung <%s>: %s"
+msgid "Instruction proc '%s' error: %s"
+msgstr "Fehler in der Befehlsausführung '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
@@ -1324,16 +1324,16 @@ msgid "Widget enable error: %s"
 msgstr "Fehler der Einschaltung des Widgets: %s"
 
 #, c-format
-msgid "Ingeriting widget <%s> disable error"
-msgstr "Fehler beim Abschalten des vererbenden Widgets <%s>"
+msgid "Ingeriting widget '%s' disable error."
+msgstr "Fehler beim Abschalten des vererbenden Widgets '%s'."
 
 #, c-format
-msgid "Child widget <%s> enable/disable error"
-msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets <%s>"
+msgid "Child widget '%s' enable/disable error."
+msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 
 #, c-format
-msgid "Attribute <%s> is not present!"
-msgstr "Attribut <%s> fehlt!"
+msgid "Attribute '%s' is not present!"
+msgstr "Attribut '%s' fehlt!"
 
 #, c-format
 msgid "Attribute attach access error: %d."

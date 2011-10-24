@@ -811,7 +811,7 @@ void CWidget::setEnable( bool val )
 	for(unsigned i_h = 0; i_h < ownerLWdg().herit().size(); i_h++)
 	    if(!ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable() && ownerLWdg().herit()[i_h].at().wdgPresent(id()))
 		try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
-		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
+		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
 }
 
 string CWidget::calcId( )

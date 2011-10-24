@@ -230,11 +230,13 @@ class SessWdg : public Widget, public TValFunc
 	unsigned int modifVal( Attr &cfg );
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
+	//Attributes
+	unsigned	mProc		: 1;
+	unsigned	inLnkGet	: 1;
+	unsigned 	mToEn		: 1;
+
     private:
 	//Attributes
-	char		mProc		: 1;
-	char		inLnkGet	: 1;
-
 	string		mWorkProg;
 	unsigned int	mMdfClc;
 	unsigned int	&mCalcClk;
@@ -259,7 +261,7 @@ class SessPage : public SessWdg
 	string path( );
 	string type( )          { return "SessPage"; }
 
-	void setEnable( bool val );
+	void setEnable( bool val, bool force = false );
 	void setProcess( bool val );
 
 	void calc( bool first, bool last );
@@ -276,6 +278,9 @@ class SessPage : public SessWdg
 	//> Alarms process
 	void alarmSet( bool isSet = false );
 	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
+
+	bool attrPresent(const string &attr);
+	AutoHD<Attr> attrAt(const string &attr);
 
     protected:
 	//Methods

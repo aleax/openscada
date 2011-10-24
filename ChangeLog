@@ -1,5 +1,10 @@
+2011-10-24 Roman
+- !!!:UI.VCAEngine: Selected pages, only opened and processing, enable on progect's session start for start speed increase.
+    Other pages will enable at need that is use.
+
+
 2011-10-23 Roman
-- UI.VCAEngine: Attributes at lock counter and other bit methods of widget is reordered.
+- !!:UI.VCAEngine: Attributes at lock counter and other bit methods of widget is reordered.
     Init base attributes of session's widget is pass to the widget enable by inherit.
     Remove some messages translation on session call time.
     The allow to significant decrease overall enable session time.

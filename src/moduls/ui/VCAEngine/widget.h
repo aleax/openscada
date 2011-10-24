@@ -208,9 +208,9 @@ class Widget : public TCntrNode
 	void attrList(vector<string> &list);
 	void attrAdd(TFld *attr, int pos = -1, bool inher = false);
 	void attrDel(const string &attr, bool allInher = false);
-	bool attrPresent(const string &attr);
+	virtual bool attrPresent(const string &attr);
 	int  attrPos(const string &iattr);
-	AutoHD<Attr> attrAt(const string &attr);
+	virtual AutoHD<Attr> attrAt(const string &attr);
 
 	//> Include widgets
 	void wdgList( vector<string> &list );

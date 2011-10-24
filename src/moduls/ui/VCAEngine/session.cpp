@@ -770,13 +770,39 @@ string SessPage::path( )
     return ownerFullId(true)+"/pg_"+id();
 }
 
-void SessPage::setEnable( bool val )
+void SessPage::setEnable( bool val, bool force )
 {
-    if(val == enable()) return;
+    vector<string> pg_ls;
 
-    if(!val)
+    //> Page enable
+    if(val)
     {
-	vector<string> pg_ls;
+	mToEn = true;
+	//>> Check for full enable need
+	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
+	if((pgOpen || force) && !enable())
+	{
+	    SessWdg::setEnable(true);
+	    if(pgOpen) ownerSess()->openReg(path());
+	}
+	//>> Child pages process
+	if(!force)
+	{
+	    //> Create included pages
+	    parent().at().pageList(pg_ls);
+	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
+		if(!pagePresent(pg_ls[i_p]))
+		    pageAdd(pg_ls[i_p],parent().at().pageAt(pg_ls[i_p]).at().path());
+	    //> Enable included pages
+	    pageList(pg_ls);
+	    for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
+		try{ pageAt(pg_ls[i_l]).at().setEnable(true); }
+		catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	}
+	mToEn = false;
+    }
+    else if(enable())
+    {
 	//> Unregister opened page
 	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
 	    ownerSess()->openUnreg(path());
@@ -787,38 +813,20 @@ void SessPage::setEnable( bool val )
 	//> Delete included pages
 	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageDel(pg_ls[i_l]);
-    }
 
-    //> Call parrent enable method
-    SessWdg::setEnable(val);
-
-    if(val)
-    {
-	vector<string> pg_ls;
-	//> Register opened page
-	if(!(parent().at().prjFlags()&Page::Empty) && attrAt("pgOpen").at().getB()) ownerSess()->openReg(path());
-	//> Create included pages
-	parent().at().pageList(pg_ls);
-	for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
-	    if(!pagePresent(pg_ls[i_p]))
-		pageAdd(pg_ls[i_p],parent().at().pageAt(pg_ls[i_p]).at().path());
-	//> Enable included pages
-	pageList(pg_ls);
-	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
-	    try{ pageAt(pg_ls[i_l]).at().setEnable(true); }
-	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	SessWdg::setEnable(false);
     }
 }
 
 void SessPage::setProcess( bool val )
 {
-    if(!enable()) return;
-
     //> Change process state for included pages
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
         pageAt(ls[i_l]).at().setProcess(val);
+
+    if(!enable()) return;
 
     //> Change self process state
     bool diff = (val!=process());
@@ -839,6 +847,11 @@ void SessPage::setProcess( bool val )
 
 AutoHD<Page> SessPage::parent( )
 {
+    if(!enable())
+    {
+	if(parentNm() == "..") return AutoHD<TCntrNode>(nodePrev());
+        else return mod->nodeAt(parentNm());
+    }
     return Widget::parent();
 }
 
@@ -1019,6 +1032,18 @@ void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
     if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
 
+bool SessPage::attrPresent(const string &attr)
+{
+    if(!enable() && !mToEn) setEnable(true, true);
+    return Widget::attrPresent(attr);
+}
+
+AutoHD<Attr> SessPage::attrAt(const string &attr)
+{
+    if(!enable() && !mToEn) setEnable(true, true);
+    return Widget::attrAt(attr);
+}
+
 TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
 {
     if( stlLock() ) return vl;
@@ -1073,7 +1098,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //* SessWdg: Session page's widget               *
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
-    Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), mProc(false), inLnkGet(true), mMdfClc(0),
+    Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), mProc(false), inLnkGet(true), mToEn(false), mMdfClc(0),
     mCalcClk(isess->calcClk()), mSess(isess)
 {
     BACrtHoldOvr = true;
@@ -1097,9 +1122,11 @@ void SessWdg::postEnable( int flag )
 
     if(flag&TCntrNode::NodeConnect)
     {
+	mToEn = true;
 	attrAdd(new TFld("event","Events",TFld::String,TFld::FullText));
 	attrAdd(new TFld("alarmSt","Alarm status",TFld::Integer,TFld::HexDec,"5","0"));
 	attrAdd(new TFld("alarm","Alarm",TFld::String,TFld::NoFlag,"200"));
+	mToEn = false;
     }
 }
 
@@ -1339,7 +1366,7 @@ void SessWdg::pgClose( )
 
 void SessWdg::eventAdd( const string &ev )
 {
-    if(!attrPresent("event"))	return;
+    if(!enable() || !attrPresent("event")) return;
     Res &res = ownerSess()->eventRes();
     res.resRequestW();
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
@@ -1348,7 +1375,7 @@ void SessWdg::eventAdd( const string &ev )
 
 string SessWdg::eventGet( bool clear )
 {
-    if(!attrPresent("event"))	return "";
+    if(!enable() || !attrPresent("event")) return "";
     Res &res = ownerSess()->eventRes();
 
     res.resRequestW();
@@ -1709,7 +1736,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - readed attribute
     if( iid == "attr" && prms.size() )
     {
-	if(!attrPresent( prms[0].getS())) return string("");
+	if(!attrPresent(prms[0].getS())) return string("");
 	return attrAt(prms[0].getS()).at().get();
     }
     // TCntrNodeObj attrSet(string attr, ElTp vl)

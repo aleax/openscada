@@ -179,7 +179,8 @@ string Widget::rootId( )
 
 string Widget::name( )
 {
-    return (attrAt("name").at().getS().size()) ? attrAt("name").at().getS() : mId;
+    string wnm = attrAt("name").at().getS();
+    return wnm.size() ? wnm : mId;
 }
 
 void Widget::setName( const string &inm )
@@ -315,7 +316,7 @@ void Widget::setEnable( bool val )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Ingeriting widget <%s> disable error"),herit()[i_h].at().id().c_str());
+		    mess_err(nodePath().c_str(),_("Ingeriting widget '%s' disable error."),herit()[i_h].at().id().c_str());
 		    i_h++;
 		}
 	    else i_h++;
@@ -338,7 +339,7 @@ void Widget::setEnable( bool val )
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Child widget <%s> enable/disable error"),ls[i_l].c_str());
+		mess_err(nodePath().c_str(),_("Child widget '%s' enable/disable error."),ls[i_l].c_str());
 	    }
 
     mEnable = val;
@@ -561,7 +562,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	rLock = pthread_mutex_lock(&mtxAttr);
 
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
-	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute <%s> is not present!"), attr.c_str());
+	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
 	int pos = p->second->mOi;
 	for( map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1 )
 	    if( p1->second->mOi > pos ) p1->second->mOi--;
@@ -590,7 +591,7 @@ AutoHD<Attr> Widget::attrAt(const string &attr)
     if(p == mAttrs.end())
     {
 	if(!rLock) pthread_mutex_unlock(&mtxAttr);
-	throw TError(nodePath().c_str(),_("Attribute <%s> is not present!"), attr.c_str());
+	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
     }
 
     return AutoHD<Attr>(p->second);

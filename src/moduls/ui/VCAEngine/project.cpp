@@ -1406,7 +1406,7 @@ void PageWdg::setEnable( bool val )
 	for(unsigned i_h = 0; i_h < ownerPage().herit().size(); i_h++)
 	    if(ownerPage().herit()[i_h].at().wdgPresent(id()) && !ownerPage().herit()[i_h].at().wdgAt(id()).at().enable())
 		try { ownerPage().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
-		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget <%s> enable error"),id().c_str()); }
+		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
 }
 
 string PageWdg::calcId( )
@@ -1427,7 +1427,7 @@ string PageWdg::calcProg( )
     return "";
 }
 
-int PageWdg::calcPer(  )
+int PageWdg::calcPer( )
 {
     if( !parent().freeStat() )	return parent().at().calcPer();
     return 0;

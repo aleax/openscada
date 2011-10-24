@@ -100,8 +100,8 @@ msgid "Library widget: "
 msgstr "Библиотечный виджет: "
 
 #, c-format
-msgid "Inheriting widget <%s> enable error"
-msgstr "Ошибка включения наследующего виджета <%s>"
+msgid "Inheriting widget '%s' enable error."
+msgstr "Ошибка включения наследующего виджета '%s'."
 
 msgid "Link to widget: "
 msgstr "Ссылка на виджет: "
@@ -849,8 +849,8 @@ msgid "Compile function for document is error: %s"
 msgstr "Ошибка компиляции функции для документа: %s"
 
 #, c-format
-msgid "Instruction proc <%s> error: %s"
-msgstr "Ошибка исполнения инструкции <%s>: %s"
+msgid "Instruction proc '%s' error: %s"
+msgstr "Ошибка исполнения инструкции '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
@@ -1352,16 +1352,16 @@ msgid "Widget enable error: %s"
 msgstr "Ошибка включения виджета: %s"
 
 #, c-format
-msgid "Ingeriting widget <%s> disable error"
-msgstr "Ошибка отключения наследующего виджета <%s>"
+msgid "Ingeriting widget '%s' disable error."
+msgstr "Ошибка отключения наследующего виджета '%s'."
 
 #, c-format
-msgid "Child widget <%s> enable/disable error"
-msgstr "Ошибка включения/отключения дочернего виджета <%s>"
+msgid "Child widget '%s' enable/disable error."
+msgstr "Ошибка включения/отключения дочернего виджета '%s'."
 
 #, c-format
-msgid "Attribute <%s> is not present!"
-msgstr "Атрибут <%s> отсутствует!"
+msgid "Attribute '%s' is not present!"
+msgstr "Атрибут '%s' отсутствует!"
 
 #, c-format
 msgid "Attribute attach access error: %d."

@@ -1482,7 +1482,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    }
 	    catch(TError err)
 	    {
-		mess_err(wdg->nodePath().c_str(),_("Instruction proc <%s> error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
+		mess_err(wdg->nodePath().c_str(),_("Instruction proc '%s' error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
 		mess_err(wdg->nodePath().c_str(),_("Error code: %s"), curPrc->text().c_str());
 	    }
 	}
