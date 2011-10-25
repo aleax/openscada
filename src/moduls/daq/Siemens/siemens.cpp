@@ -668,8 +668,9 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
     //> Register to asynchronous write block
     if(wr && assincWrite())
     {
+	plcOK = false;
 	for(i_b = 0; i_b < writeBlks.size(); i_b++)
-	    if(writeBlks[i_b].db > ival.db) break;
+	    if(ival.db < writeBlks[i_b].db) break;
 	    else if(writeBlks[i_b].db == ival.db)
 	    {
 		if(ival.off < writeBlks[i_b].off)
@@ -698,10 +699,10 @@ void TMdContr::regVal( SValData ival, IO::Type itp, bool wr )
 		    }
 		    else continue;
 		}
+		plcOK = true;
 		break;
 	    }
-	if(i_b >= writeBlks.size())
-	    writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
+	if(!plcOK) writeBlks.insert(writeBlks.begin()+i_b,SDataRec(ival.db,ival.off,iv_sz));
 	writeBlks[i_b].err = _("-1:No data");
     }
 }
