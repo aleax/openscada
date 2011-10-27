@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-09 14:57+0300\n"
+"POT-Creation-Date: 2011-10-27 17:35+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -333,6 +333,30 @@ msgstr "Кнопка для переходу до очищення змін ві
 
 msgid "Press to go to visual item changes clear."
 msgstr "Натиснути для переходу до очищення змін візуального елементу."
+
+msgid "Visual item changes UnDo"
+msgstr "Відмінити зміни візуального елементу"
+
+msgid "Make visual item changes UnDo:"
+msgstr "Виконання відміни змін візуального елементу:"
+
+msgid "The button for making visual item changes UnDo"
+msgstr "Кнопка для виконання відміни змін візуального елементу"
+
+msgid "Press to make visual item changes UnDo."
+msgstr "Натиснути для виконання відміни змін візуального елементу."
+
+msgid "Visual item changes ReDo"
+msgstr "Повторити зміни візуального елементу"
+
+msgid "Make visual item changes ReDo:"
+msgstr "Виконати повтор змін візуального елементу:"
+
+msgid "The button for making visual item changes ReDo"
+msgstr "Кнопка для виконання повтору змін візуального елементу"
+
+msgid "Press to make visual item changes ReDo."
+msgstr "Натиснути для виконання повтору змін візуального елементу."
 
 msgid "Visual item cut"
 msgstr "Вирізати візуальний елемент"
@@ -799,9 +823,9 @@ msgid ""
 "All changes will be lost and variables are returning to default values or "
 "will be inherited!"
 msgstr ""
-"Ви дійсно бажаєте очищення всіх змін візуальних елементів: '%1'?\nВсі зміни "
-"буде втрачено та значення повернуться до попереднього стану або будуть "
-"успадковані!"
+"Ви дійсно бажаєте очищення всіх змін візуальних елементів: '%1'?\n"
+"Всі зміни буде втрачено та значення повернуться до попереднього стану або "
+"будуть успадковані!"
 
 msgid "Visual items' changes clear"
 msgstr "Очищення змін візуальних елементів"
@@ -1165,6 +1189,15 @@ msgstr "Вибрані елементи --- xy(%2:%3) шв[%4:%5]"
 
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Сторінка: '%1' --- xy(%2:%3) шв[%4:%5]"
+
+msgid "geometry"
+msgstr "геометрія"
+
+msgid "attribute '%s'"
+msgstr "атрибут '%s'"
+
+msgid "unknown"
+msgstr "невідомо"
 
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"

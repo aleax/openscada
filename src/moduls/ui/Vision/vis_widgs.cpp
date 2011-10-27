@@ -1044,7 +1044,7 @@ WdgView *WdgView::newWdgItem( const string &iwid )
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
     //> Send value to model
-    if( !attr.empty() )
+    if(!attr.empty())
     {
 	XMLNode req("set");
 	req.setAttr("path",id()+"/%2fserv%2fattr");
@@ -1053,7 +1053,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     }
     bool up = false;
 
-    switch( uiPrmPos )
+    switch(uiPrmPos)
     {
 	case -1:	//load
 	    up = true;

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-09 14:57+0300\n"
+"POT-Creation-Date: 2011-10-27 17:35+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -332,6 +332,30 @@ msgstr "Кнопка для перехода к очистке изменени�
 
 msgid "Press to go to visual item changes clear."
 msgstr "Нажать для перехода к очистке изменений визуального элемента."
+
+msgid "Visual item changes UnDo"
+msgstr "Откат изменений визуального элемента"
+
+msgid "Make visual item changes UnDo:"
+msgstr "Выполнение отката изменений визуального элемента:"
+
+msgid "The button for making visual item changes UnDo"
+msgstr "Кнопка для выполнения отката изменений визуального элемента"
+
+msgid "Press to make visual item changes UnDo."
+msgstr "Нажать для выполнения отката изменений визуального элемента."
+
+msgid "Visual item changes ReDo"
+msgstr "Повтор изменений визуального элемента"
+
+msgid "Make visual item changes ReDo:"
+msgstr "Выполнить повтор изменений визуального элемента:"
+
+msgid "The button for making visual item changes ReDo"
+msgstr "Кнопка для выполнения повтора изменений визуального элемента"
+
+msgid "Press to make visual item changes ReDo."
+msgstr "Нажать для выполнения повтора изменений визуального элемента."
 
 msgid "Visual item cut"
 msgstr "Вырезать визуальный элемент"
@@ -1166,6 +1190,15 @@ msgstr "Выбраны элементы --- xy(%2:%3) шв[%4:%5]"
 
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Страница: '%1' --- xy(%2:%3) шв[%4:%5]"
+
+msgid "geometry"
+msgstr "геометрия"
+
+msgid "attribute '%s'"
+msgstr "атрибут '%s'"
+
+msgid "unknown"
+msgstr "неизвестно"
 
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Виджет отключен или образ виджета не поддерживается!"

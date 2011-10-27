@@ -709,8 +709,6 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     int64_t f_sz = (int64_t)(((ModVArch&)archivator()).fileTimeSize()*3600e6);
     int64_t v_per = (int64_t)(archivator().valPeriod()*1e6);
 
-    realEnd = vmax(realEnd,buf.end());
-
     //> Put values to files
     ResAlloc res(mRes,true);
     for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
@@ -748,7 +746,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	    b_prev = arh_f[i_a]->end()+v_per;
 	}
     //> Create new file for new data
-    while( end >= beg )
+    while(end >= beg)
     {
 	char c_buf[30];
 	time_t tm = beg/1000000;
@@ -765,6 +763,8 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	arh_f[arh_f.size()-1]->setVals(buf,beg,n_end);
 	beg = n_end+v_per;
     }
+
+    realEnd = vmax(realEnd,end);
 }
 
 //*************************************************
@@ -1455,6 +1455,10 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     moveTail(hd,foff_end,foff_end+(val_b.size()-(foff_end-foff_beg)));
     lseek(hd,foff_beg,SEEK_SET);
     write(hd,val_b.data(),val_b.size());
+
+    //> Check for write to end correct
+    if(fixVl && iend > owner().end() && iend < end() && (mSize-foff_end) != vSize)
+	mess_err(mod->nodePath().c_str(), _("Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);
 
     //> Drop cache
     cacheDrop(vpos_beg);

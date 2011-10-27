@@ -509,16 +509,23 @@ class DevelWdgView: public WdgView
 	void wdgsMoveResize( const QPointF &dP );
 	void setVisScale( float val );
         void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
+        void setFocus( bool focus );
 
 	WdgView *newWdgItem( const string &iwid );
 	void load( const string& item, bool load = true, bool init = true, XMLNode *aBr = NULL );
 
 	DevelWdgView *levelWidget( int lev );
 
+	bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
+
 	//> Resource and cache operations
 	string resGet( const string &res );
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
+
+	//> Changes operations
+	void chRecord( XMLNode ch );
+	void chUpdate( );
 
     signals:
 	void selected( const string& item );		//Change selection signal
@@ -534,6 +541,8 @@ class DevelWdgView: public WdgView
 	void editExit( );
 	void incDecVisScale( );
 	void nextUnderlWdgWait( );
+	void chUnDo( );
+	void chReDo( );
 
     protected:
 	//Protected methods
@@ -558,12 +567,15 @@ class DevelWdgView: public WdgView
 	short int	fHideChilds	:1;	//Hide childs on move
 	short int	fSelChange	:1;	//Changed select map
         short int	fPrevEdExitFoc  :1;	//Prevention exit from widget edition by focus loosing
+        short int	fFocus		:1;	//Edition window of the widget in focus
 
 	float		mVisScale;		//Visual scale value of root widget.
 
 	QPoint		holdPnt;		//Hold move point
 	SizePntWdg	*pntView;		//Point view
 	DevelWdgView	*editWdg;
+	XMLNode		*chTree;		//Changes tree
+	XMLNode 	chGeomCtx;		//Change geometry context
 	QPoint		dragStartPos;
 	map<string,string>	mCacheRes;	//Resources cache
 };

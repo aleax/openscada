@@ -108,8 +108,8 @@ class VisDevelop : public QMainWindow
 
     public:
 	//Public attributes
-	//- Actions -
-	//-- VCA actions of items
+	//> Actions
+	//>> VCA actions of items
 	QAction *actDBLoad,		//Load item from DB
 		*actDBSave,		//Save item to DB
 		*actPrjRun,		//Run project execution from selected project item
@@ -123,7 +123,9 @@ class VisDevelop : public QMainWindow
 		*actVisItCut,		//Cut visual item
 		*actVisItCopy,		//Copy visual item
 		*actVisItPaste,		//Paste visual item
-	//-- Widget's ordering actions --
+		*actVisItUnDo,		//UnDo visual item changes
+		*actVisItReDo,		//ReDo visual item changes
+	//>> Widget's ordering actions
 		*actLevUp,		//Up widget level
 		*actLevDown,		//Down widget level
 		*actLevRise,		//Rise widget level
@@ -134,13 +136,13 @@ class VisDevelop : public QMainWindow
 		*actAlignTop,		//Align top
 		*actAlignHCenter,	//Align horizontal center
 		*actAlignBottom,	//Align bottom
-	//-- Elementar figure actions --
+	//>> Elementar figure actions
 		*actElFigLine,		//Create line
 		*actElFigArc,		//Create arc
 		*actElFigBesie,		//Create Besie curve
 		*actElFigCheckAct,	//Enable holds
 		*actElFigCursorAct,	//Unset cursor
-	//-- Window manipulation actions --
+	//>> Window manipulation actions
 		*actWinClose,		//Close window
 		*actWinCloseAll,	//Close all windows
 		*actWinTile,		//Tile windows
@@ -149,22 +151,22 @@ class VisDevelop : public QMainWindow
 		*actWinPrevious;	//Select previous window
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
-	//- Toolbars -
+	//> Toolbars
         QToolBar *visItToolBar;         //Main visual items toolbar
 	QToolBar *wdgToolView;		//Widget's view functions
 	QToolBar *elFigTool;		//Elementar figure base widget tools
 	vector<QToolBar*> lb_toolbar;	//Library toolbars
 
-	//- Dock widgets -
+	//> Dock widgets
 	WdgTree		*wdgTree;	//Widgets tree
 	ProjTree	*prjTree;	//Progects tree
 	InspAttrDock	*attrInsp;	//Docked attributes inspector
 	InspLnkDock	*lnkInsp;	//Docked links inspector
 
-	//- Work space -
+	//> Work space
 	QWorkspace	*work_space;	//MDI widgets workspace
 
-	//- Menu root items -
+	//> Menu root items
 	QMenu	*mn_file,		//Menu "File"
 		*mn_edit,		//Menu "Edit"
 		*mn_proj,		//Menu "Project"

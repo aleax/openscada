@@ -190,6 +190,24 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItClear->setStatusTip(_("Press to go to visual item changes clear."));
     actVisItClear->setEnabled(false);
     connect(actVisItClear, SIGNAL(triggered()), this, SLOT(visualItClear()));
+    //>>> UnDo visual item changes
+    if(!ico_t.load(TUIS::icoPath("undo").c_str())) ico_t.load(":/images/undo.png");
+    actVisItUnDo = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes UnDo"),this);
+    actVisItUnDo->setObjectName("undo");
+    actVisItUnDo->setToolTip(_("Make visual item changes UnDo:"));
+    actVisItUnDo->setWhatsThis(_("The button for making visual item changes UnDo"));
+    actVisItUnDo->setStatusTip(_("Press to make visual item changes UnDo."));
+    actVisItUnDo->setShortcut(QKeySequence("Ctrl+Z"));
+    actVisItUnDo->setEnabled(false);
+    //>>> ReDo visual item changes
+    if(!ico_t.load(TUIS::icoPath("redo").c_str())) ico_t.load(":/images/redo.png");
+    actVisItReDo = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes ReDo"),this);
+    actVisItReDo->setObjectName("redo");
+    actVisItReDo->setToolTip(_("Make visual item changes ReDo:"));
+    actVisItReDo->setWhatsThis(_("The button for making visual item changes ReDo"));
+    actVisItReDo->setStatusTip(_("Press to make visual item changes ReDo."));
+    actVisItReDo->setShortcut(QKeySequence("Ctrl+Y"));
+    actVisItReDo->setEnabled(false);
     //>>> Cut visual item
     if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
     actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);
@@ -408,6 +426,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_file->addAction(actClose);
     mn_file->addAction(actQuit);
     mn_edit = menuBar()->addMenu(_("&Edit"));
+    mn_edit->addAction(actVisItUnDo);
+    mn_edit->addAction(actVisItReDo);
+    mn_edit->addSeparator();
     mn_edit->addAction(actVisItCut);
     mn_edit->addAction(actVisItCopy);
     mn_edit->addAction(actVisItPaste);
@@ -470,6 +491,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     visItToolBar->addAction(actVisItDel);
     visItToolBar->addAction(actVisItProp);
     visItToolBar->addAction(actVisItEdit);
+    visItToolBar->addSeparator();
+    visItToolBar->addAction(actVisItUnDo);
+    visItToolBar->addAction(actVisItReDo);
     visItToolBar->addSeparator();
     visItToolBar->addAction(actVisItCut);
     visItToolBar->addAction(actVisItCopy);

@@ -61,7 +61,7 @@ void VCASess::getReq( SSess &ses )
     //> Access time to session is updating
     lst_ses_req = time(NULL);
 
-    map<string,string>::iterator prmEl = ses.prm.find("com");
+    map<string,string>::iterator prmEl = ses.prm.find("com"), prmEl1;
     string first_lev = TSYS::pathLev(ses.url,1);
     string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
     if( wp_com.empty() )
@@ -118,8 +118,10 @@ void VCASess::getReq( SSess &ses )
     else if( wp_com == "attrsBr" )
     {
 	prmEl = ses.prm.find("tm");
+	prmEl1 = ses.prm.find("FullTree");
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fserv%2fattrBr")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
+	req.setAttr("path",ses.url+"/%2fserv%2fattrBr")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0")->
+	    setAttr("FullTree",(prmEl1!=ses.prm.end())?prmEl1->second:"0");
 	mod->cntrIfCmd(req,ses.user);
 
 	//>> Backend objects' attributes set

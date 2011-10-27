@@ -41,6 +41,8 @@
     <file>images/editcopy.png</file>
     <file>images/editcut.png</file>
     <file>images/editpaste.png</file>
+    <file>images/undo.png</file>
+    <file>images/redo.png</file>
     <file>images/alarmLev.png</file>
     <file>images/alarmLight.png</file>
     <file>images/alarmAlarm.png</file>

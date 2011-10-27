@@ -1,6 +1,8 @@
 2011-10-27 Roman
+- !!!:UI.Vision: Main UnDo and ReDo changes support is added into visual widgets edit.
+    Going to add UnDo and Redo for operations "add" and "remove" included widgets.
 - !!:UI.VCAEngine, UI.Vision, UI.WebVision: Periodic check opened pages by request full widgets tree is added for
-    check and remove removed in run widgets. To UI.WebVision only start that realization.
+    check and remove removed in run widgets.
 
 
 2011-10-25 Roman

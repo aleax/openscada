@@ -374,7 +374,8 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     var opPg = this.findOpenPage(pgId);
     if(opPg)
     {
-      if(updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
+      if(!(prcCnt%5)) opPg.makeEl(servGet(pgId,'com=attrsBr&FullTree=1&tm='+tmCnt),false,false,true);
+      else if(updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
       return true;
     }
   }
@@ -391,7 +392,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     this.addr  = pgId;
     this.place = document.createElement('div');
     this.place.setAttribute('id','mainCntr');
-    this.makeEl(servGet(pgId,'com=attrsBr'));
+    this.makeEl(servGet(pgId,'com=attrsBr'),false,true);
     var centerTag = document.createElement('center');
     centerTag.appendChild(this.place);
     document.body.appendChild(centerTag);
@@ -505,7 +506,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     }
 
     this.pages[iPg.addr] = iPg;
-    iPg.makeEl(attrBrVal);
+    iPg.makeEl(attrBrVal,false,true);
 
     return true;
   }
@@ -537,7 +538,7 @@ function findOpenPage( pgId )
   return null;
 }
 
-function makeEl( pgBr, inclPg, FullTree )
+function makeEl( pgBr, inclPg, full, FullTree )
 {
   var margBrdUpd = false; var newAttr = false;
   this.place.wdgLnk = this;
@@ -692,7 +693,7 @@ function makeEl( pgBr, inclPg, FullTree )
         {
 	  var iPg = new pwDescr(this.inclOpen,true,this);
 	  iPg.place = this.place.ownerDocument.createElement('div');
-	  iPg.makeEl( servGet(this.inclOpen,'com=attrsBr') );
+	  iPg.makeEl(servGet(this.inclOpen,'com=attrsBr'),false,true);
 	  this.pages[this.inclOpen] = iPg;
 	  this.place.appendChild(iPg.place);
         }
@@ -1561,7 +1562,7 @@ function makeEl( pgBr, inclPg, FullTree )
   elStyle+='width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
   this.place.style.cssText = elStyle;
   }
-  if( margBrdUpd ) for( var i in this.wdgs ) this.wdgs[i].makeEl();
+  if(margBrdUpd) for(var i in this.wdgs) this.wdgs[i].makeEl();
   this.place.setAttribute('title',this.attrs['tipTool']);
   this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
 
@@ -1635,24 +1636,34 @@ function makeEl( pgBr, inclPg, FullTree )
 
   //> Delete child widgets check
   if(FullTree)
-  {
-    //????
-  }
+    for(var i in this.wdgs)
+    {
+	var j;
+	for(j = 0; j < pgBr.childNodes.length; j++)
+	    if(pgBr.childNodes[j].nodeName == 'w' && pgBr.childNodes[j].getAttribute('id') == i)
+		break;
+	if(j >= pgBr.childNodes.length)
+	{
+	    this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
+	    delete this.wdgs[i];
+	}
+    }
 
   //> Child widgets process
-  if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD )
-    for( var j = 0; j < pgBr.childNodes.length; j++ )
+  if(pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD)
+    for(var j = 0; j < pgBr.childNodes.length; j++)
     {
-      if( pgBr.childNodes[j].nodeName != 'w' ) continue;
+      if(pgBr.childNodes[j].nodeName != 'w') continue;
       var chEl = pgBr.childNodes[j].getAttribute('id');
-      if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, FullTree);
+      if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, full, FullTree);
       else
       {
 	var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
 	wdgO.place = this.place.ownerDocument.createElement('div');
-	wdgO.makeEl(pgBr.childNodes[j]);		//!!!! Need full
 	this.place.appendChild(wdgO.place);
 	this.wdgs[chEl] = wdgO;
+	wdgO.makeEl(full?pgBr.childNodes[j]:servGet(wdgO.addr,'com=attrsBr'));
+	//wdgO.makeEl(pgBr.childNodes[j]);		//!!!! Need full
       }
     }
 }
@@ -1760,6 +1771,7 @@ function pwDescr( pgAddr, pg, parent )
  ***************************************************/
 function makeUI()
 {
+  prcCnt++;
   //> Get open pages list
   var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
   if(pgNode)
@@ -1798,7 +1810,7 @@ function makeUI()
     tmCnt = parseInt(pgNode.getAttribute('tm'));
   }
   //> Update some widgets
-  for( var i in perUpdtWdgs ) perUpdtWdgs[i].perUpdt();
+  for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
   setTimeout(makeUI,1000);
 }
 
@@ -1807,10 +1819,10 @@ function makeUI()
  ***************************************************/
 function setStatus( mess, tm )
 {
-  window.status = mess ? mess : '###Ready###';
-  if( !mess ) return;
-  if( stTmID ) clearTimeout(stTmID);
-  if( !tm || tm > 0 ) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
+    window.status = mess ? mess : '###Ready###';
+    if(!mess) return;
+    if(stTmID) clearTimeout(stTmID);
+    if(!tm || tm > 0) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
 }
 
 /**************************************************
@@ -1849,6 +1861,7 @@ document.body.onmouseup = function(e)
   if( popUpMenu ) popUpMenu.style.visibility = 'hidden';
 }
 
+prcCnt = 0;				//Process counter
 tmCnt = 0;				//Call counter
 pgList = new Array();			//Opened pages list
 pgCache = new Object();			//Cached pages' data

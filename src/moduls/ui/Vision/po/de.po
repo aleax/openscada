@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-09 14:57+0300\n"
+"POT-Creation-Date: 2011-10-27 17:35+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -334,6 +334,38 @@ msgstr "Schaltfläche zum Zurücksetzen der Änderungen"
 
 msgid "Press to go to visual item changes clear."
 msgstr "Betätigen zum Zurücksetzen der Änderungen."
+
+#, fuzzy
+msgid "Visual item changes UnDo"
+msgstr "Änderungen zurücksetzen"
+
+#, fuzzy
+msgid "Make visual item changes UnDo:"
+msgstr "Kopieren des Elements"
+
+#, fuzzy
+msgid "The button for making visual item changes UnDo"
+msgstr "Schaltfläche zum Kopieren des Elements"
+
+#, fuzzy
+msgid "Press to make visual item changes UnDo."
+msgstr "Betätigen zum Kopieren des Elements."
+
+#, fuzzy
+msgid "Visual item changes ReDo"
+msgstr "Änderungen zurücksetzen"
+
+#, fuzzy
+msgid "Make visual item changes ReDo:"
+msgstr "Einfügen des Elements"
+
+#, fuzzy
+msgid "The button for making visual item changes ReDo"
+msgstr "Schaltfläche zum Einfügen des Elements"
+
+#, fuzzy
+msgid "Press to make visual item changes ReDo."
+msgstr "Betätigen zum Einfügen des Elements."
 
 msgid "Visual item cut"
 msgstr "Element ausschneiden"
@@ -804,8 +836,8 @@ msgid ""
 "All changes will be lost and variables are returning to default values or "
 "will be inherited!"
 msgstr ""
-"Wollen Sie wirklich alle Änderungendes Elements: '%1' zurücksetzen?\nAlle "
-"Änderungen gehen verloren und die Variablen erhalten Standardwerte oder "
+"Wollen Sie wirklich alle Änderungendes Elements: '%1' zurücksetzen?\n"
+"Alle Änderungen gehen verloren und die Variablen erhalten Standardwerte oder "
 "vererbte Werte!"
 
 msgid "Visual items' changes clear"
@@ -1171,6 +1203,16 @@ msgstr "Ausgewählt sind die Elemente --- xy(%2:%3) wh[%4:%5]"
 
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Seite: '%1' --- xy(%2:%3) wh[%4:%5]"
+
+msgid "geometry"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "attribute '%s'"
+msgstr "Attribute"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Widget ist nicht eingeschaltet oder Widgetform wird nicht unterstützt!"
