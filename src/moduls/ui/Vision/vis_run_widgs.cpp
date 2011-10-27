@@ -96,64 +96,65 @@ WdgView *RunWdgView::newWdgItem( const string &iwid )
     return new RunWdgView(iwid,wLevel()+1,mainWin(),this);
 }
 
-void RunWdgView::update( bool full, XMLNode *aBr )
+void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
 {
     bool reqBrCr = false;
-    if( !aBr )
+    if(!aBr)
     {
 	aBr = new XMLNode("get");
-	aBr->setAttr("path",id()+"/%2fserv%2fattrBr")->setAttr("tm",TSYS::uint2str(full?0:mainWin()->reqTm()));
+	aBr->setAttr("path",id()+"/%2fserv%2fattrBr")->
+	    setAttr("tm",TSYS::uint2str(full?0:mainWin()->reqTm()))->setAttr("FullTree",FullTree?"1":"0");
 	cntrIfCmd(*aBr);
 	reqBrCr = true;
     }
 
-    if( full )	setAllAttrLoad(true);
+    if(full)	setAllAttrLoad(true);
     for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
 	if(aBr->childGet(i_el)->name() == "el")
 	    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
-    if( full )
+    if(full)
     {
 	setAllAttrLoad(false);
-
 	attrSet("","load",-1);
+    }
 
-	//> Delete child widgets
+    //> Delete child widgets check
+    if(full || FullTree)
 	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++)
 	{
-	    if( !qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c)) ) continue;
-	    for( i_l = 0; i_l < (int)aBr->childSize(); i_l++ )
-		if( aBr->childGet(i_l)->name() == "w" &&
-			((WdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+	    if(!qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c))) continue;
+	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
+		if(aBr->childGet(i_l)->name() == "w" &&
+			((WdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		    break;
-	    if( i_l >= (int)aBr->childSize() ) children().at(i_c)->deleteLater();
+	    if(i_l >= (int)aBr->childSize()) children().at(i_c)->deleteLater();
 	}
-    }
 
     //> Create new child widget
     for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++)
     {
-	if( aBr->childGet(i_l)->name() != "w" ) continue;
+	if(aBr->childGet(i_l)->name() != "w") continue;
 
-	for( i_c = 0; i_c < children().size(); i_c++ )
-	    if( qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
-		    ((RunWdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+	for(i_c = 0; i_c < children().size(); i_c++)
+	    if(qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
+		    ((RunWdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 	    {
-		((RunWdgView*)children().at(i_c))->update(full,aBr->childGet(i_l));
+		((RunWdgView*)children().at(i_c))->update(full,aBr->childGet(i_l),FullTree);
 		break;
 	    }
-	if( i_c < children().size() ) continue;
+	if(i_c < children().size()) continue;
 	WdgView *nwdg = newWdgItem(id()+"/wdg_"+aBr->childGet(i_l)->attr("id"));
 	nwdg->show();
 	nwdg->load("");
     }
 
-    if( full )
+    if(full)
     {
 	orderUpdate();
 	QWidget::update();
     }
 
-    if( reqBrCr ) delete aBr;
+    if(reqBrCr) delete aBr;
 }
 
 void RunWdgView::shapeList( const string &snm, vector<string> &ls )

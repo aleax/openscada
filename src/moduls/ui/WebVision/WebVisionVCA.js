@@ -372,8 +372,11 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
   if(this == masterPage)
   {
     var opPg = this.findOpenPage(pgId);
-    if(opPg && updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
-    if(opPg) return true;
+    if(opPg)
+    {
+      if(updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
+      return true;
+    }
   }
   //> Create or replace main page
   if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
@@ -534,7 +537,7 @@ function findOpenPage( pgId )
   return null;
 }
 
-function makeEl( pgBr, inclPg )
+function makeEl( pgBr, inclPg, FullTree )
 {
   var margBrdUpd = false; var newAttr = false;
   this.place.wdgLnk = this;
@@ -551,7 +554,7 @@ function makeEl( pgBr, inclPg )
   {
   var elMargin = parseInt(this.attrs['geomMargin']);
   var elBorder = 0;
-  if( this.attrs['bordWidth'] ) elBorder=parseInt(this.attrs['bordWidth']);
+  if(this.attrs['bordWidth']) elBorder = parseInt(this.attrs['bordWidth']);
   var elStyle = '';
   this.isVisible = true;
   if(!(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEC_RD)))
@@ -1630,18 +1633,24 @@ function makeEl( pgBr, inclPg )
       return true;
     }
 
+  //> Delete child widgets check
+  if(FullTree)
+  {
+    //????
+  }
+
   //> Child widgets process
   if( pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD )
     for( var j = 0; j < pgBr.childNodes.length; j++ )
     {
       if( pgBr.childNodes[j].nodeName != 'w' ) continue;
       var chEl = pgBr.childNodes[j].getAttribute('id');
-      if( this.wdgs[chEl] ) this.wdgs[chEl].makeEl(pgBr.childNodes[j]);
+      if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, FullTree);
       else
       {
 	var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
 	wdgO.place = this.place.ownerDocument.createElement('div');
-	wdgO.makeEl(pgBr.childNodes[j]);
+	wdgO.makeEl(pgBr.childNodes[j]);		//!!!! Need full
 	this.place.appendChild(wdgO.place);
 	this.wdgs[chEl] = wdgO;
       }

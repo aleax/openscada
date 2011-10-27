@@ -60,7 +60,7 @@ namespace VISION
 
 	    WdgView *newWdgItem( const string &iwid );
 	    void attrLoad( QMap<QString, QString> &attrs );
-	    void update( bool full, XMLNode *aBr = NULL );
+	    void update( bool full, XMLNode *aBr = NULL, bool FullTree = false );
 	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
 	    void shapeList( const string &snm, vector<string> &ls );

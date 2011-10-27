@@ -1,3 +1,8 @@
+2011-10-27 Roman
+- !!:UI.VCAEngine, UI.Vision, UI.WebVision: Periodic check opened pages by request full widgets tree is added for
+    check and remove removed in run widgets. To UI.WebVision only start that realization.
+
+
 2011-10-25 Roman
 - FIX:DAQ.Siemens: Multi-blocks fragments register is fixed, write blocks.
 

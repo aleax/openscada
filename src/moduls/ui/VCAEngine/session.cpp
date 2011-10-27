@@ -1816,6 +1816,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))//Get attributes all updated elements' of the branch
     {
 	unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
+	bool     fullTree = atoi(opt->attr("FullTree").c_str());
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
 
 	//>> Self attributes put
@@ -1849,11 +1850,13 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    {
 		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
 		XMLNode *wn = new XMLNode("get");
-		wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->setAttr("tm",opt->attr("tm"));
+		wn->setAttr("path",a_path)->setAttr("user",opt->attr("user"))->
+		    setAttr("tm",opt->attr("tm"))->setAttr("FullTree",opt->attr("FullTree"));
 		iwdg.at().cntrCmdServ(wn);
-		if(wn->childSize())
+		if(wn->childSize() || fullTree)
 		{
-		    wn->setName("w")->attrDel("path")->attrDel("user")->attrDel("rez")->attrDel("tm")->setAttr("id",lst[i_f]);
+		    wn->setName("w")->attrDel("path")->attrDel("user")->
+			attrDel("rez")->attrDel("tm")->attrDel("FullTree")->setAttr("id",lst[i_f]);
 		    opt->childAdd(wn);
 		}
 		else delete wn;

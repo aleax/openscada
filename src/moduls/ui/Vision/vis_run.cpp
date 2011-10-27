@@ -1167,11 +1167,15 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     string stmp;
 
     //> Scan and update opened page
-    if( master_pg )
+    if(master_pg)
     {
 	RunPageView *pg = master_pg->findOpenPage(pg_it);
-	if( pg && updWdg ) pg->update(false);
-	if( pg ) return;
+	if(pg)
+	{
+	    if(!(wPrcCnt%(5000/vmin(5000,period()))))	pg->update(false, NULL, true);
+	    else if(updWdg) pg->update(false);
+	    return;
+	}
     }
 
     // Get group and parent page
@@ -1425,8 +1429,8 @@ void VisRun::updatePage( )
 
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
-    //> Alarms update (one seconds update)
-    if(wPrcCnt%(500/vmin(500,period())) == 0)
+    //> Alarms update (0.5 second update)
+    if((wPrcCnt%(500/vmin(500,period()))) == 0)
     {
 	//>> Get alarm status
 	unsigned wAlrmSt = alarmSt( );
