@@ -1457,7 +1457,8 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     write(hd,val_b.data(),val_b.size());
 
     //> Check for write to end correct
-    if(fixVl && iend > owner().end() && iend < end() && (mSize-foff_end) != vSize)
+    if(fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
+				((mSize-foff_end) == 0 && val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
 	mess_err(mod->nodePath().c_str(), _("Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);
 
     //> Drop cache

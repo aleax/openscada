@@ -447,18 +447,18 @@ void Widget::inheritAttr( const string &iattr )
 void Widget::inheritIncl( const string &iwdg )
 {
     AutoHD<Widget> parw = parent();
-    while( !parw.freeStat() && parw.at().isLink() )
+    while(!parw.freeStat() && parw.at().isLink())
 	parw = parw.at().parent();
-    if( parw.freeStat() ) return;
+    if(parw.freeStat()) return;
 
     //> Create no present include widgets for no link and container widgets
     vector<string>  ls;
-    if( !iwdg.empty() && parw.at().wdgPresent(iwdg) )
+    if(!iwdg.empty() && parw.at().wdgPresent(iwdg))
 	ls.push_back(iwdg);
     else parw.at().wdgList(ls);
     for(unsigned i_w = 0; i_w < ls.size(); i_w++)
 	if(!wdgPresent(ls[i_w]))
-	    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path()); }
+	    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true); }
 	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 }
 

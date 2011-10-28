@@ -3017,13 +3017,13 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::MouseButtonPress:
 	    {
-		if( edit() )    break;
+		if(edit()) break;
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
 		//> New widget inserting
 		QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
-		if( act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
+		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton)
 		{
 		    mainWin()->visualItAdd(act,QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
 		    setCursor(Qt::ArrowCursor);
@@ -3032,11 +3032,11 @@ bool DevelWdgView::event( QEvent *event )
 		}
 
 		//> Select widget
-		if( (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton )
+		if((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton)
 		{
 		    dragStartPos = ((QMouseEvent*)event)->pos();
 		    bool sh_hold = QApplication::keyboardModifiers()&Qt::ShiftModifier;
-		    if( cursor().shape() == Qt::ArrowCursor || sh_hold )
+		    if(cursor().shape() == Qt::ArrowCursor || sh_hold)
 		    {
 			//>> Scan childs
 			bool sel_modif = false;

@@ -1248,6 +1248,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    tbl->resizeRowsToContents();
 		    int hgt = vmax(tbl->minimumHeight(),vmin(300,(20+20*tbl->rowCount())));
                     tbl->setMinimumHeight(hgt); //tbl->setMaximumHeight(hgt);
+
+		    //>>> Resize too long rows
+		    for(int i_r = 0; i_r < tbl->rowCount(); i_r++)
+			tbl->setRowHeight(i_r, vmin(tbl->height()/2,tbl->rowHeight(i_r)));
 		}
 		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 

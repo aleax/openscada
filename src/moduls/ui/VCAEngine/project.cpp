@@ -1145,20 +1145,20 @@ void Page::setEnable( bool val )
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
-    if( !isContainer() )  throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if( wdgPresent(wid) ) return;
+    if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(wdgPresent(wid)) return;
 
     //> Check for label <deleted>
-    if( !force )
+    if(!force)
     {
 	string db = ownerProj()->DB();
 	string tbl = ownerProj()->tbl()+"_incl";
-	TConfig c_el( &mod->elInclWdg() );
+	TConfig c_el(&mod->elInclWdg());
 	c_el.cfg("IDW").setS(path());
 	c_el.cfg("ID").setS(wid);
-	if( SYS->db().at().dataGet( db+"."+tbl, mod->nodePath()+tbl, c_el ) && c_el.cfg("PARENT").getS() == "<deleted>" )
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el) && c_el.cfg("PARENT").getS() == "<deleted>")
 	{
-	    if( !parent().at().wdgPresent(wid) )	SYS->db().at().dataDel( db+"."+tbl, mod->nodePath()+tbl, c_el, true );
+	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true);
 	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
     }

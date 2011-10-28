@@ -123,23 +123,28 @@ string TController::tbl( )	{ return owner().owner().subId()+"_"+owner().modId();
 
 string TController::getStatus( )
 {
-    string rez;
-    if( startStat() )
+    string rez, mess;
+    if(startStat())
     {
 	rez = string("0:")+_("Started. ");
-	if( owner().redntAllow( ) && redntUse( ) )
+	if(owner().redntAllow() && redntUse())
 	{
-	    rez += _("Geting data from remote station: ");
+	    mess = _("Geting data from remote station: ");
 	    string rSt = mRedntSt.getVal();
-	    if( !rSt.empty() )
+	    if(!rSt.empty())
 	    {
-		int rOff = 0;
-		rez.replace(0,1,TSYS::strSepParse(rSt,0,':',&rOff));
-		rez.append(rSt.substr(rOff));
+		if(rSt.find(mess) == string::npos)
+		{
+		    int rOff = 0;
+		    rez.replace(0,1,TSYS::strSepParse(rSt,0,':',&rOff));
+		    mess.append(rSt.substr(rOff));
+		}
+		else mess = _("Your redundance configuration wrong and controller often enable-disable redundancy!");
 	    }
+	    rez += mess;
 	}
     }
-    else if( enableStat() ) rez = string("1:")+_("Enabled. ");
+    else if(enableStat()) rez = string("1:")+_("Enabled. ");
     else rez = string("2:")+_("Disabled. ");
 
     return rez;
