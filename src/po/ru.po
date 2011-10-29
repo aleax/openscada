@@ -42,7 +42,7 @@ msgid "Start archive"
 msgstr "Начало архива"
 
 msgid "Messages categories"
-msgstr "Катигории сообщений"
+msgstr "Категории сообщений"
 
 msgid "Messages level"
 msgstr "Уровень сообщений"
