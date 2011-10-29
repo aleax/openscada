@@ -807,8 +807,17 @@ void ConfApp::userSel()
     initHosts();
 }
 
-void ConfApp::pageRefresh( )
+void ConfApp::pageRefresh( bool tm )
 {
+    if(tm)
+    {
+	if(!actStartUpd->isEnabled())	return;
+
+	autoUpdTimer->setSingleShot(true);
+	autoUpdTimer->start(CH_REFR_TM);
+	return;
+    }
+
     try { pageDisplay(sel_path); }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
@@ -2356,8 +2365,7 @@ void ConfApp::checkBoxStChange( int stat )
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //> Redraw
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);
+    pageRefresh(true);
 }
 
 void ConfApp::buttonClicked( )
@@ -2394,8 +2402,7 @@ void ConfApp::buttonClicked( )
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //> Redraw
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);
+    pageRefresh(true);
 }
 
 void ConfApp::combBoxActivate( const QString& ival )
@@ -2459,9 +2466,8 @@ void ConfApp::combBoxActivate( const QString& ival )
 	}
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    //- Redraw -
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);
+    //> Redraw
+    pageRefresh(true);
 }
 
 void ConfApp::listBoxPopup( )
@@ -2620,8 +2626,7 @@ void ConfApp::listBoxPopup( )
 		return;
 	    }
 
-	    autoUpdTimer->setSingleShot(true);
-	    autoUpdTimer->start(CH_REFR_TM);      //Redraw
+	    pageRefresh(true);	//Redraw
 
 	    if( n_el->attr("tp") == "br" && (rez == actAdd || rez == actIns || rez == actEd || rez == actDel) )
 		treeUpdate();
@@ -2631,9 +2636,7 @@ void ConfApp::listBoxPopup( )
     }catch(TError err)
     {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
-
-	autoUpdTimer->setSingleShot(true);
-	autoUpdTimer->start(CH_REFR_TM);	//Redraw
+	pageRefresh(true);	//Redraw
     }
 }
 
@@ -2769,8 +2772,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 	}
     }catch(TError err)	{ mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);	//Redraw
+    pageRefresh(true);	//Redraw
 }
 
 void ConfApp::imgPopup( const QPoint &pos )
@@ -2843,9 +2845,7 @@ void ConfApp::imgPopup( const QPoint &pos )
     }catch(TError err)
     {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
-
-	autoUpdTimer->setSingleShot(true);
-	autoUpdTimer->start(CH_REFR_TM);	//Redraw
+	pageRefresh(true);	//Redraw
     }
 }
 
@@ -2933,8 +2933,7 @@ void ConfApp::tableSet( int row, int col )
     }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);
+    pageRefresh(true);
 }
 
 void ConfApp::listBoxGo( QListWidgetItem* item )
@@ -3003,14 +3002,12 @@ void ConfApp::applyButton( )
 	if( cntrIfCmd(n_el) ) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    //- Redraw -
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);
+    //> Redraw
+    pageRefresh(true);
 }
 
 void ConfApp::cancelButton( )
 {
     //> Redraw
-    autoUpdTimer->setSingleShot(true);
-    autoUpdTimer->start(CH_REFR_TM);
+    pageRefresh(true);
 }

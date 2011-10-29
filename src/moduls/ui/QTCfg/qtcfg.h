@@ -85,7 +85,7 @@ class ConfApp: public QMainWindow
 	void itCut( );
 	void itCopy( );
 	void itPaste( );
-	void pageRefresh( );
+	void pageRefresh( bool tm = false );
 	void pageCyclRefrStart( );
 	void pageCyclRefrStop( );
 

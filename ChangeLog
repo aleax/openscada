@@ -1,3 +1,7 @@
+2011-10-29 Roman
+- FIX:UI.QTCfg: Autoupdate check is added on page refrash command, after any page's items change.
+
+
 2011-10-28 Roman
 - FIX:DAQ: Status of controller objects grow is prevented on incorrect redundance configuration, from self to self.
 - Archive.FSArch: Checking for value archive file write error is some expanded.
