@@ -2749,7 +2749,8 @@ void DevelWdgView::chRecord( XMLNode ch )
 		    chTree->childGet(0)->setAttr(alst[i_a], ch.attr(alst[i_a]));
 	    return;
 	}
-	else if(ch.name() == "attr" && chTree->childGet(0)->attr("id") == ch.attr("id")) { chTree->childGet(0)->setText(ch.text()); return; }
+	else if(ch.name() == "attr" && !atoi(ch.attr("noMerge").c_str()) && chTree->childGet(0)->attr("id") == ch.attr("id"))
+	{ chTree->childGet(0)->setText(ch.text()); return; }
     }
     *(chTree->childIns(0)) = ch;
     while(chTree->childSize() > 100) chTree->childDel(chTree->childSize()-1);
@@ -2778,6 +2779,8 @@ void DevelWdgView::chUnDo( )
 	}
 	else if(rule->name() == "attr")
 	    rlW->attrSet(rule->attr("id"), rule->attr("prev"));
+	else if(rule->name() == "chldAdd")
+	    mainWin()->visualItDel(rule->attr("path"));
     }
 
     //> For top items (like inspector) data update
@@ -2811,6 +2814,12 @@ void DevelWdgView::chReDo( )
 	}
 	else if(rule->name() == "attr")
 	    rlW->attrSet(rule->attr("id"), rule->text());
+	else if(rule->name() == "chldAdd")
+	{
+	    QAction addAct(NULL);
+	    addAct.setObjectName(rule->attr("parent").c_str());
+            mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())), rule->attr("id"), rule->attr("name"), rlW->id());
+        }
     }
 
     //> For top items (like inspector) data update
@@ -2828,33 +2837,26 @@ void DevelWdgView::chUpdate( )
     if(!chTree)	return;
     if(fFocus)
     {
-	string ells;
+	string ells, ellsUn, ellsRe, wdg;
 	XMLNode *rule;
 	int cur = atoi(chTree->attr("cur").c_str());
 
-	//>> UnDo prepare
 	mainWin()->actVisItUnDo->setEnabled(atoi(chTree->attr("cur").c_str()) < chTree->childSize());
-	for(unsigned i_r = cur; i_r < chTree->childSize(); i_r++)
-	{
-	    rule = chTree->childGet(i_r);
-	    ells += "\n"+rule->attr("wdg")+": ";
-	    if(rule->name() == "geom") ells += _("geometry");
-	    else if(rule->name() == "attr") ells += TSYS::strMess(_("attribute '%s'"),rule->attr("id").c_str());
-	    else ells += _("unknown");
-	}
-	mainWin()->actVisItUnDo->setToolTip(mainWin()->actVisItUnDo->toolTip().split("\n")[0]+ells.c_str());
-	//>> ReDo prepare
 	mainWin()->actVisItReDo->setEnabled(chTree->childSize() && atoi(chTree->attr("cur").c_str()));
-	ells = "";
-	for(int i_r = vmin(cur,chTree->childSize())-1; i_r >= 0; i_r--)
+
+	for(unsigned i_r = 0; i_r < chTree->childSize(); i_r++)
 	{
 	    rule = chTree->childGet(i_r);
-	    ells += "\n"+rule->attr("wdg")+": ";
+	    wdg = rule->attr("wdg");
+	    ells = "\n"+(wdg.empty()?id():wdg)+": ";
 	    if(rule->name() == "geom") ells += _("geometry");
 	    else if(rule->name() == "attr") ells += TSYS::strMess(_("attribute '%s'"),rule->attr("id").c_str());
+	    else if(rule->name() == "chldAdd") ells += TSYS::strMess(_("new widget '%s' from '%s'"),rule->attr("id").c_str(),rule->attr("parent").c_str());
 	    else ells += _("unknown");
+	    if(i_r >= cur) ellsUn += ells; else ellsRe = ells+ellsRe;
 	}
-	mainWin()->actVisItReDo->setToolTip(mainWin()->actVisItReDo->toolTip().split("\n")[0]+ells.c_str());
+	mainWin()->actVisItUnDo->setToolTip(mainWin()->actVisItUnDo->toolTip().split("\n")[0]+ellsUn.c_str());
+	mainWin()->actVisItReDo->setToolTip(mainWin()->actVisItReDo->toolTip().split("\n")[0]+ellsRe.c_str());
     }
     else
     {

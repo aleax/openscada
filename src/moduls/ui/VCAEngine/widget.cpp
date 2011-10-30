@@ -165,10 +165,10 @@ void Widget::postEnable( int flag )
 void Widget::preDisable( int flag )
 {
     //> Delete heritors widgets
-    while( herit().size() )	mod->nodeDel( herit()[0].at().path(), 0, 0x10, true );
+    while(herit().size()) mod->nodeDel(herit()[0].at().path(), 0, 0x10);
 
     //> Disable widget
-    if( enable() )  setEnable(false);
+    if(enable()) setEnable(false);
 }
 
 string Widget::rootId( )
@@ -643,11 +643,6 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path, 
     for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
 	if(m_herit[i_h].at().enable())
 	    m_herit[i_h].at().inheritIncl(wid);
-}
-
-void Widget::wdgDel( const string &wid, bool full )
-{
-    if( wdgPresent(wid) )	chldDel( inclWdg, wid, -1, full, true );
 }
 
 AutoHD<Widget> Widget::wdgAt( const string &wdg )

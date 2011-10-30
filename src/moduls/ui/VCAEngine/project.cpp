@@ -1331,7 +1331,7 @@ void Page::cntrCmdProc( XMLNode *opt )
 //* PageWdg: Container stored widget             *
 //************************************************
 PageWdg::PageWdg( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()), delMark(false),
+        Widget(iid), TConfig(&mod->elInclWdg()),
         mParent(cfg("PARENT").getSd()), mAttrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
@@ -1370,11 +1370,31 @@ void PageWdg::postEnable( int flag )
     cfg("IDW").setS(ownerPage().path());
 }
 
-void PageWdg::preDisable( int flag )
+void PageWdg::postDisable( int flag )
 {
-    if( flag )  delMark = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
+    if(flag)
+    {
+	string db  = ownerPage().ownerProj()->DB();
+	string tbl = ownerPage().ownerProj()->tbl();
 
-    Widget::preDisable(flag);
+	//>> Remove from library table
+	if(!((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink())
+	{
+	    mParent = "<deleted>";
+	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
+	}
+	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+
+	//>> Remove widget's work and users IO from library IO table
+	string tAttrs = mAttrs;
+
+        TConfig c_el(&mod->elWdgIO());
+	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
+	c_el.setElem(&mod->elWdgUIO());
+	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
+    }
 }
 
 string PageWdg::path( )
@@ -1481,39 +1501,14 @@ void PageWdg::save_( )
     string db  = ownerPage().ownerProj()->DB();
     string tbl = ownerPage().ownerProj()->tbl();
 
-    //> Delete from DB
-    if(nodeMode() == TCntrNode::Disable)
-    {
-	//>> Remove from library table
-	if(delMark)
-	{
-	    mParent = "<deleted>";
-	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
-	}
-	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+    //>> Save generic attributes
+    mAttrs = mod->attrsSave( *this, db+"."+tbl, ownerPage().path(), id(), true );
 
-	//>> Remove widget's work and users IO from library IO table
-	string tAttrs = mAttrs;
+    //>> Save generic widget's data
+    SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
 
-        TConfig c_el(&mod->elWdgIO());
-	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
-	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
-    }
-    //> Save widget's data
-    else
-    {
-	//>> Save generic attributes
-	mAttrs = mod->attrsSave( *this, db+"."+tbl, ownerPage().path(), id(), true );
-
-	//>> Save generic widget's data
-	SYS->db().at().dataSet( db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this );
-
-	//>> Save widget's attributes
-	saveIO();
-    }
+    //>> Save widget's attributes
+    saveIO();
 }
 
 void PageWdg::saveIO( )

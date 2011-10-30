@@ -1346,6 +1346,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
                     (*images)[inundationItems[i].brush_img].c_str())+"\n";
         else if( inundationItems[i].brush_img > 0  ) elList = elList + "i" +  TSYS::int2str(inundationItems[i].brush_img)+"\n";
     }
+    if(devW && elList != elFD->elLst)
+	devW->chRecord(*XMLNode("attr").setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList));
     w->attrSet( "elLst", elList );
     elFD->elLst = elList;
 

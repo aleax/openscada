@@ -97,7 +97,7 @@ class VisDevelop : public QMainWindow
 	void prjRun( );		//Run project execution
 	void prjNew( );		//New project create
 	void libNew( );		//New widgets library creating
-	void visualItAdd( QAction*, const QPointF &pnt = QPointF(), const string &wid = "", const string &wnm = "" );//Add visual item (widget or page)
+	void visualItAdd( QAction*, const QPointF &pnt = QPointF(), const string &wid = "", const string &wnm = "", const string &own = "" );//Add visual item (widget or page)
 	void visualItDel( const string &itms = "" );	//Delete selected visual items
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
 	void visualItEdit( );	//Visual item graphical edit
@@ -190,7 +190,7 @@ class VisDevelop : public QMainWindow
 
     private:
 	//Private attributes
-	//- Main components -
+	//> Main components
 	bool		winClose;
 	UserStBar	*mWUser;	//User status widget
 	QLabel		*mWStat;	//VCA engine station
@@ -202,7 +202,7 @@ class VisDevelop : public QMainWindow
 			copy_buf;	//Copy buffer
 	QSignalMapper	*wMapper;	//Internal window mapper
 
-	//- Main dialogs -
+	//> Main dialogs
 	LibProjProp	*prjLibPropDlg;	//Widget's library and project properties dialog
 	VisItProp	*visItPropDlg;	//Visual item properties properties dialog
 };

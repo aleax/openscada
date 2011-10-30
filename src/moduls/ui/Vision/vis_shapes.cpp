@@ -1426,7 +1426,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	default:
 	    //> Individual trend's attributes process
-	    if( uiPrmPos >= 50 && uiPrmPos < 150 )
+	    if(uiPrmPos >= 50 && uiPrmPos < 150)
 	    {
 		int trndN = (uiPrmPos/10)-5;
 		if(trndN >= (int)shD->prms.size()) break;
@@ -1438,18 +1438,19 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    case 2: shD->prms[trndN].setBordU(atof(val.c_str()));	break;		//bordU
 		    case 3: shD->prms[trndN].setColor(getColor(val));		break;		//color
 		    case 4:									//value
-			shD->prms[trndN].setCurVal( (val==EVAL_STR) ? EVAL_REAL : atof(val.c_str()) );
+			shD->prms[trndN].setCurVal((val==EVAL_STR) ? EVAL_REAL : atof(val.c_str()));
 			make_pct = false;
 			break;
+		    case 6: shD->prms[trndN].setWidth(atoi(val.c_str()));	break;		//width
 		}
 	    }
     }
 
-    if( !w->allAttrLoad( ) )
+    if(!w->allAttrLoad())
     {
-	if( reld_tr_dt )	{ loadData(w,reld_tr_dt==2); make_pct = true; }
-	if( make_pct )		{ makePicture(w); up = true; }
-	if( up && uiPrmPos != -1 )	w->update();
+	if(reld_tr_dt)	{ loadData(w,reld_tr_dt==2); make_pct = true; }
+	if(make_pct)	{ makePicture(w); up = true; }
+	if(up && uiPrmPos != -1) w->update();
     }
 
     return (reld_tr_dt|make_pct|up);
@@ -1502,7 +1503,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth( (int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))) );
+	grdPen.setWidth((int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))));
 	//>> Set markers font and color
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
@@ -1663,12 +1664,12 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     for(unsigned i_t = 0; i_t < shD->prms.size(); i_t++)
     {
 	TrendObj *sTr = &shD->prms[i_t];
-	if( !sTr->fftN || !sTr->color().isValid() ) continue;
+	if(!sTr->fftN || !sTr->color().isValid()) continue;
 
 	//>>> Set trend's pen
 	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(1);
+	trpen.setWidth(vmax(1,vmin(10,sTr->width()*vmin(w->xScale(true),w->yScale(true)))));
 	pnt.setPen(trpen);
 
 	double vlOff = sTr->fftOut[0][0]/sTr->fftN;
@@ -1769,7 +1770,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth( (int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))) );
+	grdPen.setWidth((int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))));
 	//>> Set markers font and color
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
@@ -2025,7 +2026,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>>> Set trend's pen
 	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(1);
+	trpen.setWidth(vmax(1,vmin(10,sTr->width()*vmin(w->xScale(true),w->yScale(true)))));
 	pnt.setPen(trpen);
 
 	//>>> Prepare generic parameters
@@ -2317,7 +2318,7 @@ ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) :
 #if HAVE_FFTW3_H
     fftN(0), fftOut(NULL),
 #endif
-    m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL),
+    mBordLow(0), mBordUp(0), mCurvl(EVAL_REAL), mWidth(1),
     arh_per(0), arh_beg(0), arh_end(0), val_tp(0), view(iview)
 {
     loadData();
@@ -2352,9 +2353,9 @@ int ShapeDiagram::TrendObj::val( int64_t tm )
 
 void ShapeDiagram::TrendObj::setAddr( const string &vl )
 {
-    if( vl == m_addr ) return;
-    m_addr = vl;
-    loadData( true );
+    if(vl == mAddr) return;
+    mAddr = vl;
+    loadData(true);
 }
 
 void ShapeDiagram::TrendObj::loadData( bool full )

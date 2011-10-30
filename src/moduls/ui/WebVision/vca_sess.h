@@ -319,11 +319,12 @@ class VCADiagram : public VCAObj
 		TrendObj( VCADiagram *owner );
 		~TrendObj( );
 
-		string	addr( )		{ return m_addr; }
-		double	bordL( )	{ return m_bord_low; }
-		double	bordU( )	{ return m_bord_up; }
-		int	color( )	{ return m_color; }
-		double	curVal( )	{ return m_curvl; }
+		string	addr( )		{ return mAddr; }
+		double	bordL( )	{ return mBordLow; }
+		double	bordU( )	{ return mBordUp; }
+		int	color( )	{ return mColor; }
+		char	width( )	{ return mWidth; }
+		double	curVal( )	{ return mCurvl; }
 		int	valTp( )	{ return val_tp; }
 		int64_t	valBeg( );
 		int64_t	valEnd( );
@@ -331,10 +332,11 @@ class VCADiagram : public VCAObj
 		deque<SHg> &val( )	{ return vals; }
 
 		void setAddr( const string &vl );
-		void setBordL( double vl )	{ m_bord_low = vl; }
-		void setBordU( double vl )	{ m_bord_up  = vl; }
-		void setColor( int vl )		{ m_color = vl; }
-		void setCurVal( double vl )	{ m_curvl = vl; }
+		void setBordL( double vl )	{ mBordLow = vl; }
+		void setBordU( double vl )	{ mBordUp  = vl; }
+		void setColor( int vl )		{ mColor = vl; }
+		void setWidth( char vl )	{ mWidth = vl; }
+		void setCurVal( double vl )	{ mCurvl = vl; }
 
 		void loadData( const string &user, bool full = false );
 		void loadTrendsData( const string &user, bool full );
@@ -351,15 +353,16 @@ class VCADiagram : public VCAObj
 
 	    private:
 		//Attributes
-		string		m_addr;		//A parameter or an archive item address
-		double m_bord_low, m_bord_up;	//Borders
-		double		m_curvl;	//Curent value
-		int		m_color;	//Values line color
-		//- Archive -
+		string		mAddr;		//A parameter or an archive item address
+		double mBordLow, mBordUp;	//Borders
+		double		mCurvl;		//Curent value
+		int		mColor;		//Values line color
+		char		mWidth;		//Line width
+		//> Archive
 		int		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time
 		int64_t		arh_end;	//Archive end time
-		//- Values -
+		//> Values
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
 

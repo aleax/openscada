@@ -5334,8 +5334,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     strex.vdpi = 72;
     strex.hdpi = 72;
 
-    if( sclHor&0x3 || sclVer&0x3 )
+    if(sclHor&0x3 || sclVer&0x3)
     {
+	gdImageSetThickness(im,vmax(1,vmin(xSc,ySc)));
 	//>> Set grid color
 	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
@@ -5584,6 +5585,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     for(unsigned i_t = 0; i_t < trnds.size(); i_t++)
     {
 	//>> Set trend's pen
+	gdImageSetThickness(im,vmax(1,vmin(10,trnds[i_t].width()*vmin(xSc,ySc))));
 	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
 	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 
@@ -5736,6 +5738,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     //> Process scale
     if( sclHor&0x3 || sclVer&0x3 )
     {
+	gdImageSetThickness(im,vmax(1,vmin(xSc,ySc)));
 	//>> Set grid color
 	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
@@ -5894,6 +5897,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	if( !trnds[i_t].fftN || (trnds[i_t].color()>>31)&0x01 ) continue;
 
+	//>> Set trend's pen
+	gdImageSetThickness(im,vmax(1,vmin(10,trnds[i_t].width()*vmin(xSc,ySc))));
 	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
 	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;
@@ -6116,8 +6121,9 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 			case 2: trnds[trndN].setBordU(atof(req_el->text().c_str()));	break;	//bordU
 			case 3: trnds[trndN].setColor(mod->colorParse(req_el->text()));	break;	//color
 			case 4:									//value
-			    trnds[trndN].setCurVal( (req_el->text()==EVAL_STR) ? EVAL_REAL : atof(req_el->text().c_str()) );
+			    trnds[trndN].setCurVal((req_el->text()==EVAL_STR) ? EVAL_REAL : atof(req_el->text().c_str()));
 			    break;
+			case 6:	trnds[trndN].setWidth(atoi(req_el->text().c_str()));	break;	//width
 		    }
 		}
 	}
@@ -6191,7 +6197,8 @@ VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) :
 #if HAVE_FFTW3_H
     fftN(0), fftOut(NULL),
 #endif
-    m_bord_low(0), m_bord_up(0), m_curvl(EVAL_REAL), arh_per(0), arh_beg(0), arh_end(0), val_tp(0), m_owner(iowner)
+    mBordLow(0), mBordUp(0), mCurvl(EVAL_REAL), mWidth(1),
+    arh_per(0), arh_beg(0), arh_end(0), val_tp(0), m_owner(iowner)
 {
     loadData("root");
 }
@@ -6230,9 +6237,9 @@ int VCADiagram::TrendObj::val( int64_t tm )
 
 void VCADiagram::TrendObj::setAddr( const string &vl )
 {
-    if( vl == m_addr ) return;
-    m_addr = vl;
-    loadData( "root", true );
+    if(vl == mAddr) return;
+    mAddr = vl;
+    loadData("root", true);
 }
 
 void VCADiagram::TrendObj::loadData( const string &user, bool full )

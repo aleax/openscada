@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-24 08:16+0300\n"
+"POT-Creation-Date: 2011-10-29 18:34+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -639,6 +639,9 @@ msgstr ":границя відображення:автомасштаб"
 msgid ":color"
 msgstr ":колір"
 
+msgid ":width"
+msgstr ":ширина"
+
 msgid "Value archivator in form \"[ArchMod].[ArchivatorId]\"."
 msgstr "Архіватор значень у формі \"[МодульАрхівів].[IdАрхіватору]\"."
 
@@ -985,12 +988,15 @@ msgstr "Віджет посилання: "
 msgid "Enable session."
 msgstr "Включення сеансу."
 
+#, c-format
 msgid "Load previous style time: %f ms."
 msgstr "Час завантаження попереднього стилю: %f мс."
 
+#, c-format
 msgid "Create root pages time: %f ms."
 msgstr "Час створення кореневих сторінок: %f мс."
 
+#, c-format
 msgid "Enable root pages time: %f ms."
 msgstr "Час включення кореневих сторінок: %f мс."
 
@@ -1000,6 +1006,7 @@ msgstr "Вимкнення сеансу."
 msgid "Start session."
 msgstr "Виконання сеансу."
 
+#, c-format
 msgid "Load styles from project time: %f ms."
 msgstr "Час завантаження стилів з проекту: %f мс."
 
@@ -1007,6 +1014,7 @@ msgstr "Час завантаження стилів з проекту: %f мс.
 msgid "Process on for all root pages time: %f ms."
 msgstr "Час включення у обробку всіх кореневих сторінок: %f мс."
 
+#, c-format
 msgid "Start process task time: %f ms."
 msgstr "Час запуску задачі обробки: %f мс."
 

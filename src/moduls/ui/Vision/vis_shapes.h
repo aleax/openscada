@@ -305,11 +305,12 @@ class ShapeDiagram : public WdgShape
 		TrendObj( WdgView *view );
 		~TrendObj( );
 
-		string	addr( )		{ return m_addr; }
-		double	bordL( )	{ return m_bord_low; }
-		double	bordU( )	{ return m_bord_up; }
-		QColor	color( )	{ return m_color; }
-		double	curVal( )	{ return m_curvl; }
+		string	addr( )		{ return mAddr; }
+		double	bordL( )	{ return mBordLow; }
+		double	bordU( )	{ return mBordUp; }
+		QColor	color( )	{ return mColor; }
+		int	width( )	{ return mWidth; }
+		double	curVal( )	{ return mCurvl; }
 		int	valTp( )	{ return val_tp; }
 		int64_t	valBeg( );
 		int64_t	valEnd( );
@@ -317,10 +318,11 @@ class ShapeDiagram : public WdgShape
 		deque<SHg> &val( )	{ return vals; }
 
 		void setAddr( const string &vl );
-		void setBordL( double vl )	{ m_bord_low = vl; }
-		void setBordU( double vl )	{ m_bord_up  = vl; }
-		void setColor( const QColor &vl ){ m_color = vl; }
-		void setCurVal( double vl )	{ m_curvl = vl; }
+		void setBordL( double vl )	{ mBordLow = vl; }
+		void setBordU( double vl )	{ mBordUp  = vl; }
+		void setColor( const QColor &vl ){ mColor = vl; }
+		void setWidth( char vl )	{ mWidth = vl; }
+		void setCurVal( double vl )	{ mCurvl = vl; }
 
 		void loadData( bool full = false );
 		void loadTrendsData( bool full = false );
@@ -335,10 +337,11 @@ class ShapeDiagram : public WdgShape
 
 	    private:
 		//Attributes
-		string		m_addr;		//A parameter or an archive item address
-		double m_bord_low, m_bord_up;	//Borders
-		double		m_curvl;	//Curent value
-		QColor		m_color;	//Values line color
+		string		mAddr;		//A parameter or an archive item address
+		double mBordLow, mBordUp;	//Borders
+		double		mCurvl;		//Curent value
+		QColor		mColor;		//Values line color
+		char		mWidth;		//Line width in pixels
 		//> Archive
 		int		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time

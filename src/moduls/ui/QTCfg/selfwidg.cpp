@@ -197,35 +197,41 @@ void LineEdit::changed( )
 
 void LineEdit::setValue(const QString &txt)
 {
-    if( ed_fld ) ed_fld->blockSignals(true);
+    if(ed_fld) ed_fld->blockSignals(true);
     switch(type())
     {
 	case Text:
+	    if(txt == ((QLineEdit*)ed_fld)->text()) break;
 	    ((QLineEdit*)ed_fld)->setText(txt);
 	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
 	    break;
 	case Integer:
+	    if(txt.toInt() == ((QSpinBox*)ed_fld)->value()) break;
 	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
 	    break;
 	case Real:
+	    if(txt.toDouble() == ((QDoubleSpinBox*)ed_fld)->value()) break;
 	    ((QDoubleSpinBox*)ed_fld)->setValue(txt.toDouble());
 	    break;
 	case Time:
+	    if(QTime().addSecs(txt.toInt()) == ((QTimeEdit*)ed_fld)->time()) break;
 	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
 	    break;
 	case Date: case DateTime:
+	    if(QDateTime::fromTime_t(txt.toInt()) == ((QDateTimeEdit*)ed_fld)->dateTime()) break;
 	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
-	    if( ((QComboBox*)ed_fld)->findText(txt) < 0 ) ((QComboBox*)ed_fld)->addItem(txt);
+	    if(txt == ((QComboBox*)ed_fld)->currentText()) break;
+	    if(((QComboBox*)ed_fld)->findText(txt) < 0) ((QComboBox*)ed_fld)->addItem(txt);
 	    ((QComboBox*)ed_fld)->setEditText(txt);
 	    break;
     }
-    if( ed_fld ) ed_fld->blockSignals(false);
+    if(ed_fld) ed_fld->blockSignals(false);
 
     m_val = txt;
 
-    if( bt_fld ) viewApplyBt(false);
+    if(bt_fld) viewApplyBt(false);
 }
 
 void LineEdit::setCfg(const QString &cfg)
@@ -506,10 +512,10 @@ bool TextEdit::hasFocus( ) const
 
 void TextEdit::setText(const QString &text)
 {
-    isInit=true;
-    ed_fld->setPlainText(text);
+    isInit = true;
+    if(text != ed_fld->toPlainText()) ed_fld->setPlainText(text);
     ed_fld->document()->setModified(false);
-    isInit=false;
+    isInit = false;
     changed();
 }
 

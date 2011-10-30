@@ -91,7 +91,7 @@ void WidgetLib::postEnable( int flag )
 
 void WidgetLib::preDisable( int flag )
 {
-    if( enable() )  setEnable(false);
+    if(enable()) setEnable(false);
 }
 
 void WidgetLib::postDisable( int flag )
@@ -749,7 +749,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //* CWidget: Container stored widget             *
 //************************************************
 CWidget::CWidget( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()), delMark(false),
+        Widget(iid), TConfig(&mod->elInclWdg()),
         mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
 {
     cfg("ID").setS(id());
@@ -780,16 +780,36 @@ void CWidget::postEnable( int flag )
     cfg("IDW").setS(ownerLWdg().id());
 }
 
-void CWidget::preDisable( int flag )
+void CWidget::postDisable( int flag )
 {
-    if( flag )	delMark = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
+    if(flag)
+    {
+	string db  = ownerLWdg().ownerLib().DB();
+	string tbl = ownerLWdg().ownerLib().tbl();
 
-    Widget::preDisable( flag );
+	//>> Remove from library table
+	if(!((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink())
+	{
+	    mParent = "<deleted>";
+	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
+	}
+	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+
+	//>> Remove widget's work and users IO from library IO table
+	string tAttrs = m_attrs;
+
+	TConfig c_el( &mod->elWdgIO() );
+	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
+	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
+	c_el.setElem(&mod->elWdgUIO());
+	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
+	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
+    }
 }
 
 string CWidget::ico( )
 {
-    if( !parent().freeStat() )  return parent().at().ico();
+    if(!parent().freeStat()) return parent().at().ico();
     return "";
 }
 
@@ -882,46 +902,21 @@ void CWidget::save_( )
     string db  = ownerLWdg().ownerLib().DB();
     string tbl = ownerLWdg().ownerLib().tbl();
 
-    //> Delete from DB
-    if(nodeMode() == TCntrNode::Disable)
-    {
-	//>> Remove from library table
-	if(delMark)
-	{
-	    mParent = "<deleted>";
-	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
-	}
-	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+    //> Save generic attributes
+    m_attrs = mod->attrsSave( *this, db+"."+tbl, ownerLWdg().id(), id(), true );
 
-	//>> Remove widget's work and users IO from library IO table
-	string tAttrs = m_attrs;
+    //> Save generic widget's data
+    SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
 
-	TConfig c_el( &mod->elWdgIO() );
-	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
-	SYS->db().at().dataDel( db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el );
-	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
-	SYS->db().at().dataDel( db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el );
-    }
-    //> Save widget's data
-    else
-    {
-	//> Save generic attributes
-	m_attrs = mod->attrsSave( *this, db+"."+tbl, ownerLWdg().id(), id(), true );
-
-	//> Save generic widget's data
-	SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
-
-	//>> Save widget's attributes
-	saveIO();
-    }
+    //>> Save widget's attributes
+    saveIO();
 }
 
 void CWidget::saveIO( )
 {
-    if( !enable() ) return;
+    if(!enable()) return;
 
-    mod->attrsSave( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id() );
+    mod->attrsSave(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id());
 }
 
 void CWidget::wClear( )

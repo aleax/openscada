@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-27 17:35+0300\n"
+"POT-Creation-Date: 2011-10-30 12:41+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1210,6 +1210,10 @@ msgstr ""
 #, fuzzy, c-format
 msgid "attribute '%s'"
 msgstr "Attribute"
+
+#, fuzzy, c-format
+msgid "new widget '%s' from '%s'"
+msgstr "Verschieben des Widgets '%1' nach '%2'.\n"
 
 msgid "unknown"
 msgstr ""

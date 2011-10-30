@@ -892,7 +892,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
 		cfg.owner()->attrAdd( new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","","37") );
 		cfg.owner()->attrAdd( new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","","38") );
-		cfg.owner()->attrAdd( new TFld("valsForPix",_("Values for pixel"),TFld::Integer,Attr::Mutable,"1","1;100","","","42") );
+		cfg.owner()->attrAdd( new TFld("valsForPix",_("Values for pixel"),TFld::Integer,Attr::Mutable,"","1","1;100","","42") );
 		cfg.owner()->attrAdd( new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;10","","39") );
 		break;
 	}
@@ -901,38 +901,41 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     {
 	string fid("prm"), fnm(_("Parametr ")), fidp, fnmp;
 	//> Delete specific unnecessary attributes of parameters
-	for( int i_p = 0; true; i_p++ )
+	for(int i_p = 0; true; i_p++)
 	{
 	    fidp = fid+TSYS::int2str(i_p);
-	    if( !cfg.owner()->attrPresent( fidp+"addr" ) )	break;
-	    else if( i_p >= cfg.getI() )
+	    if(!cfg.owner()->attrPresent(fidp+"addr"))	break;
+	    else if(i_p >= cfg.getI())
 	    {
 		cfg.owner()->attrDel(fidp+"addr");
 		cfg.owner()->attrDel(fidp+"bordL");
 		cfg.owner()->attrDel(fidp+"bordU");
 		cfg.owner()->attrDel(fidp+"aScale");
 		cfg.owner()->attrDel(fidp+"color");
+		cfg.owner()->attrDel(fidp+"width");
 		cfg.owner()->attrDel(fidp+"val");
 	    }
 	}
 	//> Create ullage attributes of parameters
-	for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	for(int i_p = 0; i_p < cfg.getI(); i_p++)
 	{
 	    fidp = fid+TSYS::int2str(i_p);
 	    fnmp = fnm+TSYS::int2str(i_p);
-	    if( cfg.owner()->attrPresent( fidp+"addr" ) ) continue;
-	    cfg.owner()->attrAdd( new TFld((fidp+"addr").c_str(),(fnmp+_(":address")).c_str(),
-					    TFld::String,Attr::Address|Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()) );
-	    cfg.owner()->attrAdd( new TFld((fidp+"bordL").c_str(),(fnmp+_(":view border:lower")).c_str(),
-		TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(51+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"bordU").c_str(),(fnmp+_(":view border:upper")).c_str(),
-					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"aScale").c_str(),(fnmp+_(":view border:autoscale")).c_str(),
-					    TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
-					    TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
-					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(54+10*i_p).c_str()) );
+	    if(cfg.owner()->attrPresent(fidp+"addr")) continue;
+	    cfg.owner()->attrAdd(new TFld((fidp+"addr").c_str(),(fnmp+_(":address")).c_str(),
+					    TFld::String,Attr::Address|Attr::Mutable,"","","","",TSYS::int2str(50+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"bordL").c_str(),(fnmp+_(":view border:lower")).c_str(),
+					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(51+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"bordU").c_str(),(fnmp+_(":view border:upper")).c_str(),
+					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"aScale").c_str(),(fnmp+_(":view border:autoscale")).c_str(),
+					    TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
+					    TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"width").c_str(),(fnmp+_(":width")).c_str(),
+					    TFld::Integer,Attr::Mutable,"","1","1;10","",TSYS::int2str(56+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
+					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(54+10*i_p).c_str()));
 	}
     }
 

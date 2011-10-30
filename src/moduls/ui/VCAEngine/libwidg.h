@@ -76,8 +76,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	AutoHD<LWidget> at( const string &id );
 	void add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
-	void del( const string &id, bool full = false )
-	{ chldDel( m_wdg, id, -1, full ); }
+	void del( const string &id, bool full = false )	{ chldDel( m_wdg, id, -1, full ); }
 
     protected:
 	//Methods
@@ -201,7 +200,7 @@ class CWidget : public Widget, public TConfig
     protected:
 	//Methods
 	void postEnable( int flag );
-	void preDisable( int flag );
+	void postDisable( int flag );
 
 	//> Storing
 	void load_( );
@@ -213,7 +212,6 @@ class CWidget : public Widget, public TConfig
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	bool	delMark;
 	ResString &mParent, &m_attrs;
 };
 

@@ -1,3 +1,10 @@
+2011-10-30 Roman
+- UI.QTCfg: Write only changed values to LineEdit and TextEdit fields is set for allow easy write on periodic update.
+- !!:UI.VCAEngine: Old UnDo mechanism for removed child widgets is removed and going to replaced to new.
+- !!:UI.VCAEngine, UI.Vision, UI.WebVision: Graphic line width select is added to primitive "Diagram".
+- !:UI.Vision: UnDo and ReDo is added for new widgets add and primitive "ElFigure" edit.
+
+
 2011-10-29 Roman
 - FIX:UI.QTCfg: Autoupdate check is added on page refrash command, after any page's items change.
 

@@ -216,7 +216,7 @@ class Widget : public TCntrNode
 	void wdgList( vector<string> &list );
 	bool wdgPresent( const string &wdg );
 	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
-	void wdgDel( const string &wid, bool full = false );
+	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full); }
 	AutoHD<Widget> wdgAt( const string &wdg );
 
 	//> Data access
