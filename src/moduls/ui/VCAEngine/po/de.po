@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 18:34+0300\n"
+"POT-Creation-Date: 2011-10-31 15:59+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -632,9 +632,6 @@ msgstr ":Grenze der Ansicht:untere"
 msgid ":view border:upper"
 msgstr ":Grenze  der Ansicht:obere"
 
-msgid ":view border:autoscale"
-msgstr ":Grenze der Ansicht:Automassstab"
-
 msgid ":color"
 msgstr ":Farbe"
 
@@ -781,8 +778,8 @@ msgstr "Cursor:Aussehen"
 msgid "Cursor:archive"
 msgstr "Cursor:Archiv"
 
-msgid "Document "
-msgstr "Dokument "
+msgid "Document (current archive)"
+msgstr "Dokument (die aktuelle Datei)"
 
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
 msgstr "CSS-Regeln in Reihen wie \"body { background-color:#818181; }\""
@@ -802,6 +799,9 @@ msgstr ""
 
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Final-Dokument in XHTML. Start von Tag \"body\"."
+
+msgid "Current archive document in XHTML. Start from tag \"body\"."
+msgstr "Aktuelle Dokumentenarchiv in XHTML. Es beginnt mit dem Tag \"Körper\"."
 
 msgid "Write time for document generation from that point."
 msgstr "Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus."
@@ -1640,6 +1640,12 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid ":view border:autoscale"
+#~ msgstr ":Grenze der Ansicht:Automassstab"
+
+#~ msgid "Document "
+#~ msgstr "Dokument "
 
 #~ msgid "Events"
 #~ msgstr "Ereignisse"

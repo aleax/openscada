@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 18:34+0300\n"
+"POT-Creation-Date: 2011-10-31 15:59+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -634,9 +634,6 @@ msgstr ":граница отображения:нижняя"
 msgid ":view border:upper"
 msgstr ":граница отображения:верхняя"
 
-msgid ":view border:autoscale"
-msgstr ":граница отображения:автомасштаб"
-
 msgid ":color"
 msgstr ":цвет"
 
@@ -782,8 +779,8 @@ msgstr "Курсор:вид"
 msgid "Cursor:archive"
 msgstr "Курсор:архив"
 
-msgid "Document "
-msgstr "Документ "
+msgid "Document (current archive)"
+msgstr "Документ (текущий архив)"
 
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
 msgstr "Правила CSS в строках, вроде \"body { background-color:#818181; }\""
@@ -803,6 +800,9 @@ msgstr ""
 
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Финальный документ в XHTML. Начинается с тега \"body\"."
+
+msgid "Current archive document in XHTML. Start from tag \"body\"."
+msgstr "Текущий документ архива в XHTML. Начинается с тега \"body\"."
 
 msgid "Write time for document generation from that point."
 msgstr "Записать времени для генерации документа от этой точки."
@@ -1639,6 +1639,12 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid ":view border:autoscale"
+#~ msgstr ":граница отображения:автомасштаб"
+
+#~ msgid "Document "
+#~ msgstr "Документ "
 
 #~ msgid "Events"
 #~ msgstr "События"

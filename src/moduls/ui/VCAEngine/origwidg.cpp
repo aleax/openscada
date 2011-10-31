@@ -928,8 +928,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(51+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"bordU").c_str(),(fnmp+_(":view border:upper")).c_str(),
 					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(52+10*i_p).c_str()));
-	    cfg.owner()->attrAdd(new TFld((fidp+"aScale").c_str(),(fnmp+_(":view border:autoscale")).c_str(),
-					    TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()));
+	    //cfg.owner()->attrAdd(new TFld((fidp+"aScale").c_str(),(fnmp+_(":view border:autoscale")).c_str(),
+	    //				    TFld::Integer,Attr::Mutable,"","0","","",TSYS::int2str(55+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
 					    TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"width").c_str(),(fnmp+_(":width")).c_str(),
@@ -1122,43 +1122,42 @@ void OrigDocument::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd( new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","20") );
-	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21") );
-	attrAdd( new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","22") );
-	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","26") );
-	attrAdd( new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","","24") );
-	attrAdd( new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","","23") );
-	attrAdd( new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;99","","25") );
+	attrAdd(new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","20"));
+	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21"));
+	attrAdd(new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","22"));
+	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","26"));
+	attrAdd(new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","","24"));
+	attrAdd(new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","","23"));
+	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;1000000","","25"));
     }
 }
 
 void OrigDocument::calc( Widget *base )
 {
     //> Make document after time set
-    if( base->attrAt("time").at().flgSelf()&0x100 )
+    if(base->attrAt("time").at().flgSelf()&0x100)
     {
 	base->attrAt("time").at().setFlgSelf((Attr::SelfAttrFlgs)(base->attrAt("time").at().flgSelf()&(~0x100)));
 	string mkDk;
 	int n = base->attrAt("n").at().getI();
-	if( !n )
+	if(!n)
 	{
 	    mkDk = base->attrAt("doc").at().getS();
-	    if( mkDk.empty() )	mkDk = base->attrAt("tmpl").at().getS();
+	    if(mkDk.empty()) mkDk = base->attrAt("tmpl").at().getS();
 	    mkDk = makeDoc(mkDk,base);
 	    base->attrAt("doc").at().setS(mkDk);
 	}
 	else
 	{
 	    int aCur = base->attrAt("aCur").at().getI();
-	    mkDk = base->attrAt("doc"+TSYS::int2str(aCur)).at().getS();
-	    if( mkDk.empty() )	mkDk = base->attrAt("tmpl").at().getS();
+	    mkDk = base->attrAt("aDoc").at().getS();
+	    if(mkDk.empty()) mkDk = base->attrAt("tmpl").at().getS();
 
 	    mkDk = makeDoc(mkDk,base);
-	    base->attrAt("doc"+TSYS::int2str(aCur)).at().setS(mkDk);
-	    if( aCur == base->attrAt("vCur").at().getI() )
-		base->attrAt("doc").at().setS(mkDk);
+	    base->attrAt("aDoc").at().setS(mkDk);
+	    if(aCur == base->attrAt("vCur").at().getI()) base->attrAt("doc").at().setS(mkDk);
 	}
     }
 }
@@ -1174,6 +1173,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	{
 	    cfg.owner()->attrDel("aCur");
 	    cfg.owner()->attrDel("vCur");
+	    cfg.owner()->attrDel("aDoc");
 	}
 	else
 	{
@@ -1187,37 +1187,25 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"));
 		cfg.owner()->inheritAttr("aCur");
 	    }
-	}
-
-	string fidp;
-	//>> Delete archive document's attributes
-	for(int i_p = 0; true; i_p++)
-	{
-	    fidp = "doc"+TSYS::int2str(i_p);
-	    if(!cfg.owner()->attrPresent(fidp))	break;
-	    else if(i_p >= cfg.getI())	cfg.owner()->attrDel(fidp);
-	}
-
-	//>> Create archive document's attributes
-	for(int i_p = 0; i_p < cfg.getI(); i_p++)
-	{
-	    fidp = "doc"+TSYS::int2str(i_p);
-	    if(cfg.owner()->attrPresent(fidp))	continue;
-	    cfg.owner()->attrAdd(new TFld(fidp.c_str(),(_("Document ")+TSYS::int2str(i_p)).c_str(),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active));
+	    if(!cfg.owner()->attrPresent("aDoc"))
+	    {
+		cfg.owner()->attrAdd(new TFld("aDoc",_("Document (current archive)"),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active));
+		cfg.owner()->inheritAttr("aDoc");
+	    }
 	}
     }
 
     SessWdg *sw = dynamic_cast<SessWdg*>(cfg.owner());
     if(!sw) return Widget::attrChange(cfg,prev);
 
+    string db  = sw->ownerSess()->parent().at().DB();
+    string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+
     //> Make document after time set
     if(cfg.id() == "time" && cfg.getI() != prev.getI()) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
     //> Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI())
     {
-	string db  = sw->ownerSess()->parent().at().DB();
-	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
 	TConfig c_el(&mod->elPrjSes());
 	TSYS::pathLev(sw->path(),0,true,&off);
 	c_el.cfg("IDW").setS(sw->path().substr(off));
@@ -1225,19 +1213,16 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	c_el.cfg("ID").setS("aCur");
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
 	    cfg.owner()->attrAt("aCur").at().setI(c_el.cfg("IO_VAL").getI(),false,true);
-	//>> Documents load
-	for(int i_d = prev.getI(); i_d < cfg.getI(); i_d++)
-	{
-	    c_el.cfg("ID").setS("doc"+TSYS::int2str(i_d));
-	    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
-		cfg.owner()->attrAt("doc"+TSYS::int2str(i_d)).at().setS(c_el.cfg("IO_VAL").getS(),false,true);
-	}
+	//>> Current archive socuments load
+	c_el.cfg("ID").setS("doc"+TSYS::int2str(cfg.owner()->attrAt("aCur").at().getI()));
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
+	    cfg.owner()->attrAt("aDoc").at().setS(c_el.cfg("IO_VAL").getS(),false,true);
 	//>> Set curent document
 	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
-	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.owner()->attrAt("aCur").at().getI())).at().getS(),false,true);
+	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("aDoc").at().getS(),false,true);
 	//>> Parse curent document and restore last document's time
 	string cdoc = cfg.owner()->attrAt("doc").at().getS();
-	if( !cdoc.empty() )
+	if(!cdoc.empty())
 	{
 	    XMLNode xdoc;
 	    try{ xdoc.load(XHTML_entity+cdoc); } catch(TError err) { }
@@ -1252,16 +1237,13 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	else if(cfg.getI() >= n)	cfg.setI(n-1, false, true);
 	if(cfg.getI() != prev.getI())
 	{
-	    cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().setS(cfg.owner()->attrAt("tmpl").at().getS());
+	    cfg.owner()->attrAt("aDoc").at().setS(cfg.owner()->attrAt("tmpl").at().getS());
 	    if(prev.getI() == cfg.owner()->attrAt("vCur").at().getI())
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
 	    //>> Save cursor to document to project's DB
 	    if(prev.getI() < n && prev.getI() >= 0)
 	    {
-		string db  = sw->ownerSess()->parent().at().DB();
-		string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
 		TConfig c_el(&mod->elPrjSes());
 		TSYS::pathLev(sw->path(),0,true,&off);
 		c_el.cfg("IDW").setS(sw->path().substr(off));
@@ -1272,21 +1254,22 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	}
     }
     //> Document save
-    else if(cfg.id().compare(0,3,"doc") == 0 && cfg.getS() != prev.getS())
+    else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS())
     {
-	string db  = sw->ownerSess()->parent().at().DB();
-	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
 	TConfig c_el(&mod->elPrjSes());
 	TSYS::pathLev(sw->path(),0,true,&off);
 	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS(cfg.id());
+	c_el.cfg("ID").setS("doc"+TSYS::int2str(cfg.owner()->attrAt("aCur").at().getI()));
 	c_el.cfg("IO_VAL").setS(cfg.getS());
 	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
     }
     //> Move archive view cursor
     else if(cfg.id() == "vCur" && cfg.getI() != prev.getI())
     {
+	TConfig c_el(&mod->elPrjSes());
+	TSYS::pathLev(sw->path(),0,true,&off);
+	c_el.cfg("IDW").setS(sw->path().substr(off));
+
 	int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	int n = cfg.owner()->attrAt("n").at().getI();
 	if(cfg.getI() < 0)
@@ -1294,22 +1277,24 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    int docN = prev.getI();
 	    //>> Search next document
 	    if(cfg.getI() == -1)
-	    {
-		while(docN != aCur && (docN == prev.getI() || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty()))
+		while(docN != aCur)
+		{
+		    c_el.cfg("ID").setS("doc"+TSYS::int2str(docN));
+		    if(docN != prev.getI() && SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) break;
 		    if(++docN >= n) docN = 0;
-	    }
+		}
 	    //>> Search previous document
 	    else
 	    {
 		if(--docN < 0) docN = n-1;
-		if(docN == aCur || cfg.owner()->attrAt("doc"+TSYS::int2str(docN)).at().getS().empty())
-		    docN = prev.getI();
+		if(docN == aCur) docN = prev.getI();
+		c_el.cfg("ID").setS("doc"+TSYS::int2str(docN));
+		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) docN = prev.getI();
 	    }
 	    if(docN != cfg.getI())	cfg.setI(docN,false,true);
 	}
 	else if(cfg.getI() >= n)	cfg.setI(cfg.owner()->attrAt("aCur").at().getI(), false, true);
-	if(cfg.getI() != prev.getI())
-	    cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("doc"+TSYS::int2str(cfg.getI())).at().getS());
+	if(cfg.getI() != prev.getI())	cfg.owner()->attrAt("doc").at().setS(c_el.cfg("IO_VAL").getS());
     }
 
     return Widget::attrChange(cfg,prev);
@@ -1331,6 +1316,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		_("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
 		"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
 	    if((el=ctrId(root,"/doc",true))) el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
+	    if((el=ctrId(root,"/aDoc",true))) el->setAttr("SnthHgl","1")->setAttr("help",_("Current archive document in XHTML. Start from tag \"body\"."));
 	    if((el=ctrId(root,"/time",true))) el->setAttr("help",_("Write time for document generation from that point."));
 	}
 	return true;
@@ -1338,7 +1324,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if((a_path == "/attr/tmpl" || a_path == "/attr/doc") && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    if((a_path == "/attr/tmpl" || a_path == "/attr/doc" || a_path == "/attr/aDoc") && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
     {
 	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
 	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
