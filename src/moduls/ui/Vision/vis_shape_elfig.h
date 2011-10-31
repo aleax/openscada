@@ -261,7 +261,7 @@ class ShapeElFigure : public WdgShape
         int count_rects, rect_num_arc, arc_rect;
         double t_start, t_end;
 	QPointF Mouse_pos, offset, pop_pos;
-        QPoint stPointDashedRect;
+        QPoint stPointDashedRect, mousePress_pos;
         int current_ss, current_se, current_ee, current_es;
         int count_holds;
         QVector<int> arc_rect_array, fig_rect_array, vect;

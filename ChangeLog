@@ -1,3 +1,7 @@
+2011-10-31 Maxim
+- FIX:UI.Vision: Unnecessary calls of the "shapeSave" function are removed in the primitive ElFigure to optimize the performance and UnDo/ReDo functions.
+
+
 2011-10-30 Roman
 - UI.QTCfg: Write only changed values to LineEdit and TextEdit fields is set for allow easy write on periodic update.
 - !!:UI.VCAEngine: Old UnDo mechanism for removed child widgets is removed and going to replaced to new.

@@ -3881,6 +3881,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             }
             else if( devW )
             {
+                mousePress_pos = ev->pos();
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
                     if( ev->button()==Qt::LeftButton && !status )
@@ -4112,7 +4113,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 EndLine = unScaleRotate( EndLine, view, flag_scale, flag_rotate );
                                 shapeItems[shapeItems.size()-1].n1 = appendPoint( StartLine, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
-                                shapeSave( view );
                                 rect_num = 1;
                                 index = shapeItems.size()-1;
                                 itemInMotion = &shapeItems[index];
@@ -4160,7 +4160,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n5 = appendPoint( CtrlPos_3, shapeItems, pnts, 1 );
-                                shapeSave( view );
                                 rect_num = 4;
                                 index = shapeItems.size()-1;
                                 itemInMotion = &shapeItems[index];
@@ -4200,7 +4199,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 shapeItems[shapeItems.size()-1].n2 = appendPoint( EndLine, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n3 = appendPoint( CtrlPos_1, shapeItems, pnts, 1 );
                                 shapeItems[shapeItems.size()-1].n4 = appendPoint( CtrlPos_2, shapeItems, pnts, 1 );
-                                shapeSave( view );
                                 rect_num = 1;
                                 index = shapeItems.size()-1;
                                 itemInMotion = &shapeItems[index];
@@ -4247,6 +4245,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             }
             else if( devW )
             {
+                bool fl_shapeSave = false;
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
                     index = itemAt( ev->pos(), shapeItems, view );
@@ -4268,6 +4267,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                         {
                                             inundationItems.remove(i);
                                             fl_brk = true;
+                                            fl_shapeSave = true;
                                             paintImage(view);
                                             view->repaint();
                                             break;
@@ -4275,6 +4275,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                     if( !fl_brk && status_hold )
                                     {
                                         inundationItems.push_back(inundationItem(inundationPath,-7,-5, inundation_vector, inundation_vector));
+                                        fl_shapeSave = true;
                                         paintImage(view);
                                         view->repaint();
                                     }
@@ -4286,13 +4287,14 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         }
                         else
                         {
+                            fl_shapeSave = true;
                             paintImage(view);
                             view->repaint();
                         }
                         flag_angle_temp = false;
                     }
                 }
-                shapeSave(view);
+                if ( fl_shapeSave ) shapeSave(view);
 		return true;
             }
     	    break;
@@ -4302,6 +4304,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             QMouseEvent *ev = static_cast<QMouseEvent*>(event); 
             if( devW )
             {
+                bool fl_dashedRect = false;
                 if( !flag_down && !flag_up && !flag_left && !flag_right )
                 {
                     if( flag_move && ev->button() == Qt::LeftButton && !(QApplication::keyboardModifiers()&Qt::ControlModifier) )
@@ -4332,6 +4335,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                         ((VisDevelop *)view->mainWin())->actLevRise->setEnabled(true);
                         ((VisDevelop *)view->mainWin())->actLevLower->setEnabled(true);
                         ((VisDevelop *)view->mainWin())->actVisItCopy->setEnabled(true);
+                        fl_dashedRect = true;
                         view->repaint();
                     }
                     if( ev->button() == Qt::LeftButton && itemInMotion )
@@ -4527,10 +4531,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             paint_im = true;
                             index = -1;
                         }
-                        shapeSave( view );
+                        bool flag_save = false;
+                        if( (mousePress_pos != ev->pos()) && !fl_dashedRect ) { flag_save = true; shapeSave( view ); }
                         itemInMotion = 0;
                         flag_m = false;
-                        if( paint_im || ell_present ){ paintImage(view); view->repaint(); }
+                        if( (paint_im || ell_present) && flag_save ){ paintImage(view); view->repaint(); }
                         if( status_hold && !flag_A )
                         {
                             count_moveItemTo = 0;
@@ -4823,7 +4828,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                             flag_arc_rect_3_4 = flag_rect = flag_ctrl = false;
                             index_array.clear();
                         }
-                        flag_first_move = false;  
+                        flag_first_move = false;
                     }
                     if( !flag_m )
                     {
