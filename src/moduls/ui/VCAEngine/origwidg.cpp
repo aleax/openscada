@@ -1174,23 +1174,29 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel("aCur");
 	    cfg.owner()->attrDel("vCur");
 	    cfg.owner()->attrDel("aDoc");
+	    cfg.owner()->attrDel("aSize");
 	}
 	else
 	{
 	    if(!cfg.owner()->attrPresent("vCur"))
 	    {
-		cfg.owner()->attrAdd(new TFld("vCur",_("Cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99"));
+		cfg.owner()->attrAdd(new TFld("vCur",_("Archive:cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99"));
 		cfg.owner()->inheritAttr("vCur");
 	    }
 	    if(!cfg.owner()->attrPresent("aCur"))
 	    {
-		cfg.owner()->attrAdd(new TFld("aCur",_("Cursor:archive"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"));
+		cfg.owner()->attrAdd(new TFld("aCur",_("Archive:cursor:current"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"));
 		cfg.owner()->inheritAttr("aCur");
 	    }
 	    if(!cfg.owner()->attrPresent("aDoc"))
 	    {
-		cfg.owner()->attrAdd(new TFld("aDoc",_("Document (current archive)"),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active));
+		cfg.owner()->attrAdd(new TFld("aDoc",_("Archive:current document"),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active));
 		cfg.owner()->inheritAttr("aDoc");
+	    }
+	    if(!cfg.owner()->attrPresent("aSize"))
+	    {
+		cfg.owner()->attrAdd(new TFld("aSize",_("Archive:size"),TFld::Integer,TFld::NoWrite|Attr::DirRead|Attr::Mutable));
+		cfg.owner()->inheritAttr("aSize");
 	    }
 	}
     }
@@ -1353,6 +1359,67 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
     else return Widget::cntrCmdAttributes(opt,src);
 
     return true;
+}
+
+TVariant OrigDocument::vlGet( Attr &a )
+{
+    SessWdg *sw = dynamic_cast<SessWdg*>(a.owner());
+    if(sw)
+    {
+	string db  = sw->ownerSess()->parent().at().DB();
+	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+
+	if(a.id() == "aSize")
+	{
+	    int aCur = a.owner()->attrAt("aCur").at().getI();
+	    int n = a.owner()->attrAt("n").at().getI();
+	    if(aCur < n)
+	    {
+		int off = 0;
+		TConfig c_el(&mod->elPrjSes());
+		TSYS::pathLev(sw->path(),0,true,&off);
+		c_el.cfg("IDW").setS(sw->path().substr(off));
+		c_el.cfg("ID").setS("doc"+TSYS::int2str(aCur+1));
+		c_el.cfg("IO_VAL").setView(false);
+		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) return aCur+1;
+	    }
+	    return n;
+	}
+    }
+
+    return Widget::vlGet(a);
+}
+
+TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms, const string &user, Widget *src )
+{
+    // string getArhDoc(integer nDoc) - get archive document text to 'nDoc' depth.
+    //  nDoc - archive document at depth (0-aSize)
+    if(iid == "getArhDoc" && prms.size() >= 1)
+    {
+	int nDoc = prms[0].getI();
+        int aCur = src->attrAt("aCur").at().getI();
+	int aSize = src->attrAt("aSize").at().getI();
+	SessWdg *sw = dynamic_cast<SessWdg*>(src);
+	if(!sw || nDoc < 0 || nDoc >= aSize) return "";
+
+	aCur -= nDoc;
+	if(aCur < 0) aCur += aSize;
+
+	string db  = sw->ownerSess()->parent().at().DB();
+	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+
+	int off = 0;
+	TConfig c_el(&mod->elPrjSes());
+	TSYS::pathLev(sw->path(),0,true,&off);
+	c_el.cfg("IDW").setS(sw->path().substr(off));
+	c_el.cfg("ID").setS("doc"+TSYS::int2str(aCur));
+	c_el.cfg("IO_VAL").setView(false);
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) return c_el.cfg("IO_VAL").getS();
+
+	return "";
+    }
+
+    return TVariant();
 }
 
 string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )

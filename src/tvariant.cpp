@@ -55,9 +55,9 @@ TVariant::~TVariant( )				{ setType(TVariant::Null); }
 
 void TVariant::setType( Type tp )
 {
-    if( tp == type() )	return;
+    if(tp == type()) return;
 
-    if( type() == TVariant::Object && getO() && !getO()->disconnect() ) delete getO( );
+    if(type() == TVariant::Object && getO() && !getO()->disconnect()) delete getO();
 
     switch(tp)
     {

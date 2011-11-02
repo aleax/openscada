@@ -244,6 +244,7 @@ class Widget : public TCntrNode
 	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
 	virtual void calc( Widget *base );
+	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 
 	//Attributes
 	//> Generic data
@@ -256,11 +257,11 @@ class Widget : public TCntrNode
 	unsigned char	mStlLock	:1;	//Style lock
 	unsigned char   BACrtHoldOvr    :1;     //Base attrs creation hold over to enable and inherit stage
 
-	string	mParentNm;			//Parent widget name
+	string		mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 	map<string, Attr* >	mAttrs;
-	pthread_mutex_t		mtxAttr;
+	pthread_mutex_t	mtxAttr;
 };
 
 }

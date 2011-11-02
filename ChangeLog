@@ -1,3 +1,8 @@
+2011-11-02 Roman
+- UI.VCAEngine: Archive size field is added to primitive "Document".
+    User API function, session side, getArhDoc() is added to primitive "Document" for requests to archive of documents.
+
+
 2011-10-31 Roman
 - !:UI.VCAEngine: Document's archive realisation is changed to full use DB, remove item's attributes
     (replaced by single current archive document attribute "aDoc") and expand archive's limit size to 1000000.

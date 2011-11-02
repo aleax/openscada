@@ -65,28 +65,28 @@ Widget::~Widget()
 TCntrNode &Widget::operator=( TCntrNode &node )
 {
     Widget *src_n = dynamic_cast<Widget*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
-    if( !src_n->enable() ) return *this;
+    if(!src_n->enable()) return *this;
 
     //> Parent link copy
-    if( src_n->parentNm() != path() )
+    if(src_n->parentNm() != path())
     {
-	if( parentNm() != src_n->parentNm() && enable() ) setEnable(false);
+	if(parentNm() != src_n->parentNm() && enable()) setEnable(false);
 	setParentNm( src_n->parentNm() );
     }
-    if( !enable() ) setEnable(true);
+    if(!enable()) setEnable(true);
 
     //> Copy generic configuration
-    if( src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name() )	setName(src_n->name());
-    if( src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr() )	setDescr(src_n->descr());
-    if( src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico() )	setIco(src_n->ico());
-    setOwner( src_n->owner() );
-    setGrp( src_n->grp() );
-    setPermit( src_n->permit() );
-    if( src_n->parent().freeStat() || src_n->calcLang() != src_n->parent().at().calcLang() )	setCalcLang(src_n->calcLang());
-    if( src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg() )	setCalcProg(src_n->calcProg());
-    if( src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer() )	setCalcPer(src_n->calcPer());
+    if(src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name())	setName(src_n->name());
+    if(src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr())	setDescr(src_n->descr());
+    if(src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico())	setIco(src_n->ico());
+    setOwner(src_n->owner());
+    setGrp(src_n->grp());
+    setPermit(src_n->permit());
+    if(src_n->parent().freeStat() || src_n->calcLang() != src_n->parent().at().calcLang())	setCalcLang(src_n->calcLang());
+    if(src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg())	setCalcProg(src_n->calcProg());
+    if(src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer())	setCalcPer(src_n->calcPer());
 
     //> Copy attributes
     vector<string> els;
@@ -131,7 +131,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 
 void Widget::postEnable( int flag )
 {
-    if(flag&TCntrNode::NodeRestore)	setEnable(true);
+    if(flag&TCntrNode::NodeRestore) setEnable(true);
     if(flag&TCntrNode::NodeConnect && !BACrtHoldOvr)
     {
 	//> Add main attributes
@@ -173,7 +173,7 @@ void Widget::preDisable( int flag )
 
 string Widget::rootId( )
 {
-    if( !parent().freeStat() )  return parent().at().rootId();
+    if(!parent().freeStat())  return parent().at().rootId();
     return "";
 }
 
@@ -238,14 +238,14 @@ void Widget::setPermit( short iperm )
 
 bool Widget::isContainer( )
 {
-    if( !parent().freeStat() )    return parent().at().isContainer();
+    if(!parent().freeStat()) return parent().at().isContainer();
     return false;
 }
 
 string Widget::path( )
 {
     Widget *ownW = dynamic_cast<Widget*>(nodePrev());
-    if( ownW )	return ownW->path()+"/wdg_"+mId;
+    if(ownW) return ownW->path()+"/wdg_"+mId;
 
     return mId;
 }
@@ -253,7 +253,7 @@ string Widget::path( )
 string Widget::calcId( )
 {
     Widget *ownW = dynamic_cast<Widget*>(nodePrev());
-    if( ownW )	return ownW->calcId()+"_"+mId;
+    if(ownW) return ownW->calcId()+"_"+mId;
 
     return mId;
 }
@@ -347,7 +347,7 @@ void Widget::setEnable( bool val )
 
 void Widget::setParentNm( const string &isw )
 {
-    if( enable() && mParentNm != isw ) setEnable(false);
+    if(enable() && mParentNm != isw) setEnable(false);
     mParentNm = isw;
 }
 
@@ -358,7 +358,7 @@ AutoHD<Widget> Widget::parent( )
 
 AutoHD<Widget> Widget::parentNoLink( )
 {
-    if( parent().at().isLink() ) return parent().at().parentNoLink( );
+    if(parent().at().isLink()) return parent().at().parentNoLink();
     return parent();
 }
 
@@ -486,7 +486,7 @@ void Widget::wClear( )
 	AutoHD<Widget> parw = parent();
 	while(!parw.freeStat() && parw.at().isLink())
 	    parw = parw.at().parent();
-	if( !parw.freeStat() )
+	if(!parw.freeStat())
 	{
 	    //> Check for widget's deletion
 	    wdgList(ls);
@@ -564,8 +564,8 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
 	int pos = p->second->mOi;
-	for( map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1 )
-	    if( p1->second->mOi > pos ) p1->second->mOi--;
+	for(map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1)
+	    if(p1->second->mOi > pos) p1->second->mOi--;
 	delete p->second;
 	mAttrs.erase(p);
     }
@@ -604,7 +604,14 @@ int  Widget::attrPos(const string &inm)
 
 void Widget::calc( Widget *base )
 {
-    if( !parent().freeStat() ) parent().at().calc(base);
+    if(!parent().freeStat()) parent().at().calc(base);
+}
+
+TVariant Widget::objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src )
+{
+    if(!parent().freeStat()) parent().at().objFuncCall_w(id, prms, user, src);
+
+    return TVariant();
 }
 
 bool Widget::attrChange( Attr &cfg, TVariant prev )
@@ -623,7 +630,7 @@ bool Widget::attrChange( Attr &cfg, TVariant prev )
 
 void Widget::wdgList( vector<string> &list )
 {
-    chldList( inclWdg, list );
+    chldList(inclWdg, list);
 }
 
 bool Widget::wdgPresent( const string &wdg )
@@ -665,10 +672,15 @@ string Widget::helpImg( )
 
 TVariant Widget::vlGet( Attr &a )
 {
-    if(a.id() == "id")		return TVariant(id());
-    else if(a.id() == "path")	return TVariant(path());
-    else if(a.id() == "root")	return TVariant(rootId());
-    else if(a.id() == "parent")	return TVariant(parentNm());
+    if(a.owner() == this)
+    {
+	if(a.id() == "id")		return TVariant(id());
+	else if(a.id() == "path")	return TVariant(path());
+	else if(a.id() == "root")	return TVariant(rootId());
+	else if(a.id() == "parent")	return TVariant(parentNm());
+    }
+
+    if(!parent().freeStat())		return parent().at().vlGet(a);
 
     return TVariant();
 }

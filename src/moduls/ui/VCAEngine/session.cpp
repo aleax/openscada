@@ -1685,27 +1685,27 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // TCntrNodeObj ownerSess( ) - Get session object
-    if( iid == "ownerSess" )	return new TCntrNodeObj(ownerSess(),user);
+    if(iid == "ownerSess")	return new TCntrNodeObj(ownerSess(),user);
     // TCntrNodeObj ownerPage( ) - Get page-owner object
-    if( iid == "ownerPage" )
+    if(iid == "ownerPage")
     {
 	SessPage *opg = ownerPage();
-	if( !opg ) return 0;
+	if(!opg) return 0;
 	return new TCntrNodeObj(opg,user);
     }
     // TCntrNodeObj ownerWdg(bool base) - Get widget-owner object
     //  base - include widgets and pages for true
-    if( iid == "ownerWdg" )
+    if(iid == "ownerWdg")
     {
-	SessWdg *wdg = ownerSessWdg( prms.size() ? prms[0].getB() : 0 );
-	if( !wdg ) return 0;
+	SessWdg *wdg = ownerSessWdg(prms.size() ? prms[0].getB() : 0);
+	if(!wdg) return 0;
 	return new TCntrNodeObj(wdg,user);
     }
     // TCntrNodeObj wdgAdd(string wid, string wname, string parent) - add new widget
     //  wid - widget identifier
     //  wname - widget name
     //  parent - parent widget
-    if( iid == "wdgAdd" && prms.size() >= 3 )
+    if(iid == "wdgAdd" && prms.size() >= 3)
     {
 	try
 	{
@@ -1723,7 +1723,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     }
     // bool wdgDel(string wid) - delete widget, return true for success
     //  wid - widget identifier
-    if( iid == "wdgDel" && prms.size() )
+    if(iid == "wdgDel" && prms.size())
     {
 	try { wdgDel(prms[0].getS()); }
 	catch(TError err){ return false; }
@@ -1731,16 +1731,16 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     }
     // bool attrPresent(string attr) - check for attribute <attr> present.
     //  attr - checked attribute
-    if( iid == "attrPresent" && prms.size() )	return attrPresent( prms[0].getS() );
+    if(iid == "attrPresent" && prms.size())	return attrPresent(prms[0].getS());
     // ElTp attr(string attr) - get attribute <attr> value.
     //  attr - readed attribute
-    if( iid == "attr" && prms.size() )
+    if(iid == "attr" && prms.size())
     {
 	if(!attrPresent(prms[0].getS())) return string("");
 	return attrAt(prms[0].getS()).at().get();
     }
     // TCntrNodeObj attrSet(string attr, ElTp vl)
-    if( iid == "attrSet" && prms.size() >= 2 )
+    if(iid == "attrSet" && prms.size() >= 2)
     {
 	if(!attrPresent(prms[0].getS())) return -1;
 	attrAt(prms[0].getS()).at().set(prms[1]);
@@ -1749,27 +1749,32 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // string link(string attr, bool prm = false) - get link for attribute or attribute block (prm)
     //  attr - attribute identifier
     //  prm  - attribute block for true
-    if( iid == "link" && prms.size() )
+    if(iid == "link" && prms.size())
     {
 	XMLNode req("get");
 	req.setAttr("user","root");
-	if( prms.size() >= 2 && prms[1].getB() ) req.setAttr("path",TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
+	if(prms.size() >= 2 && prms[1].getB()) req.setAttr("path",TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
 	else req.setAttr("path",TSYS::strMess("/links/lnk/el_%s",prms[0].getS().c_str()));
-	if( cntrCmdLinks(&req) ) return req.text();
+	if(cntrCmdLinks(&req)) return req.text();
 	return "";
     }
     // string linkSet(string attr, string vl, bool prm = false) - set link for attribute or attribute block (prm) to vl
     //  attr - attribute identifier
     //  vl   - link value
     //  prm  - attribute block for true
-    if( iid == "linkSet" && prms.size() >= 2 )
+    if(iid == "linkSet" && prms.size() >= 2)
     {
 	XMLNode req("set");
 	req.setAttr("user","root")->setText(prms[1].getS());
-	if( prms.size() >= 3 && prms[2].getB() ) req.setAttr("path",TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
+	if(prms.size() >= 3 && prms[2].getB()) req.setAttr("path",TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
 	else req.setAttr("path",TSYS::strMess("/links/lnk/el_%s",prms[0].getS().c_str()));
 	return cntrCmdLinks(&req);
     }
+
+    //> Request to primitive
+    TVariant rez = objFuncCall_w(iid,prms,user,this);
+    if(!rez.isNull())	return rez;
+
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 

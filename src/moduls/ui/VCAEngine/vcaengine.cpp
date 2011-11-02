@@ -252,7 +252,7 @@ void Engine::preDisable( int flag )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	wlbAt(ls[l_id]).at().setEnable(false);
 
-    TModule::preDisable( flag );
+    TModule::preDisable(flag);
 }
 
 void Engine::load_( )

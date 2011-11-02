@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-31 15:59+0200\n"
+"POT-Creation-Date: 2011-11-01 10:19+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -773,14 +773,17 @@ msgstr "Время:текущее"
 msgid "Archive size"
 msgstr "Размер архива"
 
-msgid "Cursor:view"
-msgstr "Курсор:вид"
+msgid "Archive:cursor:view"
+msgstr "Архив:курсор:вид"
 
-msgid "Cursor:archive"
-msgstr "Курсор:архив"
+msgid "Archive:cursor:current"
+msgstr "Архив:курсор:текущий"
 
-msgid "Document (current archive)"
-msgstr "Документ (текущий архив)"
+msgid "Archive:current document"
+msgstr "Архив:текущий документ"
+
+msgid "Archive:size"
+msgstr "Архив:размер"
 
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
 msgstr "Правила CSS в строках, вроде \"body { background-color:#818181; }\""
@@ -1639,6 +1642,12 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "Cursor:archive"
+#~ msgstr "Курсор:архив"
+
+#~ msgid "Document (current archive)"
+#~ msgstr "Документ (текущий архив)"
 
 #~ msgid ":view border:autoscale"
 #~ msgstr ":граница отображения:автомасштаб"

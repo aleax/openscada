@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-31 15:59+0200\n"
+"POT-Creation-Date: 2011-11-01 10:19+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -772,14 +772,19 @@ msgstr "Zeit:laufend"
 msgid "Archive size"
 msgstr "Archivgrösse"
 
-msgid "Cursor:view"
+#, fuzzy
+msgid "Archive:cursor:view"
 msgstr "Cursor:Aussehen"
 
-msgid "Cursor:archive"
-msgstr "Cursor:Archiv"
+msgid "Archive:cursor:current"
+msgstr ""
 
-msgid "Document (current archive)"
-msgstr "Dokument (die aktuelle Datei)"
+msgid "Archive:current document"
+msgstr ""
+
+#, fuzzy
+msgid "Archive:size"
+msgstr "Archivgrösse"
 
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
 msgstr "CSS-Regeln in Reihen wie \"body { background-color:#818181; }\""
@@ -1640,6 +1645,12 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Cursor:archive"
+#~ msgstr "Cursor:Archiv"
+
+#~ msgid "Document (current archive)"
+#~ msgstr "Dokument (die aktuelle Datei)"
 
 #~ msgid ":view border:autoscale"
 #~ msgstr ":Grenze der Ansicht:Automassstab"
