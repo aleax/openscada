@@ -1,4 +1,7 @@
 2011-11-02 Roman
+- !!!:FIX:UI.VCAEngine: Lost some changes on visualisators is prevented by store start counter into "openList" service request.
+- FIX:UI.VCAEngine: Archive size field of primitive "Document" is made static and update only after archive position change.
+    Get archive document of primitive "Document" on view position changing is fixed.
 - UI.VCAEngine: Archive size field is added to primitive "Document".
     User API function, session side, getArhDoc() is added to primitive "Document" for requests to archive of documents.
 

@@ -178,6 +178,8 @@ class OrigProtocol : public PrWidget
 //************************************************
 //* OrigDocument: Document view original widget  *
 //************************************************
+class SessWdg;
+
 class OrigDocument : public PrWidget
 {
     public:
@@ -193,7 +195,7 @@ class OrigDocument : public PrWidget
 	void calc( Widget *base );
 	bool attrChange( Attr &cfg, TVariant prev );
 	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
-	TVariant vlGet( Attr &a );
+	void sizeUpdate( SessWdg *sw );
 	TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 
 	string makeDoc( const string &tmpl, Widget *wdg );

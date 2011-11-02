@@ -1195,7 +1195,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    }
 	    if(!cfg.owner()->attrPresent("aSize"))
 	    {
-		cfg.owner()->attrAdd(new TFld("aSize",_("Archive:size"),TFld::Integer,TFld::NoWrite|Attr::DirRead|Attr::Mutable));
+		cfg.owner()->attrAdd(new TFld("aSize",_("Archive:size"),TFld::Integer,Attr::Mutable));
 		cfg.owner()->inheritAttr("aSize");
 	    }
 	}
@@ -1234,6 +1234,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    try{ xdoc.load(XHTML_entity+cdoc); } catch(TError err) { }
 	    cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
 	}
+	sizeUpdate(sw);
     }
     //> Move archive cursor
     else if(cfg.id() == "aCur" && cfg.getI() != prev.getI())
@@ -1258,6 +1259,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
 	    }
 	}
+	sizeUpdate(sw);
     }
     //> Document save
     else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS())
@@ -1275,9 +1277,11 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	TConfig c_el(&mod->elPrjSes());
 	TSYS::pathLev(sw->path(),0,true,&off);
 	c_el.cfg("IDW").setS(sw->path().substr(off));
+	c_el.cfg("IO_VAL").setView(false);
 
 	int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	int n = cfg.owner()->attrAt("n").at().getI();
+
 	if(cfg.getI() < 0)
 	{
 	    int docN = prev.getI();
@@ -1300,7 +1304,13 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    if(docN != cfg.getI())	cfg.setI(docN,false,true);
 	}
 	else if(cfg.getI() >= n)	cfg.setI(cfg.owner()->attrAt("aCur").at().getI(), false, true);
-	if(cfg.getI() != prev.getI())	cfg.owner()->attrAt("doc").at().setS(c_el.cfg("IO_VAL").getS());
+	if(cfg.getI() != prev.getI())
+	{
+	    c_el.cfg("ID").setS("doc"+TSYS::int2str(cfg.getI()));
+	    c_el.cfg("IO_VAL").setView(true);
+	    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+	    cfg.owner()->attrAt("doc").at().setS(c_el.cfg("IO_VAL").getS());
+	}
     }
 
     return Widget::attrChange(cfg,prev);
@@ -1361,39 +1371,36 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
     return true;
 }
 
-TVariant OrigDocument::vlGet( Attr &a )
+void OrigDocument::sizeUpdate( SessWdg *sw )
 {
-    SessWdg *sw = dynamic_cast<SessWdg*>(a.owner());
-    if(sw)
-    {
-	string db  = sw->ownerSess()->parent().at().DB();
-	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
+    string db  = sw->ownerSess()->parent().at().DB();
+    string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
-	if(a.id() == "aSize")
+    int aCur = sw->attrAt("aCur").at().getI();
+    int n = sw->attrAt("n").at().getI();
+    int rSz = n;
+    if(aCur < n)
+    {
+	int off = 0;
+	TConfig c_el(&mod->elPrjSes());
+	TSYS::pathLev(sw->path(),0,true,&off);
+	c_el.cfg("IDW").setS(sw->path().substr(off));
+	c_el.cfg("ID").setS("doc"+TSYS::int2str(aCur+1));
+	c_el.cfg("IO_VAL").setView(false);
+	if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) rSz = aCur+1;
+	else
 	{
-	    int aCur = a.owner()->attrAt("aCur").at().getI();
-	    int n = a.owner()->attrAt("n").at().getI();
-	    if(aCur < n)
-	    {
-		int off = 0;
-		TConfig c_el(&mod->elPrjSes());
-		TSYS::pathLev(sw->path(),0,true,&off);
-		c_el.cfg("IDW").setS(sw->path().substr(off));
-		c_el.cfg("ID").setS("doc"+TSYS::int2str(aCur+1));
-		c_el.cfg("IO_VAL").setView(false);
-		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) return aCur+1;
-	    }
-	    return n;
+	    c_el.cfg("ID").setS("doc"+TSYS::int2str(n-1));
+	    if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) rSz = aCur+1;
 	}
     }
-
-    return Widget::vlGet(a);
+    sw->attrAt("aSize").at().setI(rSz);
 }
 
 TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms, const string &user, Widget *src )
 {
     // string getArhDoc(integer nDoc) - get archive document text to 'nDoc' depth.
-    //  nDoc - archive document at depth (0-aSize)
+    //  nDoc - archive document at depth (0-{aSize-1})
     if(iid == "getArhDoc" && prms.size() >= 1)
     {
 	int nDoc = prms[0].getI();

@@ -528,6 +528,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEC_RD))	//Open pages list
 	{
 	    unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
+	    unsigned ntm = calcClk();
 	    vector<string> &lst = openList();
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	    {
@@ -546,7 +547,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    pel->setAttr("updWdg",TSYS::int2str(updEl.size()));
 		}
 	    }
-	    opt->setAttr("tm",TSYS::uint2str(calcClk()));
+	    opt->setAttr("tm",TSYS::uint2str(ntm));
 	}
 	else if(ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEC_WR))		//Open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true);
