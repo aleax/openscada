@@ -572,20 +572,22 @@ function makeEl( pgBr, inclPg, full, FullTree )
     geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
   }
   elStyle+='position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
-  var geomW = parseFloat(this.attrs['geomW'])-2*(elMargin+elBorder);
-  var geomH = parseFloat(this.attrs['geomH'])-2*(elMargin+elBorder);
-
-  if( this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr )
-  {
-    elStyle += 'overflow: auto; ';
-    geomW = parseFloat(this.parent.attrs['geomW'])-2*(elMargin+elBorder);
-    geomH = parseFloat(this.parent.attrs['geomH'])-2*(elMargin+elBorder);
-  }
-  else elStyle += 'overflow: hidden; ';
 
   var xSc = this.xScale(true);
   var ySc = this.yScale(true);
-  geomW = realRound(geomW*xSc); geomH = realRound(geomH*ySc);
+  var geomW = realRound(parseFloat(this.attrs['geomW'])*xSc);
+  var geomH = realRound(parseFloat(this.attrs['geomH'])*ySc);
+
+  if(this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr)
+  {
+    //elStyle += 'overflow: auto; ';
+    geomW = Math.max(geomW, parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true));
+    geomH = Math.max(geomH, parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true));
+  }
+  //else elStyle += 'overflow: hidden; ';
+
+  geomW -= 2*(elMargin+elBorder);
+  geomH -= 2*(elMargin+elBorder);
 
   this.mousedown = new Array();
   this.mouseup = new Array();
@@ -669,6 +671,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
     }
     if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
     {
+      elStyle += 'overflow: auto; ';
       if(this.inclOpen)
       {
 	servSet(this.inclOpen,'com=pgClose','');
@@ -1331,7 +1334,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
     else elStyle+='background-color: white; ';
     if( this.attrs['backImg'] )   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
-    geomW -= 4; geomH -= 4;
+    geomW -= 6; geomH -= 6;
 
     this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc));
 
