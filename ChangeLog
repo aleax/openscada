@@ -1,3 +1,7 @@
+2011-11-03 Roman
+- FIX:UI.WebVision: Scale is fixed for included and other, no master, pages for prevent using self master static scale.
+
+
 2011-11-02 Roman
 - !!!:FIX:UI.VCAEngine: Lost some changes on visualisators is prevented by store start counter into "openList" service request.
 - FIX:UI.VCAEngine: Archive size field of primitive "Document" is made static and update only after archive position change.

@@ -504,7 +504,7 @@ void TSYS::save_( )
     Mess->save();	//Messages load
 }
 
-int TSYS::start(  )
+int TSYS::start( )
 {
     vector<string> lst;
     list(lst);

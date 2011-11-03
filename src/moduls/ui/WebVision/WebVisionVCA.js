@@ -350,6 +350,7 @@ function chkPattern( val, patt )
   }
   return false;
 }
+
 /***************************************************
  * setFocus - Command for set focus                *
  ***************************************************/
@@ -362,9 +363,10 @@ function setFocus( wdg, onlyClr )
   if( onlyClr ) return;
   attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs);
 }
-/***************************************************
- * pwDescr - Page/widget descriptor object         *
- ***************************************************/
+
+/**********************************************************
+ * callPage - call page 'pgId' for open update and other. *
+ **********************************************************/
 function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 {
   if(!pgId) return true;
@@ -1725,19 +1727,19 @@ function perUpdt( )
 }
 function xScale( full )
 {
-  var rez = parseFloat(this.attrs['geomXsc'])
-  if( !full ) return rez;
-  if( !this.pg ) return rez*this.parent.xScale(full);
-  if( this != masterPage ) return masterPage.xScale()*rez;
-  return rez;
+    var rez = parseFloat(this.attrs['geomXsc'])
+    if(!full) return rez;
+    if(!this.pg) return rez*this.parent.xScale(full);
+    // if(this != masterPage) return masterPage.xScale()*rez;
+    return rez;
 }
 function yScale( full )
 {
-  var rez = parseFloat(this.attrs['geomYsc'])
-  if( !full ) return rez;
-  if( !this.pg ) return rez*this.parent.yScale(full);
-  if( this != masterPage ) return masterPage.yScale()*rez;
-  return rez;
+    var rez = parseFloat(this.attrs['geomYsc'])
+    if(!full) return rez;
+    if(!this.pg) return rez*this.parent.yScale(full);
+    // if(this != masterPage) return masterPage.yScale()*rez;
+    return rez;
 }
 function isEnabled( )
 {
@@ -1745,6 +1747,10 @@ function isEnabled( )
   if( !rez || this.pg ) return rez;
   return this.parent.isEnabled();
 }
+
+/***************************************************
+ * pwDescr - Page/widget descriptor object         *
+ ***************************************************/
 function pwDescr( pgAddr, pg, parent )
 {
   this.addr = pgAddr;
