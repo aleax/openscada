@@ -238,7 +238,7 @@ class TBDS : public TSubSYS, public TElem
 	static string realDBName( const string &bdn );
 	void dbList( vector<string> &ls, bool checkSel = false );
 
-	void closeOldTables( int secOld = 600 );
+	void perSYSCall( unsigned int cnt );
 
 	//> Open/close table.
 	AutoHD<TTable> open( const string &bdn, bool create = false );

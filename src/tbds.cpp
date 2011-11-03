@@ -87,8 +87,9 @@ void TBDS::dbList( vector<string> &ls, bool checkSel )
     }
 }
 
-void TBDS::closeOldTables( int secOld )
+void TBDS::perSYSCall( unsigned int cnt )
 {
+    int secOld = 600;
     vector<string> tdbs, dbs, tbls;
 
     try

@@ -110,6 +110,8 @@ class Engine : public TUI
 	TElem &elPrjSes( )	{ return prj_ses_el; }
 	TElem &elPrjStl( )	{ return prjStl_el; }
 
+	void perSYSCall( unsigned int cnt );
+
     protected:
 	//Methods
 	void load_( );

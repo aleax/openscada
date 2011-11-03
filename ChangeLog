@@ -1,5 +1,10 @@
 2011-11-03 Roman
+- SYS, DB: System periodic call function perSYSCall() to subsystem's and its modules objects is added.
+    TDBS::closeOldTables() realisation is moved to perSYSCall().
+- UI.VCAEngine: Periodic check for not use session is added into function perSYSCall() for 30 minutes timeout.
+- FIX:UI.VCAEngine: Copy properties for DirectRead attributes on widget copy is fixed.
 - FIX:UI.WebVision: Scale is fixed for included and other, no master, pages for prevent using self master static scale.
+    Pages include to Box-container widget is fixed to scroll processing.
 
 
 2011-11-02 Roman

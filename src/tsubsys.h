@@ -65,6 +65,8 @@ class TSubSYS : public TCntrNode
 	void modDel( const string &name );
 	AutoHD<TModule> modAt( const string &name );
 
+	virtual void perSYSCall( unsigned int cnt );
+
 	TSYS &owner( );
 
     protected:

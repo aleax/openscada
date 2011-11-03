@@ -39,6 +39,7 @@ Session::Session( const string &iid, const string &iproj ) :
     mId = iid;
     mPage = grpAdd("pg_");
     sec = SYS->security();
+    mReqTm = time(NULL);
 }
 
 Session::~Session( )
@@ -553,6 +554,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true);
 	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR))		//Close open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
+	mReqTm = time(NULL);
 	return;
     }
     else if(a_path == "/serv/alarm")	//Alarm operations

@@ -536,14 +536,17 @@ int TSYS::start( )
 	if(modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)))
 	    modSchedul( ).at().libLoad(modDir(),true);
 
-	//> Old tables closing
-	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	db().at().closeOldTables();
-
 	//> Periodic changes saving to DB
 	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
 
 	//> Config file save need check
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileSave();
+
+	//> Call subsystems at 10s
+	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
+	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
+		try { at(lst[i_a]).at().perSYSCall(i_cnt); }
+		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	usleep(STD_WAIT_DELAY*1000);
 	i_cnt++;

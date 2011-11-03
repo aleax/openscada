@@ -123,6 +123,16 @@ void TSubSYS::subStop( )
     mStart = false;
 }
 
+void TSubSYS::perSYSCall( unsigned int cnt )
+{
+    if(!subModule()) return;
+    vector<string> list;
+    modList(list);
+    for(unsigned i_m = 0; i_m < list.size(); i_m++)
+	try{ modAt(list[i_m]).at().perSYSCall(cnt); }
+	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
 void TSubSYS::cntrCmdProc( XMLNode *opt )
 {
     //Get page info

@@ -547,9 +547,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
   if( !inclPg && pgBr )
     for( var j = 0; j < pgBr.childNodes.length; j++ )
     {
-      if( pgBr.childNodes[j].nodeName != 'el' ) continue;
+      if(pgBr.childNodes[j].nodeName != 'el') continue;
       var i = pgBr.childNodes[j].getAttribute('id');
-      if( (i == 'bordWidth' || i == 'geomMargin') && this.attrs[i] != nodeText(pgBr.childNodes[j]) ) margBrdUpd = true;
+      if((i == 'bordWidth' || i == 'geomMargin') && this.attrs[i] != nodeText(pgBr.childNodes[j])) margBrdUpd = true;
       this.attrs[i] = nodeText(pgBr.childNodes[j]);
       newAttr = true;
     }
@@ -564,7 +564,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
   { elStyle += 'visibility : hidden; '; this.isVisible = false; }
   var geomX = parseFloat(this.attrs['geomX']);
   var geomY = parseFloat(this.attrs['geomY']);
-  if( this.pg ) geomX = geomY = 0;
+  if( this.pg ) { geomX = geomY = 0; elStyle += 'overflow: hidden; '; }
   else{ geomX *= this.parent.xScale(true); geomY *= this.parent.yScale(true); }
   if( this.parent && !(this.pg && this.parent.pg) )
   {
@@ -580,9 +580,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
   if(this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr)
   {
+    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true);
+    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true);
+    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'scroll' : 'visible';
     //elStyle += 'overflow: auto; ';
-    geomW = Math.max(geomW, parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true));
-    geomH = Math.max(geomH, parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true));
+    geomW = Math.max(geomW, geomWpar);
+    geomH = Math.max(geomH, geomHpar);
   }
   //else elStyle += 'overflow: hidden; ';
 
@@ -671,7 +674,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
     }
     if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) || (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
     {
-      elStyle += 'overflow: auto; ';
+      //elStyle += 'overflow: auto; ';
       if(this.inclOpen)
       {
 	servSet(this.inclOpen,'com=pgClose','');

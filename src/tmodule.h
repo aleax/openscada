@@ -91,6 +91,8 @@ class TModule : public TCntrNode
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
 
+	virtual void perSYSCall( unsigned int cnt )	{ }
+
 	//> Export functions
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );

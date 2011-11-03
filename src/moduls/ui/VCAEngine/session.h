@@ -45,19 +45,20 @@ class Session : public TCntrNode
 	Session( const string &id, const string &proj = "" );
 	~Session( );
 
-	string ico( );
+	string	ico( );
 	const string &id( )	{ return mId; }			//Identifier
-	string projNm( )	{ return mPrjnm; }		//Project's name
-	string user( )		{ return mUser; }		//Open session user
-	string owner( )		{ return mOwner; }		//Source project owner
-	string grp( )		{ return mGrp; }		//Source project group
-	short  permit( )	{ return mPermit; }		//Permition for access to source project
-	int    period( )	{ return vmax(1,mPer); }	//Process period (ms)
-	double calcTm( )	{ return tm_calc; }		//Calc session time
-	bool   enable( )	{ return mEnable; }		//Enable stat
-	bool   start( )		{ return mStart; }		//Start stat
-	bool   backgrnd( )	{ return mBackgrnd; }		//Background session execution
-	int    connects( )	{ return mConnects; }		//Connections counter
+	string	projNm( )	{ return mPrjnm; }		//Project's name
+	string	user( )		{ return mUser; }		//Open session user
+	string	owner( )	{ return mOwner; }		//Source project owner
+	string	grp( )		{ return mGrp; }		//Source project group
+	short	permit( )	{ return mPermit; }		//Permition for access to source project
+	int	period( )	{ return vmax(1,mPer); }	//Process period (ms)
+	double	calcTm( )	{ return tm_calc; }		//Calc session time
+	bool	enable( )	{ return mEnable; }		//Enable stat
+	bool	start( )	{ return mStart; }		//Start stat
+	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
+	int	connects( )	{ return mConnects; }		//Connections counter
+	time_t	reqTm( )	{ return mReqTm; }		//Last request time from client
 	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( );
 	int stlCurent( )	{ return mStyleIdW; }
@@ -149,6 +150,7 @@ class Session : public TCntrNode
 	unsigned	mCalcClk;		//Calc clock
 	float		tm_calc;		//Scheme's calc time
 	float		rez_calc;
+	time_t		mReqTm;
 	AutoHD<Project>	mParent;
 	Res		mCalcRes;		//Calc resource
 	Res		mEvRes;			//Event access resource

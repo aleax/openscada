@@ -102,15 +102,15 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	    attrAt(els[i_a]).at().setModif(1);
 	}
 	attr  = attrAt(els[i_a]);
-	if(attr.at().flgGlob( )&Attr::DirRead) continue;
 	attr.at().setFlgSelf(pattr.at().flgSelf());
-	switch(attr.at().type())
-	{
-	    case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
-	    case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
-	    case TFld::Real:	attr.at().setR(pattr.at().getR());	break;
-	    case TFld::String:	attr.at().setS(pattr.at().getS());	break;
-	}
+	if(!(attr.at().flgGlob()&Attr::DirRead))
+	    switch(attr.at().type())
+	    {
+		case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
+		case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
+		case TFld::Real:	attr.at().setR(pattr.at().getR());	break;
+		case TFld::String:	attr.at().setS(pattr.at().getS());	break;
+	    }
 	attr.at().setCfgTempl( pattr.at().cfgTempl() );
 	attr.at().setCfgVal( pattr.at().cfgVal() );
     }

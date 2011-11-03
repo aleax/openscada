@@ -720,6 +720,16 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
     return m_attrs;
 }
 
+void Engine::perSYSCall( unsigned int cnt )
+{
+    //> Check for stop and remove lost and not used already project's sessions
+    vector<string> sls;
+    sesList(sls);
+    for(unsigned i_s = 0; i_s < sls.size(); i_s++)
+	if(!sesAt(sls[i_s]).at().backgrnd() && (time(NULL)-sesAt(sls[i_s]).at().reqTm()) > 30*60)
+	    sesDel(sls[i_s]);
+}
+
 void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
