@@ -588,7 +588,7 @@ void MTable::fieldGet( TConfig &cfg )
     mLstUse = time(NULL);
 
     //> Prepare request
-    string req = "SELECT ", req_where, sid;
+    string req = "SELECT ", req_where, sid, first_key;
     //>> Add fields list to queue
     bool first_sel = true, next_wr = false, trPresent = false;
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
@@ -606,6 +606,7 @@ void MTable::fieldGet( TConfig &cfg )
 	if(u_cfg->fld().flg()&TCfg::Key)
 	{
 	    req_where = req_where + (next_wr?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
+	    if(first_key.empty()) first_key = mod->sqlReqCode(sid,'"');
 	    next_wr = true;
 	}
 	else if(u_cfg->view())
@@ -614,6 +615,7 @@ void MTable::fieldGet( TConfig &cfg )
 	    first_sel = false;
 	}
     }
+    if(first_sel) req += "\""+first_key+"\"";
     req = req + " FROM \"" + mod->sqlReqCode(name(),'"') + "\" WHERE " + req_where;
 
     //> Query

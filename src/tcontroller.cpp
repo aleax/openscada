@@ -440,6 +440,19 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
 	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit, (prms.size() >= 3) ? prms[2].getS() : "");
 	return true;
     }
+    // bool enable(bool newSt = EVAL) - get enable status or change it by argument 'newSt' assign.
+    if(iid == "enable")
+    {
+	if(prms.size())	{ prms[0].getB() ? enable() : disable(); }
+	return enableStat();
+    }
+    // bool start(bool newSt = EVAL) - get start status or change it by argument 'newSt' assign.
+    if(iid == "start")
+    {
+	if(prms.size())	{ prms[0].getB() ? start() : stop(); }
+	return startStat();
+    }
+
     //> Config functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;

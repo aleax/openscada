@@ -422,7 +422,7 @@ void MTable::fieldGet( TConfig &cfg )
     string sid;
     //> Prepare request
     string req = "SELECT ";
-    string req_where;
+    string req_where, first_key;
     //>> Add fields list to queue
     bool first_sel = true, next_wr = false, trPresent = false;
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
@@ -432,23 +432,24 @@ void MTable::fieldGet( TConfig &cfg )
 	if(!cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#"))
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
+	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
 	    trPresent = true;
 	}
-	if( !u_cfg ) continue;
+	if(!u_cfg) continue;
 
-	if( u_cfg->fld().flg()&TCfg::Key )
+	if(u_cfg->fld().flg()&TCfg::Key)
 	{
 	    req_where = req_where + (next_wr?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='"  +TSYS::strEncode(getVal(*u_cfg),TSYS::SQL) + "' ";
+	    if(first_key.empty()) first_key = TSYS::strEncode(sid,TSYS::SQL);
 	    next_wr = true;
 	}
-	else if( u_cfg->view() )
+	else if(u_cfg->view())
 	{
 	    req = req + (first_sel?"`":",`") + TSYS::strEncode(sid,TSYS::SQL) + "`";
 	    first_sel = false;
 	}
     }
-    if(first_sel) req += "*";
+    if(first_sel) req += "`"+first_key+"`";
     req = req + " FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` WHERE " + req_where;
 
     //> Query
