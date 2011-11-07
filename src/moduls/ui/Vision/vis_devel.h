@@ -97,14 +97,16 @@ class VisDevelop : public QMainWindow
 	void prjRun( );		//Run project execution
 	void prjNew( );		//New project create
 	void libNew( );		//New widgets library creating
-	void visualItAdd( QAction*, const QPointF &pnt = QPointF(), const string &wid = "", const string &wnm = "", const string &own = "" );//Add visual item (widget or page)
-	void visualItDel( const string &itms = "" );	//Delete selected visual items
+	void visualItAdd( QAction*, const QPointF &pnt = QPointF(), const string &wid = "",
+	    const string &wnm = "", const string &own = "", bool chNoWr = false );	//Add visual item (widget or page)
+	void visualItDel( const string &itms = "", bool chNoWr = false );		//Delete selected visual items
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
 	void visualItEdit( );	//Visual item graphical edit
-	void visualItClear( const string &el_wa = "" );	//Visual item changes clear
+	void visualItClear( const string &el_wa = "" );		//Visual item changes clear
 	void visualItCut( );	//Visual item cut
 	void visualItCopy( );	//Visual item copy
-	void visualItPaste( );	//Visual item paste
+	void visualItPaste( const string &wsrc = "", const string &wdst = "",
+	    const string &wnm = "", bool chNoWr = false );	//Visual item paste
 
     public:
 	//Public attributes

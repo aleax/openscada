@@ -1,3 +1,10 @@
+2011-11-07 Roman
+- !!:UI.VCAEngine: Visual item add changes record is made optional by 'chNoWr' argument for prevented uncontrolled record.
+    Visual item changes record is added for copy-paste and delete container's child widgets.
+    Crash at UnDo and ReDo for some cases is prevented.
+- FIX:UI.VCAEngine: Pointer cursor-hand lost for selected widgets after copy at some cases is prevented.
+
+
 2011-11-04 Roman
 - DAQ: User API functions enable() and start() is added to controller object.
 - Archive: User API functions status(), end() and begin() is added to messages archivator object.

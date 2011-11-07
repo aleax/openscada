@@ -182,9 +182,9 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 
 	//> Set/update widget name
 	req.setAttr("path",itId+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
-	if( !mainWin()->cntrIfCmd(req) )	it->setName(req.text().c_str());
+	if(!mainWin()->cntrIfCmd(req))	it->setName(req.text().c_str());
 
-	info_req.setAttr("path",itId+"/%2fattr" );
+	info_req.setAttr("path",itId+"/%2fattr");
 	mainWin()->cntrIfCmd(info_req);
 	XMLNode *root = info_req.childGet(0);
 
@@ -2284,7 +2284,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 	else if( grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp) )	new_shp = Qt::SizeVerCursor;
 	else if( grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp) )			{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
 	else if( grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp) )	new_shp = Qt::SizeHorCursor;
-	else if( !noSelUp && selRect.contains(curp) )						new_shp = Qt::PointingHandCursor;
+	else if( /*!noSelUp &&*/ selRect.contains(curp) )					new_shp = Qt::PointingHandCursor;
 	if( new_shp != Qt::ArrowCursor )	fHoldChild = true;
     }
     if( new_shp != cursor().shape() ) setCursor(new_shp);
@@ -2765,27 +2765,39 @@ void DevelWdgView::chUnDo( )
     //> Get change on cursor and make it
     XMLNode *rule = chTree->childGet(cur);
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
-    if(rlW)
+    if(rlW && rule->name() == "geom")
     {
-	if(rule->name() == "geom")
-	{
-	    rlW->attrSet("geomX", rule->attr("_x"));
-	    rlW->attrSet("geomY", rule->attr("_y"));
-	    rlW->attrSet("geomW", rule->attr("_w"));
-	    rlW->attrSet("geomH", rule->attr("_h"));
-	    rlW->attrSet("geomXsc", rule->attr("_xSc"));
-	    rlW->attrSet("geomYsc", rule->attr("_ySc"));
-	    rlW->attrSet("geomZ", rule->attr("_z"));
-	}
-	else if(rule->name() == "attr")
-	    rlW->attrSet(rule->attr("id"), rule->attr("prev"));
-	else if(rule->name() == "chldAdd")
-	    mainWin()->visualItDel(rule->attr("path"));
+	rlW->attrSet("geomX", rule->attr("_x"));
+	rlW->attrSet("geomY", rule->attr("_y"));
+	rlW->attrSet("geomW", rule->attr("_w"));
+	rlW->attrSet("geomH", rule->attr("_h"));
+	rlW->attrSet("geomXsc", rule->attr("_xSc"));
+	rlW->attrSet("geomYsc", rule->attr("_ySc"));
+	rlW->attrSet("geomZ", rule->attr("_z"));
     }
+    else if(rlW && rule->name() == "attr")	rlW->attrSet(rule->attr("id"), rule->attr("prev"));
+    else if(rlW && rule->name() == "chldAdd")	mainWin()->visualItDel(rule->attr("path"),true);
+    else if(rule->name() == "chldDel")
+    {
+	//>> Add widget
+	QAction addAct(NULL);
+	addAct.setObjectName(rule->attr("parent").c_str());
+        mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
+        //>> Save contest restore
+	XMLNode reqVls("CntrReqs");
+        reqVls.setAttr("path",rule->attr("wdg"));
+        vector<string> als;
+        rule->attrList(als);
+        for(unsigned i_a = 0; i_a < als.size(); i_a++)
+            if(als[i_a][0] == '_')
+                reqVls.childAdd("set")->setAttr("path","/%2fattr%2f"+als[i_a].substr(1))->setText(rule->attr(als[i_a]));
+        mainWin()->cntrIfCmd(reqVls);
+    }
+    else if(rlW && rule->name() == "chldPaste")	mainWin()->visualItDel(rule->attr("dst"),true);
 
     //> For top items (like inspector) data update
     setSelect(true,PrcChilds);
-    load(rlW->id());
+    if(rlW) load(rlW->id()); else load(id());
 
     //> Move cursor
     chTree->setAttr("cur",TSYS::int2str(vmin(chTree->childSize(),cur+1)));
@@ -2812,19 +2824,22 @@ void DevelWdgView::chReDo( )
 	    rlW->attrSet("geomYsc", rule->attr("ySc"));
 	    rlW->attrSet("geomZ", rule->attr("z"));
 	}
-	else if(rule->name() == "attr")
-	    rlW->attrSet(rule->attr("id"), rule->text());
+	else if(rule->name() == "attr")	rlW->attrSet(rule->attr("id"), rule->text());
+	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
 	else if(rule->name() == "chldAdd")
 	{
 	    QAction addAct(NULL);
 	    addAct.setObjectName(rule->attr("parent").c_str());
-            mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())), rule->attr("id"), rule->attr("name"), rlW->id());
+            mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())),
+        	rule->attr("id"), rule->attr("name"), rlW->id(), true);
         }
+        else if(rule->name() == "chldPaste")
+            mainWin()->visualItPaste("0"+rule->attr("src"), rule->attr("dst"), rule->attr("name"), true);
     }
 
     //> For top items (like inspector) data update
     setSelect(true,PrcChilds);
-    load(rlW->id());
+    if(rlW) load(rlW->id()); else load(id());
 
     //> Move cursor
     chTree->setAttr("cur",TSYS::int2str(vmax(0,cur-1)));
@@ -2850,8 +2865,12 @@ void DevelWdgView::chUpdate( )
 	    wdg = rule->attr("wdg");
 	    ells = "\n"+(wdg.empty()?id():wdg)+": ";
 	    if(rule->name() == "geom") ells += _("geometry");
-	    else if(rule->name() == "attr") ells += TSYS::strMess(_("attribute '%s'"),rule->attr("id").c_str());
-	    else if(rule->name() == "chldAdd") ells += TSYS::strMess(_("new widget '%s' from '%s'"),rule->attr("id").c_str(),rule->attr("parent").c_str());
+	    else if(rule->name() == "attr")	ells += TSYS::strMess(_("attribute '%s'"),rule->attr("id").c_str());
+	    else if(rule->name() == "chldAdd")
+		ells += TSYS::strMess(_("new widget '%s' from '%s'"),rule->attr("id").c_str(),rule->attr("parent").c_str());
+	    else if(rule->name() == "chldDel")	ells += TSYS::strMess(_("remove widget"));
+	    else if(rule->name() == "chldPaste")
+		ells += TSYS::strMess(_("copy past widget '%s' from '%s'"),rule->attr("dst").c_str(),rule->attr("src").c_str());
 	    else ells += _("unknown");
 	    if(i_r >= cur) ellsUn += ells; else ellsRe = ells+ellsRe;
 	}
@@ -3006,11 +3025,12 @@ bool DevelWdgView::event( QEvent *event )
 
 		    QString lwdg;
 		    dataStream >> lwdg;
-		    //-- Search need action --
+		    //>> Search need action
 		    QPoint curp = mapFromGlobal(cursor().pos());
-		    for( int i_a = 0; i_a < mainWin()->actGrpWdgAdd->actions().size(); i_a++ )
-			if( mainWin()->actGrpWdgAdd->actions().at(i_a)->objectName() == lwdg )
-			    mainWin()->visualItAdd(mainWin()->actGrpWdgAdd->actions().at(i_a),QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
+		    for(int i_a = 0; i_a < mainWin()->actGrpWdgAdd->actions().size(); i_a++)
+			if(mainWin()->actGrpWdgAdd->actions().at(i_a)->objectName() == lwdg)
+			    mainWin()->visualItAdd(mainWin()->actGrpWdgAdd->actions().at(i_a),
+				    QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
 
 		    ev->accept();
 		    return true;

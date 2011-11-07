@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 12:41+0200\n"
+"POT-Creation-Date: 2011-11-06 22:01+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1197,8 +1197,15 @@ msgstr "геометрія"
 msgid "attribute '%s'"
 msgstr "атрибут '%s'"
 
+#, c-format
 msgid "new widget '%s' from '%s'"
 msgstr "новий віджет '%s' від '%s'"
+
+msgid "remove widget"
+msgstr "видалення віджету"
+
+msgid "copy past widget '%s' from '%s'"
+msgstr "копіювання-вставка віджету '%s' з '%s'"
 
 msgid "unknown"
 msgstr "невідомо"

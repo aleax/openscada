@@ -194,7 +194,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 		if(p->second->nodeMode() == Enable)
 		    p->second->nodeDis(tm, flag);
 
-	//- Wait of free node -
+	//> Wait of free node
 	time_t t_cur = time(NULL);
 	while(1)
 	{

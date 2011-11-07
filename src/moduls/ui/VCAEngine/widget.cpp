@@ -695,7 +695,7 @@ TVariant Widget::stlReq( Attr &a, const TVariant &vl, bool wr )
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //> Service commands process -
+    //> Service commands process
     if(a_path == "/serv/attr")	//Attribute's access
     {
 	if(ctrChkNode(opt,"get",RWRWRW,"root",SUI_ID,SEC_RD))		//Get values
