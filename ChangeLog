@@ -1,8 +1,8 @@
 2011-11-07 Roman
-- !!:UI.VCAEngine: Visual item add changes record is made optional by 'chNoWr' argument for prevented uncontrolled record.
+- !!:UI.Vision: Visual item add changes record is made optional by 'chNoWr' argument for prevented uncontrolled record.
     Visual item changes record is added for copy-paste and delete container's child widgets.
     Crash at UnDo and ReDo for some cases is prevented.
-- FIX:UI.VCAEngine: Pointer cursor-hand lost for selected widgets after copy at some cases is prevented.
+- FIX:UI.Vision: Pointer cursor-hand lost for selected widgets after copy at some cases is prevented.
 
 
 2011-11-04 Roman
