@@ -1,3 +1,9 @@
+2011-11-08 Roman
+- DAQ.JavaLikeCalc: Contoller's values context length for save to DB is rise from 50 to 10000.
+- FIX:UI.VCAEngine: Pages with "pgNoOpenProc" flag set enabling on start session is fixed.
+- FIX:UI.Vision: Copy first level widgets of a library is fixed.
+
+
 2011-11-07 Roman
 - !!:UI.Vision: Visual item add changes record is made optional by 'chNoWr' argument for prevented uncontrolled record.
     Visual item changes record is added for copy-paste and delete container's child widgets.

@@ -1445,7 +1445,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
 	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
 	    else req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
-	    if(n_del == 2)
+	    if(n_del <= 2)
 	    {
 		d_elp += ("/"+d_el);
 		t1_el = s_el.substr(4);

@@ -783,7 +783,7 @@ void SessPage::setEnable( bool val, bool force )
 	mToEn = true;
 	//>> Check for full enable need
 	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
-	if((pgOpen || force) && !enable())
+	if((pgOpen || force || parent().at().attrAt("pgNoOpenProc").at().getB()) && !enable())
 	{
 	    SessWdg::setEnable(true);
 	    if(pgOpen) ownerSess()->openReg(path());

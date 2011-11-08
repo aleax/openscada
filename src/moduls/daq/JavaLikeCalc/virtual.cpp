@@ -100,7 +100,7 @@ void TipContr::postEnable( int flag )
 
     //> Controller value db structure
     val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
-    val_el.fldAdd( new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"50") );
+    val_el.fldAdd( new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"10000") );
 
     //> Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
