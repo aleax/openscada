@@ -528,8 +528,6 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 	    {
 		//> Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
-		/*DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
-		if(dw)	dw->chRecord(*XMLNode("attr").setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val));*/
 
 		//> Local update
 		it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
@@ -2788,13 +2786,17 @@ void DevelWdgView::chUnDo( )
     }
     else if(rlW && rule->name() == "attr")
     {
-	rlW->attrSet(rule->attr("id"), rule->attr("prev"));
-	chRestoreCtx(*rule);
+        for(int i_ch = 0; i_ch < rule->childSize(); i_ch++)
+            rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->attr("prev"));
+        if(rule->attr("id").size())
+        {
+            rlW->attrSet(rule->attr("id"), rule->attr("prev"));
+	   chRestoreCtx(*rule);
+        }
     }
     else if(rlW && rule->name() == "chldAdd")	mainWin()->visualItDel(rule->attr("path"),true);
     else if(rule->name() == "chldDel")
     {
-	//>> Add widget
 	QAction addAct(NULL);
 	addAct.setObjectName(rule->attr("parent").c_str());
         mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
@@ -2831,7 +2833,12 @@ void DevelWdgView::chReDo( )
 	    rlW->attrSet("geomYsc", rule->attr("ySc"));
 	    rlW->attrSet("geomZ", rule->attr("z"));
 	}
-	else if(rule->name() == "attr")	rlW->attrSet(rule->attr("id"), rule->text());
+	else if(rule->name() == "attr")
+        {
+            if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
+            for(int i_ch = 0; i_ch < rule->childSize(); i_ch++)
+                rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->text());
+        }
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
 	else if(rule->name() == "chldAdd")
 	{
@@ -2872,7 +2879,8 @@ void DevelWdgView::chUpdate( )
 	    wdg = rule->attr("wdg");
 	    ells = "\n"+(wdg.empty()?id():wdg)+": ";
 	    if(rule->name() == "geom") ells += _("geometry");
-	    else if(rule->name() == "attr")	ells += TSYS::strMess(_("attribute '%s'"),rule->attr("id").c_str());
+	    else if(rule->name() == "attr")
+                ells += rule->attr("name").empty() ? TSYS::strMess(_("attribute '%s'"),rule->attr("id").c_str()) : rule->attr("name");
 	    else if(rule->name() == "chldAdd")
 		ells += TSYS::strMess(_("new widget '%s' from '%s'"),rule->attr("id").c_str(),rule->attr("parent").c_str());
 	    else if(rule->name() == "chldDel")	ells += TSYS::strMess(_("remove widget"));
@@ -3404,6 +3412,7 @@ bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
 		setSelect(false,PrcChilds);
 		setSelect(true);
 		break;
+            default:    break;
 	}
     return WdgView::eventFilter(object, event);
 }

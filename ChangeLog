@@ -1,5 +1,8 @@
 2011-11-09 Roman
-- UI.VCAEngine: Context record for widget atributes' value is moved to separated function and used also
+- UI.Vision: Falgs store for developed widgets is changed to uint8_t type.
+    Child attributes process into change rule "attr" is added.
+    Rule's name process is added for group attributes change into one rule "attr".
+- UI.Vision: Context record for widget atributes' value is moved to separated function and used also
     for record context after active atribute value change.
 
 
