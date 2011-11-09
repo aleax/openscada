@@ -1,3 +1,8 @@
+2011-11-09 Roman
+- UI.VCAEngine: Context record for widget atributes' value is moved to separated function and used also
+    for record context after active atribute value change.
+
+
 2011-11-08 Roman
 - DAQ.JavaLikeCalc: Contoller's values context length for save to DB is rise from 50 to 10000.
 - FIX:UI.VCAEngine: Pages with "pgNoOpenProc" flag set enabling on start session is fixed.

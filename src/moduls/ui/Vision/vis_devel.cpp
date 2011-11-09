@@ -1209,28 +1209,8 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	}
 
 	//> Save removed widget context for change record
-	if(!chNoWr)
-	{
-	    dw = work_space->findChild<DevelWdgView*>(del_wdg.c_str());
-	    if(dw)
-	    {
-		XMLNode reqCtf("info"), reqVls("CntrReqs");
-		reqCtf.setAttr("path",del_wdg+"/%2fattr");
-		if(!cntrIfCmd(reqCtf))
-		{
-		    XMLNode *root = reqCtf.childGet(0);
-		    reqVls.setAttr("path",del_wdg);
-            	    reqVls.childAdd("get")->setAttr("path","/%2fattr%2fparent");
-		    for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
-			if(atoi(root->childGet(i_a)->attr("modif").c_str()))
-			    reqVls.childAdd("get")->setAttr("path","/%2fattr%2f"+root->childGet(i_a)->attr("id"));
-		    cntrIfCmd(reqVls);
-		    chCtx.setAttr("parent",reqVls.childGet(0)->text());
-		    for(unsigned i_a = 1; i_a < reqVls.childSize(); i_a++)
-			chCtx.setAttr("_"+reqVls.childGet(i_a)->attr("path").substr(11),reqVls.childGet(i_a)->text());
-		}
-	    }
-	}
+	if(!chNoWr && (dw=work_space->findChild<DevelWdgView*>(del_wdg.c_str())))
+	    dw->chLoadCtx(chCtx, "parent;");
 
 	//> Send remove context
 	if(cntrIfCmd(req))

@@ -486,7 +486,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 
 bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int role )
 {
-    if( !index.isValid() )  return false;
+    if(!index.isValid()) return false;
 
     //> Attribute
     Item *it = static_cast<Item*>(index.internalPointer());
@@ -509,16 +509,27 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     try
     {
+	XMLNode chCtx("attr");
+
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();
 	XMLNode req("set");
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); )
 	{
 	    req.setAttr("path",swdg+"/%2fattr%2f"+nattr)->setText(val);
+	    DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
+	    if(dw)
+	    {
+		chCtx.clear();
+		chCtx.setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val);
+		if(it->flag()&Item::Active) dw->chLoadCtx(chCtx, "", nattr);
+	    }
+
 	    if(!mainWin()->cntrIfCmd(req) && req.text() == val)
 	    {
 		//> Send change request to opened to edit widget
-		DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
-		if(dw)	dw->chRecord(*XMLNode("attr").setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val));
+		if(dw)	dw->chRecord(chCtx);
+		/*DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
+		if(dw)	dw->chRecord(*XMLNode("attr").setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val));*/
 
 		//> Local update
 		it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
@@ -2775,7 +2786,11 @@ void DevelWdgView::chUnDo( )
 	rlW->attrSet("geomYsc", rule->attr("_ySc"));
 	rlW->attrSet("geomZ", rule->attr("_z"));
     }
-    else if(rlW && rule->name() == "attr")	rlW->attrSet(rule->attr("id"), rule->attr("prev"));
+    else if(rlW && rule->name() == "attr")
+    {
+	rlW->attrSet(rule->attr("id"), rule->attr("prev"));
+	chRestoreCtx(*rule);
+    }
     else if(rlW && rule->name() == "chldAdd")	mainWin()->visualItDel(rule->attr("path"),true);
     else if(rule->name() == "chldDel")
     {
@@ -2783,15 +2798,7 @@ void DevelWdgView::chUnDo( )
 	QAction addAct(NULL);
 	addAct.setObjectName(rule->attr("parent").c_str());
         mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
-        //>> Save contest restore
-	XMLNode reqVls("CntrReqs");
-        reqVls.setAttr("path",rule->attr("wdg"));
-        vector<string> als;
-        rule->attrList(als);
-        for(unsigned i_a = 0; i_a < als.size(); i_a++)
-            if(als[i_a][0] == '_')
-                reqVls.childAdd("set")->setAttr("path","/%2fattr%2f"+als[i_a].substr(1))->setText(rule->attr(als[i_a]));
-        mainWin()->cntrIfCmd(reqVls);
+        chRestoreCtx(*rule);
     }
     else if(rlW && rule->name() == "chldPaste")	mainWin()->visualItDel(rule->attr("dst"),true);
 
@@ -2886,6 +2893,45 @@ void DevelWdgView::chUpdate( )
         mainWin()->actVisItReDo->setEnabled(false);
         mainWin()->actVisItReDo->setToolTip(mainWin()->actVisItReDo->toolTip().split("\n")[0]);
     }
+}
+
+void DevelWdgView::chLoadCtx( XMLNode &chCtx, const string &forceAttrs, const string &fromAttr )
+{
+    XMLNode reqCtf("info"), reqVls("CntrReqs");
+    reqCtf.setAttr("path",id()+"/%2fattr");
+    reqVls.setAttr("path",id());
+    if(!mainWin()->cntrIfCmd(reqCtf))
+    {
+        XMLNode *root = reqCtf.childGet(0), *chEl;
+
+	bool fromOK = fromAttr.empty();
+        for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
+        {
+	    chEl = root->childGet(i_a);
+            if((forceAttrs.size() && forceAttrs.find(chEl->attr("id")+";") != string::npos) || (fromOK && atoi(chEl->attr("modif").c_str())))
+        	reqVls.childAdd("get")->setAttr("path","/%2fattr%2f"+chEl->attr("id"));
+    	    if(!fromOK && chEl->attr("id") == fromAttr) fromOK = true;
+	}
+	cntrIfCmd(reqVls);
+	for(unsigned i_a = 0; i_a < reqVls.childSize(); i_a++)
+	{
+	    chEl = reqVls.childGet(i_a);
+	    string aid = chEl->attr("path").substr(11);
+	    chCtx.setAttr((forceAttrs.size()&&forceAttrs.find(aid+";")!=string::npos)?aid:("_"+aid), chEl->text());
+	}
+    }
+}
+
+void DevelWdgView::chRestoreCtx( const XMLNode &ch )
+{
+    XMLNode reqVls("CntrReqs");
+    reqVls.setAttr("path",ch.attr("wdg").empty()?id():ch.attr("wdg"));
+    vector<string> als;
+    ch.attrList(als);
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
+        if(als[i_a][0] == '_')
+            reqVls.childAdd("set")->setAttr("path","/%2fattr%2f"+als[i_a].substr(1))->setText(ch.attr(als[i_a]));
+    mainWin()->cntrIfCmd(reqVls);
 }
 
 float DevelWdgView::xScale( bool full )

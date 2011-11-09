@@ -526,6 +526,8 @@ class DevelWdgView: public WdgView
 	//> Changes operations
 	void chRecord( XMLNode ch );
 	void chUpdate( );
+	void chLoadCtx( XMLNode &ch, const string &forceAttrs = "", const string &fromAttr = "" );
+	void chRestoreCtx( const XMLNode &ch );
 
     signals:
 	void selected( const string& item );		//Change selection signal
