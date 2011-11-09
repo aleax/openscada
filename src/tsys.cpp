@@ -1317,7 +1317,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     }
 }
 
-void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm )
+void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSignal )
 {
     ResAlloc res(taskRes, false);
     map<string,STask>::iterator it = mTasks.find(path);
@@ -1326,14 +1326,14 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm )
     res.release();
 
     if(endrunCntr) *endrunCntr = true;
-    pthread_kill(thr, SIGALRM);
+    if(!noSignal) pthread_kill(thr, SIGALRM);
 
     //> Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
     t_tm = s_tm = time(NULL);
     while(!(it->second.flgs&STask::FinishTask))
     {
-        pthread_kill(thr, SIGALRM);
+        if(!noSignal) pthread_kill(thr, SIGALRM);
 	time_t c_tm = time(NULL);
         //Check timeout
         if(wtm && (c_tm > (s_tm+wtm)))

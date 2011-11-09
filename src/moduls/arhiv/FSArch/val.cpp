@@ -1708,7 +1708,8 @@ void VFileArch::repairFile( int hd )
 	    //> Fix file
 	    if(dt > 0)
 	    {
-		ftruncate(hd, f_off);
+		mSize = f_off+vSize;
+		ftruncate(hd, mSize);
 		setValue(hd, f_off, eVal);
 	    }
 	    else

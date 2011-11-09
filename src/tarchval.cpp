@@ -2159,7 +2159,7 @@ void TVArchivator::stop( bool full_del )
     if(!runSt) return;
 
     //> Values acquisition task stop
-    SYS->taskDestroy(nodePath('.',true), &endrunReq);
+    SYS->taskDestroy(nodePath('.',true), &endrunReq, archPeriod(), true);
 
     //> Detach from all archives
     ResAlloc res(archRes,false);
@@ -2238,12 +2238,15 @@ void *TVArchivator::Task( void *param )
     arch.runSt = true;
     bool isLast = false;
 
-    usleep(arch.archPeriod()*1000000);
+    time_t stTm = time(NULL);
+    while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) usleep(STD_WAIT_DELAY*1000);
+    //usleep(arch.archPeriod()*1000000);
 
     //> Archiving
     while(true)
 	try
 	{
+	    stTm = time(NULL);
 	    if(arch.endrunReq) isLast = true;
 
 	    int64_t t_cnt = TSYS::curTime();
@@ -2265,7 +2268,8 @@ void *TVArchivator::Task( void *param )
 
 	    if(isLast) break;
 
-	    TSYS::taskSleep((int64_t)(1e9*arch.archPeriod()));
+	    while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) usleep(STD_WAIT_DELAY*1000);
+	    //TSYS::taskSleep((int64_t)(1e9*arch.archPeriod()));
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
     arch.runSt = false;

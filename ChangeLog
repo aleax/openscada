@@ -1,4 +1,9 @@
 2011-11-09 Roman
+- !!!:FIX:Archive: Task for values archiving by periodic ~60s is changet to no signal SIGALRM terminate mode for prevent values
+    archive-files of module Archive.FSArch break by incidentally function write() terminate.
+    Going to add processing for result of all write() and read() functions of module Archive.FSArch to prevent it.
+- FIX:Archive.FSArch: Size of value archive file update after truncate of fix file procedure is added.
+- SYS: The option 'noSignal' is added to function taskDestroy() for no signal SIGALRM send to task.
 - UI.Vision: Falgs store for developed widgets is changed to uint8_t type.
     Child attributes process into change rule "attr" is added.
     Rule's name process is added for group attributes change into one rule "attr".
