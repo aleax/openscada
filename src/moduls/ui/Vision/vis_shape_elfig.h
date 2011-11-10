@@ -206,6 +206,7 @@ class ShapeElFigure : public WdgShape
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
         int appendPoint( const QPointF &pos, const QVector<ShapeItem> &shapeItems, PntMap *pnts, bool flag_down );
         void dropPoint( int num, int num_shape, const QVector<ShapeItem> &shapeItems, PntMap *pnts );
+        void removeFill( QVector<int> ind_array, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, int count );
         int appendWidth( const float &width, WidthMap *widths, bool flag_down );
         int appendColor( const QColor &color, ColorMap *colors, bool flag_down );
         int appendStyle( const Qt::PenStyle &style, StyleMap *styles, bool flag_down );
@@ -242,6 +243,7 @@ class ShapeElFigure : public WdgShape
 	unsigned flag_A		:1;
 	unsigned flag_copy	:1;
 	unsigned flag_check_pnt_inund	:1;
+        unsigned flag_check_point	:1;
 	unsigned flag_rect	:1;
 	unsigned flag_arc_rect_3_4	:1;
 	unsigned flag_first_move	:1;
@@ -254,6 +256,7 @@ class ShapeElFigure : public WdgShape
         unsigned flag_geom	:1;
         unsigned flag_rect_items	:1;
         unsigned flag_def_stat	:1;
+        unsigned flag_dyn_save	:1;
         unsigned fl_status_move	:1;//Flag for the calling moveItemTo during the creation of the figure
         unsigned fl_orto_move	:1;//Flag for using during the orthogonal line or bezier curve drawing
         unsigned fl_orto_disable:1;//Flag for disabling the orthogonal drawing in the moveItemTo function

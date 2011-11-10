@@ -1,3 +1,14 @@
+2011-11-10 Maxim
+- FIX:UI.Vision: Unnecessary calls of the "shapeSave" function are removed when properties dialog is accepted in the primitive ElFigure
+                 to optimize the performance and UnDo/ReDo functions.
+- UI.Vision: UnDo/ReDo is done for the dynamic properties of the primitive ElFigure.
+- FIX:UI.Vision: moveUpDown function is optimized and fixed for the primitive ElFigure.
+- FIX:UI.Vision: falling of the system when trying to create the fill, having the 'Connections' button disabled, using the
+                 'inundation1_2' function is fixed for the primitive ElFigure.
+- UI.Vision: Appending of points for the single shape of Elfigure is moved form the 'MouseButtonPress' to the 'MouseMove' event
+             for greater convenience.
+
+
 2011-11-09 Roman
 - !!!:FIX:Archive: Task for values archiving by periodic ~60s is changet to no signal SIGALRM terminate mode for prevent values
     archive-files of module Archive.FSArch break by incidentally function write() terminate.
