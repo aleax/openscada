@@ -1,3 +1,7 @@
+2011-11-11 Maxim
+- FIX:UI.Vision: Saving the previous inundationItems container is done during removing or creation fills in the ElFigure editor
+                 for the correct EnDo/ReDo functions work.
+
 2011-11-10 Maxim
 - FIX:UI.Vision: Unnecessary calls of the "shapeSave" function are removed when properties dialog is accepted in the primitive ElFigure
                  to optimize the performance and UnDo/ReDo functions.

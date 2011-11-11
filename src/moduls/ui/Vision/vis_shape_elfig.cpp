@@ -2528,6 +2528,7 @@ void ElFigDt::dynamic( )
             if( elF->index == -1 && elF->fill_index != -1 )
             {
                 inundationItems.remove(elF->fill_index);
+                inundationItems_temp = inundationItems;
                 if( elF->flag_dyn_save )
                 {
                     elF->shapeSave( w );
@@ -4309,6 +4310,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             inundationItems.remove(i);
                                             fl_brk = true;
                                             fl_shapeSave = true;
+                                            elFD->inundationItems_temp = inundationItems;
                                             paintImage(view);
                                             view->repaint();
                                             break;
@@ -6870,6 +6872,7 @@ QVector<int> ShapeElFigure::inundationSort( const QPainterPath &inundationPath, 
 //- detecting the figures, which count <=2, for filling -
 bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap *pnts, WdgView *view, int number )
 {
+    ElFigDt *elFD = (ElFigDt*)view->shpData;
     QPainterPath inundationPath_1_2;
     QVector<int> in_fig_num;
     bool flag_break;
@@ -6889,6 +6892,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                         if( inundationItems[i].path == inundationPath_1_2 )
                         {
                             inundationItems.remove(i);
+                            elFD->inundationItems_temp = inundationItems;
                             paintImage(view);
                             view->repaint();
                             return true;
@@ -6930,6 +6934,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
                                 if( inundationItems[i].path == inundationPath_1_2 )
                                 {
                                     inundationItems.remove(i);
+                                    elFD->inundationItems_temp = inundationItems;
                                     paintImage(view);
                                     view->repaint();
                                     return true;
