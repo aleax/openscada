@@ -1,3 +1,12 @@
+2011-11-12 Roman
+- !!!!:FIX:Archive.FSArch: Incorrect not aligned blocks' end processing on value offset calculate into fast bit count algoritm call is fixed.
+    Monopoly resource is used to function calcVlOff() call for prevent partialy cache using on high loaded systems.
+- !!!:FIX:UI.Vision, UI.WebVision: Out of range access to values vector on trends build and fast, by half dividing interval,
+    algoritm for diagram's parameter values get of primitive "Diagram" is fixed.
+- SYS: Global source tree version is changed to 0.7.2
+- Archive: Task for values archiving by periodic ~60s is restored to signal SIGALRM terminate mode after fix critial error into Archive.FSArch.
+
+
 2011-11-11 Maxim
 - FIX:UI.Vision: Saving the previous inundationItems container is done during removing or creation fills in the ElFigure editor
                  for the correct EnDo/ReDo functions work.

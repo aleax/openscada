@@ -2068,16 +2068,16 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	int64_t curTm, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
-	    curTm = vmin(aVend,vmax(aVbeg,sTr->val()[a_pos].tm));
 	    if(a_pos < (int)sTr->val().size() && !end_vl)
 	    {
+		curTm = vmin(aVend,vmax(aVbeg,sTr->val()[a_pos].tm));
 		curVl = sTr->val()[a_pos].val;
 		if( vsPerc && curVl != EVAL_REAL )
 		    curVl = vmin(100,vmax(0,100*(curVl-bordL)/(bordU-bordL)));
 		if( isnan(curVl) ) curVl = EVAL_REAL;
 		curPos = tAr.x()+tAr.width()*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
-	    if( sTr->val()[a_pos].tm >= aVend )	end_vl = true;
+	    if(!curPos || sTr->val()[a_pos].tm >= aVend) end_vl = true;
 
 	    //Square Average
 	    if( averPos == curPos )
@@ -2343,10 +2343,10 @@ int64_t ShapeDiagram::TrendObj::valEnd()
 
 int ShapeDiagram::TrendObj::val( int64_t tm )
 {
-    int i_p = 0;
-    for(int d_win = vals.size()/2; d_win > 10; d_win/=2)
-	if(tm < vals[i_p+d_win].tm)	i_p+=d_win;
-    for(unsigned i_p = 0; i_p < vals.size(); i_p++)
+    unsigned i_p = 0;
+    for(unsigned d_win = vals.size()/2; d_win > 10; d_win/=2)
+	if(tm > vals[i_p+d_win].tm) i_p += d_win;
+    for( ; i_p < vals.size(); i_p++)
 	if(vals[i_p].tm >= tm) return i_p;
     return vals.size();
 }

@@ -702,7 +702,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
     //> Check border
-    if( !buf.vOK(beg,end) )	return;
+    if(!buf.vOK(beg,end)) return;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
     int64_t b_prev = 0;
@@ -1055,11 +1055,13 @@ int64_t VFileArch::endData( )
     if(hd <= 0) { mErr = true; return end(); }
 
     //> Find last value offset
+    res.request(true);
     int last_off = calcVlOff(hd,mpos);
     int curPos = mpos;
     for(int d_win = curPos/2; d_win > 3; d_win /= 2)
 	if(calcVlOff(hd,curPos-d_win) == last_off) curPos -= d_win;
     while(curPos > 0 && calcVlOff(hd,curPos) == last_off) curPos--;
+    res.request(false);
 
     //> Free file resource and close file
     close(hd);
@@ -1098,7 +1100,9 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     int hd = open(name().c_str(),O_RDONLY);
     if( hd <= 0 ) { mErr = true; return; }
 
+    res.request(true);
     voff_beg = calcVlOff(hd,vpos_beg,&vlen_beg);
+    res.request(false);
 
     //> Get the pack index block and the value block
     if( fixVl )
@@ -1214,6 +1218,7 @@ TVariant VFileArch::getVal( int vpos )
     int hd = open(name().c_str(),O_RDONLY);
     if( hd <= 0 ) { mErr = true; return EVAL_REAL; }
 
+    res.request(true);
     switch(type())
     {
 	case TFld::Boolean:
@@ -1508,7 +1513,8 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	for(int n_pos = 0; i_ps <= vpos; i_ps = n_pos)
 	{
 	    //> Fast algorithm for big blocks
-	    if(!((i_ps%8) || (i_bf%4)) && (i_ps/32) < (vpos/32))
+	    //if(!((i_ps%8) || ((i_ps/8)%4)) && (i_ps/32) < (vpos/32))
+	    if(!((i_ps%8) || (i_bf%4)) && (vpos/8 - i_ps/8) >= 4)
 	    {
 		//> Buffer check for refresh
 		if((i_bf+4) > b_sz)

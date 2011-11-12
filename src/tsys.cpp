@@ -545,7 +545,7 @@ int TSYS::start( )
 	//> Call subsystems at 10s
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		try { at(lst[i_a]).at().perSYSCall(i_cnt); }
+		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
 		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	usleep(STD_WAIT_DELAY*1000);
