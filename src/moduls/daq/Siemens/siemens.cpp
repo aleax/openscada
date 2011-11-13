@@ -1473,9 +1473,9 @@ void TMdPrm::enable( )
 	if(to_make)	loadIO();
 
 	//> Check for delete DAQ parameter's attributes
-	for(int i_p = 0; i_p < p_el.fldSize(); i_p++)
+	for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
 	{
-	    int i_l;
+	    unsigned i_l;
 	    for(i_l = 0; i_l < als.size(); i_l++)
 		if(p_el.fldAt(i_p).name() == als[i_l])
 		    break;
@@ -1596,6 +1596,7 @@ void TMdPrm::vlGet( TVal &val )
 		    if(id_lnk < 0) val.setB(getB(ioId(val.name())),0,true);
 		    else val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);
 		    break;
+		default: break;
 	    }
 	}catch(TError err) { }
     else
@@ -1659,6 +1660,7 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 		else owner().setValB( vl, lnk(id_lnk).val, acq_err );
 		break;
 	    }
+	    default: break;
 	}
     }catch(TError err) {  }
 }

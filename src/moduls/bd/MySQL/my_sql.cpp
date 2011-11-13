@@ -646,6 +646,7 @@ void MTable::fieldFix( TConfig &cfg )
 		case TFld::Boolean:
 		    f_tp = "tinyint(1)";
 		    break;
+		default: break;
 	    }
 	    if( tblStrct[i_fld][1] != f_tp )
 	    {
@@ -735,6 +736,7 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 	case TFld::Boolean:
 	    req=req+"tinyint(1) NOT NULL DEFAULT '"+TSYS::int2str(atoi(cfg.fld().def().c_str()))+"' ";
 	    break;
+	default: break;
     }
     //> Position param
     //if( last.size() )	req=req+"AFTER `"+last+"` ";
@@ -755,6 +757,7 @@ string MTable::getVal( TCfg &cfg )
 	    return SYS->real2str(vl);
 	}
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
+	default: break;
     }
     return "";
 }
@@ -775,6 +778,7 @@ void MTable::setVal( TCfg &cfg, const string &val )
 	    break;
 	}
 	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
+	default: break;
     }
 }
 

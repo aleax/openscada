@@ -2993,6 +2993,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 						case TFld::String:
 						    TProt::oDataValue(respEp,eMsk,((AutoHD<TVal>)cNd).at().getS(),OpcUa_String);
 						    break;
+						default: break;
 					    }
 					    break;
 					case TProt::AId_DataType:
@@ -3004,6 +3005,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 						case TFld::Integer:	dt.setNumbVal(OpcUa_Int32);	break;
 						case TFld::Real:	dt.setNumbVal(OpcUa_Double);	break;
 						case TFld::String:	dt.setNumbVal(OpcUa_String);	break;
+						default: break;
 					    }
 					    TProt::oDataValue(respEp,eMsk,dt.toAddr(),OpcUa_NodeId);
 					    break;

@@ -75,6 +75,7 @@ class TestPrm : public TFunction
 			case TFld::Boolean:
 			    mod->mess(id(),_("%s(BOOLEAN): %d"),list_el[i].c_str(), val.at().getB() );
 			    break;
+			default: break;
 		    }
 		}
 
@@ -98,6 +99,7 @@ class TestPrm : public TFunction
 			case TFld::Boolean:
 			    mod->mess(id(),_("%s(BOOLEAN): %d"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getB() );
 			    break;
+			default: break;
 		    }
 		}
 		/*XMLNode node("info");

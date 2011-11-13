@@ -521,6 +521,7 @@ retry:
 		case TFld::Integer:	*yylval.reg = *(int*)(cnst_v->val.c_str());	break;
 		case TFld::Boolean:	*yylval.reg = *(char*)(cnst_v->val.c_str());	break;
 		case TFld::String:	*yylval.reg = cnst_v->val;			break;
+		default: break;
 	    }
 	    return CONST;
 	}

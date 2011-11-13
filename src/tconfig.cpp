@@ -61,6 +61,7 @@ TConfig &TConfig::operator=(TConfig &config)
 	    case TFld::Real:	d_cfg.setR(s_cfg.getR());break;
 	    case TFld::Integer:	d_cfg.setI(s_cfg.getI());break;
 	    case TFld::Boolean:	d_cfg.setB(s_cfg.getB());break;
+	    default: break;
 	}
     }
     return *this;
@@ -241,6 +242,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
 	case TFld::Integer:	m_val.i_val = atoi(mFld->def().c_str());	break;
 	case TFld::Real:	m_val.r_val = atof(mFld->def().c_str());	break;
 	case TFld::Boolean:	m_val.b_val = atoi(mFld->def().c_str());	break;
+	default: break;
     }
     if( fld.flg()&TCfg::Hide )	mView = false;
 }
@@ -286,6 +288,7 @@ string TCfg::getSEL( char RqFlg )
 	case TFld::Integer:	return mFld->selVl2Nm(getI(RqFlg));
 	case TFld::Real:	return mFld->selVl2Nm(getR(RqFlg));
 	case TFld::Boolean:	return mFld->selVl2Nm(getB(RqFlg));
+	default: break;
     }
     return "";
 }
@@ -298,7 +301,9 @@ TVariant TCfg::get( char RqFlg )
 	case TFld::Integer:	return getI(RqFlg);
 	case TFld::Real:	return getR(RqFlg);
 	case TFld::Boolean:	return getB(RqFlg);
+	default: break;
     }
+    return TVariant();
 }
 
 string TCfg::getS( char RqFlg )
@@ -309,6 +314,7 @@ string TCfg::getS( char RqFlg )
 	case TFld::Real:	return TSYS::real2str(getR(RqFlg));
 	case TFld::Boolean:	return TSYS::int2str(getB(RqFlg));
 	case TFld::String:	return m_val.s_val->getVal();
+	default: break;
     }
     return "";
 }
@@ -321,6 +327,7 @@ double TCfg::getR( char RqFlg )
 	case TFld::Integer:	return getI(RqFlg);
 	case TFld::Boolean:	return getB(RqFlg);
 	case TFld::Real:	return m_val.r_val;
+	default: break;
     }
     return 0;
 }
@@ -333,6 +340,7 @@ int TCfg::getI( char RqFlg )
 	case TFld::Real:	return (int)getR(RqFlg);
 	case TFld::Boolean:	return getB(RqFlg);
 	case TFld::Integer:	return m_val.i_val;
+	default: break;
     }
     return 0;
 }
@@ -345,6 +353,7 @@ bool TCfg::getB( char RqFlg )
 	case TFld::Integer:	return getI(RqFlg);
 	case TFld::Real:	return (int)getR(RqFlg);
 	case TFld::Boolean:	return m_val.b_val;
+	default: break;
     }
     return false;
 }
@@ -358,6 +367,7 @@ void TCfg::setSEL( const string &val, char RqFlg )
 	case TFld::Integer:	setI( mFld->selNm2VlI(val), RqFlg );	break;
 	case TFld::Real:	setR( mFld->selNm2VlR(val), RqFlg );	break;
 	case TFld::Boolean:	setB( mFld->selNm2VlB(val), RqFlg );	break;
+	default: break;
     }
 }
 
@@ -369,6 +379,7 @@ void TCfg::set( const TVariant &val, char RqFlg )
 	case TFld::Integer:	return setI(val.getI(), RqFlg);
 	case TFld::Real:	return setR(val.getR(), RqFlg);
 	case TFld::Boolean:	return setB(val.getB(), RqFlg);
+	default: break;
     }
 }
 
@@ -387,6 +398,7 @@ void TCfg::setS( const string &val, char RqFlg )
 	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -407,6 +419,7 @@ void TCfg::setR( double val, char RqFlg )
 	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -427,6 +440,7 @@ void TCfg::setI( int val, char RqFlg )
 	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -445,6 +459,7 @@ void TCfg::setB( bool val, char RqFlg )
 	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -464,6 +479,7 @@ bool TCfg::operator==( TCfg &cfg )
 	case TFld::Boolean:
 	    if( cfg.fld().type()==TFld::Boolean && getB() == cfg.getB())return true;
 	    break;
+	default: break;
     }
     return(false);
 }
@@ -476,6 +492,7 @@ TCfg &TCfg::operator=(TCfg & cfg)
 	case TFld::Integer:	setI( cfg.getI() );	break;
 	case TFld::Real:	setR( cfg.getR() );	break;
 	case TFld::Boolean:	setB( cfg.getB() );	break;
+	default: break;
     }
     return *this;
 }

@@ -432,6 +432,7 @@ void TVal::setFld( TFld &fld )
 	    val.val_r = src.fld->def().empty() ? EVAL_REAL : atof(src.fld->def().c_str());	break;
 	case TFld::Boolean:
 	    val.val_b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
+	default: break;
     }
 
     mCfg = false;
@@ -473,6 +474,7 @@ string TVal::getSEL( int64_t *tm, bool sys )
 	case TFld::Integer:	return fld().selVl2Nm(getI(tm,sys));
 	case TFld::Real:	return fld().selVl2Nm(getR(tm,sys));
 	case TFld::Boolean:	return fld().selVl2Nm(getB(tm,sys));
+	default: break;
     }
     return EVAL_STR;
 }
@@ -485,6 +487,7 @@ TVariant TVal::get( int64_t *tm, bool sys )
 	case TFld::Real:	return getR(tm,sys);
 	case TFld::Boolean:	return getB(tm,sys);
 	case TFld::String:	return getS(tm,sys);
+	default: break;
     }
     return EVAL_STR;
 }
@@ -514,6 +517,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
 	    return val.val_s->getVal();
+	default: break;
     }
     return EVAL_STR;
 }
@@ -543,6 +547,7 @@ int TVal::getI( int64_t *tm, bool sys )
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
 	    return val.val_i;
+	default: break;
     }
     return EVAL_INT;
 }
@@ -572,6 +577,7 @@ double TVal::getR( int64_t *tm, bool sys )
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
 	    return val.val_r;
+	default: break;
     }
     return EVAL_REAL;
 }
@@ -601,6 +607,7 @@ char TVal::getB( int64_t *tm, bool sys )
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
 	    return val.val_b;
+	default: break;
     }
     return EVAL_BOOL;
 }
@@ -614,6 +621,7 @@ void TVal::setSEL( const string &value, int64_t tm, bool sys )
 	case TFld::Integer:	setI(fld().selNm2VlI(value),tm,sys);	break;
 	case TFld::Real:	setR(fld().selNm2VlR(value),tm,sys);	break;
 	case TFld::Boolean:	setB(fld().selNm2VlB(value),tm,sys);	break;
+	default: break;
     }
 }
 
@@ -625,6 +633,7 @@ void TVal::set( const TVariant &value, int64_t tm, bool sys )
 	case TFld::Real:	setR(value.getR(), tm, sys);	break;
 	case TFld::Boolean:	setB(value.getB(), tm, sys);	break;
 	case TFld::String:	setS(value.getS(), tm, sys);	break;
+	default: break;
     }
 }
 
@@ -639,6 +648,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	case TFld::Boolean:
 	    setB( (value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys );	break;
 	case TFld::String:
+	{
 	    //> Set value to config
 	    if( mCfg )	{ src.cfg->setS( value ); return; }
 	    //> Check to write
@@ -652,6 +662,9 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		try{ mArch.at().setS(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+	    break;
+	}
+	default: break;
     }
 }
 
@@ -682,7 +695,9 @@ void TVal::setI( int value, int64_t tm, bool sys )
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		try{ mArch.at().setI(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+	    break;
 	}
+	default: break;
     }
 }
 
@@ -713,7 +728,9 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		try{ mArch.at().setR(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+	    break;
 	}
+	default: break;
     }
 }
 
@@ -742,7 +759,9 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		try{ mArch.at().setB(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+	    break;
 	}
+	default: break;
     }
 }
 
@@ -767,6 +786,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 		case TFld::Integer:	rez = getI(&tm,isSys);	break;
 		case TFld::Real:	rez = getR(&tm,isSys);	break;
 		case TFld::String:	rez = getS(&tm,isSys);	break;
+		default: break;
 	    }
 	    if(prms.size() >= 1)	{ prms[0].setI(tm/1000000); prms[0].setModify(); }
 	    if(prms.size() >= 2)	{ prms[1].setI(tm%1000000); prms[1].setModify(); }
@@ -794,6 +814,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 		case TFld::Integer:	setI(prms[0].getI(),tm,isSys);	break;
 		case TFld::Real:	setR(prms[0].getR(),tm,isSys);	break;
 		case TFld::String:	setS(prms[0].getS(),tm,isSys);	break;
+		default: break;
 	    }
 	    return false;
 	}catch(...){ }

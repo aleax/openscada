@@ -34,7 +34,7 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), m_lnk(false), attrAtLockCnt(0), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
+    mId(id), attrAtLockCnt(0), mEnable(false), m_lnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
 
@@ -110,6 +110,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 		case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
 		case TFld::Real:	attr.at().setR(pattr.at().getR());	break;
 		case TFld::String:	attr.at().setS(pattr.at().getS());	break;
+		default: break;
 	    }
 	attr.at().setCfgTempl( pattr.at().cfgTempl() );
 	attr.at().setCfgVal( pattr.at().cfgVal() );
@@ -431,6 +432,7 @@ void Widget::inheritAttr( const string &iattr )
 		case TFld::Integer:	attr.at().setI(pattr.at().getI(), attr.at().flgGlob()&Attr::Active);	break;
 		case TFld::Real:	attr.at().setR(pattr.at().getR(), attr.at().flgGlob()&Attr::Active);	break;
 		case TFld::String:	attr.at().setS(pattr.at().getS(), attr.at().flgGlob()&Attr::Active);	break;
+		default: break;
 	    }
 	//>> No inherit calc flag for links
 	if(isLink() && !parent().at().isLink())
@@ -912,9 +914,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		case 0:
 		    ls.clear();
 		    mod->nodeList(tls,"wlb_");
-		    for(int i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
+		    for(unsigned i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
 		    mod->nodeList(tls,"prj_");
-		    for(int i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
+		    for(unsigned i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
 		    //mod->nodeList(ls);
 		    break;
 		case 1:
@@ -1650,6 +1652,7 @@ void Attr::setFld( TFld *fld, bool inher )
 	    case TFld::Object:
                 if(m_val.o_val && !m_val.o_val->disconnect()) delete m_val.o_val;
                 break;
+            default: break;
 	}
 
     //> Alloc for new type
@@ -1708,6 +1711,7 @@ string Attr::getSEL( bool sys )
 	case TFld::Integer:	return fld().selVl2Nm(getI(sys));
 	case TFld::Real:	return fld().selVl2Nm(getR(sys));
 	case TFld::Boolean:	return fld().selVl2Nm(getB(sys));
+	default: break;
     }
     return EVAL_STR;
 }
@@ -1751,6 +1755,7 @@ int Attr::getI( bool sys )
 	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
 	case TFld::Integer:	return m_val.i_val;
+	default: break;
     }
     return EVAL_INT;
 }
@@ -1765,6 +1770,7 @@ double Attr::getR( bool sys )
 	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? m_val.i_val : EVAL_REAL;
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
 	case TFld::Real:	return m_val.r_val;
+	default: break;
     }
     return EVAL_REAL;
 }
@@ -1779,6 +1785,7 @@ char Attr::getB( bool sys )
 	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
 	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
 	case TFld::Boolean:	return m_val.b_val;
+	default: break;
     }
     return EVAL_BOOL;
 }
@@ -1801,6 +1808,7 @@ void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 	case TFld::Integer:	setI(fld().selNm2VlI(val), strongPrev, sys);	break;
 	case TFld::Real:	setR(fld().selNm2VlR(val), strongPrev, sys);	break;
 	case TFld::Boolean:	setB(fld().selNm2VlB(val), strongPrev, sys);	break;
+	default: break;
     }
 }
 
@@ -1839,6 +1847,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	    }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -1866,6 +1875,7 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 	    }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -1893,6 +1903,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	    }
 	    break;
 	}
+	default: break;
     }
 }
 
@@ -1919,6 +1930,7 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 	    }
 	    break;
 	}
+	default: break;
     }
 }
 

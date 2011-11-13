@@ -178,7 +178,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
                 if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
                 {
                     rez = atoi(TSYS::strParse(header,0," ",&off).c_str());
-                    if(rez > 0 || off >= header.size())
+                    if(rez > 0 || off >= (int)header.size())
                 	throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
                     tro.setPrm1(atoi(header.substr(off).c_str()));
                 } else throw TError(nodePath().c_str(),_("Station '%s' error: Respond format error!"),tro.id().c_str());
@@ -207,7 +207,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
             int resp_size = atoi(header.substr(off).c_str());
 
 	    //>> Wait tail
-	    while(resp.size() < abs(resp_size)+head_end)
+	    while((int)resp.size() < abs(resp_size)+head_end)
 	    {
 		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));

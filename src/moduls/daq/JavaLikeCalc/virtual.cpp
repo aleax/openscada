@@ -871,6 +871,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
 		case TFld::Boolean:
 		    ((Contr &)owner()).setB(io_id,val.getB(0,true));
 		    break;
+		default: break;
 	    }
 	}
     }catch(TError err) { disable(); }
@@ -902,6 +903,7 @@ void Prm::vlGet( TVal &val )
 		    val.setR(enableStat()?owner().getR(io_id):EVAL_REAL,0,true);break;
 		case TFld::Boolean:
 		    val.setB(enableStat()?owner().getB(io_id):EVAL_BOOL,0,true);break;
+		default: break;
 	    }
         }
     }catch(TError err) { disable(); }

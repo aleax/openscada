@@ -1074,9 +1074,9 @@ void TMdPrm::enable( )
 	}catch(TError err) { disable(); throw; }
 
     //> Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < p_el.fldSize(); i_p++)
+    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
     {
-        int i_l;
+        unsigned i_l;
         for(i_l = 0; i_l < als.size(); i_l++)
             if(p_el.fldAt(i_p).name() == als[i_l])
                 break;

@@ -33,7 +33,7 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
-    mPrjnm(iproj), mUser("root"), mOwner("root"), mGrp("UI"), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser("root"), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
     endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), tm_calc(0.0), mAlrmSndPlay(-1), mStyleIdW(-1)
 {
     mId = iid;
@@ -1519,6 +1519,7 @@ void SessWdg::calc( bool first, bool last )
 			    case TFld::Integer:	attr.at().setI(vl.at().getI());	break;
 			    case TFld::Real:	attr.at().setR(vl.at().getR());	break;
 			    case TFld::String:	attr.at().setS(vl.at().getS());	break;
+			    default: break;
 			}
 		    }
 		    else if(obj_tp == "wdg:")
@@ -1665,6 +1666,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		    case TFld::String:
 		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
 		        break;
+		    default: break;
 		}
 	    else if( obj_tp == "wdg:" )
 	    {
@@ -1677,6 +1679,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		    case TFld::Integer:	wattr.at().setI(cfg.getI());	break;
 		    case TFld::Real:	wattr.at().setR(cfg.getR());	break;
 		    case TFld::String:	wattr.at().setS(cfg.getS());	break;
+		    default: break;
 		}
 	    }
 	}catch(...)	{ }

@@ -660,6 +660,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    case TFld::Integer: case TFld::Boolean:
 				tpCfg = "INTEGER DEFAULT '" + mod->sqlReqCode(cf.fld().def()) + "' ";	break;
 	    case TFld::Real:	tpCfg = "DOUBLE DEFAULT '" + mod->sqlReqCode(cf.fld().def()) + "' ";	break;
+	    default:	break;
 	}
 	req += tpCfg;
 
@@ -707,6 +708,7 @@ string MTable::getVal( TCfg &cfg )
 	case TFld::Integer:	return SYS->int2str(cfg.getI());
 	case TFld::Real:	return SYS->real2str(cfg.getR());
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
+	default: break;
     }
     return "";
 }
@@ -719,5 +721,6 @@ void MTable::setVal( TCfg &cfg, const string &val )
 	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
 	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
 	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
+	default: break;
     }
 }

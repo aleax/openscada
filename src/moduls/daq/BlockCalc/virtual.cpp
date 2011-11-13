@@ -698,6 +698,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
 		case TFld::Integer:	blk.at().setI(io_id,val.getI(0,true));	break;
 		case TFld::Real:	blk.at().setR(io_id,val.getR(0,true));	break;
 		case TFld::Boolean:	blk.at().setB(io_id,val.getB(0,true));	break;
+		default: break;
 	    }
 	}
     }catch(TError err) { disable(); }
@@ -732,6 +733,7 @@ void Prm::vlGet( TVal &val )
 		    val.setR( (enableStat()&&owner().startStat()) ? blk.at().getR(io_id) : EVAL_REAL, 0, true );break;
 		case TFld::Boolean:
 		    val.setB( (enableStat()&&owner().startStat()) ? blk.at().getB(io_id) : EVAL_BOOL, 0, true );break;
+		default: break;
 	    }
     }catch(TError err) { disable(); }
 }

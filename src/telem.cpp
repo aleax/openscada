@@ -174,6 +174,7 @@ TFld::~TFld( )
 	    case TFld::Integer:	delete m_val.v_i;	break;
 	    case TFld::Real:	delete m_val.v_r;	break;
 	    case TFld::Boolean:	delete m_val.v_b;	break;
+	    default: break;
 	}
 }
 
@@ -208,6 +209,7 @@ string TFld::values()
 	    for(unsigned i_el = 0; i_el < m_val.v_b->size(); i_el++)
 		rez = rez+TSYS::int2str((*m_val.v_b)[i_el])+";";
 	    break;
+	default: break;
     }
     return rez.size()?rez.substr(0,rez.size()-1):"";
 }
@@ -250,6 +252,7 @@ void TFld::setValues( const string &vls )
 		if(!m_val.v_b)	m_val.v_b = new vector<bool>;
 		m_val.v_b->resize(i_lvl,false);
 		break;
+	    default: break;
 	}
 	//> Get elements
 	for( int i = 0, i_off=0; i < i_lvl; i++ )
@@ -261,6 +264,7 @@ void TFld::setValues( const string &vls )
 		case TFld::Integer:	(*m_val.v_i)[i] = strtol(s_el.c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));	break;
 		case TFld::Real:	(*m_val.v_r)[i] = atof(s_el.c_str());	break;
 		case TFld::Boolean:	(*m_val.v_b)[i] = atoi(s_el.c_str());	break;
+		default: break;
 	    }
 	}
     }
@@ -343,6 +347,7 @@ TFld &TFld::operator=( TFld &fld )
 	    case TFld::Integer:	delete m_val.v_i;	break;
 	    case TFld::Real:	delete m_val.v_r;	break;
 	    case TFld::Boolean:	delete m_val.v_b;	break;
+	    default: break;
 	}
     //- Create new -
     m_name	= fld.name();
@@ -376,6 +381,7 @@ TFld &TFld::operator=( TFld &fld )
 		m_val.v_b = new vector<bool>;
 		*(m_val.v_b) = fld.selValB();
 		break;
+	    default: break;
 	}
     }
     else

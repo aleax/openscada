@@ -2065,7 +2065,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	bool end_vl = false;
 	double curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int    curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos = 0;
-	int64_t curTm, averTm = 0, averLstTm = 0;
+	int64_t curTm = 0, averTm = 0, averLstTm = 0;
 	for( int a_pos = aPosBeg; true; a_pos++ )
 	{
 	    if(a_pos < (int)sTr->val().size() && !end_vl)

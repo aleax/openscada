@@ -765,6 +765,7 @@ void MTable::fieldFix( TConfig &cfg )
 			break;
 		    case TFld::Real:	if( tblStrct[i_fld][1] == "double precision" ) isEqual = true;	break;
 		    case TFld::Boolean:	if( tblStrct[i_fld][1] == "smallint" ) isEqual = true;	break;
+		    default: break;
 		}
 		if( isEqual ) break;
 		continue;
@@ -812,6 +813,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    case TFld::Boolean:
 		f_tp = "SMALLINT DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
 		break;
+	    default: break;
 	}
 
 	if( i_fld >= tblStrct.size() )
@@ -856,6 +858,7 @@ string MTable::getVal( TCfg &cfg )
 	    else		return SYS->int2str(cfg.getI());
 	case TFld::Real:	return SYS->real2str(cfg.getR());
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
+	default: break;
     }
     return "";
 }
@@ -871,6 +874,7 @@ void MTable::setVal( TCfg &cfg, const string &val )
 	    break;
 	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
 	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
+	default: break;
     }
 }
 

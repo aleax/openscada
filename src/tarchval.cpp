@@ -70,6 +70,7 @@ TValBuf::~TValBuf( )
 	case TFld::Integer:	delete buf.dec;	break;
 	case TFld::Real:	delete buf.real;break;
 	case TFld::String:	delete buf.str;	break;
+	default: break;
     }
 }
 
@@ -103,6 +104,7 @@ TValBuf &TValBuf::operator=( TValBuf &src )
 	    else if( mHgResTm )	*(buf.str->buf.tm_high) = *(src.buf.str->buf.tm_high);
 	    else *(buf.str->buf.tm_low) = *(src.buf.str->buf.tm_low);
 	    break;
+	default: break;
     }
     mEvalCnt = src.mEvalCnt;
 
@@ -117,6 +119,7 @@ void TValBuf::clear()
 	case TFld::Integer:	buf.dec->clear();	break;
 	case TFld::Real:	buf.real->clear();	break;
 	case TFld::String:	buf.str->clear(); 	break;
+	default: break;
     }
 }
 
@@ -128,6 +131,7 @@ int TValBuf::realSize()
 	case TFld::Integer:	return buf.dec->realSize();
 	case TFld::Real:	return buf.real->realSize();
 	case TFld::String:	return buf.str->realSize();
+	default: break;
     }
 
     return 0;
@@ -163,6 +167,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 	    case TFld::Integer:	delete buf.dec;	break;
 	    case TFld::Real:	delete buf.real;break;
 	    case TFld::String:	delete buf.str;	break;
+	    default: break;
 	}
 	buf.bl = NULL;
     }
@@ -176,6 +181,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 	    case TFld::Integer:	buf.dec = new TBuf<int>( EVAL_INT, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
 	    case TFld::Real:	buf.real = new TBuf<double>( EVAL_REAL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
 	    case TFld::String:	buf.str = new TBuf<string>( EVAL_STR, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
+	    default: break;
 	}
 	mValTp = v_tp;
     }
@@ -186,6 +192,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 	    case TFld::Integer:	buf.dec->makeBuf( isz, ipr, hd_grd, hg_res );	break;
 	    case TFld::Real:	buf.real->makeBuf( isz, ipr, hd_grd, hg_res );	break;
 	    case TFld::String:	buf.str->makeBuf( isz, ipr, hd_grd, hg_res );	break;
+	    default: break;
 	}
 }
 
@@ -197,6 +204,7 @@ string TValBuf::getS( int64_t *itm, bool up_ord )
 	case TFld::Integer:	{ int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_STR:TSYS::int2str(vl); }
 	case TFld::Real:	{ double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_STR:TSYS::real2str(vl); }
 	case TFld::String:	{ ResAlloc res(bRes,false); return buf.str->get(itm,up_ord); }
+	default: break;
     }
     return EVAL_STR;
 }
@@ -209,6 +217,7 @@ double TValBuf::getR( int64_t *itm, bool up_ord )
 	case TFld::Integer:	{ int vl = getI(itm,up_ord); return (vl==EVAL_INT)?EVAL_REAL:(double)vl; }
 	case TFld::String:	{ string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_REAL:atof(vl.c_str()); }
 	case TFld::Real:	{ ResAlloc res(bRes,false); return buf.real->get(itm,up_ord); }
+	default: break;
     }
     return EVAL_REAL;
 }
@@ -221,6 +230,7 @@ int TValBuf::getI( int64_t *itm, bool up_ord )
 	case TFld::String:	{ string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_INT:atoi(vl.c_str()); }
 	case TFld::Real:	{ double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_INT:(int)vl; }
 	case TFld::Integer:	{ ResAlloc res(bRes,false); return buf.dec->get(itm,up_ord); }
+	default: break;
     }
     return EVAL_INT;
 }
@@ -233,6 +243,7 @@ char TValBuf::getB( int64_t *itm, bool up_ord )
 	case TFld::String:	{ string vl = getS(itm,up_ord); return (vl==EVAL_STR)?EVAL_BOOL:(bool)atoi(vl.c_str()); }
 	case TFld::Real:	{ double vl = getR(itm,up_ord); return (vl==EVAL_REAL)?EVAL_BOOL:(bool)vl; }
 	case TFld::Boolean:	{ ResAlloc res(bRes,false); return buf.bl->get(itm,up_ord); }
+	default: break;
     }
     return EVAL_BOOL;
 }
@@ -248,7 +259,12 @@ void TValBuf::setS( const string &value, int64_t tm )
 	case TFld::Real:
 	    setR((value==EVAL_STR)?EVAL_REAL:atof(value.c_str()),tm);	break;
 	case TFld::String:
-	    ResAlloc res(bRes,true); buf.str->set(value,tm);		break;
+	{
+	    ResAlloc res(bRes,true);
+	    buf.str->set(value,tm);
+	    break;
+	}
+	default: break;
     }
 }
 
@@ -263,7 +279,12 @@ void TValBuf::setR( double value, int64_t tm )
 	case TFld::String:
 	    setS((value==EVAL_REAL)?EVAL_STR:TSYS::real2str(value),tm);	break;
 	case TFld::Real:
-	    ResAlloc res(bRes,true); buf.real->set(value,tm);	break;
+	{
+	    ResAlloc res(bRes,true);
+	    buf.real->set(value,tm);
+	    break;
+	}
+	default: break;
     }
 }
 
@@ -278,7 +299,12 @@ void TValBuf::setI( int value, int64_t tm )
 	case TFld::Real:
 	    setR((value==EVAL_INT)?EVAL_REAL:value,tm);		break;
 	case TFld::Integer:
-	    ResAlloc res(bRes,true); buf.dec->set(value,tm);	break;
+	{
+	    ResAlloc res(bRes,true);
+	    buf.dec->set(value,tm);
+	    break;
+	}
+	default: break;
     }
 }
 
@@ -293,7 +319,12 @@ void TValBuf::setB( char value, int64_t tm )
 	case TFld::Real:
 	    setR((value==EVAL_BOOL)?EVAL_REAL:(bool)value,tm);	break;
 	case TFld::Boolean:
-	    ResAlloc res(bRes,true); buf.bl->set(value,tm);	break;
+	{
+	    ResAlloc res(bRes,true);
+	    buf.bl->set(value,tm);
+	    break;
+	}
+	default: break;
     }
 }
 
@@ -311,6 +342,7 @@ void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	    case TFld::Integer:	{ int vl = getI(&ibeg,true); buf.setI(vl,ibeg); break; }
 	    case TFld::Real:	{ double vl = getR(&ibeg,true); buf.setR(vl,ibeg); break; }
 	    case TFld::String:	{ string vl = getS(&ibeg,true); buf.setS(vl,ibeg); break; }
+	    default: break;
 	}
 	ibeg++;
     }
@@ -1101,6 +1133,7 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
 	    case TFld::String:	return TValBuf::getS(tm,up_ord);
 	    case TFld::Real:	return TValBuf::getR(tm,up_ord);
 	    case TFld::Boolean:	return TValBuf::getB(tm,up_ord);
+	    default: break;
 	}
     //> Get from archivators
     else
@@ -1168,6 +1201,7 @@ void TVArchive::getActiveData()
 	case TFld::Integer:	{ int vl = pattr_src.at().getI(&tm); setI(vl,tm); break; }
 	case TFld::Real:	{ double vl = pattr_src.at().getR(&tm); setR(vl,tm); break; }
 	case TFld::String:	{ string vl = pattr_src.at().getS(&tm); setS(vl,tm); break; }
+	default: break;
     }
 }
 
@@ -1733,6 +1767,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    }
 		    break;
 		}
+		default: break;
 	    }
 	    //>>> Set result and information attributes
 	    opt->setAttr("tm",TSYS::ll2str( (buf.end()/period)*period ));
@@ -2647,6 +2682,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		    c_tm++;
 		    break;
 		}
+		default: break;
 	    }
 	}
 	setValsProc( obuf, obuf.begin(), end );

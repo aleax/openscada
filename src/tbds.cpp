@@ -1046,6 +1046,7 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		    case TFld::Integer:	stp = "int";	break;
 		    case TFld::Real:	stp = "real";	break;
 		    case TFld::String:	stp = "str";	break;
+		    default: break;
 	        }
 		XMLNodeObj *el = new XMLNodeObj(icfg.name());
 		el->propSet("type",stp);

@@ -487,7 +487,7 @@ void *TTrIn::Task( void *tr_in )
 
     AutoHD<TProtocolIn> prot_in;
     struct timeval tv;
-    ssize_t r_len;
+    ssize_t r_len = 0;
     string req, answ;
     char buf[1000];
     fd_set fdset;

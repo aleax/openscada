@@ -1490,6 +1490,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 		case TFld::Integer:	vl = rg.val().p_attr->at().getI();	break;
 		case TFld::Real:	vl = rg.val().p_attr->at().getR();	break;
 		case TFld::String:	vl = rg.val().p_attr->at().getS();	break;
+		default: break;
 	    }
 	    break;
 	case Reg::Obj:	vl = rg.val().o_el;	break;
@@ -1723,7 +1724,7 @@ void Func::calc( TValFunc *val )
 		reg[i_rg].setType(Reg::PrmAttr);
 		*reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
 		break;
-	    //default: reg[i_rg].setType(mRegs[i_rg]->type());	break;
+	    default:	break;
 	}
 
     //> Exec calc
@@ -2825,8 +2826,9 @@ Reg::Type Reg::vType( Func *fnc )
 		case TFld::Integer:	return Int;
 		case TFld::Real:	return Real;
 		case TFld::String:	return String;
+		default: break;
 	    }
-	default:	break;
+	default: break;
     }
     return type();
 }
@@ -2911,9 +2913,10 @@ Reg::Type RegW::vType( Func *fnc )
 		case TFld::Integer:	return Reg::Int;
 		case TFld::Real:	return Reg::Real;
 		case TFld::String:	return Reg::String;
+		default: break;
 	    }
 	    break;
-	default:	break;
+	default: break;
     }
     return type();
 }

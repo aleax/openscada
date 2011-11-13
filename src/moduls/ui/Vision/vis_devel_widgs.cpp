@@ -2786,12 +2786,12 @@ void DevelWdgView::chUnDo( )
     }
     else if(rlW && rule->name() == "attr")
     {
-        for(int i_ch = 0; i_ch < rule->childSize(); i_ch++)
+        for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
             rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->attr("prev"));
         if(rule->attr("id").size())
         {
             rlW->attrSet(rule->attr("id"), rule->attr("prev"));
-	   chRestoreCtx(*rule);
+	    chRestoreCtx(*rule);
         }
     }
     else if(rlW && rule->name() == "chldAdd")	mainWin()->visualItDel(rule->attr("path"),true);
@@ -2836,7 +2836,7 @@ void DevelWdgView::chReDo( )
 	else if(rule->name() == "attr")
         {
             if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
-            for(int i_ch = 0; i_ch < rule->childSize(); i_ch++)
+            for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
                 rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->text());
         }
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
@@ -2868,10 +2868,10 @@ void DevelWdgView::chUpdate( )
     {
 	string ells, ellsUn, ellsRe, wdg;
 	XMLNode *rule;
-	int cur = atoi(chTree->attr("cur").c_str());
+	unsigned cur = atoi(chTree->attr("cur").c_str());
 
-	mainWin()->actVisItUnDo->setEnabled(atoi(chTree->attr("cur").c_str()) < chTree->childSize());
-	mainWin()->actVisItReDo->setEnabled(chTree->childSize() && atoi(chTree->attr("cur").c_str()));
+	mainWin()->actVisItUnDo->setEnabled(cur < chTree->childSize());
+	mainWin()->actVisItReDo->setEnabled(chTree->childSize() && cur);
 
 	for(unsigned i_r = 0; i_r < chTree->childSize(); i_r++)
 	{

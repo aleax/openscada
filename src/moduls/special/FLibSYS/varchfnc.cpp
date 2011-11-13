@@ -153,6 +153,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		case TFld::Integer:	vl = buf()->getI( &vtm, (prms.size()>=3)?prms[2].getB():false );	break;
 		case TFld::Real:	vl = buf()->getR( &vtm, (prms.size()>=3)?prms[2].getB():false );	break;
 		case TFld::String:	vl = buf()->getS( &vtm, (prms.size()>=3)?prms[2].getB():false );	break;
+		default: break;
 	    }
 	}
 	prms[0].setI(vtm/1000000); prms[0].setModify();
@@ -168,6 +169,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		case TFld::Integer:	arch().at().setI(prms[0].getI(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 		case TFld::Real:	arch().at().setR(prms[0].getR(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 		case TFld::String:	arch().at().setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		default: break;
 	    }
 	else
 	{
@@ -178,6 +180,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		case TFld::Integer:	buf()->setI(prms[0].getI(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 		case TFld::Real:	buf()->setR(prms[0].getR(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 		case TFld::String:	buf()->setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		default: break;
 	    }
 	}
 	return true;

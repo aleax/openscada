@@ -536,9 +536,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    if(secLev() == "authPriv")
 	    {
 #ifdef USM_PRIV_PROTO_AES_LEN
-		char *prtLs = "DES;AES";
+		const char *prtLs = "DES;AES";
 #else
-		char *prtLs = "DES";
+		const char *prtLs = "DES";
 #endif
 		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivProto",_("Privacy"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list",prtLs);
 		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivPass","",RWRWR_,"root",SDAQ_ID,1,"tp","str");

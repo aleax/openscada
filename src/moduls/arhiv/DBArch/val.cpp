@@ -226,6 +226,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 	    }
 	    break;
 	}
+	default: break;
     }
     for( int64_t c_tm = iend+period(); c_tm <= iendIn; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
 }
@@ -242,6 +243,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	case TFld::Boolean: case TFld::Integer:	cf.setElem(&mod->vlIntEl());	break;
 	case TFld::Real:	cf.setElem(&mod->vlRealEl());	break;
 	case TFld::String:	cf.setElem(&mod->vlStrEl());	break;
+	default: break;
     }
     cf.cfg("TM").setI(itm/1000000);
     cf.cfg("TMU").setI(itm%1000000);
@@ -254,6 +256,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	    case TFld::Integer:	return cf.cfg("VAL").getI();
 	    case TFld::Real:	return cf.cfg("VAL").getR();
 	    case TFld::String:	return cf.cfg("VAL").getS();
+	    default: break;
 	}
     }
     if(tm) *tm = 0;
@@ -282,6 +285,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	    case TFld::Integer:	cfg.cfg("VAL").setI(buf.getI(&beg,true));	break;
 	    case TFld::Real:	cfg.cfg("VAL").setR(buf.getR(&beg,true));	break;
 	    case TFld::String:	cfg.cfg("VAL").setS(buf.getS(&beg,true));	break;
+	    default: break;
 	}
 	ctm = (beg/period())*period();
 	cfg.cfg("TM").setI(ctm/1000000);

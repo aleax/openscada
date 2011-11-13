@@ -341,6 +341,7 @@ void MTable::fieldSet( TConfig &cfg )
 		case TFld::Boolean:
 		    if( fld_rec->tip_fild == 'L' )	continue;
 		    break;
+		default: break;
 	    }
 
 	    db_str_rec n_rec;
@@ -481,6 +482,7 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 	    n_rec.len_fild  = 1;
 	    n_rec.dec_field = 0;
 	    break;
+	default: break;
     }
 }
 
@@ -506,6 +508,7 @@ string MTable::getVal( TCfg &cfg, db_str_rec *fld_rec )
 	    return str;
 	}
 	case TFld::Boolean:	return cfg.getB()?"T":"F";
+	default: break;
     }
     return "";
 }
@@ -525,5 +528,6 @@ void MTable::setVal( TCfg &cfg, const string &val )
 	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
 	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
 	case TFld::Boolean:	cfg.setB(val.c_str()[0]=='T');	break;
+	default: break;
     }
 }

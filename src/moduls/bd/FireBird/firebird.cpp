@@ -782,6 +782,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    case TFld::Integer:	if(tblStrct[i_fld][1] == "8")	isEqual = true;	break;
 		    case TFld::Real:	if(tblStrct[i_fld][1] == "27")	isEqual = true;	break;
 		    case TFld::Boolean:	if(tblStrct[i_fld][1] == "7")	isEqual = true;	break;
+		    default: break;
 		}
 		if(isEqual) break;
 		continue;
@@ -827,6 +828,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    case TFld::Boolean:
 		f_tp = "SMALLINT DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' NOT NULL ";
 		break;
+	    default: break;
 	}
 
 	if(i_fld >= tblStrct.size())
@@ -868,6 +870,7 @@ string MTable::getVal( TCfg &cfg )
 	case TFld::Integer:	return SYS->int2str(cfg.getI());
 	case TFld::Real:	return SYS->real2str(cfg.getR());
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
+	default: break;
     }
     return "";
 }
@@ -880,5 +883,6 @@ void MTable::setVal( TCfg &cfg, const string &val )
 	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
 	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
 	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
+	default: break;
     }
 }

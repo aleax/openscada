@@ -721,7 +721,6 @@ void TSocketOut::start()
 	int flags = fcntl(sock_fd,F_GETFL,0);
 	fcntl(sock_fd,F_SETFL,flags|O_NONBLOCK);
 	int res = ::connect(sock_fd, (sockaddr *)&name_in, sizeof(name_in));
-	int res1;
 	if(res == -1 && errno == EINPROGRESS)
 	{
 	    struct timeval tv;

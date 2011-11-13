@@ -118,7 +118,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
-    mPerOld(cfg("PERIOD").getId()), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()),
+    mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()), mPerOld(cfg("PERIOD").getId()),
     mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     mSched(cfg("SCHEDULE").getSd()), mStations(cfg("STATIONS").getSd()), mContrPrm(cfg("CNTRPRM").getSd()),
     prcSt(false), call_st(false), endrunReq(false), mPer(1e9), tmGath(0)

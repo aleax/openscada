@@ -1482,6 +1482,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	    case TFld::Integer:	tp = IO::Integer;	break;
 	    case TFld::Real:	tp = IO::Real;		break;
 	    case TFld::String:	tp = IO::String;	break;
+	    default: break;
 	}
 	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output));
     }

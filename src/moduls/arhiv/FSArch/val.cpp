@@ -885,6 +885,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    write(hd,&s_val,sizeof(s_val));
 	    break;
 	}
+	default: break;
     }
     mSize = lseek(hd,0,SEEK_END);
     close(hd);
@@ -950,6 +951,7 @@ void VFileArch::attach( const string &name )
 		eVal.assign((char*)&s_val,vSize);
 		break;
 	    }
+	    default: break;
 	}
 
 	//> Load previous val check
@@ -1179,6 +1181,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	    case TFld::String:
 		buf.setS(string(val_b+voff_beg,vlen_beg),begin()+(int64_t)vpos_beg*period());
 		break;
+	    default: break;
 	}
 	vpos_beg++;
 	if(vpos_beg > vpos_end)	break;
@@ -1247,6 +1250,7 @@ TVariant VFileArch::getVal( int vpos )
 	    close(hd);
 	    return rez;
 	}
+	default: break;
     }
     return EVAL_STR;
 }
@@ -1329,6 +1333,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 		    value.erase((1<<(vSize*8))-1);
 		break;
 	    }
+	    default: break;
 	}
 
 	int pos_cur = (ibeg-begin())/period();
@@ -1463,7 +1468,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     //> Check for write to end correct
     if(fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
-				((mSize-foff_end) == 0 && val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
+				((mSize-foff_end) == 0 && (int)val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
 	mess_err(mod->nodePath().c_str(), _("Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);
 
     //> Drop cache
