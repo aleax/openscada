@@ -137,13 +137,13 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(),true);
-    if( tbl.freeStat() ) return;
+    if(tbl.freeStat()) return;
 
     TConfig cfg(&mod->messEl());
     int64_t t_cnt = TSYS::curTime();
-    for( unsigned i_m = 0; i_m < mess.size(); i_m++)
+    for(unsigned i_m = 0; i_m < mess.size(); i_m++)
     {
-	if( !chkMessOK(mess[i_m].categ,mess[i_m].level) ) continue;
+	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 
 	//> Put record to DB
 	cfg.cfg("TM").setI(mess[i_m].time);
@@ -158,10 +158,10 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     }
 
     //> Archive size limit process
-    if( (mEnd-mBeg) > (time_t)(maxSize()*3600.) )
+    if((mEnd-mBeg) > (time_t)(maxSize()*3600))
     {
-	time_t n_end = mEnd-(time_t)(maxSize()*3600.);
-	for( time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++ )
+	time_t n_end = mEnd-(time_t)(maxSize()*3600);
+	for(time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++)
 	{
 	    cfg.cfg("TM").setI(t_c,true);
 	    tbl.at().fieldDel(cfg);
@@ -193,6 +193,7 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 
     TConfig cfg(&mod->messEl());
     TRegExp re(category, "p");
+
     //> Get values from DB
     for(time_t t_c = b_tm; t_c <= e_tm; t_c++)
     {

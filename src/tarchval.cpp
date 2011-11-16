@@ -1057,21 +1057,20 @@ void TVArchive::save_( )
 
 void TVArchive::start( )
 {
-    if(runSt) return;
+    if(!runSt)
+	try
+	{
+	    runSt = true;
+	    setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
+	}
+	catch(...){ runSt = false; throw; }
 
-    runSt = true;
-
-    try
-    {
-	setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
-
-	//> Attach to archivators
-	string arch;
-	for(int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size(); )
-	    if( !archivatorPresent(arch) )
-		try{ archivatorAttach(arch); }
-		catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-    }catch(...){ runSt = false; throw; }
+    //> Attach to archivators
+    string arch;
+    for(int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size(); )
+	if(!archivatorPresent(arch))
+	    try{ archivatorAttach(arch); }
+	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TVArchive::stop( bool full_del )
@@ -2186,7 +2185,9 @@ void TVArchivator::start()
     if(runSt) return;
 
     //> Start archivator thread
-    SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this);
+    SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this, 2, NULL, &runSt);
+
+    if(!owner().owner().SubStarting) owner().owner().subStart();
 }
 
 void TVArchivator::stop( bool full_del )

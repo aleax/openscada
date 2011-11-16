@@ -1,3 +1,11 @@
+2011-11-16 Roman
+- Archive: Archives connections update to Archivators on it start.
+- SYS: Argument 'startSt' is recovered into function taskCreate() for wait to user's function call.
+- SYS: Default format is set on empty format's argument for function TSYS::time2str(time_t, const string&).
+- Archive.DBArch: Field 'MESS' of messages table is set to no Key type for store big messages on DB MySQL and other DB with limited key size.
+- FIX:DAQ.OPC_UA: Different OpenSSL versions using is fixed.
+
+
 2011-11-13 Roman
 - !:SYS: Mostly warnings clear caused by option -Wall.
 

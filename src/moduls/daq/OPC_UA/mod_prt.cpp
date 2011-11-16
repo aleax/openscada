@@ -1265,7 +1265,11 @@ string TProt::certDER2PEM( const string &certDer )
     string rez = "";
 
     if( certDer.empty() ) return rez;
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L
     const unsigned char *ind = (const unsigned char *)certDer.data();
+#else
+    unsigned char *ind = (unsigned char *)certDer.data();
+#endif
     x = d2i_X509(NULL,&ind,certDer.size());
     if( x ) bm = BIO_new(BIO_s_mem());
     if( bm && PEM_write_bio_X509(bm,x) > 0 )
@@ -1418,7 +1422,7 @@ bool TProt::asymmetricVerify( const string &mess, const string &sign, const stri
 	if(BIO_write(mdtmp,mess.data(),mess.size()) == (int)mess.size())
 	{
 	    BIO_get_md_ctx(mdtmp, &ctx);
-	    if(ctx) rez = EVP_VerifyFinal(ctx, (const unsigned char*)sign.data(), sign.size(), pkey);
+	    if(ctx) rez = EVP_VerifyFinal(ctx, (unsigned char*)sign.data(), sign.size(), pkey);
 	}
     }
     //> Free temporary data

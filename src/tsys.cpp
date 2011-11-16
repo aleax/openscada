@@ -211,7 +211,7 @@ string TSYS::time2str( time_t itm, const string &format )
     struct tm tm_tm;
     localtime_r(&itm,&tm_tm);
     char buf[100];
-    int ret = strftime(buf, sizeof(buf), format.c_str(), &tm_tm);
+    int ret = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
     return (ret > 0) ? string(buf,ret) : string("");
 }
 
@@ -1246,7 +1246,7 @@ void TSYS::cntrSet( const string &id, double vl )
     mCntrs[id] = vl;
 }
 
-void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm, pthread_attr_t *pAttr )
+void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm, pthread_attr_t *pAttr, bool *startSt )
 {
     int detachStat = 0;
     pthread_t procPthr;
@@ -1307,6 +1307,12 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 	//> Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) pthread_yield();
+	//> Wait for start status
+	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); )
+	{
+	    if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' start timeouted!"),path.c_str());
+	    usleep(STD_WAIT_DELAY *1000);
+	}
     }
     catch(TError)
     {

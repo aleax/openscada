@@ -305,7 +305,7 @@ void TArchiveS::subStart( )
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	{
 	    AutoHD<TMArchivator> mess = mod.at().messAt(o_lst[i_o]);
-	    if( !mess.at().startStat() && mess.at().toStart() )
+	    if( /*!mess.at().startStat() &&*/ mess.at().toStart() )
 		try{ mess.at().start(); }
 		catch(TError err)
 		{
@@ -318,7 +318,7 @@ void TArchiveS::subStart( )
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	{
 	    AutoHD<TVArchivator> val = mod.at().valAt(o_lst[i_o]);
-	    if( !val.at().startStat() && val.at().toStart() )
+	    if( /*!val.at().startStat() &&*/ val.at().toStart() )
 		try{ val.at().start(); }
 		catch(TError err)
 		{
@@ -333,7 +333,7 @@ void TArchiveS::subStart( )
     for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
     {
 	AutoHD<TVArchive> aval = valAt(o_lst[i_o]);
-	if( !aval.at().startStat() && aval.at().toStart() )
+	if( /*!aval.at().startStat() &&*/ aval.at().toStart() )
 	    try{ aval.at().start(); }
 	    catch(TError err)
 	    {

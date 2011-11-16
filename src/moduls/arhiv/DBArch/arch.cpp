@@ -100,7 +100,7 @@ void ModArch::postEnable( int flag )
 	el_mess.fldAdd( new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10") );
 	el_mess.fldAdd( new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"6","0") );
 	el_mess.fldAdd( new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100") );
-	el_mess.fldAdd( new TFld("MESS",_("Message"),TFld::String,TCfg::Key,"1000") );
+	el_mess.fldAdd( new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000") );
 	el_mess.fldAdd( new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"1") );
 
 	//> Boolean and integer value DB archive DB structure
