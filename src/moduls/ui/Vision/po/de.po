@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-06 22:01+0200\n"
+"POT-Creation-Date: 2011-11-17 16:09+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1204,6 +1204,12 @@ msgstr "Ausgewählt sind die Elemente --- xy(%2:%3) wh[%4:%5]"
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Seite: '%1' --- xy(%2:%3) wh[%4:%5]"
 
+#, c-format
+msgid ""
+"\n"
+"... more items (%d)"
+msgstr ""
+
 msgid "geometry"
 msgstr ""
 
@@ -1603,6 +1609,10 @@ msgstr "Wählen Sie Ihren Stil aus der Liste."
 
 msgid "Style select"
 msgstr "Style wählen"
+
+#, fuzzy
+msgid "Elementary figure"
+msgstr "Panel der elementaren Figuren"
 
 msgid "Make this point dynamic"
 msgstr "Diesen Punkt dynamisch machen"

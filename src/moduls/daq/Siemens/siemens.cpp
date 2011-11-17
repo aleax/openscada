@@ -572,7 +572,7 @@ void TMdContr::start_( )
     catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
 
     //> Clear acquisition data blocks and asynchronous write mode data blocks
     acqBlks.clear();
@@ -1306,7 +1306,7 @@ void *TMdContr::Task( void *icntr )
 
 	//> Calc parameters
 	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
-	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop,cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+	    try{ cntr.pHd[i_p].at().calc(is_start,is_stop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
@@ -1317,7 +1317,7 @@ void *TMdContr::Task( void *icntr )
 
 	if(is_stop) break;
 
-	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
 	if(cntr.endrun_req) is_stop = true;
 	is_start = false;
@@ -1669,7 +1669,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

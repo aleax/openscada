@@ -453,7 +453,8 @@ void TTrIn::start()
     if( run_st ) return;
 
     //> Status clear
-    trIn = trOut = tmMax = 0;
+    trIn = trOut = 0;
+    tmMax = 0;
 
     connect( );
 
@@ -470,7 +471,8 @@ void TTrIn::stop()
     mMdmMode = mMdmDataMode = false;
 
     //> Status clear
-    trIn = trOut = tmMax = 0;
+    trIn = trOut = 0;
+    tmMax = 0;
 
     SYS->taskDestroy(nodePath('.',true), &endrun);
 

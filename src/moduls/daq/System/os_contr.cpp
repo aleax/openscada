@@ -223,7 +223,7 @@ void TMdContr::enable_(  )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
 
     //> Start the request data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -279,7 +279,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.call_st = false;
 	}
 
-	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
     }
 
     cntr.prc_st = false;
@@ -390,7 +390,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( true );
 }

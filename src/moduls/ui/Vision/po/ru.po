@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-06 22:01+0200\n"
+"POT-Creation-Date: 2011-11-17 16:09+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1191,6 +1191,12 @@ msgstr "Выбраны элементы --- xy(%2:%3) шв[%4:%5]"
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Страница: '%1' --- xy(%2:%3) шв[%4:%5]"
 
+#, c-format
+msgid ""
+"\n"
+"... more items (%d)"
+msgstr "\n... больше пунктов (%d)"
+
 msgid "geometry"
 msgstr "геометрия"
 
@@ -1205,6 +1211,7 @@ msgstr "новый виджет '%s' от '%s'"
 msgid "remove widget"
 msgstr "удаление виджета"
 
+#, c-format
 msgid "copy past widget '%s' from '%s'"
 msgstr "копирование-вставка виджета '%s' из '%s'"
 
@@ -1589,6 +1596,9 @@ msgstr "Выборите Ваш стиль из списка."
 msgid "Style select"
 msgstr "Выбор стиля"
 
+msgid "Elementary figure"
+msgstr "Элементарная фигура"
+
 msgid "Make this point dynamic"
 msgstr "Сделать эту точку динамической"
 
@@ -1968,7 +1978,7 @@ msgid "Sample:"
 msgstr "Образец:"
 
 msgid "AaBbCcDdEeFf"
-msgstr ""
+msgstr "АаБбВвГгДдЕе"
 
 msgid "Auth wrong!!!"
 msgstr "Ошибка аутентификации!!!"

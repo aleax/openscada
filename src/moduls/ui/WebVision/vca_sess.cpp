@@ -5336,7 +5336,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     if(sclHor&0x3 || sclVer&0x3)
     {
-	gdImageSetThickness(im,vmax(1,vmin(xSc,ySc)));
+	gdImageSetThickness(im,vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
 	//>> Set grid color
 	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
@@ -5585,7 +5585,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     for(unsigned i_t = 0; i_t < trnds.size(); i_t++)
     {
 	//>> Set trend's pen
-	gdImageSetThickness(im,vmax(1,vmin(10,trnds[i_t].width()*vmin(xSc,ySc))));
+	gdImageSetThickness(im,vmax(1,vmin(10,(int)TSYS::realRound(trnds[i_t].width()*vmin(xSc,ySc)))));
 	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
 	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 
@@ -5738,7 +5738,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     //> Process scale
     if( sclHor&0x3 || sclVer&0x3 )
     {
-	gdImageSetThickness(im,vmax(1,vmin(xSc,ySc)));
+	gdImageSetThickness(im,vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
 	//>> Set grid color
 	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
@@ -5898,7 +5898,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	if( !trnds[i_t].fftN || (trnds[i_t].color()>>31)&0x01 ) continue;
 
 	//>> Set trend's pen
-	gdImageSetThickness(im,vmax(1,vmin(10,trnds[i_t].width()*vmin(xSc,ySc))));
+	gdImageSetThickness(im,vmax(1,vmin(10,(int)TSYS::realRound(trnds[i_t].width()*vmin(xSc,ySc)))));
 	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
 	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;

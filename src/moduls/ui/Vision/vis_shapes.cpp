@@ -1503,7 +1503,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth((int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))));
+	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
 	//>> Set markers font and color
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
@@ -1527,7 +1527,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     double fftBeg = 1e6/(double)tSize;			//Minimum frequency or maximum period time (s)
     double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -1627,7 +1627,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
     }
 
-    double vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15.0*vmin(w->xScale(true),w->yScale(true))) );
+    double vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))) );
     if( vmax_ln >= 2 )
     {
 	double vDiv = 1.;
@@ -1669,7 +1669,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	//>>> Set trend's pen
 	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(vmax(1,vmin(10,sTr->width()*vmin(w->xScale(true),w->yScale(true)))));
+	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(sTr->width()*vmin(w->xScale(true),w->yScale(true))))));
 	pnt.setPen(trpen);
 
 	double vlOff = sTr->fftOut[0][0]/sTr->fftN;
@@ -1770,7 +1770,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth((int)vmax(1.0,vmin(w->xScale(true),w->yScale(true))));
+	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
 	//>> Set markers font and color
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
@@ -1793,7 +1793,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     //> Calc horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
 
-    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15.0*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
@@ -2026,7 +2026,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>>> Set trend's pen
 	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(vmax(1,vmin(10,sTr->width()*vmin(w->xScale(true),w->yScale(true)))));
+	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(sTr->width()*vmin(w->xScale(true),w->yScale(true))))));
 	pnt.setPen(trpen);
 
 	//>>> Prepare generic parameters

@@ -2875,6 +2875,18 @@ void DevelWdgView::chUpdate( )
 
 	for(unsigned i_r = 0; i_r < chTree->childSize(); i_r++)
 	{
+	    //>> Limits process
+	    if(cur > i_r && (cur-i_r) >= 11)
+	    {
+		if((cur-i_r) == 11) ellsRe += TSYS::strMess(_("\n... more items (%d)"),cur-10);
+		continue;
+	    }
+	    else if(i_r > cur && (i_r-cur) >= 10)
+	    {
+		if((i_r-cur) == 10) ellsUn += TSYS::strMess(_("\n... more items (%d)"),chTree->childSize()-cur-10);
+		break;
+	    }
+
 	    rule = chTree->childGet(i_r);
 	    wdg = rule->attr("wdg");
 	    ells = "\n"+(wdg.empty()?id():wdg)+": ";

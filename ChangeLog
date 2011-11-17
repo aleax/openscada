@@ -1,3 +1,9 @@
+2011-11-17 Roman
+- DAQ.BlockCalc, DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System, Transport.Serial: Double to int64_t conversion warnings is resolved.
+- UI.Vision: Tool tip undo and redo list limit is set to ten items.
+- UI.Vision, UI.WebVision: Real round use for trends width calculate into primitive "Diagram".
+
+
 2011-11-16 Roman
 - Archive: Archives connections update to Archivators on it start.
 - SYS: Argument 'startSt' is recovered into function taskCreate() for wait to user's function call.

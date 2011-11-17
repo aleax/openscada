@@ -201,7 +201,7 @@ void TMdContr::start_( )
     if(prc_st)	return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
 
     SYS->transport().at().at("Serial").at().outAt(mAddr).at().start();
 
@@ -611,7 +611,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //> Calc next work time and sleep
-	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 	}
     }
     catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
@@ -899,7 +899,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr, val.arch().at().srcData());
-    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }

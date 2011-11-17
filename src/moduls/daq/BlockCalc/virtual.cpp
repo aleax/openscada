@@ -300,7 +300,7 @@ void Contr::disable_( )
 void Contr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
 
     //> Make process all bloks
     vector<string> lst;
@@ -376,7 +376,7 @@ void *Contr::Task( void *icontr )
 	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
 	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
 	    {
-		try{ cntr.clc_blks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/(double)cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+		try{ cntr.clc_blks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -398,7 +398,7 @@ void *Contr::Task( void *icontr )
 
 	if(is_stop) break;
 
-	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
 	if(cntr.endrun_req)	is_stop = true;
 	if(!cntr.redntUse())	is_start = false;
@@ -742,7 +742,7 @@ void Prm::vlArchMake( TVal &val )
 {
     if( val.arch().freeStat() ) return;
 	val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
-    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid( true );
     val.arch().at().setHighResTm( false );
 }
