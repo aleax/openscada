@@ -262,12 +262,15 @@ void *TUIMod::Task( void * )
     if(!ico_t.load(TUIS::icoPath(SYS->id()+"_splash").c_str()))	ico_t.load(":/images/splash.png");
     QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
+    QFont wFnt = splash->font();
+    wFnt.setPixelSize(10);
+    splash->setFont(wFnt);
 
     while(!mod->startCom( ) && !mod->endRun())
     {
 	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-7); i_m--)
+	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
 	    mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
@@ -305,12 +308,14 @@ void *TUIMod::Task( void * )
     if(!ico_t.load(TUIS::icoPath(SYS->id()+"_splash_exit").c_str()))	ico_t.load(":/images/splash.png");
     splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
+    splash->setFont(wFnt);
+
     st_time = time(NULL);
     while(!mod->endRun())
     {
 	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
 	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-7); i_m--)
+	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
 	    mess+=QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
