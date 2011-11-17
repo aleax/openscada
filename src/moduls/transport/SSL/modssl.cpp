@@ -287,9 +287,12 @@ void *TSocketIn::Task( void *sock_in )
     SSL_METHOD *meth;
 #endif
     meth = SSLv23_server_method();
-    if(ssl_method == "SSLv2")		meth = SSLv2_server_method();
-    else if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
-    else if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
+
+#ifndef OPENSSL_NO_SSL2
+    if(ssl_method == "SSLv2")	meth = SSLv2_server_method();
+#endif
+    if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
+    if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
 
     try
     {
@@ -732,10 +735,13 @@ void TSocketOut::start()
 #else
     SSL_METHOD *meth;
 #endif
+
     meth = SSLv23_client_method();
-    if( ssl_method == "SSLv2" )		meth = SSLv2_client_method();
-    else if( ssl_method == "SSLv3" )	meth = SSLv3_client_method();
-    else if( ssl_method == "TLSv1" )	meth = TLSv1_client_method();
+#ifndef OPENSSL_NO_SSL2
+    if(ssl_method == "SSLv2")	meth = SSLv2_client_method();
+#endif
+    if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
+    if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
 
     try
     {

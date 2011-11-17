@@ -1,4 +1,5 @@
 2011-11-17 Roman
+- Transport.SSL: Build for several OpenSSL version and definition OPENSSL_NO_SSL2 processing is made.
 - UI.QTStarter: Test's font for splash is set to fix 10 pixels and 10 log's lines.
 - DAQ.BlockCalc, DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System, Transport.Serial: Double to int64_t conversion warnings is resolved.
 - UI.Vision: Tool tip undo and redo list limit is set to ten items.
