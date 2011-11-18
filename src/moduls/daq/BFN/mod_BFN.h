@@ -69,7 +69,6 @@ class TMdPrm : public TParamContr
     private:
 	//Methods
 	void postEnable(int flag);
-	void cntrCmdProc(XMLNode *opt);
 	void vlArchMake(TVal &val);
 	void vlGet(TVal &val);
 

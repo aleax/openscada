@@ -1,3 +1,8 @@
+2011-11-18 Roman
+- SYS: Module DAQ.AMRDevs is set disabled by default.
+- DAQ.BFN: Some not used functions is removed.
+
+
 2011-11-17 Roman
 - Transport.SSL: Build for several OpenSSL version and definition OPENSSL_NO_SSL2 processing is made.
 - UI.QTStarter: Test's font for splash is set to fix 10 pixels and 10 log's lines.

@@ -311,12 +311,10 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
 	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mSched(cfg("SCHEDULE").getSd()), mAddr(cfg("ADDR").getSd()),
 	/*mHouse(cfg("HOUSE").getSd()),*/ mUser(cfg("USER").getSd()), mPassword(cfg("PASS").getSd()),
 	prc_st(false), acq_st(false), endrun_req(false), tm_gath(0)
-
 {
     //cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
@@ -719,8 +717,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
-    TParamContr(name,tp_prm), curAlrmsId(0), p_el("w_attr")
+TMdPrm::TMdPrm(string name, TTipParam *tp_prm) : TParamContr(name,tp_prm), curAlrmsId(0), p_el("w_attr")
 {
     setToEnable(true);
 }
@@ -775,30 +772,6 @@ void TMdPrm::load_( )
 void TMdPrm::save_( )
 {
     //TParamContr::save_();
-}
-
-void TMdPrm::cntrCmdProc(XMLNode *opt)
-{
-    //> Service commands process
-    string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
-
-    //> Get page info
-    if(opt->name() == "info")
-    {
-	TParamContr::cntrCmdProc(opt);
-	//ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	return;
-    }
-
-    //> Process command to page
-    /*if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-    {
-	if(enableStat())	throw TError(nodePath().c_str(),"Parameter is enabled.");
-//	parseOIDList(opt->text());
-    }
-    else*/
-    TParamContr::cntrCmdProc(opt);
 }
 
 void TMdPrm::vlGet( TVal &val )

@@ -52,7 +52,7 @@
 ModTmpl::TTpContr *ModTmpl::mod;  //Pointer for direct access to module
 
 //!!! Required section for binding OpenSCADA core to this module. It give information and create module root object.
-//!!! Not remove this section!
+//!!! Do not remove this section!
 extern "C"
 {
     TModule::SAt module( int n_mod )
