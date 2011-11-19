@@ -224,6 +224,13 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 6:		//active
 	    setProperty("active",(bool)atoi(val.c_str()));
 	    return true;
+	case 11:	//geomZ
+	    if(!allAttrLoad() && !dynamic_cast<RunPageView*>(this))
+	    {
+		RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget());
+		if(wdg) { wdg->orderUpdate(); wdg->QWidget::update(); }
+	    }
+	    return true;
 	case 16:	//tipStatus
 	    if(val.size() && mainWin()->masterPg() == this)
 		mainWin()->statusBar()->showMessage(val.c_str(), 10000);
@@ -449,17 +456,17 @@ bool RunWdgView::event( QEvent *event )
     }
 
     //> Try put mouse event to next level widget into same container
-    if( !qobject_cast<RunPageView*>(this) && 
-	(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick) )
+    if(!qobject_cast<RunPageView*>(this) &&
+	(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick))
     {
 	bool isOk = false;
 	QPoint curp = parentWidget()->mapFromGlobal(cursor().pos());
-	for( int i_c = parentWidget()->children().size()-1; i_c >= 0; i_c-- )
+	for(int i_c = parentWidget()->children().size()-1; i_c >= 0; i_c--)
 	{
 	    RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget()->children().at(i_c));
-	    if( !wdg ) continue;
-	    if( wdg == this ) isOk = true;
-	    else if( isOk && wdg->geometry().contains(curp) )	return QApplication::sendEvent(wdg,event);
+	    if(!wdg) continue;
+	    if(wdg == this) isOk = true;
+	    else if(isOk && wdg->geometry().contains(curp)) return QApplication::sendEvent(wdg,event);
 	}
     }
 

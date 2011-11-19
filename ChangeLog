@@ -1,3 +1,7 @@
+2011-11-19 Roman
+- UI.Vision: 'geomZ' widget's property trace and order dynamic update into run project's session.
+
+
 2011-11-18 Roman
 - SYS: Module DAQ.AMRDevs is set disabled by default.
 - DAQ.BFN: Some not used functions is removed.
