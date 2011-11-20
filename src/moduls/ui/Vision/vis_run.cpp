@@ -834,6 +834,7 @@ void VisRun::exportDoc( const string &idoc )
 		    //>>> Check for marked table and process it
 		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && atoi(curNode->attr("export").c_str()))
 		    {
+			map<int,int>	rowSpn;
 			XMLNode *tblN = NULL, *tblRow;
 			string val;
 			for(int i_st = 0; i_st < 4; i_st++)
@@ -852,16 +853,20 @@ void VisRun::exportDoc( const string &idoc )
 			    {
 				if(strcasecmp(tblN->childGet(i_n)->name().c_str(),"tr") != 0)	continue;
 				tblRow = tblN->childGet(i_n);
-				for(unsigned i_c = 0; i_c < tblRow->childSize(); i_c++)
-				    if(strcasecmp(tblRow->childGet(i_c)->name().c_str(),"th") == 0 || strcasecmp(tblRow->childGet(i_c)->name().c_str(),"td") == 0)
-				    {
-					val = tblRow->childGet(i_c)->text(true,true);
-					for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
-					rez += "\""+val+"\";";
-					//>>>> Colspan process
-					int colSpan = atoi(tblRow->childGet(i_c)->attr("colspan",false).c_str());
-					for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";
-				    }
+				for(unsigned i_c = 0, i_cl = 0; i_c < tblRow->childSize(); i_c++)
+				{
+				    if(!(strcasecmp(tblRow->childGet(i_c)->name().c_str(),"th") == 0 || strcasecmp(tblRow->childGet(i_c)->name().c_str(),"td") == 0))
+					continue;
+				    while(rowSpn[i_cl] > 1) { rez += ";"; rowSpn[i_cl]--; i_cl++; }
+				    rowSpn[i_cl] = atoi(tblRow->childGet(i_c)->attr("rowspan",false).c_str());
+				    val = tblRow->childGet(i_c)->text(true,true);
+				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
+				    rez += "\""+TSYS::strNoSpace(val)+"\";";
+				    //>>>> Colspan process
+				    int colSpan = atoi(tblRow->childGet(i_c)->attr("colspan",false).c_str());
+				    for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";
+				    i_cl++;
+				}
 				rez += "\x0D\x0A";
 			    }
 			}

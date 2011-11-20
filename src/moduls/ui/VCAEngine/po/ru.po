@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-01 10:19+0200\n"
+"POT-Creation-Date: 2011-11-20 10:32+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -810,9 +810,8 @@ msgstr "Текущий документ архива в XHTML. Начинает�
 msgid "Write time for document generation from that point."
 msgstr "Записать времени для генерации документа от этой точки."
 
-#, c-format
-msgid "Document's template parsing error: %s."
-msgstr "Ошибка разбора шаблона документа: %s."
+msgid "Document parsing error: %s."
+msgstr "Ошибка разбора документа: %s."
 
 msgid "Result"
 msgstr "Результат"

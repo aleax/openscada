@@ -794,7 +794,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //   0x1E - interrupt the string after all.
     //  path - file path for save to file
     //  cp - target codepage
-    if( id == "save" )
+    if(id == "save")
     {
 	XMLNode nd;
 	toXMLNode(nd);
@@ -811,7 +811,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     // XMLNodeObj getElementBy( string val, string attr = "id" ) - get element from the tree by attribute <attr> value <val>.
     //  val - attribute value for find;
     //  attr - attribute name for find it value.
-    if( id == "getElementBy" && prms.size())
+    if(id == "getElementBy" && prms.size())
     {
 	XMLNodeObj *rez = getElementBy(((prms.size() >= 2) ? prms[1].getS() : "id"), prms[0].getS());
 	if(!rez) return TVariant();

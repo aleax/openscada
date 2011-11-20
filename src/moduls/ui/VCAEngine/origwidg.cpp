@@ -1137,7 +1137,7 @@ void OrigDocument::postEnable( int flag )
 void OrigDocument::calc( Widget *base )
 {
     //> Make document after time set
-    if(base->attrAt("time").at().flgSelf()&0x100)
+    if(base->attrAt("time").at().flgSelf()&0x100 && TSYS::strNoSpace(base->attrAt("tmpl").at().getS()).size())
     {
 	base->attrAt("time").at().setFlgSelf((Attr::SelfAttrFlgs)(base->attrAt("time").at().flgSelf()&(~0x100)));
 	string mkDk;
@@ -1420,7 +1420,6 @@ TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms,
 	TSYS::pathLev(sw->path(),0,true,&off);
 	c_el.cfg("IDW").setS(sw->path().substr(off));
 	c_el.cfg("ID").setS("doc"+TSYS::int2str(aCur));
-	c_el.cfg("IO_VAL").setView(false);
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) return c_el.cfg("IO_VAL").getS();
 
 	return "";
@@ -1443,7 +1442,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     try{ xdoc.load(XHTML_entity+tmpl,true); }
     catch(TError err)
     {
-	mess_err(wdg->nodePath().c_str(),_("Document's template parsing error: %s."),err.mess.c_str());
+	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());
 	return "";
     }
 

@@ -1,3 +1,10 @@
+2011-11-20 Roman
+- UI.VCAEngine: Disabled builded to primitive "Document" generation on attribute "time" change if template "tmpl" empty
+    for full dynamic documents.
+- FIX:UI.VCAEngine: User API function getArhDoc() for primitive "Document" and like functions call mechanism is fixed.
+- UI.Vision: RowSpan and empty symbols at begin and end clear is added for documents export to CVS.
+
+
 2011-11-19 Roman
 - UI.Vision: 'geomZ' widget's property trace and order dynamic update into run project's session.
 

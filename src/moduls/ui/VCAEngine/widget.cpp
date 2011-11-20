@@ -611,7 +611,7 @@ void Widget::calc( Widget *base )
 
 TVariant Widget::objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src )
 {
-    if(!parent().freeStat()) parent().at().objFuncCall_w(id, prms, user, src);
+    if(!parent().freeStat()) return parent().at().objFuncCall_w(id, prms, user, src);
 
     return TVariant();
 }
