@@ -5,12 +5,11 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-06 17:27+0300\n"
+"POT-Creation-Date: 2011-11-23 21:49+0200\n"
 "PO-Revision-Date: 2010-10-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -31,7 +30,7 @@ msgstr "Gewährt die Gruppe von Testen für das System OpenSCADA."
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config-file ----------\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
 "All tests main options:\n"
 "  id           test's id;\n"
 "  on           on test's flag;\n"
@@ -40,7 +39,7 @@ msgid ""
 msgstr ""
 "========================== Optionen des Moduls <%s:%s> "
 "==========================\n"
-"-------- Parameter der modularen Sektion <%s> in der Konfigurationsdatei "
+"-------- Parameter der modularen Sektion '%s' in der Konfigurationsdatei "
 "--------\n"
 "Gemeinsame Optionen von allen Testen:\n"
 "  id           Bezeichner des Testes;\n"
@@ -48,13 +47,12 @@ msgstr ""
 "  per          Periode der Wiederholung (sek).\n"
 "       *** Optionen der Teste ***\n"
 
+#, c-format
 msgid "%s{%d \"%s\", text \"%s\", childs - %d."
 msgstr "%s{%d \"%s\", Text \"%s\", der Nachkommen - %d."
 
+#, c-format
 msgid "        Attr \"%s\" = \"%s\"."
-msgstr "        Attribut \"%s\" = \"%s\"."
-
-msgid "        Proc \"%s\" = \"%s\"."
 msgstr "        Attribut \"%s\" = \"%s\"."
 
 msgid "Test"
@@ -101,7 +99,7 @@ msgid "Test1: Passed."
 msgstr "Test1: Gemacht."
 
 msgid "Test2: Internal insert double value (down)."
-msgstr "Test2: Innerer Einsatz des reelen Wertes  (nach unten)."
+msgstr "Test2: Innerer Einsatz des reellen Wertes  (nach unten)."
 
 msgid "Test2: Failed."
 msgstr "Test2: Fehler."
@@ -110,7 +108,7 @@ msgid "Test2: Passed."
 msgstr "Test2: Gemacht."
 
 msgid "Test3: Internal insert double value (up)."
-msgstr "Test3: Innerer Einsatz des reelen Wertes (nach oben)."
+msgstr "Test3: Innerer Einsatz des reellen Wertes (nach oben)."
 
 msgid "Test3: Failed."
 msgstr "Test3: Fehler."
@@ -119,7 +117,7 @@ msgid "Test3: Passed."
 msgstr "Test3: Gemacht."
 
 msgid "Test4: Internal insert double value (down)."
-msgstr "Test4: Innerer Einsatz des reelen Wertes (nach oben)."
+msgstr "Test4: Innerer Einsatz des reellen Wertes (nach oben)."
 
 msgid "Test4: Failed."
 msgstr "Test4: Fehler."
@@ -128,7 +126,7 @@ msgid "Test4: Passed."
 msgstr "Test4: Gemacht."
 
 msgid "Test5: Internal insert no double value."
-msgstr "Test5: Innerer Einsatz des reelen Wertes."
+msgstr "Test5: Innerer Einsatz des reellen Wertes."
 
 msgid "Test5: Failed."
 msgstr "Test5: Fehler."
@@ -137,7 +135,7 @@ msgid "Test5: Passed."
 msgstr "Test5: Gemacht."
 
 msgid "Test6: Internal insert double value (up)."
-msgstr "Test6: Innerer Einsatz des reelen Wertes (nach oben)."
+msgstr "Test6: Innerer Einsatz des reellen Wertes (nach oben)."
 
 msgid "Test6: Failed."
 msgstr "Test6: Fehler."
@@ -146,7 +144,7 @@ msgid "Test6: Passed."
 msgstr "Test6: Gemacht."
 
 msgid "Test7: Internal insert value instaead double value."
-msgstr "Test7: Innerer Einsatz des Wertes statt des reelen."
+msgstr "Test7: Innerer Einsatz des Wertes statt des reellen."
 
 msgid "Test7: Failed"
 msgstr "Test7: Fehler."
@@ -186,14 +184,14 @@ msgid "Encoded text: %s"
 msgstr "Kodierter Text: %s"
 
 msgid "Test2: Decoding."
-msgstr "Test2: Dekodierung."
+msgstr "Test2: Decodierung."
 
 #, c-format
 msgid "Decoded text by length %d for time %f ms."
-msgstr "Text %d lang dekodirt in der Zeit von %f usek."
+msgstr "Text %d lang dekodiert in der Zeit von %f usek."
 
 msgid "Test2: Failed. Decoding error."
-msgstr "Test2: Fehler. Fehler der Dekodierung."
+msgstr "Test2: Fehler. Fehler der Decodierung."
 
 msgid "DB type"
 msgstr "DB-Typ"
@@ -244,9 +242,9 @@ msgstr "Eröffnung der Tabelle '%s'."
 
 #, c-format
 msgid "Connect to table '%s'."
-msgstr "Anschluß an die Tabelle '%s'."
+msgstr "Anschluss an die Tabelle '%s'."
 
-msgid "Create DB config."
+msgid "Create DB configuration."
 msgstr "Erschaffung der Konfiguration der DB."
 
 msgid "Name field"
@@ -366,17 +364,17 @@ msgstr " %d neue Nachrichten vorhanden."
 msgid "DAQ parameter address"
 msgstr "Adresse des DAQ-Parameters"
 
-msgid "Param"
+msgid "Parameter"
 msgstr "Parameter"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and config fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration fields."
 msgstr ""
 "Test der DAQ-Parameter. Liest Attribute und Konfigurationsfelder des "
 "Parameters."
 
 #, c-format
-msgid "Value attrbutes present: %d"
+msgid "Value attributes present: %d"
 msgstr "Wert des Attributs ist vorhanden: %d"
 
 #, c-format
@@ -407,13 +405,13 @@ msgid "Path to module"
 msgstr "Weg zum Modul"
 
 msgid "Mode (1-attach;-1-detach;0-change)"
-msgstr "Regime (1-Anschalt.;-1-Ausschalt.;0-Veränderung)"
+msgstr "Regime (1-Anschalte.;-1-Ausschalte.;0-Veränderung)"
 
 msgid "Full attach(to start)"
-msgstr "Voller Anschluß(beim Start)"
+msgstr "Voller Anschluss(beim Start)"
 
 msgid "Attach SO"
-msgstr "Anschluß SO"
+msgstr "Anschluss SO"
 
 msgid "Attach/detach module test."
 msgstr "Test des Anschlusses/der Abschaltung der Module."
@@ -506,10 +504,10 @@ msgstr "Fehler der Erschaffung des Buffers."
 msgid "%s: Change buffer mode."
 msgstr "%s: Veränderung des Regimes des Buffers."
 
-msgid "Disable hard griding ok."
+msgid "Disable hard grid ok."
 msgstr "Abschaltung des harten Gitters ist erfolgreich."
 
-msgid "Disable hard griding failed."
+msgid "Disable hard grid failed."
 msgstr "Ausfall der Abschaltung des harten Gitters."
 
 msgid "Set high resolution time ok."
@@ -532,20 +530,20 @@ msgstr "Abfall der Veränderung der Periode."
 
 #, c-format
 msgid "%s: Destroy buffer."
-msgstr "%s: Verfall des Buffers."
+msgstr "%s: Verfall des Puffer."
 
 #, c-format
-msgid "%s: Fill and check hard time griding string buffer."
+msgid "%s: Fill and check hard time grid string buffer."
 msgstr ""
-"%s: Einfüllung unf Prüfung des Zeilenbuffers mit dem harten Zeitgitter."
+"%s: Füllen und Prüfung des Zeilenbuffers mit dem harten Zeitgitter."
 
 msgid "Buffer begin or/and end error, at filling half buffer."
 msgstr ""
-"Abfall des Beginns und/oder der Ende des Buffers, bei der Einfüllung der "
-"Hälfte des Buffers."
+"Abfall des Beginns und/oder der Ende des Puffer, bei der Füllen der "
+"Hälfte des Puffer."
 
 msgid "Write a half buffer values error."
-msgstr "Abfall der Aufname der Hälfte der Bufferswerte."
+msgstr "Abfall der Aufname der Hälfte der Pufferswerte."
 
 msgid "Write a half buffer ok."
 msgstr "Aufschreibung der Hälfte des Wertebuffers ist erfolgreich."
@@ -557,13 +555,13 @@ msgid "Write a roll buffer values error."
 msgstr "Abfall der Ringaufschreibung in den Wertebuffer."
 
 msgid "Write a roll buffer ok."
-msgstr "Ringaufschreibung der Werte in den Buffer ist erfolgreich."
+msgstr "Ringaufschreibung der Werte in den Puffer ist erfolgreich."
 
 msgid "Update buffer end error."
-msgstr "Abfall der Erneuerung des Bufferendes."
+msgstr "Abfall der Erneuerung des Pufferendes."
 
 msgid "Update buffer end ok."
-msgstr "Erneuerungen des Bufferendes sind erfolgreich."
+msgstr "Erneuerungen des Pufferendes sind erfolgreich."
 
 #, c-format
 msgid "Wrote 1000 values for time %f ms."
@@ -574,57 +572,57 @@ msgid "Read 1000 values for time %f ms."
 msgstr "1000 Aufschreibungen gelesen im Laufe von %f usek."
 
 #, c-format
-msgid "%s: Fill and check hard time griding integer buffer."
+msgid "%s: Fill and check hard time grid integer buffer."
 msgstr ""
-"%s: Einfüllung und Prüfung des ganzzahligen Buffers mit dem weichen "
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen "
 "Zeitgitter."
 
 #, c-format
-msgid "%s: Fill and check soft time griding string buffer (high time)."
+msgid "%s: Fill and check soft time grid string buffer (high time)."
 msgstr ""
-"%s: Einfüllung und Prüfung des Zeilenbuffers mit dem weichen Zeitgitter "
+"%s: Füllen und Prüfung des Zeilenbuffers mit dem weichen Zeitgitter "
 "(hohe Zeitauflösung)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding integer buffer (high time)."
+msgid "%s: Fill and check soft time grid integer buffer (high time)."
 msgstr ""
-"%s: Einfüllung und Prüfung des ganzzahligen Buffers mit dem weichen "
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen "
 "Zeitgitter (hohe Zeitauflösung)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding string buffer (low time)."
+msgid "%s: Fill and check soft time grid string buffer (low time)."
 msgstr ""
-"%s: Einfüllung und Prüfung des Zeilenbuffers mit dem weichen Zeitgitter "
+"%s: Füllen und Prüfung des Zeilenbuffers mit dem weichen Zeitgitter "
 "(niedrige Zeitauflösung)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding integer buffer (low time)."
+msgid "%s: Fill and check soft time grid integer buffer (low time)."
 msgstr ""
-"%s: Einfüllung und Prüfung des ganzzahligen Buffers mit dem weichen "
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen "
 "Zeitgitter (niedrige Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check free time string buffer (high time)."
 msgstr ""
-"%s: Erfüllung und Prüfung des Zeilenbufers mit der freien Zeit (hohe "
+"%s: Füllen und Prüfung des Zeilenbufers mit der freien Zeit (hohe "
 "Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check free time integer buffer (high time)."
 msgstr ""
-"%s: Einfüllung und Prüfung des ganzzahligen Buffers mit der freien Zeit(hohe "
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit der freien Zeit(hohe "
 "Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check free time string buffer (low time)."
 msgstr ""
-"%s: Erfüllung und Prüfung des Zeilenbuffers mit der freien Zeit (niedrige "
+"%s: Füllen und Prüfung des Zeilenbuffers mit der freien Zeit (niedrige "
 "Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check free time integer buffer (low time)."
 msgstr ""
-"%s: Einfüllung und Prüfung des ganzzahligen Buffers mit der freien Zeit "
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit der freien Zeit "
 "(niedrige Zeitauflösung)."
 
 #, c-format
@@ -683,5 +681,7 @@ msgstr ""
 msgid "Open file '%s' error."
 msgstr "Fehler der Eröffnung der Datei '%s'."
 
+#, c-format
 msgid "Test: Passed: %f ms."
-msgstr "Test: Passed: %f ms."
+msgstr "Test: Gemacht: %f ms."
+

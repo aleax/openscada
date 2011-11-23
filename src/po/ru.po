@@ -957,8 +957,8 @@ msgid "Index %d is broken!"
 msgstr "Индекс %d повреждён!"
 
 #, c-format
-msgid "Delete IO <%d> error."
-msgstr "Ошибка удаления IO <%d>."
+msgid "Delete IO '%d' error."
+msgstr "Ошибка удаления IO '%d'."
 
 #, c-format
 msgid "Move IO from %d to %d error."

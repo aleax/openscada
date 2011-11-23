@@ -79,7 +79,7 @@ class TestDB : public TFunction
 		mod->mess(id(),_("Connect to table '%s'."),n_tbl.c_str());
 		AutoHD<TTable> tbl = bd.at().at(n_bd).at().at(n_tbl);
 
-		mod->mess(id(),_("Create DB config."));
+		mod->mess(id(),_("Create DB configuration."));
 		TConfig bd_cfg;
 		bd_cfg.elem().fldAdd( new TFld("name",_("Name field"),TFld::String,TCfg::Key,"20") );
 		bd_cfg.elem().fldAdd( new TFld("descr",_("Description field"),TFld::String,0,"50") );

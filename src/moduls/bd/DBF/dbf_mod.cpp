@@ -127,7 +127,7 @@ void MBD::enable( )
 
     char *rez = getcwd(buf,sizeof(buf));
     if( chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0 )
-	throw TError(TSYS::DBInit,nodePath().c_str(),_("Error create DB directory <%s>!"),addr().c_str());
+	throw TError(TSYS::DBInit,nodePath().c_str(),_("Error create DB directory '%s'!"),addr().c_str());
     if( rez && chdir(buf) ) throw TError(TSYS::DBInit,nodePath().c_str(),_("Restore previous directory as current error."));
 
     TBD::enable( );
@@ -157,7 +157,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &nm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),nm.c_str());
+	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table '%s'. DB is disabled."),nm.c_str());
     return new MTable(nm,this,create);
 }
 
@@ -431,7 +431,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
 	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
 	    if(fld_rec == NULL)
-		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column <%s> is not present!"),cf_el[i_cf].c_str());
+		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Key column '%s' is not present!"),cf_el[i_cf].c_str());
 	    //>> Get table volume
 	    string val;
 	    if( basa->GetFieldIt( i_ln, i_clm, val ) < 0)

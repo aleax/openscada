@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.4\n"
+"Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-03 10:30+0300\n"
+"POT-Creation-Date: 2011-11-23 19:29+0200\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,12 +25,15 @@ msgstr "Роман Савоченко"
 msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Собственный протокол OpenSCADA, поддерживает основные функции."
 
+#, c-format
 msgid "Station '%s' error: %s!"
 msgstr "Станция '%s' ошибка: %s!"
 
+#, c-format
 msgid "Station '%s' error: Respond format error!"
 msgstr "Ошибка станции '%s': Ответ не корректен!"
 
+#, c-format
 msgid "Station respond '%s' error!"
 msgstr "Ошибка ответа станции '%s'!"
 
@@ -44,7 +46,7 @@ msgstr "Параметры"
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Life time of auth sesion(min)"
+msgid "Life time of auth session(min)"
 msgstr "Время жизни сессии (мин)"
 
 msgid "Compression level"
@@ -57,7 +59,7 @@ msgid ""
 "  1-9 - direct level."
 msgstr ""
 "Уровень компрессии ZLib:\n"
-"  -1  - оптимальный скорость-размер;\n"
+"  -1  - оптимальный, скорость-размер;\n"
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
 

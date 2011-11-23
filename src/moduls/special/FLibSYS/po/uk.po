@@ -4,18 +4,17 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.2\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:46+0300\n"
+"POT-Creation-Date: 2011-11-23 21:35+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "System API functions"
 msgstr "Функції системного API"
@@ -136,7 +135,7 @@ msgid "Use for insertion string to other string."
 msgstr "Використовується для вставки строки у іншу."
 
 msgid "Replace string"
-msgstr "Заміняюча строка"
+msgstr "Рядок для заміни"
 
 msgid "String: Replace part string on other string"
 msgstr "Строка: Заміна частини строки іншою"
@@ -169,16 +168,16 @@ msgid "Source"
 msgstr "Джерело"
 
 msgid "String: Path to separated string"
-msgstr "Строка: Шлях у сроку з розділювачем"
+msgstr "Строка: Шлях у рядок з розділювачем"
 
 msgid "Use for convert path to separated string."
-msgstr "Використовується для перетворення шляху у сроку з розділювачем."
+msgstr "Використовується для перетворення шляху у рядок з розділювачем."
 
 msgid "String: Encode string to HTML"
 msgstr "Строка: Кодування строки у HTML"
 
 msgid "Use for encode string for use into HTML source."
-msgstr "Використовується для кодування сроки для використання у вихідних HTML."
+msgstr "Використовується для кодування рядка для використання у вихідних HTML."
 
 msgid "String: Encode text to bin"
 msgstr "Строка: Кодування тексту у бінарний вигляд"
@@ -239,10 +238,10 @@ msgid "Word 2"
 msgstr "Слово 2"
 
 msgid "Float: Split to words"
-msgstr "Float: Розділення на слова"
+msgstr "Float: Розподіл на слова"
 
 msgid "Split float (4 byte) to words (2 byte)."
-msgstr "Розділення float (4 байтів) на слова (2 байти)."
+msgstr "Розподіл float (4 байтів) на слова (2 байти)."
 
 msgid "Float: Merge from words"
 msgstr "Float: Об'єднання зі слів"
@@ -262,7 +261,7 @@ msgstr "Формат дати та часу"
 msgid "Time: String time"
 msgstr "Time: Строка повного часу."
 
-msgid "Formated string time."
+msgid "Formatted string time."
 msgstr "Форматована строка часу."
 
 msgid "Full seconds"

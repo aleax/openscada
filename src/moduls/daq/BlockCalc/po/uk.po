@@ -17,8 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #, c-format
-msgid "Block link <%s> save error."
-msgstr "Помилка збереження зв'язку блока <%s>."
+msgid "Block link '%s' save error."
+msgstr "Помилка збереження зв'язку блока '%s'."
 
 #, c-format
 msgid "Node '%s' is not function."
@@ -29,12 +29,12 @@ msgid "Link %d error!"
 msgstr "Помилка зв'язку %d!"
 
 #, c-format
-msgid "Error reading block's <%s> links."
-msgstr "Помилка читання зв'язків блоку <%s>."
+msgid "Error reading block's '%s' links."
+msgstr "Помилка читання зв'язків блоку '%s'."
 
 #, c-format
-msgid "Error writing block's <%s> links."
-msgstr "Помилка запису зв'язків блоку <%s>."
+msgid "Error writing block's '%s' links."
+msgstr "Помилка запису зв'язків блоку '%s'."
 
 msgid "Block disabled or error."
 msgstr "Блок виключено або помилка."
@@ -197,20 +197,20 @@ msgid "Spent time: %s. "
 msgstr "Витрачено часу: %s. "
 
 #, c-format
-msgid "Enable block <%s> error."
-msgstr "Помилка ввімкнення блоку <%s>."
+msgid "Enable block '%s' error."
+msgstr "Помилка ввімкнення блоку '%s'."
 
 #, c-format
-msgid "Process block <%s> error."
-msgstr "Помилка обрахунку блоку <%s>."
+msgid "Process block '%s' error."
+msgstr "Помилка обрахунку блоку '%s'."
 
 #, c-format
-msgid "Block <%s> calc error."
-msgstr "Помилка обчислення блоку <%s>."
+msgid "Block '%s' calc error."
+msgstr "Помилка обчислення блоку '%s'."
 
 #, c-format
-msgid "Block <%s> is stopped."
-msgstr "Блок <%s> зупинено."
+msgid "Block '%s' is stopped."
+msgstr "Блок '%s' зупинено."
 
 msgid "Blocks scheme"
 msgstr "Схема блоків"

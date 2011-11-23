@@ -128,7 +128,7 @@ int TFunction::ioIns( IO *io, int pos )
 void TFunction::ioDel( int pos )
 {
     if(pos < 0 || pos >= (int)mIO.size())
-        throw TError(nodePath().c_str(),_("Delete IO <%d> error."),pos);
+        throw TError(nodePath().c_str(),_("Delete IO '%d' error."),pos);
 
     preIOCfgChange();
     mIO.erase(mIO.begin()+pos);

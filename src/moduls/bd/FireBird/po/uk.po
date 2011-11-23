@@ -34,8 +34,8 @@ msgid "Create DB '%s' error: %s"
 msgstr "Помилка створення БД '%s': %s"
 
 #, c-format
-msgid "Error open table <%s>. DB is disabled."
-msgstr "Помилка відкриття таблиці <%s>. БД виключено."
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Помилка відкриття таблиці '%s'. БД виключено."
 
 #, c-format
 msgid "Start transaction error: %s"

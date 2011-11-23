@@ -34,7 +34,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.9.4"
+#define MOD_VER		"0.9.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Self OpenSCADA protocol, support generic functions.")
 #define LICENSE		"GPL2"
@@ -232,7 +232,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth sesion(min)"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth session(min)"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
 		    "help",_("ZLib compression level:\n"
 			     "  -1  - optimal speed-size;\n"

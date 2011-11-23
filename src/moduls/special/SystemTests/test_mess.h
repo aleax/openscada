@@ -58,7 +58,7 @@ class TestMess : public TFunction
 		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
 		{
 		    ctime_r(&buf_rec[i_rec].time, c_tm);
-		    mod->mess(id(),"<%s> : <%s> : <%s>",TSYS::strParse(c_tm,0,"\n").c_str(),
+		    mod->mess(id(),"'%s' : '%s' : '%s'",TSYS::strParse(c_tm,0,"\n").c_str(),
 			buf_rec[i_rec].categ.c_str(),buf_rec[i_rec].mess.c_str() );
 		}
 		mod->mess(id(),_("Test: Passed"));

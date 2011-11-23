@@ -22,8 +22,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, c-format
-msgid "Block link <%s> save error."
-msgstr "Fehler beim Speichern der Blockverbindung <%s>."
+msgid "Block link '%s' save error."
+msgstr "Fehler beim Speichern der Blockverbindung '%s'."
 
 #, c-format
 msgid "Node '%s' is not function."
@@ -34,12 +34,12 @@ msgid "Link %d error!"
 msgstr "Fehler in der Verbindung %d!"
 
 #, c-format
-msgid "Error reading block's <%s> links."
-msgstr "Fehler beim Lesen der Blockverbindung <%s>."
+msgid "Error reading block's '%s' links."
+msgstr "Fehler beim Lesen der Blockverbindung '%s'."
 
 #, c-format
-msgid "Error writing block's <%s> links."
-msgstr "Fehler beim Schreiben der Blockverbindung <%s>."
+msgid "Error writing block's '%s' links."
+msgstr "Fehler beim Schreiben der Blockverbindung '%s'."
 
 msgid "Block disabled or error."
 msgstr "Block abgeschaltet oder Fehler."
@@ -202,20 +202,20 @@ msgid "Spent time: %s. "
 msgstr "Verbrauchte Zeit: %s. "
 
 #, c-format
-msgid "Enable block <%s> error."
-msgstr "Fehler beim Einschalten des Blocks <%s>."
+msgid "Enable block '%s' error."
+msgstr "Fehler beim Einschalten des Blocks '%s'."
 
 #, c-format
-msgid "Process block <%s> error."
-msgstr "Fehler bei der Bearbeitung des Blocks <%s>."
+msgid "Process block '%s' error."
+msgstr "Fehler bei der Bearbeitung des Blocks '%s'."
 
 #, c-format
-msgid "Block <%s> calc error."
-msgstr "Berechnungsfehler im Blocks <%s>."
+msgid "Block '%s' calc error."
+msgstr "Berechnungsfehler im Blocks '%s'."
 
 #, c-format
-msgid "Block <%s> is stopped."
-msgstr "Block <%s> ist angehalten."
+msgid "Block '%s' is stopped."
+msgstr "Block '%s' ist angehalten."
 
 msgid "Blocks scheme"
 msgstr "Blockschema"

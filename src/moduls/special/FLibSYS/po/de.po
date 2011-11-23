@@ -7,15 +7,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.2\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:46+0300\n"
+"POT-Creation-Date: 2011-11-23 21:35+0200\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: de\n"
 
 msgid "System API functions"
 msgstr "System-API Bibliothek"
@@ -107,10 +107,10 @@ msgid "String"
 msgstr "Zeile"
 
 msgid "String: Get size"
-msgstr "Zeile: Grösse erhalten"
+msgstr "Zeile: Größe erhalten"
 
 msgid "Use for string size getting."
-msgstr "Wird verwendet um die Grösse der Zeile zu erhalten."
+msgstr "Wird verwendet um die Größe der Zeile zu erhalten."
 
 msgid "Position"
 msgstr "Position"
@@ -208,10 +208,10 @@ msgid "Type"
 msgstr "Typ"
 
 msgid "String: Real to string"
-msgstr "Zeile: Reele Zahl in die Zeile"
+msgstr "Zeile: Reelle Zahl in die Zeile"
 
 msgid "Convert real to string."
-msgstr "Konvertierung einer reelen Zahl in eine Zeile."
+msgstr "Konvertierung einer reellen Zahl in eine Zeile."
 
 msgid "Base"
 msgstr "Basis"
@@ -223,10 +223,10 @@ msgid "Convert integer to string."
 msgstr "Konvertierung einer Ganzzahl in eine Zeile."
 
 msgid "String: String to real"
-msgstr "Zeile: Zeile in die reele Zahl"
+msgstr "Zeile: Zeile in die reelle Zahl"
 
 msgid "Convert string to real."
-msgstr "Konvertierung einer Zeile in eine reele Zahl."
+msgstr "Konvertierung einer Zeile in eine reelle Zahl."
 
 msgid "String: String to integer"
 msgstr "Zeile: Zeile in die Ganzzahl"
@@ -264,7 +264,7 @@ msgstr "Datum- und Zeitenformat"
 msgid "Time: String time"
 msgstr "Zeit: Zeit in die Zeile"
 
-msgid "Formated string time."
+msgid "Formatted string time."
 msgstr "Formatierte Zeitenzeile."
 
 msgid "Full seconds"
@@ -307,7 +307,7 @@ msgid "Time: Time"
 msgstr "Zeit: Uhrzeit"
 
 msgid "Full time (since 01.01.1970)."
-msgstr "absolute Zeit (seit 01.01.1970)."
+msgstr "Absolute Zeit (seit 01.01.1970)."
 
 msgid "Time: String to time"
 msgstr "Zeit: Zeile in Zeit"
@@ -340,7 +340,7 @@ msgid "Get value archive object."
 msgstr "Objekt aus dem Wertearchiv laden."
 
 msgid "Size"
-msgstr "Grösse"
+msgstr "Größe"
 
 msgid "Period (us)"
 msgstr "Periode (usek)"

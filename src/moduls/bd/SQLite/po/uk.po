@@ -34,8 +34,8 @@ msgid "Open DB file error: %s"
 msgstr "Помилка відкриття файлу БД: %s"
 
 #, c-format
-msgid "Error open table <%s>. DB is disabled."
-msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Помилка відкриття таблиці '%s'. БД вимкнено."
 
 msgid "Unknown error"
 msgstr "Невідома помилка"

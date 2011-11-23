@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.2\n"
+"Project-Id-Version: OpenSCADA.Special.FLibMath 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-06 17:05+0300\n"
 "PO-Revision-Date: 2007-10-24 18:10+0300\n"
@@ -23,7 +22,7 @@ msgstr "Бібліотека математичних функцій"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow mathematic static function library."
+msgid "Allow mathematical static function library."
 msgstr "Надає статичну бібліотеку математичних функцій."
 
 msgid "Function"
@@ -68,11 +67,11 @@ msgstr "Косинус"
 msgid "Cosine math function."
 msgstr "Мат. функція косинус"
 
-msgid "Cosine hyperbolical"
-msgstr "Косинус гіпербалічний"
+msgid "Cosine hyperbolic"
+msgstr "Косинус гіперболічний"
 
-msgid "Cosine hyperbolical math function."
-msgstr "Мат. функція косинус гіпербалічний."
+msgid "Cosine hyperbolic math function."
+msgstr "Мат. функція косинус гіперболічний."
 
 msgid "Exponent"
 msgstr "Експонента"
@@ -87,16 +86,16 @@ msgid "Natural logarithm math function."
 msgstr "Мат. функція натуральний логарифм."
 
 msgid "Decimal logarithm"
-msgstr "Десятичний логарифм"
+msgstr "Десятковий логарифм"
 
 msgid "Decimal logarithm math function."
-msgstr "Мат. функція десятичній логарифм."
+msgstr "Мат. функція десятковий логарифм."
 
 msgid "Power"
 msgstr "Степінь"
 
 msgid "Power math function."
-msgstr "Мат. функція возведення у степінь"
+msgstr "Мат. функція зведення у степінь"
 
 msgid "Sine"
 msgstr "Синус"
@@ -104,11 +103,11 @@ msgstr "Синус"
 msgid "Sine math function."
 msgstr "Мат. функція синус."
 
-msgid "Sine hyperbolical"
-msgstr "Синус гіпербалічний"
+msgid "Sine hyperbolic"
+msgstr "Синус гіперболічний"
 
-msgid "Sine hyperbolical math function."
-msgstr "Мат. функція синус гіпербалічний."
+msgid "Sine hyperbolic math function."
+msgstr "Мат. функція синус гіперболічний."
 
 msgid "Square root"
 msgstr "Корінь квадратний"
@@ -122,14 +121,14 @@ msgstr "Тангенс"
 msgid "Tangent math function."
 msgstr "Мат. функція тангенс."
 
-msgid "Tangent hyperbolical"
-msgstr "Тангенс гіпербалічний"
+msgid "Tangent hyperbolic"
+msgstr "Тангенс гіперболічний"
 
-msgid "Tangent hyperbolical math function."
-msgstr "Мат. функція тангенс гіпербалічний."
+msgid "Tangent hyperbolic math function."
+msgstr "Мат. функція тангенс гіперболічний."
 
 msgid "Ceil"
-msgstr "Округл. до більшого"
+msgstr "Округлення до більшого"
 
 msgid "Ceil math function."
 msgstr "Мат. функція округлення до більшого цілого."
@@ -141,13 +140,13 @@ msgid "Absolute math function."
 msgstr "Мат. функція модуль значення."
 
 msgid "Floor"
-msgstr "Округл. до меншого"
+msgstr "Округлення до меншого"
 
 msgid "Floor math function."
 msgstr "Мат. функція округлення до меншого цілого."
 
 msgid "Rand"
-msgstr "Випадк. число"
+msgstr "Випадкове число"
 
 msgid "Rand math function."
 msgstr "Мат. функція генерації випадкових чисел."

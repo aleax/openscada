@@ -106,7 +106,7 @@ string TUIMod::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config-file ----------\n"
+	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartPath  <path>    Configurator start path.\n"
 	"StartUser  <user>    No password requested start user.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());

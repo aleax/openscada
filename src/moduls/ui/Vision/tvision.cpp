@@ -134,7 +134,7 @@ string TVision::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config-file ----------\n"
+	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartUser   <user>    No password requested start user.\n"
 	"RunPrjs     <list>    Run projects list on the module start.\n"
 	"RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive update,\n"

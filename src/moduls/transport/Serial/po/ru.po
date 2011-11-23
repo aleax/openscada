@@ -4,18 +4,17 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2009-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Serial 0.7.2\n"
+"Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:50+0300\n"
+"POT-Creation-Date: 2011-11-23 16:28+0200\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Serial interfaces"
 msgstr "Последовательный интерфейс"
@@ -30,7 +29,7 @@ msgstr ""
 "Предоставляет последовательный интерфейс. Используется для обмена данными "
 "через последовательные интерфейсы типа RS232, RS485, GSM и другое."
 
-msgid "Addon parameters"
+msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
 msgid "Check transports thread is not stopped!"
@@ -72,19 +71,19 @@ msgid "Stop bits '%d' error."
 msgstr "Ошибка в количестве стоп битов '%d'."
 
 #, c-format
-msgid "No response to init request '%s'."
+msgid "No response to initial request '%s'."
 msgstr "Нет ответа на запрос инициализации '%s'."
 
 #, c-format
-msgid "Serial received message <%d>."
-msgstr "Serial получил сообщение <%d>."
+msgid "Serial received message '%d'."
+msgstr "Serial получил сообщение '%d'."
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
 #, c-format
-msgid "Serial replied message <%d>."
-msgstr "Serial ответил сообщением <%d>."
+msgid "Serial replied message '%d'."
+msgstr "Serial ответил сообщением '%d'."
 
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[mdm]\". "
@@ -131,19 +130,19 @@ msgstr "Модем"
 msgid "Timeout (sec)"
 msgstr "Время ожидания (с)"
 
-msgid "Pre-init delay (sec)"
-msgstr "Выдержка пре-инициал. (с)"
+msgid "Pre-initial delay (sec)"
+msgstr "Выдержка пре-инициализации (с)"
 
-msgid "Post-init delay (sec)"
-msgstr "Выдержка после-инициал. (с)"
+msgid "Post-initial delay (sec)"
+msgstr "Выдержка после-инициализации (с)"
 
 msgid "Initialization string 1"
-msgstr "Строка инициализ. 1"
+msgstr "Строка инициализации 1"
 
 msgid "Initialization string 2"
-msgstr "Строка инициализ. 2"
+msgstr "Строка инициализации 2"
 
-msgid "Init response"
+msgid "Initial response"
 msgstr "Инициализация, результат"
 
 msgid "Ring request"
@@ -188,8 +187,8 @@ msgid "Serial error!"
 msgstr "Ошибка последовательного интерфейса!"
 
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]"
-"\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:"
+"[modTel]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"

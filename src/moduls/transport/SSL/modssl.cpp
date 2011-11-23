@@ -42,7 +42,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"0.9.6"
+#define MOD_VER		"1.0.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1.")
 #define LICENSE		"GPL2"
@@ -117,8 +117,8 @@ void TTransSock::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
-	owner().outEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().outEl().fldAdd( new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000") );
     }
 }
 
@@ -306,7 +306,7 @@ void *TSocketIn::Task( void *sock_in )
 	//> Write certificate and private key to temorary file
 	cfile = tmpnam(err);
 	int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	if(icfile < 0) throw TError(s.nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
+	if(icfile < 0) throw TError(s.nodePath().c_str(),_("Open temporary file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	write(icfile,s.certKey().data(),s.certKey().size());
 	close(icfile);
 
@@ -430,7 +430,7 @@ void *TSocketIn::ClTask( void *s_inf )
     int cSock = s.s->clientReg(pthread_self());
 
 #if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by <%s>!"),s.sender.c_str() );
+    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str() );
 #endif
 
     if(BIO_do_handshake(s.bio) <= 0)
@@ -473,7 +473,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	rez = BIO_read(s.bio,buf,sizeof(buf));
 	if(rez <= 0)	break;		//Connection closed by client
 #if OSC_DEBUG >= 4
-        mess_debug(s.s->nodePath().c_str(),_("The message is received with the size <%d>."),rez);
+        mess_debug(s.s->nodePath().c_str(),_("The message is received with the size '%d'."),rez);
 #endif
 	req.assign(buf,rez);
 	s.s->sock_res.resRequestW();
@@ -484,7 +484,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	if(answ.size())
 	{
 #if OSC_DEBUG >= 4
-            mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size <%d>."),answ.size());
+            mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size '%d'."),answ.size());
 #endif
 	    do { rez = BIO_write(s.bio,answ.data(),answ.size()); }
 	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
@@ -761,7 +761,7 @@ void TSocketOut::start()
 	    //>> Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporaty file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
+	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporary file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	    write(icfile,certKey().data(),certKey().size());
 	    close(icfile);
 
@@ -864,7 +864,7 @@ repeate:
 
     trOut += ret;
 #if OSC_DEBUG >= 4
-    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size <%d>."),ret);
+    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size '%d'."),ret);
 #endif
 
     //> Read reply
@@ -905,7 +905,7 @@ repeate:
     }
 
 #if OSC_DEBUG >= 4
-    if(ret > 0) mess_debug(nodePath().c_str(),_("The message is received with the size <%d>."),ret);
+    if(ret > 0) mess_debug(nodePath().c_str(),_("The message is received with the size '%d'."),ret);
 #endif
 
     return vmax(0,ret);

@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.4\n"
+"Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-03 10:30+0300\n"
+"POT-Creation-Date: 2011-11-23 19:29+0200\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -26,12 +25,15 @@ msgstr "Роман Савоченко"
 msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Власний протокол OpenSCADA, підтримує основні функції."
 
+#, c-format
 msgid "Station '%s' error: %s!"
 msgstr "Помилка станції '%s': %s!"
 
+#, c-format
 msgid "Station '%s' error: Respond format error!"
 msgstr "Помилка станції '%s': Відповідь помилкова!"
 
+#, c-format
 msgid "Station respond '%s' error!"
 msgstr "Помилка відповіді станції '%s'!"
 
@@ -44,8 +46,8 @@ msgstr "Параметри"
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Life time of auth sesion(min)"
-msgstr "Час життя сесії аутентифікації (хвил)"
+msgid "Life time of auth session(min)"
+msgstr "Час життя сесії аутентифікації (хвил.)"
 
 msgid "Compression level"
 msgstr "Рівень компресії"
@@ -81,4 +83,4 @@ msgstr "Обробка запиту: '%s', час: %f мс."
 
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
-msgstr "Збереження відповіді у поток та пакування: '%s': %d, час: %f мс."
+msgstr "Збереження відповіді до потоку та пакування: '%s': %d, час: %f мс."

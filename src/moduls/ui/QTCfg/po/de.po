@@ -407,23 +407,23 @@ msgid "Remote station"
 msgstr "Entfernter Bedienrechner"
 
 #, c-format
-msgid "%s| Set <%s> to <%s>!"
-msgstr "%s| Installieren <%s> in <%s>!"
+msgid "%s| Set '%s' to '%s'!"
+msgstr "%s| Installieren '%s' in '%s'!"
 
 #, c-format
-msgid "%s| Go to link <%s>!"
-msgstr "%s| Geh zum Link <%s>!"
+msgid "%s| Go to link '%s'!"
+msgstr "%s| Geh zum Link '%s'!"
 
 #, c-format
-msgid "%s| Press <%s>!"
-msgstr "%s| Betätigen <%s>!"
+msgid "%s| Press '%s'!"
+msgstr "%s| Betätigen '%s'!"
 
 msgid "Value no valid: "
 msgstr "Der Wert ist ungültig: "
 
 #, c-format
-msgid "%s| Change <%s> from <%s> to <%s>!"
-msgstr "%s| Ändern <%s> aus <%s> in <%s>!"
+msgid "%s| Change '%s' from '%s' to '%s'!"
+msgstr "%s| Ändern '%s' aus '%s' in '%s'!"
 
 msgid "Go"
 msgstr "Ändern"
@@ -459,24 +459,24 @@ msgid "Rename element."
 msgstr "Umbenennen des Elements."
 
 #, c-format
-msgid "%s| Add <%s> element <%s:%s>!"
-msgstr "%s| Hinzufügen <%s> Element <%s:%s>!"
+msgid "%s| Add '%s' element <%s:%s>!"
+msgstr "%s| Hinzufügen '%s' Element <%s:%s>!"
 
 #, c-format
-msgid "%s| Insert <%s> element <%s:%s> to %d!"
-msgstr "%s| Einfügen <%s> des Elements <%s:%s> in %d!"
+msgid "%s| Insert '%s' element <%s:%s> to %d!"
+msgstr "%s| Einfügen '%s' des Elements <%s:%s> in %d!"
 
 #, c-format
-msgid "%s| Set <%s> element %d to <%s:%s>!"
-msgstr "%s| Installieren <%s> des Element %d in <%s:%s>!"
+msgid "%s| Set '%s' element %d to <%s:%s>!"
+msgstr "%s| Installieren '%s' des Element %d in <%s:%s>!"
 
 #, c-format
-msgid "%s| Delete <%s> element <%s:%s>!"
-msgstr "%s| Löschen <%s> des Elements <%s:%s>!"
+msgid "%s| Delete '%s' element <%s:%s>!"
+msgstr "%s| Löschen '%s' des Elements <%s:%s>!"
 
 #, c-format
-msgid "%s| Move <%s> from %d to %d!"
-msgstr "%s| Verschieben <%s> von %d nach %d!"
+msgid "%s| Move '%s' from %d to %d!"
+msgstr "%s| Verschieben '%s' von %d nach %d!"
 
 msgid "Add record"
 msgstr "Datensatz hinzufügen"
@@ -497,20 +497,20 @@ msgid "Copy"
 msgstr "Kopieren"
 
 #, c-format
-msgid "%s| Add <%s> record."
-msgstr "%s| Hinzufügen <%s> Datensatz."
+msgid "%s| Add '%s' record."
+msgstr "%s| Hinzufügen '%s' Datensatz."
 
 #, c-format
-msgid "%s| Insert <%s> record %d."
-msgstr "%s| Einfügen <%s> des Datensatzes %d."
+msgid "%s| Insert '%s' record %d."
+msgstr "%s| Einfügen '%s' des Datensatzes %d."
 
 #, c-format
-msgid "%s| Delete <%s> record <%s>."
-msgstr "%s| Löschen <%s> des Datensatzes <%s>."
+msgid "%s| Delete '%s' record '%s'."
+msgstr "%s| Löschen '%s' des Datensatzes '%s'."
 
 #, c-format
-msgid "%s| Move <%s> record from %d to %d."
-msgstr "%s| Verschieben <%s> des Datensatzes aus %d in %d."
+msgid "%s| Move '%s' record from %d to %d."
+msgstr "%s| Verschieben '%s' des Datensatzes aus %d in %d."
 
 msgid "Save image"
 msgstr "Abbildung speichern"
@@ -543,24 +543,24 @@ msgid "Image file %s error\n"
 msgstr "Fehler in der Bilddatei %s\n"
 
 #, c-format
-msgid "%s| Upload picture <%s> to: %s."
-msgstr "%s| Speichern des Bildes <%s> nach %s."
+msgid "%s| Upload picture '%s' to: %s."
+msgstr "%s| Speichern des Bildes '%s' nach %s."
 
 #, c-format
-msgid "Value <%s> is not valid!"
-msgstr "Wert <%s> ist ungültig"
+msgid "Value '%s' is not valid!"
+msgstr "Wert '%s' ist ungültig"
 
 #, c-format
-msgid "%s| Set <%s> cell (<%s>:%s) to: %s."
-msgstr "%s| Installieren <%s> der Zelle (<%s>:%s) in %s."
+msgid "%s| Set '%s' cell ('%s':%s) to: %s."
+msgstr "%s| Installieren '%s' der Zelle ('%s':%s) in %s."
 
 #, c-format
-msgid "Selective element <%s> is not present!"
-msgstr "Ausgewähltes Element <%s> fehlt!"
+msgid "Selective element '%s' is not present!"
+msgstr "Ausgewähltes Element '%s' fehlt!"
 
 #, c-format
-msgid "%s| Change <%s> to: <%s>!"
-msgstr "%s| Ändern <%s> in: <%s>!"
+msgid "%s| Change '%s' to: '%s'!"
+msgstr "%s| Ändern '%s' in: '%s'!"
 
 msgid "Picture is not set!"
 msgstr "Es ist kein Bild hinterlegt!"
@@ -631,14 +631,14 @@ msgstr "Ermöglicht die QT-basierte Systemeinstellung von OpenSCADA."
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config-file ----------\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
 "StartPath  <path>    Configurator start path.\n"
 "StartUser  <user>    No password requested start user.\n"
 "\n"
 msgstr ""
 "======================= Optionen des Moduls <%s:%s> "
 "========================\n"
-"------ Parameter des Abschnitts <%s> in der Konfigurationsdatei --\n"
+"------ Parameter des Abschnitts '%s' in der Konfigurationsdatei --\n"
 "StartPath  <path>    Verzeichnispfad der Systemeinstellungen.\n"
 "StartUser  <user>    Start, ohne Kennwort, Benutzer.\n"
 "\n"

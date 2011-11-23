@@ -158,7 +158,7 @@ string TTest::optDescr( )
 
     rez = TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config-file ----------\n"
+	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"All tests main options:\n"
 	"  id           test's id;\n"
 	"  on           on test's flag;\n"

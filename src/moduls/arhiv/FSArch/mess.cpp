@@ -506,7 +506,7 @@ void MFileArch::attach( const string &iname, bool full )
 	char s_char[100];
 	//> Check to plain text archive
 	if( fgets(buf,sizeof(buf),f) == NULL )
-	    throw TError(owner().nodePath().c_str(),_("File %s header error!"),name().c_str());
+	    throw TError(owner().nodePath().c_str(),_("File '%s' header error!"),name().c_str());
 	string s_tmpl = mod->modId()+"%*s %99s %x %x";
 	if( sscanf(buf,s_tmpl.c_str(),s_char,&mBeg,&mEnd) == 3 )
 	{

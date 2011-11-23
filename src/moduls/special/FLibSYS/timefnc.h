@@ -44,7 +44,7 @@ class tmFStr : public TFunction
 	}
 
 	string name( )	{ return _("Time: String time"); }
-	string descr( )	{ return _("Formated string time."); }
+	string descr( )	{ return _("Formatted string time."); }
 
 	void calc( TValFunc *val )
 	{

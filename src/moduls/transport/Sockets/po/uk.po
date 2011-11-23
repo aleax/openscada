@@ -1,15 +1,14 @@
 # OpenSCADA.Transport.Sockets translate to Ukrainian.
-# Copyright (C) 2003-2010 Roman Savochenko
+# Copyright (C) 2003-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.6\n"
+"Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 16:43+0300\n"
+"POT-Creation-Date: 2011-11-23 17:02+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,7 +29,7 @@ msgstr ""
 "Надає транспорт базований на сокетах. Підтримуються інтернет та UNIX сокети. "
 "Інтернет сокет використовує TCP та UDP протоколи."
 
-msgid "Addon parameters"
+msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
 #, c-format
@@ -42,58 +41,62 @@ msgstr ""
 "підключень за лімітом %d."
 
 #, c-format
-msgid "Error create %s socket!"
+msgid "Error create '%s' socket!"
 msgstr "Помилка створення %s сокету!"
 
 #, c-format
-msgid "Socket type <%s> error!"
-msgstr "Помилка у типу <%s> сокету!"
+msgid "Socket type '%s' error!"
+msgstr "Помилка у типу '%s' сокету!"
 
 #, c-format
-msgid "Socket name <%s> error!"
-msgstr "Помилка у імені <%s> сокету!"
+msgid "Socket name '%s' error!"
+msgstr "Помилка у імені '%s' сокету!"
 
 #, c-format
-msgid "TCP socket doesn't bind to <%s>!"
-msgstr "TCP сокет не під'єднався до <%s>!"
+msgid "TCP socket doesn't bind to '%s'!"
+msgstr "TCP сокет не під'єднався до '%s'!"
 
 #, c-format
-msgid "UDP socket doesn't bind to <%s>!"
-msgstr "UDP сокет не під'єднався до <%s>!"
+msgid "UDP socket doesn't bind to '%s'!"
+msgstr "UDP сокет не під'єднався до '%s'!"
 
 #, c-format
-msgid "UNIX socket doesn't bind to <%s>!"
-msgstr "UNIX сокет не під'єднався до <%s>!"
+msgid "UNIX socket doesn't bind to '%s'!"
+msgstr "UNIX сокет не під'єднався до '%s'!"
+
+#, c-format
+msgid "Close input transport by error: %s"
+msgstr "Закриття вхідного транспорту за помилкою: %s!"
 
 msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
 #, c-format
-msgid "Socket received datagram <%d> from <%s>!"
-msgstr "Сокет отримав датаграму <%d> з <%s>!"
+msgid "Socket received datagram '%d' from '%s'!"
+msgstr "Сокет отримав датаграму '%d' з '%s'!"
 
 #, c-format
-msgid "Socket replied datagram <%d> to <%s>!"
-msgstr "Сокет відповів датаграмою <%d> до <%s>!"
+msgid "Socket replied datagram '%d' to '%s'!"
+msgstr "Сокет відповів датаграмою '%d' до '%s'!"
 
 msgid " client task is stopping...."
 msgstr " клієнтську задачу зупинено...."
 
 #, c-format
-msgid "Socket has been connected by <%s>!"
-msgstr "До сокета приєднався <%s>!"
+msgid "Socket has been connected by '%s'!"
+msgstr "До сокета приєднався '%s'!"
 
 #, c-format
-msgid "Socket received message <%d> from <%s>."
-msgstr "Сокет отримав повідомлення <%d> від <%s>."
+msgid "Socket received message '%d' from '%s'."
+msgstr "Сокет отримав повідомлення '%d' від '%s'."
 
 #, c-format
-msgid "Socket replied message <%d> to <%s>."
-msgstr "Сокет відповів повідомленням <%d> до <%s>."
+msgid "Socket replied message '%d' to '%s'."
+msgstr "Сокет відповів повідомленням '%d' до '%s'."
 
 #, c-format
-msgid "Socket has been disconnected by <%s>!"
-msgstr "Від сокету відєднався <%s>!"
+msgid "Socket has been disconnected by '%s'!"
+msgstr "Від сокету від'єднався '%s'!"
 
 #, c-format
 msgid "The protocol '%s' is not present."
@@ -150,15 +153,15 @@ msgid "Keep alive timeout (s)"
 msgstr "Keep alive час очікування (с)"
 
 msgid "Priority"
-msgstr "Пріорітет"
+msgstr "Пріоритет"
 
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафік вхідний %s, вихідний %s."
 
 #, c-format
-msgid "Type socket <%s> error!"
-msgstr "Помилка у типу <%s> сокету!"
+msgid "Type socket '%s' error!"
+msgstr "Помилка у типу '%s' сокету!"
 
 #, c-format
 msgid "Error creation TCP socket: %s!"

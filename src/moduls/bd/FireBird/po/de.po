@@ -39,8 +39,8 @@ msgid "Create DB '%s' error: %s"
 msgstr "Datenbank '%s', Fehler %s bei der Erstellung"
 
 #, c-format
-msgid "Error open table <%s>. DB is disabled."
-msgstr "Fehler beim Öffnen der Tabelle <%s>. Datenbank ist abgeschaltet."
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
 #, c-format
 msgid "Start transaction error: %s"

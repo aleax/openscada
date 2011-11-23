@@ -2360,7 +2360,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 
 	    if( req.text() == val ) return;
-	    mess_info( mod->nodePath().c_str(), _("%s| Set <%s> to <%s>!"), w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), val.c_str() );
+	    mess_info( mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"), w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), val.c_str() );
 
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
@@ -2387,7 +2387,7 @@ void ConfApp::buttonClicked( )
 	    XMLNode req("get"); req.setAttr("path",sel_path+"/"+button->objectName().toAscii().data());
 	    if( cntrIfCmd(req) ) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	    string url = "/"+TSYS::pathLev(sel_path,0)+req.text();
-	    mess_info(mod->nodePath().c_str(),_("%s| Go to link <%s>!"), w_user->user().toAscii().data(),url.c_str());
+	    mess_info(mod->nodePath().c_str(),_("%s| Go to link '%s'!"), w_user->user().toAscii().data(),url.c_str());
 	    selectPage( url );
 	    return;
 	}
@@ -2398,7 +2398,7 @@ void ConfApp::buttonClicked( )
 	    for(unsigned i_ch = 0; i_ch < n_el->childSize(); i_ch++)
 		*(req.childAdd()) = *(n_el->childGet(i_ch));
 
-	    mess_info(mod->nodePath().c_str(),_("%s| Press <%s>!"), w_user->user().toAscii().data(),
+	    mess_info(mod->nodePath().c_str(),_("%s| Press '%s'!"), w_user->user().toAscii().data(),
 		(sel_path+"/"+button->objectName().toAscii().data()).c_str() );
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	}
@@ -2461,7 +2461,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 
 	    if( req.text() == val ) return;
-	    mess_info(mod->nodePath().c_str(),_("%s| Change <%s> from <%s> to <%s>!"),
+	    mess_info(mod->nodePath().c_str(),_("%s| Change '%s' from '%s' to '%s'!"),
 		    w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), req.text().c_str(), val.c_str() );
 
 	    req.setName("set")->setText(val);
@@ -2589,7 +2589,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.setName("add");
 		if( ind_m ) n_el1.setAttr("id",id);
 		n_el1.setText(text);
-		mess_info(mod->nodePath().c_str(),_("%s| Add <%s> element <%s:%s>!"),
+		mess_info(mod->nodePath().c_str(),_("%s| Add '%s' element <%s:%s>!"),
 			w_user->user().toAscii().data(), el_path.c_str(), id.c_str(), text.c_str() );
 	    }
 	    else if( rez == actIns )
@@ -2597,7 +2597,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.setName("ins")->setAttr("pos",TSYS::int2str(c_id))->setAttr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.setAttr("id",id);
 		n_el1.setText(text);
-		mess_info(mod->nodePath().c_str(),_("%s| Insert <%s> element <%s:%s> to %d!"),
+		mess_info(mod->nodePath().c_str(),_("%s| Insert '%s' element <%s:%s> to %d!"),
 			w_user->user().toAscii().data(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
 	    }
 	    else if( rez == actEd )
@@ -2605,7 +2605,7 @@ void ConfApp::listBoxPopup( )
 		n_el1.setName("edit")->setAttr("pos",TSYS::int2str(c_id))->setAttr("p_id",(ind_m)?p_id:p_text);
 		if( ind_m ) n_el1.setAttr("id",id);
 		n_el1.setText(text);
-		mess_info(mod->nodePath().c_str(),_("%s| Set <%s> element %d to <%s:%s>!"),
+		mess_info(mod->nodePath().c_str(),_("%s| Set '%s' element %d to <%s:%s>!"),
 			w_user->user().toAscii().data(), el_path.c_str(), c_id, id.c_str(), text.c_str());
 	    }
 	    else if( rez == actDel )
@@ -2613,14 +2613,14 @@ void ConfApp::listBoxPopup( )
 		n_el1.setName("del")->setAttr("pos",TSYS::int2str(c_id));
 		if( ind_m ) n_el1.setAttr("id",p_id);
 		else n_el1.setText(item->text().toAscii().data());
-		mess_info(mod->nodePath().c_str(),_("%s| Delete <%s> element <%s:%s>!"),
+		mess_info(mod->nodePath().c_str(),_("%s| Delete '%s' element <%s:%s>!"),
 			w_user->user().toAscii().data(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
 	    }
 	    else if( rez == actMoveUp || rez == actMoveDown )
 	    {
 		int c_new = (rez==actMoveDown) ? c_id+1 : c_id-1;
 		n_el1.setName("move")->setAttr("pos",TSYS::int2str(c_id))->setAttr("to",TSYS::int2str(c_new));
-		mess_info(mod->nodePath().c_str(),_("%s| Move <%s> from %d to %d!"),
+		mess_info(mod->nodePath().c_str(),_("%s| Move '%s' from %d to %d!"),
 			w_user->user().toAscii().data(), el_path.c_str(), c_id, c_new);
 	    }
 	    if( cntrIfCmd(n_el1) )
@@ -2725,14 +2725,14 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    if( rez == actAdd )
 	    {
 		n_el1.setName("add");
-		mess_info(mod->nodePath().c_str(),_("%s| Add <%s> record."),
+		mess_info(mod->nodePath().c_str(),_("%s| Add '%s' record."),
 			w_user->user().toAscii().data(), el_path.c_str() );
 	    }
 	    else if( rez == actIns )
 	    {
 		n_el1.setName("ins");
 		n_el1.setAttr("row",TSYS::int2str(row));
-		mess_info(mod->nodePath().c_str(),_("%s| Insert <%s> record %d."),
+		mess_info(mod->nodePath().c_str(),_("%s| Insert '%s' record %d."),
 			w_user->user().toAscii().data(), el_path.c_str(), row );
 	    }
 	    else if( rez == actDel )
@@ -2757,7 +2757,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 				break;
 			    }
 		}
-		mess_info(mod->nodePath().c_str(),_("%s| Delete <%s> record <%s>."),
+		mess_info(mod->nodePath().c_str(),_("%s| Delete '%s' record '%s'."),
 			w_user->user().toAscii().data(), el_path.c_str(), row_addr.c_str() );
 	    }
 	    else if( rez == actMoveUp || rez == actMoveDown )
@@ -2766,7 +2766,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		if( rez == actMoveDown )  r_new = row+1;
 		n_el1.setName("move");
 		n_el1.setAttr("row",TSYS::int2str(row))->setAttr("to",TSYS::int2str(r_new));
-		mess_info(mod->nodePath().c_str(),_("%s| Move <%s> record from %d to %d."),
+		mess_info(mod->nodePath().c_str(),_("%s| Move '%s' record from %d to %d."),
 			w_user->user().toAscii().data(), el_path.c_str(), row, r_new );
 	    }
 	    if( cntrIfCmd(n_el1) )	throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
@@ -2836,7 +2836,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 		//> Send image to system
 		XMLNode n_el1("set");
 		n_el1.setAttr("path",el_path)->setText(TSYS::strEncode(rez,TSYS::base64));
-		mess_info(mod->nodePath().c_str(),_("%s| Upload picture <%s> to: %s."),
+		mess_info(mod->nodePath().c_str(),_("%s| Upload picture '%s' to: %s."),
 		    w_user->user().toAscii().data(), fileName.toAscii().data(), el_path.c_str());
 		if( cntrIfCmd(n_el1) )
 		{
@@ -2898,7 +2898,7 @@ void ConfApp::tableSet( int row, int col )
 		    }
 		}
 	    }
-	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value <%s> is not valid!"),value.c_str());
+	    if( !find_ok ) throw TError(mod->nodePath().c_str(),_("Value '%s' is not valid!"),value.c_str());
 	}
 	else value = val.toString().toAscii().data();
 
@@ -2930,7 +2930,7 @@ void ConfApp::tableSet( int row, int col )
 	}
 
 	//>> Put request
-	mess_info(mod->nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."),
+	mess_info(mod->nodePath().c_str(),_("%s| Set '%s' cell ('%s':%s) to: %s."),
 	    w_user->user().toAscii().data(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());
     }
@@ -2964,7 +2964,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 		    path = sel_path+"/"+TSYS::strEncode(br_pref+req.childGet(i_el)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
-	if(!sel_ok) throw TError(mod->nodePath().c_str(),_("Selective element <%s> is not present!"),item->text().toAscii().data());
+	if(!sel_ok) throw TError(mod->nodePath().c_str(),_("Selective element '%s' is not present!"),item->text().toAscii().data());
 
 	selectPage(path);
     }
@@ -2997,7 +2997,7 @@ void ConfApp::applyButton( )
 	if( el->attr("tp") == "hex" )		sval = TSYS::int2str(QString(sval.c_str()).toUInt(0,16));
 	else if( el->attr("tp") == "oct" )	sval = TSYS::int2str(QString(sval.c_str()).toUInt(0,8));
 
-	mess_info(mod->nodePath().c_str(),_("%s| Change <%s> to: <%s>!"),
+	mess_info(mod->nodePath().c_str(),_("%s| Change '%s' to: '%s'!"),
 		w_user->user().toAscii().data(), (sel_path+"/"+path).c_str(), sval.c_str() );
 
 	XMLNode n_el("set");

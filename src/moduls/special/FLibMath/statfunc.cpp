@@ -32,9 +32,9 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"0.5.2"
+#define MOD_VER		"0.6.0"
 #define AUTORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow mathematic static function library.")
+#define DESCRIPTION	_("Allow mathematical static function library.")
 #define LICENSE		"GPL2"
 //*************************************************
 

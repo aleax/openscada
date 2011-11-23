@@ -64,8 +64,8 @@ class TestValBuf : public TFunction
 		test = TSYS::strMess(_("Test%d"),2);
 		mod->mess(id(),_("%s: Change buffer mode."),test.c_str());
 		buf->setHardGrid( false );
-		if( buf->hardGrid() == false )	mod->mess(id(),_("Disable hard griding ok."));
-		else throw TError(nodePath().c_str(),_("Disable hard griding failed."));
+		if( buf->hardGrid() == false )	mod->mess(id(),_("Disable hard grid ok."));
+		else throw TError(nodePath().c_str(),_("Disable hard grid failed."));
 		buf->setHighResTm(true);
 		if( buf->highResTm() == true )	mod->mess(id(),_("Set high resolution time ok."));
 		else throw TError(nodePath().c_str(),_("Set high resolution time failed."));
@@ -86,7 +86,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 4 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),4);
-		mod->mess(id(),_("%s: Fill and check hard time griding string buffer."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check hard time grid string buffer."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 100000, true, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
@@ -147,7 +147,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 5 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),5);
-		mod->mess(id(),_("%s: Fill and check hard time griding integer buffer."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check hard time grid integer buffer."),test.c_str());
 		buf = new TValBuf(TFld::Integer, 10, 100000, true, true);
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
@@ -208,7 +208,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 6 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),6);
-		mod->mess(id(),_("%s: Fill and check soft time griding string buffer (high time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check soft time grid string buffer (high time)."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 100000, false, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
@@ -271,7 +271,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 7 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),7);
-		mod->mess(id(),_("%s: Fill and check soft time griding integer buffer (high time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check soft time grid integer buffer (high time)."),test.c_str());
 		buf = new TValBuf( TFld::Integer, 10, 100000, false, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
@@ -334,7 +334,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 8 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),8);
-		mod->mess(id(),_("%s: Fill and check soft time griding string buffer (low time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check soft time grid string buffer (low time)."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 1000000, false, false );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
@@ -396,7 +396,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 9 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),9);
-		mod->mess(id(),_("%s: Fill and check soft time griding integer buffer (low time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check soft time grid integer buffer (low time)."),test.c_str());
 		buf = new TValBuf( TFld::Integer, 10, 1000000, false, false );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill

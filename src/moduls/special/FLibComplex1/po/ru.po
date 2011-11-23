@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.0.6\n"
+"Project-Id-Version: OpenSCADA.Special.FLibComplex1 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-06 16:57+0300\n"
 "PO-Revision-Date: 2007-10-24 16:47+0300\n"
@@ -52,7 +51,7 @@ msgstr "Состояние \"Закрыт\""
 msgid "Command hold time (s)"
 msgstr "Время удержания команды (с)"
 
-msgid "Calc period (ms)"
+msgid "Calculation period (ms)"
 msgstr "Период обсчёта (мс)"
 
 msgid "Process command clock"
@@ -96,11 +95,11 @@ msgstr "Вход 1."
 msgid "Input 2."
 msgstr "Вход 2."
 
-msgid "Simple multiplicator"
+msgid "Simple multiplier"
 msgstr "Простое умножение"
 
 msgid ""
-"Simple moltiplicator per formula:\n"
+"Simple multiplier per formula:\n"
 "out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"
 msgstr ""
 "Простое умножение по формуле:\n"
@@ -112,11 +111,11 @@ msgstr "Вход 3."
 msgid "Input 4."
 msgstr "Вход 4."
 
-msgid "Multiplicator+divider"
+msgid "Multiplier+divider"
 msgstr "Умножение+деление"
 
 msgid ""
-"Multiplicator+divider per formula:\n"
+"Multiplier+divider per formula:\n"
 "out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
 "          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
 msgstr ""
@@ -228,17 +227,17 @@ msgstr "Вход"
 msgid "Previous"
 msgstr "Предыдущий"
 
-msgid "Positive koef"
-msgstr "Полож. коеф."
+msgid "Positive coefficient"
+msgstr "Положительный коэффициент"
 
-msgid "Negative koef"
-msgstr "Отриц. коеф."
+msgid "Negative coefficient"
+msgstr "Отрицательный коэффициент"
 
-msgid "Incrementator"
+msgid "Increment"
 msgstr "Итератор"
 
 msgid ""
-"Incrementator per formula:\n"
+"Increment per formula:\n"
 "out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);"
 msgstr ""
 "Итератор по формуле:\n"
@@ -264,7 +263,7 @@ msgstr ""
 msgid "Variable"
 msgstr "Переменная"
 
-msgid "Setpoint"
+msgid "Set-point"
 msgstr "Задание"
 
 msgid "Max scale"
@@ -286,19 +285,19 @@ msgid "Cascade mode"
 msgstr "Каскад"
 
 msgid "Kp"
-msgstr ""
+msgstr "Кп"
 
 msgid "Ti (ms)"
 msgstr "Ти (мс)"
 
 msgid "Kd"
-msgstr ""
+msgstr "Кд"
 
 msgid "Td (ms)"
 msgstr "Тд (мс)"
 
 msgid "Td lag (ms)"
-msgstr "Т зад. диф. (мс)"
+msgstr "Тд задержка (мс)"
 
 msgid "Out up limit (%)"
 msgstr "Верхняя граница выхода (%)"
@@ -313,34 +312,34 @@ msgid "Follow sp from var on manual"
 msgstr "След. задание за переменной в ручном"
 
 msgid "K input 1"
-msgstr "Коэф. входа 1"
+msgstr "К входа 1"
 
 msgid "K input 2"
-msgstr "Коэф. входа 2"
+msgstr "К входа 2"
 
 msgid "Input 2"
 msgstr "Вход 2"
 
 msgid "K input 3"
-msgstr "Коэф. входа 3"
+msgstr "К входа 3"
 
 msgid "K input 4"
-msgstr "Коэф. входа 4"
+msgstr "К входа 4"
 
 msgid "Input 4"
 msgstr "Вход 4"
 
-msgid "Calc frequency (Hz)"
+msgid "Calculate frequency (Hz)"
 msgstr "Частота вычисления (Гц)"
 
 msgid "Integral value"
-msgstr "Знач. интеграла"
+msgstr "Значение интеграла"
 
-msgid "Differencial value"
-msgstr "Знач. дифференциала"
+msgid "Differential value"
+msgstr "Значение дифференциала"
 
-msgid "Differencial lag"
-msgstr "Задержка диференцирования"
+msgid "Differential lag"
+msgstr "Задержка дифференциала"
 
 msgid "PID regulator"
 msgstr "ПИД регулятор"
@@ -367,7 +366,7 @@ msgstr ""
 msgid "Flow"
 msgstr "Расход"
 
-msgid "X positon"
+msgid "X position"
 msgstr "X положение"
 
 msgid "K1"
@@ -383,17 +382,17 @@ msgid "K4"
 msgstr ""
 
 msgid ""
-"Flow calc per formule:\n"
+"Flow calculate per formula:\n"
 "f = K1*((K3+K4*x)^K2);"
 msgstr ""
 "Расчёт расхода по формуле:\n"
 "f = K1*((K3+K4*x)^K2);"
 
-msgid "Sum and mult"
+msgid "Summation and multiplication"
 msgstr "Сумма с умножением"
 
 msgid ""
-"Sum and mult per formule:\n"
+"Summation and multiplication per formula:\n"
 "out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
 "      in3_1*in3_2*(in3_3*in3_4+in3_5) + in4_1*in4_2*(in4_3*in4_4+in4_5);"
 msgstr ""
@@ -401,11 +400,11 @@ msgstr ""
 "out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
 "      in3_1*in3_2*(in3_3*in3_4+in3_5) + in4_1*in4_2*(in4_3*in4_4+in4_5);"
 
-msgid "Sum and divide"
+msgid "Summation and divide"
 msgstr "Сумма с делением"
 
 msgid ""
-"Sum and divide per formule:\n"
+"Summation and divide per formula:\n"
 "out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
 "      in3_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);"
 msgstr ""
@@ -420,13 +419,13 @@ msgid "X"
 msgstr ""
 
 msgid "Klag"
-msgstr "Кзад"
+msgstr "Кзадрж"
 
 msgid "Lag"
 msgstr "Задержка"
 
 msgid ""
-"Lag per formule:\n"
+"Lag per formula:\n"
 "y = y - Klag*( y - x );"
 msgstr ""
 "Задержка по формуле:\n"

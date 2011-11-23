@@ -5,14 +5,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.SSL 0.9.6\n"
+"Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 16:57+0300\n"
+"POT-Creation-Date: 2011-11-23 15:56+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
-"Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -31,22 +30,26 @@ msgstr ""
 "Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. Es "
 "werden benutzt OpenSSL und unterstützt SSLv2, SSLv3 und TLSv1."
 
-msgid "Addon parameters"
-msgstr "Дополнительные параметры"
+msgid "Addition parameters"
+msgstr "Weitere Optionen"
 
 msgid "Start error: "
-msgstr "Fehler des Startes: "
+msgstr "Fehler beim Start: "
 
+#, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
 "limit %d."
 msgstr ""
-"Verbindungen %d, eröffnet %d. Eingangstreffik %s, Ausgangs- %s. "
-"Закрыто соединений из-за лимита %d."
+"Verbindungen %d, eröffnet %d. Eingangstreffik %s, Ausgangs %s. Closed-Verbindungen aufgrund der Begrenzung %d."
 
 #, c-format
-msgid "Open temporaty file '%s' error: '%s'"
+msgid "Open temporary file '%s' error: '%s'"
 msgstr "Fehler der Eröffnung der zeitweiligen Datei '%s': '%s'"
+
+#, c-format
+msgid "Close input transport by error: %s"
+msgstr "Close-Eingang Transport durch Fehler: %s"
 
 msgid "Error creation of the thread!"
 msgstr "Fehler der Schaffung des Stroms!"
@@ -55,16 +58,16 @@ msgid " client tasks is stopping...."
 msgstr " Kundenaufgabe ist gestoppt...."
 
 #, c-format
-msgid "Socket has been connected by <%s>!"
-msgstr "Socket ist verbunden von <%s>!"
+msgid "Socket has been connected by '%s'!"
+msgstr "Socket ist verbunden von '%s'!"
 
 #, c-format
-msgid "The message is received with the size <%d>."
-msgstr "Die Nachricht ist bekommen von der Größe <%d>."
+msgid "The message is received with the size '%d'."
+msgstr "Die Nachricht ist bekommen von der Größe '%d'."
 
 #, c-format
-msgid "The message is replied with the size <%d>."
-msgstr "Es wurde beantwortet mit der Nachricht von der Größe  <%d>."
+msgid "The message is replied with the size '%d'."
+msgstr "Es wurde beantwortet mit der Nachricht von der Größe  '%d'."
 
 #, c-format
 msgid "Socket has been disconnected (%d)."
@@ -85,8 +88,8 @@ msgstr ""
 "  [addr]:[port]:[mode] - wo:\n"
 "    addr - die Adresse der Eröffnung SSL, '*' Adresse eröffnet für alle "
 "Interfaces;\n"
-"    port - der Network Port (/etc/services);\n"
-"    mode - SSL Regime und Version (SSLv2, SSLv3, SSLv23 and TLSv1)."
+"    port - Netzwerk-Port (/etc/services);\n"
+"    mode - SSL Regime und Version (SSLv2, SSLv3, SSLv23 und TLSv1)."
 
 msgid "Certificates and private key"
 msgstr "Zertifikate und Privatschlüssel"
@@ -104,14 +107,15 @@ msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
 msgid "Keep alive connections"
-msgstr "Keep alive соединений"
+msgstr "Keep Alive-Verbindungen"
 
 msgid "Keep alive timeout (s)"
-msgstr "Keep alive время ожидания (с)"
+msgstr "Keep alive Wartezeit (s)"
 
 msgid "Priority"
 msgstr "Priorität"
 
+#, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %s, Ausgangs %s."
 
@@ -130,8 +134,8 @@ msgid "Connection error"
 msgstr "Fehler der Verbindung"
 
 #, c-format
-msgid "The message is sent with the size <%d>."
-msgstr "Die Nachricht von der Größe <%d> ist gesendet."
+msgid "The message is sent with the size '%d'."
+msgstr "Die Nachricht von der Größe '%d' ist gesendet."
 
 msgid "Timeouted!"
 msgstr "Die Wartezeit ist aus!"
@@ -149,17 +153,17 @@ msgstr ""
 "Das Format der Adresse des SSL-Ausgangstransport:\n"
 "  [addr]:[port]:[mode] - wo:\n"
 "    addr - Die Adresse des entfernten SSL Hostes;\n"
-"    port - Der Network Port (/etc/services);\n"
+"    port - Der Netzwerk Port (/etc/services);\n"
 "    mode - Das SSL-Regime und Version (SSLv2, SSLv3, SSLv23 and TLSv1)."
 
 msgid "Timings"
-msgstr "Временные интервалы"
+msgstr "Zeitabstände"
 
 msgid ""
 "Connection timings in format: \"[conn]:[next]\". Where:\n"
 "    conn - maximum time for connection respond wait, in seconds;\n"
 "    next - maximum time for continue respond wait, in seconds."
 msgstr ""
-"Временные интервалы соединения в формате: \"[conn]:[next]\". Где:\n"
-"    conn - максимальное время ожидания ответа соединения, в секундах;\n"
-"    next - максимальное время ожидания продолжения ответа, в секундах."
+"Die Zeitabstände sind Verbindung in das Format: \"[conn]:[next]\". Wo:\n"
+"    conn - maximale Wartezeit Verbindung in Sekunden;\n"
+"    next - maximale Wartezeit auf die Antwort in Sekunden weiter."

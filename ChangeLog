@@ -21,6 +21,14 @@
 - !!:DAQ.System: Documents and full translations is updated and released version 1.7.5.
 - !!:Protocol.ModBus: Documents and full translations is updated and released version 0.6.3.
 - !!:Protocol.OPC_UA: Documents and full translations is updated and released version 0.6.2.
+- !!:Protocol.SelfSystem: Documents and full translations is updated and released version 0.9.5.
+- !!:Protocol.UserProtocol: Documents and full translations is updated and released version 0.6.2.
+- !!:Transport.SSL: Documents and full translations is updated and released version 1.0.0.
+- !!:Transport.Serial: Documents and full translations is updated and released version 0.7.3.
+- !!:Transport.Sockets: Documents and full translations is updated and released version 1.5.0.
+- !!:Special.FLibComplex1: Documents and full translations is updated and released version 1.1.0.
+- !!:Special.FLibMath: Documents and full translations is updated and released version 0.6.0.
+- !!:Special.FLibSYS: Documents and full translations is updated and released version 1.0.0.
 - Archive: Display linked parameter's address for emty archive name is added.
 - UI.QTCfg: Follow to visibility of selected items of nodes tree is added.
 

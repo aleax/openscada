@@ -37,8 +37,8 @@ msgid "Query to DB error: %s. %s"
 msgstr "Ошибка запроса к БД: %s. %s"
 
 #, c-format
-msgid "Error open table <%s>. DB is disabled."
-msgstr "Ошибка открытия таблицы <%s>. БД отключена."
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Ошибка открытия таблицы '%s'. БД отключена."
 
 msgid "Start transaction error!"
 msgstr "Ошибка запуска транзакции!"

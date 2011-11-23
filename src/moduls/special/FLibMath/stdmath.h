@@ -129,7 +129,7 @@ class MathCos : public TFunction
 };
 
 //*************************************************
-//* Cosine hyperbolical                           *
+//* Cosine hyperbolic                             *
 //* Formula: y=cosh(x)                            *
 //*************************************************
 class MathCosh : public TFunction
@@ -141,8 +141,8 @@ class MathCosh : public TFunction
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 
-	string name( )	{ return _("Cosine hyperbolical"); }
-	string descr( )	{ return _("Cosine hyperbolical math function."); }
+	string name( )	{ return _("Cosine hyperbolic"); }
+	string descr( )	{ return _("Cosine hyperbolic math function."); }
 
 	void calc( TValFunc *val )
 	{
@@ -262,7 +262,7 @@ class MathSin : public TFunction
 };
 
 //*************************************************
-//* Sine hyperbolical                             *
+//* Sine hyperbolic                               *
 //* Formula: y=sinh(x)                            *
 //*************************************************
 class MathSinh : public TFunction
@@ -274,8 +274,8 @@ class MathSinh : public TFunction
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 
-	string name( )	{ return _("Sine hyperbolical"); }
-	string descr( )	{ return _("Sine hyperbolical math function."); }
+	string name( )	{ return _("Sine hyperbolic"); }
+	string descr( )	{ return _("Sine hyperbolic math function."); }
 
 	void calc( TValFunc *val )
 	{
@@ -328,7 +328,7 @@ class MathTan : public TFunction
 };
 
 //*************************************************
-//* Tangent hyperbolical                          *
+//* Tangent hyperbolic                            *
 //* Formula: y=tanh(x)                            *
 //*************************************************
 class MathTanh : public TFunction
@@ -340,8 +340,8 @@ class MathTanh : public TFunction
 	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
 	}
 
-	string name( )	{ return _("Tangent hyperbolical"); }
-	string descr( )	{ return _("Tangent hyperbolical math function."); }
+	string name( )	{ return _("Tangent hyperbolic"); }
+	string descr( )	{ return _("Tangent hyperbolic math function."); }
 
 	void calc( TValFunc *val )
 	{

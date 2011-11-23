@@ -34,7 +34,7 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"HTTP"
-#define MOD_NAME	_("HTTP-realisation")
+#define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"1.5.1"
@@ -89,7 +89,7 @@ string TProt::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config-file ----------\n"
+	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"AuthTime <min>      Life time of the authentication, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 

@@ -5,12 +5,11 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.6\n"
+"Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 16:43+0300\n"
+"POT-Creation-Date: 2011-11-23 17:02+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -31,69 +30,74 @@ msgstr ""
 "Gewährt den auf Sockets gebauten Transport. Internet und UNIX Sockets werden "
 "unterstützt. Internet Socket benutzt die TCP und UDP Protokolle."
 
-msgid "Addon parameters"
-msgstr "Zusätzliche Parameter"
+msgid "Addition parameters"
+msgstr "Weitere Optionen"
 
+#, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
 "limit %d."
 msgstr ""
-"Verbindungen %d, eröffnet %d. Eingangstraffik %s, Ausgangs %s. "
-"Verbindungen geschlossen nach dem Limit %d."
+"Verbindungen %d, eröffnet %d. Eingangstraffik %s, Ausgangs %s. Verbindungen "
+"geschlossen nach dem Limit %d."
 
 #, c-format
-msgid "Error create %s socket!"
-msgstr "Fehler der Schaffung des Sockets <%s>!"
+msgid "Error create '%s' socket!"
+msgstr "Fehler der Schaffung des Sockets '%s'!"
 
 #, c-format
-msgid "Socket type <%s> error!"
-msgstr "Fehler des Typs <%s> des Sockets!"
+msgid "Socket type '%s' error!"
+msgstr "Fehler des Typs '%s' des Sockets!"
 
 #, c-format
-msgid "Socket name <%s> error!"
-msgstr "Fehler des Namens <%s> des Sockets!"
+msgid "Socket name '%s' error!"
+msgstr "Fehler des Namens '%s' des Sockets!"
 
 #, c-format
-msgid "TCP socket doesn't bind to <%s>!"
-msgstr "TCP Socket ist nicht verbunden mit <%s>!"
+msgid "TCP socket doesn't bind to '%s'!"
+msgstr "TCP Socket ist nicht verbunden mit '%s'!"
 
 #, c-format
-msgid "UDP socket doesn't bind to <%s>!"
-msgstr "UDP Socket ist nicht verbunden mit <%s>!"
+msgid "UDP socket doesn't bind to '%s'!"
+msgstr "UDP Socket ist nicht verbunden mit '%s'!"
 
 #, c-format
-msgid "UNIX socket doesn't bind to <%s>!"
-msgstr "UNIX ist nicht verbunden mit <%s>!"
+msgid "UNIX socket doesn't bind to '%s'!"
+msgstr "UNIX ist nicht verbunden mit '%s'!"
+
+#, c-format
+msgid "Close input transport by error: %s"
+msgstr "Close-Eingang Transport durch Fehler: %s!"
 
 msgid "Error creation of the thread!"
 msgstr "Fehler der Schaffung des Stroms!"
 
 #, c-format
-msgid "Socket received datagram <%d> from <%s>!"
-msgstr "Socket hat das Datagramm bekommen <%d> aus <%s>!"
+msgid "Socket received datagram '%d' from '%s'!"
+msgstr "Socket hat das Datagramm bekommen '%d' aus '%s'!"
 
 #, c-format
-msgid "Socket replied datagram <%d> to <%s>!"
-msgstr "Socket hat mit dem Datagramm geantwortet <%d> an <%s>!"
+msgid "Socket replied datagram '%d' to '%s'!"
+msgstr "Socket hat mit dem Datagramm geantwortet '%d' an '%s'!"
 
 msgid " client task is stopping...."
 msgstr " Kundenaufgabe wird gestoppt...."
 
 #, c-format
-msgid "Socket has been connected by <%s>!"
-msgstr "Mit dem Socket verbunden <%s>!"
+msgid "Socket has been connected by '%s'!"
+msgstr "Mit dem Socket verbunden '%s'!"
 
 #, c-format
-msgid "Socket received message <%d> from <%s>."
-msgstr "Socket hat die Nachricht bekommen <%d> aus <%s>."
+msgid "Socket received message '%d' from '%s'."
+msgstr "Socket hat die Nachricht bekommen '%d' aus '%s'."
 
 #, c-format
-msgid "Socket replied message <%d> to <%s>."
-msgstr "Socket hat mit der Nachricht geantwortet <%d> auf <%s>."
+msgid "Socket replied message '%d' to '%s'."
+msgstr "Socket hat mit der Nachricht geantwortet '%d' auf '%s'."
 
 #, c-format
-msgid "Socket has been disconnected by <%s>!"
-msgstr "Vom Socket abgebunden <%s>!"
+msgid "Socket has been disconnected by '%s'!"
+msgstr "Vom Socket abgebunden '%s'!"
 
 #, c-format
 msgid "The protocol '%s' is not present."
@@ -121,13 +125,13 @@ msgstr ""
 "  TCP:[addr]:[port]:[mode] - TCP Socket:\n"
 "    addr - die Adresse der Eröffnung des Sockets, leere Adresse eröffnet den "
 "Socket in allen Interfaces;\n"
-"    port - Network Port (/etc/services);\n"
+"    port - Netzwerk Port (/etc/services);\n"
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - speichern die "
 "Verbidung).\n"
 "  UDP:[addr]:[port] - UDP Socket:\n"
 "    addr - die Adresse der Eröffnung des Sockets, leere Adresse eröffnet den "
 "Socket in allen Interfaces;\n"
-"    port - Network Port (/etc/services).\n"
+"    port - Netzwerk Port (/etc/services).\n"
 "  UNIX:[name]:[mode] - UNIX Socket:\n"
 "    name - Name der Datei des UNIX-Sockets;\n"
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - die Verbindung "
@@ -146,20 +150,21 @@ msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
 msgid "Keep alive connections"
-msgstr "Keep alive соединений"
+msgstr "Keep Alive-Verbindungen"
 
 msgid "Keep alive timeout (s)"
-msgstr "Keep alive время ожидания (с)"
+msgstr "Keep alive Timeout (s)"
 
 msgid "Priority"
 msgstr "Priorität"
 
+#, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %s, Ausgangs- %s."
 
 #, c-format
-msgid "Type socket <%s> error!"
-msgstr "Fehler im Typ <%s> des Sockets!"
+msgid "Type socket '%s' error!"
+msgstr "Fehler im Typ '%s' des Sockets!"
 
 #, c-format
 msgid "Error creation TCP socket: %s!"
@@ -187,6 +192,7 @@ msgstr "Unbekannter Fehler"
 msgid "Transport is not started!"
 msgstr "Transport ist nicht gestartet!"
 
+#, c-format
 msgid "Request error: %s"
 msgstr "Request-Fehler: %s"
 
@@ -210,15 +216,15 @@ msgstr ""
 "Ausgangstransport Socket hat das Format der Adresse:\n"
 "  TCP:[addr]:[port] - TCP Socket:\n"
 "    addr - die Adresse für die Eröffnung des entfernten Sockets;\n"
-"    port - das Network Port (/etc/services);\n"
+"    port - das Netzwerk Port (/etc/services);\n"
 "  UDP:[addr]:[port] - UDP Socket:\n"
 "    addr - die Adresse für die Eröffnung des entfernten Sockets ;\n"
-"    port - das Network Port (/etc/services);\n"
+"    port - das Netzwerk Port (/etc/services);\n"
 "  UNIX:[name] - UNIX Socket:\n"
 "    name - Name der Datei des UNIX-Sockets."
 
 msgid "Timings"
-msgstr "Zeitabschnitte"
+msgstr "Zeitabstände"
 
 msgid ""
 "Connection timings in format: \"[conn]:[next]\". Where:\n"

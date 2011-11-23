@@ -883,7 +883,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 
 	    string url = string("/")+MOD_ID+"/"+TSYS::strEncode(req.text(),TSYS::HttpURL);
 
-	    mess_info(nodePath().c_str(),_("%s| Go to link <%s>"),ses.user.c_str(),url.c_str());
+	    mess_info(nodePath().c_str(),_("%s| Go to link '%s'"),ses.user.c_str(),url.c_str());
 
 	    ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
 	    messPost( ses.page,nodePath(),"Go to <"+url+"> !",TWEB::Info);
@@ -991,7 +991,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.setAttr("id",i_el);
 	else n_el1.setText(l_el);
 
-	mess_info(nodePath().c_str(),_("%s| Delete <%s> element <%s:%s>."),
+	mess_info(nodePath().c_str(),_("%s| Delete '%s' element <%s:%s>."),
 	    ses.user.c_str(), f_path.c_str(), i_el.c_str(), l_el.c_str());
     }
     else if( l_com == "ins" )
@@ -1002,7 +1002,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.setAttr("id",ener_id);
 	n_el1.setText(ener_f);
 
-	mess_info(nodePath().c_str(),_("%s| Insert <%s> element <%s:%s> to %s."),
+	mess_info(nodePath().c_str(),_("%s| Insert '%s' element <%s:%s> to %s."),
 	    ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str(), i_pos.c_str());
     }
     else if( l_com == "add" )
@@ -1011,7 +1011,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.setAttr("id",ener_id);
 	n_el1.setText(ener_f);
 
-	mess_info(nodePath().c_str(),_("%s| Add <%s> element <%s:%s>."),
+	mess_info(nodePath().c_str(),_("%s| Add '%s' element <%s:%s>."),
 	    ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if( l_com == "edit" )
@@ -1022,7 +1022,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if( ind_m ) n_el1.setAttr("id",ener_id);
 	n_el1.setText(ener_f);
 
-	mess_info(nodePath().c_str(),_("%s| Set <%s> element %s to <%s:%s>."),
+	mess_info(nodePath().c_str(),_("%s| Set '%s' element %s to <%s:%s>."),
 	    ses.user.c_str(), f_path.c_str(), i_pos.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if( l_com == "up" || l_com == "down" )
@@ -1034,7 +1034,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	n_el1.setAttr("pos",i_pos);
 	n_el1.setAttr("to",i_pos_to);
 
-	mess_info(nodePath().c_str(),_("%s| Move <%s> from %s to %s."),
+	mess_info(nodePath().c_str(),_("%s| Move '%s' from %s to %s."),
 	    ses.user.c_str(), f_path.c_str(), i_pos.c_str(), i_pos_to.c_str());
     }
 
@@ -1112,7 +1112,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 			    //-- Get current column id --
 			    n_el1.setAttr("col",t_linf->attr("id"));
 			}
-			mess_info(nodePath().c_str(),_("%s| Set <%s> cell (<%s>:%s) to: %s."),
+			mess_info(nodePath().c_str(),_("%s| Set '%s' cell ('%s':%s) to: %s."),
 			    ses.user.c_str(), f_path.c_str(), row_addr.c_str(), t_linf->attr("id").c_str(), new_val.c_str());
 
 			if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -1123,7 +1123,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
     else if( l_com == "add" )
     {
 	n_el1.setName("add");
-	mess_info(nodePath().c_str(),_("%s| Add <%s> record."), ses.user.c_str(), f_path.c_str() );
+	mess_info(nodePath().c_str(),_("%s| Add '%s' record."), ses.user.c_str(), f_path.c_str() );
 
 	if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
     }
@@ -1134,7 +1134,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 	    {
 		n_el1.setName("ins");
 		n_el1.setAttr("row",TSYS::int2str(i_rw+op_cnt));
-		mess_info(nodePath().c_str(),_("%s| Insert <%s> record %d."),
+		mess_info(nodePath().c_str(),_("%s| Insert '%s' record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw+op_cnt );
 
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -1158,7 +1158,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 			    if( dt_tbl.childGet(i_el)->attr("id") == key )
 			    { n_el1.setAttr("key_"+key,dt_tbl.childGet(i_el)->childGet(i_rw)->text()); break; }
 		}
-		mess_info(nodePath().c_str(),_("%s| Delete <%s> record %d."),
+		mess_info(nodePath().c_str(),_("%s| Delete '%s' record %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw-op_cnt );
 
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -1174,7 +1174,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 		if( l_com == "down" )  r_new = i_rw+1;
 		n_el1.setName("move");
 		n_el1.setAttr("row",TSYS::int2str(i_rw))->setAttr("to",TSYS::int2str(r_new));
-		mess_info(nodePath().c_str(),_("%s| Move <%s> record from %d to %d."),
+		mess_info(nodePath().c_str(),_("%s| Move '%s' record from %d to %d."),
 		    ses.user.c_str(), f_path.c_str(), i_rw, r_new );
 
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());

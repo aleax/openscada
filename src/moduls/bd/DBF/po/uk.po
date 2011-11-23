@@ -30,15 +30,15 @@ msgid "Delete DB error!"
 msgstr "Помилка видалення БД!"
 
 #, c-format
-msgid "Error create DB directory <%s>!"
-msgstr "Помилка створення директорії БД <%s>!"
+msgid "Error create DB directory '%s'!"
+msgstr "Помилка створення директорії БД '%s'!"
 
 msgid "Restore previous directory as current error."
 msgstr "Помилка відновлення минулої директорії як поточну."
 
 #, c-format
-msgid "Error open table <%s>. DB is disabled."
-msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Помилка відкриття таблиці '%s'. БД вимкнено."
 
 msgid ""
 "For DBF address DB is the directory which contains files of tables (*.dbf).\n"
@@ -66,5 +66,5 @@ msgid "Line error!"
 msgstr "Помилка лінії!"
 
 #, c-format
-msgid "Key column <%s> is not present!"
-msgstr "Ключовий стовпчик <%s> відсутній!"
+msgid "Key column '%s' is not present!"
+msgstr "Ключовий стовпчик '%s' відсутній!"

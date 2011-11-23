@@ -236,7 +236,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),inm.c_str());
+	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table '%s'. DB is disabled."),inm.c_str());
     return new MTable(inm,this,create);
 }
 

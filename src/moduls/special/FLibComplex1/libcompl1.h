@@ -55,7 +55,7 @@ class DigitBlock : public TFunction
 	    ioAdd( new IO("stOpen",_("Stat \"Opened\""),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("stClose",_("Stat \"Closed\""),IO::Boolean,IO::Default,"0") );
 	    ioAdd( new IO("tCmd",_("Command hold time (s)"),IO::Integer,IO::Default,"5") );
-	    ioAdd( new IO("frq",_("Calc period (ms)"),IO::Integer,IO::Default,"1000") );
+	    ioAdd( new IO("frq",_("Calculation period (ms)"),IO::Integer,IO::Default,"1000") );
 	    ioAdd( new IO("w_tm",_("Process command clock"),IO::Real,IO::Output,"0",true) );
 	    ioAdd( new IO("last_cmd",_("Last command"),IO::Integer,IO::Output,"0",true) );
 	}
@@ -133,7 +133,7 @@ class Sum : public TFunction
 };
 
 //*********************************************************************
-//* Simple moltiplicator                                              *
+//* Simple multiplier                                                 *
 //* Formula: out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/               *
 //*              (in2_1*in2_2*in2_3*in2_4);                           *
 //*********************************************************************
@@ -149,10 +149,10 @@ class Mult : public TFunction
 		ioAdd( new IO(("in2_"+TSYS::int2str(i_c)).c_str(),(_("Input 2.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 
-	string name( )	{ return _("Simple multiplicator"); }
+	string name( )	{ return _("Simple multiplier"); }
 	string descr( )	
 	{
-	    return _("Simple moltiplicator per formula:\n"
+	    return _("Simple multiplier per formula:\n"
 		"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);");
 	}
 
@@ -165,7 +165,7 @@ class Mult : public TFunction
 };
 
 //*********************************************************************
-//* Multiplicator+divider                                             *
+//* Multiplier+divider                                             *
 //* Formula: out=(in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+
 //*              (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5)))
 //*********************************************************************
@@ -185,10 +185,10 @@ class MultDiv : public TFunction
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 
-	string name( )	{ return _("Multiplicator+divider"); }
+	string name( )	{ return _("Multiplier+divider"); }
 	string descr( )
 	{
-	    return _("Multiplicator+divider per formula:\n"
+	    return _("Multiplier+divider per formula:\n"
 		"out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
 		"          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));");
 	}
@@ -455,7 +455,7 @@ class Select : public TFunction
 };
 
 //*********************************************************************
-//* Incrementator                                                     *
+//* Increment                                                         *
 //* Formula: out = if( in > prev )                                    *
 //*                  then prev + k_pos*(in-prev);                     *
 //*                  else prev - k_neg*(prev-in);                     *
@@ -468,14 +468,14 @@ class Increm : public TFunction
 	    ioAdd( new IO("out",_("Output"),IO::Real,IO::Return,"0") );
 	    ioAdd( new IO("in",_("Input"),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("prev",_("Previous"),IO::Real,IO::Default,"1") );
-	    ioAdd( new IO("k+",_("Positive koef"),IO::Real,IO::Default,"0.1") );
-	    ioAdd( new IO("k-",_("Negative koef"),IO::Real,IO::Default,"0.1") );
+	    ioAdd( new IO("k+",_("Positive coefficient"),IO::Real,IO::Default,"0.1") );
+	    ioAdd( new IO("k-",_("Negative coefficient"),IO::Real,IO::Default,"0.1") );
 	}
 
-	string name( )	{ return _("Incrementator"); }
+	string name( )	{ return _("Increment"); }
 	string descr( )
 	{
-	    return _("Incrementator per formula:\n"
+	    return _("Increment per formula:\n"
 		"out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);");
 	}
 
@@ -533,7 +533,7 @@ class Divider : public TFunction
 //* PID                                                               *
 //* Inputs:                                                           *
 //*   0:var   - Variable                                              *
-//*   1:sp    - Setpoint                                              *
+//*   1:sp    - Set-point                                             *
 //*   2:max   - Maximum scale                                         *
 //*   3:min   - Minimum scale                                         *
 //*   4:manIn - Manual input                                          *
@@ -543,7 +543,7 @@ class Divider : public TFunction
 //*   8:Kp    - Gain                                                  *
 //*   9:Ti    - Integral time (ms)                                    *
 //*   10:Kd   - Kd                                                    *
-//*   11:Td   - Differencial time (ms)                                *
+//*   11:Td   - Differential time (ms)                                *
 //*   12:Tzd  - Filter (lag) time (ms)                                *
 //*   13:Hup  - Up output limit (%)                                   *
 //*   14:Hdwn - Down output limit (%)                                 *
@@ -560,7 +560,7 @@ class Divider : public TFunction
 //*   25:cycle- Calc cycle (ms)                                       *
 //* Internal data:                                                    *
 //*   26:#int - Curent integral value                                 *
-//*   27:#dif - Curent differencial value                             *
+//*   27:#dif - Curent differential value                             *
 //*   28:#lag - Curent lag value                                      *
 //*********************************************************************
 class PID : public TFunction
@@ -570,7 +570,7 @@ class PID : public TFunction
 	{
 	    //Inputs
 	    ioAdd( new IO("var",_("Variable"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("sp",_("Setpoint"),IO::Real,IO::Output,"0") );
+	    ioAdd( new IO("sp",_("Set-point"),IO::Real,IO::Output,"0") );
 	    ioAdd( new IO("max",_("Max scale"),IO::Real,IO::Default,"100") );
 	    ioAdd( new IO("min",_("Min scale"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("manIn",_("Manual input (%)"),IO::Real,IO::Default,"0") );
@@ -596,12 +596,12 @@ class PID : public TFunction
 	    ioAdd( new IO("K4",_("K input 4"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("in4",_("Input 4"),IO::Real,IO::Default,"0") );
 
-	    ioAdd( new IO("f_frq",_("Calc frequency (Hz)"),IO::Real,IO::Default,"1") );
+	    ioAdd( new IO("f_frq",_("Calculate frequency (Hz)"),IO::Real,IO::Default,"1") );
 
 	    //Internal data:
 	    ioAdd( new IO("int",_("Integral value"),IO::Real,IO::Output,"0",true) );
-	    ioAdd( new IO("dif",_("Differencial value"),IO::Real,IO::Output,"0",true) );
-	    ioAdd( new IO("lag",_("Differencial lag"),IO::Real,IO::Output,"0",true) );
+	    ioAdd( new IO("dif",_("Differential value"),IO::Real,IO::Output,"0",true) );
+	    ioAdd( new IO("lag",_("Differential lag"),IO::Real,IO::Output,"0",true) );
 	}
 
 	string name( )	{ return _("PID regulator"); }
@@ -729,7 +729,7 @@ class Flow : public TFunction
 	Flow( ) : TFunction("flow",SSPC_ID)
 	{
 	    ioAdd( new IO("f",_("Flow"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X positon"),IO::Real,IO::Default,"0") );
+	    ioAdd( new IO("x",_("X position"),IO::Real,IO::Default,"0") );
 	    ioAdd( new IO("K1",_("K1"),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("K2",_("K2"),IO::Real,IO::Default,"1") );
 	    ioAdd( new IO("K3",_("K3"),IO::Real,IO::Default,"0") );
@@ -739,7 +739,7 @@ class Flow : public TFunction
 	string name( )	{ return _("Flow"); }
 	string descr( )
 	{
-	    return _("Flow calc per formule:\n"
+	    return _("Flow calculate per formula:\n"
 		"f = K1*((K3+K4*x)^K2);");
 	}
 
@@ -773,10 +773,10 @@ class SumMult : public TFunction
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 
-	string name( )	{ return _("Sum and mult"); }
+	string name( )	{ return _("Summation and multiplication"); }
 	string descr( )
 	{
-	    return _("Sum and mult per formule:\n"
+	    return _("Summation and multiplication per formula:\n"
 		"out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
 		"      in3_1*in3_2*(in3_3*in3_4+in3_5) + in4_1*in4_2*(in4_3*in4_4+in4_5);");
 	}
@@ -816,10 +816,10 @@ class SumDiv : public TFunction
 		ioAdd( new IO(("in4_"+TSYS::int2str(i_c)).c_str(),(_("Input 4.")+TSYS::int2str(i_c)).c_str(),IO::Real,IO::Default,"1") );
 	}
 
-	string name( )	{ return _("Sum and divide"); }
+	string name( )	{ return _("Summation and divide"); }
 	string descr( )
 	{
-	    return _("Sum and divide per formule:\n"
+	    return _("Summation and divide per formula:\n"
 		"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
 		"      in3_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);");
 	}
@@ -852,7 +852,7 @@ class Lag : public TFunction
 	string name( )	{ return _("Lag"); }
 	string descr( )
 	{
-	    return _("Lag per formule:\n"
+	    return _("Lag per formula:\n"
 		"y = y - Klag*( y - x );");
 	}
 

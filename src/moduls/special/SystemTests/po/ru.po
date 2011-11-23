@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-06 17:27+0300\n"
+"POT-Creation-Date: 2011-11-23 21:49+0200\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -29,7 +28,7 @@ msgstr "Предоставляет группу тестов для систем
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config-file ----------\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
 "All tests main options:\n"
 "  id           test's id;\n"
 "  on           on test's flag;\n"
@@ -37,20 +36,19 @@ msgid ""
 "       *** Test's options ***\n"
 msgstr ""
 "========================== Опции модуля <%s:%s> ==========================\n"
-"-------- Параметры модульной секции <%s> в конфигурационном файле --------\n"
+"-------- Параметры модульной секции '%s' в конфигурационном файле --------\n"
 "Общие опции всех тестов:\n"
 "  id           идентификатор теста;\n"
 "  on           флаг включения теста;\n"
 "  per          период повторения (сек).\n"
 "       *** Опции тестов ***\n"
 
+#, c-format
 msgid "%s{%d \"%s\", text \"%s\", childs - %d."
 msgstr "%s{%d \"%s\", текст \"%s\", потомков - %d."
 
+#, c-format
 msgid "        Attr \"%s\" = \"%s\"."
-msgstr "        Атрибут \"%s\" = \"%s\"."
-
-msgid "        Proc \"%s\" = \"%s\"."
 msgstr "        Атрибут \"%s\" = \"%s\"."
 
 msgid "Test"
@@ -88,7 +86,7 @@ msgid "Test: Start"
 msgstr "Тест: Запуск"
 
 msgid "Test1: Simple fill and check archive."
-msgstr "Тест1: Простое заполнение и проверка ахива."
+msgstr "Тест1: Простое заполнение и проверка архива."
 
 msgid "Test1: Failed."
 msgstr "Тест1: Ошибка."
@@ -241,7 +239,7 @@ msgstr "Открытие таблицы '%s'."
 msgid "Connect to table '%s'."
 msgstr "Подключение к таблице '%s'."
 
-msgid "Create DB config."
+msgid "Create DB configuration."
 msgstr "Создание конфигурации БД."
 
 msgid "Name field"
@@ -314,13 +312,13 @@ msgid "Add column error."
 msgstr "Ошибка добавления колонки."
 
 msgid "Add column ok."
-msgstr "Колонка добавлена успешано."
+msgstr "Колонка добавлена успешно."
 
 msgid "Del column error."
 msgstr "Ошибка удаления колонки."
 
 msgid "Del column ok."
-msgstr "Колонка удалена успешано."
+msgstr "Колонка удалена успешно."
 
 #, c-format
 msgid "Del %d records for time %f sec."
@@ -360,16 +358,16 @@ msgstr "Доступно %d новых сообщений."
 msgid "DAQ parameter address"
 msgstr "Адрес DAQ параметра"
 
-msgid "Param"
+msgid "Parameter"
 msgstr "Параметр"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and config fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration fields."
 msgstr ""
 "Тест DAQ параметров. Вычитывает атрибуты и конфигурационные поля параметра."
 
 #, c-format
-msgid "Value attrbutes present: %d"
+msgid "Value attributes present: %d"
 msgstr "Значение атрибута присутствует: %d"
 
 #, c-format
@@ -400,7 +398,7 @@ msgid "Path to module"
 msgstr "Путь к модулю"
 
 msgid "Mode (1-attach;-1-detach;0-change)"
-msgstr "Режим (1-подключ.;-1-отключ.;0-изменение)"
+msgstr "Режим (1-подключение;-1-отключение;0-изменение)"
 
 msgid "Full attach(to start)"
 msgstr "Полное подключение(при старте)"
@@ -485,7 +483,7 @@ msgid ""
 "%s: Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, "
 "HighRes = no."
 msgstr ""
-"%s: Создание буфера: Даные = строка, Размер = 10, Период = 1с, ЖёсткаяСетка "
+"%s: Создание буфера: Данные = строка, Размер = 10, Период = 1с, ЖёсткаяСетка "
 "= да, ВысокоеРазрешение = нет."
 
 #, c-format
@@ -499,10 +497,10 @@ msgstr "Сбой создания буфера."
 msgid "%s: Change buffer mode."
 msgstr "%s: Изменение режима буфера."
 
-msgid "Disable hard griding ok."
+msgid "Disable hard grid ok."
 msgstr "Отключение жёсткой сетки успешно."
 
-msgid "Disable hard griding failed."
+msgid "Disable hard grid failed."
 msgstr "Сбой отключение жёсткой сетки."
 
 msgid "Set high resolution time ok."
@@ -528,7 +526,7 @@ msgid "%s: Destroy buffer."
 msgstr "%s: Разрушение буфера."
 
 #, c-format
-msgid "%s: Fill and check hard time griding string buffer."
+msgid "%s: Fill and check hard time grid string buffer."
 msgstr "%s: Заполнение и проверка строкового буфера с жёсткой сеткой времени."
 
 msgid "Buffer begin or/and end error, at filling half buffer."
@@ -564,30 +562,30 @@ msgid "Read 1000 values for time %f ms."
 msgstr "Прочитано 1000 записей в течении %f мс."
 
 #, c-format
-msgid "%s: Fill and check hard time griding integer buffer."
+msgid "%s: Fill and check hard time grid integer buffer."
 msgstr ""
 "%s: Заполнение и проверка целочисленного буфера с жёсткой сеткой времени."
 
 #, c-format
-msgid "%s: Fill and check soft time griding string buffer (high time)."
+msgid "%s: Fill and check soft time grid string buffer (high time)."
 msgstr ""
 "%s: Заполнение и проверка строкового буфера с мягкой сеткой времени (высокое "
 "разрешение времени)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding integer buffer (high time)."
+msgid "%s: Fill and check soft time grid integer buffer (high time)."
 msgstr ""
 "%s: Заполнение и проверка целочисленного буфера с мягкой сеткой времени "
 "(высокое разрешение времени)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding string buffer (low time)."
+msgid "%s: Fill and check soft time grid string buffer (low time)."
 msgstr ""
 "%s: Заполнение и проверка строкового буфера с мягкой сеткой времени (низкое "
 "разрешение времени)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding integer buffer (low time)."
+msgid "%s: Fill and check soft time grid integer buffer (low time)."
 msgstr ""
 "%s: Заполнение и проверка целочисленного буфера с мягкой сеткой времени "
 "(низкое разрешение времени)."
@@ -665,11 +663,12 @@ msgstr "Разбор XML"
 
 msgid "XML file parsing test. Parse and show selected file structure."
 msgstr ""
-"Тест разбора файла XML. Парсит и отображает структуру указанного файла."
+"Тест разбора файла XML. Разбирает и отображает структуру указанного файла."
 
 #, c-format
 msgid "Open file '%s' error."
 msgstr "Ошибка открытия файла '%s'."
 
+#, c-format
 msgid "Test: Passed: %f ms."
 msgstr "Тест: Пройден: %f ms."

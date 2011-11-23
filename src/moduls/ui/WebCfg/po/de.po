@@ -125,49 +125,49 @@ msgid "%s| Change <%s:%s> to %s"
 msgstr "%s| Änderung <%s:%s> in %s"
 
 #, c-format
-msgid "%s| Go to link <%s>"
-msgstr "%s| Gehen zum Link <%s>"
+msgid "%s| Go to link '%s'"
+msgstr "%s| Gehen zum Link '%s'"
 
 #, c-format
 msgid "%s| Put command <%s:%s>"
 msgstr "%s| Kommando einsetzen <%s:%s>"
 
 #, c-format
-msgid "%s| Delete <%s> element <%s:%s>."
-msgstr "%s| Löschen <%s> des Elements <%s:%s>."
+msgid "%s| Delete '%s' element <%s:%s>."
+msgstr "%s| Löschen '%s' des Elements <%s:%s>."
 
 #, c-format
-msgid "%s| Insert <%s> element <%s:%s> to %s."
-msgstr "%s| Einfügen <%s> des Elements <%s:%s> in %s."
+msgid "%s| Insert '%s' element <%s:%s> to %s."
+msgstr "%s| Einfügen '%s' des Elements <%s:%s> in %s."
 
 #, c-format
-msgid "%s| Add <%s> element <%s:%s>."
-msgstr "%s| Hinzufügen <%s> des Elements <%s:%s>."
+msgid "%s| Add '%s' element <%s:%s>."
+msgstr "%s| Hinzufügen '%s' des Elements <%s:%s>."
 
 #, c-format
-msgid "%s| Set <%s> element %s to <%s:%s>."
-msgstr "%s| Speichern <%s> des Elements %s in <%s:%s>."
+msgid "%s| Set '%s' element %s to <%s:%s>."
+msgstr "%s| Speichern '%s' des Elements %s in <%s:%s>."
 
 #, c-format
-msgid "%s| Move <%s> from %s to %s."
-msgstr "%s| Verschieben <%s> von %s nach %s."
+msgid "%s| Move '%s' from %s to %s."
+msgstr "%s| Verschieben '%s' von %s nach %s."
 
 #, c-format
-msgid "%s| Set <%s> cell (<%s>:%s) to: %s."
-msgstr "%s| Speichern <%s> der Zelle (<%s>:%s) in: %s."
+msgid "%s| Set '%s' cell ('%s':%s) to: %s."
+msgstr "%s| Speichern '%s' der Zelle ('%s':%s) in: %s."
 
 #, c-format
-msgid "%s| Add <%s> record."
-msgstr "%s| Hinzufügen <%s> des Datensatzes."
+msgid "%s| Add '%s' record."
+msgstr "%s| Hinzufügen '%s' des Datensatzes."
 
 #, c-format
-msgid "%s| Insert <%s> record %d."
-msgstr "%s| Einfügen <%s> des Datensatzes %d."
+msgid "%s| Insert '%s' record %d."
+msgstr "%s| Einfügen '%s' des Datensatzes %d."
 
 #, c-format
-msgid "%s| Delete <%s> record %d."
-msgstr "%s| Löschen <%s> des Datensatzes %d."
+msgid "%s| Delete '%s' record %d."
+msgstr "%s| Löschen '%s' des Datensatzes %d."
 
 #, c-format
-msgid "%s| Move <%s> record from %d to %d."
-msgstr "%s| Verschieben <%s> des Datensatzes von %d nach %d."
+msgid "%s| Move '%s' record from %d to %d."
+msgstr "%s| Verschieben '%s' des Datensatzes von %d nach %d."

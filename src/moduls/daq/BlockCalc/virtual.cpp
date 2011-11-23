@@ -278,7 +278,7 @@ void Contr::enable_( )
 	    catch(TError err)
 	    {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Enable block <%s> error."),lst[i_l].c_str());
+		mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
 	    }
 }
 
@@ -293,7 +293,7 @@ void Contr::disable_( )
 		catch(TError err)
 		{
 		    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_warning(nodePath().c_str(),_("Enable block <%s> error."),lst[i_l].c_str());
+		    mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
 		}
 }
 
@@ -311,7 +311,7 @@ void Contr::start_( )
 	    catch(TError err)
 	    {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Process block <%s> error."),lst[i_l].c_str());
+		mess_warning(nodePath().c_str(),_("Process block '%s' error."),lst[i_l].c_str());
 	    }
 
     //> Sort blocks
@@ -381,10 +381,10 @@ void *Contr::Task( void *icontr )
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    string blck = cntr.clc_blks[i_blk].at().id();
-		    mess_err(cntr.nodePath().c_str(),_("Block <%s> calc error."),blck.c_str());
+		    mess_err(cntr.nodePath().c_str(),_("Block '%s' calc error."),blck.c_str());
 		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
 		    cntr.hd_res.resRelease( );
-		    mess_err(cntr.nodePath().c_str(),_("Block <%s> is stopped."),blck.c_str());
+		    mess_err(cntr.nodePath().c_str(),_("Block '%s' is stopped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
 		    cntr.hd_res.resRequestR( );
 		}

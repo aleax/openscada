@@ -39,8 +39,8 @@ class TestPrm : public TFunction
 	    ioAdd( new IO("name",_("DAQ parameter address"),IO::String,IO::Default,"System.AutoDA.CPULoad") );
 	}
 
-	string name( )	{ return _("Param"); }
-	string descr( )	{ return _("DAQ parameters test. Make read a parameter's attributes and config fields."); }
+	string name( )	{ return _("Parameter"); }
+	string descr( )	{ return _("DAQ parameters test. Make read a parameter's attributes and configuration fields."); }
 
 	void calc( TValFunc *val )
 	{
@@ -55,7 +55,7 @@ class TestPrm : public TFunction
 
 		vector<string> list_el;
 		prm.at().vlList(list_el);
-		mod->mess(id(),_("Value attrbutes present: %d"),list_el.size());
+		mod->mess(id(),_("Value attributes present: %d"),list_el.size());
 		for(unsigned i = 0; i < list_el.size(); i++)
 		{
 		    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);

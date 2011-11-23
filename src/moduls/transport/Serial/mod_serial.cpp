@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"0.7.2"
+#define MOD_VER		"0.7.3"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other.")
 #define LICENSE		"GPL2"
@@ -107,8 +107,8 @@ void TTr::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
-	owner().outEl().fldAdd( new TFld("A_PRMS",_("Addon parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().inEl().fldAdd( new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000") );
+	owner().outEl().fldAdd( new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000") );
     }
 }
 
@@ -422,7 +422,7 @@ void TTrIn::connect( )
 		}
 		TTr::writeLine(fd,mdmInitStr1());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
-		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr1().c_str());
+		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr1().c_str());
 		usleep((int)(mdmPostInit()*1e6));
 	    }
 	    //>> Send init 2 string
@@ -436,7 +436,7 @@ void TTrIn::connect( )
 		}
 		TTr::writeLine(fd,mdmInitStr2());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
-		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr2().c_str());
+		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr2().c_str());
 		usleep((int)(mdmPostInit()*1e6));
 	    }
 	}
@@ -545,7 +545,7 @@ void *TTrIn::Task( void *tr_in )
 	tr->trIn += req.size();
 
 #if OSC_DEBUG >= 5
-	mess_debug(nodePath().c_str(), _("Serial received message <%d>."), req.size());
+	mess_debug(nodePath().c_str(), _("Serial received message '%d'."), req.size());
 #endif
 
 	//> Check for device lock and RING request from modem
@@ -585,7 +585,7 @@ void *TTrIn::Task( void *tr_in )
 	if(answ.size())
 	{
 #if OSC_DEBUG >= 5
-	    mess_debug(nodePath().c_str(), _("Serial replied message <%d>."), answ.size());
+	    mess_debug(nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
 #endif
 	    ssize_t wL = 1;
 	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
@@ -632,11 +632,11 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	if(atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/ringReq",_("Ring request"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/ringAnswer",_("Ring answer"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/ringAnswerResp",_("Ring answer response"),RWRWR_,"root",STR_ID,1,"tp","str");
@@ -923,7 +923,7 @@ void TTrOut::start( )
 		}
 		TTr::writeLine(fd,mdmInitStr1());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
-		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr1().c_str());
+		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr1().c_str());
 		usleep((int)(mdmPostInit()*1e6));
 	    }
 	    //>> Send init 2 string
@@ -937,7 +937,7 @@ void TTrOut::start( )
 		}
 		TTr::writeLine(fd,mdmInitStr2());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
-		    throw TError(nodePath().c_str(),_("No response to init request '%s'."),mdmInitStr2().c_str());
+		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr2().c_str());
 		usleep((int)(mdmPostInit()*1e6));
 	    }
 	    //>> Dial number and connection wait
@@ -1079,11 +1079,11 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-init delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Init response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/dialStr",_("Dial string"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/cnctResp",_("Connect response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/busyResp",_("Busy response"),RWRWR_,"root",STR_ID,1,"tp","str");

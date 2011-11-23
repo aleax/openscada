@@ -133,8 +133,8 @@ msgid "Write to file error: %s"
 msgstr "Fehler: %s beim Schreiben in die Datei"
 
 #, c-format
-msgid "File %s header error!"
-msgstr "Datei %s Dateikopf Fehler!"
+msgid "File '%s' header error!"
+msgstr "Datei '%s' Dateikopf Fehler!"
 
 #, c-format
 msgid "Archive file: '%s' is not mine."

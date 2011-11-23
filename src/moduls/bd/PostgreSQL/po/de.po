@@ -41,8 +41,8 @@ msgid "Query to DB error: %s. %s"
 msgstr "Fehler der Anfrage an die Datenbank: %s. %s"
 
 #, c-format
-msgid "Error open table <%s>. DB is disabled."
-msgstr "Fehler der Öffnung der Tabelle <%s>. Datenbank ist abgeschaltet."
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Fehler der Öffnung der Tabelle '%s'. Datenbank ist abgeschaltet."
 
 msgid "Start transaction error!"
 msgstr "Start Transaktion Fehler!"

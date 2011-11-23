@@ -5,10 +5,9 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibMath 0.5.2\n"
+"Project-Id-Version: OpenSCADA.Special.FLibMath 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-06 17:05+0300\n"
 "PO-Revision-Date: 2009-08-19 10:10+0200\n"
@@ -27,7 +26,7 @@ msgstr "Mathematische Bibliothek"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow mathematic static function library."
+msgid "Allow mathematical static function library."
 msgstr "Bibliothek mit mathematischen Funktionen."
 
 msgid "Function"
@@ -43,22 +42,22 @@ msgid "X"
 msgstr ""
 
 msgid "ArcCos"
-msgstr "Arcus Cosinus"
+msgstr "Arkuskosinus"
 
 msgid "Arc cosine math function."
-msgstr "Mathematische Funktion Arcus Cosinus."
+msgstr "Mathematische Funktion Arkuskosinus."
 
 msgid "ArcSin"
-msgstr "Arcus Sinus"
+msgstr "Arcussinus"
 
 msgid "Arc sine math function."
-msgstr "Mathematische Funktion Arcus Sinus."
+msgstr "Mathematische Funktion Arcussinus."
 
 msgid "ArcTan"
-msgstr "Arcus Tangens"
+msgstr "Arcustangens"
 
 msgid "Arc tangent math function."
-msgstr "Mathematische Funktion Arcus Tangens."
+msgstr "Mathematische Funktion Arcustangens."
 
 msgid "Y"
 msgstr ""
@@ -67,22 +66,22 @@ msgid "X(rad.)"
 msgstr "X(Rad.)"
 
 msgid "Cosine"
-msgstr "Cosinus"
+msgstr "Kosinus"
 
 msgid "Cosine math function."
-msgstr "Mathematische Funktion Cosinus."
+msgstr "Mathematische Funktion Kosinus."
 
-msgid "Cosine hyperbolical"
-msgstr "Hyperbolischer Cosinus"
+msgid "Cosine hyperbolic"
+msgstr "Hyperbolischer Kosinus"
 
-msgid "Cosine hyperbolical math function."
-msgstr "Mathematische Funktion Cosinus hyperbolisch."
+msgid "Cosine hyperbolic math function."
+msgstr "Mathematische Funktion Kosinus hyperbolisch."
 
 msgid "Exponent"
 msgstr "Exponent"
 
 msgid "Exponent math function."
-msgstr "Mathematische Funktion des Exponents."
+msgstr "Mathematische Funktion des Exponent."
 
 msgid "Natural logarithm"
 msgstr "Natürlicher Logarithmus"
@@ -108,10 +107,10 @@ msgstr "Sinus"
 msgid "Sine math function."
 msgstr "Mathematische Funktion Sinus."
 
-msgid "Sine hyperbolical"
+msgid "Sine hyperbolic"
 msgstr "Hyperbolischer Sinus"
 
-msgid "Sine hyperbolical math function."
+msgid "Sine hyperbolic math function."
 msgstr "Mathematische Funktion Sinus hyperbolisch."
 
 msgid "Square root"
@@ -126,14 +125,14 @@ msgstr "Tangens"
 msgid "Tangent math function."
 msgstr "Mathematische Funktion Tangens."
 
-msgid "Tangent hyperbolical"
+msgid "Tangent hyperbolic"
 msgstr "Hyperbolischer Tangens"
 
-msgid "Tangent hyperbolical math function."
+msgid "Tangent hyperbolic math function."
 msgstr "Mathematische Funktion Tangens hyperbolisch."
 
 msgid "Ceil"
-msgstr "Aufrundung"
+msgstr "Ceil"
 
 msgid "Ceil math function."
 msgstr "Mathematische Funktion Aufrundung zur nächst grösseren Zahl."

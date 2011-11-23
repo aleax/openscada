@@ -402,23 +402,23 @@ msgid "Remote station"
 msgstr "Удалённая станция"
 
 #, c-format
-msgid "%s| Set <%s> to <%s>!"
-msgstr "%s| Установлен <%s> в <%s>!"
+msgid "%s| Set '%s' to '%s'!"
+msgstr "%s| Установлен '%s' в '%s'!"
 
 #, c-format
-msgid "%s| Go to link <%s>!"
-msgstr "%s| Переход по ссылке <%s>!"
+msgid "%s| Go to link '%s'!"
+msgstr "%s| Переход по ссылке '%s'!"
 
 #, c-format
-msgid "%s| Press <%s>!"
-msgstr "%s| Нажат <%s>!"
+msgid "%s| Press '%s'!"
+msgstr "%s| Нажат '%s'!"
 
 msgid "Value no valid: "
 msgstr "Значение ошибочно: "
 
 #, c-format
-msgid "%s| Change <%s> from <%s> to <%s>!"
-msgstr "%s| Изменён <%s> из <%s> в <%s>!"
+msgid "%s| Change '%s' from '%s' to '%s'!"
+msgstr "%s| Изменён '%s' из '%s' в '%s'!"
 
 msgid "Go"
 msgstr "Перейти"
@@ -454,24 +454,24 @@ msgid "Rename element."
 msgstr "Переименование элемента."
 
 #, c-format
-msgid "%s| Add <%s> element <%s:%s>!"
-msgstr "%s| Добавлен <%s> элемент <%s:%s>!"
+msgid "%s| Add '%s' element <%s:%s>!"
+msgstr "%s| Добавлен '%s' элемент <%s:%s>!"
 
 #, c-format
-msgid "%s| Insert <%s> element <%s:%s> to %d!"
-msgstr "%s| Вставлен <%s> элемент <%s:%s> в %d!"
+msgid "%s| Insert '%s' element <%s:%s> to %d!"
+msgstr "%s| Вставлен '%s' элемент <%s:%s> в %d!"
 
 #, c-format
-msgid "%s| Set <%s> element %d to <%s:%s>!"
-msgstr "%s| Установлен <%s> элемент %d в <%s:%s>!"
+msgid "%s| Set '%s' element %d to <%s:%s>!"
+msgstr "%s| Установлен '%s' элемент %d в <%s:%s>!"
 
 #, c-format
-msgid "%s| Delete <%s> element <%s:%s>!"
-msgstr "%s| Удалён <%s> элемент <%s:%s>!"
+msgid "%s| Delete '%s' element <%s:%s>!"
+msgstr "%s| Удалён '%s' элемент <%s:%s>!"
 
 #, c-format
-msgid "%s| Move <%s> from %d to %d!"
-msgstr "%s| Перемещён <%s> из %d в %d!"
+msgid "%s| Move '%s' from %d to %d!"
+msgstr "%s| Перемещён '%s' из %d в %d!"
 
 msgid "Add record"
 msgstr "Добавить запись"
@@ -492,20 +492,20 @@ msgid "Copy"
 msgstr "Копировать"
 
 #, c-format
-msgid "%s| Add <%s> record."
-msgstr "%s| Добавлена <%s> запись."
+msgid "%s| Add '%s' record."
+msgstr "%s| Добавлена '%s' запись."
 
 #, c-format
-msgid "%s| Insert <%s> record %d."
-msgstr "%s| Вставлена <%s> запись %d."
+msgid "%s| Insert '%s' record %d."
+msgstr "%s| Вставлена '%s' запись %d."
 
 #, c-format
-msgid "%s| Delete <%s> record <%s>."
-msgstr "%s| Удаление <%s> записи <%s>."
+msgid "%s| Delete '%s' record '%s'."
+msgstr "%s| Удаление '%s' записи '%s'."
 
 #, c-format
-msgid "%s| Move <%s> record from %d to %d."
-msgstr "%s| Перемещение <%s> записи из %d в %d."
+msgid "%s| Move '%s' record from %d to %d."
+msgstr "%s| Перемещение '%s' записи из %d в %d."
 
 msgid "Save image"
 msgstr "Сохранить изображение"
@@ -538,24 +538,24 @@ msgid "Image file %s error\n"
 msgstr "Ошибка файла изображения %s\n"
 
 #, c-format
-msgid "%s| Upload picture <%s> to: %s."
-msgstr "%s| Выгрузка картинки <%s> в: %s."
+msgid "%s| Upload picture '%s' to: %s."
+msgstr "%s| Выгрузка картинки '%s' в: %s."
 
 #, c-format
-msgid "Value <%s> is not valid!"
-msgstr "Значение <%s> ошибочно!"
+msgid "Value '%s' is not valid!"
+msgstr "Значение '%s' ошибочно!"
 
 #, c-format
-msgid "%s| Set <%s> cell (<%s>:%s) to: %s."
-msgstr "%s| Установка <%s> ячейки (<%s>:%s) в: %s."
+msgid "%s| Set '%s' cell ('%s':%s) to: %s."
+msgstr "%s| Установка '%s' ячейки ('%s':%s) в: %s."
 
 #, c-format
-msgid "Selective element <%s> is not present!"
-msgstr "Выборочнный элемент <%s> отсутствует!"
+msgid "Selective element '%s' is not present!"
+msgstr "Выборочнный элемент '%s' отсутствует!"
 
 #, c-format
-msgid "%s| Change <%s> to: <%s>!"
-msgstr "%s| Изменено <%s> в: <%s>!"
+msgid "%s| Change '%s' to: '%s'!"
+msgstr "%s| Изменено '%s' в: '%s'!"
 
 msgid "Picture is not set!"
 msgstr "Картинка не установлена!"
@@ -626,13 +626,13 @@ msgstr "Предоставляет QT основанный конфигурат�
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config-file ----------\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
 "StartPath  <path>    Configurator start path.\n"
 "StartUser  <user>    No password requested start user.\n"
 "\n"
 msgstr ""
 "======================= Опции модуля <%s:%s> =============================\n"
-"------- Параметры модульной секции <%s> в конфигурационном файле ---------\n"
+"------- Параметры модульной секции '%s' в конфигурационном файле ---------\n"
 "StartPath  <path>    Стартовый путь конфигуратора.\n"
 "StartUser  <user>    Стартовый, безпарольный, пользователь.\n"
 "\n"

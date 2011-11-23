@@ -4,7 +4,6 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
@@ -17,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "HTTP-realisation"
+msgid "HTTP-realization"
 msgstr "HTTP-реалізація"
 
 msgid "Roman Savochenko"
@@ -25,17 +24,17 @@ msgstr "Роман Савоченко"
 
 msgid "Allow support HTTP for WWW based UIs."
 msgstr ""
-"Надає підтримку HTTP для WWW базозованих користувальницьких інтерфейсів."
+"Надає підтримку HTTP для WWW базованих користувацьких інтерфейсів."
 
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config-file ----------\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
 "AuthTime <min>      Life time of the authentication, minutes (default 10).\n"
 "\n"
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
-"------- Параметри модульної секції <%s> у конфігураційному файлі ---------\n"
+"------- Параметри модульної секції '%s' у конфігураційному файлі ---------\n"
 "AuthTime <хвил>     Час життя аутентифікації, хвилин (по замовченню 10).\n"
 "\n"
 
@@ -73,7 +72,7 @@ msgid ""
 "For address field you can use address templates list, for example "
 "\"192.168.1.*;192.168.2.*\"."
 msgstr ""
-"Для поля адреси може бути використано перелік шаблонів адреси, для приклада "
+"Для поля адреси може бути використано перелік шаблонів адреси, для прикладу "
 "\"192.168.1.*;192.168.2.*\"."
 
 msgid "Address"
@@ -157,7 +156,7 @@ msgstr ""
 msgid ""
 "You can auto-login from user \"<b>%s</b>\" by simple selecting the module."
 msgstr ""
-"Ви можете автоматично увійти від користувача \"<b>%s</b>\" просто вибравши "
+"Ви можете автоматично увійти від користувача \"<b>%s</b>\" просто обравши "
 "модуль."
 
 msgid "Accessible web modules"

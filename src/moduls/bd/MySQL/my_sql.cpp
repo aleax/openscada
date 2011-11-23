@@ -186,7 +186,7 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if( !enableStat() )
-	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table <%s>. DB is disabled."),inm.c_str());
+	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table '%s'. DB is disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
 }
@@ -223,7 +223,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		resource.request(true);
 		goto rep;
 	    }
-	    //mess_debug(nodePath().c_str(),_("Query <%s> is error."),ireq.c_str());
+	    //mess_debug(nodePath().c_str(),_("Query '%s' is error."),ireq.c_str());
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error %d: %s"),irez,mysql_error(&connect));
 	}
     }

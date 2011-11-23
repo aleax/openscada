@@ -4,18 +4,17 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Special.FLibSYS 0.9.2\n"
+"Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:46+0300\n"
+"POT-Creation-Date: 2011-11-23 21:35+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "System API functions"
 msgstr "Функции системного API"
@@ -39,7 +38,7 @@ msgstr "Свойства не поддерживаются объектом."
 
 #, c-format
 msgid "Function '%s' error or not enough parameters."
-msgstr "Ошибка функции '%s' или не достаточно параметров."
+msgstr "Ошибка функции '%s' или недостаточно параметров."
 
 msgid "1:Request is not object!"
 msgstr "1:Запрос не объект!"
@@ -73,7 +72,7 @@ msgid "DB: SQL request"
 msgstr "DB: SQL запрос"
 
 msgid "Send SQL request to DB."
-msgstr "Отсылка SQL запроса в БД."
+msgstr "Отправка SQL запроса в БД."
 
 msgid "Begin time"
 msgstr "Время начала"
@@ -262,7 +261,7 @@ msgstr "Формат даты и времени"
 msgid "Time: String time"
 msgstr "Time: Строка времени"
 
-msgid "Formated string time."
+msgid "Formatted string time."
 msgstr "Форматированная строка времени."
 
 msgid "Full seconds"

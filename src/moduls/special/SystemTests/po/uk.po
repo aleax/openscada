@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-06 17:27+0300\n"
+"POT-Creation-Date: 2011-11-23 21:49+0200\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -29,7 +28,7 @@ msgstr "Надає групу тестів для системи OpenSCADA."
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config-file ----------\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
 "All tests main options:\n"
 "  id           test's id;\n"
 "  on           on test's flag;\n"
@@ -37,20 +36,19 @@ msgid ""
 "       *** Test's options ***\n"
 msgstr ""
 "========================== Опції модуля <%s:%s> ==========================\n"
-"-------- Параметри модульної секції <%s> у конфігураційному файлі --------\n"
+"-------- Параметри модульної секції '%s' у конфігураційному файлі --------\n"
 "Загальні опції всіх тестів:\n"
-"  id           ідетифікатор тесту;\n"
+"  id           ідентифікатор тесту;\n"
 "  on           ввімкнення тесту;\n"
 "  per          період повтору (сек).\n"
 "       *** Опції тестів ***\n"
 
+#, c-format
 msgid "%s{%d \"%s\", text \"%s\", childs - %d."
 msgstr "%s{%d \"%s\", текст \"%s\", нащадків - %d."
 
+#, c-format
 msgid "        Attr \"%s\" = \"%s\"."
-msgstr "        Атрибут \"%s\" = \"%s\"."
-
-msgid "        Proc \"%s\" = \"%s\"."
 msgstr "        Атрибут \"%s\" = \"%s\"."
 
 msgid "Test"
@@ -220,7 +218,7 @@ msgstr ""
 "Повний тест БД. Виконує:\n"
 "  - створення/відкриття БД;\n"
 "  - створення/відкриття таблиці;\n"
-"  - створення множини записів (рядків) визначиною структурою;\n"
+"  - створення множини записів (рядків) визначеною структурою;\n"
 "  - модифікація множини записів;\n"
 "  - отримання та перевірка значень множини записів;\n"
 "  - модифікація структури запису та таблиці;\n"
@@ -240,7 +238,7 @@ msgstr "Відкриття таблиці '%s'."
 msgid "Connect to table '%s'."
 msgstr "Підключення до таблиці '%s'."
 
-msgid "Create DB config."
+msgid "Create DB configuration."
 msgstr "Створення конфігурації БД."
 
 msgid "Name field"
@@ -350,7 +348,7 @@ msgid ""
 "archivator."
 msgstr ""
 "Тест архіву повідомлень. Періодично вичитує нові повідомлення з архіву, для "
-"вказаного архиватору."
+"вказаного архіватору."
 
 #, c-format
 msgid "New messages present %d."
@@ -359,16 +357,16 @@ msgstr "Наявно %d нових повідомлень."
 msgid "DAQ parameter address"
 msgstr "Адреса DAQ параметру"
 
-msgid "Param"
+msgid "Parameter"
 msgstr "Параметр"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and config fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration fields."
 msgstr ""
 "Тест DAQ параметрів. Вичитує атрибути та конфігураційні поля параметру."
 
 #, c-format
-msgid "Value attrbutes present: %d"
+msgid "Value attributes present: %d"
 msgstr "Наявно значень атрибутів: %d"
 
 #, c-format
@@ -399,7 +397,7 @@ msgid "Path to module"
 msgstr "Шлях до модуля"
 
 msgid "Mode (1-attach;-1-detach;0-change)"
-msgstr "Режим (1-підключ.;-1-виключ.;0-змінити)"
+msgstr "Режим (1-підключити;-1-виключити;0-змінити)"
 
 msgid "Full attach(to start)"
 msgstr "Повне підключення (на старті)"
@@ -429,7 +427,7 @@ msgstr ""
 "Виконує запит елементів мови за посередництвом повного шляху.\n"
 "Повний шлях до елемента мови має вигляд </Archive/%2fbd%2fm_per>.\n"
 "Повний шлях складається з двох вкладених шляхів.\n"
-"Перший </d_Archive/> це шлях до вузла дерева контроля.\n"
+"Перший </d_Archive/> це шлях до вузла дерева контролю.\n"
 "Другий </bd/m_per> це шлях до конкретного елемента вузла."
 
 #, c-format
@@ -484,7 +482,7 @@ msgid ""
 "%s: Create buffer: Data = string, Size = 10, Period = 1s, HardGrid = yes, "
 "HighRes = no."
 msgstr ""
-"%s: Створення буферу: Дані = строка, Розмір = 10, Періо = 1с, ЖорстГратка = "
+"%s: Створення буферу: Дані = строка, Розмір = 10, Період = 1с, ЖорстГратка = "
 "так, ВисРоздЗд = ні."
 
 #, c-format
@@ -498,11 +496,11 @@ msgstr "Збій створення буферу."
 msgid "%s: Change buffer mode."
 msgstr "%s: Зміна режиму буфера."
 
-msgid "Disable hard griding ok."
-msgstr "Вдала зміна жорсткої гратки."
+msgid "Disable hard grid ok."
+msgstr "Вдала зміна жорсткої ґратки."
 
-msgid "Disable hard griding failed."
-msgstr "Збій зміни жорсткої гратки."
+msgid "Disable hard grid failed."
+msgstr "Збій зміни жорсткої ґратки."
 
 msgid "Set high resolution time ok."
 msgstr "Вдале встановлення високої роздільної здатності часу."
@@ -527,14 +525,14 @@ msgid "%s: Destroy buffer."
 msgstr "%s: Видалення буферу."
 
 #, c-format
-msgid "%s: Fill and check hard time griding string buffer."
+msgid "%s: Fill and check hard time grid string buffer."
 msgstr "%s: Заповнення та перевірка строкового буферу з жорсткою граткою часу."
 
 msgid "Buffer begin or/and end error, at filling half buffer."
 msgstr "Збій початку або/та кінця буферу, під час заповнення половини буферу."
 
 msgid "Write a half buffer values error."
-msgstr "Збії запису половини буферу значень."
+msgstr "Збій запису половини буферу значень."
 
 msgid "Write a half buffer ok."
 msgstr "Вдалий запис половини буферу."
@@ -563,32 +561,32 @@ msgid "Read 1000 values for time %f ms."
 msgstr "Прочитано 1000 значень за час %f мс."
 
 #, c-format
-msgid "%s: Fill and check hard time griding integer buffer."
+msgid "%s: Fill and check hard time grid integer buffer."
 msgstr ""
-"%s: Заповнення та перевірка цілочисельного буферу з жорсткою граткою часу."
+"%s: Заповнення та перевірка цілочислового буферу з жорсткою ґраткою часу."
 
 #, c-format
-msgid "%s: Fill and check soft time griding string buffer (high time)."
+msgid "%s: Fill and check soft time grid string buffer (high time)."
 msgstr ""
-"%s: Заповнення та перевірка строкового буферу з м'якою граткою часу (висока "
+"%s: Заповнення та перевірка строкового буферу з м'якою ґраткою часу (висока "
 "розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding integer buffer (high time)."
+msgid "%s: Fill and check soft time grid integer buffer (high time)."
 msgstr ""
-"%s: Заповнення та перевірка цілочисельного буферу з м'якою граткою часу "
+"%s: Заповнення та перевірка цілочислового буферу з м'якою ґраткою часу "
 "(висока розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding string buffer (low time)."
+msgid "%s: Fill and check soft time grid string buffer (low time)."
 msgstr ""
-"%s: Заповнення та перевірка строкового буферу з м'якою граткою часу (низька "
+"%s: Заповнення та перевірка строкового буферу з м'якою ґраткою часу (низька "
 "розд. здатн. часу)."
 
 #, c-format
-msgid "%s: Fill and check soft time griding integer buffer (low time)."
+msgid "%s: Fill and check soft time grid integer buffer (low time)."
 msgstr ""
-"%s: Заповнення та перевірка цілочисельного буферу з м'якою граткою часу "
+"%s: Заповнення та перевірка цілочислового буферу з м'якою ґраткою часу "
 "(низька розд. здатн. часу)."
 
 #, c-format
@@ -600,7 +598,7 @@ msgstr ""
 #, c-format
 msgid "%s: Fill and check free time integer buffer (high time)."
 msgstr ""
-"%s: Заповнення та перевірка цілочисельного буферу з вільним часом (висока "
+"%s: Заповнення та перевірка цілочислового буферу з вільним часом (висока "
 "розд. здатн. часу)."
 
 #, c-format
@@ -612,7 +610,7 @@ msgstr ""
 #, c-format
 msgid "%s: Fill and check free time integer buffer (low time)."
 msgstr ""
-"%s: Заповнення та перевірка цілочисельного з вільним часом (низька розд. "
+"%s: Заповнення та перевірка цілочислового з вільним часом (низька розд. "
 "здатн. часу)."
 
 #, c-format
@@ -650,7 +648,7 @@ msgstr "Значення з: %s."
 
 #, c-format
 msgid "Last value = %s"
-msgstr "Останне значення = %s"
+msgstr "Останнє значення = %s"
 
 #, c-format
 msgid "Value %d = %s."
@@ -670,5 +668,6 @@ msgstr ""
 msgid "Open file '%s' error."
 msgstr "Помилка відкриття файлу '%s'."
 
+#, c-format
 msgid "Test: Passed: %f ms."
 msgstr "Тест1: Виконано: %f ms."

@@ -127,8 +127,8 @@ msgid "Write to file error: %s"
 msgstr "Помилка запису до файлу: %s"
 
 #, c-format
-msgid "File %s header error!"
-msgstr "Помилка у заголовку файла <%s>!"
+msgid "File '%s' header error!"
+msgstr "Помилка у заголовку файла '%s'!"
 
 #, c-format
 msgid "Archive file: '%s' is not mine."

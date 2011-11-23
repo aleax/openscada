@@ -4,18 +4,17 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2009-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Serial 0.7.2\n"
+"Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:50+0300\n"
+"POT-Creation-Date: 2011-11-23 16:28+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Serial interfaces"
 msgstr "Послідовні інтерфейси"
@@ -28,16 +27,16 @@ msgid ""
 "interfaces like RS232, RS485, GSM and other."
 msgstr ""
 "Надає послідовні інтерфейси. Використовується для обміну даними через "
-"послідовні інтерфейсти типу RS232, RS485, GSM та інше."
+"послідовні інтерфейси типу RS232, RS485, GSM та інше."
 
-msgid "Addon parameters"
+msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
 msgid "Check transports thread is not stopped!"
-msgstr "Поток перевірки транспортів не зупинено!"
+msgstr "Нитку перевірки транспортів не зупинено!"
 
 msgid "Write line error."
-msgstr "Помилка запису строки."
+msgstr "Помилка запису рядка."
 
 msgid "Read from serial error."
 msgstr "Помилка читання з послідовного інтерфейсу."
@@ -57,7 +56,7 @@ msgstr "Помилкова швидкість '%s'."
 
 #, c-format
 msgid "Asynchronous data format '%s' error."
-msgstr "Помилка формату асинхроних даних '%s'."
+msgstr "Помилка формату асинхронних даних '%s'."
 
 #, c-format
 msgid "Char length '%d' error."
@@ -72,19 +71,19 @@ msgid "Stop bits '%d' error."
 msgstr "Помилка кількості стопових бітів '%d'."
 
 #, c-format
-msgid "No response to init request '%s'."
+msgid "No response to initial request '%s'."
 msgstr "Немає відповіді на запит ініціалізації '%s'."
 
 #, c-format
-msgid "Serial received message <%d>."
-msgstr "Serial отримав повідомлення <%d>."
+msgid "Serial received message '%d'."
+msgstr "Serial отримав повідомлення '%d'."
 
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
 #, c-format
-msgid "Serial replied message <%d>."
-msgstr "Serial відповів повідомленням <%d>."
+msgid "Serial replied message '%d'."
+msgstr "Serial відповів повідомленням '%d'."
 
 msgid ""
 "Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[mdm]\". "
@@ -105,7 +104,7 @@ msgstr ""
 "    speed - швидкість пристрою (300, 600, 1200, 2400, 4800, 9600, 19200, "
 "38400, 57600, 115200,\n"
 "                                230400, 460800, 500000, 576000 або 921600);\n"
-"    format - формат асинхроних даних '<розмір><парність><стоп>' (8N1, 7E1, "
+"    format - формат асинхронних даних '<розмір><парність><стоп>' (8N1, 7E1, "
 "5O2);\n"
 "    fc - керування потоком: 'h' - апаратне (CRTSCTS), 's' - програмне (IXON|"
 "IXOFF);\n"
@@ -130,19 +129,19 @@ msgstr "Модем"
 msgid "Timeout (sec)"
 msgstr "Час очікування (с)"
 
-msgid "Pre-init delay (sec)"
-msgstr "Витримка пре-ініціаліз. (с)"
+msgid "Pre-initial delay (sec)"
+msgstr "Витримка пре-ініціалізації (с)"
 
-msgid "Post-init delay (sec)"
-msgstr "Витримка після-ініціаліз. (с)"
+msgid "Post-initial delay (sec)"
+msgstr "Витримка після-ініціалізації (с)"
 
 msgid "Initialization string 1"
-msgstr "Строка ініціалізації 1"
+msgstr "Рядок ініціалізації 1"
 
 msgid "Initialization string 2"
-msgstr "Строка ініціалізації 2"
+msgstr "Рядок ініціалізації 2"
 
-msgid "Init response"
+msgid "Initial response"
 msgstr "Ініціалізація, відповідь"
 
 msgid "Ring request"
@@ -187,8 +186,8 @@ msgid "Serial error!"
 msgstr "Помилка послідовного інтерфейсу!"
 
 msgid ""
-"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]"
-"\". Where:\n"
+"Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:"
+"[modTel]\". Where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
@@ -207,7 +206,7 @@ msgstr ""
 "38400, 57600, 115200\n"
 "                                230400, 460800, 500000, 576000 або "
 "921600 );\n"
-"    format - формат асинхроних даних '<розмір><парність><стоп>' (8N1, 7E1, "
+"    format - формат асинхронних даних '<розмір><парність><стоп>' (8N1, 7E1, "
 "5O2);\n"
 "    fc - керування потоком: 'h' - апаратне (CRTSCTS), 's' - програмне (IXON|"
 "IXOFF);\n"
@@ -228,7 +227,7 @@ msgid "Life time (sec)"
 msgstr "Час життя (с)"
 
 msgid "Dial string"
-msgstr "Строка для дзвінка"
+msgstr "Рядок для дзвінка"
 
 msgid "Connect response"
 msgstr "Підключення, результат"

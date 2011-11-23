@@ -231,7 +231,7 @@ string TUIMod::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config-file ----------\n"
+	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 

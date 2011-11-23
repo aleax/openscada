@@ -177,7 +177,7 @@ void Block::saveIO( )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Block link <%s> save error."),func()->io(i_ln)->id().c_str());
+	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(i_ln)->id().c_str());
 	}
 }
 
@@ -408,7 +408,7 @@ void Block::calc( bool first, bool last, double frq )
 	err_cnt++;
 	lnk_res.resRelease( );
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	throw TError(nodePath().c_str(),_("Error reading block's <%s> links."),id().c_str());
+	throw TError(nodePath().c_str(),_("Error reading block's '%s' links."),id().c_str());
     }
     lnk_res.resRelease( );
 
@@ -471,7 +471,7 @@ void Block::calc( bool first, bool last, double frq )
     {
 	err_cnt++;
 	lnk_res.resRelease( );
-	throw TError(nodePath().c_str(),_("Error writing block's <%s> links."),id().c_str());
+	throw TError(nodePath().c_str(),_("Error writing block's '%s' links."),id().c_str());
     }
     lnk_res.resRelease( );
     err_cnt=0;

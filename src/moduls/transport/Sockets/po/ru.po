@@ -1,15 +1,14 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
-# Copyright (C) 2003-2010 Roman Savochenko
+# Copyright (C) 2003-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Transport.Sockets 1.4.6\n"
+"Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 16:43+0300\n"
+"POT-Creation-Date: 2011-11-23 17:02+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,7 +29,7 @@ msgstr ""
 "Предоставляет транспорт основанный на сокетах. Поддерживаются интернет и "
 "UNIX сокеты. Интернет сокет использует TCP и UDP протоколы."
 
-msgid "Addon parameters"
+msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
 #, c-format
@@ -42,58 +41,62 @@ msgstr ""
 "соединений по лимиту %d."
 
 #, c-format
-msgid "Error create %s socket!"
-msgstr "Ошибка создания сокета <%s>!"
+msgid "Error create '%s' socket!"
+msgstr "Ошибка создания сокета '%s'!"
 
 #, c-format
-msgid "Socket type <%s> error!"
-msgstr "Ошибка типа <%s> сокета!"
+msgid "Socket type '%s' error!"
+msgstr "Ошибка типа '%s' сокета!"
 
 #, c-format
-msgid "Socket name <%s> error!"
-msgstr "Ошибка имени <%s> сокета!"
+msgid "Socket name '%s' error!"
+msgstr "Ошибка имени '%s' сокета!"
 
 #, c-format
-msgid "TCP socket doesn't bind to <%s>!"
-msgstr "TCP сокет не подключился к <%s>!"
+msgid "TCP socket doesn't bind to '%s'!"
+msgstr "TCP сокет не подключился к '%s'!"
 
 #, c-format
-msgid "UDP socket doesn't bind to <%s>!"
-msgstr "UDP сокет не подключился к <%s>!"
+msgid "UDP socket doesn't bind to '%s'!"
+msgstr "UDP сокет не подключился к '%s'!"
 
 #, c-format
-msgid "UNIX socket doesn't bind to <%s>!"
-msgstr "UNIX сокет не подключился к <%s>!"
+msgid "UNIX socket doesn't bind to '%s'!"
+msgstr "UNIX сокет не подключился к '%s'!"
+
+#, c-format
+msgid "Close input transport by error: %s"
+msgstr "Закрытие входного транспорта по ошибке: %s!"
 
 msgid "Error creation of the thread!"
 msgstr "Ошибка создания потока!"
 
 #, c-format
-msgid "Socket received datagram <%d> from <%s>!"
-msgstr "Сокет получил датаграму <%d> из <%s>!"
+msgid "Socket received datagram '%d' from '%s'!"
+msgstr "Сокет получил датаграму '%d' из '%s'!"
 
 #, c-format
-msgid "Socket replied datagram <%d> to <%s>!"
-msgstr "Сокет ответил датаграмой <%d> в <%s>!"
+msgid "Socket replied datagram '%d' to '%s'!"
+msgstr "Сокет ответил датаграмой '%d' в '%s'!"
 
 msgid " client task is stopping...."
 msgstr " клиентская задача остановлена...."
 
 #, c-format
-msgid "Socket has been connected by <%s>!"
-msgstr "К сокету подключился <%s>!"
+msgid "Socket has been connected by '%s'!"
+msgstr "К сокету подключился '%s'!"
 
 #, c-format
-msgid "Socket received message <%d> from <%s>."
-msgstr "Сокет получил сообщение <%d> из <%s>."
+msgid "Socket received message '%d' from '%s'."
+msgstr "Сокет получил сообщение '%d' из '%s'."
 
 #, c-format
-msgid "Socket replied message <%d> to <%s>."
-msgstr "Сокет ответил сообщением <%d> на <%s>."
+msgid "Socket replied message '%d' to '%s'."
+msgstr "Сокет ответил сообщением '%d' на '%s'."
 
 #, c-format
-msgid "Socket has been disconnected by <%s>!"
-msgstr "От сокета отключился <%s>!"
+msgid "Socket has been disconnected by '%s'!"
+msgstr "От сокета отключился '%s'!"
 
 #, c-format
 msgid "The protocol '%s' is not present."
@@ -158,8 +161,8 @@ msgid "Traffic in %s, out %s."
 msgstr "Трафик входящий %s, исходящий %s."
 
 #, c-format
-msgid "Type socket <%s> error!"
-msgstr "Ошибка в типе <%s> сокета!"
+msgid "Type socket '%s' error!"
+msgstr "Ошибка в типе '%s' сокета!"
 
 #, c-format
 msgid "Error creation TCP socket: %s!"

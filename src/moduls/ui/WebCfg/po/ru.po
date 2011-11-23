@@ -121,49 +121,49 @@ msgid "%s| Change <%s:%s> to %s"
 msgstr "%s| Изменение <%s:%s> в %s"
 
 #, c-format
-msgid "%s| Go to link <%s>"
-msgstr "%s| Переход по ссылке <%s>"
+msgid "%s| Go to link '%s'"
+msgstr "%s| Переход по ссылке '%s'"
 
 #, c-format
 msgid "%s| Put command <%s:%s>"
 msgstr "%s| Передача команды <%s:%s>"
 
 #, c-format
-msgid "%s| Delete <%s> element <%s:%s>."
-msgstr "%s| Удаление <%s> элемента <%s:%s>."
+msgid "%s| Delete '%s' element <%s:%s>."
+msgstr "%s| Удаление '%s' элемента <%s:%s>."
 
 #, c-format
-msgid "%s| Insert <%s> element <%s:%s> to %s."
-msgstr "%s| Вставка <%s> элемента <%s:%s> в %s."
+msgid "%s| Insert '%s' element <%s:%s> to %s."
+msgstr "%s| Вставка '%s' элемента <%s:%s> в %s."
 
 #, c-format
-msgid "%s| Add <%s> element <%s:%s>."
-msgstr "%s| Добавление <%s> элемента <%s:%s>."
+msgid "%s| Add '%s' element <%s:%s>."
+msgstr "%s| Добавление '%s' элемента <%s:%s>."
 
 #, c-format
-msgid "%s| Set <%s> element %s to <%s:%s>."
-msgstr "%s| Установка <%s> элемента %s в <%s:%s>."
+msgid "%s| Set '%s' element %s to <%s:%s>."
+msgstr "%s| Установка '%s' элемента %s в <%s:%s>."
 
 #, c-format
-msgid "%s| Move <%s> from %s to %s."
-msgstr "%s| Перемещение <%s> из %s в %s."
+msgid "%s| Move '%s' from %s to %s."
+msgstr "%s| Перемещение '%s' из %s в %s."
 
 #, c-format
-msgid "%s| Set <%s> cell (<%s>:%s) to: %s."
-msgstr "%s| Установка <%s> ячейки (<%s>:%s) в: %s."
+msgid "%s| Set '%s' cell ('%s':%s) to: %s."
+msgstr "%s| Установка '%s' ячейки ('%s':%s) в: %s."
 
 #, c-format
-msgid "%s| Add <%s> record."
-msgstr "%s| Добавление <%s> записи."
+msgid "%s| Add '%s' record."
+msgstr "%s| Добавление '%s' записи."
 
 #, c-format
-msgid "%s| Insert <%s> record %d."
-msgstr "%s| Вставка <%s> записи %d."
+msgid "%s| Insert '%s' record %d."
+msgstr "%s| Вставка '%s' записи %d."
 
 #, c-format
-msgid "%s| Delete <%s> record %d."
-msgstr "%s| Удаление <%s> записи %d."
+msgid "%s| Delete '%s' record %d."
+msgstr "%s| Удаление '%s' записи %d."
 
 #, c-format
-msgid "%s| Move <%s> record from %d to %d."
-msgstr "%s| Перемещение <%s> записи из %d в %d."
+msgid "%s| Move '%s' record from %d to %d."
+msgstr "%s| Перемещение '%s' записи из %d в %d."
