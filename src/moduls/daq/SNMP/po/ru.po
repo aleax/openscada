@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2006-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:16+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
@@ -23,7 +22,7 @@ msgstr "SNMP клиент"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow realising of SNMP client service."
+msgid "Allow realization of SNMP client service."
 msgstr "Предоставляет реализацию клиентского сервиса протокола SNMP."
 
 msgid "Parameteres table"
@@ -53,7 +52,7 @@ msgstr "Сообщество/пользователь сервера"
 msgid "V3 parameters"
 msgstr "V3 параметры"
 
-msgid "Param's attributes limit"
+msgid "Parameter's attributes limit"
 msgstr "Ограничение на количество атрибутов"
 
 msgid "Standard"
@@ -108,7 +107,7 @@ msgid "Security level"
 msgstr "Уровень безопасности."
 
 msgid "No auth/No privacy;Auth/No privacy;Auth/Privacy"
-msgstr "Нет авториз/Нет приватн;Авториз/Нет приватн;Авториз/Приватн"
+msgstr "Нет авториз./Нет приватн.;Авториз./Нет приватн.;Авториз./Приватн."
 
 msgid "Auth"
 msgstr "Авторизация"

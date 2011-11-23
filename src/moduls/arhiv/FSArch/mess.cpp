@@ -205,7 +205,7 @@ void ModMArch::checkArchivator( bool now )
 	if(IdDir == NULL)
 	{
 	    if( mkdir(addr().c_str(),0777) )
-		throw TError(nodePath().c_str(),_("Can not create dir '%s'."),addr().c_str());
+		throw TError(nodePath().c_str(),_("Can not create directory '%s'."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 	//> Clean scan flag
@@ -242,7 +242,7 @@ void ModMArch::checkArchivator( bool now )
 		f_arh->scan = true;
 
 		res.request(true);
-		//>>> Oldest and broken arhives to down
+		//>>> Oldest and broken archives to down
 		if( f_arh->err() )	arh_s.push_back( f_arh );
 		else
 		{

@@ -6,12 +6,11 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.2\n"
+"Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-02 16:37+0300\n"
+"POT-Creation-Date: 2011-11-22 13:22+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -33,7 +32,7 @@ msgid ""
 "OpenSCADA station."
 msgstr "Verbindung mit Datenquellen von entfernten OpenSCADA-Stationen."
 
-msgid "Parameteres cache table"
+msgid "Parameters cache table"
 msgstr "Einflussgrößen Cache-Tabelle"
 
 msgid "Gather data period (s)"
@@ -50,7 +49,7 @@ msgstr "Zeitüberschreitung bei der Wiederherstellung (s)"
 
 msgid "Restore data depth time (hour). Zero for disable archive access."
 msgstr ""
-"Wiederherstellen von Daten Tiefe der Zeit (Stunde). Zero für Behinderte "
+"Wiederherstellen von Daten Tiefe der Zeit (Stunde). Null für Behinderte "
 "Archiv zugreifen."
 
 msgid "Sync inter remote station period (s)"
@@ -60,7 +59,7 @@ msgid "Remote stations list"
 msgstr "Liste von entfernten Stationen"
 
 msgid "Remote cotrollers and parameters list"
-msgstr "Liste von entfernten Kontrollern und Parametern"
+msgstr "Liste von entfernten Controllern und Parametern"
 
 msgid "Standard"
 msgstr "Standard"
@@ -73,7 +72,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -83,6 +82,7 @@ msgstr "Call nächsten durch cron '%s'. "
 msgid "Spent time: %s. "
 msgstr "Verbrauchte Zeit: %s. "
 
+#, c-format
 msgid "Station '%s' error, restoring in %.3g s."
 msgstr "Fehler der Station '%s', Wiederherstellung in %.6g s."
 
@@ -110,10 +110,10 @@ msgid ""
 "  System.AutoDA - for controller;\n"
 "  System.AutoDA.UpTimeStation - for controller's parameter."
 msgstr ""
-"Parameterliste von entfernten OpenSCADA Kontrollern oder einzelnen  "
-"Kontrollern. Beispiel für die Angabe:\n"
+"Parameterliste von entfernten OpenSCADA Controllern oder einzelnen "
+"Controllern. Beispiel für die Angabe:\n"
 "  System.AutoDA - für den Kontroller;\n"
-"  System.AutoDA.UpTimeStation - für die Parameter des Kontrollers."
+"  System.AutoDA.UpTimeStation - für die Parameter des Controllers."
 
 msgid "Go to remote stations list configuration"
 msgstr "Konfiguration der entfernten Stationen"
@@ -128,7 +128,7 @@ msgid "State"
 msgstr "Zustand"
 
 msgid "Type"
-msgstr "Тyp"
+msgstr "Typ"
 
 msgid "Enable"
 msgstr "Einschalten"
@@ -139,11 +139,11 @@ msgstr ""
 msgid "Name"
 msgstr "Name"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
-msgid "Remote station config"
+msgid "Remote station configuration"
 msgstr "Konfiguration einer entfernten Station"
 
 msgid "Controller is not started!"
-msgstr "Kontroller ist nicht gestartet!"
+msgstr "Controller ist nicht gestartet!"

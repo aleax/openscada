@@ -71,7 +71,7 @@ void TUIS::load_( )
 	}
     } while(next_opt != -1);
 
-    //- Load parameters from config file -
+    //> Load parameters from config-file
 
 }
 
@@ -164,7 +164,7 @@ void TUI::cntrCmdProc( XMLNode *opt )
 	TModule::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm",_("User interface")))
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
-		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Runing"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/r_st",_("Running"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	return;
     }
 

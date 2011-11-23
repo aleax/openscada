@@ -63,7 +63,7 @@ class TVal : public TCntrNode
 	const string &name( );
 	int64_t time( )	{ return mTime; }
 
-	//> Read curent value (direct)
+	//> Read current value (direct)
 	string	getSEL( int64_t *tm = NULL, bool sys = false );
 	TVariant get( int64_t *tm = NULL, bool sys = false );
 	string	getS( int64_t *tm = NULL, bool sys = false );
@@ -71,7 +71,7 @@ class TVal : public TCntrNode
 	int	getI( int64_t *tm = NULL, bool sys = false );
 	char	getB( int64_t *tm = NULL, bool sys = false );
 
-	//> Set curent value
+	//> Set current value
 	void setSEL( const string &value, int64_t tm = 0, bool sys = false );
 	void set( const TVariant &value, int64_t tm = 0, bool sys = false );
 	void setS( const string &value, int64_t tm = 0, bool sys = false );
@@ -106,16 +106,16 @@ class TVal : public TCntrNode
 	//Attributes
 	union
 	{
-	    ResString	*val_s;		//string value
-	    double	val_r;		//real value
-	    int		val_i;		//integer value
-	    char	val_b;		//boolean value
+	    ResString	*val_s;		//String value
+	    double	val_r;		//Real value
+	    int		val_i;		//Integer value
+	    char	val_b;		//Boolean value
 	} val;
 
-	unsigned char	mCfg	: 1;		//Config id
+	unsigned char	mCfg	: 1;		//Configuration id
 	unsigned char	mReqFlg	: 1;		//Request to attribute flag
-	unsigned char	mResB1	: 1;		//Reserve boolean
-	unsigned char	mResB2	: 1;		//Reserve boolean
+	unsigned char	mResB1	: 1;		//Reserve Boolean
+	unsigned char	mResB2	: 1;		//Reserve Boolean
 	union
 	{
 	    TFld *fld;
@@ -145,9 +145,9 @@ class TValue: public TCntrNode, public TValElem
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//> Manipulation for config element
+	//> Manipulation for configuration element
 	TConfig *vlCfg( )			{ return mCfg; }
-	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configs.
+	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configurations.
 
 	//> Manipulation for elements of value
 	bool vlElemPresent( TElem *ValEl );
@@ -171,8 +171,8 @@ class TValue: public TCntrNode, public TValElem
 	char		m_vl;
 	vector<TElem*>	elem;		// Elements (dinamic parts)
 
-	short int	l_cfg;		// Config len
-	TConfig*	mCfg;		// Configs (static parts)
+	short int	l_cfg;		// Configuration len
+	TConfig*	mCfg;		// Configurations (static parts)
 };
 
 }

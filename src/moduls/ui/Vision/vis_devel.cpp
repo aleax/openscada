@@ -88,9 +88,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
-    actAbout->setToolTip(_("Programm and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button for display the programm and OpenSCADA information"));
-    actAbout->setStatusTip(_("Press to display the programm and OpenSCADA information."));
+    actAbout->setToolTip(_("Program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button for display the program and OpenSCADA information"));
+    actAbout->setStatusTip(_("Press to display the program and OpenSCADA information."));
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     //>>> About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
@@ -531,7 +531,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_view->addSeparator();
     //> Init status bar
     mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
-    mWUser->setWhatsThis(_("This label displays curent user."));
+    mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
     statusBar()->insertPermanentWidget(0,mWUser);

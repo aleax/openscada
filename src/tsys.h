@@ -22,7 +22,7 @@
 #ifndef TSYS_H
 #define TSYS_H
 
-//> Programm constants
+//> Program constants
 #define PACKAGE_LICENSE	"GPL v2"
 #define PACKAGE_DESCR	_("Open Supervisory Control And Data Acquisition")
 #define PACKAGE_AUTHOR	_("Roman Savochenko")
@@ -99,7 +99,7 @@ class TSYS : public TCntrNode
 
 	int stopSignal( )	{ return mStopSignal; }
 
-	//> Programms options
+	//> Programs options
 	const string &id( )	{ return mId; }
 	string name( )		{ return mName; }
 	void setName( const string &vl )	{ mName = vl; modif(); }
@@ -129,7 +129,7 @@ class TSYS : public TCntrNode
 	void setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
 	void setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
 
-	//> Config file functions
+	//> Config-file functions
 	string cfgFile( )	{ return mConfFile; }
 	XMLNode &cfgRoot( )	{ return rootN; }
 	XMLNode *cfgNode( const string &path, bool create = false );
@@ -321,7 +321,7 @@ class TSYS : public TCntrNode
 
 	//Private attributes
 	string	mUser,		// A owner user name!
-	 	mConfFile,	// Config file name
+	 	mConfFile,	// Config-file name
 		mId,		// Station id
 		mName,		// Station name
 		mIcoDir,	// Icons directory
@@ -331,9 +331,9 @@ class TSYS : public TCntrNode
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
-	XMLNode rootN;		// Root of the config file tree
-	string	rootCfgFl;	// Root node's config file name
-	time_t	rootFlTm;	// Root node's config file's modify time
+	XMLNode rootN;		// Root of the config-file tree
+	string	rootCfgFl;	// Root node's config-file name
+	time_t	rootFlTm;	// Root node's config-file's modify time
 	unsigned rootModifCnt;	// Root tree modify counter, used for save tree to file detect
 
 	int	mStopSignal,	// Stop station signal

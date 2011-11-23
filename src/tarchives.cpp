@@ -77,8 +77,8 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd( new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1") );
     elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000") );
     elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"6","100","0;1000000") );
-    elAval.fldAdd( new TFld("BHGRD",_("Buffer hard time griding"),TFld::Boolean,0,"1","1") );
-    elAval.fldAdd( new TFld("BHRES",_("Buffer high time resolution"),TFld::Boolean,0,"1","0") );
+    elAval.fldAdd( new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1") );
+    elAval.fldAdd( new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0") );
     elAval.fldAdd( new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500") );
 
     setMessBufLen( BUF_SIZE_DEF );
@@ -275,10 +275,10 @@ string TArchiveS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================== Subsystem \"Archives\" options ===================\n"
-	"------------ Parameters of section '%s' in config file -----------\n"
+	"------------ Parameters of section '%s' in config-file -----------\n"
 	"MessBufSize   <items>       Messages buffer size.\n"
-	"MessPeriod    <sec>         Message arhiving period.\n"
-	"ValPeriod     <msec>        Values arhiving period.\n"
+	"MessPeriod    <sec>         Message archiving period.\n"
+	"ValPeriod     <msec>        Values archiving period.\n"
 	"ValPriority   <level>	     Values task priority level.\n"
 	"MaxReqMess    <items>       Maximum request messages.\n"
 	"MaxReqVals    <items>       Maximum request values.\n\n"
@@ -456,7 +456,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	{
 	    bufErr |= 0x02;
 	    res.release();
-	    mess_warning(nodePath().c_str(),_("Messagess buffer filling is too fast!"));
+	    mess_warning(nodePath().c_str(),_("Messages buffer filling is too fast!"));
 	    res.request(true);
 	}
     }
@@ -636,7 +636,7 @@ void TArchiveS::ArhMessTask( union sigval obj )
     if( arh.prcStMess )  return;
     arh.prcStMess = true;
 
-    //> Message bufer read
+    //> Message buffer read
     if( arh.headLstread != arh.headBuf )
 	try
 	{
@@ -669,7 +669,7 @@ void TArchiveS::ArhMessTask( union sigval obj )
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(arh.nodePath().c_str(),_("Message bufer read error."));
+	    mess_err(arh.nodePath().c_str(),_("Message buffer read error."));
 	}
 
     arh.prcStMess = false;
@@ -785,7 +785,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
             	      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
                       "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","-7","max","7",
-		    "help",_("Get messages for level more and equaly it."));
+		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/m_arch/lstAMess",
 		    "help",_("Messages archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
 		if(ctrMkNode("table",opt,-1,"/m_arch/view/mess",_("Messages"),R_R___,"root",SARH_ID))
@@ -1108,7 +1108,7 @@ TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     // int begin() - get archivator data begin time.
     if(iid == "begin") return (int)begin();
 
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -1126,20 +1126,20 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),R_R_R_,"root","root",1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),R_R_R_,"root","root",1,"tp","time");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","dec",
-		    "help",_("Get messages for level more and equaly it."));
+		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str",
 		    "help",_("Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
 			   "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
@@ -1156,7 +1156,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
             	  "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
                   "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","0","max","7",
-		"help",_("Get messages for level more and equaly it."));
+		"help",_("Get messages for level more and equal it."));
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID))
 	    {
 		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");

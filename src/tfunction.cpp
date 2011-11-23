@@ -153,7 +153,7 @@ void TFunction::preIOCfgChange()
     for(unsigned i=0; i < used.size(); i++)
 	if( used[i]->blk() )	blk_lst+=used[i]->vfName()+",";
     if( blk_lst.size() )
-	throw TError(nodePath().c_str(),_("Change is not permited while function is used: %s"),blk_lst.c_str());
+	throw TError(nodePath().c_str(),_("Change is not permitted while function is used: %s"),blk_lst.c_str());
 
     for( unsigned i=0; i < used.size(); i++ )
 	used[i]->preIOCfgChange();
@@ -259,7 +259,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/func/st/st",_("Accessing"),RWRWR_,"root",grp,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/func/st/use",_("Used"),R_R_R_,"root",grp,1,"tp","dec");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Id"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),R_R_R_,"root",grp,1,"tp","str");

@@ -244,7 +244,7 @@ class TBDS : public TSubSYS, public TElem
 	AutoHD<TTable> open( const string &bdn, bool create = false );
 	void close( const string &bdn, bool del = false );
 
-	//> Get Data from DB or config file. If <tbl> cleaned then load from config file
+	//> Get Data from DB or config file. If <tbl> cleaned then load from config-file
 	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false );
 	bool dataGet( const string &bdn, const string &path, TConfig &cfg );
 	bool dataSet( const string &bdn, const string &path, TConfig &cfg );

@@ -86,12 +86,12 @@ class Reg
 
 	enum Code	//Byte codes
 	{
-	    End,	//[E]: End programm.
-	    EndFull,	//[E]: Full end from programm.
-	    MviB,	//[CRRB]: Load boolean <B> to register <R>.
-	    MviI,	//[CRR____]: Load integer <____> to register <R>.
-	    MviR,	//[CRR______]: Load real <______> to register <R>.
-	    MviS,	//[CRRn_____]: Load string len <n> to register <R>.
+	    End,	//[E]: End program.
+	    EndFull,	//[E]: Full end from program.
+	    MviB,	//[CRRB]: Load Boolean <B> to register <R>.
+	    MviI,	//[CRR____]: Load Integer <____> to register <R>.
+	    MviR,	//[CRR______]: Load Real <______> to register <R>.
+	    MviS,	//[CRRn_____]: Load String len <n> to register <R>.
 	    MviObject,	//[CRR]: Load object.
 	    MviArray,	//[CRRnrr....]: Load array from registers list.
 	    MviRegExp,	//[CRRrrRR]: Load Regular expression object.
@@ -112,9 +112,9 @@ class Reg
 	    BitShLeft,	//[CRRrrRR]: Integer bit shift left.
 	    BitShRight,	//[CRRrrRR]: Integer bit shift right.
 	    LOr,	//[CRRrrRR]: Boolean OR.
-	    LCOr,	//[CRRrrRRnn]: Conditional boolean OR.
+	    LCOr,	//[CRRrrRRnn]: Conditional Boolean OR.
 	    LAnd,	//[CRRrrRR]: Boolean AND.
-	    LCAnd,	//[CRRrrRRnn]: Conditional boolean AND.
+	    LCAnd,	//[CRRrrRRnn]: Conditional Boolean AND.
 	    LT,		//[CRRrrRR]: Real least.
 	    GT,		//[CRRrrRR]: Real great.
 	    LEQ,	//[CRRrrRR]: Real least equal.

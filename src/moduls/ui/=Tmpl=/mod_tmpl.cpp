@@ -121,7 +121,7 @@ string TWEB::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	"---------- Parameters of the module section <%s> in config-file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -151,8 +151,8 @@ void TWEB::load_( )
 	}
     } while(next_opt != -1);
 
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config file.
-    //> Load parameters from config file
+    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file.
+    //> Load parameters from config-file
     string trnds = TBDS::genDBGet(nodePath()+"Trends"), trnd_el;
     trnd_lst.clear();
     for( int el_off = 0; (trnd_el=TSYS::strSepParse(trnds,0,';',&el_off)).size(); )
@@ -168,7 +168,7 @@ void TWEB::load_( )
 void TWEB::save_( )
 {
     //!!! Save addition your module specific data. For example, make saving addition module's parameters to OpenSCADA system DB.
-    //> Save parameters to config file
+    //> Save parameters to config-file
     string trnds;
     for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
 	trnds+=trnd_lst[i_el]+";";

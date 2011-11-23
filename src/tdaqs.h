@@ -65,7 +65,7 @@ class TDAQS : public TSubSYS
 	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmplib,id,-1,flg); }
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
 
-	//> Redundance
+	//> Redundancy
 	bool rdActive( );
 	int rdStLevel( )		{ return mRdStLevel; }
 	void setRdStLevel( int vl );

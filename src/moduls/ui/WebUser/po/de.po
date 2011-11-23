@@ -127,7 +127,7 @@ msgstr "Eingeschaltet"
 msgid "DB"
 msgstr "DB"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Program language"

@@ -102,7 +102,7 @@ string TTr::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	"---------- Parameters of the module section <%s> in config-file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -132,7 +132,7 @@ void TTr::load_( )
 	}
     } while(next_opt != -1);
 
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config file
+    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file
 }
 
 //!!! Main subsystem API functions for self modules input and output transport objects creation. Change only your class names.

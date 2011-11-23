@@ -134,7 +134,7 @@ string TVision::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"---------- Parameters of the module section <%s> in config-file ----------\n"
 	"StartUser   <user>    No password requested start user.\n"
 	"RunPrjs     <list>    Run projects list on the module start.\n"
 	"RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive update,\n"
@@ -171,7 +171,7 @@ void TVision::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file and DB
+    //> Load parameters from config-file and DB
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",""));
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
@@ -259,7 +259,7 @@ QMainWindow *TVision::openWindow()
 	    (!(err=mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true)) && atoi(req.text().c_str()))) )
 	while(true)
 	{
-	    if( err == 10 )	{ postMess(nodePath().c_str(),_("Error conection to remote station!")); return NULL; }
+	    if( err == 10 )	{ postMess(nodePath().c_str(),_("Error connection to remote station!")); return NULL; }
 	    DlgUser d_usr(startUser().c_str(),userPass().c_str(),VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if( rez == DlgUser::SelCancel ) return NULL;

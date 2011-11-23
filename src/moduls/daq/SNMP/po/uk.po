@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2006-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:16+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
@@ -23,7 +22,7 @@ msgstr "SNMP клієнт"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow realising of SNMP client service."
+msgid "Allow realization of SNMP client service."
 msgstr "Надає реалізацію клієнтського SNMP сервісу."
 
 msgid "Parameteres table"
@@ -33,7 +32,7 @@ msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
 msgid "Gather task priority"
-msgstr "Рівень пріорітету задачі збору даних"
+msgstr "Рівень пріоритету задачі збору даних"
 
 msgid "Remote host address"
 msgstr "Адреса віддаленого хосту"
@@ -53,14 +52,14 @@ msgstr "Співтовариство/користувач серверу"
 msgid "V3 parameters"
 msgstr "V3 параметри"
 
-msgid "Param's attributes limit"
+msgid "Parameter's attributes limit"
 msgstr "Обмеження на кількість атрибутів"
 
 msgid "Standard"
 msgstr "Стандарт"
 
 msgid "OID list (next line separated)"
-msgstr "Перелік OID (поділено наступн. строкою)"
+msgstr "Перелік OID (поділено наступним рядком)"
 
 msgid "Call now. "
 msgstr "Виклик зараз. "
@@ -78,7 +77,7 @@ msgid "Spent time: %s."
 msgstr "Витрачено часу: %s."
 
 msgid "Error generating Ku from authentication pass phrase."
-msgstr "Помилка генерації Ku з паролю автонтифікації."
+msgstr "Помилка генерації Ku з паролю автентифікації."
 
 msgid "Error generating Ku from privacy pass phrase."
 msgstr "Помилка генерації Ku з паролю приватності."
@@ -108,10 +107,10 @@ msgid "Security level"
 msgstr "Рівень безпеки"
 
 msgid "No auth/No privacy;Auth/No privacy;Auth/Privacy"
-msgstr "Немає автонт/Немає приватн;Автонт/Немає приватн;Автонт/Приватн"
+msgstr "Немає автент./Немає приватн.;Автент./Немає приватн.;Автент./Приватн."
 
 msgid "Auth"
-msgstr "Автонтифікація"
+msgstr "Автентифікація"
 
 msgid "Privacy"
 msgstr "Приватність"

@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:26+0300\n"
+"POT-Creation-Date: 2011-11-22 21:56+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -48,7 +47,7 @@ msgstr "Функция объекта имеет более 255 параметр
 msgid "Get object from no object's register"
 msgstr "Получение объекта из не объектного регистра"
 
-msgid "Timeouted function calc."
+msgid "Timeouted function calculation"
 msgstr "Исчерпано предельное время вычисления функции."
 
 msgid "Not supported type for operation 'Add'."
@@ -58,11 +57,8 @@ msgid "Call object's function for no object or function name is empty."
 msgstr "Вызов функции объекта для не объекта или имя функции пусто."
 
 #, c-format
-msgid "Operation %c(%xh) error. Function '%s' is stoped."
+msgid "Operation %c(%xh) error. Function '%s' is stopped."
 msgstr "Ошибка операции %c(%xh). Функция '%s' остановлена."
-
-msgid "Function '%s' error or not enough parameters."
-msgstr "Ошибка функции '%s' или не достаточно параметров для неё."
 
 msgid "Function: "
 msgstr "Функция: "
@@ -73,10 +69,10 @@ msgstr "Имя"
 msgid "Description"
 msgstr "Описание"
 
-msgid "Maximum calc time (sec)"
+msgid "Maximum calculate time (sec)"
 msgstr "Максимальное время вычисления (сек)"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Программа"
 
 msgid "IO"
@@ -132,7 +128,7 @@ msgid ""
 "For use main work DB set '*.*'."
 msgstr ""
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Program's text translation"
@@ -161,13 +157,13 @@ msgstr "Таблица параметров"
 msgid "Controller's function"
 msgstr "Функция контроллера"
 
-msgid "Calc schedule"
+msgid "Calculation schedule"
 msgstr "Планирование вычисления"
 
-msgid "Calc task priority"
+msgid "Calculation task priority"
 msgstr "Приоритет задачи вычисления"
 
-msgid "Iteration number in single calc"
+msgid "Iteration number in single calculation"
 msgstr "Количество итераций в одном вычислении"
 
 msgid "IO ID"
@@ -187,9 +183,6 @@ msgstr ""
 
 msgid "Data base"
 msgstr "База данных"
-
-msgid "Maximum calc time"
-msgstr "Максимальное время вычисления"
 
 msgid "Formula"
 msgstr "Формула"
@@ -239,13 +232,13 @@ msgstr "Затрачено времени: %s."
 msgid ""
 "Functions library '%s' is not present. Please, create functions library!"
 msgstr ""
-"Библиотека функций '%s' отсутствует. Пожалуйста. создайте библиотеку функций!"
+"Библиотека функций '%s' отсутствует. Пожалуйста, создайте библиотеку функций!"
 
 #, c-format
 msgid "Create new function '%s'."
 msgstr "Создание новой функции '%s'."
 
-msgid "Load function and its io error."
+msgid "Load function and its IO error."
 msgstr "Ошибка загрузки функции и её IO."
 
 msgid "Function calculate frequency (Hz)"
@@ -260,13 +253,13 @@ msgstr "Флаг останова функции"
 msgid "This controller object link"
 msgstr "Связь на объект этого контроллера"
 
-msgid "Calc controller's function error."
+msgid "Calculation controller's function error."
 msgstr "Ошибка вычисления функции контроллера"
 
 msgid "No started or no present function."
 msgstr "Функция отсутствует или не запущена."
 
-msgid "Calcing"
+msgid "Calculation"
 msgstr "Вычисления"
 
 msgid "Data"
@@ -284,7 +277,7 @@ msgstr "Недопустимо удаление заблокированного
 msgid "Changing locked attribute is not allowed."
 msgstr "Недопустимо изменение заблокированного атрибута."
 
-msgid "2:Controller is stoped"
+msgid "2:Controller is stopped"
 msgstr "2:Контроллер остановлен!"
 
 msgid "1:Parameter is disabled"
@@ -294,7 +287,7 @@ msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<io>:<aid>:<anm>]\n"
 "Where:\n"
-"  io - calc function's IO;\n"
+"  io - calculation function's IO;\n"
 "  aid - created attribute identifier;\n"
 "  anm - created attribute name.\n"
 "If 'aid' or 'anm' are not set they will be generated from selected "
@@ -306,14 +299,17 @@ msgstr ""
 "  io - IO вычисляемой функции;\n"
 "  aid - идентификатор создаваемого атрибута;\n"
 "  anm - имя создаваемого атрибута.\n"
-"Если 'aid' или 'anm' не установлены то они будут сгенерированы из выбранного "
+"Если 'aid' или 'anm' не установлены то они будут генерироваться из выбранного "
 "IO функции."
+
+msgid "Error constant after constant"
+msgstr "Ошибка постоянной после постоянной"
 
 #, c-format
 msgid "%s, pos: (%d,%d)-(%d,%d)."
 msgstr "%s, позиция: (%d,%d)-(%d,%d)."
 
-msgid "Unexpected end programm, expect end string symbol '\"', "
+msgid "Unexpected end program, expect end string symbol '\"', "
 msgstr ""
 "Неожиданное окончание программы, ожидается символ окончания строки '\"', "
 

@@ -774,7 +774,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),RWRWR_,"root",SUI_ID,1,"tp","lnk");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/wdg/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/type",_("Type"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -1392,14 +1392,14 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/wa",_("Work area"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Process"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/proc/attr/cfg",_("Config"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/lnk_ls");
-		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Config template"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/proc/attr/cfg",_("Configuration"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/lnk_ls");
+		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate")))
 	    {
-		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Programm language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
+		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calc period (ms)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Programm"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
+		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Program"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
 	    }
 	}
 	return true;
@@ -1496,7 +1496,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		Attr::SelfAttrFlgs sflgs = wdg.at().attrAt(idattr).at().flgSelf();
 
 		if(!(!(sflgs&Attr::IsInher) && tflg&Attr::IsUser))
-		    throw TError(nodePath().c_str(),_("Changing of not user attribute is no permited"));
+		    throw TError(nodePath().c_str(),_("Changing of not user attribute is no permitted"));
 
 		string tvl	= wdg.at().attrAt(idattr).at().getS();
 		string tmpl	= wdg.at().attrAt(idattr).at().cfgTempl();

@@ -299,9 +299,9 @@ ConfApp::ConfApp( string open_user ) :
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
-    actAbout->setToolTip(_("Programm and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button for display programm and OpenSCADA information"));
-    actAbout->setStatusTip(_("Press to display programm and OpenSCADA information"));
+    actAbout->setToolTip(_("Program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button for display program and OpenSCADA information"));
+    actAbout->setStatusTip(_("Press to display program and OpenSCADA information"));
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     //>> About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
@@ -376,7 +376,7 @@ ConfApp::ConfApp( string open_user ) :
     //> Init status bar
     connect( statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
     w_user = new UserStBar(open_user.c_str(), this);
-    w_user->setWhatsThis(_("This label displays curent user."));
+    w_user->setWhatsThis(_("This label displays current user."));
     w_user->setToolTip(_("Field for display of the current user."));
     w_user->setStatusTip(_("Double click to change user."));
     statusBar()->insertPermanentWidget(0,w_user);
@@ -901,7 +901,10 @@ void ConfApp::selectItem( )
 {
     QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
     if(sel_ls.size() == 1 && sel_path != sel_ls.at(0)->text(2).toAscii().data())
+    {
 	selectPage(sel_ls.at(0)->text(2).toAscii().data());
+	CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
+    }
 }
 
 void ConfApp::selectPage( const string &path )
@@ -1502,7 +1505,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
     }
     else
     {
-	//> View boolean fields
+	//> View Boolean fields
 	if( t_s.attr("tp") == "bool" )
 	{
 	    QLabel *lab = NULL, *val_r = NULL;

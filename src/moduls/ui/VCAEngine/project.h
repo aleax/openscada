@@ -132,7 +132,7 @@ class Project : public TCntrNode, public TConfig
 		&mIco,		//Individual icon
 		workPrjDB,	//Work DB
 		mOldDB;
-	int	&mPermit,	//Access permition
+	int	&mPermit,	//Access permission
 		&mPer,		//Calc period
 		&mFlgs,		//Project's flags
 		&mStyleIdW;	//Work style

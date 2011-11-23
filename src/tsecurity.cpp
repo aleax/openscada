@@ -171,7 +171,7 @@ void TSecurity::load_( )
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>>> Search new into DB and Config file
+	//>>> Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -204,7 +204,7 @@ void TSecurity::load_( )
 	vector<string> db_ls;
 	itReg.clear();
 
-	//>>> Search new into DB and Config file
+	//>>> Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -379,7 +379,7 @@ void TUser::save_( )
 
 TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -549,7 +549,7 @@ void TGroup::userDel( const string &name )
 
 TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 

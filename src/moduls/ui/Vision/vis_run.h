@@ -123,7 +123,7 @@ class VisRun : public QMainWindow
 	void userChanged( const QString &oldUser, const QString &oldPass );	//User changed
 	void styleChanged( );
 
-	void about( );					//About at programm
+	void about( );					//About at program
 	void aboutQt( );				//About at QT library
 	//void enterWhatsThis( );				//What is GUI components
 	void updatePage( );				//Update page data

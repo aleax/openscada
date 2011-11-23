@@ -96,7 +96,7 @@ void BDMod::load_( )
 {
     //> Load parameters from command line
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 }
 
 //************************************************

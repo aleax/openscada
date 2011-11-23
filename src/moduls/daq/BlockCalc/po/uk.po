@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:54+0300\n"
+"POT-Creation-Date: 2011-11-22 12:10+0200\n"
 "PO-Revision-Date: 2007-10-28 08:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -55,7 +54,7 @@ msgstr "Ввімкнено"
 msgid "Process"
 msgstr "Обробляється"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфігурація"
 
 msgid "Id"
@@ -77,10 +76,10 @@ msgid "Prior block"
 msgstr "Попередній блок"
 
 msgid ""
-"Priority block(s) calced before this block. Blocks list is separated by "
+"Priority block(s) calculate before this block. Blocks list is separated by "
 "symbol ';'."
 msgstr ""
-"Приорітетний блок(и) який має обчислюватися перед цим блоком. Перелік блоків "
+"Пріоритетний блок(и) який має обчислюватися перед цим блоком. Перелік блоків "
 "поділяється символом ';'."
 
 msgid "Function"
@@ -146,16 +145,16 @@ msgstr "Таблиця параметрів"
 msgid "Block's table"
 msgstr "Таблиця блоків"
 
-msgid "Calc period (ms)"
+msgid "Calculate period (ms)"
 msgstr "Період обрахувань (мс)"
 
-msgid "Calc schedule"
+msgid "Calculate schedule"
 msgstr "Політика планування"
 
-msgid "Calc task priority"
-msgstr "Пріорітет задачі обчислення"
+msgid "Calculate task priority"
+msgstr "Пріоритет задачі обчислення"
 
-msgid "Iteration number into calc period"
+msgid "Iteration number into calculate period"
 msgstr "Кількість ітерацій у одному періоді обрахування"
 
 msgid "Standard"
@@ -167,7 +166,7 @@ msgstr "Параметри блоку"
 msgid "ID"
 msgstr ""
 
-msgid "Blok's ID"
+msgid "Block's ID"
 msgstr "ID блоку"
 
 msgid "IO ID"
@@ -210,7 +209,7 @@ msgid "Block <%s> calc error."
 msgstr "Помилка обчислення блоку <%s>."
 
 #, c-format
-msgid "Block <%s> is stoped."
+msgid "Block <%s> is stopped."
 msgstr "Блок <%s> зупинено."
 
 msgid "Blocks scheme"
@@ -229,7 +228,7 @@ msgstr "Всього: %u; Включено: %u; Обробляється: %u"
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Controller is stoped."
+msgid "2:Controller is stopped."
 msgstr "2:Контролер зупинено."
 
 msgid ""
@@ -237,10 +236,10 @@ msgid ""
 "[<blk>.<blk_io>:<aid>:<anm>]\n"
 "Where:\n"
 "  blk - block identifier from block's scheme; for constant value set to:\n"
-"    '*s' - string type;\n"
-"    '*i' - integer type;\n"
-"    '*r' - real type;\n"
-"    '*b' - boolean type.\n"
+"    '*s' - String type;\n"
+"    '*i' - Integer type;\n"
+"    '*r' - Real type;\n"
+"    '*b' - Boolean type.\n"
 "  blk_io - block's parameter from block's scheme; for constant value set to "
 "attribute value;\n"
 "  aid - created attribute identifier;\n"

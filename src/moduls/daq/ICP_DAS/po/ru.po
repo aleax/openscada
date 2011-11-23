@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2009-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.7.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:08+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
@@ -24,7 +23,7 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 "
+"Allow realization of ICP DAS hardware support. Include I87000 and I-7000 "
 "DCON modules and I-8000 fast modules."
 msgstr ""
 "Предоставляет реализацию поддержки оборудования ICP DAS. Включена поддержка "
@@ -63,7 +62,7 @@ msgstr "Адрес модуля"
 msgid "Module slot"
 msgstr "Слот модуля"
 
-msgid "Module addon parameters"
+msgid "Module addition parameters"
 msgstr "Дополнительные параметры модуля"
 
 msgid "Call now. "
@@ -126,7 +125,7 @@ msgstr "11:Ошибка в ответе модуля."
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
 #, c-format
@@ -167,13 +166,13 @@ msgstr "Состояние хостового сторожевого тайме�
 msgid "Power on values"
 msgstr "Значения при включении питания"
 
-msgid "Set power on values from curent"
+msgid "Set power on values from current"
 msgstr "Установка значений при включении питания из текущих"
 
 msgid "Safe values"
 msgstr "Безопасные значения"
 
-msgid "Set safe values from curent"
+msgid "Set safe values from current"
 msgstr "Установка безопасных значений из текущих"
 
 msgid "Out reverse"

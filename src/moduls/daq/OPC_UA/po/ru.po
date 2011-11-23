@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@oscada.org>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:13+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
@@ -17,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблица параметров"
 
 msgid "Acquisition schedule"
@@ -177,13 +176,13 @@ msgstr "УровеньДоступа"
 msgid "Readable, "
 msgstr "Чтение, "
 
-msgid "Writible, "
+msgid "Writable, "
 msgstr "Запись, "
 
 msgid "History readable, "
 msgstr "Чтение архива, "
 
-msgid "History writible, "
+msgid "History writable, "
 msgstr "Запись архива, "
 
 msgid "Semantic change, "
@@ -207,7 +206,7 @@ msgstr "ИсполняемыйПользов"
 msgid ""
 "Variables and it containers (Objects) list. All variables will put into the "
 "parameter attributes list.\n"
-"Variables writed by separated lines into format: [ns:id].\n"
+"Variables wrote by separated lines into format: [ns:id].\n"
 "Where:\n"
 "  ns - names scope, number, zero value can missed;\n"
 "  id - node identifier, number, string, bytes string and GUID.\n"
@@ -236,7 +235,7 @@ msgstr ""
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
 #, c-format
@@ -273,19 +272,19 @@ msgstr "Приватный ключ сервера (PEM)"
 msgid "Search and create new server error."
 msgstr "Ошибка поиска и создания нового сервера."
 
-msgid "Respond size is not coincedence."
+msgid "Respond size is not coincidence."
 msgstr "Несоответствующий размер ответа."
 
 msgid "Respond don't acknowledge."
 msgstr "Несоответствие ответа."
 
 msgid "Not full respond."
-msgstr ""
+msgstr "Неполный ответ"
 
 msgid "Client certificate thumbprint error."
 msgstr "Ошибка отпечатка сертификата клиента."
 
-msgid "Respond's NodeId don't acknowledge"
+msgid "Respond NodeId don't acknowledge"
 msgstr "Несоответствие NodeId ответа"
 
 msgid "Signature error"
@@ -401,7 +400,7 @@ msgstr "Ошибка в настройках безопасности %d."
 
 #, c-format
 msgid "Parent node '%s' no present for node '%s'."
-msgstr "Родителький узел '%s' отсутствует для узла '%s'."
+msgstr "Родительский узел '%s' отсутствует для узла '%s'."
 
 #, c-format
 msgid "No session %d present."
@@ -432,7 +431,7 @@ msgstr "Включен"
 msgid "DB"
 msgstr "БД"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Policy"
@@ -441,7 +440,7 @@ msgstr "Политика"
 msgid "Message mode"
 msgstr "Режим сообщения"
 
-msgid "No present seleted row."
+msgid "No present selected row."
 msgstr "Выбранная строка отсутствует."
 
 msgid "OPC UA"
@@ -450,8 +449,8 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow realisation of OPC UA client service."
+msgid "Allow realization of OPC UA client service."
 msgstr "Предоставляет реализацию клиентского сервиса OPC UA."
 
-msgid "Allow realisation of OPC UA protocol."
+msgid "Allow realization of OPC UA protocol."
 msgstr "Предоставляет реализацию OPC UA протокола."

@@ -75,7 +75,7 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
+    fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000") );
@@ -540,9 +540,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    char cRW = atoi(nAVl.c_str());
 		    nAVl = "";
 		    if(cRW & TProt::ACS_Read)		nAVl += _("Readable, ");
-		    if(cRW & TProt::ACS_Write)		nAVl += _("Writible, ");
+		    if(cRW & TProt::ACS_Write)		nAVl += _("Writable, ");
 		    if(cRW & TProt::ACS_HistRead)	nAVl += _("History readable, ");
-		    if(cRW & TProt::ACS_HistWrite)	nAVl += _("History writible, ");
+		    if(cRW & TProt::ACS_HistWrite)	nAVl += _("History writable, ");
 		    if(cRW & TProt::ACS_SemChange)	nAVl += _("Semantic change, ");
 		    break;
 		}
@@ -552,9 +552,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    char cRW = atoi(nAVl.c_str());
 		    nAVl = "";
 		    if(cRW & TProt::ACS_Read)		nAVl += _("Readable, ");
-		    if(cRW & TProt::ACS_Write)		nAVl += _("Writible, ");
+		    if(cRW & TProt::ACS_Write)		nAVl += _("Writable, ");
 		    if(cRW & TProt::ACS_HistRead)	nAVl += _("History readable, ");
-		    if(cRW & TProt::ACS_HistWrite)	nAVl += _("History writible, ");
+		    if(cRW & TProt::ACS_HistWrite)	nAVl += _("History writable, ");
 		    break;
 		}
 		case TProt::AId_MinimumSamplingInterval:nANm = _("MinimumSamplingInterval");	break;
@@ -764,7 +764,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",cfg("ND_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
-		"Variables writed by separated lines into format: [ns:id].\n"
+		"Variables wrote by separated lines into format: [ns:id].\n"
 		"Where:\n"
 		"  ns - names scope, number, zero value can missed;\n"
 		"  id - node identifier, number, string, bytes string and GUID.\n"
@@ -794,7 +794,7 @@ void TMdPrm::vlGet( TVal &val )
     if(!enableStat() || !owner().startStat())
     {
 	if(!enableStat())		val.setS(_("1:Parameter is disabled."),0,true);
-	else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
+	else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
 	return;
     }
     if(owner().redntUse()) return;

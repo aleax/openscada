@@ -37,7 +37,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.5.0"
+#define MOD_VER		"0.5.1"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -502,7 +502,7 @@ void TMdContr::reqBFN(XMLNode &io)
     {
 	XMLNode rez;
 	try{ rez.load(req.text()); }
-	catch(TError err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplite.")); }
+	catch(TError err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplete.")); }
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(atoi(rCod.c_str())) io.setAttr("err",rCod);
 	else
@@ -781,7 +781,7 @@ void TMdPrm::vlGet( TVal &val )
     if(!enableStat() || !owner().startStat())
     {
         if(!enableStat())               val.setS(_("1:Parameter is disabled."),0,true);
-        else if(!owner().startStat())   val.setS(_("2:Acquisition is stoped."),0,true);
+        else if(!owner().startStat())   val.setS(_("2:Acquisition is stopped."),0,true);
         return;
     }
     if(owner().redntUse()) return;

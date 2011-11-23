@@ -5,10 +5,9 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.2\n"
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 17:24+0300\n"
 "PO-Revision-Date: 2009-08-17 14:02+0200\n"
@@ -54,7 +53,7 @@ msgstr "Basisadresse Karte"
 msgid "Interrupt vector"
 msgstr "Interrupt Nummer"
 
-msgid "Digit IO config byte"
+msgid "Digit IO configuration byte"
 msgstr "Konfigurationbyte Diskret IO"
 
 msgid "A/D interrupt mode"
@@ -75,7 +74,7 @@ msgstr "Bipolar;Unipolar"
 msgid "A/D gain"
 msgstr "A/D Verstärkung"
 
-msgid "A/D convertion rate (Hz)"
+msgid "A/D conversion rate (Hz)"
 msgstr "A/D Abtastrate (Hz)"
 
 msgid "Analog parameter"
@@ -109,7 +108,7 @@ msgid "Voltage V"
 msgstr "Spannung,V"
 
 msgid "A/D code"
-msgstr "A/D Kode"
+msgstr "A/D Code"
 
 msgid "Value"
 msgstr "Wert"
@@ -139,7 +138,7 @@ msgstr "DSC Zähler ist mit der Systemzeit korrigiert"
 msgid "AD DSC task error."
 msgstr "AD DSC Aufgabe Fehler."
 
-msgid "Board config"
+msgid "Board configuration"
 msgstr "Konfiguration der Karte"
 
 msgid "Digital IO ports. Select input!"
@@ -165,8 +164,8 @@ msgstr "Fehler dscDAConvert: %s %s"
 msgid "dscDIOOutputBit error: %s %s"
 msgstr "Fehler dscDIOOutputBit: %s %s"
 
-msgid "2:Controller is stoped"
-msgstr "2:Kontroller ist angehalten"
+msgid "2:Controller is stopped"
+msgstr "2:Controller ist angehalten"
 
 msgid "1:Parameter is disabled"
 msgstr "1:Parameter ist abgeschaltet"

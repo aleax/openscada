@@ -141,7 +141,7 @@ class TSocketIn: public TTransportIn
 			mKeepAliveTm,		// KeepAlive timeout
 			mTaskPrior;		// Requests processing task prioritet
 
-	bool		cl_free;		// Clients stoped
+	bool		cl_free;		// Clients stopped
 	vector<SSockCl>	cl_id;			// Client's pids
 
 	//> Status atributes

@@ -6,10 +6,9 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
+"Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-22 15:18+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
@@ -22,11 +21,11 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Tabelle der Parameter"
 
-msgid "Logical parameteres table"
-msgstr "Logical Tabelle der Parameter"
+msgid "Logical parameters table"
+msgstr "Logische Parameter der Tabelle"
 
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
@@ -68,10 +67,10 @@ msgid "Attributes list"
 msgstr "Liste der Attribute"
 
 msgid "Logical"
-msgstr "Logical"
+msgstr "Logische"
 
 msgid "Parameter template"
-msgstr "Template der Parameter"
+msgstr "Template-Parameter"
 
 msgid "Parameter ID"
 msgstr "ID der Parameter"
@@ -91,7 +90,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -122,7 +121,7 @@ msgid "4:Server failure."
 msgstr "4:Serverfehler."
 
 msgid "15:Response PDU size error."
-msgstr "Fehler des Umfangs der PDU - Antwort."
+msgstr "15:Fehler des Umfangs der PDU - Antwort."
 
 msgid "OK"
 msgstr "OK"
@@ -132,7 +131,7 @@ msgid ""
 "Attention! Some devices don't support accompany request wrong registers into "
 "single block."
 msgstr ""
-"Merge nicht benachbarte Fragmente von Registern zu einzelnen Block für "
+"Kombination nicht benachbarte Fragmente von Registern zu einzelnen Block für "
 "Anfrage.\n"
 "Achtung! Einige Geräte unterstützen nicht begleiten Antrag falsch Register "
 "in einzelnen Block."
@@ -148,13 +147,13 @@ msgstr ""
 msgid "11:Value not gathered."
 msgstr "11:Werte sind nicht erfasst."
 
-msgid "Error calc template."
-msgstr "Fehler calc Vorlage."
+msgid "Error calculate template."
+msgstr "Fehler in der Berechnung Vorlage."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Anfrage ist angehalten."
 
 msgid ""
@@ -191,17 +190,17 @@ msgstr ""
 "Beispiel:\n"
 "  'R:0x300:rw:var:Variable' - Zugang zum Register;\n"
 "  'C:100:r:var1:Variable 1' - Zugang zum Bit;\n"
-"  'R_f:200:r:float:Float' - das Reele bekommen aus den Registern 200 und "
+"  'R_f:200:r:float:Float' - das 'float' bekommen aus den Registern 200 und "
 "201;\n"
-"  'R_i4:300,400:r:int32:Int32' - bekommen int32 aus den Registern 300 und "
+"  'R_i4:300,400:r:int32:Int32' - bekommen 'int32' aus den Registern 300 und "
 "400;\n"
 "  'R_b10:25:r:rBit:Reg bit' - Bit 10 aus dem Register 25 bekommen."
 
-msgid "Template config"
-msgstr "Template config"
+msgid "Template configuration"
+msgstr "Konfiguration Vorlage"
 
 msgid "Parameters"
-msgstr "Parameter"
+msgstr "Optionen"
 
 msgid ""
 "ModBus address in format: [dt:numb:rw]\n"
@@ -231,8 +230,8 @@ msgstr ""
 "Beispiel:\n"
 "  'R:0x300:rw' - Zugang zum Register;\n"
 "  'C:100:r' - Zugang zum Bit;\n"
-"  'R_f:200:r' - das Reele bekommen aus den Registern 200 und 201;\n"
-"  'R_i4:300,400:r' - bekommen int32 aus den Registern 300 und 400;\n"
+"  'R_f:200:r' - das 'float' bekommen aus den Registern 200 und 201;\n"
+"  'R_i4:300,400:r' - bekommen 'int32' aus den Registern 300 und 400;\n"
 "  'R_b10:25:r' - Bit 10 aus dem Register 25 bekommen."
 
 msgid "Parameter id error."
@@ -257,7 +256,7 @@ msgid "Protocol"
 msgstr "Protokoll"
 
 msgid "RTU;ASCII;TCP/IP;All"
-msgstr "RTU;ASCII;TCP/IP;All"
+msgstr "RTU;ASCII;TCP/IP;Alle"
 
 msgid "Mode"
 msgstr "Modus"
@@ -265,10 +264,10 @@ msgstr "Modus"
 msgid "Data;Gateway node;Gateway net"
 msgstr "Daten;Knotenschnittstelle;Netzschnittstelle"
 
-msgid "Calc data period (s)"
+msgid "Calculate data period (s)"
 msgstr "Daten Rechenzeit (sek)"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Programm"
 
 msgid "To transport"
@@ -296,7 +295,7 @@ msgid "Real position"
 msgstr "Reale Position"
 
 msgid "Search and create new node error."
-msgstr "Fehler bem Suchen und Erstellen des neuen Knotens."
+msgstr "Fehler dem Suchen und Erstellen des neuen Knotens."
 
 msgid "13:Error server respond"
 msgstr "13:Fehler in der Antwort des Server"
@@ -305,7 +304,7 @@ msgid "Not full respond"
 msgstr "Nicht voll antworten"
 
 msgid "13:Error respond: Too short."
-msgstr "13:Fehlerin der Anwort: Zu kurz."
+msgstr "13:Fehler in der Antwort: Zu kurz."
 
 msgid "13:Error respond: CRC check error."
 msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
@@ -329,7 +328,7 @@ msgstr "1:%02X:Funktion wird nicht unterstützt."
 
 msgid "2:Requested address not allow or request area too long."
 msgstr ""
-"2:Angefragte Adresse ist nicht zulässig oder Anfragebereich ist zu gross."
+"2:Angefragte Adresse ist nicht zulässig oder Anfragebereich ist zu groß."
 
 msgid "3:Illegal data value into request."
 msgstr "3:Illegale Datenwert in der Anfrage."
@@ -340,7 +339,7 @@ msgstr "5:Anfrage benötigt zu viel Zeit für die Ausführung."
 msgid "6:Server is busy."
 msgstr "6:Server ist beschäftigt."
 
-msgid "7:Programm function is error. By request functions 13 or 14."
+msgid "7:Program function is error. By request functions 13 or 14."
 msgstr "7:Fehler in Programmfunktion. In Anfragefunctions 13 or 14."
 
 msgid "10:Gateway problem."
@@ -408,7 +407,7 @@ msgstr ""
 msgid "Requests %.4g."
 msgstr "Anfragen %.4g."
 
-msgid "Calc node's function error."
+msgid "Calculate node's function error."
 msgstr "Fehler bei der Berechnung der Funktion des Knotens."
 
 msgid "Node: "
@@ -426,7 +425,7 @@ msgstr "Einschalten"
 msgid "DB"
 msgstr "DB"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Data"
@@ -442,12 +441,12 @@ msgid "Type"
 msgstr "Typ"
 
 msgid "Real;Integer;Boolean;String"
-msgstr "Reele Zahl;Ganzzahl;Logisch;Text"
+msgstr "Reelle Zahl;Ganz Zahl;Logisch;Text"
 
 msgid "Link"
 msgstr "Verbindung"
 
-msgid "Programm language"
+msgid "Program language"
 msgstr "Programmsprache."
 
 msgid "Links"
@@ -475,14 +474,14 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
+"Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
 "and Modbus/ASCII protocols."
 msgstr ""
 "Ermöglicht die Realisierung des Klientservices des ModBus-Protokolls. "
 "Unterstützt werden Modbus/TCP, Modbus/RTU und Modbus/ASCII Protokolle."
 
 msgid ""
-"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
+"Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
 "Modbus/ASCII protocols."
 msgstr ""
 "Ermöglicht die Realisierung der ModBus-Protokolle. Unterstützt werden Modbus/"

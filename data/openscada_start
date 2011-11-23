@@ -15,7 +15,7 @@ if [ ! -d ~/.openscada/DATA ]; then mkdir -m 700 ~/.openscada/DATA; fi
 if [ ! -e ~/.openscada/oscada.xml ]; then cp /etc/oscada_start.xml ~/.openscada/oscada.xml; fi
 cd ~/.openscada
 
-# Programm command and lock file
+# Program command and lock file
 pCmd="openscada --Config=./oscada.xml"
 pLock=".start.lock"
 
@@ -34,7 +34,7 @@ echo $pPid > $pLock
 
 # Wait for programm stop
 wait $pPid
-echo "Programm result: $?"
+echo "Program result: $?"
 
 # Remove lock file
 rm -f $pLock

@@ -35,7 +35,7 @@ msgstr "Розробники"
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
+"---------- Parameters of the module section <%s> in config-file ----------\n"
 "StartUser   <user>    No password requested start user.\n"
 "RunPrjs     <list>    Run projects list on the module start.\n"
 "RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive "
@@ -61,7 +61,7 @@ msgstr "Завантаження модуля."
 msgid "Save module."
 msgstr "Збереження модуля."
 
-msgid "Error conection to remote station!"
+msgid "Error connection to remote station!"
 msgstr "Помилка підключення до віддаленої станції!"
 
 msgid "Auth is wrong!!!"
@@ -163,13 +163,13 @@ msgstr "Натиснути для повного виходу з OpenSCADA."
 msgid "&About"
 msgstr "&Про"
 
-msgid "Programm and OpenSCADA information"
+msgid "Program and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-msgid "The button for display the programm and OpenSCADA information"
+msgid "The button for display the program and OpenSCADA information"
 msgstr "Кнопка для отримання інформації про програму та OpenSCADA"
 
-msgid "Press to display the programm and OpenSCADA information."
+msgid "Press to display the program and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
 
 msgid "About &Qt"
@@ -676,7 +676,7 @@ msgstr "Функції видимості віджетів"
 msgid "Elementars figure tools"
 msgstr "Панель елементарних фігур"
 
-msgid "This label displays curent user."
+msgid "This label displays current user."
 msgstr "Це маркування показує поточного користувача."
 
 msgid "Field for display the current user."
@@ -1013,10 +1013,7 @@ msgstr "Робоча ділянка"
 msgid "Proc"
 msgstr "Оброб."
 
-msgid "Config"
-msgstr "Конфігурація"
-
-msgid "Config template"
+msgid "Configuration template"
 msgstr "Конфігураційний шаблон"
 
 msgid "Add attribute"
@@ -1328,7 +1325,7 @@ msgstr "Кнопка для перемикання режиму \"На весь 
 msgid "Press for toggle full screen."
 msgstr "Натиснути для перемикання режиму \"На весь екран\"."
 
-msgid "Press for display the programm and OpenSCADA information."
+msgid "Press for display the program and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
 
 msgid "Alarm level"
@@ -1379,7 +1376,7 @@ msgstr "Порушення"
 msgid "Alarms (status)"
 msgstr "Порушення (статус)"
 
-msgid "This label displays curent system's time."
+msgid "This label displays current system's time."
 msgstr "Це маркування показує поточний системний час."
 
 msgid "Field for display of the current user."
@@ -1561,7 +1558,7 @@ msgstr "Під'єднатися"
 msgid "Create"
 msgstr "Створити"
 
-msgid "Runing project: %1"
+msgid "Running project: %1"
 msgstr "Виконання проекту: %1"
 
 #, c-format
@@ -1581,7 +1578,7 @@ msgstr "Час оновлення сеансу '%s' %f мс."
 
 msgid ""
 "Page: '%1'.\n"
-"View access is not permited."
+"View access is not permitted."
 msgstr ""
 "Сторінка: '%1'.\n"
 "Відсутній доступ для перегляду."

@@ -52,7 +52,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
     el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
     el_out.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
-    //> External hosts' conection DB struct
+    //> External hosts' connection DB struct
     el_ext.fldAdd( new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,"20") );
     el_ext.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_ext.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
@@ -122,7 +122,7 @@ void TTransportS::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 
     //> Load DB
     string id, type;
@@ -134,7 +134,7 @@ void TTransportS::load_( )
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>>> Search new into DB and Config file
+	//>>> Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -174,7 +174,7 @@ void TTransportS::load_( )
 	vector<string> tdb_ls, db_ls;
 	itReg.clear();
 
-	//>>> Search new into DB and Config file
+	//>>> Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back("<cfg>");
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -670,7 +670,7 @@ void TTransportIn::preEnable(int flag)
 
 TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -689,11 +689,11 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",STR_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len","50");
@@ -878,7 +878,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	return 0;
     }
 
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -897,11 +897,11 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",STR_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len","50");

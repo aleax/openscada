@@ -306,28 +306,28 @@ const vector<string> &TFld::selValS()
 {
     if( flg()&TFld::Selected && type() == TFld::String )
 	return *m_val.v_s;
-    throw TError("Field",_("Field is not string."));
+    throw TError("Field",_("Field is not String."));
 }
 
 const vector<int> &TFld::selValI()
 {
     if( type() == TFld::Integer )
 	return *m_val.v_i;
-    throw TError("Field",_("Field is not integer."));
+    throw TError("Field",_("Field is not Integer."));
 }
 
 const vector<double> &TFld::selValR()
 {
     if( type() == TFld::Real )
 	return *m_val.v_r;
-    throw TError("Field",_("Field is not real."));
+    throw TError("Field",_("Field is not Real."));
 }
 
 const vector<bool> &TFld::selValB()
 {
     if( flg()&TFld::Selected && type() == TFld::Boolean )
 	return *m_val.v_b;
-    throw TError("Field",_("Field is not boolean."));
+    throw TError("Field",_("Field is not Boolean."));
 }
 
 const vector<string> &TFld::selNm()

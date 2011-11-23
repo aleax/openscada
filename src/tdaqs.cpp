@@ -49,8 +49,8 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     el_tmpl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200") );
-    el_tmpl.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
-    el_tmpl.fldAdd( new TFld("PROGRAM",_("Template programm"),TFld::String,TCfg::TransltText,"10000") );
+    el_tmpl.fldAdd( new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
+    el_tmpl.fldAdd( new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"10000") );
 
     //> Parameter template IO DB structure
     el_tmpl_io.fldAdd( new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,"20") );
@@ -203,7 +203,7 @@ void TDAQS::load_( )
 	}
     }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    //> Load parameters from config file and SYS DB
+    //> Load parameters from config-file and SYS DB
     setRdStLevel(atoi(TBDS::genDBGet(nodePath()+"RdStLevel",TSYS::int2str(rdStLevel())).c_str()));
     setRdTaskPer(atof(TBDS::genDBGet(nodePath()+"RdTaskPer",TSYS::real2str(rdTaskPer())).c_str()));
     setRdRestConnTm(atoi(TBDS::genDBGet(nodePath()+"RdRestConnTm",TSYS::int2str(rdRestConnTm())).c_str()));
@@ -232,7 +232,7 @@ void TDAQS::save_( )
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool funcCall(string progLang, TVarObj args, string prog) - call function text <prog> whith arguments <args> for programm language <progLang>.
+    // bool funcCall(string progLang, TVarObj args, string prog) - call function text <prog> whith arguments <args> for program language <progLang>.
     //		Return "true" on well call.
     //  progLang - program procedure language;
     //  args - function arguments;
@@ -617,8 +617,8 @@ string TDAQS::optDescr( )
 {
     return TSYS::strMess(_(
 	"=================== Subsystem \"Data acquisition\" options ================\n"
-	"------------ Parameters of section '%s' in config file -----------\n"
-	"RdStLevel    <lev>  The curent station redundant level.\n"
+	"------------ Parameters of section '%s' in config-file -----------\n"
+	"RdStLevel    <lev>  The current station redundant level.\n"
 	"RdTaskPer    <s>    The redundant task call period.\n"
 	"RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
 	"RdRestDtTm   <hour> Restore data archive depth from a reserve station after deadline.\n"
@@ -652,7 +652,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     {
 	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,0,"/redund",_("Redundance")) )
+	if( ctrMkNode("area",opt,0,"/redund",_("Redundancy")) )
 	{
 	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");

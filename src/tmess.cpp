@@ -160,7 +160,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if( hd == (iconv_t)(-1) )
     {
-	mess_crit("IConv",_("Error iconv open: %s"),strerror(errno));
+	mess_crit("IConv",_("Error 'iconv' open: %s"),strerror(errno));
 	return mess;
     }
 
@@ -229,7 +229,7 @@ void TMess::load()
 	}
     } while(next_opt != -1);
 
-    //> Load params config file
+    //> Load params config-file
     setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel())).c_str()));
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect())).c_str()));
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase);
@@ -250,7 +250,7 @@ const char *TMess::labDB( )
 
 const char *TMess::labSecCRON( )
 {
-    return _("Schedule is writed in seconds periodic form or in standard CRON form.\n"
+    return _("Schedule is wrote in seconds periodic form or in standard CRON form.\n"
              "Seconds form is one real number (1.5, 1e-3).\n"
              "Cron it is standard form \"* * * * *\".\n"
              "  Where items by order:\n"
@@ -258,7 +258,7 @@ const char *TMess::labSecCRON( )
              "    - hours (0-23);\n"
              "    - days (1-31);\n"
              "    - month (1-12);\n"
-             "    - week day (0[sunday]-6).\n"
+             "    - week day (0[Sunday]-6).\n"
              "  Where an item variants:\n"
              "    - \"*\" - any value;\n"
              "    - \"1,2,3\" - allowed values;\n"

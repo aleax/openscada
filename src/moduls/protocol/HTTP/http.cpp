@@ -89,7 +89,7 @@ string TProt::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"---------- Parameters of the module section <%s> in config-file ----------\n"
 	"AuthTime <min>      Life time of the authentication, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
@@ -118,7 +118,7 @@ void TProt::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
     setAuthTime(atoi(TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(authTime())).c_str()));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     //>> Load auto-login config
@@ -458,7 +458,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	m_buf = m_buf+reqst;
 	m_nofull = false;
     }
-    else m_buf=reqst;  //Save request to bufer
+    else m_buf=reqst;  //Save request to buffer
 
     string request = m_buf;
 

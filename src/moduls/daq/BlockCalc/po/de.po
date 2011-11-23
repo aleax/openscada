@@ -6,10 +6,9 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 09:54+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
@@ -60,7 +59,7 @@ msgstr "Einschalten"
 msgid "Process"
 msgstr "Bearbeitung"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Id"
@@ -82,10 +81,10 @@ msgid "Prior block"
 msgstr "Priorität Block"
 
 msgid ""
-"Priority block(s) calced before this block. Blocks list is separated by "
+"Priority block(s) calculate before this block. Blocks list is separated by "
 "symbol ';'."
 msgstr ""
-"Priorität Block(e) vor diesem Block Calced. Blockiert Liste wird von Symbol "
+"Priorität Block(e) vor diesem Block berechnet. Blockiert Liste wird von Symbol "
 "getrennt ';'."
 
 msgid "Function"
@@ -151,16 +150,16 @@ msgstr "Tabelle der Parameter"
 msgid "Block's table"
 msgstr "Tabelle des Blocks"
 
-msgid "Calc period (ms)"
+msgid "Calculate period (ms)"
 msgstr "Rechenzeit (ms)"
 
-msgid "Calc schedule"
-msgstr "Calc Zeitplan"
+msgid "Calculate schedule"
+msgstr "Berechnet Zeitplan"
 
-msgid "Calc task priority"
+msgid "Calculate task priority"
 msgstr "Priorität der Berechnung"
 
-msgid "Iteration number into calc period"
+msgid "Iteration number into calculate period"
 msgstr "Anzahl der Iterationen in der Rechenzeit"
 
 msgid "Standard"
@@ -172,7 +171,7 @@ msgstr "IO-Parameter des Blocks"
 msgid "ID"
 msgstr ""
 
-msgid "Blok's ID"
+msgid "Block's ID"
 msgstr "Id des Blocks"
 
 msgid "IO ID"
@@ -192,7 +191,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Call mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -215,7 +214,7 @@ msgid "Block <%s> calc error."
 msgstr "Berechnungsfehler im Blocks <%s>."
 
 #, c-format
-msgid "Block <%s> is stoped."
+msgid "Block <%s> is stopped."
 msgstr "Block <%s> ist angehalten."
 
 msgid "Blocks scheme"
@@ -234,18 +233,18 @@ msgstr "Alle: %u; Eingeschaltet: %u; Bearbeitung: %u"
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Controller is stoped."
-msgstr "2:Kontroller ist angehalten."
+msgid "2:Controller is stopped."
+msgstr "2:Controller ist angehalten."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<blk>.<blk_io>:<aid>:<anm>]\n"
 "Where:\n"
 "  blk - block identifier from block's scheme; for constant value set to:\n"
-"    '*s' - string type;\n"
-"    '*i' - integer type;\n"
-"    '*r' - real type;\n"
-"    '*b' - boolean type.\n"
+"    '*s' - String type;\n"
+"    '*i' - Integer type;\n"
+"    '*r' - Real type;\n"
+"    '*b' - Boolean type.\n"
 "  blk_io - block's parameter from block's scheme; for constant value set to "
 "attribute value;\n"
 "  aid - created attribute identifier;\n"
@@ -256,7 +255,7 @@ msgstr ""
 "Liste der Konfiguration der Attribute. Die Liste wird gemacht zeilenweise im "
 "Format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 "Wo:\n"
-"  blk - Blockbezeichner, des Blockschemas; für die Konstane wird die "
+"  blk - Blockbezeichner, des Blockschemas; für die Konstante wird die "
 "Bedeutung  bestimmt:\n"
 "    '*s' - Zeilentyp;\n"
 "    '*i' - integer-bedeutend;\n"

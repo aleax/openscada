@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.FSArch 1.4.5\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-19 15:40+0300\n"
+"POT-Creation-Date: 2011-11-22 09:43+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -24,8 +23,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"The Archive module. Allow functions for messages and values arhiving to file "
-"system."
+"The Archive module. Allow functions for messages and values archiving to "
+"file system."
 msgstr ""
 "Модуль архива. Предоставляет функции архивирования сообщений и значений на "
 "файловую систему."
@@ -77,8 +76,8 @@ msgid "Error create new archive file '%s'!"
 msgstr "Не мой архивный файл '%s'"
 
 #, c-format
-msgid "Can not create dir '%s'."
-msgstr "Немогу создать директорию '%s'."
+msgid "Can not create directory '%s'."
+msgstr "Не могу создать директорию '%s'."
 
 msgid "Archivator files size"
 msgstr "Размер файлов архиватора"
@@ -121,7 +120,7 @@ msgstr "Проверить директорию архиватора сейча�
 
 #, c-format
 msgid "Can not create file: '%s'!"
-msgstr "Немогу создать файл: '%s'!"
+msgstr "Не могу создать файл: '%s'!"
 
 #, c-format
 msgid "Write to file error: %s"
@@ -165,7 +164,7 @@ msgstr "Путь к директории для файлов архиватор�
 msgid "File's time size (hours)"
 msgstr "Размер файла (часов)"
 
-msgid "Numberic values rounding (%)"
+msgid "Numeric values rounding (%)"
 msgstr "Округление числовых значений (%)"
 
 msgid "Files size"
@@ -190,7 +189,7 @@ msgid "To file"
 msgstr "В файл"
 
 #, c-format
-msgid "Archive file '%s' no openned!"
+msgid "Archive file '%s' no opened!"
 msgstr "Файл архива '%s' не открыт!"
 
 #, c-format
@@ -199,6 +198,13 @@ msgstr "Ошибка подключения файла '%s'."
 
 msgid "Archive file error!"
 msgstr "Ошибка в файле архива!"
+
+#, c-format
+msgid ""
+"Write data block to archive file '%s' error. Will structure break. mSize=%d, "
+"foff_end=%d, vSize=%d"
+msgstr ""
+"Ошибка записи блока данных в файл архива '%s'. Структура будет сломана. mSize=%d, foff_end=%d, vSize=%d"
 
 #, c-format
 msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"

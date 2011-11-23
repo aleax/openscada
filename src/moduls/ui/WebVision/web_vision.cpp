@@ -303,7 +303,7 @@ string TWEB::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"---------- Parameters of the module section <%s> in config-file ----------\n"
 	"SessTimeLife <time>      Time of the session life, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
@@ -332,7 +332,7 @@ void TWEB::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
     setSessTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime())).c_str()));
     setSessLimit(atoi(TBDS::genDBGet(nodePath()+"SessLimit",TSYS::int2str(sessLimit())).c_str()));
 }

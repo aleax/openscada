@@ -75,11 +75,11 @@ class MFileArch
 	//> Base parameters
 	string	mName;		// name Archive file;
 	bool	mXML;		// XML mode file
-	int	mSize;		// Arhive size
+	int	mSize;		// Archive size
 	string	mChars;	// Archive charset;
 	//> State parameters
 	bool	mErr;		// Archive err
-	bool	mWrite;		// Archive had changed but no writed to file
+	bool	mWrite;		// Archive had changed but no wrote to file
 	bool	mLoad;		// Archive load to mNode
 	bool	mPack;		// Archive packed
 	time_t	mAcces;		// last of time acces to Archive file

@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.2\n"
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 17:24+0300\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
@@ -50,7 +49,7 @@ msgstr "Базовий адрес плати"
 msgid "Interrupt vector"
 msgstr "Вектор переривання"
 
-msgid "Digit IO config byte"
+msgid "Digit IO configuration byte"
 msgstr "Конфігураційний байт цифрових IO"
 
 msgid "A/D interrupt mode"
@@ -71,7 +70,7 @@ msgstr "Біполярний;Однополярний"
 msgid "A/D gain"
 msgstr "Підсилення для AI"
 
-msgid "A/D convertion rate (Hz)"
+msgid "A/D conversion rate (Hz)"
 msgstr "Частота збору за одним каналом AI (Гц)"
 
 msgid "Analog parameter"
@@ -135,7 +134,7 @@ msgstr "Виконано корекцію відхилення лічильни�
 msgid "AD DSC task error."
 msgstr "Помилка задачі DSC."
 
-msgid "Board config"
+msgid "Board configuration"
 msgstr "Конфігурація плати"
 
 msgid "Digital IO ports. Select input!"
@@ -161,7 +160,7 @@ msgstr "Помилка dscDAConvert: %s %s"
 msgid "dscDIOOutputBit error: %s %s"
 msgstr "Помилка dscDIOOutputBit: %s %s"
 
-msgid "2:Controller is stoped"
+msgid "2:Controller is stopped"
 msgstr "2:Контролер зупинено"
 
 msgid "1:Parameter is disabled"

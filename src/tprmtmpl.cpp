@@ -146,7 +146,7 @@ void TPrmTempl::setStart( bool vl )
 
 AutoHD<TFunction> TPrmTempl::func()
 {
-    if(!startStat())	throw TError(nodePath().c_str(),_("Tempate is disabled."));
+    if(!startStat())	throw TError(nodePath().c_str(),_("Template is disabled."));
     if(!prog().size())	return AutoHD<TFunction>(this);
     return SYS->nodeAt(work_prog);
 }
@@ -239,7 +239,7 @@ void TPrmTempl::preIOCfgChange()
 
 TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -260,12 +260,12 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/tmpl/st/use",_("Used"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","4");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/m_calc_tm",_("Maximum calc time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
@@ -287,8 +287,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Constant;Public constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Programm language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/io/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/io/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }
@@ -441,7 +441,7 @@ TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
     TPrmTmplLib *src_n = dynamic_cast<TPrmTmplLib*>(&node);
     if( !src_n ) return *this;
 
-    //- Configuration copy -
+    //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     m_id = tid;
@@ -557,7 +557,7 @@ void TPrmTmplLib::add( const string &id, const string &name )
 
 TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -581,7 +581,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library BD"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed","select","/db/tblList",
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 	    }
-	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");

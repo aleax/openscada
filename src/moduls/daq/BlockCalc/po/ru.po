@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.4.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:54+0300\n"
+"POT-Creation-Date: 2011-11-22 12:10+0200\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -55,7 +54,7 @@ msgstr "Включен"
 msgid "Process"
 msgstr "Обрабатывается"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Id"
@@ -77,7 +76,7 @@ msgid "Prior block"
 msgstr "Предшествующий блок"
 
 msgid ""
-"Priority block(s) calced before this block. Blocks list is separated by "
+"Priority block(s) calculate before this block. Blocks list is separated by "
 "symbol ';'."
 msgstr ""
 "Приоритетный блок(и) вычисляемый перед данным. Список блоков разделяется "
@@ -146,16 +145,16 @@ msgstr "Таблица параметров"
 msgid "Block's table"
 msgstr "Таблица блоков"
 
-msgid "Calc period (ms)"
+msgid "Calculate period (ms)"
 msgstr "Периодичность обсчёта (мс)"
 
-msgid "Calc schedule"
+msgid "Calculate schedule"
 msgstr "Планирование вычислений"
 
-msgid "Calc task priority"
+msgid "Calculate task priority"
 msgstr "Приоритет задачи вычисления"
 
-msgid "Iteration number into calc period"
+msgid "Iteration number into calculate period"
 msgstr "Число итераций в одном периоде обсчёта"
 
 msgid "Standard"
@@ -167,7 +166,7 @@ msgstr "Параметры блока"
 msgid "ID"
 msgstr ""
 
-msgid "Blok's ID"
+msgid "Block's ID"
 msgstr "Id блока"
 
 msgid "IO ID"
@@ -210,7 +209,7 @@ msgid "Block <%s> calc error."
 msgstr "Ошибка <%s> вычисления блока."
 
 #, c-format
-msgid "Block <%s> is stoped."
+msgid "Block <%s> is stopped."
 msgstr "Блок <%s> остановлен."
 
 msgid "Blocks scheme"
@@ -229,7 +228,7 @@ msgstr "Всего: %u; Включено: %u; Обрабатывается: %u"
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Controller is stoped."
+msgid "2:Controller is stopped."
 msgstr "2:Контроллер остановлен."
 
 msgid ""
@@ -237,10 +236,10 @@ msgid ""
 "[<blk>.<blk_io>:<aid>:<anm>]\n"
 "Where:\n"
 "  blk - block identifier from block's scheme; for constant value set to:\n"
-"    '*s' - string type;\n"
-"    '*i' - integer type;\n"
-"    '*r' - real type;\n"
-"    '*b' - boolean type.\n"
+"    '*s' - String type;\n"
+"    '*i' - Integer type;\n"
+"    '*r' - Real type;\n"
+"    '*b' - Boolean type.\n"
 "  blk_io - block's parameter from block's scheme; for constant value set to "
 "attribute value;\n"
 "  aid - created attribute identifier;\n"
@@ -261,5 +260,5 @@ msgstr ""
 "устанавливается в значение атрибута;\n"
 "  aid - идентификатор создаваемого атрибута;\n"
 "  anm - имя создаваемого атрибута.\n"
-"Если 'aid' или 'anm' не установлены то выполняется их генерация из выбраного "
+"Если 'aid' или 'anm' не установлены то выполняется их генерация из выбранного "
 "параметра блока."

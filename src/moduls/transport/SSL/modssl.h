@@ -122,7 +122,7 @@ class TSocketIn: public TTransportIn
 	string		mCertKey,		// SSL certificate
 			mKeyPass;		// SSL private key password
 
-	bool		cl_free;		// Clients stoped
+	bool		cl_free;		// Clients stopped
 	vector<pthread_t>	cl_id;		// Client's pids
 
 	//> Status atributes

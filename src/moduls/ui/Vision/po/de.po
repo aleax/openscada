@@ -37,7 +37,7 @@ msgstr "Entwickler"
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
+"---------- Parameters of the module section <%s> in config-file ----------\n"
 "StartUser   <user>    No password requested start user.\n"
 "RunPrjs     <list>    Run projects list on the module start.\n"
 "RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive "
@@ -63,7 +63,7 @@ msgstr "Modul laden."
 msgid "Save module."
 msgstr "Speicherung des Moduls."
 
-msgid "Error conection to remote station!"
+msgid "Error connection to remote station!"
 msgstr "Fehler beim Verbinden an die enfernte Station!"
 
 msgid "Auth is wrong!!!"
@@ -164,13 +164,13 @@ msgstr "Betätigen um OpenSCADA zu beenden"
 msgid "&About"
 msgstr "&Über"
 
-msgid "Programm and OpenSCADA information"
+msgid "Program and OpenSCADA information"
 msgstr "OpenSCADA-Information"
 
-msgid "The button for display the programm and OpenSCADA information"
+msgid "The button for display the program and OpenSCADA information"
 msgstr "Schaltfläche Informationen über OpenSCADA-"
 
-msgid "Press to display the programm and OpenSCADA information."
+msgid "Press to display the program and OpenSCADA information."
 msgstr "Betätigen um Informationen über OpenSCADA zu erhalten."
 
 msgid "About &Qt"
@@ -689,7 +689,7 @@ msgstr "Widgetsansichtfunktionen"
 msgid "Elementars figure tools"
 msgstr "Panel der elementaren Figuren"
 
-msgid "This label displays curent user."
+msgid "This label displays current user."
 msgstr "Dieses Feld zeigt den aktuellen Benutzer."
 
 msgid "Field for display the current user."
@@ -1027,10 +1027,7 @@ msgstr "Arbeitsbereich"
 msgid "Proc"
 msgstr "Bearbeit."
 
-msgid "Config"
-msgstr "Konfig"
-
-msgid "Config template"
+msgid "Configuration template"
 msgstr "Konfigurationvorlage"
 
 msgid "Add attribute"
@@ -1343,7 +1340,7 @@ msgstr "Schaltfläche zum Umschalten des Vollbilds"
 msgid "Press for toggle full screen."
 msgstr "Betätigen zum Umschalten des Vollbilds."
 
-msgid "Press for display the programm and OpenSCADA information."
+msgid "Press for display the program and OpenSCADA information."
 msgstr "Betätigen für Informationen über das Programm und OpenSCADA."
 
 msgid "Alarm level"
@@ -1394,7 +1391,7 @@ msgstr "Stö&rung"
 msgid "Alarms (status)"
 msgstr "Störung (Status)"
 
-msgid "This label displays curent system's time."
+msgid "This label displays current system's time."
 msgstr "Dieses Zeichen zeigt die aktuelle Systemzeit."
 
 msgid "Field for display of the current user."
@@ -1576,7 +1573,7 @@ msgstr "Verbinden"
 msgid "Create"
 msgstr "Erstellen"
 
-msgid "Runing project: %1"
+msgid "Running project: %1"
 msgstr "Ausführen Projekt: %1"
 
 #, c-format
@@ -1596,7 +1593,7 @@ msgstr "Sitzung '%s' Aktualisierungszeit %f ms."
 
 msgid ""
 "Page: '%1'.\n"
-"View access is not permited."
+"View access is not permitted."
 msgstr ""
 "Seite: '%1'.\n"
 "View Zugriff ist nicht erlaubt."

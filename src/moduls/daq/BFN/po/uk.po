@@ -4,18 +4,17 @@
 #
 # Roman Savochenko <rom_as@oscada.org>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:42+0300\n"
+"POT-Creation-Date: 2011-11-22 11:48+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "BFN module"
 msgstr "Модуль BFN"
@@ -34,10 +33,10 @@ msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
 msgid "Gather task priority"
-msgstr "Рівень пріорітету задачі збору даних"
+msgstr "Рівень пріоритету задачі збору даних"
 
 msgid "Sync inter remote station period (s)"
-msgstr "Період синхронизації з віддаленою станцією (сек)"
+msgstr "Період синхронізації з віддаленою станцією (сек)"
 
 msgid "Transport address"
 msgstr "Адреса транспорту"
@@ -118,7 +117,7 @@ msgstr "ЗУПИНЕНО"
 msgid "Connect to transport '%s' error."
 msgstr "Помилка підключення до транспорту '%s'."
 
-msgid "Respond parsing error. Possible respond incomplite."
+msgid "Respond parsing error. Possible respond incomplete."
 msgstr "Помилка аналізу відповіді. Ймовірно відповідь не повна."
 
 #, c-format
@@ -140,5 +139,5 @@ msgstr "НОРМА"
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."

@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.7.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:20+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
@@ -84,13 +83,13 @@ msgid "Cached (kB)"
 msgstr "Кеши (кБ)"
 
 msgid "Swap free (kB)"
-msgstr "Свопа свободно (кБ)"
+msgstr "Своп свободно (кБ)"
 
 msgid "Swap total (kB)"
-msgstr "Свопа всего (кБ)"
+msgstr "Своп всего (кБ)"
 
 msgid "Swap use (kB)"
-msgstr "Свопа использовано (кБ)"
+msgstr "Своп использовано (кБ)"
 
 msgid "Memory info"
 msgstr "Информация про память"
@@ -156,8 +155,8 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr "Авт. создавать активные ист. данных"
 
-msgid "System parameteres table"
-msgstr "Таблица ситемных параметров"
+msgid "System parameters table"
+msgstr "Таблица системных параметров"
 
 msgid "Request data period (ms)"
 msgstr "Период опроса данных (мс)"
@@ -189,7 +188,7 @@ msgstr "Следующий вызов по cron '%s'. "
 msgid "Spent time: %s. "
 msgstr "Затрачено времени: %s. "
 
-msgid "2:Controller stoped"
+msgid "2:Controller stopped"
 msgstr "2:Контроллер остановлен"
 
 msgid "1:Parameter disabled"

@@ -40,7 +40,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.3"
+#define MOD_VER		"1.2.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow logic level parameters.")
 #define LICENSE		"GPL2"
@@ -101,7 +101,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000"));	//!!!! Remove at further
-    fldAdd(new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
+    fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
@@ -594,7 +594,7 @@ void TMdPrm::vlGet( TVal &val )
 	if(val.name() == "err")
 	{
 	    if(!enableStat()) val.setS(_("1:Parameter is disabled."), 0, true);
-	    else if(!owner().startStat()) val.setS(_("2:Controller is stoped."), 0, true);
+	    else if(!owner().startStat()) val.setS(_("2:Controller is stopped."), 0, true);
 	}
 	else val.setS(EVAL_STR, 0, true);
 	return;
@@ -733,7 +733,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
     }catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error calc template."));
+	mess_warning(nodePath().c_str(),_("Error calculate template."));
     }
 }
 
@@ -768,7 +768,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	TParamContr::cntrCmdProc(opt);
         if(isPRefl()) ctrMkNode("fld",opt,-1,"/prm/cfg/PSRC",cfg("PSRC").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
         else if(isStd()) ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	if(isStd() && ctrMkNode("area",opt,-1,"/cfg",_("Template config")))
+	if(isStd() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration")))
 	{
 	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))

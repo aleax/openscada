@@ -5,10 +5,9 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.2\n"
+"Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 11:53+0300\n"
 "PO-Revision-Date: 2009-08-17 10:37+0200\n"
@@ -28,7 +27,7 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"The Archive module. Allow functions for messages and values arhiving to DB."
+"The Archive module. Allow functions for messages and values archiving to DB."
 msgstr ""
 "Archivmodul. Funktionen zum Archivieren von Nachrichten und Werten in die "
 "Datenbank."

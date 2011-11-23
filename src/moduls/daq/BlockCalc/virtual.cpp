@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.1"
+#define MOD_VER		"1.5.0"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow block based calculator.")
 #define LICENSE		"GPL2"
@@ -95,7 +95,7 @@ void TipContr::load_()
 {
     //> Load parameters from command line
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 }
 
 void TipContr::postEnable( int flag )
@@ -105,10 +105,10 @@ void TipContr::postEnable( int flag )
     //Controllers BD structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
-    fldAdd( new TFld("PERIOD",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
-    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
-    fldAdd( new TFld("ITER",_("Iteration number into calc period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    fldAdd( new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
+    fldAdd( new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
+    fldAdd( new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -124,7 +124,7 @@ void TipContr::postEnable( int flag )
     blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200") );
 
     //IO blok's db structure
-    blkio_el.fldAdd( new TFld("BLK_ID",_("Blok's ID"),TFld::String,TCfg::Key,"20") );
+    blkio_el.fldAdd( new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,"20") );
     blkio_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
     blkio_el.fldAdd( new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2") );
     blkio_el.fldAdd( new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"50") );
@@ -384,7 +384,7 @@ void *Contr::Task( void *icontr )
 		    mess_err(cntr.nodePath().c_str(),_("Block <%s> calc error."),blck.c_str());
 		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
 		    cntr.hd_res.resRelease( );
-		    mess_err(cntr.nodePath().c_str(),_("Block <%s> is stoped."),blck.c_str());
+		    mess_err(cntr.nodePath().c_str(),_("Block <%s> is stopped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
 		    cntr.hd_res.resRequestR( );
 		}
@@ -537,7 +537,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 
 //************************************************
 //* Prm - parameters for access to data          *
-//*       of calced blocks                       *
+//*       of calculate blocks                    *
 //************************************************
 Prm::Prm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), v_el(name)
@@ -709,7 +709,7 @@ void Prm::vlGet( TVal &val )
     if( val.name() == "err" )
     {
 	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
-	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stoped."),0,true);
+	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
 	return;
     }
@@ -757,10 +757,10 @@ void Prm::cntrCmdProc( XMLNode *opt )
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
 	    "Where:\n"
 	    "  blk - block identifier from block's scheme; for constant value set to:\n"
-	    "    '*s' - string type;\n"
-	    "    '*i' - integer type;\n"
-	    "    '*r' - real type;\n"
-	    "    '*b' - boolean type.\n"
+	    "    '*s' - String type;\n"
+	    "    '*i' - Integer type;\n"
+	    "    '*r' - Real type;\n"
+	    "    '*b' - Boolean type.\n"
 	    "  blk_io - block's parameter from block's scheme; for constant value set to attribute value;\n"
 	    "  aid - created attribute identifier;\n"
 	    "  anm - created attribute name.\n"

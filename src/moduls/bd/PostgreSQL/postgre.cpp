@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.9.1"
+#define MOD_VER		"0.9.2"
 #define AUTORS		_("Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -256,7 +256,7 @@ void MBD::transOpen( )
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 	    PQclear(res);
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error!"));
+	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error!"));
 	}
 	PQclear(res);
 	trOpenTm = time(NULL);
@@ -277,7 +277,7 @@ void MBD::transCommit( )
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 	    PQclear(res);
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop trasaction error!"));
+	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop transaction error!"));
 	}
 	PQclear(res);
     }

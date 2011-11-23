@@ -1,3 +1,30 @@
+2011-11-23 Roman
+- !!:SYS: Core language English and core translation to Russian and Ukrainian is updated.
+- !!:Archive.DBArch: Documents and full translations is updated and released version 0.9.5.
+- !!:Archive.FSArch: Documents and full translations is updated and released version 1.5.0.
+- !!:DB.FireBird: Documents and full translations is updated and released version 0.9.7.
+- !!:DB.MySQL: Documents and full translations is updated and released version 1.7.1.
+- !!:DB.PostgreSQL: Documents and full translations is updated and released version 0.9.2.
+- !!:DB.SQLite: Documents and full translations is updated and released version 1.6.4.
+- !!:DAQ.BFN: Documents and full translations is updated and released version 0.5.1.
+- !!:DAQ.BlockCalc: Documents and full translations is updated and released version 1.5.0.
+- !!:DAQ.DAQGate: Documents and full translations is updated and released version 0.9.5.
+- !!:DAQ.DCON: Documents and full translations is updated and released version 0.5.1.
+- !!:DAQ.DiamondBoards: Documents and full translations is updated and released version 1.2.5.
+- !!:DAQ.ICP_DAS: Documents and full translations is updated and released version 0.8.0.
+- !!:DAQ.JavaLikeCalc: Documents and full translations is updated and released version 1.9.5.
+- !!:DAQ.LogicLev: Documents and full translations is updated and released version 1.2.0.
+- !!:DAQ.ModBus: Documents and full translations is updated and released version 1.2.0.
+- !!:DAQ.OPC_UA: Documents and full translations is updated and released version 0.6.2.
+- !!:DAQ.SNMP: Documents and full translations is updated and released version 0.6.1.
+- !!:DAQ.Siemens: Documents and full translations is updated and released version 1.3.0.
+- !!:DAQ.System: Documents and full translations is updated and released version 1.7.5.
+- !!:Protocol.ModBus: Documents and full translations is updated and released version 0.6.3.
+- !!:Protocol.OPC_UA: Documents and full translations is updated and released version 0.6.2.
+- Archive: Display linked parameter's address for emty archive name is added.
+- UI.QTCfg: Follow to visibility of selected items of nodes tree is added.
+
+
 2011-11-20 Roman
 - UI.VCAEngine: Disabled builded to primitive "Document" generation on attribute "time" change if template "tmpl" empty
     for full dynamic documents.
@@ -632,7 +659,7 @@
 2011-06-14 Roman
 - !!:FIX:SYS: A time call schedule by cron is fixed to not-in-sync functions time() and clock_gettime(CLOCK_REALTIME,&sp_tm).
 - FIX:SYS: Not-in-terminate function sleep() is replaced by usleep() everywhere.
-- !!:DAQ.LogicLev, DAQ.Siemens, DAQ.ModBus: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
+- !!:DAQ.LogicLev, DAQ.Siemens, DAQ.ModBus: Set pass time to "f_frq" after calls, by negative seconds, for cron schedule.
     Start and stop calc is added for enable/disable parameter of the run controller.
 
 
@@ -2920,7 +2947,7 @@
 
 
 2009-06-05 Roman
-- !:/SYS: Programm's work version is changed to 0.6.3.3.
+- !:/SYS: Program's work version is changed to 0.6.3.3.
 - !!!!:/Archives, /DAQS: The subsystems' modules API version rise to 3.
 - !!:/Archive/DBArch: Documents is updated and released version 0.8.0.
 - !!:/Archive/FSArch: Documents is updated and released version 1.3.0.
@@ -3320,7 +3347,7 @@
 2009-03-10 Roman
 - !!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: Attributes index for base widgets is reordered.
 - /UI/VCAEngine,/UI/Vision: Not realised primitives Function and Link is disabled.
-- !:/SYS: Programm version is changed to 0.6.3.2.
+- !:/SYS: Program version is changed to 0.6.3.2.
 - /SYS: Set hard depend to bison.
 - /SYS: To RPM-build specification file is added ALTLinux build depend to libportaudio2-devel
 - FIX:/SYS: Removed broken build parameter --disable-gcc-warnings.

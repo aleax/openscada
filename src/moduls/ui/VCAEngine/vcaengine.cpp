@@ -281,7 +281,7 @@ void Engine::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file and DB
+    //> Load parameters from config-file and DB
     setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
 
@@ -757,7 +757,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    //>> User permission check
 	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
 	    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()))
-		throw TError(nodePath().c_str(),_("Connection to session is not permited for '%s'."),opt->attr("user").c_str());
+		throw TError(nodePath().c_str(),_("Connection to session is not permitted for '%s'."),opt->attr("user").c_str());
 	    //>> Connect to present session
 	    if(!sess.empty())	sesAt(sess).at().connect();
 	    //>> Create session

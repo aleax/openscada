@@ -68,7 +68,7 @@ void TProtocolS::load_()
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 
 }
 

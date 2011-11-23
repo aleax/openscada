@@ -35,7 +35,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.6.3"
+#define MOD_VER		"1.6.4"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -91,7 +91,7 @@ void BDMod::load_( )
 {
     //> Load parameters from command line
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 
 }
 
@@ -264,7 +264,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 		      "               Use empty path for a private, temporary on-disk database create.\n"
 		      "               Use \":memory:\" for a private, temporary in-memory database create."));
 	if(reqCnt)
-	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close openned transaction"),RWRWRW,"root",SDB_ID);
+	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
 	return;
     }
     //> Process command to page
@@ -568,7 +568,7 @@ void MTable::fieldDel( TConfig &cfg )
     catch( TError err )
     {
 	if( (err.cod-100) == SQLITE_READONLY )
-	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion is not permited. Data base is read only."));
+	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion is not permitted. Data base is read only."));
 	throw;
     }
 }

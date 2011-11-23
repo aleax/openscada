@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2009-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.7.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:08+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
@@ -24,7 +23,7 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 "
+"Allow realization of ICP DAS hardware support. Include I87000 and I-7000 "
 "DCON modules and I-8000 fast modules."
 msgstr ""
 "Надає реалізацію підтримки обладнання ICP DAS. Включаючи I-87000 та I-7000 "
@@ -37,7 +36,7 @@ msgid "Gather data period (s)"
 msgstr "Період збору даних (с)"
 
 msgid "Gather task priority"
-msgstr "Рівень пріорітету задачі збору даних"
+msgstr "Рівень пріоритету задачі збору даних"
 
 msgid "Bus"
 msgstr "Шина"
@@ -63,7 +62,7 @@ msgstr "Адреса модуля"
 msgid "Module slot"
 msgstr "Слот модуля"
 
-msgid "Module addon parameters"
+msgid "Module addition parameters"
 msgstr "Додаткові параметри модуля"
 
 msgid "Call now. "
@@ -126,12 +125,12 @@ msgstr "11:Помилка у відповіді модуля."
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."
 
 #, c-format
 msgid "Write value to attribute '%s' error: %s"
-msgstr "Пимилка запису значення у атрибут '%s': %s"
+msgstr "Помилка запису значення до атрибуту '%s': %s"
 
 msgid "Configuration"
 msgstr "Конфігурація"
@@ -167,13 +166,13 @@ msgstr "Стан хостового сторожового таймеру"
 msgid "Power on values"
 msgstr "Значення при включені"
 
-msgid "Set power on values from curent"
+msgid "Set power on values from current"
 msgstr "Встановити значення при включені у поточні"
 
 msgid "Safe values"
 msgstr "Безпечні значення"
 
-msgid "Set safe values from curent"
+msgid "Set safe values from current"
 msgstr "Встановити безпечні значення у поточні"
 
 msgid "Out reverse"

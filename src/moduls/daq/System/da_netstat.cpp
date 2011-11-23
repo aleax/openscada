@@ -50,7 +50,7 @@ void NetStat::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
 
-    //- Create Config -
+    //> Create Configuration
     c_subt.fld().setDescr(_("Interface"));
 
     vector<string> list;

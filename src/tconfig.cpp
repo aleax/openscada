@@ -275,7 +275,7 @@ int &TCfg::getId( )
 
 bool &TCfg::getBd( )
 {
-    if(mFld->type() != TFld::Boolean)	throw TError("Cfg",_("Element type is not boolean!"));
+    if(mFld->type() != TFld::Boolean)	throw TError("Cfg",_("Element type is not Boolean!"));
     return m_val.b_val;
 }
 

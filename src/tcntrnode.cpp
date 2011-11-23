@@ -207,7 +207,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	    {
 		if(!TSYS::finalKill)
 		    throw TError(nodePath().c_str(),_("Timeouted of wait. Object is used by %d users. Free object first!"),mUse);
-		mess_err(nodePath().c_str(),_("Blocking node error. Inform developpers please!"));
+		mess_err(nodePath().c_str(),_("Blocking node error. Inform developers please!"));
 		break;
 	    }
 	    usleep(STD_WAIT_DELAY*1000);
@@ -344,7 +344,7 @@ int8_t TCntrNode::grpId( const string &sid )
 
 TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
 {
-    if( iid < 0 || iid >= grpSize( ) )	throw TError(nodePath().c_str(),_("Branche group '%d' error."),iid);
+    if( iid < 0 || iid >= grpSize( ) )	throw TError(nodePath().c_str(),_("Branch group '%d' error."),iid);
     return (*chGrp)[iid];
 }
 
@@ -433,7 +433,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     ResAlloc res(hd_res,false);
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if(!(nodeMode() == Enable || nodeMode() == Disable))
-        throw TError(nodePath().c_str(),_("Node is beign processed now!"));
+        throw TError(nodePath().c_str(),_("Node is begin processed now!"));
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name);
     if(p == (*chGrp)[igr].elem.end())

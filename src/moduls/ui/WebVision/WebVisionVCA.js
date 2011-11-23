@@ -611,7 +611,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
     if( this.pg )
     {
       elStyle+='background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
-      this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permited.</div>";
+      this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permitted.</div>";
     }
   }
   else if( this.attrs['root'] == 'ElFigure' )

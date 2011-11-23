@@ -7,21 +7,21 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:42+0300\n"
+"POT-Creation-Date: 2011-11-22 11:48+0200\n"
 "PO-Revision-Date: 2011-07-19 20:40+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 msgid "BFN module"
-msgstr "BFN Modul"
+msgstr "BFN Module"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
@@ -40,7 +40,7 @@ msgid "Gather task priority"
 msgstr "Niveau der Priorität der Datenempfangaufgabe"
 
 msgid "Sync inter remote station period (s)"
-msgstr "Periode der Sznchronisierung mit der entfernten Station (sek)"
+msgstr "Periode der Synchronisieren mit der entfernten Station (sek)"
 
 msgid "Transport address"
 msgstr "Adresse des Transports"
@@ -56,7 +56,7 @@ msgstr "Standard"
 
 #, c-format
 msgid "Code %s"
-msgstr "Kode %s"
+msgstr "Code %s"
 
 msgid "Symbols"
 msgstr "Symbole"
@@ -65,7 +65,7 @@ msgid "Symbols DB"
 msgstr "Symbole DB"
 
 msgid "Codes"
-msgstr "Koden"
+msgstr "Codes"
 
 msgid "Id"
 msgstr "Id"
@@ -77,7 +77,7 @@ msgid "Alarms"
 msgstr "Alarme"
 
 msgid "Code"
-msgstr "Kode"
+msgstr "Code"
 
 msgid "New symbol for code"
 msgstr "Neues Symbol für die Code"
@@ -94,7 +94,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -121,8 +121,8 @@ msgstr "STOP"
 msgid "Connect to transport '%s' error."
 msgstr "Verbinden Sie den Transport '%s' Fehler."
 
-msgid "Respond parsing error. Possible respond incomplite."
-msgstr "Reagieren Parsing-Fehler. Mögliche reagieren incomplite."
+msgid "Respond parsing error. Possible respond incomplete."
+msgstr "Reagieren Parsing-Fehler. Mögliche reagieren unvollständig."
 
 #, c-format
 msgid "Unknown alarm '%s'."
@@ -143,5 +143,5 @@ msgstr "OK"
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter abgeschaltet."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Befragung ist gestoppt."

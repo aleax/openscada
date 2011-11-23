@@ -38,7 +38,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.9.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries.")
 #define LICENSE		"GPL2"
@@ -94,9 +94,9 @@ void TipContr::postEnable( int flag )
     //> Controller db structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system") );
     fldAdd( new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40") );
-    fldAdd( new TFld("SCHEDULE",_("Calc schedule"),TFld::String,TFld::NoFlag,"100","1") );
-    fldAdd( new TFld("PRIOR",_("Calc task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
-    fldAdd( new TFld("ITER",_("Iteration number in single calc"),TFld::Integer,TFld::NoFlag,"2","1","1;99") );
+    fldAdd( new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1") );
+    fldAdd( new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
+    fldAdd( new TFld("ITER",_("Iteration number in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99") );
 
     //> Controller value db structure
     val_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
@@ -117,7 +117,7 @@ void TipContr::postEnable( int flag )
     fnc_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
     fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
-    fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calc time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
+    fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
     fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"10000") );
 
     //> Function's IO structure
@@ -420,7 +420,7 @@ void Contr::enable_( )
     catch(TError err)
     {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Load function and its io error."));
+	mess_warning(nodePath().c_str(),_("Load function and its IO error."));
     }
 }
 
@@ -551,7 +551,7 @@ void *Contr::Task( void *icntr )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
-		    mess_err(cntr.nodePath().c_str(),_("Calc controller's function error."));
+		    mess_err(cntr.nodePath().c_str(),_("Calculation controller's function error."));
 		}
 	    t_prev = t_cnt;
             cntr.tm_calc = TSYS::curTime()-t_cnt;
@@ -622,7 +622,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calcing")))
+	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15"))
 	    {
@@ -636,7 +636,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Input;Output;Return"));
 		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Programm"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }
@@ -881,7 +881,7 @@ void Prm::vlGet( TVal &val )
 {
     if( val.name() == "err" )
     {
-	if( !owner().startStat() )	val.setS(_("2:Controller is stoped"),0,true);
+	if( !owner().startStat() )	val.setS(_("2:Controller is stopped"),0,true);
 	else if( !enableStat() )	val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
@@ -927,7 +927,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
 	    "Where:\n"
-	    "  io - calc function's IO;\n"
+	    "  io - calculation function's IO;\n"
 	    "  aid - created attribute identifier;\n"
 	    "  anm - created attribute name.\n"
 	    "If 'aid' or 'anm' are not set they will be generated from selected function's IO."));

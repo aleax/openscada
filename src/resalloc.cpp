@@ -35,7 +35,7 @@ Res::Res( )
     wThr = 0;
 #endif
     if(pthread_rwlock_init(&rwc,NULL))
-	throw TError("ResAlloc",_("Error open semaphor!"));
+	throw TError("ResAlloc",_("Error open semaphore!"));
 }
 
 Res::~Res( )

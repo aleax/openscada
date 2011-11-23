@@ -584,7 +584,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
 		ctrRemoveNode(opt,"/up/cfg/PROG");

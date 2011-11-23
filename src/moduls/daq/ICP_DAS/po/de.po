@@ -6,10 +6,9 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.7.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:08+0300\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
@@ -29,7 +28,7 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 "
+"Allow realization of ICP DAS hardware support. Include I87000 and I-7000 "
 "DCON modules and I-8000 fast modules."
 msgstr ""
 "Lassen Realisierung von ICP DAS Hardware-Unterstützung. Einschließen I87000 "
@@ -68,7 +67,7 @@ msgstr "Adresse des Moduls"
 msgid "Module slot"
 msgstr "Slot des Moduls"
 
-msgid "Module addon parameters"
+msgid "Module addition parameters"
 msgstr "Zusätzliche Parameter des Moduls"
 
 msgid "Call now. "
@@ -131,7 +130,7 @@ msgstr "11:Fehler in der Antwort des Moduls."
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Erfassung ist angehalten."
 
 #, c-format
@@ -167,23 +166,23 @@ msgid "Module"
 msgstr "Modul"
 
 msgid "Host watchdog status"
-msgstr "Zustand des  Hostwatchdogs"
+msgstr "Zustand des Hostwatchdogs"
 
 msgid "Power on values"
 msgstr "Werte beim Einschalten der Speisung"
 
-msgid "Set power on values from curent"
+msgid "Set power on values from current"
 msgstr ""
 "Wiederherstellung der Werte  beim Einschalten der Speisung aus den laufenden"
 
 msgid "Safe values"
 msgstr "Sichere Werte"
 
-msgid "Set safe values from curent"
+msgid "Set safe values from current"
 msgstr "Wiederherstellung der sicheren Werte aus den laufenden"
 
 msgid "Out reverse"
-msgstr "Inversion des Eingangs"
+msgstr "Umgekehrt des Eingangs"
 
 msgid "-10V to +10V"
 msgstr "-10В bis +10В"
@@ -198,7 +197,7 @@ msgid "-1.25V to +1.25V"
 msgstr "-1.25В bis +1.25B"
 
 msgid "-20mA to +20mA (with 125 ohms resistor)"
-msgstr "-20мА bis +20мА (mit dem Resister 125 Ом)"
+msgstr "-20мА bis +20мА (mit dem Resistor 125 Ом)"
 
 msgid "Error"
 msgstr "Fehler"

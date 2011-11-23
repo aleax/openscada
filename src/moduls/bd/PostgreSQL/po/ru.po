@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.1\n"
+"Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 17:04+0300\n"
 "PO-Revision-Date: 2010-07-30 09:10+0300\n"
@@ -41,10 +40,10 @@ msgstr "Ошибка запроса к БД: %s. %s"
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Ошибка открытия таблицы <%s>. БД отключена."
 
-msgid "Start trasaction error!"
+msgid "Start transaction error!"
 msgstr "Ошибка запуска транзакции!"
 
-msgid "Stop trasaction error!"
+msgid "Stop transaction error!"
 msgstr "Ошибка останова транзакции!"
 
 msgid ""

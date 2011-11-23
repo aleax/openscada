@@ -105,7 +105,7 @@ class VFileArch
 
 	//> Base parameters
 	string	mName;		// Name Archive file
-	int	mSize;		// Arhive size
+	int	mSize;		// Archive size
 	TFld::Type mTp;		// Value typ
 	int64_t	mBeg;		// Begin of archive file
 	int64_t	mEnd;		// End of archive file
@@ -231,7 +231,7 @@ class ModVArch: public TVArchivator
 
 	double	time_size;			// number hours into one file
 	unsigned mNumbFiles;			// number of Archive files
-	double	round_proc;			// numberic values rounding procent (0-50)
+	double	round_proc;			// numeric values rounding procent (0-50)
 	int	mChkTm;				// period of check the archive files directory;
 	int	mPackTm;			// pack the archive files timeout
 	bool	mPackInfoFiles;			// use info files for packed archives

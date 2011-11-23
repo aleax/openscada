@@ -6,10 +6,9 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.3\n"
+"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-21 16:39+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
@@ -67,8 +66,8 @@ msgstr ""
 "               Verwenden Sie \":memory:\" für eine private, temporäre In-"
 "Memory-Datenbank zu erstellen."
 
-msgid "Close openned transaction"
-msgstr "Geöffnete Transaktion schliessen"
+msgid "Close opened transaction"
+msgstr "Geöffnete Transaktion schlissen"
 
 msgid "Table is empty."
 msgstr "Tabelle ist leer."
@@ -76,5 +75,5 @@ msgstr "Tabelle ist leer."
 msgid "Row is not present."
 msgstr "Datensatz ist nicht vorhanden."
 
-msgid "Deletion is not permited. Data base is read only."
+msgid "Deletion is not permitted. Data base is read only."
 msgstr "Das Löschen ist nicht erlaubt. Die Datenbank kann nur gelesen werden."

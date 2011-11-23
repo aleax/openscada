@@ -150,7 +150,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 	if( !SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg) ) continue;
 	//> Value
 	setS(i_ln,cfg.cfg("VAL").getS());
-	//> Config of link
+	//> Configuration of link
 	setLink( i_ln, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS() );
     }
 }
@@ -514,7 +514,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		if(owner().startStat())
 		    ctrMkNode("fld",opt,-1,"/blck/st/prc",_("Process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/blck/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/blck/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/blck/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
@@ -522,7 +522,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/prior",_("Prior block"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed","select","/blck/cfg/blks",
-		    "help",_("Priority block(s) calced before this block. Blocks list is separated by symbol ';'."));
+		    "help",_("Priority block(s) calculate before this block. Blocks list is separated by symbol ';'."));
 		ctrMkNode("fld",opt,-1,"/blck/cfg/func",_("Function"),(!func())?RWRWR_:R_R_R_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
 		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",_("Go to function"),wFunc().empty()?0:RWRW__,"root",SDAQ_ID,1,"tp","lnk");
 	    }

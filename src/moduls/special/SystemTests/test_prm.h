@@ -80,7 +80,7 @@ class TestPrm : public TFunction
 		}
 
 		prm.at().cfgList(list_el);
-		mod->mess(id(),_("Config fields: %d"),list_el.size());
+		mod->mess(id(),_("Configuration fields: %d"),list_el.size());
 		for(unsigned i = 0; i < list_el.size(); i++)
 		{
 		    if( prm.at().cfg(list_el[i]).fld().flg()&TFld::Selected )

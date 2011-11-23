@@ -42,7 +42,7 @@ namespace Virtual
 
 //*************************************************
 //* Prm: parameters for access to data            *
-//*      of calced blocks                         *
+//*      of calculate blocks                      *
 //************************************************* 
 class Contr;
 

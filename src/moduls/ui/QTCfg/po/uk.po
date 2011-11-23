@@ -228,13 +228,13 @@ msgstr ""
 msgid "&About"
 msgstr "&Про ..."
 
-msgid "Programm and OpenSCADA information"
+msgid "Program and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-msgid "The button for display programm and OpenSCADA information"
+msgid "The button for display program and OpenSCADA information"
 msgstr "Кнопка для відображення інформації про програму та OpenSCADA"
 
-msgid "Press to display programm and OpenSCADA information"
+msgid "Press to display program and OpenSCADA information"
 msgstr "Натиснути для відображення інформації про програму та OpenSCADA"
 
 msgid "About &Qt"
@@ -276,7 +276,7 @@ msgstr "&Допомога"
 msgid "OpenSCADA toolbar"
 msgstr "OpenSCADA тулбар"
 
-msgid "This label displays curent user."
+msgid "This label displays current user."
 msgstr "Ця мітка відображає поточного користувача."
 
 msgid "Field for display of the current user."
@@ -622,7 +622,7 @@ msgstr "Надає базований на QT конфігуратор сист�
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
+"---------- Parameters of the module section <%s> in config-file ----------\n"
 "StartPath  <path>    Configurator start path.\n"
 "StartUser  <user>    No password requested start user.\n"
 "\n"

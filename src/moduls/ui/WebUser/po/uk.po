@@ -125,7 +125,7 @@ msgstr "Включено"
 msgid "DB"
 msgstr "БД"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфігурація"
 
 msgid "Program language"

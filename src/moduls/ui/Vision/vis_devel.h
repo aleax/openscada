@@ -86,7 +86,7 @@ class VisDevelop : public QMainWindow
 
 	void quitSt( );		//Full quit OpenSCADA
 
-	void about( );		//About at programm
+	void about( );		//About at program
 	void aboutQt( );	//About at QT library
 	void enterWhatsThis( );	//What is GUI components
 	void updateMenuWindow();//Generate menu "Windows"

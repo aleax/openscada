@@ -157,9 +157,9 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
-    actAbout->setToolTip(_("Programm and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button for display the programm and OpenSCADA information"));
-    actAbout->setStatusTip(_("Press for display the programm and OpenSCADA information."));
+    actAbout->setToolTip(_("Program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button for display the program and OpenSCADA information"));
+    actAbout->setStatusTip(_("Press for display the program and OpenSCADA information."));
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     //>>> About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
@@ -245,10 +245,10 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     mWTime = new QLabel( this );
     mWTime->setVisible(false);
     mWTime->setAlignment(Qt::AlignCenter);
-    mWTime->setWhatsThis(_("This label displays curent system's time."));
+    mWTime->setWhatsThis(_("This label displays current system's time."));
     statusBar()->insertPermanentWidget(0,mWTime);
     mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
-    mWUser->setWhatsThis(_("This label displays curent user."));
+    mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display of the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
     connect( mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)) );
@@ -906,7 +906,7 @@ void VisRun::about()
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 {
-    //> Try second connect to session for permition check
+    //> Try second connect to session for permission check
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     if( cntrIfCmd(req) )
@@ -1084,7 +1084,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //>> Get project's name
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fname");
     if( !cntrIfCmd(req) )	setWindowTitle(req.text().c_str());
-    else setWindowTitle(QString(_("Runing project: %1")).arg(src_prj.c_str()));
+    else setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));
 
     //> Set project's icon to window
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fico");

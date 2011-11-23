@@ -114,7 +114,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
 
-    //> Config parameters
+    //> Configuration parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
@@ -885,7 +885,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
 
-    //>> Config parameters
+    //>> Configuration parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
@@ -990,7 +990,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_attr_cfg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
     QStringList headLabels;
-    headLabels << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc") << _("Config") << _("Config template");
+    headLabels << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc") << _("Configuration") << _("Configuration template");
     obj_attr_cfg->setHeaderLabels(headLabels);
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 
@@ -1359,7 +1359,7 @@ void VisItProp::tabChanged( int itb )
 		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(i_l)->text().c_str());
 		}
 	    }
-	    //>>> Load types and configs
+	    //>>> Load types and configurations
 	    QStringList	atypes;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/tp_ls",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )

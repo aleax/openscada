@@ -5,10 +5,9 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:13+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "X-Generator: Lokalize 1.0\n"
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Parametertabelle"
 
 msgid "Acquisition schedule"
@@ -76,7 +75,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -132,10 +131,10 @@ msgid "ReferenceType"
 msgstr "Typ der Verweisung"
 
 msgid "DataType"
-msgstr "Datentyp"
+msgstr "DatenTyp"
 
 msgid "View"
-msgstr "Typ"
+msgstr "Form"
 
 msgid "BrowseName"
 msgstr "ÜbersichtsName"
@@ -179,13 +178,13 @@ msgstr "ZugangsNiveau"
 msgid "Readable, "
 msgstr "Lesen, "
 
-msgid "Writible, "
+msgid "Writable, "
 msgstr "Einschreiben, "
 
 msgid "History readable, "
 msgstr "LesenDesArchivs, "
 
-msgid "History writible, "
+msgid "History writable, "
 msgstr "EinschreibungDesArchivs, "
 
 msgid "Semantic change, "
@@ -209,7 +208,7 @@ msgstr "AusgeübterNutzer"
 msgid ""
 "Variables and it containers (Objects) list. All variables will put into the "
 "parameter attributes list.\n"
-"Variables writed by separated lines into format: [ns:id].\n"
+"Variables wrote by separated lines into format: [ns:id].\n"
 "Where:\n"
 "  ns - names scope, number, zero value can missed;\n"
 "  id - node identifier, number, string, bytes string and GUID.\n"
@@ -238,7 +237,7 @@ msgstr ""
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter abgeschaltet."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Befragung ist gestoppt."
 
 #, c-format
@@ -255,10 +254,10 @@ msgid "To enable"
 msgstr "Einschalten"
 
 msgid "Serializer type"
-msgstr "Kodierungstyp"
+msgstr "KodierungsTyp"
 
 msgid "Binary"
-msgstr "binär"
+msgstr "Binär"
 
 msgid "URL"
 msgstr "URL"
@@ -275,19 +274,19 @@ msgstr "Privatschlüssel des Servers (PEM)"
 msgid "Search and create new server error."
 msgstr "Fehler der Suche und der Schaffung des neuen Servers."
 
-msgid "Respond size is not coincedence."
+msgid "Respond size is not coincidence."
 msgstr "Nicht übereinstimmender Umfang der Antwort."
 
 msgid "Respond don't acknowledge."
 msgstr "Nichtübereinstimmung der Antwort."
 
 msgid "Not full respond."
-msgstr ""
+msgstr "Teilantwort"
 
 msgid "Client certificate thumbprint error."
 msgstr "Fehler des Stempels des Zertifikats des Kunden."
 
-msgid "Respond's NodeId don't acknowledge"
+msgid "Respond NodeId don't acknowledge"
 msgstr "Nichtübereinstimmumg NodeId der Antwort"
 
 msgid "Signature error"
@@ -319,7 +318,7 @@ msgstr "Fehler im Umfang '%d' de Zahl."
 
 #, c-format
 msgid "Real number size '%d' error."
-msgstr "Fehler im Umfang '%d' der reelen Zahl."
+msgstr "Fehler im Umfang '%d' der reellen Zahl."
 
 msgid "Buffer size is less for requested string."
 msgstr "Buffersumfang ist kleiner als die gefragte Zeile."
@@ -329,14 +328,14 @@ msgstr "Buffersumfang ist kleiner als der gefragte NodeId."
 
 #, c-format
 msgid "NodeId type %d error or don't support."
-msgstr "Fehler oder der NodeId %d Typ wird nicht unterstüzt."
+msgstr "Fehler oder der NodeId %d Typ wird nicht unterstützt."
 
 #, c-format
 msgid "Data type '%d' isn't supported."
-msgstr "Datentyp '%d' wird nicht unterstüzt."
+msgstr "Datentyp '%d' wird nicht unterstützt."
 
 msgid "ArrayDimensions field don't supported now."
-msgstr "Feld DimensionMassiv nicht unterestüzt jetzt."
+msgstr "Feld DimensionMassiv nicht unterstützt jetzt."
 
 #, c-format
 msgid "randBytes error: %s"
@@ -391,11 +390,11 @@ msgstr "Sicherheitskanal ist geschlossen"
 
 #, c-format
 msgid "No supported userIdentityToken '%d'."
-msgstr "userIdentityToken '%d' wird nicht unterstüzt."
+msgstr "userIdentityToken '%d' wird nicht unterstützt."
 
 #, c-format
 msgid "No supported request id '%d'."
-msgstr "Anfrage '%d' wird nicht unterstüzt."
+msgstr "Anfrage '%d' wird nicht unterstützt."
 
 #, c-format
 msgid "Security setting %d error."
@@ -434,7 +433,7 @@ msgstr "Eingeschaltet"
 msgid "DB"
 msgstr "DB"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Policy"
@@ -443,7 +442,7 @@ msgstr "Politik"
 msgid "Message mode"
 msgstr "Regime der Nachricht"
 
-msgid "No present seleted row."
+msgid "No present selected row."
 msgstr "Gewählte Zeile fehlt."
 
 msgid "OPC UA"
@@ -452,8 +451,8 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow realisation of OPC UA client service."
+msgid "Allow realization of OPC UA client service."
 msgstr "Gewährt die Realisierung des Kundenservices OPC UA."
 
-msgid "Allow realisation of OPC UA protocol."
+msgid "Allow realization of OPC UA protocol."
 msgstr "Gewährt die Realisierung OPC UA des Protokolls."

@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.Archive.FSArch 1.4.5\n"
+"Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-19 15:40+0300\n"
+"POT-Creation-Date: 2011-11-22 09:43+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -24,8 +23,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"The Archive module. Allow functions for messages and values arhiving to file "
-"system."
+"The Archive module. Allow functions for messages and values archiving to "
+"file system."
 msgstr ""
 "Модуль архіву. Надає функції архівації повідомлень та значень на файлову "
 "систему."
@@ -50,7 +49,7 @@ msgid ""
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
 "    --noArchLimit        Вимкнути обмеження на кількість файлів.\n"
-"                         Використовуйте для режиму перегляда архівів, не для "
+"                         Використовуйте для режиму перегляду архівів, не для "
 "роботи.\n"
 "    --copyErrValFiles    Копіювання вихідних помилкових файлів архіву "
 "значень до відновлення.\n"
@@ -59,7 +58,7 @@ msgstr ""
 "\n"
 
 msgid "Check archives thread is not stopped!"
-msgstr "Поток перевірки архівів не зупинено!"
+msgstr "Нитку перевірки архівів не зупинено!"
 
 #, c-format
 msgid "Check message archivator '%s' error."
@@ -77,8 +76,8 @@ msgid "Error create new archive file '%s'!"
 msgstr "Помилка створення нового архівного файлу '%s'!"
 
 #, c-format
-msgid "Can not create dir '%s'."
-msgstr "Неможу створити директорію '%s'."
+msgid "Can not create directory '%s'."
+msgstr "Не можу створити директорію '%s'."
 
 msgid "Archivator files size"
 msgstr "Розмір файлів архіватору"
@@ -111,7 +110,7 @@ msgid "Check archives period (min)"
 msgstr "Період перевірки архівів (хвил)"
 
 msgid "Use info files for packed archives"
-msgstr "Використовувати інф. файли для пакованих архівів"
+msgstr "Використовувати інф. файли для упакованих архівів"
 
 msgid "Prevent duplicates"
 msgstr "Запобігати дублікатам"
@@ -121,7 +120,7 @@ msgstr "Перевірити директорію архіватору зара�
 
 #, c-format
 msgid "Can not create file: '%s'!"
-msgstr "Неможу створити файл: '%s'!"
+msgstr "Не можу створити файл: '%s'!"
 
 #, c-format
 msgid "Write to file error: %s"
@@ -144,13 +143,13 @@ msgstr "Вставлення повідомлення до архівного ф
 
 #, c-format
 msgid "Archive file '%s' isn't attached!"
-msgstr "Файл архіву '%s' не підєднано!"
+msgstr "Файл архіву '%s' не під'єднано!"
 
 msgid "Getting messages from an error Archive file!"
-msgstr "Отримання повідомлень з файлу архіва з помилкою!"
+msgstr "Отримання повідомлень з файлу архіву з помилкою!"
 
 msgid "Archive file isn't attached!"
-msgstr "Файл архіву не підєднано!"
+msgstr "Файл архіву не під'єднано!"
 
 #, c-format
 msgid "Unpack '%s' for information get."
@@ -165,7 +164,7 @@ msgstr "Шлях до директорії для файлів архівато�
 msgid "File's time size (hours)"
 msgstr "Розмір файлу (годин)"
 
-msgid "Numberic values rounding (%)"
+msgid "Numeric values rounding (%)"
 msgstr "Округлення числових значень (%)"
 
 msgid "Files size"
@@ -190,7 +189,7 @@ msgid "To file"
 msgstr "До файлу"
 
 #, c-format
-msgid "Archive file '%s' no openned!"
+msgid "Archive file '%s' no opened!"
 msgstr "Файл архіву '%s' не відкрито!"
 
 #, c-format
@@ -199,6 +198,13 @@ msgstr "Помилка під'єднання файлу '%s'."
 
 msgid "Archive file error!"
 msgstr "Помилка у файлі архіву!"
+
+#, c-format
+msgid ""
+"Write data block to archive file '%s' error. Will structure break. mSize=%d, "
+"foff_end=%d, vSize=%d"
+msgstr ""
+"Помилка запису блока до файлу архіву '%s'. Структуру буде зламано. mSize=%d, foff_end=%d, vSize=%d"
 
 #, c-format
 msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"

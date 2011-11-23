@@ -159,9 +159,9 @@ class TTipArchivator: public TModule
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	virtual TMArchivator *AMess( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),_("Message arhiv no support!")); }
+	{ throw TError(nodePath().c_str(),_("Message archive no support!")); }
 	virtual TVArchivator *AVal( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),_("Value arhiv no support!")); }
+	{ throw TError(nodePath().c_str(),_("Value archive no support!")); }
 
     private:
 	//Private attributes
@@ -245,7 +245,7 @@ class TArchiveS : public TSubSYS
 
 	//> Messages archiving
 	char	bufErr;			//Buffer error
-	int	mMessPer;		//Message arhiving period
+	int	mMessPer;		//Message archiving period
 	timer_t	tmIdMess;		//Messages timer
 	bool	prcStMess;		//Process messages flag
 	//> Messages buffer
@@ -257,7 +257,7 @@ class TArchiveS : public TSubSYS
 
 	//> Value archiving
 	Res	vRes;			//Value access resource
-	int	mValPer;		//Value arhiving period
+	int	mValPer;		//Value archiving period
 	int	mValPrior;		//Value archive task priority
 	bool	prcStVal;		//Process value flag
 	bool	endrunReqVal;		//Endrun value request

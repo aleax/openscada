@@ -76,8 +76,8 @@ namespace VISION
 
 	private:
 	    //Attributes
-	    char	mPermCntr :1;	//Control widget's permition
-	    char	mPermView :1;	//View widget's permition
+	    char	mPermCntr :1;	//Control widget's permission
+	    char	mPermView :1;	//View widget's permission
     };
 
     //*********************************************

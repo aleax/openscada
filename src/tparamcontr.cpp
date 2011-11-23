@@ -162,7 +162,7 @@ void TParamContr::vlGet( TVal &val )
     if( val.name() == "err" )
     {
 	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
-	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stoped."),0,true);
+	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
     }
 }
@@ -193,7 +193,7 @@ void TParamContr::setType( const string &tpId )
 	tipparm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
 	setElem(tipparm);
 
-	//> Restore configs
+	//> Restore configurations
 	*(TConfig*)this = tCfg;
     }catch(...) { }
 
@@ -206,7 +206,7 @@ void TParamContr::setType( const string &tpId )
 
 TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -231,12 +231,12 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    {
 		if(!enableStat() && owner().owner().tpPrmSize() > 1)
 		    ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/prm/tpLst",
-			"help",_("Change type lead to data lost for specific configs."));
+			"help",_("Change type lead to data lost for specific configurations."));
 		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		if(owner().enableStat())
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDAQ_ID,RWRWR_);
 	}
         return;

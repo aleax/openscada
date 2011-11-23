@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-28 15:21+0300\n"
+"POT-Creation-Date: 2011-11-21 11:32+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -21,14 +21,14 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Error open semaphor!"
+msgid "Error open semaphore!"
 msgstr "Fehler beim Öffnen des Semaphors!"
 
 msgid "Resource is try deadlock a thread!"
-msgstr "Die Resource versucht den toten Block in den Strom einzusetzen"
+msgstr "Die Ressource versucht den toten Block in den Strom einzusetzen"
 
 msgid "Resource is timeouted!"
-msgstr "Wartezeit der resource ist aus"
+msgstr "Wartezeit der Ressource ist aus"
 
 msgid "ID"
 msgstr ""
@@ -75,10 +75,10 @@ msgstr "Zeitintervall für Speicherung (Sek)"
 msgid "Buffer size (items)"
 msgstr "Speichergrösse (Einheiten)"
 
-msgid "Buffer hard time griding"
+msgid "Buffer in hard time grid"
 msgstr "Raster der Pufferzeit"
 
-msgid "Buffer high time resolution"
+msgid "Buffer in high time resolution"
 msgstr "Auflösung Pufferzeit"
 
 msgid "Process into archivators"
@@ -96,10 +96,10 @@ msgstr "Fehler beim Laden des Wertearchivs."
 #, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
-"------------ Parameters of section '%s' in config file -----------\n"
+"------------ Parameters of section '%s' in config-file -----------\n"
 "MessBufSize   <items>       Messages buffer size.\n"
-"MessPeriod    <sec>         Message arhiving period.\n"
-"ValPeriod     <msec>        Values arhiving period.\n"
+"MessPeriod    <sec>         Message archiving period.\n"
+"ValPeriod     <msec>        Values archiving period.\n"
 "ValPriority   <level>\t     Values task priority level.\n"
 "MaxReqMess    <items>       Maximum request messages.\n"
 "MaxReqVals    <items>       Maximum request values.\n"
@@ -153,10 +153,10 @@ msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 msgid "Buffer full. Messages lost!"
 msgstr "Der Speicher ist voll, Datenverlust!"
 
-msgid "Messagess buffer filling is too fast!"
+msgid "Messages buffer filling is too fast!"
 msgstr "Nachrichtenspeicher wird zu schnell gefüllt!"
 
-msgid "Message bufer read error."
+msgid "Message buffer read error."
 msgstr "Fehler beim Lesen des Nachrichtenspeichers."
 
 msgid "Value archive"
@@ -199,7 +199,7 @@ msgstr ""
 msgid "Level"
 msgstr "Stufe"
 
-msgid "Get messages for level more and equaly it."
+msgid "Get messages for level more and equal it."
 msgstr "Empfang von Nachrichten für gleiche und höhere Stufe"
 
 msgid "Archivator"
@@ -270,7 +270,7 @@ msgstr "Nachtrichtarchivar: "
 msgid "State"
 msgstr "Zustand"
 
-msgid "Runing"
+msgid "Running"
 msgstr "Aktiv"
 
 msgid "Archivator DB"
@@ -282,7 +282,7 @@ msgstr "Ende"
 msgid "Begin"
 msgstr "Beginn"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid ""
@@ -472,7 +472,7 @@ msgstr "Fehler beim Schliessen der Datenbank '%s'!"
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
-"----------- The config file station '%s' parameters -----------\n"
+"----------- The config-file station '%s' parameters -----------\n"
 "SYSStPref    <1>   Use station id prefix into generic (SYS) table.\n"
 "\n"
 msgstr ""
@@ -590,7 +590,7 @@ msgstr ""
 "Zeitüberschreitung ist aufgetreten. Objekt wird von %d Benutzern verwendet."
 "Zuerst Objekt freigeben!"
 
-msgid "Blocking node error. Inform developpers please!"
+msgid "Blocking node error. Inform developers please!"
 msgstr "Fehler beim Blockierung des Knotens. Informieren Sie die Entwickler!"
 
 msgid "Node disable error. Restore node enabling."
@@ -616,7 +616,7 @@ msgid "Destination node doesn't have necessary branche."
 msgstr "Der Zielknoten hat keine erforderliche Verzweigung."
 
 #, c-format
-msgid "Branche group '%d' error."
+msgid "Branch group '%d' error."
 msgstr "Fehler der Branchengruppe '%d'."
 
 #, c-format
@@ -633,7 +633,7 @@ msgstr "Der hinzugefügte Kindbezeichner ist leer!"
 msgid "Node '%s' is already present."
 msgstr "Der Knoten '%s' ist schon vorhanden."
 
-msgid "Node is beign processed now!"
+msgid "Node is begin processed now!"
 msgstr "Knoten wird jetzt bearbeitet!"
 
 #, c-format
@@ -697,7 +697,7 @@ msgstr "Elemententyp ist nicht Reele Zahl!"
 msgid "Element type is not int!"
 msgstr "Elemententyp ist nicht Ganzzahl!"
 
-msgid "Element type is not boolean!"
+msgid "Element type is not Boolean!"
 msgstr "Elemententyp ist nicht Logisch!"
 
 msgid "Element type is not selected!"
@@ -706,11 +706,11 @@ msgstr "Elemententyp ist nicht ausgewählt!"
 msgid "Started. "
 msgstr "Gestartet. "
 
-msgid "Geting data from remote station: "
+msgid "Getting data from remote station: "
 msgstr "Datenempfang von der entfernten Station"
 
 msgid ""
-"Your redundance configuration wrong and controller often enable-disable "
+"Your redundancy configuration wrong and controller often enable-disable "
 "redundancy!"
 msgstr ""
 
@@ -720,10 +720,10 @@ msgstr "Eingeschaltet"
 msgid "Disabled. "
 msgstr "Abgeschaltet"
 
-msgid "Load controller's configs!"
+msgid "Load controller's configurations!"
 msgstr "Konfiguration des Kontrollers laden!"
 
-msgid "Save controller's configs!"
+msgid "Save controller's configurations!"
 msgstr "Speichern der Kontrollerkonfiguration!"
 
 msgid "Start controller!"
@@ -783,10 +783,10 @@ msgstr "Parameter hinzufügen"
 msgid "Data acquisition"
 msgstr "Datenerfassung"
 
-msgid "Maximum calc time (sec)"
+msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
 
-msgid "Template programm"
+msgid "Template program"
 msgstr "Vorlagenprogramm"
 
 msgid "Template ID"
@@ -827,8 +827,8 @@ msgstr "Fehler beim Abschalten des Kontrollers '%s'."
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
-"------------ Parameters of section '%s' in config file -----------\n"
-"RdStLevel    <lev>  The curent station redundant level.\n"
+"------------ Parameters of section '%s' in config-file -----------\n"
+"RdStLevel    <lev>  The current station redundant level.\n"
 "RdTaskPer    <s>    The redundant task call period.\n"
 "RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
 "RdRestDtTm   <hour> Restore data archive depth from a reserve station after "
@@ -856,7 +856,7 @@ msgstr ""
 msgid "Template library"
 msgstr "Vorlagenbibliothek"
 
-msgid "Redundance"
+msgid "Redundancy"
 msgstr "Redundanz"
 
 msgid "Station level"
@@ -930,16 +930,16 @@ msgstr "Elementencontainer ist schon eingeschaltet!"
 msgid "Element '%s' is not present!"
 msgstr "Element '%s' ist nicht vorhanden!"
 
-msgid "Field is not string."
+msgid "Field is not String."
 msgstr "Feld ist kein Text."
 
-msgid "Field is not integer."
+msgid "Field is not Integer."
 msgstr "Feld ist keine Ganzzahl."
 
-msgid "Field is not real."
+msgid "Field is not Real."
 msgstr "Feld ist keine reele Zahl."
 
-msgid "Field is not boolean."
+msgid "Field is not Boolean."
 msgstr "Feld ist nicht Logisch."
 
 msgid "Field is not select type!"
@@ -977,7 +977,7 @@ msgid "Move IO from %d to %d error."
 msgstr "Fehler beim Verschieben von IO von %d nach %d."
 
 #, c-format
-msgid "Change is not permited while function is used: %s"
+msgid "Change is not permitted while function is used: %s"
 msgstr "Änderung nicht möglich solange die Funktion verwendet wird: %s"
 
 #, c-format
@@ -1054,8 +1054,8 @@ msgid "Get object from not object's IO %d error!"
 msgstr "Fehler beim Empfang des Objekts vom anderen IO %d !"
 
 #, c-format
-msgid "Error iconv open: %s"
-msgstr "Fehler beim Öffnen iconv: %s"
+msgid "Error 'iconv' open: %s"
+msgstr "Fehler beim Öffnen 'iconv': %s"
 
 #, c-format
 msgid "Error input sequence convert: %s"
@@ -1073,7 +1073,7 @@ msgstr ""
 "Für die Hauptdatenbank '*.*' verwenden."
 
 msgid ""
-"Schedule is writed in seconds periodic form or in standard CRON form.\n"
+"Schedule is wrote in seconds periodic form or in standard CRON form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
 "Cron it is standard form \"* * * * *\".\n"
 "  Where items by order:\n"
@@ -1081,7 +1081,7 @@ msgid ""
 "    - hours (0-23);\n"
 "    - days (1-31);\n"
 "    - month (1-12);\n"
-"    - week day (0[sunday]-6).\n"
+"    - week day (0[Sunday]-6).\n"
 "  Where an item variants:\n"
 "    - \"*\" - any value;\n"
 "    - \"1,2,3\" - allowed values;\n"
@@ -1116,14 +1116,14 @@ msgstr ""
 "  \"*/2 * * * *\" - für Minuten: 0,2,4,..., 56,58;\n"
 "  \"* 2-4 * * *\" - für alle Minuten in Stunden von 2 bis 4 (einschließlich)."
 
-msgid "Modules sheduler"
+msgid "Modules scheduler"
 msgstr "Modulsteuerung"
 
 #, c-format
 msgid ""
-"=================== Subsystem \"Module sheduler\" options =================\n"
+"=================== Subsystem \"Module scheduler\" options =================\n"
 "    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
-"------------ Parameters of section '%s' in config file -----------\n"
+"------------ Parameters of section '%s' in config-file -----------\n"
 "ModPath  <path>        Path to shared libraries(modules).\n"
 "ModAllow <list>        List of shared libraries allowed for automatic "
 "loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
@@ -1187,7 +1187,7 @@ msgid "Allowed modules"
 msgstr "Erlaubte Module"
 
 msgid ""
-"List of shared libs(modules) allow for auto conection.\n"
+"List of shared libs(modules) allow for auto connection.\n"
 "Elements separated by symbol ';'.\n"
 "Value '*' is used for allow all modules."
 msgstr ""
@@ -1200,7 +1200,7 @@ msgid "Denied modules"
 msgstr "Nicht erlaubte Module"
 
 msgid ""
-"List of shared libs(modules) deny for auto conection.\n"
+"List of shared libs(modules) deny for auto connection.\n"
 "Elements separated by symbol ';'."
 msgstr ""
 "Liste von gemeinsamen Bibkiotheken (Modulen) die für die automatische "
@@ -1248,13 +1248,13 @@ msgstr "Modulinformation"
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist deaktiviert."
 
-msgid "2:Controller is stoped."
+msgid "2:Controller is stopped."
 msgstr "2:Kontroller ist angehalten!"
 
 msgid "Parameter: "
 msgstr "Parameter: "
 
-msgid "Change type lead to data lost for specific configs."
+msgid "Change type lead to data lost for specific configurations."
 msgstr "Ändern Art führen zu Daten für bestimmte Konfigurationen verloren."
 
 msgid "Controller is not started!"
@@ -1272,7 +1272,7 @@ msgstr "Die Flagge fürs Stoppen der Funktion"
 msgid "Function error"
 msgstr "Fehler in der Funktion"
 
-msgid "Tempate is disabled."
+msgid "Template is disabled."
 msgstr "Vorlage ist abgeschaltet."
 
 msgid "Parameter template: "
@@ -1299,10 +1299,10 @@ msgstr "Konfiguration"
 msgid "Constant;Public constant;Link"
 msgstr "Konstante;Konstante frei verfügbar;Verbindung"
 
-msgid "Programm language"
+msgid "Program language"
 msgstr "Programmsprache"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Programm"
 
 msgid "New IO"
@@ -1535,7 +1535,7 @@ msgid ""
 "========================= The general system options ======================\n"
 "===========================================================================\n"
 "-h, --help             Info message about system options.\n"
-"    --Config=<path>    Config file path.\n"
+"    --Config=<path>    Config-file path.\n"
 "    --Station=<id>     Station identifier.\n"
 "    --demon            Start into demon mode.\n"
 "    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -1544,7 +1544,7 @@ msgid ""
 "                         <direct> & 2 - stdout;\n"
 "                         <direct> & 4 - stderr;\n"
 "                         <direct> & 8 - archive.\n"
-"----------- The config file station '%s' parameters -----------\n"
+"----------- The config-file station '%s' parameters -----------\n"
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "Workdir    <path>\tWork directory.\n"
@@ -1599,26 +1599,26 @@ msgstr ""
 "SavePeriod <sec>       Zeitintervall für Systemspeicherung.\n"
 
 #, c-format
-msgid "Config file '%s' error: %s"
+msgid "Config-file '%s' error: %s"
 msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
 #, c-format
 msgid ""
-"Station '%s' is not present in the config file. Use '%s' station config!"
+"Station '%s' is not present in the config-file. Use '%s' station configuration!"
 msgstr ""
 "Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station "
 "'%s' wird verwendet!"
 
 #, c-format
-msgid "Config '%s' error!"
+msgid "Configuration '%s' error!"
 msgstr "Konfigurationsfehler '%s'!"
 
 #, c-format
-msgid "Load config file error: %s"
+msgid "Load config-file error: %s"
 msgstr "Fehler beim Laden der Konfigurationsdatei: %s"
 
 #, c-format
-msgid "Config '%s' write error. %s"
+msgid "Configuration '%s' write error. %s"
 msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
 msgid "Load!"
@@ -1651,10 +1651,10 @@ msgstr "Anhalten!"
 msgid "Error stop subsystem '%s'."
 msgstr "Fehler beim Anhalten des Subsystems '%s'."
 
-msgid "The Terminate signal is received.. Server is being stoped!"
+msgid "The Terminate signal is received. Server is being stopped!"
 msgstr "Signal zum Beenden wird empfangen. Server wird angehalten!"
 
-msgid "Floating point exception is catched!"
+msgid "Floating point exception is caught!"
 msgstr "Fehler bei Fliesskommaoperation abgefangen!"
 
 #, c-format
@@ -1681,7 +1681,7 @@ msgstr "Warte auf Ereignis..."
 msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
-msgid "No permition for create realtime policy. Default thread is created!"
+msgid "No permission for create real-time policy. Default thread is created!"
 msgstr ""
 "Kein Zugang für das Schaffen der Realzeitpolitik. Der Strom ist geschaffen "
 "default!"
@@ -1690,12 +1690,16 @@ msgstr ""
 msgid "Task creation error %d."
 msgstr "Fehler des Schaffens der Aufgabe %d!"
 
+#, fuzzy, c-format
+msgid "Task '%s' start timeouted!"
+msgstr "Aufgabe '%s' ist nicht gestoppt!"
+
 #, c-format
 msgid "Task '%s' is not stopped!"
 msgstr "Aufgabe '%s' ist nicht gestoppt!"
 
 #, c-format
-msgid "Task %u unexpected terminated by exeption."
+msgid "Task %u unexpected terminated by exception."
 msgstr "Task %u unerwartet beendet durch Ausnahme."
 
 msgid "1:Request is not object!"
@@ -1707,9 +1711,6 @@ msgstr "%s Station: \"%s\""
 
 msgid "Station"
 msgstr "Station"
-
-msgid "Program"
-msgstr "Programm"
 
 msgid "Version"
 msgstr "Version"
@@ -1726,13 +1727,13 @@ msgstr "Betriebssystem"
 msgid "Frequency (MHZ)"
 msgstr "Systemtakt (MHz)"
 
-msgid "Realtime clock resolution"
+msgid "Real-time clock resolution"
 msgstr "Auflösung Echtzeituhr"
 
 msgid "Internal charset"
 msgstr "Interne Kodierung"
 
-msgid "Config file"
+msgid "Config-file"
 msgstr "Konfigurationsdatei"
 
 msgid "Work directory"
@@ -1778,7 +1779,7 @@ msgid "Text variable's base language"
 msgstr "Basissprache für die Variablentexte"
 
 msgid ""
-"Multilangual for variable texts support enabling by base language selection."
+"Multilingual for variable texts support enabling by base language selection."
 msgstr ""
 "Schließt die multisprachliche Unterstützung für die Textvariable durch die "
 "Wahl der Grundsprache."
@@ -2110,10 +2111,10 @@ msgstr "Entity Fehler. Pos: %d"
 msgid "Unknown entity. Pos: %d"
 msgstr "Unbekannte Entität. Pos: %d"
 
-msgid "Message arhiv no support!"
+msgid "Message archive no support!"
 msgstr "Nachrichtarchiv wird nicht unterstützt!"
 
-msgid "Value arhiv no support!"
+msgid "Value archive no support!"
 msgstr "Wertearchiv wird nicht unterstützt!"
 
 #, c-format

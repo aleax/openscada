@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.ModBus 1.1.2\n"
+"Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-22 15:18+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
@@ -17,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблица параметров"
 
-msgid "Logical parameteres table"
+msgid "Logical parameters table"
 msgstr "Таблица логических параметров"
 
 msgid "Acquisition schedule"
@@ -142,13 +141,13 @@ msgstr ""
 msgid "11:Value not gathered."
 msgstr "11:Значения не опрошены."
 
-msgid "Error calc template."
+msgid "Error calculate template."
 msgstr "Ошибка вычисления шаблона."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
 msgid ""
@@ -188,7 +187,7 @@ msgstr ""
 "  'R_i4:300,400:r:int32:Int32' - получить int32 из регистров 300 и 400;\n"
 "  'R_b10:25:r:rBit:Reg bit' - получить бит 10 из регистра 25."
 
-msgid "Template config"
+msgid "Template configuration"
 msgstr "Конфигурация шаблона"
 
 msgid "Parameters"
@@ -255,10 +254,10 @@ msgstr "Режим"
 msgid "Data;Gateway node;Gateway net"
 msgstr "Данные;Шлюз узла;Шлюз сети"
 
-msgid "Calc data period (s)"
+msgid "Calculate data period (s)"
 msgstr "Период обсчёта данных (с)"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Программа"
 
 msgid "To transport"
@@ -329,7 +328,7 @@ msgstr "5:Запрос требует очень много времени дл�
 msgid "6:Server is busy."
 msgstr "6:Сервер занят."
 
-msgid "7:Programm function is error. By request functions 13 or 14."
+msgid "7:Program function is error. By request functions 13 or 14."
 msgstr "7:Ошибка функции программы. Запрошено функцией 13 или 14."
 
 msgid "10:Gateway problem."
@@ -397,7 +396,7 @@ msgstr ""
 msgid "Requests %.4g."
 msgstr "Запросов %.4g."
 
-msgid "Calc node's function error."
+msgid "Calculate node's function error."
 msgstr "Ошибка вычисления функции узла."
 
 msgid "Node: "
@@ -415,7 +414,7 @@ msgstr "Включен"
 msgid "DB"
 msgstr "БД"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Data"
@@ -436,7 +435,7 @@ msgstr "Вещ.;Целый;Логич.;Строка"
 msgid "Link"
 msgstr "Связь"
 
-msgid "Programm language"
+msgid "Program language"
 msgstr "Язык программы."
 
 msgid "Links"
@@ -464,14 +463,14 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow realisation of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
+"Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
 "and Modbus/ASCII protocols."
 msgstr ""
 "Предоставляет реализацию клиентского сервиса протокола ModBus. "
 "Поддерживаются Modbus/TCP, Modbus/RTU и Modbus/ASCII протоколы."
 
 msgid ""
-"Allow realisation of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
+"Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
 "Modbus/ASCII protocols."
 msgstr ""
 "Предоставляет реализацию протоколов ModBus. Поддерживаются Modbus/TCP, "

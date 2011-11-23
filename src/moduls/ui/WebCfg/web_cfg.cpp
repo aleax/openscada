@@ -125,7 +125,7 @@ void TWEB::load_( )
 {
     //> Load parameters from command line
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 }
 
 void TWEB::modStart()
@@ -887,7 +887,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 
 	    ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
 	    messPost( ses.page,nodePath(),"Go to <"+url+"> !",TWEB::Info);
-	    return 0x01|0x02;  //No error. That no draw curent page
+	    return 0x01|0x02;  //No error. That no draw current page
 	}
 
 	for(unsigned i_prm = 0; i_prm < node.childSize(); i_prm++)
@@ -980,7 +980,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 
 	ses.page = ses.page + "<meta http-equiv='Refresh' content='0; url="+url+"'/>\n";
 	messPost( ses.page, nodePath(), "Go to <"+url+"> !",TWEB::Info);
-	return 0x01|0x02;  //No error. That no draw curent page
+	return 0x01|0x02;  //No error. That no draw current page
     }
 
     XMLNode n_el1; n_el1.setAttr("path",f_path)->setAttr("user",ses.user);

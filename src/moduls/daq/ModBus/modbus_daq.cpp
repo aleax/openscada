@@ -64,8 +64,8 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_L",_("Logical parameteres table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_L",_("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("PROT",_("Modbus protocol"),TFld::String,TFld::Selected,"5","TCP","TCP;RTU;ASCII",_("TCP/IP;RTU;ASCII")));
@@ -1248,7 +1248,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	}catch(TError err)
 	{
     	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-    	    mess_warning(nodePath().c_str(),_("Error calc template."));
+    	    mess_warning(nodePath().c_str(),_("Error calculate template."));
 	}
 
     //> Alarm set
@@ -1262,7 +1262,7 @@ void TMdPrm::vlGet( TVal &val )
 	if(val.name() == "err")
 	{
 	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;
@@ -1348,7 +1348,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(isLogic())
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	    if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template config")))
+	    if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration")))
     	    {
         	if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
                 for(int i_io = 0; i_io < lCtx->ioSize(); i_io++)

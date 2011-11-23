@@ -117,7 +117,7 @@ string Lib::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n\n"),
+	"---------- Parameters of the module section <%s> in config-file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;

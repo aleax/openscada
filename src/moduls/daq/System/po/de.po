@@ -6,10 +6,9 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.7.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:20+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
@@ -161,7 +160,7 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr "Automatisches Erstellen ist aktiv - DA"
 
-msgid "System parameteres table"
+msgid "System parameters table"
 msgstr "Tabelle der Systemparameter"
 
 msgid "Request data period (ms)"
@@ -184,7 +183,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -194,8 +193,8 @@ msgstr "Call nächsten durch cron '%s'. "
 msgid "Spent time: %s. "
 msgstr "Verbrauchte Zeit: %s. "
 
-msgid "2:Controller stoped"
-msgstr "2:Kontroller ist angehalten"
+msgid "2:Controller stopped"
+msgstr "2:Controller ist angehalten"
 
 msgid "1:Parameter disabled"
 msgstr "1:Parameter ist abgeschaltet"

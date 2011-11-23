@@ -62,8 +62,8 @@ TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
     mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("Data;Gateway node;Gateway net")));
     //>> For "Data" mode
-    mNodeEl.fldAdd(new TFld("DT_PER",_("Calc data period (s)"),TFld::Real,0,"5.3","1","0.001;99"));
-    mNodeEl.fldAdd(new TFld("DT_PROG",_("Programm"),TFld::String,TCfg::TransltText,"10000"));
+    mNodeEl.fldAdd(new TFld("DT_PER",_("Calculate data period (s)"),TFld::Real,0,"5.3","1","0.001;99"));
+    mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TCfg::TransltText,"10000"));
     //>> For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,"20"));
     mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")));
@@ -379,7 +379,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    case 0x4: err = _("4:Server failure.");				break;
 		    case 0x5: err = _("5:Request requires too long time for execute.");	break;
 		    case 0x6: err = _("6:Server is busy.");				break;
-		    case 0x7: err = _("7:Programm function is error. By request functions 13 or 14.");	break;
+		    case 0x7: err = _("7:Program function is error. By request functions 13 or 14.");	break;
 		    case 0xA: case 0xB: err = _("10:Gateway problem.");			break;
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
@@ -1144,7 +1144,7 @@ void *Node::Task( void *ind )
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
-		mess_err(nd.nodePath().c_str(),_("Calc node's function error."));
+		mess_err(nd.nodePath().c_str(),_("Calculate node's function error."));
 	    }
 
 	    //> Calc acquisition process time
@@ -1180,7 +1180,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root",SPRT_ID,RWRWR_);
 		//>> Append configuration properties
@@ -1204,8 +1204,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Programm language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Programm"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	if(mode() == 0 && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    for(int i_io = 0; i_io < ioSize(); i_io++)

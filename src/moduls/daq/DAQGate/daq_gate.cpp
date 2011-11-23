@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.2"
+#define MOD_VER		"0.9.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station.")
 #define LICENSE		"GPL2"
@@ -90,7 +90,7 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //> Controler's DB structure
-    fldAdd(new TFld("PRM_BD",_("Parameteres cache table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",_("Parameters cache table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6.2","1","0.1;100"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
@@ -692,7 +692,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Config"));
+	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"));
 	    if(cfgN)
 	    {
 		//>> Get remote parameter's config section
@@ -708,7 +708,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(req.childSize())
 		{
 		    *cfgN = *req.childGet(0);
-		    cfgN->setAttr("dscr",_("Remote station config"));
+		    cfgN->setAttr("dscr",_("Remote station configuration"));
 		}
 	    }
 	}

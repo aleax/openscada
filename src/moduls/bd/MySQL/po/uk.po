@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.MySQL 1.7.0\n"
+"Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 12:59+0300\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
@@ -71,7 +70,7 @@ msgstr ""
 "Де:\n"
 "  host - адреса хосту MySQL сервера;\n"
 "  user - ім'я користувача БД;\n"
-"  pass - пароль користувача для доступа до БД;\n"
+"  pass - пароль користувача для доступу до БД;\n"
 "  db - ім'я БД;\n"
 "  port - порт серверу БД (по замовченню 3306);\n"
 "  u_sock - Ім'я UNIX-сокету, для локального доступу до БД (/var/lib/mysql/"

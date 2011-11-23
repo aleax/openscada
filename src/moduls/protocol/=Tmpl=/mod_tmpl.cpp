@@ -101,7 +101,7 @@ string TProt::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section <%s> in config file ----------\n"
+	"---------- Parameters of the module section <%s> in config-file ----------\n"
 	"AuthTime <min>      Life time of the authentication, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
@@ -132,7 +132,7 @@ void TProt::load_( )
 	}
     } while(next_opt != -1);
 
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config file
+    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file
 }
 
 void TProt::save_( )

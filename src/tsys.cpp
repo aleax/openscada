@@ -299,7 +299,7 @@ string TSYS::optDescr( )
 	"========================= The general system options ======================\n"
 	"===========================================================================\n"
 	"-h, --help             Info message about system options.\n"
-	"    --Config=<path>    Config file path.\n"
+	"    --Config=<path>    Config-file path.\n"
 	"    --Station=<id>     Station identifier.\n"
 	"    --demon            Start into demon mode.\n"
 	"    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -308,7 +308,7 @@ string TSYS::optDescr( )
 	"                         <direct> & 2 - stdout;\n"
 	"                         <direct> & 4 - stderr;\n"
 	"                         <direct> & 8 - archive.\n"
-	"----------- The config file station '%s' parameters -----------\n"
+	"----------- The config-file station '%s' parameters -----------\n"
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"Workdir    <path>	Work directory.\n"
@@ -358,9 +358,9 @@ bool TSYS::cfgFileLoad( )
 	}
     } while(next_opt != -1);
 
-    //Load config file
+    //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
 	string s_buf;
@@ -391,16 +391,16 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId)
 		{
-		    mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config file. Use '%s' station config!"),
+		    mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
 			mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
 	    } else rootN.clear();
-	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Config '%s' error!"),mConfFile.c_str());
+	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Configuration '%s' error!"),mConfFile.c_str());
 	    rootModifCnt = 0;
 	}
-	catch(TError err) { mess_err(nodePath().c_str(),_("Load config file error: %s"),err.mess.c_str() ); }
+	catch(TError err) { mess_err(nodePath().c_str(),_("Load config-file error: %s"),err.mess.c_str() ); }
     }
 
     return cmd_help;
@@ -411,11 +411,11 @@ void TSYS::cfgFileSave( )
     ResAlloc res(nodeRes(),true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
 
     string rezFile = rootN.save(XMLNode::XMLHeader);
     int rez = write(hd, rezFile.data(), rezFile.size());
-    if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Config '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
+    if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
     rootModifCnt = 0;
     rootFlTm = time(NULL);
 }
@@ -529,7 +529,7 @@ int TSYS::start( )
 	//> CPU frequency calc
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
 
-	//> Config file change periodic check
+	//> Config-file change periodic check
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
 
 	//> Periodic shared libraries checking
@@ -539,7 +539,7 @@ int TSYS::start( )
 	//> Periodic changes saving to DB
 	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
 
-	//> Config file save need check
+	//> Config-file save need check
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileSave();
 
 	//> Call subsystems at 10s
@@ -586,11 +586,11 @@ void TSYS::sighandler( int signal )
 	    SYS->mStopSignal=signal;
 	    break;
 	case SIGTERM:
-	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received.. Server is being stoped!"));
+	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received. Server is being stopped!"));
 	    SYS->mStopSignal=signal;
 	    break;
 	case SIGFPE:
-	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is catched!"));
+	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
             exit(1);
 	    break;
 	case SIGCHLD:
@@ -1294,7 +1294,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM)
 	{
-	    mess_warning(nodePath().c_str(),_("No permition for create realtime policy. Default thread is created!"));
+	    mess_warning(nodePath().c_str(),_("No permission for create real-time policy. Default thread is created!"));
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
@@ -1406,10 +1406,10 @@ void *TSYS::taskWrap( void *stas )
     catch(TError err)
     {
 	mess_err(err.cat.c_str(),err.mess.c_str());
-	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exeption."),tsk->thr);
+	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exception."),tsk->thr);
     }
     //???? The code cause: FATAL: exception not rethrown
-    //catch(...)	{ mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by unknown exeption."),tsk->thr); }
+    //catch(...)	{ mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by unknown exception."),tsk->thr); }
 
     //> Mark for task finish
     tsk->flgs |= STask::FinishTask;
@@ -1798,9 +1798,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/sys",_("Operation system"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/frq",_("Frequency (MHZ)"),R_R_R_,"root","root",1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Realtime clock resolution"),R_R_R_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config file"),R_R___,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",1,"tp","str");
@@ -1812,7 +1812,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
-		"help",_("Multilangual for variable texts support enabling by base language selection."));
+		"help",_("Multilingual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_))
 	    {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",3,

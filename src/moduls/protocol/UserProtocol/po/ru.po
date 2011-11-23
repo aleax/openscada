@@ -98,7 +98,7 @@ msgstr "Включен"
 msgid "DB"
 msgstr "БД"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Input"

@@ -129,7 +129,7 @@ string TController::getStatus( )
 	rez = string("0:")+_("Started. ");
 	if(owner().redntAllow() && redntUse())
 	{
-	    mess = _("Geting data from remote station: ");
+	    mess = _("Getting data from remote station: ");
 	    string rSt = mRedntSt.getVal();
 	    if(!rSt.empty())
 	    {
@@ -139,7 +139,7 @@ string TController::getStatus( )
 		    rez.replace(0,1,TSYS::strSepParse(rSt,0,':',&rOff));
 		    mess.append(rSt.substr(rOff));
 		}
-		else mess = _("Your redundance configuration wrong and controller often enable-disable redundancy!");
+		else mess = _("Your redundancy configuration wrong and controller often enable-disable redundancy!");
 	    }
 	    rez += mess;
 	}
@@ -154,7 +154,7 @@ void TController::load_( )
 {
     if(!SYS->chkSelDB(DB())) return;
 
-    mess_info(nodePath().c_str(),_("Load controller's configs!"));
+    mess_info(nodePath().c_str(),_("Load controller's configurations!"));
 
     bool en_st_prev = en_st, run_st_prev = run_st;
 
@@ -170,7 +170,7 @@ void TController::load_( )
 
 void TController::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save controller's configs!"));
+    mess_info(nodePath().c_str(),_("Save controller's configurations!"));
 
     //> Update type controller bd record
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
@@ -287,7 +287,7 @@ void TController::LoadParmCfg(  )
 	    TConfig c_el(&owner().tpPrmAt(i_tp));
 	    c_el.cfgViewAll(false);
 
-	    //>>> Search new into DB and Config file
+	    //>>> Search new into DB and Config-file
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
 					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el); )
 	    {
@@ -453,7 +453,7 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
 	return startStat();
     }
 
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -478,7 +478,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
 		ctrRemoveNode(opt,"/cntr/cfg/REDNT");

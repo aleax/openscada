@@ -43,9 +43,9 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.0"
+#define MOD_VER		"0.6.1"
 #define AUTORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow realising of SNMP client service.")
+#define DESCRIPTION	_("Allow realization of SNMP client service.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -112,7 +112,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selected,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
     fldAdd(new TFld("COMM",_("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
     fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
-    fldAdd(new TFld("PATTR_LIM",_("Param's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
+    fldAdd(new TFld("PATTR_LIM",_("Parameter's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));

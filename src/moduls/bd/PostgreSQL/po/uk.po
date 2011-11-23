@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.1\n"
+"Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 17:04+0300\n"
 "PO-Revision-Date: 2010-07-30 09:10+0300\n"
@@ -41,10 +40,10 @@ msgstr "Помилка запиту до БД: %s. %s"
 msgid "Error open table <%s>. DB is disabled."
 msgstr "Помилка відкриття таблиці <%s>. БД вимкнено."
 
-msgid "Start trasaction error!"
+msgid "Start transaction error!"
 msgstr "Помилка запуску транзакції!"
 
-msgid "Stop trasaction error!"
+msgid "Stop transaction error!"
 msgstr "Помилка зупинки транзакції!"
 
 msgid ""
@@ -71,10 +70,10 @@ msgstr ""
 "Де:\n"
 "  host - ім'я хосту PostgreSQL сервера; Якщо починається зі слеша ('/'), то\n"
 "         використовується UNIX-сокет замість TCP,-\n"
-"         це им'я каталогу, де зберігаеться файл сокета;\n"
+"         це ім'я каталогу, де зберігається файл сокета;\n"
 "  hostaddr - чисельна адреса хосту PostgreSQL сервера;\n"
 "  user - ім'я користувача БД;\n"
-"  pass - пароль користувача для доступа до БД;\n"
+"  pass - пароль користувача для доступу до БД;\n"
 "  port - порт серверу БД (по замовченню 5432);\n"
 "  db - ім'я БД;\n"
 "  connect_timeout - час очікування з'єднання;\n"

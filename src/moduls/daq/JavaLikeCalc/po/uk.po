@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:26+0300\n"
+"POT-Creation-Date: 2011-11-22 21:56+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -43,26 +42,23 @@ msgid "No object variable for function"
 msgstr "Не об'єктна змінна для функції"
 
 msgid "Object's function have more 255 parameters."
-msgstr "Функція об’єкту містить більш 255 параметрів."
+msgstr "Функція об'єкту містить більш 255 параметрів."
 
 msgid "Get object from no object's register"
 msgstr "Отримання об'єкту з не об'єктного регістру"
 
-msgid "Timeouted function calc."
+msgid "Timeouted function calculation"
 msgstr "Перевищено час обчислення функції."
 
 msgid "Not supported type for operation 'Add'."
-msgstr "Тип який не підтримується операцією 'Add'."
+msgstr "Тип, який не підтримується операцією 'Add'."
 
 msgid "Call object's function for no object or function name is empty."
-msgstr "Виклик об'єктної функції без об'єкту або ім'я функції порожне."
+msgstr "Виклик об'єктної функції без об'єкту або ім'я функції порожнє."
 
 #, c-format
-msgid "Operation %c(%xh) error. Function '%s' is stoped."
+msgid "Operation %c(%xh) error. Function '%s' is stopped."
 msgstr "Помилка операції %c(%xh). Функція '%s' зупинена."
-
-msgid "Function '%s' error or not enough parameters."
-msgstr "Помилка функції '%s' або не достатньо параметрів для неї."
 
 msgid "Function: "
 msgstr "Функція: "
@@ -73,10 +69,10 @@ msgstr "Ім'я"
 msgid "Description"
 msgstr "Опис"
 
-msgid "Maximum calc time (sec)"
+msgid "Maximum calculate time (sec)"
 msgstr "Максимальний час обрахунку (сек)"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Програма"
 
 msgid "IO"
@@ -89,7 +85,7 @@ msgid "Type"
 msgstr "Тип"
 
 msgid "Real;Integer;Boolean;String;Object"
-msgstr "Реальний;Цілий;Логічний;Строка;Об’єкт"
+msgstr "Реальний;Цілий;Логічний;Рядок;Об'єкт"
 
 msgid "Mode"
 msgstr "Режим"
@@ -132,7 +128,7 @@ msgid ""
 "For use main work DB set '*.*'."
 msgstr ""
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфігурація"
 
 msgid "Program's text translation"
@@ -151,7 +147,7 @@ msgid ""
 "Allow java-like based calculator and function's libraries engine. User can "
 "create and modify function and libraries."
 msgstr ""
-"Надає базовані на мові схожій на Java обчислювач та движок бібліотек функцї. "
+"Надає базований на мові схожій на Java обчислювач та рушій бібліотек функцій. "
 "Користувач може створювати та модифікувати функції та бібліотеки."
 
 msgid "Parameters table"
@@ -160,13 +156,13 @@ msgstr "Таблиця параметрів"
 msgid "Controller's function"
 msgstr "Функція контролера"
 
-msgid "Calc schedule"
+msgid "Calculation schedule"
 msgstr "Планування обчислення"
 
-msgid "Calc task priority"
-msgstr "Пріорітет задачі обчислення"
+msgid "Calculation task priority"
+msgstr "Пріоритет задачі обчислення"
 
-msgid "Iteration number in single calc"
+msgid "Iteration number in single calculation"
 msgstr "Кількість ітерацій у одному обчисленні"
 
 msgid "IO ID"
@@ -186,9 +182,6 @@ msgstr ""
 
 msgid "Data base"
 msgstr "База даних"
-
-msgid "Maximum calc time"
-msgstr "Максимальний час обчислення"
 
 msgid "Formula"
 msgstr "Формула"
@@ -244,7 +237,7 @@ msgstr ""
 msgid "Create new function '%s'."
 msgstr "Створення нової функції '%s'."
 
-msgid "Load function and its io error."
+msgid "Load function and its IO error."
 msgstr "Помилка завантаження функції та її IO."
 
 msgid "Function calculate frequency (Hz)"
@@ -259,20 +252,20 @@ msgstr "Прапорець зупинки функції"
 msgid "This controller object link"
 msgstr "Зв'язок на об'єкт цього контролера."
 
-msgid "Calc controller's function error."
-msgstr "Помилка обчислення функції контроллера."
+msgid "Calculation controller's function error."
+msgstr "Помилка обчислення функції контролеру."
 
 msgid "No started or no present function."
 msgstr "Функція відсутня або не запущена."
 
-msgid "Calcing"
+msgid "Calculation"
 msgstr "Обчислення"
 
 msgid "Data"
 msgstr "Дані"
 
 msgid "String;Integer;Real;Boolean;Object"
-msgstr "Строка;Цілий;Реальний;Логічний;Об`єкт"
+msgstr "Рядок;Цілий;Реальний;Логічний;Об'єкт"
 
 msgid "Value"
 msgstr "Значення"
@@ -283,7 +276,7 @@ msgstr "Видалення заблокованого атрибуту не до
 msgid "Changing locked attribute is not allowed."
 msgstr "Зміна заблокованого атрибуту не дозволена."
 
-msgid "2:Controller is stoped"
+msgid "2:Controller is stopped"
 msgstr "2:Контролер зупинено!"
 
 msgid "1:Parameter is disabled"
@@ -293,7 +286,7 @@ msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<io>:<aid>:<anm>]\n"
 "Where:\n"
-"  io - calc function's IO;\n"
+"  io - calculation function's IO;\n"
 "  aid - created attribute identifier;\n"
 "  anm - created attribute name.\n"
 "If 'aid' or 'anm' are not set they will be generated from selected "
@@ -304,19 +297,22 @@ msgstr ""
 "Де:\n"
 "  io - IO обчислюваної функції;\n"
 "  aid - ідентифікатор створюваного атрибута;\n"
-"  anm - ім’я створюваного атрибута.\n"
-"Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з вибраного "
+"  anm - ім'я створюваного атрибута.\n"
+"Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "IO функції."
+
+msgid "Error constant after constant"
+msgstr "Помилка константи після константи"
 
 #, c-format
 msgid "%s, pos: (%d,%d)-(%d,%d)."
 msgstr "%s, позиція: (%d,%d)-(%d,%d)."
 
-msgid "Unexpected end programm, expect end string symbol '\"', "
+msgid "Unexpected end program, expect end string symbol '\"', "
 msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
 
 msgid "The next line symbol failed into string, "
-msgstr "Символ переведення лінії не дозволено у срічці, "
+msgstr "Символ переведення лінії не дозволено у рядку, "
 
 msgid "Using namespace is error or empty, "
 msgstr "Помилка площини найменувань або вона порожня, "

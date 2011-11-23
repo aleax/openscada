@@ -61,7 +61,7 @@ msgstr ""
 "Datenbank Parameter im Format [<DB-Modul>.<DB-Name>.<Name der Tabelle>].\n"
 "Für die Hauptdatenbank '*.*' verwenden."
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfig"
 
 msgid "Id"
@@ -1240,7 +1240,7 @@ msgid "Stop module."
 msgstr "Modul anhalten."
 
 #, c-format
-msgid "Connection to session is not permited for '%s'."
+msgid "Connection to session is not permitted for '%s'."
 msgstr "Verbindung an die Sitzung ist nicht zulässig für '%s'."
 
 msgid "Connect/create session arguments error."
@@ -1251,9 +1251,6 @@ msgstr "Widgetsbibliothek"
 
 msgid "Functions"
 msgstr "Funktionen"
-
-msgid "Configuration"
-msgstr "Konfiguration"
 
 msgid "Widget's libraries"
 msgstr "Widgetsbibliotheken"
@@ -1499,16 +1496,10 @@ msgstr "val:Konstante"
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
-msgid "Config template"
-msgstr "Konfigurationsvorlage"
-
-msgid "Calculate"
-msgstr "Berechnung"
-
-msgid "Programm language"
+msgid "Program language"
 msgstr "Programmsprache"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Programm"
 
 msgid "New attribute"
@@ -1520,7 +1511,7 @@ msgstr "Fehler beim Löschen von Widgetelementen"
 msgid "Deletint the not user element error."
 msgstr "Fehler beim Löschen des nicht benutzerdefinierten Elements."
 
-msgid "Changing of not user attribute is no permited"
+msgid "Changing of not user attribute is no permitted"
 msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
 
 #, c-format

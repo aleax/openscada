@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.9.6"
+#define MOD_VER		"0.9.7"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -89,7 +89,7 @@ void BDMod::load_( )
 {
     //> Load parameters from command line
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 
 }
 
@@ -228,7 +228,7 @@ void MBD::transOpen( )
     if(!htrans)
     {
 	if(isc_start_transaction(status, &htrans, 1, &hdb, 0, NULL))
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error: %s"),getErr(status).c_str());
+	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error: %s"),getErr(status).c_str());
 	trOpenTm = time(NULL);
     }
     reqCnt++;
@@ -278,7 +278,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if( isc_dsql_allocate_statement(status, &hdb, &stmt) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Allocate statement error: %s"),getErr(status).c_str());
 	if( !trans && isc_start_transaction(status, &trans, 1, &hdb, 0, NULL) )
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start trasaction error: %s"),getErr(status).c_str());
+	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error: %s"),getErr(status).c_str());
 	//> Prepare output data structure
 	if( isc_dsql_prepare(status, &trans, &stmt, 0, Mess->codeConvOut(cd_pg.c_str(),ireq).c_str(), 3, NULL) )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("DSQL prepare error: %s"),getErr(status).c_str());

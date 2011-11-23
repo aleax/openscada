@@ -279,7 +279,7 @@ bool RunWdgView::event( QEvent *event )
 		    cfnt.setPointSize( 16 );
 		    pnt.setFont( cfnt );
 		}
-		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permited.")).arg(id().c_str()),to);
+		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permitted.")).arg(id().c_str()),to);
 	    }
 	    return true;
 	case QEvent::MouseButtonRelease:

@@ -72,7 +72,7 @@ void TValue::delFld( TElem *el, unsigned id_val )
 void TValue::setVlCfg( TConfig *cfg )
 {
     vector<string> list;
-    //> Detach old configs
+    //> Detach old configurations
     if(mCfg)
     {
 	mCfg->cfgList(list);

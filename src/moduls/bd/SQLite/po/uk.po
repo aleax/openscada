@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.3\n"
+"Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-21 16:39+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
@@ -62,7 +61,7 @@ msgstr ""
 "               Використовуйте \":memory:\" для створення тимчасової бази "
 "даних у пам'яті."
 
-msgid "Close openned transaction"
+msgid "Close opened transaction"
 msgstr "Закрити відкриту транзакцію"
 
 msgid "Table is empty."
@@ -71,5 +70,5 @@ msgstr "Таблиця порожня."
 msgid "Row is not present."
 msgstr "Запис відсутній."
 
-msgid "Deletion is not permited. Data base is read only."
+msgid "Deletion is not permitted. Data base is read only."
 msgstr "Видалення не дозволене. БД тільки для читання."

@@ -48,7 +48,7 @@ void sfErr( const string &mess, YYLTYPE *ps);
     int	id;		//Function id
     Reg	*reg;		//Variable and Constant registers list index and function list index
     int	fp_cnt;		//Function parameters counter
-    int	prg_cd;		//Programm code
+    int	prg_cd;		//Program code
     char op[256];	//Object's properties.
 }
 
@@ -445,7 +445,7 @@ retry:
 	}
 	if(pos >= prog.size())
 	{
-	    yyerror(_("Unexpected end programm, expect end string symbol '\"', "));
+	    yyerror(_("Unexpected end program, expect end string symbol '\"', "));
 	    return ERR;
 	}
 	else if(prog[pos] == '\n')

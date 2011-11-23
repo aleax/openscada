@@ -63,7 +63,7 @@ void TSpecialS::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
 
 }
 
@@ -98,7 +98,7 @@ void TSpecial::cntrCmdProc( XMLNode *opt )
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/prm",_("Special"));
 	ctrMkNode("area",opt,-1,"/prm/st",_("State"));
-	ctrMkNode("fld",opt,-1,"/prm/st/st",_("Runing"),RWRWR_,"root",SSPC_ID,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SSPC_ID,1,"tp","bool");
 	return;
     }
     //> Process command to page

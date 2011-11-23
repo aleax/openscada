@@ -39,9 +39,9 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.5.0"
+#define MOD_VER		"0.5.1"
 #define AUTORS		_("Roman Savochenko, Almaz Karimov")
-#define DESCRIPTION	_("Allow realisation of DCON client service. Supported I-7000 DCON protocol.")
+#define DESCRIPTION	_("Allow realization of DCON client service. Supported I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -108,14 +108,14 @@ void TTpContr::postEnable( int flag )
 		"0;1;2;3;4;6;8;10;20;116",
 		_("No AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI (#AA);20AI (#AA);16AI (#AA^AA)")));
     tpPrmAt(t_prm).fldAdd(new TFld("AI_RANGE",""/*_("AI range")*/,TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
-		"0;1;2",_("Engeneer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)")));
+		"0;1;2",_("Engineer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)")));
     tpPrmAt(t_prm).fldAdd(new TFld("AO_METHOD",_("AO method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
 		"0;1;2;4",_("No AO;1AO (#AA);2AO (#AA);4AO (#AA)")));
     tpPrmAt(t_prm).fldAdd(new TFld("AO_RANGE",""/*_("AO range")*/,TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
 		"0;1;2;3;4;5;6;7;8;9;10",
-		_("Engeneer (00.000 20.000);Engeneer (04.000 20.000);Engeneer (00.000 10.000);Engeneer (+00.000 +20.000);"
-		  "Engeneer (+04.000 +20.000);Engeneer (+00.000 +10.000);Engeneer (-10.000 +10.000);Engeneer (+00.000 +05.000);"
-		  "Engeneer (-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)")));
+		_("Engineer (00.000 20.000);Engineer (04.000 20.000);Engineer (00.000 10.000);Engineer (+00.000 +20.000);"
+		  "Engineer (+04.000 +20.000);Engineer (+00.000 +10.000);Engineer (-10.000 +10.000);Engineer (+00.000 +05.000);"
+		  "Engineer (-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)")));
     tpPrmAt(t_prm).fldAdd(new TFld("DI_METHOD",_("DI method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
 		"0;3;4;7;8;14;16;101;201",
 		_("No DI;3DI (@AA);4DI (@AA);7DI (@AA);8DI (@AA);14DI (@AA);16DI (@AA);1DI (@AADI);8DI (@AA,FF00)")) );
@@ -363,31 +363,31 @@ void *TMdContr::Task( void *icntr )
 				//Control range
 				switch(cntr.p_hd[i_p].at().ao_range)
 				{
-				    case 0://Engeneer (00.000 20.000)
+				    case 0://Engineer (00.000 20.000)
 					str = TSYS::strMess("%06.3f",vmax(0,vmin(20,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 1://Engeneer (04.000 20.000)
+				    case 1://Engineer (04.000 20.000)
 					str = TSYS::strMess("%06.3f",vmax(4,vmin(20,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 2://Engeneer (00.000 10.000)
+				    case 2://Engineer (00.000 10.000)
 					str = TSYS::strMess("%06.3f",vmax(0,vmin(10,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 3://Engeneer (+00.000 +20.000)
+				    case 3://Engineer (+00.000 +20.000)
 					str = TSYS::strMess("%+07.3f",vmax(0,vmin(20,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 4://Engeneer (+04.000 +20.000)
+				    case 4://Engineer (+04.000 +20.000)
 					str = TSYS::strMess("%+07.3f",vmax(4,vmin(20,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 5://Engeneer (+00.000 +10.000)
+				    case 5://Engineer (+00.000 +10.000)
 					str = TSYS::strMess("%+07.3f",vmax(0,vmin(10,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 6://Engeneer (-10.000 +10.000)
+				    case 6://Engineer (-10.000 +10.000)
 					str = TSYS::strMess("%+07.3f",vmax(-10,vmin(10,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 7://Engeneer (+00.000 +05.000)
+				    case 7://Engineer (+00.000 +05.000)
 					str = TSYS::strMess("%+07.3f",vmax(0,vmin(5,cntr.p_hd[i_p].at().AO[i])));
 					break;
-				    case 8://Engeneer (-05.000 +05.000)
+				    case 8://Engineer (-05.000 +05.000)
 					str = TSYS::strMess("%+07.3f",vmax(-5,vmin(5,cntr.p_hd[i_p].at().AO[i])));
 					break;
 				    case 9://Percent (+000.00 +100.00)
@@ -723,15 +723,15 @@ void TMdPrm::enable()
     string ao_d;
     switch(ao_range)
     {
-	case 0:	ao_d = "0;20";	break;	//Engeneer (00.000 20.000)
-	case 1:	ao_d = "4;20";	break;	//Engeneer (04.000 20.000)
-	case 2:	ao_d = "0;10";	break;	//Engeneer (00.000 10.000)
-	case 3:	ao_d = "0;20";	break;	//Engeneer (+00.000 +20.000)
-	case 4:	ao_d = "4;20";	break;	//Engeneer (+04.000 +20.000)
-	case 5:	ao_d = "0;10";	break;	//Engeneer (+00.000 +10.000)
-	case 6:	ao_d = "-10;10";break;	//Engeneer (-10.000 +10.000)
-	case 7:	ao_d = "0;5";	break;	//Engeneer (+00.000 +05.000)
-	case 8:	ao_d = "-5;5";	break;	//Engeneer (-05.000 +05.000)
+	case 0:	ao_d = "0;20";	break;	//Engineer (00.000 20.000)
+	case 1:	ao_d = "4;20";	break;	//Engineer (04.000 20.000)
+	case 2:	ao_d = "0;10";	break;	//Engineer (00.000 10.000)
+	case 3:	ao_d = "0;20";	break;	//Engineer (+00.000 +20.000)
+	case 4:	ao_d = "4;20";	break;	//Engineer (+04.000 +20.000)
+	case 5:	ao_d = "0;10";	break;	//Engineer (+00.000 +10.000)
+	case 6:	ao_d = "-10;10";break;	//Engineer (-10.000 +10.000)
+	case 7:	ao_d = "0;5";	break;	//Engineer (+00.000 +05.000)
+	case 8:	ao_d = "-5;5";	break;	//Engineer (-05.000 +05.000)
 	case 9:	ao_d = "0;100";	break;	//Percent (+000.00 +100.00)
 	case 10:ao_d = "0;4095";break;	//Hexadecimal (000 FFF)
 	default:ao_d = "";	break;
@@ -848,7 +848,7 @@ void TMdPrm::vlGet( TVal &val )
 	if(val.name() == "err")
 	{
 	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;

@@ -221,7 +221,7 @@ void ModVArch::checkArchivator( bool now )
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL)
 	{
-	    if(mkdir(addr().c_str(),0777)) throw TError(nodePath().c_str(),_("Can not create dir '%s'."),addr().c_str());
+	    if(mkdir(addr().c_str(),0777)) throw TError(nodePath().c_str(),_("Can not create directory '%s'."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 
@@ -422,7 +422,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("File's time size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum files number"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Numberic values rounding (%)"),RWRWR_,"root",SARH_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Numeric values rounding (%)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
@@ -627,7 +627,7 @@ void ModVArchEl::fileAdd( const string &file )
     VFileArch *f_arh = new VFileArch(this);
     f_arh->attach(file);
 
-    //>> Broken archives delete. Oldest arhives to up.
+    //>> Broken archives delete. Oldest archives to up.
     if(f_arh->err()) delete f_arh;
     else
     {
@@ -963,7 +963,7 @@ void VFileArch::attach( const string &name )
 	//> Check and prepare last archive files
 	//>> Get file size
 	int hd = open(mName.c_str(),O_RDWR);
-	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file '%s' no openned!"),name.c_str());
+	if( hd == -1 )	throw TError(owner().archivator().nodePath().c_str(),_("Archive file '%s' no opened!"),name.c_str());
 	mSize = lseek(hd,0,SEEK_END);
 	mpos = (end()-begin())/period();
 	if(!mPack && cur_tm >= begin() && cur_tm <= end()) repairFile(hd);

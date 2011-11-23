@@ -98,7 +98,7 @@ msgstr "Aktiviert"
 msgid "DB"
 msgstr "БД"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Input"

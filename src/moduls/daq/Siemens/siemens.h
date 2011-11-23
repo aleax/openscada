@@ -55,7 +55,7 @@ class SValData
 
 	int db;		//DB
 	int off;	//Data offset
-	int sz;		//Data size or boolean bit
+	int sz;		//Data size or Boolean bit
 };
 
 //************************************************
@@ -63,7 +63,7 @@ class SValData
 //*----------------------------------------------*
 //* Parammeters errors list:                     *
 //* 1   - Parameter had disabled.                *
-//* 2   - Controller is stoped.                  *
+//* 2   - Controller is stopped.                 *
 //* 10  - CIF device error.                      *
 //* 11  - Value not gathered.                    *
 //* 12  - Put request is timeouted.              *

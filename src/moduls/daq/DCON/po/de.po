@@ -8,7 +8,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:02+0300\n"
 "PO-Revision-Date: 2011-03-01 10:11+0300\n"
@@ -28,7 +28,7 @@ msgid "Roman Savochenko, Almaz Karimov"
 msgstr "Roman Savotschenko, Almaz Karimov"
 
 msgid ""
-"Allow realisation of DCON client service. Supported I-7000 DCON protocol."
+"Allow realization of DCON client service. Supported I-7000 DCON protocol."
 msgstr "Realisierung des I-7000 DCON Client-Protokolls."
 
 msgid "Parameters table"
@@ -41,10 +41,10 @@ msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
 msgid "Gather task priority"
-msgstr "PrioritÃ¤t der Datenerfassung"
+msgstr "Priorität der Datenerfassung"
 
 msgid "Serial transport"
-msgstr "Serielle Ãœbertragung"
+msgstr "Serielle Übertragung"
 
 msgid "Request tries"
 msgstr "Fordern Sie versucht"
@@ -74,9 +74,9 @@ msgstr ""
 "Nicht vorhanden AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI "
 "(#AA);10AI (#AA);20AI (#AA);16AI (#AA^AA)"
 
-msgid "Engeneer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)"
+msgid "Engineer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)"
 msgstr ""
-"Ingeneuer- oder Prozent; Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)"
+"Ingenieur oder Prozent; Hexadezimal (0000 FFFF);Hexadezimal (8000 7FFF)"
 
 msgid "AO method"
 msgstr "AO-Methode"
@@ -85,15 +85,15 @@ msgid "No AO;1AO (#AA);2AO (#AA);4AO (#AA)"
 msgstr "Nicht vorhanden AO;1AO (#AA);2AO (#AA);4AO (#AA)"
 
 msgid ""
-"Engeneer (00.000 20.000);Engeneer (04.000 20.000);Engeneer (00.000 10.000);"
-"Engeneer (+00.000 +20.000);Engeneer (+04.000 +20.000);Engeneer (+00.000 "
-"+10.000);Engeneer (-10.000 +10.000);Engeneer (+00.000 +05.000);Engeneer "
+"Engineer (00.000 20.000);Engineer (04.000 20.000);Engineer (00.000 10.000);"
+"Engineer (+00.000 +20.000);Engineer (+04.000 +20.000);Engineer (+00.000 "
+"+10.000);Engineer (-10.000 +10.000);Engineer (+00.000 +05.000);Engineer "
 "(-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)"
 msgstr ""
-"Ingeneuer (00.000 20.000);Ingeneuer (04.000 20.000);Ingeneuer (00.000 "
-"10.000);Ingeneuer (+00.000 +20.000);Ingeneuer (+04.000 +20.000);Ingeneuer "
-"(+00.000 +10.000);Ingeneuer (-10.000 +10.000);Ingeneuer (+00.000 +05.000);"
-"Ingeneuer (-05.000 +05.000);Prozent (+000.00 +100.00);Hexadecimal (000 FFF)"
+"Ingenieur (00.000 20.000);Ingenieur (04.000 20.000);Ingenieur (00.000 "
+"10.000);Ingenieur (+00.000 +20.000);Ingenieur (+04.000 +20.000);Ingenieur "
+"(+00.000 +10.000);Ingenieur (-10.000 +10.000);Ingenieur (+00.000 +05.000);"
+"Ingenieur (-05.000 +05.000);Prozent (+000.00 +100.00);Hexadezimal (000 FFF)"
 
 msgid "DI method"
 msgstr "DI-Methode"
@@ -126,11 +126,11 @@ msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr "Nicht vorhanden CI;2CI (#AA);3CI (#AA)"
 
 msgid "Call now. "
-msgstr "ufen Sie jetzt an. "
+msgstr "Aufruf jetzt. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Call by Zeit: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -167,5 +167,5 @@ msgstr "25:Kommando ist ignoriert (host watchdog)."
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Acquisition is stoped."
+msgid "2:Acquisition is stopped."
 msgstr "2:Erfassung ist angehalten."

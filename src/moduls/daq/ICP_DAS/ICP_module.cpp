@@ -36,9 +36,9 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.3"
+#define MOD_VER		"0.8.0"
 #define AUTORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow realisation of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
+#define DESCRIPTION	_("Allow realization of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -101,7 +101,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("Module type"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","552985") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_SLOT",_("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11") );
-    tpPrmAt(t_prm).fldAdd( new TFld("MOD_PRMS",_("Module addon parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000") );
+    tpPrmAt(t_prm).fldAdd( new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000") );
 }
 
 void TTpContr::load_( )
@@ -695,7 +695,7 @@ void TMdPrm::vlGet( TVal &val )
 	if( val.name() == "err" )
 	{
 	    if( !enableStat() )			val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stoped."),0,true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;
@@ -919,9 +919,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(!owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) break;
 		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root",SDAQ_ID);
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from current"),RWRW__,"root",SDAQ_ID);
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root",SDAQ_ID);
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from current"),RWRW__,"root",SDAQ_ID);
 		break;
 	    case 0x87057:
 		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
@@ -931,9 +931,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(!owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) break;
 		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from curent"),RWRW__,"root",SDAQ_ID);
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vPonSet",_("Set power on values from current"),RWRW__,"root",SDAQ_ID);
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vSf",_("Safe values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from curent"),RWRW__,"root",SDAQ_ID);
+		ctrMkNode("comm",opt,-1,"/cfg/mod/vSfSet",_("Set safe values from current"),RWRW__,"root",SDAQ_ID);
 		break;
 	}
 	return;

@@ -96,7 +96,7 @@ msgstr "Розробники"
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
+"---------- Parameters of the module section <%s> in config-file ----------\n"
 "SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
 "\n"
 msgstr ""

@@ -58,7 +58,7 @@ msgstr ""
 "Адрес БД в формате [<Модуль БД>.<Имя БД>.<Имя таблицы>].\n"
 "Для использования основной рабочей БД установить '*.*'."
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Id"
@@ -1237,7 +1237,7 @@ msgid "Stop module."
 msgstr "Останов модуля."
 
 #, c-format
-msgid "Connection to session is not permited for '%s'."
+msgid "Connection to session is not permitted for '%s'."
 msgstr "Недопустимо подключение к сеансу пользователя '%s'."
 
 msgid "Connect/create session arguments error."
@@ -1248,9 +1248,6 @@ msgstr "Библиотека виджетов"
 
 msgid "Functions"
 msgstr "Функции"
-
-msgid "Configuration"
-msgstr "Конфигурация"
 
 msgid "Widget's libraries"
 msgstr "Библиотеки виджетов"
@@ -1496,16 +1493,10 @@ msgstr "val:Постоянная"
 msgid "Work area"
 msgstr "Рабочая область"
 
-msgid "Config template"
-msgstr "Конфигурационный шаблон"
-
-msgid "Calculate"
-msgstr "Вычисление"
-
-msgid "Programm language"
+msgid "Program language"
 msgstr "Язык программы"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Программа"
 
 msgid "New attribute"
@@ -1517,7 +1508,7 @@ msgstr "Ошибка. Удаление элементов вложенных в�
 msgid "Deletint the not user element error."
 msgstr "Ошибка. Удаление не пользовательского элемента."
 
-msgid "Changing of not user attribute is no permited"
+msgid "Changing of not user attribute is no permitted"
 msgstr "Модификация не пользовательских атрибутов не допустима"
 
 #, c-format

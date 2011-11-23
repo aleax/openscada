@@ -22,7 +22,7 @@
 //> Global parameters init
 MOD_ID = 'WebCfgD';	//Module identifier
 stTmID = null;		//Status line timer identifier
-pgRefrTmID = null;	//Periodic curent page update timer identifier
+pgRefrTmID = null;	//Periodic current page update timer identifier
 dlgWin = null;		//Opened window dialog
 selPath = '';		//Selected node path
 queSZ = 20;		//Previous and next arrays queue size
@@ -1413,7 +1413,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
   }
   else
   {
-    //> View boolean fields
+    //> View Boolean fields
     if( t_s.getAttribute('tp') == 'bool' )
     {
       var lab = null; var val_r = null; var val_w = null;
@@ -1991,7 +1991,7 @@ function pageRefresh( )
   if( pgRefrTmID ) pgRefrTmID = setTimeout('pageRefresh();',5000);
 }
 /********************************************************
- * pageCyclRefrStart - Start curent page cyclic refrash.*
+ * pageCyclRefrStart - Start current page cyclic refrash.*
  ********************************************************/
 function pageCyclRefrStart( )
 {
@@ -1999,7 +1999,7 @@ function pageCyclRefrStart( )
   actEnable('actUpdate',false); actEnable('actStart',false); actEnable('actStop',true);
 }
 /********************************************************
- * pageCyclRefrStop - Stop curent page cyclic refrash.  *
+ * pageCyclRefrStop - Stop current page cyclic refrash.  *
  ********************************************************/
 function pageCyclRefrStop( )
 {
@@ -2007,7 +2007,7 @@ function pageCyclRefrStop( )
   actEnable('actUpdate',true); actEnable('actStart',true); actEnable('actStop',false);
 }
 /**************************************************
- * itDBLoad - Load curent page from DB.           *
+ * itDBLoad - Load current page from DB.           *
  **************************************************/
 function itDBLoad( )
 {
@@ -2016,7 +2016,7 @@ function itDBLoad( )
   else setTimeout('pageRefresh()',500);
 }
 /**************************************************
- * itDBSave - Save curent page to DB.             *
+ * itDBSave - Save current page to DB.             *
  **************************************************/
 function itDBSave( )
 {

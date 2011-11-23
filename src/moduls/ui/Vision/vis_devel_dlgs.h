@@ -198,7 +198,7 @@ class VisItProp : public QDialog
 
 	LineEdit	*proc_per;	//Procedure calc period
 	QComboBox	*proc_lang;	//Widget's procedure name
-	TextEdit	*proc_text;	//Widget's procedure programm text
+	TextEdit	*proc_text;	//Widget's procedure program text
 
 	QTreeWidget	*obj_attr_cfg;	//Attribute configuration widget
 	QPushButton	*buttAttrAdd,	//Add new attribute button

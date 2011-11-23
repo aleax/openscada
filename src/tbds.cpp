@@ -261,7 +261,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 	}
     }
 
-    //> Load from Config file if tbl no present
+    //> Load from Config-file if tbl no present
     ResAlloc res(SYS->nodeRes(),false);
     XMLNode *nd, *fnd, *el;
     string vl, vl_tr;
@@ -269,7 +269,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 
     nd = SYS->cfgNode(path);
 
-    //>> Scan fields and fill Config
+    //>> Scan fields and fill Configuration
     for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++)
     {
 	el = nd->childGet(i_fld);
@@ -540,7 +540,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 
     if(!bd_ok)
     {
-	//> Get from config file
+	//> Get from config-file
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *tgtN = NULL;
 	if(rFlg&TBDS::UseTranslate && Mess->lang2Code().size())
@@ -557,7 +557,7 @@ string TBDS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"========================= Subsystem \"DB\" options ========================\n"
-	"----------- The config file station '%s' parameters -----------\n"
+	"----------- The config-file station '%s' parameters -----------\n"
 	"SYSStPref    <1>   Use station id prefix into generic (SYS) table.\n\n"
 	),nodePath().c_str());
 
@@ -586,7 +586,7 @@ void TBDS::load_( )
 	}
     } while(next_opt != -1);
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
     mSYSStPref = (bool)atoi(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg).c_str());
 
     //> DB open
@@ -600,7 +600,7 @@ void TBDS::load_( )
 	at(db_tp).at().at(db_nm).at().enable();
     }
 
-    //>> Open other DB stored into table 'DB' and config file
+    //>> Open other DB stored into table 'DB' and config-file
     try
     {
 	string id,type;
@@ -837,7 +837,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 	return rez;
     }
 
-    //> Config functions call
+    //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -876,7 +876,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
 		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load system from this DB"),RWRW__,"root","root");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len","50");
@@ -1116,7 +1116,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),RWRW__,"root",SDB_ID);
 	if(ctrMkNode("area",opt,0,"/prm",_("Table")))
 	{
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
 	    XMLNode *tbl;

@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2006-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.Siemens 1.2.4\n"
+"Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-05 13:49+0300\n"
+"POT-Creation-Date: 2011-11-23 12:38+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,7 +29,7 @@ msgstr ""
 "Предоставляет источник данных ПЛК Siemens посредством карт Hilscher CIF с "
 "использованием протокола MPI и библиотеки Libnodave для остального."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблица параметров"
 
 msgid "Request data period (ms)"
@@ -263,6 +262,7 @@ msgstr "20:Ошибка в указанном смещении или БД."
 msgid "Read block '%d' error: %s"
 msgstr "Ошибка чтения блока '%d': %s"
 
+#, c-format
 msgid "12:Read DB '%d' from controller error: %s"
 msgstr "12:Ошибка чтения БД '%d' из контроллера: %s"
 
@@ -276,6 +276,7 @@ msgstr "13:Истекло время ожидания получения соо�
 msgid "Write block '%d' error: %s"
 msgstr "Ошибка записи блока '%d': %s"
 
+#, c-format
 msgid "12:Write DB '%d' to controller error: %s"
 msgstr "12:Ошибка записи БД '%d' в контроллер: %s"
 
@@ -291,7 +292,7 @@ msgstr "11:Значения не получены."
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Controller is stoped."
+msgid "2:Controller is stopped."
 msgstr "2:Контроллер остановлен."
 
 msgid "Parameter is disabled."
@@ -300,13 +301,13 @@ msgstr "Параметр отключен."
 msgid "Parameter is disabled or id error."
 msgstr "Параметр отключен или ошибка идентификатора."
 
-msgid "Error calc template."
+msgid "Error calculate template."
 msgstr "Ошибка вычисления шаблона."
 
 msgid "Parameter disabled or error."
 msgstr "Параметр отключен или ошибка."
 
-msgid "Template config"
+msgid "Template configuration"
 msgstr "Конфигурация шаблона"
 
 msgid "Only DB offsets are to be shown"

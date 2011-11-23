@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.2\n"
+"Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-02 16:37+0300\n"
+"POT-Creation-Date: 2011-11-22 13:22+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -29,7 +28,7 @@ msgid ""
 msgstr ""
 "Дозволяє шлюзувати джерела даних віддалених OpenSCADA станцій до локальних."
 
-msgid "Parameteres cache table"
+msgid "Parameters cache table"
 msgstr "Таблиця кеша параметрів"
 
 msgid "Gather data period (s)"
@@ -39,15 +38,15 @@ msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
 msgid "Gather task priority"
-msgstr "Рівень пріорітету задачі збору даних"
+msgstr "Рівень пріоритету задачі збору даних"
 
 msgid "Restore timeout (s)"
 msgstr "Час відновлення (с)"
 
 msgid "Restore data depth time (hour). Zero for disable archive access."
 msgstr ""
-"Глибина часу відновлення даних (годин). Нуль для виключення доступа до "
-"архіва."
+"Глибина часу відновлення даних (годин). Нуль для виключення доступу до "
+"архіву."
 
 msgid "Sync inter remote station period (s)"
 msgstr "Період синхронізації з віддаленою станцією (с)"
@@ -79,6 +78,7 @@ msgstr "Наступний виклик за cron '%s'. "
 msgid "Spent time: %s. "
 msgstr "Витрачено часу: %s. "
 
+#, c-format
 msgid "Station '%s' error, restoring in %.3g s."
 msgstr "Помилка станції '%s', відновлення через %.6g с."
 
@@ -137,10 +137,10 @@ msgstr ""
 msgid "Name"
 msgstr "Ім'я"
 
-msgid "Config"
-msgstr "Кофігурація"
+msgid "Configuration"
+msgstr "Конфігурація"
 
-msgid "Remote station config"
+msgid "Remote station configuration"
 msgstr "Конфігурація віддаленої станції"
 
 msgid "Controller is not started!"

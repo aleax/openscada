@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2006-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.1.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 09:39+0300\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
@@ -35,7 +34,7 @@ msgstr "Таблица параметров для отражения"
 msgid "Request data period (ms)"
 msgstr "Период получения данных (мс)"
 
-msgid "Calc schedule"
+msgid "Calculate schedule"
 msgstr "Планирование вычислений"
 
 msgid "Request task priority"
@@ -80,7 +79,7 @@ msgstr "Затрачено времени: %s. "
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Controller is stoped."
+msgid "2:Controller is stopped."
 msgstr "2:Контроллер остановлен."
 
 msgid "Parameter is disabled or is not based on the template."
@@ -89,13 +88,13 @@ msgstr "Параметр отключен или не основан на шаб
 msgid "Parameter id error."
 msgstr "Ошибка идентификатора параметра."
 
-msgid "Error calc template."
+msgid "Error calculate template."
 msgstr "Ошибка вычисления шаблона."
 
 msgid "No template parameter or error."
-msgstr "Ошибка или не шаблонный параметр."
+msgstr "Ошибка или нешаблонный параметр."
 
-msgid "Template config"
+msgid "Template configuration"
 msgstr "Конфигурация шаблона"
 
 msgid "Only attributes are to be shown"

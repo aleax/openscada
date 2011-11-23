@@ -86,7 +86,7 @@ class TController : public TCntrNode, public TConfig
 	void del( const string &name, bool full = false )	{ chldDel(mPrm,name,-1,full); }
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )	{ return chldAt(mPrm,name); }
 
-	//> Redundance
+	//> Redundancy
 	bool redntUse( )			{ return mRedntUse; }
 	void setRedntUse( bool vl );
 	Redundant redntMode( );

@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Diamond DA boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.2.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to Diamond systems DA boards. Include support of Athena board.")
 #define LICENSE		"GPL2"
@@ -105,7 +105,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("ADDR",_("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
     fldAdd( new TFld("INT",_("Interrupt vector"),TFld::Integer,0,"2","5") );
-    fldAdd( new TFld("DIO_CFG",_("Digit IO config byte"),TFld::Integer,TFld::HexDec,"2","0") );
+    fldAdd( new TFld("DIO_CFG",_("Digit IO configuration byte"),TFld::Integer,TFld::HexDec,"2","0") );
     fldAdd( new TFld("ADMODE",_("A/D interrupt mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("ADRANGE",_("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),
 	(TSYS::int2str(RANGE_5)+";"+TSYS::int2str(RANGE_10)).c_str(),_("5v;10v")) );
@@ -113,7 +113,7 @@ void TTpContr::postEnable( int flag )
 	(TSYS::int2str(BIPOLAR)+";"+TSYS::int2str(UNIPOLAR)).c_str(),_("Bipolar;Unipolar")) );
     fldAdd( new TFld("ADGAIN",_("A/D gain"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(GAIN_1).c_str(),
 	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
-    fldAdd( new TFld("ADCONVRATE",_("A/D convertion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
+    fldAdd( new TFld("ADCONVRATE",_("A/D conversion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
 
     //- Parameter type bd structure -
     //-- Analog --
@@ -444,7 +444,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,-1,"/board",_("Board config")))
+	if(ctrMkNode("area",opt,-1,"/board",_("Board configuration")))
 	    if(ctrMkNode("area",opt,-1,"/board/dio",_("Digital IO ports. Select input!")))
 	    {
 		ctrMkNode("fld",opt,-1,"/board/dio/a",_("Port A"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -642,7 +642,7 @@ void TMdPrm::vlGet( TVal &val )
     if(aid == 0)
     {
 	if(!owner().startStat())
-	    val.setS(_("2:Controller is stoped"),0,true);
+	    val.setS(_("2:Controller is stopped"),0,true);
 	else if(!enableStat())
 	    val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);

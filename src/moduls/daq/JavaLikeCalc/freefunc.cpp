@@ -318,7 +318,7 @@ void Func::progCompile( )
     p_err  = "";	//Clear error messages
     la_pos = 0;		//LA position
     sprg = prg_src;
-    prg.clear();	//Clear programm
+    prg.clear();	//Clear program
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list
     funcClear();	//Clear functions list
@@ -910,7 +910,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     int a_sz = sizeof(uint16_t);
     string cd_tmp;
 
-    //> Mvi cond register (insert to programm)
+    //> Mvi cond register (insert to program)
     cd_tmp = prg.substr(p_cmd);
     prg.erase(p_cmd);
     cond = cdMvi(cond);
@@ -922,7 +922,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 
     if(thn != NULL && els != NULL)
     {
-	//> Add Move command to "then" end (insert to programm)
+	//> Add Move command to "then" end (insert to program)
 	cd_tmp = prg.substr(p_else-1);	//-1 pass end command
 	prg.erase(p_else-1);
 	thn = cdMvi(thn);
@@ -930,7 +930,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 	p_end += prg.size()-p_else+1;
 	p_else = prg.size()+1;
 	prg += cd_tmp;
-	//> Add Move command to "else" end (insert to programm)
+	//> Add Move command to "else" end (insert to program)
 	cd_tmp = prg.substr(p_end-1);   //-1 pass end command
 	prg.erase(p_end-1);
 	els = cdMvi(els);
@@ -957,7 +957,7 @@ void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter
     string cd_tmp;
     int p_body = (p_postiter?p_postiter:p_solve)-1;	//Include Reg::End command
 
-    //> Mvi cond register (insert to programm)
+    //> Mvi cond register (insert to program)
     cd_tmp = prg.substr(p_body);
     prg.erase(p_body);
     cond = cdMvi(cond);
@@ -988,7 +988,7 @@ void Func::cdCycleObj( int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var )
     uint16_t p_var = var->pos();
     var->free();
 
-    //> Mvi cond register (insert to programm)
+    //> Mvi cond register (insert to program)
     string cd_tmp = prg.substr(p_body);
     prg.erase(p_body);
     cond = cdMvi(cond);
@@ -1743,7 +1743,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	{
 	    if(time(NULL) > (dt.start_tm+max_calc_tm))
 	    {
-		mess_err(nodePath().c_str(),_("Timeouted function calc."));
+		mess_err(nodePath().c_str(),_("Timeouted function calculation"));
 		dt.flg |= 0x01;
 		return;
 	    }
@@ -2652,7 +2652,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    }
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function '%s' is stoped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function '%s' is stopped."),*cprg,*cprg,id().c_str());
 	}
     }
 }
@@ -2666,8 +2666,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
 	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calc time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
-	if(ctrMkNode("area",opt,-1,"/io",_("Programm")))
+	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
+	if(ctrMkNode("area",opt,-1,"/io",_("Program")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move"))
 	    {
@@ -2682,7 +2682,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Programm"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }

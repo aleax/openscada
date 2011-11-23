@@ -54,7 +54,7 @@ msgid "Cell error!"
 msgstr "Помилка чарунки!"
 
 msgid "Field is not present!"
-msgstr "Поле відсутне!"
+msgstr "Поле відсутнє!"
 
 msgid "Column error!"
 msgstr "Помилка стовпчику!"
@@ -67,4 +67,4 @@ msgstr "Помилка лінії!"
 
 #, c-format
 msgid "Key column <%s> is not present!"
-msgstr "Ключовий стовпчик <%s> відсутнії!"
+msgstr "Ключовий стовпчик <%s> відсутній!"

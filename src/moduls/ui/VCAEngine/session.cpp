@@ -626,7 +626,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
 		ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calc session time"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Period (ms)"),permit(),owner().c_str(),grp().c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/style",_("Style"),permit(),owner().c_str(),grp().c_str(),3,"tp","dec","dest","select","select","/obj/cfg/stLst");

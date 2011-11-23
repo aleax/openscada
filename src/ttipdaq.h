@@ -68,7 +68,7 @@ class TTipDAQ : public TModule, public TElem
 	virtual void compileFuncSynthHighl( const string &lang, XMLNode &shgl )	{ }
 	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "", int maxCalcTm = 10 );
 
-	//> Redundance
+	//> Redundancy
 	virtual bool redntAllow( )		{ return false; }
 
 	TDAQS &owner( );
@@ -81,7 +81,7 @@ class TTipDAQ : public TModule, public TElem
 
     private:
 	//Private attributes
-	vector<TTipParam *>	paramt;		// List type parameter and Structure configs of parameter.
+	vector<TTipParam *>	paramt;		// List type parameter and Structure configurations of parameter.
 	int	m_cntr;
 };
 

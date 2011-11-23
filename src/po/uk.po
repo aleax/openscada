@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-28 15:21+0300\n"
+"POT-Creation-Date: 2011-11-21 12:14+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -17,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Error open semaphor!"
+msgid "Error open semaphore!"
 msgstr "Помилка відкриття семафору!"
 
 msgid "Resource is try deadlock a thread!"
-msgstr "Ресурс намагається намертво заблокувати поток!"
+msgstr "Ресурс намагається намертво заблокувати нитку!"
 
 msgid "Resource is timeouted!"
 msgstr "Час очікування ресурсу вичерпано!"
@@ -71,10 +70,10 @@ msgstr "Період буфера (сек)"
 msgid "Buffer size (items)"
 msgstr "Розмір буферу (одиниць)"
 
-msgid "Buffer hard time griding"
+msgid "Buffer in hard time grid"
 msgstr "Жорстка сітка часу буфера"
 
-msgid "Buffer high time resolution"
+msgid "Buffer in high time resolution"
 msgstr "Висока роздільна здатність часу буфера"
 
 msgid "Process into archivators"
@@ -92,10 +91,10 @@ msgstr "Помилка завантаження архівів значень."
 #, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
-"------------ Parameters of section '%s' in config file -----------\n"
+"------------ Parameters of section '%s' in config-file -----------\n"
 "MessBufSize   <items>       Messages buffer size.\n"
-"MessPeriod    <sec>         Message arhiving period.\n"
-"ValPeriod     <msec>        Values arhiving period.\n"
+"MessPeriod    <sec>         Message archiving period.\n"
+"ValPeriod     <msec>        Values archiving period.\n"
 "ValPriority   <level>\t     Values task priority level.\n"
 "MaxReqMess    <items>       Maximum request messages.\n"
 "MaxReqVals    <items>       Maximum request values.\n"
@@ -106,7 +105,7 @@ msgstr ""
 "MessBufSize   <од.>        Розмір буферу повідомлень.\n"
 "MessPeriod    <сек>        Період архівації повідомлень.\n"
 "ValPeriod     <мсек>       Період архівації значень.\n"
-"ValPriority   <рівень>     Рівень пріорітету задачі значень.\n"
+"ValPriority   <рівень>     Рівень пріоритету задачі значень.\n"
 "MaxReqMess    <од.>        Максимальна кількість запитаних повідомлень.\n"
 "MaxReqVals    <од.>        Максимальна кількість запитаних значень.\n"
 "\n"
@@ -130,7 +129,7 @@ msgid "Stop subsystem."
 msgstr "Зупинка підсистеми."
 
 msgid "Archive messages thread is not stopped!"
-msgstr "Поток архівування повідомлень не зупинено!"
+msgstr "Нитку архівування повідомлень не зупинено!"
 
 #, c-format
 msgid "Value archivator '%s' stop error."
@@ -147,10 +146,10 @@ msgstr "Помилка зупинки архіву значень '%s'."
 msgid "Buffer full. Messages lost!"
 msgstr "Буфер повний. Повідомлення втрачені!"
 
-msgid "Messagess buffer filling is too fast!"
+msgid "Messages buffer filling is too fast!"
 msgstr "Буфер повідомлень заповнюється дуже швидко!"
 
-msgid "Message bufer read error."
+msgid "Message buffer read error."
 msgstr "Помилка читання буферу повідомлень."
 
 msgid "Value archive"
@@ -186,14 +185,14 @@ msgid ""
 msgstr ""
 "Шаблон або регулярний вираз категорії повідомлень.\n"
 "Використовуйте символи шаблону для групового вибору:\n"
-"  '*' - будьяка підстрока;\n"
-"  '?' - будьякий символ.\n"
+"  '*' - будь який підрядок;\n"
+"  '?' - будь який символ.\n"
 "Регулярний вираз розташовується між символами '/' (/mod_(System|LogicLev)/)."
 
 msgid "Level"
 msgstr "Рівень"
 
-msgid "Get messages for level more and equaly it."
+msgid "Get messages for level more and equal it."
 msgstr "Отримання повідомлень з рівнем більш або дорівнює вказаному."
 
 msgid "Archivator"
@@ -230,7 +229,7 @@ msgid "Get data period (ms)"
 msgstr "Період отримання даних (мс)"
 
 msgid "Get data task priority level"
-msgstr "Рівень пріорітету задачі отримання даних"
+msgstr "Рівень пріоритету задачі отримання даних"
 
 msgid "Number"
 msgstr "Кількість"
@@ -263,7 +262,7 @@ msgstr "Архіватор повідомлень: "
 msgid "State"
 msgstr "Стан"
 
-msgid "Runing"
+msgid "Running"
 msgstr "Виконується"
 
 msgid "Archivator DB"
@@ -275,7 +274,7 @@ msgstr "Кінець"
 msgid "Begin"
 msgstr "Початок"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфігурація"
 
 msgid ""
@@ -289,15 +288,15 @@ msgstr ""
 "Шаблон або регулярний вираз категорії повідомлень для обробки архіватором, "
 "поділені символом ';'.\n"
 "Використовуйте символи шаблону для групової вибірки:\n"
-"  '*' - будьяка підстрока;\n"
-"  '?' - будьякий символ.\n"
+"  '*' - будь який підрядок;\n"
+"  '?' - будь який символ.\n"
 "Регулярний вираз розташовується між символами '/' (/mod_(System|LogicLev)/)."
 
 msgid "To start"
 msgstr "Запускати"
 
 msgid "Value is not present."
-msgstr "Значення відсутне."
+msgstr "Значення відсутнє."
 
 #, c-format
 msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
@@ -318,7 +317,7 @@ msgstr "Помилка архіватору '%s' або його не запущ
 
 #, c-format
 msgid "gdImageStringFT for font '%s' error: %s."
-msgstr "Помилка gdImageStringFT для шрифта '%s': %s."
+msgstr "Помилка gdImageStringFT для шрифту '%s': %s."
 
 #, c-format
 msgid "%ds"
@@ -394,10 +393,10 @@ msgid "Picture size"
 msgstr "Розмір зображення"
 
 msgid "Picture width in pixels."
-msgstr "Ширина зображення у пікселах."
+msgstr "Ширина зображення у пікселях."
 
 msgid "Picture height in pixels."
-msgstr "Висота зображення у пікселах."
+msgstr "Висота зображення у пікселях."
 
 msgid "Value scale"
 msgstr "Шкала значення"
@@ -421,7 +420,7 @@ msgid "Real"
 msgstr "Реальний"
 
 msgid "String"
-msgstr "Строка"
+msgstr "Рядок"
 
 msgid "Passive"
 msgstr "Пасивний"
@@ -466,7 +465,7 @@ msgstr "Помилка закриття БД '%s'!"
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
-"----------- The config file station '%s' parameters -----------\n"
+"----------- The config-file station '%s' parameters -----------\n"
 "SYSStPref    <1>   Use station id prefix into generic (SYS) table.\n"
 "\n"
 msgstr ""
@@ -487,7 +486,7 @@ msgstr "Повне видалення БД"
 
 msgid "Select for full deletion DB on DB close. Else DB will be simply closed."
 msgstr ""
-"Вибрати для повного видалення БД під час закриття. Інакше БД буде просто "
+"Обрати для повного видалення БД під час закриття. Інакше БД буде просто "
 "закрито."
 
 msgid "Data base: "
@@ -512,7 +511,7 @@ msgid "Load system from this DB"
 msgstr "Завантажити систему з цієї БД"
 
 msgid "Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."
-msgstr "Кодування даних у БД. Для приклада: UTF-8, KOI8-R, KOI8-U ... ."
+msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid "Tables"
 msgstr "Таблиці"
@@ -561,7 +560,7 @@ msgstr "Дані"
 
 #, c-format
 msgid "Field id = %s(%s) no present!"
-msgstr "Поле id = %s(%s) відсутне!"
+msgstr "Поле id = %s(%s) відсутнє!"
 
 #, c-format
 msgid "%s:%s:> Control element '%s' error!"
@@ -577,10 +576,10 @@ msgstr "Очікування звільнення %d користувачами!
 #, c-format
 msgid "Timeouted of wait. Object is used by %d users. Free object first!"
 msgstr ""
-"Перевищено час очикування. Об'єкт викорисовується %d користувачами. "
+"Перевищено час очікування. Об'єкт використовується %d користувачами. "
 "Звільніть об'єкт спочатку!"
 
-msgid "Blocking node error. Inform developpers please!"
+msgid "Blocking node error. Inform developers please!"
 msgstr "Помилка блокування вузлу. Інформуйте будь ласка розробників!"
 
 msgid "Node disable error. Restore node enabling."
@@ -604,7 +603,7 @@ msgid "Destination node doesn't have necessary branche."
 msgstr "Цільовий вузол не має потрібної гілки."
 
 #, c-format
-msgid "Branche group '%d' error."
+msgid "Branch group '%d' error."
 msgstr "Помилка групи гілок '%d'."
 
 #, c-format
@@ -615,13 +614,13 @@ msgid "Node is not enabled!"
 msgstr "Вузол не увімкнено!"
 
 msgid "Add child id is empty!"
-msgstr "Id нащадку, який додається, порожне!"
+msgstr "Id нащадку, який додається, порожнє!"
 
 #, c-format
 msgid "Node '%s' is already present."
 msgstr "Вузол '%s' вже присутній."
 
-msgid "Node is beign processed now!"
+msgid "Node is begin processed now!"
 msgstr "Вузол оброблюється зараз!"
 
 #, c-format
@@ -642,7 +641,7 @@ msgid "Saving node error."
 msgstr "Помилка збереження вузла."
 
 msgid "Too more users for node!!!"
-msgstr "Дуже багато користувачів у візла!!!"
+msgstr "Дуже багато користувачів у вузла!!!"
 
 #, c-format
 msgid "Function '%s' error or not enough parameters."
@@ -677,7 +676,7 @@ msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' відсутній!"
 
 msgid "Element type is not string!"
-msgstr "Тип елементу не строка!"
+msgstr "Тип елементу не рядок!"
 
 msgid "Element type is not real!"
 msgstr "Тип елементу не реальний!"
@@ -685,7 +684,7 @@ msgstr "Тип елементу не реальний!"
 msgid "Element type is not int!"
 msgstr "Тип елементу не цілий!"
 
-msgid "Element type is not boolean!"
+msgid "Element type is not Boolean!"
 msgstr "Тип елементу не логічний!"
 
 msgid "Element type is not selected!"
@@ -694,26 +693,26 @@ msgstr "Тип елементу не вибірковий!"
 msgid "Started. "
 msgstr "Запущено. "
 
-msgid "Geting data from remote station: "
+msgid "Getting data from remote station: "
 msgstr "Отримання даних з віддаленої станції: "
 
 msgid ""
-"Your redundance configuration wrong and controller often enable-disable "
+"Your redundancy configuration wrong and controller often enable-disable "
 "redundancy!"
 msgstr ""
 "Ваші налаштування резервування некоректні та контролер часто включає-"
 "виключає резервування!"
 
 msgid "Enabled. "
-msgstr "Ввімкнено. "
+msgstr "Включено. "
 
 msgid "Disabled. "
 msgstr "Виключено. "
 
-msgid "Load controller's configs!"
+msgid "Load controller's configurations!"
 msgstr "Завантаження конфігурації контролера!"
 
-msgid "Save controller's configs!"
+msgid "Save controller's configurations!"
 msgstr "Збереження конфігурації контролера!"
 
 msgid "Start controller!"
@@ -733,11 +732,11 @@ msgid "Some parameters enable error."
 msgstr "Помилка включення деяких параметрів."
 
 msgid "Disable controller!"
-msgstr "Вимкнення контроллера!"
+msgstr "Виключення контролеру!"
 
 #, c-format
 msgid "Disable parameter '%s' error."
-msgstr "Помилка вимкнення параметру '%s'."
+msgstr "Помилка виключення параметру '%s'."
 
 #, c-format
 msgid "Add parameter '%s' error."
@@ -750,7 +749,7 @@ msgid "Controller: "
 msgstr "Контролер: "
 
 msgid "Controller"
-msgstr "Контроллер"
+msgstr "Контролер"
 
 msgid "Status"
 msgstr "Статус"
@@ -773,17 +772,17 @@ msgstr "Додавати параметри"
 msgid "Data acquisition"
 msgstr "Збір даних"
 
-msgid "Maximum calc time (sec)"
+msgid "Maximum calculate time (sec)"
 msgstr "Максимальний час обрахунку (сек)"
 
-msgid "Template programm"
+msgid "Template program"
 msgstr "Програма шаблону"
 
 msgid "Template ID"
 msgstr "ID шаблону"
 
 msgid "Flags"
-msgstr "Флаги"
+msgstr "Прапорці"
 
 msgid "Real position"
 msgstr "Реальна позиція"
@@ -796,7 +795,7 @@ msgstr "Помилка завантаження бібліотек шаблон�
 
 #, c-format
 msgid "Add controller '%s' error."
-msgstr "Помилка додання контроллера '%s'."
+msgstr "Помилка додання контролеру '%s'."
 
 #, c-format
 msgid "Start template library '%s' error."
@@ -812,13 +811,13 @@ msgstr "Помилка зупинки контролера '%s'."
 
 #, c-format
 msgid "Disable controller '%s' error."
-msgstr "Помилка вимкнення контроллера '%s'."
+msgstr "Помилка вимкнення контролеру '%s'."
 
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
-"------------ Parameters of section '%s' in config file -----------\n"
-"RdStLevel    <lev>  The curent station redundant level.\n"
+"------------ Parameters of section '%s' in config-file -----------\n"
+"RdStLevel    <lev>  The current station redundant level.\n"
 "RdTaskPer    <s>    The redundant task call period.\n"
 "RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
 "RdRestDtTm   <hour> Restore data archive depth from a reserve station after "
@@ -828,7 +827,7 @@ msgid ""
 "\n"
 msgstr ""
 "==================== Опції підсистеми \"Збір даних\" ======================\n"
-"------- Параметри секції '%s' у конфігураціїному файлі -----------\n"
+"------- Параметри секції '%s' у конфігураційному файлі -----------\n"
 "RdStLevel    <рів>   Рівень резервування поточної станції.\n"
 "RdTaskPer    <с>     Період виклику задачі обслуговування резервування.\n"
 "RdRestConnTm <с>     Час відновлення з'єднання з \"мертвою\" резервною "
@@ -842,7 +841,7 @@ msgstr ""
 msgid "Template library"
 msgstr "Бібліотеки шаблонів"
 
-msgid "Redundance"
+msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Station level"
@@ -852,7 +851,7 @@ msgid "Redundant task period (s)"
 msgstr "Період задачі резервування (с)"
 
 msgid "Restore connection timeout (s)"
-msgstr "Час відновлення з'єдання (с)"
+msgstr "Час відновлення підключення (с)"
 
 msgid "Restore data depth time (hour)"
 msgstr "Глибина часу відновлення даних (годин)"
@@ -916,16 +915,16 @@ msgstr "Елемент контейнеру вже під'єднано!"
 msgid "Element '%s' is not present!"
 msgstr "Елемент '%s' відсутній!"
 
-msgid "Field is not string."
-msgstr "Поле не строка."
+msgid "Field is not String."
+msgstr "Поле не рядок."
 
-msgid "Field is not integer."
+msgid "Field is not Integer."
 msgstr "Поле не ціле."
 
-msgid "Field is not real."
+msgid "Field is not Real."
 msgstr "Поле не реальне."
 
-msgid "Field is not boolean."
+msgid "Field is not Boolean."
 msgstr "Поле не логічне."
 
 msgid "Field is not select type!"
@@ -960,10 +959,10 @@ msgstr "Помилка видалення IO <%d>."
 
 #, c-format
 msgid "Move IO from %d to %d error."
-msgstr "Помилка пересунення IO з %d до %d."
+msgstr "Помилка пересування IO з %d до %d."
 
 #, c-format
-msgid "Change is not permited while function is used: %s"
+msgid "Change is not permitted while function is used: %s"
 msgstr "Зміни неможливі тому що функція використана: %s"
 
 #, c-format
@@ -977,7 +976,7 @@ msgid "Function"
 msgstr "Функція"
 
 msgid "Accessing"
-msgstr "Доступен"
+msgstr "Доступний"
 
 msgid "Used"
 msgstr "Використано"
@@ -1040,8 +1039,8 @@ msgid "Get object from not object's IO %d error!"
 msgstr "Помилка отримання об'єкту з не об'єктного IO %d!"
 
 #, c-format
-msgid "Error iconv open: %s"
-msgstr "Помилка відкриття iconv: %s"
+msgid "Error 'iconv' open: %s"
+msgstr "Помилка відкриття 'iconv': %s"
 
 #, c-format
 msgid "Error input sequence convert: %s"
@@ -1059,7 +1058,7 @@ msgstr ""
 "Для використання основної робочої БД вставити '*.*'."
 
 msgid ""
-"Schedule is writed in seconds periodic form or in standard CRON form.\n"
+"Schedule is wrote in seconds periodic form or in standard CRON form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
 "Cron it is standard form \"* * * * *\".\n"
 "  Where items by order:\n"
@@ -1067,7 +1066,7 @@ msgid ""
 "    - hours (0-23);\n"
 "    - days (1-31);\n"
 "    - month (1-12);\n"
-"    - week day (0[sunday]-6).\n"
+"    - week day (0[Sunday]-6).\n"
 "  Where an item variants:\n"
 "    - \"*\" - any value;\n"
 "    - \"1,2,3\" - allowed values;\n"
@@ -1089,7 +1088,7 @@ msgstr ""
 "    - години (0-23);\n"
 "    - дні (1-31);\n"
 "    - місяця (1-12);\n"
-"    - дні тижня (0[неділя]-6).  Де варіанти елементу:\n"
+"    - дні тижня (0[Неділя]-6).  Де варіанти елементу:\n"
 "    - \"*\" - будь яке значення;\n"
 "    - \"1,2,3\" - дозволені значення;\n"
 "    - \"1-5\" - діапазон дозволених значень;\n"
@@ -1102,14 +1101,14 @@ msgstr ""
 "  \"*/2 * * * *\" - для хвилин: 0,2,4,...,56,58;\n"
 "  \"* 2-4 * * *\" - для будь якої хвилини у годині від 2 до 4(включно)."
 
-msgid "Modules sheduler"
+msgid "Modules scheduler"
 msgstr "Керування модулями"
 
 #, c-format
 msgid ""
-"=================== Subsystem \"Module sheduler\" options =================\n"
+"=================== Subsystem \"Module scheduler\" options =================\n"
 "    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
-"------------ Parameters of section '%s' in config file -----------\n"
+"------------ Parameters of section '%s' in config-file -----------\n"
 "ModPath  <path>        Path to shared libraries(modules).\n"
 "ModAllow <list>        List of shared libraries allowed for automatic "
 "loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
@@ -1121,7 +1120,7 @@ msgid ""
 msgstr ""
 "================ Опції підсистеми \"Керування модулями\" ==================\n"
 "    --ModPath=<шлях>  Шлях до модулів (/var/os/modules/).\n"
-"------- Параметри секції '%s' у конфігураціїному файлі -----------\n"
+"------- Параметри секції '%s' у конфігураційному файлі -----------\n"
 "ModPath  <шлях>       Шлях до поділяємих бібліотек (модулів).\n"
 "ModAllow <перелік>    Перелік поділяємих бібліотек дозволених для "
 "автоматичного завантаження, підключення та виконання (bd_DBF.so;"
@@ -1136,7 +1135,7 @@ msgstr ""
 
 #, c-format
 msgid "SO '%s' is not present!"
-msgstr "SO '%s' відсутне!"
+msgstr "SO '%s' відсутнє!"
 
 #, c-format
 msgid "SO '%s' is already attached!"
@@ -1166,13 +1165,13 @@ msgid "Subsystem"
 msgstr "Підсистема"
 
 msgid "Path to shared libs(modules)"
-msgstr "Шлях до поділяємих біблиотек(модулей)"
+msgstr "Шлях до поділяємих бібліотек(модулів)"
 
 msgid "Allowed modules"
 msgstr "Дозволені модулі"
 
 msgid ""
-"List of shared libs(modules) allow for auto conection.\n"
+"List of shared libs(modules) allow for auto connection.\n"
 "Elements separated by symbol ';'.\n"
 "Value '*' is used for allow all modules."
 msgstr ""
@@ -1185,7 +1184,7 @@ msgid "Denied modules"
 msgstr "Заборонені модулі"
 
 msgid ""
-"List of shared libs(modules) deny for auto conection.\n"
+"List of shared libs(modules) deny for auto connection.\n"
 "Elements separated by symbol ';'."
 msgstr ""
 "Перелік поділяємих бібліотек(модулів) заборонених для автоматичного "
@@ -1232,13 +1231,13 @@ msgstr "Інформація про модуль"
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Controller is stoped."
+msgid "2:Controller is stopped."
 msgstr "2:Контролер зупинено."
 
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "Change type lead to data lost for specific configs."
+msgid "Change type lead to data lost for specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічної конфігурації."
 
 msgid "Controller is not started!"
@@ -1248,15 +1247,15 @@ msgid "Function calculate frequency (Hz)"
 msgstr "Частота обчислення функції (Гц)"
 
 msgid "Function start flag"
-msgstr "Флаг запуску функції"
+msgstr "Прапорець запуску функції"
 
 msgid "Function stop flag"
-msgstr "Флаг зупинки функції"
+msgstr "Прапорець зупинки функції"
 
 msgid "Function error"
 msgstr "Помилка функції"
 
-msgid "Tempate is disabled."
+msgid "Template is disabled."
 msgstr "Шаблон вимкнено."
 
 msgid "Parameter template: "
@@ -1266,7 +1265,7 @@ msgid "Template"
 msgstr "Шаблон"
 
 msgid "Real;Integer;Boolean;String;Object"
-msgstr "Реальний;Цілий;Логічний;Строка;Об'єкт"
+msgstr "Реальний;Цілий;Логічний;Рядок;Об'єкт"
 
 msgid "Input;Output"
 msgstr "Вхід;Вихід"
@@ -1283,10 +1282,10 @@ msgstr "Конфігурація"
 msgid "Constant;Public constant;Link"
 msgstr "Константа;Публічна константа;Зв'язок"
 
-msgid "Programm language"
+msgid "Program language"
 msgstr "Мова програми"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Програма"
 
 msgid "New IO"
@@ -1517,7 +1516,7 @@ msgid ""
 "========================= The general system options ======================\n"
 "===========================================================================\n"
 "-h, --help             Info message about system options.\n"
-"    --Config=<path>    Config file path.\n"
+"    --Config=<path>    Config-file path.\n"
 "    --Station=<id>     Station identifier.\n"
 "    --demon            Start into demon mode.\n"
 "    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -1526,7 +1525,7 @@ msgid ""
 "                         <direct> & 2 - stdout;\n"
 "                         <direct> & 4 - stderr;\n"
 "                         <direct> & 8 - archive.\n"
-"----------- The config file station '%s' parameters -----------\n"
+"----------- The config-file station '%s' parameters -----------\n"
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "Workdir    <path>\tWork directory.\n"
@@ -1553,10 +1552,10 @@ msgstr ""
 "===========================================================================\n"
 "-h, --help             Інформація про опції системи.\n"
 "    --Config=<шлях>    Конфігураційний файл.\n"
-"    --Station=<ім'я>   І'мя станції.\n"
+"    --Station=<ім'я>   Ім'я станції.\n"
 "    --demon            Запуск у режимі демона.\n"
-"    --MessLev=<рівень> Обробляємий <рівень> повідомлень (0-7).\n"
-"    --log=<напрямок>   Направлення повідомлень до:\n"
+"    --MessLev=<рівень> Оброблюваний <рівень> повідомлень (0-7).\n"
+"    --log=<напрямок>   Спрямування повідомлень до:\n"
 "                         <напрямок> & 1 - системний логер (syslogd);\n"
 "                         <напрямок> & 2 - стандартний вихід (stdout);\n"
 "                         <напрямок> & 4 - стандартний вихід помилок "
@@ -1568,40 +1567,40 @@ msgstr ""
 "Workdir    <шлях>      Робоча директорія.\n"
 "IcoDir     <path>      Директорія іконок.\n"
 "ModDir     <path>      Директорія модулів.\n"
-"MessLev    <рівень>    Обробляємий <рівень> повідомлень (0-7).\n"
-"LogTarget  <напрямок>  Направлення повідомлень до:\n"
+"MessLev    <рівень>    Оброблюваний <рівень> повідомлень (0-7).\n"
+"LogTarget  <напрямок>  Спрямування повідомлень до:\n"
 "                         <напрямок> & 1 - системний логер (syslogd);\n"
 "                         <напрямок> & 2 - стандартний вихід (stdout);\n"
 "                         <напрямок> & 4 - стандартний вихід помилок "
 "(stderr);\n"
 "                         <напрямок> & 8 - архів повідомлень.\n"
-"Lang2CodeBase <мова>   Базова мова для перекладу текстових зміних, два "
+"Lang2CodeBase <мова>   Базова мова для перекладу текстових змінних, два "
 "символи.\n"
 "SaveAtExit <true>      Зберігати систему при виході.\n"
 "SavePeriod <сек>\tПеріод збереження системи.\n"
 "\n"
 
 #, c-format
-msgid "Config file '%s' error: %s"
+msgid "Config-file '%s' error: %s"
 msgstr "Помилка конфігураційного файлу '%s': %s"
 
 #, c-format
 msgid ""
-"Station '%s' is not present in the config file. Use '%s' station config!"
+"Station '%s' is not present in the config-file. Use '%s' station configuration!"
 msgstr ""
 "Станція '%s' відсутня у конфігураційному файлі. Використано конфігурацію "
 "станції '%s'!"
 
 #, c-format
-msgid "Config '%s' error!"
+msgid "Configuration '%s' error!"
 msgstr "Помилка конфігурації '%s'!"
 
 #, c-format
-msgid "Load config file error: %s"
+msgid "Load config-file error: %s"
 msgstr "Помилка завантаження конфігураційного файлу: %s"
 
 #, c-format
-msgid "Config '%s' write error. %s"
+msgid "Configuration '%s' write error. %s"
 msgstr "Помилка конфігураційного файлу '%s': %s"
 
 msgid "Load!"
@@ -1632,17 +1631,17 @@ msgstr "Зупинка!"
 
 #, c-format
 msgid "Error stop subsystem '%s'."
-msgstr "Помилка зупинення підсистеми '%s'."
+msgstr "Помилка зупинки підсистеми '%s'."
 
-msgid "The Terminate signal is received.. Server is being stoped!"
+msgid "The Terminate signal is received. Server is being stopped!"
 msgstr "Отримано сигнал припинення. Сервер буде зупинено!"
 
-msgid "Floating point exception is catched!"
+msgid "Floating point exception is caught!"
 msgstr "Виключення операції з плаваючою крапкою!"
 
 #, c-format
 msgid "Free child process %d!"
-msgstr "Закриття процеса нащадка %d!"
+msgstr "Закриття процесу нащадка %d!"
 
 msgid "Segmentation fault signal!"
 msgstr "Сигнал помилки сегментації пам'яті!"
@@ -1664,22 +1663,26 @@ msgstr "Очікування повідомлення..."
 msgid "Task '%s' is already present!"
 msgstr "Завдання '%s' вже присутне!"
 
-msgid "No permition for create realtime policy. Default thread is created!"
+msgid "No permission for create real-time policy. Default thread is created!"
 msgstr ""
-"Немає доступу для створення політики реального часу. Створено звичайний "
-"поток!"
+"Немає доступу для створення політики реального часу. Створено звичайну "
+"нитку!"
 
 #, c-format
 msgid "Task creation error %d."
 msgstr "Помилка створення задачі %d."
 
 #, c-format
+msgid "Task '%s' start timeouted!"
+msgstr "Завдання '%s' не запущено!"
+
+#, c-format
 msgid "Task '%s' is not stopped!"
 msgstr "Завдання '%s' не зупинено!"
 
 #, c-format
-msgid "Task %u unexpected terminated by exeption."
-msgstr "Завдання %u неспадівано перервано виключенням."
+msgid "Task %u unexpected terminated by exception."
+msgstr "Завдання %u несподівано перервано виключенням."
 
 msgid "1:Request is not object!"
 msgstr "1:Запит не є об'єкт!"
@@ -1690,9 +1693,6 @@ msgstr "%s станція: \"%s\""
 
 msgid "Station"
 msgstr "Станція"
-
-msgid "Program"
-msgstr "Програма"
 
 msgid "Version"
 msgstr "Версія"
@@ -1709,13 +1709,13 @@ msgstr "Операційна система"
 msgid "Frequency (MHZ)"
 msgstr "Частота (МГц)"
 
-msgid "Realtime clock resolution"
-msgstr "Роздільна здатність годиника реального часу"
+msgid "Real-time clock resolution"
+msgstr "Роздільна здатність годиннику реального часу"
 
 msgid "Internal charset"
 msgstr "Внутрішнє кодування"
 
-msgid "Config file"
+msgid "Config-file"
 msgstr "Конфігураційний файл"
 
 msgid "Work directory"
@@ -1758,12 +1758,12 @@ msgid "Language"
 msgstr "Мова"
 
 msgid "Text variable's base language"
-msgstr "Базова мова текстових зміних"
+msgstr "Базова мова текстових змінних"
 
 msgid ""
-"Multilangual for variable texts support enabling by base language selection."
+"Multilingual for variable texts support enabling by base language selection."
 msgstr ""
-"Вмикає багатомовну підтримку для текстових зміних шляхом вибору базової мови."
+"Вмикає багатомовну підтримку для текстових змінних шляхом вибору базової мови."
 
 msgid "Least level"
 msgstr "Найменший рівень"
@@ -1798,7 +1798,7 @@ msgstr ""
 "Номера процесорів починаються з 0."
 
 msgid "Thread"
-msgstr "Поток"
+msgstr "Нитка"
 
 msgid "TID"
 msgstr ""
@@ -1807,7 +1807,7 @@ msgid "Policy"
 msgstr "Політика"
 
 msgid "Prior."
-msgstr "Приор."
+msgstr "Пріор."
 
 msgid "CPU set"
 msgstr "Вст. CPU"
@@ -1854,7 +1854,7 @@ msgid "Id of parameter type error!"
 msgstr "Id параметру помилкове!"
 
 msgid "Parameter type is not present."
-msgstr "Тип параметру відсутнії."
+msgstr "Тип параметру відсутній."
 
 #, c-format
 msgid "Error attach new controller %s."
@@ -1871,7 +1871,7 @@ msgid "Transport protocol"
 msgstr "Транспортний протокол"
 
 msgid "Open user"
-msgstr "Відкриваючий користувач"
+msgstr "Користувач що відкриває"
 
 msgid "Transport"
 msgstr "Транспорт"
@@ -1972,8 +1972,8 @@ msgstr ""
 "Ознака очікувати таймауту при отриманні відповіді.\n"
 "Багато систем під час відповіді на різних протоколах (HTTP) можуть надсилати "
 "дані відповіді декількома частинами.\n"
-"Без цього флагу буде отримано та відображено тільки першу частину.\n"
-"При встановлені цього флагу буде здійснено очікування всіх частин відповіді, "
+"Без цього прапорцю буде отримано та відображено тільки першу частину.\n"
+"При встановлені цього прапорцю буде здійснено очікування всіх частин відповіді, "
 "до відсутності даних протягом таймаута доочікування транспорту."
 
 msgid "Answer"
@@ -2048,7 +2048,7 @@ msgstr "Нащадок %s:%d не знайдений!"
 
 #, c-format
 msgid "Child with attribut %s=%s is not present."
-msgstr "Нащадок з атрибутом %s=%s відсутнії."
+msgstr "Нащадок з атрибутом %s=%s відсутній."
 
 #, c-format
 msgid "Unexpected end. Pos: %d"
@@ -2056,7 +2056,7 @@ msgstr "Неочікуваний кінець. Поз: %d"
 
 #, c-format
 msgid "No comment block end. Pos: %d"
-msgstr "Немає завершення блоку коментарю. Поз: %d"
+msgstr "Немає завершення блоку коментаря. Поз: %d"
 
 #, c-format
 msgid "Unfinished '!DOCTYPE' block. Pos: %d"
@@ -2090,10 +2090,10 @@ msgstr "Помилка сутності. Поз: %d"
 msgid "Unknown entity. Pos: %d"
 msgstr "Невідома сутність. Поз: %d"
 
-msgid "Message arhiv no support!"
+msgid "Message archive no support!"
 msgstr "Архів повідомлень не підтримується!"
 
-msgid "Value arhiv no support!"
+msgid "Value archive no support!"
 msgstr "Архів значень не підтримується!"
 
 #, c-format

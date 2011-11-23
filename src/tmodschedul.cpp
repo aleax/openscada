@@ -39,7 +39,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules sheduler"),false), mAllow("*"), mPer(10)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10)
 {
 
 }
@@ -66,9 +66,9 @@ string TModSchedul::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"=================== Subsystem \"Module sheduler\" options =================\n"
+	"=================== Subsystem \"Module scheduler\" options =================\n"
 	"    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
-	"------------ Parameters of section '%s' in config file -----------\n"
+	"------------ Parameters of section '%s' in config-file -----------\n"
 	"ModPath  <path>        Path to shared libraries(modules).\n"
 	"ModAllow <list>        List of shared libraries allowed for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
 	"                       Use '*' value for allow all modules.\n"
@@ -415,9 +415,9 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),R_R_R_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) allow for auto conection.\nElements separated by symbol ';'.\nValue '*' is used for allow all modules."));
+		"help",_("List of shared libs(modules) allow for auto connection.\nElements separated by symbol ';'.\nValue '*' is used for allow all modules."));
 	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),R_R_R_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) deny for auto conection.\nElements separated by symbol ';'."));
+		"help",_("List of shared libs(modules) deny for auto connection.\nElements separated by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
 	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path"))

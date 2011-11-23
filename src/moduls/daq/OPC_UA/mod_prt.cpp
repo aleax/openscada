@@ -234,7 +234,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		int off = 4;
 		if( rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size() )
-		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincedence."));
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincidence."));
 		else if( rez.compare(0,4,"ERRF") == 0 ) err = iErr(rez,off);
 		else if( rez.compare(0,4,"ACKF") != 0 )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
@@ -322,7 +322,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		off = 4;
 		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
-		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincedence."));
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincidence."));
 		else if( rez.compare(0,4,"ERRF") == 0 ) err = iErr(rez,off);
 		else if( rez.compare(0,4,"OPNF") != 0 )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
@@ -348,7 +348,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    iNu(rez,off,4);					//RequestId
 									//> Extension Object
 		    if( iNodeId(rez,off).numbVal() != OpcUa_OpenSecureChannelResponse )	//TypeId
-			throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC_UA Bin", _("Respond's NodeId don't acknowledge") );
+			throw TError( OpcUa_BadTcpMessageTypeInvalid, "OPC_UA Bin", _("Respond NodeId don't acknowledge") );
 									//>> Body
 									//>>> RespondHeader
 		    iTm(rez,off);					//timestamp
@@ -629,7 +629,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		off = 4;
 		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
-		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincedence."));
+		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincidence."));
 		else if( rez.compare(0,4,"ERRF") == 0 ) err = iErr(rez,off);
 		else if( rez.compare(0,4,"MSGF") != 0 )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
@@ -667,7 +667,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			case OpcUa_FindServersResponse:
 			{
 			    if( iTpId != OpcUa_FindServersRequest )
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 			    int AppDescrNub = iNu(rez,off,4);				//List items
 			    for( int i_l = 0; i_l < AppDescrNub; i_l++ )
 			    {
@@ -688,7 +688,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			case OpcUa_GetEndpointsResponse:
 			{
 			    if( iTpId != OpcUa_GetEndpointsRequest )
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 			    int EndpointDescrNub = iNu(rez,off,4);		//List items
 			    for( int i_l = 0; i_l < EndpointDescrNub; i_l++ )
 			    {
@@ -728,7 +728,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			case OpcUa_CreateSessionResponse:
 			{
 			    if( iTpId != OpcUa_CreateSessionRequest )
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 			    io.setAttr("sesId",TSYS::uint2str(iNodeId(rez,off).numbVal()));	//sessionId
 			    io.setAttr("authTokenId",TSYS::uint2str(iNodeId(rez,off).numbVal()));//authentication Token
 			    io.setAttr("sesTm",TSYS::real2str(iR(rez,off,8)));			//revisedSession Timeout, ms
@@ -782,7 +782,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			case OpcUa_ActivateSessionResponse:
 			{
 			    if( iTpId != OpcUa_ActivateSessionRequest )
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 			    iS(rez,off);				//serverNonce
 			    iS(rez,off);				//results []
 			    iS(rez,off);				//diagnosticInfos []
@@ -790,14 +790,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			}
 			case OpcUa_CloseSessionResponse:
 			    if( iTpId != OpcUa_CloseSessionRequest )
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 			    io.setAttr("sesId","");			//sessionId
 			    io.setAttr("authTokenId","");		//authentication Token
 			    break;
 			case OpcUa_ReadResponse:
 			{
 			    if(iTpId != OpcUa_ReadRequest)
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Nodes number
 			    for(int i_r = 0; i_r < resN && stIdx < (int)io.childSize(); i_r++, stIdx++)
@@ -810,7 +810,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			case OpcUa_WriteResponse:
 			{
 			    if(iTpId != OpcUa_WriteRequest)
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Number
 			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
@@ -822,7 +822,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			case OpcUa_BrowseResponse:
 			{
 			    if( iTpId != OpcUa_BrowseRequest )
-				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond's NodeId don't acknowledge"));
+				throw TError(OpcUa_BadTcpMessageTypeInvalid,"OPC_UA Bin",_("Respond NodeId don't acknowledge"));
 									//> results []
 			    int resN = iNu(rez,off,4);			//Numbers
 			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
@@ -1789,7 +1789,7 @@ bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
 
     //> Continue for full request
     if(mNotFull)	{ mBuf = mBuf+reqst; mNotFull = false; }
-    else mBuf = reqst;  //Save request to bufer
+    else mBuf = reqst;  //Save request to buffer
 
     string &rba = mBuf;
 
@@ -3135,7 +3135,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Config")))
+	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);
 		ctrMkNode("fld",opt,-1,"/ep/cfg/ServCert",cfg("ServCert").fld().descr(),RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
@@ -3190,7 +3190,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	{ mSec.push_back(SecuritySetting("None",OPCEndPoint::None)); modif(); return; }
 	int row = atoi(opt->attr("row").c_str());
 	if(row < 0 || row >= (int)mSec.size())
-	    throw TError(nodePath().c_str(),_("No present seleted row."));
+	    throw TError(nodePath().c_str(),_("No present selected row."));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ mSec.erase(mSec.begin()+row); modif(); return; }
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))

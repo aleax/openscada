@@ -388,7 +388,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21") );
 		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,
 		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Date;Date and time"),"22") );
-		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23") );
+		cfg.owner()->attrAdd( new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23") );
 		cfg.owner()->attrAdd( new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24") );
 		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
 		break;
@@ -419,7 +419,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		break;
 	    case 6: case 7:	//Slider and scroll bar
 		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","","21") );
-		cfg.owner()->attrAdd( new TFld("cfg",_("Config"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","","22") );
+		cfg.owner()->attrAdd( new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","","22") );
 		break;
 	}
     }
@@ -1223,10 +1223,10 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	c_el.cfg("ID").setS("doc"+TSYS::int2str(cfg.owner()->attrAt("aCur").at().getI()));
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
 	    cfg.owner()->attrAt("aDoc").at().setS(c_el.cfg("IO_VAL").getS(),false,true);
-	//>> Set curent document
+	//>> Set current document
 	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
 	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("aDoc").at().getS(),false,true);
-	//>> Parse curent document and restore last document's time
+	//>> Parse current document and restore last document's time
 	string cdoc = cfg.owner()->attrAt("doc").at().getS();
 	if(!cdoc.empty())
 	{
@@ -1432,7 +1432,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 {
     XMLNode xdoc;
     string iLang;				//Process instruction language
-    string wProgO;				//Object of work programm
+    string wProgO;				//Object of work program
     time_t lstTime = 0;				//Last time
     TFunction funcIO(TSYS::path2sepstr(wdg->path(),'_'));
     TValFunc funcV(wdg->id()+"_doc",NULL,false);

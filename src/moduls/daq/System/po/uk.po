@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.7.3\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 10:20+0300\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
@@ -21,13 +20,13 @@ msgid "Load (%)"
 msgstr "Завантаження (%)"
 
 msgid "System (%)"
-msgstr "Cистема (%)"
+msgstr "Система (%)"
 
 msgid "User (%)"
 msgstr "Користувач (%)"
 
 msgid "Idle (%)"
-msgstr "Простій (%)"
+msgstr "Бездія (%)"
 
 msgid "General"
 msgstr "В загалі"
@@ -81,16 +80,16 @@ msgid "Buffers (kB)"
 msgstr "Буфера (кБ)"
 
 msgid "Cached (kB)"
-msgstr "Кеши (кБ)"
+msgstr "Кеші (кБ)"
 
 msgid "Swap free (kB)"
-msgstr "Свопу вільно (кБ)"
+msgstr "Своп вільно (кБ)"
 
 msgid "Swap total (kB)"
-msgstr "Свопу усього (кБ)"
+msgstr "Своп усього (кБ)"
 
 msgid "Swap use (kB)"
-msgstr "Свопу використано (кБ)"
+msgstr "Своп використано (кБ)"
 
 msgid "Memory info"
 msgstr "Інформація про пам'ять"
@@ -156,7 +155,7 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr "Авт. створювати акт. джерела даних"
 
-msgid "System parameteres table"
+msgid "System parameters table"
 msgstr "Таблиця системних параметрів"
 
 msgid "Request data period (ms)"
@@ -166,7 +165,7 @@ msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
 msgid "Request task priority"
-msgstr "Пріорітет задачі опитування"
+msgstr "Пріоритет задачі опитування"
 
 msgid "Standard"
 msgstr "Стандартний"
@@ -189,7 +188,7 @@ msgstr "Наступний виклик за cron '%s'. "
 msgid "Spent time: %s. "
 msgstr "Витрачено часу: %s. "
 
-msgid "2:Controller stoped"
+msgid "2:Controller stopped"
 msgstr "2:Контролер зупинено!"
 
 msgid "1:Parameter disabled"

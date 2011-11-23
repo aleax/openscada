@@ -236,13 +236,13 @@ msgstr ""
 msgid "&About"
 msgstr "&Über"
 
-msgid "Programm and OpenSCADA information"
+msgid "Program and OpenSCADA information"
 msgstr "OpenSCADA Information"
 
-msgid "The button for display programm and OpenSCADA information"
+msgid "The button for display program and OpenSCADA information"
 msgstr "Schaltfläche für Informationen über OpenSCADA"
 
-msgid "Press to display programm and OpenSCADA information"
+msgid "Press to display program and OpenSCADA information"
 msgstr "Betätigen um Informationen über OpenSCADA zu erhalten"
 
 msgid "About &Qt"
@@ -284,7 +284,7 @@ msgstr "&Hilfe"
 msgid "OpenSCADA toolbar"
 msgstr "OpenSCADA Toolbar"
 
-msgid "This label displays curent user."
+msgid "This label displays current user."
 msgstr "Dieses Feld zeigt den aktuellen Benutzer an"
 
 msgid "Field for display of the current user."
@@ -631,7 +631,7 @@ msgstr "Ermöglicht die QT-basierte Systemeinstellung von OpenSCADA."
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
+"---------- Parameters of the module section <%s> in config-file ----------\n"
 "StartPath  <path>    Configurator start path.\n"
 "StartUser  <user>    No password requested start user.\n"
 "\n"

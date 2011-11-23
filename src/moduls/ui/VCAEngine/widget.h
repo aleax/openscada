@@ -135,7 +135,7 @@ class Attr
 	short		self_flg;	//Self attributes flags
 	unsigned char	mOi;		//Order index
 
-	string	cfg;			//Config template and value
+	string	cfg;			//Configuration template and value
 
 	Widget	*mOwner;
 };

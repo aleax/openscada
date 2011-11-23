@@ -97,7 +97,7 @@ msgstr "Увімкнений"
 msgid "DB"
 msgstr "БД"
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Конфігурація"
 
 msgid "Input"

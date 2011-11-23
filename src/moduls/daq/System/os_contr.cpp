@@ -49,7 +49,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.3"
+#define MOD_VER		"1.7.5"
 #define AUTORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other.")
 #define LICENSE		"GPL2"
@@ -120,7 +120,7 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("PRM_BD",_("System parameteres table"),TFld::String,TFld::NoFlag,"30","system") );
+    fldAdd( new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
     fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
@@ -364,7 +364,7 @@ void TMdPrm::vlGet( TVal &val )
 {
     if( val.name() == "err" )
     {
-	if( !owner().startStat() ) val.setS(_("2:Controller stoped"),0,true);
+	if( !owner().startStat() ) val.setS(_("2:Controller stopped"),0,true);
 	else if( !enableStat() )   val.setS(_("1:Parameter disabled"),0,true);
 	else val.setS("0",0,true);
     }

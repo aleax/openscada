@@ -131,7 +131,7 @@ void TProt::load_( )
 {
     //> Load parameters from command line
 
-    //> Load parameters from config file
+    //> Load parameters from config-file
     setAuthTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()));
     setComprLev(atoi(TBDS::genDBGet(nodePath()+"ComprLev",TSYS::int2str(comprLev())).c_str()));
     setComprBrd(atoi(TBDS::genDBGet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd())).c_str()));
@@ -289,7 +289,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	req_buf = req_buf+request;
 	m_nofull = false;
     }
-    else req_buf=request;  //Save request to bufer
+    else req_buf=request;  //Save request to buffer
 
     string req = req_buf.substr(0,req_buf.find("\n"));
 

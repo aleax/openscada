@@ -31,7 +31,7 @@ msgstr "Gewährt die Gruppe von Testen für das System OpenSCADA."
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
-"---------- Parameters of the module section <%s> in config file ----------\n"
+"---------- Parameters of the module section <%s> in config-file ----------\n"
 "All tests main options:\n"
 "  id           test's id;\n"
 "  on           on test's flag;\n"
@@ -400,7 +400,7 @@ msgid "%s(BOOLEAN): %d"
 msgstr "%s(LOGISCH): %d"
 
 #, c-format
-msgid "Config fields: %d"
+msgid "Configuration fields: %d"
 msgstr "Felder der Konfiguration: %d"
 
 msgid "Path to module"

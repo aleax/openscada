@@ -6,12 +6,11 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 09:26+0300\n"
+"POT-Creation-Date: 2011-11-22 21:56+0200\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -53,7 +52,7 @@ msgstr "Object-Funktion haben mehr 255 Parameter."
 msgid "Get object from no object's register"
 msgstr "Lade Objekt nicht vom Objektregister"
 
-msgid "Timeouted function calc."
+msgid "Timeouted function calculation"
 msgstr "Zeitüberschreitung Berechnung der Funktion."
 
 msgid "Not supported type for operation 'Add'."
@@ -63,11 +62,8 @@ msgid "Call object's function for no object or function name is empty."
 msgstr "Funktion ruft kein Objekt auf oder Funktionsname ist leer."
 
 #, c-format
-msgid "Operation %c(%xh) error. Function '%s' is stoped."
+msgid "Operation %c(%xh) error. Function '%s' is stopped."
 msgstr "Fehler bei der Operation %c(%xh). Funktion '%s' ist angehalten."
-
-msgid "Function '%s' error or not enough parameters."
-msgstr "Funktion '%s' Fehler oder nicht genügend Parameter."
 
 msgid "Function: "
 msgstr "Funktion: "
@@ -78,10 +74,10 @@ msgstr "Name"
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "Maximum calc time (sec)"
+msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
 
-msgid "Programm"
+msgid "Program"
 msgstr "Programm"
 
 msgid "IO"
@@ -137,7 +133,7 @@ msgid ""
 "For use main work DB set '*.*'."
 msgstr ""
 
-msgid "Config"
+msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Program's text translation"
@@ -163,15 +159,15 @@ msgid "Parameters table"
 msgstr "Tabelle der Parameter"
 
 msgid "Controller's function"
-msgstr "Funktion des Kontrollers"
+msgstr "Funktion des Controllers"
 
-msgid "Calc schedule"
-msgstr "Calc Zeitplan"
+msgid "Calculation schedule"
+msgstr "Berechnung Zeitplan"
 
-msgid "Calc task priority"
+msgid "Calculation task priority"
 msgstr "Priorität der Berechnung"
 
-msgid "Iteration number in single calc"
+msgid "Iteration number in single calculation"
 msgstr "Anzahl der Iterationen"
 
 msgid "IO ID"
@@ -192,9 +188,6 @@ msgstr ""
 msgid "Data base"
 msgstr "Datenbank"
 
-msgid "Maximum calc time"
-msgstr "Maximale Zeit der Berechnung"
-
 msgid "Formula"
 msgstr "Formel"
 
@@ -209,7 +202,7 @@ msgstr "Position"
 
 #, c-format
 msgid "Compilation with the help of the program language %s is not supported."
-msgstr "Kompilierung mit der Programmierungssprache %s wird nicht unterstützt."
+msgstr "Kompilieren mit der Programmierungssprache %s wird nicht unterstützt."
 
 #, c-format
 msgid "Compile error: %s\n"
@@ -229,7 +222,7 @@ msgstr "Rufen Sie jetzt an. "
 
 #, c-format
 msgid "Call by period: %s. "
-msgstr "Aufruf bei Periode: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
 #, c-format
 msgid "Call next by cron '%s'. "
@@ -250,7 +243,7 @@ msgstr ""
 msgid "Create new function '%s'."
 msgstr "Erstellen einer neuen Funktion '%s'."
 
-msgid "Load function and its io error."
+msgid "Load function and its IO error."
 msgstr "Fehler beim Laden der Funktion und ihrer IO."
 
 msgid "Function calculate frequency (Hz)"
@@ -265,13 +258,13 @@ msgstr "Schalter für das Anhalten der Funktion"
 msgid "This controller object link"
 msgstr "Das Controller-Objekt zu verknüpfen"
 
-msgid "Calc controller's function error."
-msgstr "Kontroller Berechnungsfehler in der Funktion."
+msgid "Calculation controller's function error."
+msgstr "Controller Berechnungsfehler in der Funktion."
 
 msgid "No started or no present function."
 msgstr "Nicht gestartet oder Funktion ist nicht vorhanden."
 
-msgid "Calcing"
+msgid "Calculation"
 msgstr "Berechnungen"
 
 msgid "Data"
@@ -289,8 +282,8 @@ msgstr "Löschen Verriegelungsattribut ist nicht erlaubt."
 msgid "Changing locked attribute is not allowed."
 msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
 
-msgid "2:Controller is stoped"
-msgstr "2:Kontroller ist angehalten!"
+msgid "2:Controller is stopped"
+msgstr "2:Controller ist angehalten!"
 
 msgid "1:Parameter is disabled"
 msgstr "1:Parameter ist abgeschaltet"
@@ -299,7 +292,7 @@ msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<io>:<aid>:<anm>]\n"
 "Where:\n"
-"  io - calc function's IO;\n"
+"  io - calculation function's IO;\n"
 "  aid - created attribute identifier;\n"
 "  anm - created attribute name.\n"
 "If 'aid' or 'anm' are not set they will be generated from selected "
@@ -311,14 +304,17 @@ msgstr ""
 "  io - IO der berechneten Funktion;\n"
 "  aid - Bezeichner des gebildeten Attributs;\n"
 "  anm - Name des gebildeten Attributs.\n"
-"  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewähltenIO "
+"  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
 "der Funktion generiert."
+
+msgid "Error constant after constant"
+msgstr "Fehler konstant nach konstanter"
 
 #, c-format
 msgid "%s, pos: (%d,%d)-(%d,%d)."
 msgstr "%s, Position: (%d,%d)-(%d,%d)."
 
-msgid "Unexpected end programm, expect end string symbol '\"', "
+msgid "Unexpected end program, expect end string symbol '\"', "
 msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
 
 msgid "The next line symbol failed into string, "

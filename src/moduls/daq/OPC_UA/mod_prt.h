@@ -42,9 +42,9 @@ using namespace OSCADA;
 #define PRT_NAME	_("OPC UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"0.6.1"
+#define PRT_MVER	"0.6.2"
 #define PRT_AUTOR	_("Roman Savochenko")
-#define PRT_DESCR	_("Allow realisation of OPC UA protocol.")
+#define PRT_DESCR	_("Allow realization of OPC UA protocol.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
