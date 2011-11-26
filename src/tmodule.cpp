@@ -115,7 +115,7 @@ string TModule::modInfo( const string &name )
     else if(name == l_info[2]) info = mType;
     else if(name == l_info[3]) info = mSource;
     else if(name == l_info[4]) info = mVers;
-    else if(name == l_info[5]) info = mAutor;
+    else if(name == l_info[5]) info = mAuthor;
     else if(name == l_info[6]) info = mDescr;
     else if(name == l_info[7]) info = mLicense;
 

@@ -317,7 +317,7 @@ void Widget::setEnable( bool val )
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Ingeriting widget '%s' disable error."),herit()[i_h].at().id().c_str());
+		    mess_err(nodePath().c_str(),_("Inheriting widget '%s' disable error."),herit()[i_h].at().id().c_str());
 		    i_h++;
 		}
 	    else i_h++;
@@ -994,7 +994,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
 		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"[owner]:[group]\"."));
 		    else if(list_a[i_el] == "perm")
-			el->setAttr("help",_("Permition to the widget in form \"[user][group][other]\".\n"
+			el->setAttr("help",_("Permission to the widget in form \"[user][group][other]\".\n"
 					     "Where \"user\", \"group\" and \"other\" is:\n"
 					     "  \"__\" - no any access;\n"
 					     "  \"R_\" - read only;\n"
@@ -1010,7 +1010,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 					     "      pg_so - direct name of the desired page with the prefix;\n"
 					     "      1 - name of a new page in a general way, without a prefix;\n"
 					     "      * - the page is taken from the name of a previous page;\n"
-					     "      $ - points the place of the opened page relativ.\n"
+					     "      $ - points the place of the opened page relative.\n"
 					     "Examples:\n"
 					     "  ws_BtPress:/prev:prev:/pg_so/*/*/$\n"
 					     "  ws_BtPress:/next:next:/pg_so/*/*/$\n"
@@ -1398,7 +1398,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate")))
 	    {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
-		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calc period (ms)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calculate period (ms)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Program"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
 	    }
 	}
@@ -1475,7 +1475,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if( !(wdg.at().attrAt(opt->attr("key_id")).at().flgSelf()&Attr::IsInher) &&
 		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
 		wdg.at().attrDel(opt->attr("key_id"));
-	    else throw TError(nodePath().c_str(),_("Deletint the not user element error."));
+	    else throw TError(nodePath().c_str(),_("Deleting the not user element error."));
 	    wdg.at().modif();
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))

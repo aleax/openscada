@@ -45,7 +45,7 @@ TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
     mType	= PRT_TYPE;
     mName	= PRT_NAME;
     mVers	= PRT_MVER;
-    mAutor	= PRT_AUTORS;
+    mAuthor	= PRT_AUTHORS;
     mDescr	= PRT_DESCR;
     mLicense	= PRT_LICENSE;
     mSource	= name;

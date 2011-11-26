@@ -791,12 +791,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	case 29:	//alignment
 	{
-	    shD->text_flg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
+	    shD->text_flg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignJustify|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
 	    switch( atoi(val.c_str())&0x3 )
 	    {
 		case 0: shD->text_flg |= Qt::AlignLeft;		break;
 		case 1: shD->text_flg |= Qt::AlignRight;	break;
 		case 2: shD->text_flg |= Qt::AlignHCenter;	break;
+		case 3: shD->text_flg |= Qt::AlignJustify;	break;
 	    }
 	    switch( atoi(val.c_str())>>2 )
 	    {
@@ -1279,8 +1280,8 @@ void ShapeDiagram::destroy( WdgView *w )
 
 bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
-    bool up = false,		//Repaint diagramm picture
-	 make_pct = false;	//Remake diagramm picture
+    bool up = false,		//Repaint diagram picture
+	 make_pct = false;	//Remake diagram picture
     int  reld_tr_dt = 0;	//Reload trend's data ( 1-reload addons, 2-full reload)
 
     ShpDt *shD = (ShpDt*)w->shpData;

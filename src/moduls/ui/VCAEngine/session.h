@@ -51,9 +51,9 @@ class Session : public TCntrNode
 	string	user( )		{ return mUser; }		//Open session user
 	string	owner( )	{ return mOwner; }		//Source project owner
 	string	grp( )		{ return mGrp; }		//Source project group
-	short	permit( )	{ return mPermit; }		//Permition for access to source project
+	short	permit( )	{ return mPermit; }		//Permission for access to source project
 	int	period( )	{ return vmax(1,mPer); }	//Process period (ms)
-	double	calcTm( )	{ return tm_calc; }		//Calc session time
+	double	calcTm( )	{ return tm_calc; }		//Calculate session time
 	bool	enable( )	{ return mEnable; }		//Enable stat
 	bool	start( )	{ return mStart; }		//Start stat
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
@@ -127,7 +127,7 @@ class Session : public TCntrNode
 		//Attributes
 		uint8_t	    lev,	//Level
 			    tp,		//Type
-			    qtp;	//Quitance type
+			    qtp;	//Quittance type
 		string	    path,	//Widget path
 			    cat,	//Category
 			    mess,	//Message

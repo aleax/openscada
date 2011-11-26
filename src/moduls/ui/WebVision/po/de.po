@@ -6,12 +6,11 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebVision 0.9.1\n"
+"Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 17:51+0300\n"
+"POT-Creation-Date: 2011-11-25 22:35+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -104,8 +103,7 @@ msgid ""
 "SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
 "\n"
 msgstr ""
-"======================== Optione des Moduls <%s:%s> "
-"============================\n"
+"======================== Optionen des Moduls <%s:%s> ============================\n"
 "------- Parameter des Abschnitts '%s' in der Konfigurationsdatei ---------\n"
 "SessTimeLife <time>     Lebensdauer der Sitzung, Minuten (default 10).\n"
 "\n"
@@ -123,11 +121,11 @@ msgid "No one sessions and projects of VCA engine are present for user!"
 msgstr ""
 "Keine Sitzung und Projekte der VCA Maschine für den Benutzer vorhanden!"
 
-msgid "Sorry, openned sessions number reach limit!"
-msgstr "Leider erreichen openned Sitzungen Anzahl unbegrenzt!"
+msgid "Sorry, opened sessions number reach limit!"
+msgstr "Leider erreichen öffnen Sitzungen Anzahl unbegrenzt!"
 
 #, c-format
-msgid "An unaccessible request is received: '%s'"
+msgid "An inaccessible request is received: '%s'"
 msgstr "Unzulässige Anfrage wird empfangen: '%s'"
 
 msgid "Name: "
@@ -139,23 +137,8 @@ msgstr "Lizenz: "
 msgid "Author: "
 msgstr "Autor: "
 
-msgid "Desription: "
+msgid "Description: "
 msgstr "Beschreibung: "
-
-msgid "Enter to module"
-msgstr "Eingang ins Modul"
-
-msgid "User name"
-msgstr "Benutzername"
-
-msgid "Password"
-msgstr "Kennwort"
-
-msgid "Enter"
-msgstr "Enter"
-
-msgid "Clean"
-msgstr "Bereinigen"
 
 msgid "Module options"
 msgstr "Optionen des Moduls"
@@ -164,7 +147,7 @@ msgid "Life time of session (min)"
 msgstr "Lebensdauer der Sitzung (Min)"
 
 msgid "Sessions limit"
-msgstr "Sessions Grenze"
+msgstr "Session Limit"
 
 msgid "Options help"
 msgstr "Optionen Hilfe"

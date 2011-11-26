@@ -48,7 +48,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(DAQ_ID)
     mName	= DAQ_NAME;
     mType	= DAQ_TYPE;
     mVers	= DAQ_MVER;
-    mAutor	= DAQ_AUTORS;
+    mAuthor	= DAQ_AUTHORS;
     mDescr	= DAQ_DESCR;
     mLicense	= DAQ_LICENSE;
     mSource	= name;

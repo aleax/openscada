@@ -131,7 +131,7 @@ string OrigElFigure::name( )
 
 string OrigElFigure::descr( )
 {
-    return _("Elementary figures widget of the finite visualisation.");
+    return _("Elementary figures widget of the finite visualization.");
 }
 
 void OrigElFigure::postEnable( int flag )
@@ -148,7 +148,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","","25") );
 	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","","26") );
 	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","","28") );
-	attrAdd( new TFld("elLst",_("Elements' list"),TFld::String,TFld::NoStrTransl|TFld::FullText|Attr::Active,"","","","","27") );
+	attrAdd( new TFld("elLst",_("Elements list"),TFld::String,TFld::NoStrTransl|TFld::FullText|Attr::Active,"","","","","27") );
     }
 }
 
@@ -318,12 +318,12 @@ OrigFormEl::OrigFormEl( ) : PrWidget("FormEl")
 
 string OrigFormEl::name( )
 {
-    return _("Form's elements");
+    return _("Form elements");
 }
 
 string OrigFormEl::descr( )
 {
-    return _("Form's elements widget of the finite visualisation.");
+    return _("Form elements widget of the finite visualization.");
 }
 
 void OrigFormEl::postEnable( int flag )
@@ -332,7 +332,7 @@ void OrigFormEl::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
 	attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0","0;1;2;3;4;5;6;7",
-				    _("Line edit;Text edit;Chek box;Button;Combo box;List;Slider;Scroll Bar"),"20") );
+				    _("Line edit;Text edit;Check box;Button;Combo box;List;Slider;Scroll Bar"),"20") );
 }
 
 bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
@@ -557,7 +557,7 @@ string OrigText::name( )
 
 string OrigText::descr( )
 {
-    return _("Text fields widget of the finite visualisation.");
+    return _("Text fields widget of the finite visualization.");
 }
 
 void OrigText::postEnable( int flag )
@@ -683,7 +683,7 @@ string OrigMedia::name( )
 
 string OrigMedia::descr( )
 {
-    return _("Media widget of the finite visualisation.");
+    return _("Media widget of the finite visualization.");
 }
 
 void OrigMedia::postEnable( int flag )
@@ -778,7 +778,7 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if(!el) continue;
 		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
 		{
-		    case 0: el->setAttr("help",_("Rect area in form \"[x1],[y1],[x2],[y2]\"."));		break;
+		    case 0: el->setAttr("help",_("Rectangle area in form \"[x1],[y1],[x2],[y2]\"."));		break;
 		    case 1: el->setAttr("help",_("Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."));	break;
 		    case 2: el->setAttr("help",_("Circle area in form \"[x],[y],[r]\"."));			break;
 		}
@@ -806,7 +806,7 @@ string OrigDiagram::name( )
 
 string OrigDiagram::descr( )
 {
-    return _("Diagram widget of the finite visualisation.");
+    return _("Diagram widget of the finite visualization.");
 }
 
 void OrigDiagram::postEnable( int flag )
@@ -899,7 +899,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     }
     else if( cfg.id() == "parNum" )
     {
-	string fid("prm"), fnm(_("Parametr ")), fidp, fnmp;
+	string fid("prm"), fnm(_("Parameter ")), fidp, fnmp;
 	//> Delete specific unnecessary attributes of parameters
 	for(int i_p = 0; true; i_p++)
 	{
@@ -988,7 +988,7 @@ string OrigProtocol::name( )
 
 string OrigProtocol::descr( )
 {
-    return _("Protocol widget of the finite visualisation.");
+    return _("Protocol widget of the finite visualization.");
 }
 
 void OrigProtocol::postEnable( int flag )
@@ -1010,7 +1010,7 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
 	    "0;1;2;3;4;5;6;7",_("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),"30") );
 	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","","31") );
-	attrAdd( new TFld("itProp",_("Item's properties"),TFld::Integer,Attr::Active,"","","","","32") );
+	attrAdd( new TFld("itProp",_("Item properties"),TFld::Integer,Attr::Active,"","","","","32") );
     }
 }
 
@@ -1074,7 +1074,7 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		"  '?' - any one symbol;\n"
 		"  '\\' - use for shield special simbols."));
 	    if((el=ctrId(root,"/col",true))) el->setAttr("help",
-		_("Visible and order collumns list separated by symbol ';'. Supported collumns:\n"
+		_("Visible and order columns list separated by symbol ';'. Supported columns:\n"
 		"  \"pos\" - row number;\n"
 		"  \"tm\" - date and time of the message;\n"
 		"  \"utm\" - microseconds part of time of the message;\n"
@@ -1115,7 +1115,7 @@ string OrigDocument::name( )
 
 string OrigDocument::descr( )
 {
-    return _("Document widget of the finite visualisation.");
+    return _("Document widget of the finite visualization.");
 }
 
 void OrigDocument::postEnable( int flag )
@@ -1545,7 +1545,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    }
 	    catch(TError err)
 	    {
-		mess_err(wdg->nodePath().c_str(),_("Instruction proc '%s' error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
+		mess_err(wdg->nodePath().c_str(),_("Instruction procedure '%s' error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
 		mess_err(wdg->nodePath().c_str(),_("Error code: %s"), curPrc->text().c_str());
 	    }
 	}
@@ -1652,12 +1652,12 @@ OrigFunction::OrigFunction( ) : PrWidget("Function")
 
 string OrigFunction::name( )
 {
-    return _("Buildin function");
+    return _("Built-in function");
 }
 
 string OrigFunction::descr( )
 {
-    return _("Buildin function widget.");
+    return _("Built-in function widget.");
 }
 
 //************************************************
@@ -1675,7 +1675,7 @@ string OrigBox::name( )
 
 string OrigBox::descr( )
 {
-    return _("Elements box widget of the finite visualisation.");
+    return _("Elements box widget of the finite visualization.");
 }
 
 void OrigBox::postEnable( int flag )

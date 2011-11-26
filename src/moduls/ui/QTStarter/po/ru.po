@@ -4,18 +4,17 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.1\n"
+"Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:52+0300\n"
+"POT-Creation-Date: 2011-11-24 10:31+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "QT GUI starter"
 msgstr "QT GUI пускатель"
@@ -125,7 +124,7 @@ msgid "&Undo"
 msgstr "&Откат"
 
 msgid "&Redo"
-msgstr "&Накат"
+msgstr "&Повтор"
 
 msgid "Cu&t"
 msgstr "Вы&резать"
@@ -177,7 +176,7 @@ msgid ""
 "for Windows CE.</p><p>Qt is a Nokia product. See <a href=\"http://www."
 "trolltech.com/qt/\">www.trolltech.com/qt/</a> for more information.</p>"
 msgstr ""
-"<h3>Про Qt</h3>%1<p>Qt это C++ инструментарий для кроссплатформенной "
+"<h3>Про Qt</h3>%1<p>Qt это C++ инструментарий для кросс-платформенной "
 "разработки приложений. </p><p>Qt обеспечивает переносимость, без изменений "
 "исходных текстов, на MS&nbsp;Windows, Mac&nbsp;OS&nbsp;X, Linux, и все "
 "основные варианты коммерческих Unix. Qt также доступна для встраиваемых "
@@ -204,7 +203,7 @@ msgid "Bl&ue:"
 msgstr "Синий:"
 
 msgid "A&lpha channel:"
-msgstr "Алфа канал:"
+msgstr "Альфа канал:"
 
 msgid "&Basic colors"
 msgstr "Базовые цвета"
@@ -234,7 +233,7 @@ msgid "Location:"
 msgstr "Расположение:"
 
 msgid "Preview"
-msgstr "Предпросмотр"
+msgstr "Пред-просмотр"
 
 msgid "Type:"
 msgstr "Тип:"

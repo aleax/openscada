@@ -37,8 +37,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"1.1.0"
-#define AUTORS		_("Roman Savochenko")
+#define MOD_VER		"1.2.0"
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Generic visual control area engine.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -66,7 +66,7 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name ) : TUI(MOD_ID), mFrcClr(false),
+Engine::Engine( string name ) : TUI(MOD_ID),
     mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R")
 {
     mod		= this;
@@ -74,7 +74,7 @@ Engine::Engine( string name ) : TUI(MOD_ID), mFrcClr(false),
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
@@ -102,18 +102,6 @@ string Engine::modInfo( const string &name )
     else return TModule::modInfo( name);
 }
 
-string Engine::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n\n"),
-	    MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void Engine::postEnable( int flag )
 {
     TModule::postEnable(flag);
@@ -137,7 +125,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     wdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
-    wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calc period"),TFld::Integer,TFld::NoFlag,"5","-1") );
+    wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
     //> Make include widgets' DB structure
@@ -174,8 +162,8 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     prj_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
     prj_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
-    prj_el.fldAdd( new TFld("PERMIT",_("Permision"),TFld::Integer,TFld::OctDec,"3","436") );
-    prj_el.fldAdd( new TFld("PER",_("Calc period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
+    prj_el.fldAdd( new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436") );
+    prj_el.fldAdd( new TFld("PER",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
     prj_el.fldAdd( new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1") );
     prj_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
 
@@ -185,7 +173,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     page_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
     page_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
-    page_el.fldAdd( new TFld("PROC_PER",_("Procedure calc period"),TFld::Integer,TFld::NoFlag,"5","-1") );
+    page_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
@@ -259,28 +247,6 @@ void Engine::load_( )
 {
     mess_info(nodePath().c_str(),_("Load module."));
 
-    //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{"VCADBClearForce" ,0,NULL,'f'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case 'f': mFrcClr = true; break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
-
     //> Load parameters from config-file and DB
     setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
@@ -291,7 +257,7 @@ void Engine::load_( )
 
     map<string, bool>	itReg;
 
-    //>> Load widget's libraries
+    //>> Load widgets libraries
     try
     {
 	//>>> Search and create new libraries
@@ -336,7 +302,7 @@ void Engine::load_( )
     }catch( TError err )
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Load widget's libraries error."));
+	mess_err(nodePath().c_str(),_("Load widgets libraries error."));
     }
 
     //>> Load projects
@@ -699,7 +665,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
 	{
 	    string sid = c_el.cfg("ID").getS();
-	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) continue;
+	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",c_el,true);
 	    fld_cnt--;
@@ -710,7 +676,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fld_cnt++,c_elu); )
 	{
 	    string sid = c_elu.cfg("ID").getS();
-	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty() && !forceDBClear())) continue;
+	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
 	    fld_cnt--;
@@ -834,13 +800,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
     {
 	TUI::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/prj_",_("Project"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
-	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widget's library"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
+	ctrMkNode("grp",opt,-1,"/br/wlb_",_("Widgets library"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	ctrMkNode("grp",opt,-1,"/br/ses_",_("Session"),RWRWR_,"root",SUI_ID);
 	ctrMkNode("grp",opt,-1,"/br/vca",_("Functions"),R_R_R_,"root",SUI_ID,1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"),R_R_R_,"root",SUI_ID))
 	{
 	    ctrMkNode("list",opt,-1,"/prm/cfg/prj",_("Project"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","prj_","idSz","30");
-	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widget's libraries"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wlb_","idSz","30");
+	    ctrMkNode("list",opt,-1,"/prm/cfg/wlb",_("Widgets libraries"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wlb_","idSz","30");
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),R_R_R_,"root",SUI_ID))
 	{

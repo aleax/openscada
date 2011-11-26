@@ -1343,7 +1343,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
         else if( inundationItems[i].brush > 0  ) elList = elList + "c" +  TSYS::int2str(inundationItems[i].brush) + ":";
 
         if( inundationItems[i].brush_img <= -10 || inundationItems[i].brush_img == -5 )
-                    elList = elList + (((*images)[inundationItems[i].brush_img] == (*images)[-5]) ? "" : 
+                    elList = elList + (((*images)[inundationItems[i].brush_img] == (*images)[-5]) ? "" :
                     (*images)[inundationItems[i].brush_img].c_str())+"\n";
         else if( inundationItems[i].brush_img > 0  ) elList = elList + "i" +  TSYS::int2str(inundationItems[i].brush_img)+"\n";
     }
@@ -1654,6 +1654,9 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
         QVector<inundationItem> &inundationItems = elFD->inundationItems;
         for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
             menu.addAction(((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a));
+        menu.addSeparator();
+	menu.addAction(((VisDevelop *)w->mainWin())->actVisItUnDo);
+        menu.addAction(((VisDevelop *)w->mainWin())->actVisItReDo);
         menu.addSeparator();
         menu.addAction(((VisDevelop *)w->mainWin())->actVisItCopy);
         menu.addAction(((VisDevelop *)w->mainWin())->actVisItPaste);

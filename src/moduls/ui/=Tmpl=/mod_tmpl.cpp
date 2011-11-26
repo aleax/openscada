@@ -40,7 +40,7 @@
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"0.0.1"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("UI subsystem template module.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -81,7 +81,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

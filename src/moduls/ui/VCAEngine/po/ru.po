@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2006-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
+"Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-20 10:32+0200\n"
+"POT-Creation-Date: 2011-11-24 22:16+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -33,7 +32,7 @@ msgstr "Отключение библиотеки виджетов."
 msgid "Enable/disable widget '%s' error %s."
 msgstr "Ошибка включения/отключения виджета '%s': %s."
 
-msgid "Widget's library: "
+msgid "Widgets library: "
 msgstr "Библиотека виджетов: "
 
 msgid "Widget"
@@ -93,8 +92,8 @@ msgid ""
 "You try to create widget with name '%s' of the widget that was the early "
 "inherited and deleted from base container!"
 msgstr ""
-"Вы пытаетесь создать виджет с именем виджета '%s', который был ранее "
-"наследован и удалён из базового контейнера!"
+"Вы пытаетесь создать виджет с именем '%s', который был ранее унаследован и "
+"удалён из базового контейнера!"
 
 msgid "Library widget: "
 msgstr "Библиотечный виджет: "
@@ -118,7 +117,7 @@ msgstr "Родитель"
 msgid "Elementary figures"
 msgstr "Элементарная фигура"
 
-msgid "Elementary figures widget of the finite visualisation."
+msgid "Elementary figures widget of the finite visualization."
 msgstr "Виджет элементарной фигуры конечной визуализации."
 
 msgid "Line:width"
@@ -148,7 +147,7 @@ msgstr "Заполнение:изображение"
 msgid "Orientation angle"
 msgstr "Угол поворота"
 
-msgid "Elements' list"
+msgid "Elements list"
 msgstr "Список элементов"
 
 msgid "Attributes"
@@ -235,18 +234,18 @@ msgstr "Изображение "
 msgid "Style "
 msgstr "Стиль "
 
-msgid "Form's elements"
+msgid "Form elements"
 msgstr "Элементы формы"
 
-msgid "Form's elements widget of the finite visualisation."
+msgid "Form elements widget of the finite visualization."
 msgstr "Виджет элементов формы конечной визуализации."
 
 msgid "Element type"
 msgstr "Тип элемента"
 
-msgid "Line edit;Text edit;Chek box;Button;Combo box;List;Slider;Scroll Bar"
+msgid "Line edit;Text edit;Check box;Button;Combo box;List;Slider;Scroll Bar"
 msgstr ""
-"Строка редактиров.;Текстовый редактор;Check Box;Кнопка;Combo Box;Список;"
+"Строка редактирования;Текстовый редактор;Check Box;Кнопка;Combo Box;Список;"
 "Слайдер;Полоса прокрутки"
 
 msgid "Value"
@@ -256,7 +255,7 @@ msgid "View"
 msgstr "Вид"
 
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time"
-msgstr "Текст;Combo;Целое;Веществ.;Время;Дата;Дата и время"
+msgstr "Текст;Combo;Целое;Вещественное;Время;Дата;Дата и время"
 
 msgid "Confirm"
 msgstr "Подтверждать"
@@ -313,10 +312,10 @@ msgstr ""
 "  'X' - Необходим любой символ.\n"
 "  'x' - Разрешён но не необходим любой символ.\n"
 "  '9' - ASCII цифра необходима. 0-9.\n"
-"  '0' - ASCII цифра разрешёна но не необходима.\n"
+"  '0' - ASCII цифра разрешена но не необходима.\n"
 "  'D' - ASCII цифра необходима. 1-9.\n"
-"  'd' - ASCII цифра разрешёна но не необходима (1-9).\n"
-"  '#' - ASCII цифра или знаки плюс/минус разрешёны но не необходимы.\n"
+"  'd' - ASCII цифра разрешена но не необходима (1-9).\n"
+"  '#' - ASCII цифра или знаки плюс/минус разрешены но не необходимы.\n"
 "  'H' - Необходим символ шестнадцатеричного числа. A-F, a-f, 0-9.\n"
 "  'h' - Разрешён но не необходим символ шестнадцатеричного числа.\n"
 "  'B' - Необходим бинарный символ. 0-1.\n"
@@ -328,7 +327,7 @@ msgstr ""
 "которые перечислены."
 
 msgid "List of values the editable combobox by lines."
-msgstr "Список значений редактируемого комбобокса по строкам."
+msgstr "Список значений редактируемого комбо-бокса по строкам."
 
 msgid ""
 "Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:"
@@ -410,7 +409,7 @@ msgstr ""
 msgid "Text fields"
 msgstr "Текстовые поля"
 
-msgid "Text fields widget of the finite visualisation."
+msgid "Text fields widget of the finite visualization."
 msgstr "Виджет текстовых полей конечной визуализации."
 
 msgid "Background:color"
@@ -483,7 +482,7 @@ msgstr "Конфигурация строкового значения в фор
 msgid "Media"
 msgstr "Медиа"
 
-msgid "Media widget of the finite visualisation."
+msgid "Media widget of the finite visualization."
 msgstr "Медиа виджет конечной визуализации."
 
 msgid "Source"
@@ -543,7 +542,7 @@ msgstr ""
 "  \"file:/var/tmp/workMedia.mng\" - из локального файла по пути \"/var/tmp/"
 "workMedia.mng\"."
 
-msgid "Rect area in form \"[x1],[y1],[x2],[y2]\"."
+msgid "Rectangle area in form \"[x1],[y1],[x2],[y2]\"."
 msgstr "Прямоугольная область в форме \"[x1],[y1],[x2],[y2]\"."
 
 msgid "Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."
@@ -555,7 +554,7 @@ msgstr "Круговая область в форме \"[x],[y],[r]\"."
 msgid "Diagram"
 msgstr "Диаграмма"
 
-msgid "Diagram widget of the finite visualisation."
+msgid "Diagram widget of the finite visualization."
 msgstr "Виджет диаграммы конечной визуализации."
 
 msgid "Tracing period (s)"
@@ -622,17 +621,17 @@ msgstr "Значений на пиксел"
 msgid "Parameters number"
 msgstr "Количество параметров"
 
-msgid "Parametr "
+msgid "Parameter "
 msgstr "Параметр "
 
 msgid ":address"
 msgstr ":адрес"
 
 msgid ":view border:lower"
-msgstr ":граница отображения:нижняя"
+msgstr ":граница отображ.:нижняя"
 
 msgid ":view border:upper"
-msgstr ":граница отображения:верхняя"
+msgstr ":граница отображ.:верхняя"
 
 msgid ":color"
 msgstr ":цвет"
@@ -668,7 +667,7 @@ msgstr ""
 msgid "Protocol"
 msgstr "Протокол"
 
-msgid "Protocol widget of the finite visualisation."
+msgid "Protocol widget of the finite visualization."
 msgstr "Виджет формирования протокола конечной визуализации."
 
 msgid "Header visible"
@@ -699,7 +698,7 @@ msgstr ""
 msgid "View columns"
 msgstr "Показать колонки"
 
-msgid "Item's properties"
+msgid "Item properties"
 msgstr "Свойства элемента"
 
 msgid "Item "
@@ -737,8 +736,7 @@ msgstr ""
 "  '\\' - используйте для экранирования специальных символов."
 
 msgid ""
-"Visible and order collumns list separated by symbol ';'. Supported "
-"collumns:\n"
+"Visible and order columns list separated by symbol ';'. Supported columns:\n"
 "  \"pos\" - row number;\n"
 "  \"tm\" - date and time of the message;\n"
 "  \"utm\" - microseconds part of time of the message;\n"
@@ -758,7 +756,7 @@ msgstr ""
 msgid "Document"
 msgstr "Документ"
 
-msgid "Document widget of the finite visualisation."
+msgid "Document widget of the finite visualization."
 msgstr "Виджет формирования документа конечной визуализации."
 
 msgid "CSS"
@@ -810,6 +808,7 @@ msgstr "Текущий документ архива в XHTML. Начинает�
 msgid "Write time for document generation from that point."
 msgstr "Записать времени для генерации документа от этой точки."
 
+#, c-format
 msgid "Document parsing error: %s."
 msgstr "Ошибка разбора документа: %s."
 
@@ -854,23 +853,23 @@ msgid "Compile function for document is error: %s"
 msgstr "Ошибка компиляции функции для документа: %s"
 
 #, c-format
-msgid "Instruction proc '%s' error: %s"
+msgid "Instruction procedure '%s' error: %s"
 msgstr "Ошибка исполнения инструкции '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
 msgstr "Код с ошибкой: %s"
 
-msgid "Buildin function"
+msgid "Built-in function"
 msgstr "Встроенная функция"
 
-msgid "Buildin function widget."
+msgid "Built-in function widget."
 msgstr "Виджет встроенной функции"
 
 msgid "Elements box"
 msgstr "Группа элементов"
 
-msgid "Elements box widget of the finite visualisation."
+msgid "Elements box widget of the finite visualization."
 msgstr "Виджет группы элементов конечной визуализации."
 
 msgid "Page:open source"
@@ -909,10 +908,10 @@ msgstr "Доступ"
 msgid "No access;View;View and control"
 msgstr "Нет доступа;Обзор;Обзор и управление"
 
-msgid "Calc period"
+msgid "Calculate period"
 msgstr "Период вычисления"
 
-msgid "Project's session calc period on milliseconds."
+msgid "Project's session calculate period on milliseconds."
 msgstr "Период вычисления сессии проекта в миллисекундах."
 
 msgid "Run window"
@@ -1025,7 +1024,7 @@ msgid "Stop session."
 msgstr "Останов сеанса."
 
 #, c-format
-msgid "Session '%s' calc error."
+msgid "Session '%s' calculate error."
 msgstr "Ошибка вычисления сессии '%s'."
 
 msgid "Session: "
@@ -1052,7 +1051,7 @@ msgstr "Фоновый режим исполнения"
 msgid "Connections counter"
 msgstr "Счётчик подключений"
 
-msgid "Calc session time"
+msgid "Calculate session time"
 msgstr "Время вычисления сеанса"
 
 msgid "Period (ms)"
@@ -1073,7 +1072,7 @@ msgstr "Категория"
 msgid "Messages"
 msgstr "Сообщение"
 
-msgid "Quitance"
+msgid "Quittance"
 msgstr "Квитация"
 
 msgid "Type argument"
@@ -1104,17 +1103,6 @@ msgstr "Роман Савоченко"
 msgid "Generic visual control area engine."
 msgstr "Общий движок среды визуализации и управления."
 
-#, c-format
-msgid ""
-"======================= The module <%s:%s> options =======================\n"
-"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n"
-"\n"
-msgstr ""
-"======================== Опции модуля <%s:%s> ============================\n"
-"     --VCADBClearForce           Принудительная очистка БД СВУ от данных API "
-"1.\n"
-"\n"
-
 msgid "ID"
 msgstr ""
 
@@ -1127,7 +1115,7 @@ msgstr "Родительский виджет"
 msgid "Procedure text and language"
 msgstr "Текст и язык программирования процедуры"
 
-msgid "Procedure calc period"
+msgid "Procedure calculate period"
 msgstr "Периодичность вычисления процедуры"
 
 msgid "Changed attributes"
@@ -1157,10 +1145,10 @@ msgstr "Значение конфигурации"
 msgid "Attribute generic flags and type"
 msgstr "Основные флаги и тип атрибута"
 
-msgid "Permision"
+msgid "Permission"
 msgstr "Права доступа"
 
-msgid "Calc period (ms)"
+msgid "Calculate period (ms)"
 msgstr "Период вычисления (мс)"
 
 msgid "Work style"
@@ -1209,7 +1197,7 @@ msgstr "Загрузка модуля."
 msgid "Load library '%s' time: %f ms."
 msgstr "Время загрузки библиотеки '%s': %f мс."
 
-msgid "Load widget's libraries error."
+msgid "Load widgets libraries error."
 msgstr "Ошибка загрузки библиотеки виджетов."
 
 #, c-format
@@ -1243,13 +1231,13 @@ msgstr "Недопустимо подключение к сеансу польз
 msgid "Connect/create session arguments error."
 msgstr "Ошибка аргументов подключения/создания сеанса."
 
-msgid "Widget's library"
+msgid "Widgets library"
 msgstr "Библиотека виджетов"
 
 msgid "Functions"
 msgstr "Функции"
 
-msgid "Widget's libraries"
+msgid "Widgets libraries"
 msgstr "Библиотеки виджетов"
 
 msgid "Sessions"
@@ -1278,7 +1266,7 @@ msgstr ""
 "  %t - синтезируемый текст;\n"
 "  %f - имя результирующего файла.\n"
 "Если файл результата не используется то результат читается из канала.\n"
-"Если используется файл результата и не используется %t то синтезируемый техт "
+"Если используется файл результата и не используется %t то синтезируемый текст "
 "отправляется в канал."
 
 msgid "Text code"
@@ -1348,7 +1336,7 @@ msgid "Widget enable error: %s"
 msgstr "Ошибка включения виджета: %s"
 
 #, c-format
-msgid "Ingeriting widget '%s' disable error."
+msgid "Inheriting widget '%s' disable error."
 msgstr "Ошибка отключения наследующего виджета '%s'."
 
 #, c-format
@@ -1409,7 +1397,7 @@ msgid "The widget owner and group in form \"[owner]:[group]\"."
 msgstr "Владелец и группа виджета в форме \"[владелец]:[группа]\"."
 
 msgid ""
-"Permition to the widget in form \"[user][group][other]\".\n"
+"Permission to the widget in form \"[user][group][other]\".\n"
 "Where \"user\", \"group\" and \"other\" is:\n"
 "  \"__\" - no any access;\n"
 "  \"R_\" - read only;\n"
@@ -1431,7 +1419,7 @@ msgid ""
 "      pg_so - direct name of the desired page with the prefix;\n"
 "      1 - name of a new page in a general way, without a prefix;\n"
 "      * - the page is taken from the name of a previous page;\n"
-"      $ - points the place of the opened page relativ.\n"
+"      $ - points the place of the opened page relative.\n"
 "Examples:\n"
 "  ws_BtPress:/prev:prev:/pg_so/*/*/$\n"
 "  ws_BtPress:/next:next:/pg_so/*/*/$\n"
@@ -1493,6 +1481,9 @@ msgstr "val:Постоянная"
 msgid "Work area"
 msgstr "Рабочая область"
 
+msgid "Calculate"
+msgstr "Вычисление"
+
 msgid "Program language"
 msgstr "Язык программы"
 
@@ -1505,7 +1496,7 @@ msgstr "Новый атрибут"
 msgid "Deleting the enclosed widget's elements error."
 msgstr "Ошибка. Удаление элементов вложенных виджетов."
 
-msgid "Deletint the not user element error."
+msgid "Deleting the not user element error."
 msgstr "Ошибка. Удаление не пользовательского элемента."
 
 msgid "Changing of not user attribute is no permitted"
@@ -1596,9 +1587,6 @@ msgstr ""
 "виджетов. Если установлено <pg> то возвращается список страниц для проектов "
 "и сеансов."
 
-msgid "Rezult"
-msgstr "Результат"
-
 msgid "Node present"
 msgstr "Присутствие узла"
 
@@ -1632,45 +1620,3 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
-
-#~ msgid "Cursor:archive"
-#~ msgstr "Курсор:архив"
-
-#~ msgid "Document (current archive)"
-#~ msgstr "Документ (текущий архив)"
-
-#~ msgid ":view border:autoscale"
-#~ msgstr ":граница отображения:автомасштаб"
-
-#~ msgid "Document "
-#~ msgstr "Документ "
-
-#~ msgid "Events"
-#~ msgstr "События"
-
-#~ msgid "Alarm status"
-#~ msgstr "Статус нарушения"
-
-#~ msgid "Alarm"
-#~ msgstr "Нарушение"
-
-#~ msgid "Function calculate frequency (Hz)"
-#~ msgstr "Частота обсчёта функции (Гц)"
-
-#~ msgid "Function start flag"
-#~ msgstr "Флаг запуска функции"
-
-#~ msgid "Function stop flag"
-#~ msgstr "Флаг останова функции"
-
-#~ msgid "This widget's object for access to user's API"
-#~ msgstr "Этот объект виджета для доступа к пользовательскому API"
-
-#~ msgid "Event"
-#~ msgstr "Событие"
-
-#~ msgid "Focus"
-#~ msgstr "Фокус"
-
-#~ msgid "DB version"
-#~ msgstr "Версия БД"

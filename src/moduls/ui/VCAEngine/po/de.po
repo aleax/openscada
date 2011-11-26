@@ -6,12 +6,11 @@
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
+"Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-20 10:32+0200\n"
+"POT-Creation-Date: 2011-11-24 22:16+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -36,7 +35,7 @@ msgstr "Widgetsbibliothek abschalten."
 msgid "Enable/disable widget '%s' error %s."
 msgstr "Fehler beim Ein-/Abschaltens des Widgets '%s': %s."
 
-msgid "Widget's library: "
+msgid "Widgets library: "
 msgstr "Widgetsbibliothek: "
 
 msgid "Widget"
@@ -121,7 +120,7 @@ msgstr "Eltern"
 msgid "Elementary figures"
 msgstr "Elementarfiguren"
 
-msgid "Elementary figures widget of the finite visualisation."
+msgid "Elementary figures widget of the finite visualization."
 msgstr "Widget für die Elementarfigur der Visualisierung."
 
 msgid "Line:width"
@@ -151,7 +150,7 @@ msgstr "Ausfüllen:Bild"
 msgid "Orientation angle"
 msgstr "Drehwinkel"
 
-msgid "Elements' list"
+msgid "Elements list"
 msgstr "Liste von Elementen"
 
 msgid "Attributes"
@@ -206,14 +205,14 @@ msgstr ""
 "  color, bord_clr, fill_clr - gerade Farbe, Rahmen und Füllung in Form eines "
 "Namens oder einer 32-Bit-Code mit alpha {name}-AAA, #RRGGBB-AAA;\n"
 "  c{n}            - dynamische Farbe 'n';\n"
-"  line_stl        - gerade style: 0-solid, 1-punktiert, 2-Punkt;\n"
+"  line_stl        - gerade Stil: 0-solid, 1-punktiert, 2-Punkt;\n"
 "  s{n}            - dynamischen Stil 'n';\n"
 "  fill_img        - direktes Bild im Format füllen \"[src%3Aname]\", wo:\n"
 "      \"src\" - Bildquelle:\n"
 "         file - direkt aus einer lokalen Datei auf den Weg;\n"
-"         res  - table of mime-Datenbank-Ressourcen.\n"
+"         res  - Tabelle of mime-Datenbank-Ressourcen.\n"
 "      \"name\" - dateipfad oder Kennung mime-Ressource.\n"
-"  i{n}            - dynamisches Bild fill 'n'.\n"
+"  i{n}            - dynamisches Bild füllen 'n'.\n"
 "Zum Beispiel:\n"
 "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
 "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
@@ -235,16 +234,16 @@ msgstr "Bild"
 msgid "Style "
 msgstr "Stil"
 
-msgid "Form's elements"
+msgid "Form elements"
 msgstr "Formenelemente"
 
-msgid "Form's elements widget of the finite visualisation."
+msgid "Form elements widget of the finite visualization."
 msgstr "Widget für die Formenelemente der Visualisierung."
 
 msgid "Element type"
 msgstr "Typ des Elements"
 
-msgid "Line edit;Text edit;Chek box;Button;Combo box;List;Slider;Scroll Bar"
+msgid "Line edit;Text edit;Check box;Button;Combo box;List;Slider;Scroll Bar"
 msgstr ""
 "Zeilenbearbeitung;Textbearbeitung;Check Box;Schaltfläche;Combo Box;Liste;"
 "Schieber;Schieberegler"
@@ -256,7 +255,7 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time"
-msgstr "Text;Combo;Ganzzahl;Reele Zahl;Uhrzeit;Datum;Datum und Uhrzeit"
+msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit"
 
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -410,7 +409,7 @@ msgstr ""
 msgid "Text fields"
 msgstr "Textfelder"
 
-msgid "Text fields widget of the finite visualisation."
+msgid "Text fields widget of the finite visualization."
 msgstr "Widget für die Textfelder der Visualisierung."
 
 msgid "Background:color"
@@ -424,8 +423,7 @@ msgstr "Rand:Stil"
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
 msgstr ""
-"Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;nach innen;nach aussen;"
-"Vertieft;Hervorgehoben"
+"Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
 
 msgid "Color"
 msgstr "Farbe"
@@ -482,7 +480,7 @@ msgstr "String-Wert-Konfiguration in Form \"[strLen]\"."
 msgid "Media"
 msgstr "Media"
 
-msgid "Media widget of the finite visualisation."
+msgid "Media widget of the finite visualization."
 msgstr "Widget für die Media der Visualisierung."
 
 msgid "Source"
@@ -530,7 +528,7 @@ msgid ""
 "  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/"
 "workMedia.mng\"."
 msgstr ""
-"Media Source Name in Form \"[src:name]\", wo:\n"
+"Media Quelle Name in Form \"[src:name]\", wo:\n"
 "  \"src\" - Quelle:\n"
 "    file - direkt vom lokalen Dateisystem von Pfad;\n"
 "    res - von DB Mime Ressourcen-Tabelle.\n"
@@ -541,8 +539,8 @@ msgstr ""
 "  \"file:/var/tmp/workMedia.mng\" - von der lokalen Datei-Pfad \"/var/tmp/"
 "workMedia.mng\"."
 
-msgid "Rect area in form \"[x1],[y1],[x2],[y2]\"."
-msgstr "Rect Bereich in Form \"[x1],[y1],[x2],[y2]\"."
+msgid "Rectangle area in form \"[x1],[y1],[x2],[y2]\"."
+msgstr "Rechteck Bereich in Form \"[x1],[y1],[x2],[y2]\"."
 
 msgid "Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."
 msgstr "Polygon-Bereich in Form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."
@@ -553,7 +551,7 @@ msgstr "Kreisfläche in Form \"[x],[y],[r]\"."
 msgid "Diagram"
 msgstr "Diagramm"
 
-msgid "Diagram widget of the finite visualisation."
+msgid "Diagram widget of the finite visualization."
 msgstr "Widget für das Diagramm der Visualisierung."
 
 msgid "Tracing period (s)"
@@ -578,7 +576,7 @@ msgid "Time:usek"
 msgstr "Zeit:Mikrosek"
 
 msgid "Size, sek"
-msgstr "Grösse, Sek"
+msgstr "Größe, Sek"
 
 msgid "Scale:color"
 msgstr "Skala:Farbe"
@@ -620,17 +618,17 @@ msgstr "Werte pro Pixel"
 msgid "Parameters number"
 msgstr "Anzahl der Parameter"
 
-msgid "Parametr "
+msgid "Parameter "
 msgstr "Parameter "
 
 msgid ":address"
 msgstr ":Adresse"
 
 msgid ":view border:lower"
-msgstr ":Grenze der Ansicht:untere"
+msgstr ":Sicht Grenze:untere"
 
 msgid ":view border:upper"
-msgstr ":Grenze  der Ansicht:obere"
+msgstr ":Sicht Grenze:obere"
 
 msgid ":color"
 msgstr ":Farbe"
@@ -645,7 +643,7 @@ msgid ""
 "The number of values per pixel. Increase to enhance the accuracy of export "
 "at large time intervals."
 msgstr ""
-"Die Anzahl der Werte pro Pixel. Zoom, um die Genauigkeit der Ausfuhren in "
+"Die Anzahl der Werte pro Pixel. Zoom, um die Genauigkeit der Ausführen in "
 "die großen Zeitabständen zu erhöhen."
 
 msgid ""
@@ -666,7 +664,7 @@ msgstr ""
 msgid "Protocol"
 msgstr "Protokoll"
 
-msgid "Protocol widget of the finite visualisation."
+msgid "Protocol widget of the finite visualization."
 msgstr "Widget für das Protokoll der Visualisierung."
 
 msgid "Header visible"
@@ -691,14 +689,14 @@ msgid ""
 "On time;On level;On category;On messages;On time (reverse);On level "
 "(reverse);On category (reverse);On messages (reverse)"
 msgstr ""
-"Nach der Zeit;nach dem Niveau;nach der Kategorie;nach der Nachricht;nach der "
-"Zeit;nach dem Niveau; nach der Kategorie (reziprok);nach der Kategorie "
-"(reziprok);nach der Nachricht(reziprok)"
+"Nach der Zeit;Nach dem Niveau;Nach der Kategorie;Nach der Nachricht;Nach der "
+"Zeit;Nach dem Niveau;Nach der Kategorie (reziprok);Nach der Kategorie "
+"(reziprok);Nach der Nachricht(reziprok)"
 
 msgid "View columns"
 msgstr "Spalten zeigen"
 
-msgid "Item's properties"
+msgid "Item properties"
 msgstr "Eigenschaften des Elements"
 
 msgid "Item "
@@ -736,8 +734,7 @@ msgstr ""
 "  '\\' - Einsatz für spezielle Abschirmung simbols."
 
 msgid ""
-"Visible and order collumns list separated by symbol ';'. Supported "
-"collumns:\n"
+"Visible and order columns list separated by symbol ';'. Supported columns:\n"
 "  \"pos\" - row number;\n"
 "  \"tm\" - date and time of the message;\n"
 "  \"utm\" - microseconds part of time of the message;\n"
@@ -745,8 +742,8 @@ msgid ""
 "  \"cat\" - category of the message;\n"
 "  \"mess\" - the message text."
 msgstr ""
-"Sichtbare und Ordnung collumns Liste von Symbol getrennt ';'. Unterstützte "
-"collumns:\n"
+"Sichtbare und Ordnung Spalten Liste von Symbol getrennt ';'. Unterstützte "
+"Spalten:\n"
 "  \"pos\" - Zeilennummer;\n"
 "  \"tm\" - Datum und Uhrzeit der Nachricht;\n"
 "  \"utm\" - Mikrosekunden Teil der Zeit der Meldung;\n"
@@ -757,7 +754,7 @@ msgstr ""
 msgid "Document"
 msgstr "Dokument"
 
-msgid "Document widget of the finite visualisation."
+msgid "Document widget of the finite visualization."
 msgstr "Widget für das Dokument der Visualisierung."
 
 msgid "CSS"
@@ -772,19 +769,17 @@ msgstr "Zeit:laufend"
 msgid "Archive size"
 msgstr "Archivgrösse"
 
-#, fuzzy
 msgid "Archive:cursor:view"
-msgstr "Cursor:Aussehen"
+msgstr "Archiv:Cursor:Aussehen"
 
 msgid "Archive:cursor:current"
-msgstr ""
+msgstr "Archiv:Cursor:Strom"
 
 msgid "Archive:current document"
-msgstr ""
+msgstr "Archiv:Strom Dokument"
 
-#, fuzzy
 msgid "Archive:size"
-msgstr "Archivgrösse"
+msgstr "ArchivGröße"
 
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
 msgstr "CSS-Regeln in Reihen wie \"body { background-color:#818181; }\""
@@ -811,6 +806,7 @@ msgstr "Aktuelle Dokumentenarchiv in XHTML. Es beginnt mit dem Tag \"Körper\"."
 msgid "Write time for document generation from that point."
 msgstr "Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus."
 
+#, c-format
 msgid "Document parsing error: %s."
 msgstr "Fehler bei der Analyse der Dokumente: %s."
 
@@ -821,7 +817,7 @@ msgid "Document time"
 msgstr "Zeit des Dokuments"
 
 msgid "Document begin time"
-msgstr "Zeit des Beginnes des Dokuments"
+msgstr "Startzeit des Dokuments"
 
 msgid "Last time"
 msgstr "Das letzte Mal"
@@ -855,23 +851,23 @@ msgid "Compile function for document is error: %s"
 msgstr "Fehler in der Funktionskompilation für das Dokument: %s"
 
 #, c-format
-msgid "Instruction proc '%s' error: %s"
+msgid "Instruction procedure '%s' error: %s"
 msgstr "Fehler in der Befehlsausführung '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
 msgstr "Fehlercode : %s"
 
-msgid "Buildin function"
+msgid "Built-in function"
 msgstr "Installierte Funktion"
 
-msgid "Buildin function widget."
+msgid "Built-in function widget."
 msgstr "Widget für die installierte Funktion"
 
 msgid "Elements box"
 msgstr "Elementengruppe"
 
-msgid "Elements box widget of the finite visualisation."
+msgid "Elements box widget of the finite visualization."
 msgstr "Widget für die Elementengruppe der Visualisierung."
 
 msgid "Page:open source"
@@ -910,10 +906,10 @@ msgstr "Berechtigung"
 msgid "No access;View;View and control"
 msgstr "Kein Zugriff;Ansicht;Ansicht und Bedienung"
 
-msgid "Calc period"
+msgid "Calculate period"
 msgstr "Rechenzeit"
 
-msgid "Project's session calc period on milliseconds."
+msgid "Project's session calculate period on milliseconds."
 msgstr "Rechenzeit der Projektsitzung in Millisek."
 
 msgid "Run window"
@@ -945,7 +941,7 @@ msgstr "Löschen"
 
 #, c-format
 msgid "All: %d; Enabled: %d"
-msgstr "Gesamt: %d; Enabled: %d"
+msgstr "Alle: %d; Aktiviert: %d"
 
 msgid "New style"
 msgstr "Neuer Stil"
@@ -998,7 +994,7 @@ msgstr "Download-Zeit voriges Modell: %f ms."
 
 #, c-format
 msgid "Create root pages time: %f ms."
-msgstr "Time to root-Seiten zu erstellen: %f ms."
+msgstr "Zeit, um die Root-Seite erstellen: %f ms."
 
 #, c-format
 msgid "Enable root pages time: %f ms."
@@ -1026,7 +1022,7 @@ msgid "Stop session."
 msgstr "Session stoppen."
 
 #, c-format
-msgid "Session '%s' calc error."
+msgid "Session '%s' calculate error."
 msgstr "Fehler der Berechnung der Sitzung '%s'."
 
 msgid "Session: "
@@ -1053,7 +1049,7 @@ msgstr "Hintergrundmodus der Ausführung"
 msgid "Connections counter"
 msgstr "Verbindungzähler"
 
-msgid "Calc session time"
+msgid "Calculate session time"
 msgstr "Rechenzeit der Sitzung"
 
 msgid "Period (ms)"
@@ -1074,7 +1070,7 @@ msgstr "Kategorie"
 msgid "Messages"
 msgstr "Nachrichten"
 
-msgid "Quitance"
+msgid "Quittance"
 msgstr "Quittung"
 
 msgid "Type argument"
@@ -1106,18 +1102,6 @@ msgstr "Roman Savotschenko"
 msgid "Generic visual control area engine."
 msgstr "Allgemeine Visualisierungssteuerung."
 
-#, c-format
-msgid ""
-"======================= The module <%s:%s> options =======================\n"
-"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n"
-"\n"
-msgstr ""
-"======================== Optionen des Moduls <%s:%s> "
-"============================\n"
-"     --VCADBClearForce           Zwangslöschung der VCA Datenbank von API-"
-"Daten 1.\n"
-"\n"
-
 msgid "ID"
 msgstr ""
 
@@ -1130,8 +1114,8 @@ msgstr "Elternwidget"
 msgid "Procedure text and language"
 msgstr "Text und Sprache des Programms"
 
-msgid "Procedure calc period"
-msgstr "Periodizität des Progamms"
+msgid "Procedure calculate period"
+msgstr "Zeitraum der Berechnungsverfahren"
 
 msgid "Changed attributes"
 msgstr "Geänderte Attribute"
@@ -1160,10 +1144,10 @@ msgstr "Konfigurationswert"
 msgid "Attribute generic flags and type"
 msgstr "Basisschalter und Typ des Attributs"
 
-msgid "Permision"
+msgid "Permission"
 msgstr "Erlaubnis"
 
-msgid "Calc period (ms)"
+msgid "Calculate period (ms)"
 msgstr "Rechenzeit (msek)"
 
 msgid "Work style"
@@ -1212,7 +1196,7 @@ msgstr "Modul laden"
 msgid "Load library '%s' time: %f ms."
 msgstr "Zeit Laden der Bibliothek '%s': %f msek."
 
-msgid "Load widget's libraries error."
+msgid "Load widgets libraries error."
 msgstr "Fehler beim Laden der Widgetsbibliothek."
 
 #, c-format
@@ -1246,13 +1230,13 @@ msgstr "Verbindung an die Sitzung ist nicht zulässig für '%s'."
 msgid "Connect/create session arguments error."
 msgstr "Fehler in den Parametern beim Verbinden/Erstellen der Sitzung."
 
-msgid "Widget's library"
+msgid "Widgets library"
 msgstr "Widgetsbibliothek"
 
 msgid "Functions"
 msgstr "Funktionen"
 
-msgid "Widget's libraries"
+msgid "Widgets libraries"
 msgstr "Widgetsbibliotheken"
 
 msgid "Sessions"
@@ -1321,10 +1305,10 @@ msgid "Geometry:height"
 msgstr "Geometrie:Höhe"
 
 msgid "Geometry:x scale"
-msgstr "Geometrie:x Massstab"
+msgstr "Geometrie:x Maßstab"
 
 msgid "Geometry:y scale"
-msgstr "Geometrie:y Massstab"
+msgstr "Geometrie:y Maßstab"
 
 msgid "Geometry:z"
 msgstr "Geometrie:z"
@@ -1352,7 +1336,7 @@ msgid "Widget enable error: %s"
 msgstr "Fehler der Einschaltung des Widgets: %s"
 
 #, c-format
-msgid "Ingeriting widget '%s' disable error."
+msgid "Inheriting widget '%s' disable error."
 msgstr "Fehler beim Abschalten des vererbenden Widgets '%s'."
 
 #, c-format
@@ -1412,7 +1396,7 @@ msgid "The widget owner and group in form \"[owner]:[group]\"."
 msgstr "Das Widget Eigentümer und die Gruppe in Form \"[owner]:[group]\"."
 
 msgid ""
-"Permition to the widget in form \"[user][group][other]\".\n"
+"Permission to the widget in form \"[user][group][other]\".\n"
 "Where \"user\", \"group\" and \"other\" is:\n"
 "  \"__\" - no any access;\n"
 "  \"R_\" - read only;\n"
@@ -1434,7 +1418,7 @@ msgid ""
 "      pg_so - direct name of the desired page with the prefix;\n"
 "      1 - name of a new page in a general way, without a prefix;\n"
 "      * - the page is taken from the name of a previous page;\n"
-"      $ - points the place of the opened page relativ.\n"
+"      $ - points the place of the opened page relative.\n"
 "Examples:\n"
 "  ws_BtPress:/prev:prev:/pg_so/*/*/$\n"
 "  ws_BtPress:/next:next:/pg_so/*/*/$\n"
@@ -1496,6 +1480,9 @@ msgstr "val:Konstante"
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
+msgid "Calculate"
+msgstr "Berechnen"
+
 msgid "Program language"
 msgstr "Programmsprache"
 
@@ -1508,7 +1495,7 @@ msgstr "Neues Attribut"
 msgid "Deleting the enclosed widget's elements error."
 msgstr "Fehler beim Löschen von Widgetelementen"
 
-msgid "Deletint the not user element error."
+msgid "Deleting the not user element error."
 msgstr "Fehler beim Löschen des nicht benutzerdefinierten Elements."
 
 msgid "Changing of not user attribute is no permitted"
@@ -1525,7 +1512,7 @@ msgid "Integer"
 msgstr "Ganzzahl"
 
 msgid "Real"
-msgstr "Reele Zahl"
+msgstr "Reelle Zahl"
 
 msgid "String"
 msgstr "Text"
@@ -1537,7 +1524,7 @@ msgid "Select integer"
 msgstr "Ganzzahl auswählen"
 
 msgid "Select real"
-msgstr "Reele Zahl auswählen"
+msgstr "Reelle Zahl auswählen"
 
 msgid "Select string"
 msgstr "Text auswählen"
@@ -1549,7 +1536,7 @@ msgid "Address"
 msgstr "Adresse"
 
 msgid "Not"
-msgstr "nicht"
+msgstr "Nicht"
 
 msgid "Constant"
 msgstr "Konstante"
@@ -1564,7 +1551,7 @@ msgid "Full link"
 msgstr "Voller Link"
 
 msgid "From style"
-msgstr "aus dem Stil"
+msgstr "Aus dem Stil"
 
 msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
@@ -1599,9 +1586,6 @@ msgstr ""
 "Wenn <pg> aktiv ist, wird die Seitenliste von Projekten und Sitzungen "
 "zurückgeliefert."
 
-msgid "Rezult"
-msgstr "Ergebnis"
-
 msgid "Node present"
 msgstr "Knoten vorhanden"
 
@@ -1635,45 +1619,3 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
-
-#~ msgid "Cursor:archive"
-#~ msgstr "Cursor:Archiv"
-
-#~ msgid "Document (current archive)"
-#~ msgstr "Dokument (die aktuelle Datei)"
-
-#~ msgid ":view border:autoscale"
-#~ msgstr ":Grenze der Ansicht:Automassstab"
-
-#~ msgid "Document "
-#~ msgstr "Dokument "
-
-#~ msgid "Events"
-#~ msgstr "Ereignisse"
-
-#~ msgid "Alarm status"
-#~ msgstr "Status der Störung"
-
-#~ msgid "Alarm"
-#~ msgstr "Störung"
-
-#~ msgid "Function calculate frequency (Hz)"
-#~ msgstr "Berechnung der Frequenz (Hz)"
-
-#~ msgid "Function start flag"
-#~ msgstr "Schalter für das Starten der Funktion"
-
-#~ msgid "Function stop flag"
-#~ msgstr "Schalter für das Anhalten der Funktion"
-
-#~ msgid "This widget's object for access to user's API"
-#~ msgstr "Dises Objekt des Widgets ist für den Zugang zu dem Nutzers-API"
-
-#~ msgid "Event"
-#~ msgstr "Ereignis"
-
-#~ msgid "Focus"
-#~ msgstr "Fokus"
-
-#~ msgid "DB version"
-#~ msgstr "Datenbank Version"

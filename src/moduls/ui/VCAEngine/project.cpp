@@ -483,8 +483,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/o_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Calc period"),RWRWR_,"root",SUI_ID,2,"tp","dec",
-		    "help",_("Project's session calc period on milliseconds."));
+		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Calculate period"),RWRWR_,"root",SUI_ID,2,"tp","dec",
+		    "help",_("Project's session calculate period on milliseconds."));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/runWin",_("Run window"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;1;2","sel_list",_("Original size;Maximize;Full screen"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/keepAspRatio",_("Keep aspect ratio on scale"),RWRWR_,"root",SUI_ID,1,"tp","bool");

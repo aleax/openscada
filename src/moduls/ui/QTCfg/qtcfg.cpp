@@ -191,13 +191,13 @@ ConfApp::ConfApp( string open_user ) :
     actUp->setStatusTip(_("Press for going to level up"));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(triggered()), this, SLOT(pageUp()));
-    //>> Previos page
+    //>> Previous page
     if(!ico_t.load(TUIS::icoPath("previous").c_str())) ico_t.load(":/images/previous.png");
-    actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Previos"),this);
+    actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Previous"),this);
     actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
-    actPrev->setToolTip(_("Previos page"));
-    actPrev->setWhatsThis(_("The button for going to previos page"));
-    actPrev->setStatusTip(_("Press for going to previos page"));
+    actPrev->setToolTip(_("Previous page"));
+    actPrev->setWhatsThis(_("The button for going to previous page"));
+    actPrev->setStatusTip(_("Press for going to previous page"));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(triggered()), this, SLOT(pagePrev()));
     //>> Next page
@@ -868,7 +868,7 @@ void ConfApp::about( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-	"%s v%s.\n%s\nAutor: %s\nLicense: %s\n\n"
+	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
 	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
 	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
 	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE );

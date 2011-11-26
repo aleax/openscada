@@ -196,7 +196,7 @@ class VisItProp : public QDialog
 	InspAttr	*obj_attr;	//Attributes inspector
 	InspLnk		*obj_lnk;	//Links inspector
 
-	LineEdit	*proc_per;	//Procedure calc period
+	LineEdit	*proc_per;	//Procedure calculate period
 	QComboBox	*proc_lang;	//Widget's procedure name
 	TextEdit	*proc_text;	//Widget's procedure program text
 

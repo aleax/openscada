@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebUser 0.6.1\n"
+"Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-18 18:00+0300\n"
+"POT-Creation-Date: 2011-11-25 22:05+0200\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -25,8 +24,7 @@ msgstr "Роман Савоченко"
 
 msgid "Allow creation self-user web-interfaces on any OpenSCADA language."
 msgstr ""
-"Дозволяє створювати користувачу власні web-інтерфейси на будьякій мові "
-"OpenSCADA."
+"Дозволяє створювати користувачу власні web-інтерфейси на мові OpenSCADA."
 
 msgid "ID"
 msgstr ""
@@ -55,6 +53,7 @@ msgstr "Наявні Web-сторінки користувачів"
 msgid "Page error"
 msgstr "Помилка сторінки"
 
+#, c-format
 msgid "Page '%s' error: %s"
 msgstr "Сторінка '%s' помилка: %s"
 

@@ -43,7 +43,7 @@
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
 #define MOD_VER		"0.0.1"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Transport's subsystem template module.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -84,7 +84,7 @@ TTr::TTr( string name ) : TTipTransport(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

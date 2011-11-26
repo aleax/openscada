@@ -304,7 +304,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget's library: ")+id(),RWRWR_,"root",SUI_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widgets library: ")+id(),RWRWR_,"root",SUI_ID);
 	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/wdg_",_("Widget"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");

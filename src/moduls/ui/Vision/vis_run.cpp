@@ -176,36 +176,36 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     //>> Alarms actions
-    //>>> Alarm level display button and full alarms quitance
+    //>>> Alarm level display button and full alarms quittance
     if(!ico_t.load(TUIS::icoPath("alarmLev").c_str())) ico_t.load(":/images/alarmLev.png");
     actAlrmLev = new QAction( QPixmap::fromImage(ico_t), _("Alarm level"), this );
     actAlrmLev->setObjectName("alarmLev");
     actAlrmLev->setToolTip(_("Alarm level"));
-    actAlrmLev->setWhatsThis(_("The button for all alarms quitance"));
-    actAlrmLev->setStatusTip(_("Press for all alarms quitance."));
+    actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
+    actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
     //>>> Alarm by Light
     if(!ico_t.load(TUIS::icoPath("alarmLight").c_str())) ico_t.load(":/images/alarmLight.png");
     actAlrmLight = new QAction( QPixmap::fromImage(ico_t), _("Blink alarm"), this );
     actAlrmLight->setObjectName("alarmLight");
     actAlrmLight->setToolTip(_("Blink alarm"));
-    actAlrmLight->setWhatsThis(_("The button for all blink alarms quitance"));
-    actAlrmLight->setStatusTip(_("Press for all blink alarms quitance."));
+    actAlrmLight->setWhatsThis(_("The button for all blink alarms quittance"));
+    actAlrmLight->setStatusTip(_("Press for all blink alarms quittance."));
     actAlrmLight->setVisible(false);
     //>>> Alarm by mono sound (PC speaker)
     if(!ico_t.load(TUIS::icoPath("alarmAlarm").c_str())) ico_t.load(":/images/alarmAlarm.png");
     actAlrmAlarm = new QAction( QPixmap::fromImage(ico_t), _("Speaker alarm"), this );
     actAlrmAlarm->setObjectName("alarmAlarm");
     actAlrmAlarm->setToolTip(_("PC speaker alarm"));
-    actAlrmAlarm->setWhatsThis(_("The button for all PC speaker alarms quitance"));
-    actAlrmAlarm->setStatusTip(_("Press for all PC speaker alarms quitance."));
+    actAlrmAlarm->setWhatsThis(_("The button for all PC speaker alarms quittance"));
+    actAlrmAlarm->setStatusTip(_("Press for all PC speaker alarms quittance."));
     actAlrmAlarm->setVisible(false);
     //>>> Alarm by sound or synthesis of speech
     if(!ico_t.load(TUIS::icoPath("alarmSound").c_str())) ico_t.load(":/images/alarmSound.png");
     actAlrmSound = new QAction( QPixmap::fromImage(ico_t), _("Sound/speech alarm"), this );
     actAlrmSound->setObjectName("alarmSound");
     actAlrmSound->setToolTip(_("Sound or speech alarm"));
-    actAlrmSound->setWhatsThis(_("The button for all sound or speech alarms quitance"));
-    actAlrmSound->setStatusTip(_("Press for all sound or speech alarms quitance."));
+    actAlrmSound->setWhatsThis(_("The button for all sound or speech alarms quittance"));
+    actAlrmSound->setStatusTip(_("Press for all sound or speech alarms quittance."));
     actAlrmSound->setVisible(false);
 
     //> Create menu
@@ -339,7 +339,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
     if(rez == 10 && master_pg && !isConErr && !master_pg->findChild<QLabel*>("==ConnError=="))
     {
 	//> Create error message
-	conErr = new QLabel(QString(_("Connection to visualisation server '%1' error: %2")).
+	conErr = new QLabel(QString(_("Connection to visualization server '%1' error: %2")).
 				arg(VCAStation().c_str()).arg(node.text().c_str()),master_pg);
 	conErr->setObjectName("==ConnError==");
 	conErr->setAlignment(Qt::AlignCenter);
@@ -493,7 +493,7 @@ void VisRun::printDiag( const string &idg )
 	    //> Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
-	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagramm for print."), _("Diagram print."), false, false);
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for print."), _("Diagram print."), false, false);
 	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
@@ -661,7 +661,7 @@ void VisRun::exportDiag( const string &idg )
 	    //> Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/export.png");
-	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagramm for export."), _("Diagram export."), false, false);
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for export."), _("Diagram export."), false, false);
 	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
@@ -898,7 +898,7 @@ void VisRun::exportDoc( const string &idoc )
 void VisRun::about()
 {
     QMessageBox::about(this,windowTitle(),
-	QString(_("%1 v%2.\n%3\nAutor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
+	QString(_("%1 v%2.\n%3\nAuthor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
 	arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
 	arg(mod->modInfo("Author").c_str()).arg(mod->modInfo(_("Developers")).c_str()).arg(mod->modInfo("License").c_str()).
 	arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
@@ -970,21 +970,21 @@ void VisRun::alarmAct( QAction *alrm )
 {
     if(alrm == NULL) return;
 
-    int quitance = 0;
+    int quittance = 0;
     string qwdg;
-    if(alrm->objectName() == "alarmLev")	quitance = 0xFF;
-    else if(alrm->objectName() == "alarmLight")	quitance = 0x01;
-    else if(alrm->objectName() == "alarmAlarm")	quitance = 0x02;
+    if(alrm->objectName() == "alarmLev")	quittance = 0xFF;
+    else if(alrm->objectName() == "alarmLight")	quittance = 0x01;
+    else if(alrm->objectName() == "alarmAlarm")	quittance = 0x02;
     else if(alrm->objectName() == "alarmSound")
     {
-	quitance = 0x04;
+	quittance = 0x04;
 	qwdg = alrmPlay->widget( );
     }
     else return;
 
     XMLNode req("quittance");
     req.setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm")->
-	setAttr("tmpl",TSYS::uint2str(quitance))->
+	setAttr("tmpl",TSYS::uint2str(quittance))->
 	setAttr("wdg",qwdg);
     cntrIfCmd(req);
 

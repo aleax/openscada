@@ -4,10 +4,9 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.6\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-14 14:53+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
@@ -106,7 +105,7 @@ msgid "Insert new element."
 msgstr "Das neue Element einsetzen."
 
 msgid "Rename element."
-msgstr "Das neue Element umnennen."
+msgstr "Benennen Element."
 
 msgid "Select image file for download to picture field."
 msgstr "Die Imagedatei für das Laden ins Imagefeld wählen."
@@ -138,7 +137,7 @@ msgstr "Das Element '%1' ist schon vorhanden."
 msgid "You sure for delete node '%1'?"
 msgstr "Wollen Sie wirklich den Knoten '%1' löschen?"
 
-msgid "Copy is imposible."
+msgid "Copy is impossible."
 msgstr "Kopierung ist unmöglich."
 
 msgid "Selected"
@@ -190,7 +189,7 @@ msgstr "Unbekanntes Kommando: %s."
 msgid "Name: "
 msgstr "Name: "
 
-msgid "Desription: "
+msgid "Description: "
 msgstr "Beschreibung: "
 
 msgid "License: "

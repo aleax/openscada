@@ -37,8 +37,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.5"
-#define AUTORS		_("Roman Savochenko")
+#define MOD_VER		"1.5.6"
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the WEB based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -73,7 +73,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
@@ -248,9 +248,9 @@ void TWEB::getAbout( SSess &ses )
 	"<tr><td class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
 	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Desription: ")+"</TD><TD>"+_(DESCRIPTION)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Description: ")+"</TD><TD>"+_(DESCRIPTION)+"</TD></TR>\n"
 	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+_(LICENSE)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(AUTORS)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(AUTHORS)+"</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR>\n</table><br/>\n"
 	"<table class='work'>\n"
@@ -276,8 +276,8 @@ void TWEB::getHead( SSess &ses )
 	"<a href='"+path+"?com=save' title='"+_("Save")+"'><img src='/"MOD_ID"/img_save' alt='"+_("Save")+"'/></a>\n"
 	"<img src='/"MOD_ID"/img_line'/>\n"
 	"<a href='/"MOD_ID"' title='"+_("Root page")+"'><img src='/"MOD_ID"/img_gohome' alt='"+_("Root page")+"'/></a>\n"
-	"<a href='"+path+"' title='"+_("Curent page")+"'><img src='/"MOD_ID"/img_reload' alt='" +_("Curent page")+"'/></a>\n"
-	"<a href='"+path.substr(0,path.rfind("/"))+"' title='"+_("Previous page")+"'><img src='/"MOD_ID"/img_up' alt='"+_("Previos page")+"'/></a>\n"
+	"<a href='"+path+"' title='"+_("Current page")+"'><img src='/"MOD_ID"/img_reload' alt='" +_("Curent page")+"'/></a>\n"
+	"<a href='"+path.substr(0,path.rfind("/"))+"' title='"+_("Previous page")+"'><img src='/"MOD_ID"/img_up' alt='"+_("Previous page")+"'/></a>\n"
 	"<img src='/"MOD_ID"/img_line'/>\n"
 	"<a href='/"MOD_ID"/about' title='"+_("About")+"'><img src='/"MOD_ID"/img_help' alt='"+_("About")+"'/></a>\n"
 	"</td>\n"

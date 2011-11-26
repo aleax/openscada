@@ -47,7 +47,7 @@
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
 #define MOD_VER		"1.5.0"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -82,7 +82,7 @@ TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

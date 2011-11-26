@@ -37,7 +37,7 @@
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
 #define MOD_VER		"1.7.1"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
@@ -72,7 +72,7 @@ BDMod::BDMod(string name) : TTipBD(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= MOD_LICENSE;
     mSource	= name;

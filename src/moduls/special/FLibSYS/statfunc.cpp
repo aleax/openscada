@@ -72,7 +72,7 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= MOD_AUTOR;
+    mAuthor	= MOD_AUTOR;
     mDescr	= MOD_DESCR;
     mLicense	= MOD_LICENSE;
     mSource	= src;

@@ -41,7 +41,7 @@
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
 #define MOD_VER		"2.0.2"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -76,7 +76,7 @@ BDMod::BDMod( string name ) : TTipBD(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

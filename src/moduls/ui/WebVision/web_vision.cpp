@@ -35,8 +35,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.1"
-#define AUTORS		_("Roman Savochenko")
+#define MOD_VER		"1.0.0"
+#define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Web operation user interface for visual control area (VCA) projects playing.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
@@ -527,7 +527,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
 		    if((int)vcaLs.size() >= mod->sessLimit())
-		        messPost(ses.page,nodePath(),_("Sorry, openned sessions number reach limit!"),TWEB::Warning);
+		        messPost(ses.page,nodePath(),_("Sorry, opened sessions number reach limit!"),TWEB::Warning);
 		    else
 		    {
 			sesRes.request(true);
@@ -573,7 +573,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		page = ses.page;
 		return;
 	    }
-            else mess_err(nodePath().c_str(),_("An unaccessible request is received: '%s'"),zero_lev.c_str());
+            else mess_err(nodePath().c_str(),_("An inaccessible request is received: '%s'"),zero_lev.c_str());
 	}
     }catch(TError err)
     {
@@ -602,9 +602,9 @@ void TWEB::getAbout( SSess &ses )
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
 	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_(MOD_NAME)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Desription: ")+"</font></TD><TD>"+_(DESCRIPTION)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("Description: ")+"</font></TD><TD>"+_(DESCRIPTION)+"</TD></TR>"
 	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>"+_(LICENSE)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>"+_(AUTORS)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>"+_(AUTHORS)+"</TD></TR>"
 	"</table>\n"
 	"</TD></TR>\n</table><br/></center>\n";
 }

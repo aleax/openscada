@@ -2185,7 +2185,7 @@ function itPaste( )
   for( pathLev.off = 0; (t_el=pathLev(copyBuf.substr(1),0,true)).length; n_sel++ )
   { if(n_sel) s_elp += ('/'+s_el); s_el = t_el; }
 
-  if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('###Copy is imposible.###'); return; }
+  if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('###Copy is impossible.###'); return; }
 
   if( parseInt(root.getAttribute('acs'))&SEC_WR ) { typeCfg+="<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
   for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )

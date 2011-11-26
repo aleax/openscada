@@ -44,7 +44,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.3.0"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -79,7 +79,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), drv_CIF_OK(false)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

@@ -4,12 +4,11 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2006-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.VCAEngine 1.1.0\n"
+"Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-20 10:32+0200\n"
+"POT-Creation-Date: 2011-11-24 22:16+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -33,7 +32,7 @@ msgstr "Вимкнення бібліотеки віджетів."
 msgid "Enable/disable widget '%s' error %s."
 msgstr "Помилка ввімкнення/вимкнення віджету '%s': %s."
 
-msgid "Widget's library: "
+msgid "Widgets library: "
 msgstr "Бібліотека віджетів: "
 
 msgid "Widget"
@@ -93,7 +92,7 @@ msgid ""
 "You try to create widget with name '%s' of the widget that was the early "
 "inherited and deleted from base container!"
 msgstr ""
-"Ви намагаєтесь створити віджет з ім’ям '%s' віджета який було раніше "
+"Ви намагаєтесь створити віджет з ім'ям '%s' віджета який було раніше "
 "успадковано та видалено з базового контейнера!"
 
 msgid "Library widget: "
@@ -118,7 +117,7 @@ msgstr "Батько"
 msgid "Elementary figures"
 msgstr "Елементарна фігура"
 
-msgid "Elementary figures widget of the finite visualisation."
+msgid "Elementary figures widget of the finite visualization."
 msgstr "Віджет елементарної фігури кінцевої візуалізації."
 
 msgid "Line:width"
@@ -148,7 +147,7 @@ msgstr "Заповнення:зображення"
 msgid "Orientation angle"
 msgstr "Кут оберту"
 
-msgid "Elements' list"
+msgid "Elements list"
 msgstr "Перелік елементів"
 
 msgid "Attributes"
@@ -195,13 +194,13 @@ msgstr ""
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
 "Де:\n"
-"  (x|y)           - пряма точка (x,y) координати у пікселах з плаваючою "
+"  (x|y)           - пряма точка (x,y) координати у пікселях з плаваючою "
 "точкою;\n"
 "  {1}...{n}       - динамічні точки 1...n;\n"
-"  width, bord_w   - пряма ширина лінії та бордюра у пікселах з плаваючою "
+"  width, bord_w   - пряма ширина лінії та бордюру у пікселях з плаваючою "
 "точкою;\n"
 "  w{n}            - динамічна ширина 'n';\n"
-"  color, bord_clr, fill_clr - прямий колір лінії, бордюра та заповнення у "
+"  color, bord_clr, fill_clr - прямий колір лінії, бордюру та заповнення у "
 "вигляді назви або 32-бітного коду з альфа: {назва}-AAA, #RRGGBB-AAA;\n"
 "  c{n}            - динамічний колір 'n';\n"
 "  line_stl        - прямий стиль лінії: 0-Суцільна, 1-Пунктирна, 2-Точкова;\n"
@@ -234,16 +233,16 @@ msgstr "Зображення "
 msgid "Style "
 msgstr "Стиль "
 
-msgid "Form's elements"
+msgid "Form elements"
 msgstr "Елементи форми"
 
-msgid "Form's elements widget of the finite visualisation."
+msgid "Form elements widget of the finite visualization."
 msgstr "Віджет елементів форми кінцевої візуалізації."
 
 msgid "Element type"
 msgstr "Тип елементу"
 
-msgid "Line edit;Text edit;Chek box;Button;Combo box;List;Slider;Scroll Bar"
+msgid "Line edit;Text edit;Check box;Button;Combo box;List;Slider;Scroll Bar"
 msgstr ""
 "Стрічка редагув.;Текстовий редактор;Check Box;Кнопка;Combo Box;Перелік;"
 "Слайдер;Стрічка прокрутки"
@@ -399,9 +398,9 @@ msgstr ""
 "Конфігурація слайдеру у форматі: \"[ВертОрієнт]:[Мінімум]:[Максимум]:"
 "[ОдинКрок]:[СторКрок].\n"
 "Де:\n"
-"  \"ВертОрієнт\" - ознака вертикальної орієнтації, по замовченю орієнтація "
+"  \"ВертОрієнт\" - ознака вертикальної орієнтації, по замовченню орієнтація "
 "горизонтальна;\n"
-"  \"Мінімум\" - мінімальне значеня;\n"
+"  \"Мінімум\" - мінімальне значення;\n"
 "  \"Максимум\" - максимальне значення;\n"
 "  \"ОдинКрок\" - розмір одного кроку;\n"
 "  \"СторКрок\" - розмір сторінкового кроку."
@@ -409,7 +408,7 @@ msgstr ""
 msgid "Text fields"
 msgstr "Текстові поля"
 
-msgid "Text fields widget of the finite visualisation."
+msgid "Text fields widget of the finite visualization."
 msgstr "Віджет текстових полів кінцевої візуалізації."
 
 msgid "Background:color"
@@ -453,7 +452,7 @@ msgid ":type"
 msgstr ":тип"
 
 msgid "Integer;Real;String"
-msgstr "Цілий;Реальний;Строка"
+msgstr "Цілий;Реальний;Рядок"
 
 msgid ":value"
 msgstr ":значення"
@@ -463,7 +462,7 @@ msgstr ":конфігурація"
 
 msgid "Text value. Use '%{n}' for argument {n} (from 1) value insert."
 msgstr ""
-"Значення тексту. Використовуйте \"%{n}\" для розташування значення аргумента "
+"Значення тексту. Використовуйте \"%{n}\" для розташування значення аргументу "
 "{n} (від 1)."
 
 msgid "Integer value configuration in form \"[valLen]\"."
@@ -482,7 +481,7 @@ msgstr "Конфігурація строкового значення у фор
 msgid "Media"
 msgstr "Медія"
 
-msgid "Media widget of the finite visualisation."
+msgid "Media widget of the finite visualization."
 msgstr "Медія віджет кінцевої візуалізації."
 
 msgid "Source"
@@ -542,7 +541,7 @@ msgstr ""
 "  \"file:/var/tmp/workMedia.mng\" - з локального файлу за шляхом \"/var/tmp/"
 "workMedia.mng\"."
 
-msgid "Rect area in form \"[x1],[y1],[x2],[y2]\"."
+msgid "Rectangle area in form \"[x1],[y1],[x2],[y2]\"."
 msgstr "Прямокутна область у формі \"[x1],[y1],[x2],[y2]\"."
 
 msgid "Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."
@@ -554,7 +553,7 @@ msgstr "Кругова область у формі \"[x],[y],[r]\"."
 msgid "Diagram"
 msgstr "Діаграма"
 
-msgid "Diagram widget of the finite visualisation."
+msgid "Diagram widget of the finite visualization."
 msgstr "Віджет діаграми кінцевої візуалізації."
 
 msgid "Tracing period (s)"
@@ -588,7 +587,7 @@ msgid "Scale:horizontal"
 msgstr "Шкала:горизонтальна"
 
 msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Без;Гратка;Маркери;Гратка та маркери"
+msgstr "Без;Ґратка;Маркери;Ґратка та маркери"
 
 msgid "Scale:vertical"
 msgstr "Шкала:вертикальна"
@@ -597,7 +596,7 @@ msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and "
 "markers (log)"
 msgstr ""
-"Без;Гратка;Маркери;Гратка та маркери;Гратка (лог);Маркери (лог);Гратка та "
+"Без;Ґратка;Маркери;Ґратка та маркери;Ґратка (лог);Маркери (лог);Ґратка та "
 "маркери (лог)"
 
 msgid "Scale:vertical scale (%)"
@@ -616,22 +615,22 @@ msgid "Value archivator"
 msgstr "Архіватор значень"
 
 msgid "Values for pixel"
-msgstr "Значень на піксел"
+msgstr "Значень на піксель"
 
 msgid "Parameters number"
 msgstr "Кількість параметрів"
 
-msgid "Parametr "
+msgid "Parameter "
 msgstr "Параметр "
 
 msgid ":address"
 msgstr ":адреса"
 
 msgid ":view border:lower"
-msgstr ":границя відображення:нижня"
+msgstr ":границя відображ.:нижня"
 
 msgid ":view border:upper"
-msgstr ":границя відображення:верхня"
+msgstr ":границя відображ.:верхня"
 
 msgid ":color"
 msgstr ":колір"
@@ -646,7 +645,7 @@ msgid ""
 "The number of values per pixel. Increase to enhance the accuracy of export "
 "at large time intervals."
 msgstr ""
-"Кількість значень на піксел. Збільшити для розширення точності експорту на "
+"Кількість значень на піксель. Збільшити для розширення точності експорту на "
 "великих проміжках часу."
 
 msgid ""
@@ -667,7 +666,7 @@ msgstr ""
 msgid "Protocol"
 msgstr "Протокол"
 
-msgid "Protocol widget of the finite visualisation."
+msgid "Protocol widget of the finite visualization."
 msgstr "Віджет протоколу кінцевої візуалізації."
 
 msgid "Header visible"
@@ -692,13 +691,13 @@ msgid ""
 "On time;On level;On category;On messages;On time (reverse);On level "
 "(reverse);On category (reverse);On messages (reverse)"
 msgstr ""
-"За часом;За рівнем;За кетегорією;За повідомленням;За часом (обернений);За "
-"рівнем (обернений);За кетегорією (обернений);За повідомленням (обернений)"
+"За часом;За рівнем;За категорією;За повідомленням;За часом (обернений);За "
+"рівнем (обернений);За категорією (обернений);За повідомленням (обернений)"
 
 msgid "View columns"
 msgstr "Показати колонки"
 
-msgid "Item's properties"
+msgid "Item properties"
 msgstr "Властивості елемента"
 
 msgid "Item "
@@ -733,11 +732,10 @@ msgstr ""
 "символи:\n"
 "  '*' - множина будь яких, група символів;\n"
 "  '?' - будь який, один символ;\n"
-"  '\\' - використовуйте для экранування спеціальних символів."
+"  '\\' - використовуйте для екранування спеціальних символів."
 
 msgid ""
-"Visible and order collumns list separated by symbol ';'. Supported "
-"collumns:\n"
+"Visible and order columns list separated by symbol ';'. Supported columns:\n"
 "  \"pos\" - row number;\n"
 "  \"tm\" - date and time of the message;\n"
 "  \"utm\" - microseconds part of time of the message;\n"
@@ -747,7 +745,7 @@ msgid ""
 msgstr ""
 "Перелік видимих та порядок рядків, поділених символом ';'. Підтримуються "
 "рядки:\n"
-"  \"pos\" - номер рядка;\n"
+"  \"pos\" - номер рядку;\n"
 "  \"tm\" - дата та час повідомлення;\n"
 "  \"utm\" - мікросекундна частина часу повідомлення;\n"
 "  \"lev\" - рівень повідомлення;\n"
@@ -757,7 +755,7 @@ msgstr ""
 msgid "Document"
 msgstr "Документ"
 
-msgid "Document widget of the finite visualisation."
+msgid "Document widget of the finite visualization."
 msgstr "Віджет формування документу кінцевої візуалізації."
 
 msgid "CSS"
@@ -809,6 +807,7 @@ msgstr "Поточний документ архіву у XHTML. Починає�
 msgid "Write time for document generation from that point."
 msgstr "Записати час для генерації документу з цієї точки."
 
+#, c-format
 msgid "Document parsing error: %s."
 msgstr "Помилка розбору документа: %s."
 
@@ -853,23 +852,23 @@ msgid "Compile function for document is error: %s"
 msgstr "Помилка компіляції функції для документа: %s"
 
 #, c-format
-msgid "Instruction proc '%s' error: %s"
+msgid "Instruction procedure '%s' error: %s"
 msgstr "Помилка виконання інструкції '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
 msgstr "Код з помилкою: %s"
 
-msgid "Buildin function"
+msgid "Built-in function"
 msgstr "Вбудована функція"
 
-msgid "Buildin function widget."
+msgid "Built-in function widget."
 msgstr "Віджет вбудованої функції"
 
 msgid "Elements box"
 msgstr "Група елементів"
 
-msgid "Elements box widget of the finite visualisation."
+msgid "Elements box widget of the finite visualization."
 msgstr "Віджет групи елементів кінцевої візуалізації."
 
 msgid "Page:open source"
@@ -908,10 +907,10 @@ msgstr "Доступ"
 msgid "No access;View;View and control"
 msgstr "Немає доступу;Огляд;Огляд та керування"
 
-msgid "Calc period"
+msgid "Calculate period"
 msgstr "Період обчислення"
 
-msgid "Project's session calc period on milliseconds."
+msgid "Project's session calculate period on milliseconds."
 msgstr "Період обчислення сеансу проекту у мілісекундах."
 
 msgid "Run window"
@@ -1024,7 +1023,7 @@ msgid "Stop session."
 msgstr "Зупинка сеансу."
 
 #, c-format
-msgid "Session '%s' calc error."
+msgid "Session '%s' calculate error."
 msgstr "Помилка обчислення сесії '%s'."
 
 msgid "Session: "
@@ -1051,7 +1050,7 @@ msgstr "Режим виконання у тлі"
 msgid "Connections counter"
 msgstr "Лічильник підключень"
 
-msgid "Calc session time"
+msgid "Calculate session time"
 msgstr "Час обчислення сеансу"
 
 msgid "Period (ms)"
@@ -1072,7 +1071,7 @@ msgstr "Категорія"
 msgid "Messages"
 msgstr "Повідомлення"
 
-msgid "Quitance"
+msgid "Quittance"
 msgstr "Квітація"
 
 msgid "Type argument"
@@ -1095,23 +1094,13 @@ msgid "Process"
 msgstr "Обробка"
 
 msgid "Visual control area engine"
-msgstr "Рущій середовища візуалізації та керування"
+msgstr "Рушій середовища візуалізації та керування"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid "Generic visual control area engine."
-msgstr "Загальний рущій середовища візуалізації та керування."
-
-#, c-format
-msgid ""
-"======================= The module <%s:%s> options =======================\n"
-"    --VCADBClearForce            Force clear VCA DB from data of API 1.\n"
-"\n"
-msgstr ""
-"======================== Опції модуля <%s:%s> ============================\n"
-"    --VCADBClearForce            Примусове очищення БД СВК від даних API 1.\n"
-"\n"
+msgstr "Загальний рушій середовища візуалізації та керування."
 
 msgid "ID"
 msgstr ""
@@ -1125,7 +1114,7 @@ msgstr "Батьківський віджет"
 msgid "Procedure text and language"
 msgstr "Текст та мова програмування процедури"
 
-msgid "Procedure calc period"
+msgid "Procedure calculate period"
 msgstr "Періодичність обчислення процедури"
 
 msgid "Changed attributes"
@@ -1155,10 +1144,10 @@ msgstr "Значення конфігурації"
 msgid "Attribute generic flags and type"
 msgstr "Основні прапорці та тип атрибуту"
 
-msgid "Permision"
+msgid "Permission"
 msgstr "Права доступу"
 
-msgid "Calc period (ms)"
+msgid "Calculate period (ms)"
 msgstr "Період обчислення (мс)"
 
 msgid "Work style"
@@ -1207,7 +1196,7 @@ msgstr "Завантаження модуля."
 msgid "Load library '%s' time: %f ms."
 msgstr "Час завантаження бібліотеки '%s': %f мс."
 
-msgid "Load widget's libraries error."
+msgid "Load widgets libraries error."
 msgstr "Помилка завантаження бібліотеки віджетів."
 
 #, c-format
@@ -1241,13 +1230,13 @@ msgstr "Недозволено підключення до сеансу кори
 msgid "Connect/create session arguments error."
 msgstr "Помилка аргументів підключення/створення сеансів."
 
-msgid "Widget's library"
+msgid "Widgets library"
 msgstr "Бібліотека віджетів"
 
 msgid "Functions"
 msgstr "Функції"
 
-msgid "Widget's libraries"
+msgid "Widgets libraries"
 msgstr "Бібліотеки віджетів"
 
 msgid "Sessions"
@@ -1271,7 +1260,7 @@ msgid ""
 "If result file name is used and  %t is not used synthesis text is sent to "
 "pipe."
 msgstr ""
-"Командний рядок для виклику рущія синтезу мови з тексту.\n"
+"Командний рядок для виклику рушія синтезу мови з тексту.\n"
 "Використовуйте наступні ключові слова для підміни:\n"
 "  %t - текст для синтезу;\n"
 "  %f - ім'я результуючого файлу.\n"
@@ -1283,7 +1272,7 @@ msgid "Text code"
 msgstr "Кодування тексту"
 
 msgid "Engine text codepage for text encode into it."
-msgstr "Кодування тексту рущія для перекодування у неї."
+msgstr "Кодування тексту рушія для перекодування у неї."
 
 msgid "Attributes deadlock."
 msgstr "Мертве блокування атрибуту."
@@ -1346,7 +1335,7 @@ msgid "Widget enable error: %s"
 msgstr "Помилка включення віджета: %s"
 
 #, c-format
-msgid "Ingeriting widget '%s' disable error."
+msgid "Inheriting widget '%s' disable error."
 msgstr "Помилка вимкнення наслідуючого віджета '%s'."
 
 #, c-format
@@ -1407,7 +1396,7 @@ msgid "The widget owner and group in form \"[owner]:[group]\"."
 msgstr "Володар та група віджету у формі \"[володар]:[група]\"."
 
 msgid ""
-"Permition to the widget in form \"[user][group][other]\".\n"
+"Permission to the widget in form \"[user][group][other]\".\n"
 "Where \"user\", \"group\" and \"other\" is:\n"
 "  \"__\" - no any access;\n"
 "  \"R_\" - read only;\n"
@@ -1429,7 +1418,7 @@ msgid ""
 "      pg_so - direct name of the desired page with the prefix;\n"
 "      1 - name of a new page in a general way, without a prefix;\n"
 "      * - the page is taken from the name of a previous page;\n"
-"      $ - points the place of the opened page relativ.\n"
+"      $ - points the place of the opened page relative.\n"
 "Examples:\n"
 "  ws_BtPress:/prev:prev:/pg_so/*/*/$\n"
 "  ws_BtPress:/next:next:/pg_so/*/*/$\n"
@@ -1439,7 +1428,7 @@ msgstr ""
 "Пряма обробка повідомлень для маніпуляцій сторінками у формі:\n"
 "      \"[event]:[evSrc]:[com]:[prm]\". Де:\n"
 "  \"event\" - очікуване повідомлення;\n"
-"  \"evSrc\" - джерело повідомленя;\n"
+"  \"evSrc\" - джерело повідомлення;\n"
 "  \"com\" - команда сеансу (open, next, prev);\n"
 "  \"prm\" - параметр команди, де використовується:\n"
 "      pg_so - пряме ім'я бажаної сторінки з префіксом;\n"
@@ -1491,6 +1480,9 @@ msgstr "val:Стала"
 msgid "Work area"
 msgstr "Робоче середовище"
 
+msgid "Calculate"
+msgstr "Обчислення"
+
 msgid "Program language"
 msgstr "Мова програми"
 
@@ -1503,7 +1495,7 @@ msgstr "Новий атрибут"
 msgid "Deleting the enclosed widget's elements error."
 msgstr "Помилка. Видалення елементів вкладених віджетів."
 
-msgid "Deletint the not user element error."
+msgid "Deleting the not user element error."
 msgstr "Помилка. Видалення елементу не користувача."
 
 msgid "Changing of not user attribute is no permitted"
@@ -1553,7 +1545,7 @@ msgid "Input link"
 msgstr "Вхідний зв'язок"
 
 msgid "Output link"
-msgstr "Вихідний зв'зок"
+msgstr "Вихідний зв'язок"
 
 msgid "Full link"
 msgstr "Повний зв'язок"
@@ -1593,9 +1585,6 @@ msgstr ""
 "Повертає перелік віджетів у контейнері віджетів або перелік нащадків. Якщо "
 "встановлено <pg> тоді повертається перелік сторінок для проектів та сеансів."
 
-msgid "Rezult"
-msgstr "Результат"
-
 msgid "Node present"
 msgstr "Присутність вузлу"
 
@@ -1603,7 +1592,7 @@ msgid "Checking for node, include widgets, attributes and other present."
 msgstr "Перевірка на присутність вузлу, включаючи віджети, атрибути та інше."
 
 msgid "Without user's"
-msgstr "Без користувальницьких"
+msgstr "Без користувацьких"
 
 msgid "Attributes list"
 msgstr "Перелік атрибутів"
@@ -1612,7 +1601,7 @@ msgid ""
 "Return attributes list for widget. If set <noUser> then return only not "
 "user's attributes."
 msgstr ""
-"Повертає перелік атрибутів для віджетів. Якщо встановленно <noUser> тоді "
+"Повертає перелік атрибутів для віджетів. Якщо встановлено <noUser> тоді "
 "повертаються тільки атрибути не користувача."
 
 msgid "Attribute"
@@ -1629,45 +1618,3 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
-
-#~ msgid "Cursor:archive"
-#~ msgstr "Курсор:архів"
-
-#~ msgid "Document (current archive)"
-#~ msgstr "Документ (поточний архіву)"
-
-#~ msgid ":view border:autoscale"
-#~ msgstr ":границя відображення:автомасштаб"
-
-#~ msgid "Document "
-#~ msgstr "Документ "
-
-#~ msgid "Events"
-#~ msgstr "Явища"
-
-#~ msgid "Alarm status"
-#~ msgstr "Статус порушення"
-
-#~ msgid "Alarm"
-#~ msgstr "Порушення"
-
-#~ msgid "Function calculate frequency (Hz)"
-#~ msgstr "Частота обчислення функції (Гц)"
-
-#~ msgid "Function start flag"
-#~ msgstr "Прапорець запуску функції"
-
-#~ msgid "Function stop flag"
-#~ msgstr "Прапорець зупинки функції"
-
-#~ msgid "This widget's object for access to user's API"
-#~ msgstr "Цей об'єкт віджету для доступу до API користувача"
-
-#~ msgid "Event"
-#~ msgstr "Явище"
-
-#~ msgid "Focus"
-#~ msgstr "Фокус"
-
-#~ msgid "DB version"
-#~ msgstr "Версія БД"

@@ -128,7 +128,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
     actPrjRun = new QAction(QPixmap::fromImage(ico_t),_("Run project execution"),this);
     actPrjRun->setToolTip(_("Run project execution for selected item"));
-    actPrjRun->setWhatsThis(_("The button for runing project execution for selected item"));
+    actPrjRun->setWhatsThis(_("The button for running project execution for selected item"));
     actPrjRun->setStatusTip(_("Press to run project execution for selected item."));
     actPrjRun->setEnabled(false);
     connect(actPrjRun, SIGNAL(triggered()), this, SLOT(prjRun()));
@@ -354,7 +354,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actElFigArc->setEnabled(false);
     //>>> Add Besie curve
     if(!ico_t.load(TUIS::icoPath("vision_elfig_besie").c_str())) ico_t.load(":/images/elfig_besie.png");
-    actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add besier curve"),this);
+    actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add Besier curve"),this);
     actElFigBesie->setCheckable(true);
     actElFigBesie->setObjectName("besier");
     actElFigBesie->setToolTip(_("Add Besier curve to elementary figure"));
@@ -804,7 +804,7 @@ void VisDevelop::quitSt()
 void VisDevelop::about()
 {
     QMessageBox::about(this,windowTitle(),
-	    QString(_("%1 v%2.\n%3\nAutor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
+	    QString(_("%1 v%2.\n%3\nAuthor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
 		arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
 		arg(mod->modInfo("Author").c_str()).arg(mod->modInfo(_("Developers")).c_str()).arg(mod->modInfo("License").c_str()).
 		arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
@@ -965,7 +965,7 @@ void VisDevelop::itDBSave( )
     {
 	//> Request to confirm
 	InputDlg dlg(this,actDBSave->icon(),
-		(own_wdg == "/" ? QString(_("Are you sure of saving all modifings to DB?")) :
+		(own_wdg == "/" ? QString(_("Are you sure of saving all modifications to DB?")) :
 		QString(_("Are you sure of saving visual items '%1' to DB?")).arg(QString(own_wdg.c_str()).replace(";","; "))),
 		_("Save visual item's data to DB"),false,false);
 	if( dlg.exec() == QDialog::Accepted )

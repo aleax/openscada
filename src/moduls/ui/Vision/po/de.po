@@ -9,11 +9,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
+"Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-17 16:09+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
-"Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -227,7 +227,7 @@ msgstr "Projekt starten"
 msgid "Run project execution for selected item"
 msgstr "Starten des Projekts, für das ausgewählte Element"
 
-msgid "The button for runing project execution for selected item"
+msgid "The button for running project execution for selected item"
 msgstr "Schaltfläche zum Starten des Projekts, für das ausgewählte Element"
 
 msgid "Press to run project execution for selected item."
@@ -335,37 +335,29 @@ msgstr "Schaltfläche zum Zurücksetzen der Änderungen"
 msgid "Press to go to visual item changes clear."
 msgstr "Betätigen zum Zurücksetzen der Änderungen."
 
-#, fuzzy
 msgid "Visual item changes UnDo"
-msgstr "Änderungen zurücksetzen"
+msgstr "Visuelle Element Änderungen rückgängig"
 
-#, fuzzy
 msgid "Make visual item changes UnDo:"
-msgstr "Kopieren des Elements"
+msgstr "Machen Sie visuelle Element Änderungen rückgängig:"
 
-#, fuzzy
 msgid "The button for making visual item changes UnDo"
-msgstr "Schaltfläche zum Kopieren des Elements"
+msgstr "Schaltfläche zum machen Sie visuelle Element Änderungen rückgängig"
 
-#, fuzzy
 msgid "Press to make visual item changes UnDo."
-msgstr "Betätigen zum Kopieren des Elements."
+msgstr "Betätigen zum machen Sie visuelle Element Änderungen rückgängig."
 
-#, fuzzy
 msgid "Visual item changes ReDo"
-msgstr "Änderungen zurücksetzen"
+msgstr "Visuelle Element ändert wiederholen Sie"
 
-#, fuzzy
 msgid "Make visual item changes ReDo:"
-msgstr "Einfügen des Elements"
+msgstr "Machen Sie visuelle Element ändert wiederholen Sie:"
 
-#, fuzzy
 msgid "The button for making visual item changes ReDo"
-msgstr "Schaltfläche zum Einfügen des Elements"
+msgstr "Schaltfläche zum machen Sie visuelle Element ändert wiederholen Sie"
 
-#, fuzzy
 msgid "Press to make visual item changes ReDo."
-msgstr "Betätigen zum Einfügen des Elements."
+msgstr "Betätigen zum machen Sie visuelle Element ändert wiederholen Sie."
 
 msgid "Visual item cut"
 msgstr "Element ausschneiden"
@@ -563,7 +555,7 @@ msgstr "Schaltfläche zum Hinzufügen eines Bogens zur elementaren Figur"
 msgid "Press to add arc to elementary figure."
 msgstr "Betätigen zum Hinzufügen eines Bogens zur elementaren Figur."
 
-msgid "Add besier curve"
+msgid "Add Besier curve"
 msgstr "Den Besie-Bogen hinzufügen"
 
 msgid "Add Besier curve to elementary figure"
@@ -588,28 +580,28 @@ msgid "Press to enable connections"
 msgstr "Betätigen zum Einschalten der Verbindungen"
 
 msgid "Cl&ose"
-msgstr "&Schliessen"
+msgstr "&Schließen"
 
 msgid "Close active window"
-msgstr "Schliessen des aktiven Fensters"
+msgstr "Schließen des aktiven Fensters"
 
 msgid "The button for the active window closing"
-msgstr "Schaltfläche zum Schliessen des aktiven Fensters"
+msgstr "Schaltfläche zum Schließen des aktiven Fensters"
 
 msgid "Press to close active window."
-msgstr "Betätigen zum Schliessen des aktiven Fensters."
+msgstr "Betätigen zum Schließen des aktiven Fensters."
 
 msgid "Close &All"
-msgstr "Schliessen &alle"
+msgstr "Schließen &alle"
 
 msgid "Close all windows"
-msgstr "Alle Fenster schliessen"
+msgstr "Alle Fenster schließen"
 
 msgid "The button for all windows closing"
-msgstr "Schaltfläche zum Schliessen aller Fenster"
+msgstr "Schaltfläche zum Schließen aller Fenster"
 
 msgid "Press to close all windows."
-msgstr "Betätigen zum Schliessen aller Fenster."
+msgstr "Betätigen zum Schließen aller Fenster."
 
 msgid "&Tile"
 msgstr "&Aufschichten"
@@ -681,13 +673,13 @@ msgid "&Help"
 msgstr "&Hilfe"
 
 msgid "Visual items toolbar"
-msgstr "Panel der Elemente"
+msgstr "Toolbar der Elemente"
 
 msgid "Widgets view functions"
 msgstr "Widgetsansichtfunktionen"
 
 msgid "Elementars figure tools"
-msgstr "Panel der elementaren Figuren"
+msgstr "Werkzeuge der elementaren Figuren"
 
 msgid "This label displays current user."
 msgstr "Dieses Feld zeigt den aktuellen Benutzer."
@@ -705,13 +697,13 @@ msgid "Field for display of the using VCA engine station."
 msgstr "Feld für Anzeige der Station der VCA Maschine."
 
 msgid "This label displays widgets' scaling mode."
-msgstr "Dieses Zeichen zeigt Massstab des Widgets."
+msgstr "Dieses Zeichen zeigt Maßstab des Widgets."
 
 msgid "Field for display widgets' scaling mode."
-msgstr "Feld für Anzeige des Massstab des Widgets . "
+msgstr "Feld für Anzeige des Maßstab des Widgets . "
 
 msgid "Click to change widgets' scaling mode."
-msgstr "Betätigen um Massstab des Widgets zu ändern."
+msgstr "Betätigen um Maßstab des Widgets zu ändern."
 
 msgid "This label displays modifying."
 msgstr "Dieses Feld zeigt die Änderung."
@@ -720,7 +712,7 @@ msgid "Field for display modifying."
 msgstr "Feld für Anzeige der Änderungen."
 
 msgid "Click to save all modifyings."
-msgstr "Klicken, um alle modifyings speichern."
+msgstr "Klicken, um alle Änderungen speichern."
 
 msgid "This label displays current widget's scale."
 msgstr "Dieses Zeichen zeigt den Bereich des aktuellen Widgets an."
@@ -767,7 +759,7 @@ msgstr "Änderungen in die Datenbank beim Beenden speichern?"
 msgid ""
 "%1 v%2.\n"
 "%3\n"
-"Autor: %4\n"
+"Author: %4\n"
 "Developers: %5\n"
 "License: %6\n"
 "\n"
@@ -785,7 +777,7 @@ msgstr ""
 "\n"
 "%7 v%8.\n"
 "%9\n"
-"Linzenz: %10\n"
+"Lizenz: %10\n"
 "Autor: %11\n"
 "Web Seite: %12"
 
@@ -795,8 +787,8 @@ msgstr "Wollen Sie wirklich die Elemente '%1' aus der Datenbank laden?"
 msgid "Load visual item's data from DB"
 msgstr "Element aus der Datenbank laden"
 
-msgid "Are you sure of saving all modifings to DB?"
-msgstr "Sind Sie sicher, alle zu retten modifings der DB?"
+msgid "Are you sure of saving all modifications to DB?"
+msgstr "Sind Sie sicher, alle zu retten Änderungen der DB?"
 
 msgid "Are you sure of saving visual items '%1' to DB?"
 msgstr "Wollen Sie wirklich die Elemente '%1' in die Datenbank speichern?"
@@ -836,7 +828,7 @@ msgid ""
 "All changes will be lost and variables are returning to default values or "
 "will be inherited!"
 msgstr ""
-"Wollen Sie wirklich alle Änderungendes Elements: '%1' zurücksetzen?\n"
+"Wollen Sie wirklich alle Änderungen Elements: '%1' zurücksetzen?\n"
 "Alle Änderungen gehen verloren und die Variablen erhalten Standardwerte oder "
 "vererbte Werte!"
 
@@ -916,7 +908,7 @@ msgstr "Besitzer, Gruppe:"
 msgid "Access:"
 msgstr "Zugang:"
 
-msgid "Calc period (ms):"
+msgid "Calculate period (ms):"
 msgstr "Rechenzeit (ms):"
 
 msgid "Run window mode:"
@@ -1024,7 +1016,7 @@ msgstr "Datentyp"
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
-msgid "Proc"
+msgid "Proc."
 msgstr "Bearbeit."
 
 msgid "Configuration template"
@@ -1039,7 +1031,7 @@ msgstr "Attribut löschen"
 msgid "Procedure language:"
 msgstr "Verfahrenssprache:"
 
-msgid "Procedure calc (ms):"
+msgid "Procedure calculate (ms):"
 msgstr "Rechenzeit der Funktion (ms):"
 
 msgid "Links"
@@ -1139,10 +1131,10 @@ msgid "Press to refresh present projects."
 msgstr "Betätigen um die vorhandenen Projekte zu aktualisieren."
 
 msgid "Scale"
-msgstr "Massstab"
+msgstr "Maßstab"
 
 msgid "Resize"
-msgstr "Grösse ändern"
+msgstr "Größe ändern"
 
 msgid "Exit from widget editing"
 msgstr "Beenden der Widgetbearbeitung"
@@ -1181,10 +1173,10 @@ msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Betätigen um Massstab um 10% zu verkleinern."
 
 msgid "Reset zoom (100%)"
-msgstr "Reset Massstab (100%)"
+msgstr "Reset Maßstab (100%)"
 
 msgid "Press to set the visual scale of the widget to 100%."
-msgstr "Betätigen um Massstab auf 100% einzustellen."
+msgstr "Betätigen um Maßstab auf 100% einzustellen."
 
 msgid "Save widget's image"
 msgstr "Speicherung des Widgetbildes"
@@ -1206,28 +1198,29 @@ msgid ""
 "\n"
 "... more items (%d)"
 msgstr ""
+"\n"
+"... mehr Elemente (%d)"
 
 msgid "geometry"
-msgstr ""
+msgstr "Geometrie"
 
-#, fuzzy, c-format
+#, c-format
 msgid "attribute '%s'"
-msgstr "Attribute"
+msgstr "Attribute '%s'"
 
-#, fuzzy, c-format
+#, c-format
 msgid "new widget '%s' from '%s'"
-msgstr "Verschieben des Widgets '%1' nach '%2'.\n"
+msgstr "neues Widget '%s' von '%s'"
 
-#, fuzzy
 msgid "remove widget"
-msgstr "Widget nach unten"
+msgstr "entfernen Widget"
 
-#, fuzzy, c-format
+#, c-format
 msgid "copy past widget '%s' from '%s'"
-msgstr "Verschieben des Widgets '%1' nach '%2'.\n"
+msgstr "Kopie vergangenen Widget '%s' von '%s'"
 
 msgid "unknown"
-msgstr ""
+msgstr "unbekannt"
 
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Widget ist nicht eingeschaltet oder Widgetform wird nicht unterstützt!"
@@ -1346,19 +1339,19 @@ msgstr "Betätigen für Informationen über das Programm und OpenSCADA."
 msgid "Alarm level"
 msgstr "Störungsstufe"
 
-msgid "The button for all alarms quitance"
+msgid "The button for all alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller Störungen"
 
-msgid "Press for all alarms quitance."
+msgid "Press for all alarms quittance."
 msgstr "Betätigen für die Quittierung aller Störungen."
 
 msgid "Blink alarm"
 msgstr "Blinzalarme"
 
-msgid "The button for all blink alarms quitance"
+msgid "The button for all blink alarms quittance"
 msgstr "Schaltfläche für Quittierung alle Alarme blinken"
 
-msgid "Press for all blink alarms quitance."
+msgid "Press for all blink alarms quittance."
 msgstr "Betätigen für die Quittierung alle Alarme blinken."
 
 msgid "Speaker alarm"
@@ -1367,10 +1360,10 @@ msgstr "Lautsprecheralarm"
 msgid "PC speaker alarm"
 msgstr "PC Lautsprecheralarm"
 
-msgid "The button for all PC speaker alarms quitance"
+msgid "The button for all PC speaker alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller Lautsprecheralarme"
 
-msgid "Press for all PC speaker alarms quitance."
+msgid "Press for all PC speaker alarms quittance."
 msgstr "Betätigen für die Quittierung aller Lautsprecheralarme."
 
 msgid "Sound/speech alarm"
@@ -1379,10 +1372,10 @@ msgstr "Signal/Redealarm"
 msgid "Sound or speech alarm"
 msgstr "Signal- oder Redealarm"
 
-msgid "The button for all sound or speech alarms quitance"
+msgid "The button for all sound or speech alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller akustischen Alarme"
 
-msgid "Press for all sound or speech alarms quitance."
+msgid "Press for all sound or speech alarms quittance."
 msgstr "Betätigen für Quittierung aller akustischen Alarme."
 
 msgid "&Alarm"
@@ -1412,7 +1405,7 @@ msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
 
-msgid "Connection to visualisation server '%1' error: %2"
+msgid "Connection to visualization server '%1' error: %2"
 msgstr "Der Anschluss an Visualisierungs-Server '%1' Fehler: %2"
 
 msgid "Print page"
@@ -1428,7 +1421,7 @@ msgid "Page print."
 msgstr "Seite drucken."
 
 msgid "Pages:"
-msgstr "Seiten: "
+msgstr "Seiten:"
 
 msgid "Print page: \"%1\" (%2)"
 msgstr "Drucken von Seiten \"%1\" (%2)"
@@ -1448,7 +1441,7 @@ msgstr "Keine Seite ist vorhanden."
 msgid "No one diagram is present!"
 msgstr "Kein Diagramm ist vorhanden!"
 
-msgid "Select diagramm for print."
+msgid "Select diagram for print."
 msgstr "Diagramm zum Drucken auswählen."
 
 msgid "Diagram print."
@@ -1508,16 +1501,16 @@ msgid "Save page's image"
 msgstr "Speicherung des Bildes der Seite"
 
 msgid "Export diagram"
-msgstr "Export des Diagrammes"
+msgstr "Export-Chart"
 
-msgid "Select diagramm for export."
-msgstr "Diagramm für den Export auswählen."
+msgid "Select diagram for export."
+msgstr "Chart für den Export auswählen."
 
 msgid "Diagram export."
-msgstr "Export des Diagrammes."
+msgstr "Export-Chart."
 
 msgid "Save diagram"
-msgstr "Diagramm speichern"
+msgstr "Chart speichern"
 
 #, c-format
 msgid "Trend %1.png"
@@ -1546,7 +1539,7 @@ msgstr "Speicherung des Dokumentes"
 
 #, c-format
 msgid "Document %1.html"
-msgstr "Document %1.html"
+msgstr "Dokument %1.html"
 
 msgid "XHTML (*.html);;CSV file (*.csv)"
 msgstr "XHTML (*.html);;CSV File (*.csv)"
@@ -1596,7 +1589,7 @@ msgid ""
 "View access is not permitted."
 msgstr ""
 "Seite: '%1'.\n"
-"View Zugriff ist nicht erlaubt."
+"Ansicht Zugriff ist nicht erlaubt."
 
 msgid "No style"
 msgstr "Kein Stil"
@@ -1605,11 +1598,10 @@ msgid "Select your style from list."
 msgstr "Wählen Sie Ihren Stil aus der Liste."
 
 msgid "Style select"
-msgstr "Style wählen"
+msgstr "Stil wählen"
 
-#, fuzzy
 msgid "Elementary figure"
-msgstr "Panel der elementaren Figuren"
+msgstr "Elementare Figur"
 
 msgid "Make this point dynamic"
 msgstr "Diesen Punkt dynamisch machen"
@@ -1767,7 +1759,7 @@ msgstr "Punkt 5:"
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr ""
-"Einschlißen(eingeschlossen)/Ausschließen(ausgeschlossen) Einbettungsfarbe "
+"Einschließen(eingeschlossen)/Ausschließen(ausgeschlossen) Einbettungsfarbe "
 "aus der Attributenliste."
 
 msgid "Fill Color"
@@ -1801,7 +1793,7 @@ msgstr "Einbettungsbild Dynamisch(eingeschaltet)/Statisch(abgeschaltet)machen."
 msgid ""
 "Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr ""
-"Eischließen(eingeschlossen)/Ausschließen(ausgeschlossen) die Linienbreite "
+"Einschließen(eingeschlossen)/Ausschließen(ausgeschlossen) die Linienbreite "
 "aus der Attributenliste."
 
 msgid "Line width"
@@ -1820,7 +1812,7 @@ msgstr ""
 "Attributenliste."
 
 msgid "Line color"
-msgstr "Erase Stil"
+msgstr "Linienfarbe"
 
 msgid "Set the default line color."
 msgstr "Stellen Sie die Standard Linienfarbe."

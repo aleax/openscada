@@ -42,7 +42,7 @@
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.0.1"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Protocol's subsystem template module.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -83,7 +83,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

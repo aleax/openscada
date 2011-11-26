@@ -46,8 +46,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
-#define MOD_VER		"1.1.0"
-#define AUTORS		_("Roman Savochenko")
+#define MOD_VER		"1.2.0"
+#define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface.")
 #define LICENSE		"GPL2"
@@ -96,7 +96,7 @@ TVision::TVision( string name ) : TUI(MOD_ID), end_run(false), mCachePgLife(1), 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

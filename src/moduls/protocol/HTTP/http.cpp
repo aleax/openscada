@@ -38,7 +38,7 @@
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"1.5.1"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow support HTTP for WWW based UIs.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -73,7 +73,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), lst_ses_chk(0)
     mType	= MOD_TYPE;
     mName	= MOD_NAME;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

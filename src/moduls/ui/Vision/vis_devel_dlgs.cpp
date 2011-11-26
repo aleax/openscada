@@ -167,7 +167,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay->addWidget(obj_accother,5,3);
 
     //>>> Specific parameter: project calc time
-    lab = new QLabel(_("Calc period (ms):"),tab_w);
+    lab = new QLabel(_("Calculate period (ms):"),tab_w);
     glay->addWidget(lab,6,0);
     prj_ctm = new LineEdit(tab_w,LineEdit::Integer,false,false);
     prj_ctm->setCfg("0:10000:10");
@@ -990,7 +990,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_attr_cfg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
     QStringList headLabels;
-    headLabels << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc") << _("Configuration") << _("Configuration template");
+    headLabels << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc.") << _("Configuration") << _("Configuration template");
     obj_attr_cfg->setHeaderLabels(headLabels);
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 
@@ -1018,7 +1018,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang,1,1);
-    lab = new QLabel(_("Procedure calc (ms):"),wdg_proc_fr);
+    lab = new QLabel(_("Procedure calculate (ms):"),wdg_proc_fr);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,1,2);
     proc_per = new LineEdit(wdg_proc_fr);
@@ -1375,7 +1375,7 @@ void VisItProp::tabChanged( int itb )
 	    if( obj_attr_cfg->topLevelItemCount() )
 		obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
-	    //>>> Calc period
+	    //>>> Calculate period
 	    gnd = TCntrNode::ctrId(root,proc_per->objectName().toAscii().data(),true);
 	    proc_per->setEnabled(gnd && atoi(gnd->attr("acs").c_str())&SEC_WR);
 	    if( gnd )

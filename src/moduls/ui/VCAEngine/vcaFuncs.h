@@ -104,7 +104,7 @@ class nodePresent : public TFunction
     public:
 	nodePresent( ) : TFunction("NodePresent")
 	{
-	    ioAdd( new IO("rez",_("Rezult"),IO::Boolean,IO::Return) );
+	    ioAdd( new IO("rez",_("Result"),IO::Boolean,IO::Return) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default) );
 	    setStart(true);
 	}

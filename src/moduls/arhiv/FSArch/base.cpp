@@ -38,7 +38,7 @@
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
 #define MOD_VER		"1.5.0"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The Archive module. Allow functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -73,7 +73,7 @@ ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(fals
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

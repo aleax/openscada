@@ -97,13 +97,13 @@ class VisRun : public QMainWindow
 
 	//> Alarms commands
 	unsigned alarmSt( )					{ return mAlrmSt; }
-	char alarmTp( char tmpl, bool quitance = false )	{ return (mAlrmSt>>(quitance?16:8)) & tmpl; }
+	char alarmTp( char tmpl, bool quittance = false )	{ return (mAlrmSt>>(quittance?16:8)) & tmpl; }
 	int  alarmLev( )					{ return mAlrmSt & 0xFF; }
 	void alarmSet( unsigned alarm );
 
     protected:
 	//Protected methods
-	void closeEvent( QCloseEvent* );		//Close runtime window event
+	void closeEvent( QCloseEvent* );		//Close run-time window event
 	void resizeEvent( QResizeEvent * );		//Resize window event
 
     private slots:
@@ -165,7 +165,7 @@ class VisRun : public QMainWindow
 	UserStBar	*mWUser;		//User status widget
 	StylesStBar	*mStlBar;		//Style status widget
 	QLabel		*mWStat;		//VCA engine station
-	QLabel		*mWTime;		//Runtime time display for fullscreen
+	QLabel		*mWTime;		//Run-time time display for fullscreen
 	bool		crSessForce;		//Force session creation flag
 	bool		keepAspectRatio;	//Keep aspect ratio on scale
 	string 		prj_it, work_sess, src_prj;//Work session and source project
@@ -181,7 +181,7 @@ class VisRun : public QMainWindow
 	//> Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
 	SndPlay		*alrmPlay;		//Alarm play widget
-	bool		alrLevSet,		//Use for no quitance lamp blinking
+	bool		alrLevSet,		//Use for no quittance lamp blinking
 			isConErr;		//Connection error flag
 
 	vector<string>	pgList;			//Pages list

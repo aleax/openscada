@@ -34,7 +34,7 @@
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
 #define MOD_VER		"0.9.7"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
 //******************************************************************************
@@ -69,7 +69,7 @@ BDMod::BDMod(string name) : TTipBD(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

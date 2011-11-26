@@ -117,7 +117,7 @@ class TModule : public TCntrNode
 	string mDescr;				// Describe
 	string mType;				// Type
 	string mVers;				// Version
-	string mAutor;				// Autor
+	string mAuthor;				// Author
 	string mLicense;			// License
 	string mSource;				// Source of module (SO, in build, ....)
 

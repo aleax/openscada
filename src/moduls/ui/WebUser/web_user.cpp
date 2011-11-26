@@ -37,8 +37,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.1"
-#define AUTORS		_("Roman Savochenko")
+#define MOD_VER		"0.6.2"
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow creation self-user web-interfaces on any OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -73,7 +73,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

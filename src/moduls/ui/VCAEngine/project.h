@@ -57,8 +57,8 @@ class Project : public TCntrNode, public TConfig
 	string	ico( )		{ return mIco; }		//Icon
 	string	owner( );					//Library owner
 	string	grp( );						//Library group
-	short	permit( )	{ return mPermit; }		//Permition for access to library
-	int	period( )	{ return mPer; }		//Project's session calc period
+	short	permit( )	{ return mPermit; }		//Permission for access to library
+	int	period( )	{ return mPer; }		//Project's session calculate period
 	int	prjFlags( )	{ return mFlgs; }		//Project's flags
 
 	string DB( )		{ return workPrjDB; }		//Current library DB
@@ -133,7 +133,7 @@ class Project : public TCntrNode, public TConfig
 		workPrjDB,	//Work DB
 		mOldDB;
 	int	&mPermit,	//Access permission
-		&mPer,		//Calc period
+		&mPer,		//Calculate period
 		&mFlgs,		//Project's flags
 		&mStyleIdW;	//Work style
 	bool	mEnable;	//Enable state

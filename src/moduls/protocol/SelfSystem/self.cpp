@@ -35,7 +35,7 @@
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.9.5"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Self OpenSCADA protocol, support generic functions.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -70,7 +70,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mCo
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

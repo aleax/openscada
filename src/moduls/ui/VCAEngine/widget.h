@@ -163,7 +163,7 @@ class Widget : public TCntrNode
 	virtual string type( )		{ return "Generic"; }	//Widget hierarchy type
 	string owner( );					//Widget owner
 	string grp( );						//Widget group
-	short  permit( );					//Permition for access to widget
+	short  permit( );					//Permission for access to widget
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( )	{ return ""; }		//Calc procedure language
 	virtual string calcProg( )	{ return ""; }		//Calc procedure

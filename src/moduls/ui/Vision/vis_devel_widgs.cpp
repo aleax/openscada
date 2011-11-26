@@ -2483,7 +2483,9 @@ void DevelWdgView::wdgPopup( )
 	connect(actUnsetVisScale, SIGNAL(triggered()), this, SLOT(incDecVisScale()));
 	popup.addAction(actUnsetVisScale);
 	popup.addSeparator();
-
+	popup.addAction(mainWin()->actVisItUnDo);
+	popup.addAction(mainWin()->actVisItReDo);
+	popup.addSeparator();
 	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
 	popup.addAction(mainWin()->actVisItPaste);
@@ -2979,21 +2981,16 @@ void DevelWdgView::setFocus( bool focus )
     fFocus = focus;
 
     //> Connect to UnDo ReDo actions
-    if(chTree)
+    if(chTree && fFocus)
     {
-	if(fFocus)
-	{
-	    connect(mainWin()->actVisItUnDo, SIGNAL(triggered()), this, SLOT(chUnDo()));
-	    connect(mainWin()->actVisItReDo, SIGNAL(triggered()), this, SLOT(chReDo()));
-	}
-	else
-	{
-	    disconnect(mainWin()->actVisItUnDo, SIGNAL(triggered()), this, SLOT(chUnDo()));
-	    disconnect(mainWin()->actVisItReDo, SIGNAL(triggered()), this, SLOT(chReDo()));
-	}
-    }
+	disconnect(mainWin()->actVisItUnDo, SIGNAL(triggered()), 0, 0);
+	disconnect(mainWin()->actVisItReDo, SIGNAL(triggered()), 0, 0);
 
-    chUpdate();
+	connect(mainWin()->actVisItUnDo, SIGNAL(triggered()), this, SLOT(chUnDo()));
+	connect(mainWin()->actVisItReDo, SIGNAL(triggered()), this, SLOT(chReDo()));
+
+	chUpdate();
+    }
 }
 
 void DevelWdgView::incDecVisScale( )
@@ -3282,25 +3279,19 @@ bool DevelWdgView::event( QEvent *event )
 	    case QEvent::FocusIn:
 		setFocus(true);
 		if(edit()) break;
-		//-- Unselect and store child widgets --
-		//if(select())
 		setSelect(true,PrcChilds);
 		mainWin()->setWdgScale(false);
 		mainWin()->setWdgVisScale(mVisScale);
 		return true;
 	    case QEvent::FocusOut:
 		if(cursor().shape() != Qt::ArrowCursor)	setCursor(Qt::ArrowCursor);
+		if(QApplication::focusWidget() && (QApplication::focusWidget() == this || strncmp("QMenu",QApplication::focusWidget()->metaObject()->className(),5) == 0)) break;
 		if(!parentWidget()->hasFocus()) setFocus(false);
                 if(QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
                     !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
 		{
 		    if(editWdg)	editWdg->setSelect(false,PrcChilds);
-		    //emit selected("");
 		    setSelect(false);
-		    //-- Unselect and store child widgets --
-		    /*for( int i_c = 0; i_c < children().size(); i_c++ )
-			if( qobject_cast<DevelWdgView*>(children().at(i_c)) && ((DevelWdgView*)children().at(i_c))->select() )
-			    ((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);*/
 		}
 		return true;
 	    case QEvent::MouseMove:

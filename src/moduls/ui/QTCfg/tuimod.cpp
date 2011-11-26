@@ -39,8 +39,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"QT"
-#define MOD_VER		"2.0.0"
-#define AUTORS		_("Roman Savochenko")
+#define MOD_VER		"2.1.0"
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow the QT based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -75,7 +75,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), start_path(string("/")+SYS->id()), 
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;

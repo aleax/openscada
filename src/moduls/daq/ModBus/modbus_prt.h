@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
 #define PRT_MVER	"0.6.3"
-#define PRT_AUTORS	_("Roman Savochenko")
+#define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************

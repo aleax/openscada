@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2005-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.Vision 1.1.0\n"
+"Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-17 16:09+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
@@ -52,7 +51,7 @@ msgstr ""
 "RunTimeUpdt <mode>    Режим поновлення динаміки у RunTime (0 - адаптивне "
 "періодичне поновлення всіх віджетів,\n"
 "\t\t       1 - поновлення тільки змінених віджетів).\n"
-"VCAstation  <id>      Станція з рущієм СВК ('.' - локальна).\n"
+"VCAstation  <id>      Станція з рушієм СВК ('.' - локальна).\n"
 "\n"
 
 msgid "Load module."
@@ -80,7 +79,7 @@ msgid "Module options"
 msgstr "Опції модуля"
 
 msgid "VCA engine station"
-msgstr "Станція рущія СВК"
+msgstr "Станція рушія СВК"
 
 msgid "Start user"
 msgstr "Стартовий користувач"
@@ -89,15 +88,15 @@ msgid "User password"
 msgstr "Пароль користувача"
 
 msgid "Cached pages lifetime"
-msgstr "Час життя сторінок у кещі"
+msgstr "Час життя сторінок у кеші"
 
 msgid ""
 "The time in hours for close pages from cache by inactive.\n"
 "For zero time pages will not closed."
 msgstr ""
 "Час вказано у годинах, який визначає інтервал бездіяльності для закриття "
-"сторінок у кещі.\n"
-"Нульове значення часу виключає закриття сторінок у кещі."
+"сторінок у кеші.\n"
+"Нульове значення часу виключає закриття сторінок у кеші."
 
 msgid "Run projects list"
 msgstr "Перелік проектів для пуску"
@@ -226,7 +225,7 @@ msgstr "Запуск виконання проекту"
 msgid "Run project execution for selected item"
 msgstr "Запуск виконання проекту, для вибраного елемента"
 
-msgid "The button for runing project execution for selected item"
+msgid "The button for running project execution for selected item"
 msgstr "Кнопка для запуску виконання проекту, для вибраного елемента"
 
 msgid "Press to run project execution for selected item."
@@ -518,13 +517,13 @@ msgid "Cursor"
 msgstr "Курсор"
 
 msgid "Unset cursor"
-msgstr "Поверення курсору"
+msgstr "Повернення курсору"
 
 msgid "The button for unset cursor"
-msgstr "Кнопка для поверення курсору"
+msgstr "Кнопка для повернення курсору"
 
 msgid "Press to unset cursor"
-msgstr "Кнопка для поверення курсору"
+msgstr "Кнопка для повернення курсору"
 
 msgid "Add line"
 msgstr "Додати лінію"
@@ -550,17 +549,17 @@ msgstr "Кнопка для додання дуги до елементарно�
 msgid "Press to add arc to elementary figure."
 msgstr "Натиснути для додання дуги до елементарної фігури."
 
-msgid "Add besier curve"
-msgstr "Додати криву безьє"
+msgid "Add Besier curve"
+msgstr "Додати криву Безьє"
 
 msgid "Add Besier curve to elementary figure"
-msgstr "Додання кривої безьє до елементарної фігури"
+msgstr "Додання кривої Безьє до елементарної фігури"
 
 msgid "The button for adding Besier curve to elementary figure"
-msgstr "Кнопка для додання кривої безьє до елементарної фігури"
+msgstr "Кнопка для додання кривої Безьє до елементарної фігури"
 
 msgid "Press to add Besier curve to elementary figure."
-msgstr "Натиснути для додання кривої безьє до елементарної фігури."
+msgstr "Натиснути для додання кривої Безьє до елементарної фігури."
 
 msgid "Connections"
 msgstr "Під'єднатися"
@@ -683,13 +682,13 @@ msgid "Field for display the current user."
 msgstr "Поле для відображення поточного користувача."
 
 msgid "Double click to change user."
-msgstr "Подвійно клікнути для зміни користувача."
+msgstr "Подвійно клацнути для зміни користувача."
 
 msgid "This label displays the using VCA engine station."
-msgstr "Це маркування показує використану станцію рущія СВК"
+msgstr "Це маркування показує використану станцію рушія СВК"
 
 msgid "Field for display of the using VCA engine station."
-msgstr "Поле для відображення використаної станції рущія СВК"
+msgstr "Поле для відображення використаної станції рушія СВК"
 
 msgid "This label displays widgets' scaling mode."
 msgstr "Це маркування показує поточний режим масштабування."
@@ -754,7 +753,7 @@ msgstr "Деякі візуальні елементи було змінено. 
 msgid ""
 "%1 v%2.\n"
 "%3\n"
-"Autor: %4\n"
+"Author: %4\n"
 "Developers: %5\n"
 "License: %6\n"
 "\n"
@@ -782,7 +781,7 @@ msgstr "Ви дійсно бажаєте завантажити візуальн
 msgid "Load visual item's data from DB"
 msgstr "Завантаження даних візуального елементу з БД"
 
-msgid "Are you sure of saving all modifings to DB?"
+msgid "Are you sure of saving all modifications to DB?"
 msgstr "Ви дійсно бажаєте зберегти всі зміни у БД?"
 
 msgid "Are you sure of saving visual items '%1' to DB?"
@@ -902,7 +901,7 @@ msgstr "Власник, група:"
 msgid "Access:"
 msgstr "Доступ:"
 
-msgid "Calc period (ms):"
+msgid "Calculate period (ms):"
 msgstr "Період обчислення (мс):"
 
 msgid "Run window mode:"
@@ -1010,7 +1009,7 @@ msgstr "Тип даних"
 msgid "Work area"
 msgstr "Робоча ділянка"
 
-msgid "Proc"
+msgid "Proc."
 msgstr "Оброб."
 
 msgid "Configuration template"
@@ -1025,7 +1024,7 @@ msgstr "Видалити атрибут"
 msgid "Procedure language:"
 msgstr "Мова процедури:"
 
-msgid "Procedure calc (ms):"
+msgid "Procedure calculate (ms):"
 msgstr "Обчислення процедури (мс):"
 
 msgid "Links"
@@ -1218,7 +1217,7 @@ msgid "Widget is not enabled or shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"
 
 msgid "Select elements: '%1'"
-msgstr "Вибрано елементи: '%1'"
+msgstr "Обрано елементи: '%1'"
 
 msgid "Vision runtime"
 msgstr "Vision-виконання"
@@ -1331,19 +1330,19 @@ msgstr "Натиснути для отримання інформації про
 msgid "Alarm level"
 msgstr "Рівень порушення"
 
-msgid "The button for all alarms quitance"
+msgid "The button for all alarms quittance"
 msgstr "Кнопка для квітації всіх порушень"
 
-msgid "Press for all alarms quitance."
+msgid "Press for all alarms quittance."
 msgstr "Натиснути для квітації всіх порушень."
 
 msgid "Blink alarm"
 msgstr "Квітація миготіння"
 
-msgid "The button for all blink alarms quitance"
+msgid "The button for all blink alarms quittance"
 msgstr "Кнопка для квітації всіх порушень миготінням"
 
-msgid "Press for all blink alarms quitance."
+msgid "Press for all blink alarms quittance."
 msgstr "Натиснути для квітації всіх порушень миготінням."
 
 msgid "Speaker alarm"
@@ -1352,10 +1351,10 @@ msgstr "Квітація гудком"
 msgid "PC speaker alarm"
 msgstr "Квітація гудком"
 
-msgid "The button for all PC speaker alarms quitance"
+msgid "The button for all PC speaker alarms quittance"
 msgstr "Кнопка для квітації всіх порушень гудком"
 
-msgid "Press for all PC speaker alarms quitance."
+msgid "Press for all PC speaker alarms quittance."
 msgstr "Натиснути для квітації всіх порушень гудком."
 
 msgid "Sound/speech alarm"
@@ -1364,10 +1363,10 @@ msgstr "Квітація звука/мови"
 msgid "Sound or speech alarm"
 msgstr "Квітація звука/мови"
 
-msgid "The button for all sound or speech alarms quitance"
+msgid "The button for all sound or speech alarms quittance"
 msgstr "Кнопка для квітації всіх порушень звуком або мовою"
 
-msgid "Press for all sound or speech alarms quitance."
+msgid "Press for all sound or speech alarms quittance."
 msgstr "Натиснути для квітації всіх порушень звуком або мовою."
 
 msgid "&Alarm"
@@ -1395,9 +1394,9 @@ msgid "Field for display the used interface style."
 msgstr "Поле для відображення використаного стилю інтерфейсу."
 
 msgid "Double click for style change."
-msgstr "Подвійно клікнути для зміни стилю."
+msgstr "Подвійно клацнути для зміни стилю."
 
-msgid "Connection to visualisation server '%1' error: %2"
+msgid "Connection to visualization server '%1' error: %2"
 msgstr "Помилка підключення до сервера візуалізації '%1': %2"
 
 msgid "Print page"
@@ -1433,7 +1432,7 @@ msgstr "Немає жодної сторінки!"
 msgid "No one diagram is present!"
 msgstr "Немає жодної діаграми!"
 
-msgid "Select diagramm for print."
+msgid "Select diagram for print."
 msgstr "Вибір діаграми для друку."
 
 msgid "Diagram print."
@@ -1495,7 +1494,7 @@ msgstr "Збереження зображення сторінки"
 msgid "Export diagram"
 msgstr "Експорт діаграми"
 
-msgid "Select diagramm for export."
+msgid "Select diagram for export."
 msgstr "Вибір діаграми для експорту."
 
 msgid "Diagram export."
@@ -1548,7 +1547,7 @@ msgid ""
 "press 'Connect' or press 'Create' for creation of a new, individual, session."
 msgstr ""
 "Вже відкрито декілька сеансів для сторінки %1. Ви можете створити новий "
-"сеанс або під'єднатися до існуючого. Будьласка, виберіть потрібний сеанс і "
+"сеанс або під'єднатися до існуючого. Будь ласка, оберіть потрібний сеанс і "
 "натисніть 'Під'єднатися' або натисніть 'Створити' для створення нового, "
 "власного, сеансу."
 
@@ -1587,7 +1586,7 @@ msgid "No style"
 msgstr "Немає стилю"
 
 msgid "Select your style from list."
-msgstr "Виберіть Ваш стиль з переліку."
+msgstr "Оберіть Ваш стиль з переліку."
 
 msgid "Style select"
 msgstr "Вибір стилю"
@@ -1808,7 +1807,7 @@ msgid "Set the default line color."
 msgstr "Встановити колір лінії за замовчуванням."
 
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити клір лінії Динамічним(вибрана)/Статичним(невибрана)."
+msgstr "Зробити колір лінії Динамічним(вибрана)/Статичним(невибрана)."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line style from the properties list."
@@ -2001,7 +2000,7 @@ msgid "Enter text string for search:"
 msgstr "Введіть строку тексту для пошуку:"
 
 msgid "String search"
-msgstr "Строка"
+msgstr "Рядок пошуку"
 
 msgid "Backward"
 msgstr "Зворотній"

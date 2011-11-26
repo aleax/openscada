@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2004-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 2.0.0\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-07 10:39+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
@@ -75,16 +74,16 @@ msgstr "Кнопка для переходу на рівень вгору"
 msgid "Press for going to level up"
 msgstr "Натиснути для переходу на рівень вгору"
 
-msgid "&Previos"
+msgid "&Previous"
 msgstr "&Попередня"
 
-msgid "Previos page"
+msgid "Previous page"
 msgstr "Попередня сторінка"
 
-msgid "The button for going to previos page"
+msgid "The button for going to previous page"
 msgstr "Кнопка для переходу на попередню сторінку"
 
-msgid "Press for going to previos page"
+msgid "Press for going to previous page"
 msgstr "Натиснути для переходу на попередню сторінку"
 
 msgid "&Next"
@@ -274,7 +273,7 @@ msgid "&Help"
 msgstr "&Допомога"
 
 msgid "OpenSCADA toolbar"
-msgstr "OpenSCADA тулбар"
+msgstr "Панель інструментів OpenSCADA"
 
 msgid "This label displays current user."
 msgstr "Ця мітка відображає поточного користувача."
@@ -307,7 +306,7 @@ msgid "Some changing is made. Save changing to DB on exit?"
 msgstr "Деякі зміни було зроблено. Зберегти зміни у БД перед виходом?"
 
 msgid "No one editable container is present."
-msgstr "Жодного радагованого контейнеру не присутньо."
+msgstr "Жодного редагованого контейнеру не присутньо."
 
 msgid "Add item to node: '%1'."
 msgstr "Додання елементу у вузол: '%1'."
@@ -355,7 +354,7 @@ msgstr "Повідомлення статусу"
 msgid ""
 "%s v%s.\n"
 "%s\n"
-"Autor: %s\n"
+"Author: %s\n"
 "License: %s\n"
 "\n"
 "%s v%s.\n"
@@ -467,7 +466,7 @@ msgstr "%s| Видалення '%s' елементу <%s:%s>!"
 
 #, c-format
 msgid "%s| Move '%s' from %d to %d!"
-msgstr "%s| Пересунення '%s' з %d до %d!"
+msgstr "%s| Пересування '%s' з %d до %d!"
 
 msgid "Add record"
 msgstr "Додати запис"
@@ -501,7 +500,7 @@ msgstr "%s| Видалення '%s' запису '%s'."
 
 #, c-format
 msgid "%s| Move '%s' record from %d to %d."
-msgstr "%s| Пересунення '%s' запису з %d до %d."
+msgstr "%s| Пересування '%s' запису з %d до %d."
 
 msgid "Save image"
 msgstr "Зберегти зображення"

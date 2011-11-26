@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2004-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.5\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-07 11:08+0300\n"
 "PO-Revision-Date: 2007-10-29 22:29+0200\n"
@@ -29,7 +28,7 @@ msgstr "Надає WEB базований конфігуратор систем�
 msgid "Name: "
 msgstr "Ім'я: "
 
-msgid "Desription: "
+msgid "Description: "
 msgstr "Опис: "
 
 msgid "License: "
@@ -48,15 +47,12 @@ msgid "Save"
 msgstr "Збереження"
 
 msgid "Root page"
-msgstr "Корнева сторінка"
+msgstr "Коренева сторінка"
 
-msgid "Curent page"
+msgid "Current page"
 msgstr "Поточна сторінка"
 
 msgid "Previous page"
-msgstr "Попередня сторінка"
-
-msgid "Previos page"
 msgstr "Попередня сторінка"
 
 msgid "About"

@@ -33,7 +33,7 @@
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
 #define MOD_VER		"0.6.0"
-#define AUTORS		_("Roman Savochenko")
+#define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow mathematical static function library.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -69,7 +69,7 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     mName	= MOD_NAME;
     mType	= MOD_TYPE;
     mVers	= MOD_VER;
-    mAutor	= AUTORS;
+    mAuthor	= AUTHORS;
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= src;

@@ -66,9 +66,7 @@ class Engine : public TUI
 
 	string callSynth( const string &txt );
 
-	bool forceDBClear( )			{ return mFrcClr; }
-
-	//> Widget's libraries
+	//> Widgets libraries
 	void wlbList( vector<string> &ls )			{ chldList( idWlb, ls ); }
 	bool wlbPresent( const string &id )			{ return chldPresent( idWlb, id ); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
@@ -120,12 +118,9 @@ class Engine : public TUI
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	string optDescr( );
-
     private:
 	//Attributes
 	int	idWlb, idPrj, idSes, idFnc;
-	bool	mFrcClr;
 	TElem	lbwdg_el,	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB
 		wdg_el,		//The table structure of library widgets

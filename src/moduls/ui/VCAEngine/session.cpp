@@ -420,7 +420,7 @@ void *Session::Task( void *icontr )
 	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(ses.nodePath().c_str(),_("Session '%s' calc error."),pls[i_l].c_str());
+		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
 
 	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
@@ -624,7 +624,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),permit(),owner().c_str(),grp().c_str(),4,"tp","str","idm","1","dest","select","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
-		ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calc session time"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calculate session time"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration")))
 	    {
@@ -643,7 +643,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Category"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/mess",_("Messages"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tp",_("Type"),R_R_R_,"root",SUI_ID,1,"tp","hex");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/qtp",_("Quitance"),R_R_R_,"root",SUI_ID,1,"tp","hex");
+		ctrMkNode("list",opt,-1,"/alarm/alarm/qtp",_("Quittance"),R_R_R_,"root",SUI_ID,1,"tp","hex");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tpArg",_("Type argument"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    }
 	return;
@@ -1023,7 +1023,7 @@ void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
     attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
 
     vector<string> lst;
-    //> Included pages quitance
+    //> Included pages quittance
     pageList(lst);
     for(unsigned i_p = 0; i_p < lst.size(); i_p++)
 	pageAt(lst[i_p]).at().alarmQuittance(quit_tmpl);

@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2004-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.QTCfg 2.0.0\n"
+"Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-07 10:39+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
@@ -75,16 +74,16 @@ msgstr "Кнопка для поднятия на уровень вверх"
 msgid "Press for going to level up"
 msgstr "Перейти на страницу вверх"
 
-msgid "&Previos"
+msgid "&Previous"
 msgstr "&Предыдущая"
 
-msgid "Previos page"
+msgid "Previous page"
 msgstr "Предыдущая страница"
 
-msgid "The button for going to previos page"
+msgid "The button for going to previous page"
 msgstr "Кнопка для перехода на предыдущую страницу"
 
-msgid "Press for going to previos page"
+msgid "Press for going to previous page"
 msgstr "Нажать для перехода на предыдущую страницу"
 
 msgid "&Next"
@@ -278,7 +277,7 @@ msgid "&Help"
 msgstr "&Помощь"
 
 msgid "OpenSCADA toolbar"
-msgstr "OpenSCADA тулбар"
+msgstr "Панель инструментов OpenSCADA"
 
 msgid "This label displays current user."
 msgstr "Эта метка отображает текущего пользователя."
@@ -359,7 +358,7 @@ msgstr "Сообщения статуса"
 msgid ""
 "%s v%s.\n"
 "%s\n"
-"Autor: %s\n"
+"Author: %s\n"
 "License: %s\n"
 "\n"
 "%s v%s.\n"
@@ -551,7 +550,7 @@ msgstr "%s| Установка '%s' ячейки ('%s':%s) в: %s."
 
 #, c-format
 msgid "Selective element '%s' is not present!"
-msgstr "Выборочнный элемент '%s' отсутствует!"
+msgstr "Выборочный элемент '%s' отсутствует!"
 
 #, c-format
 msgid "%s| Change '%s' to: '%s'!"
@@ -634,7 +633,7 @@ msgstr ""
 "======================= Опции модуля <%s:%s> =============================\n"
 "------- Параметры модульной секции '%s' в конфигурационном файле ---------\n"
 "StartPath  <path>    Стартовый путь конфигуратора.\n"
-"StartUser  <user>    Стартовый, безпарольный, пользователь.\n"
+"StartUser  <user>    Стартовый, беспарольный, пользователь.\n"
 "\n"
 
 msgid "Load module."

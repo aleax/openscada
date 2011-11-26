@@ -4,10 +4,9 @@
 #
 # Roman Savochenko <rom_as@fromru.com>, 2008-2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.6.6\n"
+"Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-14 14:53+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
@@ -138,11 +137,11 @@ msgstr "Элемент '%1' уже присутствует."
 msgid "You sure for delete node '%1'?"
 msgstr "Вы действительно хотите удалить узел '%1'?"
 
-msgid "Copy is imposible."
+msgid "Copy is impossible."
 msgstr "Копирование невозможно."
 
 msgid "Selected"
-msgstr "Выбраный"
+msgstr "Выбранный"
 
 msgid "Move node '%1' to '%2'."
 msgstr "Перемещение узла '%1' в '%2'."
@@ -190,7 +189,7 @@ msgstr "Неизвестная команда: %s."
 msgid "Name: "
 msgstr "Имя: "
 
-msgid "Desription: "
+msgid "Description: "
 msgstr "Описание: "
 
 msgid "License: "
