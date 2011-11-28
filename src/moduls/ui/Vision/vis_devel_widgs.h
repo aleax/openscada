@@ -570,6 +570,7 @@ class DevelWdgView: public WdgView
         uint8_t	fSelChange	:1;	//Changed select map
         uint8_t	fPrevEdExitFoc  :1;	//Prevention exit from widget edition by focus loosing
         uint8_t	fFocus		:1;	//Edition window of the widget in focus
+        uint8_t	fMakeIco	:1;	//Make icon flag for background disable
 
 	float		mVisScale;		//Visual scale value of root widget.
 

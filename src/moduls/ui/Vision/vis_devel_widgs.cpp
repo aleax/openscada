@@ -2050,7 +2050,8 @@ void WMdfStBar::mousePressEvent( QMouseEvent * event )
 DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
     WdgView(iwid,ilevel,mainWind,parent), fMakeScale(false), fWdgEdit(false), fWdgSelect(false), fMoveHold(false),
     fHoldChild(false), fLeftTop(false), fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false),
-    fSelChange(false), fPrevEdExitFoc(false), fFocus(false), mVisScale(1), pntView(NULL), editWdg(NULL), chTree(NULL), chGeomCtx("geom")
+    fSelChange(false), fPrevEdExitFoc(false), fFocus(false), fMakeIco(false),
+    mVisScale(1), pntView(NULL), editWdg(NULL), chTree(NULL), chGeomCtx("geom")
 {
     setObjectName(iwid.c_str());
     setMouseTracking(true);
@@ -2501,7 +2502,9 @@ void DevelWdgView::wdgPopup( )
 
 void DevelWdgView::makeIcon( )
 {
+    fMakeIco = true;
     QPixmap ico_new = QPixmap::grabWidget(this);
+    fMakeIco = false;
     ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     parentWidget()->setWindowIcon(ico_new);
     //> Send to VCA engine
@@ -2526,7 +2529,7 @@ void DevelWdgView::makeImage( )
     //> Call save file dialog
     QString fileName = QFileDialog::getSaveFileName(this,_("Save widget's image"),
 	(TSYS::path2sepstr(id())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
-    if( !fileName.isEmpty() && !img.save(fileName) )
+    if(!fileName.isEmpty() && !img.save(fileName))
 	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }
 
@@ -3011,9 +3014,12 @@ bool DevelWdgView::event( QEvent *event )
 	//> Draw background for root widget
 	if( wLevel() == 0 )
 	{
-	    pnt.setPen("black");
-	    pnt.setBrush(QBrush(QColor("white")));
-	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	    if(!fMakeIco)
+	    {
+		pnt.setPen("black");
+		pnt.setBrush(QBrush(QColor("white")));
+		pnt.drawRect(rect().adjusted(0,0,-1,-1));
+	    }
 	}
 	//> Draw widget border geometry
 	else if( levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove )
