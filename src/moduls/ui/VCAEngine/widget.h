@@ -255,7 +255,8 @@ class Widget : public TCntrNode
 	unsigned char	mEnable		:1;	//Enable status
 	unsigned char	m_lnk		:1;	//Widget as link
 	unsigned char	mStlLock	:1;	//Style lock
-	unsigned char   BACrtHoldOvr    :1;     //Base attrs creation hold over to enable and inherit stage
+	unsigned char	BACrtHoldOvr	:1;	//Base attrs creation hold over to enable and inherit stage
+	unsigned char	ChldResrv	:1;	//Childs reserve attribute
 
 	string		mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget

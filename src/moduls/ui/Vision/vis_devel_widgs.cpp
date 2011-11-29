@@ -47,6 +47,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QClipboard>
+#include <QBitmap>
 
 #include <tsys.h>
 
@@ -2513,6 +2514,8 @@ void DevelWdgView::makeIcon( )
     QPixmap ico_new = QPixmap::grabWidget(this);
     fMakeIco = false;
     ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    QBitmap bMask = ico_new.createMaskFromColor ( (0xFFFDFBFC), Qt::MaskInColor );
+    ico_new.setMask(bMask);
     parentWidget()->setWindowIcon(ico_new);
     //> Send to VCA engine
     QByteArray ba;
@@ -3023,10 +3026,16 @@ bool DevelWdgView::event( QEvent *event )
 	{
 	    if(!fMakeIco)
 	    {
-		pnt.setPen("black");
+                pnt.setPen(QColor("black"));
 		pnt.setBrush(QBrush(QColor("white")));
 		pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    }
+            else
+            {
+                pnt.setPen(QColor(253,251,252));
+                pnt.setBrush(QBrush(QColor(253,251,252)));
+                pnt.drawRect(rect().adjusted(0,0,-1,-1));
+            }
 	}
 	//> Draw widget border geometry
 	else if( levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove )

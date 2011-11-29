@@ -1,4 +1,9 @@
+2011-11-29 Maxim
+- FIX:UI.Vision: Transparent background for icon creation from widget is fixed.
+
+
 2011-11-29 Roman
+- FIX:UI.VCAEngine: Child's widgets deletion from inherited container is fixed.
 - FIX:UI.Vision: Previous value request is added for changes record on group values write into the inspector of attributes.
 
 

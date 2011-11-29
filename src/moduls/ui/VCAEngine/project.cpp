@@ -1370,6 +1370,13 @@ void PageWdg::postEnable( int flag )
     cfg("IDW").setS(ownerPage().path());
 }
 
+void PageWdg::preDisable( int flag )
+{
+    if(flag)	ChldResrv = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
+
+    Widget::preDisable(flag);
+}
+
 void PageWdg::postDisable( int flag )
 {
     if(flag)
@@ -1378,7 +1385,7 @@ void PageWdg::postDisable( int flag )
 	string tbl = ownerPage().ownerProj()->tbl();
 
 	//>> Remove from library table
-	if(!((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink())
+	if(ChldResrv)
 	{
 	    mParent = "<deleted>";
 	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);

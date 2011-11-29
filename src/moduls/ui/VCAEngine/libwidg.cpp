@@ -780,6 +780,13 @@ void CWidget::postEnable( int flag )
     cfg("IDW").setS(ownerLWdg().id());
 }
 
+void CWidget::preDisable( int flag )
+{
+    if(flag)	ChldResrv = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
+
+    Widget::preDisable(flag);
+}
+
 void CWidget::postDisable( int flag )
 {
     if(flag)
@@ -788,12 +795,13 @@ void CWidget::postDisable( int flag )
 	string tbl = ownerLWdg().ownerLib().tbl();
 
 	//>> Remove from library table
-	if(!((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink())
+	if(ChldResrv)
 	{
 	    mParent = "<deleted>";
 	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 	}
 	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+
 
 	//>> Remove widget's work and users IO from library IO table
 	string tAttrs = m_attrs;

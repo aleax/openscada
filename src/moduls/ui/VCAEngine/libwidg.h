@@ -200,6 +200,7 @@ class CWidget : public Widget, public TConfig
     protected:
 	//Methods
 	void postEnable( int flag );
+	void preDisable( int flag );
 	void postDisable( int flag );
 
 	//> Storing
