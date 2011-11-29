@@ -8,28 +8,6 @@
 - UI:Vision: Disable white background draw on widget's icons prepare.
 
 
-2011-04-12 Maxim
-- !UI.Vision: Support of sevelar figures is added to the properties dialog of the ElFigure.
-
-
-2011-04-11 Roman
-- FIX:DAQ.DCON: DI command 8DI (@AA,FF00) processing is fixed.
-- !!:DOC: New documents is added for libraries: Lib.TechApp, WLib.Main and WLib.MnEls. Generic document "openscada.pdf" for Russian is created.
-    Some Russian documents is fixed.
-
-
-2011-04-11 Maxim
-- !UI.Vision: Elementary figure's properties dialog is added.
-
-
-2011-04-08 Roman
-- !!:DOC: Main system documents is updated: APIOpenSCADA.pdf, AboutOpenSCADA.pdf, DAQ.pdf, QuickStart.pdf.
-- !!:DOC: New main system documents is added: build.pdf, properties.pdf, report.pdf, terms.pdf.
-
-
-
-
-
 2011-11-26 Roman
 - FIX:SYS: Error word "Autor" is fixed to "Author" everywhere.
 - !!:SYS: Core translation to German, Russian and Ukrainian is updated.
