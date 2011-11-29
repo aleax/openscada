@@ -2084,6 +2084,12 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 
 DevelWdgView::~DevelWdgView( )
 {
+    if(editWdg)
+    {
+	setEdit(false);
+	if(wLevel() != 0) levelWidget(0)->setEdit(false);
+    }
+
     if(select() && !mod->endRun())
     {
 	setSelect(false);
@@ -2096,7 +2102,7 @@ DevelWdgView::~DevelWdgView( )
 
 string DevelWdgView::user( )
 {
-    return mainWin( )->user();
+    return mainWin()->user();
 }
 
 VisDevelop *DevelWdgView::mainWin( )
@@ -2159,42 +2165,42 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
     int chld_cnt = 0;
 
     fWdgSelect = vl;
-    if( !vl && edit() && !(flgs&OnlyFlag) ) setEdit(false);
+    if(!vl && edit() && !(flgs&OnlyFlag)) setEdit(false);
 
     //> Level 0 process
-    if( wLevel() != 0 && !edit() ) return;
+    if(wLevel() != 0 && !edit()) return;
 
-    if( vl && !(flgs&OnlyFlag) )
+    if(vl && !(flgs&OnlyFlag))
     {
 	string sel_chlds = selectChilds(&chld_cnt);
-	if( sel_chlds.size() )	emit selected(sel_chlds);
+	if(sel_chlds.size())	emit selected(sel_chlds);
 	else			emit selected(id());
     }
-    if( !vl )
+    if(!vl)
     {
-	if( flgs&PrcChilds )
-	    for( int i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+	if(flgs&PrcChilds)
+	    for(int i_c = 0; i_c < children().size(); i_c++)
+		if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false,flgs|OnlyFlag);
-	if( !(flgs&OnlyFlag) )	emit selected("");
+	if(!(flgs&OnlyFlag))	emit selected("");
     }
 
     //> Update actions access
     //>> Enable view toolbar
-    if( !(flgs&OnlyFlag) )
+    if(!(flgs&OnlyFlag))
     {
-	if( !edit() )
+	if(!edit())
 	{
 	    mainWin()->wdgToolView->setVisible(vl);
-	    disconnect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
-	    if( vl ) connect( mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)) );
+	    disconnect(mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)));
+	    if(vl) connect(mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)));
 
 	    //>> Update widget view tools
-	    for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
+	    for(int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++)
 		mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
 	}
 
-	if( !(flgs&NoUpdate) ) update();
+	if(!(flgs&NoUpdate)) update();
     }
 }
 
@@ -2202,15 +2208,15 @@ void DevelWdgView::setEdit( bool vl )
 {
     fWdgEdit = vl;
 
-    if( vl )
+    if(vl)
     {
 	editWdg = this;
-	if( shape->isEditable( ) ) shape->editEnter( this );
+	if(shape->isEditable()) shape->editEnter(this);
 	//> Raise top included editable widget
-	if( wLevel( ) == 0 )
-	    for( int i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-			((DevelWdgView*)children().at(i_c))->edit() )
+	if(wLevel() == 0)
+	    for(int i_c = 0; i_c < children().size(); i_c++)
+		if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
+			((DevelWdgView*)children().at(i_c))->edit())
 		{
 		    editWdg = (DevelWdgView*)children().at(i_c);
 		    editWdg->raise();
@@ -2218,15 +2224,15 @@ void DevelWdgView::setEdit( bool vl )
 		    break;
 		}
 	//> Disable widget view tools
-	for( int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++ )
+	for(int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++)
 	    mainWin()->wdgToolView->actions().at(i_a)->setEnabled(false);
     }
     else
     {
-	if( shape->isEditable( ) ) shape->editExit( this );
+	if(shape->isEditable()) shape->editExit(this);
 	editWdg = NULL;
 	//> Update widgets order
-	if( wLevel( ) == 0 )	orderUpdate( );
+	if(wLevel() == 0) orderUpdate();
     }
 }
 
@@ -2566,8 +2572,8 @@ void DevelWdgView::editEnter( )
 
 void DevelWdgView::editExit( )
 {
-    for( int i_c = 0; i_c < children().size(); i_c++ )
-	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+    for(int i_c = 0; i_c < children().size(); i_c++)
+	if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 	    ((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
     setEdit(false);
     update();
@@ -3001,9 +3007,8 @@ void DevelWdgView::setFocus( bool focus )
 
 	connect(mainWin()->actVisItUnDo, SIGNAL(triggered()), this, SLOT(chUnDo()));
 	connect(mainWin()->actVisItReDo, SIGNAL(triggered()), this, SLOT(chReDo()));
-
-	chUpdate();
     }
+    chUpdate();
 }
 
 void DevelWdgView::incDecVisScale( )
@@ -3274,24 +3279,24 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::MouseButtonDblClick:
 	    {
-		if( edit() )	break;
+		if(edit()) break;
 
-		//- Enter to Edit mode -
+		//> Enter to Edit mode
 		QPoint curp = mapFromGlobal(cursor().pos());
 		DevelWdgView *edwdg = NULL;
-		for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+		for(int i_c = children().size()-1; i_c >= 0; i_c--)
 		{
 		    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-		    if( !cwdg ) continue;
-		    if( cwdg->geometryF().contains(curp) && !edwdg )
+		    if(!cwdg) continue;
+		    if(cwdg->geometryF().contains(curp) && !edwdg)
 		    {
-		        if( !cwdg->shape || !cwdg->shape->isEditable( ) )	continue;
+		        if(!cwdg->shape || !cwdg->shape->isEditable())	continue;
 		        edwdg = cwdg;
 		    }
-		    else if( cwdg->select() ) cwdg->setSelect(false,PrcChilds);
+		    else if(cwdg->select()) cwdg->setSelect(false,PrcChilds);
 		}
-		if( edwdg && !edwdg->select() )	edwdg->setSelect(true,PrcChilds);
-		editEnter( );
+		if(edwdg && !edwdg->select())	edwdg->setSelect(true,PrcChilds);
+		editEnter();
 		return true;
 	    }
 	    case QEvent::Wheel:

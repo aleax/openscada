@@ -3,6 +3,8 @@
 
 
 2011-11-29 Roman
+- FIX:UI.Vision: Crash on remove edited child widget try is fixed.
+    UnDo and ReDo buttons update on close widget's window is fixed.
 - FIX:UI.VCAEngine: Child's widgets deletion from inherited container is fixed.
 - FIX:UI.Vision: Previous value request is added for changes record on group values write into the inspector of attributes.
 
