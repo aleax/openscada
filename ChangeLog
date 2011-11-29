@@ -1,3 +1,7 @@
+2011-11-29 Roman
+- FIX:UI.Vision: Previous value request is added for changes record on group values write into the inspector of attributes.
+
+
 2011-11-28 Roman
 - !!:DOC: All generic documents is updated for all languages: openscada.pdf, build.pdf, properties.pdf, "OpenSCADA API", "About OpenSCADA",
     "Lib TechApp", "Quick Start", "WLib Main", "WLib Mnemo elements"

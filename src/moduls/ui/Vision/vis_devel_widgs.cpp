@@ -494,7 +494,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
     string nattr = it->id();
 
     //> Attribute widget(s)
-    string nwdg = it->wdgs( ), swdg;
+    string nwdg = it->wdgs(), swdg;
     if(nwdg.empty())
     {
 	Item *cit = it;
@@ -509,10 +509,11 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     try
     {
+	bool isGrp = TSYS::strSepParse(nwdg,1,';').size();
 	XMLNode chCtx("attr");
 
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();
-	XMLNode req("set");
+	XMLNode req("set"), reqPrev("get");
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); )
 	{
 	    req.setAttr("path",swdg+"/%2fattr%2f"+nattr)->setText(val);
@@ -522,6 +523,12 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		chCtx.clear();
 		chCtx.setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val);
 		if(it->flag()&Item::Active) dw->chLoadCtx(chCtx, "", nattr);
+		//> Load previous value for group
+		if(isGrp)
+		{
+		    reqPrev.setAttr("path",swdg+"/%2fattr%2f"+nattr);
+		    if(!mainWin()->cntrIfCmd(reqPrev)) chCtx.setAttr("prev",reqPrev.text());
+		}
 	    }
 
 	    if(!mainWin()->cntrIfCmd(req) && req.text() == val)
