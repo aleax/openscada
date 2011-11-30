@@ -837,7 +837,7 @@ void VisDevelop::applyWorkWdg( )
 
     //> Set/update attributes inspector
     attrInsp->setWdg(work_wdg_new);
-    lnkInsp->setWdg(work_wdg_new);
+    if(lnkInsp->realVisible()) lnkInsp->setWdg(work_wdg_new);
 
     //> Update actions
     if(work_wdg == work_wdg_new) return;
@@ -864,6 +864,7 @@ void VisDevelop::applyWorkWdg( )
     actVisItProp->setEnabled(isProj || isLib);
     actVisItEdit->setEnabled((isProj || isLib) && sel2.size());
     actVisItClear->setEnabled((isProj || isLib) && sel2.size());
+
     //> Edit actions update
     editToolUpdate( );
 }

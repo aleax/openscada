@@ -66,6 +66,7 @@ class VisDevelop : public QMainWindow
 	string VCAStation( );
 	bool   wdgScale( );
 	double wdgVisScale( );
+	const string &workWdg()	{ return work_wdg; }
 
 	void setVCAStation( const string& st );
 	void setWdgScale( bool val );

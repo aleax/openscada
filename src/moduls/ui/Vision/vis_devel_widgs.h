@@ -297,14 +297,18 @@ class InspLnkDock: public QDockWidget
 	InspLnkDock( VisDevelop * parent );
 	~InspLnkDock( );
 
+	bool realVisible( );
+
 	VisDevelop *owner( );
 
     public slots:
 	void setWdg( const string &iwdg );
+	void setVis( bool visible );
 
     private:
 	//Private attributes
 	InspLnk *ainsp_w;
+	bool is_visible;
 };
 
 //****************************************

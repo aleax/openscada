@@ -1173,6 +1173,8 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
     setWdg(it_wdg);
 }
 
+
+
 //*******************************
 //* Links item delegate         *
 //*******************************
@@ -1248,19 +1250,23 @@ void LinkItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
 //****************************************
 //* Inspector of links dock widget       *
 //****************************************
-InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidget*)parent)
+InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidget*)parent), is_visible(false)
 {
     setObjectName("InspLnkDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 
     ainsp_w = new InspLnk(this,owner());
     setWidget(ainsp_w);
+
+    connect(this,SIGNAL(visibilityChanged(bool)), this, SLOT(setVis(bool)));
 }
 
 InspLnkDock::~InspLnkDock( )
 {
 
 }
+
+bool InspLnkDock::realVisible( )	{ return isVisible() && is_visible; }
 
 VisDevelop *InspLnkDock::owner()
 {
@@ -1273,6 +1279,11 @@ void InspLnkDock::setWdg( const string &iwdg )
 	ainsp_w->setWdg(iwdg);
 }
 
+void InspLnkDock::setVis( bool visible )
+{
+    is_visible = visible;
+    if(is_visible) setWdg(ainsp_w->mainWin()->workWdg());
+}
 
 //****************************************
 //* Widget's libraries tree              *
