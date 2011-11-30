@@ -837,7 +837,7 @@ void VisDevelop::applyWorkWdg( )
 
     //> Set/update attributes inspector
     attrInsp->setWdg(work_wdg_new);
-    if(lnkInsp->realVisible()) lnkInsp->setWdg(work_wdg_new);
+    lnkInsp->setWdg(work_wdg_new);
 
     //> Update actions
     if(work_wdg == work_wdg_new) return;
@@ -1420,18 +1420,23 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	}
 	//>> Widget copy
 	else if(s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" ||
-	    (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del >= 2)))
+	    (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del == 2)))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
 		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
 	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
 	    else req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
-	    if(n_del <= 2)
-	    {
-		d_elp += ("/"+d_el);
-		t1_el = s_el.substr(4);
-	    }
-	    else t1_el = d_el.substr(4);
+	    d_elp += ("/"+d_el);
+	    d_el = "wdg_";
+	    t1_el = s_el.substr(4);
+	}
+	//>> Direct widget to widget copy
+	else if(s_el.substr(0,4) == "wdg_" && d_el.substr(0,4) == "wdg_")
+	{
+	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
+		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+	    req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
+	    t1_el = d_el.substr(4);
 	    d_el = "wdg_";
 	}
 	//>> Copy scheme error

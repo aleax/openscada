@@ -1266,8 +1266,6 @@ InspLnkDock::~InspLnkDock( )
 
 }
 
-bool InspLnkDock::realVisible( )	{ return isVisible() && is_visible; }
-
 VisDevelop *InspLnkDock::owner()
 {
     return (VisDevelop*)parentWidget();
@@ -1275,7 +1273,7 @@ VisDevelop *InspLnkDock::owner()
 
 void InspLnkDock::setWdg( const string &iwdg )
 {
-    if( QApplication::focusWidget() != ainsp_w )
+    if(isVisible() && is_visible && QApplication::focusWidget() != ainsp_w)
 	ainsp_w->setWdg(iwdg);
 }
 

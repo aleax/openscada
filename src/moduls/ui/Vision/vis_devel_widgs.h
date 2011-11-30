@@ -297,8 +297,6 @@ class InspLnkDock: public QDockWidget
 	InspLnkDock( VisDevelop * parent );
 	~InspLnkDock( );
 
-	bool realVisible( );
-
 	VisDevelop *owner( );
 
     public slots:
