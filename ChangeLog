@@ -1,3 +1,7 @@
+2011-11-30 Maxim
+- FIX:UI.Vision: Record of the context for the Undo/ReDo on exit the editing mode is fixed for the primitive ElFigure.
+
+
 2011-11-29 Maxim
 - FIX:UI.Vision: Transparent background for icon creation from widget is fixed.
 

@@ -1462,7 +1462,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
             w->attrSet( "s"+TSYS::int2str(pi->first), TSYS::int2str( pi->second - 1) );
         }
     elFD->shapeStyles_temp = elFD->shapeStyles;
-    if(devW) devW->chRecord(chCtx);
+    if(devW && (chCtx.attr("id").size() || chCtx.childSize())) devW->chRecord(chCtx);
     devW->setSelect(true,false);
 }
 void ShapeElFigure::initShapeItems( const QPointF &pos, WdgView *w, QVector<int> &items_array )
