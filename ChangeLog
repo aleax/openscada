@@ -1,3 +1,8 @@
+2011-12-01 Roman
+- UI.QTCfg: Horizontal scroller position of navigation tree store is added for prevent drop to zero position on item selection.
+- FIX:UI.Vision: "Slider" and "QScrollBar" variants of primitive "FormEl" position update is fixed.
+
+
 2011-11-30 Roman
 - FIX:UI.Vision: Copy widgets into page is fixed.
 
@@ -469,14 +474,14 @@
 
 
 2011-08-13 Roman
-- UI.QTCfg: Full text edit is added into table cells edit.
+- !:UI.QTCfg: Full text edit is added into table cells edit.
 - FIX:UI.Vision: Deranged widgets level operations is fixed.
 
 
 2011-08-12 Roman
 - FIX:UI.QTCfg: Start periodic update icon is fixed.
 - UI.VCAEngine: For attribute "text" of primitive "Text" context help is added.
-- UI.Vision: The background for developed widget window is set to QT::Dense7Pattern.
+- !:UI.Vision: The background for developed widget window is set to QT::Dense7Pattern.
     Processing events filter from scrolled area of developed widget window is added.
     Wait for double click, into development, is set only for editable widgets.
 
@@ -503,7 +508,7 @@
 
 
 2011-08-02 Roman
-- SYS, DAQ: User API functions is appended by Obj.nodePath() and SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"].arch().
+- !:SYS, DAQ: User API functions is appended by NodeObj.nodePath() and SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"].arch().
 - SYS: TiB, PiB, EiB, ZiB and YiB is added to TSYS::cpct2str() function.
 - Transport.Serial, Transport.Sockets and Transport.SSL: Traffic absolute counter type is changed from float to uint64_t.
 
@@ -788,7 +793,7 @@
 - XMLNode: New save flag XMLNode::XHTMLHeader is added for standard XHTML header place at save.
     Target codepage set is added to save function.
     Caseinsensible search node by tag name is added.
-- !!:Protocol.HTTP: HTML-template to custom interface for internal content support is aded.
+- !!:Protocol.HTTP: HTML-template to custom interface for internal content support is added.
 
 
 2011-05-20 Maxim
@@ -817,7 +822,7 @@
 
 2011-05-15 Roman
 - SYS: To TSYS::ShieldSimb encode mode is added support direct symbols like '\xFF' and '\777'.
-- SYS: User API function SYS.strCodeConv() is added for string texts encode from and to code pages.
+- !:SYS: User API function SYS.strCodeConv() is added for string texts encode from and to code pages.
 - !!!:DAQ.WebCfgD: Group request for pages content support is added, for significant performance rise on slow highlatence connections.
 
 
@@ -848,7 +853,7 @@
 
 2011-05-08 Roman
 - !!!!:SYS: Save to config file support is added.
-- !:XMLNode: Load and save comment blocks is added for full mode.
+- !!:XMLNode: Load and save comment blocks is added for full mode.
 
 
 2011-05-06 Roman
@@ -863,7 +868,7 @@
 
 
 2011-05-04 Roman
-- SYS: The ResString object is significant improved for free conver to/from std::string and some typical functions of std::string wrap.
+- !!:SYS: The ResString object is significant improved for free conver to/from std::string and some typical functions of std::string wrap.
 - !!!!:SYS.TConfig, Archives, DAQ, Security, Transports, Archive.*, DAQ.*, Protocol.UserProtocol, Transport.*, UI.VCAEngine, UI.WebUser:
     For direct link to string configuration properties is used resourced object ResString everywhere.
 - UI.QTCfg: No warning dialog set for start path open error. Simple open local root page.
@@ -876,7 +881,7 @@
 
 
 2011-04-30 Roman
-- FIX:UI.Vision: "Disable" button is included to repository.
+- FIX:UI.Vision: "Disable" button's image is included to repository.
 
 
 2011-04-29 Roman
@@ -892,7 +897,7 @@
 
 2011-04-28 Roman
 - FIX:UI.QTCfg, UI.Vision: Input dialog wrong resize by minimum border set is fixed.
-- UI.WebVision: Central align is added to interface. Background color is set fixed to #B0B0B0.
+- !!:UI.WebVision: Central align is added to interface. Background color is set fixed to #B0B0B0.
 - FIX:UI.WebVision: View type switch is fixed for demo form.
 - DAQ: To user API of system object TDAQS is added function funcCall() for call function's texts by OpenSCADA internal languages.
 - DAQ.JavaLikeCalc, DAQ.PrmTmpl, Protocol.ModBus, Protocol.UserProtocol, UI.VCAEngine, UI.WebUser:
@@ -902,7 +907,7 @@
 
 
 2011-04-27 Maxim
-- !:UI.Vision: The 'dynamic' function is modified to be able to make tha static values as well for the primitive ElFigure.
+- !:UI.Vision: The 'dynamic' function is modified to be able to make the static values as well for the primitive ElFigure.
 - !:UI.Vision: The properties dialog is modified to be able to make the values dynamic/static, and also to ignore the selected attributes
                when accepted for the primitive ElFigure.
 - !:UI.Vision: The popup menu is appended by the fields to make the value the 'static' one for the primitive ElFigure.
@@ -934,13 +939,13 @@
     Error double node creation message is added for create from configurator list element.
 - Transport.Out: Help to wait timeout property of free request form is added.
 - UI.QTCfg: Navigation tree widget's width limit is removed.
-- Transport: Types of the requests form of output transport is exanded for line end variants support: LF, CR, CR/LF.
-- !!!!:FIX:Transport, DAQ.AMRDevs, DAQ.DCON, DAQ.ICP_DAS, DAQ.ModBus, DAQ.OPC_UA, Protocol.HTTP, :
+- !:Transport: Types of the requests form of output transport is exanded for line end variants support: LF, CR, CR/LF.
+- !!!!:FIX:Transport, DAQ.AMRDevs, DAQ.DCON, DAQ.ICP_DAS, DAQ.ModBus, DAQ.OPC_UA, Protocol.HTTP:
     Using function TTransportOut::messIO() for tail requests and zero result is fixed everywhere.
 - !:FIX:DAQ.ModBus, Transport.Serial, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.WebVision:
     Wrong using symbol '\n' for multi program platform UNIX, MAC, DOS/Windows is fixed by replace to "\x0A".
 - !!:Protocol.HTTP: HTTP-header parse, for requests, to different line end variants (LF, CR, CR/LF) support is added.
-- UI.WebCfgD: Adapted for full screen.
+- !!:UI.WebCfgD: Adapted for full screen width.
 - UI.WebUser: HTTP properties get from script object and place it to answer is added.
 
 
@@ -958,7 +963,7 @@
 
 
 2011-04-15 Roman
-- DAQ.ModBus: Multi-items write functions 15 and 16 support is added.
+- !!:DAQ.ModBus: Multi-items write functions 15 and 16 support is added.
 
 
 2011-04-14 Maxim
@@ -999,7 +1004,7 @@
 
 
 2011-04-12 Maxim
-- !UI.Vision: Support of sevelar figures is added to the properties dialog of the ElFigure.
+- !!:UI.Vision: Support of sevelar figures is added to the properties dialog of the ElFigure.
 
 
 2011-04-11 Roman
@@ -1009,7 +1014,7 @@
 
 
 2011-04-11 Maxim
-- !UI.Vision: Elementary figure's properties dialog is added.
+- !!:UI.Vision: Elementary figure's properties dialog is added.
 
 
 2011-04-08 Roman

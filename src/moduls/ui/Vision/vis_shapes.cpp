@@ -480,11 +480,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case 6:	//Slider
 	    case 7:	//Scroll bar
 	    {
-		if( !shD->addrWdg || (shD->elType==6 && !qobject_cast<QSlider*>(shD->addrWdg)) || (shD->elType==7 && !qobject_cast<QScrollBar*>(shD->addrWdg)) )
+		if(!shD->addrWdg || (shD->elType==6 && !qobject_cast<QSlider*>(shD->addrWdg)) || (shD->elType==7 && !qobject_cast<QScrollBar*>(shD->addrWdg)))
 		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
+		    if(shD->addrWdg) shD->addrWdg->deleteLater();
 		    shD->addrWdg = (shD->elType==6 ? (QWidget *)new QSlider(w) : (QWidget *)new QScrollBar(w));
-		    if( runW ) connect( shD->addrWdg, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)) );
+		    if(runW) connect(shD->addrWdg, SIGNAL(valueChanged(int)), this, SLOT(sliderMoved(int)));
 		    mk_new = true;
 		}
 		int cfgOff = 0;
@@ -503,6 +503,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		((QAbstractSlider*)shD->addrWdg)->setMaximum( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)shD->addrWdg)->setSingleStep( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)shD->addrWdg)->setPageStep( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
+		((QAbstractSlider*)shD->addrWdg)->setValue(atoi(shD->value.c_str()));
 		break;
 	    }
 	}

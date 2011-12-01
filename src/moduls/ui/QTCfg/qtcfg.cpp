@@ -903,7 +903,10 @@ void ConfApp::selectItem( )
     if(sel_ls.size() == 1 && sel_path != sel_ls.at(0)->text(2).toAscii().data())
     {
 	selectPage(sel_ls.at(0)->text(2).toAscii().data());
+
+	int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
 	CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
+	if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
     }
 }
 
