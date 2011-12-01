@@ -118,6 +118,8 @@ class TVision : public TUI
 	string			vca_station;	//VCA station id ('.' - for local station)
 
 	string			mPlayCom;	//Play command
+
+	int			mScrnCnt;
 };
 
 extern TVision *mod;

@@ -1,6 +1,6 @@
 2011-12-01 Roman
-- UI.QTCfg: Horizontal scroller position of navigation tree store is added for prevent drop to zero position on item selection.
-- FIX:UI.Vision: "Slider" and "QScrollBar" variants of primitive "FormEl" position update is fixed.
+- FIX:UI.Vision: Possible crash on screens count request from other thread (not QT main) is fixed.
+    The problem possible depends from real allow multiply screens and Xinerma active.
 
 
 2011-11-30 Roman
@@ -129,6 +129,7 @@
 - FIX:UI.Vision: Saving the previous inundationItems container is done during removing or creation fills in the ElFigure editor
                  for the correct EnDo/ReDo functions work.
 
+
 2011-11-10 Maxim
 - FIX:UI.Vision: Unnecessary calls of the "shapeSave" function are removed when properties dialog is accepted in the primitive ElFigure
                  to optimize the performance and UnDo/ReDo functions.
@@ -141,7 +142,7 @@
 
 
 2011-11-09 Roman
-- !!!:FIX:Archive: Task for values archiving by periodic ~60s is changet to no signal SIGALRM terminate mode for prevent values
+- FIX:Archive: Task for values archiving by periodic ~60s is changet to no signal SIGALRM terminate mode for prevent values
     archive-files of module Archive.FSArch break by incidentally function write() terminate.
     Going to add processing for result of all write() and read() functions of module Archive.FSArch to prevent it.
 - FIX:Archive.FSArch: Size of value archive file update after truncate of fix file procedure is added.
@@ -167,17 +168,17 @@
 
 
 2011-11-04 Roman
-- DAQ: User API functions enable() and start() is added to controller object.
-- Archive: User API functions status(), end() and begin() is added to messages archivator object.
+- !:DAQ: User API functions enable() and start() is added to controller object.
+- !:Archive: User API functions status(), end() and begin() is added to messages archivator object.
 - FIX:DB.*: Fix ALL SQL DB modules to append first key field to SELECT request of dataGet() function at case no one other fields for select present.
 
 
 2011-11-03 Roman
-- SYS, DB: System periodic call function perSYSCall() to subsystem's and its modules objects is added.
+- !:SYS, DB: System periodic call function perSYSCall() to subsystem's and its modules objects is added.
     TDBS::closeOldTables() realisation is moved to perSYSCall().
-- UI.VCAEngine: Periodic check for not use session is added into function perSYSCall() for 30 minutes timeout.
+- !:UI.VCAEngine: Periodic check for not use session is added into function perSYSCall() for 30 minutes timeout.
 - FIX:UI.VCAEngine: Copy properties for DirectRead attributes on widget copy is fixed.
-- FIX:UI.WebVision: Scale is fixed for included and other, no master, pages for prevent using self master static scale.
+- !:FIX:UI.WebVision: Scale is fixed for included and other, no master, pages for prevent using self master static scale.
     Pages include to Box-container widget is fixed to scroll processing.
 
 
@@ -256,7 +257,7 @@
     attribute remove.
 - UI.WebCfgD: Filters for unactive images changed from "gray" to "unact".
     "unact" filter is added for light-dark unactive images.
-- UI.WebVision: HTML sting encode is added to JS-code. Image convert backend function is added.
+- !:UI.WebVision: HTML sting encode is added to JS-code. Image convert backend function is added.
     Images resize code is moved to server side for smooth.
     Inactive button display is added. Button display borders is changed to compact.
 
@@ -308,7 +309,7 @@
 
 
 2011-10-09 Roman
-- UI.Vision, UI.WebVision: Value, not use percent, scale store for multiply parameters into primitive "Diagram"
+- !:UI.Vision, UI.WebVision: Value, not use percent, scale store for multiply parameters into primitive "Diagram"
     for the parameters like scale, over 20%, is added.
 - FIX:DB.PostgreSQL: TIMESTAMP place for DateTimeDec integer type is fixed.
 
@@ -350,7 +351,7 @@
 
 
 2011-09-15 Roman
-- UI.VCAEngine: The "user" field of session object is set to resourced string for possible crash prevent on multiply
+- FIX:UI.VCAEngine: The "user" field of session object is set to resourced string for possible crash prevent on multiply
     connections to single session.
 
 
@@ -385,17 +386,17 @@
 
 
 2011-09-07 Roman
-- SYS, DAQ.OPC_UA: To and from standard little-endian FloatPoint variant convertion functions is added:
+- !:SYS, DAQ.OPC_UA: To and from standard little-endian FloatPoint variant convertion functions is added:
     floatLE(), floatLErev(), doubleLE(), doubleLErev().
 - FIX:DAQ.Siemens: Into Libnodave file nodave.h #pragma pack(1) is replaced to #pragma pack(push,1) ... #pragma pack(pop).
 - SYS: GLibC version for EDEADLK processing hack is rised to 2.4 and features.h include for correct GLibC version check everywhere.
 - SYS, UI.VCAEngine: EDEADLK processing hack is added for pthread_rdlock_wrlock() for fix GLibC 2.3.2 (< 2.5).
-- !:SYS: Set DB to "<cvf>" for load only from config file for all OpenSCADA stored nodes.
-- !!:DAQ.Siemens. Libnodave library is updated to version 0.8.4.6.
+- !:SYS: Set DB to "<cfg>" for load only from config file for all OpenSCADA stored nodes.
+- !!:DAQ.Siemens: Libnodave library is updated to version 0.8.4.6.
 
 
 2011-09-06 Roman
-- SYS, DAQ.ICP_DAS: ARM library libi8k_arm.a and build for ARM is added. libi8k.a for x86 is updated. Include files for i8k is updated.
+- !:DAQ.ICP_DAS: ARM library libi8k_arm.a and build for ARM is added. libi8k.a for x86 is updated. Include files for i8k is updated.
 - FIX:UI.QTCfg: Message generate error on group request is fixed.
 
 
@@ -413,7 +414,7 @@
 2011-08-30 Roman
 - !:DB: Save and load big table's fields for text by included tag with field name is added.
 - SYS: No translated system charset "ANSI_X3.4-1968" is added.
-- !!!!:FIX: The functions getUnalign*() for unaligned access on ARM and like is fixed. Detected on PXA270.
+- !!!!:FIX:SYS: The functions getUnalign*() for unaligned access on ARM and like is fixed. Detected on PXA270.
 - FIX:DAQ.JavaLikeCal: The user's object function real::toFixed() is fixed to all width process for signed values.
 - UI.Vision: New demands for QT 4.6 and more is wrapped.
 
@@ -462,7 +463,7 @@
 
 2011-08-17 Roman
 - XMLNode: Prevent new line doubled on save node by XMLNode::BrOpenPrev.
-- UI.VCAEngine, UI.Vision: To primitive "FormEl" for modes "Line and Text edit" new attribute "confirm" is added for
+- !:UI.VCAEngine, UI.Vision: To primitive "FormEl" for modes "Line and Text edit" new attribute "confirm" is added for
     confirm on edit disabling allow.
 
 
