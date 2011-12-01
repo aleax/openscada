@@ -576,7 +576,7 @@
 - Archive.FSArch: The module options --noArchLimit and --copyErrValFiles is added.
     The option --noArchLimit used for disable archive's files removing by limit on view archives run mode.
     The option --copyErrValFiles used for enable copy error archive's files to debug correction algorithm.
-- DAQ.JavaLikeCalc: String constants direct concatenation is added.
+- !:DAQ.JavaLikeCalc: String constants direct concatenation is added.
 - DAQ.ModBus: Templates calc on start mode and no connection with remote PLC is added.
 - UI.VCAEngine, UI.Vision: The attribute "valsForPix" is added to primitive "Diagram" for precision control for export to CSV at large time intervals.
 
@@ -588,10 +588,10 @@
 
 2011-07-15 Roman
 - !!:TConfig, TBD, TTransportIn, TTransportOut, TUser, TGroup, TPrmTmplLib, TPrmTempl, TParamContr, TController, TVArchive, TVArchivator, TMArchivator:
-    User API functions for config access cfg() and cfgSet() is added.
+    User API functions for config access (stored into DB) cfg() and cfgSet() is added.
 - TConfig: Generic function get() and set() is added.
 - FIX:Transport.Sockets, Transport.SSL: Input transport hang prevent is added on a socket system problem in function select(), on run.
-- UI.VCAEngine: Text type select for user attributes is added.
+- !:UI.VCAEngine: "Text" type select for user attributes is added.
 
 
 2011-07-14 Roman
@@ -600,7 +600,7 @@
     by option --enable-ForDist.
 - !!:FIX:UI.WebVision: Master page open and replace is fixed. Multiply child's windows open is fixed.
     Child window's header is adapted for long title place.
-- UI.WebCfgD: Web-dialogs is realized by flow block on all content.
+- !!:UI.WebCfgD: Web-dialogs is realized by flow block on all content.
 
 
 2011-07-11 Roman
@@ -635,9 +635,9 @@
 
 
 2011-06-30 Roman
-- DAQ.ModBus: User API function TController::messIO() is added for allow custom ModBus associated requests from the controller
+- !:DAQ.ModBus: User API function TController::messIO() is added for allow custom ModBus associated requests from the controller
     logical parameter's templates.
-- DAQ: User API function TController::alarmSet() is added for unified alarm set to DAQ-object.
+- !:DAQ: User API function TController::alarmSet() is added for unified alarm set to DAQ-object.
 - FIX:DAQ.JavaLikeCalc: Wrong warning for not used template first try compile on change properties configuration and text programm is fixed.
     Function object's name generation for template's functions is set to nodePath(), for prevent coincidence of equal templates
     from different template libraries.
@@ -667,7 +667,7 @@
 
 2011-06-22 Roman
 - SYS: The function SYS.sleep() is added to user API. Repeated send signal SIGALRM is added in function taskDestroy().
-- DAQ: Object type selection is added to templates.
+- !!:DAQ: Object type selection is added to template's attributes.
 
 
 2011-06-20 Roman
@@ -679,7 +679,7 @@
 
 
 2011-06-17 Maxim
-- FIX:UI.Vision: The drawing performance of the fills with the fill images is optimized for the primitive ElFigure by changing the "contains"
+- !!:FIX:UI.Vision: The drawing performance of the fills with the fill images is optimized for the primitive ElFigure by changing the "contains"
                  more quick mechanism especially for the complex objects.
 
 
