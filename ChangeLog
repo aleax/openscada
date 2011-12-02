@@ -288,7 +288,7 @@
 2011-10-14 Roman
 - Security: Users and groups check to removed from DB for remove object is added.
     Checking for remove performed only at direct selected DB loading.
-- SYS: The function chkSelDB() is adapted for support writing to config-file "<cfg>".
+- !:SYS: The function chkSelDB() is adapted for support writing to config-file "<cfg>".
 - FIX:DAQ.DCON, DAQ.System, DAQ.Siemens, DAQ.LogicLev, DAQ.DAQGate, DAQ.BlockCalc:
     Fix to old period mechanism store into DB field "PERIOD". Direct load and use is prevented.
 - DAQ.Template, DAQ.JavaLikeCalc, UI.VCAEngine: DB address is addapted to "<cfg>.[tbl]" parse.
@@ -834,7 +834,7 @@
 
 2011-05-12 Roman
 - SYS.XML: No empty attributes save is added.
-- Protocol.HTTP: Messages generation for auth process is added.
+- !:Protocol.HTTP: Messages generation for auth process is added.
 - UI.WebCfgD: JavaScript code is updated for finish realization full request function servReq().
 
 
