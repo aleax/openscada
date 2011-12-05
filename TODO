@@ -19,16 +19,7 @@ To do tasks of the project OpenSCADA
 
 8. Subsystem “User interfaces”
 
-8.1. VCAEngine
-  * Develope and making the “Function” primitive.
-  * Develope and making the “Link” primitive.
-
-8.2. Vision
-  * Develope and making the “Function” primitive.
-  * Develope and making the “Link” primitive.
-  * The implementation mechanism of rollback in tool of user interfaces developing.
-
-8.3. WebVision
+8.1. VCAEngine, Vision, WebVision
   * Develope and making the “Function” primitive.
   * Develope and making the “Link” primitive.
 

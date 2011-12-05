@@ -1,25 +1,25 @@
 
 	     Welcome to open SCADA system OpenSCADA.
 
-Documentation about this programm you may find together this document. Usually OpenSCASA system is accompanied by next
-documentetion:
+Documentation about this program you may find together this document. Usually OpenSCASA system is accompanied by next
+documentation:
  - AboutOpenSCADA.pdf: Contain the generic information about system.
  - DAQ.pdf: Data acquisition conception OpenSCADA.
  - APIOpenSCADA.pdf: Contain OpenSCADA system API for developers.
  - FAQ.pdf: Frequently ask questions about system.
  - Modules/*: Module's documentation directory.
  - release_*.pdf: The release preview document for last version.
- - openscada.pdf: Generic programm description document.
+ - openscada.pdf: Generic program description document.
 
 For OpenSCADA starting you should write shell command <# openscada>. The system will be started in default configuration.
 This mode not have one DB configuration, but data into the configuration file enough for:
  - working into the graphical configurator UI.QTCfg;
- - working into WEB-configurators (adress: http://localhost:10002 or http://localhost:10004 )
+ - working into WEB-configurators (adress: http://localhost:10002 or http://localhost:10004)
 
-Default cofiguration can used for demon mode run. For starting the system into demon(server) mode you should write shell command
+Default configuration you can use for demon mode run. For starting the system into demon(server) mode you should write shell command
 <# service oscadad start>.
 
-For first experience geting you can use OpenSCADA demo package (ModelsDB.AGLKS). This package contain DB with the system and subsystems
+For first experience getting you can use OpenSCADA demo package (ModelsDB.AGLKS). This package contain DB with the system and subsystems
 configuration examples. For starting into demo configurations you should write shell command <# openscada_demo>.
 
 To create your own independent configuration SCADA-system user has a run OpenSCADAs putting data in user's home directory (~/.openscada).

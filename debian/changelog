@@ -1,3 +1,9 @@
+openscada (0.7.2-1) experimental; urgency=low
+
+  * Version 0.7.2 build Debian packages for OpenSCADA.
+
+ -- Roman Savochenko <rom_as@oscada.org>  Mon, 05 Dec 2011 16:00:00 +0200
+
 openscada (0.7.1-2) experimental; urgency=low
 
   * Model's AGLKS DB is fixed for start message about QTCfg wrong start page.

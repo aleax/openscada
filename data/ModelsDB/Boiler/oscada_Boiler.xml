@@ -17,7 +17,7 @@
 	<prm id="ModDir">/usr/lib/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
-	<prm id="Lang2CodeBase"></prm>
+	<prm id="Lang2CodeBase">en</prm>
 	<prm id="SaveAtExit">0</prm>
 	<prm id="SavePeriod">0</prm>
 

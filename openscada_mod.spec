@@ -1458,6 +1458,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Mon Dec 05 2011 Roman Savochenko <rom_as@oscada.org>
+- Build 0.7.2 release.
+
 * Mon Apr 18 2011 Roman Savochenko <rom_as@oscada.org>
 - Model's RPM-packages dependency to main package is fixed for modules spec-file.
 

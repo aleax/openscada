@@ -22,7 +22,7 @@ echo $pPid > $pLock
 
 # Wait for programm stop
 wait $pPid
-echo "Programm result: $?"
+echo "Program rezult: $?"
 
 # Remove lock file
 rm -f $pLock

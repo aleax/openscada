@@ -1,3 +1,14 @@
+2011-12-05 Roman 0.7.2
+- RPM- and Deb-packages build resources is updated for version 0.7.2.
+- DOC: README and TODO is updated.
+- UI.QTStarter: Splash is updated for 0.7.2 release.
+- DOC: Release notes for version 0.7.2 is added. Index files is updated.
+- DOC: Generic document "openscada.pdf" and library "WLib Main" is updated.
+- !!!!:DB: Model "AGLKS", "Boiler" and main libraries DB files is updated. Electro elements library is added.
+- !!:Protocol.HTTP: Documents and full translations is updated and released version 1.6.0.
+- FIX:DAQ.OPC_UA: Build for old version of OpenSSL is fixed.
+
+
 2011-12-01 Roman
 - FIX:UI.Vision: Possible crash on screens count request from other thread (not QT main) is fixed.
     The problem possible depends from real allow multiply screens and Xinerma active.
@@ -98,7 +109,7 @@
 
 2011-11-17 Roman
 - Transport.SSL: Build for several OpenSSL version and definition OPENSSL_NO_SSL2 processing is made.
-- UI.QTStarter: Test's font for splash is set to fix 10 pixels and 10 log's lines.
+- UI.QTStarter: Text's font for splash is set to fix 10 pixels and 10 log's lines.
 - DAQ.BlockCalc, DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System, Transport.Serial: Double to int64_t conversion warnings is resolved.
 - UI.Vision: Tool tip undo and redo list limit is set to ten items.
 - UI.Vision, UI.WebVision: Real round use for trends width calculate into primitive "Diagram".
