@@ -1,3 +1,6 @@
+2011-12-07 Maxim
+- FIX:DB: Model "Boiler" is fixed for the correct representation on the small resolution (Nokia N900, N9) screens.
+
 2011-12-05 Roman 0.7.2
 - RPM- and Deb-packages build resources is updated for version 0.7.2.
 - DOC: README and TODO is updated.
