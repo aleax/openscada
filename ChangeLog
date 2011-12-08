@@ -1,4 +1,6 @@
 2011-12-08 Roman
+- UI.Vision, UI.WebVision: Trend cut to percent limit (0...100) of primitive "Diagram" is removed for allow see values
+    out of board by view offset change.
 - SYS: Force files *.la remove is added to RPM-build *.spec files.
 - FIX:DAQ.OPC_UA: Build for old version of OpenSSL is fixed, newer to 0.9.8.
 - UI.Vision: Build with QT version 4.4 is adapted.

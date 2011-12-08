@@ -5631,9 +5631,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    {
 		curTm = vmin(aVend,vmax(aVbeg,trnds[i_t].val()[a_pos].tm));
 		curVl = trnds[i_t].val()[a_pos].val;
-		if( vsPerc && curVl != EVAL_REAL )
-		    curVl = vmin(100,vmax(0,100*(curVl-bordL)/(bordU-bordL)));
-		if( isnan(curVl) ) curVl = EVAL_REAL;
+		if(vsPerc && curVl != EVAL_REAL) curVl = 100*(curVl-bordL)/(bordU-bordL);
+		if(isnan(curVl)) curVl = EVAL_REAL;
 		curPos = tArX+tArW*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
 	    if(!curPos || trnds[i_t].val()[a_pos].tm >= aVend)	end_vl = true;
@@ -5927,11 +5926,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	for( int i_v = 1; i_v < (trnds[i_t].fftN/2+1); i_v++ )
 	{
 	    curVl = vlOff+pow(pow(trnds[i_t].fftOut[i_v][0],2)+pow(trnds[i_t].fftOut[i_v][1],2),0.5)/(trnds[i_t].fftN/2+1);
-	    if( vsPerc )
-	    {
-		curVl = 100.*(curVl-bordL)/(bordU-bordL);
-		curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
-	    }
+	    if(vsPerc) curVl = 100*(curVl-bordL)/(bordU-bordL);
 	    curPos = tArX+(int)((double)tArW*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
 
 	    int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(curVl-vsMin)/(vsMax-vsMin))));

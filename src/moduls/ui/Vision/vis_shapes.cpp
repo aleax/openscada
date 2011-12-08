@@ -1700,11 +1700,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	for( int i_v = 1; i_v < (sTr->fftN/2+1); i_v++ )
 	{
 	    curVl = vlOff+pow(pow(sTr->fftOut[i_v][0],2)+pow(sTr->fftOut[i_v][1],2),0.5)/(sTr->fftN/2+1);
-	    if( vsPerc )
-	    {
-		curVl = 100.*(curVl-bordL)/(bordU-bordL);
-		curVl = (curVl>100) ? 100 : (curVl<0) ? 0 : curVl;
-	    }
+	    if(vsPerc) curVl = 100*(curVl-bordL)/(bordU-bordL);
 	    curPos = tAr.x()+(int)((double)tAr.width()*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
 
 	    int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(curVl-vsMin)/(vsMax-vsMin))));
@@ -2074,9 +2070,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    {
 		curTm = vmin(aVend,vmax(aVbeg,sTr->val()[a_pos].tm));
 		curVl = sTr->val()[a_pos].val;
-		if( vsPerc && curVl != EVAL_REAL )
-		    curVl = vmin(100,vmax(0,100*(curVl-bordL)/(bordU-bordL)));
-		if( isnan(curVl) ) curVl = EVAL_REAL;
+		if(vsPerc && curVl != EVAL_REAL) curVl = 100*(curVl-bordL)/(bordU-bordL);
+		if(isnan(curVl)) curVl = EVAL_REAL;
 		curPos = tAr.x()+tAr.width()*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
 	    if(!curPos || sTr->val()[a_pos].tm >= aVend) end_vl = true;
