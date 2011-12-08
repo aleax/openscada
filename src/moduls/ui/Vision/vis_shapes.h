@@ -447,7 +447,7 @@ class ShapeProtocol : public WdgShape
 			QFont font;
 		};
 		//Methods
-		ShpDt( ) : active(true), timeCurent(false), time(0), tSize(60), arhBeg(0), arhEnd(0)	{ }
+		ShpDt( ) : active(true), timeCurent(false), time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
 		short active	:1;
 		short timeCurent:1;
@@ -456,7 +456,7 @@ class ShapeProtocol : public WdgShape
 		short viewOrd	:4;
 		QTimer 		*trcTimer;
 		QTableWidget	*addrWdg;
-		unsigned int	time, tSize;
+		unsigned int	time, tSize, tmPrev, tmGrndPrev;
 		unsigned int	arhBeg, arhEnd;
 		string		arch, tmpl, col;
 		vector<ItProp>	itProps;

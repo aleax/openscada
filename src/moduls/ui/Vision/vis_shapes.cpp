@@ -2731,7 +2731,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		arhEnd		= shD->arhEnd;
     bool	toUp = false,
 		isDtChang = false,
-		newFill = false;
+		newFill = false,
+		isDbl = false;
 
     //> Check table structure
     //> Clear collumns
@@ -2804,8 +2805,9 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     //> Clear data at time error
     unsigned int valEnd = 0, valBeg = 0;
 
-    while( shD->messList.size() && (valEnd=shD->messList[0].time) > tTime ) { shD->messList.pop_front(); isDtChang = true; }
-    while( shD->messList.size() && (valBeg=shD->messList[shD->messList.size()-1].time) < tTimeGrnd )	{ shD->messList.pop_back(); isDtChang = true; }
+    while(shD->messList.size() && (valEnd=shD->messList[0].time) > tTime) { shD->messList.pop_front(); isDtChang = true; }
+    while(shD->messList.size() && (valBeg=shD->messList[shD->messList.size()-1].time) < tTimeGrnd) { shD->messList.pop_back(); isDtChang = true; }
+    if(shD->messList.empty()) valEnd = valBeg = 0;
 
     if( tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
     {
@@ -2816,8 +2818,11 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     }
 
     //> Correct request to present data
-    if( valEnd && tTime >= valEnd )	{ tTimeGrnd = valEnd; toUp = true; }
-    else if( valBeg && tTimeGrnd < valBeg )	tTime = valBeg-1;
+    if(shD->time > shD->tmPrev) { if(valEnd) tTimeGrnd = valEnd; toUp = true; }
+    else if((shD->time-shD->tSize) < shD->tmGrndPrev) { if(valBeg) tTime = valBeg-1; }
+    else return;
+    shD->tmPrev = shD->time;
+    shD->tmGrndPrev = shD->time-shD->tSize;
 
     //> Get values data
     XMLNode req("get");
@@ -2828,46 +2833,43 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	setAttr("cat",shD->tmpl)->
 	setAttr("lev",TSYS::int2str(shD->lev));
-    if( w->cntrIfCmd(req,true) )	return;
+    if(w->cntrIfCmd(req,true))	return;
 
-
-    if( toUp )
+    if(toUp)
 	for(unsigned i_req = 0; i_req < req.childSize(); i_req++)
 	{
 	    XMLNode *rcd = req.childGet(i_req);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10),atoi(rcd->attr("utime").c_str()),rcd->attr("cat"),(TMess::Type)atoi(rcd->attr("lev").c_str()),rcd->text());
 
 	    //>> Check for dublicates
-	    unsigned i_p;
-	    for(i_p = 0; i_p < shD->messList.size(); i_p++)
+	    isDbl = false;
+	    for(unsigned i_p = 0; !isDbl && i_p < shD->messList.size(); i_p++)
 	    {
-		if(mess.time > shD->messList[0].time && i_p) continue;
+		if(mess.time > shD->messList[0].time && i_p) break;
 		if(shD->messList[i_p].utime == mess.utime && shD->messList[i_p].level == mess.level &&
-			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess)
-		    break;
+			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess) isDbl = true;
 	    }
-	    if(i_p < shD->messList.size()) continue;
+	    if(isDbl) continue;
 
 	    //>> Insert new row
 	    shD->messList.push_front(mess);
 	    isDtChang = true;
 	}
     else
-	for( int i_req = req.childSize()-1; i_req >= 0; i_req-- )
+	for(int i_req = req.childSize()-1; i_req >= 0; i_req--)
 	{
 	    XMLNode *rcd = req.childGet(i_req);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10),atoi(rcd->attr("utime").c_str()),rcd->attr("cat"),(TMess::Type)atoi(rcd->attr("lev").c_str()),rcd->text());
 
 	    //>> Check for dublicates
-	    int i_p;
-	    for( i_p = shD->messList.size()-1; i_p >= 0; i_p-- )
+	    isDbl = false;
+	    for(int i_p = shD->messList.size()-1; !isDbl && i_p >= 0; i_p--)
 	    {
-		if(mess.time < shD->messList[shD->messList.size()-1].time && i_p < ((int)shD->messList.size()-1)) continue;
+		if(mess.time < shD->messList[shD->messList.size()-1].time && i_p < ((int)shD->messList.size()-1)) break;
 		if(shD->messList[i_p].utime == mess.utime && shD->messList[i_p].level == mess.level &&
-			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess )
-		    break;
+			shD->messList[i_p].categ == mess.categ && shD->messList[i_p].mess == mess.mess)	isDbl = true;
 	    }
-	    if( i_p >= 0 ) continue;
+	    if(isDbl) continue;
 
 	    //>> Insert new row
 	    shD->messList.push_back(mess);

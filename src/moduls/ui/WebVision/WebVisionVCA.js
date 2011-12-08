@@ -1354,14 +1354,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
       this.place.firstChild.className='prot';
       this.loadData = function( )
       {
+	if(!this.tmPrev) this.tmPrev = 0;
+	if(!this.tmGrndPrev) this.tmGrndPrev = 0;
+
 	var tblB = this.place.firstChild;
 
 	//> Get archive parameters
 	var tTime = parseInt(this.attrs['time']);
-	if( !tTime ) tTime = (new Date()).getTime()/1000;
+	if(!tTime) tTime = (new Date()).getTime()/1000;
+	var srcTime = tTime;
 	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
-	if( this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] || 
+	if( this.curCols != this.attrs['col'] || this.curArch != this.attrs['arch'] || this.curTmpl != this.attrs['tmpl'] ||
 	    this.curLev != this.attrs['lev'] || this.headVis != this.attrs['headVis'] )
 	{
 	  this.arhBeg = this.arhEnd = 0;
@@ -1414,8 +1418,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	//> Clear data at time error
 	var valEnd = 0; var valBeg = 0;
-	while( this.messList.length && (valEnd=this.messList[0].time) > tTime) this.messList.shift();
-	while( this.messList.length && (valBeg=this.messList[this.messList.length-1].time) < tTimeGrnd ) this.messList.pop();
+	while( this.messList.length && (valEnd=this.messList[0][0]) > tTime) this.messList.shift();
+	while( this.messList.length && (valBeg=this.messList[this.messList.length-1][0]) < tTimeGrnd ) this.messList.pop();
+
+	if(!this.messList.length) valEnd = valBeg = 0;
 
 	if( tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
 	{
@@ -1427,48 +1433,51 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	//> Correct request to present data
 	var toUp = false, isDtChang = false;
-	if( valEnd && tTime >= valEnd ) { tTimeGrnd = valEnd; toUp = true; }
-	else if( valBeg && tTimeGrnd < valBeg ) tTime = valBeg-1;
+	if(srcTime > this.tmPrev) { if(valEnd) tTimeGrnd = valEnd; toUp = true; }
+	else if((srcTime-parseInt(this.attrs['tSize'])) < this.tmGrndPrev) { if(valBeg) tTime = valBeg-1; }
+	else return;
+	this.tmPrev = srcTime;
+	this.tmGrndPrev = srcTime-parseInt(this.attrs['tSize']);
 
 	var rez = servSet('/Archive/%2fserv%2fmess','com=com',
 	    "<get arch='"+this.curArch+"' tm='"+tTime+"' tm_grnd='"+tTimeGrnd+"' cat='"+this.curTmpl+"' lev='"+this.curLev+"' />",true);
 	if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) return;
 
-	if( toUp )
-	  for( var i_req = 0; i_req < rez.childNodes.length; i_req++ )
+	if(toUp)
+	  for(var i_req = 0; i_req < rez.childNodes.length; i_req++)
 	  {
 	    var rcd = rez.childNodes[i_req];
 	    var mess = new Array(parseInt(rcd.getAttribute('time')),parseInt(rcd.getAttribute('utime')),parseInt(rcd.getAttribute('lev')),rcd.getAttribute('cat'),nodeText(rcd));
 
 	    //>> Check for dublicates
-	    var i_p;
-	    for( i_p = 0; i_p < this.messList.length; i_p++ )
+	    var isDbl = false;
+	    for(var i_p = 0; !isDbl && i_p < this.messList.length; i_p++)
 	    {
-	      if( mess[0] > this.messList[0][0] && i_p ) continue;
-	      if( this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] && this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4] )
-		break;
+	      if(mess[0] > this.messList[0][0] && i_p) break;
+	      if(this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] &&
+	    	    this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4]) isDbl = true;
 	    }
-	    if( i_p < this.messList.length ) continue;
+	    if(isDbl) continue;
 
 	    //>> Insert new row
 	    this.messList.unshift(mess);
 	    isDtChang = true;
 	  }
 	else
-	  for( var i_req = rez.childNodes.length-1; i_req >= 0; i_req-- )
+	  for(var i_req = rez.childNodes.length-1; i_req >= 0; i_req--)
 	  {
 	    var rcd = rez.childNodes[i_req];
 	    var mess = new Array(parseInt(rcd.getAttribute('time')),parseInt(rcd.getAttribute('utime')),parseInt(rcd.getAttribute('lev')),rcd.getAttribute('cat'),nodeText(rcd));    
 
 	    //>> Check for dublicates
-	    var i_p;
-	    for( i_p = this.messList.length-1; i_p >= 0; i_p-- )
+	    var isDbl = false;
+	    for(var i_p = this.messList.length-1; !isDbl && i_p >= 0; i_p--)
 	    {
-	      if( mess[0] < this.messList[this.messList.length-1][0] && i_p < (this.messList.length-1) ) continue;
-	      if( this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] && this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4] )
-		break;
+	      if(mess[0] < this.messList[this.messList.length-1][0] && i_p < (this.messList.length-1)) break;
+	      if(this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] &&
+	    	    this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4]) isDbl = true;
 	    }
-	    if( i_p >= 0 ) continue;
+	    if(isDbl) continue;
 
 	    //>> Insert new row
 	    this.messList.push(mess);
