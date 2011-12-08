@@ -1,5 +1,12 @@
+2011-12-08 Roman
+- SYS: Force files *.la remove is added to RPM-build *.spec files.
+- FIX:DAQ.OPC_UA: Build for old version of OpenSSL is fixed, newer to 0.9.8.
+- UI.Vision: Build with QT version 4.4 is adapted.
+
+
 2011-12-07 Maxim
 - FIX:DB: Model "Boiler" is fixed for the correct representation on the small resolution (Nokia N900, N9) screens.
+
 
 2011-12-05 Roman 0.7.2
 - RPM- and Deb-packages build resources is updated for version 0.7.2.

@@ -1265,7 +1265,7 @@ string TProt::certDER2PEM( const string &certDer )
     string rez = "";
 
     if( certDer.empty() ) return rez;
-#if OPENSSL_VERSION_NUMBER >= 0x0090804fL
+#if OPENSSL_VERSION_NUMBER >= 0x00908000L
     const unsigned char *ind = (const unsigned char *)certDer.data();
 #else
     unsigned char *ind = (unsigned char *)certDer.data();

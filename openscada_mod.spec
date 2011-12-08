@@ -1088,6 +1088,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 
 %install
 %makeinstall
+rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_includedir/openscada/
 install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/{MESS,VAL}
@@ -1153,7 +1154,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_libdir/*.so.*
 #_libdir/openscada/*.so
 #exclude %_libdir/openscada/*.a
-%exclude %_libdir/openscada/*.la
+#exclude %_libdir/openscada/*.la
 %_datadir/locale/*/LC_MESSAGES/openscada.mo
 /var/spool/openscada/DATA/.info
 /var/spool/openscada/icons/*
