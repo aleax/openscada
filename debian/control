@@ -59,8 +59,8 @@ Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
 Package: openscada-model.boiler
 Architecture: all
 Depends: openscada, openscada-libdb.main, openscada-libdb.vca
-Description: Model "Boiler" data bases and config (only Russian).
+Description: Model "Boiler" data bases and config (EN,RU,UK).
  The openscada-model.boiler package model "Boiler" data bases and config.
- The Model is allowed only for Russian language.
+ The Model is allowed for English, Russian and Ukrainian languages.
  For start use command <openscada_Boiler>.
  For access use account "root" and password "openscada" or account "user" and password "user".

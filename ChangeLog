@@ -1,3 +1,7 @@
+2011-12-09 Roman
+- FIX:RPM- and Deb-packages build resources is updated for information about package Model.Boiler fix.
+
+
 2011-12-08 Roman
 - !!:FIX:UI.Vision, UI.WebVision: Primitive "Protocol" update on time and size is fixed.
 - !!:FIX:UI.WebVision: Primitive "Protocol" tail clear is fixed.

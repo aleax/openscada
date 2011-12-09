@@ -257,10 +257,10 @@ Fuers Starten wird Kommando <openscada_demo> oder <openscada_AGLKS> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package Model.Boiler
-Summary: Model "Boiler" data bases and config (only Russian).
-Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (только Русский).
-Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (тільки Російська).
-Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (nur russisch).
+Summary: Model "Boiler" data bases and config (EN,RU,UK).
+Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,RU,UK).
+Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,RU,UK).
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,RU,UK).
 Group: Graphics
 Requires: %name-LibDB.Main %name-LibDB.VCA
 Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.System
@@ -268,22 +268,22 @@ Requires: %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibMath %nam
 Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision 
 %description Model.Boiler
 The %{name}-Model.Boiler package model "Boiler" data bases and config.
-The Model is allowed only for Russian language.
+The Model is allowed for English, Russian and Ukrainian languages.
 For start use command <openscada_Boiler>.
 For access use account "root" and password "openscada" or account "user" and password "user".
 %description Model.Boiler -l ru_RU.UTF8
 Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
-Модель доступна только на Русском языке.
+Модель доступна доступна на Английском, Русском и Украинском языках.
 Для старта используйте команду <openscada_Boiler>.
 Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
 %description Model.Boiler -l uk_UA.UTF8
 Пакет %{name}-Model.Boiler включає БД та конфігурацію моделі "Котел".
-Модель доступно тільки на Російській мові.
+Модель доступно на Англійській, Російській та Українській мовах.
 Для старту використовуйте команду <openscada_Boiler>.
 Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
 %description Model.Boiler -l de_DE.UTF8
 Das Paket %{name}-Model.Boiler enthaelt Datenbanken und Konfigurationsdateien Modell "Kessel".
-Das Modell ist nur in Russisch verfügbar.
+Das Modell ist verfügbar in Englisch, Russisch und Ukrainisch.
 Fuers Starten wird Kommando <openscada_Boiler> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen. 
 
