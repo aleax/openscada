@@ -192,7 +192,7 @@ void TController::start( )
     mess_info(nodePath().c_str(),_("Start controller!"));
 
     //> First archives synchronization
-    if( owner().redntAllow() && redntMode() ) redntDataUpdate( );
+    if(owner().redntAllow() && redntMode()) redntDataUpdate();
 
     //> Start for children
     start_();
@@ -371,7 +371,7 @@ void TController::redntDataUpdate( )
 	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr");
 
 	//>> Prepare individual attributes list
-	prmNd->setAttr( "sepReq", "1" );
+	prmNd->setAttr("sepReq", "1");
 
 	//>> Check attributes last present data time into archives
 	vector<string> listV;
@@ -388,15 +388,15 @@ void TController::redntDataUpdate( )
 	if(rC > listV.size()/2)
 	{
 	    prmNd->childClear("el");
-	    prmNd->setAttr( "sepReq", "0" );
+	    prmNd->setAttr("sepReq", "0");
 	}
     }
 
     //> Send request to first active station for this controller
-    if( owner().owner().rdStRequest(workId(),req).empty() ) return;
+    if(owner().owner().rdStRequest(workId(),req).empty()) return;
 
     //> Write data to parameters
-    if( req.childSize() ) mRedntSt.setVal(req.childGet(0)->text());
+    if(req.childSize()) mRedntSt.setVal(req.childGet(0)->text());
     for(unsigned i_p = 0; i_p < pls.size(); i_p++)
     {
 	prm = at(pls[i_p]);

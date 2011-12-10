@@ -1,3 +1,7 @@
+2011-12-10 Roman
+- FIX:DAQ: Wait to redundancy task start for archives' blocks of atributes DAQ parameters restore on start.
+
+
 2011-12-09 Roman
 - FIX:RPM- and Deb-packages build resources is updated for information about package Model.Boiler fix.
 

@@ -369,7 +369,7 @@ void TDAQS::subStart(  )
     if(!SYS->archive().at().subStartStat() || !SYS->stopSignal()) SYS->archive().at().subStart( );
 
     //> Redundant task start
-    if(!prcStRd) SYS->taskCreate(nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this);
+    if(!prcStRd) SYS->taskCreate(nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this, 5, NULL, &prcStRd);
 
     //> Controllers start
     TSubSYS::subStart( );
@@ -464,11 +464,12 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
     string lcPath = req.attr("path");
     ResAlloc res(nodeRes(),false);
     for(sit = mSt.begin(); sit != mSt.end(); sit++)
+    {
 	if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || cit->second))
 	{
-	    if( prevSt.size() && !prevPresent )
+	    if(prevSt.size() && !prevPresent)
 	    {
-		if( sit->first == prevSt ) prevPresent = true;
+		if(sit->first == prevSt) prevPresent = true;
 		continue;
 	    }
 	    //> Real request
@@ -488,6 +489,7 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
 		continue;
 	    }
 	}
+    }
 
     at(TSYS::strSepParse(cntr,0,'.')).at().at(TSYS::strSepParse(cntr,1,'.')).at().setRedntUse(false);
 
@@ -498,7 +500,6 @@ void *TDAQS::RdTask( void *param )
 {
     TDAQS &daq = *(TDAQS *)param;
     daq.endrunRd = false;
-    daq.prcStRd = true;
 
     vector<string> cls;
     XMLNode req("st");
@@ -506,7 +507,7 @@ void *TDAQS::RdTask( void *param )
     map<string,TDAQS::SStat>::iterator sit;
     map<string,bool>::iterator cit;
 
-    while( !daq.endrunRd )
+    while(!daq.endrunRd)
     try
     {
 	int64_t work_tm = SYS->curTime();
@@ -543,6 +544,7 @@ void *TDAQS::RdTask( void *param )
 	    if( !sit->second.isLive && sit->second.cnt > 0 ) sit->second.cnt -= daq.rdTaskPer();
 	}
 	res.release();
+	daq.prcStRd = true;
 
 	//> Planing controllers' run and process requests to remote run controllers
 	daq.rdActCntrList(cls);
