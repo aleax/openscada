@@ -58,6 +58,8 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
+	void upVal( void *ss, bool onlyInit = false );
+
 	TMdContr &owner( );
 
     protected:
@@ -97,6 +99,7 @@ class TMdContr: public TController
         string  cron( )         { return mSched; }
 	int	prior( )	{ return m_prior; }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
+	struct snmp_session *getSess( );
 
 	string	secLev( );
 	string	secAuthProto( );
