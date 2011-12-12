@@ -118,6 +118,7 @@ class TMdContr: public TController
     protected:
 	//Methods
 	void prmEn( const string &id, bool val );
+	void enable_( );
 	void start_( );
 	void stop_( );
 
@@ -147,7 +148,8 @@ class TMdContr: public TController
 
 	bool	prc_st,		// Process task active
 		call_st,        // Calc now stat
-		endrun_req;	// Request to stop of the Process task
+		endrun_req,	// Request to stop of the Process task
+		prmEnErr;	// Error connection pass for enable parameters
 	vector< AutoHD<TMdPrm> >  p_hd;
 
 	double	tm_gath;	// Gathering time

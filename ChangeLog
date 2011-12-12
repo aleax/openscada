@@ -1,5 +1,6 @@
 2011-12-12 Roman
 - FIX:DAQ.SNMP: Early attributes init on parameter enable is added, by send typical request.
+- FIX:DAQ.SNMP: Only one parameter connection try on global its' controler enable.
 
 
 2011-12-10 Roman

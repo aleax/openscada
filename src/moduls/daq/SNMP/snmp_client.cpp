@@ -131,7 +131,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
     m_prior(cfg("PRIOR").getId()), m_pattr_lim(cfg("PATTR_LIM").getId()), m_retr(cfg("RETR").getId()), m_tm(cfg("TM").getId()),
     mSched(cfg("SCHEDULE").getSd()), m_addr(cfg("ADDR").getSd()), m_ver(cfg("VER").getSd()), m_comm(cfg("COMM").getSd()),
-    m_V3(cfg("V3").getSd()), prc_st(false), call_st(false), endrun_req(false), tm_gath(0)
+    m_V3(cfg("V3").getSd()), prc_st(false), call_st(false), endrun_req(false), prmEnErr(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
@@ -291,6 +291,11 @@ void TMdContr::setSecPrivPass(const string &vl)
 TParamContr *TMdContr::ParamAttach(const string &name, int type)
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
+}
+
+void TMdContr::enable_( )
+{
+    prmEnErr = false;
 }
 
 void TMdContr::start_( )
@@ -480,11 +485,19 @@ void TMdPrm::enable( )
 
     //> Init attributes call
     //>> Start SNMP-net session
-    void *ss =  snmp_sess_open(owner().getSess());
-    if(ss)
+    if(owner().enableStat() || !owner().prmEnErr)
     {
-	upVal(ss,true);
-	snmp_sess_close(ss);
+	void *ss =  snmp_sess_open(owner().getSess());
+	if(ss)
+	{
+	    try { upVal(ss,true); }
+	    catch(TError err)
+	    {
+		owner().prmEnErr = true;
+		mess_err(nodePath().c_str(),"%s",err.mess.c_str());
+	    }
+	    snmp_sess_close(ss);
+	}
     }
 }
 
