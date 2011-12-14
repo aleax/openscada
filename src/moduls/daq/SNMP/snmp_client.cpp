@@ -518,6 +518,7 @@ void TMdPrm::disable( )
 
 void TMdPrm::upVal( void *ss, bool onlyInit )
 {
+    bool	some_fld_add = false;
     int		el_cnt = 0;
     string      soid;
     char	tbuf[100];
@@ -553,6 +554,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		    als.push_back(soid);
 		    if(!elem().fldPresent(soid))
 		    {
+			some_fld_add = true;
 			snprint_objid(tbuf,sizeof(tbuf),var->name,var->name_length);
 			switch(var->type)
 			{
@@ -661,6 +663,9 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	    if(response) snmp_free_pdu(response);
 	}
     }
+
+    //> Archives subsystem update on any field add
+    if(SYS->archive().at().subStartStat() && some_fld_add) SYS->archive().at().subStart();
 
     //> Check for delete DAQ parameter's attributes
     for(int i_p = 0; onlyInit && i_p < (int)elem().fldSize(); i_p++)

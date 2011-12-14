@@ -1,3 +1,7 @@
+2011-12-14 Roman
+- DAQ.SNMP: Archives subsystem update is added at new attributes add after connection to server restore, for example.
+
+
 2011-12-12 Roman
 - FIX:DAQ.SNMP: Early attributes init on parameter enable is added, by send typical request.
 - FIX:DAQ.SNMP: Only one parameter connection try on global its' controler enable.
