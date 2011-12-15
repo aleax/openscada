@@ -1,3 +1,9 @@
+2011-12-15 Roman
+- Archive: Planing Archives subsystem update flag is added and check on system update period 10s.
+    All sources set Archives subsystem update flag for update planing.
+    DAQ subsystem made planing update on any parameter's attribute add.
+
+
 2011-12-14 Roman
 - DAQ.SNMP: Archives subsystem update is added at new attributes add after connection to server restore, for example.
 

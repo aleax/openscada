@@ -43,7 +43,7 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false),
-    headBuf(0), headLstread(0), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false)
+    headBuf(0), headLstread(0), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false)
 {
     mAval = grpAdd("va_");
 
@@ -289,7 +289,7 @@ string TArchiveS::optDescr(  )
 
 void TArchiveS::subStart( )
 {
-    mess_info(nodePath().c_str(),_("Start subsystem."));
+    mess_info(nodePath().c_str(),_("Start/update subsystem."));
 
     SubStarting = true;
 
@@ -353,7 +353,7 @@ void TArchiveS::subStart( )
 
     TSubSYS::subStart( );
 
-    SubStarting = false;
+    SubStarting = toUpdate = false;
 }
 
 void TArchiveS::subStop( )
@@ -425,6 +425,11 @@ void TArchiveS::subStop( )
 		mess_err(nodePath().c_str(),_("Value archive '%s' stop error."),o_lst[i_o].c_str());
 	    }
     }
+}
+
+void TArchiveS::perSYSCall( unsigned int cnt )
+{
+    if(subStartStat() && toUpdate && !SubStarting) subStart();
 }
 
 void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess )

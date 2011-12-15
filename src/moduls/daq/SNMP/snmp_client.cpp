@@ -664,9 +664,6 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	}
     }
 
-    //> Archives subsystem update on any field add
-    if(SYS->archive().at().subStartStat() && some_fld_add) SYS->archive().at().subStart();
-
     //> Check for delete DAQ parameter's attributes
     for(int i_p = 0; onlyInit && i_p < (int)elem().fldSize(); i_p++)
     {

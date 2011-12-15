@@ -189,9 +189,12 @@ class TArchiveS : public TSubSYS
 	void setMessPeriod( int ivl );
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl );
+	void setToUpdate( )		{ toUpdate = true; }
 
 	void subStart( );
 	void subStop( );
+
+	void perSYSCall( unsigned int cnt );
 
 	//> Value archives functions
 	void valList( vector<string> &list )			{ chldList(mAval,list); }
@@ -261,6 +264,7 @@ class TArchiveS : public TSubSYS
 	int	mValPrior;		//Value archive task priority
 	bool	prcStVal;		//Process value flag
 	bool	endrunReqVal;		//Endrun value request
+	bool	toUpdate;
 	int	mAval;
 
 	vector< AutoHD<TVArchive> > actUpSrc;

@@ -143,6 +143,7 @@ class TValue: public TCntrNode, public TValElem
 
     protected:
 	//Methods
+	void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//> Manipulation for configuration element

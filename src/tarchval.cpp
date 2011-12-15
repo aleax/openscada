@@ -2187,7 +2187,7 @@ void TVArchivator::start()
     //> Start archivator thread
     SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this, 2, NULL, &runSt);
 
-    if(!owner().owner().SubStarting) owner().owner().subStart();
+    owner().owner().setToUpdate();
 }
 
 void TVArchivator::stop( bool full_del )

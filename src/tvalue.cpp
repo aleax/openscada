@@ -138,6 +138,12 @@ TElem &TValue::vlElem( const string &name )
     throw TError(nodePath().c_str(),"Element '%s' is not present!",name.c_str());
 }
 
+void TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
+{
+    TCntrNode::chldAdd(igr, node, pos, noExp);
+    if(igr == m_vl) SYS->archive().at().setToUpdate();
+}
+
 void TValue::cntrCmdProc( XMLNode *opt )
 {
     vector<string> list_c;
