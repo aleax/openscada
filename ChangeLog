@@ -1,4 +1,5 @@
 2011-12-15 Roman
+- SYS: CPU frequency retrieve from file /proc/cpuinfo for ARM-processors is added.
 - Archive: Planing Archives subsystem update flag is added and check on system update period 10s.
     All sources set Archives subsystem update flag for update planing.
     DAQ subsystem made planing update on any parameter's attribute add.

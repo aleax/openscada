@@ -616,6 +616,27 @@ void TSYS::sighandler( int signal )
     }
 }
 
+void TSYS::clkCalc( )
+{
+    uint64_t st_pnt = shrtCnt();
+    usleep(100000);
+    mSysclc = 10*(shrtCnt()-st_pnt);
+
+    //Try read file /proc/cpuinfo for CPU frequency get
+    if(!mSysclc)
+    {
+        float frq;
+        char buf[255];
+        FILE *fp = fopen("/proc/cpuinfo", "r");
+        if(fp)
+        {
+            while(fgets(buf,sizeof(buf),fp) != NULL)
+                if(sscanf(buf,"BogoMIPS : %f\n",&frq))	{ mSysclc = (uint64_t)(frq*1e6); break; }
+            fclose(fp);
+        }
+    }
+}
+
 void TSYS::cfgFileScan( bool first )
 {
     struct stat f_stat;

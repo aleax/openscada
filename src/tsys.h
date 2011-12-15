@@ -152,12 +152,7 @@ class TSYS : public TCntrNode
 	//> Short time dimensions
 	bool multCPU( )		{ return mMultCPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
-	void clkCalc( )
-	{
-	    uint64_t st_pnt = shrtCnt( );
-	    usleep(100000);
-	    mSysclc = 10*(shrtCnt( )-st_pnt);
-	}
+	void clkCalc( );
 	uint64_t shrtCnt( )
 	{
 #if defined (__i386__) || defined (__x86_64__)
