@@ -104,7 +104,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
 	TSYS::strMess("%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ADS).c_str(),"CIF_PB;ISO_TCP;ADS"));
-    fldAdd(new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"40","10"));
+    fldAdd(new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"100","10"));
     fldAdd(new TFld("ADDR_TR",_("Output transport"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
     fldAdd(new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3"));
