@@ -1,3 +1,12 @@
+2011-12-20 Roman
+- To function TElem::fldId() argument "noex" is added for prevent exceptions generation.
+- !:DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens: Attributes of parameter of logical type update is added on
+    type or ReadOnly flag change into template.
+- !!:DAQ.Siemens: Protocol "ADS" realisation is added. Connection's errors is some unified.
+    DB number and offset allowed to set in hexadecimal view.
+- FIX:UI.Vision, UI.WebVision: Cursor position's values update is added on cursor time changing from VCA engine.
+
+
 2011-12-15 Roman
 - SYS: CPU frequency retrieve from file /proc/cpuinfo for ARM-processors is added.
 - Archive: Planing Archives subsystem update flag is added and check on system update period 10s.

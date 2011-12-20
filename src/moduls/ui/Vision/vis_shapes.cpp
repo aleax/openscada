@@ -1452,7 +1452,11 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
     {
 	if(reld_tr_dt)	{ loadData(w,reld_tr_dt==2); make_pct = true; }
 	if(make_pct)	{ makePicture(w); up = true; }
-	if(up && uiPrmPos != -1) w->update();
+	if(up && uiPrmPos != -1)
+	{
+	    w->update();
+	    setCursor(w, shD->curTime);
+	}
     }
 
     return (reld_tr_dt|make_pct|up);

@@ -6049,12 +6049,16 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		reld_tr_dt = 2;
 		break;
 	    case 30:	//curSek
+		if((curTime/1000000) == atoi(req_el->text().c_str())) break;
 		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;
 		holdCur = (curTime>=tTime);
+		setCursor(curTime, user);
 		break;
 	    case 31:	//curUSek
+		if((curTime%1000000) == atoi(req_el->text().c_str())) break;
 		curTime = 1000000ll*(curTime/1000000)+atoll(req_el->text().c_str());
 		holdCur = (curTime>=tTime);
+		setCursor(curTime, user);
 		break;
 	    case 32:	//curColor
 		curColor = mod->colorParse(req_el->text());				break;

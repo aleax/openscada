@@ -1017,6 +1017,7 @@ void TMdPrm::enable( )
 	try
 	{
 	    bool to_make = false;
+	    unsigned fId = 0;
     	    if(!lCtx->func())
 	    {
 		string m_tmpl = cfg("TMPL").getS();
@@ -1030,22 +1031,27 @@ void TMdPrm::enable( )
         	if((lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(i_io) < 0) lCtx->plnk.push_back(TLogCtx::SLnk(i_io));
         	if((lCtx->func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
         	{
-        	    if(!vlPresent(lCtx->func()->io(i_io)->id()))
-        	    {
-            		TFld::Type tp = TFld::String;
-            		unsigned flg = TVal::DirWrite|TVal::DirRead;
+    		    unsigned flg = TVal::DirWrite|TVal::DirRead;
+            	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
 
-            		switch(lCtx->ioType(i_io))
-            		{
-                	    case IO::String:    tp = TFld::String;      break;
-                	    case IO::Integer:   tp = TFld::Integer;     break;
-                	    case IO::Real:      tp = TFld::Real;        break;
-                	    case IO::Boolean:   tp = TFld::Boolean;     break;
-                	    case IO::Object:    tp = TFld::String;      break;
-            		}
-            		if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
+            	    TFld::Type tp = TFld::String;
+            	    switch(lCtx->ioType(i_io))
+            	    {
+                	case IO::String:    tp = TFld::String;      break;
+                	case IO::Integer:   tp = TFld::Integer;     break;
+                	case IO::Real:      tp = TFld::Real;        break;
+                	case IO::Boolean:   tp = TFld::Boolean;     break;
+                	case IO::Object:    tp = TFld::String;      break;
+            	    }
+
+		    if((fId=p_el.fldId(lCtx->func()->io(i_io)->id(),true)) < p_el.fldSize() &&
+                    	    (p_el.fldAt(fId).type() != tp || p_el.fldAt(fId).flg() != flg))
+                	try{ p_el.fldDel(fId); }
+                	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+
+        	    if(!vlPresent(lCtx->func()->io(i_io)->id()))
             		p_el.fldAdd(new TFld(lCtx->func()->io(i_io)->id().c_str(),lCtx->func()->io(i_io)->name().c_str(),tp,flg));
-        	    }
+
 		    als.push_back(lCtx->func()->io(i_io)->id());
         	}
         	if(to_make && (lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)) lCtx->setS(i_io,"0");

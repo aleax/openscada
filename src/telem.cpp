@@ -84,11 +84,12 @@ void TElem::valDet( TValElem *cnt )
 	if(cont[i] == cnt) { cont.erase(cont.begin()+i); break; }
 }
 
-unsigned TElem::fldId( const string &name )
+unsigned TElem::fldId( const string &name, bool noex )
 {
     ResAlloc res(mResEl, false);
     for(unsigned i = 0; i < elem.size(); i++)
 	if(elem[i]->name() == name) return i;
+    if(noex) return fldSize();
     throw TError("Elem",_("Element '%s' is not present!"),name.c_str());
 }
 
@@ -289,7 +290,7 @@ void TFld::setValues( const string &vls )
 
 void TFld::setSelNames( const string &slnms )
 {
-    //- Set value list -
+    //> Set value list
     if( !(flg()&TFld::Selected) ) return;
 
     int i_lvl = 0;
@@ -338,7 +339,7 @@ const vector<string> &TFld::selNm()
 
 TFld &TFld::operator=( TFld &fld )
 {
-    //- Free old -
+    //> Free old
     if( m_sel )	delete m_sel;
     if( m_val.v_s != NULL )
 	switch(type())
@@ -349,7 +350,7 @@ TFld &TFld::operator=( TFld &fld )
 	    case TFld::Boolean:	delete m_val.v_b;	break;
 	    default: break;
 	}
-    //- Create new -
+    //> Create new
     m_name	= fld.name();
     m_descr	= fld.descr();
     m_len	= fld.len();
@@ -358,7 +359,7 @@ TFld &TFld::operator=( TFld &fld )
     m_def	= fld.def();
     //m_vals  = fld.vals();
 
-    //- Copy select and values border -
+    //> Copy select and values border
     if( flg()&TFld::Selected )
     {
 	m_sel  = new vector<string>;

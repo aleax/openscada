@@ -151,7 +151,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Data
-	enum Type { CIF_PB, ISO_TCP };
+	enum Type { CIF_PB, ISO_TCP, ADS };
 
 	//Methods
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
@@ -162,6 +162,7 @@ class TMdContr: public TController
 	double period( )	{ return mPer; }
 	string cron( )		{ return mSched; }
 	bool assincWrite( )	{ return mAssincWR; }
+	Type type( )		{ return (Type)mType; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -188,7 +189,7 @@ class TMdContr: public TController
 	bool cfgChange( TCfg &cfg );
 	void prmEn( const string &id, bool val );		//Enable parameter to process list
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
-	//- Values process -
+	//> Values process
 	char getValB( SValData ival, ResString &err );
 	int  getValI( SValData ival, ResString &err );
 	double getValR( SValData ival, ResString &err );
@@ -211,6 +212,7 @@ class TMdContr: public TController
 	int valSize( IO::Type itp, int iv_sz );			//Prepare value sizes
 	string revers( const string &ibuf )
 	{
+	    if(type() == ADS) return ibuf;
 	    string obuf;
 	    for(int i=ibuf.size()-1; i >= 0; i--) obuf += ibuf[i];
 	    return obuf;
@@ -234,14 +236,15 @@ class TMdContr: public TController
 		&mSlot,
 		&mDev;			// CIF device number
 	ResString &mSched,      	// Acquisition schedule
-		&mAddr;			// Remote host address
+		&mAddr,			// Remote host address
+		&mAddrTr;		// Output transport address
 	bool	&mAssincWR;		// Asynchronous write mode
 
 	bool	prc_st,			// Process task active
 		call_st,        	// Calc now stat
 		endrun_req,		// Request to stop of the Process task
-		toReconect,
 		isReload;
+	ResString errCon;
 	vector< AutoHD<TMdPrm> > pHd;	// Parameter's process list
 	vector< SDataRec > acqBlks;	// Acquisition data blocks
 	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode
@@ -309,6 +312,35 @@ class TTpContr: public TTipDAQ
 };
 
 extern TTpContr *mod;
+
+//***********************************************************
+//* Specific structures protocols'                          *
+//***********************************************************
+#pragma pack(push,1)
+
+struct AMS_TCP_HEAD
+{
+    uint16_t reserv;
+    uint32_t len;
+};
+
+struct AMS_HEAD
+{
+    char AMSNetId_targ[6];
+    uint16_t AMSPort_targ;
+    char AMSNetId_src[6];
+    uint16_t AMSPort_src;
+    uint16_t com, stFlgs;
+    uint32_t len, errCod, InvId;
+};
+
+struct ADS_ReadWriteReq { uint32_t IdGrp, IdOff, len; };
+
+struct ADS_ReadResp { uint32_t res, len; };
+
+struct ADS_WriteResp { uint32_t res; };
+
+#pragma pack(pop)
 
 } //End namespace
 

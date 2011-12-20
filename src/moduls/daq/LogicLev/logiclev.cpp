@@ -406,6 +406,7 @@ void TMdPrm::enable()
 	else if(isStd())
 	{
 	    bool to_make = false;
+	    unsigned fId = 0;
 	    string prm = cfg("PRM").getS();
 	    if(!tmpl->val.func())
 	    {
@@ -421,22 +422,27 @@ void TMdPrm::enable()
 		    tmpl->lnk.push_back(SLnk(i_io));
 		if((tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 		{
-		    if(!vlPresent(tmpl->val.func()->io(i_io)->id()))
-		    {
-			TFld::Type tp = TFld::String;
-			unsigned flg = TVal::DirWrite|TVal::DirRead;
+		    unsigned flg = TVal::DirWrite|TVal::DirRead;
+		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
 
-			switch(tmpl->val.ioType(i_io))
-			{
-			    case IO::String:	tp = TFld::String;	break;
-			    case IO::Integer:	tp = TFld::Integer;	break;
-			    case IO::Real:	tp = TFld::Real;	break;
-			    case IO::Boolean:	tp = TFld::Boolean;	break;
-			    case IO::Object:	tp = TFld::String;	break;
-			}
-			if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg|=TFld::NoWrite;
-			p_el.fldAdd(new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg));
+		    TFld::Type tp = TFld::String;
+		    switch(tmpl->val.ioType(i_io))
+		    {
+			case IO::String:	tp = TFld::String;	break;
+			case IO::Integer:	tp = TFld::Integer;	break;
+			case IO::Real:		tp = TFld::Real;	break;
+			case IO::Boolean:	tp = TFld::Boolean;	break;
+			case IO::Object:	tp = TFld::String;	break;
 		    }
+
+		    if((fId=p_el.fldId(tmpl->val.func()->io(i_io)->id(),true)) < p_el.fldSize() &&
+                    	    (p_el.fldAt(fId).type() != tp || p_el.fldAt(fId).flg() != flg))
+                	try{ p_el.fldDel(fId); }
+                	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+
+		    if(!vlPresent(tmpl->val.func()->io(i_io)->id()))
+			p_el.fldAdd(new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg));
+
 		    als.push_back(tmpl->val.func()->io(i_io)->id());
 		}
 		if(to_make && (tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink))	tmpl->val.setS(i_io,EVAL_STR);
