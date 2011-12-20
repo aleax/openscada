@@ -199,12 +199,14 @@ string TFld::values()
 		rez = rez+(*m_val.v_s)[i_el]+";";
 	    break;
 	case TFld::Integer:
-	    for(unsigned i_el = 0; i_el < m_val.v_i->size(); i_el++)
-		rez = rez+TSYS::int2str((*m_val.v_i)[i_el])+";";
+	    if(flg()&TFld::Selected || (m_val.v_i->size() == 2 && (*m_val.v_i)[0] < (*m_val.v_i)[1]))
+		for(unsigned i_el = 0; i_el < m_val.v_i->size(); i_el++)
+		    rez = rez+TSYS::int2str((*m_val.v_i)[i_el])+";";
 	    break;
 	case TFld::Real:
-	    for(unsigned i_el = 0; i_el < m_val.v_r->size(); i_el++)
-		rez = rez+TSYS::real2str((*m_val.v_r)[i_el],6)+";";
+	    if(flg()&TFld::Selected || (m_val.v_i->size() == 2 && (*m_val.v_i)[0] < (*m_val.v_i)[1]))
+		for(unsigned i_el = 0; i_el < m_val.v_r->size(); i_el++)
+		    rez = rez+TSYS::real2str((*m_val.v_r)[i_el],6)+";";
 	    break;
 	case TFld::Boolean:
 	    for(unsigned i_el = 0; i_el < m_val.v_b->size(); i_el++)

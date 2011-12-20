@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 12:38+0200\n"
+"POT-Creation-Date: 2011-12-20 20:21+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -48,7 +48,10 @@ msgid "Connection type"
 msgstr "Тип з'єднання"
 
 msgid "Remote controller address"
-msgstr "Адреса віддаленої станції"
+msgstr "Адреса віддаленого контролеру"
+
+msgid "Output transport"
+msgstr "Вихідний транспорт"
 
 msgid "Slot CPU"
 msgstr "Слот ЦП"
@@ -202,9 +205,6 @@ msgstr " : Активна станція"
 msgid " : Passive station"
 msgstr " : Пасивна станція"
 
-msgid "Connection error."
-msgstr "Помилка підключення."
-
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
@@ -228,6 +228,9 @@ msgstr "Немає жодного пристрою або драйвер від�
 
 msgid "Open socket of remote PLC error."
 msgstr "Помилка відкриття сокету віддаленого ПЛК."
+
+msgid "10:Connection error."
+msgstr "10:Помилка підключення."
 
 msgid "Connection to PLC error."
 msgstr "Помилка підключення до ПЛК."
@@ -266,6 +269,24 @@ msgstr "Помилка читання блока '%d': %s"
 msgid "12:Read DB '%d' from controller error: %s"
 msgstr "12:Помилка запиту до БД '%d' контролера: %s"
 
+msgid "13:Error server respond"
+msgstr "13:Помилка відповіді серверу"
+
+msgid "13:Not full respond"
+msgstr "13:Неповна відповідь"
+
+#, c-format
+msgid "13:Error server respond: %d"
+msgstr "13:Помилка відповіді серверу: %d"
+
+#, c-format
+msgid "13:Error server '%s' respond"
+msgstr "13:Помилка '%s' відповіді серверу"
+
+#, c-format
+msgid "13:Error server '%s' respond: %d"
+msgstr "13:Помилка '%s' відповіді серверу: %d"
+
 msgid "16:Transmitted block is too big."
 msgstr "16:Передаваний блок дуже великий."
 
@@ -288,6 +309,40 @@ msgstr "Помилковий тип значення."
 
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримані."
+
+msgid ""
+"Connection type:\n"
+"  CIF_PB - connection to controllers series S7, by firm Siemens, by "
+"communication unit CIF-50PB or like;\n"
+"  ISO_TCP - connection to controllers series S7, by firm Siemens, by "
+"Ethernet network;\n"
+"  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."
+msgstr ""
+"Тип підключення. Підтримуються:\n"
+"  CIF_PB - підключення до контролерів серії S7, фірми Siemens, за посередництвом комунікаційного процесору CIF-50PB або схожого;\n"
+"  ISO_TCP - підключення до контролерів серії S7, фірми Siemens, за посередництвом мережі Ethernet;\n"
+"  ADS - TwinCAT ADS/AMS протокол для підключення до контролерів фірми Beckhoff."
+
+msgid ""
+"Remote controller address. For connections:\n"
+"  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
+"  ISO_TCP - IP-address into Ethernet network;\n"
+"  ADS - Network identifier and port for target and source stations, in view\n"
+"      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:"
+"{Source_AMSPort}\"\n"
+"      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"
+"    AMSNetId - network identifier, write into view of six digits 0-255, for "
+"example: \"192.168.0.1.1.1\";\n"
+"    AMSPort - port, write into view digit 0-65535."
+msgstr ""
+"Адреса віддаленого контролеру. У випадку типу підключення:\n"
+"  CIF_PB - адреса контролеру у мережі \"Profibus\", цифра 0-255;\n"
+"  ISO_TCP - IP-адреса контролеру у мережі Ethernet;\n"
+"  ADS - Мережевий ідентифікатор та порт цільового контролеру та вихідної станції, у вигляді\n"
+"      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
+"      (наприклад: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), де:\n"
+"    AMSNetId - мережевий ідентифікатор, записується у вигляді шести цифр 0-255, наприклад: \"192.168.0.1.1.1\";\n"
+"    AMSPort - порт, записується у вигляді числа 0-65535."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."

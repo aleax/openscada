@@ -256,7 +256,33 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    //>>> Add attributes list
 	    vlList(list_c);
 	    for(unsigned i_el = 0; i_el < list_c.size(); i_el++)
-		vlAt(list_c[i_el]).at().fld().cntrCmdMake(opt,"/val",-1,"root",SDAQ_ID,RWRWR_);
+	    {
+		AutoHD<TVal> vl = vlAt(list_c[i_el]);
+		XMLNode *n_e = vl.at().fld().cntrCmdMake(opt,"/val",-1,"root",SDAQ_ID,RWRWR_);
+		if(n_e)
+		{
+		    string sType = _("Unknown");
+		    switch(vl.at().fld().type())
+    		    {
+			case TFld::String:	sType = _("String");	break;
+        		case TFld::Integer:	sType = _("Integer");	break;
+        		case TFld::Real:	sType = _("Real");	break;
+        		case TFld::Boolean:	sType = _("Boolean");	break;
+        		case TFld::Object:	sType = _("Object");	break;
+    		    }
+    		    if(vl.at().fld().flg()&TFld::Selected) sType = _("-select");
+    		    n_e->setAttr("help",
+        		TSYS::strMess(_("Parameter's attribute\n"
+                            "  ID: '%s'\n"
+                            "  Name: '%s'\n"
+                            "  Type: '%s'"),
+                            vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str()));
+    		    if(vl.at().fld().values().size())
+    			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
+    		    if(vl.at().fld().selNames().size())
+    			n_e->setAttr("help",n_e->attr("help")+_("\n  Selected names: ")+vl.at().fld().selNames());
+		}
+	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archiving")))
 	{

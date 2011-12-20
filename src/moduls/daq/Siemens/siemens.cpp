@@ -1509,6 +1509,20 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
         ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",cfg("TYPE").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+            "help",_("Connection type:\n"
+        	     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
+		     "  ISO_TCP - connection to controllers series S7, by firm Siemens, by Ethernet network;\n"
+		     "  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."));
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+            "help",_("Remote controller address. For connections:\n"
+        	     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
+		     "  ISO_TCP - IP-address into Ethernet network;\n"
+		     "  ADS - Network identifier and port for target and source stations, in view\n"
+		     "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
+		     "      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"
+		     "    AMSNetId - network identifier, write into view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
+		     "    AMSPort - port, write into view digit 0-65535."));
 	XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/ADDR_TR",true);
         if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/cfg/trLst");
         return;
@@ -1601,10 +1615,17 @@ void TMdPrm::enable( )
 		    case IO::Object:	tp = TFld::String;	break;
 		}
 
-		if((fId=p_el.fldId(func()->io(i_io)->id(),true)) < p_el.fldSize() &&
-			(p_el.fldAt(fId).type() != tp || p_el.fldAt(fId).flg() != flg))
-        	    try{ p_el.fldDel(fId); }
-        	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		if((fId=p_el.fldId(func()->io(i_io)->id(),true)) < p_el.fldSize())
+		{
+		    if(p_el.fldAt(fId).type() != tp)
+        		try{ p_el.fldDel(fId); }
+        		catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		    else
+		    {
+			p_el.fldAt(fId).setFlg(flg);
+			p_el.fldAt(fId).setDescr(func()->io(i_io)->name().c_str());
+		    }
+        	}
 
 		if(!vlPresent(func()->io(i_io)->id()))
 		    p_el.fldAdd(new TFld(func()->io(i_io)->id().c_str(),func()->io(i_io)->name().c_str(),tp,flg));
@@ -1878,7 +1899,7 @@ void TMdPrm::initLnks()
 	}
 	else
 	{
-	    if(sscanf(lnk(i_l).db_addr.c_str(),"DB%i.%d",&lnk(i_l).val.db,&lnk(i_l).val.off) == 2)
+	    if(sscanf(lnk(i_l).db_addr.c_str(),"DB%i.%i",&lnk(i_l).val.db,&lnk(i_l).val.off) == 2)
 		lnk(i_l).val.sz = atoi(TSYS::strParse(func()->io(lnk(i_l).io_id)->def(),2,"|").c_str());
 	    else lnk(i_l).val.db = -1;
 	}
@@ -2064,7 +2085,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    int off, coff, cbit;
 	    int lnk_id = lnkId(atoi(a_path.substr(12).c_str()));
 	    string sdb = TSYS::strSepParse(opt->text(),0,'.');
-	    off = atoi(TSYS::strSepParse(opt->text(),1,'.').c_str());
+	    off = strtol(TSYS::strSepParse(opt->text(),1,'.').c_str(),NULL,0);
 	    p_nm = TSYS::strSepParse(func()->io(lnk(lnk_id).io_id)->def(),0,'|');
 
 	    for(int i_l = 0; i_l < lnkSize(); i_l++)

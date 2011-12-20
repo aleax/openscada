@@ -1044,10 +1044,17 @@ void TMdPrm::enable( )
                 	case IO::Object:    tp = TFld::String;      break;
             	    }
 
-		    if((fId=p_el.fldId(lCtx->func()->io(i_io)->id(),true)) < p_el.fldSize() &&
-                    	    (p_el.fldAt(fId).type() != tp || p_el.fldAt(fId).flg() != flg))
-                	try{ p_el.fldDel(fId); }
-                	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		    if((fId=p_el.fldId(lCtx->func()->io(i_io)->id(),true)) < p_el.fldSize())
+            	    {
+                	if(p_el.fldAt(fId).type() != tp)
+                    	    try{ p_el.fldDel(fId); }
+                    	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+                	else
+                	{
+                    	    p_el.fldAt(fId).setFlg(flg);
+                    	    p_el.fldAt(fId).setDescr(lCtx->func()->io(i_io)->name().c_str());
+                	}
+            	    }
 
         	    if(!vlPresent(lCtx->func()->io(i_io)->id()))
             		p_el.fldAdd(new TFld(lCtx->func()->io(i_io)->id().c_str(),lCtx->func()->io(i_io)->name().c_str(),tp,flg));

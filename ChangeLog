@@ -1,7 +1,11 @@
 2011-12-20 Roman
-- To function TElem::fldId() argument "noex" is added for prevent exceptions generation.
+- DAQ.Siemens: Context help is added for a conroller fields "Connection type" and "Remote controller address".
+    Hexadecimal view of DB number and offset processing is some fixed.
+- DAQ:Context help is added to attributes of parameter.
+- SYS:To function TElem::fldId() argument "noex" is added for prevent exceptions generation.
+    Save only real borders for type "Integer" and "Real" is added.
 - !:DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens: Attributes of parameter of logical type update is added on
-    type or ReadOnly flag change into template.
+    type, ReadOnly flag or name change into template.
 - !!:DAQ.Siemens: Protocol "ADS" realisation is added. Connection's errors is some unified.
     DB number and offset allowed to set in hexadecimal view.
 - FIX:UI.Vision, UI.WebVision: Cursor position's values update is added on cursor time changing from VCA engine.

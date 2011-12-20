@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 12:38+0200\n"
+"POT-Creation-Date: 2011-12-20 20:21+0200\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -54,6 +54,9 @@ msgstr "Typ der Verbindung"
 
 msgid "Remote controller address"
 msgstr "Adresse des entfernen Controllers"
+
+msgid "Output transport"
+msgstr "Output Transport"
 
 msgid "Slot CPU"
 msgstr "CP-Slot"
@@ -207,9 +210,6 @@ msgstr " : Aktive Station"
 msgid " : Passive station"
 msgstr " : Passive Station"
 
-msgid "Connection error."
-msgstr "Fehler beim Anschluss."
-
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
@@ -233,6 +233,9 @@ msgstr "Treiber oder CP (Karte) sind nicht vorhanden."
 
 msgid "Open socket of remote PLC error."
 msgstr "Fehler beim Öffnen des Sockets des entfernten PLC."
+
+msgid "10:Connection error."
+msgstr "10:Fehler beim Anschluss."
 
 msgid "Connection to PLC error."
 msgstr "Fehler beim Anschluss an PLC."
@@ -271,6 +274,24 @@ msgstr "Fehler beim Lesen des Blocks '%d': %s"
 msgid "12:Read DB '%d' from controller error: %s"
 msgstr "12:Fehler beim Lesen der Datenbank '%d' aus dem Kontroller: %s"
 
+msgid "13:Error server respond"
+msgstr "13:Fehler Antwort vom Server"
+
+msgid "13:Not full respond"
+msgstr "13:Ein partielles Ansprechen"
+
+#, c-format
+msgid "13:Error server respond: %d"
+msgstr "13:Fehler Antwort vom Server: %d"
+
+#, c-format
+msgid "13:Error server '%s' respond"
+msgstr "13:Fehler '%s' Antwort vom Server"
+
+#, c-format
+msgid "13:Error server '%s' respond: %d"
+msgstr "13:Fehler '%s' Antwort vom Server: %d"
+
 msgid "16:Transmitted block is too big."
 msgstr "16:Übermittelter Block ist zu groß."
 
@@ -293,6 +314,28 @@ msgstr "Fehler im Wertetyp."
 
 msgid "11:Value not gathered."
 msgstr "11:Wert wurde nicht erfasst."
+
+msgid ""
+"Connection type:\n"
+"  CIF_PB - connection to controllers series S7, by firm Siemens, by "
+"communication unit CIF-50PB or like;\n"
+"  ISO_TCP - connection to controllers series S7, by firm Siemens, by "
+"Ethernet network;\n"
+"  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."
+msgstr ""
+
+msgid ""
+"Remote controller address. For connections:\n"
+"  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
+"  ISO_TCP - IP-address into Ethernet network;\n"
+"  ADS - Network identifier and port for target and source stations, in view\n"
+"      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:"
+"{Source_AMSPort}\"\n"
+"      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"
+"    AMSNetId - network identifier, write into view of six digits 0-255, for "
+"example: \"192.168.0.1.1.1\";\n"
+"    AMSPort - port, write into view digit 0-65535."
+msgstr ""
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
