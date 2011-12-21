@@ -1,3 +1,7 @@
+2011-12-21 Roman
+- FIX:UI.WebCfgD: Going by lynk buttons is fixed.
+
+
 2011-12-20 Roman
 - DAQ.Siemens: Context help is added for a conroller fields "Connection type" and "Remote controller address".
     Hexadecimal view of DB number and offset processing is some fixed.

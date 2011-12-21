@@ -1261,7 +1261,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	  //> Check link
 	  if( this.srcNode.getAttribute('tp') == 'lnk' )
 	  {
-	    var dataReq = servGet(this.brPath,'com=get');
+	    var dataReq = servGet(selPath+'/'+this.brPath,'com=get');
 	    if(!dataReq) return false;
 	    else if( parseInt(dataReq.getAttribute('rez'))!=0 ) { alert(nodeText(dataReq)); return false; }
 	    selectPage('/'+pathLev(selPath,0)+nodeText(dataReq));
