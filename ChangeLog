@@ -1,4 +1,5 @@
 2011-12-21 Roman
+- FIX:DAQ.Template: Template stop on configuration value change is added.
 - FIX:UI.WebCfgD: Going by lynk buttons is fixed.
 
 
