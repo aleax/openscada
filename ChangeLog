@@ -1,3 +1,8 @@
+2011-12-27 Roman
+- UI.QTStarter: Start QT UI-modules dialog last close is made OpenSCADA full stop.
+    Used for correct OpenSCADA stop at exit by DE dialog (KDE, Gnome and other).
+
+
 2011-12-21 Roman
 - FIX:DAQ.Template: Template stop on configuration value change is added.
 - FIX:UI.WebCfgD: Going by lynk buttons is fixed.

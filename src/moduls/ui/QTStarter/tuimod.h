@@ -24,6 +24,8 @@
 
 #include <QObject>
 #include <QTranslator>
+#include <QMainWindow>
+#include <QCloseEvent>
 
 #include <tuis.h>
 
@@ -73,6 +75,20 @@ class WinControl: public QObject
     private:
 	//Attributes
 	QTimer	*tm;
+};
+
+//*************************************************
+//* StartDialog                                   *
+//*************************************************
+class StartDialog: public QMainWindow
+{
+    public:
+	//Methods
+	StartDialog( WinControl *wcntr );
+
+    protected:
+        //Methods
+        void closeEvent( QCloseEvent* );
 };
 
 //*************************************************

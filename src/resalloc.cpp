@@ -178,9 +178,8 @@ void ResString::setVal( const string &vl )
 
 string ResString::getVal( )
 {
-    string rez;
     pthread_mutex_lock(&mRes);
-    rez = str;
+    string rez = str;
     pthread_mutex_unlock(&mRes);
     return rez;
 }

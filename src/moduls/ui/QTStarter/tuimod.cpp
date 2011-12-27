@@ -23,7 +23,6 @@
 #include <unistd.h>
 
 #include <QApplication>
-#include <QMainWindow>
 #include <QMenuBar>
 #include <QToolBar>
 #include <QAction>
@@ -458,16 +457,25 @@ bool WinControl::callQTModule( const string &nm )
 
 void WinControl::startDialog( )
 {
+    StartDialog *new_wnd = new StartDialog(this);
+    new_wnd->show();
+}
+
+//*************************************************
+//* StartDialog                                   *
+//*************************************************
+StartDialog::StartDialog( WinControl *wcntr )
+{
     vector<string> list;
 
-    QMainWindow *new_wnd = new QMainWindow( );
-    new_wnd->setWindowTitle(_("OpenSCADA system QT-starter"));
-    new_wnd->setWindowIcon(QIcon(":/images/oscada_qt.png"));
+    setAttribute(Qt::WA_DeleteOnClose,true);
+    setWindowTitle(_("OpenSCADA system QT-starter"));
+    setWindowIcon(QIcon(":/images/oscada_qt.png"));
 
-    new_wnd->setCentralWidget( new QWidget(new_wnd) );
-    QVBoxLayout *new_wnd_lay = new QVBoxLayout(new_wnd->centralWidget());
-    new_wnd_lay->setMargin(6);
-    new_wnd_lay->setSpacing(4);
+    setCentralWidget(new QWidget(this));
+    QVBoxLayout *wnd_lay = new QVBoxLayout(centralWidget());
+    wnd_lay->setMargin(6);
+    wnd_lay->setSpacing(4);
 
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
@@ -484,25 +492,29 @@ void WinControl::startDialog( )
 	else icon = QIcon(":/images/oscada_qt.png");
 
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
-	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),new_wnd->centralWidget());
+	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),centralWidget());
 	butt->setObjectName(list[i_l].c_str());
-	QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
-	new_wnd_lay->addWidget( butt, 0, 0 );
+	QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQTModule()));
+	wnd_lay->addWidget( butt, 0, 0 );
     }
 
-    new_wnd_lay->addItem( new QSpacerItem( 20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    wnd_lay->addItem( new QSpacerItem( 20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-    QFrame *gFrame = new QFrame( new_wnd->centralWidget() );
+    QFrame *gFrame = new QFrame( centralWidget() );
     gFrame->setFrameShape(QFrame::HLine);
     gFrame->setFrameShadow(QFrame::Raised);
-    new_wnd_lay->addWidget(gFrame,0,0);
+    wnd_lay->addWidget(gFrame,0,0);
 
-    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), new_wnd->centralWidget());
+    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), centralWidget());
     butt->setObjectName("*exit*");
-    QObject::connect(butt, SIGNAL(clicked(bool)), this, SLOT(callQTModule()));
-    new_wnd_lay->addWidget( butt, 0, 0 );
+    QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQTModule()));
+    wnd_lay->addWidget( butt, 0, 0 );
+}
 
-    new_wnd->show();
+void StartDialog::closeEvent( QCloseEvent* ce )
+{
+    if(QApplication::topLevelWidgets().size() <= 1) SYS->stop();
+    ce->accept();
 }
 
 //*************************************************
