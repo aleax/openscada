@@ -1,3 +1,7 @@
+2011-12-29 Roman
+- FIX:DAQ.JavaLikeCalc: User's API function string.slice() is fixed for begin position outrage check.
+
+
 2011-12-27 Roman
 - UI.QTStarter: Start QT UI-modules dialog last close is made OpenSCADA full stop.
     Used for correct OpenSCADA stop at exit by DE dialog (KDE, Gnome and other).

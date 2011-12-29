@@ -1350,6 +1350,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		{
 		    int beg = prms[0].getI();
 		    if(beg < 0) beg = vl.getS().size()+beg;
+		    beg = vmax(beg,0);
 		    int end = vl.getS().size();
 		    if(prms.size() >= 2) end = prms[1].getI();
 		    if(end < 0) end = vl.getS().size()+end;
