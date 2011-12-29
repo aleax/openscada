@@ -1,4 +1,5 @@
 2011-12-29 Roman
+- FIX:SYS:User's API function TArrayObj::slice() is fixed from more bugs.
 - FIX:DAQ.JavaLikeCalc: User's API function string.slice() is fixed for begin position outrage check.
 
 

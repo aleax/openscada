@@ -395,14 +395,15 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "slice" && prms.size() )
     {
 	int beg = prms[0].getI();
-	if( beg < 0 ) beg = mEls.size()-1+beg;
-	int end = prms.size()-1;
-	if( prms.size()>=2 ) end = prms[1].getI();
-	if( end < 0 ) end = mEls.size()-1+end;
-	end = vmin(end,(int)mEls.size()-1);
+	if(beg < 0) beg = mEls.size()+beg;
+	beg = vmax(beg,0);
+	int end = mEls.size();
+	if(prms.size() >= 2) end = prms[1].getI();
+	if(end < 0) end = mEls.size()+end;
+	end = vmin(end,(int)mEls.size());
 	TArrayObj *rez = new TArrayObj();
-	for( int i_p = beg; i_p <= end; i_p++ )
-	    rez->propSet( TSYS::int2str(i_p-beg), prms[i_p] );
+	for(int i_p = beg; i_p < end; i_p++)
+	    rez->propSet(TSYS::int2str(i_p-beg), mEls[i_p]);
 	return rez;
     }
     // Array splice(int beg, int remN, ElTp val1, ElTp val2, ...) - insert, remove or replace array's items
