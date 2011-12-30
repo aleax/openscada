@@ -389,7 +389,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.insert(mEls.begin()+i_p,prms[i_p]);
 	return (int)mEls.size();
     }
-    // Array slice(int beg, int end) - get array part from positon <beg> to <end>
+    // Array slice(int beg, int end) - get array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
     if( id == "slice" && prms.size() )
@@ -409,7 +409,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     // Array splice(int beg, int remN, ElTp val1, ElTp val2, ...) - insert, remove or replace array's items
     //  beg - start position
     //  remN - removed items number
-    //  val1, val2 - values for insert
+    //  val1, val2, ... - values for insert
     if( id == "splice" && prms.size() >= 1 )
     {
 	int beg = vmax(0,prms[0].getI());
@@ -418,11 +418,11 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	TArrayObj *rez = new TArrayObj();
 	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++)
 	{
-	    rez->propSet( TSYS::int2str(i_c), mEls[beg] );
+	    rez->propSet(TSYS::int2str(i_c), mEls[beg]);
 	    mEls.erase(mEls.begin()+beg);
 	}
 	//> Insert elements
-	for(unsigned i_c = 2; i_c < prms.size(); i_c++)
+	for(unsigned i_c = 2; i_c < prms.size() && beg <= (int)mEls.size(); i_c++)
 	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
 	return rez;
     }
