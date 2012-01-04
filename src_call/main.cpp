@@ -20,6 +20,9 @@
  ***************************************************************************/
 
 #include <getopt.h>
+#include <sys/prctl.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 #include "terror.h"
 #include "tmess.h"
@@ -30,6 +33,19 @@ using namespace OSCADA;
 int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0;
+
+    int ret;
+    struct rlimit rlim;
+
+    // Set the Dumpable state to be enabled
+    /*ret = prctl( PR_SET_DUMPABLE, 1, 0, 0, 0 );
+    printf( "PR_SET_DUMPABLE returned %d\n", ret );
+
+    // Set the core dump limitation to be unlimited
+    rlim.rlim_cur = RLIM_INFINITY;
+    rlim.rlim_max = RLIM_INFINITY;
+    ret = setrlimit(RLIMIT_CORE, &rlim);
+    printf( "RLIMIT_CORE returned %d\n", ret );*/
 
     //Check demon mode start
     int next_opt;

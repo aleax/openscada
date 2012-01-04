@@ -16,6 +16,8 @@ qrc_qtstarter.cpp: qtstarter.qrc
 moc_tuimod.cpp: tuimod.h
 	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)QTStarter
 
@@ -46,5 +48,7 @@ uninstall-local:
 
 clean-local:
 	rm -f qrc_qtstarter.cpp moc_tuimod.cpp po/$(m_name).pot po/*~
+
+endif
 
 DISTFILES = $(DIST_COMMON) $(ui_QTStarter_la_DIST) $(EXTRA_DIST)

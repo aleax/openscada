@@ -9,6 +9,8 @@ spec_SystemTests_la_LDFLAGS = -module -avoid-version -no-undefined
 spec_SystemTests_la_SOURCES = mod_tests.cpp
 spec_SystemTests_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)SystemTests
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

@@ -7,6 +7,8 @@ arh_DBArch_la_LDFLAGS = -module -avoid-version -no-undefined
 arh_DBArch_la_SOURCES = arch.cpp mess.cpp val.cpp
 arh_DBArch_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)DBArch
 
@@ -22,19 +24,22 @@ install-data-local:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=$(m_name).mo ; \
 	for cat in $$catalogs; do \
-	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
-	msgfmt -vo $$name $$cat ; \
-	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	rm $$name ; \
+	    mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
+	    msgfmt -vo $$name $$cat ; \
+	    cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	    rm $$name ; \
 	done
+
 
 uninstall-local:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=$(m_name).mo ; \
 	for cat in $$catalogs; do \
-	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
+	    rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
 	done
 
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

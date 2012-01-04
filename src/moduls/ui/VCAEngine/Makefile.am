@@ -9,6 +9,8 @@ ui_VCAEngine_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_VCAEngine_la_SOURCES = vcaengine.cpp libwidg.cpp widget.cpp origwidg.cpp project.cpp session.cpp
 ui_VCAEngine_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)VCAEngine
 
@@ -39,3 +41,5 @@ uninstall-local:
 
 clean-local:
 	rm -f po/$(m_name).pot po/*~
+
+endif

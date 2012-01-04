@@ -9,6 +9,8 @@ ui_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_Tmpl_la_SOURCES = mod_tmpl.cpp
 ui_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)Tmpl
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

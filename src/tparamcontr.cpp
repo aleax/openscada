@@ -181,7 +181,7 @@ void TParamContr::setType( const string &tpId )
     try
     {
 	//> Wait for disconnect other
-	while(nodeUse(true) > 1) usleep(1000);
+	while(nodeUse(true) > 1) TSYS::sysSleep(1e-3);
 	//> Remove from DB
 	postDisable(true);
 

@@ -32,6 +32,8 @@ VCAhtml.cpp: WebCfgDVCA.html
 	  let il=il+1 ; \
 	done
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)WebCfgD
 
@@ -62,3 +64,5 @@ uninstall-local:
 
 clean-local:
 	rm -f VCAhtml.cpp VCAjs.cpp po/$(m_name).pot po/*~
+
+endif

@@ -416,28 +416,28 @@ void TTrIn::connect( )
 	    {
 		if(mdmPreInit() > 0)
 		{
-		    usleep((int)(mdmPreInit()*0.5e6));
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		    TTr::writeLine(fd,"");
-		    usleep((int)(mdmPreInit()*0.5e6));
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		}
 		TTr::writeLine(fd,mdmInitStr1());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr1().c_str());
-		usleep((int)(mdmPostInit()*1e6));
+		TSYS::sysSleep(mdmPostInit());
 	    }
 	    //>> Send init 2 string
 	    if(!mdmInitStr2().empty())
 	    {
 		if(mdmPreInit() > 0)
 		{
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		    TTr::writeLine(fd,"");
-		    usleep( (int)(mdmPreInit()*0.5e6) );
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		}
 		TTr::writeLine(fd,mdmInitStr2());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr2().c_str());
-		usleep((int)(mdmPostInit()*1e6));
+		TSYS::sysSleep(mdmPostInit());
 	    }
 	}
     }
@@ -534,7 +534,7 @@ void *TTrIn::Task( void *tr_in )
 		{
 		    //>> Reconnect try after hung up by remote agent
 		    mod->devUnLock(tr->mDevPort);
-		    usleep(10000000);
+		    TSYS::sysSleep(10);
 		    try{ tr->connect(); } catch(TError err) { break; }
 		    continue;
 		}
@@ -917,28 +917,28 @@ void TTrOut::start( )
 	    {
 		if(mdmPreInit() > 0)
 		{
-		    usleep((int)(mdmPreInit()*0.5e6));
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		    TTr::writeLine(fd,"");
-		    usleep((int)(mdmPreInit()*0.5e6));
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		}
 		TTr::writeLine(fd,mdmInitStr1());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr1().c_str());
-		usleep((int)(mdmPostInit()*1e6));
+		TSYS::sysSleep(mdmPostInit());
 	    }
 	    //>> Send init 2 string
 	    if(!mdmInitStr2().empty())
 	    {
 		if(mdmPreInit() > 0)
 		{
-		    usleep((int)(mdmPreInit()*0.5e6));
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		    TTr::writeLine(fd,"");
-		    usleep((int)(mdmPreInit()*0.5e6));
+		    TSYS::sysSleep(mdmPreInit()*0.5);
 		}
 		TTr::writeLine(fd,mdmInitStr2());
 		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
 		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr2().c_str());
-		usleep((int)(mdmPostInit()*1e6));
+		TSYS::sysSleep(mdmPostInit());
 	    }
 	    //>> Dial number and connection wait
 	    string rez;
@@ -1021,7 +1021,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     if(obuf && len_ob > 0)
     {
 	tcflush(fd, TCIOFLUSH);
-	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = usleep((int)((4000*wCharTm)-(tmW-mLstReqTm)));
+	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
 	for(int wOff = 0, kz = 0; wOff != len_ob; wOff += kz)
 	{
 	    kz = write(fd,obuf+wOff,len_ob-wOff);

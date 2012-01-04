@@ -10,6 +10,8 @@ prot_UserProtocol_la_SOURCES = user_prt.cpp
 #prot_Tmpl_la_LIBADD  = -lnetsnmp -lcrypto
 prot_UserProtocol_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)UserProtocol
 
@@ -41,3 +43,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

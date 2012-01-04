@@ -9,6 +9,8 @@ ui_WebCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebCfg_la_SOURCES = web_cfg.cpp
 ui_WebCfg_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)WebCfg
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

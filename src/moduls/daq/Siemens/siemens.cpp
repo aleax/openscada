@@ -324,7 +324,7 @@ void TTpContr::initCIF( int dev )
     do
     {
 	DevGetTaskState(dev, 2, sizeof(tTaskState), &tTaskState);
-	usleep(1000);
+	TSYS::sysSleep(1e-3);
     }
     while(tTaskState.bDPM_state!=OPERATE);
 }
@@ -842,7 +842,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    {
 		e_try--;
 		//> Clear all previous data
-		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	usleep(1000);
+		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	TSYS::sysSleep(1e-3);
 
 		//> Prepare put request
 		tMsg.rx = 3;
@@ -1045,7 +1045,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		e_try--;
 
 		//> Clear all previous data
-		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	usleep(1000);
+		while(!DevGetMessage(mDev,sizeof(RCS_MESSAGE),(MSG_STRUC *)&tMsg,0L))	TSYS::sysSleep(1e-3);
 
 		//> Prepare put request
 		tMsg.rx = 3;

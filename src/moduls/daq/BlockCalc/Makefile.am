@@ -9,6 +9,8 @@ daq_BlockCalc_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_BlockCalc_la_SOURCES = virtual.cpp block.cpp
 daq_BlockCalc_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)BlockCalc
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

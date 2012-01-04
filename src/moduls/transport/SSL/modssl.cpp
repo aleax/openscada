@@ -436,7 +436,7 @@ void *TSocketIn::ClTask( void *s_inf )
     if(BIO_do_handshake(s.bio) <= 0)
     {
 	if(BIO_should_retry(s.bio))
-	    while(BIO_should_retry(s.bio) && !s.s->endrun_cl)	{ BIO_do_handshake(s.bio); usleep(STD_WAIT_DELAY*1000); }
+	    while(BIO_should_retry(s.bio) && !s.s->endrun_cl)	{ BIO_do_handshake(s.bio); TSYS::sysSleep(STD_WAIT_DELAY*1e-3); }
 	else
 	{
 	    if(ERR_peek_last_error())
@@ -897,7 +897,8 @@ repeate:
 	    else if( FD_ISSET(sock_fd, &rd_fd) )
 	    {
 		ret = BIO_read(conn,ibuf,len_ib);
-		if(ret == -1) while((ret=BIO_read(conn,ibuf,len_ib))==-1) pthread_yield();
+		if(ret == -1)
+		    while((ret=BIO_read(conn,ibuf,len_ib))==-1) sched_yield();
 		if(ret < 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 		trIn += ret;
 	    }

@@ -14,6 +14,8 @@ daq_Tmpl_la_SOURCES = mod_tmpl.cpp
 #daq_Tmpl_la_LIBADD  = -lnetsnmp -lcrypto
 daq_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 #!!! The module name for translation files
 m_name = $(oscd_modulpref)Tmpl
@@ -47,3 +49,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

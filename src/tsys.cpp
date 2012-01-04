@@ -548,7 +548,7 @@ int TSYS::start( )
 		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
 		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-	usleep(STD_WAIT_DELAY*1000);
+	sysSleep(STD_WAIT_DELAY*1e-3);
 	i_cnt++;
     }
 
@@ -619,7 +619,7 @@ void TSYS::sighandler( int signal )
 void TSYS::clkCalc( )
 {
     uint64_t st_pnt = shrtCnt();
-    usleep(100000);
+    sysSleep(0.1);
     mSysclc = 10*(shrtCnt()-st_pnt);
 
     //Try read file /proc/cpuinfo for CPU frequency get
@@ -683,7 +683,7 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	    t_tm = c_tm;
 	    mess_info(loc.c_str(),_("Wait event..."));
 	}
-	usleep(STD_WAIT_DELAY*1000);
+	sysSleep(STD_WAIT_DELAY*1e-3);
     }
     return false;
 }
@@ -1279,7 +1279,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     {
 	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
 	res.release();
-	usleep(10000);
+	sysSleep(0.01);
 	res.request(true);
     }
     STask &htsk = mTasks[path];
@@ -1327,12 +1327,12 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
 
 	//> Wait for thread structure initialization finish for not detachable tasks
-	while(!(htsk.flgs&STask::Detached) && !htsk.thr) pthread_yield();
+	while(!(htsk.flgs&STask::Detached) && !htsk.thr) sched_yield();
 	//> Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); )
 	{
 	    if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' start timeouted!"),path.c_str());
-	    usleep(STD_WAIT_DELAY *1000);
+	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
     }
     catch(TError)
@@ -1375,7 +1375,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
             mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
 
         }
-        usleep(STD_WAIT_DELAY*1000);
+        sysSleep(STD_WAIT_DELAY*1e-3);
     }
 
     if(!(it->second.flgs&STask::Detached)) pthread_join(thr, NULL);
@@ -1441,6 +1441,13 @@ void *TSYS::taskWrap( void *stas )
     return rez;
 }
 
+int TSYS::sysSleep( float tm )
+{
+    struct timespec sp_tm;
+    sp_tm.tv_sec = tm; sp_tm.tv_nsec = (int)(tm*1e9)%1000000000;
+    return nanosleep(&sp_tm, NULL);
+}
+
 void TSYS::taskSleep( int64_t per, time_t cron )
 {
     struct timespec sp_tm;
@@ -1469,7 +1476,7 @@ void TSYS::taskSleep( int64_t per, time_t cron )
     else
     {
 	time_t end_tm = time(NULL);
-	while(time(NULL) < cron && usleep(1000000) == 0) ;
+	while(time(NULL) < cron && sysSleep(1) == 0) ;
 	if(stsk)
 	{
 	    stsk->tm_beg = stsk->tm_per;

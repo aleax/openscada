@@ -10,6 +10,8 @@ daq_SNMP_la_SOURCES = snmp_client.cpp
 daq_SNMP_la_LIBADD  = -lnetsnmp -lcrypto
 daq_SNMP_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)SNMP
 
@@ -41,3 +43,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

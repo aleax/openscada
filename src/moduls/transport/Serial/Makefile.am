@@ -8,6 +8,8 @@ tr_Serial_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_Serial_la_SOURCES = mod_serial.cpp
 tr_Serial_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)Serial
 
@@ -39,3 +41,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

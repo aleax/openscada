@@ -14,6 +14,8 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
 liboscada_la_LIBADD = -ldl -lpthread -lrt -lcrypt -lz -lpcre $(LIB_EXPAT) $(LIB_GD)
 liboscada_la_LDFLAGS = -no-undefined -version-info $(oscd_LIBREVISION)
 
+if LibIntl
+
 m_name = $(PACKAGE)
 
 messages:
@@ -44,3 +46,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

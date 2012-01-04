@@ -178,6 +178,7 @@ class TSYS : public TCntrNode
 	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );
 
 	//> Sleep task for period grid <per> on ns or to cron time.
+	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
 	static void taskSleep( int64_t per, time_t cron = 0 );
 	static time_t cron( const string &vl, time_t base = 0 );
 

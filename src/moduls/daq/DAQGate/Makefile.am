@@ -9,6 +9,8 @@ daq_DAQGate_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DAQGate_la_SOURCES = daq_gate.cpp
 daq_DAQGate_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)DAQGate
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

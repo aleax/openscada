@@ -2275,8 +2275,8 @@ void *TVArchivator::Task( void *param )
     bool isLast = false;
 
     //time_t stTm = time(NULL);
-    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) usleep(STD_WAIT_DELAY*1000);
-    usleep(arch.archPeriod()*1000000);
+    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+    TSYS::sysSleep(arch.archPeriod());
 
     //> Archiving
     while(true)
@@ -2304,7 +2304,7 @@ void *TVArchivator::Task( void *param )
 
 	    if(isLast) break;
 
-	    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) usleep(STD_WAIT_DELAY*1000);
+	    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 	    TSYS::taskSleep((int64_t)(1e9*arch.archPeriod()));
 	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 

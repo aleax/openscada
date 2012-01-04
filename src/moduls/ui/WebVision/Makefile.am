@@ -21,6 +21,8 @@ VCAjs.cpp: WebVisionVCA.js
 	  let il=il+1 ; \
 	done
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)WebVision
 
@@ -51,3 +53,5 @@ uninstall-local:
 
 clean-local:
 	rm -f VCAjs.cpp po/$(m_name).pot po/*~
+
+endif

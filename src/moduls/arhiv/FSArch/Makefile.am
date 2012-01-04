@@ -9,6 +9,8 @@ arh_FSArch_la_LDFLAGS = -module -avoid-version -no-undefined
 arh_FSArch_la_SOURCES = base.cpp mess.cpp val.cpp
 arh_FSArch_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)FSArch
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

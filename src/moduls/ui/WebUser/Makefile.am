@@ -9,6 +9,8 @@ ui_WebUser_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebUser_la_SOURCES = web_user.cpp
 ui_WebUser_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)WebUser
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

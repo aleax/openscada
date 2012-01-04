@@ -10,6 +10,8 @@ daq_ICP_DAS_la_SOURCES = ICP_module.cpp
 daq_ICP_DAS_la_LIBADD  = $(ICP_DAS_LIBS)
 daq_ICP_DAS_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)ICP_DAS
 
@@ -41,3 +43,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

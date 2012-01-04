@@ -1,3 +1,18 @@
+2012-01-04 Roman
+- !!!!:SYS: Build adaptation to uClibc is added.
+    Build start from version 0.9.32 which have support real time functions like clock_nanosleep().
+    Some other work made for it:
+	- Check and disable using Iconv and Intl (I18N) API is added.
+	- Automatic detect and enable configure option --enable-CrossCompile is added for cross-compile environments.
+	- Configure option --enable-CoreLibStatic is added for shared OpenSCADA library build separate disable and 
+	    call-start programm static linking.
+	- Module DAQ.ICP_DAS is configured by default to disabled, for prevent build try for onapt ARM environment.
+	- Results table is added at configuration end.
+	- Function usleep() is replaced everywhere to self function-wraper TSYS::sysSleep() by reason function usleep()
+	    miss into uCLibc and allow only by special uClibc configure on build. Into TSYS::sysSleep() used nanosleep().
+	- Function pthread_yield() is replaced to sched_yield().
+
+
 2011-12-30 Roman
 - FIX:SYS:User's API function TArrayObj::splice() is some fixed for limits.
 

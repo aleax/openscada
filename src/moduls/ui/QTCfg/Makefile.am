@@ -18,6 +18,8 @@ moc_qtcfg.cpp: qtcfg.h
 moc_selfwidg.cpp: selfwidg.h
 	$(QT4_MOC) selfwidg.h > moc_selfwidg.cpp
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)QTCfg
 
@@ -48,5 +50,7 @@ uninstall-local:
 
 clean-local:
 	rm -f qrc_qtcfg.cpp moc_qtcfg.cpp moc_selfwidg.cpp po/$(m_name).pot po/*~
+
+endif
 
 DISTFILES = $(DIST_COMMON) $(ui_QTCfg_la_DIST) $(EXTRA_DIST)

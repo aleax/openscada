@@ -25,13 +25,16 @@
 #include <unistd.h>
 #include <dlfcn.h>
 #include <string.h>
-#include <libintl.h>
 
 #include "tsys.h"
 #include "terror.h"
 #include "tmess.h"
 #include "tsubsys.h"
 #include "tmodule.h"
+
+#ifdef HAVE_LIBINTL_H
+#include <libintl.h>
+#endif
 
 using namespace OSCADA;
 
@@ -44,7 +47,10 @@ const char *TModule::l_info[] =
 TModule::TModule( const string &id ) : mId(id)
 {
     lc_id = string("oscd_")+mId;
+
+#ifdef HAVE_LIBINTL_H
     bindtextdomain(lc_id.c_str(),LOCALEDIR);
+#endif
 
     //> Dynamic string translation hook
 #if 0
@@ -157,7 +163,11 @@ void TModule::cntrCmdProc( XMLNode *opt )
 
 const char *TModule::I18N( const char *mess )
 {
+#ifdef HAVE_LIBINTL_H
     const char *rez = Mess->I18N(mess,lc_id.c_str());
-    if( !strcmp(mess,rez) ) rez = _(mess);
+    if(!strcmp(mess,rez)) rez = _(mess);
     return rez;
+#else
+    return mess;
+#endif
 }

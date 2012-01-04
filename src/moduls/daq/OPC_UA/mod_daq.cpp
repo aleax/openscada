@@ -344,8 +344,8 @@ void *TMdContr::Task( void *icntr )
     {
 	for(unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++)
 	{
-	    if(cntr.redntUse())	{ usleep(1000000); continue; }
-	    if(cntr.tmDelay > 0){ usleep(1000000); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.redntUse())	{ TSYS::sysSleep(1); continue; }
+	    if(cntr.tmDelay > 0){ TSYS::sysSleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    int64_t t_cnt = TSYS::curTime();
 	    cntr.call_st = true;

@@ -8,6 +8,8 @@ daq_AMRDevs_la_SOURCES = mod_amr.cpp da_FlowTEC.cpp da_Ergomera.cpp
 #daq_AMRdevs_la_LIBADD  = -lnetsnmp -lcrypto
 daq_AMRDevs_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)AMRDevs
 
@@ -39,3 +41,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

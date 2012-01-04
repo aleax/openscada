@@ -9,6 +9,8 @@ daq_JavaLikeCalc_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_JavaLikeCalc_la_SOURCES = virtual.cpp freelib.cpp freefunc.cpp func_analise.ypp
 daq_JavaLikeCalc_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)JavaLikeCalc
 
@@ -41,3 +43,5 @@ clean-local:
 	rm -f *func_analise.cpp \
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

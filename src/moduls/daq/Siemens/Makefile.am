@@ -9,6 +9,8 @@ daq_Siemens_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_Siemens_la_SOURCES = siemens.cpp cif_api.c nodave.c openSocket.c setport.c
 daq_Siemens_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)Siemens
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

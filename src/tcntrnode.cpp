@@ -210,7 +210,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 		mess_err(nodePath().c_str(),_("Blocking node error. Inform developers please!"));
 		break;
 	    }
-	    usleep(STD_WAIT_DELAY*1000);
+	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 	}
 
 	setNodeMode(Disable);

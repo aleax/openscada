@@ -9,6 +9,8 @@ prot_SelfSystem_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_SelfSystem_la_SOURCES = self.cpp
 prot_SelfSystem_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)SelfSystem
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

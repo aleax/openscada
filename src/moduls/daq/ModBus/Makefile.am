@@ -9,6 +9,8 @@ daq_ModBus_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_ModBus_la_SOURCES = moduls.cpp modbus_daq.cpp modbus_prt.cpp
 daq_ModBus_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)ModBus
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

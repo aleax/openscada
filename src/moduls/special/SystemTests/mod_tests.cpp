@@ -253,7 +253,7 @@ void *TTest::Task( void *CfgM )
 		    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		}
 	}
-	usleep(STD_WAIT_DELAY*1000);
+	TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
     }
     tst->run_st = false;
 

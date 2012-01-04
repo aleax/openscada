@@ -10,6 +10,8 @@ tr_SSL_la_SOURCES = modssl.cpp
 tr_SSL_la_LIBADD  = -lssl
 tr_SSL_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)SSL
 
@@ -41,3 +43,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

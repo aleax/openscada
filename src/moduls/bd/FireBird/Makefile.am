@@ -9,6 +9,8 @@ bd_FireBird_la_LDFLAGS = -module -avoid-version -no-undefined $(FIREBIRD_LDFLAGS
 bd_FireBird_la_SOURCES = firebird.cpp
 bd_FireBird_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)FireBird
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

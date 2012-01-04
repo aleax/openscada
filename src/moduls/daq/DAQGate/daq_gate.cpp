@@ -297,7 +297,7 @@ void *TMdContr::Task( void *icntr )
 
     for(unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++)
     {
-	if(cntr.redntUse()) { usleep(STD_WAIT_DELAY*1000); continue; }
+	if(cntr.redntUse()) { TSYS::sysSleep(STD_WAIT_DELAY*1e-3); continue; }
 
 	cntr.call_st = true;
 	t_cnt = TSYS::curTime();
@@ -313,7 +313,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.mStatWork[i_st].second > 0) cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-1e-6*(t_cnt-t_prev));
 		if(cntr.mStatWork[i_st].second <= 0) isAccess = true;
 	    }
-	    if(!isAccess) { t_prev = t_cnt; usleep(1000000); continue; }
+	    if(!isAccess) { t_prev = t_cnt; TSYS::sysSleep(1); continue; }
 	    else
 	    {
 		unsigned int div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;

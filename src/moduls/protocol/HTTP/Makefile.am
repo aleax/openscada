@@ -9,6 +9,8 @@ prot_HTTP_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_HTTP_la_SOURCES = http.cpp
 prot_HTTP_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)HTTP
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

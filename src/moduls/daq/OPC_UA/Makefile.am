@@ -10,6 +10,8 @@ daq_OPC_UA_la_SOURCES = moduls.cpp mod_daq.cpp mod_prt.cpp
 daq_OPC_UA_la_LIBADD  = -lcrypto
 daq_OPC_UA_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)OPC_UA
 
@@ -41,3 +43,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

@@ -656,7 +656,7 @@ void *TMdContr::Task( void *icntr )
 
 		if(is_stop) break;
 
-		usleep(1000000);
+		TSYS::sysSleep(1);
 
 		if(cntr.endrun_req) is_stop = true;
 		is_start = false;
@@ -709,7 +709,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.redntUse()) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
 		pdu = (char)0x02;					//Function, read multiple input's coils
-		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);	//Address MSB
+		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);		//Address MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].off;		//Address LSB
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
@@ -769,8 +769,8 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		//>> Encode request PDU (Protocol Data Units)
-		pdu = (char)0x04;				//Function, read multiple input registers
-		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);	//Address MSB
+		pdu = (char)0x04;					//Function, read multiple input registers
+		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);		//Address MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].off/2);		//Address LSB
 		pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB

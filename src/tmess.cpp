@@ -24,18 +24,23 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <iconv.h>
 #include <langinfo.h>
 #include <getopt.h>
 #include <stdlib.h>
 #include <locale.h>
-#include <libintl.h>
 #include <string.h>
 #include <errno.h>
 
 #include "tsys.h"
 #include "resalloc.h"
 #include "tmess.h"
+
+#ifdef HAVE_ICONV_H
+#include <iconv.h>
+#endif
+#ifdef HAVE_LIBINTL_H
+#include <libintl.h>
+#endif
 
 using namespace OSCADA;
 
@@ -49,8 +54,10 @@ TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2), mConvCode(tr
     setlocale(LC_ALL,"");
     IOCharSet = nl_langinfo(CODESET);
 
+#ifdef HAVE_LIBINTL_H
     bindtextdomain(PACKAGE,LOCALEDIR);
     textdomain(PACKAGE);
+#endif
 
     mLang2Code = lang();
     if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
@@ -150,6 +157,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 {
     if(!mConvCode || fromCH == toCH) return mess;
 
+#ifdef HAVE_ICONV_H
     //> Make convert to blocks 1000 bytes
     string buf;
     buf.reserve(mess.size());
@@ -186,11 +194,18 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     iconv_close(hd);
 
     return buf;
+#else
+    return mess;
+#endif
 }
 
 const char *TMess::I18N( const char *mess, const char *d_name )
 {
+#ifdef HAVE_LIBINTL_H
     return dgettext(d_name, mess);
+#else
+    return mess;
+#endif
 }
 
 void TMess::setLang2CodeBase( const string &vl )

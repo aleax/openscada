@@ -9,6 +9,8 @@ daq_DCON_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DCON_la_SOURCES = DCON_client.cpp
 daq_DCON_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)DCON
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

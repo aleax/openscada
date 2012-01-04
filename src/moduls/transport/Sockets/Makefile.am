@@ -9,6 +9,8 @@ tr_Sockets_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_Sockets_la_SOURCES = socket.cpp
 tr_Sockets_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)Sockets
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

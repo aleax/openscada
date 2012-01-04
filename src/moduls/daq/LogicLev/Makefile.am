@@ -9,6 +9,8 @@ daq_LogicLev_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_LogicLev_la_SOURCES = logiclev.cpp
 daq_LogicLev_la_LIBTOOLFLAGS = --tag=disable-static
 
+if LibIntl
+
 #PO files process
 m_name = $(oscd_modulpref)LogicLev
 
@@ -40,3 +42,5 @@ uninstall-local:
 clean-local:
 	rm -f po/$(m_name).pot ; \
 	rm -f po/*~ ;
+
+endif

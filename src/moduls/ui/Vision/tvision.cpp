@@ -326,8 +326,8 @@ void TVision::modStop()
     end_run = true;
 
     for(unsigned i_w = 0; i_w < mn_winds.size(); i_w++)
-	while(mn_winds[i_w]) usleep(STD_WAIT_DELAY*1000);
-    usleep(STD_WAIT_DELAY*1000);
+	while(mn_winds[i_w]) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
     run_st = false;
 }
