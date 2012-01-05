@@ -110,7 +110,7 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Generic functions enable/disable ======
-AC_ARG_ENABLE(ForDist,AC_HELP_STRING([--enable-ForDist], [prepare for distributive build by "make dist", by all modules enable.]),[ ],[ enable_ForDist=yes; ])
+AC_ARG_ENABLE(ForDist,AC_HELP_STRING([--enable-ForDist], [prepare for distributive build by "make dist", by all modules enable.]),[ ],[ enable_ForDist=no; ])
 AC_ARG_ENABLE(CrossCompile,AC_HELP_STRING([--enable-CrossCompile], [enable crosscompile build]),[ ],
 [ if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
 AC_ARG_ENABLE(CoreLibStatic,AC_HELP_STRING([--enable-CoreLibStatic], [enable OpenSCADA core lib no shared, only static.]),
@@ -123,8 +123,7 @@ AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB.DBF])
 [ if test $enableval = yes; then ModDBF=true; else ModDBF=false; fi],[ ModDBF=true; ])
 AC_ARG_ENABLE(MySQL,AC_HELP_STRING([--disable-MySQL], [disable build module DB.MySQL]),
 [ if test $enableval = yes; then ModMySQL=true; else ModMySQL=false; fi],[ ModMySQL=true; ])
-AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable build module DB.SQLite]),
-[ if test $enableval = yes; then ModSQLite=true; else ModSQLite=false; fi],[ ModSQLite=true; ])
+AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [enable/disable/enable=incl build module DB.SQLite]),[ ],[ enable_SQLite=yes; ])
 AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable build module DB.FireBird]),
 [ if test $enableval = yes; then ModFireBird=true; else ModFireBird=false; fi],[ ModFireBird=true; ])
 AC_ARG_ENABLE(PostgreSQL,AC_HELP_STRING([--disable-PostgreSQL], [disable build module DB.PostgreSQL]),
@@ -144,8 +143,7 @@ AC_ARG_ENABLE(SNMP,AC_HELP_STRING([--disable-SNMP], [disable build module DAQ.SN
 [ if test $enableval = yes; then ModSNMP=true; else ModSNMP=false; fi],[ ModSNMP=true; ])
 AC_ARG_ENABLE(Siemens,AC_HELP_STRING([--disable-Siemens], [disable build module DAQ.Siemens]),
 [ if test $enableval = yes; then ModSiemens=true; else ModSiemens=false; fi],[ ModSiemens=true; ])
-AC_ARG_ENABLE(ModBus,AC_HELP_STRING([--disable-ModBus], [disable build module DAQ.ModBus]),
-[ if test $enableval = yes; then ModModBus=true; else ModModBus=false; fi],[ ModModBus=true; ])
+AC_ARG_ENABLE(ModBus,AC_HELP_STRING([--disable-ModBus], [enable/disable/enable=incl build module DAQ.ModBus]),[ ],[ enable_ModBus=yes; ])
 AC_ARG_ENABLE(DCON,AC_HELP_STRING([--disable-DCON], [disable build module DAQ.DCON]),
 [ if test $enableval = yes; then ModDCON=true; else ModDCON=false; fi],[ ModDCON=true; ])
 AC_ARG_ENABLE(DAQGate,AC_HELP_STRING([--disable-DAQGate], [disable build module DAQ.DAQGate]),
@@ -208,7 +206,7 @@ AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module 
 
 AC_MSG_RESULT(========== Core libraries check =============)
 # Check for libraries
-if test $enable_CrossCompile = yes; then
+if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
 fi
@@ -257,7 +255,7 @@ if test $enable_ForDist = yes -o $ModMySQL = true; then
     AX_LIB_MYSQL
     if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
 fi
-if test $enable_ForDist = yes -o $ModSQLite = true; then
+if test $enable_ForDist = yes -o $enable_SQLite = yes -o $enable_SQLite = incl; then
     AC_MSG_RESULT(Build module: DB.SQLite)
     AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
@@ -265,6 +263,12 @@ if test $enable_ForDist = yes -o $ModSQLite = true; then
     PKG_CHECK_MODULES([sqlite3],[sqlite3 > 3],
 	[AC_CHECK_LIB([sqlite3],[sqlite3_open],[],[AC_MSG_ERROR(SQLite3 library is not usable!)])],
 	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!)])
+    if test $enable_SQLite = incl; then
+	AC_MSG_RESULT(Include to core module: DB.SQLite);
+	LIB_CORE="${LIB_CORE} moduls/bd/SQLite/.libs/*.o ${sqlite3_LIBS} "
+	AC_DEFINE(MOD_DB_SQLite_INCL,[],[Module DB.SQLite include to core.])
+	ModsIncl="${ModsIncl}bd_SQLite "
+    fi
 fi
 if test $enable_ForDist = yes -o $ModFireBird = true; then
     AC_MSG_RESULT(Build module: DB.FireBird)
@@ -340,10 +344,16 @@ if test $enable_ForDist = yes -o $ModSiemens = true; then
     AC_CHECK_HEADERS([linux/kd.h],[],
 	[AC_MSG_ERROR(DAQ.Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])
 fi
-if test $enable_ForDist = yes -o $ModModBus = true; then
+if test $enable_ForDist = yes -o $enable_ModBus = yes -o $enable_ModBus = incl; then
     AC_MSG_RESULT(Build module: DAQ.ModBus)
     AC_CONFIG_FILES(src/moduls/daq/ModBus/Makefile)
     DAQSub_mod="${DAQSub_mod}ModBus "
+    if test $enable_ModBus = incl; then
+	AC_MSG_RESULT(Include to core module: DAQ.ModBus);
+	LIB_CORE="${LIB_CORE} moduls/daq/ModBus/.libs/*.o "
+	AC_DEFINE(MOD_DAQ_ModBus_INCL,[],[Module DAQ.ModBus include to core.])
+	ModsIncl="${ModsIncl}daq_ModBus "
+    fi
 fi
 if test $enable_ForDist = yes -o $ModDCON = true; then
     AC_MSG_RESULT(Build module: DAQ.DCON)
@@ -572,6 +582,8 @@ if test $SensorsUse = true; then
     AC_SUBST(LIB_SENSORS)
 fi
 
+AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])
+
 # Clear libs list after PKG_CHECK_MODULES
 LIBS=""
 
@@ -590,6 +602,7 @@ AC_MSG_RESULT([  - Subsystem "Transport" modules build:            $TranspSub_mo
 AC_MSG_RESULT([  - Subsystem "Transport's protocol" modules build: $ProtSub_mod])
 AC_MSG_RESULT([  - Subsystem "UI" modules build:                   $UISub_mod])
 AC_MSG_RESULT([  - Subsystem "Special" modules build:              $SpecSub_mod])
+AC_MSG_RESULT([  - Modules list included to OpenSCADA core: $ModsIncl])
 AC_MSG_RESULT([* Modules' features:])
 if test $FFTWuse = true; then
     AC_MSG_RESULT([  - FFTW3 library use for signal spectrum purchase: $LIB_FFTW])

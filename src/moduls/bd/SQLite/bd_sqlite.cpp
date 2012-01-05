@@ -45,18 +45,31 @@ BDSQLite::BDMod *BDSQLite::mod;
 
 extern "C"
 {
+#ifdef MOD_DB_SQLite_INCL
+    TModule::SAt bd_SQLite_module( int n_mod )
+    {
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	return TModule::SAt("");
+    }
+
+    TModule *bd_SQLite_attach( const TModule::SAt &AtMod, const string &source )
+    {
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new BDSQLite::BDMod(source);
+	return NULL;
+    }
+#else
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new BDSQLite::BDMod( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new BDSQLite::BDMod(source);
 	return NULL;
     }
+#endif
 }
 
 using namespace BDSQLite;

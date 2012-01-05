@@ -1,4 +1,6 @@
 2012-01-05 Roman
+- SYS: Modules builtin to OpenSCADA core support is added. Experimental build modules DB.SQLite and DAQ.ModBus is added
+    for builtin to core library.
 - SYS:confugure.in: Use buildin variables for macros AC_CHECK_HEADERS and AC_ARG_ENABLE.
 - SYS: Option --CoreDumpAllow is added for core dump creation on crash enable. Function TSYS::sysSleep() is some fixed.
 - SYS: To all start scripts added procedure for automatic core dump files process by backtrace call and put it result to

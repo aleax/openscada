@@ -180,7 +180,9 @@ int TModSchedul::libReg( const string &name )
     struct stat file_stat;
 
     ResAlloc res(nodeRes(),true);
-    stat(name.c_str(),&file_stat);
+    if(name[0] == '*') file_stat.st_mtime = time(NULL);
+    else stat(name.c_str(),&file_stat);
+
     unsigned i_sh;
     for(i_sh = 0; i_sh < SchHD.size(); i_sh++)
 	if(SchHD[i_sh].name == name) break;
@@ -212,7 +214,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	{
 	    if(SchHD[i_sh].hd) throw TError(nodePath().c_str(),_("SO '%s' is already attached!"),iname.c_str());
 
-	    void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_LOCAL);
+	    void *h_lib = dlopen((iname[0]!='*')?iname.c_str():NULL, RTLD_LAZY|RTLD_LOCAL);
 	    if(!h_lib)
 	    {
 		SchHD[i_sh].err = dlerror();
@@ -221,7 +223,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 
 	    //> Connect to module function
 	    TModule::SAt (*module)( int );
-	    module = (TModule::SAt (*)(int)) dlsym(h_lib,"module");
+	    module = (TModule::SAt (*)(int)) dlsym(h_lib,(iname[0]!='*')?"module":(iname.substr(1)+"_module").c_str());
 	    if((dlErr=dlerror()) != NULL)
 	    {
 		SchHD[i_sh].err = dlErr;
@@ -231,7 +233,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 
 	    //> Connect to attach function
 	    TModule *(*attach)( const TModule::SAt &, const string & );
-	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,"attach");
+	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,(iname[0]!='*')?"attach":(iname.substr(1)+"_attach").c_str());
 	    if((dlErr=dlerror()) != NULL)
 	    {
 		SchHD[i_sh].err = dlErr;
@@ -367,6 +369,23 @@ int TModSchedul::libLoad( const string &iname, bool full )
 {
     int ldCnt = 0;
     vector<string> files, llist;
+
+    //> Check and register builtin modules
+    string smod;
+    for(int off = 0; (smod=TSYS::strParse(MODS_INCL,0," ",&off)).size(); )
+    {
+	unsigned i_sh;
+	ResAlloc res(nodeRes(),false);
+	for(i_sh = 0; i_sh < SchHD.size(); i_sh++)
+	    if(SchHD[i_sh].name == ("*"+smod)) break;
+	if(i_sh >= SchHD.size())
+	{
+	    res.release();
+	    libReg("*"+smod);
+	    try{ libAtt("*"+smod,full); ldCnt++; }
+	    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	}
+    }
 
     //> Get new or changed modules list
     ScanDir(iname, files);
