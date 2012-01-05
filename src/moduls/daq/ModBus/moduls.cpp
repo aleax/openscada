@@ -26,21 +26,9 @@ extern "C"
 {
 #ifdef MOD_DAQ_ModBus_INCL
     TModule::SAt daq_ModBus_module( int nMod )
-    {
-	if(nMod == 0)		return TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER);
-	else if(nMod == 1)	return TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER);
-
-	return TModule::SAt("");
-    }
-
-    TModule *daq_ModBus_attach( const TModule::SAt &AtMod, const string &source )
-    {
-	if(AtMod == TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER))		return new ModBus::TTpContr( source );
-	else if(AtMod == TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER))	return new ModBus::TProt( source );
-	return NULL;
-    }
 #else
     TModule::SAt module( int nMod )
+#endif
     {
 	if(nMod == 0)		return TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER);
 	else if(nMod == 1)	return TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER);
@@ -48,11 +36,14 @@ extern "C"
 	return TModule::SAt("");
     }
 
+#ifdef MOD_DAQ_ModBus_INCL
+    TModule *daq_ModBus_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
 	if(AtMod == TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER))		return new ModBus::TTpContr( source );
 	else if(AtMod == TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER))	return new ModBus::TProt( source );
 	return NULL;
     }
-#endif
 }
