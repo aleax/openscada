@@ -302,6 +302,7 @@ string TSYS::optDescr( )
 	"    --Config=<path>    Config-file path.\n"
 	"    --Station=<id>     Station identifier.\n"
 	"    --demon            Start into demon mode.\n"
+	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
 	"    --MessLev=<level>  Process messages <level> (0-7).\n"
 	"    --log=<direct>     Direct messages to:\n"
 	"                         <direct> & 1 - syslogd;\n"
@@ -1444,7 +1445,8 @@ void *TSYS::taskWrap( void *stas )
 int TSYS::sysSleep( float tm )
 {
     struct timespec sp_tm;
-    sp_tm.tv_sec = tm; sp_tm.tv_nsec = (int)(tm*1e9)%1000000000;
+    sp_tm.tv_sec = (time_t)tm;
+    sp_tm.tv_nsec = (long int)(1e9*(tm-floorf(tm)));
     return nanosleep(&sp_tm, NULL);
 }
 

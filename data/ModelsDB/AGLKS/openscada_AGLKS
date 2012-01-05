@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Use for core dump creation on programm crash
-ulimit -c unlimited
-
 # User directory prepare
 if [ ! -d ~/.openscada ]; then mkdir -m 700 ~/.openscada; fi
 if [ ! -d ~/.openscada/ARCHIVES ]; then
@@ -16,7 +13,7 @@ if [ ! -e ~/.openscada/oscada_AGLKS.xml ]; then cp /etc/oscada_AGLKS.xml ~/.open
 cd ~/.openscada
 
 # Programm command and lock file
-pCmd="openscada --Config=./oscada_AGLKS.xml"
+pCmd="openscada --CoreDumpAllow --Config=./oscada_AGLKS.xml"
 pLock=".AGLKS.lock"
 
 # Check for already started programm present
@@ -35,6 +32,13 @@ echo $pPid > $pLock
 # Wait for programm stop
 wait $pPid
 echo "Program rezult: $?"
+
+# Core dump file "core" into work directory process
+if [ -f ~/.openscada/core -a -n "$(which gdb)" ]; then
+    echo "Core dump process for back trace purchase to file crash_AGLKS_$(date +%F_%H:%M).txt"
+    gdb openscada --core ~/.openscada/core --batch --quiet -ex "thread apply all bt full" -ex "quit" > ~/.openscada/crash_AGLKS_$(date +%F_%H:%M).txt
+    rm -f ~/.openscada/core
+fi
 
 # Remove lock file
 rm -f $pLock

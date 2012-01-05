@@ -34,39 +34,42 @@ int main(int argc, char *argv[], char *envp[] )
 {
     int rez = 0;
 
-    int ret;
-    struct rlimit rlim;
-
-    // Set the Dumpable state to be enabled
-    /*ret = prctl( PR_SET_DUMPABLE, 1, 0, 0, 0 );
-    printf( "PR_SET_DUMPABLE returned %d\n", ret );
-
-    // Set the core dump limitation to be unlimited
-    rlim.rlim_cur = RLIM_INFINITY;
-    rlim.rlim_max = RLIM_INFINITY;
-    ret = setrlimit(RLIMIT_CORE, &rlim);
-    printf( "RLIMIT_CORE returned %d\n", ret );*/
-
-    //Check demon mode start
+    //Check demon mode start and CoreDump allow enable
     int next_opt;
     optind=opterr=0;
-    struct option long_opt[] = { {"demon" ,0,NULL,'d'}, {NULL    ,0,NULL,0  } };
+    struct option long_opt[] =
+	{
+	    { "demon", 0, NULL, 'd' },
+	    { "CoreDumpAllow", 0, NULL, 'c'},
+	    { NULL, 0, NULL, 0 }
+	};
+
     while((next_opt=getopt_long(argc,argv,"",long_opt,NULL)) != -1)
-	if( next_opt == 'd' )
+	if(next_opt == 'd')
 	{
 	    printf("Start into demon mode!\n");
 	    int pid = fork();
-	    if( pid == -1 )
+	    if(pid == -1)
 	    {
 		printf("Error: fork error!\n");
 		return -1;
 	    }
-	    if( pid != 0 )	return 0;
+	    if(pid != 0) return 0;
 
 	    //Prepare demon environment
 	    setsid();
 
 	    break;
+	}
+	else if(next_opt == 'c')
+	{
+	    // Set the Dumpable state to be enabled
+	    prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
+	    // Set the core dump limitation to be unlimited
+	    struct rlimit rlim;
+	    rlim.rlim_cur = RLIM_INFINITY;
+	    rlim.rlim_max = RLIM_INFINITY;
+	    setrlimit(RLIMIT_CORE, &rlim);
 	}
 
     try

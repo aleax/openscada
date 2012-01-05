@@ -1,10 +1,7 @@
 #!/bin/sh
 
-# Use for core dump creation on programm crash
-ulimit -c unlimited
-
 # Programm command and lock file
-pCmd="./openscada --Config=$(pwd)/../etc/oscada_demo.xml"
+pCmd="./openscada --CoreDumpAllow --Config=$(pwd)/../etc/oscada_demo.xml"
 pLock=".demo.lock"
 
 # Check for already started programm present
@@ -23,6 +20,13 @@ echo $pPid > $pLock
 # Wait for programm stop
 wait $pPid
 echo "Program rezult: $?"
+
+# Core dump file "core" into work directory process
+if [ -f ../share/openscada/core -a -n "$(which gdb)" ]; then
+    echo "Core dump process for back trace purchase to file crash_$(date +%F_%H:%M).txt"
+    gdb openscada --core ../share/openscada/core --batch --quiet -ex "thread apply all bt full" -ex "quit" > ../share/openscada/crash_$(date +%F_%H:%M).txt
+    rm -f ../share/openscada/core
+fi
 
 # Remove lock file
 rm -f $pLock

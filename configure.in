@@ -45,12 +45,12 @@ AC_CHECK_HEADERS([time.h signal.h semaphore.h fcntl.h math.h errno.h syslog.h un
     [AC_MSG_ERROR(Some GLibC headers not found. Install or check GLibC developing package!)])
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     [AC_MSG_ERROR([Some standard template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
-AC_CHECK_HEADERS([iconv.h],[ Iconv=true; ],[AC_MSG_NOTICE(iconv.h header not found. Using is disabled!); Iconv=false;])
-AC_CHECK_HEADERS([libintl.h],[ LibIntl=true; ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!); LibIntl=false;])
-AM_CONDITIONAL([LibIntl], [test $LibIntl = true])
+AC_CHECK_HEADERS([iconv.h],[ ],[AC_MSG_NOTICE(iconv.h header not found. Using is disabled!)])
+AC_CHECK_HEADERS([libintl.h],[ ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!)])
+AM_CONDITIONAL([LibIntl], [test $ac_cv_header_libintl_h = yes])
 
 #Gettext utilites check
-if test $LibIntl = true; then
+if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
     AC_CHECK_PROG(MSGFMT, msgfmt, msgfmt, false)
@@ -70,9 +70,12 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 
 # Set up system library
+AC_SUBST(sys_lib)
 sys_lib="/usr/lib"
 if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
-AC_SUBST(sys_lib)
+
+AC_SUBST(LIB_CORE)
+
 QT4use=false;
 FFTWuse=false;
 GDuse=false;
@@ -107,15 +110,12 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Generic functions enable/disable ======
-AC_ARG_ENABLE(ForDist,AC_HELP_STRING([--enable-ForDist], [prepare for distributive build by "make dist", by all modules enable.]),
-[ if test $enableval = yes; then ForDist=true; else ForDist=false; fi],[ ForDist=false; ])
-AC_ARG_ENABLE(CrossCompile,AC_HELP_STRING([--enable-CrossCompile], [enable crosscompile support]),
-[ if test $enableval = yes; then CrossCompile=true; else CrossCompile=false; fi],
-[ if test $host = $build; then CrossCompile=false; else CrossCompile=true; fi])
+AC_ARG_ENABLE(ForDist,AC_HELP_STRING([--enable-ForDist], [prepare for distributive build by "make dist", by all modules enable.]),[ ],[ enable_ForDist=yes; ])
+AC_ARG_ENABLE(CrossCompile,AC_HELP_STRING([--enable-CrossCompile], [enable crosscompile build]),[ ],
+[ if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
 AC_ARG_ENABLE(CoreLibStatic,AC_HELP_STRING([--enable-CoreLibStatic], [enable OpenSCADA core lib no shared, only static.]),
 [ liboscada_la_LIBTOOLFLAGS="--tag=disable-shared"; AC_SUBST(liboscada_la_LIBTOOLFLAGS) ],[ ])
-AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--disable-LibGD], [disable using library LibGD in core]),
-[ if test $enableval = yes; then LibGD=true; else LibGD=false; fi],[ LibGD=true; ])
+AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--disable-LibGD], [disable using library LibGD in core]),[ ],[ enable_LibGD=yes; ])
 
 #====== Check build modules ======
 #> DB modules
@@ -208,7 +208,7 @@ AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable build module 
 
 AC_MSG_RESULT(========== Core libraries check =============)
 # Check for libraries
-if test $CrossCompile = false; then
+if test $enable_CrossCompile = yes; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
 fi
@@ -224,16 +224,14 @@ AC_CHECK_LIB([z],[deflate],[AC_MSG_NOTICE([LibZ: Pass global library using])],
     [AC_MSG_ERROR(Z library not found. Install or check libz package!)])
 
 #> Check for GD library use in OpenSCADA core
-if test $LibGD = true; then
+if test $enable_LibGD = yes; then
     AC_CHECK_HEADERS([gd.h],
 	[
 	    AC_CHECK_LIB([gd],[gdImageCreate],
-	    [AC_MSG_NOTICE([LibGD: Pass global library using])
-	    LIB_GD="-lgd"],
+	    [AC_MSG_NOTICE([LibGD: Pass global library using]); LIB_CORE="${LIB_CORE}-lgd "],
 	    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
 	],
 	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
-    AC_SUBST(LIB_GD)
 fi
 
 #> Check for PCRE library use in OpenSCADA core
@@ -246,12 +244,12 @@ AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library usi
 AC_MSG_RESULT(========== Build modules list =============)
 #> DB modules
 AC_SUBST(DBSub_mod)
-if test $ForDist = true -o $ModDBF = true; then
+if test $enable_ForDist = yes -o $ModDBF = true; then
     AC_MSG_RESULT(Build module: DB.DBF)
     AC_CONFIG_FILES(src/moduls/bd/DBF/Makefile)
     DBSub_mod="${DBSub_mod}DBF "
 fi
-if test $ForDist = true -o $ModMySQL = true; then
+if test $enable_ForDist = yes -o $ModMySQL = true; then
     AC_MSG_RESULT(Build module: DB.MySQL)
     AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
@@ -259,7 +257,7 @@ if test $ForDist = true -o $ModMySQL = true; then
     AX_LIB_MYSQL
     if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
 fi
-if test $ForDist = true -o $ModSQLite = true; then
+if test $enable_ForDist = yes -o $ModSQLite = true; then
     AC_MSG_RESULT(Build module: DB.SQLite)
     AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
@@ -268,7 +266,7 @@ if test $ForDist = true -o $ModSQLite = true; then
 	[AC_CHECK_LIB([sqlite3],[sqlite3_open],[],[AC_MSG_ERROR(SQLite3 library is not usable!)])],
 	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!)])
 fi
-if test $ForDist = true -o $ModFireBird = true; then
+if test $enable_ForDist = yes -o $ModFireBird = true; then
     AC_MSG_RESULT(Build module: DB.FireBird)
     AC_CONFIG_FILES(src/moduls/bd/FireBird/Makefile)
     DBSub_mod="${DBSub_mod}FireBird "
@@ -276,7 +274,7 @@ if test $ForDist = true -o $ModFireBird = true; then
     AX_LIB_FIREBIRD([2.0.0])
     if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
 fi
-if test $ForDist = true -o $ModPostgreSQL = true; then
+if test $enable_ForDist = yes -o $ModPostgreSQL = true; then
     AC_MSG_RESULT(Build module: DB.PostgreSQL)
     AC_CONFIG_FILES(src/moduls/bd/PostgreSQL/Makefile)
     DBSub_mod="${DBSub_mod}PostgreSQL "
@@ -286,19 +284,19 @@ if test $ForDist = true -o $ModPostgreSQL = true; then
 fi
 #> DAQ modules
 AC_SUBST(DAQSub_mod)
-if test $ForDist = true -o $ModSystem = true; then
+if test $enable_ForDist = yes -o $ModSystem = true; then
     AC_MSG_RESULT(Build module: DAQ.System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
     #>> Modules checkings
     SensorsUse=true;
 fi
-if test $ForDist = true -o $ModBlockCalc = true; then
+if test $enable_ForDist = yes -o $ModBlockCalc = true; then
     AC_MSG_RESULT(Build module: DAQ.BlockCalc)
     AC_CONFIG_FILES(src/moduls/daq/BlockCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}BlockCalc "
 fi
-if test $ForDist = true -o $ModJavaLikeCalc = true; then
+if test $enable_ForDist = yes -o $ModJavaLikeCalc = true; then
     AC_MSG_RESULT(Build module: DAQ.JavaLikeCalc)
     AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
@@ -309,17 +307,17 @@ if test $ForDist = true -o $ModJavaLikeCalc = true; then
 	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
     fi
 fi
-if test $ForDist = true || test $ModDiamondBoards = true -a $ix86 = true; then
+if test $enable_ForDist = yes || test $ModDiamondBoards = true -a $ix86 = true; then
     AC_MSG_RESULT(Build module: DAQ.DiamondBoards)
     AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
     DAQSub_mod="${DAQSub_mod}DiamondBoards "
 fi
-if test $ForDist = true -o $ModLogicLev = true; then
+if test $enable_ForDist = yes -o $ModLogicLev = true; then
     AC_MSG_RESULT(Build module: DAQ.LogicLev)
     AC_CONFIG_FILES(src/moduls/daq/LogicLev/Makefile)
     DAQSub_mod="${DAQSub_mod}LogicLev "
 fi
-if test $ForDist = true -o $ModSNMP = true; then
+if test $enable_ForDist = yes -o $ModSNMP = true; then
     AC_MSG_RESULT(Build module: DAQ.SNMP)
     AC_CONFIG_FILES(src/moduls/daq/SNMP/Makefile)
     DAQSub_mod="${DAQSub_mod}SNMP "
@@ -332,7 +330,7 @@ if test $ForDist = true -o $ModSNMP = true; then
 #	[AC_MSG_ERROR(DAQ.SNMP: Net SNMP API library not found. Install or check Net SNMP library package!)],
 #	[crypto])
 fi
-if test $ForDist = true -o $ModSiemens = true; then
+if test $enable_ForDist = yes -o $ModSiemens = true; then
     AC_MSG_RESULT(Build module: DAQ.Siemens)
     AC_CONFIG_FILES(src/moduls/daq/Siemens/Makefile)
     DAQSub_mod="${DAQSub_mod}Siemens "
@@ -342,22 +340,22 @@ if test $ForDist = true -o $ModSiemens = true; then
     AC_CHECK_HEADERS([linux/kd.h],[],
 	[AC_MSG_ERROR(DAQ.Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])
 fi
-if test $ForDist = true -o $ModModBus = true; then
+if test $enable_ForDist = yes -o $ModModBus = true; then
     AC_MSG_RESULT(Build module: DAQ.ModBus)
     AC_CONFIG_FILES(src/moduls/daq/ModBus/Makefile)
     DAQSub_mod="${DAQSub_mod}ModBus "
 fi
-if test $ForDist = true -o $ModDCON = true; then
+if test $enable_ForDist = yes -o $ModDCON = true; then
     AC_MSG_RESULT(Build module: DAQ.DCON)
     AC_CONFIG_FILES(src/moduls/daq/DCON/Makefile)
     DAQSub_mod="${DAQSub_mod}DCON "
 fi
-if test $ForDist = true -o $ModDAQGate = true; then
+if test $enable_ForDist = yes -o $ModDAQGate = true; then
     AC_MSG_RESULT(Build module: DAQ.DAQGate)
     AC_CONFIG_FILES(src/moduls/daq/DAQGate/Makefile)
     DAQSub_mod="${DAQSub_mod}DAQGate "
 fi
-if test $ForDist = true -o $ModSoundCard = true; then
+if test $enable_ForDist = yes -o $ModSoundCard = true; then
     AC_MSG_RESULT(Build module: DAQ.SoundCard)
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
@@ -367,7 +365,7 @@ if test $ForDist = true -o $ModSoundCard = true; then
     AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE([LibPortaudio: Pass global library using])],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
 fi
-if test $ForDist = true || test $ModICP_DAS = true -a $ix86 = true || test $ModICP_DAS = true -a $target_cpu = "arm"; then
+if test $enable_ForDist = yes || test $ModICP_DAS = true -a $ix86 = true || test $ModICP_DAS = true -a $target_cpu = "arm"; then
     AC_MSG_RESULT(Build module: DAQ.ICP_DAS)
     AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
     DAQSub_mod="${DAQSub_mod}ICP_DAS "
@@ -378,7 +376,7 @@ if test $ForDist = true || test $ModICP_DAS = true -a $ix86 = true || test $ModI
     AC_SUBST(ICP_DAS_CFLAGS)
     AC_SUBST(ICP_DAS_LIBS)
 fi
-if test $ForDist = true -o $ModOPC_UA = true; then
+if test $enable_ForDist = yes -o $ModOPC_UA = true; then
     AC_MSG_RESULT(Build module: DAQ.OPC_UA)
     AC_CONFIG_FILES(src/moduls/daq/OPC_UA/Makefile)
     DAQSub_mod="${DAQSub_mod}OPC_UA "
@@ -388,31 +386,31 @@ if test $ForDist = true -o $ModOPC_UA = true; then
     AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
 	[AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
-if test $ForDist = true -o $ModAMRDevs = true; then
+if test $enable_ForDist = yes -o $ModAMRDevs = true; then
     AC_MSG_RESULT(Build module: DAQ.AMRDevs)
     AC_CONFIG_FILES(src/moduls/daq/AMRDevs/Makefile)
     DAQSub_mod="${DAQSub_mod}AMRDevs "
 fi
-if test $ForDist = true -o $ModBFN = true; then
+if test $enable_ForDist = yes -o $ModBFN = true; then
     AC_MSG_RESULT(Build module: DAQ.BFN)
     AC_CONFIG_FILES(src/moduls/daq/BFN/Makefile)
     DAQSub_mod="${DAQSub_mod}BFN "
 fi
 #> Archive modules
 AC_SUBST(ArchSub_mod)
-if test $ForDist = true -o $ModFSArch = true; then
+if test $enable_ForDist = yes -o $ModFSArch = true; then
     AC_MSG_RESULT(Build module: Archive.FSArch)
     AC_CONFIG_FILES(src/moduls/arhiv/FSArch/Makefile)
     ArchSub_mod="${ArchSub_mod}FSArch "
 fi
-if test $ForDist = true -o $ModDBArch = true; then
+if test $enable_ForDist = yes -o $ModDBArch = true; then
     AC_MSG_RESULT(Build module: Archive.DBArch)
     AC_CONFIG_FILES(src/moduls/arhiv/DBArch/Makefile)
     ArchSub_mod="${ArchSub_mod}DBArch "
 fi
 #> Transport modules
 AC_SUBST(TranspSub_mod)
-if test $ForDist = true -o $ModSockets = true; then
+if test $enable_ForDist = yes -o $ModSockets = true; then
     AC_MSG_RESULT(Build module: Transport.Sockets)
     AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
@@ -420,7 +418,7 @@ if test $ForDist = true -o $ModSockets = true; then
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
 fi
-if test $ForDist = true -o $ModSSL = true; then
+if test $enable_ForDist = yes -o $ModSSL = true; then
     AC_MSG_RESULT(Build module: Transport.SSL)
     AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
     TranspSub_mod="${TranspSub_mod}SSL "
@@ -430,36 +428,36 @@ if test $ForDist = true -o $ModSSL = true; then
     AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
 	[AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 fi
-if test $ForDist = true -o $ModSerial = true; then
+if test $enable_ForDist = yes -o $ModSerial = true; then
     AC_MSG_RESULT(Build module: Transport.Serial)
     AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
     TranspSub_mod="${TranspSub_mod}Serial "
 fi
 #> Transport protocol modules
 AC_SUBST(ProtSub_mod)
-if test $ForDist = true -o $ModHTTP = true; then
+if test $enable_ForDist = yes -o $ModHTTP = true; then
     AC_MSG_RESULT(Build module: Protocol.HTTP)
     AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile)
     ProtSub_mod="${ProtSub_mod}HTTP "
 fi
-if test $ForDist = true -o $ModSelfSystem = true; then
+if test $enable_ForDist = yes -o $ModSelfSystem = true; then
     AC_MSG_RESULT(Build module: Protocol.SelfSystem)
     AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
     ProtSub_mod="${ProtSub_mod}SelfSystem "
 fi
-if test $ForDist = true -o $ModUserProtocol = true; then
+if test $enable_ForDist = yes -o $ModUserProtocol = true; then
     AC_MSG_RESULT(Build module: Protocol.UserProtocol)
     AC_CONFIG_FILES(src/moduls/protocol/UserProtocol/Makefile)
     ProtSub_mod="${ProtSub_mod}UserProtocol "
 fi
 #> UI modules
 AC_SUBST(UISub_mod)
-if test $ForDist = true -o $ModVCAEngine = true; then
+if test $enable_ForDist = yes -o $ModVCAEngine = true; then
     AC_MSG_RESULT(Build module: UI.VCAEngine)
     AC_CONFIG_FILES(src/moduls/ui/VCAEngine/Makefile)
     UISub_mod="${UISub_mod}VCAEngine "
 fi
-if test $ForDist = true -o $ModVision = true; then
+if test $enable_ForDist = yes -o $ModVision = true; then
     AC_MSG_RESULT(Build module: UI.Vision)
     AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
     UISub_mod="${UISub_mod}Vision "
@@ -467,30 +465,30 @@ if test $ForDist = true -o $ModVision = true; then
     QT4use=true;
     FFTWuse=true;
 fi
-if test $ForDist = true -o $ModQTStarter = true; then
+if test $enable_ForDist = yes -o $ModQTStarter = true; then
     AC_MSG_RESULT(Build module: UI.QTStarter)
     AC_CONFIG_FILES(src/moduls/ui/QTStarter/Makefile)
     UISub_mod="${UISub_mod}QTStarter "
     QT4use=true;
 fi
-if test $ForDist = true -o $ModQTCfg = true; then
+if test $enable_ForDist = yes -o $ModQTCfg = true; then
     AC_MSG_RESULT(Build module: UI.QTCfg)
     AC_CONFIG_FILES(src/moduls/ui/QTCfg/Makefile)
     UISub_mod="${UISub_mod}QTCfg "
     QT4use=true;
 fi
-if test $ForDist = true -o $ModWebCfg = true; then
+if test $enable_ForDist = yes -o $ModWebCfg = true; then
     AC_MSG_RESULT(Build module: UI.WebCfg)
     AC_CONFIG_FILES(src/moduls/ui/WebCfg/Makefile)
     UISub_mod="${UISub_mod}WebCfg "
 fi
-if test $ForDist = true -o $ModWebCfgD = true; then
+if test $enable_ForDist = yes -o $ModWebCfgD = true; then
     AC_MSG_RESULT(Build module: UI.WebCfgD)
     AC_CONFIG_FILES(src/moduls/ui/WebCfgD/Makefile)
     UISub_mod="${UISub_mod}WebCfgD "
     GDuse=true;
 fi
-if test $ForDist = true -o $ModWebVision = true; then
+if test $enable_ForDist = yes -o $ModWebVision = true; then
     AC_MSG_RESULT(Build module: UI.WebVision)
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
@@ -498,29 +496,29 @@ if test $ForDist = true -o $ModWebVision = true; then
     FFTWuse=true;
     GDuse=true;
 fi
-if test $ForDist = true -o $ModWebUser = true; then
+if test $enable_ForDist = yes -o $ModWebUser = true; then
     AC_MSG_RESULT(Build module: UI.WebUser)
     AC_CONFIG_FILES(src/moduls/ui/WebUser/Makefile)
     UISub_mod="${UISub_mod}WebUser "
 fi
 #> Special modules
 AC_SUBST(SpecSub_mod)
-if test $ForDist = true -o $ModSystemTests = true; then
+if test $enable_ForDist = yes -o $ModSystemTests = true; then
     AC_MSG_RESULT(Build module: Special.SystemTests)
     AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile)
     SpecSub_mod="${SpecSub_mod}SystemTests "
 fi
-if test $ForDist = true -o $ModFLibComplex1 = true; then
+if test $enable_ForDist = yes -o $ModFLibComplex1 = true; then
     AC_MSG_RESULT(Build module: Special.FLibComplex1)
     AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibComplex1 "
 fi
-if test $ForDist = true -o $ModFLibMath = true; then
+if test $enable_ForDist = yes -o $ModFLibMath = true; then
     AC_MSG_RESULT(Build module: Special.FLibMath)
     AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibMath "
 fi
-if test $ForDist = true -o $ModFLibSYS = true; then
+if test $enable_ForDist = yes -o $ModFLibSYS = true; then
     AC_MSG_RESULT(Build module: Special.FLibSYS)
     AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibSYS "
@@ -581,10 +579,10 @@ AC_OUTPUT
 
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Generic features:])
-AC_MSG_RESULT([  - Crosscompile build                                          = $CrossCompile])
-AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $Iconv])
-AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (by LibIntl) = $LibIntl])
-AC_MSG_RESULT([  - Graphical library (LibGD2) use by core                      = $LibGD])
+AC_MSG_RESULT([  - Crosscompile build                                          = $enable_CrossCompile])
+AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $ac_cv_header_iconv_h])
+AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (by LibIntl) = $ac_cv_header_libintl_h])
+AC_MSG_RESULT([  - Graphical library (LibGD2) use by core                      = $enable_LibGD])
 AC_MSG_RESULT([  - Subsystem "DB" modules build:                   $DBSub_mod])
 AC_MSG_RESULT([  - Subsystem "DAQ" modules build:                  $DAQSub_mod])
 AC_MSG_RESULT([  - Subsystem "Archive" modules build:              $ArchSub_mod])

@@ -16,7 +16,7 @@ if [ ! -e ~/.openscada/oscada_Boiler.xml ]; then cp /etc/oscada_Boiler.xml ~/.op
 cd ~/.openscada
 
 # Programm command and lock file
-pCmd="openscada --Config=./oscada_Boiler.xml"
+pCmd="openscada --CoreDumpAllow --Config=./oscada_Boiler.xml"
 pLock=".Boiler.lock"
 
 # Check for already started programm present
@@ -35,6 +35,13 @@ echo $pPid > $pLock
 # Wait for programm stop
 wait $pPid
 echo "Program rezult: $?"
+
+# Core dump file "core" into work directory process
+if [ -f ~/.openscada/core -a -n "$(which gdb)" ]; then
+    echo "Core dump process for back trace purchase to file crash_Boiler_$(date +%F_%H:%M).txt"
+    gdb openscada --core ~/.openscada/core --batch --quiet -ex "thread apply all bt full" -ex "quit" > ~/.openscada/crash_Boiler_$(date +%F_%H:%M).txt
+    rm -f ~/.openscada/core
+fi
 
 # Remove lock file
 rm -f $pLock
