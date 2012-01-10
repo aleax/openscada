@@ -3927,7 +3927,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 
                     }
                 }
-                else mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area. The 'fill' is not drawn."));
+                else mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area."));
             }
         if( (int)TSYS::realRound( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)TSYS::realRound( clickPnt.y, POS_PREC_DIG, true ) == -1 )
         {

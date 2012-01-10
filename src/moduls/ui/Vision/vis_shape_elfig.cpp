@@ -56,9 +56,9 @@ ShapeElFigure::ShapeElFigure( ) :
         WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),
     flag_up(false), flag_down(false), flag_left(false), flag_right(false), flag_ctrl(false), flag_m(false), flag_hold_arc(false), flag_A(false),
     flag_copy(false), flag_check_pnt_inund(false), flag_check_point(false), flag_rect(false), flag_arc_rect_3_4(false), flag_first_move(false),
-    flag_move(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),flag_geom (false), 
-    flag_rect_items (false), flag_def_stat(false), flag_dyn_save(true), fl_status_move(false), fl_orto_move(false), fl_orto_disable(false), count_rects(0),
-    rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), count_holds(0), geomH(0), geomW(0), rect_dyn(-1)
+    flag_move(false), flag_hold_move(false), flag_inund_break(false), flag_scale(true), flag_rotate(true), flag_angle_temp(false),flag_geom (false),
+    flag_rect_items (false), flag_def_stat(false), flag_dyn_save(true), fl_status_move(false), fl_orto_move(false), fl_orto_disable(false),
+    count_holds(0), count_rects(0), rect_num_arc(-1), current_ss(-1), current_se(-1), current_ee(-1), current_es(-1), geomH(0), geomW(0), rect_dyn(-1)
 {
     newPath.addEllipse( QRect(0,0,0,0) );
 }

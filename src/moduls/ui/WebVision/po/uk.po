@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-25 22:35+0200\n"
+"POT-Creation-Date: 2012-01-10 11:53+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
 
 #, c-format
 msgid "Unknown command: %s."
@@ -25,10 +25,10 @@ msgstr "Тип зображення заповнення не підтримує
 
 msgid ""
 "At least one of the elementary figures from each the 'fill' consists of is "
-"out of drawing area. The 'fill' is not drawn."
+"out of drawing area."
 msgstr ""
 "Хоча б одна з елементарних фігур, з яких 'заповнення' складається, поза "
-"кордоном області відображення. 'Заповнення' не намальовано."
+"кордоном області відображення."
 
 #, c-format
 msgid "gdImageStringFTex for font '%s' error: %s."

@@ -1,3 +1,8 @@
+2012-01-10 Maxim
+- FIX:UI:WebVision Debug message for the exceeding by the figures the borders of the widget is changed for the primitive ElFigure.
+- FIX:UI:Vision: Some code refactoring is done for the primitive ElFigure.
+
+
 2012-01-05 Roman
 - SYS: Modules builtin to OpenSCADA core support is added. Experimental build modules DB.SQLite and DAQ.ModBus is added
     for builtin to core library.
