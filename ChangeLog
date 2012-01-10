@@ -1,3 +1,8 @@
+2012-01-10 Roman
+- Archive: User API function SYS.Archive.messPut() for place messages direct to archive for need time and other properties
+    is added.
+
+
 2012-01-10 Maxim
 - FIX:UI:WebVision Debug message for the exceeding by the figures the borders of the widget is changed for the primitive ElFigure.
 - FIX:UI:Vision: Some code refactoring is done for the primitive ElFigure.

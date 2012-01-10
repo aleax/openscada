@@ -736,6 +736,17 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	}
 	return rez;
     }
+    // bool messPut(int tm, int utm, string cat, int lev, string mess) - write message <mess> with category <cat>,
+    //       level <lev> and time <tm>.<utm> to archive or/and allarms list.
+    //  tm.utm - seconds and microseconds message time
+    //  cat - message' category
+    //  lev - message level
+    //  mess - message text
+    if( iid == "messPut" && prms.size() >= 5 )
+    {
+	messPut(prms[0].getI(), prms[1].getI(), prms[2].getS(), prms[3].getI(), prms[4].getS());
+	return true;
+    }
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }
