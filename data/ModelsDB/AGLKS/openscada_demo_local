@@ -23,9 +23,11 @@ echo "Program rezult: $?"
 
 # Core dump file "core" into work directory process
 if [ -f ../share/openscada/core -a -n "$(which gdb)" ]; then
+    pCmd="$(pwd)/openscada"
+    cd ../share/openscada/
     echo "Core dump process for back trace purchase to file crash_$(date +%F_%H:%M).txt"
-    gdb openscada --core ../share/openscada/core --batch --quiet -ex "thread apply all bt full" -ex "quit" > ../share/openscada/crash_$(date +%F_%H:%M).txt
-    rm -f ../share/openscada/core
+    gdb $pCmd --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" > crash_$(date +%F_%H:%M).txt
+    rm -f core
 fi
 
 # Remove lock file

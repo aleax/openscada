@@ -2969,7 +2969,8 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	    }
 	if(!sel_ok) throw TError(mod->nodePath().c_str(),_("Selective element '%s' is not present!"),item->text().toAscii().data());
 
-	selectPage(path);
+	sel_path = path;
+	pageRefresh(true);
     }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }

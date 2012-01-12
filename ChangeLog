@@ -1,3 +1,9 @@
+2012-01-12 Roman
+- FIX:UI.QTCfg: Crash on double mouse click processing in list items element which allowed for goto other page
+    with the tab also present into new page.
+- FIX:SYS: All start scripts is fixed for core dumps processing.
+
+
 2012-01-10 Roman
 - Archive: User API function SYS.Archive.messPut() for place messages direct to archive for need time and other properties
     is added.
