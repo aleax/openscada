@@ -1,4 +1,5 @@
 2012-01-12 Roman
+- FIX:UI.Vision: Crash on maximize runtime window for no one openned window project is fixed.
 - FIX:UI.QTCfg: Crash on double mouse click processing in list items element which allowed for goto other page
     with the tab also present into new page.
 - FIX:SYS: All start scripts is fixed for core dumps processing.

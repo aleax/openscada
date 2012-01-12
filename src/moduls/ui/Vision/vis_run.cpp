@@ -1493,7 +1493,8 @@ void VisRun::updatePage( )
     }
 
     //> Scale for full screen check
-    if((windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)))
+    if(centralWidget() && master_pg && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)) &&
+	(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen))
     {
 	float xSc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	float ySc = (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
