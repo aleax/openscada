@@ -51,7 +51,8 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
 
 RunWdgView::~RunWdgView( )
 {
-
+    //> Child widgets remove before
+    childsClear();
 }
 
 string RunWdgView::name( )
@@ -484,7 +485,8 @@ RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent,
 
 RunPageView::~RunPageView( )
 {
-
+    //> Child widgets remove before
+    childsClear();
 }
 
 float RunPageView::xScale( bool full )

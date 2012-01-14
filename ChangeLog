@@ -1,3 +1,8 @@
+2012-01-14 Roman
+- FIX:UI.Vision: Early child widgets clear on its parent widget delete is made for prevent access to mostly freeing parent widget
+    on child widget remove.
+
+
 2012-01-12 Roman
 - FIX:UI.Vision: Crash on maximize runtime window for no one openned window project is fixed.
 - FIX:UI.QTCfg: Crash on double mouse click processing in list items element which allowed for goto other page

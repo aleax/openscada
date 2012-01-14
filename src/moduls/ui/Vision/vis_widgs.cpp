@@ -1001,7 +1001,20 @@ WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget
 
 WdgView::~WdgView( )
 {
+    childsClear();
+
     if(shape) shape->destroy(this);
+}
+
+void WdgView::childsClear( )
+{
+    //> Child widgets remove before
+    QObjectList chLst = children();
+    for(int i_c = 0; i_c < chLst.size(); i_c++)
+    {
+	WdgView *cw = qobject_cast<WdgView*>(chLst[i_c]);
+	if(cw)	delete cw;
+    }
 }
 
 float WdgView::xScale( bool full )

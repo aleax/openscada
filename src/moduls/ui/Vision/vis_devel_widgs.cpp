@@ -2098,12 +2098,14 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 
 DevelWdgView::~DevelWdgView( )
 {
+    //> Exit from edit
     if(editWdg)
     {
 	setEdit(false);
 	if(wLevel() != 0) levelWidget(0)->setEdit(false);
     }
 
+    //> Selection clear
     if(select() && !mod->endRun())
     {
 	setSelect(false);
@@ -2111,6 +2113,11 @@ DevelWdgView::~DevelWdgView( )
 	    if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 		((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
     }
+
+    //> Child widgets remove before
+    childsClear();
+
+    //> Changes tree remove
     if(chTree)	delete chTree;
 }
 

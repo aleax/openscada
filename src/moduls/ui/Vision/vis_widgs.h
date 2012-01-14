@@ -327,6 +327,7 @@ namespace VISION
 
 	protected:
 	    //Protected methods
+	    void childsClear( );
 	    virtual void orderUpdate( );
 
 	    bool event( QEvent * event );
