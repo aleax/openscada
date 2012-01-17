@@ -607,8 +607,6 @@ bool TMdContr::setValC( char val, int addr, ResString &err )
 
 string TMdContr::modBusReq( string &pdu )
 {
-    //if(pdu[0] == 6) return "";
-
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
 
     XMLNode req(mPrt);

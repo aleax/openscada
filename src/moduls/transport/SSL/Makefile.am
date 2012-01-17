@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = tr_SSL.la
 tr_SSL_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_SSL_la_SOURCES = modssl.cpp
-tr_SSL_la_LIBADD  = -lssl
+tr_SSL_la_LIBADD  = -lssl -lcrypto
 tr_SSL_la_LIBTOOLFLAGS = --tag=disable-static
 
 if LibIntl

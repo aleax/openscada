@@ -65,7 +65,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(false)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5)
 {
     mod		= this;
 
@@ -86,15 +86,6 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), chck_st(fals
         "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
 
     gdFTUseFontConfig(1);
-
-    //> Create check sessions timer
-    struct sigevent sigev;
-    memset(&sigev,0,sizeof(sigev));
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = TaskSessCheck;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&chkSessTm);
 
     //> Create named colors' container
     colors["aliceblue"] = rgb(240, 248, 255);
@@ -343,51 +334,20 @@ void TWEB::save_( )
     TBDS::genDBSet(nodePath()+"SessLimit",TSYS::int2str(sessLimit()));
 }
 
-void TWEB::modStart( )
+void TWEB::perSYSCall( unsigned int cnt )
 {
-    //> Start interval timer for periodic thread creating of DB syncing
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = 10;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(chkSessTm, 0, &itval, NULL);
-
-    run_st = true;
-}
-
-void TWEB::modStop( )
-{
-    //> Stop interval timer for periodic thread creating
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-    itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(chkSessTm, 0, &itval, NULL);
-    if( TSYS::eventWait( chck_st, false, nodePath()+"chck_stop",5) )
-	throw TError(nodePath().c_str(),_("Checking if session is not stopped!"));
-
-    run_st = false;
-}
-
-void TWEB::TaskSessCheck( union sigval obj )
-{
-    TWEB *web = (TWEB *)obj.sival_ptr;
-    if( web->chck_st )  return;
-    web->chck_st = true;
-
-    time_t cur_tm = time(NULL);
-
     try
     {
-	ResAlloc sesRes(web->nodeRes(),true);
 	//> Check for opened sessions timeout close
+	time_t cur_tm = time(NULL);
+
 	vector<string> list;
-	web->vcaSesList(list);
+	vcaSesList(list);
 	for(unsigned i_s = 0; i_s < list.size(); i_s++)
-	    if(cur_tm > web->vcaSesAt(list[i_s]).at().lstReq()+web->sessTime()*60)
-		web->vcaSesDel(list[i_s]);
+	    if(cur_tm > vcaSesAt(list[i_s]).at().lstReq()+sessTime()*60)
+		vcaSesDel(list[i_s]);
     }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-
-    web->chck_st = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )

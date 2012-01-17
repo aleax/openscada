@@ -94,9 +94,6 @@ class TWEB: public TUI
 	void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
 	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
 
-	void modStart( );
-	void modStop( );
-
 	//> Web process methods
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 	void getAbout( SSess &ses );
@@ -117,6 +114,8 @@ class TWEB: public TUI
 	int colorParse( const string &clr );
 	string trMessReplace( const string &tsrc );
 
+	void perSYSCall( unsigned int cnt );
+
     protected:
 	//Methods
 	void load_( );
@@ -133,8 +132,6 @@ class TWEB: public TUI
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)
 	int		mSessLimit;			//Sessions limit
-	timer_t		chkSessTm;			//Check session's timer
-	bool		chck_st;			//Check session's status
 	int		id_vcases;			//VCA session's container identifier
 	string		mCSStables;			//CSS tables
 	map<string,int> colors;				//Named colors

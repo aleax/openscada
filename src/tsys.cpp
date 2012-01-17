@@ -1457,10 +1457,28 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 
     if(!cron)
     {
+	/*if(!per) per = 1000000000;
+	int64_t cur_tm = 1000*curTime();
+	int64_t pnt_tm = (cur_tm/per + 1)*per;
+	int64_t beg_tm = cur_tm;
+	do
+	{
+	    sp_tm.tv_sec = (pnt_tm-cur_tm)/1000000000; sp_tm.tv_nsec = (pnt_tm-cur_tm)%1000000000;
+	    if(nanosleep(&sp_tm,NULL))	return;
+	    cur_tm = 1000*curTime();
+	}while(cur_tm < pnt_tm);
+
+	if(stsk)
+	{
+	    stsk->tm_beg = stsk->tm_per;
+	    stsk->tm_end = beg_tm;
+	    stsk->tm_per = cur_tm;
+	}*/
+
 	if(!per) per = 1000000000;
 	clock_gettime(CLOCK_REALTIME,&sp_tm);
-	int64_t end_tm = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
-	int64_t pnt_tm = (end_tm/per + 1)*per;
+	int64_t cur_tm = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
+	int64_t pnt_tm = (cur_tm/per + 1)*per;
 	do
 	{
 	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
@@ -1471,7 +1489,7 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 	if(stsk)
 	{
 	    stsk->tm_beg = stsk->tm_per;
-	    stsk->tm_end = end_tm;
+	    stsk->tm_end = cur_tm;
 	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
 	}
     }
@@ -1715,7 +1733,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
 	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
-	int rez = clock_nanosleep(CLOCK_REALTIME,0,&sp_tm,NULL);
+	int rez = nanosleep(&sp_tm,NULL);
 	return rez;
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
@@ -2019,7 +2037,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f% (%s from %s)"),
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f%% (%s from %s)"),
 			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
 			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str()));
 		}

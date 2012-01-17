@@ -1828,8 +1828,8 @@ msgstr "Счётчики"
 msgid "Finished. "
 msgstr "Закончен. "
 
-msgid "Last: %s. Load: %3.1f% (%s from %s)"
-msgstr "Последний: %s. Нагрузка %3.1f% (%s из %s)"
+msgid "Last: %s. Load: %3.1f%% (%s from %s)"
+msgstr "Последний: %s. Нагрузка %3.1f%% (%s из %s)"
 
 msgid "Standard"
 msgstr "Стандарт"

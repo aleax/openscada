@@ -1843,8 +1843,8 @@ msgstr "Zähler"
 msgid "Finished. "
 msgstr "Finished. "
 
-msgid "Last: %s. Load: %3.1f% (%s from %s)"
-msgstr "Letzter: %s. Laden: %3.1f% (%s von %s)"
+msgid "Last: %s. Load: %3.1f%% (%s from %s)"
+msgstr "Letzter: %s. Laden: %3.1f%% (%s von %s)"
 
 msgid "Standard"
 msgstr "Standard"

@@ -1,3 +1,12 @@
+2012-01-17 Roman
+- SYS: Check for use libraries "libintl" and "libiconv" is added.
+    Function clock_nanosleep() some replaced by nanosleep().
+    Symbol '%' using for self is fixed into string "Last: %s. Load: %3.1f%% (%s from %s)", detected on uCLibc-0.9.32.1.
+- FIX:Transport.SSL: Dependency to library "libcrypto" is added for fix build and execute on uCLibc-0.9.32.1.
+- FIX:UI.WebVision: Check for close old sessions need is removed from independent task to service call function.
+    Deadlock resource is removed, detect on uCLibc-0.9.32.1.
+
+
 2012-01-14 Roman
 - FIX:UI.Vision: Early child widgets clear on its parent widget delete is made for prevent access to mostly freeing parent widget
     on child widget remove.
