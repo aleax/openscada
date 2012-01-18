@@ -277,11 +277,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(prt == "TCP")		// Modbus/TCP protocol process
 	{
 	    //> Encode MBAP (Modbus Application Protocol)
+	    int tid = rand();
 	    mbap.reserve(pdu.size()+7);
-	    mbap += (char)0x15;			//Transaction ID MSB
-	    mbap += (char)0x01;			//Transaction ID LSB
-	    mbap += (char)0x00;			//Protocol ID MSB
-	    mbap += (char)0x00;			//Protocol ID LSB
+	    mbap.append((char *)&tid,4);	//Transaction ID
 	    mbap += (char)((pdu.size()+1)>>8);	//PDU size MSB
 	    mbap += (char)(pdu.size()+1);	//PDU size LSB
 	    mbap += (char)node;			//Unit identifier
