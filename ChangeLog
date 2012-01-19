@@ -1,3 +1,8 @@
+2012-01-19 Roman
+- DAQ.ModBus: Maximum request block size is made optional for a controller object.
+    Comments support is added into attributes configuration list, for standard parameter type.
+
+
 2012-01-18 Roman
 - DAQ.ModBus: Transaction ID random generation is added to ModBus/TCP requests packages.
 - SYS: Some status is added to result build configuration table.

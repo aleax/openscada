@@ -76,6 +76,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;3600"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
+    fldAdd(new TFld("MAX_BLKSZ",_("Maximum request block size (bytes)"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //> Parameter type bd structure
     //>> Standard parameter type by symple attributes list
@@ -113,7 +114,8 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), mSched(cfg("SCHEDULE").getSd()), mPrt(cfg("PROT").getSd()),
 	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
-	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), prc_st(false), call_st(false), endrun_req(false), isReload(false),
+	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
+	prc_st(false), call_st(false), endrun_req(false), isReload(false),
 	tmGath(0), tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
@@ -274,7 +276,7 @@ void TMdContr::regVal(int reg, const string &dt)
 	{
 	    if((reg*2) < workCnt[i_b].off)
 	    {
-		if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq)
+		if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < blkMaxSz)
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg*2,0);
 		    workCnt[i_b].off = reg*2;
@@ -283,7 +285,7 @@ void TMdContr::regVal(int reg, const string &dt)
 	    }
 	    else if((reg*2+2) > (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	    {
-		if((mMerge || reg*2 <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq)
+		if((mMerge || reg*2 <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < blkMaxSz)
 		{
 		    workCnt[i_b].val.append((reg*2+2)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		    //>> Check for allow mergin to next block
@@ -308,7 +310,7 @@ void TMdContr::regVal(int reg, const string &dt)
 	{
 	    if(reg < workCnt[i_b].off)
 	    {
-		if((mMerge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < MaxLenReq*8)
+		if((mMerge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < blkMaxSz*8)
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg,0);
 		    workCnt[i_b].off = reg;
@@ -317,7 +319,7 @@ void TMdContr::regVal(int reg, const string &dt)
 	    }
 	    else if((reg+1) > (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	    {
-		if((mMerge || reg <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < MaxLenReq*8)
+		if((mMerge || reg <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < blkMaxSz*8)
 		{
 		    workCnt[i_b].val.append((reg+1)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
 		    //>> Check for allow mergin to next block
@@ -966,6 +968,7 @@ void TMdPrm::enable( )
 	string m_attrLs = cfg("ATTR_LS").getS();
 	for(int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); )
 	{
+	    if(sel[0] == '#') continue;
 	    atp = TSYS::strSepParse(sel,0,':');
 	    if(atp.empty()) atp = "R";
 	    atp_m = TSYS::strSepParse(atp,0,'_');
@@ -1347,7 +1350,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:rw:id:name]\n"
 		    "Where:\n"
 		    "  dt - Modbus data type (R-register[3,6(16)],C-coil[1,5(15)],RI-input register[4],CI-input coil[2]).\n"
-		    "       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5;\n"
+		    "       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5.\n"
+		    "       Star from symbol '#' for comment line;\n"
 		    "  numb - ModBus device's data address (dec, hex or octal);\n"
 		    "  rw - read-write mode (r-read; w-write; rw-readwrite);\n"
 		    "  id - created attribute identifier;\n"
@@ -1403,6 +1407,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
     {
+	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
 	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
 	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[ibf]\\d*)")->setAttr("color","darkorange");

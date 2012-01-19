@@ -32,8 +32,6 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define MaxLenReq 200
-
 using std::string;
 using std::vector;
 using std::map;
@@ -202,8 +200,9 @@ class TMdContr: public TController
 	//Attributes
 	Res     req_res, en_res;
 	int	&mPrior,			//Process task priority
-		&mNode;				//Node
-	ResString &mSched,			// Calc schedule
+		&mNode,				//Node
+		&blkMaxSz;			//Maximum request block size
+	ResString &mSched,			//Calc schedule
 		&mPrt,				//Protocol
 		&mAddr;				//Transport device address
 	bool	&mMerge,			//Fragments of register merge
