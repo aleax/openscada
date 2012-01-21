@@ -1808,8 +1808,14 @@ function makeUI()
       if(opPg.window)
       {
         if(opPg.windowExt) opPg.window.close();
-        else document.getElementById('mainCntr').removeChild(opPg.window);
-        delete opPg.parent.pages[pgList[i_p]];
+        else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
+	else
+	{
+	    document.body.removeChild(opPg.window);
+	    delete masterPage;
+	    masterPage = new pwDescr('',true)
+	}
+	if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
       }
       else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p])
       { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null,true); }

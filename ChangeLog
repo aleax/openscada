@@ -1,4 +1,5 @@
 2012-01-21 Roman
+- FIX:UI.WebVision: Master page replace is fixed.
 - FIX:DB, Archives: Call module's service call function perSYSCall() is fixed.
 - Archive.FSArch: Checking for archivators is removed from independent task to service call function.
 - Transport.Serial: Checking for output transports is removed from independent task to service call function.
