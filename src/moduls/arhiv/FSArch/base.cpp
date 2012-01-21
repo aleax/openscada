@@ -66,7 +66,7 @@ using namespace FSArch;
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(false), copyErrValFiles(false), prcSt(false)
+ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(false), copyErrValFiles(false)
 {
     mod		= this;
 
@@ -77,15 +77,6 @@ ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(fals
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    //> Create checking archivators timer
-    struct sigevent sigev;
-    memset(&sigev,0,sizeof(sigev));
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = Task;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
 void ModArch::postEnable( int flag )
@@ -111,8 +102,6 @@ void ModArch::postEnable( int flag )
 ModArch::~ModArch()
 {
     try{ modStop(); }catch(...){}
-
-    timer_delete(tmId);
 }
 
 string ModArch::filesDB()
@@ -196,58 +185,35 @@ void ModArch::load_( )
     } while(next_opt != -1);
 }
 
-void ModArch::modStart( )
+void ModArch::perSYSCall( unsigned int cnt )
 {
-    //> Start interval timer for checking archivators
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = CHECK_ARH_PER;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-}
-
-void ModArch::modStop( )
-{
-    //> Stop interval timer for periodic thread creating
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-    if(TSYS::eventWait(prcSt, false, nodePath()+"stop",STD_WAIT_TM))
-	throw TError(nodePath().c_str(),_("Check archives thread is not stopped!"));
-}
-
-void ModArch::Task( union sigval obj )
-{
-    ModArch *arh = (ModArch *)obj.sival_ptr;
-    if(arh->prcSt)  return;
-    arh->prcSt = true;
-
-    vector<string> a_list;
-
     try
     {
+	if(cnt%60) return;
+
+	vector<string> a_list;
 	time_t end_tm = time(NULL)+STD_WAIT_TM;
 
 	//> Check message archivators
-	arh->messList(a_list);
+	messList(a_list);
 	for(unsigned i_a = 0; time(NULL) < end_tm && i_a < a_list.size(); i_a++)
-	    if(arh->messAt(a_list[i_a]).at().startStat())
-		try{ arh->messAt(a_list[i_a]).at().checkArchivator(); }
+	    if(messAt(a_list[i_a]).at().startStat())
+		try{ messAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(arh->nodePath().c_str(),_("Check message archivator '%s' error."),a_list[i_a].c_str());
+		    mess_err(nodePath().c_str(),_("Check message archivator '%s' error."),a_list[i_a].c_str());
 		}
 
 	//> Check value archivators
-	arh->valList(a_list);
+	valList(a_list);
 	for(unsigned i_a = 0; time(NULL) < end_tm && i_a < a_list.size(); i_a++)
-	    if(arh->valAt(a_list[i_a]).at().startStat())
-		try{ arh->valAt(a_list[i_a]).at().checkArchivator(); }
+	    if(valAt(a_list[i_a]).at().startStat())
+		try{ valAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(arh->nodePath().c_str(),_("Check value archivator '%s' error."),a_list[i_a].c_str());
+		    mess_err(nodePath().c_str(),_("Check value archivator '%s' error."),a_list[i_a].c_str());
 		}
 
 	//> Check to nopresent archive files
@@ -261,9 +227,7 @@ void ModArch::Task( union sigval obj )
 		fld_cnt--;
 	    }
     }
-    catch(TError err) { mess_err(arh->nodePath().c_str(),"%s",err.mess.c_str()); }
-
-    arh->prcSt = false;
+    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 }
 
 TMArchivator *ModArch::AMess(const string &iid, const string &idb)

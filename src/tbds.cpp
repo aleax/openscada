@@ -117,6 +117,8 @@ void TBDS::perSYSCall( unsigned int cnt )
 	    }
 	}
     }catch(...){  }
+
+    TSubSYS::perSYSCall(cnt);
 }
 
 AutoHD<TTable> TBDS::open( const string &bdn, bool create )

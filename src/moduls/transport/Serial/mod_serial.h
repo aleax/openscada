@@ -29,8 +29,6 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define CHECK_TR_PER 10
-
 using namespace OSCADA;
 
 namespace Serial
@@ -197,9 +195,6 @@ class TTr: public TTipTransport
 	TTr( string name );
 	~TTr( );
 
-	void modStart( );
-	void modStop( );
-
 	AutoHD<TTrIn> inAt( const string &name );
 	AutoHD<TTrOut> outAt( const string &name );
 
@@ -212,6 +207,8 @@ class TTr: public TTipTransport
 	bool devLock( const string &dn, bool check = false );
 	void devUnLock( const string &dn );
 
+	void perSYSCall( unsigned int cnt );
+
     protected:
 	void load_( );
 
@@ -219,12 +216,7 @@ class TTr: public TTipTransport
 	//Methods
 	void postEnable( int flag );
 
-	static void Task( union sigval obj );	//Transports checking task
-
 	//Attributes
-	bool	prcSt;
-	timer_t	tmId;				//Thread timer
-
 	map<string,bool> mDevLock;
 };
 

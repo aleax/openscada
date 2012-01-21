@@ -124,8 +124,6 @@ class TWEB: public TUI
 
     private:
 	//Methods
-	static void TaskSessCheck( union sigval obj );	//Sessions check task
-
 	//> Post message dialog
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 

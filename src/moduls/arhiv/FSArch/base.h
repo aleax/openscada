@@ -48,9 +48,6 @@ class ModArch: public TTipArchivator
 	ModArch( const string &name );
 	~ModArch( );
 
-	void modStart( );
-	void modStop( );
-
 	AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
 	AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
 
@@ -61,6 +58,8 @@ class ModArch: public TTipArchivator
 
 	string filesDB( );
 	TElem &packFE( )	{ return elPackfl; }
+
+	void perSYSCall( unsigned int cnt );
 
 	//> Attributes
 	bool	noArchLimit;
@@ -76,13 +75,9 @@ class ModArch: public TTipArchivator
 
     private:
 	//Methods
-	static void Task( union sigval obj );		//Checking archives task
-
 	string optDescr( );
 
 	//Attributes
-	bool	prcSt;
-	timer_t	tmId;		//Thread timer
 	TElem	elPackfl;	//Arch files elements
 };
 

@@ -72,7 +72,7 @@ using namespace Serial;
 //************************************************
 //* TTr						 *
 //************************************************
-TTr::TTr( string name ) : TTipTransport(MOD_ID), prcSt(false)
+TTr::TTr( string name ) : TTipTransport(MOD_ID)
 {
     mod		= this;
 
@@ -83,22 +83,11 @@ TTr::TTr( string name ) : TTipTransport(MOD_ID), prcSt(false)
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
-
-    //> Create transports checking timer
-    struct sigevent sigev;
-    memset(&sigev,0,sizeof(sigev));
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = Task;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmId);
 }
 
 TTr::~TTr( )
 {
     try{ modStop(); }catch(...){}
-
-    timer_delete(tmId);
 }
 
 void TTr::postEnable( int flag )
@@ -115,26 +104,6 @@ void TTr::postEnable( int flag )
 AutoHD<TTrIn> TTr::inAt( const string &name )	{ return TTipTransport::inAt(name); }
 
 AutoHD<TTrOut> TTr::outAt( const string &name )	{ return TTipTransport::outAt(name); }
-
-void TTr::modStart( )
-{
-    //> Start interval timer for transports checking
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = CHECK_TR_PER;
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-}
-
-void TTr::modStop( )
-{
-    //> Stop interval timer for transports checking
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmId, 0, &itval, NULL);
-    if( TSYS::eventWait( prcSt, false, nodePath()+"stop",5) )
-	throw TError(nodePath().c_str(),_("Check transports thread is not stopped!"));
-}
 
 void TTr::load_( )
 {
@@ -168,19 +137,14 @@ void TTr::devUnLock( const string &dn )
     mDevLock[dn] = false;
 }
 
-void TTr::Task( union sigval obj )
+void TTr::perSYSCall( unsigned int cnt )
 {
-    if(mod->prcSt) return;
-    mod->prcSt = true;
-
     //> Check all output transports
     vector<string> ls;
     mod->outList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try{ mod->outAt(ls[i_l]).at().check(); }
-	catch(...){ }
-
-    mod->prcSt = false;
+	catch(TError err){ }
 }
 
 void TTr::writeLine( int fd, const string &ln )

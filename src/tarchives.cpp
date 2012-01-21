@@ -430,6 +430,8 @@ void TArchiveS::subStop( )
 void TArchiveS::perSYSCall( unsigned int cnt )
 {
     if(subStartStat() && toUpdate && !SubStarting) subStart();
+
+    TSubSYS::perSYSCall(cnt);
 }
 
 void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess )

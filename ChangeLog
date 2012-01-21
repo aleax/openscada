@@ -1,3 +1,9 @@
+2012-01-21 Roman
+- FIX:DB, Archives: Call module's service call function perSYSCall() is fixed.
+- Archive.FSArch: Checking for archivators is removed from independent task to service call function.
+- Transport.Serial: Checking for output transports is removed from independent task to service call function.
+
+
 2012-01-19 Roman
 - DAQ.ModBus: Maximum request block size is made optional for a controller object.
     Comments support is added into attributes configuration list, for standard parameter type.
