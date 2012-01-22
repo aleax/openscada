@@ -496,5 +496,3 @@ TCfg &TCfg::operator=(TCfg & cfg)
     }
     return *this;
 }
-
-

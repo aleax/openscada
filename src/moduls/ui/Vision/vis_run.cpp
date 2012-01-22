@@ -1410,8 +1410,12 @@ void VisRun::updatePage( )
 		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toAscii().data()))->setPgOpenSrc("");
 	    else
 	    {
-		pg->deleteLater();
-		if(pg == master_pg)	master_pg = NULL;
+		if(pg != master_pg)	pg->deleteLater();
+		else
+		{
+		    ((QScrollArea *)centralWidget())->setWidget(new QWidget());
+		    master_pg = NULL;
+		}
 	    }
 	}
 

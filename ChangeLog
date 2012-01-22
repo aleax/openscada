@@ -1,3 +1,7 @@
+2012-01-22 Roman
+- FIX:UI.Vision: Master page replace is some changed by previous remove from centralWidget().
+
+
 2012-01-21 Roman
 - FIX:UI.WebVision: Master page replace is fixed.
 - FIX:DB, Archives: Call module's service call function perSYSCall() is fixed.
