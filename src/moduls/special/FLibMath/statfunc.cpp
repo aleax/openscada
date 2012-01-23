@@ -42,13 +42,21 @@ FLibMath::Lib *FLibMath::mod;
 
 extern "C"
 {
+#ifdef MOD_SPEC_FLibMath_INCL
+    TModule::SAt spec_FLibMath_module( int n_mod )
+#else
     TModule::SAt module( int n_mod )
+#endif
     {
 	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
+#ifdef MOD_SPEC_FLibMath_INCL
+    TModule *spec_FLibMath_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new FLibMath::Lib( source );

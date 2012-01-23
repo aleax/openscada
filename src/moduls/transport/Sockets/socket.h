@@ -192,6 +192,7 @@ class TSocketOut: public TTransportOut
 	string		mTimings;
 	unsigned short	mTmCon;
 	unsigned short	mTmNext;
+	unsigned short	mTmRep;
 
 	int		sock_fd;
 
@@ -202,6 +203,7 @@ class TSocketOut: public TTransportOut
 	//> Status atributes
 	uint64_t	trIn, trOut;			// Traffic in and out counter
 	Res		wres;
+	int64_t		mLstReqTm;
 };
 
 //************************************************

@@ -1,3 +1,10 @@
+2012-01-23 Roman
+- DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.DCON, Transport.Sockets, Transport.Serial,
+	Protocol.HTTP, Protocol.SelfSystem, UI.WebCfgD, Special.FLibComplex1, Special.FLibMath, Special.FLibSYS:
+    Builtin to OpenSCADA core support is added.
+- Transport.Sockets: Last repeat timeout is added for next requests repeat.
+
+
 2012-01-22 Roman
 - FIX:UI.Vision: Master page replace is some changed by previous remove from centralWidget().
 

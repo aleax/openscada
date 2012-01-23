@@ -54,16 +54,24 @@ Virtual::TipContr *Virtual::mod;
 
 extern "C"
 {
+#ifdef MOD_DAQ_BlockCalc_INCL
+    TModule::SAt daq_BlockCalc_module( int n_mod )
+#else
     TModule::SAt module( int n_mod )
+#endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
+#ifdef MOD_DAQ_BlockCalc_INCL
+    TModule *daq_BlockCalc_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new Virtual::TipContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+	    return new Virtual::TipContr(source);
 	return NULL;
     }
 }

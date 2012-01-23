@@ -56,13 +56,21 @@ Sockets::TTransSock *Sockets::mod;
 
 extern "C"
 {
+#ifdef MOD_Tr_Sockets_INCL
+    TModule::SAt tr_Sockets_module( int n_mod )
+#else
     TModule::SAt module( int n_mod )
+#endif
     {
 	if( n_mod==0 ) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
+#ifdef MOD_Tr_Sockets_INCL
+    TModule *tr_Sockets_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new Sockets::TTransSock( source );
@@ -615,7 +623,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), sock_fd(-1)
+    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), sock_fd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
@@ -630,7 +638,9 @@ void TSocketOut::setTimings( const string &vl )
 {
     mTmCon = vmax(1,vmin(60000,(int)(atof(TSYS::strParse(vl,0,":").c_str())*1e3)));
     mTmNext = vmax(1,vmin(60000,(int)(atof(TSYS::strParse(vl,1,":").c_str())*1e3)));
-    mTimings = TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
+    mTmRep = vmax(0,vmin(10000,(int)(atof(TSYS::strParse(vl,2,":").c_str())*1e3)));
+    mTimings = mTmRep ? TSYS::strMess("%g:%g:%g",(1e-3*mTmCon),(1e-3*mTmNext),(1e-3*mTmRep)) :
+			TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
 }
 
@@ -757,6 +767,9 @@ void TSocketOut::start()
 	}
 	fcntl(sock_fd,F_SETFL,fcntl(sock_fd,F_GETFL,0)|O_NONBLOCK);
     }
+
+    mLstReqTm = TSYS::curTime();
+
     run_st = true;
 }
 
@@ -794,7 +807,7 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
     if(!run_st) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-    if(reqTry++ >= 2) throw TError(nodePath().c_str(),_("Request error: %s"),err.c_str());
+    if(reqTry++ >= 2) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Request error: %s"),err.c_str()); }
     //> Write request
     writeReq = false;
     if(obuf != NULL && len_ob > 0)
@@ -803,6 +816,8 @@ repeate:
 	char tbuf[100];
 	while(read(sock_fd,tbuf,sizeof(tbuf)) > 0) ;
 	//>> Write request
+	if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
+	    TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
 	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);
@@ -838,8 +853,8 @@ repeate:
 	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	}
 	while(kz == -1 && errno == EINTR);
-	if(kz == 0)	{ res.release(); if(writeReq) stop(); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if(kz < 0)	{ res.release(); stop(); throw TError(nodePath().c_str(),_("Socket error!")); }
+	if(kz == 0)	{ res.release(); if(writeReq) stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
+	else if(kz < 0)	{ res.release(); stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Socket error!")); }
 	else if(FD_ISSET(sock_fd, &rd_fd))
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
@@ -856,6 +871,8 @@ repeate:
     }
 
     if(prevTmOut) setTmCon(prevTmOut);
+
+    if(mTmRep)	mLstReqTm = TSYS::curTime();
 
     return vmax(0,i_b);
 }
@@ -877,9 +894,10 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:[name] - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"[conn]:[next]\". Where:\n"
+	    _("Connection timings in format: \"conn:next:[rep]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
-	    "    next - maximum time for continue respond wait, in seconds."));
+	    "    next - maximum time for continue respond wait, in seconds;\n"
+	    "    rep  - minimum repeate timeout, in seconds."));
 	return;
     }
 
