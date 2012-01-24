@@ -1,3 +1,8 @@
+2012-01-24 Maxim
+- FIX:UI: Vision crashing during the paste operation is fixed for the primitive ElFigure by adding the check on the shape's
+		presence in the shapes' container.
+
+
 2012-01-23 Roman
 - DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.DCON, Transport.Sockets, Transport.Serial,
 	Protocol.HTTP, Protocol.SelfSystem, UI.WebCfgD, Special.FLibComplex1, Special.FLibMath, Special.FLibSYS:

@@ -1980,78 +1980,93 @@ void ShapeElFigure::toolAct( QAction *act )
         QVector<int> inund_figs;
         map< int, QVector<int> > inund_map;
         if( index_array.size() ) index_array.clear();
-        for( int i=0; i < copy_index.size(); i++ )
+        bool f_present = true;
+        for( int i_p=0; i_p < copy_index.size(); i_p++ )
         {
-            if( copy_index[i] != -1 )
+            if( copy_index[i_p] != -1 )
             {
-                shapeItems.push_back( shapeItems[copy_index[i]] );
-                index_array.push_back( shapeItems.size()-1 );
-                switch( shapeItems[copy_index[i]].type )
+                bool f_pr = false;
+                for (int i_s = 0; i_s < shapeItems.size(); i_s++ )
+                    if( copy_index[i_p] == i_s ) { f_pr = true; break; }
+                if( !f_pr ){ f_present = false; break; }
+            }
+        }
+        if( f_present )
+        {
+            for( int i=0; i < copy_index.size(); i++ )
+            {
+                if( copy_index[i] != -1 )
                 {
-                    case 1:
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                        if( shapeItems[shapeItems.size()-1].n1 > 0 )
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if(  shapeItems[shapeItems.size()-1].n1 <= -10 )
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                        if( shapeItems[shapeItems.size()-1].n2 > 0 )
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        break;
-                    case 2:
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                        if( shapeItems[shapeItems.size()-1].n1 > 0 )
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n1 <= -10 )
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                        if( shapeItems[shapeItems.size()-1].n2 > 0 )
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
-                        if( shapeItems[shapeItems.size()-1].n3 > 0 )
-                            shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n3 <= -10 )
-                            shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
-                        if( shapeItems[shapeItems.size()-1].n4 > 0 )
-                            shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n4 <= -10 )
-                            shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n5];
-                        if( shapeItems[shapeItems.size()-1].n5 > 0 )
-                            shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n5 <= -10 )
-                            shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        break;
-                    case 3:
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                        if( shapeItems[shapeItems.size()-1].n1 > 0 )
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n1 <= -10 )
-                            shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                        if( shapeItems[shapeItems.size()-1].n2 > 0 )
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
-                            shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
-                        if( shapeItems[shapeItems.size()-1].n3 > 0 )
-                            shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n3 <= -10 )
-                            shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
-                        if( shapeItems[shapeItems.size()-1].n4 > 0 )
-                            shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
-                        else if( shapeItems[shapeItems.size()-1].n4 <= -10 )
-                            shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
-                        break;
+                    shapeItems.push_back( shapeItems[copy_index[i]] );
+                    index_array.push_back( shapeItems.size()-1 );
+                    switch( shapeItems[copy_index[i]].type )
+                    {
+                        case 1:
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
+                            if( shapeItems[shapeItems.size()-1].n1 > 0 )
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if(  shapeItems[shapeItems.size()-1].n1 <= -10 )
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
+                            if( shapeItems[shapeItems.size()-1].n2 > 0 )
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            break;
+                        case 2:
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
+                            if( shapeItems[shapeItems.size()-1].n1 > 0 )
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n1 <= -10 )
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
+                            if( shapeItems[shapeItems.size()-1].n2 > 0 )
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
+                            if( shapeItems[shapeItems.size()-1].n3 > 0 )
+                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n3 <= -10 )
+                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
+                            if( shapeItems[shapeItems.size()-1].n4 > 0 )
+                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n4 <= -10 )
+                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n5];
+                            if( shapeItems[shapeItems.size()-1].n5 > 0 )
+                                shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n5 <= -10 )
+                                shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            break;
+                        case 3:
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
+                            if( shapeItems[shapeItems.size()-1].n1 > 0 )
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n1 <= -10 )
+                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
+                            if( shapeItems[shapeItems.size()-1].n2 > 0 )
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
+                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
+                            if( shapeItems[shapeItems.size()-1].n3 > 0 )
+                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n3 <= -10 )
+                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
+                            if( shapeItems[shapeItems.size()-1].n4 > 0 )
+                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
+                            else if( shapeItems[shapeItems.size()-1].n4 <= -10 )
+                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
+                            break;
+                    }
                 }
             }
         }
+        else ((VisDevelop *)w->mainWin())->actVisItCopy->setEnabled(false);
         if( index_array.size() )
         {
             for( int i = 0; i < index_array.size(); i++ )
