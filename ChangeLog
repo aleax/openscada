@@ -1,3 +1,7 @@
+2012-01-24 Roman
+- FIX:SYS: config.h installation and using into /etc/openscada/ directory is fixed for build external OpenSCADA modules.
+
+
 2012-01-24 Maxim
 - FIX:UI: Vision crashing during the paste operation is fixed for the primitive ElFigure by adding the check on the shape's
 		presence in the shapes' container.

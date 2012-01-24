@@ -228,7 +228,6 @@ rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_includedir/openscada/
 install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/{MESS,VAL}
-install -m 644 *.h %buildroot/%_includedir/openscada
 install -m 644 src/*.h %buildroot/%_includedir/openscada
 install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
 install -m 644 -pD data/oscada_start.xml %buildroot/%_sysconfdir/oscada_start.xml

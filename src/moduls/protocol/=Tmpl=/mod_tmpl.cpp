@@ -25,7 +25,6 @@
 #include <string.h>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
-#include <config.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>

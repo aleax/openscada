@@ -9,7 +9,7 @@ oscd_docmodul="../../../../doc/Modules/"
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
-AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(src/config.h)
 
 AC_LANG(C++)
 

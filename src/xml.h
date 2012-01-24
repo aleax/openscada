@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 
-#include "../config.h"
+#include "config.h"
 
 using std::string;
 using std::vector;
