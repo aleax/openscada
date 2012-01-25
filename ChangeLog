@@ -1,3 +1,7 @@
+2012-01-25 Roman
+- SYS: DAQ subsystem modules interface version is risen to 6.
+
+
 2012-01-24 Roman
 - FIX:SYS: config.h installation and using into /etc/openscada/ directory is fixed for build external OpenSCADA modules.
 
