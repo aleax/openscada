@@ -28,9 +28,9 @@ using namespace OSCADA;
 //* TPrmTempl                                     *
 //*************************************************
 TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
-    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), m_id(cfg("ID").getSd()), m_prog(cfg("PROGRAM").getSd())
+    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), mId(cfg("ID").getSd())
 {
-    m_id = iid;
+    mId = iid;
     setName(iname);
 }
 
@@ -47,7 +47,7 @@ TCntrNode &TPrmTempl::operator=( TCntrNode &node )
     string tid = id();
     *(TConfig *)this = *(TConfig*)src_n;
     *(TFunction *)this = *(TFunction*)src_n;
-    m_id = tid;
+    mId = tid;
 
     if( src_n->startStat( ) && !startStat( ) )  setStart( true );
 
@@ -98,13 +98,13 @@ void TPrmTempl::setMaxCalcTm( int vl )	{ cfg("MAXCALCTM").setI(vl); modif(); }
 
 string TPrmTempl::progLang()
 {
-    string tPrg = m_prog.getVal();
+    string tPrg = cfg("PROGRAM").getS();
     return tPrg.substr(0,tPrg.find("\n"));
 }
 
 string TPrmTempl::prog( )
 {
-    string tPrg = m_prog.getVal();
+    string tPrg = cfg("PROGRAM").getS();
     size_t lngEnd = tPrg.find("\n");
     return tPrg.substr((lngEnd==string::npos)?0:lngEnd+1);
 }
@@ -112,17 +112,13 @@ string TPrmTempl::prog( )
 void TPrmTempl::setProgLang( const string &ilng )
 {
     if(startStat()) setStart(false);
-
-    m_prog = ilng+"\n"+prog();
-    modif();
+    cfg("PROGRAM").setS(ilng+"\n"+prog());
 }
 
 void TPrmTempl::setProg( const string &iprg )
 {
     if(startStat()) setStart(false);
-
-    m_prog = progLang()+"\n"+iprg;
-    modif();
+    cfg("PROGRAM").setS(progLang()+"\n"+iprg);
 }
 
 void TPrmTempl::setStart( bool vl )
@@ -423,11 +419,11 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 //* TPrmTmplLib                                   *
 //*************************************************
 TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&SYS->daq().at().elLib()), run_st(false), m_id(cfg("ID").getSd()), m_db(cfg("DB").getSd()), work_lib_db(lib_db)
+    TConfig(&SYS->daq().at().elLib()), run_st(false), mId(cfg("ID").getSd()), work_lib_db(lib_db)
 {
-    m_id = id;
+    mId = id;
     setName( name );
-    m_db = string("tmplib_")+id;
+    cfg("DB").setS(string("tmplib_")+id);
     m_ptmpl = grpAdd("tmpl_");
 }
 
@@ -444,10 +440,10 @@ TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
     //> Configuration copy
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
-    m_id = tid;
+    mId = tid;
     work_lib_db = src_n->work_lib_db;
 
-    //- Templates copy -
+    //> Templates copy
     vector<string> ls;
     src_n->list(ls);
     for(unsigned i_p = 0; i_p < ls.size(); i_p++)
@@ -495,8 +491,7 @@ void TPrmTmplLib::setFullDB( const string &vl )
 {
     size_t dpos = vl.rfind(".");
     work_lib_db = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
-    m_db = (dpos!=string::npos) ? vl.substr(dpos+1) : "";
-    modifG();
+    cfg("DB").setS((dpos!=string::npos) ? vl.substr(dpos+1) : "");
 }
 
 void TPrmTmplLib::load_( )

@@ -110,7 +110,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), pEl("w_attr"),
-    mCard(cfg("CARD").getSd()), mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()),
+    mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()),
     prcSt(false), endrunReq(false), numChan(0), smplSize(0), stream(NULL), acqSize(0)
 {
     cfg("PRM_BD").setS("SoundCard_"+name_c);
@@ -138,11 +138,11 @@ string TMdContr::getStatus( )
 int TMdContr::channelAllow( )
 {
     int chann = 0;
-    if( mCard.getVal() == "<default>" && Pa_GetDefaultInputDevice() >= 0 )
+    if(card() == "<default>" && Pa_GetDefaultInputDevice() >= 0)
 	chann = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice())->maxInputChannels;
     else
 	for( int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++ )
-	    if( mCard.getVal() == Pa_GetDeviceInfo(i_d)->name )
+	    if(card() == Pa_GetDeviceInfo(i_d)->name)
 	    {
 		chann = Pa_GetDeviceInfo(i_d)->maxInputChannels;
 		break;
@@ -198,12 +198,12 @@ void TMdContr::start_( )
     PaStreamParameters iParam;
     iParam.device = -1;
 
-    if( mCard.getVal() == "<default>" )	iParam.device = Pa_GetDefaultInputDevice();
+    if(card() == "<default>") iParam.device = Pa_GetDefaultInputDevice();
     else
-	for( int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++ )
-	    if( Pa_GetDeviceInfo(i_d)->maxInputChannels && mCard.getVal() == Pa_GetDeviceInfo(i_d)->name )
+	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
+	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels && card() == Pa_GetDeviceInfo(i_d)->name)
 	    { iParam.device = i_d; break; }
-    if( iParam.device < 0 ) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),mCard.getVal().c_str());
+    if( iParam.device < 0 ) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),card().c_str());
     if( !numChan ) throw TError(nodePath().c_str(),_("No one channel is configured for acquisition."));
     if( !smplSize ) throw TError(nodePath().c_str(),_("Sample type set is error."));
 

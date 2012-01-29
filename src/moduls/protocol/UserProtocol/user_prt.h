@@ -71,9 +71,9 @@ class UserPrt : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string name( );
-	string descr( )		{ return mDscr; }
+	string descr( )		{ return cfg("DESCR").getS(); }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
 	string inProgLang( );
@@ -89,8 +89,8 @@ class UserPrt : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &name )	{ mName = name; modif(); }
-	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
+	void setName( const string &name )	{ cfg("NAME").setS(name); }
+	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
 	void setInProgLang( const string &ilng );
@@ -114,14 +114,14 @@ class UserPrt : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	ResString &mId, &mName, &mDscr;
+	string	&mId;
 	bool	&mAEn, mEn;
 	string	mDB, mWorkInProg, mWorkOutProg;
 };

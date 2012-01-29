@@ -47,10 +47,10 @@ class TUser : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )	{ return m_name.getValRef(); }
-	string	lName( )	{ return m_lname; }
-	string	descr( )	{ return m_descr; }
-	string	picture( )	{ return m_pict; }
+	const string &name( )	{ return m_name; }
+	string	lName( )	{ return cfg("DESCR").getS(); }
+	string	descr( )	{ return cfg("LONGDESCR").getS(); }
+	string	picture( )	{ return cfg("PICTURE").getS(); }
 	bool sysItem( )		{ return m_sysIt; }
 
 	bool auth( const string &pass );
@@ -59,9 +59,9 @@ class TUser : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )		{ return DB()+'.'+tbl(); }
 
-	void setLName( const string &nm )	{ m_lname = nm; modif(); }
-	void setDescr( const string &vl )	{ m_descr = vl; modif(); }
-	void setPicture( const string &pct )	{ m_pict = pct; modif(); }
+	void setLName( const string &nm )	{ cfg("DESCR").setS(nm); }
+	void setDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
+	void setPicture( const string &pct )	{ cfg("PICTURE").setS(pct); }
 	void setPass( const string &n_pass );
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
 
@@ -78,16 +78,12 @@ class TUser : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_name.getValRef(); }
+	const string &nodeName( )	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	ResString &m_name,
-		&m_lname,
-		&m_descr,
-		&m_pass,
-		&m_pict;
+	string 	&m_name;
 	string	m_db;
 	bool	m_sysIt;
 };
@@ -104,17 +100,18 @@ class TGroup : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )	{ return m_name.getValRef(); }
-	string lName( )		{ return m_lname; }
-	string descr( )		{ return m_descr; }
+	const string &name( )	{ return m_name; }
+	string lName( )		{ return cfg("DESCR").getS(); }
+	string descr( )		{ return cfg("LONGDESCR").getS(); }
+	string users( )		{ return cfg("USERS").getS(); }
 	bool sysItem( )		{ return m_sysIt; }
 
 	string DB( )		{ return m_db; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setLName( const string &nm )	{ m_lname = nm; modif(); }
-	void setDescr( const string &vl )	{ m_descr = vl; modif(); }
+	void setLName( const string &nm )	{ cfg("DESCR").setS(nm); }
+	void setDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
 
 	void setDB( const string &vl )		{ m_db = vl; modifG(); }
@@ -134,15 +131,12 @@ class TGroup : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_name.getValRef(); }
+	const string &nodeName( )	{ return m_name; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	ResString &m_name,
-		&m_lname,
-		&m_descr,
-		&m_usrs;
+	string 	&m_name;
 	string	m_db;
 	bool	m_sysIt;
 };

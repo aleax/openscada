@@ -483,8 +483,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem),
 	mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
-	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), mSched(cfg("SCHEDULE").getSd()),
-	mAddr(cfg("ADDR").getSd()), mAddrTr(cfg("ADDR_TR").getSd()), mAssincWR(cfg("ASINC_WR").getBd()),
+	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), mAssincWR(cfg("ASINC_WR").getBd()),
 	prc_st(false), call_st(false), endrun_req(false), isReload(false), di(NULL), dc(NULL),
 	mPer(1e9), tm_calc(0)
 {
@@ -545,7 +544,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld/1e3);
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
 }
 
 void TMdContr::save_( )
@@ -573,7 +572,7 @@ void TMdContr::start_( )
     catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
 
     //> Clear acquisition data blocks and asynchronous write mode data blocks
     acqBlks.clear();
@@ -726,7 +725,7 @@ void TMdContr::connectRemotePLC( )
 	    //> Full Libnodave API
 	    ResAlloc res(reqRes, true);
 	    _daveOSserialType fds;
-	    fds.wfd = fds.rfd = openSocket(102, mAddr.getVal().c_str());
+	    fds.wfd = fds.rfd = openSocket(102, addr().c_str());
 	    if(fds.rfd <= 0) throw TError(nodePath().c_str(),_("Open socket of remote PLC error."));
 	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
 	    dc = daveNewConnection(di,2,0,mSlot);
@@ -747,8 +746,8 @@ void TMdContr::connectRemotePLC( )
 	    /*if( !SYS->transport().at().at("Sockets").at().outPresent(mod->modId()+id()) )
 		SYS->transport().at().at("Sockets").at().outAdd(mod->modId()+id());
 	    AutoHD<TTransportOut> tr = SYS->transport().at().at("Sockets").at().outAt(mod->modId()+id());
-	    string trAddr = "TCP:"+TSYS::strSepParse(mAddr,0,':')+":"+
-			        (TSYS::strSepParse(mAddr,1,':').empty() ? "102" : TSYS::strSepParse(mAddr,1,':'));
+	    string trAddr = "TCP:"+TSYS::strSepParse(addr(),0,':')+":"+
+			        (TSYS::strSepParse(addr(),1,':').empty() ? "102" : TSYS::strSepParse(addr(),1,':'));
 	    tr.at().setAddr(trAddr);
 	    tr.at().start();
 
@@ -797,7 +796,7 @@ void TMdContr::connectRemotePLC( )
 	case ADS:
 	{
 	    //> Establish connection
-	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddrTr,0,'.')).at().outAt(TSYS::strSepParse(mAddrTr,1,'.'));
+	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addrTr(),0,'.')).at().outAt(TSYS::strSepParse(addrTr(),1,'.'));
 	    try { tr.at().start(); }
 	    catch(TError err) { errCon = _("10:Connection error."); mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
@@ -853,7 +852,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		tMsg.f  = 0;
 		tMsg.b  = MPI_Read_Write_DB;
 		tMsg.e  = 0;
-		tMsg.d[0] = vmax(0,vmin(126,atoi(mAddr.getVal().c_str())));
+		tMsg.d[0] = vmax(0,vmin(126,atoi(addr().c_str())));
 		tMsg.d[1] = (unsigned char)(offset>>8);
 		tMsg.d[2] = (unsigned char)n_db;
 		tMsg.d[3] = (unsigned char)(n_db>>8);
@@ -877,7 +876,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    if(tMsg.f == 18)	throw TError(nodePath().c_str(),_("18:Master is out of the logical token ring."));
 	    if(tMsg.f == 0x85)	throw TError(nodePath().c_str(),_("20:Specified offset address or DB error."));
 
-	    //printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",mDev,vmax(0,vmin(126,atoi(mAddr.c_str()))),n_db,offset,buffer.size(),tMsg.f);
+	    //printf("Get DB %d:%d DB%d.%d(%d) -- %d\n",mDev,vmax(0,vmin(126,atoi(addr().c_str()))),n_db,offset,buffer.size(),tMsg.f);
 
 	    //> Close connection
 	    /*tMsg.rx = 3;
@@ -960,7 +959,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	}
 	case ADS:
 	{
-	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddrTr,0,'.')).at().outAt(TSYS::strSepParse(mAddrTr,1,'.'));
+	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addrTr(),0,'.')).at().outAt(TSYS::strSepParse(addrTr(),1,'.'));
 	    ResAlloc resN(tr.at().nodeRes(), true);
 	    try { if(!tr.at().startStat()) tr.at().start(); }
 	    catch(TError err) { errCon = _("10:Connection error."); throw; }
@@ -972,10 +971,10 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    AmsTcpHD->len = sizeof(AMS_HEAD) + sizeof(ADS_ReadWriteReq);
 
 	    AMS_HEAD *AmsHD = (AMS_HEAD *)(AmsTcpHD+1);
-	    string tAddr = TSYS::strParse(mAddr,0,"|");
+	    string tAddr = TSYS::strParse(addr(),0,"|");
 	    for(int i_d = 0, i_off = 0; i_d < 6; i_d++) AmsHD->AMSNetId_targ[i_d] = atoi(TSYS::strParse(tAddr,0,".",&i_off).c_str());
 	    AmsHD->AMSPort_targ = atoi(TSYS::strParse(tAddr,1,":").c_str());
-	    tAddr = TSYS::strParse(mAddr,1,"|");
+	    tAddr = TSYS::strParse(addr(),1,"|");
 	    for(int i_d = 0, i_off = 0; i_d < 6; i_d++) AmsHD->AMSNetId_src[i_d] = atoi(TSYS::strParse(tAddr,0,".",&i_off).c_str());
 	    AmsHD->AMSPort_src = atoi(TSYS::strParse(tAddr,1,":").c_str());
 	    AmsHD->com = 2;		//ADS Read
@@ -1056,7 +1055,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		tMsg.f  = 0;
 		tMsg.b  = MPI_Read_Write_DB;
 		tMsg.e  = 0;
-		tMsg.d[0] = vmax(0,vmin(126,atoi(mAddr.getVal().c_str())));
+		tMsg.d[0] = vmax(0,vmin(126,atoi(addr().c_str())));
 		tMsg.d[1] = (unsigned char)(offset>>8);
 		tMsg.d[2] = (unsigned char)n_db;
 		tMsg.d[3] = (unsigned char)(n_db>>8);
@@ -1074,7 +1073,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    }
 	    while((res == DRV_NO_ERROR) && (tMsg.f == 0x02 || tMsg.f == 0x39) && e_try > 0);
 
-	    //printf("Put DB %d:%d DB%d.%d(%d) -- %d \n",mDev,vmax(0,vmin(126,atoi(mAddr.c_str()))),n_db,offset,buffer.size(),tMsg.f);
+	    //printf("Put DB %d:%d DB%d.%d(%d) -- %d \n",mDev,vmax(0,vmin(126,atoi(addr().c_str()))),n_db,offset,buffer.size(),tMsg.f);
 
 	    //> Process errors
 	    if(res != DRV_NO_ERROR)		throw TError(nodePath().c_str(),_("19:Request to DB error %d."),res);
@@ -1137,7 +1136,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	}
 	case ADS:
 	{
-	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddrTr,0,'.')).at().outAt(TSYS::strSepParse(mAddrTr,1,'.'));
+	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addrTr(),0,'.')).at().outAt(TSYS::strSepParse(addrTr(),1,'.'));
 	    ResAlloc resN(tr.at().nodeRes(), true);
 	    try{ if(!tr.at().startStat()) tr.at().start(); }
 	    catch(TError err) { errCon = _("10:Connection error."); throw; }
@@ -1149,10 +1148,10 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    AmsTcpHD->len = sizeof(AMS_HEAD) + sizeof(ADS_ReadWriteReq) + buffer.size();
 
 	    AMS_HEAD *AmsHD = (AMS_HEAD *)(AmsTcpHD+1);
-	    string tAddr = TSYS::strParse(mAddr,0,"|");
+	    string tAddr = TSYS::strParse(addr(),0,"|");
 	    for(int i_d = 0, i_off = 0; i_d < 6; i_d++) AmsHD->AMSNetId_targ[i_d] = atoi(TSYS::strParse(tAddr,0,".",&i_off).c_str());
 	    AmsHD->AMSPort_targ = atoi(TSYS::strParse(tAddr,1,":").c_str());
-	    tAddr = TSYS::strParse(mAddr,1,"|");
+	    tAddr = TSYS::strParse(addr(),1,"|");
 	    for(int i_d = 0, i_off = 0; i_d < 6; i_d++) AmsHD->AMSNetId_src[i_d] = atoi(TSYS::strParse(tAddr,0,".",&i_off).c_str());
 	    AmsHD->AMSPort_src = atoi(TSYS::strParse(tAddr,1,":").c_str());
 	    AmsHD->com = 3;		//ADS Write
@@ -1263,14 +1262,14 @@ string TMdContr::getValS( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::String, ival.sz );
     for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off && 
+	if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 	    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()) )
 	{
-	    if(!acqBlks[i_b].err.size())	return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
+	    if(!acqBlks[i_b].err.size()) return acqBlks[i_b].val.substr(ival.off-acqBlks[i_b].off,iv_sz);
 	    else err.setVal(acqBlks[i_b].err);
 	    break;
 	}
-    if(err.getVal().empty()) err.setVal( _("11:Value is not gathered.") );
+    if(err.getVal().empty()) err.setVal(_("11:Value is not gathered."));
 
     return EVAL_STR;
 }
@@ -1378,7 +1377,7 @@ void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
 		if(writeBlks[i_b].db == ival.db && ival.off >= writeBlks[i_b].off &&
 			(ival.off+iv_sz) <= (writeBlks[i_b].off+(int)writeBlks[i_b].val.size()))
 		{
-		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,vali.c_str());
+		    writeBlks[i_b].val.replace(ival.off-writeBlks[i_b].off,iv_sz,vali);
 		    if(atoi(writeBlks[i_b].err.getVal().c_str()) == -1) writeBlks[i_b].err = "";
 		    break;
 		}
@@ -1386,7 +1385,7 @@ void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
 	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali.c_str()); break; }
+	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali); break; }
     }
     catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
@@ -1544,7 +1543,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                       *
 //************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), TValFunc(name+"SiemensPrm"), m_tmpl(cfg("TMPL").getSd()), p_el("cif_attr"),
+    TParamContr(name,tp_prm), TValFunc(name+"SiemensPrm"), p_el("cif_attr"),
     id_freq(-1), id_start(-1), id_stop(-1), id_err(-1), id_sh(-1), id_nm(-1), id_dscr(-1), acq_err_tm(0)
 {
 
@@ -1592,8 +1591,8 @@ void TMdPrm::enable( )
 	unsigned fId = 0;
 	if(!func())
 	{
-	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
-				     at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
+	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(cfg("TMPL").getS(),0,'.')).at().
+				     at(TSYS::strSepParse(cfg("TMPL").getS(),1,'.')).at().func().at());
 	    to_make = true;
 	}
 	//>> Init attrubutes
@@ -2057,9 +2056,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     if(a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
     {
-	m_tmpl = opt->text();
+	cfg("TMPL").setS(opt->text());
 	disable();
-	modif();
     }
     else if(a_path == "/cfg/only_off" && enableStat())
     {

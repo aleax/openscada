@@ -135,7 +135,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
-    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE").getSd()),
+    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
     prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_calc(0)
 {
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
@@ -188,13 +188,13 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld/1e3);
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
 }
 
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
 
     //> Former process parameters list
     vector<string> list_p;

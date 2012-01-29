@@ -130,8 +130,7 @@ TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
     m_prior(cfg("PRIOR").getId()), m_pattr_lim(cfg("PATTR_LIM").getId()), m_retr(cfg("RETR").getId()), m_tm(cfg("TM").getId()),
-    mSched(cfg("SCHEDULE").getSd()), m_addr(cfg("ADDR").getSd()), m_ver(cfg("VER").getSd()), m_comm(cfg("COMM").getSd()),
-    m_V3(cfg("V3").getSd()), prc_st(false), call_st(false), endrun_req(false), prmEnErr(false), tm_gath(0)
+    prc_st(false), call_st(false), endrun_req(false), prmEnErr(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
@@ -163,23 +162,23 @@ struct snmp_session *TMdContr::getSess( )
     //> Session init
     snmp_sess_init(&session);
     session.version = SNMP_VERSION_1;
-    if(m_ver.getVal() == "1")		session.version = SNMP_VERSION_1;
-    else if(m_ver.getVal() == "2c")	session.version = SNMP_VERSION_2c;
-    else if(m_ver.getVal() == "2u")	session.version = SNMP_VERSION_2u;
-    else if(m_ver.getVal() == "3")	session.version = SNMP_VERSION_3;
-    w_addr = TSYS::strParse(m_addr, 0, ":");
+    if(ver() == "1")		session.version = SNMP_VERSION_1;
+    else if(ver() == "2c")	session.version = SNMP_VERSION_2c;
+    else if(ver() == "2u")	session.version = SNMP_VERSION_2u;
+    else if(ver() == "3")	session.version = SNMP_VERSION_3;
+    w_addr = TSYS::strParse(cfg("ADDR").getS(), 0, ":");
     session.peername = (char *)w_addr.c_str();
     session.retries = m_retr;
     session.timeout = m_tm*1000000;
     if(session.version != SNMP_VERSION_3)
     {
-	w_comm = m_comm;
+	w_comm = cfg("COMM").getS();
 	session.community = (u_char*)w_comm.c_str();
 	session.community_len = w_comm.size();
     }
     else
     {
-	w_comm = m_comm;
+	w_comm = cfg("COMM").getS();
 	session.securityName = (char*)w_comm.c_str();
 	session.securityNameLen = strlen(session.securityName);
 
@@ -235,57 +234,52 @@ struct snmp_session *TMdContr::getSess( )
 
 string TMdContr::secLev( )
 {
-    return TSYS::strParse(m_V3, 0, ":");
+    return TSYS::strParse(cfg("V3").getS(), 0, ":");
 }
 
 void TMdContr::setSecLev(const string &vl)
 {
-    m_V3 = vl+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass();
-    modif();
+    cfg("V3").setS(vl+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass());
 }
 
 string TMdContr::secAuthProto( )
 {
-    return TSYS::strParse(m_V3, 1, ":");
+    return TSYS::strParse(cfg("V3").getS(), 1, ":");
 }
 
 void TMdContr::setSecAuthProto(const string &vl)
 {
-    m_V3 = secLev()+":"+vl+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass();
-    modif();
+    cfg("V3").setS(secLev()+":"+vl+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass());
 }
 
 string TMdContr::secAuthPass( )
 {
-    return TSYS::strParse(m_V3, 2, ":");
+    return TSYS::strParse(cfg("V3").getS(), 2, ":");
 }
 
 void TMdContr::setSecAuthPass(const string &vl)
 {
-    m_V3 = secLev()+":"+secAuthProto()+":"+vl+":"+secPrivProto()+":"+secPrivPass();
-    modif();
+    cfg("V3").setS(secLev()+":"+secAuthProto()+":"+vl+":"+secPrivProto()+":"+secPrivPass());
 }
 
 string TMdContr::secPrivProto( )
 {
-    return TSYS::strParse(m_V3, 3, ":");
+    return TSYS::strParse(cfg("V3").getS(), 3, ":");
 }
 
 void TMdContr::setSecPrivProto(const string &vl)
 {
-    m_V3 = secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+vl+":"+secPrivPass();
-    modif();
+    cfg("V3").setS(secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+vl+":"+secPrivPass());
 }
 
 string TMdContr::secPrivPass( )
 {
-    return TSYS::strParse(m_V3, 4, ":");
+    return TSYS::strParse(cfg("V3").getS(), 4, ":");
 }
 
 void TMdContr::setSecPrivPass(const string &vl)
 {
-    m_V3 = secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+vl;
-    modif();
+    cfg("V3").setS(secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+vl);
 }
 
 TParamContr *TMdContr::ParamAttach(const string &name, int type)
@@ -301,7 +295,7 @@ void TMdContr::enable_( )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched, 1, ' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     getSess();
 
@@ -397,7 +391,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
     	    "help",_("Community group or user."));
 	ctrRemoveNode(opt,"/cntr/cfg/V3");
-	if(m_ver.getVal() == "3")
+	if(ver() == "3")
 	{
     	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
         	"sel_id","noAurhNoPriv;authNoPriv;authPriv","sel_list",_("No auth/No privacy;Auth/No privacy;Auth/Privacy"));
@@ -455,7 +449,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
-    TParamContr(name,tp_prm), m_oid(cfg("OID_LS").getSd()), p_el("w_attr")
+    TParamContr(name,tp_prm), p_el("w_attr")
 {
 
 }
@@ -481,7 +475,7 @@ void TMdPrm::enable( )
 
     owner().prmEn(id(), true);
 
-    parseOIDList(m_oid);
+    parseOIDList(OIDList());
 
     //> Init attributes call
     //>> Start SNMP-net session
@@ -684,7 +678,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::parseOIDList(const string &ioid)
 {
-    m_oid = ioid;
+    cfg("OID_LS").setS(ioid);
 
     oid tmpoid[MAX_OID_LEN];
     size_t tmpoid_len = MAX_OID_LEN;
@@ -692,7 +686,7 @@ void TMdPrm::parseOIDList(const string &ioid)
     ls_oid.clear();
 
     string sel;
-    for(int ioff = 0; (sel=TSYS::strSepParse(m_oid,0,'\n',&ioff)).size(); )
+    for(int ioff = 0; (sel=TSYS::strSepParse(OIDList(),0,'\n',&ioff)).size(); )
     {
 	tmpoid_len = MAX_OID_LEN;
 	if(snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len))

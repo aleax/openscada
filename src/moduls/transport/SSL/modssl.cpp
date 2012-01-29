@@ -174,8 +174,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), ctx(NULL), mAPrms(cfg("A_PRMS").getSd()),
-    mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0), cl_free(true)
+    TTransportIn(name,idb,el), ctx(NULL), mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0), cl_free(true)
 {
     setAddr("localhost:10042");
 }
@@ -208,7 +207,7 @@ void TSocketIn::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(atoi(vl.c_str()));
 	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(atoi(vl.c_str()));
 	vl = prmNd.attr("KeepAliveCnt");if(!vl.empty()) setKeepAliveCon(atoi(vl.c_str()));
@@ -230,7 +229,7 @@ void TSocketIn::save_( )
     if( prmNd.childGet("CertKey",0,true) ) prmNd.childGet("CertKey")->setText(mCertKey);
     else prmNd.childAdd("CertKey")->setText(mCertKey);
     prmNd.setAttr("PKeyPass",mKeyPass);
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
 }
@@ -656,8 +655,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd())
+TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el)
 {
     setAddr("localhost:10042");
     setTimings("5:1");
@@ -694,7 +692,7 @@ void TSocketOut::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	if( prmNd.childGet("CertKey",0,true) ) setCertKey( prmNd.childGet("CertKey")->text() );
 	vl = prmNd.attr("PKeyPass");	if( !vl.empty() ) setPKeyPass(vl);
 	vl = prmNd.attr("TMS");		if( !vl.empty() ) setTimings(vl);
@@ -708,7 +706,7 @@ void TSocketOut::save_( )
     else prmNd.childAdd("CertKey")->setText(certKey());
     prmNd.setAttr("PKeyPass",pKeyPass());
     prmNd.setAttr("TMS",timings());
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
 }

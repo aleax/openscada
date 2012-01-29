@@ -44,19 +44,19 @@ class WidgetLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }	//Identifier
+	const string &id( )	{ return mId; }			//Identifier
 	string name( );						//Name
-	string descr( ) 	{ return m_descr; }		//Description
-	string ico( )		{ return m_ico; }		//Icon
+	string descr( ) 	{ return cfg("DESCR").getS(); }	//Description
+	string ico( )		{ return cfg("ICO").getS(); }	//Icon
 
 	string DB( )		{ return work_lib_db; }		//Current library DB
-	string tbl( )		{ return m_dbt; }		//Table of storing library data
+	string tbl( )		{ return cfg("DB_TBL").getS(); }//Table of storing library data
 	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
-	void setName( const string &it )	{ m_name = it; modif(); }
-	void setDescr( const string &it )	{ m_descr = it; modif(); }
-	void setIco( const string &it )		{ m_ico = it; modif(); }
-	void setTbl( const string &it )		{ m_dbt = it; }
+	void setName( const string &it )	{ cfg("NAME").setS(it); }
+	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
+	void setIco( const string &it )		{ cfg("ICO").setS(it); }
+	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 
 	void setFullDB( const string &it );
 
@@ -80,7 +80,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const string &nodeName( )		{ return mId.getValRef(); }
+	const string &nodeName( )		{ return mId; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -95,7 +95,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	ResString &mId, &m_name, &m_descr, &m_dbt, &m_ico;
+	string &mId;
 	string work_lib_db, mOldDB;
 	bool	mEnable;
 };
@@ -119,9 +119,10 @@ class LWidget : public Widget, public TConfig
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	string parentNm( )	{ return mParent; }
+	string parentNm( )	{ return cfg("PARENT").getS(); }
+	string proc( )		{ return cfg("PROC").getS(); }
 
-	void setIco( const string &iico )	{ m_ico = iico; modif(); }
+	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
@@ -156,10 +157,6 @@ class LWidget : public Widget, public TConfig
 
     private:
 	//Attributes
-	ResString &m_ico,	//Widget icon
-		&m_proc,	//Widget procedure
-		&mParent,	//Widget parent
-		&m_attrs;	//Changed attributes list
 	int	&m_proc_per;	//Widget period
 };
 
@@ -181,7 +178,7 @@ class CWidget : public Widget, public TConfig
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	string parentNm( )	{ return mParent; }
+	string parentNm( )	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val );
 	void setParentNm( const string &isw );
@@ -211,9 +208,6 @@ class CWidget : public Widget, public TConfig
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	//Attributes
-	ResString &mParent, &m_attrs;
 };
 
 }

@@ -440,8 +440,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* UserPrt                                       *
 //*************************************************
 UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntReq(0), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
-    mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
+    TConfig(el), cntReq(0), mId(cfg("ID").getSd()), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
 {
     mId = iid;
 }
@@ -478,7 +477,11 @@ void UserPg::postDisable( int flag )
 
 TWEB &UserPg::owner( )		{ return *(TWEB*)nodePrev(); }
 
-string UserPg::name( )		{ return mName.size() ? mName : id(); }
+string UserPg::name( )
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : id();
+}
 
 string UserPg::tbl( )		{ return owner().modId()+"_uPg"; }
 

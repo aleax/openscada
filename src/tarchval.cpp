@@ -890,8 +890,8 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 //*************************************************
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), mDB(idb),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mDSourc(cfg("Source").getSd()), mArchs(cfg("ArchS").getSd()),
-    mStart(cfg("START").getBd()), mSrcMode(cfg("SrcMode").getId()), mVType(cfg("VTYPE").getId()), mBPer(cfg("BPER").getRd()), mBSize(cfg("BSIZE").getId()),
+    mId(cfg("ID").getSd()), mStart(cfg("START").getBd()), mSrcMode(cfg("SrcMode").getId()),
+    mVType(cfg("VTYPE").getId()), mBPer(cfg("BPER").getRd()), mBSize(cfg("BSIZE").getId()),
     mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd())
 {
     mId = iid;
@@ -937,7 +937,11 @@ void TVArchive::postDisable(int flag)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TVArchive::name( )	{ return mName.size() ? mName : (srcData().size() ? srcData() : mId); }
+string TVArchive::name( )
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : (srcData().size() ? srcData() : mId);
+}
 
 TArchiveS &TVArchive::owner( )	{ return *(TArchiveS *)nodePrev(); }
 
@@ -1049,7 +1053,7 @@ void TVArchive::save_( )
 	archivatorList(arch_ls);
 	string als;
 	for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++) als += arch_ls[i_l]+";";
-	mArchs = als;
+	cfg("ArchS").setS(als);
     }
 
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
@@ -1061,13 +1065,13 @@ void TVArchive::start( )
 	try
 	{
 	    runSt = true;
-	    setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
+	    setSrcMode((TVArchive::SrcMode)mSrcMode,srcData());
 	}
 	catch(...){ runSt = false; throw; }
 
     //> Attach to archivators
-    string arch;
-    for(int i_off = 0; (arch = TSYS::strSepParse(mArchs,0,';',&i_off)).size(); )
+    string arch, archs = cfg("ArchS").getS();
+    for(int i_off = 0; (arch = TSYS::strSepParse(archs,0,';',&i_off)).size(); )
 	if(!archivatorPresent(arch))
 	    try{ archivatorAttach(arch); }
 	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -1085,24 +1089,24 @@ void TVArchive::stop( bool full_del )
     for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++)
 	archivatorDetach(arch_ls[i_l],full_del);
 
-    setSrcMode((TVArchive::SrcMode)mSrcMode,mDSourc);
+    setSrcMode((TVArchive::SrcMode)mSrcMode,srcData());
 }
 
 void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
 {
     //> Disable all links
-    if((!runSt || vl != ActiveAttr || isrc != mDSourc.getVal()) && !pattr_src.freeStat())
+    if((!runSt || vl != ActiveAttr || isrc != srcData()) && !pattr_src.freeStat())
     {
 	owner().setActValArch(id(), false);
 	pattr_src.free();
-	dynamic_cast<TVal&>(SYS->nodeAt(mDSourc,0,'.').at()).setArch(AutoHD<TVArchive>());
+	dynamic_cast<TVal&>(SYS->nodeAt(srcData(),0,'.').at()).setArch(AutoHD<TVArchive>());
     }
 
     try
     {
-	if((!runSt || vl != PassiveAttr || isrc != mDSourc.getVal()) &&
-		dynamic_cast<TVal*>(&SYS->nodeAt(mDSourc,0,'.').at()))
-	    dynamic_cast<TVal&>(SYS->nodeAt(mDSourc,0,'.').at()).setArch(AutoHD<TVArchive>());
+	if((!runSt || vl != PassiveAttr || isrc != srcData()) &&
+		dynamic_cast<TVal*>(&SYS->nodeAt(srcData(),0,'.').at()))
+	    dynamic_cast<TVal&>(SYS->nodeAt(srcData(),0,'.').at()).setArch(AutoHD<TVArchive>());
     }catch(...){  }
 
     //> Set all links
@@ -1116,10 +1120,8 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     if(runSt && vl == PassiveAttr && dynamic_cast<TVal*>(&SYS->nodeAt(isrc,0,'.').at()))
 	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch( AutoHD<TVArchive>(this) );
 
-    if(mSrcMode != vl || mDSourc.getVal() != isrc) modif();
-
-    mSrcMode = vl;
-    mDSourc = isrc;
+    if(mSrcMode != vl) { mSrcMode = vl; modif(); }
+    cfg("Source").setS(isrc);
 }
 
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
@@ -1889,11 +1891,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/srcm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(mSrcMode));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),mDSourc);
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),srcData());
     }
     else if(a_path == "/prm/cfg/src")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(mDSourc);
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)mSrcMode,opt->text());
     }
     else if(a_path == "/prm/cfg/b_per")
@@ -1934,7 +1936,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	int c_lv = 0;
 	string c_path = "", c_el;
-	for( int c_off = 0; (c_el=TSYS::strSepParse(mDSourc,0,'.',&c_off)).size(); c_lv++ )
+	for( int c_off = 0; (c_el=TSYS::strSepParse(srcData(),0,'.',&c_off)).size(); c_lv++ )
 	{
 	    opt->childAdd("el")->setText(c_path);
 	    if( c_lv ) c_path+=".";
@@ -2111,8 +2113,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 //* TVArchivator                                  *
 //*************************************************
 TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : TConfig(cf_el), runSt(false), endrunReq(false),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAddr(cfg("ADDR").getSd()), mStart(cfg("START").getBd()),
-    mVPer(cfg("V_PER").getRd()), mAPer(cfg("A_PER").getId()), mDB(idb), tm_calc(0.0)
+    mId(cfg("ID").getSd()), mStart(cfg("START").getBd()), mVPer(cfg("V_PER").getRd()), mAPer(cfg("A_PER").getId()), mDB(idb), tm_calc(0)
 {
     mId = iid;
 }
@@ -2139,7 +2140,11 @@ TCntrNode &TVArchivator::operator=( TCntrNode &node )
     return *this;
 }
 
-string TVArchivator::name( )	{ return mName.size() ? mName : mId; }
+string TVArchivator::name( )
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : mId;
+}
 
 string TVArchivator::tbl( )	{ return owner().owner().subId()+"_val_proc"; }
 

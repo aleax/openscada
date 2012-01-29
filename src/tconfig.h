@@ -83,8 +83,8 @@ class TCfg
 	double	getR( char RqFlg = 0 );
 	int	getI( char RqFlg = 0 );
 	bool	getB( char RqFlg = 0 );
-	//> Direct access
-	ResString &getSd( );
+	//> Direct access. Use only for readonly config-fields by no resourced!
+	string	&getSd( );
 	double	&getRd( );
 	int	&getId( );
 	bool	&getBd( );
@@ -100,7 +100,7 @@ class TCfg
 	//Data
 	union
 	{
-	    ResString	*s_val;
+	    string	*s_val;
 	    double	r_val;
 	    int		i_val;
 	    bool	b_val;
@@ -159,6 +159,9 @@ class TConfig: public TValElem
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id );
 	void delFld( TElem *el, unsigned id );
+
+	//Attributes
+	pthread_mutex_t mRes;
 
     private:
 	//Attributes

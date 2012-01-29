@@ -268,9 +268,9 @@ class Func : public TConfig, public TFunction
 	Func &operator=( Func &func );
 
 	string name( );
-	string descr( )			{ return mDescr; }
+	string descr( )			{ return cfg("DESCR").getS(); }
 	int maxCalcTm( )		{ return max_calc_tm; }
-	string prog( )			{ return prg_src; }
+	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
 
 	void setName( const string &nm );
@@ -380,7 +380,6 @@ class Func : public TConfig, public TFunction
 
     private:
 	//Attributes
-	ResString &mName, &mDescr, &prg_src;
 	int	&max_calc_tm;
 
 	bool	be_start;		//Change structure check

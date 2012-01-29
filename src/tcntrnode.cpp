@@ -616,7 +616,7 @@ void TCntrNode::AHDConnect()
 {
     pthread_mutex_lock(&connM);
     mUse++;
-    if( mUse > 65000 ) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
+    if(mUse > 65000) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
     pthread_mutex_unlock(&connM);
 }
 

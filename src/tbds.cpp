@@ -707,9 +707,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 //* TBD                                          *
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
-    mAddr(cfg("ADDR").getSd()), mCodepage(cfg("CODEPAGE").getSd()), mToEn(cfg("EN").getBd()),
-    mEn(false), userSQLTrans(EVAL_BOOL)
+    mId(cfg("ID").getSd()), mToEn(cfg("EN").getBd()), mEn(false), userSQLTrans(EVAL_BOOL)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -776,7 +774,11 @@ void TBD::postDisable(int flag)
 
 TTipBD &TBD::owner( )	{ return *(TTipBD*)nodePrev(); }
 
-string TBD::name( )	{ return (mName.size())?mName:id(); }
+string TBD::name( )
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : id();
+}
 
 void TBD::enable( )
 {
@@ -997,7 +999,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTable                                       *
 //************************************************
-TTable::TTable( const string &name ) :  mName(name), notFullShow(false), tblOff(0)
+TTable::TTable( const string &name ) : mName(name), notFullShow(false), tblOff(0)
 {
     modifClr();
     mLstUse = time(NULL);

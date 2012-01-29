@@ -107,7 +107,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	double period( )	{ return mPer; }
-	string cron( )		{ return mSched; }
+	string cron( )		{ return cfg("SCHEDULE").getS(); }
 	int    prior( )		{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -135,8 +135,6 @@ class TMdContr: public TController
 	int	&mPerOld,			//Acquisition task (seconds)
 		&mPrior,			//Process task priority
 		&connTry;			//Connections try
-	ResString &mSched,                      //Acquisition schedule
-		&mAddr;				//Transport device address
 
 	bool	prc_st,				//Process task active
 		call_st,        		//Calc now stat

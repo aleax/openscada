@@ -25,7 +25,6 @@
 #include <tmodule.h>
 #include <tcontroller.h>
 #include <ttipdaq.h>
-//#include <tparamcontr.h>
 
 #include <string>
 #include <vector>
@@ -87,6 +86,8 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
+	string	card( )		{ return cfg("CARD").getS(); }
+
 	string getStatus( );
 	int channelAllow( );
 
@@ -116,7 +117,6 @@ class TMdContr: public TController
     private:
 	//Attributes
 	TElem	pEl;					//Work atribute elements
-	ResString &mCard;
 	int	&mSmplRate, &mSmplType;
 	bool	prcSt, endrunReq;
 	int	numChan, smplSize;

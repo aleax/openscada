@@ -130,8 +130,6 @@ class TMdPrm : public TParamContr, public TValFunc
 	void initLnks( );
 
 	//Attributes
-	ResString &m_tmpl;
-
 	TElem	p_el;				//Work atribute elements
 
 	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
@@ -160,7 +158,9 @@ class TMdContr: public TController
 	string getStatus( );
 
 	double period( )	{ return mPer; }
-	string cron( )		{ return mSched; }
+	string cron( )		{ return cfg("SCHEDULE").getS(); }
+	string addr( )		{ return cfg("ADDR").getS(); }
+	string addrTr( )	{ return cfg("ADDR_TR").getS(); }
 	bool assincWrite( )	{ return mAssincWR; }
 	Type type( )		{ return (Type)mType; }
 
@@ -235,9 +235,6 @@ class TMdContr: public TController
 		&mType,			// Connection type
 		&mSlot,
 		&mDev;			// CIF device number
-	ResString &mSched,      	// Acquisition schedule
-		&mAddr,			// Remote host address
-		&mAddrTr;		// Output transport address
 	bool	&mAssincWR;		// Asynchronous write mode
 
 	bool	prc_st,			// Process task active

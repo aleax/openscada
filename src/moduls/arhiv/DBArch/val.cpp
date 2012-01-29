@@ -37,7 +37,7 @@ using namespace DBArch;
 //* DBArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), mMaxSize(24), mAPrms(cfg("A_PRMS").getSd())
+    TVArchivator(iid,idb,cf_el), mMaxSize(24)
 {
     setAddr("*.*");
 }
@@ -62,7 +62,7 @@ void ModVArch::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("Size");
 	if(!vl.empty()) setMaxSize(atof(vl.c_str()));
     } catch(...){ }
@@ -72,7 +72,7 @@ void ModVArch::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("Size",TSYS::real2str(maxSize()));
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TVArchivator::save_();
 }

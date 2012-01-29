@@ -149,8 +149,6 @@ class ModMArch: public TMArchivator
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	ResString &mAPrms;	// Addon parameters
-
 	bool	mUseXml;	// use XML for archive files
 	int	mMaxSize;	// maximum size kb of Archives file
 	int	mNumbFiles;	// number of Archive files

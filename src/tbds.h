@@ -22,7 +22,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		5		//BDS type modules version
+#define SDB_VER		6		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -105,19 +105,19 @@ class TBD : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string	&id( )		{ return mId.getValRef(); }
+	const string	&id( )		{ return mId; }
 	string		name( );
-	string		dscr( )		{ return mDscr; }
-	string		addr( )		{ return mAddr; }
-	string		codePage( )	{ return mCodepage; }
+	string		dscr( )		{ return cfg("DESCR").getS(); }
+	string		addr( )		{ return cfg("ADDR").getS(); }
+	string		codePage( )	{ return cfg("CODEPAGE").getS(); }
 
 	bool enableStat( )		{ return mEn; }
 	bool toEnable( )		{ return mToEn; }
 
-	void setName( const string &inm )	{ mName = inm; modif(); }
-	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }
-	void setAddr( const string &iaddr )	{ mAddr = iaddr; modif(); }
-	void setCodePage( const string &icp )	{ mCodepage = icp; modif(); }
+	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
+	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
+	void setAddr( const string &iaddr )	{ cfg("ADDR").setS(iaddr); }
+	void setCodePage( const string &icp )	{ cfg("CODEPAGE").setS(icp); }
 	void setToEnable( bool ivl )		{ mToEn = ivl; modif(); }
 
 	virtual void enable( );
@@ -159,15 +159,11 @@ class TBD : public TCntrNode, public TConfig
     private:
 	//Private methods
 	void postEnable( int flag );
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Private attributes
 	//> Base options
-	ResString &mId,		//ID
-		&mName,		//Name
-		&mDscr,		//Description
-		&mAddr,		//Individual address
-		&mCodepage;	//DB codepage
+	string 	&mId;		//ID
 	bool	&mToEn;
 
 	bool	mEn;

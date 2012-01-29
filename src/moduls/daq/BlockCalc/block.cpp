@@ -35,8 +35,7 @@ using namespace Virtual;
 Block::Block( const string &iid, Contr *iown ) :
     TCntrNode(iown), TValFunc(iid+"_block",NULL), TConfig(&((TipContr &)iown->owner()).blockE()),
     m_enable(false), m_process(false),
-    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
-    m_func(cfg("FUNC").getSd()), mPrior(cfg("PRIOR").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()),
+    m_id(cfg("ID").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()),
     id_freq(-1), id_start(-1), id_stop(-1)
 {
     m_id = iid;
@@ -96,7 +95,7 @@ Contr &Block::owner( )	{ return *(Contr *)nodePrev(); }
 
 string Block::name( )
 {
-    string rez = m_name;
+    string rez = cfg("NAME").getS();
     return rez.size() ? rez : id();
 }
 

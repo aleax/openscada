@@ -1,3 +1,18 @@
+2012-01-29 Roman
+- !!!!:TConfig: Store string is changed from type "ResString" to "string" object and resource removed direct to TCfg object.
+    Direct values access by link by functions like getSd() is dangerous for parallel access.
+- !!!!:TValFunc: Store string is changed from type "ResString" to "string" object and resource removed direct to the object.
+- !!!!:TVal: Store string is changed from type "ResString" to "string" object and resource used nodeRes() by the object.
+- !!!!:Archives: Subsystem's modules version ABI is changed to 6.
+- !!!!:DB: Subsystem's modules version ABI is changed to 6.
+- !!!!:Protocol: Subsystem's modules version ABI is changed to 6.
+- !!!!:Special: Subsystem's modules version ABI is changed to 6.
+- !!!!:Transport: Subsystem's modules version ABI is changed to 6.
+- !!!!:UI: Subsystem's modules version ABI is changed to 6.
+- !:Transport.Serial: Flow control by RTS signal for pure RS-485 is added to output transport.
+- FIX:DAQ.Siemens: String write is fixed by write reserved block size.
+
+
 2012-01-25 Roman
 - SYS: DAQ subsystem modules interface version is risen to 6.
 

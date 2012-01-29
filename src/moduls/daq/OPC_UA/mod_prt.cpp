@@ -2421,12 +2421,11 @@ string TProtIn::mkError( uint32_t errId, const string &err )
 //* OPCEndPoint                                   *
 //*************************************************
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()),
-    mURL(cfg("URL").getSd()), mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
+    TConfig(el), mId(cfg("ID").getSd()), mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
     mEn(false), mDB(idb), cntReq(0), objTree("root")
 {
     mId = iid;
-    mURL = "opc.tcp://"+SYS->host()+":4841";
+    cfg("URL").setS("opc.tcp://"+SYS->host()+":4841");
 }
 
 OPCEndPoint::~OPCEndPoint( )
@@ -2463,7 +2462,7 @@ TProt &OPCEndPoint::owner( )	{ return *(TProt*)nodePrev(); }
 
 string OPCEndPoint::name( )
 {
-    string tNm = mName;
+    string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : id();
 }
 

@@ -33,12 +33,11 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elLib()), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()),
-    mDB(cfg("DB").getSd()), work_lib_db(lib_db), mProgTr(cfg("PROG_TR").getBd())
+    TConfig(&mod->elLib()), mId(cfg("ID").getSd()), work_lib_db(lib_db), mProgTr(cfg("PROG_TR").getBd())
 {
     mId = id;
-    mName = name;
-    mDB = string("flb_")+id;
+    cfg("NAME").setS(name);
+    cfg("DB").setS(string("flb_")+id);
     mFnc = grpAdd("fnc_");
     if(DB().empty()) modifClr();
 }
@@ -95,7 +94,7 @@ void Lib::postDisable( int flag )
 
 string Lib::name( )
 {
-    string tNm = mName;
+    string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : mId;
 }
 
@@ -103,7 +102,7 @@ void Lib::setFullDB( const string &idb )
 {
     size_t dpos = idb.rfind(".");
     work_lib_db = (dpos!=string::npos) ? idb.substr(0,dpos) : "";
-    mDB = (dpos!=string::npos) ? idb.substr(dpos+1) : "";
+    cfg("DB").setS((dpos!=string::npos) ? idb.substr(dpos+1) : "");
     modifG( );
 }
 

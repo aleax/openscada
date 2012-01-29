@@ -174,11 +174,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	//> Base functions
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string name( );
-	string dscr( )		{ return mDscr; }
+	string dscr( )		{ return cfg("DESCR").getS(); }
 	SrcMode srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
-	string  srcData( )	{ return mDSourc; }
+	string  srcData( )	{ return cfg("Source").getS(); }
 	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return runSt; }
 
@@ -194,8 +194,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool highResTm( )	{ return TValBuf::highResTm(); }
 	int size( )		{ return TValBuf::size(); }
 
-	void setName( const string &inm )	{ mName = inm; modif(); }
-	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }
+	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
+	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setSrcMode( SrcMode vl, const string &isrc = "" );
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
@@ -246,18 +246,14 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Private attributes
 	Res	aRes;
 	bool	runSt;
 	string	mDB;
 	//> Base params
-	ResString &mId,		//ID
-		&mName,		//Name
-		&mDscr,		//Description
-		&mDSourc,	//Data source (parameter atribute)
-		&mArchs;	//Use archivators list (separated whith ';')
+	string 	&mId;		//ID
 	bool	&mStart;	//Starting flag
 	int	&mSrcMode;	//Source mode
 	//> Buffer params
@@ -290,11 +286,11 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string workId( );
 	string name( );
-	string dscr( )		{ return mDscr; }
-	string addr( )		{ return mAddr; }
+	string dscr( )		{ return cfg("DESCR").getS(); }
+	string addr( )		{ return cfg("ADDR").getS(); }
 	double valPeriod( )	{ return mVPer; }
 	int    archPeriod( )	{ return mAPer; }
 
@@ -305,9 +301,9 @@ class TVArchivator : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )	{ mName = inm; modif(); }
-	void setDscr( const string &idscr )	{ mDscr = idscr; modif(); }
-	void setAddr( const string &vl )	{ mAddr = vl; modif(); }
+	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
+	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
+	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
 	virtual void setValPeriod( double per );
 	virtual void setArchPeriod( int per )	{ mAPer = (per?per:1); modif(); }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
@@ -349,14 +345,11 @@ class TVArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
-	ResString &mId,		//Var arch id
-		&mName,		//Var arch name
-		&mDscr,		//Var arch description
-		&mAddr;		//Mess arch phisical address
+	string 	&mId;		//Var arch id
 	bool	&mStart;	//Var arch starting flag
 	double	&mVPer;		//Value period (sec)
 	int	&mAPer;		//Archivation period

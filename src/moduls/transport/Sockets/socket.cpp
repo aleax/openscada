@@ -132,8 +132,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mAPrms(cfg("A_PRMS").getSd()),
-    mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0), cl_free(true)
+    TTransportIn(name,idb,el), mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveCon(100), mKeepAliveTm(5), mTaskPrior(0), cl_free(true)
 {
     setAddr("TCP:localhost:10002:0");
 }
@@ -162,7 +161,7 @@ void TSocketIn::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("MaxQueue");	if(!vl.empty()) setMaxQueue(atoi(vl.c_str()));
 	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(atoi(vl.c_str()));
 	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(atoi(vl.c_str()));
@@ -181,7 +180,7 @@ void TSocketIn::save_( )
     prmNd.setAttr("KeepAliveCnt",TSYS::int2str(keepAliveCon()));
     prmNd.setAttr("KeepAliveTm",TSYS::int2str(keepAliveTm()));
     prmNd.setAttr("TaskPrior",TSYS::int2str(taskPrior()));
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
 }
@@ -623,7 +622,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), sock_fd(-1), mLstReqTm(0)
+    TTransportOut(name,idb,el), sock_fd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
@@ -662,7 +661,7 @@ void TSocketOut::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("tms");	if( !vl.empty() ) setTimings(vl);
     } catch(...){ }
 }
@@ -671,7 +670,7 @@ void TSocketOut::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("tms",timings());
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
 }

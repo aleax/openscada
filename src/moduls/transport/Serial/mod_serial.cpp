@@ -202,7 +202,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 //* TTrIn                                        *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0),
+    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
     mMdmMode(false), mMdmDataMode(false)
@@ -224,7 +224,7 @@ void TTrIn::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
 	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(atoi(vl.c_str()));
 	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(atof(vl.c_str()));
@@ -251,7 +251,7 @@ void TTrIn::save_( )
     prmNd.setAttr("MdmRingReq",mdmRingReq());
     prmNd.setAttr("MdmRingAnswer",mdmRingAnswer());
     prmNd.setAttr("MdmRingAnswerResp",mdmRingAnswerResp());
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
 }
@@ -367,6 +367,7 @@ void TTrIn::connect( )
 
 	//>> Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	tio.c_cflag &= ~CRTSCTS;
 	if(!fc.empty())
 	    switch(tolower(fc[0]))
 	    {
@@ -590,7 +591,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[mdm]\". Where:\n"
+	    _("Serial transport has address format: \"dev:speed:format:[fc]:[mdm]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
@@ -675,10 +676,10 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mAPrms(cfg("A_PRMS").getSd()), fd(-1), mLstReqTm(0), trIn(0), trOut(0),
+    TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
-    mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false)
+    mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("640:6");
@@ -697,7 +698,7 @@ void TTrOut::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
 	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(atoi(vl.c_str()));
 	vl = prmNd.attr("MdmLifeTime");	if(!vl.empty()) setMdmLifeTime(atoi(vl.c_str()));
@@ -734,7 +735,7 @@ void TTrOut::save_( )
     prmNd.setAttr("MdmNoDialToneResp",mdmNoDialToneResp());
     prmNd.setAttr("MdmHangUp",mdmHangUp());
     prmNd.setAttr("MdmHangUpResp",mdmHangUpResp());
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
 }
@@ -865,12 +866,14 @@ void TTrOut::start( )
 
 	//>> Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	mRTSfc = false;
+	tio.c_cflag &= ~CRTSCTS;
 	if(!fc.empty())
-	    switch(tolower(fc[0]))
-	    {
-		case 'h': tio.c_cflag |= CRTSCTS;		break;
-		case 's': tio.c_iflag |= (IXON|IXOFF|IXANY);	break;
-	    }
+	{
+	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
+	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
+	    else if(strcasecmp(fc.c_str(),"rts") == 0)	mRTSfc = true;
+	}
 
 	//>> Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -977,7 +980,7 @@ void TTrOut::check( )
 int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
     ssize_t blen = 0;
-    int off = 0, kz;
+    int off = 0, kz, sec;
 
     if(!noRes) ResAlloc res(nodeRes(), true);
 
@@ -989,11 +992,17 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 
     int64_t tmW = TSYS::curTime();
 
+    if(mRTSfc)	ioctl(fd, TIOCMGET, &sec);
+
     //> Write request
     if(obuf && len_ob > 0)
     {
 	tcflush(fd, TCIOFLUSH);
 	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
+
+	//>> Pure RS-485 flow control: Clear RTS for transfer allow
+	if(mRTSfc) { sec &= ~TIOCM_RTS; ioctl(fd, TIOCMSET, &sec); }
+
 	for(int wOff = 0, kz = 0; wOff != len_ob; wOff += kz)
 	{
 	    kz = write(fd,obuf+wOff,len_ob-wOff);
@@ -1008,6 +1017,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	fd_set rd_fd;
 	struct timeval tv;
 
+wait_more:
 	do
 	{
 	    if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
@@ -1022,6 +1032,22 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	{
 	    blen = read(fd, ibuf, len_ib);
 	    trIn += vmax(0, blen);
+
+	    //>> Pure RS-485 flow control: Set RTS for transfer disable, check for echo and wait real respond
+	    if(mRTSfc && obuf && len_ob > 0 && !(sec&TIOCM_RTS) && blen > 0)
+	    {
+        	if(blen < len_ob) goto wait_more;
+                if(string(obuf,len_ob) == string(ibuf,len_ob))
+                {
+                    sec |= TIOCM_RTS;
+                    ioctl(fd, TIOCMSET, &sec);
+
+                    trIn -= len_ob;
+                    memcpy(ibuf, ibuf+len_ob, blen-len_ob);
+                    blen -= len_ob;
+                }
+                if(!blen) goto wait_more;
+	    }
 	}
     }
     mLstReqTm = TSYS::curTime();
@@ -1036,12 +1062,15 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	TTransportOut::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Serial transport has address format: \"[dev]:[speed]:[format]:[fc]:[modTel]\". Where:\n"
+	    _("Serial transport has address format: \"dev:speed:format:[fc]:[modTel]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
 	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
-	    "    fc - flow control: 'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF);\n"
+	    "    fc - flow control:\n"
+	    "      'h' - hardware (CRTSCTS);\n"
+	    "      's' - software (IXON|IXOFF);\n"
+	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"[conn]:[symbol]\". Where:\n"

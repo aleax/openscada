@@ -59,7 +59,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id.getValRef(); }
+	const string &id( )	{ return mId; }
 	string name( );
 	string descr( );
 	int maxCalcTm( );
@@ -91,10 +91,10 @@ class TPrmTempl: public TFunction, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Attributes
-	ResString &m_id, &m_prog, work_prog;
+	string	&mId, work_prog;
 };
 
 //*************************************************
@@ -110,12 +110,12 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id.getValRef(); }
+	const string &id( )	{ return mId; }
 	string name( );
 	string descr( );
 
 	string DB( )		{ return work_lib_db; }
-	string tbl( )		{ return m_db; }
+	string tbl( )		{ return cfg("DB").getS(); }
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
 	bool startStat( )	{ return run_st; }
@@ -147,12 +147,13 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Attributes
 	bool	run_st;
 	int	m_ptmpl;
-	ResString &m_id, &m_db, work_lib_db;
+	string 	&mId;
+	ResString work_lib_db;
 };
 
 }

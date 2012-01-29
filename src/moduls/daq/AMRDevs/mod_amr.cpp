@@ -179,8 +179,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem),
-	mSched(cfg("SCHEDULE").getSd()), mPrior(cfg("PRIOR").getId()),
-	mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
+	mPrior(cfg("PRIOR").getId()), mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
 	prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("AMRDevsPrm_"+name_c);
@@ -213,7 +212,7 @@ void TMdContr::start_( )
     if( prc_st ) return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -283,9 +282,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr"),
-    mAddr(cfg("ADDR").getSd()), devTp(cfg("DEV_TP").getSd()), devAddr(cfg("DEV_ADDR").getSd()), devPrms(cfg("DEV_PRMS").getSd()),
-    needApply(false), mDA(NULL)
+    TParamContr(name,tp_prm), p_el("w_attr"), needApply(false), mDA(NULL)
 {
 
 }
@@ -317,8 +314,9 @@ void TMdPrm::enable()
     }
 
     //> Connect device's code
-    if(devTp.getVal() == "FLowTC_UGTAA55")	mDA = new FlowTEC(this);
-    else if(devTp.getVal() == "Ergomera")	mDA = new Ergomera(this);
+
+    if(devTp() == "FLowTC_UGTAA55")	mDA = new FlowTEC(this);
+    else if(devTp() == "Ergomera")	mDA = new Ergomera(this);
     else throw TError(nodePath().c_str(),_("No one device selected."));
 
     owner().prmEn( id(), true );
@@ -352,7 +350,7 @@ string TMdPrm::extPrmGet( const string &prm, bool isText )
     {
 	XMLNode prmNd;
 	ResAlloc res( nodeRes(), false );
-	prmNd.load(devPrms);
+	prmNd.load(cfg("DEV_PRMS").getS());
 	if( !isText ) return prmNd.attr(prm);
 	return prmNd.childGet(prm)->text();
     } catch(...){ }
@@ -363,7 +361,7 @@ void TMdPrm::extPrmSet( const string &prm, const string &val, bool isText, bool 
 {
     XMLNode prmNd("prms");
     ResAlloc res( nodeRes(), false );
-    try{ prmNd.load(devPrms); } catch(...){ }
+    try{ prmNd.load(cfg("DEV_PRMS").getS()); } catch(...){ }
     if( !isText ) prmNd.setAttr(prm,val);
     else
     {
@@ -372,7 +370,7 @@ void TMdPrm::extPrmSet( const string &prm, const string &val, bool isText, bool 
 	pNd->setText(val);
     }
     res.request(true);
-    devPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("DEV_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
     modif();
     if( nApply && enableStat() ) needApply = true;
 }

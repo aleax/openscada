@@ -22,7 +22,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		5		//TransportS type modules version
+#define STR_VER		6		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -48,12 +48,12 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string workId( );
 	string name( );
-	string dscr( )		{ return mDscr; }
-	string addr( )		{ return mAddr; }
-	string protocolFull( )	{ return mProt; }
+	string dscr( )		{ return cfg("DESCRIPT").getS(); }
+	string addr( )		{ return cfg("ADDR").getS(); }
+	string protocolFull( )	{ return cfg("PROT").getS(); }
 	string protocol( );
 	virtual string getStatus( );
 
@@ -64,10 +64,10 @@ class TTransportIn : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )		{ mName = inm; modif(); }
-	void setDscr( const string &idscr )		{ mDscr = idscr; modif(); }
-	virtual void setAddr( const string &addr )	{ mAddr = addr; modif(); }
-	void setProtocolFull( const string &prt )	{ mProt = prt; modif(); }
+	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
+	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
+	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	void setProtocolFull( const string &prt )	{ cfg("PROT").setS(prt); }
 	void setToStart( bool val )			{ mStart = val; modif(); }
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
@@ -94,14 +94,10 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Attributes
-	ResString &mId,
-		&mName,
-		&mDscr,
-		&mAddr,
-		&mProt;
+	string 	&mId;
 	bool	&mStart;
 	string	mDB;
 };
@@ -118,11 +114,11 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string	workId( );
 	string	name( );
-	string	dscr( )		{ return mDscr; }
-	string	addr( )		{ return mAddr; }
+	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
+	string	addr( )		{ return cfg("ADDR").getS(); }
 	int	prm1( )		{ return mPrm1; }
 	int	prm2( )		{ return mPrm2; }
 	bool	toStart( )	{ return mStart; }
@@ -133,9 +129,9 @@ class TTransportOut : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )		{ mName = inm; modif(); }
-	void setDscr( const string &idscr )		{ mDscr = idscr; modif(); }
-	virtual void setAddr( const string &addr )	{ mAddr = addr; modif(); }
+	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
+	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
+	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
 	void setPrm1( int vl )				{ mPrm1 = vl; }
 	void setPrm2( int vl )				{ mPrm2 = vl; }
 	void setToStart( bool val )			{ mStart = val; modif(); }
@@ -171,13 +167,10 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Attributes
-	ResString &mId,
-		&mName,
-		&mDscr,
-		&mAddr;
+	string 	&mId;
 	bool	&mStart;
 	string	mDB;
 

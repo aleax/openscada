@@ -120,7 +120,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
     mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()), mPerOld(cfg("PERIOD").getId()),
     mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
-    mSched(cfg("SCHEDULE").getSd()), mStations(cfg("STATIONS").getSd()), mContrPrm(cfg("CNTRPRM").getSd()),
     prcSt(false), call_st(false), endrunReq(false), mPer(1e9), tmGath(0)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
@@ -166,7 +165,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld);
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld));
 }
 
 void TMdContr::enable_( )
@@ -181,10 +180,10 @@ void TMdContr::enable_( )
     for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++) at(prm_ls[i_p]).at().setCntrAdr("");
 
     //> Remote station scaning. Controllers and parameters scaning
-    for(int st_off = 0; (statv=TSYS::strSepParse(mStations,0,'\n',&st_off)).size(); )
+    for(int st_off = 0; (statv=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&st_off)).size(); )
     {
 	if(!enableStat()) mStatWork.push_back(pair<string,float>(statv,0));
-	for(int cp_off = 0; (cp_el=TSYS::strSepParse(mContrPrm,0,'\n',&cp_off)).size(); )
+	for(int cp_off = 0; (cp_el=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cp_off)).size(); )
 	    try
 	    {
 		//>> Parse parameter template
@@ -267,7 +266,7 @@ void TMdContr::start_( )
     if(prcSt) return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Clear stations request counter
     for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second = 0;

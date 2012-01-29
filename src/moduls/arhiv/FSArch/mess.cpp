@@ -36,7 +36,7 @@ using namespace FSArch;
 //* FSArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), mAPrms(cfg("A_PRMS").getSd()),
+    TMArchivator(iid,idb,cf_el),
     mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mPrevDbl(false),
     tmCalc(0.0), mLstCheck(0)
 {
@@ -56,7 +56,7 @@ void ModMArch::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("XML"); if(!vl.empty()) setUseXML(atoi(vl.c_str()));
 	vl = prmNd.attr("MSize"); if(!vl.empty()) setMaxSize(atoi(vl.c_str()));
 	vl = prmNd.attr("NFiles"); if(!vl.empty()) setNumbFiles(atoi(vl.c_str()));
@@ -80,7 +80,7 @@ void ModMArch::save_( )
     prmNd.setAttr("CheckTm",TSYS::int2str(checkTm()));
     prmNd.setAttr("PackInfoFiles",TSYS::int2str(packInfoFiles()));
     prmNd.setAttr("PrevDbl",TSYS::int2str(prevDbl()));
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
 }

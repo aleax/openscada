@@ -322,13 +322,13 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string name( );
-	string descr( )		{ return mDscr; }
+	string descr( )		{ return cfg("DESCR").getS(); }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
 	SerializerType serType( )	{ return (SerializerType)mSerType; }
-	string url( )		{ return mURL; }
+	string url( )		{ return cfg("URL").getS(); }
 	string cert( );
 	string pvKey( );
 
@@ -338,8 +338,8 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &name )	{ mName = name; modif(); }
-	void setDescr( const string &idsc )	{ mDscr = idsc; modif(); }
+	void setName( const string &name )	{ cfg("NAME").setS(name); }
+	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
 
@@ -368,7 +368,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -379,7 +379,7 @@ class OPCEndPoint : public TCntrNode, public TConfig
 	    int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
 
 	//Attributes
-	ResString &mId, &mName, &mDscr, &mURL;
+	string	&mId;
 	int	&mSerType;
 	bool	&mAEn, mEn;
 	string	mDB;

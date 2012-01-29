@@ -68,7 +68,6 @@ class TMdPrm : public TParamContr
 	int	&modTp;		//I-7000,I-8000 module type
 	int	&modAddr;	//I-7000,I-8000 module address
 	int	&modSlot;	//I-8000 module slot
-	ResString &modPrms;	//Individual module extended parameters
 
     protected:
 	//Methods
@@ -151,7 +150,6 @@ class TMdContr: public TController
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
 		&mBaud,				//Baudrate
 		&connTry;			//Connections try
-	ResString &mLPprms;			//LinPAC parameters
 
 	bool	prcSt,				//Process task active
 		call_st,        		//Calc now stat

@@ -1033,10 +1033,9 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
     TConfig( cf_el ), run_st(false),
-    m_id(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_dscr(cfg("DESCR").getSd()), m_addr(cfg("ADDR").getSd()),
-    m_cat_o(cfg("CATEG").getSd()), m_start(cfg("START").getBd()), m_level(cfg("LEVEL").getId()), m_db(idb)
+    mId(cfg("ID").getSd()), m_start(cfg("START").getBd()), m_level(cfg("LEVEL").getId()), m_db(idb)
 {
-    m_id = iid;
+    mId = iid;
 }
 
 TCntrNode &TMArchivator::operator=( TCntrNode &node )
@@ -1048,7 +1047,7 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     string tid = id();
     *(TConfig*)this = *(TConfig*)src_n;
     cfg("MODUL").setS(owner().modId());
-    m_id = tid;
+    mId = tid;
     m_db = src_n->m_db;
 
     if( src_n->startStat() && toStart() && !startStat() )
@@ -1081,7 +1080,11 @@ TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
 
 string TMArchivator::workId( )		{ return owner().modId()+"."+id(); }
 
-string TMArchivator::name()		{ return (m_name.size())?m_name:m_id; }
+string TMArchivator::name()
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : mId;
+}
 
 string TMArchivator::tbl( )		{ return owner().owner().subId()+"_mess_proc"; }
 
@@ -1099,8 +1102,8 @@ void TMArchivator::save_( )
 void TMArchivator::categ( vector<string> &list )
 {
     list.clear();
-    string c_vl;
-    for( int i_off = 0; (c_vl=TSYS::strSepParse(m_cat_o,0,';',&i_off)).size(); )
+    string c_vl, cat = cfg("CATEG").getS();
+    for( int i_off = 0; (c_vl=TSYS::strSepParse(cat,0,';',&i_off)).size(); )
 	list.push_back(c_vl);
 }
 
@@ -1228,8 +1231,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/cats")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(m_cat_o);
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	{ m_cat_o = opt->text(); modif(); }
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(cfg("CATEG").getS());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	cfg("CATEG").setS(opt->text());
     }
     else if(a_path == "/mess/tm")
     {

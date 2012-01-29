@@ -307,8 +307,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 //* TUser                                         *
 //*************************************************
 TUser::TUser( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_descr(cfg("LONGDESCR").getSd()), m_pass(cfg("PASS").getSd()),
-    m_pict(cfg("PICTURE").getSd()), m_db(idb), m_sysIt(false)
+    TConfig(el), m_name(cfg("NAME").getSd()), m_db(idb), m_sysIt(false)
 {
     m_name = nm;
 }
@@ -333,13 +332,12 @@ TCntrNode &TUser::operator=( TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
-    m_pass = crypt(n_pass.c_str(),name().c_str());
-    modif();
+    cfg("PASS").setS(crypt(n_pass.c_str(),name().c_str()));
 }
 
 bool TUser::auth( const string &ipass )
 {
-    return (m_pass.getVal() == crypt(ipass.c_str(),name().c_str()));
+    return (cfg("PASS").getS() == crypt(ipass.c_str(),name().c_str()));
 }
 
 void TUser::postDisable(int flag)
@@ -470,8 +468,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 //* TGroup					  *
 //*************************************************
 TGroup::TGroup( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_name(cfg("NAME").getSd()), m_lname(cfg("DESCR").getSd()), m_descr(cfg("LONGDESCR").getSd()), m_usrs(cfg("USERS").getSd()),
-    m_db(idb), m_sysIt(false)
+    TConfig(el), m_name(cfg("NAME").getSd()), m_db(idb), m_sysIt(false)
 {
     m_name = nm;
 }
@@ -524,7 +521,7 @@ bool TGroup::user( const string &inm )
     if( owner().usrPresent(inm) )
     {
 	string val;
-	for( int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
+	for( int off = 0; (val=TSYS::strSepParse(users(),0,';',&off)).size(); )
 	    if(val==inm) return true;
     }
     return false;
@@ -532,17 +529,17 @@ bool TGroup::user( const string &inm )
 
 void TGroup::userAdd( const string &name )
 {
-    if(!user(name)) m_usrs = m_usrs.getVal()+name+";";
+    if(!user(name)) cfg("USERS").setS(users()+name+";");
     modif();
 }
 
 void TGroup::userDel( const string &name )
 {
-    string tUsrs = m_usrs.getVal();
+    string tUsrs = users();
     size_t pos = tUsrs.find(name+";", 0);
     if(pos != string::npos)
     {
-	m_usrs = tUsrs.erase(pos, name.size()+1);
+	cfg("USERS").setS(tUsrs.erase(pos, name.size()+1));
 	modif();
     }
 }
@@ -597,7 +594,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
 	{
 	    string val;
-	    for(int off = 0; (val=TSYS::strSepParse(m_usrs,0,';',&off)).size(); )
+	    for(int off = 0; (val=TSYS::strSepParse(users(),0,';',&off)).size(); )
 		opt->childAdd("el")->setText(val);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	userAdd(opt->text());

@@ -34,8 +34,7 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), tm_calc(0.0), mBeg(0), mEnd(0), mMaxSize(24),
-    mAPrms(cfg("A_PRMS").getSd())
+    TMArchivator(iid,idb,cf_el), tm_calc(0), mBeg(0), mEnd(0), mMaxSize(24)
 {
     setAddr("*.*");
 }
@@ -73,12 +72,12 @@ void ModMArch::load_( )
     if( addr().empty() ) setAddr("*.*");
 
     //> Load message archive parameters
-    TConfig cfg(&mod->archEl());
-    cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg))
+    TConfig wcfg(&mod->archEl());
+    wcfg.cfg("TBL").setS(archTbl());
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg))
     {
-	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
-	mEnd = atoi(cfg.cfg("END").getS().c_str());
+	mBeg = atoi(wcfg.cfg("BEGIN").getS().c_str());
+	mEnd = atoi(wcfg.cfg("END").getS().c_str());
 	//>> Check for delete archivator table
 	if( mEnd <= (time(NULL)-(time_t)(maxSize()*3600.)) )
 	{
@@ -92,7 +91,7 @@ void ModMArch::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("Size");
 	if(!vl.empty()) setMaxSize(atof(vl.c_str()));
     } catch(...){ }
@@ -102,7 +101,7 @@ void ModMArch::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("Size",TSYS::real2str(maxSize()));
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
 }

@@ -116,7 +116,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	double	period( )	{ return mPer; }
-	string	cron( )		{ return mSched; }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
@@ -148,9 +148,6 @@ class TMdContr: public TController
 	int	&mPerOld,			//Acquisition task (seconds)
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
-	ResString &mSched,              	// Acquisition schedule
-		&mStations,			//Remote stations list
-		&mContrPrm;			//Transported remote cotrollers and parameters list
 
 	bool	prcSt,				//Process task active
 		call_st,        		//Calc now stat

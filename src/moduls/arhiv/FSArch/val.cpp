@@ -37,7 +37,7 @@ using namespace FSArch;
 //* FSArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), chkANow(false), mAPrms(cfg("A_PRMS").getSd()),
+    TVArchivator(iid,idb,cf_el), chkANow(false),
     time_size(800), mNumbFiles(100), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
 {
 
@@ -63,7 +63,7 @@ void ModVArch::load_( )
     {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
+	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("TmSize"); if( !vl.empty() ) setFileTimeSize(atof(vl.c_str()));
 	vl = prmNd.attr("NFiles"); if( !vl.empty() ) setNumbFiles(atoi(vl.c_str()));
 	vl = prmNd.attr("Round"); if( !vl.empty() ) setRoundProc(atof(vl.c_str()));
@@ -83,7 +83,7 @@ void ModVArch::save_( )
     prmNd.setAttr("PackTm",TSYS::int2str(packTm()));
     prmNd.setAttr("CheckTm",TSYS::int2str(checkTm()));
     prmNd.setAttr("PackInfoFiles",TSYS::int2str(packInfoFiles()));
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TVArchivator::save_();
 }

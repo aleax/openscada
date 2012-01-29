@@ -312,8 +312,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
-	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mSched(cfg("SCHEDULE").getSd()), mAddr(cfg("ADDR").getSd()),
-	/*mHouse(cfg("HOUSE").getSd()),*/ mUser(cfg("USER").getSd()), mPassword(cfg("PASS").getSd()),
+	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
 	prc_st(false), acq_st(false), endrun_req(false), tm_gath(0)
 {
     //cfg("PRM_BD").setS("TmplPrm_"+name_c);
@@ -427,7 +426,7 @@ void TMdContr::enable_( )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Start the gathering data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -468,8 +467,8 @@ void TMdContr::reqBFN(XMLNode &io)
     ResAlloc res(req_res, true);
 
     AutoHD<TTransportOut> tr;
-    try{ tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.')); }
-    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),mAddr.getVal().c_str()); }
+    try{ tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.')); }
+    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),addr().c_str()); }
 
     XMLNode req("POST");
     req.setAttr("URI","/cgi-bin/imwl_ws.cgi");
@@ -489,8 +488,8 @@ void TMdContr::reqBFN(XMLNode &io)
     //>> Append SOAP data to IO
     string reqName = io.name();
     io.setName("SOAPSDK4:"+reqName)->setAttr("xmlns:SOAPSDK4","http://tempuri.org");
-    io.childAdd("szUserName")->setText(mUser);
-    io.childAdd("szPassword")->setText(mPassword);
+    io.childAdd("szUserName")->setText(cfg("USER").getS());
+    io.childAdd("szPassword")->setText(cfg("PASS").getS());
     dataReq += io.save();
     dataReq += "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
     //> Append full request
@@ -681,7 +680,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/PASS" && ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(mPassword.getVal().size(),'*'));
+    if(a_path == "/cntr/cfg/PASS" && ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	opt->setText(string(cfg("PASS").getS().size(),'*'));
     else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
     {
 	vector<string> sls;
@@ -699,8 +699,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    setAttr("xmlns:SOAP-ENV","http://schemas.xmlsoap.org/soap/envelope/");
 	XMLNode *reqAuth = req.childAdd("SOAP-ENV:Body")->setAttr("SOAP-ENV:encodingStyle","http://schemas.xmlsoap.org/soap/encoding/")->
 	    childAdd("SOAPSDK4:GetHouses")->setAttr("xmlns:SOAPSDK4","http://tempuri.org");
-	reqAuth->childAdd("szUserName")->setText(mUser);
-	reqAuth->childAdd("szPassword")->setText(mPassword);
+	reqAuth->childAdd("szUserName")->setText(cfg("USER").getS());
+	reqAuth->childAdd("szPassword")->setText(cfg("PASS").getS());
 	reqBFN(req);
 	if(!atoi(req.attr("err").c_str()) && 
 	    !atoi(req.childGet("SOAP-ENV:Body")->childGet("imwlws:GetHousesResponse")->childGet("res")->text().c_str()))

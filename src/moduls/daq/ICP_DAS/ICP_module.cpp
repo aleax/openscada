@@ -126,8 +126,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
-	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()), mBaud(cfg("BAUD").getId()),
-	connTry(cfg("REQ_TRY").getId()), mLPprms(cfg("LP_PRMS").getSd()),
+	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
+	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()),
 	prcSt(false), call_st(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
@@ -231,7 +231,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 string TMdContr::prmLP( const string &prm )
 {
     XMLNode prmNd;
-    try { prmNd.load(mLPprms); return prmNd.attr(prm); } catch(...){ }
+    try { prmNd.load(cfg("LP_PRMS").getS()); return prmNd.attr(prm); } catch(...){ }
 
     return "";
 }
@@ -239,9 +239,9 @@ string TMdContr::prmLP( const string &prm )
 void TMdContr::setPrmLP( const string &prm, const string &vl )
 {
     XMLNode prmNd("prms");
-    try { prmNd.load(mLPprms); } catch(...){ }
+    try { prmNd.load(cfg("LP_PRMS").getS()); } catch(...){ }
     prmNd.setAttr(prm,vl);
-    mLPprms = prmNd.save(XMLNode::BrAllPast);
+    cfg("LP_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
     modif();
 }
 
@@ -401,8 +401,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
-    TParamContr(name, tp_prm), p_el("w_attr"), modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()),
-    modSlot(cfg("MOD_SLOT").getId()), modPrms(cfg("MOD_PRMS").getSd()),
+    TParamContr(name, tp_prm),
+    p_el("w_attr"), modTp(cfg("MOD_TP").getId()), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
     endRunReq(false), prcSt(false), clcCnt(0), extPrms(NULL), wTm(0), dOutRev(0), dInRev(0)
 {
 
@@ -516,7 +516,7 @@ void TMdPrm::loadExtPrms( )
     if(!enableStat())	return;
 
     XMLNode prmNd;
-    try{ prmNd.load(modPrms); } catch(...){ }
+    try{ prmNd.load(cfg("MOD_PRMS").getS()); } catch(...){ }
     string  vl;
 
     //> Generic
@@ -561,8 +561,7 @@ void TMdPrm::saveExtPrms( )
 	    break;
     }
 
-    modPrms = prmNd.save(XMLNode::BrAllPast);
-    modif();
+    cfg("MOD_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 }
 
 void TMdPrm::getVals( )

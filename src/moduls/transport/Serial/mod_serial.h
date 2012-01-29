@@ -87,8 +87,6 @@ class TTrIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	ResString &mAPrms;			// Addition parameters
-
 	string	mTimings, mDevPort;
 	int	fd;
 
@@ -169,8 +167,6 @@ class TTrOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	ResString &mAPrms;			// Addition parameters
-
 	string	mDevPort, mTimings;
 	int	fd;
 	int64_t	mLstReqTm;
@@ -183,7 +179,9 @@ class TTrOut: public TTransportOut
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
 	string	mMdmDialStr, mMdmCnctResp, mMdmBusyResp, mMdmNoCarResp, mMdmNoDialToneResp;
 	string	mMdmHangUp, mMdmHangUpResp;
-	bool	mMdmMode, mMdmDataMode;
+	unsigned mMdmMode	:1;
+	unsigned mMdmDataMode	:1;
+	unsigned mRTSfc		:1;	//Flow control by RTS signal for pure RS-485
 };
 
 //************************************************

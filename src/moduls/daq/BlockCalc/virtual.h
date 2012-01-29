@@ -95,7 +95,7 @@ class Contr: public TController
 
 	TParamContr *ParamAttach( const string &name, int type );
 	double period( )			{ return mPer; }
-	string cron( )				{ return mSched; }
+	string cron( )				{ return cfg("SCHEDULE").getS(); }
 	int iterate( )				{ return mIter; }
 
 	//> Scheme's functions
@@ -135,7 +135,6 @@ class Contr: public TController
 	int	&mPerOld,	// Clock period (ms)
 		&mPrior,	// Process data task priority
 		&mIter;		// Iteration into clock
-	ResString &mSched;	// Calc schedule
 
 	int	mBl;
 	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD

@@ -119,7 +119,8 @@ class Contr: public TController, public TValFunc
 	string getStatus( );
 
 	int64_t period( )	{ return mPer; }
-	string cron( )		{ return mSched; }
+	string cron( )		{ return cfg("SCHEDULE").getS(); }
+	string fnc( )		{ return cfg("FUNC").getS(); }
 	int iterate( )		{ return mIter; }
 
 	void redntDataUpdate( );
@@ -151,8 +152,6 @@ class Contr: public TController, public TValFunc
 		endrun_req;	// Request to stop of the Process task
 	int	&mPrior,	// Calc task priority
 		&mIter;		// iteration number
-	ResString &mSched,	// Calculation schedule
-		&mFnc;		// Work function
 
 	int	id_freq, id_start, id_stop;
 

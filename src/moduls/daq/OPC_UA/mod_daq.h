@@ -86,8 +86,6 @@ class TMdPrm : public TParamContr
 	void vlGet( TVal &val );
 	void vlSet( TVal &val, const TVariant &pvl );
 
-	ResString &mNdLst;		//Nodes list
-
 	//Attributes
 	TElem	p_el;			//Work atribute elements
 
@@ -108,18 +106,19 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-	string	cron( )		{ return mSched; }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
+	string	addr( )		{ return cfg("ADDR").getS(); }
 	double	syncPer( )	{ return mSync; }
-	string	endPoint( )	{ return mEndPoint; }
-	string	secPolicy( )	{ return mSecPolicy; }
+	string	endPoint( )	{ return cfg("EndPoint").getS(); }
+	string	secPolicy( )	{ return cfg("SecPolicy").getS(); }
 	int	secMessMode( )	{ return mSecMessMode; }
 	string	cert( );
 	string	pvKey( );
 	int	pAttrLim( )	{ return mPAttrLim; }
 
-	void	setEndPoint( const string &iep ){ if( mEndPoint.getVal() != iep ) { mEndPoint = iep; modif(); } }
-	void	setSecPolicy( const string &isp )	{ mSecPolicy = isp; modif(); }
+	void	setEndPoint( const string &iep ){ if(cfg("EndPoint").getS() != iep) { cfg("EndPoint").setS(iep); } }
+	void	setSecPolicy( const string &isp )	{ cfg("SecPolicy").setS(isp); }
 	void	setSecMessMode( int smm )	{ mSecMessMode = smm; modif(); }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -182,10 +181,6 @@ class TMdContr: public TController
 	Res	en_res;		//Resource for enable params
 	int	&mPrior;	//Process task priority
 	double	&mSync;		//Synchronization inter remote station: attributes list update.
-	ResString &mSched,	//Acquisition schedule
-		&mAddr,		//Transport device address
-		&mEndPoint,	//Endpoint URL
-		&mSecPolicy;	//Security policy
 	int	&mSecMessMode,	//Security policy mode
 		&mPAttrLim;	//Parameter attributes number limit
 	int64_t	mPer;

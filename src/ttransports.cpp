@@ -601,9 +601,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
-    mDscr(cfg("DESCRIPT").getSd()), mAddr(cfg("ADDR").getSd()), mProt(cfg("PROT").getSd()),
-    mStart(cfg("START").getBd()), mDB(idb)
+    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mStart(cfg("START").getBd()), mDB(idb)
 {
     mId = iid;
 }
@@ -629,7 +627,11 @@ TCntrNode &TTransportIn::operator=( TCntrNode &node )
 
 TTipTransport &TTransportIn::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportIn::name( )		{ return mName.size()?mName:mId; }
+string TTransportIn::name( )
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : mId;
+}
 
 string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
@@ -771,8 +773,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()),
-    mDscr(cfg("DESCRIPT").getSd()), mAddr(cfg("ADDR").getSd()), mStart(cfg("START").getBd()),
+    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mStart(cfg("START").getBd()),
     mDB(idb), mPrm1(0), mPrm2(0)
 {
     mId = iid;
@@ -799,7 +800,11 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
 
 TTipTransport &TTransportOut::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportOut::name()		{ return mName.size()?mName:mId; }
+string TTransportOut::name()
+{
+    string rez = cfg("NAME").getS();
+    return rez.size() ? rez : mId;
+}
 
 string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 

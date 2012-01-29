@@ -243,7 +243,7 @@ class TValFunc
 	    unsigned short	mdf	: 1;
 	    union
 	    {
-		ResString *s;
+		string *s;
 		double r;
 		int    i;
 		char   b;
@@ -269,6 +269,7 @@ class TValFunc
 
 	TFunction	*mFunc;
 	map<int,TValFunc* >	vctx;
+	pthread_mutex_t mRes;
 };
 
 //***********************************************************

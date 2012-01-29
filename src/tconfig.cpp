@@ -28,6 +28,8 @@ using namespace OSCADA;
 //*************************************************
 TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mNoTransl(false)
 {
+    pthread_mutex_init(&mRes, NULL);
+
     setElem(Elements,true);
 }
 
@@ -43,6 +45,9 @@ TConfig::~TConfig()
 
     m_elem->valDet(this);
     if( single ) delete m_elem;
+
+    pthread_mutex_lock(&mRes);
+    pthread_mutex_destroy(&mRes);
 }
 
 TConfig &TConfig::operator=(TConfig &config)
@@ -226,7 +231,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mOwner(owner)
 {
     //> Chek for self field for dinamic elements
-    if( fld.flg()&TFld::SelfFld )
+    if(fld.flg()&TFld::SelfFld)
     {
 	mFld = new TFld();
 	*mFld = fld;
@@ -235,27 +240,24 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
 
     switch(mFld->type())
     {
-	case TFld::String:
-	    m_val.s_val    = new ResString();
-	    m_val.s_val->setVal(mFld->def());
-	    break;
+	case TFld::String:	m_val.s_val = new string(mFld->def());		break;
 	case TFld::Integer:	m_val.i_val = atoi(mFld->def().c_str());	break;
 	case TFld::Real:	m_val.r_val = atof(mFld->def().c_str());	break;
 	case TFld::Boolean:	m_val.b_val = atoi(mFld->def().c_str());	break;
 	default: break;
     }
-    if( fld.flg()&TCfg::Hide )	mView = false;
+    if(fld.flg()&TCfg::Hide)	mView = false;
 }
 
 TCfg::~TCfg(  )
 {
-    if( mFld->type() == TFld::String )	delete m_val.s_val;
-    if( mFld->flg()&TFld::SelfFld )	delete mFld;
+    if(mFld->type() == TFld::String)	delete m_val.s_val;
+    if(mFld->flg()&TFld::SelfFld)	delete mFld;
 }
 
 const string &TCfg::name()	{ return mFld->name(); }
 
-ResString &TCfg::getSd( )
+string &TCfg::getSd( )
 {
     if(mFld->type() != TFld::String)	throw TError("Cfg",_("Element type is not string!"));
     return *m_val.s_val;
@@ -313,7 +315,13 @@ string TCfg::getS( char RqFlg )
 	case TFld::Integer:	return TSYS::int2str(getI(RqFlg));
 	case TFld::Real:	return TSYS::real2str(getR(RqFlg));
 	case TFld::Boolean:	return TSYS::int2str(getB(RqFlg));
-	case TFld::String:	return m_val.s_val->getVal();
+	case TFld::String:
+	{
+	    pthread_mutex_lock(&mOwner.mRes);
+	    string rez = *m_val.s_val;
+	    pthread_mutex_unlock(&mOwner.mRes);
+	    return rez;
+	}
 	default: break;
     }
     return "";
@@ -392,10 +400,17 @@ void TCfg::setS( const string &val, char RqFlg )
 	case TFld::Boolean:	setB( atoi(val.c_str()), RqFlg );	break;
 	case TFld::String:
 	{
-	    string t_str = m_val.s_val->getVal();
-	    m_val.s_val->setVal(val);
-	    if( !mOwner.cfgChange(*this) ) m_val.s_val->setVal(t_str);
-	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
+	    pthread_mutex_lock(&mOwner.mRes);
+	    string t_str = *m_val.s_val;
+	    *m_val.s_val = val;
+	    pthread_mutex_unlock(&mOwner.mRes);
+	    if(!mOwner.cfgChange(*this))
+	    {
+		pthread_mutex_lock(&mOwner.mRes);
+		*m_val.s_val = t_str;
+		pthread_mutex_unlock(&mOwner.mRes);
+	    }
+	    if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 	    break;
 	}
 	default: break;

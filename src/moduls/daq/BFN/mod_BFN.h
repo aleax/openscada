@@ -93,8 +93,9 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t period( )	{ return mPer; }
-	string	cron( )		{ return mSched; }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
+	string	addr( )		{ return cfg("ADDR").getS(); }
 	double	syncPer( )	{ return mSync; }
 
 	AutoHD<TMdPrm> at(const string &nm)	{ return TController::at(nm); }
@@ -122,11 +123,6 @@ class TMdContr: public TController
 	Res	en_res, req_res;//Resource for enable params
 	int	&mPrior;	// Process task priority
 	double	&mSync;		//Synchronization inter remote station: attributes list update.
-	ResString &mSched,	//Acquisition schedule
-		&mAddr,		//Transport device address
-		//&mHouse,	//BFN house for get
-		&mUser,		//Auth user name
-		&mPassword;	//Auth pasword
 	int64_t	mPer;
 
 	bool	prc_st,		// Process task active

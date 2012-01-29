@@ -47,7 +47,7 @@ class TParamContr : public TConfig, public TValue
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return cfg("SHIFR").getSd().getValRef(); }
+	const string &id( )	{ return cfg("SHIFR").getSd(); }
 	string name( );
 	string descr( );
 	bool toEnable( )	{ return cfg("EN").getB(); }

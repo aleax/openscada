@@ -156,8 +156,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-    TController(name_c, daq_db, cfgelem), mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
-    connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE").getSd()), mAddr(cfg("ADDR").getSd()),
+    TController(name_c, daq_db, cfgelem),
+    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
     prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_gath(0)
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
@@ -196,7 +196,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mSched.getVal().empty()) mSched = TSYS::real2str(mPerOld);
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld));
 }
 
 void TMdContr::disable_( )
@@ -209,9 +209,9 @@ void TMdContr::start_( )
     if(prc_st)	return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,1e9*atof(mSched.getVal().c_str())) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
 
-    SYS->transport().at().at("Serial").at().outAt(mAddr).at().start();
+    SYS->transport().at().at("Serial").at().outAt(cfg("ADDR").getS()).at().start();
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -256,7 +256,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 
     try
     {
-	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mAddr);
+	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(cfg("ADDR").getS());
 	if(!tr.at().startStat()) tr.at().start();
 	if(CRC) pdu += DCONCRC(pdu);
 	pdu += "\r";

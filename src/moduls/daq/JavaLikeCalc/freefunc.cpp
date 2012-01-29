@@ -38,11 +38,10 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 Func::Func( const string &iid, const string &name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
-    mName(cfg("NAME").getSd()), mDescr(cfg("DESCR").getSd()), prg_src(cfg("FORMULA").getSd()),
     max_calc_tm(cfg("MAXCALCTM").getId()), parse_res(mod->parseRes())
 {
     cfg("ID").setS(id());
-    mName = name.empty() ? id() : name;
+    cfg("NAME").setS(name.empty() ? id() : name);
 }
 
 Func::~Func( )
@@ -78,7 +77,7 @@ Lib &Func::owner( )
 
 string Func::name( )
 {
-    string tNm = mName;
+    string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : id();
 }
 
@@ -111,14 +110,14 @@ Func &Func::operator=(Func &func)
 
 void Func::setName( const string &nm )
 {
-    mName = nm;
-    if(!owner().DB().empty()) modif();
+    cfg("NAME").setS(nm);
+    if(owner().DB().empty()) modifClr();
 }
 
 void Func::setDescr( const string &dscr )
 {
-    mDescr = dscr;
-    if(!owner().DB().empty()) modif();
+    cfg("DESCR").setS(dscr);
+    if(owner().DB().empty()) modifClr();
 }
 
 void Func::setMaxCalcTm( int vl )
@@ -129,8 +128,8 @@ void Func::setMaxCalcTm( int vl )
 
 void Func::setProg( const string &prg )
 {
-    prg_src = prg;
-    if(!owner().DB().empty()) modif();
+    cfg("FORMULA").setS(prg);
+    if(owner().DB().empty()) modifClr();
 }
 
 void Func::load_( )
@@ -317,7 +316,7 @@ void Func::progCompile( )
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
     la_pos = 0;		//LA position
-    sprg = prg_src;
+    sprg = cfg("FORMULA").getS();
     prg.clear();	//Clear program
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list

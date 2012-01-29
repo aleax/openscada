@@ -431,8 +431,8 @@ TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
 
 TVal::~TVal( )
 {
-    if( !mCfg && src.fld->type() == TFld::String )	delete val.val_s;
-    if( !mCfg && src.fld->flg()&TFld::SelfFld )		delete src.fld;
+    if(!mCfg && src.fld->type() == TFld::String)delete val.val_s;
+    if(!mCfg && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 }
 
 TValue &TVal::owner( )	{ return *(TValue*)nodePrev(); }
@@ -440,8 +440,8 @@ TValue &TVal::owner( )	{ return *(TValue*)nodePrev(); }
 void TVal::setFld( TFld &fld )
 {
     //> Delete previous
-    if( !mCfg && src.fld && src.fld->type() == TFld::String )	delete val.val_s;
-    if( !mCfg && src.fld && src.fld->flg()&TFld::SelfFld )	delete src.fld;
+    if(!mCfg && src.fld && src.fld->type() == TFld::String)	delete val.val_s;
+    if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 
     //> Chek for self field for dynamic elements
     if( fld.flg()&TFld::SelfFld )
@@ -454,9 +454,7 @@ void TVal::setFld( TFld &fld )
     switch(src.fld->type())
     {
 	case TFld::String:
-	    val.val_s = new ResString();
-	    if( src.fld->def().empty() ) val.val_s->setVal(EVAL_STR);
-	    else val.val_s->setVal(src.fld->def());
+	    val.val_s = new string(src.fld->def().empty()?string(EVAL_STR):src.fld->def());
 	    break;
 	case TFld::Integer:
 	    val.val_i = src.fld->def().empty() ? EVAL_INT : atoi(src.fld->def().c_str());	break;
@@ -473,8 +471,8 @@ void TVal::setFld( TFld &fld )
 void TVal::setCfg( TCfg &cfg )
 {
     //> Delete previous
-    if( !mCfg && src.fld && src.fld->type() == TFld::String )	delete val.val_s;
-    if( !mCfg && src.fld && src.fld->flg()&TFld::SelfFld )	delete src.fld;
+    if(!mCfg && src.fld && src.fld->type() == TFld::String)	delete val.val_s;
+    if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 
     //> Set cfg
     src.cfg = &cfg;
@@ -535,6 +533,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
 	case TFld::String:
+	{
 	    setReqFlg(true);
 	    //> Get from archive
 	    if(tm && (*tm) && !mArch.freeStat() && *tm/mArch.at().period() < time()/mArch.at().period())
@@ -548,7 +547,11 @@ string TVal::getS( int64_t *tm, bool sys )
 	    //> Get current value
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
-	    return val.val_s->getVal();
+	    nodeRes().resRequestR();
+	    string rez = *val.val_s;
+	    nodeRes().resRelease();
+	    return rez;
+	}
 	default: break;
     }
     return EVAL_STR;
@@ -682,16 +685,19 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	case TFld::String:
 	{
 	    //> Set value to config
-	    if( mCfg )	{ src.cfg->setS( value ); return; }
+	    if(mCfg)	{ src.cfg->setS( value ); return; }
 	    //> Check to write
-	    if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite)	throw TError("Val",_("Write access is denied!"));
 	    //> Set current value and time
-	    string pvl = val.val_s->getVal(); val.val_s->setVal(value);
+	    nodeRes().resRequestW();
+	    string pvl = *val.val_s;
+	    *val.val_s = value;
+            nodeRes().resRelease();
 	    mTime = tm;
-	    if( !mTime ) mTime = TSYS::curTime();
-	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
+	    if(!mTime) mTime = TSYS::curTime();
+	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, pvl);
 	    //> Set to archive
-	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setS(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;

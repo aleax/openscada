@@ -33,7 +33,7 @@ using namespace AMRDevs;
 //*************************************************
 Ergomera::Ergomera( TMdPrm *prm ) : DA(prm), numReg(0)
 {
-    devAddr = vmin(65535,vmax(1,atoi(mPrm->devAddr.getVal().c_str())));
+    devAddr = vmin(65535,vmax(1,atoi(mPrm->devAddr().c_str())));
     mAttrs = mPrm->extPrmGet("Attrs",true);
     mMerge = atoi(mPrm->extPrmGet("FragMerge").c_str());
 
@@ -138,7 +138,7 @@ string Ergomera::modBusReq( string &pdu )
     try
     {
 	//> Connect to transport
-	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->mAddr);
+	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->addr());
 	if( !tr.at().startStat() ) tr.at().start();
 
 	mbap.reserve( pdu.size()+3 );

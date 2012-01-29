@@ -51,7 +51,7 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	string OIDList( )	{ return m_oid; }
+	string OIDList( )	{ return cfg("OID_LS").getS(); }
 	vector<string> &lsOID( ){ return ls_oid; }
 	TElem &elem( )		{ return p_el; }
 
@@ -76,7 +76,6 @@ class TMdPrm : public TParamContr
 	void parseOIDList( const string &ioid );
 
 	//Attributes
-	ResString &m_oid;		//Gaher OID list. Single text
 	vector<string>	ls_oid;		//Parsed IOD list.
 
 	TElem	p_el;			//Work atribute elements
@@ -96,8 +95,9 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-        string  cron( )         { return mSched; }
+        string  cron( )         { return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return m_prior; }
+	string	ver( )		{ return cfg("VER").getS(); }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
 	struct snmp_session *getSess( );
 
@@ -138,11 +138,6 @@ class TMdContr: public TController
 		&m_pattr_lim,	// Parameter's attributes limit
 		&m_retr,	// Request retries
 		&m_tm;		// Request timeout
-	ResString &mSched,	// Acquisition schedule
-		&m_addr,	// Host address
-		&m_ver,		// SNMP version
-		&m_comm,	// Server community
-		&m_V3;		// V3 parameters
 	string	w_addr, w_comm;
 	int64_t	mPer;
 

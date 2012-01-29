@@ -106,7 +106,7 @@ class TVal : public TCntrNode
 	//Attributes
 	union
 	{
-	    ResString	*val_s;		//String value
+	    string	*val_s;		//String value
 	    double	val_r;		//Real value
 	    int		val_i;		//Integer value
 	    char	val_b;		//Boolean value

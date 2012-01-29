@@ -67,8 +67,6 @@ class ModMArch: public TMArchivator
 	double	tm_calc;			//Archiving time
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
-
-	ResString &mAPrms;			// Addon parameters
 };
 
 }

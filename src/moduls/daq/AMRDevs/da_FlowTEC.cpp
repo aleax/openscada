@@ -33,7 +33,7 @@ using namespace AMRDevs;
 //*************************************************
 FlowTEC::FlowTEC( TMdPrm *prm ) : DA(prm), mVer(10), mThread(1)
 {
-    devAddr = vmin(255,vmax(1,atoi(mPrm->devAddr.getVal().c_str())));
+    devAddr = vmin(255,vmax(1,atoi(mPrm->devAddr().c_str())));
     mVer = vmin(100,vmax(1,atoi(mPrm->extPrmGet("FirmwareVer").c_str())));
     mThread = vmin(3,vmax(1,atoi(mPrm->extPrmGet("Thread").c_str())));
 
@@ -68,8 +68,8 @@ void FlowTEC::getVals( )
     char szReceive[255];
 
     //> Connect to transport
-    AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->mAddr);
-    if( !tr.at().startStat() ) tr.at().start();
+    AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->addr());
+    if(!tr.at().startStat()) tr.at().start();
 
     //> Prepare request
     string req, rez;

@@ -56,6 +56,10 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	string	devTp( )	{ return cfg("DEV_TP").getS(); }
+	string	devAddr( )	{ return cfg("DEV_ADDR").getS(); }
+	string	addr( )		{ return cfg("ADDR").getS(); }
+
 	TElem &elem( )		{ return p_el; }
 
 	void enable( );
@@ -70,10 +74,6 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements
-	ResString &mAddr,		//Transport device address
-		&devTp,		//Device type
-		&devAddr,	//Device address on a bus
-		&devPrms;	//Individual device extended parameters
 	bool	needApply;	//Configuration changed and need apply
 
 	ResString mErr;
@@ -108,10 +108,11 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-	string	cron( )		{ return mSched; }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
 	int	restTm( )	{ return mRestTm; }
 	int	connTry( )	{ return mConnTry; }
+
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -130,7 +131,6 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	ResString &mSched;	//Acquisition schedule
 	int	&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
 		&mConnTry;	//Connections try

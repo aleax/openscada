@@ -591,8 +591,8 @@ retry:
 //*************************************************
 Node::Node( const string &iid, const string &idb, TElem *el ) :
     TFunction("ModBusNode_"+iid), TConfig(el), data(NULL),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mPer(cfg("DT_PER").getRd()),
-    mAEn(cfg("EN").getBd()), mEn(false), mDB(idb), prcSt(false), endrunRun(false), cntReq(0)
+    mId(cfg("ID").getSd()), mPer(cfg("DT_PER").getRd()), mAEn(cfg("EN").getBd()),
+    mEn(false), mDB(idb), prcSt(false), endrunRun(false), cntReq(0)
 {
     mId = iid;
 
@@ -653,7 +653,7 @@ TProt &Node::owner( )		{ return *(TProt*)nodePrev(); }
 
 string Node::name( )
 {
-    string tNm = mName;
+    string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : id();
 }
 

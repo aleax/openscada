@@ -22,7 +22,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	5		//ArchiveS type modules version
+#define SARH_VER	6		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <time.h>
@@ -56,13 +56,13 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return m_id.getValRef(); }
+	const string &id( )	{ return mId; }
 	string workId( );
 	string name( );
-	string dscr( )		{ return m_dscr; }
+	string dscr( )		{ return cfg("DESCR").getS(); }
 	bool toStart( )		{ return m_start; }
 	bool startStat( )	{ return run_st; }
-	string addr( )		{ return m_addr; }
+	string addr( )		{ return cfg("ADDR").getS(); }
 	int    level( )		{ return m_level; }
 	void   categ( vector<string> &list );
 
@@ -70,10 +70,10 @@ class TMArchivator : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &vl )	{ m_name = vl; modif(); }
-	void setDscr( const string &vl )	{ m_dscr = vl; modif(); }
+	void setName( const string &vl )	{ cfg("NAME").setS(vl); }
+	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setToStart( bool vl )		{ m_start = vl; modif(); }
-	void setAddr( const string &vl )	{ m_addr = vl; modif(); }
+	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
 	void setLevel( int lev )		{ m_level = lev; modif(); }
 
 	void setDB( const string &idb )		{ m_db = idb; modifG(); }
@@ -108,14 +108,10 @@ class TMArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return m_id.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 
 	//Private attributes
-	ResString &m_id,		//Mess arch id
-		&m_name,	//Mess arch name
-		&m_dscr,	//Mess arch description
-		&m_addr,	//Mess arch address
-		&m_cat_o;	//Mess arch cetegory
+	string 	&mId;		//Mess arch id
 	bool	&m_start;	//Mess arch starting flag
 	int	&m_level;	//Mess arch level
 	string	m_db;

@@ -48,18 +48,18 @@ class Lib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }
+	const string &id( )	{ return mId; }
 	string name( );
-	string descr( )		{ return mDescr; }
+	string descr( )		{ return cfg("DESCR").getS(); }
 	bool startStat( )	{ return run_st; }
 	bool progTr( )		{ return mProgTr; }
 
 	string DB( )		{ return work_lib_db; }
-	string tbl( )		{ return mDB; }
+	string tbl( )		{ return cfg("DB").getS(); }
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )	{ mName = inm; modif(); }
-	void setDescr( const string &idscr )	{ mDescr = idscr; modif(); }
+	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
+	void setDescr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setStart( bool val );
 	void setFullDB( const string &idb );
 	void setProgTr( bool val )		{ mProgTr = val; modif(); }
@@ -75,7 +75,7 @@ class Lib : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
@@ -87,7 +87,7 @@ class Lib : public TCntrNode, public TConfig
     private:
 	bool	run_st;
 	int	mFnc;
-	ResString &mId, &mName, &mDescr, &mDB;
+	string	&mId;
 	string	work_lib_db;
 	bool	&mProgTr;
 };

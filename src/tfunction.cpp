@@ -487,12 +487,15 @@ void IO::setRez( const string &val )
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
     mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), tm_calc(0), mFunc(NULL)
 {
+    pthread_mutex_init(&mRes, NULL);
     setFunc(ifunc);
 }
 
 TValFunc::~TValFunc( )
 {
-    if( mFunc ) funcDisConnect();
+    if(mFunc) funcDisConnect();
+    pthread_mutex_lock(&mRes);
+    pthread_mutex_destroy(&mRes);
 }
 
 void TValFunc::setFunc( TFunction *ifunc, bool att_det )
@@ -513,7 +516,7 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	    val.mdf = false;
 	    switch( val.tp )
 	    {
-		case IO::String:	val.val.s = new ResString(mFunc->io(i_vl)->def());	break;
+		case IO::String:	val.val.s = new string(mFunc->io(i_vl)->def());		break;
 		case IO::Integer:	val.val.i = atoi(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Real:		val.val.r = atof(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Boolean:	val.val.b = atoi(mFunc->io(i_vl)->def().c_str());	break;
@@ -583,55 +586,109 @@ TVariant TValFunc::get( unsigned id )
 
 string TValFunc::getS( unsigned id )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getS()",id);
+    if(id >= mVal.size()) throw TError("ValFnc",_("%s: Id or IO %d error!"),"getS()",id);
+
+    string rez = EVAL_STR;
     switch(mVal[id].tp)
     {
-	case IO::Integer:	return (mVal[id].val.i!=EVAL_INT) ? TSYS::int2str(mVal[id].val.i) : EVAL_STR;
-	case IO::Real:		return (mVal[id].val.r!=EVAL_REAL) ? TSYS::real2str(mVal[id].val.r) : EVAL_STR;
-	case IO::Boolean:	return (mVal[id].val.b!=EVAL_BOOL) ? TSYS::int2str((bool)mVal[id].val.b) : EVAL_STR;
-	case IO::String:	return mVal[id].val.s->getVal();
-	case IO::Object:	return mVal[id].val.o->getStrXML();
+	case IO::Integer:
+	    rez = (mVal[id].val.i!=EVAL_INT) ? TSYS::int2str(mVal[id].val.i) : EVAL_STR;
+	    break;
+	case IO::Real:
+	    rez = (mVal[id].val.r!=EVAL_REAL) ? TSYS::real2str(mVal[id].val.r) : EVAL_STR;
+	    break;
+	case IO::Boolean:
+	    rez = (mVal[id].val.b!=EVAL_BOOL) ? TSYS::int2str((bool)mVal[id].val.b) : EVAL_STR;
+	    break;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    rez = *mVal[id].val.s;
+	    pthread_mutex_unlock(&mRes);
+	    break;
+	case IO::Object:
+	    rez = mVal[id].val.o->getStrXML();
+	    break;
     }
-    return EVAL_STR;
+
+    return rez;
 }
 
 int TValFunc::getI( unsigned id )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getI()",id);
-    switch( mVal[id].tp )
+    if(id >= mVal.size()) throw TError("ValFnc",_("%s: Id or IO %d error!"),"getI()",id);
+
+    int rez = EVAL_INT;
+    switch(mVal[id].tp)
     {
-	case IO::String:	return (mVal[id].val.s->getVal()!=EVAL_STR) ? atoi(mVal[id].val.s->getVal().c_str()) : EVAL_INT;
-	case IO::Real:		return (mVal[id].val.r!=EVAL_REAL) ? (int)mVal[id].val.r : EVAL_INT;
-	case IO::Boolean:	return (mVal[id].val.b!=EVAL_BOOL) ? (bool)mVal[id].val.b : EVAL_INT;
-	case IO::Integer:	return mVal[id].val.i;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    rez = (*mVal[id].val.s!=EVAL_STR) ? atoi(mVal[id].val.s->c_str()) : EVAL_INT;
+	    pthread_mutex_unlock(&mRes);
+	    break;
+	case IO::Real:
+	    rez = (mVal[id].val.r!=EVAL_REAL) ? (int)mVal[id].val.r : EVAL_INT;
+	    break;
+	case IO::Boolean:
+	    rez = (mVal[id].val.b!=EVAL_BOOL) ? (bool)mVal[id].val.b : EVAL_INT;
+	    break;
+	case IO::Integer:
+	    rez = mVal[id].val.i;
+	    break;
     }
-    return EVAL_INT;
+
+    return rez;
 }
 
 double TValFunc::getR( unsigned id )
 {
-    if( id >= mVal.size() )    throw TError("ValFnc",_("%s: Id or IO %d error!"),"getR()",id);
-    switch( mVal[id].tp )
+    if(id >= mVal.size()) throw TError("ValFnc",_("%s: Id or IO %d error!"),"getR()",id);
+
+    double rez = EVAL_REAL;
+    switch(mVal[id].tp)
     {
-	case IO::String:	return (mVal[id].val.s->getVal()!=EVAL_STR) ? atof(mVal[id].val.s->getVal().c_str()) : EVAL_REAL;
-	case IO::Integer:	return (mVal[id].val.i!=EVAL_INT) ? mVal[id].val.i : EVAL_REAL;
-	case IO::Boolean:	return (mVal[id].val.b!=EVAL_BOOL) ? (bool)mVal[id].val.b : EVAL_REAL;
-	case IO::Real:		return mVal[id].val.r;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    rez = (*mVal[id].val.s!=EVAL_STR) ? atof(mVal[id].val.s->c_str()) : EVAL_REAL;
+	    pthread_mutex_unlock(&mRes);
+	    break;
+	case IO::Integer:
+	    rez = (mVal[id].val.i!=EVAL_INT) ? mVal[id].val.i : EVAL_REAL;
+	    break;
+	case IO::Boolean:
+	    rez = (mVal[id].val.b!=EVAL_BOOL) ? (bool)mVal[id].val.b : EVAL_REAL;
+	    break;
+	case IO::Real:
+	    rez = mVal[id].val.r;
+	    break;
     }
-    return EVAL_REAL;
+
+    return rez;
 }
 
 char TValFunc::getB( unsigned id )
 {
-    if( id >= mVal.size() )	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getB()",id);
-    switch( mVal[id].tp )
+    if(id >= mVal.size()) throw TError("ValFnc",_("%s: Id or IO %d error!"),"getB()",id);
+
+    char rez = EVAL_BOOL;
+    switch(mVal[id].tp)
     {
-	case IO::String:	return (mVal[id].val.s->getVal()!=EVAL_STR) ? (bool)atoi(mVal[id].val.s->getVal().c_str()) : EVAL_BOOL;
-	case IO::Integer:	return (mVal[id].val.i!=EVAL_INT) ? (bool)mVal[id].val.i : EVAL_BOOL;
-	case IO::Real:		return (mVal[id].val.r!=EVAL_REAL) ? (bool)mVal[id].val.r : EVAL_BOOL;
-	case IO::Boolean:	return mVal[id].val.b;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    rez = (*mVal[id].val.s!=EVAL_STR) ? (bool)atoi(mVal[id].val.s->c_str()) : EVAL_BOOL;
+	    pthread_mutex_unlock(&mRes);
+	    break;
+	case IO::Integer:
+	    rez = (mVal[id].val.i!=EVAL_INT) ? (bool)mVal[id].val.i : EVAL_BOOL;
+	    break;
+	case IO::Real:
+	    rez = (mVal[id].val.r!=EVAL_REAL) ? (bool)mVal[id].val.r : EVAL_BOOL;
+	    break;
+	case IO::Boolean:
+	    rez = mVal[id].val.b;
+	    break;
     }
-    return EVAL_BOOL;
+
+    return rez;
 }
 
 TVarObj *TValFunc::getO( unsigned id )
@@ -663,7 +720,11 @@ void TValFunc::setS( unsigned id, const string &val )
 	case IO::Integer:	mVal[id].val.i = (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT;	break;
 	case IO::Real:		mVal[id].val.r = (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL;	break;
 	case IO::Boolean:	mVal[id].val.b = (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL;	break;
-	case IO::String:	mVal[id].val.s->setVal(val);	break;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    *mVal[id].val.s = val;
+	    pthread_mutex_unlock(&mRes);
+	    break;
     }
 }
 
@@ -673,10 +734,14 @@ void TValFunc::setI( unsigned id, int val )
     if(mdfChk() && val != getI(id)) mVal[id].mdf = true;
     switch(mVal[id].tp)
     {
-	case IO::String:	mVal[id].val.s->setVal((val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR);	break;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    *mVal[id].val.s = (val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR;
+	    pthread_mutex_unlock(&mRes);
+	    break;
 	case IO::Real:		mVal[id].val.r = (val!=EVAL_INT) ? val : EVAL_REAL;		break;
 	case IO::Boolean:	mVal[id].val.b = (val!=EVAL_INT) ? (bool)val : EVAL_BOOL;	break;
-	case IO::Integer:	mVal[id].val.i = val;	break;
+	case IO::Integer:	mVal[id].val.i = val;						break;
     }
 }
 
@@ -687,7 +752,11 @@ void TValFunc::setR( unsigned id, double val )
     if(mdfChk() && val != getR(id)) mVal[id].mdf = true;
     switch(mVal[id].tp)
     {
-	case IO::String:	mVal[id].val.s->setVal((val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR);	break;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    *mVal[id].val.s = (val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR;
+	    pthread_mutex_unlock(&mRes);
+	    break;
 	case IO::Integer:	mVal[id].val.i = (val!=EVAL_REAL) ? (int)val : EVAL_INT;	break;
 	case IO::Boolean:	mVal[id].val.b = (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL;	break;
 	case IO::Real:		mVal[id].val.r = val;	break;
@@ -700,7 +769,11 @@ void TValFunc::setB( unsigned id, char val )
     if(mdfChk() && val != getB(id)) mVal[id].mdf = true;
     switch(mVal[id].tp)
     {
-	case IO::String:	mVal[id].val.s->setVal((val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR);	break;
+	case IO::String:
+	    pthread_mutex_lock(&mRes);
+	    *mVal[id].val.s = (val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR;
+	    pthread_mutex_unlock(&mRes);
+	    break;
 	case IO::Integer:	mVal[id].val.i = (val!=EVAL_BOOL) ? (bool)val : EVAL_INT;	break;
 	case IO::Real:		mVal[id].val.r = (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL;	break;
 	case IO::Boolean:	mVal[id].val.b = val;	break;

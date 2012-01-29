@@ -371,8 +371,7 @@ BFunc *TipContr::bFuncGet( const char *nm )
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), call_st(false), endrun_req(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), mSched(cfg("SCHEDULE").getSd()), mFnc(cfg("FUNC").getSd()),
-    id_freq(-1), id_start(-1), id_stop(-1), tm_calc(0)
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), tm_calc(0)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -416,14 +415,15 @@ string Contr::getStatus( )
 
 void Contr::enable_( )
 {
-    if(!mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')))
-	throw TError(nodePath().c_str(),_("Functions library '%s' is not present. Please, create functions library!"),TSYS::strSepParse(mFnc,0,'.').c_str());
-    if(!mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().present(TSYS::strSepParse(mFnc,1,'.')))
+    string wfnc = fnc();
+    if(!mod->lbPresent(TSYS::strSepParse(wfnc,0,'.')))
+	throw TError(nodePath().c_str(),_("Functions library '%s' is not present. Please, create functions library!"),TSYS::strSepParse(wfnc,0,'.').c_str());
+    if(!mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().present(TSYS::strSepParse(wfnc,1,'.')))
     {
-	mess_info(nodePath().c_str(),_("Create new function '%s'."),mFnc.getVal().c_str());
-	mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().add(TSYS::strSepParse(mFnc,1,'.').c_str());
+	mess_info(nodePath().c_str(),_("Create new function '%s'."),wfnc.c_str());
+	mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().add(TSYS::strSepParse(wfnc,1,'.').c_str());
     }
-    setFunc(&mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().at(TSYS::strSepParse(mFnc,1,'.')).at());
+    setFunc(&mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().at(TSYS::strSepParse(wfnc,1,'.')).at());
     try{ loadFunc( ); }
     catch(TError err)
     {
@@ -520,7 +520,7 @@ void Contr::start_( )
     if(id_this >= 0) setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Start the request data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
@@ -656,7 +656,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(mFnc,0,'.',&c_off)).size(); c_lv++)
+	for(int c_off = 0; (c_el=TSYS::strSepParse(fnc(),0,'.',&c_off)).size(); c_lv++)
 	{
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
@@ -666,8 +666,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	{
 	    case 0:	mod->lbList(lst); break;
 	    case 1:
-		if(mod->lbPresent(TSYS::strSepParse(mFnc,0,'.')))
-		    mod->lbAt(TSYS::strSepParse(mFnc,0,'.')).at().list(lst);
+		if(mod->lbPresent(TSYS::strSepParse(fnc(),0,'.')))
+		    mod->lbAt(TSYS::strSepParse(fnc(),0,'.')).at().list(lst);
 		break;
 	}
 	for(unsigned i_a=0; i_a < lst.size(); i_a++)

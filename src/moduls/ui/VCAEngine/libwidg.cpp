@@ -34,12 +34,11 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), mId(cfg("ID").getSd()), m_name(cfg("NAME").getSd()), m_descr(cfg("DESCR").getSd()),
-    m_dbt(cfg("DB_TBL").getSd()), m_ico(cfg("ICO").getSd()), work_lib_db(lib_db), mEnable(false)
+    TConfig(&mod->elWdgLib()), mId(cfg("ID").getSd()), work_lib_db(lib_db), mEnable(false)
 {
     mId = id;
-    m_name = name;
-    m_dbt = string("wlb_")+id;
+    cfg("NAME").setS(name);
+    cfg("DB_TBL").setS(string("wlb_")+id);
     m_wdg = grpAdd("wdg_",(id=="originals")?true:false);
 }
 
@@ -57,7 +56,7 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     string tid = mId;
     *(TConfig*)this = *(TConfig*)src_n;
     mId  = tid;
-    m_dbt = string("wlb_")+tid;
+    cfg("DB_TBL").setS(string("wlb_")+tid);
     work_lib_db = src_n->work_lib_db;
 
     if(!src_n->enable()) return *this;
@@ -122,7 +121,7 @@ void WidgetLib::postDisable( int flag )
 
 string WidgetLib::name( )
 {
-    string tNm = m_name;
+    string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : mId;
 }
 
@@ -130,7 +129,7 @@ void WidgetLib::setFullDB( const string &it )
 {
     size_t dpos = it.rfind(".");
     work_lib_db = (dpos!=string::npos) ? it.substr(0,dpos) : "";
-    m_dbt = (dpos!=string::npos) ? it.substr(dpos+1) : "";
+    cfg("DB_TBL").setS((dpos!=string::npos) ? it.substr(dpos+1) : "");
     modifG();
 }
 
@@ -448,9 +447,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //* LWidget: Library stored widget               *
 //************************************************
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
-	Widget(iid), TConfig(&mod->elWdg()),
-	m_ico(cfg("ICO").getSd()), m_proc(cfg("PROC").getSd()), mParent(cfg("PARENT").getSd()),	m_attrs(cfg("ATTRS").getSd()),
-	m_proc_per(cfg("PROC_PER").getId())
+	Widget(iid), TConfig(&mod->elWdg()), m_proc_per(cfg("PROC_PER").getId())
 {
     cfg("ID").setS(id());
 
@@ -501,16 +498,17 @@ string LWidget::path( )
 
 string LWidget::ico( )
 {
-    if(m_ico.size() )          return m_ico;
-    if(!parent().freeStat() )  return parent().at().ico();
+    string rIco = cfg("ICO").getS();
+    if(rIco.size()) return rIco;
+    if(!parent().freeStat())  return parent().at().ico();
     return "";
 }
 
 string LWidget::calcId( )
 {
-    if( m_proc.empty() )
+    if(proc().empty())
     {
-	if( !parent().freeStat() ) return parent().at().calcId( );
+	if(!parent().freeStat()) return parent().at().calcId( );
 	return "";
     }
     return "L_"+ownerLib().id()+"_"+id();
@@ -518,23 +516,23 @@ string LWidget::calcId( )
 
 string LWidget::calcLang( )
 {
-    if( !m_proc.size() && !parent().freeStat() )
+    if(!proc().size() && !parent().freeStat() )
 	return parent().at().calcLang();
 
-    string iprg = m_proc;
+    string iprg = proc();
     if(iprg.find("\n") == string::npos)
     {
 	iprg = iprg+"\n";
-	m_proc = iprg;
+	cfg("PROC").setS(iprg);
     }
     return iprg.substr(0,iprg.find("\n"));
 }
 
 string LWidget::calcProg( )
 {
-    if(!m_proc.size() && !parent().freeStat()) return parent().at().calcProg();
+    if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
 
-    string iprg = m_proc;
+    string iprg = proc();
     size_t lng_end = iprg.find("\n");
     if(lng_end == string::npos) lng_end=0;
     else lng_end++;
@@ -543,20 +541,19 @@ string LWidget::calcProg( )
 
 int LWidget::calcPer( )
 {
-    if( m_proc_per < 0 && !parent().freeStat() )
-	return parent().at().calcPer();
+    if(m_proc_per < 0 && !parent().freeStat())	return parent().at().calcPer();
     return m_proc_per;
 }
 
 void LWidget::setCalcLang( const string &ilng )
 {
-    m_proc = ilng.empty() ? "" : ilng+"\n"+calcProg();
+    cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg());
     modif();
 }
 
 void LWidget::setCalcProg( const string &iprg )
 {
-    m_proc = calcLang()+"\n"+iprg;
+    cfg("PROC").setS(calcLang()+"\n"+iprg);
     modif();
 }
 
@@ -568,8 +565,8 @@ void LWidget::setCalcPer( int vl )
 
 void LWidget::setParentNm( const string &isw )
 {
-    if(enable() && mParent.getVal() != isw) setEnable(false);
-    mParent = isw;
+    if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
+    cfg("PARENT").setS(isw);
     modif();
 }
 
@@ -585,7 +582,7 @@ void LWidget::load_( )
     //> Inherit modify attributes
     vector<string> als;
     attrList(als);
-    string tAttrs = m_attrs;
+    string tAttrs = cfg("ATTRS").getS();
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	if(!attrPresent(als[i_a])) continue;
@@ -609,7 +606,7 @@ void LWidget::loadIO( )
     if(!enable()) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", m_attrs);
+    mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", cfg("ATTRS").getS());
 
     //> Load cotainer widgets
     if(!isContainer()) return;
@@ -651,7 +648,7 @@ void LWidget::save_( )
     string tbl = ownerLib().tbl();
 
     //> Save generic attributes
-    m_attrs = mod->attrsSave( *this, db+"."+tbl, id(), "", true );
+    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, id(), "", true));
 
     //> Save generic widget's data
     SYS->db().at().dataSet( db+"."+tbl, mod->nodePath()+tbl, *this );
@@ -672,7 +669,8 @@ void LWidget::wClear( )
 {
     Widget::wClear();
 
-    m_proc = m_attrs = "";
+    cfg("ATTRS").setS("");
+    cfg("PROC").setS("");
 }
 
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
@@ -748,9 +746,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* CWidget: Container stored widget             *
 //************************************************
-CWidget::CWidget( const string &iid, const string &isrcwdg ) :
-        Widget(iid), TConfig(&mod->elInclWdg()),
-        mParent(cfg("PARENT").getSd()), m_attrs(cfg("ATTRS").getSd())
+CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id());
     m_lnk = true;
@@ -797,14 +793,14 @@ void CWidget::postDisable( int flag )
 	//>> Remove from library table
 	if(ChldResrv)
 	{
-	    mParent = "<deleted>";
+	    cfg("PARENT").setS("<deleted>");
 	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 	}
 	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
 
 
 	//>> Remove widget's work and users IO from library IO table
-	string tAttrs = m_attrs;
+	string tAttrs = cfg("ATTRS").getS();
 
 	TConfig c_el( &mod->elWdgIO() );
 	c_el.cfg("IDW").setS( ownerLWdg().id(), true ); c_el.cfg("IDC").setS( id(), true );
@@ -823,8 +819,8 @@ string CWidget::ico( )
 
 void CWidget::setParentNm( const string &isw )
 {
-    if(enable() && mParent.getVal() != isw) setEnable(false);
-    mParent = isw;
+    if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
+    cfg("PARENT").setS(isw);
     modif();
 }
 
@@ -878,7 +874,7 @@ void CWidget::load_( )
     //> Inherit modify attributes
     vector<string> als;
     attrList(als);
-    string tAttrs = m_attrs;
+    string tAttrs = cfg("ATTRS").getS();
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	if(!attrPresent(als[i_a])) continue;
@@ -899,10 +895,10 @@ void CWidget::load_( )
 
 void CWidget::loadIO( )
 {
-    if( !enable() ) return;
+    if(!enable()) return;
 
     //> Load widget's work attributes
-    mod->attrsLoad( *this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), m_attrs );
+    mod->attrsLoad(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), cfg("ATTRS").getS());
 }
 
 void CWidget::save_( )
@@ -911,7 +907,7 @@ void CWidget::save_( )
     string tbl = ownerLWdg().ownerLib().tbl();
 
     //> Save generic attributes
-    m_attrs = mod->attrsSave( *this, db+"."+tbl, ownerLWdg().id(), id(), true );
+    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerLWdg().id(), id(), true));
 
     //> Save generic widget's data
     SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
@@ -930,8 +926,7 @@ void CWidget::saveIO( )
 void CWidget::wClear( )
 {
     Widget::wClear();
-
-    m_attrs = "";
+    cfg("ATTRS").setS("");
 }
 
 string CWidget::resourceGet( const string &id, string *mime )

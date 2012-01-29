@@ -102,8 +102,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
-    mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()), mSched(cfg("SCHEDULE").getSd()),
-    mAddr(cfg("ADDR").getSd()), mEndPoint(cfg("EndPoint").getSd()), mSecPolicy(cfg("SecPolicy").getSd()),
+    mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
     mSecMessMode(cfg("SecMessMode").getId()), mPAttrLim(cfg("AttrsLimit").getId()),
     prc_st(false), call_st(false), endrun_req(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
@@ -147,7 +146,7 @@ void TMdContr::reqOPC( XMLNode &io )
     ResAlloc res( nodeRes(), true );
     io.setAttr("err","");
 
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
     try { tr.at().start(); }
     catch( TError err )
     { io.setAttr("err",TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
@@ -296,12 +295,12 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 void TMdContr::start_( )
 {
     //> Establish connection
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
     try { tr.at().start(); }
     catch( TError err ){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     tmDelay = 0;
 
@@ -611,7 +610,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), mNdLst(cfg("ND_LS").getSd()), p_el("w_attr")
+    TParamContr(name,tp_prm), p_el("w_attr")
 {
 
 }
@@ -670,7 +669,7 @@ string TMdPrm::attrPrc( )
 
     //> Nodes list process and parameter's attributes creation
     string snd;
-    for(int off = 0; (snd=TSYS::strParse(mNdLst,0,"\n",&off)).size(); )
+    for(int off = 0; (snd=TSYS::strParse(cfg("ND_LS").getS(),0,"\n",&off)).size(); )
     {
 	//>> Request for node class request
 	req.clear()->setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER));

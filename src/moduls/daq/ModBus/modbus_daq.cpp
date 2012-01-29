@@ -112,8 +112,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
-	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), mSched(cfg("SCHEDULE").getSd()), mPrt(cfg("PROT").getSd()),
-	mAddr(cfg("ADDR").getSd()), mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
+	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()),
+	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
 	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
 	prc_st(false), call_st(false), endrun_req(false), isReload(false),
 	tmGath(0), tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
@@ -187,12 +187,12 @@ void TMdContr::start_( )
     if(prc_st) return;
 
     //> Establish connection
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
     try { tr.at().start(); }
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //> Schedule process
-    mPer = TSYS::strSepParse(mSched,1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(mSched.getVal().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
@@ -609,9 +609,11 @@ bool TMdContr::setValC( char val, int addr, ResString &err )
 
 string TMdContr::modBusReq( string &pdu )
 {
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(mAddr,0,'.')).at().outAt(TSYS::strSepParse(mAddr,1,'.'));
+    //if(pdu[0] == 6) return "";
 
-    XMLNode req(mPrt);
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
+
+    XMLNode req(cfg("PROT").getS());
     req.setAttr("id",id())->
 	setAttr("reqTm",TSYS::int2str(reqTm))->
 	setAttr("node",TSYS::int2str(mNode))->

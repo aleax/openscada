@@ -279,10 +279,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 //* UserPrt                                       *
 //*************************************************
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntInReq(0), cntOutReq(0),
-    mId(cfg("ID").getSd()), mName(cfg("NAME").getSd()), mDscr(cfg("DESCR").getSd()), mAEn(cfg("EN").getBd()),
-    mEn(false), mDB(idb)
-
+    TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID").getSd()), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
 {
     mId = iid;
 }
@@ -321,7 +318,7 @@ TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }
 
 string UserPrt::name( )
 {
-    string tNm = mName;
+    string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : id();
 }
 

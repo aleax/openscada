@@ -63,25 +63,25 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	//> Block's parameters
-	const string &id( )	{ return m_id.getValRef(); }
+	const string &id( )	{ return m_id; }
 	string name( );
-	string descr( ) 	{ return m_descr; }
+	string descr( ) 	{ return cfg("DESCR").getS(); }
 	int    errCnt( )	{ return err_cnt; }
 	bool   enable( )	{ return m_enable; }
 	bool   process( )	{ return m_process; }
 	bool   toEnable( )	{ return m_to_en; }
 	bool   toProcess( )	{ return m_to_prc; }
-	string prior( )		{ return mPrior; }
-	string wFunc( )		{ return m_func; }
+	string prior( )		{ return cfg("PRIOR").getS(); }
+	string wFunc( )		{ return cfg("FUNC").getS(); }
 
-	void setName( const string &name )	{ m_name = name; modif(); }
-	void setDescr( const string &dscr )	{ m_descr = dscr; modif(); }
+	void setName( const string &name )	{ cfg("NAME").setS(name); }
+	void setDescr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
 	void setEnable( bool val );
 	void setProcess( bool val );
 	void setToEnable( bool val )		{ m_to_en = val; modif(); }
 	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
-	void setPrior( const string &vl )	{ mPrior = vl; modif(); }
-	void setWFunc( const string &vl )	{ m_func = vl; modif(); }
+	void setPrior( const string &vl )	{ cfg("PRIOR").setS(vl); }
+	void setWFunc( const string &vl )	{ cfg("FUNC").setS(vl); }
 
 	//> Link IO
 	LnkT link( unsigned id );
@@ -101,7 +101,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
 
-	const string &nodeName( )	{ return m_id.getValRef(); }
+	const string &nodeName( )	{ return m_id; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );
@@ -136,14 +136,10 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool		m_enable,
 			m_process;	//Processing block
 
-	ResString	&m_id,		//Block id
-			&m_name,	//Block name
-			&m_descr,	//Block description
-			&m_func,	//Associated function
-			&mPrior;	//Prior calc block
+	string		&m_id;		//Block id
 	bool		&m_to_en, &m_to_prc;
 
-	Res		lnk_res;		//Link resource
+	Res		lnk_res;	//Link resource
 	int		err_cnt;
 	int		id_freq, id_start, id_stop;	//Fixed system attributes identifiers
 };

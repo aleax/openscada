@@ -51,10 +51,10 @@ class Project : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId.getValRef(); }	//Identifier
+	const string &id( )	{ return mId; }			//Identifier
 	string	name( );					//Name
-	string	descr( )	{ return mDescr; }		//Description
-	string	ico( )		{ return mIco; }		//Icon
+	string	descr( )	{ return cfg("DESCR").getS(); }	//Description
+	string	ico( )		{ return cfg("ICO").getS(); }	//Icon
 	string	owner( );					//Library owner
 	string	grp( );						//Library group
 	short	permit( )	{ return mPermit; }		//Permission for access to library
@@ -62,19 +62,19 @@ class Project : public TCntrNode, public TConfig
 	int	prjFlags( )	{ return mFlgs; }		//Project's flags
 
 	string DB( )		{ return workPrjDB; }		//Current library DB
-	string tbl( )		{ return mDBt; }		//Table of storing library data
+	string tbl( )		{ return cfg("DB_TBL").getS(); }//Table of storing library data
 	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
-	void setName( const string &it )	{ mName = it; modif(); }
-	void setDescr( const string &it )	{ mDescr = it; modif(); }
-	void setIco( const string &it )		{ mIco = it; modif(); }
+	void setName( const string &it )	{ cfg("NAME").setS(it); }
+	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
+	void setIco( const string &it )		{ cfg("ICO").setS(it); }
 	void setOwner( const string &it );
-	void setGrp( const string &it )		{ mGrp = it; modif(); }
+	void setGrp( const string &it )		{ cfg("GRP").setS(it); }
 	void setPermit( short it )		{ mPermit = it; modif(); }
 	void setPeriod( int it )		{ mPer = it; modif(); }
 	void setPrjFlags( int val )		{ mFlgs = val; modif(); }
 
-	void setTbl( const string &it )		{ mDBt = it; }
+	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
 	//> Enable stat
@@ -108,7 +108,7 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const string &nodeName( )	{ return mId.getValRef(); }
+	const string &nodeName( )	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -123,13 +123,7 @@ class Project : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	ResString &mId,		//Identifier
-		&mName,		//Name
-		&mDescr,	//Description
-		&mDBt,		//DB table
-		&mOwner,	//Access owner
-		&mGrp,		//Access group
-		&mIco,		//Individual icon
+	string	&mId,		//Identifier
 		workPrjDB,	//Work DB
 		mOldDB;
 	int	&mPermit,	//Access permission
@@ -174,9 +168,10 @@ class Page : public Widget, public TConfig
 	int    calcPer( );
 	string ownerFullId( bool contr = false );
 	int    prjFlags( )	{ return mFlgs; }
-	string parentNm( )	{ return mParent; }
+	string parentNm( )	{ return cfg("PARENT").getS(); }
+	string proc( )		{ return cfg("PROC").getS(); }
 
-	void setIco( const string &iico )	{ mIco = iico; modif(); }
+	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
@@ -228,10 +223,6 @@ class Page : public Widget, public TConfig
     private:
 	//Attributes
 	int	mPage;		//Page container identifier
-	ResString &mIco,	//Widget icon
-		&mProc,		//Widget procedure
-		&mParent,	//Widget parent
-		&mAttrs;	//Changed attributes list
 	int	&mFlgs,		//Project's flags
 		&mProcPer;	//Process period
 };
@@ -256,7 +247,7 @@ class PageWdg : public Widget, public TConfig
 	string calcLang( );
 	string calcProg( );
 	int    calcPer( );
-	string parentNm( )	{ return mParent; }
+	string parentNm( )	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val );
 	void setParentNm( const string &isw );
@@ -286,9 +277,6 @@ class PageWdg : public Widget, public TConfig
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	//Attributes
-	ResString &mParent, &mAttrs;
 };
 
 }
