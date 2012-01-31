@@ -1,3 +1,7 @@
+2012-01-31 Roman
+- UI.WebCfgD: Tree update is separated from page update and made by doubleclick into tree area.
+
+
 2012-01-29 Roman
 - !!!!:TConfig: Store string is changed from type "ResString" to "string" object and resource removed direct to TCfg object.
     Direct values access by link by functions like getSd() is dangerous for parallel access.

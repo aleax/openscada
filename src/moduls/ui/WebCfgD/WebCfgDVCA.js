@@ -2316,37 +2316,44 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 
 //> First start data init
 //>> Tool bar init
+//>>> Tree update action
+var actTreeUpdt = document.getElementById('treeBlk');
+if(actTreeUpdt)
+{
+    actTreeUpdt.ondblclick = function()	{ treeUpdate(); }
+    actTreeUpdt.onmousedown = function(){ return false; }
+}
 //>>> Update actions
 var actUpdate = document.getElementById('actUpdate');
-if( actUpdate ) actUpdate.onclick = function() { if( this.className=='active' ) { treeUpdate(); pageRefresh(); } return false; }
+if(actUpdate) actUpdate.onclick = function()	{ if(this.className=='active') pageRefresh(); return false; }
 var actStart = document.getElementById('actStart');
-if( actStart ) actStart.onclick = function() { if( this.className=='active' ) pageCyclRefrStart(); return false; }
+if(actStart) actStart.onclick = function()	{ if(this.className=='active') pageCyclRefrStart(); return false; }
 var actStop = document.getElementById('actStop');
-if( actStop ) actStop.onclick = function() { if( this.className=='active' ) pageCyclRefrStop(); return false; }
+if(actStop) actStop.onclick = function()	{ if(this.className=='active') pageCyclRefrStop(); return false; }
 //>>> DB actions
 var actLoad = document.getElementById('actLoad');
-if( actLoad ) actLoad.onclick = function() { if( this.className=='active' ) itDBLoad(); return false; }
+if(actLoad) actLoad.onclick = function()	{ if(this.className=='active') itDBLoad(); return false; }
 var actSave = document.getElementById('actSave');
-if( actSave ) actSave.onclick = function() { if( this.className=='active' ) itDBSave(); return false; }
+if(actSave) actSave.onclick = function()	{ if(this.className=='active') itDBSave(); return false; }
 //>>> Navigate actions
 var actUp = document.getElementById('actUp');
-if( actUp ) actUp.onclick = function() { if( this.className=='active' ) pageUp(); return false; }
+if(actUp) actUp.onclick = function()		{ if(this.className=='active') pageUp(); return false; }
 var actPrevious = document.getElementById('actPrevious');
-if( actPrevious ) actPrevious.onclick = function() { if( this.className=='active' ) pagePrev(); return false; }
+if(actPrevious) actPrevious.onclick = function(){ if(this.className=='active') pagePrev(); return false; }
 var actNext = document.getElementById('actNext');
-if( actNext ) actNext.onclick = function() { if( this.className=='active' ) pageNext(); return false; }
+if(actNext) actNext.onclick = function()	{ if(this.className=='active') pageNext(); return false; }
 //>>> Create/delete actions
 var actAddIt = document.getElementById('actAddIt');
-if( actAddIt ) actAddIt.onclick = function() { if( this.className=='active' ) itAdd(); return false; }
+if(actAddIt) actAddIt.onclick = function()	{ if(this.className=='active') itAdd(); return false; }
 var actDelIt = document.getElementById('actDelIt');
-if( actDelIt ) actDelIt.onclick = function() { if( this.className=='active' ) itDel(); return false; }
+if(actDelIt) actDelIt.onclick = function()	{ if(this.className=='active') itDel(); return false; }
 //>>> Copy actions
 var actCopy = document.getElementById('actCopy');
-if( actCopy ) actCopy.onclick = function() { if( this.className=='active' ) itCopy(); return false; }
+if(actCopy) actCopy.onclick = function()	{ if(this.className=='active') itCopy(); return false; }
 var actCut = document.getElementById('actCut');
-if( actCut ) actCut.onclick = function() { if( this.className=='active' ) itCut(); return false; }
+if(actCut) actCut.onclick = function()		{ if(this.className=='active') itCut(); return false; }
 var actPaste = document.getElementById('actPaste');
-if( actPaste ) actPaste.onclick = function() { if( this.className=='active' ) itPaste(); return false; }
+if(actPaste) actPaste.onclick = function()	{ if(this.className=='active') itPaste(); return false; }
 
 pageDisplay(hostsUpdate());
 
