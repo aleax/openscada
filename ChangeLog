@@ -1,3 +1,7 @@
+2012-02-06 Roman
+- Archive.FSArch: Archives files limit size for value archivator is added.
+
+
 2012-01-31 Roman
 - UI.WebCfgD: Tree update is separated from page update and made by doubleclick into tree area.
 

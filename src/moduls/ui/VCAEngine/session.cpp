@@ -923,7 +923,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
 			if(src.at().attrPresent(atr_id))
 			{
-			    if(src.at().attrAt(atr_id).at().cfgVal().size() > 4 && src.at().attrAt(atr_id).at().cfgVal().substr(0,4) == "prm:")
+			    if(src.at().attrAt(atr_id).at().cfgVal().compare(0,4,"prm:") == 0)
 			    {
 				if(prm_lnk.empty()) prm_lnk = src.at().attrAt(atr_id).at().cfgVal().substr(4);
 				attr.at().setCfgVal(src.at().attrAt(atr_id).at().cfgVal());
@@ -1159,9 +1159,9 @@ string SessWdg::path( )
 string SessWdg::ownerFullId( bool contr )
 {
     SessWdg *ownW = ownerSessWdg( );
-    if( ownW )	return ownW->ownerFullId(contr)+(contr?"/wdg_":"/")+ownW->id();
+    if(ownW) return ownW->ownerFullId(contr)+(contr?"/wdg_":"/")+ownW->id();
     SessPage *ownP = ownerPage( );
-    if( ownP )	return ownP->ownerFullId(contr)+(contr?"/pg_":"/")+ownP->id();
+    if(ownP) return ownP->ownerFullId(contr)+(contr?"/pg_":"/")+ownP->id();
     return string(contr?"/ses_":"/")+ownerSess()->id();
 }
 

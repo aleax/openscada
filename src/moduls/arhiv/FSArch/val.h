@@ -159,7 +159,7 @@ class ModVArchEl: public TVArchEl
 
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
-	void checkArchivator( bool now = false );
+	void checkArchivator( bool now = false, bool cpctLim = false );
 	void fileAdd( const string &file );
 
     protected:
@@ -185,10 +185,13 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
+	double curCapacity();
+
 	void setValPeriod( double iper );
 
 	double	fileTimeSize()	{ return time_size; }
 	unsigned numbFiles()	{ return mNumbFiles; }
+	double	maxCapacity()	{ return mMaxCapacity; }
 	double	roundProc()	{ return round_proc; }
 	int	checkTm()	{ return mChkTm; }
 	int	packTm()	{ return mPackTm; }
@@ -196,6 +199,7 @@ class ModVArch: public TVArchivator
 
 	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
 	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
+	void setMaxCapacity( double vl )	{ mMaxCapacity = vl; modif(); }
 	void setRoundProc( double vl )		{ round_proc = vl; modif(); }
 	void setCheckTm( int vl )		{ mChkTm = vl; modif(); }
 	void setPackTm( int vl )		{ mPackTm = vl; modif(); }
@@ -229,6 +233,7 @@ class ModVArch: public TVArchivator
 	//Attributes
 	double	time_size;			// number hours into one file
 	unsigned mNumbFiles;			// number of Archive files
+	double	mMaxCapacity;			// maximum archives capacity in megabytes
 	double	round_proc;			// numeric values rounding procent (0-50)
 	int	mChkTm;				// period of check the archive files directory;
 	int	mPackTm;			// pack the archive files timeout

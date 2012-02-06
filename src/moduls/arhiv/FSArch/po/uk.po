@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-22 09:43+0200\n"
+"POT-Creation-Date: 2012-02-06 12:50+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -56,9 +56,6 @@ msgstr ""
 "                         Використовується для налагодження помилок архівів "
 "значень та коректність відновлення.\n"
 "\n"
-
-msgid "Check archives thread is not stopped!"
-msgstr "Нитку перевірки архівів не зупинено!"
 
 #, c-format
 msgid "Check message archivator '%s' error."
@@ -161,11 +158,27 @@ msgstr "Повний розмір архівів"
 msgid "Path to directory for archivator's of values files."
 msgstr "Шлях до директорії для файлів архіватору значень."
 
-msgid "File's time size (hours)"
-msgstr "Розмір файлу (годин)"
+msgid "Archive's file time size (hours)"
+msgstr "Розмір файлу архіву (годин)"
+
+msgid "Maximum files number for one archive"
+msgstr "Максимальна кількість файлів одного архіву"
+
+msgid "Use zero for limit disable"
+msgstr "Використовуйте нуль для відключення обмеження."
+
+msgid "Maximum capacity by all archives (MB)"
+msgstr "Максимальний розмір всіх архівів (МБ)"
 
 msgid "Numeric values rounding (%)"
 msgstr "Округлення числових значень (%)"
+
+msgid ""
+"Allow fast archives append to other station by prevent long unpack for info "
+"get."
+msgstr ""
+"Дозволяє швидко додавати архіви до іншої станції шляхом попередження \n"
+"тривалого розпакування з метою отримання інформації."
 
 msgid "Files size"
 msgstr "Розмір файлів"
@@ -204,7 +217,8 @@ msgid ""
 "Write data block to archive file '%s' error. Will structure break. mSize=%d, "
 "foff_end=%d, vSize=%d"
 msgstr ""
-"Помилка запису блока до файлу архіву '%s'. Структуру буде зламано. mSize=%d, foff_end=%d, vSize=%d"
+"Помилка запису блока до файлу архіву '%s'. Структуру буде зламано. mSize=%d, "
+"foff_end=%d, vSize=%d"
 
 #, c-format
 msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"

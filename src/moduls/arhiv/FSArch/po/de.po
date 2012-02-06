@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-22 09:43+0200\n"
+"POT-Creation-Date: 2012-02-06 12:50+0200\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -62,9 +62,6 @@ msgstr ""
 "                         Wird für Debugging-Fehler-Wert Archiven und "
 "Richtigkeit der Erholung.\n"
 "\n"
-
-msgid "Check archives thread is not stopped!"
-msgstr "Der Thread für die Archivprüfung ist nicht angehalten"
 
 #, c-format
 msgid "Check message archivator '%s' error."
@@ -167,11 +164,28 @@ msgstr "Vollständige Archive Größe"
 msgid "Path to directory for archivator's of values files."
 msgstr "Verzeichnispfad zu den Dateien des Wertearchivars"
 
-msgid "File's time size (hours)"
-msgstr "Dateiumfang (Stunden)"
+msgid "Archive's file time size (hours)"
+msgstr "Die Backup-Datei (Stunden)"
+
+msgid "Maximum files number for one archive"
+msgstr "Maximale Dateianzahl pro Archiv"
+
+msgid "Use zero for limit disable"
+msgstr "Verwenden Sie Null, um die Einschränkung zu deaktivieren."
+
+msgid "Maximum capacity by all archives (MB)"
+msgstr "Die maximale Größe aller Dateien (MB)"
 
 msgid "Numeric values rounding (%)"
 msgstr "Rundung der numerischen Werte (%)"
+
+msgid ""
+"Allow fast archives append to other station by prevent long unpack for info "
+"get."
+msgstr ""
+"Damit können Sie schnell hinzufügen, Dateien auf einen anderen "
+"Arbeitsplatz \n"
+"durch die Verhinderung längerer Extraktion, um Informationen zu erhalten."
 
 msgid "Files size"
 msgstr "Dateiumfang"
@@ -210,7 +224,8 @@ msgid ""
 "Write data block to archive file '%s' error. Will structure break. mSize=%d, "
 "foff_end=%d, vSize=%d"
 msgstr ""
-"Fehler beim Schreiben Datenblöcke in die Archiv-Datei '%s'. Die Struktur wird aufgebrochen werden. mGröße=%d, foff_end=%d, VSIZE=%d"
+"Fehler beim Schreiben Datenblöcke in die Archiv-Datei '%s'. Die Struktur "
+"wird aufgebrochen werden. mGröße=%d, foff_end=%d, VSIZE=%d"
 
 #, c-format
 msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"

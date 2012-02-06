@@ -38,7 +38,7 @@ using namespace FSArch;
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), chkANow(false),
-    time_size(800), mNumbFiles(100), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
+    time_size(800), mNumbFiles(100), mMaxCapacity(0), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
 {
 
 }
@@ -46,6 +46,15 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
 ModVArch::~ModVArch( )
 {
     try{ stop(); }catch(...){}
+}
+
+double ModVArch::curCapacity( )
+{
+    double fsz = 0;
+    ResAlloc res(archRes,false);
+    for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
+	fsz += ((ModVArchEl *)iel->second)->size();
+    return fsz;
 }
 
 void ModVArch::setValPeriod( double iper )
@@ -64,12 +73,13 @@ void ModVArch::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("TmSize"); if( !vl.empty() ) setFileTimeSize(atof(vl.c_str()));
-	vl = prmNd.attr("NFiles"); if( !vl.empty() ) setNumbFiles(atoi(vl.c_str()));
-	vl = prmNd.attr("Round"); if( !vl.empty() ) setRoundProc(atof(vl.c_str()));
-	vl = prmNd.attr("PackTm"); if( !vl.empty() ) setPackTm(atoi(vl.c_str()));
-	vl = prmNd.attr("CheckTm"); if( !vl.empty() ) setCheckTm(atoi(vl.c_str()));
-	vl = prmNd.attr("PackInfoFiles"); if( !vl.empty() ) setPackInfoFiles(atoi(vl.c_str()));
+	vl = prmNd.attr("TmSize");	if(!vl.empty()) setFileTimeSize(atof(vl.c_str()));
+	vl = prmNd.attr("NFiles");	if(!vl.empty()) setNumbFiles(atoi(vl.c_str()));
+	vl = prmNd.attr("MaxCapacity"); if(!vl.empty()) setMaxCapacity(atof(vl.c_str()));
+	vl = prmNd.attr("Round"); 	if(!vl.empty()) setRoundProc(atof(vl.c_str()));
+	vl = prmNd.attr("PackTm");	if(!vl.empty()) setPackTm(atoi(vl.c_str()));
+	vl = prmNd.attr("CheckTm");	if(!vl.empty()) setCheckTm(atoi(vl.c_str()));
+	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(atoi(vl.c_str()));
     } catch(...){ }
 
 }
@@ -79,6 +89,7 @@ void ModVArch::save_( )
     XMLNode prmNd("prms");
     prmNd.setAttr("TmSize",TSYS::real2str(fileTimeSize()));
     prmNd.setAttr("NFiles",TSYS::int2str(numbFiles()));
+    prmNd.setAttr("MaxCapacity",TSYS::real2str(maxCapacity()));
     prmNd.setAttr("Round",TSYS::real2str(roundProc()));
     prmNd.setAttr("PackTm",TSYS::int2str(packTm()));
     prmNd.setAttr("CheckTm",TSYS::int2str(checkTm()));
@@ -268,7 +279,7 @@ void ModVArch::checkArchivator( bool now )
     //>> Scan files of attached archives
     ResAlloc res(archRes, false);
     for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
-	((ModVArchEl *)iel->second)->checkArchivator(now);
+	((ModVArchEl *)iel->second)->checkArchivator(now, maxCapacity() && (curCapacity()/1048576) > maxCapacity());
 
     chkANow = false;
     if(isTm)	mLstCheck = time(NULL);
@@ -420,12 +431,14 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    "tp","str","help",_("Path to directory for archivator's of values files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("File's time size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum files number"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum files number for one archive"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",_("Use zero for limit disable"));
+	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum capacity by all archives (MB)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",_("Use zero for limit disable"));
 	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Numeric values rounding (%)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool",
+		"help",_("Allow fast archives append to other station by prevent long unpack for info get."));
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID);
 	}
 	ctrMkNode("list",opt,-1,"/arch/arch/3",_("Files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
@@ -441,14 +454,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))
-    {
-	double fsz = 0;
-	ResAlloc res(archRes,false);
-	for( map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel )
-	    fsz += ((ModVArchEl *)iel->second)->size();
-	opt->setText(TSYS::cpct2str(fsz));
-    }
+    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
     else if(a_path == "/prm/add/tm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(fileTimeSize(),6));
@@ -458,6 +464,11 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(numbFiles()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setNumbFiles(atoi(opt->text().c_str()));
+    }
+    else if(a_path == "/prm/add/maxCpct")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(maxCapacity(),6));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxCapacity(atof(opt->text().c_str()));
     }
     else if(a_path == "/prm/add/round")
     {
@@ -562,7 +573,7 @@ int ModVArchEl::size()
     return rez;
 }
 
-void ModVArchEl::checkArchivator( bool now )
+void ModVArchEl::checkArchivator( bool now, bool cpctLim )
 {
     if(now && !archivator().chkANow)
     {
@@ -593,10 +604,10 @@ void ModVArchEl::checkArchivator( bool now )
 
     ResAlloc res(mRes,true);
     //>> Check file count for delete old files
-    if(now && !mod->noArchLimit && ((ModVArch &)archivator()).numbFiles() && arh_f.size() > ((ModVArch &)archivator()).numbFiles())
-	for(unsigned i_arh = 0; i_arh < arh_f.size(); )
+    if(now && !mod->noArchLimit && ((((ModVArch &)archivator()).numbFiles() && arh_f.size() > ((ModVArch &)archivator()).numbFiles()) || cpctLim))
+	for(unsigned i_arh = 1; i_arh < arh_f.size(); )
 	{
-	    if(arh_f.size() <= ((ModVArch &)archivator()).numbFiles())	break;
+	    if(!(arh_f.size() > ((ModVArch &)archivator()).numbFiles() || cpctLim))	break;
 	    else if(!arh_f[i_arh]->err())
 	    {
 		string f_nm = arh_f[i_arh]->name();
@@ -604,6 +615,7 @@ void ModVArchEl::checkArchivator( bool now )
 		arh_f.erase(arh_f.begin() + i_arh);
 		remove(f_nm.c_str());
 		remove((f_nm+".info").c_str());
+		if(cpctLim) break;
 		continue;
 	    }
 	    i_arh++;
