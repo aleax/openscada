@@ -117,6 +117,7 @@ class Project : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	//Attributes
 	int	mPage;
@@ -268,6 +269,7 @@ class PageWdg : public Widget, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	//> Storing
 	void load_( );

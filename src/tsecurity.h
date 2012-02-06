@@ -69,6 +69,7 @@ class TUser : public TCntrNode, public TConfig
 
     protected:
 	//Methods
+	bool cfgChange( TCfg & )	{ modif(); return true; }
 	void load_( );
 	void save_( );
 
@@ -122,6 +123,7 @@ class TGroup : public TCntrNode, public TConfig
 
     protected:
 	//Methods
+	bool cfgChange( TCfg & )	{ modif(); return true; }
 	void load_( );
 	void save_( );
 

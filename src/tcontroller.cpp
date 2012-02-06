@@ -176,13 +176,6 @@ void TController::save_( )
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
 }
 
-bool TController::cfgChange( TCfg &cfg )
-{
-    modif( );
-
-    return true;
-}
-
 void TController::start( )
 {
     //> Enable if no enabled

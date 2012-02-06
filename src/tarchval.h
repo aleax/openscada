@@ -237,6 +237,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Protected methods
 	void preDisable( int flag );
 	void postDisable( int flag );
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	void load_( );
 	void save_( );
@@ -333,6 +334,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	void load_( );
 	void save_( );

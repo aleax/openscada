@@ -1,4 +1,5 @@
 2012-02-06 Roman
+- FIX:SYS: Modification flag set is fixed for all nodes changed after last TConfig API modification.
 - Archive.FSArch: Archives files limit size for value archivator is added.
 
 

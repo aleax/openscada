@@ -367,6 +367,7 @@ class Func : public TConfig, public TFunction
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
+	bool cfgChange( TCfg & )        { modif(); return true; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );

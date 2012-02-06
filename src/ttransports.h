@@ -83,6 +83,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	void load_( );
 	void save_( );
@@ -156,6 +157,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 

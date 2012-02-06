@@ -117,7 +117,7 @@ class TController : public TCntrNode, public TConfig
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
 
 	void preDisable( int flag );		//Disable if delete
 	void postDisable( int flag );		//Delete all DB if flag 1

@@ -147,6 +147,7 @@ class TBD : public TCntrNode, public TConfig
 
 	void preDisable( int flag );
 	void postDisable( int flag );
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	void load_( );
 	void save_( );

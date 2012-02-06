@@ -86,15 +86,15 @@ TPrmTmplLib &TPrmTempl::owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
 
 string TPrmTempl::name( )		{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
 
-void TPrmTempl::setName( const string &inm )	{ cfg("NAME").setS(inm); modif(); }
+void TPrmTempl::setName( const string &inm )	{ cfg("NAME").setS(inm); }
 
 string TPrmTempl::descr( )		{ return cfg("DESCR").getS(); }
 
-void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); modif(); }
+void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
 
 int TPrmTempl::maxCalcTm( )		{ return cfg("MAXCALCTM").getI(); }
 
-void TPrmTempl::setMaxCalcTm( int vl )	{ cfg("MAXCALCTM").setI(vl); modif(); }
+void TPrmTempl::setMaxCalcTm( int vl )	{ cfg("MAXCALCTM").setI(vl); }
 
 string TPrmTempl::progLang()
 {
@@ -481,11 +481,11 @@ TDAQS &TPrmTmplLib::owner( )	{ return *(TDAQS*)nodePrev(); }
 
 string TPrmTmplLib::name( )	{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
 
-void TPrmTmplLib::setName( const string &vl )	{ cfg("NAME").setS(vl); modif(); }
+void TPrmTmplLib::setName( const string &vl )	{ cfg("NAME").setS(vl); }
 
 string TPrmTmplLib::descr( )	{ return cfg("DESCR").getS(); }
 
-void TPrmTmplLib::setDescr( const string &vl )	{ cfg("DESCR").setS(vl); modif(); }
+void TPrmTmplLib::setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 
 void TPrmTmplLib::setFullDB( const string &vl )
 {
