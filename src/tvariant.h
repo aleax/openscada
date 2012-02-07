@@ -109,7 +109,7 @@ class TVariant
 	//Data
 	union
 	{
-	    bool	b;
+	    char	b;
 	    int		i;
 	    double	r;
 	    char	*sPtr;
