@@ -1268,6 +1268,12 @@ void TSYS::cntrSet( const string &id, double vl )
     mCntrs[id] = vl;
 }
 
+void TSYS::cntrIter( const string &id, double vl )
+{
+    ResAlloc res( nodeRes(), true );
+    mCntrs[id] += vl;
+}
+
 void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm, pthread_attr_t *pAttr, bool *startSt )
 {
     int detachStat = 0;

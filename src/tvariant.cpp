@@ -35,69 +35,110 @@ using namespace OSCADA;
 //*************************************************
 //* TVariant                                      *
 //*************************************************
-TVariant::TVariant( )				{ vl.assign(1,(char)TVariant::Null); }
+TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)
+{
 
-TVariant::TVariant( char ivl )			{ vl.assign(1,(char)TVariant::Null); setB(ivl); }
+}
 
-TVariant::TVariant( int ivl )			{ vl.assign(1,(char)TVariant::Null); setI(ivl); }
+TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setB(ivl);
+}
 
-TVariant::TVariant( double ivl )		{ vl.assign(1,(char)TVariant::Null); setR(ivl); }
+TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setI(ivl);
+}
 
-TVariant::TVariant( const string &ivl )		{ vl.assign(1,(char)TVariant::Null); setS(ivl); }
+TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setR(ivl);
+}
 
-TVariant::TVariant( TVarObj *ivl )		{ vl.assign(1,(char)TVariant::Null); setO(ivl); }
+TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setS(ivl);
+}
 
-TVariant::TVariant( const TVariant &var )	{ operator=(var); }
+TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setS(ivl);
+}
 
-TVariant::TVariant( const char *var )		{ operator=(string(var)); }
+TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setO(ivl);
+}
 
-TVariant::~TVariant( )				{ setType(TVariant::Null); }
+TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    operator=(var);
+}
+
+TVariant::~TVariant( )
+{
+    setType(Null);
+}
 
 void TVariant::setType( Type tp )
 {
     if(tp == type()) return;
 
-    if(type() == TVariant::Object && getO() && !getO()->disconnect()) delete getO();
-
-    switch(tp)
+    //> Free
+    switch(mType)
     {
-	case TVariant::Boolean:
-	    vl.assign(1,(char)TVariant::Boolean);
-	    vl.reserve(1+sizeof(char));
+	case String:
+	    if(mSize >= sizeof(val.sMini))	free(val.sPtr);
+	    mSize = 0;
 	    break;
-	case TVariant::Integer:
-	    vl.assign(1,(char)TVariant::Integer);
-	    vl.reserve(1+sizeof(int));
+	case Object:
+	    if(getO(true) && !getO()->disconnect()) delete getO();
+	    val.o = NULL;
 	    break;
-	case TVariant::Real:
-	    vl.assign(1,(char)TVariant::Real);
-	    vl.reserve(1+sizeof(double));
-	    break;
-	case TVariant::String:
-	    vl.assign(1,(char)TVariant::String);
-	    break;
-	case TVariant::Object:
-	    vl.assign(1,(char)TVariant::Object);
-	    vl.reserve(1+sizeof(void*));
-	    break;
+    }
+
+    //> Create
+    mType = tp;
+    switch(mType)
+    {
+	/*case Boolean:	setB(EVAL_BOOL);	break;
+	case Integer:	setI(EVAL_INT);		break;
+	case Real:	setR(EVAL_REAL);	break;*/
+	case String:	mSize = 0; val.sMini[mSize] = 0; /*setS(EVAL_STR);*/	break;
+	case Object:	val.o = NULL;	break;
 	default: break;
     }
 }
 
-void TVariant::setModify( bool iv )
+bool TVariant::operator==( const TVariant &vr )
 {
-    vl[0] = iv ? vl[0]|0x80 : vl[0]&(~0x80);
+    if(vr.type() == type())
+	switch(type())
+	{
+	    case Boolean:	return (vr.getB()==getB());
+	    case Integer:	return (vr.getI()==getI());
+	    case Real:		return (vr.getR()==getR());
+	    case String:	return (vr.getS()==getS());
+	    case Object:	return (vr.getO(true)==getO(true));
+	    default: break;
+	}
+
+    return false;
 }
 
-bool TVariant::operator==( const TVariant &vr )	{ return vr.vl == vl; }
-
-bool TVariant::operator!=( const TVariant &vr )	{ return vr.vl != vl; }
+bool TVariant::operator!=( const TVariant &vr )	{ return !operator==(vr); }
 
 TVariant &TVariant::operator=( const TVariant &vr )
 {
-    setType(TVariant::Null);
-    vl = vr.vl;
-    if( type() == TVariant::Object ) getO()->connect();
+    switch(vr.type())
+    {
+	case Boolean:	setB(vr.getB());	break;
+	case Integer:	setI(vr.getI());	break;
+	case Real:	setR(vr.getR());	break;
+	case String:	setS(vr.getS());	break;
+	case Object:	setO(vr.getO(true));	break;
+	default: break;
+    }
     return *this;
 }
 
@@ -105,11 +146,11 @@ bool TVariant::isEVal( ) const
 {
     switch(type())
     {
-	case TVariant::String:	return (getS()==EVAL_STR);
-	case TVariant::Integer:	return (getI()==EVAL_INT);
-	case TVariant::Real:	return (getR()==EVAL_REAL);
-	case TVariant::Boolean:	return (getB()==EVAL_BOOL);;
-	case TVariant::Object:	return !getO();
+	case String:	return (getS()==EVAL_STR);
+	case Integer:	return (getI()==EVAL_INT);
+	case Real:	return (getR()==EVAL_REAL);
+	case Boolean:	return (getB()==EVAL_BOOL);;
+	case Object:	return !getO(true);
 	default: break;
     }
     return true;
@@ -119,11 +160,11 @@ char TVariant::getB( ) const
 {
     switch(type())
     {
-	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_BOOL : (bool)atoi(getS().c_str());
-	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_BOOL : (bool)getI();
-	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_BOOL : (bool)getR();
-	case TVariant::Boolean:	return vl[1];
-	case TVariant::Object:	return true;
+	case String:	return (getS()==EVAL_STR) ? EVAL_BOOL : (bool)atoi(getS().c_str());
+	case Integer:	return (getI()==EVAL_INT) ? EVAL_BOOL : (bool)getI();
+	case Real:	return (getR()==EVAL_REAL) ? EVAL_BOOL : (bool)getR();
+	case Boolean:	return val.b;
+	case Object:	return true;
 	default: break;
     }
     return EVAL_BOOL;
@@ -131,13 +172,13 @@ char TVariant::getB( ) const
 
 int TVariant::getI( ) const
 {
-    switch( type() )
+    switch(type())
     {
-	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_INT : atoi(getS().c_str());
-	case TVariant::Integer:	return TSYS::getUnalignInt(vl.data()+1);
-	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
-	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
-	case TVariant::Object:	return 1;
+	case String:	return (getS()==EVAL_STR) ? EVAL_INT : atoi(getS().c_str());
+	case Integer:	return val.i;
+	case Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
+	case Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
+	case Object:	return 1;
 	default: break;
     }
     return EVAL_INT;
@@ -145,13 +186,13 @@ int TVariant::getI( ) const
 
 double TVariant::getR( ) const
 {
-    switch( type() )
+    switch(type())
     {
-	case TVariant::String:	return (getS()==EVAL_STR) ? EVAL_REAL : atof(getS().c_str());
-	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_REAL : getI();
-	case TVariant::Real:	return TSYS::getUnalignDbl(vl.data()+1);
-	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
-	case TVariant::Object:	return 1;
+	case String:	return (getS()==EVAL_STR) ? EVAL_REAL : atof(getS().c_str());
+	case Integer:	return (getI()==EVAL_INT) ? EVAL_REAL : getI();
+	case Real:	return val.r;
+	case Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
+	case Object:	return 1;
 	default: break;
     }
     return EVAL_REAL;
@@ -159,56 +200,107 @@ double TVariant::getR( ) const
 
 string TVariant::getS( ) const
 {
-    switch( type() )
+    switch(type())
     {
-	case TVariant::String:	return vl.substr(1);
-	case TVariant::Integer:	return (getI()==EVAL_INT) ? EVAL_STR : TSYS::int2str(getI());
-	case TVariant::Real:	return (getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(getR());
-	case TVariant::Boolean:	return (getB()==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(getB());
-	case TVariant::Object:	return getO()->getStrXML();
+	case String:
+	    if(mSize < sizeof(val.sMini)) return string(val.sMini,mSize);
+	    return string(val.sPtr,mSize);
+	case Integer:	return (getI()==EVAL_INT) ? EVAL_STR : TSYS::int2str(getI());
+	case Real:	return (getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(getR());
+	case Boolean:	return (getB()==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(getB());
+	case Object:	return getO(true) ? getO()->getStrXML() : EVAL_STR;
 	default: break;
     }
     return EVAL_STR;
 }
 
-TVarObj	*TVariant::getO( ) const
+TVarObj	*TVariant::getO( bool noex ) const
 {
-    if( type() != TVariant::Object ) throw TError("TVariant",_("Variable not object!"));
-    TVarObj *rez = (TVarObj*)TSYS::str2addr(vl.substr(1));
-    if( !rez ) throw TError("TVariant",_("Zero object using try!"));
-    return rez;
+    if(type() != Object) { if(noex) return NULL; throw TError("TVariant",_("Variable not object!")); }
+    if(!val.o && !noex) throw TError("TVariant",_("Zero object using try!"));
+    return val.o;
 }
 
 void TVariant::setB( char ivl )
 {
-    if( type() != TVariant::Boolean )	setType(TVariant::Boolean);
-    vl.replace(1,string::npos,(char*)&ivl,sizeof(char));
+    if(type() != Boolean && !mFixedTp) setType(Boolean);
+    switch(type())
+    {
+	case String:	setS((ivl==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(ivl));	break;
+	case Integer:	setI((ivl==EVAL_BOOL) ? EVAL_INT : ivl);	break;
+	case Real:	setR((ivl==EVAL_BOOL) ? EVAL_REAL : ivl);	break;
+	case Boolean:	val.b = ivl;	break;
+	default: break;
+    }
 }
 
 void TVariant::setI( int ivl )
 {
-    if( type() != TVariant::Integer )	setType(TVariant::Integer);
-    vl.replace(1,string::npos,(char*)&ivl,sizeof(int));
+    if(type() != Integer && !mFixedTp) setType(Integer);
+    switch(type())
+    {
+	case String:	setS((ivl==EVAL_INT) ? EVAL_STR : TSYS::int2str(ivl));	break;
+	case Integer:	val.i = ivl;	break;
+	case Real:	setR((ivl==EVAL_INT) ? EVAL_REAL : ivl);	break;
+	case Boolean:	setB((ivl==EVAL_INT) ? EVAL_BOOL : (bool)ivl);	break;
+	default: break;
+    }
 }
 
 void TVariant::setR( double ivl )
 {
-    if( type() != TVariant::Real )	setType(TVariant::Real);
-    vl.replace(1,string::npos,(char*)&ivl,sizeof(double));
+    if(type() != Real && !mFixedTp) setType(Real);
+    switch(type())
+    {
+	case String:	setS((ivl==EVAL_REAL) ? EVAL_STR : TSYS::real2str(ivl));	break;
+	case Integer:	setI((ivl==EVAL_REAL) ? EVAL_INT : (int)ivl);	break;
+	case Real:	val.r = ivl;	break;
+	case Boolean:	setB((ivl==EVAL_REAL) ? EVAL_BOOL : (bool)ivl);	break;
+	default: break;
+    }
 }
 
 void TVariant::setS( const string &ivl )
 {
-    if( type() != TVariant::String )	setType(TVariant::String);
-    vl.replace(1,string::npos,ivl);
+    if(type() != String && !mFixedTp) setType(String);
+    switch(type())
+    {
+	case String:
+	    if(ivl.size() > 130000000)	throw TError("TVariant",_("Too big string length (> 130 MB)!"));
+	    if(ivl.size() < sizeof(val.sMini))
+	    {
+		if(mSize >= sizeof(val.sMini)) free(val.sPtr);
+		memcpy(val.sMini, ivl.data(), ivl.size());
+		val.sMini[ivl.size()] = 0;
+	    }
+	    else
+	    {
+		if(mSize < sizeof(val.sMini)) val.sPtr = (char*)malloc(ivl.size()+1);
+		else if(ivl.size() != mSize) val.sPtr = (char*)realloc(val.sPtr,ivl.size()+1);
+		if(!val.sPtr)
+		{
+		    mSize = 0;
+		    val.sMini[mSize] = 0;
+		    throw TError("TVariant",_("Memory alloc for big string length (%d) error!"),ivl.size());
+		}
+		memcpy(val.sPtr, ivl.data(), ivl.size());
+		val.sPtr[ivl.size()] = 0;
+	    }
+	    mSize = ivl.size();
+	    break;
+	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : atoi(ivl.c_str()));	break;
+	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : atof(ivl.c_str()));	break;
+	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(ivl.c_str()));
+	default: break;
+    }
 }
 
-void TVariant::setO( TVarObj *val )
+void TVariant::setO( TVarObj *ivl )
 {
-    if( type() == TVariant::Object && getO() && !getO()->disconnect() ) delete getO( );
-    if( type() != TVariant::Object )	setType(TVariant::Object);
-    vl.replace(1,string::npos,TSYS::addr2str(val));
-    if( val ) val->connect();
+    if(type() != Object && !mFixedTp) setType(Object);
+    if(type() == Object && getO(true) && !getO()->disconnect()) delete getO();
+    if(ivl) ivl->connect();
+    val.o = ivl;
 }
 
 //***********************************************************

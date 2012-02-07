@@ -1,3 +1,10 @@
+2012-02-07 Roman
+- ResString: For read-write to stored string used "string(vl.data(), vl.size())" construction for COW algorithm disable.
+- SYS: TSYS::cntrIter() function is added for faster and simple counters iteration.
+- !!!!:TVariant: Rewrited to storage mechanism change from "string" using to "union" and adaptive memory alloc using for strings
+    (simple, up to 7 symbols store static and more allocated to dynamic memory).
+
+
 2012-02-06 Roman
 - FIX:SYS: Modification flag set is fixed for all nodes changed after last TConfig API modification.
 - Archive.FSArch: Archives files limit size for value archivator is added.

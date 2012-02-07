@@ -80,18 +80,24 @@ class TVariant
 	bool operator!=( const TVariant &vr );
 	TVariant &operator=( const TVariant &vr );
 
-	bool isNull( ) const	{ return (type()==TVariant::Null); }
+	bool isNull( ) const	{ return (type()==Null); }
 	bool isEVal( ) const;
-	Type type( ) const	{ return (Type)(vl[0]&0x0F); }
+	Type type( ) const	{ return (Type)mType; }
 	void setType( Type tp );
-	bool isModify( )	{ return vl[0]&0x80; }
-	void setModify( bool vl = true );
+	bool isModify( )	{ return mModify; }
+	void setModify( bool vl = true )	{ mModify = vl; }
 
 	char	getB( ) const;
 	int	getI( ) const;
 	double	getR( ) const;
 	string	getS( ) const;
-	TVarObj	*getO( ) const;
+	TVarObj	*getO( bool noex = false ) const;
+
+	operator char( )	{ return getB(); }
+	operator int( )		{ return getI(); }
+	operator double( )	{ return getR(); }
+	operator string( )	{ return getS(); }
+	operator TVarObj*( )	{ return getO(); }
 
 	void setB( char val );
 	void setI( int val );
@@ -99,9 +105,23 @@ class TVariant
 	void setS( const string &val );
 	void setO( TVarObj *val );
 
-    private:
+    protected:
+	//Data
+	union
+	{
+	    bool	b;
+	    int		i;
+	    double	r;
+	    char	*sPtr;
+	    char	sMini[8];
+	    TVarObj	*o;
+	}val;
+
 	//Attributes
-	string vl;
+	unsigned mSize		: 27;
+	unsigned mType		: 3;
+	unsigned mModify	: 1;
+	unsigned mFixedTp	: 1;
 };
 
 //***********************************************************

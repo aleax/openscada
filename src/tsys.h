@@ -168,6 +168,7 @@ class TSYS : public TCntrNode
 	bool   cntrEmpty( );
 	double cntrGet( const string &id );
 	void   cntrSet( const string &id, double vl );
+	void   cntrIter( const string &id, double vl );
 
 	//Public system static methods
 	//> Current system time (usec)

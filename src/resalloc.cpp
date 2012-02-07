@@ -172,14 +172,14 @@ bool   ResString::empty( )	{ return getVal().empty(); }
 void ResString::setVal( const string &vl )
 {
     pthread_mutex_lock(&mRes);
-    str = vl;
+    str.assign(vl.data(), vl.size());	//Bypass for COW algorithm prevent
     pthread_mutex_unlock(&mRes);
 }
 
 string ResString::getVal( )
 {
     pthread_mutex_lock(&mRes);
-    string rez = str;
+    string rez(str.data(), str.size());	//Bypass for COW algorithm prevent
     pthread_mutex_unlock(&mRes);
     return rez;
 }
